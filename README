@@ -1,0 +1,75 @@
+/******************************************************************************\
+ * Copyright (c) 2004-2006
+ *
+ * Author(s):
+ *	Volker Fischer
+ *
+ ******************************************************************************
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later 
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+\******************************************************************************/
+
+llcon
+-----
+
+Low-Latency Connection / client and server
+
+
+OBJECTIVES:
+The task is to build a client/server software to enable musicians to play together
+over the internet. Target internet connection is DSL with 256 kbps upstream and
+1 Mbit downstream. The server software must be located at a server with a very
+fast internet connection (at least 1 Mbps for up- and downstream).
+
+To get sufficient results, a sample rate of 24 kHz (mono channel) was chosen. An
+audio compression algorithm with very low delay is IMA-ADPCM (delay is just one
+sample). This gives a raw compressed audio data rate of 96 kbps.
+
+Target hardware setup at the client is stereo audio input signal with one channel
+is the instrument and the other channel is a microphone signal. On the microphne
+channel a reverberation effect can be applied (maybe at a later time other audio
+effects are added).
+
+
+MANUAL:
+For starting server type ./llcon -s
+
+Start the llcon server on a remote computer with fast internet access. Start the
+llcon client on your local computer and connect your sound card with your
+instrument/microphone and headphone and type in the IP address of the server.
+There are levelers for adjusting the sound card (in/out) and network buffer sizes.
+It seems that 2 blocks for network buffer is optimal choice. For the sound card
+buffer, try to make them as short as possible by watching the LEDs below the 
+levelers (they should stay green) and the timing standard deviation (should be
+as low as approx. 0.5 ms).
+
+For test purpose it is possible to run server and client on the same computer. For
+this setup firstly start server and then the client. Type in 127.0.0.1 for the
+IP address in the client.
+
+
+EXTERNAL CODE:
+This code contains open source code from different sources. The developer(s) want
+to thank the developer of this code for making their efforts available under open
+source:
+
+- audio reverberation code: by Perry R. Cook and Gary P. Scavone, 1995 - 2004
+	(taken from "The Synthesis ToolKit in C++ (STK)")
+
+- IMA-ADPCM: by Erik de Castro Lopo
+
+- some parts are taken from the project "Dream: a PC-based Digital Radio Mondiale
+	(DRM) receiver" written by one of the llcon authors, Volker Fischer

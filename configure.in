@@ -1,0 +1,70 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_PREREQ(2.50)
+AC_INIT(src/main.cpp)
+
+AM_INIT_AUTOMAKE(llcon,0.9.1)
+
+
+AM_CONFIG_HEADER(config.h)
+
+dnl Checks for programs.
+AC_PROG_LIBTOOL
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_CPP
+AC_PROG_INSTALL
+AC_SUBST(LIBTOOL_DEPS)
+AC_PROG_MAKE_SET
+AC_CHECK_PROGS(RPMBUILD, rpmbuild, rpm)
+
+dnl Configuration Arguments
+
+AC_ARG_ENABLE( sound,[  --enable-sound        generic sound support], enable_sound=$enableval, enable_sound=yes)
+
+AC_ARG_WITH( qtdir,[  --with-qtdir=path to QT],QTDIR=$withval)
+
+
+
+AC_CHECK_HEADER(sys/asoundlib.h, , enable_sound=no)
+AC_CHECK_LIB(asound, snd_pcm_open, , enable_sound=no)
+
+if test "$enable_sound" = "yes"; then
+	AC_DEFINE(WITH_SOUND, 1, [Define if you want to use sound])
+fi
+
+if test "$enable_client" = "yes"; then
+	AC_DEFINE(APPL_TYPE_CLIENT, 1, [Define if you want to use client])
+fi
+
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_LANG_CPLUSPLUS
+
+dnl Checks for some external libraries that need to be installed
+AC_LANG(C++)
+
+
+dnl QT --------------------------------------------------------------------------
+if test "no$QTDIR" = "no"; then
+	AC_MSG_ERROR( "*** Please set QTDIR ***" )
+fi
+
+saved_ldflags="$LDFLAGS"
+LDFLAGS="$LDFLAGS -L$QTDIR/lib"
+
+AC_HAVE_LIBRARY(qt-mt,,exit 1)
+
+AC_PATH_PROG(MOC, moc,, "$QTDIR/bin")
+if test -z "$MOC"; then
+	AC_MSG_ERROR("No moc found in $QTDIR/bin");
+fi
+AC_PATH_PROG(UIC, uic,, "$QTDIR/bin")
+if test -z "$UIC"; then
+	AC_MSG_ERROR("No uic found in $QTDIR/bin");
+fi
+AC_SUBST(QTDIR)
+
+
+AC_CONFIG_FILES(Makefile linux/Makefile)
+AC_OUTPUT

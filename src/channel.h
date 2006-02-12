@@ -26,12 +26,12 @@
 #define CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_
 
 #include <qthread.h>
+#include <qdatetime.h>
 #include "global.h"
 #include "buffer.h"
 #include "audiocompr.h"
 #include "util.h"
 #include "resample.h"
-#include "qdatetime.h"
 
 
 /* Definitions ****************************************************************/

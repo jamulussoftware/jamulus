@@ -42,22 +42,22 @@ class CServer : public QObject
 	Q_OBJECT
 
 public:
-	CServer();
-	virtual ~CServer() {}
+	CServer ();
+	virtual ~CServer () {}
 
-	void Start();
-	void GetConCliParam(CVector<CHostAddress>& vecHostAddresses,
-		CVector<double>& vecdSamOffs)
-		{ChannelSet.GetConCliParam(vecHostAddresses, vecdSamOffs);}
+	void Start ();
+	void Stop ();
+	bool IsRunning() { return Timer.isActive (); }
+	void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
+		CVector<double>& vecdSamOffs )
+		{ ChannelSet.GetConCliParam ( vecHostAddresses, vecdSamOffs ); }
 
-	/* we want to return the standard deviation. For that we need to calculate
-	   the sqaure root */
-	double GetTimingStdDev() {return sqrt(RespTimeMoAvBuf.GetAverage());}
+	bool GetTimingStdDev ( double& dCurTiStdDev );
 
-	CChannelSet* GetChannelSet() {return &ChannelSet;}
+	CChannelSet* GetChannelSet () { return &ChannelSet; }
 
 protected:
-	CVector<short> ProcessData(CVector<CVector<double> >& vecvecdData);
+	CVector<short> ProcessData ( CVector<CVector<double> >& vecvecdData );
 
 	QTimer				Timer;
 	CVector<short>		vecsSendData;
@@ -71,7 +71,7 @@ protected:
 	QTime				TimeLastBlock;
 
 public slots:
-	void OnTimer();
+	void OnTimer ();
 };
 
 

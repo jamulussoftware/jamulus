@@ -63,37 +63,45 @@ int CChannelSet::CheckAddr(const CHostAddress& Addr)
 bool CChannelSet::PutData(const CVector<unsigned char>& vecbyRecBuf,
 						  const int iNumBytesRead, const CHostAddress& HostAdr)
 {
-	Mutex.lock();
+	Mutex.lock ();
 
 	/* get channel ID ------------------------------------------------------- */
 	bool bChanOK = true;
 
 	/* check address */
-	int iCurChanID = CheckAddr(HostAdr);
+	int iCurChanID = CheckAddr ( HostAdr );
 
-	if (iCurChanID == INVALID_CHANNEL_ID)
+	if ( iCurChanID == INVALID_CHANNEL_ID )
 	{
 		/* a new client is calling, look for free channel */
-		iCurChanID = GetFreeChan();
+		iCurChanID = GetFreeChan ();
 
-		if (iCurChanID != INVALID_CHANNEL_ID)
-			vecChannels[iCurChanID].SetAddress(HostAdr);
+		if ( iCurChanID != INVALID_CHANNEL_ID )
+		{
+			vecChannels[iCurChanID].SetAddress ( HostAdr );
+		}
 		else
+		{
 			bChanOK = false; /* no free channel available */
+		}
 	}
 
 
 	/* put received data in jitter buffer ----------------------------------- */
-	if (bChanOK)
+	if ( bChanOK )
 	{
 		/* put packet in socket buffer */
-		if (vecChannels[iCurChanID].PutData(vecbyRecBuf, iNumBytesRead))
-			PostWinMessage(MS_JIT_BUF_PUT, MUL_COL_LED_GREEN, iCurChanID);
+		if ( vecChannels[iCurChanID].PutData ( vecbyRecBuf, iNumBytesRead ) )
+		{
+			PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN, iCurChanID );
+		}
 		else
-			PostWinMessage(MS_JIT_BUF_PUT, MUL_COL_LED_RED, iCurChanID);
+		{
+			PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED, iCurChanID );
+		}
 	}
 
-	Mutex.unlock();
+	Mutex.unlock ();
 
 	return !bChanOK; /* return 1 if error */
 }
@@ -213,25 +221,6 @@ void CChannel::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
 	Mutex.unlock ();
 }
 
-int CChannel::GetTimeStampIdx ()
-{
-	/* only send time stamp index after a pre-defined number of packets */
-	if ( iTimeStampActCnt > 0 )
-	{
-		iTimeStampActCnt--;
-		return INVALID_TIME_STAMP_IDX;
-	}
-	else
-	{
-		/* reset time stamp activation counter */
-		iTimeStampActCnt = NUM_BL_TIME_STAMPS - 1;
-
-		/* wraps around automatically */
-		byTimeStampIdxCnt++;
-		return byTimeStampIdxCnt;
-	}
-}
-
 bool CChannel::GetAddress(CHostAddress& RetAddr)
 {
 	if (IsConnected())
@@ -262,9 +251,6 @@ bool CChannel::PutData(const CVector<unsigned char>& vecbyData,
 
 		/* do resampling to compensate for sample rate offsets in the
 		   different sound cards of the clients */
-// we should not do resampling here since we already have resampling
-// in the client audio path, we could use this resampling for this
-// sample rate correction, too
 /*
 for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 	vecdResInData[i] = (double) vecsData[i];
@@ -339,6 +325,24 @@ CVector<unsigned char> CChannel::PrepSendPacket(const CVector<short>& vecsNPacke
 	return vecbySendBuf;
 }
 
+int CChannel::GetTimeStampIdx ()
+{
+	/* only send time stamp index after a pre-defined number of packets */
+	if ( iTimeStampActCnt > 0 )
+	{
+		iTimeStampActCnt--;
+		return INVALID_TIME_STAMP_IDX;
+	}
+	else
+	{
+		/* reset time stamp activation counter */
+		iTimeStampActCnt = NUM_BL_TIME_STAMPS - 1;
+
+		/* wraps around automatically */
+		byTimeStampIdxCnt++;
+		return byTimeStampIdxCnt;
+	}
+}
 
 
 /******************************************************************************\
@@ -395,8 +399,6 @@ fflush(pFile);
 */
 
 
-
-
 	/* calculate linear regression for sample rate estimation */
 	/* first, calculate averages */
 	double dTimeAv = 0;
@@ -434,15 +436,10 @@ fflush(pFile);
 */
 	}
 
-
-
 /*
 static FILE* pFile = fopen("v.dat", "w");
 fprintf(pFile, "%e\n", dSamRateEst);
 fflush(pFile);
 */
-
-
-
 
 }

@@ -178,6 +178,10 @@ SOURCE=..\src\multicolorled.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\protocol.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\resample.cpp
 # End Source File
 # Begin Source File
@@ -235,6 +239,10 @@ SOURCE=..\src\llconserverdlg.h
 # Begin Source File
 
 SOURCE=..\src\multicolorled.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\protocol.h
 # End Source File
 # Begin Source File
 

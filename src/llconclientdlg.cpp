@@ -68,9 +68,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	OnTimerStatus ();
 
 	/* init sample rate offset label */
-//	TextSamRateOffsValue->setText ( "0 Hz" );
-// FIXME disable sample rate estimation result label since estimation does not work
-TextSamRateOffsValue->setText ( "---" );
+	TextSamRateOffsValue->setText ( "0 Hz" );
 
 	/* init connection button text */
 	PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
@@ -275,17 +273,9 @@ void CLlconClientDlg::OnTimerStatus()
 		TextLabelStatus->setText(tr("disconnected"));
 
 	/* update sample rate offset label */
-// FIXME disable sample rate estimation result label since estimation does not work
-/*
 	QString strSamRaOffs;
-
-// FIXME: sample rate estimation result must be corrected since we use
-// smaller buffers in client now. Actual estimation should be fixed, not here
-
-	strSamRaOffs.setNum(pClient->GetChannel()->GetResampleOffset() *
-		MIN_BLOCK_DURATION_MS / BLOCK_DURATION_MS, 'f', 2);
+	strSamRaOffs.setNum(pClient->GetChannel()->GetResampleOffset(), 'f', 2);
 	TextSamRateOffsValue->setText(strSamRaOffs + " Hz");
-*/
 
 	/* response time */
 	TextLabelStdDevTimer->setText(QString().

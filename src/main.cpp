@@ -34,25 +34,27 @@
 QApplication* pApp = NULL;
 
 
-int main(int argc, char** argv)
+int main ( int argc, char** argv )
 {
 	/* Application object */
-	QApplication app(argc, argv);
+	QApplication app ( argc, argv );
 
 	/* check if server or client application shall be started */
 	bool bIsClient = true;
 
 	/* QT docu: argv()[0] is the program name, argv()[1] is the first
 	   argument and argv()[argc()-1] is the last argument */
-	if (argc > 1)
+	if ( argc > 1 )
 	{
 		/* only "-s" is supported right now */
 		std::string strShortOpt = "-s";
-		if (!strShortOpt.compare(argv[1]))
+		if ( !strShortOpt.compare ( argv[1] ) )
+		{
 			bIsClient = false;
+		}
 	}
 
-	if (bIsClient)
+	if ( bIsClient )
 	{
 		// actual client object
 		CClient Client;
@@ -98,7 +100,8 @@ void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam,
 	/* In case of simulation no events should be generated */
 	if ( pApp != NULL )
 	{
-		CLlconEvent* LlconEv = new CLlconEvent ( MessID, iMessageParam, iChanNum );
+		CLlconEvent* LlconEv =
+			new CLlconEvent ( MessID, iMessageParam, iChanNum );
 
 		/* Qt will delete the event object when done */
 		QThread::postEvent ( pApp->mainWidget (), LlconEv );

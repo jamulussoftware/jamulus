@@ -30,6 +30,7 @@
 #include <qwhatsthis.h>
 #include <qtextview.h>
 #include <qlabel.h>
+#include <qdatetime.h>
 #include <vector>
 #include "global.h"
 using namespace std; /* Because of the library: "vector" */
@@ -375,6 +376,43 @@ protected:
 	CFIFO<int>	combDelays_[4];
 	double		allpassCoefficient_;
 	double		combCoefficient_[4];
+};
+
+
+/* Time conversion ---------------------------------------------------------- */
+// needed for ping measurement
+class CTimeConv
+{
+public:
+	// QTime to network time vector
+	static CVector<unsigned char> QTi2NetTi ( const QTime qTiIn )
+	{
+		// vector format: 1 byte hours, 1 byte min, 1 byte sec, 2 bytes ms
+		CVector<unsigned char> veccNetTi ( 5 );
+
+		veccNetTi[0] = static_cast<unsigned char> ( qTiIn.hour () );
+		veccNetTi[1] = static_cast<unsigned char> ( qTiIn.minute () );
+		veccNetTi[2] = static_cast<unsigned char> ( qTiIn.second () );
+
+		const int iMs = qTiIn.msec ();
+		veccNetTi[3] = static_cast<unsigned char> ( ( iMs >> 8 ) & 255 );
+		veccNetTi[4] = static_cast<unsigned char> ( iMs & 255 );
+
+		return veccNetTi;
+	}
+
+	// network time vector to QTime
+	static QTime NetTi2QTi ( const CVector<unsigned char> netTiIn )
+	{
+		// vector format: 1 byte hours, 1 byte min, 1 byte sec, 2 bytes ms
+		return QTime (
+			static_cast<int> ( netTiIn[0] ), // hour
+			static_cast<int> ( netTiIn[1] ), // minute
+			static_cast<int> ( netTiIn[2] ), // seconds
+			// msec
+			static_cast<int> ( ( netTiIn[3] << 8 ) | netTiIn[4] )
+			);
+	}
 };
 
 

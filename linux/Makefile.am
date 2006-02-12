@@ -13,6 +13,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/llconserverdlg.cpp \
 	../src/server.cpp \
 	../src/settings.cpp \
+	../src/protocol.cpp \
 	../src/multicolorled.cpp \
 	sound.cpp \
 	../src/buffer.h \
@@ -26,6 +27,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/client.h \
 	../src/server.h \
 	../src/settings.h \
+	../src/protocol.h \
 	../src/multicolorled.h \
 	../src/llconserverdlg.h \
 	../src/llconclientdlg.h \

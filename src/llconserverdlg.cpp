@@ -108,6 +108,7 @@ void CLlconServerDlg::OnTimer()
 {
 	CVector<CHostAddress>	vecHostAddresses;
 	CVector<double>			vecdSamOffs;
+	double					dCurTiStdDev;
 
 	ListViewMutex.lock();
 
@@ -140,9 +141,16 @@ void CLlconServerDlg::OnTimer()
 
 	ListViewMutex.unlock();
 
-	/* response time */
-	TextLabelResponseTime->setText(QString().
-		setNum(Server.GetTimingStdDev(), 'f', 2) + " ms");
+	/* response time (if available) */
+	if ( Server.GetTimingStdDev ( dCurTiStdDev ) )
+	{
+		TextLabelResponseTime->setText(QString().
+			setNum(dCurTiStdDev, 'f', 2) + " ms");
+	}
+	else
+	{
+		TextLabelResponseTime->setText("---");
+	}
 }
 
 void CLlconServerDlg::OnSliderNetBuf(int value)

@@ -26,96 +26,104 @@
 
 
 /* Implementation *************************************************************/
-void CSocket::Init()
+void CSocket::Init ()
 {
 	/* allocate memory for network receive and send buffer in samples */
-	vecbyRecBuf.Init(MAX_SIZE_BYTES_NETW_BUF);
+	vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
 
 	/* initialize the listening socket */
-	bool bSuccess = SocketDevice.bind(
-		QHostAddress((Q_UINT32) 0) /* INADDR_ANY */, LLCON_PORT_NUMBER);
+	bool bSuccess = SocketDevice.bind (
+		QHostAddress ( (Q_UINT32) 0 ) /* INADDR_ANY */, LLCON_PORT_NUMBER );
 
-	if (bIsClient)
+	if ( bIsClient )
 	{
 		/* if no success, try if server is on same machine (only for client) */
-		if (!bSuccess)
+		if ( !bSuccess )
 		{
 			/* if server and client is on same machine, decrease port number by
 			one by definition */
-			bSuccess =
-				SocketDevice.bind(QHostAddress((Q_UINT32) 0) /* INADDR_ANY */,
-				LLCON_PORT_NUMBER - 1);
+			bSuccess = SocketDevice.bind (
+				QHostAddress( (Q_UINT32) 0 ) /* INADDR_ANY */,
+				LLCON_PORT_NUMBER - 1 );
 		}
 	}
 
-	if (!bSuccess)
+	if ( !bSuccess )
 	{
 		/* show error message */
-		QMessageBox::critical(0, "Network Error", "Cannot bind the socket.",
-			QMessageBox::Ok, QMessageBox::NoButton);
+		QMessageBox::critical ( 0, "Network Error", "Cannot bind the socket.",
+			QMessageBox::Ok, QMessageBox::NoButton );
 
 		/* exit application */
-		exit(1);
+		exit ( 1 );
 	}
 
 	QSocketNotifier* pSocketNotivRead =
-		new QSocketNotifier(SocketDevice.socket(), QSocketNotifier::Read);
+		new QSocketNotifier ( SocketDevice.socket (), QSocketNotifier::Read );
 
 	/* connect the "activated" signal */
-	QObject::connect(pSocketNotivRead, SIGNAL(activated(int)),
-		this, SLOT(OnDataReceived()));
+	QObject::connect ( pSocketNotivRead, SIGNAL ( activated ( int ) ),
+		this, SLOT ( OnDataReceived () ) );
 }
 
-void CSocket::SendPacket(const CVector<unsigned char>& vecbySendBuf,
-						 const CHostAddress& HostAddr, const int iTimeStampIdx)
+void CSocket::SendPacket( const CVector<unsigned char>& vecbySendBuf,
+						  const CHostAddress& HostAddr,
+						  const int iTimeStampIdx )
 {
-	const int iVecSizeOut = vecbySendBuf.Size();
+	const int iVecSizeOut = vecbySendBuf.Size ();
 
 	if ( iVecSizeOut != 0 )
 	{
 		/* send packet through network */
-		SocketDevice.writeBlock ((const char*) &((CVector<unsigned char>) vecbySendBuf)[0],
-			iVecSizeOut, HostAddr.InetAddr, HostAddr.iPort);
+		SocketDevice.writeBlock (
+			(const char*) &((CVector<unsigned char>) vecbySendBuf)[0],
+			iVecSizeOut, HostAddr.InetAddr, HostAddr.iPort );
 	}
 
 	/* sent time stamp if required */
-	if (iTimeStampIdx != INVALID_TIME_STAMP_IDX)
+	if ( iTimeStampIdx != INVALID_TIME_STAMP_IDX )
 	{
 		/* Always one byte long */
-		SocketDevice.writeBlock((const char*) &iTimeStampIdx, 1,
-			HostAddr.InetAddr, HostAddr.iPort);
+		SocketDevice.writeBlock ( (const char*) &iTimeStampIdx, 1,
+			HostAddr.InetAddr, HostAddr.iPort );
 	}
 }
 
-void CSocket::OnDataReceived()
+void CSocket::OnDataReceived ()
 {
 	/* read block from network interface */
-	const int iNumBytesRead = SocketDevice.readBlock((char*) &vecbyRecBuf[0],
+	const int iNumBytesRead = SocketDevice.readBlock( (char*) &vecbyRecBuf[0],
 		MAX_SIZE_BYTES_NETW_BUF);
 
 	/* check if an error occurred */
-	if (iNumBytesRead < 0)
+	if ( iNumBytesRead < 0 )
+	{
 		return;
+	}
 
 	/* get host address of client */
-	CHostAddress RecHostAddr(SocketDevice.peerAddress(),
-		SocketDevice.peerPort());
+	CHostAddress RecHostAddr ( SocketDevice.peerAddress (),
+		SocketDevice.peerPort () );
 
-	if (bIsClient)
+	if ( bIsClient )
 	{
 		/* client */
 		/* check if packet comes from the server we want to connect */
-		if (!(pChannel->GetAddress() == RecHostAddr))
+		if ( ! ( pChannel->GetAddress () == RecHostAddr ) )
 			return;
 
-		if (pChannel->PutData(vecbyRecBuf, iNumBytesRead))
-			PostWinMessage(MS_JIT_BUF_PUT, MUL_COL_LED_GREEN);
+		if ( pChannel->PutData( vecbyRecBuf, iNumBytesRead ) )
+		{
+			PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN );
+		}
 		else
-			PostWinMessage(MS_JIT_BUF_PUT, MUL_COL_LED_RED);
+		{
+			PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED );
+		}
 	}
 	else
 	{
 		/* server */
-		pChannelSet->PutData(vecbyRecBuf, iNumBytesRead, RecHostAddr);
+		pChannelSet->PutData ( vecbyRecBuf, iNumBytesRead, RecHostAddr );
 	}
 }

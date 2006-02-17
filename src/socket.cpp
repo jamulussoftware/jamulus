@@ -110,7 +110,9 @@ void CSocket::OnDataReceived ()
 		/* client */
 		/* check if packet comes from the server we want to connect */
 		if ( ! ( pChannel->GetAddress () == RecHostAddr ) )
+		{
 			return;
+		}
 
 		if ( pChannel->PutData( vecbyRecBuf, iNumBytesRead ) )
 		{

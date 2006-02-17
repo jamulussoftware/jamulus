@@ -64,16 +64,9 @@
 #define MIN_BLOCK_SIZE_SAMPLES			( MIN_BLOCK_DURATION_MS * SAMPLE_RATE / 1000 )
 #define MIN_SND_CRD_BLOCK_SIZE_SAMPLES	( MIN_BLOCK_DURATION_MS * SND_CRD_SAMPLE_RATE / 1000 )
 
-/* block length in milliseconds (it seems that with the standard windows time
-   a minimum block duration of 10 ms can be used) */
-#ifdef _WIN32
-# define BLOCK_DURATION_MS				6 /* ms */
-#else
 /* first tests showed that with 24000 kHz a block time shorter than 5 ms leads to
    much higher DSL network latencies. A length of 6 ms seems to be optimal */
-# define BLOCK_DURATION_MS				6 /* ms */
-#endif
-
+#define BLOCK_DURATION_MS				6 /* ms */
 
 #define BLOCK_SIZE_SAMPLES				(BLOCK_DURATION_MS * SAMPLE_RATE / 1000)
 #define SND_CRD_BLOCK_SIZE_SAMPLES		(BLOCK_DURATION_MS * SND_CRD_SAMPLE_RATE / 1000)

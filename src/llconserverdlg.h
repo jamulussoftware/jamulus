@@ -51,18 +51,18 @@ class CLlconServerDlg : public CLlconServerDlgBase
 	Q_OBJECT
 
 public:
-	CLlconServerDlg(QWidget* parent = 0, const char* name = 0,
-		bool modal = FALSE,	WFlags f = 0);
+	CLlconServerDlg ( CServer* pNServP, QWidget* parent = 0,
+		const char* name = 0, bool modal = FALSE, WFlags f = 0 );
 
-	virtual ~CLlconServerDlg() {}
+	virtual ~CLlconServerDlg () {}
 
 protected:
-	QTimer	Timer;
-	CServer	Server;
+	QTimer		Timer;
+	CServer*	pServer;
 
-	QPixmap	BitmCubeGreen;
-	QPixmap	BitmCubeYellow;
-	QPixmap	BitmCubeRed;
+	QPixmap		BitmCubeGreen;
+	QPixmap		BitmCubeYellow;
+	QPixmap		BitmCubeRed;
 
 	CVector<CServerListViewItem*> vecpListViewItems;
 	QMutex ListViewMutex;

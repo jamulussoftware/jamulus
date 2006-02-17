@@ -36,26 +36,38 @@ QApplication* pApp = NULL;
 
 int main ( int argc, char** argv )
 {
-	/* Application object */
-	QApplication app ( argc, argv );
-
 	/* check if server or client application shall be started */
 	bool bIsClient = true;
-
+	bool bUseGUI = true;
+		
 	/* QT docu: argv()[0] is the program name, argv()[1] is the first
 	   argument and argv()[argc()-1] is the last argument */
 	if ( argc > 1 )
 	{
-		/* only "-s" is supported right now */
-		std::string strShortOpt = "-s";
+		std::string strShortOpt;
+
+		/* "-s": start server with GUI enabled */
+		strShortOpt = "-s";
 		if ( !strShortOpt.compare ( argv[1] ) )
 		{
 			bIsClient = false;
 		}
+
+		/* "-sn": start server with GUI disabled (no GUI used) */
+		strShortOpt = "-sn";
+		if ( !strShortOpt.compare ( argv[1] ) )
+		{
+			bIsClient = false;
+			bUseGUI = false;
+		}
 	}
+
+	/* Application object */
+	QApplication app ( argc, argv, bUseGUI );
 
 	if ( bIsClient )
 	{
+		/* client */
 		// actual client object
 		CClient Client;
 
@@ -63,7 +75,7 @@ int main ( int argc, char** argv )
 		CSettings Settings ( &Client );
 		Settings.Load ();
 
-		/* client */
+		// GUI object
 		CLlconClientDlg ClientDlg ( &Client, 0, 0, FALSE, Qt::WStyle_MinMax );
 
 		/* Set main window */
@@ -80,14 +92,26 @@ int main ( int argc, char** argv )
 	else
 	{
 		/* server */
-		CLlconServerDlg ServerDlg ( 0, 0, FALSE, Qt::WStyle_MinMax );
+		// actual server object
+		CServer Server;
 
-		/* Set main window */
-		app.setMainWidget ( &ServerDlg );
-		pApp = &app; /* Needed for post-event routine */
+		/* start the server */
+		Server.Start ();
 
-		/* Show dialog */
-		ServerDlg.show ();
+		if ( bUseGUI )
+		{
+			// GUI object for the server
+			CLlconServerDlg ServerDlg ( &Server, 0, 0, FALSE,
+				Qt::WStyle_MinMax );
+
+			/* Set main window */
+			app.setMainWidget ( &ServerDlg );
+			pApp = &app; /* Needed for post-event routine */
+
+			/* Show dialog */
+			ServerDlg.show ();
+		}
+
 		app.exec ();
 	}
 

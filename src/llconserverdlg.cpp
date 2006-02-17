@@ -26,8 +26,9 @@
 
 
 /* Implementation *************************************************************/
-CLlconServerDlg::CLlconServerDlg(QWidget* parent, const char* name, bool modal,
-	WFlags f) : CLlconServerDlgBase(parent, name, modal, f)
+CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent,
+	const char* name, bool modal, WFlags f ) : pServer ( pNServP ),
+	CLlconServerDlgBase ( parent, name, modal, f )
 {
 	/* set text for version and application name */
 	TextLabelNameVersion->
@@ -69,12 +70,9 @@ CLlconServerDlg::CLlconServerDlg(QWidget* parent, const char* name, bool modal,
 
 	/* Init slider control */
 	SliderNetBuf->setRange(1, MAX_NET_BUF_SIZE_NUM_BL);
-	const int iCurNumNetBuf = Server.GetChannelSet()->GetSockBufSize();
+	const int iCurNumNetBuf = pServer->GetChannelSet()->GetSockBufSize();
 	SliderNetBuf->setValue(iCurNumNetBuf);
 	TextNetBuf->setText("Size: " + QString().setNum(iCurNumNetBuf));
-
-	/* start the server */
-	Server.Start();
 
 	/* Init timing jitter text label */
 	TextLabelResponseTime->setText("");
@@ -112,7 +110,7 @@ void CLlconServerDlg::OnTimer()
 
 	ListViewMutex.lock();
 
-	Server.GetConCliParam(vecHostAddresses, vecdSamOffs);
+	pServer->GetConCliParam(vecHostAddresses, vecdSamOffs);
 
 	/* fill list with connected clients */
 	for (int i = 0; i < MAX_NUM_CHANNELS; i++)
@@ -142,7 +140,7 @@ void CLlconServerDlg::OnTimer()
 	ListViewMutex.unlock();
 
 	/* response time (if available) */
-	if ( Server.GetTimingStdDev ( dCurTiStdDev ) )
+	if ( pServer->GetTimingStdDev ( dCurTiStdDev ) )
 	{
 		TextLabelResponseTime->setText(QString().
 			setNum(dCurTiStdDev, 'f', 2) + " ms");
@@ -155,7 +153,7 @@ void CLlconServerDlg::OnTimer()
 
 void CLlconServerDlg::OnSliderNetBuf(int value)
 {
-	Server.GetChannelSet()->SetSockBufSize( BLOCK_SIZE_SAMPLES, value );
+	pServer->GetChannelSet()->SetSockBufSize( BLOCK_SIZE_SAMPLES, value );
 	TextNetBuf->setText("Size: " + QString().setNum(value));
 }
 

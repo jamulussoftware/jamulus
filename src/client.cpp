@@ -38,7 +38,9 @@ bool CClient::SetServerAddr(QString strNAddr)
 		return true;
 	}
 	else
+	{
 		return false; /* invalid address */
+	}
 }
 
 void CClient::Init()

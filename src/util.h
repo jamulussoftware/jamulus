@@ -83,7 +83,7 @@ public:
 	   default, reset */
 	CVector(const CVector<TData>& vecI) :
 		std::vector<TData>(static_cast<const std::vector<TData>&>(vecI)), 
-		iVectorSize(vecI.Size()), pData(this->begin()) {}
+		iVectorSize(vecI.Size()) { pData = this->begin(); }
 
 	void Init(const int iNewSize);
 

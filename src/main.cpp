@@ -110,9 +110,13 @@ int main ( int argc, char** argv )
 
 			/* Show dialog */
 			ServerDlg.show ();
+			app.exec ();
 		}
-
-		app.exec ();
+		else
+		{
+			// only start application without using the GUI
+			app.exec ();
+		}
 	}
 
 	return 0;

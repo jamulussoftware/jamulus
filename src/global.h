@@ -42,7 +42,7 @@
 
 /* version and application name */
 #ifndef VERSION
-# define VERSION						"0.9.2cvs"
+# define VERSION						"0.9.3cvs"
 #endif
 #define APP_NAME						"llcon"
 
@@ -72,14 +72,14 @@
 #define SND_CRD_BLOCK_SIZE_SAMPLES		(BLOCK_DURATION_MS * SND_CRD_SAMPLE_RATE / 1000)
 
 /* maximum network buffer size (which can be chosen by slider) */
-#define MAX_NET_BUF_SIZE_NUM_BL			10 /* number of blocks */
+#define MAX_NET_BUF_SIZE_NUM_BL			12 /* number of blocks */
 
 /* default network buffer size */
-#define DEF_NET_BUF_SIZE_NUM_BL			2 /* number of blocks */
+#define DEF_NET_BUF_SIZE_NUM_BL			5 /* number of blocks */
 
 // number of ticks of audio in/out buffer sliders
 #ifdef _WIN32
-# define AUD_SLIDER_LENGTH				15
+# define AUD_SLIDER_LENGTH				30
 #else
 # define AUD_SLIDER_LENGTH				6
 #endif

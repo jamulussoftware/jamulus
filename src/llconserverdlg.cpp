@@ -153,7 +153,7 @@ void CLlconServerDlg::OnTimer()
 
 void CLlconServerDlg::OnSliderNetBuf(int value)
 {
-	pServer->GetChannelSet()->SetSockBufSize( BLOCK_SIZE_SAMPLES, value );
+	pServer->GetChannelSet()->SetSockBufSize( MIN_BLOCK_SIZE_SAMPLES, value );
 	TextNetBuf->setText("Size: " + QString().setNum(value));
 }
 

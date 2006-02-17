@@ -31,28 +31,32 @@
 int CChannelSet::GetFreeChan()
 {
 	/* look for a free channel */
-	for (int i = 0; i < MAX_NUM_CHANNELS; i++)
+	for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
 	{
-		if (!vecChannels[i].IsConnected())
+		if ( !vecChannels[i].IsConnected () )
+		{
 			return i;
+		}
 	}
 
 	/* no free channel found, return invalid ID */
 	return INVALID_CHANNEL_ID;
 }
 
-int CChannelSet::CheckAddr(const CHostAddress& Addr)
+int CChannelSet::CheckAddr ( const CHostAddress& Addr )
 {
 	CHostAddress InetAddr;
 
 	/* Check for all possible channels if IP is already in use */
-	for (int i = 0; i < MAX_NUM_CHANNELS; i++)
+	for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-		if (vecChannels[i].GetAddress(InetAddr))
+		if ( vecChannels[i].GetAddress ( InetAddr ) )
 		{
 			/* IP found, return channel number */
-			if (InetAddr == Addr)
+			if ( InetAddr == Addr )
+			{
 				return i;
+			}
 		}
 	}
 
@@ -60,8 +64,9 @@ int CChannelSet::CheckAddr(const CHostAddress& Addr)
 	return INVALID_CHANNEL_ID;
 }
 
-bool CChannelSet::PutData(const CVector<unsigned char>& vecbyRecBuf,
-						  const int iNumBytesRead, const CHostAddress& HostAdr)
+bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
+						    const int iNumBytesRead,
+							const CHostAddress& HostAdr )
 {
 	Mutex.lock ();
 
@@ -106,64 +111,68 @@ bool CChannelSet::PutData(const CVector<unsigned char>& vecbyRecBuf,
 	return !bChanOK; /* return 1 if error */
 }
 
-void CChannelSet::GetBlockAllConC(CVector<int>& vecChanID,
-								  CVector<CVector<double> >& vecvecdData)
+void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
+								    CVector<CVector<double> >& vecvecdData )
 {
 	/* init temporal data vector and clear input buffers */
-	CVector<double>	vecdData(BLOCK_SIZE_SAMPLES);
+	CVector<double>	vecdData ( MIN_BLOCK_SIZE_SAMPLES );
 
-	vecChanID.Init(0);
-	vecvecdData.Init(0);
+	vecChanID.Init ( 0 );
+	vecvecdData.Init ( 0 );
 
 	/* make put and get calls thread safe. Do not forget to unlock mutex
 	   afterwards! */
-	Mutex.lock();
+	Mutex.lock ();
 
 	/* Check all possible channels */
-	for (int i = 0; i < MAX_NUM_CHANNELS; i++)
+	for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
 	{
 		/* read out all input buffers to decrease timeout counter on
 		   disconnected channels */
-		bool bGetOK = vecChannels[i].GetData(vecdData);
+		const bool bGetOK = vecChannels[i].GetData ( vecdData );
 
-		if (vecChannels[i].IsConnected())
+		if ( vecChannels[i].IsConnected () )
 		{
 			/* add ID and data */
-			vecChanID.Add(i);
+			vecChanID.Add ( i );
 
-			const int iOldSize = vecvecdData.Size();
-			vecvecdData.Enlarge(1);
-			vecvecdData[iOldSize].Init(vecdData.Size());
+			const int iOldSize = vecvecdData.Size ();
+			vecvecdData.Enlarge ( 1 );
+			vecvecdData[iOldSize].Init ( vecdData.Size () );
 			vecvecdData[iOldSize] = vecdData;
 
 			/* send message for get status (for GUI) */
-			if (bGetOK)
-				PostWinMessage(MS_JIT_BUF_GET, MUL_COL_LED_GREEN, i);
+			if ( bGetOK )
+			{
+				PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN, i );
+			}
 			else
-				PostWinMessage(MS_JIT_BUF_GET, MUL_COL_LED_RED, i);
+			{
+				PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED, i );
+			}
 		}
 	}
 
-	Mutex.unlock(); /* release mutex */
+	Mutex.unlock (); /* release mutex */
 }
 
-void CChannelSet::GetConCliParam(CVector<CHostAddress>& vecHostAddresses,
-								 CVector<double>& vecdSamOffs)
+void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
+								   CVector<double>& vecdSamOffs )
 {
 	CHostAddress InetAddr;
 
 	/* init return values */
-	vecHostAddresses.Init(MAX_NUM_CHANNELS);
-	vecdSamOffs.Init(MAX_NUM_CHANNELS);
+	vecHostAddresses.Init ( MAX_NUM_CHANNELS );
+	vecdSamOffs.Init ( MAX_NUM_CHANNELS );
 
 	/* Check all possible channels */
-	for (int i = 0; i < MAX_NUM_CHANNELS; i++)
+	for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
 	{
-		if (vecChannels[i].GetAddress(InetAddr))
+		if ( vecChannels[i].GetAddress ( InetAddr ) )
 		{
 			/* add new address and sample rate offset to vectors */
 			vecHostAddresses[i] = InetAddr;
-			vecdSamOffs[i] = vecChannels[i].GetResampleOffset();
+			vecdSamOffs[i] = vecChannels[i].GetResampleOffset ();
 		}
 	}
 }
@@ -195,7 +204,7 @@ CChannel::CChannel()
 	byTimeStampIdxCnt = 0;
 
 	/* init the socket buffer */
-	SetSockBufSize ( BLOCK_SIZE_SAMPLES, DEF_NET_BUF_SIZE_NUM_BL );
+	SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, DEF_NET_BUF_SIZE_NUM_BL );
 
 	/* init conversion buffer */
 	ConvBuf.Init ( BLOCK_SIZE_SAMPLES );

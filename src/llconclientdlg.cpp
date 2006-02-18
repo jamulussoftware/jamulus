@@ -244,33 +244,50 @@ void CLlconClientDlg::OnSliderNetBuf(int value)
 	TextNetBuf->setText("Size: " + QString().setNum(value));
 }
 
-void CLlconClientDlg::OnTimerSigMet()
+void CLlconClientDlg::OnTimerSigMet ()
 {
 	/* get current input levels */
-	double dCurSigLevelL = pClient->MicLevelL();
-	double dCurSigLevelR = pClient->MicLevelR();
+	double dCurSigLevelL = pClient->MicLevelL ();
+	double dCurSigLevelR = pClient->MicLevelR ();
 
 	/* linear transformation of the input level range to the progress-bar
 	   range */
 	dCurSigLevelL -= LOW_BOUND_SIG_METER;
 	dCurSigLevelL *= NUM_STEPS_INP_LEV_METER /
-		(UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER);
+		( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+
+	// lower bound the signal
+	if ( dCurSigLevelL < 0 )
+	{
+		dCurSigLevelL = 0;
+	}
+
 	dCurSigLevelR -= LOW_BOUND_SIG_METER;
 	dCurSigLevelR *= NUM_STEPS_INP_LEV_METER /
-		(UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER);
+		( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+
+	// lower bound the signal
+	if ( dCurSigLevelR < 0 )
+	{
+		dCurSigLevelR = 0;
+	}
 
 	/* show current level */
-	ProgressBarInputLevelL->setProgress((int) ceil(dCurSigLevelL));
-	ProgressBarInputLevelR->setProgress((int) ceil(dCurSigLevelR));
+	ProgressBarInputLevelL->setProgress ( (int) ceil ( dCurSigLevelL ) );
+	ProgressBarInputLevelR->setProgress ( (int) ceil ( dCurSigLevelR ) );
 }
 
-void CLlconClientDlg::OnTimerStatus()
+void CLlconClientDlg::OnTimerStatus ()
 {
 	/* show connection status in status bar */
-	if (pClient->IsConnected() && pClient->IsRunning())
-		TextLabelStatus->setText(tr("connected"));
+	if ( pClient->IsConnected () && pClient->IsRunning () )
+	{
+		TextLabelStatus->setText ( tr ( "connected" ) );
+	}
 	else
-		TextLabelStatus->setText(tr("disconnected"));
+	{
+		TextLabelStatus->setText ( tr ( "disconnected" ) );
+	}
 
 	/* update sample rate offset label */
 	QString strSamRaOffs;

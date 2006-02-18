@@ -27,41 +27,48 @@
 
 /* Implementation *************************************************************/
 /* Input level meter implementation ------------------------------------------ */
-void CSignalLevelMeter::Update(CVector<double>& vecdAudio)
+void CSignalLevelMeter::Update ( CVector<double>& vecdAudio )
 {
-	/* Do the update for entire vector, convert to floating-point */
-	const int iVecSize = vecdAudio.Size();
+	/* Do the update for entire vector */
+	const int iVecSize = vecdAudio.Size ();
 
-	for (int i = 0; i < iVecSize; i++)
+	for ( int i = 0; i < iVecSize; i++ )
 	{
 		/* norm of current audio sample */
-		const double dCurSig = fabs(vecdAudio[i]);
+		const double dCurSig = fabs ( vecdAudio[i] );
 
 		/* search for maximum. Decrease this max with time */
 		/* decrease max with time */
-		if (dCurLevel >= METER_FLY_BACK)
-			dCurLevel -= METER_FLY_BACK;
+		if ( dCurLevel >= METER_FLY_BACK )
+		{
+			dCurLevel *= 0.9999;
+		}
 		else
 		{
-			if ((dCurLevel <= METER_FLY_BACK) && (dCurLevel > 1.0))
-				dCurLevel -= 2.0;
+			dCurLevel = 0;
 		}
 
 		/* search for max */
-		if (dCurSig > dCurLevel)
+		if ( dCurSig > dCurLevel )
+		{
 			dCurLevel = dCurSig;
+		}
 	}
 }
 
-double CSignalLevelMeter::MicLevel()
+double CSignalLevelMeter::MicLevel ()
 {
 	const double dNormMicLevel = dCurLevel / _MAXSHORT;
 
 	/* logarithmic measure */
-	if (dNormMicLevel > 0)
-		return 20.0 * log10(dNormMicLevel);
+	if ( dNormMicLevel > 0 )
+	{
+		return 20.0 * log10 ( dNormMicLevel );
+	}
 	else
+	{
 		return -100000.0; /* large negative value */
+	}
 }
 
 

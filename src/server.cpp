@@ -26,7 +26,7 @@
 
 
 /* Implementation *************************************************************/
-CServer::CServer () : Socket ( &ChannelSet )
+CServer::CServer () : Socket ( &ChannelSet, this )
 {
 	vecsSendData.Init ( MIN_BLOCK_SIZE_SAMPLES );
 
@@ -153,5 +153,22 @@ bool CServer::GetTimingStdDev ( double& dCurTiStdDev )
 	else
 	{
 		return false;
+	}
+}
+
+void CServer::customEvent(QCustomEvent* Event)
+{
+	if (Event->type() == QEvent::User + 11)
+	{
+		const int iMessType = ((CLlconEvent*) Event)->iMessType;
+
+		switch(iMessType)
+		{
+		case MS_PACKET_RECEIVED:
+
+printf("packet received\n");
+
+			break;
+		}
 	}
 }

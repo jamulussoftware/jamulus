@@ -126,6 +126,15 @@ void CSocket::OnDataReceived ()
 	else
 	{
 		/* server */
+		// a packet was received, tell the server object to wake up if it
+		// is in sleep mode
+		CLlconEvent* LlconEv =
+			new CLlconEvent ( MS_PACKET_RECEIVED, 0, 0 );
+
+		/* Qt will delete the event object when done */
+		QThread::postEvent ( pServer, LlconEv );
+
+
 		pChannelSet->PutData ( vecbyRecBuf, iNumBytesRead, RecHostAddr );
 	}
 }

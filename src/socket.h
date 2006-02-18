@@ -50,7 +50,8 @@ public:
 	CSocket::CSocket(CChannel* pNewChannel) : pChannel(pNewChannel),
 		SocketDevice(QSocketDevice::Datagram /* UDP */), bIsClient(true)
 		{Init();}
-	CSocket::CSocket(CChannelSet* pNewChannelSet) : pChannelSet(pNewChannelSet),
+	CSocket::CSocket(CChannelSet* pNewChannelSet, QObject* pNServP) :
+		pChannelSet(pNewChannelSet), pServer ( pNServP ),
 		SocketDevice(QSocketDevice::Datagram /* UDP */), bIsClient(false)
 		{Init();}
 	virtual ~CSocket() {}
@@ -68,6 +69,7 @@ protected:
 
 	CChannel*				pChannel; /* for client */
 	CChannelSet*			pChannelSet; /* for server */
+	QObject*				pServer;
 	bool					bIsClient;
 
 public slots:

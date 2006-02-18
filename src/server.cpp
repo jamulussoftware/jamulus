@@ -47,6 +47,8 @@ void CServer::Start ()
 
 		/* init time for response time evaluation */
 		TimeLastBlock = QTime::currentTime ();
+
+qDebug("Server started");
 	}
 }
 
@@ -98,13 +100,11 @@ void CServer::OnTimer ()
 	}
 	else
 	{
-		/* disable server */
+		// Disable server if no clients are connected. In this case the server
+		// does not consume any significant CPU when no client is connected.
+		Stop ();
 
-// TODO not yet working since the socket does not have access to the server
-// object and cannot restart the server if packets arrive...
-
-//		Stop ();
-
+qDebug("Server stopped");
 	}
 }
 
@@ -165,9 +165,10 @@ void CServer::customEvent(QCustomEvent* Event)
 		switch(iMessType)
 		{
 		case MS_PACKET_RECEIVED:
-
-printf("packet received\n");
-
+			// wake up the server if a packet was received
+			// if the server is still running, the call to Start() will have
+			// no effect
+			Start ();
 			break;
 		}
 	}

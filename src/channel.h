@@ -38,16 +38,17 @@
 /* Set the time-out for the input buffer until the state changes from
    connected to not-connected (the actual time depends on the way the error
    correction is implemented) */
-#define CON_TIME_OUT_CNT_MAX			50
+#define CON_TIME_OUT_SEC_MAX	5 // seconds
+#define CON_TIME_OUT_CNT_MAX	( ( CON_TIME_OUT_SEC_MAX * 1000 ) / BLOCK_DURATION_MS )
 
 /* maximum number of internet connections (channels) */
-#define MAX_NUM_CHANNELS				10 /* max number channels for server */
+#define MAX_NUM_CHANNELS		10 /* max number channels for server */
 
 /* no valid channel number */
-#define INVALID_CHANNEL_ID				(MAX_NUM_CHANNELS + 1)
+#define INVALID_CHANNEL_ID		(MAX_NUM_CHANNELS + 1)
 
 /* no valid time stamp index */
-#define INVALID_TIME_STAMP_IDX			-1
+#define INVALID_TIME_STAMP_IDX	-1
 
 
 /* Classes ********************************************************************/

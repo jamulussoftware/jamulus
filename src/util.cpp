@@ -257,17 +257,44 @@ CAboutDlg::CAboutDlg(QWidget* parent, const char* name, bool modal, WFlags f)
 	TextLabelVersion->setText(GetVersionAndNameStr());
 }
 
-QString CAboutDlg::GetVersionAndNameStr()
+QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
 {
-	QString strVersionText;
+	QString strVersionText = "";
 
 	// name, short description and GPL hint
-	strVersionText = "<center><b>" + tr("llcon, Version ");
-	strVersionText += VERSION;
-	strVersionText += "</b><br> " +
-	tr("llcon, Low-Latency (Internet) Connection") + "<br>";
-	strVersionText += tr("Under the GNU General Public License (GPL)") +
-		"</center>";
+	if ( bWithHtml )
+	{
+		strVersionText += "<center><b>";
+	}
+
+	strVersionText += tr("llcon, Version ") + VERSION;
+
+	if ( bWithHtml )
+	{
+		strVersionText += "</b><br>";
+	}
+	else
+	{
+		strVersionText += "\n";
+	}
+
+	strVersionText += tr("llcon, Low-Latency (Internet) Connection");
+
+	if ( bWithHtml )
+	{
+		strVersionText += "<br>";
+	}
+	else
+	{
+		strVersionText += "\n";
+	}
+
+	strVersionText += tr("Under the GNU General Public License (GPL)");
+
+	if ( bWithHtml )
+	{
+		strVersionText += "</center>";
+	}
 
 	return strVersionText;
 }

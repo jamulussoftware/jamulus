@@ -304,7 +304,7 @@ public:
 	CAboutDlg(QWidget* parent = 0, const char* name = 0, bool modal = FALSE,
 		WFlags f = 0);
 
-	static QString GetVersionAndNameStr();
+	static QString GetVersionAndNameStr ( const bool bWithHtml = true );
 };
 
 

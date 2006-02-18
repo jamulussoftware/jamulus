@@ -95,9 +95,6 @@ int main ( int argc, char** argv )
 		// actual server object
 		CServer Server;
 
-		/* start the server */
-		Server.Start ();
-
 		if ( bUseGUI )
 		{
 			// GUI object for the server
@@ -115,7 +112,7 @@ int main ( int argc, char** argv )
 		else
 		{
 			// only start application without using the GUI
-			qDebug ( CAboutDlg::GetVersionAndNameStr () );
+			qDebug ( CAboutDlg::GetVersionAndNameStr ( false ) );
 			app.exec ();
 		}
 	}

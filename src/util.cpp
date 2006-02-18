@@ -72,20 +72,50 @@ double CSignalLevelMeter::MicLevel ()
 }
 
 
-/* Global functions implementation ********************************************/
-void DebugError(const char* pchErDescr, const char* pchPar1Descr, 
-				const double dPar1, const char* pchPar2Descr,
-				const double dPar2)
+/* CRC ---------------------------------------------------------------------- */
+void CCRC::Reset ()
 {
-	FILE* pFile = fopen("DebugError.dat", "a");
-	fprintf(pFile, pchErDescr); fprintf(pFile, " ### ");
-	fprintf(pFile, pchPar1Descr); fprintf(pFile, ": ");
-	fprintf(pFile, "%e ### ", dPar1);
-	fprintf(pFile, pchPar2Descr); fprintf(pFile, ": ");
-	fprintf(pFile, "%e\n", dPar2);
-	fclose(pFile);
-	printf("\nDebug error! For more information see test/DebugError.dat\n");
-	exit(1);
+	/* Init state shift-register with ones. Set all registers to "1" with
+	   bit-wise not operation */
+	iStateShiftReg = ~uint32_t ( 0 );
+}
+
+void CCRC::AddByte ( const uint8_t byNewInput )
+{
+	for ( int i = 0; i < 8; i++ )
+	{
+		/* Shift bits in shift-register for transistion */
+		iStateShiftReg <<= 1;
+
+		/* Take bit, which was shifted out of the register-size and place it
+		   at the beginning (LSB)
+		   (If condition is not satisfied, implicitely a "0" is added) */
+		if ( ( iStateShiftReg & iBitOutMask) > 0 )
+		{
+			iStateShiftReg |= 1;
+		}
+
+		/* Add new data bit to the LSB */
+		if ( ( byNewInput & ( 1 << ( 8 - i - 1 ) ) ) > 0 )
+		{
+			iStateShiftReg ^= 1;
+		}
+
+		/* Add mask to shift-register if first bit is true */
+		if ( iStateShiftReg & 1 )
+		{
+			iStateShiftReg ^= iPoly;
+		}
+	}
+}
+
+uint32_t CCRC::GetCRC()
+{
+	/* Return inverted shift-register (1's complement) */
+	iStateShiftReg = ~iStateShiftReg;
+
+	/* Remove bit which where shifted out of the shift-register frame */
+	return iStateShiftReg & ( iBitOutMask - 1 );
 }
 
 
@@ -315,4 +345,23 @@ CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QPopupMenu ( parent )
 		SLOT ( OnHelpWhatsThis () ), SHIFT+Key_F1 );
 	insertSeparator();
 	insertItem ( tr ( "&About..." ), this, SLOT ( OnHelpAbout () ) );
+}
+
+
+/******************************************************************************\
+* Global functions implementation                                              *
+\******************************************************************************/
+void DebugError(const char* pchErDescr, const char* pchPar1Descr, 
+				const double dPar1, const char* pchPar2Descr,
+				const double dPar2)
+{
+	FILE* pFile = fopen("DebugError.dat", "a");
+	fprintf(pFile, pchErDescr); fprintf(pFile, " ### ");
+	fprintf(pFile, pchPar1Descr); fprintf(pFile, ": ");
+	fprintf(pFile, "%e ### ", dPar1);
+	fprintf(pFile, pchPar2Descr); fprintf(pFile, ": ");
+	fprintf(pFile, "%e\n", dPar2);
+	fclose(pFile);
+	printf("\nDebug error! For more information see test/DebugError.dat\n");
+	exit(1);
 }

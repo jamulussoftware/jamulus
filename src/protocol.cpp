@@ -4,6 +4,20 @@
  * Author(s):
  *	Volker Fischer
  *
+
+Protocol message definition
+
+   +-----------+------------+-----------------+--------------+-------------+
+   | 2 byte ID | 1 byte cnt | 2 byte length n | n bytes data | 2 bytes CRC |
+   +-----------+------------+-----------------+--------------+-------------+
+
+- message ID defined by the defines PROTMESSID_x
+- cnt: counter which is incremet for each message and wraps around at 255
+- length n in bytes of the data
+- actual data, dependent on message type
+- 16 bits CRC, calculating over the entire message, is transmitted inverted
+  Generator polynom: G_16(x) = x^16 + x^12 + x^5 + 1, initial state: all ones
+
  *
  ******************************************************************************
  *

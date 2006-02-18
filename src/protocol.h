@@ -28,6 +28,13 @@
 #include "global.h"
 
 
+/* Definitions ****************************************************************/
+// protocol message IDs
+#define PROTMESSID_ACKN				 0 // acknowledge
+#define PROTMESSID_JITT_BUF_SIZE	10 // jitter buffer size
+#define PROTMESSID_PING				11 // for measuring ping time
+
+
 /* Classes ********************************************************************/
 class CProtocol
 {
@@ -54,6 +61,16 @@ class CClientProtocol : public CProtocol
 public:
 	CClientProtocol() {}
 	virtual ~CClientProtocol() {}
+
+protected:
+
+};
+
+class CProtMessage
+{
+public:
+	CProtMessage () {}
+	virtual ~CProtMessage () {}
 
 protected:
 

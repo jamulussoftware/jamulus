@@ -381,6 +381,26 @@ protected:
 };
 
 
+/* CRC ---------------------------------------------------------------------- */
+class CCRC
+{
+public:
+	CCRC () : iPoly ( ( 1 << 5 ) | ( 1 << 12 ) ), iBitOutMask ( 1 << 16 )
+		{ Reset (); }
+	virtual ~CCRC () {}
+
+	void Reset ();
+	void AddByte ( const uint8_t byNewInput );
+	bool CheckCRC ( const uint32_t iCRC ) { return iCRC == GetCRC(); }
+	uint32_t GetCRC ();
+
+protected:
+	uint32_t iBitOutMask;
+	uint32_t iPoly;
+	uint32_t iStateShiftReg;
+};
+
+
 /* Time conversion ---------------------------------------------------------- */
 // needed for ping measurement
 class CTimeConv

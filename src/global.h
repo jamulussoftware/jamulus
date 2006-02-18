@@ -68,8 +68,8 @@
    much higher DSL network latencies. A length of 6 ms seems to be optimal */
 #define BLOCK_DURATION_MS				6 /* ms */
 
-#define BLOCK_SIZE_SAMPLES				(BLOCK_DURATION_MS * SAMPLE_RATE / 1000)
-#define SND_CRD_BLOCK_SIZE_SAMPLES		(BLOCK_DURATION_MS * SND_CRD_SAMPLE_RATE / 1000)
+#define BLOCK_SIZE_SAMPLES				( BLOCK_DURATION_MS * SAMPLE_RATE / 1000 )
+#define SND_CRD_BLOCK_SIZE_SAMPLES		( BLOCK_DURATION_MS * SND_CRD_SAMPLE_RATE / 1000 )
 
 /* maximum network buffer size (which can be chosen by slider) */
 #define MAX_NET_BUF_SIZE_NUM_BL			12 /* number of blocks */
@@ -102,6 +102,20 @@
 #define _MAXSHORT						32767
 #define _MAXBYTE						255 /* binary: 11111111 */
 #define _MINSHORT						(-32768)
+
+#if HAVE_STDINT_H
+# include <stdint.h>
+#elif HAVE_INTTYPES_H
+# include <inttypes.h>
+#elif defined ( _WIN32 )
+typedef unsigned __int32 uint32_t;
+typedef unsigned __int16 uint16_t;
+typedef unsigned __int8  uint8_t;
+#else
+typedef unsigned int   uint32_t;
+typedef unsigned short uint16_t;
+typedef unsigned char  uint8_t;
+#endif
 
 
 /* Definitions for window message system ------------------------------------ */

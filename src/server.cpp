@@ -48,7 +48,7 @@ void CServer::Start ()
 		/* init time for response time evaluation */
 		TimeLastBlock = QTime::currentTime ();
 
-qDebug("Server started");
+		qDebug("Server started");
 	}
 }
 
@@ -56,6 +56,8 @@ void CServer::Stop ()
 {
 	/* stop main timer */
 	Timer.stop ();
+
+	qDebug("Server stopped");
 }
 
 void CServer::OnTimer ()
@@ -103,8 +105,6 @@ void CServer::OnTimer ()
 		// Disable server if no clients are connected. In this case the server
 		// does not consume any significant CPU when no client is connected.
 		Stop ();
-
-qDebug("Server stopped");
 	}
 }
 

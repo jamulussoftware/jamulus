@@ -115,6 +115,7 @@ int main ( int argc, char** argv )
 		else
 		{
 			// only start application without using the GUI
+			qDebug ( CAboutDlg::GetVersionAndNameStr () );
 			app.exec ();
 		}
 	}

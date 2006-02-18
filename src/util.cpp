@@ -254,14 +254,22 @@ CAboutDlg::CAboutDlg(QWidget* parent, const char* name, bool modal, WFlags f)
 		"</center><br>");
 
 	/* Set version number in about dialog */
+	TextLabelVersion->setText(GetVersionAndNameStr());
+}
+
+QString CAboutDlg::GetVersionAndNameStr()
+{
 	QString strVersionText;
+
+	// name, short description and GPL hint
 	strVersionText = "<center><b>" + tr("llcon, Version ");
 	strVersionText += VERSION;
 	strVersionText += "</b><br> " +
 	tr("llcon, Low-Latency (Internet) Connection") + "<br>";
 	strVersionText += tr("Under the GNU General Public License (GPL)") +
 		"</center>";
-	TextLabelVersion->setText(strVersionText);
+
+	return strVersionText;
 }
 
 

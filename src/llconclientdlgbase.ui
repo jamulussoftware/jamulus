@@ -360,6 +360,10 @@
                                 <name>text</name>
                                 <string>C&amp;onnect</string>
                             </property>
+                            <property stdset="1">
+                                <name>default</name>
+                                <bool>true</bool>
+                            </property>
                         </widget>
                     </hbox>
                 </widget>

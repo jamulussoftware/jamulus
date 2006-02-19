@@ -36,6 +36,10 @@
 #define PROTMESSID_JITT_BUF_SIZE	10 // jitter buffer size
 #define PROTMESSID_PING				11 // for measuring ping time
 
+// lengths of message as defined in protocol.cpp file
+#define MESS_HEADER_LENGTH_BYTE		5 /* ID, cnt, length */
+#define MESS_LEN_WITHOUT_DATA_BYTE	( MESS_HEADER_LENGTH_BYTE + 2 /* CRC */ )
+
 
 /* Classes ********************************************************************/
 class CProtocol
@@ -45,7 +49,11 @@ public:
 	virtual ~CProtocol() {}
 
 protected:
-	bool ParseMessage ( const CVector<uint8_t>& vecIn );
+	bool ParseMessage ( const CVector<uint8_t>& vecIn,
+						int& iCnt,
+						int& iID,
+						CVector<uint8_t>& vecData );
+
 	void GenMessage ( CVector<uint8_t>& vecOut,
 					  const int iCnt,
 					  const int iID,
@@ -55,9 +63,10 @@ protected:
 						  unsigned int& iPos,
 						  const uint32_t iVal,
 						  const unsigned int iNumOfBytes );
-	uint32_t	GetValFromStream ( const CVector<uint8_t>& vecIn,
-								   unsigned int& iPos,
-								   const unsigned int iNumOfBytes );
+
+	uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
+								unsigned int& iPos,
+								const unsigned int iNumOfBytes );
 
 	uint8_t iCounter;
 };

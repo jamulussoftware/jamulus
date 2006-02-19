@@ -41,16 +41,15 @@ Protocol message definition
 
 
 /* Implementation *************************************************************/
-
-#define MESS_HEADER_LENGTH_BYTE		5 /* ID, cnt, length */
-#define MESS_LEN_WITHOUT_DATA_BYTE	( MESS_HEADER_LENGTH_BYTE + 2 /* CRC */ )
-
-bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecIn )
+bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecIn,
+							   int& iCnt,
+							   int& iID,
+							   CVector<uint8_t>& vecData )
 {
 /*
 	return code: true -> ok; false -> error
 */
-	int iID, iCnt, iLenBy, i;
+	int iLenBy, i;
 	unsigned int iCurPos;
 
 	// query length of input vector
@@ -82,9 +81,9 @@ bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecIn )
 
 	// now check CRC -----
 	CCRC CRCObj;
-	iCurPos = 0; // start from beginning
-
 	const int iLenCRCCalc = MESS_HEADER_LENGTH_BYTE + iLenBy;
+
+	iCurPos = 0; // start from beginning
 	for ( i = 0; i < iLenCRCCalc; i++ )
 	{
 		CRCObj.AddByte ( static_cast<uint8_t> ( 
@@ -96,9 +95,13 @@ bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecIn )
 		return false; // return error code
 	}
 
-
-// TODO actual parsing of message data
-
+	// decode data -----
+	iCurPos = MESS_HEADER_LENGTH_BYTE; // start from beginning of data
+	for ( i = 0; i < iLenBy; i++ )
+	{
+		vecData[i] = static_cast<uint8_t> (
+			GetValFromStream ( vecIn, iCurPos, 1 ) );
+	}
 
 	return true; // everything was ok
 }
@@ -127,8 +130,10 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
 void CProtocol::GenMessage ( CVector<uint8_t>& vecOut,
 							 const int iCnt,
 							 const int iID,
-							 const CVector<uint8_t>& vecData)
+							 const CVector<uint8_t>& vecData )
 {
+	int i;
+
 	// query length of data vector
 	const int iDataLenByte = vecData.Size();
 
@@ -154,11 +159,27 @@ void CProtocol::GenMessage ( CVector<uint8_t>& vecOut,
 	PutValOnStream ( vecOut, iCurPos,
 		static_cast<uint32_t> ( iDataLenByte ), 2 );
 
-// TODO data, CRC
+	// encode data -----
+	for ( i = 0; i < iDataLenByte; i++ )
+	{
+		PutValOnStream ( vecOut, iCurPos,
+			static_cast<uint32_t> ( vecData[i] ), 1 );
+	}
 
+	// encode CRC -----
+	CCRC CRCObj;
+	iCurPos = 0; // start from beginning
+
+	const int iLenCRCCalc = MESS_HEADER_LENGTH_BYTE + iDataLenByte;
+	for ( i = 0; i < iLenCRCCalc; i++ )
+	{
+		CRCObj.AddByte ( static_cast<uint8_t> ( 
+			GetValFromStream ( vecOut, iCurPos, 1 ) ) );
+	}
+
+	PutValOnStream ( vecOut, iCurPos,
+		static_cast<uint32_t> ( CRCObj.GetCRC () ), 2 );
 }
-
-
 
 void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,
 								 unsigned int& iPos,

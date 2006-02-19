@@ -25,7 +25,9 @@
 #if !defined(PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_)
 #define PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_
 
+#include <qglobal.h>
 #include "global.h"
+#include "util.h"
 
 
 /* Definitions ****************************************************************/
@@ -39,11 +41,16 @@
 class CProtocol
 {
 public:
-	CProtocol() {}
+	CProtocol() : iCounter(0) {}
 	virtual ~CProtocol() {}
 
 protected:
+	bool		ParseMessage ( const CVector<uint8_t>& vecIn );
+	uint32_t	GetValFromStream ( const CVector<uint8_t>& vecIn,
+								   unsigned int& iPos,
+								   const unsigned int iNumOfBytes );
 
+	uint8_t iCounter;
 };
 
 class CServerProtocol : public CProtocol

@@ -12,7 +12,7 @@ Protocol message definition
    +-----------+------------+-----------------+--------------+-------------+
 
 - message ID defined by the defines PROTMESSID_x
-- cnt: counter which is incremet for each message and wraps around at 255
+- cnt: counter which is increment for each message and wraps around at 255
 - length n in bytes of the data
 - actual data, dependent on message type
 - 16 bits CRC, calculating over the entire message, is transmitted inverted
@@ -42,4 +42,85 @@ Protocol message definition
 
 /* Implementation *************************************************************/
 
-// TODO
+#define MESS_HEADER_LENGTH_BYTE		5 /* ID, cnt, length */
+#define MESS_LEN_WITHOUT_DATA_BYTE	( MESS_HEADER_LENGTH_BYTE + 2 /* CRC */ )
+
+bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecIn )
+{
+/*
+	return code: true -> ok; false -> error
+*/
+	int iID, iCnt, iLenBy, i;
+	unsigned int iCurPos;
+
+	// query length of input vector
+	const int iVecInLenByte = vecIn.Size();
+
+	// vector must be at least "MESS_LEN_WITHOUT_DATA_BYTE" bytes long
+	if ( iVecInLenByte < MESS_LEN_WITHOUT_DATA_BYTE )
+	{
+		return false; // return error code
+	}
+
+	// decode header -----
+	iCurPos = 0; // start from beginning
+	for ( i = 0; i < MESS_HEADER_LENGTH_BYTE; i++ )
+	{
+		/* 2 bytes ID */
+		iID = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
+
+		/* 1 byte cnt */
+		iCnt = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 1 ) );
+
+		/* 2 bytes length */
+		iLenBy = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
+	}
+
+	// make sure the length is correct
+	if ( iLenBy !=  iVecInLenByte - MESS_LEN_WITHOUT_DATA_BYTE )
+	{
+		return false; // return error code
+	}
+
+	// now check CRC -----
+	CCRC CRCObj;
+	iCurPos = 0; // start from beginning
+
+	const int iLenCRCCalc = MESS_HEADER_LENGTH_BYTE + iLenBy;
+	for ( i = 0; i < iLenCRCCalc; i++ )
+	{
+		CRCObj.AddByte ( static_cast<uint8_t> ( 
+			GetValFromStream ( vecIn, iCurPos, 1 ) ) );
+	}
+
+	if ( CRCObj.GetCRC () != GetValFromStream ( vecIn, iCurPos, 2 ) )
+	{
+		return false; // return error code
+	}
+
+
+// TODO actual parsing of message data
+
+
+	return true; // everything was ok
+}
+
+uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
+									   unsigned int& iPos,
+									   const unsigned int iNumOfBytes )
+{
+/*
+	note: iPos is automatically incremented in this function
+*/
+	// 4 bytes maximum since we return uint32
+	ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
+	ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
+
+	uint32_t iRet = 0;
+	for ( int i = 0; i < iNumOfBytes; i++ )
+	{
+		iRet |= vecIn[iPos + i] << ( i * 8 /* size of byte */ );
+	}
+
+	return iRet;
+}

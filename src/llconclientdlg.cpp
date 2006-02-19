@@ -164,8 +164,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 		this, SLOT(OnRevSelR()));
 
 	/* text edit controls */
+#ifdef _WIN32
 	QObject::connect(LineEditServerAddr, SIGNAL(returnPressed()),
 		this, SLOT(OnConnectDisconBut()));
+#endif
 
 
 	/* timers --------------------------------------------------------------- */

@@ -45,7 +45,16 @@ public:
 	virtual ~CProtocol() {}
 
 protected:
-	bool		ParseMessage ( const CVector<uint8_t>& vecIn );
+	bool ParseMessage ( const CVector<uint8_t>& vecIn );
+	void GenMessage ( CVector<uint8_t>& vecOut,
+					  const int iCnt,
+					  const int iID,
+					  const CVector<uint8_t>& vecData);
+
+	void PutValOnStream ( CVector<uint8_t>& vecIn,
+						  unsigned int& iPos,
+						  const uint32_t iVal,
+						  const unsigned int iNumOfBytes );
 	uint32_t	GetValFromStream ( const CVector<uint8_t>& vecIn,
 								   unsigned int& iPos,
 								   const unsigned int iNumOfBytes );

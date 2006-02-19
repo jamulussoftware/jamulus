@@ -64,17 +64,15 @@ bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecIn )
 
 	// decode header -----
 	iCurPos = 0; // start from beginning
-	for ( i = 0; i < MESS_HEADER_LENGTH_BYTE; i++ )
-	{
-		/* 2 bytes ID */
-		iID = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
 
-		/* 1 byte cnt */
-		iCnt = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 1 ) );
+	/* 2 bytes ID */
+	iID = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
 
-		/* 2 bytes length */
-		iLenBy = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
-	}
+	/* 1 byte cnt */
+	iCnt = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 1 ) );
+
+	/* 2 bytes length */
+	iLenBy = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
 
 	// make sure the length is correct
 	if ( iLenBy !=  iVecInLenByte - MESS_LEN_WITHOUT_DATA_BYTE )
@@ -119,8 +117,66 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
 	uint32_t iRet = 0;
 	for ( int i = 0; i < iNumOfBytes; i++ )
 	{
-		iRet |= vecIn[iPos + i] << ( i * 8 /* size of byte */ );
+		iRet |= vecIn[iPos] << ( i * 8 /* size of byte */ );
+		iPos++;
 	}
 
 	return iRet;
+}
+
+void CProtocol::GenMessage ( CVector<uint8_t>& vecOut,
+							 const int iCnt,
+							 const int iID,
+							 const CVector<uint8_t>& vecData)
+{
+	// query length of data vector
+	const int iDataLenByte = vecData.Size();
+
+	// total length of message = 7 + "iDataLenByte"
+	// 2 byte ID + 1 byte cnt + 2 byte length + n bytes data + 2 bytes CRC
+	const int iTotLenByte = 7 + iDataLenByte;
+
+	// init message vector
+	vecOut.Init( iTotLenByte );
+
+	// encode header -----
+	unsigned int iCurPos = 0; // init position pointer
+
+	/* 2 bytes ID */
+	PutValOnStream ( vecOut, iCurPos,
+		static_cast<uint32_t> ( iID ), 2 );
+
+	/* 1 byte cnt */
+	PutValOnStream ( vecOut, iCurPos,
+		static_cast<uint32_t> ( iCnt ), 1 );
+
+	/* 2 bytes length */
+	PutValOnStream ( vecOut, iCurPos,
+		static_cast<uint32_t> ( iDataLenByte ), 2 );
+
+// TODO data, CRC
+
+}
+
+
+
+void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,
+								 unsigned int& iPos,
+								 const uint32_t iVal,
+								 const unsigned int iNumOfBytes )
+{
+/*
+	note: iPos is automatically incremented in this function
+*/
+	// 4 bytes maximum since we use uint32
+	ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
+	ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
+
+	for ( int i = 0; i < iNumOfBytes; i++ )
+	{
+		vecIn[iPos] =
+			( iVal >> ( i * 8 /* size of byte */ ) ) & 255 /* 11111111 */;
+
+		iPos++;
+	}
 }

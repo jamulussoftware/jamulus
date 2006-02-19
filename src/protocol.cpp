@@ -41,6 +41,22 @@ Protocol message definition
 
 
 /* Implementation *************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+/******************************************************************************\
+* Message generation (parsing)                                                 *
+\******************************************************************************/
 bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecIn,
 							   int& iCnt,
 							   int& iID,

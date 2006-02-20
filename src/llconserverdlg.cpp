@@ -54,7 +54,10 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent,
 	ListViewClients->setColumnAlignment(1, Qt::AlignCenter);
 	ListViewClients->addColumn(tr("Get"));
 	ListViewClients->setColumnAlignment(2, Qt::AlignCenter);
+	ListViewClients->addColumn(tr("Jitter buffer size"));
+	ListViewClients->setColumnAlignment(3, Qt::AlignRight);
 	ListViewClients->addColumn(tr("Sample-rate offset [Hz]"));
+	ListViewClients->setColumnAlignment(4, Qt::AlignRight);
 	ListViewClients->clear();
 
 	/* insert items in reverse order because in Windows all of them are
@@ -106,11 +109,12 @@ void CLlconServerDlg::OnTimer()
 {
 	CVector<CHostAddress>	vecHostAddresses;
 	CVector<double>			vecdSamOffs;
+	CVector<int>			veciJitBufSize;
 	double					dCurTiStdDev;
 
 	ListViewMutex.lock();
 
-	pServer->GetConCliParam(vecHostAddresses, vecdSamOffs);
+	pServer->GetConCliParam(vecHostAddresses, vecdSamOffs, veciJitBufSize);
 
 	/* fill list with connected clients */
 	for (int i = 0; i < MAX_NUM_CHANNELS; i++)
@@ -122,9 +126,13 @@ void CLlconServerDlg::OnTimer()
 				vecHostAddresses[i].InetAddr.toString().latin1(),
 				vecHostAddresses[i].iPort) /* IP, port */);
 
+			/* jitter buffer size */
+			vecpListViewItems[i]->setText(3,
+				QString().setNum(veciJitBufSize[i]));
+
 			/* sample rate offset */
 // FIXME disable sample rate estimation result label since estimation does not work
-//			vecpListViewItems[i]->setText(3,
+//			vecpListViewItems[i]->setText(4,
 //				QString().sprintf("%5.2f", vecdSamOffs[i]));
 
 #ifndef _WIN32

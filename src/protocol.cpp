@@ -7,9 +7,13 @@
 
 Protocol message definition
 
-   +-----------+------------+-----------------+--------------+-------------+
-   | 2 byte ID | 1 byte cnt | 2 byte length n | n bytes data | 2 bytes CRC |
-   +-----------+------------+-----------------+--------------+-------------+
+
+MAIN FRAME
+----------
+
+	+------------+------------+------------------+--------------+-------------+
+	| 2 bytes ID | 1 byte cnt | 2 bytes length n | n bytes data | 2 bytes CRC |
+	+------------+------------+------------------+--------------+-------------+
 
 - message ID defined by the defines PROTMESSID_x
 - cnt: counter which is increment for each message and wraps around at 255
@@ -17,6 +21,19 @@ Protocol message definition
 - actual data, dependent on message type
 - 16 bits CRC, calculating over the entire message, is transmitted inverted
   Generator polynom: G_16(x) = x^16 + x^12 + x^5 + 1, initial state: all ones
+
+
+MESSAGES
+--------
+
+- Jitter buffer size: PROTMESSID_JITT_BUF_SIZE
+
+	+--------------------------+
+	| 2 bytes number of blocks |
+	+--------------------------+
+
+
+
 
  *
  ******************************************************************************
@@ -42,25 +59,62 @@ Protocol message definition
 
 /* Implementation *************************************************************/
 
+bool CClientProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
+									 const int iNumBytes )
+{
+/*
+	return code: true -> ok; false -> error
+*/
+	int					iRecCounter, iRecID;
+	CVector<uint8_t>	vecData;
 
+// convert unsigned char in uint8_t, TODO convert all buffers in uint8_t
+CVector<uint8_t> vecbyDataConv ( vecbyData.Size () );
+for ( int i = 0; i < vecbyData.Size (); i++ ) {
+	vecbyDataConv[i] = static_cast<uint8_t> ( vecbyData[i] );
+}
 
+	if ( ParseMessageFrame ( vecbyDataConv, iRecCounter, iRecID, vecData ) )
+	{
 
+		switch ( iRecID ) 
+		{
+		case PROTMESSID_ACKN:
 
+// TODO implement acknowledge code -> do implementation in CProtocol since
+// it can be used in the server protocol, too
 
+			break;
+		}
 
+		return true; // everything was ok
+	}
+	else
+	{
+		return false; // return error code
+	}
+}
 
+void CClientProtocol::CreateJitBufMes ( const int iJitBufSize )
+{
+	CVector<uint8_t>	vecData ( 2 );
+	unsigned int		iPos = 0;
 
+	// build data vector
+	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iJitBufSize ), 2 );
 
-
+	// build complete message
+	GenMessageFrame ( vecMessage, iCounter, PROTMESSID_JITT_BUF_SIZE, vecData );
+}
 
 
 /******************************************************************************\
 * Message generation (parsing)                                                 *
 \******************************************************************************/
-bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecIn,
-							   int& iCnt,
-							   int& iID,
-							   CVector<uint8_t>& vecData )
+bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
+								    int& iCnt,
+									int& iID,
+									CVector<uint8_t>& vecData )
 {
 /*
 	return code: true -> ok; false -> error
@@ -143,10 +197,10 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
 	return iRet;
 }
 
-void CProtocol::GenMessage ( CVector<uint8_t>& vecOut,
-							 const int iCnt,
-							 const int iID,
-							 const CVector<uint8_t>& vecData )
+void CProtocol::GenMessageFrame ( CVector<uint8_t>& vecOut,
+								  const int iCnt,
+								  const int iID,
+								  const CVector<uint8_t>& vecData )
 {
 	int i;
 

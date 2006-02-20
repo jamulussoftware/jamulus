@@ -36,6 +36,12 @@ CServer::CServer () : Socket ( &ChannelSet, this )
 	/* connect timer timeout signal */
 	QObject::connect ( &Timer, SIGNAL ( timeout () ),
 		this, SLOT ( OnTimer () ) );
+
+#ifdef _WIN32
+	// event handling of custom events seems not to work under Windows in this
+	// class, do not use automatic start/stop of server in Windows version
+	Start ();
+#endif
 }
 
 void CServer::Start ()
@@ -104,7 +110,11 @@ void CServer::OnTimer ()
 	{
 		// Disable server if no clients are connected. In this case the server
 		// does not consume any significant CPU when no client is connected.
+#ifndef _WIN32
+		// event handling of custom events seems not to work under Windows in this
+		// class, do not use automatic start/stop of server in Windows version
 		Stop ();
+#endif
 	}
 }
 

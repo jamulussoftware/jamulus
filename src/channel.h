@@ -32,6 +32,7 @@
 #include "audiocompr.h"
 #include "util.h"
 #include "resample.h"
+#include "protocol.h"
 
 
 /* Definitions ****************************************************************/
@@ -117,6 +118,11 @@ protected:
 	/* network output conversion buffer */
 	CConvBuf ConvBuf;
 
+
+// TEST TODO: better implementation, now this object is created in server AND client which is not good
+CClientProtocol ClientProtocol;
+
+
 	/* time stamp index counter */
 	Q_UINT8 byTimeStampIdxCnt;
 	int iTimeStampActCnt;
@@ -143,7 +149,8 @@ public:
 	void GetBlockAllConC(CVector<int>& vecChanID,
 						 CVector<CVector<double> >& vecvecdData);
 	void GetConCliParam(CVector<CHostAddress>& vecHostAddresses,
-						CVector<double>& vecdSamOffs);
+						CVector<double>& vecdSamOffs,
+						CVector<int>& veciJitBufSize);
 
 	/* access functions for actual channels */
 	bool IsConnected(const int iChanNum)

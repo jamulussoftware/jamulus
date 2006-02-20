@@ -157,13 +157,15 @@ void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
 }
 
 void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-								   CVector<double>& vecdSamOffs )
+								   CVector<double>& vecdSamOffs,
+								   CVector<int>& veciJitBufSize )
 {
 	CHostAddress InetAddr;
 
 	/* init return values */
 	vecHostAddresses.Init ( MAX_NUM_CHANNELS );
 	vecdSamOffs.Init ( MAX_NUM_CHANNELS );
+	veciJitBufSize.Init ( MAX_NUM_CHANNELS );
 
 	/* Check all possible channels */
 	for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
@@ -173,6 +175,7 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 			/* add new address and sample rate offset to vectors */
 			vecHostAddresses[i] = InetAddr;
 			vecdSamOffs[i] = vecChannels[i].GetResampleOffset ();
+			veciJitBufSize[i] = vecChannels[i].GetSockBufSize ();
 		}
 	}
 }
@@ -244,19 +247,19 @@ bool CChannel::GetAddress(CHostAddress& RetAddr)
 	}
 }
 
-bool CChannel::PutData(const CVector<unsigned char>& vecbyData,
-					   int iNumBytes)
+bool CChannel::PutData ( const CVector<unsigned char>& vecbyData,
+					     int iNumBytes )
 {
 	bool bRet = true;
 
-	Mutex.lock(); /* put mutex lock */
+	Mutex.lock (); /* put mutex lock */
 
 	/* only process if packet has correct size */
-	if (iNumBytes == iAudComprSize)
+	if ( iNumBytes == iAudComprSize )
 	{
 		/* decompress audio */
-		CVector<short> vecsDecomprAudio(BLOCK_SIZE_SAMPLES);
-		vecsDecomprAudio = AudioCompression.Decode(vecbyData);
+		CVector<short> vecsDecomprAudio ( BLOCK_SIZE_SAMPLES );
+		vecsDecomprAudio = AudioCompression.Decode ( vecbyData );
 
 		/* do resampling to compensate for sample rate offsets in the
 		   different sound cards of the clients */
@@ -273,20 +276,30 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 	vecdResOutData[i] = (double) vecsDecomprAudio[i];
 
 
-		bRet = SockBuf.Put(vecdResOutData);
+		bRet = SockBuf.Put ( vecdResOutData );
 
 		/* reset time-out counter */
 		iConTimeOut = CON_TIME_OUT_CNT_MAX;
 	}
-	else if (iNumBytes == 1)
+	else if ( iNumBytes == 1 )
 	{
 		/* time stamp packet */
-		SampleOffsetEst.AddTimeStampIdx(vecbyData[0]);
+		SampleOffsetEst.AddTimeStampIdx ( vecbyData[0] );
 	}
 	else
-		bRet = false; /* wrong packet size */
+	{
 
-	Mutex.unlock(); /* put mutex unlock */
+
+
+// TODO add protocol parsing here
+ClientProtocol.ParseMessage ( vecbyData, iNumBytes );
+
+
+
+		bRet = false; /* wrong packet size */
+	}
+
+	Mutex.unlock (); /* put mutex unlock */
 
 	return bRet;
 }

@@ -45,19 +45,19 @@
 class CProtocol
 {
 public:
-	CProtocol() : iCounter(0) {}
-	virtual ~CProtocol() {}
+	CProtocol () : iCounter ( 0 ) {}
+	virtual ~CProtocol () {}
 
 protected:
-	bool ParseMessage ( const CVector<uint8_t>& vecIn,
-						int& iCnt,
-						int& iID,
-						CVector<uint8_t>& vecData );
+	bool ParseMessageFrame ( const CVector<uint8_t>& vecIn,
+							 int& iCnt,
+							 int& iID,
+							 CVector<uint8_t>& vecData );
 
-	void GenMessage ( CVector<uint8_t>& vecOut,
-					  const int iCnt,
-					  const int iID,
-					  const CVector<uint8_t>& vecData);
+	void GenMessageFrame ( CVector<uint8_t>& vecOut,
+						   const int iCnt,
+						   const int iID,
+						   const CVector<uint8_t>& vecData);
 
 	void PutValOnStream ( CVector<uint8_t>& vecIn,
 						  unsigned int& iPos,
@@ -68,38 +68,44 @@ protected:
 								unsigned int& iPos,
 								const unsigned int iNumOfBytes );
 
-	uint8_t iCounter;
+	CVector<uint8_t>	vecMessage;
+	uint8_t				iCounter;
 };
 
-class CServerProtocol : public CProtocol
-{
-public:
-	CServerProtocol() {}
-	virtual ~CServerProtocol() {}
-
-protected:
-
-};
 
 class CClientProtocol : public CProtocol
 {
 public:
-	CClientProtocol() {}
-	virtual ~CClientProtocol() {}
+	CClientProtocol () {}
+	virtual ~CClientProtocol () {}
+
+	void CreateJitBufMes ( const int iJitBufSize );
+
+	bool ParseMessage ( const CVector<unsigned char>& vecbyData,
+						const int iNumBytes );
 
 protected:
 
 };
 
-class CProtMessage
+
+class CServerProtocol : public CProtocol
 {
 public:
-	CProtMessage () {}
-	virtual ~CProtMessage () {}
+	CServerProtocol () {}
+	virtual ~CServerProtocol () {}
+
+	bool ParseMessage ( const CVector<unsigned char>& vecbyData,
+						const int iNumBytes );
 
 protected:
 
 };
+
+
+
+
+
 
 
 #endif /* !defined(PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_) */

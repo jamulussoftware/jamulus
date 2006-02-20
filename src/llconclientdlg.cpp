@@ -163,12 +163,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	QObject::connect(RadioButtonRevSelR, SIGNAL(clicked()),
 		this, SLOT(OnRevSelR()));
 
-	/* text edit controls */
-#ifdef _WIN32
-	QObject::connect(LineEditServerAddr, SIGNAL(returnPressed()),
-		this, SLOT(OnConnectDisconBut()));
-#endif
-
 
 	/* timers --------------------------------------------------------------- */
 	/* start timer for status bar */

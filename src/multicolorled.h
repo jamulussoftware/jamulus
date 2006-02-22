@@ -101,15 +101,22 @@ protected:
 class CMultColLEDListViewItem : public CMultiColorLEDbase
 {
 public:
-	CMultColLEDListViewItem(const int iNewCol) : iColumn(iNewCol),
-		pListViewItem(NULL) {}
+	CMultColLEDListViewItem ( const int iNewCol ) : iColumn ( iNewCol ),
+		pListViewItem ( NULL ) {}
 
-	void SetListViewItemPointer(QListViewItem* pNewListViewItem)
-		{pListViewItem = pNewListViewItem;}
+	void SetListViewItemPointer ( QListViewItem* pNewListViewItem )
+	{
+		pListViewItem = pNewListViewItem;
+	}
 
 protected:
-	virtual void SetPixmap(QPixmap& NewBitmap)
-		{if (pListViewItem != NULL) pListViewItem->setPixmap(iColumn, NewBitmap);}
+	virtual void SetPixmap ( QPixmap& NewBitmap )
+	{
+		if ( pListViewItem != NULL )
+		{
+			pListViewItem->setPixmap ( iColumn, NewBitmap );
+		}
+	}
 
 	QListViewItem*	pListViewItem;
 	int				iColumn;
@@ -119,15 +126,19 @@ protected:
 class CServerListViewItem : public QListViewItem
 {
 public:
-	CServerListViewItem(QListView* parent) : LED0(1), LED1(2),
-		QListViewItem(parent) {LED0.SetListViewItemPointer(this);
-		LED1.SetListViewItemPointer(this);}
-
-	void SetLight(int iWhichLED, int iNewStatus)
+	CServerListViewItem ( QListView* parent ) : LED0 ( 1 ), LED1 ( 2 ),
+		QListViewItem ( parent )
 	{
-		switch (iWhichLED) {
-		case 0: LED0.SetLight(iNewStatus); break;
-		case 1: LED1.SetLight(iNewStatus); break;
+		LED0.SetListViewItemPointer ( this );
+		LED1.SetListViewItemPointer ( this );
+	}
+
+	void SetLight ( int iWhichLED, int iNewStatus )
+	{
+		switch ( iWhichLED )
+		{
+		case 0: LED0.SetLight ( iNewStatus ); break;
+		case 1: LED1.SetLight ( iNewStatus ); break;
 		}
 	}
 

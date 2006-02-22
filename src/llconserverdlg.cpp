@@ -136,13 +136,20 @@ void CLlconServerDlg::OnTimer()
 //				QString().sprintf("%5.2f", vecdSamOffs[i]));
 
 #ifndef _WIN32
-			vecpListViewItems[i]->setVisible(true);
+			vecpListViewItems[i]->setVisible ( true );
 #endif
 		}
-#ifndef _WIN32
 		else
-			vecpListViewItems[i]->setVisible(false);
+		{
+#ifdef _WIN32
+			/* remove text for Windows version */
+			vecpListViewItems[i]->setText(0,"");
+			vecpListViewItems[i]->setText(3,"");
+			vecpListViewItems[i]->setText(4,"");
+#else
+			vecpListViewItems[i]->setVisible ( false );
 #endif
+		}
 	}
 
 	ListViewMutex.unlock();

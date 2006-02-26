@@ -97,10 +97,6 @@ bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
 	CVector<uint8_t>	vecData;
 
 
-// TEST
-qDebug ( "parser entered" );
-
-
 // convert unsigned char in uint8_t, TODO convert all buffers in uint8_t
 CVector<uint8_t> vecbyDataConv ( iNumBytes );
 for ( int i = 0; i < iNumBytes; i++ ) {
@@ -178,11 +174,6 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
 	}
 
 
-// TEST
-qDebug ( "min length ok" );
-
-
-
 	// decode header -----
 	iCurPos = 0; // start from beginning
 
@@ -196,19 +187,10 @@ qDebug ( "min length ok" );
 	iLenBy = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
 
 	// make sure the length is correct
-
-
-qDebug ( "iLenBy: %d / iVecInLenByte: %d" );
-
-
 	if ( iLenBy !=  iVecInLenByte - MESS_LEN_WITHOUT_DATA_BYTE )
 	{
 		return false; // return error code
 	}
-
-// TEST
-qDebug ( "overall length ok" );
-
 
 
 	// now check CRC -----
@@ -228,11 +210,8 @@ qDebug ( "overall length ok" );
 	}
 
 
-// TEST
-qDebug ( "CRC ok" );
-
-
 	// decode data -----
+	vecData.Init ( iLenBy );
 	iCurPos = MESS_HEADER_LENGTH_BYTE; // start from beginning of data
 	for ( i = 0; i < iLenBy; i++ )
 	{

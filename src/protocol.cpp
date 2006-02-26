@@ -176,6 +176,12 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
 		return false; // return error code
 	}
 
+
+// TEST
+qDebug ( "min length ok" );
+
+
+
 	// decode header -----
 	iCurPos = 0; // start from beginning
 
@@ -194,6 +200,11 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
 		return false; // return error code
 	}
 
+// TEST
+qDebug ( "overall length ok" );
+
+
+
 	// now check CRC -----
 	CCRC CRCObj;
 	const int iLenCRCCalc = MESS_HEADER_LENGTH_BYTE + iLenBy;
@@ -209,6 +220,11 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
 	{
 		return false; // return error code
 	}
+
+
+// TEST
+qDebug ( "CRC ok" );
+
 
 	// decode data -----
 	iCurPos = MESS_HEADER_LENGTH_BYTE; // start from beginning of data

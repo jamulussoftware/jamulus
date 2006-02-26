@@ -102,11 +102,12 @@ qDebug ( "parser entered" );
 
 
 // convert unsigned char in uint8_t, TODO convert all buffers in uint8_t
-CVector<uint8_t> vecbyDataConv ( vecbyData.Size () );
-for ( int i = 0; i < vecbyData.Size (); i++ ) {
+CVector<uint8_t> vecbyDataConv ( iNumBytes );
+for ( int i = 0; i < iNumBytes; i++ ) {
 	vecbyDataConv[i] = static_cast<uint8_t> ( vecbyData[i] );
 }
 
+// important: vecbyDataConv must have iNumBytes to get it work!!!
 	if ( ParseMessageFrame ( vecbyDataConv, iRecCounter, iRecID, vecData ) )
 	{
 
@@ -195,6 +196,11 @@ qDebug ( "min length ok" );
 	iLenBy = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
 
 	// make sure the length is correct
+
+
+qDebug ( "iLenBy: %d / iVecInLenByte: %d" );
+
+
 	if ( iLenBy !=  iVecInLenByte - MESS_LEN_WITHOUT_DATA_BYTE )
 	{
 		return false; // return error code

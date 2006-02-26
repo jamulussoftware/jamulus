@@ -198,7 +198,7 @@ for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
 /******************************************************************************\
 * CChannel                                                                     *
 \******************************************************************************/
-CChannel::CChannel()
+CChannel::CChannel ()
 {
 	/* init time stamp activation counter */
 	iTimeStampActCnt = NUM_BL_TIME_STAMPS;
@@ -221,6 +221,12 @@ CChannel::CChannel()
 
 	/* init sample rate offset estimation object */
 	SampleOffsetEst.Init();
+
+
+	/* connections ---------------------------------------------------------- */
+	// just route message through this class
+	QObject::connect(&Protocol, SIGNAL(MessReadyForSending()),
+		SIGNAL(MessReadyForSending()));
 }
 
 void CChannel::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
@@ -292,7 +298,7 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 
 
 // TODO add protocol parsing here
-ClientProtocol.ParseMessage ( vecbyData, iNumBytes );
+Protocol.ParseMessage ( vecbyData, iNumBytes );
 
 
 
@@ -304,27 +310,29 @@ ClientProtocol.ParseMessage ( vecbyData, iNumBytes );
 	return bRet;
 }
 
-bool CChannel::GetData(CVector<double>& vecdData)
+bool CChannel::GetData ( CVector<double>& vecdData )
 {
-	Mutex.lock(); /* get mutex lock */
+	Mutex.lock (); /* get mutex lock */
 
-	const bool bGetOK = SockBuf.Get(vecdData);
+	const bool bGetOK = SockBuf.Get ( vecdData );
 
-	if (!bGetOK)
+	if ( !bGetOK )
 	{
 		/* decrease time-out counter */
-		if (iConTimeOut > 0)
+		if ( iConTimeOut > 0 )
 		{
 			iConTimeOut--;
 
 			/* if time out is reached, re-init resample offset estimation
 			   module */
-			if (iConTimeOut == 0)
-				SampleOffsetEst.Init();
+			if ( iConTimeOut == 0 )
+			{
+				SampleOffsetEst.Init ();
+			}
 		}
 	}
 
-	Mutex.unlock(); /* get mutex unlock */
+	Mutex.unlock (); /* get mutex unlock */
 
 	return bGetOK;
 }

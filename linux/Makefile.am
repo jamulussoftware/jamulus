@@ -39,6 +39,9 @@ llcon_SOURCES = ../src/buffer.cpp \
 # these need to be generated before the rest can be compiled
 
 BUILT_SOURCES=moc/moc_server.cpp \
+	moc/moc_client.cpp \
+	moc/moc_protocol.cpp \
+	moc/moc_channel.cpp \
 	moc/moc_socket.cpp \
 	moc/moc_multicolorled.cpp \
 	moc/moc_util.cpp \
@@ -56,7 +59,10 @@ dist-hook:
 
 moc/moc_server.cpp: ../src/server.h
 	$(MOC) ../src/server.h -o moc/moc_server.cpp
-	
+
+moc/moc_client.cpp: ../src/client.h
+	$(MOC) ../src/client.h -o moc/moc_client.cpp
+
 moc/moc_socket.cpp: ../src/socket.h
 	$(MOC) ../src/socket.h -o moc/moc_socket.cpp
 
@@ -66,6 +72,11 @@ moc/moc_multicolorled.cpp: ../src/multicolorled.h
 moc/moc_util.cpp: ../src/util.h
 	$(MOC) ../src/util.h -o moc/moc_util.cpp
 
+moc/moc_protocol.cpp: ../src/protocol.h
+	$(MOC) ../src/protocol.h -o moc/moc_protocol.cpp
+
+moc/moc_channel.cpp: ../src/channel.h
+	$(MOC) ../src/channel.h -o moc/moc_channel.cpp
 
 
 moc/moc_aboutdlgbase.cpp: moc/aboutdlgbase.h

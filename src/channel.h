@@ -74,27 +74,39 @@ protected:
 
 
 /* CChannel ----------------------------------------------------------------- */
-class CChannel
+class CChannel : public QObject
 {
+	Q_OBJECT
+
 public:
-	CChannel();
-	virtual ~CChannel() {}
+	CChannel ();
+	virtual ~CChannel () {}
 
-	bool PutData(const CVector<unsigned char>& vecbyData,
-				 int iNumBytes);
-	bool GetData(CVector<double>& vecdData);
+	bool PutData ( const CVector<unsigned char>& vecbyData,
+				   int iNumBytes );
+	bool GetData ( CVector<double>& vecdData );
 
-	CVector<unsigned char> PrepSendPacket(const CVector<short>& vecsNPacket);
+	CVector<unsigned char> PrepSendPacket ( const CVector<short>& vecsNPacket );
+	CVector<unsigned char> GetSendMessage () { return Protocol.GetSendMessage (); }
 
-	bool GetAddress(CHostAddress& RetAddr);
-	CHostAddress GetAddress() {return InetAddr;}
-	int GetTimeStampIdx();
-	void SetAddress(const CHostAddress NAddr) {InetAddr = NAddr;}
-	bool IsConnected() const {return iConTimeOut > 0;}
-	int	GetComprAudSize() {return iAudComprSize;}
-	double GetResampleOffset() {return SampleOffsetEst.GetSamRate();}
+	bool IsConnected () const { return iConTimeOut > 0; }
+
+	int GetTimeStampIdx ();
+	int	GetComprAudSize () { return iAudComprSize; }
+	double GetResampleOffset () { return SampleOffsetEst.GetSamRate (); }
+
+	void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
+	bool GetAddress ( CHostAddress& RetAddr );
+	CHostAddress GetAddress () { return InetAddr; }
+
 	void SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks );
-	int GetSockBufSize() {return SockBuf.GetSize();}
+	int GetSockBufSize () { return SockBuf.GetSize(); }
+
+	// network protocol interface
+	void CreateJitBufMes ( const int iJitBufSize )
+	{
+		Protocol.CreateJitBufMes ( iJitBufSize );
+	}
 
 protected:
 	/* audio compression */
@@ -118,10 +130,8 @@ protected:
 	/* network output conversion buffer */
 	CConvBuf ConvBuf;
 
-
-// TEST TODO: better implementation, now this object is created in server AND client which is not good
-CClientProtocol ClientProtocol;
-
+	// network protocol
+	CProtocol Protocol;
 
 	/* time stamp index counter */
 	Q_UINT8 byTimeStampIdxCnt;
@@ -130,6 +140,9 @@ CClientProtocol ClientProtocol;
 	int iConTimeOut;
 
 	QMutex Mutex;
+
+signals:
+	void MessReadyForSending ();
 };
 
 

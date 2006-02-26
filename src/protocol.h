@@ -26,6 +26,7 @@
 #define PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_
 
 #include <qglobal.h>
+#include <qthread.h>
 #include "global.h"
 #include "util.h"
 
@@ -42,13 +43,25 @@
 
 
 /* Classes ********************************************************************/
-class CProtocol
+class CProtocol : public QObject
 {
+	Q_OBJECT
+
 public:
 	CProtocol () : iCounter ( 0 ) {}
 	virtual ~CProtocol () {}
 
+	void CreateJitBufMes ( const int iJitBufSize );
+
+	bool ParseMessage ( const CVector<unsigned char>& vecbyData,
+						const int iNumBytes );
+
+	CVector<unsigned char> GetSendMessage ();
+
 protected:
+	void EnqueueMessage ( CVector<uint8_t>& vecMessage );
+
+
 	bool ParseMessageFrame ( const CVector<uint8_t>& vecIn,
 							 int& iCnt,
 							 int& iID,
@@ -70,42 +83,12 @@ protected:
 
 	CVector<uint8_t>	vecMessage;
 	uint8_t				iCounter;
+
+	bool				bIsClient;
+
+signals:
+	void MessReadyForSending ();
 };
-
-
-class CClientProtocol : public CProtocol
-{
-public:
-	CClientProtocol () {}
-	virtual ~CClientProtocol () {}
-
-	void CreateJitBufMes ( const int iJitBufSize );
-
-	bool ParseMessage ( const CVector<unsigned char>& vecbyData,
-						const int iNumBytes );
-
-protected:
-
-};
-
-
-class CServerProtocol : public CProtocol
-{
-public:
-	CServerProtocol () {}
-	virtual ~CServerProtocol () {}
-
-	bool ParseMessage ( const CVector<unsigned char>& vecbyData,
-						const int iNumBytes );
-
-protected:
-
-};
-
-
-
-
-
 
 
 #endif /* !defined(PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_) */

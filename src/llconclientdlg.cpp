@@ -98,7 +98,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
 	/* network buffer */
 	SliderNetBuf->setRange(1, MAX_NET_BUF_SIZE_NUM_BL);
-	const int iCurNumNetBuf = pClient->GetChannel()->GetSockBufSize();
+	const int iCurNumNetBuf = pClient->GetSockBufSize();
 	SliderNetBuf->setValue(iCurNumNetBuf);
 	TextNetBuf->setText("Size: " + QString().setNum(iCurNumNetBuf));
 
@@ -240,7 +240,7 @@ void CLlconClientDlg::OnSliderSndBufOutChange(int value)
 
 void CLlconClientDlg::OnSliderNetBuf(int value)
 {
-	pClient->GetChannel()->SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, value );
+	pClient->SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, value );
 	TextNetBuf->setText("Size: " + QString().setNum(value));
 }
 

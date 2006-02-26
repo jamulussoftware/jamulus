@@ -51,46 +51,60 @@
 
 
 /* Classes ********************************************************************/
-class CClient : public QThread
+class CClient : public QObject, public QThread
 {
+	Q_OBJECT
+
 public:
-	CClient() : bRun ( false ), Socket ( &Channel ),
-		iAudioInFader ( AUD_FADER_IN_MAX / 2 ),
-		iReverbLevel ( AUD_REVERB_MAX / 6 ),
-		bReverbOnLeftChan ( false ) {}
+	CClient();
 	virtual ~CClient () {}
 
-	void Init();
-	bool Stop();
-	bool IsRunning() {return bRun;}
-	bool SetServerAddr(QString strNAddr);
-	double MicLevelL() {return SignalLevelMeterL.MicLevel();}
-	double MicLevelR() {return SignalLevelMeterR.MicLevel();}
-	bool IsConnected() {return Channel.IsConnected();}
+	void Init ();
+	bool Stop ();
+	bool IsRunning () { return bRun; }
+	bool SetServerAddr ( QString strNAddr );
+	double MicLevelL () { return SignalLevelMeterL.MicLevel (); }
+	double MicLevelR () { return SignalLevelMeterR.MicLevel (); }
+	bool IsConnected () { return Channel.IsConnected (); }
 
 	/* we want to return the standard deviation. For that we need to calculate
 	   the sqaure root */
-	double GetTimingStdDev() {return sqrt(RespTimeMoAvBuf.GetAverage());}
+	double GetTimingStdDev () { return sqrt ( RespTimeMoAvBuf.GetAverage () ); }
 
-	int GetAudioInFader() {return iAudioInFader;}
-	void SetAudioInFader(const int iNV) {iAudioInFader = iNV;}
+	int GetAudioInFader () { return iAudioInFader; }
+	void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
-	int GetReverbLevel() {return iReverbLevel;}
-	void SetReverbLevel(const int iNL) {iReverbLevel = iNL;}
+	int GetReverbLevel () { return iReverbLevel; }
+	void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
 
-	bool IsReverbOnLeftChan() {return bReverbOnLeftChan;}
-	void SetReverbOnLeftChan(const bool bIL)
-		{bReverbOnLeftChan = bIL; AudioReverb.Clear();}
+	bool IsReverbOnLeftChan () { return bReverbOnLeftChan; }
+	void SetReverbOnLeftChan ( const bool bIL )
+	{
+		bReverbOnLeftChan = bIL;
+		AudioReverb.Clear ();
+	}
 
-	CSound* GetSndInterface() {return &Sound;}
-	CChannel* GetChannel() {return &Channel;}
+
+	void SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
+	{
+		// set the new socket size
+		Channel.SetSockBufSize ( iNewBlockSize, iNumBlocks );
+
+		// tell the server that size has changed
+		Channel.CreateJitBufMes ( iNumBlocks );
+	}
+	int GetSockBufSize () { return Channel.GetSockBufSize (); }
+
+
+	CSound* GetSndInterface () { return &Sound; }
+	CChannel* GetChannel () { return &Channel; }
 
 
 	// settings
 	string				strIPAddress;
 
 protected:
-	virtual void run();
+	virtual void run ();
 
 	/* only one channel is needed for client application */
 	CChannel			Channel;
@@ -129,6 +143,9 @@ protected:
 	/* debugging, evaluating */
 	CMovingAv<double>	RespTimeMoAvBuf;
 	QTime				TimeLastBlock;
+
+public slots:
+	void OnSendProtMessage ();
 };
 
 

@@ -69,6 +69,7 @@ protected:
 
 	CChannel*				pChannel; /* for client */
 	CChannelSet*			pChannelSet; /* for server */
+
 	QObject*				pServer;
 	bool					bIsClient;
 

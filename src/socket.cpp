@@ -76,7 +76,7 @@ void CSocket::SendPacket( const CVector<unsigned char>& vecbySendBuf,
 	{
 		/* send packet through network */
 		SocketDevice.writeBlock (
-			(const char*) &((CVector<unsigned char>) vecbySendBuf)[0],
+			(const char*) &( (CVector<unsigned char>) vecbySendBuf )[0],
 			iVecSizeOut, HostAddr.InetAddr, HostAddr.iPort );
 	}
 
@@ -93,7 +93,7 @@ void CSocket::OnDataReceived ()
 {
 	/* read block from network interface */
 	const int iNumBytesRead = SocketDevice.readBlock( (char*) &vecbyRecBuf[0],
-		MAX_SIZE_BYTES_NETW_BUF);
+		MAX_SIZE_BYTES_NETW_BUF );
 
 	/* check if an error occurred */
 	if ( iNumBytesRead < 0 )

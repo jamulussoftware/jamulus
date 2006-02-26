@@ -58,15 +58,48 @@ MESSAGES
 
 
 /* Implementation *************************************************************/
+CVector<unsigned char> CProtocol::GetSendMessage ()
+{
+// TEST, TODO implement protocol handling here (timers, etc.)
 
-bool CClientProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
-									 const int iNumBytes )
+// convert unsigned uint8_t in char, TODO convert all buffers in uint8_t
+CVector<unsigned char> vecbyDataConv ( vecMessage.Size () );
+for ( int i = 0; i < vecMessage.Size (); i++ ) {
+	vecbyDataConv[i] = static_cast<unsigned char> ( vecMessage[i] );
+}
+
+	return vecbyDataConv;
+}
+
+
+
+void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage )
+{
+	/* TODO */
+
+emit MessReadyForSending ();
+
+}
+
+
+
+
+
+
+
+bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
+							   const int iNumBytes )
 {
 /*
 	return code: true -> ok; false -> error
 */
 	int					iRecCounter, iRecID;
 	CVector<uint8_t>	vecData;
+
+
+// TEST
+qDebug ( "parser entered" );
+
 
 // convert unsigned char in uint8_t, TODO convert all buffers in uint8_t
 CVector<uint8_t> vecbyDataConv ( vecbyData.Size () );
@@ -95,7 +128,7 @@ for ( int i = 0; i < vecbyData.Size (); i++ ) {
 	}
 }
 
-void CClientProtocol::CreateJitBufMes ( const int iJitBufSize )
+void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 {
 	CVector<uint8_t>	vecData ( 2 );
 	unsigned int		iPos = 0;
@@ -105,6 +138,13 @@ void CClientProtocol::CreateJitBufMes ( const int iJitBufSize )
 
 	// build complete message
 	GenMessageFrame ( vecMessage, iCounter, PROTMESSID_JITT_BUF_SIZE, vecData );
+
+// increase counter (wraps around automatically)
+// TODO: make it thread safe!!!!!!!!!!!!
+iCounter++;
+
+	// enqueue message
+	EnqueueMessage ( vecMessage );
 }
 
 

@@ -26,6 +26,29 @@
 
 
 /* Implementation *************************************************************/
+CClient::CClient () : bRun ( false ), Socket ( &Channel ),
+		iAudioInFader ( AUD_FADER_IN_MAX / 2 ),
+		iReverbLevel ( AUD_REVERB_MAX / 6 ),
+		bReverbOnLeftChan ( false )
+{
+	QObject::connect(&Channel, SIGNAL(MessReadyForSending()),
+		this, SLOT(OnSendProtMessage()));
+}
+
+void CClient::OnSendProtMessage ()
+{
+
+	// the protocol queries me to call the function to send the message
+	// send it through the network
+	Socket.SendPacket ( Channel.GetSendMessage (),
+		Channel.GetAddress(), Channel.GetTimeStampIdx() );
+
+
+
+}
+
+
+
 bool CClient::SetServerAddr(QString strNAddr)
 {
 	QHostAddress InetAddr;
@@ -113,9 +136,13 @@ void CClient::run()
 	{
 		/* get audio from sound card (blocking function) */
 		if (Sound.Read(vecsAudioSndCrd))
+		{
 			PostWinMessage(MS_SOUND_IN, MUL_COL_LED_RED);
+		}
 		else
+		{
 			PostWinMessage(MS_SOUND_IN, MUL_COL_LED_GREEN);
+		}
 
 		/* copy data from one stereo buffer in two separate buffers */
 		iInCnt = 0;
@@ -182,9 +209,13 @@ void CClient::run()
 
 		/* receive a new block */
 		if (Channel.GetData(vecdNetwData))
+		{
 			PostWinMessage(MS_JIT_BUF_GET, MUL_COL_LED_GREEN);
+		}
 		else
+		{
 			PostWinMessage(MS_JIT_BUF_GET, MUL_COL_LED_RED);
+		}
 
 #ifdef _DEBUG_
 #if 0
@@ -253,13 +284,17 @@ fflush(pFileDelay);
 		{
 			/* write mono input signal in both sound-card channels */
 			for (i = 0; i < iBlockSizeSam; i++)
+			{
 				vecdAudioL[i] = vecdAudioR[i] = vecdNetwData[i];
+			}
 		}
 		else
 		{
 			/* if not connected, clear data */
 			for (i = 0; i < iBlockSizeSam; i++)
+			{
 				vecdAudioL[i] = vecdAudioR[i] = 0.0;
+			}
 		}
 
 		/* resample data for each channel separately */
@@ -276,9 +311,13 @@ fflush(pFileDelay);
 
 		/* play the new block */
 		if (Sound.Write(vecsAudioSndCrd))
+		{
 			PostWinMessage(MS_SOUND_OUT, MUL_COL_LED_RED);
+		}
 		else
+		{
 			PostWinMessage(MS_SOUND_OUT, MUL_COL_LED_GREEN);
+		}
 
 
 		/* update response time measurement --------------------------------- */

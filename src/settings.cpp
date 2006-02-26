@@ -79,7 +79,7 @@ void CSettings::ReadIniFile()
 
 	// network jitter buffer size
 	if ( GetNumericIniSet(ini, "Client", "jitbuf", 0, MAX_NET_BUF_SIZE_NUM_BL, iValue ) == TRUE ) {
-		pClient->GetChannel()->SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, iValue );
+		pClient->SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, iValue );
 	}
 }
 
@@ -106,7 +106,7 @@ void CSettings::WriteIniFile()
 	SetNumericIniSet ( ini, "Client", "audoutbuf", pClient->GetSndInterface()->GetOutNumBuf () );
 
 	// network jitter buffer size
-	SetNumericIniSet ( ini, "Client", "jitbuf", pClient->GetChannel()->GetSockBufSize () );
+	SetNumericIniSet ( ini, "Client", "jitbuf", pClient->GetSockBufSize () );
 
 
 	/* Save settings in init-file */

@@ -113,6 +113,14 @@ SOURCE=.\moc\moc_aboutdlgbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\moc\moc_channel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\moc\moc_client.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\moc\moc_llconclientdlg.cpp
 # End Source File
 # Begin Source File
@@ -130,6 +138,10 @@ SOURCE=.\moc\moc_llconserverdlgbase.cpp
 # Begin Source File
 
 SOURCE=.\moc\moc_multicolorled.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\moc\moc_protocol.cpp
 # End Source File
 # Begin Source File
 

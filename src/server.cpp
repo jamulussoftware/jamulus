@@ -87,8 +87,7 @@ void CServer::OnTimer ()
 		{
 			Socket.SendPacket (
 				ChannelSet.PrepSendPacket ( vecChanID[i], vecsSendData ),
-				ChannelSet.GetAddress ( vecChanID[i] ),
-				ChannelSet.GetTimeStampIdx ( vecChanID[i] ) );
+				ChannelSet.GetAddress ( vecChanID[i] ) );
 		}
 
 

@@ -157,14 +157,12 @@ void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
 }
 
 void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-								   CVector<double>& vecdSamOffs,
 								   CVector<int>& veciJitBufSize )
 {
 	CHostAddress InetAddr;
 
 	/* init return values */
 	vecHostAddresses.Init ( MAX_NUM_CHANNELS );
-	vecdSamOffs.Init ( MAX_NUM_CHANNELS );
 	veciJitBufSize.Init ( MAX_NUM_CHANNELS );
 
 	/* Check all possible channels */
@@ -174,7 +172,6 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 		{
 			/* add new address and sample rate offset to vectors */
 			vecHostAddresses[i] = InetAddr;
-			vecdSamOffs[i] = vecChannels[i].GetResampleOffset ();
 			veciJitBufSize[i] = vecChannels[i].GetSockBufSize ();
 		}
 	}
@@ -200,9 +197,6 @@ for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
 \******************************************************************************/
 CChannel::CChannel ()
 {
-	/* init time stamp activation counter */
-	iTimeStampActCnt = NUM_BL_TIME_STAMPS;
-
 	/* init time stamp index counter */
 	byTimeStampIdxCnt = 0;
 
@@ -218,9 +212,6 @@ CChannel::CChannel ()
 
 	/* init time-out for the buffer with zero -> no connection */
 	iConTimeOut = 0;
-
-	/* init sample rate offset estimation object */
-	SampleOffsetEst.Init();
 
 
 	/* connections ---------------------------------------------------------- */
@@ -287,11 +278,6 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 		/* reset time-out counter */
 		iConTimeOut = CON_TIME_OUT_CNT_MAX;
 	}
-	else if ( iNumBytes == 1 )
-	{
-		/* time stamp packet */
-		SampleOffsetEst.AddTimeStampIdx ( vecbyData[0] );
-	}
 	else
 	{
 
@@ -322,13 +308,6 @@ bool CChannel::GetData ( CVector<double>& vecdData )
 		if ( iConTimeOut > 0 )
 		{
 			iConTimeOut--;
-
-			/* if time out is reached, re-init resample offset estimation
-			   module */
-			if ( iConTimeOut == 0 )
-			{
-				SampleOffsetEst.Init ();
-			}
 		}
 	}
 
@@ -353,25 +332,6 @@ CVector<unsigned char> CChannel::PrepSendPacket(const CVector<short>& vecsNPacke
 	}
 
 	return vecbySendBuf;
-}
-
-int CChannel::GetTimeStampIdx ()
-{
-	/* only send time stamp index after a pre-defined number of packets */
-	if ( iTimeStampActCnt > 0 )
-	{
-		iTimeStampActCnt--;
-		return INVALID_TIME_STAMP_IDX;
-	}
-	else
-	{
-		/* reset time stamp activation counter */
-		iTimeStampActCnt = NUM_BL_TIME_STAMPS - 1;
-
-		/* wraps around automatically */
-		byTimeStampIdxCnt++;
-		return byTimeStampIdxCnt;
-	}
 }
 
 

@@ -66,9 +66,8 @@ void CSocket::Init ()
 		this, SLOT ( OnDataReceived () ) );
 }
 
-void CSocket::SendPacket( const CVector<unsigned char>& vecbySendBuf,
-						  const CHostAddress& HostAddr,
-						  const int iTimeStampIdx )
+void CSocket::SendPacket ( const CVector<unsigned char>& vecbySendBuf,
+						   const CHostAddress& HostAddr )
 {
 	const int iVecSizeOut = vecbySendBuf.Size ();
 
@@ -78,14 +77,6 @@ void CSocket::SendPacket( const CVector<unsigned char>& vecbySendBuf,
 		SocketDevice.writeBlock (
 			(const char*) &( (CVector<unsigned char>) vecbySendBuf )[0],
 			iVecSizeOut, HostAddr.InetAddr, HostAddr.iPort );
-	}
-
-	/* sent time stamp if required */
-	if ( iTimeStampIdx != INVALID_TIME_STAMP_IDX )
-	{
-		/* Always one byte long */
-		SocketDevice.writeBlock ( (const char*) &iTimeStampIdx, 1,
-			HostAddr.InetAddr, HostAddr.iPort );
 	}
 }
 

@@ -31,23 +31,18 @@ CClient::CClient () : bRun ( false ), Socket ( &Channel ),
 		iReverbLevel ( AUD_REVERB_MAX / 6 ),
 		bReverbOnLeftChan ( false )
 {
-	QObject::connect(&Channel, SIGNAL(MessReadyForSending()),
-		this, SLOT(OnSendProtMessage()));
+	// connection for protocol
+	QObject::connect ( &Channel, SIGNAL ( MessReadyForSending () ),
+		this, SLOT ( OnSendProtMessage () ) );
 }
 
 void CClient::OnSendProtMessage ()
 {
-
 	// the protocol queries me to call the function to send the message
 	// send it through the network
 	Socket.SendPacket ( Channel.GetSendMessage (),
-		Channel.GetAddress(), Channel.GetTimeStampIdx() );
-
-
-
+		Channel.GetAddress () );
 }
-
-
 
 bool CClient::SetServerAddr(QString strNAddr)
 {
@@ -204,8 +199,8 @@ void CClient::run()
 		}
 
 		/* send it through the network */
-		Socket.SendPacket(Channel.PrepSendPacket(vecsNetwork),
-			Channel.GetAddress(), Channel.GetTimeStampIdx());
+		Socket.SendPacket ( Channel.PrepSendPacket ( vecsNetwork ),
+			Channel.GetAddress () );
 
 		/* receive a new block */
 		if (Channel.GetData(vecdNetwData))

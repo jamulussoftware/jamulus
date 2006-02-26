@@ -67,9 +67,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	/* init status label */
 	OnTimerStatus ();
 
-	/* init sample rate offset label */
-	TextSamRateOffsValue->setText ( "0 Hz" );
-
 	/* init connection button text */
 	PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
 
@@ -288,11 +285,6 @@ void CLlconClientDlg::OnTimerStatus ()
 	{
 		TextLabelStatus->setText ( tr ( "disconnected" ) );
 	}
-
-	/* update sample rate offset label */
-	QString strSamRaOffs;
-	strSamRaOffs.setNum(pClient->GetChannel()->GetResampleOffset(), 'f', 2);
-	TextSamRateOffsValue->setText(strSamRaOffs + " Hz");
 
 	/* response time */
 	TextLabelStdDevTimer->setText(QString().

@@ -49,9 +49,9 @@ public:
 	void Stop ();
 	bool IsRunning() { return Timer.isActive (); }
 	void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-		CVector<double>& vecdSamOffs, CVector<int>& veciJitBufSize )
+		CVector<int>& veciJitBufSize )
 	{
-		ChannelSet.GetConCliParam ( vecHostAddresses, vecdSamOffs,
+		ChannelSet.GetConCliParam ( vecHostAddresses,
 			veciJitBufSize );
 	}
 

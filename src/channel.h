@@ -48,9 +48,6 @@
 /* no valid channel number */
 #define INVALID_CHANNEL_ID		(MAX_NUM_CHANNELS + 1)
 
-/* no valid time stamp index */
-#define INVALID_TIME_STAMP_IDX	-1
-
 
 /* Classes ********************************************************************/
 class CSampleOffsetEst
@@ -91,9 +88,7 @@ public:
 
 	bool IsConnected () const { return iConTimeOut > 0; }
 
-	int GetTimeStampIdx ();
 	int	GetComprAudSize () { return iAudComprSize; }
-	double GetResampleOffset () { return SampleOffsetEst.GetSamRate (); }
 
 	void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
 	bool GetAddress ( CHostAddress& RetAddr );
@@ -118,8 +113,6 @@ protected:
 	double			dSamRateOffset;
 	CVector<double>	vecdResInData;
 	CVector<double>	vecdResOutData;
-
-	CSampleOffsetEst SampleOffsetEst;
 
 	/* connection parameters */
 	CHostAddress InetAddr;
@@ -162,7 +155,6 @@ public:
 	void GetBlockAllConC(CVector<int>& vecChanID,
 						 CVector<CVector<double> >& vecvecdData);
 	void GetConCliParam(CVector<CHostAddress>& vecHostAddresses,
-						CVector<double>& vecdSamOffs,
 						CVector<int>& veciJitBufSize);
 
 	/* access functions for actual channels */
@@ -173,8 +165,6 @@ public:
 		{return vecChannels[iChanNum].PrepSendPacket(vecsNPacket);}
 	CHostAddress GetAddress(const int iChanNum)
 		{return vecChannels[iChanNum].GetAddress();}
-	int GetTimeStampIdx(const int iChanNum)
-		{return vecChannels[iChanNum].GetTimeStampIdx();}
 
 	void SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks);
 	int GetSockBufSize() {return vecChannels[0].GetSockBufSize();}

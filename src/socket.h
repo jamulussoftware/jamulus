@@ -56,8 +56,8 @@ public:
 		{Init();}
 	virtual ~CSocket() {}
 
-	void SendPacket(const CVector<unsigned char>& vecbySendBuf,
-					const CHostAddress& HostAddr, const int iTimeStampIdx);
+	void SendPacket ( const CVector<unsigned char>& vecbySendBuf,
+					  const CHostAddress& HostAddr );
 
 protected:
 	void Init();

@@ -110,6 +110,11 @@ for ( int i = 0; i < vecbyData.Size (); i++ ) {
 	if ( ParseMessageFrame ( vecbyDataConv, iRecCounter, iRecID, vecData ) )
 	{
 
+
+// TEST
+qDebug ( "parsing successful" );
+
+
 		switch ( iRecID ) 
 		{
 		case PROTMESSID_ACKN:

@@ -226,11 +226,21 @@ CChannel::CChannel ()
 void CChannel::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
 {
 	/* this opperation must be done with mutex */
+
+qDebug ( "before lock" );
+
 	Mutex.lock ();
 
 	SockBuf.Init ( iNewBlockSize, iNumBlocks );
 
+qDebug ( "in lock" );
+
+
 	Mutex.unlock ();
+
+
+qDebug ( "after lock" );
+
 }
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )

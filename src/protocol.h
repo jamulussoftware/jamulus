@@ -84,10 +84,12 @@ protected:
 	CVector<uint8_t>	vecMessage;
 	uint8_t				iCounter;
 
-	bool				bIsClient;
-
 signals:
+	// transmitting
 	void MessReadyForSending ();
+
+	// receiving
+	void ChangeJittBufSize ( int iNewJitBufSize );
 };
 
 

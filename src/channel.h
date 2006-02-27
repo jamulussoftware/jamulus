@@ -134,6 +134,9 @@ protected:
 
 	QMutex Mutex;
 
+public slots:
+	void OnJittBufSizeChange ( int iNewJitBufSize );
+
 signals:
 	void MessReadyForSending ();
 };

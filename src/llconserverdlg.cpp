@@ -123,7 +123,7 @@ void CLlconServerDlg::OnTimer()
 				vecHostAddresses[i].InetAddr.toString().latin1(),
 				vecHostAddresses[i].iPort) /* IP, port */);
 
-			/* jitter buffer size */
+			/* jitter buffer size (polling for updates) */
 			vecpListViewItems[i]->setText(3,
 				QString().setNum(veciJitBufSize[i]));
 

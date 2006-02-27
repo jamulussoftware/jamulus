@@ -216,8 +216,11 @@ CChannel::CChannel ()
 
 	/* connections ---------------------------------------------------------- */
 	// just route message through this class
-	QObject::connect(&Protocol, SIGNAL(MessReadyForSending()),
-		SIGNAL(MessReadyForSending()));
+	QObject::connect ( &Protocol, SIGNAL ( MessReadyForSending () ),
+		SIGNAL ( MessReadyForSending () ) );
+
+	QObject::connect ( &Protocol, SIGNAL ( ChangeJittBufSize ( int ) ),
+		this, SLOT ( OnJittBufSizeChange ( int ) ) );
 }
 
 void CChannel::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
@@ -228,6 +231,11 @@ void CChannel::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
 	SockBuf.Init ( iNewBlockSize, iNumBlocks );
 
 	Mutex.unlock ();
+}
+
+void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
+{
+	SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, iNewJitBufSize );
 }
 
 bool CChannel::GetAddress(CHostAddress& RetAddr)
@@ -280,15 +288,11 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 	}
 	else
 	{
+		// this seems not to be an audio block, parse the message
 
+// TODO: different return code for protocol
 
-
-// TODO add protocol parsing here
-Protocol.ParseMessage ( vecbyData, iNumBytes );
-
-
-
-		bRet = false; /* wrong packet size */
+		bRet = Protocol.ParseMessage ( vecbyData, iNumBytes );
 	}
 
 	Mutex.unlock (); /* put mutex unlock */

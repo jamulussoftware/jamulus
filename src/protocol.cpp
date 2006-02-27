@@ -32,6 +32,8 @@ MESSAGES
 	| 2 bytes number of blocks |
 	+--------------------------+
 
+  This message requires acknowledgement
+
 
 
 
@@ -93,7 +95,8 @@ bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
 /*
 	return code: true -> ok; false -> error
 */
-	int					iRecCounter, iRecID;
+	int					iRecCounter, iRecID, iData;
+	unsigned int		iPos;
 	CVector<uint8_t>	vecData;
 
 
@@ -102,6 +105,14 @@ CVector<uint8_t> vecbyDataConv ( iNumBytes );
 for ( int i = 0; i < iNumBytes; i++ ) {
 	vecbyDataConv[i] = static_cast<uint8_t> ( vecbyData[i] );
 }
+
+
+	// In case we received a message and returned an answer but our answer did
+	// not make it to the receiver, he will resend his message. We check here
+	// if the message is the same as the old one, and if this is the case, just
+	// resend our old answer again
+// TODO
+
 
 // important: vecbyDataConv must have iNumBytes to get it work!!!
 	if ( ParseMessageFrame ( vecbyDataConv, iRecCounter, iRecID, vecData ) )
@@ -119,6 +130,17 @@ qDebug ( "parsing successful" );
 // TODO implement acknowledge code -> do implementation in CProtocol since
 // it can be used in the server protocol, too
 
+			break;
+
+		case PROTMESSID_JITT_BUF_SIZE:
+
+// TODO acknowledgement
+
+			// extract data from stream and emit signal for received value
+			iPos = 0;
+			iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+			emit ChangeJittBufSize ( iData );
 			break;
 		}
 

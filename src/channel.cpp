@@ -226,21 +226,11 @@ CChannel::CChannel ()
 void CChannel::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
 {
 	/* this opperation must be done with mutex */
-
-qDebug ( "before lock" );
-
 	Mutex.lock ();
 
 	SockBuf.Init ( iNewBlockSize, iNumBlocks );
 
-qDebug ( "in lock" );
-
-
 	Mutex.unlock ();
-
-
-qDebug ( "after lock" );
-
 }
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
@@ -267,8 +257,6 @@ bool CChannel::PutData ( const CVector<unsigned char>& vecbyData,
 {
 	bool bRet = true;
 
-	Mutex.lock (); /* put mutex lock */
-
 	/* only process if packet has correct size */
 	if ( iNumBytes == iAudComprSize )
 	{
@@ -291,7 +279,11 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 	vecdResOutData[i] = (double) vecsDecomprAudio[i];
 
 
+		Mutex.lock (); /* put mutex lock */
+
 		bRet = SockBuf.Put ( vecdResOutData );
+
+		Mutex.unlock (); /* put mutex unlock */
 
 		/* reset time-out counter */
 		iConTimeOut = CON_TIME_OUT_CNT_MAX;
@@ -304,8 +296,6 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 
 		bRet = Protocol.ParseMessage ( vecbyData, iNumBytes );
 	}
-
-	Mutex.unlock (); /* put mutex unlock */
 
 	return bRet;
 }

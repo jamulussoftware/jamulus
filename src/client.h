@@ -145,7 +145,7 @@ protected:
 	QTime				TimeLastBlock;
 
 public slots:
-	void OnSendProtMessage ();
+	void OnSendProtMessage ( CVector<uint8_t> vecMessage );
 };
 
 

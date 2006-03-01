@@ -6,6 +6,10 @@
  *
 
 Protocol message definition
+---------------------------
+
+- All messages received need to be acknowledged by an acknowledge packet
+
 
 
 MAIN FRAME
@@ -26,13 +30,21 @@ MAIN FRAME
 MESSAGES
 --------
 
+- Acknowledgement message: PROTMESSID_ACKN
+
+	+-----------------------------------+
+	| 2 bytes ID of message to be ackn. |
+	+-----------------------------------+
+
+	note: the cnt value is the same as of the message to be acknowledged
+
+
 - Jitter buffer size: PROTMESSID_JITT_BUF_SIZE
 
 	+--------------------------+
 	| 2 bytes number of blocks |
 	+--------------------------+
 
-  This message requires acknowledgement
 
 
 
@@ -60,30 +72,17 @@ MESSAGES
 
 
 /* Implementation *************************************************************/
-CVector<unsigned char> CProtocol::GetSendMessage ()
-{
-// TEST, TODO implement protocol handling here (timers, etc.)
-
-// convert unsigned uint8_t in char, TODO convert all buffers in uint8_t
-CVector<unsigned char> vecbyDataConv ( vecMessage.Size () );
-for ( int i = 0; i < vecMessage.Size (); i++ ) {
-	vecbyDataConv[i] = static_cast<unsigned char> ( vecMessage[i] );
-}
-
-	return vecbyDataConv;
-}
-
 
 
 void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage )
 {
 	/* TODO */
 
-emit MessReadyForSending ();
+emit MessReadyForSending ( vecMessage );
 
 }
 
-
+// TODO take care of mutexing ressources!!!!!!
 
 
 
@@ -107,42 +106,55 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 }
 
 
-	// In case we received a message and returned an answer but our answer did
-	// not make it to the receiver, he will resend his message. We check here
-	// if the message is the same as the old one, and if this is the case, just
-	// resend our old answer again
-// TODO
 
 
 // important: vecbyDataConv must have iNumBytes to get it work!!!
 	if ( ParseMessageFrame ( vecbyDataConv, iRecCounter, iRecID, vecData ) )
 	{
-
-
-// TEST
-qDebug ( "parsing successful" );
-
-
-		switch ( iRecID ) 
+		// In case we received a message and returned an answer but our answer
+		// did not make it to the receiver, he will resend his message. We check
+		// here if the message is the same as the old one, and if this is the
+		// case, just resend our old answer again
+		if ( ( iOldRecID == iRecID ) && ( iOldRecCnt == iRecCounter ) )
 		{
-		case PROTMESSID_ACKN:
-
-// TODO implement acknowledge code -> do implementation in CProtocol since
-// it can be used in the server protocol, too
-
-			break;
-
-		case PROTMESSID_JITT_BUF_SIZE:
-
-// TODO acknowledgement
-
-			// extract data from stream and emit signal for received value
-			iPos = 0;
-			iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
-
-			emit ChangeJittBufSize ( iData );
-			break;
+			// acknowledgments are not acknowledged
+			if ( iRecID != PROTMESSID_ACKN )
+			{
+				// re-send acknowledgement
+				CreateAndSendAcknMess ( iRecID, iRecCounter );
+			}
 		}
+		else
+		{
+			// check which type of message we received and do action
+			switch ( iRecID ) 
+			{
+			case PROTMESSID_ACKN:
+
+// TODO
+
+
+
+
+				break;
+
+			case PROTMESSID_JITT_BUF_SIZE:
+
+				// extract data from stream and emit signal for received value
+				iPos = 0;
+				iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+				// invoke message action and send acknowledge message
+				emit ChangeJittBufSize ( iData );
+				CreateAndSendAcknMess ( iRecID, iRecCounter );
+
+				break;
+			}
+		}
+
+		// save current message ID and counter to find out if message was re-sent
+		iOldRecID = iRecID;
+		iOldRecCnt = iRecCounter;
 
 		return true; // everything was ok
 	}
@@ -152,23 +164,40 @@ qDebug ( "parsing successful" );
 	}
 }
 
+void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
+{
+	CVector<uint8_t>	vecAcknMessage;
+	CVector<uint8_t>	vecData ( 2 ); // 2 bytes of data
+	unsigned int		iPos = 0; // init position pointer
+
+	// build data vector
+	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iID ), 2 );
+
+	// build complete message
+	GenMessageFrame ( vecAcknMessage, iCnt, PROTMESSID_ACKN, vecData );
+
+	// immediately send acknowledge message
+	emit MessReadyForSending ( vecAcknMessage );
+}
+
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 {
-	CVector<uint8_t>	vecData ( 2 );
-	unsigned int		iPos = 0;
+	CVector<uint8_t>	vecNewMessage;
+	CVector<uint8_t>	vecData ( 2 ); // 2 bytes of data
+	unsigned int		iPos = 0; // init position pointer
 
 	// build data vector
 	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iJitBufSize ), 2 );
 
 	// build complete message
-	GenMessageFrame ( vecMessage, iCounter, PROTMESSID_JITT_BUF_SIZE, vecData );
+	GenMessageFrame ( vecNewMessage, iCounter, PROTMESSID_JITT_BUF_SIZE, vecData );
 
 // increase counter (wraps around automatically)
 // TODO: make it thread safe!!!!!!!!!!!!
 iCounter++;
 
 	// enqueue message
-	EnqueueMessage ( vecMessage );
+	EnqueueMessage ( vecNewMessage );
 }
 
 

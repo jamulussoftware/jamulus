@@ -216,8 +216,9 @@ CChannel::CChannel ()
 
 	/* connections ---------------------------------------------------------- */
 	// just route message through this class
-	QObject::connect ( &Protocol, SIGNAL ( MessReadyForSending () ),
-		SIGNAL ( MessReadyForSending () ) );
+	QObject::connect ( &Protocol,
+		SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+		SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ) );
 
 	QObject::connect ( &Protocol, SIGNAL ( ChangeJittBufSize ( int ) ),
 		this, SLOT ( OnJittBufSizeChange ( int ) ) );
@@ -235,6 +236,9 @@ void CChannel::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 {
+// TEST
+qDebug ( "new jitter buffer size: %d", iNewJitBufSize );
+
 	SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, iNewJitBufSize );
 }
 

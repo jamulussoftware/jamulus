@@ -32,15 +32,23 @@ CClient::CClient () : bRun ( false ), Socket ( &Channel ),
 		bReverbOnLeftChan ( false )
 {
 	// connection for protocol
-	QObject::connect ( &Channel, SIGNAL ( MessReadyForSending () ),
-		this, SLOT ( OnSendProtMessage () ) );
+	QObject::connect ( &Channel, SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+		this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
 }
 
-void CClient::OnSendProtMessage ()
+void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 {
+
+// convert unsigned uint8_t in char, TODO convert all buffers in uint8_t
+CVector<unsigned char> vecbyDataConv ( vecMessage.Size () );
+for ( int i = 0; i < vecMessage.Size (); i++ ) {
+	vecbyDataConv[i] = static_cast<unsigned char> ( vecMessage[i] );
+}
+
+
 	// the protocol queries me to call the function to send the message
 	// send it through the network
-	Socket.SendPacket ( Channel.GetSendMessage (),
+	Socket.SendPacket ( vecbyDataConv,
 		Channel.GetAddress () );
 }
 

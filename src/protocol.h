@@ -33,7 +33,8 @@
 
 /* Definitions ****************************************************************/
 // protocol message IDs
-#define PROTMESSID_ACKN				 0 // acknowledge
+#define PROTMESSID_ILLEGAL			 0 // illegal ID
+#define PROTMESSID_ACKN				 1 // acknowledge
 #define PROTMESSID_JITT_BUF_SIZE	10 // jitter buffer size
 #define PROTMESSID_PING				11 // for measuring ping time
 
@@ -48,15 +49,16 @@ class CProtocol : public QObject
 	Q_OBJECT
 
 public:
-	CProtocol () : iCounter ( 0 ) {}
+	CProtocol () : iCounter ( 0 ),
+		iOldRecID ( PROTMESSID_ILLEGAL ), iOldRecCnt ( 0 ) {}
 	virtual ~CProtocol () {}
 
 	void CreateJitBufMes ( const int iJitBufSize );
 
+	void CreateAndSendAcknMess ( const int& iID, const int& iCnt );
+
 	bool ParseMessage ( const CVector<unsigned char>& vecbyData,
 						const int iNumBytes );
-
-	CVector<unsigned char> GetSendMessage ();
 
 protected:
 	void EnqueueMessage ( CVector<uint8_t>& vecMessage );
@@ -83,10 +85,11 @@ protected:
 
 	CVector<uint8_t>	vecMessage;
 	uint8_t				iCounter;
+	int					iOldRecID, iOldRecCnt;
 
 signals:
 	// transmitting
-	void MessReadyForSending ();
+	void MessReadyForSending ( CVector<uint8_t> vecMessage );
 
 	// receiving
 	void ChangeJittBufSize ( int iNewJitBufSize );

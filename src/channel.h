@@ -84,7 +84,6 @@ public:
 	bool GetData ( CVector<double>& vecdData );
 
 	CVector<unsigned char> PrepSendPacket ( const CVector<short>& vecsNPacket );
-	CVector<unsigned char> GetSendMessage () { return Protocol.GetSendMessage (); }
 
 	bool IsConnected () const { return iConTimeOut > 0; }
 
@@ -138,7 +137,7 @@ public slots:
 	void OnJittBufSizeChange ( int iNewJitBufSize );
 
 signals:
-	void MessReadyForSending ();
+	void MessReadyForSending ( CVector<uint8_t> vecMessage );
 };
 
 

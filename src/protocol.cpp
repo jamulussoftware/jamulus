@@ -74,19 +74,69 @@ MESSAGES
 /* Implementation *************************************************************/
 
 
-void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage )
-{
-	/* TODO */
-
-emit MessReadyForSending ( vecMessage );
-
-}
 
 // TODO take care of mutexing ressources!!!!!!
 
 
 
 
+CProtocol::CProtocol() : iCounter ( 0 ), iOldRecID ( PROTMESSID_ILLEGAL ),
+	iOldRecCnt ( 0 )
+{
+	SendMessQueue.clear();
+
+	// connections
+	QObject::connect ( &TimerSendMess, SIGNAL ( timeout() ),
+		this, SLOT ( OnTimerSendMess() ) );
+}
+
+void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
+								 const int iCnt,
+								 const int iID )
+{
+	// check if list is empty so that we have to initiate a send process
+	const bool bListWasEmpty = SendMessQueue.empty();
+
+	// create send message object for the queue
+	CSendMessage SendMessageObj ( vecMessage, iCnt, iID );
+
+	// we want to have a FIFO: we add at the end and take from the beginning
+	SendMessQueue.push_back ( SendMessageObj );
+
+	// if list was empty, initiate send process
+	if ( bListWasEmpty )
+	{
+		SendMessage();
+	}
+}
+
+void CProtocol::SendMessage()
+{
+	// we have to check that list is not empty, since in another thread the
+	// last element of the list might have been erased
+	if ( !SendMessQueue.empty() )
+	{
+		// send message
+		emit MessReadyForSending ( SendMessQueue.front().vecMessage );
+
+		// start time-out timer if not active
+		if ( !TimerSendMess.isActive() )
+		{
+			TimerSendMess.start ( SEND_MESS_TIMEOUT_MS );
+		}
+	}
+	else
+	{
+		// no message to send, stop timer
+		TimerSendMess.stop();
+	}
+}
+
+void CProtocol::DeleteSendMessQueue()
+{
+	// delete complete "send message queue"
+	SendMessQueue.clear();
+}
 
 bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
 							   const int iNumBytes )
@@ -131,10 +181,20 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 			{
 			case PROTMESSID_ACKN:
 
-// TODO
+				// extract data from stream and emit signal for received value
+				iPos = 0;
+				iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
+				// check if this is the correct acknowledgment
+				if ( ( SendMessQueue.front().iCnt == iRecCounter ) &&
+					 ( SendMessQueue.front().iID == iData ) )
+				{
+					// message acknowledged, remove from queue
+					SendMessQueue.pop_front();
 
-
+					// send next message in queue
+					SendMessage();
+				}
 
 				break;
 
@@ -144,8 +204,10 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 				iPos = 0;
 				iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
-				// invoke message action and send acknowledge message
+				// invoke message action
 				emit ChangeJittBufSize ( iData );
+
+				// send acknowledge message
 				CreateAndSendAcknMess ( iRecID, iRecCounter );
 
 				break;
@@ -197,8 +259,26 @@ void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 iCounter++;
 
 	// enqueue message
-	EnqueueMessage ( vecNewMessage );
+	EnqueueMessage ( vecNewMessage, iCounter, PROTMESSID_JITT_BUF_SIZE );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /******************************************************************************\

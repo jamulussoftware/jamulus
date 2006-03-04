@@ -108,32 +108,33 @@ protected:
 	int					iAudComprSize;
 
 	/* resampling */
-	CResample		ResampleObj;
-	double			dSamRateOffset;
-	CVector<double>	vecdResInData;
-	CVector<double>	vecdResOutData;
+	CResample			ResampleObj;
+	double				dSamRateOffset;
+	CVector<double>		vecdResInData;
+	CVector<double>		vecdResOutData;
 
 	/* connection parameters */
-	CHostAddress InetAddr;
+	CHostAddress		InetAddr;
 
 	/* network jitter-buffer */
-	CNetBuf SockBuf;
+	CNetBuf				SockBuf;
 
 	/* network output conversion buffer */
-	CConvBuf ConvBuf;
+	CConvBuf			ConvBuf;
 
 	// network protocol
-	CProtocol Protocol;
+	CProtocol			Protocol;
 
 	/* time stamp index counter */
-	Q_UINT8 byTimeStampIdxCnt;
-	int iTimeStampActCnt;
+	Q_UINT8				byTimeStampIdxCnt;
+	int					iTimeStampActCnt;
 
-	int iConTimeOut;
+	int					iConTimeOut;
 
 	QMutex Mutex;
 
 public slots:
+	void OnSendProtMessage ( CVector<uint8_t> vecMessage );
 	void OnJittBufSizeChange ( int iNewJitBufSize );
 
 signals:

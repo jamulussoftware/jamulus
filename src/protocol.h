@@ -27,6 +27,8 @@
 
 #include <qglobal.h>
 #include <qthread.h>
+#include <qtimer.h>
+#include <list>
 #include "global.h"
 #include "util.h"
 
@@ -42,6 +44,9 @@
 #define MESS_HEADER_LENGTH_BYTE		5 /* ID, cnt, length */
 #define MESS_LEN_WITHOUT_DATA_BYTE	( MESS_HEADER_LENGTH_BYTE + 2 /* CRC */ )
 
+// time out for message re-send if no acknowledgement was received
+#define SEND_MESS_TIMEOUT_MS		400 // ms
+
 
 /* Classes ********************************************************************/
 class CProtocol : public QObject
@@ -49,9 +54,8 @@ class CProtocol : public QObject
 	Q_OBJECT
 
 public:
-	CProtocol () : iCounter ( 0 ),
-		iOldRecID ( PROTMESSID_ILLEGAL ), iOldRecCnt ( 0 ) {}
-	virtual ~CProtocol () {}
+	CProtocol();
+	virtual ~CProtocol() {}
 
 	void CreateJitBufMes ( const int iJitBufSize );
 
@@ -60,9 +64,35 @@ public:
 	bool ParseMessage ( const CVector<unsigned char>& vecbyData,
 						const int iNumBytes );
 
-protected:
-	void EnqueueMessage ( CVector<uint8_t>& vecMessage );
+	void DeleteSendMessQueue ();
 
+protected:
+	class CSendMessage
+	{
+	public:
+		CSendMessage() : vecMessage ( 0 ), iID ( PROTMESSID_ILLEGAL ),
+			iCnt ( 0 ) {}
+		CSendMessage ( const CVector<uint8_t>& nMess, const int iNCnt,
+			const int iNID ) : vecMessage ( nMess ), iID ( iNID ),
+			iCnt ( iNCnt ) {}
+
+		CSendMessage& operator= ( const CSendMessage& NewSendMess )
+		{
+			vecMessage.Init ( NewSendMess.vecMessage.Size() );
+			vecMessage = NewSendMess.vecMessage;
+
+			iID = NewSendMess.iID;
+			iCnt = NewSendMess.iCnt;
+			return *this; 
+		}
+
+		CVector<uint8_t>	vecMessage;
+		int					iID, iCnt;
+	};
+
+	void EnqueueMessage ( CVector<uint8_t>& vecMessage,
+						  const int iCnt,
+						  const int iID );
 
 	bool ParseMessageFrame ( const CVector<uint8_t>& vecIn,
 							 int& iCnt,
@@ -83,9 +113,16 @@ protected:
 								unsigned int& iPos,
 								const unsigned int iNumOfBytes );
 
-	CVector<uint8_t>	vecMessage;
-	uint8_t				iCounter;
-	int					iOldRecID, iOldRecCnt;
+	void SendMessage();
+
+	uint8_t					iCounter;
+	int						iOldRecID, iOldRecCnt;
+	std::list<CSendMessage>	SendMessQueue;
+	QTimer					TimerSendMess;
+	QMutex					Mutex;
+
+public slots:
+	void OnTimerSendMess() { SendMessage(); }
 
 signals:
 	// transmitting

@@ -215,13 +215,27 @@ CChannel::CChannel ()
 
 
 	/* connections ---------------------------------------------------------- */
-	// just route message through this class
 	QObject::connect ( &Protocol,
 		SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-		SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ) );
+		this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
 
 	QObject::connect ( &Protocol, SIGNAL ( ChangeJittBufSize ( int ) ),
 		this, SLOT ( OnJittBufSizeChange ( int ) ) );
+}
+
+void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
+{
+	// only send messages if we are connected, otherwise delete complete queue
+//	if ( IsConnected () )
+//	{
+		// emit message to actually send the data
+		emit MessReadyForSending ( vecMessage );
+//	}
+//	else
+//	{
+//		// delete send message queue
+//		Protocol.DeleteSendMessQueue();
+//	}
 }
 
 void CChannel::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
@@ -341,6 +355,13 @@ CVector<unsigned char> CChannel::PrepSendPacket(const CVector<short>& vecsNPacke
 
 	return vecbySendBuf;
 }
+
+
+
+
+
+
+
 
 
 /******************************************************************************\

@@ -30,33 +30,20 @@
 \******************************************************************************/
 CChannelSet::CChannelSet()
 {
-// TEST for a test just connect each channel in a separate function
-// TODO better solution!!!
-QObject::connect ( &vecChannels[0], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
-QObject::connect ( &vecChannels[1], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
-QObject::connect ( &vecChannels[2], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
-QObject::connect ( &vecChannels[3], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
-QObject::connect ( &vecChannels[4], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
-QObject::connect ( &vecChannels[5], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
-QObject::connect ( &vecChannels[6], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
-QObject::connect ( &vecChannels[7], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
-QObject::connect ( &vecChannels[8], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
-QObject::connect ( &vecChannels[9], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
-
-
+	// connect "message send"-message for each channel
+	for  ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+	{
+		QObject::connect ( &vecChannels[i],
+			SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+			this, SLOT ( OnSendProtMessage ( i, CVector<uint8_t> ) ) );
+	}
 }
 
-
+void CChannelSet::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
+{
+	// just pass message through and add channel ID
+	emit MessReadyForSending ( iChID,vecMessage );
+}
 
 int CChannelSet::GetFreeChan()
 {

@@ -156,8 +156,6 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 }
 
 
-
-
 // important: vecbyDataConv must have iNumBytes to get it work!!!
 	if ( ParseMessageFrame ( vecbyDataConv, iRecCounter, iRecID, vecData ) )
 	{
@@ -248,18 +246,21 @@ void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 	CVector<uint8_t>	vecData ( 2 ); // 2 bytes of data
 	unsigned int		iPos = 0; // init position pointer
 
-	// build data vector
-	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iJitBufSize ), 2 );
-
-	// build complete message
-	GenMessageFrame ( vecNewMessage, iCounter, PROTMESSID_JITT_BUF_SIZE, vecData );
+	// store current counter value
+	const int iCurCounter = iCounter;
 
 // increase counter (wraps around automatically)
 // TODO: make it thread safe!!!!!!!!!!!!
 iCounter++;
 
+	// build data vector
+	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iJitBufSize ), 2 );
+
+	// build complete message
+	GenMessageFrame ( vecNewMessage, iCurCounter, PROTMESSID_JITT_BUF_SIZE, vecData );
+
 	// enqueue message
-	EnqueueMessage ( vecNewMessage, iCounter, PROTMESSID_JITT_BUF_SIZE );
+	EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_JITT_BUF_SIZE );
 }
 
 

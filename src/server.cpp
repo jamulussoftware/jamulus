@@ -37,11 +37,31 @@ CServer::CServer () : Socket ( &ChannelSet, this )
 	QObject::connect ( &Timer, SIGNAL ( timeout () ),
 		this, SLOT ( OnTimer () ) );
 
+	// connection for protocol
+	QObject::connect ( &ChannelSet,
+		SIGNAL ( MessReadyForSending ( int, CVector<uint8_t> ) ),
+		this, SLOT ( OnSendProtMessage ( int, CVector<uint8_t> ) ) );
+
 #ifdef _WIN32
 	// event handling of custom events seems not to work under Windows in this
 	// class, do not use automatic start/stop of server in Windows version
 	Start ();
 #endif
+}
+
+void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
+{
+
+// convert unsigned uint8_t in char, TODO convert all buffers in uint8_t
+CVector<unsigned char> vecbyDataConv ( vecMessage.Size () );
+for ( int i = 0; i < vecMessage.Size (); i++ ) {
+	vecbyDataConv[i] = static_cast<unsigned char> ( vecMessage[i] );
+}
+
+	// the protocol queries me to call the function to send the message
+	// send it through the network
+	Socket.SendPacket ( vecbyDataConv,
+		ChannelSet.GetAddress ( iChID ) );
 }
 
 void CServer::Start ()

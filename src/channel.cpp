@@ -28,6 +28,36 @@
 /******************************************************************************\
 * CChannelSet                                                                  *
 \******************************************************************************/
+CChannelSet::CChannelSet()
+{
+// TEST for a test just connect each channel in a separate function
+// TODO better solution!!!
+QObject::connect ( &vecChannels[0], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
+QObject::connect ( &vecChannels[1], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
+QObject::connect ( &vecChannels[2], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
+QObject::connect ( &vecChannels[3], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
+QObject::connect ( &vecChannels[4], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
+QObject::connect ( &vecChannels[5], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
+QObject::connect ( &vecChannels[6], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
+QObject::connect ( &vecChannels[7], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
+QObject::connect ( &vecChannels[8], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
+QObject::connect ( &vecChannels[9], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+	this, SLOT ( OnSendProtMessageCh0 ( CVector<uint8_t> ) ) );
+
+
+}
+
+
+
 int CChannelSet::GetFreeChan()
 {
 	/* look for a free channel */
@@ -226,16 +256,16 @@ CChannel::CChannel ()
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 {
 	// only send messages if we are connected, otherwise delete complete queue
-//	if ( IsConnected () )
-//	{
+	if ( IsConnected () )
+	{
 		// emit message to actually send the data
 		emit MessReadyForSending ( vecMessage );
-//	}
-//	else
-//	{
-//		// delete send message queue
-//		Protocol.DeleteSendMessQueue();
-//	}
+	}
+	else
+	{
+		// delete send message queue
+		Protocol.DeleteSendMessQueue();
+	}
 }
 
 void CChannel::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )

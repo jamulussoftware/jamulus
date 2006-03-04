@@ -75,7 +75,8 @@ protected:
 	QTime				TimeLastBlock;
 
 public slots:
-	void OnTimer ();
+	void OnTimer();
+	void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
 };
 
 

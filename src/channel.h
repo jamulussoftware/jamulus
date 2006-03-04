@@ -143,10 +143,12 @@ signals:
 
 
 /* CChannelSet (for server) ------------------------------------------------- */
-class CChannelSet
+class CChannelSet : public QObject
 {
+	Q_OBJECT
+
 public:
-	CChannelSet() {}
+	CChannelSet();
 	virtual ~CChannelSet() {}
 
 	bool PutData(const CVector<unsigned char>& vecbyRecBuf,
@@ -177,6 +179,25 @@ protected:
 	   copy constructor/operator */
 	CChannel	vecChannels[MAX_NUM_CHANNELS];
 	QMutex		Mutex;
+
+
+
+public slots:
+// TODO better solution!!!
+	void OnSendProtMessageCh0(CVector<uint8_t> mess) { emit MessReadyForSending(0,mess); }
+	void OnSendProtMessageCh1(CVector<uint8_t> mess) { emit MessReadyForSending(1,mess); }
+	void OnSendProtMessageCh2(CVector<uint8_t> mess) { emit MessReadyForSending(2,mess); }
+	void OnSendProtMessageCh3(CVector<uint8_t> mess) { emit MessReadyForSending(3,mess); }
+	void OnSendProtMessageCh4(CVector<uint8_t> mess) { emit MessReadyForSending(4,mess); }
+	void OnSendProtMessageCh5(CVector<uint8_t> mess) { emit MessReadyForSending(5,mess); }
+	void OnSendProtMessageCh6(CVector<uint8_t> mess) { emit MessReadyForSending(6,mess); }
+	void OnSendProtMessageCh7(CVector<uint8_t> mess) { emit MessReadyForSending(7,mess); }
+	void OnSendProtMessageCh8(CVector<uint8_t> mess) { emit MessReadyForSending(8,mess); }
+	void OnSendProtMessageCh9(CVector<uint8_t> mess) { emit MessReadyForSending(9,mess); }
+
+
+signals:
+	void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );
 };
 
 

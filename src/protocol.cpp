@@ -147,21 +147,21 @@ void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
 */
 void CProtocol::DeleteSendMessQueue()
 {
-//	Mutex.lock();
-//	{
+	Mutex.lock();
+	{
 		// delete complete "send message queue"
 		SendMessQueue.clear();
-//	}
-//	Mutex.unlock();
+	}
+	Mutex.unlock();
 }
 
 void CProtocol::OnTimerSendMess()
 {
-//	Mutex.lock();
-//	{
+	Mutex.lock();
+	{
 		SendMessage();
-//	}
-//	Mutex.unlock();
+	}
+	Mutex.unlock();
 }
 
 bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
@@ -170,8 +170,8 @@ bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
 /*
 	return code: true -> ok; false -> error
 */
-	Mutex.lock();
-	{
+//	Mutex.lock();
+//	{
 		int					iRecCounter, iRecID, iData;
 		unsigned int		iPos;
 		CVector<uint8_t>	vecData;
@@ -250,8 +250,8 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 		{
 			return false; // return error code
 		}
-	}
-	Mutex.unlock();
+//	}
+//	Mutex.unlock();
 }
 
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )

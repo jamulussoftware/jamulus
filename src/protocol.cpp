@@ -72,14 +72,6 @@ MESSAGES
 
 
 /* Implementation *************************************************************/
-
-
-
-// TODO take care of mutexing ressources!!!!!!
-
-
-
-
 CProtocol::CProtocol() : iCounter ( 0 ), iOldRecID ( PROTMESSID_ILLEGAL ),
 	iOldRecCnt ( 0 )
 {
@@ -132,98 +124,6 @@ void CProtocol::SendMessage()
 	}
 }
 
-void CProtocol::DeleteSendMessQueue()
-{
-	// delete complete "send message queue"
-	SendMessQueue.clear();
-}
-
-bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
-							   const int iNumBytes )
-{
-/*
-	return code: true -> ok; false -> error
-*/
-	int					iRecCounter, iRecID, iData;
-	unsigned int		iPos;
-	CVector<uint8_t>	vecData;
-
-
-// convert unsigned char in uint8_t, TODO convert all buffers in uint8_t
-CVector<uint8_t> vecbyDataConv ( iNumBytes );
-for ( int i = 0; i < iNumBytes; i++ ) {
-	vecbyDataConv[i] = static_cast<uint8_t> ( vecbyData[i] );
-}
-
-
-// important: vecbyDataConv must have iNumBytes to get it work!!!
-	if ( ParseMessageFrame ( vecbyDataConv, iRecCounter, iRecID, vecData ) )
-	{
-		// In case we received a message and returned an answer but our answer
-		// did not make it to the receiver, he will resend his message. We check
-		// here if the message is the same as the old one, and if this is the
-		// case, just resend our old answer again
-		if ( ( iOldRecID == iRecID ) && ( iOldRecCnt == iRecCounter ) )
-		{
-			// acknowledgments are not acknowledged
-			if ( iRecID != PROTMESSID_ACKN )
-			{
-				// re-send acknowledgement
-				CreateAndSendAcknMess ( iRecID, iRecCounter );
-			}
-		}
-		else
-		{
-			// check which type of message we received and do action
-			switch ( iRecID ) 
-			{
-			case PROTMESSID_ACKN:
-
-				// extract data from stream and emit signal for received value
-				iPos = 0;
-				iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
-
-				// check if this is the correct acknowledgment
-				if ( ( SendMessQueue.front().iCnt == iRecCounter ) &&
-					 ( SendMessQueue.front().iID == iData ) )
-				{
-					// message acknowledged, remove from queue
-					SendMessQueue.pop_front();
-
-					// send next message in queue
-					SendMessage();
-				}
-
-				break;
-
-			case PROTMESSID_JITT_BUF_SIZE:
-
-				// extract data from stream and emit signal for received value
-				iPos = 0;
-				iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
-
-				// invoke message action
-				emit ChangeJittBufSize ( iData );
-
-				// send acknowledge message
-				CreateAndSendAcknMess ( iRecID, iRecCounter );
-
-				break;
-			}
-		}
-
-		// save current message ID and counter to find out if message was re-sent
-		iOldRecID = iRecID;
-		iOldRecCnt = iRecCounter;
-
-		return true; // everything was ok
-	}
-	else
-	{
-		return false; // return error code
-	}
-}
-
 void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
 {
 	CVector<uint8_t>	vecAcknMessage;
@@ -240,46 +140,145 @@ void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
 	emit MessReadyForSending ( vecAcknMessage );
 }
 
-void CProtocol::CreateJitBufMes ( const int iJitBufSize )
+
+/*
+	The following functions are access functions from different threads. These
+	functions have to be secured by a mutex to avoid data corruption
+*/
+void CProtocol::DeleteSendMessQueue()
 {
-	CVector<uint8_t>	vecNewMessage;
-	CVector<uint8_t>	vecData ( 2 ); // 2 bytes of data
-	unsigned int		iPos = 0; // init position pointer
+	Mutex.lock();
+	{
+		// delete complete "send message queue"
+		SendMessQueue.clear();
+	}
+	Mutex.unlock();
+}
 
-	// store current counter value
-	const int iCurCounter = iCounter;
+void CProtocol::OnTimerSendMess()
+{
+	Mutex.lock();
+	{
+		SendMessage();
+	}
+	Mutex.unlock();
+}
 
-// increase counter (wraps around automatically)
-// TODO: make it thread safe!!!!!!!!!!!!
-iCounter++;
+bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
+							   const int iNumBytes )
+{
+/*
+	return code: true -> ok; false -> error
+*/
+	Mutex.lock();
+	{
+		int					iRecCounter, iRecID, iData;
+		unsigned int		iPos;
+		CVector<uint8_t>	vecData;
 
-	// build data vector
-	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iJitBufSize ), 2 );
 
-	// build complete message
-	GenMessageFrame ( vecNewMessage, iCurCounter, PROTMESSID_JITT_BUF_SIZE, vecData );
-
-	// enqueue message
-	EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_JITT_BUF_SIZE );
+// convert unsigned char in uint8_t, TODO convert all buffers in uint8_t
+CVector<uint8_t> vecbyDataConv ( iNumBytes );
+for ( int i = 0; i < iNumBytes; i++ ) {
+	vecbyDataConv[i] = static_cast<uint8_t> ( vecbyData[i] );
 }
 
 
+// important: vecbyDataConv must have iNumBytes to get it work!!!
+		if ( ParseMessageFrame ( vecbyDataConv, iRecCounter, iRecID, vecData ) )
+		{
+			// In case we received a message and returned an answer but our answer
+			// did not make it to the receiver, he will resend his message. We check
+			// here if the message is the same as the old one, and if this is the
+			// case, just resend our old answer again
+			if ( ( iOldRecID == iRecID ) && ( iOldRecCnt == iRecCounter ) )
+			{
+				// acknowledgments are not acknowledged
+				if ( iRecID != PROTMESSID_ACKN )
+				{
+					// re-send acknowledgement
+					CreateAndSendAcknMess ( iRecID, iRecCounter );
+				}
+			}
+			else
+			{
+				// check which type of message we received and do action
+				switch ( iRecID ) 
+				{
+				case PROTMESSID_ACKN:
 
+					// extract data from stream and emit signal for received value
+					iPos = 0;
+					iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
+					// check if this is the correct acknowledgment
+					if ( ( SendMessQueue.front().iCnt == iRecCounter ) &&
+						 ( SendMessQueue.front().iID == iData ) )
+					{
+						// message acknowledged, remove from queue
+						SendMessQueue.pop_front();
 
+						// send next message in queue
+						SendMessage();
+					}
 
+					break;
 
+				case PROTMESSID_JITT_BUF_SIZE:
 
+					// extract data from stream and emit signal for received value
+					iPos = 0;
+					iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
+					// invoke message action
+					emit ChangeJittBufSize ( iData );
 
+					// send acknowledge message
+					CreateAndSendAcknMess ( iRecID, iRecCounter );
 
+					break;
+				}
+			}
 
+			// save current message ID and counter to find out if message was re-sent
+			iOldRecID = iRecID;
+			iOldRecCnt = iRecCounter;
 
+			return true; // everything was ok
+		}
+		else
+		{
+			return false; // return error code
+		}
+	}
+	Mutex.unlock();
+}
 
+void CProtocol::CreateJitBufMes ( const int iJitBufSize )
+{
+	Mutex.lock();
+	{
+		CVector<uint8_t>	vecNewMessage;
+		CVector<uint8_t>	vecData ( 2 ); // 2 bytes of data
+		unsigned int		iPos = 0; // init position pointer
 
+		// store current counter value
+		const int iCurCounter = iCounter;
 
+		// increase counter (wraps around automatically)
+		iCounter++;
 
+		// build data vector
+		PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iJitBufSize ), 2 );
 
+		// build complete message
+		GenMessageFrame ( vecNewMessage, iCurCounter, PROTMESSID_JITT_BUF_SIZE, vecData );
+
+		// enqueue message
+		EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_JITT_BUF_SIZE );
+	}
+	Mutex.unlock();
+}
 
 
 /******************************************************************************\

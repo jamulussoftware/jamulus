@@ -118,11 +118,12 @@ protected:
 	uint8_t					iCounter;
 	int						iOldRecID, iOldRecCnt;
 	std::list<CSendMessage>	SendMessQueue;
+
 	QTimer					TimerSendMess;
 	QMutex					Mutex;
 
 public slots:
-	void OnTimerSendMess() { SendMessage(); }
+	void OnTimerSendMess();
 
 signals:
 	// transmitting

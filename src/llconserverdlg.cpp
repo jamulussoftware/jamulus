@@ -69,12 +69,6 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent,
 #endif
 	}
 
-	/* Init slider control */
-	SliderNetBuf->setRange(1, MAX_NET_BUF_SIZE_NUM_BL);
-	const int iCurNumNetBuf = pServer->GetChannelSet()->GetSockBufSize();
-	SliderNetBuf->setValue(iCurNumNetBuf);
-	TextNetBuf->setText("Size: " + QString().setNum(iCurNumNetBuf));
-
 	/* Init timing jitter text label */
 	TextLabelResponseTime->setText("");
 
@@ -92,10 +86,6 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent,
 	/* connections ---------------------------------------------------------- */
 	/* timers */
 	QObject::connect(&Timer, SIGNAL(timeout()), this, SLOT(OnTimer()));
-
-	/* sliders */
-	QObject::connect(SliderNetBuf, SIGNAL(valueChanged(int)),
-		this, SLOT(OnSliderNetBuf(int)));
 
 
 	/* timers --------------------------------------------------------------- */
@@ -156,12 +146,6 @@ void CLlconServerDlg::OnTimer()
 	{
 		TextLabelResponseTime->setText("---");
 	}
-}
-
-void CLlconServerDlg::OnSliderNetBuf(int value)
-{
-	pServer->GetChannelSet()->SetSockBufSize( MIN_BLOCK_SIZE_SAMPLES, value );
-	TextNetBuf->setText("Size: " + QString().setNum(value));
 }
 
 void CLlconServerDlg::customEvent(QCustomEvent* Event)

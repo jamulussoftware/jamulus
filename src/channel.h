@@ -48,53 +48,42 @@
 /* no valid channel number */
 #define INVALID_CHANNEL_ID		(MAX_NUM_CHANNELS + 1)
 
-
-/* Classes ********************************************************************/
-class CSampleOffsetEst
+enum EPutDataStat
 {
-public:
-	CSampleOffsetEst() {Init();}
-	virtual ~CSampleOffsetEst() {}
-
-	void Init();
-	void AddTimeStampIdx(const int iTimeStampIdx);
-	double GetSamRate() {return dSamRateEst;}
-
-protected:
-	QTime RefTime;
-	int iAccTiStVal;
-	double dSamRateEst;
-	CVector<long int> veciTimeElapsed;
-	CVector<long int> veciTiStIdx;
-	int iInitCnt;
+	PS_GEN_ERROR,
+	PS_AUDIO_OK,
+	PS_AUDIO_ERR,
+	PS_PROT_OK,
+	PS_PROT_ERR
 };
 
 
+/* Classes ********************************************************************/
 /* CChannel ----------------------------------------------------------------- */
 class CChannel : public QObject
 {
 	Q_OBJECT
 
 public:
-	CChannel ();
-	virtual ~CChannel () {}
+	CChannel();
+	virtual ~CChannel() {}
 
-	bool PutData ( const CVector<unsigned char>& vecbyData,
-				   int iNumBytes );
+	EPutDataStat PutData ( const CVector<unsigned char>& vecbyData,
+						   int iNumBytes );
 	bool GetData ( CVector<double>& vecdData );
 
 	CVector<unsigned char> PrepSendPacket ( const CVector<short>& vecsNPacket );
 
-	bool IsConnected () const { return iConTimeOut > 0; }
+	bool IsConnected() const { return iConTimeOut > 0; }
 
-	int	GetComprAudSize () { return iAudComprSize; }
+	int	GetComprAudSize() { return iAudComprSize; }
 
 	void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
 	bool GetAddress ( CHostAddress& RetAddr );
 	CHostAddress GetAddress () { return InetAddr; }
 
 	void SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks );
-	int GetSockBufSize () { return SockBuf.GetSize(); }
+	int GetSockBufSize() { return SockBuf.GetSize(); }
 
 	// network protocol interface
 	void CreateJitBufMes ( const int iJitBufSize )
@@ -139,6 +128,7 @@ public slots:
 
 signals:
 	void MessReadyForSending ( CVector<uint8_t> vecMessage );
+	void NewConnection();
 };
 
 
@@ -151,28 +141,29 @@ public:
 	CChannelSet();
 	virtual ~CChannelSet() {}
 
-	bool PutData(const CVector<unsigned char>& vecbyRecBuf,
-				 const int iNumBytesRead, const CHostAddress& HostAdr);
+	bool PutData ( const CVector<unsigned char>& vecbyRecBuf,
+				   const int iNumBytesRead, const CHostAddress& HostAdr );
 
 	int	GetFreeChan();
-	int	CheckAddr(const CHostAddress& Addr);
 
-	void GetBlockAllConC(CVector<int>& vecChanID,
-						 CVector<CVector<double> >& vecvecdData);
-	void GetConCliParam(CVector<CHostAddress>& vecHostAddresses,
-						CVector<int>& veciJitBufSize);
+	int	CheckAddr ( const CHostAddress& Addr );
+
+	void GetBlockAllConC ( CVector<int>& vecChanID,
+						   CVector<CVector<double> >& vecvecdData );
+
+	void GetConCliParam( CVector<CHostAddress>& vecHostAddresses,
+						 CVector<int>& veciJitBufSize );
 
 	/* access functions for actual channels */
-	bool IsConnected(const int iChanNum)
-		{return vecChannels[iChanNum].IsConnected();}
-	CVector<unsigned char> PrepSendPacket(const int iChanNum,
-		const CVector<short>& vecsNPacket)
-		{return vecChannels[iChanNum].PrepSendPacket(vecsNPacket);}
-	CHostAddress GetAddress(const int iChanNum)
-		{return vecChannels[iChanNum].GetAddress();}
+	bool IsConnected ( const int iChanNum )
+		{ return vecChannels[iChanNum].IsConnected(); }
 
-	void SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks);
-	int GetSockBufSize() {return vecChannels[0].GetSockBufSize();}
+	CVector<unsigned char> PrepSendPacket ( const int iChanNum,
+											const CVector<short>& vecsNPacket )
+		{ return vecChannels[iChanNum].PrepSendPacket ( vecsNPacket ); }
+
+	CHostAddress GetAddress ( const int iChanNum )
+		{ return vecChannels[iChanNum].GetAddress(); }
 
 protected:
 	/* do not use the vector class since CChannel does not have appropriate
@@ -199,6 +190,27 @@ void OnSendProtMessCh9(CVector<uint8_t> mess) {emit MessReadyForSending(9,mess);
 
 signals:
 	void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );
+};
+
+
+/* Sample rate offset estimation -------------------------------------------- */
+class CSampleOffsetEst
+{
+public:
+	CSampleOffsetEst() { Init(); }
+	virtual ~CSampleOffsetEst() {}
+
+	void Init();
+	void AddTimeStampIdx ( const int iTimeStampIdx );
+	double GetSamRate() { return dSamRateEst; }
+
+protected:
+	QTime				RefTime;
+	int					iAccTiStVal;
+	double				dSamRateEst;
+	CVector<long int>	veciTimeElapsed;
+	CVector<long int>	veciTiStIdx;
+	int					iInitCnt;
 };
 
 

@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>633</width>
+            <width>629</width>
             <height>240</height>
         </rect>
     </property>
@@ -37,110 +37,35 @@
             <number>6</number>
         </property>
         <widget>
-            <class>QLayoutWidget</class>
+            <class>QListView</class>
+            <column>
+                <property>
+                    <name>text</name>
+                    <string>Column 1</string>
+                </property>
+                <property>
+                    <name>clickable</name>
+                    <bool>true</bool>
+                </property>
+                <property>
+                    <name>resizeable</name>
+                    <bool>true</bool>
+                </property>
+            </column>
+        <item>
+            <property>
+                <name>text</name>
+                <string>New Item</string>
+            </property>
+            <property>
+                <name>pixmap</name>
+                <pixmap></pixmap>
+            </property>
+        </item>
             <property stdset="1">
                 <name>name</name>
-                <cstring>Layout4</cstring>
+                <cstring>ListViewClients</cstring>
             </property>
-            <hbox>
-                <property stdset="1">
-                    <name>margin</name>
-                    <number>0</number>
-                </property>
-                <property stdset="1">
-                    <name>spacing</name>
-                    <number>6</number>
-                </property>
-                <widget>
-                    <class>QListView</class>
-                    <column>
-                        <property>
-                            <name>text</name>
-                            <string>Column 1</string>
-                        </property>
-                        <property>
-                            <name>clickable</name>
-                            <bool>true</bool>
-                        </property>
-                        <property>
-                            <name>resizeable</name>
-                            <bool>true</bool>
-                        </property>
-                    </column>
-                <item>
-                    <property>
-                        <name>text</name>
-                        <string>New Item</string>
-                    </property>
-                    <property>
-                        <name>pixmap</name>
-                        <pixmap></pixmap>
-                    </property>
-                </item>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>ListViewClients</cstring>
-                    </property>
-                </widget>
-                <widget>
-                    <class>QGroupBox</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>GroupBox3</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>title</name>
-                        <string>Jitter Buffer</string>
-                    </property>
-                    <vbox>
-                        <property stdset="1">
-                            <name>margin</name>
-                            <number>11</number>
-                        </property>
-                        <property stdset="1">
-                            <name>spacing</name>
-                            <number>6</number>
-                        </property>
-                        <widget>
-                            <class>QLabel</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>TextNetBuf</cstring>
-                            </property>
-                            <property stdset="1">
-                                <name>text</name>
-                                <string>Size</string>
-                            </property>
-                            <property stdset="1">
-                                <name>alignment</name>
-                                <set>AlignCenter</set>
-                            </property>
-                            <property>
-                                <name>hAlign</name>
-                            </property>
-                        </widget>
-                        <widget>
-                            <class>QSlider</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>SliderNetBuf</cstring>
-                            </property>
-                            <property stdset="1">
-                                <name>pageStep</name>
-                                <number>1</number>
-                            </property>
-                            <property stdset="1">
-                                <name>orientation</name>
-                                <enum>Vertical</enum>
-                            </property>
-                            <property stdset="1">
-                                <name>tickmarks</name>
-                                <enum>Both</enum>
-                            </property>
-                        </widget>
-                    </vbox>
-                </widget>
-            </hbox>
         </widget>
         <widget>
             <class>QLayoutWidget</class>

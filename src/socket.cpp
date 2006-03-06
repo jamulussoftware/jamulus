@@ -105,13 +105,20 @@ void CSocket::OnDataReceived ()
 			return;
 		}
 
-		if ( pChannel->PutData( vecbyRecBuf, iNumBytesRead ) )
+		switch ( pChannel->PutData( vecbyRecBuf, iNumBytesRead ) )
 		{
+		case PS_AUDIO_OK:
 			PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN );
-		}
-		else
-		{
+			break;
+
+		case PS_AUDIO_ERR:
+		case PS_GEN_ERROR:
 			PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED );
+			break;
+
+		case PS_PROT_ERR:
+			PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW );
+			break;
 		}
 	}
 	else

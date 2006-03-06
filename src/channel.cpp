@@ -112,44 +112,50 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 						    const int iNumBytesRead,
 							const CHostAddress& HostAdr )
 {
-	Mutex.lock ();
-
-	/* get channel ID ------------------------------------------------------- */
 	bool bChanOK = true;
 
-	/* check address */
-	int iCurChanID = CheckAddr ( HostAdr );
-
-	if ( iCurChanID == INVALID_CHANNEL_ID )
+	Mutex.lock ();
 	{
-		/* a new client is calling, look for free channel */
-		iCurChanID = GetFreeChan ();
+		/* get channel ID --------------------------------------------------- */
+		/* check address */
+		int iCurChanID = CheckAddr ( HostAdr );
 
-		if ( iCurChanID != INVALID_CHANNEL_ID )
+		if ( iCurChanID == INVALID_CHANNEL_ID )
 		{
-			vecChannels[iCurChanID].SetAddress ( HostAdr );
+			/* a new client is calling, look for free channel */
+			iCurChanID = GetFreeChan ();
+
+			if ( iCurChanID != INVALID_CHANNEL_ID )
+			{
+				vecChannels[iCurChanID].SetAddress ( HostAdr );
+			}
+			else
+			{
+				bChanOK = false; /* no free channel available */
+			}
 		}
-		else
+
+
+		/* put received data in jitter buffer ------------------------------- */
+		if ( bChanOK )
 		{
-			bChanOK = false; /* no free channel available */
+			/* put packet in socket buffer */
+			switch ( vecChannels[iCurChanID].PutData ( vecbyRecBuf, iNumBytesRead ) )
+			{
+			case PS_AUDIO_OK:
+				PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN, iCurChanID );
+				break;
+
+			case PS_AUDIO_ERR:
+				PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED, iCurChanID );
+				break;
+
+			case PS_PROT_ERR:
+				PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW, iCurChanID );
+				break;
+			}
 		}
 	}
-
-
-	/* put received data in jitter buffer ----------------------------------- */
-	if ( bChanOK )
-	{
-		/* put packet in socket buffer */
-		if ( vecChannels[iCurChanID].PutData ( vecbyRecBuf, iNumBytesRead ) )
-		{
-			PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN, iCurChanID );
-		}
-		else
-		{
-			PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED, iCurChanID );
-		}
-	}
-
 	Mutex.unlock ();
 
 	return !bChanOK; /* return 1 if error */
@@ -167,36 +173,36 @@ void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
 	/* make put and get calls thread safe. Do not forget to unlock mutex
 	   afterwards! */
 	Mutex.lock ();
-
-	/* Check all possible channels */
-	for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
 	{
-		/* read out all input buffers to decrease timeout counter on
-		   disconnected channels */
-		const bool bGetOK = vecChannels[i].GetData ( vecdData );
-
-		if ( vecChannels[i].IsConnected () )
+		/* Check all possible channels */
+		for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
 		{
-			/* add ID and data */
-			vecChanID.Add ( i );
+			/* read out all input buffers to decrease timeout counter on
+			   disconnected channels */
+			const bool bGetOK = vecChannels[i].GetData ( vecdData );
 
-			const int iOldSize = vecvecdData.Size ();
-			vecvecdData.Enlarge ( 1 );
-			vecvecdData[iOldSize].Init ( vecdData.Size () );
-			vecvecdData[iOldSize] = vecdData;
+			if ( vecChannels[i].IsConnected () )
+			{
+				/* add ID and data */
+				vecChanID.Add ( i );
 
-			/* send message for get status (for GUI) */
-			if ( bGetOK )
-			{
-				PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN, i );
-			}
-			else
-			{
-				PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED, i );
+				const int iOldSize = vecvecdData.Size ();
+				vecvecdData.Enlarge ( 1 );
+				vecvecdData[iOldSize].Init ( vecdData.Size () );
+				vecvecdData[iOldSize] = vecdData;
+
+				/* send message for get status (for GUI) */
+				if ( bGetOK )
+				{
+					PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN, i );
+				}
+				else
+				{
+					PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED, i );
+				}
 			}
 		}
 	}
-
 	Mutex.unlock (); /* release mutex */
 }
 
@@ -219,20 +225,6 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 			veciJitBufSize[i] = vecChannels[i].GetSockBufSize ();
 		}
 	}
-}
-
-void CChannelSet::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
-{
-	/* this opperation must be done with mutex */
-	Mutex.lock ();
-
-/* as a test we adjust the buffers of all channels to the new value. Maybe later
-   do change only for some channels -> take care to set value back to default if
-   channel is disconnected, afterwards! */
-for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-	vecChannels[i].SetSockBufSize ( iNewBlockSize, iNumBlocks );
-
-	Mutex.unlock ();
 }
 
 
@@ -286,9 +278,9 @@ void CChannel::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
 {
 	/* this opperation must be done with mutex */
 	Mutex.lock ();
-
-	SockBuf.Init ( iNewBlockSize, iNumBlocks );
-
+	{
+		SockBuf.Init ( iNewBlockSize, iNumBlocks );
+	}
 	Mutex.unlock ();
 }
 
@@ -314,10 +306,10 @@ bool CChannel::GetAddress(CHostAddress& RetAddr)
 	}
 }
 
-bool CChannel::PutData ( const CVector<unsigned char>& vecbyData,
-					     int iNumBytes )
+EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
+								 int iNumBytes )
 {
-	bool bRet = true;
+	EPutDataStat eRet = PS_GEN_ERROR;
 
 	/* only process if packet has correct size */
 	if ( iNumBytes == iAudComprSize )
@@ -342,41 +334,61 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 
 
 		Mutex.lock (); /* put mutex lock */
-
-		bRet = SockBuf.Put ( vecdResOutData );
-
+		{
+			if ( SockBuf.Put ( vecdResOutData ) )
+			{
+				eRet = PS_AUDIO_OK;
+			}
+			else
+			{
+				eRet = PS_AUDIO_ERR;
+			}
+		}
 		Mutex.unlock (); /* put mutex unlock */
 
-		/* reset time-out counter */
+		// if channel was not connected, emit signal to inform that new connection
+		// was established
+		if ( iConTimeOut == 0 )
+		{
+			emit NewConnection();
+		}
+
+		// reset time-out counter
 		iConTimeOut = CON_TIME_OUT_CNT_MAX;
 	}
 	else
 	{
 		// this seems not to be an audio block, parse the message
-
-// TODO: different return code for protocol
-
-		bRet = Protocol.ParseMessage ( vecbyData, iNumBytes );
+		if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )
+		{
+			eRet = PS_PROT_OK;
+		}
+		else
+		{
+			eRet = PS_PROT_ERR;
+		}
 	}
 
-	return bRet;
+	return eRet;
 }
 
 bool CChannel::GetData ( CVector<double>& vecdData )
 {
+	bool bGetOK = false;
+
 	Mutex.lock (); /* get mutex lock */
-
-	const bool bGetOK = SockBuf.Get ( vecdData );
-
-	if ( !bGetOK )
 	{
-		/* decrease time-out counter */
-		if ( iConTimeOut > 0 )
+		bGetOK = SockBuf.Get ( vecdData );
+
+		if ( !bGetOK )
 		{
-			iConTimeOut--;
+			/* decrease time-out counter */
+			if ( iConTimeOut > 0 )
+			{
+				iConTimeOut--;
+			}
 		}
 	}
-
 	Mutex.unlock (); /* get mutex unlock */
 
 	return bGetOK;

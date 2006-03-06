@@ -74,5 +74,4 @@ protected:
 
 public slots:
 	void OnTimer();
-	void OnSliderNetBuf(int value);
 };

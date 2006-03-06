@@ -86,6 +86,10 @@ void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
 								 const int iCnt,
 								 const int iID )
 {
+
+qDebug("EnqueueMessage start");
+
+
 	// check if list is empty so that we have to initiate a send process
 	const bool bListWasEmpty = SendMessQueue.empty();
 
@@ -100,10 +104,18 @@ void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
 	{
 		SendMessage();
 	}
+
+qDebug("EnqueueMessage end");
+
+
 }
 
 void CProtocol::SendMessage()
 {
+
+qDebug("SendMessage start");
+
+
 	// we have to check that list is not empty, since in another thread the
 	// last element of the list might have been erased
 	if ( !SendMessQueue.empty() )
@@ -122,6 +134,10 @@ void CProtocol::SendMessage()
 		// no message to send, stop timer
 		TimerSendMess.stop();
 	}
+
+qDebug("SendMessage stop");
+
+
 }
 
 void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
@@ -129,6 +145,10 @@ void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
 	CVector<uint8_t>	vecAcknMessage;
 	CVector<uint8_t>	vecData ( 2 ); // 2 bytes of data
 	unsigned int		iPos = 0; // init position pointer
+
+
+qDebug("CreateAndSendAcknMess start");
+
 
 	// build data vector
 	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iID ), 2 );
@@ -138,6 +158,10 @@ void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
 
 	// immediately send acknowledge message
 	emit MessReadyForSending ( vecAcknMessage );
+
+
+qDebug("CreateAndSendAcknMess end");
+
 }
 
 
@@ -170,8 +194,15 @@ bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
 /*
 	return code: true -> ok; false -> error
 */
+
+qDebug("before lock");
+
 	Mutex.lock();
 	{
+
+qDebug("after lock");
+
+
 		int					iRecCounter, iRecID, iData;
 		unsigned int		iPos;
 		CVector<uint8_t>	vecData;

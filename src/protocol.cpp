@@ -147,12 +147,12 @@ void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
 */
 void CProtocol::DeleteSendMessQueue()
 {
-	Mutex.lock();
-	{
+//	Mutex.lock();
+//	{
 		// delete complete "send message queue"
 		SendMessQueue.clear();
-	}
-	Mutex.unlock();
+//	}
+//	Mutex.unlock();
 }
 
 void CProtocol::OnTimerSendMess()

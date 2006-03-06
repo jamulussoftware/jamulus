@@ -147,12 +147,12 @@ void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
 */
 void CProtocol::DeleteSendMessQueue()
 {
-	Mutex.lock();
-	{
+//	Mutex.lock();
+//	{
 		// delete complete "send message queue"
 		SendMessQueue.clear();
-	}
-	Mutex.unlock();
+//	}
+//	Mutex.unlock();
 }
 
 void CProtocol::OnTimerSendMess()
@@ -170,8 +170,8 @@ bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
 /*
 	return code: true -> ok; false -> error
 */
-//	Mutex.lock();
-//	{
+	Mutex.lock();
+	{
 		int					iRecCounter, iRecID, iData;
 		unsigned int		iPos;
 		CVector<uint8_t>	vecData;
@@ -250,14 +250,14 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 		{
 			return false; // return error code
 		}
-//	}
-//	Mutex.unlock();
+	}
+	Mutex.unlock();
 }
 
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 {
-	Mutex.lock();
-	{
+//	Mutex.lock();
+//	{
 		CVector<uint8_t>	vecNewMessage;
 		CVector<uint8_t>	vecData ( 2 ); // 2 bytes of data
 		unsigned int		iPos = 0; // init position pointer
@@ -276,8 +276,8 @@ void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 
 		// enqueue message
 		EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_JITT_BUF_SIZE );
-	}
-	Mutex.unlock();
+//	}
+//	Mutex.unlock();
 }
 
 

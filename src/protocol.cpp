@@ -157,11 +157,11 @@ void CProtocol::DeleteSendMessQueue()
 
 void CProtocol::OnTimerSendMess()
 {
-	Mutex.lock();
-	{
+//	Mutex.lock();
+//	{
 		SendMessage();
-	}
-	Mutex.unlock();
+//	}
+//	Mutex.unlock();
 }
 
 bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,

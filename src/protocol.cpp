@@ -170,8 +170,8 @@ bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
 /*
 	return code: true -> ok; false -> error
 */
-//	Mutex.lock();
-//	{
+	Mutex.lock();
+	{
 		int					iRecCounter, iRecID, iData;
 		unsigned int		iPos;
 		CVector<uint8_t>	vecData;
@@ -250,8 +250,8 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 		{
 			return false; // return error code
 		}
-//	}
-//	Mutex.unlock();
+	}
+	Mutex.unlock();
 }
 
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )

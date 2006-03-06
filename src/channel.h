@@ -172,11 +172,10 @@ protected:
 	QMutex		Mutex;
 
 public slots:
-
+/*
 // seems not to work...
 	void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
-
-/*
+*/
 // make sure we have MAX_NUM_CHANNELS connections!!!
 void OnSendProtMessCh0(CVector<uint8_t> mess) {emit MessReadyForSending(0,mess);}
 void OnSendProtMessCh1(CVector<uint8_t> mess) {emit MessReadyForSending(1,mess);}
@@ -188,7 +187,6 @@ void OnSendProtMessCh6(CVector<uint8_t> mess) {emit MessReadyForSending(6,mess);
 void OnSendProtMessCh7(CVector<uint8_t> mess) {emit MessReadyForSending(7,mess);}
 void OnSendProtMessCh8(CVector<uint8_t> mess) {emit MessReadyForSending(8,mess);}
 void OnSendProtMessCh9(CVector<uint8_t> mess) {emit MessReadyForSending(9,mess);}
-*/
 
 signals:
 	void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );

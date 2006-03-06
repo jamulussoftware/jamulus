@@ -30,7 +30,7 @@
 \******************************************************************************/
 CChannelSet::CChannelSet()
 {
-/*
+
 // seems not to work...
 	// connect "message send"-message for each channel
 	for  ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
@@ -39,7 +39,7 @@ CChannelSet::CChannelSet()
 			SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
 			this, SLOT ( OnSendProtMessage ( i, CVector<uint8_t> ) ) );
 	}
-*/
+/*
 // make sure we have MAX_NUM_CHANNELS connections!!!
 QObject::connect(&vecChannels[0],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
 	this,SLOT(OnSendProtMessCh0(CVector<uint8_t>)));
@@ -61,16 +61,17 @@ QObject::connect(&vecChannels[8],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
 	this,SLOT(OnSendProtMessCh8(CVector<uint8_t>)));
 QObject::connect(&vecChannels[9],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
 	this,SLOT(OnSendProtMessCh9(CVector<uint8_t>)));
+*/
 }
 
-/*
+
 // seems not to work...
 void CChannelSet::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 {
 	// just pass message through and add channel ID
 	emit MessReadyForSending ( iChID,vecMessage );
 }
-*/
+
 
 int CChannelSet::GetFreeChan()
 {

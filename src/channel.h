@@ -43,6 +43,7 @@
 #define CON_TIME_OUT_CNT_MAX	( ( CON_TIME_OUT_SEC_MAX * 1000 ) / BLOCK_DURATION_MS )
 
 /* maximum number of internet connections (channels) */
+// if you want to change this paramter, change the connections in this class, too!
 #define MAX_NUM_CHANNELS		10 /* max number channels for server */
 
 /* no valid channel number */
@@ -86,10 +87,8 @@ public:
 	int GetSockBufSize() { return SockBuf.GetSize(); }
 
 	// network protocol interface
-	void CreateJitBufMes ( const int iJitBufSize )
-	{
-		Protocol.CreateJitBufMes ( iJitBufSize );
-	}
+	void CreateJitBufMes ( const int iJitBufSize ) { Protocol.CreateJitBufMes ( iJitBufSize ); }
+	void CreateReqJitBufMes() { Protocol.CreateReqJitBufMes(); }
 
 protected:
 	/* audio compression */
@@ -129,6 +128,7 @@ public slots:
 signals:
 	void MessReadyForSending ( CVector<uint8_t> vecMessage );
 	void NewConnection();
+	void ReqJittBufSize();
 };
 
 
@@ -172,21 +172,29 @@ protected:
 	QMutex		Mutex;
 
 public slots:
-/*
-// seems not to work...
-	void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
-*/
-// make sure we have MAX_NUM_CHANNELS connections!!!
-void OnSendProtMessCh0(CVector<uint8_t> mess) {emit MessReadyForSending(0,mess);}
-void OnSendProtMessCh1(CVector<uint8_t> mess) {emit MessReadyForSending(1,mess);}
-void OnSendProtMessCh2(CVector<uint8_t> mess) {emit MessReadyForSending(2,mess);}
-void OnSendProtMessCh3(CVector<uint8_t> mess) {emit MessReadyForSending(3,mess);}
-void OnSendProtMessCh4(CVector<uint8_t> mess) {emit MessReadyForSending(4,mess);}
-void OnSendProtMessCh5(CVector<uint8_t> mess) {emit MessReadyForSending(5,mess);}
-void OnSendProtMessCh6(CVector<uint8_t> mess) {emit MessReadyForSending(6,mess);}
-void OnSendProtMessCh7(CVector<uint8_t> mess) {emit MessReadyForSending(7,mess);}
-void OnSendProtMessCh8(CVector<uint8_t> mess) {emit MessReadyForSending(8,mess);}
-void OnSendProtMessCh9(CVector<uint8_t> mess) {emit MessReadyForSending(9,mess);}
+	// make sure we have MAX_NUM_CHANNELS connections!!!
+	// send message
+	void OnSendProtMessCh0(CVector<uint8_t> mess) {emit MessReadyForSending(0,mess);}
+	void OnSendProtMessCh1(CVector<uint8_t> mess) {emit MessReadyForSending(1,mess);}
+	void OnSendProtMessCh2(CVector<uint8_t> mess) {emit MessReadyForSending(2,mess);}
+	void OnSendProtMessCh3(CVector<uint8_t> mess) {emit MessReadyForSending(3,mess);}
+	void OnSendProtMessCh4(CVector<uint8_t> mess) {emit MessReadyForSending(4,mess);}
+	void OnSendProtMessCh5(CVector<uint8_t> mess) {emit MessReadyForSending(5,mess);}
+	void OnSendProtMessCh6(CVector<uint8_t> mess) {emit MessReadyForSending(6,mess);}
+	void OnSendProtMessCh7(CVector<uint8_t> mess) {emit MessReadyForSending(7,mess);}
+	void OnSendProtMessCh8(CVector<uint8_t> mess) {emit MessReadyForSending(8,mess);}
+	void OnSendProtMessCh9(CVector<uint8_t> mess) {emit MessReadyForSending(9,mess);}
+
+	void OnNewConnectionCh0(CVector<uint8_t> mess) {vecChannels[0].CreateReqJitBufMes();}
+	void OnNewConnectionCh1(CVector<uint8_t> mess) {vecChannels[1].CreateReqJitBufMes();}
+	void OnNewConnectionCh2(CVector<uint8_t> mess) {vecChannels[2].CreateReqJitBufMes();}
+	void OnNewConnectionCh3(CVector<uint8_t> mess) {vecChannels[3].CreateReqJitBufMes();}
+	void OnNewConnectionCh4(CVector<uint8_t> mess) {vecChannels[4].CreateReqJitBufMes();}
+	void OnNewConnectionCh5(CVector<uint8_t> mess) {vecChannels[5].CreateReqJitBufMes();}
+	void OnNewConnectionCh6(CVector<uint8_t> mess) {vecChannels[6].CreateReqJitBufMes();}
+	void OnNewConnectionCh7(CVector<uint8_t> mess) {vecChannels[7].CreateReqJitBufMes();}
+	void OnNewConnectionCh8(CVector<uint8_t> mess) {vecChannels[8].CreateReqJitBufMes();}
+	void OnNewConnectionCh9(CVector<uint8_t> mess) {vecChannels[9].CreateReqJitBufMes();}
 
 signals:
 	void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );

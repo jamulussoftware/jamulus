@@ -35,10 +35,11 @@
 
 /* Definitions ****************************************************************/
 // protocol message IDs
-#define PROTMESSID_ILLEGAL			 0 // illegal ID
-#define PROTMESSID_ACKN				 1 // acknowledge
-#define PROTMESSID_JITT_BUF_SIZE	10 // jitter buffer size
-#define PROTMESSID_PING				11 // for measuring ping time
+#define PROTMESSID_ILLEGAL				 0 // illegal ID
+#define PROTMESSID_ACKN					 1 // acknowledge
+#define PROTMESSID_JITT_BUF_SIZE		10 // jitter buffer size
+#define PROTMESSID_REQ_JITT_BUF_SIZE	11 // request jitter buffer size
+#define PROTMESSID_PING					12 // for measuring ping time
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE		5 /* ID, cnt, length */
@@ -58,6 +59,7 @@ public:
 	virtual ~CProtocol() {}
 
 	void CreateJitBufMes ( const int iJitBufSize );
+	void CreateReqJitBufMes();
 
 	void CreateAndSendAcknMess ( const int& iID, const int& iCnt );
 
@@ -131,6 +133,7 @@ signals:
 
 	// receiving
 	void ChangeJittBufSize ( int iNewJitBufSize );
+	void ReqJittBufSize();
 };
 
 

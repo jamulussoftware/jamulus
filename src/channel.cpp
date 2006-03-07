@@ -30,47 +30,31 @@
 \******************************************************************************/
 CChannelSet::CChannelSet()
 {
-/*
-// seems not to work...
-	// connect "message send"-message for each channel
-	for  ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-	{
-		QObject::connect ( &vecChannels[i],
-			SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-			this, SLOT ( OnSendProtMessage ( i, CVector<uint8_t> ) ) );
-	}
-*/
-// make sure we have MAX_NUM_CHANNELS connections!!!
-QObject::connect(&vecChannels[0],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
-	this,SLOT(OnSendProtMessCh0(CVector<uint8_t>)));
-QObject::connect(&vecChannels[1],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
-	this,SLOT(OnSendProtMessCh1(CVector<uint8_t>)));
-QObject::connect(&vecChannels[2],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
-	this,SLOT(OnSendProtMessCh2(CVector<uint8_t>)));
-QObject::connect(&vecChannels[3],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
-	this,SLOT(OnSendProtMessCh3(CVector<uint8_t>)));
-QObject::connect(&vecChannels[4],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
-	this,SLOT(OnSendProtMessCh4(CVector<uint8_t>)));
-QObject::connect(&vecChannels[5],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
-	this,SLOT(OnSendProtMessCh5(CVector<uint8_t>)));
-QObject::connect(&vecChannels[6],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
-	this,SLOT(OnSendProtMessCh6(CVector<uint8_t>)));
-QObject::connect(&vecChannels[7],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
-	this,SLOT(OnSendProtMessCh7(CVector<uint8_t>)));
-QObject::connect(&vecChannels[8],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
-	this,SLOT(OnSendProtMessCh8(CVector<uint8_t>)));
-QObject::connect(&vecChannels[9],SIGNAL(MessReadyForSending(CVector<uint8_t>)),
-	this,SLOT(OnSendProtMessCh9(CVector<uint8_t>)));
-}
+	// make sure we have MAX_NUM_CHANNELS connections!!!
+	// send message
+	QObject::connect(&vecChannels[0],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh0(CVector<uint8_t>)));
+	QObject::connect(&vecChannels[1],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh1(CVector<uint8_t>)));
+	QObject::connect(&vecChannels[2],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh2(CVector<uint8_t>)));
+	QObject::connect(&vecChannels[3],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh3(CVector<uint8_t>)));
+	QObject::connect(&vecChannels[4],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh4(CVector<uint8_t>)));
+	QObject::connect(&vecChannels[5],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh5(CVector<uint8_t>)));
+	QObject::connect(&vecChannels[6],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh6(CVector<uint8_t>)));
+	QObject::connect(&vecChannels[7],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh7(CVector<uint8_t>)));
+	QObject::connect(&vecChannels[8],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh8(CVector<uint8_t>)));
+	QObject::connect(&vecChannels[9],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh9(CVector<uint8_t>)));
 
-/*
-// seems not to work...
-void CChannelSet::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
-{
-	// just pass message through and add channel ID
-	emit MessReadyForSending ( iChID,vecMessage );
+	// request jitter buffer size
+	QObject::connect(&vecChannels[0],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh0()));
+	QObject::connect(&vecChannels[1],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh1()));
+	QObject::connect(&vecChannels[2],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh2()));
+	QObject::connect(&vecChannels[3],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh3()));
+	QObject::connect(&vecChannels[4],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh4()));
+	QObject::connect(&vecChannels[5],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh5()));
+	QObject::connect(&vecChannels[6],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh6()));
+	QObject::connect(&vecChannels[7],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh7()));
+	QObject::connect(&vecChannels[8],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh8()));
+	QObject::connect(&vecChannels[9],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh9()));
 }
-*/
 
 int CChannelSet::GetFreeChan()
 {
@@ -257,6 +241,9 @@ CChannel::CChannel ()
 
 	QObject::connect ( &Protocol, SIGNAL ( ChangeJittBufSize ( int ) ),
 		this, SLOT ( OnJittBufSizeChange ( int ) ) );
+
+	QObject::connect ( &Protocol, SIGNAL ( ReqJittBufSize() ),
+		SIGNAL ( ReqJittBufSize() ) );
 }
 
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -346,8 +333,8 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 		}
 		Mutex.unlock (); /* put mutex unlock */
 
-		// if channel was not connected, emit signal to inform that new connection
-		// was established
+		// if channel was not connected, emit signal to inform that new
+		// connection was established
 		if ( iConTimeOut == 0 )
 		{
 			emit NewConnection();

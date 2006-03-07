@@ -45,6 +45,9 @@ MESSAGES
 	| 2 bytes number of blocks |
 	+--------------------------+
 
+- Request jitter buffer size: PROTMESSID_REQ_JITT_BUF_SIZE
+	no data
+
 
 
 
@@ -241,6 +244,16 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 					CreateAndSendAcknMess ( iRecID, iRecCounter );
 
 					break;
+
+				case PROTMESSID_REQ_JITT_BUF_SIZE:
+
+					// invoke message action
+					emit ReqJittBufSize();
+
+					// send acknowledge message
+					CreateAndSendAcknMess ( iRecID, iRecCounter );
+
+					break;
 				}
 			}
 
@@ -282,6 +295,27 @@ void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 
 		// enqueue message
 		EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_JITT_BUF_SIZE );
+	}
+	Mutex.unlock();
+}
+
+void CProtocol::CreateReqJitBufMes()
+{
+	Mutex.lock();
+	{
+		CVector<uint8_t> vecNewMessage;
+
+		// store current counter value
+		const int iCurCounter = iCounter;
+
+		// increase counter (wraps around automatically)
+		iCounter++;
+
+		// build complete message
+		GenMessageFrame ( vecNewMessage, iCurCounter, PROTMESSID_REQ_JITT_BUF_SIZE, CVector<uint8_t> ( 0 ) );
+
+		// enqueue message
+		EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_REQ_JITT_BUF_SIZE );
 	}
 	Mutex.unlock();
 }

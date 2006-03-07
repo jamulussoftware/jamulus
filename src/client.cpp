@@ -34,6 +34,9 @@ CClient::CClient () : bRun ( false ), Socket ( &Channel ),
 	// connection for protocol
 	QObject::connect ( &Channel, SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
 		this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
+
+	QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
+		this, SLOT ( OnReqJittBufSize() ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )

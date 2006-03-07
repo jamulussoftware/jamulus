@@ -185,16 +185,16 @@ public slots:
 	void OnSendProtMessCh8(CVector<uint8_t> mess) {emit MessReadyForSending(8,mess);}
 	void OnSendProtMessCh9(CVector<uint8_t> mess) {emit MessReadyForSending(9,mess);}
 
-	void OnNewConnectionCh0(CVector<uint8_t> mess) {vecChannels[0].CreateReqJitBufMes();}
-	void OnNewConnectionCh1(CVector<uint8_t> mess) {vecChannels[1].CreateReqJitBufMes();}
-	void OnNewConnectionCh2(CVector<uint8_t> mess) {vecChannels[2].CreateReqJitBufMes();}
-	void OnNewConnectionCh3(CVector<uint8_t> mess) {vecChannels[3].CreateReqJitBufMes();}
-	void OnNewConnectionCh4(CVector<uint8_t> mess) {vecChannels[4].CreateReqJitBufMes();}
-	void OnNewConnectionCh5(CVector<uint8_t> mess) {vecChannels[5].CreateReqJitBufMes();}
-	void OnNewConnectionCh6(CVector<uint8_t> mess) {vecChannels[6].CreateReqJitBufMes();}
-	void OnNewConnectionCh7(CVector<uint8_t> mess) {vecChannels[7].CreateReqJitBufMes();}
-	void OnNewConnectionCh8(CVector<uint8_t> mess) {vecChannels[8].CreateReqJitBufMes();}
-	void OnNewConnectionCh9(CVector<uint8_t> mess) {vecChannels[9].CreateReqJitBufMes();}
+	void OnNewConnectionCh0() {vecChannels[0].CreateReqJitBufMes();}
+	void OnNewConnectionCh1() {vecChannels[1].CreateReqJitBufMes();}
+	void OnNewConnectionCh2() {vecChannels[2].CreateReqJitBufMes();}
+	void OnNewConnectionCh3() {vecChannels[3].CreateReqJitBufMes();}
+	void OnNewConnectionCh4() {vecChannels[4].CreateReqJitBufMes();}
+	void OnNewConnectionCh5() {vecChannels[5].CreateReqJitBufMes();}
+	void OnNewConnectionCh6() {vecChannels[6].CreateReqJitBufMes();}
+	void OnNewConnectionCh7() {vecChannels[7].CreateReqJitBufMes();}
+	void OnNewConnectionCh8() {vecChannels[8].CreateReqJitBufMes();}
+	void OnNewConnectionCh9() {vecChannels[9].CreateReqJitBufMes();}
 
 signals:
 	void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );

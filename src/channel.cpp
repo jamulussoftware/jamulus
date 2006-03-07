@@ -350,14 +350,18 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 	}
 	else
 	{
-		// this seems not to be an audio block, parse the message
-		if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )
+		// only use protocol data if channel is connected
+		if ( IsConnected() )
 		{
-			eRet = PS_PROT_OK;
-		}
-		else
-		{
-			eRet = PS_PROT_ERR;
+			// this seems not to be an audio block, parse the message
+			if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )
+			{
+				eRet = PS_PROT_OK;
+			}
+			else
+			{
+				eRet = PS_PROT_ERR;
+			}
 		}
 	}
 

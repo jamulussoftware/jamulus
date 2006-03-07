@@ -96,7 +96,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 						    const int iNumBytesRead,
 							const CHostAddress& HostAdr )
 {
-	bool bChanOK = true;
+	bool bChanOK = false;
 
 	Mutex.lock ();
 	{
@@ -115,7 +115,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 			}
 			else
 			{
-				bChanOK = false; /* no free channel available */
+				/* no free channel available */
 			}
 		}
 
@@ -128,10 +128,12 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 			{
 			case PS_AUDIO_OK:
 				PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN, iCurChanID );
+				bChanOK = true; // in case we have an audio packet, return true
 				break;
 
 			case PS_AUDIO_ERR:
 				PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED, iCurChanID );
+				bChanOK = true; // in case we have an audio packet, return true
 				break;
 
 			case PS_PROT_ERR:
@@ -142,7 +144,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 	}
 	Mutex.unlock ();
 
-	return !bChanOK; /* return 1 if error */
+	return bChanOK;
 }
 
 void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,

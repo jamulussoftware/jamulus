@@ -73,6 +73,7 @@
 
 /* maximum network buffer size (which can be chosen by slider) */
 #define MAX_NET_BUF_SIZE_NUM_BL			12 /* number of blocks */
+#define MIN_NET_BUF_SIZE_NUM_BL			( BLOCK_SIZE_SAMPLES / MIN_BLOCK_SIZE_SAMPLES )
 
 /* default network buffer size */
 #define DEF_NET_BUF_SIZE_NUM_BL			5 /* number of blocks */

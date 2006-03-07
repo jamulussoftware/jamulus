@@ -140,21 +140,23 @@ void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
 	emit MessReadyForSending ( vecAcknMessage );
 }
 
+void CProtocol::DeleteSendMessQueue()
+{
+/*
+	Actually, this function must be secured by a mutex, too. The problem is that
+	this function is called from OnSendProtMessage in client which is called
+	from a mutexed function of this object. In this case, we will get a dead
+	lock.
+*/
+	// delete complete "send message queue"
+	SendMessQueue.clear();
+}
+
 
 /*
 	The following functions are access functions from different threads. These
 	functions have to be secured by a mutex to avoid data corruption
 */
-void CProtocol::DeleteSendMessQueue()
-{
-	Mutex.lock();
-	{
-		// delete complete "send message queue"
-		SendMessQueue.clear();
-	}
-	Mutex.unlock();
-}
-
 void CProtocol::OnTimerSendMess()
 {
 	Mutex.lock();

@@ -90,8 +90,13 @@ void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
 								 const int iCnt,
 								 const int iID )
 {
-	// check if list is empty so that we have to initiate a send process
-	const bool bListWasEmpty = SendMessQueue.empty();
+	bool bListWasEmpty;
+
+	Mutex.lock();
+	{
+		// check if list is empty so that we have to initiate a send process
+		bListWasEmpty = SendMessQueue.empty();
+	}
 
 	// create send message object for the queue
 	CSendMessage SendMessageObj ( vecMessage, iCnt, iID );

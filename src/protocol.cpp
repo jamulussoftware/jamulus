@@ -153,6 +153,29 @@ void CProtocol::SendMessage()
 	}
 }
 
+void CProtocol::CreateAndSendMessage ( const int iID,
+									   const CVector<uint8_t>& vecData )
+{
+	CVector<uint8_t>	vecNewMessage;
+	int					iCurCounter;
+
+	Mutex.lock();
+	{
+		// store current counter value
+		iCurCounter = iCounter;
+
+		// increase counter (wraps around automatically)
+		iCounter++;
+	}
+	Mutex.unlock();
+
+	// build complete message
+	GenMessageFrame ( vecNewMessage, iCurCounter, iID, vecData );
+
+	// enqueue message
+	EnqueueMessage ( vecNewMessage, iCurCounter, iID );
+}
+
 void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
 {
 	CVector<uint8_t>	vecAcknMessage;
@@ -292,53 +315,22 @@ vecbyDataConv[i] = static_cast<uint8_t> ( vecbyData[i] );
 	return bRet;
 }
 
+
+/* Access-functions for creating messages ----------------------------------- */
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 {
-	CVector<uint8_t>	vecNewMessage;
 	CVector<uint8_t>	vecData ( 2 ); // 2 bytes of data
-	int					iCurCounter;
 	unsigned int		iPos = 0; // init position pointer
-
-	Mutex.lock();
-	{
-		// store current counter value
-		iCurCounter = iCounter;
-
-		// increase counter (wraps around automatically)
-		iCounter++;
-	}
-	Mutex.unlock();
 
 	// build data vector
 	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iJitBufSize ), 2 );
 
-	// build complete message
-	GenMessageFrame ( vecNewMessage, iCurCounter, PROTMESSID_JITT_BUF_SIZE, vecData );
-
-	// enqueue message
-	EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_JITT_BUF_SIZE );
+	CreateAndSendMessage ( PROTMESSID_JITT_BUF_SIZE, vecData );
 }
 
 void CProtocol::CreateReqJitBufMes()
 {
-	CVector<uint8_t>	vecNewMessage;
-	int					iCurCounter;
-
-	Mutex.lock();
-	{
-		// store current counter value
-		iCurCounter = iCounter;
-
-		// increase counter (wraps around automatically)
-		iCounter++;
-	}
-	Mutex.unlock();
-
-	// build complete message
-	GenMessageFrame ( vecNewMessage, iCurCounter, PROTMESSID_REQ_JITT_BUF_SIZE, CVector<uint8_t> ( 0 ) );
-
-	// enqueue message
-	EnqueueMessage ( vecNewMessage, iCurCounter, PROTMESSID_REQ_JITT_BUF_SIZE );
+	CreateAndSendMessage ( PROTMESSID_REQ_JITT_BUF_SIZE, CVector<uint8_t> ( 0 ) );
 }
 
 

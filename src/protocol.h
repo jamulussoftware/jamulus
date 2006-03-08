@@ -104,7 +104,7 @@ protected:
 	void GenMessageFrame ( CVector<uint8_t>& vecOut,
 						   const int iCnt,
 						   const int iID,
-						   const CVector<uint8_t>& vecData);
+						   const CVector<uint8_t>& vecData );
 
 	void PutValOnStream ( CVector<uint8_t>& vecIn,
 						  unsigned int& iPos,
@@ -116,6 +116,8 @@ protected:
 								const unsigned int iNumOfBytes );
 
 	void SendMessage();
+
+	void CreateAndSendMessage ( const int iID, const CVector<uint8_t>& vecData );
 
 	int						iOldRecID, iOldRecCnt;
 

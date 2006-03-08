@@ -87,7 +87,14 @@ public:
 	int GetSockBufSize() { return SockBuf.GetSize(); }
 
 	// network protocol interface
-	void CreateJitBufMes ( const int iJitBufSize ) { Protocol.CreateJitBufMes ( iJitBufSize ); }
+	void CreateJitBufMes ( const int iJitBufSize )
+	{ 
+		if ( IsConnected() )
+		{
+			Protocol.CreateJitBufMes ( iJitBufSize );
+		}
+	}
+
 	void CreateReqJitBufMes() { Protocol.CreateReqJitBufMes(); }
 
 protected:

@@ -338,15 +338,18 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 		}
 		Mutex.unlock (); /* put mutex unlock */
 
-		// if channel was not connected, emit signal to inform that new
-		// connection was established
-		if ( iConTimeOut == 0 )
-		{
-			emit NewConnection();
-		}
+		// check if channel was not connected
+		const bool bChanWasNotConnected = !IsConnected();
 
 		// reset time-out counter
 		iConTimeOut = CON_TIME_OUT_CNT_MAX;
+
+		// if channel was not connected, emit signal to inform that new
+		// connection was established
+		if ( bChanWasNotConnected )
+		{
+			emit NewConnection();
+		}
 	}
 	else
 	{

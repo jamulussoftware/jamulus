@@ -51,8 +51,7 @@ for ( int i = 0; i < vecMessage.Size (); i++ ) {
 
 	// the protocol queries me to call the function to send the message
 	// send it through the network
-	Socket.SendPacket ( vecbyDataConv,
-		Channel.GetAddress () );
+	Socket.SendPacket ( vecbyDataConv, Channel.GetAddress () );
 }
 
 bool CClient::SetServerAddr(QString strNAddr)

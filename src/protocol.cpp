@@ -97,6 +97,7 @@ void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
 		// check if list is empty so that we have to initiate a send process
 		bListWasEmpty = SendMessQueue.empty();
 	}
+	Mutex.unlock();
 
 	// create send message object for the queue
 	CSendMessage SendMessageObj ( vecMessage, iCnt, iID );

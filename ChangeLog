@@ -1,0 +1,9 @@
+0.9.4
+
+- implemented protocol, now it is possible to set the jitter buffer in the
+  server according to the setting in the client (they are coupled now)
+
+- removed sample rate offset estimation since it was not used anyway
+
+- internal audio processing in the server is now based on minimum block
+  size (improves latency)

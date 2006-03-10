@@ -42,7 +42,7 @@
 
 /* version and application name */
 #ifndef VERSION
-# define VERSION						"0.9.4"
+# define VERSION						"0.9.5cvs"
 #endif
 #define APP_NAME						"llcon"
 

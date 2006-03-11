@@ -59,7 +59,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	/* set text for version and application name */
 	TextLabelNameVersion->
 		setText(QString(APP_NAME) + tr(" client ") + QString(VERSION) +
-		" (" + QString().setNum(BLOCK_DURATION_MS) + " ms)");
+		" (" + QString().setNum(MIN_BLOCK_DURATION_MS * NET_BLOCK_SIZE_FACTOR) + " ms)");
 
 	/* init server address line edit */
 	LineEditServerAddr->setText ( pClient->strIPAddress.c_str () );

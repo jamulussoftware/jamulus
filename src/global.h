@@ -71,13 +71,9 @@
 // maximum value of factor for network block size
 #define NET_BLOCK_SIZE_FACTOR_MAX		10
 
-#define BLOCK_DURATION_MS				6 /* ms */
-
-#define BLOCK_SIZE_SAMPLES				( BLOCK_DURATION_MS * SAMPLE_RATE / 1000 )
-
 /* maximum network buffer size (which can be chosen by slider) */
 #define MAX_NET_BUF_SIZE_NUM_BL			12 /* number of blocks */
-#define MIN_NET_BUF_SIZE_NUM_BL			( BLOCK_SIZE_SAMPLES / MIN_BLOCK_SIZE_SAMPLES )
+#define MIN_NET_BUF_SIZE_NUM_BL			NET_BLOCK_SIZE_FACTOR
 
 /* default network buffer size */
 #define DEF_NET_BUF_SIZE_NUM_BL			5 /* number of blocks */
@@ -96,7 +92,7 @@
 /* time interval of taps for sample rate offset estimation (time stamps) */
 #define INTVL_TAPS_SAM_OFF_SET			1 /* s */
 
-#define NUM_BL_TIME_STAMPS				( ( INTVL_TAPS_SAM_OFF_SET * 1000 ) / BLOCK_DURATION_MS )
+#define NUM_BL_TIME_STAMPS				( ( INTVL_TAPS_SAM_OFF_SET * 1000 ) / MIN_BLOCK_DURATION_MS )
 #define VEC_LEN_SAM_OFFS_EST			( TIME_INT_SAM_OFFS_EST / INTVL_TAPS_SAM_OFF_SET )
 
 /* length of the moving average buffer for response time measurement */

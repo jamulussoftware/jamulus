@@ -33,7 +33,7 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent,
 	/* set text for version and application name */
 	TextLabelNameVersion->
 		setText(QString(APP_NAME) + tr(" server ") + QString(VERSION) +
-		" (" + QString().setNum(BLOCK_DURATION_MS) + " ms)");
+		" (" + QString().setNum(MIN_BLOCK_DURATION_MS * NET_BLOCK_SIZE_FACTOR) + " ms)");
 
 	/* Create bitmaps */
 	/* Define size of the bitmaps */

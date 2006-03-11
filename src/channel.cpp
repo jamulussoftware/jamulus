@@ -228,9 +228,6 @@ CChannel::CChannel ()
 	/* init the socket buffer */
 	SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, DEF_NET_BUF_SIZE_NUM_BL );
 
-	/* init conversion buffer */
-	ConvBuf.Init ( BLOCK_SIZE_SAMPLES );
-
 	// set initial input and output block size factors
 	SetNetwInBlSiFact ( NET_BLOCK_SIZE_FACTOR );
 	SetNetwOutBlSiFact ( NET_BLOCK_SIZE_FACTOR );
@@ -526,7 +523,7 @@ fflush(pFile);
 		iInitCnt--;
 	else
 	{
-		dSamRateEst = dNom / dDenom * NUM_BL_TIME_STAMPS * BLOCK_SIZE_SAMPLES * 1000;
+		dSamRateEst = dNom / dDenom * NUM_BL_TIME_STAMPS * MIN_BLOCK_SIZE_SAMPLES * 1000;
 
 /*
 static FILE* pFile = fopen("v.dat", "w");

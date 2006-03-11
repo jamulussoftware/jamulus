@@ -231,9 +231,9 @@ CChannel::CChannel ()
 	/* init conversion buffer */
 	ConvBuf.Init ( BLOCK_SIZE_SAMPLES );
 
-	/* init audio compression unit */
-	iAudComprSize = AudioCompression.Init ( BLOCK_SIZE_SAMPLES,
-		CAudioCompression::CT_IMAADPCM );
+	// set initial input and output block size factors
+	SetNetwInBlSiFact ( NET_BLOCK_SIZE_FACTOR );
+	SetNetwOutBlSiFact ( NET_BLOCK_SIZE_FACTOR );
 
 	/* init time-out for the buffer with zero -> no connection */
 	iConTimeOut = 0;
@@ -249,6 +249,32 @@ CChannel::CChannel ()
 
 	QObject::connect ( &Protocol, SIGNAL ( ReqJittBufSize() ),
 		SIGNAL ( ReqJittBufSize() ) );
+}
+
+void CChannel::SetNetwInBlSiFact ( const int iNewBlockSizeFactor )
+{
+	// store new value
+	iCurNetwInBlSiFact = iNewBlockSizeFactor;
+
+	/* init audio compression unit */
+	iAudComprSizeIn = AudioCompressionIn.Init (
+		iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+		CAudioCompression::CT_IMAADPCM );
+
+	// initial value for connection time out counter
+	iConTimeOutStartVal = ( CON_TIME_OUT_SEC_MAX * 1000 ) /
+		( iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES );
+}
+
+void CChannel::SetNetwOutBlSiFact ( const int iNewBlockSizeFactor )
+{
+	/* init audio compression unit */
+	iAudComprSizeOut = AudioCompressionOut.Init (
+		iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+		CAudioCompression::CT_IMAADPCM );
+
+	/* init conversion buffer */
+	ConvBuf.Init ( iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES );
 }
 
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -304,11 +330,10 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
 	EPutDataStat eRet = PS_GEN_ERROR;
 
 	/* only process if packet has correct size */
-	if ( iNumBytes == iAudComprSize )
+	if ( iNumBytes == iAudComprSizeIn )
 	{
 		/* decompress audio */
-		CVector<short> vecsDecomprAudio ( BLOCK_SIZE_SAMPLES );
-		vecsDecomprAudio = AudioCompression.Decode ( vecbyData );
+		CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
 
 		/* do resampling to compensate for sample rate offsets in the
 		   different sound cards of the clients */
@@ -320,9 +345,10 @@ const int iInSize = ResampleObj.Resample(vecdResInData, vecdResOutData,
 	(double) SAMPLE_RATE / (SAMPLE_RATE - dSamRateOffset));
 */
 
-vecdResOutData.Init(BLOCK_SIZE_SAMPLES);
-for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
+vecdResOutData.Init ( iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES );
+for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
 	vecdResOutData[i] = (double) vecsDecomprAudio[i];
+}
 
 
 		Mutex.lock (); /* put mutex lock */
@@ -342,7 +368,7 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 		const bool bChanWasNotConnected = !IsConnected();
 
 		// reset time-out counter
-		iConTimeOut = CON_TIME_OUT_CNT_MAX;
+		iConTimeOut = iConTimeOutStartVal;
 
 		// if channel was not connected, emit signal to inform that new
 		// connection was established
@@ -404,8 +430,8 @@ CVector<unsigned char> CChannel::PrepSendPacket(const CVector<short>& vecsNPacke
 	if ( ConvBuf.Put ( vecsNPacket ) )
 	{
 		/* a packet is ready, compress audio */
-		vecbySendBuf.Init ( iAudComprSize );
-		vecbySendBuf = AudioCompression.Encode ( ConvBuf.Get () );
+		vecbySendBuf.Init ( iAudComprSizeOut );
+		vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get () );
 	}
 
 	return vecbySendBuf;

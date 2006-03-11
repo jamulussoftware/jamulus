@@ -33,20 +33,24 @@
 
 
 /* Implementation *************************************************************/
-int CAudioCompression::Init(const int iNewAudioLen,
-							const EAudComprType eNewAuCoTy)
+int CAudioCompression::Init ( const int iNewAudioLen,
+							  const EAudComprType eNewAuCoTy )
 {
 	eAudComprType = eNewAuCoTy;
 
-	switch (eNewAuCoTy)
+	switch ( eNewAuCoTy )
 	{
-	case CT_NONE: return iCodeSize = 2 * iNewAudioLen; /* short = 2 * byte */
-	case CT_IMAADPCM: return ImaAdpcm.Init(iNewAudioLen);
+	case CT_NONE:
+		return iCodeSize = 2 * iNewAudioLen; /* short = 2 * byte */
+
+	case CT_IMAADPCM:
+		return ImaAdpcm.Init ( iNewAudioLen );
+
 	default: return 0;
 	}
 }
 
-CVector<unsigned char> CAudioCompression::Encode(const CVector<short>& vecsAudio)
+CVector<unsigned char> CAudioCompression::Encode ( const CVector<short>& vecsAudio )
 {
 	if (eAudComprType == CT_NONE)
 	{
@@ -63,10 +67,13 @@ CVector<unsigned char> CAudioCompression::Encode(const CVector<short>& vecsAudio
 	}
 	else
 	{
-		switch (eAudComprType)
+		switch ( eAudComprType )
 		{
-		case CT_IMAADPCM: return ImaAdpcm.Encode(vecsAudio); /* IMA-ADPCM */
-		default: return CVector<unsigned char>(0);
+		case CT_IMAADPCM:
+			return ImaAdpcm.Encode ( vecsAudio ); /* IMA-ADPCM */
+
+		default:
+			return CVector<unsigned char> ( 0 );
 		}
 	}
 }
@@ -91,10 +98,13 @@ CVector<short> CAudioCompression::Decode(const CVector<unsigned char>& vecbyAdpc
 	}
 	else
 	{
-		switch (eAudComprType)
+		switch ( eAudComprType )
 		{
-		case CT_IMAADPCM: return ImaAdpcm.Decode(vecbyAdpcm); /* IMA-ADPCM */
-		default: return CVector<short>(0);
+		case CT_IMAADPCM:
+			return ImaAdpcm.Decode ( vecbyAdpcm ); /* IMA-ADPCM */
+
+		default:
+			return CVector<short> ( 0 );
 		}
 	}
 }

@@ -42,11 +42,8 @@
 #define MAX_SND_BUF_IN			200
 #define MAX_SND_BUF_OUT			200
 
-#define NUM_SOUND_BUFFERS_IN	(70 / BLOCK_DURATION_MS)
-#define NUM_SOUND_BUFFERS_OUT	(80 / BLOCK_DURATION_MS)
-
-//#define NUM_SOUND_BUFFERS_IN	7//200		/* Number of sound card buffers */
-//#define NUM_SOUND_BUFFERS_OUT	8//100//15		/* Number of sound card buffers */
+#define NUM_SOUND_BUFFERS_IN	(70 / MIN_BLOCK_DURATION_MS)
+#define NUM_SOUND_BUFFERS_OUT	(80 / MIN_BLOCK_DURATION_MS)
 
 /* Maximum number of recognized sound cards installed in the system */
 #define MAX_NUMBER_SOUND_CARDS	10

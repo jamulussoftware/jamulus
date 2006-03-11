@@ -56,12 +56,12 @@ static int ima_step_size[IMA_STEP_SIZE_TAB_LEN] =
 class CImaAdpcm
 {
 public:
-	CImaAdpcm() : iStepindEnc(0) {}
+	CImaAdpcm() : iStepindEnc ( 0 ) {}
 	virtual ~CImaAdpcm() {}
 
-	int Init(const int iNewAudioLen);
-	CVector<unsigned char> Encode(const CVector<short>& vecsAudio);
-	CVector<short> Decode(const CVector<unsigned char>& vecbyAdpcm);
+	int						Init ( const int iNewAudioLen );
+	CVector<unsigned char>	Encode ( const CVector<short>& vecsAudio );
+	CVector<short>			Decode ( const CVector<unsigned char>& vecbyAdpcm );
 
 protected:
 	int iAudSize;
@@ -69,12 +69,17 @@ protected:
 	int iStepindEnc;
 
 	/* inline functions must be declared in the header */
-	inline int CheckBounds(const int iData, const int iMin, const int iMax)
+	inline int CheckBounds ( const int iData, const int iMin, const int iMax )
 	{
-		if (iData > iMax)
+		if ( iData > iMax )
+		{
 			return iMax;
-		if (iData < iMin)
+		}
+
+		if ( iData < iMin )
+		{
 			return iMin;
+		}
 
 		return iData;
 	}
@@ -90,9 +95,10 @@ public:
 	CAudioCompression() {}
 	virtual ~CAudioCompression() {}
 
-	int Init(const int iNewAudioLen, const EAudComprType eNewAuCoTy);
-	CVector<unsigned char> Encode(const CVector<short>& vecsAudio);
-	CVector<short> Decode(const CVector<unsigned char>& vecbyAdpcm);
+	int						Init ( const int iNewAudioLen,
+								   const EAudComprType eNewAuCoTy );
+	CVector<unsigned char>	Encode ( const CVector<short>& vecsAudio );
+	CVector<short>			Decode ( const CVector<unsigned char>& vecbyAdpcm );
 
 protected:
 	EAudComprType	eAudComprType;

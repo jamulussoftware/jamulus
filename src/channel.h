@@ -40,7 +40,6 @@
    connected to not-connected (the actual time depends on the way the error
    correction is implemented) */
 #define CON_TIME_OUT_SEC_MAX	5 // seconds
-#define CON_TIME_OUT_CNT_MAX	( ( CON_TIME_OUT_SEC_MAX * 1000 ) / BLOCK_DURATION_MS )
 
 /* maximum number of internet connections (channels) */
 // if you want to change this paramter, change the connections in this class, too!
@@ -77,8 +76,6 @@ public:
 
 	bool IsConnected() const { return iConTimeOut > 0; }
 
-	int	GetComprAudSize() { return iAudComprSize; }
-
 	void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
 	bool GetAddress ( CHostAddress& RetAddr );
 	CHostAddress GetAddress () { return InetAddr; }
@@ -98,9 +95,14 @@ public:
 	void CreateReqJitBufMes() { Protocol.CreateReqJitBufMes(); }
 
 protected:
+	void SetNetwInBlSiFact ( const int iNewBlockSizeFactor );
+	void SetNetwOutBlSiFact ( const int iNewBlockSizeFactor );
+
 	/* audio compression */
-	CAudioCompression	AudioCompression;
-	int					iAudComprSize;
+	CAudioCompression	AudioCompressionIn;
+	int					iAudComprSizeIn;
+	CAudioCompression	AudioCompressionOut;
+	int					iAudComprSizeOut;
 
 	/* resampling */
 	CResample			ResampleObj;
@@ -125,6 +127,9 @@ protected:
 	int					iTimeStampActCnt;
 
 	int					iConTimeOut;
+	int					iConTimeOutStartVal;
+
+	int					iCurNetwInBlSiFact;
 
 	QMutex Mutex;
 

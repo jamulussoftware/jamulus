@@ -263,6 +263,9 @@ void CChannel::SetNetwInBlSiFact ( const int iNewBlockSizeFactor )
 	// initial value for connection time out counter
 	iConTimeOutStartVal = ( CON_TIME_OUT_SEC_MAX * 1000 ) /
 		( iNewBlockSizeFactor * MIN_BLOCK_DURATION_MS );
+
+	// socket buffer must be adjusted
+	SetSockBufSize ( GetSockBufSize() );
 }
 
 void CChannel::SetNetwOutBlSiFact ( const int iNewBlockSizeFactor )
@@ -298,6 +301,8 @@ void CChannel::SetSockBufSize ( const int iNumBlocks )
 	/* this opperation must be done with mutex */
 	Mutex.lock ();
 	{
+		iCurSockBufSize = iNumBlocks;
+
 		// the idea of setting the jitter buffer is as follows:
 		// The network block size is a multiple of the internal minimal
 		// block size. Therefore, the minimum jitter buffer size must be
@@ -305,15 +310,9 @@ void CChannel::SetSockBufSize ( const int iNumBlocks )
 		// The actual jitter compensation are then the additional blocks of
 		// the internal block size, which is set with SetSockBufSize
 		SockBuf.Init ( MIN_BLOCK_SIZE_SAMPLES,
-			iNumBlocks + NET_BLOCK_SIZE_FACTOR );
+			iNumBlocks + iCurNetwInBlSiFact );
 	}
 	Mutex.unlock ();
-}
-
-int CChannel::GetSockBufSize()
-{
-	// see comment in SetSockBufSize function
-	return SockBuf.GetSize() - NET_BLOCK_SIZE_FACTOR;
 }
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
@@ -328,15 +327,10 @@ qDebug ( "new jitter buffer size: %d", iNewJitBufSize );
 // network buffer size factor
 void CChannel::SetNetwBufSizeFact ( const int iNetNetwBlSiFact )
 {
-	/* this opperation must be done with mutex */
-	Mutex.lock ();
-	{
-		iCurNetwBlSiFact = iNetNetwBlSiFact;
+	iCurNetwBlSiFact = iNetNetwBlSiFact;
 
-		SetNetwInBlSiFact ( iNetNetwBlSiFact );
-		SetNetwOutBlSiFact ( iNetNetwBlSiFact );
-	}
-	Mutex.unlock ();
+	SetNetwInBlSiFact ( iNetNetwBlSiFact );
+	SetNetwOutBlSiFact ( iNetNetwBlSiFact );
 }
 
 void CChannel::OnNetwBlSiFactChange ( int iNewNetwBlSiFact )
@@ -411,7 +405,10 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
 	else
 	{
 		// only use protocol data if channel is connected
-		if ( IsConnected() )
+
+// must be disabled to be able to receive network buffer size factor changes
+//		if ( IsConnected() )
+
 		{
 			// this seems not to be an audio block, parse the message
 			if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )
@@ -474,6 +471,13 @@ CVector<unsigned char> CChannel::PrepSendPacket(const CVector<short>& vecsNPacke
 		/* a packet is ready, compress audio */
 		vecbySendBuf.Init ( iAudComprSizeOut );
 		vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get () );
+	}
+
+	// if we are not connected, send network buffer size factor so that the
+	// server is able to process our audio packets
+	if ( !IsConnected() )
+	{
+		Protocol.CreateNetwBlSiFactMes ( iCurNetwBlSiFact );
 	}
 
 	return vecbySendBuf;

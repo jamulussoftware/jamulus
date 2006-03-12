@@ -81,7 +81,7 @@ public:
 	CHostAddress GetAddress () { return InetAddr; }
 
 	void SetSockBufSize ( const int iNumBlocks );
-	int GetSockBufSize();
+	int GetSockBufSize() { return iCurSockBufSize; }
 
 	void SetNetwBufSizeFact ( const int iNetNetwBlSiFact );
 	int GetNetwBufSizeFact() { return iCurNetwBlSiFact; }
@@ -126,6 +126,7 @@ protected:
 
 	/* network jitter-buffer */
 	CNetBuf				SockBuf;
+	int					iCurSockBufSize;
 
 	/* network output conversion buffer */
 	CConvBuf			ConvBuf;

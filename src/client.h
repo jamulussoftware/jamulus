@@ -157,7 +157,7 @@ protected:
 
 public slots:
 	void OnSendProtMessage ( CVector<uint8_t> vecMessage );
-	void OnReqJittBufSize() { Channel.CreateJitBufMes ( Channel.GetSockBufSize() ); }
+	void OnReqJittBufSize();
 };
 
 

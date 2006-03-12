@@ -225,6 +225,8 @@ CChannel::CChannel ()
 	/* init time stamp index counter */
 	byTimeStampIdxCnt = 0;
 
+	iCurNetwInBlSiFact = NET_BLOCK_SIZE_FACTOR;
+
 	/* init the socket buffer */
 	SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 

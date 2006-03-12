@@ -76,15 +76,17 @@ protected:
 	bool			bConnected;
 	QTimer			TimerSigMet;
 	QTimer			TimerStatus;
+
 	virtual void	customEvent ( QCustomEvent* Event );
 	virtual void	closeEvent ( QCloseEvent * Event );
+	void			UpdateDisplay();
 
 	QMenuBar*		pMenu;
 
 public slots:
-	void OnConnectDisconBut ();
-	void OnTimerSigMet ();
-	void OnTimerStatus ();
+	void OnConnectDisconBut();
+	void OnTimerSigMet();
+	void OnTimerStatus() { UpdateDisplay(); }
 	void OnSliderSndBufInChange ( int value );
 	void OnSliderSndBufOutChange ( int value );
 	void OnSliderNetBuf ( int value );
@@ -92,6 +94,6 @@ public slots:
 	void OnSliderAudInFader ( int value ) { pClient->SetAudioInFader(value); }
 	void OnSliderAudReverb ( int value )
 		{ pClient->SetReverbLevel ( AUD_REVERB_MAX - value ); }
-	void OnRevSelL () { pClient->SetReverbOnLeftChan(true); }
-	void OnRevSelR () { pClient->SetReverbOnLeftChan(false); }
+	void OnRevSelL() { pClient->SetReverbOnLeftChan(true); }
+	void OnRevSelR() { pClient->SetReverbOnLeftChan(false); }
 };

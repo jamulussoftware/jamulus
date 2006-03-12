@@ -1095,7 +1095,7 @@
                 <name>title</name>
                 <string>Measurement Results</string>
             </property>
-            <vbox>
+            <hbox>
                 <property stdset="1">
                     <name>margin</name>
                     <number>11</number>
@@ -1108,9 +1108,9 @@
                     <class>QLayoutWidget</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>Layout16</cstring>
+                        <cstring>Layout17</cstring>
                     </property>
-                    <hbox>
+                    <vbox>
                         <property stdset="1">
                             <name>margin</name>
                             <number>0</number>
@@ -1127,9 +1127,37 @@
                             </property>
                             <property stdset="1">
                                 <name>text</name>
-                                <string> StdDev:</string>
+                                <string>StdDev:</string>
                             </property>
                         </widget>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabelActNetwBufSizeLabel</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>Netw. Buf. Size:</string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget>
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout18</cstring>
+                    </property>
+                    <vbox>
+                        <property stdset="1">
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property stdset="1">
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
                         <widget>
                             <class>QLabel</class>
                             <property stdset="1">
@@ -1141,9 +1169,20 @@
                                 <string>val</string>
                             </property>
                         </widget>
-                    </hbox>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabelActNetwBufSize</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>val</string>
+                            </property>
+                        </widget>
+                    </vbox>
                 </widget>
-            </vbox>
+            </hbox>
         </widget>
     </hbox>
 </widget>

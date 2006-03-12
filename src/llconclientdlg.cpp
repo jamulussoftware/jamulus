@@ -235,24 +235,28 @@ void CLlconClientDlg::OnSliderSndBufInChange(int value)
 {
 	pClient->GetSndInterface()->SetInNumBuf(value);
 	TextSndBufIn->setText("In: " + QString().setNum(value));
+	UpdateDisplay();
 }
 
 void CLlconClientDlg::OnSliderSndBufOutChange(int value)
 {
 	pClient->GetSndInterface()->SetOutNumBuf(value);
 	TextSndBufOut->setText("Out: " + QString().setNum(value));
+	UpdateDisplay();
 }
 
 void CLlconClientDlg::OnSliderNetBuf(int value)
 {
 	pClient->SetSockBufSize ( value );
 	TextNetBuf->setText("Size: " + QString().setNum(value));
+	UpdateDisplay();
 }
 
 void CLlconClientDlg::OnSliderNetBufSiFact(int value)
 {
 	pClient->SetNetwBufSizeFact ( value );
 	TextNetBufSiFact->setText("Fact.: " + QString().setNum(value));
+	UpdateDisplay();
 }
 
 void CLlconClientDlg::OnTimerSigMet ()
@@ -288,7 +292,7 @@ void CLlconClientDlg::OnTimerSigMet ()
 	ProgressBarInputLevelR->setProgress ( (int) ceil ( dCurSigLevelR ) );
 }
 
-void CLlconClientDlg::OnTimerStatus ()
+void CLlconClientDlg::UpdateDisplay()
 {
 	/* show connection status in status bar */
 	if ( pClient->IsConnected () && pClient->IsRunning () )
@@ -303,6 +307,10 @@ void CLlconClientDlg::OnTimerStatus ()
 	/* response time */
 	TextLabelStdDevTimer->setText(QString().
 		setNum(pClient->GetTimingStdDev(), 'f', 2) + " ms");
+
+	// current network buffer size
+	TextLabelActNetwBufSize->setText(QString().
+		setNum(double(pClient->GetNetwBufSizeFact() * MIN_BLOCK_DURATION_MS), 'f', 2) + " ms");
 }
 
 void CLlconClientDlg::customEvent(QCustomEvent* Event)

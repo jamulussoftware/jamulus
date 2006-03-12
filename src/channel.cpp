@@ -61,7 +61,7 @@ int CChannelSet::GetFreeChan()
 	/* look for a free channel */
 	for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
 	{
-		if ( !vecChannels[i].IsConnected () )
+		if ( !vecChannels[i].IsConnected() )
 		{
 			return i;
 		}
@@ -98,7 +98,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 {
 	bool bRet = false;
 
-	Mutex.lock ();
+	Mutex.lock();
 	{
 		bool bChanOK = true;
 
@@ -109,7 +109,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 		if ( iCurChanID == INVALID_CHANNEL_ID )
 		{
 			/* a new client is calling, look for free channel */
-			iCurChanID = GetFreeChan ();
+			iCurChanID = GetFreeChan();
 
 			if ( iCurChanID != INVALID_CHANNEL_ID )
 			{
@@ -145,7 +145,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 			}
 		}
 	}
-	Mutex.unlock ();
+	Mutex.unlock();
 
 	return bRet;
 }
@@ -161,7 +161,7 @@ void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
 
 	/* make put and get calls thread safe. Do not forget to unlock mutex
 	   afterwards! */
-	Mutex.lock ();
+	Mutex.lock();
 	{
 		/* Check all possible channels */
 		for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
@@ -170,14 +170,14 @@ void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
 			   disconnected channels */
 			const bool bGetOK = vecChannels[i].GetData ( vecdData );
 
-			if ( vecChannels[i].IsConnected () )
+			if ( vecChannels[i].IsConnected() )
 			{
 				/* add ID and data */
 				vecChanID.Add ( i );
 
-				const int iOldSize = vecvecdData.Size ();
+				const int iOldSize = vecvecdData.Size();
 				vecvecdData.Enlarge ( 1 );
-				vecvecdData[iOldSize].Init ( vecdData.Size () );
+				vecvecdData[iOldSize].Init ( vecdData.Size() );
 				vecvecdData[iOldSize] = vecdData;
 
 				/* send message for get status (for GUI) */
@@ -192,7 +192,7 @@ void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
 			}
 		}
 	}
-	Mutex.unlock (); /* release mutex */
+	Mutex.unlock(); /* release mutex */
 }
 
 void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
@@ -220,7 +220,7 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 /******************************************************************************\
 * CChannel                                                                     *
 \******************************************************************************/
-CChannel::CChannel ()
+CChannel::CChannel()
 {
 	/* init time stamp index counter */
 	byTimeStampIdxCnt = 0;
@@ -283,17 +283,21 @@ void CChannel::SetNetwOutBlSiFact ( const int iNewBlockSizeFactor )
 
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 {
-	// only send messages if we are connected, otherwise delete complete queue
-	if ( IsConnected () )
-	{
+
+// must be disabled to be able to receive network buffer size factor changes
+// FIXME check, if this condition must be checked somewhere else!
+
+//	// only send messages if we are connected, otherwise delete complete queue
+//	if ( IsConnected() )
+//	{
 		// emit message to actually send the data
 		emit MessReadyForSending ( vecMessage );
-	}
-	else
-	{
-		// delete send message queue
-		Protocol.DeleteSendMessQueue();
-	}
+//	}
+//	else
+//	{
+//		// delete send message queue
+//		Protocol.DeleteSendMessQueue();
+//	}
 }
 
 
@@ -301,7 +305,7 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 void CChannel::SetSockBufSize ( const int iNumBlocks )
 {
 	/* this opperation must be done with mutex */
-	Mutex.lock ();
+	Mutex.lock();
 	{
 		iCurSockBufSize = iNumBlocks;
 
@@ -314,7 +318,7 @@ void CChannel::SetSockBufSize ( const int iNumBlocks )
 		SockBuf.Init ( MIN_BLOCK_SIZE_SAMPLES,
 			iNumBlocks + iCurNetwInBlSiFact );
 	}
-	Mutex.unlock ();
+	Mutex.unlock();
 }
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
@@ -367,7 +371,7 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
 	/* only process if packet has correct size */
 	if ( iNumBytes == iAudComprSizeIn )
 	{
-		Mutex.lock ();
+		Mutex.lock();
 		{
 			/* decompress audio */
 			CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
@@ -402,13 +406,14 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
 			// reset time-out counter
 			iConTimeOut = iConTimeOutStartVal;
 		}
-		Mutex.unlock ();
+		Mutex.unlock();
 	}
 	else
 	{
 		// only use protocol data if channel is connected
 
 // must be disabled to be able to receive network buffer size factor changes
+// FIXME check, if this condition must be checked somewhere else!
 //		if ( IsConnected() )
 
 		{
@@ -442,7 +447,7 @@ bool CChannel::GetData ( CVector<double>& vecdData )
 {
 	bool bGetOK = false;
 
-	Mutex.lock (); /* get mutex lock */
+	Mutex.lock(); /* get mutex lock */
 	{
 		bGetOK = SockBuf.Get ( vecdData );
 
@@ -455,12 +460,12 @@ bool CChannel::GetData ( CVector<double>& vecdData )
 			}
 		}
 	}
-	Mutex.unlock (); /* get mutex unlock */
+	Mutex.unlock(); /* get mutex unlock */
 
 	return bGetOK;
 }
 
-CVector<unsigned char> CChannel::PrepSendPacket(const CVector<short>& vecsNPacket)
+CVector<unsigned char> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )
 {
 	/* if the block is not ready we have to initialize with zero length to
 	   tell the following network send routine that nothing should be sent */
@@ -472,7 +477,7 @@ CVector<unsigned char> CChannel::PrepSendPacket(const CVector<short>& vecsNPacke
 	{
 		/* a packet is ready, compress audio */
 		vecbySendBuf.Init ( iAudComprSizeOut );
-		vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get () );
+		vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
 	}
 
 	// if we are not connected, send network buffer size factor so that the

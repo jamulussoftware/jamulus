@@ -260,7 +260,7 @@ void CChannel::SetNetwInBlSiFact ( const int iNewBlockSizeFactor )
 
 	// initial value for connection time out counter
 	iConTimeOutStartVal = ( CON_TIME_OUT_SEC_MAX * 1000 ) /
-		( iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES );
+		( iNewBlockSizeFactor * MIN_BLOCK_DURATION_MS );
 }
 
 void CChannel::SetNetwOutBlSiFact ( const int iNewBlockSizeFactor )

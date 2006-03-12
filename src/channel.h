@@ -81,7 +81,7 @@ public:
 	CHostAddress GetAddress () { return InetAddr; }
 
 	void SetSockBufSize ( const int iNumBlocks );
-	int GetSockBufSize() { return SockBuf.GetSize(); }
+	int GetSockBufSize();
 
 	// network protocol interface
 	void CreateJitBufMes ( const int iJitBufSize )

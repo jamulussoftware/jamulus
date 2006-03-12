@@ -294,9 +294,22 @@ void CChannel::SetSockBufSize ( const int iNumBlocks )
 	/* this opperation must be done with mutex */
 	Mutex.lock ();
 	{
-		SockBuf.Init ( MIN_BLOCK_SIZE_SAMPLES, iNumBlocks );
+		// the idea of setting the jitter buffer is as follows:
+		// The network block size is a multiple of the internal minimal
+		// block size. Therefore, the minimum jitter buffer size must be
+		// so that it can take one network buffer -> NET_BLOCK_SIZE_FACTOR.
+		// The actual jitter compensation are then the additional blocks of
+		// the internal block size, which is set with SetSockBufSize
+		SockBuf.Init ( MIN_BLOCK_SIZE_SAMPLES,
+			iNumBlocks + NET_BLOCK_SIZE_FACTOR );
 	}
 	Mutex.unlock ();
+}
+
+int CChannel::GetSockBufSize()
+{
+	// see comment in SetSockBufSize function
+	return SockBuf.GetSize() - NET_BLOCK_SIZE_FACTOR;
 }
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
@@ -324,16 +337,19 @@ bool CChannel::GetAddress(CHostAddress& RetAddr)
 EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
 								 int iNumBytes )
 {
-	EPutDataStat eRet = PS_GEN_ERROR;
+	EPutDataStat	eRet = PS_GEN_ERROR;
+	bool			bNewConnection = false;
 
 	/* only process if packet has correct size */
 	if ( iNumBytes == iAudComprSizeIn )
 	{
-		/* decompress audio */
-		CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
+		Mutex.lock ();
+		{
+			/* decompress audio */
+			CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
 
-		/* do resampling to compensate for sample rate offsets in the
-		   different sound cards of the clients */
+			/* do resampling to compensate for sample rate offsets in the
+			   different sound cards of the clients */
 /*
 for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
 	vecdResInData[i] = (double) vecsData[i];
@@ -347,9 +363,6 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
 	vecdResOutData[i] = (double) vecsDecomprAudio[i];
 }
 
-
-		Mutex.lock (); /* put mutex lock */
-		{
 			if ( SockBuf.Put ( vecdResOutData ) )
 			{
 				eRet = PS_AUDIO_OK;
@@ -358,21 +371,14 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
 			{
 				eRet = PS_AUDIO_ERR;
 			}
+
+			// check if channel was not connected, this is a new connection
+			bNewConnection = !IsConnected();
+
+			// reset time-out counter
+			iConTimeOut = iConTimeOutStartVal;
 		}
-		Mutex.unlock (); /* put mutex unlock */
-
-		// check if channel was not connected
-		const bool bChanWasNotConnected = !IsConnected();
-
-		// reset time-out counter
-		iConTimeOut = iConTimeOutStartVal;
-
-		// if channel was not connected, emit signal to inform that new
-		// connection was established
-		if ( bChanWasNotConnected )
-		{
-			emit NewConnection();
-		}
+		Mutex.unlock ();
 	}
 	else
 	{
@@ -389,6 +395,12 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
 				eRet = PS_PROT_ERR;
 			}
 		}
+	}
+
+	// inform other objects that new connection was established
+	if ( bNewConnection )
+	{
+		emit NewConnection();
 	}
 
 	return eRet;

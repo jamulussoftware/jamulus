@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>814</width>
-            <height>287</height>
+            <width>890</width>
+            <height>288</height>
         </rect>
     </property>
     <property stdset="1">
@@ -730,6 +730,64 @@
                             </property>
                         </widget>
                     </hbox>
+                </widget>
+            </vbox>
+        </widget>
+        <widget>
+            <class>QGroupBox</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>GroupBoxNetwBuf</cstring>
+            </property>
+            <property stdset="1">
+                <name>title</name>
+                <string>Block Size</string>
+            </property>
+            <vbox>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>11</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextNetBufSiFact</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Size</string>
+                    </property>
+                    <property stdset="1">
+                        <name>alignment</name>
+                        <set>AlignCenter</set>
+                    </property>
+                    <property>
+                        <name>hAlign</name>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QSlider</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>SliderNetBufSiFact</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>pageStep</name>
+                        <number>1</number>
+                    </property>
+                    <property stdset="1">
+                        <name>orientation</name>
+                        <enum>Vertical</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>tickmarks</name>
+                        <enum>Both</enum>
+                    </property>
                 </widget>
             </vbox>
         </widget>

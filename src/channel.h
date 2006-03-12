@@ -83,6 +83,9 @@ public:
 	void SetSockBufSize ( const int iNumBlocks );
 	int GetSockBufSize();
 
+	void SetNetwBufSizeFact ( const int iNetNetwBlSiFact );
+	int GetNetwBufSizeFact() { return iCurNetwBlSiFact; }
+
 	// network protocol interface
 	void CreateJitBufMes ( const int iJitBufSize )
 	{ 
@@ -91,8 +94,16 @@ public:
 			Protocol.CreateJitBufMes ( iJitBufSize );
 		}
 	}
-
 	void CreateReqJitBufMes() { Protocol.CreateReqJitBufMes(); }
+
+	void CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
+	{ 
+		if ( IsConnected() )
+		{
+			Protocol.CreateNetwBlSiFactMes ( iNetwBlSiFact );
+		}
+	}
+
 
 protected:
 	void SetNetwInBlSiFact ( const int iNewBlockSizeFactor );
@@ -131,11 +142,14 @@ protected:
 
 	int					iCurNetwInBlSiFact;
 
+	int					iCurNetwBlSiFact; // TODO, will be replaced by in/out settings
+
 	QMutex Mutex;
 
 public slots:
 	void OnSendProtMessage ( CVector<uint8_t> vecMessage );
 	void OnJittBufSizeChange ( int iNewJitBufSize );
+	void OnNetwBlSiFactChange ( int iNewNetwBlSiFact );
 
 signals:
 	void MessReadyForSending ( CVector<uint8_t> vecMessage );

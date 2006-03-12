@@ -229,8 +229,7 @@ CChannel::CChannel ()
 	SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
 	// set initial input and output block size factors
-	SetNetwInBlSiFact ( NET_BLOCK_SIZE_FACTOR );
-	SetNetwOutBlSiFact ( NET_BLOCK_SIZE_FACTOR );
+	SetNetwBufSizeFact ( NET_BLOCK_SIZE_FACTOR );
 
 	/* init time-out for the buffer with zero -> no connection */
 	iConTimeOut = 0;
@@ -246,6 +245,9 @@ CChannel::CChannel ()
 
 	QObject::connect ( &Protocol, SIGNAL ( ReqJittBufSize() ),
 		SIGNAL ( ReqJittBufSize() ) );
+
+	QObject::connect ( &Protocol, SIGNAL ( ChangeNetwBlSiFact ( int ) ),
+		this, SLOT ( OnNetwBlSiFactChange ( int ) ) );
 }
 
 void CChannel::SetNetwInBlSiFact ( const int iNewBlockSizeFactor )
@@ -289,6 +291,8 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 	}
 }
 
+
+// socket buffer size
 void CChannel::SetSockBufSize ( const int iNumBlocks )
 {
 	/* this opperation must be done with mutex */
@@ -319,6 +323,30 @@ qDebug ( "new jitter buffer size: %d", iNewJitBufSize );
 
 	SetSockBufSize ( iNewJitBufSize );
 }
+
+
+// network buffer size factor
+void CChannel::SetNetwBufSizeFact ( const int iNetNetwBlSiFact )
+{
+	/* this opperation must be done with mutex */
+	Mutex.lock ();
+	{
+		iCurNetwBlSiFact = iNetNetwBlSiFact;
+
+		SetNetwInBlSiFact ( iNetNetwBlSiFact );
+		SetNetwOutBlSiFact ( iNetNetwBlSiFact );
+	}
+	Mutex.unlock ();
+}
+
+void CChannel::OnNetwBlSiFactChange ( int iNewNetwBlSiFact )
+{
+// TEST
+qDebug ( "new network block size factor: %d", iNewNetwBlSiFact );
+
+	SetNetwBufSizeFact ( iNewNetwBlSiFact );
+}
+
 
 bool CChannel::GetAddress(CHostAddress& RetAddr)
 {
@@ -403,7 +431,7 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
 
 // TEST debug output
 CHostAddress address ( GetAddress() );
-qDebug ( "new connection with IP %s\n", address.InetAddr.toString().latin1() );
+qDebug ( "new connection with IP %s", address.InetAddr.toString().latin1() );
 
 		emit NewConnection();
 	}

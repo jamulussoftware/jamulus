@@ -58,8 +58,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
 	/* set text for version and application name */
 	TextLabelNameVersion->
-		setText(QString(APP_NAME) + tr(" client ") + QString(VERSION) +
-		" (" + QString().setNum(MIN_BLOCK_DURATION_MS * NET_BLOCK_SIZE_FACTOR) + " ms)");
+		setText(QString(APP_NAME) + tr(" client ") + QString(VERSION));
 
 	/* init server address line edit */
 	LineEditServerAddr->setText ( pClient->strIPAddress.c_str () );
@@ -98,6 +97,12 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	const int iCurNumNetBuf = pClient->GetSockBufSize();
 	SliderNetBuf->setValue(iCurNumNetBuf);
 	TextNetBuf->setText("Size: " + QString().setNum(iCurNumNetBuf));
+
+	/* network buffer size factor */
+	SliderNetBufSiFact->setRange(1, NET_BLOCK_SIZE_FACTOR_MAX);
+	const int iCurNetBufSiFact = pClient->GetNetwBufSizeFact();
+	SliderNetBufSiFact->setValue(iCurNetBufSiFact);
+	TextNetBufSiFact->setText("Fact.: " + QString().setNum(iCurNetBufSiFact));
 
 	/* audio in fader */
 	SliderAudInFader->setRange(0, AUD_FADER_IN_MAX);
@@ -146,8 +151,11 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 		this, SLOT(OnSliderSndBufInChange(int)));
 	QObject::connect(SliderSndBufOut, SIGNAL(valueChanged(int)),
 		this, SLOT(OnSliderSndBufOutChange(int)));
+
 	QObject::connect(SliderNetBuf, SIGNAL(valueChanged(int)),
 		this, SLOT(OnSliderNetBuf(int)));
+	QObject::connect(SliderNetBufSiFact, SIGNAL(valueChanged(int)),
+		this, SLOT(OnSliderNetBufSiFact(int)));
 
 	QObject::connect(SliderAudInFader, SIGNAL(valueChanged(int)),
 		this, SLOT(OnSliderAudInFader(int)));
@@ -239,6 +247,12 @@ void CLlconClientDlg::OnSliderNetBuf(int value)
 {
 	pClient->SetSockBufSize ( value );
 	TextNetBuf->setText("Size: " + QString().setNum(value));
+}
+
+void CLlconClientDlg::OnSliderNetBufSiFact(int value)
+{
+	pClient->SetNetwBufSizeFact ( value );
+	TextNetBufSiFact->setText("Fact.: " + QString().setNum(value));
 }
 
 void CLlconClientDlg::OnTimerSigMet ()

@@ -30,7 +30,7 @@ MAIN FRAME
 MESSAGES
 --------
 
-- Acknowledgement message:             PROTMESSID_ACKN
+- Acknowledgement message:                    PROTMESSID_ACKN
 
 	+-----------------------------------+
 	| 2 bytes ID of message to be ackn. |
@@ -39,16 +39,23 @@ MESSAGES
 	note: the cnt value is the same as of the message to be acknowledged
 
 
-- Jitter buffer size:                  PROTMESSID_JITT_BUF_SIZE
+- Jitter buffer size:                         PROTMESSID_JITT_BUF_SIZE
 
 	+--------------------------+
 	| 2 bytes number of blocks |
 	+--------------------------+
 
-- Request jitter buffer size:          PROTMESSID_REQ_JITT_BUF_SIZE
+- Request jitter buffer size:                 PROTMESSID_REQ_JITT_BUF_SIZE
 
 	note: does not have any data -> n = 0
 
+- network buffer block size factor            PROTMESSID_NET_BLSI_FACTOR
+
+	note: size, relative to minimum block size
+
+	+----------------+
+	| 2 bytes factor |
+	+----------------+
 
 
 
@@ -298,6 +305,20 @@ vecbyDataConv[i] = static_cast<uint8_t> ( vecbyData[i] );
 				CreateAndSendAcknMess ( iRecID, iRecCounter );
 
 				break;
+
+			case PROTMESSID_NET_BLSI_FACTOR:
+
+				// extract data from stream and emit signal for received value
+				iPos = 0;
+				iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+				// invoke message action
+				emit ChangeNetwBlSiFact ( iData );
+
+				// send acknowledge message
+				CreateAndSendAcknMess ( iRecID, iRecCounter );
+
+				break;
 			}
 		}
 
@@ -331,6 +352,17 @@ void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 void CProtocol::CreateReqJitBufMes()
 {
 	CreateAndSendMessage ( PROTMESSID_REQ_JITT_BUF_SIZE, CVector<uint8_t> ( 0 ) );
+}
+
+void CProtocol::CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
+{
+	CVector<uint8_t>	vecData ( 2 ); // 2 bytes of data
+	unsigned int		iPos = 0; // init position pointer
+
+	// build data vector
+	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iNetwBlSiFact ), 2 );
+
+	CreateAndSendMessage ( PROTMESSID_NET_BLSI_FACTOR, vecData );
 }
 
 

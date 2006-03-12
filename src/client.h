@@ -57,33 +57,32 @@ class CClient : public QObject, public QThread
 
 public:
 	CClient();
-	virtual ~CClient () {}
+	virtual ~CClient() {}
 
-	void Init ();
-	bool Stop ();
-	bool IsRunning () { return bRun; }
+	void Init();
+	bool Stop();
+	bool IsRunning() { return bRun; }
 	bool SetServerAddr ( QString strNAddr );
-	double MicLevelL () { return SignalLevelMeterL.MicLevel (); }
-	double MicLevelR () { return SignalLevelMeterR.MicLevel (); }
-	bool IsConnected () { return Channel.IsConnected (); }
+	double MicLevelL() { return SignalLevelMeterL.MicLevel(); }
+	double MicLevelR() { return SignalLevelMeterR.MicLevel(); }
+	bool IsConnected() { return Channel.IsConnected(); }
 
 	/* we want to return the standard deviation. For that we need to calculate
 	   the sqaure root */
-	double GetTimingStdDev () { return sqrt ( RespTimeMoAvBuf.GetAverage () ); }
+	double GetTimingStdDev() { return sqrt ( RespTimeMoAvBuf.GetAverage() ); }
 
-	int GetAudioInFader () { return iAudioInFader; }
+	int GetAudioInFader() { return iAudioInFader; }
 	void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
-	int GetReverbLevel () { return iReverbLevel; }
+	int GetReverbLevel() { return iReverbLevel; }
 	void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
 
-	bool IsReverbOnLeftChan () { return bReverbOnLeftChan; }
+	bool IsReverbOnLeftChan() { return bReverbOnLeftChan; }
 	void SetReverbOnLeftChan ( const bool bIL )
 	{
 		bReverbOnLeftChan = bIL;
-		AudioReverb.Clear ();
+		AudioReverb.Clear();
 	}
-
 
 	void SetSockBufSize ( const int iNumBlocks )
 	{
@@ -93,11 +92,23 @@ public:
 		// tell the server that size has changed
 		Channel.CreateJitBufMes ( iNumBlocks );
 	}
-	int GetSockBufSize () { return Channel.GetSockBufSize (); }
+	int GetSockBufSize() { return Channel.GetSockBufSize (); }
 
 
-	CSound* GetSndInterface () { return &Sound; }
-	CChannel* GetChannel () { return &Channel; }
+
+	void SetNetwBufSizeFact ( const int iNetNetwBlSiFact )
+	{
+		// set the new socket size
+		Channel.SetNetwBufSizeFact ( iNetNetwBlSiFact );
+
+		// tell the server that size has changed
+		Channel.CreateNetwBlSiFactMes ( iNetNetwBlSiFact );
+	}
+	int GetNetwBufSizeFact() { return Channel.GetNetwBufSizeFact(); }
+
+
+	CSound* GetSndInterface() { return &Sound; }
+	CChannel* GetChannel() { return &Channel; }
 
 
 	// settings

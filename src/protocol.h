@@ -40,6 +40,7 @@
 #define PROTMESSID_JITT_BUF_SIZE		10 // jitter buffer size
 #define PROTMESSID_REQ_JITT_BUF_SIZE	11 // request jitter buffer size
 #define PROTMESSID_PING					12 // for measuring ping time
+#define PROTMESSID_NET_BLSI_FACTOR		13 // network buffer size factor
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE		5 /* ID, cnt, length */
@@ -60,6 +61,7 @@ public:
 
 	void CreateJitBufMes ( const int iJitBufSize );
 	void CreateReqJitBufMes();
+	void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
 
 	void CreateAndSendAcknMess ( const int& iID, const int& iCnt );
 
@@ -137,6 +139,7 @@ signals:
 
 	// receiving
 	void ChangeJittBufSize ( int iNewJitBufSize );
+	void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
 	void ReqJittBufSize();
 };
 

@@ -26,16 +26,16 @@
 
 
 /* Implementation *************************************************************/
-void CSettings::Load ()
+void CSettings::Load()
 {
 	/* load settings from init-file */
-	ReadIniFile ();
+	ReadIniFile();
 }
 
 void CSettings::Save()
 {
 	/* write settings in init-file */
-	WriteIniFile ();
+	WriteIniFile();
 }
 
 
@@ -81,6 +81,11 @@ void CSettings::ReadIniFile()
 	if ( GetNumericIniSet(ini, "Client", "jitbuf", 0, MAX_NET_BUF_SIZE_NUM_BL, iValue ) == TRUE ) {
 		pClient->SetSockBufSize ( iValue );
 	}
+
+	// network buffer size factor
+	if ( GetNumericIniSet(ini, "Client", "netwbusifact", 1, NET_BLOCK_SIZE_FACTOR_MAX, iValue ) == TRUE ) {
+		pClient->SetNetwBufSizeFact ( iValue );
+	}
 }
 
 void CSettings::WriteIniFile()
@@ -91,22 +96,25 @@ void CSettings::WriteIniFile()
 	PutIniSetting ( ini, "Client", "ipaddress", pClient->strIPAddress.c_str() );
 
 	// audio fader
-	SetNumericIniSet ( ini, "Client", "audfad", pClient->GetAudioInFader () );
+	SetNumericIniSet ( ini, "Client", "audfad", pClient->GetAudioInFader() );
 
 	// reverberation level
-	SetNumericIniSet ( ini, "Client", "revlev", pClient->GetReverbLevel () );
+	SetNumericIniSet ( ini, "Client", "revlev", pClient->GetReverbLevel() );
 
 	// reverberation channel assignment
-	SetFlagIniSet ( ini, "Client", "reverblchan", pClient->IsReverbOnLeftChan () );
+	SetFlagIniSet ( ini, "Client", "reverblchan", pClient->IsReverbOnLeftChan() );
 
 	// sound card in number of buffers
-	SetNumericIniSet ( ini, "Client", "audinbuf", pClient->GetSndInterface()->GetInNumBuf () );
+	SetNumericIniSet ( ini, "Client", "audinbuf", pClient->GetSndInterface()->GetInNumBuf() );
 
 	// sound card out number of buffers
-	SetNumericIniSet ( ini, "Client", "audoutbuf", pClient->GetSndInterface()->GetOutNumBuf () );
+	SetNumericIniSet ( ini, "Client", "audoutbuf", pClient->GetSndInterface()->GetOutNumBuf() );
 
 	// network jitter buffer size
-	SetNumericIniSet ( ini, "Client", "jitbuf", pClient->GetSockBufSize () );
+	SetNumericIniSet ( ini, "Client", "jitbuf", pClient->GetSockBufSize() );
+
+	// network buffer size factor
+	SetNumericIniSet ( ini, "Client", "netwbusifact", pClient->GetNetwBufSizeFact() );
 
 
 	/* Save settings in init-file */
@@ -121,7 +129,7 @@ bool CSettings::GetNumericIniSet ( INIFile& theINI, string strSection,
 	bool bReturn = FALSE;
 
 	const string strGetIni =
-		GetIniSetting ( theINI, strSection.c_str (), strKey.c_str () );
+		GetIniSetting ( theINI, strSection.c_str(), strKey.c_str() );
 
 	/* Check if it is a valid parameter */
 	if ( !strGetIni.empty () )
@@ -144,7 +152,7 @@ void CSettings::SetNumericIniSet ( INIFile& theINI, string strSection,
 	char cString[256];
 
 	sprintf ( cString, "%d", iValue );
-	PutIniSetting ( theINI, strSection.c_str (), strKey.c_str (), cString );
+	PutIniSetting ( theINI, strSection.c_str(), strKey.c_str(), cString );
 }
 
 bool CSettings::GetFlagIniSet ( INIFile& theINI, string strSection,
@@ -154,11 +162,11 @@ bool CSettings::GetFlagIniSet ( INIFile& theINI, string strSection,
 	bool bReturn = FALSE;
 
 	const string strGetIni =
-		GetIniSetting ( theINI, strSection.c_str (), strKey.c_str () );
+		GetIniSetting ( theINI, strSection.c_str(), strKey.c_str() );
 
-	if ( !strGetIni.empty () )
+	if ( !strGetIni.empty() )
 	{
-		if ( atoi ( strGetIni.c_str () ) )
+		if ( atoi ( strGetIni.c_str() ) )
 		{
 			bValue = TRUE;
 		}
@@ -178,11 +186,11 @@ void CSettings::SetFlagIniSet ( INIFile& theINI, string strSection, string strKe
 {
 	if ( bValue == TRUE )
 	{
-		PutIniSetting ( theINI, strSection.c_str (), strKey.c_str (), "1" );
+		PutIniSetting ( theINI, strSection.c_str(), strKey.c_str(), "1" );
 	}
 	else
 	{
-		PutIniSetting ( theINI, strSection.c_str (), strKey.c_str (), "0" );
+		PutIniSetting ( theINI, strSection.c_str(), strKey.c_str(), "0" );
 	}
 }
 

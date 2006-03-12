@@ -237,7 +237,7 @@ void CLlconClientDlg::OnSliderSndBufOutChange(int value)
 
 void CLlconClientDlg::OnSliderNetBuf(int value)
 {
-	pClient->SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, value );
+	pClient->SetSockBufSize ( value );
 	TextNetBuf->setText("Size: " + QString().setNum(value));
 }
 

@@ -226,7 +226,7 @@ CChannel::CChannel ()
 	byTimeStampIdxCnt = 0;
 
 	/* init the socket buffer */
-	SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, DEF_NET_BUF_SIZE_NUM_BL );
+	SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
 	// set initial input and output block size factors
 	SetNetwInBlSiFact ( NET_BLOCK_SIZE_FACTOR );
@@ -289,12 +289,12 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 	}
 }
 
-void CChannel::SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
+void CChannel::SetSockBufSize ( const int iNumBlocks )
 {
 	/* this opperation must be done with mutex */
 	Mutex.lock ();
 	{
-		SockBuf.Init ( iNewBlockSize, iNumBlocks );
+		SockBuf.Init ( MIN_BLOCK_SIZE_SAMPLES, iNumBlocks );
 	}
 	Mutex.unlock ();
 }
@@ -304,7 +304,7 @@ void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 // TEST
 qDebug ( "new jitter buffer size: %d", iNewJitBufSize );
 
-	SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, iNewJitBufSize );
+	SetSockBufSize ( iNewJitBufSize );
 }
 
 bool CChannel::GetAddress(CHostAddress& RetAddr)

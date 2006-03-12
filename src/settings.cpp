@@ -79,7 +79,7 @@ void CSettings::ReadIniFile()
 
 	// network jitter buffer size
 	if ( GetNumericIniSet(ini, "Client", "jitbuf", 0, MAX_NET_BUF_SIZE_NUM_BL, iValue ) == TRUE ) {
-		pClient->SetSockBufSize ( MIN_BLOCK_SIZE_SAMPLES, iValue );
+		pClient->SetSockBufSize ( iValue );
 	}
 }
 

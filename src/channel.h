@@ -80,7 +80,7 @@ public:
 	bool GetAddress ( CHostAddress& RetAddr );
 	CHostAddress GetAddress () { return InetAddr; }
 
-	void SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks );
+	void SetSockBufSize ( const int iNumBlocks );
 	int GetSockBufSize() { return SockBuf.GetSize(); }
 
 	// network protocol interface

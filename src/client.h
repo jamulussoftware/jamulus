@@ -85,10 +85,10 @@ public:
 	}
 
 
-	void SetSockBufSize ( const int iNewBlockSize, const int iNumBlocks )
+	void SetSockBufSize ( const int iNumBlocks )
 	{
 		// set the new socket size
-		Channel.SetSockBufSize ( iNewBlockSize, iNumBlocks );
+		Channel.SetSockBufSize ( iNumBlocks );
 
 		// tell the server that size has changed
 		Channel.CreateJitBufMes ( iNumBlocks );

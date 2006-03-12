@@ -400,6 +400,11 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
 	// inform other objects that new connection was established
 	if ( bNewConnection )
 	{
+
+// TEST debug output
+CHostAddress address ( GetAddress() );
+qDebug ( "new connection with IP %s\n", address.InetAddr.toString().latin1() );
+
 		emit NewConnection();
 	}
 

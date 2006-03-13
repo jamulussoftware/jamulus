@@ -57,10 +57,6 @@ for ( int i = 0; i < vecMessage.Size (); i++ ) {
 void CClient::OnReqJittBufSize()
 {
 	Channel.CreateJitBufMes ( Channel.GetSockBufSize() );
-
-// FIXME: we set the network buffer size factor here, too -> in the
-// future a separate request function for this parameter should be created
-	Channel.CreateNetwBlSiFactMes ( Channel.GetNetwBufSizeFact() );
 }
 
 bool CClient::SetServerAddr(QString strNAddr)

@@ -141,6 +141,8 @@ protected:
 	int					iConTimeOut;
 	int					iConTimeOutStartVal;
 
+	int					vecNetwInBufSizes[NET_BLOCK_SIZE_FACTOR_MAX];
+
 	int					iCurNetwInBlSiFact;
 
 	int					iCurNetwBlSiFact; // TODO, will be replaced by in/out settings

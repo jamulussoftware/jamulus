@@ -222,6 +222,16 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 \******************************************************************************/
 CChannel::CChannel()
 {
+	// query all possible network in buffer sizes for determining if an
+	// audio packet was received
+	for ( int i = 0; i < ( NET_BLOCK_SIZE_FACTOR_MAX - 1 ); i++ )
+	{
+		// network block size factor must start from 1 -> ( i + 1 )
+		vecNetwInBufSizes[i] = AudioCompressionIn.Init (
+			( i + 1 ) * MIN_BLOCK_SIZE_SAMPLES,
+			CAudioCompression::CT_IMAADPCM );
+	}
+
 	/* init time stamp index counter */
 	byTimeStampIdxCnt = 0;
 
@@ -283,21 +293,17 @@ void CChannel::SetNetwOutBlSiFact ( const int iNewBlockSizeFactor )
 
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 {
-
-// must be disabled to be able to receive network buffer size factor changes
-// FIXME check, if this condition must be checked somewhere else!
-
-//	// only send messages if we are connected, otherwise delete complete queue
-//	if ( IsConnected() )
-//	{
+	// only send messages if we are connected, otherwise delete complete queue
+	if ( IsConnected() )
+	{
 		// emit message to actually send the data
 		emit MessReadyForSending ( vecMessage );
-//	}
-//	else
-//	{
-//		// delete send message queue
-//		Protocol.DeleteSendMessQueue();
-//	}
+	}
+	else
+	{
+		// delete send message queue
+		Protocol.DeleteSendMessQueue();
+	}
 }
 
 
@@ -367,9 +373,26 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
 {
 	EPutDataStat	eRet = PS_GEN_ERROR;
 	bool			bNewConnection = false;
+	bool			bIsAudioPacket = false;
+
+	// check if this is an audio packet by checking all possible lengths
+	for ( int i = 0; i < ( NET_BLOCK_SIZE_FACTOR_MAX - 1 ); i++ )
+	{
+		if ( iNumBytes == vecNetwInBufSizes[i] )
+		{
+			bIsAudioPacket = true;
+
+			// check if we are correctly initialized
+			if ( iAudComprSizeIn != vecNetwInBufSizes[i] )
+			{
+				// re-initialize to new value
+				SetNetwBufSizeFact ( i + 1 );
+			}
+		}
+	}
 
 	/* only process if packet has correct size */
-	if ( iNumBytes == iAudComprSizeIn )
+	if ( bIsAudioPacket )
 	{
 		Mutex.lock();
 		{
@@ -478,13 +501,6 @@ CVector<unsigned char> CChannel::PrepSendPacket ( const CVector<short>& vecsNPac
 		/* a packet is ready, compress audio */
 		vecbySendBuf.Init ( iAudComprSizeOut );
 		vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
-	}
-
-	// if we are not connected, send network buffer size factor so that the
-	// server is able to process our audio packets
-	if ( !IsConnected() )
-	{
-		Protocol.CreateNetwBlSiFactMes ( iCurNetwBlSiFact );
 	}
 
 	return vecbySendBuf;

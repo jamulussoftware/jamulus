@@ -90,7 +90,7 @@ protected:
 class CAudioCompression
 {
 public:
-	enum EAudComprType {CT_NONE, CT_IMAADPCM};
+	enum EAudComprType { CT_NONE, CT_IMAADPCM };
 
 	CAudioCompression() {}
 	virtual ~CAudioCompression() {}

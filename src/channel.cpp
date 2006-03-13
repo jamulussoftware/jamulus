@@ -224,7 +224,7 @@ CChannel::CChannel()
 {
 	// query all possible network in buffer sizes for determining if an
 	// audio packet was received
-	for ( int i = 0; i < ( NET_BLOCK_SIZE_FACTOR_MAX - 1 ); i++ )
+	for ( int i = 0; i < NET_BLOCK_SIZE_FACTOR_MAX; i++ )
 	{
 		// network block size factor must start from 1 -> ( i + 1 )
 		vecNetwInBufSizes[i] = AudioCompressionIn.Init (
@@ -367,17 +367,18 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
 	bool			bIsAudioPacket = false;
 
 	// check if this is an audio packet by checking all possible lengths
-	for ( int i = 0; i < ( NET_BLOCK_SIZE_FACTOR_MAX - 1 ); i++ )
+	for ( int i = 0; i < NET_BLOCK_SIZE_FACTOR_MAX; i++ )
 	{
 		if ( iNumBytes == vecNetwInBufSizes[i] )
 		{
 			bIsAudioPacket = true;
 
 			// check if we are correctly initialized
-			if ( iAudComprSizeIn != vecNetwInBufSizes[i] )
+			const int iNewNetwInBlSiFact = i + 1;
+			if ( iNewNetwInBlSiFact != iCurNetwInBlSiFact )
 			{
 				// re-initialize to new value
-				SetNetwInBlSiFact ( i + 1 );
+				SetNetwInBlSiFact ( iNewNetwInBlSiFact );
 			}
 		}
 	}

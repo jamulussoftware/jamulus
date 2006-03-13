@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>897</width>
+            <width>914</width>
             <height>287</height>
         </rect>
     </property>
@@ -756,7 +756,14 @@
                     <class>QLabel</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>TextNetBufSiFact</cstring>
+                        <cstring>TextNetBufSiFactIn</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>minimumSize</name>
+                        <size>
+                            <width>72</width>
+                            <height>0</height>
+                        </size>
                     </property>
                     <property stdset="1">
                         <name>text</name>
@@ -774,7 +781,51 @@
                     <class>QSlider</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>SliderNetBufSiFact</cstring>
+                        <cstring>SliderNetBufSiFactIn</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>pageStep</name>
+                        <number>1</number>
+                    </property>
+                    <property stdset="1">
+                        <name>orientation</name>
+                        <enum>Vertical</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>tickmarks</name>
+                        <enum>Both</enum>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextNetBufSiFactOut</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>minimumSize</name>
+                        <size>
+                            <width>0</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Size</string>
+                    </property>
+                    <property stdset="1">
+                        <name>alignment</name>
+                        <set>AlignCenter</set>
+                    </property>
+                    <property>
+                        <name>hAlign</name>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QSlider</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>SliderNetBufSiFactOut</cstring>
                     </property>
                     <property stdset="1">
                         <name>pageStep</name>
@@ -1095,7 +1146,7 @@
                 <name>title</name>
                 <string>Measurement Results</string>
             </property>
-            <hbox>
+            <vbox>
                 <property stdset="1">
                     <name>margin</name>
                     <number>11</number>
@@ -1110,7 +1161,7 @@
                         <name>name</name>
                         <cstring>Layout17</cstring>
                     </property>
-                    <vbox>
+                    <hbox>
                         <property stdset="1">
                             <name>margin</name>
                             <number>0</number>
@@ -1134,34 +1185,6 @@
                             <class>QLabel</class>
                             <property stdset="1">
                                 <name>name</name>
-                                <cstring>TextLabelActNetwBufSizeLabel</cstring>
-                            </property>
-                            <property stdset="1">
-                                <name>text</name>
-                                <string>Netw. Buf. Size:</string>
-                            </property>
-                        </widget>
-                    </vbox>
-                </widget>
-                <widget>
-                    <class>QLayoutWidget</class>
-                    <property stdset="1">
-                        <name>name</name>
-                        <cstring>Layout18</cstring>
-                    </property>
-                    <vbox>
-                        <property stdset="1">
-                            <name>margin</name>
-                            <number>0</number>
-                        </property>
-                        <property stdset="1">
-                            <name>spacing</name>
-                            <number>6</number>
-                        </property>
-                        <widget>
-                            <class>QLabel</class>
-                            <property stdset="1">
-                                <name>name</name>
                                 <cstring>TextLabelStdDevTimer</cstring>
                             </property>
                             <property stdset="1">
@@ -1169,20 +1192,9 @@
                                 <string>val</string>
                             </property>
                         </widget>
-                        <widget>
-                            <class>QLabel</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>TextLabelActNetwBufSize</cstring>
-                            </property>
-                            <property stdset="1">
-                                <name>text</name>
-                                <string>val</string>
-                            </property>
-                        </widget>
-                    </vbox>
+                    </hbox>
                 </widget>
-            </hbox>
+            </vbox>
         </widget>
     </hbox>
 </widget>

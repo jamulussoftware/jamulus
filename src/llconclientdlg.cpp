@@ -98,11 +98,21 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	SliderNetBuf->setValue(iCurNumNetBuf);
 	TextNetBuf->setText("Size: " + QString().setNum(iCurNumNetBuf));
 
-	/* network buffer size factor */
-	SliderNetBufSiFact->setRange(1, NET_BLOCK_SIZE_FACTOR_MAX);
-	const int iCurNetBufSiFact = pClient->GetNetwBufSizeFact();
-	SliderNetBufSiFact->setValue(iCurNetBufSiFact);
-	TextNetBufSiFact->setText("Fact.: " + QString().setNum(iCurNetBufSiFact));
+	/* network buffer size factor in */
+	SliderNetBufSiFactIn->setRange(1, NET_BLOCK_SIZE_FACTOR_MAX);
+	const int iCurNetBufSiFactIn = pClient->GetNetwBufSizeFactIn();
+	SliderNetBufSiFactIn->setValue(iCurNetBufSiFactIn);
+	TextNetBufSiFactIn->setText("Len: " + QString().setNum(
+		double(iCurNetBufSiFactIn * MIN_BLOCK_DURATION_MS), 'f', 2) +
+		" ms");
+
+	/* network buffer size factor out */
+	SliderNetBufSiFactOut->setRange(1, NET_BLOCK_SIZE_FACTOR_MAX);
+	const int iCurNetBufSiFactOut = pClient->GetNetwBufSizeFactOut();
+	SliderNetBufSiFactOut->setValue(iCurNetBufSiFactOut);
+	TextNetBufSiFactOut->setText("Len: " + QString().setNum(
+		double(iCurNetBufSiFactOut * MIN_BLOCK_DURATION_MS), 'f', 2) +
+		" ms");
 
 	/* audio in fader */
 	SliderAudInFader->setRange(0, AUD_FADER_IN_MAX);
@@ -154,8 +164,11 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
 	QObject::connect(SliderNetBuf, SIGNAL(valueChanged(int)),
 		this, SLOT(OnSliderNetBuf(int)));
-	QObject::connect(SliderNetBufSiFact, SIGNAL(valueChanged(int)),
-		this, SLOT(OnSliderNetBufSiFact(int)));
+
+	QObject::connect(SliderNetBufSiFactIn, SIGNAL(valueChanged(int)),
+		this, SLOT(OnSliderNetBufSiFactIn(int)));
+	QObject::connect(SliderNetBufSiFactOut, SIGNAL(valueChanged(int)),
+		this, SLOT(OnSliderNetBufSiFactOut(int)));
 
 	QObject::connect(SliderAudInFader, SIGNAL(valueChanged(int)),
 		this, SLOT(OnSliderAudInFader(int)));
@@ -252,10 +265,21 @@ void CLlconClientDlg::OnSliderNetBuf(int value)
 	UpdateDisplay();
 }
 
-void CLlconClientDlg::OnSliderNetBufSiFact(int value)
+void CLlconClientDlg::OnSliderNetBufSiFactIn(int value)
 {
-	pClient->SetNetwBufSizeFact ( value );
-	TextNetBufSiFact->setText("Fact.: " + QString().setNum(value));
+	pClient->SetNetwBufSizeFactIn ( value );
+	TextNetBufSiFactIn->setText("Len: " + QString().setNum(
+		double(value * MIN_BLOCK_DURATION_MS), 'f', 2) +
+		" ms");
+	UpdateDisplay();
+}
+
+void CLlconClientDlg::OnSliderNetBufSiFactOut(int value)
+{
+	pClient->SetNetwBufSizeFactOut ( value );
+	TextNetBufSiFactOut->setText("Len: " + QString().setNum(
+		double(value * MIN_BLOCK_DURATION_MS), 'f', 2) +
+		" ms");
 	UpdateDisplay();
 }
 
@@ -307,10 +331,6 @@ void CLlconClientDlg::UpdateDisplay()
 	/* response time */
 	TextLabelStdDevTimer->setText(QString().
 		setNum(pClient->GetTimingStdDev(), 'f', 2) + " ms");
-
-	// current network buffer size
-	TextLabelActNetwBufSize->setText(QString().
-		setNum(double(pClient->GetNetwBufSizeFact() * MIN_BLOCK_DURATION_MS), 'f', 2) + " ms");
 }
 
 void CLlconClientDlg::customEvent(QCustomEvent* Event)

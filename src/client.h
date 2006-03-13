@@ -95,16 +95,20 @@ public:
 	int GetSockBufSize() { return Channel.GetSockBufSize (); }
 
 
+	void SetNetwBufSizeFactIn ( const int iNewNetNetwBlSiFactIn )
+	{
+		// store value and tell the server about new value
+		iNetwBufSizeFactIn = iNewNetNetwBlSiFactIn;
+		Channel.CreateNetwBlSiFactMes ( iNewNetNetwBlSiFactIn );
+	}
+	int GetNetwBufSizeFactIn() { return iNetwBufSizeFactIn; }
 
-	void SetNetwBufSizeFact ( const int iNetNetwBlSiFact )
+	void SetNetwBufSizeFactOut ( const int iNetNetwBlSiFact )
 	{
 		// set the new socket size
-		Channel.SetNetwBufSizeFact ( iNetNetwBlSiFact );
-
-		// tell the server that size has changed
-		Channel.CreateNetwBlSiFactMes ( iNetNetwBlSiFact );
+		Channel.SetNetwBufSizeFactOut ( iNetNetwBlSiFact );
 	}
-	int GetNetwBufSizeFact() { return Channel.GetNetwBufSizeFact(); }
+	int GetNetwBufSizeFactOut() { return Channel.GetNetwBufSizeFactOut(); }
 
 
 	CSound* GetSndInterface() { return &Sound; }
@@ -135,6 +139,8 @@ protected:
 
 	int					iSndCrdBlockSizeSam;
 	int					iBlockSizeSam;
+
+	int					iNetwBufSizeFactIn;
 
 	CVector<short>		vecsAudioSndCrd;
 	CVector<double>		vecdAudioSndCrdL;

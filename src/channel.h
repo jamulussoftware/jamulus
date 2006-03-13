@@ -83,8 +83,8 @@ public:
 	void SetSockBufSize ( const int iNumBlocks );
 	int GetSockBufSize() { return iCurSockBufSize; }
 
-	void SetNetwBufSizeFact ( const int iNetNetwBlSiFact );
-	int GetNetwBufSizeFact() { return iCurNetwBlSiFact; }
+	void SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut );
+	int GetNetwBufSizeFactOut() { return iCurNetwOutBlSiFact; }
 
 	// network protocol interface
 	void CreateJitBufMes ( const int iJitBufSize )
@@ -107,7 +107,6 @@ public:
 
 protected:
 	void SetNetwInBlSiFact ( const int iNewBlockSizeFactor );
-	void SetNetwOutBlSiFact ( const int iNewBlockSizeFactor );
 
 	/* audio compression */
 	CAudioCompression	AudioCompressionIn;
@@ -144,8 +143,7 @@ protected:
 	int					vecNetwInBufSizes[NET_BLOCK_SIZE_FACTOR_MAX];
 
 	int					iCurNetwInBlSiFact;
-
-	int					iCurNetwBlSiFact; // TODO, will be replaced by in/out settings
+	int					iCurNetwOutBlSiFact;
 
 	QMutex Mutex;
 

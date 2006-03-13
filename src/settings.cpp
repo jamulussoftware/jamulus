@@ -82,9 +82,14 @@ void CSettings::ReadIniFile()
 		pClient->SetSockBufSize ( iValue );
 	}
 
-	// network buffer size factor
-	if ( GetNumericIniSet(ini, "Client", "netwbusifact", 1, NET_BLOCK_SIZE_FACTOR_MAX, iValue ) == TRUE ) {
-		pClient->SetNetwBufSizeFact ( iValue );
+	// network buffer size factor in
+	if ( GetNumericIniSet(ini, "Client", "netwbusifactin", 1, NET_BLOCK_SIZE_FACTOR_MAX, iValue ) == TRUE ) {
+		pClient->SetNetwBufSizeFactIn ( iValue );
+	}
+
+	// network buffer size factor out
+	if ( GetNumericIniSet(ini, "Client", "netwbusifactout", 1, NET_BLOCK_SIZE_FACTOR_MAX, iValue ) == TRUE ) {
+		pClient->SetNetwBufSizeFactOut ( iValue );
 	}
 }
 
@@ -113,8 +118,11 @@ void CSettings::WriteIniFile()
 	// network jitter buffer size
 	SetNumericIniSet ( ini, "Client", "jitbuf", pClient->GetSockBufSize() );
 
-	// network buffer size factor
-	SetNumericIniSet ( ini, "Client", "netwbusifact", pClient->GetNetwBufSizeFact() );
+	// network buffer size factor in
+	SetNumericIniSet ( ini, "Client", "netwbusifactin", pClient->GetNetwBufSizeFactIn() );
+
+	// network buffer size factor out
+	SetNumericIniSet ( ini, "Client", "netwbusifactout", pClient->GetNetwBufSizeFactOut() );
 
 
 	/* Save settings in init-file */

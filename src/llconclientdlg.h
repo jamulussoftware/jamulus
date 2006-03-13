@@ -90,7 +90,8 @@ public slots:
 	void OnSliderSndBufInChange ( int value );
 	void OnSliderSndBufOutChange ( int value );
 	void OnSliderNetBuf ( int value );
-	void OnSliderNetBufSiFact ( int value );
+	void OnSliderNetBufSiFactIn ( int value );
+	void OnSliderNetBufSiFactOut ( int value );
 	void OnSliderAudInFader ( int value ) { pClient->SetAudioInFader(value); }
 	void OnSliderAudReverb ( int value )
 		{ pClient->SetReverbLevel ( AUD_REVERB_MAX - value ); }

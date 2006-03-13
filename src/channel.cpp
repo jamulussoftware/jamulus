@@ -241,7 +241,8 @@ CChannel::CChannel()
 	SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
 	// set initial input and output block size factors
-	SetNetwBufSizeFact ( NET_BLOCK_SIZE_FACTOR );
+	SetNetwBufSizeFactOut ( NET_BLOCK_SIZE_FACTOR );
+	SetNetwInBlSiFact ( NET_BLOCK_SIZE_FACTOR );
 
 	/* init time-out for the buffer with zero -> no connection */
 	iConTimeOut = 0;
@@ -280,15 +281,26 @@ void CChannel::SetNetwInBlSiFact ( const int iNewBlockSizeFactor )
 	SetSockBufSize ( GetSockBufSize() );
 }
 
-void CChannel::SetNetwOutBlSiFact ( const int iNewBlockSizeFactor )
+void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
 {
+	// store new value
+	iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
+
 	/* init audio compression unit */
 	iAudComprSizeOut = AudioCompressionOut.Init (
-		iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+		iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES,
 		CAudioCompression::CT_IMAADPCM );
 
 	/* init conversion buffer */
-	ConvBuf.Init ( iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES );
+	ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES );
+}
+
+void CChannel::OnNetwBlSiFactChange ( int iNewNetwBlSiFact )
+{
+// TEST
+qDebug ( "new network block size factor: %d", iNewNetwBlSiFact );
+
+	SetNetwBufSizeFactOut ( iNewNetwBlSiFact );
 }
 
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -306,8 +318,6 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 	}
 }
 
-
-// socket buffer size
 void CChannel::SetSockBufSize ( const int iNumBlocks )
 {
 	/* this opperation must be done with mutex */
@@ -334,25 +344,6 @@ qDebug ( "new jitter buffer size: %d", iNewJitBufSize );
 
 	SetSockBufSize ( iNewJitBufSize );
 }
-
-
-// network buffer size factor
-void CChannel::SetNetwBufSizeFact ( const int iNetNetwBlSiFact )
-{
-	iCurNetwBlSiFact = iNetNetwBlSiFact;
-
-	SetNetwInBlSiFact ( iNetNetwBlSiFact );
-	SetNetwOutBlSiFact ( iNetNetwBlSiFact );
-}
-
-void CChannel::OnNetwBlSiFactChange ( int iNewNetwBlSiFact )
-{
-// TEST
-qDebug ( "new network block size factor: %d", iNewNetwBlSiFact );
-
-	SetNetwBufSizeFact ( iNewNetwBlSiFact );
-}
-
 
 bool CChannel::GetAddress(CHostAddress& RetAddr)
 {
@@ -386,7 +377,7 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
 			if ( iAudComprSizeIn != vecNetwInBufSizes[i] )
 			{
 				// re-initialize to new value
-				SetNetwBufSizeFact ( i + 1 );
+				SetNetwInBlSiFact ( i + 1 );
 			}
 		}
 	}

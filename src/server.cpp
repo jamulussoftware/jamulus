@@ -73,7 +73,7 @@ void CServer::Start ()
 		/* init time for response time evaluation */
 		TimeLastBlock = QTime::currentTime ();
 
-		qDebug("Server started");
+		qDebug ( CLogTimeDate::toString() + "Server started" );
 	}
 }
 
@@ -82,7 +82,7 @@ void CServer::Stop ()
 	/* stop main timer */
 	Timer.stop ();
 
-	qDebug("Server stopped");
+	qDebug ( CLogTimeDate::toString() + "Server stopped" );
 }
 
 void CServer::OnTimer ()

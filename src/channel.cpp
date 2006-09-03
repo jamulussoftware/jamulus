@@ -298,7 +298,7 @@ void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
 void CChannel::OnNetwBlSiFactChange ( int iNewNetwBlSiFact )
 {
 // TEST
-qDebug ( "new network block size factor: %d", iNewNetwBlSiFact );
+//qDebug ( "new network block size factor: %d", iNewNetwBlSiFact );
 
 	SetNetwBufSizeFactOut ( iNewNetwBlSiFact );
 }
@@ -340,7 +340,7 @@ void CChannel::SetSockBufSize ( const int iNumBlocks )
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 {
 // TEST
-qDebug ( "new jitter buffer size: %d", iNewJitBufSize );
+//qDebug ( "new jitter buffer size: %d", iNewJitBufSize );
 
 	SetSockBufSize ( iNewJitBufSize );
 }
@@ -447,10 +447,10 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
 	// inform other objects that new connection was established
 	if ( bNewConnection )
 	{
-
-// TEST debug output
-CHostAddress address ( GetAddress() );
-qDebug ( "new connection with IP %s", address.InetAddr.toString().latin1() );
+		// log new connection
+		CHostAddress address ( GetAddress() );
+		qDebug ( CLogTimeDate::toString() +  "Connected with IP %s",
+			address.InetAddr.toString().latin1() );
 
 		emit NewConnection();
 	}

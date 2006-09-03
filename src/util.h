@@ -438,4 +438,22 @@ public:
 };
 
 
+/* Time and Data to String conversion --------------------------------------- */
+class CLogTimeDate
+{
+public:
+	static QString toString()
+	{
+		const QDateTime curDateTime = QDateTime::currentDateTime();
+
+		// format date and time output according to "3.9.2006 11:38:08: "
+		return QString().setNum ( curDateTime.date().day() ) + "." + 
+			QString().setNum ( curDateTime.date().month() ) + "." +
+			QString().setNum ( curDateTime.date().year() ) + " " + 
+			curDateTime.time().toString() + ": ";
+	}
+};
+
+
+
 #endif /* !defined(UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_) */

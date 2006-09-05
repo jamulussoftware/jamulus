@@ -72,8 +72,6 @@ void CServer::Start ()
 
 		/* init time for response time evaluation */
 		TimeLastBlock = QTime::currentTime ();
-
-		qDebug ( CLogTimeDate::toString() + "Server started" );
 	}
 }
 

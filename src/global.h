@@ -40,10 +40,9 @@
 #define _DEBUG_
 #undef _DEBUG_
 
-/* version and application name */
-#ifndef VERSION
-# define VERSION						"0.9.5cvs"
-#endif
+/* version and application name (always use this version) */
+#undef VERSION
+#define VERSION							"0.9.6cvs"
 #define APP_NAME						"llcon"
 
 

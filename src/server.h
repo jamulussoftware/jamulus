@@ -48,11 +48,13 @@ public:
 	void Start ();
 	void Stop ();
 	bool IsRunning() { return Timer.isActive (); }
+
 	void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-		CVector<int>& veciJitBufSize )
+		CVector<int>& veciJitBufSize, CVector<int>& veciNetwOutBlSiFact,
+		CVector<int>& veciNetwInBlSiFact)
 	{
 		ChannelSet.GetConCliParam ( vecHostAddresses,
-			veciJitBufSize );
+			veciJitBufSize, veciNetwOutBlSiFact, veciNetwInBlSiFact );
 	}
 
 	bool GetTimingStdDev ( double& dCurTiStdDev );

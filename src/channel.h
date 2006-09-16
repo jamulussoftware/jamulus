@@ -43,7 +43,7 @@
 
 /* maximum number of internet connections (channels) */
 // if you want to change this paramter, change the connections in this class, too!
-#define MAX_NUM_CHANNELS		10 /* max number channels for server */
+#define MAX_NUM_CHANNELS		5//10 /* max number channels for server */
 
 /* no valid channel number */
 #define INVALID_CHANNEL_ID		(MAX_NUM_CHANNELS + 1)
@@ -85,6 +85,8 @@ public:
 
 	void SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut );
 	int GetNetwBufSizeFactOut() { return iCurNetwOutBlSiFact; }
+
+	int GetNetwBufSizeFactIn() { return iCurNetwInBlSiFact; }
 
 	// network protocol interface
 	void CreateJitBufMes ( const int iJitBufSize )
@@ -178,8 +180,10 @@ public:
 	void GetBlockAllConC ( CVector<int>& vecChanID,
 						   CVector<CVector<double> >& vecvecdData );
 
-	void GetConCliParam( CVector<CHostAddress>& vecHostAddresses,
-						 CVector<int>& veciJitBufSize );
+	void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
+						  CVector<int>& veciJitBufSize,
+						  CVector<int>& veciNetwOutBlSiFact,
+						  CVector<int>& veciNetwInBlSiFact );
 
 	/* access functions for actual channels */
 	bool IsConnected ( const int iChanNum )

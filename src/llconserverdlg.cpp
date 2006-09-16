@@ -55,6 +55,10 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent,
 	ListViewClients->setColumnAlignment(2, Qt::AlignCenter);
 	ListViewClients->addColumn(tr("Jitter buffer size"));
 	ListViewClients->setColumnAlignment(3, Qt::AlignRight);
+	ListViewClients->addColumn(tr("Block Size In"));
+	ListViewClients->setColumnAlignment(4, Qt::AlignRight);
+	ListViewClients->addColumn(tr("Block Size Out"));
+	ListViewClients->setColumnAlignment(5, Qt::AlignRight);
 	ListViewClients->clear();
 
 	/* insert items in reverse order because in Windows all of them are
@@ -96,11 +100,14 @@ void CLlconServerDlg::OnTimer()
 {
 	CVector<CHostAddress>	vecHostAddresses;
 	CVector<int>			veciJitBufSize;
+	CVector<int>			veciNetwOutBlSiFact;
+	CVector<int>			veciNetwInBlSiFact;
 	double					dCurTiStdDev;
 
 	ListViewMutex.lock();
 
-	pServer->GetConCliParam(vecHostAddresses, veciJitBufSize);
+	pServer->GetConCliParam ( vecHostAddresses, veciJitBufSize,
+		veciNetwOutBlSiFact, veciNetwInBlSiFact );
 
 	/* fill list with connected clients */
 	for (int i = 0; i < MAX_NUM_CHANNELS; i++)
@@ -116,6 +123,14 @@ void CLlconServerDlg::OnTimer()
 			vecpListViewItems[i]->setText(3,
 				QString().setNum(veciJitBufSize[i]));
 
+			/* in / out network block sizes */
+			vecpListViewItems[i]->setText(4,
+				QString().setNum(
+				double(veciNetwInBlSiFact[i] * MIN_BLOCK_DURATION_MS), 'f', 2));
+			vecpListViewItems[i]->setText(5,
+				QString().setNum(
+				double(veciNetwOutBlSiFact[i] * MIN_BLOCK_DURATION_MS), 'f', 2));
+
 #ifndef _WIN32
 			vecpListViewItems[i]->setVisible ( true );
 #endif
@@ -124,9 +139,9 @@ void CLlconServerDlg::OnTimer()
 		{
 #ifdef _WIN32
 			/* remove text for Windows version */
-			vecpListViewItems[i]->setText(0,"");
-			vecpListViewItems[i]->setText(3,"");
-			vecpListViewItems[i]->setText(4,"");
+			vecpListViewItems[i]->setText(0, "");
+			vecpListViewItems[i]->setText(3, "");
+			vecpListViewItems[i]->setText(4, "");
 #else
 			vecpListViewItems[i]->setVisible ( false );
 #endif

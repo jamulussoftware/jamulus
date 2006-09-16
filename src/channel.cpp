@@ -37,11 +37,11 @@ CChannelSet::CChannelSet()
 	QObject::connect(&vecChannels[2],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh2(CVector<uint8_t>)));
 	QObject::connect(&vecChannels[3],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh3(CVector<uint8_t>)));
 	QObject::connect(&vecChannels[4],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh4(CVector<uint8_t>)));
-	QObject::connect(&vecChannels[5],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh5(CVector<uint8_t>)));
-	QObject::connect(&vecChannels[6],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh6(CVector<uint8_t>)));
-	QObject::connect(&vecChannels[7],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh7(CVector<uint8_t>)));
-	QObject::connect(&vecChannels[8],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh8(CVector<uint8_t>)));
-	QObject::connect(&vecChannels[9],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh9(CVector<uint8_t>)));
+//	QObject::connect(&vecChannels[5],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh5(CVector<uint8_t>)));
+//	QObject::connect(&vecChannels[6],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh6(CVector<uint8_t>)));
+//	QObject::connect(&vecChannels[7],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh7(CVector<uint8_t>)));
+//	QObject::connect(&vecChannels[8],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh8(CVector<uint8_t>)));
+//	QObject::connect(&vecChannels[9],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh9(CVector<uint8_t>)));
 
 	// request jitter buffer size
 	QObject::connect(&vecChannels[0],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh0()));
@@ -49,11 +49,11 @@ CChannelSet::CChannelSet()
 	QObject::connect(&vecChannels[2],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh2()));
 	QObject::connect(&vecChannels[3],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh3()));
 	QObject::connect(&vecChannels[4],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh4()));
-	QObject::connect(&vecChannels[5],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh5()));
-	QObject::connect(&vecChannels[6],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh6()));
-	QObject::connect(&vecChannels[7],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh7()));
-	QObject::connect(&vecChannels[8],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh8()));
-	QObject::connect(&vecChannels[9],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh9()));
+//	QObject::connect(&vecChannels[5],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh5()));
+//	QObject::connect(&vecChannels[6],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh6()));
+//	QObject::connect(&vecChannels[7],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh7()));
+//	QObject::connect(&vecChannels[8],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh8()));
+//	QObject::connect(&vecChannels[9],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh9()));
 }
 
 int CChannelSet::GetFreeChan()
@@ -196,22 +196,28 @@ void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
 }
 
 void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-								   CVector<int>& veciJitBufSize )
+								   CVector<int>& veciJitBufSize,
+								   CVector<int>& veciNetwOutBlSiFact,
+								   CVector<int>& veciNetwInBlSiFact )
 {
 	CHostAddress InetAddr;
 
 	/* init return values */
 	vecHostAddresses.Init ( MAX_NUM_CHANNELS );
 	veciJitBufSize.Init ( MAX_NUM_CHANNELS );
+	veciNetwOutBlSiFact.Init ( MAX_NUM_CHANNELS );
+	veciNetwInBlSiFact.Init ( MAX_NUM_CHANNELS );
 
 	/* Check all possible channels */
 	for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
 	{
 		if ( vecChannels[i].GetAddress ( InetAddr ) )
 		{
-			/* add new address and sample rate offset to vectors */
+			/* get requested data */
 			vecHostAddresses[i] = InetAddr;
 			veciJitBufSize[i] = vecChannels[i].GetSockBufSize ();
+			veciNetwOutBlSiFact[i] = vecChannels[i].GetNetwBufSizeFactOut ();
+			veciNetwInBlSiFact[i] = vecChannels[i].GetNetwBufSizeFactIn ();
 		}
 	}
 }
@@ -347,7 +353,7 @@ void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 
 bool CChannel::GetAddress(CHostAddress& RetAddr)
 {
-	if (IsConnected())
+	if ( IsConnected() )
 	{
 		RetAddr = InetAddr;
 		return true;
@@ -426,11 +432,7 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
 	else
 	{
 		// only use protocol data if channel is connected
-
-// must be disabled to be able to receive network buffer size factor changes
-// FIXME check, if this condition must be checked somewhere else!
-//		if ( IsConnected() )
-
+		if ( IsConnected() )
 		{
 			// this seems not to be an audio block, parse the message
 			if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )

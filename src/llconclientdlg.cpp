@@ -205,41 +205,45 @@ void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
 	Event->accept();
 }
 
-void CLlconClientDlg::OnConnectDisconBut()
+void CLlconClientDlg::OnConnectDisconBut ()
 {
 	/* start/stop client, set button text */
-	if (pClient->IsRunning())
+	if ( pClient->IsRunning () )
 	{
-		pClient->Stop();
-		PushButtonConnect->setText(CON_BUT_CONNECTTEXT);
+		pClient->Stop ();
+		PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
 
 		/* stop timer for level meter bars and reset them */
-		TimerSigMet.stop();
-		ProgressBarInputLevelL->setProgress(0);
-		ProgressBarInputLevelR->setProgress(0);
+		TimerSigMet.stop ();
+		ProgressBarInputLevelL->setProgress ( 0 );
+		ProgressBarInputLevelR->setProgress ( 0 );
 
 		/* immediately update status bar */
-		OnTimerStatus();
+		OnTimerStatus ();
 	}
 	else
 	{
 		/* set address and check if address is valid */
-		if (pClient->SetServerAddr(LineEditServerAddr->text()))
+		if ( pClient->SetServerAddr ( LineEditServerAddr->text () ) )
 		{
-			pClient->start();
-			PushButtonConnect->setText(CON_BUT_DISCONNECTTEXT);
+#if ( QT_VERSION > 300 )
+			pClient->start ( QThread::TimeCriticalPriority );
+#else
+			pClient->start ();
+#endif
+			PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
 
 			/* start timer for level meter bar */
-			TimerSigMet.start(LEVELMETER_UPDATE_TIME);
+			TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
 		}
 		else
 		{
 			/* Restart timer to ensure that the text is visible at
 			   least the time for one complete interval */
-			TimerStatus.changeInterval(STATUSBAR_UPDATE_TIME);
+			TimerStatus.changeInterval ( STATUSBAR_UPDATE_TIME );
 
 			/* show the error in the status bar */
-			TextLabelStatus->setText(tr("invalid address"));
+			TextLabelStatus->setText ( tr ( "invalid address" ) );
 		}
 	}
 }

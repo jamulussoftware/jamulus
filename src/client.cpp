@@ -130,13 +130,15 @@ void CClient::run()
 	/* Set thread priority (The working thread should have a higher
 	   priority than the GUI) */
 #ifdef _WIN32
-	SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
+	SetThreadPriority ( GetCurrentThread (), THREAD_PRIORITY_ABOVE_NORMAL );
 #else
-    /* set the process to realtime privs */
+    /* set the process to realtime privs, taken from
+	   "http://www.gardena.net/benno/linux/audio" but does not seem to work,
+	   maybe a problem with user rights */
 	struct sched_param schp;
-    memset(&schp, 0, sizeof(schp));
-    schp.sched_priority = sched_get_priority_max(SCHED_FIFO);
-    sched_setscheduler(0, SCHED_FIFO, &schp);
+	memset ( &schp, 0, sizeof ( schp ) );
+	schp.sched_priority = sched_get_priority_max ( SCHED_FIFO );
+	sched_setscheduler ( 0, SCHED_FIFO, &schp );
 #endif
 
 	/* init object */

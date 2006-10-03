@@ -47,7 +47,8 @@ public:
 	CSound()
 #if WITH_SOUND
 	: rhandle(NULL), phandle(NULL), iCurPeriodSizeIn(NUM_PERIOD_BLOCKS_IN),
-	iCurPeriodSizeOut(NUM_PERIOD_BLOCKS_OUT)
+	iCurPeriodSizeOut(NUM_PERIOD_BLOCKS_OUT), bChangParamIn(true),
+	bChangParamOut(true)
 #endif
 		{}
 	virtual ~CSound() {Close();}
@@ -78,8 +79,8 @@ protected:
 	snd_pcm_t* rhandle;
 	snd_pcm_t* phandle;
 
-	bool SetHWParams(snd_pcm_t* handle, const bool bIsRecord,
-					 const int iBufferSizeIn, const int iNumPeriodBlocks);
+	bool SetHWParams(snd_pcm_t* handle, const int iBufferSizeIn,
+					 const int iNumPeriodBlocks);
 
 	int iBufferSizeOut;
 	int iBufferSizeIn;

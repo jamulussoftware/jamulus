@@ -42,7 +42,7 @@
 
 /* version and application name (always use this version) */
 #undef VERSION
-#define VERSION							"0.9.6cvs"
+#define VERSION							"0.9.7cvs"
 #define APP_NAME						"llcon"
 
 
@@ -68,7 +68,7 @@
 #define NET_BLOCK_SIZE_FACTOR			3 // 3 * 2 ms = 6 ms
 
 // maximum value of factor for network block size
-#define NET_BLOCK_SIZE_FACTOR_MAX		15
+#define NET_BLOCK_SIZE_FACTOR_MAX		8
 
 /* maximum network buffer size (which can be chosen by slider) */
 #define MAX_NET_BUF_SIZE_NUM_BL			10 /* number of blocks */

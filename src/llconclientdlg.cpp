@@ -102,7 +102,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	SliderNetBufSiFactIn->setRange(1, NET_BLOCK_SIZE_FACTOR_MAX);
 	const int iCurNetBufSiFactIn = pClient->GetNetwBufSizeFactIn();
 	SliderNetBufSiFactIn->setValue(iCurNetBufSiFactIn);
-	TextNetBufSiFactIn->setText("In: " + QString().setNum(
+	TextNetBufSiFactIn->setText("In:\n" + QString().setNum(
 		double(iCurNetBufSiFactIn * MIN_BLOCK_DURATION_MS), 'f', 2) +
 		" ms");
 
@@ -110,7 +110,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	SliderNetBufSiFactOut->setRange(1, NET_BLOCK_SIZE_FACTOR_MAX);
 	const int iCurNetBufSiFactOut = pClient->GetNetwBufSizeFactOut();
 	SliderNetBufSiFactOut->setValue(iCurNetBufSiFactOut);
-	TextNetBufSiFactOut->setText("Out: " + QString().setNum(
+	TextNetBufSiFactOut->setText("Out:\n" + QString().setNum(
 		double(iCurNetBufSiFactOut * MIN_BLOCK_DURATION_MS), 'f', 2) +
 		" ms");
 
@@ -272,7 +272,7 @@ void CLlconClientDlg::OnSliderNetBuf(int value)
 void CLlconClientDlg::OnSliderNetBufSiFactIn(int value)
 {
 	pClient->SetNetwBufSizeFactIn ( value );
-	TextNetBufSiFactIn->setText("In: " + QString().setNum(
+	TextNetBufSiFactIn->setText("In:\n" + QString().setNum(
 		double(value * MIN_BLOCK_DURATION_MS), 'f', 2) +
 		" ms");
 	UpdateDisplay();
@@ -281,7 +281,7 @@ void CLlconClientDlg::OnSliderNetBufSiFactIn(int value)
 void CLlconClientDlg::OnSliderNetBufSiFactOut(int value)
 {
 	pClient->SetNetwBufSizeFactOut ( value );
-	TextNetBufSiFactOut->setText("Out: " + QString().setNum(
+	TextNetBufSiFactOut->setText("Out:\n" + QString().setNum(
 		double(value * MIN_BLOCK_DURATION_MS), 'f', 2) +
 		" ms");
 	UpdateDisplay();

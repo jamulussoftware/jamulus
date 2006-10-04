@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>927</width>
+            <width>776</width>
             <height>287</height>
         </rect>
     </property>
@@ -452,7 +452,8 @@
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
-                                        <string>Audio Fader</string>
+                                        <string>Audio
+Fader</string>
                                     </property>
                                     <property stdset="1">
                                         <name>alignment</name>
@@ -506,7 +507,8 @@
                                     </property>
                                     <property stdset="1">
                                         <name>text</name>
-                                        <string>Reverb</string>
+                                        <string>Reverb
+Level</string>
                                     </property>
                                     <property stdset="1">
                                         <name>alignment</name>
@@ -547,7 +549,8 @@
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Reverb Selection</string>
+                        <string>Reverb Chan.
+Selection</string>
                     </property>
                     <property stdset="1">
                         <name>alignment</name>
@@ -622,6 +625,13 @@
                     <property stdset="1">
                         <name>name</name>
                         <cstring>TextNetBuf</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>minimumSize</name>
+                        <size>
+                            <width>50</width>
+                            <height>0</height>
+                        </size>
                     </property>
                     <property stdset="1">
                         <name>text</name>
@@ -761,7 +771,7 @@
                     <property stdset="1">
                         <name>minimumSize</name>
                         <size>
-                            <width>85</width>
+                            <width>50</width>
                             <height>0</height>
                         </size>
                     </property>
@@ -801,13 +811,6 @@
                     <property stdset="1">
                         <name>name</name>
                         <cstring>TextNetBufSiFactOut</cstring>
-                    </property>
-                    <property stdset="1">
-                        <name>minimumSize</name>
-                        <size>
-                            <width>0</width>
-                            <height>0</height>
-                        </size>
                     </property>
                     <property stdset="1">
                         <name>text</name>
@@ -1136,15 +1139,8 @@
                 <cstring>GroupBoxMeasureResults</cstring>
             </property>
             <property stdset="1">
-                <name>minimumSize</name>
-                <size>
-                    <width>152</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property stdset="1">
                 <name>title</name>
-                <string>Measurement Results</string>
+                <string>Debug</string>
             </property>
             <vbox>
                 <property stdset="1">
@@ -1156,43 +1152,26 @@
                     <number>6</number>
                 </property>
                 <widget>
-                    <class>QLayoutWidget</class>
+                    <class>QLabel</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>Layout17</cstring>
+                        <cstring>TextLabelStdDevTimerLabel</cstring>
                     </property>
-                    <hbox>
-                        <property stdset="1">
-                            <name>margin</name>
-                            <number>0</number>
-                        </property>
-                        <property stdset="1">
-                            <name>spacing</name>
-                            <number>6</number>
-                        </property>
-                        <widget>
-                            <class>QLabel</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>TextLabelStdDevTimerLabel</cstring>
-                            </property>
-                            <property stdset="1">
-                                <name>text</name>
-                                <string>StdDev:</string>
-                            </property>
-                        </widget>
-                        <widget>
-                            <class>QLabel</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>TextLabelStdDevTimer</cstring>
-                            </property>
-                            <property stdset="1">
-                                <name>text</name>
-                                <string>val</string>
-                            </property>
-                        </widget>
-                    </hbox>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>StdDev:</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QLabel</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>TextLabelStdDevTimer</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>val</string>
+                    </property>
                 </widget>
             </vbox>
         </widget>

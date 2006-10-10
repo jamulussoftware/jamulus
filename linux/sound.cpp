@@ -114,6 +114,8 @@ void CSound::InitRecording(int iNewBufferSize, bool bNewBlocking)
 
 bool CSound::Read(CVector<short>& psData)
 {
+	int ret;
+
 	/* Check if device must be opened or reinitialized */
 	if (bChangParamIn == true)
 	{
@@ -123,14 +125,13 @@ bool CSound::Read(CVector<short>& psData)
 		bChangParamIn = false;
 	}
 
-	int ret = snd_pcm_readi(rhandle, &psData[0], iBufferSizeIn);
-//qDebug("ret: %d, iBufferSizeIn: %d", ret, iBufferSizeIn);
+	ret = snd_pcm_readi(rhandle, &psData[0], iBufferSizeIn);
 
-	if (ret < 0)
+	if ( ret < 0 )
 	{
-		if (ret == -EPIPE)
+		if ( ret == -EPIPE )
 		{
-			/* Under-run */
+			// under-run
 			qDebug ( "rprepare" );
 
 			ret = snd_pcm_prepare ( rhandle );
@@ -154,15 +155,15 @@ bool CSound::Read(CVector<short>& psData)
 		{
 			qDebug ( "strpipe" );
 
-			/* Wait until the suspend flag is released */
+			// wait until the suspend flag is released
 			while ( ( ret = snd_pcm_resume ( rhandle ) ) == -EAGAIN )
 			{
-				sleep(1);
+				sleep ( 1 );
 			}
 
 			if ( ret < 0 )
 			{
-				ret = snd_pcm_prepare(rhandle);
+				ret = snd_pcm_prepare ( rhandle );
 
 				if (ret < 0)
 				{
@@ -310,7 +311,6 @@ bool CSound::Write ( CVector<short>& psData )
 	while ( size )
 	{
 		ret = snd_pcm_writei ( phandle, &psData[start], size );
-//qDebug("start: %d, iBufferSizeIn: %d", start, iBufferSizeIn);
 
 		if ( ret < 0 )
 		{
@@ -325,7 +325,6 @@ bool CSound::Write ( CVector<short>& psData )
 				{
 					qDebug ( "Can't recover from underrun, prepare failed: %s", snd_strerror ( ret ) );
 				}
-
 				continue;
 			}
 			else if ( ret == -EAGAIN )
@@ -448,40 +447,28 @@ bool CSound::SetHWParams(snd_pcm_t* handle, const int iBufferSizeIn,
 		return true;
 	}
 
-
-
-
-
-	/* set the buffer and period size */
-
-// TEST
-snd_pcm_uframes_t BufferFrames = iBufferSizeIn * iNumPeriodBlocks;
-
-	if (err = snd_pcm_hw_params_set_buffer_size_near(handle, hwparams, &BufferFrames) < 0)
+	// set the buffer size and period size
+	snd_pcm_uframes_t BufferFrames = iBufferSizeIn * iNumPeriodBlocks;
+	if ( err = snd_pcm_hw_params_set_buffer_size_near ( handle, hwparams, &BufferFrames ) < 0 )
 	{
-		qDebug("cannot set buffer size (%s)\n", snd_strerror (err));
+		qDebug ( "cannot set buffer size (%s)\n", snd_strerror ( err ) );
 		return true;
 	}
 
-// TEST
-snd_pcm_uframes_t PeriodSize = iBufferSizeIn;
-
-	if (err = snd_pcm_hw_params_set_period_size_near(handle, hwparams, &PeriodSize, 0) < 0)
-//if (err = snd_pcm_hw_params_set_period_size_max(handle, hwparams, &PeriodSize, 0) < 0)
+	// set the period size
+	snd_pcm_uframes_t PeriodSize = iBufferSizeIn;
+	if ( err = snd_pcm_hw_params_set_period_size_near ( handle, hwparams, &PeriodSize, 0 ) < 0 )
 	{
-		qDebug("cannot set period size (%s)\n", snd_strerror (err));
+		qDebug ( "cannot set period size (%s)\n", snd_strerror ( err ) );
 		return true;
 	}
 
-
-
-	/* Write the parameters to device */
-	if (err = snd_pcm_hw_params(handle, hwparams) < 0)
+	// write the parameters to device
+	if ( err = snd_pcm_hw_params ( handle, hwparams ) < 0 )
 	{
 		qDebug("Unable to set hw params : %s", snd_strerror(err));
 		return true;
 	}
-
 
 
 /* check period and buffer size */
@@ -498,7 +485,6 @@ if (err < 0)
 	qDebug("Unable to get period size for playback: %s\n", snd_strerror(err));
 }
 qDebug("frame size: %d (desired: %d)", period_size, iBufferSizeIn);
-
 
 
 	/* clean-up */

@@ -80,6 +80,9 @@ public:
 	bool GetAddress ( CHostAddress& RetAddr );
 	CHostAddress GetAddress () { return InetAddr; }
 
+	void SetName ( const std::string sNNa ) { sName = sNNa; }
+	std::string GetName() { return sName; }
+
 	void SetSockBufSize ( const int iNumBlocks );
 	int GetSockBufSize() { return iCurSockBufSize; }
 
@@ -110,32 +113,35 @@ public:
 protected:
 	void SetNetwInBlSiFact ( const int iNewBlockSizeFactor );
 
-	/* audio compression */
+	// audio compression
 	CAudioCompression	AudioCompressionIn;
 	int					iAudComprSizeIn;
 	CAudioCompression	AudioCompressionOut;
 	int					iAudComprSizeOut;
 
-	/* resampling */
+	// resampling
 	CResample			ResampleObj;
 	double				dSamRateOffset;
 	CVector<double>		vecdResInData;
 	CVector<double>		vecdResOutData;
 
-	/* connection parameters */
+	// connection parameters
 	CHostAddress		InetAddr;
 
-	/* network jitter-buffer */
+	// channel name
+	std::string			sName;
+
+	// network jitter-buffer
 	CNetBuf				SockBuf;
 	int					iCurSockBufSize;
 
-	/* network output conversion buffer */
+	// network output conversion buffer
 	CConvBuf			ConvBuf;
 
 	// network protocol
 	CProtocol			Protocol;
 
-	/* time stamp index counter */
+	// time stamp index counter
 	Q_UINT8				byTimeStampIdxCnt;
 	int					iTimeStampActCnt;
 
@@ -147,7 +153,7 @@ protected:
 	int					iCurNetwInBlSiFact;
 	int					iCurNetwOutBlSiFact;
 
-	QMutex Mutex;
+	QMutex				Mutex;
 
 public slots:
 	void OnSendProtMessage ( CVector<uint8_t> vecMessage );

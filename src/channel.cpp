@@ -226,7 +226,7 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 /******************************************************************************\
 * CChannel                                                                     *
 \******************************************************************************/
-CChannel::CChannel()
+CChannel::CChannel() : sName ( "" )
 {
 	// query all possible network in buffer sizes for determining if an
 	// audio packet was received

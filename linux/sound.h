@@ -50,7 +50,7 @@ public:
 	iCurPeriodSizeOut(NUM_PERIOD_BLOCKS_OUT), bChangParamIn(true),
 	bChangParamOut(true)
 #endif
-		{snd_pcm_status_alloca(&status);}
+		{}
 	virtual ~CSound() {Close();}
 
 	/* Not implemented yet, always return one device and default string */

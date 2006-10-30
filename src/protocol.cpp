@@ -57,8 +57,13 @@ MESSAGES
 	| 2 bytes factor |
 	+----------------+
 
+- IP number and name of connected clients     PROTMESSID_CONN_CLIENTS_LIST
 
+    for each connected client append following data:
 
+	+--------------------+------------------+----------------------+
+	| 4 bytes IP address | 2 bytes number n | n bytes UTF-8 string |
+	+--------------------+------------------+----------------------+
 
  *
  ******************************************************************************
@@ -365,6 +370,14 @@ void CProtocol::CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
 	CreateAndSendMessage ( PROTMESSID_NET_BLSI_FACTOR, vecData );
 }
 
+//void CProtocol::CreateConClientListMes ( const )
+//{
+// TODO
+//PROTMESSID_CONN_CLIENTS_LIST
+
+
+//}
+
 
 /******************************************************************************\
 * Message generation (parsing)                                                 *
@@ -403,7 +416,7 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
 	iLenBy = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
 
 	// make sure the length is correct
-	if ( iLenBy !=  iVecInLenByte - MESS_LEN_WITHOUT_DATA_BYTE )
+	if ( iLenBy != iVecInLenByte - MESS_LEN_WITHOUT_DATA_BYTE )
 	{
 		return false; // return error code
 	}

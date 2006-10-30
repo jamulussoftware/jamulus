@@ -127,24 +127,6 @@ bool CSound::Read(CVector<short>& psData)
 
 	ret = snd_pcm_readi(rhandle, &psData[0], iBufferSizeIn);
 
-
-//snd_pcm_sframes_t test = snd_pcm_avail_update ( rhandle );
-//qDebug ( "test: %d", test );
-//if ( test == 64 )
-//	snd_pcm_prepare ( rhandle );
-
-/*
-snd_pcm_status( rhandle, status );
-snd_pcm_sframes_t test = snd_pcm_status_get_delay(status);
-//qDebug ( "test: %d", test );
-*/
-
-//static FILE* pFile = fopen("test.dat", "w");
-//fprintf(pFile, "%d\n", test);
-//fflush(pFile);
-
-
-
 	if ( ret < 0 )
 	{
 		if ( ret == -EPIPE )
@@ -251,60 +233,6 @@ void CSound::InitPlayback ( int iNewBufferSize, bool bNewBlocking )
 	// set hardware parameters
 	SetHWParams ( phandle, iBufferSizeOut, iCurPeriodSizeOut );
 
-
-
-#if 0
-	/* sw parameters --------------------------------------------------------- */
-	snd_pcm_sw_params_t* swparams;
-
-// TEST
-// allocate an invalid snd_pcm_sw_params_t using standard malloc
-if ( err = snd_pcm_sw_params_malloc ( &swparams ) != 0 )
-{
-	qDebug ( "snd_pcm_sw_params_malloc: %s", snd_strerror ( err ) );
-}
-
-/* get the current swparams */
-err = snd_pcm_sw_params_current(phandle, swparams);
-if (err < 0)
-{
-	qDebug("Unable to determine current swparams for playback: %s\n", snd_strerror(err));
-}
-
-/* start the transfer when the buffer is almost full: */
-/* (buffer_size / avail_min) * avail_min */
-err = snd_pcm_sw_params_set_start_threshold(phandle, swparams, iCurPeriodSizeOut - 1);
-if (err < 0) {
-	qDebug("Unable to set start threshold mode for playback: %s\n", snd_strerror(err));
-}
-
-/* allow the transfer when at least period_size samples can be processed */
-err = snd_pcm_sw_params_set_avail_min(phandle, swparams, iBufferSizeOut);
-if (err < 0) {
-	qDebug("Unable to set avail min for playback: %s\n", snd_strerror(err));
-}
-
-/* align all transfers to 1 sample */
-err = snd_pcm_sw_params_set_xfer_align(phandle, swparams, 1);
-if (err < 0) {
-	qDebug("Unable to set transfer align for playback: %s\n", snd_strerror(err));
-}
-
-/* write the parameters to the playback device */
-err = snd_pcm_sw_params(phandle, swparams);
-if (err < 0) {
-	qDebug("Unable to set sw params for playback: %s\n", snd_strerror(err));
-}
-
-// clean-up
-snd_pcm_sw_params_free ( swparams );
-#endif
-
-
-
-
-
-
 	// start playback
 	snd_pcm_start ( phandle );
 
@@ -329,35 +257,6 @@ bool CSound::Write ( CVector<short>& psData )
 	while ( size )
 	{
 		ret = snd_pcm_writei ( phandle, &psData[start], size );
-
-
-//snd_pcm_sframes_t test = snd_pcm_avail_update ( phandle );
-//qDebug ( "test: %d", test );
-//if ( test == 64 )
-//	snd_pcm_prepare ( rhandle );
-
-/*
-snd_pcm_sframes_t  	delayp;
-snd_pcm_delay ( phandle, &delayp	)  ;
-qDebug ( "test: %d", delayp );
-*/
-
-
-//snd_pcm_status_t* status;
-//snd_pcm_status_alloca(&status);
-//snd_pcm_status( phandle, status );
-//snd_pcm_sframes_t test = snd_pcm_status_get_delay(status);
-//qDebug ( "test: %d", test );
-
-//snd_pcm_status( phandle, status );
-//snd_pcm_sframes_t test = snd_pcm_status_get_delay(status);
-//qDebug ( "test: %d", test );
-
-//static FILE* pFile = fopen("test.dat", "w");
-//fprintf(pFile, "%d\n", test);
-//fflush(pFile);
-
-
 
 		if ( ret < 0 )
 		{

@@ -88,12 +88,6 @@ protected:
 	int iCurPeriodSizeIn;
 	bool bChangParamOut;
 	int iCurPeriodSizeOut;
-
-
-// TEST
-snd_pcm_status_t* status;
-
-
 #else
 	/* Dummy definitions */
 	void	SetInNumBuf(int iNewNum) {}

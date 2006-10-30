@@ -30,7 +30,7 @@ CClient::CClient () : bRun ( false ), Socket ( &Channel ),
 		iAudioInFader ( AUD_FADER_IN_MAX / 2 ),
 		iReverbLevel ( AUD_REVERB_MAX / 6 ),
 		bReverbOnLeftChan ( false ),
-		iNetwBufSizeFactIn ( NET_BLOCK_SIZE_FACTOR )
+		iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR )
 {
 	// connection for protocol
 	QObject::connect ( &Channel, SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),

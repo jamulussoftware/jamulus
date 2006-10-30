@@ -99,7 +99,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	TextNetBuf->setText("Size: " + QString().setNum(iCurNumNetBuf));
 
 	/* network buffer size factor in */
-	SliderNetBufSiFactIn->setRange(1, NET_BLOCK_SIZE_FACTOR_MAX);
+	SliderNetBufSiFactIn->setRange(1, MAX_NET_BLOCK_SIZE_FACTOR);
 	const int iCurNetBufSiFactIn = pClient->GetNetwBufSizeFactIn();
 	SliderNetBufSiFactIn->setValue(iCurNetBufSiFactIn);
 	TextNetBufSiFactIn->setText("In:\n" + QString().setNum(
@@ -107,7 +107,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 		" ms");
 
 	/* network buffer size factor out */
-	SliderNetBufSiFactOut->setRange(1, NET_BLOCK_SIZE_FACTOR_MAX);
+	SliderNetBufSiFactOut->setRange(1, MAX_NET_BLOCK_SIZE_FACTOR);
 	const int iCurNetBufSiFactOut = pClient->GetNetwBufSizeFactOut();
 	SliderNetBufSiFactOut->setValue(iCurNetBufSiFactOut);
 	TextNetBufSiFactOut->setText("Out:\n" + QString().setNum(

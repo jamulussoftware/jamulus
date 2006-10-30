@@ -83,12 +83,12 @@ void CSettings::ReadIniFile()
 	}
 
 	// network buffer size factor in
-	if ( GetNumericIniSet(ini, "Client", "netwbusifactin", 1, NET_BLOCK_SIZE_FACTOR_MAX, iValue ) == TRUE ) {
+	if ( GetNumericIniSet(ini, "Client", "netwbusifactin", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) == TRUE ) {
 		pClient->SetNetwBufSizeFactIn ( iValue );
 	}
 
 	// network buffer size factor out
-	if ( GetNumericIniSet(ini, "Client", "netwbusifactout", 1, NET_BLOCK_SIZE_FACTOR_MAX, iValue ) == TRUE ) {
+	if ( GetNumericIniSet(ini, "Client", "netwbusifactout", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) == TRUE ) {
 		pClient->SetNetwBufSizeFactOut ( iValue );
 	}
 }

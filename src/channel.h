@@ -142,7 +142,7 @@ protected:
 	int					iConTimeOut;
 	int					iConTimeOutStartVal;
 
-	int					vecNetwInBufSizes[NET_BLOCK_SIZE_FACTOR_MAX];
+	int					vecNetwInBufSizes[MAX_NET_BLOCK_SIZE_FACTOR];
 
 	int					iCurNetwInBlSiFact;
 	int					iCurNetwOutBlSiFact;

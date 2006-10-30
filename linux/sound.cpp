@@ -127,6 +127,24 @@ bool CSound::Read(CVector<short>& psData)
 
 	ret = snd_pcm_readi(rhandle, &psData[0], iBufferSizeIn);
 
+
+//snd_pcm_sframes_t test = snd_pcm_avail_update ( rhandle );
+//qDebug ( "test: %d", test );
+//if ( test == 64 )
+//	snd_pcm_prepare ( rhandle );
+
+/*
+snd_pcm_status( rhandle, status );
+snd_pcm_sframes_t test = snd_pcm_status_get_delay(status);
+//qDebug ( "test: %d", test );
+*/
+
+//static FILE* pFile = fopen("test.dat", "w");
+//fprintf(pFile, "%d\n", test);
+//fflush(pFile);
+
+
+
 	if ( ret < 0 )
 	{
 		if ( ret == -EPIPE )
@@ -311,6 +329,35 @@ bool CSound::Write ( CVector<short>& psData )
 	while ( size )
 	{
 		ret = snd_pcm_writei ( phandle, &psData[start], size );
+
+
+//snd_pcm_sframes_t test = snd_pcm_avail_update ( phandle );
+//qDebug ( "test: %d", test );
+//if ( test == 64 )
+//	snd_pcm_prepare ( rhandle );
+
+/*
+snd_pcm_sframes_t  	delayp;
+snd_pcm_delay ( phandle, &delayp	)  ;
+qDebug ( "test: %d", delayp );
+*/
+
+
+//snd_pcm_status_t* status;
+//snd_pcm_status_alloca(&status);
+//snd_pcm_status( phandle, status );
+//snd_pcm_sframes_t test = snd_pcm_status_get_delay(status);
+//qDebug ( "test: %d", test );
+
+//snd_pcm_status( phandle, status );
+//snd_pcm_sframes_t test = snd_pcm_status_get_delay(status);
+//qDebug ( "test: %d", test );
+
+//static FILE* pFile = fopen("test.dat", "w");
+//fprintf(pFile, "%d\n", test);
+//fflush(pFile);
+
+
 
 		if ( ret < 0 )
 		{

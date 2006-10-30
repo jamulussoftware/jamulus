@@ -230,7 +230,7 @@ CChannel::CChannel()
 {
 	// query all possible network in buffer sizes for determining if an
 	// audio packet was received
-	for ( int i = 0; i < NET_BLOCK_SIZE_FACTOR_MAX; i++ )
+	for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
 	{
 		// network block size factor must start from 1 -> ( i + 1 )
 		vecNetwInBufSizes[i] = AudioCompressionIn.Init (
@@ -241,14 +241,14 @@ CChannel::CChannel()
 	/* init time stamp index counter */
 	byTimeStampIdxCnt = 0;
 
-	iCurNetwInBlSiFact = NET_BLOCK_SIZE_FACTOR;
+	iCurNetwInBlSiFact = DEF_NET_BLOCK_SIZE_FACTOR;
 
 	/* init the socket buffer */
 	SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
 	// set initial input and output block size factors
-	SetNetwBufSizeFactOut ( NET_BLOCK_SIZE_FACTOR );
-	SetNetwInBlSiFact ( NET_BLOCK_SIZE_FACTOR );
+	SetNetwBufSizeFactOut ( iCurNetwInBlSiFact );
+	SetNetwInBlSiFact ( iCurNetwInBlSiFact );
 
 	/* init time-out for the buffer with zero -> no connection */
 	iConTimeOut = 0;
@@ -373,7 +373,7 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
 	bool			bIsAudioPacket = false;
 
 	// check if this is an audio packet by checking all possible lengths
-	for ( int i = 0; i < NET_BLOCK_SIZE_FACTOR_MAX; i++ )
+	for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
 	{
 		if ( iNumBytes == vecNetwInBufSizes[i] )
 		{

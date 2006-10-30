@@ -26,7 +26,7 @@
 
 
 /* Implementation *************************************************************/
-CServer::CServer () : Socket ( &ChannelSet, this )
+CServer::CServer() : Socket ( &ChannelSet, this )
 {
 	vecsSendData.Init ( MIN_BLOCK_SIZE_SAMPLES );
 
@@ -34,8 +34,8 @@ CServer::CServer () : Socket ( &ChannelSet, this )
 	RespTimeMoAvBuf.Init ( LEN_MOV_AV_RESPONSE );
 
 	/* connect timer timeout signal */
-	QObject::connect ( &Timer, SIGNAL ( timeout () ),
-		this, SLOT ( OnTimer () ) );
+	QObject::connect ( &Timer, SIGNAL ( timeout() ),
+		this, SLOT ( OnTimer() ) );
 
 	// connection for protocol
 	QObject::connect ( &ChannelSet,
@@ -45,7 +45,7 @@ CServer::CServer () : Socket ( &ChannelSet, this )
 #ifdef _WIN32
 	// event handling of custom events seems not to work under Windows in this
 	// class, do not use automatic start/stop of server in Windows version
-	Start ();
+	Start();
 #endif
 }
 
@@ -53,7 +53,7 @@ void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 {
 
 // convert unsigned uint8_t in char, TODO convert all buffers in uint8_t
-CVector<unsigned char> vecbyDataConv ( vecMessage.Size () );
+CVector<unsigned char> vecbyDataConv ( vecMessage.Size() );
 for ( int i = 0; i < vecMessage.Size (); i++ ) {
 	vecbyDataConv[i] = static_cast<unsigned char> ( vecMessage[i] );
 }
@@ -63,27 +63,27 @@ for ( int i = 0; i < vecMessage.Size (); i++ ) {
 	Socket.SendPacket ( vecbyDataConv, ChannelSet.GetAddress ( iChID ) );
 }
 
-void CServer::Start ()
+void CServer::Start()
 {
-	if ( !IsRunning () )
+	if ( !IsRunning() )
 	{
 		/* start main timer */
 		Timer.start ( MIN_BLOCK_DURATION_MS );
 
 		/* init time for response time evaluation */
-		TimeLastBlock = QTime::currentTime ();
+		TimeLastBlock = QTime::currentTime();
 	}
 }
 
-void CServer::Stop ()
+void CServer::Stop()
 {
 	/* stop main timer */
-	Timer.stop ();
+	Timer.stop();
 
 	qDebug ( CLogTimeDate::toString() + "Server stopped" );
 }
 
-void CServer::OnTimer ()
+void CServer::OnTimer()
 {
 	CVector<int>				vecChanID;
 	CVector<CVector<double> >	vecvecdData ( MIN_BLOCK_SIZE_SAMPLES );
@@ -129,7 +129,7 @@ void CServer::OnTimer ()
 #ifndef _WIN32
 		// event handling of custom events seems not to work under Windows in this
 		// class, do not use automatic start/stop of server in Windows version
-		Stop ();
+		Stop();
 #endif
 	}
 }
@@ -139,7 +139,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData )
 	CVector<short> vecsOutData;
 	vecsOutData.Init ( MIN_BLOCK_SIZE_SAMPLES );
 
-	const int iNumClients = vecvecdData.Size ();
+	const int iNumClients = vecvecdData.Size();
 
 	/* we normalize with sqrt() of N to avoid that the level drops too much
 	   in case that a new client connects */
@@ -168,11 +168,11 @@ bool CServer::GetTimingStdDev ( double& dCurTiStdDev )
 
 	/* only return value if server is active and the actual measurement is
 	   updated */
-	if ( IsRunning () )
+	if ( IsRunning() )
 	{
 		/* we want to return the standard deviation, for that we need to calculate
 		   the sqaure root */
-		dCurTiStdDev = sqrt ( RespTimeMoAvBuf.GetAverage () );
+		dCurTiStdDev = sqrt ( RespTimeMoAvBuf.GetAverage() );
 
 		return true;
 	}
@@ -182,19 +182,19 @@ bool CServer::GetTimingStdDev ( double& dCurTiStdDev )
 	}
 }
 
-void CServer::customEvent(QCustomEvent* Event)
+void CServer::customEvent ( QCustomEvent* Event )
 {
-	if (Event->type() == QEvent::User + 11)
+	if ( Event->type() == QEvent::User + 11 )
 	{
-		const int iMessType = ((CLlconEvent*) Event)->iMessType;
+		const int iMessType = ( ( CLlconEvent* ) Event )->iMessType;
 
-		switch(iMessType)
+		switch ( iMessType )
 		{
 		case MS_PACKET_RECEIVED:
 			// wake up the server if a packet was received
 			// if the server is still running, the call to Start() will have
 			// no effect
-			Start ();
+			Start();
 			break;
 		}
 	}

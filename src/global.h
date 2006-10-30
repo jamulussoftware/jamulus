@@ -63,12 +63,11 @@
 #define MIN_BLOCK_SIZE_SAMPLES			( MIN_BLOCK_DURATION_MS * SAMPLE_RATE / 1000 )
 #define MIN_SND_CRD_BLOCK_SIZE_SAMPLES	( MIN_BLOCK_DURATION_MS * SND_CRD_SAMPLE_RATE / 1000 )
 
-/* first tests showed that with 24000 kHz a block time shorter than 5 ms leads to
-   much higher DSL network latencies. A length of 6 ms seems to be optimal */
-#define NET_BLOCK_SIZE_FACTOR			3 // 3 * 2 ms = 6 ms
-
 // maximum value of factor for network block size
-#define NET_BLOCK_SIZE_FACTOR_MAX		8
+#define MAX_NET_BLOCK_SIZE_FACTOR		8
+
+/* default network block size factor */
+#define DEF_NET_BLOCK_SIZE_FACTOR		3
 
 /* maximum network buffer size (which can be chosen by slider) */
 #define MAX_NET_BUF_SIZE_NUM_BL			10 /* number of blocks */

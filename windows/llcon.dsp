@@ -129,6 +129,10 @@ SOURCE=.\moc\moc_clientsettingsdlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\moc\moc_clientsettingsdlgbase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\moc\moc_llconclientdlg.cpp
 # End Source File
 # Begin Source File

@@ -36,6 +36,7 @@
 #include "global.h"
 #include "client.h"
 #include "multicolorled.h"
+#include "clientsettingsdlg.h"
 #ifdef _WIN32
 # include "../windows/moc/llconclientdlgbase.h"
 #else
@@ -72,26 +73,25 @@ public:
 	virtual ~CLlconClientDlg ();
 
 protected:
-	CClient*		pClient;
-	bool			bConnected;
-	QTimer			TimerSigMet;
-	QTimer			TimerStatus;
+	CClient*			pClient;
+	bool				bConnected;
+	QTimer				TimerSigMet;
+	QTimer				TimerStatus;
 
-	virtual void	customEvent ( QCustomEvent* Event );
-	virtual void	closeEvent ( QCloseEvent * Event );
-	void			UpdateDisplay();
+	virtual void		customEvent ( QCustomEvent* Event );
+	virtual void		closeEvent ( QCloseEvent * Event );
+	void				UpdateDisplay();
 
-	QMenuBar*		pMenu;
+	QPopupMenu*			pSettingsMenu;
+	QMenuBar*			pMenu;
+
+	CClientSettingsDlg	ClientSettingsDlg;
 
 public slots:
 	void OnConnectDisconBut();
 	void OnTimerSigMet();
 	void OnTimerStatus() { UpdateDisplay(); }
-	void OnSliderSndBufInChange ( int value );
-	void OnSliderSndBufOutChange ( int value );
-	void OnSliderNetBuf ( int value );
-	void OnSliderNetBufSiFactIn ( int value );
-	void OnSliderNetBufSiFactOut ( int value );
+	void OnOpenGeneralSettings();
 	void OnSliderAudInFader ( int value ) { pClient->SetAudioInFader(value); }
 	void OnSliderAudReverb ( int value )
 		{ pClient->SetReverbLevel ( AUD_REVERB_MAX - value ); }

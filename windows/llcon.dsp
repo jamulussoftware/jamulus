@@ -101,6 +101,10 @@ SOURCE=.\moc\aboutdlgbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\moc\clientsettingsdlgbase.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\moc\llconclientdlgbase.cpp
 # End Source File
 # Begin Source File
@@ -118,6 +122,10 @@ SOURCE=.\moc\moc_channel.cpp
 # Begin Source File
 
 SOURCE=.\moc\moc_client.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\moc\moc_clientsettingsdlg.cpp
 # End Source File
 # Begin Source File
 
@@ -171,6 +179,10 @@ SOURCE=..\src\channel.cpp
 # Begin Source File
 
 SOURCE=..\src\client.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\clientsettingsdlg.cpp
 # End Source File
 # Begin Source File
 
@@ -235,6 +247,10 @@ SOURCE=..\src\channel.h
 # Begin Source File
 
 SOURCE=..\src\client.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\clientsettingsdlg.h
 # End Source File
 # Begin Source File
 

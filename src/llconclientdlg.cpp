@@ -28,7 +28,8 @@
 /* Implementation *************************************************************/
 CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	const char* name, bool modal, WFlags f) : pClient ( pNCliP ),
-	CLlconClientDlgBase ( parent, name, modal, f )
+	CLlconClientDlgBase ( parent, name, modal, f ),
+	ClientSettingsDlg ( pNCliP, 0, 0, FALSE, Qt::WStyle_MinMax )
 {
 	/* add help text to controls */
 	QString strInpLevH = tr("<b>Input level meter:</b> Shows the level of the "
@@ -69,9 +70,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	/* init connection button text */
 	PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
 
-	/* Init timing jitter text label */
-	TextLabelStdDevTimer->setText ( "" );
-
 	/* init input level meter bars */
 	ProgressBarInputLevelL->setTotalSteps ( NUM_STEPS_INP_LEV_METER );
 	ProgressBarInputLevelL->setProgress ( 0 );
@@ -80,40 +78,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
 
 	/* init slider controls --- */
-	/* sound buffer in */
-	SliderSndBufIn->setRange(2, AUD_SLIDER_LENGTH);
-	const int iCurNumInBuf = pClient->GetSndInterface()->GetInNumBuf();
-	SliderSndBufIn->setValue(iCurNumInBuf);
-	TextSndBufIn->setText("In: " + QString().setNum(iCurNumInBuf));
-
-	/* sound buffer out */
-	SliderSndBufOut->setRange(2, AUD_SLIDER_LENGTH);
-	const int iCurNumOutBuf = pClient->GetSndInterface()->GetOutNumBuf();
-	SliderSndBufOut->setValue(iCurNumOutBuf);
-	TextSndBufOut->setText("Out: " + QString().setNum(iCurNumOutBuf));
-
-	/* network buffer */
-	SliderNetBuf->setRange(0, MAX_NET_BUF_SIZE_NUM_BL);
-	const int iCurNumNetBuf = pClient->GetSockBufSize();
-	SliderNetBuf->setValue(iCurNumNetBuf);
-	TextNetBuf->setText("Size: " + QString().setNum(iCurNumNetBuf));
-
-	/* network buffer size factor in */
-	SliderNetBufSiFactIn->setRange(1, MAX_NET_BLOCK_SIZE_FACTOR);
-	const int iCurNetBufSiFactIn = pClient->GetNetwBufSizeFactIn();
-	SliderNetBufSiFactIn->setValue(iCurNetBufSiFactIn);
-	TextNetBufSiFactIn->setText("In:\n" + QString().setNum(
-		double(iCurNetBufSiFactIn * MIN_BLOCK_DURATION_MS), 'f', 2) +
-		" ms");
-
-	/* network buffer size factor out */
-	SliderNetBufSiFactOut->setRange(1, MAX_NET_BLOCK_SIZE_FACTOR);
-	const int iCurNetBufSiFactOut = pClient->GetNetwBufSizeFactOut();
-	SliderNetBufSiFactOut->setValue(iCurNetBufSiFactOut);
-	TextNetBufSiFactOut->setText("Out:\n" + QString().setNum(
-		double(iCurNetBufSiFactOut * MIN_BLOCK_DURATION_MS), 'f', 2) +
-		" ms");
-
 	/* audio in fader */
 	SliderAudInFader->setRange(0, AUD_FADER_IN_MAX);
 	const int iCurAudInFader = pClient->GetAudioInFader();
@@ -134,15 +98,24 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	else
 		RadioButtonRevSelR->setChecked(true);
 
+	/* Settings menu  ------------------------------------------------------- */
+	pSettingsMenu = new QPopupMenu ( this );
+	CHECK_PTR ( pSettingsMenu );
+
+	pSettingsMenu->insertItem ( tr ( "&General Settings..." ), this,
+		SLOT ( OnOpenGeneralSettings() ) );
+
 
 	/* Main menu bar -------------------------------------------------------- */
-	pMenu = new QMenuBar(this);
-	CHECK_PTR(pMenu);
-	pMenu->insertItem(tr("&?"), new CLlconHelpMenu(this));
-	pMenu->setSeparator(QMenuBar::InWindowsStyle);
+	pMenu = new QMenuBar ( this );
+	CHECK_PTR ( pMenu );
+
+	pMenu->insertItem ( tr ( "&Settings" ), pSettingsMenu );
+	pMenu->insertItem ( tr ( "&?"), new CLlconHelpMenu ( this ) );
+	pMenu->setSeparator ( QMenuBar::InWindowsStyle );
 
 	/* Now tell the layout about the menu */
-	CLlconClientDlgBaseLayout->setMenuBar(pMenu);
+	CLlconClientDlgBaseLayout->setMenuBar ( pMenu );
 
 
 	/* connections ---------------------------------------------------------- */
@@ -157,19 +130,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 		this, SLOT(OnTimerStatus()));
 
 	/* sliders */
-	QObject::connect(SliderSndBufIn, SIGNAL(valueChanged(int)),
-		this, SLOT(OnSliderSndBufInChange(int)));
-	QObject::connect(SliderSndBufOut, SIGNAL(valueChanged(int)),
-		this, SLOT(OnSliderSndBufOutChange(int)));
-
-	QObject::connect(SliderNetBuf, SIGNAL(valueChanged(int)),
-		this, SLOT(OnSliderNetBuf(int)));
-
-	QObject::connect(SliderNetBufSiFactIn, SIGNAL(valueChanged(int)),
-		this, SLOT(OnSliderNetBufSiFactIn(int)));
-	QObject::connect(SliderNetBufSiFactOut, SIGNAL(valueChanged(int)),
-		this, SLOT(OnSliderNetBufSiFactOut(int)));
-
 	QObject::connect(SliderAudInFader, SIGNAL(valueChanged(int)),
 		this, SLOT(OnSliderAudInFader(int)));
 	QObject::connect(SliderAudReverb, SIGNAL(valueChanged(int)),
@@ -248,43 +208,10 @@ void CLlconClientDlg::OnConnectDisconBut ()
 	}
 }
 
-void CLlconClientDlg::OnSliderSndBufInChange(int value)
+void CLlconClientDlg::OnOpenGeneralSettings()
 {
-	pClient->GetSndInterface()->SetInNumBuf(value);
-	TextSndBufIn->setText("In: " + QString().setNum(value));
-	UpdateDisplay();
-}
-
-void CLlconClientDlg::OnSliderSndBufOutChange(int value)
-{
-	pClient->GetSndInterface()->SetOutNumBuf(value);
-	TextSndBufOut->setText("Out: " + QString().setNum(value));
-	UpdateDisplay();
-}
-
-void CLlconClientDlg::OnSliderNetBuf(int value)
-{
-	pClient->SetSockBufSize ( value );
-	TextNetBuf->setText("Size: " + QString().setNum(value));
-	UpdateDisplay();
-}
-
-void CLlconClientDlg::OnSliderNetBufSiFactIn(int value)
-{
-	pClient->SetNetwBufSizeFactIn ( value );
-	TextNetBufSiFactIn->setText("In:\n" + QString().setNum(
-		double(value * MIN_BLOCK_DURATION_MS), 'f', 2) +
-		" ms");
-	UpdateDisplay();
-}
-
-void CLlconClientDlg::OnSliderNetBufSiFactOut(int value)
-{
-	pClient->SetNetwBufSizeFactOut ( value );
-	TextNetBufSiFactOut->setText("Out:\n" + QString().setNum(
-		double(value * MIN_BLOCK_DURATION_MS), 'f', 2) +
-		" ms");
-	UpdateDisplay();
+	// open general settings dialog
+	ClientSettingsDlg.show();
 }
 
 void CLlconClientDlg::OnTimerSigMet ()
@@ -331,43 +258,32 @@ void CLlconClientDlg::UpdateDisplay()
 	{
 		TextLabelStatus->setText ( tr ( "disconnected" ) );
 	}
-
-	/* response time */
-	TextLabelStdDevTimer->setText(QString().
-		setNum(pClient->GetTimingStdDev(), 'f', 2) + " ms");
 }
 
-void CLlconClientDlg::customEvent(QCustomEvent* Event)
+void CLlconClientDlg::customEvent ( QCustomEvent* Event )
 {
-	if (Event->type() == QEvent::User + 11)
+	if ( Event->type() == QEvent::User + 11 )
 	{
-		const int iMessType = ((CLlconEvent*) Event)->iMessType;
-		const int iStatus = ((CLlconEvent*) Event)->iStatus;
+		const int iMessType = ( (CLlconEvent*) Event ) ->iMessType;
+		const int iStatus = ( (CLlconEvent*) Event ) ->iStatus;
 
-		switch(iMessType)
+		switch ( iMessType )
 		{
 		case MS_SOUND_IN:
-			CLEDSoundIn->SetLight(iStatus);
-			break;
-
 		case MS_SOUND_OUT:
-			CLEDSoundOut->SetLight(iStatus);
-			break;
-
 		case MS_JIT_BUF_PUT:
-			CLEDNetwPut->SetLight(iStatus);
-			break;
-
 		case MS_JIT_BUF_GET:
-			CLEDNetwGet->SetLight(iStatus);
+
+			// show overall status -> if any LED goes red, this LED will go red
+			CLEDOverallStatus->SetLight ( iStatus );
 			break;
 
 		case MS_RESET_ALL:
-			CLEDSoundIn->Reset();
-			CLEDSoundOut->Reset();
-			CLEDNetwPut->Reset();
-			CLEDNetwGet->Reset();
+			CLEDOverallStatus->Reset();
 			break;
 		}
+
+		// update general settings dialog, too
+		ClientSettingsDlg.SetStatus ( iMessType, iStatus );
 	}
 }

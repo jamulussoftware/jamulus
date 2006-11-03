@@ -29,6 +29,7 @@ rem .h --------------
 %qtdir%\bin\moc.exe ..\src\util.h -o moc\moc_util.cpp
 %qtdir%\bin\moc.exe ..\src\multicolorled.h -o moc\moc_multicolorled.cpp
 %qtdir%\bin\moc.exe ..\src\llconclientdlg.h -o moc\moc_llconclientdlg.cpp
+%qtdir%\bin\moc.exe ..\src\clientsettingsdlg.h -o moc\moc_clientsettingsdlg.cpp
 %qtdir%\bin\moc.exe ..\src\llconserverdlg.h -o moc\moc_llconserverdlg.cpp
 %qtdir%\bin\moc.exe ..\src\server.h -o moc\moc_server.cpp
 %qtdir%\bin\moc.exe ..\src\client.h -o moc\moc_client.cpp
@@ -45,6 +46,10 @@ rem .ui -------------
 %qtdir%\bin\uic.exe ..\src\llconclientdlgbase.ui -o moc\llconclientdlgbase.h  
 %qtdir%\bin\uic.exe ..\src\llconclientdlgbase.ui -i llconclientdlgbase.h -o moc\llconclientdlgbase.cpp  
 %qtdir%\bin\moc.exe moc\llconclientdlgbase.h -o moc\moc_llconclientdlgbase.cpp
+
+%qtdir%\bin\uic.exe ..\src\clientsettingsdlgbase.ui -o moc\clientsettingsdlgbase.h  
+%qtdir%\bin\uic.exe ..\src\clientsettingsdlgbase.ui -i clientsettingsdlgbase.h -o moc\clientsettingsdlgbase.cpp  
+%qtdir%\bin\moc.exe moc\clientsettingsdlgbase.h -o moc\moc_clientsettingsdlgbase.cpp
 
 %qtdir%\bin\uic.exe ..\src\llconserverdlgbase.ui -o moc\llconserverdlgbase.h  
 %qtdir%\bin\uic.exe ..\src\llconserverdlgbase.ui -i llconserverdlgbase.h -o moc\llconserverdlgbase.cpp  

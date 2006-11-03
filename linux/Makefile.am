@@ -9,6 +9,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/channel.cpp \
 	../src/util.cpp \
 	../src/llconclientdlg.cpp \
+	../src/clientsettingsdlg.cpp \
 	../src/client.cpp \
 	../src/llconserverdlg.cpp \
 	../src/server.cpp \
@@ -31,6 +32,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/multicolorled.h \
 	../src/llconserverdlg.h \
 	../src/llconclientdlg.h \
+	../src/clientsettingsdlg.h \
 	../src/llconclientdlgbase.ui \
 	../src/llconserverdlgbase.ui \
 	../src/aboutdlgbase.ui \
@@ -46,6 +48,7 @@ BUILT_SOURCES=moc/moc_server.cpp \
 	moc/moc_multicolorled.cpp \
 	moc/moc_util.cpp \
 	moc/moc_llconclientdlg.cpp moc/moc_llconclientdlgbase.cpp moc/llconclientdlgbase.h moc/llconclientdlgbase.cpp \
+	moc/moc_clientsettingsdlg.cpp moc/moc_clientsettingsdlgbase.cpp moc/clientsettingsdlgbase.h moc/clientsettingsdlgbase.cpp \
 	moc/moc_llconserverdlg.cpp moc/moc_llconserverdlgbase.cpp moc/llconserverdlgbase.h moc/llconserverdlgbase.cpp \
 	moc/moc_aboutdlgbase.cpp moc/aboutdlgbase.h moc/aboutdlgbase.cpp
 
@@ -101,7 +104,20 @@ moc/llconclientdlgbase.h: ../src/llconclientdlgbase.ui
 moc/llconclientdlgbase.cpp: ../src/llconclientdlgbase.ui moc/llconclientdlgbase.h
 	$(UIC) ../src/llconclientdlgbase.ui -i moc/llconclientdlgbase.h -o moc/llconclientdlgbase.cpp	
 
+
+moc/moc_clientsettingsdlg.cpp: ../src/clientsettingsdlg.h
+	$(MOC) ../src/clientsettingsdlg.h -o moc/moc_clientsettingsdlg.cpp
+
+moc/moc_clientsettingsdlgbase.cpp: moc/clientsettingsdlgbase.h
+	$(MOC) moc/clientsettingsdlgbase.h -o moc/moc_clientsettingsdlgbase.cpp
 	
+moc/clientsettingsdlgbase.h: ../src/clientsettingsdlgbase.ui
+	$(UIC) ../src/clientsettingsdlgbase.ui -o moc/clientsettingsdlgbase.h
+	
+moc/clientsettingsdlgbase.cpp: ../src/clientsettingsdlgbase.ui moc/clientsettingsdlgbase.h
+	$(UIC) ../src/clientsettingsdlgbase.ui -i moc/clientsettingsdlgbase.h -o moc/clientsettingsdlgbase.cpp	
+
+
 moc/moc_llconserverdlg.cpp: ../src/llconserverdlg.h
 	$(MOC) ../src/llconserverdlg.h -o moc/moc_llconserverdlg.cpp
 	

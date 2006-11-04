@@ -112,6 +112,11 @@ public:
 		}
 	}
 
+	void CreateConClientListMes ( const CVector<uint32_t>& veciIpAddrs,
+								  const CVector<std::string>& vecstrNames )
+	{ 
+		Protocol.CreateConClientListMes ( veciIpAddrs, vecstrNames );
+	}
 
 protected:
 	void SetNetwInBlSiFact ( const int iNewBlockSizeFactor );
@@ -134,8 +139,9 @@ protected:
 	// channel name
 	std::string			sName;
 
-	// mixer and effect settings
-	double				dGain;
+// TODO we need mixer and effect settings for all the other channels, too!!!
+// mixer and effect settings
+double				dGain;
 
 	// network jitter-buffer
 	CNetBuf				SockBuf;
@@ -206,6 +212,8 @@ public:
 		{ return vecChannels[iChanNum].GetAddress(); }
 
 protected:
+	void CreateAndSendChanListForAllConClients();
+
 	/* do not use the vector class since CChannel does not have appropriate
 	   copy constructor/operator */
 	CChannel	vecChannels[MAX_NUM_CHANNELS];

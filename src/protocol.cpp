@@ -229,17 +229,18 @@ bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
 /*
 	return code: true -> ok; false -> error
 */
-	bool				bRet;
-	int					iRecCounter, iRecID, iData;
+	bool				bRet, bSendNextMess;
+	int					iRecCounter, iRecID, iData, iDataLen, iStringLen, iCurID;
 	unsigned int		iPos;
 	CVector<uint8_t>	vecData;
-	bool				bSendNextMess;
+	std::string			strCurString;
+	double				dNewGain;
 
 
 // convert unsigned char in uint8_t, TODO convert all buffers in uint8_t
 CVector<uint8_t> vecbyDataConv ( iNumBytes );
 for ( int i = 0; i < iNumBytes; i++ ) {
-vecbyDataConv[i] = static_cast<uint8_t> ( vecbyData[i] );
+	vecbyDataConv[i] = static_cast<uint8_t> ( vecbyData[i] );
 }
 
 
@@ -328,6 +329,65 @@ vecbyDataConv[i] = static_cast<uint8_t> ( vecbyData[i] );
 
 				// invoke message action
 				emit ChangeNetwBlSiFact ( iData );
+
+				// send acknowledge message
+				CreateAndSendAcknMess ( iRecID, iRecCounter );
+
+				break;
+
+			case PROTMESSID_CHANNEL_GAIN:
+
+				// extract data from stream and emit signal for received value
+				iPos = 0;
+
+				// channel ID
+				iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+				// actual gain, we convert from integer to double with range 0..1
+				iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+				dNewGain = (double) iData / ( 1 << 16 );
+
+				// invoke message action
+				emit ChangeChanGain ( iCurID, dNewGain );
+
+				// send acknowledge message
+				CreateAndSendAcknMess ( iRecID, iRecCounter );
+
+				break;
+
+			case PROTMESSID_CONN_CLIENTS_LIST:
+
+				// extract data from stream and emit signal for received value
+				iPos = 0;
+				iDataLen = vecData.Size();
+
+				while ( iPos < iDataLen )
+				{
+
+					// IP address (4 bytes)
+					iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+// TODO do something with the received IP address "iData"
+
+// TEST
+QHostAddress addrTest ( iData );
+printf ( "%s ", addrTest.toString().latin1() );
+
+					// number of bytes for name string (2 bytes)
+					iStringLen = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+					// name string (n bytes)
+					strCurString = "";
+					for ( int j = 0; j < iStringLen; j++ )
+					{
+						// byte-by-byte copying of the string data
+						iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+						strCurString += std::string ( (char*) &iData );
+					}
+
+// TODO do something with the received name string "strCurString"
+
+				}
 
 				// send acknowledge message
 				CreateAndSendAcknMess ( iRecID, iRecCounter );

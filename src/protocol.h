@@ -146,6 +146,7 @@ signals:
 	// receiving
 	void ChangeJittBufSize ( int iNewJitBufSize );
 	void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
+	void ChangeChanGain ( int iChanID, double dNewGain );
 	void ReqJittBufSize();
 };
 

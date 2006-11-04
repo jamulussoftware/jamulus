@@ -56,6 +56,38 @@ CChannelSet::CChannelSet()
 //	QObject::connect(&vecChannels[9],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh9()));
 }
 
+void CChannelSet::CreateAndSendChanListForAllConClients()
+{
+	int i;
+	CVector<uint32_t>		veciIpAddrs ( 0 );
+	CVector<std::string>	vecstrNames ( 0 );
+
+	// the channel ID is defined as the order of the channels in the channel
+	// set where we do not care about not-connected channels
+	int iCurChanID = 0;
+
+	// look for free channels
+	for ( i = 0; i < MAX_NUM_CHANNELS; i++ )
+	{
+		if ( vecChannels[i].IsConnected() )
+		{
+			// append IP address and channel name to storing vectors
+			veciIpAddrs.Add ( vecChannels[i].GetAddress().InetAddr.ip4Addr() );
+			vecstrNames.Add ( vecChannels[i].GetName() );
+		}
+	}
+
+	// now send connected channels list to all connected clients
+	for ( i = 0; i < MAX_NUM_CHANNELS; i++ )
+	{
+		if ( vecChannels[i].IsConnected() )
+		{
+			// send message
+			vecChannels[i].CreateConClientListMes ( veciIpAddrs, vecstrNames );
+		}
+	}
+}
+
 int CChannelSet::GetFreeChan()
 {
 	/* look for a free channel */
@@ -97,6 +129,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 							const CHostAddress& HostAdr )
 {
 	bool bRet = false;
+	bool bCreateChanList = false;
 
 	Mutex.lock();
 	{
@@ -114,6 +147,12 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 			if ( iCurChanID != INVALID_CHANNEL_ID )
 			{
 				vecChannels[iCurChanID].SetAddress ( HostAdr );
+
+				// a new client connected to the server, set flag to create and
+				// send all clients the updated channel list, we cannot create
+				// the message here since the received data has to be put to the
+				// channel first so that this channel is marked as connected
+				bCreateChanList = true;
 			}
 			else
 			{
@@ -144,7 +183,15 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 				break;
 			}
 		}
-	}
+
+
+		// after data is put in channel buffer, create channel list message if
+		// requested
+		if ( bCreateChanList )
+		{
+			CreateAndSendChanListForAllConClients();
+		}
+ 	}
 	Mutex.unlock();
 
 	return bRet;

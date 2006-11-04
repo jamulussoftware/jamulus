@@ -97,6 +97,9 @@ void CServer::OnTimer()
 	   one client is connected */
 	if ( iNumClients != 0 )
 	{
+
+// TODO generate a sparate mix for each channel
+
 		/* actual processing of audio data -> mix */
 		vecsSendData = ProcessData ( vecvecdData, vecdGains );
 

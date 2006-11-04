@@ -87,17 +87,18 @@ void CServer::OnTimer()
 {
 	CVector<int>				vecChanID;
 	CVector<CVector<double> >	vecvecdData ( MIN_BLOCK_SIZE_SAMPLES );
+	CVector<double>				vecdGains;
 
 	/* get data from all connected clients */
-	ChannelSet.GetBlockAllConC ( vecChanID, vecvecdData );
-	const int iNumClients = vecvecdData.Size ();
+	ChannelSet.GetBlockAllConC ( vecChanID, vecvecdData, vecdGains );
+	const int iNumClients = vecChanID.Size();
 
 	/* Check if at least one client is connected. If not, stop server until
 	   one client is connected */
 	if ( iNumClients != 0 )
 	{
 		/* actual processing of audio data -> mix */
-		vecsSendData = ProcessData ( vecvecdData );
+		vecsSendData = ProcessData ( vecvecdData, vecdGains );
 
 		/* send the same data to all connected clients */
 		for ( int i = 0; i < iNumClients; i++ )
@@ -134,7 +135,8 @@ void CServer::OnTimer()
 	}
 }
 
-CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData )
+CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
+									  CVector<double>& vecdGains )
 {
 	CVector<short> vecsOutData;
 	vecsOutData.Init ( MIN_BLOCK_SIZE_SAMPLES );
@@ -152,7 +154,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData )
 
 		for ( int j = 0; j < iNumClients; j++ )
 		{
-			dMixedData += vecvecdData[j][i];
+			dMixedData += vecvecdData[j][i] * vecdGains[j];
 		}
 
 		/* normalization and truncating to short */

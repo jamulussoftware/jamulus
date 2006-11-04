@@ -62,7 +62,9 @@ public:
 	CChannelSet* GetChannelSet () { return &ChannelSet; }
 
 protected:
-	CVector<short>	ProcessData ( CVector<CVector<double> >& vecvecdData );
+	CVector<short>	ProcessData ( CVector<CVector<double> >& vecvecdData,
+								  CVector<double>& vecdGains );
+
 	virtual void	customEvent ( QCustomEvent* Event );
 
 	QTimer				Timer;

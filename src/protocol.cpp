@@ -49,13 +49,22 @@ MESSAGES
 
 	note: does not have any data -> n = 0
 
-- network buffer block size factor            PROTMESSID_NET_BLSI_FACTOR
+- Network buffer block size factor            PROTMESSID_NET_BLSI_FACTOR
 
 	note: size, relative to minimum block size
 
 	+----------------+
 	| 2 bytes factor |
 	+----------------+
+
+- Gain of channel							  PROTMESSID_CHANNEL_GAIN
+
+    for each connected client append following data:
+
+	+--------------------+--------------+
+	| 2 bytes channel ID | 2 bytes gain |
+	+--------------------+--------------+
+
 
 - IP number and name of connected clients     PROTMESSID_CONN_CLIENTS_LIST
 
@@ -370,13 +379,62 @@ void CProtocol::CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
 	CreateAndSendMessage ( PROTMESSID_NET_BLSI_FACTOR, vecData );
 }
 
-//void CProtocol::CreateConClientListMes ( const )
-//{
-// TODO
-//PROTMESSID_CONN_CLIENTS_LIST
+void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
+{
+	CVector<uint8_t>	vecData ( 4 ); // 4 bytes of data
+	unsigned int		iPos = 0; // init position pointer
 
+	// build data vector
+	// channel ID
+	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 2 );
 
-//}
+	// actual gain, we convert from double with range 0..1 to integer
+	const int iCurGain = (int) ( dGain * ( 1 << 16 ) );
+	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iCurGain ), 2 );
+
+	CreateAndSendMessage ( PROTMESSID_CHANNEL_GAIN, vecData );
+}
+
+void CProtocol::CreateConClientListMes ( const CVector<uint32_t>& veciIpAddrs,
+										 const CVector<std::string>& vecstrNames )
+{
+	const int iNumClients = veciIpAddrs.Size();
+
+	// build data vector
+	CVector<uint8_t>	vecData ( 0 );
+	unsigned int		iPos = 0; // init position pointer
+
+	for ( int i = 0; i < iNumClients; i++ )
+	{
+		// current string size
+		const int iCurStrLen = vecstrNames[i].size();
+
+		// size of current list entry
+		const int iCurListEntrLen =
+			4 /* IP addr. */ + 2 /* str. size */ + iCurStrLen;
+
+		// make space for new data
+		vecData.Enlarge ( iCurListEntrLen );
+
+		// IP address (4 bytes)
+		PutValOnStream ( vecData, iPos,
+			static_cast<uint32_t> ( veciIpAddrs[i] ), 4 );
+
+		// number of bytes for name string (2 bytes)
+		PutValOnStream ( vecData, iPos,
+			static_cast<uint32_t> ( iCurStrLen ), 2 );
+
+		// name string (n bytes)
+		for ( int j = 0; j < iCurStrLen; j++ )
+		{
+			// byte-by-byte copying of the string data
+			PutValOnStream ( vecData, iPos,
+				static_cast<uint32_t> ( vecstrNames[i][j] ), 1 );
+		}
+	}
+
+	CreateAndSendMessage ( PROTMESSID_CONN_CLIENTS_LIST, vecData );
+}
 
 
 /******************************************************************************\

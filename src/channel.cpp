@@ -151,13 +151,15 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 }
 
 void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
-								    CVector<CVector<double> >& vecvecdData )
+								    CVector<CVector<double> >& vecvecdData,
+									CVector<double>& vecdGains )
 {
 	/* init temporal data vector and clear input buffers */
 	CVector<double>	vecdData ( MIN_BLOCK_SIZE_SAMPLES );
 
 	vecChanID.Init ( 0 );
 	vecvecdData.Init ( 0 );
+	vecdGains.Init ( 0 );
 
 	/* make put and get calls thread safe. Do not forget to unlock mutex
 	   afterwards! */
@@ -172,8 +174,9 @@ void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
 
 			if ( vecChannels[i].IsConnected() )
 			{
-				/* add ID and data */
+				/* add ID, gain and data */
 				vecChanID.Add ( i );
+				vecdGains.Add ( vecChannels[i].GetGain() );
 
 				const int iOldSize = vecvecdData.Size();
 				vecvecdData.Enlarge ( 1 );
@@ -226,7 +229,7 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 /******************************************************************************\
 * CChannel                                                                     *
 \******************************************************************************/
-CChannel::CChannel() : sName ( "" )
+CChannel::CChannel() : sName ( "" ), dGain ( (double) 1.0 )
 {
 	// query all possible network in buffer sizes for determining if an
 	// audio packet was received
@@ -237,9 +240,6 @@ CChannel::CChannel() : sName ( "" )
 			( i + 1 ) * MIN_BLOCK_SIZE_SAMPLES,
 			CAudioCompression::CT_IMAADPCM );
 	}
-
-	/* init time stamp index counter */
-	byTimeStampIdxCnt = 0;
 
 	iCurNetwInBlSiFact = DEF_NET_BLOCK_SIZE_FACTOR;
 

@@ -83,6 +83,9 @@ public:
 	void SetName ( const std::string sNNa ) { sName = sNNa; }
 	std::string GetName() { return sName; }
 
+	void SetGain ( const double dNG ) { dGain = dNG; }
+	double GetGain() { return dGain; }
+
 	void SetSockBufSize ( const int iNumBlocks );
 	int GetSockBufSize() { return iCurSockBufSize; }
 
@@ -131,6 +134,9 @@ protected:
 	// channel name
 	std::string			sName;
 
+	// mixer and effect settings
+	double				dGain;
+
 	// network jitter-buffer
 	CNetBuf				SockBuf;
 	int					iCurSockBufSize;
@@ -140,10 +146,6 @@ protected:
 
 	// network protocol
 	CProtocol			Protocol;
-
-	// time stamp index counter
-	Q_UINT8				byTimeStampIdxCnt;
-	int					iTimeStampActCnt;
 
 	int					iConTimeOut;
 	int					iConTimeOutStartVal;
@@ -184,7 +186,8 @@ public:
 	int	CheckAddr ( const CHostAddress& Addr );
 
 	void GetBlockAllConC ( CVector<int>& vecChanID,
-						   CVector<CVector<double> >& vecvecdData );
+						   CVector<CVector<double> >& vecvecdData,
+						   CVector<double>& vecdGains );
 
 	void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 						  CVector<int>& veciJitBufSize,

@@ -43,10 +43,13 @@
 
 
 /* Definitions ****************************************************************/
-/* audio in fader range */
+// audio in fader range
 #define AUD_FADER_IN_MAX			100
 
-/* audio reverberation range */
+// audio mixer fader range
+#define AUD_MIX_FADER_MAX			100
+
+// audio reverberation range
 #define AUD_REVERB_MAX				100
 
 

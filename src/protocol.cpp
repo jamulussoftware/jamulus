@@ -59,8 +59,6 @@ MESSAGES
 
 - Gain of channel							  PROTMESSID_CHANNEL_GAIN
 
-    for each connected client append following data:
-
 	+--------------------+--------------+
 	| 2 bytes channel ID | 2 bytes gain |
 	+--------------------+--------------+

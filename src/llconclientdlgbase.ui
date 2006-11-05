@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>445</width>
+            <width>597</width>
             <height>289</height>
         </rect>
     </property>
@@ -426,11 +426,11 @@
             <class>QButtonGroup</class>
             <property stdset="1">
                 <name>name</name>
-                <cstring>GroupBoxAudioInput</cstring>
+                <cstring>GroupBoxReverberation</cstring>
             </property>
             <property stdset="1">
                 <name>title</name>
-                <string>Audio In</string>
+                <string>Reverb</string>
             </property>
             <vbox>
                 <property stdset="1">
@@ -445,9 +445,9 @@
                     <class>QLayoutWidget</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>Layout14</cstring>
+                        <cstring>Layout13</cstring>
                     </property>
-                    <hbox>
+                    <vbox>
                         <property stdset="1">
                             <name>margin</name>
                             <number>0</number>
@@ -457,116 +457,43 @@
                             <number>6</number>
                         </property>
                         <widget>
-                            <class>QLayoutWidget</class>
+                            <class>QLabel</class>
                             <property stdset="1">
                                 <name>name</name>
-                                <cstring>Layout12</cstring>
+                                <cstring>TextLabelAudReverb</cstring>
                             </property>
-                            <vbox>
-                                <property stdset="1">
-                                    <name>margin</name>
-                                    <number>0</number>
-                                </property>
-                                <property stdset="1">
-                                    <name>spacing</name>
-                                    <number>6</number>
-                                </property>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>TextAudInFader</cstring>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>text</name>
-                                        <string>Audio
-Fader</string>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>alignment</name>
-                                        <set>AlignCenter</set>
-                                    </property>
-                                    <property>
-                                        <name>hAlign</name>
-                                    </property>
-                                </widget>
-                                <widget>
-                                    <class>QSlider</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>SliderAudInFader</cstring>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>pageStep</name>
-                                        <number>1</number>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>orientation</name>
-                                        <enum>Vertical</enum>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>tickmarks</name>
-                                        <enum>Both</enum>
-                                    </property>
-                                </widget>
-                            </vbox>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>Level</string>
+                            </property>
+                            <property stdset="1">
+                                <name>alignment</name>
+                                <set>AlignCenter</set>
+                            </property>
+                            <property>
+                                <name>hAlign</name>
+                            </property>
                         </widget>
                         <widget>
-                            <class>QLayoutWidget</class>
+                            <class>QSlider</class>
                             <property stdset="1">
                                 <name>name</name>
-                                <cstring>Layout13</cstring>
+                                <cstring>SliderAudReverb</cstring>
                             </property>
-                            <vbox>
-                                <property stdset="1">
-                                    <name>margin</name>
-                                    <number>0</number>
-                                </property>
-                                <property stdset="1">
-                                    <name>spacing</name>
-                                    <number>6</number>
-                                </property>
-                                <widget>
-                                    <class>QLabel</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>TextLabelAudReverb</cstring>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>text</name>
-                                        <string>Reverb
-Level</string>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>alignment</name>
-                                        <set>AlignCenter</set>
-                                    </property>
-                                    <property>
-                                        <name>hAlign</name>
-                                    </property>
-                                </widget>
-                                <widget>
-                                    <class>QSlider</class>
-                                    <property stdset="1">
-                                        <name>name</name>
-                                        <cstring>SliderAudReverb</cstring>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>pageStep</name>
-                                        <number>1</number>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>orientation</name>
-                                        <enum>Vertical</enum>
-                                    </property>
-                                    <property stdset="1">
-                                        <name>tickmarks</name>
-                                        <enum>Both</enum>
-                                    </property>
-                                </widget>
-                            </vbox>
+                            <property stdset="1">
+                                <name>pageStep</name>
+                                <number>1</number>
+                            </property>
+                            <property stdset="1">
+                                <name>orientation</name>
+                                <enum>Vertical</enum>
+                            </property>
+                            <property stdset="1">
+                                <name>tickmarks</name>
+                                <enum>Both</enum>
+                            </property>
                         </widget>
-                    </hbox>
+                    </vbox>
                 </widget>
                 <widget>
                     <class>QLabel</class>
@@ -576,8 +503,7 @@ Level</string>
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Reverb Chan
-Selection</string>
+                        <string>Channel</string>
                     </property>
                     <property stdset="1">
                         <name>alignment</name>
@@ -588,12 +514,55 @@ Selection</string>
                     </property>
                 </widget>
                 <widget>
+                    <class>QRadioButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>RadioButtonRevSelL</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Left</string>
+                    </property>
+                </widget>
+                <widget>
+                    <class>QRadioButton</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>RadioButtonRevSelR</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>text</name>
+                        <string>Right</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget>
+            <class>QButtonGroup</class>
+            <property stdset="1">
+                <name>name</name>
+                <cstring>GroupBoxAudioInput</cstring>
+            </property>
+            <property stdset="1">
+                <name>title</name>
+                <string>Audio Mixer</string>
+            </property>
+            <hbox>
+                <property stdset="1">
+                    <name>margin</name>
+                    <number>11</number>
+                </property>
+                <property stdset="1">
+                    <name>spacing</name>
+                    <number>6</number>
+                </property>
+                <widget>
                     <class>QLayoutWidget</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>Layout11</cstring>
+                        <cstring>Layout15</cstring>
                     </property>
-                    <hbox>
+                    <vbox>
                         <property stdset="1">
                             <name>margin</name>
                             <number>0</number>
@@ -603,30 +572,92 @@ Selection</string>
                             <number>6</number>
                         </property>
                         <widget>
-                            <class>QRadioButton</class>
+                            <class>QSlider</class>
                             <property stdset="1">
                                 <name>name</name>
-                                <cstring>RadioButtonRevSelL</cstring>
+                                <cstring>SliderAudInFader</cstring>
                             </property>
                             <property stdset="1">
-                                <name>text</name>
-                                <string>L</string>
+                                <name>pageStep</name>
+                                <number>1</number>
+                            </property>
+                            <property stdset="1">
+                                <name>orientation</name>
+                                <enum>Vertical</enum>
+                            </property>
+                            <property stdset="1">
+                                <name>tickmarks</name>
+                                <enum>Both</enum>
                             </property>
                         </widget>
                         <widget>
-                            <class>QRadioButton</class>
+                            <class>QLabel</class>
                             <property stdset="1">
                                 <name>name</name>
-                                <cstring>RadioButtonRevSelR</cstring>
+                                <cstring>TextAudInFader</cstring>
                             </property>
                             <property stdset="1">
                                 <name>text</name>
-                                <string>R</string>
+                                <string>Audio
+Fader</string>
+                            </property>
+                            <property stdset="1">
+                                <name>alignment</name>
+                                <set>AlignCenter</set>
+                            </property>
+                            <property>
+                                <name>hAlign</name>
                             </property>
                         </widget>
+                    </vbox>
+                </widget>
+                <widget>
+                    <class>QFrame</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>FrameAudioFaders</cstring>
+                    </property>
+                    <property stdset="1">
+                        <name>frameShape</name>
+                        <enum>StyledPanel</enum>
+                    </property>
+                    <property stdset="1">
+                        <name>frameShadow</name>
+                        <enum>Sunken</enum>
+                    </property>
+                    <hbox>
+                        <property stdset="1">
+                            <name>margin</name>
+                            <number>11</number>
+                        </property>
+                        <property stdset="1">
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <spacer>
+                            <property>
+                                <name>name</name>
+                                <cstring>Spacer2</cstring>
+                            </property>
+                            <property>
+                                <name>orientation</name>
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property>
+                                <name>sizeType</name>
+                                <enum>Expanding</enum>
+                            </property>
+                            <property>
+                                <name>sizeHint</name>
+                                <size>
+                                    <width>20</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
                     </hbox>
                 </widget>
-            </vbox>
+            </hbox>
         </widget>
     </hbox>
 </widget>

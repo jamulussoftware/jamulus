@@ -164,6 +164,50 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	/* timers --------------------------------------------------------------- */
 	/* start timer for status bar */
 	TimerStatus.start(STATUSBAR_UPDATE_TIME);
+
+
+
+// TEST
+/*
+QGridLayout* grid1 = new QGridLayout ( FrameAudioFaders, 2, 1 );
+
+QSlider* pSliderChannelFader = new QSlider ( Qt::Vertical, FrameAudioFaders );
+grid1->addWidget( pSliderChannelFader, 0, 0 );
+
+pSliderChannelFader->setPageStep ( 1 );
+pSliderChannelFader->setTickmarks ( QSlider::Both );
+pSliderChannelFader->setRange(0, AUD_MIX_FADER_MAX);
+pSliderChannelFader->setTickInterval(AUD_MIX_FADER_MAX / 9);
+
+pSliderChannelFader->setValue ( AUD_MIX_FADER_MAX );
+
+QLabel* pTextChannelName = new QLabel ( "Test", FrameAudioFaders );
+grid1->addWidget( pTextChannelName, 1, 0 );
+
+FrameAudioFadersLayout->insertLayout ( 0, grid1 );
+
+
+
+
+QGridLayout* grid2 = new QGridLayout ( FrameAudioFaders, 2, 1 );
+
+QSlider* pSliderChannelFader2 = new QSlider ( Qt::Vertical, FrameAudioFaders );
+grid2->addWidget( pSliderChannelFader2, 0, 0 );
+
+pSliderChannelFader2->setPageStep ( 1 );
+pSliderChannelFader2->setTickmarks ( QSlider::Both );
+pSliderChannelFader2->setRange(0, AUD_MIX_FADER_MAX);
+pSliderChannelFader2->setTickInterval(AUD_MIX_FADER_MAX / 9);
+
+pSliderChannelFader2->setValue ( AUD_MIX_FADER_MAX );
+
+QLabel* pTextChannelName2 = new QLabel ( "Test", FrameAudioFaders );
+grid2->addWidget( pTextChannelName2, 1, 0 );
+
+FrameAudioFadersLayout->insertLayout ( 0, grid2 );
+*/
+
+
 }
 
 CLlconClientDlg::~CLlconClientDlg()

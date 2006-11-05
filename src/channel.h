@@ -172,6 +172,7 @@ signals:
 	void MessReadyForSending ( CVector<uint8_t> vecMessage );
 	void NewConnection();
 	void ReqJittBufSize();
+	void ProtocolStatus ( bool bOk );
 };
 
 

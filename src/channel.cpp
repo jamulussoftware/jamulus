@@ -485,10 +485,16 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
 			if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )
 			{
 				eRet = PS_PROT_OK;
+
+				// create message for protocol status
+				emit ProtocolStatus ( true );
 			}
 			else
 			{
 				eRet = PS_PROT_ERR;
+
+				// create message for protocol status
+				emit ProtocolStatus ( false );
 			}
 		}
 	}

@@ -44,9 +44,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 		"to be specified before. If the client is connected, pressing this "
 		"button will disconnect the connection."));
 
-	QWhatsThis::add(TextLabelNameVersion, tr("<b>Version:</b> Shows the "
-		"current version of the software."));
-
 	QWhatsThis::add(TextLabelStatus, tr("<b>Status Bar:</b> In the status bar "
 		"different messages are displayed. E.g., if an error ocurred or the "
 		"status of the connection is shown."));
@@ -57,9 +54,31 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	QWhatsThis::add(TextLabelServerAddr, strServAddrH);
 	QWhatsThis::add(LineEditServerAddr, strServAddrH);
 
-	/* set text for version and application name */
-	TextLabelNameVersion->
-		setText(QString(APP_NAME) + tr(" client ") + QString(VERSION));
+	QString strAudFader = tr ( "<b>Audio Fader:</b> With the audio fader "
+		"control the level of left and right audio input channels can "
+		"be controlled." );
+	QWhatsThis::add ( TextAudInFader, strAudFader );
+	QWhatsThis::add ( SliderAudInFader, strAudFader );
+
+	QString strAudReverb = tr ( "<b>Reverberation Level:</b> The level of "
+		"reverberation effect can be set with this control. The channel to "
+		"which that reverberation effect shall be applied can be chosen "
+		"with the Reverberation Channel Selection radio buttons." );
+	QWhatsThis::add ( TextLabelAudReverb, strAudReverb );
+	QWhatsThis::add ( SliderAudReverb, strAudReverb );
+
+	QString strRevChanSel = tr ( "<b>Reverberation Channel Selection:</b> "
+		"With these radio buttons the audio input channel on which the "
+		"reverberation effect is applied can be chosen. Either the left "
+		"or right input channel can be selected." );
+	QWhatsThis::add ( TextLabelReverbSelection, strRevChanSel );
+	QWhatsThis::add ( RadioButtonRevSelL, strRevChanSel );
+	QWhatsThis::add ( RadioButtonRevSelR, strRevChanSel );
+
+	QWhatsThis::add ( CLEDOverallStatus, tr ( "<b>Overall Status:</b> "
+		"The overall status of the software is shown. If either the "
+		"network or sound interface has bad status, this LED will show "
+		"red color." ) );
 
 	/* init server address line edit */
 	LineEditServerAddr->setText ( pClient->strIPAddress.c_str () );

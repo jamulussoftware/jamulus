@@ -42,7 +42,7 @@
 
 /* version and application name (always use this version) */
 #undef VERSION
-#define VERSION							"0.9.7cvs"
+#define VERSION							"0.9.8cvs"
 #define APP_NAME						"llcon"
 
 
@@ -124,6 +124,7 @@ typedef unsigned int					_MESSAGE_IDENT;
 #define MS_JIT_BUF_PUT					3
 #define MS_JIT_BUF_GET					4
 #define MS_PACKET_RECEIVED				5
+#define MS_PROTOCOL						6
 
 #define MUL_COL_LED_RED					0
 #define MUL_COL_LED_YELLOW				1

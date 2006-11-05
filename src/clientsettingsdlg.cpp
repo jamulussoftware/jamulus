@@ -160,11 +160,15 @@ void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
 		CLEDNetwGet->SetLight(iStatus);
 		break;
 
+	case MS_PROTOCOL:
+		CLEDProtocolStatus->SetLight(iStatus);
+
 	case MS_RESET_ALL:
 		CLEDSoundIn->Reset();
 		CLEDSoundOut->Reset();
 		CLEDNetwPut->Reset();
 		CLEDNetwGet->Reset();
+		CLEDProtocolStatus->Reset();
 		break;
 	}
 }

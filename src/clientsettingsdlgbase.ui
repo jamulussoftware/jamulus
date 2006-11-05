@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>361</width>
-            <height>263</height>
+            <width>410</width>
+            <height>249</height>
         </rect>
     </property>
     <property stdset="1">
@@ -323,6 +323,13 @@
                 <cstring>GroupBoxSoundCardBuffers</cstring>
             </property>
             <property stdset="1">
+                <name>sizePolicy</name>
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>5</vsizetype>
+                </sizepolicy>
+            </property>
+            <property stdset="1">
                 <name>title</name>
                 <string>Sndcard Buffers</string>
             </property>
@@ -374,7 +381,7 @@
                                     <property stdset="1">
                                         <name>sizePolicy</name>
                                         <sizepolicy>
-                                            <hsizetype>3</hsizetype>
+                                            <hsizetype>1</hsizetype>
                                             <vsizetype>1</vsizetype>
                                         </sizepolicy>
                                     </property>
@@ -442,7 +449,7 @@
                                     <property stdset="1">
                                         <name>sizePolicy</name>
                                         <sizepolicy>
-                                            <hsizetype>3</hsizetype>
+                                            <hsizetype>1</hsizetype>
                                             <vsizetype>1</vsizetype>
                                         </sizepolicy>
                                     </property>
@@ -574,6 +581,13 @@
                 <cstring>GroupBoxMeasureResults</cstring>
             </property>
             <property stdset="1">
+                <name>sizePolicy</name>
+                <sizepolicy>
+                    <hsizetype>3</hsizetype>
+                    <vsizetype>5</vsizetype>
+                </sizepolicy>
+            </property>
+            <property stdset="1">
                 <name>title</name>
                 <string>Debug</string>
             </property>
@@ -587,26 +601,92 @@
                     <number>6</number>
                 </property>
                 <widget>
-                    <class>QLabel</class>
+                    <class>QLayoutWidget</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>TextLabelStdDevTimerLabel</cstring>
+                        <cstring>Layout6</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>StdDev:</string>
-                    </property>
+                    <hbox>
+                        <property stdset="1">
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property stdset="1">
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabelStdDevTimerLabel</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>StdDev:</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabelStdDevTimer</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>val</string>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
                 <widget>
-                    <class>QLabel</class>
+                    <class>QLayoutWidget</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>TextLabelStdDevTimer</cstring>
+                        <cstring>Layout8</cstring>
                     </property>
-                    <property stdset="1">
-                        <name>text</name>
-                        <string>val</string>
-                    </property>
+                    <hbox>
+                        <property stdset="1">
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property stdset="1">
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabel1_2</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>Protocol Status:</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>CMultiColorLED</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>CLEDProtocolStatus</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>minimumSize</name>
+                                <size>
+                                    <width>13</width>
+                                    <height>13</height>
+                                </size>
+                            </property>
+                            <property stdset="1">
+                                <name>maximumSize</name>
+                                <size>
+                                    <width>13</width>
+                                    <height>13</height>
+                                </size>
+                            </property>
+                        </widget>
+                    </hbox>
                 </widget>
             </vbox>
         </widget>

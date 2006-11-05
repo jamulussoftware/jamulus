@@ -315,7 +315,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
 		strVersionText += "\n";
 	}
 
-	strVersionText += tr("llcon, Low-Latency (Internet) Connection");
+	strVersionText += tr("llcon, Low-Latency (internet) CONnection");
 
 	if ( bWithHtml )
 	{

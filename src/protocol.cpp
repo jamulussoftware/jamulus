@@ -230,11 +230,9 @@ bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
 	return code: true -> ok; false -> error
 */
 	bool				bRet, bSendNextMess;
-	int					iRecCounter, iRecID, iData, iDataLen, iStringLen, iCurID;
+	int					iRecCounter, iRecID;
 	unsigned int		iPos;
 	CVector<uint8_t>	vecData;
-	std::string			strCurString;
-	double				dNewGain;
 
 
 // convert unsigned char in uint8_t, TODO convert all buffers in uint8_t
@@ -262,14 +260,13 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 		}
 		else
 		{
-			// check which type of message we received and do action
-			switch ( iRecID ) 
+			// special treatment for acknowledge messages
+			if ( iRecID == PROTMESSID_ACKN )
 			{
-			case PROTMESSID_ACKN:
-
 				// extract data from stream and emit signal for received value
 				iPos = 0;
-				iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+				const int iData =
+					static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
 				Mutex.lock();
 				{
@@ -294,105 +291,44 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 				{
 					SendMessage();
 				}
-
-				break;
-
-			case PROTMESSID_JITT_BUF_SIZE:
-
-				// extract data from stream and emit signal for received value
-				iPos = 0;
-				iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
-
-				// invoke message action
-				emit ChangeJittBufSize ( iData );
-
-				// send acknowledge message
-				CreateAndSendAcknMess ( iRecID, iRecCounter );
-
-				break;
-
-			case PROTMESSID_REQ_JITT_BUF_SIZE:
-
-				// invoke message action
-				emit ReqJittBufSize();
-
-				// send acknowledge message
-				CreateAndSendAcknMess ( iRecID, iRecCounter );
-
-				break;
-
-			case PROTMESSID_NET_BLSI_FACTOR:
-
-				// extract data from stream and emit signal for received value
-				iPos = 0;
-				iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
-
-				// invoke message action
-				emit ChangeNetwBlSiFact ( iData );
-
-				// send acknowledge message
-				CreateAndSendAcknMess ( iRecID, iRecCounter );
-
-				break;
-
-			case PROTMESSID_CHANNEL_GAIN:
-
-				// extract data from stream and emit signal for received value
+			}
+			else
+			{
+				// init position pointer which is used for extracting data from
+				// received data vector
 				iPos = 0;
 
-				// channel ID
-				iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
-
-				// actual gain, we convert from integer to double with range 0..1
-				iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
-				dNewGain = (double) iData / ( 1 << 16 );
-
-				// invoke message action
-				emit ChangeChanGain ( iCurID, dNewGain );
-
-				// send acknowledge message
-				CreateAndSendAcknMess ( iRecID, iRecCounter );
-
-				break;
-
-			case PROTMESSID_CONN_CLIENTS_LIST:
-
-				// extract data from stream and emit signal for received value
-				iPos = 0;
-				iDataLen = vecData.Size();
-
-				while ( iPos < iDataLen )
+				// check which type of message we received and do action
+				switch ( iRecID ) 
 				{
+				case PROTMESSID_JITT_BUF_SIZE:
 
-					// IP address (4 bytes)
-					iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+					EvaluateJitBufMes ( iPos, vecData );
+					break;
 
-// TODO do something with the received IP address "iData"
+				case PROTMESSID_REQ_JITT_BUF_SIZE:
 
-// TEST
-QHostAddress addrTest ( iData );
-printf ( "%s ", addrTest.toString().latin1() );
+					EvaluateReqJitBufMes ( iPos, vecData );
+					break;
 
-					// number of bytes for name string (2 bytes)
-					iStringLen = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+				case PROTMESSID_NET_BLSI_FACTOR:
 
-					// name string (n bytes)
-					strCurString = "";
-					for ( int j = 0; j < iStringLen; j++ )
-					{
-						// byte-by-byte copying of the string data
-						iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
-						strCurString += std::string ( (char*) &iData );
-					}
+					EvaluateNetwBlSiFactMes ( iPos, vecData );
+					break;
 
-// TODO do something with the received name string "strCurString"
+				case PROTMESSID_CHANNEL_GAIN:
 
+					EvaluateChanGainMes ( iPos, vecData );
+					break;
+
+				case PROTMESSID_CONN_CLIENTS_LIST:
+
+					EvaluateConClientListMes ( iPos, vecData );
+					break;
 				}
 
 				// send acknowledge message
 				CreateAndSendAcknMess ( iRecID, iRecCounter );
-
-				break;
 			}
 		}
 
@@ -411,7 +347,7 @@ printf ( "%s ", addrTest.toString().latin1() );
 }
 
 
-/* Access-functions for creating messages ----------------------------------- */
+/* Access-functions for creating and parsing messages ----------------------- */
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 {
 	CVector<uint8_t>	vecData ( 2 ); // 2 bytes of data
@@ -423,9 +359,25 @@ void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 	CreateAndSendMessage ( PROTMESSID_JITT_BUF_SIZE, vecData );
 }
 
+void CProtocol::EvaluateJitBufMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
+{
+	// extract jitter buffer size
+	const int iData =
+		static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+	// invoke message action
+	emit ChangeJittBufSize ( iData );
+}
+
 void CProtocol::CreateReqJitBufMes()
 {
 	CreateAndSendMessage ( PROTMESSID_REQ_JITT_BUF_SIZE, CVector<uint8_t> ( 0 ) );
+}
+
+void CProtocol::EvaluateReqJitBufMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
+{
+	// invoke message action
+	emit ReqJittBufSize();
 }
 
 void CProtocol::CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
@@ -437,6 +389,15 @@ void CProtocol::CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
 	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iNetwBlSiFact ), 2 );
 
 	CreateAndSendMessage ( PROTMESSID_NET_BLSI_FACTOR, vecData );
+}
+
+void CProtocol::EvaluateNetwBlSiFactMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
+{
+	const int iData =
+		static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+	// invoke message action
+	emit ChangeNetwBlSiFact ( iData );
 }
 
 void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
@@ -453,6 +414,22 @@ void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
 	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iCurGain ), 2 );
 
 	CreateAndSendMessage ( PROTMESSID_CHANNEL_GAIN, vecData );
+}
+
+void CProtocol::EvaluateChanGainMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
+{
+	// channel ID
+	const int iCurID =
+		static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+	// actual gain, we convert from integer to double with range 0..1
+	const int iData =
+		static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+	const double dNewGain = (double) iData / ( 1 << 16 );
+
+	// invoke message action
+	emit ChangeChanGain ( iCurID, dNewGain );
 }
 
 void CProtocol::CreateConClientListMes ( const CVector<uint32_t>& veciIpAddrs,
@@ -494,6 +471,41 @@ void CProtocol::CreateConClientListMes ( const CVector<uint32_t>& veciIpAddrs,
 	}
 
 	CreateAndSendMessage ( PROTMESSID_CONN_CLIENTS_LIST, vecData );
+}
+
+void CProtocol:: EvaluateConClientListMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
+{
+	int			iData;
+	const int	iDataLen = vecData.Size();
+
+	while ( iPos < iDataLen )
+	{
+
+		// IP address (4 bytes)
+		iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+// TODO do something with the received IP address "iData"
+
+// TEST
+QHostAddress addrTest ( iData );
+printf ( "%s ", addrTest.toString().latin1() );
+
+		// number of bytes for name string (2 bytes)
+		const int iStringLen =
+			static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+		// name string (n bytes)
+		std::string strCurString = "";
+		for ( int j = 0; j < iStringLen; j++ )
+		{
+			// byte-by-byte copying of the string data
+			iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+			strCurString += std::string ( (char*) &iData );
+		}
+
+// TODO do something with the received name string "strCurString"
+
+	}
 }
 
 

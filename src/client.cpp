@@ -38,6 +38,9 @@ CClient::CClient () : bRun ( false ), Socket ( &Channel ),
 
 	QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
 		this, SLOT ( OnReqJittBufSize() ) );
+
+	QObject::connect ( &Channel, SIGNAL ( ProtocolStatus ( bool ) ),
+		this, SLOT ( OnProtocolStatus ( bool ) ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -78,6 +81,19 @@ bool CClient::SetServerAddr(QString strNAddr)
 	else
 	{
 		return false; /* invalid address */
+	}
+}
+
+void CClient::OnProtocolStatus ( bool bOk )
+{
+	// show protocol status in GUI
+	if ( bOk )
+	{
+		PostWinMessage ( MS_PROTOCOL, MUL_COL_LED_RED );
+	}
+	else
+	{
+		PostWinMessage ( MS_PROTOCOL, MUL_COL_LED_GREEN );
 	}
 }
 

@@ -45,11 +45,11 @@
 #define PROTMESSID_CONN_CLIENTS_LIST	15 // connected client list
 
 // lengths of message as defined in protocol.cpp file
-#define MESS_HEADER_LENGTH_BYTE		5 /* ID, cnt, length */
-#define MESS_LEN_WITHOUT_DATA_BYTE	( MESS_HEADER_LENGTH_BYTE + 2 /* CRC */ )
+#define MESS_HEADER_LENGTH_BYTE			5 /* ID, cnt, length */
+#define MESS_LEN_WITHOUT_DATA_BYTE		( MESS_HEADER_LENGTH_BYTE + 2 /* CRC */ )
 
 // time out for message re-send if no acknowledgement was received
-#define SEND_MESS_TIMEOUT_MS		400 // ms
+#define SEND_MESS_TIMEOUT_MS			400 // ms
 
 
 /* Classes ********************************************************************/
@@ -59,7 +59,6 @@ class CProtocol : public QObject
 
 public:
 	CProtocol();
-	virtual ~CProtocol() {}
 
 	void CreateJitBufMes ( const int iJitBufSize );
 	void CreateReqJitBufMes();
@@ -126,6 +125,12 @@ protected:
 	void SendMessage();
 
 	void CreateAndSendMessage ( const int iID, const CVector<uint8_t>& vecData );
+
+	void EvaluateJitBufMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
+	void EvaluateReqJitBufMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
+	void EvaluateNetwBlSiFactMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
+	void EvaluateChanGainMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
+	void EvaluateConClientListMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
 
 	int						iOldRecID, iOldRecCnt;
 

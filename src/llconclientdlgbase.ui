@@ -318,17 +318,6 @@
                             <name>spacing</name>
                             <number>6</number>
                         </property>
-                        <widget>
-                            <class>QLabel</class>
-                            <property stdset="1">
-                                <name>name</name>
-                                <cstring>TextLabelNameVersion</cstring>
-                            </property>
-                            <property stdset="1">
-                                <name>text</name>
-                                <string>TextLabelNameVersion</string>
-                            </property>
-                        </widget>
                         <spacer>
                             <property>
                                 <name>name</name>
@@ -587,7 +576,7 @@ Level</string>
                     </property>
                     <property stdset="1">
                         <name>text</name>
-                        <string>Reverb Chan.
+                        <string>Reverb Chan
 Selection</string>
                     </property>
                     <property stdset="1">

@@ -59,18 +59,18 @@ MESSAGES
 
 - Gain of channel							  PROTMESSID_CHANNEL_GAIN
 
-	+--------------------+--------------+
-	| 2 bytes channel ID | 2 bytes gain |
-	+--------------------+--------------+
+	+-------------------+--------------+
+	| 1 byte channel ID | 2 bytes gain |
+	+-------------------+--------------+
 
 
 - IP number and name of connected clients     PROTMESSID_CONN_CLIENTS_LIST
 
     for each connected client append following data:
 
-	+--------------------+------------------+----------------------+
-	| 4 bytes IP address | 2 bytes number n | n bytes UTF-8 string |
-	+--------------------+------------------+----------------------+
+	+-------------------+--------------------+------------------+----------------------+
+	| 1 byte channel ID | 4 bytes IP address | 2 bytes number n | n bytes UTF-8 string |
+	+-------------------+--------------------+------------------+----------------------+
 
  *
  ******************************************************************************
@@ -400,12 +400,12 @@ void CProtocol::EvaluateNetwBlSiFactMes ( unsigned int iPos, const CVector<uint8
 
 void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
 {
-	CVector<uint8_t>	vecData ( 4 ); // 4 bytes of data
+	CVector<uint8_t>	vecData ( 3 ); // 3 bytes of data
 	unsigned int		iPos = 0; // init position pointer
 
 	// build data vector
 	// channel ID
-	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 2 );
+	PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
 
 	// actual gain, we convert from double with range 0..1 to integer
 	const int iCurGain = (int) ( dGain * ( 1 << 16 ) );
@@ -418,7 +418,7 @@ void CProtocol::EvaluateChanGainMes ( unsigned int iPos, const CVector<uint8_t>&
 {
 	// channel ID
 	const int iCurID =
-		static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+		static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
 	// actual gain, we convert from integer to double with range 0..1
 	const int iData =
@@ -430,7 +430,8 @@ void CProtocol::EvaluateChanGainMes ( unsigned int iPos, const CVector<uint8_t>&
 	emit ChangeChanGain ( iCurID, dNewGain );
 }
 
-void CProtocol::CreateConClientListMes ( const CVector<uint32_t>& veciIpAddrs,
+void CProtocol::CreateConClientListMes ( const CVector<int>& veciChanIDs,
+										 const CVector<uint32_t>& veciIpAddrs,
 										 const CVector<std::string>& vecstrNames )
 {
 	const int iNumClients = veciIpAddrs.Size();
@@ -446,10 +447,14 @@ void CProtocol::CreateConClientListMes ( const CVector<uint32_t>& veciIpAddrs,
 
 		// size of current list entry
 		const int iCurListEntrLen =
-			4 /* IP addr. */ + 2 /* str. size */ + iCurStrLen;
+			1 /* chan ID */ + 4 /* IP addr. */ + 2 /* str. size */ + iCurStrLen;
 
 		// make space for new data
 		vecData.Enlarge ( iCurListEntrLen );
+
+		// channel ID
+		PutValOnStream ( vecData, iPos,
+			static_cast<uint32_t> ( veciChanIDs[i] ), 1 );
 
 		// IP address (4 bytes)
 		PutValOnStream ( vecData, iPos,
@@ -478,6 +483,8 @@ void CProtocol:: EvaluateConClientListMes ( unsigned int iPos, const CVector<uin
 
 	while ( iPos < iDataLen )
 	{
+		// channel ID (1 byte)
+		iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
 		// IP address (4 bytes)
 		iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );

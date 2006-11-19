@@ -65,7 +65,8 @@ public:
 	void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
 	void CreateChanGainMes ( const int iChanID, const double dGain );
 
-	void CreateConClientListMes ( const CVector<uint32_t>& veciIpAddrs,
+	void CreateConClientListMes ( const CVector<int>& veciChanIDs,
+								  const CVector<uint32_t>& veciIpAddrs,
 								  const CVector<std::string>& vecstrNames );
 
 	void CreateAndSendAcknMess ( const int& iID, const int& iCnt );

@@ -112,10 +112,11 @@ public:
 		}
 	}
 
-	void CreateConClientListMes ( const CVector<uint32_t>& veciIpAddrs,
+	void CreateConClientListMes ( const CVector<int>& veciChanIDs,
+								  const CVector<uint32_t>& veciIpAddrs,
 								  const CVector<std::string>& vecstrNames )
 	{ 
-		Protocol.CreateConClientListMes ( veciIpAddrs, vecstrNames );
+		Protocol.CreateConClientListMes ( veciChanIDs, veciIpAddrs, vecstrNames );
 	}
 
 protected:

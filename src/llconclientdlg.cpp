@@ -166,9 +166,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 	TimerStatus.start(STATUSBAR_UPDATE_TIME);
 
 
-
-// TEST
 /*
+// TEST
 QGridLayout* grid1 = new QGridLayout ( FrameAudioFaders, 2, 1 );
 
 QSlider* pSliderChannelFader = new QSlider ( Qt::Vertical, FrameAudioFaders );
@@ -205,6 +204,11 @@ QLabel* pTextChannelName2 = new QLabel ( "Test", FrameAudioFaders );
 grid2->addWidget( pTextChannelName2, 1, 0 );
 
 FrameAudioFadersLayout->insertLayout ( 0, grid2 );
+*/
+
+/*
+// TEST
+new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
 */
 
 
@@ -349,4 +353,34 @@ void CLlconClientDlg::customEvent ( QCustomEvent* Event )
 		// update general settings dialog, too
 		ClientSettingsDlg.SetStatus ( iMessType, iStatus );
 	}
+}
+
+
+// Help classes ---------------------------------------------------------------
+CLlconClientDlg::CChannelFader::CChannelFader ( QWidget* pNW, QHBoxLayout* pNPtLy ) :
+	pParentLayout ( pNPtLy ),
+	MainGrid ( pNW, 2, 1 ),
+	Fader ( Qt::Vertical, pNW ),
+	Label ( "", pNW )
+{
+	// add slider to grid as position 0 / 0
+	MainGrid.addWidget( &Fader, 0, 0 );
+
+	// setup slider
+	Fader.setPageStep ( 1 );
+	Fader.setTickmarks ( QSlider::Both );
+	Fader.setRange(0, AUD_MIX_FADER_MAX);
+	Fader.setTickInterval(AUD_MIX_FADER_MAX / 9);
+
+// TEST set value
+Fader.setValue ( AUD_MIX_FADER_MAX );
+
+	// add label to grid
+	MainGrid.addWidget( &Label, 1, 0 );
+
+
+// TEST set label
+Label.setText ( "Test" );
+
+	pParentLayout->insertLayout ( 0, &MainGrid );
 }

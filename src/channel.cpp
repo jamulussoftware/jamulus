@@ -58,7 +58,8 @@ CChannelSet::CChannelSet()
 
 void CChannelSet::CreateAndSendChanListForAllConClients()
 {
-	int i;
+	int						i;
+	CVector<int>			veciChanIDs ( 0 );
 	CVector<uint32_t>		veciIpAddrs ( 0 );
 	CVector<std::string>	vecstrNames ( 0 );
 
@@ -71,7 +72,8 @@ void CChannelSet::CreateAndSendChanListForAllConClients()
 	{
 		if ( vecChannels[i].IsConnected() )
 		{
-			// append IP address and channel name to storing vectors
+			// append channel ID, IP address and channel name to storing vectors
+			veciChanIDs.Add ( i );
 			veciIpAddrs.Add ( vecChannels[i].GetAddress().InetAddr.ip4Addr() );
 			vecstrNames.Add ( vecChannels[i].GetName() );
 		}
@@ -83,7 +85,7 @@ void CChannelSet::CreateAndSendChanListForAllConClients()
 		if ( vecChannels[i].IsConnected() )
 		{
 			// send message
-			vecChannels[i].CreateConClientListMes ( veciIpAddrs, vecstrNames );
+			vecChannels[i].CreateConClientListMes ( veciChanIDs, veciIpAddrs, vecstrNames );
 		}
 	}
 }

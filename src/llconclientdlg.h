@@ -73,19 +73,34 @@ public:
 	virtual ~CLlconClientDlg ();
 
 protected:
-	CClient*			pClient;
-	bool				bConnected;
-	QTimer				TimerSigMet;
-	QTimer				TimerStatus;
+	class CChannelFader
+	{
+	public:
+		CChannelFader ( QWidget* pNW, QHBoxLayout* pNPtLy );
 
-	virtual void		customEvent ( QCustomEvent* Event );
-	virtual void		closeEvent ( QCloseEvent * Event );
-	void				UpdateDisplay();
+	protected:
+		QGridLayout MainGrid;
+		QSlider		Fader;
+		QLabel		Label;
 
-	QPopupMenu*			pSettingsMenu;
-	QMenuBar*			pMenu;
+		QHBoxLayout* pParentLayout;
+	};
 
-	CClientSettingsDlg	ClientSettingsDlg;
+	CClient*				pClient;
+	bool					bConnected;
+	QTimer					TimerSigMet;
+	QTimer					TimerStatus;
+
+	virtual void			customEvent ( QCustomEvent* Event );
+	virtual void			closeEvent ( QCloseEvent * Event );
+	void					UpdateDisplay();
+
+	QPopupMenu*				pSettingsMenu;
+	QMenuBar*				pMenu;
+
+	CClientSettingsDlg		ClientSettingsDlg;
+
+	CVector<CChannelFader>	vecpChanFader;
 
 public slots:
 	void OnConnectDisconBut();

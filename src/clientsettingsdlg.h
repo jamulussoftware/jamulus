@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -45,30 +45,30 @@
 
 /* Definitions ****************************************************************/
 /* update time for GUI controls */
-#define DISPLAY_UPDATE_TIME			1000 /* ms */
+#define DISPLAY_UPDATE_TIME         1000 /* ms */
 
 
 /* Classes ********************************************************************/
 class CClientSettingsDlg : public CClientSettingsDlgBase
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CClientSettingsDlg ( CClient* pNCliP, QWidget* parent = 0,
-		const char* name = 0, bool modal = FALSE, WFlags f = 0 );
+    CClientSettingsDlg ( CClient* pNCliP, QWidget* parent = 0,
+        const char* name = 0, bool modal = FALSE, WFlags f = 0 );
 
-	void SetStatus ( const int iMessType, const int iStatus );
+    void SetStatus ( const int iMessType, const int iStatus );
 
 protected:
-	CClient*		pClient;
-	QTimer			TimerStatus;
-	void			UpdateDisplay();
+    CClient*        pClient;
+    QTimer          TimerStatus;
+    void            UpdateDisplay();
 
 public slots:
-	void OnTimerStatus() { UpdateDisplay(); }
-	void OnSliderSndBufInChange ( int value );
-	void OnSliderSndBufOutChange ( int value );
-	void OnSliderNetBuf ( int value );
-	void OnSliderNetBufSiFactIn ( int value );
-	void OnSliderNetBufSiFactOut ( int value );
+    void OnTimerStatus() { UpdateDisplay(); }
+    void OnSliderSndBufInChange ( int value );
+    void OnSliderSndBufOutChange ( int value );
+    void OnSliderNetBuf ( int value );
+    void OnSliderNetBufSiFactIn ( int value );
+    void OnSliderNetBufSiFactOut ( int value );
 };

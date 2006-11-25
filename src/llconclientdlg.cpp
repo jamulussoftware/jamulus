@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -27,143 +27,143 @@
 
 /* Implementation *************************************************************/
 CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
-	const char* name, bool modal, WFlags f) : pClient ( pNCliP ),
-	CLlconClientDlgBase ( parent, name, modal, f ),
-	ClientSettingsDlg ( pNCliP, 0, 0, FALSE, Qt::WStyle_MinMax )
+    const char* name, bool modal, WFlags f) : pClient ( pNCliP ),
+    CLlconClientDlgBase ( parent, name, modal, f ),
+    ClientSettingsDlg ( pNCliP, 0, 0, FALSE, Qt::WStyle_MinMax )
 {
-	/* add help text to controls */
-	QString strInpLevH = tr("<b>Input level meter:</b> Shows the level of the "
-		"input audio signal of the sound card. The level is in dB. Overload "
-		"should be avoided.");
-	QWhatsThis::add(TextLabelInputLevel, strInpLevH);
-	QWhatsThis::add(ProgressBarInputLevelL, strInpLevH);
-	QWhatsThis::add(ProgressBarInputLevelR, strInpLevH);
+    /* add help text to controls */
+    QString strInpLevH = tr("<b>Input level meter:</b> Shows the level of the "
+        "input audio signal of the sound card. The level is in dB. Overload "
+        "should be avoided.");
+    QWhatsThis::add(TextLabelInputLevel, strInpLevH);
+    QWhatsThis::add(ProgressBarInputLevelL, strInpLevH);
+    QWhatsThis::add(ProgressBarInputLevelR, strInpLevH);
 
-	QWhatsThis::add(PushButtonConnect, tr("<b>Connect / Disconnect Button:"
-		"</b> Push this button to connect the server. A valid IP address has "
-		"to be specified before. If the client is connected, pressing this "
-		"button will disconnect the connection."));
+    QWhatsThis::add(PushButtonConnect, tr("<b>Connect / Disconnect Button:"
+        "</b> Push this button to connect the server. A valid IP address has "
+        "to be specified before. If the client is connected, pressing this "
+        "button will disconnect the connection."));
 
-	QWhatsThis::add(TextLabelStatus, tr("<b>Status Bar:</b> In the status bar "
-		"different messages are displayed. E.g., if an error ocurred or the "
-		"status of the connection is shown."));
+    QWhatsThis::add(TextLabelStatus, tr("<b>Status Bar:</b> In the status bar "
+        "different messages are displayed. E.g., if an error ocurred or the "
+        "status of the connection is shown."));
 
-	QString strServAddrH = tr("<b>Server Address:</b> In this edit control, "
-		"the IP address of the server can be set. If an invalid address was "
-		"chosen, an error message is shown in the status bar.");
-	QWhatsThis::add(TextLabelServerAddr, strServAddrH);
-	QWhatsThis::add(LineEditServerAddr, strServAddrH);
+    QString strServAddrH = tr("<b>Server Address:</b> In this edit control, "
+        "the IP address of the server can be set. If an invalid address was "
+        "chosen, an error message is shown in the status bar.");
+    QWhatsThis::add(TextLabelServerAddr, strServAddrH);
+    QWhatsThis::add(LineEditServerAddr, strServAddrH);
 
-	QString strAudFader = tr ( "<b>Audio Fader:</b> With the audio fader "
-		"control the level of left and right audio input channels can "
-		"be controlled." );
-	QWhatsThis::add ( TextAudInFader, strAudFader );
-	QWhatsThis::add ( SliderAudInFader, strAudFader );
+    QString strAudFader = tr ( "<b>Audio Fader:</b> With the audio fader "
+        "control the level of left and right audio input channels can "
+        "be controlled." );
+    QWhatsThis::add ( TextAudInFader, strAudFader );
+    QWhatsThis::add ( SliderAudInFader, strAudFader );
 
-	QString strAudReverb = tr ( "<b>Reverberation Level:</b> The level of "
-		"reverberation effect can be set with this control. The channel to "
-		"which that reverberation effect shall be applied can be chosen "
-		"with the Reverberation Channel Selection radio buttons." );
-	QWhatsThis::add ( TextLabelAudReverb, strAudReverb );
-	QWhatsThis::add ( SliderAudReverb, strAudReverb );
+    QString strAudReverb = tr ( "<b>Reverberation Level:</b> The level of "
+        "reverberation effect can be set with this control. The channel to "
+        "which that reverberation effect shall be applied can be chosen "
+        "with the Reverberation Channel Selection radio buttons." );
+    QWhatsThis::add ( TextLabelAudReverb, strAudReverb );
+    QWhatsThis::add ( SliderAudReverb, strAudReverb );
 
-	QString strRevChanSel = tr ( "<b>Reverberation Channel Selection:</b> "
-		"With these radio buttons the audio input channel on which the "
-		"reverberation effect is applied can be chosen. Either the left "
-		"or right input channel can be selected." );
-	QWhatsThis::add ( TextLabelReverbSelection, strRevChanSel );
-	QWhatsThis::add ( RadioButtonRevSelL, strRevChanSel );
-	QWhatsThis::add ( RadioButtonRevSelR, strRevChanSel );
+    QString strRevChanSel = tr ( "<b>Reverberation Channel Selection:</b> "
+        "With these radio buttons the audio input channel on which the "
+        "reverberation effect is applied can be chosen. Either the left "
+        "or right input channel can be selected." );
+    QWhatsThis::add ( TextLabelReverbSelection, strRevChanSel );
+    QWhatsThis::add ( RadioButtonRevSelL, strRevChanSel );
+    QWhatsThis::add ( RadioButtonRevSelR, strRevChanSel );
 
-	QWhatsThis::add ( CLEDOverallStatus, tr ( "<b>Overall Status:</b> "
-		"The overall status of the software is shown. If either the "
-		"network or sound interface has bad status, this LED will show "
-		"red color." ) );
+    QWhatsThis::add ( CLEDOverallStatus, tr ( "<b>Overall Status:</b> "
+        "The overall status of the software is shown. If either the "
+        "network or sound interface has bad status, this LED will show "
+        "red color." ) );
 
-	/* init server address line edit */
-	LineEditServerAddr->setText ( pClient->strIPAddress.c_str () );
+    /* init server address line edit */
+    LineEditServerAddr->setText ( pClient->strIPAddress.c_str () );
 
-	/* init status label */
-	OnTimerStatus ();
+    /* init status label */
+    OnTimerStatus ();
 
-	/* init connection button text */
-	PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
+    /* init connection button text */
+    PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
 
-	/* init input level meter bars */
-	ProgressBarInputLevelL->setTotalSteps ( NUM_STEPS_INP_LEV_METER );
-	ProgressBarInputLevelL->setProgress ( 0 );
-	ProgressBarInputLevelR->setTotalSteps ( NUM_STEPS_INP_LEV_METER );
-	ProgressBarInputLevelR->setProgress ( 0 );
-
-
-	/* init slider controls --- */
-	/* audio in fader */
-	SliderAudInFader->setRange(0, AUD_FADER_IN_MAX);
-	const int iCurAudInFader = pClient->GetAudioInFader();
-	SliderAudInFader->setValue(iCurAudInFader);
-	SliderAudInFader->setTickInterval(AUD_FADER_IN_MAX / 9);
-
-	/* audio reverberation */
-	SliderAudReverb->setRange(0, AUD_REVERB_MAX);
-	const int iCurAudReverb = pClient->GetReverbLevel();
-	SliderAudReverb->setValue ( AUD_REVERB_MAX - iCurAudReverb );
-	SliderAudReverb->setTickInterval(AUD_REVERB_MAX / 9);
+    /* init input level meter bars */
+    ProgressBarInputLevelL->setTotalSteps ( NUM_STEPS_INP_LEV_METER );
+    ProgressBarInputLevelL->setProgress ( 0 );
+    ProgressBarInputLevelR->setTotalSteps ( NUM_STEPS_INP_LEV_METER );
+    ProgressBarInputLevelR->setProgress ( 0 );
 
 
-	/* set radio buttons --- */
-	/* reverb channel */
-	if (pClient->IsReverbOnLeftChan())
-		RadioButtonRevSelL->setChecked(true);
-	else
-		RadioButtonRevSelR->setChecked(true);
+    /* init slider controls --- */
+    /* audio in fader */
+    SliderAudInFader->setRange(0, AUD_FADER_IN_MAX);
+    const int iCurAudInFader = pClient->GetAudioInFader();
+    SliderAudInFader->setValue(iCurAudInFader);
+    SliderAudInFader->setTickInterval(AUD_FADER_IN_MAX / 9);
 
-	/* Settings menu  ------------------------------------------------------- */
-	pSettingsMenu = new QPopupMenu ( this );
-	CHECK_PTR ( pSettingsMenu );
-
-	pSettingsMenu->insertItem ( tr ( "&General Settings..." ), this,
-		SLOT ( OnOpenGeneralSettings() ) );
-
-
-	/* Main menu bar -------------------------------------------------------- */
-	pMenu = new QMenuBar ( this );
-	CHECK_PTR ( pMenu );
-
-	pMenu->insertItem ( tr ( "&Settings" ), pSettingsMenu );
-	pMenu->insertItem ( tr ( "&?"), new CLlconHelpMenu ( this ) );
-	pMenu->setSeparator ( QMenuBar::InWindowsStyle );
-
-	/* Now tell the layout about the menu */
-	CLlconClientDlgBaseLayout->setMenuBar ( pMenu );
+    /* audio reverberation */
+    SliderAudReverb->setRange(0, AUD_REVERB_MAX);
+    const int iCurAudReverb = pClient->GetReverbLevel();
+    SliderAudReverb->setValue ( AUD_REVERB_MAX - iCurAudReverb );
+    SliderAudReverb->setTickInterval(AUD_REVERB_MAX / 9);
 
 
-	/* connections ---------------------------------------------------------- */
-	/* push-buttons */
+    /* set radio buttons --- */
+    /* reverb channel */
+    if (pClient->IsReverbOnLeftChan())
+        RadioButtonRevSelL->setChecked(true);
+    else
+        RadioButtonRevSelR->setChecked(true);
+
+    /* Settings menu  ------------------------------------------------------- */
+    pSettingsMenu = new QPopupMenu ( this );
+    CHECK_PTR ( pSettingsMenu );
+
+    pSettingsMenu->insertItem ( tr ( "&General Settings..." ), this,
+        SLOT ( OnOpenGeneralSettings() ) );
+
+
+    /* Main menu bar -------------------------------------------------------- */
+    pMenu = new QMenuBar ( this );
+    CHECK_PTR ( pMenu );
+
+    pMenu->insertItem ( tr ( "&Settings" ), pSettingsMenu );
+    pMenu->insertItem ( tr ( "&?"), new CLlconHelpMenu ( this ) );
+    pMenu->setSeparator ( QMenuBar::InWindowsStyle );
+
+    /* Now tell the layout about the menu */
+    CLlconClientDlgBaseLayout->setMenuBar ( pMenu );
+
+
+    /* connections ---------------------------------------------------------- */
+    /* push-buttons */
     QObject::connect(PushButtonConnect, SIGNAL(clicked()),
-		this, SLOT(OnConnectDisconBut()));
+        this, SLOT(OnConnectDisconBut()));
 
-	/* timers */
-	QObject::connect(&TimerSigMet, SIGNAL(timeout()),
-		this, SLOT(OnTimerSigMet()));
-	QObject::connect(&TimerStatus, SIGNAL(timeout()),
-		this, SLOT(OnTimerStatus()));
+    /* timers */
+    QObject::connect(&TimerSigMet, SIGNAL(timeout()),
+        this, SLOT(OnTimerSigMet()));
+    QObject::connect(&TimerStatus, SIGNAL(timeout()),
+        this, SLOT(OnTimerStatus()));
 
-	/* sliders */
-	QObject::connect(SliderAudInFader, SIGNAL(valueChanged(int)),
-		this, SLOT(OnSliderAudInFader(int)));
-	QObject::connect(SliderAudReverb, SIGNAL(valueChanged(int)),
-		this, SLOT(OnSliderAudReverb(int)));
+    /* sliders */
+    QObject::connect(SliderAudInFader, SIGNAL(valueChanged(int)),
+        this, SLOT(OnSliderAudInFader(int)));
+    QObject::connect(SliderAudReverb, SIGNAL(valueChanged(int)),
+        this, SLOT(OnSliderAudReverb(int)));
 
-	/* radio buttons */
-	QObject::connect(RadioButtonRevSelL, SIGNAL(clicked()),
-		this, SLOT(OnRevSelL()));
-	QObject::connect(RadioButtonRevSelR, SIGNAL(clicked()),
-		this, SLOT(OnRevSelR()));
+    /* radio buttons */
+    QObject::connect(RadioButtonRevSelL, SIGNAL(clicked()),
+        this, SLOT(OnRevSelL()));
+    QObject::connect(RadioButtonRevSelR, SIGNAL(clicked()),
+        this, SLOT(OnRevSelR()));
 
 
-	/* timers --------------------------------------------------------------- */
-	/* start timer for status bar */
-	TimerStatus.start(STATUSBAR_UPDATE_TIME);
+    /* timers --------------------------------------------------------------- */
+    /* start timer for status bar */
+    TimerStatus.start(STATUSBAR_UPDATE_TIME);
 
 
 /*
@@ -209,178 +209,181 @@ FrameAudioFadersLayout->insertLayout ( 0, grid2 );
 /*
 // TEST
 new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
+new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
+CLlconClientDlg::CChannelFader* pTest = new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
+new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
+new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
 */
-
 
 }
 
 CLlconClientDlg::~CLlconClientDlg()
 {
-	/* if connected, terminate connection */
-	if (pClient->IsRunning())
-	{
-		pClient->Stop();
-	}
+    /* if connected, terminate connection */
+    if (pClient->IsRunning())
+    {
+        pClient->Stop();
+    }
 }
 
 void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
 {
-	// store IP address
-	pClient->strIPAddress = LineEditServerAddr->text().latin1();
+    // store IP address
+    pClient->strIPAddress = LineEditServerAddr->text().latin1();
 
-	// default implementation of this event handler routine
-	Event->accept();
+    // default implementation of this event handler routine
+    Event->accept();
 }
 
 void CLlconClientDlg::OnConnectDisconBut ()
 {
-	/* start/stop client, set button text */
-	if ( pClient->IsRunning () )
-	{
-		pClient->Stop ();
-		PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
+    /* start/stop client, set button text */
+    if ( pClient->IsRunning () )
+    {
+        pClient->Stop ();
+        PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
 
-		/* stop timer for level meter bars and reset them */
-		TimerSigMet.stop ();
-		ProgressBarInputLevelL->setProgress ( 0 );
-		ProgressBarInputLevelR->setProgress ( 0 );
+        /* stop timer for level meter bars and reset them */
+        TimerSigMet.stop ();
+        ProgressBarInputLevelL->setProgress ( 0 );
+        ProgressBarInputLevelR->setProgress ( 0 );
 
-		/* immediately update status bar */
-		OnTimerStatus ();
-	}
-	else
-	{
-		/* set address and check if address is valid */
-		if ( pClient->SetServerAddr ( LineEditServerAddr->text () ) )
-		{
+        /* immediately update status bar */
+        OnTimerStatus ();
+    }
+    else
+    {
+        /* set address and check if address is valid */
+        if ( pClient->SetServerAddr ( LineEditServerAddr->text () ) )
+        {
 #if ( QT_VERSION > 300 )
-			pClient->start ( QThread::TimeCriticalPriority );
+            pClient->start ( QThread::TimeCriticalPriority );
 #else
-			pClient->start ();
+            pClient->start ();
 #endif
-			PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
+            PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
 
-			/* start timer for level meter bar */
-			TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
-		}
-		else
-		{
-			/* Restart timer to ensure that the text is visible at
-			   least the time for one complete interval */
-			TimerStatus.changeInterval ( STATUSBAR_UPDATE_TIME );
+            /* start timer for level meter bar */
+            TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
+        }
+        else
+        {
+            /* Restart timer to ensure that the text is visible at
+               least the time for one complete interval */
+            TimerStatus.changeInterval ( STATUSBAR_UPDATE_TIME );
 
-			/* show the error in the status bar */
-			TextLabelStatus->setText ( tr ( "invalid address" ) );
-		}
-	}
+            /* show the error in the status bar */
+            TextLabelStatus->setText ( tr ( "invalid address" ) );
+        }
+    }
 }
 
 void CLlconClientDlg::OnOpenGeneralSettings()
 {
-	// open general settings dialog
-	ClientSettingsDlg.show();
+    // open general settings dialog
+    ClientSettingsDlg.show();
 }
 
 void CLlconClientDlg::OnTimerSigMet ()
 {
-	/* get current input levels */
-	double dCurSigLevelL = pClient->MicLevelL ();
-	double dCurSigLevelR = pClient->MicLevelR ();
+    /* get current input levels */
+    double dCurSigLevelL = pClient->MicLevelL ();
+    double dCurSigLevelR = pClient->MicLevelR ();
 
-	/* linear transformation of the input level range to the progress-bar
-	   range */
-	dCurSigLevelL -= LOW_BOUND_SIG_METER;
-	dCurSigLevelL *= NUM_STEPS_INP_LEV_METER /
-		( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+    /* linear transformation of the input level range to the progress-bar
+       range */
+    dCurSigLevelL -= LOW_BOUND_SIG_METER;
+    dCurSigLevelL *= NUM_STEPS_INP_LEV_METER /
+        ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
 
-	// lower bound the signal
-	if ( dCurSigLevelL < 0 )
-	{
-		dCurSigLevelL = 0;
-	}
+    // lower bound the signal
+    if ( dCurSigLevelL < 0 )
+    {
+        dCurSigLevelL = 0;
+    }
 
-	dCurSigLevelR -= LOW_BOUND_SIG_METER;
-	dCurSigLevelR *= NUM_STEPS_INP_LEV_METER /
-		( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+    dCurSigLevelR -= LOW_BOUND_SIG_METER;
+    dCurSigLevelR *= NUM_STEPS_INP_LEV_METER /
+        ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
 
-	// lower bound the signal
-	if ( dCurSigLevelR < 0 )
-	{
-		dCurSigLevelR = 0;
-	}
+    // lower bound the signal
+    if ( dCurSigLevelR < 0 )
+    {
+        dCurSigLevelR = 0;
+    }
 
-	/* show current level */
-	ProgressBarInputLevelL->setProgress ( (int) ceil ( dCurSigLevelL ) );
-	ProgressBarInputLevelR->setProgress ( (int) ceil ( dCurSigLevelR ) );
+    /* show current level */
+    ProgressBarInputLevelL->setProgress ( (int) ceil ( dCurSigLevelL ) );
+    ProgressBarInputLevelR->setProgress ( (int) ceil ( dCurSigLevelR ) );
 }
 
 void CLlconClientDlg::UpdateDisplay()
 {
-	/* show connection status in status bar */
-	if ( pClient->IsConnected () && pClient->IsRunning () )
-	{
-		TextLabelStatus->setText ( tr ( "connected" ) );
-	}
-	else
-	{
-		TextLabelStatus->setText ( tr ( "disconnected" ) );
-	}
+    /* show connection status in status bar */
+    if ( pClient->IsConnected () && pClient->IsRunning () )
+    {
+        TextLabelStatus->setText ( tr ( "connected" ) );
+    }
+    else
+    {
+        TextLabelStatus->setText ( tr ( "disconnected" ) );
+    }
 }
 
 void CLlconClientDlg::customEvent ( QCustomEvent* Event )
 {
-	if ( Event->type() == QEvent::User + 11 )
-	{
-		const int iMessType = ( (CLlconEvent*) Event ) ->iMessType;
-		const int iStatus = ( (CLlconEvent*) Event ) ->iStatus;
+    if ( Event->type() == QEvent::User + 11 )
+    {
+        const int iMessType = ( (CLlconEvent*) Event ) ->iMessType;
+        const int iStatus = ( (CLlconEvent*) Event ) ->iStatus;
 
-		switch ( iMessType )
-		{
-		case MS_SOUND_IN:
-		case MS_SOUND_OUT:
-		case MS_JIT_BUF_PUT:
-		case MS_JIT_BUF_GET:
+        switch ( iMessType )
+        {
+        case MS_SOUND_IN:
+        case MS_SOUND_OUT:
+        case MS_JIT_BUF_PUT:
+        case MS_JIT_BUF_GET:
 
-			// show overall status -> if any LED goes red, this LED will go red
-			CLEDOverallStatus->SetLight ( iStatus );
-			break;
+            // show overall status -> if any LED goes red, this LED will go red
+            CLEDOverallStatus->SetLight ( iStatus );
+            break;
 
-		case MS_RESET_ALL:
-			CLEDOverallStatus->Reset();
-			break;
-		}
+        case MS_RESET_ALL:
+            CLEDOverallStatus->Reset();
+            break;
+        }
 
-		// update general settings dialog, too
-		ClientSettingsDlg.SetStatus ( iMessType, iStatus );
-	}
+        // update general settings dialog, too
+        ClientSettingsDlg.SetStatus ( iMessType, iStatus );
+    }
 }
 
 
 // Help classes ---------------------------------------------------------------
 CLlconClientDlg::CChannelFader::CChannelFader ( QWidget* pNW, QHBoxLayout* pNPtLy ) :
-	pParentLayout ( pNPtLy ),
-	MainGrid ( pNW, 2, 1 ),
-	Fader ( Qt::Vertical, pNW ),
-	Label ( "", pNW )
+    pParentLayout ( pNPtLy ),
+    MainGrid ( pNW, 2, 1 ),
+    Fader ( Qt::Vertical, pNW ),
+    Label ( "", pNW )
 {
-	// add slider to grid as position 0 / 0
-	MainGrid.addWidget( &Fader, 0, 0 );
+    // add slider to grid as position 0 / 0
+    MainGrid.addWidget( &Fader, 0, 0 );
 
-	// setup slider
-	Fader.setPageStep ( 1 );
-	Fader.setTickmarks ( QSlider::Both );
-	Fader.setRange(0, AUD_MIX_FADER_MAX);
-	Fader.setTickInterval(AUD_MIX_FADER_MAX / 9);
+    // setup slider
+    Fader.setPageStep ( 1 );
+    Fader.setTickmarks ( QSlider::Both );
+    Fader.setRange ( 0, AUD_MIX_FADER_MAX );
+    Fader.setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
 // TEST set value
 Fader.setValue ( AUD_MIX_FADER_MAX );
 
-	// add label to grid
-	MainGrid.addWidget( &Label, 1, 0 );
+    // add label to grid
+    MainGrid.addWidget( &Label, 1, 0 );
 
 
 // TEST set label
 Label.setText ( "Test" );
 
-	pParentLayout->insertLayout ( 0, &MainGrid );
+    pParentLayout->insertLayout ( 0, &MainGrid );
 }

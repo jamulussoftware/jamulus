@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -42,36 +42,36 @@
 
 /* Definitions ****************************************************************/
 /* update time for GUI controls */
-#define GUI_CONTRL_UPDATE_TIME		1000 /* ms */
+#define GUI_CONTRL_UPDATE_TIME      1000 /* ms */
 
 
 /* Classes ********************************************************************/
 class CLlconServerDlg : public CLlconServerDlgBase
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CLlconServerDlg ( CServer* pNServP, QWidget* parent = 0,
-		const char* name = 0, bool modal = FALSE, WFlags f = 0 );
+    CLlconServerDlg ( CServer* pNServP, QWidget* parent = 0,
+        const char* name = 0, bool modal = FALSE, WFlags f = 0 );
 
-	virtual ~CLlconServerDlg () {}
+    virtual ~CLlconServerDlg () {}
 
 protected:
-	QTimer		Timer;
-	CServer*	pServer;
+    QTimer      Timer;
+    CServer*    pServer;
 
-	QPixmap		BitmCubeGreen;
-	QPixmap		BitmCubeYellow;
-	QPixmap		BitmCubeRed;
+    QPixmap     BitmCubeGreen;
+    QPixmap     BitmCubeYellow;
+    QPixmap     BitmCubeRed;
 
-	CVector<CServerListViewItem*> vecpListViewItems;
-	QMutex ListViewMutex;
+    CVector<CServerListViewItem*> vecpListViewItems;
+    QMutex ListViewMutex;
 
-	QMenuBar* pMenu;
+    QMenuBar* pMenu;
 
-	virtual void customEvent(QCustomEvent* Event);
-	void UpdateSliderNetBuf();
+    virtual void customEvent(QCustomEvent* Event);
+    void UpdateSliderNetBuf();
 
 public slots:
-	void OnTimer();
+    void OnTimer();
 };

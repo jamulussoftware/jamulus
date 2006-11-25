@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -36,100 +36,100 @@ QApplication* pApp = NULL;
 
 int main ( int argc, char** argv )
 {
-	/* check if server or client application shall be started */
-	bool bIsClient = true;
-	bool bUseGUI = true;
-		
-	/* QT docu: argv()[0] is the program name, argv()[1] is the first
-	   argument and argv()[argc()-1] is the last argument */
-	if ( argc > 1 )
-	{
-		std::string strShortOpt;
+    /* check if server or client application shall be started */
+    bool bIsClient = true;
+    bool bUseGUI = true;
+        
+    /* QT docu: argv()[0] is the program name, argv()[1] is the first
+       argument and argv()[argc()-1] is the last argument */
+    if ( argc > 1 )
+    {
+        std::string strShortOpt;
 
-		/* "-s": start server with GUI enabled */
-		strShortOpt = "-s";
-		if ( !strShortOpt.compare ( argv[1] ) )
-		{
-			bIsClient = false;
-		}
+        /* "-s": start server with GUI enabled */
+        strShortOpt = "-s";
+        if ( !strShortOpt.compare ( argv[1] ) )
+        {
+            bIsClient = false;
+        }
 
-		/* "-sn": start server with GUI disabled (no GUI used) */
-		strShortOpt = "-sn";
-		if ( !strShortOpt.compare ( argv[1] ) )
-		{
-			bIsClient = false;
-			bUseGUI = false;
-		}
-	}
+        /* "-sn": start server with GUI disabled (no GUI used) */
+        strShortOpt = "-sn";
+        if ( !strShortOpt.compare ( argv[1] ) )
+        {
+            bIsClient = false;
+            bUseGUI = false;
+        }
+    }
 
-	/* Application object */
-	QApplication app ( argc, argv, bUseGUI );
+    /* Application object */
+    QApplication app ( argc, argv, bUseGUI );
 
-	if ( bIsClient )
-	{
-		/* client */
-		// actual client object
-		CClient Client;
+    if ( bIsClient )
+    {
+        /* client */
+        // actual client object
+        CClient Client;
 
-		// load settings from init-file
-		CSettings Settings ( &Client );
-		Settings.Load ();
+        // load settings from init-file
+        CSettings Settings ( &Client );
+        Settings.Load ();
 
-		// GUI object
-		CLlconClientDlg ClientDlg ( &Client, 0, 0, FALSE, Qt::WStyle_MinMax );
+        // GUI object
+        CLlconClientDlg ClientDlg ( &Client, 0, 0, FALSE, Qt::WStyle_MinMax );
 
-		/* Set main window */
-		app.setMainWidget ( &ClientDlg );
-		pApp = &app; /* Needed for post-event routine */
+        /* Set main window */
+        app.setMainWidget ( &ClientDlg );
+        pApp = &app; /* Needed for post-event routine */
 
-		/* Show dialog */
-		ClientDlg.show ();
-		app.exec ();
+        /* Show dialog */
+        ClientDlg.show ();
+        app.exec ();
 
-		/* Save settings to init-file */
-		Settings.Save ();
-	}
-	else
-	{
-		/* server */
-		// actual server object
-		CServer Server;
+        /* Save settings to init-file */
+        Settings.Save ();
+    }
+    else
+    {
+        /* server */
+        // actual server object
+        CServer Server;
 
-		if ( bUseGUI )
-		{
-			// GUI object for the server
-			CLlconServerDlg ServerDlg ( &Server, 0, 0, FALSE,
-				Qt::WStyle_MinMax );
+        if ( bUseGUI )
+        {
+            // GUI object for the server
+            CLlconServerDlg ServerDlg ( &Server, 0, 0, FALSE,
+                Qt::WStyle_MinMax );
 
-			/* Set main window */
-			app.setMainWidget ( &ServerDlg );
-			pApp = &app; /* Needed for post-event routine */
+            /* Set main window */
+            app.setMainWidget ( &ServerDlg );
+            pApp = &app; /* Needed for post-event routine */
 
-			/* Show dialog */
-			ServerDlg.show ();
-			app.exec ();
-		}
-		else
-		{
-			// only start application without using the GUI
-			qDebug ( CAboutDlg::GetVersionAndNameStr ( false ) );
-			app.exec ();
-		}
-	}
+            /* Show dialog */
+            ServerDlg.show ();
+            app.exec ();
+        }
+        else
+        {
+            // only start application without using the GUI
+            qDebug ( CAboutDlg::GetVersionAndNameStr ( false ) );
+            app.exec ();
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam,
-					  const int iChanNum )
+                      const int iChanNum )
 {
-	/* In case of simulation no events should be generated */
-	if ( pApp != NULL )
-	{
-		CLlconEvent* LlconEv =
-			new CLlconEvent ( MessID, iMessageParam, iChanNum );
+    /* In case of simulation no events should be generated */
+    if ( pApp != NULL )
+    {
+        CLlconEvent* LlconEv =
+            new CLlconEvent ( MessID, iMessageParam, iChanNum );
 
-		/* Qt will delete the event object when done */
-		QThread::postEvent ( pApp->mainWidget (), LlconEv );
-	}
+        /* Qt will delete the event object when done */
+        QThread::postEvent ( pApp->mainWidget (), LlconEv );
+    }
 }

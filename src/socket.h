@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -38,43 +38,43 @@
 
 /* Definitions ****************************************************************/
 /* maximum block size for network input buffer. Consider two bytes per sample */
-#define MAX_SIZE_BYTES_NETW_BUF			( MAX_NET_BLOCK_SIZE_FACTOR * MIN_BLOCK_SIZE_SAMPLES * 2 )
+#define MAX_SIZE_BYTES_NETW_BUF         ( MAX_NET_BLOCK_SIZE_FACTOR * MIN_BLOCK_SIZE_SAMPLES * 2 )
 
 
 /* Classes ********************************************************************/
 class CSocket : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CSocket::CSocket(CChannel* pNewChannel) : pChannel(pNewChannel),
-		SocketDevice(QSocketDevice::Datagram /* UDP */), bIsClient(true)
-		{Init();}
-	CSocket::CSocket(CChannelSet* pNewChannelSet, QObject* pNServP) :
-		pChannelSet(pNewChannelSet), pServer ( pNServP ),
-		SocketDevice(QSocketDevice::Datagram /* UDP */), bIsClient(false)
-		{Init();}
-	virtual ~CSocket() {}
+    CSocket::CSocket(CChannel* pNewChannel) : pChannel(pNewChannel),
+        SocketDevice(QSocketDevice::Datagram /* UDP */), bIsClient(true)
+        {Init();}
+    CSocket::CSocket(CChannelSet* pNewChannelSet, QObject* pNServP) :
+        pChannelSet(pNewChannelSet), pServer ( pNServP ),
+        SocketDevice(QSocketDevice::Datagram /* UDP */), bIsClient(false)
+        {Init();}
+    virtual ~CSocket() {}
 
-	void SendPacket ( const CVector<unsigned char>& vecbySendBuf,
-					  const CHostAddress& HostAddr );
+    void SendPacket ( const CVector<unsigned char>& vecbySendBuf,
+                      const CHostAddress& HostAddr );
 
 protected:
-	void Init();
+    void Init();
 
-	QSocketDevice			SocketDevice;
+    QSocketDevice           SocketDevice;
 
-	CVector<unsigned char>	vecbyRecBuf;
-	CHostAddress			RecHostAddr;
+    CVector<unsigned char>  vecbyRecBuf;
+    CHostAddress            RecHostAddr;
 
-	CChannel*				pChannel; /* for client */
-	CChannelSet*			pChannelSet; /* for server */
+    CChannel*               pChannel; /* for client */
+    CChannelSet*            pChannelSet; /* for server */
 
-	QObject*				pServer;
-	bool					bIsClient;
+    QObject*                pServer;
+    bool                    bIsClient;
 
 public slots:
-	void OnDataReceived();
+    void OnDataReceived();
 };
 
 

@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -44,130 +44,130 @@
 
 /* Definitions ****************************************************************/
 // audio in fader range
-#define AUD_FADER_IN_MAX			100
+#define AUD_FADER_IN_MAX            100
 
 // audio mixer fader range
-#define AUD_MIX_FADER_MAX			100
+#define AUD_MIX_FADER_MAX           100
 
 // audio reverberation range
-#define AUD_REVERB_MAX				100
+#define AUD_REVERB_MAX              100
 
 
 /* Classes ********************************************************************/
 class CClient : public QObject, public QThread
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CClient();
-	virtual ~CClient() {}
+    CClient();
+    virtual ~CClient() {}
 
-	void Init();
-	bool Stop();
-	bool IsRunning() { return bRun; }
-	bool SetServerAddr ( QString strNAddr );
-	double MicLevelL() { return SignalLevelMeterL.MicLevel(); }
-	double MicLevelR() { return SignalLevelMeterR.MicLevel(); }
-	bool IsConnected() { return Channel.IsConnected(); }
+    void Init();
+    bool Stop();
+    bool IsRunning() { return bRun; }
+    bool SetServerAddr ( QString strNAddr );
+    double MicLevelL() { return SignalLevelMeterL.MicLevel(); }
+    double MicLevelR() { return SignalLevelMeterR.MicLevel(); }
+    bool IsConnected() { return Channel.IsConnected(); }
 
-	/* we want to return the standard deviation. For that we need to calculate
-	   the sqaure root */
-	double GetTimingStdDev() { return sqrt ( RespTimeMoAvBuf.GetAverage() ); }
+    /* we want to return the standard deviation. For that we need to calculate
+       the sqaure root */
+    double GetTimingStdDev() { return sqrt ( RespTimeMoAvBuf.GetAverage() ); }
 
-	int GetAudioInFader() { return iAudioInFader; }
-	void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
+    int GetAudioInFader() { return iAudioInFader; }
+    void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
-	int GetReverbLevel() { return iReverbLevel; }
-	void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
+    int GetReverbLevel() { return iReverbLevel; }
+    void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
 
-	bool IsReverbOnLeftChan() { return bReverbOnLeftChan; }
-	void SetReverbOnLeftChan ( const bool bIL )
-	{
-		bReverbOnLeftChan = bIL;
-		AudioReverb.Clear();
-	}
+    bool IsReverbOnLeftChan() { return bReverbOnLeftChan; }
+    void SetReverbOnLeftChan ( const bool bIL )
+    {
+        bReverbOnLeftChan = bIL;
+        AudioReverb.Clear();
+    }
 
-	void SetSockBufSize ( const int iNumBlocks )
-	{
-		// set the new socket size
-		Channel.SetSockBufSize ( iNumBlocks );
+    void SetSockBufSize ( const int iNumBlocks )
+    {
+        // set the new socket size
+        Channel.SetSockBufSize ( iNumBlocks );
 
-		// tell the server that size has changed
-		Channel.CreateJitBufMes ( iNumBlocks );
-	}
-	int GetSockBufSize() { return Channel.GetSockBufSize (); }
-
-
-	void SetNetwBufSizeFactIn ( const int iNewNetNetwBlSiFactIn )
-	{
-		// store value and tell the server about new value
-		iNetwBufSizeFactIn = iNewNetNetwBlSiFactIn;
-		Channel.CreateNetwBlSiFactMes ( iNewNetNetwBlSiFactIn );
-	}
-	int GetNetwBufSizeFactIn() { return iNetwBufSizeFactIn; }
-
-	void SetNetwBufSizeFactOut ( const int iNetNetwBlSiFact )
-	{
-		// set the new socket size
-		Channel.SetNetwBufSizeFactOut ( iNetNetwBlSiFact );
-	}
-	int GetNetwBufSizeFactOut() { return Channel.GetNetwBufSizeFactOut(); }
+        // tell the server that size has changed
+        Channel.CreateJitBufMes ( iNumBlocks );
+    }
+    int GetSockBufSize() { return Channel.GetSockBufSize (); }
 
 
-	CSound* GetSndInterface() { return &Sound; }
-	CChannel* GetChannel() { return &Channel; }
+    void SetNetwBufSizeFactIn ( const int iNewNetNetwBlSiFactIn )
+    {
+        // store value and tell the server about new value
+        iNetwBufSizeFactIn = iNewNetNetwBlSiFactIn;
+        Channel.CreateNetwBlSiFactMes ( iNewNetNetwBlSiFactIn );
+    }
+    int GetNetwBufSizeFactIn() { return iNetwBufSizeFactIn; }
+
+    void SetNetwBufSizeFactOut ( const int iNetNetwBlSiFact )
+    {
+        // set the new socket size
+        Channel.SetNetwBufSizeFactOut ( iNetNetwBlSiFact );
+    }
+    int GetNetwBufSizeFactOut() { return Channel.GetNetwBufSizeFactOut(); }
 
 
-	// settings
-	string				strIPAddress;
+    CSound* GetSndInterface() { return &Sound; }
+    CChannel* GetChannel() { return &Channel; }
+
+
+    // settings
+    string              strIPAddress;
 
 protected:
-	virtual void run ();
+    virtual void run ();
 
-	/* only one channel is needed for client application */
-	CChannel			Channel;
+    /* only one channel is needed for client application */
+    CChannel            Channel;
 
-	CSocket				Socket;
-	CSound				Sound;
-	CSignalLevelMeter	SignalLevelMeterL;
-	CSignalLevelMeter	SignalLevelMeterR;
+    CSocket             Socket;
+    CSound              Sound;
+    CSignalLevelMeter   SignalLevelMeterL;
+    CSignalLevelMeter   SignalLevelMeterR;
 
-	bool				bRun;
-	CVector<double>		vecdNetwData;
+    bool                bRun;
+    CVector<double>     vecdNetwData;
 
-	int					iAudioInFader;
-	bool				bReverbOnLeftChan;
-	int					iReverbLevel;
-	CAudioReverb		AudioReverb;
+    int                 iAudioInFader;
+    bool                bReverbOnLeftChan;
+    int                 iReverbLevel;
+    CAudioReverb        AudioReverb;
 
-	int					iSndCrdBlockSizeSam;
-	int					iBlockSizeSam;
+    int                 iSndCrdBlockSizeSam;
+    int                 iBlockSizeSam;
 
-	int					iNetwBufSizeFactIn;
+    int                 iNetwBufSizeFactIn;
 
-	CVector<short>		vecsAudioSndCrd;
-	CVector<double>		vecdAudioSndCrdL;
-	CVector<double>		vecdAudioSndCrdR;
+    CVector<short>      vecsAudioSndCrd;
+    CVector<double>     vecdAudioSndCrdL;
+    CVector<double>     vecdAudioSndCrdR;
 
-	CVector<double>		vecdAudioL;
-	CVector<double>		vecdAudioR;
+    CVector<double>     vecdAudioL;
+    CVector<double>     vecdAudioR;
 
-	CVector<short>		vecsNetwork;
+    CVector<short>      vecsNetwork;
 
-	/* resample objects */
-	CAudioResample		ResampleObjDownL; /* left channel */
-	CAudioResample		ResampleObjDownR; /* right channel */
-	CAudioResample		ResampleObjUpL; /* left channel */
-	CAudioResample		ResampleObjUpR; /* right channel */
+    /* resample objects */
+    CAudioResample      ResampleObjDownL; /* left channel */
+    CAudioResample      ResampleObjDownR; /* right channel */
+    CAudioResample      ResampleObjUpL; /* left channel */
+    CAudioResample      ResampleObjUpR; /* right channel */
 
-	/* debugging, evaluating */
-	CMovingAv<double>	RespTimeMoAvBuf;
-	QTime				TimeLastBlock;
+    /* debugging, evaluating */
+    CMovingAv<double>   RespTimeMoAvBuf;
+    QTime               TimeLastBlock;
 
 public slots:
-	void OnSendProtMessage ( CVector<uint8_t> vecMessage );
-	void OnReqJittBufSize();
-	void OnProtocolStatus ( bool bOk );
+    void OnSendProtMessage ( CVector<uint8_t> vecMessage );
+    void OnReqJittBufSize();
+    void OnProtocolStatus ( bool bOk );
 };
 
 

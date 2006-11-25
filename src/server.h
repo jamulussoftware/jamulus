@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -39,48 +39,48 @@
 /* Classes ********************************************************************/
 class CServer : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CServer ();
-	virtual ~CServer () {}
+    CServer ();
+    virtual ~CServer () {}
 
-	void Start ();
-	void Stop ();
-	bool IsRunning() { return Timer.isActive (); }
+    void Start ();
+    void Stop ();
+    bool IsRunning() { return Timer.isActive (); }
 
-	void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-		CVector<int>& veciJitBufSize, CVector<int>& veciNetwOutBlSiFact,
-		CVector<int>& veciNetwInBlSiFact)
-	{
-		ChannelSet.GetConCliParam ( vecHostAddresses,
-			veciJitBufSize, veciNetwOutBlSiFact, veciNetwInBlSiFact );
-	}
+    void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
+        CVector<int>& veciJitBufSize, CVector<int>& veciNetwOutBlSiFact,
+        CVector<int>& veciNetwInBlSiFact)
+    {
+        ChannelSet.GetConCliParam ( vecHostAddresses,
+            veciJitBufSize, veciNetwOutBlSiFact, veciNetwInBlSiFact );
+    }
 
-	bool GetTimingStdDev ( double& dCurTiStdDev );
+    bool GetTimingStdDev ( double& dCurTiStdDev );
 
-	CChannelSet* GetChannelSet () { return &ChannelSet; }
+    CChannelSet* GetChannelSet () { return &ChannelSet; }
 
 protected:
-	CVector<short>	ProcessData ( CVector<CVector<double> >& vecvecdData,
-								  CVector<double>& vecdGains );
+    CVector<short>  ProcessData ( CVector<CVector<double> >& vecvecdData,
+                                  CVector<double>& vecdGains );
 
-	virtual void	customEvent ( QCustomEvent* Event );
+    virtual void    customEvent ( QCustomEvent* Event );
 
-	QTimer				Timer;
-	CVector<short>		vecsSendData;
+    QTimer              Timer;
+    CVector<short>      vecsSendData;
 
-	/* actual working objects */
-	CChannelSet			ChannelSet;
-	CSocket				Socket;
+    /* actual working objects */
+    CChannelSet         ChannelSet;
+    CSocket             Socket;
 
-	/* debugging, evaluating */
-	CMovingAv<double>	RespTimeMoAvBuf;
-	QTime				TimeLastBlock;
+    /* debugging, evaluating */
+    CMovingAv<double>   RespTimeMoAvBuf;
+    QTime               TimeLastBlock;
 
 public slots:
-	void OnTimer();
-	void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
+    void OnTimer();
+    void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
 };
 
 

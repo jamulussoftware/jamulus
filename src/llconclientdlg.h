@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -46,70 +46,70 @@
 
 /* Definitions ****************************************************************/
 /* text strings for connection button for connect and disconnect */
-#define CON_BUT_CONNECTTEXT			"C&onnect"
-#define CON_BUT_DISCONNECTTEXT		"D&isconnect"
+#define CON_BUT_CONNECTTEXT         "C&onnect"
+#define CON_BUT_DISCONNECTTEXT      "D&isconnect"
 
 /* steps for input level meter */
-#define NUM_STEPS_INP_LEV_METER		100
+#define NUM_STEPS_INP_LEV_METER     100
 
 /* update time for GUI controls */
-#define LEVELMETER_UPDATE_TIME		100 /* ms */
-#define STATUSBAR_UPDATE_TIME		1000 /* ms */
+#define LEVELMETER_UPDATE_TIME      100 /* ms */
+#define STATUSBAR_UPDATE_TIME       1000 /* ms */
 
 /* range for signal level meter */
-#define LOW_BOUND_SIG_METER			( -50.0 ) /* dB */
-#define UPPER_BOUND_SIG_METER		( 0.0 ) /* dB */
+#define LOW_BOUND_SIG_METER         ( -50.0 ) /* dB */
+#define UPPER_BOUND_SIG_METER       ( 0.0 ) /* dB */
 
 
 /* Classes ********************************************************************/
 class CLlconClientDlg : public CLlconClientDlgBase
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CLlconClientDlg ( CClient* pNCliP, QWidget* parent = 0,
-		const char* name = 0, bool modal = FALSE, WFlags f = 0 );
+    CLlconClientDlg ( CClient* pNCliP, QWidget* parent = 0,
+        const char* name = 0, bool modal = FALSE, WFlags f = 0 );
 
-	virtual ~CLlconClientDlg ();
+    virtual ~CLlconClientDlg ();
 
 protected:
-	class CChannelFader
-	{
-	public:
-		CChannelFader ( QWidget* pNW, QHBoxLayout* pNPtLy );
+    class CChannelFader
+    {
+    public:
+        CChannelFader ( QWidget* pNW, QHBoxLayout* pNPtLy );
 
-	protected:
-		QGridLayout MainGrid;
-		QSlider		Fader;
-		QLabel		Label;
+    protected:
+        QGridLayout     MainGrid;
+        QSlider         Fader;
+        QLabel          Label;
 
-		QHBoxLayout* pParentLayout;
-	};
+        QHBoxLayout*    pParentLayout;
+    };
 
-	CClient*				pClient;
-	bool					bConnected;
-	QTimer					TimerSigMet;
-	QTimer					TimerStatus;
+    CClient*                pClient;
+    bool                    bConnected;
+    QTimer                  TimerSigMet;
+    QTimer                  TimerStatus;
 
-	virtual void			customEvent ( QCustomEvent* Event );
-	virtual void			closeEvent ( QCloseEvent * Event );
-	void					UpdateDisplay();
+    virtual void            customEvent ( QCustomEvent* Event );
+    virtual void            closeEvent ( QCloseEvent * Event );
+    void                    UpdateDisplay();
 
-	QPopupMenu*				pSettingsMenu;
-	QMenuBar*				pMenu;
+    QPopupMenu*             pSettingsMenu;
+    QMenuBar*               pMenu;
 
-	CClientSettingsDlg		ClientSettingsDlg;
+    CClientSettingsDlg      ClientSettingsDlg;
 
-	CVector<CChannelFader>	vecpChanFader;
+    CVector<CChannelFader>  vecpChanFader;
 
 public slots:
-	void OnConnectDisconBut();
-	void OnTimerSigMet();
-	void OnTimerStatus() { UpdateDisplay(); }
-	void OnOpenGeneralSettings();
-	void OnSliderAudInFader ( int value ) { pClient->SetAudioInFader(value); }
-	void OnSliderAudReverb ( int value )
-		{ pClient->SetReverbLevel ( AUD_REVERB_MAX - value ); }
-	void OnRevSelL() { pClient->SetReverbOnLeftChan(true); }
-	void OnRevSelR() { pClient->SetReverbOnLeftChan(false); }
+    void OnConnectDisconBut();
+    void OnTimerSigMet();
+    void OnTimerStatus() { UpdateDisplay(); }
+    void OnOpenGeneralSettings();
+    void OnSliderAudInFader ( int value ) { pClient->SetAudioInFader(value); }
+    void OnSliderAudReverb ( int value )
+        { pClient->SetReverbLevel ( AUD_REVERB_MAX - value ); }
+    void OnRevSelL() { pClient->SetReverbOnLeftChan(true); }
+    void OnRevSelR() { pClient->SetReverbOnLeftChan(false); }
 };

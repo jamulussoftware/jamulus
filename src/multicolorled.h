@@ -2,15 +2,15 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  * Description:
  *
  * SetLight():
- *	0: Green
- *	1: Yellow
- *	2: Red
- *	
+ *  0: Green
+ *  1: Yellow
+ *  2: Red
+ *  
  *
  ******************************************************************************
  *
@@ -41,10 +41,10 @@
 
 
 /* Definitions ****************************************************************/
-#define DEFAULT_UPDATE_TIME				300
+#define DEFAULT_UPDATE_TIME             300
 
 /* The red and yellow light should be on at least this interval */
-#define MIN_TIME_FOR_RED_LIGHT			100
+#define MIN_TIME_FOR_RED_LIGHT          100
 
 
 /* Classes ********************************************************************/
@@ -53,97 +53,97 @@ class CMultiColorLEDbase : public QObject
     Q_OBJECT
 
 public:
-	CMultiColorLEDbase();
+    CMultiColorLEDbase();
 
-	void Reset();
-	void SetUpdateTime(int iNUTi);
-	void SetLight(int iNewStatus);
+    void Reset();
+    void SetUpdateTime(int iNUTi);
+    void SetLight(int iNewStatus);
 
 protected:
-	enum ELightColor {RL_GREY, RL_RED, RL_GREEN, RL_YELLOW};
-	ELightColor		eColorFlag;
+    enum ELightColor {RL_GREY, RL_RED, RL_GREEN, RL_YELLOW};
+    ELightColor     eColorFlag;
 
-	virtual void SetPixmap(QPixmap& NewBitmap) {} /* must be implemented in derived class! */
-	void UpdateColor();
+    virtual void SetPixmap(QPixmap& NewBitmap) {} /* must be implemented in derived class! */
+    void UpdateColor();
 
-	QPixmap	BitmCubeGreen;
-	QPixmap	BitmCubeYellow;
-	QPixmap	BitmCubeRed;
-	QPixmap	BitmCubeGrey;
+    QPixmap BitmCubeGreen;
+    QPixmap BitmCubeYellow;
+    QPixmap BitmCubeRed;
+    QPixmap BitmCubeGrey;
 
-	QTimer	TimerRedLight;
-	QTimer	TimerGreenLight;
-	QTimer	TimerYellowLight;
+    QTimer  TimerRedLight;
+    QTimer  TimerGreenLight;
+    QTimer  TimerYellowLight;
 
-	int		iUpdateTime;
+    int     iUpdateTime;
 
-	bool	bFlagRedLi;
-	bool	bFlagGreenLi;
-	bool	bFlagYellowLi;
+    bool    bFlagRedLi;
+    bool    bFlagGreenLi;
+    bool    bFlagYellowLi;
 
 protected slots:
-	void OnTimerRedLight();
-	void OnTimerGreenLight();
-	void OnTimerYellowLight();
+    void OnTimerRedLight();
+    void OnTimerGreenLight();
+    void OnTimerYellowLight();
 };
 
 
 class CMultiColorLED : public QLabel, public CMultiColorLEDbase
 {
 public:
-	CMultiColorLED(QWidget* parent, const char* name = 0, WFlags f = 0);
+    CMultiColorLED(QWidget* parent, const char* name = 0, WFlags f = 0);
 
 protected:
-	virtual void SetPixmap(QPixmap& NewBitmap) {setPixmap(NewBitmap);}
+    virtual void SetPixmap(QPixmap& NewBitmap) {setPixmap(NewBitmap);}
 };
 
 
 class CMultColLEDListViewItem : public CMultiColorLEDbase
 {
 public:
-	CMultColLEDListViewItem ( const int iNewCol ) : iColumn ( iNewCol ),
-		pListViewItem ( NULL ) {}
+    CMultColLEDListViewItem ( const int iNewCol ) : iColumn ( iNewCol ),
+        pListViewItem ( NULL ) {}
 
-	void SetListViewItemPointer ( QListViewItem* pNewListViewItem )
-	{
-		pListViewItem = pNewListViewItem;
-	}
+    void SetListViewItemPointer ( QListViewItem* pNewListViewItem )
+    {
+        pListViewItem = pNewListViewItem;
+    }
 
 protected:
-	virtual void SetPixmap ( QPixmap& NewBitmap )
-	{
-		if ( pListViewItem != NULL )
-		{
-			pListViewItem->setPixmap ( iColumn, NewBitmap );
-		}
-	}
+    virtual void SetPixmap ( QPixmap& NewBitmap )
+    {
+        if ( pListViewItem != NULL )
+        {
+            pListViewItem->setPixmap ( iColumn, NewBitmap );
+        }
+    }
 
-	QListViewItem*	pListViewItem;
-	int				iColumn;
+    QListViewItem*  pListViewItem;
+    int             iColumn;
 };
 
 
 class CServerListViewItem : public QListViewItem
 {
 public:
-	CServerListViewItem ( QListView* parent ) : LED0 ( 1 ), LED1 ( 2 ),
-		QListViewItem ( parent )
-	{
-		LED0.SetListViewItemPointer ( this );
-		LED1.SetListViewItemPointer ( this );
-	}
+    CServerListViewItem ( QListView* parent ) : LED0 ( 1 ), LED1 ( 2 ),
+        QListViewItem ( parent )
+    {
+        LED0.SetListViewItemPointer ( this );
+        LED1.SetListViewItemPointer ( this );
+    }
 
-	void SetLight ( int iWhichLED, int iNewStatus )
-	{
-		switch ( iWhichLED )
-		{
-		case 0: LED0.SetLight ( iNewStatus ); break;
-		case 1: LED1.SetLight ( iNewStatus ); break;
-		}
-	}
+    void SetLight ( int iWhichLED, int iNewStatus )
+    {
+        switch ( iWhichLED )
+        {
+        case 0: LED0.SetLight ( iNewStatus ); break;
+        case 1: LED1.SetLight ( iNewStatus ); break;
+        }
+    }
 
 protected:
-	CMultColLEDListViewItem LED0, LED1;
+    CMultColLEDListViewItem LED0, LED1;
 };
 
 

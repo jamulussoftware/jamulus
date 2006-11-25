@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -31,48 +31,48 @@
 
 /* Definitions ****************************************************************/
 /* time for fading effect for masking drop outs */
-#define FADE_IN_OUT_TIME			((double) 0.3) /* ms */
-#define FADE_IN_OUT_NUM_SAM			((int) (SAMPLE_RATE * FADE_IN_OUT_TIME) / 1000)
+#define FADE_IN_OUT_TIME            ((double) 0.3) /* ms */
+#define FADE_IN_OUT_NUM_SAM         ((int) (SAMPLE_RATE * FADE_IN_OUT_TIME) / 1000)
 
 /* for extrapolation a shorter time for fading */
-#define FADE_IN_OUT_NUM_SAM_EXTRA	5 /* samples */
+#define FADE_IN_OUT_NUM_SAM_EXTRA   5 /* samples */
 
 
 /* Classes ********************************************************************/
 class CNetBuf
 {
 public:
-	CNetBuf() {}
-	virtual ~CNetBuf() {}
+    CNetBuf() {}
+    virtual ~CNetBuf() {}
 
-	void Init(const int iNewBlockSize, const int iNewNumBlocks);
-	int GetSize() {return iMemSize / iBlockSize;}
+    void Init(const int iNewBlockSize, const int iNewNumBlocks);
+    int GetSize() {return iMemSize / iBlockSize;}
 
-	bool Put(CVector<double>& vecdData);
-	bool Get(CVector<double>& vecdData);
+    bool Put(CVector<double>& vecdData);
+    bool Get(CVector<double>& vecdData);
 
 protected:
-	enum EBufState {BS_OK, BS_FULL, BS_EMPTY};
-	enum EClearType {CT_PUT, CT_GET};
-	void Clear(const EClearType eClearType);
-	int GetAvailSpace() const;
-	int GetAvailData() const;
-	void FadeInAudioDataBlock(CVector<double>& vecdData);
-	void FadeOutExtrapolateAudioDataBlock(CVector<double>& vecdData,
-		const double dExPDiff, const double dExPLastV);
+    enum EBufState {BS_OK, BS_FULL, BS_EMPTY};
+    enum EClearType {CT_PUT, CT_GET};
+    void Clear(const EClearType eClearType);
+    int GetAvailSpace() const;
+    int GetAvailData() const;
+    void FadeInAudioDataBlock(CVector<double>& vecdData);
+    void FadeOutExtrapolateAudioDataBlock(CVector<double>& vecdData,
+        const double dExPDiff, const double dExPLastV);
 
-	CVector<double>	vecdMemory;
-	int				iMemSize;
-	int				iBlockSize;
-	int				iGetPos, iPutPos;
-	EBufState		eBufState;
-	bool			bFadeInNewPutData;
-	int				iNumSamFading;
-	int				iNumSamFadingExtra;
+    CVector<double> vecdMemory;
+    int             iMemSize;
+    int             iBlockSize;
+    int             iGetPos, iPutPos;
+    EBufState       eBufState;
+    bool            bFadeInNewPutData;
+    int             iNumSamFading;
+    int             iNumSamFadingExtra;
 
-	/* extrapolation parameters */
-	double			dExPDiff;
-	double			dExPLastV;
+    /* extrapolation parameters */
+    double          dExPDiff;
+    double          dExPLastV;
 };
 
 
@@ -80,20 +80,20 @@ protected:
 class CConvBuf
 {
 public:
-	CConvBuf () {}
-	virtual ~CConvBuf () {}
+    CConvBuf () {}
+    virtual ~CConvBuf () {}
 
-	void Init ( const int iNewMemSize );
-	int GetSize() { return iMemSize; }
+    void Init ( const int iNewMemSize );
+    int GetSize() { return iMemSize; }
 
-	bool Put ( const CVector<short>& vecsData );
-	CVector<short> Get ();
+    bool Put ( const CVector<short>& vecsData );
+    CVector<short> Get ();
 
 protected:
-	CVector<short>	vecsMemory;
-	int				iMemSize;
-	int				iBlockSize;
-	int				iPutPos;
+    CVector<short>  vecsMemory;
+    int             iMemSize;
+    int             iBlockSize;
+    int             iPutPos;
 };
 
 

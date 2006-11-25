@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -35,125 +35,125 @@
 
 /* Definitions ****************************************************************/
 // protocol message IDs
-#define PROTMESSID_ILLEGAL				 0 // illegal ID
-#define PROTMESSID_ACKN					 1 // acknowledge
-#define PROTMESSID_JITT_BUF_SIZE		10 // jitter buffer size
-#define PROTMESSID_REQ_JITT_BUF_SIZE	11 // request jitter buffer size
-#define PROTMESSID_PING					12 // for measuring ping time
-#define PROTMESSID_NET_BLSI_FACTOR		13 // network buffer size factor
-#define PROTMESSID_CHANNEL_GAIN			14 // set channel gain for mix
-#define PROTMESSID_CONN_CLIENTS_LIST	15 // connected client list
+#define PROTMESSID_ILLEGAL               0 // illegal ID
+#define PROTMESSID_ACKN                  1 // acknowledge
+#define PROTMESSID_JITT_BUF_SIZE        10 // jitter buffer size
+#define PROTMESSID_REQ_JITT_BUF_SIZE    11 // request jitter buffer size
+#define PROTMESSID_PING                 12 // for measuring ping time
+#define PROTMESSID_NET_BLSI_FACTOR      13 // network buffer size factor
+#define PROTMESSID_CHANNEL_GAIN         14 // set channel gain for mix
+#define PROTMESSID_CONN_CLIENTS_LIST    15 // connected client list
 
 // lengths of message as defined in protocol.cpp file
-#define MESS_HEADER_LENGTH_BYTE			5 /* ID, cnt, length */
-#define MESS_LEN_WITHOUT_DATA_BYTE		( MESS_HEADER_LENGTH_BYTE + 2 /* CRC */ )
+#define MESS_HEADER_LENGTH_BYTE         5 /* ID, cnt, length */
+#define MESS_LEN_WITHOUT_DATA_BYTE      ( MESS_HEADER_LENGTH_BYTE + 2 /* CRC */ )
 
 // time out for message re-send if no acknowledgement was received
-#define SEND_MESS_TIMEOUT_MS			400 // ms
+#define SEND_MESS_TIMEOUT_MS            400 // ms
 
 
 /* Classes ********************************************************************/
 class CProtocol : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CProtocol();
+    CProtocol();
 
-	void CreateJitBufMes ( const int iJitBufSize );
-	void CreateReqJitBufMes();
-	void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
-	void CreateChanGainMes ( const int iChanID, const double dGain );
+    void CreateJitBufMes ( const int iJitBufSize );
+    void CreateReqJitBufMes();
+    void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
+    void CreateChanGainMes ( const int iChanID, const double dGain );
 
-	void CreateConClientListMes ( const CVector<int>& veciChanIDs,
-								  const CVector<uint32_t>& veciIpAddrs,
-								  const CVector<std::string>& vecstrNames );
+    void CreateConClientListMes ( const CVector<int>& veciChanIDs,
+                                  const CVector<uint32_t>& veciIpAddrs,
+                                  const CVector<std::string>& vecstrNames );
 
-	void CreateAndSendAcknMess ( const int& iID, const int& iCnt );
+    void CreateAndSendAcknMess ( const int& iID, const int& iCnt );
 
-	bool ParseMessage ( const CVector<unsigned char>& vecbyData,
-						const int iNumBytes );
+    bool ParseMessage ( const CVector<unsigned char>& vecbyData,
+                        const int iNumBytes );
 
-	void DeleteSendMessQueue ();
+    void DeleteSendMessQueue ();
 
 protected:
-	class CSendMessage
-	{
-	public:
-		CSendMessage() : vecMessage ( 0 ), iID ( PROTMESSID_ILLEGAL ),
-			iCnt ( 0 ) {}
-		CSendMessage ( const CVector<uint8_t>& nMess, const int iNCnt,
-			const int iNID ) : vecMessage ( nMess ), iID ( iNID ),
-			iCnt ( iNCnt ) {}
+    class CSendMessage
+    {
+    public:
+        CSendMessage() : vecMessage ( 0 ), iID ( PROTMESSID_ILLEGAL ),
+            iCnt ( 0 ) {}
+        CSendMessage ( const CVector<uint8_t>& nMess, const int iNCnt,
+            const int iNID ) : vecMessage ( nMess ), iID ( iNID ),
+            iCnt ( iNCnt ) {}
 
-		CSendMessage& operator= ( const CSendMessage& NewSendMess )
-		{
-			vecMessage.Init ( NewSendMess.vecMessage.Size() );
-			vecMessage = NewSendMess.vecMessage;
+        CSendMessage& operator= ( const CSendMessage& NewSendMess )
+        {
+            vecMessage.Init ( NewSendMess.vecMessage.Size() );
+            vecMessage = NewSendMess.vecMessage;
 
-			iID = NewSendMess.iID;
-			iCnt = NewSendMess.iCnt;
-			return *this; 
-		}
+            iID = NewSendMess.iID;
+            iCnt = NewSendMess.iCnt;
+            return *this; 
+        }
 
-		CVector<uint8_t>	vecMessage;
-		int					iID, iCnt;
-	};
+        CVector<uint8_t>    vecMessage;
+        int                 iID, iCnt;
+    };
 
-	void EnqueueMessage ( CVector<uint8_t>& vecMessage,
-						  const int iCnt,
-						  const int iID );
+    void EnqueueMessage ( CVector<uint8_t>& vecMessage,
+                          const int iCnt,
+                          const int iID );
 
-	bool ParseMessageFrame ( const CVector<uint8_t>& vecIn,
-							 int& iCnt,
-							 int& iID,
-							 CVector<uint8_t>& vecData );
+    bool ParseMessageFrame ( const CVector<uint8_t>& vecIn,
+                             int& iCnt,
+                             int& iID,
+                             CVector<uint8_t>& vecData );
 
-	void GenMessageFrame ( CVector<uint8_t>& vecOut,
-						   const int iCnt,
-						   const int iID,
-						   const CVector<uint8_t>& vecData );
+    void GenMessageFrame ( CVector<uint8_t>& vecOut,
+                           const int iCnt,
+                           const int iID,
+                           const CVector<uint8_t>& vecData );
 
-	void PutValOnStream ( CVector<uint8_t>& vecIn,
-						  unsigned int& iPos,
-						  const uint32_t iVal,
-						  const unsigned int iNumOfBytes );
+    void PutValOnStream ( CVector<uint8_t>& vecIn,
+                          unsigned int& iPos,
+                          const uint32_t iVal,
+                          const unsigned int iNumOfBytes );
 
-	uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
-								unsigned int& iPos,
-								const unsigned int iNumOfBytes );
+    uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
+                                unsigned int& iPos,
+                                const unsigned int iNumOfBytes );
 
-	void SendMessage();
+    void SendMessage();
 
-	void CreateAndSendMessage ( const int iID, const CVector<uint8_t>& vecData );
+    void CreateAndSendMessage ( const int iID, const CVector<uint8_t>& vecData );
 
-	void EvaluateJitBufMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
-	void EvaluateReqJitBufMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
-	void EvaluateNetwBlSiFactMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
-	void EvaluateChanGainMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
-	void EvaluateConClientListMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
+    void EvaluateJitBufMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
+    void EvaluateReqJitBufMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
+    void EvaluateNetwBlSiFactMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
+    void EvaluateChanGainMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
+    void EvaluateConClientListMes ( unsigned int iPos, const CVector<uint8_t>& vecData );
 
-	int						iOldRecID, iOldRecCnt;
+    int                     iOldRecID, iOldRecCnt;
 
-	// these two objects must be sequred by a mutex
-	uint8_t					iCounter;
-	std::list<CSendMessage>	SendMessQueue;
+    // these two objects must be sequred by a mutex
+    uint8_t                 iCounter;
+    std::list<CSendMessage> SendMessQueue;
 
-	QTimer					TimerSendMess;
-	QMutex					Mutex;
+    QTimer                  TimerSendMess;
+    QMutex                  Mutex;
 
 public slots:
-	void OnTimerSendMess() { SendMessage(); }
+    void OnTimerSendMess() { SendMessage(); }
 
 signals:
-	// transmitting
-	void MessReadyForSending ( CVector<uint8_t> vecMessage );
+    // transmitting
+    void MessReadyForSending ( CVector<uint8_t> vecMessage );
 
-	// receiving
-	void ChangeJittBufSize ( int iNewJitBufSize );
-	void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
-	void ChangeChanGain ( int iChanID, double dNewGain );
-	void ReqJittBufSize();
+    // receiving
+    void ChangeJittBufSize ( int iNewJitBufSize );
+    void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
+    void ChangeChanGain ( int iChanID, double dNewGain );
+    void ReqJittBufSize();
 };
 
 

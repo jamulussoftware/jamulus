@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -39,22 +39,22 @@
 /* Set the time-out for the input buffer until the state changes from
    connected to not-connected (the actual time depends on the way the error
    correction is implemented) */
-#define CON_TIME_OUT_SEC_MAX	5 // seconds
+#define CON_TIME_OUT_SEC_MAX    5 // seconds
 
 /* maximum number of internet connections (channels) */
 // if you want to change this paramter, change the connections in this class, too!
-#define MAX_NUM_CHANNELS		5//10 /* max number channels for server */
+#define MAX_NUM_CHANNELS        5//10 /* max number channels for server */
 
 /* no valid channel number */
-#define INVALID_CHANNEL_ID		(MAX_NUM_CHANNELS + 1)
+#define INVALID_CHANNEL_ID      (MAX_NUM_CHANNELS + 1)
 
 enum EPutDataStat
 {
-	PS_GEN_ERROR,
-	PS_AUDIO_OK,
-	PS_AUDIO_ERR,
-	PS_PROT_OK,
-	PS_PROT_ERR
+    PS_GEN_ERROR,
+    PS_AUDIO_OK,
+    PS_AUDIO_ERR,
+    PS_PROT_OK,
+    PS_PROT_ERR
 };
 
 
@@ -62,192 +62,192 @@ enum EPutDataStat
 /* CChannel ----------------------------------------------------------------- */
 class CChannel : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CChannel();
-	virtual ~CChannel() {}
+    CChannel();
+    virtual ~CChannel() {}
 
-	EPutDataStat PutData ( const CVector<unsigned char>& vecbyData,
-						   int iNumBytes );
-	bool GetData ( CVector<double>& vecdData );
+    EPutDataStat PutData ( const CVector<unsigned char>& vecbyData,
+                           int iNumBytes );
+    bool GetData ( CVector<double>& vecdData );
 
-	CVector<unsigned char> PrepSendPacket ( const CVector<short>& vecsNPacket );
+    CVector<unsigned char> PrepSendPacket ( const CVector<short>& vecsNPacket );
 
-	bool IsConnected() const { return iConTimeOut > 0; }
+    bool IsConnected() const { return iConTimeOut > 0; }
 
-	void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
-	bool GetAddress ( CHostAddress& RetAddr );
-	CHostAddress GetAddress () { return InetAddr; }
+    void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
+    bool GetAddress ( CHostAddress& RetAddr );
+    CHostAddress GetAddress () { return InetAddr; }
 
-	void SetName ( const std::string sNNa ) { sName = sNNa; }
-	std::string GetName() { return sName; }
+    void SetName ( const std::string sNNa ) { sName = sNNa; }
+    std::string GetName() { return sName; }
 
-	void SetGain ( const double dNG ) { dGain = dNG; }
-	double GetGain() { return dGain; }
+    void SetGain ( const double dNG ) { dGain = dNG; }
+    double GetGain() { return dGain; }
 
-	void SetSockBufSize ( const int iNumBlocks );
-	int GetSockBufSize() { return iCurSockBufSize; }
+    void SetSockBufSize ( const int iNumBlocks );
+    int GetSockBufSize() { return iCurSockBufSize; }
 
-	void SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut );
-	int GetNetwBufSizeFactOut() { return iCurNetwOutBlSiFact; }
+    void SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut );
+    int GetNetwBufSizeFactOut() { return iCurNetwOutBlSiFact; }
 
-	int GetNetwBufSizeFactIn() { return iCurNetwInBlSiFact; }
+    int GetNetwBufSizeFactIn() { return iCurNetwInBlSiFact; }
 
-	// network protocol interface
-	void CreateJitBufMes ( const int iJitBufSize )
-	{ 
-		if ( IsConnected() )
-		{
-			Protocol.CreateJitBufMes ( iJitBufSize );
-		}
-	}
-	void CreateReqJitBufMes() { Protocol.CreateReqJitBufMes(); }
+    // network protocol interface
+    void CreateJitBufMes ( const int iJitBufSize )
+    { 
+        if ( IsConnected() )
+        {
+            Protocol.CreateJitBufMes ( iJitBufSize );
+        }
+    }
+    void CreateReqJitBufMes() { Protocol.CreateReqJitBufMes(); }
 
-	void CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
-	{ 
-		if ( IsConnected() )
-		{
-			Protocol.CreateNetwBlSiFactMes ( iNetwBlSiFact );
-		}
-	}
+    void CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
+    { 
+        if ( IsConnected() )
+        {
+            Protocol.CreateNetwBlSiFactMes ( iNetwBlSiFact );
+        }
+    }
 
-	void CreateConClientListMes ( const CVector<int>& veciChanIDs,
-								  const CVector<uint32_t>& veciIpAddrs,
-								  const CVector<std::string>& vecstrNames )
-	{ 
-		Protocol.CreateConClientListMes ( veciChanIDs, veciIpAddrs, vecstrNames );
-	}
+    void CreateConClientListMes ( const CVector<int>& veciChanIDs,
+                                  const CVector<uint32_t>& veciIpAddrs,
+                                  const CVector<std::string>& vecstrNames )
+    { 
+        Protocol.CreateConClientListMes ( veciChanIDs, veciIpAddrs, vecstrNames );
+    }
 
 protected:
-	void SetNetwInBlSiFact ( const int iNewBlockSizeFactor );
+    void SetNetwInBlSiFact ( const int iNewBlockSizeFactor );
 
-	// audio compression
-	CAudioCompression	AudioCompressionIn;
-	int					iAudComprSizeIn;
-	CAudioCompression	AudioCompressionOut;
-	int					iAudComprSizeOut;
+    // audio compression
+    CAudioCompression   AudioCompressionIn;
+    int                 iAudComprSizeIn;
+    CAudioCompression   AudioCompressionOut;
+    int                 iAudComprSizeOut;
 
-	// resampling
-	CResample			ResampleObj;
-	double				dSamRateOffset;
-	CVector<double>		vecdResInData;
-	CVector<double>		vecdResOutData;
+    // resampling
+    CResample           ResampleObj;
+    double              dSamRateOffset;
+    CVector<double>     vecdResInData;
+    CVector<double>     vecdResOutData;
 
-	// connection parameters
-	CHostAddress		InetAddr;
+    // connection parameters
+    CHostAddress        InetAddr;
 
-	// channel name
-	std::string			sName;
+    // channel name
+    std::string         sName;
 
 // TODO we need mixer and effect settings for all the other channels, too!!!
 // mixer and effect settings
-double				dGain;
+double              dGain;
 
-	// network jitter-buffer
-	CNetBuf				SockBuf;
-	int					iCurSockBufSize;
+    // network jitter-buffer
+    CNetBuf             SockBuf;
+    int                 iCurSockBufSize;
 
-	// network output conversion buffer
-	CConvBuf			ConvBuf;
+    // network output conversion buffer
+    CConvBuf            ConvBuf;
 
-	// network protocol
-	CProtocol			Protocol;
+    // network protocol
+    CProtocol           Protocol;
 
-	int					iConTimeOut;
-	int					iConTimeOutStartVal;
+    int                 iConTimeOut;
+    int                 iConTimeOutStartVal;
 
-	int					vecNetwInBufSizes[MAX_NET_BLOCK_SIZE_FACTOR];
+    int                 vecNetwInBufSizes[MAX_NET_BLOCK_SIZE_FACTOR];
 
-	int					iCurNetwInBlSiFact;
-	int					iCurNetwOutBlSiFact;
+    int                 iCurNetwInBlSiFact;
+    int                 iCurNetwOutBlSiFact;
 
-	QMutex				Mutex;
+    QMutex              Mutex;
 
 public slots:
-	void OnSendProtMessage ( CVector<uint8_t> vecMessage );
-	void OnJittBufSizeChange ( int iNewJitBufSize );
-	void OnNetwBlSiFactChange ( int iNewNetwBlSiFact );
+    void OnSendProtMessage ( CVector<uint8_t> vecMessage );
+    void OnJittBufSizeChange ( int iNewJitBufSize );
+    void OnNetwBlSiFactChange ( int iNewNetwBlSiFact );
 
 signals:
-	void MessReadyForSending ( CVector<uint8_t> vecMessage );
-	void NewConnection();
-	void ReqJittBufSize();
-	void ProtocolStatus ( bool bOk );
+    void MessReadyForSending ( CVector<uint8_t> vecMessage );
+    void NewConnection();
+    void ReqJittBufSize();
+    void ProtocolStatus ( bool bOk );
 };
 
 
 /* CChannelSet (for server) ------------------------------------------------- */
 class CChannelSet : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CChannelSet();
-	virtual ~CChannelSet() {}
+    CChannelSet();
+    virtual ~CChannelSet() {}
 
-	bool PutData ( const CVector<unsigned char>& vecbyRecBuf,
-				   const int iNumBytesRead, const CHostAddress& HostAdr );
+    bool PutData ( const CVector<unsigned char>& vecbyRecBuf,
+                   const int iNumBytesRead, const CHostAddress& HostAdr );
 
-	int	GetFreeChan();
+    int GetFreeChan();
 
-	int	CheckAddr ( const CHostAddress& Addr );
+    int CheckAddr ( const CHostAddress& Addr );
 
-	void GetBlockAllConC ( CVector<int>& vecChanID,
-						   CVector<CVector<double> >& vecvecdData,
-						   CVector<double>& vecdGains );
+    void GetBlockAllConC ( CVector<int>& vecChanID,
+                           CVector<CVector<double> >& vecvecdData,
+                           CVector<double>& vecdGains );
 
-	void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-						  CVector<int>& veciJitBufSize,
-						  CVector<int>& veciNetwOutBlSiFact,
-						  CVector<int>& veciNetwInBlSiFact );
+    void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
+                          CVector<int>& veciJitBufSize,
+                          CVector<int>& veciNetwOutBlSiFact,
+                          CVector<int>& veciNetwInBlSiFact );
 
-	/* access functions for actual channels */
-	bool IsConnected ( const int iChanNum )
-		{ return vecChannels[iChanNum].IsConnected(); }
+    /* access functions for actual channels */
+    bool IsConnected ( const int iChanNum )
+        { return vecChannels[iChanNum].IsConnected(); }
 
-	CVector<unsigned char> PrepSendPacket ( const int iChanNum,
-											const CVector<short>& vecsNPacket )
-		{ return vecChannels[iChanNum].PrepSendPacket ( vecsNPacket ); }
+    CVector<unsigned char> PrepSendPacket ( const int iChanNum,
+                                            const CVector<short>& vecsNPacket )
+        { return vecChannels[iChanNum].PrepSendPacket ( vecsNPacket ); }
 
-	CHostAddress GetAddress ( const int iChanNum )
-		{ return vecChannels[iChanNum].GetAddress(); }
+    CHostAddress GetAddress ( const int iChanNum )
+        { return vecChannels[iChanNum].GetAddress(); }
 
 protected:
-	void CreateAndSendChanListForAllConClients();
+    void CreateAndSendChanListForAllConClients();
 
-	/* do not use the vector class since CChannel does not have appropriate
-	   copy constructor/operator */
-	CChannel	vecChannels[MAX_NUM_CHANNELS];
-	QMutex		Mutex;
+    /* do not use the vector class since CChannel does not have appropriate
+       copy constructor/operator */
+    CChannel    vecChannels[MAX_NUM_CHANNELS];
+    QMutex      Mutex;
 
 public slots:
-	// make sure we have MAX_NUM_CHANNELS connections!!!
-	// send message
-	void OnSendProtMessCh0(CVector<uint8_t> mess) {emit MessReadyForSending(0,mess);}
-	void OnSendProtMessCh1(CVector<uint8_t> mess) {emit MessReadyForSending(1,mess);}
-	void OnSendProtMessCh2(CVector<uint8_t> mess) {emit MessReadyForSending(2,mess);}
-	void OnSendProtMessCh3(CVector<uint8_t> mess) {emit MessReadyForSending(3,mess);}
-	void OnSendProtMessCh4(CVector<uint8_t> mess) {emit MessReadyForSending(4,mess);}
-	void OnSendProtMessCh5(CVector<uint8_t> mess) {emit MessReadyForSending(5,mess);}
-	void OnSendProtMessCh6(CVector<uint8_t> mess) {emit MessReadyForSending(6,mess);}
-	void OnSendProtMessCh7(CVector<uint8_t> mess) {emit MessReadyForSending(7,mess);}
-	void OnSendProtMessCh8(CVector<uint8_t> mess) {emit MessReadyForSending(8,mess);}
-	void OnSendProtMessCh9(CVector<uint8_t> mess) {emit MessReadyForSending(9,mess);}
+    // make sure we have MAX_NUM_CHANNELS connections!!!
+    // send message
+    void OnSendProtMessCh0(CVector<uint8_t> mess) {emit MessReadyForSending(0,mess);}
+    void OnSendProtMessCh1(CVector<uint8_t> mess) {emit MessReadyForSending(1,mess);}
+    void OnSendProtMessCh2(CVector<uint8_t> mess) {emit MessReadyForSending(2,mess);}
+    void OnSendProtMessCh3(CVector<uint8_t> mess) {emit MessReadyForSending(3,mess);}
+    void OnSendProtMessCh4(CVector<uint8_t> mess) {emit MessReadyForSending(4,mess);}
+    void OnSendProtMessCh5(CVector<uint8_t> mess) {emit MessReadyForSending(5,mess);}
+    void OnSendProtMessCh6(CVector<uint8_t> mess) {emit MessReadyForSending(6,mess);}
+    void OnSendProtMessCh7(CVector<uint8_t> mess) {emit MessReadyForSending(7,mess);}
+    void OnSendProtMessCh8(CVector<uint8_t> mess) {emit MessReadyForSending(8,mess);}
+    void OnSendProtMessCh9(CVector<uint8_t> mess) {emit MessReadyForSending(9,mess);}
 
-	void OnNewConnectionCh0() {vecChannels[0].CreateReqJitBufMes();}
-	void OnNewConnectionCh1() {vecChannels[1].CreateReqJitBufMes();}
-	void OnNewConnectionCh2() {vecChannels[2].CreateReqJitBufMes();}
-	void OnNewConnectionCh3() {vecChannels[3].CreateReqJitBufMes();}
-	void OnNewConnectionCh4() {vecChannels[4].CreateReqJitBufMes();}
-	void OnNewConnectionCh5() {vecChannels[5].CreateReqJitBufMes();}
-	void OnNewConnectionCh6() {vecChannels[6].CreateReqJitBufMes();}
-	void OnNewConnectionCh7() {vecChannels[7].CreateReqJitBufMes();}
-	void OnNewConnectionCh8() {vecChannels[8].CreateReqJitBufMes();}
-	void OnNewConnectionCh9() {vecChannels[9].CreateReqJitBufMes();}
+    void OnNewConnectionCh0() {vecChannels[0].CreateReqJitBufMes();}
+    void OnNewConnectionCh1() {vecChannels[1].CreateReqJitBufMes();}
+    void OnNewConnectionCh2() {vecChannels[2].CreateReqJitBufMes();}
+    void OnNewConnectionCh3() {vecChannels[3].CreateReqJitBufMes();}
+    void OnNewConnectionCh4() {vecChannels[4].CreateReqJitBufMes();}
+    void OnNewConnectionCh5() {vecChannels[5].CreateReqJitBufMes();}
+    void OnNewConnectionCh6() {vecChannels[6].CreateReqJitBufMes();}
+    void OnNewConnectionCh7() {vecChannels[7].CreateReqJitBufMes();}
+    void OnNewConnectionCh8() {vecChannels[8].CreateReqJitBufMes();}
+    void OnNewConnectionCh9() {vecChannels[9].CreateReqJitBufMes();}
 
 signals:
-	void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );
+    void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );
 };
 
 
@@ -255,20 +255,20 @@ signals:
 class CSampleOffsetEst
 {
 public:
-	CSampleOffsetEst() { Init(); }
-	virtual ~CSampleOffsetEst() {}
+    CSampleOffsetEst() { Init(); }
+    virtual ~CSampleOffsetEst() {}
 
-	void Init();
-	void AddTimeStampIdx ( const int iTimeStampIdx );
-	double GetSamRate() { return dSamRateEst; }
+    void Init();
+    void AddTimeStampIdx ( const int iTimeStampIdx );
+    double GetSamRate() { return dSamRateEst; }
 
 protected:
-	QTime				RefTime;
-	int					iAccTiStVal;
-	double				dSamRateEst;
-	CVector<long int>	veciTimeElapsed;
-	CVector<long int>	veciTiStIdx;
-	int					iInitCnt;
+    QTime               RefTime;
+    int                 iAccTiStVal;
+    double              dSamRateEst;
+    CVector<long int>   veciTimeElapsed;
+    CVector<long int>   veciTiStIdx;
+    int                 iInitCnt;
 };
 
 

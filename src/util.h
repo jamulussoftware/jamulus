@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -42,28 +42,28 @@ using namespace std; /* Because of the library: "vector" */
 
 
 /* Definitions ****************************************************************/
-#define	METER_FLY_BACK				2
+#define METER_FLY_BACK              2
 
 
 /* Global functions ***********************************************************/
 /* Converting double to short */
 inline short Double2Short(const double dInput)
 {
-	/* Lower bound */
-	if (dInput < _MINSHORT)
-		return _MINSHORT;
+    /* Lower bound */
+    if (dInput < _MINSHORT)
+        return _MINSHORT;
 
-	/* Upper bound */
-	if (dInput > _MAXSHORT)
-		return _MAXSHORT;
+    /* Upper bound */
+    if (dInput > _MAXSHORT)
+        return _MAXSHORT;
 
-	return (short) dInput;
+    return (short) dInput;
 }
 
 /* Debug error handling */
 void DebugError(const char* pchErDescr, const char* pchPar1Descr,
-				const double dPar1, const char* pchPar2Descr,
-				const double dPar2);
+                const double dPar1, const char* pchPar2Descr,
+                const double dPar2);
 
 
 /******************************************************************************\
@@ -72,115 +72,115 @@ void DebugError(const char* pchErDescr, const char* pchPar1Descr,
 template<class TData> class CVector : public std::vector<TData>
 {
 public:
-	CVector() : iVectorSize(0) {pData = this->begin();}
-	CVector(const int iNeSi) {Init(iNeSi);}
-	CVector(const int iNeSi, const TData tInVa) {Init(iNeSi, tInVa);}
-	virtual	~CVector() {}
+    CVector() : iVectorSize(0) {pData = this->begin();}
+    CVector(const int iNeSi) {Init(iNeSi);}
+    CVector(const int iNeSi, const TData tInVa) {Init(iNeSi, tInVa);}
+    virtual ~CVector() {}
 
-	/* Copy constructor: The order of the initialization list must not be
-	   changed. First, the base class must be initialized, then the pData
-	   pointer must be set to the new data source. The bit access is, by
-	   default, reset */
-	CVector(const CVector<TData>& vecI) :
-		std::vector<TData>(static_cast<const std::vector<TData>&>(vecI)), 
-		iVectorSize(vecI.Size()) { pData = this->begin(); }
+    /* Copy constructor: The order of the initialization list must not be
+       changed. First, the base class must be initialized, then the pData
+       pointer must be set to the new data source. The bit access is, by
+       default, reset */
+    CVector(const CVector<TData>& vecI) :
+        std::vector<TData>(static_cast<const std::vector<TData>&>(vecI)), 
+        iVectorSize(vecI.Size()) { pData = this->begin(); }
 
-	void Init(const int iNewSize);
+    void Init(const int iNewSize);
 
-	/* Use this init to give all elements a defined value */
-	void Init(const int iNewSize, const TData tIniVal);
-	void Reset(const TData tResetVal);
+    /* Use this init to give all elements a defined value */
+    void Init(const int iNewSize, const TData tIniVal);
+    void Reset(const TData tResetVal);
 
-	void Enlarge(const int iAddedSize);
-	void Add(const TData& tI) {Enlarge(1); pData[iVectorSize - 1] = tI;}
+    void Enlarge(const int iAddedSize);
+    void Add(const TData& tI) {Enlarge(1); pData[iVectorSize - 1] = tI;}
 
-	inline int Size() const {return iVectorSize;}
+    inline int Size() const {return iVectorSize;}
 
-	/* This operator allows for a l-value assignment of this object:
-	   CVector[x] = y is possible */
-	inline TData& operator[](const int iPos) {
+    /* This operator allows for a l-value assignment of this object:
+       CVector[x] = y is possible */
+    inline TData& operator[](const int iPos) {
 #ifdef _DEBUG_
-		if ((iPos < 0) || (iPos > iVectorSize - 1))
-		{
-			DebugError("Writing vector out of bounds", "Vector size",
-				iVectorSize, "New parameter", iPos);
-		}
-#endif		
-		return pData[iPos];}
+        if ((iPos < 0) || (iPos > iVectorSize - 1))
+        {
+            DebugError("Writing vector out of bounds", "Vector size",
+                iVectorSize, "New parameter", iPos);
+        }
+#endif      
+        return pData[iPos];}
 
-	inline TData operator[](const int iPos) const {
+    inline TData operator[](const int iPos) const {
 #ifdef _DEBUG_
-		if ((iPos < 0) || (iPos > iVectorSize - 1))
-		{
-			DebugError("Reading vector out of bounds", "Vector size",
-				iVectorSize, "New parameter", iPos);
-		}
+        if ((iPos < 0) || (iPos > iVectorSize - 1))
+        {
+            DebugError("Reading vector out of bounds", "Vector size",
+                iVectorSize, "New parameter", iPos);
+        }
 #endif
-		return pData[iPos];}
+        return pData[iPos];}
 
-	inline CVector<TData>& operator=(const CVector<TData>& vecI) {
+    inline CVector<TData>& operator=(const CVector<TData>& vecI) {
 #ifdef _DEBUG_
-		/* Vectors which shall be copied MUST have same size! (If this is 
-		   satisfied, the parameter "iVectorSize" must not be adjusted as
-		   a side effect) */
-		if (vecI.Size() != iVectorSize)
-		{
-			DebugError("Vector operator=() different size", "Vector size",
-				iVectorSize, "New parameter", vecI.Size());
-		}
+        /* Vectors which shall be copied MUST have same size! (If this is 
+           satisfied, the parameter "iVectorSize" must not be adjusted as
+           a side effect) */
+        if (vecI.Size() != iVectorSize)
+        {
+            DebugError("Vector operator=() different size", "Vector size",
+                iVectorSize, "New parameter", vecI.Size());
+        }
 #endif
-		vector<TData>::operator=(vecI);
+        vector<TData>::operator=(vecI);
 
-		/* Reset my data pointer in case, the operator=() of the base class
-		   did change the actual memory */
-	  	pData = this->begin();
+        /* Reset my data pointer in case, the operator=() of the base class
+           did change the actual memory */
+        pData = this->begin();
 
-		return *this;
-	}
+        return *this;
+    }
 
 protected:
-	typename std::vector<TData>::iterator	pData;
-	int										iVectorSize;
+    typename std::vector<TData>::iterator   pData;
+    int                                     iVectorSize;
 };
 
 
 /* Implementation *************************************************************/
 template<class TData> void CVector<TData>::Init(const int iNewSize)
 {
-	iVectorSize = iNewSize;
+    iVectorSize = iNewSize;
 
-	/* Clear old buffer and reserve memory for new buffer, get iterator
-	   for pointer operations */
-	this->clear();
-	this->resize(iNewSize);
-	pData = this->begin();
+    /* Clear old buffer and reserve memory for new buffer, get iterator
+       for pointer operations */
+    this->clear();
+    this->resize(iNewSize);
+    pData = this->begin();
 }
 
 template<class TData> void CVector<TData>::Init(const int iNewSize, 
-												const TData tIniVal)
+                                                const TData tIniVal)
 {
-	/* Call actual init routine */
-	Init(iNewSize);
+    /* Call actual init routine */
+    Init(iNewSize);
 
-	/* Set values */
-	Reset(tIniVal);
+    /* Set values */
+    Reset(tIniVal);
 }
 
 template<class TData> void CVector<TData>::Enlarge(const int iAddedSize)
 {
-	iVectorSize += iAddedSize;
-	this->resize(iVectorSize);
+    iVectorSize += iAddedSize;
+    this->resize(iVectorSize);
 
-	/* We have to reset the pointer since it could be that the vector size was
-	   zero before enlarging the vector */
-	pData = this->begin();
+    /* We have to reset the pointer since it could be that the vector size was
+       zero before enlarging the vector */
+    pData = this->begin();
 }
 
 template<class TData> void CVector<TData>::Reset(const TData tResetVal)
 {
-	/* Set all values to reset value */
-	for (int i = 0; i < iVectorSize; i++)
-		pData[i] = tResetVal;
+    /* Set all values to reset value */
+    for (int i = 0; i < iVectorSize; i++)
+        pData[i] = tResetVal;
 }
 
 
@@ -190,42 +190,42 @@ template<class TData> void CVector<TData>::Reset(const TData tResetVal)
 template<class TData> class CFIFO : public CVector<TData>
 {
 public:
-	CFIFO() : CVector<TData>(), iCurIdx(0) {}
-	CFIFO(const int iNeSi) : CVector<TData>(iNeSi), iCurIdx(0) {}
-	CFIFO(const int iNeSi, const TData tInVa) :
-		CVector<TData>(iNeSi, tInVa), iCurIdx(0) {}
+    CFIFO() : CVector<TData>(), iCurIdx(0) {}
+    CFIFO(const int iNeSi) : CVector<TData>(iNeSi), iCurIdx(0) {}
+    CFIFO(const int iNeSi, const TData tInVa) :
+        CVector<TData>(iNeSi, tInVa), iCurIdx(0) {}
 
-	void Add(const TData tNewD);
-	inline TData Get() {return this->pData[iCurIdx];}
+    void Add(const TData tNewD);
+    inline TData Get() {return this->pData[iCurIdx];}
 
-	virtual void Init(const int iNewSize);
-	virtual void Init(const int iNewSize, const TData tIniVal);
+    virtual void Init(const int iNewSize);
+    virtual void Init(const int iNewSize, const TData tIniVal);
 
 protected:
-	int iCurIdx;
+    int iCurIdx;
 };
 
 template<class TData> void CFIFO<TData>::Init(const int iNewSize)
 {
-	iCurIdx = 0;
-	CVector<TData>::Init(iNewSize);
+    iCurIdx = 0;
+    CVector<TData>::Init(iNewSize);
 }
 
 template<class TData> void CFIFO<TData>::Init(const int iNewSize,
-											  const TData tIniVal)
+                                              const TData tIniVal)
 {
-	iCurIdx = 0;
-	CVector<TData>::Init(iNewSize, tIniVal);
+    iCurIdx = 0;
+    CVector<TData>::Init(iNewSize, tIniVal);
 }
 
 template<class TData> void CFIFO<TData>::Add(const TData tNewD)
 {
-	this->pData[iCurIdx] = tNewD;
+    this->pData[iCurIdx] = tNewD;
 
-	/* Increment index */
-	iCurIdx++;
-	if (iCurIdx >= this->iVectorSize)
-		iCurIdx = 0;
+    /* Increment index */
+    iCurIdx++;
+    if (iCurIdx >= this->iVectorSize)
+        iCurIdx = 0;
 }
 
 
@@ -235,60 +235,60 @@ template<class TData> void CFIFO<TData>::Add(const TData tNewD)
 template<class TData> class CMovingAv : public CVector<TData>
 {
 public:
-	CMovingAv() : CVector<TData>(), iCurIdx(0), iNorm(0),
-		tCurAvResult(TData(0)) {}
-	CMovingAv(const int iNeSi) : CVector<TData>(iNeSi), iCurIdx(0), iNorm(0),
-		tCurAvResult(TData(0)) {}
-	CMovingAv(const int iNeSi, const TData tInVa) :
-		CVector<TData>(iNeSi, tInVa), iCurIdx(0), iNorm(0),
-		tCurAvResult(TData(0)) {}
+    CMovingAv() : CVector<TData>(), iCurIdx(0), iNorm(0),
+        tCurAvResult(TData(0)) {}
+    CMovingAv(const int iNeSi) : CVector<TData>(iNeSi), iCurIdx(0), iNorm(0),
+        tCurAvResult(TData(0)) {}
+    CMovingAv(const int iNeSi, const TData tInVa) :
+        CVector<TData>(iNeSi, tInVa), iCurIdx(0), iNorm(0),
+        tCurAvResult(TData(0)) {}
 
-	void Add(const TData tNewD);
-	inline TData GetAverage()
-	{
-		if (this->iNorm == 0) return TData(0);
-		else return tCurAvResult / this->iNorm;
-	}
+    void Add(const TData tNewD);
+    inline TData GetAverage()
+    {
+        if (this->iNorm == 0) return TData(0);
+        else return tCurAvResult / this->iNorm;
+    }
 
-	virtual void Init(const int iNewSize);
-	void InitVec(const int iNewSize, const int iNewVecSize);
+    virtual void Init(const int iNewSize);
+    void InitVec(const int iNewSize, const int iNewVecSize);
 
 protected:
-	int		iCurIdx;
-	int		iNorm;
-	TData	tCurAvResult;
+    int     iCurIdx;
+    int     iNorm;
+    TData   tCurAvResult;
 };
 
 template<class TData> void CMovingAv<TData>::Init(const int iNewSize)
 {
-	iNorm = 0;
-	iCurIdx = 0;
-	tCurAvResult = TData(0); /* Only for scalars! */
-	CVector<TData>::Init(iNewSize);
+    iNorm = 0;
+    iCurIdx = 0;
+    tCurAvResult = TData(0); /* Only for scalars! */
+    CVector<TData>::Init(iNewSize);
 }
 
 template<class TData> void CMovingAv<TData>::Add(const TData tNewD)
 {
 /*
-	Optimized calculation of the moving average. We only add a new value and
-	subtract the old value from the result. We only need one addition and a
-	history buffer
+    Optimized calculation of the moving average. We only add a new value and
+    subtract the old value from the result. We only need one addition and a
+    history buffer
 */
-	/* Subtract oldest value */
-	tCurAvResult -= this->pData[iCurIdx];
+    /* Subtract oldest value */
+    tCurAvResult -= this->pData[iCurIdx];
 
-	/* Add new value and write in memory */
-	tCurAvResult += tNewD;
-	this->pData[iCurIdx] = tNewD;
+    /* Add new value and write in memory */
+    tCurAvResult += tNewD;
+    this->pData[iCurIdx] = tNewD;
 
-	/* Increase position pointer and test if wrap */
-	iCurIdx++;
-	if (iCurIdx >= this->iVectorSize)
-		iCurIdx = 0;
+    /* Increase position pointer and test if wrap */
+    iCurIdx++;
+    if (iCurIdx >= this->iVectorSize)
+        iCurIdx = 0;
 
-	/* take care of norm */
-	if (this->iNorm < this->iVectorSize)
-		this->iNorm++;
+    /* take care of norm */
+    if (this->iNorm < this->iVectorSize)
+        this->iNorm++;
 }
 
 
@@ -298,30 +298,30 @@ template<class TData> void CMovingAv<TData>::Add(const TData tNewD)
 /* About dialog ------------------------------------------------------------- */
 class CAboutDlg : public CAboutDlgBase
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CAboutDlg(QWidget* parent = 0, const char* name = 0, bool modal = FALSE,
-		WFlags f = 0);
+    CAboutDlg(QWidget* parent = 0, const char* name = 0, bool modal = FALSE,
+        WFlags f = 0);
 
-	static QString GetVersionAndNameStr ( const bool bWithHtml = true );
+    static QString GetVersionAndNameStr ( const bool bWithHtml = true );
 };
 
 
 /* Help menu ---------------------------------------------------------------- */
 class CLlconHelpMenu : public QPopupMenu
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	CLlconHelpMenu(QWidget* parent = 0);
+    CLlconHelpMenu(QWidget* parent = 0);
 
 protected:
-	CAboutDlg AboutDlg;
+    CAboutDlg AboutDlg;
 
 public slots:
-	void OnHelpWhatsThis () { QWhatsThis::enterWhatsThisMode (); }
-	void OnHelpAbout () { AboutDlg.exec(); }
+    void OnHelpWhatsThis () { QWhatsThis::enterWhatsThisMode (); }
+    void OnHelpAbout () { AboutDlg.exec(); }
 };
 
 
@@ -330,34 +330,34 @@ public slots:
 class CSignalLevelMeter
 {
 public:
-	CSignalLevelMeter() : dCurLevel(0.0) {}
-	virtual ~CSignalLevelMeter() {}
+    CSignalLevelMeter() : dCurLevel(0.0) {}
+    virtual ~CSignalLevelMeter() {}
 
-	void	Update(CVector<double>& vecdAudio);
-	double	MicLevel();
-	void	Reset() {dCurLevel = 0.0;}
+    void    Update(CVector<double>& vecdAudio);
+    double  MicLevel();
+    void    Reset() {dCurLevel = 0.0;}
 
 protected:
-	double dCurLevel;
+    double dCurLevel;
 };
 
 class CHostAddress
 {
 public:
-	CHostAddress() : InetAddr((Q_UINT32) 0), iPort(0) {}
-	CHostAddress(const QHostAddress NInetAddr, const Q_UINT16 iNPort) :
-		InetAddr(NInetAddr), iPort(iNPort) {}
-	CHostAddress(const CHostAddress& NHAddr) :
-		InetAddr(NHAddr.InetAddr), iPort(NHAddr.iPort) {}
+    CHostAddress() : InetAddr((Q_UINT32) 0), iPort(0) {}
+    CHostAddress(const QHostAddress NInetAddr, const Q_UINT16 iNPort) :
+        InetAddr(NInetAddr), iPort(iNPort) {}
+    CHostAddress(const CHostAddress& NHAddr) :
+        InetAddr(NHAddr.InetAddr), iPort(NHAddr.iPort) {}
 
-	/* copy and compare operators */
+    /* copy and compare operators */
     CHostAddress& operator=(const CHostAddress& NHAddr)
-		{InetAddr = NHAddr.InetAddr; iPort = NHAddr.iPort; return *this;}
-	bool operator==(const CHostAddress& CompAddr) /* oompare operator */
-		{return ((CompAddr.InetAddr == InetAddr) && (CompAddr.iPort == iPort));}
+        {InetAddr = NHAddr.InetAddr; iPort = NHAddr.iPort; return *this;}
+    bool operator==(const CHostAddress& CompAddr) /* oompare operator */
+        {return ((CompAddr.InetAddr == InetAddr) && (CompAddr.iPort == iPort));}
 
-	QHostAddress	InetAddr;
-	Q_UINT16		iPort;
+    QHostAddress    InetAddr;
+    Q_UINT16        iPort;
 };
 
 
@@ -365,19 +365,19 @@ public:
 class CAudioReverb
 {
 public:
-	CAudioReverb(const double rT60 = (double) 5.0);
+    CAudioReverb(const double rT60 = (double) 5.0);
 
-	void Clear();
-	double ProcessSample(const double input);
+    void Clear();
+    double ProcessSample(const double input);
 
 protected:
-	void setT60(const double rT60);
-	bool isPrime(const int number);
+    void setT60(const double rT60);
+    bool isPrime(const int number);
 
-	CFIFO<int>	allpassDelays_[3];
-	CFIFO<int>	combDelays_[4];
-	double		allpassCoefficient_;
-	double		combCoefficient_[4];
+    CFIFO<int>  allpassDelays_[3];
+    CFIFO<int>  combDelays_[4];
+    double      allpassCoefficient_;
+    double      combCoefficient_[4];
 };
 
 
@@ -385,19 +385,19 @@ protected:
 class CCRC
 {
 public:
-	CCRC () : iPoly ( ( 1 << 5 ) | ( 1 << 12 ) ), iBitOutMask ( 1 << 16 )
-		{ Reset (); }
-	virtual ~CCRC () {}
+    CCRC () : iPoly ( ( 1 << 5 ) | ( 1 << 12 ) ), iBitOutMask ( 1 << 16 )
+        { Reset (); }
+    virtual ~CCRC () {}
 
-	void Reset ();
-	void AddByte ( const uint8_t byNewInput );
-	bool CheckCRC ( const uint32_t iCRC ) { return iCRC == GetCRC(); }
-	uint32_t GetCRC ();
+    void Reset ();
+    void AddByte ( const uint8_t byNewInput );
+    bool CheckCRC ( const uint32_t iCRC ) { return iCRC == GetCRC(); }
+    uint32_t GetCRC ();
 
 protected:
-	uint32_t iBitOutMask;
-	uint32_t iPoly;
-	uint32_t iStateShiftReg;
+    uint32_t iBitOutMask;
+    uint32_t iPoly;
+    uint32_t iStateShiftReg;
 };
 
 
@@ -406,35 +406,35 @@ protected:
 class CTimeConv
 {
 public:
-	// QTime to network time vector
-	static CVector<unsigned char> QTi2NetTi ( const QTime qTiIn )
-	{
-		// vector format: 1 byte hours, 1 byte min, 1 byte sec, 2 bytes ms
-		CVector<unsigned char> veccNetTi ( 5 );
+    // QTime to network time vector
+    static CVector<unsigned char> QTi2NetTi ( const QTime qTiIn )
+    {
+        // vector format: 1 byte hours, 1 byte min, 1 byte sec, 2 bytes ms
+        CVector<unsigned char> veccNetTi ( 5 );
 
-		veccNetTi[0] = static_cast<unsigned char> ( qTiIn.hour () );
-		veccNetTi[1] = static_cast<unsigned char> ( qTiIn.minute () );
-		veccNetTi[2] = static_cast<unsigned char> ( qTiIn.second () );
+        veccNetTi[0] = static_cast<unsigned char> ( qTiIn.hour () );
+        veccNetTi[1] = static_cast<unsigned char> ( qTiIn.minute () );
+        veccNetTi[2] = static_cast<unsigned char> ( qTiIn.second () );
 
-		const int iMs = qTiIn.msec ();
-		veccNetTi[3] = static_cast<unsigned char> ( ( iMs >> 8 ) & 255 );
-		veccNetTi[4] = static_cast<unsigned char> ( iMs & 255 );
+        const int iMs = qTiIn.msec ();
+        veccNetTi[3] = static_cast<unsigned char> ( ( iMs >> 8 ) & 255 );
+        veccNetTi[4] = static_cast<unsigned char> ( iMs & 255 );
 
-		return veccNetTi;
-	}
+        return veccNetTi;
+    }
 
-	// network time vector to QTime
-	static QTime NetTi2QTi ( const CVector<unsigned char> netTiIn )
-	{
-		// vector format: 1 byte hours, 1 byte min, 1 byte sec, 2 bytes ms
-		return QTime (
-			static_cast<int> ( netTiIn[0] ), // hour
-			static_cast<int> ( netTiIn[1] ), // minute
-			static_cast<int> ( netTiIn[2] ), // seconds
-			// msec
-			static_cast<int> ( ( netTiIn[3] << 8 ) | netTiIn[4] )
-			);
-	}
+    // network time vector to QTime
+    static QTime NetTi2QTi ( const CVector<unsigned char> netTiIn )
+    {
+        // vector format: 1 byte hours, 1 byte min, 1 byte sec, 2 bytes ms
+        return QTime (
+            static_cast<int> ( netTiIn[0] ), // hour
+            static_cast<int> ( netTiIn[1] ), // minute
+            static_cast<int> ( netTiIn[2] ), // seconds
+            // msec
+            static_cast<int> ( ( netTiIn[3] << 8 ) | netTiIn[4] )
+            );
+    }
 };
 
 
@@ -442,16 +442,16 @@ public:
 class CLogTimeDate
 {
 public:
-	static QString toString()
-	{
-		const QDateTime curDateTime = QDateTime::currentDateTime();
+    static QString toString()
+    {
+        const QDateTime curDateTime = QDateTime::currentDateTime();
 
-		// format date and time output according to "3.9.2006 11:38:08: "
-		return QString().setNum ( curDateTime.date().day() ) + "." + 
-			QString().setNum ( curDateTime.date().month() ) + "." +
-			QString().setNum ( curDateTime.date().year() ) + " " + 
-			curDateTime.time().toString() + ": ";
-	}
+        // format date and time output according to "3.9.2006 11:38:08: "
+        return QString().setNum ( curDateTime.date().day() ) + "." + 
+            QString().setNum ( curDateTime.date().month() ) + "." +
+            QString().setNum ( curDateTime.date().year() ) + " " + 
+            curDateTime.time().toString() + ": ";
+    }
 };
 
 

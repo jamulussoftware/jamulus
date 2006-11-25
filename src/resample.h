@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2006
  *
  * Author(s):
- *	Volker Fischer
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -34,41 +34,45 @@
 class CResample
 {
 public:
-	CResample() {}
-	virtual ~CResample() {}
+    CResample() {}
+    virtual ~CResample() {}
 
-	void Init(const int iNewInputBlockSize);
-	int Resample(CVector<double>& vecdInput, CVector<double>& vecdOutput,
-				 const double dRation);
+    void Init(const int iNewInputBlockSize);
+    int Resample(CVector<double>& vecdInput, CVector<double>& vecdOutput,
+                 const double dRation);
 
 protected:
-	double			dTStep;
-	double			dtOut;
-	double			dBlockDuration;
+    double          dTStep;
+    double          dtOut;
+    double          dBlockDuration;
 
-	CVector<double>	vecdIntBuff;
-	int				iHistorySize;
+    CVector<double> vecdIntBuff;
+    int             iHistorySize;
 
-	int				iInputBlockSize;
+    int             iInputBlockSize;
 };
 
 class CAudioResample
 {
 public:
-	CAudioResample() {}
-	virtual ~CAudioResample() {}
+    CAudioResample() {}
+    virtual ~CAudioResample() {}
 
-	void Init(const int iNewInputBlockSize, const double dNewRation);
-	void Resample(CVector<double>& vecdInput, CVector<double>& vecdOutput);
+    void Init(const int iNewInputBlockSize, const int iFrom, const int iTo);
+    void Resample(CVector<double>& vecdInput, CVector<double>& vecdOutput);
 
 protected:
-	double				dRation;
+    double              dRation;
 
-	CVector<double>		vecdIntBuff;
-	int					iHistorySize;
+    CVector<double>     vecdIntBuff;
+    int                 iHistorySize;
 
-	int					iInputBlockSize;
-	int					iOutputBlockSize;
+    int                 iInputBlockSize;
+    int                 iOutputBlockSize;
+
+    float*              pFiltTaps;
+    int                 iNumTaps;
+    int                 iI;
 };
 
 

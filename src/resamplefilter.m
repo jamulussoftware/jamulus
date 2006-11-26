@@ -78,15 +78,13 @@ fprintf(fid, '\n\n');
 
 % Write filter taps
 fprintf(fid, '\n// Filter for ratio 2\n');
-ExportFilterTaps(fid, 'fResTaps2up[INTERP_I_2][DECIM_D_2 * NUM_TAPS_PER_PHASE2]', h2, I2);
-ExportFilterTaps(fid, 'fResTaps2dn[DECIM_D_2][INTERP_I_2 * NUM_TAPS_PER_PHASE2]', h2, D2);
+ExportFilterTaps(fid, 'fResTaps2[INTERP_I_2 * DECIM_D_2 * NUM_TAPS_PER_PHASE2]', h2);
 
 fprintf(fid, '\n// Filter for ratio 3 / 2\n');
-ExportFilterTaps(fid, 'fResTaps3_2up[INTERP_I_3_2][DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2]', h3_2, I3_2);
-ExportFilterTaps(fid, 'fResTaps3_2dn[DECIM_D_3_2][INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2]', h3_2, D3_2);
+ExportFilterTaps(fid, 'fResTaps3_2[INTERP_I_3_2 * DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2]', h3_2);
 
 fprintf(fid, '// Filter for ratios close to 1\n');
-ExportFilterTaps(fid, 'fResTaps1[INTERP_DECIM_I_D1][NUM_TAPS_PER_PHASE1]', h1, I1);
+ExportFilterTaps(fid, 'fResTaps1[INTERP_DECIM_I_D1 * NUM_TAPS_PER_PHASE1]', h1);
 
 fprintf(fid, '\n#endif	/* _RESAMPLEFILTER_H_ */\n');
 fclose(fid);
@@ -108,17 +106,12 @@ h = I * firls(NoTapsP - 1, [0 fc fc 1], [1 1 0 0]) .* kaiser(NoTapsP, 5)';
 return;
 
 
-function ExportFilterTaps(f, name, h, I)
+function ExportFilterTaps(f, name, h)
 
 % Write filter taps
 fprintf(f, ['static float ' name ' = {\n']);
-for i = 1:I
-	hTemp = h(i:I:end) ;
-	fprintf(f, '{\n');
-	fprintf(f, '	%.20ff,\n', hTemp(1:end - 1));
-	fprintf(f, '	%.20ff\n', hTemp(end));
-	fprintf(f, '},\n');
-end
+fprintf(f, '	%.20ff,\n', h(1:end - 1));
+fprintf(f, '	%.20ff\n', h(end));
 fprintf(f, '};\n\n');
 
 return;

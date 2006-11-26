@@ -87,8 +87,8 @@ int CResample::Resample ( CVector<double>& vecdInput,
         double dy2 = 0.0;
         for (int i = 0; i < NUM_TAPS_PER_PHASE1; i++)
         {
-            dy1 += fResTaps1[ip1][i] * vecdIntBuff[in1 - i];
-            dy2 += fResTaps1[ip2][i] * vecdIntBuff[in2 - i];
+            dy1 += fResTaps1[ip1 * INTERP_DECIM_I_D1 + i] * vecdIntBuff[in1 - i];
+            dy2 += fResTaps1[ip2 * INTERP_DECIM_I_D1 + i] * vecdIntBuff[in2 - i];
         }
 
 
@@ -174,7 +174,7 @@ void CAudioResample::Resample ( CVector<double>& vecdInput,
             double dy = 0.0;
             for ( int i = 0; i < iNumTaps; i++ )
             {
-                dy += pFiltTaps[ip * iNumTaps + i] * vecdIntBuff[in - i];
+                dy += pFiltTaps[ip + i * iI] * vecdIntBuff[in - i];
             }
 
             vecdOutput[j] = dy;
@@ -195,14 +195,14 @@ void CAudioResample::Init ( const int iNewInputBlockSize,
         switch ( iFrom / iTo )
         {
         case 2: // 48 kHz to 24 kHz
-            pFiltTaps        = &fResTaps2dn[0][0];
+            pFiltTaps        = fResTaps2;
             iNumTaps         = INTERP_I_2 * NUM_TAPS_PER_PHASE2;
             iI               = DECIM_D_2;
             break;
 
 /* not yet supported
 case ( 2 / 3 ): // 48 kHz to 32 kHz
-    pFiltTaps        = &fResTaps3_2dn[0][0];
+    pFiltTaps        = fResTaps3_2;
     iNumTaps         = INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2;
     iI               = DECIM_D_3_2;
     break;
@@ -223,14 +223,14 @@ case ( 2 / 3 ): // 48 kHz to 32 kHz
         switch ( iTo / iFrom )
         {
         case 2: // 24 kHz to 48 kHz
-            pFiltTaps        = &fResTaps2up[0][0];
+            pFiltTaps        = fResTaps2;
             iNumTaps         = DECIM_D_2 * NUM_TAPS_PER_PHASE2;
             iI               = INTERP_I_2;
             break;
 
 /* not yet supported
 case 1.5: // 32 kHz to 48 kHz
-    pFiltTaps        = &fResTaps3_2up[0][0];
+    pFiltTaps        = fResTaps3_2;
     iNumTaps         = DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2;
     iI               = INTERP_I_3_2;
     break;

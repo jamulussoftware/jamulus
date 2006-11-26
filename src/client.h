@@ -168,6 +168,9 @@ public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnReqJittBufSize();
     void OnProtocolStatus ( bool bOk );
+
+signals:
+    void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
 };
 
 

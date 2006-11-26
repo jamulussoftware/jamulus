@@ -76,12 +76,19 @@ protected:
     class CChannelFader
     {
     public:
-        CChannelFader ( QWidget* pNW, QHBoxLayout* pNPtLy );
+        CChannelFader ( QWidget* pNW, QHBoxLayout* pNPtLy, QString sName );
+        ~CChannelFader()
+        {
+            pLabel->close();
+            pFader->close();
+
+            // TODO get rid of pMainGrid
+        }
 
     protected:
-        QGridLayout     MainGrid;
-        QSlider         Fader;
-        QLabel          Label;
+        QGridLayout*    pMainGrid;
+        QSlider*        pFader;
+        QLabel*         pLabel;
 
         QHBoxLayout*    pParentLayout;
     };
@@ -112,4 +119,5 @@ public slots:
         { pClient->SetReverbLevel ( AUD_REVERB_MAX - value ); }
     void OnRevSelL() { pClient->SetReverbOnLeftChan(true); }
     void OnRevSelR() { pClient->SetReverbOnLeftChan(false); }
+    void OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
 };

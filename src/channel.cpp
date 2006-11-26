@@ -58,10 +58,8 @@ CChannelSet::CChannelSet()
 
 void CChannelSet::CreateAndSendChanListForAllConClients()
 {
-    int                     i;
-    CVector<int>            veciChanIDs ( 0 );
-    CVector<uint32_t>       veciIpAddrs ( 0 );
-    CVector<std::string>    vecstrNames ( 0 );
+    int                         i;
+    CVector<CChannelShortInfo>   vecChanInfo ( 0 );
 
     // the channel ID is defined as the order of the channels in the channel
     // set where we do not care about not-connected channels
@@ -73,9 +71,11 @@ void CChannelSet::CreateAndSendChanListForAllConClients()
         if ( vecChannels[i].IsConnected() )
         {
             // append channel ID, IP address and channel name to storing vectors
-            veciChanIDs.Add ( i );
-            veciIpAddrs.Add ( vecChannels[i].GetAddress().InetAddr.ip4Addr() );
-            vecstrNames.Add ( vecChannels[i].GetName() );
+            CChannelShortInfo ChannelShortInfo (
+                i, vecChannels[i].GetAddress().InetAddr.ip4Addr(),
+                vecChannels[i].GetName() );
+
+            vecChanInfo.Add ( ChannelShortInfo );
         }
     }
 
@@ -85,7 +85,7 @@ void CChannelSet::CreateAndSendChanListForAllConClients()
         if ( vecChannels[i].IsConnected() )
         {
             // send message
-            vecChannels[i].CreateConClientListMes ( veciChanIDs, veciIpAddrs, vecstrNames );
+            vecChannels[i].CreateConClientListMes ( vecChanInfo );
         }
     }
 }
@@ -225,7 +225,9 @@ void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
             {
                 /* add ID, gain and data */
                 vecChanID.Add ( i );
-                vecdGains.Add ( vecChannels[i].GetGain() );
+
+// TEST
+vecdGains.Add ( 1.0);//vecChannels[i].GetGain() );
 
                 const int iOldSize = vecvecdData.Size();
                 vecvecdData.Enlarge ( 1 );
@@ -278,7 +280,8 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 /******************************************************************************\
 * CChannel                                                                     *
 \******************************************************************************/
-CChannel::CChannel() : sName ( "" ), dGain ( (double) 1.0 )
+CChannel::CChannel() : sName ( "" ),
+    vecdGains ( MAX_NUM_CHANNELS, (double) 1.0 )
 {
     // query all possible network in buffer sizes for determining if an
     // audio packet was received
@@ -313,6 +316,9 @@ CChannel::CChannel() : sName ( "" ), dGain ( (double) 1.0 )
 
     QObject::connect ( &Protocol, SIGNAL ( ReqJittBufSize() ),
         SIGNAL ( ReqJittBufSize() ) );
+
+    QObject::connect ( &Protocol, SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
 
     QObject::connect ( &Protocol, SIGNAL ( ChangeNetwBlSiFact ( int ) ),
         this, SLOT ( OnNetwBlSiFactChange ( int ) ) );

@@ -160,59 +160,32 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect(RadioButtonRevSelR, SIGNAL(clicked()),
         this, SLOT(OnRevSelR()));
 
+    // other
+    QObject::connect(pClient, SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
+        this, SLOT ( OnConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
+
 
     /* timers --------------------------------------------------------------- */
     /* start timer for status bar */
     TimerStatus.start(STATUSBAR_UPDATE_TIME);
 
 
-/*
+
+
+
+
 // TEST
-QGridLayout* grid1 = new QGridLayout ( FrameAudioFaders, 2, 1 );
-
-QSlider* pSliderChannelFader = new QSlider ( Qt::Vertical, FrameAudioFaders );
-grid1->addWidget( pSliderChannelFader, 0, 0 );
-
-pSliderChannelFader->setPageStep ( 1 );
-pSliderChannelFader->setTickmarks ( QSlider::Both );
-pSliderChannelFader->setRange(0, AUD_MIX_FADER_MAX);
-pSliderChannelFader->setTickInterval(AUD_MIX_FADER_MAX / 9);
-
-pSliderChannelFader->setValue ( AUD_MIX_FADER_MAX );
-
-QLabel* pTextChannelName = new QLabel ( "Test", FrameAudioFaders );
-grid1->addWidget( pTextChannelName, 1, 0 );
-
-FrameAudioFadersLayout->insertLayout ( 0, grid1 );
-
-
-
-
-QGridLayout* grid2 = new QGridLayout ( FrameAudioFaders, 2, 1 );
-
-QSlider* pSliderChannelFader2 = new QSlider ( Qt::Vertical, FrameAudioFaders );
-grid2->addWidget( pSliderChannelFader2, 0, 0 );
-
-pSliderChannelFader2->setPageStep ( 1 );
-pSliderChannelFader2->setTickmarks ( QSlider::Both );
-pSliderChannelFader2->setRange(0, AUD_MIX_FADER_MAX);
-pSliderChannelFader2->setTickInterval(AUD_MIX_FADER_MAX / 9);
-
-pSliderChannelFader2->setValue ( AUD_MIX_FADER_MAX );
-
-QLabel* pTextChannelName2 = new QLabel ( "Test", FrameAudioFaders );
-grid2->addWidget( pTextChannelName2, 1, 0 );
-
-FrameAudioFadersLayout->insertLayout ( 0, grid2 );
-*/
+//new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
+//new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
+//new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
+//new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout, "test");
 
 /*
-// TEST
-new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
-new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
+for ( int z = 0; z < 100; z++)
+{
 CLlconClientDlg::CChannelFader* pTest = new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
-new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
-new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
+delete pTest;
+}
 */
 
 }
@@ -317,6 +290,24 @@ void CLlconClientDlg::OnTimerSigMet ()
     ProgressBarInputLevelR->setProgress ( (int) ceil ( dCurSigLevelR ) );
 }
 
+void CLlconClientDlg::OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo )
+{
+// TODO
+
+// TEST
+for ( int i = 0; i < vecChanInfo.Size(); i++ )
+{
+    QHostAddress addrTest ( vecChanInfo[i].veciIpAddr );
+
+    new CLlconClientDlg::CChannelFader ( FrameAudioFaders,
+        FrameAudioFadersLayout, addrTest.toString() );
+}
+
+
+
+
+}
+
 void CLlconClientDlg::UpdateDisplay()
 {
     /* show connection status in status bar */
@@ -360,30 +351,33 @@ void CLlconClientDlg::customEvent ( QCustomEvent* Event )
 
 
 // Help classes ---------------------------------------------------------------
-CLlconClientDlg::CChannelFader::CChannelFader ( QWidget* pNW, QHBoxLayout* pNPtLy ) :
-    pParentLayout ( pNPtLy ),
-    MainGrid ( pNW, 2, 1 ),
-    Fader ( Qt::Vertical, pNW ),
-    Label ( "", pNW )
+CLlconClientDlg::CChannelFader::CChannelFader ( QWidget* pNW,
+                                                QHBoxLayout* pNPtLy,
+                                                QString sName ) :
+    pParentLayout ( pNPtLy )
 {
+    // create new GUI control objects and store pointers to them
+    pMainGrid = new QGridLayout ( pNW, 2, 1 );
+    pFader    = new QSlider ( Qt::Vertical, pNW );
+    pLabel    = new QLabel ( "", pNW );
+
     // add slider to grid as position 0 / 0
-    MainGrid.addWidget( &Fader, 0, 0 );
+    pMainGrid->addWidget( pFader, 0, 0 );
 
     // setup slider
-    Fader.setPageStep ( 1 );
-    Fader.setTickmarks ( QSlider::Both );
-    Fader.setRange ( 0, AUD_MIX_FADER_MAX );
-    Fader.setTickInterval ( AUD_MIX_FADER_MAX / 9 );
+    pFader->setPageStep ( 1 );
+    pFader->setTickmarks ( QSlider::Both );
+    pFader->setRange ( 0, AUD_MIX_FADER_MAX );
+    pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
 // TEST set value
-Fader.setValue ( AUD_MIX_FADER_MAX );
+pFader->setValue ( 0 );
 
     // add label to grid
-    MainGrid.addWidget( &Label, 1, 0 );
+    pMainGrid->addWidget( pLabel, 1, 0 );
 
+    // set label text
+    pLabel->setText ( sName );
 
-// TEST set label
-Label.setText ( "Test" );
-
-    pParentLayout->insertLayout ( 0, &MainGrid );
+    pParentLayout->insertLayout ( 0, pMainGrid );
 }

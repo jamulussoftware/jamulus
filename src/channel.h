@@ -83,8 +83,8 @@ public:
     void SetName ( const std::string sNNa ) { sName = sNNa; }
     std::string GetName() { return sName; }
 
-    void SetGain ( const double dNG ) { dGain = dNG; }
-    double GetGain() { return dGain; }
+    void SetGain ( const int iNID, const double dNG ) { vecdGains[iNID] = dNG; }
+    double GetGain( const int iNID ) { return vecdGains[iNID]; }
 
     void SetSockBufSize ( const int iNumBlocks );
     int GetSockBufSize() { return iCurSockBufSize; }
@@ -112,11 +112,9 @@ public:
         }
     }
 
-    void CreateConClientListMes ( const CVector<int>& veciChanIDs,
-                                  const CVector<uint32_t>& veciIpAddrs,
-                                  const CVector<std::string>& vecstrNames )
+    void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo )
     { 
-        Protocol.CreateConClientListMes ( veciChanIDs, veciIpAddrs, vecstrNames );
+        Protocol.CreateConClientListMes ( vecChanInfo );
     }
 
 protected:
@@ -140,9 +138,8 @@ protected:
     // channel name
     std::string         sName;
 
-// TODO we need mixer and effect settings for all the other channels, too!!!
-// mixer and effect settings
-double              dGain;
+    // mixer and effect settings
+    CVector<double>     vecdGains;
 
     // network jitter-buffer
     CNetBuf             SockBuf;
@@ -173,6 +170,7 @@ signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
     void NewConnection();
     void ReqJittBufSize();
+    void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ProtocolStatus ( bool bOk );
 };
 

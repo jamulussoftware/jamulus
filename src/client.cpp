@@ -41,6 +41,9 @@ CClient::CClient () : bRun ( false ), Socket ( &Channel ),
 
     QObject::connect ( &Channel, SIGNAL ( ProtocolStatus ( bool ) ),
         this, SLOT ( OnProtocolStatus ( bool ) ) );
+
+    QObject::connect ( &Channel, SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )

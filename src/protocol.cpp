@@ -430,11 +430,9 @@ void CProtocol::EvaluateChanGainMes ( unsigned int iPos, const CVector<uint8_t>&
     emit ChangeChanGain ( iCurID, dNewGain );
 }
 
-void CProtocol::CreateConClientListMes ( const CVector<int>& veciChanIDs,
-                                         const CVector<uint32_t>& veciIpAddrs,
-                                         const CVector<std::string>& vecstrNames )
+void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo )
 {
-    const int iNumClients = veciIpAddrs.Size();
+    const int iNumClients = vecChanInfo.Size();
 
     // build data vector
     CVector<uint8_t>    vecData ( 0 );
@@ -443,7 +441,7 @@ void CProtocol::CreateConClientListMes ( const CVector<int>& veciChanIDs,
     for ( int i = 0; i < iNumClients; i++ )
     {
         // current string size
-        const int iCurStrLen = vecstrNames[i].size();
+        const int iCurStrLen = vecChanInfo[i].vecstrName.size();
 
         // size of current list entry
         const int iCurListEntrLen =
@@ -454,11 +452,11 @@ void CProtocol::CreateConClientListMes ( const CVector<int>& veciChanIDs,
 
         // channel ID
         PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( veciChanIDs[i] ), 1 );
+            static_cast<uint32_t> ( vecChanInfo[i].veciChanID ), 1 );
 
         // IP address (4 bytes)
         PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( veciIpAddrs[i] ), 4 );
+            static_cast<uint32_t> ( vecChanInfo[i].veciIpAddr ), 4 );
 
         // number of bytes for name string (2 bytes)
         PutValOnStream ( vecData, iPos,
@@ -469,7 +467,7 @@ void CProtocol::CreateConClientListMes ( const CVector<int>& veciChanIDs,
         {
             // byte-by-byte copying of the string data
             PutValOnStream ( vecData, iPos,
-                static_cast<uint32_t> ( vecstrNames[i][j] ), 1 );
+                static_cast<uint32_t> ( vecChanInfo[i].vecstrName[j] ), 1 );
         }
     }
 
@@ -478,39 +476,37 @@ void CProtocol::CreateConClientListMes ( const CVector<int>& veciChanIDs,
 
 void CProtocol:: EvaluateConClientListMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
 {
-    int         iData;
-    const int   iDataLen = vecData.Size();
+    int                         iData;
+    const int                   iDataLen = vecData.Size();
+    CVector<CChannelShortInfo>  vecChanInfo ( 0 );
 
     while ( iPos < iDataLen )
     {
         // channel ID (1 byte)
-        iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+        const int iChanID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
         // IP address (4 bytes)
-        iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
-
-// TODO do something with the received IP address "iData"
-
-// TEST
-QHostAddress addrTest ( iData );
-printf ( "%s ", addrTest.toString().latin1() );
+        const int iIpAddr = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
 
         // number of bytes for name string (2 bytes)
         const int iStringLen =
             static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
         // name string (n bytes)
-        std::string strCurString = "";
+        std::string strCurStr = "";
         for ( int j = 0; j < iStringLen; j++ )
         {
             // byte-by-byte copying of the string data
             iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
-            strCurString += std::string ( (char*) &iData );
+            strCurStr += std::string ( (char*) &iData );
         }
 
-// TODO do something with the received name string "strCurString"
-
+        // add channel information to vector
+        vecChanInfo.Add ( CChannelShortInfo ( iChanID, iIpAddr, strCurStr ) );
     }
+
+    // invoke message action
+    emit ConClientListMesReceived ( vecChanInfo );
 }
 
 

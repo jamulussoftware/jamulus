@@ -65,9 +65,7 @@ public:
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
     void CreateChanGainMes ( const int iChanID, const double dGain );
 
-    void CreateConClientListMes ( const CVector<int>& veciChanIDs,
-                                  const CVector<uint32_t>& veciIpAddrs,
-                                  const CVector<std::string>& vecstrNames );
+    void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
 
     void CreateAndSendAcknMess ( const int& iID, const int& iCnt );
 
@@ -153,6 +151,7 @@ signals:
     void ChangeJittBufSize ( int iNewJitBufSize );
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ChangeChanGain ( int iChanID, double dNewGain );
+    void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ReqJittBufSize();
 };
 

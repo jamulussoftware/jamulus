@@ -49,6 +49,11 @@ MESSAGES
 
     note: does not have any data -> n = 0
 
+- Server full message:                        PROTMESSID_SERVER_FULL
+
+    note: does not have any data -> n = 0
+
+
 - Network buffer block size factor            PROTMESSID_NET_BLSI_FACTOR
 
     note: size, relative to minimum block size
@@ -309,6 +314,11 @@ for ( int i = 0; i < iNumBytes; i++ ) {
                     EvaluateReqJitBufMes ( iPos, vecData );
                     break;
 
+                case PROTMESSID_SERVER_FULL:
+
+                    EvaluateServerFullMes ( iPos, vecData );
+                    break;
+
                 case PROTMESSID_NET_BLSI_FACTOR:
 
                     EvaluateNetwBlSiFactMes ( iPos, vecData );
@@ -348,8 +358,8 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 /* Access-functions for creating and parsing messages ----------------------- */
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 {
-    CVector<uint8_t>    vecData ( 2 ); // 2 bytes of data
-    unsigned int        iPos = 0; // init position pointer
+    CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
+    unsigned int     iPos = 0; // init position pointer
 
     // build data vector
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iJitBufSize ), 2 );
@@ -376,6 +386,17 @@ void CProtocol::EvaluateReqJitBufMes ( unsigned int iPos, const CVector<uint8_t>
 {
     // invoke message action
     emit ReqJittBufSize();
+}
+
+void CProtocol::CreateServerFullMes()
+{
+    CreateAndSendMessage ( PROTMESSID_SERVER_FULL, CVector<uint8_t> ( 0 ) );
+}
+
+void CProtocol::EvaluateServerFullMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
+{
+    // invoke message action
+    emit ServerFull();
 }
 
 void CProtocol::CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
@@ -435,8 +456,8 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
     const int iNumClients = vecChanInfo.Size();
 
     // build data vector
-    CVector<uint8_t>    vecData ( 0 );
-    unsigned int        iPos = 0; // init position pointer
+    CVector<uint8_t> vecData ( 0 );
+    unsigned int     iPos = 0; // init position pointer
 
     for ( int i = 0; i < iNumClients; i++ )
     {
@@ -476,9 +497,9 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
 
 void CProtocol:: EvaluateConClientListMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
 {
-    int                         iData;
-    const int                   iDataLen = vecData.Size();
-    CVector<CChannelShortInfo>  vecChanInfo ( 0 );
+    int                        iData;
+    const int                  iDataLen = vecData.Size();
+    CVector<CChannelShortInfo> vecChanInfo ( 0 );
 
     while ( iPos < iDataLen )
     {
@@ -583,8 +604,8 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
 }
 
 uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
-                                       unsigned int& iPos,
-                                       const unsigned int iNumOfBytes )
+                                       unsigned int&           iPos,
+                                       const unsigned int      iNumOfBytes )
 {
 /*
     note: iPos is automatically incremented in this function

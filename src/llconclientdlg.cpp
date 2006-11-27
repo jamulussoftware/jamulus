@@ -29,7 +29,8 @@
 CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     const char* name, bool modal, WFlags f) : pClient ( pNCliP ),
     CLlconClientDlgBase ( parent, name, modal, f ),
-    ClientSettingsDlg ( pNCliP, 0, 0, FALSE, Qt::WStyle_MinMax )
+    ClientSettingsDlg ( pNCliP, 0, 0, FALSE, Qt::WStyle_MinMax ),
+    vecpChanFader ( 0 )
 {
     /* add help text to controls */
     QString strInpLevH = tr("<b>Input level meter:</b> Shows the level of the "
@@ -171,14 +172,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
 
 
-
-
-
 // TEST
-//new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
-//new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
-//new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
-//new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout, "test");
+//vecpChanFader.Init(0);
+//vecpChanFader.Add(new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout, "test"));
+
 
 /*
 for ( int z = 0; z < 100; z++)
@@ -187,6 +184,7 @@ CLlconClientDlg::CChannelFader* pTest = new CLlconClientDlg::CChannelFader(Frame
 delete pTest;
 }
 */
+
 
 }
 
@@ -292,17 +290,26 @@ void CLlconClientDlg::OnTimerSigMet ()
 
 void CLlconClientDlg::OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo )
 {
+    int i;
+
 // TODO
 
-// TEST
-for ( int i = 0; i < vecChanInfo.Size(); i++ )
+// remove old controls
+for ( i = 0; i < vecpChanFader.Size(); i++ )
+{
+    delete vecpChanFader[i];
+}
+
+
+// TEST add current faders
+vecpChanFader.Init ( vecChanInfo.Size() );
+for ( i = 0; i < vecChanInfo.Size(); i++ )
 {
     QHostAddress addrTest ( vecChanInfo[i].veciIpAddr );
 
-    new CLlconClientDlg::CChannelFader ( FrameAudioFaders,
+    vecpChanFader[i] = new CLlconClientDlg::CChannelFader ( FrameAudioFaders,
         FrameAudioFadersLayout, addrTest.toString() );
 }
-
 
 
 
@@ -370,8 +377,10 @@ CLlconClientDlg::CChannelFader::CChannelFader ( QWidget* pNW,
     pFader->setRange ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
-// TEST set value
+// TEST set value and make read only
 pFader->setValue ( 0 );
+pFader->setEnabled ( FALSE );
+
 
     // add label to grid
     pMainGrid->addWidget( pLabel, 1, 0 );

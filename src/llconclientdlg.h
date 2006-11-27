@@ -107,7 +107,7 @@ protected:
 
     CClientSettingsDlg      ClientSettingsDlg;
 
-    CVector<CChannelFader>  vecpChanFader;
+    CVector<CChannelFader*> vecpChanFader;
 
 public slots:
     void OnConnectDisconBut();

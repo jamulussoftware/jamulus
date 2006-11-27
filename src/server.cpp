@@ -85,9 +85,9 @@ void CServer::Stop()
 
 void CServer::OnTimer()
 {
-    CVector<int>                vecChanID;
-    CVector<CVector<double> >   vecvecdData ( MIN_BLOCK_SIZE_SAMPLES );
-    CVector<double>             vecdGains;
+    CVector<int>              vecChanID;
+    CVector<CVector<double> > vecvecdData ( MIN_BLOCK_SIZE_SAMPLES );
+    CVector<double>           vecdGains;
 
     /* get data from all connected clients */
     ChannelSet.GetBlockAllConC ( vecChanID, vecvecdData, vecdGains );
@@ -97,15 +97,14 @@ void CServer::OnTimer()
        one client is connected */
     if ( iNumClients != 0 )
     {
-
-// TODO generate a sparate mix for each channel
-
-        /* actual processing of audio data -> mix */
-        vecsSendData = ProcessData ( vecvecdData, vecdGains );
-
-        /* send the same data to all connected clients */
         for ( int i = 0; i < iNumClients; i++ )
         {
+// TODO generate a sparate mix for each channel
+
+// actual processing of audio data -> mix
+vecsSendData = ProcessData ( vecvecdData, vecdGains );
+            
+            // send separate mix to current clients
             Socket.SendPacket (
                 ChannelSet.PrepSendPacket ( vecChanID[i], vecsSendData ),
                 ChannelSet.GetAddress ( vecChanID[i] ) );
@@ -139,16 +138,14 @@ void CServer::OnTimer()
 }
 
 CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
-                                      CVector<double>& vecdGains )
+                                      CVector<double>&           vecdGains )
 {
-    CVector<short> vecsOutData;
-    vecsOutData.Init ( MIN_BLOCK_SIZE_SAMPLES );
+    CVector<short> vecsOutData ( MIN_BLOCK_SIZE_SAMPLES );
 
     const int iNumClients = vecvecdData.Size();
 
-    /* we normalize with sqrt() of N to avoid that the level drops too much
-       in case that a new client connects */
-    const double dNorm = sqrt ( (double) iNumClients );
+    // 3 dB offset to avoid overload if all clients are set to gain 1
+    const double dNorm = (double) 2.0;
 
     /* mix all audio data from all clients together */
     for ( int i = 0; i < MIN_BLOCK_SIZE_SAMPLES; i++ )

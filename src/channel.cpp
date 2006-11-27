@@ -58,12 +58,8 @@ CChannelSet::CChannelSet()
 
 void CChannelSet::CreateAndSendChanListForAllConClients()
 {
-    int                         i;
-    CVector<CChannelShortInfo>   vecChanInfo ( 0 );
-
-    // the channel ID is defined as the order of the channels in the channel
-    // set where we do not care about not-connected channels
-    int iCurChanID = 0;
+    int                        i;
+    CVector<CChannelShortInfo> vecChanInfo ( 0 );
 
     // look for free channels
     for ( i = 0; i < MAX_NUM_CHANNELS; i++ )
@@ -71,11 +67,10 @@ void CChannelSet::CreateAndSendChanListForAllConClients()
         if ( vecChannels[i].IsConnected() )
         {
             // append channel ID, IP address and channel name to storing vectors
-            CChannelShortInfo ChannelShortInfo (
-                i, vecChannels[i].GetAddress().InetAddr.ip4Addr(),
-                vecChannels[i].GetName() );
-
-            vecChanInfo.Add ( ChannelShortInfo );
+            vecChanInfo.Add ( CChannelShortInfo (
+                i, // ID
+                vecChannels[i].GetAddress().InetAddr.ip4Addr(), // IP address
+                vecChannels[i].GetName() /* name */ ) );
         }
     }
 
@@ -130,7 +125,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
                             const int iNumBytesRead,
                             const CHostAddress& HostAdr )
 {
-    bool bRet = false;
+    bool bRet            = false;
     bool bCreateChanList = false;
 
     Mutex.lock();
@@ -160,6 +155,10 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
             {
                 /* no free channel available */
                 bChanOK = false;
+
+                // create and send "server full" message
+// TODO
+
             }
         }
 

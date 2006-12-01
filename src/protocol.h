@@ -39,11 +39,11 @@
 #define PROTMESSID_ACKN                  1 // acknowledge
 #define PROTMESSID_JITT_BUF_SIZE        10 // jitter buffer size
 #define PROTMESSID_REQ_JITT_BUF_SIZE    11 // request jitter buffer size
-#define PROTMESSID_SERVER_FULL          12
-#define PROTMESSID_PING                 13 // for measuring ping time
-#define PROTMESSID_NET_BLSI_FACTOR      14 // network buffer size factor
-#define PROTMESSID_CHANNEL_GAIN         15 // set channel gain for mix
-#define PROTMESSID_CONN_CLIENTS_LIST    16 // connected client list
+#define PROTMESSID_PING                 12 // for measuring ping time
+#define PROTMESSID_NET_BLSI_FACTOR      13 // network buffer size factor
+#define PROTMESSID_CHANNEL_GAIN         14 // set channel gain for mix
+#define PROTMESSID_CONN_CLIENTS_LIST    15 // connected client list
+#define PROTMESSID_SERVER_FULL          16
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         5 /* ID, cnt, length */

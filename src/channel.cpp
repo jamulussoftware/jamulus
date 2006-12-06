@@ -37,11 +37,11 @@ CChannelSet::CChannelSet()
     QObject::connect(&vecChannels[2],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh2(CVector<uint8_t>)));
     QObject::connect(&vecChannels[3],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh3(CVector<uint8_t>)));
     QObject::connect(&vecChannels[4],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh4(CVector<uint8_t>)));
-//  QObject::connect(&vecChannels[5],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh5(CVector<uint8_t>)));
-//  QObject::connect(&vecChannels[6],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh6(CVector<uint8_t>)));
-//  QObject::connect(&vecChannels[7],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh7(CVector<uint8_t>)));
-//  QObject::connect(&vecChannels[8],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh8(CVector<uint8_t>)));
-//  QObject::connect(&vecChannels[9],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh9(CVector<uint8_t>)));
+    QObject::connect(&vecChannels[5],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh5(CVector<uint8_t>)));
+    QObject::connect(&vecChannels[6],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh6(CVector<uint8_t>)));
+    QObject::connect(&vecChannels[7],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh7(CVector<uint8_t>)));
+    QObject::connect(&vecChannels[8],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh8(CVector<uint8_t>)));
+    QObject::connect(&vecChannels[9],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh9(CVector<uint8_t>)));
 
     // request jitter buffer size
     QObject::connect(&vecChannels[0],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh0()));
@@ -49,11 +49,11 @@ CChannelSet::CChannelSet()
     QObject::connect(&vecChannels[2],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh2()));
     QObject::connect(&vecChannels[3],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh3()));
     QObject::connect(&vecChannels[4],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh4()));
-//  QObject::connect(&vecChannels[5],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh5()));
-//  QObject::connect(&vecChannels[6],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh6()));
-//  QObject::connect(&vecChannels[7],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh7()));
-//  QObject::connect(&vecChannels[8],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh8()));
-//  QObject::connect(&vecChannels[9],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh9()));
+    QObject::connect(&vecChannels[5],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh5()));
+    QObject::connect(&vecChannels[6],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh6()));
+    QObject::connect(&vecChannels[7],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh7()));
+    QObject::connect(&vecChannels[8],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh8()));
+    QObject::connect(&vecChannels[9],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh9()));
 }
 
 void CChannelSet::CreateAndSendChanListForAllConClients()
@@ -143,7 +143,20 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 
             if ( iCurChanID != INVALID_CHANNEL_ID )
             {
+                // initialize current channel by storing the calling host
+                // address
                 vecChannels[iCurChanID].SetAddress ( HostAdr );
+
+                // reset the channel gains of current channel, at the same
+                // time reset gains of this channel ID for all other channels
+                for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+                {
+                    vecChannels[iCurChanID].SetGain ( i, (double) 1.0 );
+
+                    // other channels (we do not distinguish the case if
+                    // i == iCurChanID for simplicity)
+                    vecChannels[i].SetGain ( iCurChanID, (double) 1.0 );
+                }
 
                 // a new client connected to the server, set flag to create and
                 // send all clients the updated channel list, we cannot create
@@ -198,42 +211,41 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
     return bRet;
 }
 
-void CChannelSet::GetBlockAllConC ( CVector<int>& vecChanID,
+void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
                                     CVector<CVector<double> >& vecvecdData,
-                                    CVector<double>& vecdGains )
+                                    CVector<CVector<double> >& vecvecdGains )
 {
-    /* init temporal data vector and clear input buffers */
+    int i, j;
+
+    // init temporal data vector and clear input buffers
     CVector<double> vecdData ( MIN_BLOCK_SIZE_SAMPLES );
 
-    vecChanID.Init ( 0 );
-    vecvecdData.Init ( 0 );
-    vecdGains.Init ( 0 );
+    vecChanID.Init    ( 0 );
+    vecvecdData.Init  ( 0 );
+    vecvecdGains.Init ( 0 );
 
-    /* make put and get calls thread safe. Do not forget to unlock mutex
-       afterwards! */
+    // make put and get calls thread safe. Do not forget to unlock mutex
+    // afterwards!
     Mutex.lock();
     {
-        /* Check all possible channels */
-        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        // check all possible channels
+        for ( i = 0; i < MAX_NUM_CHANNELS; i++ )
         {
-            /* read out all input buffers to decrease timeout counter on
-               disconnected channels */
+            // read out all input buffers to decrease timeout counter on
+            // disconnected channels
             const bool bGetOK = vecChannels[i].GetData ( vecdData );
 
             if ( vecChannels[i].IsConnected() )
             {
-                /* add ID, gain and data */
+                // add ID and data
                 vecChanID.Add ( i );
-
-// TEST
-vecdGains.Add ( 1.0);//vecChannels[i].GetGain() );
 
                 const int iOldSize = vecvecdData.Size();
                 vecvecdData.Enlarge ( 1 );
                 vecvecdData[iOldSize].Init ( vecdData.Size() );
                 vecvecdData[iOldSize] = vecdData;
 
-                /* send message for get status (for GUI) */
+                // send message for get status (for GUI)
                 if ( bGetOK )
                 {
                     PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN, i );
@@ -244,22 +256,39 @@ vecdGains.Add ( 1.0);//vecChannels[i].GetGain() );
                 }
             }
         }
+
+        // now that we know the IDs of the connected clients, get gains
+        const int iNumCurConnChan = vecChanID.Size();
+        vecvecdGains.Init ( iNumCurConnChan );
+
+        for ( i = 0; i < iNumCurConnChan; i++ )
+        {
+            vecvecdGains[i].Init ( iNumCurConnChan );
+
+            for ( j = 0; j < iNumCurConnChan; j++ )
+            {
+                // The second index of "vecvecdGains" does not represent
+                // the channel ID! Therefore we have to use "vecChanID" to
+                // query the IDs of the currently connected channels
+                vecvecdGains[i][j] = vecChannels[i].GetGain( vecChanID[j] );
+            }
+        }
     }
-    Mutex.unlock(); /* release mutex */
+    Mutex.unlock(); // release mutex
 }
 
 void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-                                   CVector<int>& veciJitBufSize,
-                                   CVector<int>& veciNetwOutBlSiFact,
-                                   CVector<int>& veciNetwInBlSiFact )
+                                   CVector<int>&          veciJitBufSize,
+                                   CVector<int>&          veciNetwOutBlSiFact,
+                                   CVector<int>&          veciNetwInBlSiFact )
 {
     CHostAddress InetAddr;
 
     /* init return values */
-    vecHostAddresses.Init ( MAX_NUM_CHANNELS );
-    veciJitBufSize.Init ( MAX_NUM_CHANNELS );
+    vecHostAddresses.Init    ( MAX_NUM_CHANNELS );
+    veciJitBufSize.Init      ( MAX_NUM_CHANNELS );
     veciNetwOutBlSiFact.Init ( MAX_NUM_CHANNELS );
-    veciNetwInBlSiFact.Init ( MAX_NUM_CHANNELS );
+    veciNetwInBlSiFact.Init  ( MAX_NUM_CHANNELS );
 
     /* Check all possible channels */
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
@@ -267,10 +296,10 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
         if ( vecChannels[i].GetAddress ( InetAddr ) )
         {
             /* get requested data */
-            vecHostAddresses[i] = InetAddr;
-            veciJitBufSize[i] = vecChannels[i].GetSockBufSize ();
+            vecHostAddresses[i]    = InetAddr;
+            veciJitBufSize[i]      = vecChannels[i].GetSockBufSize ();
             veciNetwOutBlSiFact[i] = vecChannels[i].GetNetwBufSizeFactOut ();
-            veciNetwInBlSiFact[i] = vecChannels[i].GetNetwBufSizeFactIn ();
+            veciNetwInBlSiFact[i]  = vecChannels[i].GetNetwBufSizeFactIn ();
         }
     }
 }
@@ -310,16 +339,20 @@ CChannel::CChannel() : sName ( "" ),
         SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
         this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
 
-    QObject::connect ( &Protocol, SIGNAL ( ChangeJittBufSize ( int ) ),
+    QObject::connect ( &Protocol,
+        SIGNAL ( ChangeJittBufSize ( int ) ),
         this, SLOT ( OnJittBufSizeChange ( int ) ) );
 
-    QObject::connect ( &Protocol, SIGNAL ( ReqJittBufSize() ),
+    QObject::connect ( &Protocol,
+        SIGNAL ( ReqJittBufSize() ),
         SIGNAL ( ReqJittBufSize() ) );
 
-    QObject::connect ( &Protocol, SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
+    QObject::connect ( &Protocol,
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
 
-    QObject::connect ( &Protocol, SIGNAL ( ChangeNetwBlSiFact ( int ) ),
+    QObject::connect ( &Protocol,
+        SIGNAL ( ChangeNetwBlSiFact ( int ) ),
         this, SLOT ( OnNetwBlSiFactChange ( int ) ) );
 }
 
@@ -353,14 +386,6 @@ void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
 
     /* init conversion buffer */
     ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES );
-}
-
-void CChannel::OnNetwBlSiFactChange ( int iNewNetwBlSiFact )
-{
-// TEST
-//qDebug ( "new network block size factor: %d", iNewNetwBlSiFact );
-
-    SetNetwBufSizeFactOut ( iNewNetwBlSiFact );
 }
 
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -397,12 +422,28 @@ void CChannel::SetSockBufSize ( const int iNumBlocks )
     Mutex.unlock();
 }
 
+void CChannel::OnNetwBlSiFactChange ( int iNewNetwBlSiFact )
+{
+// TEST
+//qDebug ( "new network block size factor: %d", iNewNetwBlSiFact );
+
+    SetNetwBufSizeFactOut ( iNewNetwBlSiFact );
+}
+
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 {
 // TEST
 //qDebug ( "new jitter buffer size: %d", iNewJitBufSize );
 
     SetSockBufSize ( iNewJitBufSize );
+}
+
+void CChannel::OnChangeChanGain ( int iChanID, double dNewGain )
+{
+    ASSERT ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) );
+
+    // set value
+    vecdGains[iChanID] = dNewGain;
 }
 
 bool CChannel::GetAddress(CHostAddress& RetAddr)

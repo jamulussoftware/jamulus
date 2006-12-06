@@ -70,20 +70,20 @@ void CClient::OnReqJittBufSize()
     Channel.CreateNetwBlSiFactMes ( iNetwBufSizeFactIn );
 }
 
-bool CClient::SetServerAddr(QString strNAddr)
+bool CClient::SetServerAddr ( QString strNAddr )
 {
     QHostAddress InetAddr;
 
-    if (InetAddr.setAddress(strNAddr))
+    if ( InetAddr.setAddress ( strNAddr ) )
     {
-        /* The server port is fixed and always the same */
-        Channel.SetAddress(CHostAddress(InetAddr, LLCON_PORT_NUMBER));
+        // the server port is fixed and always the same
+        Channel.SetAddress ( CHostAddress ( InetAddr, LLCON_PORT_NUMBER ) );
 
         return true;
     }
     else
     {
-        return false; /* invalid address */
+        return false; // invalid address
     }
 }
 

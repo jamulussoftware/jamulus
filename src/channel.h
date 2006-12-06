@@ -43,7 +43,7 @@
 
 /* maximum number of internet connections (channels) */
 // if you want to change this paramter, change the connections in this class, too!
-#define MAX_NUM_CHANNELS        5//10 /* max number channels for server */
+#define MAX_NUM_CHANNELS        10 /* max number channels for server */
 
 /* no valid channel number */
 #define INVALID_CHANNEL_ID      (MAX_NUM_CHANNELS + 1)
@@ -165,6 +165,7 @@ public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnJittBufSizeChange ( int iNewJitBufSize );
     void OnNetwBlSiFactChange ( int iNewNetwBlSiFact );
+    void OnChangeChanGain ( int iChanID, double dNewGain );
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
@@ -193,7 +194,7 @@ public:
 
     void GetBlockAllConC ( CVector<int>& vecChanID,
                            CVector<CVector<double> >& vecvecdData,
-                           CVector<double>& vecdGains );
+                           CVector<CVector<double> >& vecvecdGains );
 
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                           CVector<int>& veciJitBufSize,

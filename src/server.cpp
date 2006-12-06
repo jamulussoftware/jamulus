@@ -30,10 +30,10 @@ CServer::CServer() : Socket ( &ChannelSet, this )
 {
     vecsSendData.Init ( MIN_BLOCK_SIZE_SAMPLES );
 
-    /* init moving average buffer for response time evaluation */
+    // init moving average buffer for response time evaluation
     RespTimeMoAvBuf.Init ( LEN_MOV_AV_RESPONSE );
 
-    /* connect timer timeout signal */
+    // connect timer timeout signal
     QObject::connect ( &Timer, SIGNAL ( timeout() ),
         this, SLOT ( OnTimer() ) );
 
@@ -67,17 +67,17 @@ void CServer::Start()
 {
     if ( !IsRunning() )
     {
-        /* start main timer */
+        // start main timer
         Timer.start ( MIN_BLOCK_DURATION_MS );
 
-        /* init time for response time evaluation */
+        // init time for response time evaluation
         TimeLastBlock = QTime::currentTime();
     }
 }
 
 void CServer::Stop()
 {
-    /* stop main timer */
+    // stop main timer
     Timer.stop();
 
     qDebug ( CLogTimeDate::toString() + "Server stopped" );
@@ -87,23 +87,22 @@ void CServer::OnTimer()
 {
     CVector<int>              vecChanID;
     CVector<CVector<double> > vecvecdData ( MIN_BLOCK_SIZE_SAMPLES );
-    CVector<double>           vecdGains;
+    CVector<CVector<double> > vecvecdGains;
 
-    /* get data from all connected clients */
-    ChannelSet.GetBlockAllConC ( vecChanID, vecvecdData, vecdGains );
+    // get data from all connected clients
+    ChannelSet.GetBlockAllConC ( vecChanID, vecvecdData, vecvecdGains );
     const int iNumClients = vecChanID.Size();
 
-    /* Check if at least one client is connected. If not, stop server until
-       one client is connected */
+    // Check if at least one client is connected. If not, stop server until
+    // one client is connected
     if ( iNumClients != 0 )
     {
         for ( int i = 0; i < iNumClients; i++ )
         {
-// TODO generate a sparate mix for each channel
+            // generate a sparate mix for each channel
+            // actual processing of audio data -> mix
+            vecsSendData = ProcessData ( vecvecdData, vecvecdGains[i] );
 
-// actual processing of audio data -> mix
-vecsSendData = ProcessData ( vecvecdData, vecdGains );
-            
             // send separate mix to current clients
             Socket.SendPacket (
                 ChannelSet.PrepSendPacket ( vecChanID[i], vecsSendData ),
@@ -111,18 +110,18 @@ vecsSendData = ProcessData ( vecvecdData, vecdGains );
         }
 
 
-        /* update response time measurement --------------------------------- */
-        /* add time difference */
+        // update response time measurement ------------------------------------
+        // add time difference
         const QTime CurTime = QTime::currentTime ();
 
-        /* we want to calculate the standard deviation (we assume that the mean
-           is correct at the block period time) */
+        // we want to calculate the standard deviation (we assume that the mean
+        // is correct at the block period time)
         const double dCurAddVal = ( (double) TimeLastBlock.msecsTo ( CurTime ) -
             MIN_BLOCK_DURATION_MS );
 
-        RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); /* add squared value */
+        RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
 
-        /* store old time value */
+        // store old time value
         TimeLastBlock = CurTime;
     }
     else
@@ -147,7 +146,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
     // 3 dB offset to avoid overload if all clients are set to gain 1
     const double dNorm = (double) 2.0;
 
-    /* mix all audio data from all clients together */
+    // mix all audio data from all clients together
     for ( int i = 0; i < MIN_BLOCK_SIZE_SAMPLES; i++ )
     {
         double dMixedData = 0.0;
@@ -157,7 +156,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
             dMixedData += vecvecdData[j][i] * vecdGains[j];
         }
 
-        /* normalization and truncating to short */
+        // normalization and truncating to short
         vecsOutData[i] = Double2Short ( dMixedData / dNorm );
     }
 
@@ -166,7 +165,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
 
 bool CServer::GetTimingStdDev ( double& dCurTiStdDev )
 {
-    dCurTiStdDev = 0.0; /* init return value */
+    dCurTiStdDev = 0.0; // init return value
 
     /* only return value if server is active and the actual measurement is
        updated */

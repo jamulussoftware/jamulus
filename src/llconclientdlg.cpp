@@ -82,10 +82,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
         "red color." ) );
 
     /* init server address line edit */
-    LineEditServerAddr->setText ( pClient->strIPAddress.c_str () );
+    LineEditServerAddr->setText ( pClient->strIPAddress.c_str() );
 
     /* init status label */
-    OnTimerStatus ();
+    OnTimerStatus();
 
     /* init connection button text */
     PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
@@ -98,25 +98,26 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
 
     /* init slider controls --- */
-    /* audio in fader */
-    SliderAudInFader->setRange(0, AUD_FADER_IN_MAX);
+    // audio in fader
+    SliderAudInFader->setRange ( 0, AUD_FADER_IN_MAX );
     const int iCurAudInFader = pClient->GetAudioInFader();
-    SliderAudInFader->setValue(iCurAudInFader);
-    SliderAudInFader->setTickInterval(AUD_FADER_IN_MAX / 9);
+    SliderAudInFader->setValue ( iCurAudInFader );
+    SliderAudInFader->setTickInterval ( AUD_FADER_IN_MAX / 9 );
 
-    /* audio reverberation */
-    SliderAudReverb->setRange(0, AUD_REVERB_MAX);
+    // audio reverberation
+    SliderAudReverb->setRange ( 0, AUD_REVERB_MAX );
     const int iCurAudReverb = pClient->GetReverbLevel();
     SliderAudReverb->setValue ( AUD_REVERB_MAX - iCurAudReverb );
-    SliderAudReverb->setTickInterval(AUD_REVERB_MAX / 9);
+    SliderAudReverb->setTickInterval ( AUD_REVERB_MAX / 9 );
 
 
     /* set radio buttons --- */
-    /* reverb channel */
+    // reverb channel
     if (pClient->IsReverbOnLeftChan())
         RadioButtonRevSelL->setChecked(true);
     else
         RadioButtonRevSelR->setChecked(true);
+
 
     /* Settings menu  ------------------------------------------------------- */
     pSettingsMenu = new QPopupMenu ( this );
@@ -139,23 +140,23 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
 
     /* connections ---------------------------------------------------------- */
-    /* push-buttons */
+    // push-buttons
     QObject::connect(PushButtonConnect, SIGNAL(clicked()),
         this, SLOT(OnConnectDisconBut()));
 
-    /* timers */
+    // timers
     QObject::connect(&TimerSigMet, SIGNAL(timeout()),
         this, SLOT(OnTimerSigMet()));
     QObject::connect(&TimerStatus, SIGNAL(timeout()),
         this, SLOT(OnTimerStatus()));
 
-    /* sliders */
+    // sliders
     QObject::connect(SliderAudInFader, SIGNAL(valueChanged(int)),
         this, SLOT(OnSliderAudInFader(int)));
     QObject::connect(SliderAudReverb, SIGNAL(valueChanged(int)),
         this, SLOT(OnSliderAudReverb(int)));
 
-    /* radio buttons */
+    // radio buttons
     QObject::connect(RadioButtonRevSelL, SIGNAL(clicked()),
         this, SLOT(OnRevSelL()));
     QObject::connect(RadioButtonRevSelR, SIGNAL(clicked()),
@@ -167,7 +168,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
 
     /* timers --------------------------------------------------------------- */
-    /* start timer for status bar */
+    // start timer for status bar
     TimerStatus.start(STATUSBAR_UPDATE_TIME);
 
 
@@ -176,7 +177,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 //vecpChanFader.Init(0);
 //vecpChanFader.Add(new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout, "test"));
 
-
+//FrameAudioFadersLayout->addWidget(new QLabel ( "test", FrameAudioFaders ));
 /*
 for ( int z = 0; z < 100; z++)
 {
@@ -292,6 +293,14 @@ void CLlconClientDlg::OnConClientListMesReceived ( CVector<CChannelShortInfo> ve
 {
     int i;
 
+
+
+//FrameAudioFadersLayout->addWidget(new QLabel ( "test", FrameAudioFaders ));
+
+
+
+
+
 // TODO
 
 // remove old controls
@@ -310,7 +319,7 @@ for ( i = 0; i < vecChanInfo.Size(); i++ )
     vecpChanFader[i] = new CLlconClientDlg::CChannelFader ( FrameAudioFaders,
         FrameAudioFadersLayout, addrTest.toString() );
 }
-
+//FrameAudioFadersLayout->addWidget(new QLabel ( "test", FrameAudioFaders ));
 
 
 }

@@ -87,7 +87,7 @@ void CChannelSet::CreateAndSendChanListForAllConClients()
 
 int CChannelSet::GetFreeChan()
 {
-    /* look for a free channel */
+    // look for a free channel
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( !vecChannels[i].IsConnected() )
@@ -122,8 +122,8 @@ int CChannelSet::CheckAddr ( const CHostAddress& Addr )
 }
 
 bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
-                            const int iNumBytesRead,
-                            const CHostAddress& HostAdr )
+                            const int                     iNumBytesRead,
+                            const CHostAddress&           HostAdr )
 {
     bool bRet            = false;
     bool bCreateChanList = false;
@@ -132,13 +132,13 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
     {
         bool bChanOK = true;
 
-        /* get channel ID --------------------------------------------------- */
-        /* check address */
+        // get channel ID ------------------------------------------------------
+        // check address
         int iCurChanID = CheckAddr ( HostAdr );
 
         if ( iCurChanID == INVALID_CHANNEL_ID )
         {
-            /* a new client is calling, look for free channel */
+            // a new client is calling, look for free channel
             iCurChanID = GetFreeChan();
 
             if ( iCurChanID != INVALID_CHANNEL_ID )
@@ -166,20 +166,21 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
             }
             else
             {
-                /* no free channel available */
+                // no free channel available
                 bChanOK = false;
 
                 // create and send "server full" message
-// TODO
+
+// TODO problem: if channel is not officially connected, we cannot send messages
 
             }
         }
 
 
-        /* put received data in jitter buffer ------------------------------- */
+        // put received data in jitter buffer ----------------------------------
         if ( bChanOK )
         {
-            /* put packet in socket buffer */
+            // put packet in socket buffer
             switch ( vecChannels[iCurChanID].PutData ( vecbyRecBuf, iNumBytesRead ) )
             {
             case PS_AUDIO_OK:
@@ -284,18 +285,18 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 {
     CHostAddress InetAddr;
 
-    /* init return values */
+    // init return values
     vecHostAddresses.Init    ( MAX_NUM_CHANNELS );
     veciJitBufSize.Init      ( MAX_NUM_CHANNELS );
     veciNetwOutBlSiFact.Init ( MAX_NUM_CHANNELS );
     veciNetwInBlSiFact.Init  ( MAX_NUM_CHANNELS );
 
-    /* Check all possible channels */
+    // check all possible channels
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( vecChannels[i].GetAddress ( InetAddr ) )
         {
-            /* get requested data */
+            // get requested data
             vecHostAddresses[i]    = InetAddr;
             veciJitBufSize[i]      = vecChannels[i].GetSockBufSize ();
             veciNetwOutBlSiFact[i] = vecChannels[i].GetNetwBufSizeFactOut ();
@@ -323,18 +324,18 @@ CChannel::CChannel() : sName ( "" ),
 
     iCurNetwInBlSiFact = DEF_NET_BLOCK_SIZE_FACTOR;
 
-    /* init the socket buffer */
+    // init the socket buffer
     SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
     // set initial input and output block size factors
     SetNetwBufSizeFactOut ( iCurNetwInBlSiFact );
     SetNetwInBlSiFact ( iCurNetwInBlSiFact );
 
-    /* init time-out for the buffer with zero -> no connection */
+    // init time-out for the buffer with zero -> no connection
     iConTimeOut = 0;
 
 
-    /* connections ---------------------------------------------------------- */
+    // connections -------------------------------------------------------------
     QObject::connect ( &Protocol,
         SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
         this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
@@ -361,7 +362,7 @@ void CChannel::SetNetwInBlSiFact ( const int iNewBlockSizeFactor )
     // store new value
     iCurNetwInBlSiFact = iNewBlockSizeFactor;
 
-    /* init audio compression unit */
+    // init audio compression unit
     iAudComprSizeIn = AudioCompressionIn.Init (
         iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
         CAudioCompression::CT_IMAADPCM );
@@ -379,12 +380,12 @@ void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
     // store new value
     iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
 
-    /* init audio compression unit */
+    // init audio compression unit
     iAudComprSizeOut = AudioCompressionOut.Init (
         iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES,
         CAudioCompression::CT_IMAADPCM );
 
-    /* init conversion buffer */
+    // init conversion buffer
     ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES );
 }
 
@@ -405,7 +406,7 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 
 void CChannel::SetSockBufSize ( const int iNumBlocks )
 {
-    /* this opperation must be done with mutex */
+    // this opperation must be done with mutex
     Mutex.lock();
     {
         iCurSockBufSize = iNumBlocks;
@@ -484,16 +485,16 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
         }
     }
 
-    /* only process if packet has correct size */
+    // only process if packet has correct size
     if ( bIsAudioPacket )
     {
         Mutex.lock();
         {
-            /* decompress audio */
+            // decompress audio
             CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
 
-            /* do resampling to compensate for sample rate offsets in the
-               different sound cards of the clients */
+            // do resampling to compensate for sample rate offsets in the
+            // different sound cards of the clients
 /*
 for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
     vecdResInData[i] = (double) vecsData[i];
@@ -565,35 +566,35 @@ bool CChannel::GetData ( CVector<double>& vecdData )
 {
     bool bGetOK = false;
 
-    Mutex.lock(); /* get mutex lock */
+    Mutex.lock(); // get mutex lock
     {
         bGetOK = SockBuf.Get ( vecdData );
 
         if ( !bGetOK )
         {
-            /* decrease time-out counter */
+            // decrease time-out counter
             if ( iConTimeOut > 0 )
             {
                 iConTimeOut--;
             }
         }
     }
-    Mutex.unlock(); /* get mutex unlock */
+    Mutex.unlock(); // get mutex unlock
 
     return bGetOK;
 }
 
 CVector<unsigned char> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )
 {
-    /* if the block is not ready we have to initialize with zero length to
-       tell the following network send routine that nothing should be sent */
+    // if the block is not ready we have to initialize with zero length to
+    // tell the following network send routine that nothing should be sent
     CVector<unsigned char> vecbySendBuf ( 0 );
 
-    /* use conversion buffer to convert sound card block size in network
-       block size */
+    // use conversion buffer to convert sound card block size in network
+    // block size
     if ( ConvBuf.Put ( vecsNPacket ) )
     {
-        /* a packet is ready, compress audio */
+        // a packet is ready, compress audio
         vecbySendBuf.Init ( iAudComprSizeOut );
         vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
     }

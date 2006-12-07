@@ -114,9 +114,13 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     /* set radio buttons --- */
     // reverb channel
     if (pClient->IsReverbOnLeftChan())
+    {
         RadioButtonRevSelL->setChecked(true);
+    }
     else
+    {
         RadioButtonRevSelR->setChecked(true);
+    }
 
 
     /* Settings menu  ------------------------------------------------------- */
@@ -137,6 +141,18 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
     /* Now tell the layout about the menu */
     CLlconClientDlgBaseLayout->setMenuBar ( pMenu );
+
+
+    // mixer board -------------------------------------------------------------
+    // create all mixer controls and make them invisible
+    vecpChanFader.Init ( MAX_NUM_CHANNELS );
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        vecpChanFader[i] = new CLlconClientDlg::CChannelFader ( FrameAudioFaders,
+            FrameAudioFadersLayout, "test" );
+
+        vecpChanFader[i]->Hide();
+    }
 
 
     /* connections ---------------------------------------------------------- */
@@ -222,6 +238,19 @@ void CLlconClientDlg::OnConnectDisconBut ()
 
         /* immediately update status bar */
         OnTimerStatus ();
+
+
+
+// TEST
+/*
+// make old controls invisible
+for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+{
+    vecpChanFader[i]->Hide();
+}
+*/
+
+
     }
     else
     {
@@ -294,32 +323,28 @@ void CLlconClientDlg::OnConClientListMesReceived ( CVector<CChannelShortInfo> ve
     int i;
 
 
-
-//FrameAudioFadersLayout->addWidget(new QLabel ( "test", FrameAudioFaders ));
-
-
-
-
-
 // TODO
 
-// remove old controls
-for ( i = 0; i < vecpChanFader.Size(); i++ )
+// make old controls invisible
+for ( i = 0; i < MAX_NUM_CHANNELS; i++ )
 {
-    delete vecpChanFader[i];
+    vecpChanFader[i]->Hide();
 }
 
 
 // TEST add current faders
-vecpChanFader.Init ( vecChanInfo.Size() );
 for ( i = 0; i < vecChanInfo.Size(); i++ )
 {
     QHostAddress addrTest ( vecChanInfo[i].veciIpAddr );
 
-    vecpChanFader[i] = new CLlconClientDlg::CChannelFader ( FrameAudioFaders,
-        FrameAudioFadersLayout, addrTest.toString() );
+    vecpChanFader[i]->Show();
+    vecpChanFader[i]->SetText ( addrTest.toString().latin1() );
+
+
+
+//    vecpChanFader[i] = new CLlconClientDlg::CChannelFader ( FrameAudioFaders,
+//        FrameAudioFadersLayout, addrTest.toString() );
 }
-//FrameAudioFadersLayout->addWidget(new QLabel ( "test", FrameAudioFaders ));
 
 
 }
@@ -398,4 +423,9 @@ pFader->setEnabled ( FALSE );
     pLabel->setText ( sName );
 
     pParentLayout->insertLayout ( 0, pMainGrid );
+}
+
+void CLlconClientDlg::CChannelFader::SetText ( const std::string sText )
+{
+    pLabel->setText ( sText.c_str() );
 }

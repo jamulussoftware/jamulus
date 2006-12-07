@@ -85,6 +85,10 @@ protected:
             // TODO get rid of pMainGrid
         }
 
+        void SetText ( const std::string sText );
+        void Show() { pLabel->show(); pFader->show(); }
+        void Hide() { pLabel->hide(); pFader->hide(); }
+
     protected:
         QGridLayout*    pMainGrid;
         QSlider*        pFader;

@@ -26,14 +26,15 @@
 
 
 /* Implementation *************************************************************/
-CClient::CClient () : bRun ( false ), Socket ( &Channel ),
+CClient::CClient() : bRun ( false ), Socket ( &Channel ),
         iAudioInFader ( AUD_FADER_IN_MAX / 2 ),
         iReverbLevel ( AUD_REVERB_MAX / 6 ),
         bReverbOnLeftChan ( false ),
         iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR )
 {
     // connection for protocol
-    QObject::connect ( &Channel, SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+    QObject::connect ( &Channel,
+        SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
         this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
 
     QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
@@ -42,7 +43,8 @@ CClient::CClient () : bRun ( false ), Socket ( &Channel ),
     QObject::connect ( &Channel, SIGNAL ( ProtocolStatus ( bool ) ),
         this, SLOT ( OnProtocolStatus ( bool ) ) );
 
-    QObject::connect ( &Channel, SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
+    QObject::connect ( &Channel,
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
 }
 
@@ -50,15 +52,15 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 {
 
 // convert unsigned uint8_t in char, TODO convert all buffers in uint8_t
-CVector<unsigned char> vecbyDataConv ( vecMessage.Size () );
-for ( int i = 0; i < vecMessage.Size (); i++ ) {
+CVector<unsigned char> vecbyDataConv ( vecMessage.Size() );
+for ( int i = 0; i < vecMessage.Size(); i++ ) {
     vecbyDataConv[i] = static_cast<unsigned char> ( vecMessage[i] );
 }
 
 
     // the protocol queries me to call the function to send the message
     // send it through the network
-    Socket.SendPacket ( vecbyDataConv, Channel.GetAddress () );
+    Socket.SendPacket ( vecbyDataConv, Channel.GetAddress() );
 }
 
 void CClient::OnReqJittBufSize()
@@ -102,37 +104,37 @@ void CClient::OnProtocolStatus ( bool bOk )
 
 void CClient::Init()
 {
-    /* set block sizes (in samples) */
+    // set block sizes (in samples)
     iBlockSizeSam = MIN_BLOCK_SIZE_SAMPLES;
     iSndCrdBlockSizeSam = MIN_SND_CRD_BLOCK_SIZE_SAMPLES;
 
-    vecsAudioSndCrd.Init(iSndCrdBlockSizeSam * 2); /* stereo */
-    vecdAudioSndCrdL.Init(iSndCrdBlockSizeSam);
-    vecdAudioSndCrdR.Init(iSndCrdBlockSizeSam);
+    vecsAudioSndCrd.Init  ( iSndCrdBlockSizeSam * 2 ); // stereo
+    vecdAudioSndCrdL.Init ( iSndCrdBlockSizeSam );
+    vecdAudioSndCrdR.Init ( iSndCrdBlockSizeSam );
 
-    vecdAudioL.Init(iBlockSizeSam);
-    vecdAudioR.Init(iBlockSizeSam);
+    vecdAudioL.Init ( iBlockSizeSam );
+    vecdAudioR.Init ( iBlockSizeSam );
 
-    Sound.InitRecording(iSndCrdBlockSizeSam * 2 /* stereo */);
-    Sound.InitPlayback(iSndCrdBlockSizeSam * 2 /* stereo */);
+    Sound.InitRecording ( iSndCrdBlockSizeSam * 2 ); // stereo
+    Sound.InitPlayback  ( iSndCrdBlockSizeSam * 2 ); // stereo
 
-    /* resample objects are always initialized with the input block size */
-    /* record */
-    ResampleObjDownL.Init(iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SAMPLE_RATE);
-    ResampleObjDownR.Init(iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SAMPLE_RATE);
+    // resample objects are always initialized with the input block size
+    // record
+    ResampleObjDownL.Init ( iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SAMPLE_RATE );
+    ResampleObjDownR.Init ( iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SAMPLE_RATE );
 
-    /* playback */
-    ResampleObjUpL.Init(iBlockSizeSam, SAMPLE_RATE, SND_CRD_SAMPLE_RATE);
-    ResampleObjUpR.Init(iBlockSizeSam, SAMPLE_RATE, SND_CRD_SAMPLE_RATE);
+    // playback
+    ResampleObjUpL.Init ( iBlockSizeSam, SAMPLE_RATE, SND_CRD_SAMPLE_RATE );
+    ResampleObjUpR.Init ( iBlockSizeSam, SAMPLE_RATE, SND_CRD_SAMPLE_RATE );
 
-    /* init network buffers */
-    vecsNetwork.Init(iBlockSizeSam);
-    vecdNetwData.Init(iBlockSizeSam);
+    // init network buffers
+    vecsNetwork.Init  ( iBlockSizeSam );
+    vecdNetwData.Init ( iBlockSizeSam );
 
-    /* init moving average buffer for response time evaluation */
-    RespTimeMoAvBuf.Init(LEN_MOV_AV_RESPONSE);
+    // init moving average buffer for response time evaluation
+    RespTimeMoAvBuf.Init ( LEN_MOV_AV_RESPONSE );
 
-    /* init time for response time evaluation */
+    // init time for response time evaluation
     TimeLastBlock = QTime::currentTime();
 
     AudioReverb.Clear();
@@ -142,111 +144,116 @@ void CClient::run()
 {
     int i, iInCnt;
 
-    /* Set thread priority (The working thread should have a higher
-       priority than the GUI) */
+    // Set thread priority (The working thread should have a higher
+    // priority than the GUI)
 #ifdef _WIN32
-    SetThreadPriority ( GetCurrentThread (), THREAD_PRIORITY_ABOVE_NORMAL );
+    SetThreadPriority ( GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL );
 #else
-    /* set the process to realtime privs, taken from
-       "http://www.gardena.net/benno/linux/audio" but does not seem to work,
-       maybe a problem with user rights */
+    // set the process to realtime privs, taken from
+    // "http://www.gardena.net/benno/linux/audio" but does not seem to work,
+    // maybe a problem with user rights
     struct sched_param schp;
     memset ( &schp, 0, sizeof ( schp ) );
     schp.sched_priority = sched_get_priority_max ( SCHED_FIFO );
     sched_setscheduler ( 0, SCHED_FIFO, &schp );
 #endif
 
-    /* init object */
+    // init object
     Init();
 
 
-    /* runtime phase --------------------------------------------------------- */
+    // runtime phase ------------------------------------------------------------
     bRun = true;
 
-    /* main loop of working thread */
-    while (bRun)
+    // main loop of working thread
+    while ( bRun )
     {
-        /* get audio from sound card (blocking function) */
-        if (Sound.Read(vecsAudioSndCrd))
+        // get audio from sound card (blocking function)
+        if ( Sound.Read ( vecsAudioSndCrd ) )
         {
-            PostWinMessage(MS_SOUND_IN, MUL_COL_LED_RED);
+            PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_RED );
         }
         else
         {
-            PostWinMessage(MS_SOUND_IN, MUL_COL_LED_GREEN);
+            PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_GREEN );
         }
 
-        /* copy data from one stereo buffer in two separate buffers */
+        // copy data from one stereo buffer in two separate buffers
         iInCnt = 0;
-        for (i = 0; i < iSndCrdBlockSizeSam; i++)
+        for ( i = 0; i < iSndCrdBlockSizeSam; i++ )
         {
             vecdAudioSndCrdL[i] = (double) vecsAudioSndCrd[iInCnt++];
             vecdAudioSndCrdR[i] = (double) vecsAudioSndCrd[iInCnt++];
         }
 
-        /* resample data for each channel seaparately */
-        ResampleObjDownL.Resample(vecdAudioSndCrdL, vecdAudioL);
-        ResampleObjDownR.Resample(vecdAudioSndCrdR, vecdAudioR);
+        // resample data for each channel seaparately
+        ResampleObjDownL.Resample ( vecdAudioSndCrdL, vecdAudioL );
+        ResampleObjDownR.Resample ( vecdAudioSndCrdR, vecdAudioR );
 
-        /* update signal level meters */
-        SignalLevelMeterL.Update(vecdAudioL);
-        SignalLevelMeterR.Update(vecdAudioR);
+        // update signal level meters
+        SignalLevelMeterL.Update ( vecdAudioL );
+        SignalLevelMeterR.Update ( vecdAudioR );
 
-        /* add reverberation effect if activated */
-        if (iReverbLevel != 0)
+        // add reverberation effect if activated
+        if ( iReverbLevel != 0 )
         {
-            /* first attenuation amplification factor */
+            // first attenuation amplification factor
             const double dRevLev = (double) iReverbLevel / AUD_REVERB_MAX / 2;
 
-            if (bReverbOnLeftChan)
+            if ( bReverbOnLeftChan )
             {
                 for (i = 0; i < iBlockSizeSam; i++)
                 {
-                    /* left channel */
+                    // left channel
                     vecdAudioL[i] +=
-                        dRevLev * AudioReverb.ProcessSample(vecdAudioL[i]);
+                        dRevLev * AudioReverb.ProcessSample ( vecdAudioL[i] );
                 }
             }
             else
             {
-                for (i = 0; i < iBlockSizeSam; i++)
+                for ( i = 0; i < iBlockSizeSam; i++ )
                 {
-                    /* right channel */
+                    // right channel
                     vecdAudioR[i] +=
-                        dRevLev * AudioReverb.ProcessSample(vecdAudioR[i]);
+                        dRevLev * AudioReverb.ProcessSample ( vecdAudioR[i] );
                 }
             }
         }
 
-        /* mix both signals depending on the fading setting */
+        // mix both signals depending on the fading setting
         const int iMiddleOfFader = AUD_FADER_IN_MAX / 2;
         const double dAttFact =
-            (double) (iMiddleOfFader - abs(iMiddleOfFader - iAudioInFader)) /
+            (double) ( iMiddleOfFader - abs ( iMiddleOfFader - iAudioInFader ) ) /
             iMiddleOfFader;
-        for (i = 0; i < iBlockSizeSam; i++)
+
+        for ( i = 0; i < iBlockSizeSam; i++ )
         {
             double dMixedSignal;
 
-            if (iAudioInFader > iMiddleOfFader)
+            if ( iAudioInFader > iMiddleOfFader )
+            {
                 dMixedSignal = vecdAudioL[i] + dAttFact * vecdAudioR[i];
+            }
             else
+            {
                 dMixedSignal = vecdAudioR[i] + dAttFact * vecdAudioL[i];
+            }
 
-            vecsNetwork[i] = Double2Short(dMixedSignal);
+            vecsNetwork[i] = Double2Short ( dMixedSignal );
         }
 
-        /* send it through the network */
+        // send it through the network
         Socket.SendPacket ( Channel.PrepSendPacket ( vecsNetwork ),
             Channel.GetAddress () );
 
-        /* receive a new block */
-        if (Channel.GetData(vecdNetwData))
+        // receive a new block
+        if ( Channel.GetData ( vecdNetwData ) )
         {
-            PostWinMessage(MS_JIT_BUF_GET, MUL_COL_LED_GREEN);
+            PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN );
         }
         else
         {
-            PostWinMessage(MS_JIT_BUF_GET, MUL_COL_LED_RED);
+            PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED );
         }
 
 #ifdef _DEBUG_
@@ -311,53 +318,53 @@ fflush(pFileDelay);
 */
 
 
-        /* check if channel is connected */
-        if (Channel.IsConnected())
+        // check if channel is connected
+        if ( Channel.IsConnected() )
         {
-            /* write mono input signal in both sound-card channels */
-            for (i = 0; i < iBlockSizeSam; i++)
+            // write mono input signal in both sound-card channels
+            for ( i = 0; i < iBlockSizeSam; i++ )
             {
                 vecdAudioL[i] = vecdAudioR[i] = vecdNetwData[i];
             }
         }
         else
         {
-            /* if not connected, clear data */
-            for (i = 0; i < iBlockSizeSam; i++)
+            // if not connected, clear data
+            for ( i = 0; i < iBlockSizeSam; i++ )
             {
                 vecdAudioL[i] = vecdAudioR[i] = 0.0;
             }
         }
 
-        /* resample data for each channel separately */
-        ResampleObjUpL.Resample(vecdAudioL, vecdAudioSndCrdL);
-        ResampleObjUpR.Resample(vecdAudioR, vecdAudioSndCrdR);
+        // resample data for each channel separately
+        ResampleObjUpL.Resample ( vecdAudioL, vecdAudioSndCrdL );
+        ResampleObjUpR.Resample ( vecdAudioR, vecdAudioSndCrdR );
 
-        /* copy data from one stereo buffer in two separate buffers */
+        // copy data from one stereo buffer in two separate buffers
         iInCnt = 0;
-        for (i = 0; i < iSndCrdBlockSizeSam; i++)
+        for ( i = 0; i < iSndCrdBlockSizeSam; i++ )
         {
-            vecsAudioSndCrd[iInCnt++] = Double2Short(vecdAudioSndCrdL[i]);
-            vecsAudioSndCrd[iInCnt++] = Double2Short(vecdAudioSndCrdR[i]);
+            vecsAudioSndCrd[iInCnt++] = Double2Short ( vecdAudioSndCrdL[i] );
+            vecsAudioSndCrd[iInCnt++] = Double2Short ( vecdAudioSndCrdR[i] );
         }
 
-        /* play the new block */
-        if (Sound.Write(vecsAudioSndCrd))
+        // play the new block
+        if ( Sound.Write ( vecsAudioSndCrd ) )
         {
-            PostWinMessage(MS_SOUND_OUT, MUL_COL_LED_RED);
+            PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_RED );
         }
         else
         {
-            PostWinMessage(MS_SOUND_OUT, MUL_COL_LED_GREEN);
+            PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_GREEN );
         }
 
 
-        /* update response time measurement --------------------------------- */
-        /* add time difference */
+        // update response time measurement ------------------------------------
+        // add time difference
         const QTime CurTime = QTime::currentTime();
 
-        /* we want to calculate the standard deviation (we assume that the mean
-           is correct at the block period time) */
+        // we want to calculate the standard deviation (we assume that the mean
+        // is correct at the block period time)
         const double dCurAddVal =
             ( (double) TimeLastBlock.msecsTo ( CurTime ) - MIN_BLOCK_DURATION_MS );
 
@@ -368,23 +375,23 @@ fprintf(pFileTest, "%e\n", dCurAddVal);
 fflush(pFileTest);
 */
 
-        RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); /* add squared value */
+        RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
 
-        /* store old time value */
+        // store old time value
         TimeLastBlock = CurTime;
     }
 
-    /* reset current signal level and LEDs */
+    // reset current signal level and LEDs
     SignalLevelMeterL.Reset();
     SignalLevelMeterR.Reset();
-    PostWinMessage(MS_RESET_ALL, 0);
+    PostWinMessage ( MS_RESET_ALL, 0 );
 }
 
 bool CClient::Stop()
 {
-    /* set flag so that thread can leave the main loop */
+    // set flag so that thread can leave the main loop
     bRun = false;
 
-    /* give thread some time to terminate, return status */
-    return wait(5000);
+    // give thread some time to terminate, return status
+    return wait ( 5000 );
 }

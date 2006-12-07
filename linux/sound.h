@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2005
  *
  * Author(s):
- *	Volker Fischer, Alexander Kurpiers
+ *  Volker Fischer, Alexander Kurpiers
  *
  * This code is based on the Open-Source sound interface implementation of
  * the Dream DRM Receiver project.
@@ -31,74 +31,74 @@
 
 
 /* Definitions ****************************************************************/
-#define	NUM_IN_OUT_CHANNELS			2		/* always stereo */
+#define NUM_IN_OUT_CHANNELS         2       /* always stereo */
 
 /* the number of periods is critical for latency */
-#define NUM_PERIOD_BLOCKS_IN		2
-#define NUM_PERIOD_BLOCKS_OUT		2
+#define NUM_PERIOD_BLOCKS_IN        2
+#define NUM_PERIOD_BLOCKS_OUT       2
 
-#define MAX_SND_BUF_IN				200
-#define MAX_SND_BUF_OUT				200
+#define MAX_SND_BUF_IN              200
+#define MAX_SND_BUF_OUT             200
 
 /* Classes ********************************************************************/
 class CSound
 {
 public:
-	CSound()
+    CSound()
 #if WITH_SOUND
-	: rhandle(NULL), phandle(NULL), iCurPeriodSizeIn(NUM_PERIOD_BLOCKS_IN),
-	iCurPeriodSizeOut(NUM_PERIOD_BLOCKS_OUT), bChangParamIn(true),
-	bChangParamOut(true)
+    : rhandle(NULL), phandle(NULL), iCurPeriodSizeIn(NUM_PERIOD_BLOCKS_IN),
+    iCurPeriodSizeOut(NUM_PERIOD_BLOCKS_OUT), bChangParamIn(true),
+    bChangParamOut(true)
 #endif
-		{}
-	virtual ~CSound() {Close();}
+        {}
+    virtual ~CSound() {Close();}
 
-	/* Not implemented yet, always return one device and default string */
-	int		GetNumDev() {return 1;}
-	void	SetOutDev(int iNewDev) {}
-	void	SetInDev(int iNewDev) {}
+    /* Not implemented yet, always return one device and default string */
+    int     GetNumDev() {return 1;}
+    void    SetOutDev(int iNewDev) {}
+    void    SetInDev(int iNewDev) {}
 
-	/* Return invalid device ID which is the same as using "wave mapper" which
-	   we assume here to be used */
-	int		GetOutDev() {return 1;}
-	int		GetInDev() {return 1;}
+    /* Return invalid device ID which is the same as using "wave mapper" which
+       we assume here to be used */
+    int     GetOutDev() {return 1;}
+    int     GetInDev() {return 1;}
 
 #if WITH_SOUND
-	void	SetInNumBuf(int iNewNum);
-	int		GetInNumBuf() {return iCurPeriodSizeIn;}
-	void	SetOutNumBuf(int iNewNum);
-	int		GetOutNumBuf() {return iCurPeriodSizeOut;}
-	void	InitRecording(int iNewBufferSize, bool bNewBlocking = true);
-	void	InitPlayback(int iNewBufferSize, bool bNewBlocking = false);
-	bool	Read(CVector<short>& psData);
-	bool	Write(CVector<short>& psData);
+    void    SetInNumBuf(int iNewNum);
+    int     GetInNumBuf() {return iCurPeriodSizeIn;}
+    void    SetOutNumBuf(int iNewNum);
+    int     GetOutNumBuf() {return iCurPeriodSizeOut;}
+    void    InitRecording(int iNewBufferSize, bool bNewBlocking = true);
+    void    InitPlayback(int iNewBufferSize, bool bNewBlocking = false);
+    bool    Read(CVector<short>& psData);
+    bool    Write(CVector<short>& psData);
 
-	void	Close();
-	
+    void    Close();
+    
 protected:
-	snd_pcm_t* rhandle;
-	snd_pcm_t* phandle;
+    snd_pcm_t* rhandle;
+    snd_pcm_t* phandle;
 
-	bool SetHWParams(snd_pcm_t* handle, const int iBufferSizeIn,
-					 const int iNumPeriodBlocks);
+    bool SetHWParams(snd_pcm_t* handle, const int iBufferSizeIn,
+                     const int iNumPeriodBlocks);
 
-	int iBufferSizeOut;
-	int iBufferSizeIn;
-	bool bChangParamIn;
-	int iCurPeriodSizeIn;
-	bool bChangParamOut;
-	int iCurPeriodSizeOut;
+    int iBufferSizeOut;
+    int iBufferSizeIn;
+    bool bChangParamIn;
+    int iCurPeriodSizeIn;
+    bool bChangParamOut;
+    int iCurPeriodSizeOut;
 #else
-	/* Dummy definitions */
-	void	SetInNumBuf(int iNewNum) {}
-	int		GetInNumBuf() {return 1;}
-	void	SetOutNumBuf(int iNewNum) {}
-	int		GetOutNumBuf() {return 1;}
-	void	InitRecording(int iNewBufferSize, bool bNewBlocking = true) {printf("no sound!");}
-	void	InitPlayback(int iNewBufferSize, bool bNewBlocking = false) {printf("no sound!");}
-	bool	Read(CVector<short>& psData) {printf("no sound!"); return false;}
-	bool	Write(CVector<short>& psData) {printf("no sound!"); return false;}
-	void	Close() {}
+    /* Dummy definitions */
+    void    SetInNumBuf(int iNewNum) {}
+    int     GetInNumBuf() {return 1;}
+    void    SetOutNumBuf(int iNewNum) {}
+    int     GetOutNumBuf() {return 1;}
+    void    InitRecording(int iNewBufferSize, bool bNewBlocking = true) {printf("no sound!");}
+    void    InitPlayback(int iNewBufferSize, bool bNewBlocking = false) {printf("no sound!");}
+    bool    Read(CVector<short>& psData) {printf("no sound!"); return false;}
+    bool    Write(CVector<short>& psData) {printf("no sound!"); return false;}
+    void    Close() {}
 #endif
 };
 

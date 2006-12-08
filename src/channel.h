@@ -103,6 +103,7 @@ public:
         }
     }
     void CreateReqJitBufMes() { Protocol.CreateReqJitBufMes(); }
+    void CreateReqConnClientsList() { Protocol.CreateReqConnClientsList(); }
 
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
     { 
@@ -171,6 +172,7 @@ signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
     void NewConnection();
     void ReqJittBufSize();
+    void ReqConnClientsList();
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ProtocolStatus ( bool bOk );
 };
@@ -244,6 +246,18 @@ public slots:
     void OnNewConnectionCh7() {vecChannels[7].CreateReqJitBufMes();}
     void OnNewConnectionCh8() {vecChannels[8].CreateReqJitBufMes();}
     void OnNewConnectionCh9() {vecChannels[9].CreateReqJitBufMes();}
+
+// TODO
+    void OnReqConnClientsListCh0() {}
+    void OnReqConnClientsListCh1() {}
+    void OnReqConnClientsListCh2() {}
+    void OnReqConnClientsListCh3() {}
+    void OnReqConnClientsListCh4() {}
+    void OnReqConnClientsListCh5() {}
+    void OnReqConnClientsListCh6() {}
+    void OnReqConnClientsListCh7() {}
+    void OnReqConnClientsListCh8() {}
+    void OnReqConnClientsListCh9() {}
 
 signals:
     void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );

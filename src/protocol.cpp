@@ -77,6 +77,11 @@ MESSAGES
     | 1 byte channel ID | 4 bytes IP address | 2 bytes number n | n bytes UTF-8 string |
     +-------------------+--------------------+------------------+----------------------+
 
+- Request connected clients list:             PROTMESSID_REQ_CONN_CLIENTS_LIST
+
+    note: does not have any data -> n = 0
+
+
  *
  ******************************************************************************
  *
@@ -528,6 +533,17 @@ void CProtocol:: EvaluateConClientListMes ( unsigned int iPos, const CVector<uin
 
     // invoke message action
     emit ConClientListMesReceived ( vecChanInfo );
+}
+
+void CProtocol::CreateReqConnClientsList()
+{
+    CreateAndSendMessage ( PROTMESSID_REQ_CONN_CLIENTS_LIST, CVector<uint8_t> ( 0 ) );
+}
+
+void CProtocol::EvaluateReqConnClientsList ( unsigned int iPos, const CVector<uint8_t>& vecData )
+{
+    // invoke message action
+    emit ReqConnClientsList();
 }
 
 

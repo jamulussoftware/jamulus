@@ -54,6 +54,18 @@ CChannelSet::CChannelSet()
     QObject::connect(&vecChannels[7],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh7()));
     QObject::connect(&vecChannels[8],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh8()));
     QObject::connect(&vecChannels[9],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh9()));
+
+    // request connected clients list
+    QObject::connect(&vecChannels[0],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh0()));
+    QObject::connect(&vecChannels[1],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh1()));
+    QObject::connect(&vecChannels[2],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh2()));
+    QObject::connect(&vecChannels[3],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh3()));
+    QObject::connect(&vecChannels[4],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh4()));
+    QObject::connect(&vecChannels[5],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh5()));
+    QObject::connect(&vecChannels[6],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh6()));
+    QObject::connect(&vecChannels[7],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh7()));
+    QObject::connect(&vecChannels[8],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh8()));
+    QObject::connect(&vecChannels[9],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh9()));
 }
 
 void CChannelSet::CreateAndSendChanListForAllConClients()
@@ -204,7 +216,18 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
         // requested
         if ( bCreateChanList )
         {
-            CreateAndSendChanListForAllConClients();
+
+
+
+// TODO list is only send for new connected clients after request, only
+// the already connected clients get the list automatically, because they
+// don't know when new clients connect!
+
+// TODO use "void OnReqConnClientsListChx() {}" for sending list to specific client
+
+CreateAndSendChanListForAllConClients(); // <- replace this
+
+
         }
     }
     Mutex.unlock();
@@ -347,6 +370,10 @@ CChannel::CChannel() : sName ( "" ),
     QObject::connect ( &Protocol,
         SIGNAL ( ReqJittBufSize() ),
         SIGNAL ( ReqJittBufSize() ) );
+
+    QObject::connect ( &Protocol,
+        SIGNAL ( ReqConnClientsList() ),
+        SIGNAL ( ReqConnClientsList() ) );
 
     QObject::connect ( &Protocol,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),

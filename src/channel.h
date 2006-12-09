@@ -57,6 +57,14 @@ enum EPutDataStat
     PS_PROT_ERR
 };
 
+enum EGetDataStat
+{
+    GS_BUFFER_OK,
+    GS_BUFFER_UNDERRUN,
+    GS_CHAN_NOW_DISCONNECTED,
+    GS_CHAN_NOT_CONNECTED
+};
+
 
 /* Classes ********************************************************************/
 // CChannel --------------------------------------------------------------------
@@ -70,7 +78,7 @@ public:
 
     EPutDataStat PutData ( const CVector<unsigned char>& vecbyData,
                            int iNumBytes );
-    bool GetData ( CVector<double>& vecdData );
+    EGetDataStat GetData ( CVector<double>& vecdData );
 
     CVector<unsigned char> PrepSendPacket ( const CVector<short>& vecsNPacket );
 
@@ -221,6 +229,7 @@ public:
 
 protected:
     CVector<CChannelShortInfo> CreateChannelList();
+    void CreateAndSendChanListForAllConChannels();
     void CreateAndSendChanListForAllExceptThisChan ( const int iCurChanID );
     void CreateAndSendChanListForThisChan          ( const int iCurChanID );
 

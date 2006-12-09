@@ -253,7 +253,7 @@ void CClient::run()
             Channel.GetAddress () );
 
         // receive a new block
-        if ( Channel.GetData ( vecdNetwData ) )
+        if ( Channel.GetData ( vecdNetwData ) == GS_BUFFER_OK )
         {
             PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN );
         }

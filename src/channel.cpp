@@ -94,6 +94,22 @@ CVector<CChannelShortInfo> CChannelSet::CreateChannelList()
     return vecChanInfo;
 }
 
+void CChannelSet::CreateAndSendChanListForAllConChannels()
+{
+    // create channel list
+    CVector<CChannelShortInfo> vecChanInfo ( CChannelSet::CreateChannelList() );
+
+    // now send connected channels list to all connected clients
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            // send message
+            vecChannels[i].CreateConClientListMes ( vecChanInfo );
+        }
+    }
+}
+
 void CChannelSet::CreateAndSendChanListForAllExceptThisChan ( const int iCurChanID )
 {
     // create channel list
@@ -254,7 +270,8 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
                                     CVector<CVector<double> >& vecvecdData,
                                     CVector<CVector<double> >& vecvecdGains )
 {
-    int i, j;
+    int  i, j;
+    bool bCreateChanList = false;
 
     // init temporal data vector and clear input buffers
     CVector<double> vecdData ( MIN_BLOCK_SIZE_SAMPLES );
@@ -272,7 +289,14 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
         {
             // read out all input buffers to decrease timeout counter on
             // disconnected channels
-            const bool bGetOK = vecChannels[i].GetData ( vecdData );
+            const EGetDataStat eGetStat = vecChannels[i].GetData ( vecdData );
+
+            // if channel was just disconnected, set flag that connected
+            // client list is sent to all other clients
+            if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
+            {
+                bCreateChanList = true;
+            }
 
             if ( vecChannels[i].IsConnected() )
             {
@@ -285,7 +309,7 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
                 vecvecdData[iOldSize] = vecdData;
 
                 // send message for get status (for GUI)
-                if ( bGetOK )
+                if ( eGetStat == GS_BUFFER_OK )
                 {
                     PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN, i );
                 }
@@ -311,6 +335,13 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
                 // query the IDs of the currently connected channels
                 vecvecdGains[i][j] = vecChannels[i].GetGain( vecChanID[j] );
             }
+        }
+
+        // create channel list message if requested
+        if ( bCreateChanList )
+        {
+            // update channel list for all currently connected clients
+            CreateAndSendChanListForAllConChannels();
         }
     }
     Mutex.unlock(); // release mutex
@@ -620,26 +651,41 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
     return eRet;
 }
 
-bool CChannel::GetData ( CVector<double>& vecdData )
+EGetDataStat CChannel::GetData ( CVector<double>& vecdData )
 {
-    bool bGetOK = false;
+    // init with ok flag
+    EGetDataStat eGetStatus = GS_BUFFER_OK;
 
     Mutex.lock(); // get mutex lock
     {
-        bGetOK = SockBuf.Get ( vecdData );
-
-        if ( !bGetOK )
+        if ( !SockBuf.Get ( vecdData ) )
         {
             // decrease time-out counter
             if ( iConTimeOut > 0 )
             {
                 iConTimeOut--;
+
+                if ( iConTimeOut == 0 )
+                {
+                    // channel is just disconnected
+                    eGetStatus = GS_CHAN_NOW_DISCONNECTED;
+                }
+                else
+                {
+                    // channel is not yet disconnected but no data in buffer
+                    eGetStatus = GS_BUFFER_UNDERRUN;
+                }
+            }
+            else
+            {
+                // channel is disconnected
+                eGetStatus = GS_CHAN_NOT_CONNECTED;
             }
         }
     }
     Mutex.unlock(); // get mutex unlock
 
-    return bGetOK;
+    return eGetStatus;
 }
 
 CVector<unsigned char> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )

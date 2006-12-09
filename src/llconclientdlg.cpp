@@ -242,13 +242,12 @@ void CLlconClientDlg::OnConnectDisconBut ()
 
 
 // TEST
-/*
 // make old controls invisible
 for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
 {
     vecpChanFader[i]->Hide();
 }
-*/
+
 
 
     }

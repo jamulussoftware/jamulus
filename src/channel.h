@@ -36,17 +36,17 @@
 
 
 /* Definitions ****************************************************************/
-/* Set the time-out for the input buffer until the state changes from
-   connected to not-connected (the actual time depends on the way the error
-   correction is implemented) */
-#define CON_TIME_OUT_SEC_MAX    5 // seconds
+// Set the time-out for the input buffer until the state changes from
+// connected to not-connected (the actual time depends on the way the error
+// correction is implemented)
+#define CON_TIME_OUT_SEC_MAX        5 // seconds
 
-/* maximum number of internet connections (channels) */
+// maximum number of internet connections (channels)
 // if you want to change this paramter, change the connections in this class, too!
-#define MAX_NUM_CHANNELS        10 /* max number channels for server */
+#define MAX_NUM_CHANNELS            10 /* max number channels for server */
 
-/* no valid channel number */
-#define INVALID_CHANNEL_ID      (MAX_NUM_CHANNELS + 1)
+// no valid channel number
+#define INVALID_CHANNEL_ID          (MAX_NUM_CHANNELS + 1)
 
 enum EPutDataStat
 {
@@ -59,7 +59,7 @@ enum EPutDataStat
 
 
 /* Classes ********************************************************************/
-/* CChannel ----------------------------------------------------------------- */
+// CChannel --------------------------------------------------------------------
 class CChannel : public QObject
 {
     Q_OBJECT
@@ -75,6 +75,9 @@ public:
     CVector<unsigned char> PrepSendPacket ( const CVector<short>& vecsNPacket );
 
     bool IsConnected() const { return iConTimeOut > 0; }
+
+    void SetEnable ( const bool bNEnStat );
+    bool IsEnabled() { return bIsEnabled; }
 
     void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
     bool GetAddress ( CHostAddress& RetAddr );
@@ -102,7 +105,7 @@ public:
             Protocol.CreateJitBufMes ( iJitBufSize );
         }
     }
-    void CreateReqJitBufMes() { Protocol.CreateReqJitBufMes(); }
+    void CreateReqJitBufMes()       { Protocol.CreateReqJitBufMes(); }
     void CreateReqConnClientsList() { Protocol.CreateReqConnClientsList(); }
 
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
@@ -155,6 +158,8 @@ protected:
     int                 iConTimeOut;
     int                 iConTimeOutStartVal;
 
+    bool                bIsEnabled;
+
     int                 vecNetwInBufSizes[MAX_NET_BLOCK_SIZE_FACTOR];
 
     int                 iCurNetwInBlSiFact;
@@ -178,7 +183,7 @@ signals:
 };
 
 
-/* CChannelSet (for server) ------------------------------------------------- */
+// CChannelSet (for server) ----------------------------------------------------
 class CChannelSet : public QObject
 {
     Q_OBJECT
@@ -203,7 +208,7 @@ public:
                           CVector<int>& veciNetwOutBlSiFact,
                           CVector<int>& veciNetwInBlSiFact );
 
-    /* access functions for actual channels */
+    // access functions for actual channels
     bool IsConnected ( const int iChanNum )
         { return vecChannels[iChanNum].IsConnected(); }
 
@@ -215,7 +220,9 @@ public:
         { return vecChannels[iChanNum].GetAddress(); }
 
 protected:
-    void CreateAndSendChanListForAllConClients();
+    CVector<CChannelShortInfo> CreateChannelList();
+    void CreateAndSendChanListForAllExceptThisChan ( const int iCurChanID );
+    void CreateAndSendChanListForThisChan          ( const int iCurChanID );
 
     /* do not use the vector class since CChannel does not have appropriate
        copy constructor/operator */
@@ -247,17 +254,16 @@ public slots:
     void OnNewConnectionCh8() {vecChannels[8].CreateReqJitBufMes();}
     void OnNewConnectionCh9() {vecChannels[9].CreateReqJitBufMes();}
 
-// TODO
-    void OnReqConnClientsListCh0() {}
-    void OnReqConnClientsListCh1() {}
-    void OnReqConnClientsListCh2() {}
-    void OnReqConnClientsListCh3() {}
-    void OnReqConnClientsListCh4() {}
-    void OnReqConnClientsListCh5() {}
-    void OnReqConnClientsListCh6() {}
-    void OnReqConnClientsListCh7() {}
-    void OnReqConnClientsListCh8() {}
-    void OnReqConnClientsListCh9() {}
+    void OnReqConnClientsListCh0() { CreateAndSendChanListForThisChan ( 0 ); }
+    void OnReqConnClientsListCh1() { CreateAndSendChanListForThisChan ( 1 ); }
+    void OnReqConnClientsListCh2() { CreateAndSendChanListForThisChan ( 2 ); }
+    void OnReqConnClientsListCh3() { CreateAndSendChanListForThisChan ( 3 ); }
+    void OnReqConnClientsListCh4() { CreateAndSendChanListForThisChan ( 4 ); }
+    void OnReqConnClientsListCh5() { CreateAndSendChanListForThisChan ( 5 ); }
+    void OnReqConnClientsListCh6() { CreateAndSendChanListForThisChan ( 6 ); }
+    void OnReqConnClientsListCh7() { CreateAndSendChanListForThisChan ( 7 ); }
+    void OnReqConnClientsListCh8() { CreateAndSendChanListForThisChan ( 8 ); }
+    void OnReqConnClientsListCh9() { CreateAndSendChanListForThisChan ( 9 ); }
 
 signals:
     void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );

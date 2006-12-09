@@ -338,6 +338,11 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 
                     EvaluateConClientListMes ( iPos, vecData );
                     break;
+
+                case PROTMESSID_REQ_CONN_CLIENTS_LIST:
+
+                    EvaluateReqConnClientsList ( iPos, vecData );
+                    break;
                 }
 
                 // send acknowledge message

@@ -30,6 +30,12 @@
 \******************************************************************************/
 CChannelSet::CChannelSet()
 {
+    // enable all channels
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        vecChannels[i].SetEnable ( true );
+    }
+
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
     QObject::connect(&vecChannels[0],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh0(CVector<uint8_t>)));
@@ -56,25 +62,24 @@ CChannelSet::CChannelSet()
     QObject::connect(&vecChannels[9],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh9()));
 
     // request connected clients list
-    QObject::connect(&vecChannels[0],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh0()));
-    QObject::connect(&vecChannels[1],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh1()));
-    QObject::connect(&vecChannels[2],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh2()));
-    QObject::connect(&vecChannels[3],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh3()));
-    QObject::connect(&vecChannels[4],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh4()));
-    QObject::connect(&vecChannels[5],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh5()));
-    QObject::connect(&vecChannels[6],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh6()));
-    QObject::connect(&vecChannels[7],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh7()));
-    QObject::connect(&vecChannels[8],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh8()));
-    QObject::connect(&vecChannels[9],SIGNAL(ReqConnClientsList()),this,SLOT(OnNewConnectionCh9()));
+    QObject::connect(&vecChannels[0],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh0()));
+    QObject::connect(&vecChannels[1],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh1()));
+    QObject::connect(&vecChannels[2],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh2()));
+    QObject::connect(&vecChannels[3],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh3()));
+    QObject::connect(&vecChannels[4],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh4()));
+    QObject::connect(&vecChannels[5],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh5()));
+    QObject::connect(&vecChannels[6],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh6()));
+    QObject::connect(&vecChannels[7],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh7()));
+    QObject::connect(&vecChannels[8],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh8()));
+    QObject::connect(&vecChannels[9],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh9()));
 }
 
-void CChannelSet::CreateAndSendChanListForAllConClients()
+CVector<CChannelShortInfo> CChannelSet::CreateChannelList()
 {
-    int                        i;
     CVector<CChannelShortInfo> vecChanInfo ( 0 );
 
     // look for free channels
-    for ( i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -86,15 +91,33 @@ void CChannelSet::CreateAndSendChanListForAllConClients()
         }
     }
 
-    // now send connected channels list to all connected clients
-    for ( i = 0; i < MAX_NUM_CHANNELS; i++ )
+    return vecChanInfo;
+}
+
+void CChannelSet::CreateAndSendChanListForAllExceptThisChan ( const int iCurChanID )
+{
+    // create channel list
+    CVector<CChannelShortInfo> vecChanInfo ( CChannelSet::CreateChannelList() );
+
+    // now send connected channels list to all connected clients except for
+    // the channel with the ID "iCurChanID"
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        if ( vecChannels[i].IsConnected() )
+        if ( ( vecChannels[i].IsConnected() ) && ( i != iCurChanID ) )
         {
             // send message
             vecChannels[i].CreateConClientListMes ( vecChanInfo );
         }
     }
+}
+
+void CChannelSet::CreateAndSendChanListForThisChan ( const int iCurChanID )
+{
+    // create channel list
+    CVector<CChannelShortInfo> vecChanInfo ( CChannelSet::CreateChannelList() );
+
+    // now send connected channels list to the channel with the ID "iCurChanID"
+    vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo );
 }
 
 int CChannelSet::GetFreeChan()
@@ -216,18 +239,10 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
         // requested
         if ( bCreateChanList )
         {
-
-
-
-// TODO list is only send for new connected clients after request, only
-// the already connected clients get the list automatically, because they
-// don't know when new clients connect!
-
-// TODO use "void OnReqConnClientsListChx() {}" for sending list to specific client
-
-CreateAndSendChanListForAllConClients(); // <- replace this
-
-
+            // connected clients list is only send for new connected clients after
+            // request, only the already connected clients get the list
+            // automatically, because they don't know when new clients connect
+            CreateAndSendChanListForAllExceptThisChan ( iCurChanID );
         }
     }
     Mutex.unlock();
@@ -384,6 +399,18 @@ CChannel::CChannel() : sName ( "" ),
         this, SLOT ( OnNetwBlSiFactChange ( int ) ) );
 }
 
+void CChannel::SetEnable ( const bool bNEnStat )
+{
+    // set internal parameter
+    bIsEnabled = bNEnStat;
+
+    // if channel is not enabled, reset time out count
+    if ( !bNEnStat )
+    {
+        iConTimeOut = 0;
+    }
+}
+
 void CChannel::SetNetwInBlSiFact ( const int iNewBlockSizeFactor )
 {
     // store new value
@@ -491,37 +518,40 @@ bool CChannel::GetAddress(CHostAddress& RetAddr)
 EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                                  int iNumBytes )
 {
-    EPutDataStat    eRet = PS_GEN_ERROR;
-    bool            bNewConnection = false;
-    bool            bIsAudioPacket = false;
+    EPutDataStat eRet = PS_GEN_ERROR;
 
-    // check if this is an audio packet by checking all possible lengths
-    for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
+    if ( bIsEnabled )
     {
-        if ( iNumBytes == vecNetwInBufSizes[i] )
-        {
-            bIsAudioPacket = true;
+        bool bNewConnection = false;
+        bool bIsAudioPacket = false;
 
-            // check if we are correctly initialized
-            const int iNewNetwInBlSiFact = i + 1;
-            if ( iNewNetwInBlSiFact != iCurNetwInBlSiFact )
+        // check if this is an audio packet by checking all possible lengths
+        for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
+        {
+            if ( iNumBytes == vecNetwInBufSizes[i] )
             {
-                // re-initialize to new value
-                SetNetwInBlSiFact ( iNewNetwInBlSiFact );
+                bIsAudioPacket = true;
+
+                // check if we are correctly initialized
+                const int iNewNetwInBlSiFact = i + 1;
+                if ( iNewNetwInBlSiFact != iCurNetwInBlSiFact )
+                {
+                    // re-initialize to new value
+                    SetNetwInBlSiFact ( iNewNetwInBlSiFact );
+                }
             }
         }
-    }
 
-    // only process if packet has correct size
-    if ( bIsAudioPacket )
-    {
-        Mutex.lock();
+        // only process if packet has correct size
+        if ( bIsAudioPacket )
         {
-            // decompress audio
-            CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
+            Mutex.lock();
+            {
+                // decompress audio
+                CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
 
-            // do resampling to compensate for sample rate offsets in the
-            // different sound cards of the clients
+                // do resampling to compensate for sample rate offsets in the
+                // different sound cards of the clients
 /*
 for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
     vecdResInData[i] = (double) vecsData[i];
@@ -535,55 +565,56 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
     vecdResOutData[i] = (double) vecsDecomprAudio[i];
 }
 
-            if ( SockBuf.Put ( vecdResOutData ) )
-            {
-                eRet = PS_AUDIO_OK;
-            }
-            else
-            {
-                eRet = PS_AUDIO_ERR;
-            }
+                if ( SockBuf.Put ( vecdResOutData ) )
+                {
+                    eRet = PS_AUDIO_OK;
+                }
+                else
+                {
+                    eRet = PS_AUDIO_ERR;
+                }
 
-            // check if channel was not connected, this is a new connection
-            bNewConnection = !IsConnected();
+                // check if channel was not connected, this is a new connection
+                bNewConnection = !IsConnected();
 
-            // reset time-out counter
-            iConTimeOut = iConTimeOutStartVal;
+                // reset time-out counter
+                iConTimeOut = iConTimeOutStartVal;
+            }
+            Mutex.unlock();
         }
-        Mutex.unlock();
-    }
-    else
-    {
-        // only use protocol data if channel is connected
-        if ( IsConnected() )
+        else
         {
-            // this seems not to be an audio block, parse the message
-            if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )
+            // only use protocol data if channel is connected
+            if ( IsConnected() )
             {
-                eRet = PS_PROT_OK;
+                // this seems not to be an audio block, parse the message
+                if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )
+                {
+                    eRet = PS_PROT_OK;
 
-                // create message for protocol status
-                emit ProtocolStatus ( true );
-            }
-            else
-            {
-                eRet = PS_PROT_ERR;
+                    // create message for protocol status
+                    emit ProtocolStatus ( true );
+                }
+                else
+                {
+                    eRet = PS_PROT_ERR;
 
-                // create message for protocol status
-                emit ProtocolStatus ( false );
+                    // create message for protocol status
+                    emit ProtocolStatus ( false );
+                }
             }
         }
-    }
 
-    // inform other objects that new connection was established
-    if ( bNewConnection )
-    {
-        // log new connection
-        CHostAddress address ( GetAddress() );
-        qDebug ( CLogTimeDate::toString() +  "Connected with IP %s",
-            address.InetAddr.toString().latin1() );
+        // inform other objects that new connection was established
+        if ( bNewConnection )
+        {
+            // log new connection
+            CHostAddress address ( GetAddress() );
+            qDebug ( CLogTimeDate::toString() +  "Connected with IP %s",
+                address.InetAddr.toString().latin1() );
 
-        emit NewConnection();
+            emit NewConnection();
+        }
     }
 
     return eRet;

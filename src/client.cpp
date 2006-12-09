@@ -46,6 +46,9 @@ CClient::CClient() : bRun ( false ), Socket ( &Channel ),
     QObject::connect ( &Channel,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
+
+    QObject::connect ( &Channel, SIGNAL ( NewConnection() ),
+        this, SLOT ( OnNewConnection() ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -163,6 +166,9 @@ void CClient::run()
 
 
     // runtime phase ------------------------------------------------------------
+    // enable channel
+    Channel.SetEnable ( true );
+
     bRun = true;
 
     // main loop of working thread
@@ -380,6 +386,9 @@ fflush(pFileTest);
         // store old time value
         TimeLastBlock = CurTime;
     }
+
+    // disable channel
+    Channel.SetEnable ( false );
 
     // reset current signal level and LEDs
     SignalLevelMeterL.Reset();

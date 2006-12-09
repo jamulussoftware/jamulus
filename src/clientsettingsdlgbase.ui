@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>410</width>
-            <height>249</height>
+            <width>404</width>
+            <height>294</height>
         </rect>
     </property>
     <property stdset="1">
@@ -381,7 +381,7 @@
                                     <property stdset="1">
                                         <name>sizePolicy</name>
                                         <sizepolicy>
-                                            <hsizetype>1</hsizetype>
+                                            <hsizetype>3</hsizetype>
                                             <vsizetype>1</vsizetype>
                                         </sizepolicy>
                                     </property>
@@ -449,7 +449,7 @@
                                     <property stdset="1">
                                         <name>sizePolicy</name>
                                         <sizepolicy>
-                                            <hsizetype>1</hsizetype>
+                                            <hsizetype>3</hsizetype>
                                             <vsizetype>1</vsizetype>
                                         </sizepolicy>
                                     </property>

@@ -46,9 +46,6 @@
 // audio in fader range
 #define AUD_FADER_IN_MAX            100
 
-// audio mixer fader range
-#define AUD_MIX_FADER_MAX           100
-
 // audio reverberation range
 #define AUD_REVERB_MAX              100
 
@@ -62,13 +59,13 @@ public:
     CClient();
     virtual ~CClient() {}
 
-    void Init();
-    bool Stop();
-    bool IsRunning() { return bRun; }
-    bool SetServerAddr ( QString strNAddr );
+    void   Init();
+    bool   Stop();
+    bool   IsRunning() { return bRun; }
+    bool   SetServerAddr ( QString strNAddr );
     double MicLevelL() { return SignalLevelMeterL.MicLevel(); }
     double MicLevelR() { return SignalLevelMeterR.MicLevel(); }
-    bool IsConnected() { return Channel.IsConnected(); }
+    bool   IsConnected() { return Channel.IsConnected(); }
 
     /* we want to return the standard deviation. For that we need to calculate
        the sqaure root */
@@ -113,9 +110,12 @@ public:
     }
     int GetNetwBufSizeFactOut() { return Channel.GetNetwBufSizeFactOut(); }
 
+    void SetRemoteChanGain ( const int iId, const double dGain )
+        { Channel.SetRemoteChanGain ( iId, dGain ); }
 
-    CSound* GetSndInterface() { return &Sound; }
-    CChannel* GetChannel() { return &Channel; }
+
+    CSound*   GetSndInterface() { return &Sound; }
+    CChannel* GetChannel()      { return &Channel; }
 
 
     // settings

@@ -428,6 +428,9 @@ CChannel::CChannel() : sName ( "" ),
     QObject::connect ( &Protocol,
         SIGNAL ( ChangeNetwBlSiFact ( int ) ),
         this, SLOT ( OnNetwBlSiFactChange ( int ) ) );
+
+    QObject::connect( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
+        this, SLOT ( OnChangeChanGain ( int, double ) ) );
 }
 
 void CChannel::SetEnable ( const bool bNEnStat )

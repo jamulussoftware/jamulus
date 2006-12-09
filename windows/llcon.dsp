@@ -117,6 +117,10 @@ SOURCE=.\moc\moc_aboutdlgbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\moc\moc_audiomixerboard.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\moc\moc_channel.cpp
 # End Source File
 # Begin Source File
@@ -171,6 +175,10 @@ SOURCE=.\moc\moc_util.cpp
 # Begin Source File
 
 SOURCE=..\src\audiocompr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\audiomixerboard.cpp
 # End Source File
 # Begin Source File
 
@@ -239,6 +247,10 @@ SOURCE=..\src\util.cpp
 # Begin Source File
 
 SOURCE=..\src\audiocompr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\audiomixerboard.h
 # End Source File
 # Begin Source File
 

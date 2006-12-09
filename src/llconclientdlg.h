@@ -36,6 +36,7 @@
 #include "global.h"
 #include "client.h"
 #include "multicolorled.h"
+#include "audiomixerboard.h"
 #include "clientsettingsdlg.h"
 #ifdef _WIN32
 # include "../windows/moc/llconclientdlgbase.h"
@@ -73,30 +74,6 @@ public:
     virtual ~CLlconClientDlg ();
 
 protected:
-    class CChannelFader
-    {
-    public:
-        CChannelFader ( QWidget* pNW, QHBoxLayout* pNPtLy, QString sName );
-        ~CChannelFader()
-        {
-            pLabel->close();
-            pFader->close();
-
-            // TODO get rid of pMainGrid
-        }
-
-        void SetText ( const std::string sText );
-        void Show() { pLabel->show(); pFader->show(); }
-        void Hide() { pLabel->hide(); pFader->hide(); }
-
-    protected:
-        QGridLayout*    pMainGrid;
-        QSlider*        pFader;
-        QLabel*         pLabel;
-
-        QHBoxLayout*    pParentLayout;
-    };
-
     CClient*                pClient;
     bool                    bConnected;
     QTimer                  TimerSigMet;
@@ -111,8 +88,6 @@ protected:
 
     CClientSettingsDlg      ClientSettingsDlg;
 
-    CVector<CChannelFader*> vecpChanFader;
-
 public slots:
     void OnConnectDisconBut();
     void OnTimerSigMet();
@@ -123,5 +98,8 @@ public slots:
         { pClient->SetReverbLevel ( AUD_REVERB_MAX - value ); }
     void OnRevSelL() { pClient->SetReverbOnLeftChan(true); }
     void OnRevSelR() { pClient->SetReverbOnLeftChan(false); }
-    void OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
+    void OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo )
+        { MainMixerBoard->ApplyNewConClientList ( vecChanInfo ); }
+    void OnChangeChanGain ( int iId, double dGain )
+        { pClient->SetRemoteChanGain ( iId, dGain ); }
 };

@@ -82,6 +82,10 @@
 # define AUD_SLIDER_LENGTH              6
 #endif
 
+// maximum number of internet connections (channels)
+// if you want to change this paramter, change the connections in channel class, too!
+#define MAX_NUM_CHANNELS                10 /* max number channels for server */
+
 /* sample rate offset estimation algorithm */
 /* time interval for sample rate offset estimation */
 #define TIME_INT_SAM_OFFS_EST           60 /* s */

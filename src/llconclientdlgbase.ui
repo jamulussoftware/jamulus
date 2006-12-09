@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>597</width>
+            <width>586</width>
             <height>289</height>
         </rect>
     </property>
@@ -401,7 +401,7 @@
                             <class>CMultiColorLED</class>
                             <property stdset="1">
                                 <name>name</name>
-                                <cstring>CLEDOverallStatus</cstring>
+                                <cstring>LEDOverallStatus</cstring>
                             </property>
                             <property stdset="1">
                                 <name>minimumSize</name>
@@ -612,50 +612,18 @@ Fader</string>
                     </vbox>
                 </widget>
                 <widget>
-                    <class>QFrame</class>
+                    <class>CAudioMixerBoard</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>FrameAudioFaders</cstring>
+                        <cstring>MainMixerBoard</cstring>
                     </property>
                     <property stdset="1">
-                        <name>frameShape</name>
-                        <enum>StyledPanel</enum>
+                        <name>sizePolicy</name>
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                        </sizepolicy>
                     </property>
-                    <property stdset="1">
-                        <name>frameShadow</name>
-                        <enum>Sunken</enum>
-                    </property>
-                    <hbox>
-                        <property stdset="1">
-                            <name>margin</name>
-                            <number>11</number>
-                        </property>
-                        <property stdset="1">
-                            <name>spacing</name>
-                            <number>6</number>
-                        </property>
-                        <spacer>
-                            <property>
-                                <name>name</name>
-                                <cstring>Spacer2</cstring>
-                            </property>
-                            <property>
-                                <name>orientation</name>
-                                <enum>Horizontal</enum>
-                            </property>
-                            <property>
-                                <name>sizeType</name>
-                                <enum>Expanding</enum>
-                            </property>
-                            <property>
-                                <name>sizeHint</name>
-                                <size>
-                                    <width>20</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </hbox>
                 </widget>
             </hbox>
         </widget>
@@ -673,6 +641,20 @@ Fader</string>
         <sizepolicy>
             <hordata>0</hordata>
             <verdata>0</verdata>
+        </sizepolicy>
+        <pixmap>image2</pixmap>
+    </customwidget>
+    <customwidget>
+        <class>CAudioMixerBoard</class>
+        <header location="local">audiomixerboard.h</header>
+        <sizehint>
+            <width>-1</width>
+            <height>-1</height>
+        </sizehint>
+        <container>0</container>
+        <sizepolicy>
+            <hordata>5</hordata>
+            <verdata>5</verdata>
         </sizepolicy>
         <pixmap>image2</pixmap>
     </customwidget>

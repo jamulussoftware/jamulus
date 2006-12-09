@@ -16,6 +16,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/settings.cpp \
 	../src/protocol.cpp \
 	../src/multicolorled.cpp \
+	../src/audiomixerboard.cpp \
 	sound.cpp \
 	../src/buffer.h \
 	../src/global.h \
@@ -30,6 +31,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/settings.h \
 	../src/protocol.h \
 	../src/multicolorled.h \
+	../src/audiomixerboard.h \
 	../src/llconserverdlg.h \
 	../src/llconclientdlg.h \
 	../src/clientsettingsdlg.h \
@@ -46,6 +48,7 @@ BUILT_SOURCES=moc/moc_server.cpp \
 	moc/moc_channel.cpp \
 	moc/moc_socket.cpp \
 	moc/moc_multicolorled.cpp \
+	moc/moc_audiomixerboard.cpp \
 	moc/moc_util.cpp \
 	moc/moc_llconclientdlg.cpp moc/moc_llconclientdlgbase.cpp moc/llconclientdlgbase.h moc/llconclientdlgbase.cpp \
 	moc/moc_clientsettingsdlg.cpp moc/moc_clientsettingsdlgbase.cpp moc/clientsettingsdlgbase.h moc/clientsettingsdlgbase.cpp \
@@ -71,6 +74,9 @@ moc/moc_socket.cpp: ../src/socket.h
 
 moc/moc_multicolorled.cpp: ../src/multicolorled.h
 	$(MOC) ../src/multicolorled.h -o moc/moc_multicolorled.cpp
+
+moc/moc_audiomixerboard.cpp: ../src/audiomixerboard.h
+	$(MOC) ../src/audiomixerboard.h -o moc/moc_audiomixerboard.cpp
 
 moc/moc_util.cpp: ../src/util.h
 	$(MOC) ../src/util.h -o moc/moc_util.cpp

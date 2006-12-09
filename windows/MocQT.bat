@@ -28,6 +28,7 @@ rem\****************************************************************************
 rem .h --------------
 %qtdir%\bin\moc.exe ..\src\util.h -o moc\moc_util.cpp
 %qtdir%\bin\moc.exe ..\src\multicolorled.h -o moc\moc_multicolorled.cpp
+%qtdir%\bin\moc.exe ..\src\audiomixerboard.h -o moc\moc_audiomixerboard.cpp
 %qtdir%\bin\moc.exe ..\src\llconclientdlg.h -o moc\moc_llconclientdlg.cpp
 %qtdir%\bin\moc.exe ..\src\clientsettingsdlg.h -o moc\moc_clientsettingsdlg.cpp
 %qtdir%\bin\moc.exe ..\src\llconserverdlg.h -o moc\moc_llconserverdlg.cpp

@@ -41,10 +41,6 @@
 // correction is implemented)
 #define CON_TIME_OUT_SEC_MAX        5 // seconds
 
-// maximum number of internet connections (channels)
-// if you want to change this paramter, change the connections in this class, too!
-#define MAX_NUM_CHANNELS            10 /* max number channels for server */
-
 // no valid channel number
 #define INVALID_CHANNEL_ID          (MAX_NUM_CHANNELS + 1)
 
@@ -96,6 +92,9 @@ public:
 
     void SetGain ( const int iNID, const double dNG ) { vecdGains[iNID] = dNG; }
     double GetGain( const int iNID ) { return vecdGains[iNID]; }
+
+    void SetRemoteChanGain ( const int iId, const double dGain )
+        { Protocol.CreateChanGainMes ( iId, dGain ); }
 
     void SetSockBufSize ( const int iNumBlocks );
     int GetSockBufSize() { return iCurSockBufSize; }

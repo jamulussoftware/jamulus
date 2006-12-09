@@ -29,8 +29,7 @@
 CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     const char* name, bool modal, WFlags f) : pClient ( pNCliP ),
     CLlconClientDlgBase ( parent, name, modal, f ),
-    ClientSettingsDlg ( pNCliP, 0, 0, FALSE, Qt::WStyle_MinMax ),
-    vecpChanFader ( 0 )
+    ClientSettingsDlg ( pNCliP, 0, 0, FALSE, Qt::WStyle_MinMax )
 {
     /* add help text to controls */
     QString strInpLevH = tr("<b>Input level meter:</b> Shows the level of the "
@@ -76,7 +75,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     QWhatsThis::add ( RadioButtonRevSelL, strRevChanSel );
     QWhatsThis::add ( RadioButtonRevSelR, strRevChanSel );
 
-    QWhatsThis::add ( CLEDOverallStatus, tr ( "<b>Overall Status:</b> "
+    QWhatsThis::add ( LEDOverallStatus, tr ( "<b>Overall Status:</b> "
         "The overall status of the software is shown. If either the "
         "network or sound interface has bad status, this LED will show "
         "red color." ) );
@@ -113,13 +112,13 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
     /* set radio buttons --- */
     // reverb channel
-    if (pClient->IsReverbOnLeftChan())
+    if ( pClient->IsReverbOnLeftChan() )
     {
-        RadioButtonRevSelL->setChecked(true);
+        RadioButtonRevSelL->setChecked ( true );
     }
     else
     {
-        RadioButtonRevSelR->setChecked(true);
+        RadioButtonRevSelR->setChecked ( true );
     }
 
 
@@ -143,19 +142,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     CLlconClientDlgBaseLayout->setMenuBar ( pMenu );
 
 
-    // mixer board -------------------------------------------------------------
-    // create all mixer controls and make them invisible
-    vecpChanFader.Init ( MAX_NUM_CHANNELS );
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-    {
-        vecpChanFader[i] = new CLlconClientDlg::CChannelFader ( FrameAudioFaders,
-            FrameAudioFadersLayout, "test" );
-
-        vecpChanFader[i]->Hide();
-    }
-
-
-    /* connections ---------------------------------------------------------- */
+    // connections -------------------------------------------------------------
     // push-buttons
     QObject::connect(PushButtonConnect, SIGNAL(clicked()),
         this, SLOT(OnConnectDisconBut()));
@@ -179,30 +166,16 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
         this, SLOT(OnRevSelR()));
 
     // other
-    QObject::connect(pClient, SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
+    QObject::connect ( pClient,
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
         this, SLOT ( OnConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
+    QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
+        this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
 
-    /* timers --------------------------------------------------------------- */
+    // timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start(STATUSBAR_UPDATE_TIME);
-
-
-
-// TEST
-//vecpChanFader.Init(0);
-//vecpChanFader.Add(new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout, "test"));
-
-//FrameAudioFadersLayout->addWidget(new QLabel ( "test", FrameAudioFaders ));
-/*
-for ( int z = 0; z < 100; z++)
-{
-CLlconClientDlg::CChannelFader* pTest = new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
-delete pTest;
-}
-*/
-
-
 }
 
 CLlconClientDlg::~CLlconClientDlg()
@@ -223,56 +196,47 @@ void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
     Event->accept();
 }
 
-void CLlconClientDlg::OnConnectDisconBut ()
+void CLlconClientDlg::OnConnectDisconBut()
 {
-    /* start/stop client, set button text */
-    if ( pClient->IsRunning () )
+    // start/stop client, set button text
+    if ( pClient->IsRunning() )
     {
-        pClient->Stop ();
+        pClient->Stop();
         PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
 
-        /* stop timer for level meter bars and reset them */
-        TimerSigMet.stop ();
+        // stop timer for level meter bars and reset them
+        TimerSigMet.stop();
         ProgressBarInputLevelL->setProgress ( 0 );
         ProgressBarInputLevelR->setProgress ( 0 );
 
-        /* immediately update status bar */
-        OnTimerStatus ();
+        // immediately update status bar
+        OnTimerStatus();
 
-
-
-// TEST
-// make old controls invisible
-for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-{
-    vecpChanFader[i]->Hide();
-}
-
-
-
+        // clear mixer board (remove all faders)
+        MainMixerBoard->Clear();
     }
     else
     {
-        /* set address and check if address is valid */
-        if ( pClient->SetServerAddr ( LineEditServerAddr->text () ) )
+        // set address and check if address is valid
+        if ( pClient->SetServerAddr ( LineEditServerAddr->text() ) )
         {
 #if ( QT_VERSION > 300 )
             pClient->start ( QThread::TimeCriticalPriority );
 #else
-            pClient->start ();
+            pClient->start();
 #endif
             PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
 
-            /* start timer for level meter bar */
+            // start timer for level meter bar
             TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
         }
         else
         {
-            /* Restart timer to ensure that the text is visible at
-               least the time for one complete interval */
+            // Restart timer to ensure that the text is visible at
+            // least the time for one complete interval
             TimerStatus.changeInterval ( STATUSBAR_UPDATE_TIME );
 
-            /* show the error in the status bar */
+            // show the error in the status bar
             TextLabelStatus->setText ( tr ( "invalid address" ) );
         }
     }
@@ -284,11 +248,11 @@ void CLlconClientDlg::OnOpenGeneralSettings()
     ClientSettingsDlg.show();
 }
 
-void CLlconClientDlg::OnTimerSigMet ()
+void CLlconClientDlg::OnTimerSigMet()
 {
     /* get current input levels */
-    double dCurSigLevelL = pClient->MicLevelL ();
-    double dCurSigLevelR = pClient->MicLevelR ();
+    double dCurSigLevelL = pClient->MicLevelL();
+    double dCurSigLevelR = pClient->MicLevelR();
 
     /* linear transformation of the input level range to the progress-bar
        range */
@@ -315,37 +279,6 @@ void CLlconClientDlg::OnTimerSigMet ()
     /* show current level */
     ProgressBarInputLevelL->setProgress ( (int) ceil ( dCurSigLevelL ) );
     ProgressBarInputLevelR->setProgress ( (int) ceil ( dCurSigLevelR ) );
-}
-
-void CLlconClientDlg::OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo )
-{
-    int i;
-
-
-// TODO
-
-// make old controls invisible
-for ( i = 0; i < MAX_NUM_CHANNELS; i++ )
-{
-    vecpChanFader[i]->Hide();
-}
-
-
-// TEST add current faders
-for ( i = 0; i < vecChanInfo.Size(); i++ )
-{
-    QHostAddress addrTest ( vecChanInfo[i].veciIpAddr );
-
-    vecpChanFader[i]->SetText ( addrTest.toString().latin1() );
-    vecpChanFader[i]->Show();
-
-
-
-//    vecpChanFader[i] = new CLlconClientDlg::CChannelFader ( FrameAudioFaders,
-//        FrameAudioFadersLayout, addrTest.toString() );
-}
-
-
 }
 
 void CLlconClientDlg::UpdateDisplay()
@@ -376,68 +309,15 @@ void CLlconClientDlg::customEvent ( QCustomEvent* Event )
         case MS_JIT_BUF_GET:
 
             // show overall status -> if any LED goes red, this LED will go red
-            CLEDOverallStatus->SetLight ( iStatus );
+            LEDOverallStatus->SetLight ( iStatus );
             break;
 
         case MS_RESET_ALL:
-            CLEDOverallStatus->Reset();
+            LEDOverallStatus->Reset();
             break;
         }
 
         // update general settings dialog, too
         ClientSettingsDlg.SetStatus ( iMessType, iStatus );
     }
-}
-
-
-// Help classes ---------------------------------------------------------------
-CLlconClientDlg::CChannelFader::CChannelFader ( QWidget*     pNW,
-                                                QHBoxLayout* pNPtLy,
-                                                QString      sName ) :
-    pParentLayout ( pNPtLy )
-{
-    // create new GUI control objects and store pointers to them
-    pMainGrid = new QGridLayout ( pNW, 2, 1 );
-    pFader    = new QSlider ( Qt::Vertical, pNW );
-    pLabel    = new QLabel ( "", pNW );
-
-    // setup slider
-    pFader->setPageStep ( 1 );
-    pFader->setTickmarks ( QSlider::Both );
-    pFader->setRange ( 0, AUD_MIX_FADER_MAX );
-    pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
-
-// TEST set value and make read only
-pFader->setValue ( 0 );
-pFader->setEnabled ( FALSE );
-
-    // set label text
-    pLabel->setText ( sName );
-
-    // add slider to grid as position 0 / 0
-    pMainGrid->addWidget( pFader, 0, 0, Qt::AlignHCenter );
-
-    // add label to grid as position 1 / 0
-    pMainGrid->addWidget( pLabel, 1, 0, Qt::AlignHCenter );
-
-    pParentLayout->insertLayout ( 0, pMainGrid );
-}
-
-void CLlconClientDlg::CChannelFader::SetText ( const std::string sText )
-{
-    const int iBreakPos = 6;
-
-    // break text at predefined position
-    QString sModText = sText.c_str();
-
-    if ( sModText.length() > iBreakPos )
-    {
-        sModText.insert ( iBreakPos, QString ( "<br>" ) );
-    }
-
-    // use bold text
-    sModText.prepend ( "<b>" );
-    sModText.append ( "</b>" );
-
-    pLabel->setText ( sModText );
 }

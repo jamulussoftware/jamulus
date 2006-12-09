@@ -336,8 +336,8 @@ for ( i = 0; i < vecChanInfo.Size(); i++ )
 {
     QHostAddress addrTest ( vecChanInfo[i].veciIpAddr );
 
-    vecpChanFader[i]->Show();
     vecpChanFader[i]->SetText ( addrTest.toString().latin1() );
+    vecpChanFader[i]->Show();
 
 
 
@@ -391,18 +391,15 @@ void CLlconClientDlg::customEvent ( QCustomEvent* Event )
 
 
 // Help classes ---------------------------------------------------------------
-CLlconClientDlg::CChannelFader::CChannelFader ( QWidget* pNW,
+CLlconClientDlg::CChannelFader::CChannelFader ( QWidget*     pNW,
                                                 QHBoxLayout* pNPtLy,
-                                                QString sName ) :
+                                                QString      sName ) :
     pParentLayout ( pNPtLy )
 {
     // create new GUI control objects and store pointers to them
     pMainGrid = new QGridLayout ( pNW, 2, 1 );
     pFader    = new QSlider ( Qt::Vertical, pNW );
     pLabel    = new QLabel ( "", pNW );
-
-    // add slider to grid as position 0 / 0
-    pMainGrid->addWidget( pFader, 0, 0 );
 
     // setup slider
     pFader->setPageStep ( 1 );
@@ -414,17 +411,33 @@ CLlconClientDlg::CChannelFader::CChannelFader ( QWidget* pNW,
 pFader->setValue ( 0 );
 pFader->setEnabled ( FALSE );
 
-
-    // add label to grid
-    pMainGrid->addWidget( pLabel, 1, 0 );
-
     // set label text
     pLabel->setText ( sName );
+
+    // add slider to grid as position 0 / 0
+    pMainGrid->addWidget( pFader, 0, 0, Qt::AlignHCenter );
+
+    // add label to grid as position 1 / 0
+    pMainGrid->addWidget( pLabel, 1, 0, Qt::AlignHCenter );
 
     pParentLayout->insertLayout ( 0, pMainGrid );
 }
 
 void CLlconClientDlg::CChannelFader::SetText ( const std::string sText )
 {
-    pLabel->setText ( sText.c_str() );
+    const int iBreakPos = 6;
+
+    // break text at predefined position
+    QString sModText = sText.c_str();
+
+    if ( sModText.length() > iBreakPos )
+    {
+        sModText.insert ( iBreakPos, QString ( "<br>" ) );
+    }
+
+    // use bold text
+    sModText.prepend ( "<b>" );
+    sModText.append ( "</b>" );
+
+    pLabel->setText ( sModText );
 }

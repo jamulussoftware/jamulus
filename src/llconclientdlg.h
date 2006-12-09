@@ -103,7 +103,7 @@ protected:
     QTimer                  TimerStatus;
 
     virtual void            customEvent ( QCustomEvent* Event );
-    virtual void            closeEvent ( QCloseEvent * Event );
+    virtual void            closeEvent  ( QCloseEvent * Event );
     void                    UpdateDisplay();
 
     QPopupMenu*             pSettingsMenu;

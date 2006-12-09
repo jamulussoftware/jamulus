@@ -36,18 +36,15 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 {
     // create new GUI control objects and store pointers to them
     pMainGrid = new QGridLayout ( pNW, 2, 1 );
-    pFader    = new QSlider ( Qt::Vertical, pNW );
-    pLabel    = new QLabel ( "", pNW );
+    pFader    = new QSlider     ( Qt::Vertical, pNW );
+    pLabel    = new QLabel      ( "", pNW );
 
     // setup slider
     pFader->setPageStep ( 1 );
     pFader->setTickmarks ( QSlider::Both );
     pFader->setRange ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
-
-// TEST set value and make read only
-pFader->setValue ( 0 );
-pFader->setEnabled ( FALSE );
+    pFader->setValue ( 0 ); // set init value
 
     // set label text
     pLabel->setText ( sName );
@@ -59,6 +56,21 @@ pFader->setEnabled ( FALSE );
     pMainGrid->addWidget( pLabel, 1, 0, Qt::AlignHCenter );
 
     pParentLayout->insertLayout ( 0, pMainGrid );
+
+
+    // connections -------------------------------------------------------------
+    QObject::connect ( pFader, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnValueChanged ( int ) ) );
+}
+
+void CChannelFader::OnValueChanged ( int value )
+{
+    // convert actual slider range in gain values
+    // reverse linear scale and normalize so that maximum gain is 1
+    const double dCurGain =
+        static_cast<double> ( AUD_MIX_FADER_MAX - value ) / AUD_MIX_FADER_MAX;
+
+    emit valueChanged ( dCurGain );
 }
 
 void CChannelFader::SetText ( const std::string sText )
@@ -97,30 +109,27 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent,
     vecpChanFader.Init ( MAX_NUM_CHANNELS );
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        vecpChanFader[i] = new CChannelFader ( this,
-            pMainLayout, "test" );
-
+        vecpChanFader[i] = new CChannelFader ( this, pMainLayout, "" );
         vecpChanFader[i]->Hide();
     }
 
 
-// TEST
-//vecpChanFader.Init(0);
-//vecpChanFader.Add(new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout, "test"));
-
-//FrameAudioFadersLayout->addWidget(new QLabel ( "test", FrameAudioFaders ));
-/*
-for ( int z = 0; z < 100; z++)
-{
-CLlconClientDlg::CChannelFader* pTest = new CLlconClientDlg::CChannelFader(FrameAudioFaders, FrameAudioFadersLayout);
-delete pTest;
+    // connections -------------------------------------------------------------
+    // CODE TAG: MAX_NUM_CHANNELS_TAG
+    // make sure we have MAX_NUM_CHANNELS connections!!!
+    QObject::connect(vecpChanFader[0],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh0(double)));
+    QObject::connect(vecpChanFader[1],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh1(double)));
+    QObject::connect(vecpChanFader[2],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh2(double)));
+    QObject::connect(vecpChanFader[3],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh3(double)));
+    QObject::connect(vecpChanFader[4],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh4(double)));
+    QObject::connect(vecpChanFader[5],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh5(double)));
+    QObject::connect(vecpChanFader[6],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh6(double)));
+    QObject::connect(vecpChanFader[7],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh7(double)));
+    QObject::connect(vecpChanFader[8],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh8(double)));
+    QObject::connect(vecpChanFader[9],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh9(double)));
 }
-*/
 
-
-}
-
-void CAudioMixerBoard::Clear()
+void CAudioMixerBoard::HideAll()
 {
     // make old controls invisible
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
@@ -131,27 +140,53 @@ void CAudioMixerBoard::Clear()
 
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecChanInfo )
 {
-    int i;
+    // search for channels with are already present and preserver their gain
+    // setting, for all other channels, reset gain
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        bool bFaderIsUsed = false;
 
+        for ( int j = 0; j < vecChanInfo.Size(); j++ )
+        {
+            // search if current fader is used
+            if ( vecChanInfo[j].iChanID == i )
+            {
+                // check if fader was already in use -> preserve gain value
+                if ( !vecpChanFader[i]->IsVisible() )
+                {
+                    vecpChanFader[i]->ResetGain();
 
-// TODO
+                    // show fader
+                    vecpChanFader[i]->Show();
+                }
 
-// make old controls invisible
-Clear();
+                // update text
+                vecpChanFader[i]->SetText ( GenFaderText ( vecChanInfo[j] ) );
 
+                bFaderIsUsed = true;
+            }
+        }
 
-// TEST add current faders
-for ( i = 0; i < vecChanInfo.Size(); i++ )
-{
-    QHostAddress addrTest ( vecChanInfo[i].veciIpAddr );
-
-    vecpChanFader[i]->SetText ( addrTest.toString().latin1() );
-    vecpChanFader[i]->Show();
-
-
-
-//    vecpChanFader[i] = new CLlconClientDlg::CChannelFader ( FrameAudioFaders,
-//        FrameAudioFadersLayout, addrTest.toString() );
+        // if current fader is not used, hide it
+        if ( !bFaderIsUsed )
+        {
+            vecpChanFader[i]->Hide();
+        }
+    }
 }
 
+std::string CAudioMixerBoard::GenFaderText ( CChannelShortInfo& ChanInfo )
+{
+    // if text is empty, show IP address instead
+    if ( ChanInfo.strName.empty() )
+    {
+        // convert IP address to text and show it
+        const QHostAddress addrTest ( ChanInfo.iIpAddr );
+        return addrTest.toString().latin1();
+    }
+    else
+    {
+        // show name of channel
+        return ChanInfo.strName;
+    }
 }

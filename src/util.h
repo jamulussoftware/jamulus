@@ -363,13 +363,13 @@ public:
 class CChannelShortInfo
 {
 public:
-    CChannelShortInfo() : veciChanID ( 0 ), veciIpAddr ( 0 ), vecstrName ( "" ) {}
+    CChannelShortInfo() : iChanID ( 0 ), iIpAddr ( 0 ), strName ( "" ) {}
     CChannelShortInfo ( const int iNID, const uint32_t nIP, const std::string nN ) :
-        veciChanID ( iNID ), veciIpAddr ( nIP ), vecstrName ( nN ) {}
+        iChanID ( iNID ), iIpAddr ( nIP ), strName ( nN ) {}
 
-    int         veciChanID;
-    uint32_t    veciIpAddr;
-    std::string vecstrName;
+    int         iChanID;
+    uint32_t    iIpAddr;
+    std::string strName;
 };
 
 

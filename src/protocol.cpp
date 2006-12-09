@@ -439,7 +439,7 @@ void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
 
     // actual gain, we convert from double with range 0..1 to integer
-    const int iCurGain = (int) ( dGain * ( 1 << 16 ) );
+    const int iCurGain = static_cast<int> ( dGain * ( 1 << 15 ) );
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iCurGain ), 2 );
 
     CreateAndSendMessage ( PROTMESSID_CHANNEL_GAIN, vecData );
@@ -455,7 +455,7 @@ void CProtocol::EvaluateChanGainMes ( unsigned int iPos, const CVector<uint8_t>&
     const int iData =
         static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
-    const double dNewGain = (double) iData / ( 1 << 16 );
+    const double dNewGain = static_cast<double> ( iData ) / ( 1 << 15 );
 
     // invoke message action
     emit ChangeChanGain ( iCurID, dNewGain );
@@ -472,7 +472,7 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
     for ( int i = 0; i < iNumClients; i++ )
     {
         // current string size
-        const int iCurStrLen = vecChanInfo[i].vecstrName.size();
+        const int iCurStrLen = vecChanInfo[i].strName.size();
 
         // size of current list entry
         const int iCurListEntrLen =
@@ -483,11 +483,11 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
 
         // channel ID
         PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecChanInfo[i].veciChanID ), 1 );
+            static_cast<uint32_t> ( vecChanInfo[i].iChanID ), 1 );
 
         // IP address (4 bytes)
         PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecChanInfo[i].veciIpAddr ), 4 );
+            static_cast<uint32_t> ( vecChanInfo[i].iIpAddr ), 4 );
 
         // number of bytes for name string (2 bytes)
         PutValOnStream ( vecData, iPos,
@@ -498,7 +498,7 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
         {
             // byte-by-byte copying of the string data
             PutValOnStream ( vecData, iPos,
-                static_cast<uint32_t> ( vecChanInfo[i].vecstrName[j] ), 1 );
+                static_cast<uint32_t> ( vecChanInfo[i].strName[j] ), 1 );
         }
     }
 

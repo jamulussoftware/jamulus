@@ -36,6 +36,7 @@ CChannelSet::CChannelSet()
         vecChannels[i].SetEnable ( true );
     }
 
+    // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
     QObject::connect(&vecChannels[0],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh0(CVector<uint8_t>)));

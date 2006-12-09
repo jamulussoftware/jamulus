@@ -44,8 +44,10 @@
 
 
 /* Classes ********************************************************************/
-class CChannelFader
+class CChannelFader : public QObject
 {
+    Q_OBJECT
+
 public:
     CChannelFader ( QWidget* pNW, QHBoxLayout* pNPtLy, QString sName );
     ~CChannelFader()
@@ -59,6 +61,10 @@ public:
     void SetText ( const std::string sText );
     void Show() { pLabel->show(); pFader->show(); }
     void Hide() { pLabel->hide(); pFader->hide(); }
+    bool IsVisible() { return pLabel->isVisible(); }
+
+     // init gain value -> maximum value as definition according to server
+    void ResetGain() { pFader->setValue ( 0 ); }
 
 protected:
     QGridLayout*    pMainGrid;
@@ -66,6 +72,12 @@ protected:
     QLabel*         pLabel;
 
     QHBoxLayout*    pParentLayout;
+
+public slots:
+    void OnValueChanged ( int value );
+
+signals:
+    void valueChanged ( double value );
 };
 
 
@@ -76,12 +88,28 @@ class CAudioMixerBoard : public QFrame
 public:
     CAudioMixerBoard ( QWidget* parent = 0, const char* name = 0, WFlags f = 0 );
 
-    void Clear();
+    void HideAll();
     void ApplyNewConClientList ( CVector<CChannelShortInfo>& vecChanInfo );
 
 protected:
+    std::string GenFaderText ( CChannelShortInfo& ChanInfo );
+
     CVector<CChannelFader*> vecpChanFader;
     QHBoxLayout*            pMainLayout;
+
+public slots:
+    // CODE TAG: MAX_NUM_CHANNELS_TAG
+    // make sure we have MAX_NUM_CHANNELS connections!!!
+    void OnValueChangedCh0 ( double dValue ) { emit ChangeChanGain ( 0, dValue ); }
+    void OnValueChangedCh1 ( double dValue ) { emit ChangeChanGain ( 1, dValue ); }
+    void OnValueChangedCh2 ( double dValue ) { emit ChangeChanGain ( 2, dValue ); }
+    void OnValueChangedCh3 ( double dValue ) { emit ChangeChanGain ( 3, dValue ); }
+    void OnValueChangedCh4 ( double dValue ) { emit ChangeChanGain ( 4, dValue ); }
+    void OnValueChangedCh5 ( double dValue ) { emit ChangeChanGain ( 5, dValue ); }
+    void OnValueChangedCh6 ( double dValue ) { emit ChangeChanGain ( 6, dValue ); }
+    void OnValueChangedCh7 ( double dValue ) { emit ChangeChanGain ( 7, dValue ); }
+    void OnValueChangedCh8 ( double dValue ) { emit ChangeChanGain ( 8, dValue ); }
+    void OnValueChangedCh9 ( double dValue ) { emit ChangeChanGain ( 9, dValue ); }
 
 signals:
     void ChangeChanGain ( int iId, double dGain );

@@ -238,6 +238,7 @@ protected:
     QMutex      Mutex;
 
 public slots:
+    // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
     void OnSendProtMessCh0(CVector<uint8_t> mess) {emit MessReadyForSending(0,mess);}

@@ -213,7 +213,7 @@ void CLlconClientDlg::OnConnectDisconBut()
         OnTimerStatus();
 
         // clear mixer board (remove all faders)
-        MainMixerBoard->Clear();
+        MainMixerBoard->HideAll();
     }
     else
     {

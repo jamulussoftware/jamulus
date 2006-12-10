@@ -52,6 +52,9 @@ void CSettings::ReadIniFile()
     // IP address
     pClient->strIPAddress = GetIniSetting ( ini, "Client", "ipaddress" );
 
+    // name
+    pClient->strName = GetIniSetting ( ini, "Client", "name" );
+
     // audio fader
     if ( GetNumericIniSet(ini, "Client", "audfad", 0, AUD_FADER_IN_MAX, iValue ) == TRUE ) {
         pClient->SetAudioInFader ( iValue );
@@ -99,6 +102,9 @@ void CSettings::WriteIniFile()
 
     // IP address
     PutIniSetting ( ini, "Client", "ipaddress", pClient->strIPAddress.c_str() );
+
+    // name
+    PutIniSetting ( ini, "Client", "name", pClient->strName.c_str() );
 
     // audio fader
     SetNumericIniSet ( ini, "Client", "audfad", pClient->GetAudioInFader() );

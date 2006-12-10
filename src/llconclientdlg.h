@@ -102,4 +102,5 @@ public slots:
         { MainMixerBoard->ApplyNewConClientList ( vecChanInfo ); }
     void OnChangeChanGain ( int iId, double dGain )
         { pClient->SetRemoteChanGain ( iId, dGain ); }
+    void OnFaderTagTextChanged ( const QString& strNewName );
 };

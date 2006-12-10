@@ -73,6 +73,18 @@ CChannelSet::CChannelSet()
     QObject::connect(&vecChannels[7],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh7()));
     QObject::connect(&vecChannels[8],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh8()));
     QObject::connect(&vecChannels[9],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh9()));
+
+    // channel name has changed
+    QObject::connect(&vecChannels[0],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh0()));
+    QObject::connect(&vecChannels[1],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh1()));
+    QObject::connect(&vecChannels[2],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh2()));
+    QObject::connect(&vecChannels[3],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh3()));
+    QObject::connect(&vecChannels[4],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh4()));
+    QObject::connect(&vecChannels[5],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh5()));
+    QObject::connect(&vecChannels[6],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh6()));
+    QObject::connect(&vecChannels[7],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh7()));
+    QObject::connect(&vecChannels[8],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh8()));
+    QObject::connect(&vecChannels[9],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh9()));
 }
 
 CVector<CChannelShortInfo> CChannelSet::CreateChannelList()
@@ -433,6 +445,9 @@ CChannel::CChannel() : sName ( "" ),
 
     QObject::connect( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
+
+    QObject::connect( &Protocol, SIGNAL ( ChangeChanName ( std::string ) ),
+        this, SLOT ( OnChangeChanName ( std::string ) ) );
 }
 
 void CChannel::SetEnable ( const bool bNEnStat )
@@ -535,6 +550,18 @@ void CChannel::OnChangeChanGain ( int iChanID, double dNewGain )
 
     // set value
     vecdGains[iChanID] = dNewGain;
+}
+
+void CChannel::OnChangeChanName ( std::string strName )
+{
+    // apply value (if different from previous name)
+    if ( sName.compare ( strName ) )
+    {
+        sName = strName;
+
+        // fire message that name has changed
+        emit NameHasChanged();
+    }
 }
 
 bool CChannel::GetAddress(CHostAddress& RetAddr)

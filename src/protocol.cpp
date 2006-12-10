@@ -82,6 +82,17 @@ MESSAGES
     note: does not have any data -> n = 0
 
 
+- Name of channel                             PROTMESSID_CHANNEL_NAME
+
+    for each connected client append following data:
+
+    +------------------+----------------------+
+    | 2 bytes number n | n bytes UTF-8 string |
+    +------------------+----------------------+
+
+
+
+
  *
  ******************************************************************************
  *
@@ -343,6 +354,11 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 
                     EvaluateReqConnClientsList ( iPos, vecData );
                     break;
+
+                case PROTMESSID_CHANNEL_NAME:
+
+                    EvaluateChanNameMes ( iPos, vecData );
+                    break;
                 }
 
                 // send acknowledge message
@@ -505,7 +521,7 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
     CreateAndSendMessage ( PROTMESSID_CONN_CLIENTS_LIST, vecData );
 }
 
-void CProtocol:: EvaluateConClientListMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
+void CProtocol::EvaluateConClientListMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
 {
     int                        iData;
     const int                  iDataLen = vecData.Size();
@@ -549,6 +565,50 @@ void CProtocol::EvaluateReqConnClientsList ( unsigned int iPos, const CVector<ui
 {
     // invoke message action
     emit ReqConnClientsList();
+}
+
+void CProtocol::CreateChanNameMes ( const std::string strName )
+{
+    unsigned int  iPos = 0; // init position pointer
+    const int     iStrLen = strName.size(); // get string size
+
+    // size of current list entry
+    const int iEntrLen = 2 /* str. size */ + iStrLen;
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // number of bytes for name string (2 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iStrLen ), 2 );
+
+    // name string (n bytes)
+    for ( int j = 0; j < iStrLen; j++ )
+    {
+        // byte-by-byte copying of the string data
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( strName[j] ), 1 );
+    }
+
+    CreateAndSendMessage ( PROTMESSID_CHANNEL_NAME, vecData );
+}
+
+void CProtocol::EvaluateChanNameMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
+{
+    // number of bytes for name string (2 bytes)
+    const int iStrLen =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+    // name string (n bytes)
+    std::string strName = "";
+    for ( int j = 0; j < iStrLen; j++ )
+    {
+        // byte-by-byte copying of the string data
+        int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+        strName += std::string ( (char*) &iData );
+    }
+
+    // invoke message action
+    emit ChangeChanName ( strName );
 }
 
 

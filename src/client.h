@@ -113,13 +113,15 @@ public:
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Channel.SetRemoteChanGain ( iId, dGain ); }
 
+    void SetRemoteName() { Channel.SetRemoteName ( strName ); }
 
     CSound*   GetSndInterface() { return &Sound; }
     CChannel* GetChannel()      { return &Channel; }
 
 
     // settings
-    string              strIPAddress;
+    std::string         strIPAddress;
+    std::string         strName;
 
 protected:
     virtual void run ();
@@ -168,7 +170,7 @@ public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnReqJittBufSize();
     void OnProtocolStatus ( bool bOk );
-    void OnNewConnection() { Channel.CreateReqConnClientsList(); }
+    void OnNewConnection();
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );

@@ -45,6 +45,7 @@
 #define PROTMESSID_CONN_CLIENTS_LIST        15 // connected client list
 #define PROTMESSID_SERVER_FULL              16 // server full message
 #define PROTMESSID_REQ_CONN_CLIENTS_LIST    17 // request connected client list
+#define PROTMESSID_CHANNEL_NAME             18 // set channel name for fader tag
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         5 /* ID, cnt, length */
@@ -68,6 +69,7 @@ public:
     void CreateServerFullMes();
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
     void CreateChanGainMes ( const int iChanID, const double dGain );
+    void CreateChanNameMes ( const std::string strName );
 
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
 
@@ -135,6 +137,7 @@ protected:
     void EvaluateServerFullMes      ( unsigned int iPos, const CVector<uint8_t>& vecData );
     void EvaluateNetwBlSiFactMes    ( unsigned int iPos, const CVector<uint8_t>& vecData );
     void EvaluateChanGainMes        ( unsigned int iPos, const CVector<uint8_t>& vecData );
+    void EvaluateChanNameMes        ( unsigned int iPos, const CVector<uint8_t>& vecData );
     void EvaluateConClientListMes   ( unsigned int iPos, const CVector<uint8_t>& vecData );
 
     int                     iOldRecID, iOldRecCnt;
@@ -157,6 +160,7 @@ signals:
     void ChangeJittBufSize ( int iNewJitBufSize );
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ChangeChanGain ( int iChanID, double dNewGain );
+    void ChangeChanName ( std::string strName );
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ReqJittBufSize();
     void ReqConnClientsList();

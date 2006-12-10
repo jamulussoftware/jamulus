@@ -30,7 +30,8 @@ CClient::CClient() : bRun ( false ), Socket ( &Channel ),
         iAudioInFader ( AUD_FADER_IN_MAX / 2 ),
         iReverbLevel ( AUD_REVERB_MAX / 6 ),
         bReverbOnLeftChan ( false ),
-        iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR )
+        iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR ),
+        strIPAddress ( "" ), strName ( "" )
 {
     // connection for protocol
     QObject::connect ( &Channel,
@@ -73,6 +74,14 @@ void CClient::OnReqJittBufSize()
 // FIXME: we set the network buffer size factor here, too -> in the
 // future a separate request function for this parameter should be created
     Channel.CreateNetwBlSiFactMes ( iNetwBufSizeFactIn );
+}
+
+void CClient::OnNewConnection()
+{
+    // a new connection was successfully initiated, send name and request
+    // connected clients list
+    Channel.SetRemoteName ( strName );
+    Channel.CreateReqConnClientsList();
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )

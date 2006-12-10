@@ -45,7 +45,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
         "button will disconnect the connection."));
 
     QWhatsThis::add(TextLabelStatus, tr("<b>Status Bar:</b> In the status bar "
-        "different messages are displayed. E.g., if an error ocurred or the "
+        "different messages are displayed. E.g., if an error occurred or the "
         "status of the connection is shown."));
 
     QString strServAddrH = tr("<b>Server Address:</b> In this edit control, "
@@ -53,6 +53,12 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
         "chosen, an error message is shown in the status bar.");
     QWhatsThis::add(TextLabelServerAddr, strServAddrH);
     QWhatsThis::add(LineEditServerAddr, strServAddrH);
+
+    QString strFaderTag = tr("<b>Fader Tag:</b> In this edit control, "
+        "the tag string of your fader can be set. This tag will appear "
+        "at your fader on the mixer board.");
+    QWhatsThis::add(TextLabelServerTag, strFaderTag);
+    QWhatsThis::add(LineEditFaderTag, strFaderTag);
 
     QString strAudFader = tr ( "<b>Audio Fader:</b> With the audio fader "
         "control the level of left and right audio input channels can "
@@ -80,8 +86,14 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
         "network or sound interface has bad status, this LED will show "
         "red color." ) );
 
-    /* init server address line edit */
+    // init fader tag line edit
+    LineEditFaderTag->setText ( pClient->strName.c_str() );
+
+    // init server address line edit
     LineEditServerAddr->setText ( pClient->strIPAddress.c_str() );
+
+    // we want the cursor to be at IP address line edit at startup
+    LineEditServerAddr->setFocus();
 
     /* init status label */
     OnTimerStatus();
@@ -96,7 +108,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     ProgressBarInputLevelR->setProgress ( 0 );
 
 
-    /* init slider controls --- */
+    // init slider controls ---
     // audio in fader
     SliderAudInFader->setRange ( 0, AUD_FADER_IN_MAX );
     const int iCurAudInFader = pClient->GetAudioInFader();
@@ -110,7 +122,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     SliderAudReverb->setTickInterval ( AUD_REVERB_MAX / 9 );
 
 
-    /* set radio buttons --- */
+    // set radio buttons ---
     // reverb channel
     if ( pClient->IsReverbOnLeftChan() )
     {
@@ -165,6 +177,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect(RadioButtonRevSelR, SIGNAL(clicked()),
         this, SLOT(OnRevSelR()));
 
+    // line edits
+    QObject::connect ( LineEditFaderTag, SIGNAL ( textChanged ( const QString& ) ),
+        this, SLOT ( OnFaderTagTextChanged ( const QString& ) ) );
+
     // other
     QObject::connect ( pClient,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
@@ -191,6 +207,9 @@ void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
 {
     // store IP address
     pClient->strIPAddress = LineEditServerAddr->text().latin1();
+
+    // store fader tag
+    pClient->strName = LineEditFaderTag->text().latin1();
 
     // default implementation of this event handler routine
     Event->accept();
@@ -246,6 +265,15 @@ void CLlconClientDlg::OnOpenGeneralSettings()
 {
     // open general settings dialog
     ClientSettingsDlg.show();
+}
+
+void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
+{
+    // refresh internal name parameter
+    pClient->strName = strNewName.latin1();
+
+    // update name at server
+    pClient->SetRemoteName();
 }
 
 void CLlconClientDlg::OnTimerSigMet()

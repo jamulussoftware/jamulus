@@ -11,7 +11,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>586</width>
+            <width>580</width>
             <height>289</height>
         </rect>
     </property>
@@ -307,7 +307,7 @@
                     <class>QLayoutWidget</class>
                     <property stdset="1">
                         <name>name</name>
-                        <cstring>Layout17</cstring>
+                        <cstring>Layout9</cstring>
                     </property>
                     <hbox>
                         <property stdset="1">
@@ -318,6 +318,28 @@
                             <name>spacing</name>
                             <number>6</number>
                         </property>
+                        <widget>
+                            <class>QLabel</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>TextLabelServerTag</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>text</name>
+                                <string>Fader Tag:</string>
+                            </property>
+                        </widget>
+                        <widget>
+                            <class>QLineEdit</class>
+                            <property stdset="1">
+                                <name>name</name>
+                                <cstring>LineEditFaderTag</cstring>
+                            </property>
+                            <property stdset="1">
+                                <name>maxLength</name>
+                                <number>15</number>
+                            </property>
+                        </widget>
                         <spacer>
                             <property>
                                 <name>name</name>
@@ -674,7 +696,12 @@ Fader</string>
     </image>
 </images>
 <tabstops>
-    <tabstop>PushButtonConnect</tabstop>
     <tabstop>LineEditServerAddr</tabstop>
+    <tabstop>PushButtonConnect</tabstop>
+    <tabstop>LineEditFaderTag</tabstop>
+    <tabstop>SliderAudReverb</tabstop>
+    <tabstop>RadioButtonRevSelL</tabstop>
+    <tabstop>RadioButtonRevSelR</tabstop>
+    <tabstop>SliderAudInFader</tabstop>
 </tabstops>
 </UI>

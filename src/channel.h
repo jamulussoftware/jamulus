@@ -90,6 +90,9 @@ public:
     void SetName ( const std::string sNNa ) { sName = sNNa; }
     std::string GetName() { return sName; }
 
+    void SetRemoteName ( const std::string strName )
+        { Protocol.CreateChanNameMes ( strName ); }
+
     void SetGain ( const int iNID, const double dNG ) { vecdGains[iNID] = dNG; }
     double GetGain( const int iNID ) { return vecdGains[iNID]; }
 
@@ -179,6 +182,7 @@ public slots:
     void OnJittBufSizeChange ( int iNewJitBufSize );
     void OnNetwBlSiFactChange ( int iNewNetwBlSiFact );
     void OnChangeChanGain ( int iChanID, double dNewGain );
+    void OnChangeChanName ( std::string strName );
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
@@ -187,6 +191,7 @@ signals:
     void ReqConnClientsList();
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ProtocolStatus ( bool bOk );
+    void NameHasChanged();
 };
 
 
@@ -273,6 +278,17 @@ public slots:
     void OnReqConnClientsListCh7() { CreateAndSendChanListForThisChan ( 7 ); }
     void OnReqConnClientsListCh8() { CreateAndSendChanListForThisChan ( 8 ); }
     void OnReqConnClientsListCh9() { CreateAndSendChanListForThisChan ( 9 ); }
+
+    void OnNameHasChangedCh0() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh1() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh2() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh3() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh4() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh5() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh6() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh7() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh8() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh9() { CreateAndSendChanListForAllConChannels(); }
 
 signals:
     void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );

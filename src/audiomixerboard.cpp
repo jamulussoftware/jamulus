@@ -30,9 +30,8 @@
 
 /* Implementation *************************************************************/
 CChannelFader::CChannelFader ( QWidget*     pNW,
-                               QHBoxLayout* pNPtLy,
-                               QString      sName ) :
-    pParentLayout ( pNPtLy )
+                               QHBoxLayout* pParentLayout,
+                               QString      sName )
 {
     // create new GUI control objects and store pointers to them
     pMainGrid = new QGridLayout ( 2, 1 );
@@ -107,7 +106,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent,
     setFrameShadow ( QFrame::Sunken );
 
     // add hboxlayout with horizontal spacer
-    pMainLayout = new QHBoxLayout ( this, 11, 6 );
+    pMainLayout = new QHBoxLayout ( this, 11, 0 );
     pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
 
     // create all mixer controls and make them invisible

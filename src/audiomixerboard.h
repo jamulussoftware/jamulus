@@ -49,7 +49,7 @@ class CChannelFader : public QObject
     Q_OBJECT
 
 public:
-    CChannelFader ( QWidget* pNW, QHBoxLayout* pNPtLy, QString sName );
+    CChannelFader ( QWidget* pNW, QHBoxLayout* pParentLayout, QString sName );
     ~CChannelFader()
     {
         pLabel->close();
@@ -70,8 +70,6 @@ protected:
     QGridLayout*    pMainGrid;
     QSlider*        pFader;
     QLabel*         pLabel;
-
-    QHBoxLayout*    pParentLayout;
 
 public slots:
     void OnValueChanged ( int value );

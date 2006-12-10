@@ -48,8 +48,8 @@
 #define PROTMESSID_CHANNEL_NAME             18 // set channel name for fader tag
 
 // lengths of message as defined in protocol.cpp file
-#define MESS_HEADER_LENGTH_BYTE         5 /* ID, cnt, length */
-#define MESS_LEN_WITHOUT_DATA_BYTE      ( MESS_HEADER_LENGTH_BYTE + 2 /* CRC */ )
+#define MESS_HEADER_LENGTH_BYTE         7 /* TAG (2), ID (2), cnt (1), length (2) */
+#define MESS_LEN_WITHOUT_DATA_BYTE      ( MESS_HEADER_LENGTH_BYTE + 2 /* CRC (2) */ )
 
 // time out for message re-send if no acknowledgement was received
 #define SEND_MESS_TIMEOUT_MS            400 // ms

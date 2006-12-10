@@ -15,10 +15,11 @@ Protocol message definition
 MAIN FRAME
 ----------
 
-    +------------+------------+------------------+--------------+-------------+
-    | 2 bytes ID | 1 byte cnt | 2 bytes length n | n bytes data | 2 bytes CRC |
-    +------------+------------+------------------+--------------+-------------+
+    +-------------+------------+------------+------------------+--------------+-------------+
+    | 2 bytes TAG | 2 bytes ID | 1 byte cnt | 2 bytes length n | n bytes data | 2 bytes CRC |
+    +-------------+------------+------------+------------------+--------------+-------------+
 
+- TAG is an all zero bit word to identify protocol messages
 - message ID defined by the defines PROTMESSID_x
 - cnt: counter which is increment for each message and wraps around at 255
 - length n in bytes of the data
@@ -639,6 +640,15 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
     // decode header -----
     iCurPos = 0; // start from beginning
 
+    // 2 bytes TAG
+    const int iTag = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
+
+    // check if tag is correct
+    if ( iTag != 0 )
+    {
+        return false; // return error code
+    }
+
     /* 2 bytes ID */
     iID = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
 
@@ -715,9 +725,8 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>& vecOut,
     // query length of data vector
     const int iDataLenByte = vecData.Size();
 
-    // total length of message = 7 + "iDataLenByte"
-    // 2 byte ID + 1 byte cnt + 2 byte length + n bytes data + 2 bytes CRC
-    const int iTotLenByte = 7 + iDataLenByte;
+    // total length of message
+    const int iTotLenByte = MESS_LEN_WITHOUT_DATA_BYTE + iDataLenByte;
 
     // init message vector
     vecOut.Init( iTotLenByte );
@@ -725,15 +734,19 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>& vecOut,
     // encode header -----
     unsigned int iCurPos = 0; // init position pointer
 
-    /* 2 bytes ID */
+    // 2 bytes TAG (all zero bits)
+    PutValOnStream ( vecOut, iCurPos,
+        static_cast<uint32_t> ( 0 ), 2 );
+
+    // 2 bytes ID
     PutValOnStream ( vecOut, iCurPos,
         static_cast<uint32_t> ( iID ), 2 );
 
-    /* 1 byte cnt */
+    // 1 byte cnt
     PutValOnStream ( vecOut, iCurPos,
         static_cast<uint32_t> ( iCnt ), 1 );
 
-    /* 2 bytes length */
+    // 2 bytes length
     PutValOnStream ( vecOut, iCurPos,
         static_cast<uint32_t> ( iDataLenByte ), 2 );
 

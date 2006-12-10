@@ -583,38 +583,59 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
 {
     EPutDataStat eRet = PS_GEN_ERROR;
 
+    // init flags
+    bool bIsProtocolPacket = false;
+    bool bIsAudioPacket    = false;
+    bool bNewConnection    = false;
+
     if ( bIsEnabled )
     {
-        bool bNewConnection = false;
-        bool bIsAudioPacket = false;
-
-        // check if this is an audio packet by checking all possible lengths
-        for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
+        // first check if this is protocol data
+        // only use protocol data if channel is connected
+        if ( IsConnected() )
         {
-            if ( iNumBytes == vecNetwInBufSizes[i] )
+            // this seems not to be an audio block, parse the message
+            if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )
             {
-                bIsAudioPacket = true;
+                // set status flags
+                eRet              = PS_PROT_OK;
+                bIsProtocolPacket = true;
 
-                // check if we are correctly initialized
-                const int iNewNetwInBlSiFact = i + 1;
-                if ( iNewNetwInBlSiFact != iCurNetwInBlSiFact )
-                {
-                    // re-initialize to new value
-                    SetNetwInBlSiFact ( iNewNetwInBlSiFact );
-                }
+                // create message for protocol status
+                emit ProtocolStatus ( true );
             }
         }
 
-        // only process if packet has correct size
-        if ( bIsAudioPacket )
+        // only try to parse audio if it was not a protocol packet
+        if ( !bIsProtocolPacket )
         {
-            Mutex.lock();
+            // check if this is an audio packet by checking all possible lengths
+            for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
             {
-                // decompress audio
-                CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
+                if ( iNumBytes == vecNetwInBufSizes[i] )
+                {
+                    bIsAudioPacket = true;
 
-                // do resampling to compensate for sample rate offsets in the
-                // different sound cards of the clients
+                    // check if we are correctly initialized
+                    const int iNewNetwInBlSiFact = i + 1;
+                    if ( iNewNetwInBlSiFact != iCurNetwInBlSiFact )
+                    {
+                        // re-initialize to new value
+                        SetNetwInBlSiFact ( iNewNetwInBlSiFact );
+                    }
+                }
+            }
+
+            // only process if packet has correct size
+            if ( bIsAudioPacket )
+            {
+                Mutex.lock();
+                {
+                    // decompress audio
+                    CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
+
+                    // do resampling to compensate for sample rate offsets in the
+                    // different sound cards of the clients
 /*
 for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
     vecdResInData[i] = (double) vecsData[i];
@@ -628,43 +649,31 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
     vecdResOutData[i] = (double) vecsDecomprAudio[i];
 }
 
-                if ( SockBuf.Put ( vecdResOutData ) )
-                {
-                    eRet = PS_AUDIO_OK;
-                }
-                else
-                {
-                    eRet = PS_AUDIO_ERR;
-                }
+                    if ( SockBuf.Put ( vecdResOutData ) )
+                    {
+                        eRet = PS_AUDIO_OK;
+                    }
+                    else
+                    {
+                        eRet = PS_AUDIO_ERR;
+                    }
 
-                // check if channel was not connected, this is a new connection
-                bNewConnection = !IsConnected();
+                    // check if channel was not connected, this is a new connection
+                    bNewConnection = !IsConnected();
 
-                // reset time-out counter
-                iConTimeOut = iConTimeOutStartVal;
+                    // reset time-out counter
+                    iConTimeOut = iConTimeOutStartVal;
+                }
+                Mutex.unlock();
             }
-            Mutex.unlock();
-        }
-        else
-        {
-            // only use protocol data if channel is connected
-            if ( IsConnected() )
+            else
             {
-                // this seems not to be an audio block, parse the message
-                if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )
-                {
-                    eRet = PS_PROT_OK;
+                // the protocol parsing failed and this was no audio block,
+                // we treat this as protocol error (unkown packet)
+                eRet = PS_PROT_ERR;
 
-                    // create message for protocol status
-                    emit ProtocolStatus ( true );
-                }
-                else
-                {
-                    eRet = PS_PROT_ERR;
-
-                    // create message for protocol status
-                    emit ProtocolStatus ( false );
-                }
+                // create message for protocol status
+                emit ProtocolStatus ( false );
             }
         }
 

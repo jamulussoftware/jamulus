@@ -334,7 +334,8 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
                 // The second index of "vecvecdGains" does not represent
                 // the channel ID! Therefore we have to use "vecChanID" to
                 // query the IDs of the currently connected channels
-                vecvecdGains[i][j] = vecChannels[i].GetGain( vecChanID[j] );
+                vecvecdGains[i][j] =
+                    vecChannels[ vecChanID[i] ].GetGain( vecChanID[j] );
             }
         }
 

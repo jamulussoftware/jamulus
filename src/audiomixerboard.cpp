@@ -35,7 +35,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pParentLayout ( pNPtLy )
 {
     // create new GUI control objects and store pointers to them
-    pMainGrid = new QGridLayout ( pNW, 2, 1 );
+    pMainGrid = new QGridLayout ( 2, 1 );
     pFader    = new QSlider     ( Qt::Vertical, pNW );
     pLabel    = new QLabel      ( "", pNW );
 
@@ -75,14 +75,19 @@ void CChannelFader::OnValueChanged ( int value )
 
 void CChannelFader::SetText ( const std::string sText )
 {
-    const int iBreakPos = 6;
+    const int iBreakPos = 7;
 
-    // break text at predefined position
+    // break text at predefined position, if text is too short, break anyway to
+    // make sure we have two lines for fader tag
     QString sModText = sText.c_str();
 
     if ( sModText.length() > iBreakPos )
     {
         sModText.insert ( iBreakPos, QString ( "<br>" ) );
+    }
+    else
+    {
+        sModText.append ( QString ( "<br>" ) );
     }
 
     // use bold text

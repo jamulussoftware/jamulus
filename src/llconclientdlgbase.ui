@@ -11,8 +11,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>580</width>
-            <height>289</height>
+            <width>594</width>
+            <height>319</height>
         </rect>
     </property>
     <property stdset="1">
@@ -340,6 +340,23 @@
                                 <number>15</number>
                             </property>
                         </widget>
+                    </hbox>
+                </widget>
+                <widget>
+                    <class>QLayoutWidget</class>
+                    <property stdset="1">
+                        <name>name</name>
+                        <cstring>Layout10</cstring>
+                    </property>
+                    <hbox>
+                        <property stdset="1">
+                            <name>margin</name>
+                            <number>0</number>
+                        </property>
+                        <property stdset="1">
+                            <name>spacing</name>
+                            <number>6</number>
+                        </property>
                         <spacer>
                             <property>
                                 <name>name</name>

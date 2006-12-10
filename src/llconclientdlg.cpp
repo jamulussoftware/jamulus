@@ -56,7 +56,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
     QString strFaderTag = tr("<b>Fader Tag:</b> In this edit control, "
         "the tag string of your fader can be set. This tag will appear "
-        "at your fader on the mixer board.");
+        "at your fader on the mixer board when connected to the server.");
     QWhatsThis::add(TextLabelServerTag, strFaderTag);
     QWhatsThis::add(LineEditFaderTag, strFaderTag);
 
@@ -140,6 +140,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
     pSettingsMenu->insertItem ( tr ( "&General Settings..." ), this,
         SLOT ( OnOpenGeneralSettings() ) );
+
+    pSettingsMenu->insertSeparator();
+    pSettingsMenu->insertItem ( tr ( "E&xit" ), this,
+        SLOT ( close() ), CTRL+Key_Q );
 
 
     /* Main menu bar -------------------------------------------------------- */

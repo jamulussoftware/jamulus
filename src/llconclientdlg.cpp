@@ -269,6 +269,10 @@ void CLlconClientDlg::OnOpenGeneralSettings()
 {
     // open general settings dialog
     ClientSettingsDlg.show();
+
+    // make sure dialog is upfront and has focus
+    ClientSettingsDlg.raise();
+    ClientSettingsDlg.setActiveWindow();    
 }
 
 void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )

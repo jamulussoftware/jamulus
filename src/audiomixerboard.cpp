@@ -56,6 +56,14 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     pParentLayout->insertLayout ( 0, pMainGrid );
 
+    // add help text to controls
+    QWhatsThis::add(pFader, "<b>Mixer Fader:</b> Adjusts the audio level of this "
+		"channel. All connected clients at the server will be assigned an audio "
+		"fader at each client");
+
+    QWhatsThis::add(pLabel, "<b>Mixer Fader Label:</b> Label (fader tag) identifying "
+		"the connected client. The tag name can be set in the clients main window.");
+
 
     // connections -------------------------------------------------------------
     QObject::connect ( pFader, SIGNAL ( valueChanged ( int ) ),

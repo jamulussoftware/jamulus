@@ -42,7 +42,7 @@
 
 /* version and application name (always use this version) */
 #undef VERSION
-#define VERSION                         "0.9.9"
+#define VERSION                         "1.0cvs"
 #define APP_NAME                        "llcon"
 
 

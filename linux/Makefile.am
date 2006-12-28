@@ -37,6 +37,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/clientsettingsdlg.h \
 	../src/llconclientdlgbase.ui \
 	../src/llconserverdlgbase.ui \
+	../src/clientsettingsdlgbase.ui \
 	../src/aboutdlgbase.ui \
 	sound.h
 

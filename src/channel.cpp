@@ -362,6 +362,7 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
 }
 
 void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
+                                   CVector<std::string>&  vecsName,
                                    CVector<int>&          veciJitBufSize,
                                    CVector<int>&          veciNetwOutBlSiFact,
                                    CVector<int>&          veciNetwInBlSiFact )
@@ -370,6 +371,7 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 
     // init return values
     vecHostAddresses.Init    ( MAX_NUM_CHANNELS );
+    vecsName.Init            ( MAX_NUM_CHANNELS );
     veciJitBufSize.Init      ( MAX_NUM_CHANNELS );
     veciNetwOutBlSiFact.Init ( MAX_NUM_CHANNELS );
     veciNetwInBlSiFact.Init  ( MAX_NUM_CHANNELS );
@@ -381,9 +383,10 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
         {
             // get requested data
             vecHostAddresses[i]    = InetAddr;
-            veciJitBufSize[i]      = vecChannels[i].GetSockBufSize ();
-            veciNetwOutBlSiFact[i] = vecChannels[i].GetNetwBufSizeFactOut ();
-            veciNetwInBlSiFact[i]  = vecChannels[i].GetNetwBufSizeFactIn ();
+            vecsName[i]            = vecChannels[i].GetName();
+            veciJitBufSize[i]      = vecChannels[i].GetSockBufSize();
+            veciNetwOutBlSiFact[i] = vecChannels[i].GetNetwBufSizeFactOut();
+            veciNetwInBlSiFact[i]  = vecChannels[i].GetNetwBufSizeFactIn();
         }
     }
 }

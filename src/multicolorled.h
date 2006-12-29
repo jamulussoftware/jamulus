@@ -126,7 +126,7 @@ protected:
 class CServerListViewItem : public QListViewItem
 {
 public:
-    CServerListViewItem ( QListView* parent ) : LED0 ( 1 ), LED1 ( 2 ),
+    CServerListViewItem ( QListView* parent ) : LED0 ( 2 ), LED1 ( 3 ),
         QListViewItem ( parent )
     {
         LED0.SetListViewItemPointer ( this );

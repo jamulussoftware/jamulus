@@ -216,6 +216,7 @@ public:
                            CVector<CVector<double> >& vecvecdGains );
 
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
+                          CVector<std::string>& vecsName,
                           CVector<int>& veciJitBufSize,
                           CVector<int>& veciNetwOutBlSiFact,
                           CVector<int>& veciNetwInBlSiFact );

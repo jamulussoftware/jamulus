@@ -39,6 +39,8 @@
 #else
 # include "../linux/sound.h"
 # include <sched.h>
+# include <socket.h>
+# include <netdb.h>
 #endif
 
 

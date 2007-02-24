@@ -88,17 +88,37 @@ bool CClient::SetServerAddr ( QString strNAddr )
 {
     QHostAddress InetAddr;
 
-    if ( InetAddr.setAddress ( strNAddr ) )
+    // first try if this is an IP number an can directly applied to QHostAddress
+    if ( !InetAddr.setAddress ( strNAddr ) )
     {
-        // the server port is fixed and always the same
-        Channel.SetAddress ( CHostAddress ( InetAddr, LLCON_PORT_NUMBER ) );
 
-        return true;
+// TODO implement the IP number query with QT objects (this is not possible with
+// QT 2 so we have to implement a workaround solution here
+
+        // it was no vaild IP address, try to get host by name, assuming
+        // that the string contains a valid host name string
+        const hostent* HostInf = gethostbyname ( strNAddr.latin1() );
+
+        if ( HostInf )
+        {
+            uint32_t dwIPNumber;
+
+            // copy IP address of first found host in host list
+            memcpy ( (char*) &dwIPNumber, HostInf->h_addr_list[0], sizeof ( dwIPNumber ) );
+
+            // apply IP address to QT object (change byte order, too)
+            InetAddr.setAddress ( htonl ( dwIPNumber ) );
+        }
+        else
+        {
+            return false; // invalid address
+        }
     }
-    else
-    {
-        return false; // invalid address
-    }
+
+    // apply address (the server port is fixed and always the same)
+    Channel.SetAddress ( CHostAddress ( InetAddr, LLCON_PORT_NUMBER ) );
+
+    return true;
 }
 
 void CClient::OnProtocolStatus ( bool bOk )

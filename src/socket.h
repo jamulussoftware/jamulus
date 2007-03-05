@@ -47,10 +47,10 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket::CSocket(CChannel* pNewChannel) : pChannel(pNewChannel),
+    CSocket(CChannel* pNewChannel) : pChannel(pNewChannel),
         SocketDevice(QSocketDevice::Datagram /* UDP */), bIsClient(true)
         {Init();}
-    CSocket::CSocket(CChannelSet* pNewChannelSet, QObject* pNServP) :
+    CSocket(CChannelSet* pNewChannelSet, QObject* pNServP) :
         pChannelSet(pNewChannelSet), pServer ( pNServP ),
         SocketDevice(QSocketDevice::Datagram /* UDP */), bIsClient(false)
         {Init();}

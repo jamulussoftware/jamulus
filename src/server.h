@@ -42,12 +42,12 @@ class CServer : public QObject
     Q_OBJECT
 
 public:
-    CServer ();
-    virtual ~CServer () {}
+    CServer ( const bool bUseLogging );
+    virtual ~CServer() {}
 
     void Start ();
     void Stop ();
-    bool IsRunning() { return Timer.isActive (); }
+    bool IsRunning() { return Timer.isActive(); }
 
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
         CVector<std::string>& vecsName,
@@ -60,7 +60,7 @@ public:
 
     bool GetTimingStdDev ( double& dCurTiStdDev );
 
-    CChannelSet* GetChannelSet () { return &ChannelSet; }
+    CChannelSet* GetChannelSet() { return &ChannelSet; }
 
 protected:
     CVector<short>  ProcessData ( CVector<CVector<double> >& vecvecdData,
@@ -78,6 +78,9 @@ protected:
     /* debugging, evaluating */
     CMovingAv<double>   RespTimeMoAvBuf;
     QTime               TimeLastBlock;
+
+    // logging
+    CLogging            Logging;
 
 public slots:
     void OnTimer();

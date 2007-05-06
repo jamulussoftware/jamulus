@@ -467,5 +467,35 @@ public:
 };
 
 
+/* Time and Data to String conversion --------------------------------------- */
+class CLogging
+{
+public:
+    CLogging() : bDoLogging ( false ), pFile ( NULL ) {}
+    virtual ~CLogging()
+    {
+        if ( pFile != NULL )
+        {
+            fclose ( pFile );
+        }
+    }
+
+    void Start()
+    {
+        // open file
+        pFile = fopen ( LOG_FILE_NAME, "a" );
+    }
+
+    CLogging& operator<< ( const QString & sNewStr )
+    {
+        fprintf ( pFile, "%s\n", sNewStr.latin1() );
+        fflush ( pFile );
+        return *this;
+    }
+
+protected:
+    bool        bDoLogging;
+    FILE*       pFile;
+};
 
 #endif /* !defined(UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_) */

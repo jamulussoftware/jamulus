@@ -45,6 +45,8 @@
 #define VERSION                         "1.0cvs"
 #define APP_NAME                        "llcon"
 
+// file name for logging file
+#define LOG_FILE_NAME                   "llconsrvlog.txt"
 
 /* defined port number for client and server */
 #define LLCON_PORT_NUMBER               22122

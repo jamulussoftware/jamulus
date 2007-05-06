@@ -26,7 +26,7 @@
 
 
 /* Implementation *************************************************************/
-CServer::CServer() : Socket ( &ChannelSet, this )
+CServer::CServer ( const bool bUseLogging ) : Socket ( &ChannelSet, this )
 {
     vecsSendData.Init ( MIN_BLOCK_SIZE_SAMPLES );
 
@@ -47,6 +47,12 @@ CServer::CServer() : Socket ( &ChannelSet, this )
     // class, do not use automatic start/stop of server in Windows version
     Start();
 #endif
+
+    // enable logging (if requested)
+    if ( bUseLogging )
+    {
+        Logging.Start();
+    }
 }
 
 void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
@@ -80,7 +86,11 @@ void CServer::Stop()
     // stop main timer
     Timer.stop();
 
-    qDebug ( CLogTimeDate::toString() + "Server stopped" );
+    // logging
+    QString strLogStr = CLogTimeDate::toString() + "Server stopped";
+
+    qDebug ( strLogStr ); // on console
+    Logging << strLogStr; // in log file
 }
 
 void CServer::OnTimer()

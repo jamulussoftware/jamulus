@@ -37,9 +37,10 @@ QApplication* pApp = NULL;
 int main ( int argc, char** argv )
 {
     /* check if server or client application shall be started */
-    bool bIsClient = true;
-    bool bUseGUI = true;
-        
+    bool bIsClient         = true;
+    bool bUseGUI           = true;
+    bool bUseServerLogging = false;
+
     /* QT docu: argv()[0] is the program name, argv()[1] is the first
        argument and argv()[argc()-1] is the last argument */
     if ( argc > 1 )
@@ -58,7 +59,16 @@ int main ( int argc, char** argv )
         if ( !strShortOpt.compare ( argv[1] ) )
         {
             bIsClient = false;
-            bUseGUI = false;
+            bUseGUI   = false;
+        }
+
+        /* "-sln": start server with GUI disabled and logging enabled */
+        strShortOpt = "-sln";
+        if ( !strShortOpt.compare ( argv[1] ) )
+        {
+            bIsClient         = false;
+            bUseGUI           = false;
+            bUseServerLogging = true;
         }
     }
 
@@ -83,17 +93,17 @@ int main ( int argc, char** argv )
         pApp = &app; /* Needed for post-event routine */
 
         /* Show dialog */
-        ClientDlg.show ();
-        app.exec ();
+        ClientDlg.show();
+        app.exec();
 
         /* Save settings to init-file */
-        Settings.Save ();
+        Settings.Save();
     }
     else
     {
         /* server */
         // actual server object
-        CServer Server;
+        CServer Server ( bUseServerLogging );
 
         if ( bUseGUI )
         {
@@ -106,14 +116,14 @@ int main ( int argc, char** argv )
             pApp = &app; /* Needed for post-event routine */
 
             /* Show dialog */
-            ServerDlg.show ();
-            app.exec ();
+            ServerDlg.show();
+            app.exec();
         }
         else
         {
             // only start application without using the GUI
             qDebug ( CAboutDlg::GetVersionAndNameStr ( false ) );
-            app.exec ();
+            app.exec();
         }
     }
 
@@ -130,6 +140,6 @@ void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam,
             new CLlconEvent ( MessID, iMessageParam, iChanNum );
 
         /* Qt will delete the event object when done */
-        QThread::postEvent ( pApp->mainWidget (), LlconEv );
+        QThread::postEvent ( pApp->mainWidget(), LlconEv );
     }
 }

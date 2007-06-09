@@ -241,7 +241,7 @@ void CSound::InitPlayback ( int iNewBufferSize, bool bNewBlocking )
 
 bool CSound::Write ( CVector<short>& psData )
 {
-    int size = iBufferSizeIn;
+    int size = iBufferSizeOut;
     int start = 0;
     int ret;
 

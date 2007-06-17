@@ -484,13 +484,20 @@ public:
     {
         // open file
         pFile = fopen ( LOG_FILE_NAME, "a" );
+
+        if ( pFile != NULL )
+        {
+            bDoLogging = true;
+        }
     }
 
-    CLogging& operator<< ( const QString & sNewStr )
+    void operator<< ( const QString & sNewStr )
     {
-        fprintf ( pFile, "%s\n", sNewStr.latin1() );
-        fflush ( pFile );
-        return *this;
+        if ( bDoLogging )
+        {
+            fprintf ( pFile, "%s\n", sNewStr.latin1() );
+            fflush ( pFile );
+        }
     }
 
 protected:

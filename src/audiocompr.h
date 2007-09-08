@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(AUDIOCOMPR_H_OIHGE76GEKJH3249_GEG98EG3_43441912__INCLUDED_)
+#if !defined ( AUDIOCOMPR_H_OIHGE76GEKJH3249_GEG98EG3_43441912__INCLUDED_ )
 #define AUDIOCOMPR_H_OIHGE76GEKJH3249_GEG98EG3_43441912__INCLUDED_
 
 #include "util.h"
@@ -68,7 +68,7 @@ protected:
     int iAdpcmSize;
     int iStepindEnc;
 
-    /* inline functions must be declared in the header */
+    // inline functions must be declared in the header
     inline int CheckBounds ( const int iData, const int iMin, const int iMax )
     {
         if ( iData > iMax )
@@ -107,4 +107,4 @@ protected:
 };
 
 
-#endif /* !defined(AUDIOCOMPR_H_OIHGE76GEKJH3249_GEG98EG3_43441912__INCLUDED_) */
+#endif /* !defined ( AUDIOCOMPR_H_OIHGE76GEKJH3249_GEG98EG3_43441912__INCLUDED_ ) */

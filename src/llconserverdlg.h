@@ -41,8 +41,8 @@
 
 
 /* Definitions ****************************************************************/
-/* update time for GUI controls */
-#define GUI_CONTRL_UPDATE_TIME      1000 /* ms */
+// update time for GUI controls
+#define GUI_CONTRL_UPDATE_TIME      1000 // ms
 
 
 /* Classes ********************************************************************/
@@ -54,7 +54,7 @@ public:
     CLlconServerDlg ( CServer* pNServP, QWidget* parent = 0,
         const char* name = 0, bool modal = FALSE, WFlags f = 0 );
 
-    virtual ~CLlconServerDlg () {}
+    virtual ~CLlconServerDlg() {}
 
 protected:
     QTimer      Timer;
@@ -69,7 +69,7 @@ protected:
 
     QMenuBar* pMenu;
 
-    virtual void customEvent(QCustomEvent* Event);
+    virtual void customEvent ( QCustomEvent* Event );
     void UpdateSliderNetBuf();
 
 public slots:

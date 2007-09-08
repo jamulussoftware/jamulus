@@ -46,20 +46,20 @@
 
 
 /* Definitions ****************************************************************/
-/* text strings for connection button for connect and disconnect */
+// text strings for connection button for connect and disconnect
 #define CON_BUT_CONNECTTEXT         "C&onnect"
 #define CON_BUT_DISCONNECTTEXT      "D&isconnect"
 
-/* steps for input level meter */
+// steps for input level meter
 #define NUM_STEPS_INP_LEV_METER     100
 
-/* update time for GUI controls */
-#define LEVELMETER_UPDATE_TIME      100 /* ms */
-#define STATUSBAR_UPDATE_TIME       1000 /* ms */
+// update time for GUI controls
+#define LEVELMETER_UPDATE_TIME      100 // ms
+#define STATUSBAR_UPDATE_TIME       1000 // ms
 
-/* range for signal level meter */
-#define LOW_BOUND_SIG_METER         ( -50.0 ) /* dB */
-#define UPPER_BOUND_SIG_METER       ( 0.0 ) /* dB */
+// range for signal level meter
+#define LOW_BOUND_SIG_METER         ( -50.0 ) // dB
+#define UPPER_BOUND_SIG_METER       ( 0.0 ) // dB
 
 
 /* Classes ********************************************************************/
@@ -71,7 +71,7 @@ public:
     CLlconClientDlg ( CClient* pNCliP, QWidget* parent = 0,
         const char* name = 0, bool modal = FALSE, WFlags f = 0 );
 
-    virtual ~CLlconClientDlg ();
+    virtual ~CLlconClientDlg();
 
 protected:
     CClient*                pClient;

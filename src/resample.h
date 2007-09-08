@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(RESAMPLE_H__3B0FEUFE7876F_FE8FE_CA63_4344_1912__INCLUDED_)
+#if !defined ( RESAMPLE_H__3B0FEUFE7876F_FE8FE_CA63_4344_1912__INCLUDED_ )
 #define RESAMPLE_H__3B0FEUFE7876F_FE8FE_CA63_4344_1912__INCLUDED_
 
 #include "util.h"
@@ -37,9 +37,9 @@ public:
     CResample() {}
     virtual ~CResample() {}
 
-    void Init(const int iNewInputBlockSize);
-    int Resample(CVector<double>& vecdInput, CVector<double>& vecdOutput,
-                 const double dRation);
+    void Init ( const int iNewInputBlockSize );
+    int Resample ( CVector<double>& vecdInput, CVector<double>& vecdOutput,
+                   const double dRation );
 
 protected:
     double          dTStep;
@@ -58,8 +58,8 @@ public:
     CAudioResample() {}
     virtual ~CAudioResample() {}
 
-    void Init(const int iNewInputBlockSize, const int iFrom, const int iTo);
-    void Resample(CVector<double>& vecdInput, CVector<double>& vecdOutput);
+    void Init ( const int iNewInputBlockSize, const int iFrom, const int iTo );
+    void Resample ( CVector<double>& vecdInput, CVector<double>& vecdOutput );
 
 protected:
     double              dRation;
@@ -76,4 +76,4 @@ protected:
 };
 
 
-#endif // !defined(RESAMPLE_H__3B0FEUFE7876F_FE8FE_CA63_4344_1912__INCLUDED_)
+#endif // !defined ( RESAMPLE_H__3B0FEUFE7876F_FE8FE_CA63_4344_1912__INCLUDED_ )

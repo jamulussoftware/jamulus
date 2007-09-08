@@ -29,16 +29,16 @@
 /* Input level meter implementation ------------------------------------------ */
 void CSignalLevelMeter::Update ( CVector<double>& vecdAudio )
 {
-    /* Do the update for entire vector */
-    const int iVecSize = vecdAudio.Size ();
+    // do the update for entire vector
+    const int iVecSize = vecdAudio.Size();
 
     for ( int i = 0; i < iVecSize; i++ )
     {
-        /* norm of current audio sample */
+        // norm of current audio sample
         const double dCurSig = fabs ( vecdAudio[i] );
 
-        /* search for maximum. Decrease this max with time */
-        /* decrease max with time */
+        // search for maximum. Decrease this max with time
+        // decrease max with time
         if ( dCurLevel >= METER_FLY_BACK )
         {
             dCurLevel *= 0.9999;
@@ -48,7 +48,7 @@ void CSignalLevelMeter::Update ( CVector<double>& vecdAudio )
             dCurLevel = 0;
         }
 
-        /* search for max */
+        // search for max
         if ( dCurSig > dCurLevel )
         {
             dCurLevel = dCurSig;
@@ -56,24 +56,24 @@ void CSignalLevelMeter::Update ( CVector<double>& vecdAudio )
     }
 }
 
-double CSignalLevelMeter::MicLevel ()
+double CSignalLevelMeter::MicLevel()
 {
     const double dNormMicLevel = dCurLevel / _MAXSHORT;
 
-    /* logarithmic measure */
+    // logarithmic measure
     if ( dNormMicLevel > 0 )
     {
         return 20.0 * log10 ( dNormMicLevel );
     }
     else
     {
-        return -100000.0; /* large negative value */
+        return -100000.0; // large negative value
     }
 }
 
 
 /* CRC ---------------------------------------------------------------------- */
-void CCRC::Reset ()
+void CCRC::Reset()
 {
     /* Init state shift-register with ones. Set all registers to "1" with
        bit-wise not operation */
@@ -84,7 +84,7 @@ void CCRC::AddByte ( const uint8_t byNewInput )
 {
     for ( int i = 0; i < 8; i++ )
     {
-        /* Shift bits in shift-register for transistion */
+        // shift bits in shift-register for transistion
         iStateShiftReg <<= 1;
 
         /* Take bit, which was shifted out of the register-size and place it
@@ -95,13 +95,13 @@ void CCRC::AddByte ( const uint8_t byNewInput )
             iStateShiftReg |= 1;
         }
 
-        /* Add new data bit to the LSB */
+        // add new data bit to the LSB
         if ( ( byNewInput & ( 1 << ( 8 - i - 1 ) ) ) > 0 )
         {
             iStateShiftReg ^= 1;
         }
 
-        /* Add mask to shift-register if first bit is true */
+        // add mask to shift-register if first bit is true
         if ( iStateShiftReg & 1 )
         {
             iStateShiftReg ^= iPoly;
@@ -111,10 +111,10 @@ void CCRC::AddByte ( const uint8_t byNewInput )
 
 uint32_t CCRC::GetCRC()
 {
-    /* Return inverted shift-register (1's complement) */
+    // return inverted shift-register (1's complement)
     iStateShiftReg = ~iStateShiftReg;
 
-    /* Remove bit which where shifted out of the shift-register frame */
+    // remove bit which where shifted out of the shift-register frame
     return iStateShiftReg & ( iBitOutMask - 1 );
 }
 
@@ -138,7 +138,7 @@ CAudioReverb::CAudioReverb ( const double rT60 )
 {
     int delay, i;
 
-    /* Delay lengths for 44100 Hz sample rate */
+    // delay lengths for 44100 Hz sample rate
     int lengths[9] = { 1777, 1847, 1993, 2137, 389, 127, 43, 211, 179 };
     const double scaler = (double) SAMPLE_RATE / 44100.0;
 
@@ -269,17 +269,17 @@ double CAudioReverb::ProcessSample ( const double input )
 * GUI utilities                                                                *
 \******************************************************************************/
 /* About dialog ------------------------------------------------------------- */
-CAboutDlg::CAboutDlg(QWidget* parent, const char* name, bool modal, WFlags f)
-    : CAboutDlgBase(parent, name, modal, f)
+CAboutDlg::CAboutDlg ( QWidget* parent, const char* name, bool modal, WFlags f )
+    : CAboutDlgBase ( parent, name, modal, f )
 {
-    /* Set the text for the about dialog html text control */
-    TextViewCredits->setText(
-        "<p>" /* General description of llcon software */
+    // set the text for the about dialog html text control
+    TextViewCredits->setText (
+        "<p>" // general description of llcon software
         "<big><b>llcon</b> " + tr("Client/Server communication tool to enable "
         "musician to play together through a conventional broadband internet "
         "connection (like DSL).") + "</big>"
         "</p><br>"
-        "<p><font face=\"courier\">" /* GPL header text */
+        "<p><font face=\"courier\">" // GPL header text
         "This program is free software; you can redistribute it and/or modify "
         "it under the terms of the GNU General Public License as published by "
         "the Free Software Foundation; either version 2 of the License, or "
@@ -292,7 +292,7 @@ CAboutDlg::CAboutDlg(QWidget* parent, const char* name, bool modal, WFlags f)
         "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 "
         "USA"
         "</font></p><br>"
-        "<p>" /* Libraries used by this compilation of Dream */
+        "<p>" // libraries used by this compilation of Dream
         "<b>" + tr("llcon uses the following libraries or code snippets:") +
         "</b></p>"
         "<ul>"
@@ -305,8 +305,8 @@ CAboutDlg::CAboutDlg(QWidget* parent, const char* name, bool modal, WFlags f)
         "</ul>"
         "</center><br>");
 
-    /* Set version number in about dialog */
-    TextLabelVersion->setText(GetVersionAndNameStr());
+    // set version number in about dialog
+    TextLabelVersion->setText ( GetVersionAndNameStr() );
 }
 
 QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
@@ -319,7 +319,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
         strVersionText += "<center><b>";
     }
 
-    strVersionText += tr("llcon, Version ") + VERSION;
+    strVersionText += tr ( "llcon, Version " ) + VERSION;
 
     if ( bWithHtml )
     {
@@ -330,7 +330,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
         strVersionText += "\n";
     }
 
-    strVersionText += tr("llcon, Low-Latency (internet) CONnection");
+    strVersionText += tr ( "llcon, Low-Latency (internet) CONnection" );
 
     if ( bWithHtml )
     {
@@ -341,7 +341,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
         strVersionText += "\n";
     }
 
-    strVersionText += tr("Under the GNU General Public License (GPL)");
+    strVersionText += tr ( "Under the GNU General Public License (GPL)" );
 
     if ( bWithHtml )
     {
@@ -355,28 +355,28 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
 /* Help menu ---------------------------------------------------------------- */
 CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QPopupMenu ( parent )
 {
-    /* Standard help menu consists of about and what's this help */
-    insertItem ( tr ( "What's &This" ), this ,
+    // standard help menu consists of about and what's this help
+    insertItem ( tr ( "What's &This" ), this,
         SLOT ( OnHelpWhatsThis () ), SHIFT+Key_F1 );
     insertSeparator();
-    insertItem ( tr ( "&About..." ), this, SLOT ( OnHelpAbout () ) );
+    insertItem ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
 }
 
 
 /******************************************************************************\
 * Global functions implementation                                              *
 \******************************************************************************/
-void DebugError(const char* pchErDescr, const char* pchPar1Descr, 
-                const double dPar1, const char* pchPar2Descr,
-                const double dPar2)
+void DebugError ( const char* pchErDescr, const char* pchPar1Descr, 
+                  const double dPar1, const char* pchPar2Descr,
+                  const double dPar2 )
 {
-    FILE* pFile = fopen("DebugError.dat", "a");
-    fprintf(pFile, pchErDescr); fprintf(pFile, " ### ");
-    fprintf(pFile, pchPar1Descr); fprintf(pFile, ": ");
-    fprintf(pFile, "%e ### ", dPar1);
-    fprintf(pFile, pchPar2Descr); fprintf(pFile, ": ");
-    fprintf(pFile, "%e\n", dPar2);
-    fclose(pFile);
-    printf("\nDebug error! For more information see test/DebugError.dat\n");
-    exit(1);
+    FILE* pFile = fopen ( "DebugError.dat", "a" );
+    fprintf ( pFile, pchErDescr ); fprintf ( pFile, " ### " );
+    fprintf ( pFile, pchPar1Descr ); fprintf ( pFile, ": " );
+    fprintf ( pFile, "%e ### ", dPar1);
+    fprintf ( pFile, pchPar2Descr ); fprintf ( pFile, ": " );
+    fprintf ( pFile, "%e\n", dPar2 );
+    fclose ( pFile );
+    printf ( "\nDebug error! For more information see test/DebugError.dat\n" );
+    exit ( 1 );
 }

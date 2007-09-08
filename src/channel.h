@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_)
+#if !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ )
 #define CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_
 
 #include <qthread.h>
@@ -42,7 +42,7 @@
 #define CON_TIME_OUT_SEC_MAX        5 // seconds
 
 // no valid channel number
-#define INVALID_CHANNEL_ID          (MAX_NUM_CHANNELS + 1)
+#define INVALID_CHANNEL_ID          ( MAX_NUM_CHANNELS + 1 )
 
 enum EPutDataStat
 {
@@ -85,7 +85,7 @@ public:
 
     void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
     bool GetAddress ( CHostAddress& RetAddr );
-    CHostAddress GetAddress () { return InetAddr; }
+    CHostAddress GetAddress() { return InetAddr; }
 
     void SetName ( const std::string sNNa ) { sName = sNNa; }
     std::string GetName() { return sName; }
@@ -317,4 +317,4 @@ protected:
 };
 
 
-#endif /* !defined(CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_) */
+#endif /* !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

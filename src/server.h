@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_)
+#if !defined ( SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ )
 #define SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_
 
 #include <qobject.h>
@@ -45,14 +45,14 @@ public:
     CServer ( const bool bUseLogging );
     virtual ~CServer() {}
 
-    void Start ();
-    void Stop ();
+    void Start();
+    void Stop();
     bool IsRunning() { return Timer.isActive(); }
 
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
         CVector<std::string>& vecsName,
         CVector<int>& veciJitBufSize, CVector<int>& veciNetwOutBlSiFact,
-        CVector<int>& veciNetwInBlSiFact)
+        CVector<int>& veciNetwInBlSiFact )
     {
         ChannelSet.GetConCliParam ( vecHostAddresses, vecsName,
             veciJitBufSize, veciNetwOutBlSiFact, veciNetwInBlSiFact );
@@ -71,11 +71,11 @@ protected:
     QTimer              Timer;
     CVector<short>      vecsSendData;
 
-    /* actual working objects */
+    // actual working objects
     CChannelSet         ChannelSet;
     CSocket             Socket;
 
-    /* debugging, evaluating */
+    // debugging, evaluating
     CMovingAv<double>   RespTimeMoAvBuf;
     QTime               TimeLastBlock;
 
@@ -88,4 +88,4 @@ public slots:
 };
 
 
-#endif /* !defined(SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_) */
+#endif /* !defined ( SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ ) */

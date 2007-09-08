@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_)
+#if !defined ( SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_ )
 #define SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_
 
 #include "global.h"
@@ -47,20 +47,20 @@ class CSettings
 public:
     CSettings ( CClient* pNCliP ) : pClient ( pNCliP ) {}
 
-    void Load ();
-    void Save ();
+    void Load();
+    void Save();
 
 protected:
-    void ReadIniFile ();
-    void WriteIniFile ();
+    void ReadIniFile();
+    void WriteIniFile();
 
-    /* Function declarations for stlini code written by Robert Kesterson */
+    // function declarations for stlini code written by Robert Kesterson
     struct StlIniCompareStringNoCase 
     {
-        bool operator () ( const std::string& x, const std::string& y ) const;
+        bool operator() ( const std::string& x, const std::string& y ) const;
     };
 
-    /* These typedefs just make the code a bit more readable */
+    // these typedefs just make the code a bit more readable
     typedef std::map<string, string, StlIniCompareStringNoCase > INISection;
     typedef std::map<string, INISection , StlIniCompareStringNoCase > INIFile;
 
@@ -81,8 +81,8 @@ protected:
     bool GetFlagIniSet ( INIFile& theINI, string strSection, string strKey,
                          bool& bValue );
 
-    /* Pointer to the client object needed for the various settings */
+    // pointer to the client object needed for the various settings
     CClient* pClient;
 };
 
-#endif // !defined(SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_)
+#endif // !defined ( SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_ )

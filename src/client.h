@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_)
+#if !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ )
 #define CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_
 
 #include <qthread.h>
@@ -94,7 +94,7 @@ public:
         // tell the server that size has changed
         Channel.CreateJitBufMes ( iNumBlocks );
     }
-    int GetSockBufSize() { return Channel.GetSockBufSize (); }
+    int GetSockBufSize() { return Channel.GetSockBufSize(); }
 
 
     void SetNetwBufSizeFactIn ( const int iNewNetNetwBlSiFactIn )
@@ -126,9 +126,9 @@ public:
     std::string         strName;
 
 protected:
-    virtual void run ();
+    virtual void run();
 
-    /* only one channel is needed for client application */
+    // only one channel is needed for client application
     CChannel            Channel;
 
     CSocket             Socket;
@@ -158,13 +158,13 @@ protected:
 
     CVector<short>      vecsNetwork;
 
-    /* resample objects */
-    CAudioResample      ResampleObjDownL; /* left channel */
-    CAudioResample      ResampleObjDownR; /* right channel */
-    CAudioResample      ResampleObjUpL; /* left channel */
-    CAudioResample      ResampleObjUpR; /* right channel */
+    // resample objects
+    CAudioResample      ResampleObjDownL; // left channel
+    CAudioResample      ResampleObjDownR; // right channel
+    CAudioResample      ResampleObjUpL; // left channel
+    CAudioResample      ResampleObjUpR; // right channel
 
-    /* debugging, evaluating */
+    // debugging, evaluating
     CMovingAv<double>   RespTimeMoAvBuf;
     QTime               TimeLastBlock;
 
@@ -179,4 +179,4 @@ signals:
 };
 
 
-#endif /* !defined(CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_) */
+#endif /* !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

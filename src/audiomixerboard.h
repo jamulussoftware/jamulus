@@ -25,7 +25,7 @@
  *
 \******************************************************************************/
 
-#if !defined(MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_)
+#if !defined ( MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_ )
 #define MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_
 
 #include <qframe.h>

@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_)
+#if !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ )
 #define PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_
 
 #include <qglobal.h>
@@ -48,7 +48,7 @@
 #define PROTMESSID_CHANNEL_NAME             18 // set channel name for fader tag
 
 // lengths of message as defined in protocol.cpp file
-#define MESS_HEADER_LENGTH_BYTE         7 /* TAG (2), ID (2), cnt (1), length (2) */
+#define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
 #define MESS_LEN_WITHOUT_DATA_BYTE      ( MESS_HEADER_LENGTH_BYTE + 2 /* CRC (2) */ )
 
 // time out for message re-send if no acknowledgement was received
@@ -78,7 +78,7 @@ public:
     bool ParseMessage ( const CVector<unsigned char>& vecbyData,
                         const int iNumBytes );
 
-    void DeleteSendMessQueue ();
+    void DeleteSendMessQueue();
 
 protected:
     class CSendMessage
@@ -95,7 +95,7 @@ protected:
             vecMessage.Init ( NewSendMess.vecMessage.Size() );
             vecMessage = NewSendMess.vecMessage;
 
-            iID = NewSendMess.iID;
+            iID  = NewSendMess.iID;
             iCnt = NewSendMess.iCnt;
             return *this; 
         }
@@ -168,4 +168,4 @@ signals:
 };
 
 
-#endif /* !defined(PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_) */
+#endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

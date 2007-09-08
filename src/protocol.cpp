@@ -729,7 +729,7 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>& vecOut,
     const int iTotLenByte = MESS_LEN_WITHOUT_DATA_BYTE + iDataLenByte;
 
     // init message vector
-    vecOut.Init( iTotLenByte );
+    vecOut.Init ( iTotLenByte );
 
     // encode header -----
     unsigned int iCurPos = 0; // init position pointer
@@ -769,7 +769,7 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>& vecOut,
     }
 
     PutValOnStream ( vecOut, iCurPos,
-        static_cast<uint32_t> ( CRCObj.GetCRC () ), 2 );
+        static_cast<uint32_t> ( CRCObj.GetCRC() ), 2 );
 }
 
 void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,

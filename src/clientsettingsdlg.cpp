@@ -35,133 +35,133 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     /* init slider controls --- */
     /* sound buffer in */
-    SliderSndBufIn->setRange(2, AUD_SLIDER_LENGTH);
+    SliderSndBufIn->setRange ( 2, AUD_SLIDER_LENGTH );
     const int iCurNumInBuf = pClient->GetSndInterface()->GetInNumBuf();
-    SliderSndBufIn->setValue(iCurNumInBuf);
-    TextSndBufIn->setText("In: " + QString().setNum(iCurNumInBuf));
+    SliderSndBufIn->setValue ( iCurNumInBuf );
+    TextSndBufIn->setText ( "In: " + QString().setNum ( iCurNumInBuf ) );
 
     /* sound buffer out */
-    SliderSndBufOut->setRange(2, AUD_SLIDER_LENGTH);
+    SliderSndBufOut->setRange ( 2, AUD_SLIDER_LENGTH );
     const int iCurNumOutBuf = pClient->GetSndInterface()->GetOutNumBuf();
-    SliderSndBufOut->setValue(iCurNumOutBuf);
-    TextSndBufOut->setText("Out: " + QString().setNum(iCurNumOutBuf));
+    SliderSndBufOut->setValue ( iCurNumOutBuf );
+    TextSndBufOut->setText ( "Out: " + QString().setNum ( iCurNumOutBuf ) );
 
     /* network buffer */
-    SliderNetBuf->setRange(0, MAX_NET_BUF_SIZE_NUM_BL);
+    SliderNetBuf->setRange ( 0, MAX_NET_BUF_SIZE_NUM_BL );
     const int iCurNumNetBuf = pClient->GetSockBufSize();
-    SliderNetBuf->setValue(iCurNumNetBuf);
-    TextNetBuf->setText("Size: " + QString().setNum(iCurNumNetBuf));
+    SliderNetBuf->setValue ( iCurNumNetBuf );
+    TextNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
 
     /* network buffer size factor in */
-    SliderNetBufSiFactIn->setRange(1, MAX_NET_BLOCK_SIZE_FACTOR);
+    SliderNetBufSiFactIn->setRange ( 1, MAX_NET_BLOCK_SIZE_FACTOR );
     const int iCurNetBufSiFactIn = pClient->GetNetwBufSizeFactIn();
-    SliderNetBufSiFactIn->setValue(iCurNetBufSiFactIn);
-    TextNetBufSiFactIn->setText("In:\n" + QString().setNum(
-        double(iCurNetBufSiFactIn * MIN_BLOCK_DURATION_MS), 'f', 2) +
-        " ms");
+    SliderNetBufSiFactIn->setValue ( iCurNetBufSiFactIn );
+    TextNetBufSiFactIn->setText ( "In:\n" + QString().setNum (
+        double ( iCurNetBufSiFactIn * MIN_BLOCK_DURATION_MS ), 'f', 2 ) +
+        " ms" );
 
     /* network buffer size factor out */
-    SliderNetBufSiFactOut->setRange(1, MAX_NET_BLOCK_SIZE_FACTOR);
+    SliderNetBufSiFactOut->setRange ( 1, MAX_NET_BLOCK_SIZE_FACTOR );
     const int iCurNetBufSiFactOut = pClient->GetNetwBufSizeFactOut();
-    SliderNetBufSiFactOut->setValue(iCurNetBufSiFactOut);
-    TextNetBufSiFactOut->setText("Out:\n" + QString().setNum(
-        double(iCurNetBufSiFactOut * MIN_BLOCK_DURATION_MS), 'f', 2) +
-        " ms");
+    SliderNetBufSiFactOut->setValue ( iCurNetBufSiFactOut );
+    TextNetBufSiFactOut->setText ( "Out:\n" + QString().setNum (
+        double ( iCurNetBufSiFactOut * MIN_BLOCK_DURATION_MS), 'f', 2 ) +
+        " ms" );
 
 
     /* connections ---------------------------------------------------------- */
     /* timers */
-    QObject::connect(&TimerStatus, SIGNAL(timeout()),
-        this, SLOT(OnTimerStatus()));
+    QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerStatus() ) );
 
     /* sliders */
-    QObject::connect(SliderSndBufIn, SIGNAL(valueChanged(int)),
-        this, SLOT(OnSliderSndBufInChange(int)));
-    QObject::connect(SliderSndBufOut, SIGNAL(valueChanged(int)),
-        this, SLOT(OnSliderSndBufOutChange(int)));
+    QObject::connect ( SliderSndBufIn, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnSliderSndBufInChange ( int ) ) );
+    QObject::connect ( SliderSndBufOut, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnSliderSndBufOutChange ( int ) ) );
 
-    QObject::connect(SliderNetBuf, SIGNAL(valueChanged(int)),
-        this, SLOT(OnSliderNetBuf(int)));
+    QObject::connect ( SliderNetBuf, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnSliderNetBuf ( int ) ) );
 
-    QObject::connect(SliderNetBufSiFactIn, SIGNAL(valueChanged(int)),
-        this, SLOT(OnSliderNetBufSiFactIn(int)));
-    QObject::connect(SliderNetBufSiFactOut, SIGNAL(valueChanged(int)),
-        this, SLOT(OnSliderNetBufSiFactOut(int)));
+    QObject::connect ( SliderNetBufSiFactIn, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnSliderNetBufSiFactIn ( int ) ) );
+    QObject::connect ( SliderNetBufSiFactOut, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnSliderNetBufSiFactOut ( int ) ) );
 
 
     /* timers --------------------------------------------------------------- */
     /* start timer for status bar */
-    TimerStatus.start(DISPLAY_UPDATE_TIME);
+    TimerStatus.start ( DISPLAY_UPDATE_TIME );
 }
 
-void CClientSettingsDlg::OnSliderSndBufInChange(int value)
+void CClientSettingsDlg::OnSliderSndBufInChange ( int value )
 {
-    pClient->GetSndInterface()->SetInNumBuf(value);
-    TextSndBufIn->setText("In: " + QString().setNum(value));
+    pClient->GetSndInterface()->SetInNumBuf ( value );
+    TextSndBufIn->setText ( "In: " + QString().setNum ( value ) );
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::OnSliderSndBufOutChange(int value)
+void CClientSettingsDlg::OnSliderSndBufOutChange ( int value )
 {
-    pClient->GetSndInterface()->SetOutNumBuf(value);
-    TextSndBufOut->setText("Out: " + QString().setNum(value));
+    pClient->GetSndInterface()->SetOutNumBuf ( value );
+    TextSndBufOut->setText ( "Out: " + QString().setNum ( value ) );
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::OnSliderNetBuf(int value)
+void CClientSettingsDlg::OnSliderNetBuf ( int value )
 {
     pClient->SetSockBufSize ( value );
-    TextNetBuf->setText("Size: " + QString().setNum(value));
+    TextNetBuf->setText ( "Size: " + QString().setNum ( value ) );
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::OnSliderNetBufSiFactIn(int value)
+void CClientSettingsDlg::OnSliderNetBufSiFactIn ( int value )
 {
     pClient->SetNetwBufSizeFactIn ( value );
-    TextNetBufSiFactIn->setText("In:\n" + QString().setNum(
-        double(value * MIN_BLOCK_DURATION_MS), 'f', 2) +
-        " ms");
+    TextNetBufSiFactIn->setText ( "In:\n" + QString().setNum (
+        double ( value * MIN_BLOCK_DURATION_MS ), 'f', 2 ) +
+        " ms" );
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::OnSliderNetBufSiFactOut(int value)
+void CClientSettingsDlg::OnSliderNetBufSiFactOut ( int value )
 {
     pClient->SetNetwBufSizeFactOut ( value );
-    TextNetBufSiFactOut->setText("Out:\n" + QString().setNum(
-        double(value * MIN_BLOCK_DURATION_MS), 'f', 2) +
-        " ms");
+    TextNetBufSiFactOut->setText ( "Out:\n" + QString().setNum (
+        double ( value * MIN_BLOCK_DURATION_MS ), 'f', 2 ) +
+        " ms" );
     UpdateDisplay();
 }
 
 void CClientSettingsDlg::UpdateDisplay()
 {
     /* response time */
-    TextLabelStdDevTimer->setText(QString().
-        setNum(pClient->GetTimingStdDev(), 'f', 2) + " ms");
+    TextLabelStdDevTimer->setText ( QString().
+        setNum ( pClient->GetTimingStdDev(), 'f', 2 ) + " ms" );
 }
 
 void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
 {
-    switch(iMessType)
+    switch ( iMessType )
     {
     case MS_SOUND_IN:
-        CLEDSoundIn->SetLight(iStatus);
+        CLEDSoundIn->SetLight ( iStatus );
         break;
 
     case MS_SOUND_OUT:
-        CLEDSoundOut->SetLight(iStatus);
+        CLEDSoundOut->SetLight ( iStatus );
         break;
 
     case MS_JIT_BUF_PUT:
-        CLEDNetwPut->SetLight(iStatus);
+        CLEDNetwPut->SetLight ( iStatus );
         break;
 
     case MS_JIT_BUF_GET:
-        CLEDNetwGet->SetLight(iStatus);
+        CLEDNetwGet->SetLight ( iStatus );
         break;
 
     case MS_PROTOCOL:
-        CLEDProtocolStatus->SetLight(iStatus);
+        CLEDProtocolStatus->SetLight ( iStatus );
 
     case MS_RESET_ALL:
         CLEDSoundIn->Reset();

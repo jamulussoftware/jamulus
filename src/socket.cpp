@@ -26,7 +26,7 @@
 
 
 /* Implementation *************************************************************/
-void CSocket::Init ()
+void CSocket::Init()
 {
     /* allocate memory for network receive and send buffer in samples */
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
@@ -63,13 +63,13 @@ void CSocket::Init ()
 
     /* connect the "activated" signal */
     QObject::connect ( pSocketNotivRead, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnDataReceived () ) );
+        this, SLOT ( OnDataReceived() ) );
 }
 
 void CSocket::SendPacket ( const CVector<unsigned char>& vecbySendBuf,
                            const CHostAddress& HostAddr )
 {
-    const int iVecSizeOut = vecbySendBuf.Size ();
+    const int iVecSizeOut = vecbySendBuf.Size();
 
     if ( iVecSizeOut != 0 )
     {
@@ -80,7 +80,7 @@ void CSocket::SendPacket ( const CVector<unsigned char>& vecbySendBuf,
     }
 }
 
-void CSocket::OnDataReceived ()
+void CSocket::OnDataReceived()
 {
     /* read block from network interface */
     const int iNumBytesRead = SocketDevice.readBlock( (char*) &vecbyRecBuf[0],
@@ -93,14 +93,14 @@ void CSocket::OnDataReceived ()
     }
 
     /* get host address of client */
-    CHostAddress RecHostAddr ( SocketDevice.peerAddress (),
-        SocketDevice.peerPort () );
+    CHostAddress RecHostAddr ( SocketDevice.peerAddress(),
+        SocketDevice.peerPort() );
 
     if ( bIsClient )
     {
         /* client */
         /* check if packet comes from the server we want to connect */
-        if ( ! ( pChannel->GetAddress () == RecHostAddr ) )
+        if ( ! ( pChannel->GetAddress() == RecHostAddr ) )
         {
             return;
         }

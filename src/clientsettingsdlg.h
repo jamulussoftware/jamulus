@@ -44,8 +44,8 @@
 
 
 /* Definitions ****************************************************************/
-/* update time for GUI controls */
-#define DISPLAY_UPDATE_TIME         1000 /* ms */
+// update time for GUI controls
+#define DISPLAY_UPDATE_TIME         1000 // ms
 
 
 /* Classes ********************************************************************/

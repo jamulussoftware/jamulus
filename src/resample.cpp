@@ -195,16 +195,16 @@ void CAudioResample::Init ( const int iNewInputBlockSize,
         switch ( iFrom / iTo )
         {
         case 2: // 48 kHz to 24 kHz
-            pFiltTaps        = fResTaps2;
-            iNumTaps         = INTERP_I_2 * NUM_TAPS_PER_PHASE2;
-            iI               = DECIM_D_2;
+            pFiltTaps    = fResTaps2;
+            iNumTaps     = INTERP_I_2 * NUM_TAPS_PER_PHASE2;
+            iI           = DECIM_D_2;
             break;
 
 /* not yet supported
 case ( 2 / 3 ): // 48 kHz to 32 kHz
-    pFiltTaps        = fResTaps3_2;
-    iNumTaps         = INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2;
-    iI               = DECIM_D_3_2;
+    pFiltTaps    = fResTaps3_2;
+    iNumTaps     = INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2;
+    iI           = DECIM_D_3_2;
     break;
 */
 
@@ -223,16 +223,16 @@ case ( 2 / 3 ): // 48 kHz to 32 kHz
         switch ( iTo / iFrom )
         {
         case 2: // 24 kHz to 48 kHz
-            pFiltTaps        = fResTaps2;
-            iNumTaps         = DECIM_D_2 * NUM_TAPS_PER_PHASE2;
-            iI               = INTERP_I_2;
+            pFiltTaps    = fResTaps2;
+            iNumTaps     = DECIM_D_2 * NUM_TAPS_PER_PHASE2;
+            iI           = INTERP_I_2;
             break;
 
 /* not yet supported
 case 1.5: // 32 kHz to 48 kHz
-    pFiltTaps        = fResTaps3_2;
-    iNumTaps         = DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2;
-    iI               = INTERP_I_3_2;
+    pFiltTaps    = fResTaps3_2;
+    iNumTaps     = DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2;
+    iI           = INTERP_I_3_2;
     break;
 */
 

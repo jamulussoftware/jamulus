@@ -67,36 +67,36 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent,
     /* insert items in reverse order because in Windows all of them are
        always visible -> put first item on the top */
     vecpListViewItems.Init(MAX_NUM_CHANNELS);
-    for (int i = MAX_NUM_CHANNELS - 1; i >= 0; i--)
+    for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
     {
-        vecpListViewItems[i] = new CServerListViewItem(ListViewClients);
+        vecpListViewItems[i] = new CServerListViewItem ( ListViewClients );
 #ifndef _WIN32
-        vecpListViewItems[i]->setVisible(false);
+        vecpListViewItems[i]->setVisible ( false );
 #endif
     }
 
     /* Init timing jitter text label */
-    TextLabelResponseTime->setText("");
+    TextLabelResponseTime->setText ( "" );
 
 
     /* Main menu bar -------------------------------------------------------- */
-    pMenu = new QMenuBar(this);
-    CHECK_PTR(pMenu);
-    pMenu->insertItem(tr("&?"), new CLlconHelpMenu(this));
-    pMenu->setSeparator(QMenuBar::InWindowsStyle);
+    pMenu = new QMenuBar ( this );
+    CHECK_PTR ( pMenu );
+    pMenu->insertItem ( tr ( "&?" ), new CLlconHelpMenu ( this ) );
+    pMenu->setSeparator ( QMenuBar::InWindowsStyle );
 
     /* Now tell the layout about the menu */
-    CLlconServerDlgBaseLayout->setMenuBar(pMenu);
+    CLlconServerDlgBaseLayout->setMenuBar ( pMenu );
 
 
     /* connections ---------------------------------------------------------- */
     /* timers */
-    QObject::connect(&Timer, SIGNAL(timeout()), this, SLOT(OnTimer()));
+    QObject::connect ( &Timer, SIGNAL ( timeout() ), this, SLOT ( OnTimer() ) );
 
 
     /* timers --------------------------------------------------------------- */
     /* start timer for GUI controls */
-    Timer.start(GUI_CONTRL_UPDATE_TIME);
+    Timer.start ( GUI_CONTRL_UPDATE_TIME );
 }
 
 void CLlconServerDlg::OnTimer()

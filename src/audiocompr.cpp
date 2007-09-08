@@ -52,16 +52,16 @@ int CAudioCompression::Init ( const int iNewAudioLen,
 
 CVector<unsigned char> CAudioCompression::Encode ( const CVector<short>& vecsAudio )
 {
-    if (eAudComprType == CT_NONE)
+    if ( eAudComprType == CT_NONE )
     {
         /* no compression, simply ship pure samples */
-        CVector<unsigned char> vecbyOut(iCodeSize);
+        CVector<unsigned char> vecbyOut ( iCodeSize );
         const int iAudSize = iCodeSize / 2;
 
-        for (int i = 0; i < iAudSize; i++)
+        for ( int i = 0; i < iAudSize; i++ )
         {
             vecbyOut[2 * i] = vecsAudio[i] & 0xFF;
-            vecbyOut[2 * i + 1] = (vecsAudio[i] >> 8) & 0xFF;
+            vecbyOut[2 * i + 1] = ( vecsAudio[i] >> 8 ) & 0xFF;
         }
         return vecbyOut;
     }
@@ -78,19 +78,21 @@ CVector<unsigned char> CAudioCompression::Encode ( const CVector<short>& vecsAud
     }
 }
 
-CVector<short> CAudioCompression::Decode(const CVector<unsigned char>& vecbyAdpcm)
+CVector<short> CAudioCompression::Decode ( const CVector<unsigned char>& vecbyAdpcm )
 {
-    if (eAudComprType == CT_NONE)
+    if ( eAudComprType == CT_NONE )
     {
         /* no compression, reassemble pure samples */
         const int iAudSize = iCodeSize / 2;
-        CVector<short> vecsOut(iAudSize);
+        CVector<short> vecsOut ( iAudSize );
 
-        for (int i = 0; i < iAudSize; i++)
+        for ( int i = 0; i < iAudSize; i++ )
         {
-            int current = vecbyAdpcm[2 * i] | (vecbyAdpcm[2 * i + 1] << 8);
-            if (current & 0x8000)
+            int current = vecbyAdpcm[2 * i] | ( vecbyAdpcm[2 * i + 1] << 8 );
+            if ( current & 0x8000 )
+			{
                 current -= 0x10000;
+			}
 
             vecsOut[i] = (short) current;
         }
@@ -111,38 +113,38 @@ CVector<short> CAudioCompression::Decode(const CVector<unsigned char>& vecbyAdpc
 
 
 /* IMA-ADPCM implementation ------------------------------------------------- */
-int CImaAdpcm::Init(const int iNewAudioLen)
+int CImaAdpcm::Init ( const int iNewAudioLen )
 {
     /* set lengths for audio and compressed data */
     iAudSize = iNewAudioLen;
-    iAdpcmSize = 4 /* bytes header */ + (int) ceil(
-        (double) (iAudSize - 2 /* first two samples are in header */) / 2);
+    iAdpcmSize = 4 /* bytes header */ + (int) ceil (
+        (double) ( iAudSize - 2 /* first two samples are in header */ ) / 2 );
 
     iStepindEnc = 0;
 
     return iAdpcmSize;
 }
 
-CVector<unsigned char> CImaAdpcm::Encode(const CVector<short>& vecsAudio)
+CVector<unsigned char> CImaAdpcm::Encode ( const CVector<short>& vecsAudio )
 {
     int                     i;
     CVector<unsigned char>  vecbyAdpcm;
     CVector<unsigned char>  vecbyAdpcmTemp;
 
     /* init size */
-    vecbyAdpcm.Init(iAdpcmSize);
-    vecbyAdpcmTemp.Init(iAudSize);
+    vecbyAdpcm.Init ( iAdpcmSize );
+    vecbyAdpcmTemp.Init ( iAudSize );
 
     /* encode the block header ----------------------------------------------- */
     vecbyAdpcm[0] = vecsAudio[0] & 0xFF;
-    vecbyAdpcm[1] = (vecsAudio[0] >> 8) & 0xFF;
+    vecbyAdpcm[1] = ( vecsAudio[0] >> 8 ) & 0xFF;
     vecbyAdpcm[2] = iStepindEnc;
 
     int iPrevAudio = vecsAudio[0];
 
 
     /* encode the samples as 4 bit ------------------------------------------- */
-    for (i = 1; i < iAudSize; i++)
+    for ( i = 1; i < iAudSize; i++ )
     {
         /* init diff and step */
         int diff = vecsAudio[i] - iPrevAudio;
@@ -151,15 +153,15 @@ CVector<unsigned char> CImaAdpcm::Encode(const CVector<short>& vecsAudio)
         short bytecode = 0;
 
         int vpdiff = step >> 3;
-        if (diff < 0)
+        if ( diff < 0 )
         {
             bytecode = 8;
             diff = -diff;
         }
         short mask = 4;
-        while (mask)
+        while ( mask )
         {
-            if (diff >= step)
+            if ( diff >= step )
             {
                 bytecode |= mask;
                 diff -= step;
@@ -169,17 +171,21 @@ CVector<unsigned char> CImaAdpcm::Encode(const CVector<short>& vecsAudio)
             mask >>= 1;
         }
 
-        if (bytecode & 8)
+        if ( bytecode & 8 )
+		{
             iPrevAudio -= vpdiff;
+		}
         else
+		{
             iPrevAudio += vpdiff;
+		}
 
         /* adjust step size */
         iStepindEnc += ima_indx_adjust[bytecode];
 
         /* check that values do not exceed the bounds */
-        iPrevAudio = CheckBounds(iPrevAudio, _MINSHORT, _MAXSHORT);
-        iStepindEnc = CheckBounds(iStepindEnc, 0, IMA_STEP_SIZE_TAB_LEN - 1);
+        iPrevAudio = CheckBounds ( iPrevAudio, _MINSHORT, _MAXSHORT );
+        iStepindEnc = CheckBounds ( iStepindEnc, 0, IMA_STEP_SIZE_TAB_LEN - 1 );
 
         /* use the input buffer as an intermediate result buffer */
         vecbyAdpcmTemp[i] = bytecode;
@@ -190,30 +196,32 @@ CVector<unsigned char> CImaAdpcm::Encode(const CVector<short>& vecsAudio)
     /* The first encoded audio sample is in header */
     vecbyAdpcm[3] = vecbyAdpcmTemp[1] & 0x0F;
 
-    for (i = 4; i < iAdpcmSize; i++)
+    for ( i = 4; i < iAdpcmSize; i++ )
     {
         vecbyAdpcm[i] = vecbyAdpcmTemp[2 * i - 6] & 0x0F;
-        vecbyAdpcm[i] |= (vecbyAdpcmTemp[2 * i - 5] << 4) & 0xF0;
+        vecbyAdpcm[i] |= ( vecbyAdpcmTemp[2 * i - 5] << 4 ) & 0xF0;
     }
 
     return vecbyAdpcm;
 }
 
-CVector<short> CImaAdpcm::Decode(const CVector<unsigned char>& vecbyAdpcm)
+CVector<short> CImaAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
 {
     int             i;
     CVector<short>  vecsAudio;
 
-    vecsAudio.Init(iAudSize);
+    vecsAudio.Init ( iAudSize );
 
 
     /* read and check the block header --------------------------------------- */
-    int current = vecbyAdpcm[0] | (vecbyAdpcm[1] << 8);
-    if (current & 0x8000)
+    int current = vecbyAdpcm[0] | ( vecbyAdpcm[1] << 8 );
+    if ( current & 0x8000 )
+	{
         current -= 0x10000;
+	}
 
     /* get and bound step index */
-    int iStepindDec = CheckBounds(vecbyAdpcm[2], 0, IMA_STEP_SIZE_TAB_LEN - 1);
+    int iStepindDec = CheckBounds ( vecbyAdpcm[2], 0, IMA_STEP_SIZE_TAB_LEN - 1 );
 
     /* set first sample which was delivered in the header */
     vecsAudio[0] = current;
@@ -225,16 +233,16 @@ CVector<short> CImaAdpcm::Decode(const CVector<unsigned char>& vecbyAdpcm)
     /* The first encoded audio sample is in header */
     vecsAudio[1] = vecbyAdpcm[3] & 0x0F;
 
-    for (i = 4; i < iAdpcmSize; i++)
+    for ( i = 4; i < iAdpcmSize; i++ )
     {
         const short bytecode = vecbyAdpcm[i];
         vecsAudio[2 * i - 6] = bytecode & 0x0F;
-        vecsAudio[2 * i - 5] = (bytecode >> 4) & 0x0F;
+        vecsAudio[2 * i - 5] = ( bytecode >> 4 ) & 0x0F;
     }
 
 
     /* decode the encoded 4 bit samples -------------------------------------- */
-    for (i = 1; i < iAudSize; i++)
+    for ( i = 1; i < iAudSize; i++ )
     {
         const short bytecode = vecsAudio[i] & 0xF ;
 
@@ -242,21 +250,29 @@ CVector<short> CImaAdpcm::Decode(const CVector<unsigned char>& vecbyAdpcm)
         int current = vecsAudio[i - 1];
 
         int diff = step >> 3;
-        if (bytecode & 1)
+        if ( bytecode & 1 )
+		{
             diff += step >> 2;
-        if (bytecode & 2)
+		}
+        if ( bytecode & 2 )
+		{
             diff += step >> 1;
-        if (bytecode & 4)
+		}
+        if ( bytecode & 4 )
+		{
             diff += step;
-        if (bytecode & 8)
+		}
+        if ( bytecode & 8 )
+		{
             diff = -diff;
+		}
 
         current += diff;
         iStepindDec += ima_indx_adjust[bytecode];
 
         /* check that values do not exceed the bounds */
-        current = CheckBounds(current, _MINSHORT, _MAXSHORT);
-        iStepindDec = CheckBounds(iStepindDec, 0, IMA_STEP_SIZE_TAB_LEN - 1);
+        current = CheckBounds ( current, _MINSHORT, _MAXSHORT );
+        iStepindDec = CheckBounds ( iStepindDec, 0, IMA_STEP_SIZE_TAB_LEN - 1 );
 
         vecsAudio[i] = current;
     }

@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_)
+#if !defined ( SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_ )
 #define SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_
 
 #include <vector>
@@ -37,7 +37,7 @@
 
 
 /* Definitions ****************************************************************/
-/* maximum block size for network input buffer. Consider two bytes per sample */
+// maximum block size for network input buffer. Consider two bytes per sample
 #define MAX_SIZE_BYTES_NETW_BUF         ( MAX_NET_BLOCK_SIZE_FACTOR * MIN_BLOCK_SIZE_SAMPLES * 2 )
 
 
@@ -67,8 +67,8 @@ protected:
     CVector<unsigned char>  vecbyRecBuf;
     CHostAddress            RecHostAddr;
 
-    CChannel*               pChannel; /* for client */
-    CChannelSet*            pChannelSet; /* for server */
+    CChannel*               pChannel; // for client
+    CChannelSet*            pChannelSet; // for server
 
     QObject*                pServer;
     bool                    bIsClient;
@@ -78,4 +78,4 @@ public slots:
 };
 
 
-#endif /* !defined(SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_) */
+#endif /* !defined ( SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

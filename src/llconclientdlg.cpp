@@ -27,38 +27,38 @@
 
 /* Implementation *************************************************************/
 CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
-    const char* name, bool modal, WFlags f) : pClient ( pNCliP ),
+    const char* name, bool modal, WFlags f ) : pClient ( pNCliP ),
     CLlconClientDlgBase ( parent, name, modal, f ),
     ClientSettingsDlg ( pNCliP, 0, 0, FALSE, Qt::WStyle_MinMax )
 {
     /* add help text to controls */
-    QString strInpLevH = tr("<b>Input level meter:</b> Shows the level of the "
+    QString strInpLevH = tr ( "<b>Input level meter:</b> Shows the level of the "
         "input audio signal of the sound card. The level is in dB. Overload "
-        "should be avoided.");
-    QWhatsThis::add(TextLabelInputLevel, strInpLevH);
-    QWhatsThis::add(ProgressBarInputLevelL, strInpLevH);
-    QWhatsThis::add(ProgressBarInputLevelR, strInpLevH);
+        "should be avoided." );
+    QWhatsThis::add ( TextLabelInputLevel, strInpLevH );
+    QWhatsThis::add ( ProgressBarInputLevelL, strInpLevH );
+    QWhatsThis::add ( ProgressBarInputLevelR, strInpLevH );
 
-    QWhatsThis::add(PushButtonConnect, tr("<b>Connect / Disconnect Button:"
+    QWhatsThis::add(PushButtonConnect, tr ( "<b>Connect / Disconnect Button:"
         "</b> Push this button to connect the server. A valid IP address has "
         "to be specified before. If the client is connected, pressing this "
-        "button will disconnect the connection."));
+        "button will disconnect the connection." ) );
 
-    QWhatsThis::add(TextLabelStatus, tr("<b>Status Bar:</b> In the status bar "
+    QWhatsThis::add(TextLabelStatus, tr ( "<b>Status Bar:</b> In the status bar "
         "different messages are displayed. E.g., if an error occurred or the "
-        "status of the connection is shown."));
+        "status of the connection is shown." ) );
 
-    QString strServAddrH = tr("<b>Server Address:</b> In this edit control, "
+    QString strServAddrH = tr ( "<b>Server Address:</b> In this edit control, "
         "the IP address of the server can be set. If an invalid address was "
-        "chosen, an error message is shown in the status bar.");
-    QWhatsThis::add(TextLabelServerAddr, strServAddrH);
-    QWhatsThis::add(LineEditServerAddr, strServAddrH);
+        "chosen, an error message is shown in the status bar." );
+    QWhatsThis::add ( TextLabelServerAddr, strServAddrH );
+    QWhatsThis::add ( LineEditServerAddr, strServAddrH );
 
-    QString strFaderTag = tr("<b>Fader Tag:</b> In this edit control, "
+    QString strFaderTag = tr ( "<b>Fader Tag:</b> In this edit control, "
         "the tag string of your fader can be set. This tag will appear "
         "at your fader on the mixer board when connected to the server.");
-    QWhatsThis::add(TextLabelServerTag, strFaderTag);
-    QWhatsThis::add(LineEditFaderTag, strFaderTag);
+    QWhatsThis::add ( TextLabelServerTag, strFaderTag );
+    QWhatsThis::add ( LineEditFaderTag, strFaderTag );
 
     QString strAudFader = tr ( "<b>Audio Fader:</b> With the audio fader "
         "control the level of left and right audio input channels can "
@@ -160,26 +160,26 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
     // connections -------------------------------------------------------------
     // push-buttons
-    QObject::connect(PushButtonConnect, SIGNAL(clicked()),
-        this, SLOT(OnConnectDisconBut()));
+    QObject::connect ( PushButtonConnect, SIGNAL ( clicked() ),
+        this, SLOT ( OnConnectDisconBut() ) );
 
     // timers
-    QObject::connect(&TimerSigMet, SIGNAL(timeout()),
-        this, SLOT(OnTimerSigMet()));
-    QObject::connect(&TimerStatus, SIGNAL(timeout()),
-        this, SLOT(OnTimerStatus()));
+    QObject::connect ( &TimerSigMet, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerSigMet() ) );
+    QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerStatus() ) );
 
     // sliders
-    QObject::connect(SliderAudInFader, SIGNAL(valueChanged(int)),
-        this, SLOT(OnSliderAudInFader(int)));
-    QObject::connect(SliderAudReverb, SIGNAL(valueChanged(int)),
-        this, SLOT(OnSliderAudReverb(int)));
+    QObject::connect ( SliderAudInFader, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnSliderAudInFader ( int ) ) );
+    QObject::connect ( SliderAudReverb, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnSliderAudReverb ( int ) ) );
 
     // radio buttons
-    QObject::connect(RadioButtonRevSelL, SIGNAL(clicked()),
-        this, SLOT(OnRevSelL()));
-    QObject::connect(RadioButtonRevSelR, SIGNAL(clicked()),
-        this, SLOT(OnRevSelR()));
+    QObject::connect ( RadioButtonRevSelL, SIGNAL ( clicked() ),
+        this, SLOT ( OnRevSelL() ) );
+    QObject::connect ( RadioButtonRevSelR, SIGNAL ( clicked() ),
+        this, SLOT ( OnRevSelR() ) );
 
     // line edits
     QObject::connect ( LineEditFaderTag, SIGNAL ( textChanged ( const QString& ) ),
@@ -195,13 +195,13 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
     // timers ------------------------------------------------------------------
     // start timer for status bar
-    TimerStatus.start(STATUSBAR_UPDATE_TIME);
+    TimerStatus.start ( STATUSBAR_UPDATE_TIME );
 }
 
 CLlconClientDlg::~CLlconClientDlg()
 {
     /* if connected, terminate connection */
-    if (pClient->IsRunning())
+    if ( pClient->IsRunning() )
     {
         pClient->Stop();
     }
@@ -335,8 +335,8 @@ void CLlconClientDlg::customEvent ( QCustomEvent* Event )
 {
     if ( Event->type() == QEvent::User + 11 )
     {
-        const int iMessType = ( (CLlconEvent*) Event ) ->iMessType;
-        const int iStatus = ( (CLlconEvent*) Event ) ->iStatus;
+        const int iMessType = ( (CLlconEvent*) Event )->iMessType;
+        const int iStatus = ( (CLlconEvent*) Event )->iStatus;
 
         switch ( iMessType )
         {

@@ -37,32 +37,32 @@ CMultiColorLEDbase::CMultiColorLEDbase()
     const int iYSize = 13;
 
     /* Create bitmaps */
-    BitmCubeGreen.resize(iXSize, iYSize);
-    BitmCubeGreen.fill(QColor(0, 255, 0));
-    BitmCubeRed.resize(iXSize, iYSize);
-    BitmCubeRed.fill(QColor(255, 0, 0));
-    BitmCubeGrey.resize(iXSize, iYSize);
-    BitmCubeGrey.fill(QColor(192, 192, 192));
-    BitmCubeYellow.resize(iXSize, iYSize);
-    BitmCubeYellow.fill(QColor(255, 255, 0));
+    BitmCubeGreen.resize ( iXSize, iYSize );
+    BitmCubeGreen.fill ( QColor ( 0, 255, 0 ) );
+    BitmCubeRed.resize ( iXSize, iYSize );
+    BitmCubeRed.fill ( QColor ( 255, 0, 0 ) );
+    BitmCubeGrey.resize ( iXSize, iYSize );
+    BitmCubeGrey.fill ( QColor ( 192, 192, 192 ) );
+    BitmCubeYellow.resize ( iXSize, iYSize );
+    BitmCubeYellow.fill ( QColor ( 255, 255, 0 ) );
 
     /* Init color flags */
     Reset();
 
     /* Set init-bitmap */
-    SetPixmap(BitmCubeGrey);
+    SetPixmap ( BitmCubeGrey );
     eColorFlag = RL_GREY;
 
     /* Init update time */
     iUpdateTime = DEFAULT_UPDATE_TIME;
 
     /* Connect timer events to the desired slots */
-    connect(&TimerRedLight, SIGNAL(timeout()), 
-        this, SLOT(OnTimerRedLight()));
-    connect(&TimerGreenLight, SIGNAL(timeout()), 
-        this, SLOT(OnTimerGreenLight()));
-    connect(&TimerYellowLight, SIGNAL(timeout()), 
-        this, SLOT(OnTimerYellowLight()));
+    connect ( &TimerRedLight, SIGNAL ( timeout() ), 
+        this, SLOT ( OnTimerRedLight() ) );
+    connect ( &TimerGreenLight, SIGNAL ( timeout() ), 
+        this, SLOT ( OnTimerGreenLight() ) );
+    connect ( &TimerYellowLight, SIGNAL ( timeout() ), 
+        this, SLOT ( OnTimerYellowLight() ) );
 }
 
 void CMultiColorLEDbase::Reset()
@@ -98,85 +98,89 @@ void CMultiColorLEDbase::UpdateColor()
     /* Red light has highest priority, then comes yellow and at the end, we
        decide to set green light. Allways check the current color of the
        control before setting the color to prevent flicking */
-    if (bFlagRedLi)
+    if ( bFlagRedLi )
     {
-        if (eColorFlag != RL_RED)
+        if ( eColorFlag != RL_RED )
         {
-            SetPixmap(BitmCubeRed);
+            SetPixmap ( BitmCubeRed );
             eColorFlag = RL_RED;
         }
         return;
     }
 
-    if (bFlagYellowLi)
+    if ( bFlagYellowLi )
     {
-        if (eColorFlag != RL_YELLOW)
+        if ( eColorFlag != RL_YELLOW )
         {
-            SetPixmap(BitmCubeYellow);
+            SetPixmap ( BitmCubeYellow );
             eColorFlag = RL_YELLOW;
         }
         return;
     }
 
-    if (bFlagGreenLi)
+    if ( bFlagGreenLi )
     {
-        if (eColorFlag != RL_GREEN)
+        if ( eColorFlag != RL_GREEN )
         {
-            SetPixmap(BitmCubeGreen);
+            SetPixmap ( BitmCubeGreen );
             eColorFlag = RL_GREEN;
         }
         return;
     }
 
     /* If no color is active, set control to grey light */
-    if (eColorFlag != RL_GREY)
+    if ( eColorFlag != RL_GREY )
     {
-        SetPixmap(BitmCubeGrey);
+        SetPixmap ( BitmCubeGrey );
         eColorFlag = RL_GREY;
     }
 }
 
-void CMultiColorLEDbase::SetLight(int iNewStatus)
+void CMultiColorLEDbase::SetLight ( int iNewStatus )
 {
-    switch (iNewStatus)
+    switch ( iNewStatus )
     {
     case MUL_COL_LED_GREEN:
         /* Green light */
         bFlagGreenLi = true;
-        TimerGreenLight.changeInterval(iUpdateTime);
+        TimerGreenLight.changeInterval ( iUpdateTime );
         break;
 
     case MUL_COL_LED_YELLOW:
         /* Yellow light */
         bFlagYellowLi = true;
-        TimerYellowLight.changeInterval(iUpdateTime);
+        TimerYellowLight.changeInterval ( iUpdateTime );
         break;
 
     case MUL_COL_LED_RED:
         /* Red light */
         bFlagRedLi = true;
-        TimerRedLight.changeInterval(iUpdateTime);
+        TimerRedLight.changeInterval ( iUpdateTime );
         break;
     }
 
     UpdateColor();
 }
 
-void CMultiColorLEDbase::SetUpdateTime(int iNUTi)
+void CMultiColorLEDbase::SetUpdateTime ( int iNUTi )
 {
     /* Avoid too short intervals */
-    if (iNUTi < MIN_TIME_FOR_RED_LIGHT)
+    if ( iNUTi < MIN_TIME_FOR_RED_LIGHT )
+	{
         iUpdateTime = MIN_TIME_FOR_RED_LIGHT;
+	}
     else
+	{
         iUpdateTime = iNUTi;
+	}
 }
 
 
-CMultiColorLED::CMultiColorLED(QWidget* parent, const char* name, WFlags f) : 
-    QLabel(parent, name, f)
+CMultiColorLED::CMultiColorLED ( QWidget* parent, const char* name, WFlags f ) : 
+    QLabel ( parent, name, f )
 {
     // set modified style
-    setFrameShape(QFrame::Panel);
-    setFrameShadow(QFrame::Sunken);
-    setIndent(0);
+    setFrameShape ( QFrame::Panel );
+    setFrameShadow ( QFrame::Sunken );
+    setIndent ( 0 );
 }

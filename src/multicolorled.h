@@ -30,7 +30,7 @@
  *
 \******************************************************************************/
 
-#if !defined(AFX_MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_)
+#if !defined ( AFX_MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_ )
 #define AFX_MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_
 
 #include <qlabel.h>
@@ -43,7 +43,7 @@
 /* Definitions ****************************************************************/
 #define DEFAULT_UPDATE_TIME             300
 
-/* The red and yellow light should be on at least this interval */
+// the red and yellow light should be on at least this interval
 #define MIN_TIME_FOR_RED_LIGHT          100
 
 
@@ -56,14 +56,14 @@ public:
     CMultiColorLEDbase();
 
     void Reset();
-    void SetUpdateTime(int iNUTi);
-    void SetLight(int iNewStatus);
+    void SetUpdateTime ( int iNUTi );
+    void SetLight ( int iNewStatus );
 
 protected:
-    enum ELightColor {RL_GREY, RL_RED, RL_GREEN, RL_YELLOW};
-    ELightColor     eColorFlag;
+    enum ELightColor { RL_GREY, RL_RED, RL_GREEN, RL_YELLOW };
+    ELightColor eColorFlag;
 
-    virtual void SetPixmap(QPixmap& NewBitmap) {} /* must be implemented in derived class! */
+    virtual void SetPixmap ( QPixmap& NewBitmap ) {} // must be implemented in derived class!
     void UpdateColor();
 
     QPixmap BitmCubeGreen;
@@ -91,10 +91,10 @@ protected slots:
 class CMultiColorLED : public QLabel, public CMultiColorLEDbase
 {
 public:
-    CMultiColorLED(QWidget* parent, const char* name = 0, WFlags f = 0);
+    CMultiColorLED ( QWidget* parent, const char* name = 0, WFlags f = 0 );
 
 protected:
-    virtual void SetPixmap(QPixmap& NewBitmap) {setPixmap(NewBitmap);}
+    virtual void SetPixmap ( QPixmap& NewBitmap ) { setPixmap ( NewBitmap ); }
 };
 
 

@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(BUFFER_H__3B123453_4344_BB23945IUHF1912__INCLUDED_)
+#if !defined ( BUFFER_H__3B123453_4344_BB23945IUHF1912__INCLUDED_ )
 #define BUFFER_H__3B123453_4344_BB23945IUHF1912__INCLUDED_
 
 #include "util.h"
@@ -30,12 +30,12 @@
 
 
 /* Definitions ****************************************************************/
-/* time for fading effect for masking drop outs */
-#define FADE_IN_OUT_TIME            ((double) 0.3) /* ms */
-#define FADE_IN_OUT_NUM_SAM         ((int) (SAMPLE_RATE * FADE_IN_OUT_TIME) / 1000)
+// time for fading effect for masking drop outs
+#define FADE_IN_OUT_TIME            ( (double) 0.3 ) // ms
+#define FADE_IN_OUT_NUM_SAM         ( (int) ( SAMPLE_RATE * FADE_IN_OUT_TIME ) / 1000 )
 
-/* for extrapolation a shorter time for fading */
-#define FADE_IN_OUT_NUM_SAM_EXTRA   5 /* samples */
+// for extrapolation a shorter time for fading
+#define FADE_IN_OUT_NUM_SAM_EXTRA   5 // samples
 
 
 /* Classes ********************************************************************/
@@ -45,21 +45,21 @@ public:
     CNetBuf() {}
     virtual ~CNetBuf() {}
 
-    void Init(const int iNewBlockSize, const int iNewNumBlocks);
-    int GetSize() {return iMemSize / iBlockSize;}
+    void Init ( const int iNewBlockSize, const int iNewNumBlocks );
+    int GetSize() { return iMemSize / iBlockSize; }
 
-    bool Put(CVector<double>& vecdData);
-    bool Get(CVector<double>& vecdData);
+    bool Put ( CVector<double>& vecdData );
+    bool Get ( CVector<double>& vecdData );
 
 protected:
-    enum EBufState {BS_OK, BS_FULL, BS_EMPTY};
-    enum EClearType {CT_PUT, CT_GET};
-    void Clear(const EClearType eClearType);
+    enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
+    enum EClearType { CT_PUT, CT_GET };
+    void Clear ( const EClearType eClearType );
     int GetAvailSpace() const;
     int GetAvailData() const;
-    void FadeInAudioDataBlock(CVector<double>& vecdData);
-    void FadeOutExtrapolateAudioDataBlock(CVector<double>& vecdData,
-        const double dExPDiff, const double dExPLastV);
+    void FadeInAudioDataBlock ( CVector<double>& vecdData );
+    void FadeOutExtrapolateAudioDataBlock ( CVector<double>& vecdData,
+        const double dExPDiff, const double dExPLastV );
 
     CVector<double> vecdMemory;
     int             iMemSize;
@@ -70,24 +70,24 @@ protected:
     int             iNumSamFading;
     int             iNumSamFadingExtra;
 
-    /* extrapolation parameters */
+    // extrapolation parameters
     double          dExPDiff;
     double          dExPLastV;
 };
 
 
-/* conversion buffer (very simple buffer) */
+// conversion buffer (very simple buffer)
 class CConvBuf
 {
 public:
-    CConvBuf () {}
-    virtual ~CConvBuf () {}
+    CConvBuf() {}
+    virtual ~CConvBuf() {}
 
     void Init ( const int iNewMemSize );
     int GetSize() { return iMemSize; }
 
     bool Put ( const CVector<short>& vecsData );
-    CVector<short> Get ();
+    CVector<short> Get();
 
 protected:
     CVector<short>  vecsMemory;
@@ -97,4 +97,4 @@ protected:
 };
 
 
-#endif /* !defined(BUFFER_H__3B123453_4344_BB23945IUHF1912__INCLUDED_) */
+#endif /* !defined ( BUFFER_H__3B123453_4344_BB23945IUHF1912__INCLUDED_ ) */

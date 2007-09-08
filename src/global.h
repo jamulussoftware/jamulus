@@ -22,7 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_)
+#if !defined ( GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_ )
 #define GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_
 
 #include <stdio.h>
@@ -36,11 +36,11 @@
 
 
 /* Definitions ****************************************************************/
-/* define this macro to get debug output */
+// define this macro to get debug output
 #define _DEBUG_
 #undef _DEBUG_
 
-/* version and application name (always use this version) */
+// version and application name (always use this version)
 #undef VERSION
 #define VERSION                         "1.0cvs"
 #define APP_NAME                        "llcon"
@@ -68,14 +68,14 @@
 // maximum value of factor for network block size
 #define MAX_NET_BLOCK_SIZE_FACTOR       8
 
-/* default network block size factor */
+// default network block size factor
 #define DEF_NET_BLOCK_SIZE_FACTOR       3
 
-/* maximum network buffer size (which can be chosen by slider) */
-#define MAX_NET_BUF_SIZE_NUM_BL         10 /* number of blocks */
+// maximum network buffer size (which can be chosen by slider)
+#define MAX_NET_BUF_SIZE_NUM_BL         10 // number of blocks
 
-/* default network buffer size */
-#define DEF_NET_BUF_SIZE_NUM_BL         5 /* number of blocks */
+// default network buffer size
+#define DEF_NET_BUF_SIZE_NUM_BL         5 // number of blocks
 
 // number of ticks of audio in/out buffer sliders
 #ifdef _WIN32
@@ -88,26 +88,26 @@
 // if you want to change this paramter, there has to be done code modifications
 // on other places, too! The code tag "MAX_NUM_CHANNELS_TAG" shows these places
 // (just search for the tag in the entire code)
-#define MAX_NUM_CHANNELS                10 /* max number channels for server */
+#define MAX_NUM_CHANNELS                10 // max number channels for server
 
-/* sample rate offset estimation algorithm */
-/* time interval for sample rate offset estimation */
-#define TIME_INT_SAM_OFFS_EST           60 /* s */
+// sample rate offset estimation algorithm
+// time interval for sample rate offset estimation
+#define TIME_INT_SAM_OFFS_EST           60 // s
 
-/* time interval of taps for sample rate offset estimation (time stamps) */
-#define INTVL_TAPS_SAM_OFF_SET          1 /* s */
+// time interval of taps for sample rate offset estimation (time stamps)
+#define INTVL_TAPS_SAM_OFF_SET          1 // s
 
 #define NUM_BL_TIME_STAMPS              ( ( INTVL_TAPS_SAM_OFF_SET * 1000 ) / MIN_BLOCK_DURATION_MS )
 #define VEC_LEN_SAM_OFFS_EST            ( TIME_INT_SAM_OFFS_EST / INTVL_TAPS_SAM_OFF_SET )
 
-/* length of the moving average buffer for response time measurement */
-#define TIME_MOV_AV_RESPONSE            30 /* seconds */
-#define LEN_MOV_AV_RESPONSE             (TIME_MOV_AV_RESPONSE * 1000 / MIN_BLOCK_DURATION_MS)
+// length of the moving average buffer for response time measurement
+#define TIME_MOV_AV_RESPONSE            30 // seconds
+#define LEN_MOV_AV_RESPONSE             ( TIME_MOV_AV_RESPONSE * 1000 / MIN_BLOCK_DURATION_MS )
 
 
 #define _MAXSHORT                       32767
-#define _MAXBYTE                        255 /* binary: 11111111 */
-#define _MINSHORT                       (-32768)
+#define _MAXBYTE                        255 // binary: 11111111
+#define _MINSHORT                       ( -32768 )
 
 #if HAVE_STDINT_H
 # include <stdint.h>
@@ -126,7 +126,7 @@ typedef unsigned char  uint8_t;
 
 /* Definitions for window message system ------------------------------------ */
 typedef unsigned int                    _MESSAGE_IDENT;
-#define MS_RESET_ALL                    0   /* MS: Message */
+#define MS_RESET_ALL                    0   // MS: Message
 #define MS_SOUND_IN                     1
 #define MS_SOUND_OUT                    2
 #define MS_JIT_BUF_PUT                  3
@@ -143,16 +143,16 @@ typedef unsigned int                    _MESSAGE_IDENT;
 class CGenErr
 {
 public:
-    CGenErr(QString strNE) : strError(strNE) {}
+    CGenErr ( QString strNE ) : strError ( strNE ) {}
     QString strError;
 };
 
 class CLlconEvent : public QCustomEvent
 {
 public:
-    CLlconEvent(int iNewMeTy, int iNewSt, int iNewChN = 0) : 
-        QCustomEvent(QEvent::User + 11), iMessType(iNewMeTy), iStatus(iNewSt),
-        iChanNum(iNewChN) {}
+    CLlconEvent ( int iNewMeTy, int iNewSt, int iNewChN = 0 ) : 
+        QCustomEvent ( QEvent::User + 11 ), iMessType ( iNewMeTy ), iStatus ( iNewSt ),
+        iChanNum ( iNewChN ) {}
 
     int iMessType;
     int iStatus;
@@ -161,9 +161,9 @@ public:
 
 
 /* Prototypes for global functions ********************************************/
-/* Posting a window message */
-void PostWinMessage(const _MESSAGE_IDENT MessID, const int iMessageParam = 0,
-                    const int iChanNum = 0);
+// posting a window message
+void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam = 0,
+                      const int iChanNum = 0 );
 
 
-#endif /* !defined(GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_) */
+#endif /* !defined ( GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_ ) */

@@ -161,6 +161,12 @@ public:
 
 
 /* Prototypes for global functions ********************************************/
+// command line parsing, TODO do not declare functions globally but in a class
+std::string UsageArguments     ( char **argv );
+bool        GetFlagArgument    ( int, char **argv, int &i, std::string strShortOpt, std::string strLongOpt );
+bool        GetStringArgument  ( int argc, char **argv, int &i, std::string strShortOpt, std::string strLongOpt, std::string & strArg );
+bool        GetNumericArgument ( int argc, char **argv, int &i, std::string strShortOpt, std::string strLongOpt, double rRangeStart, double rRangeStop, double & rValue);
+
 // posting a window message
 void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam = 0,
                       const int iChanNum = 0 );

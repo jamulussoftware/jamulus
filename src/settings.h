@@ -47,12 +47,12 @@ class CSettings
 public:
     CSettings ( CClient* pNCliP ) : pClient ( pNCliP ) {}
 
-    void Load();
-    void Save();
+	void Load ( std::string sFileName = "" );
+	void Save ( std::string sFileName = "" );
 
 protected:
-    void ReadIniFile();
-    void WriteIniFile();
+	void ReadIniFile ( std::string sFileName );
+	void WriteIniFile ( std::string sFileName );
 
     // function declarations for stlini code written by Robert Kesterson
     struct StlIniCompareStringNoCase 

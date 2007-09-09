@@ -26,28 +26,36 @@
 
 
 /* Implementation *************************************************************/
-void CSettings::Load()
+void CSettings::Load ( std::string sFileName )
 {
     /* load settings from init-file */
-    ReadIniFile();
+    ReadIniFile ( sFileName );
 }
 
-void CSettings::Save()
+void CSettings::Save ( std::string sFileName )
 {
     /* write settings in init-file */
-    WriteIniFile();
+    WriteIniFile ( sFileName );
 }
 
 
 /* Read and write init-file ***************************************************/
-void CSettings::ReadIniFile()
+void CSettings::ReadIniFile ( std::string sFileName )
 {
     int     iValue;
     bool    bValue;
+	INIFile ini;
 
-    /* Load data from init-file */
-    INIFile ini = LoadIni ( LLCON_INIT_FILE_NAME );
-
+    // load data from init-file
+	if ( !sFileName.empty() ) 
+	{
+		ini = LoadIni ( sFileName.c_str() );
+	}
+	else
+	{
+		// use default file name
+		ini = LoadIni ( LLCON_INIT_FILE_NAME );
+	}
 
     // IP address
     pClient->strIPAddress = GetIniSetting ( ini, "Client", "ipaddress" );
@@ -104,7 +112,7 @@ void CSettings::ReadIniFile()
     }
 }
 
-void CSettings::WriteIniFile()
+void CSettings::WriteIniFile ( std::string sFileName )
 {
     INIFile ini;
 
@@ -139,8 +147,16 @@ void CSettings::WriteIniFile()
     SetNumericIniSet ( ini, "Client", "netwbusifactout", pClient->GetNetwBufSizeFactOut() );
 
 
-    /* Save settings in init-file */
-    SaveIni ( ini, LLCON_INIT_FILE_NAME );
+    // save settings in init-file
+	if ( !sFileName.empty() ) 
+	{
+		SaveIni ( ini, sFileName.c_str() );
+	}
+	else
+	{
+		// use default file name
+		SaveIni ( ini, LLCON_INIT_FILE_NAME );
+	}
 }
 
 bool CSettings::GetNumericIniSet ( INIFile& theINI, string strSection,

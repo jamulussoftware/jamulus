@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include <qapplication.h>
+#include <iostream>
 #include "global.h"
 #include "llconclientdlg.h"
 #include "llconserverdlg.h"
@@ -36,72 +37,103 @@ QApplication* pApp = NULL;
 
 int main ( int argc, char** argv )
 {
+	std::string strArgument;
+
     /* check if server or client application shall be started */
-    bool bIsClient         = true;
-    bool bUseGUI           = true;
-    bool bUseServerLogging = false;
+    bool        bIsClient         = true;
+    bool        bUseGUI           = true;
+    bool        bUseServerLogging = false;
+	std::string strIniFileName    = "";
 
-    /* QT docu: argv()[0] is the program name, argv()[1] is the first
-       argument and argv()[argc()-1] is the last argument */
-    if ( argc > 1 )
-    {
-        std::string strShortOpt;
+	/* QT docu: argv()[0] is the program name, argv()[1] is the first
+	   argument and argv()[argc()-1] is the last argument.
+	   Start with first argument, therefore "i = 1" */
+	for ( int i = 1; i < argc; i++ )
+	{
+		/* Server mode flag ------------------------------------------------------- */
+		if ( GetFlagArgument ( argc, argv, i, "-s", "--server" ) == TRUE )
+		{
+			bIsClient = false;
 
-        /* "-s": start server with GUI enabled */
-        strShortOpt = "-s";
-        if ( !strShortOpt.compare ( argv[1] ) )
-        {
-            bIsClient = false;
-        }
+cerr << "server ";
 
-        /* "-sn": start server with GUI disabled (no GUI used) */
-        strShortOpt = "-sn";
-        if ( !strShortOpt.compare ( argv[1] ) )
-        {
-            bIsClient = false;
-            bUseGUI   = false;
-        }
+			continue;
+		}
 
-        /* "-sln": start server with GUI disabled and logging enabled */
-        strShortOpt = "-sln";
-        if ( !strShortOpt.compare ( argv[1] ) )
-        {
-            bIsClient         = false;
-            bUseGUI           = false;
-            bUseServerLogging = true;
-        }
-    }
+		/* Use GUI flag ----------------------------------------------------------- */
+		if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) == TRUE )
+		{
+			bUseGUI = false;
+
+cerr << "nogui ";
+
+			continue;
+		}
+
+		/* Use logging flag ------------------------------------------------------- */
+		if ( GetFlagArgument ( argc, argv, i, "-l", "--log" ) == TRUE )
+		{
+			bUseServerLogging = true;
+
+cerr << "logging ";
+
+			continue;
+		}
+
+		/* Initialization file ---------------------------------------------------- */
+		if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) == TRUE )
+		{
+			strIniFileName = strArgument;
+			continue;
+		}
+
+		/* Help (usage) flag ------------------------------------------------------ */
+		if ( ( !strcmp ( argv[i], "--help" ) ) ||
+			 ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
+		{
+            const std::string strHelp = UsageArguments(argv);
+            cerr << strHelp;
+			exit ( 1 );
+		}
+
+		/* Unknown option --------------------------------------------------------- */
+		cerr << argv[0] << ": ";
+		cerr << "Unknown option '" << argv[i] << "' -- use '--help' for help"
+			<< endl;
+
+		exit ( 1 );
+	}
 
     /* Application object */
     QApplication app ( argc, argv, bUseGUI );
 
     if ( bIsClient )
     {
-        /* client */
+        // client
         // actual client object
         CClient Client;
 
         // load settings from init-file
         CSettings Settings ( &Client );
-        Settings.Load ();
+        Settings.Load ( strIniFileName );
 
         // GUI object
         CLlconClientDlg ClientDlg ( &Client, 0, 0, FALSE, Qt::WStyle_MinMax );
 
-        /* Set main window */
+        // set main window
         app.setMainWidget ( &ClientDlg );
-        pApp = &app; /* Needed for post-event routine */
+        pApp = &app; // Needed for post-event routine
 
-        /* Show dialog */
+        // show dialog
         ClientDlg.show();
         app.exec();
 
-        /* Save settings to init-file */
-        Settings.Save();
+        // save settings to init-file
+        Settings.Save ( strIniFileName );
     }
     else
     {
-        /* server */
+        // server
         // actual server object
         CServer Server ( bUseServerLogging );
 
@@ -111,11 +143,11 @@ int main ( int argc, char** argv )
             CLlconServerDlg ServerDlg ( &Server, 0, 0, FALSE,
                 Qt::WStyle_MinMax );
 
-            /* Set main window */
+            // set main window
             app.setMainWidget ( &ServerDlg );
-            pApp = &app; /* Needed for post-event routine */
+            pApp = &app; // needed for post-event routine
 
-            /* Show dialog */
+            // show dialog
             ServerDlg.show();
             app.exec();
         }
@@ -130,16 +162,106 @@ int main ( int argc, char** argv )
     return 0;
 }
 
+
+/******************************************************************************\
+* Command Line Argument Parsing                                                *
+\******************************************************************************/
+std::string UsageArguments ( char **argv )
+{
+	return
+		"Usage: " + std::string ( argv[0] ) + " [option] [argument]\n"
+		"Recognized options:\n"
+		"  -s, --server               start server\n"
+		"  -n, --nogui                disable GUI (only avaiable for server)\n"
+		"  -l, --log                  enable logging\n"
+		"  -i, --inifile              initialization file name (only available for client)\n"
+		"  -h, -?, --help             this help text\n"
+		"Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
+}
+
+bool GetFlagArgument ( int, char **argv, int &i,
+                       std::string strShortOpt, std::string strLongOpt )
+{
+	if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool GetStringArgument ( int argc, char **argv, int &i,
+                         std::string strShortOpt, std::string strLongOpt,
+                         std::string & strArg )
+{
+	if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+	{
+		if ( ++i >= argc )
+		{
+			cerr << argv[0] << ": ";
+			cerr << "'" << strLongOpt << "' needs a string argument" << endl;
+			exit ( 1 );
+		}
+
+		strArg = argv[i];
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool GetNumericArgument ( int argc, char **argv, int &i,
+                          std::string strShortOpt, std::string strLongOpt,
+                          double rRangeStart, double rRangeStop,
+                          double & rValue)
+{
+	if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+	{
+		if ( ++i >= argc )
+		{
+			cerr << argv[0] << ": ";
+			cerr << "'" << strLongOpt << "' needs a numeric argument between "
+				<< rRangeStart << " and " << rRangeStop << endl;
+			exit ( 1 );
+		}
+
+		char *p;
+		rValue = strtod ( argv[i], &p );
+		if ( *p || rValue < rRangeStart || rValue > rRangeStop )
+		{
+			cerr << argv[0] << ": ";
+			cerr << "'" << strLongOpt << "' needs a numeric argument between "
+				<< rRangeStart << " and " << rRangeStop << endl;
+			exit ( 1 );
+		}
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+
+/******************************************************************************\
+* Window Message System                                                        *
+\******************************************************************************/
 void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam,
                       const int iChanNum )
 {
-    /* In case of simulation no events should be generated */
+    // first check if application is initialized
     if ( pApp != NULL )
     {
         CLlconEvent* LlconEv =
             new CLlconEvent ( MessID, iMessageParam, iChanNum );
 
-        /* Qt will delete the event object when done */
+        // Qt will delete the event object when done
         QThread::postEvent ( pApp->mainWidget(), LlconEv );
     }
 }

@@ -168,7 +168,7 @@ void CAudioResample::Resample ( CVector<double>& vecdInput,
             const int ip = (int) ( j * iI / dRation ) % iI;
 
             /* sample position in input vector */
-            const int in = (int) ( j / dRation ) + iNumTaps;
+            const int in = (int) ( j / dRation ) + iNumTaps - 1;
 
             /* convolution */
             double dy = 0.0;

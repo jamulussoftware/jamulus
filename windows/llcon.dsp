@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "$(QTDIR)\include" /I "../src" /I "ASIOSDK2/common" /I "ASIOSDK2/host" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "QT_DLL" /D "QT_THREAD_SUPPORT" /FD /GZ /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "$(QTDIR)\include" /I "../src" /I "ASIOSDK2/common" /I "ASIOSDK2/host" /I "ASIOSDK2/host/pc" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "QT_DLL" /D "QT_THREAD_SUPPORT" /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -170,6 +170,22 @@ SOURCE=.\moc\moc_socket.cpp
 # Begin Source File
 
 SOURCE=.\moc\moc_util.cpp
+# End Source File
+# End Group
+# Begin Group "ASIO"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\ASIOSDK2\common\asio.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ASIOSDK2\host\asiodrivers.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ASIOSDK2\host\pc\asiolist.cpp
 # End Source File
 # End Group
 # Begin Source File

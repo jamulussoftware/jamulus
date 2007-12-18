@@ -31,6 +31,11 @@
 /* Implementation *************************************************************/
 #ifdef USE_ASIO_SND_INTERFACE
 
+// external references
+extern AsioDrivers* asioDrivers;
+bool   loadAsioDriver ( char *name );
+
+
 /******************************************************************************\
 * Wave in                                                                      *
 \******************************************************************************/
@@ -639,21 +644,59 @@ CSound::CSound()
     sWaveFormatEx.cbSize = 0;
 */
 
-/*
-    // get the number of digital audio devices in this computer, check range
-    iNumDevs = waveInGetNumDevs();
-*/
 
-    if ( iNumDevs > MAX_NUMBER_SOUND_CARDS )
-	{
-        iNumDevs = MAX_NUMBER_SOUND_CARDS;
-	}
+    // get available ASIO driver names in system
+    char* cDriverNames[MAX_NUMBER_SOUND_CARDS];
+	for ( i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+    {
+        cDriverNames[i] = new char[32];
+    }
 
-    // at least one device must exist in the system
-    if ( iNumDevs == 0 )
-	{
-        throw CGenErr ( "No audio device found." );
-	}
+    loadAsioDriver ( "dummy" ); // to initialize external object
+    const long lNumDetDriv = asioDrivers->getDriverNames ( cDriverNames, MAX_NUMBER_SOUND_CARDS );
+
+
+	// load and initialize first valid ASIO driver
+    bool bValidDriverDetected = false;
+    int  iCurDriverIdx = 0;
+
+    while ( !bValidDriverDetected && iCurDriverIdx < lNumDetDriv )
+    {
+	    if ( loadAsioDriver ( cDriverNames[iCurDriverIdx] ) )
+        {
+		    if ( ASIOInit ( &driverInfo ) == ASE_OK )
+		    {
+                bValidDriverDetected = true;
+            }
+            else
+            {
+                // driver could not be loaded, free memory
+                asioDrivers->removeCurrentDriver();
+            }
+        }
+
+        // try next driver
+        iCurDriverIdx++;
+    }
+
+    // in case we do not have a driver available, throw error
+    if ( !bValidDriverDetected )
+    {
+        throw CGenErr ( "No suitable ASIO audio device found." );
+    }
+
+
+// TEST we only use one driver for a first try
+iNumDevs = 1;
+pstrDevices[0] = driverInfo.name;
+
+
+
+
+// TEST !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ASIOExit();
+
+
 
 /*
     // get info about the devices and store the names

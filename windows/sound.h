@@ -35,8 +35,8 @@
 
 /* Definitions ****************************************************************/
 // switch here between ASIO (Steinberg) or native Windows(TM) sound interface
-//#define USE_ASIO_SND_INTERFACE
 #undef USE_ASIO_SND_INTERFACE
+//#define USE_ASIO_SND_INTERFACE
 
 
 #define NUM_IN_OUT_CHANNELS     2       /* Stereo recording (but we only
@@ -63,6 +63,7 @@
 #include "asiosys.h"
 #include "asio.h"
 #include "asiodrivers.h"
+
 
 class CSound
 {
@@ -97,12 +98,14 @@ protected:
     void        AddOutBuffer ( int iBufNum );
     void        GetDoneBuffer ( int& iCntPrepBuf, int& iIndexDoneBuf );
 
+    // ASIO stuff
+    ASIODriverInfo  driverInfo;
 
 
-    UINT            iNumDevs;
+    int             iNumDevs;
     std::string     pstrDevices[MAX_NUMBER_SOUND_CARDS];
-    UINT            iCurInDev;
-    UINT            iCurOutDev;
+    int             iCurInDev;
+    int             iCurOutDev;
     bool            bChangParamIn;
     bool            bChangParamOut;
     int             iCurNumSndBufIn;

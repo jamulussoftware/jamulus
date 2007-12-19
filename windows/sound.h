@@ -71,17 +71,17 @@ public:
     CSound();
     virtual ~CSound();
 
-    void        InitRecording ( int iNewBufferSize, bool bNewBlocking = TRUE );
-    void        InitPlayback ( int iNewBufferSize, bool bNewBlocking = FALSE );
+    void        InitRecording ( int iNewBufferSize, bool bNewBlocking = TRUE ) { InitRecordingAndPlayback ( iNewBufferSize ); }
+    void        InitPlayback ( int iNewBufferSize, bool bNewBlocking = FALSE ) { InitRecordingAndPlayback ( iNewBufferSize ); }
     bool        Read ( CVector<short>& psData );
     bool        Write ( CVector<short>& psData );
 
     int         GetNumDev() { return iNumDevs; }
     std::string GetDeviceName ( int iDiD ) { return pstrDevices[iDiD]; }
-    void        SetOutDev ( int iNewDev );
-    int         GetOutDev() { return iCurOutDev; }
-    void        SetInDev ( int iNewDev );
-    int         GetInDev() { return iCurInDev; }
+    void        SetOutDev ( int iNewDev ) {} // not supported
+    int         GetOutDev() { return 0; }  // not supported
+    void        SetInDev ( int iNewDev ) {}  // not supported
+    int         GetInDev() { return 0; }  // not supported
     void        SetOutNumBuf ( int iNewNum );
     int         GetOutNumBuf() { return iCurNumSndBufOut; }
     void        SetInNumBuf ( int iNewNum );
@@ -90,8 +90,7 @@ public:
     void        Close();
 
 protected:
-    void        OpenInDevice();
-    void        OpenOutDevice();
+    void        InitRecordingAndPlayback ( int iNewBufferSize );
     void        PrepareInBuffer ( int iBufNum );
     void        PrepareOutBuffer ( int iBufNum );
     void        AddInBuffer();
@@ -100,29 +99,34 @@ protected:
 
     // ASIO stuff
     ASIODriverInfo  driverInfo;
+    ASIOBufferInfo  bufferInfos[2 * NUM_IN_OUT_CHANNELS]; // for input and output buffers -> "2 *"
+	ASIOChannelInfo channelInfos[2 * NUM_IN_OUT_CHANNELS];
+    bool            bASIOPostOutput;
+    ASIOCallbacks   asioCallbacks;
 
+    // callbacks
+    static void bufferSwitch ( long index, ASIOBool processNow );
+    static ASIOTime* bufferSwitchTimeInfo ( ASIOTime *timeInfo, long index, ASIOBool processNow );
+    static void sampleRateChanged ( ASIOSampleRate sRate ) {}
+    static long asioMessages ( long selector, long value, void* message, double* opt );
 
     int             iNumDevs;
     std::string     pstrDevices[MAX_NUMBER_SOUND_CARDS];
-    int             iCurInDev;
-    int             iCurOutDev;
     bool            bChangParamIn;
     bool            bChangParamOut;
     int             iCurNumSndBufIn;
     int             iCurNumSndBufOut;
 
+    int             iBufferSize;
+
     // wave in
     HANDLE          m_WaveInEvent;
-    int             iBufferSizeIn;
     int             iWhichBufferIn;
     short*          psSoundcardBuffer[MAX_SND_BUF_IN];
-    bool            bBlockingRec;
 
     // wave out
-    int             iBufferSizeOut;
     short*          psPlaybackBuffer[MAX_SND_BUF_OUT];
     HANDLE          m_WaveOutEvent;
-    bool            bBlockingPlay;
 };
 
 #else // USE_ASIO_SND_INTERFACE

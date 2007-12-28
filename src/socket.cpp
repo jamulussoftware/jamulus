@@ -83,7 +83,7 @@ void CSocket::SendPacket ( const CVector<unsigned char>& vecbySendBuf,
 void CSocket::OnDataReceived()
 {
     /* read block from network interface */
-    const int iNumBytesRead = SocketDevice.readBlock( (char*) &vecbyRecBuf[0],
+    const int iNumBytesRead = SocketDevice.readBlock ( (char*) &vecbyRecBuf[0],
         MAX_SIZE_BYTES_NETW_BUF );
 
     /* check if an error occurred */
@@ -105,7 +105,7 @@ void CSocket::OnDataReceived()
             return;
         }
 
-        switch ( pChannel->PutData( vecbyRecBuf, iNumBytesRead ) )
+        switch ( pChannel->PutData ( vecbyRecBuf, iNumBytesRead ) )
         {
         case PS_AUDIO_OK:
             PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN );

@@ -229,11 +229,13 @@ bool CSound::Write ( CVector<short>& psData )
 		}
 	}
 
+/*
     // copy stereo data from input in soundcard buffer
     for ( i = 0; i < iBufferSize; i++ )
 	{
         psPlaybackBuffer[iIndexDoneBuf][i] = psData[i];
 	}
+*/
 
     // now, send the current block
     AddOutBuffer ( iIndexDoneBuf );

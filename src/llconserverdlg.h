@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -57,17 +57,17 @@ public:
     virtual ~CLlconServerDlg() {}
 
 protected:
-    QTimer      Timer;
-    CServer*    pServer;
+    QTimer                          Timer;
+    CServer*                        pServer;
 
-    QPixmap     BitmCubeGreen;
-    QPixmap     BitmCubeYellow;
-    QPixmap     BitmCubeRed;
+    QPixmap                         BitmCubeGreen;
+    QPixmap                         BitmCubeYellow;
+    QPixmap                         BitmCubeRed;
 
-    CVector<CServerListViewItem*> vecpListViewItems;
-    QMutex ListViewMutex;
+    CVector<CServerListViewItem*>   vecpListViewItems;
+    QMutex                          ListViewMutex;
 
-    QMenuBar* pMenu;
+    QMenuBar*                       pMenu;
 
     virtual void customEvent ( QCustomEvent* Event );
     void UpdateSliderNetBuf();

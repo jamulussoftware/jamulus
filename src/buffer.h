@@ -92,7 +92,6 @@ public:
 protected:
     CVector<short>  vecsMemory;
     int             iMemSize;
-    int             iBlockSize;
     int             iPutPos;
 };
 

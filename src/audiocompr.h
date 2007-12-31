@@ -31,8 +31,9 @@
 
 
 /* Definitions ****************************************************************/
-/* tables */
-static int ima_indx_adjust[16] =
+// tables
+#define IMA_INDX_ADJUST_TAB_LEN         16
+static int ima_indx_adjust[IMA_INDX_ADJUST_TAB_LEN] =
 {   -1, -1, -1, -1,     /* +0 - +3, decrease the step size */
      2,  4,  6,  8,     /* +4 - +7, increase the step size */
     -1, -1, -1, -1,     /* -0 - -3, decrease the step size */

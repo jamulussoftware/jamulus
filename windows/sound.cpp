@@ -95,6 +95,8 @@ bool CSound::Read ( CVector<short>& psData )
 	}
 */
 
+
+/*
     // copy data from sound card in output buffer
     for ( i = 0; i < iBufferSize; i++ )
 	{
@@ -106,6 +108,7 @@ bool CSound::Read ( CVector<short>& psData )
 
     // in case more than one buffer was ready, reset event
     ResetEvent ( m_WaveInEvent );
+*/
 
     return bError;
 }
@@ -182,15 +185,16 @@ bool CSound::Write ( CVector<short>& psData )
         bChangParamOut = FALSE;
     }
 
+/*
     // get number of "done"-buffers and position of one of them
     GetDoneBuffer ( iCntPrepBuf, iIndexDoneBuf );
 
     // now check special cases (Buffer is full or empty)
     if ( iCntPrepBuf == 0 )
     {
-        /* Blocking wave out routine. Needed for transmitter. Always
-           ensure that the buffer is completely filled to avoid buffer
-           underruns */
+        // Blocking wave out routine. Needed for transmitter. Always
+        // ensure that the buffer is completely filled to avoid buffer
+        // underruns
         while ( iCntPrepBuf == 0 )
         {
             WaitForSingleObject ( m_WaveOutEvent, INFINITE );
@@ -202,9 +206,9 @@ bool CSound::Write ( CVector<short>& psData )
 	{
 		if ( iCntPrepBuf == iCurNumSndBufOut )
 		{
-			/* -----------------------------------------------------------------
-			   Buffer is empty -> send as many cleared blocks to the sound-
-			   interface until half of the buffer size is reached */
+			// -----------------------------------------------------------------
+			// Buffer is empty -> send as many cleared blocks to the sound-
+			// interface until half of the buffer size is reached
 			// send half of the buffer size blocks to the sound-interface
 			for ( j = 0; j < iCurNumSndBufOut / 2; j++ )
 			{
@@ -228,6 +232,7 @@ bool CSound::Write ( CVector<short>& psData )
 			bError = FALSE;
 		}
 	}
+*/
 
 /*
     // copy stereo data from input in soundcard buffer
@@ -237,8 +242,16 @@ bool CSound::Write ( CVector<short>& psData )
 	}
 */
 
+/*
     // now, send the current block
     AddOutBuffer ( iIndexDoneBuf );
+*/
+
+
+// TEST
+Sleep(10);
+return true;
+
 
     return bError;
 }

@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -74,7 +74,10 @@ void CSocket::SendPacket ( const CVector<unsigned char>& vecbySendBuf,
 
     if ( iVecSizeOut != 0 )
     {
-        // send packet through network
+        // send packet through network (we have to convert the constant unsigned
+        // char vector in "const char*", for this we first convert the const
+        // unsigned char vector in a read/write unsigned char vector and then
+        // do the cast to const char*)
         SocketDevice.writeBlock (
             (const char*) &( (CVector<unsigned char>) vecbySendBuf )[0],
             iVecSizeOut, HostAddr.InetAddr, HostAddr.iPort );

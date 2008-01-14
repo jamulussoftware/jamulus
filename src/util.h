@@ -26,9 +26,9 @@
 #define UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_
 
 #include <qhostaddress.h>
-#include <qpopupmenu.h>
+#include <qmenu.h>
 #include <qwhatsthis.h>
-#include <qtextview.h>
+#include <qtextbrowser.h>
 #include <qlabel.h>
 #include <qdatetime.h>
 #include <vector>
@@ -314,20 +314,19 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
 * GUI utilities                                                                *
 \******************************************************************************/
 /* About dialog ------------------------------------------------------------- */
-class CAboutDlg : public CAboutDlgBase
+class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
 {
     Q_OBJECT
 
 public:
-    CAboutDlg ( QWidget* parent = 0, const char* name = 0, bool modal = FALSE,
-        WFlags f = 0 );
+    CAboutDlg ( QWidget* parent = 0 );
 
     static QString GetVersionAndNameStr ( const bool bWithHtml = true );
 };
 
 
 /* Help menu ---------------------------------------------------------------- */
-class CLlconHelpMenu : public QPopupMenu
+class CLlconHelpMenu : public QMenu
 {
     Q_OBJECT
 
@@ -362,8 +361,8 @@ protected:
 class CHostAddress
 {
 public:
-    CHostAddress() : InetAddr ( (Q_UINT32) 0 ), iPort ( 0 ) {}
-    CHostAddress ( const QHostAddress NInetAddr, const Q_UINT16 iNPort ) :
+    CHostAddress() : InetAddr ( (quint32) 0 ), iPort ( 0 ) {}
+    CHostAddress ( const QHostAddress NInetAddr, const quint16 iNPort ) :
         InetAddr ( NInetAddr ), iPort ( iNPort ) {}
     CHostAddress ( const CHostAddress& NHAddr ) :
         InetAddr ( NHAddr.InetAddr ), iPort ( NHAddr.iPort ) {}
@@ -375,7 +374,7 @@ public:
         { return ( ( CompAddr.InetAddr == InetAddr ) && ( CompAddr.iPort == iPort ) ); }
 
     QHostAddress    InetAddr;
-    Q_UINT16        iPort;
+    quint16         iPort;
 };
 
 class CChannelShortInfo
@@ -513,7 +512,7 @@ public:
     {
         if ( bDoLogging )
         {
-            fprintf ( pFile, "%s\n", sNewStr.latin1() );
+            fprintf ( pFile, "%s\n", sNewStr.toLatin1() );
             fflush ( pFile );
         }
     }

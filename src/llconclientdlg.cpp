@@ -26,62 +26,61 @@
 
 
 /* Implementation *************************************************************/
-CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
-    const char* name, bool modal, WFlags f ) : pClient ( pNCliP ),
-    CLlconClientDlgBase ( parent, name, modal, f ),
-    ClientSettingsDlg ( pNCliP, 0, 0, FALSE, Qt::WStyle_MinMax )
+CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
+    : pClient ( pNCliP ), QDialog ( parent ),
+    ClientSettingsDlg ( pNCliP, 0, Qt::WindowMinMaxButtonsHint )
 {
     /* add help text to controls */
     QString strInpLevH = tr ( "<b>Input level meter:</b> Shows the level of the "
         "input audio signal of the sound card. The level is in dB. Overload "
         "should be avoided." );
-    QWhatsThis::add ( TextLabelInputLevel, strInpLevH );
-    QWhatsThis::add ( ProgressBarInputLevelL, strInpLevH );
-    QWhatsThis::add ( ProgressBarInputLevelR, strInpLevH );
+    TextLabelInputLevel->setWhatsThis ( strInpLevH );
+    ProgressBarInputLevelL->setWhatsThis ( strInpLevH );
+    ProgressBarInputLevelR->setWhatsThis ( strInpLevH );
 
-    QWhatsThis::add(PushButtonConnect, tr ( "<b>Connect / Disconnect Button:"
+    PushButtonConnect->setWhatsThis ( tr ( "<b>Connect / Disconnect Button:"
         "</b> Push this button to connect the server. A valid IP address has "
         "to be specified before. If the client is connected, pressing this "
         "button will disconnect the connection." ) );
 
-    QWhatsThis::add(TextLabelStatus, tr ( "<b>Status Bar:</b> In the status bar "
+    TextLabelStatus->setWhatsThis ( tr ( "<b>Status Bar:</b> In the status bar "
         "different messages are displayed. E.g., if an error occurred or the "
         "status of the connection is shown." ) );
 
     QString strServAddrH = tr ( "<b>Server Address:</b> In this edit control, "
         "the IP address of the server can be set. If an invalid address was "
         "chosen, an error message is shown in the status bar." );
-    QWhatsThis::add ( TextLabelServerAddr, strServAddrH );
-    QWhatsThis::add ( LineEditServerAddr, strServAddrH );
+    TextLabelServerAddr->setWhatsThis ( strServAddrH );
+    LineEditServerAddr->setWhatsThis ( strServAddrH );
 
     QString strFaderTag = tr ( "<b>Fader Tag:</b> In this edit control, "
         "the tag string of your fader can be set. This tag will appear "
         "at your fader on the mixer board when connected to the server.");
-    QWhatsThis::add ( TextLabelServerTag, strFaderTag );
-    QWhatsThis::add ( LineEditFaderTag, strFaderTag );
+    TextLabelServerTag->setWhatsThis ( strFaderTag );
+    LineEditFaderTag->setWhatsThis ( strFaderTag );
 
     QString strAudFader = tr ( "<b>Audio Fader:</b> With the audio fader "
         "control the level of left and right audio input channels can "
         "be controlled." );
-    QWhatsThis::add ( TextAudInFader, strAudFader );
-    QWhatsThis::add ( SliderAudInFader, strAudFader );
+    TextAudInFader->setWhatsThis ( strAudFader );
+    SliderAudInFader->setWhatsThis ( strAudFader );
 
     QString strAudReverb = tr ( "<b>Reverberation Level:</b> The level of "
         "reverberation effect can be set with this control. The channel to "
         "which that reverberation effect shall be applied can be chosen "
         "with the Reverberation Channel Selection radio buttons." );
-    QWhatsThis::add ( TextLabelAudReverb, strAudReverb );
-    QWhatsThis::add ( SliderAudReverb, strAudReverb );
+    TextLabelAudReverb->setWhatsThis ( strAudReverb );
+    SliderAudReverb->setWhatsThis ( strAudReverb );
 
     QString strRevChanSel = tr ( "<b>Reverberation Channel Selection:</b> "
         "With these radio buttons the audio input channel on which the "
         "reverberation effect is applied can be chosen. Either the left "
         "or right input channel can be selected." );
-    QWhatsThis::add ( TextLabelReverbSelection, strRevChanSel );
-    QWhatsThis::add ( RadioButtonRevSelL, strRevChanSel );
-    QWhatsThis::add ( RadioButtonRevSelR, strRevChanSel );
+    TextLabelReverbSelection->setWhatsThis ( strRevChanSel );
+    RadioButtonRevSelL->setWhatsThis ( strRevChanSel );
+    RadioButtonRevSelR->setWhatsThis ( strRevChanSel );
 
-    QWhatsThis::add ( LEDOverallStatus, tr ( "<b>Overall Status:</b> "
+    LEDOverallStatus->setWhatsThis ( tr ( "<b>Overall Status:</b> "
         "The overall status of the software is shown. If either the "
         "network or sound interface has bad status, this LED will show "
         "red color." ) );
@@ -210,10 +209,10 @@ CLlconClientDlg::~CLlconClientDlg()
 void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
 {
     // store IP address
-    pClient->strIPAddress = LineEditServerAddr->text().latin1();
+    pClient->strIPAddress = LineEditServerAddr->text().toLatin1();
 
     // store fader tag
-    pClient->strName = LineEditFaderTag->text().latin1();
+    pClient->strName = LineEditFaderTag->text().toLatin1();
 
     // default implementation of this event handler routine
     Event->accept();
@@ -279,7 +278,7 @@ void CLlconClientDlg::OnOpenGeneralSettings()
 void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
 {
     // refresh internal name parameter
-    pClient->strName = strNewName.latin1();
+    pClient->strName = strNewName.toLatin1();
 
     // update name at server
     pClient->SetRemoteName();

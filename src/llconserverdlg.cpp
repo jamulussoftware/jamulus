@@ -26,9 +26,8 @@
 
 
 /* Implementation *************************************************************/
-CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent,
-    const char* name, bool modal, WFlags f ) : pServer ( pNServP ),
-    CLlconServerDlgBase ( parent, name, modal, f )
+CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
+    : pServer ( pNServP ), QDialog ( parent )
 {
     /* set text for version and application name */
     TextLabelNameVersion->setText ( QString ( APP_NAME ) +
@@ -116,11 +115,11 @@ void CLlconServerDlg::OnTimer()
     /* fill list with connected clients */
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        if ( ! ( vecHostAddresses[i].InetAddr == QHostAddress ( (Q_UINT32) 0 ) ) )
+        if ( !( vecHostAddresses[i].InetAddr == QHostAddress ( (quint32) 0 ) ) )
         {
             // IP, port number
             vecpListViewItems[i]->setText ( 0, QString().sprintf ( "%s : %d",
-                vecHostAddresses[i].InetAddr.toString().latin1(),
+                vecHostAddresses[i].InetAddr.toString().toLatin1(),
                 vecHostAddresses[i].iPort ) /* IP, port */);
 
             // name

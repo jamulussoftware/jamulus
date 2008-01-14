@@ -176,8 +176,7 @@ void CMultiColorLEDbase::SetUpdateTime ( int iNUTi )
 }
 
 
-CMultiColorLED::CMultiColorLED ( QWidget* parent, const char* name, WFlags f ) : 
-    QLabel ( parent, name, f )
+CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f ) : QLabel ( parent, f )
 {
     // set modified style
     setFrameShape ( QFrame::Panel );

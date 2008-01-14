@@ -27,8 +27,7 @@
 
 /* Implementation *************************************************************/
 CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
-    const char* name, bool modal, WFlags f) : pClient ( pNCliP ),
-    CClientSettingsDlgBase ( parent, name, modal, f )
+    Qt::WindowFlags f ) : pClient ( pNCliP ), QDialog ( parent, f )
 {
     /* Init timing jitter text label */
     TextLabelStdDevTimer->setText ( "" );

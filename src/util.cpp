@@ -269,9 +269,10 @@ double CAudioReverb::ProcessSample ( const double input )
 * GUI utilities                                                                *
 \******************************************************************************/
 /* About dialog ------------------------------------------------------------- */
-CAboutDlg::CAboutDlg ( QWidget* parent, const char* name, bool modal, WFlags f )
-    : CAboutDlgBase ( parent, name, modal, f )
+CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 {
+    setupUi ( this );
+
     // set the text for the about dialog html text control
     TextViewCredits->setText (
         "<p>" // general description of llcon software

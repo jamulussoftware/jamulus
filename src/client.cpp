@@ -97,7 +97,7 @@ bool CClient::SetServerAddr ( QString strNAddr )
 
         // it was no vaild IP address, try to get host by name, assuming
         // that the string contains a valid host name string
-        const hostent* HostInf = gethostbyname ( strNAddr.latin1() );
+        const hostent* HostInf = gethostbyname ( strNAddr.toLatin1() );
 
         if ( HostInf )
         {

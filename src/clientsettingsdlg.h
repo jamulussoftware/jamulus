@@ -49,20 +49,20 @@
 
 
 /* Classes ********************************************************************/
-class CClientSettingsDlg : public CClientSettingsDlgBase
+class CClientSettingsDlg : public QDialog, private Ui_CClientSettingsDlgBase
 {
     Q_OBJECT
 
 public:
     CClientSettingsDlg ( CClient* pNCliP, QWidget* parent = 0,
-        const char* name = 0, bool modal = FALSE, WFlags f = 0 );
+        Qt::WindowFlags f = 0 );
 
     void SetStatus ( const int iMessType, const int iStatus );
 
 protected:
-    CClient*        pClient;
-    QTimer          TimerStatus;
-    void            UpdateDisplay();
+    CClient* pClient;
+    QTimer   TimerStatus;
+    void     UpdateDisplay();
 
 public slots:
     void OnTimerStatus() { UpdateDisplay(); }

@@ -99,7 +99,7 @@ CVector<CChannelShortInfo> CChannelSet::CreateChannelList()
             // append channel ID, IP address and channel name to storing vectors
             vecChanInfo.Add ( CChannelShortInfo (
                 i, // ID
-                vecChannels[i].GetAddress().InetAddr.ip4Addr(), // IP address
+                vecChannels[i].GetAddress().InetAddr.toIPv4Address(), // IP address
                 vecChannels[i].GetName() /* name */ ) );
         }
     }
@@ -549,7 +549,7 @@ void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 
 void CChannel::OnChangeChanGain ( int iChanID, double dNewGain )
 {
-    ASSERT ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) );
+    Q_ASSERT ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) );
 
     // set value
     vecdGains[iChanID] = dNewGain;
@@ -685,8 +685,8 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
         {
             // log new connection
             CHostAddress address ( GetAddress() );
-            qDebug ( CLogTimeDate::toString() +  "Connected with IP %s",
-                address.InetAddr.toString().latin1() );
+            qDebug() << CLogTimeDate::toString() << "Connected with IP " <<
+                address.InetAddr.toString().toLatin1();
 
             emit NewConnection();
         }

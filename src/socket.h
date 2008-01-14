@@ -28,8 +28,7 @@
 #include <vector>
 #include <qobject.h>
 #include <qmessagebox.h>
-#include <qsocket.h>
-#include <qsocketdevice.h>
+#include <qudpsocket.h>
 #include <qsocketnotifier.h>
 #include "global.h"
 #include "channel.h"
@@ -47,13 +46,11 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket(CChannel* pNewChannel) : pChannel(pNewChannel),
-        SocketDevice(QSocketDevice::Datagram /* UDP */), bIsClient(true)
-        {Init();}
+    CSocket(CChannel* pNewChannel) : pChannel(pNewChannel), bIsClient(true)
+        { Init(); }
     CSocket(CChannelSet* pNewChannelSet, QObject* pNServP) :
-        pChannelSet(pNewChannelSet), pServer ( pNServP ),
-        SocketDevice(QSocketDevice::Datagram /* UDP */), bIsClient(false)
-        {Init();}
+        pChannelSet(pNewChannelSet), pServer ( pNServP ), bIsClient(false)
+        { Init(); }
     virtual ~CSocket() {}
 
     void SendPacket ( const CVector<unsigned char>& vecbySendBuf,
@@ -62,7 +59,7 @@ public:
 protected:
     void Init();
 
-    QSocketDevice           SocketDevice;
+    QUdpSocket              SocketDevice;
 
     CVector<unsigned char>  vecbyRecBuf;
     CHostAddress            RecHostAddr;

@@ -63,14 +63,12 @@
 
 
 /* Classes ********************************************************************/
-class CLlconClientDlg : public CLlconClientDlgBase
+class CLlconClientDlg : public QDialog, private Ui_CLlconClientDlgBase
 {
     Q_OBJECT
 
 public:
-    CLlconClientDlg ( CClient* pNCliP, QWidget* parent = 0,
-        const char* name = 0, bool modal = FALSE, WFlags f = 0 );
-
+    CLlconClientDlg ( CClient* pNCliP, QWidget* parent = 0 );
     virtual ~CLlconClientDlg();
 
 protected:

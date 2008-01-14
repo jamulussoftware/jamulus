@@ -26,7 +26,7 @@
 #define PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_
 
 #include <qglobal.h>
-#include <qthread.h>
+#include <qmutex.h>
 #include <qtimer.h>
 #include <list>
 #include "global.h"

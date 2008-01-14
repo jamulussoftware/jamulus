@@ -40,18 +40,7 @@ rem .h --------------
 
 
 rem .ui -------------
-%qtdir%\bin\uic.exe ..\src\aboutdlgbase.ui -o moc\aboutdlgbase.h  
-%qtdir%\bin\uic.exe ..\src\aboutdlgbase.ui -i aboutdlgbase.h -o moc\aboutdlgbase.cpp  
-%qtdir%\bin\moc.exe moc\aboutdlgbase.h -o moc\moc_aboutdlgbase.cpp
-
-%qtdir%\bin\uic.exe ..\src\llconclientdlgbase.ui -o moc\llconclientdlgbase.h  
-%qtdir%\bin\uic.exe ..\src\llconclientdlgbase.ui -i llconclientdlgbase.h -o moc\llconclientdlgbase.cpp  
-%qtdir%\bin\moc.exe moc\llconclientdlgbase.h -o moc\moc_llconclientdlgbase.cpp
-
-%qtdir%\bin\uic.exe ..\src\clientsettingsdlgbase.ui -o moc\clientsettingsdlgbase.h  
-%qtdir%\bin\uic.exe ..\src\clientsettingsdlgbase.ui -i clientsettingsdlgbase.h -o moc\clientsettingsdlgbase.cpp  
-%qtdir%\bin\moc.exe moc\clientsettingsdlgbase.h -o moc\moc_clientsettingsdlgbase.cpp
-
-%qtdir%\bin\uic.exe ..\src\llconserverdlgbase.ui -o moc\llconserverdlgbase.h  
-%qtdir%\bin\uic.exe ..\src\llconserverdlgbase.ui -i llconserverdlgbase.h -o moc\llconserverdlgbase.cpp  
-%qtdir%\bin\moc.exe moc\llconserverdlgbase.h -o moc\moc_llconserverdlgbase.cpp
+%qtdir%\bin\uic.exe ..\src\aboutdlgbase_qt4.ui -o moc\aboutdlgbase.h  
+%qtdir%\bin\uic.exe ..\src\llconclientdlgbase_qt4.ui -o moc\llconclientdlgbase.h  
+%qtdir%\bin\uic.exe ..\src\clientsettingsdlgbase_qt4.ui -o moc\clientsettingsdlgbase.h  
+%qtdir%\bin\uic.exe ..\src\llconserverdlgbase_qt4.ui -o moc\llconserverdlgbase.h  

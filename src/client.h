@@ -53,7 +53,7 @@
 
 
 /* Classes ********************************************************************/
-class CClient : public QObject, public QThread
+class CClient : public QThread
 {
     Q_OBJECT
 

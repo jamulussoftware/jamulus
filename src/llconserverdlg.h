@@ -46,14 +46,12 @@
 
 
 /* Classes ********************************************************************/
-class CLlconServerDlg : public CLlconServerDlgBase
+class CLlconServerDlg : public QDialog, private Ui_CLlconServerDlgBase
 {
     Q_OBJECT
 
 public:
-    CLlconServerDlg ( CServer* pNServP, QWidget* parent = 0,
-        const char* name = 0, bool modal = FALSE, WFlags f = 0 );
-
+    CLlconServerDlg ( CServer* pNServP, QWidget* parent = 0 );
     virtual ~CLlconServerDlg() {}
 
 protected:

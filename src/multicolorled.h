@@ -36,7 +36,8 @@
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qtimer.h>
-#include <qlistview.h>
+#include <qtreewidget.h>
+#include <qicon.h>
 #include "global.h"
 
 
@@ -48,7 +49,7 @@
 
 
 /* Classes ********************************************************************/
-class CMultiColorLEDbase : public QObject
+class CMultiColorLEDbase : public QLabel
 {
     Q_OBJECT
 
@@ -88,10 +89,10 @@ protected slots:
 };
 
 
-class CMultiColorLED : public QLabel, public CMultiColorLEDbase
+class CMultiColorLED : public CMultiColorLEDbase
 {
 public:
-    CMultiColorLED ( QWidget* parent, const char* name = 0, WFlags f = 0 );
+    CMultiColorLED ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
 protected:
     virtual void SetPixmap ( QPixmap& NewBitmap ) { setPixmap ( NewBitmap ); }
@@ -104,7 +105,7 @@ public:
     CMultColLEDListViewItem ( const int iNewCol ) : iColumn ( iNewCol ),
         pListViewItem ( NULL ) {}
 
-    void SetListViewItemPointer ( QListViewItem* pNewListViewItem )
+    void SetListViewItemPointer ( QTreeWidgetItem* pNewListViewItem )
     {
         pListViewItem = pNewListViewItem;
     }
@@ -114,20 +115,20 @@ protected:
     {
         if ( pListViewItem != NULL )
         {
-            pListViewItem->setPixmap ( iColumn, NewBitmap );
+            pListViewItem->setIcon ( iColumn, QIcon ( NewBitmap ) );
         }
     }
 
-    QListViewItem*  pListViewItem;
-    int             iColumn;
+    QTreeWidgetItem*  pListViewItem;
+    int               iColumn;
 };
 
 
-class CServerListViewItem : public QListViewItem
+class CServerListViewItem : public QTreeWidgetItem
 {
 public:
-    CServerListViewItem ( QListView* parent ) : LED0 ( 2 ), LED1 ( 3 ),
-        QListViewItem ( parent )
+    CServerListViewItem ( QTreeWidget* parent ) : LED0 ( 2 ), LED1 ( 3 ),
+        QTreeWidgetItem ( parent )
     {
         LED0.SetListViewItemPointer ( this );
         LED1.SetListViewItemPointer ( this );

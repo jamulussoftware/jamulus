@@ -702,8 +702,8 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
     note: iPos is automatically incremented in this function
 */
     // 4 bytes maximum since we return uint32
-    ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
-    ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
+    Q_ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
+    Q_ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
 
     uint32_t iRet = 0;
     for ( int i = 0; i < iNumOfBytes; i++ )
@@ -781,8 +781,8 @@ void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,
     note: iPos is automatically incremented in this function
 */
     // 4 bytes maximum since we use uint32
-    ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
-    ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
+    Q_ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
+    Q_ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
 
     for ( int i = 0; i < iNumOfBytes; i++ )
     {

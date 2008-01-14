@@ -34,13 +34,13 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
                                QString      sName )
 {
     // create new GUI control objects and store pointers to them
-    pMainGrid = new QGridLayout ( 2, 1 );
-    pFader    = new QSlider     ( Qt::Vertical, pNW );
-    pLabel    = new QLabel      ( "", pNW );
+    pMainGrid = new QGridLayout();
+    pFader    = new QSlider ( Qt::Vertical, pNW );
+    pLabel    = new QLabel  ( "", pNW );
 
     // setup slider
     pFader->setPageStep ( 1 );
-    pFader->setTickmarks ( QSlider::Both );
+    pFader->setTickPosition ( QSlider::TicksBothSides );
     pFader->setRange ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
     pFader->setValue ( 0 ); // set init value
@@ -57,11 +57,11 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pParentLayout->insertLayout ( 0, pMainGrid );
 
     // add help text to controls
-    QWhatsThis::add ( pFader, "<b>Mixer Fader:</b> Adjusts the audio level of this "
+    pFader->setWhatsThis ( "<b>Mixer Fader:</b> Adjusts the audio level of this "
 		"channel. All connected clients at the server will be assigned an audio "
 		"fader at each client" );
 
-    QWhatsThis::add ( pLabel, "<b>Mixer Fader Label:</b> Label (fader tag) identifying "
+    pLabel->setWhatsThis ( "<b>Mixer Fader Label:</b> Label (fader tag) identifying "
 		"the connected client. The tag name can be set in the clients main window." );
 
 
@@ -104,17 +104,17 @@ void CChannelFader::SetText ( const std::string sText )
     pLabel->setText ( sModText );
 }
 
-CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent,
-                                     const char* name,
-                                     WFlags f ) : 
-    QFrame ( parent, name, f )
+CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) : QFrame ( parent, f )
 {
     // set modified style
     setFrameShape  ( QFrame::StyledPanel );
     setFrameShadow ( QFrame::Sunken );
 
     // add hboxlayout with horizontal spacer
-    pMainLayout = new QHBoxLayout ( this, 11, 0 );
+
+// TODO is this ok this way? Don't we need the border 11 and space 0?
+    pMainLayout = new QHBoxLayout ( this );//, 11, 0 );
+
     pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
 
     // create all mixer controls and make them invisible
@@ -194,7 +194,7 @@ std::string CAudioMixerBoard::GenFaderText ( CChannelShortInfo& ChanInfo )
     {
         // convert IP address to text and show it
         const QHostAddress addrTest ( ChanInfo.iIpAddr );
-        return addrTest.toString().latin1();
+        return std::string ( addrTest.toString().toLatin1() );
     }
     else
     {

@@ -30,6 +30,7 @@
 #include <string>
 #include <qstring.h>
 #include <qevent.h>
+#include <qdebug.h>
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif
@@ -147,11 +148,11 @@ public:
     QString strError;
 };
 
-class CLlconEvent : public QCustomEvent
+class CLlconEvent : public QEvent
 {
 public:
     CLlconEvent ( int iNewMeTy, int iNewSt, int iNewChN = 0 ) : 
-        QCustomEvent ( QEvent::User + 11 ), iMessType ( iNewMeTy ), iStatus ( iNewSt ),
+        QEvent ( QEvent::Type ( QEvent::User + 11 ) ), iMessType ( iNewMeTy ), iStatus ( iNewSt ),
         iChanNum ( iNewChN ) {}
 
     int iMessType;

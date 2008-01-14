@@ -149,7 +149,7 @@ CVector<unsigned char> CImaAdpcm::Encode ( const CVector<short>& vecsAudio )
         // init diff and step
         int diff = vecsAudio[i] - iPrevAudio;
 
-        ASSERT ( iStepindEnc < IMA_STEP_SIZE_TAB_LEN );
+        Q_ASSERT ( iStepindEnc < IMA_STEP_SIZE_TAB_LEN );
         int step = ima_step_size[iStepindEnc];
 
         short bytecode = 0;
@@ -183,7 +183,7 @@ CVector<unsigned char> CImaAdpcm::Encode ( const CVector<short>& vecsAudio )
 		}
 
         // adjust step size
-        ASSERT ( bytecode < IMA_INDX_ADJUST_TAB_LEN );
+        Q_ASSERT ( bytecode < IMA_INDX_ADJUST_TAB_LEN );
         iStepindEnc += ima_indx_adjust[bytecode];
 
         // check that values do not exceed the bounds
@@ -249,7 +249,7 @@ CVector<short> CImaAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
     {
         const short bytecode = vecsAudio[i] & 0xF ;
 
-        ASSERT ( iStepindDec < IMA_STEP_SIZE_TAB_LEN );
+        Q_ASSERT ( iStepindDec < IMA_STEP_SIZE_TAB_LEN );
 
         short step = ima_step_size[iStepindDec];
         int current = vecsAudio[i - 1];
@@ -274,7 +274,7 @@ CVector<short> CImaAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
 
         current += diff;
 
-        ASSERT ( bytecode < IMA_INDX_ADJUST_TAB_LEN );
+        Q_ASSERT ( bytecode < IMA_INDX_ADJUST_TAB_LEN );
         iStepindDec += ima_indx_adjust[bytecode];
 
         // check that values do not exceed the bounds

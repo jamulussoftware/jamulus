@@ -33,7 +33,7 @@ void CSocket::Init()
 
     // initialize the listening socket
     bool bSuccess = SocketDevice.bind (
-        QHostAddress ( (Q_UINT32) 0 ), // INADDR_ANY
+        QHostAddress ( (quint32) 0 ), // INADDR_ANY
         LLCON_PORT_NUMBER );
 
     if ( bIsClient )
@@ -44,7 +44,7 @@ void CSocket::Init()
             // if server and client is on same machine, decrease port number by
             // one by definition
             bSuccess = SocketDevice.bind (
-                QHostAddress( (Q_UINT32) 0 ), // INADDR_ANY
+                QHostAddress( (quint32) 0 ), // INADDR_ANY
                 LLCON_PORT_NUMBER - 1 );
         }
     }

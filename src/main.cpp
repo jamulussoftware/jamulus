@@ -104,7 +104,7 @@ cerr << "logging ";
 		exit ( 1 );
 	}
 
-    /* Application object */
+    // Application object
     QApplication app ( argc, argv, bUseGUI );
 
     if ( bIsClient )
@@ -118,10 +118,10 @@ cerr << "logging ";
         Settings.Load ( strIniFileName );
 
         // GUI object
-        CLlconClientDlg ClientDlg ( &Client, 0, 0, FALSE, Qt::WStyle_MinMax );
+        CLlconClientDlg ClientDlg ( &Client, 0 );
 
         // set main window
-        app.setMainWidget ( &ClientDlg );
+        app.setActiveWindow ( &ClientDlg );
         pApp = &app; // Needed for post-event routine
 
         // show dialog
@@ -140,11 +140,10 @@ cerr << "logging ";
         if ( bUseGUI )
         {
             // GUI object for the server
-            CLlconServerDlg ServerDlg ( &Server, 0, 0, FALSE,
-                Qt::WStyle_MinMax );
+            CLlconServerDlg ServerDlg ( &Server, 0 );
 
             // set main window
-            app.setMainWidget ( &ServerDlg );
+            app.setActiveWindow ( &ServerDlg );
             pApp = &app; // needed for post-event routine
 
             // show dialog
@@ -154,7 +153,7 @@ cerr << "logging ";
         else
         {
             // only start application without using the GUI
-            qDebug ( CAboutDlg::GetVersionAndNameStr ( false ) );
+            qDebug() << CAboutDlg::GetVersionAndNameStr ( false );
             app.exec();
         }
     }
@@ -262,6 +261,6 @@ void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam,
             new CLlconEvent ( MessID, iMessageParam, iChanNum );
 
         // Qt will delete the event object when done
-        QThread::postEvent ( pApp->mainWidget(), LlconEv );
+//        QThread::postEvent ( pApp->mainWidget(), LlconEv );
     }
 }

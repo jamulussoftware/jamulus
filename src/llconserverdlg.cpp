@@ -27,40 +27,29 @@
 
 /* Implementation *************************************************************/
 CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
-    : pServer ( pNServP ), QDialog ( parent )
+    : pServer ( pNServP ), QDialog ( parent ),
+    BitmCubeGreen ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
+    BitmCubeRed ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
+    BitmCubeYellow ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL )
 {
     /* set text for version and application name */
     TextLabelNameVersion->setText ( QString ( APP_NAME ) +
         tr ( " server " ) + QString ( VERSION ) );
 
     /* Create bitmaps */
-    /* Define size of the bitmaps */
-    const int iXSize = 13;
-    const int iYSize = 13;
-    BitmCubeGreen.resize ( iXSize, iYSize );
     BitmCubeGreen.fill ( QColor ( 0, 255, 0 ) );
-    BitmCubeRed.resize ( iXSize, iYSize );
     BitmCubeRed.fill ( QColor ( 255, 0, 0 ) );
-    BitmCubeYellow.resize ( iXSize, iYSize );
     BitmCubeYellow.fill ( QColor ( 255, 255, 0 ) );
 
-    /* set up list view for connected clients (We assume that one column is
-       already there) */
-    ListViewClients->setColumnText ( 0, tr ( "Client IP : Port" ) );
+    // set up list view for connected clients
     ListViewClients->setColumnWidth ( 0, 170 );
-    ListViewClients->addColumn ( tr ( "Name" ) );
-    ListViewClients->setColumnAlignment ( 1, Qt::AlignLeft );
+//    ListViewClients->setColumnAlignment ( 1, Qt::AlignLeft );
     ListViewClients->setColumnWidth ( 1, 150 );
-    ListViewClients->addColumn ( tr ( "Put" ) );
-    ListViewClients->setColumnAlignment ( 2, Qt::AlignCenter );
-    ListViewClients->addColumn ( tr ( "Get" ) );
-    ListViewClients->setColumnAlignment ( 3, Qt::AlignCenter );
-    ListViewClients->addColumn ( tr ( "Jitter buffer size" ) );
-    ListViewClients->setColumnAlignment ( 4, Qt::AlignRight );
-    ListViewClients->addColumn ( tr ( "Block Size In" ) );
-    ListViewClients->setColumnAlignment ( 5, Qt::AlignRight );
-    ListViewClients->addColumn ( tr ( "Block Size Out" ) );
-    ListViewClients->setColumnAlignment ( 6, Qt::AlignRight );
+//    ListViewClients->setColumnAlignment ( 2, Qt::AlignCenter );
+//    ListViewClients->setColumnAlignment ( 3, Qt::AlignCenter );
+//    ListViewClients->setColumnAlignment ( 4, Qt::AlignRight );
+//    ListViewClients->setColumnAlignment ( 5, Qt::AlignRight );
+//    ListViewClients->setColumnAlignment ( 6, Qt::AlignRight );
     ListViewClients->clear();
 
     /* insert items in reverse order because in Windows all of them are
@@ -74,26 +63,27 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
 #endif
     }
 
-    /* Init timing jitter text label */
+    // Init timing jitter text label
     TextLabelResponseTime->setText ( "" );
 
 
     /* Main menu bar -------------------------------------------------------- */
     pMenu = new QMenuBar ( this );
-    pMenu->insertItem ( tr ( "&?" ), new CLlconHelpMenu ( this ) );
-    pMenu->setSeparator ( QMenuBar::InWindowsStyle );
+//    pMenu->insertItem ( tr ( "&?" ), new CLlconHelpMenu ( this ) );
+    pMenu->addMenu ( new CLlconHelpMenu ( this ) );
+    //pMenu->setSeparator ( QMenuBar::InWindowsStyle );
 
-    /* Now tell the layout about the menu */
-    CLlconServerDlgBaseLayout->setMenuBar ( pMenu );
+    // Now tell the layout about the menu
+    layout()->setMenuBar ( pMenu );
 
 
     /* connections ---------------------------------------------------------- */
-    /* timers */
+    // timers
     QObject::connect ( &Timer, SIGNAL ( timeout() ), this, SLOT ( OnTimer() ) );
 
 
     /* timers --------------------------------------------------------------- */
-    /* start timer for GUI controls */
+    // start timer for GUI controls
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
 }
 

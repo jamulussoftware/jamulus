@@ -89,7 +89,7 @@ void CServer::Stop()
     // logging
     QString strLogStr = CLogTimeDate::toString() + "Server stopped";
 
-    qDebug ( strLogStr ); // on console
+    qDebug() << strLogStr; // on console
     Logging << strLogStr; // in log file
 }
 

@@ -30,20 +30,16 @@
 
 
 /* Implementation *************************************************************/
-CMultiColorLEDbase::CMultiColorLEDbase()
+CMultiColorLEDbase::CMultiColorLEDbase() :
+    BitmCubeGreen ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
+    BitmCubeRed ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
+    BitmCubeGrey ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
+    BitmCubeYellow ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL )
 {
-    /* Define size of the bitmaps */
-    const int iXSize = 13;
-    const int iYSize = 13;
-
     /* Create bitmaps */
-    BitmCubeGreen.resize ( iXSize, iYSize );
     BitmCubeGreen.fill ( QColor ( 0, 255, 0 ) );
-    BitmCubeRed.resize ( iXSize, iYSize );
     BitmCubeRed.fill ( QColor ( 255, 0, 0 ) );
-    BitmCubeGrey.resize ( iXSize, iYSize );
     BitmCubeGrey.fill ( QColor ( 192, 192, 192 ) );
-    BitmCubeYellow.resize ( iXSize, iYSize );
     BitmCubeYellow.fill ( QColor ( 255, 255, 0 ) );
 
     /* Init color flags */
@@ -141,21 +137,21 @@ void CMultiColorLEDbase::SetLight ( int iNewStatus )
     switch ( iNewStatus )
     {
     case MUL_COL_LED_GREEN:
-        /* Green light */
+        // Green light
         bFlagGreenLi = true;
-        TimerGreenLight.changeInterval ( iUpdateTime );
+        TimerGreenLight.setInterval ( iUpdateTime );
         break;
 
     case MUL_COL_LED_YELLOW:
-        /* Yellow light */
+        // Yellow light
         bFlagYellowLi = true;
-        TimerYellowLight.changeInterval ( iUpdateTime );
+        TimerYellowLight.setInterval ( iUpdateTime );
         break;
 
     case MUL_COL_LED_RED:
-        /* Red light */
+        // Red light
         bFlagRedLi = true;
-        TimerRedLight.changeInterval ( iUpdateTime );
+        TimerRedLight.setInterval ( iUpdateTime );
         break;
     }
 

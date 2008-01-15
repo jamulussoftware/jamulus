@@ -105,6 +105,9 @@
 #define TIME_MOV_AV_RESPONSE            30 // seconds
 #define LEN_MOV_AV_RESPONSE             ( TIME_MOV_AV_RESPONSE * 1000 / MIN_BLOCK_DURATION_MS )
 
+// GUI definition: width/heigth size of LED pixmaps
+#define LED_WIDTH_HEIGHT_SIZE_PIXEL     13
+
 
 #define _MAXSHORT                       32767
 #define _MAXBYTE                        255 // binary: 11111111

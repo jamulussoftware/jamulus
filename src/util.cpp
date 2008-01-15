@@ -354,13 +354,14 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
 
 
 /* Help menu ---------------------------------------------------------------- */
-CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QPopupMenu ( parent )
+CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
 {
     // standard help menu consists of about and what's this help
-    insertItem ( tr ( "What's &This" ), this,
-        SLOT ( OnHelpWhatsThis () ), SHIFT+Key_F1 );
-    insertSeparator();
-    insertItem ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
+    addAction ( tr ( "What's &This" ), this,
+        SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
+
+    addSeparator();
+    addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
 }
 
 

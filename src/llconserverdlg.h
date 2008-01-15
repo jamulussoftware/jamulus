@@ -67,7 +67,7 @@ protected:
 
     QMenuBar*                       pMenu;
 
-    virtual void customEvent ( QCustomEvent* Event );
+    virtual void customEvent ( QEvent* Event );
     void UpdateSliderNetBuf();
 
 public slots:

@@ -193,7 +193,7 @@ bool CServer::GetTimingStdDev ( double& dCurTiStdDev )
     }
 }
 
-void CServer::customEvent ( QCustomEvent* Event )
+void CServer::customEvent ( QEvent* Event )
 {
     if ( Event->type() == QEvent::User + 11 )
     {

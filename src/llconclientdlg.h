@@ -77,12 +77,22 @@ protected:
     QTimer                  TimerSigMet;
     QTimer                  TimerStatus;
 
-    virtual void            customEvent ( QCustomEvent* Event );
-    virtual void            closeEvent  ( QCloseEvent * Event );
+    virtual void            customEvent ( QEvent* Event );
+    virtual void            closeEvent  ( QCloseEvent* Event );
     void                    UpdateDisplay();
 
-    QPopupMenu*             pSettingsMenu;
+    QMenu*                  pSettingsMenu;
     QMenuBar*               pMenu;
+
+/*
+    QAction*                pActGeneralSettings;
+    QAction*                pActExit;
+    QAction*                pActAbout;
+    QMenu*                  pSettingsMenu;
+    QMenu*                  pHelpMenu;
+    QMenuBar*               pMainMenuBar;
+*/
+
 
     CClientSettingsDlg      ClientSettingsDlg;
 

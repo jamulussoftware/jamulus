@@ -30,7 +30,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
     : pClient ( pNCliP ), QDialog ( parent ),
     ClientSettingsDlg ( pNCliP, 0, Qt::WindowMinMaxButtonsHint )
 {
-    /* add help text to controls */
+    setupUi ( this );
+
+    // add help text to controls
     QString strInpLevH = tr ( "<b>Input level meter:</b> Shows the level of the "
         "input audio signal of the sound card. The level is in dB. Overload "
         "should be avoided." );
@@ -94,17 +96,19 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
     // we want the cursor to be at IP address line edit at startup
     LineEditServerAddr->setFocus();
 
-    /* init status label */
+    // init status label
     OnTimerStatus();
 
-    /* init connection button text */
+    // init connection button text
     PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
 
-    /* init input level meter bars */
-    ProgressBarInputLevelL->setTotalSteps ( NUM_STEPS_INP_LEV_METER );
-    ProgressBarInputLevelL->setProgress ( 0 );
-    ProgressBarInputLevelR->setTotalSteps ( NUM_STEPS_INP_LEV_METER );
-    ProgressBarInputLevelR->setProgress ( 0 );
+    // init input level meter bars
+    ProgressBarInputLevelL->setMinimum ( 0 );
+    ProgressBarInputLevelL->setMaximum ( NUM_STEPS_INP_LEV_METER );
+    ProgressBarInputLevelL->setValue ( 0 );
+    ProgressBarInputLevelR->setMinimum ( 0 );
+    ProgressBarInputLevelR->setMaximum ( NUM_STEPS_INP_LEV_METER );
+    ProgressBarInputLevelR->setValue ( 0 );
 
 
     // init slider controls ---
@@ -133,28 +137,111 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
     }
 
 
-    /* Settings menu  ------------------------------------------------------- */
-    pSettingsMenu = new QPopupMenu ( this );
-    CHECK_PTR ( pSettingsMenu );
 
-    pSettingsMenu->insertItem ( tr ( "&General Settings..." ), this,
+
+
+// TODO check if code works and then clean up!!!!!!!
+
+
+#if 0
+    /* Settings menu  ------------------------------------------------------- */
+    pSettingsMenu = new QMenu ( this );
+    pSettingsMenu->addMenu ( tr ( "&General Settings..." ), this,
         SLOT ( OnOpenGeneralSettings() ) );
 
     pSettingsMenu->insertSeparator();
-    pSettingsMenu->insertItem ( tr ( "E&xit" ), this,
+    pSettingsMenu->addMenu ( tr ( "E&xit" ), this,
         SLOT ( close() ), CTRL+Key_Q );
 
 
     /* Main menu bar -------------------------------------------------------- */
     pMenu = new QMenuBar ( this );
-    CHECK_PTR ( pMenu );
-
-    pMenu->insertItem ( tr ( "&Settings" ), pSettingsMenu );
-    pMenu->insertItem ( tr ( "&?"), new CLlconHelpMenu ( this ) );
+    pMenu->addMenu ( tr ( "&Settings" ), pSettingsMenu );
+    pMenu->addMenu ( tr ( "&?"), new CLlconHelpMenu ( this ) );
     pMenu->setSeparator ( QMenuBar::InWindowsStyle );
 
     /* Now tell the layout about the menu */
     CLlconClientDlgBaseLayout->setMenuBar ( pMenu );
+#endif
+
+
+    /* Settings menu  ------------------------------------------------------- */
+    pSettingsMenu = new QMenu ( "&Settings", this );
+    pSettingsMenu->addAction ( tr ( "&General Settings..." ), this,
+        SLOT ( OnOpenGeneralSettings() ) );
+
+    pSettingsMenu->addSeparator();
+    pSettingsMenu->addAction ( tr ( "E&xit" ), this,
+        SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
+
+
+    /* Main menu bar -------------------------------------------------------- */
+    pMenu = new QMenuBar ( this );
+    //pMenu->addMenu ( tr ( "&Settings" ), pSettingsMenu );
+    pMenu->addMenu ( pSettingsMenu );
+    //pMenu->addMenu ( tr ( "&?" ), new CLlconHelpMenu ( this ) );
+    pMenu->addMenu ( new CLlconHelpMenu ( this ) );
+//    pMenu->setSeparator ( QMenuBar::InWindowsStyle );
+
+    // Now tell the layout about the menu
+    layout()->setMenuBar ( pMenu );
+
+
+
+
+    /* Menu actions --------------------------------------------------------- */
+/*
+    pActGeneralSettings = new QAction ( tr ( "&General Settings..."), this );
+    connect( pActGeneralSettings, SIGNAL ( triggered() ),
+        this, SLOT ( OnOpenGeneralSettings() ) );
+
+    pActExit = new QAction ( tr ( "&Quit" ), this );
+    pActExit->setShortcut ( tr ( "Ctrl+Q" ) );
+    connect ( pActExit, SIGNAL ( triggered() ), this, SLOT ( close() ) );
+
+
+    pActAbout = new QAction ( tr ( "&About" ), this );
+    connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
+
+
+pActAbout
+pHelpMenu
+*/
+
+    /* Main menu bar -------------------------------------------------------- */
+/*
+pMainMenuBar
+
+    pMainMenuBar = new QMenuBar ( this );
+    pMainMenuBar->addMenu ( tr ( "&Settings" ), pSettingsMenu );
+
+    pMenu->addMenu ( tr ( "&?"), new CLlconHelpMenu ( this ) );
+    pMenu->setSeparator ( QMenuBar::InWindowsStyle );
+
+    pSettingsMenu = menuBar()->addMenu ( tr ( "&Settings" ) );
+    pSettingsMenu->addAction(pActGeneralSettings);
+    pSettingsMenu->addSeparator();
+    pSettingsMenu->addAction(pActExit);
+
+
+    pMenu->addMenu ( tr ( "&?"), new CLlconHelpMenu ( this ) );
+    pMenu->setSeparator ( QMenuBar::InWindowsStyle );
+
+    // Now tell the layout about the menu
+    CLlconClientDlgBaseLayout->setMenuBar ( pMainMenuBar );
+*/
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // connections -------------------------------------------------------------
@@ -199,7 +286,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
 
 CLlconClientDlg::~CLlconClientDlg()
 {
-    /* if connected, terminate connection */
+    // if connected, terminate connection
     if ( pClient->IsRunning() )
     {
         pClient->Stop();
@@ -228,8 +315,8 @@ void CLlconClientDlg::OnConnectDisconBut()
 
         // stop timer for level meter bars and reset them
         TimerSigMet.stop();
-        ProgressBarInputLevelL->setProgress ( 0 );
-        ProgressBarInputLevelR->setProgress ( 0 );
+        ProgressBarInputLevelL->setValue ( 0 );
+        ProgressBarInputLevelR->setValue ( 0 );
 
         // immediately update status bar
         OnTimerStatus();
@@ -256,7 +343,7 @@ void CLlconClientDlg::OnConnectDisconBut()
         {
             // Restart timer to ensure that the text is visible at
             // least the time for one complete interval
-            TimerStatus.changeInterval ( STATUSBAR_UPDATE_TIME );
+            TimerStatus.setInterval ( STATUSBAR_UPDATE_TIME );
 
             // show the error in the status bar
             TextLabelStatus->setText ( tr ( "invalid address" ) );
@@ -271,8 +358,7 @@ void CLlconClientDlg::OnOpenGeneralSettings()
 
     // make sure dialog is upfront and has focus
     ClientSettingsDlg.raise();
-    ClientSettingsDlg.setActiveWindow();
-    
+    ClientSettingsDlg.activateWindow();
 }
 
 void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
@@ -286,7 +372,7 @@ void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
 
 void CLlconClientDlg::OnTimerSigMet()
 {
-    /* get current input levels */
+    // get current input levels
     double dCurSigLevelL = pClient->MicLevelL();
     double dCurSigLevelR = pClient->MicLevelR();
 
@@ -312,14 +398,14 @@ void CLlconClientDlg::OnTimerSigMet()
         dCurSigLevelR = 0;
     }
 
-    /* show current level */
-    ProgressBarInputLevelL->setProgress ( (int) ceil ( dCurSigLevelL ) );
-    ProgressBarInputLevelR->setProgress ( (int) ceil ( dCurSigLevelR ) );
+    // show current level
+    ProgressBarInputLevelL->setValue ( (int) ceil ( dCurSigLevelL ) );
+    ProgressBarInputLevelR->setValue ( (int) ceil ( dCurSigLevelR ) );
 }
 
 void CLlconClientDlg::UpdateDisplay()
 {
-    /* show connection status in status bar */
+    // show connection status in status bar
     if ( pClient->IsConnected () && pClient->IsRunning () )
     {
         TextLabelStatus->setText ( tr ( "connected" ) );
@@ -330,7 +416,7 @@ void CLlconClientDlg::UpdateDisplay()
     }
 }
 
-void CLlconClientDlg::customEvent ( QCustomEvent* Event )
+void CLlconClientDlg::customEvent ( QEvent* Event )
 {
     if ( Event->type() == QEvent::User + 11 )
     {

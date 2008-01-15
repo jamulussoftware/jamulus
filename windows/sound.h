@@ -36,7 +36,7 @@
 /* Definitions ****************************************************************/
 // switch here between ASIO (Steinberg) or native Windows(TM) sound interface
 #undef USE_ASIO_SND_INTERFACE
-#define USE_ASIO_SND_INTERFACE
+//#define USE_ASIO_SND_INTERFACE
 
 
 #define NUM_IN_OUT_CHANNELS     2       /* Stereo recording (but we only

@@ -80,7 +80,6 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
 
     /* Main menu bar -------------------------------------------------------- */
     pMenu = new QMenuBar ( this );
-    CHECK_PTR ( pMenu );
     pMenu->insertItem ( tr ( "&?" ), new CLlconHelpMenu ( this ) );
     pMenu->setSeparator ( QMenuBar::InWindowsStyle );
 
@@ -169,7 +168,7 @@ void CLlconServerDlg::OnTimer()
     }
 }
 
-void CLlconServerDlg::customEvent ( QCustomEvent* Event )
+void CLlconServerDlg::customEvent ( QEvent* Event )
 {
     if ( Event->type() == QEvent::User + 11 )
     {

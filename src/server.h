@@ -66,7 +66,7 @@ protected:
     CVector<short>  ProcessData ( CVector<CVector<double> >& vecvecdData,
                                   CVector<double>& vecdGains );
 
-    virtual void    customEvent ( QCustomEvent* Event );
+    virtual void    customEvent ( QEvent* Event );
 
     QTimer              Timer;
     CVector<short>      vecsSendData;

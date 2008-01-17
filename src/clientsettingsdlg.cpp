@@ -29,6 +29,8 @@
 CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     Qt::WindowFlags f ) : pClient ( pNCliP ), QDialog ( parent, f )
 {
+    setupUi ( this );
+
     /* Init timing jitter text label */
     TextLabelStdDevTimer->setText ( "" );
 

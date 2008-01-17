@@ -260,7 +260,12 @@ void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam,
         CLlconEvent* LlconEv =
             new CLlconEvent ( MessID, iMessageParam, iChanNum );
 
+
+// TODO QT4
         // Qt will delete the event object when done
 //        QThread::postEvent ( pApp->mainWidget(), LlconEv );
+
+
+
     }
 }

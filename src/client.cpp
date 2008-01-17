@@ -91,23 +91,18 @@ bool CClient::SetServerAddr ( QString strNAddr )
     // first try if this is an IP number an can directly applied to QHostAddress
     if ( !InetAddr.setAddress ( strNAddr ) )
     {
-
-// TODO implement the IP number query with QT objects (this is not possible with
-// QT 2 so we have to implement a workaround solution here
-
         // it was no vaild IP address, try to get host by name, assuming
         // that the string contains a valid host name string
-        const hostent* HostInf = gethostbyname ( strNAddr.toLatin1() );
+        QHostInfo HostInfo = QHostInfo::fromName ( strNAddr );
 
-        if ( HostInf )
+        if ( HostInfo.error() == QHostInfo::NoError )
         {
-            uint32_t dwIPNumber;
-
-            // copy IP address of first found host in host list
-            memcpy ( (char*) &dwIPNumber, HostInf->h_addr_list[0], sizeof ( dwIPNumber ) );
-
-            // apply IP address to QT object (change byte order, too)
-            InetAddr.setAddress ( htonl ( dwIPNumber ) );
+            // apply IP address to QT object
+             if ( !HostInfo.addresses().isEmpty() )
+             {
+                 // use the first IP address
+                 InetAddr = HostInfo.addresses().first();
+             }
         }
         else
         {

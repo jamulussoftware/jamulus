@@ -43,6 +43,9 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
 
     // set up list view for connected clients
     ListViewClients->setColumnWidth ( 0, 170 );
+
+// TODO QT4
+
 //    ListViewClients->setColumnAlignment ( 1, Qt::AlignLeft );
     ListViewClients->setColumnWidth ( 1, 150 );
 //    ListViewClients->setColumnAlignment ( 2, Qt::AlignCenter );
@@ -68,6 +71,9 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
 
 
     /* Main menu bar -------------------------------------------------------- */
+
+// TODO QT4
+
     pMenu = new QMenuBar ( this );
 //    pMenu->insertItem ( tr ( "&?" ), new CLlconHelpMenu ( this ) );
     pMenu->addMenu ( new CLlconHelpMenu ( this ) );

@@ -27,6 +27,7 @@
 
 #include <qthread.h>
 #include <qhostaddress.h>
+#include <qhostinfo.h>
 #include <qstring.h>
 #include <qdatetime.h>
 #include "global.h"

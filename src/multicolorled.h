@@ -54,7 +54,7 @@ class CMultiColorLEDbase : public QLabel
     Q_OBJECT
 
 public:
-    CMultiColorLEDbase();
+    CMultiColorLEDbase ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
     void Reset();
     void SetUpdateTime ( int iNUTi );

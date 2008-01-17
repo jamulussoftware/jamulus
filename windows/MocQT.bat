@@ -40,7 +40,10 @@ rem .h --------------
 
 
 rem .ui -------------
-%qtdir%\bin\uic.exe ..\src\aboutdlgbase_qt4.ui -o moc\aboutdlgbase.h  
-%qtdir%\bin\uic.exe ..\src\llconclientdlgbase_qt4.ui -o moc\llconclientdlgbase.h  
-%qtdir%\bin\uic.exe ..\src\clientsettingsdlgbase_qt4.ui -o moc\clientsettingsdlgbase.h  
-%qtdir%\bin\uic.exe ..\src\llconserverdlgbase_qt4.ui -o moc\llconserverdlgbase.h  
+%qtdir%\bin\uic.exe ..\src\aboutdlgbase.ui -o moc\aboutdlgbase.h  
+%qtdir%\bin\uic.exe ..\src\llconclientdlgbase.ui -o moc\llconclientdlgbase.h  
+%qtdir%\bin\uic.exe ..\src\clientsettingsdlgbase.ui -o moc\clientsettingsdlgbase.h  
+%qtdir%\bin\uic.exe ..\src\llconserverdlgbase.ui -o moc\llconserverdlgbase.h  
+
+rem .qrc ------------
+%qtdir%\bin\rcc.exe ..\src\resources.qrc -o moc\resources.rcc

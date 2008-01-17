@@ -30,7 +30,8 @@
 
 
 /* Implementation *************************************************************/
-CMultiColorLEDbase::CMultiColorLEDbase() :
+CMultiColorLEDbase::CMultiColorLEDbase ( QWidget* parent, Qt::WindowFlags f )
+    : QLabel ( parent, f ),
     BitmCubeGreen ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
     BitmCubeRed ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
     BitmCubeGrey ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
@@ -172,7 +173,8 @@ void CMultiColorLEDbase::SetUpdateTime ( int iNUTi )
 }
 
 
-CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f ) : QLabel ( parent, f )
+CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
+    : CMultiColorLEDbase ( parent, f )
 {
     // set modified style
     setFrameShape ( QFrame::Panel );

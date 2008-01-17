@@ -141,7 +141,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
 
 
 // TODO check if code works and then clean up!!!!!!!
-
+// TODO QT4
 
 #if 0
     /* Settings menu  ------------------------------------------------------- */

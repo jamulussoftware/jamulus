@@ -59,11 +59,8 @@ void CSocket::Init()
         exit ( 1 );
     }
 
-    QSocketNotifier* pSocketNotivRead =
-        new QSocketNotifier ( SocketDevice.socket (), QSocketNotifier::Read );
-
     // connect the "activated" signal
-    QObject::connect ( pSocketNotivRead, SIGNAL ( activated ( int ) ),
+    QObject::connect ( &SocketDevice, SIGNAL ( readyRead() ),
         this, SLOT ( OnDataReceived() ) );
 }
 
@@ -78,7 +75,7 @@ void CSocket::SendPacket ( const CVector<unsigned char>& vecbySendBuf,
         // char vector in "const char*", for this we first convert the const
         // unsigned char vector in a read/write unsigned char vector and then
         // do the cast to const char*)
-        SocketDevice.writeBlock (
+        SocketDevice.writeDatagram (
             (const char*) &( (CVector<unsigned char>) vecbySendBuf )[0],
             iVecSizeOut, HostAddr.InetAddr, HostAddr.iPort );
     }
@@ -87,7 +84,7 @@ void CSocket::SendPacket ( const CVector<unsigned char>& vecbySendBuf,
 void CSocket::OnDataReceived()
 {
     // read block from network interface
-    const int iNumBytesRead = SocketDevice.readBlock ( (char*) &vecbyRecBuf[0],
+    const int iNumBytesRead = SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
         MAX_SIZE_BYTES_NETW_BUF );
 
     // check if an error occurred
@@ -133,8 +130,14 @@ void CSocket::OnDataReceived()
             // this was an audio packet, start server
             // tell the server object to wake up if it
             // is in sleep mode (Qt will delete the event object when done)
-            QThread::postEvent ( pServer,
-                new CLlconEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
+
+
+// TODO QT4
+//            QThread::postEvent ( pServer,
+//                new CLlconEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
+
+
+
         }
     }
 }

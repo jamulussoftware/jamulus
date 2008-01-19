@@ -25,11 +25,11 @@
 #if !defined ( SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_ )
 #define SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_
 
-#include "global.h"
-#include "client.h"
 #include <map>
 #include <string>
 #include <fstream>
+#include "global.h"
+#include "client.h"
 
 
 /* Definitions ****************************************************************/

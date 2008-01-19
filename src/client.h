@@ -25,11 +25,11 @@
 #if !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ )
 #define CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_
 
-#include <qthread.h>
-#include <qhostaddress.h>
-#include <qhostinfo.h>
-#include <qstring.h>
-#include <qdatetime.h>
+#include <QThread.h>
+#include <QHostAddress.h>
+#include <QHostInfo.h>
+#include <QString.h>
+#include <QDateTime.h>
 #include "global.h"
 #include "socket.h"
 #include "resample.h"

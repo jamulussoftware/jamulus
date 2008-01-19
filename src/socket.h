@@ -25,11 +25,11 @@
 #if !defined ( SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_ )
 #define SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_
 
+#include <QObject.h>
+#include <QMessageBox.h>
+#include <QUdpSocket.h>
+#include <QSocketNotifier.h>
 #include <vector>
-#include <qobject.h>
-#include <qmessagebox.h>
-#include <qudpsocket.h>
-#include <qsocketnotifier.h>
 #include "global.h"
 #include "channel.h"
 #include "util.h"

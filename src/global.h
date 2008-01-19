@@ -25,12 +25,12 @@
 #if !defined ( GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_ )
 #define GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_
 
+#include <QString.h>
+#include <QEvent.h>
+#include <QDebug.h>
 #include <stdio.h>
 #include <math.h>
 #include <string>
-#include <qstring.h>
-#include <qevent.h>
-#include <qdebug.h>
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif

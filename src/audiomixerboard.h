@@ -28,12 +28,12 @@
 #if !defined ( MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_ )
 #define MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_
 
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qstring.h>
-#include <qslider.h>
-#include <qsizepolicy.h>
+#include <QFrame.h>
+#include <QLabel.h>
+#include <QLayout.h>
+#include <QString.h>
+#include <QSlider.h>
+#include <QSizePolicy.h>
 #include "global.h"
 #include "util.h"
 

@@ -33,9 +33,9 @@
 #if !defined ( AFX_MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_ )
 #define AFX_MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_
 
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qtimer.h>
+#include <QLabel.h>
+#include <QPixmap.h>
+#include <QTimer.h>
 #include <qtreewidget.h>
 #include <qicon.h>
 #include "global.h"

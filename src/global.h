@@ -25,9 +25,9 @@
 #if !defined ( GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_ )
 #define GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_
 
-#include <QString.h>
-#include <QEvent.h>
-#include <QDebug.h>
+#include <qstring.h>
+#include <qevent.h>
+#include <qdebug.h>
 #include <stdio.h>
 #include <math.h>
 #include <string>

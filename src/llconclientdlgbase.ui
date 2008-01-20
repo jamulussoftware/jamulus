@@ -51,7 +51,7 @@
          </sizepolicy>
         </property>
         <property name="pixmap" >
-         <pixmap>gig.png</pixmap>
+         <pixmap resource="resources.qrc" >:/new/prefix1/gig.png</pixmap>
         </property>
         <property name="scaledContents" >
          <bool>true</bool>

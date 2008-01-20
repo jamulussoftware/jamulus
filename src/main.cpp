@@ -107,6 +107,10 @@ cerr << "logging ";
     // Application object
     QApplication app ( argc, argv, bUseGUI );
 
+    // init resources
+    extern int qInitResources();
+    qInitResources();
+
     if ( bIsClient )
     {
         // client

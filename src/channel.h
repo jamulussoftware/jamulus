@@ -25,8 +25,8 @@
 #if !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ )
 #define CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_
 
-#include <QThread.h>
-#include <QDateTime.h>
+#include <qthread.h>
+#include <qdatetime.h>
 #include "global.h"
 #include "buffer.h"
 #include "audiocompr.h"

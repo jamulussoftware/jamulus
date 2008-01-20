@@ -22,14 +22,14 @@
  *
 \******************************************************************************/
 
-#include <QLabel.h>
+#include <qlabel.h>
 #include <qlistview.h>
-#include <QTimer.h>
-#include <QPixmap.h>
-#include <QThread.h>
-#include <QSlider.h>
-#include <QMenuBar.h>
-#include <QLayout.h>
+#include <qtimer.h>
+#include <qpixmap.h>
+#include <qthread.h>
+#include <qslider.h>
+#include <qmenubar.h>
+#include <qlayout.h>
 #include "global.h"
 #include "server.h"
 #include "multicolorled.h"

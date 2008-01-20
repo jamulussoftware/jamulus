@@ -13,7 +13,7 @@
    <string>General Settings</string>
   </property>
   <property name="windowIcon" >
-   <iconset/>
+   <iconset resource="resources.qrc" >:/new/prefix1/mainicon.png</iconset>
   </property>
   <property name="sizeGripEnabled" >
    <bool>true</bool>
@@ -729,6 +729,8 @@
    <header>multicolorled.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="resources.qrc" />
+ </resources>
  <connections/>
 </ui>

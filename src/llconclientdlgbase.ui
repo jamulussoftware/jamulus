@@ -13,7 +13,7 @@
    <string>llcon</string>
   </property>
   <property name="windowIcon" >
-   <iconset/>
+   <iconset resource="resources.qrc" >:/new/prefix1/mainicon.png</iconset>
   </property>
   <property name="sizeGripEnabled" >
    <bool>true</bool>
@@ -28,7 +28,7 @@
    <item>
     <widget class="QFrame" name="FrameMain" >
      <property name="frameShape" >
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Panel</enum>
      </property>
      <property name="frameShadow" >
       <enum>QFrame::Raised</enum>

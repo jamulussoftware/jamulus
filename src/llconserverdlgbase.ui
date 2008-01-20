@@ -13,7 +13,7 @@
    <string>llcon</string>
   </property>
   <property name="windowIcon" >
-   <iconset/>
+   <iconset resource="resources.qrc" >:/new/prefix1/mainicon.png</iconset>
   </property>
   <property name="sizeGripEnabled" >
    <bool>true</bool>
@@ -154,7 +154,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc" />
+ </resources>
  <connections>
   <connection>
    <sender>buttonOk</sender>

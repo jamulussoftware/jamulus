@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/new/prefix1" >
         <file>gig.png</file>
+        <file>mainicon.png</file>
     </qresource>
 </RCC>

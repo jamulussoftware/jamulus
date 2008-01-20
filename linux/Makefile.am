@@ -35,10 +35,10 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/llconserverdlg.h \
 	../src/llconclientdlg.h \
 	../src/clientsettingsdlg.h \
-	../src/llconclientdlg.ui \
-	../src/llconserverdlg.ui \
-	../src/clientsettingsdlg.ui \
-	../src/aboutdlg.ui \
+	../src/llconclientdlgbase.ui \
+	../src/llconserverdlgbase.ui \
+	../src/clientsettingsdlgbase.ui \
+	../src/aboutdlgbase.ui \
 	sound.h
 
 # these need to be generated before the rest can be compiled
@@ -89,17 +89,17 @@ moc/moc_channel.cpp: ../src/channel.h
 	$(QT_MOC) ../src/channel.h -o moc/moc_channel.cpp
 
 
-moc/moc_aboutdlg.h: ../src/aboutdlg.ui
-	$(QT_UIC) ../src/aboutdlg.ui -o moc/aboutdlg.h
+moc/moc_aboutdlg.h: ../src/aboutdlgbase.ui
+	$(QT_UIC) ../src/aboutdlgbase.ui -o moc/aboutdlg.h
 
-moc/moc_llconclientdlg.h: ../src/llconclientdlg.ui
-	$(QT_UIC) ../src/llconclientdlg.ui -o moc/llconclientdlg.h
+moc/moc_llconclientdlg.h: ../src/llconclientdlgbase.ui
+	$(QT_UIC) ../src/llconclientdlgbase.ui -o moc/llconclientdlg.h
 
-moc/moc_clientsettingsdlg.h: ../src/clientsettingsdlg.ui
-	$(QT_UIC) ../src/clientsettingsdlg.ui -o moc/clientsettingsdlg.h
+moc/moc_clientsettingsdlg.h: ../src/clientsettingsdlgbase.ui
+	$(QT_UIC) ../src/clientsettingsdlgbase.ui -o moc/clientsettingsdlg.h
 
-moc/moc_llconserverdlg.h: ../src/llconserverdlg.ui
-	$(QT_UIC) ../src/llconserverdlg.ui -o moc/llconserverdlg.h
+moc/moc_llconserverdlg.h: ../src/llconserverdlgbase.ui
+	$(QT_UIC) ../src/llconserverdlgbase.ui -o moc/llconserverdlg.h
 
 
-llcon_CXXFLAGS=$(QWTINCL) -I../src -I$(QTDIR)/include -DQT_THREAD_SUPPORT -D_REENTRANT -g
+llcon_CXXFLAGS=-I../src -I$(QTDIR)/include -DQT_THREAD_SUPPORT -D_REENTRANT -g

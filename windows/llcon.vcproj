@@ -834,6 +834,10 @@
 						/>
 					</FileConfiguration>
 				</File>
+				<File
+					RelativePath=".\moc\resources.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="ASIO"

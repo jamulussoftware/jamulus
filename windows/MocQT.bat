@@ -46,4 +46,4 @@ rem .ui -------------
 %qtdir%\bin\uic.exe ..\src\llconserverdlgbase.ui -o moc\llconserverdlgbase.h  
 
 rem .qrc ------------
-%qtdir%\bin\rcc.exe ..\src\resources.qrc -o moc\resources.rcc
+%qtdir%\bin\rcc.exe ..\src\resources.qrc -o moc\resources.cpp

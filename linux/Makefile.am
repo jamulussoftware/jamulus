@@ -51,10 +51,13 @@ BUILT_SOURCES=moc/moc_server.cpp \
 	moc/moc_multicolorled.cpp \
 	moc/moc_audiomixerboard.cpp \
 	moc/moc_util.cpp \
-	moc/moc_llconclientdlg.h \
-	moc/moc_clientsettingsdlg.h \
-	moc/moc_llconserverdlg.h \
-	moc/moc_aboutdlg.h \
+	moc/moc_llconclientdlg.cpp \
+	moc/llconclientdlgbase.h \
+	moc/moc_clientsettingsdlg.cpp \
+	moc/clientsettingsdlgbase.h \
+	moc/moc_llconserverdlg.cpp \
+	moc/llconserverdlgbase.h \
+	moc/aboutdlgbase.h \
 	moc/resources.cpp
 
 # and should be cleaned by make clean
@@ -90,21 +93,31 @@ moc/moc_channel.cpp: ../src/channel.h
 	$(QT_MOC) ../src/channel.h -o moc/moc_channel.cpp
 
 
-moc/moc_aboutdlg.h: ../src/aboutdlgbase.ui
-	$(QT_UIC) ../src/aboutdlgbase.ui -o moc/aboutdlg.h
+moc/moc_llconclientdlg.cpp: ../src/llconclientdlg.h
+	$(QT_MOC) ../src/llconclientdlg.h -o moc/moc_llconclientdlg.cpp
 
-moc/moc_llconclientdlg.h: ../src/llconclientdlgbase.ui
-	$(QT_UIC) ../src/llconclientdlgbase.ui -o moc/llconclientdlg.h
+moc/moc_clientsettingsdlg.cpp: ../src/clientsettingsdlg.h
+	$(QT_MOC) ../src/clientsettingsdlg.h -o moc/moc_clientsettingsdlg.cpp
 
-moc/moc_clientsettingsdlg.h: ../src/clientsettingsdlgbase.ui
-	$(QT_UIC) ../src/clientsettingsdlgbase.ui -o moc/clientsettingsdlg.h
+moc/moc_llconserverdlg.cpp: ../src/llconserverdlg.h
+	$(QT_MOC) ../src/llconserverdlg.h -o moc/moc_llconserverdlg.cpp
 
-moc/moc_llconserverdlg.h: ../src/llconserverdlgbase.ui
-	$(QT_UIC) ../src/llconserverdlgbase.ui -o moc/llconserverdlg.h
+
+moc/aboutdlgbase.h: ../src/aboutdlgbase.ui
+	$(QT_UIC) ../src/aboutdlgbase.ui -o moc/aboutdlgbase.h
+
+moc/llconclientdlgbase.h: ../src/llconclientdlgbase.ui
+	$(QT_UIC) ../src/llconclientdlgbase.ui -o moc/llconclientdlgbase.h
+
+moc/clientsettingsdlgbase.h: ../src/clientsettingsdlgbase.ui
+	$(QT_UIC) ../src/clientsettingsdlgbase.ui -o moc/clientsettingsdlgbase.h
+
+moc/llconserverdlgbase.h: ../src/llconserverdlgbase.ui
+	$(QT_UIC) ../src/llconserverdlgbase.ui -o moc/llconserverdlgbase.h
 
 
 moc/resources.cpp: ../src/resources.qrc
 	$(QT_RCC) ../src/resources.qrc -o moc/resources.cpp
 
 
-llcon_CXXFLAGS=-I../src -I$(QT_INCLUDE_DIR) -I$(EXTRA_QT_INCLUDE_DIR) -DQT_THREAD_SUPPORT -D_REENTRANT -g
+llcon_CXXFLAGS=-I../src $(QT_CFLAGS) -DQT_THREAD_SUPPORT -D_REENTRANT -g

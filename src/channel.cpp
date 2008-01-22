@@ -686,7 +686,7 @@ for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
             // log new connection
             CHostAddress address ( GetAddress() );
             qDebug() << CLogTimeDate::toString() << "Connected with IP " <<
-                address.InetAddr.toString().toLatin1();
+                address.InetAddr.toString();
 
             emit NewConnection();
         }

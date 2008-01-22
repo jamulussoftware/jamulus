@@ -296,10 +296,10 @@ CLlconClientDlg::~CLlconClientDlg()
 void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
 {
     // store IP address
-    pClient->strIPAddress = LineEditServerAddr->text().toLatin1();
+    pClient->strIPAddress = LineEditServerAddr->text().toStdString();
 
     // store fader tag
-    pClient->strName = LineEditFaderTag->text().toLatin1();
+    pClient->strName = LineEditFaderTag->text().toStdString();
 
     // default implementation of this event handler routine
     Event->accept();
@@ -364,7 +364,7 @@ void CLlconClientDlg::OnOpenGeneralSettings()
 void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
 {
     // refresh internal name parameter
-    pClient->strName = strNewName.toLatin1();
+    pClient->strName = strNewName.toStdString();
 
     // update name at server
     pClient->SetRemoteName();

@@ -512,7 +512,7 @@ public:
     {
         if ( bDoLogging )
         {
-            fprintf ( pFile, "%s\n", sNewStr.toLatin1() );
+            fprintf ( pFile, "%s\n", sNewStr.toStdString() );
             fflush ( pFile );
         }
     }

@@ -114,7 +114,7 @@ void CLlconServerDlg::OnTimer()
         {
             // IP, port number
             vecpListViewItems[i]->setText ( 0, QString().sprintf ( "%s : %d",
-                vecHostAddresses[i].InetAddr.toString().toLatin1(),
+                vecHostAddresses[i].InetAddr.toString().toStdString(),
                 vecHostAddresses[i].iPort ) /* IP, port */);
 
             // name

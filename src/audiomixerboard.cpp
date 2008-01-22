@@ -194,7 +194,7 @@ std::string CAudioMixerBoard::GenFaderText ( CChannelShortInfo& ChanInfo )
     {
         // convert IP address to text and show it
         const QHostAddress addrTest ( ChanInfo.iIpAddr );
-        return std::string ( addrTest.toString().toLatin1() );
+        return std::string ( addrTest.toString().toStdString() );
     }
     else
     {

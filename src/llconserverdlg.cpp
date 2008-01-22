@@ -61,9 +61,7 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
     for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
     {
         vecpListViewItems[i] = new CServerListViewItem ( ListViewClients );
-#ifndef _WIN32
-        vecpListViewItems[i]->setVisible ( false );
-#endif
+        vecpListViewItems[i]->setHidden ( false );
     }
 
     // Init timing jitter text label
@@ -132,21 +130,11 @@ void CLlconServerDlg::OnTimer()
                 QString().setNum (
                 double ( veciNetwOutBlSiFact[i] * MIN_BLOCK_DURATION_MS), 'f', 2 ) );
 
-#ifndef _WIN32
-            vecpListViewItems[i]->setVisible ( true );
-#endif
+            vecpListViewItems[i]->setHidden ( true );
         }
         else
         {
-#ifdef _WIN32
-            // remove text for Windows version
-            vecpListViewItems[i]->setText ( 0, "" );
-            vecpListViewItems[i]->setText ( 1, "" );
-            vecpListViewItems[i]->setText ( 4, "" );
-            vecpListViewItems[i]->setText ( 5, "" );
-#else
-            vecpListViewItems[i]->setVisible ( false );
-#endif
+            vecpListViewItems[i]->setHidden ( false );
         }
     }
 

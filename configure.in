@@ -21,7 +21,7 @@ dnl Configuration Arguments
 
 AC_ARG_ENABLE( sound,[  --enable-sound        generic sound support], enable_sound=$enableval, enable_sound=yes)
 
-AC_ARG_WITH( qt4dir,[  --with-qtdir=path to QT],QT4DIR=$withval)
+dnl AC_ARG_WITH( qt4dir,[  --with-qtdir=path to QT],QT4DIR=$withval)
 
 
 AC_CHECK_HEADER(sys/asoundlib.h, , enable_sound=no)
@@ -47,7 +47,6 @@ AC_LANG(C++)
 dnl QT4 -------------------------------------------------------------------------
 dnl The QT4 check code was taken from the FreeMat-3.0 code by Samit Basu
 PKG_CHECK_MODULES(QT, QtCore QtGui QtNetwork >= 4.0.1, HAVE_QT4="yes", HAVE_QT4="no")
-foo=`echo $QT_LIBS | sed -e 's/-L/-Wl,-rpath,/g'`
 if test "x$HAVE_QT4" = "xyes"; then
   dnl Check needed because in some cases the QtGui includedir
   dnl doesn't contain the subsystem dir.
@@ -71,8 +70,12 @@ if test "x$HAVE_QT4" = "xyes"; then
     AC_MSG_ERROR([QT4 uic is required.])
   fi
 fi
-FOO=`echo $QT_LIBS | sed -e 's/-L/-Wl,-rpath,/' | sed -e 's/-L.*//'`
-LDFLAGS="$LDFLAGS $FOO"
+dnl FOO=`echo $QT_LIBS | sed -e 's/-L/-Wl,-rpath,/' | sed -e 's/-L.*//'`
+dnl LDFLAGS="$LDFLAGS $FOO"
+
+LDFLAGS="-L/usr/lib $LDFLAGS"
+
+dnl AC_MSG_NOTICE([Set LDFLAGS... $LDFLAGS])
 
 AC_MSG_NOTICE([Set QT_CFLAGS... $QT_CFLAGS])
 AC_SUBST(QT_CFLAGS)

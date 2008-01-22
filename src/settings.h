@@ -61,24 +61,24 @@ protected:
     };
 
     // these typedefs just make the code a bit more readable
-    typedef std::map<string, string, StlIniCompareStringNoCase > INISection;
+    typedef std::map<string, std::string, StlIniCompareStringNoCase > INISection;
     typedef std::map<string, INISection , StlIniCompareStringNoCase > INIFile;
 
-    string GetIniSetting( INIFile& theINI, const char* pszSection,
-                          const char* pszKey, const char* pszDefaultVal = "" );
+    std::string GetIniSetting( INIFile& theINI, const char* pszSection,
+                               const char* pszKey, const char* pszDefaultVal = "" );
     void PutIniSetting ( INIFile &theINI, const char *pszSection,
                          const char* pszKey = NULL, const char* pszValue = "" );
     void SaveIni ( INIFile& theINI, const char* pszFilename );
     INIFile LoadIni ( const char* pszFilename );
 
 
-    void SetNumericIniSet ( INIFile& theINI, string strSection, string strKey,
+    void SetNumericIniSet ( INIFile& theINI, std::string strSection, std::string strKey,
                             int iValue );
-    bool GetNumericIniSet ( INIFile& theINI, string strSection, string strKey,
+    bool GetNumericIniSet ( INIFile& theINI, string strSection, std::string strKey,
                             int iRangeStart, int iRangeStop, int& iValue );
-    void SetFlagIniSet ( INIFile& theINI, string strSection, string strKey,
+    void SetFlagIniSet ( INIFile& theINI, std::string strSection, std::string strKey,
                          bool bValue );
-    bool GetFlagIniSet ( INIFile& theINI, string strSection, string strKey,
+    bool GetFlagIniSet ( INIFile& theINI, std::string strSection, std::string strKey,
                          bool& bValue );
 
     // pointer to the client object needed for the various settings

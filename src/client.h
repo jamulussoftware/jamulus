@@ -123,8 +123,8 @@ public:
 
 
     // settings
-    std::string         strIPAddress;
-    std::string         strName;
+    QString             strIPAddress;
+    QString             strName;
 
 protected:
     virtual void run();

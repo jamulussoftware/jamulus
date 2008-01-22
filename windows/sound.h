@@ -35,7 +35,7 @@
 
 /* Definitions ****************************************************************/
 // switch here between ASIO (Steinberg) or native Windows(TM) sound interface
-#undef USE_ASIO_SND_INTERFACE
+//#undef USE_ASIO_SND_INTERFACE
 #define USE_ASIO_SND_INTERFACE
 
 

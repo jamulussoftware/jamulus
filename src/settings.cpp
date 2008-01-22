@@ -58,10 +58,10 @@ void CSettings::ReadIniFile ( std::string sFileName )
 	}
 
     // IP address
-    pClient->strIPAddress = GetIniSetting ( ini, "Client", "ipaddress" );
+    pClient->strIPAddress = GetIniSetting ( ini, "Client", "ipaddress" ).c_str();
 
     // name
-    pClient->strName = GetIniSetting ( ini, "Client", "name" );
+    pClient->strName = GetIniSetting ( ini, "Client", "name" ).c_str();
 
     // audio fader
     if ( GetNumericIniSet ( ini, "Client", "audfad", 0, AUD_FADER_IN_MAX, iValue ) == TRUE )
@@ -117,10 +117,10 @@ void CSettings::WriteIniFile ( std::string sFileName )
     INIFile ini;
 
     // IP address
-    PutIniSetting ( ini, "Client", "ipaddress", pClient->strIPAddress.c_str() );
+    PutIniSetting ( ini, "Client", "ipaddress", pClient->strIPAddress.toStdString().c_str() );
 
     // name
-    PutIniSetting ( ini, "Client", "name", pClient->strName.c_str() );
+    PutIniSetting ( ini, "Client", "name", pClient->strName.toStdString().c_str() );
 
     // audio fader
     SetNumericIniSet ( ini, "Client", "audfad", pClient->GetAudioInFader() );
@@ -248,15 +248,15 @@ void CSettings::SetFlagIniSet ( INIFile& theINI, string strSection, string strKe
 #pragma warning ( disable : 4786 4503 )
 #endif
 
-string CSettings::GetIniSetting ( CSettings::INIFile& theINI, const char* section,
-                                  const char* key, const char* defaultval )
+std::string CSettings::GetIniSetting ( CSettings::INIFile& theINI, const char* section,
+                                       const char* key, const char* defaultval )
 {
-    string result ( defaultval );
-    INIFile::iterator iSection = theINI.find ( string ( section ) );
+    std::string result ( defaultval );
+    INIFile::iterator iSection = theINI.find ( std::string ( section ) );
 
     if ( iSection != theINI.end() )
     {
-        INISection::iterator apair = iSection->second.find ( string ( key ) );
+        INISection::iterator apair = iSection->second.find ( std::string ( key ) );
 
         if ( apair != iSection->second.end() )
 		{
@@ -273,18 +273,18 @@ void CSettings::PutIniSetting ( CSettings::INIFile &theINI, const char *section,
     INIFile::iterator       iniSection;
     INISection::iterator    apair;
     
-    if ( ( iniSection = theINI.find ( string ( section ) ) ) == theINI.end() )
+    if ( ( iniSection = theINI.find ( std::string ( section ) ) ) == theINI.end() )
     {
-        /* No such section? Then add one */
+        // no such section? Then add one
         INISection newsection;
         if (key)
         {
             newsection.insert (
-                std::pair<std::string, string> ( string ( key ), string ( value ) ) );
+                std::pair<std::string, std::string> ( std::string ( key ), std::string ( value ) ) );
         }
 
         theINI.insert (
-            std::pair<string, INISection> ( string ( section ), newsection ) );
+            std::pair<std::string, INISection> ( std::string ( section ), newsection ) );
     }
     else
 	{
@@ -299,7 +299,7 @@ void CSettings::PutIniSetting ( CSettings::INIFile &theINI, const char *section,
 			}
 
 			iniSection->second.insert (
-				std::pair<string, string> ( string ( key ), string ( value ) ) );
+				std::pair<std::string, std::string> ( std::string ( key ), std::string ( value ) ) );
 		}
 	}
 }
@@ -308,7 +308,7 @@ CSettings::INIFile CSettings::LoadIni ( const char* filename )
 {
     INIFile         theINI;
     char            *value, *temp;
-    string          section;
+    std::string     section;
     char            buffer[MAX_INI_LINE];
     std::fstream    file ( filename, std::ios::in );
     
@@ -319,35 +319,35 @@ CSettings::INIFile CSettings::LoadIni ( const char* filename )
 
         if ( ( temp = strchr ( buffer, '\n' ) ) )
 		{
-            *temp = '\0'; /* Cut off at newline */
+            *temp = '\0'; // cut off at newline
 		}
 
         if ( ( temp = strchr ( buffer, '\r' ) ) )
 		{
-            *temp = '\0'; /* Cut off at linefeeds */
+            *temp = '\0'; // cut off at linefeeds
 		}
 
         if ( ( buffer[0] == '[' ) && ( temp = strrchr ( buffer, ']' ) ) )
-        {   /* if line is like -->   [section name] */
-            *temp = '\0'; /* Chop off the trailing ']' */
+        {   // if line is like -->   [section name]
+            *temp = '\0'; // chop off the trailing ']'
             section = &buffer[1];
-            PutIniSetting ( theINI, &buffer[1] ); /* Start new section */
+            PutIniSetting ( theINI, &buffer[1] ); // start new section
         }
         else
 		{
 			if ( buffer[0] && ( value = strchr ( buffer, '=' ) ) )
 			{
-				/* Assign whatever follows = sign to value, chop at "=" */
+				// assign whatever follows = sign to value, chop at "="
 				*value++ = '\0';
 
-				/* And add both sides to INISection */
+				// and add both sides to INISection
 				PutIniSetting ( theINI, section.c_str(), buffer, value );
 			}
 			else
 			{
 				if ( buffer[0] )
 				{
-					/* Must be a comment or something */
+					// must be a comment or something
 					PutIniSetting ( theINI, section.c_str(), buffer, "" );
 				}
 			}
@@ -359,7 +359,7 @@ CSettings::INIFile CSettings::LoadIni ( const char* filename )
 
 void CSettings::SaveIni ( CSettings::INIFile &theINI, const char* filename )
 {
-    bool bFirstSection = TRUE; /* Init flag */
+    bool bFirstSection = TRUE; // init flag
 
     std::fstream file ( filename, std::ios::out );
     if ( !file.good() )
@@ -367,7 +367,7 @@ void CSettings::SaveIni ( CSettings::INIFile &theINI, const char* filename )
         return;
 	}
     
-    /* Just iterate the hashes and values and dump them to a file */
+    // just iterate the hashes and values and dump them to a file
     INIFile::iterator section = theINI.begin();
     while ( section != theINI.end() )
     {
@@ -375,10 +375,10 @@ void CSettings::SaveIni ( CSettings::INIFile &theINI, const char* filename )
         {
             if ( bFirstSection == TRUE )
             {
-                /* Don't put a newline at the beginning of the first section */
+                // do not put a newline at the beginning of the first section
                 file << "[" << section->first << "]" << std::endl;
 
-                /* Reset flag */
+                // reset flag
                 bFirstSection = FALSE;
             }
             else
@@ -408,8 +408,8 @@ void CSettings::SaveIni ( CSettings::INIFile &theINI, const char* filename )
 
 /* Return true or false depending on whether the first string is less than the
    second */
-bool CSettings::StlIniCompareStringNoCase::operator() ( const string& x,
-                                                        const string& y ) const
+bool CSettings::StlIniCompareStringNoCase::operator() ( const std::string& x,
+                                                        const std::string& y ) const
 {
 #ifdef WIN32
     return ( stricmp ( x.c_str(), y.c_str() ) < 0 ) ? true : false;

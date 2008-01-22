@@ -515,7 +515,7 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
         {
             // byte-by-byte copying of the string data
             PutValOnStream ( vecData, iPos,
-                static_cast<uint32_t> ( vecChanInfo[i].strName[j] ), 1 );
+                static_cast<uint32_t> ( vecChanInfo[i].strName[j].toAscii() ), 1 );
         }
     }
 
@@ -525,7 +525,7 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
 void CProtocol::EvaluateConClientListMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
 {
     int                        iData;
-    const int                  iDataLen = vecData.Size();
+    const unsigned int         iDataLen = vecData.Size();
     CVector<CChannelShortInfo> vecChanInfo ( 0 );
 
     while ( iPos < iDataLen )
@@ -541,12 +541,12 @@ void CProtocol::EvaluateConClientListMes ( unsigned int iPos, const CVector<uint
             static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
         // name string (n bytes)
-        std::string strCurStr = "";
+        QString strCurStr = "";
         for ( int j = 0; j < iStringLen; j++ )
         {
             // byte-by-byte copying of the string data
             iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
-            strCurStr += std::string ( (char*) &iData );
+            strCurStr += QString ( (char*) &iData );
         }
 
         // add channel information to vector
@@ -568,7 +568,7 @@ void CProtocol::EvaluateReqConnClientsList ( unsigned int iPos, const CVector<ui
     emit ReqConnClientsList();
 }
 
-void CProtocol::CreateChanNameMes ( const std::string strName )
+void CProtocol::CreateChanNameMes ( const QString strName )
 {
     unsigned int  iPos = 0; // init position pointer
     const int     iStrLen = strName.size(); // get string size
@@ -587,7 +587,7 @@ void CProtocol::CreateChanNameMes ( const std::string strName )
     {
         // byte-by-byte copying of the string data
         PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( strName[j] ), 1 );
+            static_cast<uint32_t> ( strName[j].toAscii() ), 1 );
     }
 
     CreateAndSendMessage ( PROTMESSID_CHANNEL_NAME, vecData );
@@ -600,12 +600,12 @@ void CProtocol::EvaluateChanNameMes ( unsigned int iPos, const CVector<uint8_t>&
         static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // name string (n bytes)
-    std::string strName = "";
+    QString strName = "";
     for ( int j = 0; j < iStrLen; j++ )
     {
         // byte-by-byte copying of the string data
         int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
-        strName += std::string ( (char*) &iData );
+        strName += QString ( (char*) &iData );
     }
 
     // invoke message action
@@ -706,7 +706,7 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
     Q_ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
 
     uint32_t iRet = 0;
-    for ( int i = 0; i < iNumOfBytes; i++ )
+    for ( unsigned int i = 0; i < iNumOfBytes; i++ )
     {
         iRet |= vecIn[iPos] << ( i * 8 /* size of byte */ );
         iPos++;
@@ -784,7 +784,7 @@ void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,
     Q_ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
     Q_ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
 
-    for ( int i = 0; i < iNumOfBytes; i++ )
+    for ( unsigned int i = 0; i < iNumOfBytes; i++ )
     {
         vecIn[iPos] =
             ( iVal >> ( i * 8 /* size of byte */ ) ) & 255 /* 11111111 */;

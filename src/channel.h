@@ -87,10 +87,10 @@ public:
     bool GetAddress ( CHostAddress& RetAddr );
     CHostAddress GetAddress() { return InetAddr; }
 
-    void SetName ( const std::string sNNa ) { sName = sNNa; }
-    std::string GetName() { return sName; }
+    void SetName ( const QString sNNa ) { sName = sNNa; }
+    QString GetName() { return sName; }
 
-    void SetRemoteName ( const std::string strName )
+    void SetRemoteName ( const QString strName )
         { Protocol.CreateChanNameMes ( strName ); }
 
     void SetGain ( const int iNID, const double dNG ) { vecdGains[iNID] = dNG; }
@@ -150,7 +150,7 @@ protected:
     CHostAddress        InetAddr;
 
     // channel name
-    std::string         sName;
+    QString             sName;
 
     // mixer and effect settings
     CVector<double>     vecdGains;
@@ -182,7 +182,7 @@ public slots:
     void OnJittBufSizeChange ( int iNewJitBufSize );
     void OnNetwBlSiFactChange ( int iNewNetwBlSiFact );
     void OnChangeChanGain ( int iChanID, double dNewGain );
-    void OnChangeChanName ( std::string strName );
+    void OnChangeChanName ( QString strName );
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
@@ -216,7 +216,7 @@ public:
                            CVector<CVector<double> >& vecvecdGains );
 
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-                          CVector<std::string>& vecsName,
+                          CVector<QString>& vecsName,
                           CVector<int>& veciJitBufSize,
                           CVector<int>& veciNetwOutBlSiFact,
                           CVector<int>& veciNetwInBlSiFact );

@@ -69,7 +69,7 @@ public:
     void CreateServerFullMes();
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
     void CreateChanGainMes ( const int iChanID, const double dGain );
-    void CreateChanNameMes ( const std::string strName );
+    void CreateChanNameMes ( const QString strName );
 
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
 
@@ -160,7 +160,7 @@ signals:
     void ChangeJittBufSize ( int iNewJitBufSize );
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ChangeChanGain ( int iChanID, double dNewGain );
-    void ChangeChanName ( std::string strName );
+    void ChangeChanName ( QString strName );
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ReqJittBufSize();
     void ReqConnClientsList();

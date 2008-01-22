@@ -80,13 +80,13 @@ void CChannelFader::OnValueChanged ( int value )
     emit valueChanged ( dCurGain );
 }
 
-void CChannelFader::SetText ( const std::string sText )
+void CChannelFader::SetText ( const QString sText )
 {
     const int iBreakPos = 7;
 
     // break text at predefined position, if text is too short, break anyway to
     // make sure we have two lines for fader tag
-    QString sModText = sText.c_str();
+    QString sModText = sText;
 
     if ( sModText.length() > iBreakPos )
     {
@@ -187,14 +187,14 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecCh
     }
 }
 
-std::string CAudioMixerBoard::GenFaderText ( CChannelShortInfo& ChanInfo )
+QString CAudioMixerBoard::GenFaderText ( CChannelShortInfo& ChanInfo )
 {
     // if text is empty, show IP address instead
-    if ( ChanInfo.strName.empty() )
+    if ( ChanInfo.strName.isEmpty() )
     {
         // convert IP address to text and show it
         const QHostAddress addrTest ( ChanInfo.iIpAddr );
-        return std::string ( addrTest.toString().toStdString() );
+        return addrTest.toString();
     }
     else
     {

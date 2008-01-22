@@ -362,7 +362,7 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
 }
 
 void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-                                   CVector<std::string>&  vecsName,
+                                   CVector<QString>&      vecsName,
                                    CVector<int>&          veciJitBufSize,
                                    CVector<int>&          veciNetwOutBlSiFact,
                                    CVector<int>&          veciNetwInBlSiFact )
@@ -449,8 +449,8 @@ CChannel::CChannel() : sName ( "" ),
     QObject::connect( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
-    QObject::connect( &Protocol, SIGNAL ( ChangeChanName ( std::string ) ),
-        this, SLOT ( OnChangeChanName ( std::string ) ) );
+    QObject::connect( &Protocol, SIGNAL ( ChangeChanName ( QString ) ),
+        this, SLOT ( OnChangeChanName ( QString ) ) );
 }
 
 void CChannel::SetEnable ( const bool bNEnStat )
@@ -555,7 +555,7 @@ void CChannel::OnChangeChanGain ( int iChanID, double dNewGain )
     vecdGains[iChanID] = dNewGain;
 }
 
-void CChannel::OnChangeChanName ( std::string strName )
+void CChannel::OnChangeChanName ( QString strName )
 {
     // apply value (if different from previous name)
     if ( sName.compare ( strName ) )

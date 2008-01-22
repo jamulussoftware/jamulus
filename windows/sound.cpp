@@ -42,7 +42,7 @@ bool   loadAsioDriver ( char *name );
 bool CSound::Read ( CVector<short>& psData )
 {
     int     i;
-    bool    bError;
+    bool    bError = false;
 
     // check if device must be opened or reinitialized
     if ( bChangParamIn == TRUE )

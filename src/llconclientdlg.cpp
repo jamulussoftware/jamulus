@@ -88,10 +88,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
         "red color." ) );
 
     // init fader tag line edit
-    LineEditFaderTag->setText ( pClient->strName.c_str() );
+    LineEditFaderTag->setText ( pClient->strName );
 
     // init server address line edit
-    LineEditServerAddr->setText ( pClient->strIPAddress.c_str() );
+    LineEditServerAddr->setText ( pClient->strIPAddress );
 
     // we want the cursor to be at IP address line edit at startup
     LineEditServerAddr->setFocus();
@@ -208,10 +208,10 @@ CLlconClientDlg::~CLlconClientDlg()
 void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
 {
     // store IP address
-    pClient->strIPAddress = LineEditServerAddr->text().toStdString();
+    pClient->strIPAddress = LineEditServerAddr->text();
 
     // store fader tag
-    pClient->strName = LineEditFaderTag->text().toStdString();
+    pClient->strName = LineEditFaderTag->text();
 
     // default implementation of this event handler routine
     Event->accept();
@@ -276,7 +276,7 @@ void CLlconClientDlg::OnOpenGeneralSettings()
 void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
 {
     // refresh internal name parameter
-    pClient->strName = strNewName.toStdString();
+    pClient->strName = strNewName;
 
     // update name at server
     pClient->SetRemoteName();

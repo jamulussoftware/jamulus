@@ -91,7 +91,7 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
 void CLlconServerDlg::OnTimer()
 {
     CVector<CHostAddress>   vecHostAddresses;
-    CVector<std::string>    vecsName;
+    CVector<QString>        vecsName;
     CVector<int>            veciJitBufSize;
     CVector<int>            veciNetwOutBlSiFact;
     CVector<int>            veciNetwInBlSiFact;
@@ -113,7 +113,7 @@ void CLlconServerDlg::OnTimer()
                 vecHostAddresses[i].iPort ) /* IP, port */);
 
             // name
-            vecpListViewItems[i]->setText ( 1, vecsName[i].c_str() );
+            vecpListViewItems[i]->setText ( 1, vecsName[i] );
 
             // jitter buffer size (polling for updates)
             vecpListViewItems[i]->setText ( 4,

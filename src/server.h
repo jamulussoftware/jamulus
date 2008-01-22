@@ -49,7 +49,7 @@ public:
     bool IsRunning() { return Timer.isActive(); }
 
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-        CVector<std::string>& vecsName,
+        CVector<QString>& vecsName,
         CVector<int>& veciJitBufSize, CVector<int>& veciNetwOutBlSiFact,
         CVector<int>& veciNetwInBlSiFact )
     {

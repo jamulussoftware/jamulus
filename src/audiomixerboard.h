@@ -34,6 +34,7 @@
 #include <qstring.h>
 #include <qslider.h>
 #include <qsizepolicy.h>
+#include <qhostaddress.h>
 #include "global.h"
 #include "util.h"
 
@@ -58,7 +59,7 @@ public:
         // TODO get rid of pMainGrid
     }
 
-    void SetText ( const std::string sText );
+    void SetText ( const QString sText );
     void Show() { pLabel->show(); pFader->show(); }
     void Hide() { pLabel->hide(); pFader->hide(); }
     bool IsVisible() { return pLabel->isVisible(); }
@@ -90,7 +91,7 @@ public:
     void ApplyNewConClientList ( CVector<CChannelShortInfo>& vecChanInfo );
 
 protected:
-    std::string GenFaderText ( CChannelShortInfo& ChanInfo );
+    QString GenFaderText ( CChannelShortInfo& ChanInfo );
 
     CVector<CChannelFader*> vecpChanFader;
     QHBoxLayout*            pMainLayout;

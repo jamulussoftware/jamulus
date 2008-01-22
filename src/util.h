@@ -381,12 +381,12 @@ class CChannelShortInfo
 {
 public:
     CChannelShortInfo() : iChanID ( 0 ), iIpAddr ( 0 ), strName ( "" ) {}
-    CChannelShortInfo ( const int iNID, const uint32_t nIP, const std::string nN ) :
+    CChannelShortInfo ( const int iNID, const quint32 nIP, const QString nN ) :
         iChanID ( iNID ), iIpAddr ( nIP ), strName ( nN ) {}
 
-    int         iChanID;
-    uint32_t    iIpAddr;
-    std::string strName;
+    int     iChanID;
+    quint32 iIpAddr;
+    QString strName;
 };
 
 

@@ -31,8 +31,9 @@
 
 
 /* Implementation *************************************************************/
-/* This pointer is only used for the post-event routine */
-QApplication* pApp = NULL;
+// these pointers are only used for the post-event routine
+QApplication* pApp   = NULL;
+QDialog* pMainWindow = NULL;
 
 
 int main ( int argc, char** argv )
@@ -125,7 +126,7 @@ cerr << "logging ";
         CLlconClientDlg ClientDlg ( &Client, 0 );
 
         // set main window
-        app.setActiveWindow ( &ClientDlg );
+        pMainWindow = &ClientDlg;
         pApp = &app; // Needed for post-event routine
 
         // show dialog
@@ -147,7 +148,7 @@ cerr << "logging ";
             CLlconServerDlg ServerDlg ( &Server, 0 );
 
             // set main window
-            app.setActiveWindow ( &ServerDlg );
+            pMainWindow = &ServerDlg;
             pApp = &app; // needed for post-event routine
 
             // show dialog
@@ -264,12 +265,7 @@ void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam,
         CLlconEvent* LlconEv =
             new CLlconEvent ( MessID, iMessageParam, iChanNum );
 
-
-// TODO QT4
         // Qt will delete the event object when done
-//        QThread::postEvent ( pApp->mainWidget(), LlconEv );
-
-
-
+        QCoreApplication::postEvent ( pMainWindow, LlconEv );
     }
 }

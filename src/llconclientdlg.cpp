@@ -137,35 +137,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
     }
 
 
-
-
-
-// TODO check if code works and then clean up!!!!!!!
-// TODO QT4
-
-#if 0
-    /* Settings menu  ------------------------------------------------------- */
-    pSettingsMenu = new QMenu ( this );
-    pSettingsMenu->addMenu ( tr ( "&General Settings..." ), this,
-        SLOT ( OnOpenGeneralSettings() ) );
-
-    pSettingsMenu->insertSeparator();
-    pSettingsMenu->addMenu ( tr ( "E&xit" ), this,
-        SLOT ( close() ), CTRL+Key_Q );
-
-
-    /* Main menu bar -------------------------------------------------------- */
-    pMenu = new QMenuBar ( this );
-    pMenu->addMenu ( tr ( "&Settings" ), pSettingsMenu );
-    pMenu->addMenu ( tr ( "&?"), new CLlconHelpMenu ( this ) );
-    pMenu->setSeparator ( QMenuBar::InWindowsStyle );
-
-    /* Now tell the layout about the menu */
-    CLlconClientDlgBaseLayout->setMenuBar ( pMenu );
-#endif
-
-
-    /* Settings menu  ------------------------------------------------------- */
+    // Settings menu  ----------------------------------------------------------
     pSettingsMenu = new QMenu ( "&Settings", this );
     pSettingsMenu->addAction ( tr ( "&General Settings..." ), this,
         SLOT ( OnOpenGeneralSettings() ) );
@@ -175,76 +147,16 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
         SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
 
 
-    /* Main menu bar -------------------------------------------------------- */
+    // Main menu bar -----------------------------------------------------------
     pMenu = new QMenuBar ( this );
-    //pMenu->addMenu ( tr ( "&Settings" ), pSettingsMenu );
     pMenu->addMenu ( pSettingsMenu );
-    //pMenu->addMenu ( tr ( "&?" ), new CLlconHelpMenu ( this ) );
     pMenu->addMenu ( new CLlconHelpMenu ( this ) );
-//    pMenu->setSeparator ( QMenuBar::InWindowsStyle );
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
 
 
-
-
-    /* Menu actions --------------------------------------------------------- */
-/*
-    pActGeneralSettings = new QAction ( tr ( "&General Settings..."), this );
-    connect( pActGeneralSettings, SIGNAL ( triggered() ),
-        this, SLOT ( OnOpenGeneralSettings() ) );
-
-    pActExit = new QAction ( tr ( "&Quit" ), this );
-    pActExit->setShortcut ( tr ( "Ctrl+Q" ) );
-    connect ( pActExit, SIGNAL ( triggered() ), this, SLOT ( close() ) );
-
-
-    pActAbout = new QAction ( tr ( "&About" ), this );
-    connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
-
-
-pActAbout
-pHelpMenu
-*/
-
-    /* Main menu bar -------------------------------------------------------- */
-/*
-pMainMenuBar
-
-    pMainMenuBar = new QMenuBar ( this );
-    pMainMenuBar->addMenu ( tr ( "&Settings" ), pSettingsMenu );
-
-    pMenu->addMenu ( tr ( "&?"), new CLlconHelpMenu ( this ) );
-    pMenu->setSeparator ( QMenuBar::InWindowsStyle );
-
-    pSettingsMenu = menuBar()->addMenu ( tr ( "&Settings" ) );
-    pSettingsMenu->addAction(pActGeneralSettings);
-    pSettingsMenu->addSeparator();
-    pSettingsMenu->addAction(pActExit);
-
-
-    pMenu->addMenu ( tr ( "&?"), new CLlconHelpMenu ( this ) );
-    pMenu->setSeparator ( QMenuBar::InWindowsStyle );
-
-    // Now tell the layout about the menu
-    CLlconClientDlgBaseLayout->setMenuBar ( pMainMenuBar );
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // connections -------------------------------------------------------------
+    // Connections -------------------------------------------------------------
     // push-buttons
     QObject::connect ( PushButtonConnect, SIGNAL ( clicked() ),
         this, SLOT ( OnConnectDisconBut() ) );
@@ -279,7 +191,7 @@ pMainMenuBar
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
 
-    // timers ------------------------------------------------------------------
+    // Timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start ( STATUSBAR_UPDATE_TIME );
 }

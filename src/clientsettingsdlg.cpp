@@ -31,29 +31,29 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 {
     setupUi ( this );
 
-    /* Init timing jitter text label */
+    // init timing jitter text label
     TextLabelStdDevTimer->setText ( "" );
 
-    /* init slider controls --- */
-    /* sound buffer in */
+    // init slider controls ---
+    // sound buffer in
     SliderSndBufIn->setRange ( 2, AUD_SLIDER_LENGTH );
     const int iCurNumInBuf = pClient->GetSndInterface()->GetInNumBuf();
     SliderSndBufIn->setValue ( iCurNumInBuf );
     TextSndBufIn->setText ( "In: " + QString().setNum ( iCurNumInBuf ) );
 
-    /* sound buffer out */
+    // sound buffer out
     SliderSndBufOut->setRange ( 2, AUD_SLIDER_LENGTH );
     const int iCurNumOutBuf = pClient->GetSndInterface()->GetOutNumBuf();
     SliderSndBufOut->setValue ( iCurNumOutBuf );
     TextSndBufOut->setText ( "Out: " + QString().setNum ( iCurNumOutBuf ) );
 
-    /* network buffer */
+    // network buffer
     SliderNetBuf->setRange ( 0, MAX_NET_BUF_SIZE_NUM_BL );
     const int iCurNumNetBuf = pClient->GetSockBufSize();
     SliderNetBuf->setValue ( iCurNumNetBuf );
     TextNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
 
-    /* network buffer size factor in */
+    // network buffer size factor in
     SliderNetBufSiFactIn->setRange ( 1, MAX_NET_BLOCK_SIZE_FACTOR );
     const int iCurNetBufSiFactIn = pClient->GetNetwBufSizeFactIn();
     SliderNetBufSiFactIn->setValue ( iCurNetBufSiFactIn );
@@ -61,7 +61,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         double ( iCurNetBufSiFactIn * MIN_BLOCK_DURATION_MS ), 'f', 2 ) +
         " ms" );
 
-    /* network buffer size factor out */
+    // network buffer size factor out
     SliderNetBufSiFactOut->setRange ( 1, MAX_NET_BLOCK_SIZE_FACTOR );
     const int iCurNetBufSiFactOut = pClient->GetNetwBufSizeFactOut();
     SliderNetBufSiFactOut->setValue ( iCurNetBufSiFactOut );
@@ -70,12 +70,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         " ms" );
 
 
-    /* connections ---------------------------------------------------------- */
-    /* timers */
+    // Connections -------------------------------------------------------------
+    // timers
     QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerStatus() ) );
 
-    /* sliders */
+    // sliders
     QObject::connect ( SliderSndBufIn, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderSndBufInChange ( int ) ) );
     QObject::connect ( SliderSndBufOut, SIGNAL ( valueChanged ( int ) ),
@@ -90,8 +90,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         this, SLOT ( OnSliderNetBufSiFactOut ( int ) ) );
 
 
-    /* timers --------------------------------------------------------------- */
-    /* start timer for status bar */
+    // Timers ------------------------------------------------------------------
+    // start timer for status bar
     TimerStatus.start ( DISPLAY_UPDATE_TIME );
 }
 
@@ -136,7 +136,7 @@ void CClientSettingsDlg::OnSliderNetBufSiFactOut ( int value )
 
 void CClientSettingsDlg::UpdateDisplay()
 {
-    /* response time */
+    // response time
     TextLabelStdDevTimer->setText ( QString().
         setNum ( pClient->GetTimingStdDev(), 'f', 2 ) + " ms" );
 }

@@ -32,11 +32,13 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
     BitmCubeRed ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
     BitmCubeYellow ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL )
 {
-    /* set text for version and application name */
+    setupUi ( this );
+
+    // set text for version and application name
     TextLabelNameVersion->setText ( QString ( APP_NAME ) +
         tr ( " server " ) + QString ( VERSION ) );
 
-    /* Create bitmaps */
+    // create bitmaps
     BitmCubeGreen.fill ( QColor ( 0, 255, 0 ) );
     BitmCubeRed.fill ( QColor ( 255, 0, 0 ) );
     BitmCubeYellow.fill ( QColor ( 255, 255, 0 ) );
@@ -68,25 +70,20 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
     TextLabelResponseTime->setText ( "" );
 
 
-    /* Main menu bar -------------------------------------------------------- */
-
-// TODO QT4
-
+    // Main menu bar -----------------------------------------------------------
     pMenu = new QMenuBar ( this );
-//    pMenu->insertItem ( tr ( "&?" ), new CLlconHelpMenu ( this ) );
     pMenu->addMenu ( new CLlconHelpMenu ( this ) );
-    //pMenu->setSeparator ( QMenuBar::InWindowsStyle );
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
 
 
-    /* connections ---------------------------------------------------------- */
+    // Connections -------------------------------------------------------------
     // timers
     QObject::connect ( &Timer, SIGNAL ( timeout() ), this, SLOT ( OnTimer() ) );
 
 
-    /* timers --------------------------------------------------------------- */
+    // Timers ------------------------------------------------------------------
     // start timer for GUI controls
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
 }
@@ -105,7 +102,7 @@ void CLlconServerDlg::OnTimer()
     pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufSize,
         veciNetwOutBlSiFact, veciNetwInBlSiFact );
 
-    /* fill list with connected clients */
+    // fill list with connected clients
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( !( vecHostAddresses[i].InetAddr == QHostAddress ( (quint32) 0 ) ) )

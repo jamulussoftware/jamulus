@@ -914,7 +914,7 @@ void CSound::InitRecording ( int iNewBufferSize, bool bNewBlocking )
         psSoundcardBuffer[i] = new short[iBufferSizeIn];
 
 
-        /* Send all buffers to driver for filling the queue ----------------- */
+        // Send all buffers to driver for filling the queue --------------------
         // prepare buffers before sending them to the sound interface
         PrepareInBuffer ( i );
 
@@ -1023,7 +1023,7 @@ bool CSound::Write ( CVector<short>& psData )
         }
         else
         {
-            /* All buffers are filled, dump new block ----------------------- */
+            // All buffers are filled, dump new block --------------------------
 // It would be better to kill half of the buffer blocks to set the start
 // back to the middle: TODO
             return TRUE; // an error occurred
@@ -1088,25 +1088,25 @@ void CSound::GetDoneBuffer ( int& iCntPrepBuf, int& iIndexDoneBuf )
 
 void CSound::AddOutBuffer ( int iBufNum )
 {
-    // Unprepare old wave-header
+    // unprepare old wave-header
     waveOutUnprepareHeader (
         m_WaveOut, &m_WaveOutHeader[iBufNum], sizeof ( WAVEHDR ) );
 
-    // Prepare buffers for sending to sound interface
+    // prepare buffers for sending to sound interface
     PrepareOutBuffer ( iBufNum );
 
-    // Send buffer to driver for filling with new data
+    // send buffer to driver for filling with new data
     waveOutWrite ( m_WaveOut, &m_WaveOutHeader[iBufNum], sizeof ( WAVEHDR ) );
 }
 
 void CSound::PrepareOutBuffer ( int iBufNum )
 {
-    // Set Header data
+    // set Header data
     m_WaveOutHeader[iBufNum].lpData         = (LPSTR) &psPlaybackBuffer[iBufNum][0];
     m_WaveOutHeader[iBufNum].dwBufferLength = iBufferSizeOut * BYTES_PER_SAMPLE;
     m_WaveOutHeader[iBufNum].dwFlags        = 0;
 
-    // Prepare wave-header
+    // prepare wave-header
     waveOutPrepareHeader ( m_WaveOut, &m_WaveOutHeader[iBufNum], sizeof ( WAVEHDR ) );
 }
 

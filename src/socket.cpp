@@ -83,19 +83,21 @@ void CSocket::SendPacket ( const CVector<unsigned char>& vecbySendBuf,
 
 void CSocket::OnDataReceived()
 {
-    // read block from network interface
+    QHostAddress SenderAddress;
+    quint16      SenderPort;
+
+    // read block from network interface and query address of sender
     const int iNumBytesRead = SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
-        MAX_SIZE_BYTES_NETW_BUF );
+        MAX_SIZE_BYTES_NETW_BUF, &SenderAddress, &SenderPort );
+
+    // convert address of client
+    CHostAddress RecHostAddr ( SenderAddress, SenderPort );
 
     // check if an error occurred
     if ( iNumBytesRead < 0 )
     {
         return;
     }
-
-    // get host address of client
-    CHostAddress RecHostAddr ( SocketDevice.peerAddress(),
-        SocketDevice.peerPort() );
 
     if ( bIsClient )
     {
@@ -130,14 +132,8 @@ void CSocket::OnDataReceived()
             // this was an audio packet, start server
             // tell the server object to wake up if it
             // is in sleep mode (Qt will delete the event object when done)
-
-
-// TODO QT4
-//            QThread::postEvent ( pServer,
-//                new CLlconEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
-
-
-
+            QCoreApplication::postEvent ( pServer,
+                new CLlconEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
         }
     }
 }

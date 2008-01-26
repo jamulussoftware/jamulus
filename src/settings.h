@@ -1,8 +1,8 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2007
  *
  * Author(s):
- *  Volker Fischer, Robert Kesterson
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -25,9 +25,9 @@
 #if !defined ( SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_ )
 #define SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_
 
-#include <map>
-#include <string>
-#include <fstream>
+#include <qdom.h>
+#include <qfile.h>
+#include <qtextstream.h>
 #include "global.h"
 #include "client.h"
 
@@ -36,9 +36,8 @@
 // name of the init-file
 #define LLCON_INIT_FILE_NAME        "llcon.ini"
 
-/* change this if you expect to have huge lines in your INI files. Note that
-   this is the max size of a single line, NOT the max number of lines */
-#define MAX_INI_LINE                500
+// XML document root name
+#define INIT_XML_ROOT_NAME          "Llcon Init File"
 
 
 /* Classes ********************************************************************/
@@ -47,39 +46,29 @@ class CSettings
 public:
     CSettings ( CClient* pNCliP ) : pClient ( pNCliP ) {}
 
-	void Load ( std::string sFileName = "" );
-	void Save ( std::string sFileName = "" );
+    void Load ( const QString& sFileName = "" ) { ReadIniFile ( sFileName ); }
+    void Save ( const QString& sFileName = "" ) { WriteIniFile ( sFileName ); }
 
 protected:
-	void ReadIniFile ( std::string sFileName );
-	void WriteIniFile ( std::string sFileName );
+	void ReadIniFile ( const QString& sFileName );
+	void WriteIniFile ( const QString& sFileName );
 
-    // function declarations for stlini code written by Robert Kesterson
-    struct StlIniCompareStringNoCase 
-    {
-        bool operator() ( const std::string& x, const std::string& y ) const;
-    };
+    // init file access function for read/write
+    void SetNumericIniSet ( QDomDocument& xmlFile, const QString& strSection,
+                            const QString& strKey, const int iValue = 0 );
+    bool GetNumericIniSet ( const QDomDocument& xmlFile, const QString& strSection,
+                            const QString& strKey, const int iRangeStart,
+                            const int iRangeStop, int& iValue );
+    void SetFlagIniSet ( QDomDocument& xmlFile, const QString& strSection,
+                         const QString& strKey, const bool bValue = false );
+    bool GetFlagIniSet ( const QDomDocument& xmlFile, const QString& strSection,
+                         const QString& strKey, bool& bValue );
 
-    // these typedefs just make the code a bit more readable
-    typedef std::map<string, std::string, StlIniCompareStringNoCase > INISection;
-    typedef std::map<string, INISection , StlIniCompareStringNoCase > INIFile;
-
-    std::string GetIniSetting( INIFile& theINI, const char* pszSection,
-                               const char* pszKey, const char* pszDefaultVal = "" );
-    void PutIniSetting ( INIFile &theINI, const char *pszSection,
-                         const char* pszKey = NULL, const char* pszValue = "" );
-    void SaveIni ( INIFile& theINI, const char* pszFilename );
-    INIFile LoadIni ( const char* pszFilename );
-
-
-    void SetNumericIniSet ( INIFile& theINI, std::string strSection, std::string strKey,
-                            int iValue );
-    bool GetNumericIniSet ( INIFile& theINI, string strSection, std::string strKey,
-                            int iRangeStart, int iRangeStop, int& iValue );
-    void SetFlagIniSet ( INIFile& theINI, std::string strSection, std::string strKey,
-                         bool bValue );
-    bool GetFlagIniSet ( INIFile& theINI, std::string strSection, std::string strKey,
-                         bool& bValue );
+    // actual working function for init-file access
+    QString GetIniSetting( const QDomDocument& xmlFile, const QString& sSection,
+                           const QString& sKey, const QString& sDefaultVal = "" );
+    void PutIniSetting ( QDomDocument& xmlFile, const QString& sSection,
+                         const QString& sKey, const QString& sValue = "" );
 
     // pointer to the client object needed for the various settings
     CClient* pClient;

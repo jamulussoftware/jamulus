@@ -120,7 +120,11 @@ cerr << "logging ";
 
         // load settings from init-file
         CSettings Settings ( &Client );
-        Settings.Load ( strIniFileName );
+
+
+// TODO use QString
+
+        Settings.Load ( strIniFileName.c_str() );
 
         // GUI object
         CLlconClientDlg ClientDlg ( &Client, 0 );
@@ -134,7 +138,10 @@ cerr << "logging ";
         app.exec();
 
         // save settings to init-file
-        Settings.Save ( strIniFileName );
+
+// TODO use QString
+
+        Settings.Save ( strIniFileName.c_str() );
     }
     else
     {

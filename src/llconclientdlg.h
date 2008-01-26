@@ -84,16 +84,6 @@ protected:
     QMenu*                  pSettingsMenu;
     QMenuBar*               pMenu;
 
-/*
-    QAction*                pActGeneralSettings;
-    QAction*                pActExit;
-    QAction*                pActAbout;
-    QMenu*                  pSettingsMenu;
-    QMenu*                  pHelpMenu;
-    QMenuBar*               pMainMenuBar;
-*/
-
-
     CClientSettingsDlg      ClientSettingsDlg;
 
 public slots:

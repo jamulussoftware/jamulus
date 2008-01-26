@@ -1,8 +1,8 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2007
  *
  * Author(s):
- *  Volker Fischer, Robert Kesterson
+ *  Volker Fischer
  *
  ******************************************************************************
  *
@@ -26,155 +26,164 @@
 
 
 /* Implementation *************************************************************/
-void CSettings::Load ( std::string sFileName )
+void CSettings::ReadIniFile ( const QString& sFileName )
 {
-    /* load settings from init-file */
-    ReadIniFile ( sFileName );
-}
-
-void CSettings::Save ( std::string sFileName )
-{
-    /* write settings in init-file */
-    WriteIniFile ( sFileName );
-}
-
-
-/* Read and write init-file ***************************************************/
-void CSettings::ReadIniFile ( std::string sFileName )
-{
-    int     iValue;
-    bool    bValue;
-	INIFile ini;
+    int          iValue;
+    bool         bValue;
+    QDomDocument IniXMLDocument ( INIT_XML_ROOT_NAME );
 
     // load data from init-file
-	if ( !sFileName.empty() ) 
+    // prepare file name for loading initialization data from XML file
+    QString sCurFileName = sFileName;
+	if ( sCurFileName.isEmpty() ) 
 	{
-		ini = LoadIni ( sFileName.c_str() );
-	}
-	else
-	{
-		// use default file name
-		ini = LoadIni ( LLCON_INIT_FILE_NAME );
+        // if no file name is available, use default file name
+        sCurFileName = LLCON_INIT_FILE_NAME;
 	}
 
+    // read data from file if possible
+    QFile file ( sCurFileName );
+    if ( file.open ( QIODevice::ReadOnly ) )
+    {
+        IniXMLDocument.setContent ( &file );
+        file.close();
+    }
+
+
+    // actual settings data ---------------------------------------------------
     // IP address
-    pClient->strIPAddress = GetIniSetting ( ini, "Client", "ipaddress" ).c_str();
+    pClient->strIPAddress = GetIniSetting ( IniXMLDocument, "Client", "ipaddress" );
 
     // name
-    pClient->strName = GetIniSetting ( ini, "Client", "name" ).c_str();
+    pClient->strName = GetIniSetting ( IniXMLDocument, "Client", "name" );
 
     // audio fader
-    if ( GetNumericIniSet ( ini, "Client", "audfad", 0, AUD_FADER_IN_MAX, iValue ) == TRUE )
+    if ( GetNumericIniSet ( IniXMLDocument, "Client", "audfad", 0, AUD_FADER_IN_MAX, iValue ) )
 	{
         pClient->SetAudioInFader ( iValue );
     }
 
     // reverberation level
-    if ( GetNumericIniSet(ini, "Client", "revlev", 0, AUD_REVERB_MAX, iValue ) == TRUE )
+    if ( GetNumericIniSet ( IniXMLDocument, "Client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
 	{
         pClient->SetReverbLevel ( iValue );
     }
 
     // reverberation channel assignment
-    if ( GetFlagIniSet ( ini, "Client", "reverblchan", bValue ) == TRUE )
+    if ( GetFlagIniSet ( IniXMLDocument, "Client", "reverblchan", bValue ) )
 	{
         pClient->SetReverbOnLeftChan ( bValue );
     }
 
     // sound card in number of buffers
-    if ( GetNumericIniSet ( ini, "Client", "audinbuf", 0, AUD_SLIDER_LENGTH, iValue ) == TRUE )
+    if ( GetNumericIniSet ( IniXMLDocument, "Client", "audinbuf", 0, AUD_SLIDER_LENGTH, iValue ) )
 	{
         pClient->GetSndInterface()->SetInNumBuf( iValue );
     }
 
     // sound card out number of buffers
-    if ( GetNumericIniSet ( ini, "Client", "audoutbuf", 0, AUD_SLIDER_LENGTH, iValue ) == TRUE )
+    if ( GetNumericIniSet ( IniXMLDocument, "Client", "audoutbuf", 0, AUD_SLIDER_LENGTH, iValue ) )
 	{
         pClient->GetSndInterface()->SetOutNumBuf ( iValue );
     }
 
     // network jitter buffer size
-    if ( GetNumericIniSet ( ini, "Client", "jitbuf", 0, MAX_NET_BUF_SIZE_NUM_BL, iValue ) == TRUE )
+    if ( GetNumericIniSet ( IniXMLDocument, "Client", "jitbuf", 0, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
 	{
         pClient->SetSockBufSize ( iValue );
     }
 
     // network buffer size factor in
-    if ( GetNumericIniSet ( ini, "Client", "netwbusifactin", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) == TRUE )
+    if ( GetNumericIniSet ( IniXMLDocument, "Client", "netwbusifactin", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) )
 	{
         pClient->SetNetwBufSizeFactIn ( iValue );
     }
 
     // network buffer size factor out
-    if ( GetNumericIniSet ( ini, "Client", "netwbusifactout", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) == TRUE )
+    if ( GetNumericIniSet ( IniXMLDocument, "Client", "netwbusifactout", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) )
 	{
         pClient->SetNetwBufSizeFactOut ( iValue );
     }
 }
 
-void CSettings::WriteIniFile ( std::string sFileName )
+void CSettings::WriteIniFile ( const QString& sFileName )
 {
-    INIFile ini;
+    // create XML document for storing initialization parameters
+    QDomDocument IniXMLDocument ( INIT_XML_ROOT_NAME );
 
+
+    // actual settings data ---------------------------------------------------
     // IP address
-    PutIniSetting ( ini, "Client", "ipaddress", pClient->strIPAddress.toStdString().c_str() );
+    PutIniSetting ( IniXMLDocument, "Client", "ipaddress", pClient->strIPAddress );
 
     // name
-    PutIniSetting ( ini, "Client", "name", pClient->strName.toStdString().c_str() );
+    PutIniSetting ( IniXMLDocument, "Client", "name", pClient->strName );
 
     // audio fader
-    SetNumericIniSet ( ini, "Client", "audfad", pClient->GetAudioInFader() );
+    SetNumericIniSet ( IniXMLDocument, "Client", "audfad", pClient->GetAudioInFader() );
 
     // reverberation level
-    SetNumericIniSet ( ini, "Client", "revlev", pClient->GetReverbLevel() );
+    SetNumericIniSet ( IniXMLDocument, "Client", "revlev", pClient->GetReverbLevel() );
 
     // reverberation channel assignment
-    SetFlagIniSet ( ini, "Client", "reverblchan", pClient->IsReverbOnLeftChan() );
+    SetFlagIniSet ( IniXMLDocument, "Client", "reverblchan", pClient->IsReverbOnLeftChan() );
 
     // sound card in number of buffers
-    SetNumericIniSet ( ini, "Client", "audinbuf", pClient->GetSndInterface()->GetInNumBuf() );
+    SetNumericIniSet ( IniXMLDocument, "Client", "audinbuf", pClient->GetSndInterface()->GetInNumBuf() );
 
     // sound card out number of buffers
-    SetNumericIniSet ( ini, "Client", "audoutbuf", pClient->GetSndInterface()->GetOutNumBuf() );
+    SetNumericIniSet ( IniXMLDocument, "Client", "audoutbuf", pClient->GetSndInterface()->GetOutNumBuf() );
 
     // network jitter buffer size
-    SetNumericIniSet ( ini, "Client", "jitbuf", pClient->GetSockBufSize() );
+    SetNumericIniSet ( IniXMLDocument, "Client", "jitbuf", pClient->GetSockBufSize() );
 
     // network buffer size factor in
-    SetNumericIniSet ( ini, "Client", "netwbusifactin", pClient->GetNetwBufSizeFactIn() );
+    SetNumericIniSet ( IniXMLDocument, "Client", "netwbusifactin", pClient->GetNetwBufSizeFactIn() );
 
     // network buffer size factor out
-    SetNumericIniSet ( ini, "Client", "netwbusifactout", pClient->GetNetwBufSizeFactOut() );
+    SetNumericIniSet ( IniXMLDocument, "Client", "netwbusifactout", pClient->GetNetwBufSizeFactOut() );
 
 
-    // save settings in init-file
-	if ( !sFileName.empty() ) 
+    // prepare file name for storing initialization data in XML file
+    QString sCurFileName = sFileName;
+	if ( sCurFileName.isEmpty() ) 
 	{
-		SaveIni ( ini, sFileName.c_str() );
+        // if no file name is available, use default file name
+        sCurFileName = LLCON_INIT_FILE_NAME;
 	}
-	else
-	{
-		// use default file name
-		SaveIni ( ini, LLCON_INIT_FILE_NAME );
-	}
+
+    // store XML data in file
+    QFile file ( sCurFileName );
+    if ( file.open ( QIODevice::WriteOnly ) )
+    {
+        QTextStream out ( &file );
+        out << IniXMLDocument.toString();
+    }
 }
 
-bool CSettings::GetNumericIniSet ( INIFile& theINI, string strSection,
-                                   string strKey, int iRangeStart,
-                                   int iRangeStop, int& iValue )
+void CSettings::SetNumericIniSet ( QDomDocument& xmlFile, const QString& strSection,
+                                   const QString& strKey, const int iValue )
 {
-    /* Init return value */
-    bool bReturn = FALSE;
+    // convert input parameter which is an integer to string and store
+    PutIniSetting ( xmlFile, strSection, strKey, QString("%1").arg(iValue) );
+}
 
-    const string strGetIni =
-        GetIniSetting ( theINI, strSection.c_str(), strKey.c_str() );
+bool CSettings::GetNumericIniSet ( const QDomDocument& xmlFile, const QString& strSection,
+                                   const QString& strKey, const int iRangeStart,
+                                   const int iRangeStop, int& iValue )
+{
+    // init return value
+    bool bReturn = false;
 
-    /* Check if it is a valid parameter */
-    if ( !strGetIni.empty () )
+    const QString strGetIni = GetIniSetting ( xmlFile, strSection, strKey );
+
+    // check if it is a valid parameter
+    if ( !strGetIni.isEmpty() )
     {
-        iValue = atoi( strGetIni.c_str () );
+        // convert string from init file to integer
+        iValue = strGetIni.toInt();
 
-        /* Check range */
+        // check range
         if ( ( iValue >= iRangeStart ) && ( iValue <= iRangeStop ) )
         {
             bReturn = TRUE;
@@ -184,275 +193,90 @@ bool CSettings::GetNumericIniSet ( INIFile& theINI, string strSection,
     return bReturn;
 }
 
-void CSettings::SetNumericIniSet ( INIFile& theINI, string strSection,
-                                   string strKey, int iValue )
+void CSettings::SetFlagIniSet ( QDomDocument& xmlFile, const QString& strSection,
+                                const QString& strKey, const bool bValue )
 {
-    char cString[256];
-
-    sprintf ( cString, "%d", iValue );
-    PutIniSetting ( theINI, strSection.c_str(), strKey.c_str(), cString );
+    // we encode true -> "1" and false -> "0"
+    if ( bValue == true )
+    {
+        PutIniSetting ( xmlFile, strSection, strKey, "1" );
+    }
+    else
+    {
+        PutIniSetting ( xmlFile, strSection, strKey, "0" );
+    }
 }
 
-bool CSettings::GetFlagIniSet ( INIFile& theINI, string strSection,
-                                string strKey, bool& bValue )
+bool CSettings::GetFlagIniSet ( const QDomDocument& xmlFile, const QString& strSection,
+                                const QString& strKey, bool& bValue )
 {
-    /* Init return value */
-    bool bReturn = FALSE;
+    // init return value
+    bool bReturn = false;
 
-    const string strGetIni =
-        GetIniSetting ( theINI, strSection.c_str(), strKey.c_str() );
+    const QString strGetIni = GetIniSetting ( xmlFile, strSection, strKey );
 
-    if ( !strGetIni.empty() )
+    if ( !strGetIni.isEmpty() )
     {
-        if ( atoi ( strGetIni.c_str() ) )
+        if ( strGetIni.toInt() )
         {
-            bValue = TRUE;
+            bValue = true;
         }
         else
         {
-            bValue = FALSE;
+            bValue = false;
         }
 
-        bReturn = TRUE;
+        bReturn = true;
     }
 
     return bReturn;
 }
 
-void CSettings::SetFlagIniSet ( INIFile& theINI, string strSection, string strKey,
-                                bool bValue )
+
+// Init-file routines using XML ***********************************************
+QString CSettings::GetIniSetting ( const QDomDocument& xmlFile, const QString& sSection,
+                                   const QString& sKey, const QString& sDefaultVal )
 {
-    if ( bValue == TRUE )
+    // init return parameter with default value
+    QString sResult ( sDefaultVal );
+
+    // get section
+    QDomElement xmlSection = xmlFile.firstChildElement ( sSection );
+    if ( !xmlSection.isNull() )
     {
-        PutIniSetting ( theINI, strSection.c_str(), strKey.c_str(), "1" );
-    }
-    else
-    {
-        PutIniSetting ( theINI, strSection.c_str(), strKey.c_str(), "0" );
-    }
-}
-
-
-/* INI File routines using the STL ********************************************/
-/* The following code was taken from "INI File Tools (STLINI)" written by
-   Robert Kesterson in 1999. The original files are stlini.cpp and stlini.h.
-   The homepage is http://robertk.com/source
-
-   Copyright August 18, 1999 by Robert Kesterson */
-
-#ifdef _MSC_VER
-/* These pragmas are to quiet VC++ about the expanded template identifiers
-   exceeding 255 chars. You won't be able to see those variables in a debug
-   session, but the code will run normally */
-#pragma warning ( push )
-#pragma warning ( disable : 4786 4503 )
-#endif
-
-std::string CSettings::GetIniSetting ( CSettings::INIFile& theINI, const char* section,
-                                       const char* key, const char* defaultval )
-{
-    std::string result ( defaultval );
-    INIFile::iterator iSection = theINI.find ( std::string ( section ) );
-
-    if ( iSection != theINI.end() )
-    {
-        INISection::iterator apair = iSection->second.find ( std::string ( key ) );
-
-        if ( apair != iSection->second.end() )
-		{
-            result = apair->second;
-		}
-    }
-
-    return result;
-}
-
-void CSettings::PutIniSetting ( CSettings::INIFile &theINI, const char *section,
-                                const char *key, const char *value )
-{
-    INIFile::iterator       iniSection;
-    INISection::iterator    apair;
-    
-    if ( ( iniSection = theINI.find ( std::string ( section ) ) ) == theINI.end() )
-    {
-        // no such section? Then add one
-        INISection newsection;
-        if (key)
+        // get key
+        QDomElement xmlKey = xmlSection.firstChildElement ( sKey );
+        if ( !xmlKey.isNull() )
         {
-            newsection.insert (
-                std::pair<std::string, std::string> ( std::string ( key ), std::string ( value ) ) );
+            // get value
+            sResult = xmlKey.text();
         }
-
-        theINI.insert (
-            std::pair<std::string, INISection> ( std::string ( section ), newsection ) );
     }
-    else
-	{
-		if ( key )
-		{   
-			/* Found section, make sure key isn't in there already, 
-			   if it is, just drop and re-add */
-			apair = iniSection->second.find ( string ( key ) );
-			if ( apair != iniSection->second.end() )
-			{
-				iniSection->second.erase(apair);
-			}
 
-			iniSection->second.insert (
-				std::pair<std::string, std::string> ( std::string ( key ), std::string ( value ) ) );
-		}
-	}
+    return sResult;
 }
 
-CSettings::INIFile CSettings::LoadIni ( const char* filename )
+void CSettings::PutIniSetting ( QDomDocument& xmlFile, const QString& sSection,
+                                const QString& sKey, const QString& sValue )
 {
-    INIFile         theINI;
-    char            *value, *temp;
-    std::string     section;
-    char            buffer[MAX_INI_LINE];
-    std::fstream    file ( filename, std::ios::in );
-    
-    while ( file.good() )
+    // check if section is already there, if not then create it
+    QDomElement xmlSection = xmlFile.firstChildElement ( sSection );
+    if ( xmlSection.isNull() )
     {
-        memset ( buffer, 0, sizeof ( buffer ) );
-        file.getline ( buffer, sizeof ( buffer ) );
-
-        if ( ( temp = strchr ( buffer, '\n' ) ) )
-		{
-            *temp = '\0'; // cut off at newline
-		}
-
-        if ( ( temp = strchr ( buffer, '\r' ) ) )
-		{
-            *temp = '\0'; // cut off at linefeeds
-		}
-
-        if ( ( buffer[0] == '[' ) && ( temp = strrchr ( buffer, ']' ) ) )
-        {   // if line is like -->   [section name]
-            *temp = '\0'; // chop off the trailing ']'
-            section = &buffer[1];
-            PutIniSetting ( theINI, &buffer[1] ); // start new section
-        }
-        else
-		{
-			if ( buffer[0] && ( value = strchr ( buffer, '=' ) ) )
-			{
-				// assign whatever follows = sign to value, chop at "="
-				*value++ = '\0';
-
-				// and add both sides to INISection
-				PutIniSetting ( theINI, section.c_str(), buffer, value );
-			}
-			else
-			{
-				if ( buffer[0] )
-				{
-					// must be a comment or something
-					PutIniSetting ( theINI, section.c_str(), buffer, "" );
-				}
-			}
-		}
+        // create new root element and add to document
+        xmlSection = xmlFile.createElement ( sSection );
+        xmlFile.appendChild ( xmlSection );
     }
 
-    return theINI;
+    // check if key is already there, if not then create it
+    QDomElement xmlKey = xmlSection.firstChildElement ( sKey );
+    if ( xmlKey.isNull() )
+    {
+        xmlKey = xmlFile.createElement ( sKey );
+        xmlSection.appendChild ( xmlKey );
+    }
+
+    // add actual data to the key
+    QDomText currentValue = xmlFile.createTextNode ( sValue );
+    xmlKey.appendChild ( currentValue );
 }
-
-void CSettings::SaveIni ( CSettings::INIFile &theINI, const char* filename )
-{
-    bool bFirstSection = TRUE; // init flag
-
-    std::fstream file ( filename, std::ios::out );
-    if ( !file.good() )
-	{
-        return;
-	}
-    
-    // just iterate the hashes and values and dump them to a file
-    INIFile::iterator section = theINI.begin();
-    while ( section != theINI.end() )
-    {
-        if ( section->first > "" )
-        {
-            if ( bFirstSection == TRUE )
-            {
-                // do not put a newline at the beginning of the first section
-                file << "[" << section->first << "]" << std::endl;
-
-                // reset flag
-                bFirstSection = FALSE;
-            }
-            else
-			{
-                file << std::endl << "[" << section->first << "]" << std::endl;
-			}
-        }
-
-        INISection::iterator pair = section->second.begin();
-    
-        while ( pair != section->second.end() )
-        {
-            if ( pair->second > "" )
-			{
-                file << pair->first << "=" << pair->second << std::endl;
-			}
-            else
-			{
-                file << pair->first << "=" << std::endl;
-			}
-            pair++;
-        }
-        section++;
-    }
-    file.close();
-}
-
-/* Return true or false depending on whether the first string is less than the
-   second */
-bool CSettings::StlIniCompareStringNoCase::operator() ( const std::string& x,
-                                                        const std::string& y ) const
-{
-#ifdef WIN32
-    return ( stricmp ( x.c_str(), y.c_str() ) < 0 ) ? true : false;
-#else
-#ifdef strcasecmp
-    return ( strcasecmp ( x.c_str(), y.c_str() ) < 0 ) ? true : false;
-#else
-    unsigned    nCount = 0;
-    int         nResult = 0;
-    const char  *p1 = x.c_str();
-    const char  *p2 = y.c_str();
-
-    while ( *p1 && *p2 )
-    {
-        nResult = toupper ( *p1 ) - toupper ( *p2 );
-        if ( nResult != 0 )
-		{
-            break;
-		}
-        p1++;
-        p2++;
-        nCount++;
-    }
-    if ( nResult == 0 )
-    {
-        if ( *p1 && !*p2 )
-		{
-            nResult = -1;
-		}
-        if ( !*p1 && *p2 )
-		{
-            nResult = 1;
-		}
-    }
-    if ( nResult < 0 )
-	{
-        return true;
-	}
-    return false;
-#endif /* strcasecmp */
-#endif
-}
-
-#ifdef _MSC_VER
-#pragma warning ( pop )
-#endif

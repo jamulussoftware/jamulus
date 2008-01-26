@@ -30,7 +30,7 @@ void CSettings::ReadIniFile ( const QString& sFileName )
 {
     int          iValue;
     bool         bValue;
-    QDomDocument IniXMLDocument ( INIT_XML_ROOT_NAME );
+    QDomDocument IniXMLDocument;
 
     // load data from init-file
     // prepare file name for loading initialization data from XML file
@@ -45,62 +45,64 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     QFile file ( sCurFileName );
     if ( file.open ( QIODevice::ReadOnly ) )
     {
-        IniXMLDocument.setContent ( &file );
+        QTextStream in ( &file );
+        IniXMLDocument.setContent ( in.readAll(), false );
+
         file.close();
     }
 
 
     // actual settings data ---------------------------------------------------
     // IP address
-    pClient->strIPAddress = GetIniSetting ( IniXMLDocument, "Client", "ipaddress" );
+    pClient->strIPAddress = GetIniSetting ( IniXMLDocument, "client", "ipaddress" );
 
     // name
-    pClient->strName = GetIniSetting ( IniXMLDocument, "Client", "name" );
+    pClient->strName = GetIniSetting ( IniXMLDocument, "client", "name" );
 
     // audio fader
-    if ( GetNumericIniSet ( IniXMLDocument, "Client", "audfad", 0, AUD_FADER_IN_MAX, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad", 0, AUD_FADER_IN_MAX, iValue ) )
 	{
         pClient->SetAudioInFader ( iValue );
     }
 
     // reverberation level
-    if ( GetNumericIniSet ( IniXMLDocument, "Client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
 	{
         pClient->SetReverbLevel ( iValue );
     }
 
     // reverberation channel assignment
-    if ( GetFlagIniSet ( IniXMLDocument, "Client", "reverblchan", bValue ) )
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
 	{
         pClient->SetReverbOnLeftChan ( bValue );
     }
 
     // sound card in number of buffers
-    if ( GetNumericIniSet ( IniXMLDocument, "Client", "audinbuf", 0, AUD_SLIDER_LENGTH, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "audinbuf", 0, AUD_SLIDER_LENGTH, iValue ) )
 	{
         pClient->GetSndInterface()->SetInNumBuf( iValue );
     }
 
     // sound card out number of buffers
-    if ( GetNumericIniSet ( IniXMLDocument, "Client", "audoutbuf", 0, AUD_SLIDER_LENGTH, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "audoutbuf", 0, AUD_SLIDER_LENGTH, iValue ) )
 	{
         pClient->GetSndInterface()->SetOutNumBuf ( iValue );
     }
 
     // network jitter buffer size
-    if ( GetNumericIniSet ( IniXMLDocument, "Client", "jitbuf", 0, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf", 0, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
 	{
         pClient->SetSockBufSize ( iValue );
     }
 
     // network buffer size factor in
-    if ( GetNumericIniSet ( IniXMLDocument, "Client", "netwbusifactin", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "netwbusifactin", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) )
 	{
         pClient->SetNetwBufSizeFactIn ( iValue );
     }
 
     // network buffer size factor out
-    if ( GetNumericIniSet ( IniXMLDocument, "Client", "netwbusifactout", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "netwbusifactout", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) )
 	{
         pClient->SetNetwBufSizeFactOut ( iValue );
     }
@@ -109,39 +111,39 @@ void CSettings::ReadIniFile ( const QString& sFileName )
 void CSettings::WriteIniFile ( const QString& sFileName )
 {
     // create XML document for storing initialization parameters
-    QDomDocument IniXMLDocument ( INIT_XML_ROOT_NAME );
+    QDomDocument IniXMLDocument;
 
 
     // actual settings data ---------------------------------------------------
     // IP address
-    PutIniSetting ( IniXMLDocument, "Client", "ipaddress", pClient->strIPAddress );
+    PutIniSetting ( IniXMLDocument, "client", "ipaddress", pClient->strIPAddress );
 
     // name
-    PutIniSetting ( IniXMLDocument, "Client", "name", pClient->strName );
+    PutIniSetting ( IniXMLDocument, "client", "name", pClient->strName );
 
     // audio fader
-    SetNumericIniSet ( IniXMLDocument, "Client", "audfad", pClient->GetAudioInFader() );
+    SetNumericIniSet ( IniXMLDocument, "client", "audfad", pClient->GetAudioInFader() );
 
     // reverberation level
-    SetNumericIniSet ( IniXMLDocument, "Client", "revlev", pClient->GetReverbLevel() );
+    SetNumericIniSet ( IniXMLDocument, "client", "revlev", pClient->GetReverbLevel() );
 
     // reverberation channel assignment
-    SetFlagIniSet ( IniXMLDocument, "Client", "reverblchan", pClient->IsReverbOnLeftChan() );
+    SetFlagIniSet ( IniXMLDocument, "client", "reverblchan", pClient->IsReverbOnLeftChan() );
 
     // sound card in number of buffers
-    SetNumericIniSet ( IniXMLDocument, "Client", "audinbuf", pClient->GetSndInterface()->GetInNumBuf() );
+    SetNumericIniSet ( IniXMLDocument, "client", "audinbuf", pClient->GetSndInterface()->GetInNumBuf() );
 
     // sound card out number of buffers
-    SetNumericIniSet ( IniXMLDocument, "Client", "audoutbuf", pClient->GetSndInterface()->GetOutNumBuf() );
+    SetNumericIniSet ( IniXMLDocument, "client", "audoutbuf", pClient->GetSndInterface()->GetOutNumBuf() );
 
     // network jitter buffer size
-    SetNumericIniSet ( IniXMLDocument, "Client", "jitbuf", pClient->GetSockBufSize() );
+    SetNumericIniSet ( IniXMLDocument, "client", "jitbuf", pClient->GetSockBufSize() );
 
     // network buffer size factor in
-    SetNumericIniSet ( IniXMLDocument, "Client", "netwbusifactin", pClient->GetNetwBufSizeFactIn() );
+    SetNumericIniSet ( IniXMLDocument, "client", "netwbusifactin", pClient->GetNetwBufSizeFactIn() );
 
     // network buffer size factor out
-    SetNumericIniSet ( IniXMLDocument, "Client", "netwbusifactout", pClient->GetNetwBufSizeFactOut() );
+    SetNumericIniSet ( IniXMLDocument, "client", "netwbusifactout", pClient->GetNetwBufSizeFactOut() );
 
 
     // prepare file name for storing initialization data in XML file

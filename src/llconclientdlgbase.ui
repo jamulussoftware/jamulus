@@ -547,8 +547,8 @@ Fader</string>
  </customwidgets>
  <tabstops>
   <tabstop>LineEditServerAddr</tabstop>
-  <tabstop>PushButtonConnect</tabstop>
   <tabstop>LineEditFaderTag</tabstop>
+  <tabstop>PushButtonConnect</tabstop>
   <tabstop>SliderAudReverb</tabstop>
   <tabstop>RadioButtonRevSelL</tabstop>
   <tabstop>RadioButtonRevSelR</tabstop>

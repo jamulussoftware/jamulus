@@ -36,9 +36,6 @@
 // name of the init-file
 #define LLCON_INIT_FILE_NAME        "llcon.ini"
 
-// XML document root name
-#define INIT_XML_ROOT_NAME          "Llcon Init File"
-
 
 /* Classes ********************************************************************/
 class CSettings

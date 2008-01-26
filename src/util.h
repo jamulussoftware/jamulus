@@ -31,6 +31,7 @@
 #include <qtextbrowser.h>
 #include <qlabel.h>
 #include <qdatetime.h>
+#include <qfile.h>
 #include <vector>
 #include "global.h"
 using namespace std; // because of the library: "vector"
@@ -65,8 +66,8 @@ inline short Double2Short ( const double dInput )
 }
 
 // debug error handling
-void DebugError ( const char* pchErDescr, const char* pchPar1Descr,
-                  const double dPar1, const char* pchPar2Descr,
+void DebugError ( const QString& pchErDescr, const QString& pchPar1Descr, 
+                  const double dPar1, const QString& pchPar2Descr,
                   const double dPar2 );
 
 
@@ -245,8 +246,8 @@ template<class TData> class CMovingAv : public CVector<TData>
 public:
     CMovingAv() : CVector<TData>(), iCurIdx ( 0 ), iNorm ( 0 ),
         tCurAvResult ( TData ( 0 ) ) {}
-    CMovingAv ( const int iNeSi ) : CVector<TData> ( iNeSi ), iCurIdx ( 0 ), iNorm ( 0 ),
-        tCurAvResult ( TData ( 0 ) ) {}
+    CMovingAv ( const int iNeSi ) : CVector<TData> ( iNeSi ), iCurIdx ( 0 ),
+        iNorm ( 0 ), tCurAvResult ( TData ( 0 ) ) {}
     CMovingAv ( const int iNeSi, const TData tInVa ) :
         CVector<TData> ( iNeSi, tInVa ), iCurIdx ( 0 ), iNorm ( 0 ),
         tCurAvResult ( TData ( 0 ) ) {}
@@ -313,7 +314,7 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
 /******************************************************************************\
 * GUI utilities                                                                *
 \******************************************************************************/
-/* About dialog ------------------------------------------------------------- */
+// About dialog ----------------------------------------------------------------
 class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
 {
     Q_OBJECT
@@ -325,7 +326,7 @@ public:
 };
 
 
-/* Help menu ---------------------------------------------------------------- */
+// Help menu -------------------------------------------------------------------
 class CLlconHelpMenu : public QMenu
 {
     Q_OBJECT
@@ -343,7 +344,7 @@ public slots:
 
 
 /* Other Classes **************************************************************/
-/* Signal Level Meter ------------------------------------------------------- */
+// Signal Level Meter ----------------------------------------------------------
 class CSignalLevelMeter
 {
 public:
@@ -390,7 +391,7 @@ public:
 };
 
 
-/* Audio Reverbration ------------------------------------------------------- */
+// Audio Reverbration ----------------------------------------------------------
 class CAudioReverb
 {
 public:
@@ -410,7 +411,7 @@ protected:
 };
 
 
-/* CRC ---------------------------------------------------------------------- */
+// CRC -------------------------------------------------------------------------
 class CCRC
 {
 public:
@@ -430,7 +431,7 @@ protected:
 };
 
 
-/* Time conversion ---------------------------------------------------------- */
+// Time conversion -------------------------------------------------------------
 // needed for ping measurement
 class CTimeConv
 {
@@ -467,7 +468,7 @@ public:
 };
 
 
-/* Time and Data to String conversion --------------------------------------- */
+// Time and Data to String conversion ------------------------------------------
 class CLogTimeDate
 {
 public:
@@ -484,42 +485,41 @@ public:
 };
 
 
-/* Time and Data to String conversion --------------------------------------- */
+// Logging ---------------------------------------------------------------------
 class CLogging
 {
 public:
-    CLogging() : bDoLogging ( false ), pFile ( NULL ) {}
+    CLogging() : bDoLogging ( false ), File ( LOG_FILE_NAME ) {}
     virtual ~CLogging()
     {
-        if ( pFile != NULL )
+        if ( File.isOpen() )
         {
-            fclose ( pFile );
+            File.close();
         }
     }
 
     void Start()
     {
         // open file
-        pFile = fopen ( LOG_FILE_NAME, "a" );
-
-        if ( pFile != NULL )
+        if ( File.open ( QIODevice::Append ) )
         {
             bDoLogging = true;
         }
     }
 
-    void operator<< ( const QString & sNewStr )
+    void operator<< ( const QString& sNewStr )
     {
         if ( bDoLogging )
         {
-            fprintf ( pFile, "%s\n", sNewStr.toStdString() );
-            fflush ( pFile );
+            // append new line in logging file
+            QTextStream out ( &File );
+            out << sNewStr << endl;
         }
     }
 
 protected:
-    bool     bDoLogging;
-    FILE*    pFile;
+    bool  bDoLogging;
+    QFile File;
 };
 
 #endif /* !defined ( UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

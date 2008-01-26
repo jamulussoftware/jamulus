@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -26,7 +26,7 @@
 
 
 /* Implementation *************************************************************/
-/* Input level meter implementation ------------------------------------------ */
+// Input level meter implementation --------------------------------------------
 void CSignalLevelMeter::Update ( CVector<double>& vecdAudio )
 {
     // do the update for entire vector
@@ -72,7 +72,7 @@ double CSignalLevelMeter::MicLevel()
 }
 
 
-/* CRC ---------------------------------------------------------------------- */
+// CRC -------------------------------------------------------------------------
 void CCRC::Reset()
 {
     /* Init state shift-register with ones. Set all registers to "1" with
@@ -268,7 +268,7 @@ double CAudioReverb::ProcessSample ( const double input )
 /******************************************************************************\
 * GUI utilities                                                                *
 \******************************************************************************/
-/* About dialog ------------------------------------------------------------- */
+// About dialog ----------------------------------------------------------------
 CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 {
     setupUi ( this );
@@ -352,7 +352,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
 }
 
 
-/* Help menu ---------------------------------------------------------------- */
+// Help menu -------------------------------------------------------------------
 CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
 {
     // standard help menu consists of about and what's this help
@@ -367,17 +367,23 @@ CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
 /******************************************************************************\
 * Global functions implementation                                              *
 \******************************************************************************/
-void DebugError ( const char* pchErDescr, const char* pchPar1Descr, 
-                  const double dPar1, const char* pchPar2Descr,
+void DebugError ( const QString& pchErDescr, const QString& pchPar1Descr, 
+                  const double dPar1, const QString& pchPar2Descr,
                   const double dPar2 )
 {
-    FILE* pFile = fopen ( "DebugError.dat", "a" );
-    fprintf ( pFile, pchErDescr ); fprintf ( pFile, " ### " );
-    fprintf ( pFile, pchPar1Descr ); fprintf ( pFile, ": " );
-    fprintf ( pFile, "%e ### ", dPar1);
-    fprintf ( pFile, pchPar2Descr ); fprintf ( pFile, ": " );
-    fprintf ( pFile, "%e\n", dPar2 );
-    fclose ( pFile );
+    QFile File ( "DebugError.dat" );
+    if ( File.open ( QIODevice::Append ) )
+    {
+        // append new line in logging file
+        QTextStream out ( &File );
+        out << pchErDescr << " ### " <<
+            pchPar1Descr << ": " << QString().setNum ( dPar1, 'f', 2 ) <<
+            " ### " <<
+            pchPar2Descr << ": " << QString().setNum ( dPar2, 'f', 2 ) <<
+            endl;
+
+        File.close();
+    }
     printf ( "\nDebug error! For more information see test/DebugError.dat\n" );
     exit ( 1 );
 }

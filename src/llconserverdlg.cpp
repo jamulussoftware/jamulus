@@ -109,7 +109,7 @@ void CLlconServerDlg::OnTimer()
         {
             // IP, port number
             vecpListViewItems[i]->setText ( 0, QString().sprintf ( "%s : %d",
-                vecHostAddresses[i].InetAddr.toString().toStdString(),
+                vecHostAddresses[i].InetAddr.toString(),
                 vecHostAddresses[i].iPort ) /* IP, port */);
 
             // name
@@ -122,10 +122,10 @@ void CLlconServerDlg::OnTimer()
             // in/out network block sizes
             vecpListViewItems[i]->setText ( 5,
                 QString().setNum (
-                double ( veciNetwInBlSiFact[i] * MIN_BLOCK_DURATION_MS), 'f', 2 ) );
+                double ( veciNetwInBlSiFact[i] * MIN_BLOCK_DURATION_MS ), 'f', 2 ) );
             vecpListViewItems[i]->setText(6,
                 QString().setNum (
-                double ( veciNetwOutBlSiFact[i] * MIN_BLOCK_DURATION_MS), 'f', 2 ) );
+                double ( veciNetwOutBlSiFact[i] * MIN_BLOCK_DURATION_MS ), 'f', 2 ) );
 
             vecpListViewItems[i]->setHidden ( true );
         }

@@ -703,7 +703,7 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
 */
     // 4 bytes maximum since we return uint32
     Q_ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
-    Q_ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
+    Q_ASSERT ( static_cast<unsigned int> ( vecIn.Size() ) >= iPos + iNumOfBytes );
 
     uint32_t iRet = 0;
     for ( unsigned int i = 0; i < iNumOfBytes; i++ )
@@ -782,7 +782,7 @@ void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,
 */
     // 4 bytes maximum since we use uint32
     Q_ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
-    Q_ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
+    Q_ASSERT ( static_cast<unsigned int> ( vecIn.Size() ) >= iPos + iNumOfBytes );
 
     for ( unsigned int i = 0; i < iNumOfBytes; i++ )
     {

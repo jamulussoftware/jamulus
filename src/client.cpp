@@ -210,7 +210,7 @@ void CClient::run()
 
 
 // TEST
-Sleep(300);
+//Sleep(300);
 
 
         // copy data from one stereo buffer in two separate buffers

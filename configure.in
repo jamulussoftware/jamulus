@@ -46,17 +46,20 @@ AC_LANG(C++)
 
 dnl QT4 -------------------------------------------------------------------------
 dnl The QT4 check code was taken from the FreeMat-3.0 code by Samit Basu
-PKG_CHECK_MODULES(QT, QtCore QtGui QtNetwork >= 4.0.1, HAVE_QT4="yes", HAVE_QT4="no")
+PKG_CHECK_MODULES(QT, QtCore QtGui QtNetwork QtXml >= 4.0.1, HAVE_QT4="yes", HAVE_QT4="no")
 if test "x$HAVE_QT4" = "xyes"; then
+
   dnl Check needed because in some cases the QtGui includedir
   dnl doesn't contain the subsystem dir.
   QT_INCLUDE_DIR=$($PKG_CONFIG --variable=includedir QtGui)
   EXTRA_QT_INCLUDE_DIR="$QT_INCLUDE_DIR/Qt"
   AC_CHECK_FILE([$QT_INCLUDE_DIR/QWidget],
   AC_MSG_NOTICE([No extra QT_INCLUDE_DIR needed]),
+
   AC_CHECK_FILE([$EXTRA_QT_INCLUDE_DIR/QWidget],
   QT_CFLAGS="$QT_CFLAGS -I$EXTRA_QT_INCLUDE_DIR",
   AC_MSG_WARN([QWidget not found])))
+
   AC_CHECK_PROGS(QT_MOC, [moc4 moc-qt4 moc], [])
   AC_CHECK_PROGS(QT_RCC, [rcc4 rcc-qt4 rcc], [])
   AC_CHECK_PROGS(QT_UIC, [uic4 uic-qt4 uic], [])
@@ -69,13 +72,20 @@ if test "x$HAVE_QT4" = "xyes"; then
   if (test "$QT_UIC" = ""); then
     AC_MSG_ERROR([QT4 uic is required.])
   fi
+
+  QT_LIB="-lQtCore -lQtGui -lQtNetwork -lQtXml"
 fi
+
+QT_LIBS="$QT_LIB"
+QT_LDADD="-L$QTDIR/lib $QT_LIBS"
+LDFLAGS="$QT_LDADD $LDFLAGS"
+
 dnl FOO=`echo $QT_LIBS | sed -e 's/-L/-Wl,-rpath,/' | sed -e 's/-L.*//'`
 dnl LDFLAGS="$LDFLAGS $FOO"
 
-LDFLAGS="-L/usr/lib $LDFLAGS"
+dnl LDFLAGS="-L/usr/lib $QT_LIBS $LDFLAGS"
 
-dnl AC_MSG_NOTICE([Set LDFLAGS... $LDFLAGS])
+AC_MSG_NOTICE([Set LDFLAGS... $LDFLAGS])
 
 AC_MSG_NOTICE([Set QT_CFLAGS... $QT_CFLAGS])
 AC_SUBST(QT_CFLAGS)

@@ -57,14 +57,14 @@ public:
     CMultiColorLEDbase ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
     void Reset();
-    void SetUpdateTime ( int iNUTi );
-    void SetLight ( int iNewStatus );
+    void SetUpdateTime ( const int iNUTi );
+    void SetLight ( const int iNewStatus );
 
 protected:
     enum ELightColor { RL_GREY, RL_RED, RL_GREEN, RL_YELLOW };
     ELightColor eColorFlag;
 
-    virtual void SetPixmap ( QPixmap& NewBitmap ) {} // must be implemented in derived class!
+    virtual void SetPixmap ( QPixmap& NewBitmap ) {} // must be implemented in derived class
     void UpdateColor();
 
     QPixmap BitmCubeGreen;

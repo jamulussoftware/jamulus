@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -37,23 +37,23 @@ CMultiColorLEDbase::CMultiColorLEDbase ( QWidget* parent, Qt::WindowFlags f )
     BitmCubeGrey ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
     BitmCubeYellow ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL )
 {
-    /* Create bitmaps */
-    BitmCubeGreen.fill ( QColor ( 0, 255, 0 ) );
-    BitmCubeRed.fill ( QColor ( 255, 0, 0 ) );
-    BitmCubeGrey.fill ( QColor ( 192, 192, 192 ) );
+    // create bitmaps
+    BitmCubeGreen.fill  ( QColor ( 0, 255, 0 ) );
+    BitmCubeRed.fill    ( QColor ( 255, 0, 0 ) );
+    BitmCubeGrey.fill   ( QColor ( 192, 192, 192 ) );
     BitmCubeYellow.fill ( QColor ( 255, 255, 0 ) );
 
-    /* Init color flags */
+    // init color flags
     Reset();
 
-    /* Set init-bitmap */
+    // set init bitmap
     SetPixmap ( BitmCubeGrey );
     eColorFlag = RL_GREY;
 
-    /* Init update time */
+    // init update time
     iUpdateTime = DEFAULT_UPDATE_TIME;
 
-    /* Connect timer events to the desired slots */
+    // connect timer events to the desired slots
     connect ( &TimerRedLight, SIGNAL ( timeout() ), 
         this, SLOT ( OnTimerRedLight() ) );
     connect ( &TimerGreenLight, SIGNAL ( timeout() ), 
@@ -64,9 +64,9 @@ CMultiColorLEDbase::CMultiColorLEDbase ( QWidget* parent, Qt::WindowFlags f )
 
 void CMultiColorLEDbase::Reset()
 {
-    /* Reset color flags */
-    bFlagRedLi = false;
-    bFlagGreenLi = false;
+    // reset color flags
+    bFlagRedLi    = false;
+    bFlagGreenLi  = false;
     bFlagYellowLi = false;
 
     UpdateColor();
@@ -125,7 +125,7 @@ void CMultiColorLEDbase::UpdateColor()
         return;
     }
 
-    /* If no color is active, set control to grey light */
+    // if no color is active, set control to grey light
     if ( eColorFlag != RL_GREY )
     {
         SetPixmap ( BitmCubeGrey );
@@ -133,24 +133,24 @@ void CMultiColorLEDbase::UpdateColor()
     }
 }
 
-void CMultiColorLEDbase::SetLight ( int iNewStatus )
+void CMultiColorLEDbase::SetLight ( const int iNewStatus )
 {
     switch ( iNewStatus )
     {
     case MUL_COL_LED_GREEN:
-        // Green light
+        // green light
         bFlagGreenLi = true;
         TimerGreenLight.setInterval ( iUpdateTime );
         break;
 
     case MUL_COL_LED_YELLOW:
-        // Yellow light
+        // yellow light
         bFlagYellowLi = true;
         TimerYellowLight.setInterval ( iUpdateTime );
         break;
 
     case MUL_COL_LED_RED:
-        // Red light
+        // red light
         bFlagRedLi = true;
         TimerRedLight.setInterval ( iUpdateTime );
         break;
@@ -159,9 +159,9 @@ void CMultiColorLEDbase::SetLight ( int iNewStatus )
     UpdateColor();
 }
 
-void CMultiColorLEDbase::SetUpdateTime ( int iNUTi )
+void CMultiColorLEDbase::SetUpdateTime ( const int iNUTi )
 {
-    /* Avoid too short intervals */
+    // avoid too short intervals
     if ( iNUTi < MIN_TIME_FOR_RED_LIGHT )
 	{
         iUpdateTime = MIN_TIME_FOR_RED_LIGHT;
@@ -177,7 +177,7 @@ CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     : CMultiColorLEDbase ( parent, f )
 {
     // set modified style
-    setFrameShape ( QFrame::Panel );
+    setFrameShape  ( QFrame::Panel );
     setFrameShadow ( QFrame::Sunken );
-    setIndent ( 0 );
+    setIndent      ( 0 );
 }

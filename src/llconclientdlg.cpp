@@ -207,6 +207,9 @@ CLlconClientDlg::~CLlconClientDlg()
 
 void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
 {
+    // if settings dialog is open, close it
+    ClientSettingsDlg.close();
+
     // store IP address
     pClient->strIPAddress = LineEditServerAddr->text();
 

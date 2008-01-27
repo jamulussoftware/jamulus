@@ -87,11 +87,8 @@ void CSocket::OnDataReceived()
 		quint16      SenderPort;
 
 		// read block from network interface and query address of sender
-		const int iNumBytesRead = SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
+		int iNumBytesRead = SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
 			MAX_SIZE_BYTES_NETW_BUF, &SenderAddress, &SenderPort );
-
-		// convert address of client
-		CHostAddress RecHostAddr ( SenderAddress, SenderPort );
 
 		// check if an error occurred
 		if ( iNumBytesRead < 0 )
@@ -99,7 +96,10 @@ void CSocket::OnDataReceived()
 			return;
 		}
 
-		if ( bIsClient )
+		// convert address of client
+		const CHostAddress RecHostAddr ( SenderAddress, SenderPort );
+
+        if ( bIsClient )
 		{
 			// client
 			// check if packet comes from the server we want to connect

@@ -28,7 +28,7 @@
 /* Implementation *************************************************************/
 CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
     : pClient ( pNCliP ), QDialog ( parent ),
-    ClientSettingsDlg ( pNCliP, 0, Qt::WindowMinMaxButtonsHint )
+    ClientSettingsDlg ( pNCliP, parent, Qt::WindowMinMaxButtonsHint )
 {
     setupUi ( this );
 

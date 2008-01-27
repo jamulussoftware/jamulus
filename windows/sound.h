@@ -71,8 +71,8 @@ public:
     CSound();
     virtual ~CSound();
 
-    void        InitRecording ( int iNewBufferSize, bool bNewBlocking = TRUE ) { InitRecordingAndPlayback ( iNewBufferSize ); }
-    void        InitPlayback ( int iNewBufferSize, bool bNewBlocking = FALSE ) { InitRecordingAndPlayback ( iNewBufferSize ); }
+    void        InitRecording ( int iNewBufferSize, bool bNewBlocking = true ) { InitRecordingAndPlayback ( iNewBufferSize ); }
+    void        InitPlayback ( int iNewBufferSize, bool bNewBlocking = false ) { InitRecordingAndPlayback ( iNewBufferSize ); }
     bool        Read ( CVector<short>& psData );
     bool        Write ( CVector<short>& psData );
 
@@ -137,8 +137,8 @@ public:
     CSound();
     virtual ~CSound();
 
-    void        InitRecording ( int iNewBufferSize, bool bNewBlocking = TRUE );
-    void        InitPlayback ( int iNewBufferSize, bool bNewBlocking = FALSE );
+    void        InitRecording ( int iNewBufferSize, bool bNewBlocking = true );
+    void        InitPlayback ( int iNewBufferSize, bool bNewBlocking = false );
     bool        Read ( CVector<short>& psData );
     bool        Write ( CVector<short>& psData );
 

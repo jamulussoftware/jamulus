@@ -211,7 +211,7 @@ void CClient::run()
 
 // TEST
 //Sleep(300);
-
+//wait(3000);
 
         // copy data from one stereo buffer in two separate buffers
         iInCnt = 0;

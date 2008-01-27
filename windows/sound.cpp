@@ -45,13 +45,13 @@ bool CSound::Read ( CVector<short>& psData )
     bool    bError = false;
 
     // check if device must be opened or reinitialized
-    if ( bChangParamIn == TRUE )
+    if ( bChangParamIn )
     {
         // Reinit sound interface
         InitRecordingAndPlayback ( iBufferSize );
 
         // Reset flag
-        bChangParamIn = FALSE;
+        bChangParamIn = false;
     }
 
 
@@ -59,13 +59,13 @@ bool CSound::Read ( CVector<short>& psData )
     // wait until data is available
     if ( ! ( m_WaveInHeader[iWhichBufferIn].dwFlags & WHDR_DONE ) )
     {
-        if ( bBlockingRec == TRUE )
+        if ( bBlockingRec )
 		{
             WaitForSingleObject ( m_WaveInEvent, INFINITE );
 		}
         else
 		{
-            return FALSE;
+            return false;
 		}
     }
 */
@@ -87,11 +87,11 @@ bool CSound::Read ( CVector<short>& psData )
     // very likely that a buffer got lost -> set error flag
     if ( iNumInBufDone == iCurNumSndBufIn )
 	{
-        bError = TRUE;
+        bError = true;
 	}
     else
 	{
-        bError = FALSE;
+        bError = false;
 	}
 */
 
@@ -160,7 +160,7 @@ void CSound::SetInNumBuf ( int iNewNum )
     if ( iNewNum != iCurNumSndBufIn )
     {
         iCurNumSndBufIn = iNewNum;
-        bChangParamIn   = TRUE;
+        bChangParamIn   = true;
     }
 }
 
@@ -176,13 +176,13 @@ bool CSound::Write ( CVector<short>& psData )
     bool    bError;
 
     // check if device must be opened or reinitialized
-    if ( bChangParamOut == TRUE )
+    if ( bChangParamOut )
     {
         // reinit sound interface
         InitRecordingAndPlayback ( iBufferSize );
 
         // reset flag
-        bChangParamOut = FALSE;
+        bChangParamOut = false;
     }
 
 /*
@@ -225,11 +225,11 @@ bool CSound::Write ( CVector<short>& psData )
 			// set index for done buffer
 			iIndexDoneBuf = iCurNumSndBufOut / 2;
 
-			bError = TRUE;
+			bError = true;
 		}
 		else
 		{
-			bError = FALSE;
+			bError = false;
 		}
 	}
 */
@@ -312,7 +312,7 @@ void CSound::SetOutNumBuf ( int iNewNum )
     if ( iNewNum != iCurNumSndBufOut )
     {
         iCurNumSndBufOut = iNewNum;
-        bChangParamOut   = TRUE;
+        bChangParamOut   = true;
     }
 }
 
@@ -452,8 +452,8 @@ void CSound::Close()
     Sleep ( 500 );
 
     // set flag to open devices the next time it is initialized
-    bChangParamIn  = TRUE;
-    bChangParamOut = TRUE;
+    bChangParamIn  = true;
+    bChangParamOut = true;
 }
 
 CSound::CSound()
@@ -589,8 +589,8 @@ pstrDevices[0] = driverInfo.name;
     m_WaveOutEvent = CreateEvent ( NULL, FALSE, FALSE, NULL );
 
     // set flag to open devices
-    bChangParamIn  = TRUE;
-    bChangParamOut = TRUE;
+    bChangParamIn  = true;
+    bChangParamOut = true;
 }
 
 CSound::~CSound()
@@ -779,11 +779,11 @@ long CSound::asioMessages ( long selector, long value, void* message, double* op
 \******************************************************************************/
 bool CSound::Read ( CVector<short>& psData )
 {
-    int     i;
-    bool    bError;
+    int  i;
+    bool bError;
 
     // check if device must be opened or reinitialized
-    if ( bChangParamIn == TRUE )
+    if ( bChangParamIn )
     {
         OpenInDevice();
 
@@ -791,19 +791,19 @@ bool CSound::Read ( CVector<short>& psData )
         InitRecording ( iBufferSizeIn, bBlockingRec );
 
         // Reset flag
-        bChangParamIn = FALSE;
+        bChangParamIn = false;
     }
 
     // wait until data is available
     if ( ! ( m_WaveInHeader[iWhichBufferIn].dwFlags & WHDR_DONE ) )
     {
-        if ( bBlockingRec == TRUE )
+        if ( bBlockingRec )
 		{
             WaitForSingleObject ( m_WaveInEvent, INFINITE );
 		}
         else
 		{
-            return FALSE;
+            return false;
 		}
     }
 
@@ -821,11 +821,11 @@ bool CSound::Read ( CVector<short>& psData )
        very likely that a buffer got lost -> set error flag */
     if ( iNumInBufDone == iCurNumSndBufIn )
 	{
-        bError = TRUE;
+        bError = true;
 	}
     else
 	{
-        bError = FALSE;
+        bError = false;
 	}
 
     // copy data from sound card in output buffer
@@ -877,12 +877,12 @@ void CSound::PrepareInBuffer ( int iBufNum )
 void CSound::InitRecording ( int iNewBufferSize, bool bNewBlocking )
 {
     // check if device must be opened or reinitialized
-    if ( bChangParamIn == TRUE )
+    if ( bChangParamIn )
     {
         OpenInDevice();
 
         // reset flag
-        bChangParamIn = FALSE;
+        bChangParamIn = false;
     }
 
     // set internal parameter
@@ -960,7 +960,7 @@ void CSound::SetInDev ( int iNewDev )
     if ( iNewDev != iCurInDev )
     {
         iCurInDev     = iNewDev;
-        bChangParamIn = TRUE;
+        bChangParamIn = true;
     }
 }
 
@@ -976,7 +976,7 @@ void CSound::SetInNumBuf ( int iNewNum )
     if ( iNewNum != iCurNumSndBufIn )
     {
         iCurNumSndBufIn = iNewNum;
-        bChangParamIn   = TRUE;
+        bChangParamIn   = true;
     }
 }
 
@@ -992,7 +992,7 @@ bool CSound::Write ( CVector<short>& psData )
     bool    bError;
 
     // check if device must be opened or reinitialized
-    if ( bChangParamOut == TRUE )
+    if ( bChangParamOut )
     {
         OpenOutDevice();
 
@@ -1000,7 +1000,7 @@ bool CSound::Write ( CVector<short>& psData )
         InitPlayback ( iBufferSizeOut, bBlockingPlay );
 
         // reset flag
-        bChangParamOut = FALSE;
+        bChangParamOut = false;
     }
 
     // get number of "done"-buffers and position of one of them
@@ -1009,9 +1009,9 @@ bool CSound::Write ( CVector<short>& psData )
     // now check special cases (Buffer is full or empty)
     if ( iCntPrepBuf == 0 )
     {
-        if ( bBlockingPlay == TRUE )
+        if ( bBlockingPlay )
         {
-            /* Blocking wave out routine. Needed for transmitter. Always
+            /* Blocking wave out routine. Always
                ensure that the buffer is completely filled to avoid buffer
                underruns */
             while ( iCntPrepBuf == 0 )
@@ -1026,7 +1026,7 @@ bool CSound::Write ( CVector<short>& psData )
             // All buffers are filled, dump new block --------------------------
 // It would be better to kill half of the buffer blocks to set the start
 // back to the middle: TODO
-            return TRUE; // an error occurred
+            return true; // an error occurred
         }
     }
     else
@@ -1052,11 +1052,11 @@ bool CSound::Write ( CVector<short>& psData )
 			// set index for done buffer
 			iIndexDoneBuf = iCurNumSndBufOut / 2;
 
-			bError = TRUE;
+			bError = true;
 		}
 		else
 		{
-			bError = FALSE;
+			bError = false;
 		}
 	}
 
@@ -1115,12 +1115,12 @@ void CSound::InitPlayback ( int iNewBufferSize, bool bNewBlocking )
     int i, j;
 
     // check if device must be opened or reinitialized
-    if ( bChangParamOut == TRUE )
+    if ( bChangParamOut )
     {
         OpenOutDevice();
 
         // reset flag
-        bChangParamOut = FALSE;
+        bChangParamOut = false;
     }
 
     // set internal parameters
@@ -1187,7 +1187,7 @@ void CSound::SetOutDev ( int iNewDev )
     if ( iNewDev != iCurOutDev )
     {
         iCurOutDev     = iNewDev;
-        bChangParamOut = TRUE;
+        bChangParamOut = true;
     }
 }
 
@@ -1203,7 +1203,7 @@ void CSound::SetOutNumBuf ( int iNewNum )
     if ( iNewNum != iCurNumSndBufOut )
     {
         iCurNumSndBufOut = iNewNum;
-        bChangParamOut   = TRUE;
+        bChangParamOut   = true;
     }
 }
 
@@ -1213,8 +1213,8 @@ void CSound::SetOutNumBuf ( int iNewNum )
 \******************************************************************************/
 void CSound::Close()
 {
-    int         i;
-    MMRESULT    result;
+    int      i;
+    MMRESULT result;
 
     // reset audio driver
     if ( m_WaveOut != NULL )
@@ -1292,8 +1292,8 @@ void CSound::Close()
     }
 
     // set flag to open devices the next time it is initialized
-    bChangParamIn  = TRUE;
-    bChangParamOut = TRUE;
+    bChangParamIn  = true;
+    bChangParamOut = true;
 }
 
 CSound::CSound()
@@ -1324,15 +1324,15 @@ CSound::CSound()
     }
 
     // init wave-format structure
-    sWaveFormatEx.wFormatTag = WAVE_FORMAT_PCM;
-    sWaveFormatEx.nChannels = NUM_IN_OUT_CHANNELS;
-    sWaveFormatEx.wBitsPerSample = BITS_PER_SAMPLE;
-    sWaveFormatEx.nSamplesPerSec = SND_CRD_SAMPLE_RATE;
-    sWaveFormatEx.nBlockAlign = sWaveFormatEx.nChannels *
+    sWaveFormatEx.wFormatTag      = WAVE_FORMAT_PCM;
+    sWaveFormatEx.nChannels       = NUM_IN_OUT_CHANNELS;
+    sWaveFormatEx.wBitsPerSample  = BITS_PER_SAMPLE;
+    sWaveFormatEx.nSamplesPerSec  = SND_CRD_SAMPLE_RATE;
+    sWaveFormatEx.nBlockAlign     = sWaveFormatEx.nChannels *
         sWaveFormatEx.wBitsPerSample / 8;
     sWaveFormatEx.nAvgBytesPerSec = sWaveFormatEx.nBlockAlign *
         sWaveFormatEx.nSamplesPerSec;
-    sWaveFormatEx.cbSize = 0;
+    sWaveFormatEx.cbSize          = 0;
 
     // get the number of digital audio devices in this computer, check range
     iNumDevs = waveInGetNumDevs();
@@ -1359,22 +1359,22 @@ CSound::CSound()
 
     // we use an event controlled wave-in (wave-out) structure
     // create events
-    m_WaveInEvent = CreateEvent ( NULL, FALSE, FALSE, NULL );
+    m_WaveInEvent  = CreateEvent ( NULL, FALSE, FALSE, NULL );
     m_WaveOutEvent = CreateEvent ( NULL, FALSE, FALSE, NULL );
 
     // set flag to open devices
-    bChangParamIn  = TRUE;
-    bChangParamOut = TRUE;
+    bChangParamIn  = true;
+    bChangParamOut = true;
 
     // default device number, "wave mapper"
     iCurInDev  = WAVE_MAPPER;
     iCurOutDev = WAVE_MAPPER;
 
     // non-blocking wave out is default
-    bBlockingPlay = FALSE;
+    bBlockingPlay = false;
 
     // blocking wave in is default
-    bBlockingRec = TRUE;
+    bBlockingRec = true;
 }
 
 CSound::~CSound()

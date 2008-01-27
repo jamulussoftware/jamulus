@@ -188,7 +188,7 @@ bool CSettings::GetNumericIniSet ( const QDomDocument& xmlFile, const QString& s
         // check range
         if ( ( iValue >= iRangeStart ) && ( iValue <= iRangeStop ) )
         {
-            bReturn = TRUE;
+            bReturn = true;
         }
     }
 

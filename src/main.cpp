@@ -52,7 +52,7 @@ int main ( int argc, char** argv )
 	for ( int i = 1; i < argc; i++ )
 	{
 		/* Server mode flag ------------------------------------------------------- */
-		if ( GetFlagArgument ( argc, argv, i, "-s", "--server" ) == TRUE )
+		if ( GetFlagArgument ( argc, argv, i, "-s", "--server" ) )
 		{
 			bIsClient = false;
 
@@ -62,7 +62,7 @@ cerr << "server ";
 		}
 
 		/* Use GUI flag ----------------------------------------------------------- */
-		if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) == TRUE )
+		if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) )
 		{
 			bUseGUI = false;
 
@@ -72,7 +72,7 @@ cerr << "nogui ";
 		}
 
 		/* Use logging flag ------------------------------------------------------- */
-		if ( GetFlagArgument ( argc, argv, i, "-l", "--log" ) == TRUE )
+		if ( GetFlagArgument ( argc, argv, i, "-l", "--log" ) )
 		{
 			bUseServerLogging = true;
 
@@ -82,7 +82,7 @@ cerr << "logging ";
 		}
 
 		/* Initialization file ---------------------------------------------------- */
-		if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) == TRUE )
+		if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
 		{
 			strIniFileName = strArgument;
 			continue;

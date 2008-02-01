@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -49,12 +49,12 @@
 
 
 /* Classes ********************************************************************/
-class CMultiColorLEDbase : public QLabel
+class CMultiColorLED : public QLabel
 {
     Q_OBJECT
 
 public:
-    CMultiColorLEDbase ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    CMultiColorLED ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
     void Reset();
     void SetUpdateTime ( const int iNUTi );
@@ -64,7 +64,6 @@ protected:
     enum ELightColor { RL_GREY, RL_RED, RL_GREEN, RL_YELLOW };
     ELightColor eColorFlag;
 
-    virtual void SetPixmap ( QPixmap& NewBitmap ) {} // must be implemented in derived class
     void UpdateColor();
 
     QPixmap BitmCubeGreen;
@@ -89,17 +88,11 @@ protected slots:
 };
 
 
-class CMultiColorLED : public CMultiColorLEDbase
-{
-public:
-    CMultiColorLED ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
-
-protected:
-    virtual void SetPixmap ( QPixmap& NewBitmap ) { setPixmap ( NewBitmap ); }
-};
 
 
-class CMultColLEDListViewItem : public CMultiColorLEDbase
+// TODO list view item LED does not work anymore
+
+class CMultColLEDListViewItem : public CMultiColorLED
 {
 public:
     CMultColLEDListViewItem ( const int iNewCol ) : iColumn ( iNewCol ),
@@ -119,8 +112,8 @@ protected:
         }
     }
 
-    QTreeWidgetItem*  pListViewItem;
-    int               iColumn;
+    QTreeWidgetItem* pListViewItem;
+    int              iColumn;
 };
 
 

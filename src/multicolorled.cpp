@@ -30,7 +30,7 @@
 
 
 /* Implementation *************************************************************/
-CMultiColorLEDbase::CMultiColorLEDbase ( QWidget* parent, Qt::WindowFlags f )
+CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     : QLabel ( parent, f ),
     BitmCubeGreen ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
     BitmCubeRed ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
@@ -46,8 +46,13 @@ CMultiColorLEDbase::CMultiColorLEDbase ( QWidget* parent, Qt::WindowFlags f )
     // init color flags
     Reset();
 
+    // set modified style of label
+    setFrameShape  ( QFrame::Panel );
+    setFrameShadow ( QFrame::Sunken );
+    setIndent      ( 0 );
+
     // set init bitmap
-    SetPixmap ( BitmCubeGrey );
+    setPixmap ( BitmCubeGrey );
     eColorFlag = RL_GREY;
 
     // init update time
@@ -62,7 +67,7 @@ CMultiColorLEDbase::CMultiColorLEDbase ( QWidget* parent, Qt::WindowFlags f )
         this, SLOT ( OnTimerYellowLight() ) );
 }
 
-void CMultiColorLEDbase::Reset()
+void CMultiColorLED::Reset()
 {
     // reset color flags
     bFlagRedLi    = false;
@@ -72,25 +77,25 @@ void CMultiColorLEDbase::Reset()
     UpdateColor();
 }
 
-void CMultiColorLEDbase::OnTimerRedLight() 
+void CMultiColorLED::OnTimerRedLight() 
 {
     bFlagRedLi = false;
     UpdateColor();
 }
 
-void CMultiColorLEDbase::OnTimerGreenLight() 
+void CMultiColorLED::OnTimerGreenLight() 
 {
     bFlagGreenLi = false;
     UpdateColor();
 }
 
-void CMultiColorLEDbase::OnTimerYellowLight() 
+void CMultiColorLED::OnTimerYellowLight() 
 {
     bFlagYellowLi = false;
     UpdateColor();
 }
 
-void CMultiColorLEDbase::UpdateColor()
+void CMultiColorLED::UpdateColor()
 {
     /* Red light has highest priority, then comes yellow and at the end, we
        decide to set green light. Allways check the current color of the
@@ -99,7 +104,7 @@ void CMultiColorLEDbase::UpdateColor()
     {
         if ( eColorFlag != RL_RED )
         {
-            SetPixmap ( BitmCubeRed );
+            setPixmap ( BitmCubeRed );
             eColorFlag = RL_RED;
         }
         return;
@@ -109,7 +114,7 @@ void CMultiColorLEDbase::UpdateColor()
     {
         if ( eColorFlag != RL_YELLOW )
         {
-            SetPixmap ( BitmCubeYellow );
+            setPixmap ( BitmCubeYellow );
             eColorFlag = RL_YELLOW;
         }
         return;
@@ -119,7 +124,7 @@ void CMultiColorLEDbase::UpdateColor()
     {
         if ( eColorFlag != RL_GREEN )
         {
-            SetPixmap ( BitmCubeGreen );
+            setPixmap ( BitmCubeGreen );
             eColorFlag = RL_GREEN;
         }
         return;
@@ -128,12 +133,12 @@ void CMultiColorLEDbase::UpdateColor()
     // if no color is active, set control to grey light
     if ( eColorFlag != RL_GREY )
     {
-        SetPixmap ( BitmCubeGrey );
+        setPixmap ( BitmCubeGrey );
         eColorFlag = RL_GREY;
     }
 }
 
-void CMultiColorLEDbase::SetLight ( const int iNewStatus )
+void CMultiColorLED::SetLight ( const int iNewStatus )
 {
     switch ( iNewStatus )
     {
@@ -159,7 +164,7 @@ void CMultiColorLEDbase::SetLight ( const int iNewStatus )
     UpdateColor();
 }
 
-void CMultiColorLEDbase::SetUpdateTime ( const int iNUTi )
+void CMultiColorLED::SetUpdateTime ( const int iNUTi )
 {
     // avoid too short intervals
     if ( iNUTi < MIN_TIME_FOR_RED_LIGHT )
@@ -170,14 +175,4 @@ void CMultiColorLEDbase::SetUpdateTime ( const int iNUTi )
 	{
         iUpdateTime = iNUTi;
 	}
-}
-
-
-CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
-    : CMultiColorLEDbase ( parent, f )
-{
-    // set modified style
-    setFrameShape  ( QFrame::Panel );
-    setFrameShadow ( QFrame::Sunken );
-    setIndent      ( 0 );
 }

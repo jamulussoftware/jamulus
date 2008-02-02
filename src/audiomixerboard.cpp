@@ -58,11 +58,11 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     // add help text to controls
     pFader->setWhatsThis ( "<b>Mixer Fader:</b> Adjusts the audio level of this "
-		"channel. All connected clients at the server will be assigned an audio "
-		"fader at each client" );
+        "channel. All connected clients at the server will be assigned an audio "
+        "fader at each client" );
 
     pLabel->setWhatsThis ( "<b>Mixer Fader Label:</b> Label (fader tag) identifying "
-		"the connected client. The tag name can be set in the clients main window." );
+        "the connected client. The tag name can be set in the clients main window." );
 
 
     // connections -------------------------------------------------------------
@@ -73,9 +73,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 void CChannelFader::OnValueChanged ( int value )
 {
     // convert actual slider range in gain values
-    // reverse linear scale and normalize so that maximum gain is 1
-    const double dCurGain =
-        static_cast<double> ( AUD_MIX_FADER_MAX - value ) / AUD_MIX_FADER_MAX;
+    // and normalize so that maximum gain is 1
+    const double dCurGain = static_cast<double> ( value ) / AUD_MIX_FADER_MAX;
 
     emit valueChanged ( dCurGain );
 }

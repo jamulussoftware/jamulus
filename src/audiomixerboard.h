@@ -65,7 +65,7 @@ public:
     bool IsVisible() { return pLabel->isVisible(); }
 
      // init gain value -> maximum value as definition according to server
-    void ResetGain() { pFader->setValue ( 0 ); }
+    void ResetGain() { pFader->setValue ( AUD_MIX_FADER_MAX ); }
 
 protected:
     QGridLayout*    pMainGrid;

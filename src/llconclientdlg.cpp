@@ -121,7 +121,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
     // audio reverberation
     SliderAudReverb->setRange ( 0, AUD_REVERB_MAX );
     const int iCurAudReverb = pClient->GetReverbLevel();
-    SliderAudReverb->setValue ( AUD_REVERB_MAX - iCurAudReverb );
+    SliderAudReverb->setValue ( iCurAudReverb );
     SliderAudReverb->setTickInterval ( AUD_REVERB_MAX / 9 );
 
 
@@ -244,11 +244,8 @@ void CLlconClientDlg::OnConnectDisconBut()
         // set address and check if address is valid
         if ( pClient->SetServerAddr ( LineEditServerAddr->text() ) )
         {
-#if ( QT_VERSION > 300 )
             pClient->start ( QThread::TimeCriticalPriority );
-#else
-            pClient->start();
-#endif
+
             PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
 
             // start timer for level meter bar

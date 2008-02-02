@@ -91,11 +91,10 @@ public slots:
     void OnTimerSigMet();
     void OnTimerStatus() { UpdateDisplay(); }
     void OnOpenGeneralSettings();
-    void OnSliderAudInFader ( int value ) { pClient->SetAudioInFader(value); }
-    void OnSliderAudReverb ( int value )
-        { pClient->SetReverbLevel ( AUD_REVERB_MAX - value ); }
-    void OnRevSelL() { pClient->SetReverbOnLeftChan(true); }
-    void OnRevSelR() { pClient->SetReverbOnLeftChan(false); }
+    void OnSliderAudInFader ( int value ) { pClient->SetAudioInFader ( value ); }
+    void OnSliderAudReverb ( int value ) { pClient->SetReverbLevel ( value ); }
+    void OnRevSelL() { pClient->SetReverbOnLeftChan ( true ); }
+    void OnRevSelR() { pClient->SetReverbOnLeftChan ( false ); }
     void OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo )
         { MainMixerBoard->ApplyNewConClientList ( vecChanInfo ); }
     void OnChangeChanGain ( int iId, double dGain )

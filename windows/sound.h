@@ -35,8 +35,8 @@
 
 /* Definitions ****************************************************************/
 // switch here between ASIO (Steinberg) or native Windows(TM) sound interface
-#undef USE_ASIO_SND_INTERFACE
-//#define USE_ASIO_SND_INTERFACE
+//#undef USE_ASIO_SND_INTERFACE
+#define USE_ASIO_SND_INTERFACE
 
 
 #define NUM_IN_OUT_CHANNELS     2       /* Stereo recording (but we only
@@ -98,35 +98,35 @@ protected:
     void        GetDoneBuffer ( int& iCntPrepBuf, int& iIndexDoneBuf );
 
     // ASIO stuff
-    ASIODriverInfo  driverInfo;
-    ASIOBufferInfo  bufferInfos[2 * NUM_IN_OUT_CHANNELS]; // for input and output buffers -> "2 *"
-	ASIOChannelInfo channelInfos[2 * NUM_IN_OUT_CHANNELS];
-    bool            bASIOPostOutput;
-    ASIOCallbacks   asioCallbacks;
+    ASIODriverInfo   driverInfo;
+    ASIOBufferInfo   bufferInfos[2 * NUM_IN_OUT_CHANNELS]; // for input and output buffers -> "2 *"
+	ASIOChannelInfo  channelInfos[2 * NUM_IN_OUT_CHANNELS];
+    bool             bASIOPostOutput;
+    ASIOCallbacks    asioCallbacks;
 
     // callbacks
-    static void bufferSwitch ( long index, ASIOBool processNow );
+    static void      bufferSwitch ( long index, ASIOBool processNow );
     static ASIOTime* bufferSwitchTimeInfo ( ASIOTime *timeInfo, long index, ASIOBool processNow );
-    static void sampleRateChanged ( ASIOSampleRate sRate ) {}
-    static long asioMessages ( long selector, long value, void* message, double* opt );
+    static void      sampleRateChanged ( ASIOSampleRate sRate ) {}
+    static long      asioMessages ( long selector, long value, void* message, double* opt );
 
-    int             iNumDevs;
-    std::string     pstrDevices[MAX_NUMBER_SOUND_CARDS];
-    bool            bChangParamIn;
-    bool            bChangParamOut;
-    int             iCurNumSndBufIn;
-    int             iCurNumSndBufOut;
+    int              iNumDevs;
+    std::string      pstrDevices[MAX_NUMBER_SOUND_CARDS];
+    bool             bChangParamIn;
+    bool             bChangParamOut;
+    int              iCurNumSndBufIn;
+    int              iCurNumSndBufOut;
 
-    int             iBufferSize;
+    int              iBufferSize;
 
     // wave in
-    HANDLE          m_WaveInEvent;
-    int             iWhichBufferIn;
-    short*          psSoundcardBuffer[MAX_SND_BUF_IN];
+    HANDLE           m_WaveInEvent;
+    int              iWhichBufferIn;
+    short*           psSoundcardBuffer[MAX_SND_BUF_IN];
 
     // wave out
-    short*          psPlaybackBuffer[MAX_SND_BUF_OUT];
-    HANDLE          m_WaveOutEvent;
+    short*           psPlaybackBuffer[MAX_SND_BUF_OUT];
+    HANDLE           m_WaveOutEvent;
 };
 
 #else // USE_ASIO_SND_INTERFACE

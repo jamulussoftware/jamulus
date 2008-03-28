@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
@@ -28,8 +28,8 @@
 /* Implementation *************************************************************/
 CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
     : pServer ( pNServP ), QDialog ( parent ),
-    BitmCubeGreen ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
-    BitmCubeRed ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
+    BitmCubeGreen  ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
+    BitmCubeRed    ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
     BitmCubeYellow ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL )
 {
     setupUi ( this );
@@ -39,8 +39,8 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
         tr ( " server " ) + QString ( VERSION ) );
 
     // create bitmaps
-    BitmCubeGreen.fill ( QColor ( 0, 255, 0 ) );
-    BitmCubeRed.fill ( QColor ( 255, 0, 0 ) );
+    BitmCubeGreen.fill  ( QColor ( 0, 255, 0 ) );
+    BitmCubeRed.fill    ( QColor ( 255, 0, 0 ) );
     BitmCubeYellow.fill ( QColor ( 255, 255, 0 ) );
 
     // set up list view for connected clients
@@ -63,7 +63,7 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
     for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
     {
         vecpListViewItems[i] = new CServerListViewItem ( ListViewClients );
-        vecpListViewItems[i]->setHidden ( false );
+        vecpListViewItems[i]->setHidden ( true );
     }
 
     // Init timing jitter text label
@@ -108,9 +108,9 @@ void CLlconServerDlg::OnTimer()
         if ( !( vecHostAddresses[i].InetAddr == QHostAddress ( (quint32) 0 ) ) )
         {
             // IP, port number
-            vecpListViewItems[i]->setText ( 0, QString().sprintf ( "%s : %d",
-                vecHostAddresses[i].InetAddr.toString(),
-                vecHostAddresses[i].iPort ) /* IP, port */);
+            vecpListViewItems[i]->setText ( 0, QString("%1 : %2" ).
+                arg ( vecHostAddresses[i].InetAddr.toString() ).
+                arg ( vecHostAddresses[i].iPort ) );
 
             // name
             vecpListViewItems[i]->setText ( 1, vecsName[i] );
@@ -123,15 +123,15 @@ void CLlconServerDlg::OnTimer()
             vecpListViewItems[i]->setText ( 5,
                 QString().setNum (
                 double ( veciNetwInBlSiFact[i] * MIN_BLOCK_DURATION_MS ), 'f', 2 ) );
-            vecpListViewItems[i]->setText(6,
+            vecpListViewItems[i]->setText ( 6,
                 QString().setNum (
                 double ( veciNetwOutBlSiFact[i] * MIN_BLOCK_DURATION_MS ), 'f', 2 ) );
 
-            vecpListViewItems[i]->setHidden ( true );
+            vecpListViewItems[i]->setHidden ( false );
         }
         else
         {
-            vecpListViewItems[i]->setHidden ( false );
+            vecpListViewItems[i]->setHidden ( true );
         }
     }
 
@@ -156,8 +156,8 @@ void CLlconServerDlg::customEvent ( QEvent* Event )
         ListViewMutex.lock();
 
         const int iMessType = ( (CLlconEvent*) Event )->iMessType;
-        const int iStatus = ( (CLlconEvent*) Event )->iStatus;
-        const int iChanNum = ( (CLlconEvent*) Event )->iChanNum;
+        const int iStatus   = ( (CLlconEvent*) Event )->iStatus;
+        const int iChanNum  = ( (CLlconEvent*) Event )->iChanNum;
 
         switch(iMessType)
         {

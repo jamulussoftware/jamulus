@@ -6,22 +6,22 @@
  *
  * Description:
  *  Implements a multi-color LED
- *  
+ *
  *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
@@ -32,9 +32,9 @@
 /* Implementation *************************************************************/
 CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     : QLabel ( parent, f ),
-    BitmCubeGreen ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
-    BitmCubeRed ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
-    BitmCubeGrey ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
+    BitmCubeGreen  ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
+    BitmCubeRed    ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
+    BitmCubeGrey   ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
     BitmCubeYellow ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL )
 {
     // create bitmaps
@@ -56,12 +56,12 @@ CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     eColorFlag = RL_GREY;
 
     // init update time
-	SetUpdateTime ( DEFAULT_UPDATE_TIME );
+    SetUpdateTime ( DEFAULT_UPDATE_TIME );
 
-	// init timers -> we want to have single shot timers
-	TimerRedLight.setSingleShot ( true );
-	TimerGreenLight.setSingleShot ( true );
-	TimerYellowLight.setSingleShot ( true );
+    // init timers -> we want to have single shot timers
+    TimerRedLight.setSingleShot    ( true );
+    TimerGreenLight.setSingleShot  ( true );
+    TimerYellowLight.setSingleShot ( true );
 
     // connect timer events to the desired slots
     connect ( &TimerRedLight, SIGNAL ( timeout() ), 
@@ -70,6 +70,9 @@ CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
         this, SLOT ( OnTimerGreenLight() ) );
     connect ( &TimerYellowLight, SIGNAL ( timeout() ), 
         this, SLOT ( OnTimerYellowLight() ) );
+
+    connect ( this, SIGNAL ( newPixmap ( const QPixmap& ) ), 
+        this, SLOT ( OnNewPixmap ( const QPixmap& ) ) );
 }
 
 void CMultiColorLED::Reset()
@@ -109,7 +112,8 @@ void CMultiColorLED::UpdateColor()
     {
         if ( eColorFlag != RL_RED )
         {
-            setPixmap ( BitmCubeRed );
+            //setPixmap ( BitmCubeRed );
+emit newPixmap ( BitmCubeRed );
             eColorFlag = RL_RED;
         }
         return;
@@ -119,7 +123,8 @@ void CMultiColorLED::UpdateColor()
     {
         if ( eColorFlag != RL_YELLOW )
         {
-            setPixmap ( BitmCubeYellow );
+            //setPixmap ( BitmCubeYellow );
+emit newPixmap ( BitmCubeYellow );
             eColorFlag = RL_YELLOW;
         }
         return;
@@ -129,7 +134,8 @@ void CMultiColorLED::UpdateColor()
     {
         if ( eColorFlag != RL_GREEN )
         {
-            setPixmap ( BitmCubeGreen );
+            //setPixmap ( BitmCubeGreen );
+emit newPixmap ( BitmCubeGreen );
             eColorFlag = RL_GREEN;
         }
         return;
@@ -173,15 +179,15 @@ void CMultiColorLED::SetUpdateTime ( const int iNUTi )
 {
     // avoid too short intervals
     if ( iNUTi < MIN_TIME_FOR_RED_LIGHT )
-	{
+    {
         iUpdateTime = MIN_TIME_FOR_RED_LIGHT;
-	}
+    }
     else
-	{
+    {
         iUpdateTime = iNUTi;
-	}
+    }
 
-	TimerGreenLight.setInterval ( iUpdateTime );
-	TimerYellowLight.setInterval ( iUpdateTime );
-	TimerRedLight.setInterval ( iUpdateTime );
+    TimerGreenLight.setInterval  ( iUpdateTime );
+    TimerYellowLight.setInterval ( iUpdateTime );
+    TimerRedLight.setInterval    ( iUpdateTime );
 }

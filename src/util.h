@@ -110,7 +110,7 @@ public:
             DebugError ( "Writing vector out of bounds", "Vector size",
                 iVectorSize, "New parameter", iPos );
         }
-#endif      
+#endif
         return pData[iPos]; }
 
     inline TData operator[] ( const int iPos ) const {
@@ -256,13 +256,13 @@ public:
     inline TData GetAverage()
     {
         if ( this->iNorm == 0 )
-		{
-			return TData ( 0 );
-		}
+        {
+            return TData ( 0 );
+        }
         else
-		{
-			return tCurAvResult / this->iNorm;
-		}
+        {
+            return tCurAvResult / this->iNorm;
+        }
     }
 
     virtual void Init ( const int iNewSize );
@@ -299,15 +299,15 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
     // increase position pointer and test if wrap
     iCurIdx++;
     if ( iCurIdx >= this->iVectorSize )
-	{
+    {
         iCurIdx = 0;
-	}
+    }
 
     // take care of norm
     if ( this->iNorm < this->iVectorSize )
-	{
+    {
         this->iNorm++;
-	}
+    }
 }
 
 
@@ -477,9 +477,9 @@ public:
         const QDateTime curDateTime = QDateTime::currentDateTime();
 
         // format date and time output according to "3.9.2006 11:38:08: "
-        return QString().setNum ( curDateTime.date().day() ) + "." + 
+        return QString().setNum ( curDateTime.date().day() ) + "." +
             QString().setNum ( curDateTime.date().month() ) + "." +
-            QString().setNum ( curDateTime.date().year() ) + " " + 
+            QString().setNum ( curDateTime.date().year() ) + " " +
             curDateTime.time().toString() + ": ";
     }
 };

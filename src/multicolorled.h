@@ -82,18 +82,20 @@ protected:
     bool    bFlagYellowLi;
 
 protected slots:
-    void OnTimerRedLight();
-    void OnTimerGreenLight();
-    void OnTimerYellowLight();
+    void         OnTimerRedLight();
+    void         OnTimerGreenLight();
+    void         OnTimerYellowLight();
+    virtual void OnNewPixmap ( const QPixmap& newPixmap ) { setPixmap ( newPixmap ); }
+
+signals:
+    void newPixmap ( const QPixmap& newPixmap );
 };
 
 
-
-
-// TODO list view item LED does not work anymore
-
 class CMultColLEDListViewItem : public CMultiColorLED
 {
+    Q_OBJECT
+
 public:
     CMultColLEDListViewItem ( const int iNewCol ) : iColumn ( iNewCol ),
         pListViewItem ( NULL ) {}
@@ -103,15 +105,16 @@ public:
         pListViewItem = pNewListViewItem;
     }
 
-protected:
-    virtual void SetPixmap ( QPixmap& NewBitmap )
+protected slots:
+    virtual void OnNewPixmap ( const QPixmap& newPixmap )
     {
         if ( pListViewItem != NULL )
         {
-            pListViewItem->setIcon ( iColumn, QIcon ( NewBitmap ) );
+            pListViewItem->setIcon ( iColumn, QIcon ( newPixmap ) );
         }
     }
 
+protected:
     QTreeWidgetItem* pListViewItem;
     int              iColumn;
 };

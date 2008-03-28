@@ -56,7 +56,12 @@ CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     eColorFlag = RL_GREY;
 
     // init update time
-    iUpdateTime = DEFAULT_UPDATE_TIME;
+	SetUpdateTime ( DEFAULT_UPDATE_TIME );
+
+	// init timers -> we want to have single shot timers
+	TimerRedLight.setSingleShot ( true );
+	TimerGreenLight.setSingleShot ( true );
+	TimerYellowLight.setSingleShot ( true );
 
     // connect timer events to the desired slots
     connect ( &TimerRedLight, SIGNAL ( timeout() ), 
@@ -145,19 +150,19 @@ void CMultiColorLED::SetLight ( const int iNewStatus )
     case MUL_COL_LED_GREEN:
         // green light
         bFlagGreenLi = true;
-        TimerGreenLight.setInterval ( iUpdateTime );
+        TimerGreenLight.start();
         break;
 
     case MUL_COL_LED_YELLOW:
         // yellow light
         bFlagYellowLi = true;
-        TimerYellowLight.setInterval ( iUpdateTime );
+        TimerYellowLight.start();
         break;
 
     case MUL_COL_LED_RED:
         // red light
         bFlagRedLi = true;
-        TimerRedLight.setInterval ( iUpdateTime );
+        TimerRedLight.start();
         break;
     }
 
@@ -175,4 +180,8 @@ void CMultiColorLED::SetUpdateTime ( const int iNUTi )
 	{
         iUpdateTime = iNUTi;
 	}
+
+	TimerGreenLight.setInterval ( iUpdateTime );
+	TimerYellowLight.setInterval ( iUpdateTime );
+	TimerRedLight.setInterval ( iUpdateTime );
 }

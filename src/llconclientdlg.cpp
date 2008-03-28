@@ -255,7 +255,7 @@ void CLlconClientDlg::OnConnectDisconBut()
         {
             // Restart timer to ensure that the text is visible at
             // least the time for one complete interval
-            TimerStatus.setInterval ( STATUSBAR_UPDATE_TIME );
+            TimerStatus.start ( STATUSBAR_UPDATE_TIME );
 
             // show the error in the status bar
             TextLabelStatus->setText ( tr ( "invalid address" ) );

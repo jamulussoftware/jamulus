@@ -112,8 +112,7 @@ void CMultiColorLED::UpdateColor()
     {
         if ( eColorFlag != RL_RED )
         {
-            //setPixmap ( BitmCubeRed );
-emit newPixmap ( BitmCubeRed );
+            emit newPixmap ( BitmCubeRed );
             eColorFlag = RL_RED;
         }
         return;
@@ -123,8 +122,7 @@ emit newPixmap ( BitmCubeRed );
     {
         if ( eColorFlag != RL_YELLOW )
         {
-            //setPixmap ( BitmCubeYellow );
-emit newPixmap ( BitmCubeYellow );
+            emit newPixmap ( BitmCubeYellow );
             eColorFlag = RL_YELLOW;
         }
         return;
@@ -134,8 +132,7 @@ emit newPixmap ( BitmCubeYellow );
     {
         if ( eColorFlag != RL_GREEN )
         {
-            //setPixmap ( BitmCubeGreen );
-emit newPixmap ( BitmCubeGreen );
+            emit newPixmap ( BitmCubeGreen );
             eColorFlag = RL_GREEN;
         }
         return;

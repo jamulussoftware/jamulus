@@ -39,7 +39,10 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/llconserverdlgbase.ui \
 	../src/clientsettingsdlgbase.ui \
 	../src/aboutdlgbase.ui \
-	sound.h
+	sound.h \
+	../src/resources.qrc \
+	../src/mainicon.png \
+	../src/gig.png
 
 # these need to be generated before the rest can be compiled
 

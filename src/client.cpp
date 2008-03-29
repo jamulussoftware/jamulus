@@ -27,11 +27,11 @@
 
 /* Implementation *************************************************************/
 CClient::CClient() : bRun ( false ), Socket ( &Channel ),
-        iAudioInFader ( AUD_FADER_IN_MAX / 2 ),
-        iReverbLevel ( AUD_REVERB_MAX / 6 ),
-        bReverbOnLeftChan ( false ),
-        iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR ),
-        strIPAddress ( "" ), strName ( "" )
+    iAudioInFader ( AUD_FADER_IN_MAX / 2 ),
+    iReverbLevel ( AUD_REVERB_MAX / 6 ),
+    bReverbOnLeftChan ( false ),
+    iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR ),
+    strIPAddress ( "" ), strName ( "" )
 {
     // connection for protocol
     QObject::connect ( &Channel,

@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
  * This program is distributed in the hope that it will be useful, but WITHOUT 
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
@@ -26,17 +26,17 @@
 Windows:
 --------
 
-Rquired software: QT 2 non-commercial, Visual C++ 6.0
+Rquired software: QT4, Visual Studio 2005
 
 - run llcon/windows/MocQT.bat
-- open llcon.dsw in your Visual C++ 6.0 environment and compile
+- open llcon.sln in your Visual Studio environment and compile
 - run llcon/windows/Release/llcon.exe
 
 
 Linux:
 ------
 
-Required packages: QT (devel packages, too!), ALSA (devel packages, too!)
+Required packages: QT4 (devel packages, too!), ALSA (devel packages, too!)
 
 - cd llcon
 - sh bootstrap
@@ -45,10 +45,4 @@ Required packages: QT (devel packages, too!), ALSA (devel packages, too!)
 - run llcon/linux/llcon
 
 NOTES:
-- it may be required by your Linux distrubution that you set the QTDIR
-  environment variable prior to the "./configure" call. E.g., for SUSE:
-  export QTDIR=/usr/lib/qt3
-  or for Debian:
-  export QTDIR=/usr/share/qt3
 - if the file "bootstrap" is not available, skip this step
-

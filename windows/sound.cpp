@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -332,6 +332,22 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
 
 
 
+// TODO this should be done in the setinoutbuf functions
+	// create and activate buffers
+	ASIOCreateBuffers(bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
+		iBufferSize * BYTES_PER_SAMPLE, &asioCallbacks);
+
+	// now set all the buffer details
+	for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
+	{
+		channelInfos[i].channel = NUM_IN_OUT_CHANNELS;
+		channelInfos[i].isInput = bufferInfos[i].isInput;
+		ASIOGetChannelInfo ( &channelInfos[i] );
+	}
+
+
+
+
 /*
     // reset interface so that all buffers are returned from the interface
     waveInReset ( m_WaveIn );
@@ -380,20 +396,7 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
 
 
 
-// TODO this should be done in the setinoutbuf functions
-	// create and activate buffers
-//	ASIOCreateBuffers(bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
-//		iBufferSizeIn * BYTES_PER_SAMPLE, &asioCallbacks);
-	ASIOCreateBuffers(bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
-		iBufferSize * BYTES_PER_SAMPLE, &asioCallbacks);
 
-	// now set all the buffer details
-	for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
-	{
-		channelInfos[i].channel = NUM_IN_OUT_CHANNELS;
-		channelInfos[i].isInput = bufferInfos[i].isInput;
-		ASIOGetChannelInfo ( &channelInfos[i] );
-	}
 
 
 
@@ -519,7 +522,7 @@ pstrDevices[0] = driverInfo.name;
 	long lNumInChan;
 	long lNumOutChan;
 	ASIOGetChannels ( &lNumInChan, &lNumOutChan );
-    if ( ( lNumInChan != NUM_IN_OUT_CHANNELS ) || ( lNumOutChan != NUM_IN_OUT_CHANNELS ) )
+    if ( ( lNumInChan < NUM_IN_OUT_CHANNELS ) || ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
     {
         throw CGenErr ( "The audio device does not support required number of channels." );
     }
@@ -641,7 +644,7 @@ ASIOTime* CSound::bufferSwitchTimeInfo ( ASIOTime *timeInfo, long index, ASIOBoo
 	return 0L;
 }
 
-void CSound::bufferSwitch( long index, ASIOBool processNow )
+void CSound::bufferSwitch ( long index, ASIOBool processNow )
 {
 
 
@@ -861,7 +864,7 @@ void CSound::InitRecording ( int iNewBufferSize, bool bNewBlocking )
 
     // set internal parameter
     iBufferSizeIn = iNewBufferSize;
-    bBlockingRec = bNewBlocking;
+    bBlockingRec  = bNewBlocking;
 
     // reset interface so that all buffers are returned from the interface
     waveInReset ( m_WaveIn );

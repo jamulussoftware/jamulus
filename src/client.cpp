@@ -132,7 +132,7 @@ void CClient::OnProtocolStatus ( bool bOk )
 void CClient::Init()
 {
     // set block sizes (in samples)
-    iBlockSizeSam = MIN_BLOCK_SIZE_SAMPLES;
+    iBlockSizeSam       = MIN_BLOCK_SIZE_SAMPLES;
     iSndCrdBlockSizeSam = MIN_SND_CRD_BLOCK_SIZE_SAMPLES;
 
     vecsAudioSndCrd.Init  ( iSndCrdBlockSizeSam * 2 ); // stereo

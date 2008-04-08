@@ -70,8 +70,8 @@ public:
     double MicLevelR() { return SignalLevelMeterR.MicLevel(); }
     bool   IsConnected() { return Channel.IsConnected(); }
 
-    /* we want to return the standard deviation. For that we need to calculate
-       the sqaure root */
+    /* We want to return the standard deviation. For that we need to calculate
+       the sqaure root. */
     double GetTimingStdDev() { return sqrt ( RespTimeMoAvBuf.GetAverage() ); }
 
     int GetAudioInFader() { return iAudioInFader; }

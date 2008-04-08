@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -11,13 +11,13 @@
  * Foundation; either version 2 of the License, or (at your option) any later 
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
@@ -49,19 +49,19 @@
 // file name for logging file
 #define LOG_FILE_NAME                   "llconsrvlog.txt"
 
-/* defined port number for client and server */
+// defined port number for client and server
 #define LLCON_PORT_NUMBER               22122
 
-/* sample rate */
+// sample rate
 #define SAMPLE_RATE                     24000
 
-/* sound card sample rate. Should be always 48 kHz to avoid sound card driver
-   internal sample rate conversion which might be buggy */
+// sound card sample rate. Should be always 48 kHz to avoid sound card driver
+// internal sample rate conversion which might be buggy
 #define SND_CRD_SAMPLE_RATE             48000
 
-/* minimum block duration - all other buffer durations must be a multiple
-   of this duration */
-#define MIN_BLOCK_DURATION_MS           2 /* ms */
+// minimum block duration - all other buffer durations must be a multiple
+// of this duration
+#define MIN_BLOCK_DURATION_MS           2 // ms
 
 #define MIN_BLOCK_SIZE_SAMPLES          ( MIN_BLOCK_DURATION_MS * SAMPLE_RATE / 1000 )
 #define MIN_SND_CRD_BLOCK_SIZE_SAMPLES  ( MIN_BLOCK_DURATION_MS * SND_CRD_SAMPLE_RATE / 1000 )

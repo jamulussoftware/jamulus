@@ -327,12 +327,62 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
     // first, stop audio
     ASIOStop();
 
-    // set internal parameters
-    iBufferSize = iNewBufferSize;
+    // calculate "nearest" buffer size and set internal parameter accordingly
+    // first check minimum and maximum values
+    if ( iNewBufferSize < HWBufferInfo.lMinSize )
+    {
+        iBufferSize = HWBufferInfo.lMinSize;
+    }
+    else
+    {
+        if ( iNewBufferSize > HWBufferInfo.lMaxSize )
+        {
+            iBufferSize = HWBufferInfo.lMaxSize;
+        }
+        else
+        {
+            // initialization
+            int  iTrialBufSize     = HWBufferInfo.lMinSize;
+            int  iLastTrialBufSize = HWBufferInfo.lMinSize;
+            bool bSizeFound        = false;
 
+            // test loop
+            while ( ( iTrialBufSize <= HWBufferInfo.lMaxSize ) && ( !bSizeFound ) )
+            {
+                if ( iTrialBufSize > iNewBufferSize )
+                {
+                    // test which buffer size fits better: the old one or the
+                    // current one
+                    if ( ( iTrialBufSize - iNewBufferSize ) < ( iNewBufferSize - iLastTrialBufSize ) )
+                    {
+                        iBufferSize = iTrialBufSize;
+                    }
+                    else
+                    {
+                        iBufferSize = iLastTrialBufSize;
+                    }
 
+                    // exit while loop
+                    bSizeFound = true;
+                }
 
-// TODO this should be done in the setinoutbuf functions
+                // store old trial buffer size
+                iLastTrialBufSize = iTrialBufSize;
+
+                // increment trial buffer size (check for special case first)
+                if ( HWBufferInfo.lGranularity == -1 )
+                {
+                    // special case: buffer sizes are a power of 2
+                    iTrialBufSize *= 2;
+                }
+                else
+                {
+                    iTrialBufSize += HWBufferInfo.lGranularity;
+                }
+            }
+        }
+    }
+
 	// create and activate buffers
 	ASIOCreateBuffers(bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
 		iBufferSize * BYTES_PER_SAMPLE, &asioCallbacks);
@@ -527,15 +577,11 @@ pstrDevices[0] = driverInfo.name;
         throw CGenErr ( "The audio device does not support required number of channels." );
     }
 
-    // check the usable buffer sizes
-	long lMinSize;
-	long lMaxSize;
-	long lPreferredSize;
-	long lGranularity;
-	ASIOGetBufferSize ( &lMinSize, &lMaxSize, &lPreferredSize, &lGranularity );
-
-    // TODO make use of the information...
-
+    // query the usable buffer sizes
+	ASIOGetBufferSize ( &HWBufferInfo.lMinSize,
+                        &HWBufferInfo.lMaxSize,
+                        &HWBufferInfo.lPreferredSize,
+                        &HWBufferInfo.lGranularity );
 
 	// set the sample rate and check if sample rate is supported
 	ASIOSetSampleRate ( SND_CRD_SAMPLE_RATE );

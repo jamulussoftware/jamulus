@@ -104,6 +104,15 @@ protected:
     bool             bASIOPostOutput;
     ASIOCallbacks    asioCallbacks;
 
+    // audio hardware buffer info
+    struct sHWBufferInfo
+    {
+	    long lMinSize;
+	    long lMaxSize;
+	    long lPreferredSize;
+	    long lGranularity;
+    } HWBufferInfo;
+
     // callbacks
     static void      bufferSwitch ( long index, ASIOBool processNow );
     static ASIOTime* bufferSwitchTimeInfo ( ASIOTime *timeInfo, long index, ASIOBool processNow );

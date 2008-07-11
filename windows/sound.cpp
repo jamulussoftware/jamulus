@@ -35,6 +35,14 @@
 extern AsioDrivers* asioDrivers;
 bool   loadAsioDriver ( char *name );
 
+// ASIO stuff
+ASIODriverInfo   driverInfo;
+ASIOBufferInfo   bufferInfos[2 * NUM_IN_OUT_CHANNELS]; // for input and output buffers -> "2 *"
+ASIOChannelInfo  channelInfos[2 * NUM_IN_OUT_CHANNELS];
+bool             bASIOPostOutput;
+ASIOCallbacks    asioCallbacks;
+int              iBufferSize;
+
 
 /******************************************************************************\
 * Wave in                                                                      *
@@ -384,8 +392,8 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
     }
 
 	// create and activate buffers
-	ASIOCreateBuffers(bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
-		iBufferSize * BYTES_PER_SAMPLE, &asioCallbacks);
+	ASIOCreateBuffers ( bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
+		iBufferSize * BYTES_PER_SAMPLE, &asioCallbacks );
 
 	// now set all the buffer details
 	for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
@@ -692,94 +700,47 @@ ASIOTime* CSound::bufferSwitchTimeInfo ( ASIOTime *timeInfo, long index, ASIOBoo
 
 void CSound::bufferSwitch ( long index, ASIOBool processNow )
 {
-
-
 	static long processedSamples = 0;
 
-
-/*
 	// buffer size in samples
-//	long buffSize = asioDriverInfo.preferredSize;
+	long buffSize = iBufferSize * BYTES_PER_SAMPLE;
 
-	// perform the processing
-	for ( int i = 0; i < asioDriverInfo.inputBuffers + asioDriverInfo.outputBuffers; i++ )
+	// perform the processing for input and output
+	for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
 	{
-		if ( asioDriverInfo.bufferInfos[i].isInput == false )
+        // only 16 bit is supported
+        if ( channelInfos[i].type != ASIOSTInt16LSB )
+        {
+            // TODO fire error
+        }
+
+        if ( bufferInfos[i].isInput == false )
 		{
-			// OK do processing for the outputs only
-			switch ( asioDriverInfo.channelInfos[i].type )
-			{
-			case ASIOSTInt16LSB:
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 2 );
-				break;
-			case ASIOSTInt24LSB:		// used for 20 bits as well
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 3 );
-				break;
-			case ASIOSTInt32LSB:
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 4 );
-				break;
-			case ASIOSTFloat32LSB:		// IEEE 754 32 bit float, as found on Intel x86 architecture
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 4 );
-				break;
-			case ASIOSTFloat64LSB: 		// IEEE 754 64 bit double float, as found on Intel x86 architecture
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 8 );
-				break;
-
-				// these are used for 32 bit data buffer, with different alignment of the data inside
-				// 32 bit PCI bus systems can more easily used with these
-			case ASIOSTInt32LSB16:		// 32 bit data with 18 bit alignment
-			case ASIOSTInt32LSB18:		// 32 bit data with 18 bit alignment
-			case ASIOSTInt32LSB20:		// 32 bit data with 20 bit alignment
-			case ASIOSTInt32LSB24:		// 32 bit data with 24 bit alignment
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 4 );
-				break;
-
-			case ASIOSTInt16MSB:
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 2 );
-				break;
-			case ASIOSTInt24MSB:		// used for 20 bits as well
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 3 );
-				break;
-			case ASIOSTInt32MSB:
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 4 );
-				break;
-			case ASIOSTFloat32MSB:		// IEEE 754 32 bit float, as found on Intel x86 architecture
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 4 );
-				break;
-			case ASIOSTFloat64MSB: 		// IEEE 754 64 bit double float, as found on Intel x86 architecture
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 8 );
-				break;
-
-				// these are used for 32 bit data buffer, with different alignment of the data inside
-				// 32 bit PCI bus systems can more easily used with these
-			case ASIOSTInt32MSB16:		// 32 bit data with 18 bit alignment
-			case ASIOSTInt32MSB18:		// 32 bit data with 18 bit alignment
-			case ASIOSTInt32MSB20:		// 32 bit data with 20 bit alignment
-			case ASIOSTInt32MSB24:		// 32 bit data with 24 bit alignment
-				memset ( asioDriverInfo.bufferInfos[i].buffers[index], 0, buffSize * 4 );
-				break;
-			}
+// TODO the following is just a test code
+            memset ( bufferInfos[i].buffers[index], 0, buffSize * 2 );
 		}
+        else
+        {
+
+// TEST
+static FILE* pFile = fopen ( "test.dat", "w" );
+for ( int iIdx = 0; iIdx < buffSize * 2; iIdx++ )
+{
+    fprintf ( pFile, "%d\n", ((short*) bufferInfos[i].buffers[index])[iIdx] );
+}
+fflush ( pFile );
+
+
+// TODO
+        }
 	}
 
-	// finally if the driver supports the ASIOOutputReady() optimization, do it here, all data are in place
-	if ( asioDriverInfo.postOutput )
+	// finally if the driver supports the ASIOOutputReady() optimization,
+    // do it here, all data are in place
+	if ( bASIOPostOutput )
     {
 		ASIOOutputReady();
     }
-
-	if ( processedSamples >= asioDriverInfo.sampleRate * TEST_RUN_TIME ) // roughly measured
-    {
-		asioDriverInfo.stopped = true;
-    }
-	else
-    {
-		processedSamples += buffSize;
-    }
-*/
-
-
-
 }
 
 long CSound::asioMessages ( long selector, long value, void* message, double* opt )

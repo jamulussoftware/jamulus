@@ -97,13 +97,6 @@ protected:
     void        AddOutBuffer ( int iBufNum );
     void        GetDoneBuffer ( int& iCntPrepBuf, int& iIndexDoneBuf );
 
-    // ASIO stuff
-    ASIODriverInfo   driverInfo;
-    ASIOBufferInfo   bufferInfos[2 * NUM_IN_OUT_CHANNELS]; // for input and output buffers -> "2 *"
-	ASIOChannelInfo  channelInfos[2 * NUM_IN_OUT_CHANNELS];
-    bool             bASIOPostOutput;
-    ASIOCallbacks    asioCallbacks;
-
     // audio hardware buffer info
     struct sHWBufferInfo
     {
@@ -125,8 +118,6 @@ protected:
     bool             bChangParamOut;
     int              iCurNumSndBufIn;
     int              iCurNumSndBufOut;
-
-    int              iBufferSize;
 
     // wave in
     HANDLE           m_WaveInEvent;

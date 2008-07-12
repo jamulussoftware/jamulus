@@ -33,7 +33,7 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks )
 {
     // total size -> size of one block times number of blocks
     iBlockSize = iNewBlockSize;
-    iMemSize = iNewBlockSize * iNewNumBlocks;
+    iMemSize   = iNewBlockSize * iNewNumBlocks;
 
     // fade in first block added to the buffer
     bFadeInNewPutData = true;
@@ -159,7 +159,7 @@ bool CNetBuf::Get ( CVector<double>& vecdData )
         // set flag to fade in next new block in buffer and fade out last
         // block by extrapolation to avoid clicks
         bFadeInNewPutData = true;
-        bFadeOutExtrap = true;
+        bFadeOutExtrap    = true;
 
         bGetOK = false; // return error flag
     }

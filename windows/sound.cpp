@@ -30,10 +30,18 @@
 
 /* Implementation *************************************************************/
 #ifdef USE_ASIO_SND_INTERFACE
+#include <qmutex.h>
 
 // external references
 extern AsioDrivers* asioDrivers;
 bool   loadAsioDriver ( char *name );
+
+// mutex
+QMutex ASIOMutex;
+
+// TODO the following variables should be in the class definition but we cannot
+// do it here since we have static callback functions which cannot access the
+// class members :-(((
 
 // ASIO stuff
 ASIODriverInfo   driverInfo;
@@ -43,14 +51,31 @@ bool             bASIOPostOutput;
 ASIOCallbacks    asioCallbacks;
 int              iBufferSize;
 
+// event
+HANDLE           m_ASIOEvent;
+
+// wave in
+int              iCurBlockToWrite;
+short*           psSoundcardBuffer[MAX_SND_BUF_IN];
+
+// wave out
+short*           psPlaybackBuffer[MAX_SND_BUF_OUT];
+
+int              iCurNumSndBufIn;
+int              iCurNumSndBufOut;
+
+// we must implement these functions here to get access to global variables
+int CSound::GetOutNumBuf() { return iCurNumSndBufOut; }
+int CSound::GetInNumBuf() { return iCurNumSndBufIn; }
+
 
 /******************************************************************************\
 * Wave in                                                                      *
 \******************************************************************************/
 bool CSound::Read ( CVector<short>& psData )
 {
-    int     i;
-    bool    bError = false;
+    int  i, j;
+    bool bError = false;
 
     // check if device must be opened or reinitialized
     if ( bChangParamIn )
@@ -62,98 +87,49 @@ bool CSound::Read ( CVector<short>& psData )
         bChangParamIn = false;
     }
 
-
-/*
     // wait until data is available
-    if ( ! ( m_WaveInHeader[iWhichBufferIn].dwFlags & WHDR_DONE ) )
+    if ( iCurBlockToWrite == 0 )
     {
         if ( bBlockingRec )
 		{
-            WaitForSingleObject ( m_WaveInEvent, INFINITE );
+            WaitForSingleObject ( m_ASIOEvent, INFINITE );
 		}
         else
 		{
             return false;
 		}
     }
-*/
 
-/*
-    // check if buffers got lost
-    int iNumInBufDone = 0;
-    for ( i = 0; i < iCurNumSndBufIn; i++ )
-    {
-        if ( m_WaveInHeader[i].dwFlags & WHDR_DONE )
-		{
-            iNumInBufDone++;
-		}
-    }
-*/
-
-/*
     // If the number of done buffers equals the total number of buffers, it is
     // very likely that a buffer got lost -> set error flag
-    if ( iNumInBufDone == iCurNumSndBufIn )
-	{
-        bError = true;
-	}
-    else
-	{
-        bError = false;
-	}
-*/
+    bError = ( iCurBlockToWrite == iCurNumSndBufIn );
 
+    ASIOMutex.lock(); // get mutex lock
+    {
+        // copy data from sound card in output buffer
+        for ( i = 0; i < iBufferSize; i++ )
+	    {
+            psData[i] = psSoundcardBuffer[0][i];
+	    }
 
-/*
-    // copy data from sound card in output buffer
-    for ( i = 0; i < iBufferSize; i++ )
-	{
-        psData[i] = psSoundcardBuffer[iWhichBufferIn][i];
-	}
+        // move all other data in buffer
+        for ( j = 0; j < iCurBlockToWrite - 1; j++ )
+        {
+            for ( i = 0; i < iBufferSize; i++ )
+	        {
+                psSoundcardBuffer[j][i] = psSoundcardBuffer[j + 1][i];
+	        }
+        }
 
-    // add the buffer so that it can be filled with new samples
-    AddInBuffer();
+        // adjust "current block to write" pointer
+        iCurBlockToWrite--;
+    }
+    ASIOMutex.unlock();
 
     // in case more than one buffer was ready, reset event
-    ResetEvent ( m_WaveInEvent );
-*/
+    ResetEvent ( m_ASIOEvent );
 
     return bError;
-}
-
-void CSound::AddInBuffer()
-{
-/*
-    // unprepare old wave-header
-    waveInUnprepareHeader (
-        m_WaveIn, &m_WaveInHeader[iWhichBufferIn], sizeof ( WAVEHDR ) );
-
-    // prepare buffers for sending to sound interface
-    PrepareInBuffer ( iWhichBufferIn );
-
-    // send buffer to driver for filling with new data
-    waveInAddBuffer ( m_WaveIn, &m_WaveInHeader[iWhichBufferIn], sizeof ( WAVEHDR ) );
-*/
-
-    // toggle buffers
-    iWhichBufferIn++;
-    if ( iWhichBufferIn == iCurNumSndBufIn )
-	{
-        iWhichBufferIn = 0;
-	}
-}
-
-void CSound::PrepareInBuffer ( int iBufNum )
-{
-/*
-    // set struct entries
-    m_WaveInHeader[iBufNum].lpData         = (LPSTR) &psSoundcardBuffer[iBufNum][0];
-    m_WaveInHeader[iBufNum].dwBufferLength = iBufferSizeIn * BYTES_PER_SAMPLE;
-    m_WaveInHeader[iBufNum].dwFlags        = 0;
-
-    // prepare wave-header
-    waveInPrepareHeader ( m_WaveIn, &m_WaveInHeader[iBufNum], sizeof ( WAVEHDR ) );
-*/
 }
 
 void CSound::SetInNumBuf ( int iNewNum )
@@ -264,50 +240,6 @@ return true;
     return bError;
 }
 
-void CSound::GetDoneBuffer ( int& iCntPrepBuf, int& iIndexDoneBuf )
-{
-/*
-    // get number of "done"-buffers and position of one of them
-    iCntPrepBuf = 0;
-    for ( int i = 0; i < iCurNumSndBufOut; i++ )
-    {
-        if ( m_WaveOutHeader[i].dwFlags & WHDR_DONE )
-        {
-            iCntPrepBuf++;
-            iIndexDoneBuf = i;
-        }
-    }
-*/
-}
-
-void CSound::AddOutBuffer ( int iBufNum )
-{
-/*
-    // Unprepare old wave-header
-    waveOutUnprepareHeader (
-        m_WaveOut, &m_WaveOutHeader[iBufNum], sizeof ( WAVEHDR ) );
-
-    // Prepare buffers for sending to sound interface
-    PrepareOutBuffer ( iBufNum );
-
-    // Send buffer to driver for filling with new data
-    waveOutWrite ( m_WaveOut, &m_WaveOutHeader[iBufNum], sizeof ( WAVEHDR ) );
-*/
-}
-
-void CSound::PrepareOutBuffer ( int iBufNum )
-{
-/*
-    // Set Header data
-    m_WaveOutHeader[iBufNum].lpData         = (LPSTR) &psPlaybackBuffer[iBufNum][0];
-    m_WaveOutHeader[iBufNum].dwBufferLength = iBufferSizeOut * BYTES_PER_SAMPLE;
-    m_WaveOutHeader[iBufNum].dwFlags        = 0;
-
-    // Prepare wave-header
-    waveOutPrepareHeader ( m_WaveOut, &m_WaveOutHeader[iBufNum], sizeof ( WAVEHDR ) );
-*/
-}
-
 void CSound::SetOutNumBuf ( int iNewNum )
 {
     // check new parameter
@@ -335,131 +267,98 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
     // first, stop audio
     ASIOStop();
 
-    // calculate "nearest" buffer size and set internal parameter accordingly
-    // first check minimum and maximum values
-    if ( iNewBufferSize < HWBufferInfo.lMinSize )
+    ASIOMutex.lock(); // get mutex lock
     {
-        iBufferSize = HWBufferInfo.lMinSize;
-    }
-    else
-    {
-        if ( iNewBufferSize > HWBufferInfo.lMaxSize )
+        // calculate "nearest" buffer size and set internal parameter accordingly
+        // first check minimum and maximum values
+        if ( iNewBufferSize < HWBufferInfo.lMinSize )
         {
-            iBufferSize = HWBufferInfo.lMaxSize;
+            iBufferSize = HWBufferInfo.lMinSize;
         }
         else
         {
-            // initialization
-            int  iTrialBufSize     = HWBufferInfo.lMinSize;
-            int  iLastTrialBufSize = HWBufferInfo.lMinSize;
-            bool bSizeFound        = false;
-
-            // test loop
-            while ( ( iTrialBufSize <= HWBufferInfo.lMaxSize ) && ( !bSizeFound ) )
+            if ( iNewBufferSize > HWBufferInfo.lMaxSize )
             {
-                if ( iTrialBufSize > iNewBufferSize )
+                iBufferSize = HWBufferInfo.lMaxSize;
+            }
+            else
+            {
+                // initialization
+                int  iTrialBufSize     = HWBufferInfo.lMinSize;
+                int  iLastTrialBufSize = HWBufferInfo.lMinSize;
+                bool bSizeFound        = false;
+
+                // test loop
+                while ( ( iTrialBufSize <= HWBufferInfo.lMaxSize ) && ( !bSizeFound ) )
                 {
-                    // test which buffer size fits better: the old one or the
-                    // current one
-                    if ( ( iTrialBufSize - iNewBufferSize ) < ( iNewBufferSize - iLastTrialBufSize ) )
+                    if ( iTrialBufSize > iNewBufferSize )
                     {
-                        iBufferSize = iTrialBufSize;
+                        // test which buffer size fits better: the old one or the
+                        // current one
+                        if ( ( iTrialBufSize - iNewBufferSize ) < ( iNewBufferSize - iLastTrialBufSize ) )
+                        {
+                            iBufferSize = iTrialBufSize;
+                        }
+                        else
+                        {
+                            iBufferSize = iLastTrialBufSize;
+                        }
+
+                        // exit while loop
+                        bSizeFound = true;
+                    }
+
+                    // store old trial buffer size
+                    iLastTrialBufSize = iTrialBufSize;
+
+                    // increment trial buffer size (check for special case first)
+                    if ( HWBufferInfo.lGranularity == -1 )
+                    {
+                        // special case: buffer sizes are a power of 2
+                        iTrialBufSize *= 2;
                     }
                     else
                     {
-                        iBufferSize = iLastTrialBufSize;
+                        iTrialBufSize += HWBufferInfo.lGranularity;
                     }
-
-                    // exit while loop
-                    bSizeFound = true;
-                }
-
-                // store old trial buffer size
-                iLastTrialBufSize = iTrialBufSize;
-
-                // increment trial buffer size (check for special case first)
-                if ( HWBufferInfo.lGranularity == -1 )
-                {
-                    // special case: buffer sizes are a power of 2
-                    iTrialBufSize *= 2;
-                }
-                else
-                {
-                    iTrialBufSize += HWBufferInfo.lGranularity;
                 }
             }
         }
-    }
 
-	// create and activate buffers
+	    // create and activate ASIO buffers
+	    ASIOCreateBuffers ( bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
+		    iBufferSize * BYTES_PER_SAMPLE, &asioCallbacks );
+
+	    // now set all the buffer details
+	    for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
+	    {
+		    channelInfos[i].channel = NUM_IN_OUT_CHANNELS;
+		    channelInfos[i].isInput = bufferInfos[i].isInput;
+		    ASIOGetChannelInfo ( &channelInfos[i] );
+
+            // only 16 bit is supported
+            if ( channelInfos[i].type != ASIOSTInt16LSB )
+            {
+                throw CGenErr ( "Required audio sample format not available (16 bit LSB)." );
+            }
+	    }
 
 
-int test2;
-int test = ASE_OK;
-	int test1 = ASIOCreateBuffers ( bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
-		iBufferSize * BYTES_PER_SAMPLE, &asioCallbacks );
+        // our buffer management -----------------------------------------------
+        // initialize write block pointer
+        iCurBlockToWrite = 0;
 
-	// now set all the buffer details
-	for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
-	{
-		channelInfos[i].channel = NUM_IN_OUT_CHANNELS;
-		channelInfos[i].isInput = bufferInfos[i].isInput;
-		ASIOGetChannelInfo ( &channelInfos[i] );
-
-        // only 16 bit is supported
-        if ( channelInfos[i].type != ASIOSTInt16LSB )
+        // create memory for sound card buffer
+        for ( i = 0; i < iCurNumSndBufIn; i++ )
         {
-            // TODO fire error
+            if ( psSoundcardBuffer[i] != NULL )
+		    {
+                delete[] psSoundcardBuffer[i];
+		    }
+
+            psSoundcardBuffer[i] = new short[iBufferSize];
         }
-	}
 
-
-
-
-/*
-    // reset interface so that all buffers are returned from the interface
-    waveInReset ( m_WaveIn );
-    waveInStop ( m_WaveIn );
-*/
-
-    // reset current buffer ID (it is important to do this BEFORE calling
-    // "AddInBuffer()"
-    iWhichBufferIn = 0;
-
-    // create memory for sound card buffer
-    for ( i = 0; i < iCurNumSndBufIn; i++ )
-    {
-/*
-        // Unprepare old wave-header in case that we "re-initialized" this
-        // module. Calling "waveInUnprepareHeader()" with an unprepared
-        // buffer (when the module is initialized for the first time) has
-        // simply no effect
-        waveInUnprepareHeader ( m_WaveIn, &m_WaveInHeader[i], sizeof ( WAVEHDR ) );
-*/
-
-        if ( psSoundcardBuffer[i] != NULL )
-		{
-            delete[] psSoundcardBuffer[i];
-		}
-
-        psSoundcardBuffer[i] = new short[iBufferSize];
-
-
-        /* Send all buffers to driver for filling the queue ----------------- */
-        // prepare buffers before sending them to the sound interface
-        PrepareInBuffer ( i );
-
-        AddInBuffer();
-    }
-
-/*
-    // notify that sound capturing can start now
-    waveInStart ( m_WaveIn );
-*/
-
-    // This reset event is very important for initialization, otherwise we will
-    // get errors!
-    ResetEvent ( m_WaveInEvent );
 
 
 
@@ -467,15 +366,9 @@ int test = ASE_OK;
     // reset interface
     waveOutReset ( m_WaveOut );
 */
-
+/*
     for ( j = 0; j < iCurNumSndBufOut; j++ )
     {
-/*
-        // Unprepare old wave-header (in case header was not prepared before,
-        // simply nothing happens with this function call
-        waveOutUnprepareHeader ( m_WaveOut, &m_WaveOutHeader[j], sizeof ( WAVEHDR ) );
-*/
-
         // create memory for playback buffer
         if ( psPlaybackBuffer[j] != NULL )
 		{
@@ -496,7 +389,12 @@ int test = ASE_OK;
         // initially, send all buffers to the interface
         AddOutBuffer ( j );
     }
+*/
 
+        // reset event
+        ResetEvent ( m_ASIOEvent );
+    }
+    ASIOMutex.unlock();
 
     // initialization is done, (re)start audio
     ASIOStart();
@@ -505,9 +403,9 @@ int test = ASE_OK;
 void CSound::Close()
 {
     // set event to ensure that thread leaves the waiting function
-    if ( m_WaveInEvent != NULL )
+    if ( m_ASIOEvent != NULL )
 	{
-        SetEvent(m_WaveInEvent);
+        SetEvent(m_ASIOEvent);
 	}
 
     // wait for the thread to terminate
@@ -527,8 +425,7 @@ CSound::CSound()
     iCurNumSndBufOut = NUM_SOUND_BUFFERS_OUT;
 
     // should be initialized because an error can occur during init
-    m_WaveInEvent  = NULL;
-    m_WaveOutEvent = NULL;
+    m_ASIOEvent = NULL;
 
     // get available ASIO driver names in system
     char* cDriverNames[MAX_NUMBER_SOUND_CARDS];
@@ -641,10 +538,9 @@ pstrDevices[0] = driverInfo.name;
         psPlaybackBuffer[i] = NULL;
     }
 
-    // we use an event controlled wave-in (wave-out) structure
-    // create events
-    m_WaveInEvent  = CreateEvent ( NULL, FALSE, FALSE, NULL );
-    m_WaveOutEvent = CreateEvent ( NULL, FALSE, FALSE, NULL );
+    // we use an event controlled structure
+    // create event
+    m_ASIOEvent = CreateEvent ( NULL, FALSE, FALSE, NULL );
 
     // set flag to open devices
     bChangParamIn  = true;
@@ -678,18 +574,11 @@ CSound::~CSound()
 		}
     }
 
-/*
-    // close the handle for the events
-    if ( m_WaveInEvent != NULL )
+    // close the handle for the event
+    if ( m_ASIOEvent != NULL )
 	{
-        CloseHandle ( m_WaveInEvent );
+        CloseHandle ( m_ASIOEvent );
 	}
-
-    if ( m_WaveOutEvent != NULL )
-	{
-        CloseHandle ( m_WaveOutEvent );
-	}
-*/
 }
 
 // ASIO callbacks -------------------------------------------------------------
@@ -701,59 +590,51 @@ ASIOTime* CSound::bufferSwitchTimeInfo ( ASIOTime *timeInfo, long index, ASIOBoo
 
 void CSound::bufferSwitch ( long index, ASIOBool processNow )
 {
-	static long processedSamples = 0;
-
-	// buffer size in samples
-	long buffSize = iBufferSize * BYTES_PER_SAMPLE;
-
-	// perform the processing for input and output
-	for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
-	{
-        if ( bufferInfos[i].isInput == false )
-		{
-            // PLAYBACK --------------------------------------------------------
-// TODO the following is just a test code
-            //memset ( bufferInfos[i].buffers[index], 0, buffSize /** 2*/ );
-		}
-        else
-        {
-            // CAPTURE ---------------------------------------------------------
-/*
-// TEST
-static FILE* pFile = fopen ( "test.dat", "w" );
-for ( int iIdx = 0; iIdx < buffSize * 2; iIdx++ )
-{
-    fprintf ( pFile, "%d\n", ((short*) bufferInfos[i].buffers[index])[iIdx] );
-}
-fflush ( pFile );
-*/
-
-// TEST
-channelInfos[i];
-
-			short* test;
-			test = (short*) bufferInfos[i].buffers[index];
-/*
-// TEST
-static FILE* pFile = fopen ( "test.dat", "w" );
-for ( int iIdx = 0; iIdx < buffSize; iIdx++ )
-{
-    fprintf ( pFile, "%d\n", test[iIdx] );
-}
-fflush ( pFile );
-*/
-
-int test2 = 0;
-// TODO
-        }
-	}
-
-	// finally if the driver supports the ASIOOutputReady() optimization,
-    // do it here, all data are in place
-	if ( bASIOPostOutput )
+    ASIOMutex.lock(); // get mutex lock
     {
-		ASIOOutputReady();
+	    // perform the processing for input and output
+	    for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
+	    {
+            if ( bufferInfos[i].isInput == false )
+		    {
+                // PLAYBACK --------------------------------------------------------
+    // TODO the following is just a test code
+                //memset ( bufferInfos[i].buffers[index], 0, buffSize /** 2*/ );
+		    }
+            else
+            {
+                // CAPTURE ---------------------------------------------------------
+                // first check if buffer is available
+                if ( iCurBlockToWrite < iCurNumSndBufIn )
+                {
+                    // copy new captured block in thread transfer buffer
+                    for ( int iCurSample = 0; iCurSample < iBufferSize; iCurSample++ )
+                    {
+                        psSoundcardBuffer[iCurBlockToWrite][iCurSample] =
+                            ((short*) bufferInfos[i].buffers[index])[iCurSample];
+                    }
+
+                    iCurBlockToWrite++;
+                }
+                else
+                {
+                    // TODO
+                    // buffer overrun, inform user somehow...?
+                }
+            }
+	    }
+
+	    // finally if the driver supports the ASIOOutputReady() optimization,
+        // do it here, all data are in place
+	    if ( bASIOPostOutput )
+        {
+		    ASIOOutputReady();
+        }
+
+        // set event
+        SetEvent ( m_ASIOEvent );
     }
+    ASIOMutex.unlock();
 }
 
 long CSound::asioMessages ( long selector, long value, void* message, double* opt )

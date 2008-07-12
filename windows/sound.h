@@ -71,8 +71,8 @@ public:
     CSound();
     virtual ~CSound();
 
-    void        InitRecording ( int iNewBufferSize, bool bNewBlocking = true ) { InitRecordingAndPlayback ( iNewBufferSize ); }
-    void        InitPlayback ( int iNewBufferSize, bool bNewBlocking = false ) { InitRecordingAndPlayback ( iNewBufferSize ); }
+    void        InitRecording ( int iNewBufferSize, bool bNewBlocking = true ) { bBlockingRec = bNewBlocking; InitRecordingAndPlayback ( iNewBufferSize ); }
+    void        InitPlayback ( int iNewBufferSize, bool bNewBlocking = false ) { bBlockingPlay = bNewBlocking; InitRecordingAndPlayback ( iNewBufferSize ); }
     bool        Read ( CVector<short>& psData );
     bool        Write ( CVector<short>& psData );
 
@@ -80,22 +80,17 @@ public:
     std::string GetDeviceName ( int iDiD ) { return pstrDevices[iDiD]; }
     void        SetOutDev ( int iNewDev ) {} // not supported
     int         GetOutDev() { return 0; }  // not supported
-    void        SetInDev ( int iNewDev ) {}  // not supported
+    void        SetInDev ( int iNewDev ) {}  // not supported 
     int         GetInDev() { return 0; }  // not supported
     void        SetOutNumBuf ( int iNewNum );
-    int         GetOutNumBuf() { return iCurNumSndBufOut; }
+    int         GetOutNumBuf();
     void        SetInNumBuf ( int iNewNum );
-    int         GetInNumBuf() { return iCurNumSndBufIn; }
+    int         GetInNumBuf();
 
     void        Close();
 
 protected:
     void        InitRecordingAndPlayback ( int iNewBufferSize );
-    void        PrepareInBuffer ( int iBufNum );
-    void        PrepareOutBuffer ( int iBufNum );
-    void        AddInBuffer();
-    void        AddOutBuffer ( int iBufNum );
-    void        GetDoneBuffer ( int& iCntPrepBuf, int& iIndexDoneBuf );
 
     // audio hardware buffer info
     struct sHWBufferInfo
@@ -116,17 +111,9 @@ protected:
     std::string      pstrDevices[MAX_NUMBER_SOUND_CARDS];
     bool             bChangParamIn;
     bool             bChangParamOut;
-    int              iCurNumSndBufIn;
-    int              iCurNumSndBufOut;
 
-    // wave in
-    HANDLE           m_WaveInEvent;
-    int              iWhichBufferIn;
-    short*           psSoundcardBuffer[MAX_SND_BUF_IN];
-
-    // wave out
-    HANDLE           m_WaveOutEvent;
-    short*           psPlaybackBuffer[MAX_SND_BUF_OUT];
+    bool             bBlockingRec;
+    bool             bBlockingPlay;
 };
 
 #else // USE_ASIO_SND_INTERFACE

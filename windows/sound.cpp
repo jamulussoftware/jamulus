@@ -49,7 +49,8 @@ ASIOBufferInfo   bufferInfos[2 * NUM_IN_OUT_CHANNELS]; // for input and output b
 ASIOChannelInfo  channelInfos[2 * NUM_IN_OUT_CHANNELS];
 bool             bASIOPostOutput;
 ASIOCallbacks    asioCallbacks;
-int              iBufferSize;
+int              iBufferSizeMono;
+int              iBufferSizeStereo;
 
 // event
 HANDLE           m_ASIOEvent;
@@ -81,8 +82,8 @@ bool CSound::Read ( CVector<short>& psData )
     // check if device must be opened or reinitialized
     if ( bChangParamIn )
     {
-        // Reinit sound interface
-        InitRecordingAndPlayback ( iBufferSize );
+        // Reinit sound interface (init recording requires stereo buffer size)
+        InitRecordingAndPlayback ( iBufferSizeStereo );
 
         // Reset flag
         bChangParamIn = false;
@@ -108,7 +109,7 @@ bool CSound::Read ( CVector<short>& psData )
     ASIOMutex.lock(); // get mutex lock
     {
         // copy data from sound card in output buffer
-        for ( i = 0; i < iBufferSize; i++ )
+        for ( i = 0; i < iBufferSizeStereo; i++ )
 	    {
             psData[i] = psSoundcardBuffer[0][i];
 	    }
@@ -116,7 +117,7 @@ bool CSound::Read ( CVector<short>& psData )
         // move all other data in buffer
         for ( j = 0; j < iInCurBlockToWrite - 1; j++ )
         {
-            for ( i = 0; i < iBufferSize; i++ )
+            for ( i = 0; i < iBufferSizeStereo; i++ )
 	        {
                 psSoundcardBuffer[j][i] = psSoundcardBuffer[j + 1][i];
 	        }
@@ -161,8 +162,8 @@ bool CSound::Write ( CVector<short>& psData )
     // check if device must be opened or reinitialized
     if ( bChangParamOut )
     {
-        // reinit sound interface
-        InitRecordingAndPlayback ( iBufferSize );
+        // reinit sound interface (init recording requires stereo buffer size)
+        InitRecordingAndPlayback ( iBufferSizeStereo );
 
         // reset flag
         bChangParamOut = false;
@@ -174,7 +175,7 @@ bool CSound::Write ( CVector<short>& psData )
         if ( iOutCurBlockToWrite < iCurNumSndBufOut )
         {
             // copy stereo data from input in soundcard buffer
-            for ( int i = 0; i < iBufferSize; i++ )
+            for ( int i = 0; i < iBufferSizeStereo; i++ )
             {
                 psPlaybackBuffer[iOutCurBlockToWrite][i] = psData[i];
             }
@@ -222,17 +223,20 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
 
     ASIOMutex.lock(); // get mutex lock
     {
+        // we need mono buffer size but get stereo buffer size
+        const int iNewBufferSizeMono = iNewBufferSize / 2;
+
         // calculate "nearest" buffer size and set internal parameter accordingly
         // first check minimum and maximum values
-        if ( iNewBufferSize < HWBufferInfo.lMinSize )
+        if ( iNewBufferSizeMono < HWBufferInfo.lMinSize )
         {
-            iBufferSize = HWBufferInfo.lMinSize;
+            iBufferSizeMono = HWBufferInfo.lMinSize;
         }
         else
         {
-            if ( iNewBufferSize > HWBufferInfo.lMaxSize )
+            if ( iNewBufferSizeMono > HWBufferInfo.lMaxSize )
             {
-                iBufferSize = HWBufferInfo.lMaxSize;
+                iBufferSizeMono = HWBufferInfo.lMaxSize;
             }
             else
             {
@@ -244,17 +248,17 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
                 // test loop
                 while ( ( iTrialBufSize <= HWBufferInfo.lMaxSize ) && ( !bSizeFound ) )
                 {
-                    if ( iTrialBufSize > iNewBufferSize )
+                    if ( iTrialBufSize > iNewBufferSizeMono )
                     {
                         // test which buffer size fits better: the old one or the
                         // current one
-                        if ( ( iTrialBufSize - iNewBufferSize ) < ( iNewBufferSize - iLastTrialBufSize ) )
+                        if ( ( iTrialBufSize - iNewBufferSizeMono ) < ( iNewBufferSizeMono - iLastTrialBufSize ) )
                         {
-                            iBufferSize = iTrialBufSize;
+                            iBufferSizeMono = iTrialBufSize;
                         }
                         else
                         {
-                            iBufferSize = iLastTrialBufSize;
+                            iBufferSizeMono = iLastTrialBufSize;
                         }
 
                         // exit while loop
@@ -278,9 +282,19 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
             }
         }
 
-	    // create and activate ASIO buffers
+        // calculate stereo buffer size
+        iBufferSizeStereo = 2 * iBufferSizeMono;
+
+ // TEST test if requested buffer size is supported by the audio hardware, if not, fire error
+if ( iNewBufferSize != iBufferSizeStereo )
+{
+    throw CGenErr ( "Required sound card buffer size not allowed by the audio hardware." );
+}
+
+
+	    // create and activate ASIO buffers (buffer size in samples)
 	    ASIOCreateBuffers ( bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
-		    iBufferSize * BYTES_PER_SAMPLE, &asioCallbacks );
+		    iBufferSizeMono, &asioCallbacks );
 
 	    // now set all the buffer details
 	    for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
@@ -309,7 +323,7 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
                 delete[] psSoundcardBuffer[i];
 		    }
 
-            psSoundcardBuffer[i] = new short[iBufferSize];
+            psSoundcardBuffer[i] = new short[iBufferSizeStereo];
         }
 
         // initialize write block pointer out
@@ -323,10 +337,10 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
                 delete[] psPlaybackBuffer[j];
 		    }
 
-            psPlaybackBuffer[j] = new short[iBufferSize];
+            psPlaybackBuffer[j] = new short[iBufferSizeStereo];
 
             // clear new buffer
-            for ( i = 0; i < iBufferSize; i++ )
+            for ( i = 0; i < iBufferSizeStereo; i++ )
 		    {
                 psPlaybackBuffer[j][i] = 0;
 		    }
@@ -351,6 +365,10 @@ void CSound::Close()
 
     // wait for the thread to terminate
     Sleep ( 500 );
+
+    // stop audio and dispose ASIO buffers
+    ASIOStop();
+    ASIODisposeBuffers();
 
     // set flag to open devices the next time it is initialized
     bChangParamIn  = true;
@@ -540,55 +558,67 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
 	    {
             if ( bufferInfos[i].isInput == false )
 		    {
-                // PLAYBACK --------------------------------------------------------
+                // PLAYBACK ----------------------------------------------------
                 if ( iOutCurBlockToWrite > 0 )
                 {
                     // copy data from sound card in output buffer
-                    for ( iCurSample = 0; iCurSample < iBufferSize; iCurSample++ )
+                    for ( iCurSample = 0; iCurSample < iBufferSizeMono; iCurSample++ )
 	                {
-                        ((short*) bufferInfos[i].buffers[index])[iCurSample] = 
-                            psSoundcardBuffer[0][iCurSample];
+                        // copy interleaved stereo data in mono sound card buffer
+                        ((short*) bufferInfos[i].buffers[index])[iCurSample] =
+                            psSoundcardBuffer[0][2 * iCurSample + bufferInfos[i].channelNum];
 	                }
-
-                    // move all other data in buffer
-                    for ( int j = 0; j < iOutCurBlockToWrite - 1; j++ )
-                    {
-                        for ( iCurSample = 0; iCurSample < iBufferSize; iCurSample++ )
-	                    {
-                            psPlaybackBuffer[j][iCurSample] = 
-                                psPlaybackBuffer[j + 1][iCurSample];
-	                    }
-                    }
-
-                    // adjust "current block to write" pointer
-                    iOutCurBlockToWrite--;
-                }
-                else
-                {
-                    // TODO: buffer underrun, inform user somehow...?
                 }
 		    }
             else
             {
-                // CAPTURE ---------------------------------------------------------
+                // CAPTURE -----------------------------------------------------
                 // first check if buffer is available
                 if ( iInCurBlockToWrite < iCurNumSndBufIn )
                 {
                     // copy new captured block in thread transfer buffer
-                    for ( iCurSample = 0; iCurSample < iBufferSize; iCurSample++ )
+                    for ( iCurSample = 0; iCurSample < iBufferSizeMono; iCurSample++ )
                     {
-                        psSoundcardBuffer[iInCurBlockToWrite][iCurSample] =
+                        // copy mono data interleaved in stereo buffer
+                        psSoundcardBuffer[iInCurBlockToWrite][2 * iCurSample + bufferInfos[i].channelNum] =
                             ((short*) bufferInfos[i].buffers[index])[iCurSample];
                     }
-
-                    iInCurBlockToWrite++;
-                }
-                else
-                {
-                    // TODO: buffer overrun, inform user somehow...?
                 }
             }
 	    }
+
+
+        // Manage thread interface buffers for input and output ----------------
+        // capture
+        if ( iInCurBlockToWrite < iCurNumSndBufIn )
+        {
+            iInCurBlockToWrite++;
+        }
+        else
+        {
+            // TODO: buffer overrun, inform user somehow...?
+        }
+
+        // playback
+        if ( iOutCurBlockToWrite > 0 )
+        {
+            // move all other data in playback buffer
+            for ( int j = 0; j < iOutCurBlockToWrite - 1; j++ )
+            {
+                for ( iCurSample = 0; iCurSample < iBufferSizeStereo; iCurSample++ )
+                {
+                    psPlaybackBuffer[j][iCurSample] =
+                        psPlaybackBuffer[j + 1][iCurSample];
+                }
+            }
+
+            // adjust "current block to write" pointer
+            iOutCurBlockToWrite--;
+        }
+        else
+        {
+            // TODO: buffer underrun, inform user somehow...?
+        }
     }
     ASIOMutex.unlock();
 

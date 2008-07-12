@@ -210,11 +210,6 @@ void CClient::run()
             PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_GREEN );
         }
 
-
-// TEST
-//Sleep(300);
-//wait(3000);
-
         // copy data from one stereo buffer in two separate buffers
         iInCnt = 0;
         for ( i = 0; i < iSndCrdBlockSizeSam; i++ )

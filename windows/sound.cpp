@@ -392,7 +392,11 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
     }
 
 	// create and activate buffers
-	ASIOCreateBuffers ( bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
+
+
+int test2;
+int test = ASE_OK;
+	int test1 = ASIOCreateBuffers ( bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
 		iBufferSize * BYTES_PER_SAMPLE, &asioCallbacks );
 
 	// now set all the buffer details
@@ -401,6 +405,12 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
 		channelInfos[i].channel = NUM_IN_OUT_CHANNELS;
 		channelInfos[i].isInput = bufferInfos[i].isInput;
 		ASIOGetChannelInfo ( &channelInfos[i] );
+
+        // only 16 bit is supported
+        if ( channelInfos[i].type != ASIOSTInt16LSB )
+        {
+            // TODO fire error
+        }
 	}
 
 
@@ -450,15 +460,6 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
     // This reset event is very important for initialization, otherwise we will
     // get errors!
     ResetEvent ( m_WaveInEvent );
-
-
-
-
-
-
-
-
-
 
 
 
@@ -708,20 +709,16 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
 	// perform the processing for input and output
 	for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
 	{
-        // only 16 bit is supported
-        if ( channelInfos[i].type != ASIOSTInt16LSB )
-        {
-            // TODO fire error
-        }
-
         if ( bufferInfos[i].isInput == false )
 		{
+            // PLAYBACK --------------------------------------------------------
 // TODO the following is just a test code
-            memset ( bufferInfos[i].buffers[index], 0, buffSize * 2 );
+            //memset ( bufferInfos[i].buffers[index], 0, buffSize /** 2*/ );
 		}
         else
         {
-
+            // CAPTURE ---------------------------------------------------------
+/*
 // TEST
 static FILE* pFile = fopen ( "test.dat", "w" );
 for ( int iIdx = 0; iIdx < buffSize * 2; iIdx++ )
@@ -729,8 +726,24 @@ for ( int iIdx = 0; iIdx < buffSize * 2; iIdx++ )
     fprintf ( pFile, "%d\n", ((short*) bufferInfos[i].buffers[index])[iIdx] );
 }
 fflush ( pFile );
+*/
 
+// TEST
+channelInfos[i];
 
+			short* test;
+			test = (short*) bufferInfos[i].buffers[index];
+/*
+// TEST
+static FILE* pFile = fopen ( "test.dat", "w" );
+for ( int iIdx = 0; iIdx < buffSize; iIdx++ )
+{
+    fprintf ( pFile, "%d\n", test[iIdx] );
+}
+fflush ( pFile );
+*/
+
+int test2 = 0;
 // TODO
         }
 	}

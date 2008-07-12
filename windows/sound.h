@@ -125,8 +125,8 @@ protected:
     short*           psSoundcardBuffer[MAX_SND_BUF_IN];
 
     // wave out
-    short*           psPlaybackBuffer[MAX_SND_BUF_OUT];
     HANDLE           m_WaveOutEvent;
+    short*           psPlaybackBuffer[MAX_SND_BUF_OUT];
 };
 
 #else // USE_ASIO_SND_INTERFACE

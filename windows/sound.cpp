@@ -55,10 +55,11 @@ int              iBufferSize;
 HANDLE           m_ASIOEvent;
 
 // wave in
-int              iCurBlockToWrite;
+int              iInCurBlockToWrite;
 short*           psSoundcardBuffer[MAX_SND_BUF_IN];
 
 // wave out
+int              iOutCurBlockToWrite;
 short*           psPlaybackBuffer[MAX_SND_BUF_OUT];
 
 int              iCurNumSndBufIn;
@@ -88,7 +89,7 @@ bool CSound::Read ( CVector<short>& psData )
     }
 
     // wait until data is available
-    if ( iCurBlockToWrite == 0 )
+    if ( iInCurBlockToWrite == 0 )
     {
         if ( bBlockingRec )
 		{
@@ -102,7 +103,7 @@ bool CSound::Read ( CVector<short>& psData )
 
     // If the number of done buffers equals the total number of buffers, it is
     // very likely that a buffer got lost -> set error flag
-    bError = ( iCurBlockToWrite == iCurNumSndBufIn );
+    bError = ( iInCurBlockToWrite == iCurNumSndBufIn );
 
     ASIOMutex.lock(); // get mutex lock
     {
@@ -113,7 +114,7 @@ bool CSound::Read ( CVector<short>& psData )
 	    }
 
         // move all other data in buffer
-        for ( j = 0; j < iCurBlockToWrite - 1; j++ )
+        for ( j = 0; j < iInCurBlockToWrite - 1; j++ )
         {
             for ( i = 0; i < iBufferSize; i++ )
 	        {
@@ -122,7 +123,7 @@ bool CSound::Read ( CVector<short>& psData )
         }
 
         // adjust "current block to write" pointer
-        iCurBlockToWrite--;
+        iInCurBlockToWrite--;
     }
     ASIOMutex.unlock();
 
@@ -154,10 +155,8 @@ void CSound::SetInNumBuf ( int iNewNum )
 \******************************************************************************/
 bool CSound::Write ( CVector<short>& psData )
 {
-    int     i, j;
-    int     iCntPrepBuf;
-    int     iIndexDoneBuf;
-    bool    bError;
+    // init return state
+    bool bError = false;
 
     // check if device must be opened or reinitialized
     if ( bChangParamOut )
@@ -169,73 +168,26 @@ bool CSound::Write ( CVector<short>& psData )
         bChangParamOut = false;
     }
 
-/*
-    // get number of "done"-buffers and position of one of them
-    GetDoneBuffer ( iCntPrepBuf, iIndexDoneBuf );
-
-    // now check special cases (Buffer is full or empty)
-    if ( iCntPrepBuf == 0 )
+    ASIOMutex.lock(); // get mutex lock
     {
-        // Blocking wave out routine. Needed for transmitter. Always
-        // ensure that the buffer is completely filled to avoid buffer
-        // underruns
-        while ( iCntPrepBuf == 0 )
+        // first check if buffer is available
+        if ( iOutCurBlockToWrite < iCurNumSndBufOut )
         {
-            WaitForSingleObject ( m_WaveOutEvent, INFINITE );
+            // copy stereo data from input in soundcard buffer
+            for ( int i = 0; i < iBufferSize; i++ )
+            {
+                psPlaybackBuffer[iOutCurBlockToWrite][i] = psData[i];
+            }
 
-            GetDoneBuffer ( iCntPrepBuf, iIndexDoneBuf );
+            iOutCurBlockToWrite++;
+        }
+        else
+        {
+            // buffer overrun, return error
+            bError = true;
         }
     }
-    else
-	{
-		if ( iCntPrepBuf == iCurNumSndBufOut )
-		{
-			// -----------------------------------------------------------------
-			// Buffer is empty -> send as many cleared blocks to the sound-
-			// interface until half of the buffer size is reached
-			// send half of the buffer size blocks to the sound-interface
-			for ( j = 0; j < iCurNumSndBufOut / 2; j++ )
-			{
-				// first, clear these buffers
-				for ( i = 0; i < iBufferSize; i++ )
-				{
-					psPlaybackBuffer[j][i] = 0;
-				}
-
-				// then send them to the interface
-				AddOutBuffer ( j );
-			}
-
-			// set index for done buffer
-			iIndexDoneBuf = iCurNumSndBufOut / 2;
-
-			bError = true;
-		}
-		else
-		{
-			bError = false;
-		}
-	}
-*/
-
-/*
-    // copy stereo data from input in soundcard buffer
-    for ( i = 0; i < iBufferSize; i++ )
-	{
-        psPlaybackBuffer[iIndexDoneBuf][i] = psData[i];
-	}
-*/
-
-/*
-    // now, send the current block
-    AddOutBuffer ( iIndexDoneBuf );
-*/
-
-
-// TEST
-Sleep(10);
-return true;
-
+    ASIOMutex.unlock();
 
     return bError;
 }
@@ -264,8 +216,9 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
 {
     int i, j;
 
-    // first, stop audio
+    // first, stop audio and dispose ASIO buffers
     ASIOStop();
+    ASIODisposeBuffers();
 
     ASIOMutex.lock(); // get mutex lock
     {
@@ -345,8 +298,8 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
 
 
         // our buffer management -----------------------------------------------
-        // initialize write block pointer
-        iCurBlockToWrite = 0;
+        // initialize write block pointer in
+        iInCurBlockToWrite = 0;
 
         // create memory for sound card buffer
         for ( i = 0; i < iCurNumSndBufIn; i++ )
@@ -359,37 +312,25 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
             psSoundcardBuffer[i] = new short[iBufferSize];
         }
 
+        // initialize write block pointer out
+        iOutCurBlockToWrite = 0;
 
-
-
-/*
-    // reset interface
-    waveOutReset ( m_WaveOut );
-*/
-/*
-    for ( j = 0; j < iCurNumSndBufOut; j++ )
-    {
         // create memory for playback buffer
-        if ( psPlaybackBuffer[j] != NULL )
-		{
-            delete[] psPlaybackBuffer[j];
-		}
+        for ( j = 0; j < iCurNumSndBufOut; j++ )
+        {
+            if ( psPlaybackBuffer[j] != NULL )
+		    {
+                delete[] psPlaybackBuffer[j];
+		    }
 
-        psPlaybackBuffer[j] = new short[iBufferSize];
+            psPlaybackBuffer[j] = new short[iBufferSize];
 
-        // clear new buffer
-        for ( i = 0; i < iBufferSize; i++ )
-		{
-            psPlaybackBuffer[j][i] = 0;
-		}
-
-        // prepare buffer for sending to the sound interface
-        PrepareOutBuffer ( j );
-
-        // initially, send all buffers to the interface
-        AddOutBuffer ( j );
-    }
-*/
+            // clear new buffer
+            for ( i = 0; i < iBufferSize; i++ )
+		    {
+                psPlaybackBuffer[j][i] = 0;
+		    }
+        }
 
         // reset event
         ResetEvent ( m_ASIOEvent );
@@ -405,7 +346,7 @@ void CSound::Close()
     // set event to ensure that thread leaves the waiting function
     if ( m_ASIOEvent != NULL )
 	{
-        SetEvent(m_ASIOEvent);
+        SetEvent ( m_ASIOEvent );
 	}
 
     // wait for the thread to terminate
@@ -542,9 +483,9 @@ pstrDevices[0] = driverInfo.name;
     // create event
     m_ASIOEvent = CreateEvent ( NULL, FALSE, FALSE, NULL );
 
-    // set flag to open devices
-    bChangParamIn  = true;
-    bChangParamOut = true;
+    // init flag to open devices
+    bChangParamIn  = false;
+    bChangParamOut = false;
 }
 
 CSound::~CSound()
@@ -590,6 +531,8 @@ ASIOTime* CSound::bufferSwitchTimeInfo ( ASIOTime *timeInfo, long index, ASIOBoo
 
 void CSound::bufferSwitch ( long index, ASIOBool processNow )
 {
+    int iCurSample;
+
     ASIOMutex.lock(); // get mutex lock
     {
 	    // perform the processing for input and output
@@ -598,43 +541,66 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
             if ( bufferInfos[i].isInput == false )
 		    {
                 // PLAYBACK --------------------------------------------------------
-    // TODO the following is just a test code
-                //memset ( bufferInfos[i].buffers[index], 0, buffSize /** 2*/ );
+                if ( iOutCurBlockToWrite > 0 )
+                {
+                    // copy data from sound card in output buffer
+                    for ( iCurSample = 0; iCurSample < iBufferSize; iCurSample++ )
+	                {
+                        ((short*) bufferInfos[i].buffers[index])[iCurSample] = 
+                            psSoundcardBuffer[0][iCurSample];
+	                }
+
+                    // move all other data in buffer
+                    for ( int j = 0; j < iOutCurBlockToWrite - 1; j++ )
+                    {
+                        for ( iCurSample = 0; iCurSample < iBufferSize; iCurSample++ )
+	                    {
+                            psPlaybackBuffer[j][iCurSample] = 
+                                psPlaybackBuffer[j + 1][iCurSample];
+	                    }
+                    }
+
+                    // adjust "current block to write" pointer
+                    iOutCurBlockToWrite--;
+                }
+                else
+                {
+                    // TODO: buffer underrun, inform user somehow...?
+                }
 		    }
             else
             {
                 // CAPTURE ---------------------------------------------------------
                 // first check if buffer is available
-                if ( iCurBlockToWrite < iCurNumSndBufIn )
+                if ( iInCurBlockToWrite < iCurNumSndBufIn )
                 {
                     // copy new captured block in thread transfer buffer
-                    for ( int iCurSample = 0; iCurSample < iBufferSize; iCurSample++ )
+                    for ( iCurSample = 0; iCurSample < iBufferSize; iCurSample++ )
                     {
-                        psSoundcardBuffer[iCurBlockToWrite][iCurSample] =
+                        psSoundcardBuffer[iInCurBlockToWrite][iCurSample] =
                             ((short*) bufferInfos[i].buffers[index])[iCurSample];
                     }
 
-                    iCurBlockToWrite++;
+                    iInCurBlockToWrite++;
                 }
                 else
                 {
-                    // TODO
-                    // buffer overrun, inform user somehow...?
+                    // TODO: buffer overrun, inform user somehow...?
                 }
             }
 	    }
-
-	    // finally if the driver supports the ASIOOutputReady() optimization,
-        // do it here, all data are in place
-	    if ( bASIOPostOutput )
-        {
-		    ASIOOutputReady();
-        }
-
-        // set event
-        SetEvent ( m_ASIOEvent );
     }
     ASIOMutex.unlock();
+
+    // finally if the driver supports the ASIOOutputReady() optimization,
+    // do it here, all data are in place
+    if ( bASIOPostOutput )
+    {
+	    ASIOOutputReady();
+    }
+
+    // set event
+    SetEvent ( m_ASIOEvent );
 }
 
 long CSound::asioMessages ( long selector, long value, void* message, double* opt )

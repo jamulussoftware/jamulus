@@ -51,6 +51,7 @@ bool             bASIOPostOutput;
 ASIOCallbacks    asioCallbacks;
 int              iBufferSizeMono;
 int              iBufferSizeStereo;
+int              iASIOBufferSizeMono;
 
 // event
 HANDLE           m_ASIOEvent;
@@ -105,6 +106,14 @@ bool CSound::Read ( CVector<short>& psData )
     // If the number of done buffers equals the total number of buffers, it is
     // very likely that a buffer got lost -> set error flag
     bError = ( iInCurBlockToWrite == iCurNumSndBufIn );
+
+/*
+// TEST
+if ( bError )
+{
+    iInCurBlockToWrite = 1;
+}
+*/
 
     ASIOMutex.lock(); // get mutex lock
     {
@@ -223,20 +232,21 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
 
     ASIOMutex.lock(); // get mutex lock
     {
-        // we need mono buffer size but get stereo buffer size
-        const int iNewBufferSizeMono = iNewBufferSize / 2;
+        // set internal buffer size value and calculate mono buffer size
+        iBufferSizeStereo = iNewBufferSize;
+        iBufferSizeMono   = iBufferSizeStereo / 2;
 
         // calculate "nearest" buffer size and set internal parameter accordingly
         // first check minimum and maximum values
-        if ( iNewBufferSizeMono < HWBufferInfo.lMinSize )
+        if ( iBufferSizeMono < HWBufferInfo.lMinSize )
         {
-            iBufferSizeMono = HWBufferInfo.lMinSize;
+            iASIOBufferSizeMono = HWBufferInfo.lMinSize;
         }
         else
         {
-            if ( iNewBufferSizeMono > HWBufferInfo.lMaxSize )
+            if ( iBufferSizeMono > HWBufferInfo.lMaxSize )
             {
-                iBufferSizeMono = HWBufferInfo.lMaxSize;
+                iASIOBufferSizeMono = HWBufferInfo.lMaxSize;
             }
             else
             {
@@ -248,11 +258,12 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
                 // test loop
                 while ( ( iTrialBufSize <= HWBufferInfo.lMaxSize ) && ( !bSizeFound ) )
                 {
-                    if ( iTrialBufSize > iNewBufferSizeMono )
+                    if ( iTrialBufSize >= iBufferSizeMono )
                     {
                         // test which buffer size fits better: the old one or the
                         // current one
-                        if ( ( iTrialBufSize - iNewBufferSizeMono ) < ( iNewBufferSizeMono - iLastTrialBufSize ) )
+                        if ( ( iTrialBufSize - iBufferSizeMono ) <
+                             ( iBufferSizeMono - iLastTrialBufSize ) )
                         {
                             iBufferSizeMono = iTrialBufSize;
                         }
@@ -265,28 +276,31 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
                         bSizeFound = true;
                     }
 
-                    // store old trial buffer size
-                    iLastTrialBufSize = iTrialBufSize;
+                    if ( !bSizeFound )
+                    {
+                        // store old trial buffer size
+                        iLastTrialBufSize = iTrialBufSize;
 
-                    // increment trial buffer size (check for special case first)
-                    if ( HWBufferInfo.lGranularity == -1 )
-                    {
-                        // special case: buffer sizes are a power of 2
-                        iTrialBufSize *= 2;
-                    }
-                    else
-                    {
-                        iTrialBufSize += HWBufferInfo.lGranularity;
+                        // increment trial buffer size (check for special case first)
+                        if ( HWBufferInfo.lGranularity == -1 )
+                        {
+                            // special case: buffer sizes are a power of 2
+                            iTrialBufSize *= 2;
+                        }
+                        else
+                        {
+                            iTrialBufSize += HWBufferInfo.lGranularity;
+                        }
                     }
                 }
+
+                // set ASIO buffer size
+                iASIOBufferSizeMono = iTrialBufSize;
             }
         }
 
-        // calculate stereo buffer size
-        iBufferSizeStereo = 2 * iBufferSizeMono;
-
  // TEST test if requested buffer size is supported by the audio hardware, if not, fire error
-if ( iNewBufferSize != iBufferSizeStereo )
+if ( iASIOBufferSizeMono != iBufferSizeMono )
 {
     throw CGenErr ( "Required sound card buffer size not allowed by the audio hardware." );
 }
@@ -294,7 +308,7 @@ if ( iNewBufferSize != iBufferSizeStereo )
 
 	    // create and activate ASIO buffers (buffer size in samples)
 	    ASIOCreateBuffers ( bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
-		    iBufferSizeMono, &asioCallbacks );
+		    iASIOBufferSizeMono, &asioCallbacks );
 
 	    // now set all the buffer details
 	    for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
@@ -394,7 +408,8 @@ CSound::CSound()
     }
 
     loadAsioDriver ( "dummy" ); // to initialize external object
-    const long lNumDetDriv = asioDrivers->getDriverNames ( cDriverNames, MAX_NUMBER_SOUND_CARDS );
+    const long lNumDetDriv =
+        asioDrivers->getDriverNames ( cDriverNames, MAX_NUMBER_SOUND_CARDS );
 
 
 	// load and initialize first valid ASIO driver
@@ -437,7 +452,8 @@ pstrDevices[0] = driverInfo.name;
 	long lNumInChan;
 	long lNumOutChan;
 	ASIOGetChannels ( &lNumInChan, &lNumOutChan );
-    if ( ( lNumInChan < NUM_IN_OUT_CHANNELS ) || ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
+    if ( ( lNumInChan < NUM_IN_OUT_CHANNELS ) ||
+         ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
     {
         throw CGenErr ( "The audio device does not support required number of channels." );
     }
@@ -541,13 +557,16 @@ CSound::~CSound()
 }
 
 // ASIO callbacks -------------------------------------------------------------
-ASIOTime* CSound::bufferSwitchTimeInfo ( ASIOTime *timeInfo, long index, ASIOBool processNow )
+ASIOTime* CSound::bufferSwitchTimeInfo ( ASIOTime *timeInfo,
+                                         long index,
+                                         ASIOBool processNow )
 {
 	bufferSwitch ( index, processNow );
 	return 0L;
 }
 
-void CSound::bufferSwitch ( long index, ASIOBool processNow )
+void CSound::bufferSwitch ( long index,
+                            ASIOBool processNow )
 {
     int iCurSample;
 
@@ -556,13 +575,13 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
 	    // perform the processing for input and output
 	    for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
 	    {
-            if ( bufferInfos[i].isInput == false )
+            if ( bufferInfos[i].isInput == ASIOFalse )
 		    {
                 // PLAYBACK ----------------------------------------------------
                 if ( iOutCurBlockToWrite > 0 )
                 {
                     // copy data from sound card in output buffer
-                    for ( iCurSample = 0; iCurSample < iBufferSizeMono; iCurSample++ )
+                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
 	                {
                         // copy interleaved stereo data in mono sound card buffer
                         ((short*) bufferInfos[i].buffers[index])[iCurSample] =
@@ -577,7 +596,7 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
                 if ( iInCurBlockToWrite < iCurNumSndBufIn )
                 {
                     // copy new captured block in thread transfer buffer
-                    for ( iCurSample = 0; iCurSample < iBufferSizeMono; iCurSample++ )
+                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                     {
                         // copy mono data interleaved in stereo buffer
                         psSoundcardBuffer[iInCurBlockToWrite][2 * iCurSample + bufferInfos[i].channelNum] =

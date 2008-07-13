@@ -69,7 +69,7 @@ int              iCurNumSndBufOut;
 
 // we must implement these functions here to get access to global variables
 int CSound::GetOutNumBuf() { return iCurNumSndBufOut; }
-int CSound::GetInNumBuf() { return iCurNumSndBufIn; }
+int CSound::GetInNumBuf()  { return iCurNumSndBufIn; }
 
 
 /******************************************************************************\
@@ -83,10 +83,10 @@ bool CSound::Read ( CVector<short>& psData )
     // check if device must be opened or reinitialized
     if ( bChangParamIn )
     {
-        // Reinit sound interface (init recording requires stereo buffer size)
+        // reinit sound interface (init recording requires stereo buffer size)
         InitRecordingAndPlayback ( iBufferSizeStereo );
 
-        // Reset flag
+        // reset flag
         bChangParamIn = false;
     }
 
@@ -103,7 +103,7 @@ bool CSound::Read ( CVector<short>& psData )
 		}
     }
 
-    // If the number of done buffers equals the total number of buffers, it is
+    // if the number of done buffers equals the total number of buffers, it is
     // very likely that a buffer got lost -> set error flag
     bError = ( iInCurBlockToWrite == iCurNumSndBufIn );
 
@@ -126,11 +126,11 @@ bool CSound::Read ( CVector<short>& psData )
 
         // adjust "current block to write" pointer
         iInCurBlockToWrite--;
+
+        // in case more than one buffer was ready, reset event
+        ResetEvent ( m_ASIOEvent );
     }
     ASIOMutex.unlock();
-
-    // in case more than one buffer was ready, reset event
-    ResetEvent ( m_ASIOEvent );
 
     return bError;
 }
@@ -628,18 +628,18 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
         {
             // TODO: buffer overrun, inform user somehow...?
         }
+
+        // finally if the driver supports the ASIOOutputReady() optimization,
+        // do it here, all data are in place
+        if ( bASIOPostOutput )
+        {
+	        ASIOOutputReady();
+        }
+
+        // set event
+        SetEvent ( m_ASIOEvent );
     }
     ASIOMutex.unlock();
-
-    // finally if the driver supports the ASIOOutputReady() optimization,
-    // do it here, all data are in place
-    if ( bASIOPostOutput )
-    {
-	    ASIOOutputReady();
-    }
-
-    // set event
-    SetEvent ( m_ASIOEvent );
 }
 
 long CSound::asioMessages ( long selector, long value, void* message, double* opt )

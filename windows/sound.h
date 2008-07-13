@@ -44,11 +44,11 @@
 #define BITS_PER_SAMPLE         16      // use all bits of the D/A-converter
 #define BYTES_PER_SAMPLE        2       // number of bytes per sample
 
-#define MAX_SND_BUF_IN          200
-#define MAX_SND_BUF_OUT         200
+#define MAX_SND_BUF_IN          100
+#define MAX_SND_BUF_OUT         100
 
-#define NUM_SOUND_BUFFERS_IN    ( 70 / MIN_BLOCK_DURATION_MS )
-#define NUM_SOUND_BUFFERS_OUT   ( 80 / MIN_BLOCK_DURATION_MS )
+#define NUM_SOUND_BUFFERS_IN    2
+#define NUM_SOUND_BUFFERS_OUT   2
 
 // maximum number of recognized sound cards installed in the system
 #define MAX_NUMBER_SOUND_CARDS  10

@@ -43,7 +43,7 @@
 
 // version and application name (always use this version)
 #undef VERSION
-#define VERSION                         "2.0.1cvs"
+#define VERSION                         "2.1.0cvs"
 #define APP_NAME                        "llcon"
 
 // file name for logging file
@@ -79,11 +79,7 @@
 #define DEF_NET_BUF_SIZE_NUM_BL         5 // number of blocks
 
 // number of ticks of audio in/out buffer sliders
-#ifdef _WIN32
-# define AUD_SLIDER_LENGTH              30
-#else
 # define AUD_SLIDER_LENGTH              6
-#endif
 
 // maximum number of internet connections (channels)
 // if you want to change this paramter, there has to be done code modifications

@@ -305,15 +305,32 @@ if ( iASIOBufferSizeMono != iBufferSizeMono )
     throw CGenErr ( "Required sound card buffer size not allowed by the audio hardware." );
 }
 
+        // prepare input channels
+        for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
+	    {
+		    bufferInfos[i].isInput    = ASIOTrue;
+		    bufferInfos[i].channelNum = i;
+		    bufferInfos[i].buffers[0] = 0;
+            bufferInfos[i].buffers[1] = 0;
+	    }
+
+        // prepare output channels
+        for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
+	    {
+		    bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
+		    bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
+		    bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
+            bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[1] = 0;
+	    }
 
 	    // create and activate ASIO buffers (buffer size in samples)
-	    ASIOCreateBuffers ( bufferInfos, 2 * NUM_IN_OUT_CHANNELS,
+	    ASIOCreateBuffers ( bufferInfos, 2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
 		    iASIOBufferSizeMono, &asioCallbacks );
 
-	    // now set all the buffer details
+	    // now get some buffer details
 	    for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
 	    {
-		    channelInfos[i].channel = NUM_IN_OUT_CHANNELS;
+		    channelInfos[i].channel = bufferInfos[i].channelNum;
 		    channelInfos[i].isInput = bufferInfos[i].isInput;
 		    ASIOGetChannelInfo ( &channelInfos[i] );
 
@@ -484,24 +501,6 @@ pstrDevices[0] = driverInfo.name;
 	asioCallbacks.asioMessage          = &asioMessages;
 	asioCallbacks.bufferSwitchTimeInfo = &bufferSwitchTimeInfo;
 
-    // prepare input channels
-    for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
-	{
-		bufferInfos[i].isInput    = ASIOTrue;
-		bufferInfos[i].channelNum = i;
-		bufferInfos[i].buffers[0] = 0;
-        bufferInfos[i].buffers[1] = 0;
-	}
-
-    // prepare output channels
-    for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
-	{
-		bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
-		bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
-		bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[1] = 0;
-	}
-
     // init buffer pointer to zero
     for ( i = 0; i < MAX_SND_BUF_IN; i++ )
     {
@@ -607,16 +606,6 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
 
 
         // Manage thread interface buffers for input and output ----------------
-        // capture
-        if ( iInCurBlockToWrite < iCurNumSndBufIn )
-        {
-            iInCurBlockToWrite++;
-        }
-        else
-        {
-            // TODO: buffer overrun, inform user somehow...?
-        }
-
         // playback
         if ( iOutCurBlockToWrite > 0 )
         {
@@ -636,6 +625,16 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
         else
         {
             // TODO: buffer underrun, inform user somehow...?
+        }
+
+        // capture
+        if ( iInCurBlockToWrite < iCurNumSndBufIn )
+        {
+            iInCurBlockToWrite++;
+        }
+        else
+        {
+            // TODO: buffer overrun, inform user somehow...?
         }
     }
     ASIOMutex.unlock();

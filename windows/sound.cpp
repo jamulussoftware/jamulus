@@ -59,13 +59,17 @@ HANDLE           m_ASIOEvent;
 // wave in
 int              iInCurBlockToWrite;
 short*           psSoundcardBuffer[MAX_SND_BUF_IN];
+bool             bBufferOverrun;
 
 // wave out
 int              iOutCurBlockToWrite;
 short*           psPlaybackBuffer[MAX_SND_BUF_OUT];
+bool             bBufferUnderrun;
 
 int              iCurNumSndBufIn;
 int              iCurNumSndBufOut;
+int              iNewNumSndBufIn;
+int              iNewNumSndBufOut;
 
 // we must implement these functions here to get access to global variables
 int CSound::GetOutNumBuf() { return iCurNumSndBufOut; }
@@ -78,7 +82,7 @@ int CSound::GetInNumBuf()  { return iCurNumSndBufIn; }
 bool CSound::Read ( CVector<short>& psData )
 {
     int  i, j;
-    bool bError = false;
+    bool bError;
 
     // check if device must be opened or reinitialized
     if ( bChangParamIn )
@@ -103,12 +107,16 @@ bool CSound::Read ( CVector<short>& psData )
 		}
     }
 
-    // if the number of done buffers equals the total number of buffers, it is
-    // very likely that a buffer got lost -> set error flag
-    bError = ( iInCurBlockToWrite == iCurNumSndBufIn );
-
     ASIOMutex.lock(); // get mutex lock
     {
+        // check for buffer overrun in ASIO thread
+        bError = bBufferOverrun;
+        if ( bBufferOverrun )
+        {
+            // reset flag
+            bBufferOverrun = false;
+        }
+
         // copy data from sound card in output buffer
         for ( i = 0; i < iBufferSizeStereo; i++ )
 	    {
@@ -146,7 +154,7 @@ void CSound::SetInNumBuf ( int iNewNum )
     // change only if parameter is different
     if ( iNewNum != iCurNumSndBufIn )
     {
-        iCurNumSndBufIn = iNewNum;
+        iNewNumSndBufIn = iNewNum;
         bChangParamIn   = true;
     }
 }
@@ -157,8 +165,7 @@ void CSound::SetInNumBuf ( int iNewNum )
 \******************************************************************************/
 bool CSound::Write ( CVector<short>& psData )
 {
-    // init return state
-    bool bError = false;
+    bool bError;
 
     // check if device must be opened or reinitialized
     if ( bChangParamOut )
@@ -172,6 +179,14 @@ bool CSound::Write ( CVector<short>& psData )
 
     ASIOMutex.lock(); // get mutex lock
     {
+        // check for buffer underrun in ASIO thread
+        bError = bBufferUnderrun;
+        if ( bBufferUnderrun )
+        {
+            // reset flag
+            bBufferUnderrun = false;
+        }
+
         // first check if buffer is available
         if ( iOutCurBlockToWrite < iCurNumSndBufOut )
         {
@@ -205,7 +220,7 @@ void CSound::SetOutNumBuf ( int iNewNum )
     // change only if parameter is different
     if ( iNewNum != iCurNumSndBufOut )
     {
-        iCurNumSndBufOut = iNewNum;
+        iNewNumSndBufOut = iNewNum;
         bChangParamOut   = true;
     }
 }
@@ -334,9 +349,14 @@ if ( iASIOBufferSizeMono != iBufferSizeMono )
 	    }
 
 
-        // our buffer management -----------------------------------------------
-        // initialize write block pointer in
+        // Our buffer management -----------------------------------------------
+        // store new buffer number values
+        iCurNumSndBufIn  = iNewNumSndBufIn;
+        iCurNumSndBufOut = iNewNumSndBufOut;
+
+        // initialize write block pointer in and overrun flag
         iInCurBlockToWrite = 0;
+        bBufferOverrun     = false;
 
         // create memory for sound card buffer
         for ( i = 0; i < iCurNumSndBufIn; i++ )
@@ -349,8 +369,9 @@ if ( iASIOBufferSizeMono != iBufferSizeMono )
             psSoundcardBuffer[i] = new short[iBufferSizeStereo];
         }
 
-        // initialize write block pointer out
+        // initialize write block pointer out and underrun flag
         iOutCurBlockToWrite = 0;
+        bBufferUnderrun     = false;
 
         // create memory for playback buffer
         for ( j = 0; j < iCurNumSndBufOut; j++ )
@@ -403,7 +424,9 @@ CSound::CSound()
     int i;
 
     // init number of sound buffers
+    iNewNumSndBufIn  = NUM_SOUND_BUFFERS_IN;
     iCurNumSndBufIn  = NUM_SOUND_BUFFERS_IN;
+    iNewNumSndBufOut = NUM_SOUND_BUFFERS_OUT;
     iCurNumSndBufOut = NUM_SOUND_BUFFERS_OUT;
 
     // should be initialized because an error can occur during init
@@ -616,7 +639,8 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
         }
         else
         {
-            // TODO: buffer underrun, inform user somehow...?
+            // set buffer underrun flag
+            bBufferUnderrun = true;
         }
 
         // capture
@@ -626,7 +650,8 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
         }
         else
         {
-            // TODO: buffer overrun, inform user somehow...?
+            // set buffer overrun flag
+            bBufferOverrun = true;
         }
 
         // finally if the driver supports the ASIOOutputReady() optimization,

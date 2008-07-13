@@ -400,13 +400,6 @@ fflush(pFileDelay);
         const double dCurAddVal =
             ( (double) TimeLastBlock.msecsTo ( CurTime ) - MIN_BLOCK_DURATION_MS );
 
-/*
-// TEST
-static FILE* pFileTest = fopen("sti.dat", "w");
-fprintf(pFileTest, "%e\n", dCurAddVal);
-fflush(pFileTest);
-*/
-
         RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
 
         // store old time value
@@ -415,6 +408,9 @@ fflush(pFileTest);
 
     // disable channel
     Channel.SetEnable ( false );
+
+    // disable sound interface
+    Sound.Close();
 
     // reset current signal level and LEDs
     SignalLevelMeterL.Reset();

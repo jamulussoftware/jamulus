@@ -412,7 +412,7 @@
    <item>
     <widget class="QGroupBox" name="GroupBoxSoundCardBuffers" >
      <property name="title" >
-      <string>Sndcard Buffers</string>
+      <string>Soundcard Buffers</string>
      </property>
      <layout class="QVBoxLayout" >
       <property name="spacing" >

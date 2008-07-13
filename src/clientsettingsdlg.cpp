@@ -36,13 +36,21 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // init slider controls ---
     // sound buffer in
+#ifdef _WIN32
+    SliderSndBufIn->setRange ( 1, AUD_SLIDER_LENGTH ); // for ASIO we only need one buffer
+#else
     SliderSndBufIn->setRange ( 2, AUD_SLIDER_LENGTH );
+#endif
     const int iCurNumInBuf = pClient->GetSndInterface()->GetInNumBuf();
     SliderSndBufIn->setValue ( iCurNumInBuf );
     TextSndBufIn->setText ( "In: " + QString().setNum ( iCurNumInBuf ) );
 
     // sound buffer out
+#ifdef _WIN32
+    SliderSndBufOut->setRange ( 1, AUD_SLIDER_LENGTH ); // for ASIO we only need one buffer
+#else
     SliderSndBufOut->setRange ( 2, AUD_SLIDER_LENGTH );
+#endif
     const int iCurNumOutBuf = pClient->GetSndInterface()->GetOutNumBuf();
     SliderSndBufOut->setValue ( iCurNumOutBuf );
     TextSndBufOut->setText ( "Out: " + QString().setNum ( iCurNumOutBuf ) );

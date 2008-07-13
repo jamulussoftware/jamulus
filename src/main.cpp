@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include <qapplication.h>
+#include <qmessagebox.h>
 #include <iostream>
 #include "global.h"
 #include "llconclientdlg.h"
@@ -112,61 +113,77 @@ cerr << "logging ";
     extern int qInitResources();
     qInitResources();
 
-    if ( bIsClient )
+    try
     {
-        // client
-        // actual client object
-        CClient Client;
-
-        // load settings from init-file
-        CSettings Settings ( &Client );
-
-
-// TODO use QString
-
-        Settings.Load ( strIniFileName.c_str() );
-
-        // GUI object
-        CLlconClientDlg ClientDlg ( &Client, 0 );
-
-        // set main window
-        pMainWindow = &ClientDlg;
-        pApp = &app; // Needed for post-event routine
-
-        // show dialog
-        ClientDlg.show();
-        app.exec();
-
-        // save settings to init-file
-
-// TODO use QString
-
-        Settings.Save ( strIniFileName.c_str() );
-    }
-    else
-    {
-        // server
-        // actual server object
-        CServer Server ( bUseServerLogging );
-
-        if ( bUseGUI )
+        if ( bIsClient )
         {
-            // GUI object for the server
-            CLlconServerDlg ServerDlg ( &Server, 0 );
+            // client
+            // actual client object
+            CClient Client;
+
+            // load settings from init-file
+            CSettings Settings ( &Client );
+
+
+// TODO use QString
+
+            Settings.Load ( strIniFileName.c_str() );
+
+            // GUI object
+            CLlconClientDlg ClientDlg ( &Client, 0 );
 
             // set main window
-            pMainWindow = &ServerDlg;
-            pApp = &app; // needed for post-event routine
+            pMainWindow = &ClientDlg;
+            pApp = &app; // Needed for post-event routine
 
             // show dialog
-            ServerDlg.show();
+            ClientDlg.show();
             app.exec();
+
+            // save settings to init-file
+
+// TODO use QString
+
+            Settings.Save ( strIniFileName.c_str() );
         }
         else
         {
-            // only start application without using the GUI
-            qDebug() << CAboutDlg::GetVersionAndNameStr ( false );
-            app.exec();
+            // server
+            // actual server object
+            CServer Server ( bUseServerLogging );
+
+            if ( bUseGUI )
+            {
+                // GUI object for the server
+                CLlconServerDlg ServerDlg ( &Server, 0 );
+
+                // set main window
+                pMainWindow = &ServerDlg;
+                pApp = &app; // needed for post-event routine
+
+                // show dialog
+                ServerDlg.show();
+                app.exec();
+            }
+            else
+            {
+                // only start application without using the GUI
+                qDebug() << CAboutDlg::GetVersionAndNameStr ( false );
+                app.exec();
+            }
+        }
+    }
+
+    catch ( CGenErr generr )
+    {
+        // show generic error
+        if ( bUseGUI )
+        {
+            QMessageBox::critical ( 0, APP_NAME, generr.strError, "Quit", 0 );
+        }
+        else
+        {
+            qDebug() << generr.strError;
         }
     }
 

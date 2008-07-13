@@ -107,14 +107,6 @@ bool CSound::Read ( CVector<short>& psData )
     // very likely that a buffer got lost -> set error flag
     bError = ( iInCurBlockToWrite == iCurNumSndBufIn );
 
-/*
-// TEST
-if ( bError )
-{
-    iInCurBlockToWrite = 1;
-}
-*/
-
     ASIOMutex.lock(); // get mutex lock
     {
         // copy data from sound card in output buffer
@@ -516,7 +508,7 @@ pstrDevices[0] = driverInfo.name;
     // create event
     m_ASIOEvent = CreateEvent ( NULL, FALSE, FALSE, NULL );
 
-    // init flag to open devices
+    // init flags
     bChangParamIn  = false;
     bChangParamOut = false;
 }

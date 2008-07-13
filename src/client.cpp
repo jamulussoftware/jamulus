@@ -372,20 +372,6 @@ fflush(pFileDelay);
         ResampleObjUpL.Resample ( vecdAudioL, vecdAudioSndCrdL );
         ResampleObjUpR.Resample ( vecdAudioR, vecdAudioSndCrdR );
 
-
-
-
-// TEST play sinusoidal signal for testing
-static int iCnt = 0;
-for ( i = 0; i < iSndCrdBlockSizeSam; i++ )
-{
-    vecdAudioSndCrdL[i] = sin(6 * double(iCnt) / 48000 * 2000) * 22000;
-    vecdAudioSndCrdR[i] = vecdAudioSndCrdL[i];
-    iCnt++;
-}
-
-
-
         // copy data from one stereo buffer in two separate buffers
         iInCnt = 0;
         for ( i = 0; i < iSndCrdBlockSizeSam; i++ )

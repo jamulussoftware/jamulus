@@ -146,7 +146,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;$(QTDIR)\include\Qt&quot;;&quot;$(QTDIR)\include&quot;;../src;ASIOSDK2/common;ASIOSDK2/host;ASIOSDK2/host/pc"
+				AdditionalIncludeDirectories="&quot;$(QTDIR)\include&quot;;&quot;$(QTDIR)\include\Qt&quot;;../src;ASIOSDK2/common;ASIOSDK2/host;ASIOSDK2/host/pc"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;QT_THREAD_SUPPORT"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -171,7 +171,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="winmm.lib $(QTDIR)\lib\qtmain.lib $(QTDIR)\lib\QtCore4.lib $(QTDIR)\lib\QtGui4.lib $(QTDIR)\lib\QtNetwork4.lib"
+				AdditionalDependencies="$(QTDIR)\lib\qtmain.lib $(QTDIR)\lib\QtCore4.lib $(QTDIR)\lib\QtGui4.lib $(QTDIR)\lib\QtNetwork4.lib $(QTDIR)\lib\QtXml4.lib winmm.lib"
 				OutputFile=".\Release/llcon.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"

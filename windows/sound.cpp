@@ -565,15 +565,14 @@ ASIOTime* CSound::bufferSwitchTimeInfo ( ASIOTime *timeInfo,
 	return 0L;
 }
 
-void CSound::bufferSwitch ( long index,
-                            ASIOBool processNow )
+void CSound::bufferSwitch ( long index, ASIOBool processNow )
 {
     int iCurSample;
 
     ASIOMutex.lock(); // get mutex lock
     {
 	    // perform the processing for input and output
-	    for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
+	    for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ ) // stereo
 	    {
             if ( bufferInfos[i].isInput == ASIOFalse )
 		    {
@@ -585,14 +584,14 @@ void CSound::bufferSwitch ( long index,
 	                {
                         // copy interleaved stereo data in mono sound card buffer
                         ((short*) bufferInfos[i].buffers[index])[iCurSample] =
-                            psSoundcardBuffer[0][2 * iCurSample + bufferInfos[i].channelNum];
+                            psPlaybackBuffer[0][2 * iCurSample + bufferInfos[i].channelNum];
 	                }
                 }
 		    }
             else
             {
                 // CAPTURE -----------------------------------------------------
-                // first check if buffer is available
+                // first check if space in buffer is available
                 if ( iInCurBlockToWrite < iCurNumSndBufIn )
                 {
                     // copy new captured block in thread transfer buffer

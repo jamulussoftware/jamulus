@@ -30,6 +30,7 @@
 #include <qhostinfo.h>
 #include <qstring.h>
 #include <qdatetime.h>
+#include <qmessagebox.h>
 #include "global.h"
 #include "socket.h"
 #include "resample.h"

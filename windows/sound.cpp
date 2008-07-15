@@ -60,15 +60,18 @@ HANDLE           m_ASIOEvent;
 int              iInCurBlockToWrite;
 short*           psSoundcardBuffer[MAX_SND_BUF_IN];
 bool             bBufferOverrun;
-short*           psCaptureConvBuf;
-int              iCurPosCaptConvBuf;
 
 // wave out
 int              iOutCurBlockToWrite;
 short*           psPlaybackBuffer[MAX_SND_BUF_OUT];
 bool             bBufferUnderrun;
+
+// ASIO buffer size conversion buffer
+short*           psCaptureConvBuf;
+int              iCurPosCaptConvBuf;
 short*           psPlayConvBuf;
 int              iCurPosPlayConvBuf;
+int              iASIOConfBufSize;
 
 int              iCurNumSndBufIn;
 int              iCurNumSndBufOut;
@@ -313,7 +316,8 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
  // TEST test if requested buffer size is supported by the audio hardware, if not, fire error
 if ( iASIOBufferSizeMono != iBufferSizeMono )
 {
-    throw CGenErr ( "Required sound card buffer size not allowed by the audio hardware." );
+    throw CGenErr ( QString ( "Required sound card buffer size of %1 samples "
+        "not supported by the audio hardware." ).arg(iBufferSizeMono) );
 }
 
         // prepare input channels
@@ -397,12 +401,15 @@ if ( iASIOBufferSizeMono != iBufferSizeMono )
         // create memory for ASIO buffer conversion if required
         if ( iASIOBufferSizeMono != iBufferSizeMono )
         {
+            // required size: two times of one stereo buffer of the larger buffer
+            iASIOConfBufSize = max(4 * iASIOBufferSizeMono, 2 * iBufferSizeStereo);
+
             if ( psCaptureConvBuf != NULL )
 	        {
                 delete[] psCaptureConvBuf;
 	        }
 
-            psCaptureConvBuf   = new short[max(2 * iASIOBufferSizeMono, iBufferSizeStereo)];
+            psCaptureConvBuf   = new short[iASIOConfBufSize];
             iCurPosCaptConvBuf = 0;
 
             if ( psPlayConvBuf != NULL )
@@ -410,7 +417,7 @@ if ( iASIOBufferSizeMono != iBufferSizeMono )
                 delete[] psPlayConvBuf;
 	        }
 
-            psPlayConvBuf      = new short[max(2 * iASIOBufferSizeMono, iBufferSizeStereo)];
+            psPlayConvBuf      = new short[iASIOConfBufSize];
             iCurPosPlayConvBuf = 0;
         }
 

@@ -188,7 +188,19 @@ void CClient::run()
 #endif
 
     // init object
-    Init();
+    try
+    {
+        Init();
+    }
+    catch ( CGenErr generr )
+    {
+        // TODO better error management -> should be catched in main thread
+        // problem: how to catch errors in a different thread...?
+
+        // quick hack solution
+        QMessageBox::critical ( 0, APP_NAME, generr.strError, "Quit", 0 );
+        exit ( 0 );
+    }
 
 
     // runtime phase ------------------------------------------------------------

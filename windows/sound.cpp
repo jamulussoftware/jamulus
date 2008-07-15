@@ -60,11 +60,15 @@ HANDLE           m_ASIOEvent;
 int              iInCurBlockToWrite;
 short*           psSoundcardBuffer[MAX_SND_BUF_IN];
 bool             bBufferOverrun;
+short*           psCaptureConvBuf;
+int              iCurPosCaptConvBuf;
 
 // wave out
 int              iOutCurBlockToWrite;
 short*           psPlaybackBuffer[MAX_SND_BUF_OUT];
 bool             bBufferUnderrun;
+short*           psPlayConvBuf;
+int              iCurPosPlayConvBuf;
 
 int              iCurNumSndBufIn;
 int              iCurNumSndBufOut;
@@ -390,6 +394,26 @@ if ( iASIOBufferSizeMono != iBufferSizeMono )
 		    }
         }
 
+        // create memory for ASIO buffer conversion if required
+        if ( iASIOBufferSizeMono != iBufferSizeMono )
+        {
+            if ( psCaptureConvBuf != NULL )
+	        {
+                delete[] psCaptureConvBuf;
+	        }
+
+            psCaptureConvBuf   = new short[max(2 * iASIOBufferSizeMono, iBufferSizeStereo)];
+            iCurPosCaptConvBuf = 0;
+
+            if ( psPlayConvBuf != NULL )
+	        {
+                delete[] psPlayConvBuf;
+	        }
+
+            psPlayConvBuf      = new short[max(2 * iASIOBufferSizeMono, iBufferSizeStereo)];
+            iCurPosPlayConvBuf = 0;
+        }
+
         // reset event
         ResetEvent ( m_ASIOEvent );
     }
@@ -527,6 +551,10 @@ pstrDevices[0] = driverInfo.name;
         psPlaybackBuffer[i] = NULL;
     }
 
+    // init ASIO convertion buffers
+    psCaptureConvBuf = NULL;
+    psPlayConvBuf    = NULL;
+
     // we use an event controlled structure
     // create event
     m_ASIOEvent = CreateEvent ( NULL, FALSE, FALSE, NULL );
@@ -585,6 +613,17 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
 
     ASIOMutex.lock(); // get mutex lock
     {
+        // check if special treatment is required with buffer conversion
+        const bool bConvBufNeeded = ( iASIOBufferSizeMono != iBufferSizeMono );
+
+
+// TODO implementation of ASIO conversion buffer
+// psCaptureConvBuf
+// iCurPosCaptConvBuf
+// psPlayConvBuf
+// iCurPosPlayConvBuf
+
+
 	    // perform the processing for input and output
 	    for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ ) // stereo
 	    {

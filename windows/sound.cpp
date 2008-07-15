@@ -57,21 +57,14 @@ int              iASIOBufferSizeMono;
 HANDLE           m_ASIOEvent;
 
 // wave in
-int              iInCurBlockToWrite;
-short*           psSoundcardBuffer[MAX_SND_BUF_IN];
-bool             bBufferOverrun;
+short*           psCaptureBuffer;
+int              iBufferPosCapture;
+bool             bCaptureBufferOverrun;
 
 // wave out
-int              iOutCurBlockToWrite;
-short*           psPlaybackBuffer[MAX_SND_BUF_OUT];
-bool             bBufferUnderrun;
-
-// ASIO buffer size conversion buffer
-short*           psCaptureConvBuf;
-int              iCurPosCaptConvBuf;
-short*           psPlayConvBuf;
-int              iCurPosPlayConvBuf;
-int              iASIOConfBufSize;
+short*           psPlayBuffer;
+int              iBufferPosPlay;
+bool             bPlayBufferUnderrun;
 
 int              iCurNumSndBufIn;
 int              iCurNumSndBufOut;
@@ -79,8 +72,8 @@ int              iNewNumSndBufIn;
 int              iNewNumSndBufOut;
 
 // we must implement these functions here to get access to global variables
-int CSound::GetOutNumBuf() { return iCurNumSndBufOut; }
-int CSound::GetInNumBuf()  { return iCurNumSndBufIn; }
+int CSound::GetOutNumBuf() { return iNewNumSndBufOut; }
+int CSound::GetInNumBuf()  { return iNewNumSndBufIn; }
 
 
 /******************************************************************************\
@@ -88,7 +81,7 @@ int CSound::GetInNumBuf()  { return iCurNumSndBufIn; }
 \******************************************************************************/
 bool CSound::Read ( CVector<short>& psData )
 {
-    int  i, j;
+    int  i;
     bool bError;
 
     // check if device must be opened or reinitialized
@@ -101,46 +94,44 @@ bool CSound::Read ( CVector<short>& psData )
         bChangParamIn = false;
     }
 
-    // wait until data is available
-    if ( iInCurBlockToWrite == 0 )
+    // wait until enough data is available
+    while ( iBufferPosCapture < iBufferSizeStereo )
     {
-        if ( bBlockingRec )
+        if ( bBlockingRec && !bCaptureBufferOverrun )
 		{
             WaitForSingleObject ( m_ASIOEvent, INFINITE );
 		}
         else
 		{
-            return false;
+            return true;
 		}
     }
 
     ASIOMutex.lock(); // get mutex lock
     {
         // check for buffer overrun in ASIO thread
-        bError = bBufferOverrun;
-        if ( bBufferOverrun )
+        bError = bCaptureBufferOverrun;
+        if ( bCaptureBufferOverrun )
         {
             // reset flag
-            bBufferOverrun = false;
+            bCaptureBufferOverrun = false;
         }
 
-        // copy data from sound card in output buffer
+        // copy data from sound card capture buffer in function output buffer
         for ( i = 0; i < iBufferSizeStereo; i++ )
 	    {
-            psData[i] = psSoundcardBuffer[0][i];
+            psData[i] = psCaptureBuffer[i];
 	    }
 
         // move all other data in buffer
-        for ( j = 0; j < iInCurBlockToWrite - 1; j++ )
+        const int iLenCopyRegion = iBufferPosCapture - iBufferSizeStereo;
+        for ( i = 0; i < iBufferSizeStereo; i++ )
         {
-            for ( i = 0; i < iBufferSizeStereo; i++ )
-	        {
-                psSoundcardBuffer[j][i] = psSoundcardBuffer[j + 1][i];
-	        }
+            psCaptureBuffer[i] = psCaptureBuffer[iBufferSizeStereo + i];
         }
 
         // adjust "current block to write" pointer
-        iInCurBlockToWrite--;
+        iBufferPosCapture -= iBufferSizeStereo;
 
         // in case more than one buffer was ready, reset event
         ResetEvent ( m_ASIOEvent );
@@ -187,28 +178,30 @@ bool CSound::Write ( CVector<short>& psData )
     ASIOMutex.lock(); // get mutex lock
     {
         // check for buffer underrun in ASIO thread
-        bError = bBufferUnderrun;
-        if ( bBufferUnderrun )
+        bError = bPlayBufferUnderrun;
+        if ( bPlayBufferUnderrun )
         {
             // reset flag
-            bBufferUnderrun = false;
+            bPlayBufferUnderrun = false;
         }
 
-        // first check if buffer is available
-        if ( iOutCurBlockToWrite < iCurNumSndBufOut )
-        {
-            // copy stereo data from input in soundcard buffer
-            for ( int i = 0; i < iBufferSizeStereo; i++ )
-            {
-                psPlaybackBuffer[iOutCurBlockToWrite][i] = psData[i];
-            }
+        // first check if enough data in buffer is available
+        const int iPlayBufferLen = iCurNumSndBufOut * iBufferSizeStereo;
 
-            iOutCurBlockToWrite++;
-        }
-        else
+        if ( iBufferPosPlay + iBufferSizeStereo > iPlayBufferLen )
         {
             // buffer overrun, return error
             bError = true;
+        }
+        else
+        {
+            // copy stereo data from function input in soundcard play buffer
+            for ( int i = 0; i < iBufferSizeStereo; i++ )
+            {
+                psPlayBuffer[iBufferPosPlay + i] = psData[i];
+            }
+
+            iBufferPosPlay += iBufferSizeStereo;
         }
     }
     ASIOMutex.unlock();
@@ -238,7 +231,7 @@ void CSound::SetOutNumBuf ( int iNewNum )
 \******************************************************************************/
 void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
 {
-    int i, j;
+    int i;
 
     // first, stop audio and dispose ASIO buffers
     ASIOStop();
@@ -313,12 +306,17 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
             }
         }
 
- // TEST test if requested buffer size is supported by the audio hardware, if not, fire error
+
+// TEST test if requested buffer size is supported by the audio hardware, if not, fire error
 if ( iASIOBufferSizeMono != iBufferSizeMono )
 {
     throw CGenErr ( QString ( "Required sound card buffer size of %1 samples "
         "not supported by the audio hardware." ).arg(iBufferSizeMono) );
 }
+
+// TEST
+//iASIOBufferSizeMono = 256;
+
 
         // prepare input channels
         for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
@@ -363,63 +361,32 @@ if ( iASIOBufferSizeMono != iBufferSizeMono )
         iCurNumSndBufOut = iNewNumSndBufOut;
 
         // initialize write block pointer in and overrun flag
-        iInCurBlockToWrite = 0;
-        bBufferOverrun     = false;
+        iBufferPosCapture     = 0;
+        bCaptureBufferOverrun = false;
 
-        // create memory for sound card buffer
-        for ( i = 0; i < iCurNumSndBufIn; i++ )
-        {
-            if ( psSoundcardBuffer[i] != NULL )
-		    {
-                delete[] psSoundcardBuffer[i];
-		    }
-
-            psSoundcardBuffer[i] = new short[iBufferSizeStereo];
-        }
+        // create memory for capture buffer
+        if ( psCaptureBuffer != NULL )
+	    {
+            delete[] psCaptureBuffer;
+	    }
+        psCaptureBuffer = new short[iCurNumSndBufIn * iBufferSizeStereo];
 
         // initialize write block pointer out and underrun flag
-        iOutCurBlockToWrite = 0;
-        bBufferUnderrun     = false;
+        iBufferPosPlay      = 0;
+        bPlayBufferUnderrun = false;
 
-        // create memory for playback buffer
-        for ( j = 0; j < iCurNumSndBufOut; j++ )
-        {
-            if ( psPlaybackBuffer[j] != NULL )
-		    {
-                delete[] psPlaybackBuffer[j];
-		    }
+        // create memory for play buffer
+        if ( psPlayBuffer != NULL )
+	    {
+            delete[] psPlayBuffer;
+	    }
+        psPlayBuffer = new short[iCurNumSndBufOut * iBufferSizeStereo];
 
-            psPlaybackBuffer[j] = new short[iBufferSizeStereo];
-
-            // clear new buffer
-            for ( i = 0; i < iBufferSizeStereo; i++ )
-		    {
-                psPlaybackBuffer[j][i] = 0;
-		    }
-        }
-
-        // create memory for ASIO buffer conversion if required
-        if ( iASIOBufferSizeMono != iBufferSizeMono )
-        {
-            // required size: two times of one stereo buffer of the larger buffer
-            iASIOConfBufSize = max(4 * iASIOBufferSizeMono, 2 * iBufferSizeStereo);
-
-            if ( psCaptureConvBuf != NULL )
-	        {
-                delete[] psCaptureConvBuf;
-	        }
-
-            psCaptureConvBuf   = new short[iASIOConfBufSize];
-            iCurPosCaptConvBuf = 0;
-
-            if ( psPlayConvBuf != NULL )
-	        {
-                delete[] psPlayConvBuf;
-	        }
-
-            psPlayConvBuf      = new short[iASIOConfBufSize];
-            iCurPosPlayConvBuf = 0;
-        }
+        // clear new buffer
+        for ( i = 0; i < iCurNumSndBufOut * iBufferSizeStereo; i++ )
+	    {
+            psPlayBuffer[i] = 0;
+	    }
 
         // reset event
         ResetEvent ( m_ASIOEvent );
@@ -510,7 +477,6 @@ iNumDevs = 1;
 pstrDevices[0] = driverInfo.name;
 
 
-
 	// check the number of available channels
 	long lNumInChan;
 	long lNumOutChan;
@@ -518,7 +484,8 @@ pstrDevices[0] = driverInfo.name;
     if ( ( lNumInChan < NUM_IN_OUT_CHANNELS ) ||
          ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
     {
-        throw CGenErr ( "The audio device does not support required number of channels." );
+        throw CGenErr ( "The audio device does not support the "
+            "required number of channels." );
     }
 
     // query the usable buffer sizes
@@ -534,7 +501,8 @@ pstrDevices[0] = driverInfo.name;
     ASIOGetSampleRate ( &sampleRate );
     if ( sampleRate != SND_CRD_SAMPLE_RATE )
     {
-        throw CGenErr ( "The audio device does not support required sample rate." );
+        throw CGenErr ( "The audio device does not support the "
+            "required sample rate." );
     }
 
 	// check wether the driver requires the ASIOOutputReady() optimization
@@ -548,19 +516,8 @@ pstrDevices[0] = driverInfo.name;
 	asioCallbacks.bufferSwitchTimeInfo = &bufferSwitchTimeInfo;
 
     // init buffer pointer to zero
-    for ( i = 0; i < MAX_SND_BUF_IN; i++ )
-    {
-        psSoundcardBuffer[i] = NULL;
-    }
-
-    for ( i = 0; i < MAX_SND_BUF_OUT; i++ )
-    {
-        psPlaybackBuffer[i] = NULL;
-    }
-
-    // init ASIO convertion buffers
-    psCaptureConvBuf = NULL;
-    psPlayConvBuf    = NULL;
+    psCaptureBuffer = NULL;
+    psPlayBuffer    = NULL;
 
     // we use an event controlled structure
     // create event
@@ -573,8 +530,6 @@ pstrDevices[0] = driverInfo.name;
 
 CSound::~CSound()
 {
-    int i;
-
     // cleanup ASIO stuff
     ASIOStop();
     ASIODisposeBuffers();
@@ -582,21 +537,14 @@ CSound::~CSound()
     asioDrivers->removeCurrentDriver();
 
     // delete allocated memory
-    for ( i = 0; i < iCurNumSndBufIn; i++ )
-    {
-        if ( psSoundcardBuffer[i] != NULL )
-		{
-            delete[] psSoundcardBuffer[i];
-		}
-    }
-
-    for ( i = 0; i < iCurNumSndBufOut; i++ )
-    {
-        if ( psPlaybackBuffer[i] != NULL )
-		{
-            delete[] psPlaybackBuffer[i];
-		}
-    }
+    if ( psCaptureBuffer != NULL )
+	{
+        delete[] psCaptureBuffer;
+	}
+    if ( psPlayBuffer != NULL )
+	{
+        delete[] psPlayBuffer;
+	}
 
     // close the handle for the event
     if ( m_ASIOEvent != NULL )
@@ -620,88 +568,75 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
 
     ASIOMutex.lock(); // get mutex lock
     {
-        // check if special treatment is required with buffer conversion
-        const bool bConvBufNeeded = ( iASIOBufferSizeMono != iBufferSizeMono );
+        // first check buffer state of capture and play buffers
+        const int iCaptureBufferLen = iCurNumSndBufIn * iBufferSizeStereo;
 
+        bCaptureBufferOverrun =
+            ( iBufferPosCapture + 2 * iASIOBufferSizeMono > iCaptureBufferLen );
 
-// TODO implementation of ASIO conversion buffer
-// psCaptureConvBuf
-// iCurPosCaptConvBuf
-// psPlayConvBuf
-// iCurPosPlayConvBuf
+        bPlayBufferUnderrun = ( 2 * iASIOBufferSizeMono > iBufferPosPlay );
 
-
-	    // perform the processing for input and output
+        // perform the processing for input and output
 	    for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ ) // stereo
 	    {
-            if ( bufferInfos[i].isInput == ASIOFalse )
+            if ( bufferInfos[i].isInput == ASIOTrue )
 		    {
+                // CAPTURE -----------------------------------------------------
+                // first check if space in buffer is available
+                if ( !bCaptureBufferOverrun )
+                {
+                    // copy new captured block in thread transfer buffer
+                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+                    {
+                        // copy mono data interleaved in stereo buffer
+                        psCaptureBuffer[iBufferPosCapture + 
+                            2 * iCurSample + bufferInfos[i].channelNum] =
+                            ((short*) bufferInfos[i].buffers[index])[iCurSample];
+                    }
+                }
+		    }
+            else
+            {
                 // PLAYBACK ----------------------------------------------------
-                if ( iOutCurBlockToWrite > 0 )
+                if ( !bPlayBufferUnderrun )
                 {
                     // copy data from sound card in output buffer
                     for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
 	                {
                         // copy interleaved stereo data in mono sound card buffer
                         ((short*) bufferInfos[i].buffers[index])[iCurSample] =
-                            psPlaybackBuffer[0][2 * iCurSample + bufferInfos[i].channelNum];
+                            psPlayBuffer[2 * iCurSample + bufferInfos[i].channelNum];
 	                }
-                }
-		    }
-            else
-            {
-                // CAPTURE -----------------------------------------------------
-                // first check if space in buffer is available
-                if ( iInCurBlockToWrite < iCurNumSndBufIn )
-                {
-                    // copy new captured block in thread transfer buffer
-                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
-                    {
-                        // copy mono data interleaved in stereo buffer
-                        psSoundcardBuffer[iInCurBlockToWrite][2 * iCurSample + bufferInfos[i].channelNum] =
-                            ((short*) bufferInfos[i].buffers[index])[iCurSample];
-                    }
                 }
             }
 	    }
 
 
         // Manage thread interface buffers for input and output ----------------
-        // playback
-        if ( iOutCurBlockToWrite > 0 )
+        // capture
+        if ( !bCaptureBufferOverrun )
         {
-            // move all other data in playback buffer
-            for ( int j = 0; j < iOutCurBlockToWrite - 1; j++ )
+            iBufferPosCapture += 2 * iASIOBufferSizeMono;
+        }
+
+        // play
+        if ( !bPlayBufferUnderrun )
+        {
+            // move all other data in play buffer
+            const int iLenCopyRegion = iBufferPosPlay - 2 * iASIOBufferSizeMono;
+            for ( iCurSample = 0; iCurSample < iLenCopyRegion; iCurSample++ )
             {
-                for ( iCurSample = 0; iCurSample < iBufferSizeStereo; iCurSample++ )
-                {
-                    psPlaybackBuffer[j][iCurSample] =
-                        psPlaybackBuffer[j + 1][iCurSample];
-                }
+                psPlayBuffer[iCurSample] =
+                    psPlayBuffer[2 * iASIOBufferSizeMono + iCurSample];
             }
 
             // adjust "current block to write" pointer
-            iOutCurBlockToWrite--;
-        }
-        else
-        {
-            // set buffer underrun flag
-            bBufferUnderrun = true;
+            iBufferPosPlay -= 2 * iASIOBufferSizeMono;
         }
 
-        // capture
-        if ( iInCurBlockToWrite < iCurNumSndBufIn )
-        {
-            iInCurBlockToWrite++;
-        }
-        else
-        {
-            // set buffer overrun flag
-            bBufferOverrun = true;
-        }
 
         // finally if the driver supports the ASIOOutputReady() optimization,
-        // do it here, all data are in place
+        // do it here, all data are in place -----------------------------------
         if ( bASIOPostOutput )
         {
 	        ASIOOutputReady();

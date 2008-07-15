@@ -78,13 +78,13 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     }
 
     // sound card in number of buffers
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audinbuf", 0, AUD_SLIDER_LENGTH, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "audinbuf", 1, AUD_SLIDER_LENGTH, iValue ) )
 	{
         pClient->GetSndInterface()->SetInNumBuf( iValue );
     }
 
     // sound card out number of buffers
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audoutbuf", 0, AUD_SLIDER_LENGTH, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "audoutbuf", 1, AUD_SLIDER_LENGTH, iValue ) )
 	{
         pClient->GetSndInterface()->SetOutNumBuf ( iValue );
     }

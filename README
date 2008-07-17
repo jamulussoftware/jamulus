@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *	Volker Fischer
@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
@@ -25,23 +25,30 @@
 llcon
 -----
 
-Low-Latency Connection / client and server
+Low-Latency Connection / client and server (http://llcon.sourceforge.net)
 
 
-OBJECTIVES:
-The task is to build a client/server software to enable musicians to play together
-over the internet. Target internet connection is DSL with 256 kbps upstream and
-1 Mbit downstream. The server software must be located at a server with a very
-fast internet connection (at least 1 Mbps for up- and downstream).
+INTRODUCTION:
+The llcon software enables musicians to play together over the internet. The
+way it works is that there must be one server which collects the audio data
+from each client, mixes all together and sends the mix back to each client.
+The minimum internet connection speed at each client must be 256 kbps upstream
+and 1 Mbit downstream. The server software must be located at a server with a
+very fast internet connection (at least 1 Mbps for up- and downstream) and a
+very low ping time. To get satisfactory results, the ping time from the client
+computer to the server should not exceed 30 ms average and the network jitter
+should be as low as 2-5 ms (To get a low ping time on DSL connections, an
+extra option "DSL fast path" should be enabled by your internet provider).
 
-To get sufficient results, a sample rate of 24 kHz (mono channel) was chosen. An
-audio compression algorithm with very low delay is IMA-ADPCM (delay is just one
-sample). This gives a raw compressed audio data rate of 96 kbps.
+Technical details
+To get sufficient results, a sample rate of 24 kHz (mono channel) was chosen.
+The audio compression algorithm IMA-ADPCM with very low delay is used which
+results in a raw compressed audio data rate of 96 kbps. First tests showed
+that an upstream of 128 kbps is too slow for using the llcon software. At
+least 256 kbps upstream bandwidth is required.
 
-Target hardware setup at the client is stereo audio input signal with one channel
-is the instrument and the other channel is a microphone signal. On the microphne
-channel a reverberation effect can be applied (maybe at a later time other audio
-effects are added).
+The llcon software package includes both, the server and the client
+functionality which can be selected by using command line arguments.
 
 
 MANUAL:
@@ -51,14 +58,13 @@ Start the llcon server on a remote computer with fast internet access. Start the
 llcon client on your local computer and connect your sound card with your
 instrument/microphone and headphone and type in the IP address of the server.
 There are levelers for adjusting the sound card (in/out) and network buffer sizes.
-It seems that 2 blocks for network buffer is optimal choice. For the sound card
-buffer, try to make them as short as possible by watching the LEDs below the 
-levelers (they should stay green) and the timing standard deviation (should be
-as low as approx. 0.5 ms).
+It seems that 2 blocks for network buffer is an optimal choice. For the sound card
+buffer, try to make them as short as possible by watching the LEDs below the
+levelers (they should stay green).
 
 For test purpose it is possible to run server and client on the same computer. For
-this setup firstly start server and then the client. Type in 127.0.0.1 for the
-IP address in the client.
+this setup first start the server and then the client. Type in 127.0.0.1 for the
+IP address in the client software.
 
 
 EXTERNAL CODE:

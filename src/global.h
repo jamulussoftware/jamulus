@@ -79,7 +79,7 @@
 #define DEF_NET_BUF_SIZE_NUM_BL         5 // number of blocks
 
 // number of ticks of audio in/out buffer sliders
-# define AUD_SLIDER_LENGTH              6
+# define AUD_SLIDER_LENGTH              8
 
 // maximum number of internet connections (channels)
 // if you want to change this paramter, there has to be done code modifications

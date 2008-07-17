@@ -95,11 +95,31 @@ bool CSound::Read ( CVector<short>& psData )
     }
 
     // wait until enough data is available
+    int iWaitCount = 0;
     while ( iBufferPosCapture < iBufferSizeStereo )
     {
-        if ( bBlockingRec && !bCaptureBufferOverrun )
+        if ( bBlockingRec )
 		{
-            WaitForSingleObject ( m_ASIOEvent, INFINITE );
+            if ( !bCaptureBufferOverrun )
+            {
+                // regular case
+                WaitForSingleObject ( m_ASIOEvent, INFINITE );
+            }
+            else
+            {
+                // it seems that the buffers are too small, wait
+                // just one time to avoid CPU to go up to 100% and
+                // then leave this function
+                if ( iWaitCount == 0 )
+                {
+                    WaitForSingleObject ( m_ASIOEvent, INFINITE );
+                    iWaitCount++;
+                }
+                else
+                {
+                    return true;
+                }
+            }
 		}
         else
 		{
@@ -125,7 +145,7 @@ bool CSound::Read ( CVector<short>& psData )
 
         // move all other data in buffer
         const int iLenCopyRegion = iBufferPosCapture - iBufferSizeStereo;
-        for ( i = 0; i < iBufferSizeStereo; i++ )
+        for ( i = 0; i < iLenCopyRegion; i++ )
         {
             psCaptureBuffer[i] = psCaptureBuffer[iBufferSizeStereo + i];
         }
@@ -305,18 +325,6 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
                 iASIOBufferSizeMono = iTrialBufSize;
             }
         }
-
-
-// TEST test if requested buffer size is supported by the audio hardware, if not, fire error
-if ( iASIOBufferSizeMono != iBufferSizeMono )
-{
-    throw CGenErr ( QString ( "Required sound card buffer size of %1 samples "
-        "not supported by the audio hardware." ).arg(iBufferSizeMono) );
-}
-
-// TEST
-//iASIOBufferSizeMono = 256;
-
 
         // prepare input channels
         for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )

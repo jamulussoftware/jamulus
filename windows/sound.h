@@ -47,8 +47,8 @@
 #define MAX_SND_BUF_IN          100
 #define MAX_SND_BUF_OUT         100
 
-#define NUM_SOUND_BUFFERS_IN    1
-#define NUM_SOUND_BUFFERS_OUT   1
+#define NUM_SOUND_BUFFERS_IN    4
+#define NUM_SOUND_BUFFERS_OUT   4
 
 // maximum number of recognized sound cards installed in the system
 #define MAX_NUMBER_SOUND_CARDS  10

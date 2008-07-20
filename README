@@ -72,10 +72,13 @@ This code contains open source code from different sources. The developer(s) wan
 to thank the developer of this code for making their efforts available under open
 source:
 
+- Qt cross-platform application framework: http://trolltech.com
+
 - audio reverberation code: by Perry R. Cook and Gary P. Scavone, 1995 - 2004
 	(taken from "The Synthesis ToolKit in C++ (STK)")
 
 - IMA-ADPCM: by Erik de Castro Lopo
 
 - some parts are taken from the project "Dream: a PC-based Digital Radio Mondiale
-	(DRM) receiver" written by one of the llcon authors, Volker Fischer
+	(DRM) receiver" written by one of the llcon authors, Volker Fischer:
+	http://drm.sf.net

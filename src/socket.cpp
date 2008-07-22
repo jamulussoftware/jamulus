@@ -26,35 +26,29 @@
 
 
 /* Implementation *************************************************************/
-void CSocket::Init()
+void CSocket::Init ( const quint16 iPortNumber )
 {
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
 
     // initialize the listening socket
     bool bSuccess = SocketDevice.bind (
-        QHostAddress ( QHostAddress::Any ), LLCON_PORT_NUMBER );
+        QHostAddress ( QHostAddress::Any ), iPortNumber );
 
-    if ( bIsClient )
+    // if no success, try if server is on same machine (only for client)
+    if ( ( !bSuccess ) && bIsClient )
     {
-        // if no success, try if server is on same machine (only for client)
-        if ( !bSuccess )
-        {
-            // if server and client is on same machine, decrease port number by
-            // one by definition
-            bSuccess = SocketDevice.bind (
-                QHostAddress( QHostAddress::Any ), LLCON_PORT_NUMBER - 1 );
-        }
+        // if server and client is on same machine, decrease port number by
+        // one by definition
+        bSuccess = SocketDevice.bind (
+            QHostAddress( QHostAddress::Any ), iPortNumber - 1 );
     }
 
     if ( !bSuccess )
     {
-        // show error message
-        QMessageBox::critical ( 0, "Network Error", "Cannot bind the socket.",
-            QMessageBox::Ok, QMessageBox::NoButton );
-
-        // exit application
-        exit ( 1 );
+        // we cannot bind socket, throw error
+        throw CGenErr ( "Cannot bind the socket (maybe "
+            "the software is already running).", "Network Error" );
     }
 
     // connect the "activated" signal

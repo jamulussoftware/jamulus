@@ -198,7 +198,7 @@ void CClient::run()
         // problem: how to catch errors in a different thread...?
 
         // quick hack solution
-        QMessageBox::critical ( 0, APP_NAME, generr.strError, "Quit", 0 );
+        QMessageBox::critical ( 0, APP_NAME, generr.GetErrorText(), "Quit", 0 );
         exit ( 0 );
     }
 

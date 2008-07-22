@@ -46,18 +46,18 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket(CChannel* pNewChannel) : pChannel(pNewChannel), bIsClient(true)
+    CSocket ( CChannel* pNewChannel ) : pChannel(  pNewChannel ), bIsClient ( true )
         { Init(); }
-    CSocket(CChannelSet* pNewChannelSet, QObject* pNServP) :
-        pChannelSet(pNewChannelSet), pServer ( pNServP ), bIsClient(false)
-        { Init(); }
+    CSocket ( CChannelSet* pNewChannelSet, QObject* pNServP, const quint16 iPortNumber ) :
+        pChannelSet(pNewChannelSet), pServer ( pNServP ), bIsClient ( false )
+        { Init ( iPortNumber ); }
     virtual ~CSocket() {}
 
     void SendPacket ( const CVector<unsigned char>& vecbySendBuf,
                       const CHostAddress& HostAddr );
 
 protected:
-    void Init();
+    void Init ( const quint16 iPortNumber = LLCON_PORT_NUMBER );
 
     QUdpSocket              SocketDevice;
 

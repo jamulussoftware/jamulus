@@ -40,11 +40,13 @@ QDialog* pMainWindow = NULL;
 int main ( int argc, char** argv )
 {
 	std::string strArgument;
+    double      rDbleArgument;
 
     /* check if server or client application shall be started */
     bool        bIsClient         = true;
     bool        bUseGUI           = true;
     bool        bUseServerLogging = false;
+    quint16     iPortNumber       = LLCON_PORT_NUMBER;
 	std::string strIniFileName    = "";
 
 	/* QT docu: argv()[0] is the program name, argv()[1] is the first
@@ -56,9 +58,7 @@ int main ( int argc, char** argv )
 		if ( GetFlagArgument ( argc, argv, i, "-s", "--server" ) )
 		{
 			bIsClient = false;
-
-cerr << "server ";
-
+            cerr << "server mode chosen" << std::endl;
 			continue;
 		}
 
@@ -66,9 +66,7 @@ cerr << "server ";
 		if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) )
 		{
 			bUseGUI = false;
-
-cerr << "nogui ";
-
+            cerr << "no GUI mode chosen" << std::endl;
 			continue;
 		}
 
@@ -76,9 +74,16 @@ cerr << "nogui ";
 		if ( GetFlagArgument ( argc, argv, i, "-l", "--log" ) )
 		{
 			bUseServerLogging = true;
+            cerr << "logging enabled" << std::endl;
+			continue;
+		}
 
-cerr << "logging ";
-
+		/* Port number ------------------------------------------------------------ */
+		if ( GetNumericArgument ( argc, argv, i, "-p", "--port",
+                                  0, 65535, rDbleArgument ) )
+		{
+			iPortNumber = static_cast<quint16> ( rDbleArgument );
+            cerr << "selected port number: " << iPortNumber << std::endl;
 			continue;
 		}
 
@@ -150,7 +155,7 @@ cerr << "logging ";
         {
             // server
             // actual server object
-            CServer Server ( bUseServerLogging );
+            CServer Server ( bUseServerLogging, iPortNumber );
 
             if ( bUseGUI )
             {
@@ -179,11 +184,11 @@ cerr << "logging ";
         // show generic error
         if ( bUseGUI )
         {
-            QMessageBox::critical ( 0, APP_NAME, generr.strError, "Quit", 0 );
+            QMessageBox::critical ( 0, APP_NAME, generr.GetErrorText(), "Quit", 0 );
         }
         else
         {
-            qDebug() << generr.strError;
+            qDebug() << generr.GetErrorText();
         }
     }
 

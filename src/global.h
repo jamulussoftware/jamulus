@@ -144,8 +144,25 @@ typedef unsigned int                    _MESSAGE_IDENT;
 class CGenErr
 {
 public:
-    CGenErr ( QString strNE ) : strError ( strNE ) {}
-    QString strError;
+    CGenErr ( QString strNewErrorMsg, QString strNewErrorType = "" ) :
+        strErrorMsg ( strNewErrorMsg ), strErrorType ( strNewErrorType ) {}
+
+    QString GetErrorText()
+    {
+        // return formatted error text
+        if ( strErrorType.isEmpty() )
+        {
+            return strErrorMsg;
+        }
+        else
+        {
+            return strErrorType + ": " + strErrorMsg;
+        }
+    }
+
+protected:
+    QString strErrorType;
+    QString strErrorMsg;
 };
 
 class CLlconEvent : public QEvent

@@ -26,7 +26,8 @@
 
 
 /* Implementation *************************************************************/
-CServer::CServer ( const bool bUseLogging ) : Socket ( &ChannelSet, this )
+CServer::CServer ( const bool bUseLogging, const quint16 iPortNumber ) :
+    Socket ( &ChannelSet, this, iPortNumber )
 {
     vecsSendData.Init ( MIN_BLOCK_SIZE_SAMPLES );
 

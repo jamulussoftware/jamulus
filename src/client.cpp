@@ -87,6 +87,18 @@ void CClient::OnNewConnection()
 bool CClient::SetServerAddr ( QString strNAddr )
 {
     QHostAddress InetAddr;
+    quint16      iNetPort = LLCON_PORT_NUMBER;
+
+    // parse input address for the type [IP address]:[port number]
+    QString strPort = strNAddr.section ( ":", 1, 1 );
+    if ( !strPort.isEmpty() )
+    {
+        // a colon is present in the address string, try to extract port number
+        iNetPort = strPort.toInt();
+
+        // extract address port before colon (should be actual internet address)
+        strNAddr = strNAddr.section ( ":", 0, 0 );
+    }
 
     // first try if this is an IP number an can directly applied to QHostAddress
     if ( !InetAddr.setAddress ( strNAddr ) )
@@ -111,7 +123,7 @@ bool CClient::SetServerAddr ( QString strNAddr )
     }
 
     // apply address (the server port is fixed and always the same)
-    Channel.SetAddress ( CHostAddress ( InetAddr, LLCON_PORT_NUMBER ) );
+    Channel.SetAddress ( CHostAddress ( InetAddr, iNetPort ) );
 
     return true;
 }

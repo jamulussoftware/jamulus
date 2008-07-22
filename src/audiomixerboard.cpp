@@ -134,10 +134,6 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) : QFra
     QObject::connect(vecpChanFader[3],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh3(double)));
     QObject::connect(vecpChanFader[4],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh4(double)));
     QObject::connect(vecpChanFader[5],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh5(double)));
-    QObject::connect(vecpChanFader[6],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh6(double)));
-    QObject::connect(vecpChanFader[7],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh7(double)));
-    QObject::connect(vecpChanFader[8],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh8(double)));
-    QObject::connect(vecpChanFader[9],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh9(double)));
 }
 
 void CAudioMixerBoard::HideAll()

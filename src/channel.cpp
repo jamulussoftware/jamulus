@@ -45,10 +45,6 @@ CChannelSet::CChannelSet()
     QObject::connect(&vecChannels[3],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh3(CVector<uint8_t>)));
     QObject::connect(&vecChannels[4],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh4(CVector<uint8_t>)));
     QObject::connect(&vecChannels[5],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh5(CVector<uint8_t>)));
-    QObject::connect(&vecChannels[6],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh6(CVector<uint8_t>)));
-    QObject::connect(&vecChannels[7],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh7(CVector<uint8_t>)));
-    QObject::connect(&vecChannels[8],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh8(CVector<uint8_t>)));
-    QObject::connect(&vecChannels[9],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh9(CVector<uint8_t>)));
 
     // request jitter buffer size
     QObject::connect(&vecChannels[0],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh0()));
@@ -57,10 +53,6 @@ CChannelSet::CChannelSet()
     QObject::connect(&vecChannels[3],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh3()));
     QObject::connect(&vecChannels[4],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh4()));
     QObject::connect(&vecChannels[5],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh5()));
-    QObject::connect(&vecChannels[6],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh6()));
-    QObject::connect(&vecChannels[7],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh7()));
-    QObject::connect(&vecChannels[8],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh8()));
-    QObject::connect(&vecChannels[9],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh9()));
 
     // request connected clients list
     QObject::connect(&vecChannels[0],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh0()));
@@ -69,10 +61,6 @@ CChannelSet::CChannelSet()
     QObject::connect(&vecChannels[3],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh3()));
     QObject::connect(&vecChannels[4],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh4()));
     QObject::connect(&vecChannels[5],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh5()));
-    QObject::connect(&vecChannels[6],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh6()));
-    QObject::connect(&vecChannels[7],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh7()));
-    QObject::connect(&vecChannels[8],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh8()));
-    QObject::connect(&vecChannels[9],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh9()));
 
     // channel name has changed
     QObject::connect(&vecChannels[0],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh0()));
@@ -81,10 +69,6 @@ CChannelSet::CChannelSet()
     QObject::connect(&vecChannels[3],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh3()));
     QObject::connect(&vecChannels[4],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh4()));
     QObject::connect(&vecChannels[5],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh5()));
-    QObject::connect(&vecChannels[6],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh6()));
-    QObject::connect(&vecChannels[7],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh7()));
-    QObject::connect(&vecChannels[8],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh8()));
-    QObject::connect(&vecChannels[9],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh9()));
 }
 
 CVector<CChannelShortInfo> CChannelSet::CreateChannelList()

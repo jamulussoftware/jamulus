@@ -85,7 +85,7 @@
 // if you want to change this paramter, there has to be done code modifications
 // on other places, too! The code tag "MAX_NUM_CHANNELS_TAG" shows these places
 // (just search for the tag in the entire code)
-#define MAX_NUM_CHANNELS                10 // max number channels for server
+#define MAX_NUM_CHANNELS                6 // max number channels for server
 
 // sample rate offset estimation algorithm
 // time interval for sample rate offset estimation

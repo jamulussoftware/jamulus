@@ -105,10 +105,6 @@ public slots:
     void OnValueChangedCh3 ( double dValue ) { emit ChangeChanGain ( 3, dValue ); }
     void OnValueChangedCh4 ( double dValue ) { emit ChangeChanGain ( 4, dValue ); }
     void OnValueChangedCh5 ( double dValue ) { emit ChangeChanGain ( 5, dValue ); }
-    void OnValueChangedCh6 ( double dValue ) { emit ChangeChanGain ( 6, dValue ); }
-    void OnValueChangedCh7 ( double dValue ) { emit ChangeChanGain ( 7, dValue ); }
-    void OnValueChangedCh8 ( double dValue ) { emit ChangeChanGain ( 8, dValue ); }
-    void OnValueChangedCh9 ( double dValue ) { emit ChangeChanGain ( 9, dValue ); }
 
 signals:
     void ChangeChanGain ( int iId, double dGain );

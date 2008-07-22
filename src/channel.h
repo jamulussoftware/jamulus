@@ -253,10 +253,6 @@ public slots:
     void OnSendProtMessCh3(CVector<uint8_t> mess) {emit MessReadyForSending(3,mess);}
     void OnSendProtMessCh4(CVector<uint8_t> mess) {emit MessReadyForSending(4,mess);}
     void OnSendProtMessCh5(CVector<uint8_t> mess) {emit MessReadyForSending(5,mess);}
-    void OnSendProtMessCh6(CVector<uint8_t> mess) {emit MessReadyForSending(6,mess);}
-    void OnSendProtMessCh7(CVector<uint8_t> mess) {emit MessReadyForSending(7,mess);}
-    void OnSendProtMessCh8(CVector<uint8_t> mess) {emit MessReadyForSending(8,mess);}
-    void OnSendProtMessCh9(CVector<uint8_t> mess) {emit MessReadyForSending(9,mess);}
 
     void OnNewConnectionCh0() {vecChannels[0].CreateReqJitBufMes();}
     void OnNewConnectionCh1() {vecChannels[1].CreateReqJitBufMes();}
@@ -264,10 +260,6 @@ public slots:
     void OnNewConnectionCh3() {vecChannels[3].CreateReqJitBufMes();}
     void OnNewConnectionCh4() {vecChannels[4].CreateReqJitBufMes();}
     void OnNewConnectionCh5() {vecChannels[5].CreateReqJitBufMes();}
-    void OnNewConnectionCh6() {vecChannels[6].CreateReqJitBufMes();}
-    void OnNewConnectionCh7() {vecChannels[7].CreateReqJitBufMes();}
-    void OnNewConnectionCh8() {vecChannels[8].CreateReqJitBufMes();}
-    void OnNewConnectionCh9() {vecChannels[9].CreateReqJitBufMes();}
 
     void OnReqConnClientsListCh0() { CreateAndSendChanListForThisChan ( 0 ); }
     void OnReqConnClientsListCh1() { CreateAndSendChanListForThisChan ( 1 ); }
@@ -275,10 +267,6 @@ public slots:
     void OnReqConnClientsListCh3() { CreateAndSendChanListForThisChan ( 3 ); }
     void OnReqConnClientsListCh4() { CreateAndSendChanListForThisChan ( 4 ); }
     void OnReqConnClientsListCh5() { CreateAndSendChanListForThisChan ( 5 ); }
-    void OnReqConnClientsListCh6() { CreateAndSendChanListForThisChan ( 6 ); }
-    void OnReqConnClientsListCh7() { CreateAndSendChanListForThisChan ( 7 ); }
-    void OnReqConnClientsListCh8() { CreateAndSendChanListForThisChan ( 8 ); }
-    void OnReqConnClientsListCh9() { CreateAndSendChanListForThisChan ( 9 ); }
 
     void OnNameHasChangedCh0() { CreateAndSendChanListForAllConChannels(); }
     void OnNameHasChangedCh1() { CreateAndSendChanListForAllConChannels(); }
@@ -286,10 +274,6 @@ public slots:
     void OnNameHasChangedCh3() { CreateAndSendChanListForAllConChannels(); }
     void OnNameHasChangedCh4() { CreateAndSendChanListForAllConChannels(); }
     void OnNameHasChangedCh5() { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh6() { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh7() { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh8() { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh9() { CreateAndSendChanListForAllConChannels(); }
 
 signals:
     void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );

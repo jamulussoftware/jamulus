@@ -69,6 +69,14 @@ CChannelSet::CChannelSet()
     QObject::connect(&vecChannels[3],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh3()));
     QObject::connect(&vecChannels[4],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh4()));
     QObject::connect(&vecChannels[5],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh5()));
+
+    // chate text received
+    QObject::connect(&vecChannels[0],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh0()));
+    QObject::connect(&vecChannels[1],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh1()));
+    QObject::connect(&vecChannels[2],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh2()));
+    QObject::connect(&vecChannels[3],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh3()));
+    QObject::connect(&vecChannels[4],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh4()));
+    QObject::connect(&vecChannels[5],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh5()));
 }
 
 CVector<CChannelShortInfo> CChannelSet::CreateChannelList()
@@ -103,6 +111,19 @@ void CChannelSet::CreateAndSendChanListForAllConChannels()
         {
             // send message
             vecChannels[i].CreateConClientListMes ( vecChanInfo );
+        }
+    }
+}
+
+void CChannelSet::CreateAndSendChatTextForAllConChannels ( const QString& strName )
+{
+    // send chat text to all connected clients
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            // send message
+            vecChannels[i].CreateChatTextMes ( strName );
         }
     }
 }
@@ -435,6 +456,9 @@ CChannel::CChannel() : sName ( "" ),
 
     QObject::connect( &Protocol, SIGNAL ( ChangeChanName ( QString ) ),
         this, SLOT ( OnChangeChanName ( QString ) ) );
+
+    QObject::connect( &Protocol, SIGNAL ( ChatTextReceived ( QString ) ),
+        this, SIGNAL ( ChatTextReceived ( QString ) ) );
 }
 
 void CChannel::SetEnable ( const bool bNEnStat )

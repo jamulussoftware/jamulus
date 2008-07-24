@@ -101,6 +101,12 @@ void CSettings::ReadIniFile ( const QString& sFileName )
         pClient->SetNetwBufSizeFactIn ( iValue );
     }
 
+    // network buffer size factor out
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "netwbusifactout", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) )
+    {
+        pClient->SetNetwBufSizeFactOut ( iValue );
+    }
+
     // flag whether the chat window shall be opened on a new chat message
     if ( GetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage", bValue ) )
 	{

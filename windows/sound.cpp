@@ -356,9 +356,11 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
 		    ASIOGetChannelInfo ( &channelInfos[i] );
 
             // only 16 bit is supported
-            if ( channelInfos[i].type != ASIOSTInt16LSB )
+            if ( ( channelInfos[i].type != ASIOSTInt16LSB ) &&
+                 ( channelInfos[i].type != ASIOSTInt24LSB ) &&
+                 ( channelInfos[i].type != ASIOSTInt32LSB ) )
             {
-                throw CGenErr ( "Required audio sample format not available (16 bit LSB)." );
+                throw CGenErr ( "Required audio sample format not available (16/24/32 bit LSB)." );
             }
 	    }
 
@@ -593,13 +595,44 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
                 // first check if space in buffer is available
                 if ( !bCaptureBufferOverrun )
                 {
-                    // copy new captured block in thread transfer buffer
-                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
-                    {
-                        // copy mono data interleaved in stereo buffer
-                        psCaptureBuffer[iBufferPosCapture + 
-                            2 * iCurSample + bufferInfos[i].channelNum] =
-                            ((short*) bufferInfos[i].buffers[index])[iCurSample];
+                    // copy new captured block in thread transfer buffer (copy
+                    // mono data interleaved in stereo buffer)
+		            switch ( channelInfos[i].type )
+		            {
+		            case ASIOSTInt16LSB:
+                        for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+                        {
+                            psCaptureBuffer[iBufferPosCapture + 
+                                2 * iCurSample + bufferInfos[i].channelNum] =
+                                ((short*) bufferInfos[i].buffers[index])[iCurSample];
+                        }
+			            break;
+
+		            case ASIOSTInt24LSB:
+
+// not yet tested, horrible things might happen with the following code ;-)
+
+                        for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+                        {
+                            // convert current sample in 16 bit format
+                            int iCurSam = 0;
+                            memcpy ( &iCurSam, ((char*) bufferInfos[i].buffers[index]) + iCurSample * 3, 3);
+                            iCurSam >>= 8;
+
+                            psCaptureBuffer[iBufferPosCapture + 
+                                2 * iCurSample + bufferInfos[i].channelNum] = static_cast<short> ( iCurSam );
+                        }
+			            break;
+
+		            case ASIOSTInt32LSB:
+                        for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+                        {
+                            // convert to 16 bit
+                            psCaptureBuffer[iBufferPosCapture + 
+                                2 * iCurSample + bufferInfos[i].channelNum] =
+                                (((int*) bufferInfos[i].buffers[index])[iCurSample] >> 16);
+                        }
+			            break;
                     }
                 }
 		    }
@@ -608,12 +641,40 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
                 // PLAYBACK ----------------------------------------------------
                 if ( !bPlayBufferUnderrun )
                 {
-                    // copy data from sound card in output buffer
-                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
-	                {
-                        // copy interleaved stereo data in mono sound card buffer
-                        ((short*) bufferInfos[i].buffers[index])[iCurSample] =
-                            psPlayBuffer[2 * iCurSample + bufferInfos[i].channelNum];
+                    // copy data from sound card in output buffer (copy
+                    // interleaved stereo data in mono sound card buffer)
+		            switch ( channelInfos[i].type )
+		            {
+		            case ASIOSTInt16LSB:
+                        for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+	                    {
+                            ((short*) bufferInfos[i].buffers[index])[iCurSample] =
+                                psPlayBuffer[2 * iCurSample + bufferInfos[i].channelNum];
+                        }
+			            break;
+
+		            case ASIOSTInt24LSB:
+
+// not yet tested, horrible things might happen with the following code ;-)
+
+                        for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+	                    {
+                            // convert current sample in 24 bit format
+                            int iCurSam = static_cast<int> ( psPlayBuffer[2 * iCurSample + bufferInfos[i].channelNum] );
+                            iCurSam <<= 8;
+
+                            memcpy ( ((char*) bufferInfos[i].buffers[index]) + iCurSample * 3, &iCurSam, 3);
+                        }
+			            break;
+
+		            case ASIOSTInt32LSB:
+		                for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+	                    {
+                            // convert to 32 bit
+                            int iCurSam = static_cast<int> ( psPlayBuffer[2 * iCurSample + bufferInfos[i].channelNum] );
+                            ((int*) bufferInfos[i].buffers[index])[iCurSample] = ( iCurSam << 16 );
+                        }
+                        break;
 	                }
                 }
             }

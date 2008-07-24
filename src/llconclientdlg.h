@@ -38,6 +38,7 @@
 #include "multicolorled.h"
 #include "audiomixerboard.h"
 #include "clientsettingsdlg.h"
+#include "chatdlg.h"
 #ifdef _WIN32
 # include "../windows/moc/llconclientdlgbase.h"
 #else
@@ -72,6 +73,8 @@ public:
     virtual ~CLlconClientDlg();
 
 protected:
+    void                    ShowChatWindow();
+
     CClient*                pClient;
     bool                    bConnected;
     QTimer                  TimerSigMet;
@@ -85,12 +88,14 @@ protected:
     QMenuBar*               pMenu;
 
     CClientSettingsDlg      ClientSettingsDlg;
+    CChatDlg                ChatDlg;
 
 public slots:
     void OnConnectDisconBut();
     void OnTimerSigMet();
     void OnTimerStatus() { UpdateDisplay(); }
     void OnOpenGeneralSettings();
+    void OnOpenChatDialog() { ShowChatWindow(); }
     void OnSliderAudInFader ( int value ) { pClient->SetAudioInFader ( value ); }
     void OnSliderAudReverb ( int value ) { pClient->SetReverbLevel ( value ); }
     void OnRevSelL() { pClient->SetReverbOnLeftChan ( true ); }
@@ -100,4 +105,7 @@ public slots:
     void OnChangeChanGain ( int iId, double dGain )
         { pClient->SetRemoteChanGain ( iId, dGain ); }
     void OnFaderTagTextChanged ( const QString& strNewName );
+    void OnChatTextReceived ( QString strChatText );
+    void OnNewLocalInputText ( QString strChatText )
+        { pClient->SendTextMess ( strChatText ); }
 };

@@ -28,7 +28,8 @@
 /* Implementation *************************************************************/
 CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
     : pClient ( pNCliP ), QDialog ( parent ),
-    ClientSettingsDlg ( pNCliP, parent, Qt::WindowMinMaxButtonsHint )
+    ClientSettingsDlg ( pNCliP, parent, Qt::WindowMinMaxButtonsHint ),
+    ChatDlg ( parent, Qt::WindowMinMaxButtonsHint )
 {
     setupUi ( this );
 
@@ -138,7 +139,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
 
 
     // Settings menu  ----------------------------------------------------------
-    pSettingsMenu = new QMenu ( "&Settings", this );
+    pSettingsMenu = new QMenu ( "&View", this );
+    pSettingsMenu->addAction ( tr ( "&Chat..." ), this,
+        SLOT ( OnOpenChatDialog() ) );
     pSettingsMenu->addAction ( tr ( "&General Settings..." ), this,
         SLOT ( OnOpenGeneralSettings() ) );
 
@@ -187,8 +190,13 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
     QObject::connect ( pClient,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
         this, SLOT ( OnConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
+    QObject::connect ( pClient,
+        SIGNAL ( ChatTextReceived ( QString ) ),
+        this, SLOT ( OnChatTextReceived ( QString ) ) );
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
+    QObject::connect ( &ChatDlg, SIGNAL ( NewLocalInputText ( QString ) ),
+        this, SLOT ( OnNewLocalInputText ( QString ) ) );
 
 
     // Timers ------------------------------------------------------------------
@@ -207,8 +215,9 @@ CLlconClientDlg::~CLlconClientDlg()
 
 void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
 {
-    // if settings dialog is open, close it
+    // if settings dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
+    ChatDlg.close();
 
     // store IP address
     pClient->strIPAddress = LineEditServerAddr->text();
@@ -273,6 +282,27 @@ void CLlconClientDlg::OnOpenGeneralSettings()
     ClientSettingsDlg.activateWindow();
 }
 
+void CLlconClientDlg::OnChatTextReceived ( QString strChatText )
+{
+    ChatDlg.AddChatText ( strChatText );
+
+    // if requested, open window
+    if ( pClient->GetOpenChatOnNewMessage() )
+    {
+        ShowChatWindow();
+    }
+}
+
+void CLlconClientDlg::ShowChatWindow()
+{
+    // open chat dialog
+    ChatDlg.show();
+
+    // make sure dialog is upfront and has focus
+    ChatDlg.raise();
+    ChatDlg.activateWindow();
+}
+
 void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
 {
     // refresh internal name parameter
@@ -318,7 +348,7 @@ void CLlconClientDlg::OnTimerSigMet()
 void CLlconClientDlg::UpdateDisplay()
 {
     // show connection status in status bar
-    if ( pClient->IsConnected () && pClient->IsRunning () )
+    if ( pClient->IsConnected() && pClient->IsRunning() )
     {
         TextLabelStatus->setText ( tr ( "connected" ) );
     }

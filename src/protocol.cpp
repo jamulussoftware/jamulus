@@ -603,10 +603,10 @@ void CProtocol::CreateChanNameMes ( const QString strName )
     CreateAndSendMessage ( PROTMESSID_CHANNEL_NAME, vecData );
 }
 
-void CProtocol::CreateChatTextMes ( const QString strName )
+void CProtocol::CreateChatTextMes ( const QString strChatText )
 {
     unsigned int  iPos = 0; // init position pointer
-    const int     iStrLen = strName.size(); // get string size
+    const int     iStrLen = strChatText.size(); // get string size
 
     // size of current list entry
     const int iEntrLen = 2 /* str. size */ + iStrLen;
@@ -622,7 +622,7 @@ void CProtocol::CreateChatTextMes ( const QString strName )
     {
         // byte-by-byte copying of the string data
         PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( strName[j].toAscii() ), 1 );
+            static_cast<uint32_t> ( strChatText[j].toAscii() ), 1 );
     }
 
     CreateAndSendMessage ( PROTMESSID_CHAT_TEXT, vecData );
@@ -654,16 +654,16 @@ void CProtocol::EvaluateChatTextMes ( unsigned int iPos, const CVector<uint8_t>&
         static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // name string (n bytes)
-    QString strName = "";
+    QString strChatText = "";
     for ( int j = 0; j < iStrLen; j++ )
     {
         // byte-by-byte copying of the string data
         int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
-        strName += QString ( (char*) &iData );
+        strChatText += QString ( (char*) &iData );
     }
 
     // invoke message action
-    emit ChatTextReceived ( strName );
+    emit ChatTextReceived ( strChatText );
 }
 
 

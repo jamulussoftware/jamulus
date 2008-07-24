@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -75,6 +75,9 @@ public:
        the sqaure root. */
     double GetTimingStdDev() { return sqrt ( RespTimeMoAvBuf.GetAverage() ); }
 
+    bool GetOpenChatOnNewMessage() { return bOpenChatOnNewMessage; }
+    void SetOpenChatOnNewMessage ( const bool bNV ) { bOpenChatOnNewMessage = bNV; }
+
     int GetAudioInFader() { return iAudioInFader; }
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
@@ -98,7 +101,6 @@ public:
     }
     int GetSockBufSize() { return Channel.GetSockBufSize(); }
 
-
     void SetNetwBufSizeFactIn ( const int iNewNetNetwBlSiFactIn )
     {
         // store value and tell the server about new value
@@ -118,6 +120,9 @@ public:
         { Channel.SetRemoteChanGain ( iId, dGain ); }
 
     void SetRemoteName() { Channel.SetRemoteName ( strName ); }
+
+    void SendTextMess ( const QString& strChatText )
+        { Channel.CreateChatTextMes ( strChatText ); }
 
     CSound*   GetSndInterface() { return &Sound; }
     CChannel* GetChannel()      { return &Channel; }
@@ -151,6 +156,8 @@ protected:
 
     int                 iNetwBufSizeFactIn;
 
+    bool                bOpenChatOnNewMessage;
+
     CVector<short>      vecsAudioSndCrd;
     CVector<double>     vecdAudioSndCrdL;
     CVector<double>     vecdAudioSndCrdR;
@@ -178,6 +185,7 @@ public slots:
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
+    void ChatTextReceived ( QString strChatText );
 };
 
 

@@ -77,6 +77,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         double ( iCurNetBufSiFactOut * MIN_BLOCK_DURATION_MS), 'f', 2 ) +
         " ms" );
 
+    // "OpenChatOnNewMessage" check box
+    if ( pClient->GetOpenChatOnNewMessage() )
+    {
+        cbOpenChatOnNewMessage->setCheckState ( Qt::Checked );
+    }
+    else
+    {
+        cbOpenChatOnNewMessage->setCheckState ( Qt::Unchecked );
+    }
+
 
     // Connections -------------------------------------------------------------
     // timers
@@ -96,6 +106,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         this, SLOT ( OnSliderNetBufSiFactIn ( int ) ) );
     QObject::connect ( SliderNetBufSiFactOut, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderNetBufSiFactOut ( int ) ) );
+
+    // check boxes
+    QObject::connect ( cbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnOpenChatOnNewMessageStateChanged ( int ) ) );
 
 
     // Timers ------------------------------------------------------------------
@@ -139,6 +153,12 @@ void CClientSettingsDlg::OnSliderNetBufSiFactOut ( int value )
     TextNetBufSiFactOut->setText ( "Out:\n" + QString().setNum (
         double ( value * MIN_BLOCK_DURATION_MS ), 'f', 2 ) +
         " ms" );
+    UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
+{
+    pClient->SetOpenChatOnNewMessage ( value == Qt::Checked );
     UpdateDisplay();
 }
 

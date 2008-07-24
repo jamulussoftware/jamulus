@@ -304,6 +304,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\chatdlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\client.cpp"
 				>
 				<FileConfiguration

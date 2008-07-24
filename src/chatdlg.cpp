@@ -30,7 +30,25 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f )
 {
     setupUi ( this );
 
+    // clear chat window and edit line
+    TextViewChatWindow->clear();
+    lineEditLocalInputText->clear();
+
 
     // Connections -------------------------------------------------------------
+    QObject::connect ( lineEditLocalInputText, SIGNAL ( returnPressed() ),
+        this, SLOT ( OnNewLocalInputText() ) );
+}
 
+void CChatDlg::OnNewLocalInputText()
+{
+    // send new text and clear line afterwards
+    emit NewLocalInputText ( lineEditLocalInputText->text() );
+    lineEditLocalInputText->clear();
+}
+
+void CChatDlg::AddChatText ( QString strChatText )
+{
+    // add new text in chat window
+    TextViewChatWindow->append ( strChatText );
 }

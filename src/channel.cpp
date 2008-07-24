@@ -71,12 +71,12 @@ CChannelSet::CChannelSet()
     QObject::connect(&vecChannels[5],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh5()));
 
     // chate text received
-    QObject::connect(&vecChannels[0],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh0()));
-    QObject::connect(&vecChannels[1],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh1()));
-    QObject::connect(&vecChannels[2],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh2()));
-    QObject::connect(&vecChannels[3],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh3()));
-    QObject::connect(&vecChannels[4],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh4()));
-    QObject::connect(&vecChannels[5],SIGNAL(ChatTextReceived()),this,SLOT(OnChatTextReceivedCh5()));
+    QObject::connect(&vecChannels[0],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh0(QString)));
+    QObject::connect(&vecChannels[1],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh1(QString)));
+    QObject::connect(&vecChannels[2],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh2(QString)));
+    QObject::connect(&vecChannels[3],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh3(QString)));
+    QObject::connect(&vecChannels[4],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh4(QString)));
+    QObject::connect(&vecChannels[5],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh5(QString)));
 }
 
 CVector<CChannelShortInfo> CChannelSet::CreateChannelList()
@@ -115,7 +115,7 @@ void CChannelSet::CreateAndSendChanListForAllConChannels()
     }
 }
 
-void CChannelSet::CreateAndSendChatTextForAllConChannels ( const QString& strName )
+void CChannelSet::CreateAndSendChatTextForAllConChannels ( const QString& strChatText )
 {
     // send chat text to all connected clients
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
@@ -123,7 +123,7 @@ void CChannelSet::CreateAndSendChatTextForAllConChannels ( const QString& strNam
         if ( vecChannels[i].IsConnected() )
         {
             // send message
-            vecChannels[i].CreateChatTextMes ( strName );
+            vecChannels[i].CreateChatTextMes ( strChatText );
         }
     }
 }

@@ -71,4 +71,5 @@ public slots:
     void OnSliderNetBuf ( int value );
     void OnSliderNetBufSiFactIn ( int value );
     void OnSliderNetBufSiFactOut ( int value );
+    void OnOpenChatOnNewMessageStateChanged ( int value );
 };

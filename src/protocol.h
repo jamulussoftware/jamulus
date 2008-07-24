@@ -71,7 +71,7 @@ public:
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
     void CreateChanGainMes ( const int iChanID, const double dGain );
     void CreateChanNameMes ( const QString strName );
-    void CreateChatTextMes ( const QString strName );
+    void CreateChatTextMes ( const QString strChatText );
 
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
 
@@ -164,7 +164,7 @@ signals:
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ChangeChanGain ( int iChanID, double dNewGain );
     void ChangeChanName ( QString strName );
-    void ChatTextReceived ( QString strName );
+    void ChatTextReceived ( QString strChatText );
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ReqJittBufSize();
     void ReqConnClientsList();

@@ -43,4 +43,12 @@ class CChatDlg : public QDialog, private Ui_CChatDlgBase
 
 public:
     CChatDlg ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+
+    void AddChatText ( QString strChatText );
+
+public slots:
+    void OnNewLocalInputText();
+
+signals:
+    void NewLocalInputText ( QString strNewText );
 };

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>535</width>
-    <height>397</height>
+    <width>360</width>
+    <height>405</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -82,9 +82,9 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>TextViewChatWindow</tabstop>
   <tabstop>lineEditLocalInputText</tabstop>
   <tabstop>buttonClose</tabstop>
+  <tabstop>TextViewChatWindow</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc" />

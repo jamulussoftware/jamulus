@@ -31,7 +31,8 @@ CClient::CClient() : bRun ( false ), Socket ( &Channel ),
     iReverbLevel ( AUD_REVERB_MAX / 6 ),
     bReverbOnLeftChan ( false ),
     iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR ),
-    strIPAddress ( "" ), strName ( "" )
+    strIPAddress ( "" ), strName ( "" ),
+    bOpenChatOnNewMessage ( true )
 {
     // connection for protocol
     QObject::connect ( &Channel,
@@ -50,6 +51,9 @@ CClient::CClient() : bRun ( false ), Socket ( &Channel ),
 
     QObject::connect ( &Channel, SIGNAL ( NewConnection() ),
         this, SLOT ( OnNewConnection() ) );
+
+    QObject::connect ( &Channel, SIGNAL ( ChatTextReceived ( QString ) ),
+        this, SIGNAL ( ChatTextReceived ( QString ) ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )

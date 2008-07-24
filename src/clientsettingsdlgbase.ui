@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>469</width>
-    <height>268</height>
+    <width>425</width>
+    <height>271</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -19,21 +19,6 @@
    <bool>true</bool>
   </property>
   <layout class="QHBoxLayout" >
-   <property name="spacing" >
-    <number>6</number>
-   </property>
-   <property name="leftMargin" >
-    <number>9</number>
-   </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>9</number>
-   </property>
    <item>
     <widget class="QGroupBox" name="GroupBoxJitterBuffer" >
      <property name="title" >
@@ -735,24 +720,42 @@
    <item>
     <widget class="QGroupBox" name="GroupBoxMeasureResults" >
      <property name="title" >
-      <string>Debug</string>
+      <string>Misc</string>
      </property>
      <layout class="QVBoxLayout" >
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
+      <item>
+       <widget class="QSplitter" name="splitter" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QCheckBox" name="cbOpenChatOnNewMessage" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>Open chat on new message</string>
+         </property>
+         <property name="wordWrap" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>20</width>
+          <height>71</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item>
        <layout class="QHBoxLayout" >
         <property name="spacing" >
@@ -842,19 +845,6 @@
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </widget>

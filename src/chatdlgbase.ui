@@ -29,7 +29,11 @@
     <widget class="QTextBrowser" name="TextViewChatWindow" />
    </item>
    <item>
-    <widget class="QLineEdit" name="lineEditLocalInputText" />
+    <widget class="QLineEdit" name="lineEditLocalInputText" >
+     <property name="maxLength" >
+      <number>255</number>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QHBoxLayout" >

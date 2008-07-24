@@ -115,19 +115,6 @@ void CChannelSet::CreateAndSendChanListForAllConChannels()
     }
 }
 
-void CChannelSet::CreateAndSendChatTextForAllConChannels ( const QString& strChatText )
-{
-    // send chat text to all connected clients
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-    {
-        if ( vecChannels[i].IsConnected() )
-        {
-            // send message
-            vecChannels[i].CreateChatTextMes ( strChatText );
-        }
-    }
-}
-
 void CChannelSet::CreateAndSendChanListForAllExceptThisChan ( const int iCurChanID )
 {
     // create channel list
@@ -152,6 +139,35 @@ void CChannelSet::CreateAndSendChanListForThisChan ( const int iCurChanID )
 
     // now send connected channels list to the channel with the ID "iCurChanID"
     vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo );
+}
+
+void CChannelSet::CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
+                                                           const QString& strChatText )
+{
+    // create message which is sent to all connected clients -------------------
+    // get client name, if name is empty, use IP address instead
+    QString ChanName = vecChannels[iCurChanID].GetName();
+    if ( ChanName.isEmpty() )
+    {
+        // convert IP address to text and show it
+        const QHostAddress addrTest ( vecChannels[iCurChanID].GetAddress().InetAddr );
+        ChanName = addrTest.toString();
+    }
+
+    // add name of the client at the beginning of the message text
+    const QString strActualMessageText =
+        "<" + ChanName + "> " + strChatText;
+
+
+    // send chat text to all connected clients ---------------------------------
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            // send message
+            vecChannels[i].CreateChatTextMes ( strActualMessageText );
+        }
+    }
 }
 
 int CChannelSet::GetFreeChan()

@@ -239,7 +239,7 @@ protected:
     void CreateAndSendChanListForAllConChannels();
     void CreateAndSendChanListForAllExceptThisChan ( const int iCurChanID );
     void CreateAndSendChanListForThisChan ( const int iCurChanID );
-    void CreateAndSendChatTextForAllConChannels ( const QString& strChatText );
+    void CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText );
 
     /* do not use the vector class since CChannel does not have appropriate
        copy constructor/operator */
@@ -250,19 +250,19 @@ public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
-    void OnSendProtMessCh0(CVector<uint8_t> mess) {emit MessReadyForSending(0,mess);}
-    void OnSendProtMessCh1(CVector<uint8_t> mess) {emit MessReadyForSending(1,mess);}
-    void OnSendProtMessCh2(CVector<uint8_t> mess) {emit MessReadyForSending(2,mess);}
-    void OnSendProtMessCh3(CVector<uint8_t> mess) {emit MessReadyForSending(3,mess);}
-    void OnSendProtMessCh4(CVector<uint8_t> mess) {emit MessReadyForSending(4,mess);}
-    void OnSendProtMessCh5(CVector<uint8_t> mess) {emit MessReadyForSending(5,mess);}
+    void OnSendProtMessCh0 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 0, mess ); }
+    void OnSendProtMessCh1 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 1, mess ); }
+    void OnSendProtMessCh2 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 2, mess ); }
+    void OnSendProtMessCh3 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 3, mess ); }
+    void OnSendProtMessCh4 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 4, mess ); }
+    void OnSendProtMessCh5 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 5, mess ); }
 
-    void OnNewConnectionCh0() {vecChannels[0].CreateReqJitBufMes();}
-    void OnNewConnectionCh1() {vecChannels[1].CreateReqJitBufMes();}
-    void OnNewConnectionCh2() {vecChannels[2].CreateReqJitBufMes();}
-    void OnNewConnectionCh3() {vecChannels[3].CreateReqJitBufMes();}
-    void OnNewConnectionCh4() {vecChannels[4].CreateReqJitBufMes();}
-    void OnNewConnectionCh5() {vecChannels[5].CreateReqJitBufMes();}
+    void OnNewConnectionCh0() { vecChannels[0].CreateReqJitBufMes(); }
+    void OnNewConnectionCh1() { vecChannels[1].CreateReqJitBufMes(); }
+    void OnNewConnectionCh2() { vecChannels[2].CreateReqJitBufMes(); }
+    void OnNewConnectionCh3() { vecChannels[3].CreateReqJitBufMes(); }
+    void OnNewConnectionCh4() { vecChannels[4].CreateReqJitBufMes(); }
+    void OnNewConnectionCh5() { vecChannels[5].CreateReqJitBufMes(); }
 
     void OnReqConnClientsListCh0() { CreateAndSendChanListForThisChan ( 0 ); }
     void OnReqConnClientsListCh1() { CreateAndSendChanListForThisChan ( 1 ); }
@@ -278,12 +278,12 @@ public slots:
     void OnNameHasChangedCh4() { CreateAndSendChanListForAllConChannels(); }
     void OnNameHasChangedCh5() { CreateAndSendChanListForAllConChannels(); }
 
-    void OnChatTextReceivedCh0(QString strChatText) { CreateAndSendChatTextForAllConChannels(strChatText); }
-    void OnChatTextReceivedCh1(QString strChatText) { CreateAndSendChatTextForAllConChannels(strChatText); }
-    void OnChatTextReceivedCh2(QString strChatText) { CreateAndSendChatTextForAllConChannels(strChatText); }
-    void OnChatTextReceivedCh3(QString strChatText) { CreateAndSendChatTextForAllConChannels(strChatText); }
-    void OnChatTextReceivedCh4(QString strChatText) { CreateAndSendChatTextForAllConChannels(strChatText); }
-    void OnChatTextReceivedCh5(QString strChatText) { CreateAndSendChatTextForAllConChannels(strChatText); }
+    void OnChatTextReceivedCh0 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 0, strChatText ); }
+    void OnChatTextReceivedCh1 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 1, strChatText ); }
+    void OnChatTextReceivedCh2 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 2, strChatText ); }
+    void OnChatTextReceivedCh3 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 3, strChatText ); }
+    void OnChatTextReceivedCh4 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 4, strChatText ); }
+    void OnChatTextReceivedCh5 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 5, strChatText ); }
 
 signals:
     void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );

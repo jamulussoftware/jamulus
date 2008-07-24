@@ -92,6 +92,11 @@ MESSAGES
     +------------------+----------------------+
 
 
+- Chat text                                   PROTMESSID_CHAT_TEXT
+
+    +------------------+----------------------+
+    | 2 bytes number n | n bytes UTF-8 string |
+    +------------------+----------------------+
 
 
  *
@@ -360,6 +365,11 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 
                     EvaluateChanNameMes ( iPos, vecData );
                     break;
+
+                case PROTMESSID_CHAT_TEXT:
+
+                    EvaluateChatTextMes ( iPos, vecData );
+                    break;
                 }
 
                 // send acknowledge message
@@ -593,6 +603,31 @@ void CProtocol::CreateChanNameMes ( const QString strName )
     CreateAndSendMessage ( PROTMESSID_CHANNEL_NAME, vecData );
 }
 
+void CProtocol::CreateChatTextMes ( const QString strName )
+{
+    unsigned int  iPos = 0; // init position pointer
+    const int     iStrLen = strName.size(); // get string size
+
+    // size of current list entry
+    const int iEntrLen = 2 /* str. size */ + iStrLen;
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // number of bytes for name string (2 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iStrLen ), 2 );
+
+    // name string (n bytes)
+    for ( int j = 0; j < iStrLen; j++ )
+    {
+        // byte-by-byte copying of the string data
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( strName[j].toAscii() ), 1 );
+    }
+
+    CreateAndSendMessage ( PROTMESSID_CHAT_TEXT, vecData );
+}
+
 void CProtocol::EvaluateChanNameMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
 {
     // number of bytes for name string (2 bytes)
@@ -610,6 +645,25 @@ void CProtocol::EvaluateChanNameMes ( unsigned int iPos, const CVector<uint8_t>&
 
     // invoke message action
     emit ChangeChanName ( strName );
+}
+
+void CProtocol::EvaluateChatTextMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
+{
+    // number of bytes for name string (2 bytes)
+    const int iStrLen =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+    // name string (n bytes)
+    QString strName = "";
+    for ( int j = 0; j < iStrLen; j++ )
+    {
+        // byte-by-byte copying of the string data
+        int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+        strName += QString ( (char*) &iData );
+    }
+
+    // invoke message action
+    emit ChatTextReceived ( strName );
 }
 
 

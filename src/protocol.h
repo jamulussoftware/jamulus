@@ -46,6 +46,7 @@
 #define PROTMESSID_SERVER_FULL              16 // server full message
 #define PROTMESSID_REQ_CONN_CLIENTS_LIST    17 // request connected client list
 #define PROTMESSID_CHANNEL_NAME             18 // set channel name for fader tag
+#define PROTMESSID_CHAT_TEXT                19 // contains a chat text
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -70,6 +71,7 @@ public:
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
     void CreateChanGainMes ( const int iChanID, const double dGain );
     void CreateChanNameMes ( const QString strName );
+    void CreateChatTextMes ( const QString strName );
 
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
 
@@ -138,6 +140,7 @@ protected:
     void EvaluateNetwBlSiFactMes    ( unsigned int iPos, const CVector<uint8_t>& vecData );
     void EvaluateChanGainMes        ( unsigned int iPos, const CVector<uint8_t>& vecData );
     void EvaluateChanNameMes        ( unsigned int iPos, const CVector<uint8_t>& vecData );
+    void EvaluateChatTextMes        ( unsigned int iPos, const CVector<uint8_t>& vecData );
     void EvaluateConClientListMes   ( unsigned int iPos, const CVector<uint8_t>& vecData );
 
     int                     iOldRecID, iOldRecCnt;
@@ -161,6 +164,7 @@ signals:
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ChangeChanGain ( int iChanID, double dNewGain );
     void ChangeChanName ( QString strName );
+    void ChatTextReceived ( QString strName );
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ReqJittBufSize();
     void ReqConnClientsList();

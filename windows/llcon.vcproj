@@ -637,6 +637,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\moc\moc_chatdlg.cpp"
+					>
+				</File>
+				<File
 					RelativePath="moc\moc_client.cpp"
 					>
 					<FileConfiguration
@@ -928,6 +932,10 @@
 			</File>
 			<File
 				RelativePath="..\src\channel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\chatdlg.h"
 				>
 			</File>
 			<File

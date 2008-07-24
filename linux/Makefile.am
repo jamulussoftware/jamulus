@@ -10,8 +10,9 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/util.cpp \
 	../src/llconclientdlg.cpp \
 	../src/clientsettingsdlg.cpp \
-	../src/client.cpp \
 	../src/llconserverdlg.cpp \
+	../src/chatdlg.cpp \
+	../src/client.cpp \
 	../src/server.cpp \
 	../src/settings.cpp \
 	../src/protocol.cpp \
@@ -33,11 +34,13 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/multicolorled.h \
 	../src/audiomixerboard.h \
 	../src/llconserverdlg.h \
+	../src/chatdlg.h \
 	../src/llconclientdlg.h \
 	../src/clientsettingsdlg.h \
 	../src/llconclientdlgbase.ui \
 	../src/llconserverdlgbase.ui \
 	../src/clientsettingsdlgbase.ui \
+	../src/chatdlgbase.ui \
 	../src/aboutdlgbase.ui \
 	sound.h \
 	../src/resources.qrc \
@@ -60,6 +63,8 @@ BUILT_SOURCES=moc/moc_server.cpp \
 	moc/clientsettingsdlgbase.h \
 	moc/moc_llconserverdlg.cpp \
 	moc/llconserverdlgbase.h \
+	moc/moc_chatdlg.cpp \
+	moc/chatdlgbase.h \
 	moc/aboutdlgbase.h \
 	moc/resources.cpp
 
@@ -105,6 +110,9 @@ moc/moc_clientsettingsdlg.cpp: ../src/clientsettingsdlg.h
 moc/moc_llconserverdlg.cpp: ../src/llconserverdlg.h
 	$(QT_MOC) ../src/llconserverdlg.h -o moc/moc_llconserverdlg.cpp
 
+moc/moc_chatdlg.cpp: ../src/chatdlg.h
+	$(QT_MOC) ../src/chatdlg.h -o moc/moc_chatdlg.cpp
+
 
 moc/aboutdlgbase.h: ../src/aboutdlgbase.ui
 	$(QT_UIC) ../src/aboutdlgbase.ui -o moc/aboutdlgbase.h
@@ -117,6 +125,9 @@ moc/clientsettingsdlgbase.h: ../src/clientsettingsdlgbase.ui
 
 moc/llconserverdlgbase.h: ../src/llconserverdlgbase.ui
 	$(QT_UIC) ../src/llconserverdlgbase.ui -o moc/llconserverdlgbase.h
+
+moc/chatdlgbase.h: ../src/chatdlgbase.ui
+	$(QT_UIC) ../src/chatdlgbase.ui -o moc/chatdlgbase.h
 
 
 moc/resources.cpp: ../src/resources.qrc

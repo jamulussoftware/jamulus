@@ -28,6 +28,7 @@
 #include <qglobal.h>
 #include <qmutex.h>
 #include <qtimer.h>
+#include <qdatetime.h>
 #include <list>
 #include "global.h"
 #include "util.h"
@@ -72,6 +73,7 @@ public:
     void CreateChanGainMes ( const int iChanID, const double dGain );
     void CreateChanNameMes ( const QString strName );
     void CreateChatTextMes ( const QString strChatText );
+    void CreatePingMes ( const QTime time );
 
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
 
@@ -142,6 +144,7 @@ protected:
     void EvaluateChanNameMes        ( unsigned int iPos, const CVector<uint8_t>& vecData );
     void EvaluateChatTextMes        ( unsigned int iPos, const CVector<uint8_t>& vecData );
     void EvaluateConClientListMes   ( unsigned int iPos, const CVector<uint8_t>& vecData );
+    void EvaluatePingMes            ( unsigned int iPos, const CVector<uint8_t>& vecData );
 
     int                     iOldRecID, iOldRecCnt;
 
@@ -165,6 +168,7 @@ signals:
     void ChangeChanGain ( int iChanID, double dNewGain );
     void ChangeChanName ( QString strName );
     void ChatTextReceived ( QString strChatText );
+    void PingReceived ( QTime time );
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ReqJittBufSize();
     void ReqConnClientsList();

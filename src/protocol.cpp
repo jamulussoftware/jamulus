@@ -98,8 +98,13 @@ MESSAGES
     | 2 bytes number n | n bytes UTF-8 string |
     +------------------+----------------------+
 
+- Ping message (for measuring the ping time)  PROTMESSID_PING
 
- *
+    +--------------------------------------------------------------------------+
+    | 5 bytes transmit time (1 byte hours, 1 byte min, 1 byte sec, 2 bytes ms) |
+    +--------------------------------------------------------------------------+
+
+
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -370,6 +375,11 @@ for ( int i = 0; i < iNumBytes; i++ ) {
 
                     EvaluateChatTextMes ( iPos, vecData );
                     break;
+
+                case PROTMESSID_PING:
+
+                    EvaluatePingMes ( iPos, vecData );
+                    break;
                 }
 
                 // send acknowledge message
@@ -603,6 +613,25 @@ void CProtocol::CreateChanNameMes ( const QString strName )
     CreateAndSendMessage ( PROTMESSID_CHANNEL_NAME, vecData );
 }
 
+void CProtocol::EvaluateChanNameMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
+{
+    // number of bytes for name string (2 bytes)
+    const int iStrLen =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+    // name string (n bytes)
+    QString strName = "";
+    for ( int j = 0; j < iStrLen; j++ )
+    {
+        // byte-by-byte copying of the string data
+        int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+        strName += QString ( (char*) &iData );
+    }
+
+    // invoke message action
+    emit ChangeChanName ( strName );
+}
+
 void CProtocol::CreateChatTextMes ( const QString strChatText )
 {
     unsigned int  iPos = 0; // init position pointer
@@ -628,25 +657,6 @@ void CProtocol::CreateChatTextMes ( const QString strChatText )
     CreateAndSendMessage ( PROTMESSID_CHAT_TEXT, vecData );
 }
 
-void CProtocol::EvaluateChanNameMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
-{
-    // number of bytes for name string (2 bytes)
-    const int iStrLen =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
-
-    // name string (n bytes)
-    QString strName = "";
-    for ( int j = 0; j < iStrLen; j++ )
-    {
-        // byte-by-byte copying of the string data
-        int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
-        strName += QString ( (char*) &iData );
-    }
-
-    // invoke message action
-    emit ChangeChanName ( strName );
-}
-
 void CProtocol::EvaluateChatTextMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
 {
     // number of bytes for name string (2 bytes)
@@ -665,6 +675,43 @@ void CProtocol::EvaluateChatTextMes ( unsigned int iPos, const CVector<uint8_t>&
     // invoke message action
     emit ChatTextReceived ( strChatText );
 }
+
+void CProtocol::CreatePingMes ( const QTime time )
+{
+    unsigned int iPos = 0; // init position pointer
+
+    // build data vector (5 bytes long)
+    CVector<uint8_t> vecData ( 5 );
+
+    // convert QTime to network time
+    CVector<unsigned char> vNetTimeInfo ( CTimeConv().QTi2NetTi ( time ) );
+
+    // convert all bytes (byte by byte)
+    for ( int j = 0; j < 5; j++ )
+    {
+        // byte-by-byte copying of the string data
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vNetTimeInfo[j] ), 1 );
+    }
+
+    CreateAndSendMessage ( PROTMESSID_PING, vecData );
+}
+
+void CProtocol::EvaluatePingMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
+{
+    // time information vector
+    CVector<unsigned char> vNetTimeInfo ( 5 ); // 5 bytes
+    for ( int j = 0; j < 5; j++ )
+    {
+        // byte-by-byte copying of the time information data
+        int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+        vNetTimeInfo[j] = static_cast<unsigned char> ( iData );
+    }
+
+    // convert time to QTime and invoke message action
+    emit PingReceived ( CTimeConv().NetTi2QTi ( vNetTimeInfo ) );
+}
+
 
 
 /******************************************************************************\

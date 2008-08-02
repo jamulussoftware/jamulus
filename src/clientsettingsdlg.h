@@ -46,6 +46,7 @@
 /* Definitions ****************************************************************/
 // update time for GUI controls
 #define DISPLAY_UPDATE_TIME         1000 // ms
+#define PING_UPDATE_TIME            500 // ms
 
 
 /* Classes ********************************************************************/
@@ -62,10 +63,15 @@ public:
 protected:
     CClient* pClient;
     QTimer   TimerStatus;
+    QTimer   TimerPing;
     void     UpdateDisplay();
+
+    virtual void showEvent ( QShowEvent* showEvent );
+    virtual void hideEvent ( QHideEvent* hideEvent );
 
 public slots:
     void OnTimerStatus() { UpdateDisplay(); }
+    void OnTimerPing();
     void OnSliderSndBufInChange ( int value );
     void OnSliderSndBufOutChange ( int value );
     void OnSliderNetBuf ( int value );

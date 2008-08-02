@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -33,6 +33,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // init timing jitter text label
     TextLabelStdDevTimer->setText ( "" );
+
+    // ping time controls
+    CLEDPingTime->SetUpdateTime ( 2 * PING_UPDATE_TIME );
+    CLEDPingTime->Reset();
+    TextLabelPingTime->setText ( "" );
 
     // init slider controls ---
     // sound buffer in
@@ -93,6 +98,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerStatus() ) );
 
+    QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerPing() ) );
+
     // sliders
     QObject::connect ( SliderSndBufIn, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderSndBufInChange ( int ) ) );
@@ -119,6 +127,18 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // Timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start ( DISPLAY_UPDATE_TIME );
+}
+
+void CClientSettingsDlg::showEvent ( QShowEvent* showEvent )
+{
+    // only activate ping timer if window is actually shown
+    TimerPing.start ( PING_UPDATE_TIME );
+}
+
+void CClientSettingsDlg::hideEvent ( QHideEvent* hideEvent )
+{
+    // if window is closed, stop timer for ping
+    TimerPing.stop();
 }
 
 void CClientSettingsDlg::OnSliderSndBufInChange ( int value )
@@ -166,25 +186,35 @@ void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
     UpdateDisplay();
 }
 
+void CClientSettingsDlg::OnTimerPing()
+{
+    // send ping message to server
+    pClient->SendPingMess();
+}
+
 void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 {
-
-// TEST
-//TextLabelStdDevTimer->setText ( QString().setNum ( iPingTime ) + " ms" );
-
-
-
+    // color definition: < 20 ms green, < 50 ms yellow, otherwise red
+    if ( iPingTime < 20 )
+    {
+        CLEDPingTime->SetLight ( MUL_COL_LED_GREEN );
+    }
+    else
+    {
+        if ( iPingTime < 50 )
+        {
+            CLEDPingTime->SetLight ( MUL_COL_LED_YELLOW );
+        }
+        else
+        {
+            CLEDPingTime->SetLight ( MUL_COL_LED_RED );
+        }
+    }
+    TextLabelPingTime->setText ( QString().setNum ( iPingTime ) + " ms" );
 }
 
 void CClientSettingsDlg::UpdateDisplay()
 {
-
-
-// TEST
-//pClient->SendPingMess();
-
-
-
     // response time
     TextLabelStdDevTimer->setText ( QString().
         setNum ( pClient->GetTimingStdDev(), 'f', 2 ) + " ms" );

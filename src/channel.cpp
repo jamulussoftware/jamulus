@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -39,44 +39,52 @@ CChannelSet::CChannelSet()
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
-    QObject::connect(&vecChannels[0],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh0(CVector<uint8_t>)));
-    QObject::connect(&vecChannels[1],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh1(CVector<uint8_t>)));
-    QObject::connect(&vecChannels[2],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh2(CVector<uint8_t>)));
-    QObject::connect(&vecChannels[3],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh3(CVector<uint8_t>)));
-    QObject::connect(&vecChannels[4],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh4(CVector<uint8_t>)));
-    QObject::connect(&vecChannels[5],SIGNAL(MessReadyForSending(CVector<uint8_t>)),this,SLOT(OnSendProtMessCh5(CVector<uint8_t>)));
+    QObject::connect ( &vecChannels[0], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh0 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[1], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh1 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[2], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh2 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[3], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh3 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[4], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh4 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[5], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh5 ( CVector<uint8_t> ) ) );
 
     // request jitter buffer size
-    QObject::connect(&vecChannels[0],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh0()));
-    QObject::connect(&vecChannels[1],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh1()));
-    QObject::connect(&vecChannels[2],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh2()));
-    QObject::connect(&vecChannels[3],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh3()));
-    QObject::connect(&vecChannels[4],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh4()));
-    QObject::connect(&vecChannels[5],SIGNAL(NewConnection()),this,SLOT(OnNewConnectionCh5()));
+    QObject::connect ( &vecChannels[0], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh0() ) );
+    QObject::connect ( &vecChannels[1], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh1() ) );
+    QObject::connect ( &vecChannels[2], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh2() ) );
+    QObject::connect ( &vecChannels[3], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh3() ) );
+    QObject::connect ( &vecChannels[4], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh4() ) );
+    QObject::connect ( &vecChannels[5], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh5() ) );
 
     // request connected clients list
-    QObject::connect(&vecChannels[0],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh0()));
-    QObject::connect(&vecChannels[1],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh1()));
-    QObject::connect(&vecChannels[2],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh2()));
-    QObject::connect(&vecChannels[3],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh3()));
-    QObject::connect(&vecChannels[4],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh4()));
-    QObject::connect(&vecChannels[5],SIGNAL(ReqConnClientsList()),this,SLOT(OnReqConnClientsListCh5()));
+    QObject::connect ( &vecChannels[0], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh0() ) );
+    QObject::connect ( &vecChannels[1], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh1() ) );
+    QObject::connect ( &vecChannels[2], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh2() ) );
+    QObject::connect ( &vecChannels[3], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh3() ) );
+    QObject::connect ( &vecChannels[4], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh4() ) );
+    QObject::connect ( &vecChannels[5], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh5() ) );
 
     // channel name has changed
-    QObject::connect(&vecChannels[0],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh0()));
-    QObject::connect(&vecChannels[1],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh1()));
-    QObject::connect(&vecChannels[2],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh2()));
-    QObject::connect(&vecChannels[3],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh3()));
-    QObject::connect(&vecChannels[4],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh4()));
-    QObject::connect(&vecChannels[5],SIGNAL(NameHasChanged()),this,SLOT(OnNameHasChangedCh5()));
+    QObject::connect ( &vecChannels[0], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh0() ) );
+    QObject::connect ( &vecChannels[1], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh1() ) );
+    QObject::connect ( &vecChannels[2], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh2() ) );
+    QObject::connect ( &vecChannels[3], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh3() ) );
+    QObject::connect ( &vecChannels[4], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh4() ) );
+    QObject::connect ( &vecChannels[5], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh5() ) );
 
-    // chate text received
-    QObject::connect(&vecChannels[0],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh0(QString)));
-    QObject::connect(&vecChannels[1],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh1(QString)));
-    QObject::connect(&vecChannels[2],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh2(QString)));
-    QObject::connect(&vecChannels[3],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh3(QString)));
-    QObject::connect(&vecChannels[4],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh4(QString)));
-    QObject::connect(&vecChannels[5],SIGNAL(ChatTextReceived(QString)),this,SLOT(OnChatTextReceivedCh5(QString)));
+    // chat text received
+    QObject::connect ( &vecChannels[0], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh0 ( QString ) ) );
+    QObject::connect ( &vecChannels[1], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh1 ( QString ) ) );
+    QObject::connect ( &vecChannels[2], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh2 ( QString ) ) );
+    QObject::connect ( &vecChannels[3], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh3 ( QString ) ) );
+    QObject::connect ( &vecChannels[4], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh4 ( QString ) ) );
+    QObject::connect ( &vecChannels[5], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh5 ( QString ) ) );
+
+    // ping message received
+    QObject::connect ( &vecChannels[0], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh0 ( QTime ) ) );
+    QObject::connect ( &vecChannels[1], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh1 ( QTime ) ) );
+    QObject::connect ( &vecChannels[2], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh2 ( QTime ) ) );
+    QObject::connect ( &vecChannels[3], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh3 ( QTime ) ) );
+    QObject::connect ( &vecChannels[4], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh4 ( QTime ) ) );
+    QObject::connect ( &vecChannels[5], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh5 ( QTime ) ) );
 }
 
 CVector<CChannelShortInfo> CChannelSet::CreateChannelList()
@@ -475,6 +483,9 @@ CChannel::CChannel() : sName ( "" ),
 
     QObject::connect( &Protocol, SIGNAL ( ChatTextReceived ( QString ) ),
         this, SIGNAL ( ChatTextReceived ( QString ) ) );
+
+    QObject::connect( &Protocol, SIGNAL ( PingReceived ( QTime ) ),
+        this, SIGNAL ( PingReceived ( QTime ) ) );
 }
 
 void CChannel::SetEnable ( const bool bNEnStat )

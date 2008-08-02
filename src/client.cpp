@@ -88,6 +88,12 @@ void CClient::OnNewConnection()
     Channel.CreateReqConnClientsList();
 }
 
+void CClient::OnReceivePingMessage ( QTime time )
+{
+    // calculate difference between received time and current time
+    emit PingTimeReceived ( time.msecsTo ( QTime().currentTime() ) );
+}
+
 bool CClient::SetServerAddr ( QString strNAddr )
 {
     QHostAddress InetAddr;

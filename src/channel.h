@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -118,6 +118,7 @@ public:
     void CreateReqJitBufMes()                             { Protocol.CreateReqJitBufMes(); }
     void CreateReqConnClientsList()                       { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText ) { Protocol.CreateChatTextMes ( strChatText ); }
+    void CreatePingMes ( const QTime time )               { Protocol.CreatePingMes ( time ); }
 
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
     { 
@@ -194,6 +195,7 @@ signals:
     void ProtocolStatus ( bool bOk );
     void NameHasChanged();
     void ChatTextReceived ( QString strChatText );
+    void PingReceived ( QTime time );
 };
 
 
@@ -284,6 +286,13 @@ public slots:
     void OnChatTextReceivedCh3 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 3, strChatText ); }
     void OnChatTextReceivedCh4 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 4, strChatText ); }
     void OnChatTextReceivedCh5 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 5, strChatText ); }
+
+    void OnPingReceivedCh0 ( QTime time ) { vecChannels[0].CreatePingMes ( time ); }
+    void OnPingReceivedCh1 ( QTime time ) { vecChannels[1].CreatePingMes ( time ); }
+    void OnPingReceivedCh2 ( QTime time ) { vecChannels[2].CreatePingMes ( time ); }
+    void OnPingReceivedCh3 ( QTime time ) { vecChannels[3].CreatePingMes ( time ); }
+    void OnPingReceivedCh4 ( QTime time ) { vecChannels[4].CreatePingMes ( time ); }
+    void OnPingReceivedCh5 ( QTime time ) { vecChannels[5].CreatePingMes ( time ); }
 
 signals:
     void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );

@@ -164,6 +164,12 @@ void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
 
 void CClientSettingsDlg::UpdateDisplay()
 {
+
+
+// TEST
+//pClient->SendPingMess();
+
+
     // response time
     TextLabelStdDevTimer->setText ( QString().
         setNum ( pClient->GetTimingStdDev(), 'f', 2 ) + " ms" );

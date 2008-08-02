@@ -124,6 +124,9 @@ public:
     void SendTextMess ( const QString& strChatText )
         { Channel.CreateChatTextMes ( strChatText ); }
 
+    void SendPingMess()
+        { Channel.CreatePingMes ( QTime().currentTime() ); }
+
     CSound*   GetSndInterface() { return &Sound; }
     CChannel* GetChannel()      { return &Channel; }
 
@@ -182,10 +185,12 @@ public slots:
     void OnReqJittBufSize();
     void OnProtocolStatus ( bool bOk );
     void OnNewConnection();
+    void OnReceivePingMessage ( QTime time );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
+    void PingTimeReceived ( int iPingTime );
 };
 
 

@@ -54,6 +54,9 @@ CClient::CClient() : bRun ( false ), Socket ( &Channel ),
 
     QObject::connect ( &Channel, SIGNAL ( ChatTextReceived ( QString ) ),
         this, SIGNAL ( ChatTextReceived ( QString ) ) );
+
+    QObject::connect ( &Channel, SIGNAL ( PingReceived ( QTime ) ),
+        this, SLOT ( OnReceivePingMessage ( QTime ) ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )

@@ -72,4 +72,5 @@ public slots:
     void OnSliderNetBufSiFactIn ( int value );
     void OnSliderNetBufSiFactOut ( int value );
     void OnOpenChatOnNewMessageStateChanged ( int value );
+    void OnPingTimeResult ( int iPingTime );
 };

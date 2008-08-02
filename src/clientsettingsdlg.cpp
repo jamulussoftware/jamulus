@@ -111,6 +111,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( cbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnOpenChatOnNewMessageStateChanged ( int ) ) );
 
+    // misc
+    QObject::connect ( pClient, SIGNAL ( PingTimeReceived ( int ) ),
+        this, SLOT ( OnPingTimeResult ( int ) ) );
+
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar
@@ -162,12 +166,23 @@ void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
     UpdateDisplay();
 }
 
+void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
+{
+
+// TEST
+//TextLabelStdDevTimer->setText ( QString().setNum ( iPingTime ) + " ms" );
+
+
+
+}
+
 void CClientSettingsDlg::UpdateDisplay()
 {
 
 
 // TEST
 //pClient->SendPingMess();
+
 
 
     // response time

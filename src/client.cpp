@@ -93,8 +93,9 @@ void CClient::OnNewConnection()
 
 void CClient::OnReceivePingMessage ( QTime time )
 {
-    // calculate difference between received time and current time
-    emit PingTimeReceived ( time.msecsTo ( QTime().currentTime() ) );
+    // calculate difference between received time and current time, add one
+    // ms because QT seems to use a "floor" operation on "msecsTo()" function
+    emit PingTimeReceived ( time.msecsTo ( QTime().currentTime() ) + 1 /* ms */ );
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )
@@ -172,12 +173,12 @@ void CClient::Init()
 
     // resample objects are always initialized with the input block size
     // record
-    ResampleObjDownL.Init ( iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SAMPLE_RATE );
-    ResampleObjDownR.Init ( iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SAMPLE_RATE );
+    ResampleObjDownL.Init ( iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SERVER_SAMPLE_RATE );
+    ResampleObjDownR.Init ( iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SERVER_SAMPLE_RATE );
 
     // playback
-    ResampleObjUpL.Init ( iBlockSizeSam, SAMPLE_RATE, SND_CRD_SAMPLE_RATE );
-    ResampleObjUpR.Init ( iBlockSizeSam, SAMPLE_RATE, SND_CRD_SAMPLE_RATE );
+    ResampleObjUpL.Init ( iBlockSizeSam, SERVER_SAMPLE_RATE, SND_CRD_SAMPLE_RATE );
+    ResampleObjUpR.Init ( iBlockSizeSam, SERVER_SAMPLE_RATE, SND_CRD_SAMPLE_RATE );
 
     // init network buffers
     vecsNetwork.Init  ( iBlockSizeSam );
@@ -266,7 +267,7 @@ void CClient::run()
         // add reverberation effect if activated
         if ( iReverbLevel != 0 )
         {
-            // first attenuation amplification factor
+            // calculate attenuation amplification factor
             const double dRevLev = (double) iReverbLevel / AUD_REVERB_MAX / 2;
 
             if ( bReverbOnLeftChan )
@@ -332,7 +333,7 @@ void CClient::run()
    connected to the server. In this case, exactly the same audio material is
    coming back and we can simply compare the samples */
 /* store send data instatic buffer (may delay is 100 ms) */
-const int iMaxDelaySamples = (int) ((float)       0.3     /*0.1*/ * SAMPLE_RATE);
+const int iMaxDelaySamples = (int) ((float)       0.3     /*0.1*/ * SERVER_SAMPLE_RATE);
 static CVector<short> vecsOutBuf(iMaxDelaySamples);
 
 /* update buffer */

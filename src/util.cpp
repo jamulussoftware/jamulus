@@ -140,7 +140,7 @@ CAudioReverb::CAudioReverb ( const double rT60 )
 
     // delay lengths for 44100 Hz sample rate
     int lengths[9] = { 1777, 1847, 1993, 2137, 389, 127, 43, 211, 179 };
-    const double scaler = (double) SAMPLE_RATE / 44100.0;
+    const double scaler = (double) SERVER_SAMPLE_RATE / 44100.0;
 
     if ( scaler != 1.0 )
     {
@@ -224,7 +224,7 @@ void CAudioReverb::setT60 ( const double rT60 )
     for ( int i = 0; i < 4; i++ )
     {
         combCoefficient_[i] = pow ( (double) 10.0, (double) ( -3.0 *
-            combDelays_[i].Size() / ( rT60 * SAMPLE_RATE ) ) );
+            combDelays_[i].Size() / ( rT60 * SERVER_SAMPLE_RATE ) ) );
     }
 }
 

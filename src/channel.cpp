@@ -679,7 +679,7 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
     vecdResInData[i] = (double) vecsData[i];
 
 const int iInSize = ResampleObj.Resample(vecdResInData, vecdResOutData,
-    (double) SAMPLE_RATE / (SAMPLE_RATE - dSamRateOffset));
+    (double) SERVER_SAMPLE_RATE / (SERVER_SAMPLE_RATE - dSamRateOffset));
 */
 
 vecdResOutData.Init ( iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES );
@@ -798,7 +798,7 @@ CVector<unsigned char> CChannel::PrepSendPacket ( const CVector<short>& vecsNPac
 void CSampleOffsetEst::Init()
 {
     /* init sample rate estimation */
-    dSamRateEst = SAMPLE_RATE;
+    dSamRateEst = SERVER_SAMPLE_RATE;
 
     /* init vectors storing the data */
     veciTimeElapsed.Init(VEC_LEN_SAM_OFFS_EST);

@@ -215,9 +215,18 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 
 void CClientSettingsDlg::UpdateDisplay()
 {
-    // response time
-    TextLabelStdDevTimer->setText ( QString().
-        setNum ( pClient->GetTimingStdDev(), 'f', 2 ) + " ms" );
+    if ( pClient->IsRunning() )
+    {
+        // response time
+        TextLabelStdDevTimer->setText ( QString().
+            setNum ( pClient->GetTimingStdDev(), 'f', 2 ) + " ms" );
+    }
+    else
+    {
+        // clear text labels with client parameters
+        TextLabelStdDevTimer->setText ( "" );
+        TextLabelPingTime->setText ( "" );
+    }
 }
 
 void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )

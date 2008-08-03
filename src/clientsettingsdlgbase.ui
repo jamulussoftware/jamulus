@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
-    <height>257</height>
+    <width>443</width>
+    <height>244</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -770,6 +770,12 @@
         </item>
         <item>
          <widget class="QLabel" name="TextLabelPingTime" >
+          <property name="minimumSize" >
+           <size>
+            <width>40</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="text" >
            <string>val</string>
           </property>

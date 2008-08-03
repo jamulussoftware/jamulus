@@ -67,7 +67,7 @@
 #define MIN_SND_CRD_BLOCK_SIZE_SAMPLES  ( MIN_BLOCK_DURATION_MS * SND_CRD_SAMPLE_RATE / 1000 )
 
 // maximum value of factor for network block size
-#define MAX_NET_BLOCK_SIZE_FACTOR       8
+#define MAX_NET_BLOCK_SIZE_FACTOR       4
 
 // default network block size factor
 #define DEF_NET_BLOCK_SIZE_FACTOR       3

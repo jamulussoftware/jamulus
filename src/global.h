@@ -43,7 +43,7 @@
 
 // version and application name (always use this version)
 #undef VERSION
-#define VERSION                         "2.1.1"
+#define VERSION                         "2.1.2cvs"
 #define APP_NAME                        "llcon"
 
 // file name for logging file

@@ -1,12 +1,11 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
  *
  * Description:
- * Resample routine for arbitrary sample-rate conversions in a low range (for
- * frequency offset correction).
+ * Resample routine for arbitrary sample-rate conversions in a low range.
  * The algorithm is based on a polyphase structure. We upsample the input
  * signal with a factor INTERP_DECIM_I_D1 and calculate two successive samples
  * whereby we perform a linear interpolation between these two samples to get
@@ -36,7 +35,9 @@
 #include "resample.h"
 
 
-/* Implementation *************************************************************/
+/******************************************************************************\
+* General Resampler                                                            *
+\******************************************************************************/
 int CResample::Resample ( CVector<double>& vecdInput,
                           CVector<double>& vecdOutput,
                           const double dRation )
@@ -45,14 +46,14 @@ int CResample::Resample ( CVector<double>& vecdInput,
 
     /* move old data from the end to the history part of the buffer and
        add new data (shift register) */
-    /* Shift old values */
+    // shift old values
     int iMovLen = iInputBlockSize;
     for ( i = 0; i < iHistorySize; i++ )
     {
         vecdIntBuff[i] = vecdIntBuff[iMovLen++];
     }
 
-    /* Add new block of data */
+    // add new block of data
     int iBlockEnd = iHistorySize;
     for ( i = 0; i < iInputBlockSize; i++ )
     {
@@ -63,26 +64,26 @@ int CResample::Resample ( CVector<double>& vecdInput,
        sample-interval */
     dTStep = (double) INTERP_DECIM_I_D1 / dRation;
 
-    /* init output counter */
+    // init output counter
     int im = 0;
 
-    /* main loop */
+    // main loop
     do
     {
-        /* quantize output-time to interpolated time-index */
+        // quantize output-time to interpolated time-index
         const int ik = (int) dtOut;
 
 
-        /* calculate convolutions for the two interpolation-taps ------------ */
-        /* phase for the linear interpolation-taps */
+        /* Calculate convolutions for the two interpolation-taps ------------ */
+        // phase for the linear interpolation-taps
         const int ip1 = ik % INTERP_DECIM_I_D1;
         const int ip2 = ( ik + 1 ) % INTERP_DECIM_I_D1;
 
-        /* sample positions in input vector */
+        // sample positions in input vector
         const int in1 = (int) ( ik / INTERP_DECIM_I_D1 );
         const int in2 = (int) ( ( ik + 1 ) / INTERP_DECIM_I_D1 );
 
-        /* convolution */
+        // convolution
         double dy1 = 0.0;
         double dy2 = 0.0;
         for (int i = 0; i < NUM_TAPS_PER_PHASE1; i++)
@@ -92,21 +93,21 @@ int CResample::Resample ( CVector<double>& vecdInput,
         }
 
 
-        /* linear interpolation --------------------------------------------- */
-        /* get numbers after the comma */
+        /* Linear interpolation --------------------------------------------- */
+        // get numbers after the comma
         const double dxInt = dtOut - (int) dtOut;
         vecdOutput[im] = ( dy2 - dy1 ) * dxInt + dy1;
 
 
-        /* increase output counter */
+        // increase output counter
         im++;
             
-        /* increase output-time and index one step */
+        // increase output-time and index one step
         dtOut = dtOut + dTStep;
     } 
     while ( dtOut < dBlockDuration );
 
-    /* set rtOut back */
+    // set rtOut back
     dtOut -= iInputBlockSize * INTERP_DECIM_I_D1;
 
     return im;
@@ -120,16 +121,21 @@ void CResample::Init ( const int iNewInputBlockSize )
        convolutions */
     iHistorySize = NUM_TAPS_PER_PHASE1 + 1;
 
-    /* calculate block duration */
+    // calculate block duration
     dBlockDuration = ( iInputBlockSize + iHistorySize - 1 ) * INTERP_DECIM_I_D1;
 
-    /* allocate memory for internal buffer, clear sample history */
+    // allocate memory for internal buffer, clear sample history
     vecdIntBuff.Init ( iInputBlockSize + iHistorySize, 0.0 );
 
-    /* init absolute time for output stream (at the end of the history part */
+    // init absolute time for output stream (at the end of the history part
     dtOut = (double) ( iHistorySize - 1 ) * INTERP_DECIM_I_D1;
 }
 
+
+
+/******************************************************************************\
+* Audio Resampler                                                              *
+\******************************************************************************/
 void CAudioResample::Resample ( CVector<double>& vecdInput,
                                 CVector<double>& vecdOutput )
 {
@@ -137,40 +143,37 @@ void CAudioResample::Resample ( CVector<double>& vecdInput,
 
     if ( dRation == 1.0 )
     {
-        /* if ratio is 1, no resampling is needed, just copy vector */
-        for ( j = 0; j < iOutputBlockSize; j++ )
-        {
-            vecdOutput[j] = vecdInput[j];
-        }
+        // if ratio is 1, no resampling is needed, just copy vector
+        vecdOutput = vecdInput;
     }
     else
     {
         /* move old data from the end to the history part of the buffer and
            add new data (shift register) */
-        /* Shift old values */
+        // shift old values
         int iMovLen = iInputBlockSize;
         for ( j = 0; j < iNumTaps; j++ )
         {
             vecdIntBuff[j] = vecdIntBuff[iMovLen++];
         }
 
-        /* Add new block of data */
+        // add new block of data
         int iBlockEnd = iNumTaps;
         for ( j = 0; j < iInputBlockSize; j++ )
         {
             vecdIntBuff[iBlockEnd++] = vecdInput[j];
         }
 
-        /* main loop */
+        // main loop
         for ( j = 0; j < iOutputBlockSize; j++ )
         {
-            /* calculate filter phase */
+            // calculate filter phase
             const int ip = (int) ( j * iI / dRation ) % iI;
 
-            /* sample position in input vector */
+            // sample position in input vector
             const int in = (int) ( j / dRation ) + iNumTaps - 1;
 
-            /* convolution */
+            // convolution
             double dy = 0.0;
             for ( int i = 0; i < iNumTaps; i++ )
             {
@@ -183,7 +186,8 @@ void CAudioResample::Resample ( CVector<double>& vecdInput,
 }
 
 void CAudioResample::Init ( const int iNewInputBlockSize,
-                            const int iFrom, const int iTo )
+                            const int iFrom,
+                            const int iTo )
 {
     dRation          = ( (double) iTo ) / iFrom;
     iInputBlockSize  = iNewInputBlockSize;
@@ -192,23 +196,21 @@ void CAudioResample::Init ( const int iNewInputBlockSize,
     // set correct parameters
     if ( iFrom == SND_CRD_SAMPLE_RATE ) // downsampling case
     {
-        switch ( iFrom / iTo )
+        switch ( iTo )
         {
-        case 2: // 48 kHz to 24 kHz
+        case ( SND_CRD_SAMPLE_RATE / 2 ): // 48 kHz to 24 kHz
             pFiltTaps    = fResTaps2;
             iNumTaps     = INTERP_I_2 * NUM_TAPS_PER_PHASE2;
             iI           = DECIM_D_2;
             break;
 
-/* not yet supported
-case ( 2 / 3 ): // 48 kHz to 32 kHz
-    pFiltTaps    = fResTaps3_2;
-    iNumTaps     = INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2;
-    iI           = DECIM_D_3_2;
-    break;
-*/
+        case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 48 kHz to 32 kHz
+            pFiltTaps    = fResTaps3_2;
+            iNumTaps     = INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2;
+            iI           = DECIM_D_3_2;
+            break;
 
-        case 1: // 48 kHz to 48 kHz
+        case SND_CRD_SAMPLE_RATE: // 48 kHz to 48 kHz
             // no resampling needed
             break;
 
@@ -218,23 +220,21 @@ case ( 2 / 3 ): // 48 kHz to 32 kHz
             break;
         }
     }
-    else // upsampling case
+    else // upsampling case (assumption: iTo == SND_CRD_SAMPLE_RATE)
     {
-        switch ( iTo / iFrom )
+        switch ( iFrom )
         {
-        case 2: // 24 kHz to 48 kHz
+        case ( SND_CRD_SAMPLE_RATE / 2 ): // 24 kHz to 48 kHz
             pFiltTaps    = fResTaps2;
             iNumTaps     = DECIM_D_2 * NUM_TAPS_PER_PHASE2;
             iI           = INTERP_I_2;
             break;
 
-/* not yet supported
-case 1.5: // 32 kHz to 48 kHz
-    pFiltTaps    = fResTaps3_2;
-    iNumTaps     = DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2;
-    iI           = INTERP_I_3_2;
-    break;
-*/
+        case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 32 kHz to 48 kHz
+            pFiltTaps    = fResTaps3_2;
+            iNumTaps     = DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2;
+            iI           = INTERP_I_3_2;
+            break;
 
         default:
             // resample ratio not defined, throw error

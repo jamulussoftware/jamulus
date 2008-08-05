@@ -29,7 +29,7 @@
 CServer::CServer ( const bool bUseLogging, const quint16 iPortNumber ) :
     Socket ( &ChannelSet, this, iPortNumber )
 {
-    vecsSendData.Init ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
+    vecsSendData.Init ( MIN_BLOCK_SIZE_SAMPLES );
 
     // init moving average buffer for response time evaluation
     RespTimeMoAvBuf.Init ( LEN_MOV_AV_RESPONSE );
@@ -97,7 +97,7 @@ void CServer::Stop()
 void CServer::OnTimer()
 {
     CVector<int>              vecChanID;
-    CVector<CVector<double> > vecvecdData ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
+    CVector<CVector<double> > vecvecdData ( MIN_BLOCK_SIZE_SAMPLES );
     CVector<CVector<double> > vecvecdGains;
 
     // get data from all connected clients
@@ -150,7 +150,7 @@ void CServer::OnTimer()
 CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
                                       CVector<double>&           vecdGains )
 {
-    CVector<short> vecsOutData ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
+    CVector<short> vecsOutData ( MIN_BLOCK_SIZE_SAMPLES );
 
     const int iNumClients = vecvecdData.Size();
 
@@ -158,7 +158,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
     const double dNorm = (double) 2.0;
 
     // mix all audio data from all clients together
-    for ( int i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )
+    for ( int i = 0; i < MIN_BLOCK_SIZE_SAMPLES; i++ )
     {
         double dMixedData = 0.0;
 

@@ -32,7 +32,7 @@
 /* Definitions ****************************************************************/
 // time for fading effect for masking drop outs
 #define FADE_IN_OUT_TIME            ( (double) 0.3 ) // ms
-#define FADE_IN_OUT_NUM_SAM         ( (int) ( SERVER_SAMPLE_RATE * FADE_IN_OUT_TIME ) / 1000 )
+#define FADE_IN_OUT_NUM_SAM         ( (int) ( SYSTEM_SAMPLE_RATE * FADE_IN_OUT_TIME ) / 1000 )
 
 // for extrapolation a shorter time for fading
 #define FADE_IN_OUT_NUM_SAM_EXTRA   5 // samples

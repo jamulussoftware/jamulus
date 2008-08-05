@@ -47,12 +47,12 @@ CChannelSet::CChannelSet()
     QObject::connect ( &vecChannels[5], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh5 ( CVector<uint8_t> ) ) );
 
     // request jitter buffer size
-    QObject::connect ( &vecChannels[0], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh0() ) );
-    QObject::connect ( &vecChannels[1], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh1() ) );
-    QObject::connect ( &vecChannels[2], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh2() ) );
-    QObject::connect ( &vecChannels[3], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh3() ) );
-    QObject::connect ( &vecChannels[4], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh4() ) );
-    QObject::connect ( &vecChannels[5], SIGNAL ( NewConnection()), this, SLOT ( OnNewConnectionCh5() ) );
+    QObject::connect ( &vecChannels[0], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh0() ) );
+    QObject::connect ( &vecChannels[1], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh1() ) );
+    QObject::connect ( &vecChannels[2], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh2() ) );
+    QObject::connect ( &vecChannels[3], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh3() ) );
+    QObject::connect ( &vecChannels[4], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh4() ) );
+    QObject::connect ( &vecChannels[5], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh5() ) );
 
     // request connected clients list
     QObject::connect ( &vecChannels[0], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh0() ) );
@@ -433,24 +433,14 @@ CChannel::CChannel() : sName ( "" ),
     iCurNetwInBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
 {
     // query all possible network in buffer sizes for determining if an
-    // audio packet was received, consider all possible sample rates (audio
-    // quality types: low quality, high quality)
+    // audio packet was received
     for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
     {
         // network block size factor must start from 1 -> ( i + 1 )
-        // low quality audio
-        vecNetwInBufSizesAudLQ[i] = AudioCompressionInLowQSampRate.Init (
+        vecNetwInBufSizes[i] = AudioCompressionIn.Init (
             ( i + 1 ) * MIN_BLOCK_SIZE_SAMPLES,
             CAudioCompression::CT_IMAADPCM );
-
-        // high quality audio
-        vecNetwInBufSizesAudHQ[i] = AudioCompressionInHighQSampRate.Init (
-            ( i + 1 ) * MIN_SERVER_BLOCK_SIZE_SAMPLES,
-            CAudioCompression::CT_IMAADPCM );
     }
-
-    // set initial minimum block size value (default)
-    SetMinBlockSize ( MIN_BLOCK_SIZE_SAMPLES );
 
     // init the socket buffer
     SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
@@ -501,20 +491,6 @@ CChannel::CChannel() : sName ( "" ),
         this, SIGNAL ( PingReceived ( QTime ) ) );
 }
 
-void CChannel::SetMinBlockSize ( const int iNewMinBlockSize )
-{
-    // store new parameter
-    iCurMinBlockSize = iNewMinBlockSize;
-
-
-
-// TODO init dependencies on minimum block size here!!!
-
-
-}
-
-
-
 void CChannel::SetEnable ( const bool bNEnStat )
 {
     // set internal parameter
@@ -532,13 +508,9 @@ void CChannel::SetNetwInBlSiFact ( const int iNewBlockSizeFactor )
     // store new value
     iCurNetwInBlSiFact = iNewBlockSizeFactor;
 
-    // init audio compression units
-    AudioCompressionInLowQSampRate.Init (
+    // init audio compression unit
+    AudioCompressionIn.Init (
         iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
-        CAudioCompression::CT_IMAADPCM );
-
-    AudioCompressionInHighQSampRate.Init (
-        iNewBlockSizeFactor * MIN_SERVER_BLOCK_SIZE_SAMPLES,
         CAudioCompression::CT_IMAADPCM );
 
     // initial value for connection time out counter
@@ -655,9 +627,7 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
     // init flags
     bool bIsProtocolPacket = false;
     bool bIsAudioPacket    = false;
-    bool bIsHQAudioPacket  = false; // is high quality audio packet (high sample rate)
     bool bNewConnection    = false;
-    int  iInputBlockSizeFactor;
 
     if ( bIsEnabled )
     {
@@ -684,40 +654,27 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
             for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
             {
                 // check for low/high quality audio packets and set flags
-                if ( iNumBytes == vecNetwInBufSizesAudLQ[i] )
+                if ( iNumBytes == vecNetwInBufSizes[i] )
                 {
-                    bIsAudioPacket        = true;
-                    bIsHQAudioPacket      = false;
-                    iInputBlockSizeFactor = i + 1;
-                }
+                    bIsAudioPacket = true;
 
-                if ( iNumBytes == vecNetwInBufSizesAudHQ[i] )
-                {
-                    bIsAudioPacket   = true;
-                    bIsHQAudioPacket = true;
-                    iInputBlockSizeFactor = i + 1;
+                    // check if we are correctly initialized
+                    const int iNewNetwInBlSiFact = i + 1;
+                    if ( iNewNetwInBlSiFact != iCurNetwInBlSiFact )
+                    {
+                        // re-initialize to new value
+                        SetNetwInBlSiFact ( iNewNetwInBlSiFact );
+                    }
                 }
             }
 
             // only process if packet has correct size
             if ( bIsAudioPacket )
             {
-                // check if we are correctly initialized
-                if ( iInputBlockSizeFactor != iCurNetwInBlSiFact )
-                {
-                    // re-initialize to new value
-                    SetNetwInBlSiFact ( iInputBlockSizeFactor );
-                }
-
                 Mutex.lock();
                 {
-
-
-// TODO use bIsHQAudioPacket
-
-
                     // decompress audio
-                    CVector<short> vecsDecomprAudio ( AudioCompressionInHighQSampRate.Decode ( vecbyData ) );
+                    CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
 
                     // do resampling to compensate for sample rate offsets in the
                     // different sound cards of the clients
@@ -726,7 +683,7 @@ for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
     vecdResInData[i] = (double) vecsData[i];
 
 const int iInSize = ResampleObj.Resample(vecdResInData, vecdResOutData,
-    (double) SERVER_SAMPLE_RATE / (SERVER_SAMPLE_RATE - dSamRateOffset));
+    (double) SYSTEM_SAMPLE_RATE / (SYSTEM_SAMPLE_RATE - dSamRateOffset));
 */
 
 vecdResOutData.Init ( iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES );

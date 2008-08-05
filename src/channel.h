@@ -99,9 +99,6 @@ public:
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Protocol.CreateChanGainMes ( iId, dGain ); }
 
-    void SetMinBlockSize ( const int iNewMinBlockSize );
-    int GetMinBlockSize() { return iCurMinBlockSize; }
-
     void SetSockBufSize ( const int iNumBlocks );
     int GetSockBufSize() { return iCurSockBufSize; }
 
@@ -140,8 +137,7 @@ protected:
     void SetNetwInBlSiFact ( const int iNewBlockSizeFactor );
 
     // audio compression
-    CAudioCompression   AudioCompressionInLowQSampRate;
-    CAudioCompression   AudioCompressionInHighQSampRate;
+    CAudioCompression   AudioCompressionIn;
     CAudioCompression   AudioCompressionOut;
     int                 iAudComprSizeOut;
 
@@ -175,10 +171,7 @@ protected:
 
     bool                bIsEnabled;
 
-    int                 vecNetwInBufSizesAudLQ[MAX_NET_BLOCK_SIZE_FACTOR];
-    int                 vecNetwInBufSizesAudHQ[MAX_NET_BLOCK_SIZE_FACTOR];
-
-    int                 iCurMinBlockSize;
+    int                 vecNetwInBufSizes[MAX_NET_BLOCK_SIZE_FACTOR];
 
     int                 iCurNetwInBlSiFact;
     int                 iCurNetwOutBlSiFact;

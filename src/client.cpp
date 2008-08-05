@@ -173,12 +173,12 @@ void CClient::Init()
 
     // resample objects are always initialized with the input block size
     // record
-    ResampleObjDownL.Init ( iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SERVER_SAMPLE_RATE );
-    ResampleObjDownR.Init ( iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SERVER_SAMPLE_RATE );
+    ResampleObjDownL.Init ( iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SYSTEM_SAMPLE_RATE );
+    ResampleObjDownR.Init ( iSndCrdBlockSizeSam, SND_CRD_SAMPLE_RATE, SYSTEM_SAMPLE_RATE );
 
     // playback
-    ResampleObjUpL.Init ( iBlockSizeSam, SERVER_SAMPLE_RATE, SND_CRD_SAMPLE_RATE );
-    ResampleObjUpR.Init ( iBlockSizeSam, SERVER_SAMPLE_RATE, SND_CRD_SAMPLE_RATE );
+    ResampleObjUpL.Init ( iBlockSizeSam, SYSTEM_SAMPLE_RATE, SND_CRD_SAMPLE_RATE );
+    ResampleObjUpR.Init ( iBlockSizeSam, SYSTEM_SAMPLE_RATE, SND_CRD_SAMPLE_RATE );
 
     // init network buffers
     vecsNetwork.Init  ( iBlockSizeSam );
@@ -333,7 +333,7 @@ void CClient::run()
    connected to the server. In this case, exactly the same audio material is
    coming back and we can simply compare the samples */
 /* store send data instatic buffer (may delay is 100 ms) */
-const int iMaxDelaySamples = (int) ((float)       0.3     /*0.1*/ * SERVER_SAMPLE_RATE);
+const int iMaxDelaySamples = (int) ((float)       0.3     /*0.1*/ * SYSTEM_SAMPLE_RATE);
 static CVector<short> vecsOutBuf(iMaxDelaySamples);
 
 /* update buffer */

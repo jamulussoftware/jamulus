@@ -53,7 +53,11 @@
 #define LLCON_PORT_NUMBER               22122
 
 // server sample rate
-#define SERVER_SAMPLE_RATE              24000
+#define SERVER_SAMPLE_RATE              24000 // TODO: 32000
+
+// client low quality audio sample rate (high quality is the same as the server
+// sample rate)
+#define CLIENT_LOWQUALITY_SAMPLE_RATE   24000
 
 // sound card sample rate. Should be always 48 kHz to avoid sound card driver
 // internal sample rate conversion which might be buggy
@@ -63,7 +67,9 @@
 // of this duration
 #define MIN_BLOCK_DURATION_MS           2 // ms
 
-#define MIN_BLOCK_SIZE_SAMPLES          ( MIN_BLOCK_DURATION_MS * SERVER_SAMPLE_RATE / 1000 )
+// TODO rename MIN_BLOCK_SIZE_SAMPLES -> MIN_CLIENT_LQ_BLOCK_SIZE_SAMPLES
+#define MIN_BLOCK_SIZE_SAMPLES          ( MIN_BLOCK_DURATION_MS * CLIENT_LOWQUALITY_SAMPLE_RATE / 1000 )
+#define MIN_SERVER_BLOCK_SIZE_SAMPLES   ( MIN_BLOCK_DURATION_MS * SERVER_SAMPLE_RATE / 1000 )
 #define MIN_SND_CRD_BLOCK_SIZE_SAMPLES  ( MIN_BLOCK_DURATION_MS * SND_CRD_SAMPLE_RATE / 1000 )
 
 // maximum value of factor for network block size

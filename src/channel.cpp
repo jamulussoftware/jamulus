@@ -421,30 +421,43 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
 }
 
 
+
 /******************************************************************************\
 * CChannel                                                                     *
 \******************************************************************************/
 CChannel::CChannel() : sName ( "" ),
-    vecdGains ( MAX_NUM_CHANNELS, (double) 1.0 )
+    vecdGains ( MAX_NUM_CHANNELS, (double) 1.0 ),
+    // it is important to give the following parameters meaningful initial
+    // values because they are dependend on each other
+    iCurSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL ),
+    iCurNetwInBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
 {
     // query all possible network in buffer sizes for determining if an
-    // audio packet was received
+    // audio packet was received, consider all possible sample rates (audio
+    // quality types: low quality, high quality)
     for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
     {
         // network block size factor must start from 1 -> ( i + 1 )
-        vecNetwInBufSizes[i] = AudioCompressionIn.Init (
+        // low quality audio
+        vecNetwInBufSizesAudLQ[i] = AudioCompressionInLowQSampRate.Init (
             ( i + 1 ) * MIN_BLOCK_SIZE_SAMPLES,
+            CAudioCompression::CT_IMAADPCM );
+
+        // high quality audio
+        vecNetwInBufSizesAudHQ[i] = AudioCompressionInHighQSampRate.Init (
+            ( i + 1 ) * MIN_SERVER_BLOCK_SIZE_SAMPLES,
             CAudioCompression::CT_IMAADPCM );
     }
 
-    iCurNetwInBlSiFact = DEF_NET_BLOCK_SIZE_FACTOR;
+    // set initial minimum block size value (default)
+    SetMinBlockSize ( MIN_BLOCK_SIZE_SAMPLES );
 
     // init the socket buffer
     SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
     // set initial input and output block size factors
-    SetNetwBufSizeFactOut ( iCurNetwInBlSiFact );
-    SetNetwInBlSiFact ( iCurNetwInBlSiFact );
+    SetNetwInBlSiFact     ( DEF_NET_BLOCK_SIZE_FACTOR );
+    SetNetwBufSizeFactOut ( DEF_NET_BLOCK_SIZE_FACTOR );
 
     // init time-out for the buffer with zero -> no connection
     iConTimeOut = 0;
@@ -488,6 +501,20 @@ CChannel::CChannel() : sName ( "" ),
         this, SIGNAL ( PingReceived ( QTime ) ) );
 }
 
+void CChannel::SetMinBlockSize ( const int iNewMinBlockSize )
+{
+    // store new parameter
+    iCurMinBlockSize = iNewMinBlockSize;
+
+
+
+// TODO init dependencies on minimum block size here!!!
+
+
+}
+
+
+
 void CChannel::SetEnable ( const bool bNEnStat )
 {
     // set internal parameter
@@ -505,9 +532,13 @@ void CChannel::SetNetwInBlSiFact ( const int iNewBlockSizeFactor )
     // store new value
     iCurNetwInBlSiFact = iNewBlockSizeFactor;
 
-    // init audio compression unit
-    iAudComprSizeIn = AudioCompressionIn.Init (
+    // init audio compression units
+    AudioCompressionInLowQSampRate.Init (
         iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+        CAudioCompression::CT_IMAADPCM );
+
+    AudioCompressionInHighQSampRate.Init (
+        iNewBlockSizeFactor * MIN_SERVER_BLOCK_SIZE_SAMPLES,
         CAudioCompression::CT_IMAADPCM );
 
     // initial value for connection time out counter
@@ -624,7 +655,9 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
     // init flags
     bool bIsProtocolPacket = false;
     bool bIsAudioPacket    = false;
+    bool bIsHQAudioPacket  = false; // is high quality audio packet (high sample rate)
     bool bNewConnection    = false;
+    int  iInputBlockSizeFactor;
 
     if ( bIsEnabled )
     {
@@ -632,7 +665,7 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
         // only use protocol data if channel is connected
         if ( IsConnected() )
         {
-            // this seems not to be an audio block, parse the message
+            // parse the message assuming this is a protocol message
             if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )
             {
                 // set status flags
@@ -650,27 +683,41 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
             // check if this is an audio packet by checking all possible lengths
             for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
             {
-                if ( iNumBytes == vecNetwInBufSizes[i] )
+                // check for low/high quality audio packets and set flags
+                if ( iNumBytes == vecNetwInBufSizesAudLQ[i] )
                 {
-                    bIsAudioPacket = true;
+                    bIsAudioPacket        = true;
+                    bIsHQAudioPacket      = false;
+                    iInputBlockSizeFactor = i + 1;
+                }
 
-                    // check if we are correctly initialized
-                    const int iNewNetwInBlSiFact = i + 1;
-                    if ( iNewNetwInBlSiFact != iCurNetwInBlSiFact )
-                    {
-                        // re-initialize to new value
-                        SetNetwInBlSiFact ( iNewNetwInBlSiFact );
-                    }
+                if ( iNumBytes == vecNetwInBufSizesAudHQ[i] )
+                {
+                    bIsAudioPacket   = true;
+                    bIsHQAudioPacket = true;
+                    iInputBlockSizeFactor = i + 1;
                 }
             }
 
             // only process if packet has correct size
             if ( bIsAudioPacket )
             {
+                // check if we are correctly initialized
+                if ( iInputBlockSizeFactor != iCurNetwInBlSiFact )
+                {
+                    // re-initialize to new value
+                    SetNetwInBlSiFact ( iInputBlockSizeFactor );
+                }
+
                 Mutex.lock();
                 {
+
+
+// TODO use bIsHQAudioPacket
+
+
                     // decompress audio
-                    CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
+                    CVector<short> vecsDecomprAudio ( AudioCompressionInHighQSampRate.Decode ( vecbyData ) );
 
                     // do resampling to compensate for sample rate offsets in the
                     // different sound cards of the clients
@@ -782,111 +829,4 @@ CVector<unsigned char> CChannel::PrepSendPacket ( const CVector<short>& vecsNPac
     }
 
     return vecbySendBuf;
-}
-
-
-
-
-
-
-
-
-
-/******************************************************************************\
-* CSampleOffsetEst                                                             *
-\******************************************************************************/
-void CSampleOffsetEst::Init()
-{
-    /* init sample rate estimation */
-    dSamRateEst = SERVER_SAMPLE_RATE;
-
-    /* init vectors storing the data */
-    veciTimeElapsed.Init(VEC_LEN_SAM_OFFS_EST);
-    veciTiStIdx.Init(VEC_LEN_SAM_OFFS_EST);
-
-    /* start reference time (the counter wraps to zero 24 hours after the last
-       call to start() or restart, but this should not concern us since this
-       software will most probably not be used that long) */
-    RefTime.start();
-
-    /* init accumulated time stamp variable */
-    iAccTiStVal = 0;
-
-    /* init count (do not ship any result in init phase) */
-    iInitCnt = VEC_LEN_SAM_OFFS_EST + 1;
-}
-
-void CSampleOffsetEst::AddTimeStampIdx(const int iTimeStampIdx)
-{
-    int i;
-
-    const int iLastIdx = VEC_LEN_SAM_OFFS_EST - 1;
-
-    /* take care of wrap of the time stamp index (byte wrap) */
-    if (iTimeStampIdx < veciTiStIdx[iLastIdx] - iAccTiStVal)
-        iAccTiStVal += _MAXBYTE + 1;
-
-    /* add new data pair to the FIFO */
-    for (i = 1; i < VEC_LEN_SAM_OFFS_EST; i++)
-    {
-        /* move old data */
-        veciTimeElapsed[i - 1] = veciTimeElapsed[i];
-        veciTiStIdx[i - 1] = veciTiStIdx[i];
-    }
-
-    /* add new data */
-    veciTimeElapsed[iLastIdx] = RefTime.elapsed();
-    veciTiStIdx[iLastIdx] = iAccTiStVal + iTimeStampIdx;
-
-/*
-static FILE* pFile = fopen("v.dat", "w");
-for (i = 0; i < VEC_LEN_SAM_OFFS_EST; i++)
-    fprintf(pFile, "%d\n", veciTimeElapsed[i]);
-fflush(pFile);
-*/
-
-
-    /* calculate linear regression for sample rate estimation */
-    /* first, calculate averages */
-    double dTimeAv = 0;
-    double dTiStAv = 0;
-    for (i = 0; i < VEC_LEN_SAM_OFFS_EST; i++)
-    {
-        dTimeAv += veciTimeElapsed[i];
-        dTiStAv += veciTiStIdx[i];
-    }
-    dTimeAv /= VEC_LEN_SAM_OFFS_EST;
-    dTiStAv /= VEC_LEN_SAM_OFFS_EST;
-
-    /* calculate gradient */
-    double dNom = 0;
-    double dDenom = 0;
-    for (i = 0; i < VEC_LEN_SAM_OFFS_EST; i++)
-    {
-        const double dCurTimeNoAv = veciTimeElapsed[i] - dTimeAv;
-        dNom += dCurTimeNoAv * (veciTiStIdx[i] - dTiStAv);
-        dDenom += dCurTimeNoAv * dCurTimeNoAv;
-    }
-
-    /* final sample rate offset estimation calculation */
-    if (iInitCnt > 0)
-        iInitCnt--;
-    else
-    {
-        dSamRateEst = dNom / dDenom * NUM_BL_TIME_STAMPS * MIN_BLOCK_SIZE_SAMPLES * 1000;
-
-/*
-static FILE* pFile = fopen("v.dat", "w");
-for (i = 0; i < VEC_LEN_SAM_OFFS_EST; i++)
-    fprintf(pFile, "%d %d\n", veciTimeElapsed[i], veciTiStIdx[i]);
-fflush(pFile);
-*/
-    }
-
-/*
-static FILE* pFile = fopen("v.dat", "w");
-fprintf(pFile, "%e\n", dSamRateEst);
-fflush(pFile);
-*/
-
 }

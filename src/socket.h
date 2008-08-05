@@ -36,7 +36,7 @@
 
 
 /* Definitions ****************************************************************/
-// maximum block size for network input buffer. Consider two bytes per sample
+// Maximum block size for network input buffer. Consider two bytes per sample.
 #define MAX_SIZE_BYTES_NETW_BUF         ( MAX_NET_BLOCK_SIZE_FACTOR * MIN_BLOCK_SIZE_SAMPLES * 2 )
 
 

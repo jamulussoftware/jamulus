@@ -99,6 +99,9 @@ public:
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Protocol.CreateChanGainMes ( iId, dGain ); }
 
+    void SetMinBlockSize ( const int iNewMinBlockSize );
+    int GetMinBlockSize() { return iCurMinBlockSize; }
+
     void SetSockBufSize ( const int iNumBlocks );
     int GetSockBufSize() { return iCurSockBufSize; }
 
@@ -137,8 +140,8 @@ protected:
     void SetNetwInBlSiFact ( const int iNewBlockSizeFactor );
 
     // audio compression
-    CAudioCompression   AudioCompressionIn;
-    int                 iAudComprSizeIn;
+    CAudioCompression   AudioCompressionInLowQSampRate;
+    CAudioCompression   AudioCompressionInHighQSampRate;
     CAudioCompression   AudioCompressionOut;
     int                 iAudComprSizeOut;
 
@@ -172,7 +175,10 @@ protected:
 
     bool                bIsEnabled;
 
-    int                 vecNetwInBufSizes[MAX_NET_BLOCK_SIZE_FACTOR];
+    int                 vecNetwInBufSizesAudLQ[MAX_NET_BLOCK_SIZE_FACTOR];
+    int                 vecNetwInBufSizesAudHQ[MAX_NET_BLOCK_SIZE_FACTOR];
+
+    int                 iCurMinBlockSize;
 
     int                 iCurNetwInBlSiFact;
     int                 iCurNetwOutBlSiFact;
@@ -297,27 +303,5 @@ public slots:
 signals:
     void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );
 };
-
-
-/* Sample rate offset estimation -------------------------------------------- */
-class CSampleOffsetEst
-{
-public:
-    CSampleOffsetEst() { Init(); }
-    virtual ~CSampleOffsetEst() {}
-
-    void Init();
-    void AddTimeStampIdx ( const int iTimeStampIdx );
-    double GetSamRate() { return dSamRateEst; }
-
-protected:
-    QTime               RefTime;
-    int                 iAccTiStVal;
-    double              dSamRateEst;
-    CVector<long int>   veciTimeElapsed;
-    CVector<long int>   veciTiStIdx;
-    int                 iInitCnt;
-};
-
 
 #endif /* !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

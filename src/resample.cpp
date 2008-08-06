@@ -204,6 +204,12 @@ void CAudioResample::Init ( const int iNewInputBlockSize,
             iI           = DECIM_D_2;
             break;
 
+        case ( SND_CRD_SAMPLE_RATE * 7 / 12 ): // 48 kHz to 28 kHz
+            pFiltTaps    = fResTaps12_7;
+            iNumTaps     = INTERP_I_12_7 * NUM_TAPS_PER_PHASE12_7;
+            iI           = DECIM_D_12_7;
+            break;
+
         case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 48 kHz to 32 kHz
             pFiltTaps    = fResTaps3_2;
             iNumTaps     = INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2;
@@ -212,6 +218,9 @@ void CAudioResample::Init ( const int iNewInputBlockSize,
 
         case SND_CRD_SAMPLE_RATE: // 48 kHz to 48 kHz
             // no resampling needed
+            pFiltTaps    = NULL;
+            iNumTaps     = 0;
+            iI           = 1;
             break;
 
         default:
@@ -228,6 +237,12 @@ void CAudioResample::Init ( const int iNewInputBlockSize,
             pFiltTaps    = fResTaps2;
             iNumTaps     = DECIM_D_2 * NUM_TAPS_PER_PHASE2;
             iI           = INTERP_I_2;
+            break;
+
+        case ( SND_CRD_SAMPLE_RATE * 7 / 12 ): // 28 kHz to 48 kHz
+            pFiltTaps    = fResTaps12_7;
+            iNumTaps     = DECIM_D_12_7 * NUM_TAPS_PER_PHASE12_7;
+            iI           = INTERP_I_12_7;
             break;
 
         case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 32 kHz to 48 kHz

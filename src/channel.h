@@ -237,6 +237,9 @@ public:
     CHostAddress GetAddress ( const int iChanNum )
         { return vecChannels[iChanNum].GetAddress(); }
 
+    void StartStatusHTMLFileWriting ( const QString& strNewFileName,
+                                      const QString& strNewServerNameWithPort );
+
 protected:
     CVector<CChannelShortInfo> CreateChannelList();
     void CreateAndSendChanListForAllConChannels();
@@ -250,7 +253,10 @@ protected:
     CChannel    vecChannels[MAX_NUM_CHANNELS];
     QMutex      Mutex;
 
+    // HTML file server status
     bool        bWriteStatusHTMLFile;
+    QString     strServerHTMLFileListName;
+    QString     strServerNameWithPort;
 
 public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG

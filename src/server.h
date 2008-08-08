@@ -41,7 +41,8 @@ class CServer : public QObject
     Q_OBJECT
 
 public:
-    CServer ( const bool bUseLogging, const quint16 iPortNumber );
+    CServer ( const bool bUseLogging, const quint16 iPortNumber,
+              const QString& strHTMLStatusFileName );
     virtual ~CServer() {}
 
     void Start();

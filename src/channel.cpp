@@ -121,6 +121,12 @@ void CChannelSet::CreateAndSendChanListForAllConChannels()
             vecChannels[i].CreateConClientListMes ( vecChanInfo );
         }
     }
+
+    // create status HTML file if enabled
+    if ( bWriteStatusHTMLFile )
+    {
+        WriteHTMLChannelList();
+    }
 }
 
 void CChannelSet::CreateAndSendChanListForAllExceptThisChan ( const int iCurChanID )
@@ -137,6 +143,12 @@ void CChannelSet::CreateAndSendChanListForAllExceptThisChan ( const int iCurChan
             // send message
             vecChannels[i].CreateConClientListMes ( vecChanInfo );
         }
+    }
+
+    // create status HTML file if enabled
+    if ( bWriteStatusHTMLFile )
+    {
+        WriteHTMLChannelList();
     }
 }
 
@@ -301,12 +313,6 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
             // request, only the already connected clients get the list
             // automatically, because they don't know when new clients connect
             CreateAndSendChanListForAllExceptThisChan ( iCurChanID );
-
-            // create status HTML file if enabled
-            if ( bWriteStatusHTMLFile )
-            {
-                WriteHTMLChannelList();
-            }
         }
     }
     Mutex.unlock();
@@ -391,12 +397,6 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
         {
             // update channel list for all currently connected clients
             CreateAndSendChanListForAllConChannels();
-
-            // create status HTML file if enabled
-            if ( bWriteStatusHTMLFile )
-            {
-                WriteHTMLChannelList();
-            }
         }
     }
     Mutex.unlock(); // release mutex
@@ -432,22 +432,24 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
     }
 }
 
+void CChannelSet::StartStatusHTMLFileWriting ( const QString& strNewFileName,
+                                               const QString& strNewServerNameWithPort )
+{
+    // set important parameters
+    strServerHTMLFileListName = strNewFileName;
+    strServerNameWithPort     = strNewServerNameWithPort;
 
+    // set flag
+    bWriteStatusHTMLFile = true;
 
+    // write initial file
+    WriteHTMLChannelList();
+}
 
-
-
-
-
-
-// TEST
 void CChannelSet::WriteHTMLChannelList()
 {
     // create channel list
     CVector<CChannelShortInfo> vecChanInfo ( CChannelSet::CreateChannelList() );
-
-// TEST
-QString strServerHTMLFileListName = "llconserverxxx.txt";
 
     // prepare file and stream
     QFile serverFileListFile ( strServerHTMLFileListName );
@@ -457,10 +459,6 @@ QString strServerHTMLFileListName = "llconserverxxx.txt";
     }
 
     QTextStream streamFileOut ( &serverFileListFile );
-    
-// TEST
-QString strServerNameWithPort = "llcon.dyndns.org:22122";
-
     streamFileOut << strServerNameWithPort << endl << "<ul>" << endl;
 
     // get the number of connected clients
@@ -477,7 +475,7 @@ QString strServerNameWithPort = "llcon.dyndns.org:22122";
     if ( iNumConnClients == 0 )
     {
         // no clients are connected -> empty server
-        streamFileOut << "  Empty server" << endl;
+        streamFileOut << "  No client connected" << endl;
     }
     else
     {
@@ -486,7 +484,20 @@ QString strServerNameWithPort = "llcon.dyndns.org:22122";
         {
             if ( vecChannels[i].IsConnected() )
             {
-                streamFileOut << "  <li>" << vecChannels[i].GetName() << "</li>" << endl;
+                QString strCurChanName = vecChannels[i].GetName();
+
+                // if text is empty, show IP address instead
+                if ( strCurChanName.isEmpty() )
+                {
+                    // convert IP address to text and show it
+                    const QHostAddress addrTest ( vecChannels[i].GetAddress().InetAddr );
+                    strCurChanName = addrTest.toString();
+
+                    // remove last digits
+                    strCurChanName = strCurChanName.section ( ".", 0, 2 ) + ".x";
+                }
+
+                streamFileOut << "  <li>" << strCurChanName << "</li>" << endl;
             }
         }
     }
@@ -494,13 +505,6 @@ QString strServerNameWithPort = "llcon.dyndns.org:22122";
     // finish list
     streamFileOut << "</ul>" << endl;
 }
-
-
-
-
-
-
-
 
 
 

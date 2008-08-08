@@ -43,11 +43,12 @@ int main ( int argc, char** argv )
     double      rDbleArgument;
 
     /* check if server or client application shall be started */
-    bool        bIsClient         = true;
-    bool        bUseGUI           = true;
-    bool        bUseServerLogging = false;
-    quint16     iPortNumber       = LLCON_PORT_NUMBER;
-	std::string strIniFileName    = "";
+    bool        bIsClient             = true;
+    bool        bUseGUI               = true;
+    bool        bUseServerLogging     = false;
+    quint16     iPortNumber           = LLCON_PORT_NUMBER;
+	std::string strIniFileName        = "";
+    std::string strHTMLStatusFileName = "";
 
 	/* QT docu: argv()[0] is the program name, argv()[1] is the first
 	   argument and argv()[argc()-1] is the last argument.
@@ -87,10 +88,19 @@ int main ( int argc, char** argv )
 			continue;
 		}
 
+		/* HTML status file ------------------------------------------------------- */
+		if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
+		{
+			strHTMLStatusFileName = strArgument;
+            cerr << "HTML status file name: " << strHTMLStatusFileName << std::endl;
+			continue;
+		}
+
 		/* Initialization file ---------------------------------------------------- */
 		if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
 		{
 			strIniFileName = strArgument;
+            cerr << "initialization file name: " << strIniFileName << std::endl;
 			continue;
 		}
 
@@ -155,7 +165,10 @@ int main ( int argc, char** argv )
         {
             // server
             // actual server object
-            CServer Server ( bUseServerLogging, iPortNumber );
+
+// TODO use QString
+
+            CServer Server ( bUseServerLogging, iPortNumber, strHTMLStatusFileName.c_str() );
 
             if ( bUseGUI )
             {
@@ -208,6 +221,8 @@ std::string UsageArguments ( char **argv )
 		"  -n, --nogui                disable GUI (only avaiable for server)\n"
 		"  -l, --log                  enable logging\n"
 		"  -i, --inifile              initialization file name (only available for client)\n"
+		"  -p, --port                 local port number (only avaiable for server)\n"
+		"  -m, --htmlstatus           enable HTML status file, set file name (only avaiable for server)\n"
 		"  -h, -?, --help             this help text\n"
 		"Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }

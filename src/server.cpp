@@ -63,7 +63,7 @@ CServer::CServer ( const bool bUseLogging, const quint16 iPortNumber,
         // (the static cast to integer of the port number is required so that it
         // works correctly under Linux)
         ChannelSet.StartStatusHTMLFileWriting ( strHTMLStatusFileName,
-                                                QString().number( static_cast<int> ( iPortNumber ) ) );
+            "[server address]:" + QString().number( static_cast<int> ( iPortNumber ) ) );
     }
 }
 

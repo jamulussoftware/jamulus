@@ -27,6 +27,8 @@
 
 #include <qthread.h>
 #include <qdatetime.h>
+#include <qfile.h>
+#include <qtextstream.h>
 #include "global.h"
 #include "buffer.h"
 #include "audiocompr.h"
@@ -241,11 +243,14 @@ protected:
     void CreateAndSendChanListForAllExceptThisChan ( const int iCurChanID );
     void CreateAndSendChanListForThisChan ( const int iCurChanID );
     void CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText );
+    void WriteHTMLChannelList();
 
     /* do not use the vector class since CChannel does not have appropriate
        copy constructor/operator */
     CChannel    vecChannels[MAX_NUM_CHANNELS];
     QMutex      Mutex;
+
+    bool        bWriteStatusHTMLFile;
 
 public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG

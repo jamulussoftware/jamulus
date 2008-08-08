@@ -28,7 +28,7 @@
 /******************************************************************************\
 * CChannelSet                                                                  *
 \******************************************************************************/
-CChannelSet::CChannelSet()
+CChannelSet::CChannelSet() : bWriteStatusHTMLFile ( false )
 {
     // enable all channels
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
@@ -301,6 +301,12 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
             // request, only the already connected clients get the list
             // automatically, because they don't know when new clients connect
             CreateAndSendChanListForAllExceptThisChan ( iCurChanID );
+
+            // create status HTML file if enabled
+            if ( bWriteStatusHTMLFile )
+            {
+                WriteHTMLChannelList();
+            }
         }
     }
     Mutex.unlock();
@@ -385,6 +391,12 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
         {
             // update channel list for all currently connected clients
             CreateAndSendChanListForAllConChannels();
+
+            // create status HTML file if enabled
+            if ( bWriteStatusHTMLFile )
+            {
+                WriteHTMLChannelList();
+            }
         }
     }
     Mutex.unlock(); // release mutex
@@ -419,6 +431,76 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
         }
     }
 }
+
+
+
+
+
+
+
+
+
+// TEST
+void CChannelSet::WriteHTMLChannelList()
+{
+    // create channel list
+    CVector<CChannelShortInfo> vecChanInfo ( CChannelSet::CreateChannelList() );
+
+// TEST
+QString strServerHTMLFileListName = "llconserverxxx.txt";
+
+    // prepare file and stream
+    QFile serverFileListFile ( strServerHTMLFileListName );
+    if ( !serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
+    {
+        return;
+    }
+
+    QTextStream streamFileOut ( &serverFileListFile );
+    
+// TEST
+QString strServerNameWithPort = "llcon.dyndns.org:22122";
+
+    streamFileOut << strServerNameWithPort << endl << "<ul>" << endl;
+
+    // get the number of connected clients
+    int iNumConnClients = 0;
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            iNumConnClients++;
+        }
+    }
+
+    // depending on number of connected clients write list
+    if ( iNumConnClients == 0 )
+    {
+        // no clients are connected -> empty server
+        streamFileOut << "  Empty server" << endl;
+    }
+    else
+    {
+        // write entry for each connected client
+        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        {
+            if ( vecChannels[i].IsConnected() )
+            {
+                streamFileOut << "  <li>" << vecChannels[i].GetName() << "</li>" << endl;
+            }
+        }
+    }
+
+    // finish list
+    streamFileOut << "</ul>" << endl;
+}
+
+
+
+
+
+
+
 
 
 

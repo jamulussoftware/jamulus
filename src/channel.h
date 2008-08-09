@@ -136,7 +136,8 @@ public:
     }
 
 protected:
-    void SetNetwInBlSiFact ( const int iNewBlockSizeFactor );
+    void SetNetwInBlSiFactAndCompr ( const int iNewBlockSizeFactor,
+                                     const CAudioCompression::EAudComprType eNewAudComprType );
 
     // audio compression
     CAudioCompression   AudioCompressionIn;
@@ -173,7 +174,13 @@ protected:
 
     bool                bIsEnabled;
 
-    int                 vecNetwInBufSizes[MAX_NET_BLOCK_SIZE_FACTOR];
+    struct sNetwBufferInProps
+    {
+        int                              iNetwInBufSize;
+        int                              iBlockSizeFactor;
+        CAudioCompression::EAudComprType eAudComprType;
+    };
+    CVector<sNetwBufferInProps> vecNetwBufferInProps;
 
     int                 iCurNetwInBlSiFact;
     int                 iCurNetwOutBlSiFact;

@@ -519,21 +519,37 @@ CChannel::CChannel() : sName ( "" ),
     iCurNetwInBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
 {
     // query all possible network in buffer sizes for determining if an
-    // audio packet was received
+    // audio packet was received (the following code only works if all
+    // possible network buffer sizes are different!)
+    vecNetwBufferInProps.Init ( 2 * MAX_NET_BLOCK_SIZE_FACTOR );
     for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
     {
-        // network block size factor must start from 1 -> ( i + 1 )
-        vecNetwInBufSizes[i] = AudioCompressionIn.Init (
-            ( i + 1 ) * MIN_BLOCK_SIZE_SAMPLES,
-            CAudioCompression::CT_IMAADPCM );
+        const int iIMAIdx = 2 * i;
+        const int iMSIdx  = 2 * i + 1;
+
+        // network block size factor must start from 1 -> i + 1
+        vecNetwBufferInProps[iIMAIdx].iBlockSizeFactor = i + 1;
+        vecNetwBufferInProps[iMSIdx].iBlockSizeFactor  = i + 1;
+
+        // IMA ADPCM
+        vecNetwBufferInProps[iIMAIdx].eAudComprType  = CAudioCompression::CT_IMAADPCM;
+        vecNetwBufferInProps[iIMAIdx].iNetwInBufSize = AudioCompressionIn.Init (
+            vecNetwBufferInProps[iIMAIdx].iBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+            vecNetwBufferInProps[iIMAIdx].eAudComprType );
+
+        // MS ADPCM
+        vecNetwBufferInProps[iMSIdx].eAudComprType  = CAudioCompression::CT_MSADPCM;
+        vecNetwBufferInProps[iMSIdx].iNetwInBufSize = AudioCompressionIn.Init (
+            vecNetwBufferInProps[iMSIdx].iBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+            vecNetwBufferInProps[iMSIdx].eAudComprType );
     }
 
     // init the socket buffer
     SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
     // set initial input and output block size factors
-    SetNetwInBlSiFact     ( DEF_NET_BLOCK_SIZE_FACTOR );
-    SetNetwBufSizeFactOut ( DEF_NET_BLOCK_SIZE_FACTOR );
+    SetNetwInBlSiFactAndCompr ( DEF_NET_BLOCK_SIZE_FACTOR, CAudioCompression::CT_IMAADPCM );
+    SetNetwBufSizeFactOut     ( DEF_NET_BLOCK_SIZE_FACTOR );
 
     // init time-out for the buffer with zero -> no connection
     iConTimeOut = 0;
@@ -589,15 +605,15 @@ void CChannel::SetEnable ( const bool bNEnStat )
     }
 }
 
-void CChannel::SetNetwInBlSiFact ( const int iNewBlockSizeFactor )
+void CChannel::SetNetwInBlSiFactAndCompr ( const int iNewBlockSizeFactor,
+                                           const CAudioCompression::EAudComprType eNewAudComprType )
 {
     // store new value
     iCurNetwInBlSiFact = iNewBlockSizeFactor;
 
     // init audio compression unit
-    AudioCompressionIn.Init (
-        iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
-        CAudioCompression::CT_IMAADPCM );
+    AudioCompressionIn.Init ( iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+        eNewAudComprType );
 
     // initial value for connection time out counter
     iConTimeOutStartVal = ( CON_TIME_OUT_SEC_MAX * 1000 ) /
@@ -737,19 +753,24 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
         if ( !bIsProtocolPacket )
         {
             // check if this is an audio packet by checking all possible lengths
-            for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
+            const int iPossNetwSizes = vecNetwBufferInProps.Size();
+
+            for ( int i = 0; i < iPossNetwSizes; i++ )
             {
                 // check for low/high quality audio packets and set flags
-                if ( iNumBytes == vecNetwInBufSizes[i] )
+                if ( iNumBytes == vecNetwBufferInProps[i].iNetwInBufSize )
                 {
                     bIsAudioPacket = true;
 
                     // check if we are correctly initialized
-                    const int iNewNetwInBlSiFact = i + 1;
+                    const int iNewNetwInBlSiFact =
+                        vecNetwBufferInProps[i].iBlockSizeFactor;
+
                     if ( iNewNetwInBlSiFact != iCurNetwInBlSiFact )
                     {
                         // re-initialize to new value
-                        SetNetwInBlSiFact ( iNewNetwInBlSiFact );
+                        SetNetwInBlSiFactAndCompr ( iNewNetwInBlSiFact,
+                            vecNetwBufferInProps[i].eAudComprType );
                     }
                 }
             }

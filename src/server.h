@@ -42,7 +42,8 @@ class CServer : public QObject
 
 public:
     CServer ( const bool bUseLogging, const quint16 iPortNumber,
-              const QString& strHTMLStatusFileName );
+              const QString& strHTMLStatusFileName,
+              const QString& strServerNameForHTMLStatusFile );
     virtual ~CServer() {}
 
     void Start();

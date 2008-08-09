@@ -49,6 +49,7 @@ int main ( int argc, char** argv )
     quint16     iPortNumber           = LLCON_PORT_NUMBER;
 	std::string strIniFileName        = "";
     std::string strHTMLStatusFileName = "";
+    std::string strServerName         = "";
 
 	/* QT docu: argv()[0] is the program name, argv()[1] is the first
 	   argument and argv()[argc()-1] is the last argument.
@@ -93,6 +94,13 @@ int main ( int argc, char** argv )
 		{
 			strHTMLStatusFileName = strArgument;
             cerr << "HTML status file name: " << strHTMLStatusFileName << std::endl;
+			continue;
+		}
+
+		if ( GetStringArgument ( argc, argv, i, "-a", "--servername", strArgument ) )
+		{
+			strServerName = strArgument;
+            cerr << "server name for HTML status file: " << strServerName << std::endl;
 			continue;
 		}
 
@@ -168,7 +176,9 @@ int main ( int argc, char** argv )
 
 // TODO use QString
 
-            CServer Server ( bUseServerLogging, iPortNumber, strHTMLStatusFileName.c_str() );
+            CServer Server ( bUseServerLogging, iPortNumber,
+                             strHTMLStatusFileName.c_str(),
+                             strServerName.c_str() );
 
             if ( bUseGUI )
             {

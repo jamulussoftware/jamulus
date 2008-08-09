@@ -27,7 +27,8 @@
 
 /* Implementation *************************************************************/
 CServer::CServer ( const bool bUseLogging, const quint16 iPortNumber,
-                   const QString& strHTMLStatusFileName ) :
+                   const QString& strHTMLStatusFileName,
+                   const QString& strServerNameForHTMLStatusFile ) :
     Socket ( &ChannelSet, this, iPortNumber )
 {
     vecsSendData.Init ( MIN_BLOCK_SIZE_SAMPLES );
@@ -59,11 +60,19 @@ CServer::CServer ( const bool bUseLogging, const quint16 iPortNumber,
     // HTML status file writing
     if ( !strHTMLStatusFileName.isEmpty() )
     {
-// TEST only use port number as the server name right now
+        QString strCurServerNameForHTMLStatusFile = strServerNameForHTMLStatusFile;
+
+        // if server name is empty, substitude a default name
+        if ( strCurServerNameForHTMLStatusFile.isEmpty() )
+        {
+            strCurServerNameForHTMLStatusFile = "[server address]";
+        }
+
         // (the static cast to integer of the port number is required so that it
         // works correctly under Linux)
         ChannelSet.StartStatusHTMLFileWriting ( strHTMLStatusFileName,
-            "[server address]:" + QString().number( static_cast<int> ( iPortNumber ) ) );
+            strCurServerNameForHTMLStatusFile + ":" +
+            QString().number( static_cast<int> ( iPortNumber ) ) );
     }
 }
 

@@ -88,6 +88,12 @@ void CClient::OnNewConnection()
     // a new connection was successfully initiated, send name and request
     // connected clients list
     Channel.SetRemoteName ( strName );
+
+    // We have to send a connected clients list request since it can happen
+    // that we just had connected to the server and then disconnected but
+    // the server still thinks that we are connected (the server is still
+    // waiting for the channel time-out). If we now connect again, we would
+    // not get the list because the server does not know about a new connection.
     Channel.CreateReqConnClientsList();
 }
 

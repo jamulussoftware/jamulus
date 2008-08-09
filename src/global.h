@@ -91,12 +91,6 @@
 // time interval for sample rate offset estimation
 #define TIME_INT_SAM_OFFS_EST           60 // s
 
-// time interval of taps for sample rate offset estimation (time stamps)
-#define INTVL_TAPS_SAM_OFF_SET          1 // s
-
-#define NUM_BL_TIME_STAMPS              ( ( INTVL_TAPS_SAM_OFF_SET * 1000 ) / MIN_BLOCK_DURATION_MS )
-#define VEC_LEN_SAM_OFFS_EST            ( TIME_INT_SAM_OFFS_EST / INTVL_TAPS_SAM_OFF_SET )
-
 // length of the moving average buffer for response time measurement
 #define TIME_MOV_AV_RESPONSE            30 // seconds
 #define LEN_MOV_AV_RESPONSE             ( TIME_MOV_AV_RESPONSE * 1000 / MIN_BLOCK_DURATION_MS )

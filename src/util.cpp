@@ -300,7 +300,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<li>Qt cross-platform application framework: <i>http://trolltech.com</li>"
         "<li>Audio reverberation code: by Perry R. Cook and Gary P. Scavone, "
         "1995 - 2004 (taken from \"The Synthesis ToolKit in C++ (STK)\")</li>"
-        "<li>IMA-ADPCM: by Erik de Castro Lopo</li>"
+        "<li>ADPCM coders by Erik de Castro Lopo</li>"
         "<li>Parts from Dream DRM Receiver by Volker Fischer and Alexander "
         "Kurpiers: <i>http://drm.sf.net</li>"
         "</ul>"

@@ -37,6 +37,8 @@
 using namespace std; // because of the library: "vector"
 #ifdef _WIN32
 # include "../windows/moc/aboutdlgbase.h"
+# include <windows.h>
+# include <mmsystem.h>
 #else
 # include "moc/aboutdlgbase.h"
 #endif
@@ -431,39 +433,19 @@ protected:
 };
 
 
-// Time conversion -------------------------------------------------------------
+// Precise time ----------------------------------------------------------------
 // needed for ping measurement
-class CTimeConv
+class CPreciseTime
 {
 public:
-    // QTime to network time vector
-    static CVector<unsigned char> QTi2NetTi ( const QTime qTiIn )
+    // precise time (on Windows the QTime is not precise enough)
+    static int elapsed()
     {
-        // vector format: 1 byte hours, 1 byte min, 1 byte sec, 2 bytes ms
-        CVector<unsigned char> veccNetTi ( 5 );
-
-        veccNetTi[0] = static_cast<unsigned char> ( qTiIn.hour() );
-        veccNetTi[1] = static_cast<unsigned char> ( qTiIn.minute() );
-        veccNetTi[2] = static_cast<unsigned char> ( qTiIn.second() );
-
-        const int iMs = qTiIn.msec();
-        veccNetTi[3] = static_cast<unsigned char> ( ( iMs >> 8 ) & 255 );
-        veccNetTi[4] = static_cast<unsigned char> ( iMs & 255 );
-
-        return veccNetTi;
-    }
-
-    // network time vector to QTime
-    static QTime NetTi2QTi ( const CVector<unsigned char> netTiIn )
-    {
-        // vector format: 1 byte hours, 1 byte min, 1 byte sec, 2 bytes ms
-        return QTime (
-            static_cast<int> ( netTiIn[0] ), // hour
-            static_cast<int> ( netTiIn[1] ), // minute
-            static_cast<int> ( netTiIn[2] ), // seconds
-            // msec
-            static_cast<int> ( ( netTiIn[3] << 8 ) | netTiIn[4] )
-            );
+#ifdef _WIN32
+        return timeGetTime();
+#else
+        return QTime().elapsed();
+#endif
     }
 };
 

@@ -100,9 +100,9 @@ MESSAGES
 
 - Ping message (for measuring the ping time)  PROTMESSID_PING
 
-    +--------------------------------------------------------------------------+
-    | 5 bytes transmit time (1 byte hours, 1 byte min, 1 byte sec, 2 bytes ms) |
-    +--------------------------------------------------------------------------+
+    +-----------------------------+
+    | 4 bytes transmit time in ms |
+    +-----------------------------+
 
 
  ******************************************************************************
@@ -676,40 +676,22 @@ void CProtocol::EvaluateChatTextMes ( unsigned int iPos, const CVector<uint8_t>&
     emit ChatTextReceived ( strChatText );
 }
 
-void CProtocol::CreatePingMes ( const QTime time )
+void CProtocol::CreatePingMes ( const int iMs )
 {
     unsigned int iPos = 0; // init position pointer
 
-    // build data vector (5 bytes long)
-    CVector<uint8_t> vecData ( 5 );
+    // build data vector (4 bytes long)
+    CVector<uint8_t> vecData ( 4 );
 
-    // convert QTime to network time
-    CVector<unsigned char> vNetTimeInfo ( CTimeConv().QTi2NetTi ( time ) );
-
-    // convert all bytes (byte by byte)
-    for ( int j = 0; j < 5; j++ )
-    {
-        // byte-by-byte copying of the string data
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vNetTimeInfo[j] ), 1 );
-    }
+    // byte-by-byte copying of the string data
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iMs ), 4 );
 
     CreateAndSendMessage ( PROTMESSID_PING, vecData );
 }
 
 void CProtocol::EvaluatePingMes ( unsigned int iPos, const CVector<uint8_t>& vecData )
 {
-    // time information vector
-    CVector<unsigned char> vNetTimeInfo ( 5 ); // 5 bytes
-    for ( int j = 0; j < 5; j++ )
-    {
-        // byte-by-byte copying of the time information data
-        int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
-        vNetTimeInfo[j] = static_cast<unsigned char> ( iData );
-    }
-
-    // convert time to QTime and invoke message action
-    emit PingReceived ( CTimeConv().NetTi2QTi ( vNetTimeInfo ) );
+    emit PingReceived ( static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) ) );
 }
 
 

@@ -73,7 +73,7 @@ public:
     void CreateChanGainMes ( const int iChanID, const double dGain );
     void CreateChanNameMes ( const QString strName );
     void CreateChatTextMes ( const QString strChatText );
-    void CreatePingMes ( const QTime time );
+    void CreatePingMes ( const int iMs );
 
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
 
@@ -168,7 +168,7 @@ signals:
     void ChangeChanGain ( int iChanID, double dNewGain );
     void ChangeChanName ( QString strName );
     void ChatTextReceived ( QString strChatText );
-    void PingReceived ( QTime time );
+    void PingReceived ( int iMs );
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ReqJittBufSize();
     void ReqConnClientsList();

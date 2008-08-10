@@ -55,8 +55,8 @@ CClient::CClient() : bRun ( false ), Socket ( &Channel ),
     QObject::connect ( &Channel, SIGNAL ( ChatTextReceived ( QString ) ),
         this, SIGNAL ( ChatTextReceived ( QString ) ) );
 
-    QObject::connect ( &Channel, SIGNAL ( PingReceived ( QTime ) ),
-        this, SLOT ( OnReceivePingMessage ( QTime ) ) );
+    QObject::connect ( &Channel, SIGNAL ( PingReceived ( int ) ),
+        this, SLOT ( OnReceivePingMessage ( int ) ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -97,10 +97,10 @@ void CClient::OnNewConnection()
     Channel.CreateReqConnClientsList();
 }
 
-void CClient::OnReceivePingMessage ( QTime time )
+void CClient::OnReceivePingMessage ( int iMs )
 {
-    // calculate difference between received time and current time
-    emit PingTimeReceived ( time.msecsTo ( QTime().currentTime() ) /* ms */ );
+    // calculate difference between received time in ms and current time in ms
+    emit PingTimeReceived ( CPreciseTime().elapsed() - iMs );
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )

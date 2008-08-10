@@ -80,12 +80,12 @@ CChannelSet::CChannelSet() : bWriteStatusHTMLFile ( false )
     QObject::connect ( &vecChannels[5], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh5 ( QString ) ) );
 
     // ping message received
-    QObject::connect ( &vecChannels[0], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh0 ( QTime ) ) );
-    QObject::connect ( &vecChannels[1], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh1 ( QTime ) ) );
-    QObject::connect ( &vecChannels[2], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh2 ( QTime ) ) );
-    QObject::connect ( &vecChannels[3], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh3 ( QTime ) ) );
-    QObject::connect ( &vecChannels[4], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh4 ( QTime ) ) );
-    QObject::connect ( &vecChannels[5], SIGNAL ( PingReceived ( QTime ) ), this, SLOT ( OnPingReceivedCh5 ( QTime ) ) );
+    QObject::connect ( &vecChannels[0], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh0 ( int ) ) );
+    QObject::connect ( &vecChannels[1], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh1 ( int ) ) );
+    QObject::connect ( &vecChannels[2], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh2 ( int ) ) );
+    QObject::connect ( &vecChannels[3], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh3 ( int ) ) );
+    QObject::connect ( &vecChannels[4], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh4 ( int ) ) );
+    QObject::connect ( &vecChannels[5], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh5 ( int ) ) );
 }
 
 CVector<CChannelShortInfo> CChannelSet::CreateChannelList()
@@ -605,8 +605,8 @@ CChannel::CChannel() : sName ( "" ),
     QObject::connect( &Protocol, SIGNAL ( ChatTextReceived ( QString ) ),
         this, SIGNAL ( ChatTextReceived ( QString ) ) );
 
-    QObject::connect( &Protocol, SIGNAL ( PingReceived ( QTime ) ),
-        this, SIGNAL ( PingReceived ( QTime ) ) );
+    QObject::connect( &Protocol, SIGNAL ( PingReceived ( int ) ),
+        this, SIGNAL ( PingReceived ( int ) ) );
 }
 
 void CChannel::SetEnable ( const bool bNEnStat )

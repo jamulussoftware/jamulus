@@ -123,7 +123,7 @@ public:
     void CreateReqJitBufMes()                             { Protocol.CreateReqJitBufMes(); }
     void CreateReqConnClientsList()                       { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText ) { Protocol.CreateChatTextMes ( strChatText ); }
-    void CreatePingMes ( const QTime time )               { Protocol.CreatePingMes ( time ); }
+    void CreatePingMes ( const int iMs )                  { Protocol.CreatePingMes ( iMs ); }
 
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
     { 
@@ -203,7 +203,7 @@ signals:
     void ProtocolStatus ( bool bOk );
     void NameHasChanged();
     void ChatTextReceived ( QString strChatText );
-    void PingReceived ( QTime time );
+    void PingReceived ( int iMs );
 };
 
 
@@ -304,12 +304,12 @@ public slots:
     void OnChatTextReceivedCh4 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 4, strChatText ); }
     void OnChatTextReceivedCh5 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 5, strChatText ); }
 
-    void OnPingReceivedCh0 ( QTime time ) { vecChannels[0].CreatePingMes ( time ); }
-    void OnPingReceivedCh1 ( QTime time ) { vecChannels[1].CreatePingMes ( time ); }
-    void OnPingReceivedCh2 ( QTime time ) { vecChannels[2].CreatePingMes ( time ); }
-    void OnPingReceivedCh3 ( QTime time ) { vecChannels[3].CreatePingMes ( time ); }
-    void OnPingReceivedCh4 ( QTime time ) { vecChannels[4].CreatePingMes ( time ); }
-    void OnPingReceivedCh5 ( QTime time ) { vecChannels[5].CreatePingMes ( time ); }
+    void OnPingReceivedCh0 ( int iMs ) { vecChannels[0].CreatePingMes ( iMs ); }
+    void OnPingReceivedCh1 ( int iMs ) { vecChannels[1].CreatePingMes ( iMs ); }
+    void OnPingReceivedCh2 ( int iMs ) { vecChannels[2].CreatePingMes ( iMs ); }
+    void OnPingReceivedCh3 ( int iMs ) { vecChannels[3].CreatePingMes ( iMs ); }
+    void OnPingReceivedCh4 ( int iMs ) { vecChannels[4].CreatePingMes ( iMs ); }
+    void OnPingReceivedCh5 ( int iMs ) { vecChannels[5].CreatePingMes ( iMs ); }
 
 signals:
     void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );

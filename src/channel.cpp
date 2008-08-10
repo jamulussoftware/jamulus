@@ -519,6 +519,29 @@ CChannel::CChannel() : sName ( "" ),
     iCurSockBufSize    ( DEF_NET_BUF_SIZE_NUM_BL ),
     iCurNetwInBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
 {
+
+
+/*
+// TEST
+QTime TimeStart = QTime().currentTime();
+
+int z = 0;
+for ( int testo = 0; testo < 6000000; testo++ )
+{
+    const double t = log10(2.5 * testo);
+    z += t;
+}
+
+QTime TimeStop  = QTime().currentTime();
+int iDiffKorrekt = TimeStart.msecsTo ( TimeStop );
+
+CVector<unsigned char> vtest (CTimeConv().QTi2NetTi ( TimeStop ));
+QTime TimeStopInkorrekt = CTimeConv().NetTi2QTi ( vtest );
+int iDiffInkorrekt = TimeStart.msecsTo ( TimeStopInkorrekt );
+*/
+
+
+
     // query all possible network in buffer sizes for determining if an
     // audio packet was received (the following code only works if all
     // possible network buffer sizes are different!)

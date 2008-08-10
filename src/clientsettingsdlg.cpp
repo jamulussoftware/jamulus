@@ -235,8 +235,8 @@ void CClientSettingsDlg::OnTimerPing()
 
 void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 {
-    // color definition: < 20 ms green, < 50 ms yellow, otherwise red
-    if ( iPingTime < 20 )
+    // color definition: < 27 ms green, < 50 ms yellow, otherwise red
+    if ( iPingTime < 27 )
     {
         CLEDPingTime->SetLight ( MUL_COL_LED_GREEN );
     }

@@ -99,9 +99,8 @@ void CClient::OnNewConnection()
 
 void CClient::OnReceivePingMessage ( QTime time )
 {
-    // calculate difference between received time and current time, add one
-    // ms because QT seems to use a "floor" operation on "msecsTo()" function
-    emit PingTimeReceived ( time.msecsTo ( QTime().currentTime() ) + 1 /* ms */ );
+    // calculate difference between received time and current time
+    emit PingTimeReceived ( time.msecsTo ( QTime().currentTime() ) /* ms */ );
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )

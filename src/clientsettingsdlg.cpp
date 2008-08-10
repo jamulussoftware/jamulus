@@ -31,6 +31,32 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 {
     setupUi ( this );
 
+    // add help text to controls
+    QString strJitterBufferSize = tr ( "<b>Jitter Buffer Size:</b> The size of "
+        "the network buffer (jitter buffer). The jitter buffer compensates for "
+        "the network jitter. The larger this buffer is, the more robust the "
+        "connection is against network jitter but the higher is the latency. "
+        "This setting is therefore a trade-off between audio drop outs and "
+        "overall audio delay.<br>By changing this setting, both, the client "
+        "and the server jitter buffer is set to the same value." );
+    SliderNetBuf->setWhatsThis ( strJitterBufferSize );
+    TextNetBuf->setWhatsThis ( strJitterBufferSize );
+    GroupBoxJitterBuffer->setWhatsThis ( strJitterBufferSize );
+
+    QString strNetwBlockSize = tr ( "<b>Network Block Size:</b> The size of "
+        "the network audio blocks for input and output (upstream and "
+        "downstream). The lower these values are set, the lower is the "
+        "overall audio delay but the greater is the network protocoll "
+        "overhead (UDP protocol overhead) which means more bandwidth is "
+        "required. If the upstream/downstream bandwidth is not sufficient "
+        "for the audio stream bandwidth, audio dropouts occur and the "
+        "ping time will increase significantly (the connection is stodged)." );
+    SliderNetBufSiFactIn->setWhatsThis ( strNetwBlockSize );
+    SliderNetBufSiFactOut->setWhatsThis ( strNetwBlockSize );
+    TextNetBufSiFactIn->setWhatsThis ( strNetwBlockSize );
+    TextNetBufSiFactOut->setWhatsThis ( strNetwBlockSize );
+    GroupBoxNetwBuf->setWhatsThis ( strNetwBlockSize );
+
     // init timing jitter text label
     TextLabelStdDevTimer->setText ( "" );
 

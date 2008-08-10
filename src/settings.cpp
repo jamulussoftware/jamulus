@@ -112,6 +112,26 @@ void CSettings::ReadIniFile ( const QString& sFileName )
 	{
         pClient->SetOpenChatOnNewMessage ( bValue );
     }
+
+    // audio compression type (check CAudioCompression::EAudComprType definition
+    // for integer numbers!)
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "audiocompression", 0, 2, iValue ) )
+	{
+        switch ( iValue )
+        {
+        case 0:
+            pClient->SetAudioCompressionOut ( CAudioCompression::CT_NONE );
+            break;
+
+        case 1:
+            pClient->SetAudioCompressionOut ( CAudioCompression::CT_IMAADPCM );
+            break;
+
+        case 2:
+            break;
+            pClient->SetAudioCompressionOut ( CAudioCompression::CT_MSADPCM );
+        }
+    }
 }
 
 void CSettings::WriteIniFile ( const QString& sFileName )
@@ -154,6 +174,22 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     // flag whether the chat window shall be opened on a new chat message
     SetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage", pClient->GetOpenChatOnNewMessage() );
 
+    // audio compression type (check CAudioCompression::EAudComprType definition
+    // for integer numbers!)
+    switch ( pClient->GetAudioCompressionOut() )
+    {
+    case CAudioCompression::CT_NONE:
+        SetNumericIniSet ( IniXMLDocument, "client", "audiocompression", 0 );
+        break;
+
+    case CAudioCompression::CT_IMAADPCM:
+        SetNumericIniSet ( IniXMLDocument, "client", "audiocompression", 1 );
+        break;
+
+    case CAudioCompression::CT_MSADPCM:
+        SetNumericIniSet ( IniXMLDocument, "client", "audiocompression", 2 );
+        break;
+    }
 
     // prepare file name for storing initialization data in XML file
     QString sCurFileName = sFileName;

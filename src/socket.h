@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -73,6 +73,5 @@ protected:
 public slots:
     void OnDataReceived();
 };
-
 
 #endif /* !defined ( SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

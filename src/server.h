@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -87,6 +87,5 @@ public slots:
     void OnTimer();
     void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
 };
-
 
 #endif /* !defined ( SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ ) */

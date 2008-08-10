@@ -35,6 +35,7 @@
 #include "socket.h"
 #include "resample.h"
 #include "channel.h"
+#include "audiocompr.h"
 #include "util.h"
 #ifdef _WIN32
 # include "../windows/sound.h"
@@ -110,11 +111,12 @@ public:
     int GetNetwBufSizeFactIn() { return iNetwBufSizeFactIn; }
 
     void SetNetwBufSizeFactOut ( const int iNetNetwBlSiFact )
-    {
-        // set the new socket size
-        Channel.SetNetwBufSizeFactOut ( iNetNetwBlSiFact );
-    }
+        { Channel.SetNetwBufSizeFactOut ( iNetNetwBlSiFact ); }
     int GetNetwBufSizeFactOut() { return Channel.GetNetwBufSizeFactOut(); }
+
+    void SetAudioCompressionOut ( const CAudioCompression::EAudComprType eNewAudComprTypeOut )
+        { Channel.SetAudioCompressionOut ( eNewAudComprTypeOut ); }
+    CAudioCompression::EAudComprType GetAudioCompressionOut() { return Channel.GetAudioCompressionOut(); }
 
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Channel.SetRemoteChanGain ( iId, dGain ); }
@@ -192,6 +194,5 @@ signals:
     void ChatTextReceived ( QString strChatText );
     void PingTimeReceived ( int iPingTime );
 };
-
 
 #endif /* !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

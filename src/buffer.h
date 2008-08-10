@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -94,6 +94,5 @@ protected:
     int             iMemSize;
     int             iPutPos;
 };
-
 
 #endif /* !defined ( BUFFER_H__3B123453_4344_BB23945IUHF1912__INCLUDED_ ) */

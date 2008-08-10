@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer
@@ -33,8 +33,10 @@
 #include <qradiobutton.h>
 #include <qmenubar.h>
 #include <qlayout.h>
+#include <qbuttongroup.h>
 #include "global.h"
 #include "client.h"
+#include "audiocompr.h"
 #include "multicolorled.h"
 #ifdef _WIN32
 # include "../windows/moc/clientsettingsdlgbase.h"
@@ -61,10 +63,11 @@ public:
     void SetStatus ( const int iMessType, const int iStatus );
 
 protected:
-    CClient* pClient;
-    QTimer   TimerStatus;
-    QTimer   TimerPing;
-    void     UpdateDisplay();
+    CClient*     pClient;
+    QTimer       TimerStatus;
+    QTimer       TimerPing;
+    QButtonGroup AudioCompressionButtonGroup;
+    void         UpdateDisplay();
 
     virtual void showEvent ( QShowEvent* showEvent );
     virtual void hideEvent ( QHideEvent* hideEvent );
@@ -78,5 +81,6 @@ public slots:
     void OnSliderNetBufSiFactIn ( int value );
     void OnSliderNetBufSiFactOut ( int value );
     void OnOpenChatOnNewMessageStateChanged ( int value );
+    void OnAudioCompressionButtonGroupClicked ( QAbstractButton* button );
     void OnPingTimeResult ( int iPingTime );
 };

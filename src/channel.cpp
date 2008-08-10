@@ -30,10 +30,11 @@
 \******************************************************************************/
 CChannelSet::CChannelSet() : bWriteStatusHTMLFile ( false )
 {
-    // enable all channels
+    // enable all channels and set server flag
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecChannels[i].SetEnable ( true );
+        vecChannels[i].SetIsServer ( true );
     }
 
     // CODE TAG: MAX_NUM_CHANNELS_TAG
@@ -512,24 +513,36 @@ void CChannelSet::WriteHTMLChannelList()
 * CChannel                                                                     *
 \******************************************************************************/
 CChannel::CChannel() : sName ( "" ),
-    vecdGains ( MAX_NUM_CHANNELS, (double) 1.0 ),
+    vecdGains ( MAX_NUM_CHANNELS, (double) 1.0 ), bIsServer ( false ),
     // it is important to give the following parameters meaningful initial
     // values because they are dependend on each other
-    iCurSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL ),
+    iCurSockBufSize    ( DEF_NET_BUF_SIZE_NUM_BL ),
     iCurNetwInBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
 {
     // query all possible network in buffer sizes for determining if an
     // audio packet was received (the following code only works if all
     // possible network buffer sizes are different!)
-    vecNetwBufferInProps.Init ( 2 * MAX_NET_BLOCK_SIZE_FACTOR );
+    const int iNumSupportedAudComprTypes = 3;
+    vecNetwBufferInProps.Init ( iNumSupportedAudComprTypes *
+        MAX_NET_BLOCK_SIZE_FACTOR );
+
     for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
     {
-        const int iIMAIdx = 2 * i;
-        const int iMSIdx  = 2 * i + 1;
+        const int iNoneIdx = iNumSupportedAudComprTypes * i;
+        const int iIMAIdx  = iNumSupportedAudComprTypes * i + 1;
+        const int iMSIdx   = iNumSupportedAudComprTypes * i + 2;
 
         // network block size factor must start from 1 -> i + 1
-        vecNetwBufferInProps[iIMAIdx].iBlockSizeFactor = i + 1;
-        vecNetwBufferInProps[iMSIdx].iBlockSizeFactor  = i + 1;
+        const int iCurNetBlockSizeFact = i + 1;
+        vecNetwBufferInProps[iNoneIdx].iBlockSizeFactor = iCurNetBlockSizeFact;
+        vecNetwBufferInProps[iIMAIdx].iBlockSizeFactor  = iCurNetBlockSizeFact;
+        vecNetwBufferInProps[iMSIdx].iBlockSizeFactor   = iCurNetBlockSizeFact;
+
+        // None (no audio compression)
+        vecNetwBufferInProps[iNoneIdx].eAudComprType  = CAudioCompression::CT_NONE;
+        vecNetwBufferInProps[iNoneIdx].iNetwInBufSize = AudioCompressionIn.Init (
+            vecNetwBufferInProps[iNoneIdx].iBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+            vecNetwBufferInProps[iNoneIdx].eAudComprType );
 
         // IMA ADPCM
         vecNetwBufferInProps[iIMAIdx].eAudComprType  = CAudioCompression::CT_IMAADPCM;
@@ -548,8 +561,11 @@ CChannel::CChannel() : sName ( "" ),
     SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
     // set initial input and output block size factors
-    SetNetwInBlSiFactAndCompr ( DEF_NET_BLOCK_SIZE_FACTOR, CAudioCompression::CT_IMAADPCM );
+    SetNetwInBlSiFactAndCompr ( DEF_NET_BLOCK_SIZE_FACTOR, CAudioCompression::CT_MSADPCM );
     SetNetwBufSizeFactOut     ( DEF_NET_BLOCK_SIZE_FACTOR );
+
+    // set initial audio compression format for output
+    SetAudioCompressionOut ( CAudioCompression::CT_MSADPCM );
 
     // init time-out for the buffer with zero -> no connection
     iConTimeOut = 0;
@@ -625,16 +641,30 @@ void CChannel::SetNetwInBlSiFactAndCompr ( const int iNewBlockSizeFactor,
 
 void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
 {
+    Mutex.lock();
+    {
+        // store new value
+        iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
+
+        // init audio compression and get audio compression block size
+        iAudComprSizeOut = AudioCompressionOut.Init (
+            iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
+
+        // init conversion buffer
+        ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES );
+    }
+    Mutex.unlock();
+}
+
+void CChannel::SetAudioCompressionOut ( const CAudioCompression::EAudComprType eNewAudComprTypeOut )
+{
     // store new value
-    iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
+    eAudComprTypeOut = eNewAudComprTypeOut;
 
-    // init audio compression unit
-    iAudComprSizeOut = AudioCompressionOut.Init (
-        iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES,
-        CAudioCompression::CT_IMAADPCM );
-
-    // init conversion buffer
-    ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES );
+    // call "set network buffer size factor" function because its initialization
+    // depends on the audio compression format and implicitely, the audio compression
+    // is initialized
+    SetNetwBufSizeFactOut ( iCurNetwOutBlSiFact );
 }
 
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -673,17 +703,11 @@ void CChannel::SetSockBufSize ( const int iNumBlocks )
 
 void CChannel::OnNetwBlSiFactChange ( int iNewNetwBlSiFact )
 {
-// TEST
-//qDebug ( "new network block size factor: %d", iNewNetwBlSiFact );
-
     SetNetwBufSizeFactOut ( iNewNetwBlSiFact );
 }
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 {
-// TEST
-//qDebug ( "new jitter buffer size: %d", iNewJitBufSize );
-
     SetSockBufSize ( iNewJitBufSize );
 }
 
@@ -766,11 +790,25 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                     const int iNewNetwInBlSiFact =
                         vecNetwBufferInProps[i].iBlockSizeFactor;
 
-                    if ( iNewNetwInBlSiFact != iCurNetwInBlSiFact )
+                    const CAudioCompression::EAudComprType eNewAudComprType =
+                        vecNetwBufferInProps[i].eAudComprType;
+
+                    if ( ( iNewNetwInBlSiFact != iCurNetwInBlSiFact ) ||
+                         ( eNewAudComprType != AudioCompressionIn.GetType() ) )
                     {
                         // re-initialize to new value
                         SetNetwInBlSiFactAndCompr ( iNewNetwInBlSiFact,
-                            vecNetwBufferInProps[i].eAudComprType );
+                            eNewAudComprType );
+                    }
+
+                    // in case of a server channel, use the same audio
+                    // compression for output as for the input
+                    if ( bIsServer )
+                    {
+                        if ( GetAudioCompressionOut() != vecNetwBufferInProps[i].eAudComprType )
+                        {
+                            SetAudioCompressionOut ( vecNetwBufferInProps[i].eAudComprType );
+                        }
                     }
                 }
             }
@@ -783,22 +821,14 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                     // decompress audio
                     CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
 
-                    // do resampling to compensate for sample rate offsets in the
-                    // different sound cards of the clients
-/*
-for (int i = 0; i < BLOCK_SIZE_SAMPLES; i++)
-    vecdResInData[i] = (double) vecsData[i];
+                    // convert received data from short to double
+                    CVector<double> vecdDecomprAudio ( iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES );
+                    for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ )
+                    {
+                        vecdDecomprAudio[i] = static_cast<double> ( vecsDecomprAudio[i] );
+                    }
 
-const int iInSize = ResampleObj.Resample(vecdResInData, vecdResOutData,
-    (double) SYSTEM_SAMPLE_RATE / (SYSTEM_SAMPLE_RATE - dSamRateOffset));
-*/
-
-vecdResOutData.Init ( iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES );
-for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ ) {
-    vecdResOutData[i] = (double) vecsDecomprAudio[i];
-}
-
-                    if ( SockBuf.Put ( vecdResOutData ) )
+                    if ( SockBuf.Put ( vecdDecomprAudio ) )
                     {
                         eRet = PS_AUDIO_OK;
                     }
@@ -883,14 +913,18 @@ CVector<unsigned char> CChannel::PrepSendPacket ( const CVector<short>& vecsNPac
     // tell the following network send routine that nothing should be sent
     CVector<unsigned char> vecbySendBuf ( 0 );
 
-    // use conversion buffer to convert sound card block size in network
-    // block size
-    if ( ConvBuf.Put ( vecsNPacket ) )
+    Mutex.lock(); // get mutex lock
     {
-        // a packet is ready, compress audio
-        vecbySendBuf.Init ( iAudComprSizeOut );
-        vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
+        // use conversion buffer to convert sound card block size in network
+        // block size
+        if ( ConvBuf.Put ( vecsNPacket ) )
+        {
+            // a packet is ready, compress audio
+            vecbySendBuf.Init ( iAudComprSizeOut );
+            vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
+        }
     }
+    Mutex.unlock(); // get mutex unlock
 
     return vecbySendBuf;
 }

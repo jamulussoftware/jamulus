@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>443</width>
-    <height>244</height>
+    <height>260</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -724,23 +724,60 @@
      </property>
      <layout class="QVBoxLayout" >
       <item>
-       <widget class="QSplitter" name="splitter" >
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QCheckBox" name="cbOpenChatOnNewMessage" >
+          <property name="text" >
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text" >
+           <string>Open chat on new message</string>
+          </property>
+          <property name="wordWrap" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBoxAudioCompressionType" >
+        <property name="title" >
+         <string>Audio Compression</string>
         </property>
-        <widget class="QCheckBox" name="cbOpenChatOnNewMessage" >
-         <property name="text" >
-          <string/>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label" >
-         <property name="text" >
-          <string>Open chat on new message</string>
-         </property>
-         <property name="wordWrap" >
-          <bool>true</bool>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" >
+         <item>
+          <widget class="QRadioButton" name="radioButtonIMA_ADPCM" >
+           <property name="text" >
+            <string>IMA ADPCM</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButtonMS_ADPCM" >
+           <property name="text" >
+            <string>MS ADPCM</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButtonNoAudioCompr" >
+           <property name="text" >
+            <string>None</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
       <item>
@@ -750,8 +787,8 @@
         </property>
         <property name="sizeHint" >
          <size>
-          <width>98</width>
-          <height>21</height>
+          <width>116</width>
+          <height>20</height>
          </size>
         </property>
        </spacer>

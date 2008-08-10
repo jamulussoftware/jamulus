@@ -175,5 +175,4 @@ signals:
     void ServerFull();
 };
 
-
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

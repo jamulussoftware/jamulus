@@ -83,7 +83,7 @@ public:
     bool IsConnected() const { return iConTimeOut > 0; }
 
     void SetEnable ( const bool bNEnStat );
-    bool IsEnabled() { return bIsEnabled; }
+    void SetIsServer ( const bool bNEnStat ) { bIsServer = bNEnStat; }
 
     void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
     bool GetAddress ( CHostAddress& RetAddr );
@@ -108,6 +108,9 @@ public:
     int GetNetwBufSizeFactOut() { return iCurNetwOutBlSiFact; }
 
     int GetNetwBufSizeFactIn() { return iCurNetwInBlSiFact; }
+
+    void SetAudioCompressionOut ( const CAudioCompression::EAudComprType eNewAudComprTypeOut );
+    CAudioCompression::EAudComprType GetAudioCompressionOut() { return eAudComprTypeOut; }
 
     // network protocol interface
     void CreateJitBufMes ( const int iJitBufSize )
@@ -144,12 +147,6 @@ protected:
     CAudioCompression   AudioCompressionOut;
     int                 iAudComprSizeOut;
 
-    // resampling
-    CResample           ResampleObj;
-    double              dSamRateOffset;
-    CVector<double>     vecdResInData;
-    CVector<double>     vecdResOutData;
-
     // connection parameters
     CHostAddress        InetAddr;
 
@@ -173,6 +170,12 @@ protected:
     int                 iConTimeOutStartVal;
 
     bool                bIsEnabled;
+    bool                bIsServer;
+
+    int                 iCurNetwInBlSiFact;
+    int                 iCurNetwOutBlSiFact;
+
+    QMutex              Mutex;
 
     struct sNetwBufferInProps
     {
@@ -182,10 +185,7 @@ protected:
     };
     CVector<sNetwBufferInProps> vecNetwBufferInProps;
 
-    int                 iCurNetwInBlSiFact;
-    int                 iCurNetwOutBlSiFact;
-
-    QMutex              Mutex;
+    CAudioCompression::EAudComprType eAudComprTypeOut;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

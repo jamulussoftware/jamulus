@@ -92,6 +92,25 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         cbOpenChatOnNewMessage->setCheckState ( Qt::Unchecked );
     }
 
+    // audio compression type
+    switch ( pClient->GetAudioCompressionOut() )
+    {
+    case CAudioCompression::CT_NONE:
+        radioButtonNoAudioCompr->setChecked ( true );
+        break;
+
+    case CAudioCompression::CT_IMAADPCM:
+        radioButtonIMA_ADPCM->setChecked ( true );
+        break;
+
+    case CAudioCompression::CT_MSADPCM:
+        radioButtonMS_ADPCM->setChecked ( true );
+        break;
+    }
+    AudioCompressionButtonGroup.addButton ( radioButtonNoAudioCompr );
+    AudioCompressionButtonGroup.addButton ( radioButtonIMA_ADPCM );
+    AudioCompressionButtonGroup.addButton ( radioButtonMS_ADPCM );
+
 
     // Connections -------------------------------------------------------------
     // timers
@@ -122,6 +141,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // misc
     QObject::connect ( pClient, SIGNAL ( PingTimeReceived ( int ) ),
         this, SLOT ( OnPingTimeResult ( int ) ) );
+
+    QObject::connect ( &AudioCompressionButtonGroup, SIGNAL ( buttonClicked ( QAbstractButton* ) ),
+        this, SLOT ( OnAudioCompressionButtonGroupClicked ( QAbstractButton* ) ) );
 
 
     // Timers ------------------------------------------------------------------
@@ -183,6 +205,25 @@ void CClientSettingsDlg::OnSliderNetBufSiFactOut ( int value )
 void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
 {
     pClient->SetOpenChatOnNewMessage ( value == Qt::Checked );
+    UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnAudioCompressionButtonGroupClicked ( QAbstractButton* button )
+{
+    if ( button == radioButtonNoAudioCompr )
+    {
+        pClient->SetAudioCompressionOut ( CAudioCompression::CT_NONE );
+    }
+
+    if ( button == radioButtonIMA_ADPCM )
+    {
+        pClient->SetAudioCompressionOut ( CAudioCompression::CT_IMAADPCM );
+    }
+
+    if ( button == radioButtonMS_ADPCM )
+    {
+        pClient->SetAudioCompressionOut ( CAudioCompression::CT_MSADPCM );
+    }
     UpdateDisplay();
 }
 

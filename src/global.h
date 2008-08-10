@@ -183,5 +183,4 @@ bool        GetNumericArgument ( int argc, char **argv, int &i, std::string strS
 void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam = 0,
                       const int iChanNum = 0 );
 
-
 #endif /* !defined ( GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_ ) */

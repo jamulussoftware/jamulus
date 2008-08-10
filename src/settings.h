@@ -30,6 +30,7 @@
 #include <qtextstream.h>
 #include "global.h"
 #include "client.h"
+#include "audiocompr.h"
 
 
 /* Definitions ****************************************************************/

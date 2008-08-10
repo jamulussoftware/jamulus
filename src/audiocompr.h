@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2006
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer, Erik de Castro Lopo
@@ -134,7 +134,12 @@ protected:
 class CAudioCompression
 {
 public:
-    enum EAudComprType { CT_NONE, CT_IMAADPCM, CT_MSADPCM };
+    enum EAudComprType
+    {
+        CT_NONE     = 0,
+        CT_IMAADPCM = 1,
+        CT_MSADPCM  = 2
+    };
 
     CAudioCompression() {}
     virtual ~CAudioCompression() {}
@@ -143,6 +148,8 @@ public:
                                    const EAudComprType eNewAuCoTy );
     CVector<unsigned char>  Encode ( const CVector<short>& vecsAudio );
     CVector<short>          Decode ( const CVector<unsigned char>& vecbyAdpcm );
+
+    EAudComprType           GetType() { return eAudComprType; }
 
 protected:
     EAudComprType   eAudComprType;

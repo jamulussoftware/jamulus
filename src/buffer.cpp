@@ -60,7 +60,7 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks )
 	}
     else
 	{
-        iNumSamFadingExtra = FADE_IN_OUT_NUM_SAM;
+        iNumSamFadingExtra = FADE_IN_OUT_NUM_SAM_EXTRA;
 	}
 
     // init variables for extrapolation (in case a fade out is needed)

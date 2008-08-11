@@ -40,7 +40,7 @@
 #define PROTMESSID_ACKN                      1 // acknowledge
 #define PROTMESSID_JITT_BUF_SIZE            10 // jitter buffer size
 #define PROTMESSID_REQ_JITT_BUF_SIZE        11 // request jitter buffer size
-#define PROTMESSID_PING                     12 // for measuring ping time
+#define PROTMESSID_PING                     12 // OLD, not used anymore
 #define PROTMESSID_NET_BLSI_FACTOR          13 // network buffer size factor
 #define PROTMESSID_CHANNEL_GAIN             14 // set channel gain for mix
 #define PROTMESSID_CONN_CLIENTS_LIST        15 // connected client list
@@ -48,6 +48,7 @@
 #define PROTMESSID_REQ_CONN_CLIENTS_LIST    17 // request connected client list
 #define PROTMESSID_CHANNEL_NAME             18 // set channel name for fader tag
 #define PROTMESSID_CHAT_TEXT                19 // contains a chat text
+#define PROTMESSID_PING_MS                  20 // for measuring ping time
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -135,16 +136,16 @@ protected:
 
     void CreateAndSendMessage ( const int iID, const CVector<uint8_t>& vecData );
 
-    void EvaluateJitBufMes          ( unsigned int iPos, const CVector<uint8_t>& vecData );
-    void EvaluateReqJitBufMes       ( unsigned int iPos, const CVector<uint8_t>& vecData );
-    void EvaluateReqConnClientsList ( unsigned int iPos, const CVector<uint8_t>& vecData );
-    void EvaluateServerFullMes      ( unsigned int iPos, const CVector<uint8_t>& vecData );
-    void EvaluateNetwBlSiFactMes    ( unsigned int iPos, const CVector<uint8_t>& vecData );
-    void EvaluateChanGainMes        ( unsigned int iPos, const CVector<uint8_t>& vecData );
-    void EvaluateChanNameMes        ( unsigned int iPos, const CVector<uint8_t>& vecData );
-    void EvaluateChatTextMes        ( unsigned int iPos, const CVector<uint8_t>& vecData );
-    void EvaluateConClientListMes   ( unsigned int iPos, const CVector<uint8_t>& vecData );
-    void EvaluatePingMes            ( unsigned int iPos, const CVector<uint8_t>& vecData );
+    bool EvaluateJitBufMes          ( const CVector<uint8_t>& vecData );
+    bool EvaluateReqJitBufMes       ( const CVector<uint8_t>& vecData );
+    bool EvaluateReqConnClientsList ( const CVector<uint8_t>& vecData );
+    bool EvaluateServerFullMes      ( const CVector<uint8_t>& vecData );
+    bool EvaluateNetwBlSiFactMes    ( const CVector<uint8_t>& vecData );
+    bool EvaluateChanGainMes        ( const CVector<uint8_t>& vecData );
+    bool EvaluateChanNameMes        ( const CVector<uint8_t>& vecData );
+    bool EvaluateChatTextMes        ( const CVector<uint8_t>& vecData );
+    bool EvaluateConClientListMes   ( const CVector<uint8_t>& vecData );
+    bool EvaluatePingMes            ( const CVector<uint8_t>& vecData );
 
     int                     iOldRecID, iOldRecCnt;
 

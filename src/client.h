@@ -127,7 +127,7 @@ public:
         { Channel.CreateChatTextMes ( strChatText ); }
 
     void SendPingMess()
-        { Channel.CreatePingMes ( CPreciseTime().elapsed() ); };
+        { Channel.CreatePingMes ( PreciseTime.elapsed() ); };
 
     CSound*   GetSndInterface() { return &Sound; }
     CChannel* GetChannel()      { return &Channel; }
@@ -177,6 +177,9 @@ protected:
     CAudioResample      ResampleObjDownR; // right channel
     CAudioResample      ResampleObjUpL; // left channel
     CAudioResample      ResampleObjUpR; // right channel
+
+    // for ping measurement
+    CPreciseTime        PreciseTime;
 
     // debugging, evaluating
     CMovingAv<double>   RespTimeMoAvBuf;

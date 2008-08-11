@@ -438,8 +438,15 @@ protected:
 class CPreciseTime
 {
 public:
+#ifdef _WIN32
+    // for the Windows version we have to define a minimum timer precision
+    // -> set it to 1 ms
+    CPreciseTime() { timeBeginPeriod(1); }
+    virtual ~CPreciseTime() { timeEndPeriod(1); }
+#endif
+
     // precise time (on Windows the QTime is not precise enough)
-    static int elapsed()
+    int elapsed()
     {
 #ifdef _WIN32
         return timeGetTime();

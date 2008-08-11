@@ -99,8 +99,13 @@ void CClient::OnNewConnection()
 
 void CClient::OnReceivePingMessage ( int iMs )
 {
-    // calculate difference between received time in ms and current time in ms
-    emit PingTimeReceived ( CPreciseTime().elapsed() - iMs );
+    // calculate difference between received time in ms and current time in ms,
+    // take care of wrap arounds (if wrapping, do not use result)
+    const int iCurDiff = PreciseTime.elapsed() - iMs;
+    if ( iCurDiff >= 0 )
+    {
+        emit PingTimeReceived ( iCurDiff );
+    }
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )

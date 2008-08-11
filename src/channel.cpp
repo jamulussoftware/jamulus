@@ -762,7 +762,7 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
         if ( IsConnected() )
         {
             // parse the message assuming this is a protocol message
-            if ( Protocol.ParseMessage ( vecbyData, iNumBytes ) )
+            if ( !Protocol.ParseMessage ( vecbyData, iNumBytes ) )
             {
                 // set status flags
                 eRet              = PS_PROT_OK;

@@ -1,3 +1,40 @@
+2.1.2
+
+- audio compression type can be selected (IMA ADPCM, MS ADPCM, None)
+
+- ping time measurement problems on Windows OS fixed
+
+- security checks for protocol messages (wrong messages could crash the software)
+
+
+2.1.1
+
+- chat window
+
+- server can be started on different port
+
+- client can select port of server
+
+- ping time information in general settings dialog
+
+
+2.1.0
+
+- ASIO support
+
+
+2.0.0
+
+- first QT4 compatible release
+
+
+0.9.9
+
+- new client settings dialog
+
+- at each client a separate audio mix can be generated for all connected clients at the server
+
+
 0.9.4
 
 - implemented protocol, now it is possible to set the jitter buffer in the
@@ -7,3 +44,8 @@
 
 - internal audio processing in the server is now based on minimum block
   size (improves latency)
+
+
+0.9.1
+
+- initial version

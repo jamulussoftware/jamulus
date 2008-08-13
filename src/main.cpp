@@ -142,7 +142,7 @@ int main ( int argc, char** argv )
         {
             // client
             // actual client object
-            CClient Client;
+            CClient Client ( iPortNumber );
 
             // load settings from init-file
             CSettings Settings ( &Client );

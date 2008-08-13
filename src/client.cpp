@@ -26,7 +26,8 @@
 
 
 /* Implementation *************************************************************/
-CClient::CClient() : bRun ( false ), Socket ( &Channel ),
+CClient::CClient ( const quint16 iPortNumber ) : bRun ( false ),
+    Socket ( &Channel, iPortNumber ),
     iAudioInFader ( AUD_FADER_IN_MAX / 2 ),
     iReverbLevel ( AUD_REVERB_MAX / 6 ),
     bReverbOnLeftChan ( false ),

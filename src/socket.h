@@ -46,8 +46,8 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket ( CChannel* pNewChannel ) : pChannel(  pNewChannel ), bIsClient ( true )
-        { Init(); }
+    CSocket ( CChannel* pNewChannel, const quint16 iPortNumber ) :
+        pChannel( pNewChannel ), bIsClient ( true ) { Init ( iPortNumber ); }
     CSocket ( CChannelSet* pNewChannelSet, QObject* pNServP, const quint16 iPortNumber ) :
         pChannelSet(pNewChannelSet), pServer ( pNServP ), bIsClient ( false )
         { Init ( iPortNumber ); }

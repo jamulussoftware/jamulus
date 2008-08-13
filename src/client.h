@@ -61,7 +61,7 @@ class CClient : public QThread
     Q_OBJECT
 
 public:
-    CClient();
+    CClient ( const quint16 iPortNumber );
     virtual ~CClient() {}
 
     void   Init();

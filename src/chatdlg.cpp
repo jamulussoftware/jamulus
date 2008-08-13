@@ -26,7 +26,8 @@
 
 
 /* Implementation *************************************************************/
-CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f )
+CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
+    QDialog ( parent, f )
 {
     setupUi ( this );
 

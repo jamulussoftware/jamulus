@@ -26,8 +26,9 @@
 
 
 /* Implementation *************************************************************/
-CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent )
-    : pClient ( pNCliP ), QDialog ( parent ),
+CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
+                                   Qt::WindowFlags f )
+    : pClient ( pNCliP ), QDialog ( parent, f ),
     ClientSettingsDlg ( pNCliP, parent, Qt::WindowMinMaxButtonsHint ),
     ChatDlg ( parent, Qt::WindowMinMaxButtonsHint )
 {

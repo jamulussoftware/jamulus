@@ -153,7 +153,7 @@ int main ( int argc, char** argv )
             Settings.Load ( strIniFileName.c_str() );
 
             // GUI object
-            CLlconClientDlg ClientDlg ( &Client, 0 );
+            CLlconClientDlg ClientDlg ( &Client, 0, Qt::WindowMinMaxButtonsHint );
 
             // set main window
             pMainWindow = &ClientDlg;

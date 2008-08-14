@@ -89,14 +89,14 @@ public:
     bool GetAddress ( CHostAddress& RetAddr );
     CHostAddress GetAddress() { return InetAddr; }
 
-    void SetName ( const QString sNNa ) { sName = sNNa; }
-    QString GetName() { return sName; }
+    void SetName ( const QString sNNa );
+    QString GetName();
 
     void SetRemoteName ( const QString strName )
         { Protocol.CreateChanNameMes ( strName ); }
 
-    void SetGain ( const int iNID, const double dNG ) { vecdGains[iNID] = dNG; }
-    double GetGain( const int iNID ) { return vecdGains[iNID]; }
+    void SetGain ( const int iChanID, const double dNewGain );
+    double GetGain ( const int iChanID );
 
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Protocol.CreateChanGainMes ( iId, dGain ); }
@@ -141,6 +141,8 @@ public:
 protected:
     void SetNetwInBlSiFactAndCompr ( const int iNewBlockSizeFactor,
                                      const CAudioCompression::EAudComprType eNewAudComprType );
+
+    void SetSockBufSizeIntern ( const int iNumBlocks );
 
     // audio compression
     CAudioCompression   AudioCompressionIn;

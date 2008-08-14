@@ -624,19 +624,23 @@ void CChannel::SetEnable ( const bool bNEnStat )
 void CChannel::SetNetwInBlSiFactAndCompr ( const int iNewBlockSizeFactor,
                                            const CAudioCompression::EAudComprType eNewAudComprType )
 {
-    // store new value
-    iCurNetwInBlSiFact = iNewBlockSizeFactor;
+    Mutex.lock();
+    {
+        // store new value
+        iCurNetwInBlSiFact = iNewBlockSizeFactor;
 
-    // init audio compression unit
-    AudioCompressionIn.Init ( iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
-        eNewAudComprType );
+        // init audio compression unit
+        AudioCompressionIn.Init ( iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+            eNewAudComprType );
 
-    // initial value for connection time out counter
-    iConTimeOutStartVal = ( CON_TIME_OUT_SEC_MAX * 1000 ) /
-        ( iNewBlockSizeFactor * MIN_BLOCK_DURATION_MS );
+        // initial value for connection time out counter
+        iConTimeOutStartVal = ( CON_TIME_OUT_SEC_MAX * 1000 ) /
+            ( iNewBlockSizeFactor * MIN_BLOCK_DURATION_MS );
 
-    // socket buffer must be adjusted
-    SetSockBufSize ( GetSockBufSize() );
+        // socket buffer must be adjusted
+        SetSockBufSizeIntern ( GetSockBufSize() );
+    }
+    Mutex.unlock();
 }
 
 void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
@@ -667,6 +671,97 @@ void CChannel::SetAudioCompressionOut ( const CAudioCompression::EAudComprType e
     SetNetwBufSizeFactOut ( iCurNetwOutBlSiFact );
 }
 
+void CChannel::SetSockBufSize ( const int iNumBlocks )
+{
+    // this opperation must be done with mutex
+    Mutex.lock();
+    {
+        SetSockBufSizeIntern ( iNumBlocks );
+    }
+    Mutex.unlock();
+}
+
+void CChannel::SetSockBufSizeIntern ( const int iNumBlocks )
+{
+    iCurSockBufSize = iNumBlocks;
+
+    // the idea of setting the jitter buffer is as follows:
+    // The network block size is a multiple of the internal minimal
+    // block size. Therefore, the minimum jitter buffer size must be
+    // so that it can take one network buffer -> NET_BLOCK_SIZE_FACTOR.
+    // The actual jitter compensation are then the additional blocks of
+    // the internal block size, which is set with SetSockBufSize
+    SockBuf.Init ( MIN_BLOCK_SIZE_SAMPLES,
+        iNumBlocks + iCurNetwInBlSiFact );
+}
+
+void CChannel::SetGain ( const int iChanID, const double dNewGain )
+{
+    Mutex.lock();
+    {
+        // set value (make sure channel ID is in range)
+        if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+        {
+            vecdGains[iChanID] = dNewGain;
+        }
+    }
+    Mutex.unlock();
+}
+
+double CChannel::GetGain ( const int iChanID )
+{
+    double dReturnVal = 0;
+
+    Mutex.lock();
+    {
+        // get value (make sure channel ID is in range)
+        if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+        {
+            dReturnVal = vecdGains[iChanID];
+        }
+    }
+    Mutex.unlock();
+
+    return dReturnVal;
+}
+
+void CChannel::SetName ( const QString strNewName )
+{
+    bool bNameHasChanged = false;
+
+    Mutex.lock();
+    {
+        // apply value (if different from previous name)
+        if ( sName.compare ( strNewName ) )
+        {
+            sName           = strNewName;
+            bNameHasChanged = true;
+        }
+    }
+    Mutex.unlock();
+
+    // fire message that name has changed
+    if ( bNameHasChanged )
+    {
+        // the "emit" has to be done outside the mutexed region
+        emit NameHasChanged();
+    }
+}
+QString CChannel::GetName()
+{
+    // make sure the string is not written at the same time when it is
+    // read here -> use mutex to secure access
+    QString strReturn;
+
+    Mutex.lock();
+    {
+        strReturn = sName;
+    }
+    Mutex.unlock();
+
+    return strReturn;
+}
+
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 {
     // only send messages if we are connected, otherwise delete complete queue
@@ -682,25 +777,6 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     }
 }
 
-void CChannel::SetSockBufSize ( const int iNumBlocks )
-{
-    // this opperation must be done with mutex
-    Mutex.lock();
-    {
-        iCurSockBufSize = iNumBlocks;
-
-        // the idea of setting the jitter buffer is as follows:
-        // The network block size is a multiple of the internal minimal
-        // block size. Therefore, the minimum jitter buffer size must be
-        // so that it can take one network buffer -> NET_BLOCK_SIZE_FACTOR.
-        // The actual jitter compensation are then the additional blocks of
-        // the internal block size, which is set with SetSockBufSize
-        SockBuf.Init ( MIN_BLOCK_SIZE_SAMPLES,
-            iNumBlocks + iCurNetwInBlSiFact );
-    }
-    Mutex.unlock();
-}
-
 void CChannel::OnNetwBlSiFactChange ( int iNewNetwBlSiFact )
 {
     SetNetwBufSizeFactOut ( iNewNetwBlSiFact );
@@ -713,36 +789,34 @@ void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 
 void CChannel::OnChangeChanGain ( int iChanID, double dNewGain )
 {
-    Q_ASSERT ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) );
-
-    // set value
-    vecdGains[iChanID] = dNewGain;
+    SetGain ( iChanID, dNewGain );
 }
 
 void CChannel::OnChangeChanName ( QString strName )
 {
-    // apply value (if different from previous name)
-    if ( sName.compare ( strName ) )
-    {
-        sName = strName;
-
-        // fire message that name has changed
-        emit NameHasChanged();
-    }
+    SetName ( strName );
 }
 
 bool CChannel::GetAddress(CHostAddress& RetAddr)
 {
-    if ( IsConnected() )
+    bool bReturnFlag;
+
+    Mutex.lock();
     {
-        RetAddr = InetAddr;
-        return true;
+        if ( IsConnected() )
+        {
+            RetAddr     = InetAddr;
+            bReturnFlag = true;
+        }
+        else
+        {
+            RetAddr     = CHostAddress();
+            bReturnFlag = false;
+        }
     }
-    else
-    {
-        RetAddr = CHostAddress();
-        return false;
-    }
+    Mutex.unlock();
+
+    return bReturnFlag;
 }
 
 EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,

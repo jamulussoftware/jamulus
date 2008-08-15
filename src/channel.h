@@ -259,13 +259,15 @@ protected:
 
     /* do not use the vector class since CChannel does not have appropriate
        copy constructor/operator */
-    CChannel    vecChannels[MAX_NUM_CHANNELS];
-    QMutex      Mutex;
+    CChannel         vecChannels[MAX_NUM_CHANNELS];
+    QMutex           Mutex;
+
+    CVector<QString> vstrChatColors;
 
     // HTML file server status
-    bool        bWriteStatusHTMLFile;
-    QString     strServerHTMLFileListName;
-    QString     strServerNameWithPort;
+    bool             bWriteStatusHTMLFile;
+    QString          strServerHTMLFileListName;
+    QString          strServerNameWithPort;
 
 public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG

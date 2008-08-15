@@ -37,6 +37,15 @@ CChannelSet::CChannelSet() : bWriteStatusHTMLFile ( false )
         vecChannels[i].SetIsServer ( true );
     }
 
+    // define colors for chat window identifiers
+    vstrChatColors.Init ( 6 );
+    vstrChatColors[0] = "mediumblue";
+    vstrChatColors[1] = "red";
+    vstrChatColors[2] = "darkorchid";
+    vstrChatColors[3] = "green";
+    vstrChatColors[4] = "maroon";
+    vstrChatColors[5] = "coral";
+
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
@@ -176,8 +185,10 @@ void CChannelSet::CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
     }
 
     // add name of the client at the beginning of the message text
+    QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
     const QString strActualMessageText =
-        "<" + ChanName + "> " + strChatText;
+        "<font color=""" + sCurColor + """><b>&#60;" + ChanName +
+        "&#62;</b></font> " + strChatText;
 
 
     // send chat text to all connected clients ---------------------------------

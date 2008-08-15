@@ -611,6 +611,8 @@ CChannel::CChannel() : sName ( "" ),
 
 void CChannel::SetEnable ( const bool bNEnStat )
 {
+    QMutexLocker locker ( &Mutex );
+
     // set internal parameter
     bIsEnabled = bNEnStat;
 
@@ -624,40 +626,36 @@ void CChannel::SetEnable ( const bool bNEnStat )
 void CChannel::SetNetwInBlSiFactAndCompr ( const int iNewBlockSizeFactor,
                                            const CAudioCompression::EAudComprType eNewAudComprType )
 {
-    Mutex.lock();
-    {
-        // store new value
-        iCurNetwInBlSiFact = iNewBlockSizeFactor;
+    QMutexLocker locker ( &Mutex );
 
-        // init audio compression unit
-        AudioCompressionIn.Init ( iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
-            eNewAudComprType );
+    // store new value
+    iCurNetwInBlSiFact = iNewBlockSizeFactor;
 
-        // initial value for connection time out counter
-        iConTimeOutStartVal = ( CON_TIME_OUT_SEC_MAX * 1000 ) /
-            ( iNewBlockSizeFactor * MIN_BLOCK_DURATION_MS );
+    // init audio compression unit
+    AudioCompressionIn.Init ( iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+        eNewAudComprType );
 
-        // socket buffer must be adjusted
-        SetSockBufSizeIntern ( GetSockBufSize() );
-    }
-    Mutex.unlock();
+    // initial value for connection time out counter
+    iConTimeOutStartVal = ( CON_TIME_OUT_SEC_MAX * 1000 ) /
+        ( iNewBlockSizeFactor * MIN_BLOCK_DURATION_MS );
+
+    // socket buffer must be adjusted
+    SetSockBufSizeIntern ( GetSockBufSize() );
 }
 
 void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
 {
-    Mutex.lock();
-    {
-        // store new value
-        iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
+    QMutexLocker locker ( &Mutex );
 
-        // init audio compression and get audio compression block size
-        iAudComprSizeOut = AudioCompressionOut.Init (
-            iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
+    // store new value
+    iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
 
-        // init conversion buffer
-        ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES );
-    }
-    Mutex.unlock();
+    // init audio compression and get audio compression block size
+    iAudComprSizeOut = AudioCompressionOut.Init (
+        iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
+
+    // init conversion buffer
+    ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES );
 }
 
 void CChannel::SetAudioCompressionOut ( const CAudioCompression::EAudComprType eNewAudComprTypeOut )
@@ -673,12 +671,9 @@ void CChannel::SetAudioCompressionOut ( const CAudioCompression::EAudComprType e
 
 void CChannel::SetSockBufSize ( const int iNumBlocks )
 {
-    // this opperation must be done with mutex
-    Mutex.lock();
-    {
-        SetSockBufSizeIntern ( iNumBlocks );
-    }
-    Mutex.unlock();
+    QMutexLocker locker ( &Mutex ); // this opperation must be done with mutex
+
+    SetSockBufSizeIntern ( iNumBlocks );
 }
 
 void CChannel::SetSockBufSizeIntern ( const int iNumBlocks )
@@ -697,32 +692,28 @@ void CChannel::SetSockBufSizeIntern ( const int iNumBlocks )
 
 void CChannel::SetGain ( const int iChanID, const double dNewGain )
 {
-    Mutex.lock();
+    QMutexLocker locker ( &Mutex );
+
+    // set value (make sure channel ID is in range)
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
-        // set value (make sure channel ID is in range)
-        if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
-        {
-            vecdGains[iChanID] = dNewGain;
-        }
+        vecdGains[iChanID] = dNewGain;
     }
-    Mutex.unlock();
 }
 
 double CChannel::GetGain ( const int iChanID )
 {
-    double dReturnVal = 0;
+    QMutexLocker locker ( &Mutex );
 
-    Mutex.lock();
+    // get value (make sure channel ID is in range)
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
-        // get value (make sure channel ID is in range)
-        if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
-        {
-            dReturnVal = vecdGains[iChanID];
-        }
+        return vecdGains[iChanID];
     }
-    Mutex.unlock();
-
-    return dReturnVal;
+    else
+    {
+        return 0;
+    }
 }
 
 void CChannel::SetName ( const QString strNewName )
@@ -751,15 +742,9 @@ QString CChannel::GetName()
 {
     // make sure the string is not written at the same time when it is
     // read here -> use mutex to secure access
-    QString strReturn;
+    QMutexLocker locker ( &Mutex );
 
-    Mutex.lock();
-    {
-        strReturn = sName;
-    }
-    Mutex.unlock();
-
-    return strReturn;
+    return sName;
 }
 
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -799,24 +784,18 @@ void CChannel::OnChangeChanName ( QString strName )
 
 bool CChannel::GetAddress(CHostAddress& RetAddr)
 {
-    bool bReturnFlag;
+    QMutexLocker locker ( &Mutex );
 
-    Mutex.lock();
+    if ( IsConnected() )
     {
-        if ( IsConnected() )
-        {
-            RetAddr     = InetAddr;
-            bReturnFlag = true;
-        }
-        else
-        {
-            RetAddr     = CHostAddress();
-            bReturnFlag = false;
-        }
+        RetAddr = InetAddr;
+        return true;
     }
-    Mutex.unlock();
-
-    return bReturnFlag;
+    else
+    {
+        RetAddr = CHostAddress();
+        return false;
+    }
 }
 
 EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
@@ -946,59 +925,55 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
 
 EGetDataStat CChannel::GetData ( CVector<double>& vecdData )
 {
+    QMutexLocker locker ( &Mutex );
+
     // init with ok flag
     EGetDataStat eGetStatus = GS_BUFFER_OK;
 
-    Mutex.lock(); // get mutex lock
+    if ( !SockBuf.Get ( vecdData ) )
     {
-        if ( !SockBuf.Get ( vecdData ) )
+        // decrease time-out counter
+        if ( iConTimeOut > 0 )
         {
-            // decrease time-out counter
-            if ( iConTimeOut > 0 )
-            {
-                iConTimeOut--;
+            iConTimeOut--;
 
-                if ( iConTimeOut == 0 )
-                {
-                    // channel is just disconnected
-                    eGetStatus = GS_CHAN_NOW_DISCONNECTED;
-                }
-                else
-                {
-                    // channel is not yet disconnected but no data in buffer
-                    eGetStatus = GS_BUFFER_UNDERRUN;
-                }
+            if ( iConTimeOut == 0 )
+            {
+                // channel is just disconnected
+                eGetStatus = GS_CHAN_NOW_DISCONNECTED;
             }
             else
             {
-                // channel is disconnected
-                eGetStatus = GS_CHAN_NOT_CONNECTED;
+                // channel is not yet disconnected but no data in buffer
+                eGetStatus = GS_BUFFER_UNDERRUN;
             }
         }
+        else
+        {
+            // channel is disconnected
+            eGetStatus = GS_CHAN_NOT_CONNECTED;
+        }
     }
-    Mutex.unlock(); // get mutex unlock
 
     return eGetStatus;
 }
 
 CVector<unsigned char> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )
 {
+    QMutexLocker locker ( &Mutex );
+
     // if the block is not ready we have to initialize with zero length to
     // tell the following network send routine that nothing should be sent
     CVector<unsigned char> vecbySendBuf ( 0 );
 
-    Mutex.lock(); // get mutex lock
+    // use conversion buffer to convert sound card block size in network
+    // block size
+    if ( ConvBuf.Put ( vecsNPacket ) )
     {
-        // use conversion buffer to convert sound card block size in network
-        // block size
-        if ( ConvBuf.Put ( vecsNPacket ) )
-        {
-            // a packet is ready, compress audio
-            vecbySendBuf.Init ( iAudComprSizeOut );
-            vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
-        }
+        // a packet is ready, compress audio
+        vecbySendBuf.Init ( iAudComprSizeOut );
+        vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
     }
-    Mutex.unlock(); // get mutex unlock
 
     return vecbySendBuf;
 }

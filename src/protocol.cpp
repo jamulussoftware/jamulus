@@ -146,14 +146,10 @@ void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
     {
         // check if list is empty so that we have to initiate a send process
         bListWasEmpty = SendMessQueue.empty();
-    }
-    Mutex.unlock();
 
-    // create send message object for the queue
-    CSendMessage SendMessageObj ( vecMessage, iCnt, iID );
+        // create send message object for the queue
+        CSendMessage SendMessageObj ( vecMessage, iCnt, iID );
 
-    Mutex.lock();
-    {
         // we want to have a FIFO: we add at the end and take from the beginning
         SendMessQueue.push_back ( SendMessageObj );
     }
@@ -168,22 +164,20 @@ void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
 
 void CProtocol::SendMessage()
 {
-    CVector<uint8_t>    vecMessage;
-    bool                bSendMess = false;
+    QMutexLocker locker ( &Mutex );
 
-    Mutex.lock();
+    CVector<uint8_t> vecMessage;
+    bool             bSendMess = false;
+
+    // we have to check that list is not empty, since in another thread the
+    // last element of the list might have been erased
+    if ( !SendMessQueue.empty() )
     {
-        // we have to check that list is not empty, since in another thread the
-        // last element of the list might have been erased
-        if ( !SendMessQueue.empty() )
-        {
-            vecMessage.Init ( SendMessQueue.front().vecMessage.Size() );
-            vecMessage = SendMessQueue.front().vecMessage;
+        vecMessage.Init ( SendMessQueue.front().vecMessage.Size() );
+        vecMessage = SendMessQueue.front().vecMessage;
 
-            bSendMess = true;
-        }
+        bSendMess = true;
     }
-    Mutex.unlock();
 
     if ( bSendMess )
     {
@@ -206,8 +200,8 @@ void CProtocol::SendMessage()
 void CProtocol::CreateAndSendMessage ( const int iID,
                                        const CVector<uint8_t>& vecData )
 {
-    CVector<uint8_t>    vecNewMessage;
-    int                 iCurCounter;
+    CVector<uint8_t> vecNewMessage;
+    int              iCurCounter;
 
     Mutex.lock();
     {
@@ -228,9 +222,9 @@ void CProtocol::CreateAndSendMessage ( const int iID,
 
 void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
 {
-    CVector<uint8_t>    vecAcknMessage;
-    CVector<uint8_t>    vecData ( 2 ); // 2 bytes of data
-    unsigned int        iPos = 0; // init position pointer
+    CVector<uint8_t> vecAcknMessage;
+    CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
+    unsigned int     iPos = 0; // init position pointer
 
     // build data vector
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iID ), 2 );
@@ -244,12 +238,10 @@ void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
 
 void CProtocol::DeleteSendMessQueue()
 {
-    Mutex.lock();
-    {
-        // delete complete "send message queue"
-        SendMessQueue.clear();
-    }
-    Mutex.unlock();
+    QMutexLocker locker ( &Mutex );
+
+    // delete complete "send message queue"
+    SendMessQueue.clear();
 }
 
 bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
@@ -283,7 +275,7 @@ for ( int i = 0; i < iNumBytes; i++ ) {
             // acknowledgments are not acknowledged
             if ( iRecID != PROTMESSID_ACKN )
             {
-                // re-send acknowledgement
+                // resend acknowledgement
                 CreateAndSendAcknMess ( iRecID, iRecCounter );
             }
         }
@@ -382,7 +374,7 @@ for ( int i = 0; i < iNumBytes; i++ ) {
             }
         }
 
-        // save current message ID and counter to find out if message was re-sent
+        // save current message ID and counter to find out if message was resent
         iOldRecID  = iRecID;
         iOldRecCnt = iRecCounter;
     }

@@ -273,12 +273,12 @@ public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
-    void OnSendProtMessCh0 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 0, mess ); }
-    void OnSendProtMessCh1 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 1, mess ); }
-    void OnSendProtMessCh2 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 2, mess ); }
-    void OnSendProtMessCh3 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 3, mess ); }
-    void OnSendProtMessCh4 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 4, mess ); }
-    void OnSendProtMessCh5 ( CVector<uint8_t> mess ) {emit MessReadyForSending ( 5, mess ); }
+    void OnSendProtMessCh0 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 0, mess ); }
+    void OnSendProtMessCh1 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 1, mess ); }
+    void OnSendProtMessCh2 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 2, mess ); }
+    void OnSendProtMessCh3 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 3, mess ); }
+    void OnSendProtMessCh4 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 4, mess ); }
+    void OnSendProtMessCh5 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 5, mess ); }
 
     void OnNewConnectionCh0() { vecChannels[0].CreateReqJitBufMes(); }
     void OnNewConnectionCh1() { vecChannels[1].CreateReqJitBufMes(); }

@@ -184,7 +184,9 @@ void CChannelSet::CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
         ChanName = addrTest.toString();
     }
 
-    // add name of the client at the beginning of the message text
+    // add name of the client at the beginning of the message text and use
+    // different colors, to get correct HTML, the "<" and ">" signs must be
+    // replaced by "&#60;" and "&#62;"
     QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
     const QString strActualMessageText =
         "<font color=""" + sCurColor + """><b>&#60;" + ChanName +
@@ -213,7 +215,7 @@ int CChannelSet::GetFreeChan()
         }
     }
 
-    /* no free channel found, return invalid ID */
+    // no free channel found, return invalid ID
     return INVALID_CHANNEL_ID;
 }
 
@@ -221,12 +223,12 @@ int CChannelSet::CheckAddr ( const CHostAddress& Addr )
 {
     CHostAddress InetAddr;
 
-    /* Check for all possible channels if IP is already in use */
+    // check for all possible channels if IP is already in use
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( vecChannels[i].GetAddress ( InetAddr ) )
         {
-            /* IP found, return channel number */
+            // IP found, return channel number
             if ( InetAddr == Addr )
             {
                 return i;
@@ -234,7 +236,7 @@ int CChannelSet::CheckAddr ( const CHostAddress& Addr )
         }
     }
 
-    /* IP not found, return invalid ID */
+    // IP not found, return invalid ID
     return INVALID_CHANNEL_ID;
 }
 
@@ -249,7 +251,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
     {
         bool bChanOK = true;
 
-        // get channel ID ------------------------------------------------------
+        // Get channel ID ------------------------------------------------------
         // check address
         int iCurChanID = CheckAddr ( HostAdr );
 
@@ -294,7 +296,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
         }
 
 
-        // put received data in jitter buffer ----------------------------------
+        // Put received data in jitter buffer ----------------------------------
         if ( bChanOK )
         {
             // put packet in socket buffer

@@ -164,20 +164,22 @@ void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
 
 void CProtocol::SendMessage()
 {
-    QMutexLocker locker ( &Mutex );
-
     CVector<uint8_t> vecMessage;
     bool             bSendMess = false;
 
-    // we have to check that list is not empty, since in another thread the
-    // last element of the list might have been erased
-    if ( !SendMessQueue.empty() )
+    Mutex.lock();
     {
-        vecMessage.Init ( SendMessQueue.front().vecMessage.Size() );
-        vecMessage = SendMessQueue.front().vecMessage;
+        // we have to check that list is not empty, since in another thread the
+        // last element of the list might have been erased
+        if ( !SendMessQueue.empty() )
+        {
+            vecMessage.Init ( SendMessQueue.front().vecMessage.Size() );
+            vecMessage = SendMessQueue.front().vecMessage;
 
-        bSendMess = true;
+            bSendMess = true;
+        }
     }
+    Mutex.unlock();
 
     if ( bSendMess )
     {

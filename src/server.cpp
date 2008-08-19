@@ -28,8 +28,10 @@
 /* Implementation *************************************************************/
 CServer::CServer ( const bool bUseLogging, const quint16 iPortNumber,
                    const QString& strHTMLStatusFileName,
-                   const QString& strServerNameForHTMLStatusFile ) :
-    Socket ( &ChannelSet, this, iPortNumber )
+                   const QString& strServerNameForHTMLStatusFile,
+                   const bool bForceLowUploadRate ) :
+    Socket ( &ChannelSet, this, iPortNumber ),
+    ChannelSet ( bForceLowUploadRate )
 {
     vecsSendData.Init ( MIN_BLOCK_SIZE_SAMPLES );
 

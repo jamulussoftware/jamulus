@@ -28,13 +28,15 @@
 /******************************************************************************\
 * CChannelSet                                                                  *
 \******************************************************************************/
-CChannelSet::CChannelSet() : bWriteStatusHTMLFile ( false )
+CChannelSet::CChannelSet ( const bool bForceLowUploadRate ) :
+    bWriteStatusHTMLFile ( false )
 {
     // enable all channels and set server flag
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecChannels[i].SetEnable ( true );
         vecChannels[i].SetIsServer ( true );
+        vecChannels[i].SetForceLowUploadRate ( bForceLowUploadRate );
     }
 
     // define colors for chat window identifiers
@@ -527,6 +529,7 @@ void CChannelSet::WriteHTMLChannelList()
 \******************************************************************************/
 CChannel::CChannel() : sName ( "" ),
     vecdGains ( MAX_NUM_CHANNELS, (double) 1.0 ), bIsServer ( false ),
+    bForceLowUploadRate ( false ),
     // it is important to give the following parameters meaningful initial
     // values because they are dependend on each other
     iCurSockBufSize    ( DEF_NET_BUF_SIZE_NUM_BL ),
@@ -636,6 +639,19 @@ void CChannel::SetEnable ( const bool bNEnStat )
     }
 }
 
+void CChannel::SetForceLowUploadRate ( const bool bNFoLoUpRat )
+{
+    if ( bNFoLoUpRat )
+    {
+        // initialize with low upload rate parameters and set flag so that
+        // these parameters are not changed anymore
+        SetNetwBufSizeFactOut ( LOW_UPL_SET_BLOCK_SIZE_FACTOR_OUT );
+        SetAudioCompressionOut ( LOW_UPL_SET_AUDIO_COMPRESSION );
+    }
+
+    bForceLowUploadRate = bNFoLoUpRat;
+}
+
 void CChannel::SetNetwInBlSiFactAndCompr ( const int iNewBlockSizeFactor,
                                            const CAudioCompression::EAudComprType eNewAudComprType )
 {
@@ -660,26 +676,32 @@ void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
 {
     QMutexLocker locker ( &Mutex );
 
-    // store new value
-    iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
+    if ( !bForceLowUploadRate )
+    {
+        // store new value
+        iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
 
-    // init audio compression and get audio compression block size
-    iAudComprSizeOut = AudioCompressionOut.Init (
-        iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
+        // init audio compression and get audio compression block size
+        iAudComprSizeOut = AudioCompressionOut.Init (
+            iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
 
-    // init conversion buffer
-    ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES );
+        // init conversion buffer
+        ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES );
+    }
 }
 
 void CChannel::SetAudioCompressionOut ( const CAudioCompression::EAudComprType eNewAudComprTypeOut )
 {
-    // store new value
-    eAudComprTypeOut = eNewAudComprTypeOut;
+    if ( !bForceLowUploadRate )
+    {
+        // store new value
+        eAudComprTypeOut = eNewAudComprTypeOut;
 
-    // call "set network buffer size factor" function because its initialization
-    // depends on the audio compression format and implicitely, the audio compression
-    // is initialized
-    SetNetwBufSizeFactOut ( iCurNetwOutBlSiFact );
+        // call "set network buffer size factor" function because its initialization
+        // depends on the audio compression format and implicitely, the audio compression
+        // is initialized
+        SetNetwBufSizeFactOut ( iCurNetwOutBlSiFact );
+    }
 }
 
 void CChannel::SetSockBufSize ( const int iNumBlocks )

@@ -41,10 +41,10 @@
 // Set the time-out for the input buffer until the state changes from
 // connected to not-connected (the actual time depends on the way the error
 // correction is implemented)
-#define CON_TIME_OUT_SEC_MAX        5 // seconds
+#define CON_TIME_OUT_SEC_MAX                5 // seconds
 
 // no valid channel number
-#define INVALID_CHANNEL_ID          ( MAX_NUM_CHANNELS + 1 )
+#define INVALID_CHANNEL_ID                  ( MAX_NUM_CHANNELS + 1 )
 
 enum EPutDataStat
 {
@@ -62,6 +62,10 @@ enum EGetDataStat
     GS_CHAN_NOW_DISCONNECTED,
     GS_CHAN_NOT_CONNECTED
 };
+
+// low upload data rate settings
+#define LOW_UPL_SET_AUDIO_COMPRESSION       CAudioCompression::CT_MSADPCM
+#define LOW_UPL_SET_BLOCK_SIZE_FACTOR_OUT   MAX_NET_BLOCK_SIZE_FACTOR
 
 
 /* Classes ********************************************************************/
@@ -83,7 +87,8 @@ public:
     bool IsConnected() const { return iConTimeOut > 0; }
 
     void SetEnable ( const bool bNEnStat );
-    void SetIsServer ( const bool bNEnStat ) { bIsServer = bNEnStat; }
+    void SetIsServer ( const bool bNIsServer ) { bIsServer = bNIsServer; }
+    void SetForceLowUploadRate ( const bool bNFoLoUpRat );
 
     void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
     bool GetAddress ( CHostAddress& RetAddr );
@@ -173,6 +178,7 @@ protected:
 
     bool                bIsEnabled;
     bool                bIsServer;
+    bool                bForceLowUploadRate;
 
     int                 iCurNetwInBlSiFact;
     int                 iCurNetwOutBlSiFact;
@@ -215,7 +221,7 @@ class CChannelSet : public QObject
     Q_OBJECT
 
 public:
-    CChannelSet();
+    CChannelSet ( const bool bForceLowUploadRate );
     virtual ~CChannelSet() {}
 
     bool PutData ( const CVector<unsigned char>& vecbyRecBuf,

@@ -140,9 +140,9 @@ int CImaAdpcm::Init ( const int iNewAudioLen )
 
 CVector<unsigned char> CImaAdpcm::Encode ( const CVector<short>& vecsAudio )
 {
-    int                     i;
-    CVector<unsigned char>  vecbyAdpcm;
-    CVector<unsigned char>  vecbyAdpcmTemp;
+    int                    i;
+    CVector<unsigned char> vecbyAdpcm;
+    CVector<unsigned char> vecbyAdpcmTemp;
 
     // init size
     vecbyAdpcm.Init     ( iAdpcmSize );
@@ -224,8 +224,8 @@ CVector<unsigned char> CImaAdpcm::Encode ( const CVector<short>& vecsAudio )
 
 CVector<short> CImaAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
 {
-    int             i;
-    CVector<short>  vecsAudio;
+    int            i;
+    CVector<short> vecsAudio;
 
     vecsAudio.Init ( iAudSize );
 
@@ -261,7 +261,7 @@ CVector<short> CImaAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
     /* Decode the encoded 4 bit samples ------------------------------------- */
     for ( i = 1; i < iAudSize; i++ )
     {
-        const short bytecode = vecsAudio[i] & 0xF ;
+        const short bytecode = vecsAudio[i] & 0xF;
 
         Q_ASSERT ( iStepindDec < IMA_STEP_SIZE_TAB_LEN );
 
@@ -476,7 +476,7 @@ CVector<short> CMsAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
 
 		if ( current > 32767 )
         {
-			current = 32767 ;
+			current = 32767;
         }
 		else
         {
@@ -518,9 +518,9 @@ void CMsAdpcm::ChoosePredictor ( const CVector<short>& vecsAudio,
 
 	for ( unsigned int bpred = 0; bpred < MSADPCM_ADAPT_COEFF_COUNT; bpred++ )
 	{
-        unsigned int idelta_sum = 0 ;
+        unsigned int idelta_sum = 0;
 
-		for ( unsigned int k = 2 ; k < 2 + idelta_count ; k++ )
+		for ( unsigned int k = 2; k < 2 + idelta_count; k++ )
         {
 			idelta_sum += abs ( vecsAudio[k] - 
                 ( ( vecsAudio[k - 1] * ms_AdaptCoeff1[bpred] +

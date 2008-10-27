@@ -283,7 +283,7 @@ void CClient::run()
 
             if ( bReverbOnLeftChan )
             {
-                for (i = 0; i < iBlockSizeSam; i++)
+                for ( i = 0; i < iBlockSizeSam; i++ )
                 {
                     // left channel
                     vecdAudioL[i] +=

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
-    <height>310</height>
+    <width>506</width>
+    <height>329</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -724,6 +724,33 @@
      </property>
      <layout class="QVBoxLayout" >
       <item>
+       <layout class="QVBoxLayout" >
+        <item>
+         <widget class="QLabel" name="lSoundcard" >
+          <property name="text" >
+           <string>Soundcard</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbSoundcard" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize" >
+           <size>
+            <width>153</width>
+            <height>0</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
        <layout class="QHBoxLayout" >
         <item>
          <widget class="QCheckBox" name="cbOpenChatOnNewMessage" >
@@ -733,7 +760,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label" >
+         <widget class="QLabel" name="lOpenChat" >
           <property name="sizePolicy" >
            <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
             <horstretch>0</horstretch>
@@ -796,7 +823,7 @@
       <item>
        <layout class="QHBoxLayout" >
         <item>
-         <widget class="QLabel" name="TextLabel1_3" >
+         <widget class="QLabel" name="lPingTime" >
           <property name="text" >
            <string>Ping Time:</string>
           </property>
@@ -863,7 +890,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="TextLabel1_2" >
+         <widget class="QLabel" name="lProtocolStat" >
           <property name="text" >
            <string>Protocol Status:</string>
           </property>

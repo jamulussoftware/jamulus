@@ -108,6 +108,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         double ( iCurNetBufSiFactOut * MIN_BLOCK_DURATION_MS), 'f', 2 ) +
         " ms" );
 
+    // init combo box containing all available sound cards in the system
+    cbSoundcard->clear();
+    for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndInterface()->GetNumDev(); iSndDevIdx++ )
+    {
+        cbSoundcard->addItem ( pClient->GetSndInterface()->GetDeviceName ( iSndDevIdx ).c_str() );
+    }
+    cbSoundcard->setCurrentIndex ( pClient->GetSndInterface()->GetDev() );
+
     // "OpenChatOnNewMessage" check box
     if ( pClient->GetOpenChatOnNewMessage() )
     {
@@ -163,6 +171,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // check boxes
     QObject::connect ( cbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnOpenChatOnNewMessageStateChanged ( int ) ) );
+
+    // combo boxes
+    QObject::connect ( cbSoundcard, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnSoundCrdSelection ( int ) ) );
 
     // misc
     QObject::connect ( pClient, SIGNAL ( PingTimeReceived ( int ) ),
@@ -226,6 +238,23 @@ void CClientSettingsDlg::OnSliderNetBufSiFactOut ( int value )
         double ( value * MIN_BLOCK_DURATION_MS ), 'f', 2 ) +
         " ms" );
     UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
+{
+    try
+    {
+        pClient->GetSndInterface()->SetDev ( iSndDevIdx );
+    }
+    catch ( CGenErr generr )
+    {
+        QMessageBox::critical ( 0, APP_NAME,
+            QString ( "The selected audio device could not be used because "
+            "of the following error: " ) + generr.GetErrorText(), "Ok", 0 );
+
+        // recover old selection
+        cbSoundcard->setCurrentIndex ( pClient->GetSndInterface()->GetDev() );
+    }
 }
 
 void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )

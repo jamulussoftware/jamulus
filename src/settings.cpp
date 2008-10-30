@@ -77,10 +77,24 @@ void CSettings::ReadIniFile ( const QString& sFileName )
         pClient->SetReverbOnLeftChan ( bValue );
     }
 
+    // sound card selection
+    // special case with this setting: the sound card initialization depends on this setting
+    // call, therefore, if no setting file parameter could be retrieved, the sound card is
+    // initialized with a default setting defined here
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "auddevidx", 1, MAX_NUMBER_SOUND_CARDS, iValue ) )
+	{
+        pClient->GetSndInterface()->SetDev ( iValue );
+    }
+    else
+    {
+        // default setting: use first sound card in system
+        pClient->GetSndInterface()->SetDev ( 0 );
+    }
+
     // sound card in number of buffers
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audinbuf", 1, AUD_SLIDER_LENGTH, iValue ) )
 	{
-        pClient->GetSndInterface()->SetInNumBuf( iValue );
+        pClient->GetSndInterface()->SetInNumBuf ( iValue );
     }
 
     // sound card out number of buffers
@@ -155,6 +169,9 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
     // reverberation channel assignment
     SetFlagIniSet ( IniXMLDocument, "client", "reverblchan", pClient->IsReverbOnLeftChan() );
+
+    // sound card selection
+    SetNumericIniSet ( IniXMLDocument, "client", "auddevidx", pClient->GetSndInterface()->GetDev() );
 
     // sound card in number of buffers
     SetNumericIniSet ( IniXMLDocument, "client", "audinbuf", pClient->GetSndInterface()->GetInNumBuf() );

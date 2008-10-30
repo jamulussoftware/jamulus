@@ -50,9 +50,6 @@
 #define NUM_SOUND_BUFFERS_IN    4
 #define NUM_SOUND_BUFFERS_OUT   4
 
-// maximum number of recognized sound cards installed in the system
-#define MAX_NUMBER_SOUND_CARDS  10
-
 
 /* Classes ********************************************************************/
 #ifdef USE_ASIO_SND_INTERFACE
@@ -71,26 +68,36 @@ public:
     CSound();
     virtual ~CSound();
 
-    void        InitRecording ( int iNewBufferSize, bool bNewBlocking = true ) { bBlockingRec = bNewBlocking; InitRecordingAndPlayback ( iNewBufferSize ); }
-    void        InitPlayback ( int iNewBufferSize, bool bNewBlocking = false ) { bBlockingPlay = bNewBlocking; InitRecordingAndPlayback ( iNewBufferSize ); }
+    void        InitRecording ( const int iNewBufferSize, const bool bNewBlocking = true )
+                {
+                    bBlockingRec = bNewBlocking;
+                    InitRecordingAndPlayback ( iNewBufferSize );
+                }
+    void        InitPlayback ( const int iNewBufferSize, const bool bNewBlocking = false )
+                {
+                    bBlockingPlay = bNewBlocking; 
+                    InitRecordingAndPlayback ( iNewBufferSize );
+                }
     bool        Read ( CVector<short>& psData );
     bool        Write ( CVector<short>& psData );
 
-    int         GetNumDev() { return iNumDevs; }
-    std::string GetDeviceName ( int iDiD ) { return pstrDevices[iDiD]; }
-    void        SetOutDev ( int iNewDev ) {} // not supported
-    int         GetOutDev() { return 0; }  // not supported
-    void        SetInDev ( int iNewDev ) {}  // not supported 
-    int         GetInDev() { return 0; }  // not supported
-    void        SetOutNumBuf ( int iNewNum );
+    int         GetNumDev() { return lNumDevs; }
+    std::string GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }
+
+    void        SetDev ( const int iNewDev );
+    int         GetDev() { return lCurDev; }
+
+    void        SetOutNumBuf ( const int iNewNum );
     int         GetOutNumBuf();
-    void        SetInNumBuf ( int iNewNum );
+    void        SetInNumBuf ( const int iNewNum );
     int         GetInNumBuf();
 
     void        Close();
 
 protected:
-    void        InitRecordingAndPlayback ( int iNewBufferSize );
+    bool        LoadAndInitializeFirstValidDriver();
+    std::string LoadAndInitializeDriver ( const int iIdx );
+    void        InitRecordingAndPlayback ( const int iNewBufferSize );
 
     // audio hardware buffer info
     struct sHWBufferInfo
@@ -107,8 +114,10 @@ protected:
     static void      sampleRateChanged ( ASIOSampleRate sRate ) {}
     static long      asioMessages ( long selector, long value, void* message, double* opt );
 
-    int              iNumDevs;
-    std::string      pstrDevices[MAX_NUMBER_SOUND_CARDS];
+    long             lNumDevs;
+    long             lCurDev;
+    char*            cDriverNames[MAX_NUMBER_SOUND_CARDS];
+
     bool             bChangParamIn;
     bool             bChangParamOut;
 
@@ -131,6 +140,11 @@ public:
 
     int         GetNumDev() { return iNumDevs; }
     std::string GetDeviceName ( int iDiD ) { return pstrDevices[iDiD]; }
+
+    // dummy functions
+    int         SetDev ( const int iNewDev ) {}
+    int         GetDev() { return 0; }
+
     void        SetOutDev ( int iNewDev );
     int         GetOutDev() { return iCurOutDev; }
     void        SetInDev ( int iNewDev );

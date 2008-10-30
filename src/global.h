@@ -81,6 +81,9 @@
 // number of ticks of audio in/out buffer sliders
 # define AUD_SLIDER_LENGTH              8
 
+// maximum number of recognized sound cards installed in the system
+#define MAX_NUMBER_SOUND_CARDS          10
+
 // maximum number of internet connections (channels)
 // if you want to change this paramter, there has to be done code modifications
 // on other places, too! The code tag "MAX_NUM_CHANNELS_TAG" shows these places

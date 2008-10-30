@@ -83,4 +83,5 @@ public slots:
     void OnOpenChatOnNewMessageStateChanged ( int value );
     void OnAudioCompressionButtonGroupClicked ( QAbstractButton* button );
     void OnPingTimeResult ( int iPingTime );
+    void OnSoundCrdSelection ( int iSndDevIdx );
 };

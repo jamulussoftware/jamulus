@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2005
+ * Copyright (c) 2004-2008
  *
  * Author(s):
  *  Volker Fischer, Alexander Kurpiers
@@ -53,15 +53,11 @@ public:
         {}
     virtual ~CSound() {Close();}
 
-    /* Not implemented yet, always return one device and default string */
-    int     GetNumDev() {return 1;}
-    void    SetOutDev(int iNewDev) {}
-    void    SetInDev(int iNewDev) {}
-
-    /* Return invalid device ID which is the same as using "wave mapper" which
-       we assume here to be used */
-    int     GetOutDev() {return 1;}
-    int     GetInDev() {return 1;}
+    // not implemented yet, always return one device and default string
+    int         GetNumDev() { return 1; }
+    std::string GetDeviceName ( const int iDiD ) { return "wave mapper"; }
+    int         SetDev ( const int iNewDev ) {} // dummy
+    int         GetDev() { return 0; }
 
 #if WITH_SOUND
     void    SetInNumBuf(int iNewNum);

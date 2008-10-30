@@ -249,6 +249,150 @@ void CSound::SetOutNumBuf ( int iNewNum )
 /******************************************************************************\
 * Common                                                                       *
 \******************************************************************************/
+void CSound::SetDev ( const int iNewDev )
+{
+    // check if an ASIO driver was already initialized
+    if ( lCurDev >= 0 )
+    {
+        // a device was already been initialized and is used, kill working
+        // thread and clean up
+        // set event to ensure that thread leaves the waiting function
+        if ( m_ASIOEvent != NULL )
+	    {
+            SetEvent ( m_ASIOEvent );
+	    }
+
+        // wait for the thread to terminate
+        Sleep ( 500 );
+
+        // stop audio and dispose ASIO buffers
+        ASIOStop();
+        ASIODisposeBuffers();
+
+        // remove old driver
+        ASIOExit();
+        asioDrivers->removeCurrentDriver();
+
+        const std::string strErrorMessage = LoadAndInitializeDriver ( iNewDev );
+
+        if ( !strErrorMessage.empty() )
+        {
+            // loading and initializing the new driver failed, go back to original
+            // driver and display error message
+            LoadAndInitializeDriver ( lCurDev );
+
+            throw CGenErr ( strErrorMessage.c_str() );
+        }
+    }
+    else
+    {
+        // This is the first time a driver is to be initialized, we first try
+        // to load the selected driver, if this fails, we try to load the first
+        // available driver in the system. If this fails, too, we throw an error
+        // that no driver is available -> it does not make sense to start the llcon
+        // software if no audio hardware is available
+        const std::string strErrorMessage = LoadAndInitializeDriver ( iNewDev );
+
+        if ( !strErrorMessage.empty() )
+        {
+            // loading and initializing the new driver failed, try to find at
+            // least one usable driver
+            if ( !LoadAndInitializeFirstValidDriver() )
+            {
+                throw CGenErr ( "No usable ASIO audio device (driver) found." );
+            }
+        }
+    }
+}
+
+std::string CSound::LoadAndInitializeDriver ( const int iDriverIdx )
+{
+    // load driver
+    loadAsioDriver ( cDriverNames[iDriverIdx] );
+    if ( ASIOInit ( &driverInfo ) != ASE_OK )
+    {
+        // clean up and return error string
+        asioDrivers->removeCurrentDriver();
+        return "The audio driver could not be initialized.";
+    }
+
+    // check the number of available channels
+    long lNumInChan;
+    long lNumOutChan;
+    ASIOGetChannels ( &lNumInChan, &lNumOutChan );
+    if ( ( lNumInChan < NUM_IN_OUT_CHANNELS ) ||
+         ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
+    {
+        // clean up and return error string
+        ASIOExit();
+        asioDrivers->removeCurrentDriver();
+        return "The audio device does not support the "
+            "required number of channels.";
+    }
+
+    // set the sample rate and check if sample rate is supported
+    ASIOSetSampleRate ( SND_CRD_SAMPLE_RATE );
+
+    ASIOSampleRate sampleRate;
+    ASIOGetSampleRate ( &sampleRate );
+    if ( sampleRate != SND_CRD_SAMPLE_RATE )
+    {
+        // clean up and return error string
+        ASIOExit();
+        asioDrivers->removeCurrentDriver();
+        return "The audio device does not support the "
+            "required sample rate.";
+    }
+
+    // query the usable buffer sizes
+    ASIOGetBufferSize ( &HWBufferInfo.lMinSize,
+                        &HWBufferInfo.lMaxSize,
+                        &HWBufferInfo.lPreferredSize,
+                        &HWBufferInfo.lGranularity );
+
+    // check wether the driver requires the ASIOOutputReady() optimization
+    // (can be used by the driver to reduce output latency by one block)
+    bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
+
+    // store ID of selected driver
+    lCurDev = iDriverIdx;
+
+    return "";
+}
+
+bool CSound::LoadAndInitializeFirstValidDriver()
+{
+    // load and initialize first valid ASIO driver
+    bool bValidDriverDetected = false;
+    int  iCurDriverIdx = 0;
+
+    // try all available drivers in the system ("lNumDevs" devices)
+    while ( !bValidDriverDetected && iCurDriverIdx < lNumDevs )
+    {
+        if ( loadAsioDriver ( cDriverNames[iCurDriverIdx] ) )
+        {
+            if ( ASIOInit ( &driverInfo ) == ASE_OK )
+            {
+                // initialization was successful
+                bValidDriverDetected = true;
+
+                // store ID of selected driver
+                lCurDev = iCurDriverIdx;
+            }
+            else
+            {
+                // driver could not be loaded, free memory
+                asioDrivers->removeCurrentDriver();
+            }
+        }
+
+        // try next driver
+        iCurDriverIdx++;
+    }
+
+    return bValidDriverDetected;
+}
+
 void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
 {
     int i;
@@ -429,8 +573,6 @@ void CSound::Close()
 
 CSound::CSound()
 {
-    int i;
-
     // init number of sound buffers
     iNewNumSndBufIn  = NUM_SOUND_BUFFERS_IN;
     iCurNumSndBufIn  = NUM_SOUND_BUFFERS_IN;
@@ -441,85 +583,26 @@ CSound::CSound()
     m_ASIOEvent = NULL;
 
     // get available ASIO driver names in system
-    char* cDriverNames[MAX_NUMBER_SOUND_CARDS];
-	for ( i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+	for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
     {
         cDriverNames[i] = new char[32];
     }
 
     loadAsioDriver ( "dummy" ); // to initialize external object
-    const long lNumDetDriv =
-        asioDrivers->getDriverNames ( cDriverNames, MAX_NUMBER_SOUND_CARDS );
-
-
-	// load and initialize first valid ASIO driver
-    bool bValidDriverDetected = false;
-    int  iCurDriverIdx = 0;
-
-    while ( !bValidDriverDetected && iCurDriverIdx < lNumDetDriv )
-    {
-	    if ( loadAsioDriver ( cDriverNames[iCurDriverIdx] ) )
-        {
-		    if ( ASIOInit ( &driverInfo ) == ASE_OK )
-		    {
-                bValidDriverDetected = true;
-            }
-            else
-            {
-                // driver could not be loaded, free memory
-                asioDrivers->removeCurrentDriver();
-            }
-        }
-
-        // try next driver
-        iCurDriverIdx++;
-    }
+    lNumDevs = asioDrivers->getDriverNames ( cDriverNames, MAX_NUMBER_SOUND_CARDS );
 
     // in case we do not have a driver available, throw error
-    if ( !bValidDriverDetected )
+    if ( lNumDevs == 0 )
     {
-        throw CGenErr ( "No suitable ASIO audio device found." );
+        throw CGenErr ( "No ASIO audio device (driver) found." );
     }
 
+    asioDrivers->removeCurrentDriver();
 
-// TEST we only use one driver for a first try
-iNumDevs = 1;
-pstrDevices[0] = driverInfo.name;
+    // init device index with illegal value to show that driver is not initialized
+    lCurDev = -1;
 
-
-	// check the number of available channels
-	long lNumInChan;
-	long lNumOutChan;
-	ASIOGetChannels ( &lNumInChan, &lNumOutChan );
-    if ( ( lNumInChan < NUM_IN_OUT_CHANNELS ) ||
-         ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
-    {
-        throw CGenErr ( "The audio device does not support the "
-            "required number of channels." );
-    }
-
-    // query the usable buffer sizes
-	ASIOGetBufferSize ( &HWBufferInfo.lMinSize,
-                        &HWBufferInfo.lMaxSize,
-                        &HWBufferInfo.lPreferredSize,
-                        &HWBufferInfo.lGranularity );
-
-	// set the sample rate and check if sample rate is supported
-	ASIOSetSampleRate ( SND_CRD_SAMPLE_RATE );
-
-    ASIOSampleRate sampleRate;
-    ASIOGetSampleRate ( &sampleRate );
-    if ( sampleRate != SND_CRD_SAMPLE_RATE )
-    {
-        throw CGenErr ( "The audio device does not support the "
-            "required sample rate." );
-    }
-
-	// check wether the driver requires the ASIOOutputReady() optimization
-	// (can be used by the driver to reduce output latency by one block)
-	bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
-
-	// set up the asioCallback structure and create the ASIO data buffer
+	// set up the asioCallback structure
 	asioCallbacks.bufferSwitch         = &bufferSwitch;
 	asioCallbacks.sampleRateDidChange  = &sampleRateChanged;
 	asioCallbacks.asioMessage          = &asioMessages;
@@ -533,9 +616,9 @@ pstrDevices[0] = driverInfo.name;
     // create event
     m_ASIOEvent = CreateEvent ( NULL, FALSE, FALSE, NULL );
 
-    // init flags
-    bChangParamIn  = false;
-    bChangParamOut = false;
+    // init flags (initiate init for first run)
+    bChangParamIn  = true;
+    bChangParamOut = true;
 }
 
 CSound::~CSound()

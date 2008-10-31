@@ -58,12 +58,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     GroupBoxNetwBuf->setWhatsThis ( strNetwBlockSize );
 
     // init timing jitter text label
-    TextLabelStdDevTimer->setText ( "" );
+    //TextLabelStdDevTimer->setText ( "" );
 
-    // ping time controls
-    CLEDPingTime->SetUpdateTime ( 2 * PING_UPDATE_TIME );
-    CLEDPingTime->Reset();
+    // init delay information controls
+    CLEDOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME );
+    CLEDOverallDelay->Reset();
     TextLabelPingTime->setText ( "" );
+    TextLabelBufferDelay->setText ( "" );
+    TextLabelOverallDelay->setText ( "" );
 
     // init slider controls ---
     // sound buffer in
@@ -291,23 +293,50 @@ void CClientSettingsDlg::OnTimerPing()
 
 void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 {
-    // color definition: < 27 ms green, < 50 ms yellow, otherwise red
-    if ( iPingTime < 27 )
+/*
+    For estimating the overall delay, use the following assumptions:
+    - the mean delay of a cyclic buffer is half the buffer size (since
+      for the average it is assumed that the buffer is half filled)
+    - consider the jitter buffer on the server side, too
+    - assume that the sound card introduces an additional delay of 2 * MIN_BLOCK_DURATION_MS
+*/
+    const int iTotalJitterBufferDelayMS = MIN_BLOCK_DURATION_MS *
+        ( 2 * pClient->GetSockBufSize() + pClient->GetNetwBufSizeFactIn() +
+          pClient->GetNetwBufSizeFactOut() ) / 2;
+
+    const int iTotalSoundCardDelayMS = 2 * MIN_BLOCK_DURATION_MS +
+        MIN_BLOCK_DURATION_MS * ( pClient->GetSndInterface()->GetInNumBuf() +
+          pClient->GetSndInterface()->GetOutNumBuf() ) / 2;
+
+    const int iDelayToFillNetworkPackets = MIN_BLOCK_DURATION_MS *
+        ( pClient->GetNetwBufSizeFactIn() + pClient->GetNetwBufSizeFactOut() );
+
+    const int iTotalBufferDelay = iDelayToFillNetworkPackets +
+        iTotalJitterBufferDelayMS + iTotalSoundCardDelayMS;
+
+    const int iOverallDelay = iTotalBufferDelay + iPingTime;
+
+    // apply values to GUI labels
+    TextLabelPingTime->setText ( QString().setNum ( iPingTime ) + " ms" );
+    TextLabelBufferDelay->setText ( QString().setNum ( iTotalBufferDelay ) + " ms" );
+    TextLabelOverallDelay->setText ( QString().setNum ( iOverallDelay ) + " ms" );
+
+    // color definition: < 40 ms green, < 60 ms yellow, otherwise red
+    if ( iOverallDelay <= 40 )
     {
-        CLEDPingTime->SetLight ( MUL_COL_LED_GREEN );
+        CLEDOverallDelay->SetLight ( MUL_COL_LED_GREEN );
     }
     else
     {
-        if ( iPingTime < 50 )
+        if ( iOverallDelay <= 60 )
         {
-            CLEDPingTime->SetLight ( MUL_COL_LED_YELLOW );
+            CLEDOverallDelay->SetLight ( MUL_COL_LED_YELLOW );
         }
         else
         {
-            CLEDPingTime->SetLight ( MUL_COL_LED_RED );
+            CLEDOverallDelay->SetLight ( MUL_COL_LED_RED );
         }
     }
-    TextLabelPingTime->setText ( QString().setNum ( iPingTime ) + " ms" );
 }
 
 void CClientSettingsDlg::UpdateDisplay()
@@ -315,14 +344,16 @@ void CClientSettingsDlg::UpdateDisplay()
     if ( pClient->IsRunning() )
     {
         // response time
-        TextLabelStdDevTimer->setText ( QString().
-            setNum ( pClient->GetTimingStdDev(), 'f', 2 ) + " ms" );
+        //TextLabelStdDevTimer->setText ( QString().
+        //    setNum ( pClient->GetTimingStdDev(), 'f', 2 ) + " ms" );
     }
     else
     {
         // clear text labels with client parameters
-        TextLabelStdDevTimer->setText ( "" );
+        //TextLabelStdDevTimer->setText ( "" );
         TextLabelPingTime->setText ( "" );
+        TextLabelBufferDelay->setText ( "" );
+        TextLabelOverallDelay->setText ( "" );
     }
 }
 
@@ -346,15 +377,11 @@ void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
         CLEDNetwGet->SetLight ( iStatus );
         break;
 
-    case MS_PROTOCOL:
-        CLEDProtocolStatus->SetLight ( iStatus );
-
     case MS_RESET_ALL:
         CLEDSoundIn->Reset();
         CLEDSoundOut->Reset();
         CLEDNetwPut->Reset();
         CLEDNetwGet->Reset();
-        CLEDProtocolStatus->Reset();
         break;
     }
 }

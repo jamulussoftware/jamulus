@@ -138,6 +138,11 @@ int main ( int argc, char** argv )
 		exit ( 1 );
 	}
 
+#ifdef _WIN32
+    // Set application priority class -> high priority
+    SetPriorityClass ( GetCurrentProcess(), HIGH_PRIORITY_CLASS );
+#endif
+
     // Application object
     QApplication app ( argc, argv, bUseGUI );
 

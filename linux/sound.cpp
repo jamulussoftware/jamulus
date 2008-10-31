@@ -13,12 +13,9 @@
 
 #ifdef WITH_SOUND
 /* Wave in ********************************************************************/
-void CSound::InitRecording(int iNewBufferSize, bool bNewBlocking)
+void CSound::InitRecording ( const bool bNewBlocking )
 {
     int err;
-
-    /* set internal buffer size for read */
-    iBufferSizeIn = iNewBufferSize / NUM_IN_OUT_CHANNELS; /* mono size */
 
     /* if recording device was already open, close it first */
     if ( rhandle != NULL )
@@ -112,12 +109,12 @@ void CSound::InitRecording(int iNewBufferSize, bool bNewBlocking)
     qDebug ( "alsa init record done" );
 }
 
-bool CSound::Read(CVector<short>& psData)
+bool CSound::Read ( CVector<short>& psData )
 {
     int ret;
 
     /* Check if device must be opened or reinitialized */
-    if (bChangParamIn == true)
+    if ( bChangParamIn == true )
     {
         InitRecording ( iBufferSizeIn * NUM_IN_OUT_CHANNELS );
 
@@ -125,7 +122,7 @@ bool CSound::Read(CVector<short>& psData)
         bChangParamIn = false;
     }
 
-    ret = snd_pcm_readi(rhandle, &psData[0], iBufferSizeIn);
+    ret = snd_pcm_readi ( rhandle, &psData[0], iBufferSizeIn );
 
     if ( ret < 0 )
     {
@@ -143,7 +140,7 @@ bool CSound::Read(CVector<short>& psData)
 
             ret = snd_pcm_start ( rhandle );
 
-            if (ret < 0)
+            if ( ret < 0 )
             {
                 qDebug ( "Can't recover from underrun, start failed: %s", snd_strerror ( ret ) );
             }
@@ -204,12 +201,9 @@ void CSound::SetInNumBuf ( int iNewNum )
 
 
 /* Wave out *******************************************************************/
-void CSound::InitPlayback ( int iNewBufferSize, bool bNewBlocking )
+void CSound::InitPlayback ( const bool bNewBlocking )
 {
     int err;
-
-    // save buffer size
-    iBufferSizeOut = iNewBufferSize / NUM_IN_OUT_CHANNELS; // mono size
 
     // if playback device was already open, close it first
     if ( phandle != NULL )
@@ -219,7 +213,7 @@ void CSound::InitPlayback ( int iNewBufferSize, bool bNewBlocking )
 
     // playback device (either "hw:0,0" or "plughw:0,0")
     if ( err = snd_pcm_open ( &phandle, "hw:0,0",
-        SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK ) != 0)
+        SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK ) != 0 )
     {
         qDebug ( "open error: %s", snd_strerror ( err ) );
     }
@@ -241,16 +235,16 @@ void CSound::InitPlayback ( int iNewBufferSize, bool bNewBlocking )
 
 bool CSound::Write ( CVector<short>& psData )
 {
-    int size = iBufferSizeOut;
+    int size  = iBufferSizeOut;
     int start = 0;
     int ret;
 
-    /* Check if device must be opened or reinitialized */
+    // check if device must be opened or reinitialized
     if ( bChangParamOut == true )
     {
         InitPlayback ( iBufferSizeOut * NUM_IN_OUT_CHANNELS );
 
-        /* Reset flag */
+        // reset flag
         bChangParamOut = false;
     }
 
@@ -262,7 +256,7 @@ bool CSound::Write ( CVector<short>& psData )
         {
             if ( ret == -EPIPE )
             {
-                /* under-run */
+                // under-run
                 qDebug ( "wunderrun" );
 
                 ret = snd_pcm_prepare ( phandle );
@@ -286,7 +280,7 @@ bool CSound::Write ( CVector<short>& psData )
             {
                 qDebug("wstrpipe");
 
-                /* wait until the suspend flag is released */
+                // wait until the suspend flag is released
                 while ( (ret = snd_pcm_resume ( phandle ) ) == -EAGAIN )
                 {
                     sleep(1);
@@ -317,29 +311,29 @@ bool CSound::Write ( CVector<short>& psData )
     return false;
 }
 
-void CSound::SetOutNumBuf(int iNewNum)
+void CSound::SetOutNumBuf ( int iNewNum )
 {
-    /* check new parameter */
+    // check new parameter
     if ( ( iNewNum >= MAX_SND_BUF_OUT ) || ( iNewNum < 1 ) )
     {
         iNewNum = NUM_PERIOD_BLOCKS_OUT;
     }
 
-    /* Change only if parameter is different */
+    // change only if parameter is different
     if ( iNewNum != iCurPeriodSizeOut )
     {
         iCurPeriodSizeOut = iNewNum;
-        bChangParamOut = true;
+        bChangParamOut    = true;
     }
 }
 
 
 /* common **********************************************************************/
-bool CSound::SetHWParams(snd_pcm_t* handle, const int iBufferSizeIn,
-                         const int iNumPeriodBlocks)
+bool CSound::SetHWParams ( snd_pcm_t* handle, const int iBufferSizeIn,
+                           const int iNumPeriodBlocks )
 {
-    int                     err;
-    snd_pcm_hw_params_t*    hwparams;
+    int                  err;
+    snd_pcm_hw_params_t* hwparams;
 
     // allocate an invalid snd_pcm_hw_params_t using standard malloc
     if ( err = snd_pcm_hw_params_malloc ( &hwparams ) < 0 )
@@ -417,31 +411,31 @@ bool CSound::SetHWParams(snd_pcm_t* handle, const int iBufferSizeIn,
     }
 
 
-/* check period and buffer size */
+// check period and buffer size
 snd_pcm_uframes_t buffer_size;
-if (err = snd_pcm_hw_params_get_buffer_size(hwparams, &buffer_size) < 0) {
-    qDebug("Unable to get buffer size for playback: %s\n", snd_strerror(err));
+if ( err = snd_pcm_hw_params_get_buffer_size(hwparams, &buffer_size ) < 0 ) {
+    qDebug ( "Unable to get buffer size for playback: %s\n", snd_strerror ( err ) );
 }
-qDebug("buffer size: %d (desired: %d)", buffer_size, iBufferSizeIn * iNumPeriodBlocks);
+qDebug ( "buffer size: %d (desired: %d)", buffer_size, iBufferSizeIn * iNumPeriodBlocks );
 
 snd_pcm_uframes_t period_size;
-err = snd_pcm_hw_params_get_period_size(hwparams, &period_size, 0);
-if (err < 0)
+err = snd_pcm_hw_params_get_period_size ( hwparams, &period_size, 0 );
+if ( err < 0 )
 {
-    qDebug("Unable to get period size for playback: %s\n", snd_strerror(err));
+    qDebug ( "Unable to get period size for playback: %s\n", snd_strerror ( err ) );
 }
-qDebug("frame size: %d (desired: %d)", period_size, iBufferSizeIn);
+qDebug ( "frame size: %d (desired: %d)", period_size, iBufferSizeIn );
 
 
-    /* clean-up */
+    // clean-up
     snd_pcm_hw_params_free ( hwparams );
 
     return false;
 }
 
-void CSound::Close ()
+void CSound::Close()
 {
-    /* read */
+    // read
     if ( rhandle != NULL )
     {
         snd_pcm_close ( rhandle );
@@ -449,7 +443,7 @@ void CSound::Close ()
 
     rhandle = NULL;
 
-    /* playback */
+    // playback
     if ( phandle != NULL )
     {
         snd_pcm_close ( phandle );

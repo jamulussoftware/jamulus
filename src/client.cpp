@@ -27,6 +27,8 @@
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16 iPortNumber ) : bRun ( false ),
+    iSndCrdBlockSizeSam ( MIN_SND_CRD_BLOCK_SIZE_SAMPLES ),
+    Sound ( MIN_SND_CRD_BLOCK_SIZE_SAMPLES * 2 /* stereo */ ),
     Socket ( &Channel, iPortNumber ),
     iAudioInFader ( AUD_FADER_IN_MAX / 2 ),
     iReverbLevel ( AUD_REVERB_MAX / 6 ),
@@ -168,9 +170,8 @@ void CClient::OnProtocolStatus ( bool bOk )
 
 void CClient::Init()
 {
-    // set block sizes (in samples)
-    iBlockSizeSam       = MIN_BLOCK_SIZE_SAMPLES;
-    iSndCrdBlockSizeSam = MIN_SND_CRD_BLOCK_SIZE_SAMPLES;
+    // set block size (in samples)
+    iBlockSizeSam = MIN_BLOCK_SIZE_SAMPLES;
 
     vecsAudioSndCrd.Init  ( iSndCrdBlockSizeSam * 2 ); // stereo
     vecdAudioSndCrdL.Init ( iSndCrdBlockSizeSam );
@@ -179,8 +180,8 @@ void CClient::Init()
     vecdAudioL.Init ( iBlockSizeSam );
     vecdAudioR.Init ( iBlockSizeSam );
 
-    Sound.InitRecording ( iSndCrdBlockSizeSam * 2 ); // stereo
-    Sound.InitPlayback  ( iSndCrdBlockSizeSam * 2 ); // stereo
+    Sound.InitRecording();
+    Sound.InitPlayback();
 
     // resample objects are always initialized with the input block size
     // record
@@ -325,7 +326,7 @@ void CClient::run()
 
         // send it through the network
         Socket.SendPacket ( Channel.PrepSendPacket ( vecsNetwork ),
-            Channel.GetAddress () );
+            Channel.GetAddress() );
 
         // receive a new block
         if ( Channel.GetData ( vecdNetwData ) == GS_BUFFER_OK )

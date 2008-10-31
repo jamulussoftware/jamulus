@@ -87,8 +87,8 @@ bool CSound::Read ( CVector<short>& psData )
     // check if device must be opened or reinitialized
     if ( bChangParamIn )
     {
-        // reinit sound interface (init recording requires stereo buffer size)
-        InitRecordingAndPlayback ( iBufferSizeStereo );
+        // reinit sound interface
+        InitRecordingAndPlayback();
 
         // reset flag
         bChangParamIn = false;
@@ -188,8 +188,8 @@ bool CSound::Write ( CVector<short>& psData )
     // check if device must be opened or reinitialized
     if ( bChangParamOut )
     {
-        // reinit sound interface (init recording requires stereo buffer size)
-        InitRecordingAndPlayback ( iBufferSizeStereo );
+        // reinit sound interface
+        InitRecordingAndPlayback();
 
         // reset flag
         bChangParamOut = false;
@@ -256,6 +256,9 @@ void CSound::SetDev ( const int iNewDev )
     {
         // a device was already been initialized and is used, kill working
         // thread and clean up
+        // stop driver
+        ASIOStop();
+
         // set event to ensure that thread leaves the waiting function
         if ( m_ASIOEvent != NULL )
 	    {
@@ -265,8 +268,7 @@ void CSound::SetDev ( const int iNewDev )
         // wait for the thread to terminate
         Sleep ( 500 );
 
-        // stop audio and dispose ASIO buffers
-        ASIOStop();
+        // dispose ASIO buffers
         ASIODisposeBuffers();
 
         // remove old driver
@@ -280,9 +282,11 @@ void CSound::SetDev ( const int iNewDev )
             // loading and initializing the new driver failed, go back to original
             // driver and display error message
             LoadAndInitializeDriver ( lCurDev );
+            InitRecordingAndPlayback();
 
             throw CGenErr ( strErrorMessage.c_str() );
         }
+        InitRecordingAndPlayback();
     }
     else
     {
@@ -305,8 +309,15 @@ void CSound::SetDev ( const int iNewDev )
     }
 }
 
-std::string CSound::LoadAndInitializeDriver ( const int iDriverIdx )
+std::string CSound::LoadAndInitializeDriver ( int iDriverIdx )
 {
+    // first check and correct input parameter
+    if ( iDriverIdx >= lNumDevs )
+    {
+        // we assume here that at least one driver is in the system
+        iDriverIdx = 0;
+    }
+
     // load driver
     loadAsioDriver ( cDriverNames[iDriverIdx] );
     if ( ASIOInit ( &driverInfo ) != ASE_OK )
@@ -315,6 +326,62 @@ std::string CSound::LoadAndInitializeDriver ( const int iDriverIdx )
         asioDrivers->removeCurrentDriver();
         return "The audio driver could not be initialized.";
     }
+
+    const std::string strStat = GetAndCheckSoundCardProperties();
+
+    // store ID of selected driver if initialization was successful
+    if ( strStat.empty() )
+    {
+        lCurDev = iDriverIdx;
+    }
+
+    return strStat;
+}
+
+bool CSound::LoadAndInitializeFirstValidDriver()
+{
+    // load and initialize first valid ASIO driver
+    bool bValidDriverDetected = false;
+    int  iCurDriverIdx = 0;
+
+    // try all available drivers in the system ("lNumDevs" devices)
+    while ( !bValidDriverDetected && iCurDriverIdx < lNumDevs )
+    {
+        if ( loadAsioDriver ( cDriverNames[iCurDriverIdx] ) )
+        {
+            if ( ASIOInit ( &driverInfo ) == ASE_OK )
+            {
+                if ( GetAndCheckSoundCardProperties().empty() )
+                {
+                    // initialization was successful
+                    bValidDriverDetected = true;
+
+                    // store ID of selected driver
+                    lCurDev = iCurDriverIdx;
+                }
+                else
+                {
+                    // driver could not be loaded, free memory
+                    asioDrivers->removeCurrentDriver();
+                }
+            }
+            else
+            {
+                // driver could not be loaded, free memory
+                asioDrivers->removeCurrentDriver();
+            }
+        }
+
+        // try next driver
+        iCurDriverIdx++;
+    }
+
+    return bValidDriverDetected;
+}
+
+std::string CSound::GetAndCheckSoundCardProperties()
+{
+    int i;
 
     // check the number of available channels
     long lNumInChan;
@@ -350,165 +417,125 @@ std::string CSound::LoadAndInitializeDriver ( const int iDriverIdx )
                         &HWBufferInfo.lPreferredSize,
                         &HWBufferInfo.lGranularity );
 
+    // calculate "nearest" buffer size and set internal parameter accordingly
+    // first check minimum and maximum values
+    if ( iBufferSizeMono < HWBufferInfo.lMinSize )
+    {
+        iASIOBufferSizeMono = HWBufferInfo.lMinSize;
+    }
+    else
+    {
+        if ( iBufferSizeMono > HWBufferInfo.lMaxSize )
+        {
+            iASIOBufferSizeMono = HWBufferInfo.lMaxSize;
+        }
+        else
+        {
+            // initialization
+            int  iTrialBufSize     = HWBufferInfo.lMinSize;
+            int  iLastTrialBufSize = HWBufferInfo.lMinSize;
+            bool bSizeFound        = false;
+
+            // test loop
+            while ( ( iTrialBufSize <= HWBufferInfo.lMaxSize ) && ( !bSizeFound ) )
+            {
+                if ( iTrialBufSize >= iBufferSizeMono )
+                {
+                    // test which buffer size fits better: the old one or the
+                    // current one
+                    if ( ( iTrialBufSize - iBufferSizeMono ) <
+                         ( iBufferSizeMono - iLastTrialBufSize ) )
+                    {
+                        iBufferSizeMono = iTrialBufSize;
+                    }
+                    else
+                    {
+                        iBufferSizeMono = iLastTrialBufSize;
+                    }
+
+                    // exit while loop
+                    bSizeFound = true;
+                }
+
+                if ( !bSizeFound )
+                {
+                    // store old trial buffer size
+                    iLastTrialBufSize = iTrialBufSize;
+
+                    // increment trial buffer size (check for special case first)
+                    if ( HWBufferInfo.lGranularity == -1 )
+                    {
+                        // special case: buffer sizes are a power of 2
+                        iTrialBufSize *= 2;
+                    }
+                    else
+                    {
+                        iTrialBufSize += HWBufferInfo.lGranularity;
+                    }
+                }
+            }
+
+            // set ASIO buffer size
+            iASIOBufferSizeMono = iTrialBufSize;
+        }
+    }
+
+    // prepare input channels
+    for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
+    {
+	    bufferInfos[i].isInput    = ASIOTrue;
+	    bufferInfos[i].channelNum = i;
+	    bufferInfos[i].buffers[0] = 0;
+        bufferInfos[i].buffers[1] = 0;
+    }
+
+    // prepare output channels
+    for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
+    {
+	    bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
+	    bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
+	    bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[1] = 0;
+    }
+
+    // create and activate ASIO buffers (buffer size in samples)
+    ASIOCreateBuffers ( bufferInfos, 2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
+	    iASIOBufferSizeMono, &asioCallbacks );
+
+    // now get some buffer details
+    for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
+    {
+	    channelInfos[i].channel = bufferInfos[i].channelNum;
+	    channelInfos[i].isInput = bufferInfos[i].isInput;
+	    ASIOGetChannelInfo ( &channelInfos[i] );
+
+        // only 16/24/32 LSB is supported
+        if ( ( channelInfos[i].type != ASIOSTInt16LSB ) &&
+             ( channelInfos[i].type != ASIOSTInt24LSB ) &&
+             ( channelInfos[i].type != ASIOSTInt32LSB ) )
+        {
+            // clean up and return error string
+            ASIODisposeBuffers();
+            ASIOExit();
+            asioDrivers->removeCurrentDriver();
+            return "Required audio sample format not available (16/24/32 bit LSB).";
+        }
+    }
+
     // check wether the driver requires the ASIOOutputReady() optimization
     // (can be used by the driver to reduce output latency by one block)
     bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
 
-    // store ID of selected driver
-    lCurDev = iDriverIdx;
-
     return "";
 }
 
-bool CSound::LoadAndInitializeFirstValidDriver()
+void CSound::InitRecordingAndPlayback()
 {
-    // load and initialize first valid ASIO driver
-    bool bValidDriverDetected = false;
-    int  iCurDriverIdx = 0;
-
-    // try all available drivers in the system ("lNumDevs" devices)
-    while ( !bValidDriverDetected && iCurDriverIdx < lNumDevs )
-    {
-        if ( loadAsioDriver ( cDriverNames[iCurDriverIdx] ) )
-        {
-            if ( ASIOInit ( &driverInfo ) == ASE_OK )
-            {
-                // initialization was successful
-                bValidDriverDetected = true;
-
-                // store ID of selected driver
-                lCurDev = iCurDriverIdx;
-            }
-            else
-            {
-                // driver could not be loaded, free memory
-                asioDrivers->removeCurrentDriver();
-            }
-        }
-
-        // try next driver
-        iCurDriverIdx++;
-    }
-
-    return bValidDriverDetected;
-}
-
-void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
-{
-    int i;
-
     // first, stop audio and dispose ASIO buffers
     ASIOStop();
-    ASIODisposeBuffers();
 
     ASIOMutex.lock(); // get mutex lock
     {
-        // set internal buffer size value and calculate mono buffer size
-        iBufferSizeStereo = iNewBufferSize;
-        iBufferSizeMono   = iBufferSizeStereo / 2;
-
-        // calculate "nearest" buffer size and set internal parameter accordingly
-        // first check minimum and maximum values
-        if ( iBufferSizeMono < HWBufferInfo.lMinSize )
-        {
-            iASIOBufferSizeMono = HWBufferInfo.lMinSize;
-        }
-        else
-        {
-            if ( iBufferSizeMono > HWBufferInfo.lMaxSize )
-            {
-                iASIOBufferSizeMono = HWBufferInfo.lMaxSize;
-            }
-            else
-            {
-                // initialization
-                int  iTrialBufSize     = HWBufferInfo.lMinSize;
-                int  iLastTrialBufSize = HWBufferInfo.lMinSize;
-                bool bSizeFound        = false;
-
-                // test loop
-                while ( ( iTrialBufSize <= HWBufferInfo.lMaxSize ) && ( !bSizeFound ) )
-                {
-                    if ( iTrialBufSize >= iBufferSizeMono )
-                    {
-                        // test which buffer size fits better: the old one or the
-                        // current one
-                        if ( ( iTrialBufSize - iBufferSizeMono ) <
-                             ( iBufferSizeMono - iLastTrialBufSize ) )
-                        {
-                            iBufferSizeMono = iTrialBufSize;
-                        }
-                        else
-                        {
-                            iBufferSizeMono = iLastTrialBufSize;
-                        }
-
-                        // exit while loop
-                        bSizeFound = true;
-                    }
-
-                    if ( !bSizeFound )
-                    {
-                        // store old trial buffer size
-                        iLastTrialBufSize = iTrialBufSize;
-
-                        // increment trial buffer size (check for special case first)
-                        if ( HWBufferInfo.lGranularity == -1 )
-                        {
-                            // special case: buffer sizes are a power of 2
-                            iTrialBufSize *= 2;
-                        }
-                        else
-                        {
-                            iTrialBufSize += HWBufferInfo.lGranularity;
-                        }
-                    }
-                }
-
-                // set ASIO buffer size
-                iASIOBufferSizeMono = iTrialBufSize;
-            }
-        }
-
-        // prepare input channels
-        for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
-	    {
-		    bufferInfos[i].isInput    = ASIOTrue;
-		    bufferInfos[i].channelNum = i;
-		    bufferInfos[i].buffers[0] = 0;
-            bufferInfos[i].buffers[1] = 0;
-	    }
-
-        // prepare output channels
-        for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
-	    {
-		    bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
-		    bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
-		    bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
-            bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[1] = 0;
-	    }
-
-	    // create and activate ASIO buffers (buffer size in samples)
-	    ASIOCreateBuffers ( bufferInfos, 2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
-		    iASIOBufferSizeMono, &asioCallbacks );
-
-	    // now get some buffer details
-	    for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
-	    {
-		    channelInfos[i].channel = bufferInfos[i].channelNum;
-		    channelInfos[i].isInput = bufferInfos[i].isInput;
-		    ASIOGetChannelInfo ( &channelInfos[i] );
-
-            // only 16 bit is supported
-            if ( ( channelInfos[i].type != ASIOSTInt16LSB ) &&
-                 ( channelInfos[i].type != ASIOSTInt24LSB ) &&
-                 ( channelInfos[i].type != ASIOSTInt32LSB ) )
-            {
-                throw CGenErr ( "Required audio sample format not available (16/24/32 bit LSB)." );
-            }
-	    }
-
-
         // Our buffer management -----------------------------------------------
         // store new buffer number values
         iCurNumSndBufIn  = iNewNumSndBufIn;
@@ -537,7 +564,7 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
         psPlayBuffer = new short[iCurNumSndBufOut * iBufferSizeStereo];
 
         // clear new buffer
-        for ( i = 0; i < iCurNumSndBufOut * iBufferSizeStereo; i++ )
+        for ( int i = 0; i < iCurNumSndBufOut * iBufferSizeStereo; i++ )
 	    {
             psPlayBuffer[i] = 0;
 	    }
@@ -553,6 +580,9 @@ void CSound::InitRecordingAndPlayback ( int iNewBufferSize )
 
 void CSound::Close()
 {
+    // stop driver
+    ASIOStop();
+
     // set event to ensure that thread leaves the waiting function
     if ( m_ASIOEvent != NULL )
 	{
@@ -562,8 +592,7 @@ void CSound::Close()
     // wait for the thread to terminate
     Sleep ( 500 );
 
-    // stop audio and dispose ASIO buffers
-    ASIOStop();
+    // dispose ASIO buffers
     ASIODisposeBuffers();
 
     // set flag to open devices the next time it is initialized
@@ -571,8 +600,12 @@ void CSound::Close()
     bChangParamOut = true;
 }
 
-CSound::CSound()
+CSound::CSound ( const int iNewBufferSizeStereo )
 {
+    // set internal buffer size value and calculate mono buffer size
+    iBufferSizeStereo = iNewBufferSizeStereo;
+    iBufferSizeMono   = iBufferSizeStereo / 2;
+
     // init number of sound buffers
     iNewNumSndBufIn  = NUM_SOUND_BUFFERS_IN;
     iCurNumSndBufIn  = NUM_SOUND_BUFFERS_IN;

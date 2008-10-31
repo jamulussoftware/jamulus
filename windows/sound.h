@@ -65,18 +65,18 @@
 class CSound
 {
 public:
-    CSound();
+    CSound ( const int iNewBufferSizeStereo );
     virtual ~CSound();
 
-    void        InitRecording ( const int iNewBufferSize, const bool bNewBlocking = true )
+    void        InitRecording ( const bool bNewBlocking = true )
                 {
                     bBlockingRec = bNewBlocking;
-                    InitRecordingAndPlayback ( iNewBufferSize );
+                    InitRecordingAndPlayback();
                 }
-    void        InitPlayback ( const int iNewBufferSize, const bool bNewBlocking = false )
+    void        InitPlayback ( const bool bNewBlocking = false )
                 {
                     bBlockingPlay = bNewBlocking; 
-                    InitRecordingAndPlayback ( iNewBufferSize );
+                    InitRecordingAndPlayback();
                 }
     bool        Read ( CVector<short>& psData );
     bool        Write ( CVector<short>& psData );
@@ -96,8 +96,9 @@ public:
 
 protected:
     bool        LoadAndInitializeFirstValidDriver();
-    std::string LoadAndInitializeDriver ( const int iIdx );
-    void        InitRecordingAndPlayback ( const int iNewBufferSize );
+    std::string LoadAndInitializeDriver ( int iIdx );
+    std::string GetAndCheckSoundCardProperties();
+    void        InitRecordingAndPlayback();
 
     // audio hardware buffer info
     struct sHWBufferInfo

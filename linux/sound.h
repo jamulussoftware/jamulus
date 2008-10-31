@@ -31,9 +31,9 @@
 
 
 /* Definitions ****************************************************************/
-#define NUM_IN_OUT_CHANNELS         2       /* always stereo */
+#define NUM_IN_OUT_CHANNELS         2 // always stereo
 
-/* the number of periods is critical for latency */
+// the number of periods is critical for latency
 #define NUM_PERIOD_BLOCKS_IN        2
 #define NUM_PERIOD_BLOCKS_OUT       2
 
@@ -44,14 +44,18 @@
 class CSound
 {
 public:
-    CSound()
+    CSound ( const int iNewBufferSizeStereo )
 #if WITH_SOUND
-    : rhandle(NULL), phandle(NULL), iCurPeriodSizeIn(NUM_PERIOD_BLOCKS_IN),
-    iCurPeriodSizeOut(NUM_PERIOD_BLOCKS_OUT), bChangParamIn(true),
-    bChangParamOut(true)
+    : rhandle ( NULL ), phandle ( NULL ), iCurPeriodSizeIn ( NUM_PERIOD_BLOCKS_IN ),
+    iCurPeriodSizeOut ( NUM_PERIOD_BLOCKS_OUT ), bChangParamIn ( true ),
+    bChangParamOut ( true )
 #endif
-        {}
-    virtual ~CSound() {Close();}
+    {
+        // set internal buffer size for read and write
+        iBufferSizeIn  = iNewBufferSizeStereo / NUM_IN_OUT_CHANNELS; // mono size
+        iBufferSizeOut = iNewBufferSizeStereo / NUM_IN_OUT_CHANNELS; // mono size
+    }
+    virtual ~CSound() { Close(); }
 
     // not implemented yet, always return one device and default string
     int         GetNumDev() { return 1; }
@@ -60,14 +64,14 @@ public:
     int         GetDev() { return 0; }
 
 #if WITH_SOUND
-    void    SetInNumBuf(int iNewNum);
-    int     GetInNumBuf() {return iCurPeriodSizeIn;}
-    void    SetOutNumBuf(int iNewNum);
-    int     GetOutNumBuf() {return iCurPeriodSizeOut;}
-    void    InitRecording(int iNewBufferSize, bool bNewBlocking = true);
-    void    InitPlayback(int iNewBufferSize, bool bNewBlocking = false);
-    bool    Read(CVector<short>& psData);
-    bool    Write(CVector<short>& psData);
+    void    SetInNumBuf ( int iNewNum );
+    int     GetInNumBuf() { return iCurPeriodSizeIn; }
+    void    SetOutNumBuf ( int iNewNum );
+    int     GetOutNumBuf() { return iCurPeriodSizeOut; }
+    void    InitRecording ( const bool bNewBlocking = true );
+    void    InitPlayback ( const bool bNewBlocking = false );
+    bool    Read ( CVector<short>& psData );
+    bool    Write ( CVector<short>& psData );
 
     void    Close();
     
@@ -75,8 +79,8 @@ protected:
     snd_pcm_t* rhandle;
     snd_pcm_t* phandle;
 
-    bool SetHWParams(snd_pcm_t* handle, const int iBufferSizeIn,
-                     const int iNumPeriodBlocks);
+    bool SetHWParams ( snd_pcm_t* handle, const int iBufferSizeIn,
+                       const int iNumPeriodBlocks );
 
     int iBufferSizeOut;
     int iBufferSizeIn;
@@ -85,15 +89,15 @@ protected:
     bool bChangParamOut;
     int iCurPeriodSizeOut;
 #else
-    /* Dummy definitions */
-    void    SetInNumBuf(int iNewNum) {}
-    int     GetInNumBuf() {return 1;}
-    void    SetOutNumBuf(int iNewNum) {}
-    int     GetOutNumBuf() {return 1;}
-    void    InitRecording(int iNewBufferSize, bool bNewBlocking = true) {printf("no sound!");}
-    void    InitPlayback(int iNewBufferSize, bool bNewBlocking = false) {printf("no sound!");}
-    bool    Read(CVector<short>& psData) {printf("no sound!"); return false;}
-    bool    Write(CVector<short>& psData) {printf("no sound!"); return false;}
+    // dummy definitions
+    void    SetInNumBuf ( int iNewNum ) {}
+    int     GetInNumBuf() { return 1; }
+    void    SetOutNumBuf ( int iNewNum ) {}
+    int     GetOutNumBuf() { return 1; }
+    void    InitRecording ( const bool bNewBlocking = true ) { printf ( "no sound!" ); }
+    void    InitPlayback ( const bool bNewBlocking = false ) { printf ( "no sound!" ); }
+    bool    Read ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
+    bool    Write ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
     void    Close() {}
 #endif
 };

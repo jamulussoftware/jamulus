@@ -481,6 +481,18 @@ std::string CSound::PrepareDriver()
     iMinNumSndBuf = static_cast<int> (
         ceil ( static_cast<double> ( iASIOBufferSizeMono ) / iBufferSizeMono ) );
 
+// TODO better solution
+// For some ASIO buffer sizes, the above calculation seems not to work although
+// it should be correct. Maybe there is a misunderstanding or a bug in the
+// sound interface implementation. As a workaround, we implement a table here, to
+// get working parameters for the most common ASIO buffer settings
+// Interesting observation: only 256 samples seems to be wrong, all other tested
+// buffer sizes like 192, 512, 384, etc. are correct...
+if ( iASIOBufferSizeMono == 256 )
+{
+    iMinNumSndBuf = 4;
+}
+
     Q_ASSERT ( iMinNumSndBuf < MAX_SND_BUF_IN );
     Q_ASSERT ( iMinNumSndBuf < MAX_SND_BUF_OUT );
 
@@ -498,7 +510,7 @@ std::string CSound::PrepareDriver()
             QString().number ( iASIOBufferSizeMono ) +
             QString ( " samples which is too large. Please try to modify "
             "the ASIO buffer size value in your ASIO driver settings (most ASIO "
-            "drivers like ASIO4All or kx allow to change the ASIO buffer size). "
+            "drivers like ASIO4All or kx driver allow to change the ASIO buffer size). "
             "Recommended settings are 96 or 128 samples." ), "Ok", 0 );
     }
 
@@ -739,7 +751,7 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
                         {
                             psCaptureBuffer[iBufferPosCapture + 
                                 2 * iCurSample + bufferInfos[i].channelNum] =
-                                ((short*) bufferInfos[i].buffers[index])[iCurSample];
+                                ( (short*) bufferInfos[i].buffers[index] )[iCurSample];
                         }
 			            break;
 
@@ -751,7 +763,7 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
                         {
                             // convert current sample in 16 bit format
                             int iCurSam = 0;
-                            memcpy ( &iCurSam, ((char*) bufferInfos[i].buffers[index]) + iCurSample * 3, 3);
+                            memcpy ( &iCurSam, ( (char*) bufferInfos[i].buffers[index] ) + iCurSample * 3, 3 );
                             iCurSam >>= 8;
 
                             psCaptureBuffer[iBufferPosCapture + 
@@ -783,7 +795,7 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
 		            case ASIOSTInt16LSB:
                         for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
 	                    {
-                            ((short*) bufferInfos[i].buffers[index])[iCurSample] =
+                            ( (short*) bufferInfos[i].buffers[index] )[iCurSample] =
                                 psPlayBuffer[2 * iCurSample + bufferInfos[i].channelNum];
                         }
 			            break;
@@ -798,7 +810,7 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
                             int iCurSam = static_cast<int> ( psPlayBuffer[2 * iCurSample + bufferInfos[i].channelNum] );
                             iCurSam <<= 8;
 
-                            memcpy ( ((char*) bufferInfos[i].buffers[index]) + iCurSample * 3, &iCurSam, 3);
+                            memcpy ( ( (char*) bufferInfos[i].buffers[index] ) + iCurSample * 3, &iCurSam, 3 );
                         }
 			            break;
 
@@ -807,7 +819,7 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
 	                    {
                             // convert to 32 bit
                             int iCurSam = static_cast<int> ( psPlayBuffer[2 * iCurSample + bufferInfos[i].channelNum] );
-                            ((int*) bufferInfos[i].buffers[index])[iCurSample] = ( iCurSam << 16 );
+                            ( (int*) bufferInfos[i].buffers[index] )[iCurSample] = ( iCurSam << 16 );
                         }
                         break;
 	                }

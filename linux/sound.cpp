@@ -195,7 +195,7 @@ void CSound::SetInNumBuf ( int iNewNum )
     if ( iNewNum != iCurPeriodSizeIn )
     {
         iCurPeriodSizeIn = iNewNum;
-        bChangParamIn = true;
+        bChangParamIn    = true;
     }
 }
 

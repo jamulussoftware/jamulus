@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>552</width>
-    <height>340</height>
+    <width>544</width>
+    <height>306</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -724,31 +724,27 @@
      </property>
      <layout class="QVBoxLayout" >
       <item>
-       <layout class="QVBoxLayout" >
-        <item>
-         <widget class="QLabel" name="lSoundcard" >
-          <property name="text" >
-           <string>Soundcard</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbSoundcard" >
-          <property name="sizePolicy" >
-           <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize" >
-           <size>
-            <width>153</width>
-            <height>0</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QLabel" name="lSoundcard" >
+        <property name="text" >
+         <string>Soundcard</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="cbSoundcard" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize" >
+         <size>
+          <width>153</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QGroupBox" name="groupBoxAudioCompressionType" >
@@ -781,15 +777,11 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" >
-        <item>
-         <widget class="QCheckBox" name="cbOpenChatOnNewMessage" >
-          <property name="text" >
-           <string>Open chat on new message</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QCheckBox" name="cbOpenChatOnNewMessage" >
+        <property name="text" >
+         <string>Open chat on new message</string>
+        </property>
+       </widget>
       </item>
       <item>
        <spacer>

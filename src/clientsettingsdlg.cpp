@@ -71,9 +71,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 #else
     SliderSndBufIn->setRange ( 2, AUD_SLIDER_LENGTH );
 #endif
-    const int iCurNumInBuf = pClient->GetSndInterface()->GetInNumBuf();
-    SliderSndBufIn->setValue ( iCurNumInBuf );
-    TextSndBufIn->setText ( "In: " + QString().setNum ( iCurNumInBuf ) );
+    UpdateSndBufInSlider ( pClient->GetSndInterface()->GetInNumBuf() );
 
     // sound buffer out
 #ifdef _WIN32
@@ -81,9 +79,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 #else
     SliderSndBufOut->setRange ( 2, AUD_SLIDER_LENGTH );
 #endif
-    const int iCurNumOutBuf = pClient->GetSndInterface()->GetOutNumBuf();
-    SliderSndBufOut->setValue ( iCurNumOutBuf );
-    TextSndBufOut->setText ( "Out: " + QString().setNum ( iCurNumOutBuf ) );
+    UpdateSndBufOutSlider ( pClient->GetSndInterface()->GetOutNumBuf() );
 
     // network buffer
     SliderNetBuf->setRange ( 0, MAX_NET_BUF_SIZE_NUM_BL );
@@ -188,6 +184,18 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     TimerStatus.start ( DISPLAY_UPDATE_TIME );
 }
 
+void CClientSettingsDlg::UpdateSndBufInSlider ( const int iCurNumInBuf )
+{
+    SliderSndBufIn->setValue ( iCurNumInBuf );
+    TextSndBufIn->setText ( "In: " + QString().setNum ( iCurNumInBuf ) );
+}
+
+void CClientSettingsDlg::UpdateSndBufOutSlider ( const int iCurNumOutBuf )
+{
+    SliderSndBufOut->setValue ( iCurNumOutBuf );
+    TextSndBufOut->setText ( "Out: " + QString().setNum ( iCurNumOutBuf ) );
+}
+
 void CClientSettingsDlg::showEvent ( QShowEvent* showEvent )
 {
     // only activate ping timer if window is actually shown
@@ -255,6 +263,7 @@ void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
         // recover old selection
         cbSoundcard->setCurrentIndex ( pClient->GetSndInterface()->GetDev() );
     }
+    UpdateDisplay();
 }
 
 void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
@@ -338,6 +347,10 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 
 void CClientSettingsDlg::UpdateDisplay()
 {
+    // update slider controls (settings might have been changed by sound interface)
+    UpdateSndBufInSlider  ( pClient->GetSndInterface()->GetInNumBuf() );
+    UpdateSndBufOutSlider ( pClient->GetSndInterface()->GetOutNumBuf() );
+
     if ( !pClient->IsRunning() )
     {
         // clear text labels with client parameters

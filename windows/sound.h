@@ -29,6 +29,7 @@
 #include <windows.h>
 #include <mmsystem.h>
 #include <string>
+#include <qmessagebox.h>
 #include "../src/util.h"
 #include "../src/global.h"
 

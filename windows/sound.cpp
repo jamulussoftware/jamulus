@@ -66,6 +66,7 @@ short*           psPlayBuffer;
 int              iBufferPosPlay;
 bool             bPlayBufferUnderrun;
 
+int              iMinNumSndBuf;
 int              iCurNumSndBufIn;
 int              iCurNumSndBufOut;
 int              iNewNumSndBufIn;
@@ -164,16 +165,14 @@ bool CSound::Read ( CVector<short>& psData )
 void CSound::SetInNumBuf ( int iNewNum )
 {
     // check new parameter
-    if ( ( iNewNum >= MAX_SND_BUF_IN ) || ( iNewNum < 1 ) )
+    if ( ( iNewNum < MAX_SND_BUF_IN ) && ( iNewNum >= iMinNumSndBuf ) )
 	{
-        iNewNum = NUM_SOUND_BUFFERS_IN;
-	}
-
-    // change only if parameter is different
-    if ( iNewNum != iCurNumSndBufIn )
-    {
-        iNewNumSndBufIn = iNewNum;
-        bChangParamIn   = true;
+        // change only if parameter is different
+        if ( iNewNum != iNewNumSndBufIn )
+        {
+            iNewNumSndBufIn = iNewNum;
+            bChangParamIn   = true;
+        }
     }
 }
 
@@ -232,16 +231,14 @@ bool CSound::Write ( CVector<short>& psData )
 void CSound::SetOutNumBuf ( int iNewNum )
 {
     // check new parameter
-    if ( ( iNewNum >= MAX_SND_BUF_OUT ) || ( iNewNum < 1 ) )
+    if ( ( iNewNum < MAX_SND_BUF_OUT ) && ( iNewNum >= iMinNumSndBuf ) )
 	{
-        iNewNum = NUM_SOUND_BUFFERS_OUT;
-	}
-
-    // change only if parameter is different
-    if ( iNewNum != iCurNumSndBufOut )
-    {
-        iNewNumSndBufOut = iNewNum;
-        bChangParamOut   = true;
+        // change only if parameter is different
+        if ( iNewNum != iNewNumSndBufOut )
+        {
+            iNewNumSndBufOut = iNewNum;
+            bChangParamOut   = true;
+        }
     }
 }
 
@@ -480,6 +477,31 @@ std::string CSound::PrepareDriver()
         }
     }
 
+    // calculate the minimum required number of soundcard buffers
+    iMinNumSndBuf = static_cast<int> (
+        ceil ( static_cast<double> ( iASIOBufferSizeMono ) / iBufferSizeMono ) );
+
+    Q_ASSERT ( iMinNumSndBuf < MAX_SND_BUF_IN );
+    Q_ASSERT ( iMinNumSndBuf < MAX_SND_BUF_OUT );
+
+    // correct number of sound card buffers if required
+    iCurNumSndBufIn  = max ( iMinNumSndBuf, iCurNumSndBufIn );
+    iCurNumSndBufOut = max ( iMinNumSndBuf, iCurNumSndBufOut );
+    iNewNumSndBufIn  = iCurNumSndBufIn;
+    iNewNumSndBufOut = iCurNumSndBufOut;
+
+    // display warning in case the ASIO buffer is too big
+    if ( iMinNumSndBuf > 6 )
+    {
+        QMessageBox::critical ( 0, APP_NAME,
+            QString ( "The ASIO buffer size of the selected audio driver is ") + 
+            QString().number ( iASIOBufferSizeMono ) +
+            QString ( " samples which is too large. Please try to modify "
+            "the ASIO buffer size value in your ASIO driver settings (most ASIO "
+            "drivers like ASIO4All or kx allow to change the ASIO buffer size). "
+            "Recommended settings are 96 or 128 samples." ), "Ok", 0 );
+    }
+
     // prepare input channels
     for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
     {
@@ -536,7 +558,6 @@ void CSound::InitRecordingAndPlayback()
 
     ASIOMutex.lock(); // get mutex lock
     {
-        // Our buffer management -----------------------------------------------
         // store new buffer number values
         iCurNumSndBufIn  = iNewNumSndBufIn;
         iCurNumSndBufOut = iNewNumSndBufOut;
@@ -608,6 +629,7 @@ CSound::CSound ( const int iNewBufferSizeStereo )
     iCurNumSndBufIn  = NUM_SOUND_BUFFERS_IN;
     iNewNumSndBufOut = NUM_SOUND_BUFFERS_OUT;
     iCurNumSndBufOut = NUM_SOUND_BUFFERS_OUT;
+    iMinNumSndBuf    = 1;
 
     // should be initialized because an error can occur during init
     m_ASIOEvent = NULL;

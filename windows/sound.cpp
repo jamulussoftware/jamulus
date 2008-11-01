@@ -327,7 +327,7 @@ std::string CSound::LoadAndInitializeDriver ( int iDriverIdx )
         return "The audio driver could not be initialized.";
     }
 
-    const std::string strStat = GetAndCheckSoundCardProperties();
+    const std::string strStat = PrepareDriver();
 
     // store ID of selected driver if initialization was successful
     if ( strStat.empty() )
@@ -351,7 +351,7 @@ bool CSound::LoadAndInitializeFirstValidDriver()
         {
             if ( ASIOInit ( &driverInfo ) == ASE_OK )
             {
-                if ( GetAndCheckSoundCardProperties().empty() )
+                if ( PrepareDriver().empty() )
                 {
                     // initialization was successful
                     bValidDriverDetected = true;
@@ -379,7 +379,7 @@ bool CSound::LoadAndInitializeFirstValidDriver()
     return bValidDriverDetected;
 }
 
-std::string CSound::GetAndCheckSoundCardProperties()
+std::string CSound::PrepareDriver()
 {
     int i;
 
@@ -591,9 +591,6 @@ void CSound::Close()
 
     // wait for the thread to terminate
     Sleep ( 500 );
-
-    // dispose ASIO buffers
-    ASIODisposeBuffers();
 
     // set flag to open devices the next time it is initialized
     bChangParamIn  = true;

@@ -97,7 +97,7 @@ public:
 protected:
     bool        LoadAndInitializeFirstValidDriver();
     std::string LoadAndInitializeDriver ( int iIdx );
-    std::string GetAndCheckSoundCardProperties();
+    std::string PrepareDriver();
     void        InitRecordingAndPlayback();
 
     // audio hardware buffer info

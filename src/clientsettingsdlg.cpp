@@ -57,9 +57,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     TextNetBufSiFactOut->setWhatsThis ( strNetwBlockSize );
     GroupBoxNetwBuf->setWhatsThis ( strNetwBlockSize );
 
-    // init timing jitter text label
-    //TextLabelStdDevTimer->setText ( "" );
-
     // init delay information controls
     CLEDOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME );
     CLEDOverallDelay->Reset();
@@ -341,16 +338,9 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 
 void CClientSettingsDlg::UpdateDisplay()
 {
-    if ( pClient->IsRunning() )
-    {
-        // response time
-        //TextLabelStdDevTimer->setText ( QString().
-        //    setNum ( pClient->GetTimingStdDev(), 'f', 2 ) + " ms" );
-    }
-    else
+    if ( !pClient->IsRunning() )
     {
         // clear text labels with client parameters
-        //TextLabelStdDevTimer->setText ( "" );
         TextLabelPingTime->setText ( "" );
         TextLabelBufferDelay->setText ( "" );
         TextLabelOverallDelay->setText ( "" );

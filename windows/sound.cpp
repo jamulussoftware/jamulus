@@ -71,6 +71,7 @@ int              iCurNumSndBufIn;
 int              iCurNumSndBufOut;
 int              iNewNumSndBufIn;
 int              iNewNumSndBufOut;
+bool             bSetNumSndBufToMinimumValue;
 
 // we must implement these functions here to get access to global variables
 int CSound::GetOutNumBuf() { return iNewNumSndBufOut; }
@@ -251,6 +252,10 @@ void CSound::SetDev ( const int iNewDev )
     // check if an ASIO driver was already initialized
     if ( lCurDev >= 0 )
     {
+        // the new driver was not selected before, use default settings for
+        // buffer sizes
+        bSetNumSndBufToMinimumValue = true;
+
         // a device was already been initialized and is used, kill working
         // thread and clean up
         // stop driver
@@ -276,6 +281,14 @@ void CSound::SetDev ( const int iNewDev )
 
         if ( !strErrorMessage.empty() )
         {
+            // The new driver initializing was not successful, try to preserve
+            // the old buffer settings -> this is possible, if errornous driver
+            // had failed before the buffer setting was done. If it failed after
+            // setting the minimum buffer sizes, the following flag modification
+            // does not have any effect which means the old settings cannot be
+            // recovered anymore (TODO better solution)
+            bSetNumSndBufToMinimumValue = false;
+
             // loading and initializing the new driver failed, go back to original
             // driver and display error message
             LoadAndInitializeDriver ( lCurDev );
@@ -287,17 +300,32 @@ void CSound::SetDev ( const int iNewDev )
     }
     else
     {
-        // This is the first time a driver is to be initialized, we first try
-        // to load the selected driver, if this fails, we try to load the first
-        // available driver in the system. If this fails, too, we throw an error
-        // that no driver is available -> it does not make sense to start the llcon
-        // software if no audio hardware is available
-        const std::string strErrorMessage = LoadAndInitializeDriver ( iNewDev );
-
-        if ( !strErrorMessage.empty() )
+        if ( iNewDev != INVALID_SNC_CARD_DEVICE )
         {
-            // loading and initializing the new driver failed, try to find at
-            // least one usable driver
+            // This is the first time a driver is to be initialized, we first try
+            // to load the selected driver, if this fails, we try to load the first
+            // available driver in the system. If this fails, too, we throw an error
+            // that no driver is available -> it does not make sense to start the llcon
+            // software if no audio hardware is available
+            const std::string strErrorMessage = LoadAndInitializeDriver ( iNewDev );
+
+            if ( !strErrorMessage.empty() )
+            {
+                // loading and initializing the new driver failed, try to find at
+                // least one usable driver
+                if ( !LoadAndInitializeFirstValidDriver() )
+                {
+                    throw CGenErr ( "No usable ASIO audio device (driver) found." );
+                }
+            }
+        }
+        else
+        {
+            // the new driver was not selected before, use default settings for
+            // buffer sizes
+            bSetNumSndBufToMinimumValue = true;
+
+            // try to find one usable driver (select the first valid driver)
             if ( !LoadAndInitializeFirstValidDriver() )
             {
                 throw CGenErr ( "No usable ASIO audio device (driver) found." );
@@ -492,15 +520,24 @@ if ( iASIOBufferSizeMono == 256 )
 {
     iMinNumSndBuf = 4;
 }
-
     Q_ASSERT ( iMinNumSndBuf < MAX_SND_BUF_IN );
     Q_ASSERT ( iMinNumSndBuf < MAX_SND_BUF_OUT );
 
-    // correct number of sound card buffers if required
-    iCurNumSndBufIn  = max ( iMinNumSndBuf, iCurNumSndBufIn );
-    iCurNumSndBufOut = max ( iMinNumSndBuf, iCurNumSndBufOut );
-    iNewNumSndBufIn  = iCurNumSndBufIn;
-    iNewNumSndBufOut = iCurNumSndBufOut;
+    // set or just check the sound card buffer sizes
+    if ( bSetNumSndBufToMinimumValue )
+    {
+        // use minimum buffer sizes as default
+        iNewNumSndBufIn  = iMinNumSndBuf;
+        iNewNumSndBufOut = iMinNumSndBuf;
+    }
+    else
+    {
+        // correct number of sound card buffers if required
+        iNewNumSndBufIn  = max ( iMinNumSndBuf, iNewNumSndBufIn );
+        iNewNumSndBufOut = max ( iMinNumSndBuf, iNewNumSndBufOut );
+    }
+    iCurNumSndBufIn  = iNewNumSndBufIn;
+    iCurNumSndBufOut = iNewNumSndBufOut;
 
     // display warning in case the ASIO buffer is too big
     if ( iMinNumSndBuf > 6 )
@@ -511,7 +548,9 @@ if ( iASIOBufferSizeMono == 256 )
             QString ( " samples which is too large. Please try to modify "
             "the ASIO buffer size value in your ASIO driver settings (most ASIO "
             "drivers like ASIO4All or kx driver allow to change the ASIO buffer size). "
-            "Recommended settings are 96 or 128 samples." ), "Ok", 0 );
+            "Recommended settings are 96 or 128 samples. Please make sure that "
+            "before you try to change the ASIO driver buffer size all ASIO "
+            "applications including llcon are closed." ), "Ok", 0 );
     }
 
     // prepare input channels
@@ -680,9 +719,10 @@ CSound::CSound ( const int iNewBufferSizeStereo )
     // create event
     m_ASIOEvent = CreateEvent ( NULL, FALSE, FALSE, NULL );
 
-    // init flags (initiate init for first run)
-    bChangParamIn  = true;
-    bChangParamOut = true;
+    // init flags
+    bChangParamIn               = false;
+    bChangParamOut              = false;
+    bSetNumSndBufToMinimumValue = false;
 }
 
 CSound::~CSound()

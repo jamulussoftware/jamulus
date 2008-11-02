@@ -76,13 +76,15 @@
 #define MAX_NET_BUF_SIZE_NUM_BL         10 // number of blocks
 
 // default network buffer size
-#define DEF_NET_BUF_SIZE_NUM_BL         5 // number of blocks
+#define DEF_NET_BUF_SIZE_NUM_BL         6 // number of blocks
 
 // number of ticks of audio in/out buffer sliders
-# define AUD_SLIDER_LENGTH              8
+#define AUD_SLIDER_LENGTH               8
 
-// maximum number of recognized sound cards installed in the system
+// maximum number of recognized sound cards installed in the system,
+// definition for "no device"
 #define MAX_NUMBER_SOUND_CARDS          10
+#define INVALID_SNC_CARD_DEVICE         -1
 
 // maximum number of internet connections (channels)
 // if you want to change this paramter, there has to be done code modifications

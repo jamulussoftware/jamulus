@@ -87,8 +87,9 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     }
     else
     {
-        // default setting: use first sound card in system
-        pClient->GetSndInterface()->SetDev ( 0 );
+        // use "INVALID_SNC_CARD_DEVICE" to tell the sound card driver that no
+        // device selection was done previously
+        pClient->GetSndInterface()->SetDev ( INVALID_SNC_CARD_DEVICE );
     }
 
     // sound card in number of buffers

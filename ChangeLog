@@ -1,3 +1,12 @@
+2.1.3
+
+- added sound card selection
+
+- added total delay display
+
+- improved ASIO configuration
+
+
 2.1.2
 
 - audio compression type can be selected (IMA ADPCM, MS ADPCM, None)

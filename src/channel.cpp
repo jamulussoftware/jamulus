@@ -284,6 +284,9 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
                 // the message here since the received data has to be put to the
                 // channel first so that this channel is marked as connected
                 bCreateChanList = true;
+
+                // send message about new channel
+                emit ChannelConnected ( HostAdr );
             }
             else
             {

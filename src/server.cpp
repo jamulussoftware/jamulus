@@ -26,7 +26,8 @@
 
 
 /* Implementation *************************************************************/
-CServer::CServer ( const bool bUseLogging, const quint16 iPortNumber,
+CServer::CServer ( const QString& strLoggingFileName,
+                   const quint16 iPortNumber,
                    const QString& strHTMLStatusFileName,
                    const QString& strServerNameForHTMLStatusFile,
                    const bool bForceLowUploadRate ) :
@@ -47,6 +48,11 @@ CServer::CServer ( const bool bUseLogging, const quint16 iPortNumber,
         SIGNAL ( MessReadyForSending ( int, CVector<uint8_t> ) ),
         this, SLOT ( OnSendProtMessage ( int, CVector<uint8_t> ) ) );
 
+    // connection for logging
+    QObject::connect ( &ChannelSet,
+        SIGNAL ( ChannelConnected ( CHostAddress ) ),
+        this, SLOT ( OnNewChannel ( CHostAddress ) ) );
+
 #ifdef _WIN32
     // event handling of custom events seems not to work under Windows in this
     // class, do not use automatic start/stop of server in Windows version
@@ -54,9 +60,9 @@ CServer::CServer ( const bool bUseLogging, const quint16 iPortNumber,
 #endif
 
     // enable logging (if requested)
-    if ( bUseLogging )
+    if ( !strLoggingFileName.isEmpty() )
     {
-        Logging.Start();
+        Logging.Start ( strLoggingFileName );
     }
 
     // HTML status file writing
@@ -110,7 +116,18 @@ void CServer::Stop()
     Timer.stop();
 
     // logging
-    QString strLogStr = CLogTimeDate::toString() + "Server stopped";
+    const QString strLogStr = CLogTimeDate::toString() + ": server stopped "
+        "#####################################################";
+
+    qDebug() << strLogStr; // on console
+    Logging << strLogStr; // in log file
+}
+
+void CServer::OnNewChannel ( CHostAddress ChanAddr )
+{
+    // logging of new connected channel
+    const QString strLogStr = CLogTimeDate::toString() + ": " +
+        ChanAddr.InetAddr.toString() + " connected";
 
     qDebug() << strLogStr; // on console
     Logging << strLogStr; // in log file

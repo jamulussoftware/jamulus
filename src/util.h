@@ -487,10 +487,11 @@ public:
         }
     }
 
-    void Start()
+    void Start ( const QString& strLoggingFileName )
     {
         // open file
-        if ( File.open ( QIODevice::Append ) )
+        File.setFileName ( strLoggingFileName );
+        if ( File.open ( QIODevice::Append | QIODevice::Text ) )
         {
             bDoLogging = true;
         }
@@ -503,6 +504,7 @@ public:
             // append new line in logging file
             QTextStream out ( &File );
             out << sNewStr << endl;
+            File.flush();
         }
     }
 

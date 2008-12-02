@@ -31,7 +31,7 @@
 #include "settings.h"
 
 
-/* Implementation *************************************************************/
+// Implementation **************************************************************
 // these pointers are only used for the post-event routine
 QApplication* pApp   = NULL;
 QDialog* pMainWindow = NULL;
@@ -45,19 +45,19 @@ int main ( int argc, char** argv )
     /* check if server or client application shall be started */
     bool        bIsClient             = true;
     bool        bUseGUI               = true;
-    bool        bUseServerLogging     = false;
     bool        bForceLowUploadRate   = false;
     quint16     iPortNumber           = LLCON_PORT_NUMBER;
 	std::string strIniFileName        = "";
     std::string strHTMLStatusFileName = "";
     std::string strServerName         = "";
+    std::string strLoggingFileName    = "";
 
 	/* QT docu: argv()[0] is the program name, argv()[1] is the first
 	   argument and argv()[argc()-1] is the last argument.
 	   Start with first argument, therefore "i = 1" */
 	for ( int i = 1; i < argc; i++ )
 	{
-		/* Server mode flag ------------------------------------------------------- */
+		// server mode flag ----------------------------------------------------------
 		if ( GetFlagArgument ( argc, argv, i, "-s", "--server" ) )
 		{
 			bIsClient = false;
@@ -65,7 +65,7 @@ int main ( int argc, char** argv )
 			continue;
 		}
 
-		/* Use GUI flag ----------------------------------------------------------- */
+		// use GUI flag --------------------------------------------------------------
 		if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) )
 		{
 			bUseGUI = false;
@@ -73,15 +73,15 @@ int main ( int argc, char** argv )
 			continue;
 		}
 
-		/* Use logging flag ------------------------------------------------------- */
-		if ( GetFlagArgument ( argc, argv, i, "-l", "--log" ) )
+		// use logging ---------------------------------------------------------------
+		if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
 		{
-			bUseServerLogging = true;
-            cerr << "logging enabled" << std::endl;
+			strLoggingFileName = strArgument;
+            cerr << "logging file name: " << strLoggingFileName << std::endl;
 			continue;
 		}
 
-		/* Force low upload data rate flag ---------------------------------------- */
+		// force low upload data rate flag -------------------------------------------
         if ( GetFlagArgument ( argc, argv, i, "-u", "--lowuploadrate" ) )
         {
 	        bForceLowUploadRate = true;
@@ -89,7 +89,7 @@ int main ( int argc, char** argv )
 	        continue;
         }
 
-        /* Port number ------------------------------------------------------------ */
+        // port number ---------------------------------------------------------------
 		if ( GetNumericArgument ( argc, argv, i, "-p", "--port",
                                   0, 65535, rDbleArgument ) )
 		{
@@ -98,7 +98,7 @@ int main ( int argc, char** argv )
 			continue;
 		}
 
-		/* HTML status file ------------------------------------------------------- */
+		// HTML status file ----------------------------------------------------------
 		if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
 		{
 			strHTMLStatusFileName = strArgument;
@@ -113,7 +113,7 @@ int main ( int argc, char** argv )
 			continue;
 		}
 
-		/* Initialization file ---------------------------------------------------- */
+		// initialization file -------------------------------------------------------
 		if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
 		{
 			strIniFileName = strArgument;
@@ -121,7 +121,7 @@ int main ( int argc, char** argv )
 			continue;
 		}
 
-		/* Help (usage) flag ------------------------------------------------------ */
+		// help (usage) flag ---------------------------------------------------------
 		if ( ( !strcmp ( argv[i], "--help" ) ) ||
 			 ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
 		{
@@ -130,7 +130,7 @@ int main ( int argc, char** argv )
 			exit ( 1 );
 		}
 
-		/* Unknown option --------------------------------------------------------- */
+		// unknown option ------------------------------------------------------------
 		cerr << argv[0] << ": ";
 		cerr << "Unknown option '" << argv[i] << "' -- use '--help' for help"
 			<< endl;
@@ -190,7 +190,8 @@ int main ( int argc, char** argv )
 
 // TODO use QString
 
-            CServer Server ( bUseServerLogging, iPortNumber,
+            CServer Server ( strLoggingFileName.c_str(),
+                             iPortNumber,
                              strHTMLStatusFileName.c_str(),
                              strServerName.c_str(),
                              bForceLowUploadRate );

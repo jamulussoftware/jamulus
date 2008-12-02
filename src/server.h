@@ -41,7 +41,8 @@ class CServer : public QObject
     Q_OBJECT
 
 public:
-    CServer ( const bool bUseLogging, const quint16 iPortNumber,
+    CServer ( const QString& strLoggingFileName,
+              const quint16 iPortNumber,
               const QString& strHTMLStatusFileName,
               const QString& strServerNameForHTMLStatusFile,
               const bool bForceLowUploadRate );
@@ -87,6 +88,7 @@ protected:
 public slots:
     void OnTimer();
     void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
+    void OnNewChannel ( CHostAddress ChanAddr );
 };
 
 #endif /* !defined ( SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ ) */

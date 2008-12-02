@@ -323,6 +323,7 @@ public slots:
 
 signals:
     void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );
+    void ChannelConnected ( CHostAddress ChanAddr );
 };
 
 #endif /* !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

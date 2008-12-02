@@ -245,7 +245,7 @@ std::string UsageArguments ( char **argv )
 		"Recognized options:\n"
 		"  -s, --server               start server\n"
 		"  -n, --nogui                disable GUI (only avaiable for server)\n"
-		"  -l, --log                  enable logging\n"
+		"  -l, --log                  enable logging, set file name\n"
 		"  -i, --inifile              initialization file name (only available for client)\n"
 		"  -p, --port                 local port number (only avaiable for server)\n"
 		"  -m, --htmlstatus           enable HTML status file, set file name (only avaiable for server)\n"

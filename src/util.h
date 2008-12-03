@@ -469,7 +469,7 @@ public:
         return QString().setNum ( curDateTime.date().day() ) + "." +
             QString().setNum ( curDateTime.date().month() ) + "." +
             QString().setNum ( curDateTime.date().year() ) + " " +
-            curDateTime.time().toString() + ": ";
+            curDateTime.time().toString();
     }
 };
 

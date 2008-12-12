@@ -117,7 +117,7 @@ void CServer::Stop()
 
     // logging
     const QString strLogStr = CLogTimeDate::toString() + ": server stopped "
-        "#############################################";
+        "############################################";
 
     qDebug() << strLogStr; // on console
     Logging << strLogStr; // in log file

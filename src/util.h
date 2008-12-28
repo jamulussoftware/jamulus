@@ -478,7 +478,7 @@ public:
 class CLogging
 {
 public:
-    CLogging() : bDoLogging ( false ), File ( LOG_FILE_NAME ) {}
+    CLogging() : bDoLogging ( false ), File ( DEFAULT_LOG_FILE_NAME ) {}
     virtual ~CLogging()
     {
         if ( File.isOpen() )

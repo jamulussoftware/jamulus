@@ -49,12 +49,14 @@ public:
     : rhandle ( NULL ), phandle ( NULL ), iCurPeriodSizeIn ( NUM_PERIOD_BLOCKS_IN ),
     iCurPeriodSizeOut ( NUM_PERIOD_BLOCKS_OUT ), bChangParamIn ( true ),
     bChangParamOut ( true )
-#endif
     {
         // set internal buffer size for read and write
         iBufferSizeIn  = iNewBufferSizeStereo / NUM_IN_OUT_CHANNELS; // mono size
         iBufferSizeOut = iNewBufferSizeStereo / NUM_IN_OUT_CHANNELS; // mono size
     }
+#else
+    {}
+#endif
     virtual ~CSound() { Close(); }
 
     // not implemented yet, always return one device and default string

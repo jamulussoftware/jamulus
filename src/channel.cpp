@@ -950,10 +950,6 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
         // inform other objects that new connection was established
         if ( bNewConnection )
         {
-            // log new connection
-            CHostAddress address ( GetAddress() );
-            qDebug() << CLogTimeDate::toString() + "Connected with IP " + address.InetAddr.toString();
-
             emit NewConnection();
         }
     }

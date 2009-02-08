@@ -200,7 +200,7 @@ void CClient::Init()
     RespTimeMoAvBuf.Init ( LEN_MOV_AV_RESPONSE );
 
     // init time for response time evaluation
-    TimeLastBlock = QTime::currentTime();
+    TimeLastBlock = PreciseTime.elapsed();
 
     AudioReverb.Clear();
 }
@@ -338,56 +338,8 @@ void CClient::run()
             PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED );
         }
 
-#ifdef _DEBUG_
-#if 0
-#if 0
-/* Determine network delay. We can do this very simple if only this client is
-   connected to the server. In this case, exactly the same audio material is
-   coming back and we can simply compare the samples */
-/* store send data instatic buffer (may delay is 100 ms) */
-const int iMaxDelaySamples = (int) ((float)       0.3     /*0.1*/ * SYSTEM_SAMPLE_RATE);
-static CVector<short> vecsOutBuf(iMaxDelaySamples);
-
-/* update buffer */
-const int iBufDiff = iMaxDelaySamples - iBlockSizeSam;
-for (i = 0; i < iBufDiff; i++)
-    vecsOutBuf[i + iBlockSizeSam] = vecsOutBuf[i];
-for (i = 0; i < iBlockSizeSam; i++)
-    vecsOutBuf[i] = vecsNetwork[i];
-
-/* now search for equal samples */
-int iDelaySamples = 0;
-for (i = 0; i < iMaxDelaySamples - 1; i++)
-{
-    /* compare two successive samples */
-    if ((vecsOutBuf[i] == (short) vecdNetwData[0]) &&
-        (vecsOutBuf[i + 1] == (short) vecdNetwData[1]))
-    {
-        iDelaySamples = i;
-    }
-}
-
-static FILE* pFileDelay = fopen("delay.dat", "w");
-fprintf(pFileDelay, "%d\n", iDelaySamples);
-fflush(pFileDelay);
-#else
-/* just store both, input and output, streams */
-// fid=fopen('v.dat','r');x=fread(fid,'int16');fclose(fid);
-static FILE* pFileDelay = fopen("v.dat", "wb");
-short sData[2];
-for (i = 0; i < iBlockSizeSam; i++)
-{
-    sData[0] = vecsNetwork[i];
-    sData[1] = (short) vecdNetwData[i];
-    fwrite(&sData, size_t(2), size_t(2), pFileDelay);
-}
-fflush(pFileDelay);
-#endif
-#endif
-#endif
-
-
 /*
+// TEST
 // fid=fopen('v.dat','r');x=fread(fid,'int16');fclose(fid);
 static FILE* pFileDelay = fopen("v.dat", "wb");
 short sData[2];
@@ -398,7 +350,6 @@ for (i = 0; i < iBlockSizeSam; i++)
 }
 fflush(pFileDelay);
 */
-
 
         // check if channel is connected
         if ( Channel.IsConnected() )
@@ -443,12 +394,12 @@ fflush(pFileDelay);
 
         // update response time measurement ------------------------------------
         // add time difference
-        const QTime CurTime = QTime::currentTime();
+        const int CurTime = PreciseTime.elapsed();
 
         // we want to calculate the standard deviation (we assume that the mean
         // is correct at the block period time)
         const double dCurAddVal =
-            ( (double) TimeLastBlock.msecsTo ( CurTime ) - MIN_BLOCK_DURATION_MS );
+            ( (double) ( CurTime - TimeLastBlock ) - MIN_BLOCK_DURATION_MS );
 
         RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
 

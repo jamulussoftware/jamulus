@@ -178,12 +178,12 @@ protected:
     CAudioResample      ResampleObjUpL; // left channel
     CAudioResample      ResampleObjUpR; // right channel
 
-    // for ping measurement
+    // for ping measurement and standard deviation of audio interface
     CPreciseTime        PreciseTime;
 
     // debugging, evaluating
     CMovingAv<double>   RespTimeMoAvBuf;
-    QTime               TimeLastBlock;
+    int                 TimeLastBlock;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

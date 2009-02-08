@@ -357,6 +357,11 @@ void CLlconClientDlg::UpdateDisplay()
     {
         TextLabelStatus->setText ( tr ( "disconnected" ) );
     }
+
+// TEST
+//TextLabelStatus->setText ( QString( "Std dev: %1" ).arg ( pClient->GetTimingStdDev() ) );
+
+
 }
 
 void CLlconClientDlg::customEvent ( QEvent* Event )

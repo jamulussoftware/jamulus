@@ -269,6 +269,7 @@ public:
 
     virtual void Init ( const int iNewSize );
     void InitVec ( const int iNewSize, const int iNewVecSize );
+    void Reset();
 
 protected:
     int     iCurIdx;
@@ -282,6 +283,14 @@ template<class TData> void CMovingAv<TData>::Init ( const int iNewSize )
     iCurIdx      = 0;
     tCurAvResult = TData ( 0 ); // only for scalars!
     CVector<TData>::Init ( iNewSize );
+}
+
+template<class TData> void CMovingAv<TData>::Reset()
+{
+    iNorm        = 0;
+    iCurIdx      = 0;
+    tCurAvResult = TData ( 0 ); // only for scalars!
+    CVector<TData>::Reset ( TData ( 0 ) );
 }
 
 template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
@@ -433,6 +442,23 @@ protected:
 };
 
 
+// Mathematics utilities -------------------------------------------------------
+class LlconMath
+{
+public:
+    static int NextPowerOfTwo ( const int& iSizeIn )
+    {
+        // calculate the next power of 2 of the given size
+        int iPowerOfTwo = 1;
+        while ( iPowerOfTwo < iSizeIn )
+        {
+            iPowerOfTwo <<= 1; // multiply by 2
+        }
+        return iPowerOfTwo;
+    }
+};
+
+
 // Precise time ----------------------------------------------------------------
 // needed for ping measurement
 class CPreciseTime
@@ -441,8 +467,8 @@ public:
 #ifdef _WIN32
     // for the Windows version we have to define a minimum timer precision
     // -> set it to 1 ms
-    CPreciseTime() { timeBeginPeriod(1); }
-    virtual ~CPreciseTime() { timeEndPeriod(1); }
+    CPreciseTime() { timeBeginPeriod ( 1 ); }
+    virtual ~CPreciseTime() { timeEndPeriod ( 1 ); }
 #endif
 
     // precise time (on Windows the QTime is not precise enough)

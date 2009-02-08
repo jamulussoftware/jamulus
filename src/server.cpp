@@ -107,6 +107,7 @@ void CServer::Start()
 
         // init time for response time evaluation
         TimeLastBlock = QTime::currentTime();
+        RespTimeMoAvBuf.Reset();
     }
 }
 
@@ -158,21 +159,6 @@ void CServer::OnTimer()
                 ChannelSet.PrepSendPacket ( vecChanID[i], vecsSendData ),
                 ChannelSet.GetAddress ( vecChanID[i] ) );
         }
-
-
-        // update response time measurement ------------------------------------
-        // add time difference
-        const QTime CurTime = QTime::currentTime ();
-
-        // we want to calculate the standard deviation (we assume that the mean
-        // is correct at the block period time)
-        const double dCurAddVal = ( (double) TimeLastBlock.msecsTo ( CurTime ) -
-            MIN_BLOCK_DURATION_MS );
-
-        RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
-
-        // store old time value
-        TimeLastBlock = CurTime;
     }
     else
     {
@@ -184,6 +170,20 @@ void CServer::OnTimer()
         Stop();
 #endif
     }
+
+    // update response time measurement ----------------------------------------
+    // add time difference
+    const QTime CurTime = QTime::currentTime();
+
+    // we want to calculate the standard deviation (we assume that the mean
+    // is correct at the block period time)
+    const double dCurAddVal = ( (double) TimeLastBlock.msecsTo ( CurTime ) -
+        MIN_BLOCK_DURATION_MS );
+
+    RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
+
+    // store old time value
+    TimeLastBlock = CurTime;
 }
 
 CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,

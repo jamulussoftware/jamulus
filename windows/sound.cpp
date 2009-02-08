@@ -407,6 +407,7 @@ bool CSound::LoadAndInitializeFirstValidDriver()
 std::string CSound::PrepareDriver()
 {
     int i;
+    int iDesiredBufferSizeMono;
 
     // check the number of available channels
     long lNumInChan;
@@ -442,15 +443,31 @@ std::string CSound::PrepareDriver()
                         &HWBufferInfo.lPreferredSize,
                         &HWBufferInfo.lGranularity );
 
+    // calculate the desired mono buffer size
+
+// TEST -> put this in the GUI and implement the code for the Linux driver, too
+// setting this variable to false sets the previous behaviour
+const bool bPreferPowerOfTwoAudioBufferSize = false;
+
+    if ( bPreferPowerOfTwoAudioBufferSize )
+    {
+        // use next power of 2 for desired block size mono
+        iDesiredBufferSizeMono = LlconMath().NextPowerOfTwo ( iBufferSizeMono );
+    }
+    else
+    {
+        iDesiredBufferSizeMono = iBufferSizeMono;
+    }
+
     // calculate "nearest" buffer size and set internal parameter accordingly
     // first check minimum and maximum values
-    if ( iBufferSizeMono < HWBufferInfo.lMinSize )
+    if ( iDesiredBufferSizeMono < HWBufferInfo.lMinSize )
     {
         iASIOBufferSizeMono = HWBufferInfo.lMinSize;
     }
     else
     {
-        if ( iBufferSizeMono > HWBufferInfo.lMaxSize )
+        if ( iDesiredBufferSizeMono > HWBufferInfo.lMaxSize )
         {
             iASIOBufferSizeMono = HWBufferInfo.lMaxSize;
         }
@@ -464,18 +481,14 @@ std::string CSound::PrepareDriver()
             // test loop
             while ( ( iTrialBufSize <= HWBufferInfo.lMaxSize ) && ( !bSizeFound ) )
             {
-                if ( iTrialBufSize >= iBufferSizeMono )
+                if ( iTrialBufSize >= iDesiredBufferSizeMono )
                 {
                     // test which buffer size fits better: the old one or the
                     // current one
-                    if ( ( iTrialBufSize - iBufferSizeMono ) <
-                         ( iBufferSizeMono - iLastTrialBufSize ) )
+                    if ( ( iTrialBufSize - iDesiredBufferSizeMono ) >
+                         ( iDesiredBufferSizeMono - iLastTrialBufSize ) )
                     {
-                        iBufferSizeMono = iTrialBufSize;
-                    }
-                    else
-                    {
-                        iBufferSizeMono = iLastTrialBufSize;
+                        iTrialBufSize = iLastTrialBufSize;
                     }
 
                     // exit while loop

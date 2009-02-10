@@ -73,7 +73,7 @@
 #define DEF_NET_BLOCK_SIZE_FACTOR       3
 
 // maximum network buffer size (which can be chosen by slider)
-#define MAX_NET_BUF_SIZE_NUM_BL         10 // number of blocks
+#define MAX_NET_BUF_SIZE_NUM_BL         12 // number of blocks
 
 // default network buffer size
 #define DEF_NET_BUF_SIZE_NUM_BL         6 // number of blocks

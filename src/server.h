@@ -79,8 +79,9 @@ protected:
     CSocket             Socket;
 
     // debugging, evaluating
+    CPreciseTime        PreciseTime;
     CMovingAv<double>   RespTimeMoAvBuf;
-    QTime               TimeLastBlock;
+    int                 TimeLastBlock;
 
     // logging
     CLogging            Logging;

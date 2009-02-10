@@ -270,6 +270,7 @@ public:
     virtual void Init ( const int iNewSize );
     void InitVec ( const int iNewSize, const int iNewVecSize );
     void Reset();
+    bool IsInitialized() { return ( this->iNorm == this->iVectorSize ); }
 
 protected:
     int     iCurIdx;

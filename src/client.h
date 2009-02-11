@@ -92,13 +92,18 @@ public:
         AudioReverb.Clear();
     }
 
+    void SetDoAutoSockBufSize ( const bool bValue )
+        { bDoAutoSockBufSize = bValue; }
     void SetSockBufSize ( const int iNumBlocks )
     {
-        // set the new socket size
-        Channel.SetSockBufSize ( iNumBlocks );
+        if ( Channel.GetSockBufSize() != iNumBlocks )
+        {
+            // set the new socket size
+            Channel.SetSockBufSize ( iNumBlocks );
 
-        // tell the server that size has changed
-        Channel.CreateJitBufMes ( iNumBlocks );
+            // tell the server that size has changed
+            Channel.CreateJitBufMes ( iNumBlocks );
+        }
     }
     int GetSockBufSize() { return Channel.GetSockBufSize(); }
 
@@ -138,10 +143,13 @@ public:
     QString             strName;
 
 protected:
-    virtual void run();
+    virtual void    run();
+    void            UpdateTimeResponseMeasurement();
+    void            UpdateSocketBufferSize();
 
     // only one channel is needed for client application
     CChannel            Channel;
+    bool                bDoAutoSockBufSize;
 
     CSocket             Socket;
     CSound              Sound;

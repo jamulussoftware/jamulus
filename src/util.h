@@ -447,15 +447,20 @@ protected:
 class LlconMath
 {
 public:
-    static int NextPowerOfTwo ( const int& iSizeIn )
+    static int NextPowerOfTwo ( const int& x )
     {
         // calculate the next power of 2 of the given size
-        int iPowerOfTwo = 1;
-        while ( iPowerOfTwo < iSizeIn )
+        int y = 1;
+        while ( y < x )
         {
-            iPowerOfTwo <<= 1; // multiply by 2
+            y <<= 1; // multiply by 2
         }
-        return iPowerOfTwo;
+        return y;
+    }
+
+    static int round ( double x )
+    {
+        return (int) ( ( x - floor ( x ) ) >= 0.5 ) ? ceil(x) : floor(x);
     }
 };
 

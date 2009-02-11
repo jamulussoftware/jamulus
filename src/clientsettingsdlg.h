@@ -72,8 +72,9 @@ protected:
     virtual void showEvent ( QShowEvent* showEvent );
     virtual void hideEvent ( QHideEvent* hideEvent );
 
-    void UpdateSndBufInSlider ( const int iCurNumInBuf );
-    void UpdateSndBufOutSlider ( const int iCurNumOutBuf );
+    void UpdateSndBufInSlider   ( const int iCurNumInBuf );
+    void UpdateSndBufOutSlider  ( const int iCurNumOutBuf );
+    void UpdateNetworkBufSlider ( const int iCurNumNetBuf );
 
 public slots:
     void OnTimerStatus() { UpdateDisplay(); }

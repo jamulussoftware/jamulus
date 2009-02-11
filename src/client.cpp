@@ -35,7 +35,8 @@ CClient::CClient ( const quint16 iPortNumber ) : bRun ( false ),
     bReverbOnLeftChan ( false ),
     iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR ),
     strIPAddress ( "" ), strName ( "" ),
-    bOpenChatOnNewMessage ( true )
+    bOpenChatOnNewMessage ( true ),
+    bDoAutoSockBufSize ( false )
 {
     // connection for protocol
     QObject::connect ( &Channel,
@@ -391,20 +392,9 @@ fflush(pFileDelay);
             PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_GREEN );
         }
 
-
-        // update response time measurement ------------------------------------
-        // add time difference
-        const int CurTime = PreciseTime.elapsed();
-
-        // we want to calculate the standard deviation (we assume that the mean
-        // is correct at the block period time)
-        const double dCurAddVal =
-            ( (double) ( CurTime - TimeLastBlock ) - MIN_BLOCK_DURATION_MS );
-
-        RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
-
-        // store old time value
-        TimeLastBlock = CurTime;
+        // update response time measurement and socket buffer size
+        UpdateTimeResponseMeasurement();
+        UpdateSocketBufferSize();
     }
 
     // disable channel
@@ -426,4 +416,96 @@ bool CClient::Stop()
 
     // give thread some time to terminate, return status
     return wait ( 5000 );
+}
+
+void CClient::UpdateTimeResponseMeasurement()
+{
+    // add time difference
+    const int CurTime = PreciseTime.elapsed();
+
+    // we want to calculate the standard deviation (we assume that the mean
+    // is correct at the block period time)
+    const double dCurAddVal =
+        ( (double) ( CurTime - TimeLastBlock ) - MIN_BLOCK_DURATION_MS );
+
+    RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
+
+    // store old time value
+    TimeLastBlock = CurTime;
+}
+
+void CClient::UpdateSocketBufferSize()
+{
+
+// TEST
+static double test = 4;
+
+    // just update the socket buffer size if auto setting is enabled, otherwise
+    // do nothing
+
+
+    //if ( bDoAutoSockBufSize )
+    {
+        // we use the time response measurement for the automatic setting
+        // Assumptions:
+        // - the network jitter can be neglected compared to the audio
+        //   interface jitter
+        // - the audio interface jitter is assumed to be Gaussian
+        // - the buffer size is set to two times the standard deviation of
+        //   the audio interface jitter (~95% of the jitter should be fit in the
+        //   buffer)
+        // - introduce a hysteresis to avoid switching the buffer sizes all the
+        //   time in case the time response measurement is close to a bound
+        // - only use time response measurement results if averaging buffer is
+        //   completely filled
+        const double dHysteresis = 0.3;
+
+
+
+        //if ( RespTimeMoAvBuf.IsInitialized() )
+        {
+            // calculate current buffer setting
+
+// TODO 2* seems not give optimal results, maybe use 3*?
+
+            //const double dEstCurBufSet = 2 * GetTimingStdDev();
+
+
+            // TEST
+            test = test + 0.01 * (2*LlconMath().round ( (double)rand()/RAND_MAX )-1);
+            if ( test < 0.5 ) test = 0.5;
+            if ( test > 10 ) test = 10;
+            const double dEstCurBufSet = test;
+
+
+            // upper/lower hysteresis decision
+            const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );
+            const int iLowerHystDec = LlconMath().round ( dEstCurBufSet + dHysteresis );
+
+            // if both decisions are equal than use the result
+            if ( iUpperHystDec == iLowerHystDec )
+            {
+
+                SetSockBufSize ( iUpperHystDec );
+            }
+            else
+            {
+                // we are in the middle of the decision region, use
+                // previous setting for determing the new decision
+                if ( !( ( GetSockBufSize() == iUpperHystDec ) ||
+                        ( GetSockBufSize() == iLowerHystDec ) ) )
+                {
+                    // the old result is not near the new decision,
+                    // use per definition the upper decision
+                    SetSockBufSize ( iUpperHystDec );
+                }
+            }
+        }
+        
+static FILE* pFile = fopen("test.dat", "w");
+fprintf(pFile, "%e %d\n",test,GetSockBufSize());
+fflush(pFile);        
+        
+        
+    }
 }

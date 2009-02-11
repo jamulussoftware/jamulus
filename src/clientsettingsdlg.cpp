@@ -84,8 +84,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // network buffer
     SliderNetBuf->setRange ( 0, MAX_NET_BUF_SIZE_NUM_BL );
     const int iCurNumNetBuf = pClient->GetSockBufSize();
-    SliderNetBuf->setValue ( iCurNumNetBuf );
-    TextNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
+    UpdateNetworkBufSlider ( iCurNumNetBuf );
 
     // network buffer size factor in
     SliderNetBufSiFactIn->setRange ( 1, MAX_NET_BLOCK_SIZE_FACTOR );
@@ -182,6 +181,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // Timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start ( DISPLAY_UPDATE_TIME );
+}
+
+void CClientSettingsDlg::UpdateNetworkBufSlider ( const int iCurNumNetBuf )
+{
+    SliderNetBuf->setValue ( iCurNumNetBuf );
+    TextNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
 }
 
 void CClientSettingsDlg::UpdateSndBufInSlider ( const int iCurNumInBuf )
@@ -348,8 +353,9 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 void CClientSettingsDlg::UpdateDisplay()
 {
     // update slider controls (settings might have been changed by sound interface)
-    UpdateSndBufInSlider  ( pClient->GetSndInterface()->GetInNumBuf() );
-    UpdateSndBufOutSlider ( pClient->GetSndInterface()->GetOutNumBuf() );
+    UpdateSndBufInSlider   ( pClient->GetSndInterface()->GetInNumBuf() );
+    UpdateSndBufOutSlider  ( pClient->GetSndInterface()->GetOutNumBuf() );
+    UpdateNetworkBufSlider ( pClient->GetSockBufSize() );
 
     if ( !pClient->IsRunning() )
     {

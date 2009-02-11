@@ -436,15 +436,9 @@ void CClient::UpdateTimeResponseMeasurement()
 
 void CClient::UpdateSocketBufferSize()
 {
-
-// TEST
-static double test = 4;
-
     // just update the socket buffer size if auto setting is enabled, otherwise
     // do nothing
-
-
-    //if ( bDoAutoSockBufSize )
+    if ( bDoAutoSockBufSize )
     {
         // we use the time response measurement for the automatic setting
         // Assumptions:
@@ -460,23 +454,12 @@ static double test = 4;
         //   completely filled
         const double dHysteresis = 0.3;
 
-
-
-        //if ( RespTimeMoAvBuf.IsInitialized() )
+        if ( RespTimeMoAvBuf.IsInitialized() )
         {
             // calculate current buffer setting
-
 // TODO 2* seems not give optimal results, maybe use 3*?
-
-            //const double dEstCurBufSet = 2 * GetTimingStdDev();
-
-
-            // TEST
-            test = test + 0.01 * (2*LlconMath().round ( (double)rand()/RAND_MAX )-1);
-            if ( test < 0.5 ) test = 0.5;
-            if ( test > 10 ) test = 10;
-            const double dEstCurBufSet = test;
-
+// TEST add 2 buffers
+            const double dEstCurBufSet = 2 * GetTimingStdDev() + 2;
 
             // upper/lower hysteresis decision
             const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );
@@ -485,7 +468,6 @@ static double test = 4;
             // if both decisions are equal than use the result
             if ( iUpperHystDec == iLowerHystDec )
             {
-
                 SetSockBufSize ( iUpperHystDec );
             }
             else
@@ -500,12 +482,6 @@ static double test = 4;
                     SetSockBufSize ( iUpperHystDec );
                 }
             }
-        }
-        
-static FILE* pFile = fopen("test.dat", "w");
-fprintf(pFile, "%e %d\n",test,GetSockBufSize());
-fflush(pFile);        
-        
-        
+        } 
     }
 }

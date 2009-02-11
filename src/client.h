@@ -98,11 +98,15 @@ public:
     {
         if ( Channel.GetSockBufSize() != iNumBlocks )
         {
-            // set the new socket size
-            Channel.SetSockBufSize ( iNumBlocks );
+            // check for valid values
+            if ( ( iNumBlocks >= 0 ) && ( iNumBlocks <= MAX_NET_BUF_SIZE_NUM_BL ) )
+            {
+                // set the new socket size
+                Channel.SetSockBufSize ( iNumBlocks );
 
-            // tell the server that size has changed
-            Channel.CreateJitBufMes ( iNumBlocks );
+                // tell the server that size has changed
+                Channel.CreateJitBufMes ( iNumBlocks );
+            }
         }
     }
     int GetSockBufSize() { return Channel.GetSockBufSize(); }

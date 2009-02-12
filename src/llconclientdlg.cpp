@@ -369,7 +369,7 @@ void CLlconClientDlg::customEvent ( QEvent* Event )
     if ( Event->type() == QEvent::User + 11 )
     {
         const int iMessType = ( (CLlconEvent*) Event )->iMessType;
-        const int iStatus = ( (CLlconEvent*) Event )->iStatus;
+        const int iStatus =   ( (CLlconEvent*) Event )->iStatus;
 
         switch ( iMessType )
         {
@@ -377,7 +377,6 @@ void CLlconClientDlg::customEvent ( QEvent* Event )
         case MS_SOUND_OUT:
         case MS_JIT_BUF_PUT:
         case MS_JIT_BUF_GET:
-
             // show overall status -> if any LED goes red, this LED will go red
             LEDOverallStatus->SetLight ( iStatus );
             break;
@@ -385,6 +384,9 @@ void CLlconClientDlg::customEvent ( QEvent* Event )
         case MS_RESET_ALL:
             LEDOverallStatus->Reset();
             break;
+
+        case MS_SET_JIT_BUF_SIZE:
+            pClient->SetSockBufSize ( iStatus );
         }
 
         // update general settings dialog, too

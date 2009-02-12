@@ -468,7 +468,10 @@ void CClient::UpdateSocketBufferSize()
             // if both decisions are equal than use the result
             if ( iUpperHystDec == iLowerHystDec )
             {
-                SetSockBufSize ( iUpperHystDec );
+                // set the socket buffer via the main window thread since somehow
+                // it gives a protocol deadlock if we call the SetSocketBufSize()
+                // function directly
+                PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
             }
             else
             {
@@ -477,9 +480,12 @@ void CClient::UpdateSocketBufferSize()
                 if ( !( ( GetSockBufSize() == iUpperHystDec ) ||
                         ( GetSockBufSize() == iLowerHystDec ) ) )
                 {
-                    // the old result is not near the new decision,
-                    // use per definition the upper decision
-                    SetSockBufSize ( iUpperHystDec );
+                    // The old result is not near the new decision,
+                    // use per definition the upper decision.
+                    // Set the socket buffer via the main window thread since somehow
+                    // it gives a protocol deadlock if we call the SetSocketBufSize()
+                    // function directly.
+                    PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
                 }
             }
         } 

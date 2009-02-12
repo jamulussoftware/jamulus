@@ -345,8 +345,9 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
     TextLabelBufferDelay->setText ( QString().setNum ( iTotalBufferDelay ) + " ms" );
     if ( iPingTime > 500 )
     {
-        TextLabelPingTime->setText ( "<font color=""red""><b>&#62;500 ms</b></font>" );
-        TextLabelOverallDelay->setText ( "<font color=""red""><b>&#62;500 ms</b></font>" );
+        const QString sErrorText = "<font color=""red""><b>&#62;500 ms</b></font>";
+        TextLabelPingTime->setText ( sErrorText );
+        TextLabelOverallDelay->setText ( sErrorText );
     }
     else
     {

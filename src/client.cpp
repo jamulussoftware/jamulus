@@ -36,7 +36,7 @@ CClient::CClient ( const quint16 iPortNumber ) : bRun ( false ),
     iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR ),
     strIPAddress ( "" ), strName ( "" ),
     bOpenChatOnNewMessage ( true ),
-    bDoAutoSockBufSize ( false )
+    bDoAutoSockBufSize ( true )
 {
     // connection for protocol
     QObject::connect ( &Channel,

@@ -104,6 +104,12 @@ void CSettings::ReadIniFile ( const QString& sFileName )
         pClient->GetSndInterface()->SetOutNumBuf ( iValue );
     }
 
+    // automatic network jitter buffer size setting
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", bValue ) )
+	{
+        pClient->SetDoAutoSockBufSize ( bValue );
+    }
+
     // network jitter buffer size
     if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf", 0, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
 	{
@@ -179,6 +185,9 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
     // sound card out number of buffers
     SetNumericIniSet ( IniXMLDocument, "client", "audoutbuf", pClient->GetSndInterface()->GetOutNumBuf() );
+
+    // automatic network jitter buffer size setting
+    SetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", pClient->GetDoAutoSockBufSize() );
 
     // network jitter buffer size
     SetNumericIniSet ( IniXMLDocument, "client", "jitbuf", pClient->GetSockBufSize() );

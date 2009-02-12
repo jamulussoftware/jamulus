@@ -83,8 +83,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // network buffer
     SliderNetBuf->setRange ( 0, MAX_NET_BUF_SIZE_NUM_BL );
-    const int iCurNumNetBuf = pClient->GetSockBufSize();
-    UpdateNetworkBufSlider ( iCurNumNetBuf );
+    UpdateJitterBufferFrame();
 
     // network buffer size factor in
     SliderNetBufSiFactIn->setRange ( 1, MAX_NET_BLOCK_SIZE_FACTOR );
@@ -144,7 +143,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // timers
     QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerStatus() ) );
-
     QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerPing() ) );
 
@@ -165,6 +163,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // check boxes
     QObject::connect ( cbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnOpenChatOnNewMessageStateChanged ( int ) ) );
+    QObject::connect ( cbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnAutoJitBuf ( int ) ) );
 
     // combo boxes
     QObject::connect ( cbSoundcard, SIGNAL ( activated ( int ) ),
@@ -183,10 +183,17 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     TimerStatus.start ( DISPLAY_UPDATE_TIME );
 }
 
-void CClientSettingsDlg::UpdateNetworkBufSlider ( const int iCurNumNetBuf )
+void CClientSettingsDlg::UpdateJitterBufferFrame()
 {
+	// update slider value and text
+	const int iCurNumNetBuf = pClient->GetSockBufSize();
     SliderNetBuf->setValue ( iCurNumNetBuf );
     TextNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
+
+	// if auto setting is enabled, disable slider control
+	cbAutoJitBuf->setChecked ( pClient->GetDoAutoSockBufSize() );
+	SliderNetBuf->setEnabled ( !pClient->GetDoAutoSockBufSize() );
+	TextNetBuf->setEnabled   ( !pClient->GetDoAutoSockBufSize() );
 }
 
 void CClientSettingsDlg::UpdateSndBufInSlider ( const int iCurNumInBuf )
@@ -271,6 +278,12 @@ void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
     UpdateDisplay();
 }
 
+void CClientSettingsDlg::OnAutoJitBuf ( int value )
+{
+	pClient->SetDoAutoSockBufSize ( value == Qt::Checked );
+	UpdateJitterBufferFrame();
+}
+
 void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
 {
     pClient->SetOpenChatOnNewMessage ( value == Qt::Checked );
@@ -353,9 +366,9 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 void CClientSettingsDlg::UpdateDisplay()
 {
     // update slider controls (settings might have been changed by sound interface)
-    UpdateSndBufInSlider   ( pClient->GetSndInterface()->GetInNumBuf() );
-    UpdateSndBufOutSlider  ( pClient->GetSndInterface()->GetOutNumBuf() );
-    UpdateNetworkBufSlider ( pClient->GetSockBufSize() );
+    UpdateSndBufInSlider  ( pClient->GetSndInterface()->GetInNumBuf() );
+    UpdateSndBufOutSlider ( pClient->GetSndInterface()->GetOutNumBuf() );
+    UpdateJitterBufferFrame();
 
     if ( !pClient->IsRunning() )
     {

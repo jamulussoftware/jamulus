@@ -813,6 +813,12 @@
           </item>
           <item>
            <widget class="QLabel" name="TextLabelBufferDelay" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize" >
              <size>
               <width>40</width>
@@ -862,9 +868,15 @@
           </item>
           <item>
            <widget class="QLabel" name="TextLabelPingTime" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="minimumSize" >
              <size>
-              <width>40</width>
+              <width>50</width>
               <height>0</height>
              </size>
             </property>
@@ -913,9 +925,15 @@
            <layout class="QHBoxLayout" >
             <item>
              <widget class="QLabel" name="TextLabelOverallDelay" >
+              <property name="sizePolicy" >
+               <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <property name="minimumSize" >
                <size>
-                <width>45</width>
+                <width>50</width>
                 <height>0</height>
                </size>
               </property>

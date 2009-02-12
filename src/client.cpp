@@ -31,7 +31,7 @@ CClient::CClient ( const quint16 iPortNumber ) : bRun ( false ),
     Sound ( MIN_SND_CRD_BLOCK_SIZE_SAMPLES * 2 /* stereo */ ),
     Socket ( &Channel, iPortNumber ),
     iAudioInFader ( AUD_FADER_IN_MAX / 2 ),
-    iReverbLevel ( AUD_REVERB_MAX / 6 ),
+    iReverbLevel ( 0 ),
     bReverbOnLeftChan ( false ),
     iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR ),
     strIPAddress ( "" ), strName ( "" ),
@@ -213,7 +213,7 @@ void CClient::run()
     // Set thread priority (The working thread should have a higher
     // priority than the GUI)
 #ifdef _WIN32
-    SetThreadPriority ( GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL );
+    SetThreadPriority ( GetCurrentThread(), THREAD_PRIORITY_HIGHEST );
 #else
 /*
     // set the process to realtime privs, taken from

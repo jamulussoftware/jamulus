@@ -108,7 +108,7 @@ fflush(pFileBI);
         const int iRemSpace = iPutPos + iInSize - iMemSize;
 
         // data must be written in two steps because of wrap around
-        while (iPutPos < iMemSize)
+        while ( iPutPos < iMemSize )
 		{
             vecdMemory[iPutPos++] = vecdData[iCurPos++];
 		}
@@ -143,7 +143,7 @@ fflush(pFileBI);
 
 bool CNetBuf::Get ( CVector<double>& vecdData )
 {
-    bool bGetOK = true; // init return value
+    bool bGetOK         = true; // init return value
     bool bFadeOutExtrap = false;
 
     // get size of data to be get from the buffer

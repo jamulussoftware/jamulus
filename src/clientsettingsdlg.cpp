@@ -340,10 +340,19 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 
     const int iOverallDelay = iTotalBufferDelay + iPingTime;
 
-    // apply values to GUI labels
-    TextLabelPingTime->setText ( QString().setNum ( iPingTime ) + " ms" );
+    // apply values to GUI labels, take special care if ping time exceeds
+    // a certain value
     TextLabelBufferDelay->setText ( QString().setNum ( iTotalBufferDelay ) + " ms" );
-    TextLabelOverallDelay->setText ( QString().setNum ( iOverallDelay ) + " ms" );
+    if ( iPingTime > 500 )
+    {
+        TextLabelPingTime->setText ( "<font color=""red""><b>&#62;500 ms</b></font>" );
+        TextLabelOverallDelay->setText ( "<font color=""red""><b>&#62;500 ms</b></font>" );
+    }
+    else
+    {
+        TextLabelPingTime->setText ( QString().setNum ( iPingTime ) + " ms" );
+        TextLabelOverallDelay->setText ( QString().setNum ( iOverallDelay ) + " ms" );
+    }
 
     // color definition: < 40 ms green, < 60 ms yellow, otherwise red
     if ( iOverallDelay <= 40 )

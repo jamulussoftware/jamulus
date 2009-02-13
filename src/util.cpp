@@ -29,30 +29,44 @@
 // Input level meter implementation --------------------------------------------
 void CSignalLevelMeter::Update ( CVector<double>& vecdAudio )
 {
-    // do the update for entire vector
+    // get the vector size
     const int iVecSize = vecdAudio.Size();
 
-    for ( int i = 0; i < iVecSize; i++ )
+    // Get maximum of current block
+    //
+    // Speed optimization:
+    // - we only make use of the positive values and ignore the negative ones
+    //   -> we do not need to call the fabs() function
+    // - we only evaluate every third sample
+    //
+    // With these speed optimizations we might loose some information in
+    // special cases but for the average music signals the following code
+    // should give good results.
+    //
+    double dMax = 0.0;
+    for ( int i = 0; i < iVecSize; i += 3 )
     {
-        // norm of current audio sample
-        const double dCurSig = fabs ( vecdAudio[i] );
+        if ( dMax < vecdAudio[i] )
+        {
+            dMax = vecdAudio[i];
+        }
+    }
 
-        // search for maximum. Decrease this max with time
-        // decrease max with time
-        if ( dCurLevel >= METER_FLY_BACK )
-        {
-            dCurLevel *= 0.9999;
-        }
-        else
-        {
-            dCurLevel = 0;
-        }
+    // decrease max with time
+    if ( dCurLevel >= METER_FLY_BACK )
+    {
+// TODO calculate factor from sample rate
+        dCurLevel *= 0.99;
+    }
+    else
+    {
+        dCurLevel = 0;
+    }
 
-        // search for max
-        if ( dCurSig > dCurLevel )
-        {
-            dCurLevel = dCurSig;
-        }
+    // update current level -> only use maximum
+    if ( dMax > dCurLevel )
+    {
+        dCurLevel = dMax;
     }
 }
 

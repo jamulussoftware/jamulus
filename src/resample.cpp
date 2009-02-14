@@ -86,7 +86,7 @@ int CResample::Resample ( CVector<double>& vecdInput,
         // convolution
         double dy1 = 0.0;
         double dy2 = 0.0;
-        for (int i = 0; i < NUM_TAPS_PER_PHASE1; i++)
+        for ( int i = 0; i < NUM_TAPS_PER_PHASE1; i++ )
         {
             dy1 += fResTaps1[ip1 * INTERP_DECIM_I_D1 + i] * vecdIntBuff[in1 - i];
             dy2 += fResTaps1[ip2 * INTERP_DECIM_I_D1 + i] * vecdIntBuff[in2 - i];
@@ -134,10 +134,10 @@ void CResample::Init ( const int iNewInputBlockSize )
 
 
 /******************************************************************************\
-* Audio Resampler                                                              *
+* Stereo Audio Resampler                                                       *
 \******************************************************************************/
-void CAudioResample::Resample ( CVector<double>& vecdInput,
-                                CVector<double>& vecdOutput )
+void CStereoAudioResample::Resample ( CVector<double>& vecdInput,
+                                      CVector<double>& vecdOutput )
 {
     int j;
 
@@ -148,50 +148,58 @@ void CAudioResample::Resample ( CVector<double>& vecdInput,
     }
     else
     {
+        const int iTwoTimesNumTaps = 2 * iNumTaps;
+
         /* move old data from the end to the history part of the buffer and
            add new data (shift register) */
         // shift old values
-        int iMovLen = iInputBlockSize;
-        for ( j = 0; j < iNumTaps; j++ )
+        int iMovLen = iStereoInputBlockSize;
+        for ( j = 0; j < iTwoTimesNumTaps; j++ )
         {
             vecdIntBuff[j] = vecdIntBuff[iMovLen++];
         }
 
         // add new block of data
-        int iBlockEnd = iNumTaps;
-        for ( j = 0; j < iInputBlockSize; j++ )
+        int iBlockEnd = iTwoTimesNumTaps;
+        for ( j = 0; j < iStereoInputBlockSize; j++ )
         {
             vecdIntBuff[iBlockEnd++] = vecdInput[j];
         }
 
         // main loop
-        for ( j = 0; j < iOutputBlockSize; j++ )
+        for ( j = 0; j < iMonoOutputBlockSize; j++ )
         {
             // calculate filter phase
             const int ip = (int) ( j * iI / dRation ) % iI;
 
-            // sample position in input vector
-            const int in = (int) ( j / dRation ) + iNumTaps - 1;
+            // sample position in stereo input vector
+            const int in = 2 * ( (int) ( j / dRation ) + iNumTaps - 1 );
 
             // convolution
-            double dy = 0.0;
+            double dyL = 0.0;
+            double dyR = 0.0;
             for ( int i = 0; i < iNumTaps; i++ )
             {
-                dy += pFiltTaps[ip + i * iI] * vecdIntBuff[in - i];
+                const double dCurFiltTap   = pFiltTaps[ip + i * iI];
+                const int    iCurSamplePos = in - 2 * i;
+
+                dyL += dCurFiltTap * vecdIntBuff[iCurSamplePos];
+                dyR += dCurFiltTap * vecdIntBuff[iCurSamplePos + 1];
             }
 
-            vecdOutput[j] = dy;
+            vecdOutput[2 * j]     = dyL;
+            vecdOutput[2 * j + 1] = dyR;
         }
     }
 }
 
-void CAudioResample::Init ( const int iNewInputBlockSize,
-                            const int iFrom,
-                            const int iTo )
+void CStereoAudioResample::Init ( const int iNewMonoInputBlockSize,
+                                  const int iFrom,
+                                  const int iTo )
 {
-    dRation          = ( (double) iTo ) / iFrom;
-    iInputBlockSize  = iNewInputBlockSize;
-    iOutputBlockSize = (int) ( iInputBlockSize * dRation );
+    dRation               = ( (double) iTo ) / iFrom;
+    iStereoInputBlockSize = 2 * iNewMonoInputBlockSize;
+    iMonoOutputBlockSize  = (int) ( iNewMonoInputBlockSize * dRation );
 
     // set correct parameters
     if ( iFrom == SND_CRD_SAMPLE_RATE ) // downsampling case
@@ -205,22 +213,22 @@ void CAudioResample::Init ( const int iNewInputBlockSize,
             break;
 
         case ( SND_CRD_SAMPLE_RATE * 7 / 12 ): // 48 kHz to 28 kHz
-            pFiltTaps    = fResTaps12_7;
-            iNumTaps     = INTERP_I_12_7 * NUM_TAPS_PER_PHASE12_7;
-            iI           = DECIM_D_12_7;
+            pFiltTaps = fResTaps12_7;
+            iNumTaps  = INTERP_I_12_7 * NUM_TAPS_PER_PHASE12_7;
+            iI        = DECIM_D_12_7;
             break;
 
         case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 48 kHz to 32 kHz
-            pFiltTaps    = fResTaps3_2;
-            iNumTaps     = INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2;
-            iI           = DECIM_D_3_2;
+            pFiltTaps = fResTaps3_2;
+            iNumTaps  = INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2;
+            iI        = DECIM_D_3_2;
             break;
 
         case SND_CRD_SAMPLE_RATE: // 48 kHz to 48 kHz
             // no resampling needed
-            pFiltTaps    = NULL;
-            iNumTaps     = 0;
-            iI           = 1;
+            pFiltTaps = NULL;
+            iNumTaps  = 0;
+            iI        = 1;
             break;
 
         default:
@@ -234,21 +242,21 @@ void CAudioResample::Init ( const int iNewInputBlockSize,
         switch ( iFrom )
         {
         case ( SND_CRD_SAMPLE_RATE / 2 ): // 24 kHz to 48 kHz
-            pFiltTaps    = fResTaps2;
-            iNumTaps     = DECIM_D_2 * NUM_TAPS_PER_PHASE2;
-            iI           = INTERP_I_2;
+            pFiltTaps = fResTaps2;
+            iNumTaps  = DECIM_D_2 * NUM_TAPS_PER_PHASE2;
+            iI        = INTERP_I_2;
             break;
 
         case ( SND_CRD_SAMPLE_RATE * 7 / 12 ): // 28 kHz to 48 kHz
-            pFiltTaps    = fResTaps12_7;
-            iNumTaps     = DECIM_D_12_7 * NUM_TAPS_PER_PHASE12_7;
-            iI           = INTERP_I_12_7;
+            pFiltTaps = fResTaps12_7;
+            iNumTaps  = DECIM_D_12_7 * NUM_TAPS_PER_PHASE12_7;
+            iI        = INTERP_I_12_7;
             break;
 
         case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 32 kHz to 48 kHz
-            pFiltTaps    = fResTaps3_2;
-            iNumTaps     = DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2;
-            iI           = INTERP_I_3_2;
+            pFiltTaps = fResTaps3_2;
+            iNumTaps  = DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2;
+            iI        = INTERP_I_3_2;
             break;
 
         default:
@@ -258,6 +266,8 @@ void CAudioResample::Init ( const int iNewInputBlockSize,
         }
     }
 
-    // allocate memory for internal buffer, clear sample history
-    vecdIntBuff.Init ( iInputBlockSize + iNumTaps, 0.0 );
+    // allocate memory for internal buffer, clear sample history (we have
+    // to consider stereo data here -> two times the number of taps of
+    // additional memory is required)
+    vecdIntBuff.Init ( iStereoInputBlockSize + 2 * iNumTaps, 0.0 );
 }

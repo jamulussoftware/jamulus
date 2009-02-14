@@ -68,8 +68,8 @@ public:
     bool   Stop();
     bool   IsRunning() { return bRun; }
     bool   SetServerAddr ( QString strNAddr );
-    double MicLevelL() { return SignalLevelMeterL.MicLevel(); }
-    double MicLevelR() { return SignalLevelMeterR.MicLevel(); }
+    double MicLevelL() { return SignalLevelMeter.MicLevelLeft(); }
+    double MicLevelR() { return SignalLevelMeter.MicLevelRight(); }
     bool   IsConnected() { return Channel.IsConnected(); }
 
     /* We want to return the standard deviation. For that we need to calculate
@@ -143,59 +143,54 @@ public:
 
 
     // settings
-    QString             strIPAddress;
-    QString             strName;
+    QString                 strIPAddress;
+    QString                 strName;
 
 protected:
-    virtual void    run();
-    void            UpdateTimeResponseMeasurement();
-    void            UpdateSocketBufferSize();
+    virtual void run();
+    void         UpdateTimeResponseMeasurement();
+    void         UpdateSocketBufferSize();
 
     // only one channel is needed for client application
-    CChannel            Channel;
-    bool                bDoAutoSockBufSize;
+    CChannel                Channel;
+    bool                    bDoAutoSockBufSize;
 
-    CSocket             Socket;
-    CSound              Sound;
-    CSignalLevelMeter   SignalLevelMeterL;
-    CSignalLevelMeter   SignalLevelMeterR;
+    CSocket                 Socket;
+    CSound                  Sound;
+    CStereoSignalLevelMeter SignalLevelMeter;
 
-    bool                bRun;
-    CVector<double>     vecdNetwData;
+    bool                    bRun;
+    CVector<double>         vecdNetwData;
 
-    int                 iAudioInFader;
-    bool                bReverbOnLeftChan;
-    int                 iReverbLevel;
-    CAudioReverb        AudioReverb;
+    int                     iAudioInFader;
+    bool                    bReverbOnLeftChan;
+    int                     iReverbLevel;
+    CAudioReverb            AudioReverb;
 
-    int                 iSndCrdBlockSizeSam;
-    int                 iBlockSizeSam;
+    int                     iSndCrdMonoBlockSizeSam;
+    int                     iSndCrdStereoBlockSizeSam;
+    int                     iMonoBlockSizeSam;
+    int                     iStereoBlockSizeSam;
 
-    int                 iNetwBufSizeFactIn;
+    int                     iNetwBufSizeFactIn;
 
-    bool                bOpenChatOnNewMessage;
+    bool                    bOpenChatOnNewMessage;
 
-    CVector<short>      vecsAudioSndCrd;
-    CVector<double>     vecdAudioSndCrdL;
-    CVector<double>     vecdAudioSndCrdR;
-
-    CVector<double>     vecdAudioL;
-    CVector<double>     vecdAudioR;
-
-    CVector<short>      vecsNetwork;
+    CVector<short>          vecsAudioSndCrd;
+    CVector<double>         vecdAudioSndCrd;
+    CVector<double>         vecdAudio;
+    CVector<short>          vecsNetwork;
 
     // resample objects
-    CAudioResample      ResampleObjDownL; // left channel
-    CAudioResample      ResampleObjDownR; // right channel
-    CAudioResample      ResampleObjUpL; // left channel
-    CAudioResample      ResampleObjUpR; // right channel
+    CStereoAudioResample    ResampleObjDown;
+    CStereoAudioResample    ResampleObjUp;
 
     // for ping measurement and standard deviation of audio interface
-    CPreciseTime        PreciseTime;
+    CPreciseTime            PreciseTime;
 
     // debugging, evaluating
-    CMovingAv<double>   RespTimeMoAvBuf;
-    int                 TimeLastBlock;
+    CMovingAv<double>       RespTimeMoAvBuf;
+    int                     TimeLastBlock;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

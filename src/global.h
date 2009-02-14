@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2008
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer
@@ -91,10 +91,6 @@
 // on other places, too! The code tag "MAX_NUM_CHANNELS_TAG" shows these places
 // (just search for the tag in the entire code)
 #define MAX_NUM_CHANNELS                6 // max number channels for server
-
-// sample rate offset estimation algorithm
-// time interval for sample rate offset estimation
-#define TIME_INT_SAM_OFFS_EST           60 // s
 
 // length of the moving average buffer for response time measurement
 #define TIME_MOV_AV_RESPONSE            30 // seconds

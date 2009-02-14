@@ -52,27 +52,27 @@ protected:
     int             iInputBlockSize;
 };
 
-class CAudioResample
+class CStereoAudioResample
 {
 public:
-    CAudioResample() {}
-    virtual ~CAudioResample() {}
+    CStereoAudioResample() {}
+    virtual ~CStereoAudioResample() {}
 
-    void Init ( const int iNewInputBlockSize, const int iFrom, const int iTo );
+    void Init ( const int iNewMonoInputBlockSize, const int iFrom, const int iTo );
     void Resample ( CVector<double>& vecdInput, CVector<double>& vecdOutput );
 
 protected:
-    double              dRation;
+    double          dRation;
 
-    CVector<double>     vecdIntBuff;
-    int                 iHistorySize;
+    CVector<double> vecdIntBuff;
+    int             iHistorySize;
 
-    int                 iInputBlockSize;
-    int                 iOutputBlockSize;
+    int             iStereoInputBlockSize;
+    int             iMonoOutputBlockSize;
 
-    float*              pFiltTaps;
-    int                 iNumTaps;
-    int                 iI;
+    float*          pFiltTaps;
+    int             iNumTaps;
+    int             iI;
 };
 
 

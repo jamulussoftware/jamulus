@@ -356,19 +356,24 @@ public slots:
 
 
 /* Other Classes **************************************************************/
-// Signal Level Meter ----------------------------------------------------------
-class CSignalLevelMeter
+// Stereo Signal Level Meter ---------------------------------------------------
+class CStereoSignalLevelMeter
 {
 public:
-    CSignalLevelMeter() : dCurLevel ( 0.0 ) {}
-    virtual ~CSignalLevelMeter() {}
+    CStereoSignalLevelMeter() { Reset(); }
+    virtual ~CStereoSignalLevelMeter() {}
 
-    void    Update ( CVector<double>& vecdAudio );
-    double  MicLevel();
-    void    Reset() { dCurLevel = 0.0; }
+    void   Update ( CVector<double>& vecdAudio );
+    double MicLevelLeft()  { return CalcLogResult ( dCurLevelL ); }
+    double MicLevelRight() { return CalcLogResult ( dCurLevelR ); }
+    void   Reset()         { dCurLevelL = 0.0; dCurLevelR = 0.0; }
 
 protected:
-    double dCurLevel;
+    double CalcLogResult  ( const double& dLinearLevel );
+    double UpdateCurLevel ( double dCurLevel, const double& dMax );
+
+    double dCurLevelL;
+    double dCurLevelR;
 };
 
 class CHostAddress
@@ -409,7 +414,7 @@ class CAudioReverb
 public:
     CAudioReverb ( const double rT60 = (double) 5.0 );
 
-    void Clear();
+    void   Clear();
     double ProcessSample ( const double input );
 
 protected:

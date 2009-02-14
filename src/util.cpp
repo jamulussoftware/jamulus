@@ -27,10 +27,10 @@
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
-void CSignalLevelMeter::Update ( CVector<double>& vecdAudio )
+void CStereoSignalLevelMeter::Update ( CVector<double>& vecdAudio )
 {
-    // get the vector size
-    const int iVecSize = vecdAudio.Size();
+    // get the stereo vector size
+    const int iStereoVecSize = vecdAudio.Size();
 
     // Get maximum of current block
     //
@@ -43,15 +43,29 @@ void CSignalLevelMeter::Update ( CVector<double>& vecdAudio )
     // special cases but for the average music signals the following code
     // should give good results.
     //
-    double dMax = 0.0;
-    for ( int i = 0; i < iVecSize; i += 3 )
+    double dMaxL = 0.0;
+    double dMaxR = 0.0;
+    for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
     {
-        if ( dMax < vecdAudio[i] )
+        // left channel
+        if ( dMaxL < vecdAudio[i] )
         {
-            dMax = vecdAudio[i];
+            dMaxL = vecdAudio[i];
+        }
+
+        // right channel
+        if ( dMaxR < vecdAudio[i + 1] )
+        {
+            dMaxR = vecdAudio[i + 1];
         }
     }
 
+    dCurLevelL = UpdateCurLevel ( dCurLevelL, dMaxL );
+    dCurLevelR = UpdateCurLevel ( dCurLevelR, dMaxR );
+}
+
+double CStereoSignalLevelMeter::UpdateCurLevel ( double dCurLevel, const double& dMax )
+{
     // decrease max with time
     if ( dCurLevel >= METER_FLY_BACK )
     {
@@ -66,13 +80,17 @@ void CSignalLevelMeter::Update ( CVector<double>& vecdAudio )
     // update current level -> only use maximum
     if ( dMax > dCurLevel )
     {
-        dCurLevel = dMax;
+        return dMax;
+    }
+    else
+    {
+        return dCurLevel;
     }
 }
 
-double CSignalLevelMeter::MicLevel()
+double CStereoSignalLevelMeter::CalcLogResult ( const double& dLinearLevel )
 {
-    const double dNormMicLevel = dCurLevel / _MAXSHORT;
+    const double dNormMicLevel = dLinearLevel / _MAXSHORT;
 
     // logarithmic measure
     if ( dNormMicLevel > 0 )

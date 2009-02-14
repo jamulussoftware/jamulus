@@ -9,10 +9,12 @@
 function resamplefilter()
 
 % Number of taps per poly phase for different resampling types
-NoTapsP2    = 12; % 24 kHz
-NoTapsP3_2  = 12; % 32 kHz
-NoTapsP12_7 = 12; % 28 kHz
-NoTapsP1    = 12; % 48 kHz
+GlobalNoTaps = 4;%12; % use global value for all types
+
+NoTapsP2     = GlobalNoTaps; % 24 kHz
+NoTapsP3_2   = GlobalNoTaps; % 32 kHz
+NoTapsP12_7  = GlobalNoTaps; % 28 kHz
+NoTapsP1     = GlobalNoTaps; % 48 kHz
 
 
 % Filter for ratio 2 -----------------------------------------------------------

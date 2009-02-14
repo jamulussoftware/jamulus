@@ -211,7 +211,7 @@ void CClient::run()
     // Set thread priority (The working thread should have a higher
     // priority than the GUI)
 #ifdef _WIN32
-    SetThreadPriority ( GetCurrentThread(), THREAD_PRIORITY_HIGHEST );
+    SetThreadPriority ( GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL );
 #else
 /*
     // set the process to realtime privs, taken from

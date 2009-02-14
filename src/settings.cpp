@@ -35,11 +35,11 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     // load data from init-file
     // prepare file name for loading initialization data from XML file
     QString sCurFileName = sFileName;
-	if ( sCurFileName.isEmpty() ) 
-	{
+    if ( sCurFileName.isEmpty() )
+    {
         // if no file name is available, use default file name
         sCurFileName = LLCON_INIT_FILE_NAME;
-	}
+    }
 
     // read data from file if possible
     QFile file ( sCurFileName );
@@ -54,26 +54,27 @@ void CSettings::ReadIniFile ( const QString& sFileName )
 
     // actual settings data ---------------------------------------------------
     // IP address
-    pClient->strIPAddress = GetIniSetting ( IniXMLDocument, "client", "ipaddress" );
+    pClient->strIPAddress = GetIniSetting ( IniXMLDocument, "client",
+        "ipaddress", DEFAULT_SERVER_ADDRESS );
 
     // name
     pClient->strName = GetIniSetting ( IniXMLDocument, "client", "name" );
 
     // audio fader
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad", 0, AUD_FADER_IN_MAX, iValue ) )
-	{
+    {
         pClient->SetAudioInFader ( iValue );
     }
 
     // reverberation level
     if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
-	{
+    {
         pClient->SetReverbLevel ( iValue );
     }
 
     // reverberation channel assignment
     if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
-	{
+    {
         pClient->SetReverbOnLeftChan ( bValue );
     }
 
@@ -82,7 +83,7 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     // call, therefore, if no setting file parameter could be retrieved, the sound card is
     // initialized with a default setting defined here
     if ( GetNumericIniSet ( IniXMLDocument, "client", "auddevidx", 1, MAX_NUMBER_SOUND_CARDS, iValue ) )
-	{
+    {
         pClient->GetSndInterface()->SetDev ( iValue );
     }
     else
@@ -94,31 +95,31 @@ void CSettings::ReadIniFile ( const QString& sFileName )
 
     // sound card in number of buffers
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audinbuf", 1, AUD_SLIDER_LENGTH, iValue ) )
-	{
+    {
         pClient->GetSndInterface()->SetInNumBuf ( iValue );
     }
 
     // sound card out number of buffers
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audoutbuf", 1, AUD_SLIDER_LENGTH, iValue ) )
-	{
+    {
         pClient->GetSndInterface()->SetOutNumBuf ( iValue );
     }
 
     // automatic network jitter buffer size setting
     if ( GetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", bValue ) )
-	{
+    {
         pClient->SetDoAutoSockBufSize ( bValue );
     }
 
     // network jitter buffer size
     if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf", 0, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
-	{
+    {
         pClient->SetSockBufSize ( iValue );
     }
 
     // network buffer size factor in
     if ( GetNumericIniSet ( IniXMLDocument, "client", "netwbusifactin", 1, MAX_NET_BLOCK_SIZE_FACTOR, iValue ) )
-	{
+    {
         pClient->SetNetwBufSizeFactIn ( iValue );
     }
 
@@ -130,14 +131,14 @@ void CSettings::ReadIniFile ( const QString& sFileName )
 
     // flag whether the chat window shall be opened on a new chat message
     if ( GetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage", bValue ) )
-	{
+    {
         pClient->SetOpenChatOnNewMessage ( bValue );
     }
 
     // audio compression type (check CAudioCompression::EAudComprType definition
     // for integer numbers!)
     if ( GetNumericIniSet ( IniXMLDocument, "client", "audiocompression", 0, 2, iValue ) )
-	{
+    {
         switch ( iValue )
         {
         case 0:
@@ -220,11 +221,11 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
     // prepare file name for storing initialization data in XML file
     QString sCurFileName = sFileName;
-	if ( sCurFileName.isEmpty() ) 
-	{
+    if ( sCurFileName.isEmpty() )
+    {
         // if no file name is available, use default file name
         sCurFileName = LLCON_INIT_FILE_NAME;
-	}
+    }
 
     // store XML data in file
     QFile file ( sCurFileName );

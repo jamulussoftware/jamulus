@@ -49,6 +49,9 @@
 // file name for logging file
 #define DEFAULT_LOG_FILE_NAME           "llconsrvlog.txt"
 
+// default server address
+#define DEFAULT_SERVER_ADDRESS          "llcon.dyndns.org"
+
 // defined port number for client and server
 #define LLCON_PORT_NUMBER               22122
 

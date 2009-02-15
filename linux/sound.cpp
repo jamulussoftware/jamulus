@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2005
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer, Alexander Kurpiers
@@ -12,12 +12,12 @@
 #include "sound.h"
 
 #ifdef WITH_SOUND
-/* Wave in ********************************************************************/
+// Wave in *********************************************************************
 void CSound::InitRecording ( const bool bNewBlocking )
 {
     int err;
 
-    /* if recording device was already open, close it first */
+    // if recording device was already open, close it first
     if ( rhandle != NULL )
     {
         snd_pcm_close ( rhandle );
@@ -30,23 +30,23 @@ void CSound::InitRecording ( const bool bNewBlocking )
        be automatically converted. This also applies to the access type and the
        number of channels. With the "hw" interface, you have to check whether
        your hardware supports the configuration you would like to use */
-    /* either "hw:0,0" or "plughw:0,0" */
+    // either "hw:0,0" or "plughw:0,0"
     if ( err = snd_pcm_open ( &rhandle, "hw:0,0", SND_PCM_STREAM_CAPTURE, 0 ) != 0 )
     {
         qDebug ( "open error: %s", snd_strerror ( err ) );
     }
 
-    /* recording should be blocking */
+    // recording should be blocking
     if ( err = snd_pcm_nonblock ( rhandle, FALSE ) != 0 )
     {
         qDebug ( "cannot set blocking: %s", snd_strerror ( err ) );
     }
 
-    /* set hardware parameters */
+    // set hardware parameters
     SetHWParams ( rhandle, iBufferSizeIn, iCurPeriodSizeIn );
 
 
-    /* sw parameters --------------------------------------------------------- */
+    // sw parameters -----------------------------------------------------------
     snd_pcm_sw_params_t* swparams;
 
     // allocate an invalid snd_pcm_sw_params_t using standard malloc
@@ -66,13 +66,6 @@ void CSound::InitRecording ( const bool bNewBlocking )
     if ( err < 0 )
     {
         qDebug ( "Unable to set start threshold mode : %s", snd_strerror ( err ) );
-    }
-
-    // align all transfers to 1 sample
-    err = snd_pcm_sw_params_set_xfer_align ( rhandle, swparams, 1 );
-    if ( err < 0 )
-    {
-        qDebug ( "Unable to set transfer align : %s", snd_strerror ( err ) );
     }
 
     // set avail min inside a software configuration container
@@ -113,12 +106,12 @@ bool CSound::Read ( CVector<short>& psData )
 {
     int ret;
 
-    /* Check if device must be opened or reinitialized */
+    // check if device must be opened or reinitialized
     if ( bChangParamIn == true )
     {
         InitRecording ( iBufferSizeIn * NUM_IN_OUT_CHANNELS );
 
-        /* Reset flag */
+        // reset flag
         bChangParamIn = false;
     }
 
@@ -185,13 +178,13 @@ bool CSound::Read ( CVector<short>& psData )
 
 void CSound::SetInNumBuf ( int iNewNum )
 {
-    /* check new parameter */
+    // check new parameter
     if ( ( iNewNum >= MAX_SND_BUF_IN ) || ( iNewNum < 1 ) )
     {
         iNewNum = NUM_PERIOD_BLOCKS_IN;
     }
 
-    /* Change only if parameter is different */
+    // change only if parameter is different
     if ( iNewNum != iCurPeriodSizeIn )
     {
         iCurPeriodSizeIn = iNewNum;
@@ -200,7 +193,7 @@ void CSound::SetInNumBuf ( int iNewNum )
 }
 
 
-/* Wave out *******************************************************************/
+// Wave out ********************************************************************
 void CSound::InitPlayback ( const bool bNewBlocking )
 {
     int err;
@@ -328,7 +321,7 @@ void CSound::SetOutNumBuf ( int iNewNum )
 }
 
 
-/* common **********************************************************************/
+// Common ***********************************************************************
 bool CSound::SetHWParams ( snd_pcm_t* handle, const int iBufferSizeIn,
                            const int iNumPeriodBlocks )
 {
@@ -416,7 +409,7 @@ snd_pcm_uframes_t buffer_size;
 if ( err = snd_pcm_hw_params_get_buffer_size(hwparams, &buffer_size ) < 0 ) {
     qDebug ( "Unable to get buffer size for playback: %s\n", snd_strerror ( err ) );
 }
-qDebug ( "buffer size: %d (desired: %d)", buffer_size, iBufferSizeIn * iNumPeriodBlocks );
+qDebug ( "buffer size: %d (desired: %d)", (int) buffer_size, iBufferSizeIn * iNumPeriodBlocks );
 
 snd_pcm_uframes_t period_size;
 err = snd_pcm_hw_params_get_period_size ( hwparams, &period_size, 0 );
@@ -424,7 +417,7 @@ if ( err < 0 )
 {
     qDebug ( "Unable to get period size for playback: %s\n", snd_strerror ( err ) );
 }
-qDebug ( "frame size: %d (desired: %d)", period_size, iBufferSizeIn );
+qDebug ( "frame size: %d (desired: %d)", (int) period_size, iBufferSizeIn );
 
 
     // clean-up

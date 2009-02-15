@@ -1,3 +1,13 @@
+2.1.4
+
+- added automatic jitter buffer size setting
+
+- speed optimizations to improve audio interface stability
+
+- new defaults (e.g. turn off Reverb by default since it requires significant
+  CPU
+
+
 2.1.3
 
 - added sound card selection

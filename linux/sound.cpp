@@ -45,56 +45,6 @@ void CSound::InitRecording ( const bool bNewBlocking )
     // set hardware parameters
     SetHWParams ( rhandle, iBufferSizeIn, iCurPeriodSizeIn );
 
-
-    // sw parameters -----------------------------------------------------------
-    snd_pcm_sw_params_t* swparams;
-
-    // allocate an invalid snd_pcm_sw_params_t using standard malloc
-    if ( err = snd_pcm_sw_params_malloc ( &swparams ) != 0 )
-    {
-        qDebug ( "snd_pcm_sw_params_malloc: %s", snd_strerror ( err ) );
-    }
-
-    // get the current swparams
-    if ( err = snd_pcm_sw_params_current ( rhandle, swparams ) < 0 )
-    {
-        qDebug ( "Unable to determine current swparams : %s", snd_strerror ( err ) );
-    }
-
-    // start the transfer when the buffer immediately -> no threshold, val: 0
-    err = snd_pcm_sw_params_set_start_threshold ( rhandle, swparams, 0 );
-    if ( err < 0 )
-    {
-        qDebug ( "Unable to set start threshold mode : %s", snd_strerror ( err ) );
-    }
-
-    // set avail min inside a software configuration container
-    /* Note: This is similar to setting an OSS wakeup point. The valid values
-       for 'val' are determined by the specific hardware. Most PC sound cards
-       can only accept power of 2 frame counts (i.e. 512, 1024, 2048). You
-       cannot use this as a high resolution timer - it is limited to how often
-       the sound card hardware raises an interrupt. Note that you can greatly
-       improve the reponses using snd_pcm_sw_params_set_sleep_min where another
-       timing source is used */
-    snd_pcm_uframes_t period_size = iBufferSizeIn;
-
-    err = snd_pcm_sw_params_set_avail_min ( rhandle, swparams, period_size );
-    if ( err < 0 )
-    {
-        qDebug ( "Unable to set avail min : %s", snd_strerror ( err ) );
-    }
-
-    // write the parameters to the record/playback device
-    err = snd_pcm_sw_params ( rhandle, swparams );
-    if ( err < 0 )
-    {
-        qDebug ( "Unable to set sw params : %s", snd_strerror ( err ) );
-    }
-
-    // clean-up
-    snd_pcm_sw_params_free ( swparams );
-
-
     // start record
     snd_pcm_reset ( rhandle );
     snd_pcm_start ( rhandle );

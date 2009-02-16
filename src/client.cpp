@@ -449,7 +449,8 @@ void CClient::UpdateSocketBufferSize()
             // calculate current buffer setting
 // TODO 2* seems not give optimal results, maybe use 3*?
 // TEST add 2 buffers
-            const double dEstCurBufSet = 2 * GetTimingStdDev() + 2;
+// add .5 to "round up" -> ceil
+            const double dEstCurBufSet = 2 * ( GetTimingStdDev() + 0.5 ) + 2;
 
             // upper/lower hysteresis decision
             const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );

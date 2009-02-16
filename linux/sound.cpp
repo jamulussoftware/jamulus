@@ -105,7 +105,7 @@ bool CSound::Read ( CVector<short>& psData )
             {
                 ret = snd_pcm_prepare ( rhandle );
 
-                if (ret < 0)
+                if ( ret < 0 )
                 {
                     qDebug ( "Can't recover from suspend, prepare failed: %s", snd_strerror ( ret ) );
                 }
@@ -156,7 +156,7 @@ void CSound::InitPlayback ( const bool bNewBlocking )
 
     // playback device (either "hw:0,0" or "plughw:0,0")
     if ( err = snd_pcm_open ( &phandle, "hw:0,0",
-        SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK ) != 0 )
+         SND_PCM_STREAM_PLAYBACK, SND_PCM_NONBLOCK ) != 0 )
     {
         qDebug ( "open error: %s", snd_strerror ( err ) );
     }
@@ -212,7 +212,7 @@ bool CSound::Write ( CVector<short>& psData )
             }
             else if ( ret == -EAGAIN )
             {
-                if ( ( ret = snd_pcm_wait ( phandle, 1 ) ) < 0 )
+                if ( ( ret = snd_pcm_wait ( phandle, 1000 ) ) < 0 )
                 {
                     qDebug ( "poll failed (%s)", snd_strerror ( ret ) );
                     break;
@@ -221,12 +221,12 @@ bool CSound::Write ( CVector<short>& psData )
             }
             else if ( ret == -ESTRPIPE )
             {
-                qDebug("wstrpipe");
+                qDebug ( "wstrpipe" );
 
                 // wait until the suspend flag is released
-                while ( (ret = snd_pcm_resume ( phandle ) ) == -EAGAIN )
+                while ( ( ret = snd_pcm_resume ( phandle ) ) == -EAGAIN )
                 {
-                    sleep(1);
+                    sleep ( 1 );
                 }
 
                 if ( ret < 0 )
@@ -247,8 +247,11 @@ bool CSound::Write ( CVector<short>& psData )
             break; // skip one period
         }
 
-        size  -= ret;
-        start += ret;
+        if ( ret > 0 )
+        {
+            size  -= ret;
+            start += ret;
+        }
     }
 
     return false;
@@ -310,7 +313,7 @@ bool CSound::SetHWParams ( snd_pcm_t* handle, const int iBufferSizeIn,
 
     // restrict a configuration space to contain only one channels count:
     // set the count of channels (usually stereo, 2 channels)
-    if ( err = snd_pcm_hw_params_set_channels(handle, hwparams, NUM_IN_OUT_CHANNELS ) < 0 )
+    if ( err = snd_pcm_hw_params_set_channels ( handle, hwparams, NUM_IN_OUT_CHANNELS ) < 0 )
     {
         qDebug ( "Channels count (%i) not available s: %s", NUM_IN_OUT_CHANNELS, snd_strerror ( err ) );
         return true;
@@ -356,7 +359,8 @@ bool CSound::SetHWParams ( snd_pcm_t* handle, const int iBufferSizeIn,
 
 // check period and buffer size
 snd_pcm_uframes_t buffer_size;
-if ( err = snd_pcm_hw_params_get_buffer_size(hwparams, &buffer_size ) < 0 ) {
+if ( err = snd_pcm_hw_params_get_buffer_size(hwparams, &buffer_size ) < 0 )
+{
     qDebug ( "Unable to get buffer size for playback: %s\n", snd_strerror ( err ) );
 }
 qDebug ( "buffer size: %d (desired: %d)", (int) buffer_size, iBufferSizeIn * iNumPeriodBlocks );

@@ -49,7 +49,9 @@
 
 /* Definitions ****************************************************************/
 // audio in fader range
+#define AUD_FADER_IN_MIN            0
 #define AUD_FADER_IN_MAX            100
+#define AUD_FADER_IN_MIDDLE         ( AUD_FADER_IN_MAX / 2 )
 
 // audio reverberation range
 #define AUD_REVERB_MAX              100
@@ -176,9 +178,10 @@ protected:
 
     bool                    bOpenChatOnNewMessage;
 
-    CVector<short>          vecsAudioSndCrd;
-    CVector<double>         vecdAudioSndCrd;
-    CVector<double>         vecdAudio;
+    CVector<short>          vecsAudioSndCrdStereo;
+    CVector<double>         vecdAudioSndCrdMono;
+    CVector<double>         vecdAudioSndCrdStereo;
+    CVector<double>         vecdAudioStereo;
     CVector<short>          vecsNetwork;
 
     // resample objects

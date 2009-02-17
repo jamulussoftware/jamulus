@@ -115,7 +115,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
     // init slider controls ---
     // audio in fader
-    SliderAudInFader->setRange ( 0, AUD_FADER_IN_MAX );
+    SliderAudInFader->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
     const int iCurAudInFader = pClient->GetAudioInFader();
     SliderAudInFader->setValue ( iCurAudInFader );
     SliderAudInFader->setTickInterval ( AUD_FADER_IN_MAX / 9 );

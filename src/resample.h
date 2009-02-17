@@ -31,27 +31,6 @@
 
 
 /* Classes ********************************************************************/
-class CResample
-{
-public:
-    CResample() {}
-    virtual ~CResample() {}
-
-    void Init ( const int iNewInputBlockSize );
-    int Resample ( CVector<double>& vecdInput, CVector<double>& vecdOutput,
-                   const double dRation );
-
-protected:
-    double          dTStep;
-    double          dtOut;
-    double          dBlockDuration;
-
-    CVector<double> vecdIntBuff;
-    int             iHistorySize;
-
-    int             iInputBlockSize;
-};
-
 class CStereoAudioResample
 {
 public:
@@ -59,14 +38,16 @@ public:
     virtual ~CStereoAudioResample() {}
 
     void Init ( const int iNewMonoInputBlockSize, const int iFrom, const int iTo );
-    void Resample ( CVector<double>& vecdInput, CVector<double>& vecdOutput );
+    void ResampleMono ( CVector<double>& vecdInput, CVector<double>& vecdOutput );
+    void ResampleStereo ( CVector<double>& vecdInput, CVector<double>& vecdOutput );
 
 protected:
     double          dRation;
 
-    CVector<double> vecdIntBuff;
-    int             iHistorySize;
+    CVector<double> vecdIntBuffMono;
+    CVector<double> vecdIntBuffStereo;
 
+    int             iMonoInputBlockSize;
     int             iStereoInputBlockSize;
     int             iMonoOutputBlockSize;
 
@@ -74,6 +55,5 @@ protected:
     int             iNumTaps;
     int             iI;
 };
-
 
 #endif // !defined ( RESAMPLE_H__3B0FEUFE7876F_FE8FE_CA63_4344_1912__INCLUDED_ )

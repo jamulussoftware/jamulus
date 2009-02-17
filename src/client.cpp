@@ -176,10 +176,11 @@ void CClient::Init()
     iMonoBlockSizeSam   = MIN_BLOCK_SIZE_SAMPLES;
     iStereoBlockSizeSam = 2 * MIN_BLOCK_SIZE_SAMPLES;
 
-    vecsAudioSndCrd.Init ( iSndCrdStereoBlockSizeSam );
-    vecdAudioSndCrd.Init ( iSndCrdStereoBlockSizeSam );
+    vecsAudioSndCrdStereo.Init ( iSndCrdStereoBlockSizeSam );
+    vecdAudioSndCrdMono.Init   ( iSndCrdMonoBlockSizeSam );
+    vecdAudioSndCrdStereo.Init ( iSndCrdStereoBlockSizeSam );
 
-    vecdAudio.Init ( iStereoBlockSizeSam );
+    vecdAudioStereo.Init ( iStereoBlockSizeSam );
 
     Sound.InitRecording();
     Sound.InitPlayback();
@@ -250,7 +251,7 @@ void CClient::run()
     while ( bRun )
     {
         // get audio from sound card (blocking function)
-        if ( Sound.Read ( vecsAudioSndCrd ) )
+        if ( Sound.Read ( vecsAudioSndCrdStereo ) )
         {
             PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_RED );
         }
@@ -262,14 +263,14 @@ void CClient::run()
         // convert data from short to double
         for ( i = 0; i < iSndCrdStereoBlockSizeSam; i++ )
         {
-            vecdAudioSndCrd[i] = (double) vecsAudioSndCrd[i];
+            vecdAudioSndCrdStereo[i] = (double) vecsAudioSndCrdStereo[i];
         }
 
         // resample data for each channel seaparately
-        ResampleObjDown.Resample ( vecdAudioSndCrd, vecdAudio );
+        ResampleObjDown.ResampleStereo ( vecdAudioSndCrdStereo, vecdAudioStereo );
 
         // update stereo signal level meter
-        SignalLevelMeter.Update ( vecdAudio );
+        SignalLevelMeter.Update ( vecdAudioStereo );
 
         // add reverberation effect if activated
         if ( iReverbLevel != 0 )
@@ -282,8 +283,8 @@ void CClient::run()
                 for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
                 {
                     // left channel
-                    vecdAudio[i] +=
-                        dRevLev * AudioReverb.ProcessSample ( vecdAudio[i] );
+                    vecdAudioStereo[i] +=
+                        dRevLev * AudioReverb.ProcessSample ( vecdAudioStereo[i] );
                 }
             }
             else
@@ -291,25 +292,24 @@ void CClient::run()
                 for ( i = 1; i < iStereoBlockSizeSam; i += 2 )
                 {
                     // right channel
-                    vecdAudio[i] +=
-                        dRevLev * AudioReverb.ProcessSample ( vecdAudio[i] );
+                    vecdAudioStereo[i] +=
+                        dRevLev * AudioReverb.ProcessSample ( vecdAudioStereo[i] );
                 }
             }
         }
 
         // mix both signals depending on the fading setting
-        const int    iMiddleOfFader = AUD_FADER_IN_MAX / 2;
         const double dAttFact =
-            (double) ( iMiddleOfFader - abs ( iMiddleOfFader - iAudioInFader ) ) /
-            iMiddleOfFader;
+            (double) ( AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
+            AUD_FADER_IN_MIDDLE;
 
-        if ( iAudioInFader > iMiddleOfFader )
+        if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
         {
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
                 // attenuation on right channel
                 vecsNetwork[i] =
-                    Double2Short ( vecdAudio[j] + dAttFact * vecdAudio[j + 1] );
+                    Double2Short ( vecdAudioStereo[j] + dAttFact * vecdAudioStereo[j + 1] );
             }
         }
         else
@@ -318,7 +318,7 @@ void CClient::run()
             {
                 // attenuation on left channel
                 vecsNetwork[i] =
-                    Double2Short ( vecdAudio[j + 1] + dAttFact * vecdAudio[j] );
+                    Double2Short ( vecdAudioStereo[j + 1] + dAttFact * vecdAudioStereo[j] );
             }
         }
 
@@ -352,29 +352,25 @@ fflush(pFileDelay);
         // check if channel is connected
         if ( Channel.IsConnected() )
         {
-            // write mono input signal in both sound-card channels
-            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+            // resample data
+            ResampleObjUp.ResampleMono ( vecdNetwData, vecdAudioSndCrdMono );
+
+            // convert data from double to short type and copy mono
+            // received data in both sound card channels
+            for ( i = 0, j = 0; i < iSndCrdMonoBlockSizeSam; i++, j += 2 )
             {
-                vecdAudio[j] = vecdAudio[j + 1] = vecdNetwData[i];
+                vecsAudioSndCrdStereo[j] = vecsAudioSndCrdStereo[j + 1] =
+                    Double2Short ( vecdAudioSndCrdMono[i] );
             }
         }
         else
         {
             // if not connected, clear data
-            vecdAudio.Reset ( 0.0 );
-        }
-
-        // resample data
-        ResampleObjUp.Resample ( vecdAudio, vecdAudioSndCrd );
-
-        // convert data from double to short type
-        for ( i = 0; i < iSndCrdStereoBlockSizeSam; i++ )
-        {
-            vecsAudioSndCrd[i] = Double2Short ( vecdAudioSndCrd[i] );
+            vecsAudioSndCrdStereo.Reset ( 0 );
         }
 
         // play the new block
-        if ( Sound.Write ( vecsAudioSndCrd ) )
+        if ( Sound.Write ( vecsAudioSndCrdStereo ) )
         {
             PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_RED );
         }

@@ -36,108 +36,10 @@
 
 
 /******************************************************************************\
-* General Resampler                                                            *
-\******************************************************************************/
-int CResample::Resample ( CVector<double>& vecdInput,
-                          CVector<double>& vecdOutput,
-                          const double dRation )
-{
-    int i;
-
-    /* move old data from the end to the history part of the buffer and
-       add new data (shift register) */
-    // shift old values
-    int iMovLen = iInputBlockSize;
-    for ( i = 0; i < iHistorySize; i++ )
-    {
-        vecdIntBuff[i] = vecdIntBuff[iMovLen++];
-    }
-
-    // add new block of data
-    int iBlockEnd = iHistorySize;
-    for ( i = 0; i < iInputBlockSize; i++ )
-    {
-        vecdIntBuff[iBlockEnd++] = vecdInput[i];
-    }
-
-    /* sample-interval of new sample frequency in relation to interpolated
-       sample-interval */
-    dTStep = (double) INTERP_DECIM_I_D1 / dRation;
-
-    // init output counter
-    int im = 0;
-
-    // main loop
-    do
-    {
-        // quantize output-time to interpolated time-index
-        const int ik = (int) dtOut;
-
-
-        /* Calculate convolutions for the two interpolation-taps ------------ */
-        // phase for the linear interpolation-taps
-        const int ip1 = ik % INTERP_DECIM_I_D1;
-        const int ip2 = ( ik + 1 ) % INTERP_DECIM_I_D1;
-
-        // sample positions in input vector
-        const int in1 = (int) ( ik / INTERP_DECIM_I_D1 );
-        const int in2 = (int) ( ( ik + 1 ) / INTERP_DECIM_I_D1 );
-
-        // convolution
-        double dy1 = 0.0;
-        double dy2 = 0.0;
-        for ( int i = 0; i < NUM_TAPS_PER_PHASE1; i++ )
-        {
-            dy1 += fResTaps1[ip1 * INTERP_DECIM_I_D1 + i] * vecdIntBuff[in1 - i];
-            dy2 += fResTaps1[ip2 * INTERP_DECIM_I_D1 + i] * vecdIntBuff[in2 - i];
-        }
-
-
-        /* Linear interpolation --------------------------------------------- */
-        // get numbers after the comma
-        const double dxInt = dtOut - (int) dtOut;
-        vecdOutput[im] = ( dy2 - dy1 ) * dxInt + dy1;
-
-
-        // increase output counter
-        im++;
-            
-        // increase output-time and index one step
-        dtOut = dtOut + dTStep;
-    } 
-    while ( dtOut < dBlockDuration );
-
-    // set rtOut back
-    dtOut -= iInputBlockSize * INTERP_DECIM_I_D1;
-
-    return im;
-}
-
-void CResample::Init ( const int iNewInputBlockSize )
-{
-    iInputBlockSize = iNewInputBlockSize;
-
-    /* history size must be one sample larger, because we use always TWO
-       convolutions */
-    iHistorySize = NUM_TAPS_PER_PHASE1 + 1;
-
-    // calculate block duration
-    dBlockDuration = ( iInputBlockSize + iHistorySize - 1 ) * INTERP_DECIM_I_D1;
-
-    // allocate memory for internal buffer, clear sample history
-    vecdIntBuff.Init ( iInputBlockSize + iHistorySize, 0.0 );
-
-    // init absolute time for output stream (at the end of the history part
-    dtOut = (double) ( iHistorySize - 1 ) * INTERP_DECIM_I_D1;
-}
-
-
-
-/******************************************************************************\
 * Stereo Audio Resampler                                                       *
 \******************************************************************************/
-void CStereoAudioResample::Resample ( CVector<double>& vecdInput,
-                                      CVector<double>& vecdOutput )
+void CStereoAudioResample::ResampleStereo ( CVector<double>& vecdInput,
+                                            CVector<double>& vecdOutput )
 {
     int j;
 
@@ -156,14 +58,14 @@ void CStereoAudioResample::Resample ( CVector<double>& vecdInput,
         int iMovLen = iStereoInputBlockSize;
         for ( j = 0; j < iTwoTimesNumTaps; j++ )
         {
-            vecdIntBuff[j] = vecdIntBuff[iMovLen++];
+            vecdIntBuffStereo[j] = vecdIntBuffStereo[iMovLen++];
         }
 
         // add new block of data
         int iBlockEnd = iTwoTimesNumTaps;
         for ( j = 0; j < iStereoInputBlockSize; j++ )
         {
-            vecdIntBuff[iBlockEnd++] = vecdInput[j];
+            vecdIntBuffStereo[iBlockEnd++] = vecdInput[j];
         }
 
         // main loop
@@ -183,12 +85,61 @@ void CStereoAudioResample::Resample ( CVector<double>& vecdInput,
                 const double dCurFiltTap   = pFiltTaps[ip + i * iI];
                 const int    iCurSamplePos = in - 2 * i;
 
-                dyL += dCurFiltTap * vecdIntBuff[iCurSamplePos];
-                dyR += dCurFiltTap * vecdIntBuff[iCurSamplePos + 1];
+                dyL += dCurFiltTap * vecdIntBuffStereo[iCurSamplePos];
+                dyR += dCurFiltTap * vecdIntBuffStereo[iCurSamplePos + 1];
             }
 
             vecdOutput[2 * j]     = dyL;
             vecdOutput[2 * j + 1] = dyR;
+        }
+    }
+}
+
+void CStereoAudioResample::ResampleMono ( CVector<double>& vecdInput,
+                                          CVector<double>& vecdOutput )
+{
+    int j;
+
+    if ( dRation == 1.0 )
+    {
+        // if ratio is 1, no resampling is needed, just copy vector
+        vecdOutput = vecdInput;
+    }
+    else
+    {
+        /* move old data from the end to the history part of the buffer and
+           add new data (shift register) */
+        // shift old values
+        int iMovLen = iMonoInputBlockSize;
+        for ( j = 0; j < iNumTaps; j++ )
+        {
+            vecdIntBuffMono[j] = vecdIntBuffMono[iMovLen++];
+        }
+
+        // add new block of data
+        int iBlockEnd = iNumTaps;
+        for ( j = 0; j < iMonoInputBlockSize; j++ )
+        {
+            vecdIntBuffMono[iBlockEnd++] = vecdInput[j];
+        }
+
+        // main loop
+        for ( j = 0; j < iMonoOutputBlockSize; j++ )
+        {
+            // calculate filter phase
+            const int ip = (int) ( j * iI / dRation ) % iI;
+
+            // sample position in input vector
+            const int in = (int) ( j / dRation ) + iNumTaps - 1;
+
+            // convolution
+            double dy = 0.0;
+            for ( int i = 0; i < iNumTaps; i++ )
+            {
+                dy += pFiltTaps[ip + i * iI] * vecdIntBuffMono[in - i];
+            }
+
+            vecdOutput[j] = dy;
         }
     }
 }
@@ -198,6 +149,7 @@ void CStereoAudioResample::Init ( const int iNewMonoInputBlockSize,
                                   const int iTo )
 {
     dRation               = ( (double) iTo ) / iFrom;
+    iMonoInputBlockSize   = iNewMonoInputBlockSize;
     iStereoInputBlockSize = 2 * iNewMonoInputBlockSize;
     iMonoOutputBlockSize  = (int) ( iNewMonoInputBlockSize * dRation );
 
@@ -266,8 +218,9 @@ void CStereoAudioResample::Init ( const int iNewMonoInputBlockSize,
         }
     }
 
-    // allocate memory for internal buffer, clear sample history (we have
-    // to consider stereo data here -> two times the number of taps of
+    // allocate memory for internal buffer, clear sample history (for
+    // the stereo case we have to consider that two times the number of taps of
     // additional memory is required)
-    vecdIntBuff.Init ( iStereoInputBlockSize + 2 * iNumTaps, 0.0 );
+    vecdIntBuffMono.Init   ( iMonoInputBlockSize + iNumTaps, 0.0 );
+    vecdIntBuffStereo.Init ( iStereoInputBlockSize + 2 * iNumTaps, 0.0 );
 }

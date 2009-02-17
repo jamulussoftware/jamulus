@@ -31,7 +31,7 @@ CClient::CClient ( const quint16 iPortNumber ) : bRun ( false ),
     iSndCrdStereoBlockSizeSam ( 2 * MIN_SND_CRD_BLOCK_SIZE_SAMPLES ),
     Sound ( MIN_SND_CRD_BLOCK_SIZE_SAMPLES * 2 /* stereo */ ),
     Socket ( &Channel, iPortNumber ),
-    iAudioInFader ( AUD_FADER_IN_MAX / 2 ),
+    iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     iReverbLevel ( 0 ),
     bReverbOnLeftChan ( false ),
     iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR ),
@@ -298,27 +298,40 @@ void CClient::run()
             }
         }
 
-        // mix both signals depending on the fading setting
-        const double dAttFact =
-            (double) ( AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
-            AUD_FADER_IN_MIDDLE;
-
-        if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
+        // mix both signals depending on the fading setting, convert
+        // from double to short
+        if ( iAudioInFader == AUD_FADER_IN_MIDDLE )
         {
+            // just mix channels together
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
-                // attenuation on right channel
                 vecsNetwork[i] =
-                    Double2Short ( vecdAudioStereo[j] + dAttFact * vecdAudioStereo[j + 1] );
+                    Double2Short ( vecdAudioStereo[j] + vecdAudioStereo[j + 1] );
             }
         }
         else
         {
-            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+            const double dAttFact =
+                (double) ( AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
+                AUD_FADER_IN_MIDDLE;
+
+            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
             {
-                // attenuation on left channel
-                vecsNetwork[i] =
-                    Double2Short ( vecdAudioStereo[j + 1] + dAttFact * vecdAudioStereo[j] );
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on right channel
+                    vecsNetwork[i] =
+                        Double2Short ( vecdAudioStereo[j] + dAttFact * vecdAudioStereo[j + 1] );
+                }
+            }
+            else
+            {
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on left channel
+                    vecsNetwork[i] =
+                        Double2Short ( vecdAudioStereo[j + 1] + dAttFact * vecdAudioStereo[j] );
+                }
             }
         }
 

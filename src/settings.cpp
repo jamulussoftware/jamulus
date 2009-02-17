@@ -61,7 +61,7 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     pClient->strName = GetIniSetting ( IniXMLDocument, "client", "name" );
 
     // audio fader
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad", 0, AUD_FADER_IN_MAX, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad", AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
     {
         pClient->SetAudioInFader ( iValue );
     }

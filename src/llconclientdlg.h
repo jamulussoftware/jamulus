@@ -75,6 +75,7 @@ public:
 
 protected:
     void                    ShowChatWindow();
+    void                    UpdateAudioFaderSlider();
 
     CClient*                pClient;
     bool                    bConnected;
@@ -97,7 +98,7 @@ public slots:
     void OnTimerStatus() { UpdateDisplay(); }
     void OnOpenGeneralSettings();
     void OnOpenChatDialog() { ShowChatWindow(); }
-    void OnSliderAudInFader ( int value ) { pClient->SetAudioInFader ( value ); }
+    void OnSliderAudInFader ( int value );
     void OnSliderAudReverb ( int value ) { pClient->SetReverbLevel ( value ); }
     void OnRevSelL() { pClient->SetReverbOnLeftChan ( true ); }
     void OnRevSelR() { pClient->SetReverbOnLeftChan ( false ); }

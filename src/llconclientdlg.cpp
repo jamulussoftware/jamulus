@@ -116,9 +116,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     // init slider controls ---
     // audio in fader
     SliderAudInFader->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
-    const int iCurAudInFader = pClient->GetAudioInFader();
-    SliderAudInFader->setValue ( iCurAudInFader );
     SliderAudInFader->setTickInterval ( AUD_FADER_IN_MAX / 9 );
+    UpdateAudioFaderSlider();
 
     // audio reverberation
     SliderAudReverb->setRange ( 0, AUD_REVERB_MAX );
@@ -228,6 +227,41 @@ void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
 
     // default implementation of this event handler routine
     Event->accept();
+}
+
+void CLlconClientDlg::UpdateAudioFaderSlider()
+{
+    // update slider and label of audio fader
+    const int iCurAudInFader = pClient->GetAudioInFader();
+    SliderAudInFader->setValue ( iCurAudInFader );
+
+    // show in label the center position and what channel is
+    // attenuated
+    if ( iCurAudInFader == AUD_FADER_IN_MIDDLE )
+    {
+        TextLabelAudFader->setText ( "Center" );
+    }
+    else
+    {
+        if ( iCurAudInFader > AUD_FADER_IN_MIDDLE )
+        {
+            // attenuation on right channel
+            TextLabelAudFader->setText ( "R -" +
+                QString().setNum ( iCurAudInFader - AUD_FADER_IN_MIDDLE ) );
+        }
+        else
+        {
+            // attenuation on left channel
+            TextLabelAudFader->setText ( "L -" +
+                QString().setNum ( AUD_FADER_IN_MIDDLE - iCurAudInFader ) );
+        }
+    }
+}
+
+void CLlconClientDlg::OnSliderAudInFader ( int value )
+{
+    pClient->SetAudioInFader ( value );
+    UpdateAudioFaderSlider();
 }
 
 void CLlconClientDlg::OnConnectDisconBut()

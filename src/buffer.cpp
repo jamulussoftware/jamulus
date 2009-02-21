@@ -417,13 +417,8 @@ bool CConvBuf::Put ( const CVector<short>& vecsData )
         vecsMemory[iPutPos++] = vecsData[iCurPos++];
     }
 
-    bool bBufOk = false;
-    if ( iEnd == iMemSize )
-    {
-        bBufOk = true;
-    }
-
-    return bBufOk;
+    // return "buffer is ready for readout" flag
+    return iEnd == iMemSize;
 }
 
 CVector<short> CConvBuf::Get()

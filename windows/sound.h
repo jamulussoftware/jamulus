@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2008
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer
@@ -27,23 +27,21 @@
 #define AFX_SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_
 
 #include <windows.h>
-#include <mmsystem.h>
 #include <string>
 #include <qmessagebox.h>
 #include "../src/util.h"
 #include "../src/global.h"
 
+// copy the ASIO SDK in the llcon/windows directory: "llcon/windows/ASIOSDK2" to
+// get it work
+#include "asiosys.h"
+#include "asio.h"
+#include "asiodrivers.h"
+
 
 /* Definitions ****************************************************************/
-// switch here between ASIO (Steinberg) or native Windows(TM) sound interface
-//#undef USE_ASIO_SND_INTERFACE
-#define USE_ASIO_SND_INTERFACE
-
-
 #define NUM_IN_OUT_CHANNELS     2       /* Stereo recording (but we only
                                            use one channel for recording) */
-#define BITS_PER_SAMPLE         16      // use all bits of the D/A-converter
-#define BYTES_PER_SAMPLE        2       // number of bytes per sample
 
 #define MAX_SND_BUF_IN          100
 #define MAX_SND_BUF_OUT         100
@@ -53,16 +51,6 @@
 
 
 /* Classes ********************************************************************/
-#ifdef USE_ASIO_SND_INTERFACE
-
-// copy the ASIO SDK in the llcon/windows directory: "llcon/windows/ASIOSDK2" to
-// get it work
-
-#include "asiosys.h"
-#include "asio.h"
-#include "asiodrivers.h"
-
-
 class CSound
 {
 public:
@@ -126,76 +114,5 @@ protected:
     bool             bBlockingRec;
     bool             bBlockingPlay;
 };
-
-#else // USE_ASIO_SND_INTERFACE
-
-class CSound
-{
-public:
-    CSound();
-    virtual ~CSound();
-
-    void        InitRecording ( int iNewBufferSize, bool bNewBlocking = true );
-    void        InitPlayback ( int iNewBufferSize, bool bNewBlocking = false );
-    bool        Read ( CVector<short>& psData );
-    bool        Write ( CVector<short>& psData );
-
-    int         GetNumDev() { return iNumDevs; }
-    std::string GetDeviceName ( int iDiD ) { return pstrDevices[iDiD]; }
-
-    // dummy functions
-    int         SetDev ( const int iNewDev ) {}
-    int         GetDev() { return 0; }
-
-    void        SetOutDev ( int iNewDev );
-    int         GetOutDev() { return iCurOutDev; }
-    void        SetInDev ( int iNewDev );
-    int         GetInDev() { return iCurInDev; }
-    void        SetOutNumBuf ( int iNewNum );
-    int         GetOutNumBuf() { return iCurNumSndBufOut; }
-    void        SetInNumBuf ( int iNewNum );
-    int         GetInNumBuf() { return iCurNumSndBufIn; }
-
-    void        Close();
-
-protected:
-    void        OpenInDevice();
-    void        OpenOutDevice();
-    void        PrepareInBuffer ( int iBufNum );
-    void        PrepareOutBuffer ( int iBufNum );
-    void        AddInBuffer();
-    void        AddOutBuffer ( int iBufNum );
-    void        GetDoneBuffer ( int& iCntPrepBuf, int& iIndexDoneBuf );
-
-    WAVEFORMATEX    sWaveFormatEx;
-    UINT            iNumDevs;
-    std::string     pstrDevices[MAX_NUMBER_SOUND_CARDS];
-    UINT            iCurInDev;
-    UINT            iCurOutDev;
-    bool            bChangParamIn;
-    bool            bChangParamOut;
-    int             iCurNumSndBufIn;
-    int             iCurNumSndBufOut;
-
-    // wave in
-    WAVEINCAPS      m_WaveInDevCaps;
-    HWAVEIN         m_WaveIn;
-    HANDLE          m_WaveInEvent;
-    WAVEHDR         m_WaveInHeader[MAX_SND_BUF_IN];
-    int             iBufferSizeIn;
-    int             iWhichBufferIn;
-    short*          psSoundcardBuffer[MAX_SND_BUF_IN];
-    bool            bBlockingRec;
-
-    // wave out
-    int             iBufferSizeOut;
-    HWAVEOUT        m_WaveOut;
-    short*          psPlaybackBuffer[MAX_SND_BUF_OUT];
-    WAVEHDR         m_WaveOutHeader[MAX_SND_BUF_OUT];
-    HANDLE          m_WaveOutEvent;
-    bool            bBlockingPlay;
-};
-
-#endif // USE_ASIO_SND_INTERFACE
 
 #endif // !defined ( AFX_SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_ )

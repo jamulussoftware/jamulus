@@ -170,6 +170,101 @@ void CClient::OnProtocolStatus ( bool bOk )
     }
 }
 
+void CClient::Start()
+{
+    // init object
+    try
+    {
+        Init();
+    }
+    catch ( CGenErr generr )
+    {
+        // TODO better error management -> should be catched in main thread
+        // problem: how to catch errors in a different thread...?
+
+        // quick hack solution
+        QMessageBox::critical ( 0, APP_NAME, generr.GetErrorText(), "Quit", 0 );
+        exit ( 0 );
+    }
+
+    // enable channel
+    Channel.SetEnable ( true );
+
+    // start the audio working thread with hightest possible priority
+    start ( QThread::TimeCriticalPriority );
+}
+
+void CClient::Stop()
+{
+    // set flag so that thread can leave the main loop
+    bRun = false;
+
+    // give thread some time to terminate
+    wait ( 5000 );
+
+    // disable channel
+    Channel.SetEnable ( false );
+
+    // disable sound interface
+    Sound.Close();
+
+    // reset current signal level and LEDs
+    SignalLevelMeter.Reset();
+    PostWinMessage ( MS_RESET_ALL, 0 );
+}
+
+void CClient::run()
+{
+    // Set thread priority (The working thread should have a higher
+    // priority than the GUI)
+#ifdef _WIN32
+    SetThreadPriority ( GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL );
+#else
+/*
+    // set the process to realtime privs, taken from
+    // "http://www.gardena.net/benno/linux/audio" but does not seem to work,
+    // maybe a problem with user rights
+    struct sched_param schp;
+    memset ( &schp, 0, sizeof ( schp ) );
+    schp.sched_priority = sched_get_priority_max ( SCHED_FIFO );
+    sched_setscheduler ( 0, SCHED_FIFO, &schp );
+*/
+#endif
+
+    // main loop of working thread
+    bRun = true;
+    while ( bRun )
+    {
+        // get audio from sound card (blocking function)
+        if ( Sound.Read ( vecsAudioSndCrdStereo ) )
+        {
+            PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_RED );
+        }
+        else
+        {
+            PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_GREEN );
+        }
+
+        // process audio data
+        ProcessAudioData ( vecsAudioSndCrdStereo );
+
+        // play the new block
+        if ( Sound.Write ( vecsAudioSndCrdStereo ) )
+        {
+            PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_RED );
+        }
+        else
+        {
+            PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_GREEN );
+        }
+    }
+}
+
+
+
+
+
+
 void CClient::Init()
 {
     // set block size (in samples)
@@ -205,149 +300,98 @@ void CClient::Init()
     AudioReverb.Clear();
 }
 
-void CClient::run()
+void CClient::ProcessAudioData ( CVector<short>& vecsStereoSndCrd )
 {
     int i, j;
 
-    // Set thread priority (The working thread should have a higher
-    // priority than the GUI)
-#ifdef _WIN32
-    SetThreadPriority ( GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL );
-#else
-/*
-    // set the process to realtime privs, taken from
-    // "http://www.gardena.net/benno/linux/audio" but does not seem to work,
-    // maybe a problem with user rights
-    struct sched_param schp;
-    memset ( &schp, 0, sizeof ( schp ) );
-    schp.sched_priority = sched_get_priority_max ( SCHED_FIFO );
-    sched_setscheduler ( 0, SCHED_FIFO, &schp );
-*/
-#endif
-
-    // init object
-    try
+    // convert data from short to double
+    for ( i = 0; i < iSndCrdStereoBlockSizeSam; i++ )
     {
-        Init();
-    }
-    catch ( CGenErr generr )
-    {
-        // TODO better error management -> should be catched in main thread
-        // problem: how to catch errors in a different thread...?
-
-        // quick hack solution
-        QMessageBox::critical ( 0, APP_NAME, generr.GetErrorText(), "Quit", 0 );
-        exit ( 0 );
+        vecdAudioSndCrdStereo[i] = (double) vecsStereoSndCrd[i];
     }
 
+    // resample data for each channel seaparately
+    ResampleObjDown.ResampleStereo ( vecdAudioSndCrdStereo, vecdAudioStereo );
 
-    // runtime phase -----------------------------------------------------------
-    // enable channel
-    Channel.SetEnable ( true );
+    // update stereo signal level meter
+    SignalLevelMeter.Update ( vecdAudioStereo );
 
-    bRun = true;
-
-    // main loop of working thread
-    while ( bRun )
+    // add reverberation effect if activated
+    if ( iReverbLevel != 0 )
     {
-        // get audio from sound card (blocking function)
-        if ( Sound.Read ( vecsAudioSndCrdStereo ) )
+        // calculate attenuation amplification factor
+        const double dRevLev = (double) iReverbLevel / AUD_REVERB_MAX / 2;
+
+        if ( bReverbOnLeftChan )
         {
-            PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_RED );
+            for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
+            {
+                // left channel
+                vecdAudioStereo[i] +=
+                    dRevLev * AudioReverb.ProcessSample ( vecdAudioStereo[i] );
+            }
         }
         else
         {
-            PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_GREEN );
-        }
-
-        // convert data from short to double
-        for ( i = 0; i < iSndCrdStereoBlockSizeSam; i++ )
-        {
-            vecdAudioSndCrdStereo[i] = (double) vecsAudioSndCrdStereo[i];
-        }
-
-        // resample data for each channel seaparately
-        ResampleObjDown.ResampleStereo ( vecdAudioSndCrdStereo, vecdAudioStereo );
-
-        // update stereo signal level meter
-        SignalLevelMeter.Update ( vecdAudioStereo );
-
-        // add reverberation effect if activated
-        if ( iReverbLevel != 0 )
-        {
-            // calculate attenuation amplification factor
-            const double dRevLev = (double) iReverbLevel / AUD_REVERB_MAX / 2;
-
-            if ( bReverbOnLeftChan )
+            for ( i = 1; i < iStereoBlockSizeSam; i += 2 )
             {
-                for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
-                {
-                    // left channel
-                    vecdAudioStereo[i] +=
-                        dRevLev * AudioReverb.ProcessSample ( vecdAudioStereo[i] );
-                }
-            }
-            else
-            {
-                for ( i = 1; i < iStereoBlockSizeSam; i += 2 )
-                {
-                    // right channel
-                    vecdAudioStereo[i] +=
-                        dRevLev * AudioReverb.ProcessSample ( vecdAudioStereo[i] );
-                }
+                // right channel
+                vecdAudioStereo[i] +=
+                    dRevLev * AudioReverb.ProcessSample ( vecdAudioStereo[i] );
             }
         }
+    }
 
-        // mix both signals depending on the fading setting, convert
-        // from double to short
-        if ( iAudioInFader == AUD_FADER_IN_MIDDLE )
+    // mix both signals depending on the fading setting, convert
+    // from double to short
+    if ( iAudioInFader == AUD_FADER_IN_MIDDLE )
+    {
+        // just mix channels together
+        for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
         {
-            // just mix channels together
+            vecsNetwork[i] =
+                Double2Short ( vecdAudioStereo[j] + vecdAudioStereo[j + 1] );
+        }
+    }
+    else
+    {
+        const double dAttFact =
+            (double) ( AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
+            AUD_FADER_IN_MIDDLE;
+
+        if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
+        {
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
+                // attenuation on right channel
                 vecsNetwork[i] =
-                    Double2Short ( vecdAudioStereo[j] + vecdAudioStereo[j + 1] );
+                    Double2Short ( vecdAudioStereo[j] + dAttFact * vecdAudioStereo[j + 1] );
             }
         }
         else
         {
-            const double dAttFact =
-                (double) ( AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
-                AUD_FADER_IN_MIDDLE;
-
-            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
+            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
-                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-                {
-                    // attenuation on right channel
-                    vecsNetwork[i] =
-                        Double2Short ( vecdAudioStereo[j] + dAttFact * vecdAudioStereo[j + 1] );
-                }
-            }
-            else
-            {
-                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-                {
-                    // attenuation on left channel
-                    vecsNetwork[i] =
-                        Double2Short ( vecdAudioStereo[j + 1] + dAttFact * vecdAudioStereo[j] );
-                }
+                // attenuation on left channel
+                vecsNetwork[i] =
+                    Double2Short ( vecdAudioStereo[j + 1] + dAttFact * vecdAudioStereo[j] );
             }
         }
+    }
 
-        // send it through the network
-        Socket.SendPacket ( Channel.PrepSendPacket ( vecsNetwork ),
-            Channel.GetAddress() );
+    // send it through the network
+    Socket.SendPacket ( Channel.PrepSendPacket ( vecsNetwork ),
+        Channel.GetAddress() );
 
-        // receive a new block
-        if ( Channel.GetData ( vecdNetwData ) == GS_BUFFER_OK )
-        {
-            PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN );
-        }
-        else
-        {
-            PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED );
-        }
+    // receive a new block
+    if ( Channel.GetData ( vecdNetwData ) == GS_BUFFER_OK )
+    {
+        PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN );
+    }
+    else
+    {
+        PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED );
+    }
 
 /*
 // TEST
@@ -356,65 +400,35 @@ static FILE* pFileDelay = fopen("v.dat", "wb");
 short sData[2];
 for (i = 0; i < iMonoBlockSizeSam; i++)
 {
-    sData[0] = (short) vecdNetwData[i];
-    fwrite(&sData, size_t(2), size_t(1), pFileDelay);
+sData[0] = (short) vecdNetwData[i];
+fwrite(&sData, size_t(2), size_t(1), pFileDelay);
 }
 fflush(pFileDelay);
 */
 
-        // check if channel is connected
-        if ( Channel.IsConnected() )
-        {
-            // resample data
-            ResampleObjUp.ResampleMono ( vecdNetwData, vecdAudioSndCrdMono );
+    // check if channel is connected
+    if ( Channel.IsConnected() )
+    {
+        // resample data
+        ResampleObjUp.ResampleMono ( vecdNetwData, vecdAudioSndCrdMono );
 
-            // convert data from double to short type and copy mono
-            // received data in both sound card channels
-            for ( i = 0, j = 0; i < iSndCrdMonoBlockSizeSam; i++, j += 2 )
-            {
-                vecsAudioSndCrdStereo[j] = vecsAudioSndCrdStereo[j + 1] =
-                    Double2Short ( vecdAudioSndCrdMono[i] );
-            }
-        }
-        else
+        // convert data from double to short type and copy mono
+        // received data in both sound card channels
+        for ( i = 0, j = 0; i < iSndCrdMonoBlockSizeSam; i++, j += 2 )
         {
-            // if not connected, clear data
-            vecsAudioSndCrdStereo.Reset ( 0 );
+            vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
+                Double2Short ( vecdAudioSndCrdMono[i] );
         }
-
-        // play the new block
-        if ( Sound.Write ( vecsAudioSndCrdStereo ) )
-        {
-            PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_RED );
-        }
-        else
-        {
-            PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_GREEN );
-        }
-
-        // update response time measurement and socket buffer size
-        UpdateTimeResponseMeasurement();
-        UpdateSocketBufferSize();
+    }
+    else
+    {
+        // if not connected, clear data
+        vecsStereoSndCrd.Reset ( 0 );
     }
 
-    // disable channel
-    Channel.SetEnable ( false );
-
-    // disable sound interface
-    Sound.Close();
-
-    // reset current signal level and LEDs
-    SignalLevelMeter.Reset();
-    PostWinMessage ( MS_RESET_ALL, 0 );
-}
-
-bool CClient::Stop()
-{
-    // set flag so that thread can leave the main loop
-    bRun = false;
-
-    // give thread some time to terminate, return status
-    return wait ( 5000 );
+    // update response time measurement and socket buffer size
+    UpdateTimeResponseMeasurement();
+    UpdateSocketBufferSize();
 }
 
 void CClient::UpdateTimeResponseMeasurement()

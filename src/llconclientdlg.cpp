@@ -267,28 +267,12 @@ void CLlconClientDlg::OnSliderAudInFader ( int value )
 void CLlconClientDlg::OnConnectDisconBut()
 {
     // start/stop client, set button text
-    if ( pClient->IsRunning() )
-    {
-        pClient->Stop();
-        PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
-
-        // stop timer for level meter bars and reset them
-        TimerSigMet.stop();
-        ProgressBarInputLevelL->setValue ( 0 );
-        ProgressBarInputLevelR->setValue ( 0 );
-
-        // immediately update status bar
-        OnTimerStatus();
-
-        // clear mixer board (remove all faders)
-        MainMixerBoard->HideAll();
-    }
-    else
+    if ( !pClient->IsRunning() )
     {
         // set address and check if address is valid
         if ( pClient->SetServerAddr ( LineEditServerAddr->text() ) )
         {
-            pClient->start ( QThread::TimeCriticalPriority );
+            pClient->Start();
 
             PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
 
@@ -304,6 +288,22 @@ void CLlconClientDlg::OnConnectDisconBut()
             // show the error in the status bar
             TextLabelStatus->setText ( tr ( "invalid address" ) );
         }
+    }
+    else
+    {
+        pClient->Stop();
+        PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
+
+        // stop timer for level meter bars and reset them
+        TimerSigMet.stop();
+        ProgressBarInputLevelL->setValue ( 0 );
+        ProgressBarInputLevelR->setValue ( 0 );
+
+        // immediately update status bar
+        OnTimerStatus();
+
+        // clear mixer board (remove all faders)
+        MainMixerBoard->HideAll();
     }
 }
 

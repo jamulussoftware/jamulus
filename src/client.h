@@ -66,8 +66,8 @@ public:
     CClient ( const quint16 iPortNumber );
     virtual ~CClient() {}
 
-    void   Init();
-    bool   Stop();
+    void   Start();
+    void   Stop();
     bool   IsRunning() { return bRun; }
     bool   SetServerAddr ( QString strNAddr );
     double MicLevelL() { return SignalLevelMeter.MicLevelLeft(); }
@@ -149,7 +149,9 @@ public:
     QString                 strName;
 
 protected:
+    void         Init();
     virtual void run();
+    void         ProcessAudioData ( CVector<short>& vecsStereoSndCrd );
     void         UpdateTimeResponseMeasurement();
     void         UpdateSocketBufferSize();
 

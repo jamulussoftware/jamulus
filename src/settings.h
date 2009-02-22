@@ -48,8 +48,8 @@ public:
     void Save ( const QString& sFileName = "" ) { WriteIniFile ( sFileName ); }
 
 protected:
-	void ReadIniFile ( const QString& sFileName );
-	void WriteIniFile ( const QString& sFileName );
+    void ReadIniFile ( const QString& sFileName );
+    void WriteIniFile ( const QString& sFileName );
 
     // init file access function for read/write
     void SetNumericIniSet ( QDomDocument& xmlFile, const QString& strSection,

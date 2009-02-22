@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2008
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer
@@ -39,7 +39,7 @@ QDialog* pMainWindow = NULL;
 
 int main ( int argc, char** argv )
 {
-	std::string strArgument;
+    std::string strArgument;
     double      rDbleArgument;
 
     /* check if server or client application shall be started */
@@ -47,96 +47,96 @@ int main ( int argc, char** argv )
     bool        bUseGUI               = true;
     bool        bForceLowUploadRate   = false;
     quint16     iPortNumber           = LLCON_PORT_NUMBER;
-	std::string strIniFileName        = "";
+    std::string strIniFileName        = "";
     std::string strHTMLStatusFileName = "";
     std::string strServerName         = "";
     std::string strLoggingFileName    = "";
 
-	/* QT docu: argv()[0] is the program name, argv()[1] is the first
-	   argument and argv()[argc()-1] is the last argument.
-	   Start with first argument, therefore "i = 1" */
-	for ( int i = 1; i < argc; i++ )
-	{
-		// server mode flag ----------------------------------------------------------
-		if ( GetFlagArgument ( argc, argv, i, "-s", "--server" ) )
-		{
-			bIsClient = false;
+    /* QT docu: argv()[0] is the program name, argv()[1] is the first
+       argument and argv()[argc()-1] is the last argument.
+       Start with first argument, therefore "i = 1" */
+    for ( int i = 1; i < argc; i++ )
+    {
+        // server mode flag ----------------------------------------------------------
+        if ( GetFlagArgument ( argc, argv, i, "-s", "--server" ) )
+        {
+            bIsClient = false;
             cerr << "server mode chosen" << std::endl;
-			continue;
-		}
+            continue;
+        }
 
-		// use GUI flag --------------------------------------------------------------
-		if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) )
-		{
-			bUseGUI = false;
+        // use GUI flag --------------------------------------------------------------
+        if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) )
+        {
+            bUseGUI = false;
             cerr << "no GUI mode chosen" << std::endl;
-			continue;
-		}
+            continue;
+        }
 
-		// use logging ---------------------------------------------------------------
-		if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
-		{
-			strLoggingFileName = strArgument;
+        // use logging ---------------------------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
+        {
+            strLoggingFileName = strArgument;
             cerr << "logging file name: " << strLoggingFileName << std::endl;
-			continue;
-		}
+            continue;
+        }
 
-		// force low upload data rate flag -------------------------------------------
+        // force low upload data rate flag -------------------------------------------
         if ( GetFlagArgument ( argc, argv, i, "-u", "--lowuploadrate" ) )
         {
-	        bForceLowUploadRate = true;
+            bForceLowUploadRate = true;
             cerr << "force low upload rate" << std::endl;
-	        continue;
+            continue;
         }
 
         // port number ---------------------------------------------------------------
-		if ( GetNumericArgument ( argc, argv, i, "-p", "--port",
+        if ( GetNumericArgument ( argc, argv, i, "-p", "--port",
                                   0, 65535, rDbleArgument ) )
-		{
-			iPortNumber = static_cast<quint16> ( rDbleArgument );
+        {
+            iPortNumber = static_cast<quint16> ( rDbleArgument );
             cerr << "selected port number: " << iPortNumber << std::endl;
-			continue;
-		}
+            continue;
+        }
 
-		// HTML status file ----------------------------------------------------------
-		if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
-		{
-			strHTMLStatusFileName = strArgument;
+        // HTML status file ----------------------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
+        {
+            strHTMLStatusFileName = strArgument;
             cerr << "HTML status file name: " << strHTMLStatusFileName << std::endl;
-			continue;
-		}
+            continue;
+        }
 
-		if ( GetStringArgument ( argc, argv, i, "-a", "--servername", strArgument ) )
-		{
-			strServerName = strArgument;
+        if ( GetStringArgument ( argc, argv, i, "-a", "--servername", strArgument ) )
+        {
+            strServerName = strArgument;
             cerr << "server name for HTML status file: " << strServerName << std::endl;
-			continue;
-		}
+            continue;
+        }
 
-		// initialization file -------------------------------------------------------
-		if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
-		{
-			strIniFileName = strArgument;
+        // initialization file -------------------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
+        {
+            strIniFileName = strArgument;
             cerr << "initialization file name: " << strIniFileName << std::endl;
-			continue;
-		}
+            continue;
+        }
 
-		// help (usage) flag ---------------------------------------------------------
-		if ( ( !strcmp ( argv[i], "--help" ) ) ||
-			 ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
-		{
+        // help (usage) flag ---------------------------------------------------------
+        if ( ( !strcmp ( argv[i], "--help" ) ) ||
+             ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
+        {
             const std::string strHelp = UsageArguments(argv);
             cerr << strHelp;
-			exit ( 1 );
-		}
+            exit ( 1 );
+        }
 
-		// unknown option ------------------------------------------------------------
-		cerr << argv[0] << ": ";
-		cerr << "Unknown option '" << argv[i] << "' -- use '--help' for help"
-			<< endl;
+        // unknown option ------------------------------------------------------------
+        cerr << argv[0] << ": ";
+        cerr << "Unknown option '" << argv[i] << "' -- use '--help' for help"
+            << endl;
 
-		exit ( 1 );
-	}
+        exit ( 1 );
+    }
 
 #ifdef _WIN32
     // Set application priority class -> high priority
@@ -240,54 +240,54 @@ int main ( int argc, char** argv )
 \******************************************************************************/
 std::string UsageArguments ( char **argv )
 {
-	return
-		"Usage: " + std::string ( argv[0] ) + " [option] [argument]\n"
-		"Recognized options:\n"
-		"  -s, --server               start server\n"
-		"  -n, --nogui                disable GUI (only avaiable for server)\n"
-		"  -l, --log                  enable logging, set file name\n"
-		"  -i, --inifile              initialization file name (only available for client)\n"
-		"  -p, --port                 local port number (only avaiable for server)\n"
-		"  -m, --htmlstatus           enable HTML status file, set file name (only avaiable for server)\n"
-		"  -u, --lowuploadrate        force low upload rate (only avaiable for server)\n"
-		"  -h, -?, --help             this help text\n"
-		"Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
+    return
+        "Usage: " + std::string ( argv[0] ) + " [option] [argument]\n"
+        "Recognized options:\n"
+        "  -s, --server               start server\n"
+        "  -n, --nogui                disable GUI (only avaiable for server)\n"
+        "  -l, --log                  enable logging, set file name\n"
+        "  -i, --inifile              initialization file name (only available for client)\n"
+        "  -p, --port                 local port number (only avaiable for server)\n"
+        "  -m, --htmlstatus           enable HTML status file, set file name (only avaiable for server)\n"
+        "  -u, --lowuploadrate        force low upload rate (only avaiable for server)\n"
+        "  -h, -?, --help             this help text\n"
+        "Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }
 
 bool GetFlagArgument ( int, char **argv, int &i,
                        std::string strShortOpt, std::string strLongOpt )
 {
-	if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool GetStringArgument ( int argc, char **argv, int &i,
                          std::string strShortOpt, std::string strLongOpt,
                          std::string & strArg )
 {
-	if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
-	{
-		if ( ++i >= argc )
-		{
-			cerr << argv[0] << ": ";
-			cerr << "'" << strLongOpt << "' needs a string argument" << endl;
-			exit ( 1 );
-		}
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+    {
+        if ( ++i >= argc )
+        {
+            cerr << argv[0] << ": ";
+            cerr << "'" << strLongOpt << "' needs a string argument" << endl;
+            exit ( 1 );
+        }
 
-		strArg = argv[i];
+        strArg = argv[i];
 
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool GetNumericArgument ( int argc, char **argv, int &i,
@@ -295,32 +295,32 @@ bool GetNumericArgument ( int argc, char **argv, int &i,
                           double rRangeStart, double rRangeStop,
                           double & rValue)
 {
-	if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
-	{
-		if ( ++i >= argc )
-		{
-			cerr << argv[0] << ": ";
-			cerr << "'" << strLongOpt << "' needs a numeric argument between "
-				<< rRangeStart << " and " << rRangeStop << endl;
-			exit ( 1 );
-		}
+    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+    {
+        if ( ++i >= argc )
+        {
+            cerr << argv[0] << ": ";
+            cerr << "'" << strLongOpt << "' needs a numeric argument between "
+                << rRangeStart << " and " << rRangeStop << endl;
+            exit ( 1 );
+        }
 
-		char *p;
-		rValue = strtod ( argv[i], &p );
-		if ( *p || rValue < rRangeStart || rValue > rRangeStop )
-		{
-			cerr << argv[0] << ": ";
-			cerr << "'" << strLongOpt << "' needs a numeric argument between "
-				<< rRangeStart << " and " << rRangeStop << endl;
-			exit ( 1 );
-		}
+        char *p;
+        rValue = strtod ( argv[i], &p );
+        if ( *p || rValue < rRangeStart || rValue > rRangeStop )
+        {
+            cerr << argv[0] << ": ";
+            cerr << "'" << strLongOpt << "' needs a numeric argument between "
+                << rRangeStart << " and " << rRangeStop << endl;
+            exit ( 1 );
+        }
 
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 

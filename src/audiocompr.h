@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2008
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer, Erik de Castro Lopo
@@ -70,7 +70,7 @@ static int ms_AdaptCoeff2[MSADPCM_ADAPT_COEFF_COUNT] =
 static int ms_AdaptationTable[] =
 {
     230, 230, 230, 230, 307, 409, 512, 614,
-	768, 614, 512, 409, 307, 230, 230, 230
+    768, 614, 512, 409, 307, 230, 230, 230
 };
 
 

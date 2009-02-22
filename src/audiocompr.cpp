@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2008
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer, Erik de Castro Lopo
@@ -97,9 +97,9 @@ CVector<short> CAudioCompression::Decode ( const CVector<unsigned char>& vecbyAd
         {
             int current = vecbyAdpcm[2 * i] | ( vecbyAdpcm[2 * i + 1] << 8 );
             if ( current & 0x8000 )
-			{
+            {
                 current -= 0x10000;
-			}
+            }
 
             vecsOut[i] = (short) current;
         }
@@ -188,13 +188,13 @@ CVector<unsigned char> CImaAdpcm::Encode ( const CVector<short>& vecsAudio )
         }
 
         if ( bytecode & 8 )
-		{
+        {
             iPrevAudio -= vpdiff;
-		}
+        }
         else
-		{
+        {
             iPrevAudio += vpdiff;
-		}
+        }
 
         // adjust step size
         Q_ASSERT ( bytecode < IMA_INDX_ADJUST_TAB_LEN );
@@ -233,9 +233,9 @@ CVector<short> CImaAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
     /* Read the block header ------------------------------------------------ */
     int current = vecbyAdpcm[0] | ( vecbyAdpcm[1] << 8 );
     if ( current & 0x8000 )
-	{
+    {
         current -= 0x10000;
-	}
+    }
 
     // get and bound step index
     int iStepindDec = CheckBounds ( vecbyAdpcm[2], 0, IMA_STEP_SIZE_TAB_LEN - 1 );
@@ -270,21 +270,21 @@ CVector<short> CImaAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
 
         int diff = step >> 3;
         if ( bytecode & 1 )
-		{
+        {
             diff += step >> 2;
-		}
+        }
         if ( bytecode & 2 )
-		{
+        {
             diff += step >> 1;
-		}
+        }
         if ( bytecode & 4 )
-		{
+        {
             diff += step;
-		}
+        }
         if ( bytecode & 8 )
-		{
+        {
             diff = -diff;
-		}
+        }
 
         current += diff;
 
@@ -345,70 +345,70 @@ CVector<unsigned char> CMsAdpcm::Encode ( const CVector<short>& vecsAudio )
 
     /* Encode the block header ---------------------------------------------- */
     vecbyAdpcm[0] = bpred;
-	vecbyAdpcm[1] = idelta & 0xFF;
-	vecbyAdpcm[2] = ( idelta >> 8 ) & 0xFF;
-	vecbyAdpcm[3] = vecsAudio[1] & 0xFF;
-	vecbyAdpcm[4] = ( vecsAudio[1] >> 8 ) & 0xFF;
-	vecbyAdpcm[5] = vecsAudio[0] & 0xFF;
-	vecbyAdpcm[6] = ( vecsAudio[0] >> 8 ) & 0xFF;
+    vecbyAdpcm[1] = idelta & 0xFF;
+    vecbyAdpcm[2] = ( idelta >> 8 ) & 0xFF;
+    vecbyAdpcm[3] = vecsAudio[1] & 0xFF;
+    vecbyAdpcm[4] = ( vecsAudio[1] >> 8 ) & 0xFF;
+    vecbyAdpcm[5] = vecsAudio[0] & 0xFF;
+    vecbyAdpcm[6] = ( vecsAudio[0] >> 8 ) & 0xFF;
 
 
     /* Encode the samples as 4 bit ------------------------------------------ */
-	unsigned int  blockindx = 7;
-	unsigned char byte      = 0;
+    unsigned int  blockindx = 7;
+    unsigned char byte      = 0;
 
     for ( int k = 2; k < iAudSize; k++ )
-	{
+    {
         const int predict = ( vecsAudioTemp[k - 1] * ms_AdaptCoeff1[bpred] +
                               vecsAudioTemp[k - 2] * ms_AdaptCoeff2[bpred] ) >> 8;
 
-		int errordelta = ( vecsAudio[k] - predict ) / idelta;
+        int errordelta = ( vecsAudio[k] - predict ) / idelta;
 
-		if ( errordelta < -8 )
+        if ( errordelta < -8 )
         {
-			errordelta = -8 ;
+            errordelta = -8 ;
         }
-		else
+        else
         {
             if (errordelta > 7)
             {
-			    errordelta = 7;
+                errordelta = 7;
             }
         }
-		int newsamp = predict + ( idelta * errordelta );
+        int newsamp = predict + ( idelta * errordelta );
 
-		if ( newsamp > 32767 )
+        if ( newsamp > 32767 )
         {
-			newsamp = 32767;
+            newsamp = 32767;
         }
-		else
+        else
         {
             if ( newsamp < -32768 )
             {
-			    newsamp = -32768;
+                newsamp = -32768;
             }
         }
-		if ( errordelta < 0 )
+        if ( errordelta < 0 )
         {
-			errordelta += 0x10;
+            errordelta += 0x10;
         }
 
-		byte = ( byte << 4 ) | ( errordelta & 0xF );
+        byte = ( byte << 4 ) | ( errordelta & 0xF );
 
-		if ( k % 2 )
-		{
+        if ( k % 2 )
+        {
             vecbyAdpcm[blockindx++] = byte;
-			byte = 0;
-		}
-
-		idelta = ( idelta * ms_AdaptationTable[errordelta] ) >> 8;
-
-		if ( idelta < 16 )
-        {
-			idelta = 16;
+            byte = 0;
         }
-		vecsAudioTemp[k] = newsamp;
-	}
+
+        idelta = ( idelta * ms_AdaptationTable[errordelta] ) >> 8;
+
+        if ( idelta < 16 )
+        {
+            idelta = 16;
+        }
+        vecsAudioTemp[k] = newsamp;
+    }
 
     return vecbyAdpcm;
 }
@@ -430,10 +430,10 @@ CVector<short> CMsAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
         return vecsAudio;
     }
 
-	short chan_idelta = vecbyAdpcm[1] | ( vecbyAdpcm[2] << 8 );
+    short chan_idelta = vecbyAdpcm[1] | ( vecbyAdpcm[2] << 8 );
 
-	vecsAudio[1] = vecbyAdpcm[3] | ( vecbyAdpcm[4] << 8 );
-	vecsAudio[0] = vecbyAdpcm[5] | ( vecbyAdpcm[6] << 8 );
+    vecsAudio[1] = vecbyAdpcm[3] | ( vecbyAdpcm[4] << 8 );
+    vecsAudio[0] = vecbyAdpcm[5] | ( vecbyAdpcm[6] << 8 );
 
 
     /* -------------------------------------------------------------------------
@@ -448,48 +448,48 @@ CVector<short> CMsAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
 
 
     /* Decode the encoded 4 bit samples ------------------------------------- */
-	for ( int k = 2; k < iAudSize; k ++ )
-	{
-		bytecode = vecsAudio[k] & 0xF;
+    for ( int k = 2; k < iAudSize; k ++ )
+    {
+        bytecode = vecsAudio[k] & 0xF;
 
-		// compute next Adaptive Scale Factor (ASF)
-		int idelta = chan_idelta;
+        // compute next Adaptive Scale Factor (ASF)
+        int idelta = chan_idelta;
 
          // => / 256 => FIXED_POINT_ADAPTATION_BASE == 256
-		chan_idelta = ( ms_AdaptationTable[bytecode] * idelta ) >> 8;
+        chan_idelta = ( ms_AdaptationTable[bytecode] * idelta ) >> 8;
 
-		if ( chan_idelta < 16 )
+        if ( chan_idelta < 16 )
         {
-			chan_idelta = 16;
+            chan_idelta = 16;
         }
 
-		if ( bytecode & 0x8 )
+        if ( bytecode & 0x8 )
         {
-			bytecode -= 0x10;
+            bytecode -= 0x10;
         }
 
         // => / 256 => FIXED_POINT_COEFF_BASE == 256
-    	const int predict = ( ( vecsAudio[k - 1] * ms_AdaptCoeff1[bpred] ) +
+        const int predict = ( ( vecsAudio[k - 1] * ms_AdaptCoeff1[bpred] ) +
                               ( vecsAudio[k - 2] * ms_AdaptCoeff2[bpred] ) ) >> 8;
 
-		int current = ( bytecode * idelta ) + predict;
+        int current = ( bytecode * idelta ) + predict;
 
-		if ( current > 32767 )
+        if ( current > 32767 )
         {
-			current = 32767;
+            current = 32767;
         }
-		else
+        else
         {
             if ( current < -32768 )
             {
-			    current = -32768;
+                current = -32768;
             }
         }
 
-		vecsAudio[k] = current;
-	}
+        vecsAudio[k] = current;
+    }
 
-	return vecsAudio;
+    return vecsAudio;
 }
 
 void CMsAdpcm::ChoosePredictor ( const CVector<short>& vecsAudio,
@@ -516,39 +516,39 @@ void CMsAdpcm::ChoosePredictor ( const CVector<short>& vecsAudio,
        by using all the samples to choose the predictor. */
     unsigned int idelta_count = min ( MSADPCM_IDELTA_COUNT, vecsAudio.Size() - 1 );
 
-	for ( unsigned int bpred = 0; bpred < MSADPCM_ADAPT_COEFF_COUNT; bpred++ )
-	{
+    for ( unsigned int bpred = 0; bpred < MSADPCM_ADAPT_COEFF_COUNT; bpred++ )
+    {
         unsigned int idelta_sum = 0;
 
-		for ( unsigned int k = 2; k < 2 + idelta_count; k++ )
+        for ( unsigned int k = 2; k < 2 + idelta_count; k++ )
         {
-			idelta_sum += abs ( vecsAudio[k] - 
+            idelta_sum += abs ( vecsAudio[k] - 
                 ( ( vecsAudio[k - 1] * ms_AdaptCoeff1[bpred] +
                     vecsAudio[k - 2] * ms_AdaptCoeff2[bpred] ) >> 8 ) );
         }
-		idelta_sum /= ( 4 * idelta_count );
+        idelta_sum /= ( 4 * idelta_count );
 
-		if ( bpred == 0 || idelta_sum < best_idelta )
-		{
+        if ( bpred == 0 || idelta_sum < best_idelta )
+        {
             best_bpred  = bpred;
-			best_idelta = idelta_sum;
-		}
+            best_idelta = idelta_sum;
+        }
 
-		if ( !idelta_sum )
-		{
+        if ( !idelta_sum )
+        {
             best_bpred  = bpred;
-			best_idelta = 16;
-			break;
-		}
-	}
-
-	if ( best_idelta < 16 )
-    {
-		best_idelta = 16;
+            best_idelta = 16;
+            break;
+        }
     }
 
-	block_pred = best_bpred;
-	idelta     = best_idelta;
+    if ( best_idelta < 16 )
+    {
+        best_idelta = 16;
+    }
 
-	return;
+    block_pred = best_bpred;
+    idelta     = best_idelta;
+
+    return;
 }

@@ -1,5 +1,5 @@
 rem/******************************************************************************\
-rem * Copyright (c) 2004-2008
+rem * Copyright (c) 2004-2009
 rem *
 rem * Author(s):
 rem *	Volker Fischer

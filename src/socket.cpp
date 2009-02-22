@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2008
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer
@@ -76,59 +76,59 @@ void CSocket::SendPacket ( const CVector<unsigned char>& vecbySendBuf,
 void CSocket::OnDataReceived()
 {
     while ( SocketDevice.hasPendingDatagrams() )
-	{
-		QHostAddress SenderAddress;
-		quint16      SenderPort;
+    {
+        QHostAddress SenderAddress;
+        quint16      SenderPort;
 
-		// read block from network interface and query address of sender
-		int iNumBytesRead = SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
-			MAX_SIZE_BYTES_NETW_BUF, &SenderAddress, &SenderPort );
+        // read block from network interface and query address of sender
+        int iNumBytesRead = SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
+            MAX_SIZE_BYTES_NETW_BUF, &SenderAddress, &SenderPort );
 
-		// check if an error occurred
-		if ( iNumBytesRead < 0 )
-		{
-			return;
-		}
+        // check if an error occurred
+        if ( iNumBytesRead < 0 )
+        {
+            return;
+        }
 
-		// convert address of client
-		const CHostAddress RecHostAddr ( SenderAddress, SenderPort );
+        // convert address of client
+        const CHostAddress RecHostAddr ( SenderAddress, SenderPort );
 
         if ( bIsClient )
-		{
-			// client
-			// check if packet comes from the server we want to connect
-			if ( ! ( pChannel->GetAddress() == RecHostAddr ) )
-			{
-				return;
-			}
+        {
+            // client
+            // check if packet comes from the server we want to connect
+            if ( ! ( pChannel->GetAddress() == RecHostAddr ) )
+            {
+                return;
+            }
 
-			switch ( pChannel->PutData ( vecbyRecBuf, iNumBytesRead ) )
-			{
-			case PS_AUDIO_OK:
-				PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN );
-				break;
+            switch ( pChannel->PutData ( vecbyRecBuf, iNumBytesRead ) )
+            {
+            case PS_AUDIO_OK:
+                PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN );
+                break;
 
-			case PS_AUDIO_ERR:
-			case PS_GEN_ERROR:
-				PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED );
-				break;
+            case PS_AUDIO_ERR:
+            case PS_GEN_ERROR:
+                PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED );
+                break;
 
-			case PS_PROT_ERR:
-				PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW );
-				break;
-			}
-		}
-		else
-		{
-			// server
-			if ( pChannelSet->PutData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
-			{
-				// this was an audio packet, start server
-				// tell the server object to wake up if it
-				// is in sleep mode (Qt will delete the event object when done)
-				QCoreApplication::postEvent ( pServer,
-					new CLlconEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
-			}
-		}
-	}
+            case PS_PROT_ERR:
+                PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW );
+                break;
+            }
+        }
+        else
+        {
+            // server
+            if ( pChannelSet->PutData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
+            {
+                // this was an audio packet, start server
+                // tell the server object to wake up if it
+                // is in sleep mode (Qt will delete the event object when done)
+                QCoreApplication::postEvent ( pServer,
+                    new CLlconEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
+            }
+        }
+    }
 }

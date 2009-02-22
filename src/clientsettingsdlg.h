@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2008
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer
@@ -84,7 +84,7 @@ public slots:
     void OnSliderNetBuf ( int value );
     void OnSliderNetBufSiFactIn ( int value );
     void OnSliderNetBufSiFactOut ( int value );
-	void OnAutoJitBuf ( int value );
+    void OnAutoJitBuf ( int value );
     void OnOpenChatOnNewMessageStateChanged ( int value );
     void OnAudioCompressionButtonGroupClicked ( QAbstractButton* button );
     void OnPingTimeResult ( int iPingTime );

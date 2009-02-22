@@ -5,7 +5,7 @@
 - speed optimizations to improve audio interface stability
 
 - new defaults (e.g. turn off Reverb by default since it requires significant
-  CPU
+  CPU)
 
 
 2.1.3
@@ -23,7 +23,8 @@
 
 - ping time measurement problems on Windows OS fixed
 
-- security checks for protocol messages (wrong messages could crash the software)
+- security checks for protocol messages (wrong messages could crash the
+  software)
 
 
 2.1.1
@@ -51,7 +52,8 @@
 
 - new client settings dialog
 
-- at each client a separate audio mix can be generated for all connected clients at the server
+- at each client a separate audio mix can be generated for all connected clients
+  at the server
 
 
 0.9.4

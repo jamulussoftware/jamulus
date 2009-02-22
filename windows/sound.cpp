@@ -100,7 +100,7 @@ bool CSound::Read ( CVector<short>& psData )
     while ( iBufferPosCapture < iBufferSizeStereo )
     {
         if ( bBlockingRec )
-		{
+        {
             if ( !bCaptureBufferOverrun )
             {
                 // regular case
@@ -121,11 +121,11 @@ bool CSound::Read ( CVector<short>& psData )
                     return true;
                 }
             }
-		}
+        }
         else
-		{
+        {
             return true;
-		}
+        }
     }
 
     ASIOMutex.lock(); // get mutex lock
@@ -140,9 +140,9 @@ bool CSound::Read ( CVector<short>& psData )
 
         // copy data from sound card capture buffer in function output buffer
         for ( i = 0; i < iBufferSizeStereo; i++ )
-	    {
+        {
             psData[i] = psCaptureBuffer[i];
-	    }
+        }
 
         // move all other data in buffer
         const int iLenCopyRegion = iBufferPosCapture - iBufferSizeStereo;
@@ -166,7 +166,7 @@ void CSound::SetInNumBuf ( int iNewNum )
 {
     // check new parameter
     if ( ( iNewNum < MAX_SND_BUF_IN ) && ( iNewNum >= iMinNumSndBuf ) )
-	{
+    {
         // change only if parameter is different
         if ( iNewNum != iNewNumSndBufIn )
         {
@@ -232,7 +232,7 @@ void CSound::SetOutNumBuf ( int iNewNum )
 {
     // check new parameter
     if ( ( iNewNum < MAX_SND_BUF_OUT ) && ( iNewNum >= iMinNumSndBuf ) )
-	{
+    {
         // change only if parameter is different
         if ( iNewNum != iNewNumSndBufOut )
         {
@@ -262,9 +262,9 @@ void CSound::SetDev ( const int iNewDev )
 
         // set event to ensure that thread leaves the waiting function
         if ( m_ASIOEvent != NULL )
-	    {
+        {
             SetEvent ( m_ASIOEvent );
-	    }
+        }
 
         // wait for the thread to terminate
         Sleep ( 500 );
@@ -568,31 +568,31 @@ if ( iASIOBufferSizeMono == 256 )
     // prepare input channels
     for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
     {
-	    bufferInfos[i].isInput    = ASIOTrue;
-	    bufferInfos[i].channelNum = i;
-	    bufferInfos[i].buffers[0] = 0;
+        bufferInfos[i].isInput    = ASIOTrue;
+        bufferInfos[i].channelNum = i;
+        bufferInfos[i].buffers[0] = 0;
         bufferInfos[i].buffers[1] = 0;
     }
 
     // prepare output channels
     for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
     {
-	    bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
-	    bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
-	    bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
         bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[1] = 0;
     }
 
     // create and activate ASIO buffers (buffer size in samples)
     ASIOCreateBuffers ( bufferInfos, 2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
-	    iASIOBufferSizeMono, &asioCallbacks );
+        iASIOBufferSizeMono, &asioCallbacks );
 
     // now get some buffer details
     for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
     {
-	    channelInfos[i].channel = bufferInfos[i].channelNum;
-	    channelInfos[i].isInput = bufferInfos[i].isInput;
-	    ASIOGetChannelInfo ( &channelInfos[i] );
+        channelInfos[i].channel = bufferInfos[i].channelNum;
+        channelInfos[i].isInput = bufferInfos[i].isInput;
+        ASIOGetChannelInfo ( &channelInfos[i] );
 
         // only 16/24/32 LSB is supported
         if ( ( channelInfos[i].type != ASIOSTInt16LSB ) &&
@@ -631,9 +631,9 @@ void CSound::InitRecordingAndPlayback()
 
         // create memory for capture buffer
         if ( psCaptureBuffer != NULL )
-	    {
+        {
             delete[] psCaptureBuffer;
-	    }
+        }
         psCaptureBuffer = new short[iCurNumSndBufIn * iBufferSizeStereo];
 
         // initialize write block pointer out and underrun flag
@@ -642,16 +642,16 @@ void CSound::InitRecordingAndPlayback()
 
         // create memory for play buffer
         if ( psPlayBuffer != NULL )
-	    {
+        {
             delete[] psPlayBuffer;
-	    }
+        }
         psPlayBuffer = new short[iCurNumSndBufOut * iBufferSizeStereo];
 
         // clear new buffer
         for ( int i = 0; i < iCurNumSndBufOut * iBufferSizeStereo; i++ )
-	    {
+        {
             psPlayBuffer[i] = 0;
-	    }
+        }
 
         // reset event
         ResetEvent ( m_ASIOEvent );
@@ -669,9 +669,9 @@ void CSound::Close()
 
     // set event to ensure that thread leaves the waiting function
     if ( m_ASIOEvent != NULL )
-	{
+    {
         SetEvent ( m_ASIOEvent );
-	}
+    }
 
     // wait for the thread to terminate
     Sleep ( 500 );
@@ -698,7 +698,7 @@ CSound::CSound ( const int iNewBufferSizeStereo )
     m_ASIOEvent = NULL;
 
     // get available ASIO driver names in system
-	for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
     {
         cDriverNames[i] = new char[32];
     }
@@ -717,11 +717,11 @@ CSound::CSound ( const int iNewBufferSizeStereo )
     // init device index with illegal value to show that driver is not initialized
     lCurDev = -1;
 
-	// set up the asioCallback structure
-	asioCallbacks.bufferSwitch         = &bufferSwitch;
-	asioCallbacks.sampleRateDidChange  = &sampleRateChanged;
-	asioCallbacks.asioMessage          = &asioMessages;
-	asioCallbacks.bufferSwitchTimeInfo = &bufferSwitchTimeInfo;
+    // set up the asioCallback structure
+    asioCallbacks.bufferSwitch         = &bufferSwitch;
+    asioCallbacks.sampleRateDidChange  = &sampleRateChanged;
+    asioCallbacks.asioMessage          = &asioMessages;
+    asioCallbacks.bufferSwitchTimeInfo = &bufferSwitchTimeInfo;
 
     // init buffer pointer to zero
     psCaptureBuffer = NULL;
@@ -747,19 +747,19 @@ CSound::~CSound()
 
     // delete allocated memory
     if ( psCaptureBuffer != NULL )
-	{
+    {
         delete[] psCaptureBuffer;
-	}
+    }
     if ( psPlayBuffer != NULL )
-	{
+    {
         delete[] psPlayBuffer;
-	}
+    }
 
     // close the handle for the event
     if ( m_ASIOEvent != NULL )
-	{
+    {
         CloseHandle ( m_ASIOEvent );
-	}
+    }
 }
 
 // ASIO callbacks -------------------------------------------------------------
@@ -767,8 +767,8 @@ ASIOTime* CSound::bufferSwitchTimeInfo ( ASIOTime *timeInfo,
                                          long index,
                                          ASIOBool processNow )
 {
-	bufferSwitch ( index, processNow );
-	return 0L;
+    bufferSwitch ( index, processNow );
+    return 0L;
 }
 
 void CSound::bufferSwitch ( long index, ASIOBool processNow )
@@ -786,28 +786,28 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
         bPlayBufferUnderrun = ( 2 * iASIOBufferSizeMono > iBufferPosPlay );
 
         // perform the processing for input and output
-	    for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ ) // stereo
-	    {
+        for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ ) // stereo
+        {
             if ( bufferInfos[i].isInput == ASIOTrue )
-		    {
+            {
                 // CAPTURE -----------------------------------------------------
                 // first check if space in buffer is available
                 if ( !bCaptureBufferOverrun )
                 {
                     // copy new captured block in thread transfer buffer (copy
                     // mono data interleaved in stereo buffer)
-		            switch ( channelInfos[i].type )
-		            {
-		            case ASIOSTInt16LSB:
+                    switch ( channelInfos[i].type )
+                    {
+                    case ASIOSTInt16LSB:
                         for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                         {
                             psCaptureBuffer[iBufferPosCapture + 
                                 2 * iCurSample + bufferInfos[i].channelNum] =
                                 ( (short*) bufferInfos[i].buffers[index] )[iCurSample];
                         }
-			            break;
+                        break;
 
-		            case ASIOSTInt24LSB:
+                    case ASIOSTInt24LSB:
 
 // not yet tested, horrible things might happen with the following code ;-)
 
@@ -821,9 +821,9 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
                             psCaptureBuffer[iBufferPosCapture + 
                                 2 * iCurSample + bufferInfos[i].channelNum] = static_cast<short> ( iCurSam );
                         }
-			            break;
+                        break;
 
-		            case ASIOSTInt32LSB:
+                    case ASIOSTInt32LSB:
                         for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                         {
                             // convert to 16 bit
@@ -831,10 +831,10 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
                                 2 * iCurSample + bufferInfos[i].channelNum] =
                                 (((int*) bufferInfos[i].buffers[index])[iCurSample] >> 16);
                         }
-			            break;
+                        break;
                     }
                 }
-		    }
+            }
             else
             {
                 // PLAYBACK ----------------------------------------------------
@@ -842,42 +842,42 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
                 {
                     // copy data from sound card in output buffer (copy
                     // interleaved stereo data in mono sound card buffer)
-		            switch ( channelInfos[i].type )
-		            {
-		            case ASIOSTInt16LSB:
+                    switch ( channelInfos[i].type )
+                    {
+                    case ASIOSTInt16LSB:
                         for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
-	                    {
+                        {
                             ( (short*) bufferInfos[i].buffers[index] )[iCurSample] =
                                 psPlayBuffer[2 * iCurSample + bufferInfos[i].channelNum];
                         }
-			            break;
+                        break;
 
-		            case ASIOSTInt24LSB:
+                    case ASIOSTInt24LSB:
 
 // not yet tested, horrible things might happen with the following code ;-)
 
                         for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
-	                    {
+                        {
                             // convert current sample in 24 bit format
                             int iCurSam = static_cast<int> ( psPlayBuffer[2 * iCurSample + bufferInfos[i].channelNum] );
                             iCurSam <<= 8;
 
                             memcpy ( ( (char*) bufferInfos[i].buffers[index] ) + iCurSample * 3, &iCurSam, 3 );
                         }
-			            break;
+                        break;
 
-		            case ASIOSTInt32LSB:
-		                for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
-	                    {
+                    case ASIOSTInt32LSB:
+                        for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+                        {
                             // convert to 32 bit
                             int iCurSam = static_cast<int> ( psPlayBuffer[2 * iCurSample + bufferInfos[i].channelNum] );
                             ( (int*) bufferInfos[i].buffers[index] )[iCurSample] = ( iCurSam << 16 );
                         }
                         break;
-	                }
+                    }
                 }
             }
-	    }
+        }
 
 
         // Manage thread interface buffers for input and output ----------------
@@ -907,7 +907,7 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
         // do it here, all data are in place -----------------------------------
         if ( bASIOPostOutput )
         {
-	        ASIOOutputReady();
+            ASIOOutputReady();
         }
 
         // set event
@@ -918,13 +918,13 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
 
 long CSound::asioMessages ( long selector, long value, void* message, double* opt )
 {
-	long ret = 0;
-	switch(selector)
-	{
-		case kAsioEngineVersion:
-			// return the supported ASIO version of the host application
-			ret = 2L;
-			break;
-	}
-	return ret;
+    long ret = 0;
+    switch(selector)
+    {
+        case kAsioEngineVersion:
+            // return the supported ASIO version of the host application
+            ret = 2L;
+            break;
+    }
+    return ret;
 }

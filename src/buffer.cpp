@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2008
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer
@@ -46,22 +46,22 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks )
 
     // initialize number of samples for fading effect
     if ( FADE_IN_OUT_NUM_SAM < iBlockSize )
-	{
+    {
         iNumSamFading = iBlockSize;
-	}
+    }
     else
-	{
+    {
         iNumSamFading = FADE_IN_OUT_NUM_SAM;
-	}
+    }
 
     if ( FADE_IN_OUT_NUM_SAM_EXTRA > iBlockSize )
-	{
+    {
         iNumSamFadingExtra = iBlockSize;
-	}
+    }
     else
-	{
+    {
         iNumSamFadingExtra = FADE_IN_OUT_NUM_SAM_EXTRA;
-	}
+    }
 
     // init variables for extrapolation (in case a fade out is needed)
     dExPDiff  = 0.0;
@@ -96,9 +96,9 @@ fflush(pFileBI);
 
     // fade in new block if required
     if ( bFadeInNewPutData )
-	{
+    {
         FadeInAudioDataBlock ( vecdData );
-	}
+    }
 
     // copy new data in internal buffer
     int iCurPos = 0;
@@ -109,34 +109,34 @@ fflush(pFileBI);
 
         // data must be written in two steps because of wrap around
         while ( iPutPos < iMemSize )
-		{
+        {
             vecdMemory[iPutPos++] = vecdData[iCurPos++];
-		}
+        }
 
         for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
-		{
+        {
             vecdMemory[iPutPos] = vecdData[iCurPos++];
-		}
+        }
     }
     else
     {
         // data can be written in one step
         const int iEnd = iPutPos + iInSize;
         while ( iPutPos < iEnd )
-		{
+        {
             vecdMemory[iPutPos++] = vecdData[iCurPos++];
-		}
+        }
     }
 
     // set buffer state flag
     if ( iPutPos == iGetPos )
-	{
+    {
         eBufState = CNetBuf::BS_FULL;
-	}
+    }
     else
-	{
+    {
         eBufState = CNetBuf::BS_OK;
-	}
+    }
 
     return bPutOK;
 }
@@ -173,34 +173,34 @@ bool CNetBuf::Get ( CVector<double>& vecdData )
 
         // data must be read in two steps because of wrap around
         while ( iGetPos < iMemSize )
-		{
+        {
             vecdData[iCurPos++] = vecdMemory[iGetPos++];
-		}
+        }
 
         for ( iGetPos = 0; iGetPos < iRemData; iGetPos++ )
-		{
+        {
             vecdData[iCurPos++] = vecdMemory[iGetPos];
-		}
+        }
     }
     else
     {
         // data can be read in one step
         const int iEnd = iGetPos + iInSize;
         while ( iGetPos < iEnd )
-		{
+        {
             vecdData[iCurPos++] = vecdMemory[iGetPos++];
-		}
+        }
     }
 
     // set buffer state flag
     if ( iPutPos == iGetPos )
-	{
+    {
         eBufState = CNetBuf::BS_EMPTY;
-	}
+    }
     else
-	{
+    {
         eBufState = CNetBuf::BS_OK;
-	}
+    }
 
 
     /* extrapolate data from old block to avoid "clicks"
@@ -208,9 +208,9 @@ bool CNetBuf::Get ( CVector<double>& vecdData )
        anymore since it is already gone (processed or send through the
        network) */
     if ( bFadeOutExtrap )
-	{
+    {
         FadeOutExtrapolateAudioDataBlock ( vecdData, dExPDiff, dExPLastV );
-	}
+    }
 
     /* save some paramters from last block which is needed in case we do not
        have enough data for next "get" operation and need to extrapolate the
@@ -229,16 +229,16 @@ int CNetBuf::GetAvailSpace() const
 
     // check for special case and wrap around
     if ( iAvSpace < 0 )
-	{
+    {
         iAvSpace += iMemSize; // wrap around
-	}
+    }
     else
-	{
-		if ( ( iAvSpace == 0 ) && ( eBufState == BS_EMPTY ) )
-		{
-			iAvSpace = iMemSize;
-		}
-	}
+    {
+        if ( ( iAvSpace == 0 ) && ( eBufState == BS_EMPTY ) )
+        {
+            iAvSpace = iMemSize;
+        }
+    }
 
     return iAvSpace;
 }
@@ -250,16 +250,16 @@ int CNetBuf::GetAvailData() const
 
     // check for special case and wrap around
     if ( iAvData < 0 )
-	{
+    {
         iAvData += iMemSize; // wrap around
-	}
+    }
     else
-	{
-		if ( ( iAvData == 0 ) && ( eBufState == BS_FULL ) )
-		{
-			iAvData = iMemSize;
-		}
-	}
+    {
+        if ( ( iAvData == 0 ) && ( eBufState == BS_FULL ) )
+        {
+            iAvData = iMemSize;
+        }
+    }
 
     return iAvData;
 }
@@ -298,13 +298,13 @@ void CNetBuf::Clear ( const EClearType eClearType )
 
         /* check for special case */
         if ( iPutPos == iGetPos )
-		{
+        {
             eBufState = CNetBuf::BS_FULL;
-		}
+        }
         else
-		{
+        {
             eBufState = CNetBuf::BS_OK;
-		}
+        }
     }
     else
     {
@@ -316,9 +316,9 @@ void CNetBuf::Clear ( const EClearType eClearType )
         // wrap around
         iPutPos += iGetPos;
         if ( iPutPos > iMemSize )
-		{
+        {
             iPutPos -= iMemSize;
-		}
+        }
 
         // fade out old data right before new put pointer
         int iCurPos = iPutPos - iNumSamFading;

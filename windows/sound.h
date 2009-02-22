@@ -92,10 +92,10 @@ protected:
     // audio hardware buffer info
     struct sHWBufferInfo
     {
-	    long lMinSize;
-	    long lMaxSize;
-	    long lPreferredSize;
-	    long lGranularity;
+        long lMinSize;
+        long lMaxSize;
+        long lPreferredSize;
+        long lGranularity;
     } HWBufferInfo;
 
     // callbacks

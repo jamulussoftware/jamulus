@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2008
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer
@@ -185,15 +185,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
 void CClientSettingsDlg::UpdateJitterBufferFrame()
 {
-	// update slider value and text
-	const int iCurNumNetBuf = pClient->GetSockBufSize();
+    // update slider value and text
+    const int iCurNumNetBuf = pClient->GetSockBufSize();
     SliderNetBuf->setValue ( iCurNumNetBuf );
     TextNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
 
-	// if auto setting is enabled, disable slider control
-	cbAutoJitBuf->setChecked ( pClient->GetDoAutoSockBufSize() );
-	SliderNetBuf->setEnabled ( !pClient->GetDoAutoSockBufSize() );
-	TextNetBuf->setEnabled   ( !pClient->GetDoAutoSockBufSize() );
+    // if auto setting is enabled, disable slider control
+    cbAutoJitBuf->setChecked ( pClient->GetDoAutoSockBufSize() );
+    SliderNetBuf->setEnabled ( !pClient->GetDoAutoSockBufSize() );
+    TextNetBuf->setEnabled   ( !pClient->GetDoAutoSockBufSize() );
 }
 
 void CClientSettingsDlg::UpdateSndBufInSlider ( const int iCurNumInBuf )
@@ -280,8 +280,8 @@ void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
 
 void CClientSettingsDlg::OnAutoJitBuf ( int value )
 {
-	pClient->SetDoAutoSockBufSize ( value == Qt::Checked );
-	UpdateJitterBufferFrame();
+    pClient->SetDoAutoSockBufSize ( value == Qt::Checked );
+    UpdateJitterBufferFrame();
 }
 
 void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )

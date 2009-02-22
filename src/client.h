@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2008
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer
@@ -95,7 +95,7 @@ public:
     }
 
     void SetDoAutoSockBufSize ( const bool bValue ) { bDoAutoSockBufSize = bValue; }
-	bool GetDoAutoSockBufSize() { return bDoAutoSockBufSize; }
+    bool GetDoAutoSockBufSize() { return bDoAutoSockBufSize; }
     void SetSockBufSize ( const int iNumBlocks )
     {
         if ( Channel.GetSockBufSize() != iNumBlocks )

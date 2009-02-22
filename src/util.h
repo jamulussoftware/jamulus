@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2008
+ * Copyright (c) 2004-2009
  *
  * Author(s):
  *  Volker Fischer
@@ -54,15 +54,15 @@ inline short Double2Short ( const double dInput )
 {
     // lower bound
     if ( dInput < _MINSHORT )
-	{
+    {
         return _MINSHORT;
-	}
+    }
 
     // upper bound
     if ( dInput > _MAXSHORT )
-	{
+    {
         return _MAXSHORT;
-	}
+    }
 
     return (short) dInput;
 }
@@ -187,9 +187,9 @@ template<class TData> void CVector<TData>::Reset ( const TData tResetVal )
 {
     // set all values to reset value
     for ( int i = 0; i < iVectorSize; i++ )
-	{
+    {
         pData[i] = tResetVal;
-	}
+    }
 }
 
 
@@ -234,9 +234,9 @@ template<class TData> void CFIFO<TData>::Add ( const TData tNewD )
     // increment index
     iCurIdx++;
     if ( iCurIdx >= this->iVectorSize )
-	{
+    {
         iCurIdx = 0;
-	}
+    }
 }
 
 

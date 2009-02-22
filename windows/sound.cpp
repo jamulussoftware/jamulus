@@ -681,7 +681,9 @@ void CSound::Close()
     bChangParamOut = true;
 }
 
-CSound::CSound ( const int iNewBufferSizeStereo )
+CSound::CSound ( const int iNewBufferSizeStereo,
+    void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
+    CSoundBase ( iNewBufferSizeStereo, fpNewCallback, arg )
 {
     // set internal buffer size value and calculate mono buffer size
     iBufferSizeStereo = iNewBufferSizeStereo;

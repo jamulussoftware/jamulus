@@ -18,9 +18,10 @@
 #include <sys/ioctl.h>
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <qthread.h>
 #include <string.h>
 #include "util.h"
+#include "soundbase.h"
 #include "global.h"
 
 #if WITH_SOUND
@@ -40,22 +41,25 @@
 #define MAX_SND_BUF_IN              200
 #define MAX_SND_BUF_OUT             200
 
+
 /* Classes ********************************************************************/
-class CSound
+class CSound : public CSoundBase
 {
 public:
-    CSound ( const int iNewBufferSizeStereo )
+    CSound ( const int iNewStereoBufferSize,
+        void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
 #if WITH_SOUND
-    : rhandle ( NULL ), phandle ( NULL ), iCurPeriodSizeIn ( NUM_PERIOD_BLOCKS_IN ),
+    CSoundBase ( iNewStereoBufferSize, fpNewCallback, arg ), rhandle ( NULL ),
+    phandle ( NULL ), iCurPeriodSizeIn ( NUM_PERIOD_BLOCKS_IN ),
     iCurPeriodSizeOut ( NUM_PERIOD_BLOCKS_OUT ), bChangParamIn ( true ),
     bChangParamOut ( true )
     {
         // set internal buffer size for read and write
-        iBufferSizeIn  = iNewBufferSizeStereo / NUM_IN_OUT_CHANNELS; // mono size
-        iBufferSizeOut = iNewBufferSizeStereo / NUM_IN_OUT_CHANNELS; // mono size
+        iBufferSizeIn  = iNewStereoBufferSize / NUM_IN_OUT_CHANNELS; // mono size
+        iBufferSizeOut = iNewStereoBufferSize / NUM_IN_OUT_CHANNELS; // mono size
     }
 #else
-    {}
+    CSoundBase ( iNewStereoBufferSize, fpNewCallback, arg ) {}
 #endif
     virtual ~CSound() { Close(); }
 
@@ -70,10 +74,11 @@ public:
     int     GetInNumBuf() { return iCurPeriodSizeIn; }
     void    SetOutNumBuf ( int iNewNum );
     int     GetOutNumBuf() { return iCurPeriodSizeOut; }
-    void    InitRecording ( const bool bNewBlocking = true );
-    void    InitPlayback ( const bool bNewBlocking = false );
-    bool    Read ( CVector<short>& psData );
-    bool    Write ( CVector<short>& psData );
+    virtual void InitRecording ( const bool bNewBlocking = true );
+    virtual void InitPlayback  ( const bool bNewBlocking = false );
+
+    virtual bool Read  ( CVector<short>& psData );
+    virtual bool Write ( CVector<short>& psData );
 
     void    Close();
     
@@ -96,13 +101,12 @@ protected:
     int     GetInNumBuf() { return 1; }
     void    SetOutNumBuf ( int iNewNum ) {}
     int     GetOutNumBuf() { return 1; }
-    void    InitRecording ( const bool bNewBlocking = true ) { printf ( "no sound!" ); }
-    void    InitPlayback ( const bool bNewBlocking = false ) { printf ( "no sound!" ); }
-    bool    Read ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
-    bool    Write ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
+    virtual void InitRecording ( const bool bNewBlocking = true )  { printf ( "no sound!" ); }
+    virtual void InitPlayback  ( const bool bNewBlocking = false ) { printf ( "no sound!" ); }
+    virtual bool Read  ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
+    virtual bool Write ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
     void    Close() {}
 #endif
 };
-
 
 #endif // !defined(_SOUND_H__9518A621345F78_3634567_8C0D_EEBF182CF549__INCLUDED_)

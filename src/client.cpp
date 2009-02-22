@@ -26,10 +26,10 @@
 
 
 /* Implementation *************************************************************/
-CClient::CClient ( const quint16 iPortNumber ) : bRun ( false ),
+CClient::CClient ( const quint16 iPortNumber ) :
     iSndCrdMonoBlockSizeSam ( MIN_SND_CRD_BLOCK_SIZE_SAMPLES ),
     iSndCrdStereoBlockSizeSam ( 2 * MIN_SND_CRD_BLOCK_SIZE_SAMPLES ),
-    Sound ( MIN_SND_CRD_BLOCK_SIZE_SAMPLES * 2 /* stereo */ ),
+    Sound ( MIN_SND_CRD_BLOCK_SIZE_SAMPLES * 2 /* stereo */, AudioCallback, this ),
     Socket ( &Channel, iPortNumber ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     iReverbLevel ( 0 ),
@@ -173,97 +173,36 @@ void CClient::OnProtocolStatus ( bool bOk )
 void CClient::Start()
 {
     // init object
-    try
-    {
-        Init();
-    }
-    catch ( CGenErr generr )
-    {
-        // TODO better error management -> should be catched in main thread
-        // problem: how to catch errors in a different thread...?
-
-        // quick hack solution
-        QMessageBox::critical ( 0, APP_NAME, generr.GetErrorText(), "Quit", 0 );
-        exit ( 0 );
-    }
+    Init();
 
     // enable channel
     Channel.SetEnable ( true );
 
-    // start the audio working thread with hightest possible priority
-    start ( QThread::TimeCriticalPriority );
+    // start audio interface
+    Sound.Start();
 }
 
 void CClient::Stop()
 {
-    // set flag so that thread can leave the main loop
-    bRun = false;
-
-    // give thread some time to terminate
-    wait ( 5000 );
-
     // disable channel
     Channel.SetEnable ( false );
 
-    // disable sound interface
-    Sound.Close();
+    // stop audio interface
+    Sound.Stop();
 
     // reset current signal level and LEDs
     SignalLevelMeter.Reset();
     PostWinMessage ( MS_RESET_ALL, 0 );
 }
 
-void CClient::run()
+void CClient::AudioCallback ( CVector<short>& psData, void* arg )
 {
-    // Set thread priority (The working thread should have a higher
-    // priority than the GUI)
-#ifdef _WIN32
-    SetThreadPriority ( GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL );
-#else
-/*
-    // set the process to realtime privs, taken from
-    // "http://www.gardena.net/benno/linux/audio" but does not seem to work,
-    // maybe a problem with user rights
-    struct sched_param schp;
-    memset ( &schp, 0, sizeof ( schp ) );
-    schp.sched_priority = sched_get_priority_max ( SCHED_FIFO );
-    sched_setscheduler ( 0, SCHED_FIFO, &schp );
-*/
-#endif
+    // get the pointer to the object
+    CClient* pMyClientObj = reinterpret_cast<CClient*> ( arg ); 
 
-    // main loop of working thread
-    bRun = true;
-    while ( bRun )
-    {
-        // get audio from sound card (blocking function)
-        if ( Sound.Read ( vecsAudioSndCrdStereo ) )
-        {
-            PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_RED );
-        }
-        else
-        {
-            PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_GREEN );
-        }
-
-        // process audio data
-        ProcessAudioData ( vecsAudioSndCrdStereo );
-
-        // play the new block
-        if ( Sound.Write ( vecsAudioSndCrdStereo ) )
-        {
-            PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_RED );
-        }
-        else
-        {
-            PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_GREEN );
-        }
-    }
+    // process audio data
+    pMyClientObj->ProcessAudioData ( psData );
 }
-
-
-
-
-
 
 void CClient::Init()
 {
@@ -277,8 +216,7 @@ void CClient::Init()
 
     vecdAudioStereo.Init ( iStereoBlockSizeSam );
 
-    Sound.InitRecording();
-    Sound.InitPlayback();
+    Sound.Init();
 
     // resample objects are always initialized with the input block size
     // record

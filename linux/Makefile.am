@@ -18,6 +18,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/protocol.cpp \
 	../src/multicolorled.cpp \
 	../src/audiomixerboard.cpp \
+	../src/soundbase.cpp \
 	sound.cpp \
 	../src/buffer.h \
 	../src/global.h \
@@ -33,6 +34,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/protocol.h \
 	../src/multicolorled.h \
 	../src/audiomixerboard.h \
+	../src/soundbase.h \
 	../src/llconserverdlg.h \
 	../src/chatdlg.h \
 	../src/llconclientdlg.h \

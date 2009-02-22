@@ -25,7 +25,7 @@
 #if !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ )
 #define CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_
 
-#include <qthread.h>
+#include <qglobal.h>
 #include <qhostaddress.h>
 #include <qhostinfo.h>
 #include <qstring.h>
@@ -58,7 +58,7 @@
 
 
 /* Classes ********************************************************************/
-class CClient : public QThread
+class CClient : public QObject
 {
     Q_OBJECT
 
@@ -68,7 +68,7 @@ public:
 
     void   Start();
     void   Stop();
-    bool   IsRunning() { return bRun; }
+    bool   IsRunning() { return Sound.IsRunning(); }
     bool   SetServerAddr ( QString strNAddr );
     double MicLevelL() { return SignalLevelMeter.MicLevelLeft(); }
     double MicLevelR() { return SignalLevelMeter.MicLevelRight(); }
@@ -149,8 +149,10 @@ public:
     QString                 strName;
 
 protected:
+    // callback function must be static, otherwise it does not work
+    static void  AudioCallback ( CVector<short>& psData, void* arg );
+
     void         Init();
-    virtual void run();
     void         ProcessAudioData ( CVector<short>& vecsStereoSndCrd );
     void         UpdateTimeResponseMeasurement();
     void         UpdateSocketBufferSize();
@@ -163,7 +165,6 @@ protected:
     CSound                  Sound;
     CStereoSignalLevelMeter SignalLevelMeter;
 
-    bool                    bRun;
     CVector<double>         vecdNetwData;
 
     int                     iAudioInFader;

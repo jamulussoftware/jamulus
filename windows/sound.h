@@ -31,6 +31,7 @@
 #include <qmessagebox.h>
 #include "../src/util.h"
 #include "../src/global.h"
+#include "../src/soundbase.h"
 
 // copy the ASIO SDK in the llcon/windows directory: "llcon/windows/ASIOSDK2" to
 // get it work
@@ -51,24 +52,25 @@
 
 
 /* Classes ********************************************************************/
-class CSound
+class CSound : public CSoundBase
 {
 public:
-    CSound ( const int iNewBufferSizeStereo );
+    CSound ( const int iNewBufferSizeStereo,
+        void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg );
     virtual ~CSound();
 
-    void        InitRecording ( const bool bNewBlocking = true )
-                {
-                    bBlockingRec = bNewBlocking;
-                    InitRecordingAndPlayback();
-                }
-    void        InitPlayback ( const bool bNewBlocking = false )
-                {
-                    bBlockingPlay = bNewBlocking; 
-                    InitRecordingAndPlayback();
-                }
-    bool        Read ( CVector<short>& psData );
-    bool        Write ( CVector<short>& psData );
+    virtual void InitRecording ( const bool bNewBlocking = true )
+                 {
+                     bBlockingRec = bNewBlocking;
+                     InitRecordingAndPlayback();
+                 }
+    virtual void InitPlayback ( const bool bNewBlocking = false )
+                 {
+                     bBlockingPlay = bNewBlocking; 
+                     InitRecordingAndPlayback();
+                 }
+    virtual bool Read ( CVector<short>& psData );
+    virtual bool Write ( CVector<short>& psData );
 
     int         GetNumDev() { return lNumDevs; }
     std::string GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }

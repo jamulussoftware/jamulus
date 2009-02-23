@@ -26,20 +26,22 @@
 
 
 /* Implementation *************************************************************/
-void CSoundBase::Init()
-{
-    InitRecording();
-    InitPlayback();
-}
-
 void CSoundBase::Start()
 {
+
+// TODO start audio interface
+
     // start the audio thread
     start();
 }
 
 void CSoundBase::Stop()
 {
+
+// TODO stop audio interface (previously done in Close function which is
+// now unused!!!!!!!!!!!
+
+
     // set flag so that thread can leave the main loop
     bRun = false;
 

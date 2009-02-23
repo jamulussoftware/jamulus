@@ -59,17 +59,8 @@ public:
         void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg );
     virtual ~CSound();
 
-    virtual void InitRecording ( const bool bNewBlocking = true )
-                 {
-                     bBlockingRec = bNewBlocking;
-                     InitRecordingAndPlayback();
-                 }
-    virtual void InitPlayback ( const bool bNewBlocking = false )
-                 {
-                     bBlockingPlay = bNewBlocking; 
-                     InitRecordingAndPlayback();
-                 }
-    virtual bool Read ( CVector<short>& psData );
+    virtual void Init();
+    virtual bool Read  ( CVector<short>& psData );
     virtual bool Write ( CVector<short>& psData );
 
     int         GetNumDev() { return lNumDevs; }
@@ -89,7 +80,6 @@ protected:
     bool        LoadAndInitializeFirstValidDriver();
     std::string LoadAndInitializeDriver ( int iIdx );
     std::string PrepareDriver();
-    void        InitRecordingAndPlayback();
 
     // audio hardware buffer info
     struct sHWBufferInfo
@@ -112,9 +102,6 @@ protected:
 
     bool             bChangParamIn;
     bool             bChangParamOut;
-
-    bool             bBlockingRec;
-    bool             bBlockingPlay;
 };
 
 #endif // !defined ( AFX_SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_ )

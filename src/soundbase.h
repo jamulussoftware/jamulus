@@ -40,7 +40,7 @@ public:
         fpCallback ( fpNewCallback ), pCallbackArg ( arg ), bRun ( false ) {}
     virtual ~CSoundBase() {}
 
-    virtual void Init();
+    virtual void Init() = 0;
     virtual void Start();
     virtual void Stop();
     bool         IsRunning() const { return bRun; }
@@ -54,8 +54,6 @@ protected:
     // non callback based audio interfaces
     virtual bool Read  ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
     virtual bool Write ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
-    virtual void InitRecording ( const bool bNewBlocking = true ) = 0;
-    virtual void InitPlayback  ( const bool bNewBlocking = false ) = 0;
 
     void run();
     bool bRun;

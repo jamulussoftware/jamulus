@@ -74,15 +74,17 @@ public:
     int     GetInNumBuf() { return iCurPeriodSizeIn; }
     void    SetOutNumBuf ( int iNewNum );
     int     GetOutNumBuf() { return iCurPeriodSizeOut; }
-    virtual void InitRecording ( const bool bNewBlocking = true );
-    virtual void InitPlayback  ( const bool bNewBlocking = false );
 
+    virtual void Init() { InitRecording(); InitPlayback(); }
     virtual bool Read  ( CVector<short>& psData );
     virtual bool Write ( CVector<short>& psData );
 
     void    Close();
     
 protected:
+    void InitRecording();
+    void InitPlayback();
+
     snd_pcm_t* rhandle;
     snd_pcm_t* phandle;
 
@@ -101,8 +103,7 @@ protected:
     int     GetInNumBuf() { return 1; }
     void    SetOutNumBuf ( int iNewNum ) {}
     int     GetOutNumBuf() { return 1; }
-    virtual void InitRecording ( const bool bNewBlocking = true )  { printf ( "no sound!" ); }
-    virtual void InitPlayback  ( const bool bNewBlocking = false ) { printf ( "no sound!" ); }
+    virtual void Init() { printf ( "no sound!" ); }
     virtual bool Read  ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
     virtual bool Write ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
     void    Close() {}

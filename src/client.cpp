@@ -184,11 +184,11 @@ void CClient::Start()
 
 void CClient::Stop()
 {
-    // disable channel
-    Channel.SetEnable ( false );
-
     // stop audio interface
     Sound.Stop();
+
+    // disable channel
+    Channel.SetEnable ( false );
 
     // reset current signal level and LEDs
     SignalLevelMeter.Reset();

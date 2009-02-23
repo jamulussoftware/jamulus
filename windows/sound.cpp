@@ -89,7 +89,7 @@ bool CSound::Read ( CVector<short>& psData )
     if ( bChangParamIn )
     {
         // reinit sound interface
-        InitRecordingAndPlayback();
+        Init();
 
         // reset flag
         bChangParamIn = false;
@@ -99,32 +99,25 @@ bool CSound::Read ( CVector<short>& psData )
     int iWaitCount = 0;
     while ( iBufferPosCapture < iBufferSizeStereo )
     {
-        if ( bBlockingRec )
+        if ( !bCaptureBufferOverrun )
         {
-            if ( !bCaptureBufferOverrun )
-            {
-                // regular case
-                WaitForSingleObject ( m_ASIOEvent, INFINITE );
-            }
-            else
-            {
-                // it seems that the buffers are too small, wait
-                // just one time to avoid CPU to go up to 100% and
-                // then leave this function
-                if ( iWaitCount == 0 )
-                {
-                    WaitForSingleObject ( m_ASIOEvent, INFINITE );
-                    iWaitCount++;
-                }
-                else
-                {
-                    return true;
-                }
-            }
+            // regular case
+            WaitForSingleObject ( m_ASIOEvent, INFINITE );
         }
         else
         {
-            return true;
+            // it seems that the buffers are too small, wait
+            // just one time to avoid CPU to go up to 100% and
+            // then leave this function
+            if ( iWaitCount == 0 )
+            {
+                WaitForSingleObject ( m_ASIOEvent, INFINITE );
+                iWaitCount++;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 
@@ -188,7 +181,7 @@ bool CSound::Write ( CVector<short>& psData )
     if ( bChangParamOut )
     {
         // reinit sound interface
-        InitRecordingAndPlayback();
+        Init();
 
         // reset flag
         bChangParamOut = false;
@@ -291,11 +284,11 @@ void CSound::SetDev ( const int iNewDev )
             // loading and initializing the new driver failed, go back to original
             // driver and display error message
             LoadAndInitializeDriver ( lCurDev );
-            InitRecordingAndPlayback();
+            Init();
 
             throw CGenErr ( strErrorMessage.c_str() );
         }
-        InitRecordingAndPlayback();
+        Init();
     }
     else
     {
@@ -614,7 +607,7 @@ if ( iASIOBufferSizeMono == 256 )
     return "";
 }
 
-void CSound::InitRecordingAndPlayback()
+void CSound::Init()
 {
     // first, stop audio and dispose ASIO buffers
     ASIOStop();

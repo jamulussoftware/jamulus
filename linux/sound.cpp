@@ -13,7 +13,7 @@
 
 #ifdef WITH_SOUND
 // Wave in *********************************************************************
-void CSound::InitRecording ( const bool bNewBlocking )
+void CSound::InitRecording()
 {
     int err;
 
@@ -59,7 +59,7 @@ bool CSound::Read ( CVector<short>& psData )
     // check if device must be opened or reinitialized
     if ( bChangParamIn == true )
     {
-        InitRecording ( iBufferSizeIn * NUM_IN_OUT_CHANNELS );
+        InitRecording();
 
         // reset flag
         bChangParamIn = false;
@@ -144,7 +144,7 @@ void CSound::SetInNumBuf ( int iNewNum )
 
 
 // Wave out ********************************************************************
-void CSound::InitPlayback ( const bool bNewBlocking )
+void CSound::InitPlayback()
 {
     int err;
 
@@ -185,7 +185,7 @@ bool CSound::Write ( CVector<short>& psData )
     // check if device must be opened or reinitialized
     if ( bChangParamOut == true )
     {
-        InitPlayback ( iBufferSizeOut * NUM_IN_OUT_CHANNELS );
+        InitPlayback();
 
         // reset flag
         bChangParamOut = false;

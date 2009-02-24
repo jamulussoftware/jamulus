@@ -104,6 +104,27 @@ MESSAGES
     | 4 bytes transmit time in ms |
     +-----------------------------+
 
+- Properties for network transport:           PROTMESSID_NETW_TRANSPORT_PROPS
+
+    +-------------------+------------------+-----------------+------------------+-----------------------+----------------------+
+    | 4 bytes netw size | 4 bytes aud size | 1 byte num chan | 4 bytes sam rate | 2 bytes audiocod type | 4 bytes audiocod arg | 
+    +-------------------+------------------+-----------------+------------------+-----------------------+----------------------+
+
+    - "netw size":     length of the network packet in bytes
+    - "aud size":      length of the mono audio block size in samples
+    - "num chan":      number of channels of the audio signal, e.g. "2" is stereo
+    - "sam rate":      sample rate of the audio stream
+    - "audiocod type": audio coding type, the following types are supported:
+                        - 0: none, no audio coding applied
+                        - 1: IMA-ADPCM
+                        - 2: MS-ADPCM
+    - "audiocod arg":  argument for the audio coder, if not used this value shall be set to 0
+
+- Request properties for network transport:   PROTMESSID_REQ_NETW_TRANSPORT_PROPS
+
+    note: does not have any data -> n = 0
+
+
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -368,6 +389,16 @@ for ( int i = 0; i < iNumBytes; i++ ) {
                 case PROTMESSID_PING_MS:
 
                     bRet = EvaluatePingMes ( vecData );
+                    break;
+
+                case PROTMESSID_NETW_TRANSPORT_PROPS:
+
+                    bRet = EvaluateNetwTranspPropsMes ( vecData );
+                    break;
+
+                case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
+
+                    bRet = EvaluateReqNetwTranspPropsMes ( vecData );
                     break;
                 }
 
@@ -691,7 +722,7 @@ void CProtocol::CreateChatTextMes ( const QString strChatText )
     unsigned int  iPos = 0; // init position pointer
     const int     iStrLen = strChatText.size(); // get string size
 
-    // size of current list entry
+    // size of message body
     const int iEntrLen = 2 /* string size */ + iStrLen;
 
     // build data vector
@@ -770,6 +801,109 @@ bool CProtocol::EvaluatePingMes ( const CVector<uint8_t>& vecData )
     }
 
     emit PingReceived ( static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) ) );
+
+    return false; // no error
+}
+
+void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps )
+{
+    unsigned int  iPos = 0; // init position pointer
+
+    // size of current message body
+    const int iEntrLen = 4 /* netw size */ + 4 /* aud size */ + 1 /* num chan */ +
+        4 /* sam rate */ + 2 /* audiocod type */ + 4 /* audiocod arg */;
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // length of the network packet in bytes (4 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( NetTrProps.iNetworkPacketSize ), 4 );
+
+    // length of the mono audio block size in samples (4 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( NetTrProps.iMonoAudioBlockSize ), 4 );
+
+    // number of channels of the audio signal, e.g. "2" is stereo (1 byte)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( NetTrProps.iNumAudioChannels ), 1 );
+
+    // sample rate of the audio stream (4 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( NetTrProps.iSampleRate ), 4 );
+
+    // audio coding type (2 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( NetTrProps.eAudioCodingType ), 2 );
+
+    // argument for the audio coder (4 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( NetTrProps.iAudioCodingArg ), 4 );
+
+    CreateAndSendMessage ( PROTMESSID_NETW_TRANSPORT_PROPS, vecData );
+}
+
+bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
+{
+    unsigned int           iPos = 0; // init position pointer
+    CNetworkTransportProps ReceivedNetwTranspProps;
+
+    // size of current message body
+    const int iEntrLen = 4 /* netw size */ + 4 /* aud size */ + 1 /* num chan */ +
+        4 /* sam rate */ + 2 /* audiocod type */ + 4 /* audiocod arg */;
+
+    // check size
+    if ( vecData.Size() != iEntrLen )
+    {
+        return true;
+    }
+
+    // length of the network packet in bytes (4 bytes)
+    ReceivedNetwTranspProps.iNetworkPacketSize =
+        static_cast<unsigned int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+    // length of the mono audio block size in samples (4 bytes)
+    ReceivedNetwTranspProps.iMonoAudioBlockSize =
+        static_cast<unsigned int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+    // number of channels of the audio signal, e.g. "2" is stereo (1 byte)
+    ReceivedNetwTranspProps.iNumAudioChannels =
+        static_cast<unsigned int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // sample rate of the audio stream (4 bytes)
+    ReceivedNetwTranspProps.iSampleRate =
+        static_cast<unsigned int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+    // audio coding type (2 bytes) with error check
+    const int iRecCodingType =
+        static_cast<unsigned short> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+    if ( ( iRecCodingType != CNetworkTransportProps::ACT_NONE ) &&
+         ( iRecCodingType != CNetworkTransportProps::ACT_IMA_ADPCM ) &&
+         ( iRecCodingType != CNetworkTransportProps::ACT_MS_ADPCM ) )
+    {
+        return true;
+    }
+
+    // argument for the audio coder (4 bytes)
+    ReceivedNetwTranspProps.iAudioCodingArg =
+        static_cast<unsigned int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+    // invoke message action
+    emit NetTranspPropsReceived ( ReceivedNetwTranspProps );
+
+    return false; // no error
+}
+
+void CProtocol::CreateReqNetwTranspPropsMes()
+{
+    CreateAndSendMessage ( PROTMESSID_REQ_NETW_TRANSPORT_PROPS, CVector<uint8_t> ( 0 ) );
+}
+
+bool CProtocol::EvaluateReqNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
+{
+    // invoke message action
+    emit ReqNetTranspProps();
 
     return false; // no error
 }

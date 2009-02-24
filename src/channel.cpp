@@ -858,9 +858,6 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                 // set status flags
                 eRet              = PS_PROT_OK;
                 bIsProtocolPacket = true;
-
-                // create message for protocol status
-                emit ProtocolStatus ( true );
             }
         }
 
@@ -941,9 +938,6 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                 // the protocol parsing failed and this was no audio block,
                 // we treat this as protocol error (unkown packet)
                 eRet = PS_PROT_ERR;
-
-                // create message for protocol status
-                emit ProtocolStatus ( false );
             }
         }
 

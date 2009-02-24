@@ -93,6 +93,8 @@
 // if you want to change this paramter, there has to be done code modifications
 // on other places, too! The code tag "MAX_NUM_CHANNELS_TAG" shows these places
 // (just search for the tag in the entire code)
+// note: since in the protocol messages the channel ID is only a byte, a
+// maximum of 8 channels are possible, see e.g. "PROTMESSID_CHANNEL_GAIN"!
 #define MAX_NUM_CHANNELS                6 // max number channels for server
 
 // length of the moving average buffer for response time measurement
@@ -130,9 +132,8 @@ typedef unsigned int                    _MESSAGE_IDENT;
 #define MS_JIT_BUF_PUT                  3
 #define MS_JIT_BUF_GET                  4
 #define MS_PACKET_RECEIVED              5
-#define MS_PROTOCOL                     6
-#define MS_ERROR_IN_THREAD              7
-#define MS_SET_JIT_BUF_SIZE             8
+#define MS_ERROR_IN_THREAD              6
+#define MS_SET_JIT_BUF_SIZE             7
 
 #define MUL_COL_LED_RED                 0
 #define MUL_COL_LED_YELLOW              1

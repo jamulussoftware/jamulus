@@ -47,9 +47,6 @@ CClient::CClient ( const quint16 iPortNumber ) :
     QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
         this, SLOT ( OnReqJittBufSize() ) );
 
-    QObject::connect ( &Channel, SIGNAL ( ProtocolStatus ( bool ) ),
-        this, SLOT ( OnProtocolStatus ( bool ) ) );
-
     QObject::connect ( &Channel,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
@@ -155,19 +152,6 @@ bool CClient::SetServerAddr ( QString strNAddr )
     Channel.SetAddress ( CHostAddress ( InetAddr, iNetPort ) );
 
     return true;
-}
-
-void CClient::OnProtocolStatus ( bool bOk )
-{
-    // show protocol status in GUI
-    if ( bOk )
-    {
-        PostWinMessage ( MS_PROTOCOL, MUL_COL_LED_RED );
-    }
-    else
-    {
-        PostWinMessage ( MS_PROTOCOL, MUL_COL_LED_GREEN );
-    }
 }
 
 void CClient::Start()

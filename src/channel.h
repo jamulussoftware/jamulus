@@ -208,7 +208,6 @@ signals:
     void ReqJittBufSize();
     void ReqConnClientsList();
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
-    void ProtocolStatus ( bool bOk );
     void NameHasChanged();
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );

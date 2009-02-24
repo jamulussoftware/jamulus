@@ -201,7 +201,6 @@ protected:
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnReqJittBufSize();
-    void OnProtocolStatus ( bool bOk );
     void OnNewConnection();
     void OnReceivePingMessage ( int iMs );
 

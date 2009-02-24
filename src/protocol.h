@@ -36,19 +36,21 @@
 
 /* Definitions ****************************************************************/
 // protocol message IDs
-#define PROTMESSID_ILLEGAL                   0 // illegal ID
-#define PROTMESSID_ACKN                      1 // acknowledge
-#define PROTMESSID_JITT_BUF_SIZE            10 // jitter buffer size
-#define PROTMESSID_REQ_JITT_BUF_SIZE        11 // request jitter buffer size
-#define PROTMESSID_PING                     12 // OLD, not used anymore
-#define PROTMESSID_NET_BLSI_FACTOR          13 // network buffer size factor
-#define PROTMESSID_CHANNEL_GAIN             14 // set channel gain for mix
-#define PROTMESSID_CONN_CLIENTS_LIST        15 // connected client list
-#define PROTMESSID_SERVER_FULL              16 // server full message
-#define PROTMESSID_REQ_CONN_CLIENTS_LIST    17 // request connected client list
-#define PROTMESSID_CHANNEL_NAME             18 // set channel name for fader tag
-#define PROTMESSID_CHAT_TEXT                19 // contains a chat text
-#define PROTMESSID_PING_MS                  20 // for measuring ping time
+#define PROTMESSID_ILLEGAL                     0 // illegal ID
+#define PROTMESSID_ACKN                        1 // acknowledge
+#define PROTMESSID_JITT_BUF_SIZE              10 // jitter buffer size
+#define PROTMESSID_REQ_JITT_BUF_SIZE          11 // request jitter buffer size
+#define PROTMESSID_PING                       12 // OLD, not used anymore
+#define PROTMESSID_NET_BLSI_FACTOR            13 // network buffer size factor
+#define PROTMESSID_CHANNEL_GAIN               14 // set channel gain for mix
+#define PROTMESSID_CONN_CLIENTS_LIST          15 // connected client list
+#define PROTMESSID_SERVER_FULL                16 // server full message
+#define PROTMESSID_REQ_CONN_CLIENTS_LIST      17 // request connected client list
+#define PROTMESSID_CHANNEL_NAME               18 // set channel name for fader tag
+#define PROTMESSID_CHAT_TEXT                  19 // contains a chat text
+#define PROTMESSID_PING_MS                    20 // for measuring ping time
+#define PROTMESSID_NETW_TRANSPORT_PROPS       21 // properties for network transport
+#define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   22 // request properties for network transport
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -68,15 +70,16 @@ public:
 
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
-    void CreateReqConnClientsList();
-    void CreateServerFullMes();
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
     void CreateChanGainMes ( const int iChanID, const double dGain );
+    void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
+    void CreateServerFullMes();
+    void CreateReqConnClientsList();
     void CreateChanNameMes ( const QString strName );
     void CreateChatTextMes ( const QString strChatText );
     void CreatePingMes ( const int iMs );
-
-    void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
+    void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
+    void CreateReqNetwTranspPropsMes();
 
     void CreateAndSendAcknMess ( const int& iID, const int& iCnt );
 
@@ -136,16 +139,18 @@ protected:
 
     void CreateAndSendMessage ( const int iID, const CVector<uint8_t>& vecData );
 
-    bool EvaluateJitBufMes          ( const CVector<uint8_t>& vecData );
-    bool EvaluateReqJitBufMes       ( const CVector<uint8_t>& vecData );
-    bool EvaluateReqConnClientsList ( const CVector<uint8_t>& vecData );
-    bool EvaluateServerFullMes      ( const CVector<uint8_t>& vecData );
-    bool EvaluateNetwBlSiFactMes    ( const CVector<uint8_t>& vecData );
-    bool EvaluateChanGainMes        ( const CVector<uint8_t>& vecData );
-    bool EvaluateChanNameMes        ( const CVector<uint8_t>& vecData );
-    bool EvaluateChatTextMes        ( const CVector<uint8_t>& vecData );
-    bool EvaluateConClientListMes   ( const CVector<uint8_t>& vecData );
-    bool EvaluatePingMes            ( const CVector<uint8_t>& vecData );
+    bool EvaluateJitBufMes             ( const CVector<uint8_t>& vecData );
+    bool EvaluateReqJitBufMes          ( const CVector<uint8_t>& vecData );
+    bool EvaluateNetwBlSiFactMes       ( const CVector<uint8_t>& vecData );
+    bool EvaluateChanGainMes           ( const CVector<uint8_t>& vecData );
+    bool EvaluateConClientListMes      ( const CVector<uint8_t>& vecData );
+    bool EvaluateServerFullMes         ( const CVector<uint8_t>& vecData );
+    bool EvaluateReqConnClientsList    ( const CVector<uint8_t>& vecData );
+    bool EvaluateChanNameMes           ( const CVector<uint8_t>& vecData );
+    bool EvaluateChatTextMes           ( const CVector<uint8_t>& vecData );
+    bool EvaluatePingMes               ( const CVector<uint8_t>& vecData );
+    bool EvaluateNetwTranspPropsMes    ( const CVector<uint8_t>& vecData );
+    bool EvaluateReqNetwTranspPropsMes ( const CVector<uint8_t>& vecData );
 
     int                     iOldRecID, iOldRecCnt;
 
@@ -165,15 +170,17 @@ signals:
 
     // receiving
     void ChangeJittBufSize ( int iNewJitBufSize );
+    void ReqJittBufSize();
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ChangeChanGain ( int iChanID, double dNewGain );
+    void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
+    void ServerFull();
+    void ReqConnClientsList();
     void ChangeChanName ( QString strName );
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );
-    void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
-    void ReqJittBufSize();
-    void ReqConnClientsList();
-    void ServerFull();
+    void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
+    void ReqNetTranspProps();
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

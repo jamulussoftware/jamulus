@@ -78,9 +78,8 @@ public:
     virtual void Init() { InitRecording(); InitPlayback(); }
     virtual bool Read  ( CVector<short>& psData );
     virtual bool Write ( CVector<short>& psData );
+    virtual void Close();
 
-    void    Close();
-    
 protected:
     void InitRecording();
     void InitPlayback();
@@ -106,7 +105,7 @@ protected:
     virtual void Init() { printf ( "no sound!" ); }
     virtual bool Read  ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
     virtual bool Write ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
-    void    Close() {}
+    virtual void Close() {}
 #endif
 };
 

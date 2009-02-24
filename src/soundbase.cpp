@@ -37,16 +37,16 @@ void CSoundBase::Start()
 
 void CSoundBase::Stop()
 {
-
-// TODO stop audio interface (previously done in Close function which is
-// now unused!!!!!!!!!!!
-
-
     // set flag so that thread can leave the main loop
     bRun = false;
 
     // give thread some time to terminate
     wait ( 5000 );
+
+
+// TODO stop audio interface (previously done in Close function, we
+// better should implement a stop function in derived sound classes
+    Close();
 }
 
 void CSoundBase::run()

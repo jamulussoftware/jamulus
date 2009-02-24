@@ -62,6 +62,7 @@ public:
     virtual void Init();
     virtual bool Read  ( CVector<short>& psData );
     virtual bool Write ( CVector<short>& psData );
+    virtual void Close();
 
     int         GetNumDev() { return lNumDevs; }
     std::string GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }
@@ -73,8 +74,6 @@ public:
     int         GetOutNumBuf();
     void        SetInNumBuf ( const int iNewNum );
     int         GetInNumBuf();
-
-    void        Close();
 
 protected:
     bool        LoadAndInitializeFirstValidDriver();

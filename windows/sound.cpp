@@ -89,7 +89,7 @@ bool CSound::Read ( CVector<short>& psData )
     if ( bChangParamIn )
     {
         // reinit sound interface
-        Init();
+        Init ( iBufferSizeStereo );
 
         // reset flag
         bChangParamIn = false;
@@ -181,7 +181,7 @@ bool CSound::Write ( CVector<short>& psData )
     if ( bChangParamOut )
     {
         // reinit sound interface
-        Init();
+        Init ( iBufferSizeStereo );
 
         // reset flag
         bChangParamOut = false;
@@ -284,11 +284,11 @@ void CSound::SetDev ( const int iNewDev )
             // loading and initializing the new driver failed, go back to original
             // driver and display error message
             LoadAndInitializeDriver ( lCurDev );
-            Init();
+            Init ( iBufferSizeStereo );
 
             throw CGenErr ( strErrorMessage.c_str() );
         }
-        Init();
+        Init ( iBufferSizeStereo );
     }
     else
     {
@@ -607,13 +607,20 @@ if ( iASIOBufferSizeMono == 256 )
     return "";
 }
 
-void CSound::Init()
+void CSound::Init ( const int iNewStereoBufferSize )
 {
     // first, stop audio and dispose ASIO buffers
     ASIOStop();
 
     ASIOMutex.lock(); // get mutex lock
     {
+        // init base clasee
+        CSoundBase::Init ( iNewStereoBufferSize );
+
+        // set internal buffer size value and calculate mono buffer size
+        iBufferSizeStereo = iNewStereoBufferSize;
+        iBufferSizeMono   = iBufferSizeStereo / 2;
+
         // store new buffer number values
         iCurNumSndBufIn  = iNewNumSndBufIn;
         iCurNumSndBufOut = iNewNumSndBufOut;
@@ -674,14 +681,9 @@ void CSound::Close()
     bChangParamOut = true;
 }
 
-CSound::CSound ( const int iNewBufferSizeStereo,
-    void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
-    CSoundBase ( iNewBufferSizeStereo, fpNewCallback, arg )
+CSound::CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
+    CSoundBase ( fpNewCallback, arg )
 {
-    // set internal buffer size value and calculate mono buffer size
-    iBufferSizeStereo = iNewBufferSizeStereo;
-    iBufferSizeMono   = iBufferSizeStereo / 2;
-
     // init number of sound buffers
     iNewNumSndBufIn  = NUM_SOUND_BUFFERS_IN;
     iCurNumSndBufIn  = NUM_SOUND_BUFFERS_IN;

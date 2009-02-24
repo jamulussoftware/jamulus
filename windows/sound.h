@@ -55,11 +55,10 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( const int iNewBufferSizeStereo,
-        void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg );
+    CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg );
     virtual ~CSound();
 
-    virtual void Init();
+    virtual void Init ( const int iNewStereoBufferSize );
     virtual bool Read  ( CVector<short>& psData );
     virtual bool Write ( CVector<short>& psData );
     virtual void Close();

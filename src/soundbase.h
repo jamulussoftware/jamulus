@@ -34,13 +34,12 @@
 class CSoundBase : public QThread
 {
 public:
-    CSoundBase ( const int iNewStereoBufferSize,
-        void (*fpNewCallback) ( CVector<short>& psData, void* arg ),
-        void* arg ) : iStereoBufferSize ( iNewStereoBufferSize ),
-        fpCallback ( fpNewCallback ), pCallbackArg ( arg ), bRun ( false ) {}
+    CSoundBase ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ),
+        void* arg ) : fpCallback ( fpNewCallback ), pCallbackArg ( arg ),
+        bRun ( false ) {}
     virtual ~CSoundBase() {}
 
-    virtual void Init() = 0;
+    virtual void Init ( const int iNewStereoBufferSize );
     virtual void Start();
     virtual void Stop();
     bool         IsRunning() const { return bRun; }
@@ -59,7 +58,7 @@ protected:
     void run();
     bool bRun;
 
-    int iStereoBufferSize;
+    CVector<short> vecsAudioSndCrdStereo;
 };
 
 #endif /* !defined ( SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_ ) */

@@ -46,20 +46,14 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( const int iNewStereoBufferSize,
-        void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
+    CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
 #if WITH_SOUND
-    CSoundBase ( iNewStereoBufferSize, fpNewCallback, arg ), rhandle ( NULL ),
+    CSoundBase ( fpNewCallback, arg ), rhandle ( NULL ),
     phandle ( NULL ), iCurPeriodSizeIn ( NUM_PERIOD_BLOCKS_IN ),
     iCurPeriodSizeOut ( NUM_PERIOD_BLOCKS_OUT ), bChangParamIn ( true ),
-    bChangParamOut ( true )
-    {
-        // set internal buffer size for read and write
-        iBufferSizeIn  = iNewStereoBufferSize / NUM_IN_OUT_CHANNELS; // mono size
-        iBufferSizeOut = iNewStereoBufferSize / NUM_IN_OUT_CHANNELS; // mono size
-    }
+    bChangParamOut ( true ) {}
 #else
-    CSoundBase ( iNewStereoBufferSize, fpNewCallback, arg ) {}
+    CSoundBase ( fpNewCallback, arg ) {}
 #endif
     virtual ~CSound() { Close(); }
 
@@ -75,7 +69,18 @@ public:
     void    SetOutNumBuf ( int iNewNum );
     int     GetOutNumBuf() { return iCurPeriodSizeOut; }
 
-    virtual void Init() { InitRecording(); InitPlayback(); }
+    virtual void Init ( const int iNewStereoBufferSize )
+    {
+        // init base class
+        CSoundBase::Init ( iNewStereoBufferSize );
+
+        // set internal buffer size for read and write
+        iBufferSizeIn  = iNewStereoBufferSize / NUM_IN_OUT_CHANNELS; // mono size
+        iBufferSizeOut = iNewStereoBufferSize / NUM_IN_OUT_CHANNELS; // mono size
+
+        InitRecording();
+        InitPlayback();
+    }
     virtual bool Read  ( CVector<short>& psData );
     virtual bool Write ( CVector<short>& psData );
     virtual void Close();
@@ -102,7 +107,7 @@ protected:
     int     GetInNumBuf() { return 1; }
     void    SetOutNumBuf ( int iNewNum ) {}
     int     GetOutNumBuf() { return 1; }
-    virtual void Init() { printf ( "no sound!" ); }
+    virtual void Init ( const int iNewStereoBufferSize ) { CSoundBase::Init ( iNewStereoBufferSize ); }
     virtual bool Read  ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
     virtual bool Write ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
     virtual void Close() {}

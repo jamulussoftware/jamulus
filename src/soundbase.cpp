@@ -26,6 +26,12 @@
 
 
 /* Implementation *************************************************************/
+void CSoundBase::Init ( const int iNewStereoBufferSize )
+{
+    // init audio sound card buffer
+    vecsAudioSndCrdStereo.Init ( iNewStereoBufferSize );
+}
+
 void CSoundBase::Start()
 {
 
@@ -71,9 +77,6 @@ void CSoundBase::run()
     bRun = true;
     while ( bRun )
     {
-// TEST
-CVector<short> vecsAudioSndCrdStereo ( iStereoBufferSize );
-
         // get audio from sound card (blocking function)
         if ( Read ( vecsAudioSndCrdStereo ) )
         {

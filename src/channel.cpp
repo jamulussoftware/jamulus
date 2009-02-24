@@ -541,15 +541,29 @@ CChannel::CChannel() : sName ( "" ),
     // query all possible network in buffer sizes for determining if an
     // audio packet was received (the following code only works if all
     // possible network buffer sizes are different!)
+    // we add a special entry for network modes which are managed via the
+    // protocol -> "+ 1"
     const int iNumSupportedAudComprTypes = 3;
     vecNetwBufferInProps.Init ( iNumSupportedAudComprTypes *
-        MAX_NET_BLOCK_SIZE_FACTOR );
+        MAX_NET_BLOCK_SIZE_FACTOR + 1 );
+
+    // init special mode
+
+// TEST -> 64
+vecNetwBufferInProps[0].iBlockSizeFactor = 1;
+vecNetwBufferInProps[0].eAudComprType = CAudioCompression::CT_NONE;
+vecNetwBufferInProps[0].iNetwInBufSize = AudioCompressionIn.Init (
+            vecNetwBufferInProps[0].iBlockSizeFactor * 64,
+            vecNetwBufferInProps[0].eAudComprType );
+
+
 
     for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
     {
-        const int iNoneIdx = iNumSupportedAudComprTypes * i;
-        const int iIMAIdx  = iNumSupportedAudComprTypes * i + 1;
-        const int iMSIdx   = iNumSupportedAudComprTypes * i + 2;
+        // (consider the special mode -> "1 +")
+        const int iNoneIdx = 1 + iNumSupportedAudComprTypes * i;
+        const int iIMAIdx  = 1 + iNumSupportedAudComprTypes * i + 1;
+        const int iMSIdx   = 1 + iNumSupportedAudComprTypes * i + 2;
 
         // network block size factor must start from 1 -> i + 1
         const int iCurNetBlockSizeFact = i + 1;
@@ -648,7 +662,7 @@ void CChannel::SetForceLowUploadRate ( const bool bNFoLoUpRat )
     {
         // initialize with low upload rate parameters and set flag so that
         // these parameters are not changed anymore
-        SetNetwBufSizeFactOut ( LOW_UPL_SET_BLOCK_SIZE_FACTOR_OUT );
+        SetNetwBufSizeFactOut  ( LOW_UPL_SET_BLOCK_SIZE_FACTOR_OUT );
         SetAudioCompressionOut ( LOW_UPL_SET_AUDIO_COMPRESSION );
     }
 

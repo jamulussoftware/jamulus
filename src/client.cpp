@@ -27,9 +27,7 @@
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16 iPortNumber ) :
-    iSndCrdMonoBlockSizeSam ( MIN_SND_CRD_BLOCK_SIZE_SAMPLES ),
-    iSndCrdStereoBlockSizeSam ( 2 * MIN_SND_CRD_BLOCK_SIZE_SAMPLES ),
-    Sound ( MIN_SND_CRD_BLOCK_SIZE_SAMPLES * 2 /* stereo */, AudioCallback, this ),
+    Sound ( AudioCallback, this ),
     Socket ( &Channel, iPortNumber ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     iReverbLevel ( 0 ),
@@ -192,7 +190,10 @@ void CClient::Init()
 {
     // set block size (in samples)
     iMonoBlockSizeSam   = MIN_BLOCK_SIZE_SAMPLES;
-    iStereoBlockSizeSam = 2 * MIN_BLOCK_SIZE_SAMPLES;
+    iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
+
+    iSndCrdMonoBlockSizeSam   = MIN_BLOCK_DURATION_MS * SND_CRD_SAMPLE_RATE / 1000;
+    iSndCrdStereoBlockSizeSam = 2 * iSndCrdMonoBlockSizeSam;
 
     vecsAudioSndCrdStereo.Init ( iSndCrdStereoBlockSizeSam );
     vecdAudioSndCrdMono.Init   ( iSndCrdMonoBlockSizeSam );
@@ -200,7 +201,7 @@ void CClient::Init()
 
     vecdAudioStereo.Init ( iStereoBlockSizeSam );
 
-    Sound.Init();
+    Sound.Init ( iSndCrdStereoBlockSizeSam );
 
     // resample objects are always initialized with the input block size
     // record

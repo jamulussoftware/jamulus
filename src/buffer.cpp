@@ -92,6 +92,13 @@ fflush(pFileBI);
         bFadeInNewPutData = true;
 
         bPutOK = false; // return error flag
+
+        // check for special case: buffer memory is not sufficient
+        if ( iInSize > iMemSize )
+        {
+            // do nothing here, just return error code
+            return bPutOK;
+        }
     }
 
     // fade in new block if required
@@ -162,6 +169,13 @@ bool CNetBuf::Get ( CVector<double>& vecdData )
         bFadeOutExtrap    = true;
 
         bGetOK = false; // return error flag
+
+        // check for special case: buffer memory is not sufficient
+        if ( iInSize > iMemSize )
+        {
+            // do nothing here, just return error code
+            return bGetOK;
+        }
     }
 
     // copy data from internal buffer in output buffer

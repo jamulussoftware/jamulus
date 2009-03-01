@@ -127,7 +127,14 @@ public:
     int GetNetwBufSizeFactOut() { return Channel.GetNetwBufSizeFactOut(); }
 
     void SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
-        { Channel.SetAudioCompressionOut ( eNewAudComprTypeOut ); }
+    {
+        Channel.SetAudioCompressionOut ( eNewAudComprTypeOut );
+
+        // tell the server that audio coding has changed (it
+        // is important to call this function AFTER we have applied
+        // the new setting to the channel!)
+        Channel.CreateNetTranspPropsMessFromCurrentSettings();
+    }
     EAudComprType GetAudioCompressionOut() { return Channel.GetAudioCompressionOut(); }
 
     void SetRemoteChanGain ( const int iId, const double dGain )

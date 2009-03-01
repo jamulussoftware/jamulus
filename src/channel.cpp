@@ -569,16 +569,10 @@ CChannel::CChannel ( const bool bNIsServer ) : bIsServer ( bNIsServer ),
     vecNetwBufferInProps.Init ( iNumSupportedAudComprTypes *
         MAX_NET_BLOCK_SIZE_FACTOR + 1 );
 
-    // init special mode
-
-// TEST -> 128
-vecNetwBufferInProps[0].iAudioBlockSize = 128;
-vecNetwBufferInProps[0].eAudComprType = CT_NONE;
-vecNetwBufferInProps[0].iNetwInBufSize = AudioCompressionIn.Init (
-            vecNetwBufferInProps[0].iAudioBlockSize,
-            vecNetwBufferInProps[0].eAudComprType );
-
-
+    // init special mode (with invalid data)
+    vecNetwBufferInProps[0].iAudioBlockSize = 0;
+    vecNetwBufferInProps[0].eAudComprType   = CT_NONE;
+    vecNetwBufferInProps[0].iNetwInBufSize  = 0;
 
     for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
     {
@@ -669,6 +663,10 @@ vecNetwBufferInProps[0].iNetwInBufSize = AudioCompressionIn.Init (
     QObject::connect ( &Protocol,
         SIGNAL ( NetTranspPropsReceived ( CNetworkTransportProps ) ),
         this, SLOT ( OnNetTranspPropsReceived ( CNetworkTransportProps ) ) );
+
+    QObject::connect ( &Protocol,
+        SIGNAL ( ReqNetTranspProps() ),
+        this, SLOT ( OnReqNetTranspProps() ) );
 }
 
 bool CChannel::ProtocolIsEnabled()
@@ -727,6 +725,9 @@ void CChannel::SetAudioBlockSizeAndComprIn ( const int iNewBlockSize,
     AudioCompressionIn.Init ( iNewBlockSize, eNewAudComprType );
 
     // initial value for connection time out counter
+
+// TODO FIXME this does not work correctly -> bug
+// (the calculation is correct but the value is not correctly applied)
     iConTimeOutStartVal = 
         ( CON_TIME_OUT_SEC_MAX * SYSTEM_SAMPLE_RATE ) / iNewBlockSize;
 }
@@ -889,26 +890,6 @@ void CChannel::OnChangeChanName ( QString strName )
     SetName ( strName );
 }
 
-
-
-
-void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps )
-{
-    QMutexLocker locker ( &Mutex );
-
-// TEST
-// TODO use mutex in Put function
-// TODO check possiblity of received parameter -> error checking
-vecNetwBufferInProps[0].iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
-vecNetwBufferInProps[0].eAudComprType = NetworkTransportProps.eAudioCodingType;
-vecNetwBufferInProps[0].iNetwInBufSize = AudioCompressionIn.Init (
-    vecNetwBufferInProps[0].iAudioBlockSize,
-    vecNetwBufferInProps[0].eAudComprType );
-}
-
-
-
-
 bool CChannel::GetAddress(CHostAddress& RetAddr)
 {
     QMutexLocker locker ( &Mutex );
@@ -924,6 +905,46 @@ bool CChannel::GetAddress(CHostAddress& RetAddr)
         return false;
     }
 }
+
+
+
+
+void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps )
+{
+    QMutexLocker locker ( &Mutex );
+
+// TEST
+// TODO use mutex in Put function
+// TODO check possiblity of received parameter -> error checking
+// utilize, e.g., MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ
+vecNetwBufferInProps[0].iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
+vecNetwBufferInProps[0].eAudComprType   = NetworkTransportProps.eAudioCodingType;
+vecNetwBufferInProps[0].iNetwInBufSize  = AudioCompressionIn.Init (
+    vecNetwBufferInProps[0].iAudioBlockSize,
+    vecNetwBufferInProps[0].eAudComprType );
+}
+
+void CChannel::OnReqNetTranspProps()
+{
+    CreateNetTranspPropsMessFromCurrentSettings();
+}
+
+void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
+{
+    CNetworkTransportProps NetworkTransportProps (
+        iAudComprSizeOut,
+        iCurAudioBlockSizeOut,
+        1, // right now we only use mono
+        SYSTEM_SAMPLE_RATE, // right now only one sample rate is supported
+        AudioCompressionOut.GetType(),
+        0 );
+
+    // send current network transport properties
+    Protocol.CreateNetwTranspPropsMes ( NetworkTransportProps );
+}
+
+
+
 
 EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                                  int iNumBytes )
@@ -1038,9 +1059,17 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
             Mutex.unlock();
         }
 
-        // inform other objects that new connection was established
         if ( bNewConnection )
         {
+            // if this is a new connection and the current network packet is
+            // neither an audio or protocol packet, we have to query the
+            // network transport properties for the audio packets
+            if ( ( !bIsProtocolPacket ) && ( !bIsAudioPacket ) )
+            {
+                Protocol.CreateReqNetwTranspPropsMes();
+            }
+
+            // inform other objects that new connection was established
             emit NewConnection();
         }
     }

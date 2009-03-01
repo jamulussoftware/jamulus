@@ -145,6 +145,8 @@ void SetNetwBufSizeOut ( const int iNewAudioBlockSizeOut );
         Protocol.CreateConClientListMes ( vecChanInfo );
     }
 
+    void CreateNetTranspPropsMessFromCurrentSettings();
+
 protected:
     void SetAudioBlockSizeAndComprIn ( const int iNewBlockSize,
                                        const EAudComprType eNewAudComprType );
@@ -205,6 +207,7 @@ public slots:
     void OnChangeChanGain ( int iChanID, double dNewGain );
     void OnChangeChanName ( QString strName );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
+    void OnReqNetTranspProps();
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
@@ -215,6 +218,7 @@ signals:
     void NameHasChanged();
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );
+    void ReqNetTranspProps();
 };
 
 

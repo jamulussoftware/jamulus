@@ -58,6 +58,9 @@ CClient::CClient ( const quint16 iPortNumber ) :
 
     QObject::connect ( &Channel, SIGNAL ( PingReceived ( int ) ),
         this, SLOT ( OnReceivePingMessage ( int ) ) );
+
+    QObject::connect ( &Channel, SIGNAL ( ReqNetTranspProps() ),
+        this, SLOT ( OnReqNetTranspProps() ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -77,6 +80,9 @@ for ( int i = 0; i < vecMessage.Size(); i++ ) {
 
 void CClient::OnReqJittBufSize()
 {
+
+// TODO cant we implement this OnReqJjittBufSize inside the channel object?
+
     Channel.CreateJitBufMes ( Channel.GetSockBufSize() );
 
 // FIXME: we set the network buffer size factor here, too -> in the

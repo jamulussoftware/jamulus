@@ -880,7 +880,7 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
 
     // audio coding type (2 bytes) with error check
     const int iRecCodingType =
-        static_cast<unsigned short> ( GetValFromStream ( vecData, iPos, 2 ) );
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     if ( ( iRecCodingType != CT_NONE ) &&
          ( iRecCodingType != CT_IMAADPCM ) &&
@@ -888,6 +888,9 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     {
         return true;
     }
+
+    ReceivedNetwTranspProps.eAudioCodingType =
+        static_cast<EAudComprType> ( iRecCodingType );
 
     // argument for the audio coder (4 bytes)
     ReceivedNetwTranspProps.iAudioCodingArg =

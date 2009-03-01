@@ -43,18 +43,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     TextNetBuf->setWhatsThis ( strJitterBufferSize );
     GroupBoxJitterBuffer->setWhatsThis ( strJitterBufferSize );
 
-    QString strNetwBlockSize = tr ( "<b>Network Block Size:</b> The size of "
-        "the network audio blocks for input and output (upstream and "
-        "downstream). The lower these values are set, the lower is the "
-        "overall audio delay but the greater is the network protocoll "
-        "overhead (UDP protocol overhead) which means more bandwidth is "
-        "required. If the upstream/downstream bandwidth is not sufficient "
-        "for the audio stream bandwidth, audio dropouts occur and the "
-        "ping time will increase significantly (the connection is stodged)." );
-    SliderNetBufSiFactIn->setWhatsThis ( strNetwBlockSize );
-    TextNetBufSiFactIn->setWhatsThis ( strNetwBlockSize );
-    GroupBoxNetwBuf->setWhatsThis ( strNetwBlockSize );
-
     // init delay information controls
     CLEDOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME );
     CLEDOverallDelay->Reset();
@@ -336,11 +324,9 @@ void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
 */
 
     case MS_JIT_BUF_PUT:
-        CLEDNetwPut->SetLight ( iStatus );
-        break;
-
     case MS_JIT_BUF_GET:
-        CLEDNetwGet->SetLight ( iStatus );
+        // network LED shows combined status of put and get
+        CLEDNetw->SetLight ( iStatus );
         break;
 
     case MS_RESET_ALL:
@@ -348,8 +334,7 @@ void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
         CLEDSoundIn->Reset();
         CLEDSoundOut->Reset();
 */
-        CLEDNetwPut->Reset();
-        CLEDNetwGet->Reset();
+        CLEDNetw->Reset();
         break;
     }
 }

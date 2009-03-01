@@ -86,10 +86,7 @@
 #define MAX_NET_BUF_SIZE_NUM_BL         20 // number of blocks
 
 // default network buffer size
-#define DEF_NET_BUF_SIZE_NUM_BL         6 // number of blocks
-
-// number of ticks of audio in/out buffer sliders
-#define AUD_SLIDER_LENGTH               8
+#define DEF_NET_BUF_SIZE_NUM_BL         10 // number of blocks
 
 // maximum number of recognized sound cards installed in the system,
 // definition for "no device"

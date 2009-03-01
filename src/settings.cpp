@@ -93,18 +93,6 @@ void CSettings::ReadIniFile ( const QString& sFileName )
         pClient->GetSndInterface()->SetDev ( INVALID_SNC_CARD_DEVICE );
     }
 
-    // sound card in number of buffers
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audinbuf", 1, AUD_SLIDER_LENGTH, iValue ) )
-    {
-        pClient->GetSndInterface()->SetInNumBuf ( iValue );
-    }
-
-    // sound card out number of buffers
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audoutbuf", 1, AUD_SLIDER_LENGTH, iValue ) )
-    {
-        pClient->GetSndInterface()->SetOutNumBuf ( iValue );
-    }
-
     // automatic network jitter buffer size setting
     if ( GetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", bValue ) )
     {
@@ -180,12 +168,6 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
     // sound card selection
     SetNumericIniSet ( IniXMLDocument, "client", "auddevidx", pClient->GetSndInterface()->GetDev() );
-
-    // sound card in number of buffers
-    SetNumericIniSet ( IniXMLDocument, "client", "audinbuf", pClient->GetSndInterface()->GetInNumBuf() );
-
-    // sound card out number of buffers
-    SetNumericIniSet ( IniXMLDocument, "client", "audoutbuf", pClient->GetSndInterface()->GetOutNumBuf() );
 
     // automatic network jitter buffer size setting
     SetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", pClient->GetDoAutoSockBufSize() );

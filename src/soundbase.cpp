@@ -26,13 +26,15 @@
 
 
 /* Implementation *************************************************************/
-void CSoundBase::Init ( const int iNewStereoBufferSize )
+int CSoundBase::Init ( const int iNewPrefMonoBufferSize )
 {
     // init audio sound card buffer
     if ( !bIsCallbackAudioInterface )
     {
-        vecsAudioSndCrdStereo.Init ( iNewStereoBufferSize );
+        vecsAudioSndCrdStereo.Init ( 2 * iNewPrefMonoBufferSize /* stereo */ );
     }
+
+    return iNewPrefMonoBufferSize;
 }
 
 void CSoundBase::Start()

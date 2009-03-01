@@ -41,7 +41,7 @@ public:
         bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ) {}
     virtual ~CSoundBase() {}
 
-    virtual void Init ( const int iNewStereoBufferSize );
+    virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
     bool         IsRunning() const { return bRun; }

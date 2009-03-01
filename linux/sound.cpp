@@ -126,22 +126,6 @@ bool CSound::Read ( CVector<short>& psData )
     }
 }
 
-void CSound::SetInNumBuf ( int iNewNum )
-{
-    // check new parameter
-    if ( ( iNewNum >= MAX_SND_BUF_IN ) || ( iNewNum < 1 ) )
-    {
-        iNewNum = NUM_PERIOD_BLOCKS_IN;
-    }
-
-    // change only if parameter is different
-    if ( iNewNum != iCurPeriodSizeIn )
-    {
-        iCurPeriodSizeIn = iNewNum;
-        bChangParamIn    = true;
-    }
-}
-
 
 // Wave out ********************************************************************
 void CSound::InitPlayback()
@@ -255,22 +239,6 @@ bool CSound::Write ( CVector<short>& psData )
     }
 
     return false;
-}
-
-void CSound::SetOutNumBuf ( int iNewNum )
-{
-    // check new parameter
-    if ( ( iNewNum >= MAX_SND_BUF_OUT ) || ( iNewNum < 1 ) )
-    {
-        iNewNum = NUM_PERIOD_BLOCKS_OUT;
-    }
-
-    // change only if parameter is different
-    if ( iNewNum != iCurPeriodSizeOut )
-    {
-        iCurPeriodSizeOut = iNewNum;
-        bChangParamOut    = true;
-    }
 }
 
 

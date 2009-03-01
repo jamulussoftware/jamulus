@@ -64,22 +64,19 @@ public:
     int         GetDev() { return 0; }
 
 #if WITH_SOUND
-    void    SetInNumBuf ( int iNewNum );
-    int     GetInNumBuf() { return iCurPeriodSizeIn; }
-    void    SetOutNumBuf ( int iNewNum );
-    int     GetOutNumBuf() { return iCurPeriodSizeOut; }
-
-    virtual void Init ( const int iNewStereoBufferSize )
+    virtual int Init ( const int iNewPrefMonoBufferSize )
     {
         // init base class
-        CSoundBase::Init ( iNewStereoBufferSize );
+        CSoundBase::Init ( iNewPrefMonoBufferSize );
 
         // set internal buffer size for read and write
-        iBufferSizeIn  = iNewStereoBufferSize / NUM_IN_OUT_CHANNELS; // mono size
-        iBufferSizeOut = iNewStereoBufferSize / NUM_IN_OUT_CHANNELS; // mono size
+        iBufferSizeIn  = iNewPrefMonoBufferSize;
+        iBufferSizeOut = iNewPrefMonoBufferSize;
 
         InitRecording();
         InitPlayback();
+
+        return iNewPrefMonoBufferSize;
     }
     virtual bool Read  ( CVector<short>& psData );
     virtual bool Write ( CVector<short>& psData );
@@ -103,11 +100,7 @@ protected:
     int iCurPeriodSizeOut;
 #else
     // dummy definitions
-    void    SetInNumBuf ( int iNewNum ) {}
-    int     GetInNumBuf() { return 1; }
-    void    SetOutNumBuf ( int iNewNum ) {}
-    int     GetOutNumBuf() { return 1; }
-    virtual void Init ( const int iNewStereoBufferSize ) { CSoundBase::Init ( iNewStereoBufferSize ); }
+    virtual int  Init ( const int iNewPrefMonoBufferSize ) { CSoundBase::Init ( iNewPrefMonoBufferSize ); }
     virtual bool Read  ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
     virtual bool Write ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
     virtual void Close() {}

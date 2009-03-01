@@ -369,7 +369,7 @@ const bool bPreferPowerOfTwoAudioBufferSize = false;
     return "";
 }
 
-void CSound::Init ( const int iNewStereoBufferSize )
+int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
     // first, stop audio and dispose ASIO buffers
     ASIOStop();
@@ -377,11 +377,11 @@ void CSound::Init ( const int iNewStereoBufferSize )
     ASIOMutex.lock(); // get mutex lock
     {
         // init base clasee
-        CSoundBase::Init ( iNewStereoBufferSize );
+        CSoundBase::Init ( iNewPrefMonoBufferSize );
 
-        // set internal buffer size value and calculate mono buffer size
-        iBufferSizeStereo = iNewStereoBufferSize;
-        iBufferSizeMono   = iBufferSizeStereo / 2;
+        // set internal buffer size value and calculate stereo buffer size
+        iBufferSizeMono   = iNewPrefMonoBufferSize;
+        iBufferSizeStereo = 2 * iBufferSizeMono;
 
 // TEST
 PrepareDriver();
@@ -393,6 +393,9 @@ PrepareDriver();
 
     // initialization is done, (re)start audio
     ASIOStart();
+
+// TEST
+return iNewPrefMonoBufferSize;
 }
 
 void CSound::Close()
@@ -552,7 +555,6 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
                 }
             }
         }
-
 
         // finally if the driver supports the ASIOOutputReady() optimization,
         // do it here, all data are in place -----------------------------------

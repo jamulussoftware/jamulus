@@ -59,24 +59,19 @@ public:
     CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg );
     virtual ~CSound();
 
-    virtual void Init ( const int iNewStereoBufferSize );
+    virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Close();
 
-    int         GetNumDev() { return lNumDevs; }
-    std::string GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }
+    int          GetNumDev() { return lNumDevs; }
+    std::string  GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }
 
-    void        SetDev ( const int iNewDev );
-    int         GetDev() { return lCurDev; }
-
-    void        SetOutNumBuf ( const int iNewNum ) {}
-    int         GetOutNumBuf() { return 1; }
-    void        SetInNumBuf ( const int iNewNum ) {}
-    int         GetInNumBuf() { return 1; }
+    void         SetDev ( const int iNewDev );
+    int          GetDev() { return lCurDev; }
 
 protected:
-    bool        LoadAndInitializeFirstValidDriver();
-    std::string LoadAndInitializeDriver ( int iIdx );
-    std::string PrepareDriver();
+    bool         LoadAndInitializeFirstValidDriver();
+    std::string  LoadAndInitializeDriver ( int iIdx );
+    std::string  PrepareDriver();
 
     // audio hardware buffer info
     struct sHWBufferInfo

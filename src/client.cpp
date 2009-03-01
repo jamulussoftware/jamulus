@@ -162,7 +162,9 @@ bool CClient::SetServerAddr ( QString strNAddr )
 void CClient::Start()
 {
     // init object
-    Init();
+
+// TEST
+Init ( 192 );
 
     // enable channel
     Channel.SetEnable ( true );
@@ -193,30 +195,25 @@ void CClient::AudioCallback ( CVector<short>& psData, void* arg )
     pMyClientObj->ProcessAudioData ( psData );
 }
 
-void CClient::Init()
+void CClient::Init ( const int iPrefMonoBlockSizeSamAtSndCrdSamRate )
 {
-    // set block size (in samples)
+    // get actual sound card buffer size using preferred size
+    iSndCrdMonoBlockSizeSam   = Sound.Init ( iPrefMonoBlockSizeSamAtSndCrdSamRate );
+    iSndCrdStereoBlockSizeSam = 2 * iSndCrdMonoBlockSizeSam;
 
-// TEST
-    iMonoBlockSizeSam   = 128;//64;//MIN_SERVER_BLOCK_SIZE_SAMPLES;
-
+    iMonoBlockSizeSam   = iSndCrdMonoBlockSizeSam * SYSTEM_SAMPLE_RATE / SND_CRD_SAMPLE_RATE;
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
-    iSndCrdMonoBlockSizeSam   = iMonoBlockSizeSam * SND_CRD_SAMPLE_RATE / SYSTEM_SAMPLE_RATE;
-    iSndCrdStereoBlockSizeSam = 2 * iSndCrdMonoBlockSizeSam;
+
+// TEST
+Channel.SetNetwBufSizeOut ( iMonoBlockSizeSam );
+
 
     vecsAudioSndCrdStereo.Init ( iSndCrdStereoBlockSizeSam );
     vecdAudioSndCrdMono.Init   ( iSndCrdMonoBlockSizeSam );
     vecdAudioSndCrdStereo.Init ( iSndCrdStereoBlockSizeSam );
 
     vecdAudioStereo.Init ( iStereoBlockSizeSam );
-
-    Sound.Init ( iSndCrdStereoBlockSizeSam );
-
-
-// TEST
-Channel.SetNetwBufSizeOut ( iMonoBlockSizeSam );
-
 
     // resample objects are always initialized with the input block size
     // record

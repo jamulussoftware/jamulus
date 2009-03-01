@@ -259,9 +259,12 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
         ( 2 * pClient->GetSockBufSize() + pClient->GetNetwBufSizeFactIn() +
           pClient->GetNetwBufSizeFactOut() ) / 2;
 
-    const int iTotalSoundCardDelayMS = 2 * MIN_SERVER_BLOCK_DURATION_MS +
-        MIN_SERVER_BLOCK_DURATION_MS * ( pClient->GetSndInterface()->GetInNumBuf() +
-          pClient->GetSndInterface()->GetOutNumBuf() ) / 2;
+// TODO consider sound card interface block size
+
+const int iTotalSoundCardDelayMS = 0;
+//    const int iTotalSoundCardDelayMS = 2 * MIN_SERVER_BLOCK_DURATION_MS +
+//        MIN_SERVER_BLOCK_DURATION_MS * ( pClient->GetSndInterface()->GetInNumBuf() +
+//          pClient->GetSndInterface()->GetOutNumBuf() ) / 2;
 
     const int iDelayToFillNetworkPackets = MIN_SERVER_BLOCK_DURATION_MS *
         ( pClient->GetNetwBufSizeFactIn() + pClient->GetNetwBufSizeFactOut() );

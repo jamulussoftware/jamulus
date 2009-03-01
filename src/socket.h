@@ -36,8 +36,9 @@
 
 
 /* Definitions ****************************************************************/
-// Maximum block size for network input buffer. Consider two bytes per sample.
-#define MAX_SIZE_BYTES_NETW_BUF         ( MAX_NET_BLOCK_SIZE_FACTOR * MIN_BLOCK_SIZE_SAMPLES * 2 )
+// Maximum block size for network input buffer. Consider a maximum sample rate
+// of 48 kHz and two audio channels and two bytes per sample.
+#define MAX_SIZE_BYTES_NETW_BUF         ( MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ * 4 )
 
 
 /* Classes ********************************************************************/
@@ -57,7 +58,7 @@ public:
                       const CHostAddress& HostAddr );
 
 protected:
-    void Init ( const quint16 iPortNumber = LLCON_PORT_NUMBER );
+    void Init ( const quint16 iPortNumber = LLCON_DFAULT_PORT_NUMBER );
 
     QUdpSocket              SocketDevice;
 

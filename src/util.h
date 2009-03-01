@@ -407,23 +407,23 @@ public:
     QString strName;
 };
 
+enum EAudComprType
+{
+    CT_NONE     = 0,
+    CT_IMAADPCM = 1,
+    CT_MSADPCM  = 2
+};
+
 class CNetworkTransportProps
 {
 public:
-    enum EAudioCodingType
-    {
-        ACT_NONE      = 0,
-        ACT_IMA_ADPCM = 1,
-        ACT_MS_ADPCM  = 2
-    };
-
     CNetworkTransportProps() : iNetworkPacketSize ( 0 ), iMonoAudioBlockSize ( 0 ),
         iNumAudioChannels ( 0 ), iSampleRate ( 0 ),
-        eAudioCodingType ( ACT_NONE ), iAudioCodingArg ( 0 ) {}
+        eAudioCodingType ( CT_NONE ), iAudioCodingArg ( 0 ) {}
 
     CNetworkTransportProps ( const unsigned int iNNPS, const unsigned int iNMABS,
         const unsigned int iNNACH, const unsigned int iNSR,
-        const EAudioCodingType eNACT, const int iNACA ) :
+        const EAudComprType eNACT, const int iNACA ) :
         iNetworkPacketSize ( iNNPS ), iMonoAudioBlockSize ( iNMABS ),
         iNumAudioChannels ( iNNACH ), iSampleRate ( iNSR ), eAudioCodingType ( eNACT ),
         iAudioCodingArg ( iNACA ) {}
@@ -432,7 +432,7 @@ public:
     unsigned int iMonoAudioBlockSize;
     unsigned int iNumAudioChannels;
     unsigned int iSampleRate;
-    EAudioCodingType eAudioCodingType;
+    EAudComprType eAudioCodingType;
     int iAudioCodingArg;
 };
 

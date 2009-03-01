@@ -46,7 +46,7 @@ int main ( int argc, char** argv )
     bool        bIsClient             = true;
     bool        bUseGUI               = true;
     bool        bForceLowUploadRate   = false;
-    quint16     iPortNumber           = LLCON_PORT_NUMBER;
+    quint16     iPortNumber           = LLCON_DFAULT_PORT_NUMBER;
     std::string strIniFileName        = "";
     std::string strHTMLStatusFileName = "";
     std::string strServerName         = "";
@@ -61,7 +61,7 @@ int main ( int argc, char** argv )
         if ( GetFlagArgument ( argc, argv, i, "-s", "--server" ) )
         {
             bIsClient = false;
-            cerr << "server mode chosen" << std::endl;
+            cout << "server mode chosen" << std::endl;
             continue;
         }
 
@@ -69,7 +69,7 @@ int main ( int argc, char** argv )
         if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) )
         {
             bUseGUI = false;
-            cerr << "no GUI mode chosen" << std::endl;
+            cout << "no GUI mode chosen" << std::endl;
             continue;
         }
 
@@ -77,7 +77,7 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
         {
             strLoggingFileName = strArgument;
-            cerr << "logging file name: " << strLoggingFileName << std::endl;
+            cout << "logging file name: " << strLoggingFileName << std::endl;
             continue;
         }
 
@@ -85,7 +85,7 @@ int main ( int argc, char** argv )
         if ( GetFlagArgument ( argc, argv, i, "-u", "--lowuploadrate" ) )
         {
             bForceLowUploadRate = true;
-            cerr << "force low upload rate" << std::endl;
+            cout << "force low upload rate" << std::endl;
             continue;
         }
 
@@ -94,7 +94,7 @@ int main ( int argc, char** argv )
                                   0, 65535, rDbleArgument ) )
         {
             iPortNumber = static_cast<quint16> ( rDbleArgument );
-            cerr << "selected port number: " << iPortNumber << std::endl;
+            cout << "selected port number: " << iPortNumber << std::endl;
             continue;
         }
 
@@ -102,14 +102,14 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
         {
             strHTMLStatusFileName = strArgument;
-            cerr << "HTML status file name: " << strHTMLStatusFileName << std::endl;
+            cout << "HTML status file name: " << strHTMLStatusFileName << std::endl;
             continue;
         }
 
         if ( GetStringArgument ( argc, argv, i, "-a", "--servername", strArgument ) )
         {
             strServerName = strArgument;
-            cerr << "server name for HTML status file: " << strServerName << std::endl;
+            cout << "server name for HTML status file: " << strServerName << std::endl;
             continue;
         }
 
@@ -117,7 +117,7 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
         {
             strIniFileName = strArgument;
-            cerr << "initialization file name: " << strIniFileName << std::endl;
+            cout << "initialization file name: " << strIniFileName << std::endl;
             continue;
         }
 
@@ -126,7 +126,7 @@ int main ( int argc, char** argv )
              ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
         {
             const std::string strHelp = UsageArguments(argv);
-            cerr << strHelp;
+            cout << strHelp;
             exit ( 1 );
         }
 
@@ -212,7 +212,7 @@ int main ( int argc, char** argv )
             else
             {
                 // only start application without using the GUI
-                qDebug() << CAboutDlg::GetVersionAndNameStr ( false );
+                cout << CAboutDlg::GetVersionAndNameStr ( false ).toStdString();
                 app.exec();
             }
         }

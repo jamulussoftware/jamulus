@@ -28,6 +28,7 @@
 
 #include <windows.h>
 #include <string>
+#include <qmutex.h>
 #include <qmessagebox.h>
 #include "../src/util.h"
 #include "../src/global.h"
@@ -59,8 +60,6 @@ public:
     virtual ~CSound();
 
     virtual void Init ( const int iNewStereoBufferSize );
-    virtual bool Read  ( CVector<short>& psData );
-    virtual bool Write ( CVector<short>& psData );
     virtual void Close();
 
     int         GetNumDev() { return lNumDevs; }
@@ -69,10 +68,10 @@ public:
     void        SetDev ( const int iNewDev );
     int         GetDev() { return lCurDev; }
 
-    void        SetOutNumBuf ( const int iNewNum );
-    int         GetOutNumBuf();
-    void        SetInNumBuf ( const int iNewNum );
-    int         GetInNumBuf();
+    void        SetOutNumBuf ( const int iNewNum ) {}
+    int         GetOutNumBuf() { return 1; }
+    void        SetInNumBuf ( const int iNewNum ) {}
+    int         GetInNumBuf() { return 1; }
 
 protected:
     bool        LoadAndInitializeFirstValidDriver();
@@ -97,9 +96,6 @@ protected:
     long             lNumDevs;
     long             lCurDev;
     char*            cDriverNames[MAX_NUMBER_SOUND_CARDS];
-
-    bool             bChangParamIn;
-    bool             bChangParamOut;
 };
 
 #endif // !defined ( AFX_SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_ )

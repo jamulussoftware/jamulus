@@ -72,18 +72,13 @@ protected:
     virtual void showEvent ( QShowEvent* showEvent );
     virtual void hideEvent ( QHideEvent* hideEvent );
 
-    void UpdateSndBufInSlider  ( const int iCurNumInBuf );
-    void UpdateSndBufOutSlider ( const int iCurNumOutBuf );
     void UpdateJitterBufferFrame();
 
 public slots:
     void OnTimerStatus() { UpdateDisplay(); }
     void OnTimerPing();
-    void OnSliderSndBufInChange ( int value );
-    void OnSliderSndBufOutChange ( int value );
     void OnSliderNetBuf ( int value );
     void OnSliderNetBufSiFactIn ( int value );
-    void OnSliderNetBufSiFactOut ( int value );
     void OnAutoJitBuf ( int value );
     void OnOpenChatOnNewMessageStateChanged ( int value );
     void OnAudioCompressionButtonGroupClicked ( QAbstractButton* button );

@@ -52,9 +52,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "for the audio stream bandwidth, audio dropouts occur and the "
         "ping time will increase significantly (the connection is stodged)." );
     SliderNetBufSiFactIn->setWhatsThis ( strNetwBlockSize );
-    SliderNetBufSiFactOut->setWhatsThis ( strNetwBlockSize );
     TextNetBufSiFactIn->setWhatsThis ( strNetwBlockSize );
-    TextNetBufSiFactOut->setWhatsThis ( strNetwBlockSize );
     GroupBoxNetwBuf->setWhatsThis ( strNetwBlockSize );
 
     // init delay information controls
@@ -65,24 +63,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     TextLabelOverallDelay->setText ( "" );
 
     // init slider controls ---
-    // sound buffer in
-#ifdef _WIN32
-    SliderSndBufIn->setRange ( 1, AUD_SLIDER_LENGTH ); // for ASIO we only need one buffer
-#else
-    SliderSndBufIn->setRange ( 2, AUD_SLIDER_LENGTH );
-#endif
-    UpdateSndBufInSlider ( pClient->GetSndInterface()->GetInNumBuf() );
-
-    // sound buffer out
-#ifdef _WIN32
-    SliderSndBufOut->setRange ( 1, AUD_SLIDER_LENGTH ); // for ASIO we only need one buffer
-#else
-    SliderSndBufOut->setRange ( 2, AUD_SLIDER_LENGTH );
-#endif
-    UpdateSndBufOutSlider ( pClient->GetSndInterface()->GetOutNumBuf() );
-
     // network buffer
-    SliderNetBuf->setRange ( 0, MAX_NET_BUF_SIZE_NUM_BL );
+    SliderNetBuf->setRange ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
     UpdateJitterBufferFrame();
 
     // network buffer size factor in
@@ -90,15 +72,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     const int iCurNetBufSiFactIn = pClient->GetNetwBufSizeFactIn();
     SliderNetBufSiFactIn->setValue ( iCurNetBufSiFactIn );
     TextNetBufSiFactIn->setText ( "In:\n" + QString().setNum (
-        double ( iCurNetBufSiFactIn * MIN_BLOCK_DURATION_MS ), 'f', 2 ) +
-        " ms" );
-
-    // network buffer size factor out
-    SliderNetBufSiFactOut->setRange ( 1, MAX_NET_BLOCK_SIZE_FACTOR );
-    const int iCurNetBufSiFactOut = pClient->GetNetwBufSizeFactOut();
-    SliderNetBufSiFactOut->setValue ( iCurNetBufSiFactOut );
-    TextNetBufSiFactOut->setText ( "Out:\n" + QString().setNum (
-        double ( iCurNetBufSiFactOut * MIN_BLOCK_DURATION_MS), 'f', 2 ) +
+        double ( iCurNetBufSiFactIn * MIN_SERVER_BLOCK_DURATION_MS ), 'f', 2 ) +
         " ms" );
 
     // init combo box containing all available sound cards in the system
@@ -122,15 +96,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // audio compression type
     switch ( pClient->GetAudioCompressionOut() )
     {
-    case CAudioCompression::CT_NONE:
+    case CT_NONE:
         radioButtonNoAudioCompr->setChecked ( true );
         break;
 
-    case CAudioCompression::CT_IMAADPCM:
+    case CT_IMAADPCM:
         radioButtonIMA_ADPCM->setChecked ( true );
         break;
 
-    case CAudioCompression::CT_MSADPCM:
+    case CT_MSADPCM:
         radioButtonMS_ADPCM->setChecked ( true );
         break;
     }
@@ -146,19 +120,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerPing() ) );
 
-    // sliders
-    QObject::connect ( SliderSndBufIn, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnSliderSndBufInChange ( int ) ) );
-    QObject::connect ( SliderSndBufOut, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnSliderSndBufOutChange ( int ) ) );
-
     QObject::connect ( SliderNetBuf, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderNetBuf ( int ) ) );
 
     QObject::connect ( SliderNetBufSiFactIn, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderNetBufSiFactIn ( int ) ) );
-    QObject::connect ( SliderNetBufSiFactOut, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnSliderNetBufSiFactOut ( int ) ) );
 
     // check boxes
     QObject::connect ( cbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
@@ -196,18 +162,6 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
     TextNetBuf->setEnabled   ( !pClient->GetDoAutoSockBufSize() );
 }
 
-void CClientSettingsDlg::UpdateSndBufInSlider ( const int iCurNumInBuf )
-{
-    SliderSndBufIn->setValue ( iCurNumInBuf );
-    TextSndBufIn->setText ( "In: " + QString().setNum ( iCurNumInBuf ) );
-}
-
-void CClientSettingsDlg::UpdateSndBufOutSlider ( const int iCurNumOutBuf )
-{
-    SliderSndBufOut->setValue ( iCurNumOutBuf );
-    TextSndBufOut->setText ( "Out: " + QString().setNum ( iCurNumOutBuf ) );
-}
-
 void CClientSettingsDlg::showEvent ( QShowEvent* showEvent )
 {
     // only activate ping timer if window is actually shown
@@ -218,20 +172,6 @@ void CClientSettingsDlg::hideEvent ( QHideEvent* hideEvent )
 {
     // if window is closed, stop timer for ping
     TimerPing.stop();
-}
-
-void CClientSettingsDlg::OnSliderSndBufInChange ( int value )
-{
-    pClient->GetSndInterface()->SetInNumBuf ( value );
-    TextSndBufIn->setText ( "In: " + QString().setNum ( value ) );
-    UpdateDisplay();
-}
-
-void CClientSettingsDlg::OnSliderSndBufOutChange ( int value )
-{
-    pClient->GetSndInterface()->SetOutNumBuf ( value );
-    TextSndBufOut->setText ( "Out: " + QString().setNum ( value ) );
-    UpdateDisplay();
 }
 
 void CClientSettingsDlg::OnSliderNetBuf ( int value )
@@ -245,16 +185,7 @@ void CClientSettingsDlg::OnSliderNetBufSiFactIn ( int value )
 {
     pClient->SetNetwBufSizeFactIn ( value );
     TextNetBufSiFactIn->setText ( "In:\n" + QString().setNum (
-        double ( value * MIN_BLOCK_DURATION_MS ), 'f', 2 ) +
-        " ms" );
-    UpdateDisplay();
-}
-
-void CClientSettingsDlg::OnSliderNetBufSiFactOut ( int value )
-{
-    pClient->SetNetwBufSizeFactOut ( value );
-    TextNetBufSiFactOut->setText ( "Out:\n" + QString().setNum (
-        double ( value * MIN_BLOCK_DURATION_MS ), 'f', 2 ) +
+        double ( value * MIN_SERVER_BLOCK_DURATION_MS ), 'f', 2 ) +
         " ms" );
     UpdateDisplay();
 }
@@ -294,17 +225,17 @@ void CClientSettingsDlg::OnAudioCompressionButtonGroupClicked ( QAbstractButton*
 {
     if ( button == radioButtonNoAudioCompr )
     {
-        pClient->SetAudioCompressionOut ( CAudioCompression::CT_NONE );
+        pClient->SetAudioCompressionOut ( CT_NONE );
     }
 
     if ( button == radioButtonIMA_ADPCM )
     {
-        pClient->SetAudioCompressionOut ( CAudioCompression::CT_IMAADPCM );
+        pClient->SetAudioCompressionOut ( CT_IMAADPCM );
     }
 
     if ( button == radioButtonMS_ADPCM )
     {
-        pClient->SetAudioCompressionOut ( CAudioCompression::CT_MSADPCM );
+        pClient->SetAudioCompressionOut ( CT_MSADPCM );
     }
     UpdateDisplay();
 }
@@ -322,17 +253,17 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
     - the mean delay of a cyclic buffer is half the buffer size (since
       for the average it is assumed that the buffer is half filled)
     - consider the jitter buffer on the server side, too
-    - assume that the sound card introduces an additional delay of 2 * MIN_BLOCK_DURATION_MS
+    - assume that the sound card introduces an additional delay of 2 * MIN_SERVER_BLOCK_DURATION_MS
 */
-    const int iTotalJitterBufferDelayMS = MIN_BLOCK_DURATION_MS *
+    const int iTotalJitterBufferDelayMS = MIN_SERVER_BLOCK_DURATION_MS *
         ( 2 * pClient->GetSockBufSize() + pClient->GetNetwBufSizeFactIn() +
           pClient->GetNetwBufSizeFactOut() ) / 2;
 
-    const int iTotalSoundCardDelayMS = 2 * MIN_BLOCK_DURATION_MS +
-        MIN_BLOCK_DURATION_MS * ( pClient->GetSndInterface()->GetInNumBuf() +
+    const int iTotalSoundCardDelayMS = 2 * MIN_SERVER_BLOCK_DURATION_MS +
+        MIN_SERVER_BLOCK_DURATION_MS * ( pClient->GetSndInterface()->GetInNumBuf() +
           pClient->GetSndInterface()->GetOutNumBuf() ) / 2;
 
-    const int iDelayToFillNetworkPackets = MIN_BLOCK_DURATION_MS *
+    const int iDelayToFillNetworkPackets = MIN_SERVER_BLOCK_DURATION_MS *
         ( pClient->GetNetwBufSizeFactIn() + pClient->GetNetwBufSizeFactOut() );
 
     const int iTotalBufferDelay = iDelayToFillNetworkPackets +
@@ -375,9 +306,7 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 
 void CClientSettingsDlg::UpdateDisplay()
 {
-    // update slider controls (settings might have been changed by sound interface)
-    UpdateSndBufInSlider  ( pClient->GetSndInterface()->GetInNumBuf() );
-    UpdateSndBufOutSlider ( pClient->GetSndInterface()->GetOutNumBuf() );
+    // update slider controls (settings might have been changed)
     UpdateJitterBufferFrame();
 
     if ( !pClient->IsRunning() )
@@ -393,6 +322,7 @@ void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
 {
     switch ( iMessType )
     {
+/*
     case MS_SOUND_IN:
         CLEDSoundIn->SetLight ( iStatus );
         break;
@@ -400,6 +330,7 @@ void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
     case MS_SOUND_OUT:
         CLEDSoundOut->SetLight ( iStatus );
         break;
+*/
 
     case MS_JIT_BUF_PUT:
         CLEDNetwPut->SetLight ( iStatus );
@@ -410,8 +341,10 @@ void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
         break;
 
     case MS_RESET_ALL:
+/*
         CLEDSoundIn->Reset();
         CLEDSoundOut->Reset();
+*/
         CLEDNetwPut->Reset();
         CLEDNetwGet->Reset();
         break;

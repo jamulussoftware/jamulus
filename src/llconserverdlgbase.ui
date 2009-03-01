@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>699</width>
-    <height>291</height>
+    <width>767</width>
+    <height>280</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -19,11 +19,20 @@
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
    <property name="spacing" >
     <number>6</number>
+   </property>
+   <property name="leftMargin" >
+    <number>9</number>
+   </property>
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
    </property>
    <item>
     <widget class="QTreeWidget" name="ListViewClients" >
@@ -57,11 +66,6 @@
      </column>
      <column>
       <property name="text" >
-       <string>Block Size In</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
        <string>Block Size Out</string>
       </property>
      </column>
@@ -69,11 +73,20 @@
    </item>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
      </property>
      <item>
       <widget class="QLabel" name="TextLabelNameVersion" >

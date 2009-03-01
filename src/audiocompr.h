@@ -134,13 +134,6 @@ protected:
 class CAudioCompression
 {
 public:
-    enum EAudComprType
-    {
-        CT_NONE     = 0,
-        CT_IMAADPCM = 1,
-        CT_MSADPCM  = 2
-    };
-
     CAudioCompression() {}
     virtual ~CAudioCompression() {}
 

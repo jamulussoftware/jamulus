@@ -68,6 +68,8 @@ class CProtocol : public QObject
 public:
     CProtocol();
 
+    void Reset();
+
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
@@ -85,8 +87,6 @@ public:
 
     bool ParseMessage ( const CVector<unsigned char>& vecbyData,
                         const int iNumBytes );
-
-    void DeleteSendMessQueue();
 
 protected:
     class CSendMessage

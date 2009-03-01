@@ -112,7 +112,7 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     }
 
     // network jitter buffer size
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf", 0, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf", MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
     {
         pClient->SetSockBufSize ( iValue );
     }
@@ -142,16 +142,16 @@ void CSettings::ReadIniFile ( const QString& sFileName )
         switch ( iValue )
         {
         case 0:
-            pClient->SetAudioCompressionOut ( CAudioCompression::CT_NONE );
+            pClient->SetAudioCompressionOut ( CT_NONE );
             break;
 
         case 1:
-            pClient->SetAudioCompressionOut ( CAudioCompression::CT_IMAADPCM );
+            pClient->SetAudioCompressionOut ( CT_IMAADPCM );
             break;
 
         case 2:
             break;
-            pClient->SetAudioCompressionOut ( CAudioCompression::CT_MSADPCM );
+            pClient->SetAudioCompressionOut ( CT_MSADPCM );
         }
     }
 }
@@ -206,15 +206,15 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     // for integer numbers!)
     switch ( pClient->GetAudioCompressionOut() )
     {
-    case CAudioCompression::CT_NONE:
+    case CT_NONE:
         SetNumericIniSet ( IniXMLDocument, "client", "audiocompression", 0 );
         break;
 
-    case CAudioCompression::CT_IMAADPCM:
+    case CT_IMAADPCM:
         SetNumericIniSet ( IniXMLDocument, "client", "audiocompression", 1 );
         break;
 
-    case CAudioCompression::CT_MSADPCM:
+    case CT_MSADPCM:
         SetNumericIniSet ( IniXMLDocument, "client", "audiocompression", 2 );
         break;
     }

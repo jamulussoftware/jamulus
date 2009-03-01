@@ -128,18 +128,22 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) : QFra
     // connections -------------------------------------------------------------
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
-    QObject::connect(vecpChanFader[0],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh0(double)));
-    QObject::connect(vecpChanFader[1],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh1(double)));
-    QObject::connect(vecpChanFader[2],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh2(double)));
-    QObject::connect(vecpChanFader[3],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh3(double)));
-    QObject::connect(vecpChanFader[4],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh4(double)));
-    QObject::connect(vecpChanFader[5],SIGNAL(valueChanged(double)),this,SLOT(OnValueChangedCh5(double)));
+    QObject::connect ( vecpChanFader[0], SIGNAL ( valueChanged ( double ) ), this, SLOT ( OnValueChangedCh0 ( double ) ) );
+    QObject::connect ( vecpChanFader[1], SIGNAL ( valueChanged ( double ) ), this, SLOT ( OnValueChangedCh1 ( double ) ) );
+    QObject::connect ( vecpChanFader[2], SIGNAL ( valueChanged ( double ) ), this, SLOT ( OnValueChangedCh2 ( double ) ) );
+    QObject::connect ( vecpChanFader[3], SIGNAL ( valueChanged ( double ) ), this, SLOT ( OnValueChangedCh3 ( double ) ) );
+    QObject::connect ( vecpChanFader[4], SIGNAL ( valueChanged ( double ) ), this, SLOT ( OnValueChangedCh4 ( double ) ) );
+    QObject::connect ( vecpChanFader[5], SIGNAL ( valueChanged ( double ) ), this, SLOT ( OnValueChangedCh5 ( double ) ) );
+    QObject::connect ( vecpChanFader[6], SIGNAL ( valueChanged ( double ) ), this, SLOT ( OnValueChangedCh6 ( double ) ) );
+    QObject::connect ( vecpChanFader[7], SIGNAL ( valueChanged ( double ) ), this, SLOT ( OnValueChangedCh7 ( double ) ) );
+    QObject::connect ( vecpChanFader[8], SIGNAL ( valueChanged ( double ) ), this, SLOT ( OnValueChangedCh8 ( double ) ) );
+    QObject::connect ( vecpChanFader[9], SIGNAL ( valueChanged ( double ) ), this, SLOT ( OnValueChangedCh9 ( double ) ) );
 }
 
 void CAudioMixerBoard::HideAll()
 {
     // make old controls invisible
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->Hide();
     }
@@ -149,7 +153,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecCh
 {
     // search for channels with are already present and preserver their gain
     // setting, for all other channels, reset gain
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         bool bFaderIsUsed = false;
 

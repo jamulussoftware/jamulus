@@ -101,7 +101,8 @@ public:
         if ( Channel.GetSockBufSize() != iNumBlocks )
         {
             // check for valid values
-            if ( ( iNumBlocks >= 0 ) && ( iNumBlocks <= MAX_NET_BUF_SIZE_NUM_BL ) )
+            if ( ( iNumBlocks >= MIN_NET_BUF_SIZE_NUM_BL ) &&
+                 ( iNumBlocks <= MAX_NET_BUF_SIZE_NUM_BL ) )
             {
                 // set the new socket size
                 Channel.SetSockBufSize ( iNumBlocks );
@@ -125,9 +126,9 @@ public:
         { Channel.SetNetwBufSizeFactOut ( iNetNetwBlSiFact ); }
     int GetNetwBufSizeFactOut() { return Channel.GetNetwBufSizeFactOut(); }
 
-    void SetAudioCompressionOut ( const CAudioCompression::EAudComprType eNewAudComprTypeOut )
+    void SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
         { Channel.SetAudioCompressionOut ( eNewAudComprTypeOut ); }
-    CAudioCompression::EAudComprType GetAudioCompressionOut() { return Channel.GetAudioCompressionOut(); }
+    EAudComprType GetAudioCompressionOut() { return Channel.GetAudioCompressionOut(); }
 
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Channel.SetRemoteChanGain ( iId, dGain ); }

@@ -29,16 +29,24 @@
 void CSoundBase::Init ( const int iNewStereoBufferSize )
 {
     // init audio sound card buffer
-    vecsAudioSndCrdStereo.Init ( iNewStereoBufferSize );
+    if ( !bIsCallbackAudioInterface )
+    {
+        vecsAudioSndCrdStereo.Init ( iNewStereoBufferSize );
+    }
 }
 
 void CSoundBase::Start()
 {
+    bRun = true;
 
 // TODO start audio interface
 
-    // start the audio thread
-    start();
+    // start the audio thread in case we do not have an callback
+    // based audio interface
+    if ( !bIsCallbackAudioInterface )
+    {
+        start();
+    }
 }
 
 void CSoundBase::Stop()
@@ -47,7 +55,10 @@ void CSoundBase::Stop()
     bRun = false;
 
     // give thread some time to terminate
-    wait ( 5000 );
+    if ( !bIsCallbackAudioInterface )
+    {
+        wait ( 5000 );
+    }
 
 
 // TODO stop audio interface (previously done in Close function, we
@@ -74,7 +85,6 @@ void CSoundBase::run()
 #endif
 
     // main loop of working thread
-    bRun = true;
     while ( bRun )
     {
         // get audio from sound card (blocking function)

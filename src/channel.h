@@ -64,7 +64,7 @@ enum EGetDataStat
 };
 
 // low upload data rate settings
-#define LOW_UPL_SET_AUDIO_COMPRESSION       CAudioCompression::CT_MSADPCM
+#define LOW_UPL_SET_AUDIO_COMPRESSION       CT_MSADPCM
 #define LOW_UPL_SET_BLOCK_SIZE_FACTOR_OUT   MAX_NET_BLOCK_SIZE_FACTOR
 
 
@@ -75,7 +75,9 @@ class CChannel : public QObject
     Q_OBJECT
 
 public:
-    CChannel();
+    // we have to make "server" the default since I do not see a chance to
+    // use constructor initialization in the server for a vector of channels
+    CChannel ( const bool bNIsServer = true );
     virtual ~CChannel() {}
 
     EPutDataStat PutData ( const CVector<unsigned char>& vecbyData,
@@ -87,7 +89,6 @@ public:
     bool IsConnected() const { return iConTimeOut > 0; }
 
     void SetEnable ( const bool bNEnStat );
-    void SetIsServer ( const bool bNIsServer ) { bIsServer = bNIsServer; }
     void SetForceLowUploadRate ( const bool bNFoLoUpRat );
 
     void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
@@ -109,18 +110,19 @@ public:
     void SetSockBufSize ( const int iNumBlocks );
     int GetSockBufSize() { return iCurSockBufSize; }
 
+// TEST
+void SetNetwBufSizeOut ( const int iNewAudioBlockSizeOut );
+
     void SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut );
     int GetNetwBufSizeFactOut() { return iCurNetwOutBlSiFact; }
 
-    int GetNetwBufSizeFactIn() { return iCurNetwInBlSiFact; }
-
-    void SetAudioCompressionOut ( const CAudioCompression::EAudComprType eNewAudComprTypeOut );
-    CAudioCompression::EAudComprType GetAudioCompressionOut() { return eAudComprTypeOut; }
+    void SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut );
+    EAudComprType GetAudioCompressionOut() { return eAudComprTypeOut; }
 
     // network protocol interface
     void CreateJitBufMes ( const int iJitBufSize )
     { 
-        if ( IsConnected() )
+        if ( ProtocolIsEnabled() )
         {
             Protocol.CreateJitBufMes ( iJitBufSize );
         }
@@ -132,7 +134,7 @@ public:
 
     void CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
     { 
-        if ( IsConnected() )
+        if ( ProtocolIsEnabled() )
         {
             Protocol.CreateNetwBlSiFactMes ( iNetwBlSiFact );
         }
@@ -144,10 +146,10 @@ public:
     }
 
 protected:
-    void SetNetwInBlSiFactAndCompr ( const int iNewBlockSizeFactor,
-                                     const CAudioCompression::EAudComprType eNewAudComprType );
+    void SetAudioBlockSizeAndComprIn ( const int iNewBlockSize,
+                                       const EAudComprType eNewAudComprType );
 
-    void SetSockBufSizeIntern ( const int iNumBlocks );
+    bool ProtocolIsEnabled(); 
 
     // audio compression
     CAudioCompression   AudioCompressionIn;
@@ -180,20 +182,21 @@ protected:
     bool                bIsServer;
     bool                bForceLowUploadRate;
 
-    int                 iCurNetwInBlSiFact;
+    int                 iCurAudioBlockSizeIn;
     int                 iCurNetwOutBlSiFact;
+    int                 iCurAudioBlockSizeOut;
 
     QMutex              Mutex;
 
     struct sNetwBufferInProps
     {
-        int                              iNetwInBufSize;
-        int                              iBlockSizeFactor;
-        CAudioCompression::EAudComprType eAudComprType;
+        int           iNetwInBufSize;
+        int           iAudioBlockSize;
+        EAudComprType eAudComprType;
     };
     CVector<sNetwBufferInProps> vecNetwBufferInProps;
 
-    CAudioCompression::EAudComprType eAudComprTypeOut;
+    EAudComprType eAudComprTypeOut;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
@@ -201,6 +204,7 @@ public slots:
     void OnNetwBlSiFactChange ( int iNewNetwBlSiFact );
     void OnChangeChanGain ( int iChanID, double dNewGain );
     void OnChangeChanName ( QString strName );
+    void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
@@ -237,8 +241,7 @@ public:
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                           CVector<QString>& vecsName,
                           CVector<int>& veciJitBufSize,
-                          CVector<int>& veciNetwOutBlSiFact,
-                          CVector<int>& veciNetwInBlSiFact );
+                          CVector<int>& veciNetwOutBlSiFact );
 
     // access functions for actual channels
     bool IsConnected ( const int iChanNum )
@@ -284,6 +287,10 @@ public slots:
     void OnSendProtMessCh3 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 3, mess ); }
     void OnSendProtMessCh4 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 4, mess ); }
     void OnSendProtMessCh5 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 5, mess ); }
+    void OnSendProtMessCh6 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 6, mess ); }
+    void OnSendProtMessCh7 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 7, mess ); }
+    void OnSendProtMessCh8 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 8, mess ); }
+    void OnSendProtMessCh9 ( CVector<uint8_t> mess ) { emit MessReadyForSending ( 9, mess ); }
 
     void OnNewConnectionCh0() { vecChannels[0].CreateReqJitBufMes(); }
     void OnNewConnectionCh1() { vecChannels[1].CreateReqJitBufMes(); }
@@ -291,6 +298,10 @@ public slots:
     void OnNewConnectionCh3() { vecChannels[3].CreateReqJitBufMes(); }
     void OnNewConnectionCh4() { vecChannels[4].CreateReqJitBufMes(); }
     void OnNewConnectionCh5() { vecChannels[5].CreateReqJitBufMes(); }
+    void OnNewConnectionCh6() { vecChannels[6].CreateReqJitBufMes(); }
+    void OnNewConnectionCh7() { vecChannels[7].CreateReqJitBufMes(); }
+    void OnNewConnectionCh8() { vecChannels[8].CreateReqJitBufMes(); }
+    void OnNewConnectionCh9() { vecChannels[9].CreateReqJitBufMes(); }
 
     void OnReqConnClientsListCh0() { CreateAndSendChanListForThisChan ( 0 ); }
     void OnReqConnClientsListCh1() { CreateAndSendChanListForThisChan ( 1 ); }
@@ -298,6 +309,10 @@ public slots:
     void OnReqConnClientsListCh3() { CreateAndSendChanListForThisChan ( 3 ); }
     void OnReqConnClientsListCh4() { CreateAndSendChanListForThisChan ( 4 ); }
     void OnReqConnClientsListCh5() { CreateAndSendChanListForThisChan ( 5 ); }
+    void OnReqConnClientsListCh6() { CreateAndSendChanListForThisChan ( 6 ); }
+    void OnReqConnClientsListCh7() { CreateAndSendChanListForThisChan ( 7 ); }
+    void OnReqConnClientsListCh8() { CreateAndSendChanListForThisChan ( 8 ); }
+    void OnReqConnClientsListCh9() { CreateAndSendChanListForThisChan ( 9 ); }
 
     void OnNameHasChangedCh0() { CreateAndSendChanListForAllConChannels(); }
     void OnNameHasChangedCh1() { CreateAndSendChanListForAllConChannels(); }
@@ -305,6 +320,10 @@ public slots:
     void OnNameHasChangedCh3() { CreateAndSendChanListForAllConChannels(); }
     void OnNameHasChangedCh4() { CreateAndSendChanListForAllConChannels(); }
     void OnNameHasChangedCh5() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh6() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh7() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh8() { CreateAndSendChanListForAllConChannels(); }
+    void OnNameHasChangedCh9() { CreateAndSendChanListForAllConChannels(); }
 
     void OnChatTextReceivedCh0 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 0, strChatText ); }
     void OnChatTextReceivedCh1 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 1, strChatText ); }
@@ -312,6 +331,10 @@ public slots:
     void OnChatTextReceivedCh3 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 3, strChatText ); }
     void OnChatTextReceivedCh4 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 4, strChatText ); }
     void OnChatTextReceivedCh5 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 5, strChatText ); }
+    void OnChatTextReceivedCh6 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 6, strChatText ); }
+    void OnChatTextReceivedCh7 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 7, strChatText ); }
+    void OnChatTextReceivedCh8 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 8, strChatText ); }
+    void OnChatTextReceivedCh9 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 9, strChatText ); }
 
     void OnPingReceivedCh0 ( int iMs ) { vecChannels[0].CreatePingMes ( iMs ); }
     void OnPingReceivedCh1 ( int iMs ) { vecChannels[1].CreatePingMes ( iMs ); }
@@ -319,6 +342,10 @@ public slots:
     void OnPingReceivedCh3 ( int iMs ) { vecChannels[3].CreatePingMes ( iMs ); }
     void OnPingReceivedCh4 ( int iMs ) { vecChannels[4].CreatePingMes ( iMs ); }
     void OnPingReceivedCh5 ( int iMs ) { vecChannels[5].CreatePingMes ( iMs ); }
+    void OnPingReceivedCh6 ( int iMs ) { vecChannels[6].CreatePingMes ( iMs ); }
+    void OnPingReceivedCh7 ( int iMs ) { vecChannels[7].CreatePingMes ( iMs ); }
+    void OnPingReceivedCh8 ( int iMs ) { vecChannels[8].CreatePingMes ( iMs ); }
+    void OnPingReceivedCh9 ( int iMs ) { vecChannels[9].CreatePingMes ( iMs ); }
 
 signals:
     void MessReadyForSending ( int iChID, CVector<uint8_t> vecMessage );

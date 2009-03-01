@@ -147,14 +147,26 @@ MESSAGES
 
 
 /* Implementation *************************************************************/
-CProtocol::CProtocol() : iCounter ( 0 ), iOldRecID ( PROTMESSID_ILLEGAL ),
-    iOldRecCnt ( 0 )
+CProtocol::CProtocol()
 {
-    SendMessQueue.clear();
+    Reset();
 
     // connections
     QObject::connect ( &TimerSendMess, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerSendMess() ) );
+}
+
+void CProtocol::Reset()
+{
+    QMutexLocker locker ( &Mutex );
+
+    // prepare internal variables for initial protocol transfer
+    iCounter   = 0;
+    iOldRecID  = PROTMESSID_ILLEGAL;
+    iOldRecCnt = 0;
+
+    // delete complete "send message queue"
+    SendMessQueue.clear();
 }
 
 void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
@@ -259,14 +271,6 @@ void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
     emit MessReadyForSending ( vecAcknMessage );
 }
 
-void CProtocol::DeleteSendMessQueue()
-{
-    QMutexLocker locker ( &Mutex );
-
-    // delete complete "send message queue"
-    SendMessQueue.clear();
-}
-
 bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
                                const int iNumBytes )
 {
@@ -315,18 +319,18 @@ for ( int i = 0; i < iNumBytes; i++ ) {
                 Mutex.lock();
                 {
                     // check if this is the correct acknowledgment
-                    if ( ( SendMessQueue.front().iCnt == iRecCounter ) &&
-                         ( SendMessQueue.front().iID == iData ) )
+                    bSendNextMess = false;
+                    if ( !SendMessQueue.empty() )
                     {
-                        // message acknowledged, remove from queue
-                        SendMessQueue.pop_front();
+                        if ( ( SendMessQueue.front().iCnt == iRecCounter ) &&
+                             ( SendMessQueue.front().iID == iData ) )
+                        {
+                            // message acknowledged, remove from queue
+                            SendMessQueue.pop_front();
 
-                        // send next message in queue
-                        bSendNextMess = true;
-                    }
-                    else
-                    {
-                        bSendNextMess = false;
+                            // send next message in queue
+                            bSendNextMess = true;
+                        }
                     }
                 }
                 Mutex.unlock();
@@ -878,9 +882,9 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     const int iRecCodingType =
         static_cast<unsigned short> ( GetValFromStream ( vecData, iPos, 2 ) );
 
-    if ( ( iRecCodingType != CNetworkTransportProps::ACT_NONE ) &&
-         ( iRecCodingType != CNetworkTransportProps::ACT_IMA_ADPCM ) &&
-         ( iRecCodingType != CNetworkTransportProps::ACT_MS_ADPCM ) )
+    if ( ( iRecCodingType != CT_NONE ) &&
+         ( iRecCodingType != CT_IMAADPCM ) &&
+         ( iRecCodingType != CT_MSADPCM ) )
     {
         return true;
     }

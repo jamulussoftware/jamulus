@@ -34,7 +34,7 @@ CServer::CServer ( const QString& strLoggingFileName,
     Socket ( &ChannelSet, this, iPortNumber ),
     ChannelSet ( bForceLowUploadRate )
 {
-    vecsSendData.Init ( MIN_BLOCK_SIZE_SAMPLES );
+    vecsSendData.Init ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
 
     // init moving average buffer for response time evaluation
     RespTimeMoAvBuf.Init ( LEN_MOV_AV_RESPONSE );
@@ -103,7 +103,7 @@ void CServer::Start()
     if ( !IsRunning() )
     {
         // start main timer
-        Timer.start ( MIN_BLOCK_DURATION_MS );
+        Timer.start ( MIN_SERVER_BLOCK_DURATION_MS );
 
         // init time for response time evaluation
         TimeLastBlock = PreciseTime.elapsed();
@@ -137,7 +137,7 @@ void CServer::OnNewChannel ( CHostAddress ChanAddr )
 void CServer::OnTimer()
 {
     CVector<int>              vecChanID;
-    CVector<CVector<double> > vecvecdData ( MIN_BLOCK_SIZE_SAMPLES );
+    CVector<CVector<double> > vecvecdData ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
     CVector<CVector<double> > vecvecdGains;
 
     // get data from all connected clients
@@ -178,7 +178,7 @@ void CServer::OnTimer()
     // we want to calculate the standard deviation (we assume that the mean
     // is correct at the block period time)
     const double dCurAddVal =
-        ( (double) ( CurTime - TimeLastBlock ) - MIN_BLOCK_DURATION_MS );
+        ( (double) ( CurTime - TimeLastBlock ) - MIN_SERVER_BLOCK_DURATION_MS );
 
     RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
 
@@ -189,7 +189,7 @@ void CServer::OnTimer()
 CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
                                       CVector<double>&           vecdGains )
 {
-    CVector<short> vecsOutData ( MIN_BLOCK_SIZE_SAMPLES );
+    CVector<short> vecsOutData ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
 
     const int iNumClients = vecvecdData.Size();
 
@@ -197,7 +197,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
     const double dNorm = (double) 2.0;
 
     // mix all audio data from all clients together
-    for ( int i = 0; i < MIN_BLOCK_SIZE_SAMPLES; i++ )
+    for ( int i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )
     {
         double dMixedData = 0.0;
 

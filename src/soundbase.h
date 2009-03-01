@@ -34,9 +34,11 @@
 class CSoundBase : public QThread
 {
 public:
-    CSoundBase ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ),
+    CSoundBase ( const bool bNewIsCallbackAudioInterface,
+        void (*fpNewCallback) ( CVector<short>& psData, void* arg ),
         void* arg ) : fpCallback ( fpNewCallback ), pCallbackArg ( arg ),
-        bRun ( false ) {}
+        bRun ( false ),
+        bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ) {}
     virtual ~CSoundBase() {}
 
     virtual void Init ( const int iNewStereoBufferSize );
@@ -50,6 +52,12 @@ protected:
     void (*fpCallback) ( CVector<short>& psData, void* arg );
     void* pCallbackArg;
 
+    // callback function call for derived classes
+    void Callback ( CVector<short>& psData )
+    {
+        (*fpCallback) ( psData, pCallbackArg );
+    }
+
     // these functions should be overwritten by derived class for
     // non callback based audio interfaces
     virtual bool Read  ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
@@ -57,6 +65,7 @@ protected:
 
     void run();
     bool bRun;
+    bool bIsCallbackAudioInterface;
 
     CVector<short> vecsAudioSndCrdStereo;
 };

@@ -48,12 +48,12 @@ class CSound : public CSoundBase
 public:
     CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
 #if WITH_SOUND
-    CSoundBase ( fpNewCallback, arg ), rhandle ( NULL ),
+    CSoundBase ( false, fpNewCallback, arg ), rhandle ( NULL ),
     phandle ( NULL ), iCurPeriodSizeIn ( NUM_PERIOD_BLOCKS_IN ),
     iCurPeriodSizeOut ( NUM_PERIOD_BLOCKS_OUT ), bChangParamIn ( true ),
     bChangParamOut ( true ) {}
 #else
-    CSoundBase ( fpNewCallback, arg ) {}
+    CSoundBase ( false, fpNewCallback, arg ) {}
 #endif
     virtual ~CSound() { Close(); }
 

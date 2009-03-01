@@ -43,7 +43,7 @@
 
 // version and application name (always use this version)
 #undef VERSION
-#define VERSION                         "2.1.5cvs"
+#define VERSION                         "2.2.0cvs"
 #define APP_NAME                        "llcon"
 
 // file name for logging file
@@ -53,7 +53,7 @@
 #define DEFAULT_SERVER_ADDRESS          "llcon.dyndns.org"
 
 // defined port number for client and server
-#define LLCON_PORT_NUMBER               22122
+#define LLCON_DFAULT_PORT_NUMBER        22122
 
 // system sample rate
 #define SYSTEM_SAMPLE_RATE              24000
@@ -62,11 +62,18 @@
 // internal sample rate conversion which might be buggy
 #define SND_CRD_SAMPLE_RATE             48000
 
-// minimum block duration - all other buffer durations must be a multiple
+// minimum server block duration - all other buffer durations must be a multiple
 // of this duration
-#define MIN_BLOCK_DURATION_MS           2 // ms
+#define MIN_SERVER_BLOCK_DURATION_MS    2 // ms
 
-#define MIN_BLOCK_SIZE_SAMPLES          ( MIN_BLOCK_DURATION_MS * SYSTEM_SAMPLE_RATE / 1000 )
+#define MIN_SERVER_BLOCK_SIZE_SAMPLES   ( MIN_SERVER_BLOCK_DURATION_MS * SYSTEM_SAMPLE_RATE / 1000 )
+
+// define the maximum mono audio buffer size at a sample rate
+// of 48 kHz, this is important for defining the maximum number
+// of bytes to be expected from the network interface (we assume
+// here that "MAX_NET_BLOCK_SIZE_FACTOR * MIN_SERVER_BLOCK_SIZE_SAMPLES"
+// is smaller than this value here)
+#define MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ 4096
 
 // maximum value of factor for network block size
 #define MAX_NET_BLOCK_SIZE_FACTOR       3
@@ -74,8 +81,9 @@
 // default network block size factor
 #define DEF_NET_BLOCK_SIZE_FACTOR       3
 
-// maximum network buffer size (which can be chosen by slider)
-#define MAX_NET_BUF_SIZE_NUM_BL         12 // number of blocks
+// minimum/maximum network buffer size (which can be chosen by slider)
+#define MIN_NET_BUF_SIZE_NUM_BL         1 // number of blocks
+#define MAX_NET_BUF_SIZE_NUM_BL         20 // number of blocks
 
 // default network buffer size
 #define DEF_NET_BUF_SIZE_NUM_BL         6 // number of blocks
@@ -88,17 +96,22 @@
 #define MAX_NUMBER_SOUND_CARDS          10
 #define INVALID_SNC_CARD_DEVICE         -1
 
+
 // maximum number of internet connections (channels)
 // if you want to change this paramter, there has to be done code modifications
 // on other places, too! The code tag "MAX_NUM_CHANNELS_TAG" shows these places
 // (just search for the tag in the entire code)
-// note: since in the protocol messages the channel ID is only a byte, a
-// maximum of 8 channels are possible, see e.g. "PROTMESSID_CHANNEL_GAIN"!
-#define MAX_NUM_CHANNELS                6 // max number channels for server
+#define MAX_NUM_CHANNELS                10 // max number channels for server
+
+// actual number of used channels in the server
+// this parameter can safely be changed from 1 to MAX_NUM_CHANNELS
+// without any other changes in the code
+#define USED_NUM_CHANNELS               6 // used number channels for server
+
 
 // length of the moving average buffer for response time measurement
 #define TIME_MOV_AV_RESPONSE            30 // seconds
-#define LEN_MOV_AV_RESPONSE             ( TIME_MOV_AV_RESPONSE * 1000 / MIN_BLOCK_DURATION_MS )
+#define LEN_MOV_AV_RESPONSE             ( TIME_MOV_AV_RESPONSE * 1000 / MIN_SERVER_BLOCK_DURATION_MS )
 
 // GUI definition: width/heigth size of LED pixmaps
 #define LED_WIDTH_HEIGHT_SIZE_PIXEL     13

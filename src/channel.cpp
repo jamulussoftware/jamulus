@@ -32,10 +32,9 @@ CChannelSet::CChannelSet ( const bool bForceLowUploadRate ) :
     bWriteStatusHTMLFile ( false )
 {
     // enable all channels and set server flag
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         vecChannels[i].SetEnable ( true );
-        vecChannels[i].SetIsServer ( true );
         vecChannels[i].SetForceLowUploadRate ( bForceLowUploadRate );
     }
 
@@ -57,6 +56,10 @@ CChannelSet::CChannelSet ( const bool bForceLowUploadRate ) :
     QObject::connect ( &vecChannels[3], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh3 ( CVector<uint8_t> ) ) );
     QObject::connect ( &vecChannels[4], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh4 ( CVector<uint8_t> ) ) );
     QObject::connect ( &vecChannels[5], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh5 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[6], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh6 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[7], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh7 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[8], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh8 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[9], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh9 ( CVector<uint8_t> ) ) );
 
     // request jitter buffer size
     QObject::connect ( &vecChannels[0], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh0() ) );
@@ -65,6 +68,10 @@ CChannelSet::CChannelSet ( const bool bForceLowUploadRate ) :
     QObject::connect ( &vecChannels[3], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh3() ) );
     QObject::connect ( &vecChannels[4], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh4() ) );
     QObject::connect ( &vecChannels[5], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh5() ) );
+    QObject::connect ( &vecChannels[6], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh6() ) );
+    QObject::connect ( &vecChannels[7], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh7() ) );
+    QObject::connect ( &vecChannels[8], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh8() ) );
+    QObject::connect ( &vecChannels[9], SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh9() ) );
 
     // request connected clients list
     QObject::connect ( &vecChannels[0], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh0() ) );
@@ -73,6 +80,10 @@ CChannelSet::CChannelSet ( const bool bForceLowUploadRate ) :
     QObject::connect ( &vecChannels[3], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh3() ) );
     QObject::connect ( &vecChannels[4], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh4() ) );
     QObject::connect ( &vecChannels[5], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh5() ) );
+    QObject::connect ( &vecChannels[6], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh6() ) );
+    QObject::connect ( &vecChannels[7], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh7() ) );
+    QObject::connect ( &vecChannels[8], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh8() ) );
+    QObject::connect ( &vecChannels[9], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh9() ) );
 
     // channel name has changed
     QObject::connect ( &vecChannels[0], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh0() ) );
@@ -81,6 +92,10 @@ CChannelSet::CChannelSet ( const bool bForceLowUploadRate ) :
     QObject::connect ( &vecChannels[3], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh3() ) );
     QObject::connect ( &vecChannels[4], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh4() ) );
     QObject::connect ( &vecChannels[5], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh5() ) );
+    QObject::connect ( &vecChannels[6], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh6() ) );
+    QObject::connect ( &vecChannels[7], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh7() ) );
+    QObject::connect ( &vecChannels[8], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh8() ) );
+    QObject::connect ( &vecChannels[9], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh9() ) );
 
     // chat text received
     QObject::connect ( &vecChannels[0], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh0 ( QString ) ) );
@@ -89,6 +104,10 @@ CChannelSet::CChannelSet ( const bool bForceLowUploadRate ) :
     QObject::connect ( &vecChannels[3], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh3 ( QString ) ) );
     QObject::connect ( &vecChannels[4], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh4 ( QString ) ) );
     QObject::connect ( &vecChannels[5], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh5 ( QString ) ) );
+    QObject::connect ( &vecChannels[6], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh6 ( QString ) ) );
+    QObject::connect ( &vecChannels[7], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh7 ( QString ) ) );
+    QObject::connect ( &vecChannels[8], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh8 ( QString ) ) );
+    QObject::connect ( &vecChannels[9], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh9 ( QString ) ) );
 
     // ping message received
     QObject::connect ( &vecChannels[0], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh0 ( int ) ) );
@@ -97,6 +116,10 @@ CChannelSet::CChannelSet ( const bool bForceLowUploadRate ) :
     QObject::connect ( &vecChannels[3], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh3 ( int ) ) );
     QObject::connect ( &vecChannels[4], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh4 ( int ) ) );
     QObject::connect ( &vecChannels[5], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh5 ( int ) ) );
+    QObject::connect ( &vecChannels[6], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh6 ( int ) ) );
+    QObject::connect ( &vecChannels[7], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh7 ( int ) ) );
+    QObject::connect ( &vecChannels[8], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh8 ( int ) ) );
+    QObject::connect ( &vecChannels[9], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh9 ( int ) ) );
 }
 
 CVector<CChannelShortInfo> CChannelSet::CreateChannelList()
@@ -104,7 +127,7 @@ CVector<CChannelShortInfo> CChannelSet::CreateChannelList()
     CVector<CChannelShortInfo> vecChanInfo ( 0 );
 
     // look for free channels
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -125,7 +148,7 @@ void CChannelSet::CreateAndSendChanListForAllConChannels()
     CVector<CChannelShortInfo> vecChanInfo ( CChannelSet::CreateChannelList() );
 
     // now send connected channels list to all connected clients
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -148,7 +171,7 @@ void CChannelSet::CreateAndSendChanListForAllExceptThisChan ( const int iCurChan
 
     // now send connected channels list to all connected clients except for
     // the channel with the ID "iCurChanID"
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         if ( ( vecChannels[i].IsConnected() ) && ( i != iCurChanID ) )
         {
@@ -196,7 +219,7 @@ void CChannelSet::CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
 
 
     // send chat text to all connected clients ---------------------------------
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -209,7 +232,7 @@ void CChannelSet::CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
 int CChannelSet::GetFreeChan()
 {
     // look for a free channel
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         if ( !vecChannels[i].IsConnected() )
         {
@@ -226,7 +249,7 @@ int CChannelSet::CheckAddr ( const CHostAddress& Addr )
     CHostAddress InetAddr;
 
     // check for all possible channels if IP is already in use
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         if ( vecChannels[i].GetAddress ( InetAddr ) )
         {
@@ -246,8 +269,8 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
                             const int                     iNumBytesRead,
                             const CHostAddress&           HostAdr )
 {
-    bool bRet            = false;
-    bool bCreateChanList = false;
+    bool bAudioOK            = false;
+    bool bNewChannelReserved = false;
 
     Mutex.lock();
     {
@@ -270,7 +293,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
 
                 // reset the channel gains of current channel, at the same
                 // time reset gains of this channel ID for all other channels
-                for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+                for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
                 {
                     vecChannels[iCurChanID].SetGain ( i, (double) 1.0 );
 
@@ -279,14 +302,8 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
                     vecChannels[i].SetGain ( iCurChanID, (double) 1.0 );
                 }
 
-                // a new client connected to the server, set flag to create and
-                // send all clients the updated channel list, we cannot create
-                // the message here since the received data has to be put to the
-                // channel first so that this channel is marked as connected
-                bCreateChanList = true;
-
-                // send message about new channel
-                emit ChannelConnected ( HostAdr );
+                // set flag for new reserved channel
+                bNewChannelReserved = true;
             }
             else
             {
@@ -309,25 +326,36 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
             {
             case PS_AUDIO_OK:
                 PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN, iCurChanID );
-                bRet = true; // in case we have an audio packet, return true
+                bAudioOK = true; // in case we have an audio packet, return true
                 break;
 
             case PS_AUDIO_ERR:
                 PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED, iCurChanID );
-                bRet = true; // in case we have an audio packet, return true
+                bAudioOK = true; // in case we have an audio packet, return true
                 break;
 
             case PS_PROT_ERR:
                 PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW, iCurChanID );
+
+// TEST
+bAudioOK = true;
+
                 break;
             }
         }
 
-
         // after data is put in channel buffer, create channel list message if
         // requested
-        if ( bCreateChanList )
+        if ( bNewChannelReserved && bAudioOK )
         {
+            // send message about new channel
+            emit ChannelConnected ( HostAdr );
+
+            // A new client connected to the server, create and
+            // send all clients the updated channel list (the list has to
+            // be created after the received data has to be put to the
+            // channel first so that this channel is marked as connected)
+            //
             // connected clients list is only send for new connected clients after
             // request, only the already connected clients get the list
             // automatically, because they don't know when new clients connect
@@ -336,7 +364,7 @@ bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
     }
     Mutex.unlock();
 
-    return bRet;
+    return bAudioOK;
 }
 
 void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
@@ -347,7 +375,7 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
     bool bCreateChanList = false;
 
     // init temporal data vector and clear input buffers
-    CVector<double> vecdData ( MIN_BLOCK_SIZE_SAMPLES );
+    CVector<double> vecdData ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
 
     vecChanID.Init    ( 0 );
     vecvecdData.Init  ( 0 );
@@ -358,7 +386,7 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
     Mutex.lock();
     {
         // check all possible channels
-        for ( i = 0; i < MAX_NUM_CHANNELS; i++ )
+        for ( i = 0; i < USED_NUM_CHANNELS; i++ )
         {
             // read out all input buffers to decrease timeout counter on
             // disconnected channels
@@ -424,20 +452,18 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
 void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                                    CVector<QString>&      vecsName,
                                    CVector<int>&          veciJitBufSize,
-                                   CVector<int>&          veciNetwOutBlSiFact,
-                                   CVector<int>&          veciNetwInBlSiFact )
+                                   CVector<int>&          veciNetwOutBlSiFact )
 {
     CHostAddress InetAddr;
 
     // init return values
-    vecHostAddresses.Init    ( MAX_NUM_CHANNELS );
-    vecsName.Init            ( MAX_NUM_CHANNELS );
-    veciJitBufSize.Init      ( MAX_NUM_CHANNELS );
-    veciNetwOutBlSiFact.Init ( MAX_NUM_CHANNELS );
-    veciNetwInBlSiFact.Init  ( MAX_NUM_CHANNELS );
+    vecHostAddresses.Init    ( USED_NUM_CHANNELS );
+    vecsName.Init            ( USED_NUM_CHANNELS );
+    veciJitBufSize.Init      ( USED_NUM_CHANNELS );
+    veciNetwOutBlSiFact.Init ( USED_NUM_CHANNELS );
 
     // check all possible channels
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         if ( vecChannels[i].GetAddress ( InetAddr ) )
         {
@@ -446,7 +472,6 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
             vecsName[i]            = vecChannels[i].GetName();
             veciJitBufSize[i]      = vecChannels[i].GetSockBufSize();
             veciNetwOutBlSiFact[i] = vecChannels[i].GetNetwBufSizeFactOut();
-            veciNetwInBlSiFact[i]  = vecChannels[i].GetNetwBufSizeFactIn();
         }
     }
 }
@@ -482,7 +507,7 @@ void CChannelSet::WriteHTMLChannelList()
 
     // get the number of connected clients
     int iNumConnClients = 0;
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -499,7 +524,7 @@ void CChannelSet::WriteHTMLChannelList()
     else
     {
         // write entry for each connected client
-        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
         {
             if ( vecChannels[i].IsConnected() )
             {
@@ -530,13 +555,10 @@ void CChannelSet::WriteHTMLChannelList()
 /******************************************************************************\
 * CChannel                                                                     *
 \******************************************************************************/
-CChannel::CChannel() : sName ( "" ),
-    vecdGains ( MAX_NUM_CHANNELS, (double) 1.0 ), bIsServer ( false ),
-    bForceLowUploadRate ( false ),
-    // it is important to give the following parameters meaningful initial
-    // values because they are dependend on each other
-    iCurSockBufSize    ( DEF_NET_BUF_SIZE_NUM_BL ),
-    iCurNetwInBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
+CChannel::CChannel ( const bool bNIsServer ) : bIsServer ( bNIsServer ),
+    sName ( "" ), vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
+    bIsEnabled ( false ), bForceLowUploadRate ( false ),
+    iCurNetwOutBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
 {
     // query all possible network in buffer sizes for determining if an
     // audio packet was received (the following code only works if all
@@ -549,11 +571,11 @@ CChannel::CChannel() : sName ( "" ),
 
     // init special mode
 
-// TEST -> 64
-vecNetwBufferInProps[0].iBlockSizeFactor = 1;
-vecNetwBufferInProps[0].eAudComprType = CAudioCompression::CT_NONE;
+// TEST -> 128
+vecNetwBufferInProps[0].iAudioBlockSize = 128;
+vecNetwBufferInProps[0].eAudComprType = CT_NONE;
 vecNetwBufferInProps[0].iNetwInBufSize = AudioCompressionIn.Init (
-            vecNetwBufferInProps[0].iBlockSizeFactor * 64,
+            vecNetwBufferInProps[0].iAudioBlockSize,
             vecNetwBufferInProps[0].eAudComprType );
 
 
@@ -567,26 +589,26 @@ vecNetwBufferInProps[0].iNetwInBufSize = AudioCompressionIn.Init (
 
         // network block size factor must start from 1 -> i + 1
         const int iCurNetBlockSizeFact = i + 1;
-        vecNetwBufferInProps[iNoneIdx].iBlockSizeFactor = iCurNetBlockSizeFact;
-        vecNetwBufferInProps[iIMAIdx].iBlockSizeFactor  = iCurNetBlockSizeFact;
-        vecNetwBufferInProps[iMSIdx].iBlockSizeFactor   = iCurNetBlockSizeFact;
+        vecNetwBufferInProps[iNoneIdx].iAudioBlockSize = iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
+        vecNetwBufferInProps[iIMAIdx].iAudioBlockSize  = iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
+        vecNetwBufferInProps[iMSIdx].iAudioBlockSize   = iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
 
         // None (no audio compression)
-        vecNetwBufferInProps[iNoneIdx].eAudComprType  = CAudioCompression::CT_NONE;
+        vecNetwBufferInProps[iNoneIdx].eAudComprType  = CT_NONE;
         vecNetwBufferInProps[iNoneIdx].iNetwInBufSize = AudioCompressionIn.Init (
-            vecNetwBufferInProps[iNoneIdx].iBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+            vecNetwBufferInProps[iNoneIdx].iAudioBlockSize,
             vecNetwBufferInProps[iNoneIdx].eAudComprType );
 
         // IMA ADPCM
-        vecNetwBufferInProps[iIMAIdx].eAudComprType  = CAudioCompression::CT_IMAADPCM;
+        vecNetwBufferInProps[iIMAIdx].eAudComprType  = CT_IMAADPCM;
         vecNetwBufferInProps[iIMAIdx].iNetwInBufSize = AudioCompressionIn.Init (
-            vecNetwBufferInProps[iIMAIdx].iBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+            vecNetwBufferInProps[iIMAIdx].iAudioBlockSize,
             vecNetwBufferInProps[iIMAIdx].eAudComprType );
 
         // MS ADPCM
-        vecNetwBufferInProps[iMSIdx].eAudComprType  = CAudioCompression::CT_MSADPCM;
+        vecNetwBufferInProps[iMSIdx].eAudComprType  = CT_MSADPCM;
         vecNetwBufferInProps[iMSIdx].iNetwInBufSize = AudioCompressionIn.Init (
-            vecNetwBufferInProps[iMSIdx].iBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
+            vecNetwBufferInProps[iMSIdx].iAudioBlockSize,
             vecNetwBufferInProps[iMSIdx].eAudComprType );
     }
 
@@ -594,11 +616,14 @@ vecNetwBufferInProps[0].iNetwInBufSize = AudioCompressionIn.Init (
     SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
     // set initial input and output block size factors
-    SetNetwInBlSiFactAndCompr ( DEF_NET_BLOCK_SIZE_FACTOR, CAudioCompression::CT_MSADPCM );
-    SetNetwBufSizeFactOut     ( DEF_NET_BLOCK_SIZE_FACTOR );
+    SetAudioBlockSizeAndComprIn (
+        MIN_SERVER_BLOCK_SIZE_SAMPLES * DEF_NET_BLOCK_SIZE_FACTOR,
+        CT_MSADPCM );
+
+    SetNetwBufSizeFactOut ( DEF_NET_BLOCK_SIZE_FACTOR );
 
     // set initial audio compression format for output
-    SetAudioCompressionOut ( CAudioCompression::CT_MSADPCM );
+    SetAudioCompressionOut ( CT_MSADPCM );
 
     // init time-out for the buffer with zero -> no connection
     iConTimeOut = 0;
@@ -640,6 +665,26 @@ vecNetwBufferInProps[0].iNetwInBufSize = AudioCompressionIn.Init (
 
     QObject::connect( &Protocol, SIGNAL ( PingReceived ( int ) ),
         this, SIGNAL ( PingReceived ( int ) ) );
+
+    QObject::connect ( &Protocol,
+        SIGNAL ( NetTranspPropsReceived ( CNetworkTransportProps ) ),
+        this, SLOT ( OnNetTranspPropsReceived ( CNetworkTransportProps ) ) );
+}
+
+bool CChannel::ProtocolIsEnabled()
+{
+    // for the server, only enable protocol if the channel is connected, i.e.,
+    // successfully audio packets are received from a client
+    // for the client, enable protocol if the channel is enabled, i.e., the
+    // connection button was hit by the user
+    if ( bIsServer )
+    {
+        return IsConnected();
+    }
+    else
+    {
+        return bIsEnabled;
+    }
 }
 
 void CChannel::SetEnable ( const bool bNEnStat )
@@ -649,10 +694,11 @@ void CChannel::SetEnable ( const bool bNEnStat )
     // set internal parameter
     bIsEnabled = bNEnStat;
 
-    // if channel is not enabled, reset time out count
+    // if channel is not enabled, reset time out count and protocol
     if ( !bNEnStat )
     {
         iConTimeOut = 0;
+        Protocol.Reset();
     }
 }
 
@@ -669,55 +715,73 @@ void CChannel::SetForceLowUploadRate ( const bool bNFoLoUpRat )
     bForceLowUploadRate = bNFoLoUpRat;
 }
 
-void CChannel::SetNetwInBlSiFactAndCompr ( const int iNewBlockSizeFactor,
-                                           const CAudioCompression::EAudComprType eNewAudComprType )
+void CChannel::SetAudioBlockSizeAndComprIn ( const int iNewBlockSize,
+                                             const EAudComprType eNewAudComprType )
 {
     QMutexLocker locker ( &Mutex );
 
-    // store new value
-    iCurNetwInBlSiFact = iNewBlockSizeFactor;
+    // store block size value
+    iCurAudioBlockSizeIn = iNewBlockSize;
 
     // init audio compression unit
-    AudioCompressionIn.Init ( iNewBlockSizeFactor * MIN_BLOCK_SIZE_SAMPLES,
-        eNewAudComprType );
+    AudioCompressionIn.Init ( iNewBlockSize, eNewAudComprType );
 
     // initial value for connection time out counter
-    iConTimeOutStartVal = ( CON_TIME_OUT_SEC_MAX * 1000 ) /
-        ( iNewBlockSizeFactor * MIN_BLOCK_DURATION_MS );
+    iConTimeOutStartVal = 
+        ( CON_TIME_OUT_SEC_MAX * SYSTEM_SAMPLE_RATE ) / iNewBlockSize;
+}
 
-    // socket buffer must be adjusted
-    SetSockBufSizeIntern ( GetSockBufSize() );
+void CChannel::SetNetwBufSizeOut ( const int iNewAudioBlockSizeOut )
+{
+    // this function is intended for the client (not the server)
+    QMutexLocker locker ( &Mutex );
+
+    // store new value
+    iCurAudioBlockSizeOut = iNewAudioBlockSizeOut;
+
+    iAudComprSizeOut =
+        AudioCompressionOut.Init ( iNewAudioBlockSizeOut, eAudComprTypeOut );
 }
 
 void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
 {
+    // this function is intended for the server (not the client)
     QMutexLocker locker ( &Mutex );
 
-    if ( !bForceLowUploadRate )
+    // use the network block size factor only for the server
+    if ( ( !bForceLowUploadRate ) && bIsServer )
     {
         // store new value
         iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
 
         // init audio compression and get audio compression block size
         iAudComprSizeOut = AudioCompressionOut.Init (
-            iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
+            iNewNetwBlSiFactOut * MIN_SERVER_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
 
         // init conversion buffer
-        ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_BLOCK_SIZE_SAMPLES );
+        ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_SERVER_BLOCK_SIZE_SAMPLES );
     }
 }
 
-void CChannel::SetAudioCompressionOut ( const CAudioCompression::EAudComprType eNewAudComprTypeOut )
+void CChannel::SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
 {
     if ( !bForceLowUploadRate )
     {
         // store new value
         eAudComprTypeOut = eNewAudComprTypeOut;
 
-        // call "set network buffer size factor" function because its initialization
-        // depends on the audio compression format and implicitely, the audio compression
-        // is initialized
-        SetNetwBufSizeFactOut ( iCurNetwOutBlSiFact );
+        if ( bIsServer )
+        {
+            // call "set network buffer size factor" function because its
+            // initialization depends on the audio compression format and
+            // implicitely, the audio compression is initialized
+            SetNetwBufSizeFactOut ( iCurNetwOutBlSiFact );
+        }
+        else
+        {
+            // for client set arbitrary block size
+            SetNetwBufSizeOut ( iCurAudioBlockSizeOut );
+        }
     }
 }
 
@@ -725,21 +789,11 @@ void CChannel::SetSockBufSize ( const int iNumBlocks )
 {
     QMutexLocker locker ( &Mutex ); // this opperation must be done with mutex
 
-    SetSockBufSizeIntern ( iNumBlocks );
-}
-
-void CChannel::SetSockBufSizeIntern ( const int iNumBlocks )
-{
     iCurSockBufSize = iNumBlocks;
 
-    // the idea of setting the jitter buffer is as follows:
-    // The network block size is a multiple of the internal minimal
-    // block size. Therefore, the minimum jitter buffer size must be
-    // so that it can take one network buffer -> NET_BLOCK_SIZE_FACTOR.
-    // The actual jitter compensation are then the additional blocks of
-    // the internal block size, which is set with SetSockBufSize
-    SockBuf.Init ( MIN_BLOCK_SIZE_SAMPLES,
-        iNumBlocks + iCurNetwInBlSiFact );
+    // the network block size is a multiple of the internal minimal
+    // block size
+    SockBuf.Init ( MIN_SERVER_BLOCK_SIZE_SAMPLES, iNumBlocks );
 }
 
 void CChannel::SetGain ( const int iChanID, const double dNewGain )
@@ -747,7 +801,7 @@ void CChannel::SetGain ( const int iChanID, const double dNewGain )
     QMutexLocker locker ( &Mutex );
 
     // set value (make sure channel ID is in range)
-    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    if ( ( iChanID >= 0 ) && ( iChanID < USED_NUM_CHANNELS ) )
     {
         vecdGains[iChanID] = dNewGain;
     }
@@ -758,7 +812,7 @@ double CChannel::GetGain ( const int iChanID )
     QMutexLocker locker ( &Mutex );
 
     // get value (make sure channel ID is in range)
-    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    if ( ( iChanID >= 0 ) && ( iChanID < USED_NUM_CHANNELS ) )
     {
         return vecdGains[iChanID];
     }
@@ -801,8 +855,9 @@ QString CChannel::GetName()
 
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 {
-    // only send messages if we are connected, otherwise delete complete queue
-    if ( IsConnected() )
+    // only send messages if protocol is enabled, otherwise delete complete
+    // queue
+    if ( ProtocolIsEnabled() )
     {
         // emit message to actually send the data
         emit MessReadyForSending ( vecMessage );
@@ -810,7 +865,7 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     else
     {
         // delete send message queue
-        Protocol.DeleteSendMessQueue();
+        Protocol.Reset();
     }
 }
 
@@ -833,6 +888,26 @@ void CChannel::OnChangeChanName ( QString strName )
 {
     SetName ( strName );
 }
+
+
+
+
+void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps )
+{
+    QMutexLocker locker ( &Mutex );
+
+// TEST
+// TODO use mutex in Put function
+// TODO check possiblity of received parameter -> error checking
+vecNetwBufferInProps[0].iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
+vecNetwBufferInProps[0].eAudComprType = NetworkTransportProps.eAudioCodingType;
+vecNetwBufferInProps[0].iNetwInBufSize = AudioCompressionIn.Init (
+    vecNetwBufferInProps[0].iAudioBlockSize,
+    vecNetwBufferInProps[0].eAudComprType );
+}
+
+
+
 
 bool CChannel::GetAddress(CHostAddress& RetAddr)
 {
@@ -863,8 +938,8 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
     if ( bIsEnabled )
     {
         // first check if this is protocol data
-        // only use protocol data if channel is connected
-        if ( IsConnected() )
+        // only use protocol data if protocol mechanism is enabled
+        if ( ProtocolIsEnabled() )
         {
             // parse the message assuming this is a protocol message
             if ( !Protocol.ParseMessage ( vecbyData, iNumBytes ) )
@@ -889,18 +964,18 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                     bIsAudioPacket = true;
 
                     // check if we are correctly initialized
-                    const int iNewNetwInBlSiFact =
-                        vecNetwBufferInProps[i].iBlockSizeFactor;
+                    const int iNewAudioBlockSize =
+                        vecNetwBufferInProps[i].iAudioBlockSize;
 
-                    const CAudioCompression::EAudComprType eNewAudComprType =
+                    const EAudComprType eNewAudComprType =
                         vecNetwBufferInProps[i].eAudComprType;
 
-                    if ( ( iNewNetwInBlSiFact != iCurNetwInBlSiFact ) ||
+                    if ( ( iNewAudioBlockSize != iCurAudioBlockSizeIn ) ||
                          ( eNewAudComprType != AudioCompressionIn.GetType() ) )
                     {
                         // re-initialize to new value
-                        SetNetwInBlSiFactAndCompr ( iNewNetwInBlSiFact,
-                            eNewAudComprType );
+                        SetAudioBlockSizeAndComprIn (
+                            iNewAudioBlockSize, eNewAudComprType );
                     }
 
                     // in case of a server channel, use the same audio
@@ -915,17 +990,18 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                 }
             }
 
-            // only process if packet has correct size
-            if ( bIsAudioPacket )
+            Mutex.lock();
             {
-                Mutex.lock();
+                // only process audio if packet has correct size
+                if ( bIsAudioPacket )
                 {
                     // decompress audio
                     CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
 
                     // convert received data from short to double
-                    CVector<double> vecdDecomprAudio ( iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES );
-                    for ( int i = 0; i < iCurNetwInBlSiFact * MIN_BLOCK_SIZE_SAMPLES; i++ )
+                    const int iAudioSize = vecsDecomprAudio.Size();
+                    CVector<double> vecdDecomprAudio ( iAudioSize );
+                    for ( int i = 0; i < iAudioSize; i++ )
                     {
                         vecdDecomprAudio[i] = static_cast<double> ( vecsDecomprAudio[i] );
                     }
@@ -938,21 +1014,28 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                     {
                         eRet = PS_AUDIO_ERR;
                     }
-
-                    // check if channel was not connected, this is a new connection
-                    bNewConnection = !IsConnected();
-
-                    // reset time-out counter
-                    iConTimeOut = iConTimeOutStartVal;
                 }
-                Mutex.unlock();
+                else
+                {
+                    // the protocol parsing failed and this was no audio block,
+                    // we treat this as protocol error (unkown packet)
+                    eRet = PS_PROT_ERR;
+                }
+
+                // all network packets except of valid llcon protocol messages
+                // regardless if they are valid or invalid audio packets lead to
+                // a state change to a connected channel
+                // this is because protocol messages can only be sent on a
+                // connected channel and the client has to inform the server
+                // about the audio packet properties via the protocol
+
+                // check if channel was not connected, this is a new connection
+                bNewConnection = !IsConnected();
+
+                // reset time-out counter
+                iConTimeOut = iConTimeOutStartVal;
             }
-            else
-            {
-                // the protocol parsing failed and this was no audio block,
-                // we treat this as protocol error (unkown packet)
-                eRet = PS_PROT_ERR;
-            }
+            Mutex.unlock();
         }
 
         // inform other objects that new connection was established
@@ -1008,13 +1091,22 @@ CVector<unsigned char> CChannel::PrepSendPacket ( const CVector<short>& vecsNPac
     // tell the following network send routine that nothing should be sent
     CVector<unsigned char> vecbySendBuf ( 0 );
 
-    // use conversion buffer to convert sound card block size in network
-    // block size
-    if ( ConvBuf.Put ( vecsNPacket ) )
+    if ( bIsServer )
+    {
+        // use conversion buffer to convert sound card block size in network
+        // block size
+        if ( ConvBuf.Put ( vecsNPacket ) )
+        {
+            // a packet is ready, compress audio
+            vecbySendBuf.Init ( iAudComprSizeOut );
+            vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
+        }
+    }
+    else
     {
         // a packet is ready, compress audio
         vecbySendBuf.Init ( iAudComprSizeOut );
-        vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
+        vecbySendBuf = AudioCompressionOut.Encode ( vecsNPacket );
     }
 
     return vecbySendBuf;

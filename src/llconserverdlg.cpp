@@ -45,22 +45,13 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
 
     // set up list view for connected clients
     ListViewClients->setColumnWidth ( 0, 170 );
-
-// TODO QT4
-
-//    ListViewClients->setColumnAlignment ( 1, Qt::AlignLeft );
     ListViewClients->setColumnWidth ( 1, 150 );
-//    ListViewClients->setColumnAlignment ( 2, Qt::AlignCenter );
-//    ListViewClients->setColumnAlignment ( 3, Qt::AlignCenter );
-//    ListViewClients->setColumnAlignment ( 4, Qt::AlignRight );
-//    ListViewClients->setColumnAlignment ( 5, Qt::AlignRight );
-//    ListViewClients->setColumnAlignment ( 6, Qt::AlignRight );
     ListViewClients->clear();
 
-    /* insert items in reverse order because in Windows all of them are
-       always visible -> put first item on the top */
-    vecpListViewItems.Init(MAX_NUM_CHANNELS);
-    for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
+    // insert items in reverse order because in Windows all of them are
+    // always visible -> put first item on the top
+    vecpListViewItems.Init ( USED_NUM_CHANNELS );
+    for ( int i = USED_NUM_CHANNELS - 1; i >= 0; i-- )
     {
         vecpListViewItems[i] = new CServerListViewItem ( ListViewClients );
         vecpListViewItems[i]->setHidden ( true );
@@ -94,16 +85,15 @@ void CLlconServerDlg::OnTimer()
     CVector<QString>        vecsName;
     CVector<int>            veciJitBufSize;
     CVector<int>            veciNetwOutBlSiFact;
-    CVector<int>            veciNetwInBlSiFact;
     double                  dCurTiStdDev;
 
     ListViewMutex.lock();
 
     pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufSize,
-        veciNetwOutBlSiFact, veciNetwInBlSiFact );
+        veciNetwOutBlSiFact );
 
     // fill list with connected clients
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         if ( !( vecHostAddresses[i].InetAddr == QHostAddress ( (quint32) 0 ) ) )
         {
@@ -119,13 +109,10 @@ void CLlconServerDlg::OnTimer()
             vecpListViewItems[i]->setText ( 4,
                 QString().setNum ( veciJitBufSize[i] ) );
 
-            // in/out network block sizes
+            // out network block size
             vecpListViewItems[i]->setText ( 5,
                 QString().setNum (
-                double ( veciNetwInBlSiFact[i] * MIN_BLOCK_DURATION_MS ), 'f', 2 ) );
-            vecpListViewItems[i]->setText ( 6,
-                QString().setNum (
-                double ( veciNetwOutBlSiFact[i] * MIN_BLOCK_DURATION_MS ), 'f', 2 ) );
+                double ( veciNetwOutBlSiFact[i] * MIN_SERVER_BLOCK_DURATION_MS ), 'f', 2 ) );
 
             vecpListViewItems[i]->setHidden ( false );
         }

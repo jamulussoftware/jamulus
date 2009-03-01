@@ -27,6 +27,7 @@
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16 iPortNumber ) :
+    Channel ( false ), /* we need a client channel -> "false" */
     Sound ( AudioCallback, this ),
     Socket ( &Channel, iPortNumber ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
@@ -111,7 +112,7 @@ void CClient::OnReceivePingMessage ( int iMs )
 bool CClient::SetServerAddr ( QString strNAddr )
 {
     QHostAddress InetAddr;
-    quint16      iNetPort = LLCON_PORT_NUMBER;
+    quint16      iNetPort = LLCON_DFAULT_PORT_NUMBER;
 
     // parse input address for the type [IP address]:[port number]
     QString strPort = strNAddr.section ( ":", 1, 1 );
@@ -189,10 +190,13 @@ void CClient::AudioCallback ( CVector<short>& psData, void* arg )
 void CClient::Init()
 {
     // set block size (in samples)
-    iMonoBlockSizeSam   = MIN_BLOCK_SIZE_SAMPLES;
+
+// TEST
+    iMonoBlockSizeSam   = 128;//64;//MIN_SERVER_BLOCK_SIZE_SAMPLES;
+
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
-    iSndCrdMonoBlockSizeSam   = MIN_BLOCK_DURATION_MS * SND_CRD_SAMPLE_RATE / 1000;
+    iSndCrdMonoBlockSizeSam   = iMonoBlockSizeSam * SND_CRD_SAMPLE_RATE / SYSTEM_SAMPLE_RATE;
     iSndCrdStereoBlockSizeSam = 2 * iSndCrdMonoBlockSizeSam;
 
     vecsAudioSndCrdStereo.Init ( iSndCrdStereoBlockSizeSam );
@@ -202,6 +206,11 @@ void CClient::Init()
     vecdAudioStereo.Init ( iStereoBlockSizeSam );
 
     Sound.Init ( iSndCrdStereoBlockSizeSam );
+
+
+// TEST
+Channel.SetNetwBufSizeOut ( iMonoBlockSizeSam );
+
 
     // resample objects are always initialized with the input block size
     // record
@@ -362,7 +371,7 @@ void CClient::UpdateTimeResponseMeasurement()
     // we want to calculate the standard deviation (we assume that the mean
     // is correct at the block period time)
     const double dCurAddVal =
-        ( (double) ( CurTime - TimeLastBlock ) - MIN_BLOCK_DURATION_MS );
+        ( (double) ( CurTime - TimeLastBlock ) - MIN_SERVER_BLOCK_DURATION_MS );
 
     RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
 

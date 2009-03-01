@@ -54,11 +54,10 @@ public:
 
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
         CVector<QString>& vecsName,
-        CVector<int>& veciJitBufSize, CVector<int>& veciNetwOutBlSiFact,
-        CVector<int>& veciNetwInBlSiFact )
+        CVector<int>& veciJitBufSize, CVector<int>& veciNetwOutBlSiFact )
     {
         ChannelSet.GetConCliParam ( vecHostAddresses, vecsName,
-            veciJitBufSize, veciNetwOutBlSiFact, veciNetwInBlSiFact );
+            veciJitBufSize, veciNetwOutBlSiFact );
     }
 
     bool GetTimingStdDev ( double& dCurTiStdDev );

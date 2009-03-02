@@ -161,7 +161,7 @@ void CClient::Start()
     // init object
 
 // TEST
-Init ( 256 );
+Init ( 192 );
 
     // enable channel
     Channel.SetEnable ( true );

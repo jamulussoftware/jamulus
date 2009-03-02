@@ -906,21 +906,16 @@ bool CChannel::GetAddress(CHostAddress& RetAddr)
     }
 }
 
-
-
-
 void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps )
 {
     QMutexLocker locker ( &Mutex );
 
-// TEST
-// TODO check possiblity of received parameter -> error checking
-// utilize, e.g., MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ
-vecNetwBufferInProps[0].iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
-vecNetwBufferInProps[0].eAudComprType   = NetworkTransportProps.eAudioCodingType;
-vecNetwBufferInProps[0].iNetwInBufSize  = AudioCompressionIn.Init (
-    vecNetwBufferInProps[0].iAudioBlockSize,
-    vecNetwBufferInProps[0].eAudComprType );
+    // apply received parameters to internal data struct
+    vecNetwBufferInProps[0].iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
+    vecNetwBufferInProps[0].eAudComprType   = NetworkTransportProps.eAudioCodingType;
+    vecNetwBufferInProps[0].iNetwInBufSize  = AudioCompressionIn.Init (
+        vecNetwBufferInProps[0].iAudioBlockSize,
+        vecNetwBufferInProps[0].eAudComprType );
 }
 
 void CChannel::OnReqNetTranspProps()
@@ -941,9 +936,6 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
     // send current network transport properties
     Protocol.CreateNetwTranspPropsMes ( NetworkTransportProps );
 }
-
-
-
 
 EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                                  int iNumBytes )

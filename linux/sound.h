@@ -36,7 +36,7 @@
 
 // the number of periods is critical for latency
 #define NUM_PERIOD_BLOCKS_IN        2
-#define NUM_PERIOD_BLOCKS_OUT       2
+#define NUM_PERIOD_BLOCKS_OUT       1
 
 #define MAX_SND_BUF_IN              200
 #define MAX_SND_BUF_OUT             200

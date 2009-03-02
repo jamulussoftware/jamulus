@@ -914,7 +914,6 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
     QMutexLocker locker ( &Mutex );
 
 // TEST
-// TODO use mutex in Put function
 // TODO check possiblity of received parameter -> error checking
 // utilize, e.g., MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ
 vecNetwBufferInProps[0].iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
@@ -955,6 +954,12 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
     bool bIsProtocolPacket = false;
     bool bIsAudioPacket    = false;
     bool bNewConnection    = false;
+    bool bReinitializeIn   = false;
+    bool bReinitializeOut  = false;
+
+    // intermediate storage for new parameters
+    int           iNewAudioBlockSize;
+    EAudComprType eNewAudComprType;
 
     if ( bIsEnabled )
     {
@@ -974,40 +979,59 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
         // only try to parse audio if it was not a protocol packet
         if ( !bIsProtocolPacket )
         {
-            // check if this is an audio packet by checking all possible lengths
-            const int iPossNetwSizes = vecNetwBufferInProps.Size();
-
-            for ( int i = 0; i < iPossNetwSizes; i++ )
+            Mutex.lock();
             {
-                // check for low/high quality audio packets and set flags
-                if ( iNumBytes == vecNetwBufferInProps[i].iNetwInBufSize )
+                // check if this is an audio packet by checking all possible lengths
+                const int iPossNetwSizes = vecNetwBufferInProps.Size();
+
+                for ( int i = 0; i < iPossNetwSizes; i++ )
                 {
-                    bIsAudioPacket = true;
-
-                    // check if we are correctly initialized
-                    const int iNewAudioBlockSize =
-                        vecNetwBufferInProps[i].iAudioBlockSize;
-
-                    const EAudComprType eNewAudComprType =
-                        vecNetwBufferInProps[i].eAudComprType;
-
-                    if ( ( iNewAudioBlockSize != iCurAudioBlockSizeIn ) ||
-                         ( eNewAudComprType != AudioCompressionIn.GetType() ) )
+                    // check for low/high quality audio packets and set flags
+                    if ( iNumBytes == vecNetwBufferInProps[i].iNetwInBufSize )
                     {
-                        // re-initialize to new value
-                        SetAudioBlockSizeAndComprIn (
-                            iNewAudioBlockSize, eNewAudComprType );
-                    }
+                        bIsAudioPacket = true;
 
-                    // in case of a server channel, use the same audio
-                    // compression for output as for the input
-                    if ( bIsServer )
-                    {
-                        if ( GetAudioCompressionOut() != vecNetwBufferInProps[i].eAudComprType )
+                        // check if we are correctly initialized
+                        iNewAudioBlockSize =
+                            vecNetwBufferInProps[i].iAudioBlockSize;
+
+                        eNewAudComprType =
+                            vecNetwBufferInProps[i].eAudComprType;
+
+                        if ( ( iNewAudioBlockSize != iCurAudioBlockSizeIn ) ||
+                             ( eNewAudComprType != AudioCompressionIn.GetType() ) )
                         {
-                            SetAudioCompressionOut ( vecNetwBufferInProps[i].eAudComprType );
+                            bReinitializeIn = true;
+                        }
+
+                        // in case of a server channel, use the same audio
+                        // compression for output as for the input
+                        if ( bIsServer )
+                        {
+                            if ( GetAudioCompressionOut() != eNewAudComprType )
+                            {
+                                bReinitializeOut = true;
+                            }
                         }
                     }
+                }
+                Mutex.unlock();
+
+                // actual initialization calls have to be made
+                // outside the mutex region since they internally
+                // use the same mutex, too                
+                if ( bReinitializeIn )
+                {
+                    // re-initialize to new value
+                    SetAudioBlockSizeAndComprIn (
+                        iNewAudioBlockSize, eNewAudComprType );
+
+                }
+                
+                if ( bReinitializeOut )
+                {
+                    SetAudioCompressionOut ( eNewAudComprType );
+
                 }
             }
 

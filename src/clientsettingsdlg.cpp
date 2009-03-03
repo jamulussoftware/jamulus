@@ -63,6 +63,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     SliderNetBuf->setRange ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
     UpdateJitterBufferFrame();
 
+    // sound card buffer size
+    SliderSndCrdBufferDelay->setRange ( 0,
+        CSndCrdBufferSizes::GetNumOfBufferSizes() - 1 );
+
     // init combo box containing all available sound cards in the system
     cbSoundcard->clear();
     for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndInterface()->GetNumDev(); iSndDevIdx++ )
@@ -108,8 +112,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerPing() ) );
 
+    // slider controls
     QObject::connect ( SliderNetBuf, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderNetBuf ( int ) ) );
+    QObject::connect ( SliderSndCrdBufferDelay, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnSliderSndCrdBufferDelay ( int ) ) );
 
     // check boxes
     QObject::connect ( cbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
@@ -146,9 +153,14 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
     TextNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
 
     // if auto setting is enabled, disable slider control
-    cbAutoJitBuf->setChecked ( pClient->GetDoAutoSockBufSize() );
+    cbAutoJitBuf->setChecked (  pClient->GetDoAutoSockBufSize() );
     SliderNetBuf->setEnabled ( !pClient->GetDoAutoSockBufSize() );
     TextNetBuf->setEnabled   ( !pClient->GetDoAutoSockBufSize() );
+}
+
+void CClientSettingsDlg::UpdateSoundCardFrame()
+{
+    // TODO
 }
 
 void CClientSettingsDlg::showEvent ( QShowEvent* showEvent )
@@ -171,8 +183,20 @@ void CClientSettingsDlg::OnDriverSetupBut()
 void CClientSettingsDlg::OnSliderNetBuf ( int value )
 {
     pClient->SetSockBufSize ( value );
-    TextNetBuf->setText ( "Size: " + QString().setNum ( value ) );
-    UpdateDisplay();
+    UpdateJitterBufferFrame();
+}
+
+void CClientSettingsDlg::OnSliderSndCrdBufferDelay ( int value )
+{
+    // TODO
+
+
+// TODO put this in the function "UpdateSoundCardFrame"
+TextLabelPreferredSndCrdBufDelay->setText (
+    QString().setNum ( (double) CSndCrdBufferSizes::GetBufferSizeFromIndex ( value ) *
+    1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
+    QString().setNum ( CSndCrdBufferSizes::GetBufferSizeFromIndex ( value ) ) + ")" );
+
 }
 
 void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
@@ -238,15 +262,11 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
     - the mean delay of a cyclic buffer is half the buffer size (since
       for the average it is assumed that the buffer is half filled)
     - consider the jitter buffer on the server side, too
-    - assume that the sound card introduces an additional delay of 2 * MIN_SERVER_BLOCK_DURATION_MS
 */
 
-// TODO revise this
+    const int iTotalJitterBufferDelayMS = MIN_SERVER_BLOCK_DURATION_MS *
+        ( 2 /* buffer at client and server */ * pClient->GetSockBufSize() ) / 2;
 
-const int iTotalJitterBufferDelayMS = 0;
-//    const int iTotalJitterBufferDelayMS = MIN_SERVER_BLOCK_DURATION_MS *
-//        ( 2 * pClient->GetSockBufSize() + pClient->GetNetwBufSizeFactIn() +
-//          pClient->GetNetwBufSizeFactOut() ) / 2;
 
 // TODO consider sound card interface block size
 
@@ -255,9 +275,9 @@ const int iTotalSoundCardDelayMS = 0;
 //        MIN_SERVER_BLOCK_DURATION_MS * ( pClient->GetSndInterface()->GetInNumBuf() +
 //          pClient->GetSndInterface()->GetOutNumBuf() ) / 2;
 
-// TODO
-    const int iDelayToFillNetworkPackets = 0;//MIN_SERVER_BLOCK_DURATION_MS *
-//        ( pClient->GetNetwBufSizeFactIn() + pClient->GetNetwBufSizeFactOut() );
+    const int iDelayToFillNetworkPackets =
+        ( pClient->GetNetwBufSizeOut() + pClient->GetAudioBlockSizeIn() ) *
+        1000 / SYSTEM_SAMPLE_RATE;
 
     const int iTotalBufferDelay = iDelayToFillNetworkPackets +
         iTotalJitterBufferDelayMS + iTotalSoundCardDelayMS;

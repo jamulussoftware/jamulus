@@ -110,8 +110,10 @@ public:
     void SetSockBufSize ( const int iNumBlocks );
     int GetSockBufSize() { return iCurSockBufSize; }
 
-// TEST
-void SetNetwBufSizeOut ( const int iNewAudioBlockSizeOut );
+    void SetNetwBufSizeOut ( const int iNewAudioBlockSizeOut );
+    int GetNetwBufSizeOut() { return iCurAudioBlockSizeOut; }
+
+    int GetAudioBlockSizeIn() { return iCurAudioBlockSizeIn; }
 
     void SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut );
     int GetNetwBufSizeFactOut() { return iCurNetwOutBlSiFact; }

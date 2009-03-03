@@ -73,11 +73,13 @@ protected:
     virtual void hideEvent ( QHideEvent* hideEvent );
 
     void UpdateJitterBufferFrame();
+    void UpdateSoundCardFrame();
 
 public slots:
     void OnTimerStatus() { UpdateDisplay(); }
     void OnTimerPing();
     void OnSliderNetBuf ( int value );
+    void OnSliderSndCrdBufferDelay ( int value );
     void OnAutoJitBuf ( int value );
     void OnOpenChatOnNewMessageStateChanged ( int value );
     void OnAudioCompressionButtonGroupClicked ( QAbstractButton* button );

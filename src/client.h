@@ -114,6 +114,9 @@ public:
     }
     int GetSockBufSize() { return Channel.GetSockBufSize(); }
 
+    int GetNetwBufSizeOut() { return Channel.GetNetwBufSizeOut(); }
+    int GetAudioBlockSizeIn() { return Channel.GetAudioBlockSizeIn(); }
+
     void SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
     {
         Channel.SetAudioCompressionOut ( eNewAudComprTypeOut );

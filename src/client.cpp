@@ -194,10 +194,8 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamAtSndCrdSamRate )
     iMonoBlockSizeSam   = iSndCrdMonoBlockSizeSam * SYSTEM_SAMPLE_RATE / SND_CRD_SAMPLE_RATE;
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
-
-// TEST
-Channel.SetNetwBufSizeOut ( iMonoBlockSizeSam );
-
+    // the channel works on the same block size as the sound interface
+    Channel.SetNetwBufSizeOut ( iMonoBlockSizeSam );
 
     vecsAudioSndCrdStereo.Init ( iSndCrdStereoBlockSizeSam );
     vecdAudioSndCrdMono.Init   ( iSndCrdMonoBlockSizeSam );

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>421</width>
-    <height>313</height>
+    <width>562</width>
+    <height>310</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -73,9 +73,12 @@
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
           <property name="sizeHint" >
            <size>
-            <width>40</width>
+            <width>0</width>
             <height>20</height>
            </size>
           </property>
@@ -99,9 +102,12 @@
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
           <property name="sizeHint" >
            <size>
-            <width>40</width>
+            <width>0</width>
             <height>20</height>
            </size>
           </property>
@@ -116,9 +122,12 @@
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
           <property name="sizeHint" >
            <size>
-            <width>16</width>
+            <width>0</width>
             <height>20</height>
            </size>
           </property>
@@ -134,14 +143,14 @@
           </property>
           <property name="minimumSize" >
            <size>
-            <width>13</width>
-            <height>13</height>
+            <width>20</width>
+            <height>20</height>
            </size>
           </property>
           <property name="maximumSize" >
            <size>
-            <width>13</width>
-            <height>13</height>
+            <width>20</width>
+            <height>20</height>
            </size>
           </property>
          </widget>
@@ -151,9 +160,12 @@
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="sizeType" >
+           <enum>QSizePolicy::Minimum</enum>
+          </property>
           <property name="sizeHint" >
            <size>
-            <width>16</width>
+            <width>0</width>
             <height>20</height>
            </size>
           </property>
@@ -165,116 +177,15 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="GroupBoxNetwBuf" >
+    <widget class="QGroupBox" name="GroupBoxSoundCard" >
      <property name="title" >
-      <string>Block Size</string>
-     </property>
-     <layout class="QVBoxLayout" >
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="TextNetBufSiFactIn" >
-        <property name="minimumSize" >
-         <size>
-          <width>50</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text" >
-         <string>Size</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
-        <item>
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QSlider" name="SliderNetBufSiFactIn" >
-          <property name="pageStep" >
-           <number>1</number>
-          </property>
-          <property name="orientation" >
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="tickPosition" >
-           <enum>QSlider::TicksBothSides</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="GroupBoxMeasureResults" >
-     <property name="title" >
-      <string>Misc</string>
+      <string>Soundcard</string>
      </property>
      <layout class="QVBoxLayout" >
       <item>
-       <widget class="QLabel" name="lSoundcard" >
+       <widget class="QLabel" name="TextSoundcardDevice" >
         <property name="text" >
-         <string>Soundcard</string>
+         <string>Device</string>
         </property>
        </widget>
       </item>
@@ -291,6 +202,112 @@
           <width>153</width>
           <height>0</height>
          </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>201</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="GroupBoxSoundCrdBufDelay" >
+        <property name="title" >
+         <string>Buffer Delay</string>
+        </property>
+        <layout class="QVBoxLayout" >
+         <item>
+          <widget class="QSlider" name="SliderSndCrdBufferDelay" >
+           <property name="orientation" >
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="tickPosition" >
+            <enum>QSlider::TicksBelow</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <item>
+            <widget class="QLabel" name="TextSndCrdBufDelayPreferred" >
+             <property name="text" >
+              <string>Preferred</string>
+             </property>
+             <property name="wordWrap" >
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="TextLabelPreferredSndCrdBufDelay" >
+             <property name="frameShape" >
+              <enum>QFrame::Panel</enum>
+             </property>
+             <property name="frameShadow" >
+              <enum>QFrame::Sunken</enum>
+             </property>
+             <property name="text" >
+              <string>val</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" >
+           <item>
+            <widget class="QLabel" name="TextSndCrdBufDelayActual" >
+             <property name="text" >
+              <string>Actual</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="TextLabelActualSndCrdBufDelay" >
+             <property name="frameShape" >
+              <enum>QFrame::Panel</enum>
+             </property>
+             <property name="frameShadow" >
+              <enum>QFrame::Sunken</enum>
+             </property>
+             <property name="text" >
+              <string>val</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QPushButton" name="ButtonDriverSetup" >
+           <property name="text" >
+            <string>Driver Setup</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="GroupBoxMeasureResults" >
+     <property name="title" >
+      <string>Misc</string>
+     </property>
+     <layout class="QVBoxLayout" >
+      <item>
+       <widget class="QCheckBox" name="cbOpenChatOnNewMessage" >
+        <property name="text" >
+         <string>Open chat on new message</string>
         </property>
        </widget>
       </item>
@@ -325,20 +342,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="cbOpenChatOnNewMessage" >
-        <property name="text" >
-         <string>Open chat on new message</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <spacer>
         <property name="orientation" >
          <enum>Qt::Vertical</enum>
         </property>
         <property name="sizeHint" >
          <size>
-          <width>116</width>
+          <width>201</width>
           <height>16</height>
          </size>
         </property>
@@ -346,84 +356,53 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>2</number>
-        </property>
         <item>
-         <layout class="QVBoxLayout" >
-          <property name="spacing" >
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="lPingTime_2" >
-            <property name="text" >
-             <string>Buffer Delay</string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="wordWrap" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="TextLabelBufferDelay" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize" >
-             <size>
-              <width>40</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="frameShape" >
-             <enum>QFrame::Panel</enum>
-            </property>
-            <property name="frameShadow" >
-             <enum>QFrame::Sunken</enum>
-            </property>
-            <property name="text" >
-             <string>val</string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QLabel" name="label" >
+         <widget class="QLabel" name="TextPingTime" >
           <property name="text" >
-           <string>+</string>
+           <string>Ping Time</string>
           </property>
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" >
-          <property name="spacing" >
-           <number>0</number>
+         <widget class="QLabel" name="TextLabelPingTime" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="frameShape" >
+           <enum>QFrame::Panel</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="text" >
+           <string>val</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QLabel" name="TextOverallDelay" >
+          <property name="text" >
+           <string>Overall Delay</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" >
           <item>
-           <widget class="QLabel" name="lPingTime" >
-            <property name="text" >
-             <string>Ping Time</string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="wordWrap" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="TextLabelPingTime" >
+           <widget class="QLabel" name="TextLabelOverallDelay" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
               <horstretch>0</horstretch>
@@ -436,6 +415,12 @@
               <height>0</height>
              </size>
             </property>
+            <property name="font" >
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="frameShape" >
              <enum>QFrame::Panel</enum>
             </property>
@@ -445,99 +430,61 @@
             <property name="text" >
              <string>val</string>
             </property>
-            <property name="alignment" >
-             <set>Qt::AlignCenter</set>
+           </widget>
+          </item>
+          <item>
+           <widget class="CMultiColorLED" native="1" name="CLEDOverallDelay" >
+            <property name="sizePolicy" >
+             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize" >
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
             </property>
            </widget>
           </item>
          </layout>
         </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" >
         <item>
-         <widget class="QLabel" name="label_2" >
+         <widget class="QLabel" name="TextUpstream" >
           <property name="text" >
-           <string>=</string>
+           <string>Upstream</string>
           </property>
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" >
-          <property name="spacing" >
-           <number>2</number>
+         <widget class="QLabel" name="TextUpstreamValue" >
+          <property name="font" >
+           <font>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
           </property>
-          <item>
-           <widget class="QLabel" name="lPingTime_3" >
-            <property name="text" >
-             <string>Overall Delay</string>
-            </property>
-            <property name="alignment" >
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="wordWrap" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" >
-            <item>
-             <widget class="QLabel" name="TextLabelOverallDelay" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize" >
-               <size>
-                <width>50</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="font" >
-               <font>
-                <weight>75</weight>
-                <bold>true</bold>
-               </font>
-              </property>
-              <property name="frameShape" >
-               <enum>QFrame::Panel</enum>
-              </property>
-              <property name="frameShadow" >
-               <enum>QFrame::Sunken</enum>
-              </property>
-              <property name="text" >
-               <string>val</string>
-              </property>
-              <property name="alignment" >
-               <set>Qt::AlignCenter</set>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="CMultiColorLED" native="1" name="CLEDOverallDelay" >
-              <property name="sizePolicy" >
-               <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize" >
-               <size>
-                <width>13</width>
-                <height>13</height>
-               </size>
-              </property>
-              <property name="maximumSize" >
-               <size>
-                <width>13</width>
-                <height>13</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
+          <property name="frameShape" >
+           <enum>QFrame::Panel</enum>
+          </property>
+          <property name="frameShadow" >
+           <enum>QFrame::Sunken</enum>
+          </property>
+          <property name="text" >
+           <string>val</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>

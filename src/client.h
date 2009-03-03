@@ -114,18 +114,6 @@ public:
     }
     int GetSockBufSize() { return Channel.GetSockBufSize(); }
 
-    void SetNetwBufSizeFactIn ( const int iNewNetNetwBlSiFactIn )
-    {
-        // store value and tell the server about new value
-        iNetwBufSizeFactIn = iNewNetNetwBlSiFactIn;
-        Channel.CreateNetwBlSiFactMes ( iNewNetNetwBlSiFactIn );
-    }
-    int GetNetwBufSizeFactIn() { return iNetwBufSizeFactIn; }
-
-    void SetNetwBufSizeFactOut ( const int iNetNetwBlSiFact )
-        { Channel.SetNetwBufSizeFactOut ( iNetNetwBlSiFact ); }
-    int GetNetwBufSizeFactOut() { return Channel.GetNetwBufSizeFactOut(); }
-
     void SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
     {
         Channel.SetAudioCompressionOut ( eNewAudComprTypeOut );
@@ -184,8 +172,6 @@ protected:
     int                     iSndCrdStereoBlockSizeSam;
     int                     iMonoBlockSizeSam;
     int                     iStereoBlockSizeSam;
-
-    int                     iNetwBufSizeFactIn;
 
     bool                    bOpenChatOnNewMessage;
 

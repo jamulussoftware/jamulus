@@ -33,7 +33,6 @@ CClient::CClient ( const quint16 iPortNumber ) :
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     iReverbLevel ( 0 ),
     bReverbOnLeftChan ( false ),
-    iNetwBufSizeFactIn ( DEF_NET_BLOCK_SIZE_FACTOR ),
     strIPAddress ( "" ), strName ( "" ),
     bOpenChatOnNewMessage ( true ),
     bDoAutoSockBufSize ( true )
@@ -77,14 +76,8 @@ for ( int i = 0; i < vecMessage.Size(); i++ ) {
 
 void CClient::OnReqJittBufSize()
 {
-
 // TODO cant we implement this OnReqJjittBufSize inside the channel object?
-
     Channel.CreateJitBufMes ( Channel.GetSockBufSize() );
-
-// FIXME: we set the network buffer size factor here, too -> in the
-// future a separate request function for this parameter should be created
-    Channel.CreateNetwBlSiFactMes ( iNetwBufSizeFactIn );
 }
 
 void CClient::OnNewConnection()

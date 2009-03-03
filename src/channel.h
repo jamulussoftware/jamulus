@@ -203,7 +203,6 @@ protected:
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnJittBufSizeChange ( int iNewJitBufSize );
-    void OnNetwBlSiFactChange ( int iNewNetwBlSiFact );
     void OnChangeChanGain ( int iChanID, double dNewGain );
     void OnChangeChanName ( QString strName );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );

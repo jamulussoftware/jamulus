@@ -648,10 +648,6 @@ CChannel::CChannel ( const bool bNIsServer ) : bIsServer ( bNIsServer ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( ChangeNetwBlSiFact ( int ) ),
-        this, SLOT ( OnNetwBlSiFactChange ( int ) ) );
-
     QObject::connect( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
@@ -865,11 +861,6 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
         // delete send message queue
         Protocol.Reset();
     }
-}
-
-void CChannel::OnNetwBlSiFactChange ( int iNewNetwBlSiFact )
-{
-    SetNetwBufSizeFactOut ( iNewNetwBlSiFact );
 }
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )

@@ -78,10 +78,10 @@ public slots:
     void OnTimerStatus() { UpdateDisplay(); }
     void OnTimerPing();
     void OnSliderNetBuf ( int value );
-    void OnSliderNetBufSiFactIn ( int value );
     void OnAutoJitBuf ( int value );
     void OnOpenChatOnNewMessageStateChanged ( int value );
     void OnAudioCompressionButtonGroupClicked ( QAbstractButton* button );
     void OnPingTimeResult ( int iPingTime );
     void OnSoundCrdSelection ( int iSndDevIdx );
+    void OnDriverSetupBut();
 };

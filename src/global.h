@@ -78,8 +78,8 @@
 // maximum value of factor for network block size
 #define MAX_NET_BLOCK_SIZE_FACTOR       3
 
-// default network block size factor
-#define DEF_NET_BLOCK_SIZE_FACTOR       3
+// default network block size factor (only used for server)
+#define DEF_NET_BLOCK_SIZE_FACTOR       2
 
 // minimum/maximum network buffer size (which can be chosen by slider)
 #define MIN_NET_BUF_SIZE_NUM_BL         1 // number of blocks
@@ -111,7 +111,7 @@
 #define LEN_MOV_AV_RESPONSE             ( TIME_MOV_AV_RESPONSE * 1000 / MIN_SERVER_BLOCK_DURATION_MS )
 
 // GUI definition: width/heigth size of LED pixmaps
-#define LED_WIDTH_HEIGHT_SIZE_PIXEL     13
+#define LED_WIDTH_HEIGHT_SIZE_PIXEL     20
 
 
 #define _MAXSHORT                       32767

@@ -243,7 +243,7 @@ bool CSound::Write ( CVector<short>& psData )
 
 
 // Common ***********************************************************************
-bool CSound::SetHWParams ( snd_pcm_t* handle, const int iBufferSizeIn,
+bool CSound::SetHWParams ( snd_pcm_t* handle, const int iDesiredBufferSize,
                            const int iNumPeriodBlocks )
 {
     int                  err;
@@ -301,21 +301,39 @@ bool CSound::SetHWParams ( snd_pcm_t* handle, const int iBufferSizeIn,
         return true;
     }
 
+    // set the period size
+    snd_pcm_uframes_t PeriodSize = iDesiredBufferSize;
+    if ( err = snd_pcm_hw_params_set_period_size_near ( handle, hwparams, &PeriodSize, 0 ) < 0 )
+    {
+        qDebug ( "cannot set period size (%s)\n", snd_strerror ( err ) );
+        return true;
+    }
+
     // set the buffer size and period size
-    snd_pcm_uframes_t BufferFrames = iBufferSizeIn * iNumPeriodBlocks;
+    snd_pcm_uframes_t BufferFrames = iDesiredBufferSize * iNumPeriodBlocks;
     if ( err = snd_pcm_hw_params_set_buffer_size_near ( handle, hwparams, &BufferFrames ) < 0 )
     {
         qDebug ( "cannot set buffer size (%s)\n", snd_strerror ( err ) );
         return true;
     }
 
-    // set the period size
-    snd_pcm_uframes_t PeriodSize = iBufferSizeIn;
-    if ( err = snd_pcm_hw_params_set_period_size_near ( handle, hwparams, &PeriodSize, 0 ) < 0 )
-    {
-        qDebug ( "cannot set period size (%s)\n", snd_strerror ( err ) );
-        return true;
-    }
+// check period and buffer size
+snd_pcm_uframes_t period_size;
+err = snd_pcm_hw_params_get_period_size ( hwparams, &period_size, 0 );
+if ( err < 0 )
+{
+    qDebug ( "Unable to get period size: %s\n", snd_strerror ( err ) );
+}
+qDebug ( "frame size: %d (desired: %d)", (int) period_size, iDesiredBufferSize );
+
+snd_pcm_uframes_t buffer_size;
+if ( err = snd_pcm_hw_params_get_buffer_size(hwparams, &buffer_size ) < 0 )
+{
+    qDebug ( "Unable to get buffer size: %s\n", snd_strerror ( err ) );
+}
+qDebug ( "buffer size: %d (desired: %d)", (int) buffer_size, iDesiredBufferSize * iNumPeriodBlocks );
+
+
 
     // write the parameters to device
     if ( err = snd_pcm_hw_params ( handle, hwparams ) < 0 )
@@ -323,24 +341,6 @@ bool CSound::SetHWParams ( snd_pcm_t* handle, const int iBufferSizeIn,
         qDebug("Unable to set hw params : %s", snd_strerror(err));
         return true;
     }
-
-
-// check period and buffer size
-snd_pcm_uframes_t buffer_size;
-if ( err = snd_pcm_hw_params_get_buffer_size(hwparams, &buffer_size ) < 0 )
-{
-    qDebug ( "Unable to get buffer size for playback: %s\n", snd_strerror ( err ) );
-}
-qDebug ( "buffer size: %d (desired: %d)", (int) buffer_size, iBufferSizeIn * iNumPeriodBlocks );
-
-snd_pcm_uframes_t period_size;
-err = snd_pcm_hw_params_get_period_size ( hwparams, &period_size, 0 );
-if ( err < 0 )
-{
-    qDebug ( "Unable to get period size for playback: %s\n", snd_strerror ( err ) );
-}
-qDebug ( "frame size: %d (desired: %d)", (int) period_size, iBufferSizeIn );
-
 
     // clean-up
     snd_pcm_hw_params_free ( hwparams );

@@ -43,25 +43,25 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     TextNetBuf->setWhatsThis ( strJitterBufferSize );
     GroupBoxJitterBuffer->setWhatsThis ( strJitterBufferSize );
 
+    // init driver button
+#ifdef _WIN32
+    ButtonDriverSetup->setText ( "ASIO Setup" );
+#else
+    // no use for this button for Linux right now, maybe later used
+    // for Jack
+    ButtonDriverSetup->hide();
+#endif
+
     // init delay information controls
     CLEDOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME );
     CLEDOverallDelay->Reset();
     TextLabelPingTime->setText ( "" );
-    TextLabelBufferDelay->setText ( "" );
     TextLabelOverallDelay->setText ( "" );
 
     // init slider controls ---
     // network buffer
     SliderNetBuf->setRange ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
     UpdateJitterBufferFrame();
-
-    // network buffer size factor in
-    SliderNetBufSiFactIn->setRange ( 1, MAX_NET_BLOCK_SIZE_FACTOR );
-    const int iCurNetBufSiFactIn = pClient->GetNetwBufSizeFactIn();
-    SliderNetBufSiFactIn->setValue ( iCurNetBufSiFactIn );
-    TextNetBufSiFactIn->setText ( "In:\n" + QString().setNum (
-        double ( iCurNetBufSiFactIn * MIN_SERVER_BLOCK_DURATION_MS ), 'f', 2 ) +
-        " ms" );
 
     // init combo box containing all available sound cards in the system
     cbSoundcard->clear();
@@ -111,9 +111,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( SliderNetBuf, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderNetBuf ( int ) ) );
 
-    QObject::connect ( SliderNetBufSiFactIn, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnSliderNetBufSiFactIn ( int ) ) );
-
     // check boxes
     QObject::connect ( cbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnOpenChatOnNewMessageStateChanged ( int ) ) );
@@ -123,6 +120,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // combo boxes
     QObject::connect ( cbSoundcard, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnSoundCrdSelection ( int ) ) );
+
+    // buttons
+    QObject::connect ( ButtonDriverSetup, SIGNAL ( clicked() ),
+        this, SLOT ( OnDriverSetupBut() ) );
 
     // misc
     QObject::connect ( pClient, SIGNAL ( PingTimeReceived ( int ) ),
@@ -162,19 +163,15 @@ void CClientSettingsDlg::hideEvent ( QHideEvent* hideEvent )
     TimerPing.stop();
 }
 
+void CClientSettingsDlg::OnDriverSetupBut()
+{
+    // TODO write function in Windows sound interface
+}
+
 void CClientSettingsDlg::OnSliderNetBuf ( int value )
 {
     pClient->SetSockBufSize ( value );
     TextNetBuf->setText ( "Size: " + QString().setNum ( value ) );
-    UpdateDisplay();
-}
-
-void CClientSettingsDlg::OnSliderNetBufSiFactIn ( int value )
-{
-    pClient->SetNetwBufSizeFactIn ( value );
-    TextNetBufSiFactIn->setText ( "In:\n" + QString().setNum (
-        double ( value * MIN_SERVER_BLOCK_DURATION_MS ), 'f', 2 ) +
-        " ms" );
     UpdateDisplay();
 }
 
@@ -243,9 +240,13 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
     - consider the jitter buffer on the server side, too
     - assume that the sound card introduces an additional delay of 2 * MIN_SERVER_BLOCK_DURATION_MS
 */
-    const int iTotalJitterBufferDelayMS = MIN_SERVER_BLOCK_DURATION_MS *
-        ( 2 * pClient->GetSockBufSize() + pClient->GetNetwBufSizeFactIn() +
-          pClient->GetNetwBufSizeFactOut() ) / 2;
+
+// TODO revise this
+
+const int iTotalJitterBufferDelayMS = 0;
+//    const int iTotalJitterBufferDelayMS = MIN_SERVER_BLOCK_DURATION_MS *
+//        ( 2 * pClient->GetSockBufSize() + pClient->GetNetwBufSizeFactIn() +
+//          pClient->GetNetwBufSizeFactOut() ) / 2;
 
 // TODO consider sound card interface block size
 
@@ -254,8 +255,9 @@ const int iTotalSoundCardDelayMS = 0;
 //        MIN_SERVER_BLOCK_DURATION_MS * ( pClient->GetSndInterface()->GetInNumBuf() +
 //          pClient->GetSndInterface()->GetOutNumBuf() ) / 2;
 
-    const int iDelayToFillNetworkPackets = MIN_SERVER_BLOCK_DURATION_MS *
-        ( pClient->GetNetwBufSizeFactIn() + pClient->GetNetwBufSizeFactOut() );
+// TODO
+    const int iDelayToFillNetworkPackets = 0;//MIN_SERVER_BLOCK_DURATION_MS *
+//        ( pClient->GetNetwBufSizeFactIn() + pClient->GetNetwBufSizeFactOut() );
 
     const int iTotalBufferDelay = iDelayToFillNetworkPackets +
         iTotalJitterBufferDelayMS + iTotalSoundCardDelayMS;
@@ -264,7 +266,6 @@ const int iTotalSoundCardDelayMS = 0;
 
     // apply values to GUI labels, take special care if ping time exceeds
     // a certain value
-    TextLabelBufferDelay->setText ( QString().setNum ( iTotalBufferDelay ) + " ms" );
     if ( iPingTime > 500 )
     {
         const QString sErrorText = "<font color=""red""><b>&#62;500 ms</b></font>";
@@ -304,7 +305,6 @@ void CClientSettingsDlg::UpdateDisplay()
     {
         // clear text labels with client parameters
         TextLabelPingTime->setText ( "" );
-        TextLabelBufferDelay->setText ( "" );
         TextLabelOverallDelay->setText ( "" );
     }
 }

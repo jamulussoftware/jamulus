@@ -606,6 +606,14 @@ CChannel::CChannel ( const bool bNIsServer ) : bIsServer ( bNIsServer ),
             vecNetwBufferInProps[iMSIdx].eAudComprType );
     }
 
+    // initial value for connection time out counter, we calculate the total
+    // number of samples here and subtract the number of samples of the block
+    // which we take out of the buffer to be independent of block sizes
+    iConTimeOutStartVal = CON_TIME_OUT_SEC_MAX * SYSTEM_SAMPLE_RATE;
+
+    // init time-out for the buffer with zero -> no connection
+    iConTimeOut = 0;
+
     // init the socket buffer
     SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
@@ -618,10 +626,6 @@ CChannel::CChannel ( const bool bNIsServer ) : bIsServer ( bNIsServer ),
 
     // set initial audio compression format for output
     SetAudioCompressionOut ( CT_MSADPCM );
-
-    // init time-out for the buffer with zero -> no connection
-    iConTimeOut = 0;
-
 
     // connections -------------------------------------------------------------
     QObject::connect ( &Protocol,
@@ -723,13 +727,6 @@ void CChannel::SetAudioBlockSizeAndComprIn ( const int iNewBlockSize,
 
     // init audio compression unit
     AudioCompressionIn.Init ( iNewBlockSize, eNewAudComprType );
-
-    // initial value for connection time out counter
-
-// TODO FIXME this does not work correctly -> bug
-// (the calculation is correct but the value is not correctly applied)
-    iConTimeOutStartVal = 
-        ( CON_TIME_OUT_SEC_MAX * SYSTEM_SAMPLE_RATE ) / iNewBlockSize;
 }
 
 void CChannel::SetNetwBufSizeOut ( const int iNewAudioBlockSizeOut )
@@ -1097,20 +1094,29 @@ EGetDataStat CChannel::GetData ( CVector<double>& vecdData )
 {
     QMutexLocker locker ( &Mutex );
 
-    // init with ok flag
-    EGetDataStat eGetStatus = GS_BUFFER_OK;
+    EGetDataStat eGetStatus;
 
-    if ( !SockBuf.Get ( vecdData ) )
+    const bool bSockBufState = SockBuf.Get ( vecdData );
+
+    // decrease time-out counter
+    if ( iConTimeOut > 0 )
     {
-        // decrease time-out counter
-        if ( iConTimeOut > 0 )
-        {
-            iConTimeOut--;
+        // subtract the number of samples of the current block since the
+        // time out counter is based on samples not on blocks
+        iConTimeOut -= vecdData.Size();
 
-            if ( iConTimeOut == 0 )
+        if ( iConTimeOut <= 0 )
+        {
+            // channel is just disconnected
+            eGetStatus  = GS_CHAN_NOW_DISCONNECTED;
+            iConTimeOut = 0; // make sure we do not have negative values
+        }
+        else
+        {
+            if ( bSockBufState )
             {
-                // channel is just disconnected
-                eGetStatus = GS_CHAN_NOW_DISCONNECTED;
+                // everything is ok
+                eGetStatus = GS_BUFFER_OK;
             }
             else
             {
@@ -1118,11 +1124,11 @@ EGetDataStat CChannel::GetData ( CVector<double>& vecdData )
                 eGetStatus = GS_BUFFER_UNDERRUN;
             }
         }
-        else
-        {
-            // channel is disconnected
-            eGetStatus = GS_CHAN_NOT_CONNECTED;
-        }
+    }
+    else
+    {
+        // channel is disconnected
+        eGetStatus = GS_CHAN_NOT_CONNECTED;
     }
 
     return eGetStatus;

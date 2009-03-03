@@ -116,6 +116,7 @@ public:
 
     int GetNetwBufSizeOut() { return Channel.GetNetwBufSizeOut(); }
     int GetAudioBlockSizeIn() { return Channel.GetAudioBlockSizeIn(); }
+    int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
     void SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
     {

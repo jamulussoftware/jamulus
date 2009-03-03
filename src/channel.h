@@ -114,6 +114,7 @@ public:
     int GetNetwBufSizeOut() { return iCurAudioBlockSizeOut; }
 
     int GetAudioBlockSizeIn() { return iCurAudioBlockSizeIn; }
+    int GetUploadRateKbps();
 
     void SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut );
     int GetNetwBufSizeFactOut() { return iCurNetwOutBlSiFact; }

@@ -321,6 +321,11 @@ void CClientSettingsDlg::UpdateDisplay()
     // update slider controls (settings might have been changed)
     UpdateJitterBufferFrame();
 
+
+// TEST
+TextUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
+
+
     if ( !pClient->IsRunning() )
     {
         // clear text labels with client parameters

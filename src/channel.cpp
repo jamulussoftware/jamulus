@@ -1153,3 +1153,23 @@ CVector<unsigned char> CChannel::PrepSendPacket ( const CVector<short>& vecsNPac
 
     return vecbySendBuf;
 }
+
+int CChannel::GetUploadRateKbps()
+{
+    int iAudioSizeOut;
+
+    if ( bIsServer )
+    {
+        iAudioSizeOut = iCurNetwOutBlSiFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
+    }
+    else
+    {
+        iAudioSizeOut = iCurAudioBlockSizeOut;
+    }
+
+    // we assume that the UDP packet which is transported via IP has an
+    // additional header size of
+    // 8 (UDP) + 20 (IP without optional fields) = 28 bytes
+    return ( iAudComprSizeOut + 28 /* header */ ) * 8 /* bits per byte */ *
+        SYSTEM_SAMPLE_RATE / iAudioSizeOut / 1000;
+}

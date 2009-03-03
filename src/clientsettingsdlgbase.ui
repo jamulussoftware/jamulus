@@ -463,7 +463,7 @@
         <item>
          <widget class="QLabel" name="TextUpstream" >
           <property name="text" >
-           <string>Upstream</string>
+           <string>Upstream Rate</string>
           </property>
          </widget>
         </item>

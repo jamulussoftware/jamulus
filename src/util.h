@@ -440,6 +440,12 @@ class CSndCrdBufferSizes
 {
 public:
     static int GetNumOfBufferSizes() { return 30; }
+
+    // we use a conservative value as default, this value does not
+    // give perfekt latency results but should work ok on most
+    // sound cards and drivers
+    static int GetDefaultIndex() { return 5; }
+
     static int GetBufferSizeFromIndex ( const int iIdx )
     {
         if ( ( iIdx >= 0 ) && ( iIdx < 30 ) )

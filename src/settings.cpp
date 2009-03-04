@@ -93,6 +93,12 @@ void CSettings::ReadIniFile ( const QString& sFileName )
         pClient->GetSndInterface()->SetDev ( INVALID_SNC_CARD_DEVICE );
     }
 
+    // sound card preferred buffer size index
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx", 0, CSndCrdBufferSizes::GetNumOfBufferSizes(), iValue ) )
+    {
+        pClient->SetSndCrdPreferredMonoBlSizeIndex ( iValue );
+    }
+
     // automatic network jitter buffer size setting
     if ( GetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", bValue ) )
     {
@@ -156,6 +162,9 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
     // sound card selection
     SetNumericIniSet ( IniXMLDocument, "client", "auddevidx", pClient->GetSndInterface()->GetDev() );
+
+    // sound card preferred buffer size index
+    SetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx", pClient->GetSndCrdPreferredMonoBlSizeIndex() );
 
     // automatic network jitter buffer size setting
     SetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", pClient->GetDoAutoSockBufSize() );

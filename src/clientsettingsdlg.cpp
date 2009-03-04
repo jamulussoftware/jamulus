@@ -52,11 +52,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     ButtonDriverSetup->hide();
 #endif
 
-    // init delay information controls
+    // init delay and other information controls
     CLEDOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME );
     CLEDOverallDelay->Reset();
     TextLabelPingTime->setText ( "" );
     TextLabelOverallDelay->setText ( "" );
+    TextUpstreamValue->setText ( "" );
 
     // init slider controls ---
     // network buffer
@@ -160,7 +161,14 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
 
 void CClientSettingsDlg::UpdateSoundCardFrame()
 {
-    // TODO
+    // update slider value and text
+    const int iCurBufIdx = pClient->GetSndCrdPreferredMonoBlSizeIndex();
+    SliderSndCrdBufferDelay->setValue ( iCurBufIdx );
+
+    TextLabelPreferredSndCrdBufDelay->setText (
+        QString().setNum ( (double) CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurBufIdx ) *
+        1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
+        QString().setNum ( CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurBufIdx ) ) + ")" );
 }
 
 void CClientSettingsDlg::showEvent ( QShowEvent* showEvent )
@@ -188,15 +196,8 @@ void CClientSettingsDlg::OnSliderNetBuf ( int value )
 
 void CClientSettingsDlg::OnSliderSndCrdBufferDelay ( int value )
 {
-    // TODO
-
-
-// TODO put this in the function "UpdateSoundCardFrame"
-TextLabelPreferredSndCrdBufDelay->setText (
-    QString().setNum ( (double) CSndCrdBufferSizes::GetBufferSizeFromIndex ( value ) *
-    1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
-    QString().setNum ( CSndCrdBufferSizes::GetBufferSizeFromIndex ( value ) ) + ")" );
-
+    pClient->SetSndCrdPreferredMonoBlSizeIndex ( value );
+    UpdateSoundCardFrame();
 }
 
 void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
@@ -320,17 +321,19 @@ void CClientSettingsDlg::UpdateDisplay()
 {
     // update slider controls (settings might have been changed)
     UpdateJitterBufferFrame();
-
-
-// TEST
-TextUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
-
+    UpdateSoundCardFrame();
 
     if ( !pClient->IsRunning() )
     {
         // clear text labels with client parameters
         TextLabelPingTime->setText ( "" );
         TextLabelOverallDelay->setText ( "" );
+        TextUpstreamValue->setText ( "" );
+    }
+    else
+    {
+        // update upstream rate information label (only if client is running)
+        TextUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
     }
 }
 

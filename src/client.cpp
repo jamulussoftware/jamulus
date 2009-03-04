@@ -35,7 +35,8 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bReverbOnLeftChan ( false ),
     strIPAddress ( "" ), strName ( "" ),
     bOpenChatOnNewMessage ( true ),
-    bDoAutoSockBufSize ( true )
+    bDoAutoSockBufSize ( true ),
+    iSndCrdPreferredMonoBlSizeIndex ( CSndCrdBufferSizes::GetDefaultIndex() )
 {
     // connection for protocol
     QObject::connect ( &Channel,
@@ -148,6 +149,23 @@ bool CClient::SetServerAddr ( QString strNAddr )
 
     return true;
 }
+
+
+
+
+void CClient::SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx )
+{
+// right now we simply set the internal value
+if ( ( iNewIdx >= 0 ) && ( CSndCrdBufferSizes::GetNumOfBufferSizes() ) )
+{
+    iSndCrdPreferredMonoBlSizeIndex = iNewIdx;
+}
+
+// TODO take action on new parameter
+}
+
+
+
 
 void CClient::Start()
 {

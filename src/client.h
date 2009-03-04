@@ -118,6 +118,10 @@ public:
     int GetAudioBlockSizeIn() { return Channel.GetAudioBlockSizeIn(); }
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
+    void SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx );
+    int GetSndCrdPreferredMonoBlSizeIndex()
+        { return iSndCrdPreferredMonoBlSizeIndex; }
+
     void SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
     {
         Channel.SetAudioCompressionOut ( eNewAudComprTypeOut );
@@ -171,6 +175,8 @@ protected:
     bool                    bReverbOnLeftChan;
     int                     iReverbLevel;
     CAudioReverb            AudioReverb;
+
+    int                     iSndCrdPreferredMonoBlSizeIndex;
 
     int                     iSndCrdMonoBlockSizeSam;
     int                     iSndCrdStereoBlockSizeSam;

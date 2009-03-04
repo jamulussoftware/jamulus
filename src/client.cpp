@@ -380,7 +380,8 @@ void CClient::UpdateTimeResponseMeasurement()
     // we want to calculate the standard deviation (we assume that the mean
     // is correct at the block period time)
     const double dCurAddVal =
-        ( (double) ( CurTime - TimeLastBlock ) - MIN_SERVER_BLOCK_DURATION_MS );
+        ( (double) ( CurTime - TimeLastBlock ) -
+          (double) iMonoBlockSizeSam / SYSTEM_SAMPLE_RATE * 1000 );
 
     RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
 
@@ -394,7 +395,7 @@ void CClient::UpdateSocketBufferSize()
     // do nothing
     if ( bDoAutoSockBufSize )
     {
-        // we use the time response measurement for the automatic setting
+        // We use the time response measurement for the automatic setting.
         // Assumptions:
         // - the network jitter can be neglected compared to the audio
         //   interface jitter
@@ -412,9 +413,17 @@ void CClient::UpdateSocketBufferSize()
         {
             // calculate current buffer setting
 // TODO 2* seems not give optimal results, maybe use 3*?
-// TEST add 2 buffers
 // add .5 to "round up" -> ceil
-            const double dEstCurBufSet = 2 * ( GetTimingStdDev() + 0.5 ) + 2;
+// divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
+// one block in the jitter buffer
+
+// TODO use max(audioMs, receivedNetpacketsMs)
+const double dAudioBufferDurationMs =
+    iMonoBlockSizeSam / SYSTEM_SAMPLE_RATE * 1000;
+
+            const double dEstCurBufSet = ( dAudioBufferDurationMs +
+                3 * ( GetTimingStdDev() + 0.5 ) ) /
+                MIN_SERVER_BLOCK_DURATION_MS;
 
             // upper/lower hysteresis decision
             const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );

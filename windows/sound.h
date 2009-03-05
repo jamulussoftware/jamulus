@@ -74,6 +74,7 @@ protected:
     bool         LoadAndInitializeFirstValidDriver();
     std::string  LoadAndInitializeDriver ( int iIdx );
     std::string  PrepareDriver();
+    int          GetActualBufferSize ( const int iDesiredBufferSizeMono );
 
     // audio hardware buffer info
     struct sHWBufferInfo

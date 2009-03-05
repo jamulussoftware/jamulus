@@ -385,16 +385,15 @@ void CLlconClientDlg::UpdateDisplay()
     // show connection status in status bar
     if ( pClient->IsConnected() && pClient->IsRunning() )
     {
-        TextLabelStatus->setText ( tr ( "connected" ) );
+        TextLabelStatus->setText ( tr ( "Connected" ) );
     }
     else
     {
-        TextLabelStatus->setText ( tr ( "disconnected" ) );
+        TextLabelStatus->setText ( tr ( "Disconnected" ) );
     }
 
 // TEST
 //TextLabelStatus->setText ( QString( "Std dev: %1" ).arg ( pClient->GetTimingStdDev() ) );
-
 
 }
 

@@ -55,9 +55,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // init delay and other information controls
     CLEDOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME );
     CLEDOverallDelay->Reset();
-    TextLabelPingTime->setText ( "" );
+    TextLabelPingTime->setText     ( "" );
     TextLabelOverallDelay->setText ( "" );
-    TextUpstreamValue->setText ( "" );
+    TextUpstreamValue->setText     ( "" );
+
 
     // init slider controls ---
     // network buffer
@@ -328,9 +329,9 @@ void CClientSettingsDlg::UpdateDisplay()
     if ( !pClient->IsRunning() )
     {
         // clear text labels with client parameters
-        TextLabelPingTime->setText ( "" );
+        TextLabelPingTime->setText     ( "" );
         TextLabelOverallDelay->setText ( "" );
-        TextUpstreamValue->setText ( "" );
+        TextUpstreamValue->setText     ( "" );
     }
     else
     {

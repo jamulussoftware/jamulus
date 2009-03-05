@@ -302,7 +302,7 @@
       <item>
        <layout class="QHBoxLayout" >
         <property name="spacing" >
-         <number>6</number>
+         <number>1</number>
         </property>
         <property name="leftMargin" >
          <number>0</number>

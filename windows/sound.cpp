@@ -193,7 +193,6 @@ bool CSound::LoadAndInitializeFirstValidDriver()
 std::string CSound::PrepareDriver()
 {
     int i;
-    int iDesiredBufferSizeMono;
 
     // check the number of available channels
     long lNumInChan;
@@ -223,39 +222,78 @@ std::string CSound::PrepareDriver()
             "required sample rate.";
     }
 
+
+// TEST
+iASIOBufferSizeMono = GetActualBufferSize ( iBufferSizeMono );
+
+
+    for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
+    {
+        // prepare input channels
+        bufferInfos[i].isInput    = ASIOTrue;
+        bufferInfos[i].channelNum = i;
+        bufferInfos[i].buffers[0] = 0;
+        bufferInfos[i].buffers[1] = 0;
+
+        // prepare output channels
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[1] = 0;
+    }
+
+    // create and activate ASIO buffers (buffer size in samples)
+    ASIOCreateBuffers ( bufferInfos, 2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
+        iASIOBufferSizeMono, &asioCallbacks );
+
+        // now get some buffer details
+    for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
+    {
+        channelInfos[i].channel = bufferInfos[i].channelNum;
+        channelInfos[i].isInput = bufferInfos[i].isInput;
+        ASIOGetChannelInfo ( &channelInfos[i] );
+
+        // only 16/24/32 LSB is supported
+        if ( ( channelInfos[i].type != ASIOSTInt16LSB ) &&
+             ( channelInfos[i].type != ASIOSTInt24LSB ) &&
+             ( channelInfos[i].type != ASIOSTInt32LSB ) )
+        {
+            // clean up and return error string
+            ASIODisposeBuffers();
+            ASIOExit();
+            asioDrivers->removeCurrentDriver();
+            return "Required audio sample format not available (16/24/32 bit LSB).";
+        }
+    }
+
+    // check wether the driver requires the ASIOOutputReady() optimization
+    // (can be used by the driver to reduce output latency by one block)
+    bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
+
+    return "";
+}
+
+int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
+{
+    int iActualBufferSizeMono;
+
     // query the usable buffer sizes
     ASIOGetBufferSize ( &HWBufferInfo.lMinSize,
                         &HWBufferInfo.lMaxSize,
                         &HWBufferInfo.lPreferredSize,
                         &HWBufferInfo.lGranularity );
 
-    // calculate the desired mono buffer size
-
-// TEST -> put this in the GUI and implement the code for the Linux driver, too
-// setting this variable to false sets the previous behaviour
-const bool bPreferPowerOfTwoAudioBufferSize = false;
-
-    if ( bPreferPowerOfTwoAudioBufferSize )
-    {
-        // use next power of 2 for desired block size mono
-        iDesiredBufferSizeMono = LlconMath().NextPowerOfTwo ( iBufferSizeMono );
-    }
-    else
-    {
-        iDesiredBufferSizeMono = iBufferSizeMono;
-    }
-
     // calculate "nearest" buffer size and set internal parameter accordingly
     // first check minimum and maximum values
     if ( iDesiredBufferSizeMono < HWBufferInfo.lMinSize )
     {
-        iASIOBufferSizeMono = HWBufferInfo.lMinSize;
+        iActualBufferSizeMono = HWBufferInfo.lMinSize;
     }
     else
     {
         if ( iDesiredBufferSizeMono > HWBufferInfo.lMaxSize )
         {
-            iASIOBufferSizeMono = HWBufferInfo.lMaxSize;
+            iActualBufferSizeMono = HWBufferInfo.lMaxSize;
         }
         else
         {
@@ -300,73 +338,11 @@ const bool bPreferPowerOfTwoAudioBufferSize = false;
             }
 
             // set ASIO buffer size
-            iASIOBufferSizeMono = iTrialBufSize;
+            iActualBufferSizeMono = iTrialBufSize;
         }
     }
 
-/*
-    // display warning in case the ASIO buffer is too big
-    if ( iMinNumSndBuf > 6 )
-    {
-        QMessageBox::critical ( 0, APP_NAME,
-            QString ( "The ASIO buffer size of the selected audio driver is ") + 
-            QString().number ( iASIOBufferSizeMono ) +
-            QString ( " samples which is too large. Please try to modify "
-            "the ASIO buffer size value in your ASIO driver settings (most ASIO "
-            "drivers like ASIO4All or kx driver allow to change the ASIO buffer size). "
-            "Recommended settings are 96 or 128 samples. Please make sure that "
-            "before you try to change the ASIO driver buffer size all ASIO "
-            "applications including llcon are closed." ), "Ok", 0 );
-    }
-*/
-
-    // prepare input channels
-    for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
-    {
-        bufferInfos[i].isInput    = ASIOTrue;
-        bufferInfos[i].channelNum = i;
-        bufferInfos[i].buffers[0] = 0;
-        bufferInfos[i].buffers[1] = 0;
-    }
-
-    // prepare output channels
-    for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
-    {
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[1] = 0;
-    }
-
-    // create and activate ASIO buffers (buffer size in samples)
-    ASIOCreateBuffers ( bufferInfos, 2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
-        iASIOBufferSizeMono, &asioCallbacks );
-
-    // now get some buffer details
-    for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
-    {
-        channelInfos[i].channel = bufferInfos[i].channelNum;
-        channelInfos[i].isInput = bufferInfos[i].isInput;
-        ASIOGetChannelInfo ( &channelInfos[i] );
-
-        // only 16/24/32 LSB is supported
-        if ( ( channelInfos[i].type != ASIOSTInt16LSB ) &&
-             ( channelInfos[i].type != ASIOSTInt24LSB ) &&
-             ( channelInfos[i].type != ASIOSTInt32LSB ) )
-        {
-            // clean up and return error string
-            ASIODisposeBuffers();
-            ASIOExit();
-            asioDrivers->removeCurrentDriver();
-            return "Required audio sample format not available (16/24/32 bit LSB).";
-        }
-    }
-
-    // check wether the driver requires the ASIOOutputReady() optimization
-    // (can be used by the driver to reduce output latency by one block)
-    bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
-
-    return "";
+    return iActualBufferSizeMono;
 }
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
@@ -385,6 +361,11 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 
 // TEST
 PrepareDriver();
+
+
+// TODO possible BUG!!!!!!!!!!!!!!!!!!!!!
+// iBufferSizeMono must not be the same as iASIOBufferSizeMono
+
 
         // create memory for intermediate audio buffer
         vecsTmpAudioSndCrdStereo.Init ( iBufferSizeStereo );

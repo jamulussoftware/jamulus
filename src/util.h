@@ -510,17 +510,6 @@ protected:
 class LlconMath
 {
 public:
-    static int NextPowerOfTwo ( const int& x )
-    {
-        // calculate the next power of 2 of the given size
-        int y = 1;
-        while ( y < x )
-        {
-            y <<= 1; // multiply by 2
-        }
-        return y;
-    }
-
     static int round ( double x )
     {
         return (int) ( ( x - floor ( x ) ) >= 0.5 ) ? ceil(x) : floor(x);

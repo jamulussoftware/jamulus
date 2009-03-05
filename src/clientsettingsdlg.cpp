@@ -175,6 +175,8 @@ void CClientSettingsDlg::showEvent ( QShowEvent* showEvent )
 {
     // only activate ping timer if window is actually shown
     TimerPing.start ( PING_UPDATE_TIME );
+
+    UpdateDisplay();
 }
 
 void CClientSettingsDlg::hideEvent ( QHideEvent* hideEvent )

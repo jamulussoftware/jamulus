@@ -121,6 +121,7 @@ public:
     void SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx );
     int GetSndCrdPreferredMonoBlSizeIndex()
         { return iSndCrdPreferredMonoBlSizeIndex; }
+    int GetSndCrdActualMonoBlSize() { return iSndCrdMonoBlockSizeSam; }
 
     void SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
     {

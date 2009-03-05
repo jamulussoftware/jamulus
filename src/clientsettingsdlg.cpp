@@ -163,13 +163,21 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
 void CClientSettingsDlg::UpdateSoundCardFrame()
 {
     // update slider value and text
-    const int iCurBufIdx = pClient->GetSndCrdPreferredMonoBlSizeIndex();
-    SliderSndCrdBufferDelay->setValue ( iCurBufIdx );
+    const int iCurPrefBufIdx   = pClient->GetSndCrdPreferredMonoBlSizeIndex();
+    const int iCurActualBufIdx = pClient->GetSndCrdActualMonoBlSize();
+    SliderSndCrdBufferDelay->setValue ( iCurPrefBufIdx );
 
+    // preferred size
     TextLabelPreferredSndCrdBufDelay->setText (
-        QString().setNum ( (double) CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurBufIdx ) *
+        QString().setNum ( (double) CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurPrefBufIdx ) *
         1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
-        QString().setNum ( CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurBufIdx ) ) + ")" );
+        QString().setNum ( CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurPrefBufIdx ) ) + ")" );
+
+    // actual size
+    TextLabelActualSndCrdBufDelay->setText (
+        QString().setNum ( (double) iCurActualBufIdx *
+        1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
+        QString().setNum ( iCurActualBufIdx ) + ")" );
 }
 
 void CClientSettingsDlg::showEvent ( QShowEvent* showEvent )

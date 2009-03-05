@@ -36,7 +36,8 @@ CClient::CClient ( const quint16 iPortNumber ) :
     strIPAddress ( "" ), strName ( "" ),
     bOpenChatOnNewMessage ( true ),
     bDoAutoSockBufSize ( true ),
-    iSndCrdPreferredMonoBlSizeIndex ( CSndCrdBufferSizes::GetDefaultIndex() )
+    iSndCrdPreferredMonoBlSizeIndex ( CSndCrdBufferSizes::GetDefaultIndex() ),
+    iSndCrdMonoBlockSizeSam ( 0 )
 {
     // connection for protocol
     QObject::connect ( &Channel,

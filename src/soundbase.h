@@ -47,6 +47,8 @@ public:
     bool         IsRunning() const { return bRun; }
     virtual void Close() = 0;
 
+    virtual void OpenDriverSetup() {}
+
 protected:
     // function pointer to callback function
     void (*fpCallback) ( CVector<short>& psData, void* arg );

@@ -248,6 +248,12 @@
            </item>
            <item>
             <widget class="QLabel" name="TextLabelPreferredSndCrdBufDelay" >
+             <property name="minimumSize" >
+              <size>
+               <width>110</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="frameShape" >
               <enum>QFrame::Panel</enum>
              </property>
@@ -272,6 +278,12 @@
            </item>
            <item>
             <widget class="QLabel" name="TextLabelActualSndCrdBufDelay" >
+             <property name="minimumSize" >
+              <size>
+               <width>110</width>
+               <height>0</height>
+              </size>
+             </property>
              <property name="frameShape" >
               <enum>QFrame::Panel</enum>
              </property>

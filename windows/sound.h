@@ -62,6 +62,8 @@ public:
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Close();
 
+    virtual void OpenDriverSetup() { ASIOControlPanel(); }
+
     int          GetNumDev() { return lNumDevs; }
     std::string  GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }
 

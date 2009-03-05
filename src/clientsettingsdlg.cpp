@@ -185,7 +185,7 @@ void CClientSettingsDlg::hideEvent ( QHideEvent* hideEvent )
 
 void CClientSettingsDlg::OnDriverSetupBut()
 {
-    // TODO write function in Windows sound interface
+    pClient->GetSndInterface()->OpenDriverSetup();
 }
 
 void CClientSettingsDlg::OnSliderNetBuf ( int value )

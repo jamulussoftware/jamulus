@@ -61,11 +61,6 @@ void CSoundBase::Stop()
     {
         wait ( 5000 );
     }
-
-
-// TODO stop audio interface (previously done in Close function, we
-// better should implement a stop function in derived sound classes
-    Close();
 }
 
 void CSoundBase::run()

@@ -251,7 +251,7 @@
              <property name="minimumSize" >
               <size>
                <width>110</width>
-               <height>0</height>
+               <height>20</height>
               </size>
              </property>
              <property name="frameShape" >
@@ -281,7 +281,7 @@
              <property name="minimumSize" >
               <size>
                <width>110</width>
-               <height>0</height>
+               <height>20</height>
               </size>
              </property>
              <property name="frameShape" >
@@ -386,7 +386,7 @@
           <property name="minimumSize" >
            <size>
             <width>50</width>
-            <height>0</height>
+            <height>20</height>
            </size>
           </property>
           <property name="frameShape" >
@@ -427,7 +427,7 @@
             <property name="minimumSize" >
              <size>
               <width>50</width>
-              <height>0</height>
+              <height>20</height>
              </size>
             </property>
             <property name="font" >
@@ -484,6 +484,12 @@
         </item>
         <item>
          <widget class="QLabel" name="TextUpstreamValue" >
+          <property name="minimumSize" >
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
           <property name="font" >
            <font>
             <weight>75</weight>

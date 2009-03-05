@@ -43,9 +43,8 @@ ASIOBufferInfo   bufferInfos[2 * NUM_IN_OUT_CHANNELS]; // for input and output b
 ASIOChannelInfo  channelInfos[2 * NUM_IN_OUT_CHANNELS];
 bool             bASIOPostOutput;
 ASIOCallbacks    asioCallbacks;
-int              iBufferSizeMono;
-int              iBufferSizeStereo;
 int              iASIOBufferSizeMono;
+int              iASIOBufferSizeStereo;
 
 CVector<short>   vecsTmpAudioSndCrdStereo;
 
@@ -88,12 +87,12 @@ void CSound::SetDev ( const int iNewDev )
             // loading and initializing the new driver failed, go back to original
             // driver and display error message
             LoadAndInitializeDriver ( lCurDev );
-            Init ( iBufferSizeStereo );
+            Init ( iASIOBufferSizeStereo );
 
             throw CGenErr ( strErrorMessage.c_str() );
         }
 
-        Init ( iBufferSizeStereo );
+        Init ( iASIOBufferSizeStereo );
     }
     else
     {
@@ -319,92 +318,75 @@ int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
-    // first, stop audio and dispose ASIO buffers
-    ASIOStop();
-
     ASIOMutex.lock(); // get mutex lock
     {
+        // get the actual sound card buffer size which is supported
+        // by the audio hardware
+        iASIOBufferSizeMono =
+            GetActualBufferSize ( iNewPrefMonoBufferSize );
+
         // init base clasee
-        CSoundBase::Init ( iNewPrefMonoBufferSize );
+        CSoundBase::Init ( iASIOBufferSizeMono );
 
         // set internal buffer size value and calculate stereo buffer size
-        iBufferSizeMono   = iNewPrefMonoBufferSize;
-        iBufferSizeStereo = 2 * iBufferSizeMono;
+        iASIOBufferSizeStereo = 2 * iASIOBufferSizeMono;
 
-
-// TODO possible BUG!!!!!!!!!!!!!!!!!!!!!
-// iBufferSizeMono must not be the same as iASIOBufferSizeMono
-
+        // set the sample rate
+        ASIOSetSampleRate ( SND_CRD_SAMPLE_RATE );
 
         // create memory for intermediate audio buffer
-        vecsTmpAudioSndCrdStereo.Init ( iBufferSizeStereo );
+        vecsTmpAudioSndCrdStereo.Init ( iASIOBufferSizeStereo );
 
+        // create and activate ASIO buffers (buffer size in samples)
+        ASIOCreateBuffers ( bufferInfos,
+            2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
+            iASIOBufferSizeMono, &asioCallbacks );
 
-
-
-    int i;
-
-    // set the sample rate and check if sample rate is supported
-    ASIOSetSampleRate ( SND_CRD_SAMPLE_RATE );
-
-
-// TEST
-iASIOBufferSizeMono = GetActualBufferSize ( iBufferSizeMono );
-
-
-    for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
-    {
-        // prepare input channels
-        bufferInfos[i].isInput    = ASIOTrue;
-        bufferInfos[i].channelNum = i;
-        bufferInfos[i].buffers[0] = 0;
-        bufferInfos[i].buffers[1] = 0;
-
-        // prepare output channels
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[1] = 0;
-    }
-
-    // create and activate ASIO buffers (buffer size in samples)
-    ASIOCreateBuffers ( bufferInfos, 2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
-        iASIOBufferSizeMono, &asioCallbacks );
-
-
-
-    // check wether the driver requires the ASIOOutputReady() optimization
-    // (can be used by the driver to reduce output latency by one block)
-    bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
-
-
-
+        // check wether the driver requires the ASIOOutputReady() optimization
+        // (can be used by the driver to reduce output latency by one block)
+        bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
     }
     ASIOMutex.unlock();
 
-    // initialization is done, (re)start audio
+    return iASIOBufferSizeMono;
+}
+
+void CSound::Start()
+{
+    // start audio
     ASIOStart();
 
-// TEST
-return iNewPrefMonoBufferSize;
+    // call base class
+    CSoundBase::Start();
+}
+
+void CSound::Stop()
+{
+    // stop audio
+    ASIOStop();
+
+    // call base class
+    CSoundBase::Stop();
 }
 
 void CSound::Close()
 {
-    // stop driver
-    ASIOStop();
+
+// TODO
+
 }
 
 CSound::CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
     CSoundBase ( true, fpNewCallback, arg )
 {
+    int i;
 
 // TEST
 pSound = this;
 
 
     // get available ASIO driver names in system
-    for ( int i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
+    for ( i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
     {
         cDriverNames[i] = new char[32];
     }
@@ -421,6 +403,23 @@ pSound = this;
 
     // init device index with illegal value to show that driver is not initialized
     lCurDev = -1;
+
+    // init buffer infos, we always want to have two input and
+    // two output channels
+    for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
+    {
+        // prepare input channels
+        bufferInfos[i].isInput    = ASIOTrue;
+        bufferInfos[i].channelNum = i;
+        bufferInfos[i].buffers[0] = 0;
+        bufferInfos[i].buffers[1] = 0;
+
+        // prepare output channels
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[1] = 0;
+    }
 
     // set up the asioCallback structure
     asioCallbacks.bufferSwitch         = &bufferSwitch;

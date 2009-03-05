@@ -156,7 +156,7 @@ protected:
     // callback function must be static, otherwise it does not work
     static void  AudioCallback ( CVector<short>& psData, void* arg );
 
-    void         Init ( const int iPrefMonoBlockSizeSamAtSndCrdSamRate );
+    void         Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate );
     void         ProcessAudioData ( CVector<short>& vecsStereoSndCrd );
     void         UpdateTimeResponseMeasurement();
     void         UpdateSocketBufferSize();

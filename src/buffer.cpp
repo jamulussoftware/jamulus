@@ -380,10 +380,13 @@ void CNetBuf::Clear ( const EClearType eClearType )
 
 void CNetBuf::FadeInAudioDataBlock ( CVector<double>& vecdData )
 {
+    // correct fading length if necessary
+    const int iCurFadingLen = min ( vecdData.Size(), iNumSamFading );
+
     // apply linear fading
-    for ( int i = 0; i < iNumSamFading; i++ )
+    for ( int i = 0; i < iCurFadingLen; i++ )
     {
-        vecdData[i] *= ( (double) i / iNumSamFading );
+        vecdData[i] *= ( (double) i / iCurFadingLen );
     }
 
     // reset flag
@@ -394,14 +397,17 @@ void CNetBuf::FadeOutExtrapolateAudioDataBlock ( CVector<double>& vecdData,
                                                  const double dExPDiff,
                                                  const double dExPLastV )
 {
+    // correct fading length if necessary
+    const int iCurFadingLenExtra = min ( vecdData.Size(), iNumSamFadingExtra );
+
     // apply linear extrapolation and linear fading
-    for ( int i = 0; i < iNumSamFadingExtra; i++ )
+    for ( int i = 0; i < iCurFadingLenExtra; i++ )
     {
         // calculate extrapolated value
         vecdData[i] = ( ( i + 1 ) * dExPDiff + dExPLastV );
 
         // linear fading
-        vecdData[i] *= ( (double) ( iNumSamFadingExtra - i ) / iNumSamFadingExtra );
+        vecdData[i] *= ( (double) ( iCurFadingLenExtra - i ) / iCurFadingLenExtra );
     }
 }
 

@@ -150,29 +150,40 @@ bool CClient::SetServerAddr ( QString strNAddr )
     return true;
 }
 
-
-
-
 void CClient::SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx )
 {
-// right now we simply set the internal value
-if ( ( iNewIdx >= 0 ) && ( CSndCrdBufferSizes::GetNumOfBufferSizes() ) )
-{
-    iSndCrdPreferredMonoBlSizeIndex = iNewIdx;
+    // right now we simply set the internal value
+    if ( ( iNewIdx >= 0 ) && ( CSndCrdBufferSizes::GetNumOfBufferSizes() ) )
+    {
+        iSndCrdPreferredMonoBlSizeIndex = iNewIdx;
+    }
+
+    // init with new parameter, if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    // init with new block size index parameter
+    Init ( iSndCrdPreferredMonoBlSizeIndex );
+
+    if ( bWasRunning )
+    {
+        Sound.Start();
+    }
+
+    // tell the server that audio coding has changed (it
+    // is important to call this function AFTER we have applied
+    // the new setting to the channel!)
+    Channel.CreateNetTranspPropsMessFromCurrentSettings();
 }
-
-// TODO take action on new parameter
-}
-
-
-
 
 void CClient::Start()
 {
     // init object
-
-// TEST
-Init ( 192 );
+    Init ( iSndCrdPreferredMonoBlSizeIndex );
 
     // enable channel
     Channel.SetEnable ( true );
@@ -203,8 +214,12 @@ void CClient::AudioCallback ( CVector<short>& psData, void* arg )
     pMyClientObj->ProcessAudioData ( psData );
 }
 
-void CClient::Init ( const int iPrefMonoBlockSizeSamAtSndCrdSamRate )
+void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
 {
+    // translate block size index in actual block size
+    const int iPrefMonoBlockSizeSamAtSndCrdSamRate = CSndCrdBufferSizes::
+        GetBufferSizeFromIndex ( iPrefMonoBlockSizeSamIndexAtSndCrdSamRate );
+
     // get actual sound card buffer size using preferred size
     iSndCrdMonoBlockSizeSam   = Sound.Init ( iPrefMonoBlockSizeSamAtSndCrdSamRate );
     iSndCrdStereoBlockSizeSam = 2 * iSndCrdMonoBlockSizeSam;

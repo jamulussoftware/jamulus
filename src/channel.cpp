@@ -622,10 +622,18 @@ CChannel::CChannel ( const bool bNIsServer ) : bIsServer ( bNIsServer ),
         MIN_SERVER_BLOCK_SIZE_SAMPLES * DEF_NET_BLOCK_SIZE_FACTOR,
         CT_MSADPCM );
 
-    SetNetwBufSizeFactOut ( DEF_NET_BLOCK_SIZE_FACTOR );
+    if ( bIsServer )
+    {
+        SetNetwBufSizeFactOut ( DEF_NET_BLOCK_SIZE_FACTOR );
+    }
+    else
+    {
+        SetNetwBufSizeOut ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
+    }
 
     // set initial audio compression format for output
     SetAudioCompressionOut ( CT_MSADPCM );
+
 
     // connections -------------------------------------------------------------
     QObject::connect ( &Protocol,
@@ -730,11 +738,16 @@ void CChannel::SetNetwBufSizeOut ( const int iNewAudioBlockSizeOut )
     // this function is intended for the client (not the server)
     QMutexLocker locker ( &Mutex );
 
-    // store new value
-    iCurAudioBlockSizeOut = iNewAudioBlockSizeOut;
+    // direct setting of audio buffer (without buffer size factor) is
+    // right now only intendet for the client, not the server
+    if ( !bIsServer )
+    {
+        // store new value
+        iCurAudioBlockSizeOut = iNewAudioBlockSizeOut;
 
-    iAudComprSizeOut =
-        AudioCompressionOut.Init ( iNewAudioBlockSizeOut, eAudComprTypeOut );
+        iAudComprSizeOut =
+            AudioCompressionOut.Init ( iNewAudioBlockSizeOut, eAudComprTypeOut );
+    }
 }
 
 void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )

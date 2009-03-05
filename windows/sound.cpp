@@ -60,6 +60,12 @@ CSound* pSound;
 \******************************************************************************/
 void CSound::SetDev ( const int iNewDev )
 {
+
+// TODO do check if sound interface is running here, take action
+
+
+
+
     // check if an ASIO driver was already initialized
     if ( lCurDev >= 0 )
     {
@@ -86,6 +92,7 @@ void CSound::SetDev ( const int iNewDev )
 
             throw CGenErr ( strErrorMessage.c_str() );
         }
+
         Init ( iBufferSizeStereo );
     }
     else
@@ -120,6 +127,31 @@ void CSound::SetDev ( const int iNewDev )
     }
 }
 
+bool CSound::LoadAndInitializeFirstValidDriver()
+{
+    // load and initialize first valid ASIO driver
+    bool bValidDriverDetected = false;
+    int  iCurDriverIdx = 0;
+
+    // try all available drivers in the system ("lNumDevs" devices)
+    while ( !bValidDriverDetected && ( iCurDriverIdx < lNumDevs ) )
+    {
+        if ( LoadAndInitializeDriver ( iCurDriverIdx ).empty() )
+        {
+            // initialization was successful
+            bValidDriverDetected = true;
+
+            // store ID of selected driver
+            lCurDev = iCurDriverIdx;
+        }
+
+        // try next driver
+        iCurDriverIdx++;
+    }
+
+    return bValidDriverDetected;
+}
+
 std::string CSound::LoadAndInitializeDriver ( int iDriverIdx )
 {
     // first check and correct input parameter
@@ -138,61 +170,39 @@ std::string CSound::LoadAndInitializeDriver ( int iDriverIdx )
         return "The audio driver could not be initialized.";
     }
 
-    const std::string strStat = PrepareDriver();
+    // check device capabilities if it fullfills our requirements
+    const std::string strStat = CheckDeviceCapabilities();
 
     // store ID of selected driver if initialization was successful
     if ( strStat.empty() )
     {
         lCurDev = iDriverIdx;
     }
+    else
+    {
+        // driver cannot be used, clean up
+        asioDrivers->removeCurrentDriver();
+    }
 
     return strStat;
 }
 
-bool CSound::LoadAndInitializeFirstValidDriver()
+std::string CSound::CheckDeviceCapabilities()
 {
-    // load and initialize first valid ASIO driver
-    bool bValidDriverDetected = false;
-    int  iCurDriverIdx = 0;
+    // This function checks if our required input/output channel
+    // properties are supported by the selected device. If the return
+    // string is empty, the device can be used, otherwise the error
+    // message is returned.
 
-    // try all available drivers in the system ("lNumDevs" devices)
-    while ( !bValidDriverDetected && iCurDriverIdx < lNumDevs )
+    // check the sample rate
+    const ASIOError CanSaRateReturn = ASIOCanSampleRate ( SND_CRD_SAMPLE_RATE );
+    if ( ( CanSaRateReturn == ASE_NoClock ) ||
+         ( CanSaRateReturn == ASE_NotPresent ) )
     {
-        if ( loadAsioDriver ( cDriverNames[iCurDriverIdx] ) )
-        {
-            if ( ASIOInit ( &driverInfo ) == ASE_OK )
-            {
-                if ( PrepareDriver().empty() )
-                {
-                    // initialization was successful
-                    bValidDriverDetected = true;
-
-                    // store ID of selected driver
-                    lCurDev = iCurDriverIdx;
-                }
-                else
-                {
-                    // driver could not be loaded, free memory
-                    asioDrivers->removeCurrentDriver();
-                }
-            }
-            else
-            {
-                // driver could not be loaded, free memory
-                asioDrivers->removeCurrentDriver();
-            }
-        }
-
-        // try next driver
-        iCurDriverIdx++;
+        // return error string
+        return "The audio device does not support the "
+            "required sample rate.";
     }
-
-    return bValidDriverDetected;
-}
-
-std::string CSound::PrepareDriver()
-{
-    int i;
 
     // check the number of available channels
     long lNumInChan;
@@ -201,56 +211,24 @@ std::string CSound::PrepareDriver()
     if ( ( lNumInChan < NUM_IN_OUT_CHANNELS ) ||
          ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
     {
-        // clean up and return error string
-        ASIOExit();
-        asioDrivers->removeCurrentDriver();
+        // return error string
         return "The audio device does not support the "
             "required number of channels.";
     }
 
-    // set the sample rate and check if sample rate is supported
-    ASIOSetSampleRate ( SND_CRD_SAMPLE_RATE );
-
-    ASIOSampleRate sampleRate;
-    ASIOGetSampleRate ( &sampleRate );
-    if ( sampleRate != SND_CRD_SAMPLE_RATE )
+    // check sample format
+    for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
     {
-        // clean up and return error string
-        ASIOExit();
-        asioDrivers->removeCurrentDriver();
-        return "The audio device does not support the "
-            "required sample rate.";
-    }
-
-
-// TEST
-iASIOBufferSizeMono = GetActualBufferSize ( iBufferSizeMono );
-
-
-    for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
-    {
-        // prepare input channels
-        bufferInfos[i].isInput    = ASIOTrue;
-        bufferInfos[i].channelNum = i;
-        bufferInfos[i].buffers[0] = 0;
-        bufferInfos[i].buffers[1] = 0;
-
-        // prepare output channels
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
-        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[1] = 0;
-    }
-
-    // create and activate ASIO buffers (buffer size in samples)
-    ASIOCreateBuffers ( bufferInfos, 2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
-        iASIOBufferSizeMono, &asioCallbacks );
-
-        // now get some buffer details
-    for ( i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ )
-    {
-        channelInfos[i].channel = bufferInfos[i].channelNum;
-        channelInfos[i].isInput = bufferInfos[i].isInput;
+        // check all used input and output channels
+        channelInfos[i].channel = i % NUM_IN_OUT_CHANNELS;
+        if ( i < NUM_IN_OUT_CHANNELS )
+        {
+            channelInfos[i].isInput = ASIOTrue;
+        }
+        else
+        {
+            channelInfos[i].isInput = ASIOFalse;
+        }
         ASIOGetChannelInfo ( &channelInfos[i] );
 
         // only 16/24/32 LSB is supported
@@ -258,17 +236,11 @@ iASIOBufferSizeMono = GetActualBufferSize ( iBufferSizeMono );
              ( channelInfos[i].type != ASIOSTInt24LSB ) &&
              ( channelInfos[i].type != ASIOSTInt32LSB ) )
         {
-            // clean up and return error string
-            ASIODisposeBuffers();
-            ASIOExit();
-            asioDrivers->removeCurrentDriver();
-            return "Required audio sample format not available (16/24/32 bit LSB).";
+            // return error string
+            return "Required audio sample format not "
+                "available (16/24/32 bit LSB).";
         }
     }
-
-    // check wether the driver requires the ASIOOutputReady() optimization
-    // (can be used by the driver to reduce output latency by one block)
-    bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
 
     return "";
 }
@@ -359,9 +331,6 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
         iBufferSizeMono   = iNewPrefMonoBufferSize;
         iBufferSizeStereo = 2 * iBufferSizeMono;
 
-// TEST
-PrepareDriver();
-
 
 // TODO possible BUG!!!!!!!!!!!!!!!!!!!!!
 // iBufferSizeMono must not be the same as iASIOBufferSizeMono
@@ -369,6 +338,47 @@ PrepareDriver();
 
         // create memory for intermediate audio buffer
         vecsTmpAudioSndCrdStereo.Init ( iBufferSizeStereo );
+
+
+
+
+    int i;
+
+    // set the sample rate and check if sample rate is supported
+    ASIOSetSampleRate ( SND_CRD_SAMPLE_RATE );
+
+
+// TEST
+iASIOBufferSizeMono = GetActualBufferSize ( iBufferSizeMono );
+
+
+    for ( i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
+    {
+        // prepare input channels
+        bufferInfos[i].isInput    = ASIOTrue;
+        bufferInfos[i].channelNum = i;
+        bufferInfos[i].buffers[0] = 0;
+        bufferInfos[i].buffers[1] = 0;
+
+        // prepare output channels
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].isInput    = ASIOFalse;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].channelNum = i;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[0] = 0;
+        bufferInfos[NUM_IN_OUT_CHANNELS + i].buffers[1] = 0;
+    }
+
+    // create and activate ASIO buffers (buffer size in samples)
+    ASIOCreateBuffers ( bufferInfos, 2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
+        iASIOBufferSizeMono, &asioCallbacks );
+
+
+
+    // check wether the driver requires the ASIOOutputReady() optimization
+    // (can be used by the driver to reduce output latency by one block)
+    bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
+
+
+
     }
     ASIOMutex.unlock();
 
@@ -407,7 +417,6 @@ pSound = this;
     {
         throw CGenErr ( "No ASIO audio device (driver) found." );
     }
-
     asioDrivers->removeCurrentDriver();
 
     // init device index with illegal value to show that driver is not initialized

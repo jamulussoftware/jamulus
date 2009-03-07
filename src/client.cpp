@@ -248,11 +248,9 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
     vecsNetwork.Init  ( iMonoBlockSizeSam );
     vecdNetwData.Init ( iMonoBlockSizeSam );
 
-    // init moving average buffer for response time evaluation
-    RespTimeMoAvBuf.Init ( LEN_MOV_AV_RESPONSE );
-
-    // init time for response time evaluation
-    TimeLastBlock = PreciseTime.elapsed();
+    // init response time evaluation
+    CycleTimeVariance.Init ( LEN_MOV_AV_RESPONSE );
+    CycleTimeVariance.Reset();
 
     AudioReverb.Clear();
 }
@@ -384,25 +382,8 @@ fflush(pFileDelay);
     }
 
     // update response time measurement and socket buffer size
-    UpdateTimeResponseMeasurement();
+    CycleTimeVariance.Update();
     UpdateSocketBufferSize();
-}
-
-void CClient::UpdateTimeResponseMeasurement()
-{
-    // add time difference
-    const int CurTime = PreciseTime.elapsed();
-
-    // we want to calculate the standard deviation (we assume that the mean
-    // is correct at the block period time)
-    const double dCurAddVal =
-        ( (double) ( CurTime - TimeLastBlock ) -
-          (double) iMonoBlockSizeSam / SYSTEM_SAMPLE_RATE * 1000 );
-
-    RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
-
-    // store old time value
-    TimeLastBlock = CurTime;
 }
 
 void CClient::UpdateSocketBufferSize()
@@ -425,7 +406,7 @@ void CClient::UpdateSocketBufferSize()
         //   completely filled
         const double dHysteresis = 0.3;
 
-        if ( RespTimeMoAvBuf.IsInitialized() )
+        if ( CycleTimeVariance.IsInitialized() )
         {
             // calculate current buffer setting
 // TODO 2* seems not give optimal results, maybe use 3*?
@@ -438,7 +419,7 @@ const double dAudioBufferDurationMs =
     iMonoBlockSizeSam / SYSTEM_SAMPLE_RATE * 1000;
 
             const double dEstCurBufSet = ( dAudioBufferDurationMs +
-                3 * ( GetTimingStdDev() + 0.5 ) ) /
+                3 * ( CycleTimeVariance.GetStdDev() + 0.5 ) ) /
                 MIN_SERVER_BLOCK_DURATION_MS;
 
             // upper/lower hysteresis decision

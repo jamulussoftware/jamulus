@@ -323,6 +323,7 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
 }
 
 
+
 /******************************************************************************\
 * GUI utilities                                                                *
 \******************************************************************************/
@@ -595,6 +596,57 @@ public:
 protected:
     bool  bDoLogging;
     QFile File;
+};
+
+
+
+/******************************************************************************\
+* Cycle Time Variance Measurement                                              *
+\******************************************************************************/
+// use for, e.g., measuring the variance of a timer
+class CCycleTimeVariance
+{
+public:
+    CCycleTimeVariance() {}
+    virtual ~CCycleTimeVariance() {}
+
+    void Init ( const int iMovingAverageLength )
+    {
+        RespTimeMoAvBuf.Init ( iMovingAverageLength );
+    }
+
+    void Reset()
+    {
+        TimeLastBlock = PreciseTime.elapsed();
+        RespTimeMoAvBuf.Reset();
+    }
+
+    void Update()
+    {
+        // add time difference
+        const int CurTime = PreciseTime.elapsed();
+
+        // we want to calculate the standard deviation (we assume that the mean
+        // is correct at the block period time)
+        const double dCurAddVal =
+            ( (double) ( CurTime - TimeLastBlock ) - MIN_SERVER_BLOCK_DURATION_MS );
+
+        RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
+
+        // store old time value
+        TimeLastBlock = CurTime;
+    }
+
+    // return the standard deviation, for that we need to calculate
+    // the sqaure root
+    double GetStdDev() { return sqrt ( RespTimeMoAvBuf.GetAverage() ); }
+
+    bool IsInitialized() { return RespTimeMoAvBuf.IsInitialized(); }
+
+protected:
+    CPreciseTime      PreciseTime;
+    CMovingAv<double> RespTimeMoAvBuf;
+    int               TimeLastBlock;
 };
 
 #endif /* !defined ( UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

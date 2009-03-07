@@ -77,10 +77,7 @@ protected:
     CChannelSet         ChannelSet;
     CSocket             Socket;
 
-    // debugging, evaluating
-    CPreciseTime        PreciseTime;
-    CMovingAv<double>   RespTimeMoAvBuf;
-    int                 TimeLastBlock;
+    CCycleTimeVariance  CycleTimeVariance;
 
     // logging
     CLogging            Logging;

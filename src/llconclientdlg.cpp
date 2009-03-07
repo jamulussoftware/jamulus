@@ -27,8 +27,8 @@
 
 /* Implementation *************************************************************/
 CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
-                                   Qt::WindowFlags f )
-    : pClient ( pNCliP ), QDialog ( parent, f ),
+                                   Qt::WindowFlags f ) :
+    pClient ( pNCliP ), QDialog ( parent, f ),
     ClientSettingsDlg ( pNCliP, parent, Qt::WindowMinMaxButtonsHint ),
     ChatDlg ( parent, Qt::WindowMinMaxButtonsHint )
 {
@@ -38,7 +38,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     QString strInpLevH = tr ( "<b>Input level meter:</b> Shows the level of the "
         "input audio signal of the sound card. The level is in dB. Overload "
         "should be avoided." );
-    TextLabelInputLevel->setWhatsThis ( strInpLevH );
+    TextLabelInputLevel->setWhatsThis    ( strInpLevH );
     ProgressBarInputLevelL->setWhatsThis ( strInpLevH );
     ProgressBarInputLevelR->setWhatsThis ( strInpLevH );
 
@@ -55,18 +55,18 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
         "the IP address of the server can be set. If an invalid address was "
         "chosen, an error message is shown in the status bar." );
     TextLabelServerAddr->setWhatsThis ( strServAddrH );
-    LineEditServerAddr->setWhatsThis ( strServAddrH );
+    LineEditServerAddr->setWhatsThis  ( strServAddrH );
 
     QString strFaderTag = tr ( "<b>Fader Tag:</b> In this edit control, "
         "the tag string of your fader can be set. This tag will appear "
         "at your fader on the mixer board when connected to the server.");
     TextLabelServerTag->setWhatsThis ( strFaderTag );
-    LineEditFaderTag->setWhatsThis ( strFaderTag );
+    LineEditFaderTag->setWhatsThis  ( strFaderTag );
 
     QString strAudFader = tr ( "<b>Audio Fader:</b> With the audio fader "
         "control the level of left and right audio input channels can "
         "be controlled." );
-    TextAudInFader->setWhatsThis ( strAudFader );
+    TextAudInFader->setWhatsThis   ( strAudFader );
     SliderAudInFader->setWhatsThis ( strAudFader );
 
     QString strAudReverb = tr ( "<b>Reverberation Level:</b> The level of "
@@ -74,15 +74,15 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
         "which that reverberation effect shall be applied can be chosen "
         "with the Reverberation Channel Selection radio buttons." );
     TextLabelAudReverb->setWhatsThis ( strAudReverb );
-    SliderAudReverb->setWhatsThis ( strAudReverb );
+    SliderAudReverb->setWhatsThis    ( strAudReverb );
 
     QString strRevChanSel = tr ( "<b>Reverberation Channel Selection:</b> "
         "With these radio buttons the audio input channel on which the "
         "reverberation effect is applied can be chosen. Either the left "
         "or right input channel can be selected." );
     TextLabelReverbSelection->setWhatsThis ( strRevChanSel );
-    RadioButtonRevSelL->setWhatsThis ( strRevChanSel );
-    RadioButtonRevSelR->setWhatsThis ( strRevChanSel );
+    RadioButtonRevSelL->setWhatsThis       ( strRevChanSel );
+    RadioButtonRevSelR->setWhatsThis       ( strRevChanSel );
 
     LEDOverallStatus->setWhatsThis ( tr ( "<b>Overall Status:</b> "
         "The overall status of the software is shown. If either the "

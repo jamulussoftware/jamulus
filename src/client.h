@@ -74,9 +74,7 @@ public:
     double MicLevelR() { return SignalLevelMeter.MicLevelRight(); }
     bool   IsConnected() { return Channel.IsConnected(); }
 
-    /* We want to return the standard deviation. For that we need to calculate
-       the sqaure root. */
-    double GetTimingStdDev() { return sqrt ( RespTimeMoAvBuf.GetAverage() ); }
+    double GetTimingStdDev() { return CycleTimeVariance.GetStdDev(); }
 
     bool GetOpenChatOnNewMessage() { return bOpenChatOnNewMessage; }
     void SetOpenChatOnNewMessage ( const bool bNV ) { bOpenChatOnNewMessage = bNV; }
@@ -159,7 +157,6 @@ protected:
 
     void         Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate );
     void         ProcessAudioData ( CVector<short>& vecsStereoSndCrd );
-    void         UpdateTimeResponseMeasurement();
     void         UpdateSocketBufferSize();
 
     // only one channel is needed for client application
@@ -196,12 +193,10 @@ protected:
     CStereoAudioResample    ResampleObjDown;
     CStereoAudioResample    ResampleObjUp;
 
-    // for ping measurement and standard deviation of audio interface
+    // for ping measurement
     CPreciseTime            PreciseTime;
 
-    // debugging, evaluating
-    CMovingAv<double>       RespTimeMoAvBuf;
-    int                     TimeLastBlock;
+    CCycleTimeVariance      CycleTimeVariance;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

@@ -37,7 +37,7 @@ CServer::CServer ( const QString& strLoggingFileName,
     vecsSendData.Init ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
 
     // init moving average buffer for response time evaluation
-    RespTimeMoAvBuf.Init ( LEN_MOV_AV_RESPONSE );
+    CycleTimeVariance.Init ( LEN_MOV_AV_RESPONSE );
 
     // connect timer timeout signal
     QObject::connect ( &Timer, SIGNAL ( timeout() ),
@@ -106,8 +106,7 @@ void CServer::Start()
         Timer.start ( MIN_SERVER_BLOCK_DURATION_MS );
 
         // init time for response time evaluation
-        TimeLastBlock = PreciseTime.elapsed();
-        RespTimeMoAvBuf.Reset();
+        CycleTimeVariance.Reset();
     }
 }
 
@@ -171,19 +170,8 @@ void CServer::OnTimer()
 #endif
     }
 
-    // update response time measurement ----------------------------------------
-    // add time difference
-    const int CurTime = PreciseTime.elapsed();
-
-    // we want to calculate the standard deviation (we assume that the mean
-    // is correct at the block period time)
-    const double dCurAddVal =
-        ( (double) ( CurTime - TimeLastBlock ) - MIN_SERVER_BLOCK_DURATION_MS );
-
-    RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
-
-    // store old time value
-    TimeLastBlock = CurTime;
+    // update response time measurement
+    CycleTimeVariance.Update();
 }
 
 CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
@@ -217,13 +205,12 @@ bool CServer::GetTimingStdDev ( double& dCurTiStdDev )
 {
     dCurTiStdDev = 0.0; // init return value
 
-    /* only return value if server is active and the actual measurement is
-       updated */
+    // only return value if server is active and the actual measurement is
+    // updated
     if ( IsRunning() )
     {
-        /* we want to return the standard deviation, for that we need to calculate
-           the sqaure root */
-        dCurTiStdDev = sqrt ( RespTimeMoAvBuf.GetAverage() );
+        // return the standard deviation
+        dCurTiStdDev = CycleTimeVariance.GetStdDev();
 
         return true;
     }

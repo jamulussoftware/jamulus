@@ -116,6 +116,14 @@ public:
     int GetAudioBlockSizeIn() { return Channel.GetAudioBlockSizeIn(); }
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
+    int          GetSndCrdNumDev() { return Sound.GetNumDev(); }
+    std::string  GetSndCrdDeviceName ( const int iDiD )
+        { return Sound.GetDeviceName ( iDiD ); }
+
+    void         SetSndCrdDev ( const int iNewDev );
+    int          GetSndCrdDev() { return Sound.GetDev(); }
+    void         OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
+
     void SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx );
     int GetSndCrdPreferredMonoBlSizeIndex()
         { return iSndCrdPreferredMonoBlSizeIndex; }
@@ -143,8 +151,7 @@ public:
     void SendPingMess()
         { Channel.CreatePingMes ( PreciseTime.elapsed() ); };
 
-    CSound*   GetSndInterface() { return &Sound; }
-    CChannel* GetChannel()      { return &Channel; }
+    CChannel* GetChannel() { return &Channel; }
 
 
     // settings

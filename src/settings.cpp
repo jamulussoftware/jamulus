@@ -84,13 +84,13 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     // initialized with a default setting defined here
     if ( GetNumericIniSet ( IniXMLDocument, "client", "auddevidx", 1, MAX_NUMBER_SOUND_CARDS, iValue ) )
     {
-        pClient->GetSndInterface()->SetDev ( iValue );
+        pClient->SetSndCrdDev ( iValue );
     }
     else
     {
         // use "INVALID_SNC_CARD_DEVICE" to tell the sound card driver that no
         // device selection was done previously
-        pClient->GetSndInterface()->SetDev ( INVALID_SNC_CARD_DEVICE );
+        pClient->SetSndCrdDev ( INVALID_SNC_CARD_DEVICE );
     }
 
     // sound card preferred buffer size index
@@ -161,7 +161,7 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     SetFlagIniSet ( IniXMLDocument, "client", "reverblchan", pClient->IsReverbOnLeftChan() );
 
     // sound card selection
-    SetNumericIniSet ( IniXMLDocument, "client", "auddevidx", pClient->GetSndInterface()->GetDev() );
+    SetNumericIniSet ( IniXMLDocument, "client", "auddevidx", pClient->GetSndCrdDev() );
 
     // sound card preferred buffer size index
     SetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx", pClient->GetSndCrdPreferredMonoBlSizeIndex() );

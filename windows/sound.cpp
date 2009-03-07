@@ -59,20 +59,10 @@ CSound* pSound;
 \******************************************************************************/
 void CSound::SetDev ( const int iNewDev )
 {
-
-// TODO do check if sound interface is running here, take action
-
-
-
-
     // check if an ASIO driver was already initialized
     if ( lCurDev >= 0 )
     {
-        // a device was already been initialized and is used, kill working
-        // thread and clean up
-        // stop driver
-        ASIOStop();
-
+        // a device was already been initialized and is used, first clean up
         // dispose ASIO buffers
         ASIODisposeBuffers();
 
@@ -103,9 +93,7 @@ void CSound::SetDev ( const int iNewDev )
             // available driver in the system. If this fails, too, we throw an error
             // that no driver is available -> it does not make sense to start the llcon
             // software if no audio hardware is available
-            const std::string strErrorMessage = LoadAndInitializeDriver ( iNewDev );
-
-            if ( !strErrorMessage.empty() )
+            if ( !LoadAndInitializeDriver ( iNewDev ).empty() )
             {
                 // loading and initializing the new driver failed, try to find at
                 // least one usable driver

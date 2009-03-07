@@ -71,11 +71,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // init combo box containing all available sound cards in the system
     cbSoundcard->clear();
-    for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndInterface()->GetNumDev(); iSndDevIdx++ )
+    for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndCrdNumDev(); iSndDevIdx++ )
     {
-        cbSoundcard->addItem ( pClient->GetSndInterface()->GetDeviceName ( iSndDevIdx ).c_str() );
+        cbSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ).c_str() );
     }
-    cbSoundcard->setCurrentIndex ( pClient->GetSndInterface()->GetDev() );
+    cbSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
 
     // "OpenChatOnNewMessage" check box
     if ( pClient->GetOpenChatOnNewMessage() )
@@ -196,7 +196,7 @@ void CClientSettingsDlg::hideEvent ( QHideEvent* hideEvent )
 
 void CClientSettingsDlg::OnDriverSetupBut()
 {
-    pClient->GetSndInterface()->OpenDriverSetup();
+    pClient->OpenSndCrdDriverSetup();
 }
 
 void CClientSettingsDlg::OnSliderNetBuf ( int value )
@@ -215,7 +215,7 @@ void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
 {
     try
     {
-        pClient->GetSndInterface()->SetDev ( iSndDevIdx );
+        pClient->SetSndCrdDev ( iSndDevIdx );
     }
     catch ( CGenErr generr )
     {
@@ -225,7 +225,7 @@ void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
             QString ( " The previous driver will be selected." ), "Ok", 0 );
 
         // recover old selection
-        cbSoundcard->setCurrentIndex ( pClient->GetSndInterface()->GetDev() );
+        cbSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
     }
     UpdateDisplay();
 }

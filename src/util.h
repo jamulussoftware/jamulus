@@ -550,10 +550,10 @@ public:
     {
         const QDateTime curDateTime = QDateTime::currentDateTime();
 
-        // format date and time output according to "3.9.2006 11:38:08: "
+        // format date and time output according to "3.9.2006, 11:38:08"
         return QString().setNum ( curDateTime.date().day() ) + "." +
             QString().setNum ( curDateTime.date().month() ) + "." +
-            QString().setNum ( curDateTime.date().year() ) + " " +
+            QString().setNum ( curDateTime.date().year() ) + ", " +
             curDateTime.time().toString();
     }
 };

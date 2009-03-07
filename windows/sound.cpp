@@ -74,8 +74,8 @@ void CSound::SetDev ( const int iNewDev )
 
         if ( !strErrorMessage.empty() )
         {
-            // loading and initializing the new driver failed, go back to original
-            // driver and display error message
+            // loading and initializing the new driver failed, go back to
+            // original driver and display error message
             LoadAndInitializeDriver ( lCurDev );
             Init ( iASIOBufferSizeStereo );
 
@@ -88,18 +88,20 @@ void CSound::SetDev ( const int iNewDev )
     {
         if ( iNewDev != INVALID_SNC_CARD_DEVICE )
         {
-            // This is the first time a driver is to be initialized, we first try
-            // to load the selected driver, if this fails, we try to load the first
-            // available driver in the system. If this fails, too, we throw an error
-            // that no driver is available -> it does not make sense to start the llcon
-            // software if no audio hardware is available
+            // This is the first time a driver is to be initialized, we first
+            // try to load the selected driver, if this fails, we try to load
+            // the first available driver in the system. If this fails, too, we
+            // throw an error that no driver is available -> it does not make
+            // sense to start the llcon software if no audio hardware is
+            // available
             if ( !LoadAndInitializeDriver ( iNewDev ).empty() )
             {
-                // loading and initializing the new driver failed, try to find at
-                // least one usable driver
+                // loading and initializing the new driver failed, try to find
+                // at least one usable driver
                 if ( !LoadAndInitializeFirstValidDriver() )
                 {
-                    throw CGenErr ( "No usable ASIO audio device (driver) found." );
+                    throw CGenErr ( "No usable ASIO audio device "
+                        "(driver) found." );
                 }
             }
         }
@@ -229,6 +231,7 @@ std::string CSound::CheckDeviceCapabilities()
         }
     }
 
+    // everything is ok, return empty string for "no error" case
     return "";
 }
 
@@ -550,7 +553,18 @@ long CSound::asioMessages ( long selector, long value, void* message, double* op
     {
         case kAsioEngineVersion:
             // return the supported ASIO version of the host application
-            ret = 2L;
+            ret = 2L; // Host ASIO implementation version, 2 or higher
+            break;
+
+        // both messages might be send if the buffer size changes
+        case kAsioBufferSizeChange:
+        case kAsioResetRequest:
+
+// TODO reinit sound interface and check for new buffer size
+// requires changes in client class, too
+
+
+            ret = 1L; // 1L if request is accepted or 0 otherwise
             break;
     }
     return ret;

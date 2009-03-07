@@ -360,13 +360,6 @@ void CSound::Stop()
     CSoundBase::Stop();
 }
 
-void CSound::Close()
-{
-
-// TODO
-
-}
-
 CSound::CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
     CSoundBase ( true, fpNewCallback, arg )
 {
@@ -564,7 +557,7 @@ long CSound::asioMessages ( long selector, long value, void* message, double* op
 // requires changes in client class, too
 
 
-            ret = 1L; // 1L if request is accepted or 0 otherwise
+            ret = 0;//1L; // 1L if request is accepted or 0 otherwise
             break;
     }
     return ret;

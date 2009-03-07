@@ -45,7 +45,6 @@ public:
     virtual void Start();
     virtual void Stop();
     bool         IsRunning() const { return bRun; }
-    virtual void Close() = 0;
 
     virtual void OpenDriverSetup() {}
 

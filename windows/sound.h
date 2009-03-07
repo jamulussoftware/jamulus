@@ -62,7 +62,6 @@ public:
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
-    virtual void Close();
 
     virtual void OpenDriverSetup() { ASIOControlPanel(); }
 

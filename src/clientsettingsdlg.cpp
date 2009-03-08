@@ -164,21 +164,34 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
 void CClientSettingsDlg::UpdateSoundCardFrame()
 {
     // update slider value and text
-    const int iCurPrefBufIdx   = pClient->GetSndCrdPreferredMonoBlSizeIndex();
-    const int iCurActualBufIdx = pClient->GetSndCrdActualMonoBlSize();
+    const int iCurPrefBufIdx    = pClient->GetSndCrdPreferredMonoBlSizeIndex();
+    const int iCurActualBufSize = pClient->GetSndCrdActualMonoBlSize();
     SliderSndCrdBufferDelay->setValue ( iCurPrefBufIdx );
 
     // preferred size
-    TextLabelPreferredSndCrdBufDelay->setText (
-        QString().setNum ( (double) CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurPrefBufIdx ) *
-        1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
-        QString().setNum ( CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurPrefBufIdx ) ) + ")" );
+    const int iPrefBufSize =
+        CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurPrefBufIdx );
 
-    // actual size
-    TextLabelActualSndCrdBufDelay->setText (
-        QString().setNum ( (double) iCurActualBufIdx *
+    TextLabelPreferredSndCrdBufDelay->setText (
+        QString().setNum ( (double) iPrefBufSize *
         1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
-        QString().setNum ( iCurActualBufIdx ) + ")" );
+        QString().setNum ( iPrefBufSize ) + ")" );
+
+    // actual size (use yellow color if different from preferred size)
+    const QString strActSizeValues =
+        QString().setNum ( (double) iCurActualBufSize *
+        1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
+        QString().setNum ( iCurActualBufSize ) + ")";
+
+    if ( iPrefBufSize != iCurActualBufSize )
+    {
+        TextLabelActualSndCrdBufDelay->setText ( "<font color=""red"">" +
+            strActSizeValues + "</font>" );
+    }
+    else
+    {
+        TextLabelActualSndCrdBufDelay->setText ( strActSizeValues );
+    }
 }
 
 void CClientSettingsDlg::showEvent ( QShowEvent* showEvent )
@@ -214,15 +227,13 @@ void CClientSettingsDlg::OnSliderSndCrdBufferDelay ( int value )
 
 void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
 {
-    try
-    {
-        pClient->SetSndCrdDev ( iSndDevIdx );
-    }
-    catch ( CGenErr generr )
+    const QString strError = pClient->SetSndCrdDev ( iSndDevIdx );
+
+    if ( !strError.isEmpty() )
     {
         QMessageBox::critical ( 0, APP_NAME,
             QString ( "The selected audio device could not be used because "
-            "of the following error: " ) + generr.GetErrorText() +
+            "of the following error: " ) + strError +
             QString ( " The previous driver will be selected." ), "Ok", 0 );
 
         // recover old selection

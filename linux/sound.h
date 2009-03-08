@@ -58,7 +58,7 @@ public:
     // not implemented yet, always return one device and default string
     int         GetNumDev() { return 1; }
     std::string GetDeviceName ( const int iDiD ) { return "wave mapper"; }
-    int         SetDev ( const int iNewDev ) {} // dummy
+    std::string SetDev ( const int iNewDev ) { return ""; } // dummy
     int         GetDev() { return 0; }
 
     virtual int  Init  ( const int iNewPrefMonoBufferSize );
@@ -85,7 +85,7 @@ public:
     // not implemented yet, always return one device and default string
     int         GetNumDev() { return 1; }
     std::string GetDeviceName ( const int iDiD ) { return "wave mapper"; }
-    int         SetDev ( const int iNewDev ) {} // dummy
+    std::string SetDev ( const int iNewDev ) { return ""; } // dummy
     int         GetDev() { return 0; }
 
     virtual int Init ( const int iNewPrefMonoBufferSize )
@@ -136,7 +136,7 @@ public:
     // not used
     int         GetNumDev() { return 1; }
     std::string GetDeviceName ( const int iDiD ) { return "wave mapper"; }
-    int         SetDev ( const int iNewDev ) {} // dummy
+    std::string SetDev ( const int iNewDev ) { return ""; } // dummy
     int         GetDev() { return 0; }
 
     // dummy definitions

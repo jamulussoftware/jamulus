@@ -120,7 +120,7 @@ public:
     std::string  GetSndCrdDeviceName ( const int iDiD )
         { return Sound.GetDeviceName ( iDiD ); }
 
-    void         SetSndCrdDev ( const int iNewDev );
+    QString      SetSndCrdDev ( const int iNewDev );
     int          GetSndCrdDev() { return Sound.GetDev(); }
     void         OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
 

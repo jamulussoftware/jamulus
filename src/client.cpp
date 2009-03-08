@@ -181,7 +181,7 @@ void CClient::SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx )
     Channel.CreateNetTranspPropsMessFromCurrentSettings();
 }
 
-void CClient::SetSndCrdDev ( const int iNewDev )
+QString CClient::SetSndCrdDev ( const int iNewDev )
 {
     // if client was running then first
     // stop it and restart again after new initialization
@@ -191,7 +191,7 @@ void CClient::SetSndCrdDev ( const int iNewDev )
         Sound.Stop();
     }
 
-    Sound.SetDev ( iNewDev );
+    const QString strReturn = Sound.SetDev ( iNewDev ).c_str();
 
     // init again because the sound card actual buffer size might
     // be changed on new device
@@ -201,6 +201,8 @@ void CClient::SetSndCrdDev ( const int iNewDev )
     {
         Sound.Start();
     }
+
+    return strReturn;
 }
 
 void CClient::Start()

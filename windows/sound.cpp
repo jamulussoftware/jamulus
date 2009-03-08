@@ -57,8 +57,10 @@ CSound* pSound;
 /******************************************************************************\
 * Common                                                                       *
 \******************************************************************************/
-void CSound::SetDev ( const int iNewDev )
+std::string CSound::SetDev ( const int iNewDev )
 {
+    std::string strReturn = ""; // init with no error
+
     // check if an ASIO driver was already initialized
     if ( lCurDev >= 0 )
     {
@@ -77,9 +79,9 @@ void CSound::SetDev ( const int iNewDev )
             // loading and initializing the new driver failed, go back to
             // original driver and display error message
             LoadAndInitializeDriver ( lCurDev );
-            Init ( iASIOBufferSizeStereo );
 
-            throw CGenErr ( strErrorMessage.c_str() );
+            // store error return message
+            strReturn = strErrorMessage;
         }
 
         Init ( iASIOBufferSizeStereo );
@@ -114,6 +116,8 @@ void CSound::SetDev ( const int iNewDev )
             }
         }
     }
+
+    return strReturn;
 }
 
 bool CSound::LoadAndInitializeFirstValidDriver()

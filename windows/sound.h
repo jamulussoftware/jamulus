@@ -68,7 +68,7 @@ public:
     int          GetNumDev() { return lNumDevs; }
     std::string  GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }
 
-    void         SetDev ( const int iNewDev );
+    std::string  SetDev ( const int iNewDev );
     int          GetDev() { return lCurDev; }
 
 protected:

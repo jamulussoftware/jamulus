@@ -436,12 +436,17 @@ void CClient::UpdateSocketBufferSize()
 // divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
 // one block in the jitter buffer
 
-// TODO use max(audioMs, receivedNetpacketsMs)
-const double dAudioBufferDurationMs =
-    iMonoBlockSizeSam / SYSTEM_SAMPLE_RATE * 1000;
+            // Use worst case scenario: We add the block size of input and
+            // output. This is not required if the smaller block size is a
+            // multiple of the bigger size, but in the general case where
+            // the block sizes do not have this relation, we require to have
+            // a minimum buffer size of the sum of both sizes
+            const double dAudioBufferDurationMs =
+                ( iMonoBlockSizeSam + Channel.GetAudioBlockSizeIn() ) /
+                SYSTEM_SAMPLE_RATE * 1000;
 
             const double dEstCurBufSet = ( dAudioBufferDurationMs +
-                3 * ( CycleTimeVariance.GetStdDev() + 0.5 ) ) /
+                2 * ( CycleTimeVariance.GetStdDev() + 0.5 ) ) /
                 MIN_SERVER_BLOCK_DURATION_MS;
 
             // upper/lower hysteresis decision

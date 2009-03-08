@@ -119,8 +119,9 @@ void CServer::Stop()
     const QString strLogStr = CLogTimeDate::toString() + ",, server stopped "
         "-------------------------------------";
 
-    qDebug() << strLogStr; // on console
-    Logging << strLogStr; // in log file
+    QTextStream tsConsoloeStream ( stdout );
+    tsConsoloeStream << strLogStr << endl; // on console
+    Logging          << strLogStr; // in log file
 }
 
 void CServer::OnNewChannel ( CHostAddress ChanAddr )
@@ -129,8 +130,9 @@ void CServer::OnNewChannel ( CHostAddress ChanAddr )
     const QString strLogStr = CLogTimeDate::toString() + ", " +
         ChanAddr.InetAddr.toString() + ", connected";
 
-    qDebug() << strLogStr; // on console
-    Logging << strLogStr; // in log file
+    QTextStream tsConsoloeStream ( stdout );
+    tsConsoloeStream << strLogStr << endl; // on console
+    Logging          << strLogStr; // in log file
 }
 
 void CServer::OnTimer()

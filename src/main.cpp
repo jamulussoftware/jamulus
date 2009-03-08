@@ -212,7 +212,7 @@ int main ( int argc, char** argv )
             else
             {
                 // only start application without using the GUI
-                cout << CAboutDlg::GetVersionAndNameStr ( false ).toStdString();
+                cout << CAboutDlg::GetVersionAndNameStr ( false ).toStdString() << std::endl;
                 app.exec();
             }
         }

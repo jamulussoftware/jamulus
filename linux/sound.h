@@ -55,20 +55,30 @@ public:
     CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg );
     virtual ~CSound() {}
 
+    virtual int  Init  ( const int iNewPrefMonoBufferSize );
+    virtual void Start();
+    virtual void Stop();
+
     // not implemented yet, always return one device and default string
     int         GetNumDev() { return 1; }
     std::string GetDeviceName ( const int iDiD ) { return "wave mapper"; }
     std::string SetDev ( const int iNewDev ) { return ""; } // dummy
     int         GetDev() { return 0; }
 
-    virtual int  Init  ( const int iNewPrefMonoBufferSize );
-    virtual bool Read  ( CVector<short>& psData );
-    virtual bool Write ( CVector<short>& psData );
+    // these variables should be protected but cannot since we want
+    // to access them from the callback function
+    CVector<short> vecsTmpAudioSndCrdStereo;
+    int            iJACKBufferSizeMono;
+    int            iJACKBufferSizeStero;
+
+    jack_port_t*   input_port_left;
+    jack_port_t*   input_port_right;
+    jack_port_t*   output_port_left;
+    jack_port_t*   output_port_right;
 
 protected:
     // callback
     static int process ( jack_nframes_t nframes, void* arg );
-
     jack_client_t* pJackClient;
 };
 # else

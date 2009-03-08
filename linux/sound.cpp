@@ -15,7 +15,7 @@
 # if USE_JACK
 CSound::CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ),
                  void* arg ) :
-    CSoundBase ( false, fpNewCallback, arg )
+    CSoundBase ( true, fpNewCallback, arg )
 {
     jack_status_t JackStatus;
 
@@ -29,41 +29,160 @@ CSound::CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ),
     // tell the JACK server to call "process()" whenever
     // there is work to be done
     jack_set_process_callback ( pJackClient, process, this );
+
+// TEST check sample rate, if not correct, just fire error
+if ( jack_get_sample_rate ( pJackClient ) != SND_CRD_SAMPLE_RATE )
+{
+    throw CGenErr ( "Jack server sample rate is different from "
+        "required one" );
 }
 
+    // create four ports
+    input_port_left = jack_port_register ( pJackClient, "input left",
+        JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
+    input_port_right = jack_port_register ( pJackClient, "input right",
+        JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
 
+    output_port_left = jack_port_register ( pJackClient, "output left",
+        JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
+    output_port_right = jack_port_register ( pJackClient, "output right",
+        JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
+}
+
+void CSound::Start()
+{
+    const char** ports;
+
+    // tell the JACK server that we are ready to roll
+    if ( jack_activate ( pJackClient ) )
+    {
+        throw CGenErr ( "Cannot activate client" );
+    }
+
+    // connect the ports, note: you cannot do this before
+    // the client is activated, because we cannot allow
+    // connections to be made to clients that are not
+    // running
+    if ( ( ports = jack_get_ports ( pJackClient, NULL, NULL,
+           JackPortIsPhysical | JackPortIsOutput ) ) == NULL )
+    {
+        throw CGenErr ( "Cannot find any physical capture ports" );
+    }
+
+    if ( !ports[1] )
+    {
+        throw CGenErr ( "Cannot find enough physical capture ports" );
+    }
+
+    if ( jack_connect ( pJackClient, ports[0], jack_port_name ( input_port_left ) ) )
+    {
+        throw CGenErr ( "Cannot connect input ports" );
+    }
+    if ( jack_connect ( pJackClient, ports[1], jack_port_name ( input_port_right ) ) )
+    {
+        throw CGenErr ( "Cannot connect input ports" );
+    }
+
+    free ( ports );
+
+    if ( ( ports = jack_get_ports ( pJackClient, NULL, NULL,
+           JackPortIsPhysical | JackPortIsInput ) ) == NULL )
+    {
+        throw CGenErr ( "Cannot find any physical playback ports" );
+    }
+
+    if ( !ports[1] )
+    {
+        throw CGenErr ( "Cannot find enough physical playback ports" );
+    }
+
+    if ( jack_connect ( pJackClient, jack_port_name ( output_port_left ), ports[0] ) )
+    {
+        throw CGenErr ( "Cannot connect output ports" );
+    }
+    if ( jack_connect ( pJackClient, jack_port_name ( output_port_right ), ports[1] ) )
+    {
+        throw CGenErr ( "Cannot connect output ports" );
+    }
+
+    free ( ports );
+
+    // call base class
+    CSoundBase::Start();
+}
+
+void CSound::Stop()
+{
+    // deactivate client
+    jack_deactivate ( pJackClient );
+
+    // call base class
+    CSoundBase::Stop();
+}
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
 
 // TEST
-return iNewPrefMonoBufferSize;
+iJACKBufferSizeMono = jack_get_buffer_size ( pJackClient );  	
+
+    // init base clasee
+    CSoundBase::Init ( iJACKBufferSizeMono );
+
+    // set internal buffer size value and calculate stereo buffer size
+    iJACKBufferSizeStero = 2 * iJACKBufferSizeMono;
+
+    // create memory for intermediate audio buffer
+    vecsTmpAudioSndCrdStereo.Init ( iJACKBufferSizeStero );
+
+// TEST
+return iJACKBufferSizeMono;
 
 }
 
-bool CSound::Read ( CVector<short>& psData )
-{
-
-
-}
-
-bool CSound::Write ( CVector<short>& psData )
-{
-
-
-
-}
 
 // JACK callbacks --------------------------------------------------------------
 int CSound::process ( jack_nframes_t nframes, void* arg )
 {
+    int     i;
     CSound* pSound = reinterpret_cast<CSound*> ( arg );
 
+    // get input data
+    jack_default_audio_sample_t* in_left =
+        (jack_default_audio_sample_t*) jack_port_get_buffer ( pSound->input_port_left, nframes );
+
+    jack_default_audio_sample_t* in_right =
+        (jack_default_audio_sample_t*) jack_port_get_buffer ( pSound->input_port_right, nframes );
+
+    // copy input data
+    for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
+    {
+
+// TODO better conversion from float to short
+
+        pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) in_left[i];
+        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) in_right[i];
+    }
+
+    // call processing callback function
+    pSound->Callback ( pSound->vecsTmpAudioSndCrdStereo );
+
+    // put output data
+    jack_default_audio_sample_t* out_left =
+        (jack_default_audio_sample_t*) jack_port_get_buffer ( pSound->output_port_left, nframes );
+
+    jack_default_audio_sample_t* out_right =
+        (jack_default_audio_sample_t*) jack_port_get_buffer ( pSound->output_port_right, nframes );
+
+    // copy output data
+    for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
+    {
+        out_left[i]  = pSound->vecsTmpAudioSndCrdStereo[2 * i];
+        out_right[i] = pSound->vecsTmpAudioSndCrdStereo[2 * i + 1];
+    }
 
     return 0; // zero on success, non-zero on error 
 }
-
-
 # else
 // Wave in *********************************************************************
 void CSound::InitRecording()

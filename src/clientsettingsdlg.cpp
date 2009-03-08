@@ -68,6 +68,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // sound card buffer size
     SliderSndCrdBufferDelay->setRange ( 0,
         CSndCrdBufferSizes::GetNumOfBufferSizes() - 1 );
+    SliderSndCrdBufferDelay->setPageStep ( 1 ); // improves setting with a mouse click
 
     // init combo box containing all available sound cards in the system
     cbSoundcard->clear();

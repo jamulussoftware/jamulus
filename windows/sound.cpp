@@ -328,7 +328,9 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
         // create memory for intermediate audio buffer
         vecsTmpAudioSndCrdStereo.Init ( iASIOBufferSizeStereo );
 
-        // create and activate ASIO buffers (buffer size in samples)
+        // create and activate ASIO buffers (buffer size in samples),
+        // dispose old buffers (if any)
+        ASIODisposeBuffers();
         ASIOCreateBuffers ( bufferInfos,
             2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
             iASIOBufferSizeMono, &asioCallbacks );

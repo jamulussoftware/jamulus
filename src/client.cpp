@@ -271,7 +271,9 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
     vecdNetwData.Init ( iMonoBlockSizeSam );
 
     // init response time evaluation
-    CycleTimeVariance.Init ( LEN_MOV_AV_RESPONSE );
+    CycleTimeVariance.Init (
+        TIME_MOV_AV_RESPONSE * SYSTEM_SAMPLE_RATE / iMonoBlockSizeSam );
+
     CycleTimeVariance.Reset();
 
     AudioReverb.Clear();
@@ -428,7 +430,9 @@ void CClient::UpdateSocketBufferSize()
         //   completely filled
         const double dHysteresis = 0.3;
 
-        if ( CycleTimeVariance.IsInitialized() )
+// it seems that it is better to update the jitter buffer as soon as possible
+// even if the value is not optimal right from the beginning
+        if ( 1 ) // previously -> CycleTimeVariance.IsInitialized()
         {
             // calculate current buffer setting
 // TODO 2* seems not give optimal results, maybe use 3*?
@@ -442,8 +446,8 @@ void CClient::UpdateSocketBufferSize()
             // the block sizes do not have this relation, we require to have
             // a minimum buffer size of the sum of both sizes
             const double dAudioBufferDurationMs =
-                ( iMonoBlockSizeSam + Channel.GetAudioBlockSizeIn() ) /
-                SYSTEM_SAMPLE_RATE * 1000;
+                ( iMonoBlockSizeSam + Channel.GetAudioBlockSizeIn() ) * 1000 /
+                SYSTEM_SAMPLE_RATE;
 
             const double dEstCurBufSet = ( dAudioBufferDurationMs +
                 2 * ( CycleTimeVariance.GetStdDev() + 0.5 ) ) /

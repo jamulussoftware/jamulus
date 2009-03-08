@@ -279,13 +279,12 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
     const int iTotalJitterBufferDelayMS = MIN_SERVER_BLOCK_DURATION_MS *
         ( 2 /* buffer at client and server */ * pClient->GetSockBufSize() ) / 2;
 
-
-// TODO consider sound card interface block size
-
-const int iTotalSoundCardDelayMS = 0;
-//    const int iTotalSoundCardDelayMS = 2 * MIN_SERVER_BLOCK_DURATION_MS +
-//        MIN_SERVER_BLOCK_DURATION_MS * ( pClient->GetSndInterface()->GetInNumBuf() +
-//          pClient->GetSndInterface()->GetOutNumBuf() ) / 2;
+    // we assume that we have two period sizes for the input and one for the
+    // output, therefore we have "3 *" instead of "2 *" (for input and output)
+    // the actual sound card buffer size
+    const int iTotalSoundCardDelayMS =
+        3 * pClient->GetSndCrdActualMonoBlSize() *
+        1000 / SND_CRD_SAMPLE_RATE;
 
     const int iDelayToFillNetworkPackets =
         ( pClient->GetNetwBufSizeOut() + pClient->GetAudioBlockSizeIn() ) *

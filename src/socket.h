@@ -50,7 +50,7 @@ public:
     CSocket ( CChannel* pNewChannel, const quint16 iPortNumber ) :
         pChannel( pNewChannel ), bIsClient ( true ) { Init ( iPortNumber ); }
     CSocket ( CChannelSet* pNewChannelSet, QObject* pNServP, const quint16 iPortNumber ) :
-        pChannelSet(pNewChannelSet), pServer ( pNServP ), bIsClient ( false )
+        pChannelSet ( pNewChannelSet ), pServer ( pNServP ), bIsClient ( false )
         { Init ( iPortNumber ); }
     virtual ~CSocket() {}
 
@@ -65,7 +65,7 @@ protected:
     CVector<unsigned char>  vecbyRecBuf;
     CHostAddress            RecHostAddr;
 
-    CChannel*               pChannel; // for client
+    CChannel*               pChannel;    // for client
     CChannelSet*            pChannelSet; // for server
 
     QObject*                pServer;

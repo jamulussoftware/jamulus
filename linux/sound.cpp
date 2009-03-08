@@ -12,6 +12,59 @@
 #include "sound.h"
 
 #ifdef WITH_SOUND
+# if USE_JACK
+CSound::CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ),
+                 void* arg ) :
+    CSoundBase ( false, fpNewCallback, arg )
+{
+    jack_status_t JackStatus;
+
+    // try to become a client of the JACK server
+    pJackClient = jack_client_open ( "llcon", JackNullOption, &JackStatus );
+    if ( pJackClient == NULL )
+    {
+        throw CGenErr ( "Jack server not running" );
+    }
+ 
+    // tell the JACK server to call "process()" whenever
+    // there is work to be done
+    jack_set_process_callback ( pJackClient, process, this );
+}
+
+
+
+int CSound::Init ( const int iNewPrefMonoBufferSize )
+{
+
+// TEST
+return iNewPrefMonoBufferSize;
+
+}
+
+bool CSound::Read ( CVector<short>& psData )
+{
+
+
+}
+
+bool CSound::Write ( CVector<short>& psData )
+{
+
+
+
+}
+
+// JACK callbacks --------------------------------------------------------------
+int CSound::process ( jack_nframes_t nframes, void* arg )
+{
+    CSound* pSound = reinterpret_cast<CSound*> ( arg );
+
+
+    return 0; // zero on success, non-zero on error 
+}
+
+
+# else
 // Wave in *********************************************************************
 void CSound::InitRecording()
 {
@@ -366,5 +419,5 @@ void CSound::Close()
 
     phandle = NULL;
 }
-
-#endif /* WITH_SOUND */
+# endif // USE_JACK
+#endif // WITH_SOUND

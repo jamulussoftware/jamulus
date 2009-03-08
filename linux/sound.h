@@ -49,9 +49,28 @@
 /* Classes ********************************************************************/
 #if WITH_SOUND
 # if USE_JACK
+class CSound : public CSoundBase
+{
+public:
+    CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg );
+    virtual ~CSound() {}
 
-// TODO, see http://jackit.sourceforge.net/cgi-bin/lxr/http/source/example-clients/simple_client.c
+    // not implemented yet, always return one device and default string
+    int         GetNumDev() { return 1; }
+    std::string GetDeviceName ( const int iDiD ) { return "wave mapper"; }
+    int         SetDev ( const int iNewDev ) {} // dummy
+    int         GetDev() { return 0; }
 
+    virtual int  Init  ( const int iNewPrefMonoBufferSize );
+    virtual bool Read  ( CVector<short>& psData );
+    virtual bool Write ( CVector<short>& psData );
+
+protected:
+    // callback
+    static int process ( jack_nframes_t nframes, void* arg );
+
+    jack_client_t* pJackClient;
+};
 # else
 class CSound : public CSoundBase
 {

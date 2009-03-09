@@ -122,9 +122,11 @@ void CSound::Stop()
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
+    // try setting buffer size
+    jack_set_buffer_size ( pJackClient, iNewPrefMonoBufferSize );
 
-// TEST
-iJACKBufferSizeMono = jack_get_buffer_size ( pJackClient );  	
+    // get actual buffer size
+    iJACKBufferSizeMono = jack_get_buffer_size ( pJackClient );  	
 
     // init base clasee
     CSoundBase::Init ( iJACKBufferSizeMono );

@@ -139,8 +139,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( pClient, SIGNAL ( PingTimeReceived ( int ) ),
         this, SLOT ( OnPingTimeResult ( int ) ) );
 
-    QObject::connect ( &AudioCompressionButtonGroup, SIGNAL ( buttonClicked ( QAbstractButton* ) ),
-        this, SLOT ( OnAudioCompressionButtonGroupClicked ( QAbstractButton* ) ) );
+    QObject::connect ( &AudioCompressionButtonGroup,
+        SIGNAL ( buttonClicked ( QAbstractButton* ) ), this,
+        SLOT ( OnAudioCompressionButtonGroupClicked ( QAbstractButton* ) ) );
 
 
     // Timers ------------------------------------------------------------------
@@ -222,7 +223,7 @@ void CClientSettingsDlg::OnSliderNetBuf ( int value )
 void CClientSettingsDlg::OnSliderSndCrdBufferDelay ( int value )
 {
     pClient->SetSndCrdPreferredMonoBlSizeIndex ( value );
-    UpdateSoundCardFrame();
+    UpdateDisplay();
 }
 
 void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
@@ -318,17 +319,18 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
     else
     {
         TextLabelPingTime->setText ( QString().setNum ( iPingTime ) + " ms" );
-        TextLabelOverallDelay->setText ( QString().setNum ( iOverallDelay ) + " ms" );
+        TextLabelOverallDelay->setText (
+            QString().setNum ( iOverallDelay ) + " ms" );
     }
 
-    // color definition: < 40 ms green, < 60 ms yellow, otherwise red
+    // color definition: < 40 ms green, < 65 ms yellow, otherwise red
     if ( iOverallDelay <= 40 )
     {
         CLEDOverallDelay->SetLight ( MUL_COL_LED_GREEN );
     }
     else
     {
-        if ( iOverallDelay <= 60 )
+        if ( iOverallDelay <= 65 )
         {
             CLEDOverallDelay->SetLight ( MUL_COL_LED_YELLOW );
         }
@@ -355,7 +357,8 @@ void CClientSettingsDlg::UpdateDisplay()
     else
     {
         // update upstream rate information label (only if client is running)
-        TextUpstreamValue->setText ( QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
+        TextUpstreamValue->setText (
+            QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
     }
 }
 
@@ -363,16 +366,6 @@ void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
 {
     switch ( iMessType )
     {
-/*
-    case MS_SOUND_IN:
-        CLEDSoundIn->SetLight ( iStatus );
-        break;
-
-    case MS_SOUND_OUT:
-        CLEDSoundOut->SetLight ( iStatus );
-        break;
-*/
-
     case MS_JIT_BUF_PUT:
     case MS_JIT_BUF_GET:
         // network LED shows combined status of put and get
@@ -380,10 +373,6 @@ void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
         break;
 
     case MS_RESET_ALL:
-/*
-        CLEDSoundIn->Reset();
-        CLEDSoundOut->Reset();
-*/
         CLEDNetw->Reset();
         break;
     }

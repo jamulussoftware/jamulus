@@ -372,7 +372,7 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
                                     CVector<CVector<double> >& vecvecdGains )
 {
     int  i, j;
-    bool bCreateChanList = false;
+    bool bChannelIsNowDisconnected = false;
 
     // init temporal data vector and clear input buffers
     CVector<double> vecdData ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
@@ -396,7 +396,7 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
             // client list is sent to all other clients
             if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
             {
-                bCreateChanList = true;
+                bChannelIsNowDisconnected = true;
             }
 
             if ( vecChannels[i].IsConnected() )
@@ -435,12 +435,12 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
                 // the channel ID! Therefore we have to use "vecChanID" to
                 // query the IDs of the currently connected channels
                 vecvecdGains[i][j] =
-                    vecChannels[ vecChanID[i] ].GetGain( vecChanID[j] );
+                    vecChannels[vecChanID[i]].GetGain( vecChanID[j] );
             }
         }
 
         // create channel list message if requested
-        if ( bCreateChanList )
+        if ( bChannelIsNowDisconnected )
         {
             // update channel list for all currently connected clients
             CreateAndSendChanListForAllConChannels();

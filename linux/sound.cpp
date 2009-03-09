@@ -37,7 +37,7 @@ if ( jack_get_sample_rate ( pJackClient ) != SND_CRD_SAMPLE_RATE )
         "required one" );
 }
 
-    // create four ports
+    // create four ports (two for input, two for output -> stereo)
     input_port_left = jack_port_register ( pJackClient, "input left",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
     input_port_right = jack_port_register ( pJackClient, "input right",
@@ -137,9 +137,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     // create memory for intermediate audio buffer
     vecsTmpAudioSndCrdStereo.Init ( iJACKBufferSizeStero );
 
-// TEST
-return iJACKBufferSizeMono;
-
+    return iJACKBufferSizeMono;
 }
 
 
@@ -159,11 +157,8 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     // copy input data
     for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
     {
-
-// TODO better conversion from float to short
-
-        pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) in_left[i];
-        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) in_right[i];
+        pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( in_left[i] * _MAXSHORT );
+        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( in_right[i] * _MAXSHORT );
     }
 
     // call processing callback function
@@ -179,8 +174,11 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     // copy output data
     for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
     {
-        out_left[i]  = pSound->vecsTmpAudioSndCrdStereo[2 * i];
-        out_right[i] = pSound->vecsTmpAudioSndCrdStereo[2 * i + 1];
+        out_left[i] = (jack_default_audio_sample_t)
+            pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
+
+        out_right[i] = (jack_default_audio_sample_t)
+            pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
     }
 
     return 0; // zero on success, non-zero on error 

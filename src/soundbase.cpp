@@ -95,7 +95,7 @@ void CSoundBase::run()
         }
 
         // process audio data
-        (*fpCallback) ( vecsAudioSndCrdStereo, pCallbackArg );
+        (*fpProcessCallback) ( vecsAudioSndCrdStereo, pProcessCallbackArg );
 
         // play the new block
         if ( Write ( vecsAudioSndCrdStereo ) )

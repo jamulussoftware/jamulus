@@ -52,7 +52,7 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg );
+    CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg );
     virtual ~CSound() {}
 
     virtual int  Init  ( const int iNewPrefMonoBufferSize );
@@ -77,16 +77,17 @@ public:
     jack_port_t*   output_port_right;
 
 protected:
-    // callback
+    // callbacks
     static int process ( jack_nframes_t nframes, void* arg );
+    static int bufferSizeCallback ( jack_nframes_t nframes, void *arg );
     jack_client_t* pJackClient;
 };
 # else
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
-        CSoundBase ( false, fpNewCallback, arg ), rhandle ( NULL ),
+    CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ), void* pParg ) :
+        CSoundBase ( false, fpNewProcessCallback, pParg ), rhandle ( NULL ),
         phandle ( NULL ), iCurPeriodSizeIn ( NUM_PERIOD_BLOCKS_IN ),
         iCurPeriodSizeOut ( NUM_PERIOD_BLOCKS_OUT ), bChangParamIn ( true ),
         bChangParamOut ( true ) {}
@@ -139,8 +140,8 @@ protected:
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
-        CSoundBase ( false, fpNewCallback, arg ) {}
+    CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ), void* pParg ) :
+        CSoundBase ( false, fpNewProcessCallback, pParg ) {}
     virtual ~CSound() { Close(); }
 
     // not used

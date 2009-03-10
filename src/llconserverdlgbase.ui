@@ -158,7 +158,7 @@
      <item>
       <widget class="QPushButton" name="buttonOk" >
        <property name="text" >
-        <string>&amp;OK</string>
+        <string>&amp;Close</string>
        </property>
        <property name="autoDefault" >
         <bool>true</bool>

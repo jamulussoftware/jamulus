@@ -35,9 +35,9 @@ class CSoundBase : public QThread
 {
 public:
     CSoundBase ( const bool bNewIsCallbackAudioInterface,
-        void (*fpNewCallback) ( CVector<short>& psData, void* arg ),
-        void* arg ) : fpCallback ( fpNewCallback ), pCallbackArg ( arg ),
-        bRun ( false ),
+        void (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
+        void* pParg ) : fpProcessCallback ( fpNewProcessCallback ),
+        pProcessCallbackArg ( pParg ), bRun ( false ),
         bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ) {}
     virtual ~CSoundBase() {}
 
@@ -50,13 +50,13 @@ public:
 
 protected:
     // function pointer to callback function
-    void (*fpCallback) ( CVector<short>& psData, void* arg );
-    void* pCallbackArg;
+    void (*fpProcessCallback) ( CVector<short>& psData, void* arg );
+    void* pProcessCallbackArg;
 
     // callback function call for derived classes
-    void Callback ( CVector<short>& psData )
+    void ProcessCallback ( CVector<short>& psData )
     {
-        (*fpCallback) ( psData, pCallbackArg );
+        (*fpProcessCallback) ( psData, pProcessCallbackArg );
     }
 
     // these functions should be overwritten by derived class for

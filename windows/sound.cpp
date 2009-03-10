@@ -489,7 +489,7 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
         }
 
         // call processing callback function
-        pSound->Callback ( vecsTmpAudioSndCrdStereo );
+        pSound->ProcessCallback ( vecsTmpAudioSndCrdStereo );
 
         // perform the processing for input and output
         for ( int i = 0; i < 2 * NUM_IN_OUT_CHANNELS; i++ ) // stereo

@@ -13,9 +13,9 @@
 
 #ifdef WITH_SOUND
 # if USE_JACK
-CSound::CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ),
-                 void* arg ) :
-    CSoundBase ( true, fpNewCallback, arg )
+CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
+                 void* pParg ) :
+    CSoundBase ( true, fpNewProcessCallback, pParg )
 {
     jack_status_t JackStatus;
 
@@ -29,6 +29,9 @@ CSound::CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ),
     // tell the JACK server to call "process()" whenever
     // there is work to be done
     jack_set_process_callback ( pJackClient, process, this );
+
+    // register a "buffer size changed" callback function
+    jack_set_buffer_size_callback ( pJackClient, bufferSizeCallback, this );
 
 // TEST check sample rate, if not correct, just fire error
 if ( jack_get_sample_rate ( pJackClient ) != SND_CRD_SAMPLE_RATE )
@@ -147,12 +150,14 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     int     i;
     CSound* pSound = reinterpret_cast<CSound*> ( arg );
 
-    // get input data
+    // get input data pointer
     jack_default_audio_sample_t* in_left =
-        (jack_default_audio_sample_t*) jack_port_get_buffer ( pSound->input_port_left, nframes );
+        (jack_default_audio_sample_t*) jack_port_get_buffer (
+        pSound->input_port_left, nframes );
 
     jack_default_audio_sample_t* in_right =
-        (jack_default_audio_sample_t*) jack_port_get_buffer ( pSound->input_port_right, nframes );
+        (jack_default_audio_sample_t*) jack_port_get_buffer (
+        pSound->input_port_right, nframes );
 
     // copy input data
     for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
@@ -162,14 +167,16 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     }
 
     // call processing callback function
-    pSound->Callback ( pSound->vecsTmpAudioSndCrdStereo );
+    pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
 
-    // put output data
+    // get output data pointer
     jack_default_audio_sample_t* out_left =
-        (jack_default_audio_sample_t*) jack_port_get_buffer ( pSound->output_port_left, nframes );
+        (jack_default_audio_sample_t*) jack_port_get_buffer (
+        pSound->output_port_left, nframes );
 
     jack_default_audio_sample_t* out_right =
-        (jack_default_audio_sample_t*) jack_port_get_buffer ( pSound->output_port_right, nframes );
+        (jack_default_audio_sample_t*) jack_port_get_buffer (
+        pSound->output_port_right, nframes );
 
     // copy output data
     for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
@@ -182,6 +189,15 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     }
 
     return 0; // zero on success, non-zero on error 
+}
+
+int CSound::bufferSizeCallback ( jack_nframes_t nframes, void *arg )
+{
+    CSound* pSound = reinterpret_cast<CSound*> ( arg );
+
+// TODO actual implementation
+
+    return 0; // zero on success, non-zero on error
 }
 # else
 // Wave in *********************************************************************

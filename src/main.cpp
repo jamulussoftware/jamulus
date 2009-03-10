@@ -42,7 +42,7 @@ int main ( int argc, char** argv )
     std::string strArgument;
     double      rDbleArgument;
 
-    /* check if server or client application shall be started */
+    // check if server or client application shall be started
     bool        bIsClient             = true;
     bool        bUseGUI               = true;
     int         iUploadRateLimitKbps  = DEF_MAX_UPLOAD_RATE_KBPS;
@@ -52,9 +52,9 @@ int main ( int argc, char** argv )
     std::string strServerName         = "";
     std::string strLoggingFileName    = "";
 
-    /* QT docu: argv()[0] is the program name, argv()[1] is the first
-       argument and argv()[argc()-1] is the last argument.
-       Start with first argument, therefore "i = 1" */
+    // QT docu: argv()[0] is the program name, argv()[1] is the first
+    // argument and argv()[argc()-1] is the last argument.
+    // Start with first argument, therefore "i = 1"
     for ( int i = 1; i < argc; i++ )
     {
         // server mode flag ----------------------------------------------------------

@@ -43,11 +43,13 @@ if ( jack_get_sample_rate ( pJackClient ) != SND_CRD_SAMPLE_RATE )
     // create four ports (two for input, two for output -> stereo)
     input_port_left = jack_port_register ( pJackClient, "input left",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
+
     input_port_right = jack_port_register ( pJackClient, "input right",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
 
     output_port_left = jack_port_register ( pJackClient, "output left",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
+
     output_port_right = jack_port_register ( pJackClient, "output right",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
 }
@@ -125,8 +127,9 @@ void CSound::Stop()
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
-    // try setting buffer size
-    jack_set_buffer_size ( pJackClient, iNewPrefMonoBufferSize );
+// try setting buffer size
+// TODO seems not to work! -> no audio after this operation!
+//jack_set_buffer_size ( pJackClient, iNewPrefMonoBufferSize );
 
     // get actual buffer size
     iJACKBufferSizeMono = jack_get_buffer_size ( pJackClient );  	

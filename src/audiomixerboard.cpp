@@ -191,9 +191,12 @@ QString CAudioMixerBoard::GenFaderText ( CChannelShortInfo& ChanInfo )
     // if text is empty, show IP address instead
     if ( ChanInfo.strName.isEmpty() )
     {
-        // convert IP address to text and show it
-        const QHostAddress addrTest ( ChanInfo.iIpAddr );
-        return addrTest.toString();
+        // convert IP address to text and show it (use dummy port number
+        // since it is not used here)
+        const CHostAddress TempAddr =
+            CHostAddress ( QHostAddress ( ChanInfo.iIpAddr ), 0 );
+
+        return TempAddr.GetIpAddressStringNoLastByte();
     }
     else
     {

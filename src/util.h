@@ -392,6 +392,12 @@ public:
     bool operator== ( const CHostAddress& CompAddr ) // compare operator
         { return ( ( CompAddr.InetAddr == InetAddr ) && ( CompAddr.iPort == iPort ) ); }
 
+    QString GetIpAddressStringNoLastByte() const
+    {
+        // remove the last byte of the IP address
+        return InetAddr.toString().section ( ".", 0, 2 ) + ".x";
+    }
+
     QHostAddress    InetAddr;
     quint16         iPort;
 };

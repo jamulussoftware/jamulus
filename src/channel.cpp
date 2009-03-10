@@ -205,8 +205,8 @@ void CChannelSet::CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
     if ( ChanName.isEmpty() )
     {
         // convert IP address to text and show it
-        const QHostAddress addrTest ( vecChannels[iCurChanID].GetAddress().InetAddr );
-        ChanName = addrTest.toString();
+        ChanName =
+            vecChannels[iCurChanID].GetAddress().GetIpAddressStringNoLastByte();
     }
 
     // add name of the client at the beginning of the message text and use
@@ -637,12 +637,10 @@ void CChannelSet::WriteHTMLChannelList()
                 // if text is empty, show IP address instead
                 if ( strCurChanName.isEmpty() )
                 {
-                    // convert IP address to text and show it
-                    const QHostAddress addrTest ( vecChannels[i].GetAddress().InetAddr );
-                    strCurChanName = addrTest.toString();
-
-                    // remove last digits
-                    strCurChanName = strCurChanName.section ( ".", 0, 2 ) + ".x";
+                    // convert IP address to text and show it, remove last
+                    // digits
+                    strCurChanName =
+                        vecChannels[i].GetAddress().GetIpAddressStringNoLastByte();
                 }
 
                 streamFileOut << "  <li>" << strCurChanName << "</li>" << endl;

@@ -45,7 +45,7 @@ int main ( int argc, char** argv )
     /* check if server or client application shall be started */
     bool        bIsClient             = true;
     bool        bUseGUI               = true;
-    bool        bForceLowUploadRate   = false;
+    int         iUploadRateLimitKbps  = DEF_MAX_UPLOAD_RATE_KBPS;
     quint16     iPortNumber           = LLCON_DFAULT_PORT_NUMBER;
     std::string strIniFileName        = "";
     std::string strHTMLStatusFileName = "";
@@ -82,10 +82,11 @@ int main ( int argc, char** argv )
         }
 
         // force low upload data rate flag -------------------------------------------
-        if ( GetFlagArgument ( argc, argv, i, "-u", "--lowuploadrate" ) )
+        if ( GetNumericArgument ( argc, argv, i, "-u", "--maxuploadrate",
+                                  100, 1000000, rDbleArgument ) )
         {
-            bForceLowUploadRate = true;
-            cout << "force low upload rate" << std::endl;
+            iUploadRateLimitKbps = static_cast<int> ( rDbleArgument );
+            cout << "maximum upload rate: " << iUploadRateLimitKbps << std::endl;
             continue;
         }
 
@@ -194,7 +195,7 @@ int main ( int argc, char** argv )
                              iPortNumber,
                              strHTMLStatusFileName.c_str(),
                              strServerName.c_str(),
-                             bForceLowUploadRate );
+                             iUploadRateLimitKbps );
 
             if ( bUseGUI )
             {
@@ -249,7 +250,7 @@ std::string UsageArguments ( char **argv )
         "  -i, --inifile              initialization file name (only available for client)\n"
         "  -p, --port                 local port number (only avaiable for server)\n"
         "  -m, --htmlstatus           enable HTML status file, set file name (only avaiable for server)\n"
-        "  -u, --lowuploadrate        force low upload rate (only avaiable for server)\n"
+        "  -u, --maxuploadrate        maximum upload rate (only avaiable for server)\n"
         "  -h, -?, --help             this help text\n"
         "Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }

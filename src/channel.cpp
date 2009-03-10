@@ -28,15 +28,14 @@
 /******************************************************************************\
 * CChannelSet                                                                  *
 \******************************************************************************/
-CChannelSet::CChannelSet ( const bool bForceLowUploadRate ) :
+CChannelSet::CChannelSet ( const int iNewUploadRateLimitKbps ) :
     bWriteStatusHTMLFile ( false ),
-    iUploadRateLimit ( DEF_MAX_UPLOAD_RATE_KBPS )
+    iUploadRateLimitKbps ( iNewUploadRateLimitKbps )
 {
-    // enable all channels and set server flag
+    // enable all channels
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         vecChannels[i].SetEnable ( true );
-        vecChannels[i].SetForceLowUploadRate ( bForceLowUploadRate );
     }
 
     // define colors for chat window identifiers
@@ -253,33 +252,46 @@ void CChannelSet::SetOutputParameters()
     // is not enough, we start to increase the buffer size factor out.
     bool bUploadRateIsBelowLimit = false;
 
-    const int     iNumTrials = 4;
+    // first initialize all channels with the first parameter set (highest
+    // upload data rate)
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            // set new parameters
+            vecChannels[i].SetNetwBufSizeFactOut  ( 1 );
+            vecChannels[i].SetAudioCompressionOut ( CT_NONE );
+        }
+    }
+
+    // calculate and check total upload rate (maybe the initialization already
+    // gives desired upload rate)
+    bUploadRateIsBelowLimit =
+        ( CalculateTotalUploadRateKbps() <= iUploadRateLimitKbps );
+
+    // try other parameter sets if required
+    const int     iNumTrials = 3;
     EAudComprType eCurAudComprType;
     int           iCurBlockSizeFact;
 
-    for ( int iCurTrialIdx = 0; iCurTrialIdx < iNumTrials; iCurTrialIdx++ )
+    int iCurTrialIdx = 0;
+    while ( ( iCurTrialIdx < iNumTrials ) && ( !bUploadRateIsBelowLimit ) )
     {
         switch ( iCurTrialIdx )
         {
         case 0:
-            // highest data rate
-            eCurAudComprType  = CT_NONE;
-            iCurBlockSizeFact = 1;
-            break;
-
-        case 1:
             // using other audio compression gives most reduction
             eCurAudComprType  = CT_MSADPCM;
             iCurBlockSizeFact = 1;
             break;
 
-        case 2:
+        case 1:
             // trying to use larger block size factor to further reduce rate
             eCurAudComprType  = CT_MSADPCM;
             iCurBlockSizeFact = 2;
             break;
 
-        case 3:
+        case 2:
             // trying to use larger block size factor to further reduce rate
             eCurAudComprType  = CT_MSADPCM;
             iCurBlockSizeFact = 3;
@@ -296,22 +308,32 @@ void CChannelSet::SetOutputParameters()
                 vecChannels[iCurCh].SetAudioCompressionOut ( eCurAudComprType );
 
                 // calculate and check total upload rate
-                int iTotalUploadRate = 0;
-                for ( int j = 0; j < USED_NUM_CHANNELS; j++ )
-                {
-                    if ( vecChannels[j].IsConnected() )
-                    {
-                        // accumulate the upload rates from all channels
-                        iTotalUploadRate += vecChannels[j].GetUploadRateKbps();
-                    }
-                }
-                bUploadRateIsBelowLimit = ( iTotalUploadRate <= iUploadRateLimit );
+                bUploadRateIsBelowLimit =
+                    ( CalculateTotalUploadRateKbps() <= iUploadRateLimitKbps );
             }
 
             // next channel
             iCurCh++;
         }
+
+        // next trial index
+        iCurTrialIdx++;
     }
+}
+
+int CChannelSet::CalculateTotalUploadRateKbps()
+{
+    // calculate total upload rate
+    int iTotalUploadRate = 0;
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            // accumulate the upload rates from all channels
+            iTotalUploadRate += vecChannels[i].GetUploadRateKbps();
+        }
+    }
+    return iTotalUploadRate;
 }
 
 int CChannelSet::CheckAddr ( const CHostAddress& Addr )
@@ -639,8 +661,7 @@ void CChannelSet::WriteHTMLChannelList()
 \******************************************************************************/
 CChannel::CChannel ( const bool bNIsServer ) : bIsServer ( bNIsServer ),
     sName ( "" ), vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
-    bIsEnabled ( false ), bForceLowUploadRate ( false ),
-    iCurNetwOutBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
+    bIsEnabled ( false ), iCurNetwOutBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
 {
     // query all possible network in buffer sizes for determining if an
     // audio packet was received (the following code only works if all
@@ -790,19 +811,6 @@ void CChannel::SetEnable ( const bool bNEnStat )
     }
 }
 
-void CChannel::SetForceLowUploadRate ( const bool bNFoLoUpRat )
-{
-    if ( bNFoLoUpRat )
-    {
-        // initialize with low upload rate parameters and set flag so that
-        // these parameters are not changed anymore
-        SetNetwBufSizeFactOut  ( LOW_UPL_SET_BLOCK_SIZE_FACTOR_OUT );
-        SetAudioCompressionOut ( LOW_UPL_SET_AUDIO_COMPRESSION );
-    }
-
-    bForceLowUploadRate = bNFoLoUpRat;
-}
-
 void CChannel::SetAudioBlockSizeAndComprIn ( const int iNewBlockSize,
                                              const EAudComprType eNewAudComprType )
 {
@@ -838,7 +846,7 @@ void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
     QMutexLocker locker ( &Mutex );
 
     // use the network block size factor only for the server
-    if ( ( !bForceLowUploadRate ) && bIsServer )
+    if ( bIsServer )
     {
         // store new value
         iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
@@ -854,23 +862,20 @@ void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
 
 void CChannel::SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
 {
-    if ( !bForceLowUploadRate )
-    {
-        // store new value
-        eAudComprTypeOut = eNewAudComprTypeOut;
+    // store new value
+    eAudComprTypeOut = eNewAudComprTypeOut;
 
-        if ( bIsServer )
-        {
-            // call "set network buffer size factor" function because its
-            // initialization depends on the audio compression format and
-            // implicitely, the audio compression is initialized
-            SetNetwBufSizeFactOut ( iCurNetwOutBlSiFact );
-        }
-        else
-        {
-            // for client set arbitrary block size
-            SetNetwBufSizeOut ( iCurAudioBlockSizeOut );
-        }
+    if ( bIsServer )
+    {
+        // call "set network buffer size factor" function because its
+        // initialization depends on the audio compression format and
+        // implicitely, the audio compression is initialized
+        SetNetwBufSizeFactOut ( iCurNetwOutBlSiFact );
+    }
+    else
+    {
+        // for client set arbitrary block size
+        SetNetwBufSizeOut ( iCurAudioBlockSizeOut );
     }
 }
 

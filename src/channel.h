@@ -89,7 +89,6 @@ public:
     bool IsConnected() const { return iConTimeOut > 0; }
 
     void SetEnable ( const bool bNEnStat );
-    void SetForceLowUploadRate ( const bool bNFoLoUpRat );
 
     void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
     bool GetAddress ( CHostAddress& RetAddr );
@@ -185,7 +184,6 @@ protected:
 
     bool                bIsEnabled;
     bool                bIsServer;
-    bool                bForceLowUploadRate;
 
     int                 iCurAudioBlockSizeIn;
     int                 iCurNetwOutBlSiFact;
@@ -230,7 +228,7 @@ class CChannelSet : public QObject
     Q_OBJECT
 
 public:
-    CChannelSet ( const bool bForceLowUploadRate );
+    CChannelSet ( const int iNewUploadRateLimitKbps = DEF_MAX_UPLOAD_RATE_KBPS );
     virtual ~CChannelSet() {}
 
     bool PutData ( const CVector<unsigned char>& vecbyRecBuf,
@@ -264,6 +262,9 @@ public:
     void StartStatusHTMLFileWriting ( const QString& strNewFileName,
                                       const QString& strNewServerNameWithPort );
 
+    void SetUploadRateLimitKbps ( const int iNewUploadRateLimitKbps )
+        { iUploadRateLimitKbps = iNewUploadRateLimitKbps; }
+
 protected:
     CVector<CChannelShortInfo> CreateChannelList();
     void CreateAndSendChanListForAllConChannels();
@@ -272,6 +273,7 @@ protected:
     void CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText );
     void WriteHTMLChannelList();
     void SetOutputParameters();
+    int CalculateTotalUploadRateKbps();
 
     /* do not use the vector class since CChannel does not have appropriate
        copy constructor/operator */
@@ -280,7 +282,7 @@ protected:
 
     CVector<QString> vstrChatColors;
 
-    int              iUploadRateLimit;
+    int              iUploadRateLimitKbps;
 
     // HTML file server status
     bool             bWriteStatusHTMLFile;

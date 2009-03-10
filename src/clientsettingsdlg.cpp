@@ -173,14 +173,16 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     const int iPrefBufSize =
         CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurPrefBufIdx );
 
+    // use two times the buffer delay for the entire delay since
+    // we have input and output
     TextLabelPreferredSndCrdBufDelay->setText (
-        QString().setNum ( (double) iPrefBufSize *
+        QString().setNum ( (double) iPrefBufSize * 2 *
         1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
         QString().setNum ( iPrefBufSize ) + ")" );
 
     // actual size (use yellow color if different from preferred size)
     const QString strActSizeValues =
-        QString().setNum ( (double) iCurActualBufSize *
+        QString().setNum ( (double) iCurActualBufSize * 2 *
         1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
         QString().setNum ( iCurActualBufSize ) + ")";
 

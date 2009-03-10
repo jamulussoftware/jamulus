@@ -86,7 +86,8 @@ int main ( int argc, char** argv )
                                   100, 1000000, rDbleArgument ) )
         {
             iUploadRateLimitKbps = static_cast<int> ( rDbleArgument );
-            cout << "maximum upload rate: " << iUploadRateLimitKbps << std::endl;
+            cout << "maximum upload rate: " << iUploadRateLimitKbps <<
+                " kbps" << std::endl;
             continue;
         }
 

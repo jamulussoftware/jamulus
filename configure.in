@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.50)
 AC_INIT(src/main.cpp)
 
-AM_INIT_AUTOMAKE(llcon,2.1.5cvs)
+AM_INIT_AUTOMAKE(llcon,2.2.0cvs)
 
 
 AM_CONFIG_HEADER(config.h)
@@ -20,7 +20,7 @@ AC_CHECK_PROGS(RPMBUILD, rpmbuild, rpm)
 dnl Configuration Arguments
 
 AC_ARG_ENABLE( sound,[  --enable-sound        generic sound support], enable_sound=$enableval, enable_sound=yes)
-AC_ARG_ENABLE( alsa,[  --enable-alsa         use ALSA interface], enable_alsa=$enableval, enable_alsa=yes)
+AC_ARG_ENABLE( alsa,[  --enable-alsa         use ALSA interface], enable_alsa=$enableval, enable_alsa=no)
 
 
 if test "$enable_alsa" = "yes"; then

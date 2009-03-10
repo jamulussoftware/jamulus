@@ -5,7 +5,8 @@
  *  Volker Fischer, Alexander Kurpiers
  *
  * This code is based on the Open-Source sound interface implementation of
- * the Dream DRM Receiver project.
+ * the Dream DRM Receiver project and on the simple_client example of the
+ * Jack audio interface.
  *
 \******************************************************************************/
 

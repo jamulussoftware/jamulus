@@ -53,7 +53,7 @@
 #define DEFAULT_SERVER_ADDRESS          "llcon.dyndns.org"
 
 // defined port number for client and server
-#define LLCON_DFAULT_PORT_NUMBER        22122
+#define LLCON_DEFAULT_PORT_NUMBER       22122
 
 // system sample rate
 #define SYSTEM_SAMPLE_RATE              24000

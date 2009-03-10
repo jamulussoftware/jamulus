@@ -110,7 +110,7 @@ void CClient::OnReceivePingMessage ( int iMs )
 bool CClient::SetServerAddr ( QString strNAddr )
 {
     QHostAddress InetAddr;
-    quint16      iNetPort = LLCON_DFAULT_PORT_NUMBER;
+    quint16      iNetPort = LLCON_DEFAULT_PORT_NUMBER;
 
     // parse input address for the type [IP address]:[port number]
     QString strPort = strNAddr.section ( ":", 1, 1 );

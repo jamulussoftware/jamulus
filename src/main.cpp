@@ -46,7 +46,7 @@ int main ( int argc, char** argv )
     bool        bIsClient             = true;
     bool        bUseGUI               = true;
     int         iUploadRateLimitKbps  = DEF_MAX_UPLOAD_RATE_KBPS;
-    quint16     iPortNumber           = LLCON_DFAULT_PORT_NUMBER;
+    quint16     iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
     std::string strIniFileName        = "";
     std::string strHTMLStatusFileName = "";
     std::string strServerName         = "";

@@ -58,7 +58,7 @@ public:
                       const CHostAddress& HostAddr );
 
 protected:
-    void Init ( const quint16 iPortNumber = LLCON_DFAULT_PORT_NUMBER );
+    void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );
 
     QUdpSocket              SocketDevice;
 

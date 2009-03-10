@@ -29,7 +29,8 @@
 * CChannelSet                                                                  *
 \******************************************************************************/
 CChannelSet::CChannelSet ( const bool bForceLowUploadRate ) :
-    bWriteStatusHTMLFile ( false )
+    bWriteStatusHTMLFile ( false ),
+    iUploadRateLimit ( DEF_MAX_UPLOAD_RATE_KBPS )
 {
     // enable all channels and set server flag
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
@@ -244,6 +245,75 @@ int CChannelSet::GetFreeChan()
     return INVALID_CHANNEL_ID;
 }
 
+void CChannelSet::SetOutputParameters()
+{
+    // The strategy is as follows: Change the parameters for each channel
+    // until the total upload rate is lower than the limit. We first set the
+    // audio compression from None to MS-ADPCM for each channel and if this
+    // is not enough, we start to increase the buffer size factor out.
+    bool bUploadRateIsBelowLimit = false;
+
+    const int     iNumTrials = 4;
+    EAudComprType eCurAudComprType;
+    int           iCurBlockSizeFact;
+
+    for ( int iCurTrialIdx = 0; iCurTrialIdx < iNumTrials; iCurTrialIdx++ )
+    {
+        switch ( iCurTrialIdx )
+        {
+        case 0:
+            // highest data rate
+            eCurAudComprType  = CT_NONE;
+            iCurBlockSizeFact = 1;
+            break;
+
+        case 1:
+            // using other audio compression gives most reduction
+            eCurAudComprType  = CT_MSADPCM;
+            iCurBlockSizeFact = 1;
+            break;
+
+        case 2:
+            // trying to use larger block size factor to further reduce rate
+            eCurAudComprType  = CT_MSADPCM;
+            iCurBlockSizeFact = 2;
+            break;
+
+        case 3:
+            // trying to use larger block size factor to further reduce rate
+            eCurAudComprType  = CT_MSADPCM;
+            iCurBlockSizeFact = 3;
+            break;
+        }
+
+        int iCurCh = 0;
+        while ( ( iCurCh < USED_NUM_CHANNELS ) && ( !bUploadRateIsBelowLimit ) )
+        {
+            if ( vecChannels[iCurCh].IsConnected() )
+            {
+                // set new parameters
+                vecChannels[iCurCh].SetNetwBufSizeFactOut  ( iCurBlockSizeFact );
+                vecChannels[iCurCh].SetAudioCompressionOut ( eCurAudComprType );
+
+                // calculate and check total upload rate
+                int iTotalUploadRate = 0;
+                for ( int j = 0; j < USED_NUM_CHANNELS; j++ )
+                {
+                    if ( vecChannels[j].IsConnected() )
+                    {
+                        // accumulate the upload rates from all channels
+                        iTotalUploadRate += vecChannels[j].GetUploadRateKbps();
+                    }
+                }
+                bUploadRateIsBelowLimit = ( iTotalUploadRate <= iUploadRateLimit );
+            }
+
+            // next channel
+            iCurCh++;
+        }
+    }
+}
+
 int CChannelSet::CheckAddr ( const CHostAddress& Addr )
 {
     CHostAddress InetAddr;
@@ -251,12 +321,15 @@ int CChannelSet::CheckAddr ( const CHostAddress& Addr )
     // check for all possible channels if IP is already in use
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
-        if ( vecChannels[i].GetAddress ( InetAddr ) )
+        if ( vecChannels[i].IsConnected() )
         {
-            // IP found, return channel number
-            if ( InetAddr == Addr )
+            if ( vecChannels[i].GetAddress ( InetAddr ) )
             {
-                return i;
+                // IP found, return channel number
+                if ( InetAddr == Addr )
+                {
+                    return i;
+                }
             }
         }
     }
@@ -348,6 +421,9 @@ bAudioOK = true;
         // requested
         if ( bNewChannelReserved && bAudioOK )
         {
+            // update output network parameters for all connected clients
+            SetOutputParameters();
+
             // send message about new channel
             emit ChannelConnected ( HostAdr );
 
@@ -439,9 +515,12 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
             }
         }
 
-        // create channel list message if requested
+        // a channel is now disconnected, take action on it
         if ( bChannelIsNowDisconnected )
         {
+            // update output network parameters for all connected clients
+            SetOutputParameters();
+
             // update channel list for all currently connected clients
             CreateAndSendChanListForAllConChannels();
         }
@@ -449,10 +528,11 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
     Mutex.unlock(); // release mutex
 }
 
-void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-                                   CVector<QString>&      vecsName,
-                                   CVector<int>&          veciJitBufSize,
-                                   CVector<int>&          veciNetwOutBlSiFact )
+void CChannelSet::GetConCliParam ( CVector<CHostAddress>&  vecHostAddresses,
+                                   CVector<QString>&       vecsName,
+                                   CVector<int>&           veciJitBufSize,
+                                   CVector<int>&           veciNetwOutBlSiFact,
+                                   CVector<EAudComprType>& veceAudComprType )
 {
     CHostAddress InetAddr;
 
@@ -461,6 +541,7 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
     vecsName.Init            ( USED_NUM_CHANNELS );
     veciJitBufSize.Init      ( USED_NUM_CHANNELS );
     veciNetwOutBlSiFact.Init ( USED_NUM_CHANNELS );
+    veceAudComprType.Init    ( USED_NUM_CHANNELS );
 
     // check all possible channels
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
@@ -472,6 +553,7 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
             vecsName[i]            = vecChannels[i].GetName();
             veciJitBufSize[i]      = vecChannels[i].GetSockBufSize();
             veciNetwOutBlSiFact[i] = vecChannels[i].GetNetwBufSizeFactOut();
+            veceAudComprType[i]    = vecChannels[i].GetAudioCompressionOut();
         }
     }
 }
@@ -948,7 +1030,6 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
     bool bIsAudioPacket    = false;
     bool bNewConnection    = false;
     bool bReinitializeIn   = false;
-    bool bReinitializeOut  = false;
 
     // intermediate storage for new parameters
     int           iNewAudioBlockSize;
@@ -996,35 +1077,18 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                         {
                             bReinitializeIn = true;
                         }
-
-                        // in case of a server channel, use the same audio
-                        // compression for output as for the input
-                        if ( bIsServer )
-                        {
-                            if ( GetAudioCompressionOut() != eNewAudComprType )
-                            {
-                                bReinitializeOut = true;
-                            }
-                        }
                     }
                 }
                 Mutex.unlock();
 
-                // actual initialization calls have to be made
-                // outside the mutex region since they internally
-                // use the same mutex, too                
+                // actual initialization call has to be made
+                // outside the mutex region since it internally
+                // usees the same mutex, too                
                 if ( bReinitializeIn )
                 {
                     // re-initialize to new value
                     SetAudioBlockSizeAndComprIn (
                         iNewAudioBlockSize, eNewAudComprType );
-
-                }
-                
-                if ( bReinitializeOut )
-                {
-                    SetAudioCompressionOut ( eNewAudComprType );
-
                 }
             }
 

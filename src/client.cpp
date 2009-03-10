@@ -432,56 +432,52 @@ void CClient::UpdateSocketBufferSize()
         //   completely filled
         const double dHysteresis = 0.3;
 
-// it seems that it is better to update the jitter buffer as soon as possible
-// even if the value is not optimal right from the beginning
-        if ( 1 ) // previously -> CycleTimeVariance.IsInitialized()
-        {
-            // calculate current buffer setting
+        // calculate current buffer setting
 // TODO 2* seems not give optimal results, maybe use 3*?
 // add .5 to "round up" -> ceil
 // divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
 // one block in the jitter buffer
+// add one block for actual network jitter
 
-            // Use worst case scenario: We add the block size of input and
-            // output. This is not required if the smaller block size is a
-            // multiple of the bigger size, but in the general case where
-            // the block sizes do not have this relation, we require to have
-            // a minimum buffer size of the sum of both sizes
-            const double dAudioBufferDurationMs =
-                ( iMonoBlockSizeSam + Channel.GetAudioBlockSizeIn() ) * 1000 /
-                SYSTEM_SAMPLE_RATE;
+        // Use worst case scenario: We add the block size of input and
+        // output. This is not required if the smaller block size is a
+        // multiple of the bigger size, but in the general case where
+        // the block sizes do not have this relation, we require to have
+        // a minimum buffer size of the sum of both sizes
+        const double dAudioBufferDurationMs =
+            ( iMonoBlockSizeSam + Channel.GetAudioBlockSizeIn() ) * 1000 /
+            SYSTEM_SAMPLE_RATE;
 
-            const double dEstCurBufSet = ( dAudioBufferDurationMs +
-                2 * ( CycleTimeVariance.GetStdDev() + 0.5 ) ) /
-                MIN_SERVER_BLOCK_DURATION_MS;
+        const double dEstCurBufSet = 1 + ( dAudioBufferDurationMs +
+            2 * ( CycleTimeVariance.GetStdDev() + 0.5 ) ) /
+            MIN_SERVER_BLOCK_DURATION_MS;
 
-            // upper/lower hysteresis decision
-            const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );
-            const int iLowerHystDec = LlconMath().round ( dEstCurBufSet + dHysteresis );
+        // upper/lower hysteresis decision
+        const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );
+        const int iLowerHystDec = LlconMath().round ( dEstCurBufSet + dHysteresis );
 
-            // if both decisions are equal than use the result
-            if ( iUpperHystDec == iLowerHystDec )
+        // if both decisions are equal than use the result
+        if ( iUpperHystDec == iLowerHystDec )
+        {
+            // set the socket buffer via the main window thread since somehow
+            // it gives a protocol deadlock if we call the SetSocketBufSize()
+            // function directly
+            PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
+        }
+        else
+        {
+            // we are in the middle of the decision region, use
+            // previous setting for determing the new decision
+            if ( !( ( GetSockBufSize() == iUpperHystDec ) ||
+                    ( GetSockBufSize() == iLowerHystDec ) ) )
             {
-                // set the socket buffer via the main window thread since somehow
+                // The old result is not near the new decision,
+                // use per definition the upper decision.
+                // Set the socket buffer via the main window thread since somehow
                 // it gives a protocol deadlock if we call the SetSocketBufSize()
-                // function directly
+                // function directly.
                 PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
             }
-            else
-            {
-                // we are in the middle of the decision region, use
-                // previous setting for determing the new decision
-                if ( !( ( GetSockBufSize() == iUpperHystDec ) ||
-                        ( GetSockBufSize() == iLowerHystDec ) ) )
-                {
-                    // The old result is not near the new decision,
-                    // use per definition the upper decision.
-                    // Set the socket buffer via the main window thread since somehow
-                    // it gives a protocol deadlock if we call the SetSocketBufSize()
-                    // function directly.
-                    PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
-                }
-            }
-        } 
+        }
     }
 }

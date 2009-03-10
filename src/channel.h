@@ -247,7 +247,8 @@ public:
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                           CVector<QString>& vecsName,
                           CVector<int>& veciJitBufSize,
-                          CVector<int>& veciNetwOutBlSiFact );
+                          CVector<int>& veciNetwOutBlSiFact,
+                          CVector<EAudComprType>& veceAudComprType );
 
     // access functions for actual channels
     bool IsConnected ( const int iChanNum )
@@ -270,6 +271,7 @@ protected:
     void CreateAndSendChanListForThisChan ( const int iCurChanID );
     void CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText );
     void WriteHTMLChannelList();
+    void SetOutputParameters();
 
     /* do not use the vector class since CChannel does not have appropriate
        copy constructor/operator */
@@ -277,6 +279,8 @@ protected:
     QMutex           Mutex;
 
     CVector<QString> vstrChatColors;
+
+    int              iUploadRateLimit;
 
     // HTML file server status
     bool             bWriteStatusHTMLFile;

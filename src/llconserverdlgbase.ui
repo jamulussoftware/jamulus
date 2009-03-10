@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>767</width>
-    <height>280</height>
+    <width>765</width>
+    <height>315</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -67,6 +67,11 @@
      <column>
       <property name="text" >
        <string>Block Size Out</string>
+      </property>
+     </column>
+     <column>
+      <property name="text" >
+       <string>Audio Compr. Out</string>
       </property>
      </column>
     </widget>

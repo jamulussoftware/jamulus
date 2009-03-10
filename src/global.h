@@ -88,6 +88,9 @@
 // default network buffer size
 #define DEF_NET_BUF_SIZE_NUM_BL         10 // number of blocks
 
+// default maximum upload rate at server (typical DSL upload for good DSL)
+#define DEF_MAX_UPLOAD_RATE_KBPS        800 // kbps
+
 // maximum number of recognized sound cards installed in the system,
 // definition for "no device"
 #define MAX_NUMBER_SOUND_CARDS          10

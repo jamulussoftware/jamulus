@@ -45,7 +45,9 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
 
     // set up list view for connected clients
     ListViewClients->setColumnWidth ( 0, 170 );
-    ListViewClients->setColumnWidth ( 1, 150 );
+    ListViewClients->setColumnWidth ( 1, 130 );
+    ListViewClients->setColumnWidth ( 2, 40 );
+    ListViewClients->setColumnWidth ( 3, 40 );
     ListViewClients->clear();
 
     // insert items in reverse order because in Windows all of them are
@@ -85,12 +87,13 @@ void CLlconServerDlg::OnTimer()
     CVector<QString>        vecsName;
     CVector<int>            veciJitBufSize;
     CVector<int>            veciNetwOutBlSiFact;
+    CVector<EAudComprType>  veceAudComprType;
     double                  dCurTiStdDev;
 
     ListViewMutex.lock();
 
     pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufSize,
-        veciNetwOutBlSiFact );
+        veciNetwOutBlSiFact, veceAudComprType );
 
     // fill list with connected clients
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
@@ -113,6 +116,26 @@ void CLlconServerDlg::OnTimer()
             vecpListViewItems[i]->setText ( 5,
                 QString().setNum (
                 double ( veciNetwOutBlSiFact[i] * MIN_SERVER_BLOCK_DURATION_MS ), 'f', 2 ) );
+
+            // output audio compression
+            switch ( veceAudComprType[i] )
+            {
+            case CT_NONE:
+                vecpListViewItems[i]->setText ( 6, "None" );
+                break;
+
+            case CT_IMAADPCM:
+                vecpListViewItems[i]->setText ( 6, "IMA-ADPCM" );
+                break;
+
+            case CT_MSADPCM:
+                vecpListViewItems[i]->setText ( 6, "MS-ADPCM" );
+                break;
+
+            default:
+                vecpListViewItems[i]->setText ( 6, "Unknown" );
+                break;
+            }
 
             vecpListViewItems[i]->setHidden ( false );
         }

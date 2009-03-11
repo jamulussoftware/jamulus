@@ -298,8 +298,11 @@ void CChannelSet::SetOutputParameters()
             break;
         }
 
-        int iCurCh = 0;
-        while ( ( iCurCh < USED_NUM_CHANNELS ) && ( !bUploadRateIsBelowLimit ) )
+        // we try to set the worst parameters to the clients which connected
+        // the latest to the server, therefore we apply the new parameters to
+        // the last channels first
+        int iCurCh = USED_NUM_CHANNELS - 1;
+        while ( ( iCurCh >= 0 ) && ( !bUploadRateIsBelowLimit ) )
         {
             if ( vecChannels[iCurCh].IsConnected() )
             {
@@ -312,8 +315,8 @@ void CChannelSet::SetOutputParameters()
                     ( CalculateTotalUploadRateKbps() <= iUploadRateLimitKbps );
             }
 
-            // next channel
-            iCurCh++;
+            // next channel (backwards counting)
+            iCurCh--;
         }
 
         // next trial index

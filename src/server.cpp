@@ -183,8 +183,8 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
 
     const int iNumClients = vecvecdData.Size();
 
-    // 3 dB offset to avoid overload if all clients are set to gain 1
-    const double dNorm = (double) 2.0;
+    // some offset to avoid overload when mixing clients together
+    const double dNorm = (double) 1.25;
 
     // mix all audio data from all clients together
     for ( int i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )

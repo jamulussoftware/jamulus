@@ -1,3 +1,19 @@
+2.2.0
+
+- added Jack audio interface (Linux)
+
+- simplified settings dialog, complete redesign (removed sound card
+  buffer settings, network block sizes settings, added upload rate display)
+
+- improved audio stability (audio interface is not callback based, removed
+  intermediate audio buffers, client audio buffer size equals network
+  buffer size now)
+
+- added upload rate limitation for server (server decides which network
+  parameters to use depending on the upload limit and the number of connected
+  clients)
+
+
 2.1.4
 
 - added automatic jitter buffer size setting

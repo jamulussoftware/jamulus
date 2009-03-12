@@ -61,13 +61,15 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     pClient->strName = GetIniSetting ( IniXMLDocument, "client", "name" );
 
     // audio fader
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad", AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad",
+         AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
     {
         pClient->SetAudioInFader ( iValue );
     }
 
     // reverberation level
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev", 0, AUD_REVERB_MAX, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev",
+         0, AUD_REVERB_MAX, iValue ) )
     {
         pClient->SetReverbLevel ( iValue );
     }
@@ -82,7 +84,8 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     // special case with this setting: the sound card initialization depends on this setting
     // call, therefore, if no setting file parameter could be retrieved, the sound card is
     // initialized with a default setting defined here
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "auddevidx", 1, MAX_NUMBER_SOUND_CARDS, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
+         1, MAX_NUMBER_SOUND_CARDS, iValue ) )
     {
         pClient->SetSndCrdDev ( iValue );
     }
@@ -94,7 +97,8 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     }
 
     // sound card preferred buffer size index
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx", 0, CSndCrdBufferSizes::GetNumOfBufferSizes(), iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx",
+         0, CSndCrdBufferSizes::GetNumOfBufferSizes(), iValue ) )
     {
         pClient->SetSndCrdPreferredMonoBlSizeIndex ( iValue );
     }
@@ -106,7 +110,8 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     }
 
     // network jitter buffer size
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf", MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf",
+         MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
     {
         pClient->SetSockBufSize ( iValue );
     }
@@ -146,34 +151,44 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
     // actual settings data ---------------------------------------------------
     // IP address
-    PutIniSetting ( IniXMLDocument, "client", "ipaddress", pClient->strIPAddress );
+    PutIniSetting ( IniXMLDocument, "client", "ipaddress",
+        pClient->strIPAddress );
 
     // name
-    PutIniSetting ( IniXMLDocument, "client", "name", pClient->strName );
+    PutIniSetting ( IniXMLDocument, "client", "name",
+        pClient->strName );
 
     // audio fader
-    SetNumericIniSet ( IniXMLDocument, "client", "audfad", pClient->GetAudioInFader() );
+    SetNumericIniSet ( IniXMLDocument, "client", "audfad",
+        pClient->GetAudioInFader() );
 
     // reverberation level
-    SetNumericIniSet ( IniXMLDocument, "client", "revlev", pClient->GetReverbLevel() );
+    SetNumericIniSet ( IniXMLDocument, "client", "revlev",
+        pClient->GetReverbLevel() );
 
     // reverberation channel assignment
-    SetFlagIniSet ( IniXMLDocument, "client", "reverblchan", pClient->IsReverbOnLeftChan() );
+    SetFlagIniSet ( IniXMLDocument, "client", "reverblchan",
+        pClient->IsReverbOnLeftChan() );
 
     // sound card selection
-    SetNumericIniSet ( IniXMLDocument, "client", "auddevidx", pClient->GetSndCrdDev() );
+    SetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
+        pClient->GetSndCrdDev() );
 
     // sound card preferred buffer size index
-    SetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx", pClient->GetSndCrdPreferredMonoBlSizeIndex() );
+    SetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx",
+        pClient->GetSndCrdPreferredMonoBlSizeIndex() );
 
     // automatic network jitter buffer size setting
-    SetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", pClient->GetDoAutoSockBufSize() );
+    SetFlagIniSet ( IniXMLDocument, "client", "autojitbuf",
+        pClient->GetDoAutoSockBufSize() );
 
     // network jitter buffer size
-    SetNumericIniSet ( IniXMLDocument, "client", "jitbuf", pClient->GetSockBufSize() );
+    SetNumericIniSet ( IniXMLDocument, "client", "jitbuf",
+        pClient->GetSockBufSize() );
 
     // flag whether the chat window shall be opened on a new chat message
-    SetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage", pClient->GetOpenChatOnNewMessage() );
+    SetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage",
+        pClient->GetOpenChatOnNewMessage() );
 
     // audio compression type (check CAudioCompression::EAudComprType definition
     // for integer numbers!)

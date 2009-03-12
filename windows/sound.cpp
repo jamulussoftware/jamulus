@@ -558,12 +558,8 @@ long CSound::asioMessages ( long selector, long value, void* message, double* op
         // both messages might be send if the buffer size changes
         case kAsioBufferSizeChange:
         case kAsioResetRequest:
-
-// TODO reinit sound interface and check for new buffer size
-// requires changes in client class, too
-
-
-            ret = 0;//1L; // 1L if request is accepted or 0 otherwise
+            pSound->EmitReinitRequestSignal();
+            ret = 1L; // 1L if request is accepted or 0 otherwise
             break;
     }
     return ret;

@@ -80,6 +80,7 @@ protected:
     // callbacks
     static int process ( jack_nframes_t nframes, void* arg );
     static int bufferSizeCallback ( jack_nframes_t nframes, void *arg );
+    static void shutdownCallback ( void *arg );
     jack_client_t* pJackClient;
 };
 # else

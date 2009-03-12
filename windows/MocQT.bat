@@ -38,6 +38,7 @@ rem .h --------------
 %qtdir%\bin\moc.exe ..\src\socket.h -o moc\moc_socket.cpp
 %qtdir%\bin\moc.exe ..\src\protocol.h -o moc\moc_protocol.cpp
 %qtdir%\bin\moc.exe ..\src\channel.h -o moc\moc_channel.cpp
+%qtdir%\bin\moc.exe ..\src\soundbase.h -o moc\moc_soundbase.cpp
 
 
 rem .ui -------------

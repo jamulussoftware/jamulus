@@ -34,6 +34,9 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* pP
     // register a "buffer size changed" callback function
     jack_set_buffer_size_callback ( pJackClient, bufferSizeCallback, this );
 
+    // register shutdown callback function
+    jack_on_shutdown ( pJackClient, shutdownCallback, this );
+
 // TEST check sample rate, if not correct, just fire error
 if ( jack_get_sample_rate ( pJackClient ) != SND_CRD_SAMPLE_RATE )
 {
@@ -199,9 +202,16 @@ int CSound::bufferSizeCallback ( jack_nframes_t nframes, void *arg )
 {
     CSound* pSound = reinterpret_cast<CSound*> ( arg );
 
-// TODO actual implementation
+    pSound->EmitReinitRequestSignal();
 
     return 0; // zero on success, non-zero on error
+}
+
+void CSound::shutdownCallback ( void *arg )
+{
+    // without a Jack server, our software makes no sense to run, throw
+    // error message
+    throw CGenErr ( "Jack server was shut down" );
 }
 # else
 // Wave in *********************************************************************

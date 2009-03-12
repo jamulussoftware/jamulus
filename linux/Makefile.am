@@ -52,6 +52,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 # these need to be generated before the rest can be compiled
 
 BUILT_SOURCES=moc/moc_server.cpp \
+    moc/moc_soundbase.cpp \
 	moc/moc_client.cpp \
 	moc/moc_protocol.cpp \
 	moc/moc_channel.cpp \
@@ -77,6 +78,9 @@ nodist_llcon_SOURCES=$(BUILT_SOURCES)
 
 dist-hook:
 	mkdir $(distdir)/moc
+
+moc/moc_soundbase.cpp: ../src/soundbase.h
+	$(QT_MOC) ../src/soundbase.h -o moc/moc_soundbase.cpp
 
 moc/moc_server.cpp: ../src/server.h
 	$(QT_MOC) ../src/server.h -o moc/moc_server.cpp

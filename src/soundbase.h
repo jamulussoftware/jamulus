@@ -33,6 +33,8 @@
 /* Classes ********************************************************************/
 class CSoundBase : public QThread
 {
+    Q_OBJECT
+
 public:
     CSoundBase ( const bool bNewIsCallbackAudioInterface,
         void (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
@@ -47,6 +49,10 @@ public:
     bool         IsRunning() const { return bRun; }
 
     virtual void OpenDriverSetup() {}
+
+    // TODO this should be protected but since it is used
+    // in a callback function it has to be public -> better solution
+    void EmitReinitRequestSignal() { emit ReinitRequest(); }
 
 protected:
     // function pointer to callback function
@@ -69,6 +75,9 @@ protected:
     bool bIsCallbackAudioInterface;
 
     CVector<short> vecsAudioSndCrdStereo;
+
+signals:
+    void ReinitRequest();
 };
 
 #endif /* !defined ( SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_ ) */

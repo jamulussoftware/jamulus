@@ -210,6 +210,7 @@ public slots:
     void OnReqJittBufSize();
     void OnNewConnection();
     void OnReceivePingMessage ( int iMs );
+    void OnSndCrdReinitRequest();
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );

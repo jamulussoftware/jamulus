@@ -59,6 +59,9 @@ CClient::CClient ( const quint16 iPortNumber ) :
 
     QObject::connect ( &Channel, SIGNAL ( PingReceived ( int ) ),
         this, SLOT ( OnReceivePingMessage ( int ) ) );
+
+    QObject::connect ( &Sound, SIGNAL ( ReinitRequest() ),
+        this, SLOT ( OnSndCrdReinitRequest() ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -203,6 +206,27 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
     }
 
     return strReturn;
+}
+
+void CClient::OnSndCrdReinitRequest()
+{
+    // if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    // reinit the driver (we use the currently selected driver) and
+    // init client object, too
+    Sound.SetDev ( Sound.GetDev() );
+    Init ( iSndCrdPreferredMonoBlSizeIndex );
+
+    if ( bWasRunning )
+    {
+        Sound.Start();
+    }
 }
 
 void CClient::Start()

@@ -111,7 +111,6 @@
 
 // length of the moving average buffer for response time measurement
 #define TIME_MOV_AV_RESPONSE            30 // seconds
-#define LEN_MOV_AV_RESPONSE_SERVER      ( TIME_MOV_AV_RESPONSE * 1000 / MIN_SERVER_BLOCK_DURATION_MS )
 
 // GUI definition: width/heigth size of LED pixmaps
 #define LED_WIDTH_HEIGHT_SIZE_PIXEL     20

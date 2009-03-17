@@ -660,9 +660,12 @@ void CChannelSet::WriteHTMLChannelList()
 /******************************************************************************\
 * CChannel                                                                     *
 \******************************************************************************/
-CChannel::CChannel ( const bool bNIsServer ) : bIsServer ( bNIsServer ),
-    sName ( "" ), vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
-    bIsEnabled ( false ), iCurNetwOutBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
+CChannel::CChannel ( const bool bNIsServer ) :
+    bIsServer ( bNIsServer ),
+    sName ( "" ),
+    vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
+    bIsEnabled ( false ),
+    iCurNetwOutBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
 {
     // query all possible network in buffer sizes for determining if an
     // audio packet was received (the following code only works if all
@@ -1122,6 +1125,24 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                     {
                         eRet = PS_AUDIO_ERR;
                     }
+
+                    // update cycle time variance measurement, take care of
+                    // re-initialization, too, if necessary
+                    if ( iAudioSize != CycleTimeVariance.GetBlockLength() )
+                    {
+                        // re-init
+                        CycleTimeVariance.Init ( iAudioSize, TIME_MOV_AV_RESPONSE );
+                        CycleTimeVariance.Reset();
+                    }
+                    else
+                    {
+
+// TODO only update if time difference of received packets is below
+// a limit to avoid having short network troubles incorporated in the
+// statistic
+
+                        CycleTimeVariance.Update();
+                    }
                 }
                 else
                 {
@@ -1155,6 +1176,9 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
             {
                 Protocol.CreateReqNetwTranspPropsMes();
             }
+
+            // reset cycle time variance measurement
+            CycleTimeVariance.Reset();
 
             // inform other objects that new connection was established
             emit NewConnection();

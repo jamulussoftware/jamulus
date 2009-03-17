@@ -37,7 +37,8 @@ CServer::CServer ( const QString& strLoggingFileName,
     vecsSendData.Init ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
 
     // init moving average buffer for response time evaluation
-    CycleTimeVariance.Init ( LEN_MOV_AV_RESPONSE_SERVER );
+    CycleTimeVariance.Init (
+        MIN_SERVER_BLOCK_SIZE_SAMPLES, TIME_MOV_AV_RESPONSE );
 
     // connect timer timeout signal
     QObject::connect ( &Timer, SIGNAL ( timeout() ),

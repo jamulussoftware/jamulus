@@ -393,7 +393,7 @@ void CLlconClientDlg::UpdateDisplay()
     }
 
 // TEST
-//TextLabelStatus->setText ( QString( "Std dev: %1" ).arg ( pClient->GetTimingStdDev() ) );
+//TextLabelStatus->setText ( QString( "Time: %1, Netw: %2" ).arg ( pClient->GetTimingStdDev() ).arg ( pClient->GetChannel()->GetTimingStdDev() ) );
 
 }
 

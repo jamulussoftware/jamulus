@@ -297,8 +297,7 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
     vecdNetwData.Init ( iMonoBlockSizeSam );
 
     // init response time evaluation
-    CycleTimeVariance.Init (
-        TIME_MOV_AV_RESPONSE * SYSTEM_SAMPLE_RATE / iMonoBlockSizeSam );
+    CycleTimeVariance.Init ( iMonoBlockSizeSam, TIME_MOV_AV_RESPONSE );
 
     CycleTimeVariance.Reset();
 
@@ -457,12 +456,6 @@ void CClient::UpdateSocketBufferSize()
         const double dHysteresis = 0.3;
 
         // calculate current buffer setting
-// TODO 2* seems not give optimal results, maybe use 3*?
-// add .5 to "round up" -> ceil
-// divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
-// one block in the jitter buffer
-// add one block for actual network jitter
-
         // Use worst case scenario: We add the block size of input and
         // output. This is not required if the smaller block size is a
         // multiple of the bigger size, but in the general case where
@@ -472,8 +465,13 @@ void CClient::UpdateSocketBufferSize()
             ( iMonoBlockSizeSam + Channel.GetAudioBlockSizeIn() ) * 1000 /
             SYSTEM_SAMPLE_RATE;
 
-        const double dEstCurBufSet = 1 + ( dAudioBufferDurationMs +
-            2 * ( CycleTimeVariance.GetStdDev() + 0.5 ) ) /
+        // accumulate the standard deviations of input network stream and
+        // internal timer,
+        // add .5 to "round up" -> ceil,
+        // divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
+        // one block in the jitter buffer
+        const double dEstCurBufSet = ( dAudioBufferDurationMs +
+            2 * ( Channel.GetTimingStdDev() + CycleTimeVariance.GetStdDev() + 0.5 ) ) /
             MIN_SERVER_BLOCK_DURATION_MS;
 
         // upper/lower hysteresis decision

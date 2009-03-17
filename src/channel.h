@@ -115,6 +115,8 @@ public:
     int GetAudioBlockSizeIn() { return iCurAudioBlockSizeIn; }
     int GetUploadRateKbps();
 
+    double GetTimingStdDev() { return CycleTimeVariance.GetStdDev(); }
+
     void SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut );
     int GetNetwBufSizeFactOut() { return iCurNetwOutBlSiFact; }
 
@@ -172,6 +174,8 @@ protected:
     // network jitter-buffer
     CNetBuf             SockBuf;
     int                 iCurSockBufSize;
+
+    CCycleTimeVariance  CycleTimeVariance;
 
     // network output conversion buffer
     CConvBuf            ConvBuf;

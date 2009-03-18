@@ -1130,7 +1130,10 @@ EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
                     // re-initialization, too, if necessary
                     if ( iAudioSize != CycleTimeVariance.GetBlockLength() )
                     {
-                        // re-init
+                        // re-init (we have to use the buffer size which works
+                        // on the system sample rate, therefore we use the
+                        // decompressed audio buffer size instead of the network
+                        // buffer size)
                         CycleTimeVariance.Init ( iAudioSize, TIME_MOV_AV_RESPONSE );
                         CycleTimeVariance.Reset();
                     }

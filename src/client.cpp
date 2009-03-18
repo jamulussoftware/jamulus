@@ -443,11 +443,9 @@ void CClient::UpdateSocketBufferSize()
     {
         // We use the time response measurement for the automatic setting.
         // Assumptions:
-        // - the network jitter can be neglected compared to the audio
-        //   interface jitter
-        // - the audio interface jitter is assumed to be Gaussian
-        // - the buffer size is set to two times the standard deviation of
-        //   the audio interface jitter (~95% of the jitter should be fit in the
+        // - the audio interface/network jitter is assumed to be Gaussian
+        // - the buffer size is set to 2.3 times the standard deviation of
+        //   the jitter (~90% of the jitter should be fit in the
         //   buffer)
         // - introduce a hysteresis to avoid switching the buffer sizes all the
         //   time in case the time response measurement is close to a bound
@@ -471,7 +469,7 @@ void CClient::UpdateSocketBufferSize()
         // divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
         // one block in the jitter buffer
         const double dEstCurBufSet = ( dAudioBufferDurationMs +
-            2 * ( Channel.GetTimingStdDev() + CycleTimeVariance.GetStdDev() + 0.5 ) ) /
+            2.3 * ( Channel.GetTimingStdDev() + CycleTimeVariance.GetStdDev() + 0.5 ) ) /
             MIN_SERVER_BLOCK_DURATION_MS;
 
         // upper/lower hysteresis decision

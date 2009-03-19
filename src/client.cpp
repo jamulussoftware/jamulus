@@ -465,12 +465,12 @@ void CClient::UpdateSocketBufferSize()
 
         // accumulate the standard deviations of input network stream and
         // internal timer,
-        // add .5 to "round up" -> ceil,
+        // add 0.5 to "round up" -> ceil,
         // divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
         // one block in the jitter buffer
         const double dEstCurBufSet = ( dAudioBufferDurationMs +
-            2.3 * ( Channel.GetTimingStdDev() + CycleTimeVariance.GetStdDev() + 0.5 ) ) /
-            MIN_SERVER_BLOCK_DURATION_MS;
+            2.3 * ( Channel.GetTimingStdDev() + CycleTimeVariance.GetStdDev() ) ) /
+            MIN_SERVER_BLOCK_DURATION_MS + 0.5;
 
         // upper/lower hysteresis decision
         const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );

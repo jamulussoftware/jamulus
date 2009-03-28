@@ -271,7 +271,7 @@ void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
     emit MessReadyForSending ( vecAcknMessage );
 }
 
-bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
+bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
                                const int iNumBytes )
 {
 /*
@@ -282,16 +282,7 @@ bool CProtocol::ParseMessage ( const CVector<unsigned char>& vecbyData,
     int              iRecCounter, iRecID;
     CVector<uint8_t> vecData;
 
-
-// convert unsigned char in uint8_t, TODO convert all buffers in uint8_t
-CVector<uint8_t> vecbyDataConv ( iNumBytes );
-for ( int i = 0; i < iNumBytes; i++ ) {
-    vecbyDataConv[i] = static_cast<uint8_t> ( vecbyData[i] );
-}
-
-
-// important: vecbyDataConv must have iNumBytes to get it work!!!
-    if ( !ParseMessageFrame ( vecbyDataConv, iRecCounter, iRecID, vecData ) )
+    if ( !ParseMessageFrame ( vecbyData, iNumBytes, iRecCounter, iRecID, vecData ) )
     {
         // In case we received a message and returned an answer but our answer
         // did not make it to the receiver, he will resend his message. We check
@@ -926,6 +917,7 @@ bool CProtocol::EvaluateReqNetwTranspPropsMes ( const CVector<uint8_t>& vecData 
 * Message generation (parsing)                                                 *
 \******************************************************************************/
 bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
+                                    const int iNumBytesIn,
                                     int& iCnt,
                                     int& iID,
                                     CVector<uint8_t>& vecData )
@@ -936,11 +928,8 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
     int iLenBy, i;
     unsigned int iCurPos;
 
-    // query length of input vector
-    const int iVecInLenByte = vecIn.Size();
-
     // vector must be at least "MESS_LEN_WITHOUT_DATA_BYTE" bytes long
-    if ( iVecInLenByte < MESS_LEN_WITHOUT_DATA_BYTE )
+    if ( iNumBytesIn < MESS_LEN_WITHOUT_DATA_BYTE )
     {
         return true; // return error code
     }
@@ -968,7 +957,7 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
     iLenBy = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
 
     // make sure the length is correct
-    if ( iLenBy != iVecInLenByte - MESS_LEN_WITHOUT_DATA_BYTE )
+    if ( iLenBy != iNumBytesIn - MESS_LEN_WITHOUT_DATA_BYTE )
     {
         return true; // return error code
     }

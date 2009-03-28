@@ -80,11 +80,11 @@ public:
     CChannel ( const bool bNIsServer = true );
     virtual ~CChannel() {}
 
-    EPutDataStat PutData ( const CVector<unsigned char>& vecbyData,
+    EPutDataStat PutData ( const CVector<uint8_t>& vecbyData,
                            int iNumBytes );
     EGetDataStat GetData ( CVector<double>& vecdData );
 
-    CVector<unsigned char> PrepSendPacket ( const CVector<short>& vecsNPacket );
+    CVector<uint8_t> PrepSendPacket ( const CVector<short>& vecsNPacket );
 
     bool IsConnected() const { return iConTimeOut > 0; }
 
@@ -235,7 +235,7 @@ public:
     CChannelSet ( const int iNewUploadRateLimitKbps = DEF_MAX_UPLOAD_RATE_KBPS );
     virtual ~CChannelSet() {}
 
-    bool PutData ( const CVector<unsigned char>& vecbyRecBuf,
+    bool PutData ( const CVector<uint8_t>& vecbyRecBuf,
                    const int iNumBytesRead, const CHostAddress& HostAdr );
 
     int GetFreeChan();
@@ -256,8 +256,8 @@ public:
     bool IsConnected ( const int iChanNum )
         { return vecChannels[iChanNum].IsConnected(); }
 
-    CVector<unsigned char> PrepSendPacket ( const int iChanNum,
-                                            const CVector<short>& vecsNPacket )
+    CVector<uint8_t> PrepSendPacket ( const int iChanNum,
+                                      const CVector<short>& vecsNPacket )
         { return vecChannels[iChanNum].PrepSendPacket ( vecsNPacket ); }
 
     CHostAddress GetAddress ( const int iChanNum )

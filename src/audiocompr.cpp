@@ -54,12 +54,12 @@ int CAudioCompression::Init ( const int iNewAudioLen,
     }
 }
 
-CVector<unsigned char> CAudioCompression::Encode ( const CVector<short>& vecsAudio )
+CVector<uint8_t> CAudioCompression::Encode ( const CVector<short>& vecsAudio )
 {
     if ( eAudComprType == CT_NONE )
     {
         // no compression, simply ship pure samples
-        CVector<unsigned char> vecbyOut ( iCodeSize );
+        CVector<uint8_t> vecbyOut ( iCodeSize );
         const int iAudSize = iCodeSize / 2;
 
         for ( int i = 0; i < iAudSize; i++ )
@@ -80,12 +80,12 @@ CVector<unsigned char> CAudioCompression::Encode ( const CVector<short>& vecsAud
             return MsAdpcm.Encode ( vecsAudio ); // MS-ADPCM
 
         default:
-            return CVector<unsigned char> ( 0 );
+            return CVector<uint8_t> ( 0 );
         }
     }
 }
 
-CVector<short> CAudioCompression::Decode ( const CVector<unsigned char>& vecbyAdpcm )
+CVector<short> CAudioCompression::Decode ( const CVector<uint8_t>& vecbyAdpcm )
 {
     if ( eAudComprType == CT_NONE )
     {
@@ -138,11 +138,11 @@ int CImaAdpcm::Init ( const int iNewAudioLen )
     return iAdpcmSize;
 }
 
-CVector<unsigned char> CImaAdpcm::Encode ( const CVector<short>& vecsAudio )
+CVector<uint8_t> CImaAdpcm::Encode ( const CVector<short>& vecsAudio )
 {
-    int                    i;
-    CVector<unsigned char> vecbyAdpcm;
-    CVector<unsigned char> vecbyAdpcmTemp;
+    int              i;
+    CVector<uint8_t> vecbyAdpcm;
+    CVector<uint8_t> vecbyAdpcmTemp;
 
     // init size
     vecbyAdpcm.Init     ( iAdpcmSize );
@@ -222,7 +222,7 @@ CVector<unsigned char> CImaAdpcm::Encode ( const CVector<short>& vecsAudio )
     return vecbyAdpcm;
 }
 
-CVector<short> CImaAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
+CVector<short> CImaAdpcm::Decode ( const CVector<uint8_t>& vecbyAdpcm )
 {
     int            i;
     CVector<short> vecsAudio;
@@ -325,10 +325,10 @@ int CMsAdpcm::Init ( const int iNewAudioLen )
     return iAdpcmSize;
 }
 
-CVector<unsigned char> CMsAdpcm::Encode ( const CVector<short>& vecsAudio )
+CVector<uint8_t> CMsAdpcm::Encode ( const CVector<short>& vecsAudio )
 {
-    CVector<short>          vecsAudioTemp;
-    CVector<unsigned char>  vecbyAdpcm;
+    CVector<short>   vecsAudioTemp;
+    CVector<uint8_t> vecbyAdpcm;
 
     // init size
     vecsAudioTemp.Init ( iAudSize );
@@ -354,8 +354,8 @@ CVector<unsigned char> CMsAdpcm::Encode ( const CVector<short>& vecsAudio )
 
 
     /* Encode the samples as 4 bit ------------------------------------------ */
-    unsigned int  blockindx = 7;
-    unsigned char byte      = 0;
+    unsigned int blockindx = 7;
+    uint8_t      byte      = 0;
 
     for ( int k = 2; k < iAudSize; k++ )
     {
@@ -413,7 +413,7 @@ CVector<unsigned char> CMsAdpcm::Encode ( const CVector<short>& vecsAudio )
     return vecbyAdpcm;
 }
 
-CVector<short> CMsAdpcm::Decode ( const CVector<unsigned char>& vecbyAdpcm )
+CVector<short> CMsAdpcm::Decode ( const CVector<uint8_t>& vecbyAdpcm )
 {
     CVector<short> vecsAudio;
     short          bytecode;

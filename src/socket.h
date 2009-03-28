@@ -54,22 +54,22 @@ public:
         { Init ( iPortNumber ); }
     virtual ~CSocket() {}
 
-    void SendPacket ( const CVector<unsigned char>& vecbySendBuf,
+    void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
                       const CHostAddress& HostAddr );
 
 protected:
     void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );
 
-    QUdpSocket              SocketDevice;
+    QUdpSocket       SocketDevice;
 
-    CVector<unsigned char>  vecbyRecBuf;
-    CHostAddress            RecHostAddr;
+    CVector<uint8_t> vecbyRecBuf;
+    CHostAddress     RecHostAddr;
 
-    CChannel*               pChannel;    // for client
-    CChannelSet*            pChannelSet; // for server
+    CChannel*        pChannel;    // for client
+    CChannelSet*     pChannelSet; // for server
 
-    QObject*                pServer;
-    bool                    bIsClient;
+    QObject*         pServer;
+    bool             bIsClient;
 
 public slots:
     void OnDataReceived();

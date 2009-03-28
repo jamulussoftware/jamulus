@@ -85,7 +85,7 @@ public:
 
     void CreateAndSendAcknMess ( const int& iID, const int& iCnt );
 
-    bool ParseMessage ( const CVector<unsigned char>& vecbyData,
+    bool ParseMessage ( const CVector<uint8_t>& vecbyData,
                         const int iNumBytes );
 
 protected:
@@ -117,6 +117,7 @@ protected:
                           const int iID );
 
     bool ParseMessageFrame ( const CVector<uint8_t>& vecIn,
+                             const int iNumBytesIn,
                              int& iCnt,
                              int& iID,
                              CVector<uint8_t>& vecData );

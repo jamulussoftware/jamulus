@@ -82,9 +82,9 @@ public:
     CImaAdpcm() : iStepindEnc ( 0 ) {}
     virtual ~CImaAdpcm() {}
 
-    int                     Init ( const int iNewAudioLen );
-    CVector<unsigned char>  Encode ( const CVector<short>& vecsAudio );
-    CVector<short>          Decode ( const CVector<unsigned char>& vecbyAdpcm );
+    int              Init ( const int iNewAudioLen );
+    CVector<uint8_t> Encode ( const CVector<short>& vecsAudio );
+    CVector<short>   Decode ( const CVector<uint8_t>& vecbyAdpcm );
 
 protected:
     int iAudSize;
@@ -116,9 +116,9 @@ public:
     CMsAdpcm() {}
     virtual ~CMsAdpcm() {}
 
-    int                     Init ( const int iNewAudioLen );
-    CVector<unsigned char>  Encode ( const CVector<short>& vecsAudio );
-    CVector<short>          Decode ( const CVector<unsigned char>& vecbyAdpcm );
+    int              Init ( const int iNewAudioLen );
+    CVector<uint8_t> Encode ( const CVector<short>& vecsAudio );
+    CVector<short>   Decode ( const CVector<uint8_t>& vecbyAdpcm );
 
 protected:
     int iAudSize;
@@ -137,10 +137,10 @@ public:
     CAudioCompression() {}
     virtual ~CAudioCompression() {}
 
-    int                     Init ( const int iNewAudioLen,
-                                   const EAudComprType eNewAuCoTy );
-    CVector<unsigned char>  Encode ( const CVector<short>& vecsAudio );
-    CVector<short>          Decode ( const CVector<unsigned char>& vecbyAdpcm );
+    int             Init ( const int iNewAudioLen,
+                           const EAudComprType eNewAuCoTy );
+    CVector<uint8_t> Encode ( const CVector<short>& vecsAudio );
+    CVector<short>   Decode ( const CVector<uint8_t>& vecbyAdpcm );
 
     EAudComprType           GetType() { return eAudComprType; }
 

@@ -56,7 +56,7 @@ void CSocket::Init ( const quint16 iPortNumber )
         this, SLOT ( OnDataReceived() ) );
 }
 
-void CSocket::SendPacket ( const CVector<unsigned char>& vecbySendBuf,
+void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
                            const CHostAddress& HostAddr )
 {
     const int iVecSizeOut = vecbySendBuf.Size();
@@ -65,10 +65,10 @@ void CSocket::SendPacket ( const CVector<unsigned char>& vecbySendBuf,
     {
         // send packet through network (we have to convert the constant unsigned
         // char vector in "const char*", for this we first convert the const
-        // unsigned char vector in a read/write unsigned char vector and then
-        // do the cast to const char*)
+        // uint8_t vector in a read/write uint8_t vector and then do the cast to
+        // const char*)
         SocketDevice.writeDatagram (
-            (const char*) &( (CVector<unsigned char>) vecbySendBuf )[0],
+            (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
             iVecSizeOut, HostAddr.InetAddr, HostAddr.iPort );
     }
 }
@@ -81,7 +81,8 @@ void CSocket::OnDataReceived()
         quint16      SenderPort;
 
         // read block from network interface and query address of sender
-        int iNumBytesRead = SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
+        const int iNumBytesRead =
+            SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
             MAX_SIZE_BYTES_NETW_BUF, &SenderAddress, &SenderPort );
 
         // check if an error occurred

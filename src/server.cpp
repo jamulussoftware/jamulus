@@ -87,16 +87,9 @@ CServer::CServer ( const QString& strLoggingFileName,
 
 void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 {
-
-// convert unsigned uint8_t in char, TODO convert all buffers in uint8_t
-CVector<unsigned char> vecbyDataConv ( vecMessage.Size() );
-for ( int i = 0; i < vecMessage.Size (); i++ ) {
-    vecbyDataConv[i] = static_cast<unsigned char> ( vecMessage[i] );
-}
-
     // the protocol queries me to call the function to send the message
     // send it through the network
-    Socket.SendPacket ( vecbyDataConv, ChannelSet.GetAddress ( iChID ) );
+    Socket.SendPacket ( vecMessage, ChannelSet.GetAddress ( iChID ) );
 }
 
 void CServer::Start()

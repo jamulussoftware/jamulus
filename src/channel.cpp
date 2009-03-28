@@ -363,9 +363,9 @@ int CChannelSet::CheckAddr ( const CHostAddress& Addr )
     return INVALID_CHANNEL_ID;
 }
 
-bool CChannelSet::PutData ( const CVector<unsigned char>& vecbyRecBuf,
-                            const int                     iNumBytesRead,
-                            const CHostAddress&           HostAdr )
+bool CChannelSet::PutData ( const CVector<uint8_t>& vecbyRecBuf,
+                            const int               iNumBytesRead,
+                            const CHostAddress&     HostAdr )
 {
     bool bAudioOK            = false;
     bool bNewChannelReserved = false;
@@ -1029,7 +1029,7 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
     Protocol.CreateNetwTranspPropsMes ( NetworkTransportProps );
 }
 
-EPutDataStat CChannel::PutData ( const CVector<unsigned char>& vecbyData,
+EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                                  int iNumBytes )
 {
     EPutDataStat eRet = PS_GEN_ERROR;
@@ -1235,13 +1235,13 @@ EGetDataStat CChannel::GetData ( CVector<double>& vecdData )
     return eGetStatus;
 }
 
-CVector<unsigned char> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )
+CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )
 {
     QMutexLocker locker ( &Mutex );
 
     // if the block is not ready we have to initialize with zero length to
     // tell the following network send routine that nothing should be sent
-    CVector<unsigned char> vecbySendBuf ( 0 );
+    CVector<uint8_t> vecbySendBuf ( 0 );
 
     if ( bIsServer )
     {

@@ -14,9 +14,7 @@
 
 #ifdef WITH_SOUND
 # if USE_JACK
-CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
-                 void* pParg ) :
-    CSoundBase ( true, fpNewProcessCallback, pParg )
+void CSound::OpenJack()
 {
     jack_status_t JackStatus;
 
@@ -43,6 +41,17 @@ if ( jack_get_sample_rate ( pJackClient ) != SND_CRD_SAMPLE_RATE )
     throw CGenErr ( "Jack server sample rate is different from "
         "required one" );
 }
+}
+
+void CSound::CloseJack()
+{
+    // close client connection to jack server
+    jack_client_close ( pJackClient );
+}
+
+void CSound::Start()
+{
+    const char** ports;
 
     // create four ports (two for input, two for output -> stereo)
     input_port_left = jack_port_register ( pJackClient, "input left",
@@ -56,11 +65,6 @@ if ( jack_get_sample_rate ( pJackClient ) != SND_CRD_SAMPLE_RATE )
 
     output_port_right = jack_port_register ( pJackClient, "output right",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
-}
-
-void CSound::Start()
-{
-    const char** ports;
 
     // tell the JACK server that we are ready to roll
     if ( jack_activate ( pJackClient ) )
@@ -124,6 +128,12 @@ void CSound::Stop()
 {
     // deactivate client
     jack_deactivate ( pJackClient );
+
+    // unregister ports
+    jack_port_unregister ( pJackClient, input_port_left );
+    jack_port_unregister ( pJackClient, input_port_right );
+    jack_port_unregister ( pJackClient, output_port_left );
+    jack_port_unregister ( pJackClient, output_port_right );
 
     // call base class
     CSoundBase::Stop();

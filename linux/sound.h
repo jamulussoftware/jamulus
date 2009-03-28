@@ -52,8 +52,9 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg );
-    virtual ~CSound() {}
+    CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
+        CSoundBase ( true, fpNewProcessCallback, arg ) { OpenJack(); }
+    virtual ~CSound() { CloseJack(); }
 
     virtual int  Init  ( const int iNewPrefMonoBufferSize );
     virtual void Start();
@@ -77,6 +78,9 @@ public:
     jack_port_t*   output_port_right;
 
 protected:
+    void OpenJack();
+    void CloseJack();
+
     // callbacks
     static int process ( jack_nframes_t nframes, void* arg );
     static int bufferSizeCallback ( jack_nframes_t nframes, void *arg );

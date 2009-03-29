@@ -1,3 +1,8 @@
+2.2.1
+
+- bug fix and improvements for automatic jitter buffer size setting
+
+
 2.2.0
 
 - added Jack audio interface (Linux)

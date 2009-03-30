@@ -55,7 +55,7 @@ MESSAGES
     note: does not have any data -> n = 0
 
 
-- Network buffer block size factor            PROTMESSID_NET_BLSI_FACTOR
+- Network buffer block size factor:           PROTMESSID_NET_BLSI_FACTOR
 
     note: size, relative to minimum block size
 
@@ -63,14 +63,14 @@ MESSAGES
     | 2 bytes factor |
     +----------------+
 
-- Gain of channel                             PROTMESSID_CHANNEL_GAIN
+- Gain of channel:                            PROTMESSID_CHANNEL_GAIN
 
     +-------------------+--------------+
     | 1 byte channel ID | 2 bytes gain |
     +-------------------+--------------+
 
 
-- IP number and name of connected clients     PROTMESSID_CONN_CLIENTS_LIST
+- IP number and name of connected clients:    PROTMESSID_CONN_CLIENTS_LIST
 
     for each connected client append following data:
 
@@ -83,7 +83,7 @@ MESSAGES
     note: does not have any data -> n = 0
 
 
-- Name of channel                             PROTMESSID_CHANNEL_NAME
+- Name of channel:                            PROTMESSID_CHANNEL_NAME
 
     for each connected client append following data:
 
@@ -92,13 +92,13 @@ MESSAGES
     +------------------+----------------------+
 
 
-- Chat text                                   PROTMESSID_CHAT_TEXT
+- Chat text:                                  PROTMESSID_CHAT_TEXT
 
     +------------------+----------------------+
     | 2 bytes number n | n bytes UTF-8 string |
     +------------------+----------------------+
 
-- Ping message (for measuring the ping time)  PROTMESSID_PING_MS
+- Ping message (for measuring the ping time): PROTMESSID_PING_MS
 
     +-----------------------------+
     | 4 bytes transmit time in ms |
@@ -337,62 +337,50 @@ bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
                 switch ( iRecID ) 
                 {
                 case PROTMESSID_JITT_BUF_SIZE:
-
                     bRet = EvaluateJitBufMes ( vecData );
                     break;
 
                 case PROTMESSID_REQ_JITT_BUF_SIZE:
-
                     bRet = EvaluateReqJitBufMes ( vecData );
                     break;
 
                 case PROTMESSID_SERVER_FULL:
-
                     bRet = EvaluateServerFullMes ( vecData );
                     break;
 
                 case PROTMESSID_NET_BLSI_FACTOR:
-
                     bRet = EvaluateNetwBlSiFactMes ( vecData );
                     break;
 
                 case PROTMESSID_CHANNEL_GAIN:
-
                     bRet = EvaluateChanGainMes ( vecData );
                     break;
 
                 case PROTMESSID_CONN_CLIENTS_LIST:
-
                     bRet = EvaluateConClientListMes ( vecData );
                     break;
 
                 case PROTMESSID_REQ_CONN_CLIENTS_LIST:
-
                     bRet = EvaluateReqConnClientsList ( vecData );
                     break;
 
                 case PROTMESSID_CHANNEL_NAME:
-
                     bRet = EvaluateChanNameMes ( vecData );
                     break;
 
                 case PROTMESSID_CHAT_TEXT:
-
                     bRet = EvaluateChatTextMes ( vecData );
                     break;
 
                 case PROTMESSID_PING_MS:
-
                     bRet = EvaluatePingMes ( vecData );
                     break;
 
                 case PROTMESSID_NETW_TRANSPORT_PROPS:
-
                     bRet = EvaluateNetwTranspPropsMes ( vecData );
                     break;
 
                 case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
-
                     bRet = EvaluateReqNetwTranspPropsMes ( vecData );
                     break;
                 }

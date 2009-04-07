@@ -54,12 +54,6 @@ CServer::CServer ( const QString& strLoggingFileName,
         SIGNAL ( ChannelConnected ( CHostAddress ) ),
         this, SLOT ( OnNewChannel ( CHostAddress ) ) );
 
-#ifdef _WIN32
-    // event handling of custom events seems not to work under Windows in this
-    // class, do not use automatic start/stop of server in Windows version
-    Start();
-#endif
-
     // enable logging (if requested)
     if ( !strLoggingFileName.isEmpty() )
     {
@@ -163,11 +157,7 @@ void CServer::OnTimer()
     {
         // Disable server if no clients are connected. In this case the server
         // does not consume any significant CPU when no client is connected.
-#ifndef _WIN32
-        // event handling of custom events seems not to work under Windows in this
-        // class, do not use automatic start/stop of server in Windows version
         Stop();
-#endif
     }
 
     // update response time measurement

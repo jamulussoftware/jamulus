@@ -44,6 +44,12 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f )
     pMainLayout->setAlignment ( Qt::AlignVCenter );
     pMainLayout->setSpacing ( 0 );
 
+
+// TEST helps finding the problem with margin on left and right
+//setFrameShape  ( QFrame::StyledPanel );
+//setFrameShadow ( QFrame::Sunken );
+
+
     // create LEDs
     vecpLEDs.Init ( iNumLEDs );
     for ( int i = 0; i < iNumLEDs; i++ )

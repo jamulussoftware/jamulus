@@ -107,9 +107,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) : QFra
     setFrameShadow ( QFrame::Sunken );
 
     // add hboxlayout with horizontal spacer
-
-// TODO is this ok this way? Don't we need the border 11 and space 0?
-    pMainLayout = new QHBoxLayout ( this );//, 11, 0 );
+    pMainLayout = new QHBoxLayout ( this );
 
     pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
 

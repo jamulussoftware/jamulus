@@ -31,14 +31,75 @@
 /* Implementation *************************************************************/
 CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f )
     : QLabel ( parent, f ),
-    BitmCubeRoundGrey   ( QString::fromUtf8 ( ":/png/LEDs/res/VRLEDGreySmall.png" ) ),
-    BitmCubeRoundGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/VRLEDGreySmall.png" ) ),
-    BitmCubeRoundYellow ( QString::fromUtf8 ( ":/png/LEDs/res/VRLEDGreySmall.png" ) ),
-    BitmCubeRoundRed    ( QString::fromUtf8 ( ":/png/LEDs/res/VRLEDGreySmall.png" ) ),
-    BitmCubeEdgeGrey    ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreySmall.png" ) ),
-    BitmCubeEdgeGreen   ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreySmall.png" ) ),
-    BitmCubeEdgeYellow  ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreySmall.png" ) ),
-    BitmCubeEdgeRed     ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreySmall.png" ) )
+    BitmCubeRoundGrey   ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreySmall.png" ) ),
+    BitmCubeRoundGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreenSmall.png" ) ),
+    BitmCubeRoundYellow ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDYellowSmall.png" ) ),
+    BitmCubeRoundRed    ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDRedSmall.png" ) )
+{
+    // set total number of LEDs
+    iNumLEDs = NUM_STEPS_INP_LEV_METER;
+
+    // create layout and set spacing to zero
+    pMainLayout = new QHBoxLayout ( this );
+    pMainLayout->setSpacing ( 0 );
+
+    // create LEDs
+    vecpLEDs.Init ( iNumLEDs );
+    for ( int i = 0; i < iNumLEDs; i++ )
+    {
+        // create LED label
+        vecpLEDs[i] = new QLabel ( "", parent );
+
+        // add LED to layout
+        pMainLayout->addWidget ( vecpLEDs[i] );
+
+        // set initial bitmap
+        vecpLEDs[i]->setPixmap ( BitmCubeRoundGrey );
+
+        // bitmap defines minimum size of the label
+        vecpLEDs[i]->setMinimumSize (
+            BitmCubeRoundGrey.width(), BitmCubeRoundGrey.height() );
+    }
+}
+
+void CMultiColorLEDBar::setValue ( const int value )
 {
 
+// TODO speed optimiation: only change bitmaps of LEDs which
+// actually have to be changed
+
+    // use green LEDs for the range from 0 to the YELLOW_BOUND_INP_LEV_METER,
+    // yellow in the range YELLOW_BOUND_INP_LEV_METER to
+    // RED_BOUND_INP_LEV_METER and red for up to value and grey for the rest
+    for ( int i = 0; i < iNumLEDs; i++ )
+    {
+        if ( i < value )
+        {
+            // we are below current input level, check which color
+            // we should use (green, yellow or red)
+            if ( i < YELLOW_BOUND_INP_LEV_METER )
+            {
+                // green region
+                vecpLEDs[i]->setPixmap ( BitmCubeRoundGreen );
+            }
+            else
+            {
+                if ( i < RED_BOUND_INP_LEV_METER )
+                {
+                    // yellow region
+                    vecpLEDs[i]->setPixmap ( BitmCubeRoundYellow );
+                }
+                else
+                {
+                    // red region
+                    vecpLEDs[i]->setPixmap ( BitmCubeRoundRed );
+                }
+            }
+        }
+        else
+        {
+            // we are above current input level -> use grey LED
+            vecpLEDs[i]->setPixmap ( BitmCubeRoundGrey );
+        }
+    }
 }

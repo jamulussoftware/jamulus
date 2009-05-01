@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>492</width>
-    <height>310</height>
+    <width>488</width>
+    <height>336</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -28,21 +28,6 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QVBoxLayout" >
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
       <item>
        <widget class="QLabel" name="PixmapLabelCorrados" >
         <property name="sizePolicy" >
@@ -67,21 +52,6 @@
       </item>
       <item>
        <layout class="QHBoxLayout" >
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <property name="leftMargin" >
-         <number>0</number>
-        </property>
-        <property name="topMargin" >
-         <number>0</number>
-        </property>
-        <property name="rightMargin" >
-         <number>0</number>
-        </property>
-        <property name="bottomMargin" >
-         <number>0</number>
-        </property>
         <item>
          <layout class="QVBoxLayout" >
           <property name="spacing" >
@@ -136,49 +106,37 @@
         <item>
          <layout class="QVBoxLayout" >
           <property name="spacing" >
-           <number>6</number>
-          </property>
-          <property name="leftMargin" >
-           <number>0</number>
-          </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
            <number>0</number>
           </property>
           <item>
-           <widget class="QProgressBar" name="ProgressBarInputLevelL" >
+           <widget class="CMultiColorLEDBar" native="1" name="MultiColorLEDBarInputLevelL" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="MinimumExpanding" hsizetype="Expanding" >
+             <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="value" >
-             <number>24</number>
-            </property>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
+            <property name="minimumSize" >
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QProgressBar" name="ProgressBarInputLevelR" >
+           <widget class="CMultiColorLEDBar" native="1" name="MultiColorLEDBarInputLevelR" >
             <property name="sizePolicy" >
-             <sizepolicy vsizetype="MinimumExpanding" hsizetype="Expanding" >
+             <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <property name="value" >
-             <number>24</number>
-            </property>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
+            <property name="minimumSize" >
+             <size>
+              <width>50</width>
+              <height>25</height>
+             </size>
             </property>
            </widget>
           </item>
@@ -644,6 +602,12 @@ Fader</string>
    <class>CAudioMixerBoard</class>
    <extends>QWidget</extends>
    <header>audiomixerboard.h</header>
+  </customwidget>
+  <customwidget>
+   <class>CMultiColorLEDBar</class>
+   <extends>QWidget</extends>
+   <header>multicolorledbar.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>

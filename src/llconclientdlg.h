@@ -51,9 +51,6 @@
 #define CON_BUT_CONNECTTEXT         "C&onnect"
 #define CON_BUT_DISCONNECTTEXT      "D&isconnect"
 
-// steps for input level meter
-#define NUM_STEPS_INP_LEV_METER     100
-
 // update time for GUI controls
 #define LEVELMETER_UPDATE_TIME      100 // ms
 #define STATUSBAR_UPDATE_TIME       1000 // ms

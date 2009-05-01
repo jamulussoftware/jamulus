@@ -36,11 +36,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
 
     // add help text to controls
     QString strInpLevH = tr ( "<b>Input level meter:</b> Shows the level of the "
-        "input audio signal of the sound card. The level is in dB. Overload "
-        "should be avoided." );
-    TextLabelInputLevel->setWhatsThis    ( strInpLevH );
-    ProgressBarInputLevelL->setWhatsThis ( strInpLevH );
-    ProgressBarInputLevelR->setWhatsThis ( strInpLevH );
+        "input audio signal of the sound card. Overload should be avoided." );
+    TextLabelInputLevel->setWhatsThis         ( strInpLevH );
+    MultiColorLEDBarInputLevelL->setWhatsThis ( strInpLevH );
+    MultiColorLEDBarInputLevelR->setWhatsThis ( strInpLevH );
 
     PushButtonConnect->setWhatsThis ( tr ( "<b>Connect / Disconnect Button:"
         "</b> Push this button to connect the server. A valid IP address has "
@@ -105,12 +104,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
 
     // init input level meter bars
-    ProgressBarInputLevelL->setMinimum ( 0 );
-    ProgressBarInputLevelL->setMaximum ( NUM_STEPS_INP_LEV_METER );
-    ProgressBarInputLevelL->setValue ( 0 );
-    ProgressBarInputLevelR->setMinimum ( 0 );
-    ProgressBarInputLevelR->setMaximum ( NUM_STEPS_INP_LEV_METER );
-    ProgressBarInputLevelR->setValue ( 0 );
+    MultiColorLEDBarInputLevelL->setValue ( 0 );
+    MultiColorLEDBarInputLevelR->setValue ( 0 );
 
 
     // init slider controls ---
@@ -296,8 +291,8 @@ void CLlconClientDlg::OnConnectDisconBut()
 
         // stop timer for level meter bars and reset them
         TimerSigMet.stop();
-        ProgressBarInputLevelL->setValue ( 0 );
-        ProgressBarInputLevelR->setValue ( 0 );
+        MultiColorLEDBarInputLevelL->setValue ( 0 );
+        MultiColorLEDBarInputLevelR->setValue ( 0 );
 
         // immediately update status bar
         OnTimerStatus();
@@ -353,8 +348,8 @@ void CLlconClientDlg::OnTimerSigMet()
     double dCurSigLevelL = pClient->MicLevelL();
     double dCurSigLevelR = pClient->MicLevelR();
 
-    /* linear transformation of the input level range to the progress-bar
-       range */
+    // linear transformation of the input level range to the progress-bar
+    // range
     dCurSigLevelL -= LOW_BOUND_SIG_METER;
     dCurSigLevelL *= NUM_STEPS_INP_LEV_METER /
         ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
@@ -376,8 +371,8 @@ void CLlconClientDlg::OnTimerSigMet()
     }
 
     // show current level
-    ProgressBarInputLevelL->setValue ( (int) ceil ( dCurSigLevelL ) );
-    ProgressBarInputLevelR->setValue ( (int) ceil ( dCurSigLevelR ) );
+    MultiColorLEDBarInputLevelL->setValue ( (int) ceil ( dCurSigLevelL ) );
+    MultiColorLEDBarInputLevelR->setValue ( (int) ceil ( dCurSigLevelR ) );
 }
 
 void CLlconClientDlg::UpdateDisplay()

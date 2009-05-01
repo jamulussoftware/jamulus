@@ -28,6 +28,8 @@
 #include <qlabel.h>
 #include <qpixmap.h>
 #include <qtimer.h>
+#include <qlayout.h>
+#include "util.h"
 #include "global.h"
 
 
@@ -39,15 +41,18 @@ class CMultiColorLEDBar : public QLabel
 public:
     CMultiColorLEDBar ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
+    void setValue ( const int value );
+
 protected:
-    QPixmap BitmCubeRoundGrey;
-    QPixmap BitmCubeRoundGreen;
-    QPixmap BitmCubeRoundYellow;
-    QPixmap BitmCubeRoundRed;
-    QPixmap BitmCubeEdgeGrey;
-    QPixmap BitmCubeEdgeGreen;
-    QPixmap BitmCubeEdgeYellow;
-    QPixmap BitmCubeEdgeRed;
+    QPixmap          BitmCubeRoundGrey;
+    QPixmap          BitmCubeRoundGreen;
+    QPixmap          BitmCubeRoundYellow;
+    QPixmap          BitmCubeRoundRed;
+
+    QHBoxLayout*     pMainLayout;
+
+    int              iNumLEDs;
+    CVector<QLabel*> vecpLEDs;
 };
 
 #endif // _MULTCOLORLEDBAR_H__FD6B49B5_87DF_48DD_E1606C2AC__INCLUDED_

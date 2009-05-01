@@ -19,7 +19,7 @@
    <string>Chat</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="resources.qrc" >:/new/prefix1/mainicon.png</iconset>
+   <iconset resource="resources.qrc" >:/png/main/res/mainicon.png</iconset>
   </property>
   <property name="sizeGripEnabled" >
    <bool>true</bool>

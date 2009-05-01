@@ -58,10 +58,6 @@ protected:
     QTimer                          Timer;
     CServer*                        pServer;
 
-    QPixmap                         BitmCubeGreen;
-    QPixmap                         BitmCubeYellow;
-    QPixmap                         BitmCubeRed;
-
     CVector<CServerListViewItem*>   vecpListViewItems;
     QMutex                          ListViewMutex;
 

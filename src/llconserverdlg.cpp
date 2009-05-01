@@ -27,21 +27,13 @@
 
 /* Implementation *************************************************************/
 CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
-    : pServer ( pNServP ), QDialog ( parent ),
-    BitmCubeGreen  ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
-    BitmCubeRed    ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
-    BitmCubeYellow ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL )
+    : pServer ( pNServP ), QDialog ( parent )
 {
     setupUi ( this );
 
     // set text for version and application name
     TextLabelNameVersion->setText ( QString ( APP_NAME ) +
         tr ( " server " ) + QString ( VERSION ) );
-
-    // create bitmaps
-    BitmCubeGreen.fill  ( QColor ( 0, 255, 0 ) );
-    BitmCubeRed.fill    ( QColor ( 255, 0, 0 ) );
-    BitmCubeYellow.fill ( QColor ( 255, 255, 0 ) );
 
     // set up list view for connected clients
     ListViewClients->setColumnWidth ( 0, 170 );

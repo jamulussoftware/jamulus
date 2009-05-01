@@ -5,7 +5,7 @@
  *  Volker Fischer
  *
  * Description:
- *  Implements a multi-color LED
+ *  Implements a multi color LED
  *
  *
  ******************************************************************************
@@ -32,24 +32,13 @@
 /* Implementation *************************************************************/
 CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     : QLabel ( parent, f ),
-    BitmCubeGreen  ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
-    BitmCubeRed    ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
-    BitmCubeGrey   ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL ),
-    BitmCubeYellow ( LED_WIDTH_HEIGHT_SIZE_PIXEL, LED_WIDTH_HEIGHT_SIZE_PIXEL )
+    BitmCubeGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
+    BitmCubeRed    ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) ),
+    BitmCubeGrey   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreySmall.png" ) ),
+    BitmCubeYellow ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) )
 {
-    // create bitmaps
-    BitmCubeGreen.fill  ( QColor ( 0, 255, 0 ) );
-    BitmCubeRed.fill    ( QColor ( 255, 0, 0 ) );
-    BitmCubeGrey.fill   ( QColor ( 192, 192, 192 ) );
-    BitmCubeYellow.fill ( QColor ( 255, 255, 0 ) );
-
     // init color flags
     Reset();
-
-    // set modified style of label
-    setFrameShape  ( QFrame::Panel );
-    setFrameShadow ( QFrame::Sunken );
-    setIndent      ( 0 );
 
     // set init bitmap
     setPixmap ( BitmCubeGrey );
@@ -64,14 +53,14 @@ CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     TimerYellowLight.setSingleShot ( true );
 
     // connect timer events to the desired slots
-    connect ( &TimerRedLight, SIGNAL ( timeout() ), 
+    connect ( &TimerRedLight, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerRedLight() ) );
-    connect ( &TimerGreenLight, SIGNAL ( timeout() ), 
+    connect ( &TimerGreenLight, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerGreenLight() ) );
-    connect ( &TimerYellowLight, SIGNAL ( timeout() ), 
+    connect ( &TimerYellowLight, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerYellowLight() ) );
 
-    connect ( this, SIGNAL ( newPixmap ( const QPixmap& ) ), 
+    connect ( this, SIGNAL ( newPixmap ( const QPixmap& ) ),
         this, SLOT ( OnNewPixmap ( const QPixmap& ) ) );
 }
 

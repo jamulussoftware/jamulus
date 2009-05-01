@@ -325,16 +325,18 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 "
         "USA"
         "</font></p><br>"
-        "<p>" // libraries used by this compilation of llcon
-        "<b>" + tr("llcon uses the following libraries or code snippets:") +
+        "<p><b>" + // libraries used by this compilation of llcon
+        tr("llcon uses the following libraries, resources or code snippets:") +
         "</b></p>"
         "<ul>"
         "<li>Qt cross-platform application framework: <i>http://trolltech.com</li>"
         "<li>Audio reverberation code: by Perry R. Cook and Gary P. Scavone, "
-        "1995 - 2004 (taken from \"The Synthesis ToolKit in C++ (STK)\")</li>"
+        "1995 - 2004 (taken from <i>The Synthesis ToolKit in C++ (STK)</i>)</li>"
         "<li>ADPCM coders by Erik de Castro Lopo</li>"
         "<li>Parts from Dream DRM Receiver by Volker Fischer and Alexander "
-        "Kurpiers: <i>http://drm.sf.net</li>"
+        "Kurpiers: <i>http://drm.sf.net</i></li>"
+        "<li>Some pixmaps are from <i>Clker.com - vector clip art online, "
+        "royalty free & public domain</i></li>"
         "</ul>"
         "</center><br>");
 

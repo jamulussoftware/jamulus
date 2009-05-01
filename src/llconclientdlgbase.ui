@@ -13,7 +13,7 @@
    <string>llcon</string>
   </property>
   <property name="windowIcon" >
-   <iconset resource="resources.qrc" >:/new/prefix1/mainicon.png</iconset>
+   <iconset resource="resources.qrc" >:/png/main/res/mainicon.png</iconset>
   </property>
   <property name="sizeGripEnabled" >
    <bool>true</bool>
@@ -52,7 +52,7 @@
          </sizepolicy>
         </property>
         <property name="pixmap" >
-         <pixmap resource="resources.qrc" >:/new/prefix1/gig.png</pixmap>
+         <pixmap resource="resources.qrc" >:/png/main/res/gig.png</pixmap>
         </property>
         <property name="scaledContents" >
          <bool>true</bool>

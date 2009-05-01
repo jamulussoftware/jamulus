@@ -112,9 +112,6 @@
 // length of the moving average buffer for response time measurement
 #define TIME_MOV_AV_RESPONSE            30 // seconds
 
-// GUI definition: width/heigth size of LED pixmaps
-#define LED_WIDTH_HEIGHT_SIZE_PIXEL     20
-
 
 #define _MAXSHORT                       32767
 #define _MAXBYTE                        255 // binary: 11111111

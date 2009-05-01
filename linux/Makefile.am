@@ -46,8 +46,38 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/aboutdlgbase.ui \
 	sound.h \
 	../src/resources.qrc \
-	../src/mainicon.png \
-	../src/gig.png
+	../src/res/gig.png \
+	../src/res/mainicon.png \
+	../src/res/CLEDBlack.png \
+	../src/res/CLEDGrey.png \
+	../src/res/CLEDGreen.png \
+	../src/res/CLEDYellow.png \
+	../src/res/CLEDRed.png \
+	../src/res/CLEDBlackSmall.png \
+	../src/res/CLEDGreySmall.png \
+	../src/res/CLEDGreenSmall.png \
+	../src/res/CLEDYellowSmall.png \
+	../src/res/CLEDRedSmall.png \
+	../src/res/VLEDBlack.png \
+	../src/res/VLEDGrey.png \
+	../src/res/VLEDGreen.png \
+	../src/res/VLEDYellow.png \
+	../src/res/VLEDRed.png \
+	../src/res/VLEDBlackSmall.png \
+	../src/res/VLEDGreySmall.png \
+	../src/res/VLEDGreenSmall.png \
+	../src/res/VLEDYellowSmall.png \
+	../src/res/VLEDRedSmall.png \
+	../src/res/VRLEDBlack.png \
+	../src/res/VRLEDGrey.png \
+	../src/res/VRLEDGreen.png \
+	../src/res/VRLEDYellow.png \
+	../src/res/VRLEDRed.png \
+	../src/res/VRLEDBlackSmall.png \
+	../src/res/VRLEDGreySmall.png \
+	../src/res/VRLEDGreenSmall.png \
+	../src/res/VRLEDYellowSmall.png \
+	../src/res/VRLEDRedSmall.png
 
 # these need to be generated before the rest can be compiled
 

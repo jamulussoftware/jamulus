@@ -2,10 +2,7 @@
  * Copyright (c) 2004-2009
  *
  * Author(s):
- *  Volker Fischer
- *
- * Description:
- *  
+ *  Volker Fischer 
  *
  ******************************************************************************
  *

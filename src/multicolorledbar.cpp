@@ -30,7 +30,7 @@
 
 /* Implementation *************************************************************/
 CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f )
-    : QLabel ( parent, f ),
+    : QFrame ( parent, f ),
     BitmCubeRoundGrey   ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreySmall.png" ) ),
     BitmCubeRoundGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreenSmall.png" ) ),
     BitmCubeRoundYellow ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDYellowSmall.png" ) ),
@@ -41,6 +41,7 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f )
 
     // create layout and set spacing to zero
     pMainLayout = new QHBoxLayout ( this );
+    pMainLayout->setAlignment ( Qt::AlignVCenter );
     pMainLayout->setSpacing ( 0 );
 
     // create LEDs
@@ -68,38 +69,41 @@ void CMultiColorLEDBar::setValue ( const int value )
 // TODO speed optimiation: only change bitmaps of LEDs which
 // actually have to be changed
 
-    // use green LEDs for the range from 0 to the YELLOW_BOUND_INP_LEV_METER,
-    // yellow in the range YELLOW_BOUND_INP_LEV_METER to
-    // RED_BOUND_INP_LEV_METER and red for up to value and grey for the rest
+    // update state of all LEDs for current level value
     for ( int i = 0; i < iNumLEDs; i++ )
     {
-        if ( i < value )
+        // set active if value is above current LED index
+        SetLED ( i, i < value );
+    }
+}
+
+void CMultiColorLEDBar::SetLED ( const int iLEDIdx, const bool bActive )
+{
+    if ( bActive )
+    {
+        // check which color we should use (green, yellow or red)
+        if ( iLEDIdx < YELLOW_BOUND_INP_LEV_METER )
         {
-            // we are below current input level, check which color
-            // we should use (green, yellow or red)
-            if ( i < YELLOW_BOUND_INP_LEV_METER )
-            {
-                // green region
-                vecpLEDs[i]->setPixmap ( BitmCubeRoundGreen );
-            }
-            else
-            {
-                if ( i < RED_BOUND_INP_LEV_METER )
-                {
-                    // yellow region
-                    vecpLEDs[i]->setPixmap ( BitmCubeRoundYellow );
-                }
-                else
-                {
-                    // red region
-                    vecpLEDs[i]->setPixmap ( BitmCubeRoundRed );
-                }
-            }
+            // green region
+            vecpLEDs[iLEDIdx]->setPixmap ( BitmCubeRoundGreen );
         }
         else
         {
-            // we are above current input level -> use grey LED
-            vecpLEDs[i]->setPixmap ( BitmCubeRoundGrey );
+            if ( iLEDIdx < RED_BOUND_INP_LEV_METER )
+            {
+                // yellow region
+                vecpLEDs[iLEDIdx]->setPixmap ( BitmCubeRoundYellow );
+            }
+            else
+            {
+                // red region
+                vecpLEDs[iLEDIdx]->setPixmap ( BitmCubeRoundRed );
+            }
         }
+    }
+    else
+    {
+        // we use grey LED for inactive state
+        vecpLEDs[iLEDIdx]->setPixmap ( BitmCubeRoundGrey );
     }
 }

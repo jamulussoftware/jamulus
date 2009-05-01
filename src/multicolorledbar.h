@@ -25,7 +25,7 @@
 #if !defined ( _MULTCOLORLEDBAR_H__FD6B49B5_87DF_48DD_E1606C2AC__INCLUDED_ )
 #define _MULTCOLORLEDBAR_H__FD6B49B5_87DF_48DD_E1606C2AC__INCLUDED_
 
-#include <qlabel.h>
+#include <qframe.h>
 #include <qpixmap.h>
 #include <qtimer.h>
 #include <qlayout.h>
@@ -34,7 +34,7 @@
 
 
 /* Classes ********************************************************************/
-class CMultiColorLEDBar : public QLabel
+class CMultiColorLEDBar : public QFrame
 {
     Q_OBJECT
 
@@ -44,6 +44,8 @@ public:
     void setValue ( const int value );
 
 protected:
+    void SetLED ( const int iLEDIdx, const bool bActive = true );
+
     QPixmap          BitmCubeRoundGrey;
     QPixmap          BitmCubeRoundGreen;
     QPixmap          BitmCubeRoundYellow;

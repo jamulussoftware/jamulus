@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="llcon"
 	ProjectGUID="{DBBC16FC-BBCA-4E3B-A9F4-0EC5202A8B2E}"
 	RootNamespace="llcon"
@@ -440,6 +440,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\multicolorledbar.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\protocol.cpp"
 				>
 				<FileConfiguration
@@ -759,6 +763,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\moc\moc_multicolorledbar.cpp"
+					>
+				</File>
+				<File
 					RelativePath="moc\moc_protocol.cpp"
 					>
 					<FileConfiguration
@@ -972,6 +980,10 @@
 			</File>
 			<File
 				RelativePath="..\src\multicolorled.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\multicolorledbar.h"
 				>
 			</File>
 			<File

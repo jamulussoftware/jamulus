@@ -1,6 +1,5 @@
 bin_PROGRAMS = llcon
 
-
 llcon_SOURCES = ../src/buffer.cpp \
 	../src/main.cpp \
 	../src/socket.cpp \
@@ -17,6 +16,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/settings.cpp \
 	../src/protocol.cpp \
 	../src/multicolorled.cpp \
+	../src/multicolorledbar.cpp \
 	../src/audiomixerboard.cpp \
 	../src/soundbase.cpp \
 	sound.cpp \
@@ -33,6 +33,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/settings.h \
 	../src/protocol.h \
 	../src/multicolorled.h \
+	../src/multicolorledbar.h \
 	../src/audiomixerboard.h \
 	../src/soundbase.h \
 	../src/llconserverdlg.h \
@@ -88,6 +89,7 @@ BUILT_SOURCES=moc/moc_server.cpp \
 	moc/moc_channel.cpp \
 	moc/moc_socket.cpp \
 	moc/moc_multicolorled.cpp \
+	moc/moc_multicolorledbar.cpp \
 	moc/moc_audiomixerboard.cpp \
 	moc/moc_util.cpp \
 	moc/moc_llconclientdlg.cpp \
@@ -123,6 +125,9 @@ moc/moc_socket.cpp: ../src/socket.h
 
 moc/moc_multicolorled.cpp: ../src/multicolorled.h
 	$(QT_MOC) ../src/multicolorled.h -o moc/moc_multicolorled.cpp
+
+moc/moc_multicolorledbar.cpp: ../src/multicolorledbar.h
+	$(QT_MOC) ../src/multicolorledbar.h -o moc/moc_multicolorledbar.cpp
 
 moc/moc_audiomixerboard.cpp: ../src/audiomixerboard.h
 	$(QT_MOC) ../src/audiomixerboard.h -o moc/moc_audiomixerboard.cpp

@@ -31,10 +31,10 @@
 /* Implementation *************************************************************/
 CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     : QLabel ( parent, f ),
-    BitmCubeGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
-    BitmCubeRed    ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) ),
     BitmCubeGrey   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreySmall.png" ) ),
-    BitmCubeYellow ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) )
+    BitmCubeGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
+    BitmCubeYellow ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) ),
+    BitmCubeRed    ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) )
 {
     // init color flags
     Reset();

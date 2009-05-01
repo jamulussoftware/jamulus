@@ -65,10 +65,10 @@ protected:
 
     void UpdateColor();
 
+    QPixmap BitmCubeGrey;
     QPixmap BitmCubeGreen;
     QPixmap BitmCubeYellow;
     QPixmap BitmCubeRed;
-    QPixmap BitmCubeGrey;
 
     QTimer  TimerRedLight;
     QTimer  TimerGreenLight;

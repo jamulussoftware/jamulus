@@ -281,7 +281,7 @@ void CLlconClientDlg::OnConnectDisconBut()
             TimerStatus.start ( STATUSBAR_UPDATE_TIME );
 
             // show the error in the status bar
-            TextLabelStatus->setText ( tr ( "invalid address" ) );
+            TextLabelStatus->setText ( tr ( "Invalid address" ) );
         }
     }
     else

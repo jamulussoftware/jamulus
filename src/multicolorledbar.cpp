@@ -30,11 +30,7 @@
 
 /* Implementation *************************************************************/
 CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f )
-    : QFrame ( parent, f ),
-    BitmCubeRoundGrey   ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreySmall.png" ) ),
-    BitmCubeRoundGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreenSmall.png" ) ),
-    BitmCubeRoundYellow ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDYellowSmall.png" ) ),
-    BitmCubeRoundRed    ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDRedSmall.png" ) )
+    : QFrame ( parent, f )
 {
     // set total number of LEDs
     iNumLEDs = NUM_STEPS_INP_LEV_METER;
@@ -47,65 +43,103 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f )
 
     // create LEDs
     vecpLEDs.Init ( iNumLEDs );
-    for ( int i = 0; i < iNumLEDs; i++ )
+    for ( int iLEDIdx = 0; iLEDIdx < iNumLEDs; iLEDIdx++ )
     {
-        // create LED label
-        vecpLEDs[i] = new QLabel ( "", parent );
+        // create LED object
+        vecpLEDs[iLEDIdx] = new cLED ( parent );
 
         // add LED to layout with spacer
         pMainLayout->addStretch();
-        pMainLayout->addWidget ( vecpLEDs[i] );
+        pMainLayout->addWidget ( vecpLEDs[iLEDIdx]->getLabelPointer() );
+    }
+}
 
-        // set initial bitmap
-        vecpLEDs[i]->setPixmap ( BitmCubeRoundGrey );
-
-        // bitmap defines minimum size of the label
-        vecpLEDs[i]->setMinimumSize (
-            BitmCubeRoundGrey.width(), BitmCubeRoundGrey.height() );
+CMultiColorLEDBar::~CMultiColorLEDBar()
+{
+    // clean up the LED objects
+    for ( int iLEDIdx = 0; iLEDIdx < iNumLEDs; iLEDIdx++ )
+    {
+        delete vecpLEDs[iLEDIdx];
     }
 }
 
 void CMultiColorLEDBar::setValue ( const int value )
 {
-
-// TODO speed optimiation: only change bitmaps of LEDs which
-// actually have to be changed
-
     // update state of all LEDs for current level value
-    for ( int i = 0; i < iNumLEDs; i++ )
+    for ( int iLEDIdx = 0; iLEDIdx < iNumLEDs; iLEDIdx++ )
     {
-        // set active if value is above current LED index
-        SetLED ( i, i < value );
-    }
-}
-
-void CMultiColorLEDBar::SetLED ( const int iLEDIdx, const bool bActive )
-{
-    if ( bActive )
-    {
-        // check which color we should use (green, yellow or red)
-        if ( iLEDIdx < YELLOW_BOUND_INP_LEV_METER )
+        // set active LED color if value is above current LED index
+        if ( iLEDIdx < value )
         {
-            // green region
-            vecpLEDs[iLEDIdx]->setPixmap ( BitmCubeRoundGreen );
-        }
-        else
-        {
-            if ( iLEDIdx < RED_BOUND_INP_LEV_METER )
+            // check which color we should use (green, yellow or red)
+            if ( iLEDIdx < YELLOW_BOUND_INP_LEV_METER )
             {
-                // yellow region
-                vecpLEDs[iLEDIdx]->setPixmap ( BitmCubeRoundYellow );
+                // green region
+                vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREEN );
             }
             else
             {
-                // red region
-                vecpLEDs[iLEDIdx]->setPixmap ( BitmCubeRoundRed );
+                if ( iLEDIdx < RED_BOUND_INP_LEV_METER )
+                {
+                    // yellow region
+                    vecpLEDs[iLEDIdx]->setColor ( cLED::RL_YELLOW );
+                }
+                else
+                {
+                    // red region
+                    vecpLEDs[iLEDIdx]->setColor ( cLED::RL_RED );
+                }
             }
         }
+        else
+        {
+            // we use grey LED for inactive state
+            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
+        }
     }
-    else
+}
+
+CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
+    BitmCubeRoundGrey   ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreySmall.png" ) ),
+    BitmCubeRoundGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreenSmall.png" ) ),
+    BitmCubeRoundYellow ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDYellowSmall.png" ) ),
+    BitmCubeRoundRed    ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDRedSmall.png" ) )
+{
+    // create LED label
+    pLEDLabel = new QLabel ( "", parent );
+
+    // bitmap defines minimum size of the label
+    pLEDLabel->setMinimumSize (
+        BitmCubeRoundGrey.width(), BitmCubeRoundGrey.height() );
+
+    // set initial bitmap
+    pLEDLabel->setPixmap ( BitmCubeRoundGrey );
+    eCurLightColor = RL_GREY;
+}
+
+void CMultiColorLEDBar::cLED::setColor ( const ELightColor eNewColor )
+{
+    // only update LED if color has changed
+    if ( eNewColor != eCurLightColor )
     {
-        // we use grey LED for inactive state
-        vecpLEDs[iLEDIdx]->setPixmap ( BitmCubeRoundGrey );
+        switch ( eNewColor )
+        {
+        case RL_GREY:
+            pLEDLabel->setPixmap ( BitmCubeRoundGrey );
+            break;
+
+        case RL_GREEN:
+            pLEDLabel->setPixmap ( BitmCubeRoundGreen );
+            break;
+
+        case RL_YELLOW:
+            pLEDLabel->setPixmap ( BitmCubeRoundYellow );
+            break;
+
+        case RL_RED:
+            pLEDLabel->setPixmap ( BitmCubeRoundRed );
+            break;
+        }
+        eCurLightColor = eNewColor;
     }
 }

@@ -40,21 +40,34 @@ class CMultiColorLEDBar : public QFrame
 
 public:
     CMultiColorLEDBar ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    virtual ~CMultiColorLEDBar();
 
     void setValue ( const int value );
 
 protected:
-    void SetLED ( const int iLEDIdx, const bool bActive = true );
+    class cLED
+    {
+    public:
+        enum ELightColor { RL_GREY, RL_GREEN, RL_YELLOW, RL_RED };
 
-    QPixmap          BitmCubeRoundGrey;
-    QPixmap          BitmCubeRoundGreen;
-    QPixmap          BitmCubeRoundYellow;
-    QPixmap          BitmCubeRoundRed;
+        cLED ( QWidget* parent );
+        void setColor ( const ELightColor eNewColor );
+        QLabel* getLabelPointer() { return pLEDLabel; }
+
+    protected:
+        QPixmap     BitmCubeRoundGrey;
+        QPixmap     BitmCubeRoundGreen;
+        QPixmap     BitmCubeRoundYellow;
+        QPixmap     BitmCubeRoundRed;
+
+        ELightColor eCurLightColor;
+        QLabel*     pLEDLabel;
+    };
 
     QHBoxLayout*     pMainLayout;
 
     int              iNumLEDs;
-    CVector<QLabel*> vecpLEDs;
+    CVector<cLED*>   vecpLEDs;
 };
 
 #endif // _MULTCOLORLEDBAR_H__FD6B49B5_87DF_48DD_E1606C2AC__INCLUDED_

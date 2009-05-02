@@ -60,7 +60,7 @@ public:
     void SetLight ( const int iNewStatus );
 
 protected:
-    enum ELightColor { RL_GREY, RL_RED, RL_GREEN, RL_YELLOW };
+    enum ELightColor { RL_GREY, RL_GREEN, RL_YELLOW, RL_RED };
     ELightColor eColorFlag;
 
     void UpdateColor();

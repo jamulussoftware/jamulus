@@ -97,9 +97,9 @@
 #define INVALID_SNC_CARD_DEVICE         -1
 
 // defines for LED input level meter
-#define NUM_STEPS_INP_LEV_METER         10
-#define YELLOW_BOUND_INP_LEV_METER      7
-#define RED_BOUND_INP_LEV_METER         9
+#define NUM_STEPS_INP_LEV_METER         12
+#define YELLOW_BOUND_INP_LEV_METER      9
+#define RED_BOUND_INP_LEV_METER         11
 
 
 // maximum number of internet connections (channels)

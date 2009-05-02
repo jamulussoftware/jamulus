@@ -42,13 +42,8 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f )
     // create layout and set spacing to zero
     pMainLayout = new QHBoxLayout ( this );
     pMainLayout->setAlignment ( Qt::AlignVCenter );
-    pMainLayout->setSpacing ( 0 );
-
-
-// TEST helps finding the problem with margin on left and right
-//setFrameShape  ( QFrame::StyledPanel );
-//setFrameShadow ( QFrame::Sunken );
-
+    pMainLayout->setMargin    ( 0 );
+    pMainLayout->setSpacing   ( 0 );
 
     // create LEDs
     vecpLEDs.Init ( iNumLEDs );
@@ -57,7 +52,8 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f )
         // create LED label
         vecpLEDs[i] = new QLabel ( "", parent );
 
-        // add LED to layout
+        // add LED to layout with spacer
+        pMainLayout->addStretch();
         pMainLayout->addWidget ( vecpLEDs[i] );
 
         // set initial bitmap

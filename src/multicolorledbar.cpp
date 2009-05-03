@@ -48,8 +48,12 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f )
         // create LED object
         vecpLEDs[iLEDIdx] = new cLED ( parent );
 
-        // add LED to layout with spacer
-        pMainLayout->addStretch();
+        // add LED to layout with spacer (do not add spacer on the left of the
+        // first LED)
+        if ( iLEDIdx > 0 )
+        {
+            pMainLayout->addStretch();
+        }
         pMainLayout->addWidget ( vecpLEDs[iLEDIdx]->getLabelPointer() );
     }
 }

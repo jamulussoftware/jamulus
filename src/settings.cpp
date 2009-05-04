@@ -53,9 +53,21 @@ void CSettings::ReadIniFile ( const QString& sFileName )
 
 
     // actual settings data ---------------------------------------------------
-    // IP address
-    pClient->strIPAddress = GetIniSetting ( IniXMLDocument, "client",
-        "ipaddress", DEFAULT_SERVER_ADDRESS );
+    // IP addresses
+    for ( int iIPAddrIdx = 0; iIPAddrIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIPAddrIdx++ )
+    {
+        QString sDefaultIP = "";
+
+        // use default only for first entry
+        if ( iIPAddrIdx == 0 )
+        {
+            sDefaultIP = DEFAULT_SERVER_ADDRESS;
+        }
+
+        pClient->vstrIPAddress[iIPAddrIdx] =
+            GetIniSetting ( IniXMLDocument, "client",
+            QString ( "ipaddress%1" ).arg ( iIPAddrIdx ), sDefaultIP );
+    }
 
     // name
     pClient->strName = GetIniSetting ( IniXMLDocument, "client", "name" );
@@ -150,9 +162,13 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
 
     // actual settings data ---------------------------------------------------
-    // IP address
-    PutIniSetting ( IniXMLDocument, "client", "ipaddress",
-        pClient->strIPAddress );
+    // IP addresses
+    for ( int iIPAddrIdx = 0; iIPAddrIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIPAddrIdx++ )
+    {
+        PutIniSetting ( IniXMLDocument, "client",
+            QString ( "ipaddress%1" ).arg ( iIPAddrIdx ),
+            pClient->vstrIPAddress[iIPAddrIdx] );
+    }
 
     // name
     PutIniSetting ( IniXMLDocument, "client", "name",

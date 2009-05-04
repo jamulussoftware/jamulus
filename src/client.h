@@ -155,7 +155,7 @@ public:
 
 
     // settings
-    QString                 strIPAddress;
+    CVector<QString>        vstrIPAddress;
     QString                 strName;
 
 protected:

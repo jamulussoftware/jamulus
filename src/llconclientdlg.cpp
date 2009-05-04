@@ -60,7 +60,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
         "the tag string of your fader can be set. This tag will appear "
         "at your fader on the mixer board when connected to the server.");
     TextLabelServerTag->setWhatsThis ( strFaderTag );
-    LineEditFaderTag->setWhatsThis  ( strFaderTag );
+    LineEditFaderTag->setWhatsThis   ( strFaderTag );
 
     QString strAudFader = tr ( "<b>Audio Fader:</b> With the audio fader "
         "control the level of left and right audio input channels can "
@@ -91,8 +91,18 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     // init fader tag line edit
     LineEditFaderTag->setText ( pClient->strName );
 
-    // init server address line edit
-    LineEditServerAddr->setText ( pClient->strIPAddress );
+    // init server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
+    LineEditServerAddr->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
+    LineEditServerAddr->setInsertPolicy ( QComboBox::InsertAtTop );
+
+    // load data from ini file
+    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
+    {
+        if ( !pClient->vstrIPAddress[iLEIdx].isEmpty() )
+        {
+            LineEditServerAddr->addItem ( pClient->vstrIPAddress[iLEIdx] );
+        }
+    }
 
     // we want the cursor to be at IP address line edit at startup
     LineEditServerAddr->setFocus();
@@ -180,6 +190,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     // line edits
     QObject::connect ( LineEditFaderTag, SIGNAL ( textChanged ( const QString& ) ),
         this, SLOT ( OnFaderTagTextChanged ( const QString& ) ) );
+    QObject::connect ( LineEditServerAddr, SIGNAL ( editTextChanged ( const QString ) ),
+        this, SLOT ( OnLineEditServerAddrTextChanged ( const QString ) ) );
+    QObject::connect ( LineEditServerAddr, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnLineEditServerAddrActivated ( int ) ) ); 
 
     // other
     QObject::connect ( pClient,
@@ -214,8 +228,12 @@ void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
     ClientSettingsDlg.close();
     ChatDlg.close();
 
-    // store IP address
-    pClient->strIPAddress = LineEditServerAddr->text();
+    // store IP addresses
+    for ( int iLEIdx = 0; iLEIdx < LineEditServerAddr->count(); iLEIdx++ )
+    {
+        pClient->vstrIPAddress[iLEIdx] =
+            LineEditServerAddr->itemText ( iLEIdx );
+    }
 
     // store fader tag
     pClient->strName = LineEditFaderTag->text();
@@ -259,13 +277,33 @@ void CLlconClientDlg::OnSliderAudInFader ( int value )
     UpdateAudioFaderSlider();
 }
 
+void CLlconClientDlg::OnLineEditServerAddrTextChanged ( const QString sNewText )
+{
+    // if the maximum number of items in the combo box is reached,
+    // delete the last item so that the new item can be added (first
+    // in - first out)
+    if ( LineEditServerAddr->count() == MAX_NUM_SERVER_ADDR_ITEMS )
+    {
+        LineEditServerAddr->removeItem ( MAX_NUM_SERVER_ADDR_ITEMS - 1 );
+    }
+}
+
+void CLlconClientDlg::OnLineEditServerAddrActivated ( int index )
+{
+    // move activated list item to the top
+    const QString strCurIPAddress = LineEditServerAddr->itemText ( index );
+    LineEditServerAddr->removeItem ( index );
+    LineEditServerAddr->insertItem ( 0, strCurIPAddress );
+    LineEditServerAddr->setCurrentIndex ( 0 );
+}
+
 void CLlconClientDlg::OnConnectDisconBut()
 {
     // start/stop client, set button text
     if ( !pClient->IsRunning() )
     {
         // set address and check if address is valid
-        if ( pClient->SetServerAddr ( LineEditServerAddr->text() ) )
+        if ( pClient->SetServerAddr ( LineEditServerAddr->currentText() ) )
         {
             pClient->Start();
 

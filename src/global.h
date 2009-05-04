@@ -96,6 +96,9 @@
 #define MAX_NUMBER_SOUND_CARDS          10
 #define INVALID_SNC_CARD_DEVICE         -1
 
+// maximum number of elemts in the server address combo box
+#define MAX_NUM_SERVER_ADDR_ITEMS       6
+
 // defines for LED input level meter
 #define NUM_STEPS_INP_LEV_METER         10
 #define YELLOW_BOUND_INP_LEV_METER      7

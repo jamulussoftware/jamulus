@@ -33,7 +33,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     iReverbLevel ( 0 ),
     bReverbOnLeftChan ( false ),
-    strIPAddress ( "" ), strName ( "" ),
+    vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ), strName ( "" ),
     bOpenChatOnNewMessage ( true ),
     bDoAutoSockBufSize ( true ),
     iSndCrdPreferredMonoBlSizeIndex ( CSndCrdBufferSizes::GetDefaultIndex() ),

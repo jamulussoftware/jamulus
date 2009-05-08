@@ -50,6 +50,14 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 pcbSolo->setEnabled ( false );
 
 
+    // setup fader tag label (use white background of label)
+    QPalette newPalette = pLabel->palette();
+    newPalette.setColor ( QPalette::Active, QPalette::Window,
+        newPalette.color ( QPalette::Active, QPalette::Base ) );
+
+    pLabel->setPalette ( newPalette );
+    pLabel->setAutoFillBackground ( true );
+
     // add user controls to grid
     pMainGrid->addWidget( pFader,  0, Qt::AlignHCenter );
     pMainGrid->addWidget( pcbMute, 0, Qt::AlignHCenter );
@@ -127,24 +135,27 @@ void CChannelFader::SetText ( const QString sText )
 {
     const int iBreakPos = 7;
 
+    // make sure we insert an HTML space ("&nbsp;") at each beginning and end
+    // of line for nicer look
+
     // break text at predefined position, if text is too short, break anyway to
     // make sure we have two lines for fader tag
     QString sModText = sText;
 
     if ( sModText.length() > iBreakPos )
     {
-        sModText.insert ( iBreakPos, QString ( "<br>" ) );
+        sModText.insert ( iBreakPos, QString ( "&nbsp;<br>&nbsp;" ) );
     }
     else
     {
         // insert line break at the beginning of the string -> make sure
         // if we only have one line that the text appears at the bottom line
-        sModText.insert ( 0, QString ( "<br>" ) );
+        sModText.insert ( 0, QString ( "&nbsp;<br>&nbsp;" ) );
     }
 
-    // use bold text
-    sModText.prepend ( "<b>" );
-    sModText.append ( "</b>" );
+    // use bold centered text
+    sModText.prepend ( "<center><b>&nbsp;" );
+    sModText.append ( "&nbsp;</b></center>" );
 
     pLabel->setText ( sModText );
 }
@@ -156,16 +167,15 @@ double CChannelFader::CalcFaderGain ( const int value )
     return static_cast<double> ( value ) / AUD_MIX_FADER_MAX;
 }
 
-CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) : QFrame ( parent, f )
+CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) :
+    QGroupBox ( parent )
 {
-    // set modified style
-    setFrameShape  ( QFrame::StyledPanel );
-    setFrameShadow ( QFrame::Sunken );
+    // set title text and title properties
+    setTitle ( "Server" );
+    setAlignment ( Qt::AlignHCenter );
 
-    // add hboxlayout with horizontal spacer
+    // add hboxlayout
     pMainLayout = new QHBoxLayout ( this );
-
-    pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
 
     // create all mixer controls and make them invisible
     vecpChanFader.Init ( MAX_NUM_CHANNELS );

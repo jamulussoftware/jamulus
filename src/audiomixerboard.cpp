@@ -25,7 +25,9 @@
 #include "audiomixerboard.h"
 
 
-/* Implementation *************************************************************/
+/******************************************************************************\
+* CChanneFader                                                                 *
+\******************************************************************************/
 CChannelFader::CChannelFader ( QWidget*     pNW,
                                QHBoxLayout* pParentLayout )
 {
@@ -45,18 +47,18 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setRange ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
-
-// TEST solo functionality is not yet implemented, disable control
-pcbSolo->setEnabled ( false );
-
-
     // setup fader tag label (use white background of label)
     QPalette newPalette = pLabel->palette();
     newPalette.setColor ( QPalette::Active, QPalette::Window,
         newPalette.color ( QPalette::Active, QPalette::Base ) );
+    newPalette.setColor ( QPalette::Disabled, QPalette::Window,
+        newPalette.color ( QPalette::Disabled, QPalette::Base ) );
+    newPalette.setColor ( QPalette::Inactive, QPalette::Window,
+        newPalette.color ( QPalette::Inactive, QPalette::Base ) );
 
     pLabel->setPalette ( newPalette );
     pLabel->setAutoFillBackground ( true );
+    pLabel->setFrameShape ( QFrame::Box );
 
     // add user controls to grid
     pMainGrid->addWidget( pFader,  0, Qt::AlignHCenter );
@@ -88,10 +90,13 @@ pcbSolo->setEnabled ( false );
 
     // connections -------------------------------------------------------------
     QObject::connect ( pFader, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnFaderValueChanged ( int ) ) );
+        this, SLOT ( OnGainValueChanged ( int ) ) );
 
     QObject::connect ( pcbMute, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnMuteStateChanged ( int ) ) );
+
+    QObject::connect ( pcbSolo, SIGNAL ( stateChanged ( int ) ),
+        this, SIGNAL ( soloStateChanged ( int ) ) );
 }
 
 void CChannelFader::Reset()
@@ -105,29 +110,68 @@ void CChannelFader::Reset()
 
     // clear label
     pLabel->setText ( "" );
+
+    bOtherChannelIsSolo = false;
 }
 
-void CChannelFader::OnFaderValueChanged ( int value )
+void CChannelFader::OnGainValueChanged ( int value )
 {
     // if mute flag is set, do not apply the new fader value
     if ( pcbMute->checkState() == Qt::Unchecked )
     {
         // emit signal for new fader gain value
-        emit faderValueChanged ( CalcFaderGain ( value ) );
+        emit gainValueChanged ( CalcFaderGain ( value ) );
     }
 }
 
 void CChannelFader::OnMuteStateChanged ( int value )
 {
-    if ( static_cast<Qt::CheckState> ( value ) == Qt::Checked )
+    // call muting function
+    SetMute ( static_cast<Qt::CheckState> ( value ) == Qt::Checked );
+}
+
+void CChannelFader::SetMute ( const bool bState )
+{
+    if ( bState )
     {
         // mute channel -> send gain of 0
-        emit faderValueChanged ( 0 );
+        emit gainValueChanged ( 0 );
     }
     else
     {
-        // mute was unchecked, get current fader value and apply
-        emit faderValueChanged ( CalcFaderGain ( pFader->value() ) );
+        // only unmute if no other channel is on solo
+        if ( !bOtherChannelIsSolo )
+        {
+            // mute was unchecked, get current fader value and apply
+            emit gainValueChanged ( CalcFaderGain ( pFader->value() ) );
+        }
+    }
+}
+
+void CChannelFader::ResetSoloState()
+{
+    // reset solo state -> since solo state means that this channel is not
+    // muted but all others, we simply have to uncheck the check box
+    pcbSolo->setChecked ( false );
+}
+
+void CChannelFader::SetOtherSoloState ( const bool bState )
+{
+    // store state (must be done before the SetMute() call!)
+    bOtherChannelIsSolo = bState;
+
+    // check if we are in solo on state, in that case we first have to disable
+    // our solo state since only one channel can be set to solo
+    if ( bState && pcbSolo->isChecked() )
+    {
+        pcbSolo->setChecked ( false );
+    }
+
+    // if other channel is solo, mute this channel, else enable channel gain
+    // (only enable channel gain if local mute switch is not set to on)
+    if ( !pcbMute->isChecked()  )
+    {
+        SetMute ( bState );
     }
 }
 
@@ -167,11 +211,15 @@ double CChannelFader::CalcFaderGain ( const int value )
     return static_cast<double> ( value ) / AUD_MIX_FADER_MAX;
 }
 
+
+/******************************************************************************\
+* CAudioMixerBoard                                                             *
+\******************************************************************************/
 CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) :
     QGroupBox ( parent )
 {
     // set title text and title properties
-    setTitle ( "Server" );
+    setTitle ( "Server Mixer" );
     setAlignment ( Qt::AlignHCenter );
 
     // add hboxlayout
@@ -185,20 +233,34 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) :
         vecpChanFader[i]->Hide();
     }
 
+    // insert horizontal spacer
+    pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
+
 
     // connections -------------------------------------------------------------
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
-    QObject::connect ( vecpChanFader[0], SIGNAL ( faderValueChanged ( double ) ), this, SLOT ( OnFaderValueChangedCh0 ( double ) ) );
-    QObject::connect ( vecpChanFader[1], SIGNAL ( faderValueChanged ( double ) ), this, SLOT ( OnFaderValueChangedCh1 ( double ) ) );
-    QObject::connect ( vecpChanFader[2], SIGNAL ( faderValueChanged ( double ) ), this, SLOT ( OnFaderValueChangedCh2 ( double ) ) );
-    QObject::connect ( vecpChanFader[3], SIGNAL ( faderValueChanged ( double ) ), this, SLOT ( OnFaderValueChangedCh3 ( double ) ) );
-    QObject::connect ( vecpChanFader[4], SIGNAL ( faderValueChanged ( double ) ), this, SLOT ( OnFaderValueChangedCh4 ( double ) ) );
-    QObject::connect ( vecpChanFader[5], SIGNAL ( faderValueChanged ( double ) ), this, SLOT ( OnFaderValueChangedCh5 ( double ) ) );
-    QObject::connect ( vecpChanFader[6], SIGNAL ( faderValueChanged ( double ) ), this, SLOT ( OnFaderValueChangedCh6 ( double ) ) );
-    QObject::connect ( vecpChanFader[7], SIGNAL ( faderValueChanged ( double ) ), this, SLOT ( OnFaderValueChangedCh7 ( double ) ) );
-    QObject::connect ( vecpChanFader[8], SIGNAL ( faderValueChanged ( double ) ), this, SLOT ( OnFaderValueChangedCh8 ( double ) ) );
-    QObject::connect ( vecpChanFader[9], SIGNAL ( faderValueChanged ( double ) ), this, SLOT ( OnFaderValueChangedCh9 ( double ) ) );
+    QObject::connect ( vecpChanFader[0], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh0 ( double ) ) );
+    QObject::connect ( vecpChanFader[1], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh1 ( double ) ) );
+    QObject::connect ( vecpChanFader[2], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh2 ( double ) ) );
+    QObject::connect ( vecpChanFader[3], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh3 ( double ) ) );
+    QObject::connect ( vecpChanFader[4], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh4 ( double ) ) );
+    QObject::connect ( vecpChanFader[5], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh5 ( double ) ) );
+    QObject::connect ( vecpChanFader[6], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh6 ( double ) ) );
+    QObject::connect ( vecpChanFader[7], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh7 ( double ) ) );
+    QObject::connect ( vecpChanFader[8], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh8 ( double ) ) );
+    QObject::connect ( vecpChanFader[9], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh9 ( double ) ) );
+
+    QObject::connect ( vecpChanFader[0], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh0 ( int ) ) );
+    QObject::connect ( vecpChanFader[1], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh1 ( int ) ) );
+    QObject::connect ( vecpChanFader[2], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh2 ( int ) ) );
+    QObject::connect ( vecpChanFader[3], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh3 ( int ) ) );
+    QObject::connect ( vecpChanFader[4], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh4 ( int ) ) );
+    QObject::connect ( vecpChanFader[5], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh5 ( int ) ) );
+    QObject::connect ( vecpChanFader[6], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh6 ( int ) ) );
+    QObject::connect ( vecpChanFader[7], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh7 ( int ) ) );
+    QObject::connect ( vecpChanFader[8], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh8 ( int ) ) );
+    QObject::connect ( vecpChanFader[9], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh9 ( int ) ) );
 }
 
 void CAudioMixerBoard::HideAll()
@@ -220,7 +282,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecCh
 
         for ( int j = 0; j < vecChanInfo.Size(); j++ )
         {
-            // search if current fader is used
+            // check if current fader is used
             if ( vecChanInfo[j].iChanID == i )
             {
                 // check if fader was already in use -> preserve gain value
@@ -230,6 +292,13 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecCh
 
                     // show fader
                     vecpChanFader[i]->Show();
+                }
+                else
+                {
+                    // by definition disable all Solo switches if the number of
+                    // channels at the server has changed
+                    vecpChanFader[i]->SetOtherSoloState ( false );
+                    vecpChanFader[i]->ResetSoloState();
                 }
 
                 // update text
@@ -243,6 +312,27 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecCh
         if ( !bFaderIsUsed )
         {
             vecpChanFader[i]->Hide();
+        }
+    }
+}
+
+void CAudioMixerBoard::OnChSoloStateChanged ( const int iChannelIdx, const int iValue )
+{
+    // if channel iChannelIdx has just activated the solo switch, mute all
+    // other channels, else enable them again
+    const bool bSetOtherSoloState =
+        ( static_cast<Qt::CheckState> ( iValue ) == Qt::Checked );
+
+    // apply "other solo state" for all other channels
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    {
+        if ( i != iChannelIdx )
+        {
+            // check if fader is in use
+            if ( vecpChanFader[i]->IsVisible() )
+            {
+                vecpChanFader[i]->SetOtherSoloState ( bSetOtherSoloState );
+            }
         }
     }
 }

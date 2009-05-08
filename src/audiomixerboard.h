@@ -64,10 +64,14 @@ public:
     void Hide() { pLabel->hide(); pcbMute->hide(); pcbSolo->hide(); pFader->hide(); }
     bool IsVisible() { return pLabel->isVisible(); }
 
+    void ResetSoloState();
+    void SetOtherSoloState ( const bool bState );
+
     void Reset();
 
 protected:
     double CalcFaderGain ( const int value );
+    void   SetMute ( const bool bState );
 
     QVBoxLayout*    pMainGrid;
     QSlider*        pFader;
@@ -75,12 +79,15 @@ protected:
     QCheckBox*      pcbSolo;
     QLabel*         pLabel;
 
+    bool            bOtherChannelIsSolo;
+
 public slots:
-    void OnFaderValueChanged ( int value );
+    void OnGainValueChanged ( int value );
     void OnMuteStateChanged ( int value );
 
 signals:
-    void faderValueChanged ( double value );
+    void gainValueChanged ( double value );
+    void soloStateChanged ( int value );
 };
 
 
@@ -96,6 +103,7 @@ public:
 
 protected:
     QString GenFaderText ( CChannelShortInfo& ChanInfo );
+    void OnChSoloStateChanged ( const int iChannelIdx, const int iValue );
 
     CVector<CChannelFader*> vecpChanFader;
     QHBoxLayout*            pMainLayout;
@@ -103,16 +111,27 @@ protected:
 public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
-    void OnFaderValueChangedCh0 ( double dValue ) { emit ChangeChanGain ( 0, dValue ); }
-    void OnFaderValueChangedCh1 ( double dValue ) { emit ChangeChanGain ( 1, dValue ); }
-    void OnFaderValueChangedCh2 ( double dValue ) { emit ChangeChanGain ( 2, dValue ); }
-    void OnFaderValueChangedCh3 ( double dValue ) { emit ChangeChanGain ( 3, dValue ); }
-    void OnFaderValueChangedCh4 ( double dValue ) { emit ChangeChanGain ( 4, dValue ); }
-    void OnFaderValueChangedCh5 ( double dValue ) { emit ChangeChanGain ( 5, dValue ); }
-    void OnFaderValueChangedCh6 ( double dValue ) { emit ChangeChanGain ( 6, dValue ); }
-    void OnFaderValueChangedCh7 ( double dValue ) { emit ChangeChanGain ( 7, dValue ); }
-    void OnFaderValueChangedCh8 ( double dValue ) { emit ChangeChanGain ( 8, dValue ); }
-    void OnFaderValueChangedCh9 ( double dValue ) { emit ChangeChanGain ( 9, dValue ); }
+    void OnGainValueChangedCh0 ( double dValue ) { emit ChangeChanGain ( 0, dValue ); }
+    void OnGainValueChangedCh1 ( double dValue ) { emit ChangeChanGain ( 1, dValue ); }
+    void OnGainValueChangedCh2 ( double dValue ) { emit ChangeChanGain ( 2, dValue ); }
+    void OnGainValueChangedCh3 ( double dValue ) { emit ChangeChanGain ( 3, dValue ); }
+    void OnGainValueChangedCh4 ( double dValue ) { emit ChangeChanGain ( 4, dValue ); }
+    void OnGainValueChangedCh5 ( double dValue ) { emit ChangeChanGain ( 5, dValue ); }
+    void OnGainValueChangedCh6 ( double dValue ) { emit ChangeChanGain ( 6, dValue ); }
+    void OnGainValueChangedCh7 ( double dValue ) { emit ChangeChanGain ( 7, dValue ); }
+    void OnGainValueChangedCh8 ( double dValue ) { emit ChangeChanGain ( 8, dValue ); }
+    void OnGainValueChangedCh9 ( double dValue ) { emit ChangeChanGain ( 9, dValue ); }
+
+    void OnChSoloStateChangedCh0 ( int value ) { OnChSoloStateChanged ( 0, value ); }
+    void OnChSoloStateChangedCh1 ( int value ) { OnChSoloStateChanged ( 1, value ); }
+    void OnChSoloStateChangedCh2 ( int value ) { OnChSoloStateChanged ( 2, value ); }
+    void OnChSoloStateChangedCh3 ( int value ) { OnChSoloStateChanged ( 3, value ); }
+    void OnChSoloStateChangedCh4 ( int value ) { OnChSoloStateChanged ( 4, value ); }
+    void OnChSoloStateChangedCh5 ( int value ) { OnChSoloStateChanged ( 5, value ); }
+    void OnChSoloStateChangedCh6 ( int value ) { OnChSoloStateChanged ( 6, value ); }
+    void OnChSoloStateChangedCh7 ( int value ) { OnChSoloStateChanged ( 7, value ); }
+    void OnChSoloStateChangedCh8 ( int value ) { OnChSoloStateChanged ( 8, value ); }
+    void OnChSoloStateChangedCh9 ( int value ) { OnChSoloStateChanged ( 9, value ); }
 
 signals:
     void ChangeChanGain ( int iId, double dGain );

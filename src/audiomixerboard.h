@@ -27,6 +27,7 @@
 
 #include <qframe.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
 #include <qlayout.h>
 #include <qstring.h>
 #include <qslider.h>
@@ -47,33 +48,39 @@ class CChannelFader : public QObject
     Q_OBJECT
 
 public:
-    CChannelFader ( QWidget* pNW, QHBoxLayout* pParentLayout, QString sName );
+    CChannelFader ( QWidget* pNW, QHBoxLayout* pParentLayout );
     ~CChannelFader()
     {
         pLabel->close();
+        pcbMute->close();
+        pcbSolo->close();
         pFader->close();
 
         // TODO get rid of pMainGrid
     }
 
     void SetText ( const QString sText );
-    void Show() { pLabel->show(); pFader->show(); }
-    void Hide() { pLabel->hide(); pFader->hide(); }
+    void Show() { pLabel->show(); pcbMute->show(); pcbSolo->show(); pFader->show(); }
+    void Hide() { pLabel->hide(); pcbMute->hide(); pcbSolo->hide(); pFader->hide(); }
     bool IsVisible() { return pLabel->isVisible(); }
 
-     // init gain value -> maximum value as definition according to server
-    void ResetGain() { pFader->setValue ( AUD_MIX_FADER_MAX ); }
+    void Reset();
 
 protected:
-    QGridLayout*    pMainGrid;
+    double CalcFaderGain ( const int value );
+
+    QVBoxLayout*    pMainGrid;
     QSlider*        pFader;
+    QCheckBox*      pcbMute;
+    QCheckBox*      pcbSolo;
     QLabel*         pLabel;
 
 public slots:
-    void OnValueChanged ( int value );
+    void OnFaderValueChanged ( int value );
+    void OnMuteStateChanged ( int value );
 
 signals:
-    void valueChanged ( double value );
+    void faderValueChanged ( double value );
 };
 
 
@@ -96,20 +103,19 @@ protected:
 public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
-    void OnValueChangedCh0 ( double dValue ) { emit ChangeChanGain ( 0, dValue ); }
-    void OnValueChangedCh1 ( double dValue ) { emit ChangeChanGain ( 1, dValue ); }
-    void OnValueChangedCh2 ( double dValue ) { emit ChangeChanGain ( 2, dValue ); }
-    void OnValueChangedCh3 ( double dValue ) { emit ChangeChanGain ( 3, dValue ); }
-    void OnValueChangedCh4 ( double dValue ) { emit ChangeChanGain ( 4, dValue ); }
-    void OnValueChangedCh5 ( double dValue ) { emit ChangeChanGain ( 5, dValue ); }
-    void OnValueChangedCh6 ( double dValue ) { emit ChangeChanGain ( 6, dValue ); }
-    void OnValueChangedCh7 ( double dValue ) { emit ChangeChanGain ( 7, dValue ); }
-    void OnValueChangedCh8 ( double dValue ) { emit ChangeChanGain ( 8, dValue ); }
-    void OnValueChangedCh9 ( double dValue ) { emit ChangeChanGain ( 9, dValue ); }
+    void OnFaderValueChangedCh0 ( double dValue ) { emit ChangeChanGain ( 0, dValue ); }
+    void OnFaderValueChangedCh1 ( double dValue ) { emit ChangeChanGain ( 1, dValue ); }
+    void OnFaderValueChangedCh2 ( double dValue ) { emit ChangeChanGain ( 2, dValue ); }
+    void OnFaderValueChangedCh3 ( double dValue ) { emit ChangeChanGain ( 3, dValue ); }
+    void OnFaderValueChangedCh4 ( double dValue ) { emit ChangeChanGain ( 4, dValue ); }
+    void OnFaderValueChangedCh5 ( double dValue ) { emit ChangeChanGain ( 5, dValue ); }
+    void OnFaderValueChangedCh6 ( double dValue ) { emit ChangeChanGain ( 6, dValue ); }
+    void OnFaderValueChangedCh7 ( double dValue ) { emit ChangeChanGain ( 7, dValue ); }
+    void OnFaderValueChangedCh8 ( double dValue ) { emit ChangeChanGain ( 8, dValue ); }
+    void OnFaderValueChangedCh9 ( double dValue ) { emit ChangeChanGain ( 9, dValue ); }
 
 signals:
     void ChangeChanGain ( int iId, double dGain );
 };
-
 
 #endif // MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_

@@ -37,7 +37,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     // add help text to controls
     QString strInpLevH = tr ( "<b>Input level meter:</b> Shows the level of the "
         "input audio signal of the sound card. Overload should be avoided." );
-    TextLabelInputLevel->setWhatsThis         ( strInpLevH );
+    TextLabelInputLevelL->setWhatsThis        ( strInpLevH );
+    TextLabelInputLevelR->setWhatsThis        ( strInpLevH );
     MultiColorLEDBarInputLevelL->setWhatsThis ( strInpLevH );
     MultiColorLEDBarInputLevelR->setWhatsThis ( strInpLevH );
 

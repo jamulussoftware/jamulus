@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
+    <width>531</width>
     <height>324</height>
    </rect>
   </property>
@@ -83,7 +83,7 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QLabel" name="TextLabelInputLevel" >
+           <widget class="QLabel" name="TextLabelInputLevelL" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="MinimumExpanding" hsizetype="Minimum" >
               <horstretch>0</horstretch>
@@ -99,7 +99,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="TextLabelInputLevel_2" >
+           <widget class="QLabel" name="TextLabelInputLevelR" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="MinimumExpanding" hsizetype="Minimum" >
               <horstretch>0</horstretch>

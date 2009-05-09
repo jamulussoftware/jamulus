@@ -219,8 +219,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) :
     QGroupBox ( parent )
 {
     // set title text and title properties
-    setTitle ( "Server Mixer" );
-    setAlignment ( Qt::AlignHCenter );
+    setTitle ( "Server" );
 
     // add hboxlayout
     pMainLayout = new QHBoxLayout ( this );

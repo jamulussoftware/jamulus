@@ -80,7 +80,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
         "With these radio buttons the audio input channel on which the "
         "reverberation effect is applied can be chosen. Either the left "
         "or right input channel can be selected." );
-    TextLabelReverbSelection->setWhatsThis ( strRevChanSel );
     RadioButtonRevSelL->setWhatsThis       ( strRevChanSel );
     RadioButtonRevSelR->setWhatsThis       ( strRevChanSel );
 

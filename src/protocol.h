@@ -51,6 +51,7 @@
 #define PROTMESSID_PING_MS                    20 // for measuring ping time
 #define PROTMESSID_NETW_TRANSPORT_PROPS       21 // properties for network transport
 #define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   22 // request properties for network transport
+#define PROTMESSID_DISCONNECTION              23 // disconnection
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -82,6 +83,7 @@ public:
     void CreatePingMes ( const int iMs );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
     void CreateReqNetwTranspPropsMes();
+    void CreateDisconnectionMes();
 
     void CreateAndSendAcknMess ( const int& iID, const int& iCnt );
 
@@ -152,6 +154,7 @@ protected:
     bool EvaluatePingMes               ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes    ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes ( const CVector<uint8_t>& vecData );
+    bool EvaluateDisconnectionMes      ( const CVector<uint8_t>& vecData );
 
     int                     iOldRecID, iOldRecCnt;
 
@@ -182,6 +185,7 @@ signals:
     void PingReceived ( int iMs );
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void ReqNetTranspProps();
+    void Disconnection();
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

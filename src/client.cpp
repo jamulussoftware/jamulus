@@ -238,6 +238,9 @@ void CClient::Stop()
     // stop audio interface
     Sound.Stop();
 
+    // send disconnect message to server
+    Channel.CreateDisconnectionMes();
+
     // disable channel
     Channel.SetEnable ( false );
 

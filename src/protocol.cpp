@@ -46,9 +46,11 @@ MESSAGES
     | 2 bytes number of blocks |
     +--------------------------+
 
+
 - Request jitter buffer size:                 PROTMESSID_REQ_JITT_BUF_SIZE
 
     note: does not have any data -> n = 0
+
 
 - Server full message:                        PROTMESSID_SERVER_FULL
 
@@ -62,6 +64,7 @@ MESSAGES
     +----------------+
     | 2 bytes factor |
     +----------------+
+
 
 - Gain of channel:                            PROTMESSID_CHANNEL_GAIN
 
@@ -77,6 +80,7 @@ MESSAGES
     +-------------------+--------------------+------------------+----------------------+
     | 1 byte channel ID | 4 bytes IP address | 2 bytes number n | n bytes UTF-8 string |
     +-------------------+--------------------+------------------+----------------------+
+
 
 - Request connected clients list:             PROTMESSID_REQ_CONN_CLIENTS_LIST
 
@@ -98,11 +102,13 @@ MESSAGES
     | 2 bytes number n | n bytes UTF-8 string |
     +------------------+----------------------+
 
+
 - Ping message (for measuring the ping time): PROTMESSID_PING_MS
 
     +-----------------------------+
     | 4 bytes transmit time in ms |
     +-----------------------------+
+
 
 - Properties for network transport:           PROTMESSID_NETW_TRANSPORT_PROPS
 
@@ -120,7 +126,13 @@ MESSAGES
                         - 2: MS-ADPCM
     - "audiocod arg":  argument for the audio coder, if not used this value shall be set to 0
 
+
 - Request properties for network transport:   PROTMESSID_REQ_NETW_TRANSPORT_PROPS
+
+    note: does not have any data -> n = 0
+
+
+- Disconnect message:                         PROTMESSID_DISCONNECTION
 
     note: does not have any data -> n = 0
 
@@ -382,6 +394,10 @@ bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
 
                 case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
                     bRet = EvaluateReqNetwTranspPropsMes ( vecData );
+                    break;
+
+                case PROTMESSID_DISCONNECTION:
+                    bRet = EvaluateDisconnectionMes ( vecData );
                     break;
                 }
 
@@ -899,6 +915,18 @@ bool CProtocol::EvaluateReqNetwTranspPropsMes ( const CVector<uint8_t>& vecData 
     return false; // no error
 }
 
+void CProtocol::CreateDisconnectionMes()
+{
+    CreateAndSendMessage ( PROTMESSID_DISCONNECTION, CVector<uint8_t> ( 0 ) );
+}
+
+bool CProtocol::EvaluateDisconnectionMes ( const CVector<uint8_t>& vecData )
+{
+    // invoke message action
+    emit Disconnection();
+
+    return false; // no error
+}
 
 
 /******************************************************************************\

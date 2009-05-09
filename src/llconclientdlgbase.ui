@@ -350,21 +350,34 @@
       <string>Reverb</string>
      </property>
      <layout class="QVBoxLayout" >
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
+      <item>
+       <widget class="QLabel" name="TextLabelReverbSelection" >
+        <property name="text" >
+         <string>Channel
+Selection</string>
+        </property>
+        <property name="alignment" >
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="RadioButtonRevSelL" >
+        <property name="text" >
+         <string>Left</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="RadioButtonRevSelR" >
+        <property name="text" >
+         <string>Right</string>
+        </property>
+       </widget>
+      </item>
       <item>
        <layout class="QVBoxLayout" >
         <property name="spacing" >
@@ -461,33 +474,6 @@
         </item>
        </layout>
       </item>
-      <item>
-       <widget class="QLabel" name="TextLabelReverbSelection" >
-        <property name="text" >
-         <string>Channel</string>
-        </property>
-        <property name="alignment" >
-         <set>Qt::AlignCenter</set>
-        </property>
-        <property name="wordWrap" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="RadioButtonRevSelL" >
-        <property name="text" >
-         <string>Left</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="RadioButtonRevSelR" >
-        <property name="text" >
-         <string>Right</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -499,6 +485,21 @@
      <layout class="QHBoxLayout" >
       <item>
        <layout class="QVBoxLayout" >
+        <item>
+         <widget class="QLabel" name="TextAudInFader" >
+          <property name="text" >
+           <string>Local
+Audio
+Fader</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="wordWrap" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QLabel" name="TextLabelAudFader" >
           <property name="minimumSize" >
@@ -581,20 +582,6 @@
            </spacer>
           </item>
          </layout>
-        </item>
-        <item>
-         <widget class="QLabel" name="TextAudInFader" >
-          <property name="text" >
-           <string>Audio
-Fader</string>
-          </property>
-          <property name="alignment" >
-           <set>Qt::AlignCenter</set>
-          </property>
-          <property name="wordWrap" >
-           <bool>false</bool>
-          </property>
-         </widget>
         </item>
        </layout>
       </item>

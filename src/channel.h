@@ -150,6 +150,7 @@ public:
     }
 
     void CreateNetTranspPropsMessFromCurrentSettings();
+    void CreateDisconnectionMes() { Protocol.CreateDisconnectionMes(); }
 
 protected:
     void SetAudioBlockSizeAndComprIn ( const int iNewBlockSize,
@@ -212,6 +213,7 @@ public slots:
     void OnChangeChanName ( QString strName );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();
+    void OnDisconnection();
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );

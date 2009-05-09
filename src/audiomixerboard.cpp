@@ -62,8 +62,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     // add user controls to grid
     pMainGrid->addWidget( pFader,  0, Qt::AlignHCenter );
-    pMainGrid->addWidget( pcbMute, 0, Qt::AlignHCenter );
-    pMainGrid->addWidget( pcbSolo, 0, Qt::AlignHCenter );
+    pMainGrid->addWidget( pcbMute, 0, Qt::AlignLeft );
+    pMainGrid->addWidget( pcbSolo, 0, Qt::AlignLeft );
     pMainGrid->addWidget( pLabel,  0, Qt::AlignHCenter );
 
     // add fader layout to audio mixer board layout

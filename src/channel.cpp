@@ -32,7 +32,8 @@ CChannelSet::CChannelSet ( const int iNewUploadRateLimitKbps ) :
     bWriteStatusHTMLFile ( false ),
     iUploadRateLimitKbps ( iNewUploadRateLimitKbps )
 {
-    // enable all channels
+    // enable all channels (for the server all channel must be enabled the
+    // entire life time of the software
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         vecChannels[i].SetEnable ( true );
@@ -782,6 +783,9 @@ CChannel::CChannel ( const bool bNIsServer ) :
     QObject::connect ( &Protocol,
         SIGNAL ( ReqNetTranspProps() ),
         this, SLOT ( OnReqNetTranspProps() ) );
+
+    QObject::connect ( &Protocol, SIGNAL ( Disconnection() ),
+        this, SLOT ( OnDisconnection() ) );
 }
 
 bool CChannel::ProtocolIsEnabled()
@@ -1027,6 +1031,14 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
 
     // send current network transport properties
     Protocol.CreateNetwTranspPropsMes ( NetworkTransportProps );
+}
+
+void CChannel::OnDisconnection()
+{
+    // set time out counter to a small value > 0 so that the next time a
+    // received audio block is queried, the disconnection is performed
+    // (assuming that no audio packet is received in the meantime)
+    iConTimeOut = 1; // a small number > 0
 }
 
 EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,

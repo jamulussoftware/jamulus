@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>483</width>
+    <width>471</width>
     <height>324</height>
    </rect>
   </property>
@@ -358,7 +358,7 @@
         <item>
          <widget class="QLabel" name="TextAudInFader" >
           <property name="text" >
-           <string>Fader</string>
+           <string>Fader:</string>
           </property>
           <property name="alignment" >
            <set>Qt::AlignCenter</set>
@@ -374,7 +374,7 @@
            </size>
           </property>
           <property name="text" >
-           <string>Level</string>
+           <string>Center</string>
           </property>
           <property name="alignment" >
            <set>Qt::AlignCenter</set>
@@ -470,7 +470,7 @@
         <item>
          <widget class="QLabel" name="TextLabelAudReverb" >
           <property name="text" >
-           <string>Reverb</string>
+           <string>Reverb:</string>
           </property>
           <property name="alignment" >
            <set>Qt::AlignCenter</set>

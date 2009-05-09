@@ -31,6 +31,14 @@
 #include "settings.h"
 
 
+/*
+// TEST -> activate the following two lines to activate the test bench,
+// currently only supported for Windows
+#include "testbench.h"
+CTestbench Testbench;
+*/
+
+
 // Implementation **************************************************************
 // these pointers are only used for the post-event routine
 QApplication* pApp   = NULL;

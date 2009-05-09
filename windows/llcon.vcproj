@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="llcon"
 	ProjectGUID="{DBBC16FC-BBCA-4E3B-A9F4-0EC5202A8B2E}"
 	RootNamespace="llcon"
@@ -837,6 +837,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\moc\moc_testbench.cpp"
+					>
+				</File>
+				<File
 					RelativePath="moc\moc_util.cpp"
 					>
 					<FileConfiguration
@@ -1016,6 +1020,10 @@
 			</File>
 			<File
 				RelativePath="..\src\soundbase.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\testbench.h"
 				>
 			</File>
 			<File

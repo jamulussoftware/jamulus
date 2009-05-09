@@ -41,6 +41,7 @@ rem .h --------------
 %qtdir%\bin\moc.exe ..\src\protocol.h -o moc\moc_protocol.cpp
 %qtdir%\bin\moc.exe ..\src\channel.h -o moc\moc_channel.cpp
 %qtdir%\bin\moc.exe ..\src\soundbase.h -o moc\moc_soundbase.cpp
+%qtdir%\bin\moc.exe ..\src\testbench.h -o moc\moc_testbench.cpp
 
 
 rem .ui -------------
@@ -49,6 +50,7 @@ rem .ui -------------
 %qtdir%\bin\uic.exe ..\src\clientsettingsdlgbase.ui -o moc\clientsettingsdlgbase.h
 %qtdir%\bin\uic.exe ..\src\llconserverdlgbase.ui -o moc\llconserverdlgbase.h
 %qtdir%\bin\uic.exe ..\src\chatdlgbase.ui -o moc\chatdlgbase.h
+
 
 rem .qrc ------------
 %qtdir%\bin\rcc.exe ..\src\resources.qrc -o moc\resources.cpp

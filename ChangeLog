@@ -1,3 +1,14 @@
+2.2.2
+
+- Mute and Solo check boxes for each connected client fader
+
+- changes to the main GUI (grouped "local" and "server" settings)
+
+- LED status lights and LED input level meter
+
+- better behaviour on disconnection (introduced disconnection protocol message)
+
+
 2.2.1
 
 - bug fix and improvements for automatic jitter buffer size setting

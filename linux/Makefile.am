@@ -35,6 +35,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/multicolorled.h \
 	../src/multicolorledbar.h \
 	../src/audiomixerboard.h \
+	../src/testbench.h \
 	../src/soundbase.h \
 	../src/llconserverdlg.h \
 	../src/chatdlg.h \
@@ -92,6 +93,7 @@ BUILT_SOURCES=moc/moc_server.cpp \
 	moc/moc_multicolorledbar.cpp \
 	moc/moc_audiomixerboard.cpp \
 	moc/moc_util.cpp \
+	moc/moc_testbench.cpp \
 	moc/moc_llconclientdlg.cpp \
 	moc/llconclientdlgbase.h \
 	moc/moc_clientsettingsdlg.cpp \
@@ -140,6 +142,9 @@ moc/moc_protocol.cpp: ../src/protocol.h
 
 moc/moc_channel.cpp: ../src/channel.h
 	$(QT_MOC) ../src/channel.h -o moc/moc_channel.cpp
+
+moc/moc_testbench.cpp: ../src/testbench.h
+	$(QT_MOC) ../src/testbench.h -o moc/moc_testbench.cpp
 
 
 moc/moc_llconclientdlg.cpp: ../src/llconclientdlg.h

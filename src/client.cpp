@@ -238,7 +238,11 @@ void CClient::Stop()
     // stop audio interface
     Sound.Stop();
 
-    // send disconnect message to server
+    // send disconnect message to server (since we disable our protocol
+    // receive mechanism with the next command, we do not evaluate any
+    // respond from the server, therefore we just hope that the message
+    // gets its way to the server, if not, the old behaviour time-out
+    // disconnects the connection anyway)
     Channel.CreateDisconnectionMes();
 
     // disable channel

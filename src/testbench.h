@@ -31,6 +31,7 @@
 #include <qhostaddress.h>
 #include "global.h"
 #include "socket.h"
+#include "protocol.h"
 #include "util.h"
 
 
@@ -49,13 +50,24 @@ public:
     }
 
 protected:
-    QTimer  Timer;
-    CSocket Socket;
+    int GenRandomIntInRange ( const int iStart, const int iEnd ) const
+    {
+        return static_cast<int> ( iStart +
+            ( ( static_cast<double> ( iEnd - iStart) * rand() ) / RAND_MAX ) );
+    }
+
+    QTimer    Timer;
+    CSocket   Socket;
+    CProtocol Protocol;
 
 public slots:
     void OnTimer()
     {
 
+// TEST check if random number generator works as expected
+static FILE* pFile = fopen ( "test.txt", "w" );
+fprintf ( pFile, "%d\n", GenRandomIntInRange ( 2, 5 ) );
+fflush ( pFile );
 
     }
 };

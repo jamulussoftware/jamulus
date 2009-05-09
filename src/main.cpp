@@ -31,12 +31,11 @@
 #include "settings.h"
 
 
-/*
 // TEST -> activate the following two lines to activate the test bench,
-// currently only supported for Windows
-#include "testbench.h"
+#if 0
+# include "testbench.h"
 CTestbench Testbench;
-*/
+#endif
 
 
 // Implementation **************************************************************

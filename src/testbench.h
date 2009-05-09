@@ -41,8 +41,15 @@ class CTestbench : public QObject
     Q_OBJECT
 
 public:
-    CTestbench() : Socket ( NULL, 22222 )
+    CTestbench()
     {
+        // bind socket
+        UdpSocket.bind ( QHostAddress ( QHostAddress::Any ), 22222 );
+
+        // connect protocol signal
+        QObject::connect ( &Protocol, SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
+            this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
+
         // connect and start the timer (testbench heartbeat)
         QObject::connect ( &Timer, SIGNAL ( timeout() ),
             this, SLOT ( OnTimer() ) );
@@ -53,22 +60,85 @@ protected:
     int GenRandomIntInRange ( const int iStart, const int iEnd ) const
     {
         return static_cast<int> ( iStart +
-            ( ( static_cast<double> ( iEnd - iStart) * rand() ) / RAND_MAX ) );
+            ( ( static_cast<double> ( iEnd - iStart + 1 ) * rand() ) / RAND_MAX ) );
     }
 
-    QTimer    Timer;
-    CSocket   Socket;
-    CProtocol Protocol;
+    QTimer     Timer;
+    CProtocol  Protocol;
+    QUdpSocket UdpSocket;
 
 public slots:
     void OnTimer()
     {
+        // generate random protocol message
+        switch ( GenRandomIntInRange ( 0, 11 ) )
+        {
+        case 0:
+            Protocol.CreateJitBufMes ( GenRandomIntInRange ( 0, 10 ) );
+            break;
 
-// TEST check if random number generator works as expected
-static FILE* pFile = fopen ( "test.txt", "w" );
-fprintf ( pFile, "%d\n", GenRandomIntInRange ( 2, 5 ) );
-fflush ( pFile );
+        case 1:
+            Protocol.CreateReqJitBufMes();
+            break;
 
+        case 2:
+            Protocol.CreateNetwBlSiFactMes ( GenRandomIntInRange ( 0, 10 ) );
+            break;
+
+        case 3:
+            Protocol.CreateChanGainMes ( GenRandomIntInRange ( 0, 20 ),
+                GenRandomIntInRange ( -100, 100 ) );
+            break;
+
+        case 4:
+            Protocol.CreateServerFullMes();
+            break;
+
+        case 5:
+            Protocol.CreateReqConnClientsList();
+            break;
+
+        case 6:
+            Protocol.CreateChanNameMes ( QString ( "test%1" ).arg (
+                GenRandomIntInRange ( 0, 1000 ) ) );
+            break;
+
+        case 7:
+            Protocol.CreateChatTextMes ( QString ( "test%1" ).arg (
+                GenRandomIntInRange ( 0, 1000 ) ) );
+            break;
+
+        case 8:
+            Protocol.CreatePingMes ( GenRandomIntInRange ( 0, 100000 ) );
+            break;
+
+        case 9:
+            Protocol.CreateReqNetwTranspPropsMes();
+            break;
+
+        case 10:
+            Protocol.CreateAndSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
+                GenRandomIntInRange ( -100, 100 ) );
+            break;
+
+        case 11:
+            // arbitrary "audio" packet (with random sizes)
+            CVector<uint8_t> vecMessage ( GenRandomIntInRange ( 1, 1000 ) );
+            OnSendProtMessage ( vecMessage );
+            break;
+        }
+    }
+
+    void OnSendProtMessage ( CVector<uint8_t> vecMessage )
+    {
+        UdpSocket.writeDatagram (
+            (const char*) &( (CVector<uint8_t>) vecMessage )[0],
+            vecMessage.Size(), QHostAddress ( "127.0.0.1" ),
+            LLCON_DEFAULT_PORT_NUMBER );
+
+        // reset protocol so that we do not have to wait for an acknowledge to
+        // send the next message
+        Protocol.Reset();
     }
 };
 

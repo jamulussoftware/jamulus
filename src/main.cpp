@@ -29,13 +29,7 @@
 #include "llconclientdlg.h"
 #include "llconserverdlg.h"
 #include "settings.h"
-
-
-// TEST -> activate the following two lines to activate the test bench,
-#if 0
-# include "testbench.h"
-CTestbench Testbench;
-#endif
+#include "testbench.h"
 
 
 // Implementation **************************************************************
@@ -158,6 +152,11 @@ int main ( int argc, char** argv )
     // init resources
     extern int qInitResources();
     qInitResources();
+
+
+// TEST -> activate the following line to activate the test bench,
+//CTestbench Testbench;
+
 
     try
     {

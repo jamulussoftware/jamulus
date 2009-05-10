@@ -51,115 +51,80 @@
        </widget>
       </item>
       <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>249</width>
-          <height>16</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" >
-        <item>
-         <layout class="QVBoxLayout" >
-          <property name="spacing" >
-           <number>0</number>
+       <layout class="QGridLayout" >
+        <item row="0" column="0" >
+         <widget class="QLabel" name="TextLabelInputLevelL" >
+          <property name="text" >
+           <string>Input Level L</string>
           </property>
-          <property name="leftMargin" >
-           <number>0</number>
+          <property name="wordWrap" >
+           <bool>false</bool>
           </property>
-          <property name="topMargin" >
-           <number>0</number>
-          </property>
-          <property name="rightMargin" >
-           <number>0</number>
-          </property>
-          <property name="bottomMargin" >
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="TextLabelInputLevelL" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="MinimumExpanding" hsizetype="Minimum" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text" >
-             <string>Input Level L</string>
-            </property>
-            <property name="wordWrap" >
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="TextLabelInputLevelR" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="MinimumExpanding" hsizetype="Minimum" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize" >
-             <size>
-              <width>88</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text" >
-             <string>Input Level R</string>
-            </property>
-            <property name="wordWrap" >
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         </widget>
         </item>
-        <item>
-         <layout class="QVBoxLayout" >
-          <property name="spacing" >
-           <number>4</number>
+        <item row="0" column="1" >
+         <widget class="CMultiColorLEDBar" native="1" name="MultiColorLEDBarInputLevelL" >
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
           </property>
-          <item>
-           <widget class="CMultiColorLEDBar" native="1" name="MultiColorLEDBarInputLevelL" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize" >
-             <size>
-              <width>50</width>
-              <height>25</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="CMultiColorLEDBar" native="1" name="MultiColorLEDBarInputLevelR" >
-            <property name="sizePolicy" >
-             <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize" >
-             <size>
-              <width>50</width>
-              <height>25</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         </widget>
+        </item>
+        <item row="1" column="0" >
+         <widget class="QLabel" name="TextLabelInputLevelR" >
+          <property name="text" >
+           <string>Input Level R</string>
+          </property>
+          <property name="wordWrap" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" >
+         <widget class="CMultiColorLEDBar" native="1" name="MultiColorLEDBarInputLevelR" >
+          <property name="minimumSize" >
+           <size>
+            <width>50</width>
+            <height>25</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" >
+         <widget class="QLabel" name="TextLabelServerAddr" >
+          <property name="text" >
+           <string>Server Address</string>
+          </property>
+          <property name="wordWrap" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" >
+         <widget class="QComboBox" name="LineEditServerAddr" >
+          <property name="editable" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" >
+         <widget class="QLabel" name="TextLabelServerTag" >
+          <property name="text" >
+           <string>Fader Tag</string>
+          </property>
+          <property name="wordWrap" >
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1" >
+         <widget class="QLineEdit" name="LineEditFaderTag" >
+          <property name="maxLength" >
+           <number>15</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -168,59 +133,16 @@
         <property name="orientation" >
          <enum>Qt::Vertical</enum>
         </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Minimum</enum>
+        </property>
         <property name="sizeHint" >
          <size>
-          <width>249</width>
-          <height>16</height>
+          <width>20</width>
+          <height>0</height>
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" >
-        <item>
-         <layout class="QVBoxLayout" >
-          <item>
-           <widget class="QLabel" name="TextLabelServerAddr" >
-            <property name="text" >
-             <string>Server Address</string>
-            </property>
-            <property name="wordWrap" >
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="TextLabelServerTag" >
-            <property name="text" >
-             <string>Fader Tag</string>
-            </property>
-            <property name="wordWrap" >
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" >
-          <item>
-           <widget class="QComboBox" name="LineEditServerAddr" >
-            <property name="editable" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="LineEditFaderTag" >
-            <property name="maxLength" >
-             <number>15</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
       </item>
       <item>
        <layout class="QHBoxLayout" >
@@ -242,8 +164,8 @@
             </property>
             <property name="sizeHint" >
              <size>
-              <width>20</width>
-              <height>5</height>
+              <width>168</width>
+              <height>0</height>
              </size>
             </property>
            </spacer>
@@ -322,22 +244,6 @@
            <bool>true</bool>
           </property>
          </widget>
-        </item>
-        <item>
-         <spacer>
-          <property name="orientation" >
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType" >
-           <enum>QSizePolicy::Minimum</enum>
-          </property>
-          <property name="sizeHint" >
-           <size>
-            <width>0</width>
-            <height>29</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </item>

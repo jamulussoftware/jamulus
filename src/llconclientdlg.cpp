@@ -121,14 +121,14 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     // init slider controls ---
     // audio in fader
     SliderAudInFader->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
-    SliderAudInFader->setTickInterval ( AUD_FADER_IN_MAX / 9 );
+    SliderAudInFader->setTickInterval ( AUD_FADER_IN_MAX / 5 );
     UpdateAudioFaderSlider();
 
     // audio reverberation
     SliderAudReverb->setRange ( 0, AUD_REVERB_MAX );
     const int iCurAudReverb = pClient->GetReverbLevel();
     SliderAudReverb->setValue ( iCurAudReverb );
-    SliderAudReverb->setTickInterval ( AUD_REVERB_MAX / 9 );
+    SliderAudReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
 
 
     // set radio buttons ---

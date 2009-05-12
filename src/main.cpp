@@ -58,7 +58,7 @@ int main ( int argc, char** argv )
     // Start with first argument, therefore "i = 1"
     for ( int i = 1; i < argc; i++ )
     {
-        // server mode flag ----------------------------------------------------------
+        // server mode flag ----------------------------------------------------
         if ( GetFlagArgument ( argc, argv, i, "-s", "--server" ) )
         {
             bIsClient = false;
@@ -66,7 +66,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // use GUI flag --------------------------------------------------------------
+        // use GUI flag --------------------------------------------------------
         if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) )
         {
             bUseGUI = false;
@@ -74,7 +74,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // use logging ---------------------------------------------------------------
+        // use logging ---------------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
         {
             strLoggingFileName = strArgument;
@@ -82,7 +82,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // force low upload data rate flag -------------------------------------------
+        // force low upload data rate flag -------------------------------------
         if ( GetNumericArgument ( argc, argv, i, "-u", "--maxuploadrate",
                                   100, 1000000, rDbleArgument ) )
         {
@@ -92,7 +92,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // port number ---------------------------------------------------------------
+        // port number ---------------------------------------------------------
         if ( GetNumericArgument ( argc, argv, i, "-p", "--port",
                                   0, 65535, rDbleArgument ) )
         {
@@ -101,7 +101,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // HTML status file ----------------------------------------------------------
+        // HTML status file ----------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
         {
             strHTMLStatusFileName = strArgument;
@@ -116,7 +116,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // initialization file -------------------------------------------------------
+        // initialization file -------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
         {
             strIniFileName = strArgument;
@@ -124,7 +124,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // help (usage) flag ---------------------------------------------------------
+        // help (usage) flag ---------------------------------------------------
         if ( ( !strcmp ( argv[i], "--help" ) ) ||
              ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
         {
@@ -133,7 +133,7 @@ int main ( int argc, char** argv )
             exit ( 1 );
         }
 
-        // unknown option ------------------------------------------------------------
+        // unknown option ------------------------------------------------------
         cerr << argv[0] << ": ";
         cerr << "Unknown option '" << argv[i] << "' -- use '--help' for help"
             << endl;
@@ -175,7 +175,8 @@ int main ( int argc, char** argv )
             Settings.Load ( strIniFileName.c_str() );
 
             // GUI object
-            CLlconClientDlg ClientDlg ( &Client, 0, Qt::WindowMinMaxButtonsHint );
+            CLlconClientDlg ClientDlg (
+                &Client, 0, Qt::WindowMinMaxButtonsHint );
 
             // set main window
             pMainWindow = &ClientDlg;
@@ -220,7 +221,10 @@ int main ( int argc, char** argv )
             else
             {
                 // only start application without using the GUI
-                cout << CAboutDlg::GetVersionAndNameStr ( false ).toStdString() << std::endl;
+                cout <<
+                    CAboutDlg::GetVersionAndNameStr ( false ).toStdString() <<
+                    std::endl;
+
                 app.exec();
             }
         }
@@ -231,7 +235,8 @@ int main ( int argc, char** argv )
         // show generic error
         if ( bUseGUI )
         {
-            QMessageBox::critical ( 0, APP_NAME, generr.GetErrorText(), "Quit", 0 );
+            QMessageBox::critical (
+                0, APP_NAME, generr.GetErrorText(), "Quit", 0 );
         }
         else
         {

@@ -155,7 +155,7 @@ int main ( int argc, char** argv )
 
 
 // TEST -> activate the following line to activate the test bench,
-//CTestbench Testbench;
+//CTestbench Testbench ( "127.0.0.1", LLCON_DEFAULT_PORT_NUMBER );
 
 
     try

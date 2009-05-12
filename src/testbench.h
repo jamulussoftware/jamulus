@@ -41,7 +41,8 @@ class CTestbench : public QObject
     Q_OBJECT
 
 public:
-    CTestbench()
+    CTestbench ( QString sNewAddress, quint16 iNewPort ) :
+        sAddress ( sNewAddress ), iPort ( iNewPort )
     {
         // bind socket
         UdpSocket.bind ( QHostAddress ( QHostAddress::Any ), 22222 );
@@ -63,6 +64,8 @@ protected:
             ( ( static_cast<double> ( iEnd - iStart + 1 ) * rand() ) / RAND_MAX ) );
     }
 
+    QString    sAddress;
+    quint16    iPort;        
     QTimer     Timer;
     CProtocol  Protocol;
     QUdpSocket UdpSocket;
@@ -133,8 +136,7 @@ public slots:
     {
         UdpSocket.writeDatagram (
             (const char*) &( (CVector<uint8_t>) vecMessage )[0],
-            vecMessage.Size(), QHostAddress ( "127.0.0.1" ),
-            LLCON_DEFAULT_PORT_NUMBER );
+            vecMessage.Size(), QHostAddress ( sAddress ), iPort );
 
         // reset protocol so that we do not have to wait for an acknowledge to
         // send the next message

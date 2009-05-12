@@ -1100,17 +1100,17 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                         }
                     }
                 }
-                Mutex.unlock();
+            }
+            Mutex.unlock();
 
-                // actual initialization call has to be made
-                // outside the mutex region since it internally
-                // usees the same mutex, too                
-                if ( bReinitializeIn )
-                {
-                    // re-initialize to new value
-                    SetAudioBlockSizeAndComprIn (
-                        iNewAudioBlockSize, eNewAudComprType );
-                }
+            // actual initialization call has to be made
+            // outside the mutex region since it internally
+            // usees the same mutex, too                
+            if ( bReinitializeIn )
+            {
+                // re-initialize to new value
+                SetAudioBlockSizeAndComprIn (
+                    iNewAudioBlockSize, eNewAudComprType );
             }
 
             Mutex.lock();

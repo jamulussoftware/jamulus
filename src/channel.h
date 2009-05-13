@@ -105,7 +105,7 @@ public:
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Protocol.CreateChanGainMes ( iId, dGain ); }
 
-    void SetSockBufSize ( const int iNumBlocks );
+    bool SetSockBufSize ( const int iNumBlocks );
     int GetSockBufSize() { return iCurSockBufSize; }
 
     void SetNetwBufSizeOut ( const int iNewAudioBlockSizeOut );

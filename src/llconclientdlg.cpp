@@ -453,6 +453,7 @@ void CLlconClientDlg::customEvent ( QEvent* Event )
 
         case MS_SET_JIT_BUF_SIZE:
             pClient->SetSockBufSize ( iStatus );
+            break;
         }
 
         // update general settings dialog, too

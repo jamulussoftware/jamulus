@@ -96,15 +96,13 @@ public:
     bool GetDoAutoSockBufSize() { return bDoAutoSockBufSize; }
     void SetSockBufSize ( const int iNumBlocks )
     {
+        // only change parameter if new parameter is different from current one
         if ( Channel.GetSockBufSize() != iNumBlocks )
         {
-            // check for valid values
-            if ( ( iNumBlocks >= MIN_NET_BUF_SIZE_NUM_BL ) &&
-                 ( iNumBlocks <= MAX_NET_BUF_SIZE_NUM_BL ) )
+            // set the new socket size
+            if ( !Channel.SetSockBufSize ( iNumBlocks ) )
             {
-                // set the new socket size
-                Channel.SetSockBufSize ( iNumBlocks );
-
+                // if setting of socket buffer size was successful, 
                 // tell the server that size has changed
                 Channel.CreateJitBufMes ( iNumBlocks );
             }

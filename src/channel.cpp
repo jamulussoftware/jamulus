@@ -691,9 +691,14 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
         // network block size factor must start from 1 -> i + 1
         const int iCurNetBlockSizeFact = i + 1;
-        vecNetwBufferInProps[iNoneIdx].iAudioBlockSize = iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
-        vecNetwBufferInProps[iIMAIdx].iAudioBlockSize  = iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
-        vecNetwBufferInProps[iMSIdx].iAudioBlockSize   = iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
+        vecNetwBufferInProps[iNoneIdx].iAudioBlockSize =
+            iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
+
+        vecNetwBufferInProps[iIMAIdx].iAudioBlockSize =
+            iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
+
+        vecNetwBufferInProps[iMSIdx].iAudioBlockSize =
+            iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
 
         // None (no audio compression)
         vecNetwBufferInProps[iNoneIdx].eAudComprType  = CT_NONE;
@@ -887,15 +892,24 @@ void CChannel::SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut 
     }
 }
 
-void CChannel::SetSockBufSize ( const int iNumBlocks )
+bool CChannel::SetSockBufSize ( const int iNumBlocks )
 {
     QMutexLocker locker ( &Mutex ); // this opperation must be done with mutex
 
-    iCurSockBufSize = iNumBlocks;
+    // first check for valid input parameter range
+    if ( ( iNumBlocks >= MIN_NET_BUF_SIZE_NUM_BL ) &&
+         ( iNumBlocks <= MAX_NET_BUF_SIZE_NUM_BL ) )
+    {
+        iCurSockBufSize = iNumBlocks;
 
-    // the network block size is a multiple of the internal minimal
-    // block size
-    SockBuf.Init ( MIN_SERVER_BLOCK_SIZE_SAMPLES, iNumBlocks );
+        // the network block size is a multiple of the internal minimal
+        // block size
+        SockBuf.Init ( MIN_SERVER_BLOCK_SIZE_SAMPLES, iNumBlocks );
+
+        return false; // -> no error
+    }
+
+    return true; // set error flag
 }
 
 void CChannel::SetGain ( const int iChanID, const double dNewGain )

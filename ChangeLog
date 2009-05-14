@@ -1,6 +1,6 @@
 2.2.2
 
-- Mute and Solo check boxes for each connected client fader
+- "Mute" and "Solo" check boxes for each connected client fader
 
 - changes to the main GUI (grouped "local" and "server" settings)
 

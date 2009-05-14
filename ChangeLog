@@ -8,6 +8,8 @@
 
 - better behaviour on disconnection (introduced disconnection protocol message)
 
+- store previous server URLs
+
 
 2.2.1
 

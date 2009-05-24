@@ -510,6 +510,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\serverlogging.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\settings.cpp"
 				>
 				<FileConfiguration
@@ -1004,6 +1008,10 @@
 			</File>
 			<File
 				RelativePath="..\src\server.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\serverlogging.h"
 				>
 			</File>
 			<File

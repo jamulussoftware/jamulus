@@ -32,6 +32,12 @@
 #include "testbench.h"
 
 
+// TEST
+#include "serverlogging.h"
+
+
+
+
 // Implementation **************************************************************
 // these pointers are only used for the post-event routine
 QApplication* pApp   = NULL;
@@ -156,6 +162,11 @@ int main ( int argc, char** argv )
 
 // TEST -> activate the following line to activate the test bench,
 //CTestbench Testbench ( "127.0.0.1", LLCON_DEFAULT_PORT_NUMBER );
+
+
+// TEST
+//CServerLogging ServerLogging;
+//exit(1);
 
 
     try

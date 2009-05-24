@@ -31,13 +31,16 @@ CServerLogging::CServerLogging()
     int i;
 
     // constants defining the plot properties
-    const int iYAxisStart = 0;
-    const int iYAxisEnd   = 24;
-    const int iNumTicksX = 10;
-    const int iNumTicksY = 5;
-    const int iPlotWidth  = 500;
-    const int iPlotHeight = 500;
-    const int iGridFrameOffset = 10;
+    const int iYAxisStart       = 0;
+    const int iYAxisEnd         = 24;
+    const int iNumTicksX        = 9;
+    const int iNumTicksY        = 5;
+    const int iPlotWidth        = 500;
+    const int iPlotHeight       = 500;
+    const int iGridFrameOffset  = 10;
+    const int iTextOffsetToGrid = 3;
+    const int iYAxisTextHeight  = 20;
+    const QFont AxisFont ( "Arial", 10 );
     const QColor PlotBackgroundColor ( Qt::white ); // white background
     const QColor PlotFrameColor ( Qt::black ); // black frame
     const QColor PlotGridColor ( Qt::gray ); // gray grid
@@ -58,20 +61,28 @@ CServerLogging::CServerLogging()
         PlotCanvasRect.x() + iGridFrameOffset,
         PlotCanvasRect.y() + iGridFrameOffset,
         PlotCanvasRect.width() - 2 * iGridFrameOffset,
-        PlotCanvasRect.height() - 2 * iGridFrameOffset );
+        PlotCanvasRect.height() - 2 * iGridFrameOffset - iYAxisTextHeight );
 
     PlotPainter.setPen ( PlotFrameColor );
     PlotPainter.drawRect ( PlotGridFrame );
 
     // grid (ticks) for x-axis
-    const int iXSpace = PlotGridFrame.width() / ( iNumTicksX - 1 );
-    for ( i = 0; i < ( iNumTicksX - 2 ); i++ )
+    const int iTextOffsetX = 20;
+    const int iXSpace = PlotGridFrame.width() / ( iNumTicksX + 1 );
+    for ( i = 0; i < iNumTicksX; i++ )
     {
         const int iCurX = PlotGridFrame.x() + iXSpace * ( i + 1 );
 
-        // text
-        PlotPainter.setPen ( PlotTextColor );
-// TODO
+        // text (only every second tick)
+        if ( !( i % 2 ) )
+        {
+            PlotPainter.setPen ( PlotTextColor );
+            PlotPainter.setFont ( AxisFont );
+            PlotPainter.drawText (
+                QPoint ( iCurX - iTextOffsetX,
+                PlotGridFrame.bottom() + iYAxisTextHeight + iTextOffsetToGrid ),
+                QDate::currentDate().addDays ( i - iNumTicksX + 1 ).toString ( "dd.MM." ) );
+        }
 
         // grid
         PlotPainter.setPen ( PlotGridColor );
@@ -87,10 +98,13 @@ CServerLogging::CServerLogging()
 
         // text
         PlotPainter.setPen ( PlotTextColor );
-        PlotPainter.setFont ( QFont ( "Arial", 10 ) );
-        PlotPainter.drawText ( QPoint ( PlotGridFrame.x(), iCurY ),
-            QString().setNum ( ( iYAxisEnd - iYAxisStart ) / iNumTicksY * i ) );
-
+        PlotPainter.setFont ( AxisFont );
+        PlotPainter.drawText ( QPoint (
+            PlotGridFrame.x() + iTextOffsetToGrid,
+            iCurY - iTextOffsetToGrid ),
+            QString().setNum (
+            ( iYAxisEnd - iYAxisStart ) / ( iNumTicksY - 1 ) *
+            ( ( iNumTicksY - 2 ) - i ) ) );
 
         // grid
         PlotPainter.setPen ( PlotGridColor );
@@ -100,7 +114,7 @@ CServerLogging::CServerLogging()
 
 
 
-    // save plot as a file
-    PlotPixmap.save ( "test.jpg", "JPG", 90 );
+ // save plot as a file
+ PlotPixmap.save ( "test.jpg", "JPG", 90 );
 
 }

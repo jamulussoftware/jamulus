@@ -165,8 +165,8 @@ int main ( int argc, char** argv )
 
 
 // TEST
-//CServerLogging ServerLogging;
-//exit(1);
+CServerLogging ServerLogging;
+exit(1);
 
 
     try

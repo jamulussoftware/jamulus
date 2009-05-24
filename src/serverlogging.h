@@ -27,6 +27,7 @@
 
 #include <qpixmap.h>
 #include <qpainter.h>
+#include <qdatetime.h>
 #include "global.h"
 
 

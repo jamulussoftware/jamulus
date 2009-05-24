@@ -33,6 +33,7 @@
 #include "socket.h"
 #include "channel.h"
 #include "util.h"
+#include "serverlogging.h"
 
 
 /* Classes ********************************************************************/
@@ -82,7 +83,7 @@ protected:
     CCycleTimeVariance  CycleTimeVariance;
 
     // logging
-    CLogging            Logging;
+    CServerLogging      Logging;
 
 public slots:
     void OnTimer();

@@ -28,6 +28,9 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qdatetime.h>
+#include <qhostaddress.h>
+#include <qfile.h>
+#include <qstring.h>
 #include "global.h"
 
 
@@ -36,6 +39,18 @@ class CServerLogging
 {
 public:
     CServerLogging();
+    virtual ~CServerLogging();
+
+    void Start ( const QString& strLoggingFileName );
+    void AddNewConnection ( const QHostAddress& ClientInetAddr );
+    void AddServerStopped();
+
+protected:
+    void operator<< ( const QString& sNewStr );
+    QString CurTimeDatetoLogString();
+
+    bool  bDoLogging;
+    QFile File;
 };
 
 #endif /* !defined ( SERVERLOGGING_HOIHOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ ) */

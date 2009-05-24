@@ -323,7 +323,6 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
 }
 
 
-
 /******************************************************************************\
 * GUI utilities                                                                *
 \******************************************************************************/
@@ -543,64 +542,6 @@ public:
 #endif
     }
 };
-
-
-// Time and Data to String conversion ------------------------------------------
-class CLogTimeDate
-{
-public:
-    static QString toString()
-    {
-        const QDateTime curDateTime = QDateTime::currentDateTime();
-
-        // format date and time output according to "3.9.2006, 11:38:08"
-        return QString().setNum ( curDateTime.date().day() ) + "." +
-            QString().setNum ( curDateTime.date().month() ) + "." +
-            QString().setNum ( curDateTime.date().year() ) + ", " +
-            curDateTime.time().toString();
-    }
-};
-
-
-// Logging ---------------------------------------------------------------------
-class CLogging
-{
-public:
-    CLogging() : bDoLogging ( false ), File ( DEFAULT_LOG_FILE_NAME ) {}
-    virtual ~CLogging()
-    {
-        if ( File.isOpen() )
-        {
-            File.close();
-        }
-    }
-
-    void Start ( const QString& strLoggingFileName )
-    {
-        // open file
-        File.setFileName ( strLoggingFileName );
-        if ( File.open ( QIODevice::Append | QIODevice::Text ) )
-        {
-            bDoLogging = true;
-        }
-    }
-
-    void operator<< ( const QString& sNewStr )
-    {
-        if ( bDoLogging )
-        {
-            // append new line in logging file
-            QTextStream out ( &File );
-            out << sNewStr << endl;
-            File.flush();
-        }
-    }
-
-protected:
-    bool  bDoLogging;
-    QFile File;
-};
-
 
 
 /******************************************************************************\

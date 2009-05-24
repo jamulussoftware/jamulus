@@ -164,11 +164,6 @@ int main ( int argc, char** argv )
 //CTestbench Testbench ( "127.0.0.1", LLCON_DEFAULT_PORT_NUMBER );
 
 
-// TEST
-CServerLogging ServerLogging;
-exit(1);
-
-
     try
     {
         if ( bIsClient )

@@ -26,8 +26,13 @@
 
 
 /* Implementation *************************************************************/
-CServerLogging::CServerLogging()
+CServerLogging::CServerLogging()  :
+    bDoLogging ( false ), File ( DEFAULT_LOG_FILE_NAME )
 {
+
+
+#if 0
+
     int i;
 
     // constants defining the plot properties
@@ -90,9 +95,10 @@ CServerLogging::CServerLogging()
             iCurX, PlotGridFrame.bottom() );
     }
 
-    // grid (ticks) for y-axis
+    // grid (ticks) for y-axis, draw iNumTicksY - 2 grid lines and
+    // iNumTicksY - 1 text labels (the lowest grid line is the grid frame)
     const int iYSpace = PlotGridFrame.height() / ( iNumTicksY - 1 );
-    for ( i = 0; i < ( iNumTicksY - 2 ); i++ )
+    for ( i = 0; i < ( iNumTicksY - 1 ); i++ )
     {
         const int iCurY = PlotGridFrame.y() + iYSpace * ( i + 1 );
 
@@ -102,14 +108,17 @@ CServerLogging::CServerLogging()
         PlotPainter.drawText ( QPoint (
             PlotGridFrame.x() + iTextOffsetToGrid,
             iCurY - iTextOffsetToGrid ),
-            QString().setNum (
+            QString ( "%1:00" ).arg (
             ( iYAxisEnd - iYAxisStart ) / ( iNumTicksY - 1 ) *
             ( ( iNumTicksY - 2 ) - i ) ) );
 
-        // grid
-        PlotPainter.setPen ( PlotGridColor );
-        PlotPainter.drawLine ( PlotGridFrame.x(), iCurY,
-            PlotGridFrame.right(), iCurY );
+        // grid (do not overwrite frame)
+        if ( i < ( iNumTicksY - 2 ) )
+        {
+            PlotPainter.setPen ( PlotGridColor );
+            PlotPainter.drawLine ( PlotGridFrame.x(), iCurY,
+                PlotGridFrame.right(), iCurY );
+        }
     }
 
 
@@ -117,4 +126,72 @@ CServerLogging::CServerLogging()
  // save plot as a file
  PlotPixmap.save ( "test.jpg", "JPG", 90 );
 
+#endif
+}
+
+CServerLogging::~CServerLogging()
+{
+    // close logging file of open
+    if ( File.isOpen() )
+    {
+        File.close();
+    }
+}
+
+void CServerLogging::Start ( const QString& strLoggingFileName )
+{
+    // open file
+    File.setFileName ( strLoggingFileName );
+    if ( File.open ( QIODevice::Append | QIODevice::Text ) )
+    {
+        bDoLogging = true;
+    }
+}
+
+void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
+{
+    // logging of new connected channel
+    const QString strLogStr = CurTimeDatetoLogString() + ", " +
+        ClientInetAddr.toString() + ", connected";
+
+#ifndef _WIN32
+    QTextStream tsConsoloeStream ( stdout );
+    tsConsoloeStream << strLogStr << endl; // on console
+#endif
+    *this << strLogStr; // in log file
+}
+
+void CServerLogging::AddServerStopped()
+{
+    const QString strLogStr = CurTimeDatetoLogString() + ",, server stopped "
+        "-------------------------------------";
+
+#ifndef _WIN32
+    QTextStream tsConsoloeStream ( stdout );
+    tsConsoloeStream << strLogStr << endl; // on console
+#endif
+    *this << strLogStr; // in log file
+}
+
+void CServerLogging::operator<< ( const QString& sNewStr )
+{
+    if ( bDoLogging )
+    {
+        // append new line in logging file
+        QTextStream out ( &File );
+        out << sNewStr << endl;
+        File.flush();
+    }
+}
+
+QString CServerLogging::CurTimeDatetoLogString()
+{
+    // time and date to string conversion
+    const QDateTime curDateTime = QDateTime::currentDateTime();
+
+    // format date and time output according to "3.9.2006, 11:38:08"
+    return QString().setNum ( curDateTime.date().day() ) + "." +
+        QString().setNum ( curDateTime.date().month() ) + "." +
+        QString().setNum ( curDateTime.date().year() ) + ", " +
+        curDateTime.time().toString();
 }

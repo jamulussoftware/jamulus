@@ -26,11 +26,22 @@
 
 
 /* Implementation *************************************************************/
-CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
-                                   Qt::WindowFlags f ) :
+CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP,
+                                  const bool bNewConnectOnStartup,
+                                  QWidget* parent, Qt::WindowFlags f ) :
     pClient ( pNCliP ), QDialog ( parent, f ),
-    ClientSettingsDlg ( pNCliP, parent, Qt::WindowMinMaxButtonsHint ),
-    ChatDlg ( parent, Qt::WindowMinMaxButtonsHint )
+    ClientSettingsDlg ( pNCliP, parent
+#ifdef _WIN32
+                        // this somehow only works reliable on Windows
+                        , Qt::WindowMinMaxButtonsHint
+#endif
+                      ),
+    ChatDlg ( parent
+#ifdef _WIN32
+              // this somehow only works reliable on Windows
+              , Qt::WindowMinMaxButtonsHint
+#endif
+            )
 {
     setupUi ( this );
 
@@ -140,6 +151,16 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP, QWidget* parent,
     else
     {
         RadioButtonRevSelR->setChecked ( true );
+    }
+
+
+    // connect on startup ---
+    if ( bNewConnectOnStartup )
+    {
+        // since the software starts up right now, the previous state was
+        // "not connected" so that a call to "OnConnectDisconBut()" will
+        // start the connection
+        OnConnectDisconBut();
     }
 
 

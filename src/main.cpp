@@ -52,6 +52,7 @@ int main ( int argc, char** argv )
     // check if server or client application shall be started
     bool        bIsClient             = true;
     bool        bUseGUI               = true;
+    bool        bConnectOnStartup     = false;
     int         iUploadRateLimitKbps  = DEF_MAX_UPLOAD_RATE_KBPS;
     quint16     iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
     std::string strIniFileName        = "";
@@ -72,6 +73,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
+
         // use GUI flag --------------------------------------------------------
         if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) )
         {
@@ -80,6 +82,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
+
         // use logging ---------------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
         {
@@ -87,6 +90,7 @@ int main ( int argc, char** argv )
             cout << "logging file name: " << strLoggingFileName << std::endl;
             continue;
         }
+
 
         // force low upload data rate flag -------------------------------------
         if ( GetNumericArgument ( argc, argv, i, "-u", "--maxuploadrate",
@@ -98,6 +102,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
+
         // port number ---------------------------------------------------------
         if ( GetNumericArgument ( argc, argv, i, "-p", "--port",
                                   0, 65535, rDbleArgument ) )
@@ -106,6 +111,7 @@ int main ( int argc, char** argv )
             cout << "selected port number: " << iPortNumber << std::endl;
             continue;
         }
+
 
         // HTML status file ----------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
@@ -122,6 +128,7 @@ int main ( int argc, char** argv )
             continue;
         }
 
+
         // initialization file -------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
         {
@@ -129,6 +136,16 @@ int main ( int argc, char** argv )
             cout << "initialization file name: " << strIniFileName << std::endl;
             continue;
         }
+
+
+        // connect on startup --------------------------------------------------
+        if ( GetFlagArgument ( argc, argv, i, "-c", "--connect" ) )
+        {
+            bConnectOnStartup = true;
+            cout << "connect on startup enabled" << std::endl;
+            continue;
+        }
+
 
         // help (usage) flag ---------------------------------------------------
         if ( ( !strcmp ( argv[i], "--help" ) ) ||
@@ -182,7 +199,13 @@ int main ( int argc, char** argv )
 
             // GUI object
             CLlconClientDlg ClientDlg (
-                &Client, 0, Qt::WindowMinMaxButtonsHint );
+                &Client, bConnectOnStartup,
+                0
+#ifdef _WIN32
+                // this somehow only works reliable on Windows
+                , Qt::WindowMinMaxButtonsHint
+#endif
+                );
 
             // set main window
             pMainWindow = &ClientDlg;
@@ -269,6 +292,7 @@ std::string UsageArguments ( char **argv )
         "  -p, --port                 local port number (only avaiable for server)\n"
         "  -m, --htmlstatus           enable HTML status file, set file name (only avaiable for server)\n"
         "  -u, --maxuploadrate        maximum upload rate (only avaiable for server)\n"
+        "  -c, --connect              connect to last server on startup (only available for client)\n"
         "  -h, -?, --help             this help text\n"
         "Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }

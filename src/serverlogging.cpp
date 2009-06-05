@@ -31,74 +31,52 @@ CHistoryGraph::CHistoryGraph() :
     iYAxisEnd ( 24 ),
     iNumTicksX ( 9 ),
     iNumTicksY ( 5 ),
-    iPlotWidth ( 500 ),
-    iPlotHeight ( 500 ),
     iGridFrameOffset ( 10 ),
     iTextOffsetToGrid ( 3 ),
     iYAxisTextHeight ( 20 ),
     AxisFont ( "Arial", 10 ),
+    iMarkerSize ( 9 ),
     PlotBackgroundColor ( Qt::white ), // white background
     PlotFrameColor ( Qt::black ), // black frame
     PlotGridColor ( Qt::gray ), // gray grid
     PlotTextColor ( Qt::black ), // black text
     PlotMarkerNewColor ( Qt::blue ), // blue marker for new connection
-    PlotMarkerStopColor ( Qt::red ) // red marker server stop
+    PlotMarkerStopColor ( Qt::red ), // red marker server stop
+    PlotCanvasRect ( 0, 0, 500, 500 ),
+    PlotPixmap ( 1, 1 )
 {
-}
-
-
-CServerLogging::CServerLogging() :
-    bDoLogging ( false ), File ( DEFAULT_LOG_FILE_NAME )
-{
-
-
-#if 0
-
-    int i;
-
-    // constants defining the plot properties
-    const int iYAxisStart       = 0;
-    const int iYAxisEnd         = 24;
-    const int iNumTicksX        = 9;
-    const int iNumTicksY        = 5;
-    const int iPlotWidth        = 500;
-    const int iPlotHeight       = 500;
-    const int iGridFrameOffset  = 10;
-    const int iTextOffsetToGrid = 3;
-    const int iYAxisTextHeight  = 20;
-    const QFont AxisFont ( "Arial", 10 );
-    const QColor PlotBackgroundColor ( Qt::white ); // white background
-    const QColor PlotFrameColor ( Qt::black ); // black frame
-    const QColor PlotGridColor ( Qt::gray ); // gray grid
-    const QColor PlotTextColor ( Qt::black ); // black text
-    const QColor PlotMarkerNewColor ( Qt::blue ); // blue marker for new connection
-    const QColor PlotMarkerStopColor ( Qt::red ); // red marker server stop
-
-    // get current date (this is the right edge of the x-axis)
-    const QDate curDate = QDate::currentDate();
-
-    // create base pixmap for plot
-    QRect PlotCanvasRect ( QPoint ( 0, 0 ), QPoint ( iPlotWidth, iPlotHeight ) );
-    QPixmap PlotPixmap ( PlotCanvasRect.size() );
-    PlotPixmap.fill ( PlotBackgroundColor ); // fill background
-
-    // create painter for plot
-    QPainter PlotPainter ( &PlotPixmap );
-
-
-    // create actual plot region (grid frame) ----------------------------------
-    QRect PlotGridFrame (
-        PlotCanvasRect.x() + iGridFrameOffset,
+    // generate plot grid frame rectangle
+    PlotGridFrame.setCoords ( PlotCanvasRect.x() + iGridFrameOffset,
         PlotCanvasRect.y() + iGridFrameOffset,
         PlotCanvasRect.width() - 2 * iGridFrameOffset,
         PlotCanvasRect.height() - 2 * iGridFrameOffset - iYAxisTextHeight );
 
+    // scale pixmap to correct size
+    PlotPixmap = PlotPixmap.scaled (
+        PlotCanvasRect.width(), PlotCanvasRect.height() ); 
+}
+
+void CHistoryGraph::DrawFrame()
+{
+    int i;
+
+    // get current date (this is the right edge of the x-axis)
+    curDate = QDate::currentDate();
+
+    // clear base pixmap for new plotting
+    PlotPixmap.fill ( PlotBackgroundColor ); // fill background
+
+    // create painter
+    QPainter PlotPainter ( &PlotPixmap );
+
+
+    // create actual plot region (grid frame) ----------------------------------
     PlotPainter.setPen ( PlotFrameColor );
     PlotPainter.drawRect ( PlotGridFrame );
 
     // grid (ticks) for x-axis
     const int iTextOffsetX = 20;
-    const int iXSpace = PlotGridFrame.width() / ( iNumTicksX + 1 );
+    iXSpace = PlotGridFrame.width() / ( iNumTicksX + 1 );
     for ( i = 0; i < iNumTicksX; i++ )
     {
         const int iCurX = PlotGridFrame.x() + iXSpace * ( i + 1 );
@@ -122,7 +100,7 @@ CServerLogging::CServerLogging() :
 
     // grid (ticks) for y-axis, draw iNumTicksY - 2 grid lines and
     // iNumTicksY - 1 text labels (the lowest grid line is the grid frame)
-    const int iYSpace = PlotGridFrame.height() / ( iNumTicksY - 1 );
+    iYSpace = PlotGridFrame.height() / ( iNumTicksY - 1 );
     for ( i = 0; i < ( iNumTicksY - 1 ); i++ )
     {
         const int iCurY = PlotGridFrame.y() + iYSpace * ( i + 1 );
@@ -145,38 +123,69 @@ CServerLogging::CServerLogging() :
                 PlotGridFrame.right(), iCurY );
         }
     }
-
-
-
-
-// TEST add some points in the graph
-const QDate testDate = QDate::currentDate().addDays ( -3 );
-const QTime testTime = QTime ( 18, 0, 0, 0 );
-const bool bIsServerStop = false;
-
-const int iXAxisOffs = curDate.daysTo ( testDate );
-const int iYAxisOffs = 24 - testTime.hour();
-
-const QPoint curPoint (
-    PlotGridFrame.x() + iXSpace * ( iNumTicksX + iXAxisOffs ),
-    PlotGridFrame.y() + static_cast<int> ( static_cast<double> ( PlotGridFrame.height() ) / ( iYAxisEnd - iYAxisStart ) * iYAxisOffs ) );
-
-// we use different markers for new connection and server stop items
-if ( bIsServerStop )
-{
-    PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerStopColor ), 9, Qt::SolidLine, Qt::RoundCap ) );
 }
-else
+
+void CHistoryGraph::AddMarker ( const QDateTime curDateTime,
+                                const bool bIsServerStop )
 {
-    PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerNewColor ), 9 ) );
+    // create painter for plot
+    QPainter PlotPainter ( &PlotPixmap );
+
+
+// TODO add range check for date
+
+
+    const int    iXAxisOffs = curDate.daysTo ( curDateTime.date() );
+    const double dYAxisOffs = 24 - curDateTime.time().hour() -
+        static_cast<double> ( curDateTime.time().minute() ) / 60;
+
+    const QPoint curPoint (
+        PlotGridFrame.x() + iXSpace * ( iNumTicksX + iXAxisOffs ),
+        PlotGridFrame.y() + static_cast<int> ( static_cast<double> (
+        PlotGridFrame.height() ) / ( iYAxisEnd - iYAxisStart ) * dYAxisOffs ) );
+
+    // we use different markers for new connection and server stop items
+    if ( bIsServerStop )
+    {
+        // filled circle marker
+        PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerStopColor ),
+            iMarkerSize, Qt::SolidLine, Qt::RoundCap ) );
+    }
+    else
+    {
+        // filled square marker
+        PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerNewColor ),
+            iMarkerSize ) );
+    }
+    PlotPainter.drawPoint ( curPoint );
 }
-PlotPainter.drawPoint ( curPoint );
+
+void CHistoryGraph::Save ( const QString sFileName )
+{
+    // save plot as a file
+    PlotPixmap.save ( sFileName, "JPG", 90 );
+}
 
 
+CServerLogging::CServerLogging() :
+    bDoLogging ( false ), File ( DEFAULT_LOG_FILE_NAME )
+{
 
 
- // save plot as a file
- PlotPixmap.save ( "test.jpg", "JPG", 90 );
+#if 0
+
+HistoryGraph.DrawFrame();
+
+// TEST
+HistoryGraph.AddMarker (
+    QDateTime ( QDate::currentDate().addDays ( -3 ),
+    QTime ( 17, 50, 0, 0 ) ), false );
+
+HistoryGraph.AddMarker (
+    QDateTime ( QDate::currentDate().addDays ( -3 ),
+    QTime ( 18, 0, 0, 0 ) ), true );
+
+HistoryGraph.Save ( "test.jpg" );
 
 #endif
 }

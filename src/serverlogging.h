@@ -39,24 +39,33 @@ class CHistoryGraph
 {
 public:
     CHistoryGraph();
+    void DrawFrame();
+    void AddMarker ( const QDateTime curDateTime,
+                     const bool bIsServerStop );
+    void Save ( const QString sFileName );
 
 protected:
-    int    iYAxisStart;
-    int    iYAxisEnd;
-    int    iNumTicksX;
-    int    iNumTicksY;
-    int    iPlotWidth;
-    int    iPlotHeight;
-    int    iGridFrameOffset;
-    int    iTextOffsetToGrid;
-    int    iYAxisTextHeight;
-    QFont  AxisFont;
-    QColor PlotBackgroundColor;
-    QColor PlotFrameColor;
-    QColor PlotGridColor;
-    QColor PlotTextColor;
-    QColor PlotMarkerNewColor;
-    QColor PlotMarkerStopColor;
+    int     iYAxisStart;
+    int     iYAxisEnd;
+    int     iNumTicksX;
+    int     iNumTicksY;
+    int     iGridFrameOffset;
+    int     iTextOffsetToGrid;
+    int     iYAxisTextHeight;
+    int     iMarkerSize;
+    int     iXSpace;
+    int     iYSpace;
+    QFont   AxisFont;
+    QColor  PlotBackgroundColor;
+    QColor  PlotFrameColor;
+    QColor  PlotGridColor;
+    QColor  PlotTextColor;
+    QColor  PlotMarkerNewColor;
+    QColor  PlotMarkerStopColor;
+    QDate   curDate;
+    QPixmap PlotPixmap;
+    QRect   PlotCanvasRect;
+    QRect   PlotGridFrame;
 };
 
 
@@ -74,8 +83,9 @@ protected:
     void operator<< ( const QString& sNewStr );
     QString CurTimeDatetoLogString();
 
-    bool  bDoLogging;
-    QFile File;
+    CHistoryGraph HistoryGraph;
+    bool          bDoLogging;
+    QFile         File;
 };
 
 #endif /* !defined ( SERVERLOGGING_HOIHOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ ) */

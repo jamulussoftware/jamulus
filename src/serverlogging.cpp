@@ -50,7 +50,10 @@ CServerLogging::CServerLogging()  :
     const QColor PlotFrameColor ( Qt::black ); // black frame
     const QColor PlotGridColor ( Qt::gray ); // gray grid
     const QColor PlotTextColor ( Qt::black ); // black text
+    const QColor PlotMarkerColor ( Qt::red ); // red marker
 
+    // get current date (this is the right edge of the x-axis)
+    const QDate curDate = QDate::currentDate();
 
     // create base pixmap for plot
     QRect PlotCanvasRect ( QPoint ( 0, 0 ), QPoint ( iPlotWidth, iPlotHeight ) );
@@ -86,7 +89,7 @@ CServerLogging::CServerLogging()  :
             PlotPainter.drawText (
                 QPoint ( iCurX - iTextOffsetX,
                 PlotGridFrame.bottom() + iYAxisTextHeight + iTextOffsetToGrid ),
-                QDate::currentDate().addDays ( i - iNumTicksX + 1 ).toString ( "dd.MM." ) );
+                curDate.addDays ( i - iNumTicksX + 1 ).toString ( "dd.MM." ) );
         }
 
         // grid
@@ -120,6 +123,24 @@ CServerLogging::CServerLogging()  :
                 PlotGridFrame.right(), iCurY );
         }
     }
+
+
+
+
+// TEST add some points in the graph
+const QDate testDate = QDate::currentDate().addDays ( -3 );
+const QTime testTime = QTime ( 18, 0, 0, 0 );
+
+const int iXAxisOffs = curDate.daysTo ( testDate );
+const int iYAxisOffs = 24 - testTime.hour();
+
+const QPoint curPoint (
+    PlotGridFrame.x() + PlotGridFrame.width() / iNumTicksX * ( iNumTicksX + iXAxisOffs ),
+    PlotGridFrame.y() + PlotGridFrame.height() / ( iYAxisEnd - iYAxisStart ) * iYAxisOffs );
+
+PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerColor ), 9 ) );
+PlotPainter.drawPoint ( curPoint );
+
 
 
 

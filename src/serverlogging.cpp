@@ -26,7 +26,7 @@
 
 
 /* Implementation *************************************************************/
-CServerLogging::CServerLogging()  :
+CServerLogging::CServerLogging() :
     bDoLogging ( false ), File ( DEFAULT_LOG_FILE_NAME )
 {
 
@@ -50,7 +50,8 @@ CServerLogging::CServerLogging()  :
     const QColor PlotFrameColor ( Qt::black ); // black frame
     const QColor PlotGridColor ( Qt::gray ); // gray grid
     const QColor PlotTextColor ( Qt::black ); // black text
-    const QColor PlotMarkerColor ( Qt::red ); // red marker
+    const QColor PlotMarkerNewColor ( Qt::blue ); // blue marker for new connection
+    const QColor PlotMarkerStopColor ( Qt::red ); // red marker server stop
 
     // get current date (this is the right edge of the x-axis)
     const QDate curDate = QDate::currentDate();
@@ -130,15 +131,24 @@ CServerLogging::CServerLogging()  :
 // TEST add some points in the graph
 const QDate testDate = QDate::currentDate().addDays ( -3 );
 const QTime testTime = QTime ( 18, 0, 0, 0 );
+const bool bIsServerStop = false;
 
 const int iXAxisOffs = curDate.daysTo ( testDate );
 const int iYAxisOffs = 24 - testTime.hour();
 
 const QPoint curPoint (
-    PlotGridFrame.x() + PlotGridFrame.width() / iNumTicksX * ( iNumTicksX + iXAxisOffs ),
-    PlotGridFrame.y() + PlotGridFrame.height() / ( iYAxisEnd - iYAxisStart ) * iYAxisOffs );
+    PlotGridFrame.x() + iXSpace * ( iNumTicksX + iXAxisOffs ),
+    PlotGridFrame.y() + static_cast<int> ( static_cast<double> ( PlotGridFrame.height() ) / ( iYAxisEnd - iYAxisStart ) * iYAxisOffs ) );
 
-PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerColor ), 9 ) );
+// we use different markers for new connection and server stop items
+if ( bIsServerStop )
+{
+    PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerStopColor ), 9, Qt::SolidLine, Qt::RoundCap ) );
+}
+else
+{
+    PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerNewColor ), 9 ) );
+}
 PlotPainter.drawPoint ( curPoint );
 
 

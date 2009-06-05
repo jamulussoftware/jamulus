@@ -35,6 +35,31 @@
 
 
 /* Classes ********************************************************************/
+class CHistoryGraph
+{
+public:
+    CHistoryGraph();
+
+protected:
+    int    iYAxisStart;
+    int    iYAxisEnd;
+    int    iNumTicksX;
+    int    iNumTicksY;
+    int    iPlotWidth;
+    int    iPlotHeight;
+    int    iGridFrameOffset;
+    int    iTextOffsetToGrid;
+    int    iYAxisTextHeight;
+    QFont  AxisFont;
+    QColor PlotBackgroundColor;
+    QColor PlotFrameColor;
+    QColor PlotGridColor;
+    QColor PlotTextColor;
+    QColor PlotMarkerNewColor;
+    QColor PlotMarkerStopColor;
+};
+
+
 class CServerLogging
 {
 public:

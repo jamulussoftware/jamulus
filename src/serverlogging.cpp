@@ -26,6 +26,27 @@
 
 
 /* Implementation *************************************************************/
+CHistoryGraph::CHistoryGraph() :
+    iYAxisStart ( 0 ),
+    iYAxisEnd ( 24 ),
+    iNumTicksX ( 9 ),
+    iNumTicksY ( 5 ),
+    iPlotWidth ( 500 ),
+    iPlotHeight ( 500 ),
+    iGridFrameOffset ( 10 ),
+    iTextOffsetToGrid ( 3 ),
+    iYAxisTextHeight ( 20 ),
+    AxisFont ( "Arial", 10 ),
+    PlotBackgroundColor ( Qt::white ), // white background
+    PlotFrameColor ( Qt::black ), // black frame
+    PlotGridColor ( Qt::gray ), // gray grid
+    PlotTextColor ( Qt::black ), // black text
+    PlotMarkerNewColor ( Qt::blue ), // blue marker for new connection
+    PlotMarkerStopColor ( Qt::red ) // red marker server stop
+{
+}
+
+
 CServerLogging::CServerLogging() :
     bDoLogging ( false ), File ( DEFAULT_LOG_FILE_NAME )
 {

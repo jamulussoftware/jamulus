@@ -45,6 +45,7 @@ public:
     CServer ( const QString& strLoggingFileName,
               const quint16 iPortNumber,
               const QString& strHTMLStatusFileName,
+              const QString& strHistoryFileName,
               const QString& strServerNameForHTMLStatusFile,
               const int iNewUploadRateLimitKbps );
     virtual ~CServer() {}

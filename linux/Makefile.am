@@ -96,6 +96,7 @@ BUILT_SOURCES=moc/moc_server.cpp \
 	moc/moc_audiomixerboard.cpp \
 	moc/moc_util.cpp \
 	moc/moc_testbench.cpp \
+	moc/moc_serverlogging.cpp \
 	moc/moc_llconclientdlg.cpp \
 	moc/llconclientdlgbase.h \
 	moc/moc_clientsettingsdlg.cpp \
@@ -147,6 +148,9 @@ moc/moc_channel.cpp: ../src/channel.h
 
 moc/moc_testbench.cpp: ../src/testbench.h
 	$(QT_MOC) ../src/testbench.h -o moc/moc_testbench.cpp
+
+moc/moc_serverlogging.cpp: ../src/serverlogging.h
+	$(QT_MOC) ../src/serverlogging.h -o moc/moc_serverlogging.cpp
 
 
 moc/moc_llconclientdlg.cpp: ../src/llconclientdlg.h

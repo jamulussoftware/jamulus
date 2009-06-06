@@ -29,6 +29,7 @@
 CServer::CServer ( const QString& strLoggingFileName,
                    const quint16 iPortNumber,
                    const QString& strHTMLStatusFileName,
+                   const QString& strHistoryFileName,
                    const QString& strServerNameForHTMLStatusFile,
                    const int iNewUploadRateLimitKbps ) :
     Socket ( &ChannelSet, this, iPortNumber ),
@@ -58,6 +59,12 @@ CServer::CServer ( const QString& strLoggingFileName,
     if ( !strLoggingFileName.isEmpty() )
     {
         Logging.Start ( strLoggingFileName );
+    }
+
+    // enable history graph (if requested)
+    if ( !strHistoryFileName.isEmpty() )
+    {
+        Logging.EnableHistory ( strHistoryFileName );
     }
 
     // HTML status file writing

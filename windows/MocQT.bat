@@ -42,6 +42,7 @@ rem .h --------------
 %qtdir%\bin\moc.exe ..\src\channel.h -o moc\moc_channel.cpp
 %qtdir%\bin\moc.exe ..\src\soundbase.h -o moc\moc_soundbase.cpp
 %qtdir%\bin\moc.exe ..\src\testbench.h -o moc\moc_testbench.cpp
+%qtdir%\bin\moc.exe ..\src\serverlogging.h -o moc\moc_serverlogging.cpp
 
 
 rem .ui -------------

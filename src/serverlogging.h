@@ -31,6 +31,7 @@
 #include <qhostaddress.h>
 #include <qfile.h>
 #include <qstring.h>
+#include <qtimer.h>
 #include "global.h"
 #include "util.h"
 
@@ -41,12 +42,15 @@
 
 
 /* Classes ********************************************************************/
-class CHistoryGraph
+class CHistoryGraph : public QObject
 {
+    Q_OBJECT
+
 public:
-    CHistoryGraph ( const QString& sNewFileName );
-    void Update();
+    CHistoryGraph();
+    void Start ( const QString& sNewFileName );
     void Add ( const QDateTime& newDateTime, const bool newIsServerStop );
+    void Update();
 
 protected:
     void DrawFrame ( const int iNewNumTicksX );
@@ -54,6 +58,7 @@ protected:
                      const bool bIsServerStop );
     void Save ( const QString sFileName );
 
+    bool    bDoHistory;
     int     iYAxisStart;
     int     iYAxisEnd;
     int     iNumTicksX;
@@ -76,19 +81,25 @@ protected:
     QRect   PlotCanvasRect;
     QRect   PlotGridFrame;
     QString sFileName;
+    QTimer  TimerDailyUpdate;
 
     CFIFO<QDateTime> vDateTimeFifo;
     CFIFO<int>       vItemTypeFifo;
+
+public slots:
+    void OnTimerDailyUpdate() { Update(); }
 };
 
 
 class CServerLogging
 {
 public:
-    CServerLogging();
+    CServerLogging() : bDoLogging ( false ),
+        File ( DEFAULT_LOG_FILE_NAME ) {}
     virtual ~CServerLogging();
 
     void Start ( const QString& strLoggingFileName );
+    void EnableHistory ( const QString& strHistoryFileName );
     void AddNewConnection ( const QHostAddress& ClientInetAddr );
     void AddServerStopped();
 

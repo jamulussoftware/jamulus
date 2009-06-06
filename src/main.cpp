@@ -32,12 +32,6 @@
 #include "testbench.h"
 
 
-// TEST
-#include "serverlogging.h"
-
-
-
-
 // Implementation **************************************************************
 // these pointers are only used for the post-event routine
 QApplication* pApp   = NULL;
@@ -59,6 +53,7 @@ int main ( int argc, char** argv )
     std::string strHTMLStatusFileName = "";
     std::string strServerName         = "";
     std::string strLoggingFileName    = "";
+    std::string strHistoryFileName    = "";
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -125,6 +120,15 @@ int main ( int argc, char** argv )
         {
             strServerName = strArgument;
             cout << "server name for HTML status file: " << strServerName << std::endl;
+            continue;
+        }
+
+
+        // HTML status file ----------------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "-y", "--history", strArgument ) )
+        {
+            strHistoryFileName = strArgument;
+            cout << "history file name: " << strHistoryFileName << std::endl;
             continue;
         }
 
@@ -231,6 +235,7 @@ int main ( int argc, char** argv )
             CServer Server ( strLoggingFileName.c_str(),
                              iPortNumber,
                              strHTMLStatusFileName.c_str(),
+                             strHistoryFileName.c_str(),
                              strServerName.c_str(),
                              iUploadRateLimitKbps );
 
@@ -288,11 +293,16 @@ std::string UsageArguments ( char **argv )
         "  -s, --server               start server\n"
         "  -n, --nogui                disable GUI (only avaiable for server)\n"
         "  -l, --log                  enable logging, set file name\n"
-        "  -i, --inifile              initialization file name (only available for client)\n"
+        "  -i, --inifile              initialization file name (only available for\n"
+        "                             client)\n"
         "  -p, --port                 local port number (only avaiable for server)\n"
-        "  -m, --htmlstatus           enable HTML status file, set file name (only avaiable for server)\n"
+        "  -m, --htmlstatus           enable HTML status file, set file name (only\n"
+        "                             avaiable for server)\n"
+        "  -y, --history              enable connection history and set file\n"
+        "                             name (only available for server)\n"
         "  -u, --maxuploadrate        maximum upload rate (only avaiable for server)\n"
-        "  -c, --connect              connect to last server on startup (only available for client)\n"
+        "  -c, --connect              connect to last server on startup (only\n"
+        "                             available for client)\n"
         "  -h, -?, --help             this help text\n"
         "Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }

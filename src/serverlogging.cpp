@@ -26,8 +26,9 @@
 
 
 /* Implementation *************************************************************/
-CHistoryGraph::CHistoryGraph ( const QString& sNewFileName ) :
-    sFileName ( sNewFileName ),
+CHistoryGraph::CHistoryGraph() :
+    sFileName ( "" ),
+    bDoHistory ( false ),
     vDateTimeFifo ( NUM_ITEMS_HISTORY ),
     vItemTypeFifo ( NUM_ITEMS_HISTORY ),
     PlotCanvasRect ( 0, 0, 600, 450 ), // defines total size of graph
@@ -56,7 +57,29 @@ CHistoryGraph::CHistoryGraph ( const QString& sNewFileName ) :
 
     // scale pixmap to correct size
     PlotPixmap = PlotPixmap.scaled (
-        PlotCanvasRect.width(), PlotCanvasRect.height() ); 
+        PlotCanvasRect.width(), PlotCanvasRect.height() );
+
+    // connections
+    QObject::connect ( &TimerDailyUpdate, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerDailyUpdate() ) );
+}
+
+void CHistoryGraph::Start ( const QString& sNewFileName )
+{
+    if ( !sNewFileName.isEmpty() )
+    {
+        // save file name
+        sFileName = sNewFileName;
+
+        // set enable flag
+        bDoHistory = true;
+
+        // enable timer (update once a day)
+        TimerDailyUpdate.start ( 3600000 * 24 );
+
+        // initial update (empty graph)
+        Update();
+    }
 }
 
 void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
@@ -192,68 +215,53 @@ void CHistoryGraph::Save ( const QString sFileName )
 void CHistoryGraph::Add ( const QDateTime& newDateTime,
                           const bool newIsServerStop )
 {
-    // add new element in FIFOs
-    vDateTimeFifo.Add ( newDateTime );
-    vItemTypeFifo.Add ( static_cast<int> ( newIsServerStop ) );
+    if ( bDoHistory )
+    {
+        // add new element in FIFOs
+        vDateTimeFifo.Add ( newDateTime );
+        vItemTypeFifo.Add ( static_cast<int> ( newIsServerStop ) );
+    }
 }
 
 void CHistoryGraph::Update()
 {
-    int i;
-
-    // store current date for reference
-    curDate = QDate::currentDate();
-
-    // get oldest date in history
-    QDate oldestDate = curDate.addDays ( 1 ); // one day in the future
-    const int iNumItemsForHistory = vDateTimeFifo.Size();
-    for ( i = 0; i < iNumItemsForHistory; i++ )
+    if ( bDoHistory )
     {
-        // only use valid dates
-        if ( vDateTimeFifo[i].date().isValid() )
+        int i;
+
+        // store current date for reference
+        curDate = QDate::currentDate();
+
+        // get oldest date in history
+        QDate oldestDate = curDate.addDays ( 1 ); // one day in the future
+        const int iNumItemsForHistory = vDateTimeFifo.Size();
+        for ( i = 0; i < iNumItemsForHistory; i++ )
         {
-            if ( vDateTimeFifo[i].date() < oldestDate )
+            // only use valid dates
+            if ( vDateTimeFifo[i].date().isValid() )
             {
-                oldestDate = vDateTimeFifo[i].date();
+                if ( vDateTimeFifo[i].date() < oldestDate )
+                {
+                    oldestDate = vDateTimeFifo[i].date();
+                }
             }
         }
+        const int iNumDaysInHistory = -curDate.daysTo ( oldestDate ) + 1;
+
+        // draw frame of the graph
+        DrawFrame ( iNumDaysInHistory );
+
+        // add markers
+        for ( i = 0; i < iNumItemsForHistory; i++ )
+        {
+            AddMarker ( vDateTimeFifo[i], static_cast<bool> ( vItemTypeFifo[i] ) );
+        }
+
+        // save graph as picture in file
+        Save ( sFileName );
     }
-    const int iNumDaysInHistory = -curDate.daysTo ( oldestDate ) + 1;
-
-    // draw frame of the graph
-    DrawFrame ( iNumDaysInHistory );
-
-    // add markers
-    for ( i = 0; i < iNumItemsForHistory; i++ )
-    {
-        AddMarker ( vDateTimeFifo[i], static_cast<bool> ( vItemTypeFifo[i] ) );
-    }
-
-    // save graph as picture in file
-    Save ( sFileName );
 }
 
-
-CServerLogging::CServerLogging() :
-    bDoLogging ( false ),
-    File ( DEFAULT_LOG_FILE_NAME ),
-    HistoryGraph ( "test.jpg" )
-{
-
-
-#if 1
-
-// TEST add some elements
-HistoryGraph.Add ( QDateTime ( QDate::currentDate().addDays ( -1 ),
-    QTime ( 18, 0, 0, 0 ) ), false );
-
-HistoryGraph.Add ( QDateTime ( QDate::currentDate().addDays ( -0 ),
-    QTime ( 17, 50, 0, 0 ) ), true );
-
-HistoryGraph.Update();
-
-#endif
-}
 
 CServerLogging::~CServerLogging()
 {
@@ -274,6 +282,11 @@ void CServerLogging::Start ( const QString& strLoggingFileName )
     }
 }
 
+void CServerLogging::EnableHistory ( const QString& strHistoryFileName )
+{
+    HistoryGraph.Start ( strHistoryFileName );
+}
+
 void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
 {
     // logging of new connected channel
@@ -285,6 +298,9 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
     tsConsoloeStream << strLogStr << endl; // on console
 #endif
     *this << strLogStr; // in log file
+
+    // add element to history
+    HistoryGraph.Add ( QDateTime::currentDateTime(), false );
 }
 
 void CServerLogging::AddServerStopped()
@@ -297,6 +313,10 @@ void CServerLogging::AddServerStopped()
     tsConsoloeStream << strLogStr << endl; // on console
 #endif
     *this << strLogStr; // in log file
+
+    // add element to history and update on server stop
+    HistoryGraph.Add ( QDateTime::currentDateTime(), true );
+    HistoryGraph.Update();
 }
 
 void CServerLogging::operator<< ( const QString& sNewStr )

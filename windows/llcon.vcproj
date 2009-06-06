@@ -815,6 +815,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\moc\moc_serverlogging.cpp"
+					>
+				</File>
+				<File
 					RelativePath="moc\moc_socket.cpp"
 					>
 					<FileConfiguration

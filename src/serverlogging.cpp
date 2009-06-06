@@ -27,10 +27,11 @@
 
 /* Implementation *************************************************************/
 CHistoryGraph::CHistoryGraph() :
+    PlotCanvasRect ( 0, 0, 600, 450 ), // defines total size of graph
     iYAxisStart ( 0 ),
     iYAxisEnd ( 24 ),
-    iNumTicksX ( 9 ),
     iNumTicksY ( 5 ),
+    iNumTicksX ( 0 ), // just initialization value, will be overwritten
     iGridFrameOffset ( 10 ),
     iTextOffsetToGrid ( 3 ),
     iYAxisTextHeight ( 20 ),
@@ -42,7 +43,6 @@ CHistoryGraph::CHistoryGraph() :
     PlotTextColor ( Qt::black ), // black text
     PlotMarkerNewColor ( Qt::blue ), // blue marker for new connection
     PlotMarkerStopColor ( Qt::red ), // red marker server stop
-    PlotCanvasRect ( 0, 0, 500, 500 ),
     PlotPixmap ( 1, 1 )
 {
     // generate plot grid frame rectangle
@@ -56,9 +56,13 @@ CHistoryGraph::CHistoryGraph() :
         PlotCanvasRect.width(), PlotCanvasRect.height() ); 
 }
 
-void CHistoryGraph::DrawFrame()
+void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
 {
     int i;
+
+    // store number of x-axis ticks (number of days we want to draw
+    // the history for
+    iNumTicksX = iNewNumTicksX;
 
     // get current date (this is the right edge of the x-axis)
     curDate = QDate::currentDate();
@@ -74,6 +78,12 @@ void CHistoryGraph::DrawFrame()
     PlotPainter.setPen ( PlotFrameColor );
     PlotPainter.drawRect ( PlotGridFrame );
 
+    // calculate step for x-axis ticks so that we get the desired number of
+    // ticks -> 5 ticks
+    // we want to have "floor ( iNumTicksX / 5 )" which is the same as
+    // "iNumTicksX / 5" since "iNumTicksX" is an integer variable
+    const int iXAxisTickStep = iNumTicksX / 5 + 1;
+
     // grid (ticks) for x-axis
     const int iTextOffsetX = 20;
     iXSpace = PlotGridFrame.width() / ( iNumTicksX + 1 );
@@ -81,8 +91,8 @@ void CHistoryGraph::DrawFrame()
     {
         const int iCurX = PlotGridFrame.x() + iXSpace * ( i + 1 );
 
-        // text (only every second tick)
-        if ( !( i % 2 ) )
+        // text (print only every "iXAxisTickStep" tick)
+        if ( !( i % iXAxisTickStep ) )
         {
             PlotPainter.setPen ( PlotTextColor );
             PlotPainter.setFont ( AxisFont );
@@ -128,21 +138,28 @@ void CHistoryGraph::DrawFrame()
 void CHistoryGraph::AddMarker ( const QDateTime curDateTime,
                                 const bool bIsServerStop )
 {
-    // create painter for plot
-    QPainter PlotPainter ( &PlotPixmap );
+    // calculate x-axis offset (difference of days compared to
+    // current date)
+    const int iXAxisOffs = curDate.daysTo ( curDateTime.date() );
 
+    // check range, if out of range, do not plot anything
+    if ( -iXAxisOffs > ( iNumTicksX - 1 ) )
+    {
+        return;
+    }
 
-// TODO add range check for date
-
-
-    const int    iXAxisOffs = curDate.daysTo ( curDateTime.date() );
+    // calculate y-axis offset (consider hours and minutes)
     const double dYAxisOffs = 24 - curDateTime.time().hour() -
         static_cast<double> ( curDateTime.time().minute() ) / 60;
 
+    // calculate the actual point in the graph (in pixels)
     const QPoint curPoint (
         PlotGridFrame.x() + iXSpace * ( iNumTicksX + iXAxisOffs ),
         PlotGridFrame.y() + static_cast<int> ( static_cast<double> (
         PlotGridFrame.height() ) / ( iYAxisEnd - iYAxisStart ) * dYAxisOffs ) );
+
+    // create painter for plot
+    QPainter PlotPainter ( &PlotPixmap );
 
     // we use different markers for new connection and server stop items
     if ( bIsServerStop )
@@ -172,9 +189,9 @@ CServerLogging::CServerLogging() :
 {
 
 
-#if 0
+#if 1
 
-HistoryGraph.DrawFrame();
+HistoryGraph.DrawFrame ( 4 );
 
 // TEST
 HistoryGraph.AddMarker (

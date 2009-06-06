@@ -39,7 +39,7 @@ class CHistoryGraph
 {
 public:
     CHistoryGraph();
-    void DrawFrame();
+    void DrawFrame ( const int iNewNumTicksX );
     void AddMarker ( const QDateTime curDateTime,
                      const bool bIsServerStop );
     void Save ( const QString sFileName );

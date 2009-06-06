@@ -32,19 +32,28 @@
 #include <qfile.h>
 #include <qstring.h>
 #include "global.h"
+#include "util.h"
+
+
+/* Definitions ****************************************************************/
+// number of history items to store
+#define NUM_ITEMS_HISTORY           200
 
 
 /* Classes ********************************************************************/
 class CHistoryGraph
 {
 public:
-    CHistoryGraph();
+    CHistoryGraph ( const QString& sNewFileName );
+    void Update();
+    void Add ( const QDateTime& newDateTime, const bool newIsServerStop );
+
+protected:
     void DrawFrame ( const int iNewNumTicksX );
-    void AddMarker ( const QDateTime curDateTime,
+    void AddMarker ( const QDateTime& curDateTime,
                      const bool bIsServerStop );
     void Save ( const QString sFileName );
 
-protected:
     int     iYAxisStart;
     int     iYAxisEnd;
     int     iNumTicksX;
@@ -66,6 +75,10 @@ protected:
     QPixmap PlotPixmap;
     QRect   PlotCanvasRect;
     QRect   PlotGridFrame;
+    QString sFileName;
+
+    CFIFO<QDateTime> vDateTimeFifo;
+    CFIFO<int>       vItemTypeFifo;
 };
 
 

@@ -26,7 +26,10 @@
 
 
 /* Implementation *************************************************************/
-CHistoryGraph::CHistoryGraph() :
+CHistoryGraph::CHistoryGraph ( const QString& sNewFileName ) :
+    sFileName ( sNewFileName ),
+    vDateTimeFifo ( NUM_ITEMS_HISTORY ),
+    vItemTypeFifo ( NUM_ITEMS_HISTORY ),
     PlotCanvasRect ( 0, 0, 600, 450 ), // defines total size of graph
     iYAxisStart ( 0 ),
     iYAxisEnd ( 24 ),
@@ -64,9 +67,6 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
     // the history for
     iNumTicksX = iNewNumTicksX;
 
-    // get current date (this is the right edge of the x-axis)
-    curDate = QDate::currentDate();
-
     // clear base pixmap for new plotting
     PlotPixmap.fill ( PlotBackgroundColor ); // fill background
 
@@ -80,6 +80,9 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
 
     // calculate step for x-axis ticks so that we get the desired number of
     // ticks -> 5 ticks
+
+// TODO the following equation does not work as expected but results are exeptable
+
     // we want to have "floor ( iNumTicksX / 5 )" which is the same as
     // "iNumTicksX / 5" since "iNumTicksX" is an integer variable
     const int iXAxisTickStep = iNumTicksX / 5 + 1;
@@ -89,6 +92,7 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
     iXSpace = PlotGridFrame.width() / ( iNumTicksX + 1 );
     for ( i = 0; i < iNumTicksX; i++ )
     {
+        int       iBottomExtraTickLen = 0;
         const int iCurX = PlotGridFrame.x() + iXSpace * ( i + 1 );
 
         // text (print only every "iXAxisTickStep" tick)
@@ -100,12 +104,14 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
                 QPoint ( iCurX - iTextOffsetX,
                 PlotGridFrame.bottom() + iYAxisTextHeight + iTextOffsetToGrid ),
                 curDate.addDays ( i - iNumTicksX + 1 ).toString ( "dd.MM." ) );
+
+            iBottomExtraTickLen = 5;
         }
 
         // grid
         PlotPainter.setPen ( PlotGridColor );
         PlotPainter.drawLine ( iCurX, PlotGridFrame.y(),
-            iCurX, PlotGridFrame.bottom() );
+            iCurX, PlotGridFrame.bottom() + iBottomExtraTickLen );
     }
 
     // grid (ticks) for y-axis, draw iNumTicksY - 2 grid lines and
@@ -135,7 +141,7 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
     }
 }
 
-void CHistoryGraph::AddMarker ( const QDateTime curDateTime,
+void CHistoryGraph::AddMarker ( const QDateTime& curDateTime,
                                 const bool bIsServerStop )
 {
     // calculate x-axis offset (difference of days compared to
@@ -183,26 +189,68 @@ void CHistoryGraph::Save ( const QString sFileName )
     PlotPixmap.save ( sFileName, "JPG", 90 );
 }
 
+void CHistoryGraph::Add ( const QDateTime& newDateTime,
+                          const bool newIsServerStop )
+{
+    // add new element in FIFOs
+    vDateTimeFifo.Add ( newDateTime );
+    vItemTypeFifo.Add ( static_cast<int> ( newIsServerStop ) );
+}
+
+void CHistoryGraph::Update()
+{
+    int i;
+
+    // store current date for reference
+    curDate = QDate::currentDate();
+
+    // get oldest date in history
+    QDate oldestDate = curDate.addDays ( 1 ); // one day in the future
+    const int iNumItemsForHistory = vDateTimeFifo.Size();
+    for ( i = 0; i < iNumItemsForHistory; i++ )
+    {
+        // only use valid dates
+        if ( vDateTimeFifo[i].date().isValid() )
+        {
+            if ( vDateTimeFifo[i].date() < oldestDate )
+            {
+                oldestDate = vDateTimeFifo[i].date();
+            }
+        }
+    }
+    const int iNumDaysInHistory = -curDate.daysTo ( oldestDate ) + 1;
+
+    // draw frame of the graph
+    DrawFrame ( iNumDaysInHistory );
+
+    // add markers
+    for ( i = 0; i < iNumItemsForHistory; i++ )
+    {
+        AddMarker ( vDateTimeFifo[i], static_cast<bool> ( vItemTypeFifo[i] ) );
+    }
+
+    // save graph as picture in file
+    Save ( sFileName );
+}
+
 
 CServerLogging::CServerLogging() :
-    bDoLogging ( false ), File ( DEFAULT_LOG_FILE_NAME )
+    bDoLogging ( false ),
+    File ( DEFAULT_LOG_FILE_NAME ),
+    HistoryGraph ( "test.jpg" )
 {
 
 
 #if 1
 
-HistoryGraph.DrawFrame ( 4 );
+// TEST add some elements
+HistoryGraph.Add ( QDateTime ( QDate::currentDate().addDays ( -1 ),
+    QTime ( 18, 0, 0, 0 ) ), false );
 
-// TEST
-HistoryGraph.AddMarker (
-    QDateTime ( QDate::currentDate().addDays ( -3 ),
-    QTime ( 17, 50, 0, 0 ) ), false );
+HistoryGraph.Add ( QDateTime ( QDate::currentDate().addDays ( -0 ),
+    QTime ( 17, 50, 0, 0 ) ), true );
 
-HistoryGraph.AddMarker (
-    QDateTime ( QDate::currentDate().addDays ( -3 ),
-    QTime ( 18, 0, 0, 0 ) ), true );
-
-HistoryGraph.Save ( "test.jpg" );
+HistoryGraph.Update();
 
 #endif
 }

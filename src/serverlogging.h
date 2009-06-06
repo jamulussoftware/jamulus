@@ -25,7 +25,7 @@
 #if !defined ( SERVERLOGGING_HOIHOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ )
 #define SERVERLOGGING_HOIHOKIH83JH8_3_43445KJIUHF1912__INCLUDED_
 
-#include <qpixmap.h>
+#include <qimage.h>
 #include <qpainter.h>
 #include <qdatetime.h>
 #include <qhostaddress.h>
@@ -77,7 +77,7 @@ protected:
     QColor  PlotMarkerNewColor;
     QColor  PlotMarkerStopColor;
     QDate   curDate;
-    QPixmap PlotPixmap;
+    QImage  PlotPixmap;
     QRect   PlotCanvasRect;
     QRect   PlotGridFrame;
     QString sFileName;

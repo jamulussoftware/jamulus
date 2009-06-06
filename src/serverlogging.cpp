@@ -47,7 +47,7 @@ CHistoryGraph::CHistoryGraph() :
     PlotTextColor ( Qt::black ), // black text
     PlotMarkerNewColor ( Qt::blue ), // blue marker for new connection
     PlotMarkerStopColor ( Qt::red ), // red marker server stop
-    PlotPixmap ( 1, 1 )
+    PlotPixmap ( 1, 1, QImage::Format_RGB32 )
 {
     // generate plot grid frame rectangle
     PlotGridFrame.setCoords ( PlotCanvasRect.x() + iGridFrameOffset,
@@ -91,7 +91,7 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
     iNumTicksX = iNewNumTicksX;
 
     // clear base pixmap for new plotting
-    PlotPixmap.fill ( PlotBackgroundColor ); // fill background
+    PlotPixmap.fill ( PlotBackgroundColor.rgb() ); // fill background
 
     // create painter
     QPainter PlotPainter ( &PlotPixmap );

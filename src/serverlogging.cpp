@@ -31,21 +31,22 @@ CHistoryGraph::CHistoryGraph() :
     bDoHistory ( false ),
     vDateTimeFifo ( NUM_ITEMS_HISTORY ),
     vItemTypeFifo ( NUM_ITEMS_HISTORY ),
-    PlotCanvasRect ( 0, 0, 600, 450 ), // defines total size of graph
-    iYAxisStart ( 0 ),
-    iYAxisEnd ( 24 ),
-    iNumTicksY ( 5 ),
-    iNumTicksX ( 0 ), // just initialization value, will be overwritten
-    iGridFrameOffset ( 10 ),
+    PlotCanvasRect    ( 0, 0, 600, 450 ), // defines total size of graph
+    iNumTicksX        ( 0 ), // just an initialization value, will be overwritten
+    iYAxisStart       ( 0 ),
+    iYAxisEnd         ( 24 ),
+    iNumTicksY        ( 5 ),
+    iGridFrameOffset  ( 10 ),
     iTextOffsetToGrid ( 3 ),
-    iYAxisTextHeight ( 20 ),
-    AxisFont ( "Arial", 10 ),
-    iMarkerSize ( 9 ),
+    iYAxisTextHeight  ( 20 ),
+    iMarkerSize       ( 9 ),
+    AxisFont ( "Arial", 12 ),
+    iTextOffsetX      ( 18 ),
     PlotBackgroundColor ( Qt::white ), // white background
-    PlotFrameColor ( Qt::black ), // black frame
-    PlotGridColor ( Qt::gray ), // gray grid
-    PlotTextColor ( Qt::black ), // black text
-    PlotMarkerNewColor ( Qt::blue ), // blue marker for new connection
+    PlotFrameColor      ( Qt::black ), // black frame
+    PlotGridColor       ( Qt::gray ), // gray grid
+    PlotTextColor       ( Qt::black ), // black text
+    PlotMarkerNewColor  ( Qt::blue ), // blue marker for new connection
     PlotMarkerStopColor ( Qt::red ), // red marker server stop
     PlotPixmap ( 1, 1, QImage::Format_RGB32 )
 {
@@ -111,7 +112,6 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
     const int iXAxisTickStep = iNumTicksX / 5 + 1;
 
     // grid (ticks) for x-axis
-    const int iTextOffsetX = 20;
     iXSpace = PlotGridFrame.width() / ( iNumTicksX + 1 );
     for ( i = 0; i < iNumTicksX; i++ )
     {

@@ -65,6 +65,7 @@ protected:
     int     iNumTicksY;
     int     iGridFrameOffset;
     int     iTextOffsetToGrid;
+    int     iTextOffsetX;
     int     iYAxisTextHeight;
     int     iMarkerSize;
     int     iXSpace;

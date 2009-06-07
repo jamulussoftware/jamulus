@@ -47,15 +47,26 @@ class CHistoryGraph : public QObject
     Q_OBJECT
 
 public:
+    enum EHistoryItemType
+    {
+        HIT_LOCAL_CONNECTION,
+        HIT_REMOTE_CONNECTION,
+        HIT_SERVER_STOP
+    };
+
     CHistoryGraph();
     void Start ( const QString& sNewFileName );
-    void Add ( const QDateTime& newDateTime, const bool newIsServerStop );
+    void Add ( const QDateTime& newDateTime, const EHistoryItemType curType );
     void Update();
 
 protected:
+    struct SHistoryData
+    {
+        QDateTime        DateTime;
+        EHistoryItemType Type;
+    };
     void DrawFrame ( const int iNewNumTicksX );
-    void AddMarker ( const QDateTime& curDateTime,
-                     const bool bIsServerStop );
+    void AddMarker ( const SHistoryData& curHistoryData );
     void Save ( const QString sFileName );
 
     bool    bDoHistory;
@@ -76,6 +87,7 @@ protected:
     QColor  PlotGridColor;
     QColor  PlotTextColor;
     QColor  PlotMarkerNewColor;
+    QColor  PlotMarkerNewLocalColor;
     QColor  PlotMarkerStopColor;
     QDate   curDate;
     QImage  PlotPixmap;
@@ -84,8 +96,7 @@ protected:
     QString sFileName;
     QTimer  TimerDailyUpdate;
 
-    CFIFO<QDateTime> vDateTimeFifo;
-    CFIFO<int>       vItemTypeFifo;
+    CFIFO<SHistoryData> vHistoryDataFifo;
 
 public slots:
     void OnTimerDailyUpdate() { Update(); }

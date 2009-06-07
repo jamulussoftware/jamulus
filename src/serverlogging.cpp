@@ -29,8 +29,7 @@
 CHistoryGraph::CHistoryGraph() :
     sFileName ( "" ),
     bDoHistory ( false ),
-    vDateTimeFifo ( NUM_ITEMS_HISTORY ),
-    vItemTypeFifo ( NUM_ITEMS_HISTORY ),
+    vHistoryDataFifo ( NUM_ITEMS_HISTORY ),
     PlotCanvasRect    ( 0, 0, 600, 450 ), // defines total size of graph
     iNumTicksX        ( 0 ), // just an initialization value, will be overwritten
     iYAxisStart       ( 0 ),
@@ -42,12 +41,13 @@ CHistoryGraph::CHistoryGraph() :
     iMarkerSize       ( 9 ),
     AxisFont ( "Arial", 12 ),
     iTextOffsetX      ( 18 ),
-    PlotBackgroundColor ( Qt::white ), // white background
-    PlotFrameColor      ( Qt::black ), // black frame
-    PlotGridColor       ( Qt::gray ), // gray grid
-    PlotTextColor       ( Qt::black ), // black text
-    PlotMarkerNewColor  ( Qt::blue ), // blue marker for new connection
-    PlotMarkerStopColor ( Qt::red ), // red marker server stop
+    PlotBackgroundColor      ( Qt::white ), // background
+    PlotFrameColor           ( Qt::black ), // frame
+    PlotGridColor            ( Qt::gray ), // grid
+    PlotTextColor            ( Qt::black ), // text
+    PlotMarkerNewColor       ( Qt::darkCyan ), // marker for new connection
+    PlotMarkerNewLocalColor  ( Qt::blue ), // marker for new local connection
+    PlotMarkerStopColor      ( Qt::red ), // marker for server stop
     PlotPixmap ( 1, 1, QImage::Format_RGB32 )
 {
     // generate plot grid frame rectangle
@@ -164,12 +164,12 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
     }
 }
 
-void CHistoryGraph::AddMarker ( const QDateTime& curDateTime,
-                                const bool bIsServerStop )
+void CHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
 {
     // calculate x-axis offset (difference of days compared to
     // current date)
-    const int iXAxisOffs = curDate.daysTo ( curDateTime.date() );
+    const int iXAxisOffs =
+        curDate.daysTo ( curHistoryData.DateTime.date() );
 
     // check range, if out of range, do not plot anything
     if ( -iXAxisOffs > ( iNumTicksX - 1 ) )
@@ -178,8 +178,8 @@ void CHistoryGraph::AddMarker ( const QDateTime& curDateTime,
     }
 
     // calculate y-axis offset (consider hours and minutes)
-    const double dYAxisOffs = 24 - curDateTime.time().hour() -
-        static_cast<double> ( curDateTime.time().minute() ) / 60;
+    const double dYAxisOffs = 24 - curHistoryData.DateTime.time().hour() -
+        static_cast<double> ( curHistoryData.DateTime.time().minute() ) / 60;
 
     // calculate the actual point in the graph (in pixels)
     const QPoint curPoint (
@@ -191,17 +191,25 @@ void CHistoryGraph::AddMarker ( const QDateTime& curDateTime,
     QPainter PlotPainter ( &PlotPixmap );
 
     // we use different markers for new connection and server stop items
-    if ( bIsServerStop )
+    switch ( curHistoryData.Type )
     {
+    case HIT_SERVER_STOP:
         // filled circle marker
         PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerStopColor ),
             iMarkerSize, Qt::SolidLine, Qt::RoundCap ) );
-    }
-    else
-    {
+        break;
+
+    case HIT_LOCAL_CONNECTION:
+        // filled square marker
+        PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerNewLocalColor ),
+            iMarkerSize ) );
+        break;
+
+    case HIT_REMOTE_CONNECTION:
         // filled square marker
         PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerNewColor ),
             iMarkerSize ) );
+        break;
     }
     PlotPainter.drawPoint ( curPoint );
 }
@@ -213,13 +221,16 @@ void CHistoryGraph::Save ( const QString sFileName )
 }
 
 void CHistoryGraph::Add ( const QDateTime& newDateTime,
-                          const bool newIsServerStop )
+                          const EHistoryItemType curType )
 {
     if ( bDoHistory )
     {
-        // add new element in FIFOs
-        vDateTimeFifo.Add ( newDateTime );
-        vItemTypeFifo.Add ( static_cast<int> ( newIsServerStop ) );
+        // create and add new element in FIFO
+        SHistoryData curHistoryData;
+        curHistoryData.DateTime = newDateTime;
+        curHistoryData.Type     = curType;
+
+        vHistoryDataFifo.Add ( curHistoryData );
     }
 }
 
@@ -234,15 +245,15 @@ void CHistoryGraph::Update()
 
         // get oldest date in history
         QDate oldestDate = curDate.addDays ( 1 ); // one day in the future
-        const int iNumItemsForHistory = vDateTimeFifo.Size();
+        const int iNumItemsForHistory = vHistoryDataFifo.Size();
         for ( i = 0; i < iNumItemsForHistory; i++ )
         {
             // only use valid dates
-            if ( vDateTimeFifo[i].date().isValid() )
+            if ( vHistoryDataFifo[i].DateTime.date().isValid() )
             {
-                if ( vDateTimeFifo[i].date() < oldestDate )
+                if ( vHistoryDataFifo[i].DateTime.date() < oldestDate )
                 {
-                    oldestDate = vDateTimeFifo[i].date();
+                    oldestDate = vHistoryDataFifo[i].DateTime.date();
                 }
             }
         }
@@ -254,7 +265,7 @@ void CHistoryGraph::Update()
         // add markers
         for ( i = 0; i < iNumItemsForHistory; i++ )
         {
-            AddMarker ( vDateTimeFifo[i], static_cast<bool> ( vItemTypeFifo[i] ) );
+            AddMarker ( vHistoryDataFifo[i] );
         }
 
         // save graph as picture in file
@@ -299,8 +310,21 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
 #endif
     *this << strLogStr; // in log file
 
-    // add element to history
-    HistoryGraph.Add ( QDateTime::currentDateTime(), false );
+    // add element to history, distinguish between a local connection
+    // and a remote connection
+    if ( ( ClientInetAddr == QHostAddress ( "127.0.0.1" ) ) ||
+        ( ClientInetAddr.toString().left ( 7 ).compare ( "192.168" ) == 0 ) )
+    {
+        // local connection
+        HistoryGraph.Add ( QDateTime::currentDateTime(),
+            CHistoryGraph::HIT_LOCAL_CONNECTION );
+    }
+    else
+    {
+        // remote connection
+        HistoryGraph.Add ( QDateTime::currentDateTime(),
+            CHistoryGraph::HIT_REMOTE_CONNECTION );
+    }
 }
 
 void CServerLogging::AddServerStopped()
@@ -315,7 +339,9 @@ void CServerLogging::AddServerStopped()
     *this << strLogStr; // in log file
 
     // add element to history and update on server stop
-    HistoryGraph.Add ( QDateTime::currentDateTime(), true );
+    HistoryGraph.Add ( QDateTime::currentDateTime(),
+        CHistoryGraph::HIT_SERVER_STOP );
+
     HistoryGraph.Update();
 }
 

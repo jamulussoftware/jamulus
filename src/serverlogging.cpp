@@ -41,13 +41,13 @@ CHistoryGraph::CHistoryGraph() :
     iMarkerSize       ( 9 ),
     AxisFont ( "Arial", 12 ),
     iTextOffsetX      ( 18 ),
-    PlotBackgroundColor      ( Qt::white ), // background
-    PlotFrameColor           ( Qt::black ), // frame
-    PlotGridColor            ( Qt::gray ), // grid
-    PlotTextColor            ( Qt::black ), // text
-    PlotMarkerNewColor       ( Qt::darkCyan ), // marker for new connection
-    PlotMarkerNewLocalColor  ( Qt::blue ), // marker for new local connection
-    PlotMarkerStopColor      ( Qt::red ), // marker for server stop
+    PlotBackgroundColor     ( Qt::white ), // background
+    PlotFrameColor          ( Qt::black ), // frame
+    PlotGridColor           ( Qt::gray ), // grid
+    PlotTextColor           ( Qt::black ), // text
+    PlotMarkerNewColor      ( Qt::darkCyan ), // marker for new connection
+    PlotMarkerNewLocalColor ( Qt::blue ), // marker for new local connection
+    PlotMarkerStopColor     ( Qt::red ), // marker for server stop
     PlotPixmap ( 1, 1, QImage::Format_RGB32 )
 {
     // generate plot grid frame rectangle

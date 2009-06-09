@@ -37,8 +37,9 @@ CHistoryGraph::CHistoryGraph() :
     iNumTicksY        ( 5 ),
     iGridFrameOffset  ( 10 ),
     iTextOffsetToGrid ( 3 ),
-    iYAxisTextHeight  ( 20 ),
-    iMarkerSize       ( 9 ),
+    iXAxisTextHeight  ( 22 ),
+    iMarkerSizeNewCon ( 11 ),
+    iMarkerSizeServSt ( 9 ),
     AxisFont ( "Arial", 12 ),
     iTextOffsetX      ( 18 ),
     PlotBackgroundColor     ( Qt::white ), // background
@@ -51,10 +52,10 @@ CHistoryGraph::CHistoryGraph() :
     PlotPixmap ( 1, 1, QImage::Format_RGB32 )
 {
     // generate plot grid frame rectangle
-    PlotGridFrame.setCoords ( PlotCanvasRect.x() + iGridFrameOffset,
+    PlotGridFrame.setRect ( PlotCanvasRect.x() + iGridFrameOffset,
         PlotCanvasRect.y() + iGridFrameOffset,
         PlotCanvasRect.width() - 2 * iGridFrameOffset,
-        PlotCanvasRect.height() - 2 * iGridFrameOffset - iYAxisTextHeight );
+        PlotCanvasRect.height() - 2 * iGridFrameOffset - iXAxisTextHeight );
 
     // scale pixmap to correct size
     PlotPixmap = PlotPixmap.scaled (
@@ -125,7 +126,7 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
             PlotPainter.setFont ( AxisFont );
             PlotPainter.drawText (
                 QPoint ( iCurX - iTextOffsetX,
-                PlotGridFrame.bottom() + iYAxisTextHeight + iTextOffsetToGrid ),
+                PlotGridFrame.bottom() + iXAxisTextHeight + iTextOffsetToGrid ),
                 curDate.addDays ( i - iNumTicksX + 1 ).toString ( "dd.MM." ) );
 
             iBottomExtraTickLen = 5;
@@ -196,19 +197,19 @@ void CHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
     case HIT_SERVER_STOP:
         // filled circle marker
         PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerStopColor ),
-            iMarkerSize, Qt::SolidLine, Qt::RoundCap ) );
+            iMarkerSizeServSt, Qt::SolidLine, Qt::RoundCap ) );
         break;
 
     case HIT_LOCAL_CONNECTION:
         // filled square marker
         PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerNewLocalColor ),
-            iMarkerSize ) );
+            iMarkerSizeNewCon ) );
         break;
 
     case HIT_REMOTE_CONNECTION:
         // filled square marker
         PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerNewColor ),
-            iMarkerSize ) );
+            iMarkerSizeNewCon ) );
         break;
     }
     PlotPainter.drawPoint ( curPoint );

@@ -77,8 +77,9 @@ protected:
     int     iGridFrameOffset;
     int     iTextOffsetToGrid;
     int     iTextOffsetX;
-    int     iYAxisTextHeight;
-    int     iMarkerSize;
+    int     iXAxisTextHeight;
+    int     iMarkerSizeNewCon;
+    int     iMarkerSizeServSt;
     int     iXSpace;
     int     iYSpace;
     QFont   AxisFont;

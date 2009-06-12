@@ -160,25 +160,34 @@ void CServer::OnTimer()
 CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
                                       CVector<double>&           vecdGains )
 {
-    CVector<short> vecsOutData ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
+    int i;
+
+    // init return vector with zeros since we mix all channels on that vector
+    CVector<short> vecsOutData ( MIN_SERVER_BLOCK_SIZE_SAMPLES, 0 );
 
     const int iNumClients = vecvecdData.Size();
 
-    // some offset to avoid overload when mixing clients together
-    const double dNorm = (double) 1.25;
-
     // mix all audio data from all clients together
-    for ( int i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )
+    for ( int j = 0; j < iNumClients; j++ )
     {
-        double dMixedData = 0.0;
-
-        for ( int j = 0; j < iNumClients; j++ )
+        // if channel gain is 1, avoid multiplication for speed optimization
+        if ( vecdGains[j] == static_cast<double> ( 1.0 ) )
         {
-            dMixedData += vecvecdData[j][i] * vecdGains[j];
+            for ( int i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )
+            {
+                vecsOutData[i] =
+                    Double2Short ( vecsOutData[i] + vecvecdData[j][i] );
+            }
         }
-
-        // normalization and truncating to short
-        vecsOutData[i] = Double2Short ( dMixedData / dNorm );
+        else
+        {
+            for ( int i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )
+            {
+                vecsOutData[i] =
+                    Double2Short ( vecsOutData[i] +
+                    vecvecdData[j][i] * vecdGains[j] );
+            }
+        }
     }
 
     return vecsOutData;

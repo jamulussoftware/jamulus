@@ -170,6 +170,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP,
     if ( bNewDisalbeLEDs )
     {
         MultiColorLEDBarInputLevelL->setEnabled ( false );
+        MultiColorLEDBarInputLevelR->setEnabled ( false );
         LEDOverallStatus->setEnabled ( false );
     }
 

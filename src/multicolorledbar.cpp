@@ -70,7 +70,7 @@ CMultiColorLEDBar::~CMultiColorLEDBar()
 void CMultiColorLEDBar::changeEvent ( QEvent* curEvent )
 {
     // act on enabled changed state
-    if ( (*curEvent).type() == QEvent::EnabledChange )
+    if ( curEvent->type() == QEvent::EnabledChange )
     {
         // reset all LEDs
         Reset ( this->isEnabled() );

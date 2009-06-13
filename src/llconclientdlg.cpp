@@ -129,6 +129,11 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP,
     MultiColorLEDBarInputLevelR->setValue ( 0 );
 
 
+// TEST
+MultiColorLEDBarInputLevelL->setEnabled ( false );
+
+
+
     // init slider controls ---
     // audio in fader
     SliderAudInFader->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );

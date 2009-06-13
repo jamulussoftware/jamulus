@@ -173,7 +173,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
         // if channel gain is 1, avoid multiplication for speed optimization
         if ( vecdGains[j] == static_cast<double> ( 1.0 ) )
         {
-            for ( int i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )
+            for ( i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )
             {
                 vecsOutData[i] =
                     Double2Short ( vecsOutData[i] + vecvecdData[j][i] );
@@ -181,7 +181,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
         }
         else
         {
-            for ( int i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )
+            for ( i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )
             {
                 vecsOutData[i] =
                     Double2Short ( vecsOutData[i] +

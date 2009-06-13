@@ -48,13 +48,21 @@ protected:
     class cLED
     {
     public:
-        enum ELightColor { RL_GREY, RL_GREEN, RL_YELLOW, RL_RED };
+        enum ELightColor
+        {
+            RL_DISABLED,
+            RL_GREY,
+            RL_GREEN,
+            RL_YELLOW,
+            RL_RED
+        };
 
         cLED ( QWidget* parent );
         void setColor ( const ELightColor eNewColor );
         QLabel* getLabelPointer() { return pLEDLabel; }
 
     protected:
+        QPixmap     BitmCubeRoundDisabled;
         QPixmap     BitmCubeRoundGrey;
         QPixmap     BitmCubeRoundGreen;
         QPixmap     BitmCubeRoundYellow;
@@ -63,6 +71,9 @@ protected:
         ELightColor eCurLightColor;
         QLabel*     pLEDLabel;
     };
+
+    void Reset ( const bool bEnabled );
+    virtual void changeEvent ( QEvent* curEvent );
 
     QHBoxLayout*     pMainLayout;
 

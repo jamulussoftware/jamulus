@@ -67,47 +67,78 @@ CMultiColorLEDBar::~CMultiColorLEDBar()
     }
 }
 
-void CMultiColorLEDBar::setValue ( const int value )
+void CMultiColorLEDBar::changeEvent ( QEvent* curEvent )
 {
-    // update state of all LEDs for current level value
+    // act on enabled changed state
+    if ( (*curEvent).type() == QEvent::EnabledChange )
+    {
+        // reset all LEDs
+        Reset ( this->isEnabled() );
+    }
+}
+
+void CMultiColorLEDBar::Reset ( const bool bEnabled )
+{
+    // update state of all LEDs
     for ( int iLEDIdx = 0; iLEDIdx < iNumLEDs; iLEDIdx++ )
     {
-        // set active LED color if value is above current LED index
-        if ( iLEDIdx < value )
+        // different reset behavoiur for enabled and disabled control
+        if ( bEnabled )
         {
-            // check which color we should use (green, yellow or red)
-            if ( iLEDIdx < YELLOW_BOUND_INP_LEV_METER )
-            {
-                // green region
-                vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREEN );
-            }
-            else
-            {
-                if ( iLEDIdx < RED_BOUND_INP_LEV_METER )
-                {
-                    // yellow region
-                    vecpLEDs[iLEDIdx]->setColor ( cLED::RL_YELLOW );
-                }
-                else
-                {
-                    // red region
-                    vecpLEDs[iLEDIdx]->setColor ( cLED::RL_RED );
-                }
-            }
+            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
         }
         else
         {
-            // we use grey LED for inactive state
-            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
+            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_DISABLED );
+        }
+    }
+}
+
+void CMultiColorLEDBar::setValue ( const int value )
+{
+    if ( this->isEnabled() )
+    {
+        // update state of all LEDs for current level value
+        for ( int iLEDIdx = 0; iLEDIdx < iNumLEDs; iLEDIdx++ )
+        {
+            // set active LED color if value is above current LED index
+            if ( iLEDIdx < value )
+            {
+                // check which color we should use (green, yellow or red)
+                if ( iLEDIdx < YELLOW_BOUND_INP_LEV_METER )
+                {
+                    // green region
+                    vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREEN );
+                }
+                else
+                {
+                    if ( iLEDIdx < RED_BOUND_INP_LEV_METER )
+                    {
+                        // yellow region
+                        vecpLEDs[iLEDIdx]->setColor ( cLED::RL_YELLOW );
+                    }
+                    else
+                    {
+                        // red region
+                        vecpLEDs[iLEDIdx]->setColor ( cLED::RL_RED );
+                    }
+                }
+            }
+            else
+            {
+                // we use grey LED for inactive state
+                vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
+            }
         }
     }
 }
 
 CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
-    BitmCubeRoundGrey   ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreySmall.png" ) ),
-    BitmCubeRoundGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreenSmall.png" ) ),
-    BitmCubeRoundYellow ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDYellowSmall.png" ) ),
-    BitmCubeRoundRed    ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDRedSmall.png" ) )
+    BitmCubeRoundDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDDisabledSmall.png" ) ),
+    BitmCubeRoundGrey     ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreySmall.png" ) ),
+    BitmCubeRoundGreen    ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreenSmall.png" ) ),
+    BitmCubeRoundYellow   ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDYellowSmall.png" ) ),
+    BitmCubeRoundRed      ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDRedSmall.png" ) )
 {
     // create LED label
     pLEDLabel = new QLabel ( "", parent );
@@ -128,6 +159,10 @@ void CMultiColorLEDBar::cLED::setColor ( const ELightColor eNewColor )
     {
         switch ( eNewColor )
         {
+        case RL_DISABLED:
+            pLEDLabel->setPixmap ( BitmCubeRoundDisabled );
+            break;
+
         case RL_GREY:
             pLEDLabel->setPixmap ( BitmCubeRoundGrey );
             break;

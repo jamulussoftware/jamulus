@@ -31,10 +31,11 @@
 /* Implementation *************************************************************/
 CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     : QLabel ( parent, f ),
-    BitmCubeGrey   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreySmall.png" ) ),
-    BitmCubeGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
-    BitmCubeYellow ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) ),
-    BitmCubeRed    ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) )
+    BitmCubeDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),
+    BitmCubeGrey     ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreySmall.png" ) ),
+    BitmCubeGreen    ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenSmall.png" ) ),
+    BitmCubeYellow   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) ),
+    BitmCubeRed      ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) )
 {
     // init color flags
     Reset();
@@ -63,14 +64,22 @@ CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
         this, SLOT ( OnNewPixmap ( const QPixmap& ) ) );
 }
 
-void CMultiColorLED::Reset()
+void CMultiColorLED::changeEvent ( QEvent* curEvent )
 {
-    // reset color flags
-    bFlagRedLi    = false;
-    bFlagGreenLi  = false;
-    bFlagYellowLi = false;
-
-    UpdateColor();
+    // act on enabled changed state
+    if ( curEvent->type() == QEvent::EnabledChange )
+    {
+        if ( this->isEnabled() )
+        {
+            emit newPixmap ( BitmCubeGrey );
+            eColorFlag = RL_GREY;
+        }
+        else
+        {
+            emit newPixmap ( BitmCubeDisabled );
+            eColorFlag = RL_DISABLED;
+        }
+    }
 }
 
 void CMultiColorLED::OnTimerRedLight() 
@@ -134,30 +143,46 @@ void CMultiColorLED::UpdateColor()
     }
 }
 
+void CMultiColorLED::Reset()
+{
+    if ( this->isEnabled() )
+    {
+        // reset color flags
+        bFlagRedLi    = false;
+        bFlagGreenLi  = false;
+        bFlagYellowLi = false;
+
+        UpdateColor();
+    }
+}
+
 void CMultiColorLED::SetLight ( const int iNewStatus )
 {
-    switch ( iNewStatus )
+    if ( this->isEnabled() )
     {
-    case MUL_COL_LED_GREEN:
-        // green light
-        bFlagGreenLi = true;
-        TimerGreenLight.start();
-        break;
+        switch ( iNewStatus )
+        {
+        case MUL_COL_LED_GREEN:
+            // green light
+            bFlagGreenLi = true;
+            TimerGreenLight.start();
+            break;
 
-    case MUL_COL_LED_YELLOW:
-        // yellow light
-        bFlagYellowLi = true;
-        TimerYellowLight.start();
-        break;
+        case MUL_COL_LED_YELLOW:
+            // yellow light
+            bFlagYellowLi = true;
+            TimerYellowLight.start();
+            break;
 
-    case MUL_COL_LED_RED:
-        // red light
-        bFlagRedLi = true;
-        TimerRedLight.start();
-        break;
+        case MUL_COL_LED_RED:
+            // red light
+            bFlagRedLi = true;
+            TimerRedLight.start();
+            break;
+        }
+
+        UpdateColor();
     }
-
-    UpdateColor();
 }
 
 void CMultiColorLED::SetUpdateTime ( const int iNUTi )

@@ -28,6 +28,7 @@
 /* Implementation *************************************************************/
 CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP,
                                   const bool bNewConnectOnStartup,
+                                  const bool bNewDisalbeLEDs,
                                   QWidget* parent, Qt::WindowFlags f ) :
     pClient ( pNCliP ), QDialog ( parent, f ),
     ClientSettingsDlg ( pNCliP, parent
@@ -129,11 +130,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP,
     MultiColorLEDBarInputLevelR->setValue ( 0 );
 
 
-// TEST
-MultiColorLEDBarInputLevelL->setEnabled ( false );
-
-
-
     // init slider controls ---
     // audio in fader
     SliderAudInFader->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
@@ -166,6 +162,15 @@ MultiColorLEDBarInputLevelL->setEnabled ( false );
         // "not connected" so that a call to "OnConnectDisconBut()" will
         // start the connection
         OnConnectDisconBut();
+    }
+
+
+    // disable controls on request ---
+    // disable LEDs in main window if requested
+    if ( bNewDisalbeLEDs )
+    {
+        MultiColorLEDBarInputLevelL->setEnabled ( false );
+        LEDOverallStatus->setEnabled ( false );
     }
 
 

@@ -60,11 +60,20 @@ public:
     void SetLight ( const int iNewStatus );
 
 protected:
-    enum ELightColor { RL_GREY, RL_GREEN, RL_YELLOW, RL_RED };
+    enum ELightColor
+    {
+        RL_DISABLED,
+        RL_GREY,
+        RL_GREEN,
+        RL_YELLOW,
+        RL_RED
+    };
     ELightColor eColorFlag;
 
+    virtual void changeEvent ( QEvent* curEvent );
     void UpdateColor();
 
+    QPixmap BitmCubeDisabled;
     QPixmap BitmCubeGrey;
     QPixmap BitmCubeGreen;
     QPixmap BitmCubeYellow;
@@ -141,6 +150,5 @@ public:
 protected:
     CMultColLEDListViewItem LED0, LED1;
 };
-
 
 #endif // _MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_

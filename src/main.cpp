@@ -47,6 +47,7 @@ int main ( int argc, char** argv )
     bool        bIsClient             = true;
     bool        bUseGUI               = true;
     bool        bConnectOnStartup     = false;
+    bool        bDisalbeLEDs          = false;
     int         iUploadRateLimitKbps  = DEF_MAX_UPLOAD_RATE_KBPS;
     quint16     iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
     std::string strIniFileName        = "";
@@ -74,6 +75,15 @@ int main ( int argc, char** argv )
         {
             bUseGUI = false;
             cout << "no GUI mode chosen" << std::endl;
+            continue;
+        }
+
+
+        // disable LEDs flag ---------------------------------------------------
+        if ( GetFlagArgument ( argc, argv, i, "-d", "--disableleds" ) )
+        {
+            bDisalbeLEDs = true;
+            cout << "disable LEDs in main window" << std::endl;
             continue;
         }
 
@@ -203,7 +213,7 @@ int main ( int argc, char** argv )
 
             // GUI object
             CLlconClientDlg ClientDlg (
-                &Client, bConnectOnStartup,
+                &Client, bConnectOnStartup, bDisalbeLEDs,
                 0
 #ifdef _WIN32
                 // this somehow only works reliable on Windows
@@ -303,6 +313,8 @@ std::string UsageArguments ( char **argv )
         "  -u, --maxuploadrate        maximum upload rate (only avaiable for server)\n"
         "  -c, --connect              connect to last server on startup (only\n"
         "                             available for client)\n"
+        "  -d, --disableleds          disable LEDs in main window (only available\n"
+        "                             for client)\n"
         "  -h, -?, --help             this help text\n"
         "Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }

@@ -67,6 +67,7 @@ class CLlconClientDlg : public QDialog, private Ui_CLlconClientDlgBase
 
 public:
     CLlconClientDlg ( CClient* pNCliP, const bool bNewConnectOnStartup,
+                      const bool bNewDisalbeLEDs,
                       QWidget* parent = 0, Qt::WindowFlags f = 0 );
     virtual ~CLlconClientDlg();
 

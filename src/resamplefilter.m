@@ -1,5 +1,5 @@
 %/******************************************************************************\
-% * Copyright (c) 2004-2006
+% * Copyright (c) 2004-2009
 % *
 % * Author(s):
 % *	Volker Fischer
@@ -9,12 +9,12 @@
 function resamplefilter()
 
 % Number of taps per poly phase for different resampling types
-GlobalNoTaps = 4;%12; % use global value for all types
+GlobalNoTaps = 4; % use global value for all types
 
-NoTapsP2     = GlobalNoTaps; % 24 kHz
-NoTapsP3_2   = GlobalNoTaps; % 32 kHz
-NoTapsP12_7  = GlobalNoTaps; % 28 kHz
-NoTapsP1     = GlobalNoTaps; % 48 kHz
+NoTapsP2    = GlobalNoTaps; % 24 kHz
+NoTapsP3_2  = GlobalNoTaps; % 32 kHz
+NoTapsP12_7 = GlobalNoTaps; % 28 kHz
+NoTapsP1    = GlobalNoTaps; % 48 kHz
 
 
 % Filter for ratio 2 -----------------------------------------------------------
@@ -116,7 +116,7 @@ fclose(fid);
 return;
 
 
-function [h] = DesignFilter(NoTapsPIn, I)
+function h = DesignFilter(NoTapsPIn, I)
 
 % number of taps, consider interpolation factor
 NoTapsP = NoTapsPIn * I;
@@ -125,7 +125,7 @@ NoTapsP = NoTapsPIn * I;
 fc = 0.97 / I;
 
 % MMSE filter design with Kaiser window, consider interpolation factor
-h = I * firls(NoTapsP - 1, [0 fc fc 1], [1 1 0 0]) .* kaiser(NoTapsP, 5)';
+h = sqrt(I) * firls(NoTapsP - 1, [0 fc fc 1], [1 1 0 0]) .* kaiser(NoTapsP, 5)';
 
 return;
 

@@ -353,7 +353,8 @@ void CClient::ProcessAudioData ( CVector<short>& vecsStereoSndCrd )
         for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
         {
             vecsNetwork[i] =
-                Double2Short ( vecdAudioStereo[j] + vecdAudioStereo[j + 1] );
+                Double2Short ( ( vecdAudioStereo[j] +
+                vecdAudioStereo[j + 1] ) / 2 );
         }
     }
     else
@@ -368,7 +369,8 @@ void CClient::ProcessAudioData ( CVector<short>& vecsStereoSndCrd )
             {
                 // attenuation on right channel
                 vecsNetwork[i] =
-                    Double2Short ( vecdAudioStereo[j] + dAttFact * vecdAudioStereo[j + 1] );
+                    Double2Short ( ( vecdAudioStereo[j] +
+                    dAttFact * vecdAudioStereo[j + 1] ) / 2 );
             }
         }
         else
@@ -377,7 +379,8 @@ void CClient::ProcessAudioData ( CVector<short>& vecsStereoSndCrd )
             {
                 // attenuation on left channel
                 vecsNetwork[i] =
-                    Double2Short ( vecdAudioStereo[j + 1] + dAttFact * vecdAudioStereo[j] );
+                    Double2Short ( ( vecdAudioStereo[j + 1] +
+                    dAttFact * vecdAudioStereo[j] ) / 2 );
             }
         }
     }

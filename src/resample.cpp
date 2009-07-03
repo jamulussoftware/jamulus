@@ -11,7 +11,7 @@
  * whereby we perform a linear interpolation between these two samples to get
  * an arbitraty sample grid.
  *
- * The polyphase filter is calculated with Matlab(TM), the associated file
+ * The polyphase filter is calculated with Matlab, the associated file
  * is ResampleFilter.m.
  *
  ******************************************************************************

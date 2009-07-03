@@ -172,6 +172,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP,
         MultiColorLEDBarInputLevelL->setEnabled ( false );
         MultiColorLEDBarInputLevelR->setEnabled ( false );
         LEDOverallStatus->setEnabled ( false );
+        PushButtonConnect->setFocus();
     }
 
 

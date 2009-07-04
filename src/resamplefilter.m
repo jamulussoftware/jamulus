@@ -1,10 +1,10 @@
-%/******************************************************************************\
-% * Copyright (c) 2004-2009
-% *
-% * Author(s):
-% *	Volker Fischer
-% *
-%\******************************************************************************/
+% /****************************************************************************\
+%  * Copyright (c) 2004-2009
+%  *
+%  * Author(s):
+%  *	Volker Fischer
+%  *
+% \****************************************************************************/
 
 function resamplefilter()
 
@@ -12,6 +12,7 @@ function resamplefilter()
 GlobalNoTaps = 4; % use global value for all types
 
 NoTapsP2    = GlobalNoTaps; % 24 kHz
+NoTapsP4_3  = GlobalNoTaps; % 32 kHz <-> 24 kHz
 NoTapsP3_2  = GlobalNoTaps; % 32 kHz
 NoTapsP12_7 = GlobalNoTaps; % 28 kHz
 NoTapsP1    = GlobalNoTaps; % 48 kHz
@@ -24,6 +25,15 @@ D2 = 1;
 
 % filter design
 h2 = DesignFilter(NoTapsP2, I2);
+
+
+% Filter for ratio 4 / 3 -------------------------------------------------------
+% I and D
+I4_3 = 4;
+D4_3 = 3;
+
+% filter design
+h4_3 = DesignFilter(NoTapsP4_3, I4_3);
 
 
 % Filter for ratio 3 / 2 -------------------------------------------------------
@@ -65,6 +75,9 @@ fprintf(fid, '#define _RESAMPLEFILTER_H_\n\n');
 fprintf(fid, '#define NUM_TAPS_PER_PHASE2          ');
 fprintf(fid, int2str(NoTapsP2));
 fprintf(fid, '\n');
+fprintf(fid, '#define NUM_TAPS_PER_PHASE4_3        ');
+fprintf(fid, int2str(NoTapsP4_3));
+fprintf(fid, '\n');
 fprintf(fid, '#define NUM_TAPS_PER_PHASE3_2        ');
 fprintf(fid, int2str(NoTapsP3_2));
 fprintf(fid, '\n');
@@ -79,6 +92,12 @@ fprintf(fid, int2str(I2));
 fprintf(fid, '\n');
 fprintf(fid, '#define DECIM_D_2                    ');
 fprintf(fid, int2str(D2));
+fprintf(fid, '\n');
+fprintf(fid, '#define INTERP_I_4_3                 ');
+fprintf(fid, int2str(I4_3));
+fprintf(fid, '\n');
+fprintf(fid, '#define DECIM_D_4_3                  ');
+fprintf(fid, int2str(D4_3));
 fprintf(fid, '\n');
 fprintf(fid, '#define INTERP_I_3_2                 ');
 fprintf(fid, int2str(I3_2));
@@ -100,6 +119,9 @@ fprintf(fid, '\n\n');
 % Write filter taps
 fprintf(fid, '\n// Filter for ratio 2\n');
 ExportFilterTaps(fid, 'fResTaps2[INTERP_I_2 * DECIM_D_2 * NUM_TAPS_PER_PHASE2]', h2);
+
+fprintf(fid, '\n// Filter for ratio 4 / 3\n');
+ExportFilterTaps(fid, 'fResTaps4_3[INTERP_I_4_3 * DECIM_D_4_3 * NUM_TAPS_PER_PHASE4_3]', h4_3);
 
 fprintf(fid, '\n// Filter for ratio 3 / 2\n');
 ExportFilterTaps(fid, 'fResTaps3_2[INTERP_I_3_2 * DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2]', h3_2);

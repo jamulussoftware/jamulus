@@ -154,7 +154,7 @@ void CStereoAudioResample::Init ( const int iNewMonoInputBlockSize,
     iMonoOutputBlockSize  = (int) ( iNewMonoInputBlockSize * dRation );
 
     // set correct parameters
-    if ( iFrom == SND_CRD_SAMPLE_RATE ) // downsampling case
+    if ( iFrom >= iTo ) // downsampling case
     {
         switch ( iTo )
         {

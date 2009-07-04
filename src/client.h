@@ -160,7 +160,8 @@ protected:
     // callback function must be static, otherwise it does not work
     static void  AudioCallback ( CVector<short>& psData, void* arg );
 
-    void         Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate );
+    void         Init ( const int iSampleRate,
+                        const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate );
     void         ProcessAudioData ( CVector<short>& vecsStereoSndCrd );
     void         UpdateSocketBufferSize();
 
@@ -180,6 +181,7 @@ protected:
     CAudioReverb            AudioReverb;
 
     int                     iSndCrdPreferredMonoBlSizeIndex;
+    int                     iClientSampleRate;
 
     int                     iSndCrdMonoBlockSizeSam;
     int                     iSndCrdStereoBlockSizeSam;

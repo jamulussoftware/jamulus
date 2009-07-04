@@ -37,6 +37,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bOpenChatOnNewMessage ( true ),
     bDoAutoSockBufSize ( true ),
     iSndCrdPreferredMonoBlSizeIndex ( CSndCrdBufferSizes::GetDefaultIndex() ),
+    iClientSampleRate ( SYSTEM_SAMPLE_RATE ),
     iSndCrdMonoBlockSizeSam ( 0 )
 {
     // connection for protocol
@@ -163,7 +164,7 @@ void CClient::SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx )
     }
 
     // init with new block size index parameter
-    Init ( iSndCrdPreferredMonoBlSizeIndex );
+    Init ( iClientSampleRate, iSndCrdPreferredMonoBlSizeIndex );
 
     if ( bWasRunning )
     {
@@ -190,7 +191,7 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
 
     // init again because the sound card actual buffer size might
     // be changed on new device
-    Init ( iSndCrdPreferredMonoBlSizeIndex );
+    Init ( iClientSampleRate, iSndCrdPreferredMonoBlSizeIndex );
 
     if ( bWasRunning )
     {
@@ -213,7 +214,7 @@ void CClient::OnSndCrdReinitRequest()
     // reinit the driver (we use the currently selected driver) and
     // init client object, too
     Sound.SetDev ( Sound.GetDev() );
-    Init ( iSndCrdPreferredMonoBlSizeIndex );
+    Init ( iClientSampleRate, iSndCrdPreferredMonoBlSizeIndex );
 
     if ( bWasRunning )
     {
@@ -224,7 +225,7 @@ void CClient::OnSndCrdReinitRequest()
 void CClient::Start()
 {
     // init object
-    Init ( iSndCrdPreferredMonoBlSizeIndex );
+    Init ( iClientSampleRate, iSndCrdPreferredMonoBlSizeIndex );
 
     // enable channel
     Channel.SetEnable ( true );
@@ -262,8 +263,12 @@ void CClient::AudioCallback ( CVector<short>& psData, void* arg )
     pMyClientObj->ProcessAudioData ( psData );
 }
 
-void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
+void CClient::Init ( const int iSampleRate,
+                     const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
 {
+    // store new sample rate
+    iClientSampleRate = iSampleRate;
+
     // translate block size index in actual block size
     const int iPrefMonoBlockSizeSamAtSndCrdSamRate = CSndCrdBufferSizes::
         GetBufferSizeFromIndex ( iPrefMonoBlockSizeSamIndexAtSndCrdSamRate );
@@ -272,7 +277,7 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
     iSndCrdMonoBlockSizeSam   = Sound.Init ( iPrefMonoBlockSizeSamAtSndCrdSamRate );
     iSndCrdStereoBlockSizeSam = 2 * iSndCrdMonoBlockSizeSam;
 
-    iMonoBlockSizeSam   = iSndCrdMonoBlockSizeSam * SYSTEM_SAMPLE_RATE / SND_CRD_SAMPLE_RATE;
+    iMonoBlockSizeSam   = iSndCrdMonoBlockSizeSam * iClientSampleRate / SND_CRD_SAMPLE_RATE;
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
     // the channel works on the same block size as the sound interface
@@ -286,10 +291,12 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
 
     // resample objects are always initialized with the input block size
     // record
-    ResampleObjDown.Init ( iSndCrdMonoBlockSizeSam, SND_CRD_SAMPLE_RATE, SYSTEM_SAMPLE_RATE );
+    ResampleObjDown.Init ( iSndCrdMonoBlockSizeSam,
+        SND_CRD_SAMPLE_RATE, iClientSampleRate );
 
     // playback
-    ResampleObjUp.Init ( iMonoBlockSizeSam, SYSTEM_SAMPLE_RATE, SND_CRD_SAMPLE_RATE );
+    ResampleObjUp.Init ( iMonoBlockSizeSam,
+        iClientSampleRate, SND_CRD_SAMPLE_RATE );
 
     // init network buffers
     vecsNetwork.Init  ( iMonoBlockSizeSam );
@@ -300,7 +307,8 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
 
     CycleTimeVariance.Reset();
 
-    AudioReverb.Clear();
+    // init reverberation
+    AudioReverb.Init ( iClientSampleRate );
 }
 
 void CClient::ProcessAudioData ( CVector<short>& vecsStereoSndCrd )
@@ -463,7 +471,7 @@ void CClient::UpdateSocketBufferSize()
         // a minimum buffer size of the sum of both sizes
         const double dAudioBufferDurationMs =
             ( iMonoBlockSizeSam + Channel.GetAudioBlockSizeIn() ) * 1000 /
-            SYSTEM_SAMPLE_RATE;
+            iClientSampleRate;
 
         // accumulate the standard deviations of input network stream and
         // internal timer,

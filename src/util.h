@@ -473,13 +473,14 @@ public:
 class CAudioReverb
 {
 public:
-    CAudioReverb ( const double rT60 = (double) 5.0 );
-
+    CAudioReverb() {}
+    
+    void   Init ( const int iSampleRate, const double rT60 = (double) 5.0 );
     void   Clear();
     double ProcessSample ( const double input );
 
 protected:
-    void setT60 ( const double rT60 );
+    void setT60 ( const double rT60, const int iSampleRate );
     bool isPrime ( const int number );
 
     CFIFO<int>  allpassDelays_[3];

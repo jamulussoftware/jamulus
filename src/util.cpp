@@ -166,13 +166,13 @@ uint32_t CCRC::GetCRC()
     three series allpass units, followed by four parallel comb filters, and two
     decorrelation delay lines in parallel at the output.
 */
-CAudioReverb::CAudioReverb ( const double rT60 )
+void CAudioReverb::Init ( const int iSampleRate, const double rT60 )
 {
     int delay, i;
 
     // delay lengths for 44100 Hz sample rate
     int lengths[9] = { 1777, 1847, 1993, 2137, 389, 127, 43, 211, 179 };
-    const double scaler = (double) SYSTEM_SAMPLE_RATE / 44100.0;
+    const double scaler = (double) iSampleRate / 44100.0;
 
     if ( scaler != 1.0 )
     {
@@ -204,7 +204,7 @@ CAudioReverb::CAudioReverb ( const double rT60 )
         combDelays_[i].Init ( lengths[i] );
     }
 
-    setT60 ( rT60 );
+    setT60 ( rT60, iSampleRate );
     allpassCoefficient_ = (double) 0.7;
     Clear();
 }
@@ -250,13 +250,14 @@ void CAudioReverb::Clear()
     combDelays_[3].Reset    ( 0 );
 }
 
-void CAudioReverb::setT60 ( const double rT60 )
+void CAudioReverb::setT60 ( const double rT60,
+                            const int iSampleRate )
 {
     // set the reverberation T60 decay time
     for ( int i = 0; i < 4; i++ )
     {
         combCoefficient_[i] = pow ( (double) 10.0, (double) ( -3.0 *
-            combDelays_[i].Size() / ( rT60 * SYSTEM_SAMPLE_RATE ) ) );
+            combDelays_[i].Size() / ( rT60 * iSampleRate ) ) );
     }
 }
 

@@ -303,7 +303,8 @@ void CClient::Init ( const int iSampleRate,
     vecdNetwData.Init ( iMonoBlockSizeSam );
 
     // init response time evaluation
-    CycleTimeVariance.Init ( iMonoBlockSizeSam, TIME_MOV_AV_RESPONSE );
+    CycleTimeVariance.Init ( iMonoBlockSizeSam,
+        iClientSampleRate, TIME_MOV_AV_RESPONSE );
 
     CycleTimeVariance.Reset();
 

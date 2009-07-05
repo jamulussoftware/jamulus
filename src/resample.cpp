@@ -4,13 +4,6 @@
  * Author(s):
  *  Volker Fischer
  *
- * Description:
- * Resample routine for arbitrary sample-rate conversions in a low range.
- * The algorithm is based on a polyphase structure. We upsample the input
- * signal with a factor INTERP_DECIM_I_D1 and calculate two successive samples
- * whereby we perform a linear interpolation between these two samples to get
- * an arbitraty sample grid.
- *
  * The polyphase filter is calculated with Matlab, the associated file
  * is ResampleFilter.m.
  *
@@ -156,65 +149,105 @@ void CStereoAudioResample::Init ( const int iNewMonoInputBlockSize,
     // set correct parameters
     if ( iFrom >= iTo ) // downsampling case
     {
-        switch ( iTo )
+        if ( iFrom == SND_CRD_SAMPLE_RATE )
         {
-        case ( SND_CRD_SAMPLE_RATE / 2 ): // 48 kHz to 24 kHz
-            pFiltTaps    = fResTaps2;
-            iNumTaps     = INTERP_I_2 * NUM_TAPS_PER_PHASE2;
-            iI           = DECIM_D_2;
-            break;
+            // sound card resampling
+            switch ( iTo )
+            {
+            case ( SND_CRD_SAMPLE_RATE / 2 ): // 48 kHz to 24 kHz
+                pFiltTaps    = fResTaps2;
+                iNumTaps     = INTERP_I_2 * NUM_TAPS_PER_PHASE2;
+                iI           = DECIM_D_2;
+                break;
 
-        case ( SND_CRD_SAMPLE_RATE * 7 / 12 ): // 48 kHz to 28 kHz
-            pFiltTaps = fResTaps12_7;
-            iNumTaps  = INTERP_I_12_7 * NUM_TAPS_PER_PHASE12_7;
-            iI        = DECIM_D_12_7;
-            break;
+            case ( SND_CRD_SAMPLE_RATE * 7 / 12 ): // 48 kHz to 28 kHz
+                pFiltTaps = fResTaps12_7;
+                iNumTaps  = INTERP_I_12_7 * NUM_TAPS_PER_PHASE12_7;
+                iI        = DECIM_D_12_7;
+                break;
 
-        case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 48 kHz to 32 kHz
-            pFiltTaps = fResTaps3_2;
-            iNumTaps  = INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2;
-            iI        = DECIM_D_3_2;
-            break;
+            case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 48 kHz to 32 kHz
+                pFiltTaps = fResTaps3_2;
+                iNumTaps  = INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2;
+                iI        = DECIM_D_3_2;
+                break;
 
-        case SND_CRD_SAMPLE_RATE: // 48 kHz to 48 kHz
-            // no resampling needed
-            pFiltTaps = NULL;
-            iNumTaps  = 0;
-            iI        = 1;
-            break;
+            case SND_CRD_SAMPLE_RATE: // 48 kHz to 48 kHz
+                // no resampling needed
+                pFiltTaps = NULL;
+                iNumTaps  = 0;
+                iI        = 1;
+                break;
 
-        default:
-            // resample ratio not defined, throw error
-            throw 0;
-            break;
+            default:
+                // resample ratio not defined, throw error
+                throw 0;
+                break;
+            }
+        }
+        else
+        {
+            // general sampling rate conversion
+            if ( ( iFrom == 32000 ) && ( iTo == 24000 ) )
+            {
+                // 32 kHz to 24 kHz
+                pFiltTaps = fResTaps4_3;
+                iNumTaps  = INTERP_I_4_3 * NUM_TAPS_PER_PHASE4_3;
+                iI        = DECIM_D_4_3;
+            }
+            else
+            {
+                // resample ratio not defined, throw error
+                throw 0;
+            }
         }
     }
-    else // upsampling case (assumption: iTo == SND_CRD_SAMPLE_RATE)
+    else // upsampling case
     {
-        switch ( iFrom )
+        if ( iTo == SND_CRD_SAMPLE_RATE )
         {
-        case ( SND_CRD_SAMPLE_RATE / 2 ): // 24 kHz to 48 kHz
-            pFiltTaps = fResTaps2;
-            iNumTaps  = DECIM_D_2 * NUM_TAPS_PER_PHASE2;
-            iI        = INTERP_I_2;
-            break;
+            // sound card resampling
+            switch ( iFrom )
+            {
+            case ( SND_CRD_SAMPLE_RATE / 2 ): // 24 kHz to 48 kHz
+                pFiltTaps = fResTaps2;
+                iNumTaps  = DECIM_D_2 * NUM_TAPS_PER_PHASE2;
+                iI        = INTERP_I_2;
+                break;
 
-        case ( SND_CRD_SAMPLE_RATE * 7 / 12 ): // 28 kHz to 48 kHz
-            pFiltTaps = fResTaps12_7;
-            iNumTaps  = DECIM_D_12_7 * NUM_TAPS_PER_PHASE12_7;
-            iI        = INTERP_I_12_7;
-            break;
+            case ( SND_CRD_SAMPLE_RATE * 7 / 12 ): // 28 kHz to 48 kHz
+                pFiltTaps = fResTaps12_7;
+                iNumTaps  = DECIM_D_12_7 * NUM_TAPS_PER_PHASE12_7;
+                iI        = INTERP_I_12_7;
+                break;
 
-        case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 32 kHz to 48 kHz
-            pFiltTaps = fResTaps3_2;
-            iNumTaps  = DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2;
-            iI        = INTERP_I_3_2;
-            break;
+            case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 32 kHz to 48 kHz
+                pFiltTaps = fResTaps3_2;
+                iNumTaps  = DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2;
+                iI        = INTERP_I_3_2;
+                break;
 
-        default:
-            // resample ratio not defined, throw error
-            throw 0;
-            break;
+            default:
+                // resample ratio not defined, throw error
+                throw 0;
+                break;
+            }
+        }
+        else
+        {
+            // general sampling rate conversion
+            if ( ( iFrom == 24000 ) && ( iTo == 32000 ) )
+            {
+                // 24 kHz to 32 kHz
+                pFiltTaps = fResTaps4_3;
+                iNumTaps  = DECIM_D_4_3 * NUM_TAPS_PER_PHASE4_3;
+                iI        = INTERP_I_4_3;
+            }
+            else
+            {
+                // resample ratio not defined, throw error
+                throw 0;
+            }
         }
     }
 

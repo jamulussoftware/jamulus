@@ -1160,7 +1160,9 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                         // on the system sample rate, therefore we use the
                         // decompressed audio buffer size instead of the network
                         // buffer size)
-                        CycleTimeVariance.Init ( iAudioSize, TIME_MOV_AV_RESPONSE );
+                        CycleTimeVariance.Init ( iAudioSize,
+                            SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
+
                         CycleTimeVariance.Reset();
                     }
                     else

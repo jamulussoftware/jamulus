@@ -556,14 +556,16 @@ public:
     virtual ~CCycleTimeVariance() {}
 
     void Init ( const int iNewBlockLengthAtSystemSampleRate,
+                const int iNewSystemSampleRate,
                 const int iHistoryLengthTime )
     {
-        // store block size
+        // store block size and sample rate
         iBlockLengthAtSystemSampleRate = iNewBlockLengthAtSystemSampleRate;
+        iSystemSampleRate              = iNewSystemSampleRate;
 
         // calculate actual moving average length and initialize buffer
         RespTimeMoAvBuf.Init ( iHistoryLengthTime *
-            SYSTEM_SAMPLE_RATE / iNewBlockLengthAtSystemSampleRate );
+            iNewSystemSampleRate / iNewBlockLengthAtSystemSampleRate );
     }
 
     int GetBlockLength() { return iBlockLengthAtSystemSampleRate; }
@@ -582,7 +584,7 @@ public:
         // we want to calculate the standard deviation (we assume that the mean
         // is correct at the block period time)
         const double dCurAddVal = ( (double) ( CurTime - TimeLastBlock ) -
-            ( iBlockLengthAtSystemSampleRate * 1000 / SYSTEM_SAMPLE_RATE ) );
+            ( iBlockLengthAtSystemSampleRate * 1000 / iSystemSampleRate ) );
 
         RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
 
@@ -601,6 +603,7 @@ protected:
     CMovingAv<double> RespTimeMoAvBuf;
     int               TimeLastBlock;
     int               iBlockLengthAtSystemSampleRate;
+    int               iSystemSampleRate;
 };
 
 #endif /* !defined ( UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

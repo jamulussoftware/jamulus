@@ -22,7 +22,7 @@ I2 = 2;
 D2 = 1;
 
 % filter design
-h2 = DesignFilter(NoTapsP2, I2);
+h2 = DesignFilter(NoTapsP2, I2, 0.97);
 
 
 % Filter for ratio 16 / 11 -----------------------------------------------------
@@ -31,7 +31,7 @@ I16_11 = 16;
 D16_11 = 11;
 
 % filter design
-h16_11 = DesignFilter(NoTapsP16_11, I16_11);
+h16_11 = DesignFilter(NoTapsP16_11, I16_11, 0.90);
 
 
 % Filter for ratios close to 1 -------------------------------------------------
@@ -39,7 +39,7 @@ h16_11 = DesignFilter(NoTapsP16_11, I16_11);
 I1 = 10; % D = I in this mode
 
 % MMSE filter-design and windowing
-h1 = DesignFilter(NoTapsP1, I1);
+h1 = DesignFilter(NoTapsP1, I1, 0.97);
 
 
 % Export coefficiants to file ****************************************
@@ -94,13 +94,13 @@ fclose(fid);
 return;
 
 
-function h = DesignFilter(NoTapsPIn, I)
+function h = DesignFilter(NoTapsPIn, I, cutofffactor)
 
 % number of taps, consider interpolation factor
 NoTapsP = NoTapsPIn * I;
 
 % Cut-off frequency (normlized)
-fc = 0.97 / I;
+fc = cutofffactor / I;
 
 % MMSE filter design with Kaiser window, consider interpolation factor
 h = I * firls(NoTapsP - 1, [0 fc fc 1], [1 1 0 0]) .* kaiser(NoTapsP, 5)';

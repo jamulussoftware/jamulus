@@ -56,7 +56,7 @@
 #define LLCON_DEFAULT_PORT_NUMBER       22123
 
 // system sample rate
-#define SYSTEM_SAMPLE_RATE              32000
+#define SYSTEM_SAMPLE_RATE              33000
 
 // sound card sample rate. Should be always 48 kHz to avoid sound card driver
 // internal sample rate conversion which might be buggy

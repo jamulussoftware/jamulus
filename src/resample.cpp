@@ -157,16 +157,10 @@ void CStereoAudioResample::Init ( const int iNewMonoInputBlockSize,
             iI           = DECIM_D_2;
             break;
 
-        case ( SND_CRD_SAMPLE_RATE * 7 / 12 ): // 48 kHz to 28 kHz
-            pFiltTaps = fResTaps12_7;
-            iNumTaps  = INTERP_I_12_7 * NUM_TAPS_PER_PHASE12_7;
-            iI        = DECIM_D_12_7;
-            break;
-
-        case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 48 kHz to 32 kHz
-            pFiltTaps = fResTaps3_2;
-            iNumTaps  = INTERP_I_3_2 * NUM_TAPS_PER_PHASE3_2;
-            iI        = DECIM_D_3_2;
+        case ( SND_CRD_SAMPLE_RATE * 11 / 16 ): // 48 kHz to 33 kHz
+            pFiltTaps = fResTaps16_11;
+            iNumTaps  = INTERP_I_16_11 * NUM_TAPS_PER_PHASE16_11;
+            iI        = DECIM_D_16_11;
             break;
 
         case SND_CRD_SAMPLE_RATE: // 48 kHz to 48 kHz
@@ -192,16 +186,10 @@ void CStereoAudioResample::Init ( const int iNewMonoInputBlockSize,
             iI        = INTERP_I_2;
             break;
 
-        case ( SND_CRD_SAMPLE_RATE * 7 / 12 ): // 28 kHz to 48 kHz
-            pFiltTaps = fResTaps12_7;
-            iNumTaps  = DECIM_D_12_7 * NUM_TAPS_PER_PHASE12_7;
-            iI        = INTERP_I_12_7;
-            break;
-
-        case ( SND_CRD_SAMPLE_RATE * 2 / 3 ): // 32 kHz to 48 kHz
-            pFiltTaps = fResTaps3_2;
-            iNumTaps  = DECIM_D_3_2 * NUM_TAPS_PER_PHASE3_2;
-            iI        = INTERP_I_3_2;
+        case ( SND_CRD_SAMPLE_RATE * 11 / 16 ): // 33 kHz to 48 kHz
+            pFiltTaps = fResTaps16_11;
+            iNumTaps  = DECIM_D_16_11 * NUM_TAPS_PER_PHASE16_11;
+            iI        = INTERP_I_16_11;
             break;
 
         default:

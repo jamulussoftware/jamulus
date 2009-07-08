@@ -1,3 +1,12 @@
+2.3.0
+
+- new system sample rate of 33 kHz to improve audio quality, not compatible
+  to old versions
+
+- added history graph for server logging
+
+- added command line argument for connecting a server at software start-up
+
 2.2.2
 
 - "Mute" and "Solo" check boxes for each connected client fader

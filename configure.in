@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.50)
 AC_INIT(src/main.cpp)
 
-AM_INIT_AUTOMAKE(llcon,2.3.0)
+AM_INIT_AUTOMAKE(llcon,2.3.1cvs)
 
 
 AM_CONFIG_HEADER(config.h)

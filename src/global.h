@@ -43,7 +43,7 @@
 
 // version and application name (always use this version)
 #undef VERSION
-#define VERSION                         "2.2.3cvs"
+#define VERSION                         "2.3.0cvs"
 #define APP_NAME                        "llcon"
 
 // file name for logging file
@@ -53,10 +53,10 @@
 #define DEFAULT_SERVER_ADDRESS          "llcon.dyndns.org"
 
 // defined port number for client and server
-#define LLCON_DEFAULT_PORT_NUMBER       22122
+#define LLCON_DEFAULT_PORT_NUMBER       22123
 
 // system sample rate
-#define SYSTEM_SAMPLE_RATE              24000
+#define SYSTEM_SAMPLE_RATE              32000
 
 // sound card sample rate. Should be always 48 kHz to avoid sound card driver
 // internal sample rate conversion which might be buggy

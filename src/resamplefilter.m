@@ -103,7 +103,7 @@ NoTapsP = NoTapsPIn * I;
 fc = 0.97 / I;
 
 % MMSE filter design with Kaiser window, consider interpolation factor
-h = sqrt(I) * firls(NoTapsP - 1, [0 fc fc 1], [1 1 0 0]) .* kaiser(NoTapsP, 5)';
+h = I * firls(NoTapsP - 1, [0 fc fc 1], [1 1 0 0]) .* kaiser(NoTapsP, 5)';
 
 return;
 

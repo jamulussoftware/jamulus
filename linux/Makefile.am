@@ -57,6 +57,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/res/CLEDGreen.png \
 	../src/res/CLEDYellow.png \
 	../src/res/CLEDRed.png \
+	../src/res/CLEDDisabledSmall.png \
 	../src/res/CLEDBlackSmall.png \
 	../src/res/CLEDGreySmall.png \
 	../src/res/CLEDGreenSmall.png \
@@ -67,6 +68,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/res/VLEDGreen.png \
 	../src/res/VLEDYellow.png \
 	../src/res/VLEDRed.png \
+	../src/res/VLEDDisabledSmall.png \
 	../src/res/VLEDBlackSmall.png \
 	../src/res/VLEDGreySmall.png \
 	../src/res/VLEDGreenSmall.png \

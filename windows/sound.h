@@ -55,7 +55,7 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewCallback) ( CVector<short>& psData, void* arg ), void* arg );
+    CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg );
     virtual ~CSound();
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
@@ -87,7 +87,7 @@ protected:
 
     // callbacks
     static void      bufferSwitch ( long index, ASIOBool processNow );
-    static ASIOTime* bufferSwitchTimeInfo ( ASIOTime *timeInfo, long index, ASIOBool processNow );
+    static ASIOTime* bufferSwitchTimeInfo ( ASIOTime* timeInfo, long index, ASIOBool processNow );
     static void      sampleRateChanged ( ASIOSampleRate sRate ) {}
     static long      asioMessages ( long selector, long value, void* message, double* opt );
 

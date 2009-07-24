@@ -38,12 +38,12 @@
 
 /* Definitions ****************************************************************/
 // define this macro to get debug output
-#define _DEBUG_
+//#define _DEBUG_
 #undef _DEBUG_
 
 // version and application name (always use this version)
 #undef VERSION
-#define VERSION                         "2.3.1cvs"
+#define VERSION                         "3.0.0cvs"
 #define APP_NAME                        "llcon"
 
 // file name for logging file
@@ -53,33 +53,19 @@
 #define DEFAULT_SERVER_ADDRESS          "llcon.dyndns.org"
 
 // defined port number for client and server
-#define LLCON_DEFAULT_PORT_NUMBER       22123
+#define LLCON_DEFAULT_PORT_NUMBER       22124
 
-// system sample rate
-#define SYSTEM_SAMPLE_RATE              33000
+// system sample rate (the sound card and audio coder works on this sample rate)
+#define SYSTEM_SAMPLE_RATE              48000
 
-// sound card sample rate. Should be always 48 kHz to avoid sound card driver
-// internal sample rate conversion which might be buggy
-#define SND_CRD_SAMPLE_RATE             48000
-
-// minimum server block duration - all other buffer durations must be a multiple
-// of this duration
-#define MIN_SERVER_BLOCK_DURATION_MS    2 // ms
-
-#define MIN_SERVER_BLOCK_SIZE_SAMPLES   ( MIN_SERVER_BLOCK_DURATION_MS * SYSTEM_SAMPLE_RATE / 1000 )
+// System block size, this is the block size on which the audio coder works.
+// All other block sizes must be a multiple of this size
+#define SYSTEM_BLOCK_SIZE_SAMPLES       128
 
 // define the maximum mono audio buffer size at a sample rate
 // of 48 kHz, this is important for defining the maximum number
-// of bytes to be expected from the network interface (we assume
-// here that "MAX_NET_BLOCK_SIZE_FACTOR * MIN_SERVER_BLOCK_SIZE_SAMPLES"
-// is smaller than this value here)
+// of bytes to be expected from the network interface
 #define MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ 4096
-
-// maximum value of factor for network block size
-#define MAX_NET_BLOCK_SIZE_FACTOR       3
-
-// default network block size factor (only used for server)
-#define DEF_NET_BLOCK_SIZE_FACTOR       2
 
 // minimum/maximum network buffer size (which can be chosen by slider)
 #define MIN_NET_BUF_SIZE_NUM_BL         1 // number of blocks
@@ -87,9 +73,6 @@
 
 // default network buffer size
 #define DEF_NET_BUF_SIZE_NUM_BL         10 // number of blocks
-
-// default maximum upload rate at server (typical DSL upload for good DSL)
-#define DEF_MAX_UPLOAD_RATE_KBPS        800 // kbps
 
 // maximum number of recognized sound cards installed in the system,
 // definition for "no device"
@@ -130,10 +113,12 @@
 #elif HAVE_INTTYPES_H
 # include <inttypes.h>
 #elif defined ( _WIN32 )
+typedef __int16          int16_t;
 typedef unsigned __int32 uint32_t;
 typedef unsigned __int16 uint16_t;
 typedef unsigned __int8  uint8_t;
 #else
+typedef short          int16_t;
 typedef unsigned int   uint32_t;
 typedef unsigned short uint16_t;
 typedef unsigned char  uint8_t;
@@ -196,10 +181,10 @@ public:
 
 /* Prototypes for global functions ********************************************/
 // command line parsing, TODO do not declare functions globally but in a class
-std::string UsageArguments     ( char **argv );
-bool        GetFlagArgument    ( int, char **argv, int &i, std::string strShortOpt, std::string strLongOpt );
-bool        GetStringArgument  ( int argc, char **argv, int &i, std::string strShortOpt, std::string strLongOpt, std::string & strArg );
-bool        GetNumericArgument ( int argc, char **argv, int &i, std::string strShortOpt, std::string strLongOpt, double rRangeStart, double rRangeStop, double & rValue);
+std::string UsageArguments     ( char** argv );
+bool        GetFlagArgument    ( int argc, char** argv, int& i, std::string strShortOpt, std::string strLongOpt );
+bool        GetStringArgument  ( int argc, char** argv, int& i, std::string strShortOpt, std::string strLongOpt, std::string& strArg );
+bool        GetNumericArgument ( int argc, char** argv, int& i, std::string strShortOpt, std::string strLongOpt, double rRangeStart, double rRangeStop, double& rValue);
 
 // posting a window message
 void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam = 0,

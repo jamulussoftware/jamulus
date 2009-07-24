@@ -27,10 +27,10 @@
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
-void CStereoSignalLevelMeter::Update ( CVector<double>& vecdAudio )
+void CStereoSignalLevelMeter::Update ( CVector<short>& vecsAudio )
 {
     // get the stereo vector size
-    const int iStereoVecSize = vecdAudio.Size();
+    const int iStereoVecSize = vecsAudio.Size();
 
     // Get maximum of current block
     //
@@ -43,28 +43,28 @@ void CStereoSignalLevelMeter::Update ( CVector<double>& vecdAudio )
     // special cases but for the average music signals the following code
     // should give good results.
     //
-    double dMaxL = 0.0;
-    double dMaxR = 0.0;
+    short sMaxL = 0;
+    short sMaxR = 0;
     for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
     {
         // left channel
-        if ( dMaxL < vecdAudio[i] )
+        if ( sMaxL < vecsAudio[i] )
         {
-            dMaxL = vecdAudio[i];
+            sMaxL = vecsAudio[i];
         }
 
         // right channel
-        if ( dMaxR < vecdAudio[i + 1] )
+        if ( sMaxR < vecsAudio[i + 1] )
         {
-            dMaxR = vecdAudio[i + 1];
+            sMaxR = vecsAudio[i + 1];
         }
     }
 
-    dCurLevelL = UpdateCurLevel ( dCurLevelL, dMaxL );
-    dCurLevelR = UpdateCurLevel ( dCurLevelR, dMaxR );
+    dCurLevelL = UpdateCurLevel ( dCurLevelL, sMaxL );
+    dCurLevelR = UpdateCurLevel ( dCurLevelR, sMaxR );
 }
 
-double CStereoSignalLevelMeter::UpdateCurLevel ( double dCurLevel, const double& dMax )
+double CStereoSignalLevelMeter::UpdateCurLevel ( double dCurLevel, const short& sMax )
 {
     // decrease max with time
     if ( dCurLevel >= METER_FLY_BACK )
@@ -78,9 +78,9 @@ double CStereoSignalLevelMeter::UpdateCurLevel ( double dCurLevel, const double&
     }
 
     // update current level -> only use maximum
-    if ( dMax > dCurLevel )
+    if ( static_cast<double> ( sMax ) > dCurLevel )
     {
-        return dMax;
+        return static_cast<double> ( sMax );
     }
     else
     {
@@ -331,6 +331,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "</b></p>"
         "<ul>"
         "<li>Qt cross-platform application framework: <i>http://trolltech.com</li>"
+        "<li>The CELT ultra-low delay audio codec: <i>http://www.celt-codec.org</li>"
         "<li>Audio reverberation code: by Perry R. Cook and Gary P. Scavone, "
         "1995 - 2004 (taken from <i>The Synthesis ToolKit in C++ (STK)</i>)</li>"
         "<li>ADPCM coders by Erik de Castro Lopo</li>"

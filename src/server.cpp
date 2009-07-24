@@ -30,10 +30,8 @@ CServer::CServer ( const QString& strLoggingFileName,
                    const quint16 iPortNumber,
                    const QString& strHTMLStatusFileName,
                    const QString& strHistoryFileName,
-                   const QString& strServerNameForHTMLStatusFile,
-                   const int iNewUploadRateLimitKbps ) :
-    Socket ( &ChannelSet, this, iPortNumber ),
-    ChannelSet ( iNewUploadRateLimitKbps )
+                   const QString& strServerNameForHTMLStatusFile ) :
+    Socket ( &ChannelSet, this, iPortNumber )
 {
     vecsSendData.Init ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
 

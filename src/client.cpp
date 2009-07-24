@@ -36,9 +36,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ), strName ( "" ),
     bOpenChatOnNewMessage ( true ),
     bDoAutoSockBufSize ( true ),
-    iSndCrdPreferredMonoBlSizeIndex ( CSndCrdBufferSizes::GetDefaultIndex() ),
-    iClientSampleRate ( SYSTEM_SAMPLE_RATE ),
-    iSndCrdMonoBlockSizeSam ( 0 )
+    iSndCrdPreferredMonoBlSizeIndex ( CSndCrdBufferSizes::GetDefaultIndex() )
 {
     // connection for protocol
     QObject::connect ( &Channel,
@@ -164,7 +162,7 @@ void CClient::SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx )
     }
 
     // init with new block size index parameter
-    Init ( iClientSampleRate, iSndCrdPreferredMonoBlSizeIndex );
+    Init ( iSndCrdPreferredMonoBlSizeIndex );
 
     if ( bWasRunning )
     {
@@ -191,7 +189,7 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
 
     // init again because the sound card actual buffer size might
     // be changed on new device
-    Init ( iClientSampleRate, iSndCrdPreferredMonoBlSizeIndex );
+    Init ( iSndCrdPreferredMonoBlSizeIndex );
 
     if ( bWasRunning )
     {
@@ -214,7 +212,7 @@ void CClient::OnSndCrdReinitRequest()
     // reinit the driver (we use the currently selected driver) and
     // init client object, too
     Sound.SetDev ( Sound.GetDev() );
-    Init ( iClientSampleRate, iSndCrdPreferredMonoBlSizeIndex );
+    Init ( iSndCrdPreferredMonoBlSizeIndex );
 
     if ( bWasRunning )
     {
@@ -225,7 +223,7 @@ void CClient::OnSndCrdReinitRequest()
 void CClient::Start()
 {
     // init object
-    Init ( iClientSampleRate, iSndCrdPreferredMonoBlSizeIndex );
+    Init ( iSndCrdPreferredMonoBlSizeIndex );
 
     // enable channel
     Channel.SetEnable ( true );
@@ -254,7 +252,7 @@ void CClient::Stop()
     PostWinMessage ( MS_RESET_ALL, 0 );
 }
 
-void CClient::AudioCallback ( CVector<short>& psData, void* arg )
+void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
 {
     // get the pointer to the object
     CClient* pMyClientObj = reinterpret_cast<CClient*> ( arg ); 
@@ -263,70 +261,62 @@ void CClient::AudioCallback ( CVector<short>& psData, void* arg )
     pMyClientObj->ProcessAudioData ( psData );
 }
 
-void CClient::Init ( const int iSampleRate,
-                     const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
+void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
 {
-    // store new sample rate
-    iClientSampleRate = iSampleRate;
-
     // translate block size index in actual block size
     const int iPrefMonoBlockSizeSamAtSndCrdSamRate = CSndCrdBufferSizes::
         GetBufferSizeFromIndex ( iPrefMonoBlockSizeSamIndexAtSndCrdSamRate );
 
     // get actual sound card buffer size using preferred size
-    iSndCrdMonoBlockSizeSam   = Sound.Init ( iPrefMonoBlockSizeSamAtSndCrdSamRate );
-    iSndCrdStereoBlockSizeSam = 2 * iSndCrdMonoBlockSizeSam;
-
-    iMonoBlockSizeSam   = iSndCrdMonoBlockSizeSam * iClientSampleRate / SND_CRD_SAMPLE_RATE;
+    iMonoBlockSizeSam   = Sound.Init ( iPrefMonoBlockSizeSamAtSndCrdSamRate );
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
-    // the channel works on the same block size as the sound interface
-    Channel.SetNetwBufSizeOut ( iMonoBlockSizeSam );
-
-    vecsAudioSndCrdStereo.Init ( iSndCrdStereoBlockSizeSam );
-    vecdAudioSndCrdMono.Init   ( iSndCrdMonoBlockSizeSam );
-    vecdAudioSndCrdStereo.Init ( iSndCrdStereoBlockSizeSam );
+    vecsAudioSndCrdStereo.Init ( iStereoBlockSizeSam );
 
     vecdAudioStereo.Init ( iStereoBlockSizeSam );
 
-    // resample objects are always initialized with the input block size
-    // record
-    ResampleObjDown.Init ( iSndCrdMonoBlockSizeSam,
-        SND_CRD_SAMPLE_RATE, iClientSampleRate );
-
-    // playback
-    ResampleObjUp.Init ( iMonoBlockSizeSam,
-        iClientSampleRate, SND_CRD_SAMPLE_RATE );
-
-    // init network buffers
-    vecsNetwork.Init  ( iMonoBlockSizeSam );
-    vecdNetwData.Init ( iMonoBlockSizeSam );
-
     // init response time evaluation
     CycleTimeVariance.Init ( iMonoBlockSizeSam,
-        iClientSampleRate, TIME_MOV_AV_RESPONSE );
+        SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
 
     CycleTimeVariance.Reset();
 
     // init reverberation
-    AudioReverb.Init ( iClientSampleRate );
+    AudioReverb.Init ( SYSTEM_SAMPLE_RATE );
+
+    // init audio endocder/decoder (mono)
+    CeltMode = celt_mode_create (
+        SYSTEM_SAMPLE_RATE, 1, iMonoBlockSizeSam, NULL );
+
+    CeltEncoder = celt_encoder_create ( CeltMode );
+    CeltDecoder = celt_decoder_create ( CeltMode );
+
+    // 16: low/normal quality   132 kbsp (128) / 90 kbps (256)
+    // 40: high good            204 kbps (128) / 162 kbps (256)
+    iCeltNumCodedBytes = 16;
+
+    vecCeltData.Init ( iCeltNumCodedBytes );
+
+    // init network buffers
+    vecsNetwork.Init   ( iMonoBlockSizeSam );
+    vecbyNetwData.Init ( iCeltNumCodedBytes );
+
+    // the channel works on the audio coded block size
+    Channel.SetNetwBufSizeOut ( iCeltNumCodedBytes );
 }
 
-void CClient::ProcessAudioData ( CVector<short>& vecsStereoSndCrd )
+void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
 {
     int i, j;
 
-    // convert data from short to double
-    for ( i = 0; i < iSndCrdStereoBlockSizeSam; i++ )
-    {
-        vecdAudioSndCrdStereo[i] = (double) vecsStereoSndCrd[i];
-    }
-
-    // resample data for each channel seaparately
-    ResampleObjDown.ResampleStereo ( vecdAudioSndCrdStereo, vecdAudioStereo );
-
     // update stereo signal level meter
-    SignalLevelMeter.Update ( vecdAudioStereo );
+    SignalLevelMeter.Update ( vecsStereoSndCrd );
+
+    // convert data from short to double
+    for ( i = 0; i < iStereoBlockSizeSam; i++ )
+    {
+        vecdAudioStereo[i] = (double) vecsStereoSndCrd[i];
+    }
 
     // add reverberation effect if activated
     if ( iReverbLevel != 0 )
@@ -395,11 +385,17 @@ void CClient::ProcessAudioData ( CVector<short>& vecsStereoSndCrd )
     }
 
     // send it through the network
-    Socket.SendPacket ( Channel.PrepSendPacket ( vecsNetwork ),
-        Channel.GetAddress() );
+//    Socket.SendPacket ( Channel.PrepSendPacket ( vecsNetwork ),
+//        Channel.GetAddress() );
+
+celt_encode(CeltEncoder, &vecsNetwork[0], NULL, &vecCeltData[0], iCeltNumCodedBytes);
+Socket.SendPacket ( vecCeltData, Channel.GetAddress() );
+
+
+
 
     // receive a new block
-    if ( Channel.GetData ( vecdNetwData ) == GS_BUFFER_OK )
+    if ( Channel.GetData ( vecbyNetwData ) == GS_BUFFER_OK )
     {
         PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN );
     }
@@ -424,16 +420,36 @@ fflush(pFileDelay);
     // check if channel is connected
     if ( Channel.IsConnected() )
     {
-        // resample data
-        ResampleObjUp.ResampleMono ( vecdNetwData, vecdAudioSndCrdMono );
-
+/*
         // convert data from double to short type and copy mono
         // received data in both sound card channels
         for ( i = 0, j = 0; i < iSndCrdMonoBlockSizeSam; i++, j += 2 )
         {
             vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
-                Double2Short ( vecdAudioSndCrdMono[i] );
+                Double2Short ( vecdNetwData[i] );
         }
+*/
+
+CVector<short> vecsAudioSndCrdMono ( iMonoBlockSizeSam );
+/*
+for ( i = 0; i < iMonoBlockSizeSam; i++ )
+{
+    vecsAudioSndCrdMono[i] = Double2Short ( vecdNetwData[i] );
+}
+*/
+// TEST CELT
+//celt_encode(CeltEncoder, &vecsAudioSndCrdMono[0], NULL, &vecCeltData[0], iCeltNumCodedBytes);
+celt_decode(CeltDecoder, &vecbyNetwData[0], iCeltNumCodedBytes, &vecsAudioSndCrdMono[0]);
+
+
+for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+{
+    vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
+        vecsAudioSndCrdMono[i];
+}
+
+
+
     }
     else
     {
@@ -472,7 +488,7 @@ void CClient::UpdateSocketBufferSize()
         // a minimum buffer size of the sum of both sizes
         const double dAudioBufferDurationMs =
             ( iMonoBlockSizeSam + Channel.GetAudioBlockSizeIn() ) * 1000 /
-            iClientSampleRate;
+            SYSTEM_SAMPLE_RATE;
 
         // accumulate the standard deviations of input network stream and
         // internal timer,

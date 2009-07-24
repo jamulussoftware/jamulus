@@ -363,14 +363,14 @@ public:
     CStereoSignalLevelMeter() { Reset(); }
     virtual ~CStereoSignalLevelMeter() {}
 
-    void   Update ( CVector<double>& vecdAudio );
+    void   Update ( CVector<short>& vecsAudio );
     double MicLevelLeft()  { return CalcLogResult ( dCurLevelL ); }
     double MicLevelRight() { return CalcLogResult ( dCurLevelR ); }
     void   Reset()         { dCurLevelL = 0.0; dCurLevelR = 0.0; }
 
 protected:
     double CalcLogResult  ( const double& dLinearLevel );
-    double UpdateCurLevel ( double dCurLevel, const double& dMax );
+    double UpdateCurLevel ( double dCurLevel, const short& sMax );
 
     double dCurLevelL;
     double dCurLevelR;
@@ -417,7 +417,8 @@ enum EAudComprType
 {
     CT_NONE     = 0,
     CT_IMAADPCM = 1,
-    CT_MSADPCM  = 2
+    CT_MSADPCM  = 2,
+    CT_CELT     = 3
 };
 
 class CNetworkTransportProps
@@ -448,17 +449,15 @@ public:
     // we use a conservative value as default, this value does not
     // give perfekt latency results but should work ok on most
     // sound cards and drivers
-    static int GetDefaultIndex() { return 5; }
+    static int GetDefaultIndex() { return 1; }
 
-    static int GetNumOfBufferSizes() { return 16; }
+    static int GetNumOfBufferSizes() { return 4; }
     static int GetBufferSizeFromIndex ( const int iIdx )
     {
-        if ( ( iIdx >= 0 ) && ( iIdx < 16 ) )
+        if ( ( iIdx >= 0 ) && ( iIdx < 4 ) )
         {
-            const int pSizes[16] = {
-                96, 128, 160, 192, 224, 256, 288, 320, 352,
-                384, 416, 448, 480, 512, 768, 1024 };
-            
+            const int pSizes[4] = { 128, 256, 512, 1024 };
+
             return pSizes[iIdx];
         }
         else

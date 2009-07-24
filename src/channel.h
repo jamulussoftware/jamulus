@@ -62,10 +62,6 @@ enum EGetDataStat
     GS_CHAN_NOT_CONNECTED
 };
 
-// low upload data rate settings
-#define LOW_UPL_SET_AUDIO_COMPRESSION       CT_MSADPCM
-#define LOW_UPL_SET_BLOCK_SIZE_FACTOR_OUT   MAX_NET_BLOCK_SIZE_FACTOR
-
 
 /* Classes ********************************************************************/
 // CChannel --------------------------------------------------------------------
@@ -81,7 +77,7 @@ public:
 
     EPutDataStat PutData ( const CVector<uint8_t>& vecbyData,
                            int iNumBytes );
-    EGetDataStat GetData ( CVector<double>& vecdData );
+    EGetDataStat GetData ( CVector<uint8_t>& vecbyData );
 
     CVector<uint8_t> PrepSendPacket ( const CVector<short>& vecsNPacket );
 
@@ -111,7 +107,7 @@ public:
     void SetNetwBufSizeOut ( const int iNewAudioBlockSizeOut );
     int GetNetwBufSizeOut() { return iCurAudioBlockSizeOut; }
 
-    int GetAudioBlockSizeIn() { return iCurAudioBlockSizeIn; }
+    int GetAudioBlockSizeIn() { return NetwBufferInProps.iAudioBlockSize; }
     int GetUploadRateKbps();
 
     double GetTimingStdDev() { return CycleTimeVariance.GetStdDev(); }
@@ -152,9 +148,6 @@ public:
     void CreateDisconnectionMes() { Protocol.CreateDisconnectionMes(); }
 
 protected:
-    void SetAudioBlockSizeAndComprIn ( const int iNewBlockSize,
-                                       const EAudComprType eNewAudComprType );
-
     bool ProtocolIsEnabled(); 
 
     // audio compression
@@ -189,19 +182,17 @@ protected:
     bool                bIsEnabled;
     bool                bIsServer;
 
-    int                 iCurAudioBlockSizeIn;
     int                 iCurNetwOutBlSiFact;
     int                 iCurAudioBlockSizeOut;
 
     QMutex              Mutex;
 
-    struct sNetwBufferInProps
+    struct sNetwProperties
     {
-        int           iNetwInBufSize;
-        int           iAudioBlockSize;
-        EAudComprType eAudComprType;
+        int iNetwInBufSize;
+        int iAudioBlockSize;
     };
-    CVector<sNetwBufferInProps> vecNetwBufferInProps;
+    sNetwProperties NetwBufferInProps;
 
     EAudComprType eAudComprTypeOut;
 
@@ -233,7 +224,7 @@ class CChannelSet : public QObject
     Q_OBJECT
 
 public:
-    CChannelSet ( const int iNewUploadRateLimitKbps = DEF_MAX_UPLOAD_RATE_KBPS );
+    CChannelSet();
     virtual ~CChannelSet() {}
 
     bool PutData ( const CVector<uint8_t>& vecbyRecBuf,
@@ -267,9 +258,6 @@ public:
     void StartStatusHTMLFileWriting ( const QString& strNewFileName,
                                       const QString& strNewServerNameWithPort );
 
-    void SetUploadRateLimitKbps ( const int iNewUploadRateLimitKbps )
-        { iUploadRateLimitKbps = iNewUploadRateLimitKbps; }
-
 protected:
     CVector<CChannelShortInfo> CreateChannelList();
     void CreateAndSendChanListForAllConChannels();
@@ -278,7 +266,7 @@ protected:
     void CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText );
     void WriteHTMLChannelList();
     void SetOutputParameters();
-    int CalculateTotalUploadRateKbps();
+    int  CalculateTotalUploadRateKbps();
 
     /* do not use the vector class since CChannel does not have appropriate
        copy constructor/operator */
@@ -286,8 +274,6 @@ protected:
     QMutex           Mutex;
 
     CVector<QString> vstrChatColors;
-
-    int              iUploadRateLimitKbps;
 
     // HTML file server status
     bool             bWriteStatusHTMLFile;

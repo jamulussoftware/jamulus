@@ -124,6 +124,7 @@ MESSAGES
                         - 0: none, no audio coding applied
                         - 1: IMA-ADPCM
                         - 2: MS-ADPCM
+                        - 3: CELT
     - "audiocod arg":  argument for the audio coder, if not used this value shall be set to 0
 
 

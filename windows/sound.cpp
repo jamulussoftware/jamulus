@@ -188,7 +188,7 @@ std::string CSound::CheckDeviceCapabilities()
     // message is returned.
 
     // check the sample rate
-    const ASIOError CanSaRateReturn = ASIOCanSampleRate ( SND_CRD_SAMPLE_RATE );
+    const ASIOError CanSaRateReturn = ASIOCanSampleRate ( SYSTEM_SAMPLE_RATE );
     if ( ( CanSaRateReturn == ASE_NoClock ) ||
          ( CanSaRateReturn == ASE_NotPresent ) )
     {
@@ -327,7 +327,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
         iASIOBufferSizeStereo = 2 * iASIOBufferSizeMono;
 
         // set the sample rate
-        ASIOSetSampleRate ( SND_CRD_SAMPLE_RATE );
+        ASIOSetSampleRate ( SYSTEM_SAMPLE_RATE );
 
         // create memory for intermediate audio buffer
         vecsTmpAudioSndCrdStereo.Init ( iASIOBufferSizeStereo );

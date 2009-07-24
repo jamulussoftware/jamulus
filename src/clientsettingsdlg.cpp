@@ -177,13 +177,13 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     // we have input and output
     TextLabelPreferredSndCrdBufDelay->setText (
         QString().setNum ( (double) iPrefBufSize * 2 *
-        1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
+        1000 / SYSTEM_SAMPLE_RATE, 'f', 2 ) + " ms (" +
         QString().setNum ( iPrefBufSize ) + ")" );
 
     // actual size (use yellow color if different from preferred size)
     const QString strActSizeValues =
         QString().setNum ( (double) iCurActualBufSize * 2 *
-        1000 / SND_CRD_SAMPLE_RATE, 'f', 2 ) + " ms (" +
+        1000 / SYSTEM_SAMPLE_RATE, 'f', 2 ) + " ms (" +
         QString().setNum ( iCurActualBufSize ) + ")";
 
     if ( iPrefBufSize != iCurActualBufSize )
@@ -299,7 +299,7 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
     // the actual sound card buffer size
     const int iTotalSoundCardDelayMS =
         3 * pClient->GetSndCrdActualMonoBlSize() *
-        1000 / SND_CRD_SAMPLE_RATE;
+        1000 / SYSTEM_SAMPLE_RATE;
 
     const int iDelayToFillNetworkPackets =
         ( pClient->GetNetwBufSizeOut() + pClient->GetAudioBlockSizeIn() ) *

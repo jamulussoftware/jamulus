@@ -31,9 +31,9 @@
 #include <qstring.h>
 #include <qdatetime.h>
 #include <qmessagebox.h>
+#include "celt.h"
 #include "global.h"
 #include "socket.h"
-#include "resample.h"
 #include "channel.h"
 #include "audiocompr.h"
 #include "util.h"
@@ -125,7 +125,7 @@ public:
     void SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx );
     int GetSndCrdPreferredMonoBlSizeIndex()
         { return iSndCrdPreferredMonoBlSizeIndex; }
-    int GetSndCrdActualMonoBlSize() { return iSndCrdMonoBlockSizeSam; }
+    int GetSndCrdActualMonoBlSize() { return iMonoBlockSizeSam; }
 
     void SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
     {
@@ -160,8 +160,7 @@ protected:
     // callback function must be static, otherwise it does not work
     static void  AudioCallback ( CVector<short>& psData, void* arg );
 
-    void         Init ( const int iSampleRate,
-                        const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate );
+    void         Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate );
     void         ProcessAudioData ( CVector<short>& vecsStereoSndCrd );
     void         UpdateSocketBufferSize();
 
@@ -169,11 +168,18 @@ protected:
     CChannel                Channel;
     bool                    bDoAutoSockBufSize;
 
+    // audio encoder/decoder
+    CELTMode*               CeltMode;
+    CELTEncoder*            CeltEncoder;
+    CELTDecoder*            CeltDecoder;
+    int                     iCeltNumCodedBytes;
+    CVector<unsigned char>  vecCeltData;
+
     CSocket                 Socket;
     CSound                  Sound;
     CStereoSignalLevelMeter SignalLevelMeter;
 
-    CVector<double>         vecdNetwData;
+    CVector<uint8_t>        vecbyNetwData;
 
     int                     iAudioInFader;
     bool                    bReverbOnLeftChan;
@@ -181,24 +187,15 @@ protected:
     CAudioReverb            AudioReverb;
 
     int                     iSndCrdPreferredMonoBlSizeIndex;
-    int                     iClientSampleRate;
 
-    int                     iSndCrdMonoBlockSizeSam;
-    int                     iSndCrdStereoBlockSizeSam;
     int                     iMonoBlockSizeSam;
     int                     iStereoBlockSizeSam;
 
     bool                    bOpenChatOnNewMessage;
 
-    CVector<short>          vecsAudioSndCrdStereo;
-    CVector<double>         vecdAudioSndCrdMono;
-    CVector<double>         vecdAudioSndCrdStereo;
+    CVector<int16_t>        vecsAudioSndCrdStereo;
     CVector<double>         vecdAudioStereo;
-    CVector<short>          vecsNetwork;
-
-    // resample objects
-    CStereoAudioResample    ResampleObjDown;
-    CStereoAudioResample    ResampleObjUp;
+    CVector<int16_t>        vecsNetwork;
 
     // for ping measurement
     CPreciseTime            PreciseTime;

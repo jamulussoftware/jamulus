@@ -29,15 +29,6 @@
 #include "global.h"
 
 
-/* Definitions ****************************************************************/
-// time for fading effect for masking drop outs
-#define FADE_IN_OUT_TIME            ( (double) 2 ) // ms
-#define FADE_IN_OUT_NUM_SAM         ( (int) ( SYSTEM_SAMPLE_RATE * FADE_IN_OUT_TIME ) / 1000 )
-
-// for extrapolation a shorter time for fading
-#define FADE_IN_OUT_NUM_SAM_EXTRA   10 // samples
-
-
 /* Classes ********************************************************************/
 class CNetBuf
 {
@@ -48,8 +39,8 @@ public:
     void Init ( const int iNewBlockSize, const int iNewNumBlocks );
     int GetSize() { return iMemSize / iBlockSize; }
 
-    bool Put ( CVector<double>& vecdData );
-    bool Get ( CVector<double>& vecdData );
+    bool Put ( const CVector<uint8_t>& vecbyData );
+    bool Get ( CVector<uint8_t>& vecbyData );
 
 protected:
     enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
@@ -57,22 +48,12 @@ protected:
     void Clear ( const EClearType eClearType );
     int GetAvailSpace() const;
     int GetAvailData() const;
-    void FadeInAudioDataBlock ( CVector<double>& vecdData );
-    void FadeOutExtrapolateAudioDataBlock ( CVector<double>& vecdData,
-        const double dExPDiff, const double dExPLastV );
 
-    CVector<double> vecdMemory;
-    int             iMemSize;
-    int             iBlockSize;
-    int             iGetPos, iPutPos;
-    EBufState       eBufState;
-    bool            bFadeInNewPutData;
-    int             iNumSamFading;
-    int             iNumSamFadingExtra;
-
-    // extrapolation parameters
-    double          dExPDiff;
-    double          dExPLastV;
+    CVector<uint8_t> vecbyMemory;
+    int              iMemSize;
+    int              iBlockSize;
+    int              iGetPos, iPutPos;
+    EBufState        eBufState;
 };
 
 

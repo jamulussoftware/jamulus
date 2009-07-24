@@ -40,18 +40,17 @@
 #define PROTMESSID_ACKN                        1 // acknowledge
 #define PROTMESSID_JITT_BUF_SIZE              10 // jitter buffer size
 #define PROTMESSID_REQ_JITT_BUF_SIZE          11 // request jitter buffer size
-#define PROTMESSID_PING                       12 // OLD, not used anymore
-#define PROTMESSID_NET_BLSI_FACTOR            13 // network buffer size factor
-#define PROTMESSID_CHANNEL_GAIN               14 // set channel gain for mix
-#define PROTMESSID_CONN_CLIENTS_LIST          15 // connected client list
-#define PROTMESSID_SERVER_FULL                16 // server full message
-#define PROTMESSID_REQ_CONN_CLIENTS_LIST      17 // request connected client list
-#define PROTMESSID_CHANNEL_NAME               18 // set channel name for fader tag
-#define PROTMESSID_CHAT_TEXT                  19 // contains a chat text
-#define PROTMESSID_PING_MS                    20 // for measuring ping time
-#define PROTMESSID_NETW_TRANSPORT_PROPS       21 // properties for network transport
-#define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   22 // request properties for network transport
-#define PROTMESSID_DISCONNECTION              23 // disconnection
+#define PROTMESSID_NET_BLSI_FACTOR            12 // network buffer size factor
+#define PROTMESSID_CHANNEL_GAIN               13 // set channel gain for mix
+#define PROTMESSID_CONN_CLIENTS_LIST          14 // connected client list
+#define PROTMESSID_SERVER_FULL                15 // server full message
+#define PROTMESSID_REQ_CONN_CLIENTS_LIST      16 // request connected client list
+#define PROTMESSID_CHANNEL_NAME               17 // set channel name for fader tag
+#define PROTMESSID_CHAT_TEXT                  18 // contains a chat text
+#define PROTMESSID_PING_MS                    19 // for measuring ping time
+#define PROTMESSID_NETW_TRANSPORT_PROPS       20 // properties for network transport
+#define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   21 // request properties for network transport
+#define PROTMESSID_DISCONNECTION              22 // disconnection
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)

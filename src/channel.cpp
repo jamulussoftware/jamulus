@@ -28,9 +28,8 @@
 /******************************************************************************\
 * CChannelSet                                                                  *
 \******************************************************************************/
-CChannelSet::CChannelSet ( const int iNewUploadRateLimitKbps ) :
-    bWriteStatusHTMLFile ( false ),
-    iUploadRateLimitKbps ( iNewUploadRateLimitKbps )
+CChannelSet::CChannelSet() :
+    bWriteStatusHTMLFile ( false )
 {
     // enable all channels (for the server all channel must be enabled the
     // entire life time of the software
@@ -492,7 +491,8 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
         {
             // read out all input buffers to decrease timeout counter on
             // disconnected channels
-            const EGetDataStat eGetStat = vecChannels[i].GetData ( vecdData );
+//            const EGetDataStat eGetStat = vecChannels[i].GetData ( vecdData );
+const EGetDataStat eGetStat=GS_BUFFER_OK;//TEST
 
             // if channel was just disconnected, set flag that connected
             // client list is sent to all other clients
@@ -668,56 +668,9 @@ CChannel::CChannel ( const bool bNIsServer ) :
     bIsEnabled ( false ),
     iCurNetwOutBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
 {
-    // query all possible network in buffer sizes for determining if an
-    // audio packet was received (the following code only works if all
-    // possible network buffer sizes are different!)
-    // we add a special entry for network modes which are managed via the
-    // protocol -> "+ 1"
-    const int iNumSupportedAudComprTypes = 3;
-    vecNetwBufferInProps.Init ( iNumSupportedAudComprTypes *
-        MAX_NET_BLOCK_SIZE_FACTOR + 1 );
-
-    // init special mode (with invalid data)
-    vecNetwBufferInProps[0].iAudioBlockSize = 0;
-    vecNetwBufferInProps[0].eAudComprType   = CT_NONE;
-    vecNetwBufferInProps[0].iNetwInBufSize  = 0;
-
-    for ( int i = 0; i < MAX_NET_BLOCK_SIZE_FACTOR; i++ )
-    {
-        // (consider the special mode -> "1 +")
-        const int iNoneIdx = 1 + iNumSupportedAudComprTypes * i;
-        const int iIMAIdx  = 1 + iNumSupportedAudComprTypes * i + 1;
-        const int iMSIdx   = 1 + iNumSupportedAudComprTypes * i + 2;
-
-        // network block size factor must start from 1 -> i + 1
-        const int iCurNetBlockSizeFact = i + 1;
-        vecNetwBufferInProps[iNoneIdx].iAudioBlockSize =
-            iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
-
-        vecNetwBufferInProps[iIMAIdx].iAudioBlockSize =
-            iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
-
-        vecNetwBufferInProps[iMSIdx].iAudioBlockSize =
-            iCurNetBlockSizeFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
-
-        // None (no audio compression)
-        vecNetwBufferInProps[iNoneIdx].eAudComprType  = CT_NONE;
-        vecNetwBufferInProps[iNoneIdx].iNetwInBufSize = AudioCompressionIn.Init (
-            vecNetwBufferInProps[iNoneIdx].iAudioBlockSize,
-            vecNetwBufferInProps[iNoneIdx].eAudComprType );
-
-        // IMA ADPCM
-        vecNetwBufferInProps[iIMAIdx].eAudComprType  = CT_IMAADPCM;
-        vecNetwBufferInProps[iIMAIdx].iNetwInBufSize = AudioCompressionIn.Init (
-            vecNetwBufferInProps[iIMAIdx].iAudioBlockSize,
-            vecNetwBufferInProps[iIMAIdx].eAudComprType );
-
-        // MS ADPCM
-        vecNetwBufferInProps[iMSIdx].eAudComprType  = CT_MSADPCM;
-        vecNetwBufferInProps[iMSIdx].iNetwInBufSize = AudioCompressionIn.Init (
-            vecNetwBufferInProps[iMSIdx].iAudioBlockSize,
-            vecNetwBufferInProps[iMSIdx].eAudComprType );
-    }
+    // init network input properties
+    NetwBufferInProps.iAudioBlockSize = 0;
+    NetwBufferInProps.iNetwInBufSize  = 0;
 
     // initial value for connection time out counter, we calculate the total
     // number of samples here and subtract the number of samples of the block
@@ -730,11 +683,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     // init the socket buffer
     SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
-    // set initial input and output block size factors
-    SetAudioBlockSizeAndComprIn (
-        MIN_SERVER_BLOCK_SIZE_SAMPLES * DEF_NET_BLOCK_SIZE_FACTOR,
-        CT_MSADPCM );
-
+    // set initial output block size factors
     if ( bIsServer )
     {
         SetNetwBufSizeFactOut ( DEF_NET_BLOCK_SIZE_FACTOR );
@@ -824,53 +773,20 @@ void CChannel::SetEnable ( const bool bNEnStat )
     }
 }
 
-void CChannel::SetAudioBlockSizeAndComprIn ( const int iNewBlockSize,
-                                             const EAudComprType eNewAudComprType )
-{
-    QMutexLocker locker ( &Mutex );
-
-    // store block size value
-    iCurAudioBlockSizeIn = iNewBlockSize;
-
-    // init audio compression unit
-    AudioCompressionIn.Init ( iNewBlockSize, eNewAudComprType );
-}
-
-void CChannel::SetNetwBufSizeOut ( const int iNewAudioBlockSizeOut )
-{
-    // this function is intended for the client (not the server)
-    QMutexLocker locker ( &Mutex );
-
-    // direct setting of audio buffer (without buffer size factor) is
-    // right now only intendet for the client, not the server
-    if ( !bIsServer )
-    {
-        // store new value
-        iCurAudioBlockSizeOut = iNewAudioBlockSizeOut;
-
-        iAudComprSizeOut =
-            AudioCompressionOut.Init ( iNewAudioBlockSizeOut, eAudComprTypeOut );
-    }
-}
-
 void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
 {
     // this function is intended for the server (not the client)
     QMutexLocker locker ( &Mutex );
 
-    // use the network block size factor only for the server
-    if ( bIsServer )
-    {
-        // store new value
-        iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
+    // store new value
+    iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
 
-        // init audio compression and get audio compression block size
-        iAudComprSizeOut = AudioCompressionOut.Init (
-            iNewNetwBlSiFactOut * MIN_SERVER_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
+    // init audio compression and get audio compression block size
+    iAudComprSizeOut = AudioCompressionOut.Init (
+        iNewNetwBlSiFactOut * MIN_SERVER_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
 
-        // init conversion buffer
-        ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_SERVER_BLOCK_SIZE_SAMPLES );
-    }
+    // init conversion buffer
+    ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_SERVER_BLOCK_SIZE_SAMPLES );
 }
 
 void CChannel::SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
@@ -1021,11 +937,22 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
     QMutexLocker locker ( &Mutex );
 
     // apply received parameters to internal data struct
-    vecNetwBufferInProps[0].iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
-    vecNetwBufferInProps[0].eAudComprType   = NetworkTransportProps.eAudioCodingType;
-    vecNetwBufferInProps[0].iNetwInBufSize  = AudioCompressionIn.Init (
-        vecNetwBufferInProps[0].iAudioBlockSize,
-        vecNetwBufferInProps[0].eAudComprType );
+    NetwBufferInProps.iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
+    NetwBufferInProps.eAudComprType   = NetworkTransportProps.eAudioCodingType;
+    NetwBufferInProps.iNetwInBufSize  = NetworkTransportProps.iNetworkPacketSize;
+
+    // re-initialize cycle time variance measurement if necessary
+    if ( NetwBufferInProps.iAudioBlockSize != CycleTimeVariance.GetBlockLength() )
+    {
+        // re-init (we have to use the buffer size which works
+        // on the system sample rate, therefore we use the
+        // decompressed audio buffer size instead of the network
+        // buffer size)
+        CycleTimeVariance.Init ( NetwBufferInProps.iAudioBlockSize,
+            SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
+
+        CycleTimeVariance.Reset();
+    }
 }
 
 void CChannel::OnReqNetTranspProps()
@@ -1040,7 +967,7 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
         iCurAudioBlockSizeOut,
         1, // right now we only use mono
         SYSTEM_SAMPLE_RATE, // right now only one sample rate is supported
-        AudioCompressionOut.GetType(),
+        CT_CELT, // always CELT coding
         0 );
 
     // send current network transport properties
@@ -1064,11 +991,6 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
     bool bIsProtocolPacket = false;
     bool bIsAudioPacket    = false;
     bool bNewConnection    = false;
-    bool bReinitializeIn   = false;
-
-    // intermediate storage for new parameters
-    int           iNewAudioBlockSize;
-    EAudComprType eNewAudComprType;
 
     if ( bIsEnabled )
     {
@@ -1090,60 +1012,14 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
         {
             Mutex.lock();
             {
-                // check if this is an audio packet by checking all possible lengths
-                const int iPossNetwSizes = vecNetwBufferInProps.Size();
-
-                for ( int i = 0; i < iPossNetwSizes; i++ )
-                {
-                    // check for low/high quality audio packets and set flags
-                    if ( iNumBytes == vecNetwBufferInProps[i].iNetwInBufSize )
-                    {
-                        bIsAudioPacket = true;
-
-                        // check if we are correctly initialized
-                        iNewAudioBlockSize =
-                            vecNetwBufferInProps[i].iAudioBlockSize;
-
-                        eNewAudComprType =
-                            vecNetwBufferInProps[i].eAudComprType;
-
-                        if ( ( iNewAudioBlockSize != iCurAudioBlockSizeIn ) ||
-                             ( eNewAudComprType != AudioCompressionIn.GetType() ) )
-                        {
-                            bReinitializeIn = true;
-                        }
-                    }
-                }
-            }
-            Mutex.unlock();
-
-            // actual initialization call has to be made
-            // outside the mutex region since it internally
-            // usees the same mutex, too                
-            if ( bReinitializeIn )
-            {
-                // re-initialize to new value
-                SetAudioBlockSizeAndComprIn (
-                    iNewAudioBlockSize, eNewAudComprType );
-            }
-
-            Mutex.lock();
-            {
                 // only process audio if packet has correct size
-                if ( bIsAudioPacket )
+                if ( iNumBytes == NetwBufferInProps.iNetwInBufSize )
                 {
-                    // decompress audio
-                    CVector<short> vecsDecomprAudio ( AudioCompressionIn.Decode ( vecbyData ) );
+                    // set audio packet flag
+                    bIsAudioPacket = true;
 
-                    // convert received data from short to double
-                    const int iAudioSize = vecsDecomprAudio.Size();
-                    CVector<double> vecdDecomprAudio ( iAudioSize );
-                    for ( int i = 0; i < iAudioSize; i++ )
-                    {
-                        vecdDecomprAudio[i] = static_cast<double> ( vecsDecomprAudio[i] );
-                    }
-
-                    if ( SockBuf.Put ( vecdDecomprAudio ) )
+                    // store new packet in jitter buffer
+                    if ( SockBuf.Put ( vecbyData ) )
                     {
                         eRet = PS_AUDIO_OK;
                     }
@@ -1152,28 +1028,13 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                         eRet = PS_AUDIO_ERR;
                     }
 
-                    // update cycle time variance measurement, take care of
-                    // re-initialization, too, if necessary
-                    if ( iAudioSize != CycleTimeVariance.GetBlockLength() )
-                    {
-                        // re-init (we have to use the buffer size which works
-                        // on the system sample rate, therefore we use the
-                        // decompressed audio buffer size instead of the network
-                        // buffer size)
-                        CycleTimeVariance.Init ( iAudioSize,
-                            SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
-
-                        CycleTimeVariance.Reset();
-                    }
-                    else
-                    {
+                    // update cycle time variance measurement
 
 // TODO only update if time difference of received packets is below
 // a limit to avoid having short network troubles incorporated in the
 // statistic
 
-                        CycleTimeVariance.Update();
-                    }
+                    CycleTimeVariance.Update();
                 }
                 else
                 {
@@ -1219,20 +1080,24 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
     return eRet;
 }
 
-EGetDataStat CChannel::GetData ( CVector<double>& vecdData )
+EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
 {
     QMutexLocker locker ( &Mutex );
 
     EGetDataStat eGetStatus;
 
-    const bool bSockBufState = SockBuf.Get ( vecdData );
+    const bool bSockBufState = SockBuf.Get ( vecbyData );
 
     // decrease time-out counter
     if ( iConTimeOut > 0 )
     {
+
+// TODO
+
+
         // subtract the number of samples of the current block since the
         // time out counter is based on samples not on blocks
-        iConTimeOut -= vecdData.Size();
+        iConTimeOut -= vecbyData.Size();
 
         if ( iConTimeOut <= 0 )
         {

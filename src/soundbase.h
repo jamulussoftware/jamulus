@@ -37,7 +37,7 @@ class CSoundBase : public QThread
 
 public:
     CSoundBase ( const bool bNewIsCallbackAudioInterface,
-        void (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
+        void (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
         void* pParg ) : fpProcessCallback ( fpNewProcessCallback ),
         pProcessCallbackArg ( pParg ), bRun ( false ),
         bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ) {}
@@ -56,25 +56,25 @@ public:
 
 protected:
     // function pointer to callback function
-    void (*fpProcessCallback) ( CVector<short>& psData, void* arg );
+    void (*fpProcessCallback) ( CVector<int16_t>& psData, void* arg );
     void* pProcessCallbackArg;
 
     // callback function call for derived classes
-    void ProcessCallback ( CVector<short>& psData )
+    void ProcessCallback ( CVector<int16_t>& psData )
     {
         (*fpProcessCallback) ( psData, pProcessCallbackArg );
     }
 
     // these functions should be overwritten by derived class for
     // non callback based audio interfaces
-    virtual bool Read  ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
-    virtual bool Write ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
+    virtual bool Read  ( CVector<int16_t>& psData ) { printf ( "no sound!" ); return false; }
+    virtual bool Write ( CVector<int16_t>& psData ) { printf ( "no sound!" ); return false; }
 
     void run();
     bool bRun;
     bool bIsCallbackAudioInterface;
 
-    CVector<short> vecsAudioSndCrdStereo;
+    CVector<int16_t> vecsAudioSndCrdStereo;
 
 signals:
     void ReinitRequest();

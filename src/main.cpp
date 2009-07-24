@@ -48,7 +48,6 @@ int main ( int argc, char** argv )
     bool        bUseGUI               = true;
     bool        bConnectOnStartup     = false;
     bool        bDisalbeLEDs          = false;
-    int         iUploadRateLimitKbps  = DEF_MAX_UPLOAD_RATE_KBPS;
     quint16     iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
     std::string strIniFileName        = "";
     std::string strHTMLStatusFileName = "";
@@ -93,17 +92,6 @@ int main ( int argc, char** argv )
         {
             strLoggingFileName = strArgument;
             cout << "logging file name: " << strLoggingFileName << std::endl;
-            continue;
-        }
-
-
-        // force low upload data rate flag -------------------------------------
-        if ( GetNumericArgument ( argc, argv, i, "-u", "--maxuploadrate",
-                                  100, 1000000, rDbleArgument ) )
-        {
-            iUploadRateLimitKbps = static_cast<int> ( rDbleArgument );
-            cout << "maximum upload rate: " << iUploadRateLimitKbps <<
-                " kbps" << std::endl;
             continue;
         }
 
@@ -246,8 +234,7 @@ int main ( int argc, char** argv )
                              iPortNumber,
                              strHTMLStatusFileName.c_str(),
                              strHistoryFileName.c_str(),
-                             strServerName.c_str(),
-                             iUploadRateLimitKbps );
+                             strServerName.c_str() );
 
             if ( bUseGUI )
             {
@@ -307,10 +294,11 @@ std::string UsageArguments ( char **argv )
         "                             client)\n"
         "  -p, --port                 local port number (only avaiable for server)\n"
         "  -m, --htmlstatus           enable HTML status file, set file name (only\n"
-        "                             avaiable for server)\n"
+        "                             available for server)\n"
+        "  -a, --servername           server name required for HTML status (only\n"
+        "                             available for server)\n"
         "  -y, --history              enable connection history and set file\n"
         "                             name (only available for server)\n"
-        "  -u, --maxuploadrate        maximum upload rate (only avaiable for server)\n"
         "  -c, --connect              connect to last server on startup (only\n"
         "                             available for client)\n"
         "  -d, --disableleds          disable LEDs in main window (only available\n"
@@ -319,8 +307,11 @@ std::string UsageArguments ( char **argv )
         "Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }
 
-bool GetFlagArgument ( int, char **argv, int &i,
-                       std::string strShortOpt, std::string strLongOpt )
+bool GetFlagArgument ( int argc,
+                       char** argv,
+                       int& i,
+                       std::string strShortOpt,
+                       std::string strLongOpt )
 {
     if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
@@ -332,9 +323,12 @@ bool GetFlagArgument ( int, char **argv, int &i,
     }
 }
 
-bool GetStringArgument ( int argc, char **argv, int &i,
-                         std::string strShortOpt, std::string strLongOpt,
-                         std::string & strArg )
+bool GetStringArgument ( int argc,
+                         char** argv,
+                         int& i,
+                         std::string strShortOpt,
+                         std::string strLongOpt,
+                         std::string& strArg )
 {
     if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
@@ -355,10 +349,14 @@ bool GetStringArgument ( int argc, char **argv, int &i,
     }
 }
 
-bool GetNumericArgument ( int argc, char **argv, int &i,
-                          std::string strShortOpt, std::string strLongOpt,
-                          double rRangeStart, double rRangeStop,
-                          double & rValue)
+bool GetNumericArgument ( int argc,
+                          char** argv,
+                          int& i,
+                          std::string strShortOpt,
+                          std::string strLongOpt,
+                          double rRangeStart,
+                          double rRangeStop,
+                          double& rValue)
 {
     if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
     {
@@ -392,7 +390,8 @@ bool GetNumericArgument ( int argc, char **argv, int &i,
 /******************************************************************************\
 * Window Message System                                                        *
 \******************************************************************************/
-void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam,
+void PostWinMessage ( const _MESSAGE_IDENT MessID,
+                      const int iMessageParam,
                       const int iChanNum )
 {
     // first check if application is initialized

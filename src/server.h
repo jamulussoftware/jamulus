@@ -46,8 +46,7 @@ public:
               const quint16 iPortNumber,
               const QString& strHTMLStatusFileName,
               const QString& strHistoryFileName,
-              const QString& strServerNameForHTMLStatusFile,
-              const int iNewUploadRateLimitKbps );
+              const QString& strServerNameForHTMLStatusFile );
     virtual ~CServer() {}
 
     void Start();

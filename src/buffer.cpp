@@ -35,40 +35,14 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks )
     iBlockSize = iNewBlockSize;
     iMemSize   = iNewBlockSize * iNewNumBlocks;
 
-    // fade in first block added to the buffer
-    bFadeInNewPutData = true;
-
     // allocate and clear memory for actual data buffer
-    vecdMemory.Init ( iMemSize );
+    vecbyMemory.Init ( iMemSize );
 
     // use the "get" flag to make sure the buffer is cleared
     Clear ( CT_GET );
-
-    // initialize number of samples for fading effect
-    if ( FADE_IN_OUT_NUM_SAM < iBlockSize )
-    {
-        iNumSamFading = iBlockSize;
-    }
-    else
-    {
-        iNumSamFading = FADE_IN_OUT_NUM_SAM;
-    }
-
-    if ( FADE_IN_OUT_NUM_SAM_EXTRA > iBlockSize )
-    {
-        iNumSamFadingExtra = iBlockSize;
-    }
-    else
-    {
-        iNumSamFadingExtra = FADE_IN_OUT_NUM_SAM_EXTRA;
-    }
-
-    // init variables for extrapolation (in case a fade out is needed)
-    dExPDiff  = 0.0;
-    dExPLastV = 0.0;
 }
 
-bool CNetBuf::Put ( CVector<double>& vecdData )
+bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData )
 {
 #ifdef _DEBUG_
 static FILE* pFileBI = fopen("bufferin.dat", "w");
@@ -79,7 +53,7 @@ fflush(pFileBI);
     bool bPutOK = true;
 
     // get size of data to be added to the buffer
-    const int iInSize = vecdData.Size();
+    const int iInSize = vecbyData.Size();
 
     // Check if there is not enough space available -> correct
     if ( GetAvailSpace() < iInSize )
@@ -87,9 +61,6 @@ fflush(pFileBI);
         // not enough space in buffer for put operation, correct buffer to
         // prepare for new data
         Clear ( CT_PUT );
-
-        // set flag to fade in new block to avoid clicks
-        bFadeInNewPutData = true;
 
         bPutOK = false; // return error flag
 
@@ -99,12 +70,6 @@ fflush(pFileBI);
             // do nothing here, just return error code
             return bPutOK;
         }
-    }
-
-    // fade in new block if required
-    if ( bFadeInNewPutData )
-    {
-        FadeInAudioDataBlock ( vecdData );
     }
 
     // copy new data in internal buffer
@@ -117,12 +82,12 @@ fflush(pFileBI);
         // data must be written in two steps because of wrap around
         while ( iPutPos < iMemSize )
         {
-            vecdMemory[iPutPos++] = vecdData[iCurPos++];
+            vecbyMemory[iPutPos++] = vecbyData[iCurPos++];
         }
 
         for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
         {
-            vecdMemory[iPutPos] = vecdData[iCurPos++];
+            vecbyMemory[iPutPos] = vecbyData[iCurPos++];
         }
     }
     else
@@ -131,7 +96,7 @@ fflush(pFileBI);
         const int iEnd = iPutPos + iInSize;
         while ( iPutPos < iEnd )
         {
-            vecdMemory[iPutPos++] = vecdData[iCurPos++];
+            vecbyMemory[iPutPos++] = vecbyData[iCurPos++];
         }
     }
 
@@ -148,13 +113,12 @@ fflush(pFileBI);
     return bPutOK;
 }
 
-bool CNetBuf::Get ( CVector<double>& vecdData )
+bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
 {
-    bool bGetOK         = true; // init return value
-    bool bFadeOutExtrap = false;
+    bool bGetOK = true; // init return value
 
     // get size of data to be get from the buffer
-    const int iInSize = vecdData.Size();
+    const int iInSize = vecbyData.Size();
 
     // Check if there is not enough data available -> correct
     if ( GetAvailData() < iInSize )
@@ -162,11 +126,6 @@ bool CNetBuf::Get ( CVector<double>& vecdData )
         // not enough data in buffer for get operation, correct buffer to
         // prepare for getting data
         Clear ( CT_GET );
-
-        // set flag to fade in next new block in buffer and fade out last
-        // block by extrapolation to avoid clicks
-        bFadeInNewPutData = true;
-        bFadeOutExtrap    = true;
 
         bGetOK = false; // return error flag
 
@@ -188,12 +147,12 @@ bool CNetBuf::Get ( CVector<double>& vecdData )
         // data must be read in two steps because of wrap around
         while ( iGetPos < iMemSize )
         {
-            vecdData[iCurPos++] = vecdMemory[iGetPos++];
+            vecbyData[iCurPos++] = vecbyMemory[iGetPos++];
         }
 
         for ( iGetPos = 0; iGetPos < iRemData; iGetPos++ )
         {
-            vecdData[iCurPos++] = vecdMemory[iGetPos];
+            vecbyData[iCurPos++] = vecbyMemory[iGetPos];
         }
     }
     else
@@ -202,7 +161,7 @@ bool CNetBuf::Get ( CVector<double>& vecdData )
         const int iEnd = iGetPos + iInSize;
         while ( iGetPos < iEnd )
         {
-            vecdData[iCurPos++] = vecdMemory[iGetPos++];
+            vecbyData[iCurPos++] = vecbyMemory[iGetPos++];
         }
     }
 
@@ -215,23 +174,6 @@ bool CNetBuf::Get ( CVector<double>& vecdData )
     {
         eBufState = CNetBuf::BS_OK;
     }
-
-
-    /* extrapolate data from old block to avoid "clicks"
-       we have to do this method since we cannot fade out the old block
-       anymore since it is already gone (processed or send through the
-       network) */
-    if ( bFadeOutExtrap )
-    {
-        FadeOutExtrapolateAudioDataBlock ( vecdData, dExPDiff, dExPLastV );
-    }
-
-    /* save some paramters from last block which is needed in case we do not
-       have enough data for next "get" operation and need to extrapolate the
-       signal to avoid "clicks"
-       we assume here that "iBlockSize" is larger than 1! */
-    dExPDiff  = vecdData[iInSize - 1] - vecdData[iInSize - 2];
-    dExPLastV = vecdData[iInSize - 1];
 
     return bGetOK;
 }
@@ -303,7 +245,7 @@ void CNetBuf::Clear ( const EClearType eClearType )
     if ( eClearType == CT_GET )
     {
         // clear buffer
-        vecdMemory.Reset ( 0.0 );
+        vecbyMemory.Reset ( 0 );
 
         // correct buffer so that after the current get operation the pointer
         // are at maximum distance
@@ -334,38 +276,6 @@ void CNetBuf::Clear ( const EClearType eClearType )
             iPutPos -= iMemSize;
         }
 
-        // fade out old data right before new put pointer
-        int iCurPos = iPutPos - iNumSamFading;
-        int i = iNumSamFading;
-
-        if ( iCurPos < 0 )
-        {
-            // wrap around
-            iCurPos += iMemSize;
-
-            // data must be processed in two steps because of wrap around
-            while ( iCurPos < iMemSize )
-            {
-                vecdMemory[iCurPos++] *= ( (double) i / iNumSamFading );
-                i--;
-            }
-
-            for ( iCurPos = 0; iCurPos < iPutPos; iCurPos++ )
-            {
-                vecdMemory[iCurPos] *= ( (double) i / iNumSamFading );
-                i--;
-            }
-        }
-        else
-        {
-            // data can be processed in one step
-            while ( iCurPos < iPutPos )
-            {
-                vecdMemory[iCurPos++] *= ( (double) i / iNumSamFading );
-                i--;
-            }
-        }
-
         // check for special case
         if ( iPutPos == iGetPos )
         {
@@ -377,40 +287,6 @@ void CNetBuf::Clear ( const EClearType eClearType )
         }
     }
 }
-
-void CNetBuf::FadeInAudioDataBlock ( CVector<double>& vecdData )
-{
-    // correct fading length if necessary
-    const int iCurFadingLen = min ( vecdData.Size(), iNumSamFading );
-
-    // apply linear fading
-    for ( int i = 0; i < iCurFadingLen; i++ )
-    {
-        vecdData[i] *= ( (double) i / iCurFadingLen );
-    }
-
-    // reset flag
-    bFadeInNewPutData = false;
-}
-
-void CNetBuf::FadeOutExtrapolateAudioDataBlock ( CVector<double>& vecdData,
-                                                 const double dExPDiff,
-                                                 const double dExPLastV )
-{
-    // correct fading length if necessary
-    const int iCurFadingLenExtra = min ( vecdData.Size(), iNumSamFadingExtra );
-
-    // apply linear extrapolation and linear fading
-    for ( int i = 0; i < iCurFadingLenExtra; i++ )
-    {
-        // calculate extrapolated value
-        vecdData[i] = ( ( i + 1 ) * dExPDiff + dExPLastV );
-
-        // linear fading
-        vecdData[i] *= ( (double) ( iCurFadingLenExtra - i ) / iCurFadingLenExtra );
-    }
-}
-
 
 
 /* conversion buffer implementation *******************************************/

@@ -31,7 +31,6 @@
 #include <qtextstream.h>
 #include "global.h"
 #include "buffer.h"
-#include "audiocompr.h"
 #include "util.h"
 #include "protocol.h"
 
@@ -151,8 +150,6 @@ protected:
     bool ProtocolIsEnabled(); 
 
     // audio compression
-    CAudioCompression   AudioCompressionIn;
-    CAudioCompression   AudioCompressionOut;
     int                 iAudComprSizeOut;
 
     // connection parameters
@@ -266,7 +263,6 @@ protected:
     void CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText );
     void WriteHTMLChannelList();
     void SetOutputParameters();
-    int  CalculateTotalUploadRateKbps();
 
     /* do not use the vector class since CChannel does not have appropriate
        copy constructor/operator */

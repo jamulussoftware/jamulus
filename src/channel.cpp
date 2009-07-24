@@ -324,21 +324,6 @@ void CChannelSet::SetOutputParameters()
     }
 }
 
-int CChannelSet::CalculateTotalUploadRateKbps()
-{
-    // calculate total upload rate
-    int iTotalUploadRate = 0;
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
-    {
-        if ( vecChannels[i].IsConnected() )
-        {
-            // accumulate the upload rates from all channels
-            iTotalUploadRate += vecChannels[i].GetUploadRateKbps();
-        }
-    }
-    return iTotalUploadRate;
-}
-
 int CChannelSet::CheckAddr ( const CHostAddress& Addr )
 {
     CHostAddress InetAddr;
@@ -476,7 +461,7 @@ void CChannelSet::GetBlockAllConC ( CVector<int>&              vecChanID,
     bool bChannelIsNowDisconnected = false;
 
     // init temporal data vector and clear input buffers
-    CVector<double> vecdData ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
+    CVector<double> vecdData ( SYSTEM_BLOCK_SIZE_SAMPLES );
 
     vecChanID.Init    ( 0 );
     vecvecdData.Init  ( 0 );
@@ -782,8 +767,9 @@ void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
     iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
 
     // init audio compression and get audio compression block size
-    iAudComprSizeOut = AudioCompressionOut.Init (
-        iNewNetwBlSiFactOut * MIN_SERVER_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
+//    iAudComprSizeOut = AudioCompressionOut.Init (
+//        iNewNetwBlSiFactOut * SYSTEM_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
+iAudComprSizeOut = iNewNetwBlSiFactOut * SYSTEM_BLOCK_SIZE_SAMPLES;
 
     // init conversion buffer
     ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_SERVER_BLOCK_SIZE_SAMPLES );

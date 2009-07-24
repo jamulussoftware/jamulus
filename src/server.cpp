@@ -33,10 +33,10 @@ CServer::CServer ( const QString& strLoggingFileName,
                    const QString& strServerNameForHTMLStatusFile ) :
     Socket ( &ChannelSet, this, iPortNumber )
 {
-    vecsSendData.Init ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
+    vecsSendData.Init ( SYSTEM_BLOCK_SIZE_SAMPLES );
 
     // init moving average buffer for response time evaluation
-    CycleTimeVariance.Init ( MIN_SERVER_BLOCK_SIZE_SAMPLES,
+    CycleTimeVariance.Init ( SYSTEM_BLOCK_SIZE_SAMPLES,
         SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
 
     // connect timer timeout signal
@@ -121,7 +121,7 @@ void CServer::OnNewChannel ( CHostAddress ChanAddr )
 void CServer::OnTimer()
 {
     CVector<int>              vecChanID;
-    CVector<CVector<double> > vecvecdData ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
+    CVector<CVector<double> > vecvecdData ( SYSTEM_BLOCK_SIZE_SAMPLES );
     CVector<CVector<double> > vecvecdGains;
 
     // get data from all connected clients
@@ -161,7 +161,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
     int i;
 
     // init return vector with zeros since we mix all channels on that vector
-    CVector<short> vecsOutData ( MIN_SERVER_BLOCK_SIZE_SAMPLES, 0 );
+    CVector<short> vecsOutData ( SYSTEM_BLOCK_SIZE_SAMPLES, 0 );
 
     const int iNumClients = vecvecdData.Size();
 
@@ -171,7 +171,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
         // if channel gain is 1, avoid multiplication for speed optimization
         if ( vecdGains[j] == static_cast<double> ( 1.0 ) )
         {
-            for ( i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )
+            for ( i = 0; i < SYSTEM_BLOCK_SIZE_SAMPLES; i++ )
             {
                 vecsOutData[i] =
                     Double2Short ( vecsOutData[i] + vecvecdData[j][i] );
@@ -179,7 +179,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
         }
         else
         {
-            for ( i = 0; i < MIN_SERVER_BLOCK_SIZE_SAMPLES; i++ )
+            for ( i = 0; i < SYSTEM_BLOCK_SIZE_SAMPLES; i++ )
             {
                 vecsOutData[i] =
                     Double2Short ( vecsOutData[i] +

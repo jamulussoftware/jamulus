@@ -35,7 +35,6 @@
 #include "global.h"
 #include "socket.h"
 #include "channel.h"
-#include "audiocompr.h"
 #include "util.h"
 #ifdef _WIN32
 # include "../windows/sound.h"

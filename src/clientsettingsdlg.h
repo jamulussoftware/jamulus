@@ -36,7 +36,6 @@
 #include <qbuttongroup.h>
 #include "global.h"
 #include "client.h"
-#include "audiocompr.h"
 #include "multicolorled.h"
 #ifdef _WIN32
 # include "../windows/moc/clientsettingsdlgbase.h"

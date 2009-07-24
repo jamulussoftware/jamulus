@@ -302,7 +302,7 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
     vecbyNetwData.Init ( iCeltNumCodedBytes );
 
     // the channel works on the audio coded block size
-    Channel.SetNetwBufSizeOut ( iCeltNumCodedBytes );
+//    Channel.SetNetwBufSizeOut ( iCeltNumCodedBytes );
 }
 
 void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
@@ -497,7 +497,7 @@ void CClient::UpdateSocketBufferSize()
         // one block in the jitter buffer
         const double dEstCurBufSet = ( dAudioBufferDurationMs +
             3.3 * ( Channel.GetTimingStdDev() + CycleTimeVariance.GetStdDev() ) ) /
-            MIN_SERVER_BLOCK_DURATION_MS + 0.5;
+            SYSTEM_BLOCK_DURATION_MS_FLOAT + 0.5;
 
         // upper/lower hysteresis decision
         const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );

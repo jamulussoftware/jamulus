@@ -244,86 +244,6 @@ int CChannelSet::GetFreeChan()
     return INVALID_CHANNEL_ID;
 }
 
-void CChannelSet::SetOutputParameters()
-{
-    // The strategy is as follows: Change the parameters for each channel
-    // until the total upload rate is lower than the limit. We first set the
-    // audio compression from None to MS-ADPCM for each channel and if this
-    // is not enough, we start to increase the buffer size factor out.
-    bool bUploadRateIsBelowLimit = false;
-
-    // first initialize all channels with the first parameter set (highest
-    // upload data rate)
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
-    {
-        if ( vecChannels[i].IsConnected() )
-        {
-            // set new parameters
-            vecChannels[i].SetNetwBufSizeFactOut  ( 1 );
-            vecChannels[i].SetAudioCompressionOut ( CT_NONE );
-        }
-    }
-
-    // calculate and check total upload rate (maybe the initialization already
-    // gives desired upload rate)
-    bUploadRateIsBelowLimit =
-        ( CalculateTotalUploadRateKbps() <= iUploadRateLimitKbps );
-
-    // try other parameter sets if required
-    const int     iNumTrials = 3;
-    EAudComprType eCurAudComprType;
-    int           iCurBlockSizeFact;
-
-    int iCurTrialIdx = 0;
-    while ( ( iCurTrialIdx < iNumTrials ) && ( !bUploadRateIsBelowLimit ) )
-    {
-        switch ( iCurTrialIdx )
-        {
-        case 0:
-            // using other audio compression gives most reduction
-            eCurAudComprType  = CT_MSADPCM;
-            iCurBlockSizeFact = 1;
-            break;
-
-        case 1:
-            // trying to use larger block size factor to further reduce rate
-            eCurAudComprType  = CT_MSADPCM;
-            iCurBlockSizeFact = 2;
-            break;
-
-        case 2:
-            // trying to use larger block size factor to further reduce rate
-            eCurAudComprType  = CT_MSADPCM;
-            iCurBlockSizeFact = 3;
-            break;
-        }
-
-        // we try to set the worst parameters to the clients which connected
-        // the latest to the server, therefore we apply the new parameters to
-        // the last channels first
-        int iCurCh = USED_NUM_CHANNELS - 1;
-        while ( ( iCurCh >= 0 ) && ( !bUploadRateIsBelowLimit ) )
-        {
-            if ( vecChannels[iCurCh].IsConnected() )
-            {
-                // set new parameters
-                vecChannels[iCurCh].SetNetwBufSizeFactOut  ( iCurBlockSizeFact );
-                vecChannels[iCurCh].SetAudioCompressionOut ( eCurAudComprType );
-
-                // calculate and check total upload rate
-                bUploadRateIsBelowLimit =
-                    ( CalculateTotalUploadRateKbps() <= iUploadRateLimitKbps );
-            }
-
-            // next channel (backwards counting)
-            iCurCh--;
-        }
-
-        // next trial index
-        iCurTrialIdx++;
-    }
-}
-
 int CChannelSet::CheckAddr ( const CHostAddress& Addr )
 {
     CHostAddress InetAddr;
@@ -431,9 +351,6 @@ bAudioOK = true;
         // requested
         if ( bNewChannelReserved && bAudioOK )
         {
-            // update output network parameters for all connected clients
-            SetOutputParameters();
-
             // send message about new channel
             emit ChannelConnected ( HostAdr );
 
@@ -529,9 +446,6 @@ const EGetDataStat eGetStat=GS_BUFFER_OK;//TEST
         // a channel is now disconnected, take action on it
         if ( bChannelIsNowDisconnected )
         {
-            // update output network parameters for all connected clients
-            SetOutputParameters();
-
             // update channel list for all currently connected clients
             CreateAndSendChanListForAllConChannels();
         }
@@ -542,8 +456,7 @@ const EGetDataStat eGetStat=GS_BUFFER_OK;//TEST
 void CChannelSet::GetConCliParam ( CVector<CHostAddress>&  vecHostAddresses,
                                    CVector<QString>&       vecsName,
                                    CVector<int>&           veciJitBufSize,
-                                   CVector<int>&           veciNetwOutBlSiFact,
-                                   CVector<EAudComprType>& veceAudComprType )
+                                   CVector<int>&           veciNetwOutBlSiFact )
 {
     CHostAddress InetAddr;
 
@@ -552,7 +465,6 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>&  vecHostAddresses,
     vecsName.Init            ( USED_NUM_CHANNELS );
     veciJitBufSize.Init      ( USED_NUM_CHANNELS );
     veciNetwOutBlSiFact.Init ( USED_NUM_CHANNELS );
-    veceAudComprType.Init    ( USED_NUM_CHANNELS );
 
     // check all possible channels
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
@@ -564,7 +476,6 @@ void CChannelSet::GetConCliParam ( CVector<CHostAddress>&  vecHostAddresses,
             vecsName[i]            = vecChannels[i].GetName();
             veciJitBufSize[i]      = vecChannels[i].GetSockBufSize();
             veciNetwOutBlSiFact[i] = vecChannels[i].GetNetwBufSizeFactOut();
-            veceAudComprType[i]    = vecChannels[i].GetAudioCompressionOut();
         }
     }
 }
@@ -651,7 +562,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     sName ( "" ),
     vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
     bIsEnabled ( false ),
-    iCurNetwOutBlSiFact ( DEF_NET_BLOCK_SIZE_FACTOR )
+    iCurNetwOutBlSiFact ( 0 )
 {
     // init network input properties
     NetwBufferInProps.iAudioBlockSize = 0;
@@ -669,6 +580,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
 
     // set initial output block size factors
+/*
     if ( bIsServer )
     {
         SetNetwBufSizeFactOut ( DEF_NET_BLOCK_SIZE_FACTOR );
@@ -677,9 +589,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     {
         SetNetwBufSizeOut ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
     }
-
-    // set initial audio compression format for output
-    SetAudioCompressionOut ( CT_MSADPCM );
+*/
 
 
     // connections -------------------------------------------------------------
@@ -772,26 +682,7 @@ void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
 iAudComprSizeOut = iNewNetwBlSiFactOut * SYSTEM_BLOCK_SIZE_SAMPLES;
 
     // init conversion buffer
-    ConvBuf.Init ( iNewNetwBlSiFactOut * MIN_SERVER_BLOCK_SIZE_SAMPLES );
-}
-
-void CChannel::SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
-{
-    // store new value
-    eAudComprTypeOut = eNewAudComprTypeOut;
-
-    if ( bIsServer )
-    {
-        // call "set network buffer size factor" function because its
-        // initialization depends on the audio compression format and
-        // implicitely, the audio compression is initialized
-        SetNetwBufSizeFactOut ( iCurNetwOutBlSiFact );
-    }
-    else
-    {
-        // for client set arbitrary block size
-        SetNetwBufSizeOut ( iCurAudioBlockSizeOut );
-    }
+    ConvBuf.Init ( iNewNetwBlSiFactOut * SYSTEM_BLOCK_SIZE_SAMPLES );
 }
 
 bool CChannel::SetSockBufSize ( const int iNumBlocks )
@@ -806,7 +697,7 @@ bool CChannel::SetSockBufSize ( const int iNumBlocks )
 
         // the network block size is a multiple of the internal minimal
         // block size
-        SockBuf.Init ( MIN_SERVER_BLOCK_SIZE_SAMPLES, iNumBlocks );
+        SockBuf.Init ( SYSTEM_BLOCK_SIZE_SAMPLES, iNumBlocks );
 
         return false; // -> no error
     }
@@ -924,7 +815,6 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
 
     // apply received parameters to internal data struct
     NetwBufferInProps.iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
-    NetwBufferInProps.eAudComprType   = NetworkTransportProps.eAudioCodingType;
     NetwBufferInProps.iNetwInBufSize  = NetworkTransportProps.iNetworkPacketSize;
 
     // re-initialize cycle time variance measurement if necessary
@@ -950,7 +840,7 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
 {
     CNetworkTransportProps NetworkTransportProps (
         iAudComprSizeOut,
-        iCurAudioBlockSizeOut,
+        0, // TODO
         1, // right now we only use mono
         SYSTEM_SAMPLE_RATE, // right now only one sample rate is supported
         CT_CELT, // always CELT coding
@@ -1130,14 +1020,14 @@ CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )
         {
             // a packet is ready, compress audio
             vecbySendBuf.Init ( iAudComprSizeOut );
-            vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
+//            vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
         }
     }
     else
     {
         // a packet is ready, compress audio
         vecbySendBuf.Init ( iAudComprSizeOut );
-        vecbySendBuf = AudioCompressionOut.Encode ( vecsNPacket );
+//        vecbySendBuf = AudioCompressionOut.Encode ( vecsNPacket );
     }
 
     return vecbySendBuf;
@@ -1145,16 +1035,7 @@ CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )
 
 int CChannel::GetUploadRateKbps()
 {
-    int iAudioSizeOut;
-
-    if ( bIsServer )
-    {
-        iAudioSizeOut = iCurNetwOutBlSiFact * MIN_SERVER_BLOCK_SIZE_SAMPLES;
-    }
-    else
-    {
-        iAudioSizeOut = iCurAudioBlockSizeOut;
-    }
+    const int iAudioSizeOut = iCurNetwOutBlSiFact * SYSTEM_BLOCK_SIZE_SAMPLES;
 
     // we assume that the UDP packet which is transported via IP has an
     // additional header size of

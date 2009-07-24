@@ -89,6 +89,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     }
 
     // audio compression type
+/*
     switch ( pClient->GetAudioCompressionOut() )
     {
     case CT_NONE:
@@ -103,6 +104,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         radioButtonMS_ADPCM->setChecked ( true );
         break;
     }
+*/
     AudioCompressionButtonGroup.addButton ( radioButtonNoAudioCompr );
     AudioCompressionButtonGroup.addButton ( radioButtonIMA_ADPCM );
     AudioCompressionButtonGroup.addButton ( radioButtonMS_ADPCM );
@@ -259,6 +261,7 @@ void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
 
 void CClientSettingsDlg::OnAudioCompressionButtonGroupClicked ( QAbstractButton* button )
 {
+/*
     if ( button == radioButtonNoAudioCompr )
     {
         pClient->SetAudioCompressionOut ( CT_NONE );
@@ -273,6 +276,7 @@ void CClientSettingsDlg::OnAudioCompressionButtonGroupClicked ( QAbstractButton*
     {
         pClient->SetAudioCompressionOut ( CT_MSADPCM );
     }
+*/
     UpdateDisplay();
 }
 
@@ -291,7 +295,7 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
     - consider the jitter buffer on the server side, too
 */
 
-    const int iTotalJitterBufferDelayMS = MIN_SERVER_BLOCK_DURATION_MS *
+    const int iTotalJitterBufferDelayMS = SYSTEM_BLOCK_DURATION_MS_FLOAT *
         ( 2 /* buffer at client and server */ * pClient->GetSockBufSize() ) / 2;
 
     // we assume that we have two period sizes for the input and one for the
@@ -301,9 +305,11 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
         3 * pClient->GetSndCrdActualMonoBlSize() *
         1000 / SYSTEM_SAMPLE_RATE;
 
-    const int iDelayToFillNetworkPackets =
-        ( pClient->GetNetwBufSizeOut() + pClient->GetAudioBlockSizeIn() ) *
-        1000 / SYSTEM_SAMPLE_RATE;
+
+// TODO
+    const int iDelayToFillNetworkPackets =0;// TEST
+//        ( pClient->GetNetwBufSizeOut() + pClient->GetAudioBlockSizeIn() ) *
+//        1000 / SYSTEM_SAMPLE_RATE;
 
     const int iTotalBufferDelay = iDelayToFillNetworkPackets +
         iTotalJitterBufferDelayMS + iTotalSoundCardDelayMS;

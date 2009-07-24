@@ -103,9 +103,6 @@ public:
     bool SetSockBufSize ( const int iNumBlocks );
     int GetSockBufSize() { return iCurSockBufSize; }
 
-    void SetNetwBufSizeOut ( const int iNewAudioBlockSizeOut );
-    int GetNetwBufSizeOut() { return iCurAudioBlockSizeOut; }
-
     int GetAudioBlockSizeIn() { return NetwBufferInProps.iAudioBlockSize; }
     int GetUploadRateKbps();
 
@@ -113,9 +110,6 @@ public:
 
     void SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut );
     int GetNetwBufSizeFactOut() { return iCurNetwOutBlSiFact; }
-
-    void SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut );
-    EAudComprType GetAudioCompressionOut() { return eAudComprTypeOut; }
 
     // network protocol interface
     void CreateJitBufMes ( const int iJitBufSize )
@@ -180,7 +174,6 @@ protected:
     bool                bIsServer;
 
     int                 iCurNetwOutBlSiFact;
-    int                 iCurAudioBlockSizeOut;
 
     QMutex              Mutex;
 
@@ -190,8 +183,6 @@ protected:
         int iAudioBlockSize;
     };
     sNetwProperties NetwBufferInProps;
-
-    EAudComprType eAudComprTypeOut;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
@@ -238,8 +229,7 @@ public:
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                           CVector<QString>& vecsName,
                           CVector<int>& veciJitBufSize,
-                          CVector<int>& veciNetwOutBlSiFact,
-                          CVector<EAudComprType>& veceAudComprType );
+                          CVector<int>& veciNetwOutBlSiFact );
 
     // access functions for actual channels
     bool IsConnected ( const int iChanNum )
@@ -262,7 +252,6 @@ protected:
     void CreateAndSendChanListForThisChan ( const int iCurChanID );
     void CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText );
     void WriteHTMLChannelList();
-    void SetOutputParameters();
 
     /* do not use the vector class since CChannel does not have appropriate
        copy constructor/operator */

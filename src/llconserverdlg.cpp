@@ -107,7 +107,7 @@ void CLlconServerDlg::OnTimer()
             // out network block size
             vecpListViewItems[i]->setText ( 5,
                 QString().setNum (
-                double ( veciNetwOutBlSiFact[i] * MIN_SERVER_BLOCK_DURATION_MS ), 'f', 2 ) );
+                static_cast<double> ( veciNetwOutBlSiFact[i] * SYSTEM_BLOCK_DURATION_MS_FLOAT ), 'f', 2 ) );
 
             // output audio compression
             switch ( veceAudComprType[i] )

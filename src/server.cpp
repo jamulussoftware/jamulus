@@ -96,7 +96,9 @@ void CServer::Start()
     if ( !IsRunning() )
     {
         // start main timer
-        Timer.start ( MIN_SERVER_BLOCK_DURATION_MS );
+
+// TEST
+Timer.start ( static_cast<int> ( ceil ( SYSTEM_BLOCK_DURATION_MS_FLOAT ) ) );
 
         // init time for response time evaluation
         CycleTimeVariance.Reset();

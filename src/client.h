@@ -109,7 +109,6 @@ public:
     }
     int GetSockBufSize() { return Channel.GetSockBufSize(); }
 
-    int GetNetwBufSizeOut() { return Channel.GetNetwBufSizeOut(); }
     int GetAudioBlockSizeIn() { return Channel.GetAudioBlockSizeIn(); }
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
@@ -125,17 +124,6 @@ public:
     int GetSndCrdPreferredMonoBlSizeIndex()
         { return iSndCrdPreferredMonoBlSizeIndex; }
     int GetSndCrdActualMonoBlSize() { return iMonoBlockSizeSam; }
-
-    void SetAudioCompressionOut ( const EAudComprType eNewAudComprTypeOut )
-    {
-        Channel.SetAudioCompressionOut ( eNewAudComprTypeOut );
-
-        // tell the server that audio coding has changed (it
-        // is important to call this function AFTER we have applied
-        // the new setting to the channel!)
-        Channel.CreateNetTranspPropsMessFromCurrentSettings();
-    }
-    EAudComprType GetAudioCompressionOut() { return Channel.GetAudioCompressionOut(); }
 
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Channel.SetRemoteChanGain ( iId, dGain ); }

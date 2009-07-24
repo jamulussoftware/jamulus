@@ -59,8 +59,10 @@ public:
         CVector<int>& veciNetwOutBlSiFact,
         CVector<EAudComprType>& veceAudComprType )
     {
-        ChannelSet.GetConCliParam ( vecHostAddresses, vecsName,
-            veciJitBufSize, veciNetwOutBlSiFact, veceAudComprType );
+        ChannelSet.GetConCliParam ( vecHostAddresses,
+                                    vecsName,
+                                    veciJitBufSize,
+                                    veciNetwOutBlSiFact );
     }
 
     bool GetTimingStdDev ( double& dCurTiStdDev );

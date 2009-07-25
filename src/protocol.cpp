@@ -117,9 +117,9 @@ MESSAGES
 
 - Properties for network transport:           PROTMESSID_NETW_TRANSPORT_PROPS
 
-    +-------------------+------------------+-----------------+ ...
-    | 4 bytes netw size | 4 bytes aud size | 1 byte num chan | ...
-    +-------------------+------------------+-----------------+ ...
+    +-------------------+-------------------------+-----------------+ ...
+    | 4 bytes netw size | 2 bytes block size fact | 1 byte num chan | ...
+    +-------------------+-------------------------+-----------------+ ...
        ... ------------------+-----------------------+ ...
        ...  4 bytes sam rate | 2 bytes audiocod type | ...
        ... ------------------+-----------------------+ ...
@@ -127,15 +127,15 @@ MESSAGES
        ...  2 bytes version | 4 bytes audiocod arg | 
        ... -----------------+----------------------+
 
-    - "netw size":     length of the network packet in bytes
-    - "aud size":      length of the mono audio block size in samples
-    - "num chan":      number of channels of the audio signal, e.g. "2" is stereo
-    - "sam rate":      sample rate of the audio stream
-    - "audiocod type": audio coding type, the following types are supported:
-                        - 0: none, no audio coding applied
-                        - 1: CELT
-    - "version":       version of the audio coder, if not used this value shall be set to 0
-    - "audiocod arg":  argument for the audio coder, if not used this value shall be set to 0
+    - "netw size":       length of the network packet in bytes
+    - "block size fact": block size factor
+    - "num chan":        number of channels of the audio signal, e.g. "2" is stereo
+    - "sam rate":        sample rate of the audio stream
+    - "audiocod type":   audio coding type, the following types are supported:
+                          - 0: none, no audio coding applied
+                          - 1: CELT
+    - "version":         version of the audio coder, if not used this value shall be set to 0
+    - "audiocod arg":    argument for the audio coder, if not used this value shall be set to 0
 
 
 - Request properties for network transport:   PROTMESSID_REQ_NETW_TRANSPORT_PROPS
@@ -820,7 +820,7 @@ void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrPr
     unsigned int  iPos = 0; // init position pointer
 
     // size of current message body
-    const int iEntrLen = 4 /* netw size */ + 4 /* aud size */ +
+    const int iEntrLen = 4 /* netw size */ + 2 /* block size fact */ +
         1 /* num chan */ + 4 /* sam rate */ + 2 /* audiocod type */ +
         2 /* version */ + 4 /* audiocod arg */;
 
@@ -831,9 +831,9 @@ void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrPr
     PutValOnStream ( vecData, iPos,
         static_cast<uint32_t> ( NetTrProps.iNetworkPacketSize ), 4 );
 
-    // length of the mono audio block size in samples (4 bytes)
+    // block size factor (2 bytes)
     PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( NetTrProps.iMonoAudioBlockSize ), 4 );
+        static_cast<uint32_t> ( NetTrProps.iBlockSizeFact ), 2 );
 
     // number of channels of the audio signal, e.g. "2" is stereo (1 byte)
     PutValOnStream ( vecData, iPos,
@@ -864,7 +864,7 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     CNetworkTransportProps ReceivedNetwTranspProps;
 
     // size of current message body
-    const int iEntrLen = 4 /* netw size */ + 4 /* aud size */ +
+    const int iEntrLen = 4 /* netw size */ + 2 /* block size fact */ +
         1 /* num chan */ + 4 /* sam rate */ + 2 /* audiocod type */ +
         2 /* version */ + 4 /* audiocod arg */;
 
@@ -876,24 +876,19 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
 
     // length of the network packet in bytes (4 bytes)
     ReceivedNetwTranspProps.iNetworkPacketSize =
-        static_cast<unsigned int> ( GetValFromStream ( vecData, iPos, 4 ) );
+        static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 4 ) );
 
-    // length of the mono audio block size in samples (4 bytes)
-    ReceivedNetwTranspProps.iMonoAudioBlockSize =
-        static_cast<unsigned int> ( GetValFromStream ( vecData, iPos, 4 ) );
-
-    if ( ReceivedNetwTranspProps.iMonoAudioBlockSize > MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ )
-    {
-        return true; // maximum audio size exceeded, return error
-    }
+    // block size factor (2 bytes)
+    ReceivedNetwTranspProps.iBlockSizeFact =
+        static_cast<uint16_t> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // number of channels of the audio signal, e.g. "2" is stereo (1 byte)
     ReceivedNetwTranspProps.iNumAudioChannels =
-        static_cast<unsigned int> ( GetValFromStream ( vecData, iPos, 1 ) );
+        static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // sample rate of the audio stream (4 bytes)
     ReceivedNetwTranspProps.iSampleRate =
-        static_cast<unsigned int> ( GetValFromStream ( vecData, iPos, 4 ) );
+        static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 4 ) );
 
     // audio coding type (2 bytes) with error check
     const int iRecCodingType =
@@ -910,11 +905,11 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
 
     // version (2 bytes)
     ReceivedNetwTranspProps.iVersion =
-        static_cast<unsigned int> ( GetValFromStream ( vecData, iPos, 2 ) );
+        static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // argument for the audio coder (4 bytes)
     ReceivedNetwTranspProps.iAudioCodingArg =
-        static_cast<unsigned int> ( GetValFromStream ( vecData, iPos, 4 ) );
+        static_cast<int32_t> ( GetValFromStream ( vecData, iPos, 4 ) );
 
     // invoke message action
     emit NetTranspPropsReceived ( ReceivedNetwTranspProps );

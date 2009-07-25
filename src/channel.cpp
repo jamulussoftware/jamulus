@@ -814,7 +814,7 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
     QMutexLocker locker ( &Mutex );
 
     // apply received parameters to internal data struct
-    NetwBufferInProps.iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
+//    NetwBufferInProps.iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
     NetwBufferInProps.iNetwInBufSize  = NetworkTransportProps.iNetworkPacketSize;
 
     // re-initialize cycle time variance measurement if necessary
@@ -853,7 +853,7 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
         iAudComprSizeOut,
         0, // TODO
         1, // right now we only use mono
-        SYSTEM_SAMPLE_RATE, // right now only one sample rate is supported
+        SYSTEM_SAMPLE_RATE,
         CT_CELT, // always CELT coding
         0,
         0 );
@@ -979,13 +979,11 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
     // decrease time-out counter
     if ( iConTimeOut > 0 )
     {
-
-// TODO
-
-
         // subtract the number of samples of the current block since the
-        // time out counter is based on samples not on blocks
-        iConTimeOut -= vecbyData.Size();
+        // time out counter is based on samples not on blocks (definition:
+        // always one atomic block is get by using the GetData() function
+        // where the atomic block size is "SYSTEM_BLOCK_SIZE_SAMPLES")
+        iConTimeOut -= SYSTEM_BLOCK_SIZE_SAMPLES;
 
         if ( iConTimeOut <= 0 )
         {

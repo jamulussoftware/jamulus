@@ -422,25 +422,25 @@ enum EAudComprType
 class CNetworkTransportProps
 {
 public:
-    CNetworkTransportProps() : iNetworkPacketSize ( 0 ), iMonoAudioBlockSize ( 0 ),
+    CNetworkTransportProps() : iNetworkPacketSize ( 0 ), iBlockSizeFact ( 0 ),
         iNumAudioChannels ( 0 ), iSampleRate ( 0 ),
         eAudioCodingType ( CT_NONE ), iAudioCodingArg ( 0 ) {}
 
-    CNetworkTransportProps ( const unsigned int iNNPS, const unsigned int iNMABS,
-        const unsigned int iNNACH, const unsigned int iNSR,
-        const EAudComprType eNACT, const unsigned int iNVers, const int iNACA ) :
-        iNetworkPacketSize ( iNNPS ), iMonoAudioBlockSize ( iNMABS ),
+    CNetworkTransportProps ( const uint32_t iNNPS, const uint16_t iNBSF,
+        const uint32_t iNNACH, const uint32_t iNSR,
+        const EAudComprType eNACT, const uint32_t iNVers, const int32_t iNACA ) :
+        iNetworkPacketSize ( iNNPS ), iBlockSizeFact ( iNBSF ),
         iNumAudioChannels ( iNNACH ), iSampleRate ( iNSR ),
         eAudioCodingType ( eNACT ), iVersion ( iNVers ),
         iAudioCodingArg ( iNACA ) {}
 
-    unsigned int iNetworkPacketSize;
-    unsigned int iMonoAudioBlockSize;
-    unsigned int iNumAudioChannels;
-    unsigned int iSampleRate;
+    uint32_t      iNetworkPacketSize;
+    uint16_t      iBlockSizeFact;
+    uint32_t      iNumAudioChannels;
+    uint32_t      iSampleRate;
     EAudComprType eAudioCodingType;
-    unsigned int iVersion;
-    int iAudioCodingArg;
+    uint32_t      iVersion;
+    int32_t       iAudioCodingArg;
 };
 
 class CSndCrdBufferSizes

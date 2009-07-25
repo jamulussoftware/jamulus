@@ -302,6 +302,10 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
     vecbyNetwData.Init ( iCeltNumCodedBytes );
 
     // the channel works on the audio coded block size
+
+// TEST right now we only support 128 samples, later 256 and 512, too
+Channel.SetNetwBufSizeFactOut ( 1 );
+
 //    Channel.SetNetwBufSizeOut ( iCeltNumCodedBytes );
 }
 

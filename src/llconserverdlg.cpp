@@ -116,12 +116,8 @@ void CLlconServerDlg::OnTimer()
                 vecpListViewItems[i]->setText ( 6, "None" );
                 break;
 
-            case CT_IMAADPCM:
-                vecpListViewItems[i]->setText ( 6, "IMA-ADPCM" );
-                break;
-
-            case CT_MSADPCM:
-                vecpListViewItems[i]->setText ( 6, "MS-ADPCM" );
+            case CT_CELT:
+                vecpListViewItems[i]->setText ( 6, "CELT" );
                 break;
 
             default:

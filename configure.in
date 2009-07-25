@@ -2,7 +2,7 @@ dnl Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.50)
 AC_INIT(src/main.cpp)
 
-AM_INIT_AUTOMAKE(llcon,2.3.1cvs)
+AM_INIT_AUTOMAKE(llcon,3.0.0cvs)
 
 
 AM_CONFIG_HEADER(config.h)
@@ -15,7 +15,6 @@ AC_PROG_CPP
 AC_PROG_INSTALL
 AC_SUBST(LIBTOOL_DEPS)
 AC_PROG_MAKE_SET
-AC_CHECK_PROGS(RPMBUILD, rpmbuild, rpm)
 
 dnl Configuration Arguments
 

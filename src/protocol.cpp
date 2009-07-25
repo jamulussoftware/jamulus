@@ -133,9 +133,7 @@ MESSAGES
     - "sam rate":      sample rate of the audio stream
     - "audiocod type": audio coding type, the following types are supported:
                         - 0: none, no audio coding applied
-                        - 1: IMA-ADPCM
-                        - 2: MS-ADPCM
-                        - 3: CELT
+                        - 1: CELT
     - "version":       version of the audio coder, if not used this value shall be set to 0
     - "audiocod arg":  argument for the audio coder, if not used this value shall be set to 0
 
@@ -902,8 +900,6 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
         static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     if ( ( iRecCodingType != CT_NONE ) &&
-         ( iRecCodingType != CT_IMAADPCM ) &&
-         ( iRecCodingType != CT_MSADPCM ) &&
          ( iRecCodingType != CT_CELT ) )
     {
         return true;

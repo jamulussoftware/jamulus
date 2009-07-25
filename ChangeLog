@@ -1,3 +1,12 @@
+3.0.0
+
+- introduced new audio codec "CELT", not compatible to old versions
+
+- IMA-ADPCM, MS-ADPCM removed
+
+- since CELT works on 48 kHz sample rate, resampling was removed
+
+
 2.3.0
 
 - new system sample rate of 33 kHz to improve audio quality, not compatible
@@ -6,6 +15,7 @@
 - added history graph for server logging
 
 - added command line argument for connecting a server at software start-up
+
 
 2.2.2
 

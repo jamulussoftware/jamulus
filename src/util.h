@@ -415,10 +415,8 @@ public:
 
 enum EAudComprType
 {
-    CT_NONE     = 0,
-    CT_IMAADPCM = 1,
-    CT_MSADPCM  = 2,
-    CT_CELT     = 3
+    CT_NONE = 0,
+    CT_CELT = 1
 };
 
 class CNetworkTransportProps

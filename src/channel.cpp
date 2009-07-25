@@ -829,6 +829,17 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
 
         CycleTimeVariance.Reset();
     }
+
+    // in case of a server channel, use the same network buffer
+    // size factor as the connected client
+    if ( bIsServer )
+    {
+
+        // TODO
+        // if size is not equal
+        //      change size
+
+    }
 }
 
 void CChannel::OnReqNetTranspProps()

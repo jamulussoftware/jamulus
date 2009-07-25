@@ -40,27 +40,10 @@ computer to the server should not exceed 30 ms average and the network jitter
 should be as low as 2-5 ms (To get a low ping time on DSL connections, an
 extra option "DSL fast path" should be enabled by your internet provider).
 
-Technical details
-To get sufficient results, a sample rate of 24 kHz (mono channel) was chosen.
-The audio compression algorithm IMA-ADPCM with very low delay is used which
-results in a raw compressed audio data rate of 96 kbps. First tests showed
-that an upstream of 128 kbps is too slow for using the llcon software. At
-least 256 kbps upstream bandwidth is required.
-
 The llcon software package includes both, the server and the client
 functionality which can be selected by using command line arguments.
 
-
-MANUAL:
 For starting server type ./llcon -s
-
-Start the llcon server on a remote computer with fast internet access. Start the
-llcon client on your local computer and connect your sound card with your
-instrument/microphone and headphone and type in the IP address of the server.
-There are levelers for adjusting the sound card (in/out) and network buffer sizes.
-It seems that 2 blocks for network buffer is an optimal choice. For the sound card
-buffer, try to make them as short as possible by watching the LEDs below the
-levelers (they should stay green).
 
 For test purpose it is possible to run server and client on the same computer. For
 this setup first start the server and then the client. Type in 127.0.0.1 for the
@@ -74,11 +57,14 @@ source:
 
 - Qt cross-platform application framework: http://trolltech.com
 
-- audio reverberation code: by Perry R. Cook and Gary P. Scavone, 1995 - 2004
-	(taken from "The Synthesis ToolKit in C++ (STK)")
+- The CELT ultra-low delay audio codec: http://www.celt-codec.org
 
-- IMA-ADPCM: by Erik de Castro Lopo
+- Audio reverberation code: by Perry R. Cook and Gary P. Scavone, 1995 - 2004
+  (taken from "The Synthesis ToolKit in C++ (STK)")
 
-- some parts are taken from the project "Dream: a PC-based Digital Radio Mondiale
-	(DRM) receiver" written by one of the llcon authors, Volker Fischer:
-	http://drm.sf.net
+- Some parts are taken from the project "Dream: a PC-based Digital Radio Mondiale
+  (DRM) receiver" written by one of the llcon authors, Volker Fischer:
+  http://drm.sf.net
+  
+- Some pixmaps are from Clker.com - vector clip art online,
+  royalty free & public domain

@@ -330,11 +330,10 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         tr("llcon uses the following libraries, resources or code snippets:") +
         "</b></p>"
         "<ul>"
-        "<li>Qt cross-platform application framework: <i>http://trolltech.com</li>"
-        "<li>The CELT ultra-low delay audio codec: <i>http://www.celt-codec.org</li>"
+        "<li>Qt cross-platform application framework: <i>http://trolltech.com</i></li>"
+        "<li>The CELT ultra-low delay audio codec: <i>http://www.celt-codec.org</i></li>"
         "<li>Audio reverberation code: by Perry R. Cook and Gary P. Scavone, "
         "1995 - 2004 (taken from <i>The Synthesis ToolKit in C++ (STK)</i>)</li>"
-        "<li>ADPCM coders by Erik de Castro Lopo</li>"
         "<li>Parts from Dream DRM Receiver by Volker Fischer and Alexander "
         "Kurpiers: <i>http://drm.sf.net</i></li>"
         "<li>Some pixmaps are from <i>Clker.com - vector clip art online, "

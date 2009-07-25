@@ -1,3 +1,5 @@
+#SUBDIRS = ../libs/celt/libcelt
+
 bin_PROGRAMS = llcon
 
 llcon_SOURCES = ../src/buffer.cpp \

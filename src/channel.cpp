@@ -844,6 +844,7 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
         1, // right now we only use mono
         SYSTEM_SAMPLE_RATE, // right now only one sample rate is supported
         CT_CELT, // always CELT coding
+        0,
         0 );
 
     // send current network transport properties

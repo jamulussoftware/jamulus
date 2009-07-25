@@ -3,8 +3,6 @@ bin_PROGRAMS = llcon
 llcon_SOURCES = ../src/buffer.cpp \
 	../src/main.cpp \
 	../src/socket.cpp \
-	../src/audiocompr.cpp \
-	../src/resample.cpp \
 	../src/channel.cpp \
 	../src/util.cpp \
 	../src/llconclientdlg.cpp \
@@ -24,9 +22,6 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/buffer.h \
 	../src/global.h \
 	../src/socket.h \
-	../src/audiocompr.h \
-	../src/resample.h \
-	../src/resamplefilter.h \
 	../src/channel.h \
 	../src/util.h \
 	../src/client.h \

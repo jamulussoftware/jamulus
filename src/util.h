@@ -430,9 +430,10 @@ public:
 
     CNetworkTransportProps ( const unsigned int iNNPS, const unsigned int iNMABS,
         const unsigned int iNNACH, const unsigned int iNSR,
-        const EAudComprType eNACT, const int iNACA ) :
+        const EAudComprType eNACT, const unsigned int iNVers, const int iNACA ) :
         iNetworkPacketSize ( iNNPS ), iMonoAudioBlockSize ( iNMABS ),
-        iNumAudioChannels ( iNNACH ), iSampleRate ( iNSR ), eAudioCodingType ( eNACT ),
+        iNumAudioChannels ( iNNACH ), iSampleRate ( iNSR ),
+        eAudioCodingType ( eNACT ), iVersion ( iNVers ),
         iAudioCodingArg ( iNACA ) {}
 
     unsigned int iNetworkPacketSize;
@@ -440,6 +441,7 @@ public:
     unsigned int iNumAudioChannels;
     unsigned int iSampleRate;
     EAudComprType eAudioCodingType;
+    unsigned int iVersion;
     int iAudioCodingArg;
 };
 

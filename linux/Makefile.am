@@ -1,5 +1,10 @@
-#SUBDIRS = ../libs/celt/libcelt
+# First compile additional libraries where the code is in our repository -------
+# CELT
+SUBDIRS = ../libs/celt/libcelt
 
+LIB_INCL_DIRS = -I../libs/celt/libcelt
+
+# Now we can deal with the actual llcon code -----------------------------------
 bin_PROGRAMS = llcon
 
 llcon_SOURCES = ../src/buffer.cpp \
@@ -185,4 +190,4 @@ moc/resources.cpp: ../src/resources.qrc
 	$(QT_RCC) ../src/resources.qrc -o moc/resources.cpp
 
 
-llcon_CXXFLAGS=-I../src $(QT_CFLAGS) -DQT_THREAD_SUPPORT -D_REENTRANT -g
+llcon_CXXFLAGS=-I../src $(LIB_INCL_DIRS) $(QT_CFLAGS) -DQT_THREAD_SUPPORT -D_REENTRANT -g

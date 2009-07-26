@@ -36,7 +36,7 @@ void CSound::OpenJack()
     jack_on_shutdown ( pJackClient, shutdownCallback, this );
 
 // TEST check sample rate, if not correct, just fire error
-if ( jack_get_sample_rate ( pJackClient ) != SND_CRD_SAMPLE_RATE )
+if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE )
 {
     throw CGenErr ( "Jack server sample rate is different from "
         "required one" );
@@ -501,13 +501,13 @@ bool CSound::SetHWParams ( snd_pcm_t* handle, const int iDesiredBufferSize,
 
     // restrict a configuration space to have rate nearest to a target:
     // set the sample-rate
-    unsigned int rrate = SND_CRD_SAMPLE_RATE;
+    unsigned int rrate = SYSTEM_SAMPLE_RATE;
     if ( err = snd_pcm_hw_params_set_rate_near ( handle, hwparams, &rrate, 0 ) < 0 )
     {
         qDebug ( "Rate %iHz not available : %s", rrate, snd_strerror ( err ) );
         return true;
     }
-    if ( rrate != SND_CRD_SAMPLE_RATE ) // check if rate is possible
+    if ( rrate != SYSTEM_SAMPLE_RATE ) // check if rate is possible
     {
         qDebug ( "Rate doesn't match (requested %iHz, get %iHz)", rrate, err );
         return true;

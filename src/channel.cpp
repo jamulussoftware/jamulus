@@ -983,6 +983,10 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
         // time out counter is based on samples not on blocks (definition:
         // always one atomic block is get by using the GetData() function
         // where the atomic block size is "SYSTEM_BLOCK_SIZE_SAMPLES")
+
+// TODO this code only works with the above assumption -> better
+//      implementation so that we are not depending on assumptions
+
         iConTimeOut -= SYSTEM_BLOCK_SIZE_SAMPLES;
 
         if ( iConTimeOut <= 0 )

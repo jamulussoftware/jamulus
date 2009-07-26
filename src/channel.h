@@ -86,7 +86,7 @@ public:
 
     void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
     bool GetAddress ( CHostAddress& RetAddr );
-    CHostAddress GetAddress() { return InetAddr; }
+    CHostAddress GetAddress() const { return InetAddr; }
 
     void SetName ( const QString sNNa );
     QString GetName();
@@ -101,7 +101,7 @@ public:
         { Protocol.CreateChanGainMes ( iId, dGain ); }
 
     bool SetSockBufSize ( const int iNumBlocks );
-    int GetSockBufSize() { return iCurSockBufSize; }
+    int GetSockBufSize() const { return iCurSockBufSize; }
 
     int GetAudioBlockSizeIn() { return NetwBufferInProps.iAudioBlockSize; }
     int GetUploadRateKbps();
@@ -109,7 +109,7 @@ public:
     double GetTimingStdDev() { return CycleTimeVariance.GetStdDev(); }
 
     void SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut );
-    int GetNetwBufSizeFactOut() { return iCurNetwOutBlSiFact; }
+    int GetNetwBufSizeFactOut() const { return iCurNetwOutBlSiFact; }
 
     // network protocol interface
     void CreateJitBufMes ( const int iJitBufSize )

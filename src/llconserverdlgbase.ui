@@ -69,11 +69,6 @@
        <string>Block Size Out</string>
       </property>
      </column>
-     <column>
-      <property name="text" >
-       <string>Audio Compr. Out</string>
-      </property>
-     </column>
     </widget>
    </item>
    <item>

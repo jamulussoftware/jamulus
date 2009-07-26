@@ -122,7 +122,7 @@ void CSocket::OnDataReceived()
         else
         {
             // server
-            if ( pChannelSet->PutData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
+            if ( pServer->PutData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
             {
                 // this was an audio packet, start server
                 // tell the server object to wake up if it

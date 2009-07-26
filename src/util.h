@@ -419,6 +419,14 @@ enum EAudComprType
     CT_CELT = 1
 };
 
+enum EGetDataStat
+{
+    GS_BUFFER_OK,
+    GS_BUFFER_UNDERRUN,
+    GS_CHAN_NOW_DISCONNECTED,
+    GS_CHAN_NOT_CONNECTED
+};
+
 class CNetworkTransportProps
 {
 public:

@@ -79,13 +79,12 @@ void CLlconServerDlg::OnTimer()
     CVector<QString>        vecsName;
     CVector<int>            veciJitBufSize;
     CVector<int>            veciNetwOutBlSiFact;
-    CVector<EAudComprType>  veceAudComprType;
     double                  dCurTiStdDev;
 
     ListViewMutex.lock();
 
     pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufSize,
-        veciNetwOutBlSiFact, veceAudComprType );
+        veciNetwOutBlSiFact );
 
     // fill list with connected clients
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
@@ -108,22 +107,6 @@ void CLlconServerDlg::OnTimer()
             vecpListViewItems[i]->setText ( 5,
                 QString().setNum (
                 static_cast<double> ( veciNetwOutBlSiFact[i] * SYSTEM_BLOCK_DURATION_MS_FLOAT ), 'f', 2 ) );
-
-            // output audio compression
-            switch ( veceAudComprType[i] )
-            {
-            case CT_NONE:
-                vecpListViewItems[i]->setText ( 6, "None" );
-                break;
-
-            case CT_CELT:
-                vecpListViewItems[i]->setText ( 6, "CELT" );
-                break;
-
-            default:
-                vecpListViewItems[i]->setText ( 6, "Unknown" );
-                break;
-            }
 
             vecpListViewItems[i]->setHidden ( false );
         }

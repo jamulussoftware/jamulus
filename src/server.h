@@ -66,7 +66,7 @@ public:
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                           CVector<QString>& vecsName,
                           CVector<int>& veciJitBufSize,
-                          CVector<int>& veciNetwOutBlSiFact );
+                          CVector<int>& veciNetwFrameSizeFactOut );
 
 protected:
     // access functions for actual channels

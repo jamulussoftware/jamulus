@@ -25,18 +25,14 @@
 #include "channel.h"
 
 
-
-
-
-/******************************************************************************\
-* CChannel                                                                     *
-\******************************************************************************/
+/* Implementation *************************************************************/
 CChannel::CChannel ( const bool bNIsServer ) :
     bIsServer ( bNIsServer ),
     sName ( "" ),
     vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
     bIsEnabled ( false ),
-    iCurNetwOutBlSiFact ( 0 )
+    iCurNetwFrameSizeFactOut ( 0 ),
+    iCurNetwFrameSizeOut ( 0 )
 {
     // init network input properties
     NetwBufferInProps.iAudioBlockSize = 0;
@@ -374,6 +370,11 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
         {
             Mutex.lock();
             {
+
+
+// TODO only process data if network properties protocol message has been arrived
+
+
                 // only process audio if packet has correct size
                 if ( iNumBytes == NetwBufferInProps.iNetwInBufSize )
                 {
@@ -500,22 +501,13 @@ CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )
     // tell the following network send routine that nothing should be sent
     CVector<uint8_t> vecbySendBuf ( 0 );
 
-    if ( bIsServer )
-    {
-        // use conversion buffer to convert sound card block size in network
-        // block size
-        if ( ConvBuf.Put ( vecsNPacket ) )
-        {
-            // a packet is ready, compress audio
-            vecbySendBuf.Init ( iAudComprSizeOut );
-//            vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
-        }
-    }
-    else
+    // use conversion buffer to convert sound card block size in network
+    // block size
+    if ( ConvBuf.Put ( vecsNPacket ) )
     {
         // a packet is ready, compress audio
         vecbySendBuf.Init ( iAudComprSizeOut );
-//        vecbySendBuf = AudioCompressionOut.Encode ( vecsNPacket );
+//         vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
     }
 
     return vecbySendBuf;

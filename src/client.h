@@ -109,7 +109,6 @@ public:
     }
     int GetSockBufSize() { return Channel.GetSockBufSize(); }
 
-    int GetAudioBlockSizeIn() { return Channel.GetAudioBlockSizeIn(); }
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
     int          GetSndCrdNumDev() { return Sound.GetNumDev(); }

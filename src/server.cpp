@@ -566,15 +566,15 @@ bAudioOK = true;
 void CServer::GetConCliParam ( CVector<CHostAddress>&  vecHostAddresses,
                                CVector<QString>&       vecsName,
                                CVector<int>&           veciJitBufSize,
-                               CVector<int>&           veciNetwOutBlSiFact )
+                               CVector<int>&           veciNetwFrameSizeFactOut )
 {
     CHostAddress InetAddr;
 
     // init return values
-    vecHostAddresses.Init    ( USED_NUM_CHANNELS );
-    vecsName.Init            ( USED_NUM_CHANNELS );
-    veciJitBufSize.Init      ( USED_NUM_CHANNELS );
-    veciNetwOutBlSiFact.Init ( USED_NUM_CHANNELS );
+    vecHostAddresses.Init         ( USED_NUM_CHANNELS );
+    vecsName.Init                 ( USED_NUM_CHANNELS );
+    veciJitBufSize.Init           ( USED_NUM_CHANNELS );
+    veciNetwFrameSizeFactOut.Init ( USED_NUM_CHANNELS );
 
     // check all possible channels
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
@@ -582,10 +582,10 @@ void CServer::GetConCliParam ( CVector<CHostAddress>&  vecHostAddresses,
         if ( vecChannels[i].GetAddress ( InetAddr ) )
         {
             // get requested data
-            vecHostAddresses[i]    = InetAddr;
-            vecsName[i]            = vecChannels[i].GetName();
-            veciJitBufSize[i]      = vecChannels[i].GetSockBufSize();
-            veciNetwOutBlSiFact[i] = vecChannels[i].GetNetwBufSizeFactOut();
+            vecHostAddresses[i]         = InetAddr;
+            vecsName[i]                 = vecChannels[i].GetName();
+            veciJitBufSize[i]           = vecChannels[i].GetSockBufSize();
+            veciNetwFrameSizeFactOut[i] = vecChannels[i].GetNetwFrameSizeFactOut();
         }
     }
 }

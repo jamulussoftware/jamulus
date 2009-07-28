@@ -301,12 +301,12 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
     vecsNetwork.Init   ( iMonoBlockSizeSam );
     vecbyNetwData.Init ( iCeltNumCodedBytes );
 
-    // the channel works on the audio coded block size
+    // set the channel network properties
 
 // TEST right now we only support 128 samples, later 256 and 512, too
-Channel.SetNetwBufSizeFactOut ( 1 );
+Channel.SetNetwFrameSizeAndFactOut ( iCeltNumCodedBytes,
+                                     1 ); // TEST "1"
 
-//    Channel.SetNetwBufSizeOut ( iCeltNumCodedBytes );
 }
 
 void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
@@ -491,8 +491,7 @@ void CClient::UpdateSocketBufferSize()
         // the block sizes do not have this relation, we require to have
         // a minimum buffer size of the sum of both sizes
         const double dAudioBufferDurationMs =
-            ( iMonoBlockSizeSam + Channel.GetAudioBlockSizeIn() ) * 1000 /
-            SYSTEM_SAMPLE_RATE;
+            ( 2 * iMonoBlockSizeSam ) * 1000 / SYSTEM_SAMPLE_RATE;
 
         // accumulate the standard deviations of input network stream and
         // internal timer,

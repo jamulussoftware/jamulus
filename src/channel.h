@@ -91,13 +91,16 @@ public:
     bool SetSockBufSize ( const int iNumBlocks );
     int GetSockBufSize() const { return iCurSockBufSize; }
 
-    int GetAudioBlockSizeIn() { return NetwBufferInProps.iAudioBlockSize; }
     int GetUploadRateKbps();
 
     double GetTimingStdDev() { return CycleTimeVariance.GetStdDev(); }
 
-    void SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut );
-    int GetNetwBufSizeFactOut() const { return iCurNetwOutBlSiFact; }
+    // set/get network out buffer size and size factor
+    void SetNetwFrameSizeAndFactOut ( const int iNewNetwFrameSizeOut,
+                                      const int iNewNetwFrameSizeFactOut );
+    int GetNetwFrameSizeFactOut() const { return iCurNetwFrameSizeFactOut; }
+    int GetNetwFrameSizeOut() const { return iCurNetwFrameSizeOut; }
+
 
     // network protocol interface
     void CreateJitBufMes ( const int iJitBufSize )
@@ -131,9 +134,6 @@ public:
 protected:
     bool ProtocolIsEnabled(); 
 
-    // audio compression
-    int                 iAudComprSizeOut;
-
     // connection parameters
     CHostAddress        InetAddr;
 
@@ -161,14 +161,15 @@ protected:
     bool                bIsEnabled;
     bool                bIsServer;
 
-    int                 iCurNetwOutBlSiFact;
+    int                 iCurNetwFrameSizeFactOut;
+    int                 iCurNetwFrameSizeOut;
 
     QMutex              Mutex;
 
     struct sNetwProperties
     {
-        int iNetwInBufSize;
-        int iAudioBlockSize;
+        int iNetwFrameSizeFact;
+        int iNetwFrameSize;
     };
     sNetwProperties NetwBufferInProps;
 

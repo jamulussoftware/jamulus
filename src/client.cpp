@@ -304,8 +304,8 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
     // set the channel network properties
 
 // TEST right now we only support 128 samples, later 256 and 512, too
-Channel.SetNetwFrameSizeAndFactOut ( iCeltNumCodedBytes,
-                                     1 ); // TEST "1"
+Channel.SetNetwFrameSizeAndFact ( iCeltNumCodedBytes,
+                                  1 ); // TEST "1"
 
 }
 

@@ -287,38 +287,3 @@ void CNetBuf::Clear ( const EClearType eClearType )
         }
     }
 }
-
-
-/* conversion buffer implementation *******************************************/
-void CConvBuf::Init ( const int iNewMemSize )
-{
-    // set memory size
-    iMemSize = iNewMemSize;
-
-    // allocate and clear memory for actual data buffer
-    vecsMemory.Init ( iMemSize );
-
-    iPutPos = 0;
-}
-
-bool CConvBuf::Put ( const CVector<short>& vecsData )
-{
-    const int iVecSize = vecsData.Size();
-
-    // copy new data in internal buffer
-    int iCurPos = 0;
-    const int iEnd = iPutPos + iVecSize;
-    while ( iPutPos < iEnd )
-    {
-        vecsMemory[iPutPos++] = vecsData[iCurPos++];
-    }
-
-    // return "buffer is ready for readout" flag
-    return iEnd == iMemSize;
-}
-
-CVector<short> CConvBuf::Get()
-{
-    iPutPos = 0;
-    return vecsMemory;
-}

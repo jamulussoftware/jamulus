@@ -216,9 +216,9 @@ void CServer::OnTimer()
             vecsSendData = ProcessData ( vecvecdData, vecvecdGains[i] );
 
             // send separate mix to current clients
-            Socket.SendPacket (
-                PrepSendPacket ( vecChanID[i], vecsSendData ),
-                GetAddress ( vecChanID[i] ) );
+//            Socket.SendPacket (
+//                PrepSendPacket ( vecChanID[i], vecsSendData ),
+//                GetAddress ( vecChanID[i] ) );
         }
     }
     else
@@ -566,15 +566,15 @@ bAudioOK = true;
 void CServer::GetConCliParam ( CVector<CHostAddress>&  vecHostAddresses,
                                CVector<QString>&       vecsName,
                                CVector<int>&           veciJitBufSize,
-                               CVector<int>&           veciNetwFrameSizeFactOut )
+                               CVector<int>&           veciNetwFrameSizeFact )
 {
     CHostAddress InetAddr;
 
     // init return values
-    vecHostAddresses.Init         ( USED_NUM_CHANNELS );
-    vecsName.Init                 ( USED_NUM_CHANNELS );
-    veciJitBufSize.Init           ( USED_NUM_CHANNELS );
-    veciNetwFrameSizeFactOut.Init ( USED_NUM_CHANNELS );
+    vecHostAddresses.Init      ( USED_NUM_CHANNELS );
+    vecsName.Init              ( USED_NUM_CHANNELS );
+    veciJitBufSize.Init        ( USED_NUM_CHANNELS );
+    veciNetwFrameSizeFact.Init ( USED_NUM_CHANNELS );
 
     // check all possible channels
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
@@ -582,10 +582,10 @@ void CServer::GetConCliParam ( CVector<CHostAddress>&  vecHostAddresses,
         if ( vecChannels[i].GetAddress ( InetAddr ) )
         {
             // get requested data
-            vecHostAddresses[i]         = InetAddr;
-            vecsName[i]                 = vecChannels[i].GetName();
-            veciJitBufSize[i]           = vecChannels[i].GetSockBufSize();
-            veciNetwFrameSizeFactOut[i] = vecChannels[i].GetNetwFrameSizeFactOut();
+            vecHostAddresses[i]      = InetAddr;
+            vecsName[i]              = vecChannels[i].GetName();
+            veciJitBufSize[i]        = vecChannels[i].GetSockBufSize();
+            veciNetwFrameSizeFact[i] = vecChannels[i].GetNetwFrameSizeFact();
         }
     }
 }

@@ -31,13 +31,9 @@ CChannel::CChannel ( const bool bNIsServer ) :
     sName ( "" ),
     vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
     bIsEnabled ( false ),
-    iCurNetwFrameSizeFactOut ( 0 ),
-    iCurNetwFrameSizeOut ( 0 )
+    iNetwFrameSizeFact ( 0 ),
+    iNetwFrameSize ( 0 )
 {
-    // init network input properties
-    NetwBufferInProps.iAudioBlockSize = 0;
-    NetwBufferInProps.iNetwInBufSize  = 0;
-
     // initial value for connection time out counter, we calculate the total
     // number of samples here and subtract the number of samples of the block
     // which we take out of the buffer to be independent of block sizes
@@ -48,18 +44,6 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
     // init the socket buffer
     SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
-
-    // set initial output block size factors
-/*
-    if ( bIsServer )
-    {
-        SetNetwBufSizeFactOut ( DEF_NET_BLOCK_SIZE_FACTOR );
-    }
-    else
-    {
-        SetNetwBufSizeOut ( MIN_SERVER_BLOCK_SIZE_SAMPLES );
-    }
-*/
 
 
     // connections -------------------------------------------------------------
@@ -138,21 +122,24 @@ void CChannel::SetEnable ( const bool bNEnStat )
     }
 }
 
-void CChannel::SetNetwBufSizeFactOut ( const int iNewNetwBlSiFactOut )
+void CChannel::SetNetwFrameSizeAndFact ( const int iNewNetwFrameSize,
+                                         const int iNewNetwFrameSizeFact )
 {
     // this function is intended for the server (not the client)
     QMutexLocker locker ( &Mutex );
 
-    // store new value
-    iCurNetwOutBlSiFact = iNewNetwBlSiFactOut;
-
-    // init audio compression and get audio compression block size
-//    iAudComprSizeOut = AudioCompressionOut.Init (
-//        iNewNetwBlSiFactOut * SYSTEM_BLOCK_SIZE_SAMPLES, eAudComprTypeOut );
-iAudComprSizeOut = iNewNetwBlSiFactOut * SYSTEM_BLOCK_SIZE_SAMPLES;
+    // store new values
+    iNetwFrameSize     = iNewNetwFrameSize;
+    iNetwFrameSizeFact = iNewNetwFrameSizeFact;
 
     // init conversion buffer
-    ConvBuf.Init ( iNewNetwBlSiFactOut * SYSTEM_BLOCK_SIZE_SAMPLES );
+    ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+
+    // initialize and reset cycle time variance measurement
+    CycleTimeVariance.Init ( iNetwFrameSizeFact * SYSTEM_BLOCK_SIZE_SAMPLES,
+        SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
+
+    CycleTimeVariance.Reset();
 }
 
 bool CChannel::SetSockBufSize ( const int iNumBlocks )
@@ -263,7 +250,7 @@ void CChannel::OnChangeChanName ( QString strName )
     SetName ( strName );
 }
 
-bool CChannel::GetAddress(CHostAddress& RetAddr)
+bool CChannel::GetAddress ( CHostAddress& RetAddr )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -281,34 +268,16 @@ bool CChannel::GetAddress(CHostAddress& RetAddr)
 
 void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps )
 {
-    QMutexLocker locker ( &Mutex );
-
-    // apply received parameters to internal data struct
-//    NetwBufferInProps.iAudioBlockSize = NetworkTransportProps.iMonoAudioBlockSize;
-    NetwBufferInProps.iNetwInBufSize  = NetworkTransportProps.iNetworkPacketSize;
-
-    // re-initialize cycle time variance measurement if necessary
-    if ( NetwBufferInProps.iAudioBlockSize != CycleTimeVariance.GetBlockLength() )
-    {
-        // re-init (we have to use the buffer size which works
-        // on the system sample rate, therefore we use the
-        // decompressed audio buffer size instead of the network
-        // buffer size)
-        CycleTimeVariance.Init ( NetwBufferInProps.iAudioBlockSize,
-            SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
-
-        CycleTimeVariance.Reset();
-    }
-
-    // in case of a server channel, use the same network buffer
-    // size factor as the connected client
+    // only the server shall act on network transport properties message
     if ( bIsServer )
     {
+        QMutexLocker locker ( &Mutex );
 
-        // TODO
-        // if size is not equal
-        //      change size
-
+        // store received parameters
+        iNetwFrameSizeFact = NetworkTransportProps.iBlockSizeFact;
+        iNetwFrameSize =
+            NetworkTransportProps.iNetworkPacketSize /
+            NetworkTransportProps.iBlockSizeFact;
     }
 }
 
@@ -320,8 +289,8 @@ void CChannel::OnReqNetTranspProps()
 void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
 {
     CNetworkTransportProps NetworkTransportProps (
-        iAudComprSizeOut,
-        0, // TODO
+        iNetwFrameSize * iNetwFrameSizeFact,
+        iNetwFrameSizeFact,
         1, // right now we only use mono
         SYSTEM_SAMPLE_RATE,
         CT_CELT, // always CELT coding
@@ -376,7 +345,7 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
 
 
                 // only process audio if packet has correct size
-                if ( iNumBytes == NetwBufferInProps.iNetwInBufSize )
+                if ( iNumBytes == ( iNetwFrameSize * iNetwFrameSizeFact ) )
                 {
                     // set audio packet flag
                     bIsAudioPacket = true;
@@ -427,7 +396,10 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
             // if this is a new connection and the current network packet is
             // neither an audio or protocol packet, we have to query the
             // network transport properties for the audio packets
-            if ( ( !bIsProtocolPacket ) && ( !bIsAudioPacket ) )
+            // (this is only required for server since we defined that the
+            // server has to send with the same properties as sent by
+            // the client)
+            if ( bIsServer && ( !bIsProtocolPacket ) && ( !bIsAudioPacket ) )
             {
                 Protocol.CreateReqNetwTranspPropsMes();
             }
@@ -493,7 +465,7 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
     return eGetStatus;
 }
 
-CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )
+CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<uint8_t>& vecbyNPacket )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -503,11 +475,11 @@ CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )
 
     // use conversion buffer to convert sound card block size in network
     // block size
-    if ( ConvBuf.Put ( vecsNPacket ) )
+    if ( ConvBuf.Put ( vecbyNPacket ) )
     {
-        // a packet is ready, compress audio
-        vecbySendBuf.Init ( iAudComprSizeOut );
-//         vecbySendBuf = AudioCompressionOut.Encode ( ConvBuf.Get() );
+        // a packet is ready
+        vecbySendBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+        vecbySendBuf = ConvBuf.Get();
     }
 
     return vecbySendBuf;
@@ -515,11 +487,12 @@ CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<short>& vecsNPacket )
 
 int CChannel::GetUploadRateKbps()
 {
-    const int iAudioSizeOut = iCurNetwOutBlSiFact * SYSTEM_BLOCK_SIZE_SAMPLES;
+    const int iAudioSizeOut = iNetwFrameSizeFact * SYSTEM_BLOCK_SIZE_SAMPLES;
 
     // we assume that the UDP packet which is transported via IP has an
     // additional header size of
     // 8 (UDP) + 20 (IP without optional fields) = 28 bytes
-    return ( iAudComprSizeOut + 28 /* header */ ) * 8 /* bits per byte */ *
+    return ( iNetwFrameSize * iNetwFrameSizeFact + 28 /* header */ ) *
+        8 /* bits per byte */ *
         SYSTEM_SAMPLE_RATE / iAudioSizeOut / 1000;
 }

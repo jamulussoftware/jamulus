@@ -66,7 +66,7 @@ public:
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                           CVector<QString>& vecsName,
                           CVector<int>& veciJitBufSize,
-                          CVector<int>& veciNetwFrameSizeFactOut );
+                          CVector<int>& veciNetwFrameSizeFact );
 
 protected:
     // access functions for actual channels
@@ -74,8 +74,8 @@ protected:
         { return vecChannels[iChanNum].IsConnected(); }
 
     CVector<uint8_t> PrepSendPacket ( const int iChanNum,
-                                      const CVector<short>& vecsNPacket )
-        { return vecChannels[iChanNum].PrepSendPacket ( vecsNPacket ); }
+                                      const CVector<uint8_t>& vecbyNPacket )
+        { return vecChannels[iChanNum].PrepSendPacket ( vecbyNPacket ); }
 
     CHostAddress GetAddress ( const int iChanNum )
         { return vecChannels[iChanNum].GetAddress(); }

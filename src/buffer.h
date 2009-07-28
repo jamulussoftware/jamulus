@@ -58,22 +58,51 @@ protected:
 
 
 // conversion buffer (very simple buffer)
-class CConvBuf
+template<class TData> class CConvBuf
 {
 public:
     CConvBuf() {}
     virtual ~CConvBuf() {}
 
-    void Init ( const int iNewMemSize );
-    int GetSize() { return iMemSize; }
+    void Init ( const int iNewMemSize )
+    {
+        // set memory size
+        iMemSize = iNewMemSize;
 
-    bool Put ( const CVector<short>& vecsData );
-    CVector<short> Get();
+        // allocate and clear memory for actual data buffer
+        vecsMemory.Init ( iMemSize );
+
+        iPutPos = 0;
+    }
+
+    int GetSize() const { return iMemSize; }
+
+    bool CConvBuf::Put ( const CVector<TData>& vecsData )
+    {
+        const int iVecSize = vecsData.Size();
+
+        // copy new data in internal buffer
+        int iCurPos = 0;
+        const int iEnd = iPutPos + iVecSize;
+        while ( iPutPos < iEnd )
+        {
+            vecsMemory[iPutPos++] = vecsData[iCurPos++];
+        }
+
+        // return "buffer is ready for readout" flag
+        return ( iEnd == iMemSize );
+    }
+
+    CVector<TData> CConvBuf::Get()
+    {
+        iPutPos = 0;
+        return vecsMemory;
+    }
 
 protected:
-    CVector<short>  vecsMemory;
-    int             iMemSize;
-    int             iPutPos;
+    CVector<TData> vecsMemory;
+    int            iMemSize;
+    int            iPutPos;
 };
 
 #endif /* !defined ( BUFFER_H__3B123453_4344_BB23945IUHF1912__INCLUDED_ ) */

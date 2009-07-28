@@ -66,7 +66,7 @@ public:
                            int iNumBytes );
     EGetDataStat GetData ( CVector<uint8_t>& vecbyData );
 
-    CVector<uint8_t> PrepSendPacket ( const CVector<short>& vecsNPacket );
+    CVector<uint8_t> PrepSendPacket ( const CVector<uint8_t>& vecbyNPacket );
 
     bool IsConnected() const { return iConTimeOut > 0; }
 
@@ -96,10 +96,10 @@ public:
     double GetTimingStdDev() { return CycleTimeVariance.GetStdDev(); }
 
     // set/get network out buffer size and size factor
-    void SetNetwFrameSizeAndFactOut ( const int iNewNetwFrameSizeOut,
-                                      const int iNewNetwFrameSizeFactOut );
-    int GetNetwFrameSizeFactOut() const { return iCurNetwFrameSizeFactOut; }
-    int GetNetwFrameSizeOut() const { return iCurNetwFrameSizeOut; }
+    void SetNetwFrameSizeAndFact ( const int iNewNetwFrameSize,
+                                   const int iNewNetwFrameSizeFact );
+    int GetNetwFrameSizeFact() const { return iNetwFrameSizeFact; }
+    int GetNetwFrameSize() const { return iNetwFrameSize; }
 
 
     // network protocol interface
@@ -150,7 +150,7 @@ protected:
     CCycleTimeVariance  CycleTimeVariance;
 
     // network output conversion buffer
-    CConvBuf            ConvBuf;
+    CConvBuf<uint8_t>   ConvBuf;
 
     // network protocol
     CProtocol           Protocol;
@@ -161,17 +161,10 @@ protected:
     bool                bIsEnabled;
     bool                bIsServer;
 
-    int                 iCurNetwFrameSizeFactOut;
-    int                 iCurNetwFrameSizeOut;
+    int                 iNetwFrameSizeFact;
+    int                 iNetwFrameSize;
 
     QMutex              Mutex;
-
-    struct sNetwProperties
-    {
-        int iNetwFrameSizeFact;
-        int iNetwFrameSize;
-    };
-    sNetwProperties NetwBufferInProps;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

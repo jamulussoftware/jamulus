@@ -78,13 +78,13 @@ void CLlconServerDlg::OnTimer()
     CVector<CHostAddress>   vecHostAddresses;
     CVector<QString>        vecsName;
     CVector<int>            veciJitBufSize;
-    CVector<int>            veciNetwOutBlSiFact;
+    CVector<int>            veciNetwFrameSizeFact;
     double                  dCurTiStdDev;
 
     ListViewMutex.lock();
 
     pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufSize,
-        veciNetwOutBlSiFact );
+        veciNetwFrameSizeFact );
 
     // fill list with connected clients
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
@@ -105,8 +105,9 @@ void CLlconServerDlg::OnTimer()
 
             // out network block size
             vecpListViewItems[i]->setText ( 5,
-                QString().setNum (
-                static_cast<double> ( veciNetwOutBlSiFact[i] * SYSTEM_BLOCK_DURATION_MS_FLOAT ), 'f', 2 ) );
+                QString().setNum ( static_cast<double> (
+                veciNetwFrameSizeFact[i] * SYSTEM_BLOCK_DURATION_MS_FLOAT
+                ), 'f', 2 ) );
 
             vecpListViewItems[i]->setHidden ( false );
         }

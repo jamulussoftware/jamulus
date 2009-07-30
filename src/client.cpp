@@ -387,7 +387,7 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
 //    Socket.SendPacket ( Channel.PrepSendPacket ( vecsNetwork ),
 //        Channel.GetAddress() );
 
-celt_encode(CeltEncoder, &vecsNetwork[0], NULL, &vecCeltData[0], iCeltNumCodedBytes);
+celt_encode ( CeltEncoder, &vecsNetwork[0], NULL, &vecCeltData[0], iCeltNumCodedBytes );
 Socket.SendPacket ( vecCeltData, Channel.GetAddress() );
 
 
@@ -438,7 +438,7 @@ for ( i = 0; i < iMonoBlockSizeSam; i++ )
 */
 // TEST CELT
 //celt_encode(CeltEncoder, &vecsAudioSndCrdMono[0], NULL, &vecCeltData[0], iCeltNumCodedBytes);
-celt_decode(CeltDecoder, &vecbyNetwData[0], iCeltNumCodedBytes, &vecsAudioSndCrdMono[0]);
+celt_decode ( CeltDecoder, &vecbyNetwData[0], iCeltNumCodedBytes, &vecsAudioSndCrdMono[0] );
 
 
 for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )

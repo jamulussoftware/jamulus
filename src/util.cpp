@@ -64,13 +64,14 @@ void CStereoSignalLevelMeter::Update ( CVector<short>& vecsAudio )
     dCurLevelR = UpdateCurLevel ( dCurLevelR, sMaxR );
 }
 
-double CStereoSignalLevelMeter::UpdateCurLevel ( double dCurLevel, const short& sMax )
+double CStereoSignalLevelMeter::UpdateCurLevel ( double dCurLevel,
+                                                 const short& sMax )
 {
     // decrease max with time
     if ( dCurLevel >= METER_FLY_BACK )
     {
 // TODO calculate factor from sample rate
-        dCurLevel *= 0.99;
+        dCurLevel *= 0.95;
     }
     else
     {

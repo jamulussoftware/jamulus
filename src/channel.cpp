@@ -140,6 +140,9 @@ void CChannel::SetNetwFrameSizeAndFact ( const int iNewNetwFrameSize,
         SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
 
     CycleTimeVariance.Reset();
+
+    // tell the server that audio coding has changed
+    CreateNetTranspPropsMessFromCurrentSettings();
 }
 
 bool CChannel::SetSockBufSize ( const int iNumBlocks )

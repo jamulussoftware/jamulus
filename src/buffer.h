@@ -77,7 +77,7 @@ public:
 
     int GetSize() const { return iMemSize; }
 
-    bool CConvBuf::Put ( const CVector<TData>& vecsData )
+    bool Put ( const CVector<TData>& vecsData )
     {
         const int iVecSize = vecsData.Size();
 
@@ -93,7 +93,7 @@ public:
         return ( iEnd == iMemSize );
     }
 
-    CVector<TData> CConvBuf::Get()
+    CVector<TData> Get()
     {
         iPutPos = 0;
         return vecsMemory;

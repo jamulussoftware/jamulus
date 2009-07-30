@@ -168,11 +168,6 @@ void CClient::SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx )
     {
         Sound.Start();
     }
-
-    // tell the server that audio coding has changed (it
-    // is important to call this function AFTER we have applied
-    // the new setting to the channel!)
-    Channel.CreateNetTranspPropsMessFromCurrentSettings();
 }
 
 QString CClient::SetSndCrdDev ( const int iNewDev )

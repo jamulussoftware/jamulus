@@ -34,6 +34,11 @@
 #include "channel.h"
 #include "util.h"
 
+// The header file server.h requires to include this header file so we get a
+// cyclic dependency. To solve this issue, a prototype of the server class is
+// defined here.
+class CServer; // forward declaration of CServer
+
 
 /* Definitions ****************************************************************/
 // Maximum block size for network input buffer. Consider a maximum sample rate
@@ -49,7 +54,7 @@ class CSocket : public QObject
 public:
     CSocket ( CChannel* pNewChannel, const quint16 iPortNumber ) :
         pChannel( pNewChannel ), bIsClient ( true ) { Init ( iPortNumber ); }
-    CSocket ( QObject* pNServP, const quint16 iPortNumber ) :
+    CSocket ( CServer* pNServP, const quint16 iPortNumber ) :
         pServer ( pNServP ), bIsClient ( false )
         { Init ( iPortNumber ); }
     virtual ~CSocket() {}
@@ -66,8 +71,8 @@ protected:
     CHostAddress     RecHostAddr;
 
     CChannel*        pChannel; // for client
+    CServer*         pServer;  // for server
 
-    QObject*         pServer;
     bool             bIsClient;
 
 public slots:

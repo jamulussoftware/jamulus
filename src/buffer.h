@@ -39,7 +39,7 @@ public:
     void Init ( const int iNewBlockSize, const int iNewNumBlocks );
     int GetSize() { return iMemSize / iBlockSize; }
 
-    bool Put ( const CVector<uint8_t>& vecbyData );
+    bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
     bool Get ( CVector<uint8_t>& vecbyData );
 
 protected:

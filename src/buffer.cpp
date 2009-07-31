@@ -42,7 +42,8 @@ void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks )
     Clear ( CT_GET );
 }
 
-bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData )
+bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
+                    const int iInSize )
 {
 #ifdef _DEBUG_
 static FILE* pFileBI = fopen("bufferin.dat", "w");
@@ -51,9 +52,6 @@ fflush(pFileBI);
 #endif
 
     bool bPutOK = true;
-
-    // get size of data to be added to the buffer
-    const int iInSize = vecbyData.Size();
 
     // Check if there is not enough space available -> correct
     if ( GetAvailSpace() < iInSize )

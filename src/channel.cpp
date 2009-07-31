@@ -354,7 +354,7 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                     bIsAudioPacket = true;
 
                     // store new packet in jitter buffer
-                    if ( SockBuf.Put ( vecbyData ) )
+                    if ( SockBuf.Put ( vecbyData, iNumBytes ) )
                     {
                         eRet = PS_AUDIO_OK;
                     }

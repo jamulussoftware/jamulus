@@ -50,15 +50,34 @@ CServer::CServer ( const QString& strLoggingFileName,
     vstrChatColors[4] = "maroon";
     vstrChatColors[5] = "coral";
 
-    vecsSendData.Init ( SYSTEM_BLOCK_SIZE_SAMPLES );
+    vecsSendData.Init ( SYSTEM_BLOCK_FRAME_SAMPLES );
 
     // init moving average buffer for response time evaluation
-    CycleTimeVariance.Init ( SYSTEM_BLOCK_SIZE_SAMPLES,
+    CycleTimeVariance.Init ( SYSTEM_BLOCK_FRAME_SAMPLES,
         SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
 
+
     // connect timer timeout signal
-    QObject::connect ( &Timer, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimer() ) );
+    QObject::connect ( &HighPrecisionTimer, SIGNAL ( timeout() ),
+        this, SLOT ( OnHighPrecisionTimer() ) );
+
+
+
+/*
+// init timer stuff
+//vTimeOutIntervals = [0 ]
+
+// for 128 sample frame size at 48 kHz sampling rate:
+// actual intervals:  0.0  2.666  5.333  8.0
+// quantized to 1 ms: 0    3      5      8 (0)
+
+// for 256 sample frame size at 48 kHz sampling rate:
+// actual intervals:  0.0  5.333  10.666  16.0
+// quantized to 1 ms: 0    5      11      16 (0)
+*/
+
+
+
 
     // enable logging (if requested)
     if ( !strLoggingFileName.isEmpty() )
@@ -176,10 +195,8 @@ void CServer::Start()
 {
     if ( !IsRunning() )
     {
-        // start main timer
-
-// TEST
-Timer.start ( static_cast<int> ( ceil ( SYSTEM_BLOCK_DURATION_MS_FLOAT ) ) );
+        // start main timer with lowest possible resolution
+        HighPrecisionTimer.start ( MIN_TIMER_RESOLUTION_MS );
 
         // init time for response time evaluation
         CycleTimeVariance.Reset();
@@ -189,16 +206,22 @@ Timer.start ( static_cast<int> ( ceil ( SYSTEM_BLOCK_DURATION_MS_FLOAT ) ) );
 void CServer::Stop()
 {
     // stop main timer
-    Timer.stop();
+    HighPrecisionTimer.stop();
 
     // logging
     Logging.AddServerStopped();
 }
 
+void CServer::OnHighPrecisionTimer()
+{
+    // TEST
+    OnTimer();
+}
+
 void CServer::OnTimer()
 {
     CVector<int>              vecChanID;
-    CVector<CVector<double> > vecvecdData ( SYSTEM_BLOCK_SIZE_SAMPLES );
+    CVector<CVector<double> > vecvecdData ( SYSTEM_BLOCK_FRAME_SAMPLES );
     CVector<CVector<double> > vecvecdGains;
 
     // get data from all connected clients
@@ -240,7 +263,7 @@ void CServer::GetBlockAllConC ( CVector<int>&              vecChanID,
     bool bChannelIsNowDisconnected = false;
 
     // init temporal data vector and clear input buffers
-    CVector<double> vecdData ( SYSTEM_BLOCK_SIZE_SAMPLES );
+    CVector<double> vecdData ( SYSTEM_BLOCK_FRAME_SAMPLES );
 
     vecChanID.Init    ( 0 );
     vecvecdData.Init  ( 0 );
@@ -668,7 +691,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
     int i;
 
     // init return vector with zeros since we mix all channels on that vector
-    CVector<short> vecsOutData ( SYSTEM_BLOCK_SIZE_SAMPLES, 0 );
+    CVector<short> vecsOutData ( SYSTEM_BLOCK_FRAME_SAMPLES, 0 );
 
     const int iNumClients = vecvecdData.Size();
 
@@ -678,7 +701,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
         // if channel gain is 1, avoid multiplication for speed optimization
         if ( vecdGains[j] == static_cast<double> ( 1.0 ) )
         {
-            for ( i = 0; i < SYSTEM_BLOCK_SIZE_SAMPLES; i++ )
+            for ( i = 0; i < SYSTEM_BLOCK_FRAME_SAMPLES; i++ )
             {
                 vecsOutData[i] =
                     Double2Short ( vecsOutData[i] + vecvecdData[j][i] );
@@ -686,7 +709,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
         }
         else
         {
-            for ( i = 0; i < SYSTEM_BLOCK_SIZE_SAMPLES; i++ )
+            for ( i = 0; i < SYSTEM_BLOCK_FRAME_SAMPLES; i++ )
             {
                 vecsOutData[i] =
                     Double2Short ( vecsOutData[i] +

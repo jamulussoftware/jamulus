@@ -60,10 +60,10 @@
 
 // System block size, this is the block size on which the audio coder works.
 // All other block sizes must be a multiple of this size
-#define SYSTEM_BLOCK_SIZE_SAMPLES       128
+#define SYSTEM_BLOCK_FRAME_SAMPLES      128
 
 #define SYSTEM_BLOCK_DURATION_MS_FLOAT  \
-    ( static_cast<double> ( SYSTEM_BLOCK_SIZE_SAMPLES ) / \
+    ( static_cast<double> ( SYSTEM_BLOCK_FRAME_SAMPLES ) / \
     SYSTEM_SAMPLE_RATE * 1000 )
 
 // define the maximum mono audio buffer size at a sample rate

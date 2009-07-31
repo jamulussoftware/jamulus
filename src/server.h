@@ -29,6 +29,7 @@
 #include <qtimer.h>
 #include <qdatetime.h>
 #include <qhostaddress.h>
+#include "celt.h"
 #include "global.h"
 #include "socket.h"
 #include "channel.h"
@@ -39,6 +40,18 @@
 /* Definitions ****************************************************************/
 // no valid channel number
 #define INVALID_CHANNEL_ID                  ( MAX_NUM_CHANNELS + 1 )
+
+// minimum timer precision
+#define MIN_TIMER_RESOLUTION_MS             1 // ms
+
+// add some error checking, the high precision timer implementation only
+// supports 128 and 256 samples frame size at 48 kHz sampling rate
+#if ( ( SYSTEM_BLOCK_FRAME_SAMPLES != 128 ) && ( SYSTEM_BLOCK_FRAME_SAMPLES != 256 ) )
+# error "Only system frame sizes of 128 and 256 samples are supported by this module"
+#endif
+#if SYSTEM_SAMPLE_RATE != 48000
+# error "Only a system sample rate of 48 kHz is supported by this module"
+#endif
 
 
 /* Classes ********************************************************************/
@@ -56,7 +69,7 @@ public:
 
     void Start();
     void Stop();
-    bool IsRunning() { return Timer.isActive(); }
+    bool IsRunning() { return HighPrecisionTimer.isActive(); }
 
     bool GetTimingStdDev ( double& dCurTiStdDev );
 
@@ -100,11 +113,19 @@ protected:
                                   CVector<double>& vecdGains );
 
     virtual void    customEvent ( QEvent* Event );
+    void            OnTimer();
 
     /* do not use the vector class since CChannel does not have appropriate
        copy constructor/operator */
     CChannel            vecChannels[MAX_NUM_CHANNELS];
     QMutex              Mutex;
+
+    // audio encoder/decoder
+    CELTMode*               CeltMode[MAX_NUM_CHANNELS];
+    CELTEncoder*            CeltEncoder[MAX_NUM_CHANNELS];
+    CELTDecoder*            CeltDecoder[MAX_NUM_CHANNELS];
+    int                     iCeltNumCodedBytes[MAX_NUM_CHANNELS];
+    CVector<unsigned char>  vecCeltData[MAX_NUM_CHANNELS];
 
     CVector<QString>    vstrChatColors;
 
@@ -113,7 +134,7 @@ protected:
     QString             strServerHTMLFileListName;
     QString             strServerNameWithPort;
 
-    QTimer              Timer;
+    QTimer              HighPrecisionTimer;
     CVector<short>      vecsSendData;
 
     // actual working objects
@@ -125,7 +146,7 @@ protected:
     CServerLogging      Logging;
 
 public slots:
-    void OnTimer();
+    void OnHighPrecisionTimer();
     void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
 
     // CODE TAG: MAX_NUM_CHANNELS_TAG

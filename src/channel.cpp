@@ -136,7 +136,7 @@ void CChannel::SetNetwFrameSizeAndFact ( const int iNewNetwFrameSize,
     ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
 
     // initialize and reset cycle time variance measurement
-    CycleTimeVariance.Init ( iNetwFrameSizeFact * SYSTEM_BLOCK_SIZE_SAMPLES,
+    CycleTimeVariance.Init ( iNetwFrameSizeFact * SYSTEM_BLOCK_FRAME_SAMPLES,
         SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
 
     CycleTimeVariance.Reset();
@@ -157,7 +157,7 @@ bool CChannel::SetSockBufSize ( const int iNumBlocks )
 
         // the network block size is a multiple of the internal minimal
         // block size
-        SockBuf.Init ( SYSTEM_BLOCK_SIZE_SAMPLES, iNumBlocks );
+        SockBuf.Init ( SYSTEM_BLOCK_FRAME_SAMPLES, iNumBlocks );
 
         return false; // -> no error
     }
@@ -432,12 +432,12 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
         // subtract the number of samples of the current block since the
         // time out counter is based on samples not on blocks (definition:
         // always one atomic block is get by using the GetData() function
-        // where the atomic block size is "SYSTEM_BLOCK_SIZE_SAMPLES")
+        // where the atomic block size is "SYSTEM_BLOCK_FRAME_SAMPLES")
 
 // TODO this code only works with the above assumption -> better
 //      implementation so that we are not depending on assumptions
 
-        iConTimeOut -= SYSTEM_BLOCK_SIZE_SAMPLES;
+        iConTimeOut -= SYSTEM_BLOCK_FRAME_SAMPLES;
 
         if ( iConTimeOut <= 0 )
         {
@@ -490,7 +490,7 @@ CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<uint8_t>& vecbyNPacket
 
 int CChannel::GetUploadRateKbps()
 {
-    const int iAudioSizeOut = iNetwFrameSizeFact * SYSTEM_BLOCK_SIZE_SAMPLES;
+    const int iAudioSizeOut = iNetwFrameSizeFact * SYSTEM_BLOCK_FRAME_SAMPLES;
 
     // we assume that the UDP packet which is transported via IP has an
     // additional header size of

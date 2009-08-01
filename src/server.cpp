@@ -26,8 +26,7 @@
 
 
 // CHighPrecisionTimer implementation ******************************************
-CHighPrecisionTimer::CHighPrecisionTimer ( const int iFrameSize,
-                                           const int iSampleRate )
+CHighPrecisionTimer::CHighPrecisionTimer()
 {
     // add some error checking, the high precision timer implementation only
     // supports 128 and 256 samples frame size at 48 kHz sampling rate
@@ -38,18 +37,32 @@ CHighPrecisionTimer::CHighPrecisionTimer ( const int iFrameSize,
 # error "Only a system sample rate of 48 kHz is supported by this module"
 #endif
 
-/*
-// init timer stuff
-//vTimeOutIntervals = [0 ]
-
-// for 128 sample frame size at 48 kHz sampling rate:
-// actual intervals:  0.0  2.666  5.333  8.0
-// quantized to 1 ms: 0    3      5      8 (0)
-
-// for 256 sample frame size at 48 kHz sampling rate:
-// actual intervals:  0.0  5.333  10.666  16.0
-// quantized to 1 ms: 0    5      11      16 (0)
-*/
+    // Since QT only supports a minimum timer resolution of 1 ms but for our
+    // llcon server we require a timer interval of 2.333 ms for 128 samples
+    // frame size and 5.666 ms for 256 samples frame size at 48 kHz sampling
+    // rate.
+    // To support this interval, we use a timer at the minimum supported
+    // resolution and fire the actual frame timer if the error to the actual
+    // required interval is minimum.
+    veciTimeOutIntervals.Init ( 3 );
+    if ( SYSTEM_BLOCK_FRAME_SAMPLES == 128 )
+    {
+        // for 128 sample frame size at 48 kHz sampling rate:
+        // actual intervals:  0.0  2.666  5.333  8.0
+        // quantized to 1 ms: 0    3      5      8 (0)
+        veciTimeOutIntervals[0] = 3;
+        veciTimeOutIntervals[1] = 2;
+        veciTimeOutIntervals[2] = 3;
+    }
+    else
+    {
+        // for 256 sample frame size at 48 kHz sampling rate:
+        // actual intervals:  0.0  5.333  10.666  16.0
+        // quantized to 1 ms: 0    5      11      16 (0)
+        veciTimeOutIntervals[0] = 5;
+        veciTimeOutIntervals[1] = 6;
+        veciTimeOutIntervals[2] = 5;
+    }
 
     // connect timer timeout signal
     QObject::connect ( &Timer, SIGNAL ( timeout() ),
@@ -58,21 +71,45 @@ CHighPrecisionTimer::CHighPrecisionTimer ( const int iFrameSize,
 
 void CHighPrecisionTimer::start()
 {
-    // TODO
+    // reset position pointer and counter
+    iCurPosInVector  = 0;
+    iIntervalCounter = 0;
+
     // start internal timer with lowest possible resolution
     Timer.start ( MIN_TIMER_RESOLUTION_MS );
 }
 
 void CHighPrecisionTimer::stop()
 {
-    // TODO
+    // stop timer
     Timer.stop();
 }
 
 void CHighPrecisionTimer::OnTimer()
 {
-    // TODO
-    emit timeout();
+    // check if maximum number of high precision timer intervals are
+    // finished
+    if ( veciTimeOutIntervals[iCurPosInVector] == iIntervalCounter )
+    {
+        // reset interval counter
+        iIntervalCounter = 0;
+
+        // go to next position in vector, take care of wrap around
+        iCurPosInVector++;
+        if ( iCurPosInVector == veciTimeOutIntervals.Size() )
+        {
+            iCurPosInVector = 0;
+        }
+
+        // minimum time error to actual required timer interval is reached,
+        // emit signal for server
+        emit timeout();
+    }
+    else
+    {
+        // next high precision timer interval
+        iIntervalCounter++;
+    }
 }
 
 
@@ -83,8 +120,7 @@ CServer::CServer ( const QString& strLoggingFileName,
                    const QString& strHistoryFileName,
                    const QString& strServerNameForHTMLStatusFile ) :
     Socket ( this, iPortNumber ),
-    bWriteStatusHTMLFile ( false ),
-    HighPrecisionTimer ( SYSTEM_BLOCK_FRAME_SAMPLES, SYSTEM_SAMPLE_RATE )
+    bWriteStatusHTMLFile ( false )
 {
     // enable all channels (for the server all channel must be enabled the
     // entire life time of the software

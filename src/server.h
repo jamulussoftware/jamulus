@@ -51,14 +51,17 @@ class CHighPrecisionTimer : public QObject
     Q_OBJECT
 
 public:
-    CHighPrecisionTimer ( const int iFrameSize, const int iSampleRate );
+    CHighPrecisionTimer();
 
     void start();
     void stop();
     bool isActive() const { return Timer.isActive(); }
 
 protected:
-    QTimer Timer;
+    QTimer       Timer;
+    CVector<int> veciTimeOutIntervals;
+    int          iCurPosInVector;
+    int          iIntervalCounter;
 
 public slots:
     void OnTimer();

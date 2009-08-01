@@ -122,9 +122,11 @@ CServer::CServer ( const QString& strLoggingFileName,
     Socket ( this, iPortNumber ),
     bWriteStatusHTMLFile ( false )
 {
+    int i;
+
     // enable all channels (for the server all channel must be enabled the
     // entire life time of the software
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         vecChannels[i].SetEnable ( true );
     }
@@ -173,6 +175,22 @@ CServer::CServer ( const QString& strLoggingFileName,
             strCurServerNameForHTMLStatusFile + ":" +
             QString().number( static_cast<int> ( iPortNumber ) ) );
     }
+
+    // create CELT encoder/decoder for each channel
+    for ( i = 0; i < USED_NUM_CHANNELS; i++ )
+    {
+        // init audio endocder/decoder (mono)
+        CeltMode[i] = celt_mode_create (
+            SYSTEM_SAMPLE_RATE, 1, SYSTEM_BLOCK_FRAME_SAMPLES, NULL );
+
+        CeltEncoder[i] = celt_encoder_create ( CeltMode[i] );
+        CeltDecoder[i] = celt_decoder_create ( CeltMode[i] );
+    }
+
+// TODO init these variables:
+// iCeltNumCodedBytes[MAX_NUM_CHANNELS];
+// vecCeltData[MAX_NUM_CHANNELS];
+
 
 
     // connections -------------------------------------------------------------
@@ -264,6 +282,7 @@ void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 
 void CServer::Start()
 {
+    // only start if not already running
     if ( !IsRunning() )
     {
         // start timer
@@ -279,7 +298,7 @@ void CServer::Stop()
     // stop timer
     HighPrecisionTimer.stop();
 
-    // logging
+    // logging (add "server stopped" logging entry)
     Logging.AddServerStopped();
 }
 

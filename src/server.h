@@ -44,24 +44,37 @@
 // minimum timer precision
 #define MIN_TIMER_RESOLUTION_MS             1 // ms
 
-// add some error checking, the high precision timer implementation only
-// supports 128 and 256 samples frame size at 48 kHz sampling rate
-#if ( ( SYSTEM_BLOCK_FRAME_SAMPLES != 128 ) && ( SYSTEM_BLOCK_FRAME_SAMPLES != 256 ) )
-# error "Only system frame sizes of 128 and 256 samples are supported by this module"
-#endif
-#if SYSTEM_SAMPLE_RATE != 48000
-# error "Only a system sample rate of 48 kHz is supported by this module"
-#endif
-
 
 /* Classes ********************************************************************/
+class CHighPrecisionTimer : public QObject
+{
+    Q_OBJECT
+
+public:
+    CHighPrecisionTimer ( const int iFrameSize, const int iSampleRate );
+
+    void start();
+    void stop();
+    bool isActive() const { return Timer.isActive(); }
+
+protected:
+    QTimer Timer;
+
+public slots:
+    void OnTimer();
+
+signals:
+    void timeout();
+};
+
+
 class CServer : public QObject
 {
     Q_OBJECT
 
 public:
     CServer ( const QString& strLoggingFileName,
-              const quint16 iPortNumber,
+              const quint16  iPortNumber,
               const QString& strHTMLStatusFileName,
               const QString& strHistoryFileName,
               const QString& strServerNameForHTMLStatusFile );
@@ -113,7 +126,6 @@ protected:
                                   CVector<double>& vecdGains );
 
     virtual void    customEvent ( QEvent* Event );
-    void            OnTimer();
 
     /* do not use the vector class since CChannel does not have appropriate
        copy constructor/operator */
@@ -134,7 +146,7 @@ protected:
     QString             strServerHTMLFileListName;
     QString             strServerNameWithPort;
 
-    QTimer              HighPrecisionTimer;
+    CHighPrecisionTimer HighPrecisionTimer;
     CVector<short>      vecsSendData;
 
     // actual working objects
@@ -146,7 +158,7 @@ protected:
     CServerLogging      Logging;
 
 public slots:
-    void OnHighPrecisionTimer();
+    void OnTimer();
     void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
 
     // CODE TAG: MAX_NUM_CHANNELS_TAG

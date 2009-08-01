@@ -25,14 +25,66 @@
 #include "server.h"
 
 
-/* Implementation *************************************************************/
+// CHighPrecisionTimer implementation ******************************************
+CHighPrecisionTimer::CHighPrecisionTimer ( const int iFrameSize,
+                                           const int iSampleRate )
+{
+    // add some error checking, the high precision timer implementation only
+    // supports 128 and 256 samples frame size at 48 kHz sampling rate
+#if ( ( SYSTEM_BLOCK_FRAME_SAMPLES != 128 ) && ( SYSTEM_BLOCK_FRAME_SAMPLES != 256 ) )
+# error "Only system frame sizes of 128 and 256 samples are supported by this module"
+#endif
+#if SYSTEM_SAMPLE_RATE != 48000
+# error "Only a system sample rate of 48 kHz is supported by this module"
+#endif
+
+/*
+// init timer stuff
+//vTimeOutIntervals = [0 ]
+
+// for 128 sample frame size at 48 kHz sampling rate:
+// actual intervals:  0.0  2.666  5.333  8.0
+// quantized to 1 ms: 0    3      5      8 (0)
+
+// for 256 sample frame size at 48 kHz sampling rate:
+// actual intervals:  0.0  5.333  10.666  16.0
+// quantized to 1 ms: 0    5      11      16 (0)
+*/
+
+    // connect timer timeout signal
+    QObject::connect ( &Timer, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimer() ) );
+}
+
+void CHighPrecisionTimer::start()
+{
+    // TODO
+    // start internal timer with lowest possible resolution
+    Timer.start ( MIN_TIMER_RESOLUTION_MS );
+}
+
+void CHighPrecisionTimer::stop()
+{
+    // TODO
+    Timer.stop();
+}
+
+void CHighPrecisionTimer::OnTimer()
+{
+    // TODO
+    emit timeout();
+}
+
+
+// CServer implementation ******************************************************
 CServer::CServer ( const QString& strLoggingFileName,
-                   const quint16 iPortNumber,
+                   const quint16  iPortNumber,
                    const QString& strHTMLStatusFileName,
                    const QString& strHistoryFileName,
                    const QString& strServerNameForHTMLStatusFile ) :
     Socket ( this, iPortNumber ),
-    bWriteStatusHTMLFile ( false )
+    bWriteStatusHTMLFile ( false ),
+    HighPrecisionTimer ( SYSTEM_BLOCK_FRAME_SAMPLES, SYSTEM_SAMPLE_RATE )
 {
     // enable all channels (for the server all channel must be enabled the
     // entire life time of the software
@@ -55,29 +107,6 @@ CServer::CServer ( const QString& strLoggingFileName,
     // init moving average buffer for response time evaluation
     CycleTimeVariance.Init ( SYSTEM_BLOCK_FRAME_SAMPLES,
         SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
-
-
-    // connect timer timeout signal
-    QObject::connect ( &HighPrecisionTimer, SIGNAL ( timeout() ),
-        this, SLOT ( OnHighPrecisionTimer() ) );
-
-
-
-/*
-// init timer stuff
-//vTimeOutIntervals = [0 ]
-
-// for 128 sample frame size at 48 kHz sampling rate:
-// actual intervals:  0.0  2.666  5.333  8.0
-// quantized to 1 ms: 0    3      5      8 (0)
-
-// for 256 sample frame size at 48 kHz sampling rate:
-// actual intervals:  0.0  5.333  10.666  16.0
-// quantized to 1 ms: 0    5      11      16 (0)
-*/
-
-
-
 
     // enable logging (if requested)
     if ( !strLoggingFileName.isEmpty() )
@@ -108,6 +137,12 @@ CServer::CServer ( const QString& strLoggingFileName,
             strCurServerNameForHTMLStatusFile + ":" +
             QString().number( static_cast<int> ( iPortNumber ) ) );
     }
+
+
+    // connections -------------------------------------------------------------
+    // connect timer timeout signal
+    QObject::connect ( &HighPrecisionTimer, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimer() ) );
 
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
@@ -195,8 +230,8 @@ void CServer::Start()
 {
     if ( !IsRunning() )
     {
-        // start main timer with lowest possible resolution
-        HighPrecisionTimer.start ( MIN_TIMER_RESOLUTION_MS );
+        // start timer
+        HighPrecisionTimer.start();
 
         // init time for response time evaluation
         CycleTimeVariance.Reset();
@@ -205,17 +240,11 @@ void CServer::Start()
 
 void CServer::Stop()
 {
-    // stop main timer
+    // stop timer
     HighPrecisionTimer.stop();
 
     // logging
     Logging.AddServerStopped();
-}
-
-void CServer::OnHighPrecisionTimer()
-{
-    // TEST
-    OnTimer();
 }
 
 void CServer::OnTimer()

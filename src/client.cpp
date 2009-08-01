@@ -387,7 +387,12 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
 //    Socket.SendPacket ( Channel.PrepSendPacket ( vecsNetwork ),
 //        Channel.GetAddress() );
 
-celt_encode ( CeltEncoder, &vecsNetwork[0], NULL, &vecCeltData[0], iCeltNumCodedBytes );
+celt_encode ( CeltEncoder,
+              &vecsNetwork[0],
+              NULL,
+              &vecCeltData[0],
+              iCeltNumCodedBytes );
+
 Socket.SendPacket ( vecCeltData, Channel.GetAddress() );
 
 
@@ -429,24 +434,20 @@ fflush(pFileDelay);
         }
 */
 
-CVector<short> vecsAudioSndCrdMono ( iMonoBlockSizeSam );
-/*
-for ( i = 0; i < iMonoBlockSizeSam; i++ )
-{
-    vecsAudioSndCrdMono[i] = Double2Short ( vecdNetwData[i] );
-}
-*/
-// TEST CELT
-//celt_encode(CeltEncoder, &vecsAudioSndCrdMono[0], NULL, &vecCeltData[0], iCeltNumCodedBytes);
-celt_decode ( CeltDecoder, &vecbyNetwData[0], iCeltNumCodedBytes, &vecsAudioSndCrdMono[0] );
 
+// TEST CELT
+CVector<short> vecsAudioSndCrdMono ( iMonoBlockSizeSam );
+
+celt_decode ( CeltDecoder,
+              &vecbyNetwData[0],
+              iCeltNumCodedBytes,
+              &vecsAudioSndCrdMono[0] );
 
 for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
 {
     vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
         vecsAudioSndCrdMono[i];
 }
-
 
 
     }

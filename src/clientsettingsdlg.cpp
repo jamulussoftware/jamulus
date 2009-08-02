@@ -95,24 +95,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     rButBufferDelaySafe->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_SAFE * SYSTEM_BLOCK_FRAME_SAMPLES ) );
 
-    // sound card buffer delay
-    switch ( pClient->GetSndCrdPrefMonoFrameSizeFactor() )
-    {
-    case FRAME_SIZE_FACTOR_PREFERRED:
-        rButBufferDelayPreferred->setChecked ( true );
-        break;
-
-    case FRAME_SIZE_FACTOR_DEFAULT:
-        rButBufferDelayDefault->setChecked ( true );
-        break;
-
-    case FRAME_SIZE_FACTOR_SAFE:
-        rButBufferDelaySafe->setChecked ( true );
-        break;
-    }
+    // sound card buffer delay inits
     SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelayPreferred );
     SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelayDefault );
     SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelaySafe );
+
+    UpdateSoundCardFrame();
 
 
     // Connections -------------------------------------------------------------
@@ -180,22 +168,37 @@ QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int iFrameSize,
 void CClientSettingsDlg::UpdateSoundCardFrame()
 {
     // update slider value and text
-    const int iCurPrefBufIdx    = pClient->GetSndCrdPrefMonoFrameSizeFactor();
-    const int iCurActualBufSize = pClient->GetSndCrdActualMonoBlSize();
+    const int iCurPrefFrameSizeFactor =
+        pClient->GetSndCrdPrefMonoFrameSizeFactor();
 
-/*
-    SliderSndCrdBufferDelay->setValue ( iCurPrefBufIdx );
+    const int iCurActualBufSize =
+        pClient->GetSndCrdActualMonoBlSize();
+
+    // update radio buttons
+    switch ( iCurPrefFrameSizeFactor )
+    {
+    case FRAME_SIZE_FACTOR_PREFERRED:
+        rButBufferDelayPreferred->setChecked ( true );
+        break;
+
+    case FRAME_SIZE_FACTOR_DEFAULT:
+        rButBufferDelayDefault->setChecked ( true );
+        break;
+
+    case FRAME_SIZE_FACTOR_SAFE:
+        rButBufferDelaySafe->setChecked ( true );
+        break;
+    }
 
     // preferred size
     const int iPrefBufSize =
-        CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurPrefBufIdx );
-*/
+        iCurPrefFrameSizeFactor * SYSTEM_BLOCK_FRAME_SAMPLES;
+
     // actual size (use yellow color if different from preferred size)
     const QString strActSizeValues =
         GenSndCrdBufferDelayString ( iCurActualBufSize );
 
-//    if ( iPrefBufSize != iCurActualBufSize )
-if ( 0 ) // TEST
+    if ( iPrefBufSize != iCurActualBufSize )
     {
         TextLabelActualSndCrdBufDelay->setText ( "<font color=""red"">" +
             strActSizeValues + "</font>" );

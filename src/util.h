@@ -379,15 +379,23 @@ protected:
 class CHostAddress
 {
 public:
-    CHostAddress() : InetAddr ( (quint32) 0 ), iPort ( 0 ) {}
-    CHostAddress ( const QHostAddress NInetAddr, const quint16 iNPort ) :
-        InetAddr ( NInetAddr ), iPort ( iNPort ) {}
+    CHostAddress() :
+        InetAddr ( (quint32) 0 ),
+        iPort ( 0 ) {}
+
+    CHostAddress ( const QHostAddress NInetAddr,
+                   const quint16 iNPort ) :
+        InetAddr ( NInetAddr ),
+        iPort ( iNPort ) {}
+
     CHostAddress ( const CHostAddress& NHAddr ) :
-        InetAddr ( NHAddr.InetAddr ), iPort ( NHAddr.iPort ) {}
+        InetAddr ( NHAddr.InetAddr ),
+        iPort ( NHAddr.iPort ) {}
 
     // copy and compare operators
     CHostAddress& operator= ( const CHostAddress& NHAddr )
         { InetAddr = NHAddr.InetAddr; iPort = NHAddr.iPort; return *this; }
+
     bool operator== ( const CHostAddress& CompAddr ) // compare operator
         { return ( ( CompAddr.InetAddr == InetAddr ) && ( CompAddr.iPort == iPort ) ); }
 
@@ -397,16 +405,24 @@ public:
         return InetAddr.toString().section ( ".", 0, 2 ) + ".x";
     }
 
-    QHostAddress    InetAddr;
-    quint16         iPort;
+    QHostAddress InetAddr;
+    quint16      iPort;
 };
 
 class CChannelShortInfo
 {
 public:
-    CChannelShortInfo() : iChanID ( 0 ), iIpAddr ( 0 ), strName ( "" ) {}
-    CChannelShortInfo ( const int iNID, const quint32 nIP, const QString nN ) :
-        iChanID ( iNID ), iIpAddr ( nIP ), strName ( nN ) {}
+    CChannelShortInfo() :
+        iChanID ( 0 ),
+        iIpAddr ( 0 ),
+        strName ( "" ) {}
+
+    CChannelShortInfo ( const int iNID,
+                        const quint32 nIP,
+                        const QString nN ) :
+        iChanID ( iNID ),
+        iIpAddr ( nIP ),
+        strName ( nN ) {}
 
     int     iChanID;
     quint32 iIpAddr;
@@ -430,17 +446,28 @@ enum EGetDataStat
 class CNetworkTransportProps
 {
 public:
-    CNetworkTransportProps() : iNetworkPacketSize ( 0 ), iBlockSizeFact ( 0 ),
-        iNumAudioChannels ( 0 ), iSampleRate ( 0 ),
-        eAudioCodingType ( CT_NONE ), iAudioCodingArg ( 0 ) {}
+    CNetworkTransportProps() :
+        iNetworkPacketSize ( 0 ),
+        iBlockSizeFact     ( 0 ),
+        iNumAudioChannels  ( 0 ),
+        iSampleRate        ( 0 ),
+        eAudioCodingType   ( CT_NONE ),
+        iAudioCodingArg    ( 0 ) {}
 
-    CNetworkTransportProps ( const uint32_t iNNPS, const uint16_t iNBSF,
-        const uint32_t iNNACH, const uint32_t iNSR,
-        const EAudComprType eNACT, const uint32_t iNVers, const int32_t iNACA ) :
-        iNetworkPacketSize ( iNNPS ), iBlockSizeFact ( iNBSF ),
-        iNumAudioChannels ( iNNACH ), iSampleRate ( iNSR ),
-        eAudioCodingType ( eNACT ), iVersion ( iNVers ),
-        iAudioCodingArg ( iNACA ) {}
+    CNetworkTransportProps ( const uint32_t iNNPS,
+                             const uint16_t iNBSF,
+                             const uint32_t iNNACH,
+                             const uint32_t iNSR,
+                             const EAudComprType eNACT,
+                             const uint32_t iNVers,
+                             const int32_t iNACA ) :
+        iNetworkPacketSize ( iNNPS ),
+        iBlockSizeFact     ( iNBSF ),
+        iNumAudioChannels  ( iNNACH ),
+        iSampleRate        ( iNSR ),
+        eAudioCodingType   ( eNACT ),
+        iVersion           ( iNVers ),
+        iAudioCodingArg    ( iNACA ) {}
 
     uint32_t      iNetworkPacketSize;
     uint16_t      iBlockSizeFact;
@@ -449,30 +476,6 @@ public:
     EAudComprType eAudioCodingType;
     uint32_t      iVersion;
     int32_t       iAudioCodingArg;
-};
-
-class CSndCrdBufferSizes
-{
-public:
-    // we use a conservative value as default, this value does not
-    // give perfekt latency results but should work ok on most
-    // sound cards and drivers
-    static int GetDefaultIndex() { return 1; }
-
-    static int GetNumOfBufferSizes() { return 4; }
-    static int GetBufferSizeFromIndex ( const int iIdx )
-    {
-        if ( ( iIdx >= 0 ) && ( iIdx < 4 ) )
-        {
-            const int pSizes[4] = { 128, 256, 512, 1024 };
-
-            return pSizes[iIdx];
-        }
-        else
-        {
-            return 0;
-        }
-    }
 };
 
 

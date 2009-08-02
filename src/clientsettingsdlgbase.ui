@@ -212,8 +212,8 @@
         </property>
         <property name="sizeHint" >
          <size>
-          <width>201</width>
-          <height>20</height>
+          <width>71</width>
+          <height>16</height>
          </size>
         </property>
        </spacer>
@@ -225,54 +225,32 @@
         </property>
         <layout class="QVBoxLayout" >
          <item>
-          <widget class="QSlider" name="SliderSndCrdBufferDelay" >
-           <property name="orientation" >
-            <enum>Qt::Horizontal</enum>
+          <widget class="QRadioButton" name="rButBufferDelayPreferred" >
+           <property name="text" >
+            <string>(preferred)</string>
            </property>
-           <property name="tickPosition" >
-            <enum>QSlider::TicksBelow</enum>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rButBufferDelayDefault" >
+           <property name="text" >
+            <string>(default)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rButBufferDelaySafe" >
+           <property name="text" >
+            <string>(safe)</string>
            </property>
           </widget>
          </item>
          <item>
           <layout class="QHBoxLayout" >
            <item>
-            <widget class="QLabel" name="TextSndCrdBufDelayPreferred" >
-             <property name="text" >
-              <string>Preferred</string>
-             </property>
-             <property name="wordWrap" >
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="TextLabelPreferredSndCrdBufDelay" >
-             <property name="minimumSize" >
-              <size>
-               <width>110</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="frameShape" >
-              <enum>QFrame::Panel</enum>
-             </property>
-             <property name="frameShadow" >
-              <enum>QFrame::Sunken</enum>
-             </property>
-             <property name="text" >
-              <string>val</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" >
-           <item>
             <widget class="QLabel" name="TextSndCrdBufDelayActual" >
              <property name="text" >
-              <string>Actual</string>
+              <string>Actual Value</string>
              </property>
             </widget>
            </item>
@@ -321,36 +299,6 @@
         <property name="text" >
          <string>Open chat on new message</string>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QGroupBox" name="groupBoxAudioCompressionType" >
-        <property name="title" >
-         <string>Audio Compression</string>
-        </property>
-        <layout class="QVBoxLayout" >
-         <item>
-          <widget class="QRadioButton" name="radioButtonIMA_ADPCM" >
-           <property name="text" >
-            <string>IMA ADPCM</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="radioButtonMS_ADPCM" >
-           <property name="text" >
-            <string>MS ADPCM</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="radioButtonNoAudioCompr" >
-           <property name="text" >
-            <string>None</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </widget>
       </item>
       <item>

@@ -66,6 +66,13 @@
     ( static_cast<double> ( SYSTEM_BLOCK_FRAME_SAMPLES ) / \
     SYSTEM_SAMPLE_RATE * 1000 )
 
+// define the allowed audio frame size factors (since the
+// "SYSTEM_BLOCK_FRAME_SAMPLES" is quite small, it may be that on some
+// computers a larger value is required)
+#define FRAME_SIZE_FACTOR_PREFERRED     1 // 128 (for frame size 128)
+#define FRAME_SIZE_FACTOR_DEFAULT       2 // 256 (for frame size 128)
+#define FRAME_SIZE_FACTOR_SAFE          4 // 512 (for frame size 128)
+
 // define the maximum mono audio buffer size at a sample rate
 // of 48 kHz, this is important for defining the maximum number
 // of bytes to be expected from the network interface

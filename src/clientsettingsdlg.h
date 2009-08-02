@@ -62,26 +62,28 @@ public:
     void SetStatus ( const int iMessType, const int iStatus );
 
 protected:
-    CClient*     pClient;
-    QTimer       TimerStatus;
-    QTimer       TimerPing;
-    QButtonGroup AudioCompressionButtonGroup;
-    void         UpdateDisplay();
+    void    UpdateJitterBufferFrame();
+    void    UpdateSoundCardFrame();
+    QString GenSndCrdBufferDelayString ( const int iFrameSize,
+                                         const QString strAddText = "" );
 
     virtual void showEvent ( QShowEvent* showEvent );
     virtual void hideEvent ( QHideEvent* hideEvent );
 
-    void UpdateJitterBufferFrame();
-    void UpdateSoundCardFrame();
+    CClient*     pClient;
+    QTimer       TimerStatus;
+    QTimer       TimerPing;
+    QButtonGroup SndCrdBufferDelayButtonGroup;
+    void         UpdateDisplay();
 
-public slots:
+ public slots:
     void OnTimerStatus() { UpdateDisplay(); }
     void OnTimerPing();
     void OnSliderNetBuf ( int value );
     void OnSliderSndCrdBufferDelay ( int value );
     void OnAutoJitBuf ( int value );
     void OnOpenChatOnNewMessageStateChanged ( int value );
-    void OnAudioCompressionButtonGroupClicked ( QAbstractButton* button );
+    void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnPingTimeResult ( int iPingTime );
     void OnSoundCrdSelection ( int iSndDevIdx );
     void OnDriverSetupBut();

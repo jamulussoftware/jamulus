@@ -65,11 +65,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     SliderNetBuf->setRange ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
     UpdateJitterBufferFrame();
 
-    // sound card buffer size
-    SliderSndCrdBufferDelay->setRange ( 0,
-        CSndCrdBufferSizes::GetNumOfBufferSizes() - 1 );
-    SliderSndCrdBufferDelay->setPageStep ( 1 ); // improves setting with a mouse click
-
     // init combo box containing all available sound cards in the system
     cbSoundcard->clear();
     for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndCrdNumDev(); iSndDevIdx++ )
@@ -88,26 +83,38 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         cbOpenChatOnNewMessage->setCheckState ( Qt::Unchecked );
     }
 
-    // audio compression type
+    // set text for sound card buffer delay radio buttons
+    rButBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
+        FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_BLOCK_FRAME_SAMPLES,
+        ", preferred" ) );
+
+    rButBufferDelayDefault->setText ( GenSndCrdBufferDelayString (
+        FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_BLOCK_FRAME_SAMPLES,
+        ", default" ) );
+
+    rButBufferDelaySafe->setText ( GenSndCrdBufferDelayString (
+        FRAME_SIZE_FACTOR_SAFE * SYSTEM_BLOCK_FRAME_SAMPLES ) );
+
 /*
-    switch ( pClient->GetAudioCompressionOut() )
+    // sound card buffer delay
+    switch ( pClient->[]() )
     {
     case CT_NONE:
-        radioButtonNoAudioCompr->setChecked ( true );
+        rButBufferDelayPreferred->setChecked ( true );
         break;
 
     case CT_IMAADPCM:
-        radioButtonIMA_ADPCM->setChecked ( true );
+        rButBufferDelayDefault->setChecked ( true );
         break;
 
     case CT_MSADPCM:
-        radioButtonMS_ADPCM->setChecked ( true );
+        rButBufferDelaySafe->setChecked ( true );
         break;
     }
 */
-    AudioCompressionButtonGroup.addButton ( radioButtonNoAudioCompr );
-    AudioCompressionButtonGroup.addButton ( radioButtonIMA_ADPCM );
-    AudioCompressionButtonGroup.addButton ( radioButtonMS_ADPCM );
+    SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelayPreferred );
+    SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelayDefault );
+    SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelaySafe );
 
 
     // Connections -------------------------------------------------------------
@@ -120,8 +127,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // slider controls
     QObject::connect ( SliderNetBuf, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderNetBuf ( int ) ) );
-    QObject::connect ( SliderSndCrdBufferDelay, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnSliderSndCrdBufferDelay ( int ) ) );
 
     // check boxes
     QObject::connect ( cbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
@@ -141,9 +146,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( pClient, SIGNAL ( PingTimeReceived ( int ) ),
         this, SLOT ( OnPingTimeResult ( int ) ) );
 
-    QObject::connect ( &AudioCompressionButtonGroup,
+    QObject::connect ( &SndCrdBufferDelayButtonGroup,
         SIGNAL ( buttonClicked ( QAbstractButton* ) ), this,
-        SLOT ( OnAudioCompressionButtonGroupClicked ( QAbstractButton* ) ) );
+        SLOT ( OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* ) ) );
 
 
     // Timers ------------------------------------------------------------------
@@ -164,31 +169,35 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
     TextNetBuf->setEnabled   ( !pClient->GetDoAutoSockBufSize() );
 }
 
+QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int iFrameSize,
+                                                         const QString strAddText )
+{
+    // use two times the buffer delay for the entire delay since
+    // we have input and output
+    return QString().setNum ( (double) iFrameSize * 2 *
+        1000 / SYSTEM_SAMPLE_RATE, 'f', 2 ) + " ms (" +
+        QString().setNum ( iFrameSize ) + strAddText + ")";
+}
+
 void CClientSettingsDlg::UpdateSoundCardFrame()
 {
     // update slider value and text
     const int iCurPrefBufIdx    = pClient->GetSndCrdPreferredMonoBlSizeIndex();
     const int iCurActualBufSize = pClient->GetSndCrdActualMonoBlSize();
+
+/*
     SliderSndCrdBufferDelay->setValue ( iCurPrefBufIdx );
 
     // preferred size
     const int iPrefBufSize =
         CSndCrdBufferSizes::GetBufferSizeFromIndex ( iCurPrefBufIdx );
-
-    // use two times the buffer delay for the entire delay since
-    // we have input and output
-    TextLabelPreferredSndCrdBufDelay->setText (
-        QString().setNum ( (double) iPrefBufSize * 2 *
-        1000 / SYSTEM_SAMPLE_RATE, 'f', 2 ) + " ms (" +
-        QString().setNum ( iPrefBufSize ) + ")" );
-
+*/
     // actual size (use yellow color if different from preferred size)
     const QString strActSizeValues =
-        QString().setNum ( (double) iCurActualBufSize * 2 *
-        1000 / SYSTEM_SAMPLE_RATE, 'f', 2 ) + " ms (" +
-        QString().setNum ( iCurActualBufSize ) + ")";
+        GenSndCrdBufferDelayString ( iCurActualBufSize );
 
-    if ( iPrefBufSize != iCurActualBufSize )
+//    if ( iPrefBufSize != iCurActualBufSize )
+if ( 0 ) // TEST
     {
         TextLabelActualSndCrdBufDelay->setText ( "<font color=""red"">" +
             strActSizeValues + "</font>" );
@@ -259,20 +268,20 @@ void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::OnAudioCompressionButtonGroupClicked ( QAbstractButton* button )
+void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )
 {
 /*
-    if ( button == radioButtonNoAudioCompr )
+    if ( button == rButBufferDelayPreferred )
     {
         pClient->SetAudioCompressionOut ( CT_NONE );
     }
 
-    if ( button == radioButtonIMA_ADPCM )
+    if ( button == rButBufferDelayDefault )
     {
         pClient->SetAudioCompressionOut ( CT_IMAADPCM );
     }
 
-    if ( button == radioButtonMS_ADPCM )
+    if ( button == rButBufferDelaySafe )
     {
         pClient->SetAudioCompressionOut ( CT_MSADPCM );
     }

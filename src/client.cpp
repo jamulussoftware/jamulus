@@ -36,7 +36,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ), strName ( "" ),
     bOpenChatOnNewMessage ( true ),
     bDoAutoSockBufSize ( true ),
-    iSndCrdPreferredMonoBlSizeIndex ( CSndCrdBufferSizes::GetDefaultIndex() )
+    iSndCrdPreferredMonoBlSizeIndex ( FRAME_SIZE_FACTOR_DEFAULT )
 {
     // connection for protocol
     QObject::connect ( &Channel,
@@ -148,25 +148,27 @@ bool CClient::SetServerAddr ( QString strNAddr )
 void CClient::SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx )
 {
     // right now we simply set the internal value
-    if ( ( iNewIdx >= 0 ) && ( CSndCrdBufferSizes::GetNumOfBufferSizes() ) )
+    if ( ( iNewIdx == FRAME_SIZE_FACTOR_PREFERRED ) ||
+         ( iNewIdx == FRAME_SIZE_FACTOR_DEFAULT ) ||
+         ( iNewIdx == FRAME_SIZE_FACTOR_SAFE ) )
     {
         iSndCrdPreferredMonoBlSizeIndex = iNewIdx;
-    }
 
-    // init with new parameter, if client was running then first
-    // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
+        // init with new parameter, if client was running then first
+        // stop it and restart again after new initialization
+        const bool bWasRunning = Sound.IsRunning();
+        if ( bWasRunning )
+        {
+            Sound.Stop();
+        }
 
-    // init with new block size index parameter
-    Init ( iSndCrdPreferredMonoBlSizeIndex );
+        // init with new block size index parameter
+        Init ( iSndCrdPreferredMonoBlSizeIndex );
 
-    if ( bWasRunning )
-    {
-        Sound.Start();
+        if ( bWasRunning )
+        {
+            Sound.Start();
+        }
     }
 }
 
@@ -259,8 +261,8 @@ void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
 void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
 {
     // translate block size index in actual block size
-    const int iPrefMonoBlockSizeSamAtSndCrdSamRate = CSndCrdBufferSizes::
-        GetBufferSizeFromIndex ( iPrefMonoBlockSizeSamIndexAtSndCrdSamRate );
+    const int iPrefMonoBlockSizeSamAtSndCrdSamRate =
+        iPrefMonoBlockSizeSamIndexAtSndCrdSamRate * SYSTEM_BLOCK_FRAME_SAMPLES;
 
     // get actual sound card buffer size using preferred size
     iMonoBlockSizeSam   = Sound.Init ( iPrefMonoBlockSizeSamAtSndCrdSamRate );

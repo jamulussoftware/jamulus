@@ -29,7 +29,8 @@
 
 
 /* Implementation *************************************************************/
-void CNetBuf::Init ( const int iNewBlockSize, const int iNewNumBlocks )
+void CNetBuf::Init ( const int iNewBlockSize,
+                     const int iNewNumBlocks )
 {
     // total size -> size of one block times number of blocks
     iBlockSize = iNewBlockSize;
@@ -226,24 +227,25 @@ int CNetBuf::GetAvailData() const
 
 void CNetBuf::Clear ( const EClearType eClearType )
 {
+    int iMiddleOfBuffer = 0;
 
-    int iMiddleOfBuffer;
-
+    if ( iBlockSize != 0 )
+    {
 #if 0
-    /* with the following operation we set the new get pos to a block
-       boundary (one block below the middle of the buffer in case of odd
-       number of blocks, e.g.:
-       [buffer size]: [get pos]
-       1: 0   /   2: 0   /   3: 1   /   4: 1   /   ... */
-    iMiddleOfBuffer = ( ( ( iMemSize - iBlockSize) / 2 ) / iBlockSize ) * iBlockSize;
+        /* with the following operation we set the new get pos to a block
+           boundary (one block below the middle of the buffer in case of odd
+           number of blocks, e.g.:
+           [buffer size]: [get pos]
+           1: 0   /   2: 0   /   3: 1   /   4: 1   /   ... */
+        iMiddleOfBuffer = ( ( ( iMemSize - iBlockSize) / 2 ) / iBlockSize ) * iBlockSize;
 #else
 // old code
 
 // somehow the old code seems to work better than the sophisticated new one....?
-    /* 1: 0   /   2: 1   /   3: 1   /   4: 2   /   ... */
-    iMiddleOfBuffer = ( ( iMemSize / 2 ) / iBlockSize ) * iBlockSize;
+        /* 1: 0   /   2: 1   /   3: 1   /   4: 2   /   ... */
+        iMiddleOfBuffer = ( ( iMemSize / 2 ) / iBlockSize ) * iBlockSize;
 #endif
-
+    }
 
     // different behaviour for get and put corrections
     if ( eClearType == CT_GET )

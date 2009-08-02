@@ -303,33 +303,42 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
       for the average it is assumed that the buffer is half filled)
     - consider the jitter buffer on the server side, too
 */
-
-    const int iTotalJitterBufferDelayMS = SYSTEM_BLOCK_DURATION_MS_FLOAT *
-        ( 2 /* buffer at client and server */ * pClient->GetSockBufNumFrames() ) / 2;
+    // 2 times buffers at client and server divided by 2 (half the buffer
+    // for the delay) is simply the total socket buffer size
+    const double dTotalJitterBufferDelayMS =
+        SYSTEM_BLOCK_DURATION_MS_FLOAT * pClient->GetSockBufNumFrames();
 
     // we assume that we have two period sizes for the input and one for the
     // output, therefore we have "3 *" instead of "2 *" (for input and output)
     // the actual sound card buffer size
-    const int iTotalSoundCardDelayMS =
+    const double dTotalSoundCardDelayMS =
         3 * pClient->GetSndCrdActualMonoBlSize() *
         1000 / SYSTEM_SAMPLE_RATE;
 
+    const double dDelayToFillNetworkPackets =
+        SYSTEM_BLOCK_DURATION_MS_FLOAT *
+        pClient->GetSndCrdPrefMonoFrameSizeFactor();
 
-// TODO
-    const int iDelayToFillNetworkPackets =0;// TEST
-//        ( pClient->GetNetwBufSizeOut() + pClient->GetAudioBlockSizeIn() ) *
-//        1000 / SYSTEM_SAMPLE_RATE;
+    // CELT additional delay at small frame sizes is half a frame size
+    const double dAdditionalAudioCodecDelay =
+        SYSTEM_BLOCK_DURATION_MS_FLOAT / 2;
 
-    const int iTotalBufferDelay = iDelayToFillNetworkPackets +
-        iTotalJitterBufferDelayMS + iTotalSoundCardDelayMS;
+    const double dTotalBufferDelay =
+        dDelayToFillNetworkPackets +
+        dTotalJitterBufferDelayMS +
+        dTotalSoundCardDelayMS +
+        dAdditionalAudioCodecDelay;
 
-    const int iOverallDelay = iTotalBufferDelay + iPingTime;
+    const int iOverallDelay =
+        LlconMath::round ( dTotalBufferDelay + iPingTime );
 
     // apply values to GUI labels, take special care if ping time exceeds
     // a certain value
     if ( iPingTime > 500 )
     {
-        const QString sErrorText = "<font color=""red""><b>&#62;500 ms</b></font>";
+        const QString sErrorText =
+            "<font color=""red""><b>&#62;500 ms</b></font>";
+
         TextLabelPingTime->setText ( sErrorText );
         TextLabelOverallDelay->setText ( sErrorText );
     }

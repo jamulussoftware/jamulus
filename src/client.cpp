@@ -289,7 +289,7 @@ void CClient::Init()
     CeltDecoder = celt_decoder_create ( CeltMode );
 
     // 16: low/normal quality   132 kbsp (128) / 90 kbps (256)
-    // 40: high good            204 kbps (128) / 162 kbps (256)
+    // 40: high quality         204 kbps (128) / 162 kbps (256)
     iCeltNumCodedBytes = 16;
 
     vecCeltData.Init ( iCeltNumCodedBytes );

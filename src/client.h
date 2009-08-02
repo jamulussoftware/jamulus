@@ -119,9 +119,9 @@ public:
     int          GetSndCrdDev() { return Sound.GetDev(); }
     void         OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
 
-    void SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx );
-    int GetSndCrdPreferredMonoBlSizeIndex()
-        { return iSndCrdPreferredMonoBlSizeIndex; }
+    void SetSndCrdPrefMonoFrameSizeFactor ( const int iNewFactor );
+    int GetSndCrdPrefMonoFrameSizeFactor()
+        { return iSndCrdPrefMonoFrameSizeFactor; }
     int GetSndCrdActualMonoBlSize() { return iMonoBlockSizeSam; }
 
     void SetRemoteChanGain ( const int iId, const double dGain )
@@ -146,7 +146,7 @@ protected:
     // callback function must be static, otherwise it does not work
     static void  AudioCallback ( CVector<short>& psData, void* arg );
 
-    void         Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate );
+    void         Init();
     void         ProcessAudioData ( CVector<short>& vecsStereoSndCrd );
     void         UpdateSocketBufferSize();
 
@@ -172,7 +172,7 @@ protected:
     int                     iReverbLevel;
     CAudioReverb            AudioReverb;
 
-    int                     iSndCrdPreferredMonoBlSizeIndex;
+    int                     iSndCrdPrefMonoFrameSizeFactor;
 
     int                     iMonoBlockSizeSam;
     int                     iStereoBlockSizeSam;

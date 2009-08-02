@@ -36,7 +36,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ), strName ( "" ),
     bOpenChatOnNewMessage ( true ),
     bDoAutoSockBufSize ( true ),
-    iSndCrdPreferredMonoBlSizeIndex ( FRAME_SIZE_FACTOR_DEFAULT )
+    iSndCrdPrefMonoFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT )
 {
     // connection for protocol
     QObject::connect ( &Channel,
@@ -145,14 +145,14 @@ bool CClient::SetServerAddr ( QString strNAddr )
     return true;
 }
 
-void CClient::SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx )
+void CClient::SetSndCrdPrefMonoFrameSizeFactor ( const int iNewFactor )
 {
     // right now we simply set the internal value
-    if ( ( iNewIdx == FRAME_SIZE_FACTOR_PREFERRED ) ||
-         ( iNewIdx == FRAME_SIZE_FACTOR_DEFAULT ) ||
-         ( iNewIdx == FRAME_SIZE_FACTOR_SAFE ) )
+    if ( ( iNewFactor == FRAME_SIZE_FACTOR_PREFERRED ) ||
+         ( iNewFactor == FRAME_SIZE_FACTOR_DEFAULT ) ||
+         ( iNewFactor == FRAME_SIZE_FACTOR_SAFE ) )
     {
-        iSndCrdPreferredMonoBlSizeIndex = iNewIdx;
+        iSndCrdPrefMonoFrameSizeFactor = iNewFactor;
 
         // init with new parameter, if client was running then first
         // stop it and restart again after new initialization
@@ -163,7 +163,7 @@ void CClient::SetSndCrdPreferredMonoBlSizeIndex ( const int iNewIdx )
         }
 
         // init with new block size index parameter
-        Init ( iSndCrdPreferredMonoBlSizeIndex );
+        Init();
 
         if ( bWasRunning )
         {
@@ -186,7 +186,7 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
 
     // init again because the sound card actual buffer size might
     // be changed on new device
-    Init ( iSndCrdPreferredMonoBlSizeIndex );
+    Init();
 
     if ( bWasRunning )
     {
@@ -209,7 +209,7 @@ void CClient::OnSndCrdReinitRequest()
     // reinit the driver (we use the currently selected driver) and
     // init client object, too
     Sound.SetDev ( Sound.GetDev() );
-    Init ( iSndCrdPreferredMonoBlSizeIndex );
+    Init();
 
     if ( bWasRunning )
     {
@@ -220,7 +220,7 @@ void CClient::OnSndCrdReinitRequest()
 void CClient::Start()
 {
     // init object
-    Init ( iSndCrdPreferredMonoBlSizeIndex );
+    Init();
 
     // enable channel
     Channel.SetEnable ( true );
@@ -258,14 +258,14 @@ void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
     pMyClientObj->ProcessAudioData ( psData );
 }
 
-void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
+void CClient::Init()
 {
     // translate block size index in actual block size
-    const int iPrefMonoBlockSizeSamAtSndCrdSamRate =
-        iPrefMonoBlockSizeSamIndexAtSndCrdSamRate * SYSTEM_BLOCK_FRAME_SAMPLES;
+    const int iPrefMonoFrameSize =
+        iSndCrdPrefMonoFrameSizeFactor * SYSTEM_BLOCK_FRAME_SAMPLES;
 
     // get actual sound card buffer size using preferred size
-    iMonoBlockSizeSam   = Sound.Init ( iPrefMonoBlockSizeSamAtSndCrdSamRate );
+    iMonoBlockSizeSam   = Sound.Init ( iPrefMonoFrameSize );
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
     vecsAudioSndCrdStereo.Init ( iStereoBlockSizeSam );
@@ -299,11 +299,8 @@ void CClient::Init ( const int iPrefMonoBlockSizeSamIndexAtSndCrdSamRate )
     vecbyNetwData.Init ( iCeltNumCodedBytes );
 
     // set the channel network properties
-
-// TEST right now we only support 128 samples, later 256 and 512, too
-Channel.SetNetwFrameSizeAndFact ( iCeltNumCodedBytes,
-                                  1 ); // TEST "1"
-
+    Channel.SetNetwFrameSizeAndFact ( iCeltNumCodedBytes,
+                                      iSndCrdPrefMonoFrameSizeFactor );
 }
 
 void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )

@@ -95,23 +95,21 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     rButBufferDelaySafe->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_SAFE * SYSTEM_BLOCK_FRAME_SAMPLES ) );
 
-/*
     // sound card buffer delay
-    switch ( pClient->[]() )
+    switch ( pClient->GetSndCrdPrefMonoFrameSizeFactor() )
     {
-    case CT_NONE:
+    case FRAME_SIZE_FACTOR_PREFERRED:
         rButBufferDelayPreferred->setChecked ( true );
         break;
 
-    case CT_IMAADPCM:
+    case FRAME_SIZE_FACTOR_DEFAULT:
         rButBufferDelayDefault->setChecked ( true );
         break;
 
-    case CT_MSADPCM:
+    case FRAME_SIZE_FACTOR_SAFE:
         rButBufferDelaySafe->setChecked ( true );
         break;
     }
-*/
     SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelayPreferred );
     SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelayDefault );
     SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelaySafe );
@@ -182,7 +180,7 @@ QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int iFrameSize,
 void CClientSettingsDlg::UpdateSoundCardFrame()
 {
     // update slider value and text
-    const int iCurPrefBufIdx    = pClient->GetSndCrdPreferredMonoBlSizeIndex();
+    const int iCurPrefBufIdx    = pClient->GetSndCrdPrefMonoFrameSizeFactor();
     const int iCurActualBufSize = pClient->GetSndCrdActualMonoBlSize();
 
 /*
@@ -235,7 +233,7 @@ void CClientSettingsDlg::OnSliderNetBuf ( int value )
 
 void CClientSettingsDlg::OnSliderSndCrdBufferDelay ( int value )
 {
-    pClient->SetSndCrdPreferredMonoBlSizeIndex ( value );
+    pClient->SetSndCrdPrefMonoFrameSizeFactor ( value );
     UpdateDisplay();
 }
 
@@ -270,22 +268,21 @@ void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
 
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )
 {
-/*
     if ( button == rButBufferDelayPreferred )
     {
-        pClient->SetAudioCompressionOut ( CT_NONE );
+        pClient->SetSndCrdPrefMonoFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED );
     }
 
     if ( button == rButBufferDelayDefault )
     {
-        pClient->SetAudioCompressionOut ( CT_IMAADPCM );
+        pClient->SetSndCrdPrefMonoFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT );
     }
 
     if ( button == rButBufferDelaySafe )
     {
-        pClient->SetAudioCompressionOut ( CT_MSADPCM );
+        pClient->SetSndCrdPrefMonoFrameSizeFactor ( FRAME_SIZE_FACTOR_SAFE );
     }
-*/
+
     UpdateDisplay();
 }
 

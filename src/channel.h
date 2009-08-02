@@ -88,8 +88,8 @@ public:
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Protocol.CreateChanGainMes ( iId, dGain ); }
 
-    bool SetSockBufSize ( const int iNumBlocks );
-    int GetSockBufSize() const { return iCurSockBufSize; }
+    bool SetSockBufNumFrames ( const int iNewNumFrames );
+    int GetSockBufNumFrames() const { return iCurSockBufNumFrames; }
 
     int GetUploadRateKbps();
 
@@ -145,7 +145,7 @@ protected:
 
     // network jitter-buffer
     CNetBuf             SockBuf;
-    int                 iCurSockBufSize;
+    int                 iCurSockBufNumFrames;
 
     CCycleTimeVariance  CycleTimeVariance;
 
@@ -182,6 +182,7 @@ signals:
     void ReqConnClientsList();
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void NameHasChanged();
+    void NetwFrameSizeHasChanged ( int iNewFrameSize );
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );
     void ReqNetTranspProps();

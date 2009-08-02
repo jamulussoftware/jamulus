@@ -154,7 +154,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 void CClientSettingsDlg::UpdateJitterBufferFrame()
 {
     // update slider value and text
-    const int iCurNumNetBuf = pClient->GetSockBufSize();
+    const int iCurNumNetBuf = pClient->GetSockBufNumFrames();
     SliderNetBuf->setValue ( iCurNumNetBuf );
     TextNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
 
@@ -220,7 +220,7 @@ void CClientSettingsDlg::OnDriverSetupBut()
 
 void CClientSettingsDlg::OnSliderNetBuf ( int value )
 {
-    pClient->SetSockBufSize ( value );
+    pClient->SetSockBufNumFrames ( value );
     UpdateJitterBufferFrame();
 }
 
@@ -296,7 +296,7 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 */
 
     const int iTotalJitterBufferDelayMS = SYSTEM_BLOCK_DURATION_MS_FLOAT *
-        ( 2 /* buffer at client and server */ * pClient->GetSockBufSize() ) / 2;
+        ( 2 /* buffer at client and server */ * pClient->GetSockBufNumFrames() ) / 2;
 
     // we assume that we have two period sizes for the input and one for the
     // output, therefore we have "3 *" instead of "2 *" (for input and output)

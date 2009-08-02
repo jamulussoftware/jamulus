@@ -125,7 +125,7 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf",
          MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
     {
-        pClient->SetSockBufSize ( iValue );
+        pClient->SetSockBufNumFrames ( iValue );
     }
 
     // flag whether the chat window shall be opened on a new chat message
@@ -180,7 +180,7 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
     // network jitter buffer size
     SetNumericIniSet ( IniXMLDocument, "client", "jitbuf",
-        pClient->GetSockBufSize() );
+        pClient->GetSockBufNumFrames() );
 
     // flag whether the chat window shall be opened on a new chat message
     SetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage",

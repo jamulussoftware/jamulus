@@ -118,6 +118,12 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
     // get size of data to be get from the buffer
     const int iInSize = vecbyData.Size();
 
+    // check size
+    if ( iInSize != iBlockSize )
+    {
+        return false;
+    }
+
     // Check if there is not enough data available -> correct
     if ( GetAvailData() < iInSize )
     {
@@ -250,7 +256,7 @@ void CNetBuf::Clear ( const EClearType eClearType )
         iPutPos = 0;
         iGetPos = iMiddleOfBuffer;
 
-        /* check for special case */
+        // check for special case
         if ( iPutPos == iGetPos )
         {
             eBufState = CNetBuf::BS_FULL;

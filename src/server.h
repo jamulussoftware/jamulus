@@ -94,7 +94,7 @@ public:
 
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                           CVector<QString>& vecsName,
-                          CVector<int>& veciJitBufSize,
+                          CVector<int>& veciJitBufNumFrames,
                           CVector<int>& veciNetwFrameSizeFact );
 
 protected:
@@ -130,8 +130,8 @@ protected:
 
     virtual void    customEvent ( QEvent* Event );
 
-    /* do not use the vector class since CChannel does not have appropriate
-       copy constructor/operator */
+    // do not use the vector class since CChannel does not have appropriate
+    // copy constructor/operator
     CChannel            vecChannels[MAX_NUM_CHANNELS];
     QMutex              Mutex;
 

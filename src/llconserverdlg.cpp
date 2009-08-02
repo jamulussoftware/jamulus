@@ -77,13 +77,13 @@ void CLlconServerDlg::OnTimer()
 {
     CVector<CHostAddress>   vecHostAddresses;
     CVector<QString>        vecsName;
-    CVector<int>            veciJitBufSize;
+    CVector<int>            veciJitBufNumFrames;
     CVector<int>            veciNetwFrameSizeFact;
     double                  dCurTiStdDev;
 
     ListViewMutex.lock();
 
-    pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufSize,
+    pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufNumFrames,
         veciNetwFrameSizeFact );
 
     // fill list with connected clients
@@ -101,7 +101,7 @@ void CLlconServerDlg::OnTimer()
 
             // jitter buffer size (polling for updates)
             vecpListViewItems[i]->setText ( 4,
-                QString().setNum ( veciJitBufSize[i] ) );
+                QString().setNum ( veciJitBufNumFrames[i] ) );
 
             // out network block size
             vecpListViewItems[i]->setText ( 5,

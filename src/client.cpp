@@ -73,7 +73,7 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 void CClient::OnReqJittBufSize()
 {
 // TODO cant we implement this OnReqJjittBufSize inside the channel object?
-    Channel.CreateJitBufMes ( Channel.GetSockBufSize() );
+    Channel.CreateJitBufMes ( Channel.GetSockBufNumFrames() );
 }
 
 void CClient::OnNewConnection()
@@ -514,8 +514,8 @@ void CClient::UpdateSocketBufferSize()
         {
             // we are in the middle of the decision region, use
             // previous setting for determing the new decision
-            if ( !( ( GetSockBufSize() == iUpperHystDec ) ||
-                    ( GetSockBufSize() == iLowerHystDec ) ) )
+            if ( !( ( GetSockBufNumFrames() == iUpperHystDec ) ||
+                    ( GetSockBufNumFrames() == iLowerHystDec ) ) )
             {
                 // The old result is not near the new decision,
                 // use per definition the upper decision.

@@ -318,6 +318,29 @@ void CServer::OnTimer()
     {
         for ( int i = 0; i < iNumClients; i++ )
         {
+
+
+/*
+// TEST CELT
+CVector<short> vecsAudioSndCrdMono ( iMonoBlockSizeSam );
+
+celt_decode ( CeltDecoder,
+              &vecbyNetwData[0],
+              iCeltNumCodedBytes,
+              &vecsAudioSndCrdMono[0] );
+
+for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+{
+    vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
+        vecsAudioSndCrdMono[i];
+}
+*/
+
+
+// TODO first ALL channels must be decoded before process data can
+// be called!!!
+
+
             // generate a sparate mix for each channel
             // actual processing of audio data -> mix
             vecsSendData = ProcessData ( vecvecdData, vecvecdGains[i] );
@@ -326,6 +349,17 @@ void CServer::OnTimer()
 //            Socket.SendPacket (
 //                PrepSendPacket ( vecChanID[i], vecsSendData ),
 //                GetAddress ( vecChanID[i] ) );
+
+/*
+celt_encode ( CeltEncoder,
+              &vecsNetwork[0],
+              NULL,
+              &vecCeltData[0],
+              iCeltNumCodedBytes );
+
+Socket.SendPacket ( vecCeltData, Channel.GetAddress() );
+*/
+
         }
     }
     else
@@ -363,7 +397,28 @@ void CServer::GetBlockAllConC ( CVector<int>&              vecChanID,
             // read out all input buffers to decrease timeout counter on
             // disconnected channels
 //            const EGetDataStat eGetStat = vecChannels[i].GetData ( vecdData );
+
 const EGetDataStat eGetStat=GS_BUFFER_OK;//TEST
+
+// TEST
+/*
+// TEST CELT
+CVector<short> vecsAudioSndCrdMono ( iMonoBlockSizeSam );
+
+celt_decode ( CeltDecoder,
+              &vecbyNetwData[0],
+              iCeltNumCodedBytes,
+              &vecsAudioSndCrdMono[0] );
+
+for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+{
+    vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
+        vecsAudioSndCrdMono[i];
+}
+*/
+
+
+
 
             // if channel was just disconnected, set flag that connected
             // client list is sent to all other clients
@@ -672,7 +727,7 @@ bAudioOK = true;
 
 void CServer::GetConCliParam ( CVector<CHostAddress>&  vecHostAddresses,
                                CVector<QString>&       vecsName,
-                               CVector<int>&           veciJitBufSize,
+                               CVector<int>&           veciJitBufNumFrames,
                                CVector<int>&           veciNetwFrameSizeFact )
 {
     CHostAddress InetAddr;
@@ -680,7 +735,7 @@ void CServer::GetConCliParam ( CVector<CHostAddress>&  vecHostAddresses,
     // init return values
     vecHostAddresses.Init      ( USED_NUM_CHANNELS );
     vecsName.Init              ( USED_NUM_CHANNELS );
-    veciJitBufSize.Init        ( USED_NUM_CHANNELS );
+    veciJitBufNumFrames.Init   ( USED_NUM_CHANNELS );
     veciNetwFrameSizeFact.Init ( USED_NUM_CHANNELS );
 
     // check all possible channels
@@ -691,7 +746,7 @@ void CServer::GetConCliParam ( CVector<CHostAddress>&  vecHostAddresses,
             // get requested data
             vecHostAddresses[i]      = InetAddr;
             vecsName[i]              = vecChannels[i].GetName();
-            veciJitBufSize[i]        = vecChannels[i].GetSockBufSize();
+            veciJitBufNumFrames[i]   = vecChannels[i].GetSockBufNumFrames();
             veciNetwFrameSizeFact[i] = vecChannels[i].GetNetwFrameSizeFact();
         }
     }

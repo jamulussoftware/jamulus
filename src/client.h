@@ -93,13 +93,13 @@ public:
 
     void SetDoAutoSockBufSize ( const bool bValue ) { bDoAutoSockBufSize = bValue; }
     bool GetDoAutoSockBufSize() { return bDoAutoSockBufSize; }
-    void SetSockBufSize ( const int iNumBlocks )
+    void SetSockBufNumFrames ( const int iNumBlocks )
     {
         // only change parameter if new parameter is different from current one
-        if ( Channel.GetSockBufSize() != iNumBlocks )
+        if ( Channel.GetSockBufNumFrames() != iNumBlocks )
         {
-            // set the new socket size
-            if ( !Channel.SetSockBufSize ( iNumBlocks ) )
+            // set the new socket size (number of frames)
+            if ( !Channel.SetSockBufNumFrames ( iNumBlocks ) )
             {
                 // if setting of socket buffer size was successful, 
                 // tell the server that size has changed
@@ -107,7 +107,7 @@ public:
             }
         }
     }
-    int GetSockBufSize() { return Channel.GetSockBufSize(); }
+    int GetSockBufNumFrames() { return Channel.GetSockBufNumFrames(); }
 
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 

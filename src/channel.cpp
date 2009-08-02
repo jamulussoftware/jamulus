@@ -43,7 +43,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     iConTimeOut = 0;
 
     // init the socket buffer
-    SetSockBufSize ( DEF_NET_BUF_SIZE_NUM_BL );
+    SetSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL );
 
 
     // connections -------------------------------------------------------------
@@ -145,19 +145,20 @@ void CChannel::SetNetwFrameSizeAndFact ( const int iNewNetwFrameSize,
     CreateNetTranspPropsMessFromCurrentSettings();
 }
 
-bool CChannel::SetSockBufSize ( const int iNumBlocks )
+bool CChannel::SetSockBufNumFrames ( const int iNewNumFrames )
 {
     QMutexLocker locker ( &Mutex ); // this opperation must be done with mutex
 
     // first check for valid input parameter range
-    if ( ( iNumBlocks >= MIN_NET_BUF_SIZE_NUM_BL ) &&
-         ( iNumBlocks <= MAX_NET_BUF_SIZE_NUM_BL ) )
+    if ( ( iNewNumFrames >= MIN_NET_BUF_SIZE_NUM_BL ) &&
+         ( iNewNumFrames <= MAX_NET_BUF_SIZE_NUM_BL ) )
     {
-        iCurSockBufSize = iNumBlocks;
+        // store new value
+        iCurSockBufNumFrames = iNewNumFrames;
 
-        // the network block size is a multiple of the internal minimal
+        // the network block size is a multiple of the minimum network
         // block size
-        SockBuf.Init ( SYSTEM_BLOCK_FRAME_SAMPLES, iNumBlocks );
+        SockBuf.Init ( iNetwFrameSize, iNewNumFrames );
 
         return false; // -> no error
     }
@@ -240,7 +241,7 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 {
-    SetSockBufSize ( iNewJitBufSize );
+    SetSockBufNumFrames ( iNewJitBufSize );
 }
 
 void CChannel::OnChangeChanGain ( int iChanID, double dNewGain )
@@ -281,6 +282,13 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
         iNetwFrameSize =
             NetworkTransportProps.iNetworkPacketSize /
             NetworkTransportProps.iBlockSizeFact;
+
+        // update socket buffer (the network block size is a multiple of the
+        // minimum network frame size
+        SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+
+        // fire message
+        emit NetwFrameSizeHasChanged ( iNetwFrameSize );
     }
 }
 
@@ -435,7 +443,7 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
         // where the atomic block size is "SYSTEM_BLOCK_FRAME_SAMPLES")
 
 // TODO this code only works with the above assumption -> better
-//      implementation so that we are not depending on assumptions
+// implementation so that we are not depending on assumptions
 
         iConTimeOut -= SYSTEM_BLOCK_FRAME_SAMPLES;
 

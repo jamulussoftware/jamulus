@@ -182,7 +182,6 @@ signals:
     void ReqConnClientsList();
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void NameHasChanged();
-    void NetwFrameSizeHasChanged ( int iNewFrameSize );
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );
     void ReqNetTranspProps();

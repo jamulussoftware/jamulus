@@ -304,12 +304,12 @@ void CServer::Stop()
 
 void CServer::OnTimer()
 {
-    CVector<int>              vecChanID;
-    CVector<CVector<double> > vecvecdData ( SYSTEM_BLOCK_FRAME_SAMPLES );
-    CVector<CVector<double> > vecvecdGains;
+    CVector<int>               vecChanID;
+    CVector<CVector<int16_t> > vecvecsData;
+    CVector<CVector<double> >  vecvecdGains;
 
     // get data from all connected clients
-    GetBlockAllConC ( vecChanID, vecvecdData, vecvecdGains );
+    GetBlockAllConC ( vecChanID, vecvecsData, vecvecdGains );
     const int iNumClients = vecChanID.Size();
 
     // Check if at least one client is connected. If not, stop server until
@@ -318,32 +318,9 @@ void CServer::OnTimer()
     {
         for ( int i = 0; i < iNumClients; i++ )
         {
-
-
-/*
-// TEST CELT
-CVector<short> vecsAudioSndCrdMono ( iMonoBlockSizeSam );
-
-celt_decode ( CeltDecoder,
-              &vecbyNetwData[0],
-              iCeltNumCodedBytes,
-              &vecsAudioSndCrdMono[0] );
-
-for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-{
-    vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
-        vecsAudioSndCrdMono[i];
-}
-*/
-
-
-// TODO first ALL channels must be decoded before process data can
-// be called!!!
-
-
             // generate a sparate mix for each channel
             // actual processing of audio data -> mix
-            vecsSendData = ProcessData ( vecvecdData, vecvecdGains[i] );
+            vecsSendData = ProcessData ( vecvecsData, vecvecdGains[i] );
 
             // send separate mix to current clients
 //            Socket.SendPacket (
@@ -351,6 +328,11 @@ for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
 //                GetAddress ( vecChanID[i] ) );
 
 /*
+            // get current number of CELT coded bytes
+            const int iCeltNumCodedBytes =
+                vecChannels[i].GetNetwFrameSize() /
+                vecChannels[i].GetNetwFrameSizeFact();
+
 celt_encode ( CeltEncoder,
               &vecsNetwork[0],
               NULL,
@@ -373,18 +355,15 @@ Socket.SendPacket ( vecCeltData, Channel.GetAddress() );
     CycleTimeVariance.Update();
 }
 
-void CServer::GetBlockAllConC ( CVector<int>&              vecChanID,
-                                CVector<CVector<double> >& vecvecdData,
-                                CVector<CVector<double> >& vecvecdGains )
+void CServer::GetBlockAllConC ( CVector<int>&               vecChanID,
+                                CVector<CVector<int16_t> >& vecvecsData,
+                                CVector<CVector<double> >&  vecvecdGains )
 {
     int  i, j;
     bool bChannelIsNowDisconnected = false;
 
-    // init temporal data vector and clear input buffers
-    CVector<double> vecdData ( SYSTEM_BLOCK_FRAME_SAMPLES );
-
     vecChanID.Init    ( 0 );
-    vecvecdData.Init  ( 0 );
+    vecvecsData.Init  ( 0 );
     vecvecdGains.Init ( 0 );
 
     // make put and get calls thread safe. Do not forget to unlock mutex
@@ -394,31 +373,25 @@ void CServer::GetBlockAllConC ( CVector<int>&              vecChanID,
         // check all possible channels
         for ( i = 0; i < USED_NUM_CHANNELS; i++ )
         {
+            // get current number of CELT coded bytes
+            const int iCeltNumCodedBytes =
+                vecChannels[i].GetNetwFrameSize() /
+                vecChannels[i].GetNetwFrameSizeFact();
+
+            // init temporal data vector and clear input buffers
+            CVector<uint8_t> vecbyData ( iCeltNumCodedBytes );
+
             // read out all input buffers to decrease timeout counter on
             // disconnected channels
-//            const EGetDataStat eGetStat = vecChannels[i].GetData ( vecdData );
+            const EGetDataStat eGetStat = vecChannels[i].GetData ( vecbyData );
 
-const EGetDataStat eGetStat=GS_BUFFER_OK;//TEST
+            // CELT decode received data stream
+            CVector<int16_t> vecsAudioMono ( SYSTEM_BLOCK_FRAME_SAMPLES );
 
-// TEST
-/*
-// TEST CELT
-CVector<short> vecsAudioSndCrdMono ( iMonoBlockSizeSam );
-
-celt_decode ( CeltDecoder,
-              &vecbyNetwData[0],
-              iCeltNumCodedBytes,
-              &vecsAudioSndCrdMono[0] );
-
-for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-{
-    vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
-        vecsAudioSndCrdMono[i];
-}
-*/
-
-
-
+            celt_decode ( CeltDecoder[i],
+                          &vecbyData[0],
+                          iCeltNumCodedBytes,
+                          &vecsAudioMono[0] );
 
             // if channel was just disconnected, set flag that connected
             // client list is sent to all other clients
@@ -432,10 +405,10 @@ for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
                 // add ID and data
                 vecChanID.Add ( i );
 
-                const int iOldSize = vecvecdData.Size();
-                vecvecdData.Enlarge ( 1 );
-                vecvecdData[iOldSize].Init ( vecdData.Size() );
-                vecvecdData[iOldSize] = vecdData;
+                const int iOldSize = vecvecsData.Size();
+                vecvecsData.Enlarge ( 1 );
+                vecvecsData[iOldSize].Init ( vecsAudioMono.Size() );
+                vecvecsData[iOldSize] = vecsAudioMono;
 
                 // send message for get status (for GUI)
                 if ( eGetStat == GS_BUFFER_OK )
@@ -824,15 +797,15 @@ void CServer::WriteHTMLChannelList()
     streamFileOut << "</ul>" << endl;
 }
 
-CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
-                                      CVector<double>&           vecdGains )
+CVector<int16_t> CServer::ProcessData ( CVector<CVector<int16_t> >& vecvecsData,
+                                        CVector<double>&            vecdGains )
 {
     int i;
 
     // init return vector with zeros since we mix all channels on that vector
-    CVector<short> vecsOutData ( SYSTEM_BLOCK_FRAME_SAMPLES, 0 );
+    CVector<int16_t> vecsOutData ( SYSTEM_BLOCK_FRAME_SAMPLES, 0 );
 
-    const int iNumClients = vecvecdData.Size();
+    const int iNumClients = vecvecsData.Size();
 
     // mix all audio data from all clients together
     for ( int j = 0; j < iNumClients; j++ )
@@ -843,7 +816,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
             for ( i = 0; i < SYSTEM_BLOCK_FRAME_SAMPLES; i++ )
             {
                 vecsOutData[i] =
-                    Double2Short ( vecsOutData[i] + vecvecdData[j][i] );
+                    Double2Short ( vecsOutData[i] + vecvecsData[j][i] );
             }
         }
         else
@@ -852,7 +825,7 @@ CVector<short> CServer::ProcessData ( CVector<CVector<double> >& vecvecdData,
             {
                 vecsOutData[i] =
                     Double2Short ( vecsOutData[i] +
-                    vecvecdData[j][i] * vecdGains[j] );
+                    vecvecsData[j][i] * vecdGains[j] );
             }
         }
     }

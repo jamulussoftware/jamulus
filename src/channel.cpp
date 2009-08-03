@@ -286,9 +286,6 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
         // update socket buffer (the network block size is a multiple of the
         // minimum network frame size
         SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
-
-        // fire message
-        emit NetwFrameSizeHasChanged ( iNetwFrameSize );
     }
 }
 

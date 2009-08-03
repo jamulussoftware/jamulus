@@ -382,19 +382,16 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
         }
     }
 
-    // send it through the network
-//    Socket.SendPacket ( Channel.PrepSendPacket ( vecsNetwork ),
-//        Channel.GetAddress() );
+    // encode current audio frame with CELT encoder
+    celt_encode ( CeltEncoder,
+                  &vecsNetwork[0],
+                  NULL,
+                  &vecCeltData[0],
+                  iCeltNumCodedBytes );
 
-celt_encode ( CeltEncoder,
-              &vecsNetwork[0],
-              NULL,
-              &vecCeltData[0],
-              iCeltNumCodedBytes );
-
-Socket.SendPacket ( vecCeltData, Channel.GetAddress() );
-
-
+    // send coded audio through the network
+    Socket.SendPacket ( Channel.PrepSendPacket ( vecCeltData ),
+        Channel.GetAddress() );
 
 
     // receive a new block
@@ -480,13 +477,8 @@ void CClient::UpdateSocketBufferSize()
         const double dHysteresis = 0.3;
 
         // calculate current buffer setting
-        // Use worst case scenario: We add the block size of input and
-        // output. This is not required if the smaller block size is a
-        // multiple of the bigger size, but in the general case where
-        // the block sizes do not have this relation, we require to have
-        // a minimum buffer size of the sum of both sizes
         const double dAudioBufferDurationMs =
-            ( 2 * iMonoBlockSizeSam ) * 1000 / SYSTEM_SAMPLE_RATE;
+            iMonoBlockSizeSam * 1000 / SYSTEM_SAMPLE_RATE;
 
         // accumulate the standard deviations of input network stream and
         // internal timer,

@@ -355,6 +355,10 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
     {
         strVersionText += "<center><b>";
     }
+    else
+    {
+        strVersionText += " *** ";
+    }
 
     strVersionText += tr ( "llcon, Version " ) + VERSION;
 
@@ -364,7 +368,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
     }
     else
     {
-        strVersionText += "\n";
+        strVersionText += "\n *** ";
     }
 
     strVersionText += tr ( "llcon, Low-Latency (internet) CONnection" );
@@ -375,7 +379,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
     }
     else
     {
-        strVersionText += "\n";
+        strVersionText += "\n *** ";
     }
 
     strVersionText += tr ( "Under the GNU General Public License (GPL)" );

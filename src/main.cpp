@@ -64,7 +64,7 @@ int main ( int argc, char** argv )
         if ( GetFlagArgument ( argc, argv, i, "-s", "--server" ) )
         {
             bIsClient = false;
-            cout << "server mode chosen" << std::endl;
+            cout << "- server mode chosen" << std::endl;
             continue;
         }
 
@@ -73,7 +73,7 @@ int main ( int argc, char** argv )
         if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) )
         {
             bUseGUI = false;
-            cout << "no GUI mode chosen" << std::endl;
+            cout << "- no GUI mode chosen" << std::endl;
             continue;
         }
 
@@ -82,7 +82,7 @@ int main ( int argc, char** argv )
         if ( GetFlagArgument ( argc, argv, i, "-d", "--disableleds" ) )
         {
             bDisalbeLEDs = true;
-            cout << "disable LEDs in main window" << std::endl;
+            cout << "- disable LEDs in main window" << std::endl;
             continue;
         }
 
@@ -91,7 +91,7 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
         {
             strLoggingFileName = strArgument;
-            cout << "logging file name: " << strLoggingFileName << std::endl;
+            cout << "- logging file name: " << strLoggingFileName << std::endl;
             continue;
         }
 
@@ -101,7 +101,7 @@ int main ( int argc, char** argv )
                                   0, 65535, rDbleArgument ) )
         {
             iPortNumber = static_cast<quint16> ( rDbleArgument );
-            cout << "selected port number: " << iPortNumber << std::endl;
+            cout << "- selected port number: " << iPortNumber << std::endl;
             continue;
         }
 
@@ -110,14 +110,14 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
         {
             strHTMLStatusFileName = strArgument;
-            cout << "HTML status file name: " << strHTMLStatusFileName << std::endl;
+            cout << "- HTML status file name: " << strHTMLStatusFileName << std::endl;
             continue;
         }
 
         if ( GetStringArgument ( argc, argv, i, "-a", "--servername", strArgument ) )
         {
             strServerName = strArgument;
-            cout << "server name for HTML status file: " << strServerName << std::endl;
+            cout << "- server name for HTML status file: " << strServerName << std::endl;
             continue;
         }
 
@@ -126,7 +126,7 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc, argv, i, "-y", "--history", strArgument ) )
         {
             strHistoryFileName = strArgument;
-            cout << "history file name: " << strHistoryFileName << std::endl;
+            cout << "- history file name: " << strHistoryFileName << std::endl;
             continue;
         }
 
@@ -135,7 +135,7 @@ int main ( int argc, char** argv )
         if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
         {
             strIniFileName = strArgument;
-            cout << "initialization file name: " << strIniFileName << std::endl;
+            cout << "- initialization file name: " << strIniFileName << std::endl;
             continue;
         }
 
@@ -144,7 +144,7 @@ int main ( int argc, char** argv )
         if ( GetFlagArgument ( argc, argv, i, "-c", "--connect" ) )
         {
             bConnectOnStartup = true;
-            cout << "connect on startup enabled" << std::endl;
+            cout << "- connect on startup enabled" << std::endl;
             continue;
         }
 

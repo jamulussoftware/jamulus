@@ -29,9 +29,9 @@
 CHighPrecisionTimer::CHighPrecisionTimer()
 {
     // add some error checking, the high precision timer implementation only
-    // supports 128 and 256 samples frame size at 48 kHz sampling rate
-#if ( ( SYSTEM_BLOCK_FRAME_SAMPLES != 128 ) && ( SYSTEM_BLOCK_FRAME_SAMPLES != 256 ) )
-# error "Only system frame sizes of 128 and 256 samples are supported by this module"
+    // supports 128 samples frame size at 48 kHz sampling rate
+#if ( SYSTEM_BLOCK_FRAME_SAMPLES != 128 )
+# error "Only system frame size of 128 samples is supported by this module"
 #endif
 #if SYSTEM_SAMPLE_RATE != 48000
 # error "Only a system sample rate of 48 kHz is supported by this module"
@@ -39,30 +39,18 @@ CHighPrecisionTimer::CHighPrecisionTimer()
 
     // Since QT only supports a minimum timer resolution of 1 ms but for our
     // llcon server we require a timer interval of 2.333 ms for 128 samples
-    // frame size and 5.666 ms for 256 samples frame size at 48 kHz sampling
-    // rate.
-    // To support this interval, we use a timer at the minimum supported
+    // frame size at 48 kHz sampling rate.
+    // To support this interval, we use a timer with 2 ms
     // resolution and fire the actual frame timer if the error to the actual
     // required interval is minimum.
     veciTimeOutIntervals.Init ( 3 );
-    if ( SYSTEM_BLOCK_FRAME_SAMPLES == 128 )
-    {
-        // for 128 sample frame size at 48 kHz sampling rate:
-        // actual intervals:  0.0  2.666  5.333  8.0
-        // quantized to 1 ms: 0    3      5      8 (0)
-        veciTimeOutIntervals[0] = 3;
-        veciTimeOutIntervals[1] = 2;
-        veciTimeOutIntervals[2] = 3;
-    }
-    else
-    {
-        // for 256 sample frame size at 48 kHz sampling rate:
-        // actual intervals:  0.0  5.333  10.666  16.0
-        // quantized to 1 ms: 0    5      11      16 (0)
-        veciTimeOutIntervals[0] = 5;
-        veciTimeOutIntervals[1] = 6;
-        veciTimeOutIntervals[2] = 5;
-    }
+
+    // for 128 sample frame size at 48 kHz sampling rate:
+    // actual intervals:  0.0  2.666  5.333  8.0
+    // quantized to 2 ms: 0    2      6      8 (0)
+    veciTimeOutIntervals[0] = 0;
+    veciTimeOutIntervals[1] = 1;
+    veciTimeOutIntervals[2] = 0;
 
     // connect timer timeout signal
     QObject::connect ( &Timer, SIGNAL ( timeout() ),
@@ -75,8 +63,8 @@ void CHighPrecisionTimer::start()
     iCurPosInVector  = 0;
     iIntervalCounter = 0;
 
-    // start internal timer with lowest possible resolution
-    Timer.start ( MIN_TIMER_RESOLUTION_MS );
+    // start internal timer with 2 ms resolution
+    Timer.start ( 2 );
 }
 
 void CHighPrecisionTimer::stop()

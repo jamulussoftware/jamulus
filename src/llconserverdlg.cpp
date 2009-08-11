@@ -75,11 +75,11 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
 
 void CLlconServerDlg::OnTimer()
 {
-    CVector<CHostAddress>   vecHostAddresses;
-    CVector<QString>        vecsName;
-    CVector<int>            veciJitBufNumFrames;
-    CVector<int>            veciNetwFrameSizeFact;
-    double                  dCurTiStdDev;
+    CVector<CHostAddress> vecHostAddresses;
+    CVector<QString>      vecsName;
+    CVector<int>          veciJitBufNumFrames;
+    CVector<int>          veciNetwFrameSizeFact;
+    double                dCurTiStdDev;
 
     ListViewMutex.lock();
 

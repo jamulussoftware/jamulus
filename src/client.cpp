@@ -395,7 +395,10 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
 
 
     // receive a new block
-    if ( Channel.GetData ( vecbyNetwData ) == GS_BUFFER_OK )
+    const bool bReceiveDataOk =
+        ( Channel.GetData ( vecbyNetwData ) == GS_BUFFER_OK );
+
+    if ( bReceiveDataOk )
     {
         PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN );
     }
@@ -404,48 +407,34 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
         PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED );
     }
 
-/*
-// TEST
-// fid=fopen('v.dat','r');x=fread(fid,'int16');fclose(fid);
-static FILE* pFileDelay = fopen("v.dat", "wb");
-short sData[2];
-for (i = 0; i < iMonoBlockSizeSam; i++)
-{
-sData[0] = (short) vecdNetwData[i];
-fwrite(&sData, size_t(2), size_t(1), pFileDelay);
-}
-fflush(pFileDelay);
-*/
-
     // check if channel is connected
     if ( Channel.IsConnected() )
     {
-/*
-        // convert data from double to short type and copy mono
-        // received data in both sound card channels
-        for ( i = 0, j = 0; i < iSndCrdMonoBlockSizeSam; i++, j += 2 )
+        CVector<short> vecsAudioSndCrdMono ( iMonoBlockSizeSam );
+
+        // CELT decoding
+        if ( bReceiveDataOk )
+        {
+            celt_decode ( CeltDecoder,
+                          &vecbyNetwData[0],
+                          iCeltNumCodedBytes,
+                          &vecsAudioSndCrdMono[0] );
+        }
+        else
+        {
+            // lost packet
+            celt_decode ( CeltDecoder,
+                          NULL,
+                          iCeltNumCodedBytes,
+                          &vecsAudioSndCrdMono[0] );
+        }
+
+        // copy mono data in stereo sound card buffer
+        for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
         {
             vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
-                Double2Short ( vecdNetwData[i] );
+                vecsAudioSndCrdMono[i];
         }
-*/
-
-
-// TEST CELT
-CVector<short> vecsAudioSndCrdMono ( iMonoBlockSizeSam );
-
-celt_decode ( CeltDecoder,
-              &vecbyNetwData[0],
-              iCeltNumCodedBytes,
-              &vecsAudioSndCrdMono[0] );
-
-for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-{
-    vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
-        vecsAudioSndCrdMono[i];
-}
-
-
     }
     else
     {

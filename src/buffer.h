@@ -61,7 +61,7 @@ protected:
 template<class TData> class CConvBuf
 {
 public:
-    CConvBuf() {}
+    CConvBuf() { Init ( 0 ); }
     virtual ~CConvBuf() {}
 
     void Init ( const int iNewMemSize )
@@ -84,13 +84,24 @@ public:
         // copy new data in internal buffer
         int iCurPos = 0;
         const int iEnd = iPutPos + iVecSize;
-        while ( iPutPos < iEnd )
-        {
-            vecsMemory[iPutPos++] = vecsData[iCurPos++];
-        }
 
-        // return "buffer is ready for readout" flag
-        return ( iEnd == iMemSize );
+        // first check for buffer overrun
+        if ( iEnd <= iMemSize )
+        {
+            // actual copy operation
+            while ( iPutPos < iEnd )
+            {
+                vecsMemory[iPutPos++] = vecsData[iCurPos++];
+            }
+
+            // return "buffer is ready for readout" flag
+            return ( iEnd == iMemSize );
+        }
+        else
+        {
+            // buffer overrun or not initialized, return "not ready"
+            return false;
+        }
     }
 
     CVector<TData> Get()

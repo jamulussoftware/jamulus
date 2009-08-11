@@ -102,13 +102,6 @@ protected:
     bool IsConnected ( const int iChanNum )
         { return vecChannels[iChanNum].IsConnected(); }
 
-    CVector<uint8_t> PrepSendPacket ( const int iChanNum,
-                                      const CVector<uint8_t>& vecbyNPacket )
-        { return vecChannels[iChanNum].PrepSendPacket ( vecbyNPacket ); }
-
-    CHostAddress GetAddress ( const int iChanNum )
-        { return vecChannels[iChanNum].GetAddress(); }
-
     void StartStatusHTMLFileWriting ( const QString& strNewFileName,
                                       const QString& strNewServerNameWithPort );
 
@@ -139,8 +132,6 @@ protected:
     CELTMode*               CeltMode[MAX_NUM_CHANNELS];
     CELTEncoder*            CeltEncoder[MAX_NUM_CHANNELS];
     CELTDecoder*            CeltDecoder[MAX_NUM_CHANNELS];
-    int                     iCeltNumCodedBytes[MAX_NUM_CHANNELS];
-    CVector<unsigned char>  vecCeltData[MAX_NUM_CHANNELS];
 
     CVector<QString>    vstrChatColors;
 

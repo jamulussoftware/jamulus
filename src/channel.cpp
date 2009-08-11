@@ -31,7 +31,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     sName ( "" ),
     vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
     bIsEnabled ( false ),
-    iNetwFrameSizeFact ( 0 ),
+    iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_DEFAULT ),
     iNetwFrameSize ( 0 )
 {
     // initial value for connection time out counter, we calculate the total
@@ -44,6 +44,10 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
     // init the socket buffer
     SetSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL );
+
+    // initialize cycle time variance measurement with defaults
+    CycleTimeVariance.Init ( SYSTEM_BLOCK_FRAME_SAMPLES,
+        SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
 
 
     // connections -------------------------------------------------------------
@@ -286,6 +290,9 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
         // update socket buffer (the network block size is a multiple of the
         // minimum network frame size
         SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+
+        // init conversion buffer
+        ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
     }
 }
 
@@ -368,13 +375,17 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                         eRet = PS_AUDIO_ERR;
                     }
 
-                    // update cycle time variance measurement
+                    // update cycle time variance measurement (this is only
+                    // used by the client so do not update for server channel)
+                    if ( !bIsServer )
+                    {
 
 // TODO only update if time difference of received packets is below
 // a limit to avoid having short network troubles incorporated in the
 // statistic
 
-                    CycleTimeVariance.Update();
+                        CycleTimeVariance.Update();
+                    }
                 }
                 else
                 {

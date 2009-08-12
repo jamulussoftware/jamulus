@@ -1,0 +1,7 @@
+The CELT library version 0.6.1 is used.
+
+Basically the files in celt-0.6.1/libcelt are used.
+
+Changes made to libcelt to be compatible to llcon:
+
+- replaced all "restricted" by "__restricted" and all "inline" by "__inline"

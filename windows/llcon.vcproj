@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(QTDIR)\include&quot;;&quot;$(QTDIR)\include\Qt&quot;;../src;ASIOSDK2/common;ASIOSDK2/host;ASIOSDK2/host/pc;../libs/celt/libcelt"
+				AdditionalIncludeDirectories="&quot;$(QTDIR)\include&quot;;&quot;$(QTDIR)\include\Qt&quot;;../src;ASIOSDK2/common;ASIOSDK2/host;ASIOSDK2/host/pc;../libs/celt"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;QT_DLL;QT_THREAD_SUPPORT;USE_ALLOCA"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -146,7 +146,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="&quot;$(QTDIR)\include&quot;;&quot;$(QTDIR)\include\Qt&quot;;../src;ASIOSDK2/common;ASIOSDK2/host;ASIOSDK2/host/pc;../libs/celt/libcelt"
+				AdditionalIncludeDirectories="&quot;$(QTDIR)\include&quot;;&quot;$(QTDIR)\include\Qt&quot;;../src;ASIOSDK2/common;ASIOSDK2/host;ASIOSDK2/host/pc;../libs/celt"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;QT_THREAD_SUPPORT;USE_ALLOCA"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -905,244 +905,84 @@
 				Name="CELT"
 				>
 				<File
-					RelativePath="..\libs\celt\libcelt\bands.c"
+					RelativePath="..\libs\celt\bands.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\celt.c"
+					RelativePath="..\libs\celt\celt.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\cwrs.c"
+					RelativePath="..\libs\celt\cwrs.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\entcode.c"
+					RelativePath="..\libs\celt\entcode.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\entdec.c"
+					RelativePath="..\libs\celt\entdec.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\entenc.c"
+					RelativePath="..\libs\celt\entenc.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\header.c"
+					RelativePath="..\libs\celt\header.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\kfft_single.c"
+					RelativePath="..\libs\celt\kfft_single.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\kiss_fft.c"
+					RelativePath="..\libs\celt\kiss_fft.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\kiss_fftr.c"
+					RelativePath="..\libs\celt\kiss_fftr.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\laplace.c"
+					RelativePath="..\libs\celt\laplace.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\mdct.c"
+					RelativePath="..\libs\celt\mdct.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\modes.c"
+					RelativePath="..\libs\celt\modes.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\pitch.c"
+					RelativePath="..\libs\celt\pitch.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\psy.c"
+					RelativePath="..\libs\celt\psy.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\quant_bands.c"
+					RelativePath="..\libs\celt\quant_bands.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\rangedec.c"
+					RelativePath="..\libs\celt\rangedec.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\rangeenc.c"
+					RelativePath="..\libs\celt\rangeenc.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\rate.c"
+					RelativePath="..\libs\celt\rate.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\libs\celt\libcelt\vq.c"
+					RelativePath="..\libs\celt\vq.c"
 					>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="1"
-						/>
-					</FileConfiguration>
 				</File>
 			</Filter>
 		</Filter>

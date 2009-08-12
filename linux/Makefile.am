@@ -1,10 +1,3 @@
-# First compile additional libraries where the code is in our repository -------
-# CELT
-SUBDIRS = ../libs/celt/libcelt
-
-LIB_INCL_DIRS = -I../libs/celt/libcelt
-
-# Now we can deal with the actual llcon code -----------------------------------
 bin_PROGRAMS = llcon
 
 llcon_SOURCES = ../src/buffer.cpp \
@@ -26,6 +19,27 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/serverlogging.cpp \
 	../src/soundbase.cpp \
 	sound.cpp \
+	../libs/celt/bands.c \
+	../libs/celt/celt.c \
+	../libs/celt/cwrs.c \
+	../libs/celt/ecintrin.h \
+	../libs/celt/entcode.c \
+	../libs/celt/entdec.c \
+	../libs/celt/entenc.c \
+	../libs/celt/header.c \
+	../libs/celt/kfft_single.c \
+	../libs/celt/kiss_fft.c \
+	../libs/celt/kiss_fftr.c \
+	../libs/celt/laplace.c \
+	../libs/celt/mdct.c \
+	../libs/celt/modes.c \
+	../libs/celt/pitch.c \
+	../libs/celt/psy.c \
+	../libs/celt/quant_bands.c \
+	../libs/celt/rangedec.c \
+	../libs/celt/rangeenc.c \
+	../libs/celt/rate.c \
+	../libs/celt/vq.c
 	../src/buffer.h \
 	../src/global.h \
 	../src/socket.h \
@@ -51,6 +65,36 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../src/chatdlgbase.ui \
 	../src/aboutdlgbase.ui \
 	sound.h \
+	../libs/celt/celt.h \
+	../libs/celt/celt_types.h \
+	../libs/celt/celt_header.h
+	../libs/celt/_kiss_fft_guts.h \
+	../libs/celt/arch.h \
+	../libs/celt/bands.h \
+	../libs/celt/fixed_c5x.h \
+	../libs/celt/fixed_c6x.h \
+	../libs/celt/cwrs.h \
+	../libs/celt/ecintrin.h \
+	../libs/celt/entcode.h \
+	../libs/celt/entdec.h \
+	../libs/celt/entenc.h \
+	../libs/celt/fixed_generic.h \
+	../libs/celt/float_cast.h \
+	../libs/celt/kfft_double.h \
+	../libs/celt/kfft_single.h \
+	../libs/celt/kiss_fft.h \
+	../libs/celt/kiss_fftr.h \
+	../libs/celt/laplace.h \
+	../libs/celt/mdct.h \
+	../libs/celt/mfrngcod.h \
+	../libs/celt/mathops.h \
+	../libs/celt/modes.h \
+	../libs/celt/os_support.h \
+	../libs/celt/pitch.h \
+	../libs/celt/psy.h \
+	../libs/celt/quant_bands.h \
+	../libs/celt/rate.h \
+	../libs/celt/stack_alloc.h vq.h
 	../src/resources.qrc \
 	../src/res/gig.png \
 	../src/res/mainicon.png \
@@ -190,4 +234,4 @@ moc/resources.cpp: ../src/resources.qrc
 	$(QT_RCC) ../src/resources.qrc -o moc/resources.cpp
 
 
-llcon_CXXFLAGS=-I../src $(LIB_INCL_DIRS) $(QT_CFLAGS) -DQT_THREAD_SUPPORT -D_REENTRANT -g
+llcon_CXXFLAGS=-I../src -I../libs/celt $(LIB_INCL_DIRS) $(QT_CFLAGS) -DQT_THREAD_SUPPORT -D_REENTRANT -g

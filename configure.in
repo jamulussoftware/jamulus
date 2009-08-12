@@ -52,6 +52,10 @@ dnl Checks for some external libraries that need to be installed
 AC_LANG(C++)
 
 
+dnl CELT ------------------------------------------------------------------------
+AC_DEFINE([USE_ALLOCA], [], [Make use of alloca])
+
+
 dnl QT4 -------------------------------------------------------------------------
 dnl The QT4 check code was taken from the FreeMat-3.0 code by Samit Basu
 PKG_CHECK_MODULES(QT, QtCore QtGui QtNetwork QtXml >= 4.0.1, HAVE_QT4="yes", HAVE_QT4="no")

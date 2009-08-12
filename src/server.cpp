@@ -112,6 +112,17 @@ CServer::CServer ( const QString& strLoggingFileName,
 {
     int i;
 
+    // create CELT encoder/decoder for each channel
+    for ( i = 0; i < USED_NUM_CHANNELS; i++ )
+    {
+        // init audio endocder/decoder (mono)
+        CeltMode[i] = celt_mode_create (
+            SYSTEM_SAMPLE_RATE, 1, SYSTEM_BLOCK_FRAME_SAMPLES, NULL );
+
+        CeltEncoder[i] = celt_encoder_create ( CeltMode[i] );
+        CeltDecoder[i] = celt_decoder_create ( CeltMode[i] );
+    }
+
     // enable all channels (for the server all channel must be enabled the
     // entire life time of the software
     for ( i = 0; i < USED_NUM_CHANNELS; i++ )
@@ -162,17 +173,6 @@ CServer::CServer ( const QString& strLoggingFileName,
         StartStatusHTMLFileWriting ( strHTMLStatusFileName,
             strCurServerNameForHTMLStatusFile + ":" +
             QString().number( static_cast<int> ( iPortNumber ) ) );
-    }
-
-    // create CELT encoder/decoder for each channel
-    for ( i = 0; i < USED_NUM_CHANNELS; i++ )
-    {
-        // init audio endocder/decoder (mono)
-        CeltMode[i] = celt_mode_create (
-            SYSTEM_SAMPLE_RATE, 1, SYSTEM_BLOCK_FRAME_SAMPLES, NULL );
-
-        CeltEncoder[i] = celt_encoder_create ( CeltMode[i] );
-        CeltDecoder[i] = celt_decoder_create ( CeltMode[i] );
     }
 
 

@@ -36,7 +36,8 @@ CClient::CClient ( const quint16 iPortNumber ) :
     vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ), strName ( "" ),
     bOpenChatOnNewMessage ( true ),
     bDoAutoSockBufSize ( true ),
-    iSndCrdPrefMonoFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT )
+    iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
+    iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT )
 {
     // init audio endocder/decoder (mono)
     CeltMode = celt_mode_create (
@@ -154,7 +155,7 @@ bool CClient::SetServerAddr ( QString strNAddr )
     return true;
 }
 
-void CClient::SetSndCrdPrefMonoFrameSizeFactor ( const int iNewFactor )
+void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
 {
     // right now we simply set the internal value
     if ( ( iNewFactor == FRAME_SIZE_FACTOR_PREFERRED ) ||
@@ -170,7 +171,7 @@ void CClient::SetSndCrdPrefMonoFrameSizeFactor ( const int iNewFactor )
         }
 
         // set new parameter
-        iSndCrdPrefMonoFrameSizeFactor = iNewFactor;
+        iSndCrdPrefFrameSizeFactor = iNewFactor;
 
         // init with new block size index parameter
         Init();
@@ -272,11 +273,18 @@ void CClient::Init()
 {
     // translate block size index in actual block size
     const int iPrefMonoFrameSize =
-        iSndCrdPrefMonoFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
+        iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
 
     // get actual sound card buffer size using preferred size
     iMonoBlockSizeSam   = Sound.Init ( iPrefMonoFrameSize );
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
+
+
+// TEST
+// calculate actual frame size factor
+iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES;
+
+
 
     vecsAudioSndCrdMono.Init   ( iMonoBlockSizeSam );
     vecsAudioSndCrdStereo.Init ( iStereoBlockSizeSam );
@@ -302,11 +310,8 @@ void CClient::Init()
     vecbyNetwData.Init ( iCeltNumCodedBytes );
 
     // set the channel network properties
-
-// TODO use the actual frame size factor if possible...
-
     Channel.SetNetwFrameSizeAndFact ( iCeltNumCodedBytes,
-                                      iSndCrdPrefMonoFrameSizeFactor );
+                                      iSndCrdFrameSizeFactor );
 }
 
 void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
@@ -391,7 +396,7 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
 
 // TEST
 // TODO use actual frame size factor, not preferred one!!!!
-    for ( i = 0; i < iSndCrdPrefMonoFrameSizeFactor; i++ )
+    for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
         // encode current audio frame with CELT encoder
         celt_encode ( CeltEncoder,
@@ -410,7 +415,7 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
 
 // TEST
 // TODO use actual frame size factor, not preferred one!!!!
-    for ( i = 0; i < iSndCrdPrefMonoFrameSizeFactor; i++ )
+    for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
         // receive a new block
         const bool bReceiveDataOk =

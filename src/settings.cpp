@@ -118,7 +118,7 @@ void CSettings::ReadIniFile ( const QString& sFileName )
              ( iValue == FRAME_SIZE_FACTOR_DEFAULT ) ||
              ( iValue == FRAME_SIZE_FACTOR_SAFE ) )
         {
-            pClient->SetSndCrdPrefMonoFrameSizeFactor ( iValue );
+            pClient->SetSndCrdPrefFrameSizeFactor ( iValue );
         }
     }
 
@@ -179,7 +179,7 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
     // sound card preferred buffer size index
     SetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx",
-        pClient->GetSndCrdPrefMonoFrameSizeFactor() );
+        pClient->GetSndCrdPrefFrameSizeFactor() );
 
     // automatic network jitter buffer size setting
     SetFlagIniSet ( IniXMLDocument, "client", "autojitbuf",

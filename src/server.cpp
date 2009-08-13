@@ -294,11 +294,10 @@ void CServer::OnTimer()
     CVector<CVector<double> >  vecvecdGains;
     CVector<CVector<int16_t> > vecvecsData;
 
-
-    // get data from all connected clients -------------------------------------
+    // Get data from all connected clients -------------------------------------
     bool bChannelIsNowDisconnected = false;
 
-    // make put and get calls thread safe. Do not forget to unlock mutex
+    // Make put and get calls thread safe. Do not forget to unlock mutex
     // afterwards!
     Mutex.lock();
     {
@@ -399,7 +398,7 @@ void CServer::OnTimer()
     const int iNumClients = vecChanID.Size();
 
     // Check if at least one client is connected. If not, stop server until
-    // one client is connected
+    // one client is connected.
     if ( iNumClients != 0 )
     {
         for ( int i = 0; i < iNumClients; i++ )

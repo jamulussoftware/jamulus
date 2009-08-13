@@ -169,7 +169,7 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
 {
     // update slider value and text
     const int iCurPrefFrameSizeFactor =
-        pClient->GetSndCrdPrefMonoFrameSizeFactor();
+        pClient->GetSndCrdPrefFrameSizeFactor();
 
     const int iCurActualBufSize =
         pClient->GetSndCrdActualMonoBlSize();
@@ -236,7 +236,7 @@ void CClientSettingsDlg::OnSliderNetBuf ( int value )
 
 void CClientSettingsDlg::OnSliderSndCrdBufferDelay ( int value )
 {
-    pClient->SetSndCrdPrefMonoFrameSizeFactor ( value );
+    pClient->SetSndCrdPrefFrameSizeFactor ( value );
     UpdateDisplay();
 }
 
@@ -273,17 +273,17 @@ void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton
 {
     if ( button == rButBufferDelayPreferred )
     {
-        pClient->SetSndCrdPrefMonoFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED );
+        pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED );
     }
 
     if ( button == rButBufferDelayDefault )
     {
-        pClient->SetSndCrdPrefMonoFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT );
+        pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT );
     }
 
     if ( button == rButBufferDelaySafe )
     {
-        pClient->SetSndCrdPrefMonoFrameSizeFactor ( FRAME_SIZE_FACTOR_SAFE );
+        pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_SAFE );
     }
 
     UpdateDisplay();
@@ -317,7 +317,7 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 
     const double dDelayToFillNetworkPackets =
         SYSTEM_BLOCK_DURATION_MS_FLOAT *
-        pClient->GetSndCrdPrefMonoFrameSizeFactor();
+        pClient->GetSndCrdPrefFrameSizeFactor();
 
     // CELT additional delay at small frame sizes is half a frame size
     const double dAdditionalAudioCodecDelay =

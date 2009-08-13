@@ -119,9 +119,9 @@ public:
     int          GetSndCrdDev() { return Sound.GetDev(); }
     void         OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
 
-    void SetSndCrdPrefMonoFrameSizeFactor ( const int iNewFactor );
-    int GetSndCrdPrefMonoFrameSizeFactor()
-        { return iSndCrdPrefMonoFrameSizeFactor; }
+    void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
+    int GetSndCrdPrefFrameSizeFactor()
+        { return iSndCrdPrefFrameSizeFactor; }
     int GetSndCrdActualMonoBlSize() { return iMonoBlockSizeSam; }
 
     void SetRemoteChanGain ( const int iId, const double dGain )
@@ -172,7 +172,8 @@ protected:
     int                     iReverbLevel;
     CAudioReverb            AudioReverb;
 
-    int                     iSndCrdPrefMonoFrameSizeFactor;
+    int                     iSndCrdPrefFrameSizeFactor;
+    int                     iSndCrdFrameSizeFactor;
 
     int                     iMonoBlockSizeSam;
     int                     iStereoBlockSizeSam;

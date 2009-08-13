@@ -179,6 +179,7 @@ protected:
 
     bool                    bOpenChatOnNewMessage;
 
+    CVector<int16_t>        vecsAudioSndCrdMono;
     CVector<int16_t>        vecsAudioSndCrdStereo;
     CVector<double>         vecdAudioStereo;
     CVector<int16_t>        vecsNetwork;

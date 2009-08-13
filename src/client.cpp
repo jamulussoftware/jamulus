@@ -38,6 +38,15 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bDoAutoSockBufSize ( true ),
     iSndCrdPrefMonoFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT )
 {
+    // init audio endocder/decoder (mono)
+    CeltMode = celt_mode_create (
+        SYSTEM_SAMPLE_RATE, 1, SYSTEM_BLOCK_FRAME_SAMPLES, NULL );
+
+    CeltEncoder = celt_encoder_create ( CeltMode );
+    CeltDecoder = celt_decoder_create ( CeltMode );
+
+
+    // connections -------------------------------------------------------------
     // connection for protocol
     QObject::connect ( &Channel,
         SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
@@ -152,8 +161,6 @@ void CClient::SetSndCrdPrefMonoFrameSizeFactor ( const int iNewFactor )
          ( iNewFactor == FRAME_SIZE_FACTOR_DEFAULT ) ||
          ( iNewFactor == FRAME_SIZE_FACTOR_SAFE ) )
     {
-        iSndCrdPrefMonoFrameSizeFactor = iNewFactor;
-
         // init with new parameter, if client was running then first
         // stop it and restart again after new initialization
         const bool bWasRunning = Sound.IsRunning();
@@ -161,6 +168,9 @@ void CClient::SetSndCrdPrefMonoFrameSizeFactor ( const int iNewFactor )
         {
             Sound.Stop();
         }
+
+        // set new parameter
+        iSndCrdPrefMonoFrameSizeFactor = iNewFactor;
 
         // init with new block size index parameter
         Init();
@@ -268,9 +278,9 @@ void CClient::Init()
     iMonoBlockSizeSam   = Sound.Init ( iPrefMonoFrameSize );
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
+    vecsAudioSndCrdMono.Init   ( iMonoBlockSizeSam );
     vecsAudioSndCrdStereo.Init ( iStereoBlockSizeSam );
-
-    vecdAudioStereo.Init ( iStereoBlockSizeSam );
+    vecdAudioStereo.Init       ( iStereoBlockSizeSam );
 
     // init response time evaluation
     CycleTimeVariance.Init ( iMonoBlockSizeSam,
@@ -280,13 +290,6 @@ void CClient::Init()
 
     // init reverberation
     AudioReverb.Init ( SYSTEM_SAMPLE_RATE );
-
-    // init audio endocder/decoder (mono)
-    CeltMode = celt_mode_create (
-        SYSTEM_SAMPLE_RATE, 1, iMonoBlockSizeSam, NULL );
-
-    CeltEncoder = celt_encoder_create ( CeltMode );
-    CeltDecoder = celt_decoder_create ( CeltMode );
 
     // 22: low/normal quality   150 kbsp (128) / 108 kbps (256)
     // 44: high quality         216 kbps (128) / 174 kbps (256)
@@ -299,6 +302,9 @@ void CClient::Init()
     vecbyNetwData.Init ( iCeltNumCodedBytes );
 
     // set the channel network properties
+
+// TODO use the actual frame size factor if possible...
+
     Channel.SetNetwFrameSizeAndFact ( iCeltNumCodedBytes,
                                       iSndCrdPrefMonoFrameSizeFactor );
 }
@@ -307,6 +313,7 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
 {
     int i, j;
 
+    // Transmit signal ---------------------------------------------------------
     // update stereo signal level meter
     SignalLevelMeter.Update ( vecsStereoSndCrd );
 
@@ -382,35 +389,41 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
         }
     }
 
-    // encode current audio frame with CELT encoder
-    celt_encode ( CeltEncoder,
-                  &vecsNetwork[0],
-                  NULL,
-                  &vecCeltData[0],
-                  iCeltNumCodedBytes );
-
-    // send coded audio through the network
-    Socket.SendPacket ( Channel.PrepSendPacket ( vecCeltData ),
-        Channel.GetAddress() );
-
-
-    // receive a new block
-    const bool bReceiveDataOk =
-        ( Channel.GetData ( vecbyNetwData ) == GS_BUFFER_OK );
-
-    if ( bReceiveDataOk )
+// TEST
+// TODO use actual frame size factor, not preferred one!!!!
+    for ( i = 0; i < iSndCrdPrefMonoFrameSizeFactor; i++ )
     {
-        PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN );
-    }
-    else
-    {
-        PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED );
+        // encode current audio frame with CELT encoder
+        celt_encode ( CeltEncoder,
+                      &vecsNetwork[i * SYSTEM_BLOCK_FRAME_SAMPLES],
+                      NULL,
+                      &vecCeltData[0],
+                      iCeltNumCodedBytes );
+
+        // send coded audio through the network
+        Socket.SendPacket ( Channel.PrepSendPacket ( vecCeltData ),
+            Channel.GetAddress() );
     }
 
-    // check if channel is connected
-    if ( Channel.IsConnected() )
+
+    // Receive signal ----------------------------------------------------------
+
+// TEST
+// TODO use actual frame size factor, not preferred one!!!!
+    for ( i = 0; i < iSndCrdPrefMonoFrameSizeFactor; i++ )
     {
-        CVector<short> vecsAudioSndCrdMono ( iMonoBlockSizeSam );
+        // receive a new block
+        const bool bReceiveDataOk =
+            ( Channel.GetData ( vecbyNetwData ) == GS_BUFFER_OK );
+
+        if ( bReceiveDataOk )
+        {
+            PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN );
+        }
+        else
+        {
+            PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED );
+        }
 
         // CELT decoding
         if ( bReceiveDataOk )
@@ -418,7 +431,7 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
             celt_decode ( CeltDecoder,
                           &vecbyNetwData[0],
                           iCeltNumCodedBytes,
-                          &vecsAudioSndCrdMono[0] );
+                          &vecsAudioSndCrdMono[i * SYSTEM_BLOCK_FRAME_SAMPLES] );
         }
         else
         {
@@ -426,9 +439,13 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
             celt_decode ( CeltDecoder,
                           NULL,
                           iCeltNumCodedBytes,
-                          &vecsAudioSndCrdMono[0] );
+                          &vecsAudioSndCrdMono[i * SYSTEM_BLOCK_FRAME_SAMPLES] );
         }
+    }
 
+    // check if channel is connected
+    if ( Channel.IsConnected() )
+    {
         // copy mono data in stereo sound card buffer
         for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
         {

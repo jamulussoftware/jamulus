@@ -322,6 +322,9 @@ void CServer::OnTimer()
 
         for ( i = 0; i < iNumCurConnChan; i++ )
         {
+            // get actual ID of current channel
+            const int iCurChanID = vecChanID[i];
+
             // init vectors storing information of all channels
             vecvecdGains[i].Init ( iNumCurConnChan );
             vecvecsData[i].Init  ( SYSTEM_FRAME_SIZE_SAMPLES );
@@ -333,18 +336,19 @@ void CServer::OnTimer()
                 // the channel ID! Therefore we have to use "vecChanID" to
                 // query the IDs of the currently connected channels
                 vecvecdGains[i][j] =
-                    vecChannels[vecChanID[i]].GetGain( vecChanID[j] );
+                    vecChannels[iCurChanID].GetGain( vecChanID[j] );
             }
 
             // get current number of CELT coded bytes
             const int iCeltNumCodedBytes =
-                vecChannels[i].GetNetwFrameSize();
+                vecChannels[iCurChanID].GetNetwFrameSize();
 
             // init temporal data vector and clear input buffers
             CVector<uint8_t> vecbyData ( iCeltNumCodedBytes );
 
             // get data
-            const EGetDataStat eGetStat = vecChannels[i].GetData ( vecbyData );
+            const EGetDataStat eGetStat =
+                vecChannels[iCurChanID].GetData ( vecbyData );
 
             // if channel was just disconnected, set flag that connected
             // client list is sent to all other clients
@@ -354,11 +358,9 @@ void CServer::OnTimer()
             }
 
             // CELT decode received data stream
-            CVector<int16_t> vecsAudioMono ( SYSTEM_FRAME_SIZE_SAMPLES );
-
             if ( eGetStat == GS_BUFFER_OK )
             {
-                celt_decode ( CeltDecoder[i],
+                celt_decode ( CeltDecoder[iCurChanID],
                               &vecbyData[0],
                               iCeltNumCodedBytes,
                               &vecvecsData[i][0] );
@@ -366,7 +368,7 @@ void CServer::OnTimer()
             else
             {
                 // lost packet
-                celt_decode ( CeltDecoder[i],
+                celt_decode ( CeltDecoder[iCurChanID],
                               NULL,
                               iCeltNumCodedBytes,
                               &vecvecsData[i][0] );
@@ -375,11 +377,11 @@ void CServer::OnTimer()
             // send message for get status (for GUI)
             if ( eGetStat == GS_BUFFER_OK )
             {
-                PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN, i );
+                PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN, iCurChanID );
             }
             else
             {
-                PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED, i );
+                PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED, iCurChanID );
             }
         }
 
@@ -402,18 +404,21 @@ void CServer::OnTimer()
     {
         for ( int i = 0; i < iNumClients; i++ )
         {
+            // get actual ID of current channel
+            const int iCurChanID = vecChanID[i];
+
             // generate a sparate mix for each channel
             // actual processing of audio data -> mix
             vecsSendData = ProcessData ( vecvecsData, vecvecdGains[i] );
 
             // get current number of CELT coded bytes
             const int iCeltNumCodedBytes =
-                vecChannels[vecChanID[i]].GetNetwFrameSize();
+                vecChannels[iCurChanID].GetNetwFrameSize();
 
             // CELT encoding
             CVector<unsigned char> vecCeltData ( iCeltNumCodedBytes );
 
-            celt_encode ( CeltEncoder[vecChanID[i]],
+            celt_encode ( CeltEncoder[iCurChanID],
                           &vecsSendData[0],
                           NULL,
                           &vecCeltData[0],
@@ -421,8 +426,8 @@ void CServer::OnTimer()
 
             // send separate mix to current clients
             Socket.SendPacket (
-                vecChannels[vecChanID[i]].PrepSendPacket ( vecCeltData ),
-                vecChannels[vecChanID[i]].GetAddress() );
+                vecChannels[iCurChanID].PrepSendPacket ( vecCeltData ),
+                vecChannels[iCurChanID].GetAddress() );
         }
     }
     else

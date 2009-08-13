@@ -32,7 +32,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
     bIsEnabled ( false ),
     iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_DEFAULT ),
-    iNetwFrameSize ( 1 ) // any value > 0
+    iNetwFrameSize ( 20 ) // must be > 0 and should be close to a valid size
 {
     // initial value for connection time out counter, we calculate the total
     // number of samples here and subtract the number of samples of the block

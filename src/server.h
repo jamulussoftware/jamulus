@@ -105,10 +105,6 @@ protected:
     void StartStatusHTMLFileWriting ( const QString& strNewFileName,
                                       const QString& strNewServerNameWithPort );
 
-    void GetBlockAllConC ( CVector<int>& vecChanID,
-                           CVector<CVector<int16_t> >& vecvecsData,
-                           CVector<CVector<double> >&  vecvecdGains );
-
     int CheckAddr ( const CHostAddress& Addr );
     int GetFreeChan();
     CVector<CChannelShortInfo> CreateChannelList();

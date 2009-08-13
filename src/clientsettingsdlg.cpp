@@ -85,15 +85,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // set text for sound card buffer delay radio buttons
     rButBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
-        FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_BLOCK_FRAME_SAMPLES,
+        FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES,
         ", preferred" ) );
 
     rButBufferDelayDefault->setText ( GenSndCrdBufferDelayString (
-        FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_BLOCK_FRAME_SAMPLES,
+        FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES,
         ", default" ) );
 
     rButBufferDelaySafe->setText ( GenSndCrdBufferDelayString (
-        FRAME_SIZE_FACTOR_SAFE * SYSTEM_BLOCK_FRAME_SAMPLES ) );
+        FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES ) );
 
     // sound card buffer delay inits
     SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelayPreferred );
@@ -192,7 +192,7 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
 
     // preferred size
     const int iPrefBufSize =
-        iCurPrefFrameSizeFactor * SYSTEM_BLOCK_FRAME_SAMPLES;
+        iCurPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
 
     // actual size (use yellow color if different from preferred size)
     const QString strActSizeValues =

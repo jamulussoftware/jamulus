@@ -60,14 +60,14 @@
 
 // System block size, this is the block size on which the audio coder works.
 // All other block sizes must be a multiple of this size
-#define SYSTEM_BLOCK_FRAME_SAMPLES      128
+#define SYSTEM_FRAME_SIZE_SAMPLES       128
 
 #define SYSTEM_BLOCK_DURATION_MS_FLOAT  \
-    ( static_cast<double> ( SYSTEM_BLOCK_FRAME_SAMPLES ) / \
+    ( static_cast<double> ( SYSTEM_FRAME_SIZE_SAMPLES ) / \
     SYSTEM_SAMPLE_RATE * 1000 )
 
 // define the allowed audio frame size factors (since the
-// "SYSTEM_BLOCK_FRAME_SAMPLES" is quite small, it may be that on some
+// "SYSTEM_FRAME_SIZE_SAMPLES" is quite small, it may be that on some
 // computers a larger value is required)
 #define FRAME_SIZE_FACTOR_PREFERRED     1 // 128 (for frame size 128)
 #define FRAME_SIZE_FACTOR_DEFAULT       2 // 256 (for frame size 128)
@@ -77,6 +77,10 @@
 // of 48 kHz, this is important for defining the maximum number
 // of bytes to be expected from the network interface
 #define MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ 4096
+
+// Maximum block size for network input buffer. Consider a maximum sample rate
+// of 48 kHz and two audio channels and two bytes per sample.
+#define MAX_SIZE_BYTES_NETW_BUF         ( MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ * 4 )
 
 // minimum/maximum network buffer size (which can be chosen by slider)
 #define MIN_NET_BUF_SIZE_NUM_BL         1 // number of blocks

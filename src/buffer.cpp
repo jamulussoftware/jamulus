@@ -120,7 +120,7 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
     const int iInSize = vecbyData.Size();
 
     // check size
-    if ( iInSize != iBlockSize )
+    if ( ( iInSize == 0 ) || ( iInSize != iBlockSize ) )
     {
         return false;
     }

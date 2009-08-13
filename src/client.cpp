@@ -40,7 +40,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
 {
     // init audio endocder/decoder (mono)
     CeltMode = celt_mode_create (
-        SYSTEM_SAMPLE_RATE, 1, SYSTEM_BLOCK_FRAME_SAMPLES, NULL );
+        SYSTEM_SAMPLE_RATE, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
     CeltEncoder = celt_encoder_create ( CeltMode );
     CeltDecoder = celt_decoder_create ( CeltMode );
@@ -272,7 +272,7 @@ void CClient::Init()
 {
     // translate block size index in actual block size
     const int iPrefMonoFrameSize =
-        iSndCrdPrefMonoFrameSizeFactor * SYSTEM_BLOCK_FRAME_SAMPLES;
+        iSndCrdPrefMonoFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
 
     // get actual sound card buffer size using preferred size
     iMonoBlockSizeSam   = Sound.Init ( iPrefMonoFrameSize );
@@ -395,7 +395,7 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
     {
         // encode current audio frame with CELT encoder
         celt_encode ( CeltEncoder,
-                      &vecsNetwork[i * SYSTEM_BLOCK_FRAME_SAMPLES],
+                      &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
                       NULL,
                       &vecCeltData[0],
                       iCeltNumCodedBytes );
@@ -431,7 +431,7 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
             celt_decode ( CeltDecoder,
                           &vecbyNetwData[0],
                           iCeltNumCodedBytes,
-                          &vecsAudioSndCrdMono[i * SYSTEM_BLOCK_FRAME_SAMPLES] );
+                          &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
         }
         else
         {
@@ -439,7 +439,7 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
             celt_decode ( CeltDecoder,
                           NULL,
                           iCeltNumCodedBytes,
-                          &vecsAudioSndCrdMono[i * SYSTEM_BLOCK_FRAME_SAMPLES] );
+                          &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
         }
     }
 

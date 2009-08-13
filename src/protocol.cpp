@@ -878,13 +878,32 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     ReceivedNetwTranspProps.iNetworkPacketSize =
         static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 4 ) );
 
+    if ( ( ReceivedNetwTranspProps.iNetworkPacketSize < 1 ) ||
+         ( ReceivedNetwTranspProps.iNetworkPacketSize > MAX_SIZE_BYTES_NETW_BUF ) )
+    {
+        return true;
+    }
+
     // block size factor (2 bytes)
     ReceivedNetwTranspProps.iBlockSizeFact =
         static_cast<uint16_t> ( GetValFromStream ( vecData, iPos, 2 ) );
 
+    if ( ( ReceivedNetwTranspProps.iBlockSizeFact != FRAME_SIZE_FACTOR_PREFERRED ) &&
+         ( ReceivedNetwTranspProps.iBlockSizeFact != FRAME_SIZE_FACTOR_DEFAULT ) &&
+         ( ReceivedNetwTranspProps.iBlockSizeFact != FRAME_SIZE_FACTOR_SAFE ) )
+    {
+        return true;
+    }
+
     // number of channels of the audio signal, e.g. "2" is stereo (1 byte)
     ReceivedNetwTranspProps.iNumAudioChannels =
         static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    if ( ( ReceivedNetwTranspProps.iNumAudioChannels != 1 ) &&
+         ( ReceivedNetwTranspProps.iNumAudioChannels != 2 ) )
+    {
+        return true;
+    }
 
     // sample rate of the audio stream (4 bytes)
     ReceivedNetwTranspProps.iSampleRate =

@@ -30,7 +30,7 @@ CHighPrecisionTimer::CHighPrecisionTimer()
 {
     // add some error checking, the high precision timer implementation only
     // supports 128 samples frame size at 48 kHz sampling rate
-#if ( SYSTEM_BLOCK_FRAME_SAMPLES != 128 )
+#if ( SYSTEM_FRAME_SIZE_SAMPLES != 128 )
 # error "Only system frame size of 128 samples is supported by this module"
 #endif
 #if SYSTEM_SAMPLE_RATE != 48000
@@ -112,22 +112,16 @@ CServer::CServer ( const QString& strLoggingFileName,
 {
     int i;
 
-    // create CELT encoder/decoder for each channel
+    // create CELT encoder/decoder for each channel (must be done before
+    // enabling the channels)
     for ( i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         // init audio endocder/decoder (mono)
         CeltMode[i] = celt_mode_create (
-            SYSTEM_SAMPLE_RATE, 1, SYSTEM_BLOCK_FRAME_SAMPLES, NULL );
+            SYSTEM_SAMPLE_RATE, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
         CeltEncoder[i] = celt_encoder_create ( CeltMode[i] );
         CeltDecoder[i] = celt_decoder_create ( CeltMode[i] );
-    }
-
-    // enable all channels (for the server all channel must be enabled the
-    // entire life time of the software
-    for ( i = 0; i < USED_NUM_CHANNELS; i++ )
-    {
-        vecChannels[i].SetEnable ( true );
     }
 
     // define colors for chat window identifiers
@@ -139,10 +133,10 @@ CServer::CServer ( const QString& strLoggingFileName,
     vstrChatColors[4] = "maroon";
     vstrChatColors[5] = "coral";
 
-    vecsSendData.Init ( SYSTEM_BLOCK_FRAME_SAMPLES );
+    vecsSendData.Init ( SYSTEM_FRAME_SIZE_SAMPLES );
 
     // init moving average buffer for response time evaluation
-    CycleTimeVariance.Init ( SYSTEM_BLOCK_FRAME_SAMPLES,
+    CycleTimeVariance.Init ( SYSTEM_FRAME_SIZE_SAMPLES,
         SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
 
     // enable logging (if requested)
@@ -173,6 +167,13 @@ CServer::CServer ( const QString& strLoggingFileName,
         StartStatusHTMLFileWriting ( strHTMLStatusFileName,
             strCurServerNameForHTMLStatusFile + ":" +
             QString().number( static_cast<int> ( iPortNumber ) ) );
+    }
+
+    // enable all channels (for the server all channel must be enabled the
+    // entire life time of the software
+    for ( i = 0; i < USED_NUM_CHANNELS; i++ )
+    {
+        vecChannels[i].SetEnable ( true );
     }
 
 
@@ -287,12 +288,112 @@ void CServer::Stop()
 
 void CServer::OnTimer()
 {
-    CVector<int>               vecChanID;
-    CVector<CVector<int16_t> > vecvecsData;
-    CVector<CVector<double> >  vecvecdGains;
+    int i, j;
 
-    // get data from all connected clients
-    GetBlockAllConC ( vecChanID, vecvecsData, vecvecdGains );
+    CVector<int> vecChanID;
+    CVector<CVector<double> >  vecvecdGains;
+    CVector<CVector<int16_t> > vecvecsData;
+
+
+    // get data from all connected clients -------------------------------------
+    bool bChannelIsNowDisconnected = false;
+
+    // make put and get calls thread safe. Do not forget to unlock mutex
+    // afterwards!
+    Mutex.lock();
+    {
+        // first, get number and IDs of connected channels
+        vecChanID.Init ( 0 );
+        for ( i = 0; i < USED_NUM_CHANNELS; i++ )
+        {
+            if ( vecChannels[i].IsConnected() )
+            {
+                // add ID and data
+                vecChanID.Add ( i );
+            }
+        }
+
+        // process connected channels
+        const int iNumCurConnChan = vecChanID.Size();
+
+        // init temporary vectors
+        vecvecdGains.Init ( iNumCurConnChan );
+        vecvecsData.Init  ( iNumCurConnChan );
+
+        for ( i = 0; i < iNumCurConnChan; i++ )
+        {
+            // init vectors storing information of all channels
+            vecvecdGains[i].Init ( iNumCurConnChan );
+            vecvecsData[i].Init  ( SYSTEM_FRAME_SIZE_SAMPLES );
+
+            // get gains of all connected channels
+            for ( j = 0; j < iNumCurConnChan; j++ )
+            {
+                // The second index of "vecvecdGains" does not represent
+                // the channel ID! Therefore we have to use "vecChanID" to
+                // query the IDs of the currently connected channels
+                vecvecdGains[i][j] =
+                    vecChannels[vecChanID[i]].GetGain( vecChanID[j] );
+            }
+
+            // get current number of CELT coded bytes
+            const int iCeltNumCodedBytes =
+                vecChannels[i].GetNetwFrameSize();
+
+            // init temporal data vector and clear input buffers
+            CVector<uint8_t> vecbyData ( iCeltNumCodedBytes );
+
+            // get data
+            const EGetDataStat eGetStat = vecChannels[i].GetData ( vecbyData );
+
+            // if channel was just disconnected, set flag that connected
+            // client list is sent to all other clients
+            if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
+            {
+                bChannelIsNowDisconnected = true;
+            }
+
+            // CELT decode received data stream
+            CVector<int16_t> vecsAudioMono ( SYSTEM_FRAME_SIZE_SAMPLES );
+
+            if ( eGetStat == GS_BUFFER_OK )
+            {
+                celt_decode ( CeltDecoder[i],
+                              &vecbyData[0],
+                              iCeltNumCodedBytes,
+                              &vecvecsData[i][0] );
+            }
+            else
+            {
+                // lost packet
+                celt_decode ( CeltDecoder[i],
+                              NULL,
+                              iCeltNumCodedBytes,
+                              &vecvecsData[i][0] );
+            }
+
+            // send message for get status (for GUI)
+            if ( eGetStat == GS_BUFFER_OK )
+            {
+                PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN, i );
+            }
+            else
+            {
+                PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED, i );
+            }
+        }
+
+        // a channel is now disconnected, take action on it
+        if ( bChannelIsNowDisconnected )
+        {
+            // update channel list for all currently connected clients
+            CreateAndSendChanListForAllConChannels();
+        }
+    }
+    Mutex.unlock(); // release mutex
+
+
+    // Process data ------------------------------------------------------------
     const int iNumClients = vecChanID.Size();
 
     // Check if at least one client is connected. If not, stop server until
@@ -307,8 +408,7 @@ void CServer::OnTimer()
 
             // get current number of CELT coded bytes
             const int iCeltNumCodedBytes =
-                vecChannels[vecChanID[i]].GetNetwFrameSize() /
-                vecChannels[vecChanID[i]].GetNetwFrameSizeFact();
+                vecChannels[vecChanID[i]].GetNetwFrameSize();
 
             // CELT encoding
             CVector<unsigned char> vecCeltData ( iCeltNumCodedBytes );
@@ -342,7 +442,7 @@ CVector<int16_t> CServer::ProcessData ( CVector<CVector<int16_t> >& vecvecsData,
     int i;
 
     // init return vector with zeros since we mix all channels on that vector
-    CVector<int16_t> vecsOutData ( SYSTEM_BLOCK_FRAME_SAMPLES, 0 );
+    CVector<int16_t> vecsOutData ( SYSTEM_FRAME_SIZE_SAMPLES, 0 );
 
     const int iNumClients = vecvecsData.Size();
 
@@ -352,7 +452,7 @@ CVector<int16_t> CServer::ProcessData ( CVector<CVector<int16_t> >& vecvecsData,
         // if channel gain is 1, avoid multiplication for speed optimization
         if ( vecdGains[j] == static_cast<double> ( 1.0 ) )
         {
-            for ( i = 0; i < SYSTEM_BLOCK_FRAME_SAMPLES; i++ )
+            for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++ )
             {
                 vecsOutData[i] =
                     Double2Short ( vecsOutData[i] + vecvecsData[j][i] );
@@ -360,7 +460,7 @@ CVector<int16_t> CServer::ProcessData ( CVector<CVector<int16_t> >& vecvecsData,
         }
         else
         {
-            for ( i = 0; i < SYSTEM_BLOCK_FRAME_SAMPLES; i++ )
+            for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++ )
             {
                 vecsOutData[i] =
                     Double2Short ( vecsOutData[i] +
@@ -370,112 +470,6 @@ CVector<int16_t> CServer::ProcessData ( CVector<CVector<int16_t> >& vecvecsData,
     }
 
     return vecsOutData;
-}
-
-void CServer::GetBlockAllConC ( CVector<int>&               vecChanID,
-                                CVector<CVector<int16_t> >& vecvecsData,
-                                CVector<CVector<double> >&  vecvecdGains )
-{
-    int  i, j;
-    bool bChannelIsNowDisconnected = false;
-
-    vecChanID.Init    ( 0 );
-    vecvecsData.Init  ( 0 );
-    vecvecdGains.Init ( 0 );
-
-    // make put and get calls thread safe. Do not forget to unlock mutex
-    // afterwards!
-    Mutex.lock();
-    {
-        // check all possible channels
-        for ( i = 0; i < USED_NUM_CHANNELS; i++ )
-        {
-            // get current number of CELT coded bytes
-            const int iCeltNumCodedBytes =
-                vecChannels[i].GetNetwFrameSize() /
-                vecChannels[i].GetNetwFrameSizeFact();
-
-            // init temporal data vector and clear input buffers
-            CVector<uint8_t> vecbyData ( iCeltNumCodedBytes );
-
-            // read out all input buffers to decrease timeout counter on
-            // disconnected channels
-            const EGetDataStat eGetStat = vecChannels[i].GetData ( vecbyData );
-
-            // if channel was just disconnected, set flag that connected
-            // client list is sent to all other clients
-            if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
-            {
-                bChannelIsNowDisconnected = true;
-            }
-
-            if ( vecChannels[i].IsConnected() )
-            {
-                // CELT decode received data stream
-                CVector<int16_t> vecsAudioMono ( SYSTEM_BLOCK_FRAME_SAMPLES );
-
-                if ( eGetStat == GS_BUFFER_OK )
-                {
-                    celt_decode ( CeltDecoder[i],
-                                  &vecbyData[0],
-                                  iCeltNumCodedBytes,
-                                  &vecsAudioMono[0] );
-                }
-                else
-                {
-                    // lost packet
-                    celt_decode ( CeltDecoder[i],
-                                  NULL,
-                                  iCeltNumCodedBytes,
-                                  &vecsAudioMono[0] );
-                }
-
-                // add ID and data
-                vecChanID.Add ( i );
-
-                const int iOldSize = vecvecsData.Size();
-                vecvecsData.Enlarge ( 1 );
-                vecvecsData[iOldSize].Init ( vecsAudioMono.Size() );
-                vecvecsData[iOldSize] = vecsAudioMono;
-
-                // send message for get status (for GUI)
-                if ( eGetStat == GS_BUFFER_OK )
-                {
-                    PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN, i );
-                }
-                else
-                {
-                    PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED, i );
-                }
-            }
-        }
-
-        // now that we know the IDs of the connected clients, get gains
-        const int iNumCurConnChan = vecChanID.Size();
-        vecvecdGains.Init ( iNumCurConnChan );
-
-        for ( i = 0; i < iNumCurConnChan; i++ )
-        {
-            vecvecdGains[i].Init ( iNumCurConnChan );
-
-            for ( j = 0; j < iNumCurConnChan; j++ )
-            {
-                // The second index of "vecvecdGains" does not represent
-                // the channel ID! Therefore we have to use "vecChanID" to
-                // query the IDs of the currently connected channels
-                vecvecdGains[i][j] =
-                    vecChannels[vecChanID[i]].GetGain( vecChanID[j] );
-            }
-        }
-
-        // a channel is now disconnected, take action on it
-        if ( bChannelIsNowDisconnected )
-        {
-            // update channel list for all currently connected clients
-            CreateAndSendChanListForAllConChannels();
-        }
-    }
-    Mutex.unlock(); // release mutex
 }
 
 CVector<CChannelShortInfo> CServer::CreateChannelList()

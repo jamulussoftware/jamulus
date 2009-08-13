@@ -40,12 +40,6 @@
 class CServer; // forward declaration of CServer
 
 
-/* Definitions ****************************************************************/
-// Maximum block size for network input buffer. Consider a maximum sample rate
-// of 48 kHz and two audio channels and two bytes per sample.
-#define MAX_SIZE_BYTES_NETW_BUF         ( MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ * 4 )
-
-
 /* Classes ********************************************************************/
 class CSocket : public QObject
 {

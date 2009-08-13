@@ -32,7 +32,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
     bIsEnabled ( false ),
     iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_DEFAULT ),
-    iNetwFrameSize ( 0 )
+    iNetwFrameSize ( 1 ) // any value > 0
 {
     // initial value for connection time out counter, we calculate the total
     // number of samples here and subtract the number of samples of the block
@@ -46,7 +46,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     SetSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL );
 
     // initialize cycle time variance measurement with defaults
-    CycleTimeVariance.Init ( SYSTEM_BLOCK_FRAME_SAMPLES,
+    CycleTimeVariance.Init ( SYSTEM_FRAME_SIZE_SAMPLES,
         SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
 
 
@@ -140,7 +140,7 @@ void CChannel::SetNetwFrameSizeAndFact ( const int iNewNetwFrameSize,
     ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
 
     // initialize and reset cycle time variance measurement
-    CycleTimeVariance.Init ( iNetwFrameSizeFact * SYSTEM_BLOCK_FRAME_SAMPLES,
+    CycleTimeVariance.Init ( iNetwFrameSizeFact * SYSTEM_FRAME_SIZE_SAMPLES,
         SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
 
     CycleTimeVariance.Reset();
@@ -448,12 +448,12 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
         // subtract the number of samples of the current block since the
         // time out counter is based on samples not on blocks (definition:
         // always one atomic block is get by using the GetData() function
-        // where the atomic block size is "SYSTEM_BLOCK_FRAME_SAMPLES")
+        // where the atomic block size is "SYSTEM_FRAME_SIZE_SAMPLES")
 
 // TODO this code only works with the above assumption -> better
 // implementation so that we are not depending on assumptions
 
-        iConTimeOut -= SYSTEM_BLOCK_FRAME_SAMPLES;
+        iConTimeOut -= SYSTEM_FRAME_SIZE_SAMPLES;
 
         if ( iConTimeOut <= 0 )
         {
@@ -506,7 +506,7 @@ CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<uint8_t>& vecbyNPacket
 
 int CChannel::GetUploadRateKbps()
 {
-    const int iAudioSizeOut = iNetwFrameSizeFact * SYSTEM_BLOCK_FRAME_SAMPLES;
+    const int iAudioSizeOut = iNetwFrameSizeFact * SYSTEM_FRAME_SIZE_SAMPLES;
 
     // we assume that the UDP packet which is transported via IP has an
     // additional header size of

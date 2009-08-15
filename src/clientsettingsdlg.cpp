@@ -83,6 +83,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         cbOpenChatOnNewMessage->setCheckState ( Qt::Unchecked );
     }
 
+    // "High Quality Audio" check box
+    if ( pClient->GetCELTHighQuality() )
+    {
+        cbUseHighQualityAudio->setCheckState ( Qt::Checked );
+    }
+    else
+    {
+        cbUseHighQualityAudio->setCheckState ( Qt::Unchecked );
+    }
+
     // set text for sound card buffer delay radio buttons
     rButBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES,
@@ -117,6 +127,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // check boxes
     QObject::connect ( cbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnOpenChatOnNewMessageStateChanged ( int ) ) );
+    QObject::connect ( cbUseHighQualityAudio, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnUseHighQualityAudioStateChanged ( int ) ) );
     QObject::connect ( cbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnAutoJitBuf ( int ) ) );
 
@@ -266,6 +278,12 @@ void CClientSettingsDlg::OnAutoJitBuf ( int value )
 void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
 {
     pClient->SetOpenChatOnNewMessage ( value == Qt::Checked );
+    UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnUseHighQualityAudioStateChanged ( int value )
+{
+    pClient->SetCELTHighQuality ( value == Qt::Checked );
     UpdateDisplay();
 }
 

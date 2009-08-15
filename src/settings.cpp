@@ -140,6 +140,12 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     {
         pClient->SetOpenChatOnNewMessage ( bValue );
     }
+
+    // flag whether using high quality audio or not
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "highqualityaudio", bValue ) )
+    {
+        pClient->SetCELTHighQuality ( bValue );
+    }
 }
 
 void CSettings::WriteIniFile ( const QString& sFileName )
@@ -192,6 +198,10 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     // flag whether the chat window shall be opened on a new chat message
     SetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage",
         pClient->GetOpenChatOnNewMessage() );
+
+    // flag whether using high quality audio or not
+    SetFlagIniSet ( IniXMLDocument, "client", "highqualityaudio",
+        pClient->GetCELTHighQuality() );
 
     // prepare file name for storing initialization data in XML file
     QString sCurFileName = sFileName;

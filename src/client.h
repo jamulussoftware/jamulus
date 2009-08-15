@@ -48,12 +48,18 @@
 
 /* Definitions ****************************************************************/
 // audio in fader range
-#define AUD_FADER_IN_MIN            0
-#define AUD_FADER_IN_MAX            100
-#define AUD_FADER_IN_MIDDLE         ( AUD_FADER_IN_MAX / 2 )
+#define AUD_FADER_IN_MIN                0
+#define AUD_FADER_IN_MAX                100
+#define AUD_FADER_IN_MIDDLE             ( AUD_FADER_IN_MAX / 2 )
 
 // audio reverberation range
-#define AUD_REVERB_MAX              100
+#define AUD_REVERB_MAX                  100
+
+// CELT number of coded bytes per audio packet
+// 22: low/normal quality   150 kbsp (128) / 108 kbps (256)
+// 44: high quality         216 kbps (128) / 174 kbps (256)
+#define CELT_NUM_BYTES_NORMAL_QUALITY   22
+#define CELT_NUM_BYTES_HIGH_QUALITY     44
 
 
 /* Classes ********************************************************************/
@@ -77,6 +83,9 @@ public:
 
     bool GetOpenChatOnNewMessage() { return bOpenChatOnNewMessage; }
     void SetOpenChatOnNewMessage ( const bool bNV ) { bOpenChatOnNewMessage = bNV; }
+
+    bool GetCELTHighQuality() { return bCeltDoHighQuality; }
+    void SetCELTHighQuality ( const bool bNCeltHighQualityFlag );
 
     int GetAudioInFader() { return iAudioInFader; }
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
@@ -159,6 +168,7 @@ protected:
     CELTEncoder*            CeltEncoder;
     CELTDecoder*            CeltDecoder;
     int                     iCeltNumCodedBytes;
+    bool                    bCeltDoHighQuality;
     CVector<unsigned char>  vecCeltData;
 
     CSocket                 Socket;

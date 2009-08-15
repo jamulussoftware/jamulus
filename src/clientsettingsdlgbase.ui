@@ -297,7 +297,17 @@
       <item>
        <widget class="QCheckBox" name="cbOpenChatOnNewMessage" >
         <property name="text" >
-         <string>Open chat on new message</string>
+         <string>Open Chat on New Message</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="cbUseHighQualityAudio" >
+        <property name="windowModality" >
+         <enum>Qt::NonModal</enum>
+        </property>
+        <property name="text" >
+         <string>Use High Quality Audio</string>
         </property>
        </widget>
       </item>
@@ -309,7 +319,7 @@
         <property name="sizeHint" >
          <size>
           <width>201</width>
-          <height>16</height>
+          <height>41</height>
          </size>
         </property>
        </spacer>

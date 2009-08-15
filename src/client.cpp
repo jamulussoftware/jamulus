@@ -37,7 +37,9 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bOpenChatOnNewMessage ( true ),
     bDoAutoSockBufSize ( true ),
     iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
-    iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT )
+    iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
+    iCeltNumCodedBytes ( CELT_NUM_BYTES_NORMAL_QUALITY ),
+    bCeltDoHighQuality ( false )
 {
     // init audio endocder/decoder (mono)
     CeltMode = celt_mode_create (
@@ -157,7 +159,7 @@ bool CClient::SetServerAddr ( QString strNAddr )
 
 void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
 {
-    // right now we simply set the internal value
+    // first check new input parameter
     if ( ( iNewFactor == FRAME_SIZE_FACTOR_PREFERRED ) ||
          ( iNewFactor == FRAME_SIZE_FACTOR_DEFAULT ) ||
          ( iNewFactor == FRAME_SIZE_FACTOR_SAFE ) )
@@ -180,6 +182,28 @@ void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
         {
             Sound.Start();
         }
+    }
+}
+
+void CClient::SetCELTHighQuality ( const bool bNCeltHighQualityFlag )
+{
+    // init with new parameter, if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    // set new parameter
+    bCeltDoHighQuality = bNCeltHighQualityFlag;
+
+    // init with new block size index parameter
+    Init();
+
+    if ( bWasRunning )
+    {
+        Sound.Start();
     }
 }
 
@@ -289,7 +313,6 @@ void CClient::Init()
 iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES;
 
 
-
     vecsAudioSndCrdMono.Init   ( iMonoBlockSizeSam );
     vecsAudioSndCrdStereo.Init ( iStereoBlockSizeSam );
     vecdAudioStereo.Init       ( iStereoBlockSizeSam );
@@ -303,10 +326,15 @@ iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES;
     // init reverberation
     AudioReverb.Init ( SYSTEM_SAMPLE_RATE );
 
-    // 22: low/normal quality   150 kbsp (128) / 108 kbps (256)
-    // 44: high quality         216 kbps (128) / 174 kbps (256)
-    iCeltNumCodedBytes = 22;
-
+    // inits for CELT coding
+    if ( bCeltDoHighQuality )
+    {
+        iCeltNumCodedBytes = CELT_NUM_BYTES_HIGH_QUALITY;
+    }
+    else
+    {
+        iCeltNumCodedBytes = CELT_NUM_BYTES_NORMAL_QUALITY;
+    }
     vecCeltData.Init ( iCeltNumCodedBytes );
 
     // init network buffers

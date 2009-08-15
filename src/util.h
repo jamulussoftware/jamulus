@@ -562,16 +562,22 @@ public:
 class CCycleTimeVariance
 {
 public:
-    CCycleTimeVariance() : iBlockLengthAtSystemSampleRate ( 0 ) {}
+    CCycleTimeVariance() : iBlockLengthAtSystemSampleRate ( 0 ),
+        dIntervalTime ( 0.0 ), iNewValueBoundFactor ( 0 ) {}
     virtual ~CCycleTimeVariance() {}
 
     void Init ( const int iNewBlockLengthAtSystemSampleRate,
                 const int iNewSystemSampleRate,
-                const int iHistoryLengthTime )
+                const int iHistoryLengthTime,
+                const int iNewNewValueBoundFactor = 4 )
     {
-        // store block size and sample rate
+        // store block size and new value bound factor
         iBlockLengthAtSystemSampleRate = iNewBlockLengthAtSystemSampleRate;
-        iSystemSampleRate              = iNewSystemSampleRate;
+        iNewValueBoundFactor           = iNewNewValueBoundFactor;
+
+        // calculate interval time
+        dIntervalTime = static_cast<double> (
+            iBlockLengthAtSystemSampleRate ) * 1000 / iNewSystemSampleRate;
 
         // calculate actual moving average length and initialize buffer
         RespTimeMoAvBuf.Init ( iHistoryLengthTime *
@@ -593,10 +599,23 @@ public:
 
         // we want to calculate the standard deviation (we assume that the mean
         // is correct at the block period time)
-        const double dCurAddVal = ( (double) ( CurTime - TimeLastBlock ) -
-            ( iBlockLengthAtSystemSampleRate * 1000 / iSystemSampleRate ) );
+        const double dCurAddVal =
+            static_cast<double> ( CurTime - TimeLastBlock ) - dIntervalTime;
 
-        RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal ); // add squared value
+        if ( iNewValueBoundFactor > 0 )
+        {
+            // check if new value is in range
+            if ( fabs ( dCurAddVal ) < ( iNewValueBoundFactor * dIntervalTime ) )
+            {
+                // add squared value
+                RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal );
+            }
+        }
+        else
+        {
+            // new value bound is not used, add new value (add squared value)
+            RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal );
+        }
 
         // store old time value
         TimeLastBlock = CurTime;
@@ -613,7 +632,8 @@ protected:
     CMovingAv<double> RespTimeMoAvBuf;
     int               TimeLastBlock;
     int               iBlockLengthAtSystemSampleRate;
-    int               iSystemSampleRate;
+    double            dIntervalTime;
+    int               iNewValueBoundFactor;
 };
 
 #endif /* !defined ( UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

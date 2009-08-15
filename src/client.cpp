@@ -245,11 +245,15 @@ void CClient::Stop()
     // stop audio interface
     Sound.Stop();
 
-    // send disconnect message to server (since we disable our protocol
+    // Send disconnect message to server (Since we disable our protocol
     // receive mechanism with the next command, we do not evaluate any
     // respond from the server, therefore we just hope that the message
     // gets its way to the server, if not, the old behaviour time-out
-    // disconnects the connection anyway)
+    // disconnects the connection anyway. Send the message three times
+    // to increase the probability that at least one message makes it
+    // through).
+    Channel.CreateDisconnectionMes();
+    Channel.CreateDisconnectionMes();
     Channel.CreateDisconnectionMes();
 
     // disable channel
@@ -497,7 +501,7 @@ void CClient::UpdateSocketBufferSize()
         // divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
         // one block in the jitter buffer
         const double dEstCurBufSet = ( dAudioBufferDurationMs +
-            3.3 * ( Channel.GetTimingStdDev() + CycleTimeVariance.GetStdDev() ) ) /
+            3 * ( Channel.GetTimingStdDev() + CycleTimeVariance.GetStdDev() ) ) /
             SYSTEM_BLOCK_DURATION_MS_FLOAT + 0.5;
 
         // upper/lower hysteresis decision

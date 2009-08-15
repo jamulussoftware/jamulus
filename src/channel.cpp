@@ -378,11 +378,6 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                     // used by the client so do not update for server channel)
                     if ( !bIsServer )
                     {
-
-// TODO only update if time difference of received packets is below
-// a limit to avoid having short network troubles incorporated in the
-// statistic
-
                         CycleTimeVariance.Update();
                     }
                 }

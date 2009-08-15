@@ -117,9 +117,9 @@ MESSAGES
 
 - Properties for network transport:           PROTMESSID_NETW_TRANSPORT_PROPS
 
-    +-------------------+-------------------------+-----------------+ ...
-    | 4 bytes netw size | 2 bytes block size fact | 1 byte num chan | ...
-    +-------------------+-------------------------+-----------------+ ...
+    +------------------------+-------------------------+-----------------+ ...
+    | 4 bytes base netw size | 2 bytes block size fact | 1 byte num chan | ...
+    +------------------------+-------------------------+-----------------+ ...
        ... ------------------+-----------------------+ ...
        ...  4 bytes sam rate | 2 bytes audiocod type | ...
        ... ------------------+-----------------------+ ...
@@ -127,7 +127,7 @@ MESSAGES
        ...  2 bytes version | 4 bytes audiocod arg | 
        ... -----------------+----------------------+
 
-    - "netw size":       length of the network packet in bytes
+    - "base netw size":  length of the base network packet (frame) in bytes
     - "block size fact": block size factor
     - "num chan":        number of channels of the audio signal, e.g. "2" is stereo
     - "sam rate":        sample rate of the audio stream
@@ -827,9 +827,9 @@ void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrPr
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
 
-    // length of the network packet in bytes (4 bytes)
+    // length of the base network packet (frame) in bytes (4 bytes)
     PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( NetTrProps.iNetworkPacketSize ), 4 );
+        static_cast<uint32_t> ( NetTrProps.iBaseNetworkPacketSize ), 4 );
 
     // block size factor (2 bytes)
     PutValOnStream ( vecData, iPos,
@@ -874,12 +874,12 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
         return true;
     }
 
-    // length of the network packet in bytes (4 bytes)
-    ReceivedNetwTranspProps.iNetworkPacketSize =
+    // length of the base network packet (frame) in bytes (4 bytes)
+    ReceivedNetwTranspProps.iBaseNetworkPacketSize =
         static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 4 ) );
 
-    if ( ( ReceivedNetwTranspProps.iNetworkPacketSize < 1 ) ||
-         ( ReceivedNetwTranspProps.iNetworkPacketSize > MAX_SIZE_BYTES_NETW_BUF ) )
+    if ( ( ReceivedNetwTranspProps.iBaseNetworkPacketSize < 1 ) ||
+         ( ReceivedNetwTranspProps.iBaseNetworkPacketSize > MAX_SIZE_BYTES_NETW_BUF ) )
     {
         return true;
     }

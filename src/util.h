@@ -447,29 +447,29 @@ class CNetworkTransportProps
 {
 public:
     CNetworkTransportProps() :
-        iNetworkPacketSize ( 0 ),
-        iBlockSizeFact     ( 0 ),
-        iNumAudioChannels  ( 0 ),
-        iSampleRate        ( 0 ),
-        eAudioCodingType   ( CT_NONE ),
-        iAudioCodingArg    ( 0 ) {}
+        iBaseNetworkPacketSize ( 0 ),
+        iBlockSizeFact         ( 0 ),
+        iNumAudioChannels      ( 0 ),
+        iSampleRate            ( 0 ),
+        eAudioCodingType       ( CT_NONE ),
+        iAudioCodingArg        ( 0 ) {}
 
-    CNetworkTransportProps ( const uint32_t iNNPS,
+    CNetworkTransportProps ( const uint32_t iNBNPS,
                              const uint16_t iNBSF,
                              const uint32_t iNNACH,
                              const uint32_t iNSR,
                              const EAudComprType eNACT,
                              const uint32_t iNVers,
                              const int32_t iNACA ) :
-        iNetworkPacketSize ( iNNPS ),
-        iBlockSizeFact     ( iNBSF ),
-        iNumAudioChannels  ( iNNACH ),
-        iSampleRate        ( iNSR ),
-        eAudioCodingType   ( eNACT ),
-        iVersion           ( iNVers ),
-        iAudioCodingArg    ( iNACA ) {}
+        iBaseNetworkPacketSize ( iNBNPS ),
+        iBlockSizeFact         ( iNBSF ),
+        iNumAudioChannels      ( iNNACH ),
+        iSampleRate            ( iNSR ),
+        eAudioCodingType       ( eNACT ),
+        iVersion               ( iNVers ),
+        iAudioCodingArg        ( iNACA ) {}
 
-    uint32_t      iNetworkPacketSize;
+    uint32_t      iBaseNetworkPacketSize;
     uint16_t      iBlockSizeFact;
     uint32_t      iNumAudioChannels;
     uint32_t      iSampleRate;

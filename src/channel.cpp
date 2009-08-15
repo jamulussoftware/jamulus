@@ -284,8 +284,7 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
         // store received parameters
         iNetwFrameSizeFact = NetworkTransportProps.iBlockSizeFact;
         iNetwFrameSize =
-            NetworkTransportProps.iNetworkPacketSize /
-            NetworkTransportProps.iBlockSizeFact;
+            NetworkTransportProps.iBaseNetworkPacketSize;
 
         // update socket buffer (the network block size is a multiple of the
         // minimum network frame size
@@ -304,7 +303,7 @@ void CChannel::OnReqNetTranspProps()
 void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
 {
     CNetworkTransportProps NetworkTransportProps (
-        iNetwFrameSize * iNetwFrameSizeFact,
+        iNetwFrameSize,
         iNetwFrameSizeFact,
         1, // right now we only use mono
         SYSTEM_SAMPLE_RATE,

@@ -315,9 +315,10 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
         3 * pClient->GetSndCrdActualMonoBlSize() *
         1000 / SYSTEM_SAMPLE_RATE;
 
+    // network packets are of the same size as the audio packets per definition
     const double dDelayToFillNetworkPackets =
-        SYSTEM_BLOCK_DURATION_MS_FLOAT *
-        pClient->GetSndCrdPrefFrameSizeFactor();
+        pClient->GetSndCrdActualMonoBlSize() *
+        1000 / SYSTEM_SAMPLE_RATE;
 
     // CELT additional delay at small frame sizes is half a frame size
     const double dAdditionalAudioCodecDelay =

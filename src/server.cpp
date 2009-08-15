@@ -170,7 +170,7 @@ CServer::CServer ( const QString& strLoggingFileName,
     }
 
     // enable all channels (for the server all channel must be enabled the
-    // entire life time of the software
+    // entire life time of the software)
     for ( i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         vecChannels[i].SetEnable ( true );
@@ -446,6 +446,10 @@ CVector<int16_t> CServer::ProcessData ( CVector<CVector<int16_t> >& vecvecsData,
     int i;
 
     // init return vector with zeros since we mix all channels on that vector
+
+// TODO speed optimization: avoid using the zero vector, use the first valid
+// data vector for initialization instead (take care of gain of this data, too!)
+
     CVector<int16_t> vecsOutData ( SYSTEM_FRAME_SIZE_SAMPLES, 0 );
 
     const int iNumClients = vecvecsData.Size();

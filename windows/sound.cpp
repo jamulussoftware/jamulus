@@ -263,48 +263,59 @@ int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
         }
         else
         {
-            // initialization
-            int  iTrialBufSize     = HWBufferInfo.lMinSize;
-            int  iLastTrialBufSize = HWBufferInfo.lMinSize;
-            bool bSizeFound        = false;
-
-            // test loop
-            while ( ( iTrialBufSize <= HWBufferInfo.lMaxSize ) && ( !bSizeFound ) )
+            // ASIO SDK 2.2: "Notes: When minimum and maximum buffer size are 
+            // equal, the preferred buffer size has to be the same value as
+            // well; granularity should be 0 in this case."
+            if ( HWBufferInfo.lMinSize == HWBufferInfo.lMaxSize )
             {
-                if ( iTrialBufSize >= iDesiredBufferSizeMono )
-                {
-                    // test which buffer size fits better: the old one or the
-                    // current one
-                    if ( ( iTrialBufSize - iDesiredBufferSizeMono ) >
-                         ( iDesiredBufferSizeMono - iLastTrialBufSize ) )
-                    {
-                        iTrialBufSize = iLastTrialBufSize;
-                    }
-
-                    // exit while loop
-                    bSizeFound = true;
-                }
-
-                if ( !bSizeFound )
-                {
-                    // store old trial buffer size
-                    iLastTrialBufSize = iTrialBufSize;
-
-                    // increment trial buffer size (check for special case first)
-                    if ( HWBufferInfo.lGranularity == -1 )
-                    {
-                        // special case: buffer sizes are a power of 2
-                        iTrialBufSize *= 2;
-                    }
-                    else
-                    {
-                        iTrialBufSize += HWBufferInfo.lGranularity;
-                    }
-                }
+                iActualBufferSizeMono = HWBufferInfo.lMinSize;
             }
+            else
+            {
+                // General case ------------------------------------------------
+                // initialization
+                int  iTrialBufSize     = HWBufferInfo.lMinSize;
+                int  iLastTrialBufSize = HWBufferInfo.lMinSize;
+                bool bSizeFound        = false;
 
-            // set ASIO buffer size
-            iActualBufferSizeMono = iTrialBufSize;
+                // test loop
+                while ( ( iTrialBufSize <= HWBufferInfo.lMaxSize ) && ( !bSizeFound ) )
+                {
+                    if ( iTrialBufSize >= iDesiredBufferSizeMono )
+                    {
+                        // test which buffer size fits better: the old one or the
+                        // current one
+                        if ( ( iTrialBufSize - iDesiredBufferSizeMono ) >
+                             ( iDesiredBufferSizeMono - iLastTrialBufSize ) )
+                        {
+                            iTrialBufSize = iLastTrialBufSize;
+                        }
+
+                        // exit while loop
+                        bSizeFound = true;
+                    }
+
+                    if ( !bSizeFound )
+                    {
+                        // store old trial buffer size
+                        iLastTrialBufSize = iTrialBufSize;
+
+                        // increment trial buffer size (check for special case first)
+                        if ( HWBufferInfo.lGranularity == -1 )
+                        {
+                            // special case: buffer sizes are a power of 2
+                            iTrialBufSize *= 2;
+                        }
+                        else
+                        {
+                            iTrialBufSize += HWBufferInfo.lGranularity;
+                        }
+                    }
+                }
+
+                // set ASIO buffer size
+                iActualBufferSizeMono = iTrialBufSize;
+            }
         }
     }
 

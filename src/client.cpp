@@ -257,6 +257,28 @@ void CClient::Start()
     // init object
     Init();
 
+
+// TEST check sound card buffer sizes, if not supported, fire error message
+if ( ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) ) &&
+     ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) &&
+     ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
+{
+    const QString strError = "The sound card frame size is not supported "
+        "by this software. Please open your "
+#ifdef _WIN32
+        "ASIO "
+#else
+        "JACK "
+#endif
+        "configuration panel and use one of the following frame sizes: " +
+        QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) + ", " +
+        QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) + ", or " +
+        QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) + ".";
+
+    throw CGenErr ( strError );
+}
+
+
     // enable channel
     Channel.SetEnable ( true );
 
@@ -426,8 +448,6 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
         }
     }
 
-// TEST
-// TODO use actual frame size factor, not preferred one!!!!
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
         // encode current audio frame with CELT encoder
@@ -444,9 +464,6 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
 
 
     // Receive signal ----------------------------------------------------------
-
-// TEST
-// TODO use actual frame size factor, not preferred one!!!!
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
         // receive a new block

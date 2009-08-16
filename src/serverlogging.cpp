@@ -106,7 +106,7 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
     // calculate step for x-axis ticks so that we get the desired number of
     // ticks -> 5 ticks
 
-// TODO the following equation does not work as expected but results are exeptable
+// TODO the following equation does not work as expected but results are acceptable
 
     // we want to have "floor ( iNumTicksX / 5 )" which is the same as
     // "iNumTicksX / 5" since "iNumTicksX" is an integer variable

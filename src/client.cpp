@@ -330,7 +330,8 @@ void CClient::Init()
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
 
-// TEST
+// TEST (we assume here that "iMonoBlockSizeSam" is divisible by
+// "SYSTEM_FRAME_SIZE_SAMPLES")
 // calculate actual frame size factor
 iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES;
 

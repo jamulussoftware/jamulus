@@ -338,12 +338,28 @@ void CLlconClientDlg::OnConnectDisconBut()
         // set address and check if address is valid
         if ( pClient->SetServerAddr ( LineEditServerAddr->currentText() ) )
         {
-            pClient->Start();
+            bool bStartOk = true;
 
-            PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
+            try
+            {
+                pClient->Start();
+            }
 
-            // start timer for level meter bar
-            TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
+            catch ( CGenErr generr )
+            {
+                QMessageBox::critical (
+                    this, APP_NAME, generr.GetErrorText(), "Close", 0 );
+
+                bStartOk = false;
+            }
+
+            if ( bStartOk )
+            {
+                PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
+
+                // start timer for level meter bar
+                TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
+            }
         }
         else
         {

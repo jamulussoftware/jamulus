@@ -257,27 +257,33 @@ void CClient::Start()
     // init object
     Init();
 
-
-// TEST check sound card buffer sizes, if not supported, fire error message
-if ( ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) ) &&
-     ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) &&
-     ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
-{
-    const QString strError = "The sound card frame size is not supported "
-        "by this software. Please open your "
+    // check sound card buffer sizes, if not supported, fire error message
+    if ( ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) ) &&
+         ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) &&
+         ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
+    {
+        const QString strError = "The current sound card frame size of <b>" +
+            QString().setNum ( iMonoBlockSizeSam ) + " samples</b> is not supported "
+            "by this software. Please open your "
 #ifdef _WIN32
-        "ASIO "
+            "ASIO "
 #else
-        "JACK "
+            "JACK "
 #endif
-        "configuration panel and use one of the following frame sizes: " +
-        QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) + ", " +
-        QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) + ", or " +
-        QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) + ".";
+            "configuration panel and use one of the following frame sizes: <b>" +
+            QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) + ", " +
+            QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) + ", or " +
+            QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) +
+            " samples</b>."
+#ifdef _WIN32
+            "<br><br>To open the ASIO configuration panel, you can open the Settings "
+            "Dialog in the llcon software (using the menu) and click on the \"ASIO "
+            "Setup\" button."
+#endif
+            ;
 
-    throw CGenErr ( strError );
-}
-
+        throw CGenErr ( strError );
+    }
 
     // enable channel
     Channel.SetEnable ( true );

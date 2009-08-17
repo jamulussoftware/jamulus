@@ -457,6 +457,9 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
             // channel is just disconnected
             eGetStatus  = GS_CHAN_NOW_DISCONNECTED;
             iConTimeOut = 0; // make sure we do not have negative values
+
+            // emit message
+            emit Disconnected();
         }
         else
         {

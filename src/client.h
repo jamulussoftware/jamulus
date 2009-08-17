@@ -211,6 +211,7 @@ signals:
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
     void PingTimeReceived ( int iPingTime );
+    void Disconnected();
 };
 
 #endif /* !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

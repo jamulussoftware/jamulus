@@ -185,6 +185,7 @@ signals:
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );
     void ReqNetTranspProps();
+    void Disconnected();
 };
 
 #endif /* !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

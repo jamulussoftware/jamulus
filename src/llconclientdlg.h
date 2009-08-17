@@ -110,4 +110,5 @@ public slots:
         { pClient->SendTextMess ( strChatText ); }
     void OnLineEditServerAddrTextChanged ( const QString sNewText );
     void OnLineEditServerAddrActivated ( int index );
+    void OnDisconnected();
 };

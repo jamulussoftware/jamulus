@@ -62,6 +62,10 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
 
+    QObject::connect ( &Channel,
+        SIGNAL ( Disconnected() ),
+        SIGNAL ( Disconnected() ) );
+
     QObject::connect ( &Channel, SIGNAL ( NewConnection() ),
         this, SLOT ( OnNewConnection() ) );
 

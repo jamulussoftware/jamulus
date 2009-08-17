@@ -233,6 +233,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
         this, SLOT ( OnConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
     QObject::connect ( pClient,
+        SIGNAL ( Disconnected() ),
+        this, SLOT ( OnDisconnected() ) );
+    QObject::connect ( pClient,
         SIGNAL ( ChatTextReceived ( QString ) ),
         this, SLOT ( OnChatTextReceived ( QString ) ) );
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
@@ -408,6 +411,12 @@ void CLlconClientDlg::OnChatTextReceived ( QString strChatText )
     {
         ShowChatWindow();
     }
+}
+
+void CLlconClientDlg::OnDisconnected()
+{
+    // channel is now disconnected, clear mixer board (remove all faders)
+    MainMixerBoard->HideAll();
 }
 
 void CLlconClientDlg::ShowChatWindow()

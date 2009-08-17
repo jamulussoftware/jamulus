@@ -136,6 +136,9 @@ void CChannel::SetNetwFrameSizeAndFact ( const int iNewNetwFrameSize,
     iNetwFrameSize     = iNewNetwFrameSize;
     iNetwFrameSizeFact = iNewNetwFrameSizeFact;
 
+    // init socket buffer
+    SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+
     // init conversion buffer
     ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
 

@@ -339,7 +339,7 @@ void CClient::Init()
 // TEST (we assume here that "iMonoBlockSizeSam" is divisible by
 // "SYSTEM_FRAME_SIZE_SAMPLES")
 // calculate actual frame size factor
-iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES;
+iSndCrdFrameSizeFactor = max ( 1, iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES );
 
 
     vecsAudioSndCrdMono.Init   ( iMonoBlockSizeSam );

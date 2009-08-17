@@ -335,61 +335,9 @@ void CLlconClientDlg::OnLineEditServerAddrActivated ( int index )
 
 void CLlconClientDlg::OnConnectDisconBut()
 {
-    // start/stop client, set button text
-    if ( !pClient->IsRunning() )
-    {
-        // set address and check if address is valid
-        if ( pClient->SetServerAddr ( LineEditServerAddr->currentText() ) )
-        {
-            bool bStartOk = true;
-
-            try
-            {
-                pClient->Start();
-            }
-
-            catch ( CGenErr generr )
-            {
-                QMessageBox::critical (
-                    this, APP_NAME, generr.GetErrorText(), "Close", 0 );
-
-                bStartOk = false;
-            }
-
-            if ( bStartOk )
-            {
-                PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
-
-                // start timer for level meter bar
-                TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
-            }
-        }
-        else
-        {
-            // Restart timer to ensure that the text is visible at
-            // least the time for one complete interval
-            TimerStatus.start ( STATUSBAR_UPDATE_TIME );
-
-            // show the error in the status bar
-            TextLabelStatus->setText ( tr ( "Invalid address" ) );
-        }
-    }
-    else
-    {
-        pClient->Stop();
-        PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
-
-        // stop timer for level meter bars and reset them
-        TimerSigMet.stop();
-        MultiColorLEDBarInputLevelL->setValue ( 0 );
-        MultiColorLEDBarInputLevelR->setValue ( 0 );
-
-        // immediately update status bar
-        OnTimerStatus();
-
-        // clear mixer board (remove all faders)
-        MainMixerBoard->HideAll();
-    }
+    // the connect/disconnect button implements a toggle functionality
+    // -> apply inverted running state
+    ConnectDisconnect ( !pClient->IsRunning() );
 }
 
 void CLlconClientDlg::OnOpenGeneralSettings()
@@ -469,6 +417,67 @@ void CLlconClientDlg::OnTimerSigMet()
     // show current level
     MultiColorLEDBarInputLevelL->setValue ( (int) ceil ( dCurSigLevelL ) );
     MultiColorLEDBarInputLevelR->setValue ( (int) ceil ( dCurSigLevelR ) );
+}
+
+void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
+{
+    // start/stop client, set button text
+    if ( bDoStart )
+    {
+        // set address and check if address is valid
+        if ( pClient->SetServerAddr ( LineEditServerAddr->currentText() ) )
+        {
+            bool bStartOk = true;
+
+            // try to start client, if error occurred, do not go in
+            // running state but show error message
+            try
+            {
+                pClient->Start();
+            }
+
+            catch ( CGenErr generr )
+            {
+                QMessageBox::critical (
+                    this, APP_NAME, generr.GetErrorText(), "Close", 0 );
+
+                bStartOk = false;
+            }
+
+            if ( bStartOk )
+            {
+                PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
+
+                // start timer for level meter bar
+                TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
+            }
+        }
+        else
+        {
+            // Restart timer to ensure that the text is visible at
+            // least the time for one complete interval
+            TimerStatus.start ( STATUSBAR_UPDATE_TIME );
+
+            // show the error in the status bar
+            TextLabelStatus->setText ( tr ( "Invalid address" ) );
+        }
+    }
+    else
+    {
+        pClient->Stop();
+        PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
+
+        // stop timer for level meter bars and reset them
+        TimerSigMet.stop();
+        MultiColorLEDBarInputLevelL->setValue ( 0 );
+        MultiColorLEDBarInputLevelR->setValue ( 0 );
+
+        // immediately update status bar
+        OnTimerStatus();
+
+        // clear mixer board (remove all faders)
+        MainMixerBoard->HideAll();
+    }
 }
 
 void CLlconClientDlg::UpdateDisplay()

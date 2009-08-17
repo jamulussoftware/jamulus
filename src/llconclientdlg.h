@@ -74,6 +74,7 @@ public:
 protected:
     void                    ShowChatWindow();
     void                    UpdateAudioFaderSlider();
+    void                    ConnectDisconnect ( const bool bDoStart );
 
     CClient*                pClient;
     bool                    bConnected;

@@ -390,14 +390,15 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
     // convert data from short to double
     for ( i = 0; i < iStereoBlockSizeSam; i++ )
     {
-        vecdAudioStereo[i] = (double) vecsStereoSndCrd[i];
+        vecdAudioStereo[i] = static_cast<double> ( vecsStereoSndCrd[i] );
     }
 
     // add reverberation effect if activated
     if ( iReverbLevel != 0 )
     {
         // calculate attenuation amplification factor
-        const double dRevLev = (double) iReverbLevel / AUD_REVERB_MAX / 2;
+        const double dRevLev =
+            static_cast<double> ( iReverbLevel ) / AUD_REVERB_MAX / 2;
 
         if ( bReverbOnLeftChan )
         {
@@ -434,7 +435,7 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
     else
     {
         const double dAttFact =
-            (double) ( AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
+            static_cast<double> ( AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
             AUD_FADER_IN_MIDDLE;
 
         if ( iAudioInFader > AUD_FADER_IN_MIDDLE )

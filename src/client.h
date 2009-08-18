@@ -56,9 +56,9 @@
 #define AUD_REVERB_MAX                  100
 
 // CELT number of coded bytes per audio packet
-// 22: low/normal quality   150 kbsp (128) / 108 kbps (256)
+// 24: low/normal quality   156 kbsp (128) / 114 kbps (256)
 // 44: high quality         216 kbps (128) / 174 kbps (256)
-#define CELT_NUM_BYTES_NORMAL_QUALITY   22
+#define CELT_NUM_BYTES_NORMAL_QUALITY   24
 #define CELT_NUM_BYTES_HIGH_QUALITY     44
 
 

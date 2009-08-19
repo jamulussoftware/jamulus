@@ -39,7 +39,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../libs/celt/rangedec.c \
 	../libs/celt/rangeenc.c \
 	../libs/celt/rate.c \
-	../libs/celt/vq.c
+	../libs/celt/vq.c \
 	../src/buffer.h \
 	../src/global.h \
 	../src/socket.h \

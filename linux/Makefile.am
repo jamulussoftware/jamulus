@@ -94,7 +94,8 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../libs/celt/psy.h \
 	../libs/celt/quant_bands.h \
 	../libs/celt/rate.h \
-	../libs/celt/stack_alloc.h vq.h
+	../libs/celt/stack_alloc.h \
+	../libs/celt/vq.h \
 	../src/resources.qrc \
 	../src/res/gig.png \
 	../src/res/mainicon.png \
@@ -133,8 +134,8 @@ llcon_SOURCES = ../src/buffer.cpp \
 
 # these need to be generated before the rest can be compiled
 
-BUILT_SOURCES=moc/moc_server.cpp \
-    moc/moc_soundbase.cpp \
+BUILT_SOURCES = moc/moc_server.cpp \
+	moc/moc_soundbase.cpp \
 	moc/moc_client.cpp \
 	moc/moc_protocol.cpp \
 	moc/moc_channel.cpp \
@@ -158,8 +159,8 @@ BUILT_SOURCES=moc/moc_server.cpp \
 
 # and should be cleaned by make clean
 
-CLEANFILES=$(BUILT_SOURCES)
-nodist_llcon_SOURCES=$(BUILT_SOURCES)
+CLEANFILES = $(BUILT_SOURCES)
+nodist_llcon_SOURCES = $(BUILT_SOURCES)
 
 dist-hook:
 	mkdir $(distdir)/moc
@@ -234,4 +235,4 @@ moc/resources.cpp: ../src/resources.qrc
 	$(QT_RCC) ../src/resources.qrc -o moc/resources.cpp
 
 
-llcon_CXXFLAGS=-I../src -I../libs/celt $(LIB_INCL_DIRS) $(QT_CFLAGS) -DQT_THREAD_SUPPORT -D_REENTRANT -g
+llcon_CXXFLAGS = -I../src -I../libs/celt $(LIB_INCL_DIRS) $(QT_CFLAGS) -DQT_THREAD_SUPPORT -D_REENTRANT -g

@@ -67,7 +67,7 @@ llcon_SOURCES = ../src/buffer.cpp \
 	sound.h \
 	../libs/celt/celt.h \
 	../libs/celt/celt_types.h \
-	../libs/celt/celt_header.h
+	../libs/celt/celt_header.h \
 	../libs/celt/_kiss_fft_guts.h \
 	../libs/celt/arch.h \
 	../libs/celt/bands.h \

@@ -6,6 +6,7 @@
 !define INSTALLER_NAME "llconinstaller.exe"
 !define VS_REDIST_PATH "C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\BootStrapper\Packages\vcredist_x86\"
 !define VS_REDIST_EXE  "vcredist_x86.exe"
+!define UNINST_KEY     "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
 
 
 SetCompressor lzma
@@ -14,11 +15,19 @@ Caption       "${APP_NAME}"
 OutFile       "${INSTALLER_NAME}"
 InstallDir    "$PROGRAMFILES\${APP_NAME}"
 
+LicenseText   "License"
+LicenseData   "..\COPYING"
+
+Page license
 Page directory
 Page instfiles
 
 
 Section
+
+  ; add reg keys so that software appears in Windows "Add/Remove Software"
+  WriteRegStr HKLM "${UNINST_KEY}" "DisplayName" "${APP_NAME} (remove only)"
+  WriteRegStr HKLM "${UNINST_KEY}" "UninstallString" '"$INSTDIR\${UNINSTALL_EXE}"'
 
   SetOutPath       $INSTDIR
   
@@ -54,6 +63,8 @@ SectionEnd
 
 
 Section "Uninstall"
+
+DeleteRegKey HKLM "${UNINST_KEY}"
 
 Delete "$DESKTOP\${APP_NAME}.lnk"
 Delete "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"

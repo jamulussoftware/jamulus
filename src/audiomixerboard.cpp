@@ -177,7 +177,7 @@ void CChannelFader::SetOtherSoloState ( const bool bState )
 
 void CChannelFader::SetText ( const QString sText )
 {
-    const int iBreakPos = 7;
+    const int iBreakPos = 8;
 
     // make sure we insert an HTML space ("&nbsp;") at each beginning and end
     // of line for nicer look

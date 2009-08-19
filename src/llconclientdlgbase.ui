@@ -122,7 +122,7 @@
         <item row="3" column="1" >
          <widget class="QLineEdit" name="LineEditFaderTag" >
           <property name="maxLength" >
-           <number>15</number>
+           <number>16</number>
           </property>
          </widget>
         </item>

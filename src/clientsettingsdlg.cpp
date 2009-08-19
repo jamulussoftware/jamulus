@@ -219,13 +219,13 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
              ( iCurActualBufSize != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) &&
              ( iCurActualBufSize != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
         {
-            TextLabelActualSndCrdBufDelay->setText ( "<font color=""red"">" +
-                strActSizeValues + "</font>" );
+            TextLabelActualSndCrdBufDelay->setText ( "<b><font color=""red"">" +
+                strActSizeValues + "</font></b>" );
         }
         else
         {
-            TextLabelActualSndCrdBufDelay->setText ( "<font color=""yellow"">" +
-                strActSizeValues + "</font>" );
+            TextLabelActualSndCrdBufDelay->setText ( "<b><font color=""yellow"">" +
+                strActSizeValues + "</font></b>" );
         }
     }
     else

@@ -2,10 +2,14 @@
 
 - introduced new audio codec "CELT", not compatible to old versions
 
+- only the sound card frame sizes 128, 256 and 512 is allowed (since other
+  frame sizes require additional conversion buffers which introduce delay)
+
 - IMA-ADPCM, MS-ADPCM removed
 
 - since CELT works on 48 kHz sample rate, resampling was removed
 
+- various bug fixes (e.g. disconnecting did not work reliably)
 
 2.3.0
 

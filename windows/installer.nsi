@@ -19,9 +19,23 @@ Page instfiles
 Section
 
   SetOutPath       $INSTDIR
+  
+  ; main application
   File             "Release\${APP_EXE}"
+
+  ; QT dlls
+  File             "$%QTDIR%\bin\QtCore4.dll"
+  File             "$%QTDIR%\bin\QtGui4.dll"
+  File             "$%QTDIR%\bin\QtNetwork4.dll"
+  File             "$%QTDIR%\bin\QtXml4.dll"
+
+  ; other files
+  File             "..\COPYING"
+
+  ; uninstaller
   WriteUninstaller $INSTDIR\${UNINSTALL_EXE}
 
+  ; shortcuts
   CreateShortCut   "$DESKTOP\${APP_NAME}.lnk" "$OUTDIR\${APP_EXE}"
 
   CreateDirectory  "$SMPROGRAMS\${APP_NAME}"
@@ -40,6 +54,11 @@ RMDIR  "$SMPROGRAMS\${APP_NAME}"
 
 Delete $INSTDIR\${UNINSTALL_EXE}
 Delete $INSTDIR\${APP_EXE}
+Delete $INSTDIR\QtCore4.dll
+Delete $INSTDIR\QtGui4.dll
+Delete $INSTDIR\QtNetwork4.dll
+Delete $INSTDIR\QtXml4.dll
+Delete $INSTDIR\COPYING
 RMDir  $INSTDIR
 
 SectionEnd 

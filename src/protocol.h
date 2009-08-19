@@ -82,9 +82,9 @@ public:
     void CreatePingMes ( const int iMs );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
     void CreateReqNetwTranspPropsMes();
-    void CreateDisconnectionMes();
 
-    void CreateAndSendAcknMess ( const int& iID, const int& iCnt );
+    void CreateAndImmSendDisconnectionMes();
+    void CreateAndImmSendAcknMess ( const int& iID, const int& iCnt );
 
     bool ParseMessage ( const CVector<uint8_t>& vecbyData,
                         const int iNumBytes );

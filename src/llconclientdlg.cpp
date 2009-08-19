@@ -236,6 +236,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP,
         SIGNAL ( Disconnected() ),
         this, SLOT ( OnDisconnected() ) );
     QObject::connect ( pClient,
+        SIGNAL ( Stopped() ),
+        this, SLOT ( OnStopped() ) );
+    QObject::connect ( pClient,
         SIGNAL ( ChatTextReceived ( QString ) ),
         this, SLOT ( OnChatTextReceived ( QString ) ) );
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
@@ -338,6 +341,11 @@ void CLlconClientDlg::OnConnectDisconBut()
     // the connect/disconnect button implements a toggle functionality
     // -> apply inverted running state
     ConnectDisconnect ( !pClient->IsRunning() );
+}
+
+void CLlconClientDlg::OnStopped()
+{
+    ConnectDisconnect ( false );
 }
 
 void CLlconClientDlg::OnOpenGeneralSettings()
@@ -464,7 +472,15 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
     }
     else
     {
-        pClient->Stop();
+        // only stop client if currently running, in case we received
+        // the stopped message, the client is already stopped but the
+        // connect/disconnect button and other GUI controls must be
+        // updated
+        if ( pClient->IsRunning() )
+        {
+            pClient->Stop();
+        }
+
         PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
 
         // stop timer for level meter bars and reset them

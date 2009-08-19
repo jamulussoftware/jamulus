@@ -129,7 +129,8 @@ public:
     }
 
     void CreateNetTranspPropsMessFromCurrentSettings();
-    void CreateDisconnectionMes() { Protocol.CreateDisconnectionMes(); }
+    void CreateAndImmSendDisconnectionMes()
+        { Protocol.CreateAndImmSendDisconnectionMes(); }
 
 protected:
     bool ProtocolIsEnabled(); 

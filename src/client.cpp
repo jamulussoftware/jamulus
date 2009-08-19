@@ -180,11 +180,22 @@ void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
         iSndCrdPrefFrameSizeFactor = iNewFactor;
 
         // init with new block size index parameter
-        Init();
+        const bool bInitWasOk = Init();
 
         if ( bWasRunning )
         {
-            Sound.Start();
+            if ( bInitWasOk )
+            {
+                // init was ok, restart client
+                Sound.Start();
+            }
+            else
+            {
+                // init was not successful, do not restart client and
+                // inform main window of the stopped client
+                Stop();
+                emit Stopped();
+            }
         }
     }
 }
@@ -225,11 +236,22 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
 
     // init again because the sound card actual buffer size might
     // be changed on new device
-    Init();
+    const bool bInitWasOk = Init();
 
     if ( bWasRunning )
     {
-        Sound.Start();
+        if ( bInitWasOk )
+        {
+            // init was ok, restart client
+            Sound.Start();
+        }
+        else
+        {
+            // init was not successful, do not restart client and
+            // inform main window of the stopped client
+            Stop();
+            emit Stopped();
+        }
     }
 
     return strReturn;
@@ -248,23 +270,29 @@ void CClient::OnSndCrdReinitRequest()
     // reinit the driver (we use the currently selected driver) and
     // init client object, too
     Sound.SetDev ( Sound.GetDev() );
-    Init();
+    const bool bInitWasOk = Init();
 
     if ( bWasRunning )
     {
-        Sound.Start();
+        if ( bInitWasOk )
+        {
+            // init was ok, restart client
+            Sound.Start();
+        }
+        else
+        {
+            // init was not successful, do not restart client and
+            // inform main window of the stopped client
+            Stop();
+            emit Stopped();
+        }
     }
 }
 
 void CClient::Start()
 {
     // init object
-    Init();
-
-    // check sound card buffer sizes, if not supported, fire error message
-    if ( ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) ) &&
-         ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) &&
-         ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
+    if ( !Init() )
     {
         const QString strError = "The current sound card frame size of <b>" +
             QString().setNum ( iMonoBlockSizeSam ) + " samples</b> is not supported "
@@ -308,9 +336,9 @@ void CClient::Stop()
     // disconnects the connection anyway. Send the message three times
     // to increase the probability that at least one message makes it
     // through).
-    Channel.CreateDisconnectionMes();
-    Channel.CreateDisconnectionMes();
-    Channel.CreateDisconnectionMes();
+    Channel.CreateAndImmSendDisconnectionMes();
+    Channel.CreateAndImmSendDisconnectionMes();
+    Channel.CreateAndImmSendDisconnectionMes();
 
     // disable channel
     Channel.SetEnable ( false );
@@ -329,7 +357,7 @@ void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
     pMyClientObj->ProcessAudioData ( psData );
 }
 
-void CClient::Init()
+bool CClient::Init()
 {
     // translate block size index in actual block size
     const int iPrefMonoFrameSize =
@@ -377,6 +405,18 @@ iSndCrdFrameSizeFactor = max ( 1, iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES 
     // set the channel network properties
     Channel.SetNetwFrameSizeAndFact ( iCeltNumCodedBytes,
                                       iSndCrdFrameSizeFactor );
+
+    // check sound card buffer sizes, if not supported, return error flag
+    if ( ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) ) &&
+         ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) &&
+         ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
+    {
+        return false; // init was not successful
+    }
+    else
+    {
+        return true; // ok
+    }
 }
 
 void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )

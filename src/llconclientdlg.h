@@ -112,4 +112,5 @@ public slots:
     void OnLineEditServerAddrTextChanged ( const QString sNewText );
     void OnLineEditServerAddrActivated ( int index );
     void OnDisconnected();
+    void OnStopped();
 };

@@ -120,7 +120,7 @@ public slots:
             break;
 
         case 10:
-            Protocol.CreateAndSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
+            Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
                 GenRandomIntInRange ( -100, 100 ) );
             break;
 

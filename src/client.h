@@ -155,7 +155,7 @@ protected:
     // callback function must be static, otherwise it does not work
     static void  AudioCallback ( CVector<short>& psData, void* arg );
 
-    void         Init();
+    bool         Init();
     void         ProcessAudioData ( CVector<short>& vecsStereoSndCrd );
     void         UpdateSocketBufferSize();
 
@@ -212,6 +212,7 @@ signals:
     void ChatTextReceived ( QString strChatText );
     void PingTimeReceived ( int iPingTime );
     void Disconnected();
+    void Stopped();
 };
 
 #endif /* !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

@@ -212,8 +212,21 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
 
     if ( iPrefBufSize != iCurActualBufSize )
     {
-        TextLabelActualSndCrdBufDelay->setText ( "<font color=""red"">" +
-            strActSizeValues + "</font>" );
+        // yellow color if actual buffer size is not the selected one
+        // but a valid one, red color if actual buffer size is not the
+        // selected one and is not a vaild one
+        if ( ( iCurActualBufSize != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) ) &&
+             ( iCurActualBufSize != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) &&
+             ( iCurActualBufSize != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
+        {
+            TextLabelActualSndCrdBufDelay->setText ( "<font color=""red"">" +
+                strActSizeValues + "</font>" );
+        }
+        else
+        {
+            TextLabelActualSndCrdBufDelay->setText ( "<font color=""yellow"">" +
+                strActSizeValues + "</font>" );
+        }
     }
     else
     {

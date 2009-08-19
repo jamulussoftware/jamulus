@@ -278,7 +278,7 @@ void CProtocol::CreateAndSendMessage ( const int iID,
     EnqueueMessage ( vecNewMessage, iCurCounter, iID );
 }
 
-void CProtocol::CreateAndSendAcknMess ( const int& iID, const int& iCnt )
+void CProtocol::CreateAndImmSendAcknMess ( const int& iID, const int& iCnt )
 {
     CVector<uint8_t> vecAcknMessage;
     CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
@@ -317,7 +317,7 @@ bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
             if ( iRecID != PROTMESSID_ACKN )
             {
                 // resend acknowledgement
-                CreateAndSendAcknMess ( iRecID, iRecCounter );
+                CreateAndImmSendAcknMess ( iRecID, iRecCounter );
             }
         }
         else
@@ -412,8 +412,8 @@ bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
                     break;
                 }
 
-                // send acknowledge message
-                CreateAndSendAcknMess ( iRecID, iRecCounter );
+                // immediately send acknowledge message
+                CreateAndImmSendAcknMess ( iRecID, iRecCounter );
             }
         }
 
@@ -949,9 +949,18 @@ bool CProtocol::EvaluateReqNetwTranspPropsMes ( const CVector<uint8_t>& vecData 
     return false; // no error
 }
 
-void CProtocol::CreateDisconnectionMes()
+void CProtocol::CreateAndImmSendDisconnectionMes()
 {
-    CreateAndSendMessage ( PROTMESSID_DISCONNECTION, CVector<uint8_t> ( 0 ) );
+    CVector<uint8_t> vecDisconMessage;
+
+    // build complete message (special case, there is not actual data
+    // and we do not use the counter since this is the very last message
+    // of the connection, after that no message will be evaluated)
+    GenMessageFrame ( vecDisconMessage, 0,
+        PROTMESSID_DISCONNECTION, CVector<uint8_t> ( 0 ) );
+
+    // immediately send acknowledge message
+    emit MessReadyForSending ( vecDisconMessage );
 }
 
 bool CProtocol::EvaluateDisconnectionMes ( const CVector<uint8_t>& vecData )

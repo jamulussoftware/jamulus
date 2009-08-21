@@ -26,11 +26,14 @@
 
 
 /* Implementation *************************************************************/
-CLlconClientDlg::CLlconClientDlg ( CClient* pNCliP,
-                                  const bool bNewConnectOnStartup,
-                                  const bool bNewDisalbeLEDs,
-                                  QWidget* parent, Qt::WindowFlags f ) :
-    pClient ( pNCliP ), QDialog ( parent, f ),
+CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
+                                   const bool      bNewConnectOnStartup,
+                                   const bool      bNewDisalbeLEDs,
+                                   QWidget*        parent,
+                                   Qt::WindowFlags f ) :
+    pClient ( pNCliP ),
+    QDialog ( parent, f ),
+    bUnreadChatMessage ( false ),
     ClientSettingsDlg ( pNCliP, parent
 #ifdef _WIN32
                         // this somehow only works reliable on Windows
@@ -360,6 +363,9 @@ void CLlconClientDlg::OnOpenGeneralSettings()
 
 void CLlconClientDlg::OnChatTextReceived ( QString strChatText )
 {
+    // init flag (will maybe overwritten later in this function)
+    bUnreadChatMessage = false;
+
     ChatDlg.AddChatText ( strChatText );
 
     // if requested, open window
@@ -367,6 +373,15 @@ void CLlconClientDlg::OnChatTextReceived ( QString strChatText )
     {
         ShowChatWindow();
     }
+    else
+    {
+        if ( !ChatDlg.isVisible() )
+        {
+            bUnreadChatMessage = true;
+        }
+    }
+
+    UpdateDisplay();
 }
 
 void CLlconClientDlg::OnDisconnected()
@@ -383,6 +398,11 @@ void CLlconClientDlg::ShowChatWindow()
     // make sure dialog is upfront and has focus
     ChatDlg.raise();
     ChatDlg.activateWindow();
+
+    // chat dialog is opened, reset unread message flag
+    bUnreadChatMessage = false;
+
+    UpdateDisplay();
 }
 
 void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
@@ -501,7 +521,14 @@ void CLlconClientDlg::UpdateDisplay()
     // show connection status in status bar
     if ( pClient->IsConnected() && pClient->IsRunning() )
     {
-        TextLabelStatus->setText ( tr ( "Connected" ) );
+        QString strStatus = tr ( "Connected" );
+
+        if ( bUnreadChatMessage )
+        {
+            strStatus += ", <b>New Chat</b>";
+        }
+
+        TextLabelStatus->setText ( strStatus );
     }
     else
     {

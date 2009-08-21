@@ -78,6 +78,7 @@ protected:
 
     CClient*                pClient;
     bool                    bConnected;
+    bool                    bUnreadChatMessage;
     QTimer                  TimerSigMet;
     QTimer                  TimerStatus;
 

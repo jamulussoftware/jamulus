@@ -544,7 +544,7 @@ void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
             // lost packet
             celt_decode ( CeltDecoder,
                           NULL,
-                          iCeltNumCodedBytes,
+                          0,
                           &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
         }
     }

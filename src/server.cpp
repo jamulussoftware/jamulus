@@ -369,7 +369,7 @@ void CServer::OnTimer()
                 // lost packet
                 celt_decode ( CeltDecoder[iCurChanID],
                               NULL,
-                              iCeltNumCodedBytes,
+                              0,
                               &vecvecsData[i][0] );
             }
 

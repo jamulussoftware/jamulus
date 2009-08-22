@@ -119,6 +119,16 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
         return false;
     }
 
+    // check for invalid data in buffer
+    if ( iNumInvalidElements > 0 )
+    {
+        // decrease number of invalid elements by the queried number (input
+        // size)
+        iNumInvalidElements -= iInSize;
+
+        bGetOK = false; // return error flag
+    }
+
     // Check if there is not enough data available -> correct
     if ( GetAvailData() < iInSize )
     {
@@ -245,6 +255,11 @@ void CNetBuf::Clear ( const EClearType eClearType )
         iPutPos = 0;
         iGetPos = iMiddleOfBuffer;
 
+        // The buffer was cleared, the next time blocks are read from the
+        // buffer, these are invalid ones. Calculate the number of invalid
+        // elements
+        iNumInvalidElements = iMemSize - iMiddleOfBuffer;
+
         // check for special case
         if ( iPutPos == iGetPos )
         {
@@ -268,6 +283,9 @@ void CNetBuf::Clear ( const EClearType eClearType )
         {
             iPutPos -= iMemSize;
         }
+
+        // in case of put correction, no invalid blocks are inserted
+        iNumInvalidElements = 0;
 
         // check for special case
         if ( iPutPos == iGetPos )

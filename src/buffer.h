@@ -52,6 +52,7 @@ protected:
     CVector<uint8_t> vecbyMemory;
     int              iMemSize;
     int              iBlockSize;
+    int              iNumInvalidElements;
     int              iGetPos, iPutPos;
     EBufState        eBufState;
 };

@@ -38,7 +38,7 @@
 
 /* Definitions ****************************************************************/
 // number of history items to store
-#define NUM_ITEMS_HISTORY           200
+#define NUM_ITEMS_HISTORY           400
 
 
 /* Classes ********************************************************************/

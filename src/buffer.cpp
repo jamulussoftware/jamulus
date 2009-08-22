@@ -46,12 +46,6 @@ void CNetBuf::Init ( const int iNewBlockSize,
 bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
                     const int iInSize )
 {
-#ifdef _DEBUG_
-static FILE* pFileBI = fopen("bufferin.dat", "w");
-fprintf(pFileBI, "%d %d\n", GetAvailSpace() / iBlockSize, iMemSize / iBlockSize);
-fflush(pFileBI);
-#endif
-
     bool bPutOK = true;
 
     // Check if there is not enough space available -> correct
@@ -231,20 +225,13 @@ void CNetBuf::Clear ( const EClearType eClearType )
 
     if ( iBlockSize != 0 )
     {
-#if 0
-        /* with the following operation we set the new get pos to a block
-           boundary (one block below the middle of the buffer in case of odd
-           number of blocks, e.g.:
-           [buffer size]: [get pos]
-           1: 0   /   2: 0   /   3: 1   /   4: 1   /   ... */
-        iMiddleOfBuffer = ( ( ( iMemSize - iBlockSize) / 2 ) / iBlockSize ) * iBlockSize;
-#else
-// old code
-
-// somehow the old code seems to work better than the sophisticated new one....?
-        /* 1: 0   /   2: 1   /   3: 1   /   4: 2   /   ... */
-        iMiddleOfBuffer = ( ( iMemSize / 2 ) / iBlockSize ) * iBlockSize;
-#endif
+        // with the following operation we set the new get pos to a block
+        // boundary (one block below the middle of the buffer in case of odd
+        // number of blocks, e.g.:
+        // [buffer size]: [get pos]
+        // 1: 0   /   2: 0   /   3: 1   /   4: 1   /   5: 2 ...
+        iMiddleOfBuffer =
+            ( ( ( iMemSize - iBlockSize) / 2 ) / iBlockSize ) * iBlockSize;
     }
 
     // different behaviour for get and put corrections

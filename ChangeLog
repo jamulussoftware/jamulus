@@ -1,3 +1,11 @@
+3.0.1
+
+- bug fix: buzzing occurred when audio stream was interrupted (e.g. in case
+  of network trouble)
+
+- in case "Open Chat on New Message" is not enabled, a hint in the status bar
+  is shown when a message is received
+
 3.0.0
 
 - introduced new audio codec "CELT", not compatible to old versions

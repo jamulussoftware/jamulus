@@ -122,6 +122,12 @@ CServer::CServer ( const QString& strLoggingFileName,
 
         CeltEncoder[i] = celt_encoder_create ( CeltMode[i] );
         CeltDecoder[i] = celt_decoder_create ( CeltMode[i] );
+
+#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+        // set encoder low complexity
+        celt_encoder_ctl(CeltEncoder[i],
+            CELT_SET_COMPLEXITY_REQUEST, celt_int32_t ( 1 ) );
+#endif
     }
 
     // define colors for chat window identifiers

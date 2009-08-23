@@ -48,6 +48,12 @@ CClient::CClient ( const quint16 iPortNumber ) :
     CeltEncoder = celt_encoder_create ( CeltMode );
     CeltDecoder = celt_decoder_create ( CeltMode );
 
+#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+    // set encoder low complexity
+    celt_encoder_ctl(CeltEncoder,
+        CELT_SET_COMPLEXITY_REQUEST, celt_int32_t ( 1 ) );
+#endif
+
 
     // connections -------------------------------------------------------------
     // connection for protocol

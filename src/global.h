@@ -73,6 +73,9 @@
 #define FRAME_SIZE_FACTOR_DEFAULT       2 // 256 (for frame size 128)
 #define FRAME_SIZE_FACTOR_SAFE          4 // 512 (for frame size 128)
 
+// low complexity CELT encoder (if defined)
+#define USE_LOW_COMPLEXITY_CELT_ENC
+
 // define the maximum mono audio buffer size at a sample rate
 // of 48 kHz, this is important for defining the maximum number
 // of bytes to be expected from the network interface

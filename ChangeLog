@@ -6,6 +6,9 @@
 - in case "Open Chat on New Message" is not enabled, a hint in the status bar
   is shown when a message is received
 
+- use low complexity CELT encoder profile, this lowers audio dropout
+  probability on slow computers
+
 3.0.0
 
 - introduced new audio codec "CELT", not compatible to old versions

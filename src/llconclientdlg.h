@@ -69,7 +69,6 @@ public:
     CLlconClientDlg ( CClient* pNCliP, const bool bNewConnectOnStartup,
                       const bool bNewDisalbeLEDs,
                       QWidget* parent = 0, Qt::WindowFlags f = 0 );
-    virtual ~CLlconClientDlg();
 
 protected:
     void                    ShowChatWindow();

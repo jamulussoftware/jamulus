@@ -255,20 +255,17 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     TimerStatus.start ( STATUSBAR_UPDATE_TIME );
 }
 
-CLlconClientDlg::~CLlconClientDlg()
-{
-    // if connected, terminate connection
-    if ( pClient->IsRunning() )
-    {
-        pClient->Stop();
-    }
-}
-
 void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
 {
     // if settings dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
     ChatDlg.close();
+
+    // if connected, terminate connection
+    if ( pClient->IsRunning() )
+    {
+        pClient->Stop();
+    }
 
     // store IP addresses
     for ( int iLEIdx = 0; iLEIdx < LineEditServerAddr->count(); iLEIdx++ )

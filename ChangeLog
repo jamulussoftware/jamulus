@@ -1,3 +1,8 @@
+3.0.2
+
+- fix for Jack Linux audio interface: ports are only once registered and
+  connect when the software is started up
+
 3.0.1
 
 - bug fix: buzzing occurred when audio stream was interrupted (e.g. in case

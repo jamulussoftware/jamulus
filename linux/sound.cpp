@@ -24,7 +24,7 @@ void CSound::OpenJack()
     {
         throw CGenErr ( "Jack server not running" );
     }
- 
+
     // tell the JACK server to call "process()" whenever
     // there is work to be done
     jack_set_process_callback ( pJackClient, process, this );
@@ -41,17 +41,6 @@ if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE )
     throw CGenErr ( "Jack server sample rate is different from "
         "required one" );
 }
-}
-
-void CSound::CloseJack()
-{
-    // close client connection to jack server
-    jack_client_close ( pJackClient );
-}
-
-void CSound::Start()
-{
-    const char** ports;
 
     // create four ports (two for input, two for output -> stereo)
     input_port_left = jack_port_register ( pJackClient, "input left",
@@ -65,6 +54,8 @@ void CSound::Start()
 
     output_port_right = jack_port_register ( pJackClient, "output right",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
+
+    const char** ports;
 
     // tell the JACK server that we are ready to roll
     if ( jack_activate ( pJackClient ) )
@@ -119,12 +110,9 @@ void CSound::Start()
     }
 
     free ( ports );
-
-    // call base class
-    CSoundBase::Start();
 }
 
-void CSound::Stop()
+void CSound::CloseJack()
 {
     // deactivate client
     jack_deactivate ( pJackClient );
@@ -135,6 +123,18 @@ void CSound::Stop()
     jack_port_unregister ( pJackClient, output_port_left );
     jack_port_unregister ( pJackClient, output_port_right );
 
+    // close client connection to jack server
+    jack_client_close ( pJackClient );
+}
+
+void CSound::Start()
+{
+    // call base class
+    CSoundBase::Start();
+}
+
+void CSound::Stop()
+{
     // call base class
     CSoundBase::Stop();
 }
@@ -164,45 +164,66 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 // JACK callbacks --------------------------------------------------------------
 int CSound::process ( jack_nframes_t nframes, void* arg )
 {
-    int     i;
     CSound* pSound = reinterpret_cast<CSound*> ( arg );
+    int     i;
 
-    // get input data pointer
-    jack_default_audio_sample_t* in_left =
-        (jack_default_audio_sample_t*) jack_port_get_buffer (
-        pSound->input_port_left, nframes );
-
-    jack_default_audio_sample_t* in_right =
-        (jack_default_audio_sample_t*) jack_port_get_buffer (
-        pSound->input_port_right, nframes );
-
-    // copy input data
-    for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
+    if ( pSound->IsRunning() )
     {
-        pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( in_left[i] * _MAXSHORT );
-        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( in_right[i] * _MAXSHORT );
+        // get input data pointer
+        jack_default_audio_sample_t* in_left =
+            (jack_default_audio_sample_t*) jack_port_get_buffer (
+            pSound->input_port_left, nframes );
+
+        jack_default_audio_sample_t* in_right =
+            (jack_default_audio_sample_t*) jack_port_get_buffer (
+            pSound->input_port_right, nframes );
+
+        // copy input data
+        for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
+        {
+            pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( in_left[i] * _MAXSHORT );
+            pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( in_right[i] * _MAXSHORT );
+        }
+
+        // call processing callback function
+        pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
+
+        // get output data pointer
+        jack_default_audio_sample_t* out_left =
+            (jack_default_audio_sample_t*) jack_port_get_buffer (
+            pSound->output_port_left, nframes );
+
+        jack_default_audio_sample_t* out_right =
+            (jack_default_audio_sample_t*) jack_port_get_buffer (
+            pSound->output_port_right, nframes );
+
+        // copy output data
+        for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
+        {
+            out_left[i] = (jack_default_audio_sample_t)
+                pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
+
+            out_right[i] = (jack_default_audio_sample_t)
+                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
+        }
     }
-
-    // call processing callback function
-    pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
-
-    // get output data pointer
-    jack_default_audio_sample_t* out_left =
-        (jack_default_audio_sample_t*) jack_port_get_buffer (
-        pSound->output_port_left, nframes );
-
-    jack_default_audio_sample_t* out_right =
-        (jack_default_audio_sample_t*) jack_port_get_buffer (
-        pSound->output_port_right, nframes );
-
-    // copy output data
-    for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
+    else
     {
-        out_left[i] = (jack_default_audio_sample_t)
-            pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
+        // get output data pointer
+        jack_default_audio_sample_t* out_left =
+            (jack_default_audio_sample_t*) jack_port_get_buffer (
+            pSound->output_port_left, nframes );
 
-        out_right[i] = (jack_default_audio_sample_t)
-            pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
+        jack_default_audio_sample_t* out_right =
+            (jack_default_audio_sample_t*) jack_port_get_buffer (
+            pSound->output_port_right, nframes );
+
+        // clear output data
+        for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
+        {
+            out_left[i]  = 0;
+            out_right[i] = 0;
+        }
     }
 
     return 0; // zero on success, non-zero on error 

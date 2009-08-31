@@ -60,6 +60,16 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pLabel->setAutoFillBackground ( true );
     pLabel->setFrameShape ( QFrame::Box );
 
+    // do not allow HTML tags, align center and use some margin
+    pLabel->setTextFormat ( Qt::PlainText );
+    pLabel->setAlignment ( Qt::AlignHCenter );
+    pLabel->setMargin ( 3 );
+
+    // set bold text
+    QFont curFont = pLabel->font();
+    curFont.setBold ( true );
+    pLabel->setFont ( curFont );
+
     // add user controls to grid
     pMainGrid->addWidget( pFader,  0, Qt::AlignHCenter );
     pMainGrid->addWidget( pcbMute, 0, Qt::AlignLeft );
@@ -179,27 +189,20 @@ void CChannelFader::SetText ( const QString sText )
 {
     const int iBreakPos = 8;
 
-    // make sure we insert an HTML space ("&nbsp;") at each beginning and end
-    // of line for nicer look
-
     // break text at predefined position, if text is too short, break anyway to
     // make sure we have two lines for fader tag
     QString sModText = sText;
 
     if ( sModText.length() > iBreakPos )
     {
-        sModText.insert ( iBreakPos, QString ( "&nbsp;<br>&nbsp;" ) );
+        sModText.insert ( iBreakPos, QString ( "\n" ) );
     }
     else
     {
         // insert line break at the beginning of the string -> make sure
         // if we only have one line that the text appears at the bottom line
-        sModText.insert ( 0, QString ( "&nbsp;<br>&nbsp;" ) );
+        sModText.prepend ( QString ( "\n" ) );
     }
-
-    // use bold centered text
-    sModText.prepend ( "<center><b>&nbsp;" );
-    sModText.append ( "&nbsp;</b></center>" );
 
     pLabel->setText ( sModText );
 }

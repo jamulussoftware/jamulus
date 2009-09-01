@@ -255,7 +255,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     TimerStatus.start ( STATUSBAR_UPDATE_TIME );
 }
 
-void CLlconClientDlg::closeEvent ( QCloseEvent * Event )
+void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
 {
     // if settings dialog or chat dialog is open, close it
     ClientSettingsDlg.close();

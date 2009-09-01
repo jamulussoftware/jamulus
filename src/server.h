@@ -109,7 +109,6 @@ protected:
     int GetFreeChan();
     CVector<CChannelShortInfo> CreateChannelList();
     void CreateAndSendChanListForAllConChannels();
-    void CreateAndSendChanListForAllExceptThisChan ( const int iCurChanID );
     void CreateAndSendChanListForThisChan ( const int iCurChanID );
     void CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText );
     void WriteHTMLChannelList();

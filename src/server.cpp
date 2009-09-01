@@ -528,29 +528,6 @@ void CServer::CreateAndSendChanListForAllConChannels()
     }
 }
 
-void CServer::CreateAndSendChanListForAllExceptThisChan ( const int iCurChanID )
-{
-    // create channel list
-    CVector<CChannelShortInfo> vecChanInfo ( CreateChannelList() );
-
-    // now send connected channels list to all connected clients except for
-    // the channel with the ID "iCurChanID"
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
-    {
-        if ( ( vecChannels[i].IsConnected() ) && ( i != iCurChanID ) )
-        {
-            // send message
-            vecChannels[i].CreateConClientListMes ( vecChanInfo );
-        }
-    }
-
-    // create status HTML file if enabled
-    if ( bWriteStatusHTMLFile )
-    {
-        WriteHTMLChannelList();
-    }
-}
-
 void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
 {
     // create channel list
@@ -573,13 +550,13 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
             vecChannels[iCurChanID].GetAddress().GetIpAddressStringNoLastByte();
     }
 
-    // add name of the client at the beginning of the message text and use
-    // different colors, to get correct HTML, the "<" and ">" signs must be
-    // replaced by "&#60;" and "&#62;"
+    // add time and name of the client at the beginning of the message text and
+    // use different colors
     QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
     const QString strActualMessageText =
-        "<font color=""" + sCurColor + """><b>&#60;" + ChanName +
-        "&#62;</b></font> " + strChatText;
+        "<font color=""" + sCurColor + """>(" +
+        QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>" + ChanName +
+        "</b></font> " + strChatText;
 
 
     // send chat text to all connected clients ---------------------------------
@@ -723,10 +700,15 @@ bAudioOK = true;
             // be created after the received data has to be put to the
             // channel first so that this channel is marked as connected)
             //
-            // connected clients list is only send for new connected clients after
-            // request, only the already connected clients get the list
-            // automatically, because they don't know when new clients connect
-            CreateAndSendChanListForAllExceptThisChan ( iCurChanID );
+            // Usually it is not required to send the channel list to the
+            // client currently connecting since it automatically requests
+            // the channel list on a new connection (as a result, he will
+            // usually get the list twice which has no impact on functionality
+            // but will only increase the network load a tiny little bit). But
+            // in case the client thinks he is still connected but the server
+            // was restartet, it is important that we send the channel list
+            // at this place.
+            CreateAndSendChanListForAllConChannels();
         }
     }
     Mutex.unlock();

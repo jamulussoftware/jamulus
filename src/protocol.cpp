@@ -415,12 +415,13 @@ bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
 
                 // immediately send acknowledge message
                 CreateAndImmSendAcknMess ( iRecID, iRecCounter );
+
+                // save current message ID and counter to find out if message
+                // was resent
+                iOldRecID  = iRecID;
+                iOldRecCnt = iRecCounter;
             }
         }
-
-        // save current message ID and counter to find out if message was resent
-        iOldRecID  = iRecID;
-        iOldRecCnt = iRecCounter;
     }
     else
     {

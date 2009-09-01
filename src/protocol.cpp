@@ -193,8 +193,8 @@ void CProtocol::Reset()
 }
 
 void CProtocol::EnqueueMessage ( CVector<uint8_t>& vecMessage,
-                                 const int iCnt,
-                                 const int iID )
+                                 const int         iCnt,
+                                 const int         iID )
 {
     bool bListWasEmpty;
 
@@ -255,7 +255,7 @@ void CProtocol::SendMessage()
     }
 }
 
-void CProtocol::CreateAndSendMessage ( const int iID,
+void CProtocol::CreateAndSendMessage ( const int               iID,
                                        const CVector<uint8_t>& vecData )
 {
     CVector<uint8_t> vecNewMessage;
@@ -278,7 +278,8 @@ void CProtocol::CreateAndSendMessage ( const int iID,
     EnqueueMessage ( vecNewMessage, iCurCounter, iID );
 }
 
-void CProtocol::CreateAndImmSendAcknMess ( const int& iID, const int& iCnt )
+void CProtocol::CreateAndImmSendAcknMess ( const int& iID,
+                                           const int& iCnt )
 {
     CVector<uint8_t> vecAcknMessage;
     CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
@@ -295,7 +296,7 @@ void CProtocol::CreateAndImmSendAcknMess ( const int& iID, const int& iCnt )
 }
 
 bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
-                               const int iNumBytes )
+                               const int               iNumBytes )
 {
 /*
     return code: false -> ok; true -> error
@@ -976,10 +977,10 @@ bool CProtocol::EvaluateDisconnectionMes ( const CVector<uint8_t>& vecData )
 * Message generation (parsing)                                                 *
 \******************************************************************************/
 bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
-                                    const int iNumBytesIn,
-                                    int& iCnt,
-                                    int& iID,
-                                    CVector<uint8_t>& vecData )
+                                    const int               iNumBytesIn,
+                                    int&                    iCnt,
+                                    int&                    iID,
+                                    CVector<uint8_t>&       vecData )
 {
 /*
     return code: true -> ok; false -> error
@@ -1072,9 +1073,9 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
     return iRet;
 }
 
-void CProtocol::GenMessageFrame ( CVector<uint8_t>& vecOut,
-                                  const int iCnt,
-                                  const int iID,
+void CProtocol::GenMessageFrame ( CVector<uint8_t>&       vecOut,
+                                  const int               iCnt,
+                                  const int               iID,
                                   const CVector<uint8_t>& vecData )
 {
     int i;
@@ -1129,9 +1130,9 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>& vecOut,
         static_cast<uint32_t> ( CRCObj.GetCRC() ), 2 );
 }
 
-void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,
-                                 unsigned int& iPos,
-                                 const uint32_t iVal,
+void CProtocol::PutValOnStream ( CVector<uint8_t>&  vecIn,
+                                 unsigned int&      iPos,
+                                 const uint32_t     iVal,
                                  const unsigned int iNumOfBytes )
 {
 /*

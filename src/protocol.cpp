@@ -308,6 +308,12 @@ bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
 
     if ( !ParseMessageFrame ( vecbyData, iNumBytes, iRecCounter, iRecID, vecData ) )
     {
+
+/*
+// TEST channel implementation: randomly delete protocol messages (50 % loss)
+if ( rand() < ( RAND_MAX / 2 ) ) return false;
+*/
+
         // In case we received a message and returned an answer but our answer
         // did not make it to the receiver, he will resend his message. We check
         // here if the message is the same as the old one, and if this is the

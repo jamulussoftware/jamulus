@@ -308,6 +308,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     setupUi ( this );
 
     // set the text for the about dialog html text control
+    TextViewCredits->setOpenExternalLinks ( true );
     TextViewCredits->setText (
         "<p>" // general description of llcon software
         "<big><b>llcon</b> " + tr("Client/Server communication tool to enable "
@@ -331,12 +332,17 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         tr("llcon uses the following libraries, resources or code snippets:") +
         "</b></p>"
         "<ul>"
-        "<li>Qt cross-platform application framework: <i>http://trolltech.com</i></li>"
-        "<li>The CELT ultra-low delay audio codec: <i>http://www.celt-codec.org</i></li>"
+        "<li>Qt cross-platform application framework: "
+        "<i><a href=""http://trolltech.com"">http://trolltech.com</a></i></li>"
+        "<li>The CELT ultra-low delay audio codec: "
+        "<i><a href=""http://www.celt-codec.org"">http://www.celt-codec.org</a></i></li>"
         "<li>Audio reverberation code: by Perry R. Cook and Gary P. Scavone, "
-        "1995 - 2004 (taken from <i>The Synthesis ToolKit in C++ (STK)</i>)</li>"
+        "1995 - 2004 (taken from "
+        "<i><a href=""http://ccrma.stanford.edu/software/stk"">"
+        "The Synthesis ToolKit in C++ (STK)</a></i>)</li>"
         "<li>Parts from Dream DRM Receiver by Volker Fischer and Alexander "
-        "Kurpiers: <i>http://drm.sf.net</i></li>"
+        "Kurpiers: "
+        "<i><a href=""http://drm.sf.net"">http://drm.sf.net</a></i></li>"
         "<li>Some pixmaps are from <i>Clker.com - vector clip art online, "
         "royalty free & public domain</i></li>"
         "</ul>"

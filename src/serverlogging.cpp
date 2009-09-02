@@ -221,6 +221,27 @@ void CHistoryGraph::Save ( const QString sFileName )
     PlotPixmap.save ( sFileName, "JPG", 90 );
 }
 
+void CHistoryGraph::Add ( const QDateTime&   newDateTime,
+                          const QHostAddress ClientInetAddr )
+{
+    if ( bDoHistory )
+    {
+        // add element to history, distinguish between a local connection
+        // and a remote connection
+        if ( ( ClientInetAddr == QHostAddress ( "127.0.0.1" ) ) ||
+             ( ClientInetAddr.toString().left ( 7 ).compare ( "192.168" ) == 0 ) )
+        {
+            // local connection
+            Add ( newDateTime, CHistoryGraph::HIT_LOCAL_CONNECTION );
+        }
+        else
+        {
+            // remote connection
+            Add ( newDateTime, CHistoryGraph::HIT_REMOTE_CONNECTION );
+        }
+    }
+}
+
 void CHistoryGraph::Add ( const QDateTime& newDateTime,
                           const EHistoryItemType curType )
 {
@@ -275,6 +296,7 @@ void CHistoryGraph::Update()
 }
 
 
+// Server logging --------------------------------------------------------------
 CServerLogging::~CServerLogging()
 {
     // close logging file of open
@@ -311,21 +333,8 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
 #endif
     *this << strLogStr; // in log file
 
-    // add element to history, distinguish between a local connection
-    // and a remote connection
-    if ( ( ClientInetAddr == QHostAddress ( "127.0.0.1" ) ) ||
-        ( ClientInetAddr.toString().left ( 7 ).compare ( "192.168" ) == 0 ) )
-    {
-        // local connection
-        HistoryGraph.Add ( QDateTime::currentDateTime(),
-            CHistoryGraph::HIT_LOCAL_CONNECTION );
-    }
-    else
-    {
-        // remote connection
-        HistoryGraph.Add ( QDateTime::currentDateTime(),
-            CHistoryGraph::HIT_REMOTE_CONNECTION );
-    }
+    // add element to history
+    HistoryGraph.Add ( QDateTime::currentDateTime(), ClientInetAddr );
 }
 
 void CServerLogging::AddServerStopped()
@@ -355,6 +364,66 @@ void CServerLogging::operator<< ( const QString& sNewStr )
         out << sNewStr << endl;
         File.flush();
     }
+}
+
+void CServerLogging::ParseLogFile ( const QString& strFileName )
+{
+    // open file for reading
+    QFile LogFile ( strFileName );
+    LogFile.open ( QIODevice::ReadOnly | QIODevice::Text );
+
+    QTextStream inStream ( &LogFile );
+
+    // read all content from file
+    while ( !inStream.atEnd() )
+    {
+        // get a new line from log file
+        QString strCurLine = inStream.readLine();
+
+        // parse log file line
+        QStringList strlistCurLine = strCurLine.split( "," );
+
+        // check number of separated strings condition
+        if ( strlistCurLine.size() == 4 )
+        {
+            // first entry
+            QDate curDate =
+                QDate::fromString ( strlistCurLine.at ( 0 ).trimmed(),
+                "d.M.yyyy" );
+
+            // second entry
+            QTime curTime =
+                QTime::fromString ( strlistCurLine.at ( 1 ).trimmed(),
+                "hh:mm:ss" );
+
+            if ( curDate.isValid() && curTime.isValid() )
+            {
+                QDateTime curDateTime ( curDate, curTime );
+
+                // check if server stop or new client connection
+                QString strAddress = strlistCurLine.at ( 2 ).trimmed();
+                if ( strAddress.isEmpty() )
+                {
+                    // server stop
+                    HistoryGraph.Add ( curDateTime,
+                        CHistoryGraph::HIT_SERVER_STOP );
+                }
+                else
+                {
+                    QHostAddress curAddress;
+                    
+                    // third entry is IP address
+                    if ( curAddress.setAddress ( strlistCurLine.at ( 2 ).trimmed() ) )
+                    {
+                        // new client connection
+                        HistoryGraph.Add ( curDateTime, curAddress );
+                    }
+                }
+            }
+        }
+    }
+
+     HistoryGraph.Update();
 }
 
 QString CServerLogging::CurTimeDatetoLogString()

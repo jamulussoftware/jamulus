@@ -38,7 +38,7 @@
 
 /* Definitions ****************************************************************/
 // number of history items to store
-#define NUM_ITEMS_HISTORY           400
+#define NUM_ITEMS_HISTORY           600
 
 
 /* Classes ********************************************************************/
@@ -57,6 +57,7 @@ public:
     CHistoryGraph();
     void Start ( const QString& sNewFileName );
     void Add ( const QDateTime& newDateTime, const EHistoryItemType curType );
+    void Add ( const QDateTime& newDateTime, const QHostAddress ClientInetAddr );
     void Update();
 
 protected:
@@ -115,6 +116,7 @@ public:
     void EnableHistory ( const QString& strHistoryFileName );
     void AddNewConnection ( const QHostAddress& ClientInetAddr );
     void AddServerStopped();
+    void ParseLogFile ( const QString& strFileName );
 
 protected:
     void operator<< ( const QString& sNewStr );

@@ -145,16 +145,24 @@ CServer::CServer ( const QString& strLoggingFileName,
     CycleTimeVariance.Init ( SYSTEM_FRAME_SIZE_SAMPLES,
         SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
 
-    // enable logging (if requested)
-    if ( !strLoggingFileName.isEmpty() )
-    {
-        Logging.Start ( strLoggingFileName );
-    }
-
     // enable history graph (if requested)
     if ( !strHistoryFileName.isEmpty() )
     {
         Logging.EnableHistory ( strHistoryFileName );
+    }
+
+    // enable logging (if requested)
+    if ( !strLoggingFileName.isEmpty() )
+    {
+        // in case the history is enabled and a logging file name is
+        // given, parse the logging file for old entries which are then
+        // added in the history on software startup
+        if ( !strHistoryFileName.isEmpty() )
+        {
+            Logging.ParseLogFile ( strLoggingFileName );
+        }
+
+        Logging.Start ( strLoggingFileName );
     }
 
     // HTML status file writing

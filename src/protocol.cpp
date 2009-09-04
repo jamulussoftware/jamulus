@@ -60,15 +60,6 @@ MESSAGES
     note: does not have any data -> n = 0
 
 
-- Network buffer block size factor:           PROTMESSID_NET_BLSI_FACTOR
-
-    note: size, relative to minimum block size
-
-    +----------------+
-    | 2 bytes factor |
-    +----------------+
-
-
 - Gain of channel:                            PROTMESSID_CHANNEL_GAIN
 
     +-------------------+--------------+
@@ -378,10 +369,6 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     bRet = EvaluateServerFullMes ( vecData );
                     break;
 
-                case PROTMESSID_NET_BLSI_FACTOR:
-                    bRet = EvaluateNetwBlSiFactMes ( vecData );
-                    break;
-
                 case PROTMESSID_CHANNEL_GAIN:
                     bRet = EvaluateChanGainMes ( vecData );
                     break;
@@ -492,36 +479,6 @@ bool CProtocol::EvaluateServerFullMes ( const CVector<uint8_t>& vecData )
 {
     // invoke message action
     emit ServerFull();
-
-    return false; // no error
-}
-
-void CProtocol::CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
-{
-    CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
-    unsigned int     iPos = 0; // init position pointer
-
-    // build data vector
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iNetwBlSiFact ), 2 );
-
-    CreateAndSendMessage ( PROTMESSID_NET_BLSI_FACTOR, vecData );
-}
-
-bool CProtocol::EvaluateNetwBlSiFactMes ( const CVector<uint8_t>& vecData )
-{
-    unsigned int iPos = 0; // init position pointer
-
-    // check size
-    if ( vecData.Size() != 2 )
-    {
-        return true;
-    }
-
-    const int iData =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
-
-    // invoke message action
-    emit ChangeNetwBlSiFact ( iData );
 
     return false; // no error
 }

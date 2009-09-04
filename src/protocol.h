@@ -40,7 +40,7 @@
 #define PROTMESSID_ACKN                        1 // acknowledge
 #define PROTMESSID_JITT_BUF_SIZE              10 // jitter buffer size
 #define PROTMESSID_REQ_JITT_BUF_SIZE          11 // request jitter buffer size
-#define PROTMESSID_NET_BLSI_FACTOR            12 // network buffer size factor
+#define PROTMESSID_NET_BLSI_FACTOR            12 // OLD (not used anymore)
 #define PROTMESSID_CHANNEL_GAIN               13 // set channel gain for mix
 #define PROTMESSID_CONN_CLIENTS_LIST          14 // connected client list
 #define PROTMESSID_SERVER_FULL                15 // server full message
@@ -143,7 +143,6 @@ protected:
 
     bool EvaluateJitBufMes             ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes          ( const CVector<uint8_t>& vecData );
-    bool EvaluateNetwBlSiFactMes       ( const CVector<uint8_t>& vecData );
     bool EvaluateChanGainMes           ( const CVector<uint8_t>& vecData );
     bool EvaluateConClientListMes      ( const CVector<uint8_t>& vecData );
     bool EvaluateServerFullMes         ( const CVector<uint8_t>& vecData );

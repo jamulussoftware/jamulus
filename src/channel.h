@@ -115,14 +115,6 @@ public:
     void CreateChatTextMes ( const QString& strChatText ) { Protocol.CreateChatTextMes ( strChatText ); }
     void CreatePingMes ( const int iMs )                  { Protocol.CreatePingMes ( iMs ); }
 
-    void CreateNetwBlSiFactMes ( const int iNetwBlSiFact )
-    { 
-        if ( ProtocolIsEnabled() )
-        {
-            Protocol.CreateNetwBlSiFactMes ( iNetwBlSiFact );
-        }
-    }
-
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo )
     { 
         Protocol.CreateConClientListMes ( vecChanInfo );

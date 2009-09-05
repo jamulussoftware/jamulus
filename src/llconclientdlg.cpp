@@ -50,8 +50,13 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     setupUi ( this );
 
     // add help text to controls
-    QString strInpLevH = tr ( "<b>Input level meter:</b> Shows the level of the "
-        "input audio signal of the sound card. Overload should be avoided." );
+    QString strInpLevH = tr ( "<b>Input level meter:</b> The input level "
+        "indicators show the current input level of the two stereo channels "
+        "of the current selected audio input. The upper level display belongs "
+        "to the left channel and the lower level display to the right channel "
+        "of the audio input.<br/>"
+        "Make sure not to clip the input signal to avoid distortions of the "
+        "audio signal." );
     TextLabelInputLevelL->setWhatsThis        ( strInpLevH );
     TextLabelInputLevelR->setWhatsThis        ( strInpLevH );
     MultiColorLEDBarInputLevelL->setWhatsThis ( strInpLevH );
@@ -66,28 +71,45 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "different messages are displayed. E.g., if an error occurred or the "
         "status of the connection is shown." ) );
 
-    QString strServAddrH = tr ( "<b>Server Address:</b> In this edit control, "
-        "the IP address of the server can be set. If an invalid address was "
-        "chosen, an error message is shown in the status bar." );
+    QString strServAddrH = tr ( "<b>Server Address:</b> The IP address or URL "
+        "of the server running the llcon server software must be set here. "
+        "A list of the most recent used server URLs is available for "
+        "selection. If an invalid address was chosen, an error message is "
+        "shown in the status bar." );
     TextLabelServerAddr->setWhatsThis ( strServAddrH );
     LineEditServerAddr->setWhatsThis  ( strServAddrH );
 
-    QString strFaderTag = tr ( "<b>Fader Tag:</b> In this edit control, "
-        "the tag string of your fader can be set. This tag will appear "
-        "at your fader on the mixer board when connected to the server.");
+    QString strFaderTag = tr ( "<b>Fader Tag:</b> The fader tag of the local "
+        "client is set in the fader tag edit box. This tag will appear "
+        "at your fader on the mixer board when you are connected to a llcon "
+        "server. This tag will also show up at each client which is connected "
+        "to the same server as the local client. If the fader tag is empty, "
+        "the IP address of the client is displayed instead.");
     TextLabelServerTag->setWhatsThis ( strFaderTag );
     LineEditFaderTag->setWhatsThis   ( strFaderTag );
 
-    QString strAudFader = tr ( "<b>Audio Fader:</b> With the audio fader "
-        "control the level of left and right audio input channels can "
-        "be controlled." );
+    QString strAudFader = tr ( "<b>Local Audio Input Fader:</b> With the "
+        "audio fader, the relative levels of the left and right local audio "
+        "channels can be changed. It acts like a panning between the two "
+        "channels. If, e.g., a microphone is connected to the right input "
+        "channel and an instrument is connected to the left input channel "
+        "which is much louder than the microphone, move the audio fader in "
+        "a direction where the label above the fader shows <i>L -x</i>, where "
+        "<i>x</i> is the current attenuation indication. " );
     TextAudInFader->setWhatsThis   ( strAudFader );
     SliderAudInFader->setWhatsThis ( strAudFader );
 
-    QString strAudReverb = tr ( "<b>Reverberation Level:</b> The level of "
-        "reverberation effect can be set with this control. The channel to "
-        "which that reverberation effect shall be applied can be chosen "
-        "with the Reverberation Channel Selection radio buttons." );
+    QString strAudReverb = tr ( "<b>Reverberation Level:</b> A reverberation "
+        "effect can be applied to one local audio channel. The channel "
+        "selection and the reverberation level can be modified. If, e.g., "
+        "the microphone signal is fed into the right audio channel of the "
+        "sound card and a reverberation effect shall be applied, set the "
+        "channel selector to right and move the fader upwards until the "
+        "desired reverberation level is reached.<br/>"
+        "The reverberation effect requires significant CPU so that it should "
+        "only be used on fast PCs. If the reverberation level fader is set to "
+        "minimum (which is the default setting), the reverberation effect is "
+        "switched off and does not cause any additional CPU usage." );
     TextLabelAudReverb->setWhatsThis ( strAudReverb );
     SliderAudReverb->setWhatsThis    ( strAudReverb );
 
@@ -99,9 +121,19 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     RadioButtonRevSelR->setWhatsThis       ( strRevChanSel );
 
     LEDOverallStatus->setWhatsThis ( tr ( "<b>Overall Status:</b> "
-        "The overall status of the software is shown. If either the "
-        "network or sound interface has bad status, this LED will show "
-        "red color." ) );
+        "The light next to the status bar shows the current audio/streaming "
+        "status. If the light is green, there are no buffer overruns/underruns "
+        "and the audio stream is not interrupted. If the light is red, the "
+        "audio stream is interrupted caused by one of the following problems:"
+        "<ul>"
+        "<li> The network jitter buffer is not large enough for the current "
+        "network/audio interface jitter.</li>"
+        "<li> The sound card buffer delay (buffer size) is set to a too small "
+        "value.</li>"
+        "<li> The upload or download stream rate is too high for the current "
+        "available internet bandwidth.</li>"
+        "<li> The CPU of the client or server is at 100%.</li>"
+        "</ul>" ) );
 
     // init fader tag line edit
     LineEditFaderTag->setText ( pClient->strName );

@@ -72,7 +72,6 @@ public:
 
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
-    void CreateNetwBlSiFactMes ( const int iNetwBlSiFact );
     void CreateChanGainMes ( const int iChanID, const double dGain );
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
     void CreateServerFullMes();

@@ -110,7 +110,8 @@ protected:
     CVector<CChannelShortInfo> CreateChannelList();
     void CreateAndSendChanListForAllConChannels();
     void CreateAndSendChanListForThisChan ( const int iCurChanID );
-    void CreateAndSendChatTextForAllConChannels ( const int iCurChanID, const QString& strChatText );
+    void CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
+                                                  const QString& strChatText );
     void WriteHTMLChannelList();
 
     CVector<int16_t> ProcessData ( CVector<CVector<int16_t> >& vecvecsData,
@@ -124,9 +125,9 @@ protected:
     QMutex              Mutex;
 
     // audio encoder/decoder
-    CELTMode*               CeltMode[MAX_NUM_CHANNELS];
-    CELTEncoder*            CeltEncoder[MAX_NUM_CHANNELS];
-    CELTDecoder*            CeltDecoder[MAX_NUM_CHANNELS];
+    CELTMode*           CeltMode[MAX_NUM_CHANNELS];
+    CELTEncoder*        CeltEncoder[MAX_NUM_CHANNELS];
+    CELTDecoder*        CeltDecoder[MAX_NUM_CHANNELS];
 
     CVector<QString>    vstrChatColors;
 

@@ -917,11 +917,20 @@ bool CProtocol::EvaluateReqNetwTranspPropsMes ( const CVector<uint8_t>& vecData 
 void CProtocol::CreateAndImmSendDisconnectionMes()
 {
     CVector<uint8_t> vecDisconMessage;
+    int              iCurCounter;
 
-    // build complete message (special case, there is not actual data
-    // and we do not use the counter since this is the very last message
-    // of the connection, after that no message will be evaluated)
-    GenMessageFrame ( vecDisconMessage, 0,
+    Mutex.lock();
+    {
+        // store current counter value
+        iCurCounter = iCounter;
+
+        // increase counter (wraps around automatically)
+        iCounter++;
+    }
+    Mutex.unlock();
+
+    // build complete message
+    GenMessageFrame ( vecDisconMessage, iCurCounter,
         PROTMESSID_DISCONNECTION, CVector<uint8_t> ( 0 ) );
 
     // immediately send acknowledge message

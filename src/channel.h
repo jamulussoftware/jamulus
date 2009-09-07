@@ -39,7 +39,7 @@
 // Set the time-out for the input buffer until the state changes from
 // connected to not connected (the actual time depends on the way the error
 // correction is implemented)
-#define CON_TIME_OUT_SEC_MAX                60 // seconds
+#define CON_TIME_OUT_SEC_MAX                30 // seconds
 
 enum EPutDataStat
 {

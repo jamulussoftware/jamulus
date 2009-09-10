@@ -1,1 +1,11 @@
+HIGH PRIORITY
 
+- Auto jitter buffer algorithm needs to be revised and optimized
+
+- Channel gains and client name is not transported to the server if the server
+  was closed and reopend during a client connection
+
+
+LOW PRIORITY
+
+- Disconnect functionality requires some more work -> does not work reliably

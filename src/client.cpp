@@ -335,6 +335,14 @@ void CClient::Stop()
     // stop audio interface
     Sound.Stop();
 
+/*
+// TEST (seems not to work, disconnect is still not working reliably)
+QTime dieTime = QTime::currentTime().addMSecs(500);
+while( QTime::currentTime() < dieTime ) {
+	QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}
+*/
+
     // Send disconnect message to server (Since we disable our protocol
     // receive mechanism with the next command, we do not evaluate any
     // respond from the server, therefore we just hope that the message

@@ -38,6 +38,15 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pcbSolo   = new QCheckBox ( "Solo",       pNW );
     pLabel    = new QLabel    ( "",           pNW );
 
+
+/*
+// TEST custom slider made of custom bitmaps
+pFader->setStyleSheet (
+    "QSlider::groove { image: url(:/png/LEDs/res/CLEDYellowSmall.png) }"
+    "QSlider::handle { image: url(:/png/LEDs/res/CLEDGreySmall.png) }" );
+*/
+
+
     // setup layout
     pMainGrid->setSpacing ( 2 );
 

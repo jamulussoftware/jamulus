@@ -64,6 +64,10 @@ CChannel::CChannel ( const bool bNIsServer ) :
         SIGNAL ( ReqJittBufSize() ) );
 
     QObject::connect ( &Protocol,
+        SIGNAL ( ReqChanName() ),
+        SIGNAL ( ReqChanName() ) );
+
+    QObject::connect ( &Protocol,
         SIGNAL ( ReqConnClientsList() ),
         SIGNAL ( ReqConnClientsList() ) );
 
@@ -402,7 +406,7 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                 bNewConnection = !IsConnected();
 
                 // reset time-out counter
-                iConTimeOut = iConTimeOutStartVal;
+                ResetTimeOutCounter();
             }
             Mutex.unlock();
         }

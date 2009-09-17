@@ -68,6 +68,7 @@ public:
 
     CVector<uint8_t> PrepSendPacket ( const CVector<uint8_t>& vecbyNPacket );
 
+    void ResetTimeOutCounter() { iConTimeOut = iConTimeOutStartVal; }
     bool IsConnected() const { return iConTimeOut > 0; }
 
     void SetEnable ( const bool bNEnStat );
@@ -79,8 +80,8 @@ public:
     void SetName ( const QString sNNa );
     QString GetName();
 
-    void SetRemoteName ( const QString strName )
-        { Protocol.CreateChanNameMes ( strName ); }
+    void SetRemoteName ( const QString strName ) { Protocol.CreateChanNameMes ( strName ); }
+    void CreateReqChanNameMes()                  { Protocol.CreateReqChanNameMes(); }
 
     void SetGain ( const int iChanID, const double dNewGain );
     double GetGain ( const int iChanID );
@@ -175,6 +176,7 @@ signals:
     void ReqConnClientsList();
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void NameHasChanged();
+    void ReqChanName();
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );
     void ReqNetTranspProps();

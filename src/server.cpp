@@ -688,25 +688,24 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
 
             case PS_PROT_ERR:
                 PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW, iCurChanID );
-
-// TEST
-bAudioOK = true;
-
                 break;
             }
         }
 
-        // after data is put in channel buffer, create channel list message if
-        // requested
-        if ( bNewChannelReserved && bAudioOK )
+        // act on new channel connection
+        if ( bNewChannelReserved )
         {
             // logging of new connected channel
             Logging.AddNewConnection ( HostAdr.InetAddr );
 
-            // A new client connected to the server, create and
-            // send all clients the updated channel list (the list has to
-            // be created after the received data has to be put to the
-            // channel first so that this channel is marked as connected)
+            // A new client connected to the server, the channel list
+            // at all clients have to be updated. This is done by sending
+            // a channel name request to the client which causes a channel
+            // name message to be transmitted to the server. If the server
+            // receives this message, the channel list will be automatically
+            // updated (implicitely).
+            // To make sure the protocol message is transmitted, the channel
+            // first has to be marked as connected.
             //
             // Usually it is not required to send the channel list to the
             // client currently connecting since it automatically requests
@@ -716,15 +715,8 @@ bAudioOK = true;
             // in case the client thinks he is still connected but the server
             // was restartet, it is important that we send the channel list
             // at this place.
-
-
-// TODO this does not work somehow (another problem: the channel name
-// is not yet received from the new client)
-// possible solution: create (new) request channel name message, if this one
-// is received, the channel list for all clients are automatically sent
-// by the server
-
-            CreateAndSendChanListForAllConChannels();
+            vecChannels[iCurChanID].ResetTimeOutCounter();
+            vecChannels[iCurChanID].CreateReqChanNameMes();
         }
     }
     Mutex.unlock();

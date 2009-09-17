@@ -91,6 +91,7 @@ MESSAGES
     | 2 bytes number n | n bytes UTF-8 string |
     +------------------+----------------------+
 
+- Request name of channel:                    PROTMESSID_REQ_CHANNEL_NAME
 
 - Chat text:                                  PROTMESSID_CHAT_TEXT
 
@@ -383,6 +384,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
                 case PROTMESSID_CHANNEL_NAME:
                     bRet = EvaluateChanNameMes ( vecData );
+                    break;
+
+                case PROTMESSID_REQ_CHANNEL_NAME:
+                    bRet = EvaluateReqChanNameMes ( vecData );
                     break;
 
                 case PROTMESSID_CHAT_TEXT:
@@ -688,6 +693,19 @@ bool CProtocol::EvaluateChanNameMes ( const CVector<uint8_t>& vecData )
 
     // invoke message action
     emit ChangeChanName ( strName );
+
+    return false; // no error
+}
+
+void CProtocol::CreateReqChanNameMes()
+{
+    CreateAndSendMessage ( PROTMESSID_REQ_CHANNEL_NAME, CVector<uint8_t> ( 0 ) );
+}
+
+bool CProtocol::EvaluateReqChanNameMes ( const CVector<uint8_t>& vecData )
+{
+    // invoke message action
+    emit ReqChanName();
 
     return false; // no error
 }

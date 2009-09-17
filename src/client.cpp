@@ -64,6 +64,9 @@ CClient::CClient ( const quint16 iPortNumber ) :
     QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
         this, SLOT ( OnReqJittBufSize() ) );
 
+    QObject::connect ( &Channel, SIGNAL ( ReqChanName() ),
+        this, SLOT ( OnReqChanName() ) );
+
     QObject::connect ( &Channel,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
@@ -90,12 +93,6 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, Channel.GetAddress() );
-}
-
-void CClient::OnReqJittBufSize()
-{
-// TODO cant we implement this OnReqJjittBufSize inside the channel object?
-    Channel.CreateJitBufMes ( Channel.GetSockBufNumFrames() );
 }
 
 void CClient::OnNewConnection()

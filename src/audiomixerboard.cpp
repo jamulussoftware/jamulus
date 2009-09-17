@@ -43,7 +43,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 // TEST custom slider made of custom bitmaps
 pFader->setStyleSheet (
     "QSlider::groove { image: url(:/png/LEDs/res/CLEDYellowSmall.png) }"
-    "QSlider::handle { image: url(:/png/LEDs/res/CLEDGreySmall.png) }" );
+    "QSlider::handle { image: url(:/png/fader/res/faderhandle.png) }" );
 */
 
 

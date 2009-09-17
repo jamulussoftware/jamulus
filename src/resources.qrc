@@ -33,6 +33,9 @@
         <file>res/VRLEDYellow.png</file>
         <file>res/VRLEDYellowSmall.png</file>
     </qresource>
+    <qresource prefix="/png/fader" >
+        <file>res/faderhandle.png</file>
+    </qresource>
     <qresource prefix="/png/main" >
         <file>res/gig.png</file>
         <file>res/mainicon.png</file>

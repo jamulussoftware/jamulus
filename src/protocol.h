@@ -51,6 +51,7 @@
 #define PROTMESSID_NETW_TRANSPORT_PROPS       20 // properties for network transport
 #define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   21 // request properties for network transport
 #define PROTMESSID_DISCONNECTION              22 // disconnection
+#define PROTMESSID_REQ_CHANNEL_NAME           23 // request channel name for fader tag
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -77,6 +78,7 @@ public:
     void CreateServerFullMes();
     void CreateReqConnClientsList();
     void CreateChanNameMes ( const QString strName );
+    void CreateReqChanNameMes();
     void CreateChatTextMes ( const QString strChatText );
     void CreatePingMes ( const int iMs );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
@@ -147,6 +149,7 @@ protected:
     bool EvaluateServerFullMes         ( const CVector<uint8_t>& vecData );
     bool EvaluateReqConnClientsList    ( const CVector<uint8_t>& vecData );
     bool EvaluateChanNameMes           ( const CVector<uint8_t>& vecData );
+    bool EvaluateReqChanNameMes        ( const CVector<uint8_t>& vecData );
     bool EvaluateChatTextMes           ( const CVector<uint8_t>& vecData );
     bool EvaluatePingMes               ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes    ( const CVector<uint8_t>& vecData );
@@ -178,6 +181,7 @@ signals:
     void ServerFull();
     void ReqConnClientsList();
     void ChangeChanName ( QString strName );
+    void ReqChanName();
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );

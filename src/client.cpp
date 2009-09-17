@@ -334,13 +334,15 @@ void CClient::Stop()
     // stop audio interface
     Sound.Stop();
 
-/*
-// TEST (seems not to work, disconnect is still not working reliably)
-QTime dieTime = QTime::currentTime().addMSecs(500);
-while( QTime::currentTime() < dieTime ) {
-	QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
-}
-*/
+    // wait for approx. 300 ms to make sure no audio packet is still in the
+    // network queue causing the channel to be reconnected right after having
+    // received the disconnect message (seems not to gain much, disconnect is
+    // still not working reliably)
+    QTime dieTime = QTime::currentTime().addMSecs ( 300 );
+    while ( QTime::currentTime() < dieTime )
+    {
+	    QCoreApplication::processEvents ( QEventLoop::AllEvents, 100 );
+    }
 
     // Send disconnect message to server (Since we disable our protocol
     // receive mechanism with the next command, we do not evaluate any

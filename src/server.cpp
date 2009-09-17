@@ -717,6 +717,11 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
             // at this place.
             vecChannels[iCurChanID].ResetTimeOutCounter();
             vecChannels[iCurChanID].CreateReqChanNameMes();
+
+// COMPATIBILITY ISSUE
+// since old versions of the llcon software did not implement the channel name
+// request message, we have to explicitely send the channel list here
+CreateAndSendChanListForAllConChannels();
         }
     }
     Mutex.unlock();

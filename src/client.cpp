@@ -109,7 +109,9 @@ void CClient::OnNewConnection()
     // the server still thinks that we are connected (the server is still
     // waiting for the channel time-out). If we now connect again, we would
     // not get the list because the server does not know about a new connection.
+    // Same problem is with the jitter buffer message.
     Channel.CreateReqConnClientsList();
+    Channel.CreateJitBufMes ( Channel.GetSockBufNumFrames() );
 }
 
 void CClient::OnReceivePingMessage ( int iMs )

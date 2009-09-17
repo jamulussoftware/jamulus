@@ -716,6 +716,14 @@ bAudioOK = true;
             // in case the client thinks he is still connected but the server
             // was restartet, it is important that we send the channel list
             // at this place.
+
+
+// TODO this does not work somehow (another problem: the channel name
+// is not yet received from the new client)
+// possible solution: create (new) request channel name message, if this one
+// is received, the channel list for all clients are automatically sent
+// by the server
+
             CreateAndSendChanListForAllConChannels();
         }
     }

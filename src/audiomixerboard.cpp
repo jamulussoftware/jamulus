@@ -103,12 +103,12 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     case GD_ORIGINAL:
         // fader
         pFader->setStyleSheet (
-            "QSlider { border-image:  url(:/png/fader/res/faderbackground.png) 4px 4px 0px 0px;"
-            "          border-top:    4px transparent;"
-            "          border-bottom: 4px transparent;"
+            "QSlider { width:         39px;"
+            "          border-image:  url(:/png/fader/res/faderbackground.png) 10px 0px 10px 0px repeat;"
+            "          border-top:    10px transparent;"
+            "          border-bottom: 10px transparent;"
             "          border-left:   0px transparent;"
-            "          border-right:  0px transparent;"
-            "          width:         39px; }"
+            "          border-right:  0px transparent; }"
             "QSlider::groove { image: url(); }"
             "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
 

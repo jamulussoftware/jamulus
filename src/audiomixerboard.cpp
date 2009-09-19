@@ -48,10 +48,12 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
     // setup fader tag label (use white background of label)
+    pLabel->setTextFormat ( Qt::PlainText ); 	 
+	pLabel->setAlignment ( Qt::AlignHCenter );
     pLabel->setStyleSheet (
         "QLabel { border:           2px solid black;"
         "         border-radius:    4px;"
-        "         padding:          1px;"
+        "         padding:          4px;"
         "         background-color: white;"
         "         font:             bold; }" );
 
@@ -103,13 +105,15 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     case GD_ORIGINAL:
         // fader
         pFader->setStyleSheet (
-            "QSlider { width:         39px;"
+            "QSlider { width:         30px;"
             "          border-image:  url(:/png/fader/res/faderbackground.png) 10px 0px 10px 0px repeat;"
             "          border-top:    10px transparent;"
             "          border-bottom: 10px transparent;"
             "          border-left:   0px transparent;"
             "          border-right:  0px transparent; }"
-            "QSlider::groove { image: url(); }"
+            "QSlider::groove { image:          url();"
+            "                  padding-top:    -10px;"
+            "                  padding-bottom: -15px; }"
             "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
 
         // mute button

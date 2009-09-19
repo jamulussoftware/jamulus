@@ -598,7 +598,7 @@ public:
         RespTimeMoAvBuf.Reset();
     }
 
-    void Update()
+    double Update()
     {
         // add time difference
         const int CurTime = PreciseTime.elapsed();
@@ -625,6 +625,8 @@ public:
 
         // store old time value
         TimeLastBlock = CurTime;
+
+        return dCurAddVal;
     }
 
     // return the standard deviation, for that we need to calculate

@@ -38,15 +38,6 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pcbSolo   = new QCheckBox ( "Solo",       pNW );
     pLabel    = new QLabel    ( "",           pNW );
 
-
-/*
-// TEST custom slider made of custom bitmaps
-pFader->setStyleSheet (
-    "QSlider::groove { image: url(:/png/LEDs/res/CLEDYellowSmall.png) }"
-    "QSlider::handle { image: url(:/png/fader/res/faderhandle.png) }" );
-*/
-
-
     // setup layout
     pMainGrid->setSpacing ( 2 );
 
@@ -57,27 +48,12 @@ pFader->setStyleSheet (
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
     // setup fader tag label (use white background of label)
-    QPalette newPalette = pLabel->palette();
-    newPalette.setColor ( QPalette::Active, QPalette::Window,
-        newPalette.color ( QPalette::Active, QPalette::Base ) );
-    newPalette.setColor ( QPalette::Disabled, QPalette::Window,
-        newPalette.color ( QPalette::Disabled, QPalette::Base ) );
-    newPalette.setColor ( QPalette::Inactive, QPalette::Window,
-        newPalette.color ( QPalette::Inactive, QPalette::Base ) );
-
-    pLabel->setPalette ( newPalette );
-    pLabel->setAutoFillBackground ( true );
-    pLabel->setFrameShape ( QFrame::Box );
-
-    // do not allow HTML tags, align center and use some margin
-    pLabel->setTextFormat ( Qt::PlainText );
-    pLabel->setAlignment ( Qt::AlignHCenter );
-    pLabel->setMargin ( 3 );
-
-    // set bold text
-    QFont curFont = pLabel->font();
-    curFont.setBold ( true );
-    pLabel->setFont ( curFont );
+    pLabel->setStyleSheet (
+        "QLabel { border:           2px solid black;"
+        "         border-radius:    4px;"
+        "         padding:          1px;"
+        "         background-color: white;"
+        "         font:             bold; }" );
 
     // add user controls to grid
     pMainGrid->addWidget( pFader,  0, Qt::AlignHCenter );
@@ -118,6 +94,54 @@ pFader->setStyleSheet (
 
     QObject::connect ( pcbSolo, SIGNAL ( stateChanged ( int ) ),
         this, SIGNAL ( soloStateChanged ( int ) ) );
+}
+
+void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
+{
+    switch ( eNewDesign )
+    {
+    case GD_ORIGINAL:
+        // fader
+        pFader->setStyleSheet (
+            "QSlider { background-image: url(:/png/fader/res/faderbackground.png);"
+            "          width:            45px; }"
+            "QSlider::groove { image: url(); }"
+            "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
+
+        // mute button
+        pcbMute->setStyleSheet (
+            "QCheckBox::indicator { width:  43px;"
+            "                       height: 24px; }"
+            "QCheckBox::indicator:unchecked {"
+            "    image: url(:/png/fader/res/ledbuttonnotpressed.png); }"
+            "QCheckBox::indicator:checked {"
+            "    image: url(:/png/fader/res/ledbuttonpressed.png); }"
+            "QCheckBox { color: rgb(148, 148, 148);"
+            "            font:  bold; }" );
+        pcbMute->setText ( "MUTE" );
+
+        // solo button
+        pcbSolo->setStyleSheet (
+            "QCheckBox::indicator { width:  43px;"
+            "                       height: 24px; }"
+            "QCheckBox::indicator:unchecked {"
+            "    image: url(:/png/fader/res/ledbuttonnotpressed.png); }"
+            "QCheckBox::indicator:checked {"
+            "    image: url(:/png/fader/res/ledbuttonpressed.png); }"
+            "QCheckBox { color: rgb(148, 148, 148);"
+            "            font:  bold; }" );
+        pcbSolo->setText ( "SOLO" );
+        break;
+
+    default:
+        // reset style sheet and set original paramters
+        pFader->setStyleSheet  ( "" );
+        pcbMute->setStyleSheet ( "" );
+        pcbSolo->setStyleSheet ( "" );
+        pcbMute->setText       ( "Mute" );
+        pcbSolo->setText       ( "Solo" );
+        break;
+    }
 }
 
 void CChannelFader::Reset()
@@ -274,6 +298,42 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) :
     QObject::connect ( vecpChanFader[7], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh7 ( int ) ) );
     QObject::connect ( vecpChanFader[8], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh8 ( int ) ) );
     QObject::connect ( vecpChanFader[9], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh9 ( int ) ) );
+}
+
+void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
+{
+    // apply GUI design to current window
+    switch ( eNewDesign )
+    {
+    case GD_ORIGINAL:
+        // group box
+        setStyleSheet (
+            "QGroupBox { border-image:  url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
+            "            border-top:    34px transparent;"
+            "            border-bottom: 40px transparent;"
+            "            border-left:   30px transparent;"
+            "            border-right:  40px transparent;"
+            "            padding:       -5px;"
+            "            margin:        -5px, -5px, 0px, 0px; }"
+            "QGroupBox::title { margin-top:       13px;"
+            "                   margin-left:      35px;"
+            "                   background-color: transparent;"
+            "                   color:            rgb(148, 148, 148); }" );
+        layout()->setMargin ( 3 );
+        break;
+
+    default:
+        // reset style sheet and set original paramters
+        setStyleSheet ( "" );
+        layout()->setMargin ( 9 );
+        break;
+    }
+
+    // also apply GUI design to child GUI controls
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    {
+        vecpChanFader[i]->SetGUIDesign ( eNewDesign );
+    }
 }
 
 void CAudioMixerBoard::HideAll()

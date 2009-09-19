@@ -97,6 +97,12 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../libs/celt/stack_alloc.h \
 	../libs/celt/vq.h \
 	../src/resources.qrc \
+	../src/res/faderbackground.png \
+	../src/res/faderhandle.png \
+	../src/res/faderhandlesmall.png \
+	../src/res/ledbuttonnotpressed.png \
+	../src/res/ledbuttonpressed.png \
+	../src/res/mixerboardbackground.png \
 	../src/res/gig.png \
 	../src/res/mainicon.png \
 	../src/res/CLEDBlack.png \

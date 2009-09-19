@@ -83,6 +83,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         cbOpenChatOnNewMessage->setCheckState ( Qt::Unchecked );
     }
 
+    // fancy GUI design check box
+    if ( pClient->GetGUIDesign() == GD_STANDARD )
+    {
+        cbGUIDesignFancy->setCheckState ( Qt::Unchecked );
+    }
+    else
+    {
+        cbGUIDesignFancy->setCheckState ( Qt::Checked );
+    }
+
     // "High Quality Audio" check box
     if ( pClient->GetCELTHighQuality() )
     {
@@ -117,6 +127,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // timers
     QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerStatus() ) );
+
     QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerPing() ) );
 
@@ -127,8 +138,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // check boxes
     QObject::connect ( cbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnOpenChatOnNewMessageStateChanged ( int ) ) );
+
+    QObject::connect ( cbGUIDesignFancy, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnGUIDesignFancyStateChanged ( int ) ) );
+
     QObject::connect ( cbUseHighQualityAudio, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnUseHighQualityAudioStateChanged ( int ) ) );
+
     QObject::connect ( cbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnAutoJitBuf ( int ) ) );
 
@@ -291,6 +307,20 @@ void CClientSettingsDlg::OnAutoJitBuf ( int value )
 void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
 {
     pClient->SetOpenChatOnNewMessage ( value == Qt::Checked );
+    UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnGUIDesignFancyStateChanged ( int value )
+{
+    if ( value == Qt::Unchecked )
+    {
+        pClient->SetGUIDesign ( GD_STANDARD );
+    }
+    else
+    {
+        pClient->SetGUIDesign ( GD_ORIGINAL );
+    }
+    emit GUIDesignChanged();
     UpdateDisplay();
 }
 

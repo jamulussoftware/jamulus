@@ -135,6 +135,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "<li> The CPU of the client or server is at 100%.</li>"
         "</ul>" ) );
 
+    // init GUI design
+    SetGUIDesign ( pClient->GetGUIDesign() );
+
     // init fader tag line edit
     LineEditFaderTag->setText ( pClient->strName );
 
@@ -240,26 +243,31 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // timers
     QObject::connect ( &TimerSigMet, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerSigMet() ) );
+
     QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerStatus() ) );
 
     // sliders
     QObject::connect ( SliderAudInFader, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderAudInFader ( int ) ) );
+
     QObject::connect ( SliderAudReverb, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderAudReverb ( int ) ) );
 
     // radio buttons
     QObject::connect ( RadioButtonRevSelL, SIGNAL ( clicked() ),
         this, SLOT ( OnRevSelL() ) );
+
     QObject::connect ( RadioButtonRevSelR, SIGNAL ( clicked() ),
         this, SLOT ( OnRevSelR() ) );
 
     // line edits
     QObject::connect ( LineEditFaderTag, SIGNAL ( textChanged ( const QString& ) ),
         this, SLOT ( OnFaderTagTextChanged ( const QString& ) ) );
+
     QObject::connect ( LineEditServerAddr, SIGNAL ( editTextChanged ( const QString ) ),
         this, SLOT ( OnLineEditServerAddrTextChanged ( const QString ) ) );
+
     QObject::connect ( LineEditServerAddr, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnLineEditServerAddrActivated ( int ) ) ); 
 
@@ -267,17 +275,25 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( pClient,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
         this, SLOT ( OnConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
+
     QObject::connect ( pClient,
         SIGNAL ( Disconnected() ),
         this, SLOT ( OnDisconnected() ) );
+
     QObject::connect ( pClient,
         SIGNAL ( Stopped() ),
         this, SLOT ( OnStopped() ) );
+
     QObject::connect ( pClient,
         SIGNAL ( ChatTextReceived ( QString ) ),
         this, SLOT ( OnChatTextReceived ( QString ) ) );
+
+    QObject::connect ( &ClientSettingsDlg, SIGNAL ( GUIDesignChanged() ),
+        this, SLOT ( OnGUIDesignChanged() ) );
+
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
+
     QObject::connect ( &ChatDlg, SIGNAL ( NewLocalInputText ( QString ) ),
         this, SLOT ( OnNewLocalInputText ( QString ) ) );
 
@@ -567,6 +583,77 @@ void CLlconClientDlg::UpdateDisplay()
 // TEST
 //TextLabelStatus->setText ( QString( "Time: %1, Netw: %2" ).arg ( pClient->GetTimingStdDev() ).arg ( pClient->GetChannel()->GetTimingStdDev() ) );
 
+}
+
+void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
+{
+    // apply GUI design to current window
+    switch ( eNewDesign )
+    {
+    case GD_ORIGINAL:
+        // group box
+        groupBoxLocal->setStyleSheet (
+            "QGroupBox { border-image:  url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
+            "            border-top:    34px transparent;"
+            "            border-bottom: 40px transparent;"
+            "            border-left:   30px transparent;"
+            "            border-right:  40px transparent;"
+            "            padding:       -5px;"
+            "            margin:        -5px, -5px, 0px, 0px; }"
+            "QGroupBox::title { margin-top:       13px;"
+            "                   margin-left:      35px;"
+            "                   background-color: transparent;"
+            "                   color:            rgb(148, 148, 148); }" );
+        groupBoxLocal->layout()->setMargin ( 3 );
+
+        // audio fader
+        SliderAudInFader->setStyleSheet (
+            "QSlider { background-image: url(:/png/fader/res/faderbackground.png);"
+            "          width:            45px; }"
+            "QSlider::groove { image: url(); }"
+            "QSlider::handle { image: url(:/png/fader/res/faderhandlesmall.png); }" );
+        TextLabelAudFader->setStyleSheet (
+            "QLabel { color: rgb(148, 148, 148);"
+            "         font:  bold; }" );
+        TextAudInFader->setStyleSheet (
+            "QLabel { color: rgb(148, 148, 148);"
+            "         font:  bold; }" );
+
+        // Reverberation
+        SliderAudReverb->setStyleSheet (
+            "QSlider { background-image: url(:/png/fader/res/faderbackground.png);"
+            "          width:            45px; }"
+            "QSlider::groove { image: url(); }"
+            "QSlider::handle { image: url(:/png/fader/res/faderhandlesmall.png); }" );
+
+        RadioButtonRevSelL->setStyleSheet (
+            "QRadioButton { color: rgb(148, 148, 148);"
+            "               font:  bold; }" );
+        RadioButtonRevSelR->setStyleSheet (
+            "QRadioButton { color: rgb(148, 148, 148);"
+            "               font:  bold; }" );
+
+        TextLabelAudReverb->setStyleSheet (
+            "QLabel { color: rgb(148, 148, 148);"
+            "         font:  bold; }" );
+         break;
+
+    default:
+        // reset style sheet and set original paramters
+        groupBoxLocal->setStyleSheet       ( "" );
+        groupBoxLocal->layout()->setMargin ( 9 );
+        SliderAudInFader->setStyleSheet    ( "" );
+        SliderAudReverb->setStyleSheet     ( "" );
+        RadioButtonRevSelL->setStyleSheet  ( "" );
+        RadioButtonRevSelR->setStyleSheet  ( "" );
+        TextLabelAudReverb->setStyleSheet  ( "" );
+        TextLabelAudFader->setStyleSheet   ( "" );
+        TextAudInFader->setStyleSheet      ( "" );
+        break;
+    }
+
+    // also apply GUI design to child GUI controls
+    MainMixerBoard->SetGUIDesign ( eNewDesign );
 }
 
 void CLlconClientDlg::customEvent ( QEvent* Event )

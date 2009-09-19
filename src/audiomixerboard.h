@@ -63,6 +63,7 @@ public:
     void Show() { pLabel->show(); pcbMute->show(); pcbSolo->show(); pFader->show(); }
     void Hide() { pLabel->hide(); pcbMute->hide(); pcbSolo->hide(); pFader->hide(); }
     bool IsVisible() { return pLabel->isVisible(); }
+    void SetGUIDesign ( const EGUIDesign eNewDesign );
 
     void ResetSoloState();
     void SetOtherSoloState ( const bool bState );
@@ -100,6 +101,7 @@ public:
 
     void HideAll();
     void ApplyNewConClientList ( CVector<CChannelShortInfo>& vecChanInfo );
+    void SetGUIDesign ( const EGUIDesign eNewDesign );
 
 protected:
     QString GenFaderText ( CChannelShortInfo& ChanInfo );

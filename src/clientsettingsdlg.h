@@ -83,9 +83,13 @@ protected:
     void OnSliderSndCrdBufferDelay ( int value );
     void OnAutoJitBuf ( int value );
     void OnOpenChatOnNewMessageStateChanged ( int value );
+    void OnGUIDesignFancyStateChanged ( int value );
     void OnUseHighQualityAudioStateChanged ( int value );
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnPingTimeResult ( int iPingTime );
     void OnSoundCrdSelection ( int iSndDevIdx );
     void OnDriverSetupBut();
+
+signals:
+    void GUIDesignChanged();
 };

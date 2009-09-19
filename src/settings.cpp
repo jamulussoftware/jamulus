@@ -141,6 +141,13 @@ void CSettings::ReadIniFile ( const QString& sFileName )
         pClient->SetOpenChatOnNewMessage ( bValue );
     }
 
+    // GUI design
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign",
+         0, 1 /* GD_ORIGINAL */, iValue ) )
+    {
+        pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
+    }
+
     // flag whether using high quality audio or not
     if ( GetFlagIniSet ( IniXMLDocument, "client", "highqualityaudio", bValue ) )
     {
@@ -198,6 +205,10 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     // flag whether the chat window shall be opened on a new chat message
     SetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage",
         pClient->GetOpenChatOnNewMessage() );
+
+    // GUI design
+    SetNumericIniSet ( IniXMLDocument, "client", "guidesign",
+        static_cast<int> ( pClient->GetGUIDesign() ) );
 
     // flag whether using high quality audio or not
     SetFlagIniSet ( IniXMLDocument, "client", "highqualityaudio",

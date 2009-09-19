@@ -34,7 +34,12 @@
         <file>res/VRLEDYellowSmall.png</file>
     </qresource>
     <qresource prefix="/png/fader" >
+        <file>res/faderbackground.png</file>
         <file>res/faderhandle.png</file>
+        <file>res/faderhandlesmall.png</file>
+        <file>res/ledbuttonnotpressed.png</file>
+        <file>res/ledbuttonpressed.png</file>
+        <file>res/mixerboardbackground.png</file>
     </qresource>
     <qresource prefix="/png/main" >
         <file>res/gig.png</file>

@@ -35,6 +35,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bReverbOnLeftChan ( false ),
     vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ), strName ( "" ),
     bOpenChatOnNewMessage ( true ),
+    eGUIDesign ( GD_STANDARD ),
     bDoAutoSockBufSize ( true ),
     iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
     iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),

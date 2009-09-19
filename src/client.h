@@ -81,19 +81,22 @@ public:
 
     double GetTimingStdDev() { return CycleTimeVariance.GetStdDev(); }
 
-    bool GetOpenChatOnNewMessage() { return bOpenChatOnNewMessage; }
+    bool GetOpenChatOnNewMessage() const { return bOpenChatOnNewMessage; }
     void SetOpenChatOnNewMessage ( const bool bNV ) { bOpenChatOnNewMessage = bNV; }
 
-    bool GetCELTHighQuality() { return bCeltDoHighQuality; }
+    EGUIDesign GetGUIDesign() const { return eGUIDesign; }
+    void SetGUIDesign ( const EGUIDesign bNGD ) { eGUIDesign = bNGD; }
+
+    bool GetCELTHighQuality() const { return bCeltDoHighQuality; }
     void SetCELTHighQuality ( const bool bNCeltHighQualityFlag );
 
-    int GetAudioInFader() { return iAudioInFader; }
+    int GetAudioInFader() const { return iAudioInFader; }
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
-    int GetReverbLevel() { return iReverbLevel; }
+    int GetReverbLevel() const { return iReverbLevel; }
     void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
 
-    bool IsReverbOnLeftChan() { return bReverbOnLeftChan; }
+    bool IsReverbOnLeftChan() const { return bReverbOnLeftChan; }
     void SetReverbOnLeftChan ( const bool bIL )
     {
         bReverbOnLeftChan = bIL;
@@ -101,7 +104,7 @@ public:
     }
 
     void SetDoAutoSockBufSize ( const bool bValue ) { bDoAutoSockBufSize = bValue; }
-    bool GetDoAutoSockBufSize() { return bDoAutoSockBufSize; }
+    bool GetDoAutoSockBufSize() const { return bDoAutoSockBufSize; }
     void SetSockBufNumFrames ( const int iNumBlocks )
     {
         // only change parameter if new parameter is different from current one
@@ -189,6 +192,7 @@ protected:
     int                     iStereoBlockSizeSam;
 
     bool                    bOpenChatOnNewMessage;
+    EGUIDesign              eGUIDesign;                    
 
     CVector<int16_t>        vecsAudioSndCrdMono;
     CVector<int16_t>        vecsAudioSndCrdStereo;

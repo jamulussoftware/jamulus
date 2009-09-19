@@ -443,6 +443,12 @@ enum EGetDataStat
     GS_CHAN_NOT_CONNECTED
 };
 
+enum EGUIDesign
+{
+    GD_STANDARD = 0,
+    GD_ORIGINAL = 1
+};
+
 class CNetworkTransportProps
 {
 public:

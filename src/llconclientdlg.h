@@ -71,6 +71,7 @@ public:
                       QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
 protected:
+    void                    SetGUIDesign ( const EGUIDesign eNewDesign );
     void                    ShowChatWindow();
     void                    UpdateAudioFaderSlider();
     void                    ConnectDisconnect ( const bool bDoStart );
@@ -113,4 +114,5 @@ public slots:
     void OnLineEditServerAddrActivated ( int index );
     void OnDisconnected();
     void OnStopped();
+    void OnGUIDesignChanged() { SetGUIDesign ( pClient->GetGUIDesign() ); }
 };

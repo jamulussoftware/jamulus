@@ -302,6 +302,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QCheckBox" name="cbGUIDesignFancy" >
+        <property name="text" >
+         <string>Fancy GUI Design</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="cbUseHighQualityAudio" >
         <property name="windowModality" >
          <enum>Qt::NonModal</enum>
@@ -319,7 +326,7 @@
         <property name="sizeHint" >
          <size>
           <width>201</width>
-          <height>41</height>
+          <height>71</height>
          </size>
         </property>
        </spacer>

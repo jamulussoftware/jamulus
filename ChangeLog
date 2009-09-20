@@ -5,6 +5,16 @@
 
 - bug fix: under bad network conditions chat messages were randomly repeated
 
+- bug fix: in case the server was shutdown and restarted during a connection,
+  the channel name was not updated correctly at the server
+
+- updates for help texts
+
+- new design for fader tag
+
+- new server features: for chat messages the time stamp is also shown, parsing
+  of existing log file supported
+
 
 3.0.1
 

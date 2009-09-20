@@ -126,13 +126,13 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "and the audio stream is not interrupted. If the light is red, the "
         "audio stream is interrupted caused by one of the following problems:"
         "<ul>"
-        "<li> The network jitter buffer is not large enough for the current "
+        "<li>The network jitter buffer is not large enough for the current "
         "network/audio interface jitter.</li>"
-        "<li> The sound card buffer delay (buffer size) is set to a too small "
+        "<li>The sound card buffer delay (buffer size) is set to a too small "
         "value.</li>"
-        "<li> The upload or download stream rate is too high for the current "
+        "<li>The upload or download stream rate is too high for the current "
         "available internet bandwidth.</li>"
-        "<li> The CPU of the client or server is at 100%.</li>"
+        "<li>The CPU of the client or server is at 100%.</li>"
         "</ul>" ) );
 
     // init GUI design

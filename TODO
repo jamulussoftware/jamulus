@@ -1,11 +1,20 @@
 HIGH PRIORITY
 
-- Auto jitter buffer algorithm needs to be revised and optimized
+- Auto jitter buffer algorithm needs to be revised and optimized (maybe
+  using a histogram instead of calculating the standard deviation is
+  more suitable to set the optimum jitter buffer size since the variance
+  of the jitter is not Gaussian but follows some other unknown distribution)
 
-- Channel gains and client name is not transported to the server if the server
-  was closed and reopend during a client connection
+- Channel gains are not transported to the server if the server
+  was closed and reopend during a client connection (this issue has to be
+  investigated in more detail, it seems that sometimes the gain is still
+  valid even if the server was shutdown and restarted...)
 
 
 LOW PRIORITY
 
 - Disconnect functionality requires some more work -> does not work reliably
+
+- Fancy GUI design is almost finished but has some issues (update problem
+  in Windows, size of fader background seems to be differently interpreted
+  in Linux and Windows)

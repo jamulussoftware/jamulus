@@ -311,10 +311,11 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     TextViewCredits->setOpenExternalLinks ( true );
     TextViewCredits->setText (
         "<p>" // general description of llcon software
-        "<big><b>llcon</b> " + tr("Client/Server communication tool to enable "
-        "musician to play together through a conventional broadband internet "
-        "connection (like DSL).") + "</big>"
-        "</p><br>"
+        "<big><b>llcon</b> " + tr("The llcon software enables musicians to "
+        "perform real-time jam sessions over the internet. There is a llcon "
+        "server which collects the audio data from each llcon client, "
+        "mixes the audio data and sends the mix back to each client.") +
+        "</big></p><br>"
         "<p><font face=\"courier\">" // GPL header text
         "This program is free software; you can redistribute it and/or modify "
         "it under the terms of the GNU General Public License as published by "

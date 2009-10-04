@@ -77,6 +77,7 @@ public:
     bool GetAddress ( CHostAddress& RetAddr );
     CHostAddress GetAddress() const { return InetAddr; }
 
+    void ResetName() { sName = ""; } // reset does not emit a message
     void SetName ( const QString sNNa );
     QString GetName();
 

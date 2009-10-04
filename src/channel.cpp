@@ -28,7 +28,6 @@
 /* Implementation *************************************************************/
 CChannel::CChannel ( const bool bNIsServer ) :
     bIsServer ( bNIsServer ),
-    sName ( "" ),
     vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
     bIsEnabled ( false ),
     iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_DEFAULT ),
@@ -48,6 +47,9 @@ CChannel::CChannel ( const bool bNIsServer ) :
     // initialize cycle time variance measurement with defaults
     CycleTimeVariance.Init ( SYSTEM_FRAME_SIZE_SAMPLES,
         SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
+
+    // initialize channel name
+    ResetName();
 
 
     // connections -------------------------------------------------------------

@@ -643,6 +643,9 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
                 // address
                 vecChannels[iCurChanID].SetAddress ( HostAdr );
 
+                // reset channel name
+                vecChannels[iCurChanID].ResetName();
+
                 // reset the channel gains of current channel, at the same
                 // time reset gains of this channel ID for all other channels
                 for ( int i = 0; i < USED_NUM_CHANNELS; i++ )

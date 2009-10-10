@@ -621,13 +621,11 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
                         const int               iNumBytesRead,
                         const CHostAddress&     HostAdr )
 {
-    bool bAudioOK            = false;
+    bool bChanOK             = true; // init with ok, might be overwritten
     bool bNewChannelReserved = false;
 
     Mutex.lock();
     {
-        bool bChanOK = true;
-
         // Get channel ID ------------------------------------------------------
         // check address
         int iCurChanID = CheckAddr ( HostAdr );
@@ -681,12 +679,10 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
             {
             case PS_AUDIO_OK:
                 PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN, iCurChanID );
-                bAudioOK = true; // in case we have an audio packet, return true
                 break;
 
             case PS_AUDIO_ERR:
                 PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED, iCurChanID );
-                bAudioOK = true; // in case we have an audio packet, return true
                 break;
 
             case PS_PROT_ERR:
@@ -729,7 +725,7 @@ CreateAndSendChanListForAllConChannels();
     }
     Mutex.unlock();
 
-    return bAudioOK;
+    return bChanOK;
 }
 
 void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,

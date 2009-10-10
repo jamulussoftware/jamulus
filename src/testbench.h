@@ -54,6 +54,7 @@ public:
         // connect and start the timer (testbench heartbeat)
         QObject::connect ( &Timer, SIGNAL ( timeout() ),
             this, SLOT ( OnTimer() ) );
+
         Timer.start ( 1 ); // 1 ms
     }
 
@@ -74,7 +75,7 @@ public slots:
     void OnTimer()
     {
         // generate random protocol message
-        switch ( GenRandomIntInRange ( 0, 10 ) )
+        switch ( GenRandomIntInRange ( 0, 11 ) )
         {
         case 0:
             Protocol.CreateJitBufMes ( GenRandomIntInRange ( 0, 10 ) );
@@ -121,6 +122,10 @@ public slots:
             break;
 
         case 10:
+            Protocol.CreateAndImmSendDisconnectionMes();
+            break;
+
+        case 11:
             // arbitrary "audio" packet (with random sizes)
             CVector<uint8_t> vecMessage ( GenRandomIntInRange ( 1, 1000 ) );
             OnSendProtMessage ( vecMessage );

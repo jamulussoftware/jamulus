@@ -468,6 +468,12 @@ bool CProtocol::EvaluateJitBufMes ( const CVector<uint8_t>& vecData )
     const int iData =
         static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
+    if ( ( iData < MIN_NET_BUF_SIZE_NUM_BL ) ||
+         ( iData > MAX_NET_BUF_SIZE_NUM_BL ) )
+    {
+        return true;
+    }
+
     // invoke message action
     emit ChangeJittBufSize ( iData );
 

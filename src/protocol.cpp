@@ -287,6 +287,18 @@ void CProtocol::CreateAndImmSendAcknMess ( const int& iID,
     emit MessReadyForSending ( vecAcknMessage );
 }
 
+bool CProtocol::IsProtocolMessage ( const CVector<uint8_t>& vecbyData,
+                                    const int               iNumBytes )
+{
+/*
+    just check if this is a protocol message but do not act on message
+*/
+    int              iRecCounter, iRecID;
+    CVector<uint8_t> vecData;
+
+    return !ParseMessageFrame ( vecbyData, iNumBytes, iRecCounter, iRecID, vecData );
+}
+
 bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
                                const int               iNumBytes )
 {
@@ -973,9 +985,6 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
                                     int&                    iID,
                                     CVector<uint8_t>&       vecData )
 {
-/*
-    return code: true -> ok; false -> error
-*/
     int iLenBy, i;
     unsigned int iCurPos;
 

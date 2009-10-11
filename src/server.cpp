@@ -621,8 +621,9 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
                         const int               iNumBytesRead,
                         const CHostAddress&     HostAdr )
 {
-    bool bChanOK             = true; // init with ok, might be overwritten
-    bool bNewChannelReserved = false;
+    bool bChanOK                        = true; // init with ok, might be overwritten
+    bool bNewChannelReserved            = false;
+    bool bIsNotEvaluatedProtocolMessage = false;
 
     Mutex.lock();
     {
@@ -688,11 +689,15 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
             case PS_PROT_ERR:
                 PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW, iCurChanID );
                 break;
+
+            case PS_PROT_OK_MESS_NOT_EVALUATED:
+                bIsNotEvaluatedProtocolMessage = true; // set flag
+                break;
             }
         }
 
         // act on new channel connection
-        if ( bNewChannelReserved )
+        if ( bNewChannelReserved && ( !bIsNotEvaluatedProtocolMessage ) )
         {
             // logging of new connected channel
             Logging.AddNewConnection ( HostAdr.InetAddr );

@@ -356,6 +356,21 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                 bIsProtocolPacket = true;
             }
         }
+        else
+        {
+            // In case we are the server and the current channel is not
+            // connected, we do not evaluate protocal messages but these
+            // messages could start the server which is not desired, especially
+            // not for the disconnect messages.
+            // We now do not start the server if a valid protocol message
+            // was received but only start the server on audio packets
+            if ( Protocol.IsProtocolMessage ( vecbyData, iNumBytes ) )
+            {
+                // set status flags
+                eRet              = PS_PROT_OK_MESS_NOT_EVALUATED;
+                bIsProtocolPacket = true;
+            }
+        }
 
         // only try to parse audio if it was not a protocol packet
         if ( !bIsProtocolPacket )
@@ -421,6 +436,12 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
             // (this is only required for server since we defined that the
             // server has to send with the same properties as sent by
             // the client)
+
+// TODO check the conditions: !bIsProtocolPacket should always be true
+// since we can only get here if bNewConnection, should we really put
+// !bIsAudioPacket in here, because shouldn't we always quere the audio
+// properties on a new connection?
+
             if ( bIsServer && ( !bIsProtocolPacket ) && ( !bIsAudioPacket ) )
             {
                 Protocol.CreateReqNetwTranspPropsMes();

@@ -47,6 +47,7 @@ enum EPutDataStat
     PS_AUDIO_OK,
     PS_AUDIO_ERR,
     PS_PROT_OK,
+    PS_PROT_OK_MESS_NOT_EVALUATED,
     PS_PROT_ERR
 };
 

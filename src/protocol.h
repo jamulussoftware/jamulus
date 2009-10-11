@@ -90,6 +90,9 @@ public:
     bool ParseMessage ( const CVector<uint8_t>& vecbyData,
                         const int iNumBytes );
 
+    bool IsProtocolMessage ( const CVector<uint8_t>& vecbyData,
+                             const int               iNumBytes );
+
 protected:
     class CSendMessage
     {

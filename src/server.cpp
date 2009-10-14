@@ -730,7 +730,9 @@ CreateAndSendChanListForAllConChannels();
     }
     Mutex.unlock();
 
-    return bChanOK;
+    // we do not want the server to be started on a protocol message but only on
+    // an audio packet -> consider "bIsNotEvaluatedProtocolMessage", too
+    return bChanOK && ( !bIsNotEvaluatedProtocolMessage );
 }
 
 void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,

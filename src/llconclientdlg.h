@@ -72,6 +72,7 @@ public:
 
 protected:
     void                    SetGUIDesign ( const EGUIDesign eNewDesign );
+    void                    SetMyWindowTitle ( const int iNumClients );
     void                    ShowChatWindow();
     void                    UpdateAudioFaderSlider();
     void                    ConnectDisconnect ( const bool bDoStart );
@@ -102,8 +103,7 @@ public slots:
     void OnSliderAudReverb ( int value ) { pClient->SetReverbLevel ( value ); }
     void OnRevSelL() { pClient->SetReverbOnLeftChan ( true ); }
     void OnRevSelR() { pClient->SetReverbOnLeftChan ( false ); }
-    void OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo )
-        { MainMixerBoard->ApplyNewConClientList ( vecChanInfo ); }
+    void OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void OnChangeChanGain ( int iId, double dGain )
         { pClient->SetRemoteChanGain ( iId, dGain ); }
     void OnFaderTagTextChanged ( const QString& strNewName );
@@ -115,4 +115,5 @@ public slots:
     void OnDisconnected();
     void OnStopped();
     void OnGUIDesignChanged() { SetGUIDesign ( pClient->GetGUIDesign() ); }
+    void OnNumClientsChanged ( int iNewNumClients );
 };

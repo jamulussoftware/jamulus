@@ -138,6 +138,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // init GUI design
     SetGUIDesign ( pClient->GetGUIDesign() );
 
+    // reset mixer board
+    MainMixerBoard->HideAll();
+
     // init fader tag line edit
     LineEditFaderTag->setText ( pClient->strName );
 
@@ -294,6 +297,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
+    QObject::connect ( MainMixerBoard, SIGNAL ( NumClientsChanged ( int ) ),
+        this, SLOT ( OnNumClientsChanged ( int ) ) );
+
     QObject::connect ( &ChatDlg, SIGNAL ( NewLocalInputText ( QString ) ),
         this, SLOT ( OnNewLocalInputText ( QString ) ) );
 
@@ -433,6 +439,41 @@ void CLlconClientDlg::OnDisconnected()
 {
     // channel is now disconnected, clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
+}
+
+void CLlconClientDlg::OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo )
+{
+    // update mixer board
+    MainMixerBoard->ApplyNewConClientList ( vecChanInfo );
+}
+
+void CLlconClientDlg::OnNumClientsChanged ( int iNewNumClients )
+{
+    // update window title
+    SetMyWindowTitle ( iNewNumClients );
+}
+
+void CLlconClientDlg::SetMyWindowTitle ( const int iNumClients )
+{
+    // show number of connected clients in window title (and therefore also in
+    // the task bar of the OS)
+    if ( iNumClients == 0 )
+    {
+        // only application name
+        setWindowTitle ( APP_NAME );
+    }
+    else
+    {
+        if ( iNumClients == 1 )
+        {
+            setWindowTitle ( QString ( APP_NAME ) + " (1 client)" );
+        }
+        else
+        {
+            setWindowTitle ( QString ( APP_NAME ) +
+                QString ( " (%1 clients)" ).arg ( iNumClients ) );
+        }
+    }
 }
 
 void CLlconClientDlg::ShowChatWindow()

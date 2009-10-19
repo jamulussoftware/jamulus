@@ -346,22 +346,28 @@ void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
 
 void CAudioMixerBoard::HideAll()
 {
-    // make old controls invisible
+    // make all controls invisible
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->Hide();
     }
+
+    // emit status of connected clients
+    emit NumClientsChanged ( 0 ); // -> no clients connected
 }
 
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecChanInfo )
 {
+    // get number of connected clients
+    const int iNumConnectedClients = vecChanInfo.Size();
+
     // search for channels with are already present and preserver their gain
     // setting, for all other channels, reset gain
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         bool bFaderIsUsed = false;
 
-        for ( int j = 0; j < vecChanInfo.Size(); j++ )
+        for ( int j = 0; j < iNumConnectedClients; j++ )
         {
             // check if current fader is used
             if ( vecChanInfo[j].iChanID == i )
@@ -395,6 +401,9 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecCh
             vecpChanFader[i]->Hide();
         }
     }
+
+    // emit status of connected clients
+    emit NumClientsChanged ( iNumConnectedClients );
 }
 
 void CAudioMixerBoard::OnChSoloStateChanged ( const int iChannelIdx, const int iValue )

@@ -76,6 +76,7 @@ protected:
     int     iNumTicksX;
     int     iNumTicksY;
     int     iGridFrameOffset;
+    int     iGridWidthWeekend;
     int     iTextOffsetToGrid;
     int     iTextOffsetX;
     int     iXAxisTextHeight;

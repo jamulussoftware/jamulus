@@ -36,6 +36,7 @@ CHistoryGraph::CHistoryGraph() :
     iYAxisEnd         ( 24 ),
     iNumTicksY        ( 5 ),
     iGridFrameOffset  ( 10 ),
+    iGridWidthWeekend ( 4 ), // should be even
     iTextOffsetToGrid ( 3 ),
     iXAxisTextHeight  ( 22 ),
     iMarkerSizeNewCon ( 11 ),
@@ -116,8 +117,9 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
     iXSpace = PlotGridFrame.width() / ( iNumTicksX + 1 );
     for ( i = 0; i < iNumTicksX; i++ )
     {
-        int       iBottomExtraTickLen = 0;
-        const int iCurX = PlotGridFrame.x() + iXSpace * ( i + 1 );
+        int         iBottomExtraTickLen = 0;
+        const int   iCurX = PlotGridFrame.x() + iXSpace * ( i + 1 );
+        const QDate curXAxisDate = curDate.addDays ( i - iNumTicksX + 1 );
 
         // text (print only every "iXAxisTickStep" tick)
         if ( !( i % iXAxisTickStep ) )
@@ -127,15 +129,29 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
             PlotPainter.drawText (
                 QPoint ( iCurX - iTextOffsetX,
                 PlotGridFrame.bottom() + iXAxisTextHeight + iTextOffsetToGrid ),
-                curDate.addDays ( i - iNumTicksX + 1 ).toString ( "dd.MM." ) );
+                curXAxisDate.toString ( "dd.MM." ) );
 
             iBottomExtraTickLen = 5;
         }
 
-        // grid
-        PlotPainter.setPen ( PlotGridColor );
-        PlotPainter.drawLine ( iCurX, PlotGridFrame.y(),
-            iCurX, PlotGridFrame.bottom() + iBottomExtraTickLen );
+        // grid (different grid width for weekends)
+        if ( ( curXAxisDate.dayOfWeek() == 6 ) ||
+             ( curXAxisDate.dayOfWeek() == 7 ) )
+        {
+            const int iGridWidthWeekendHalf = iGridWidthWeekend / 2;
+
+            PlotPainter.setPen ( QPen ( PlotGridColor, iGridWidthWeekend ) );
+            PlotPainter.drawLine ( iCurX, 1 + PlotGridFrame.y() + iGridWidthWeekendHalf,
+                iCurX, PlotGridFrame.bottom() - iGridWidthWeekendHalf + 1 +
+                iBottomExtraTickLen );
+        }
+        else
+        {
+            // regular grid
+            PlotPainter.setPen ( PlotGridColor );
+            PlotPainter.drawLine ( iCurX, 1 + PlotGridFrame.y(),
+                iCurX, PlotGridFrame.bottom() + iBottomExtraTickLen );
+        }
     }
 
     // grid (ticks) for y-axis, draw iNumTicksY - 2 grid lines and

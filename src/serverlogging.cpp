@@ -36,7 +36,7 @@ CHistoryGraph::CHistoryGraph() :
     iYAxisEnd         ( 24 ),
     iNumTicksY        ( 5 ),
     iGridFrameOffset  ( 10 ),
-    iGridWidthWeekend ( 4 ), // should be even
+    iGridWidthWeekend ( 3 ), // should be odd value
     iTextOffsetToGrid ( 3 ),
     iXAxisTextHeight  ( 22 ),
     iMarkerSizeNewCon ( 11 ),
@@ -134,7 +134,12 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
             iBottomExtraTickLen = 5;
         }
 
-        // grid (different grid width for weekends)
+        // regular grid
+        PlotPainter.setPen ( PlotGridColor );
+        PlotPainter.drawLine ( iCurX, 1 + PlotGridFrame.y(),
+            iCurX, PlotGridFrame.bottom() + iBottomExtraTickLen );
+
+        // different grid width for weekends (overwrite regular grid)
         if ( ( curXAxisDate.dayOfWeek() == 6 ) ||
              ( curXAxisDate.dayOfWeek() == 7 ) )
         {
@@ -142,15 +147,7 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
 
             PlotPainter.setPen ( QPen ( PlotGridColor, iGridWidthWeekend ) );
             PlotPainter.drawLine ( iCurX, 1 + PlotGridFrame.y() + iGridWidthWeekendHalf,
-                iCurX, PlotGridFrame.bottom() - iGridWidthWeekendHalf + 1 +
-                iBottomExtraTickLen );
-        }
-        else
-        {
-            // regular grid
-            PlotPainter.setPen ( PlotGridColor );
-            PlotPainter.drawLine ( iCurX, 1 + PlotGridFrame.y(),
-                iCurX, PlotGridFrame.bottom() + iBottomExtraTickLen );
+                iCurX, PlotGridFrame.bottom() - iGridWidthWeekendHalf );
         }
     }
 

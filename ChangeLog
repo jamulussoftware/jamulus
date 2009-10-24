@@ -1,3 +1,12 @@
+3.0.3
+
+- show number of connected clients in window title (and therefore in OS task bar)
+
+- fix for server logging history graph
+
+- fix for disconnect issue at the server
+
+
 3.0.2
 
 - fix for Jack Linux audio interface: ports are only once registered and

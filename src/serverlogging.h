@@ -82,7 +82,7 @@ protected:
     int     iXAxisTextHeight;
     int     iMarkerSizeNewCon;
     int     iMarkerSizeServSt;
-    int     iXSpace;
+    double  dXSpace;
     int     iYSpace;
     QFont   AxisFont;
     QColor  PlotBackgroundColor;

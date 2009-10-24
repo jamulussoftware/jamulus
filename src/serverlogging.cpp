@@ -114,11 +114,11 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
     const int iXAxisTickStep = iNumTicksX / 5 + 1;
 
     // grid (ticks) for x-axis
-    iXSpace = PlotGridFrame.width() / ( iNumTicksX + 1 );
+    dXSpace = static_cast<double> ( PlotGridFrame.width() ) / ( iNumTicksX + 1 );
     for ( i = 0; i < iNumTicksX; i++ )
     {
         int         iBottomExtraTickLen = 0;
-        const int   iCurX = PlotGridFrame.x() + iXSpace * ( i + 1 );
+        const int   iCurX = PlotGridFrame.x() + static_cast<int> ( dXSpace * ( i + 1 ) );
         const QDate curXAxisDate = curDate.addDays ( i - iNumTicksX + 1 );
 
         // text (print only every "iXAxisTickStep" tick)
@@ -140,8 +140,8 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
             iCurX, PlotGridFrame.bottom() + iBottomExtraTickLen );
 
         // different grid width for weekends (overwrite regular grid)
-        if ( ( curXAxisDate.dayOfWeek() == 6 ) ||
-             ( curXAxisDate.dayOfWeek() == 7 ) )
+        if ( ( curXAxisDate.dayOfWeek() == 6 ) || // check for Saturday
+             ( curXAxisDate.dayOfWeek() == 7 ) )  // check for Sunday
         {
             const int iGridWidthWeekendHalf = iGridWidthWeekend / 2;
 
@@ -197,7 +197,7 @@ void CHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
 
     // calculate the actual point in the graph (in pixels)
     const QPoint curPoint (
-        PlotGridFrame.x() + iXSpace * ( iNumTicksX + iXAxisOffs ),
+        PlotGridFrame.x() + static_cast<int> ( dXSpace * ( iNumTicksX + iXAxisOffs ) ),
         PlotGridFrame.y() + static_cast<int> ( static_cast<double> (
         PlotGridFrame.height() ) / ( iYAxisEnd - iYAxisStart ) * dYAxisOffs ) );
 

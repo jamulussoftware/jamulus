@@ -230,7 +230,7 @@ void CChannelFader::SetOtherSoloState ( const bool bState )
 
 void CChannelFader::SetText ( const QString sText )
 {
-    const int iBreakPos = 8;
+    const int iBreakPos = MAX_LEN_FADER_TAG / 2;
 
     // break text at predefined position, if text is too short, break anyway to
     // make sure we have two lines for fader tag

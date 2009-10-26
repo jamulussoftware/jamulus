@@ -37,8 +37,21 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
 
 
     // Connections -------------------------------------------------------------
+    QObject::connect ( lineEditLocalInputText, SIGNAL ( textChanged ( const QString& ) ),
+        this, SLOT ( OnChatTextChanged ( const QString& ) ) );
+
     QObject::connect ( lineEditLocalInputText, SIGNAL ( returnPressed() ),
         this, SLOT ( OnNewLocalInputText() ) );
+}
+
+void CChatDlg::OnChatTextChanged ( const QString& strNewText )
+{
+    // check and correct length
+    if ( strNewText.length() > MAX_LEN_CHAT_TEXT )
+    {
+        // text is too long, update control with shortend text
+        lineEditLocalInputText->setText ( strNewText.left ( MAX_LEN_CHAT_TEXT ) );
+    }
 }
 
 void CChatDlg::OnNewLocalInputText()

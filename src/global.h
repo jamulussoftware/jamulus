@@ -121,6 +121,13 @@
 // length of the moving average buffer for response time measurement
 #define TIME_MOV_AV_RESPONSE            30 // seconds
 
+// Maximum length of fader tag and text message strings (Since for chat messages
+// some HTML code is added, we also have to define a second length which includes
+// this additionl HTML code. Right now the length of the HTML code is approx. 66
+// character. Here, we add some headroom to this number)
+#define MAX_LEN_FADER_TAG               16
+#define MAX_LEN_CHAT_TEXT               1600
+#define MAX_LEN_CHAT_TEXT_PLUS_HTML     1800
 
 #define _MAXSHORT                       32767
 #define _MAXBYTE                        255 // binary: 11111111

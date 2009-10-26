@@ -493,11 +493,20 @@ void CLlconClientDlg::ShowChatWindow()
 
 void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
 {
-    // refresh internal name parameter
-    pClient->strName = strNewName;
+    // check length
+    if ( strNewName.length() <= MAX_LEN_FADER_TAG )
+    {
+        // refresh internal name parameter
+        pClient->strName = strNewName;
 
-    // update name at server
-    pClient->SetRemoteName();
+        // update name at server
+        pClient->SetRemoteName();
+    }
+    else
+    {
+        // text is too long, update control with shortend text
+        LineEditFaderTag->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
+    }
 }
 
 void CLlconClientDlg::OnTimerSigMet()

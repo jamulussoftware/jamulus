@@ -48,6 +48,7 @@ public:
 
 public slots:
     void OnNewLocalInputText();
+    void OnChatTextChanged ( const QString& strNewText );
 
 signals:
     void NewLocalInputText ( QString strNewText );

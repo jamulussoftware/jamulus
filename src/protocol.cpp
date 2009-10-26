@@ -670,11 +670,11 @@ void CProtocol::CreateChanNameMes ( const QString strName )
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iStrLen ), 2 );
 
     // name string (n bytes)
-    for ( int j = 0; j < iStrLen; j++ )
+    for ( int i = 0; i < iStrLen; i++ )
     {
         // byte-by-byte copying of the string data
         PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( strName[j].toAscii() ), 1 );
+            static_cast<uint32_t> ( strName[i].toAscii() ), 1 );
     }
 
     CreateAndSendMessage ( PROTMESSID_CHANNEL_NAME, vecData );
@@ -695,14 +695,14 @@ bool CProtocol::EvaluateChanNameMes ( const CVector<uint8_t>& vecData )
         static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // check size
-    if ( vecData.Size() - 2 != iStrLen )
+    if ( ( vecData.Size() - 2 != iStrLen ) || ( iStrLen > MAX_LEN_FADER_TAG ) )
     {
         return true;
     }
 
     // name string (n bytes)
     QString strName = "";
-    for ( int j = 0; j < iStrLen; j++ )
+    for ( int i = 0; i < iStrLen; i++ )
     {
         // byte-by-byte copying of the string data
         int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
@@ -739,15 +739,15 @@ void CProtocol::CreateChatTextMes ( const QString strChatText )
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
 
-    // number of bytes for name string (2 bytes)
+    // number of bytes for chat text string (2 bytes)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iStrLen ), 2 );
 
-    // name string (n bytes)
-    for ( int j = 0; j < iStrLen; j++ )
+    // chat text string (n bytes)
+    for ( int i = 0; i < iStrLen; i++ )
     {
         // byte-by-byte copying of the string data
         PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( strChatText[j].toAscii() ), 1 );
+            static_cast<uint32_t> ( strChatText[i].toAscii() ), 1 );
     }
 
     CreateAndSendMessage ( PROTMESSID_CHAT_TEXT, vecData );
@@ -763,19 +763,20 @@ bool CProtocol::EvaluateChatTextMes ( const CVector<uint8_t>& vecData )
         return true;
     }
 
-    // number of bytes for name string (2 bytes)
+    // number of bytes for chat text string (2 bytes)
     const int iStrLen =
         static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // check size
-    if ( vecData.Size() - 2 != iStrLen )
+    if ( ( vecData.Size() - 2 != iStrLen ) ||
+         ( iStrLen > MAX_LEN_CHAT_TEXT_PLUS_HTML ) )
     {
         return true;
     }
 
-    // name string (n bytes)
+    // chat text string (n bytes)
     QString strChatText = "";
-    for ( int j = 0; j < iStrLen; j++ )
+    for ( int i = 0; i < iStrLen; i++ )
     {
         // byte-by-byte copying of the string data
         int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );

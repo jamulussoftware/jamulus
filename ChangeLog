@@ -1,8 +1,12 @@
 3.0.3
 
-- show number of connected clients in window title (and therefore in OS task bar)
+- show number of connected clients in window title (and therefore in OS task
+  bar)
 
-- fix for server logging history graph
+- bug fix for server logging history graph x-axis
+
+- server logging history grid lines of weekend days are now plotted with
+  different line width
 
 - fix for disconnect issue at the server
 

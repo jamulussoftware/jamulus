@@ -466,12 +466,12 @@ void CLlconClientDlg::SetMyWindowTitle ( const int iNumClients )
     {
         if ( iNumClients == 1 )
         {
-            setWindowTitle ( QString ( APP_NAME ) + " (1 client)" );
+            setWindowTitle ( QString ( APP_NAME ) + " (1 user)" );
         }
         else
         {
             setWindowTitle ( QString ( APP_NAME ) +
-                QString ( " (%1 clients)" ).arg ( iNumClients ) );
+                QString ( " (%1 users)" ).arg ( iNumClients ) );
         }
     }
 }

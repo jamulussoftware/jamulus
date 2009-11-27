@@ -248,23 +248,26 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     }
 
 
-    // Settings menu  ----------------------------------------------------------
-    pSettingsMenu = new QMenu ( "&View", this );
-    pSettingsMenu->setAccessibleName ( "View menu" );
-    QAction* test = pSettingsMenu->addAction ( tr ( "&Chat..." ), this,
+    // View menu  --------------------------------------------------------------
+    pViewMenu = new QMenu ( "&View", this );
+    pViewMenu->setAccessibleName ( "View menu" );
+
+    pViewMenu->addAction ( tr ( "&Chat..." ), this,
         SLOT ( OnOpenChatDialog() ) );
-    pSettingsMenu->addAction ( tr ( "&General Settings..." ), this,
+
+    pViewMenu->addAction ( tr ( "&General Settings..." ), this,
         SLOT ( OnOpenGeneralSettings() ) );
 
-    pSettingsMenu->addSeparator();
-    pSettingsMenu->addAction ( tr ( "E&xit" ), this,
+    pViewMenu->addSeparator();
+
+    pViewMenu->addAction ( tr ( "E&xit" ), this,
         SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
 
 
     // Main menu bar -----------------------------------------------------------
     pMenu = new QMenuBar ( this );
     pMenu->setAccessibleName ( "Main menu" );
-    pMenu->addMenu ( pSettingsMenu );
+    pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( new CLlconHelpMenu ( this ) );
 
     // Now tell the layout about the menu

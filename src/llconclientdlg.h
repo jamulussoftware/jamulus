@@ -87,7 +87,7 @@ protected:
     virtual void            closeEvent  ( QCloseEvent* Event );
     void                    UpdateDisplay();
 
-    QMenu*                  pSettingsMenu;
+    QMenu*                  pViewMenu;
     QMenuBar*               pMenu;
 
     CClientSettingsDlg      ClientSettingsDlg;

@@ -33,18 +33,122 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // add help text to controls -----------------------------------------------
     // jitter buffer
-    QString strJitterBufferSize = tr ( "<b>Jitter Buffer Size:</b> The size of "
-        "the network buffer (jitter buffer). The jitter buffer compensates for "
-        "the network jitter. The larger this buffer is, the more robust the "
-        "connection is against network jitter but the higher is the latency. "
-        "This setting is therefore a trade-off between audio drop outs and "
-        "overall audio delay.<br>By changing this setting, both, the client "
-        "and the server jitter buffer is set to the same value." );
+    QString strJitterBufferSize = tr ( "<b>Jitter Buffer Size:</b> The jitter "
+        "buffer compensates for network and sound card timing jitters. The "
+        "size of this jitter buffer has therefore influence on the quality of "
+        "the audio stream (how many dropouts occur) and the overall delay "
+        "(the longer the buffer, the higher the delay).<br/>"
+        "Dropouts in the audio stream are indicated by the light on the bottom "
+        "of the jitter buffer size fader. If the light turns to red, a buffer "
+        "overrun/underrun took place and the audio stream is interrupted.<br/>"
+        "The jitter buffer setting is therefore a trade-off between audio "
+        "quality and overall delay.<br/>"
+        "An auto setting of the jitter buffer size setting is available. If "
+        "the check Auto is enabled, the jitter buffer is set automatically "
+        "based on measurements of the network and sound card timing jitter. If "
+        "the Auto check is enabled, the jitter buffer size fader is disabled "
+        "(cannot be moved by the mouse)." );
+
     TextNetBuf->setWhatsThis           ( strJitterBufferSize );
     GroupBoxJitterBuffer->setWhatsThis ( strJitterBufferSize );
     SliderNetBuf->setWhatsThis         ( strJitterBufferSize );
-    SliderNetBuf->setAccessibleName    ( "Jitter buffer slider control" );
-    cbAutoJitBuf->setAccessibleName    ( "Auto jitter buffer switch" );
+    SliderNetBuf->setAccessibleName    ( tr ( "Jitter buffer slider control" ) );
+    cbAutoJitBuf->setAccessibleName    ( tr ( "Auto jitter buffer switch" ) );
+    CLEDNetw->setAccessibleName        ( tr ( "Jitter buffer status LED indicator" ) );
+
+    // sound card device
+    cbSoundcard->setWhatsThis ( tr ( "<b>Sound Card Device:</b> The ASIO "
+        "driver (sound card) can be selected using llcon under the Windows "
+        "operating system. Under Linux, no sound card selection is possible "
+        "(always wave mapper is shown and cannot be changed). If the selected "
+        "ASIO driver is not valid an error message is shown and the previous "
+        "valid driver is selected.<br/>"
+        "If the driver is selected during an active connection, the connection "
+        "is stopped, the driver is changed and the connection is started again "
+        "automatically." ) );
+    cbSoundcard->setAccessibleName ( tr ( "Sound card device selector combo box" ) );
+
+    // sound card buffer delay
+    QString strSndCrdBufDelay = tr ( "<b>Sound Card Buffer Delay:</b> The "
+        "buffer delay setting is a fundamental setting of the llcon software. "
+        "This setting has influence on many connection properties.<br/>"
+        "With the buffer delay setting, the preferred buffer delay (actually "
+        "the buffer size) is chosen. This value must not be necessary the same "
+        "as the Actual buffer delay since some sound card driver do not allow "
+        "the buffer delay to be changed from within the llcon software. The "
+        "value which is actually used in the llcon software is the Actual "
+        "buffer delay.<br/>"
+        "Three buffer sizes are supported:"
+        "<ul>"
+        "<li>128 samples: This is the preferred setting since it gives lowest "
+        "latency but does not work with all sound cards.</li>"
+        "<li>256 samples: This is the default setting and should work on most "
+        "of the available sound cards.</li>"
+        "<li>512 samples: This setting should only be used if only a very slow "
+        "computer or a slow internet connection is available.</li>"
+        "</ul>"
+        "Buffer sizes different from the three sizes listed above will be "
+        "shown in red color. Trying to connect with this setting will not "
+        "work, an error message is shown instead.<br/>"
+        "If the actual buffer delay differs from the preferred one, it is "
+        "printed in yellow color. To change the actual buffer delay, this "
+        "setting has to be changed in the sound card driver. On Windows, press "
+        "the ASIO Setup button to open the driver settings panel. On Linux, "
+        "use the Jack configuration tool to change the buffer size.<br/>"
+        "The actual buffer delay has influence on the connection status, the "
+        "current upload rate and the overall delay. The lower the buffer size, "
+        "the higher the probability of red light in the status indicator (drop "
+        "outs) and the higher the upload rate and the lower the overall "
+        "delay.<br/>"
+        "The jitter buffer setting is therefore a trade-off between audio "
+        "quality and overall delay." );
+
+    rButBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
+    rButBufferDelayPreferred->setAccessibleName ( tr ( "128 samples setting radio button" ) );
+    rButBufferDelayDefault->setWhatsThis ( strSndCrdBufDelay );
+    rButBufferDelayDefault->setAccessibleName ( tr ( "256 samples setting radio button" ) );
+    rButBufferDelaySafe->setWhatsThis ( strSndCrdBufDelay );
+    rButBufferDelaySafe->setAccessibleName ( tr ( "512 samples setting radio button" ) );
+    ButtonDriverSetup->setWhatsThis ( strSndCrdBufDelay );
+    ButtonDriverSetup->setAccessibleName ( tr ( "ASIO setup push button" ) );
+
+    // open chat on new message
+    cbOpenChatOnNewMessage->setWhatsThis ( tr ( "<b>Open Chat on New "
+        "Message:</b> If this checkbox is enabled, the chat window will "
+        "open on any incoming chat text if it not already opened." ) );
+    cbOpenChatOnNewMessage->setAccessibleName ( tr ( "Open chat on new "
+        "message check box" ) );
+
+    // use high quality audio
+    cbUseHighQualityAudio->setWhatsThis ( tr ( "<b>Use High Quality Audio</b> "
+        "Enabling ""Use High Quality Audio"" will improve the audio quality "
+        "by increasing the stream data rate. Make sure that the current "
+        "upload rate does not exceed the available bandwidth of your "
+        "internet connection." ) );
+    cbUseHighQualityAudio->setAccessibleName ( tr ( "Use high quality audio "
+        "check box" ) );
+
+    // current connection status parameter 
+    QString strConnStats = tr ( "<b>Current Connection Status "
+        "Parameter:</b> The ping time is the time required for the audio "
+        "stream to travel from the client to the server and backwards. This "
+        "delay is introduced by the network. This delay should be as low as "
+        "20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to "
+        "the server is too large or your internet connection is not "
+        "sufficient.<br/>"
+        "The overall delay is calculated from the current ping time and the "
+        "delay which is introduced by the current buffer settings.<br/>"
+        "The upstream rate depends on the current audio packet size and the "
+        "audio compression setting. Make sure that the upstream rate is not "
+        "higher than the available rate (check the upstream capabilities of "
+        "your internet connection by, e.g., using speedtest.net)." );
+
+    TextPingTime->setWhatsThis          ( strConnStats );
+    TextLabelPingTime->setWhatsThis     ( strConnStats );
+    TextOverallDelay->setWhatsThis      ( strConnStats );
+    TextLabelOverallDelay->setWhatsThis ( strConnStats );
+    TextUpstream->setWhatsThis          ( strConnStats );
+    TextUpstreamValue->setWhatsThis     ( strConnStats );
 
 
     // init driver button

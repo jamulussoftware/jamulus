@@ -58,8 +58,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "of the audio input.<br/>"
         "Make sure not to clip the input signal to avoid distortions of the "
         "audio signal." );
-    QString strInpLevHAccText  = "Input level meter";
-    QString strInpLevHAccDescr = "Simulates an analog LED level meter.";
+    QString strInpLevHAccText  = tr ( "Input level meter" );
+    QString strInpLevHAccDescr = tr ( "Simulates an analog LED level meter." );
     TextLabelInputLevelL->setWhatsThis                    ( strInpLevH );
     TextLabelInputLevelR->setWhatsThis                    ( strInpLevH );
     MultiColorLEDBarInputLevelL->setWhatsThis             ( strInpLevH );
@@ -74,17 +74,17 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "</b> Push this button to connect the server. A valid IP address has "
         "to be specified before. If the client is connected, pressing this "
         "button will disconnect the connection." ) );
-    PushButtonConnect->setAccessibleName ( "Connect and disconnect toggle button" );
-    PushButtonConnect->setAccessibleDescription ( "Clicking on this button "
+    PushButtonConnect->setAccessibleName ( tr ( "Connect and disconnect toggle button" ) );
+    PushButtonConnect->setAccessibleDescription ( tr ( "Clicking on this button "
         "changes the caption of the button from Connect to Disconnect, i.e., it "
         "implements a toggle functionality for connecting and disconnecting "
-        "the llcon software." );
+        "the llcon software." ) );
 
     // status bar
     TextLabelStatus->setWhatsThis ( tr ( "<b>Status Bar:</b> In the status bar "
         "different messages are displayed. E.g., if an error occurred or the "
         "status of the connection is shown." ) );
-    TextLabelStatus->setAccessibleName ( "Status bar" );
+    TextLabelStatus->setAccessibleName ( tr ( "Status bar" ) );
 
     // server address
     QString strServAddrH = tr ( "<b>Server Address:</b> The IP address or URL "
@@ -94,9 +94,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "shown in the status bar." );
     TextLabelServerAddr->setWhatsThis            ( strServAddrH );
     LineEditServerAddr->setWhatsThis             ( strServAddrH );
-    LineEditServerAddr->setAccessibleName        ( "Server address input" );
-    LineEditServerAddr->setAccessibleDescription ( "Holds the current server "
-        "URL. It also stores old URLs in the combo box list." );
+    LineEditServerAddr->setAccessibleName        ( tr ( "Server address edit box" ) );
+    LineEditServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
+        "URL. It also stores old URLs in the combo box list." ) );
 
     // fader tag
     QString strFaderTag = tr ( "<b>Fader Tag:</b> The fader tag of the local "
@@ -104,10 +104,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "at your fader on the mixer board when you are connected to a llcon "
         "server. This tag will also show up at each client which is connected "
         "to the same server as the local client. If the fader tag is empty, "
-        "the IP address of the client is displayed instead.");
+        "the IP address of the client is displayed instead." );
     TextLabelServerTag->setWhatsThis    ( strFaderTag );
     LineEditFaderTag->setWhatsThis      ( strFaderTag );
-    LineEditFaderTag->setAccessibleName ( "Fader tag edit box" );
+    LineEditFaderTag->setAccessibleName ( tr ( "Fader tag edit box" ) );
 
     // local audio input fader
     QString strAudFader = tr ( "<b>Local Audio Input Fader:</b> With the "
@@ -120,7 +120,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "<i>x</i> is the current attenuation indication. " );
     TextAudInFader->setWhatsThis        ( strAudFader );
     SliderAudInFader->setWhatsThis      ( strAudFader );
-    SliderAudInFader->setAccessibleName ( "Local audio input fader (left/right)" );
+    SliderAudInFader->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
 
     // reverberation level
     QString strAudReverb = tr ( "<b>Reverberation Level:</b> A reverberation "
@@ -136,7 +136,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "switched off and does not cause any additional CPU usage." );
     TextLabelAudReverb->setWhatsThis   ( strAudReverb );
     SliderAudReverb->setWhatsThis      ( strAudReverb );
-    SliderAudReverb->setAccessibleName ( "Reverberation effect level setting" );
+    SliderAudReverb->setAccessibleName ( tr ( "Reverberation effect level setting" ) );
 
     // reverberation channel selection
     QString strRevChanSel = tr ( "<b>Reverberation Channel Selection:</b> "
@@ -144,9 +144,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "reverberation effect is applied can be chosen. Either the left "
         "or right input channel can be selected." );
     RadioButtonRevSelL->setWhatsThis ( strRevChanSel );
-    RadioButtonRevSelL->setAccessibleName ( "Left channel selection for reverberation" );
+    RadioButtonRevSelL->setAccessibleName ( tr ( "Left channel selection for reverberation" ) );
     RadioButtonRevSelR->setWhatsThis ( strRevChanSel );
-    RadioButtonRevSelR->setAccessibleName ( "Right channel selection for reverberation" );
+    RadioButtonRevSelR->setAccessibleName ( tr ( "Right channel selection for reverberation" ) );
 
     // overall status
     LEDOverallStatus->setWhatsThis ( tr ( "<b>Overall Status:</b> "
@@ -163,7 +163,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "available internet bandwidth.</li>"
         "<li>The CPU of the client or server is at 100%.</li>"
         "</ul>" ) );
-    LEDOverallStatus->setAccessibleName ( "Overall status LED indicator" );
+    LEDOverallStatus->setAccessibleName ( tr ( "Overall status LED indicator" ) );
 
 
     // init GUI design

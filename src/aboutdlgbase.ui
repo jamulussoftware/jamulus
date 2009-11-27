@@ -224,6 +224,10 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>buttonOk</tabstop>
+  <tabstop>TextViewCredits</tabstop>
+ </tabstops>
  <resources>
   <include location="resources.qrc" />
  </resources>

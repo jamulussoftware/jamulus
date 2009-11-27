@@ -500,12 +500,13 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>LineEditFaderTag</tabstop>
+  <tabstop>LineEditServerAddr</tabstop>
   <tabstop>PushButtonConnect</tabstop>
+  <tabstop>LineEditFaderTag</tabstop>
+  <tabstop>SliderAudInFader</tabstop>
   <tabstop>SliderAudReverb</tabstop>
   <tabstop>RadioButtonRevSelL</tabstop>
   <tabstop>RadioButtonRevSelR</tabstop>
-  <tabstop>SliderAudInFader</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc" />

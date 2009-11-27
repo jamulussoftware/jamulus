@@ -403,6 +403,8 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
 // Help menu -------------------------------------------------------------------
 CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
 {
+    setAccessibleName ( "Help menu" );
+
     // standard help menu consists of about and what's this help
     addAction ( tr ( "What's &This" ), this,
         SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );

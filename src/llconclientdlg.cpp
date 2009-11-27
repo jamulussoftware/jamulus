@@ -49,45 +49,67 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 {
     setupUi ( this );
 
-    // add help text to controls
-    QString strInpLevH = tr ( "<b>Input level meter:</b> The input level "
+    // add help text to controls -----------------------------------------------
+    // input level meter
+    QString strInpLevH = tr ( "<b>Input Level Meter:</b> The input level "
         "indicators show the current input level of the two stereo channels "
         "of the current selected audio input. The upper level display belongs "
         "to the left channel and the lower level display to the right channel "
         "of the audio input.<br/>"
         "Make sure not to clip the input signal to avoid distortions of the "
         "audio signal." );
-    TextLabelInputLevelL->setWhatsThis        ( strInpLevH );
-    TextLabelInputLevelR->setWhatsThis        ( strInpLevH );
-    MultiColorLEDBarInputLevelL->setWhatsThis ( strInpLevH );
-    MultiColorLEDBarInputLevelR->setWhatsThis ( strInpLevH );
+    QString strInpLevHAccText  = "Input level meter";
+    QString strInpLevHAccDescr = "Simulates an analog LED level meter.";
+    TextLabelInputLevelL->setWhatsThis                    ( strInpLevH );
+    TextLabelInputLevelR->setWhatsThis                    ( strInpLevH );
+    MultiColorLEDBarInputLevelL->setWhatsThis             ( strInpLevH );
+    MultiColorLEDBarInputLevelL->setAccessibleName        ( strInpLevHAccText );
+    MultiColorLEDBarInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );
+    MultiColorLEDBarInputLevelR->setWhatsThis             ( strInpLevH );
+    MultiColorLEDBarInputLevelR->setAccessibleName        ( strInpLevHAccText );
+    MultiColorLEDBarInputLevelR->setAccessibleDescription ( strInpLevHAccDescr );
 
+    // connect/disconnect button
     PushButtonConnect->setWhatsThis ( tr ( "<b>Connect / Disconnect Button:"
         "</b> Push this button to connect the server. A valid IP address has "
         "to be specified before. If the client is connected, pressing this "
         "button will disconnect the connection." ) );
+    PushButtonConnect->setAccessibleName ( "Connect and disconnect toggle button" );
+    PushButtonConnect->setAccessibleDescription ( "Clicking on this button "
+        "changes the caption of the button from Connect to Disconnect, i.e., it "
+        "implements a toggle functionality for connecting and disconnecting "
+        "the llcon software." );
 
+    // status bar
     TextLabelStatus->setWhatsThis ( tr ( "<b>Status Bar:</b> In the status bar "
         "different messages are displayed. E.g., if an error occurred or the "
         "status of the connection is shown." ) );
+    TextLabelStatus->setAccessibleName ( "Status bar" );
 
+    // server address
     QString strServAddrH = tr ( "<b>Server Address:</b> The IP address or URL "
         "of the server running the llcon server software must be set here. "
         "A list of the most recent used server URLs is available for "
         "selection. If an invalid address was chosen, an error message is "
         "shown in the status bar." );
-    TextLabelServerAddr->setWhatsThis ( strServAddrH );
-    LineEditServerAddr->setWhatsThis  ( strServAddrH );
+    TextLabelServerAddr->setWhatsThis            ( strServAddrH );
+    LineEditServerAddr->setWhatsThis             ( strServAddrH );
+    LineEditServerAddr->setAccessibleName        ( "Server address input" );
+    LineEditServerAddr->setAccessibleDescription ( "Holds the current server "
+        "URL. It also stores old URLs in the combo box list." );
 
+    // fader tag
     QString strFaderTag = tr ( "<b>Fader Tag:</b> The fader tag of the local "
         "client is set in the fader tag edit box. This tag will appear "
         "at your fader on the mixer board when you are connected to a llcon "
         "server. This tag will also show up at each client which is connected "
         "to the same server as the local client. If the fader tag is empty, "
         "the IP address of the client is displayed instead.");
-    TextLabelServerTag->setWhatsThis ( strFaderTag );
-    LineEditFaderTag->setWhatsThis   ( strFaderTag );
+    TextLabelServerTag->setWhatsThis    ( strFaderTag );
+    LineEditFaderTag->setWhatsThis      ( strFaderTag );
+    LineEditFaderTag->setAccessibleName ( "Fader tag edit box" );
 
+    // local audio input fader
     QString strAudFader = tr ( "<b>Local Audio Input Fader:</b> With the "
         "audio fader, the relative levels of the left and right local audio "
         "channels can be changed. It acts like a panning between the two "
@@ -96,9 +118,11 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "which is much louder than the microphone, move the audio fader in "
         "a direction where the label above the fader shows <i>L -x</i>, where "
         "<i>x</i> is the current attenuation indication. " );
-    TextAudInFader->setWhatsThis   ( strAudFader );
-    SliderAudInFader->setWhatsThis ( strAudFader );
+    TextAudInFader->setWhatsThis        ( strAudFader );
+    SliderAudInFader->setWhatsThis      ( strAudFader );
+    SliderAudInFader->setAccessibleName ( "Local audio input fader (left/right)" );
 
+    // reverberation level
     QString strAudReverb = tr ( "<b>Reverberation Level:</b> A reverberation "
         "effect can be applied to one local audio channel. The channel "
         "selection and the reverberation level can be modified. If, e.g., "
@@ -110,16 +134,21 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "only be used on fast PCs. If the reverberation level fader is set to "
         "minimum (which is the default setting), the reverberation effect is "
         "switched off and does not cause any additional CPU usage." );
-    TextLabelAudReverb->setWhatsThis ( strAudReverb );
-    SliderAudReverb->setWhatsThis    ( strAudReverb );
+    TextLabelAudReverb->setWhatsThis   ( strAudReverb );
+    SliderAudReverb->setWhatsThis      ( strAudReverb );
+    SliderAudReverb->setAccessibleName ( "Reverberation effect level setting" );
 
+    // reverberation channel selection
     QString strRevChanSel = tr ( "<b>Reverberation Channel Selection:</b> "
         "With these radio buttons the audio input channel on which the "
         "reverberation effect is applied can be chosen. Either the left "
         "or right input channel can be selected." );
-    RadioButtonRevSelL->setWhatsThis       ( strRevChanSel );
-    RadioButtonRevSelR->setWhatsThis       ( strRevChanSel );
+    RadioButtonRevSelL->setWhatsThis ( strRevChanSel );
+    RadioButtonRevSelL->setAccessibleName ( "Left channel selection for reverberation" );
+    RadioButtonRevSelR->setWhatsThis ( strRevChanSel );
+    RadioButtonRevSelR->setAccessibleName ( "Right channel selection for reverberation" );
 
+    // overall status
     LEDOverallStatus->setWhatsThis ( tr ( "<b>Overall Status:</b> "
         "The light next to the status bar shows the current audio/streaming "
         "status. If the light is green, there are no buffer overruns/underruns "
@@ -134,6 +163,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "available internet bandwidth.</li>"
         "<li>The CPU of the client or server is at 100%.</li>"
         "</ul>" ) );
+    LEDOverallStatus->setAccessibleName ( "Overall status LED indicator" );
+
 
     // init GUI design
     SetGUIDesign ( pClient->GetGUIDesign() );
@@ -219,7 +250,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
     // Settings menu  ----------------------------------------------------------
     pSettingsMenu = new QMenu ( "&View", this );
-    pSettingsMenu->addAction ( tr ( "&Chat..." ), this,
+    pSettingsMenu->setAccessibleName ( "View menu" );
+    QAction* test = pSettingsMenu->addAction ( tr ( "&Chat..." ), this,
         SLOT ( OnOpenChatDialog() ) );
     pSettingsMenu->addAction ( tr ( "&General Settings..." ), this,
         SLOT ( OnOpenGeneralSettings() ) );
@@ -231,6 +263,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
     // Main menu bar -----------------------------------------------------------
     pMenu = new QMenuBar ( this );
+    pMenu->setAccessibleName ( "Main menu" );
     pMenu->addMenu ( pSettingsMenu );
     pMenu->addMenu ( new CLlconHelpMenu ( this ) );
 
@@ -272,7 +305,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         this, SLOT ( OnLineEditServerAddrTextChanged ( const QString ) ) );
 
     QObject::connect ( LineEditServerAddr, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnLineEditServerAddrActivated ( int ) ) ); 
+        this, SLOT ( OnLineEditServerAddrActivated ( int ) ) );
 
     // other
     QObject::connect ( pClient,

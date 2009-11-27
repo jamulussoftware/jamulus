@@ -31,7 +31,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 {
     setupUi ( this );
 
-    // add help text to controls
+    // add help text to controls -----------------------------------------------
+    // jitter buffer
     QString strJitterBufferSize = tr ( "<b>Jitter Buffer Size:</b> The size of "
         "the network buffer (jitter buffer). The jitter buffer compensates for "
         "the network jitter. The larger this buffer is, the more robust the "
@@ -39,9 +40,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "This setting is therefore a trade-off between audio drop outs and "
         "overall audio delay.<br>By changing this setting, both, the client "
         "and the server jitter buffer is set to the same value." );
-    SliderNetBuf->setWhatsThis ( strJitterBufferSize );
-    TextNetBuf->setWhatsThis ( strJitterBufferSize );
+    TextNetBuf->setWhatsThis           ( strJitterBufferSize );
     GroupBoxJitterBuffer->setWhatsThis ( strJitterBufferSize );
+    SliderNetBuf->setWhatsThis         ( strJitterBufferSize );
+    SliderNetBuf->setAccessibleName    ( "Jitter buffer slider control" );
+    cbAutoJitBuf->setAccessibleName    ( "Auto jitter buffer switch" );
+
 
     // init driver button
 #ifdef _WIN32

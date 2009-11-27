@@ -73,18 +73,23 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setWhatsThis ( "<b>Mixer Fader:</b> Adjusts the audio level of "
         "this channel. All connected clients at the server will be assigned "
         "an audio fader at each client." );
+    pFader->setAccessibleName ( "Mixer level setting of the connected client "
+        "at the server" );
 
     pcbMute->setWhatsThis ( "<b>Mute:</b> With the Mute checkbox, the current "
         "audio channel can be muted." );
+    pcbMute->setAccessibleName ( "Mute button" );
 
     pcbSolo->setWhatsThis ( "<b>Solo:</b> With the Solo checkbox, the current "
         "audio channel can be set to solo which means that all other channels "
         "except of the current channel are muted.<br/>"
         "Only one channel at a time can be set to solo." );
+    pcbSolo->setAccessibleName ( "Solo button" );
 
     pLabel->setWhatsThis ( "<b>Mixer Fader Label:</b> Label (fader tag) "
         "identifying the connected client. The tag name can be set in the "
         "clients main window." );
+    pLabel->setAccessibleName ( "Mixer level label (fader tag)" );
 
 
     // connections -------------------------------------------------------------

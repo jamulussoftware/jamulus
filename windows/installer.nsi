@@ -31,7 +31,7 @@ Section
   WriteRegStr HKLM "${UNINST_KEY}" "UninstallString" '"$INSTDIR\${UNINSTALL_EXE}"'
 
   SetOutPath       $INSTDIR
-  
+
   ; main application
   File             "Release\${APP_EXE}"
 
@@ -49,7 +49,7 @@ Section
   File             "${VS_REDIST_PATH}${VS_REDIST_EXE}"
   ExecWait         '"$INSTDIR\${VS_REDIST_EXE}" /Q'
   Delete           $INSTDIR\${VS_REDIST_EXE}
-  
+
   ; uninstaller
   WriteUninstaller $INSTDIR\${UNINSTALL_EXE}
 
@@ -58,6 +58,7 @@ Section
 
   CreateDirectory  "$SMPROGRAMS\${APP_NAME}"
   CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
+  CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${APP_NAME} server.lnk" "$INSTDIR\${APP_EXE}" "-s"
   CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${UNINSTALL_EXE}.lnk" "$INSTDIR\${UNINSTALL_EXE}"
 
 SectionEnd
@@ -69,6 +70,7 @@ DeleteRegKey HKLM "${UNINST_KEY}"
 
 Delete "$DESKTOP\${APP_NAME}.lnk"
 Delete "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"
+Delete "$SMPROGRAMS\${APP_NAME}\${APP_NAME} server.lnk"
 Delete "$SMPROGRAMS\${APP_NAME}\${UNINSTALL_EXE}.lnk"
 RMDIR  "$SMPROGRAMS\${APP_NAME}"
 
@@ -81,4 +83,4 @@ Delete $INSTDIR\QtXml4.dll
 Delete $INSTDIR\COPYING
 RMDir  $INSTDIR
 
-SectionEnd 
+SectionEnd

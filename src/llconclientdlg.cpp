@@ -250,7 +250,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
     // View menu  --------------------------------------------------------------
     pViewMenu = new QMenu ( "&View", this );
-    pViewMenu->setAccessibleName ( "View menu" );
 
     pViewMenu->addAction ( tr ( "&Chat..." ), this,
         SLOT ( OnOpenChatDialog() ) );
@@ -266,7 +265,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
     // Main menu bar -----------------------------------------------------------
     pMenu = new QMenuBar ( this );
-    pMenu->setAccessibleName ( "Main menu" );
+
     pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( new CLlconHelpMenu ( this ) );
 

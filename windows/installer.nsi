@@ -45,10 +45,8 @@ Section
   File             "..\COPYING"
 
   ; temporarily create Microsoft Visual Studio redistributable,
-  ; call it, and delete it afterwards
   File             "${VS_REDIST_PATH}${VS_REDIST_EXE}"
   ExecWait         '"$INSTDIR\${VS_REDIST_EXE}" /Q'
-  Delete           $INSTDIR\${VS_REDIST_EXE}
 
   ; uninstaller
   WriteUninstaller $INSTDIR\${UNINSTALL_EXE}
@@ -60,6 +58,9 @@ Section
   CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
   CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${APP_NAME} server.lnk" "$INSTDIR\${APP_EXE}" "-s"
   CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${UNINSTALL_EXE}.lnk" "$INSTDIR\${UNINSTALL_EXE}"
+
+  ; cleanup: remove temporary Microsoft Visual Studio redistributable executable
+  Delete           $INSTDIR\${VS_REDIST_EXE}
 
 SectionEnd
 

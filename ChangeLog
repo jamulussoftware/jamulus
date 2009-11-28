@@ -1,5 +1,7 @@
 3.0.3
 
+- accessibility improvements
+
 - show number of connected clients in window title (and therefore in OS task
   bar)
 
@@ -8,7 +10,10 @@
 - server logging history grid lines of weekend days are now plotted with
   different line width
 
-- fix for disconnect issue at the server
+- bug fix: fix for disconnect issue at the server
+
+- added "Whats this" help text to the GUI controls in the general settings
+  dialog
 
 
 3.0.2

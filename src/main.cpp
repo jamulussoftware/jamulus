@@ -24,6 +24,7 @@
 
 #include <qapplication.h>
 #include <qmessagebox.h>
+#include <qdir.h>
 #include <iostream>
 #include "global.h"
 #include "llconclientdlg.h"
@@ -166,13 +167,19 @@ int main ( int argc, char** argv )
         exit ( 1 );
     }
 
+    // Application object
+    QApplication app ( argc, argv, bUseGUI );
+
 #ifdef _WIN32
     // Set application priority class -> high priority
     SetPriorityClass ( GetCurrentProcess(), HIGH_PRIORITY_CLASS );
-#endif
 
-    // Application object
-    QApplication app ( argc, argv, bUseGUI );
+    // For accessible support we need to add a plugin to qt. The plugin has to
+    // be located in the install directory of llcon by the installer. Here, we
+    // set the path to our application
+    QDir ApplDir ( QApplication::applicationDirPath() );
+    app.addLibraryPath ( QString ( ApplDir.absolutePath() ) );
+#endif
 
     // init resources
     extern int qInitResources();

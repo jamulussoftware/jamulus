@@ -70,10 +70,11 @@ public:
     std::string  SetDev ( const int iNewDev );
     int          GetDev() { return lCurDev; }
 
+    int          GetActualBufferSize ( const int iDesiredBufferSizeMono );
+
 protected:
     bool         LoadAndInitializeFirstValidDriver();
     std::string  LoadAndInitializeDriver ( int iIdx );
-    int          GetActualBufferSize ( const int iDesiredBufferSizeMono );
     std::string  CheckDeviceCapabilities();
 
     // audio hardware buffer info

@@ -4,8 +4,8 @@
 !define APP_EXE        "llcon.exe"
 !define UNINSTALL_EXE  "Uninstall.exe"
 !define INSTALLER_NAME "llconinstaller.exe"
-;!define VS_REDIST_PATH "C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\BootStrapper\Packages\vcredist_x86\"
-!define VS_REDIST_PATH "C:\Programme\Microsoft Visual Studio 8\SDK\v2.0\BootStrapper\Packages\vcredist_x86\"
+!define VS_REDIST_PATH "C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\BootStrapper\Packages\vcredist_x86\"
+;!define VS_REDIST_PATH "C:\Programme\Microsoft Visual Studio 8\SDK\v2.0\BootStrapper\Packages\vcredist_x86\"
 !define VS_REDIST_EXE  "vcredist_x86.exe"
 !define UNINST_KEY     "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
 
@@ -62,6 +62,10 @@ Section
   ; cleanup: remove temporary Microsoft Visual Studio redistributable executable
   Delete           $INSTDIR\${VS_REDIST_EXE}
 
+  ; accessible qt plugin
+  SetOutPath       $INSTDIR\accessible
+  File             "$%QTDIR%\plugins\accessible\qtaccessiblewidgets4.dll"
+
 SectionEnd
 
 
@@ -82,6 +86,8 @@ Delete $INSTDIR\QtGui4.dll
 Delete $INSTDIR\QtNetwork4.dll
 Delete $INSTDIR\QtXml4.dll
 Delete $INSTDIR\COPYING
+Delete $INSTDIR\accessible\qtaccessiblewidgets4.dll
+RMDir  $INSTDIR\accessible
 RMDir  $INSTDIR
 
 SectionEnd

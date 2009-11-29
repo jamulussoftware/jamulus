@@ -15,6 +15,9 @@
 - added "Whats this" help text to the GUI controls in the general settings
   dialog
 
+- removed ALSA support since the ALSA interface implementation in llcon was
+  buggy and will not be maintained in the future
+
 
 3.0.2
 

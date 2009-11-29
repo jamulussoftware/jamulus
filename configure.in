@@ -19,14 +19,10 @@ AC_PROG_MAKE_SET
 dnl Configuration Arguments
 
 AC_ARG_ENABLE( sound,[  --enable-sound        generic sound support], enable_sound=$enableval, enable_sound=yes)
-AC_ARG_ENABLE( alsa,[  --enable-alsa         use ALSA interface], enable_alsa=$enableval, enable_alsa=no)
 
 
-if test "$enable_alsa" = "yes"; then
-	dnl checks for ALSA audio
-	AC_CHECK_HEADER(sys/asoundlib.h, , enable_sound=no)
-	AC_CHECK_LIB(asound, snd_pcm_open, , enable_sound=no)
-else
+dnl Check for Jack
+if test "$enable_sound" = "yes"; then
 	dnl checks for JACK audio
 	AC_CHECK_HEADER([jack/jack.h], have_jack=yes, have_jack=no, [
 	])
@@ -36,13 +32,9 @@ else
 	   JACK_LIB="-ljack"
 	   AC_DEFINE(USE_JACK, 1,[Define to enable JACK input module])
 	fi
-fi
 
-if test "$enable_sound" = "yes"; then
 	AC_DEFINE(WITH_SOUND, 1, [Define if you want to use sound])
 fi
-
-
 
 dnl Checks for header files.
 AC_HEADER_STDC

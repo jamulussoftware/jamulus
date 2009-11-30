@@ -39,6 +39,9 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bDoAutoSockBufSize ( true ),
     iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
     iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
+    bFraSiFactPrefSupported ( false ),
+    bFraSiFactDefSupported ( false ),
+    bFraSiFactSafeSupported ( false ),
     iCeltNumCodedBytes ( CELT_NUM_BYTES_NORMAL_QUALITY ),
     bCeltDoHighQuality ( false )
 {
@@ -375,6 +378,25 @@ void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
 
 bool CClient::Init()
 {
+    // check if possible frame size factors are supported
+    const int iFraSizePreffered =
+        FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES;
+
+    bFraSiFactPrefSupported =
+        ( Sound.Init ( iFraSizePreffered ) == iFraSizePreffered );
+
+    const int iFraSizeDefault =
+        FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES;
+
+    bFraSiFactDefSupported =
+        ( Sound.Init ( iFraSizeDefault ) == iFraSizeDefault );
+
+    const int iFraSizeSafe =
+        FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES;
+
+    bFraSiFactSafeSupported =
+        ( Sound.Init ( iFraSizeSafe ) == iFraSizeSafe );
+
     // translate block size index in actual block size
     const int iPrefMonoFrameSize =
         iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;

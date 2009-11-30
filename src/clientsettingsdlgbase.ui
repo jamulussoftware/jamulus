@@ -246,36 +246,6 @@
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" >
-           <item>
-            <widget class="QLabel" name="TextSndCrdBufDelayActual" >
-             <property name="text" >
-              <string>Actual Value</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="TextLabelActualSndCrdBufDelay" >
-             <property name="minimumSize" >
-              <size>
-               <width>110</width>
-               <height>20</height>
-              </size>
-             </property>
-             <property name="frameShape" >
-              <enum>QFrame::Panel</enum>
-             </property>
-             <property name="frameShadow" >
-              <enum>QFrame::Sunken</enum>
-             </property>
-             <property name="text" >
-              <string>val</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
           <widget class="QPushButton" name="ButtonDriverSetup" >
            <property name="text" >
             <string>Driver Setup</string>

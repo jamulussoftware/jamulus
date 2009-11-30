@@ -136,6 +136,10 @@ public:
         { return iSndCrdPrefFrameSizeFactor; }
     int GetSndCrdActualMonoBlSize() { return iMonoBlockSizeSam; }
 
+    bool GetFraSiFactPrefSupported() { return bFraSiFactPrefSupported; }
+    bool GetFraSiFactDefSupported()  { return bFraSiFactDefSupported; }
+    bool GetFraSiFactSafeSupported() { return bFraSiFactSafeSupported; }
+
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Channel.SetRemoteChanGain ( iId, dGain ); }
 
@@ -187,6 +191,10 @@ protected:
 
     int                     iSndCrdPrefFrameSizeFactor;
     int                     iSndCrdFrameSizeFactor;
+
+    bool                    bFraSiFactPrefSupported;
+    bool                    bFraSiFactDefSupported;
+    bool                    bFraSiFactSafeSupported;
 
     int                     iMonoBlockSizeSam;
     int                     iStereoBlockSizeSam;

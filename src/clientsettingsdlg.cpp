@@ -309,59 +309,29 @@ QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int iFrameSize,
 
 void CClientSettingsDlg::UpdateSoundCardFrame()
 {
-    // update slider value and text
-    const int iCurPrefFrameSizeFactor =
-        pClient->GetSndCrdPrefFrameSizeFactor();
-
+    // get current actual buffer size value
     const int iCurActualBufSize =
         pClient->GetSndCrdActualMonoBlSize();
 
-    // update radio buttons
-    switch ( iCurPrefFrameSizeFactor )
-    {
-    case FRAME_SIZE_FACTOR_PREFERRED:
-        rButBufferDelayPreferred->setChecked ( true );
-        break;
+    // set radio buttons according to current value
+    rButBufferDelayPreferred->setChecked ( iCurActualBufSize ==
+        SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED );
 
-    case FRAME_SIZE_FACTOR_DEFAULT:
-        rButBufferDelayDefault->setChecked ( true );
-        break;
+    rButBufferDelayDefault->setChecked ( iCurActualBufSize ==
+        SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT );
 
-    case FRAME_SIZE_FACTOR_SAFE:
-        rButBufferDelaySafe->setChecked ( true );
-        break;
-    }
+    rButBufferDelaySafe->setChecked ( iCurActualBufSize ==
+        SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE );
 
-    // preferred size
-    const int iPrefBufSize =
-        iCurPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
+    // disable radio buttons which are not supported by audio interface
+    rButBufferDelayPreferred->setEnabled (
+        pClient->GetFraSiFactPrefSupported() );
 
-    // actual size (use yellow color if different from preferred size)
-    const QString strActSizeValues =
-        GenSndCrdBufferDelayString ( iCurActualBufSize );
+    rButBufferDelayDefault->setEnabled (
+        pClient->GetFraSiFactDefSupported() );
 
-    if ( iPrefBufSize != iCurActualBufSize )
-    {
-        // yellow color if actual buffer size is not the selected one
-        // but a valid one, red color if actual buffer size is not the
-        // selected one and is not a vaild one
-        if ( ( iCurActualBufSize != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) ) &&
-             ( iCurActualBufSize != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) &&
-             ( iCurActualBufSize != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
-        {
-            TextLabelActualSndCrdBufDelay->setText ( "<b><font color=""red"">" +
-                strActSizeValues + "</font></b>" );
-        }
-        else
-        {
-            TextLabelActualSndCrdBufDelay->setText ( "<b><font color=""yellow"">" +
-                strActSizeValues + "</font></b>" );
-        }
-    }
-    else
-    {
-        TextLabelActualSndCrdBufDelay->setText ( strActSizeValues );
-    }
+    rButBufferDelaySafe->setEnabled (
+        pClient->GetFraSiFactSafeSupported() );
 }
 
 void CClientSettingsDlg::showEvent ( QShowEvent* showEvent )

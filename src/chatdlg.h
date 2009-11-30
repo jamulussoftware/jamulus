@@ -28,6 +28,7 @@
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qlayout.h>
+#include <qaccessible.h>
 #include "global.h"
 #ifdef _WIN32
 # include "../windows/moc/chatdlgbase.h"
@@ -49,6 +50,7 @@ public:
 public slots:
     void OnNewLocalInputText();
     void OnChatTextChanged ( const QString& strNewText );
+    void OnClearButtonPressed();
 
 signals:
     void NewLocalInputText ( QString strNewText );

@@ -26,28 +26,17 @@
   </property>
   <layout class="QVBoxLayout" >
    <item>
-    <widget class="QTextBrowser" name="TextViewChatWindow" />
+    <widget class="QTextBrowser" name="TextViewChatWindow" >
+     <property name="textInteractionFlags" >
+      <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::NoTextInteraction|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QLineEdit" name="lineEditLocalInputText" />
    </item>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
-     </property>
      <item>
       <spacer>
        <property name="orientation" >
@@ -58,11 +47,21 @@
        </property>
        <property name="sizeHint" >
         <size>
-         <width>20</width>
-         <height>20</height>
+         <width>181</width>
+         <height>27</height>
         </size>
        </property>
       </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbClear" >
+       <property name="text" >
+        <string>Cl&amp;ear</string>
+       </property>
+       <property name="autoDefault" >
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="buttonClose" >
@@ -83,8 +82,9 @@
  </widget>
  <tabstops>
   <tabstop>lineEditLocalInputText</tabstop>
-  <tabstop>buttonClose</tabstop>
   <tabstop>TextViewChatWindow</tabstop>
+  <tabstop>pbClear</tabstop>
+  <tabstop>buttonClose</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc" />

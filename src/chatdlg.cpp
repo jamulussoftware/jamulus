@@ -31,17 +31,26 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
 {
     setupUi ( this );
 
+    // add help text to controls -----------------------------------------------
+    lineEditLocalInputText->setAccessibleName ( "New chat text edit box" );
+    TextViewChatWindow->setAccessibleName ( "Chat history" );
+
+
     // clear chat window and edit line
     TextViewChatWindow->clear();
     lineEditLocalInputText->clear();
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( lineEditLocalInputText, SIGNAL ( textChanged ( const QString& ) ),
+    QObject::connect ( lineEditLocalInputText,
+        SIGNAL ( textChanged ( const QString& ) ),
         this, SLOT ( OnChatTextChanged ( const QString& ) ) );
 
     QObject::connect ( lineEditLocalInputText, SIGNAL ( returnPressed() ),
         this, SLOT ( OnNewLocalInputText() ) );
+
+    QObject::connect ( pbClear, SIGNAL ( pressed() ),
+        this, SLOT ( OnClearButtonPressed() ) );
 }
 
 void CChatDlg::OnChatTextChanged ( const QString& strNewText )
@@ -61,8 +70,18 @@ void CChatDlg::OnNewLocalInputText()
     lineEditLocalInputText->clear();
 }
 
+void CChatDlg::OnClearButtonPressed()
+{
+    // clear chat window
+    TextViewChatWindow->clear();
+}
+
 void CChatDlg::AddChatText ( QString strChatText )
 {
     // add new text in chat window
     TextViewChatWindow->append ( strChatText );
+
+    // notify accessibility plugin that text has changed
+    QAccessible::updateAccessibility ( TextViewChatWindow, 0,
+        QAccessible::ValueChanged );
 }

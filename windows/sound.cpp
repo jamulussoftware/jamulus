@@ -76,9 +76,24 @@ std::string CSound::SetDev ( const int iNewDev )
 
         if ( !strErrorMessage.empty() )
         {
-            // loading and initializing the new driver failed, go back to
-            // original driver and display error message
-            LoadAndInitializeDriver ( lCurDev );
+            if ( iNewDev != lCurDev )
+            {
+                // loading and initializing the new driver failed, go back to
+                // original driver and display error message
+                LoadAndInitializeDriver ( lCurDev );
+            }
+            else
+            {
+                // the same driver is used but the driver properties seems to
+                // have changed so that they are not compatible to our
+                // software anymore
+                QMessageBox::critical (
+                    0, APP_NAME, "The audio driver properties have changed to "
+                    "a state which is incompatible to this software. "
+                    "Please restart the software.", "Close", 0 );
+
+                _exit ( 0 );
+            }
 
             // store error return message
             strReturn = strErrorMessage;

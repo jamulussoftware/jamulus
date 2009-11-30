@@ -380,7 +380,7 @@ void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
 
     if ( !strError.isEmpty() )
     {
-        QMessageBox::critical ( 0, APP_NAME,
+        QMessageBox::critical ( this, APP_NAME,
             QString ( "The selected audio device could not be used because "
             "of the following error: " ) + strError +
             QString ( " The previous driver will be selected." ), "Ok", 0 );

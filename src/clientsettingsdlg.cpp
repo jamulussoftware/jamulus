@@ -313,7 +313,14 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     const int iCurActualBufSize =
         pClient->GetSndCrdActualMonoBlSize();
 
-    // set radio buttons according to current value
+    // Set radio buttons according to current value (To make it possible
+    // to have all radio buttons unchecked, we have to disable the
+    // exclusive check for the radio button group. We require all radio
+    // buttons to be unchecked in the case when the sound card does not
+    // support any of the buffer sizes and therefore all radio buttons
+    // are disabeld and unchecked.).
+    SndCrdBufferDelayButtonGroup.setExclusive ( false );
+
     rButBufferDelayPreferred->setChecked ( iCurActualBufSize ==
         SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED );
 
@@ -322,6 +329,8 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
 
     rButBufferDelaySafe->setChecked ( iCurActualBufSize ==
         SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE );
+
+    SndCrdBufferDelayButtonGroup.setExclusive ( true );
 
     // disable radio buttons which are not supported by audio interface
     rButBufferDelayPreferred->setEnabled (

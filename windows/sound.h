@@ -26,7 +26,6 @@
 #define _SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_
 
 #include <windows.h>
-#include <string>
 #include <qmutex.h>
 #include <qmessagebox.h>
 #include "../src/util.h"
@@ -65,16 +64,16 @@ public:
     virtual void OpenDriverSetup() { ASIOControlPanel(); }
 
     int          GetNumDev() { return lNumDevs; }
-    std::string  GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }
+    QString      GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }
 
-    std::string  SetDev ( const int iNewDev );
+    QString      SetDev ( const int iNewDev );
     int          GetDev() { return lCurDev; }
 
 protected:
-    bool         LoadAndInitializeFirstValidDriver();
-    std::string  LoadAndInitializeDriver ( int iIdx );
-    int          GetActualBufferSize ( const int iDesiredBufferSizeMono );
-    std::string  CheckDeviceCapabilities();
+    QVector<QString> LoadAndInitializeFirstValidDriver();
+    QString          LoadAndInitializeDriver ( int iIdx );
+    int              GetActualBufferSize ( const int iDesiredBufferSizeMono );
+    QString          CheckDeviceCapabilities();
 
     // audio hardware buffer info
     struct sHWBufferInfo

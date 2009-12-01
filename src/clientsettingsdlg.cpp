@@ -169,7 +169,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     cbSoundcard->clear();
     for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndCrdNumDev(); iSndDevIdx++ )
     {
-        cbSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ).c_str() );
+        cbSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ) );
     }
     cbSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
 

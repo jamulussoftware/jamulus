@@ -57,9 +57,10 @@ CSound* pSound;
 /******************************************************************************\
 * Common                                                                       *
 \******************************************************************************/
-std::string CSound::SetDev ( const int iNewDev )
+QString CSound::SetDev ( const int iNewDev )
 {
-    std::string strReturn = ""; // init with no error
+    QString strReturn = ""; // init with no error
+    bool    bTryLoadAnyDriver = false;
 
     // check if an ASIO driver was already initialized
     if ( lCurDev >= 0 )
@@ -72,9 +73,9 @@ std::string CSound::SetDev ( const int iNewDev )
         ASIOExit();
         asioDrivers->removeCurrentDriver();
 
-        const std::string strErrorMessage = LoadAndInitializeDriver ( iNewDev );
+        const QString strErrorMessage = LoadAndInitializeDriver ( iNewDev );
 
-        if ( !strErrorMessage.empty() )
+        if ( !strErrorMessage.isEmpty() )
         {
             if ( iNewDev != lCurDev )
             {
@@ -92,7 +93,7 @@ std::string CSound::SetDev ( const int iNewDev )
                     "have changed to a state which is incompatible to this "
                     "software. The selected audio device could not be used "
                     "because of the following error: <b>" ) ) +
-                    strErrorMessage.c_str() +
+                    strErrorMessage +
                     QString ( tr ( "</b><br><br>Please restart the software." ) ),
                     "Close", 0 );
 
@@ -115,32 +116,52 @@ std::string CSound::SetDev ( const int iNewDev )
             // throw an error that no driver is available -> it does not make
             // sense to start the llcon software if no audio hardware is
             // available
-            if ( !LoadAndInitializeDriver ( iNewDev ).empty() )
+            if ( !LoadAndInitializeDriver ( iNewDev ).isEmpty() )
             {
                 // loading and initializing the new driver failed, try to find
                 // at least one usable driver
-                if ( !LoadAndInitializeFirstValidDriver() )
-                {
-                    throw CGenErr ( "No usable ASIO audio device "
-                        "(driver) found." );
-                }
+                bTryLoadAnyDriver = true;
             }
         }
         else
         {
             // try to find one usable driver (select the first valid driver)
-            if ( !LoadAndInitializeFirstValidDriver() )
+            bTryLoadAnyDriver = true;
+        }
+    }
+
+    if ( bTryLoadAnyDriver )
+    {
+        // try to load and initialize any valid driver
+        QVector<QString> vsErrorList =
+            LoadAndInitializeFirstValidDriver();
+
+        if ( !vsErrorList.isEmpty() )
+        {
+            // create error message with all details
+            QString sErrorMessage = tr ( "<b>No usable ASIO audio device "
+                "(driver) found.</b><br><br>"
+                "In the following there is a list of all available drivers "
+                "with the associated error message:<ul>" );
+
+            for ( int i = 0; i < lNumDevs; i++ )
             {
-                throw CGenErr ( "No usable ASIO audio device (driver) found." );
+                sErrorMessage += "<li><b>" + GetDeviceName ( i ) + "</b>: " +
+                    vsErrorList[i] + "</li>";
             }
+            sErrorMessage += "</ul>";
+
+            throw CGenErr ( sErrorMessage );
         }
     }
 
     return strReturn;
 }
 
-bool CSound::LoadAndInitializeFirstValidDriver()
+QVector<QString> CSound::LoadAndInitializeFirstValidDriver()
 {
+    QVector<QString> vsErrorList;
+
     // load and initialize first valid ASIO driver
     bool bValidDriverDetected = false;
     int  iCurDriverIdx = 0;
@@ -148,23 +169,32 @@ bool CSound::LoadAndInitializeFirstValidDriver()
     // try all available drivers in the system ("lNumDevs" devices)
     while ( !bValidDriverDetected && ( iCurDriverIdx < lNumDevs ) )
     {
-        if ( LoadAndInitializeDriver ( iCurDriverIdx ).empty() )
+        // try to load and initialize current driver, store error message
+        const QString strCurError =
+            LoadAndInitializeDriver ( iCurDriverIdx );
+
+        vsErrorList.append ( strCurError );
+
+        if ( strCurError.isEmpty() )
         {
             // initialization was successful
             bValidDriverDetected = true;
 
             // store ID of selected driver
             lCurDev = iCurDriverIdx;
+
+            // empty error list shows that init was successful
+            vsErrorList.clear();
         }
 
         // try next driver
         iCurDriverIdx++;
     }
 
-    return bValidDriverDetected;
+    return vsErrorList;
 }
 
-std::string CSound::LoadAndInitializeDriver ( int iDriverIdx )
+QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
 {
     // first check and correct input parameter
     if ( iDriverIdx >= lNumDevs )
@@ -179,14 +209,14 @@ std::string CSound::LoadAndInitializeDriver ( int iDriverIdx )
     {
         // clean up and return error string
         asioDrivers->removeCurrentDriver();
-        return "The audio driver could not be initialized.";
+        return tr ( "The audio driver could not be initialized." );
     }
 
     // check device capabilities if it fullfills our requirements
-    const std::string strStat = CheckDeviceCapabilities();
+    const QString strStat = CheckDeviceCapabilities();
 
     // store ID of selected driver if initialization was successful
-    if ( strStat.empty() )
+    if ( strStat.isEmpty() )
     {
         lCurDev = iDriverIdx;
     }
@@ -199,7 +229,7 @@ std::string CSound::LoadAndInitializeDriver ( int iDriverIdx )
     return strStat;
 }
 
-std::string CSound::CheckDeviceCapabilities()
+QString CSound::CheckDeviceCapabilities()
 {
     // This function checks if our required input/output channel
     // properties are supported by the selected device. If the return
@@ -212,8 +242,9 @@ std::string CSound::CheckDeviceCapabilities()
          ( CanSaRateReturn == ASE_NotPresent ) )
     {
         // return error string
-        return "The audio device does not support the "
-            "required sample rate.";
+        return tr ( "The audio device does not support the "
+            "required sample rate. The required sample rate is: " ) +
+            QString().setNum ( SYSTEM_SAMPLE_RATE ) + " Hz";
     }
 
     // check the number of available channels
@@ -224,8 +255,9 @@ std::string CSound::CheckDeviceCapabilities()
          ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
     {
         // return error string
-        return "The audio device does not support the "
-            "required number of channels.";
+        return tr ( "The audio device does not support the "
+            "required number of channels. The required number of channels "
+            "is: " ) + QString().setNum ( NUM_IN_OUT_CHANNELS );
     }
 
     // check sample format
@@ -249,8 +281,8 @@ std::string CSound::CheckDeviceCapabilities()
              ( channelInfos[i].type != ASIOSTInt32LSB ) )
         {
             // return error string
-            return "Required audio sample format not "
-                "available (16/24/32 bit LSB).";
+            return tr ( "Required audio sample format not "
+                "available (16/24/32 bit LSB)." );
         }
     }
 
@@ -417,7 +449,7 @@ pSound = this;
     // in case we do not have a driver available, throw error
     if ( lNumDevs == 0 )
     {
-        throw CGenErr ( "No ASIO audio device (driver) found." );
+        throw CGenErr ( tr ( "No ASIO audio device (driver) found." ) );
     }
     asioDrivers->removeCurrentDriver();
 
@@ -578,7 +610,7 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
 long CSound::asioMessages ( long selector, long value, void* message, double* opt )
 {
     long ret = 0;
-    switch(selector)
+    switch ( selector )
     {
         case kAsioEngineVersion:
             // return the supported ASIO version of the host application

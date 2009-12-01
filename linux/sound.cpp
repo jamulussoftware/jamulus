@@ -18,7 +18,7 @@ void CSound::OpenJack()
     pJackClient = jack_client_open ( "llcon", JackNullOption, &JackStatus );
     if ( pJackClient == NULL )
     {
-        throw CGenErr ( "Jack server not running" );
+        throw CGenErr ( tr ( "Jack server not running" ) );
     }
 
     // tell the JACK server to call "process()" whenever
@@ -34,8 +34,8 @@ void CSound::OpenJack()
 // TEST check sample rate, if not correct, just fire error
 if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE )
 {
-    throw CGenErr ( "Jack server sample rate is different from "
-        "required one" );
+    throw CGenErr ( tr ( "Jack server sample rate is different from "
+        "required one" ) );
 }
 
     // create four ports (two for input, two for output -> stereo)
@@ -56,7 +56,7 @@ if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE )
     // tell the JACK server that we are ready to roll
     if ( jack_activate ( pJackClient ) )
     {
-        throw CGenErr ( "Cannot activate client" );
+        throw CGenErr ( tr ( "Cannot activate client" ) );
     }
 
     // connect the ports, note: you cannot do this before
@@ -66,21 +66,21 @@ if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE )
     if ( ( ports = jack_get_ports ( pJackClient, NULL, NULL,
            JackPortIsPhysical | JackPortIsOutput ) ) == NULL )
     {
-        throw CGenErr ( "Cannot find any physical capture ports" );
+        throw CGenErr ( tr ( "Cannot find any physical capture ports" ) );
     }
 
     if ( !ports[1] )
     {
-        throw CGenErr ( "Cannot find enough physical capture ports" );
+        throw CGenErr ( tr ( "Cannot find enough physical capture ports" ) );
     }
 
     if ( jack_connect ( pJackClient, ports[0], jack_port_name ( input_port_left ) ) )
     {
-        throw CGenErr ( "Cannot connect input ports" );
+        throw CGenErr ( tr ( "Cannot connect input ports" ) );
     }
     if ( jack_connect ( pJackClient, ports[1], jack_port_name ( input_port_right ) ) )
     {
-        throw CGenErr ( "Cannot connect input ports" );
+        throw CGenErr ( tr ( "Cannot connect input ports" ) );
     }
 
     free ( ports );
@@ -88,21 +88,21 @@ if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE )
     if ( ( ports = jack_get_ports ( pJackClient, NULL, NULL,
            JackPortIsPhysical | JackPortIsInput ) ) == NULL )
     {
-        throw CGenErr ( "Cannot find any physical playback ports" );
+        throw CGenErr ( tr ( "Cannot find any physical playback ports" ) );
     }
 
     if ( !ports[1] )
     {
-        throw CGenErr ( "Cannot find enough physical playback ports" );
+        throw CGenErr ( tr ( "Cannot find enough physical playback ports" ) );
     }
 
     if ( jack_connect ( pJackClient, jack_port_name ( output_port_left ), ports[0] ) )
     {
-        throw CGenErr ( "Cannot connect output ports" );
+        throw CGenErr ( tr ( "Cannot connect output ports" ) );
     }
     if ( jack_connect ( pJackClient, jack_port_name ( output_port_right ), ports[1] ) )
     {
-        throw CGenErr ( "Cannot connect output ports" );
+        throw CGenErr ( tr ( "Cannot connect output ports" ) );
     }
 
     free ( ports );
@@ -238,6 +238,6 @@ void CSound::shutdownCallback ( void *arg )
 {
     // without a Jack server, our software makes no sense to run, throw
     // error message
-    throw CGenErr ( "Jack server was shut down" );
+    throw CGenErr ( tr ( "Jack server was shut down" ) );
 }
 #endif // WITH_SOUND

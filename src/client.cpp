@@ -241,7 +241,7 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
         Sound.Stop();
     }
 
-    const QString strReturn = Sound.SetDev ( iNewDev ).c_str();
+    const QString strReturn = Sound.SetDev ( iNewDev );
 
     // init again because the sound card actual buffer size might
     // be changed on new device

@@ -123,13 +123,13 @@ public:
 
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
-    int          GetSndCrdNumDev() { return Sound.GetNumDev(); }
-    std::string  GetSndCrdDeviceName ( const int iDiD )
+    int     GetSndCrdNumDev() { return Sound.GetNumDev(); }
+    QString GetSndCrdDeviceName ( const int iDiD )
         { return Sound.GetDeviceName ( iDiD ); }
 
-    QString      SetSndCrdDev ( const int iNewDev );
-    int          GetSndCrdDev() { return Sound.GetDev(); }
-    void         OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
+    QString SetSndCrdDev ( const int iNewDev );
+    int     GetSndCrdDev() { return Sound.GetDev(); }
+    void    OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
 
     void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
     int GetSndCrdPrefFrameSizeFactor()

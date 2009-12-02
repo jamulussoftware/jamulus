@@ -129,6 +129,13 @@
 #define MAX_LEN_CHAT_TEXT               1600
 #define MAX_LEN_CHAT_TEXT_PLUS_HTML     1800
 
+// common tool tip bottom line text
+#define TOOLTIP_COM_END_TEXT            tr ( \
+    "<br><div align=right><font size=-1><i>" \
+    "To get more information use the ""What's " \
+    "This"" help (? menu or Shift+F1)" \
+    "</i></font></div>" )
+
 #define _MAXSHORT                       32767
 #define _MAXBYTE                        255 // binary: 11111111
 #define _MINSHORT                       ( -32768 )

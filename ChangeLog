@@ -5,48 +5,48 @@
 - show number of connected clients in window title (and therefore in OS task
   bar)
 
-- bug fix for server logging history graph x-axis
+- added "Whats this" help text to the GUI controls in the general settings
+  dialog, added Tool Tips to some GUI controls
 
 - server logging history grid lines of weekend days are now plotted with
   different line width
 
-- bug fix: fix for disconnect issue at the server
-
-- added "Whats this" help text to the GUI controls in the general settings
-  dialog
-
 - removed ALSA support since the ALSA interface implementation in llcon was
   buggy and will not be maintained in the future
+
+- bug fix: fix for server logging history graph x-axis
+
+- bug fix: fix for disconnect issue at the server
 
 
 3.0.2
 
-- fix for Jack Linux audio interface: ports are only once registered and
-  connect when the software is started up
+- new server features: for chat messages the time stamp is also shown, parsing
+  of existing log file supported
+
+- updates for help texts
+
+- new design for fader tag
+
+- change for Jack Linux audio interface: ports are only registered and
+  connected once when the software is started up
 
 - bug fix: under bad network conditions chat messages were randomly repeated
 
 - bug fix: in case the server was shutdown and restarted during a connection,
   the channel name was not updated correctly at the server
 
-- updates for help texts
-
-- new design for fader tag
-
-- new server features: for chat messages the time stamp is also shown, parsing
-  of existing log file supported
-
 
 3.0.1
 
-- bug fix: buzzing occurred when audio stream was interrupted (e.g. in case
-  of network trouble)
+- use low complexity CELT encoder profile, this lowers audio dropout
+  probability on slow computers
 
 - in case "Open Chat on New Message" is not enabled, a hint in the status bar
   is shown when a message is received
 
-- use low complexity CELT encoder profile, this lowers audio dropout
-  probability on slow computers
+- bug fix: buzzing occurred when audio stream was interrupted (e.g. in case
+  of network trouble)
 
   
 3.0.0
@@ -77,13 +77,13 @@
 
 - "Mute" and "Solo" check boxes for each connected client fader
 
+- store previous server URLs
+
 - changes to the main GUI (grouped "local" and "server" settings)
 
 - LED status lights and LED input level meter
 
 - better behaviour on disconnection (introduced disconnection protocol message)
-
-- store previous server URLs
 
 
 2.2.1
@@ -113,38 +113,38 @@
 
 - speed optimizations to improve audio interface stability
 
-- new defaults (e.g. turn off Reverb by default since it requires significant
-  CPU)
+- new default settings (e.g. turn off Reverb by default since it requires
+  significant CPU)
 
 
 2.1.3
 
 - added sound card selection
 
-- added total delay display
-
 - improved ASIO configuration
+
+- added total delay display
 
 
 2.1.2
 
 - audio compression type can be selected (IMA ADPCM, MS ADPCM, None)
 
-- ping time measurement problems on Windows OS fixed
-
 - security checks for protocol messages (wrong messages could crash the
   software)
+
+- bug fix: ping time measurement problems on Windows OS fixed
 
 
 2.1.1
 
-- chat window
+- added a chat window
 
-- server can be started on different port
+- the client can select a port number of server additional to the URL
 
-- client can select port of server
+- the server can be operated on an arbitrary port number
 
-- ping time information in general settings dialog
+- ping time information in general settings dialog added
 
 
 2.1.0
@@ -167,12 +167,12 @@
 
 0.9.4
 
-- implemented protocol, now it is possible to set the jitter buffer in the
+- added a protocol mechanism, now it is possible to set the jitter buffer in the
   server according to the setting in the client (they are coupled now)
 
 - removed sample rate offset estimation since it was not used anyway
 
-- internal audio processing in the server is now based on minimum block
+- internal audio processing in the server is now based on the minimum block
   size (improves latency)
 
 

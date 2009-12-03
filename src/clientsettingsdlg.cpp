@@ -37,24 +37,38 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "buffer compensates for network and sound card timing jitters. The "
         "size of this jitter buffer has therefore influence on the quality of "
         "the audio stream (how many dropouts occur) and the overall delay "
-        "(the longer the buffer, the higher the delay).<br/>"
+        "(the longer the buffer, the higher the delay).<br>"
         "Dropouts in the audio stream are indicated by the light on the bottom "
         "of the jitter buffer size fader. If the light turns to red, a buffer "
-        "overrun/underrun took place and the audio stream is interrupted.<br/>"
+        "overrun/underrun took place and the audio stream is interrupted.<br>"
         "The jitter buffer setting is therefore a trade-off between audio "
-        "quality and overall delay.<br/>"
+        "quality and overall delay.<br>"
         "An auto setting of the jitter buffer size setting is available. If "
         "the check Auto is enabled, the jitter buffer is set automatically "
         "based on measurements of the network and sound card timing jitter. If "
         "the Auto check is enabled, the jitter buffer size fader is disabled "
         "(cannot be moved by the mouse)." );
 
+    QString strJitterBufferSizeTT = tr ( "In case the Auto setting of the "
+        "jitter buffer is enabled, the network buffer is set to a conservative "
+        "value to minimize the audio dropout probability. To <b>tweak the "
+        "audio delay/latency</b> it is recommended to disable the Auto "
+        "functionality and to <b>lower the jitter buffer size manually</b> by "
+        "using the slider until your personal acceptable limit of the amount "
+        "of dropouts is reached. The LED indicator will visualize the audio "
+        "dropouts by a red light" ) + TOOLTIP_COM_END_TEXT;
+
     TextNetBuf->setWhatsThis           ( strJitterBufferSize );
+    TextNetBuf->setToolTip             ( strJitterBufferSizeTT );
     GroupBoxJitterBuffer->setWhatsThis ( strJitterBufferSize );
+    GroupBoxJitterBuffer->setToolTip   ( strJitterBufferSizeTT );
     SliderNetBuf->setWhatsThis         ( strJitterBufferSize );
     SliderNetBuf->setAccessibleName    ( tr ( "Jitter buffer slider control" ) );
+    SliderNetBuf->setToolTip           ( strJitterBufferSizeTT );
     cbAutoJitBuf->setAccessibleName    ( tr ( "Auto jitter buffer switch" ) );
+    cbAutoJitBuf->setToolTip           ( strJitterBufferSizeTT );
     CLEDNetw->setAccessibleName        ( tr ( "Jitter buffer status LED indicator" ) );
+    CLEDNetw->setToolTip               ( strJitterBufferSizeTT );
 
     // sound card device
     cbSoundcard->setWhatsThis ( tr ( "<b>Sound Card Device:</b> The ASIO "
@@ -62,16 +76,24 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "operating system. Under Linux, no sound card selection is possible "
         "(always wave mapper is shown and cannot be changed). If the selected "
         "ASIO driver is not valid an error message is shown and the previous "
-        "valid driver is selected.<br/>"
+        "valid driver is selected.<br>"
         "If the driver is selected during an active connection, the connection "
         "is stopped, the driver is changed and the connection is started again "
         "automatically." ) );
+
     cbSoundcard->setAccessibleName ( tr ( "Sound card device selector combo box" ) );
+
+    cbSoundcard->setToolTip ( tr ( "In case the <b>ASIO4ALL</b> driver is used, "
+        "please note that this driver usually introduces approx. 10-30 ms of "
+        "additional audio delay. Using a sound card with a native ASIO driver "
+        "is therefore recommended.<br>If you are using the <b>kX ASIO</b> "
+        "driver, make sure to connect the ASIO inputs in the kX DSP settings "
+        "panel." ) + TOOLTIP_COM_END_TEXT );
 
     // sound card buffer delay
     QString strSndCrdBufDelay = tr ( "<b>Sound Card Buffer Delay:</b> The "
         "buffer delay setting is a fundamental setting of the llcon software. "
-        "This setting has influence on many connection properties.<br/>"
+        "This setting has influence on many connection properties.<br>"
         "Three buffer sizes are supported:"
         "<ul>"
         "<li>128 samples: This is the preferred setting since it gives lowest "
@@ -86,30 +108,46 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "is disabled. To change the actual buffer delay, this "
         "setting has to be changed in the sound card driver. On Windows, press "
         "the ASIO Setup button to open the driver settings panel. On Linux, "
-        "use the Jack configuration tool to change the buffer size.<br/>"
+        "use the Jack configuration tool to change the buffer size.<br>"
         "The actual buffer delay has influence on the connection status, the "
         "current upload rate and the overall delay. The lower the buffer size, "
         "the higher the probability of red light in the status indicator (drop "
         "outs) and the higher the upload rate and the lower the overall "
-        "delay.<br/>"
+        "delay.<br>"
         "The jitter buffer setting is therefore a trade-off between audio "
         "quality and overall delay." );
 
+    QString strSndCrdBufDelayTT = tr ( "If the buffer delay settings are "
+        "disabled, it is prohibited by the audio driver to modify this "
+        "setting from within the llcon software. On Windows, press "
+        "the ASIO Setup button to open the driver settings panel. On Linux, "
+        "use the Jack configuration tool to change the buffer size." ) +
+        TOOLTIP_COM_END_TEXT;
+
     rButBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
     rButBufferDelayPreferred->setAccessibleName ( tr ( "128 samples setting radio button" ) );
+    rButBufferDelayPreferred->setToolTip ( strSndCrdBufDelayTT );
     rButBufferDelayDefault->setWhatsThis ( strSndCrdBufDelay );
     rButBufferDelayDefault->setAccessibleName ( tr ( "256 samples setting radio button" ) );
+    rButBufferDelayDefault->setToolTip ( strSndCrdBufDelayTT );
     rButBufferDelaySafe->setWhatsThis ( strSndCrdBufDelay );
     rButBufferDelaySafe->setAccessibleName ( tr ( "512 samples setting radio button" ) );
+    rButBufferDelaySafe->setToolTip ( strSndCrdBufDelayTT );
     ButtonDriverSetup->setWhatsThis ( strSndCrdBufDelay );
     ButtonDriverSetup->setAccessibleName ( tr ( "ASIO setup push button" ) );
+    ButtonDriverSetup->setToolTip ( strSndCrdBufDelayTT );
 
     // open chat on new message
     cbOpenChatOnNewMessage->setWhatsThis ( tr ( "<b>Open Chat on New "
         "Message:</b> If this checkbox is enabled, the chat window will "
         "open on any incoming chat text if it not already opened." ) );
+
     cbOpenChatOnNewMessage->setAccessibleName ( tr ( "Open chat on new "
         "message check box" ) );
+
+    cbOpenChatOnNewMessage->setToolTip ( tr ( "If Open Chat on New Message "
+        "is disabled, a hint in the main window status bar is shown when a "
+        "new message has arrived" ) + TOOLTIP_COM_END_TEXT );
 
     // use high quality audio
     cbUseHighQualityAudio->setWhatsThis ( tr ( "<b>Use High Quality Audio</b> "
@@ -117,6 +155,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "by increasing the stream data rate. Make sure that the current "
         "upload rate does not exceed the available bandwidth of your "
         "internet connection." ) );
+
     cbUseHighQualityAudio->setAccessibleName ( tr ( "Use high quality audio "
         "check box" ) );
 
@@ -127,9 +166,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "delay is introduced by the network. This delay should be as low as "
         "20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to "
         "the server is too large or your internet connection is not "
-        "sufficient.<br/>"
+        "sufficient.<br>"
         "The overall delay is calculated from the current ping time and the "
-        "delay which is introduced by the current buffer settings.<br/>"
+        "delay which is introduced by the current buffer settings.<br>"
         "The upstream rate depends on the current audio packet size and the "
         "audio compression setting. Make sure that the upstream rate is not "
         "higher than the available rate (check the upstream capabilities of "
@@ -141,6 +180,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     TextLabelOverallDelay->setWhatsThis ( strConnStats );
     TextUpstream->setWhatsThis          ( strConnStats );
     TextUpstreamValue->setWhatsThis     ( strConnStats );
+    CLEDOverallDelay->setWhatsThis      ( strConnStats );
+    CLEDOverallDelay->setToolTip ( tr ( "If this LED indicator turns red, "
+        "you will not have much fun using the llcon software..." ) +
+        TOOLTIP_COM_END_TEXT );
 
 
     // init driver button
@@ -150,6 +193,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // no use for this button for Linux right now, maybe later used
     // for Jack
     ButtonDriverSetup->hide();
+
+    // for Jack interface, we cannot choose the audio hardware from
+    // within the llcon software, hide the combo box
+    TextSoundcardDevice->hide();
+    cbSoundcard->hide();
 #endif
 
     // init delay and other information controls

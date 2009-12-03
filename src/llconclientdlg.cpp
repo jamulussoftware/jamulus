@@ -55,35 +55,56 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "indicators show the current input level of the two stereo channels "
         "of the current selected audio input. The upper level display belongs "
         "to the left channel and the lower level display to the right channel "
-        "of the audio input.<br/>"
+        "of the audio input.<br>"
         "Make sure not to clip the input signal to avoid distortions of the "
         "audio signal." );
+
+    QString strInpLevHTT = tr ( "If the llcon software is connected and "
+        "you play your instrument/sing in the microphone, the LED level "
+        "meter should flicker. If this is not the case, you have "
+        "probably selected the wrong input channel (e.g. line in instead "
+        "of the microphone input) or set the input gain too low in the "
+        "(Windows) audio mixer.<br>For a proper usage of the llcon software, "
+        "you should not hear your singing/instrument in the loudspeaker or "
+        "your headphone when the llcon software is not connected. This can "
+        "be achieved by muting your input audio channel in the Playback "
+        "mixer (<b>not</b> the Recording mixer!)." ) + TOOLTIP_COM_END_TEXT;
+
     QString strInpLevHAccText  = tr ( "Input level meter" );
     QString strInpLevHAccDescr = tr ( "Simulates an analog LED level meter." );
+
     TextLabelInputLevelL->setWhatsThis                    ( strInpLevH );
+    TextLabelInputLevelL->setToolTip                      ( strInpLevHTT );
     TextLabelInputLevelR->setWhatsThis                    ( strInpLevH );
+    TextLabelInputLevelR->setToolTip                      ( strInpLevHTT );
     MultiColorLEDBarInputLevelL->setWhatsThis             ( strInpLevH );
     MultiColorLEDBarInputLevelL->setAccessibleName        ( strInpLevHAccText );
     MultiColorLEDBarInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );
+    MultiColorLEDBarInputLevelL->setToolTip               ( strInpLevHTT );
     MultiColorLEDBarInputLevelR->setWhatsThis             ( strInpLevH );
     MultiColorLEDBarInputLevelR->setAccessibleName        ( strInpLevHAccText );
     MultiColorLEDBarInputLevelR->setAccessibleDescription ( strInpLevHAccDescr );
+    MultiColorLEDBarInputLevelR->setToolTip               ( strInpLevHTT );
 
     // connect/disconnect button
     PushButtonConnect->setWhatsThis ( tr ( "<b>Connect / Disconnect Button:"
         "</b> Push this button to connect the server. A valid IP address has "
         "to be specified before. If the client is connected, pressing this "
         "button will disconnect the connection." ) );
-    PushButtonConnect->setAccessibleName ( tr ( "Connect and disconnect toggle button" ) );
-    PushButtonConnect->setAccessibleDescription ( tr ( "Clicking on this button "
-        "changes the caption of the button from Connect to Disconnect, i.e., it "
-        "implements a toggle functionality for connecting and disconnecting "
-        "the llcon software." ) );
+
+    PushButtonConnect->setAccessibleName (
+        tr ( "Connect and disconnect toggle button" ) );
+
+    PushButtonConnect->setAccessibleDescription ( tr ( "Clicking on this "
+        "button changes the caption of the button from Connect to "
+        "Disconnect, i.e., it implements a toggle functionality for connecting "
+        "and disconnecting the llcon software." ) );
 
     // status bar
     TextLabelStatus->setWhatsThis ( tr ( "<b>Status Bar:</b> In the status bar "
         "different messages are displayed. E.g., if an error occurred or the "
         "status of the connection is shown." ) );
+
     TextLabelStatus->setAccessibleName ( tr ( "Status bar" ) );
 
     // server address
@@ -92,8 +113,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "A list of the most recent used server URLs is available for "
         "selection. If an invalid address was chosen, an error message is "
         "shown in the status bar." );
+
     TextLabelServerAddr->setWhatsThis            ( strServAddrH );
     LineEditServerAddr->setWhatsThis             ( strServAddrH );
+
     LineEditServerAddr->setAccessibleName        ( tr ( "Server address edit box" ) );
     LineEditServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
         "URL. It also stores old URLs in the combo box list." ) );
@@ -105,8 +128,16 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "server. This tag will also show up at each client which is connected "
         "to the same server as the local client. If the fader tag is empty, "
         "the IP address of the client is displayed instead." );
-    TextLabelServerTag->setWhatsThis    ( strFaderTag );
-    LineEditFaderTag->setWhatsThis      ( strFaderTag );
+
+    QString strFaderTagTT = tr ( "Set your name and/or instrument and/or "
+        "pseoudonym here so that the other musicians can identify you." ) +
+        TOOLTIP_COM_END_TEXT;
+
+    TextLabelServerTag->setWhatsThis ( strFaderTag );
+    TextLabelServerTag->setToolTip   ( strFaderTagTT );
+    LineEditFaderTag->setWhatsThis   ( strFaderTag );
+    LineEditFaderTag->setToolTip     ( strFaderTagTT );
+
     LineEditFaderTag->setAccessibleName ( tr ( "Fader tag edit box" ) );
 
     // local audio input fader
@@ -118,8 +149,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "which is much louder than the microphone, move the audio fader in "
         "a direction where the label above the fader shows <i>L -x</i>, where "
         "<i>x</i> is the current attenuation indication. " );
+
     TextAudInFader->setWhatsThis        ( strAudFader );
     SliderAudInFader->setWhatsThis      ( strAudFader );
+
     SliderAudInFader->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
 
     // reverberation level
@@ -129,13 +162,15 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "the microphone signal is fed into the right audio channel of the "
         "sound card and a reverberation effect shall be applied, set the "
         "channel selector to right and move the fader upwards until the "
-        "desired reverberation level is reached.<br/>"
+        "desired reverberation level is reached.<br>"
         "The reverberation effect requires significant CPU so that it should "
         "only be used on fast PCs. If the reverberation level fader is set to "
         "minimum (which is the default setting), the reverberation effect is "
         "switched off and does not cause any additional CPU usage." );
+
     TextLabelAudReverb->setWhatsThis   ( strAudReverb );
     SliderAudReverb->setWhatsThis      ( strAudReverb );
+
     SliderAudReverb->setAccessibleName ( tr ( "Reverberation effect level setting" ) );
 
     // reverberation channel selection
@@ -143,6 +178,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "With these radio buttons the audio input channel on which the "
         "reverberation effect is applied can be chosen. Either the left "
         "or right input channel can be selected." );
+
     RadioButtonRevSelL->setWhatsThis ( strRevChanSel );
     RadioButtonRevSelL->setAccessibleName ( tr ( "Left channel selection for reverberation" ) );
     RadioButtonRevSelR->setWhatsThis ( strRevChanSel );
@@ -163,6 +199,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "available internet bandwidth.</li>"
         "<li>The CPU of the client or server is at 100%.</li>"
         "</ul>" ) );
+
     LEDOverallStatus->setAccessibleName ( tr ( "Overall status LED indicator" ) );
 
 

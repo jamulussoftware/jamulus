@@ -82,7 +82,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     pcbSolo->setWhatsThis ( "<b>Solo:</b> With the Solo checkbox, the current "
         "audio channel can be set to solo which means that all other channels "
-        "except of the current channel are muted.<br/>"
+        "except of the current channel are muted.<br>"
         "Only one channel at a time can be set to solo." );
     pcbSolo->setAccessibleName ( "Solo button" );
 

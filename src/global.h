@@ -132,8 +132,8 @@
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT            tr ( \
     "<br><div align=right><font size=-1><i>" \
-    "To get more information use the ""What's " \
-    "This"" help (? menu or Shift+F1)" \
+    "For more information use the ""What's " \
+    "This"" help (? menu, right mouse button or Shift+F1)" \
     "</i></font></div>" )
 
 #define _MAXSHORT                       32767

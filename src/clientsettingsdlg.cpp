@@ -147,7 +147,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     cbOpenChatOnNewMessage->setToolTip ( tr ( "If Open Chat on New Message "
         "is disabled, a hint in the main window status bar is shown when a "
-        "new message has arrived" ) + TOOLTIP_COM_END_TEXT );
+        "new message has arrived." ) + TOOLTIP_COM_END_TEXT );
 
     // use high quality audio
     cbUseHighQualityAudio->setWhatsThis ( tr ( "<b>Use High Quality Audio</b> "

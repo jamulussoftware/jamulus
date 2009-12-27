@@ -1,20 +1,50 @@
-HIGH PRIORITY
+HIGH PRIORITY ------------------------------------------------------------------
 
-- Auto jitter buffer algorithm needs to be revised and optimized (maybe
+- Improvement of Jitter Buffer
+  Right now in case of a buffer over-/underrun the jitter buffer is reset
+  and the pointer is set to the middle of the buffer. This is a good
+  compromise for most situations but leads to problems if very small jitter
+  buffer sizes are used. An optimized pointer position in case of buffer
+  failures will improve the performance on very small buffer sizes.
+
+- Support for Stereo Audio Streams
+  * Wait for CELT code domain mixing feature.
+  * Preserve mono mode for low CPU usage at the server and low up-/download
+    rate at the client.
+  * Server switches to stereo on first client which is connected and has
+    stereo mode enabled.  
+
+- Detect Server on Same Computer
+  Detect that a server is running on the same computer by trying to bind the
+  server socket port. If a server is running, ask the client user if
+  "localhost" shall be substituted on the host address edit box.
+  -> Aids server operation on client PC.
+
+- Auto Jitter Buffer Algorithm Improvement
+  Auto jitter buffer algorithm needs to be revised and optimized (maybe
   using a histogram instead of calculating the standard deviation is
   more suitable to set the optimum jitter buffer size since the variance
-  of the jitter is not Gaussian but follows some other unknown distribution)
+  of the jitter is not Gaussian but follows some other unknown distribution).
 
-- Channel gains are not transported to the server if the server
-  was closed and reopend during a client connection (this issue has to be
-  investigated in more detail, it seems that sometimes the gain is still
-  valid even if the server was shutdown and restarted...)
+- Bug With Channel Gains
+  Channel gains are not transported to the server if the server was closed
+  and reopend during a client connection (this issue has to be investigated
+  in more detail, it seems that sometimes the gain is still valid even if the
+  server was shutdown and restarted...).
+
+- Mac Port
+  Porting the llcon software so that it can be run on MacOS. QT is already
+  available on Mac, even a Jack port is there. But it might be better to use
+  the native Mac audio interface Core Audio. A new audio interface should be
+  written.
 
 
-LOW PRIORITY
+LOW PRIORITY -------------------------------------------------------------------
 
-- Disconnect functionality requires some more work -> does not work reliably
+- Disconnect issue
+  Disconnect functionality requires some more work -> does not work reliably
 
-- Fancy GUI design is almost finished but has some issues (update problem
+- Fancy GUI Design Implementation
+  Fancy GUI design is almost finished but has some issues (update problem
   in Windows, size of fader background seems to be differently interpreted
-  in Linux and Windows)
+  in Linux and Windows).

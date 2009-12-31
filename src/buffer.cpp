@@ -253,12 +253,19 @@ if ( bUseRandomInit )
     const int iNumBlocks = iMemSize / iBlockSize;
     if ( iNumBlocks < iNumBlocksBoundForRandom ) // just for very small buffers
     {
-        // overwrite fill level with random value
+        // overwrite fill level with random value, the range
+        // is 0 to (iMemSize - iBlockSize)
         iNewFillLevel = static_cast<int> ( static_cast<double> ( rand() ) *
             iNumBlocks / RAND_MAX ) * iBlockSize;
     }
 }
 
+/*
+// TEST
+static FILE* pFile = fopen ( "test.dat", "w" );
+fprintf ( pFile, "%d %d %d\n", iMemSize, iBlockSize, iNewFillLevel );
+fflush ( pFile );
+*/
     }
 
     // different behaviour for get and put corrections
@@ -267,7 +274,8 @@ if ( bUseRandomInit )
         // clear buffer since we had a buffer underrun
         vecbyMemory.Reset ( 0 );
 
-        // reset buffer pointers so that they are at maximum distance
+        // reset buffer pointers so that they are at maximum distance after
+        // the get operation (assign new fill level value to the get pointer)
         iPutPos = 0;
         iGetPos = iNewFillLevel;
 

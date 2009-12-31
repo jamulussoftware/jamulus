@@ -117,7 +117,7 @@ protected:
     CVector<int16_t> ProcessData ( CVector<CVector<int16_t> >& vecvecsData,
                                    CVector<double>& vecdGains );
 
-    virtual void    customEvent ( QEvent* Event );
+    virtual void     customEvent ( QEvent* Event );
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator

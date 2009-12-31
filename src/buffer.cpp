@@ -231,34 +231,50 @@ int CNetBuf::GetAvailData() const
 
 void CNetBuf::Clear ( const EClearType eClearType )
 {
-    int iMiddleOfBuffer = 0;
+// TEST defines
+const bool bUseRandomInit           = false;
+const int  iNumBlocksBoundForRandom = 6;
+
+    int iNewFillLevel = 0;
 
     if ( iBlockSize != 0 )
     {
-        // with the following operation we set the new get pos to a block
+        // with the following operation we set the fill level to a block
         // boundary (one block below the middle of the buffer in case of odd
         // number of blocks, e.g.:
         // [buffer size]: [get pos]
-        // 1: 0   /   2: 0   /   3: 1   /   4: 1   /   5: 2 ...
-        iMiddleOfBuffer =
+        // 1: 0   /   2: 0   /   3: 1   /   4: 1   /   5: 2 ...)
+        iNewFillLevel =
             ( ( ( iMemSize - iBlockSize) / 2 ) / iBlockSize ) * iBlockSize;
+
+// TEST random init position
+if ( bUseRandomInit )
+{
+    const int iNumBlocks = iMemSize / iBlockSize;
+    if ( iNumBlocks < iNumBlocksBoundForRandom ) // just for very small buffers
+    {
+        // overwrite fill level with random value
+        iNewFillLevel = static_cast<int> ( static_cast<double> ( rand() ) *
+            iNumBlocks / RAND_MAX ) * iBlockSize;
+    }
+}
+
     }
 
     // different behaviour for get and put corrections
     if ( eClearType == CT_GET )
     {
-        // clear buffer
+        // clear buffer since we had a buffer underrun
         vecbyMemory.Reset ( 0 );
 
-        // correct buffer so that after the current get operation the pointer
-        // are at maximum distance
+        // reset buffer pointers so that they are at maximum distance
         iPutPos = 0;
-        iGetPos = iMiddleOfBuffer;
+        iGetPos = iNewFillLevel;
 
         // The buffer was cleared, the next time blocks are read from the
         // buffer, these are invalid ones. Calculate the number of invalid
         // elements
-        iNumInvalidElements = iMemSize - iMiddleOfBuffer;
+        iNumInvalidElements = iMemSize - iNewFillLevel;
 
         // check for special case
         if ( iPutPos == iGetPos )
@@ -274,7 +290,7 @@ void CNetBuf::Clear ( const EClearType eClearType )
     {
         // in case of "put" correction, do not delete old data but only shift
         // the pointers
-        iPutPos = iMiddleOfBuffer;
+        iPutPos = iNewFillLevel;
 
         // adjust put pointer relative to current get pointer, take care of
         // wrap around

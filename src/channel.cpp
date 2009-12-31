@@ -160,7 +160,7 @@ void CChannel::SetNetwFrameSizeAndFact ( const int iNewNetwFrameSize,
 
 bool CChannel::SetSockBufNumFrames ( const int iNewNumFrames )
 {
-    QMutexLocker locker ( &Mutex ); // this opperation must be done with mutex
+    QMutexLocker locker ( &Mutex ); // this operation must be done with mutex
 
     // first check for valid input parameter range
     if ( ( iNewNumFrames >= MIN_NET_BUF_SIZE_NUM_BL ) &&

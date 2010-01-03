@@ -1,3 +1,8 @@
+3.0.4
+
+- improvement of network buffer (jitter buffer) in case of small buffer sizes
+
+
 3.0.3
 
 - accessibility improvements

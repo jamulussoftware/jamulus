@@ -4,8 +4,8 @@
  * Author(s):
  *  Volker Fischer
  *
- * Note: we assuming here that put and get operations are secured by a mutex
- *       and do not take place at the same time
+ * Note: We are assuming here that put and get operations are secured by a mutex
+ *       and accessing does not occur at the same time.
  *
  ******************************************************************************
  *
@@ -242,6 +242,7 @@ void CNetBuf::Clear ( const EClearType eClearType )
 {
     // Define the number of blocks bound for the "random offset" (1) algorithm.
     // If we are above the bound, we use the "middle of buffer" (2) algorithm.
+    //
     // Test results (with different jitter buffer sizes), given is the error
     // probability of jitter buffer (probability of corrections in the buffer):
     //  kX, 128 samples, WLAN:
@@ -277,7 +278,7 @@ void CNetBuf::Clear ( const EClearType eClearType )
         const int iNumBlocks = iMemSize / iBlockSize;
         if ( iNumBlocks <= iNumBlocksBoundInclForRandom ) // just for small buffers
         {
-            // random position algorithm
+            // Random position algorithm.
             // overwrite fill level with random value, the range
             // is 0 to (iMemSize - iBlockSize)
             iNewFillLevel = static_cast<int> ( static_cast<double> ( rand() ) *
@@ -285,7 +286,7 @@ void CNetBuf::Clear ( const EClearType eClearType )
         }
         else
         {
-            // middle of buffer algorithm
+            // Middle of buffer algorithm.
             // with the following operation we set the fill level to a block
             // boundary (one block below the middle of the buffer in case of odd
             // number of blocks, e.g.:

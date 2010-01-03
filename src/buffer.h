@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
@@ -29,7 +29,14 @@
 #include "global.h"
 
 
+/* Definitions ****************************************************************/
+// each regular buffer access lead to a count for put and get, assuming 2.33 ms
+// blocks we have 30 s / 2.33 ms * 2 = 25714
+#define MAX_STATISTIC_COUNT                 25714
+
+
 /* Classes ********************************************************************/
+// Network buffer (jitter buffer) ----------------------------------------------
 class CNetBuf
 {
 public:
@@ -41,6 +48,8 @@ public:
 
     bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
     bool Get ( CVector<uint8_t>& vecbyData );
+
+    double GetErrorRate() { return ErrorRateStatistic.GetAverage(); }
 
 protected:
     enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
@@ -55,10 +64,13 @@ protected:
     int              iNumInvalidElements;
     int              iGetPos, iPutPos;
     EBufState        eBufState;
+
+    // statistic
+    CErrorRate       ErrorRateStatistic;
 };
 
 
-// conversion buffer (very simple buffer)
+// Conversion buffer (very simple buffer) --------------------------------------
 template<class TData> class CConvBuf
 {
 public:

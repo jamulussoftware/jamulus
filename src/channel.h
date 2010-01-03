@@ -104,6 +104,7 @@ public:
     int GetNetwFrameSizeFact() const { return iNetwFrameSizeFact; }
     int GetNetwFrameSize() const { return iNetwFrameSize; }
 
+    double GetJitterBufferErrorRate() { return SockBuf.GetErrorRate(); }
 
     // network protocol interface
     void CreateJitBufMes ( const int iJitBufSize )

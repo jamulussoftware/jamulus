@@ -704,6 +704,7 @@ void CLlconClientDlg::UpdateDisplay()
 
 // TEST
 //TextLabelStatus->setText ( QString( "Time: %1, Netw: %2" ).arg ( pClient->GetTimingStdDev() ).arg ( pClient->GetChannel()->GetTimingStdDev() ) );
+//TextLabelStatus->setText ( QString( "Buf. Err. Rate: %1 %" ).arg ( pClient->GetChannel()->GetJitterBufferErrorRate() * 100.0 ) );
 
 }
 

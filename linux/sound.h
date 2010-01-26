@@ -83,7 +83,7 @@ class CSound : public CSoundBase
 public:
     CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ), void* pParg ) :
         CSoundBase ( false, fpNewProcessCallback, pParg ) {}
-    virtual ~CSound() { Close(); }
+    virtual ~CSound() {}
 
     // not used
     int     GetNumDev() { return 1; }

@@ -26,8 +26,10 @@
 Windows:
 --------
 
-Rquired software: QT4, Visual Studio 2005
+Rquired software: QT4, Visual Studio 2005, ASIO development files
 
+- copy ASIO development files in llcon/windows directory so that, e.g., the
+  directory llcon\windows\ASIOSDK2\common exists 
 - run llcon/windows/MocQT.bat
 - open llcon.sln in your Visual Studio environment and compile
 - run llcon/windows/Release/llcon.exe
@@ -36,7 +38,7 @@ Rquired software: QT4, Visual Studio 2005
 Linux:
 ------
 
-Required packages: QT4 (devel packages, too!), ALSA (devel packages, too!)
+Required packages: QT4 (devel packages, too!), Jack (devel packages, too!)
 
 - cd llcon
 - sh bootstrap

@@ -36,13 +36,32 @@
 
 
 /* Classes ********************************************************************/
-// Network buffer (jitter buffer) ----------------------------------------------
-class CNetBuf
+// Buffer base class -----------------------------------------------------------
+template<class TData> class CBufferBase
 {
 public:
-    CNetBuf() {}
-    virtual ~CNetBuf() {}
+    virtual void Init ( const int iNewMemSize );
 
+    virtual bool Put ( const CVector<TData>& vecData, const int iInSize );
+    virtual bool Get ( CVector<TData>& vecData );
+
+    virtual int GetAvailSpace() const;
+    virtual int GetAvailData() const;
+
+protected:
+    enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
+
+    CVector<TData> vecMemory;
+    int            iMemSize;
+    int            iGetPos, iPutPos;
+    EBufState      eBufState;
+};
+
+
+// Network buffer (jitter buffer) ----------------------------------------------
+class CNetBuf : public CBufferBase<uint8_t>
+{
+public:
     void Init ( const int iNewBlockSize, const int iNewNumBlocks );
     int GetSize() { return iMemSize / iBlockSize; }
 
@@ -52,18 +71,12 @@ public:
     double GetErrorRate() { return ErrorRateStatistic.GetAverage(); }
 
 protected:
-    enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
     enum EClearType { CT_PUT, CT_GET };
-    void Clear ( const EClearType eClearType );
-    int GetAvailSpace() const;
-    int GetAvailData() const;
 
-    CVector<uint8_t> vecbyMemory;
-    int              iMemSize;
+    void Clear ( const EClearType eClearType );
+
     int              iBlockSize;
     int              iNumInvalidElements;
-    int              iGetPos, iPutPos;
-    EBufState        eBufState;
 
     // statistic
     CErrorRate       ErrorRateStatistic;
@@ -71,11 +84,13 @@ protected:
 
 
 // Conversion buffer (very simple buffer) --------------------------------------
+// For this very simple buffer no wrap around mechanism is implemented. We
+// assume here, that the applied buffers are an integer fraction of the total
+// buffer size.
 template<class TData> class CConvBuf
 {
 public:
     CConvBuf() { Init ( 0 ); }
-    virtual ~CConvBuf() {}
 
     void Init ( const int iNewMemSize )
     {

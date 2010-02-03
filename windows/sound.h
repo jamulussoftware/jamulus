@@ -75,6 +75,11 @@ protected:
     int              GetActualBufferSize ( const int iDesiredBufferSizeMono );
     QString          CheckDeviceCapabilities();
 
+    // utility functions
+    static int16_t   Flip16Bits ( const int16_t iIn );
+    static int32_t   Flip32Bits ( const int32_t iIn );
+    static int64_t   Flip64Bits ( const int64_t iIn );
+
     // audio hardware buffer info
     struct sHWBufferInfo
     {

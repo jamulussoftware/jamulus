@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
@@ -43,7 +43,9 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bFraSiFactDefSupported ( false ),
     bFraSiFactSafeSupported ( false ),
     iCeltNumCodedBytes ( CELT_NUM_BYTES_NORMAL_QUALITY ),
-    bCeltDoHighQuality ( false )
+    bCeltDoHighQuality ( false ),
+    bSndCrdConversionBufferRequired ( false ),
+    iSndCardMonoBlockSizeSamConvBuff ( 0 )
 {
     // init audio endocder/decoder (mono)
     CeltMode = celt_mode_create (
@@ -189,22 +191,12 @@ void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
         iSndCrdPrefFrameSizeFactor = iNewFactor;
 
         // init with new block size index parameter
-        const bool bInitWasOk = Init();
+        Init();
 
         if ( bWasRunning )
         {
-            if ( bInitWasOk )
-            {
-                // init was ok, restart client
-                Sound.Start();
-            }
-            else
-            {
-                // init was not successful, do not restart client and
-                // inform main window of the stopped client
-                Stop();
-                emit Stopped();
-            }
+            // restart client
+            Sound.Start();
         }
     }
 }
@@ -245,22 +237,12 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
 
     // init again because the sound card actual buffer size might
     // be changed on new device
-    const bool bInitWasOk = Init();
+    Init();
 
     if ( bWasRunning )
     {
-        if ( bInitWasOk )
-        {
-            // init was ok, restart client
-            Sound.Start();
-        }
-        else
-        {
-            // init was not successful, do not restart client and
-            // inform main window of the stopped client
-            Stop();
-            emit Stopped();
-        }
+        // restart client
+        Sound.Start();
     }
 
     return strReturn;
@@ -279,52 +261,19 @@ void CClient::OnSndCrdReinitRequest()
     // reinit the driver (we use the currently selected driver) and
     // init client object, too
     Sound.SetDev ( Sound.GetDev() );
-    const bool bInitWasOk = Init();
+    Init();
 
     if ( bWasRunning )
     {
-        if ( bInitWasOk )
-        {
-            // init was ok, restart client
-            Sound.Start();
-        }
-        else
-        {
-            // init was not successful, do not restart client and
-            // inform main window of the stopped client
-            Stop();
-            emit Stopped();
-        }
+        // restart client
+        Sound.Start();
     }
 }
 
 void CClient::Start()
 {
     // init object
-    if ( !Init() )
-    {
-        const QString strError = "The current sound card frame size of <b>" +
-            QString().setNum ( iMonoBlockSizeSam ) + " samples</b> is not supported "
-            "by this software. Please open your "
-#ifdef _WIN32
-            "ASIO "
-#else
-            "JACK "
-#endif
-            "configuration panel and use one of the following frame sizes: <b>" +
-            QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) + ", " +
-            QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) + ", or " +
-            QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) +
-            " samples</b>."
-#ifdef _WIN32
-            "<br><br>To open the ASIO configuration panel, you can open the Settings "
-            "Dialog in the llcon software (using the menu) and click on the \"ASIO "
-            "Setup\" button."
-#endif
-            ;
-
-        throw CGenErr ( strError );
-    }
+    Init() ;
 
     // enable channel
     Channel.SetEnable ( true );
@@ -367,16 +316,7 @@ void CClient::Stop()
     PostWinMessage ( MS_RESET_ALL, 0 );
 }
 
-void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
-{
-    // get the pointer to the object
-    CClient* pMyClientObj = reinterpret_cast<CClient*> ( arg ); 
-
-    // process audio data
-    pMyClientObj->ProcessAudioData ( psData );
-}
-
-bool CClient::Init()
+void CClient::Init()
 {
     // check if possible frame size factors are supported
     const int iFraSizePreffered =
@@ -402,15 +342,59 @@ bool CClient::Init()
         iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
 
     // get actual sound card buffer size using preferred size
-    iMonoBlockSizeSam   = Sound.Init ( iPrefMonoFrameSize );
+    iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
+
+    // Calculate the current sound card frame size factor. In case
+    // the current mono block size is not a multiple of the system
+    // frame size, we have to use a sound card conversion buffer.
+    if ( ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) ) ||
+         ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) ||
+         ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
+    {
+        // regular case: one of our predefined buffer sizes is available
+        iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES;
+
+        // no sound card conversion buffer required
+        iSndCardMonoBlockSizeSamConvBuff = 0; // this is important!
+        bSndCrdConversionBufferRequired  = false;
+    }
+    else
+    {
+        // An unsupported sound card buffer size is currently used -> we have
+        // to use a conversion buffer. Per definition we use the smallest buffer
+        // size as llcon frame size
+
+        // store actual sound card buffer size (stereo)
+        iSndCardMonoBlockSizeSamConvBuff             = iMonoBlockSizeSam;
+        const int iSndCardStereoBlockSizeSamConvBuff = 2 * iMonoBlockSizeSam;
+
+        // overwrite block size by smallest supported llcon buffer size
+        iSndCrdFrameSizeFactor = FRAME_SIZE_FACTOR_PREFERRED;
+        iMonoBlockSizeSam =
+            SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED;
+
+        iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
+
+        // inits for conversion buffer (the size of the conversion buffer must
+        // be the sum of input/output sizes which is the worst case fill level)
+        const int iConBufSize =
+            iStereoBlockSizeSam + iSndCardStereoBlockSizeSamConvBuff;
+
+        SndCrdConversionBufferIn.Init  ( iConBufSize );
+        SndCrdConversionBufferOut.Init ( iConBufSize );
+        vecDataConvBuf.Init            ( iStereoBlockSizeSam );
+
+        // the output conversion buffer must be filled with the inner
+        // block size for initialization (this is the latency which is
+        // introduced by the conversion buffer) to avoid buffer underruns
+        const CVector<int16_t> vZeros ( iStereoBlockSizeSam, 0 );
+        SndCrdConversionBufferOut.Put ( vZeros, vZeros.Size() );
+
+        bSndCrdConversionBufferRequired = true;
+    }
+
+    // calculate stereo (two channels) buffer size
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
-
-
-// TEST (we assume here that "iMonoBlockSizeSam" is divisible by
-// "SYSTEM_FRAME_SIZE_SAMPLES")
-// calculate actual frame size factor
-iSndCrdFrameSizeFactor = max ( 1, iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES );
-
 
     vecsAudioSndCrdMono.Init   ( iMonoBlockSizeSam );
     vecsAudioSndCrdStereo.Init ( iStereoBlockSizeSam );
@@ -443,21 +427,49 @@ iSndCrdFrameSizeFactor = max ( 1, iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES 
     // set the channel network properties
     Channel.SetNetwFrameSizeAndFact ( iCeltNumCodedBytes,
                                       iSndCrdFrameSizeFactor );
+}
 
-    // check sound card buffer sizes, if not supported, return error flag
-    if ( ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) ) &&
-         ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) &&
-         ( iMonoBlockSizeSam != ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
+void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
+{
+    // get the pointer to the object
+    CClient* pMyClientObj = reinterpret_cast<CClient*> ( arg );
+
+    // process audio data
+    pMyClientObj->ProcessSndCrdAudioData ( psData );
+}
+
+void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsStereoSndCrd )
+{
+    // check if a conversion buffer is required or not
+    if ( bSndCrdConversionBufferRequired )
     {
-        return false; // init was not successful
+        // add new sound card block in conversion buffer
+        SndCrdConversionBufferIn.Put ( vecsStereoSndCrd, vecsStereoSndCrd.Size() );
+
+        // process all available blocks of data
+        while ( SndCrdConversionBufferIn.GetAvailData() >= iStereoBlockSizeSam )
+        {
+            // get one block of data for processing
+            SndCrdConversionBufferIn.Get ( vecDataConvBuf );
+
+            // process audio data
+            ProcessAudioDataIntern ( vecDataConvBuf );
+
+            SndCrdConversionBufferOut.Put ( vecDataConvBuf, vecDataConvBuf.Size() );
+        }
+
+        // get processed sound card block out of the conversion buffer
+        SndCrdConversionBufferOut.Get ( vecsStereoSndCrd );
     }
     else
     {
-        return true; // ok
+        // regular case: no conversion buffer required
+        // process audio data
+        ProcessAudioDataIntern ( vecsStereoSndCrd );
     }
 }
 
-void CClient::ProcessAudioData ( CVector<int16_t>& vecsStereoSndCrd )
+void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 {
     int i, j;
 
@@ -628,7 +640,8 @@ void CClient::UpdateSocketBufferSize()
 
         // calculate current buffer setting
         const double dAudioBufferDurationMs =
-            iMonoBlockSizeSam * 1000 / SYSTEM_SAMPLE_RATE;
+            ( iMonoBlockSizeSam + iSndCardMonoBlockSizeSamConvBuff ) *
+            1000 / SYSTEM_SAMPLE_RATE;
 
         // jitter introduced in the server by the timer implementation
         const double dServerJitterMs = 0.666666; // ms

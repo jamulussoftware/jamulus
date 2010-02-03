@@ -29,15 +29,173 @@
 
 
 /* Implementation *************************************************************/
+// Buffer base class -----------------------------------------------------------
+// explicit instantiation of the template used in this software (required to
+// have the implementation in the cpp file and not in the header file)
+template class CBufferBase<uint8_t>; // for network buffer
+template class CBufferBase<int16_t>; // for sound card conversion buffer
+
+template<class TData>
+void CBufferBase<TData>::Init ( const int iNewMemSize )
+{
+    // store total memory size value
+    iMemSize = iNewMemSize;
+
+    // allocate memory for actual data buffer
+    vecMemory.Init ( iNewMemSize );
+
+    // init buffer pointers and buffer state (empty buffer)
+    iGetPos   = 0;
+    iPutPos   = 0;
+    eBufState = CBufferBase<TData>::BS_EMPTY;
+}
+
+template<class TData>
+bool CBufferBase<TData>::Put ( const CVector<TData>& vecData,
+                               const int iInSize )
+{
+    // copy new data in internal buffer
+    int iCurPos = 0;
+    if ( iPutPos + iInSize > iMemSize )
+    {
+        // remaining space size for second block
+        const int iRemSpace = iPutPos + iInSize - iMemSize;
+
+        // data must be written in two steps because of wrap around
+        while ( iPutPos < iMemSize )
+        {
+            vecMemory[iPutPos++] = vecData[iCurPos++];
+        }
+
+        for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
+        {
+            vecMemory[iPutPos] = vecData[iCurPos++];
+        }
+    }
+    else
+    {
+        // data can be written in one step
+        const int iEnd = iPutPos + iInSize;
+        while ( iPutPos < iEnd )
+        {
+            vecMemory[iPutPos++] = vecData[iCurPos++];
+        }
+    }
+
+    // set buffer state flag
+    if ( iPutPos == iGetPos )
+    {
+        eBufState = CBufferBase<TData>::BS_FULL;
+    }
+    else
+    {
+        eBufState = CBufferBase<TData>::BS_OK;
+    }
+
+    return true; // no error check in base class, alyways return ok
+}
+
+template<class TData>
+bool CBufferBase<TData>::Get ( CVector<TData>& vecData )
+{
+    // get size of data to be get from the buffer
+    const int iInSize = vecData.Size();
+
+    // copy data from internal buffer in output buffer
+    int iCurPos = 0;
+    if ( iGetPos + iInSize > iMemSize )
+    {
+        // remaining data size for second block
+        const int iRemData = iGetPos + iInSize - iMemSize;
+
+        // data must be read in two steps because of wrap around
+        while ( iGetPos < iMemSize )
+        {
+            vecData[iCurPos++] = vecMemory[iGetPos++];
+        }
+
+        for ( iGetPos = 0; iGetPos < iRemData; iGetPos++ )
+        {
+            vecData[iCurPos++] = vecMemory[iGetPos];
+        }
+    }
+    else
+    {
+        // data can be read in one step
+        const int iEnd = iGetPos + iInSize;
+        while ( iGetPos < iEnd )
+        {
+            vecData[iCurPos++] = vecMemory[iGetPos++];
+        }
+    }
+
+    // set buffer state flag
+    if ( iPutPos == iGetPos )
+    {
+        eBufState = CBufferBase<TData>::BS_EMPTY;
+    }
+    else
+    {
+        eBufState = CBufferBase<TData>::BS_OK;
+    }
+
+    return true; // no error check in base class, alyways return ok
+}
+
+template<class TData>
+int CBufferBase<TData>::GetAvailSpace() const
+{
+    // calculate available space in buffer
+    int iAvSpace = iGetPos - iPutPos;
+
+    // check for special case and wrap around
+    if ( iAvSpace < 0 )
+    {
+        iAvSpace += iMemSize; // wrap around
+    }
+    else
+    {
+        if ( ( iAvSpace == 0 ) && ( eBufState == BS_EMPTY ) )
+        {
+            iAvSpace = iMemSize;
+        }
+    }
+
+    return iAvSpace;
+}
+
+template<class TData>
+int CBufferBase<TData>::GetAvailData() const
+{
+    // calculate available data in buffer
+    int iAvData = iPutPos - iGetPos;
+
+    // check for special case and wrap around
+    if ( iAvData < 0 )
+    {
+        iAvData += iMemSize; // wrap around
+    }
+    else
+    {
+        if ( ( iAvData == 0 ) && ( eBufState == BS_FULL ) )
+        {
+            iAvData = iMemSize;
+        }
+    }
+
+    return iAvData;
+}
+
+
+// Network buffer (jitter buffer) ----------------------------------------------
 void CNetBuf::Init ( const int iNewBlockSize,
                      const int iNewNumBlocks )
 {
-    // total size -> size of one block times number of blocks
+    // store block size value
     iBlockSize = iNewBlockSize;
-    iMemSize   = iNewBlockSize * iNewNumBlocks;
 
-    // allocate and clear memory for actual data buffer
-    vecbyMemory.Init ( iMemSize );
+    // total size -> size of one block times number of blocks
+    CBufferBase<uint8_t>::Init ( iNewBlockSize * iNewNumBlocks );
 
     // use the "get" flag to make sure the buffer is cleared
     Clear ( CT_GET );
@@ -68,43 +226,8 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
         }
     }
 
-    // copy new data in internal buffer
-    int iCurPos = 0;
-    if ( iPutPos + iInSize > iMemSize )
-    {
-        // remaining space size for second block
-        const int iRemSpace = iPutPos + iInSize - iMemSize;
-
-        // data must be written in two steps because of wrap around
-        while ( iPutPos < iMemSize )
-        {
-            vecbyMemory[iPutPos++] = vecbyData[iCurPos++];
-        }
-
-        for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
-        {
-            vecbyMemory[iPutPos] = vecbyData[iCurPos++];
-        }
-    }
-    else
-    {
-        // data can be written in one step
-        const int iEnd = iPutPos + iInSize;
-        while ( iPutPos < iEnd )
-        {
-            vecbyMemory[iPutPos++] = vecbyData[iCurPos++];
-        }
-    }
-
-    // set buffer state flag
-    if ( iPutPos == iGetPos )
-    {
-        eBufState = CNetBuf::BS_FULL;
-    }
-    else
-    {
-        eBufState = CNetBuf::BS_OK;
-    }
+    // copy new data in internal buffer (implemented in base class)
+    CBufferBase<uint8_t>::Put ( vecbyData, iInSize );
 
     // update statistic
     ErrorRateStatistic.Update ( !bPutOK );
@@ -152,90 +275,14 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
         }
     }
 
-    // copy data from internal buffer in output buffer
-    int iCurPos = 0;
-    if ( iGetPos + iInSize > iMemSize )
-    {
-        // remaining data size for second block
-        const int iRemData = iGetPos + iInSize - iMemSize;
-
-        // data must be read in two steps because of wrap around
-        while ( iGetPos < iMemSize )
-        {
-            vecbyData[iCurPos++] = vecbyMemory[iGetPos++];
-        }
-
-        for ( iGetPos = 0; iGetPos < iRemData; iGetPos++ )
-        {
-            vecbyData[iCurPos++] = vecbyMemory[iGetPos];
-        }
-    }
-    else
-    {
-        // data can be read in one step
-        const int iEnd = iGetPos + iInSize;
-        while ( iGetPos < iEnd )
-        {
-            vecbyData[iCurPos++] = vecbyMemory[iGetPos++];
-        }
-    }
-
-    // set buffer state flag
-    if ( iPutPos == iGetPos )
-    {
-        eBufState = CNetBuf::BS_EMPTY;
-    }
-    else
-    {
-        eBufState = CNetBuf::BS_OK;
-    }
+    // copy data from internal buffer in output buffer (implemented in base
+    // class)
+    CBufferBase<uint8_t>::Get ( vecbyData );
 
     // update statistic
     ErrorRateStatistic.Update ( !bGetOK );
 
     return bGetOK;
-}
-
-int CNetBuf::GetAvailSpace() const
-{
-    // calculate available space in buffer
-    int iAvSpace = iGetPos - iPutPos;
-
-    // check for special case and wrap around
-    if ( iAvSpace < 0 )
-    {
-        iAvSpace += iMemSize; // wrap around
-    }
-    else
-    {
-        if ( ( iAvSpace == 0 ) && ( eBufState == BS_EMPTY ) )
-        {
-            iAvSpace = iMemSize;
-        }
-    }
-
-    return iAvSpace;
-}
-
-int CNetBuf::GetAvailData() const
-{
-    // calculate available data in buffer
-    int iAvData = iPutPos - iGetPos;
-
-    // check for special case and wrap around
-    if ( iAvData < 0 )
-    {
-        iAvData += iMemSize; // wrap around
-    }
-    else
-    {
-        if ( ( iAvData == 0 ) && ( eBufState == BS_FULL ) )
-        {
-            iAvData = iMemSize;
-        }
-    }
-
-    return iAvData;
 }
 
 void CNetBuf::Clear ( const EClearType eClearType )
@@ -301,7 +348,7 @@ void CNetBuf::Clear ( const EClearType eClearType )
     if ( eClearType == CT_GET )
     {
         // clear buffer since we had a buffer underrun
-        vecbyMemory.Reset ( 0 );
+        vecMemory.Reset ( 0 );
 
         // reset buffer pointers so that they are at maximum distance after
         // the get operation (assign new fill level value to the get pointer)

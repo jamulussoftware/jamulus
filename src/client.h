@@ -36,6 +36,7 @@
 #include "socket.h"
 #include "channel.h"
 #include "util.h"
+#include "buffer.h"
 #ifdef _WIN32
 # include "../windows/sound.h"
 #else
@@ -113,7 +114,7 @@ public:
             // set the new socket size (number of frames)
             if ( !Channel.SetSockBufNumFrames ( iNumBlocks ) )
             {
-                // if setting of socket buffer size was successful, 
+                // if setting of socket buffer size was successful,
                 // tell the server that size has changed
                 Channel.CreateJitBufMes ( iNumBlocks );
             }
@@ -134,7 +135,20 @@ public:
     void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
     int GetSndCrdPrefFrameSizeFactor()
         { return iSndCrdPrefFrameSizeFactor; }
-    int GetSndCrdActualMonoBlSize() { return iMonoBlockSizeSam; }
+
+    int GetSndCrdActualMonoBlSize()
+    {
+        // the actual sound card mono block size depends on whether a
+        // sound card conversion buffer is used or not
+        if ( bSndCrdConversionBufferRequired )
+        {
+            return iSndCardMonoBlockSizeSamConvBuff;
+        }
+        else
+        {
+            return iMonoBlockSizeSam;
+        }
+    }
 
     bool GetFraSiFactPrefSupported() { return bFraSiFactPrefSupported; }
     bool GetFraSiFactDefSupported()  { return bFraSiFactDefSupported; }
@@ -153,7 +167,6 @@ public:
 
     CChannel* GetChannel() { return &Channel; }
 
-
     // settings
     CVector<QString>        vstrIPAddress;
     QString                 strName;
@@ -162,8 +175,9 @@ protected:
     // callback function must be static, otherwise it does not work
     static void  AudioCallback ( CVector<short>& psData, void* arg );
 
-    bool         Init();
-    void         ProcessAudioData ( CVector<short>& vecsStereoSndCrd );
+    void         Init();
+    void         ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
+    void         ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
     void         UpdateSocketBufferSize();
 
     // only one channel is needed for client application
@@ -192,6 +206,12 @@ protected:
     int                     iSndCrdPrefFrameSizeFactor;
     int                     iSndCrdFrameSizeFactor;
 
+    bool                    bSndCrdConversionBufferRequired;
+    int                     iSndCardMonoBlockSizeSamConvBuff;
+    CBufferBase<int16_t>    SndCrdConversionBufferIn;
+    CBufferBase<int16_t>    SndCrdConversionBufferOut;
+    CVector<int16_t>        vecDataConvBuf;
+
     bool                    bFraSiFactPrefSupported;
     bool                    bFraSiFactDefSupported;
     bool                    bFraSiFactSafeSupported;
@@ -200,7 +220,7 @@ protected:
     int                     iStereoBlockSizeSam;
 
     bool                    bOpenChatOnNewMessage;
-    EGUIDesign              eGUIDesign;                    
+    EGUIDesign              eGUIDesign;
 
     CVector<int16_t>        vecsAudioSndCrdMono;
     CVector<int16_t>        vecsAudioSndCrdStereo;

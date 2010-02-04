@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
@@ -103,12 +103,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "<li>512 samples: This setting should only be used if only a very slow "
         "computer or a slow internet connection is available.</li>"
         "</ul>"
-        "Some sound card driver to not allow the buffer delay to be changed "
+        "Some sound card driver do not allow the buffer delay to be changed "
         "from within the llcon software. In this case the buffer delay setting "
         "is disabled. To change the actual buffer delay, this "
         "setting has to be changed in the sound card driver. On Windows, press "
         "the ASIO Setup button to open the driver settings panel. On Linux, "
         "use the Jack configuration tool to change the buffer size.<br>"
+        "If no buffer size is selected and all settings are disabled, a "
+        "unsupported bufffer size is used by the driver. The llcon software "
+        "will still work with this setting but with restricted performannce.<br>"
         "The actual buffer delay has influence on the connection status, the "
         "current upload rate and the overall delay. The lower the buffer size, "
         "the higher the probability of red light in the status indicator (drop "
@@ -159,7 +162,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     cbUseHighQualityAudio->setAccessibleName ( tr ( "Use high quality audio "
         "check box" ) );
 
-    // current connection status parameter 
+    // current connection status parameter
     QString strConnStats = tr ( "<b>Current Connection Status "
         "Parameter:</b> The ping time is the time required for the audio "
         "stream to travel from the client to the server and backwards. This "

@@ -142,7 +142,7 @@ public:
         // sound card conversion buffer is used or not
         if ( bSndCrdConversionBufferRequired )
         {
-            return iSndCardMonoBlockSizeSamConvBuff;
+            return iSndCardMonoBlockSizeSamConvBuff + iMonoBlockSizeSam;
         }
         else
         {

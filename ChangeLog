@@ -1,5 +1,10 @@
 3.0.4
 
+- all available ASIO sample formats supported
+
+- sound card frame size support for frame sizes other than 128, 256 and 512
+  samples
+
 - improvement of network buffer (jitter buffer) in case of small buffer sizes
 
 
@@ -53,7 +58,7 @@
 - bug fix: buzzing occurred when audio stream was interrupted (e.g. in case
   of network trouble)
 
-  
+
 3.0.0
 
 - introduced new audio codec "CELT", not compatible to old versions

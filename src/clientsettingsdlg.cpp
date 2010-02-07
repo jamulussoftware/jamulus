@@ -508,14 +508,18 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
 
     // we assume that we have two period sizes for the input and one for the
     // output, therefore we have "3 *" instead of "2 *" (for input and output)
-    // the actual sound card buffer size
+    // the actual sound card buffer size, also consider delay introduced by
+    // sound card conversion buffer by using
+    // "GetSndCrdConvBufAdditionalDelayMonoBlSize"
     const double dTotalSoundCardDelayMS =
-        3 * pClient->GetSndCrdActualMonoBlSize() *
+        ( 3 * pClient->GetSndCrdActualMonoBlSize() +
+        pClient->GetSndCrdConvBufAdditionalDelayMonoBlSize() ) *
         1000 / SYSTEM_SAMPLE_RATE;
 
     // network packets are of the same size as the audio packets per definition
+    // if no sound card conversion buffer is used
     const double dDelayToFillNetworkPackets =
-        pClient->GetSndCrdActualMonoBlSize() *
+        pClient->GetSystemMonoBlSize() *
         1000 / SYSTEM_SAMPLE_RATE;
 
     // CELT additional delay at small frame sizes is half a frame size

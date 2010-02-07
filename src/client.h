@@ -142,11 +142,25 @@ public:
         // sound card conversion buffer is used or not
         if ( bSndCrdConversionBufferRequired )
         {
-            return iSndCardMonoBlockSizeSamConvBuff + iMonoBlockSizeSam;
+            return iSndCardMonoBlockSizeSamConvBuff;
         }
         else
         {
             return iMonoBlockSizeSam;
+        }
+    }
+    int GetSystemMonoBlSize() { return iMonoBlockSizeSam; }
+    int GetSndCrdConvBufAdditionalDelayMonoBlSize()
+    {
+        if ( bSndCrdConversionBufferRequired )
+        {
+            // by introducing the conversion buffer we also introduce additional
+            // delay which equals the "internal" mono buffer size
+            return iMonoBlockSizeSam;
+        }
+        else
+        {
+            return 0;
         }
     }
 

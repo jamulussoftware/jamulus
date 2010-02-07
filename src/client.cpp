@@ -355,7 +355,6 @@ void CClient::Init()
         iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES;
 
         // no sound card conversion buffer required
-        iSndCardMonoBlockSizeSamConvBuff = 0; // this is important!
         bSndCrdConversionBufferRequired  = false;
     }
     else
@@ -640,7 +639,8 @@ void CClient::UpdateSocketBufferSize()
 
         // calculate current buffer setting
         const double dAudioBufferDurationMs =
-            ( iMonoBlockSizeSam + iSndCardMonoBlockSizeSamConvBuff ) *
+            ( GetSndCrdActualMonoBlSize() +
+              GetSndCrdConvBufAdditionalDelayMonoBlSize() ) *
             1000 / SYSTEM_SAMPLE_RATE;
 
         // jitter introduced in the server by the timer implementation

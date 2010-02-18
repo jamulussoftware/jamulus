@@ -87,14 +87,14 @@ public:
 
     // not used
     int     GetNumDev() { return 1; }
-    QString GetDeviceName ( const int iDiD ) { return "wave mapper"; }
-    QString SetDev ( const int iNewDev ) { return ""; } // dummy
+    QString GetDeviceName ( const int ) { return "wave mapper"; }
+    QString SetDev ( const int ) { return ""; } // dummy
     int     GetDev() { return 0; }
 
     // dummy definitions
     virtual int  Init  ( const int iNewPrefMonoBufferSize ) { CSoundBase::Init ( iNewPrefMonoBufferSize ); }
-    virtual bool Read  ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
-    virtual bool Write ( CVector<short>& psData ) { printf ( "no sound!" ); return false; }
+    virtual bool Read  ( CVector<short>& ) { printf ( "no sound!" ); return false; }
+    virtual bool Write ( CVector<short>& ) { printf ( "no sound!" ); return false; }
 };
 #endif // WITH_SOUND
 

@@ -1,4 +1,4 @@
-The CELT library version 0.6.1 is uses, including git patch "0f0da999ae82a2b73974cc73a1a19d79a23ba8cd"
+The CELT library version 0.6.1 is used including git patch "0f0da999ae82a2b73974cc73a1a19d79a23ba8cd"
 of celt.c by Jean-Marc "Better fading for PLC: no fading for the first loss, muting after 6".
 
 Basically the files in celt-0.6.1/libcelt are used.

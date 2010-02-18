@@ -182,9 +182,12 @@ int main ( int argc, char** argv )
 #endif
 
     // init resources
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+    Q_INIT_RESOURCE(resources);
+#else
     extern int qInitResources();
     qInitResources();
-
+#endif
 
 // TEST -> activate the following line to activate the test bench,
 //CTestbench Testbench ( "127.0.0.1", LLCON_DEFAULT_PORT_NUMBER );

@@ -42,7 +42,11 @@
 #ifdef _WIN32
 # include "../windows/moc/llconclientdlgbase.h"
 #else
-# include "moc/llconclientdlgbase.h"
+# if defined ( __APPLE__ ) || defined ( __MACOSX )
+#  include "ui_llconclientdlgbase.h"
+# else
+#  include "moc/llconclientdlgbase.h"
+# endif
 #endif
 
 

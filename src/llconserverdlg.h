@@ -36,7 +36,11 @@
 #ifdef _WIN32
 # include "../windows/moc/llconserverdlgbase.h"
 #else
-# include "moc/llconserverdlgbase.h"
+# if defined ( __APPLE__ ) || defined ( __MACOSX )
+#  include "ui_llconserverdlgbase.h"
+# else
+#  include "moc/llconserverdlgbase.h"
+# endif
 #endif
 
 

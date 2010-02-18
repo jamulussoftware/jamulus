@@ -33,7 +33,11 @@
 #ifdef _WIN32
 # include "../windows/moc/chatdlgbase.h"
 #else
-# include "moc/chatdlgbase.h"
+# if defined ( __APPLE__ ) || defined ( __MACOSX )
+#  include "ui_chatdlgbase.h"
+# else
+#  include "moc/chatdlgbase.h"
+# endif
 #endif
 
 

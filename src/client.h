@@ -37,13 +37,17 @@
 #include "channel.h"
 #include "util.h"
 #include "buffer.h"
-#ifdef _WIN32
-# include "../windows/sound.h"
+#ifdef LLCON_VST_PLUGIN
+# include "vstsound.h"
 #else
-# include "../linux/sound.h"
-# include <sched.h>
-# include <socket.h>
-# include <netdb.h>
+# ifdef _WIN32
+#  include "../windows/sound.h"
+# else
+#  include "../linux/sound.h"
+#  include <sched.h>
+#  include <socket.h>
+#  include <netdb.h>
+# endif
 #endif
 
 

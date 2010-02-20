@@ -28,8 +28,8 @@ llcon_SOURCES = ../src/buffer.cpp \
 	../libs/celt/entenc.c \
 	../libs/celt/header.c \
 	../libs/celt/kfft_single.c \
-	../libs/celt/kiss_fft.c \
-	../libs/celt/kiss_fftr.c \
+	../libs/celt/_kiss_fft.c \
+	../libs/celt/_kiss_fftr.c \
 	../libs/celt/laplace.c \
 	../libs/celt/mdct.c \
 	../libs/celt/modes.c \

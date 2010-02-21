@@ -26,6 +26,70 @@
 
 
 // CHighPrecisionTimer implementation ******************************************
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#include <mach/mach.h>
+#include <mach/mach_error.h>
+#include <mach/mach_time.h>
+
+CHighPrecisionTimer::CHighPrecisionTimer() :
+    bRun ( false )
+{
+    // calculate delay in mach absolute time
+    const uint64_t iNsDelay =
+        ( (uint64_t) SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) /
+        (uint64_t) SYSTEM_SAMPLE_RATE; // in ns
+
+    struct mach_timebase_info timeBaseInfo;
+    mach_timebase_info ( &timeBaseInfo );
+
+    iMachDelay = ( iNsDelay * (uint64_t) timeBaseInfo.denom ) /
+        (uint64_t) timeBaseInfo.numer;
+}
+
+void CHighPrecisionTimer::start()
+{
+    // only start if not already running
+    if ( !bRun )
+    {
+        // set run flag
+        bRun = true;
+
+        // set initial end time
+        iNextEnd = mach_absolute_time() + iMachDelay;
+
+        // start thread
+        QThread::start();
+    }
+}
+
+void CHighPrecisionTimer::stop()
+{
+    // set flag so that thread can leave the main loop
+    bRun = false;
+
+// TODO (since for the server the stopping is not critical, we
+// can live with not to have a nice thread terminating for now)
+// TODO the wait is not a good solution
+//    // give thread some time to terminate
+//    wait ( 5000 );
+}
+
+void CHighPrecisionTimer::run()
+{
+    // loop until the thread shall be terminated
+    while ( bRun )
+    {
+        // call processing routine by fireing signal
+        emit timeout();
+
+        // now wait until the next buffer shall be processed (we
+        // use the "increment method" to make sure we do not introduce
+        // a timing drift)
+        mach_wait_until(iNextEnd);
+        iNextEnd += iMachDelay;
+    }
+}
+#else
 CHighPrecisionTimer::CHighPrecisionTimer()
 {
     // add some error checking, the high precision timer implementation only
@@ -99,6 +163,7 @@ void CHighPrecisionTimer::OnTimer()
         iIntervalCounter++;
     }
 }
+#endif
 
 
 // CServer implementation ******************************************************

@@ -46,6 +46,31 @@
 
 
 /* Classes ********************************************************************/
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+// using mach timers for Mac
+class CHighPrecisionTimer : public QThread
+{
+    Q_OBJECT
+
+public:
+    CHighPrecisionTimer();
+
+    void start();
+    void stop();
+    bool isActive() { return bRun; }
+
+protected:
+    virtual void run();
+
+    bool     bRun;
+    uint64_t iMachDelay;
+    uint64_t iNextEnd;
+
+signals:
+    void timeout();
+};
+#else
+// using QTimer for Windows and Linux
 class CHighPrecisionTimer : public QObject
 {
     Q_OBJECT
@@ -69,6 +94,7 @@ public slots:
 signals:
     void timeout();
 };
+#endif
 
 
 class CServer : public QObject

@@ -40,7 +40,7 @@ CHistoryGraph::CHistoryGraph() :
     iTextOffsetToGrid ( 3 ),
     iXAxisTextHeight  ( 22 ),
     iMarkerSizeNewCon ( 11 ),
-    iMarkerSizeServSt ( 9 ),
+    iMarkerSizeServSt ( 8 ),
     AxisFont ( "Arial", 12 ),
     iTextOffsetX      ( 18 ),
     PlotBackgroundColor     ( Qt::white ), // background
@@ -208,19 +208,16 @@ void CHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
     switch ( curHistoryData.Type )
     {
     case HIT_SERVER_STOP:
-        // filled circle marker
         PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerStopColor ),
-            iMarkerSizeServSt, Qt::SolidLine, Qt::RoundCap ) );
+            iMarkerSizeServSt ) );
         break;
 
     case HIT_LOCAL_CONNECTION:
-        // filled square marker
         PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerNewLocalColor ),
             iMarkerSizeNewCon ) );
         break;
 
     case HIT_REMOTE_CONNECTION:
-        // filled square marker
         PlotPainter.setPen ( QPen ( QBrush ( PlotMarkerNewColor ),
             iMarkerSizeNewCon ) );
         break;

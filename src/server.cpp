@@ -46,7 +46,7 @@ CHighPrecisionTimer::CHighPrecisionTimer() :
         (uint64_t) timeBaseInfo.numer;
 }
 
-void CHighPrecisionTimer::start()
+void CHighPrecisionTimer::Start()
 {
     // only start if not already running
     if ( !bRun )
@@ -62,7 +62,7 @@ void CHighPrecisionTimer::start()
     }
 }
 
-void CHighPrecisionTimer::stop()
+void CHighPrecisionTimer::Stop()
 {
     // set flag so that thread can leave the main loop
     bRun = false;
@@ -121,7 +121,7 @@ CHighPrecisionTimer::CHighPrecisionTimer()
         this, SLOT ( OnTimer() ) );
 }
 
-void CHighPrecisionTimer::start()
+void CHighPrecisionTimer::Start()
 {
     // reset position pointer and counter
     iCurPosInVector  = 0;
@@ -131,7 +131,7 @@ void CHighPrecisionTimer::start()
     Timer.start ( 2 );
 }
 
-void CHighPrecisionTimer::stop()
+void CHighPrecisionTimer::Stop()
 {
     // stop timer
     Timer.stop();
@@ -349,7 +349,7 @@ void CServer::Start()
     if ( !IsRunning() )
     {
         // start timer
-        HighPrecisionTimer.start();
+        HighPrecisionTimer.Start();
 
         // init time for response time evaluation
         CycleTimeVariance.Reset();
@@ -359,7 +359,7 @@ void CServer::Start()
 void CServer::Stop()
 {
     // stop timer
-    HighPrecisionTimer.stop();
+    HighPrecisionTimer.Stop();
 
     // logging (add "server stopped" logging entry)
     Logging.AddServerStopped();
@@ -757,6 +757,11 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
 
             case PS_PROT_OK_MESS_NOT_EVALUATED:
                 bIsNotEvaluatedProtocolMessage = true; // set flag
+                break;
+
+            case PS_GEN_ERROR:
+            case PS_PROT_OK:
+                // for these cases, do nothing
                 break;
             }
         }

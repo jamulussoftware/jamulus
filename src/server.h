@@ -55,8 +55,8 @@ class CHighPrecisionTimer : public QThread
 public:
     CHighPrecisionTimer();
 
-    void start();
-    void stop();
+    void Start();
+    void Stop();
     bool isActive() { return bRun; }
 
 protected:
@@ -78,8 +78,8 @@ class CHighPrecisionTimer : public QObject
 public:
     CHighPrecisionTimer();
 
-    void start();
-    void stop();
+    void Start();
+    void Stop();
     bool isActive() const { return Timer.isActive(); }
 
 protected:
@@ -157,6 +157,13 @@ protected:
 
     CVector<QString>    vstrChatColors;
 
+    // actual working objects
+    CSocket             Socket;
+    CCycleTimeVariance  CycleTimeVariance;
+
+    // logging
+    CServerLogging      Logging;
+
     // HTML file server status
     bool                bWriteStatusHTMLFile;
     QString             strServerHTMLFileListName;
@@ -164,14 +171,6 @@ protected:
 
     CHighPrecisionTimer HighPrecisionTimer;
     CVector<short>      vecsSendData;
-
-    // actual working objects
-    CSocket             Socket;
-
-    CCycleTimeVariance  CycleTimeVariance;
-
-    // logging
-    CServerLogging      Logging;
 
 public slots:
     void OnTimer();

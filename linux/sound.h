@@ -92,7 +92,7 @@ public:
     int     GetDev() { return 0; }
 
     // dummy definitions
-    virtual int  Init  ( const int iNewPrefMonoBufferSize ) { CSoundBase::Init ( iNewPrefMonoBufferSize ); }
+    virtual int  Init  ( const int iNewPrefMonoBufferSize ) { return CSoundBase::Init ( iNewPrefMonoBufferSize ); }
     virtual bool Read  ( CVector<short>& ) { printf ( "no sound!" ); return false; }
     virtual bool Write ( CVector<short>& ) { printf ( "no sound!" ); return false; }
 };

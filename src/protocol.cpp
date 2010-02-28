@@ -375,11 +375,11 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     break;
 
                 case PROTMESSID_REQ_JITT_BUF_SIZE:
-                    bRet = EvaluateReqJitBufMes ( vecData );
+                    bRet = EvaluateReqJitBufMes();
                     break;
 
                 case PROTMESSID_SERVER_FULL:
-                    bRet = EvaluateServerFullMes ( vecData );
+                    bRet = EvaluateServerFullMes();
                     break;
 
                 case PROTMESSID_CHANNEL_GAIN:
@@ -391,7 +391,7 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     break;
 
                 case PROTMESSID_REQ_CONN_CLIENTS_LIST:
-                    bRet = EvaluateReqConnClientsList ( vecData );
+                    bRet = EvaluateReqConnClientsList();
                     break;
 
                 case PROTMESSID_CHANNEL_NAME:
@@ -399,7 +399,7 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     break;
 
                 case PROTMESSID_REQ_CHANNEL_NAME:
-                    bRet = EvaluateReqChanNameMes ( vecData );
+                    bRet = EvaluateReqChanNameMes();
                     break;
 
                 case PROTMESSID_CHAT_TEXT:
@@ -415,11 +415,11 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     break;
 
                 case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
-                    bRet = EvaluateReqNetwTranspPropsMes ( vecData );
+                    bRet = EvaluateReqNetwTranspPropsMes();
                     break;
 
                 case PROTMESSID_DISCONNECTION:
-                    bRet = EvaluateDisconnectionMes ( vecData );
+                    bRet = EvaluateDisconnectionMes();
                     break;
                 }
 
@@ -485,7 +485,7 @@ void CProtocol::CreateReqJitBufMes()
     CreateAndSendMessage ( PROTMESSID_REQ_JITT_BUF_SIZE, CVector<uint8_t> ( 0 ) );
 }
 
-bool CProtocol::EvaluateReqJitBufMes ( const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateReqJitBufMes()
 {
     // invoke message action
     emit ReqJittBufSize();
@@ -498,7 +498,7 @@ void CProtocol::CreateServerFullMes()
     CreateAndSendMessage ( PROTMESSID_SERVER_FULL, CVector<uint8_t> ( 0 ) );
 }
 
-bool CProtocol::EvaluateServerFullMes ( const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateServerFullMes()
 {
     // invoke message action
     emit ServerFull();
@@ -647,7 +647,7 @@ void CProtocol::CreateReqConnClientsList()
     CreateAndSendMessage ( PROTMESSID_REQ_CONN_CLIENTS_LIST, CVector<uint8_t> ( 0 ) );
 }
 
-bool CProtocol::EvaluateReqConnClientsList ( const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateReqConnClientsList()
 {
     // invoke message action
     emit ReqConnClientsList();
@@ -720,7 +720,7 @@ void CProtocol::CreateReqChanNameMes()
     CreateAndSendMessage ( PROTMESSID_REQ_CHANNEL_NAME, CVector<uint8_t> ( 0 ) );
 }
 
-bool CProtocol::EvaluateReqChanNameMes ( const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateReqChanNameMes()
 {
     // invoke message action
     emit ReqChanName();
@@ -943,7 +943,7 @@ void CProtocol::CreateReqNetwTranspPropsMes()
     CreateAndSendMessage ( PROTMESSID_REQ_NETW_TRANSPORT_PROPS, CVector<uint8_t> ( 0 ) );
 }
 
-bool CProtocol::EvaluateReqNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateReqNetwTranspPropsMes()
 {
     // invoke message action
     emit ReqNetTranspProps();
@@ -974,7 +974,7 @@ void CProtocol::CreateAndImmSendDisconnectionMes()
     emit MessReadyForSending ( vecDisconMessage );
 }
 
-bool CProtocol::EvaluateDisconnectionMes ( const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateDisconnectionMes()
 {
     // invoke message action
     emit Disconnection();

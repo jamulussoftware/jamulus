@@ -146,18 +146,18 @@ protected:
     void CreateAndSendMessage ( const int iID, const CVector<uint8_t>& vecData );
 
     bool EvaluateJitBufMes             ( const CVector<uint8_t>& vecData );
-    bool EvaluateReqJitBufMes          ( const CVector<uint8_t>& vecData );
+    bool EvaluateReqJitBufMes();
     bool EvaluateChanGainMes           ( const CVector<uint8_t>& vecData );
     bool EvaluateConClientListMes      ( const CVector<uint8_t>& vecData );
-    bool EvaluateServerFullMes         ( const CVector<uint8_t>& vecData );
-    bool EvaluateReqConnClientsList    ( const CVector<uint8_t>& vecData );
+    bool EvaluateServerFullMes();
+    bool EvaluateReqConnClientsList();
     bool EvaluateChanNameMes           ( const CVector<uint8_t>& vecData );
-    bool EvaluateReqChanNameMes        ( const CVector<uint8_t>& vecData );
+    bool EvaluateReqChanNameMes();
     bool EvaluateChatTextMes           ( const CVector<uint8_t>& vecData );
     bool EvaluatePingMes               ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes    ( const CVector<uint8_t>& vecData );
-    bool EvaluateReqNetwTranspPropsMes ( const CVector<uint8_t>& vecData );
-    bool EvaluateDisconnectionMes      ( const CVector<uint8_t>& vecData );
+    bool EvaluateReqNetwTranspPropsMes();
+    bool EvaluateDisconnectionMes();
 
     int                     iOldRecID, iOldRecCnt;
 

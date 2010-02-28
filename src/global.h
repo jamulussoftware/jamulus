@@ -200,8 +200,8 @@ public:
     }
 
 protected:
-    QString strErrorType;
     QString strErrorMsg;
+    QString strErrorType;
 };
 
 class CLlconEvent : public QEvent

@@ -105,8 +105,8 @@ class CMultColLEDListViewItem : public CMultiColorLED
     Q_OBJECT
 
 public:
-    CMultColLEDListViewItem ( const int iNewCol ) : iColumn ( iNewCol ),
-        pListViewItem ( NULL ) {}
+    CMultColLEDListViewItem ( const int iNewCol ) : pListViewItem ( NULL ),
+        iColumn ( iNewCol ) {}
 
     void SetListViewItemPointer ( QTreeWidgetItem* pNewListViewItem )
     {
@@ -131,8 +131,8 @@ protected:
 class CServerListViewItem : public QTreeWidgetItem
 {
 public:
-    CServerListViewItem ( QTreeWidget* parent ) : LED0 ( 2 ), LED1 ( 3 ),
-        QTreeWidgetItem ( parent )
+    CServerListViewItem ( QTreeWidget* parent ) : QTreeWidgetItem ( parent ),
+        LED0 ( 2 ), LED1 ( 3 )
     {
         LED0.SetListViewItemPointer ( this );
         LED1.SetListViewItemPointer ( this );

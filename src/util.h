@@ -524,8 +524,8 @@ public:
     uint32_t GetCRC();
 
 protected:
-    uint32_t iBitOutMask;
     uint32_t iPoly;
+    uint32_t iBitOutMask;
     uint32_t iStateShiftReg;
 };
 

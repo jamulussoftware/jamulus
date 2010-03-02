@@ -7,6 +7,8 @@
 
 - improvement of network buffer (jitter buffer) in case of small buffer sizes
 
+- bug fix for M-Audio Delta ASIO driver
+
 
 3.0.3
 

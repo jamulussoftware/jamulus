@@ -40,13 +40,150 @@
 template<class TData> class CBufferBase
 {
 public:
-    virtual void Init ( const int iNewMemSize );
+    virtual void Init ( const int iNewMemSize )
+    {
+        // store total memory size value
+        iMemSize = iNewMemSize;
 
-    virtual bool Put ( const CVector<TData>& vecData, const int iInSize );
-    virtual bool Get ( CVector<TData>& vecData );
+        // allocate memory for actual data buffer
+        vecMemory.Init ( iNewMemSize );
 
-    virtual int GetAvailSpace() const;
-    virtual int GetAvailData() const;
+        // init buffer pointers and buffer state (empty buffer)
+        iGetPos   = 0;
+        iPutPos   = 0;
+        eBufState = CBufferBase<TData>::BS_EMPTY;
+    }
+
+    virtual bool Put ( const CVector<TData>& vecData, const int iInSize )
+    {
+        // copy new data in internal buffer
+        int iCurPos = 0;
+        if ( iPutPos + iInSize > iMemSize )
+        {
+            // remaining space size for second block
+            const int iRemSpace = iPutPos + iInSize - iMemSize;
+
+            // data must be written in two steps because of wrap around
+            while ( iPutPos < iMemSize )
+            {
+                vecMemory[iPutPos++] = vecData[iCurPos++];
+            }
+
+            for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
+            {
+                vecMemory[iPutPos] = vecData[iCurPos++];
+            }
+        }
+        else
+        {
+            // data can be written in one step
+            const int iEnd = iPutPos + iInSize;
+            while ( iPutPos < iEnd )
+            {
+                vecMemory[iPutPos++] = vecData[iCurPos++];
+            }
+        }
+
+        // set buffer state flag
+        if ( iPutPos == iGetPos )
+        {
+            eBufState = CBufferBase<TData>::BS_FULL;
+        }
+        else
+        {
+            eBufState = CBufferBase<TData>::BS_OK;
+        }
+
+        return true; // no error check in base class, alyways return ok
+    }
+
+    virtual bool Get ( CVector<TData>& vecData )
+    {
+        // get size of data to be get from the buffer
+        const int iInSize = vecData.Size();
+
+        // copy data from internal buffer in output buffer
+        int iCurPos = 0;
+        if ( iGetPos + iInSize > iMemSize )
+        {
+            // remaining data size for second block
+            const int iRemData = iGetPos + iInSize - iMemSize;
+
+            // data must be read in two steps because of wrap around
+            while ( iGetPos < iMemSize )
+            {
+                vecData[iCurPos++] = vecMemory[iGetPos++];
+            }
+
+            for ( iGetPos = 0; iGetPos < iRemData; iGetPos++ )
+            {
+                vecData[iCurPos++] = vecMemory[iGetPos];
+            }
+        }
+        else
+        {
+            // data can be read in one step
+            const int iEnd = iGetPos + iInSize;
+            while ( iGetPos < iEnd )
+            {
+                vecData[iCurPos++] = vecMemory[iGetPos++];
+            }
+        }
+
+        // set buffer state flag
+        if ( iPutPos == iGetPos )
+        {
+            eBufState = CBufferBase<TData>::BS_EMPTY;
+        }
+        else
+        {
+            eBufState = CBufferBase<TData>::BS_OK;
+        }
+
+        return true; // no error check in base class, alyways return ok
+    }
+
+    virtual int GetAvailSpace() const
+    {
+        // calculate available space in buffer
+        int iAvSpace = iGetPos - iPutPos;
+
+        // check for special case and wrap around
+        if ( iAvSpace < 0 )
+        {
+            iAvSpace += iMemSize; // wrap around
+        }
+        else
+        {
+            if ( ( iAvSpace == 0 ) && ( eBufState == BS_EMPTY ) )
+            {
+                iAvSpace = iMemSize;
+            }
+        }
+
+        return iAvSpace;
+    }
+
+    virtual int GetAvailData() const
+    {
+        // calculate available data in buffer
+        int iAvData = iPutPos - iGetPos;
+
+        // check for special case and wrap around
+        if ( iAvData < 0 )
+        {
+            iAvData += iMemSize; // wrap around
+        }
+        else
+        {
+            if ( ( iAvData == 0 ) && ( eBufState == BS_FULL ) )
+            {
+                iAvData = iMemSize;
+            }
+        }
+
+        return iAvData;
+    }
 
 protected:
     enum EBufState { BS_OK, BS_FULL, BS_EMPTY };

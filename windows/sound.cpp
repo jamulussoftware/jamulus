@@ -337,10 +337,12 @@ int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
             }
             else
             {
-                if ( HWBufferInfo.lGranularity <= 0 )
+                if ( ( HWBufferInfo.lGranularity < -1 ) ||
+                     ( HWBufferInfo.lGranularity == 0 ) )
                 {
                     // Special case (seen for EMU audio cards): granularity is
-                    // zero or less than zero.
+                    // zero or less than zero (make sure to exclude the special
+                    // case of -1).
                     // There is no definition of this case in the ASIO SDK
                     // document. We assume here that all buffer sizes in between
                     // minimum and maximum buffer sizes are allowed.

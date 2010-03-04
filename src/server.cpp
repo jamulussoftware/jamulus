@@ -67,11 +67,8 @@ void CHighPrecisionTimer::Stop()
     // set flag so that thread can leave the main loop
     bRun = false;
 
-// TODO (since for the server the stopping is not critical, we
-// can live with not to have a nice thread terminating for now)
-// TODO the wait is not a good solution
-//    // give thread some time to terminate
-//    wait ( 5000 );
+    // give thread some time to terminate
+    wait ( 5000 );
 }
 
 void CHighPrecisionTimer::run()
@@ -369,7 +366,7 @@ void CServer::OnTimer()
 {
     int i, j;
 
-    CVector<int> vecChanID;
+    CVector<int>               vecChanID;
     CVector<CVector<double> >  vecvecdGains;
     CVector<CVector<int16_t> > vecvecsData;
 

@@ -61,33 +61,6 @@ void CSound::OpenCoreAudio()
     {
         throw CGenErr ( tr ( "CoreAudio audio unit set property failed" ) );
     }
-
-    // set up stream format
-    AudioStreamBasicDescription streamFormat;
-    streamFormat.mSampleRate       = SYSTEM_SAMPLE_RATE;
-    streamFormat.mFormatID         = kAudioFormatLinearPCM;
-    streamFormat.mFormatFlags      = kAudioFormatFlagIsSignedInteger;
-    streamFormat.mFramesPerPacket  = 1;
-    streamFormat.mChannelsPerFrame = 1;
-    streamFormat.mBitsPerChannel   = 16;
-    streamFormat.mBytesPerPacket   = 2;
-    streamFormat.mBytesPerFrame    = 2;
-
-    if ( AudioUnitSetProperty ( gOutputUnit,
-                                kAudioUnitProperty_StreamFormat,
-                                kAudioUnitScope_Input,
-                                0,
-                                &streamFormat,
-                                sizeof(streamFormat) ) )
-    {
-        throw CGenErr ( tr ( "CoreAudio stream format set property failed" ) );
-    }
-
-    // initialize unit
-	if ( AudioUnitInitialize ( gOutputUnit ) )
-    {
-        throw CGenErr ( tr ( "Initialization of CoreAudio failed" ) );
-    }
 }
 
 void CSound::CloseCoreAudio()
@@ -117,31 +90,49 @@ void CSound::Stop()
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
+    // store buffer size
+    iCoreAudioBufferSizeMono = iNewPrefMonoBufferSize;  
 
-/*
-// try setting buffer size
-// TODO seems not to work! -> no audio after this operation!
-//jack_set_buffer_size ( pJackClient, iNewPrefMonoBufferSize );
+    // first uninitialize unit
+    AudioUnitUninitialize ( gOutputUnit );
 
-    // get actual buffer size
-    iJACKBufferSizeMono = jack_get_buffer_size ( pJackClient );  	
+    // set up stream format
+    AudioStreamBasicDescription streamFormat;
+    streamFormat.mSampleRate       = SYSTEM_SAMPLE_RATE;
+    streamFormat.mFormatID         = kAudioFormatLinearPCM;
+    streamFormat.mFormatFlags      = kAudioFormatFlagIsSignedInteger;
+    streamFormat.mFramesPerPacket  = iCoreAudioBufferSizeMono;
+    streamFormat.mBytesPerFrame    = streamFormat.mChannelsPerFrame * 2; // short type
+    streamFormat.mBytesPerPacket   = streamFormat.mBytesPerFrame * streamFormat.mFramesPerPacket;
+    streamFormat.mChannelsPerFrame = 2; // stereo
+    streamFormat.mBitsPerChannel   = 16;
 
-    // init base clasee
-    CSoundBase::Init ( iJACKBufferSizeMono );
+    if ( AudioUnitSetProperty ( gOutputUnit,
+                                kAudioUnitProperty_StreamFormat,
+                                kAudioUnitScope_Input,
+                                0,
+                                &streamFormat,
+                                sizeof(streamFormat) ) )
+    {
+        throw CGenErr ( tr ( "CoreAudio stream format set property failed" ) );
+    }
+
+    // (re-)initialize unit
+	if ( AudioUnitInitialize ( gOutputUnit ) )
+    {
+        throw CGenErr ( tr ( "Initialization of CoreAudio failed" ) );
+    }
+
+    // init base class
+    CSoundBase::Init ( iCoreAudioBufferSizeMono );
 
     // set internal buffer size value and calculate stereo buffer size
-    iJACKBufferSizeStero = 2 * iJACKBufferSizeMono;
+    iCoreAudioBufferSizeStero = 2 * iCoreAudioBufferSizeMono;
 
     // create memory for intermediate audio buffer
-    vecsTmpAudioSndCrdStereo.Init ( iJACKBufferSizeStero );
+    vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStero );
 
-    return iJACKBufferSizeMono;
-*/
-
-
-// TEST
-return 256;
-
+    return iNewPrefMonoBufferSize;
 }
 
 OSStatus CSound::process ( void*                       inRefCon,
@@ -152,6 +143,17 @@ OSStatus CSound::process ( void*                       inRefCon,
                            AudioBufferList*            ioData )
 {
     CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
+
+
+
+/*
+	for ( UInt32 channel = 1; channel < ioData->mNumberBuffers; channel++)
+    {
+		memcpy ( ioData->mBuffers[channel].mData,
+                 ioData->mBuffers[0].mData,
+                 ioData->mBuffers[0].mDataByteSize );
+    }
+*/
 
 /*
     // get input data pointer
@@ -169,10 +171,12 @@ OSStatus CSound::process ( void*                       inRefCon,
         pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( in_left[i] * _MAXSHORT );
         pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( in_right[i] * _MAXSHORT );
     }
+*/
 
     // call processing callback function
     pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
 
+/*
     // get output data pointer
     jack_default_audio_sample_t* out_left =
         (jack_default_audio_sample_t*) jack_port_get_buffer (

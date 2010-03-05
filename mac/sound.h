@@ -50,6 +50,12 @@ public:
     QString SetDev ( const int )        { return ""; } // dummy
     int     GetDev()                    { return 0; }
 
+    // these variables should be protected but cannot since we want
+    // to access them from the callback function
+    CVector<short> vecsTmpAudioSndCrdStereo;
+    int            iCoreAudioBufferSizeMono;
+    int            iCoreAudioBufferSizeStero;
+
 protected:
     void OpenCoreAudio();
     void CloseCoreAudio();

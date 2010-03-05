@@ -160,7 +160,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     // get actual buffer size
     iJACKBufferSizeMono = jack_get_buffer_size ( pJackClient );  	
 
-    // init base clasee
+    // init base class
     CSoundBase::Init ( iJACKBufferSizeMono );
 
     // set internal buffer size value and calculate stereo buffer size

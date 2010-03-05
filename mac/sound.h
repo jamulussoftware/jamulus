@@ -25,6 +25,8 @@
 #if !defined(_SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_)
 #define _SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_
 
+#include <CoreServices/CoreServices.h>
+#include <AudioUnit/AudioUnit.h>
 #include "util.h"
 #include "soundbase.h"
 #include "global.h"
@@ -35,20 +37,29 @@ class CSound : public CSoundBase
 {
 public:
     CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
-        CSoundBase ( true, fpNewProcessCallback, arg ) { OpenJack(); }
-    virtual ~CSound() {}
+        CSoundBase ( true, fpNewProcessCallback, arg ) { OpenCoreAudio(); }
+    virtual ~CSound() { CloseCoreAudio(); }
 
     virtual int  Init  ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
 
     // not implemented yet, always return one device and default string
-    int     GetNumDev() { return 1; }
-    QString GetDeviceName ( const int iDiD ) { return "CoreAudio"; }
-    QString SetDev ( const int iNewDev ) { return ""; } // dummy
-    int     GetDev() { return 0; }
+    int     GetNumDev()                 { return 1; }
+    QString GetDeviceName ( const int ) { return "CoreAudio"; }
+    QString SetDev ( const int )        { return ""; } // dummy
+    int     GetDev()                    { return 0; }
 
 protected:
+    void OpenCoreAudio();
+    void CloseCoreAudio();
+
+    // callbacks
+    static OSStatus process ( void* inRefCon,AudioUnitRenderActionFlags* ioActionFlags,
+        const AudioTimeStamp* inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames,
+        AudioBufferList* ioData );
+
+    AudioUnit gOutputUnit;
 };
 
 #endif // !defined(_SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_)

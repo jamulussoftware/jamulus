@@ -67,10 +67,10 @@ public:
     virtual void Stop();
 
     // not implemented yet, always return one device and default string
-    int     GetNumDev() { return 1; }
-    QString GetDeviceName ( const int iDiD ) { return "wave mapper"; }
-    QString SetDev ( const int iNewDev ) { return ""; } // dummy
-    int     GetDev() { return 0; }
+    int     GetNumDev()                 { return 1; }
+    QString GetDeviceName ( const int ) { return "wave mapper"; }
+    QString SetDev ( const int )        { return ""; } // dummy
+    int     GetDev()                    { return 0; }
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function

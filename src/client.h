@@ -43,10 +43,14 @@
 # ifdef _WIN32
 #  include "../windows/sound.h"
 # else
-#  include "../linux/sound.h"
-#  include <sched.h>
-#  include <socket.h>
-#  include <netdb.h>
+#  if defined ( __APPLE__ ) || defined ( __MACOSX )
+#   include "../mac/sound.h"
+#  else
+#   include "../linux/sound.h"
+#   include <sched.h>
+#   include <socket.h>
+#   include <netdb.h>
+#  endif
 # endif
 #endif
 

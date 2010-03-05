@@ -11,6 +11,17 @@ INCLUDEPATH += src \
 DEFINES += USE_ALLOCA \
 	_REENTRANT
 
+macx {
+	HEADERS += mac/sound.h
+	SOURCES += mac/sound.cpp
+
+	LIBS += -framework CoreFoundation \
+		-framework CoreServices \
+		-framework CoreAudio \
+		-framework AudioToolbox \
+		-framework AudioUnit
+}
+
 RCC_DIR = src/res
 RESOURCES += src/resources.qrc
 
@@ -20,8 +31,7 @@ FORMS += src/llconclientdlgbase.ui \
 	src/chatdlgbase.ui \
 	src/aboutdlgbase.ui
 
-HEADERS += linux/sound.h \
-	src/buffer.h \
+HEADERS += src/buffer.h \
 	src/global.h \
 	src/socket.h \
 	src/channel.h \
@@ -73,8 +83,7 @@ HEADERS += linux/sound.h \
 	libs/celt/stack_alloc.h \
 	libs/celt/vq.h
 
-SOURCES += linux/sound.cpp \
-	src/buffer.cpp \
+SOURCES += src/buffer.cpp \
 	src/main.cpp \
 	src/socket.cpp \
 	src/channel.cpp \

@@ -442,7 +442,7 @@ void CLlconClientDlg::OnSliderAudInFader ( int value )
     UpdateAudioFaderSlider();
 }
 
-void CLlconClientDlg::OnLineEditServerAddrTextChanged ( const QString sNewText )
+void CLlconClientDlg::OnLineEditServerAddrTextChanged ( const QString )
 {
     // if the maximum number of items in the combo box is reached,
     // delete the last item so that the new item can be added (first

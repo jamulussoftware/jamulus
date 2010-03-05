@@ -114,7 +114,7 @@ public slots:
     void OnChatTextReceived ( QString strChatText );
     void OnNewLocalInputText ( QString strChatText )
         { pClient->SendTextMess ( strChatText ); }
-    void OnLineEditServerAddrTextChanged ( const QString sNewText );
+    void OnLineEditServerAddrTextChanged ( const QString );
     void OnLineEditServerAddrActivated ( int index );
     void OnDisconnected();
     void OnStopped();

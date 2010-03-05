@@ -273,7 +273,7 @@ void CClient::OnSndCrdReinitRequest()
 void CClient::Start()
 {
     // init object
-    Init() ;
+    Init();
 
     // enable channel
     Channel.SetEnable ( true );

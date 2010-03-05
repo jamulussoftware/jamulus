@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="llcon"
 	ProjectGUID="{DBBC16FC-BBCA-4E3B-A9F4-0EC5202A8B2E}"
 	RootNamespace="llcon"
@@ -561,6 +561,26 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="..\src\vstmain.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
 			<Filter
 				Name="moc Files"
 				>
@@ -1069,6 +1089,46 @@
 			<File
 				RelativePath="..\src\util.h"
 				>
+			</File>
+			<File
+				RelativePath="..\src\vstmain.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\vstsound.h"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+					/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter

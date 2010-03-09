@@ -65,7 +65,7 @@ protected:
         const AudioTimeStamp* inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames,
         AudioBufferList* ioData );
 
-    AudioUnit gOutputUnit;
+    ComponentInstance audioUnit;
 };
 
 #endif // !defined(_SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_)

@@ -162,6 +162,10 @@ void CSound::OpenCoreAudio()
     }
 
 
+	
+// TODO check for required sample rate, if not available, throw error message	
+	
+	
 // TEST
 StoreInOutStreamProps ( audioUnit );
 
@@ -185,9 +189,6 @@ void CSound::Start()
 
     // call base class
     CSoundBase::Start();
-
-// TEST
-printf ( "start\n" );
 }
 
 void CSound::Stop()
@@ -200,65 +201,55 @@ void CSound::Stop()
 
     // call base class
     CSoundBase::Stop();
-	
-// TEST
-printf ( "stop\n" );	
 }
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
+	
+// TODO try to set the preferred buffer size to the audio unit	
+	
+	// get the audio unit buffer size
+	UInt32 bufferSizeFrames;
+	UInt32 propertySize = sizeof(UInt32);
+	AudioUnitGetProperty ( audioUnit, kAudioDevicePropertyBufferFrameSize,
+	    kAudioUnitScope_Global, 1, &bufferSizeFrames, &propertySize );
+
     // store buffer size
-    iCoreAudioBufferSizeMono = iNewPrefMonoBufferSize;  
+    iCoreAudioBufferSizeMono = bufferSizeFrames;  
 
+    // init base class
+    CSoundBase::Init ( iCoreAudioBufferSizeMono );
+	
+    // set internal buffer size value and calculate stereo buffer size
+    iCoreAudioBufferSizeStero = 2 * iCoreAudioBufferSizeMono;
+	
+    // create memory for intermediate audio buffer
+    vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStero );
 
-
+	
 // TEST
-//Get the size of the IO buffer(s)
-UInt32 bufferSizeFrames, bufferSizeBytes;
+printf ( "Buffer_Size: %d", (int) bufferSizeFrames );
 
-UInt32 propertySize = sizeof(bufferSizeFrames);
-AudioUnitGetProperty(audioUnit, kAudioDevicePropertyBufferFrameSize,
-					 kAudioUnitScope_Global, 1, &bufferSizeFrames, &propertySize);
+	
+// TODO	
+// fill audio unit buffer struct
+theBufferList = (AudioBufferList*) malloc ( offsetof ( AudioBufferList,
+    mBuffers[0] ) + sizeof(AudioBuffer) );
 
-bufferSizeBytes = bufferSizeFrames * sizeof(Float32);
-
-printf("Buffer_Size: %d", (int) bufferSizeFrames);
-
-
-//malloc buffer lists
-theBufferList = (AudioBufferList*) malloc(
-    offsetof(AudioBufferList, mBuffers[0]) + (sizeof(AudioBuffer) * 1));
-
-theBufferList->mNumberBuffers = 1;
-
-//pre-malloc buffers for AudioBufferLists
-for ( UInt32 i = 0; i < theBufferList->mNumberBuffers; i++ )
-{
-    theBufferList->mBuffers[i].mNumberChannels = 2;
-    theBufferList->mBuffers[i].mDataByteSize = bufferSizeBytes;
-    theBufferList->mBuffers[i].mData = malloc(bufferSizeBytes);
-}
-
-
-
-
-
-    // (re-)initialize unit
+	
+	theBufferList->mNumberBuffers = 1;
+    theBufferList->mBuffers[0].mNumberChannels = 2; // stereo
+    theBufferList->mBuffers[0].mDataByteSize = bufferSizeFrames * 4; // 2 bytes, 2 channels
+	theBufferList->mBuffers[0].mData = &vecsTmpAudioSndCrdStereo[0];	
+//theBufferList->mBuffers[0].mData = malloc(bufferSizeBytes);
+	
+    // initialize unit
 	if ( AudioUnitInitialize ( audioUnit ) )
     {
         throw CGenErr ( tr ( "Initialization of CoreAudio failed" ) );
     }
 
-    // init base class
-    CSoundBase::Init ( iCoreAudioBufferSizeMono );
-
-    // set internal buffer size value and calculate stereo buffer size
-    iCoreAudioBufferSizeStero = 2 * iCoreAudioBufferSizeMono;
-
-    // create memory for intermediate audio buffer
-    vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStero );
-
-    return iNewPrefMonoBufferSize;
+    return iCoreAudioBufferSizeMono;
 }
 
 OSStatus CSound::process ( void*                       inRefCon,
@@ -270,14 +261,6 @@ OSStatus CSound::process ( void*                       inRefCon,
 {
     CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
 
-// TEST
-for ( UInt32 channel = 0; channel < theBufferList->mNumberBuffers; channel++)
-{
-	memset ( theBufferList->mBuffers[channel].mData, 0,
-             theBufferList->mBuffers[channel].mDataByteSize );
-}
-
-
     // get the new audio data
     ComponentResult err =
         AudioUnitRender ( pSound->audioUnit,
@@ -286,15 +269,6 @@ for ( UInt32 channel = 0; channel < theBufferList->mNumberBuffers; channel++)
                           inBusNumber,
                           inNumberFrames,
                           theBufferList );
-
-// TEST
-for ( int test = 0; test < theBufferList->mBuffers[0].mDataByteSize / 2; test++ )
-{
-    fprintf ( pFile, "%d\n",
-        static_cast<short*>(theBufferList->mBuffers[0].mData)[test]);
-}
-fflush ( pFile );
-
 
 /*
 // TEST
@@ -308,29 +282,11 @@ fflush ( pFile );
 
 /*
 // TEST output seems to work!!!
-	for ( UInt32 i = 1; i < ioData->mBuffers[0].mDataByteSize / 2; i++)
-    {
-        static_cast<short*> ( ioData->mBuffers[0].mData)[i] = (short) ( (double) rand() / RAND_MAX * 10000 );
-    }
-*/
-
-/*	
-// TEST
-static FILE* pFile = fopen ( "test.dat", "w" );
-fprintf ( pFile, "%d %d %d\n", ioActionFlags, inNumberFrames, err);
-fflush ( pFile );
-*/
-
-/*
-// TEST
-static FILE* pFile = fopen ( "test.dat", "w" );
-for ( int test = 0; test < theBufferList->mBuffers[0].mDataByteSize / 4; test++ )
+for ( UInt32 i = 1; i < theBufferList->mBuffers[0].mDataByteSize / 2; i++)
 {
-    fprintf ( pFile, "%e %d %d\n", static_cast<float*>(theBufferList->mBuffers[0].mData)[test],
-        static_cast<short*>(theBufferList->mBuffers[0].mData)[test],
-        static_cast<short*> ( ioData->mBuffers[0].mData)[test]);
+    static_cast<short*> ( theBufferList->mBuffers[0].mData)[i] = (short) ( (double) rand() / RAND_MAX * 10000 );
 }
-fflush ( pFile );
+ioData = theBufferList;
 */
 
 // TEST
@@ -338,72 +294,14 @@ printf ( "buffersize: %d, inBus: %d, ioActionFlags: %d, err: %d\n",
     (int) inNumberFrames, (int) inBusNumber, (int) ioActionFlags, (int) err );
 
 
-/*
-	for ( UInt32 channel = 1; channel < ioData->mNumberBuffers; channel++)
-    {
-		memcpy ( ioData->mBuffers[channel].mData,
-                 ioData->mBuffers[0].mData,
-                 ioData->mBuffers[0].mDataByteSize );
-    }
-*/
-
-/*
-    // get input data pointer
-    jack_default_audio_sample_t* in_left =
-        (jack_default_audio_sample_t*) jack_port_get_buffer (
-        pSound->input_port_left, nframes );
-
-    jack_default_audio_sample_t* in_right =
-        (jack_default_audio_sample_t*) jack_port_get_buffer (
-        pSound->input_port_right, nframes );
-
-    // copy input data
-    for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
-    {
-        pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( in_left[i] * _MAXSHORT );
-        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( in_right[i] * _MAXSHORT );
-    }
-*/
-	
-/*	
-// TEST
-for ( int i = 0; i < inNumberFrames; i++ )
-{
-	pSound->vecsTmpAudioSndCrdStereo[2 * i]     = static_cast<SInt16*>(ioData->mBuffers[0].mData)[i];
-	pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = static_cast<SInt16*>(ioData->mBuffers[0].mData)[i];
-}
-*/	
-	
-
     // call processing callback function
     pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
 
-/*
-    // get output data pointer
-    jack_default_audio_sample_t* out_left =
-        (jack_default_audio_sample_t*) jack_port_get_buffer (
-        pSound->output_port_left, nframes );
-
-    jack_default_audio_sample_t* out_right =
-        (jack_default_audio_sample_t*) jack_port_get_buffer (
-        pSound->output_port_right, nframes );
-
-    // copy output data
-    for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
-    {
-        out_left[i] = (jack_default_audio_sample_t)
-            pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
-
-        out_right[i] = (jack_default_audio_sample_t)
-            pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
-    }
-*/
-/*
-    ioData->mBuffers[0].mDataByteSize = 2048;
-    ioData->mBuffers[0].mData = lbuf;
-    ioData->mBuffers[0].mNumberChannels = 1;
-*/
-
+	
+	
+// TODO take care of outputting processed data	
+	
+	
 
     return noErr;
 }

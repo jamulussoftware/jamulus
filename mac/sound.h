@@ -61,11 +61,16 @@ protected:
     void CloseCoreAudio();
 
     // callbacks
-    static OSStatus process ( void* inRefCon,AudioUnitRenderActionFlags* ioActionFlags,
+    static OSStatus processInput ( void* inRefCon,AudioUnitRenderActionFlags* ioActionFlags,
         const AudioTimeStamp* inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames,
         AudioBufferList* ioData );
+		
+    static OSStatus processOutput ( void* inRefCon,AudioUnitRenderActionFlags* ioActionFlags,
+        const AudioTimeStamp* inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames,
+        AudioBufferList* ioData );		
 
-    ComponentInstance audioUnit;
+    ComponentInstance audioInputUnit;
+    ComponentInstance audioOutputUnit;
 };
 
 #endif // !defined(_SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_)

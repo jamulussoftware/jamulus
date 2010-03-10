@@ -70,15 +70,20 @@ void CSound::OpenCoreAudio()
     {
         throw CGenErr ( tr ( "No CoreAudio next component found" ) );
     }
-	
-    if ( OpenAComponent ( comp, &audioUnit ) )
-    {
-        throw CGenErr ( tr ( "CoreAudio creating component instance failed" ) );
-    }
 
-    // we enable input and disable output
+	if ( OpenAComponent ( comp, &audioInputUnit ) )
+	{
+		throw CGenErr ( tr ( "CoreAudio creating input component instance failed" ) );
+	}
+		
+	if ( OpenAComponent ( comp, &audioOutputUnit ) )
+	{
+		throw CGenErr ( tr ( "CoreAudio creating output component instance failed" ) );
+	}
+
+    // we enable input and disable output for input component
     UInt32 enableIO = 1;
-    err = AudioUnitSetProperty ( audioUnit,
+    err = AudioUnitSetProperty ( audioInputUnit,
         kAudioOutputUnitProperty_EnableIO,
         kAudioUnitScope_Input,
         1, // input element
@@ -86,27 +91,12 @@ void CSound::OpenCoreAudio()
         sizeof ( enableIO ) );
 
     enableIO = 0;
-    err = AudioUnitSetProperty ( audioUnit,
+    err = AudioUnitSetProperty ( audioInputUnit,
         kAudioOutputUnitProperty_EnableIO,
         kAudioUnitScope_Output,
         0, // output element
         &enableIO,
         sizeof ( enableIO ) );
-
-    // set up a callback function for new input data
-    AURenderCallbackStruct input;
-    input.inputProc       = process;
-    input.inputProcRefCon = this;
-
-    if ( AudioUnitSetProperty ( audioUnit,
-                                kAudioOutputUnitProperty_SetInputCallback,
-                                kAudioUnitScope_Global,
-                                0,
-                                &input,
-                                sizeof ( input ) ) )
-    {
-        throw CGenErr ( tr ( "CoreAudio audio unit set property failed" ) );
-    }
 
     // set input device
     size = sizeof ( AudioDeviceID );
@@ -115,17 +105,67 @@ void CSound::OpenCoreAudio()
                                     &size,
                                     &inputDevice ) )
     {
-        throw CGenErr ( tr ( "CoreAudio AudioHardwareGetProperty call failed" ) );
+        throw CGenErr ( tr ( "CoreAudio input AudioHardwareGetProperty call failed" ) );
     }
 
-    if ( AudioUnitSetProperty ( audioUnit,
+    if ( AudioUnitSetProperty ( audioInputUnit,
                                 kAudioOutputUnitProperty_CurrentDevice,
                                 kAudioUnitScope_Global,
-                                0,
+                                1,
                                 &inputDevice,
                                 sizeof ( inputDevice ) ) )
     {
         throw CGenErr ( tr ( "CoreAudio input AudioUnitSetProperty call failed" ) );
+    }
+
+    // set up a callback function for new input data
+    AURenderCallbackStruct input;
+    input.inputProc       = processInput;
+    input.inputProcRefCon = this;
+
+    if ( AudioUnitSetProperty ( audioInputUnit,
+                                kAudioOutputUnitProperty_SetInputCallback,//kAudioUnitProperty_SetRenderCallback,//
+                                kAudioUnitScope_Global,
+                                0,
+                                &input,
+                                sizeof ( input ) ) )
+    {
+        throw CGenErr ( tr ( "CoreAudio audio unit set property failed" ) );
+    }
+
+    // set output device
+    size = sizeof ( AudioDeviceID );
+    AudioDeviceID outputDevice;
+    if ( AudioHardwareGetProperty ( kAudioHardwarePropertyDefaultOutputDevice,
+                                    &size,
+                                    &outputDevice ) )
+    {
+        throw CGenErr ( tr ( "CoreAudio output AudioHardwareGetProperty call failed" ) );
+    }
+
+    if ( AudioUnitSetProperty ( audioOutputUnit,
+                                kAudioOutputUnitProperty_CurrentDevice,
+                                kAudioUnitScope_Global,
+                                0,
+                                &outputDevice,
+                                sizeof ( outputDevice ) ) )
+    {
+        throw CGenErr ( tr ( "CoreAudio output AudioUnitSetProperty call failed" ) );
+    }	
+
+    // set up a callback function for new output data
+    AURenderCallbackStruct output;
+    output.inputProc       = processOutput;
+    output.inputProcRefCon = this;
+
+    if ( AudioUnitSetProperty ( audioOutputUnit,
+                                kAudioUnitProperty_SetRenderCallback,//kAudioOutputUnitProperty_SetInputCallback,//
+                                kAudioUnitScope_Global,
+                                0,
+                                &output,
+                                sizeof ( output ) ) )
+    {
+        throw CGenErr ( tr ( "CoreAudio audio unit set property failed" ) );
     }
 
     // set up stream format
@@ -140,7 +180,7 @@ void CSound::OpenCoreAudio()
     streamFormat.mBitsPerChannel   = 16;
  
     // our output
-    if ( AudioUnitSetProperty ( audioUnit,
+    if ( AudioUnitSetProperty ( audioOutputUnit,
                                 kAudioUnitProperty_StreamFormat,
                                 kAudioUnitScope_Input,
                                 0,
@@ -151,7 +191,7 @@ void CSound::OpenCoreAudio()
     }
 
     // our input
-    if ( AudioUnitSetProperty ( audioUnit,
+    if ( AudioUnitSetProperty ( audioInputUnit,
                                 kAudioUnitProperty_StreamFormat,
                                 kAudioUnitScope_Output,
                                 1,
@@ -167,7 +207,8 @@ void CSound::OpenCoreAudio()
 	
 	
 // TEST
-StoreInOutStreamProps ( audioUnit );
+StoreInOutStreamProps ( audioInputUnit );
+StoreInOutStreamProps ( audioOutputUnit );
 
 
 }
@@ -175,17 +216,17 @@ StoreInOutStreamProps ( audioUnit );
 void CSound::CloseCoreAudio()
 {
     // clean up "gOutputUnit"
-    AudioUnitUninitialize ( audioUnit );
-	CloseComponent        ( audioUnit );
+    AudioUnitUninitialize ( audioInputUnit );
+    AudioUnitUninitialize ( audioOutputUnit );
+	CloseComponent        ( audioInputUnit );
+	CloseComponent        ( audioOutputUnit );
 }
 
 void CSound::Start()
 {
 	// start the rendering
-	if ( AudioOutputUnitStart ( audioUnit ) )
-    {
-        throw CGenErr ( tr ( "CoreAudio starting failed" ) );
-    }
+	AudioOutputUnitStart ( audioInputUnit );
+	AudioOutputUnitStart ( audioOutputUnit );
 
     // call base class
     CSoundBase::Start();
@@ -194,10 +235,8 @@ void CSound::Start()
 void CSound::Stop()
 {
     // stop the audio stream
-	if ( AudioOutputUnitStop ( audioUnit ) )
-    {
-        throw CGenErr ( tr ( "CoreAudio stopping failed" ) );
-    }
+	AudioOutputUnitStop ( audioInputUnit );
+	AudioOutputUnitStop ( audioOutputUnit );
 
     // call base class
     CSoundBase::Stop();
@@ -211,7 +250,14 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 	// get the audio unit buffer size
 	UInt32 bufferSizeFrames;
 	UInt32 propertySize = sizeof(UInt32);
-	AudioUnitGetProperty ( audioUnit, kAudioDevicePropertyBufferFrameSize,
+	
+	
+// TEST
+AudioUnitGetProperty ( audioOutputUnit, kAudioDevicePropertyBufferFrameSize,
+	kAudioUnitScope_Global, 1, &bufferSizeFrames, &propertySize );
+printf("out buf size: %d\n",bufferSizeFrames);
+
+	AudioUnitGetProperty ( audioInputUnit, kAudioDevicePropertyBufferFrameSize,
 	    kAudioUnitScope_Global, 1, &bufferSizeFrames, &propertySize );
 
     // store buffer size
@@ -236,15 +282,21 @@ printf ( "Buffer_Size: %d", (int) bufferSizeFrames );
 theBufferList = (AudioBufferList*) malloc ( offsetof ( AudioBufferList,
     mBuffers[0] ) + sizeof(AudioBuffer) );
 
-	
+//(sizeof(AudioBufferList) + (numChannels-1)) * sizeof(AudioBuffer)	
+
+
 	theBufferList->mNumberBuffers = 1;
     theBufferList->mBuffers[0].mNumberChannels = 2; // stereo
     theBufferList->mBuffers[0].mDataByteSize = bufferSizeFrames * 4; // 2 bytes, 2 channels
-	theBufferList->mBuffers[0].mData = &vecsTmpAudioSndCrdStereo[0];	
-//theBufferList->mBuffers[0].mData = malloc(bufferSizeBytes);
+	theBufferList->mBuffers[0].mData = &vecsTmpAudioSndCrdStereo[0];
 	
     // initialize unit
-	if ( AudioUnitInitialize ( audioUnit ) )
+	if ( AudioUnitInitialize ( audioInputUnit ) )
+    {
+        throw CGenErr ( tr ( "Initialization of CoreAudio failed" ) );
+    }
+
+	if ( AudioUnitInitialize ( audioOutputUnit ) )
     {
         throw CGenErr ( tr ( "Initialization of CoreAudio failed" ) );
     }
@@ -252,59 +304,47 @@ theBufferList = (AudioBufferList*) malloc ( offsetof ( AudioBufferList,
     return iCoreAudioBufferSizeMono;
 }
 
-OSStatus CSound::process ( void*                       inRefCon,
-                           AudioUnitRenderActionFlags* ioActionFlags,
-                           const AudioTimeStamp*       inTimeStamp,
-                           UInt32                      inBusNumber,
-                           UInt32                      inNumberFrames,
-                           AudioBufferList*            ioData )
+OSStatus CSound::processInput ( void*                       inRefCon,
+                                AudioUnitRenderActionFlags* ioActionFlags,
+                                const AudioTimeStamp*       inTimeStamp,
+                                UInt32                      inBusNumber,
+                                UInt32                      inNumberFrames,
+                                AudioBufferList*            ioData )
 {
     CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
-
+	
     // get the new audio data
     ComponentResult err =
-        AudioUnitRender ( pSound->audioUnit,
+        AudioUnitRender ( pSound->audioInputUnit,
                           ioActionFlags,
                           inTimeStamp,
                           inBusNumber,
                           inNumberFrames,
                           theBufferList );
 
-/*
-// TEST
-//static FILE* pFile = fopen ( "test.dat", "w" );
-for ( int test = 0; test < theBufferList->mBuffers[0].mDataByteSize / 4; test++ )
-{
-    fprintf ( pFile, "%e\n", static_cast<float*>(theBufferList->mBuffers[0].mData)[test]);
-}
-fflush ( pFile );
-*/
-
-/*
-// TEST output seems to work!!!
-for ( UInt32 i = 1; i < theBufferList->mBuffers[0].mDataByteSize / 2; i++)
-{
-    static_cast<short*> ( theBufferList->mBuffers[0].mData)[i] = (short) ( (double) rand() / RAND_MAX * 10000 );
-}
-ioData = theBufferList;
-*/
-
-// TEST
-printf ( "buffersize: %d, inBus: %d, ioActionFlags: %d, err: %d\n",
-    (int) inNumberFrames, (int) inBusNumber, (int) ioActionFlags, (int) err );
-
-
     // call processing callback function
     pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
 
-	
-	
-// TODO take care of outputting processed data	
-	
-	
+    return noErr;
+}
+
+OSStatus CSound::processOutput ( void*                       inRefCon,
+                                 AudioUnitRenderActionFlags* ioActionFlags,
+                                 const AudioTimeStamp*       inTimeStamp,
+                                 UInt32                      inBusNumber,
+                                 UInt32                      inNumberFrames,
+                                 AudioBufferList*            ioData )
+{
+    CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
+
+	memcpy ( ioData->mBuffers[0].mData,
+		&pSound->vecsTmpAudioSndCrdStereo[0],
+		theBufferList->mBuffers[0].mDataByteSize);
 
     return noErr;
 }
+
+
 
 
 

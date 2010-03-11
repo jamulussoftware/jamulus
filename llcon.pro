@@ -14,6 +14,7 @@ DEFINES += USE_ALLOCA \
 macx {
 	HEADERS += mac/sound.h
 	SOURCES += mac/sound.cpp
+        RC_FILE = mac/llcon.icns
 
 	LIBS += -framework CoreFoundation \
 		-framework CoreServices \

@@ -124,7 +124,7 @@ void CSound::OpenCoreAudio()
     input.inputProcRefCon = this;
 
     if ( AudioUnitSetProperty ( audioInputUnit,
-                                kAudioOutputUnitProperty_SetInputCallback,//kAudioUnitProperty_SetRenderCallback,//
+                                kAudioOutputUnitProperty_SetInputCallback,
                                 kAudioUnitScope_Global,
                                 0,
                                 &input,
@@ -159,7 +159,7 @@ void CSound::OpenCoreAudio()
     output.inputProcRefCon = this;
 
     if ( AudioUnitSetProperty ( audioOutputUnit,
-                                kAudioUnitProperty_SetRenderCallback,//kAudioOutputUnitProperty_SetInputCallback,//
+                                kAudioUnitProperty_SetRenderCallback,
                                 kAudioUnitScope_Global,
                                 0,
                                 &output,
@@ -201,9 +201,37 @@ void CSound::OpenCoreAudio()
         throw CGenErr ( tr ( "CoreAudio stream format set property failed" ) );
     }
 
+	// check input device sample rate
+    size = sizeof ( Float64 );
+    Float64 inputSampleRate;
+    AudioUnitGetProperty ( audioInputUnit,
+						   kAudioUnitProperty_SampleRate,
+                           kAudioUnitScope_Input,
+                           1,
+						   &inputSampleRate,
+						   &size );
 
+	if ( static_cast<int> ( inputSampleRate ) != SYSTEM_SAMPLE_RATE )
+    {
+// TODO better error message, showing current/desired sample rate and tell how to change		
+        throw CGenErr ( tr ( "Current system input device sample rate not supported" ) );
+    }
+
+	// check output device sample rate
+    size = sizeof ( Float64 );
+    Float64 outputSampleRate;
+    AudioUnitGetProperty ( audioOutputUnit,
+						  kAudioUnitProperty_SampleRate,
+						  kAudioUnitScope_Output,
+						  0,
+						  &outputSampleRate,
+						  &size );
 	
-// TODO check for required sample rate, if not available, throw error message	
+	if ( static_cast<int> ( outputSampleRate ) != SYSTEM_SAMPLE_RATE )
+    {
+// TODO better error message, showing current/desired sample rate and tell how to change		
+        throw CGenErr ( tr ( "Current system output device sample rate not supported" ) );
+    }
 	
 	
 // TEST

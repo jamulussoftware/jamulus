@@ -25,24 +25,6 @@
 #include "sound.h"
 
 
-
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TODO remove the following code as soon as the Coreaudio is working!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TEST Debug functions
-#include <string.h>
-void StoreInOutStreamProps ( ComponentInstance in );
-void StoreAudioStreamBasicDescription ( AudioStreamBasicDescription in, std::string text );
-static FILE* pFile = fopen ( "test.dat", "w" );
-
-
-
-
 /* Implementation *************************************************************/
 void CSound::OpenCoreAudio()
 {
@@ -67,7 +49,7 @@ void CSound::OpenCoreAudio()
 	{
 		throw CGenErr ( tr ( "CoreAudio creating input component instance failed" ) );
 	}
-		
+
 	if ( OpenAComponent ( comp, &audioOutputUnit ) )
 	{
 		throw CGenErr ( tr ( "CoreAudio creating output component instance failed" ) );
@@ -76,19 +58,19 @@ void CSound::OpenCoreAudio()
     // we enable input and disable output for input component
     UInt32 enableIO = 1;
     err = AudioUnitSetProperty ( audioInputUnit,
-        kAudioOutputUnitProperty_EnableIO,
-        kAudioUnitScope_Input,
-        1, // input element
-        &enableIO,
-        sizeof ( enableIO ) );
+                                 kAudioOutputUnitProperty_EnableIO,
+                                 kAudioUnitScope_Input,
+                                 1, // input element
+                                 &enableIO,
+                                 sizeof ( enableIO ) );
 
     enableIO = 0;
     err = AudioUnitSetProperty ( audioInputUnit,
-        kAudioOutputUnitProperty_EnableIO,
-        kAudioUnitScope_Output,
-        0, // output element
-        &enableIO,
-        sizeof ( enableIO ) );
+                                 kAudioOutputUnitProperty_EnableIO,
+                                 kAudioUnitScope_Output,
+                                 0, // output element
+                                 &enableIO,
+                                 sizeof ( enableIO ) );
 
     // set input device
     size = sizeof ( AudioDeviceID );
@@ -226,13 +208,10 @@ void CSound::OpenCoreAudio()
             "Applications->Utilities and try to set a sample rate of %2 Hz." ) ).arg (
             static_cast<int> ( outputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE ) );
     }
-	
-	
-// TEST
-StoreInOutStreamProps ( audioInputUnit );
-StoreInOutStreamProps ( audioOutputUnit );
 
-
+    // allocate memory for buffer struct
+    pBufferList = (AudioBufferList*) malloc ( offsetof ( AudioBufferList,
+        mBuffers[0] ) + sizeof ( AudioBuffer ) );
 }
 
 void CSound::CloseCoreAudio()
@@ -298,20 +277,12 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     // create memory for intermediate audio buffer
     vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStero );
 
-	
-// TODO	
-// fill audio unit buffer struct
-pBufferList = (AudioBufferList*) malloc ( offsetof ( AudioBufferList,
-    mBuffers[0] ) + sizeof(AudioBuffer) );
-
-//(sizeof(AudioBufferList) + (numChannels-1)) * sizeof(AudioBuffer)	
-
-
+    // fill audio unit buffer struct
 	pBufferList->mNumberBuffers = 1;
     pBufferList->mBuffers[0].mNumberChannels = 2; // stereo
     pBufferList->mBuffers[0].mDataByteSize = iCoreAudioBufferSizeMono * 4; // 2 bytes, 2 channels
 	pBufferList->mBuffers[0].mData = &vecsTmpAudioSndCrdStereo[0];
-	
+
     // initialize unit
 	if ( AudioUnitInitialize ( audioInputUnit ) )
     {
@@ -360,7 +331,7 @@ OSStatus CSound::processInput ( void*                       inRefCon,
                                 AudioBufferList*            ioData )
 {
     CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
-	
+
     QMutexLocker locker ( &pSound->Mutex );
 
     // get the new audio data
@@ -394,79 +365,4 @@ OSStatus CSound::processOutput ( void*                       inRefCon,
 		pSound->pBufferList->mBuffers[0].mDataByteSize);
 
     return noErr;
-}
-
-
-
-
-
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TODO remove the following code as soon as the Coreaudio is working!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TEST Debug functions
-void StoreAudioStreamBasicDescription ( AudioStreamBasicDescription in,
-                                        std::string text )
-{
-    fprintf ( pFile, "*** AudioStreamBasicDescription: %s***\n", text.c_str() );
-    fprintf ( pFile, "mSampleRate:       %e\n", in.mSampleRate );
-    fprintf ( pFile, "mFormatID:         %d\n", (int) in.mFormatID );
-    fprintf ( pFile, "mFormatFlags:      %d\n", (int) in.mFormatFlags );
-    fprintf ( pFile, "mFramesPerPacket:  %d\n", (int) in.mFramesPerPacket );
-    fprintf ( pFile, "mBytesPerFrame:    %d\n", (int) in.mBytesPerFrame );
-    fprintf ( pFile, "mBytesPerPacket:   %d\n", (int) in.mBytesPerPacket );
-    fprintf ( pFile, "mChannelsPerFrame: %d\n", (int) in.mChannelsPerFrame );
-    fprintf ( pFile, "mBitsPerChannel:   %d\n", (int) in.mBitsPerChannel );
-//    fprintf ( pFile, "mReserved %d\n", in.mReserved );
-    fflush ( pFile );
-}
-
-void StoreInOutStreamProps ( ComponentInstance in )
-{
-    // input bus 1
-    AudioStreamBasicDescription DeviceFormatin1;
-    UInt32 size = sizeof ( AudioStreamBasicDescription );
-    AudioUnitGetProperty ( in,
-                           kAudioUnitProperty_StreamFormat,
-                           kAudioUnitScope_Input,
-                           1,
-                           &DeviceFormatin1,
-                           &size );
-    StoreAudioStreamBasicDescription ( DeviceFormatin1, "Input Bus 1" );
-
-    // output bus 1
-    AudioStreamBasicDescription DeviceFormatout1;
-    size = sizeof ( AudioStreamBasicDescription );
-    AudioUnitGetProperty ( in,
-                           kAudioUnitProperty_StreamFormat,
-                           kAudioUnitScope_Output,
-                           1,
-                           &DeviceFormatout1,
-                           &size );
-    StoreAudioStreamBasicDescription ( DeviceFormatout1, "Output Bus 1" );
-
-    // input bus 0
-    AudioStreamBasicDescription DeviceFormatin0;
-    size = sizeof ( AudioStreamBasicDescription );
-    AudioUnitGetProperty ( in,
-                           kAudioUnitProperty_StreamFormat,
-                           kAudioUnitScope_Input,
-                           0,
-                           &DeviceFormatin0,
-                           &size );
-    StoreAudioStreamBasicDescription ( DeviceFormatin0, "Input Bus 0" );
-
-    // output bus 0
-    AudioStreamBasicDescription DeviceFormatout0;
-    size = sizeof ( AudioStreamBasicDescription );
-    AudioUnitGetProperty ( in,
-                           kAudioUnitProperty_StreamFormat,
-                           kAudioUnitScope_Output,
-                           0,
-                           &DeviceFormatout0,
-                           &size );                                                                     
-    StoreAudioStreamBasicDescription ( DeviceFormatout0, "Output Bus 0" );
 }

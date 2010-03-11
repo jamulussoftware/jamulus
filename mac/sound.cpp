@@ -213,8 +213,10 @@ void CSound::OpenCoreAudio()
 
 	if ( static_cast<int> ( inputSampleRate ) != SYSTEM_SAMPLE_RATE )
     {
-// TODO better error message, showing current/desired sample rate and tell how to change		
-        throw CGenErr ( tr ( "Current system input device sample rate not supported" ) );
+        throw CGenErr ( QString ( tr ( "Current system audio input device sample "
+            "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
+            "Applications->Utilities and try to set a sample rate of %2 Hz." ) ).arg (
+            static_cast<int> ( inputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE ) );
     }
 
 	// check output device sample rate
@@ -226,11 +228,13 @@ void CSound::OpenCoreAudio()
 						  0,
 						  &outputSampleRate,
 						  &size );
-	
+
 	if ( static_cast<int> ( outputSampleRate ) != SYSTEM_SAMPLE_RATE )
     {
-// TODO better error message, showing current/desired sample rate and tell how to change		
-        throw CGenErr ( tr ( "Current system output device sample rate not supported" ) );
+        throw CGenErr ( QString ( tr ( "Current system audio output device sample "
+            "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
+            "Applications->Utilities and try to set a sample rate of %2 Hz." ) ).arg (
+            static_cast<int> ( outputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE ) );
     }
 	
 	

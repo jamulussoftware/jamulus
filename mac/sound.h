@@ -27,6 +27,7 @@
 
 #include <CoreServices/CoreServices.h>
 #include <AudioUnit/AudioUnit.h>
+#include <qmutex.h>
 #include "util.h"
 #include "soundbase.h"
 #include "global.h"
@@ -59,6 +60,8 @@ public:
 protected:
     void OpenCoreAudio();
     void CloseCoreAudio();
+    UInt32  SetBufferSize ( AudioDeviceID& audioDeviceID, const bool bIsInput,
+                            UInt32 iPrefBufferSize );
 
     // callbacks
     static OSStatus processInput ( void* inRefCon,AudioUnitRenderActionFlags* ioActionFlags,
@@ -70,7 +73,13 @@ protected:
         AudioBufferList* ioData );		
 
     ComponentInstance audioInputUnit;
+    AudioDeviceID     audioInputDevice;
     ComponentInstance audioOutputUnit;
+    AudioDeviceID     audioOutputDevice;
+
+    AudioBufferList*  pBufferList;
+
+    QMutex            Mutex;
 };
 
 #endif // !defined(_SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_)

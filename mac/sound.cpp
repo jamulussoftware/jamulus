@@ -43,14 +43,6 @@ static FILE* pFile = fopen ( "test.dat", "w" );
 
 
 
-
-// TEST
-// allocated to hold buffer data
-AudioBufferList* theBufferList; 
-
-
-
-
 /* Implementation *************************************************************/
 void CSound::OpenCoreAudio()
 {
@@ -100,10 +92,9 @@ void CSound::OpenCoreAudio()
 
     // set input device
     size = sizeof ( AudioDeviceID );
-    AudioDeviceID inputDevice;
     if ( AudioHardwareGetProperty ( kAudioHardwarePropertyDefaultInputDevice,
                                     &size,
-                                    &inputDevice ) )
+                                    &audioInputDevice ) )
     {
         throw CGenErr ( tr ( "CoreAudio input AudioHardwareGetProperty call failed" ) );
     }
@@ -112,8 +103,8 @@ void CSound::OpenCoreAudio()
                                 kAudioOutputUnitProperty_CurrentDevice,
                                 kAudioUnitScope_Global,
                                 1,
-                                &inputDevice,
-                                sizeof ( inputDevice ) ) )
+                                &audioInputDevice,
+                                sizeof ( audioInputDevice ) ) )
     {
         throw CGenErr ( tr ( "CoreAudio input AudioUnitSetProperty call failed" ) );
     }
@@ -135,10 +126,9 @@ void CSound::OpenCoreAudio()
 
     // set output device
     size = sizeof ( AudioDeviceID );
-    AudioDeviceID outputDevice;
     if ( AudioHardwareGetProperty ( kAudioHardwarePropertyDefaultOutputDevice,
                                     &size,
-                                    &outputDevice ) )
+                                    &audioOutputDevice ) )
     {
         throw CGenErr ( tr ( "CoreAudio output AudioHardwareGetProperty call failed" ) );
     }
@@ -147,8 +137,8 @@ void CSound::OpenCoreAudio()
                                 kAudioOutputUnitProperty_CurrentDevice,
                                 kAudioUnitScope_Global,
                                 0,
-                                &outputDevice,
-                                sizeof ( outputDevice ) ) )
+                                &audioOutputDevice,
+                                sizeof ( audioOutputDevice ) ) )
     {
         throw CGenErr ( tr ( "CoreAudio output AudioUnitSetProperty call failed" ) );
     }	
@@ -276,24 +266,28 @@ void CSound::Stop()
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
-	
-// TODO try to set the preferred buffer size to the audio unit	
-	
-	// get the audio unit buffer size
-	UInt32 bufferSizeFrames;
-	UInt32 propertySize = sizeof(UInt32);
-	
-	
-// TEST
-AudioUnitGetProperty ( audioOutputUnit, kAudioDevicePropertyBufferFrameSize,
-	kAudioUnitScope_Global, 1, &bufferSizeFrames, &propertySize );
-printf("out buf size: %d\n",bufferSizeFrames);
+    UInt32 iActualMonoBufferSize;
 
-	AudioUnitGetProperty ( audioInputUnit, kAudioDevicePropertyBufferFrameSize,
-	    kAudioUnitScope_Global, 1, &bufferSizeFrames, &propertySize );
+    // try to set input buffer size
+    iActualMonoBufferSize =
+        SetBufferSize ( audioInputDevice, true, iNewPrefMonoBufferSize );
+
+    if ( iActualMonoBufferSize != static_cast<UInt32> ( iNewPrefMonoBufferSize ) )
+    {
+        // try to set the input buffer size to the output so that we
+        // have a matching pair
+// TODO check if setting was successful
+        SetBufferSize ( audioOutputDevice, false, iActualMonoBufferSize );
+    }
+    else
+    {
+        // try to set output buffer size
+// TODO check if setting was successful
+        SetBufferSize ( audioOutputDevice, false, iNewPrefMonoBufferSize );
+    }
 
     // store buffer size
-    iCoreAudioBufferSizeMono = bufferSizeFrames;  
+    iCoreAudioBufferSizeMono = iActualMonoBufferSize;  
 
     // init base class
     CSoundBase::Init ( iCoreAudioBufferSizeMono );
@@ -305,22 +299,18 @@ printf("out buf size: %d\n",bufferSizeFrames);
     vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStero );
 
 	
-// TEST
-printf ( "Buffer_Size: %d", (int) bufferSizeFrames );
-
-	
 // TODO	
 // fill audio unit buffer struct
-theBufferList = (AudioBufferList*) malloc ( offsetof ( AudioBufferList,
+pBufferList = (AudioBufferList*) malloc ( offsetof ( AudioBufferList,
     mBuffers[0] ) + sizeof(AudioBuffer) );
 
 //(sizeof(AudioBufferList) + (numChannels-1)) * sizeof(AudioBuffer)	
 
 
-	theBufferList->mNumberBuffers = 1;
-    theBufferList->mBuffers[0].mNumberChannels = 2; // stereo
-    theBufferList->mBuffers[0].mDataByteSize = bufferSizeFrames * 4; // 2 bytes, 2 channels
-	theBufferList->mBuffers[0].mData = &vecsTmpAudioSndCrdStereo[0];
+	pBufferList->mNumberBuffers = 1;
+    pBufferList->mBuffers[0].mNumberChannels = 2; // stereo
+    pBufferList->mBuffers[0].mDataByteSize = iCoreAudioBufferSizeMono * 4; // 2 bytes, 2 channels
+	pBufferList->mBuffers[0].mData = &vecsTmpAudioSndCrdStereo[0];
 	
     // initialize unit
 	if ( AudioUnitInitialize ( audioInputUnit ) )
@@ -336,6 +326,32 @@ theBufferList = (AudioBufferList*) malloc ( offsetof ( AudioBufferList,
     return iCoreAudioBufferSizeMono;
 }
 
+UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID,
+                               const bool     bIsInput,
+                               UInt32         iPrefBufferSize )
+{
+    // first set the value
+    UInt32 iSizeBufValue = sizeof ( UInt32 );
+    AudioDeviceSetProperty ( audioDeviceID,
+                             NULL,
+                             0,
+                             bIsInput,
+                             kAudioDevicePropertyBufferFrameSize,
+                             iSizeBufValue,
+                             &iPrefBufferSize );
+
+    // read back which value is actually used
+    UInt32 iActualMonoBufferSize;
+    AudioDeviceGetProperty ( audioDeviceID,
+                             0,
+                             bIsInput,
+                             kAudioDevicePropertyBufferFrameSize,
+                             &iSizeBufValue,
+                             &iActualMonoBufferSize );
+
+    return iActualMonoBufferSize;
+}
+
 OSStatus CSound::processInput ( void*                       inRefCon,
                                 AudioUnitRenderActionFlags* ioActionFlags,
                                 const AudioTimeStamp*       inTimeStamp,
@@ -345,6 +361,8 @@ OSStatus CSound::processInput ( void*                       inRefCon,
 {
     CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
 	
+    QMutexLocker locker ( &pSound->Mutex );
+
     // get the new audio data
     ComponentResult err =
         AudioUnitRender ( pSound->audioInputUnit,
@@ -352,7 +370,7 @@ OSStatus CSound::processInput ( void*                       inRefCon,
                           inTimeStamp,
                           inBusNumber,
                           inNumberFrames,
-                          theBufferList );
+                          pSound->pBufferList );
 
     // call processing callback function
     pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
@@ -369,9 +387,11 @@ OSStatus CSound::processOutput ( void*                       inRefCon,
 {
     CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
 
-	memcpy ( ioData->mBuffers[0].mData,
+    QMutexLocker locker ( &pSound->Mutex );
+
+    memcpy ( ioData->mBuffers[0].mData,
 		&pSound->vecsTmpAudioSndCrdStereo[0],
-		theBufferList->mBuffers[0].mDataByteSize);
+		pSound->pBufferList->mBuffers[0].mDataByteSize);
 
     return noErr;
 }

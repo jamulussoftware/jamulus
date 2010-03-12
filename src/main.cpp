@@ -62,7 +62,7 @@ int main ( int argc, char** argv )
     for ( int i = 1; i < argc; i++ )
     {
         // server mode flag ----------------------------------------------------
-        if ( GetFlagArgument ( argc, argv, i, "-s", "--server" ) )
+        if ( GetFlagArgument ( argv, i, "-s", "--server" ) )
         {
             bIsClient = false;
             cout << "- server mode chosen" << std::endl;
@@ -71,7 +71,7 @@ int main ( int argc, char** argv )
 
 
         // use GUI flag --------------------------------------------------------
-        if ( GetFlagArgument ( argc, argv, i, "-n", "--nogui" ) )
+        if ( GetFlagArgument ( argv, i, "-n", "--nogui" ) )
         {
             bUseGUI = false;
             cout << "- no GUI mode chosen" << std::endl;
@@ -80,7 +80,7 @@ int main ( int argc, char** argv )
 
 
         // disable LEDs flag ---------------------------------------------------
-        if ( GetFlagArgument ( argc, argv, i, "-d", "--disableleds" ) )
+        if ( GetFlagArgument ( argv, i, "-d", "--disableleds" ) )
         {
             bDisalbeLEDs = true;
             cout << "- disable LEDs in main window" << std::endl;
@@ -142,7 +142,7 @@ int main ( int argc, char** argv )
 
 
         // connect on startup --------------------------------------------------
-        if ( GetFlagArgument ( argc, argv, i, "-c", "--connect" ) )
+        if ( GetFlagArgument ( argv, i, "-c", "--connect" ) )
         {
             bConnectOnStartup = true;
             cout << "- connect on startup enabled" << std::endl;
@@ -164,7 +164,11 @@ int main ( int argc, char** argv )
         cerr << "Unknown option '" << argv[i] << "' -- use '--help' for help"
             << endl;
 
+// clicking on the Mac application bundle, the actual application
+// is called with weird command line args -> do not exit on these
+#if !( defined ( __APPLE__ ) || defined ( __MACOSX ) )
         exit ( 1 );
+#endif
     }
 
     // Application object
@@ -317,8 +321,7 @@ std::string UsageArguments ( char **argv )
         "Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }
 
-bool GetFlagArgument ( int argc,
-                       char** argv,
+bool GetFlagArgument ( char** argv,
                        int& i,
                        std::string strShortOpt,
                        std::string strLongOpt )

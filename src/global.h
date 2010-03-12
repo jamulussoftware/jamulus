@@ -220,7 +220,7 @@ public:
 /* Prototypes for global functions ********************************************/
 // command line parsing, TODO do not declare functions globally but in a class
 std::string UsageArguments     ( char** argv );
-bool        GetFlagArgument    ( int argc, char** argv, int& i, std::string strShortOpt, std::string strLongOpt );
+bool        GetFlagArgument    ( char** argv, int& i, std::string strShortOpt, std::string strLongOpt );
 bool        GetStringArgument  ( int argc, char** argv, int& i, std::string strShortOpt, std::string strLongOpt, std::string& strArg );
 bool        GetNumericArgument ( int argc, char** argv, int& i, std::string strShortOpt, std::string strLongOpt, double rRangeStart, double rRangeStop, double& rValue);
 

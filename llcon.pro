@@ -15,6 +15,7 @@ macx {
 	HEADERS += mac/sound.h
 	SOURCES += mac/sound.cpp
         RC_FILE = mac/llcon.icns
+        CONFIG += x86 ppc
 
 	LIBS += -framework CoreFoundation \
 		-framework CoreServices \

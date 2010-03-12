@@ -285,6 +285,16 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     }
 
 
+    // Mac Workaround:
+    // If the connect button is the default button, on Mac it is highlighted
+    // by fading in and out a blue backgroud color. This operation consumes so
+    // much CPU that we get audio interruptions.
+    // Better solution: increase thread priority of worker thread -> TODO
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+    PushButtonConnect->setDefault ( false );
+#endif
+
+
     // View menu  --------------------------------------------------------------
     pViewMenu = new QMenu ( "&View", this );
 

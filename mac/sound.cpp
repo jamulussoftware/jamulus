@@ -29,7 +29,7 @@
 void CSound::OpenCoreAudio()
 {
     UInt32          size;
-	ComponentResult err;
+    ComponentResult err;
 
     // open the default unit
     ComponentDescription desc;
@@ -45,15 +45,15 @@ void CSound::OpenCoreAudio()
         throw CGenErr ( tr ( "No CoreAudio next component found" ) );
     }
 
-	if ( OpenAComponent ( comp, &audioInputUnit ) )
-	{
-		throw CGenErr ( tr ( "CoreAudio creating input component instance failed" ) );
-	}
+    if ( OpenAComponent ( comp, &audioInputUnit ) )
+    {
+        throw CGenErr ( tr ( "CoreAudio creating input component instance failed" ) );
+    }
 
-	if ( OpenAComponent ( comp, &audioOutputUnit ) )
-	{
-		throw CGenErr ( tr ( "CoreAudio creating output component instance failed" ) );
-	}
+    if ( OpenAComponent ( comp, &audioOutputUnit ) )
+    {
+        throw CGenErr ( tr ( "CoreAudio creating output component instance failed" ) );
+    }
 
     // we enable input and disable output for input component
     UInt32 enableIO = 1;
@@ -123,7 +123,7 @@ void CSound::OpenCoreAudio()
                                 sizeof ( audioOutputDevice ) ) )
     {
         throw CGenErr ( tr ( "CoreAudio output AudioUnitSetProperty call failed" ) );
-    }	
+    }
 
     // set up a callback function for new output data
     AURenderCallbackStruct output;
@@ -173,17 +173,17 @@ void CSound::OpenCoreAudio()
         throw CGenErr ( tr ( "CoreAudio stream format set property failed" ) );
     }
 
-	// check input device sample rate
+    // check input device sample rate
     size = sizeof ( Float64 );
     Float64 inputSampleRate;
     AudioUnitGetProperty ( audioInputUnit,
-						   kAudioUnitProperty_SampleRate,
+                           kAudioUnitProperty_SampleRate,
                            kAudioUnitScope_Input,
                            1,
-						   &inputSampleRate,
-						   &size );
+                           &inputSampleRate,
+                           &size );
 
-	if ( static_cast<int> ( inputSampleRate ) != SYSTEM_SAMPLE_RATE )
+    if ( static_cast<int> ( inputSampleRate ) != SYSTEM_SAMPLE_RATE )
     {
         throw CGenErr ( QString ( tr ( "Current system audio input device sample "
             "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
@@ -191,17 +191,17 @@ void CSound::OpenCoreAudio()
             static_cast<int> ( inputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE ) );
     }
 
-	// check output device sample rate
+    // check output device sample rate
     size = sizeof ( Float64 );
     Float64 outputSampleRate;
     AudioUnitGetProperty ( audioOutputUnit,
-						  kAudioUnitProperty_SampleRate,
-						  kAudioUnitScope_Output,
-						  0,
-						  &outputSampleRate,
-						  &size );
+                           kAudioUnitProperty_SampleRate,
+                           kAudioUnitScope_Output,
+                           0,
+                           &outputSampleRate,
+                           &size );
 
-	if ( static_cast<int> ( outputSampleRate ) != SYSTEM_SAMPLE_RATE )
+    if ( static_cast<int> ( outputSampleRate ) != SYSTEM_SAMPLE_RATE )
     {
         throw CGenErr ( QString ( tr ( "Current system audio output device sample "
             "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
@@ -219,15 +219,15 @@ void CSound::CloseCoreAudio()
     // clean up "gOutputUnit"
     AudioUnitUninitialize ( audioInputUnit );
     AudioUnitUninitialize ( audioOutputUnit );
-	CloseComponent        ( audioInputUnit );
-	CloseComponent        ( audioOutputUnit );
+    CloseComponent        ( audioInputUnit );
+    CloseComponent        ( audioOutputUnit );
 }
 
 void CSound::Start()
 {
-	// start the rendering
-	AudioOutputUnitStart ( audioInputUnit );
-	AudioOutputUnitStart ( audioOutputUnit );
+    // start the rendering
+    AudioOutputUnitStart ( audioInputUnit );
+    AudioOutputUnitStart ( audioOutputUnit );
 
     // call base class
     CSoundBase::Start();
@@ -236,8 +236,8 @@ void CSound::Start()
 void CSound::Stop()
 {
     // stop the audio stream
-	AudioOutputUnitStop ( audioInputUnit );
-	AudioOutputUnitStop ( audioOutputUnit );
+    AudioOutputUnitStop ( audioInputUnit );
+    AudioOutputUnitStop ( audioOutputUnit );
 
     // call base class
     CSoundBase::Stop();
@@ -247,7 +247,11 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
     UInt32 iActualMonoBufferSize;
 
-	
+    // Error message string: in case buffer sizes on input and output cannot be set to the same value
+    const QString strErrBufSize = tr ( "The buffer sizes of the current "
+        "input and output audio device cannot be set to a common value. Please "
+        "choose other input/output audio devices in your system settings." );
+
     // try to set input buffer size
     iActualMonoBufferSize =
         SetBufferSize ( audioInputDevice, true, iNewPrefMonoBufferSize );
@@ -256,14 +260,20 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     {
         // try to set the input buffer size to the output so that we
         // have a matching pair
-// TODO check if setting was successful
-        SetBufferSize ( audioOutputDevice, false, iActualMonoBufferSize );
+        if ( SetBufferSize ( audioOutputDevice, false, iActualMonoBufferSize ) !=
+             iActualMonoBufferSize )
+        {
+            throw CGenErr ( strErrBufSize );
+        }
     }
     else
     {
         // try to set output buffer size
-// TODO check if setting was successful
-        SetBufferSize ( audioOutputDevice, false, iNewPrefMonoBufferSize );
+        if ( SetBufferSize ( audioOutputDevice, false, iNewPrefMonoBufferSize ) !=
+             static_cast<UInt32> ( iNewPrefMonoBufferSize ) )
+        {
+            throw CGenErr ( strErrBufSize );
+        }
     }
 
     // store buffer size
@@ -271,26 +281,26 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 
     // init base class
     CSoundBase::Init ( iCoreAudioBufferSizeMono );
-	
+
     // set internal buffer size value and calculate stereo buffer size
     iCoreAudioBufferSizeStero = 2 * iCoreAudioBufferSizeMono;
-	
+
     // create memory for intermediate audio buffer
     vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStero );
 
     // fill audio unit buffer struct
-	pBufferList->mNumberBuffers = 1;
+    pBufferList->mNumberBuffers = 1;
     pBufferList->mBuffers[0].mNumberChannels = 2; // stereo
     pBufferList->mBuffers[0].mDataByteSize = iCoreAudioBufferSizeMono * 4; // 2 bytes, 2 channels
-	pBufferList->mBuffers[0].mData = &vecsTmpAudioSndCrdStereo[0];
+    pBufferList->mBuffers[0].mData = &vecsTmpAudioSndCrdStereo[0];
 
     // initialize unit
-	if ( AudioUnitInitialize ( audioInputUnit ) )
+    if ( AudioUnitInitialize ( audioInputUnit ) )
     {
         throw CGenErr ( tr ( "Initialization of CoreAudio failed" ) );
     }
 
-	if ( AudioUnitInitialize ( audioOutputUnit ) )
+    if ( AudioUnitInitialize ( audioOutputUnit ) )
     {
         throw CGenErr ( tr ( "Initialization of CoreAudio failed" ) );
     }
@@ -349,20 +359,20 @@ OSStatus CSound::processInput ( void*                       inRefCon,
     return noErr;
 }
 
-OSStatus CSound::processOutput ( void*                       inRefCon,
+OSStatus CSound::processOutput ( void* inRefCon,
                                  AudioUnitRenderActionFlags*,
                                  const AudioTimeStamp*,
                                  UInt32,
                                  UInt32,
-                                 AudioBufferList*            ioData )
+                                 AudioBufferList* ioData )
 {
     CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
 
     QMutexLocker locker ( &pSound->Mutex );
 
     memcpy ( ioData->mBuffers[0].mData,
-		&pSound->vecsTmpAudioSndCrdStereo[0],
-		pSound->pBufferList->mBuffers[0].mDataByteSize);
+        &pSound->vecsTmpAudioSndCrdStereo[0],
+        pSound->pBufferList->mBuffers[0].mDataByteSize);
 
     return noErr;
 }

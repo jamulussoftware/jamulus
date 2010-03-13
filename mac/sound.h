@@ -70,7 +70,7 @@ protected:
 
     static OSStatus processOutput ( void* inRefCon,AudioUnitRenderActionFlags*,
         const AudioTimeStamp*, UInt32, UInt32,
-        AudioBufferList* ioData );		
+        AudioBufferList* ioData );
 
     ComponentInstance audioInputUnit;
     AudioDeviceID     audioInputDevice;

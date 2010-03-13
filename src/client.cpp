@@ -37,8 +37,15 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bOpenChatOnNewMessage ( true ),
     eGUIDesign ( GD_STANDARD ),
     bDoAutoSockBufSize ( true ),
-    iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
-    iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+	// we assume on Mac always the preferred frame size works fine
+    iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED ),
+    iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED ),
+#else
+	// if ASIO4All is used, it is safer to use the default value
+	iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
+	iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
+#endif
     bFraSiFactPrefSupported ( false ),
     bFraSiFactDefSupported ( false ),
     bFraSiFactSafeSupported ( false ),

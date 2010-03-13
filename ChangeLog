@@ -1,4 +1,6 @@
-3.0.4
+3.1.0
+
+- support for MacOS (using CoreAudio audio interface)
 
 - all available ASIO sample formats supported
 

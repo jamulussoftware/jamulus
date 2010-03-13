@@ -66,10 +66,10 @@ protected:
     // callbacks
     static OSStatus processInput ( void* inRefCon,AudioUnitRenderActionFlags* ioActionFlags,
         const AudioTimeStamp* inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames,
-        AudioBufferList* ioData );
-		
-    static OSStatus processOutput ( void* inRefCon,AudioUnitRenderActionFlags* ioActionFlags,
-        const AudioTimeStamp* inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames,
+        AudioBufferList* );
+
+    static OSStatus processOutput ( void* inRefCon,AudioUnitRenderActionFlags*,
+        const AudioTimeStamp*, UInt32, UInt32,
         AudioBufferList* ioData );		
 
     ComponentInstance audioInputUnit;

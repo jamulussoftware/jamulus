@@ -247,6 +247,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
     UInt32 iActualMonoBufferSize;
 
+	
     // try to set input buffer size
     iActualMonoBufferSize =
         SetBufferSize ( audioInputDevice, true, iNewPrefMonoBufferSize );
@@ -328,20 +329,19 @@ OSStatus CSound::processInput ( void*                       inRefCon,
                                 const AudioTimeStamp*       inTimeStamp,
                                 UInt32                      inBusNumber,
                                 UInt32                      inNumberFrames,
-                                AudioBufferList*            ioData )
+                                AudioBufferList* )
 {
     CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
 
     QMutexLocker locker ( &pSound->Mutex );
 
     // get the new audio data
-    ComponentResult err =
-        AudioUnitRender ( pSound->audioInputUnit,
-                          ioActionFlags,
-                          inTimeStamp,
-                          inBusNumber,
-                          inNumberFrames,
-                          pSound->pBufferList );
+    AudioUnitRender ( pSound->audioInputUnit,
+                      ioActionFlags,
+                      inTimeStamp,
+                      inBusNumber,
+                      inNumberFrames,
+                      pSound->pBufferList );
 
     // call processing callback function
     pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
@@ -350,10 +350,10 @@ OSStatus CSound::processInput ( void*                       inRefCon,
 }
 
 OSStatus CSound::processOutput ( void*                       inRefCon,
-                                 AudioUnitRenderActionFlags* ioActionFlags,
-                                 const AudioTimeStamp*       inTimeStamp,
-                                 UInt32                      inBusNumber,
-                                 UInt32                      inNumberFrames,
+                                 AudioUnitRenderActionFlags*,
+                                 const AudioTimeStamp*,
+                                 UInt32,
+                                 UInt32,
                                  AudioBufferList*            ioData )
 {
     CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );

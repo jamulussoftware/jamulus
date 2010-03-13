@@ -38,7 +38,8 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     if ( sCurFileName.isEmpty() )
     {
         // if no file name is available, use default file name
-        sCurFileName = LLCON_INIT_FILE_NAME;
+        sCurFileName =
+            QApplication::applicationDirPath() + "/" + LLCON_INIT_FILE_NAME;
     }
 
     // read data from file if possible
@@ -219,7 +220,8 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     if ( sCurFileName.isEmpty() )
     {
         // if no file name is available, use default file name
-        sCurFileName = LLCON_INIT_FILE_NAME;
+        sCurFileName =
+            QApplication::applicationDirPath() + "/" + LLCON_INIT_FILE_NAME;
     }
 
     // store XML data in file

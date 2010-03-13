@@ -22,8 +22,6 @@ macx {
         -framework CoreAudio \
         -framework AudioToolbox \
         -framework AudioUnit
-
-    QMAKE_INFO_PLIST = mac/llcon.plist
 }
 
 RCC_DIR = src/res

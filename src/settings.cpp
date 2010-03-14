@@ -39,7 +39,10 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     {
         // if no file name is available, use default file name
         sCurFileName =
-            QApplication::applicationDirPath() + "/" + LLCON_INIT_FILE_NAME;
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+            QApplication::applicationDirPath() + "/" +
+#endif
+			LLCON_INIT_FILE_NAME;
     }
 
     // read data from file if possible
@@ -221,7 +224,10 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     {
         // if no file name is available, use default file name
         sCurFileName =
-            QApplication::applicationDirPath() + "/" + LLCON_INIT_FILE_NAME;
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+		QApplication::applicationDirPath() + "/" +
+#endif
+			LLCON_INIT_FILE_NAME;
     }
 
     // store XML data in file

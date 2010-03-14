@@ -355,11 +355,18 @@ void CServer::Start()
 
 void CServer::Stop()
 {
-    // stop timer
-    HighPrecisionTimer.Stop();
+    // Under Mac we have the problem that the timer shutdown might
+    // take some time and therefore we get a lot of "server stopped"
+    // entries in the log. The following condition shall prevent this.
+    // For the other OSs this should not hurt either.
+    if ( IsRunning() )
+    {
+        // stop timer
+        HighPrecisionTimer.Stop();
 
-    // logging (add "server stopped" logging entry)
-    Logging.AddServerStopped();
+        // logging (add "server stopped" logging entry)
+        Logging.AddServerStopped();
+    }
 }
 
 void CServer::OnTimer()

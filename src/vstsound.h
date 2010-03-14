@@ -35,17 +35,15 @@ class CVSTSound : public CSoundBase
 {
 public:
     CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg );
-    virtual ~CSound();
+    virtual ~CSound() {}
 
-    virtual int  Init ( const int iNewPrefMonoBufferSize );
-    virtual void Start();
-    virtual void Stop();
-
+    // these functions are not actually used -> dummies
+    virtual int  Init ( const int ) {}
+    virtual void Start() {}
+    virtual void Stop() {}
     virtual void OpenDriverSetup() {}
-
     int          GetNumDev() { return 1; }
     QString      GetDeviceName ( const int iDiD ) { return "VST"; }
-
     QString      SetDev ( const int iNewDev ) {}
     int          GetDev() { return 0; }
 

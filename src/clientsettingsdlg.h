@@ -71,8 +71,8 @@ protected:
     QString GenSndCrdBufferDelayString ( const int iFrameSize,
                                          const QString strAddText = "" );
 
-    virtual void showEvent ( QShowEvent* showEvent );
-    virtual void hideEvent ( QHideEvent* hideEvent );
+    virtual void showEvent ( QShowEvent* );
+    virtual void hideEvent ( QHideEvent* );
 
     CClient*     pClient;
     QTimer       TimerStatus;

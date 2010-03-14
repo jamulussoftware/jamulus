@@ -109,8 +109,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "setting has to be changed in the sound card driver. On Windows, press "
         "the ASIO Setup button to open the driver settings panel. On Linux, "
         "use the Jack configuration tool to change the buffer size.<br>"
-        "If no buffer size is selected and all settings are disabled, a "
-        "unsupported bufffer size is used by the driver. The llcon software "
+        "If no buffer size is selected and all settings are disabled, an "
+        "unsupported buffer size is used by the driver. The llcon software "
         "will still work with this setting but with restricted performannce.<br>"
         "The actual buffer delay has influence on the connection status, the "
         "current upload rate and the overall delay. The lower the buffer size, "
@@ -386,7 +386,7 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
         pClient->GetFraSiFactSafeSupported() );
 }
 
-void CClientSettingsDlg::showEvent ( QShowEvent* showEvent )
+void CClientSettingsDlg::showEvent ( QShowEvent* )
 {
     // only activate ping timer if window is actually shown
     TimerPing.start ( PING_UPDATE_TIME );
@@ -394,7 +394,7 @@ void CClientSettingsDlg::showEvent ( QShowEvent* showEvent )
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::hideEvent ( QHideEvent* hideEvent )
+void CClientSettingsDlg::hideEvent ( QHideEvent* )
 {
     // if window is closed, stop timer for ping
     TimerPing.stop();

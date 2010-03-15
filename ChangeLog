@@ -2,12 +2,12 @@
 
 - support for MacOS (using CoreAudio audio interface)
 
-- all available ASIO sample formats supported
-
 - sound card frame size support for frame sizes other than 128, 256 and 512
   samples
 
 - improvement of network buffer (jitter buffer) in case of small buffer sizes
+
+- all available ASIO sample formats supported
 
 - bug fix for M-Audio Delta ASIO driver
 

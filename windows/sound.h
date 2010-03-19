@@ -40,14 +40,14 @@
 
 
 /* Definitions ****************************************************************/
-#define NUM_IN_OUT_CHANNELS     2       /* Stereo recording (but we only
-                                           use one channel for recording) */
+// stereo for input and output
+#define NUM_IN_OUT_CHANNELS         2
 
-#define MAX_SND_BUF_IN          100
-#define MAX_SND_BUF_OUT         100
-
-#define NUM_SOUND_BUFFERS_IN    4
-#define NUM_SOUND_BUFFERS_OUT   4
+// define the maximum number of audio channel for input/output we can store
+// channel infos for (and therefore this is the maximum number of entries in
+// the channel selection combo box regardless of the actual available number
+// of channels by the audio device)
+#define MAX_NUM_IN_OUT_CHANNELS     32
 
 
 /* Classes ********************************************************************/
@@ -74,6 +74,17 @@ protected:
     QString          LoadAndInitializeDriver ( int iIdx );
     int              GetActualBufferSize ( const int iDesiredBufferSizeMono );
     QString          CheckDeviceCapabilities();
+    bool             CheckSampleTypeSupported ( const ASIOSampleType SamType );
+
+    int              iASIOBufferSizeMono;
+    int              iASIOBufferSizeStereo;
+
+    CVector<int>     vSelectedInputChannels;
+    CVector<int>     vSelectedOutputChannels;
+
+    CVector<int16_t> vecsTmpAudioSndCrdStereo;
+
+    QMutex           ASIOMutex;
 
     // utility functions
     static int16_t   Flip16Bits ( const int16_t iIn );
@@ -88,6 +99,14 @@ protected:
         long lPreferredSize;
         long lGranularity;
     } HWBufferInfo;
+
+    // ASIO stuff
+    ASIODriverInfo   driverInfo;
+    ASIOBufferInfo   bufferInfos[2 * NUM_IN_OUT_CHANNELS]; // for input and output buffers -> "2 *"
+    ASIOChannelInfo  channelInfosInput[MAX_NUM_IN_OUT_CHANNELS];
+    ASIOChannelInfo  channelInfosOutput[MAX_NUM_IN_OUT_CHANNELS];
+    bool             bASIOPostOutput;
+    ASIOCallbacks    asioCallbacks;
 
     // callbacks
     static void      bufferSwitch ( long index, ASIOBool processNow );

@@ -70,19 +70,19 @@ public:
     virtual int     GetDev() { return lCurDev; }
 
     // channel selection
-    int     GetNumInputChannels() { return static_cast<int> ( lNumInChan ); }
-    QString GetInputChannelName ( const int iDiD ) { return channelInfosInput[iDiD].name; }
-    void    SetLeftInputChannel  ( const int iNewChan );
-    void    SetRightInputChannel ( const int iNewChan );
-    int     GetLeftInputChannel()  { return vSelectedInputChannels[0]; }
-    int     GetRightInputChannel() { return vSelectedInputChannels[1]; }
+    virtual int     GetNumInputChannels() { return static_cast<int> ( lNumInChan ); }
+    virtual QString GetInputChannelName ( const int iDiD ) { return channelInfosInput[iDiD].name; }
+    virtual void    SetLeftInputChannel  ( const int iNewChan );
+    virtual void    SetRightInputChannel ( const int iNewChan );
+    virtual int     GetLeftInputChannel()  { return vSelectedInputChannels[0]; }
+    virtual int     GetRightInputChannel() { return vSelectedInputChannels[1]; }
 
-    int     GetNumOutputChannels() { return static_cast<int> ( lNumOutChan ); }
-    QString GetOutputChannelName ( const int iDiD ) { return channelInfosOutput[iDiD].name; }
-    void    SetLeftOutputChannel  ( const int iNewChan );
-    void    SetRightOutputChannel ( const int iNewChan );
-    int     GetLeftOutputChannel()  { return vSelectedOutputChannels[0]; }
-    int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
+    virtual int     GetNumOutputChannels() { return static_cast<int> ( lNumOutChan ); }
+    virtual QString GetOutputChannelName ( const int iDiD ) { return channelInfosOutput[iDiD].name; }
+    virtual void    SetLeftOutputChannel  ( const int iNewChan );
+    virtual void    SetRightOutputChannel ( const int iNewChan );
+    virtual int     GetLeftOutputChannel()  { return vSelectedOutputChannels[0]; }
+    virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
 
 protected:
     QVector<QString> LoadAndInitializeFirstValidDriver();

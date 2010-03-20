@@ -224,6 +224,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     }
     cbSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
 
+    // init sound card channel selection frame
+    UpdateSoundChannelSelectionFrame();
+
     // "OpenChatOnNewMessage" check box
     if ( pClient->GetOpenChatOnNewMessage() )
     {
@@ -309,6 +312,18 @@ cbGUIDesignFancy->setVisible ( false );
     QObject::connect ( cbSoundcard, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnSoundCrdSelection ( int ) ) );
 
+    QObject::connect ( cbLInChan, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnSndCrdLeftInChannelSelection ( int ) ) );
+
+    QObject::connect ( cbRInChan, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnSndCrdRightInChannelSelection ( int ) ) );
+
+    QObject::connect ( cbLOutChan, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnSndCrdLeftOutChannelSelection ( int ) ) );
+
+    QObject::connect ( cbROutChan, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnSndCrdRightOutChannelSelection ( int ) ) );
+
     // buttons
     QObject::connect ( ButtonDriverSetup, SIGNAL ( clicked() ),
         this, SLOT ( OnDriverSetupBut() ) );
@@ -386,6 +401,54 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
         pClient->GetFraSiFactSafeSupported() );
 }
 
+void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
+{
+#ifdef _WIN32
+    int iSndChanIdx;
+
+    // Definition: The channel selection frame shall only be visible,
+    // if more than two input or output channels are available
+    const int iNumInChannels  = pClient->GetSndCrdNumInputChannels();
+    const int iNumOutChannels = pClient->GetSndCrdNumOutputChannels();
+
+    if ( ( iNumInChannels <= 2 ) && ( iNumOutChannels <= 2 ) )
+    {
+        // as defined, make settings invisible
+        FrameSoundcardChannelSelection->setVisible ( false );
+    }
+    else
+    {
+        // update combo boxes
+        FrameSoundcardChannelSelection->setVisible ( true );
+
+        // input
+        cbLInChan->clear();
+        cbRInChan->clear();
+        for ( iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumInputChannels(); iSndChanIdx++ )
+        {
+            cbLInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
+            cbRInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
+        }
+        cbLInChan->setCurrentIndex ( pClient->GetSndCrdLeftInputChannel() );
+        cbRInChan->setCurrentIndex ( pClient->GetSndCrdRightInputChannel() );
+
+        // output
+        cbLOutChan->clear();
+        cbROutChan->clear();
+        for ( iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumOutputChannels(); iSndChanIdx++ )
+        {
+            cbLOutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );
+            cbROutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );
+        }
+        cbLOutChan->setCurrentIndex ( pClient->GetSndCrdLeftOutputChannel() );
+        cbROutChan->setCurrentIndex ( pClient->GetSndCrdRightOutputChannel() );
+    }
+#else
+    // for other OS, no sound card channel selection is supported
+    FrameSoundcardChannelSelection->setVisible ( false );
+#endif
+}
+
 void CClientSettingsDlg::showEvent ( QShowEvent* )
 {
     // only activate ping timer if window is actually shown
@@ -432,7 +495,32 @@ void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
         // recover old selection
         cbSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
     }
+    UpdateSoundChannelSelectionFrame();
     UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnSndCrdLeftInChannelSelection ( int iChanIdx )
+{
+    pClient->SetSndCrdLeftInputChannel ( iChanIdx );
+    UpdateSoundChannelSelectionFrame();
+}
+
+void CClientSettingsDlg::OnSndCrdRightInChannelSelection ( int iChanIdx )
+{
+    pClient->SetSndCrdRightInputChannel ( iChanIdx );
+    UpdateSoundChannelSelectionFrame();
+}
+
+void CClientSettingsDlg::OnSndCrdLeftOutChannelSelection ( int iChanIdx )
+{
+    pClient->SetSndCrdLeftOutputChannel ( iChanIdx );
+    UpdateSoundChannelSelectionFrame();
+}
+
+void CClientSettingsDlg::OnSndCrdRightOutChannelSelection ( int iChanIdx )
+{
+    pClient->SetSndCrdRightOutputChannel ( iChanIdx );
+    UpdateSoundChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnAutoJitBuf ( int value )

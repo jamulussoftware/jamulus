@@ -132,6 +132,7 @@ public:
 
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
+    // sound card device selection
     int     GetSndCrdNumDev() { return Sound.GetNumDev(); }
     QString GetSndCrdDeviceName ( const int iDiD )
         { return Sound.GetDeviceName ( iDiD ); }
@@ -139,6 +140,21 @@ public:
     QString SetSndCrdDev ( const int iNewDev );
     int     GetSndCrdDev() { return Sound.GetDev(); }
     void    OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
+
+    // sound card channel selection
+    int     GetSndCrdNumInputChannels() { return Sound.GetNumInputChannels(); }
+    QString GetSndCrdInputChannelName ( const int iDiD ) { return Sound.GetInputChannelName ( iDiD ); }
+    void    SetSndCrdLeftInputChannel  ( const int iNewChan );
+    void    SetSndCrdRightInputChannel ( const int iNewChan );
+    int     GetSndCrdLeftInputChannel()  { return Sound.GetLeftInputChannel(); }
+    int     GetSndCrdRightInputChannel() { return Sound.GetRightInputChannel(); }
+
+    int     GetSndCrdNumOutputChannels() { return Sound.GetNumOutputChannels(); }
+    QString GetSndCrdOutputChannelName ( const int iDiD ) { return Sound.GetOutputChannelName ( iDiD ); }
+    void    SetSndCrdLeftOutputChannel  ( const int iNewChan );
+    void    SetSndCrdRightOutputChannel ( const int iNewChan );
+    int     GetSndCrdLeftOutputChannel()  { return Sound.GetLeftOutputChannel(); }
+    int     GetSndCrdRightOutputChannel() { return Sound.GetRightOutputChannel(); }
 
     void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
     int GetSndCrdPrefFrameSizeFactor()

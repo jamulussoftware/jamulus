@@ -255,6 +255,86 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
     return strReturn;
 }
 
+void CClient::SetSndCrdLeftInputChannel ( const int iNewChan )
+{
+    // if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    Sound.SetLeftInputChannel ( iNewChan );
+    Init();
+
+    if ( bWasRunning )
+    {
+        // restart client
+        Sound.Start();
+    }
+}
+
+void CClient::SetSndCrdRightInputChannel ( const int iNewChan )
+{
+    // if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    Sound.SetRightInputChannel ( iNewChan );
+    Init();
+
+    if ( bWasRunning )
+    {
+        // restart client
+        Sound.Start();
+    }
+}
+
+void CClient::SetSndCrdLeftOutputChannel ( const int iNewChan )
+{
+    // if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    Sound.SetLeftOutputChannel ( iNewChan );
+    Init();
+
+    if ( bWasRunning )
+    {
+        // restart client
+        Sound.Start();
+    }
+}
+
+void CClient::SetSndCrdRightOutputChannel ( const int iNewChan )
+{
+    // if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    Sound.SetRightOutputChannel ( iNewChan );
+    Init();
+
+    if ( bWasRunning )
+    {
+        // restart client
+        Sound.Start();
+    }
+}
+
 void CClient::OnSndCrdReinitRequest()
 {
     // if client was running then first

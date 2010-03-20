@@ -68,6 +68,7 @@ public:
 protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
+    void    UpdateSoundChannelSelectionFrame();
     QString GenSndCrdBufferDelayString ( const int iFrameSize,
                                          const QString strAddText = "" );
 
@@ -92,6 +93,10 @@ protected:
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnPingTimeResult ( int iPingTime );
     void OnSoundCrdSelection ( int iSndDevIdx );
+    void OnSndCrdLeftInChannelSelection ( int iChanIdx );
+    void OnSndCrdRightInChannelSelection ( int iChanIdx );
+    void OnSndCrdLeftOutChannelSelection ( int iChanIdx );
+    void OnSndCrdRightOutChannelSelection ( int iChanIdx );
     void OnDriverSetupBut();
 
 signals:

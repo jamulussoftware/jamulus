@@ -54,8 +54,8 @@ public:
 protected:
     void OpenCoreAudio();
     void CloseCoreAudio();
-    UInt32  SetBufferSize ( AudioDeviceID& audioDeviceID, const bool bIsInput,
-                            UInt32 iPrefBufferSize );
+    UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID, const bool bIsInput,
+                           UInt32 iPrefBufferSize );
 
     // callbacks
     static OSStatus processInput ( void* inRefCon,AudioUnitRenderActionFlags* ioActionFlags,

@@ -231,8 +231,6 @@ QString CSound::CheckDeviceCapabilities()
     }
 
     // check the number of available channels
-    long lNumInChan;
-    long lNumOutChan;
     ASIOGetChannels ( &lNumInChan, &lNumOutChan );
     if ( ( lNumInChan < NUM_IN_OUT_CHANNELS ) ||
          ( lNumOutChan < NUM_IN_OUT_CHANNELS ) )
@@ -298,8 +296,48 @@ QString CSound::CheckDeviceCapabilities()
         }
     }
 
+    // the device has changed, per definition we reset the channel
+    // mapping to the defaults (first two available channels)
+    ResetChannelMapping();
+
     // everything is ok, return empty string for "no error" case
     return "";
+}
+
+void CSound::SetLeftInputChannel  ( const int iNewChan )
+{
+    // apply parameter after input parameter check
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChan ) )
+    {
+        vSelectedInputChannels[0] = iNewChan;
+    }
+}
+
+void CSound::SetRightInputChannel ( const int iNewChan )
+{
+    // apply parameter after input parameter check
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChan ) )
+    {
+        vSelectedInputChannels[1] = iNewChan;
+    }
+}
+
+void CSound::SetLeftOutputChannel  ( const int iNewChan )
+{
+    // apply parameter after input parameter check
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) )
+    {
+        vSelectedOutputChannels[0] = iNewChan;
+    }
+}
+
+void CSound::SetRightOutputChannel ( const int iNewChan )
+{
+    // apply parameter after input parameter check
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) )
+    {
+        vSelectedOutputChannels[1] = iNewChan;
+    }
 }
 
 int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
@@ -485,7 +523,9 @@ void CSound::Stop()
 CSound::CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg ) :
     CSoundBase ( true, fpNewCallback, arg ),
     vSelectedInputChannels ( NUM_IN_OUT_CHANNELS ),
-    vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS )
+    vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS ),
+    lNumInChan ( 0 ),
+    lNumOutChan ( 0 )
 {
     int i;
 
@@ -517,18 +557,24 @@ CSound::CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), 
     // init device index with illegal value to show that driver is not initialized
     lCurDev = -1;
 
-    // init selected channel numbers with defaults: use first available
-    // channels for input and output
-    vSelectedInputChannels[0]  = 0;
-    vSelectedInputChannels[1]  = 1;
-    vSelectedOutputChannels[0] = 0;
-    vSelectedOutputChannels[1] = 1;
+    // init channel mapping
+    ResetChannelMapping();
 
     // set up the asioCallback structure
     asioCallbacks.bufferSwitch         = &bufferSwitch;
     asioCallbacks.sampleRateDidChange  = &sampleRateChanged;
     asioCallbacks.asioMessage          = &asioMessages;
     asioCallbacks.bufferSwitchTimeInfo = &bufferSwitchTimeInfo;
+}
+
+void CSound::ResetChannelMapping()
+{
+    // init selected channel numbers with defaults: use first available
+    // channels for input and output
+    vSelectedInputChannels[0]  = 0;
+    vSelectedInputChannels[1]  = 1;
+    vSelectedOutputChannels[0] = 0;
+    vSelectedOutputChannels[1] = 1;
 }
 
 CSound::~CSound()

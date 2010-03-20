@@ -46,6 +46,13 @@ public:
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
+
+    // dummy implementation in base class
+    virtual int     GetNumDev()                 { return 1; }
+    virtual QString GetDeviceName ( const int ) { return "Default"; }
+    virtual QString SetDev ( const int )        { return ""; }
+    virtual int     GetDev()                    { return 0; }
+
     bool         IsRunning() const { return bRun; }
 
     virtual void OpenDriverSetup() {}

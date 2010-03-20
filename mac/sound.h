@@ -45,12 +45,6 @@ public:
     virtual void Start();
     virtual void Stop();
 
-    // not implemented yet, always return one device and default string
-    int     GetNumDev()                 { return 1; }
-    QString GetDeviceName ( const int ) { return "CoreAudio"; }
-    QString SetDev ( const int )        { return ""; } // dummy
-    int     GetDev()                    { return 0; }
-
     // these variables should be protected but cannot since we want
     // to access them from the callback function
     CVector<short> vecsTmpAudioSndCrdStereo;

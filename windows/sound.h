@@ -64,25 +64,25 @@ public:
     virtual void OpenDriverSetup() { ASIOControlPanel(); }
 
     // device selection
-    int          GetNumDev() { return lNumDevs; }
-    QString      GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }
-    QString      SetDev ( const int iNewDev );
-    int          GetDev() { return lCurDev; }
+    virtual int     GetNumDev() { return lNumDevs; }
+    virtual QString GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }
+    virtual QString SetDev ( const int iNewDev );
+    virtual int     GetDev() { return lCurDev; }
 
     // channel selection
-    int          GetNumInputChannels() { return static_cast<int> ( lNumInChan ); }
-    QString      GetInputChannelName ( const int iDiD ) { return channelInfosInput[iDiD].name; }
-    void         SetLeftInputChannel  ( const int iNewChan );
-    void         SetRightInputChannel ( const int iNewChan );
-    int          GetLeftInputChannel()  { return vSelectedInputChannels[0]; }
-    int          GetRightInputChannel() { return vSelectedInputChannels[1]; }
+    int     GetNumInputChannels() { return static_cast<int> ( lNumInChan ); }
+    QString GetInputChannelName ( const int iDiD ) { return channelInfosInput[iDiD].name; }
+    void    SetLeftInputChannel  ( const int iNewChan );
+    void    SetRightInputChannel ( const int iNewChan );
+    int     GetLeftInputChannel()  { return vSelectedInputChannels[0]; }
+    int     GetRightInputChannel() { return vSelectedInputChannels[1]; }
 
-    int          GetNumOutputChannels() { return static_cast<int> ( lNumOutChan ); }
-    QString      GetOutputChannelName ( const int iDiD ) { return channelInfosOutput[iDiD].name; }
-    void         SetLeftOutputChannel  ( const int iNewChan );
-    void         SetRightOutputChannel ( const int iNewChan );
-    int          GetLeftOutputChannel()  { return vSelectedOutputChannels[0]; }
-    int          GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
+    int     GetNumOutputChannels() { return static_cast<int> ( lNumOutChan ); }
+    QString GetOutputChannelName ( const int iDiD ) { return channelInfosOutput[iDiD].name; }
+    void    SetLeftOutputChannel  ( const int iNewChan );
+    void    SetRightOutputChannel ( const int iNewChan );
+    int     GetLeftOutputChannel()  { return vSelectedOutputChannels[0]; }
+    int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
 
 protected:
     QVector<QString> LoadAndInitializeFirstValidDriver();

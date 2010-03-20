@@ -90,6 +90,26 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "driver, make sure to connect the ASIO inputs in the kX DSP settings "
         "panel." ) + TOOLTIP_COM_END_TEXT );
 
+    // sound card input/output channel mapping
+    QString strSndCrdChanMapp = tr ( "<b>Sound Card Channel Mapping:</b> "
+        "In case the selected sound card device offers more than one "
+        "input or output channel, the Input Channel Mapping and Ouptut "
+        "Channel Mapping settings are visible.<br>"
+        "For each " ) + APP_NAME + tr ( " input/output channel (Left and "
+        "Right channel) a different actual sound card channel can be "
+        "selected." );
+
+    lbInChannelMapping->setWhatsThis ( strSndCrdChanMapp );
+    lbOutChannelMapping->setWhatsThis ( strSndCrdChanMapp );
+    cbLInChan->setWhatsThis ( strSndCrdChanMapp );
+    cbLInChan->setAccessibleName ( tr ( "Left input channel selection combo box" ) );
+    cbRInChan->setWhatsThis ( strSndCrdChanMapp );
+    cbRInChan->setAccessibleName ( tr ( "Right input channel selection combo box" ) );
+    cbLOutChan->setWhatsThis ( strSndCrdChanMapp );
+    cbLOutChan->setAccessibleName ( tr ( "Left output channel selection combo box" ) );
+    cbROutChan->setWhatsThis ( strSndCrdChanMapp );
+    cbROutChan->setAccessibleName ( tr ( "Right output channel selection combo box" ) );
+
     // sound card buffer delay
     QString strSndCrdBufDelay = tr ( "<b>Sound Card Buffer Delay:</b> The "
         "buffer delay setting is a fundamental setting of the llcon software. "

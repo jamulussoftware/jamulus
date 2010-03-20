@@ -43,12 +43,6 @@
 // stereo for input and output
 #define NUM_IN_OUT_CHANNELS         2
 
-// define the maximum number of audio channel for input/output we can store
-// channel infos for (and therefore this is the maximum number of entries in
-// the channel selection combo box regardless of the actual available number
-// of channels by the audio device)
-#define MAX_NUM_IN_OUT_CHANNELS     32
-
 
 /* Classes ********************************************************************/
 class CSound : public CSoundBase

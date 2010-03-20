@@ -307,7 +307,8 @@ QString CSound::CheckDeviceCapabilities()
 void CSound::SetLeftInputChannel  ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChan ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChan ) &&
+         ( iNewChan != vSelectedInputChannels[1] ) )
     {
         vSelectedInputChannels[0] = iNewChan;
     }
@@ -316,7 +317,8 @@ void CSound::SetLeftInputChannel  ( const int iNewChan )
 void CSound::SetRightInputChannel ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChan ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChan ) &&
+         ( iNewChan != vSelectedInputChannels[0] ) )
     {
         vSelectedInputChannels[1] = iNewChan;
     }
@@ -325,7 +327,8 @@ void CSound::SetRightInputChannel ( const int iNewChan )
 void CSound::SetLeftOutputChannel  ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) &&
+         ( iNewChan != vSelectedOutputChannels[1] ) )
     {
         vSelectedOutputChannels[0] = iNewChan;
     }
@@ -334,7 +337,8 @@ void CSound::SetLeftOutputChannel  ( const int iNewChan )
 void CSound::SetRightOutputChannel ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) &&
+         ( iNewChan != vSelectedOutputChannels[0] ) )
     {
         vSelectedOutputChannels[1] = iNewChan;
     }

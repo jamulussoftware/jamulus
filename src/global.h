@@ -97,6 +97,12 @@
 #define MAX_NUMBER_SOUND_CARDS          10
 #define INVALID_SNC_CARD_DEVICE         -1
 
+// define the maximum number of audio channel for input/output we can store
+// channel infos for (and therefore this is the maximum number of entries in
+// the channel selection combo box regardless of the actual available number
+// of channels by the audio device)
+#define MAX_NUM_IN_OUT_CHANNELS         32
+
 // maximum number of elemts in the server address combo box
 #define MAX_NUM_SERVER_ADDR_ITEMS       6
 

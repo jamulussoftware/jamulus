@@ -112,6 +112,38 @@ void CSettings::ReadIniFile ( const QString& sFileName )
         pClient->SetSndCrdDev ( INVALID_SNC_CARD_DEVICE );
     }
 
+    // sound card channel mapping settings: make sure these settings are
+    // set AFTER the sound card device is set, otherwise the settings are
+    // overwritten by the defaults
+    //
+    // sound card left input channel mapping
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch",
+         0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+    {
+        pClient->SetSndCrdLeftInputChannel ( iValue );
+    }
+
+    // sound card right input channel mapping
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch",
+         0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+    {
+        pClient->SetSndCrdRightInputChannel ( iValue );
+    }
+
+    // sound card left output channel mapping
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch",
+         0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+    {
+        pClient->SetSndCrdLeftOutputChannel ( iValue );
+    }
+
+    // sound card right output channel mapping
+    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch",
+         0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+    {
+        pClient->SetSndCrdRightOutputChannel ( iValue );
+    }
+
     // sound card preferred buffer size index
     if ( GetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx",
          FRAME_SIZE_FACTOR_PREFERRED, FRAME_SIZE_FACTOR_SAFE, iValue ) )
@@ -193,6 +225,22 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     // sound card selection
     SetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
         pClient->GetSndCrdDev() );
+
+    // sound card left input channel mapping
+    SetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch",
+        pClient->GetSndCrdLeftInputChannel() );
+
+    // sound card right input channel mapping
+    SetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch",
+        pClient->GetSndCrdRightInputChannel() );
+
+    // sound card left output channel mapping
+    SetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch",
+        pClient->GetSndCrdLeftOutputChannel() );
+
+    // sound card right output channel mapping
+    SetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch",
+        pClient->GetSndCrdRightOutputChannel() );
 
     // sound card preferred buffer size index
     SetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx",

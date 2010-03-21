@@ -223,9 +223,12 @@ protected:
     bool                    bDoAutoSockBufSize;
 
     // audio encoder/decoder
-    CELTMode*               CeltMode;
-    CELTEncoder*            CeltEncoder;
-    CELTDecoder*            CeltDecoder;
+    CELTMode*               CeltModeMono;
+    CELTEncoder*            CeltEncoderMono;
+    CELTDecoder*            CeltDecoderMono;
+    CELTMode*               CeltModeStereo;
+    CELTEncoder*            CeltEncoderStereo;
+    CELTDecoder*            CeltDecoderStereo;
     int                     iCeltNumCodedBytes;
     bool                    bCeltDoHighQuality;
     CVector<unsigned char>  vecCeltData;

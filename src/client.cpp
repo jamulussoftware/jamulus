@@ -55,15 +55,28 @@ CClient::CClient ( const quint16 iPortNumber ) :
     iSndCardMonoBlockSizeSamConvBuff ( 0 )
 {
     // init audio endocder/decoder (mono)
-    CeltMode = celt_mode_create (
+    CeltModeMono = celt_mode_create (
         SYSTEM_SAMPLE_RATE, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
-    CeltEncoder = celt_encoder_create ( CeltMode );
-    CeltDecoder = celt_decoder_create ( CeltMode );
+    CeltEncoderMono = celt_encoder_create ( CeltModeMono );
+    CeltDecoderMono = celt_decoder_create ( CeltModeMono );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
-    celt_encoder_ctl(CeltEncoder,
+    celt_encoder_ctl ( CeltEncoderMono,
+        CELT_SET_COMPLEXITY_REQUEST, celt_int32_t ( 1 ) );
+#endif
+
+    // init audio endocder/decoder (stereo)
+    CeltModeStereo = celt_mode_create (
+        SYSTEM_SAMPLE_RATE, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
+
+    CeltEncoderStereo = celt_encoder_create ( CeltModeStereo );
+    CeltDecoderStereo = celt_decoder_create ( CeltModeStereo );
+
+#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+    // set encoder low complexity
+    celt_encoder_ctl ( CeltEncoderStereo,
         CELT_SET_COMPLEXITY_REQUEST, celt_int32_t ( 1 ) );
 #endif
 
@@ -511,8 +524,9 @@ void CClient::Init()
     vecbyNetwData.Init ( iCeltNumCodedBytes );
 
     // set the channel network properties
-    Channel.SetNetwFrameSizeAndFact ( iCeltNumCodedBytes,
-                                      iSndCrdFrameSizeFactor );
+    Channel.SetAudioStreamProperties ( iCeltNumCodedBytes,
+                                       iSndCrdFrameSizeFactor,
+                                       1 /* only mono right now */ );
 }
 
 void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
@@ -610,18 +624,25 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     }
     else
     {
-        const double dAttFact =
-            static_cast<double> ( AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
-            AUD_FADER_IN_MIDDLE;
+        // make sure that in the middle position the two channels are
+        // amplified by 1/2, if the pan is set to one channel, this
+        // channel should have an amplification of 1 
+        const double dAttFact = static_cast<double> (
+            AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
+            AUD_FADER_IN_MIDDLE / 2;
+
+        const double dAmplFact = 0.5 + static_cast<double> (
+            abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
+            AUD_FADER_IN_MIDDLE / 2;
 
         if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
         {
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
                 // attenuation on right channel
-                vecsNetwork[i] =
-                    Double2Short ( ( vecdAudioStereo[j] +
-                    dAttFact * vecdAudioStereo[j + 1] ) / 2 );
+                vecsNetwork[i] = Double2Short (
+                    dAmplFact * vecdAudioStereo[j] +
+                    dAttFact * vecdAudioStereo[j + 1] );
             }
         }
         else
@@ -629,9 +650,9 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
                 // attenuation on left channel
-                vecsNetwork[i] =
-                    Double2Short ( ( vecdAudioStereo[j + 1] +
-                    dAttFact * vecdAudioStereo[j] ) / 2 );
+                vecsNetwork[i] = Double2Short (
+                    dAmplFact * vecdAudioStereo[j + 1] +
+                    dAttFact * vecdAudioStereo[j] );
             }
         }
     }
@@ -639,7 +660,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
         // encode current audio frame with CELT encoder
-        celt_encode ( CeltEncoder,
+        celt_encode ( CeltEncoderMono,
                       &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
                       NULL,
                       &vecCeltData[0],
@@ -670,7 +691,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         // CELT decoding
         if ( bReceiveDataOk )
         {
-            celt_decode ( CeltDecoder,
+            celt_decode ( CeltDecoderMono,
                           &vecbyNetwData[0],
                           iCeltNumCodedBytes,
                           &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
@@ -678,7 +699,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         else
         {
             // lost packet
-            celt_decode ( CeltDecoder,
+            celt_decode ( CeltDecoderMono,
                           NULL,
                           0,
                           &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );

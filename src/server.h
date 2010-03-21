@@ -140,8 +140,10 @@ protected:
                                                   const QString& strChatText );
     void WriteHTMLChannelList();
 
-    CVector<int16_t> ProcessData ( CVector<CVector<int16_t> >& vecvecsData,
-                                   CVector<double>& vecdGains );
+    CVector<int16_t> ProcessData ( const int iCurIndex,
+                                   CVector<CVector<int16_t> >& vecvecsData,
+                                   CVector<double>& vecdGains,
+                                   CVector<int>& vecNumAudioChannels );
 
     virtual void     customEvent ( QEvent* Event );
 
@@ -151,9 +153,12 @@ protected:
     QMutex              Mutex;
 
     // audio encoder/decoder
-    CELTMode*           CeltMode[MAX_NUM_CHANNELS];
-    CELTEncoder*        CeltEncoder[MAX_NUM_CHANNELS];
-    CELTDecoder*        CeltDecoder[MAX_NUM_CHANNELS];
+    CELTMode*           CeltModeMono[MAX_NUM_CHANNELS];
+    CELTEncoder*        CeltEncoderMono[MAX_NUM_CHANNELS];
+    CELTDecoder*        CeltDecoderMono[MAX_NUM_CHANNELS];
+    CELTMode*           CeltModeStereo[MAX_NUM_CHANNELS];
+    CELTEncoder*        CeltEncoderStereo[MAX_NUM_CHANNELS];
+    CELTDecoder*        CeltDecoderStereo[MAX_NUM_CHANNELS];
 
     CVector<QString>    vstrChatColors;
 

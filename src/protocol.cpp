@@ -897,7 +897,8 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
         return true;
     }
 
-    // number of channels of the audio signal, e.g. "2" is stereo (1 byte)
+    // number of channels of the audio signal, only mono (1 channel) or
+    // stereo (2 channels) allowed (1 byte)
     ReceivedNetwTranspProps.iNumAudioChannels =
         static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 1 ) );
 

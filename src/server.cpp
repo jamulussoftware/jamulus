@@ -175,19 +175,33 @@ CServer::CServer ( const QString& strLoggingFileName,
     int i;
 
     // create CELT encoder/decoder for each channel (must be done before
-    // enabling the channels)
+    // enabling the channels), create a mono and stereo encoder/decoder
+    // for each channel
     for ( i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         // init audio endocder/decoder (mono)
-        CeltMode[i] = celt_mode_create (
+        CeltModeMono[i] = celt_mode_create (
             SYSTEM_SAMPLE_RATE, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
-        CeltEncoder[i] = celt_encoder_create ( CeltMode[i] );
-        CeltDecoder[i] = celt_decoder_create ( CeltMode[i] );
+        CeltEncoderMono[i] = celt_encoder_create ( CeltModeMono[i] );
+        CeltDecoderMono[i] = celt_decoder_create ( CeltModeMono[i] );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
         // set encoder low complexity
-        celt_encoder_ctl(CeltEncoder[i],
+        celt_encoder_ctl ( CeltEncoderMono[i],
+            CELT_SET_COMPLEXITY_REQUEST, celt_int32_t ( 1 ) );
+#endif
+
+        // init audio endocder/decoder (stereo)
+        CeltModeStereo[i] = celt_mode_create (
+            SYSTEM_SAMPLE_RATE, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
+
+        CeltEncoderStereo[i] = celt_encoder_create ( CeltModeStereo[i] );
+        CeltDecoderStereo[i] = celt_decoder_create ( CeltModeStereo[i] );
+
+#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+        // set encoder low complexity
+        celt_encoder_ctl ( CeltEncoderStereo[i],
             CELT_SET_COMPLEXITY_REQUEST, celt_int32_t ( 1 ) );
 #endif
     }
@@ -376,6 +390,7 @@ void CServer::OnTimer()
     CVector<int>               vecChanID;
     CVector<CVector<double> >  vecvecdGains;
     CVector<CVector<int16_t> > vecvecsData;
+    CVector<int>               vecNumAudioChannels;
 
     // Get data from all connected clients -------------------------------------
     bool bChannelIsNowDisconnected = false;
@@ -399,17 +414,24 @@ void CServer::OnTimer()
         const int iNumCurConnChan = vecChanID.Size();
 
         // init temporary vectors
-        vecvecdGains.Init ( iNumCurConnChan );
-        vecvecsData.Init  ( iNumCurConnChan );
+        vecvecdGains.Init        ( iNumCurConnChan );
+        vecvecsData.Init         ( iNumCurConnChan );
+        vecNumAudioChannels.Init ( iNumCurConnChan );
 
         for ( i = 0; i < iNumCurConnChan; i++ )
         {
             // get actual ID of current channel
             const int iCurChanID = vecChanID[i];
 
+            // get and store number of audio channels
+            const int iCurNumAudChan =
+                vecChannels[iCurChanID].GetNumAudioChannels();
+
+            vecNumAudioChannels[i] = iCurNumAudChan;
+
             // init vectors storing information of all channels
             vecvecdGains[i].Init ( iNumCurConnChan );
-            vecvecsData[i].Init  ( SYSTEM_FRAME_SIZE_SAMPLES );
+            vecvecsData[i].Init  ( iCurNumAudChan * SYSTEM_FRAME_SIZE_SAMPLES );
 
             // get gains of all connected channels
             for ( j = 0; j < iNumCurConnChan; j++ )
@@ -442,18 +464,42 @@ void CServer::OnTimer()
             // CELT decode received data stream
             if ( eGetStat == GS_BUFFER_OK )
             {
-                celt_decode ( CeltDecoder[iCurChanID],
-                              &vecbyData[0],
-                              iCeltNumCodedBytes,
-                              &vecvecsData[i][0] );
+                if ( iCurNumAudChan == 1 )
+                {
+                    // mono
+                    celt_decode ( CeltDecoderMono[iCurChanID],
+                                  &vecbyData[0],
+                                  iCeltNumCodedBytes,
+                                  &vecvecsData[i][0] );
+                }
+                else
+                {
+                    // stereo
+                    celt_decode ( CeltDecoderStereo[iCurChanID],
+                                  &vecbyData[0],
+                                  iCeltNumCodedBytes,
+                                  &vecvecsData[i][0] );
+                }
             }
             else
             {
                 // lost packet
-                celt_decode ( CeltDecoder[iCurChanID],
-                              NULL,
-                              0,
-                              &vecvecsData[i][0] );
+                if ( iCurNumAudChan == 1 )
+                {
+                    // mono
+                    celt_decode ( CeltDecoderMono[iCurChanID],
+                                  NULL,
+                                  0,
+                                  &vecvecsData[i][0] );
+                }
+                else
+                {
+                    // stereo
+                    celt_decode ( CeltDecoderStereo[iCurChanID],
+                                  NULL,
+                                  0,
+                                  &vecvecsData[i][0] );
+                }
             }
 
             // send message for get status (for GUI)
@@ -491,7 +537,10 @@ void CServer::OnTimer()
 
             // generate a sparate mix for each channel
             // actual processing of audio data -> mix
-            vecsSendData = ProcessData ( vecvecsData, vecvecdGains[i] );
+            vecsSendData = ProcessData ( i,
+                                         vecvecsData,
+                                         vecvecdGains[i],
+                                         vecNumAudioChannels );
 
             // get current number of CELT coded bytes
             const int iCeltNumCodedBytes =
@@ -500,11 +549,24 @@ void CServer::OnTimer()
             // CELT encoding
             CVector<unsigned char> vecCeltData ( iCeltNumCodedBytes );
 
-            celt_encode ( CeltEncoder[iCurChanID],
-                          &vecsSendData[0],
-                          NULL,
-                          &vecCeltData[0],
-                          iCeltNumCodedBytes );
+            if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
+            {
+                // mono
+                celt_encode ( CeltEncoderMono[iCurChanID],
+                              &vecsSendData[0],
+                              NULL,
+                              &vecCeltData[0],
+                              iCeltNumCodedBytes );
+            }
+            else
+            {
+                // stereo
+                celt_encode ( CeltEncoderStereo[iCurChanID],
+                              &vecsSendData[0],
+                              NULL,
+                              &vecCeltData[0],
+                              iCeltNumCodedBytes );
+            }
 
             // send separate mix to current clients
             Socket.SendPacket (
@@ -523,39 +585,136 @@ void CServer::OnTimer()
     CycleTimeVariance.Update();
 }
 
-CVector<int16_t> CServer::ProcessData ( CVector<CVector<int16_t> >& vecvecsData,
-                                        CVector<double>&            vecdGains )
+CVector<int16_t> CServer::ProcessData ( const int                   iCurIndex,
+                                        CVector<CVector<int16_t> >& vecvecsData,
+                                        CVector<double>&            vecdGains,
+                                        CVector<int>&               vecNumAudioChannels )
 {
-    int i;
+    int i, j, k;
+
+    // get number of audio channels of current channel
+    const int iCurNumAudChan = vecNumAudioChannels[iCurIndex];
+
+    // number of samples for output vector
+    const int iNumOutSamples = iCurNumAudChan * SYSTEM_FRAME_SIZE_SAMPLES;
 
     // init return vector with zeros since we mix all channels on that vector
-
-// TODO speed optimization: avoid using the zero vector, use the first valid
-// data vector for initialization instead (take care of gain of this data, too!)
-
-    CVector<int16_t> vecsOutData ( SYSTEM_FRAME_SIZE_SAMPLES, 0 );
+    CVector<int16_t> vecsOutData ( iNumOutSamples, 0 );
 
     const int iNumClients = vecvecsData.Size();
 
     // mix all audio data from all clients together
-    for ( int j = 0; j < iNumClients; j++ )
+    if ( iCurNumAudChan == 1 )
     {
-        // if channel gain is 1, avoid multiplication for speed optimization
-        if ( vecdGains[j] == static_cast<double> ( 1.0 ) )
+        // Mono target channel -------------------------------------------------
+        for ( j = 0; j < iNumClients; j++ )
         {
-            for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++ )
+            // if channel gain is 1, avoid multiplication for speed optimization
+            if ( vecdGains[j] == static_cast<double> ( 1.0 ) )
             {
-                vecsOutData[i] =
-                    Double2Short ( vecsOutData[i] + vecvecsData[j][i] );
+                if ( vecNumAudioChannels[j] == 1 )
+                {
+                    // mono
+                    for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++ )
+                    {
+                        vecsOutData[i] =
+                            Double2Short ( vecsOutData[i] + vecvecsData[j][i] );
+                    }
+                }
+                else
+                {
+                    // stereo: apply stereo-to-mono attenuation
+                    for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++, k += 2 )
+                    {
+                        vecsOutData[i] =
+                            Double2Short ( vecsOutData[i] +
+                            ( vecvecsData[j][k] + vecvecsData[j][k + 1] ) / 2 );
+                    }
+                }
+            }
+            else
+            {
+                if ( vecNumAudioChannels[j] == 1 )
+                {
+                    // mono
+                    for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++ )
+                    {
+                        vecsOutData[i] =
+                            Double2Short ( vecsOutData[i] +
+                            vecvecsData[j][i] * vecdGains[j] );
+                    }
+                }
+                else
+                {
+                    // stereo: apply stereo-to-mono attenuation
+                    for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++, k += 2 )
+                    {
+                        vecsOutData[i] =
+                            Double2Short ( vecsOutData[i] + vecdGains[j] *
+                            ( vecvecsData[j][k] + vecvecsData[j][k + 1] ) / 2 );
+                    }
+                }
             }
         }
-        else
+    }
+    else
+    {
+        // Stereo target channel -----------------------------------------------
+        for ( j = 0; j < iNumClients; j++ )
         {
-            for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++ )
+            // if channel gain is 1, avoid multiplication for speed optimization
+            if ( vecdGains[j] == static_cast<double> ( 1.0 ) )
             {
-                vecsOutData[i] =
-                    Double2Short ( vecsOutData[i] +
-                    vecvecsData[j][i] * vecdGains[j] );
+                if ( vecNumAudioChannels[j] == 1 )
+                {
+                    // mono: copy same mono data in both out stereo audio channels
+                    for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++, k += 2 )
+                    {
+                        // left channel
+                        vecsOutData[k] =
+                            Double2Short ( vecsOutData[k] + vecvecsData[j][i] );
+
+                        // right channel
+                        vecsOutData[k + 1] =
+                            Double2Short ( vecsOutData[k + 1] + vecvecsData[j][i] );
+                    }
+                }
+                else
+                {
+                    // stereo
+                    for ( i = 0; i < iNumOutSamples; i++ )
+                    {
+                        vecsOutData[i] =
+                            Double2Short ( vecsOutData[i] + vecvecsData[j][i] );
+                    }
+                }
+            }
+            else
+            {
+                if ( vecNumAudioChannels[j] == 1 )
+                {
+                    // mono: copy same mono data in both out stereo audio channels
+                    for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++, k += 2 )
+                    {
+                        // left channel
+                        vecsOutData[k] = Double2Short (
+                            vecsOutData[k] + vecvecsData[j][i] * vecdGains[j] );
+
+                        // right channel
+                        vecsOutData[k + 1] = Double2Short (
+                            vecsOutData[k + 1] + vecvecsData[j][i] * vecdGains[j] );
+                    }
+                }
+                else
+                {
+                    // stereo
+                    for ( i = 0; i < iNumOutSamples; i++ )
+                    {
+                        vecsOutData[i] =
+                            Double2Short ( vecsOutData[i] +
+                            vecvecsData[j][i] * vecdGains[j] );
+                    }
+                }
             }
         }
     }

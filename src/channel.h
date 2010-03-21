@@ -99,10 +99,12 @@ public:
     double GetTimingStdDev() { return CycleTimeVariance.GetStdDev(); }
 
     // set/get network out buffer size and size factor
-    void SetNetwFrameSizeAndFact ( const int iNewNetwFrameSize,
-                                   const int iNewNetwFrameSizeFact );
+    void SetAudioStreamProperties ( const int iNewNetwFrameSize,
+                                    const int iNewNetwFrameSizeFact,
+                                    const int iNewNumAudioChannels );
     int GetNetwFrameSizeFact() const { return iNetwFrameSizeFact; }
     int GetNetwFrameSize() const { return iNetwFrameSize; }
+    int GetNumAudioChannels() const { return iNumAudioChannels; }
 
     double GetJitterBufferErrorRate() { return SockBuf.GetErrorRate(); }
 
@@ -160,6 +162,8 @@ protected:
 
     int                 iNetwFrameSizeFact;
     int                 iNetwFrameSize;
+
+    int                 iNumAudioChannels;
 
     QMutex              Mutex;
 

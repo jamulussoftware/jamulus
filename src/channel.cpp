@@ -31,7 +31,8 @@ CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
     bIsEnabled ( false ),
     iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_DEFAULT ),
-    iNetwFrameSize ( 20 ) // must be > 0 and should be close to a valid size
+    iNetwFrameSize ( 20 ), // must be > 0 and should be close to a valid size
+    iNumAudioChannels ( 1 ) // mono
 {
     // initial value for connection time out counter, we calculate the total
     // number of samples here and subtract the number of samples of the block
@@ -132,13 +133,15 @@ void CChannel::SetEnable ( const bool bNEnStat )
     }
 }
 
-void CChannel::SetNetwFrameSizeAndFact ( const int iNewNetwFrameSize,
-                                         const int iNewNetwFrameSizeFact )
+void CChannel::SetAudioStreamProperties ( const int iNewNetwFrameSize,
+                                          const int iNewNetwFrameSizeFact,
+                                          const int iNewNumAudioChannels )
 {
     // this function is intended for the server (not the client)
     QMutexLocker locker ( &Mutex );
 
     // store new values
+    iNumAudioChannels  = iNewNumAudioChannels;
     iNetwFrameSize     = iNewNetwFrameSize;
     iNetwFrameSizeFact = iNewNetwFrameSizeFact;
 
@@ -291,6 +294,7 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
         QMutexLocker locker ( &Mutex );
 
         // store received parameters
+        iNumAudioChannels  = NetworkTransportProps.iNumAudioChannels;
         iNetwFrameSizeFact = NetworkTransportProps.iBlockSizeFact;
         iNetwFrameSize =
             NetworkTransportProps.iBaseNetworkPacketSize;
@@ -314,10 +318,10 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
     CNetworkTransportProps NetworkTransportProps (
         iNetwFrameSize,
         iNetwFrameSizeFact,
-        1, // right now we only use mono
+        iNumAudioChannels,
         SYSTEM_SAMPLE_RATE,
         CT_CELT, // always CELT coding
-        0,
+        0, // version of the codec
         0 );
 
     // send current network transport properties

@@ -49,7 +49,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bFraSiFactPrefSupported ( false ),
     bFraSiFactDefSupported ( false ),
     bFraSiFactSafeSupported ( false ),
-    iCeltNumCodedBytes ( CELT_NUM_BYTES_NORMAL_QUALITY ),
+    iCeltNumCodedBytes ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
     bCeltDoHighQuality ( false ),
     bSndCrdConversionBufferRequired ( false ),
     iSndCardMonoBlockSizeSamConvBuff ( 0 )
@@ -498,11 +498,11 @@ void CClient::Init()
     // inits for CELT coding
     if ( bCeltDoHighQuality )
     {
-        iCeltNumCodedBytes = CELT_NUM_BYTES_HIGH_QUALITY;
+        iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_HIGH_QUALITY;
     }
     else
     {
-        iCeltNumCodedBytes = CELT_NUM_BYTES_NORMAL_QUALITY;
+        iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_NORMAL_QUALITY;
     }
     vecCeltData.Init ( iCeltNumCodedBytes );
 

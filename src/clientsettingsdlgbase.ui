@@ -433,6 +433,16 @@
        </widget>
       </item>
       <item>
+       <widget class="QCheckBox" name="cbUseStereo" >
+        <property name="windowModality" >
+         <enum>Qt::NonModal</enum>
+        </property>
+        <property name="text" >
+         <string>Stereo</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer>
         <property name="orientation" >
          <enum>Qt::Vertical</enum>
@@ -440,7 +450,7 @@
         <property name="sizeHint" >
          <size>
           <width>201</width>
-          <height>71</height>
+          <height>81</height>
          </size>
         </property>
        </spacer>

@@ -90,6 +90,7 @@ protected:
     void OnOpenChatOnNewMessageStateChanged ( int value );
     void OnGUIDesignFancyStateChanged ( int value );
     void OnUseHighQualityAudioStateChanged ( int value );
+    void OnUseStereoStateChanged ( int value );
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnPingTimeResult ( int iPingTime );
     void OnSoundCrdSelection ( int iSndDevIdx );

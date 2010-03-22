@@ -182,6 +182,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     cbUseHighQualityAudio->setAccessibleName ( tr ( "Use high quality audio "
         "check box" ) );
 
+    // use stereo
+    cbUseStereo->setWhatsThis ( tr ( "<b>Stereo</b> "
+        "Enables the stereo mode. If not checked, a mono mode is used. "
+        "Enabling stereo mode will increase the stream data rate. Make sure "
+        "that the current upload rate does not exceed the available bandwidth "
+        "of your internet connection." ) );
+
+    cbUseStereo->setAccessibleName ( tr ( "Stereo check box" ) );
+
     // current connection status parameter
     QString strConnStats = tr ( "<b>Current Connection Status "
         "Parameter:</b> The ping time is the time required for the audio "
@@ -283,6 +292,16 @@ cbGUIDesignFancy->setVisible ( false );
         cbUseHighQualityAudio->setCheckState ( Qt::Unchecked );
     }
 
+    // "Stereo" check box
+    if ( pClient->GetUseStereo() )
+    {
+        cbUseStereo->setCheckState ( Qt::Checked );
+    }
+    else
+    {
+        cbUseStereo->setCheckState ( Qt::Unchecked );
+    }
+
     // set text for sound card buffer delay radio buttons
     rButBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES,
@@ -324,6 +343,9 @@ cbGUIDesignFancy->setVisible ( false );
 
     QObject::connect ( cbUseHighQualityAudio, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnUseHighQualityAudioStateChanged ( int ) ) );
+
+    QObject::connect ( cbUseStereo, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnUseStereoStateChanged ( int ) ) );
 
     QObject::connect ( cbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnAutoJitBuf ( int ) ) );
@@ -572,7 +594,13 @@ void CClientSettingsDlg::OnGUIDesignFancyStateChanged ( int value )
 void CClientSettingsDlg::OnUseHighQualityAudioStateChanged ( int value )
 {
     pClient->SetCELTHighQuality ( value == Qt::Checked );
-    UpdateDisplay();
+    UpdateDisplay(); // upload rate will be changed
+}
+
+void CClientSettingsDlg::OnUseStereoStateChanged ( int value )
+{
+    pClient->SetUseStereo ( value == Qt::Checked );
+    UpdateDisplay(); // upload rate will be changed
 }
 
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )

@@ -104,6 +104,9 @@ public:
     bool GetCELTHighQuality() const { return bCeltDoHighQuality; }
     void SetCELTHighQuality ( const bool bNCeltHighQualityFlag );
 
+    bool GetUseStereo() const { return bUseStereo; }
+    void SetUseStereo ( const bool bNUseStereo );
+
     int GetAudioInFader() const { return iAudioInFader; }
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
@@ -236,7 +239,7 @@ protected:
     CELTDecoder*            CeltDecoderStereo;
     int                     iCeltNumCodedBytes;
     bool                    bCeltDoHighQuality;
-    bool                    bStereo;
+    bool                    bUseStereo;
     CVector<unsigned char>  vecCeltData;
 
     CSocket                 Socket;
@@ -270,7 +273,6 @@ protected:
     EGUIDesign              eGUIDesign;
 
     CVector<int16_t>        vecsAudioSndCrdMono;
-    CVector<int16_t>        vecsAudioSndCrdStereo;
     CVector<double>         vecdAudioStereo;
     CVector<int16_t>        vecsNetwork;
 

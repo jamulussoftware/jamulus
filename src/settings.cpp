@@ -189,6 +189,12 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     {
         pClient->SetCELTHighQuality ( bValue );
     }
+
+    // flag whether stereo mode is used
+    if ( GetFlagIniSet ( IniXMLDocument, "client", "stereoaudio", bValue ) )
+    {
+        pClient->SetUseStereo ( bValue );
+    }
 }
 
 void CSettings::WriteIniFile ( const QString& sFileName )
@@ -265,6 +271,10 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     // flag whether using high quality audio or not
     SetFlagIniSet ( IniXMLDocument, "client", "highqualityaudio",
         pClient->GetCELTHighQuality() );
+
+    // flag whether stereo mode is used
+    SetFlagIniSet ( IniXMLDocument, "client", "stereoaudio",
+        pClient->GetUseStereo() );
 
     // prepare file name for storing initialization data in XML file
     QString sCurFileName = sFileName;

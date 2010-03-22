@@ -51,7 +51,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bFraSiFactSafeSupported ( false ),
     iCeltNumCodedBytes ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
     bCeltDoHighQuality ( false ),
-    bStereo ( false ),
+    bUseStereo ( false ),
     bSndCrdConversionBufferRequired ( false ),
     iSndCardMonoBlockSizeSamConvBuff ( 0 )
 {
@@ -234,8 +234,26 @@ void CClient::SetCELTHighQuality ( const bool bNCeltHighQualityFlag )
 
     // set new parameter
     bCeltDoHighQuality = bNCeltHighQualityFlag;
+    Init();
 
-    // init with new block size index parameter
+    if ( bWasRunning )
+    {
+        Sound.Start();
+    }
+}
+
+void CClient::SetUseStereo ( const bool bNUseStereo )
+{
+    // init with new parameter, if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    // set new parameter
+    bUseStereo = bNUseStereo;
     Init();
 
     if ( bWasRunning )
@@ -496,9 +514,8 @@ void CClient::Init()
     // calculate stereo (two channels) buffer size
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
-    vecsAudioSndCrdMono.Init   ( iMonoBlockSizeSam );
-    vecsAudioSndCrdStereo.Init ( iStereoBlockSizeSam );
-    vecdAudioStereo.Init       ( iStereoBlockSizeSam );
+    vecsAudioSndCrdMono.Init ( iMonoBlockSizeSam );
+    vecdAudioStereo.Init     ( iStereoBlockSizeSam );
 
     // init response time evaluation
     CycleTimeVariance.Init ( iMonoBlockSizeSam,
@@ -512,7 +529,7 @@ void CClient::Init()
     // inits for CELT coding
     if ( bCeltDoHighQuality )
     {
-        if ( bStereo )
+        if ( bUseStereo )
         {
             iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_HIGH_QUALITY;
         }
@@ -523,7 +540,7 @@ void CClient::Init()
     }
     else
     {
-        if ( bStereo )
+        if ( bUseStereo )
         {
             iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_NORMAL_QUALITY;
         }
@@ -536,7 +553,7 @@ void CClient::Init()
 
     // inits for network and channel
     vecbyNetwData.Init ( iCeltNumCodedBytes );
-    if ( bStereo )
+    if ( bUseStereo )
     {
         vecsNetwork.Init ( iStereoBlockSizeSam );
 
@@ -641,7 +658,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     // from double to short
     if ( iAudioInFader == AUD_FADER_IN_MIDDLE )
     {
-        if ( bStereo )
+        if ( bUseStereo )
         {
             // perform type conversion
             for ( i = 0; i < iStereoBlockSizeSam; i++ )
@@ -662,52 +679,78 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     }
     else
     {
-
-
-// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-
-        // make sure that in the middle position the two channels are
-        // amplified by 1/2, if the pan is set to one channel, this
-        // channel should have an amplification of 1 
-        const double dAttFact = static_cast<double> (
-            AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
-            AUD_FADER_IN_MIDDLE / 2;
-
-        const double dAmplFact = 0.5 + static_cast<double> (
-            abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
-            AUD_FADER_IN_MIDDLE / 2;
-
-        if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
+        if ( bUseStereo )
         {
-            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+            // stereo
+            const double dAttFactStereo = static_cast<double> (
+                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
+                AUD_FADER_IN_MIDDLE;
+
+            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
             {
-                // attenuation on right channel
-                vecsNetwork[i] = Double2Short (
-                    dAmplFact * vecdAudioStereo[j] +
-                    dAttFact * vecdAudioStereo[j + 1] );
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on right channel
+                    vecsNetwork[j] = Double2Short (
+                        vecdAudioStereo[j] );
+
+                    vecsNetwork[j + 1] = Double2Short (
+                        dAttFactStereo * vecdAudioStereo[j + 1] );
+                }
+            }
+            else
+            {
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on left channel
+                    vecsNetwork[j] = Double2Short (
+                        dAttFactStereo * vecdAudioStereo[j] );
+
+                    vecsNetwork[j + 1] = Double2Short (
+                        vecdAudioStereo[j + 1] );
+                }
             }
         }
         else
         {
-            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+            // mono
+            // make sure that in the middle position the two channels are
+            // amplified by 1/2, if the pan is set to one channel, this
+            // channel should have an amplification of 1 
+            const double dAttFactMono = static_cast<double> (
+                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
+                AUD_FADER_IN_MIDDLE / 2;
+
+            const double dAmplFactMono = 0.5 + static_cast<double> (
+                abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
+                AUD_FADER_IN_MIDDLE / 2;
+
+            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
             {
-                // attenuation on left channel
-                vecsNetwork[i] = Double2Short (
-                    dAmplFact * vecdAudioStereo[j + 1] +
-                    dAttFact * vecdAudioStereo[j] );
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on right channel
+                    vecsNetwork[i] = Double2Short (
+                        dAmplFactMono * vecdAudioStereo[j] +
+                        dAttFactMono * vecdAudioStereo[j + 1] );
+                }
+            }
+            else
+            {
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on left channel
+                    vecsNetwork[i] = Double2Short (
+                        dAmplFactMono * vecdAudioStereo[j + 1] +
+                        dAttFactMono * vecdAudioStereo[j] );
+                }
             }
         }
     }
 
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
-        if ( bStereo )
+        if ( bUseStereo )
         {
             // encode current audio frame with CELT encoder
             celt_encode ( CeltEncoderStereo,
@@ -751,12 +794,12 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         // CELT decoding
         if ( bReceiveDataOk )
         {
-            if ( bStereo )
+            if ( bUseStereo )
             {
                 celt_decode ( CeltDecoderStereo,
                               &vecbyNetwData[0],
                               iCeltNumCodedBytes,
-                              &vecsAudioSndCrdStereo[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+                              &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
             }
             else
             {
@@ -769,12 +812,12 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         else
         {
             // lost packet
-            if ( bStereo )
+            if ( bUseStereo )
             {
                 celt_decode ( CeltDecoderStereo,
                               NULL,
                               0,
-                              &vecsAudioSndCrdStereo[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+                              &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
             }
             else
             {
@@ -789,15 +832,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     // check if channel is connected
     if ( Channel.IsConnected() )
     {
-        if ( bStereo )
-        {
-            // copy data
-            for ( i = 0; i < iStereoBlockSizeSam; i++ )
-            {
-                vecsStereoSndCrd[i] = vecsAudioSndCrdStereo[i];
-            }
-        }
-        else
+        if ( !bUseStereo )
         {
             // copy mono data in stereo sound card buffer
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )

@@ -57,18 +57,23 @@
 
 /* Definitions ****************************************************************/
 // audio in fader range
-#define AUD_FADER_IN_MIN                    0
-#define AUD_FADER_IN_MAX                    100
-#define AUD_FADER_IN_MIDDLE                 ( AUD_FADER_IN_MAX / 2 )
+#define AUD_FADER_IN_MIN                        0
+#define AUD_FADER_IN_MAX                        100
+#define AUD_FADER_IN_MIDDLE                     ( AUD_FADER_IN_MAX / 2 )
 
 // audio reverberation range
-#define AUD_REVERB_MAX                      100
+#define AUD_REVERB_MAX                          100
 
 // CELT number of coded bytes per audio packet
 // 24: mono low/normal quality   156 kbsp (128) / 114 kbps (256)
 // 44: mono high quality         216 kbps (128) / 174 kbps (256)
-#define CELT_NUM_BYTES_MONO_NORMAL_QUALITY   24
-#define CELT_NUM_BYTES_MONO_HIGH_QUALITY     44
+#define CELT_NUM_BYTES_MONO_NORMAL_QUALITY      24
+#define CELT_NUM_BYTES_MONO_HIGH_QUALITY        44
+
+// 46: stereo low/normal quality   222 kbsp (128) / 180 kbps (256)
+// 70: stereo high quality         294 kbps (128) / 252 kbps (256)
+#define CELT_NUM_BYTES_STEREO_NORMAL_QUALITY    46
+#define CELT_NUM_BYTES_STEREO_HIGH_QUALITY      70
 
 
 /* Classes ********************************************************************/
@@ -231,6 +236,7 @@ protected:
     CELTDecoder*            CeltDecoderStereo;
     int                     iCeltNumCodedBytes;
     bool                    bCeltDoHighQuality;
+    bool                    bStereo;
     CVector<unsigned char>  vecCeltData;
 
     CSocket                 Socket;

@@ -51,10 +51,11 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bFraSiFactSafeSupported ( false ),
     iCeltNumCodedBytes ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
     bCeltDoHighQuality ( false ),
+    bStereo ( false ),
     bSndCrdConversionBufferRequired ( false ),
     iSndCardMonoBlockSizeSamConvBuff ( 0 )
 {
-    // init audio endocder/decoder (mono)
+    // init audio encoder/decoder (mono)
     CeltModeMono = celt_mode_create (
         SYSTEM_SAMPLE_RATE, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
@@ -67,7 +68,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
         CELT_SET_COMPLEXITY_REQUEST, celt_int32_t ( 1 ) );
 #endif
 
-    // init audio endocder/decoder (stereo)
+    // init audio encoder/decoder (stereo)
     CeltModeStereo = celt_mode_create (
         SYSTEM_SAMPLE_RATE, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
@@ -511,22 +512,48 @@ void CClient::Init()
     // inits for CELT coding
     if ( bCeltDoHighQuality )
     {
-        iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_HIGH_QUALITY;
+        if ( bStereo )
+        {
+            iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_HIGH_QUALITY;
+        }
+        else
+        {
+            iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_HIGH_QUALITY;
+        }
     }
     else
     {
-        iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_NORMAL_QUALITY;
+        if ( bStereo )
+        {
+            iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_NORMAL_QUALITY;
+        }
+        else
+        {
+            iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_NORMAL_QUALITY;
+        }
     }
     vecCeltData.Init ( iCeltNumCodedBytes );
 
-    // init network buffers
-    vecsNetwork.Init   ( iMonoBlockSizeSam );
+    // inits for network and channel
     vecbyNetwData.Init ( iCeltNumCodedBytes );
+    if ( bStereo )
+    {
+        vecsNetwork.Init ( iStereoBlockSizeSam );
 
-    // set the channel network properties
-    Channel.SetAudioStreamProperties ( iCeltNumCodedBytes,
-                                       iSndCrdFrameSizeFactor,
-                                       1 /* only mono right now */ );
+        // set the channel network properties
+        Channel.SetAudioStreamProperties ( iCeltNumCodedBytes,
+                                           iSndCrdFrameSizeFactor,
+                                           2 );
+    }
+    else
+    {
+        vecsNetwork.Init ( iMonoBlockSizeSam );
+
+        // set the channel network properties
+        Channel.SetAudioStreamProperties ( iCeltNumCodedBytes,
+                                           iSndCrdFrameSizeFactor,
+                                           1 );
+    }
 }
 
 void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
@@ -614,16 +641,37 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     // from double to short
     if ( iAudioInFader == AUD_FADER_IN_MIDDLE )
     {
-        // just mix channels together
-        for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+        if ( bStereo )
         {
-            vecsNetwork[i] =
-                Double2Short ( ( vecdAudioStereo[j] +
-                vecdAudioStereo[j + 1] ) / 2 );
+            // perform type conversion
+            for ( i = 0; i < iStereoBlockSizeSam; i++ )
+            {
+                vecsNetwork[i] = Double2Short ( vecdAudioStereo[i] );
+            }
+        }
+        else
+        {
+            // mix channels together
+            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+            {
+                vecsNetwork[i] =
+                    Double2Short ( ( vecdAudioStereo[j] +
+                    vecdAudioStereo[j + 1] ) / 2 );
+            }
         }
     }
     else
     {
+
+
+// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// TODO for stereo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
         // make sure that in the middle position the two channels are
         // amplified by 1/2, if the pan is set to one channel, this
         // channel should have an amplification of 1 
@@ -659,12 +707,24 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
-        // encode current audio frame with CELT encoder
-        celt_encode ( CeltEncoderMono,
-                      &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
-                      NULL,
-                      &vecCeltData[0],
-                      iCeltNumCodedBytes );
+        if ( bStereo )
+        {
+            // encode current audio frame with CELT encoder
+            celt_encode ( CeltEncoderStereo,
+                          &vecsNetwork[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                          NULL,
+                          &vecCeltData[0],
+                          iCeltNumCodedBytes );
+        }
+        else
+        {
+            // encode current audio frame with CELT encoder
+            celt_encode ( CeltEncoderMono,
+                          &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                          NULL,
+                          &vecCeltData[0],
+                          iCeltNumCodedBytes );
+        }
 
         // send coded audio through the network
         Socket.SendPacket ( Channel.PrepSendPacket ( vecCeltData ),
@@ -691,29 +751,60 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         // CELT decoding
         if ( bReceiveDataOk )
         {
-            celt_decode ( CeltDecoderMono,
-                          &vecbyNetwData[0],
-                          iCeltNumCodedBytes,
-                          &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
+            if ( bStereo )
+            {
+                celt_decode ( CeltDecoderStereo,
+                              &vecbyNetwData[0],
+                              iCeltNumCodedBytes,
+                              &vecsAudioSndCrdStereo[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+            }
+            else
+            {
+                celt_decode ( CeltDecoderMono,
+                              &vecbyNetwData[0],
+                              iCeltNumCodedBytes,
+                              &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
+            }
         }
         else
         {
             // lost packet
-            celt_decode ( CeltDecoderMono,
-                          NULL,
-                          0,
-                          &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
+            if ( bStereo )
+            {
+                celt_decode ( CeltDecoderStereo,
+                              NULL,
+                              0,
+                              &vecsAudioSndCrdStereo[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+            }
+            else
+            {
+                celt_decode ( CeltDecoderMono,
+                              NULL,
+                              0,
+                              &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
+            }
         }
     }
 
     // check if channel is connected
     if ( Channel.IsConnected() )
     {
-        // copy mono data in stereo sound card buffer
-        for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+        if ( bStereo )
         {
-            vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
-                vecsAudioSndCrdMono[i];
+            // copy data
+            for ( i = 0; i < iStereoBlockSizeSam; i++ )
+            {
+                vecsStereoSndCrd[i] = vecsAudioSndCrdStereo[i];
+            }
+        }
+        else
+        {
+            // copy mono data in stereo sound card buffer
+            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+            {
+                vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
+                    vecsAudioSndCrdMono[i];
+            }
         }
     }
     else

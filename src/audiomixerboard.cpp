@@ -227,7 +227,7 @@ void CChannelFader::SetOtherSoloState ( const bool bState )
 
     // if other channel is solo, mute this channel, else enable channel gain
     // (only enable channel gain if local mute switch is not set to on)
-    if ( !pcbMute->isChecked()  )
+    if ( !pcbMute->isChecked() )
     {
         SetMute ( bState );
     }

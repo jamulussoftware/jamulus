@@ -7,12 +7,15 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Release|Win32 = Release|Win32
+		VST Release|Win32 = VST Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DBBC16FC-BBCA-4E3B-A9F4-0EC5202A8B2E}.Debug|Win32.ActiveCfg = Debug|Win32
 		{DBBC16FC-BBCA-4E3B-A9F4-0EC5202A8B2E}.Debug|Win32.Build.0 = Debug|Win32
 		{DBBC16FC-BBCA-4E3B-A9F4-0EC5202A8B2E}.Release|Win32.ActiveCfg = Release|Win32
 		{DBBC16FC-BBCA-4E3B-A9F4-0EC5202A8B2E}.Release|Win32.Build.0 = Release|Win32
+		{DBBC16FC-BBCA-4E3B-A9F4-0EC5202A8B2E}.VST Release|Win32.ActiveCfg = VST Release|Win32
+		{DBBC16FC-BBCA-4E3B-A9F4-0EC5202A8B2E}.VST Release|Win32.Build.0 = VST Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -102,4 +102,5 @@ protected:
 
 signals:
     void GUIDesignChanged();
+    void StereoCheckBoxChanged();
 };

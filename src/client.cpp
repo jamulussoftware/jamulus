@@ -524,7 +524,8 @@ void CClient::Init()
     CycleTimeVariance.Reset();
 
     // init reverberation
-    AudioReverb.Init ( SYSTEM_SAMPLE_RATE );
+    AudioReverbL.Init ( SYSTEM_SAMPLE_RATE );
+    AudioReverbR.Init ( SYSTEM_SAMPLE_RATE );
 
     // inits for CELT coding
     if ( bCeltDoHighQuality )
@@ -634,22 +635,39 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         const double dRevLev =
             static_cast<double> ( iReverbLevel ) / AUD_REVERB_MAX / 2;
 
-        if ( bReverbOnLeftChan )
+        if ( bUseStereo )
         {
+            // for stereo always apply reverberation effect on both channels
             for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
             {
                 // left channel
                 vecdAudioStereo[i] +=
-                    dRevLev * AudioReverb.ProcessSample ( vecdAudioStereo[i] );
+                    dRevLev * AudioReverbL.ProcessSample ( vecdAudioStereo[i] );
+
+                // right channel
+                vecdAudioStereo[i + 1] +=
+                    dRevLev * AudioReverbR.ProcessSample ( vecdAudioStereo[i + 1] );
             }
         }
         else
         {
-            for ( i = 1; i < iStereoBlockSizeSam; i += 2 )
+            if ( bReverbOnLeftChan )
             {
-                // right channel
-                vecdAudioStereo[i] +=
-                    dRevLev * AudioReverb.ProcessSample ( vecdAudioStereo[i] );
+                for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
+                {
+                    // left channel
+                    vecdAudioStereo[i] +=
+                        dRevLev * AudioReverbL.ProcessSample ( vecdAudioStereo[i] );
+                }
+            }
+            else
+            {
+                for ( i = 1; i < iStereoBlockSizeSam; i += 2 )
+                {
+                    // right channel
+                    vecdAudioStereo[i] +=
+                        dRevLev * AudioReverbR.ProcessSample ( vecdAudioStereo[i] );
+                }
             }
         }
     }

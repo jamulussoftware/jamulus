@@ -600,6 +600,7 @@ void CClientSettingsDlg::OnUseHighQualityAudioStateChanged ( int value )
 void CClientSettingsDlg::OnUseStereoStateChanged ( int value )
 {
     pClient->SetUseStereo ( value == Qt::Checked );
+    emit StereoCheckBoxChanged();
     UpdateDisplay(); // upload rate will be changed
 }
 

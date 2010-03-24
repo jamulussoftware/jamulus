@@ -31,6 +31,7 @@
 #include <qtimer.h>
 #include <qslider.h>
 #include <qradiobutton.h>
+#include <qbuttongroup.h>
 #include <qmenubar.h>
 #include <qlayout.h>
 #include "global.h"
@@ -75,27 +76,30 @@ public:
                       QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
 protected:
-    void                    SetGUIDesign ( const EGUIDesign eNewDesign );
-    void                    SetMyWindowTitle ( const int iNumClients );
-    void                    ShowChatWindow();
-    void                    UpdateAudioFaderSlider();
-    void                    ConnectDisconnect ( const bool bDoStart );
+    void               SetGUIDesign ( const EGUIDesign eNewDesign );
+    void               SetMyWindowTitle ( const int iNumClients );
+    void               ShowChatWindow();
+    void               UpdateAudioFaderSlider();
+    void               UpdateRevSelection();
+    void               ConnectDisconnect ( const bool bDoStart );
 
-    CClient*                pClient;
-    bool                    bConnected;
-    bool                    bUnreadChatMessage;
-    QTimer                  TimerSigMet;
-    QTimer                  TimerStatus;
+    CClient*           pClient;
+    bool               bConnected;
+    bool               bUnreadChatMessage;
+    QTimer             TimerSigMet;
+    QTimer             TimerStatus;
 
-    virtual void            customEvent ( QEvent* Event );
-    virtual void            closeEvent  ( QCloseEvent* Event );
-    void                    UpdateDisplay();
+    virtual void       customEvent ( QEvent* Event );
+    virtual void       closeEvent  ( QCloseEvent* Event );
+    void               UpdateDisplay();
 
-    QMenu*                  pViewMenu;
-    QMenuBar*               pMenu;
+    QMenu*             pViewMenu;
+    QMenuBar*          pMenu;
 
-    CClientSettingsDlg      ClientSettingsDlg;
-    CChatDlg                ChatDlg;
+    QButtonGroup       RevSelectionButtonGroup;
+
+    CClientSettingsDlg ClientSettingsDlg;
+    CChatDlg           ChatDlg;
 
 public slots:
     void OnConnectDisconBut();
@@ -105,8 +109,7 @@ public slots:
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnSliderAudInFader ( int value );
     void OnSliderAudReverb ( int value ) { pClient->SetReverbLevel ( value ); }
-    void OnRevSelL() { pClient->SetReverbOnLeftChan ( true ); }
-    void OnRevSelR() { pClient->SetReverbOnLeftChan ( false ); }
+    void OnRevSelectionButtonGroupClicked ( QAbstractButton* button );
     void OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void OnChangeChanGain ( int iId, double dGain )
         { pClient->SetRemoteChanGain ( iId, dGain ); }
@@ -119,5 +122,6 @@ public slots:
     void OnDisconnected();
     void OnStopped();
     void OnGUIDesignChanged() { SetGUIDesign ( pClient->GetGUIDesign() ); }
+    void OnStereoCheckBoxChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
 };

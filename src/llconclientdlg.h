@@ -31,7 +31,6 @@
 #include <qtimer.h>
 #include <qslider.h>
 #include <qradiobutton.h>
-#include <qbuttongroup.h>
 #include <qmenubar.h>
 #include <qlayout.h>
 #include "global.h"
@@ -96,8 +95,6 @@ protected:
     QMenu*             pViewMenu;
     QMenuBar*          pMenu;
 
-    QButtonGroup       RevSelectionButtonGroup;
-
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
 
@@ -109,7 +106,8 @@ public slots:
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnSliderAudInFader ( int value );
     void OnSliderAudReverb ( int value ) { pClient->SetReverbLevel ( value ); }
-    void OnRevSelectionButtonGroupClicked ( QAbstractButton* button );
+    void OnRevSelL() { pClient->SetReverbOnLeftChan ( true ); }
+    void OnRevSelR() { pClient->SetReverbOnLeftChan ( false ); }
     void OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void OnChangeChanGain ( int iId, double dGain )
         { pClient->SetRemoteChanGain ( iId, dGain ); }

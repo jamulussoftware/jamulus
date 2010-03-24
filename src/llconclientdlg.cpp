@@ -251,11 +251,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     SliderAudReverb->setValue ( iCurAudReverb );
     SliderAudReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
 
-
-    // set radio buttons ---
-    // reverb channel
-    RevSelectionButtonGroup.addButton ( RadioButtonRevSelL );
-    RevSelectionButtonGroup.addButton ( RadioButtonRevSelR );
+    // init reverb channel
     UpdateRevSelection();
 
 
@@ -335,9 +331,11 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         this, SLOT ( OnSliderAudReverb ( int ) ) );
 
     // radio buttons
-    QObject::connect ( &RevSelectionButtonGroup,
-        SIGNAL ( buttonClicked ( QAbstractButton* ) ), this,
-        SLOT ( OnRevSelectionButtonGroupClicked ( QAbstractButton* ) ) );
+    QObject::connect ( RadioButtonRevSelL, SIGNAL ( clicked() ),
+        this, SLOT ( OnRevSelL() ) );
+
+    QObject::connect ( RadioButtonRevSelR, SIGNAL ( clicked() ),
+        this, SLOT ( OnRevSelR() ) );
 
     // line edits
     QObject::connect ( LineEditFaderTag, SIGNAL ( textChanged ( const QString& ) ),
@@ -446,32 +444,26 @@ void CLlconClientDlg::UpdateRevSelection()
 {
     if ( pClient->GetUseStereo() )
     {
-        // for stereo set both channels checked and disable all settings
-        RevSelectionButtonGroup.setExclusive ( false );
-
-        // to be able to set both checks, exclusive has to be disabled
-        RadioButtonRevSelL->setChecked ( true );
-        RadioButtonRevSelR->setChecked ( true );
-
-        // enable exclusive again, since this is required for mono mode
-        RevSelectionButtonGroup.setExclusive ( true );
-
-        // the user shall not modify the radio buttons in stereo mode
-        RadioButtonRevSelL->setEnabled ( false );
-        RadioButtonRevSelR->setEnabled ( false );
+        // for stereo make channel selection invisible since
+        // reverberation effect is always applied to both channels
+        RadioButtonRevSelL->setVisible ( false );
+        RadioButtonRevSelR->setVisible ( false );
     }
     else
     {
-        // mono case, enable all radio buttons and set to current value
-        RadioButtonRevSelL->setEnabled ( true );
-        RadioButtonRevSelR->setEnabled ( true );
+        // make radio buttons visible
+        RadioButtonRevSelL->setVisible ( true );
+        RadioButtonRevSelR->setVisible ( true );
 
-        // first reset and then set correct selection
-        RadioButtonRevSelL->setChecked ( false );
-        RadioButtonRevSelR->setChecked ( false );
-
-        RadioButtonRevSelL->setChecked ( pClient->IsReverbOnLeftChan() );
-        RadioButtonRevSelR->setChecked ( !pClient->IsReverbOnLeftChan() );
+        // update value
+        if ( pClient->IsReverbOnLeftChan() )
+        {
+            RadioButtonRevSelL->setChecked ( true );
+        }
+        else
+        {
+            RadioButtonRevSelR->setChecked ( true );
+        }
     }
 }
 
@@ -562,19 +554,6 @@ void CLlconClientDlg::OnNumClientsChanged ( int iNewNumClients )
 {
     // update window title
     SetMyWindowTitle ( iNewNumClients );
-}
-
-void CLlconClientDlg::OnRevSelectionButtonGroupClicked ( QAbstractButton* button )
-{
-    if ( button == RadioButtonRevSelL )
-    {
-        pClient->SetReverbOnLeftChan ( true );
-    }
-
-    if ( button == RadioButtonRevSelR )
-    {
-        pClient->SetReverbOnLeftChan ( false );
-    }
 }
 
 void CLlconClientDlg::SetMyWindowTitle ( const int iNumClients )

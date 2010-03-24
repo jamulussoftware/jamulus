@@ -260,7 +260,7 @@
         <item>
          <widget class="QLabel" name="TextAudInFader" >
           <property name="text" >
-           <string>Fader:</string>
+           <string>Pan</string>
           </property>
           <property name="alignment" >
            <set>Qt::AlignCenter</set>
@@ -372,7 +372,7 @@
         <item>
          <widget class="QLabel" name="TextLabelAudReverb" >
           <property name="text" >
-           <string>Reverb:</string>
+           <string>Reverb</string>
           </property>
           <property name="alignment" >
            <set>Qt::AlignCenter</set>

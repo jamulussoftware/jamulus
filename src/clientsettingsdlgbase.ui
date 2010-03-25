@@ -79,7 +79,7 @@
           <property name="sizeHint" >
            <size>
             <width>0</width>
-            <height>20</height>
+            <height>0</height>
            </size>
           </property>
          </spacer>
@@ -108,7 +108,7 @@
           <property name="sizeHint" >
            <size>
             <width>0</width>
-            <height>20</height>
+            <height>0</height>
            </size>
           </property>
          </spacer>
@@ -128,7 +128,7 @@
           <property name="sizeHint" >
            <size>
             <width>0</width>
-            <height>20</height>
+            <height>0</height>
            </size>
           </property>
          </spacer>
@@ -166,7 +166,7 @@
           <property name="sizeHint" >
            <size>
             <width>0</width>
-            <height>20</height>
+            <height>0</height>
            </size>
           </property>
          </spacer>
@@ -438,7 +438,7 @@
          <enum>Qt::NonModal</enum>
         </property>
         <property name="text" >
-         <string>Stereo</string>
+         <string>Stereo Streaming</string>
         </property>
        </widget>
       </item>

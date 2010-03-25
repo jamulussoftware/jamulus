@@ -183,11 +183,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "check box" ) );
 
     // use stereo
-    cbUseStereo->setWhatsThis ( tr ( "<b>Stereo</b> "
-        "Enables the stereo mode. If not checked, a mono mode is used. "
-        "Enabling stereo mode will increase the stream data rate. Make sure "
-        "that the current upload rate does not exceed the available bandwidth "
-        "of your internet connection." ) );
+    cbUseStereo->setWhatsThis ( tr ( "<b>Stereo Streaming</b> "
+        "Enables the stereo streaming mode. If not checked, a mono streaming "
+        "mode is used. Enabling the stereo streaming mode will increase the "
+        "stream data rate. Make sure that the current upload rate does not "
+        "exceed the available bandwidth of your internet connection.<br>"
+        "In case of the stereo streaming mode, no audio channel selection "
+        "for the reverberation effect will be available on the main window "
+        "since the effect is applied on both channels in this case." ) );
 
     cbUseStereo->setAccessibleName ( tr ( "Stereo check box" ) );
 

@@ -244,7 +244,7 @@
 				InlineFunctionExpansion="0"
 				WholeProgramOptimization="true"
 				AdditionalIncludeDirectories="&quot;$(QTDIR)\include&quot;;&quot;$(QTDIR)\include\Qt&quot;;../src;ASIOSDK2/common;ASIOSDK2/host;ASIOSDK2/host/pc;../libs/celt;vstsdk2.4\public.sdk\source\vst2.x;vstsdk2.4"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;QT_THREAD_SUPPORT;USE_ALLOCA;_USRDLL;LLCON_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;QT_THREAD_SUPPORT;USE_ALLOCA;LLCON_VST_PLUGIN;_USRDLL;LLCON_EXPORTS;_CRT_SECURE_NO_DEPRECATE=1"
 				StringPooling="false"
 				RuntimeLibrary="0"
 				EnableFunctionLevelLinking="false"
@@ -1179,6 +1179,26 @@
 							Name="VCCLCompilerTool"
 							AdditionalIncludeDirectories=""
 							PreprocessorDefinitions=""
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\moc\moc_vstmain.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="true"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
 						/>
 					</FileConfiguration>
 				</File>

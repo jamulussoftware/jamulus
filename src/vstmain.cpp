@@ -33,7 +33,8 @@ AudioEffect* createEffectInstance ( audioMasterCallback AudioMaster )
 }
 
 CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
-    AudioEffectX ( AudioMaster, 1, 0 ) // 1 program with no parameters (=0)
+    AudioEffectX ( AudioMaster, 1, 0 ), // 1 program with no parameters (=0)
+    Client ( LLCON_DEFAULT_PORT_NUMBER )
 {
     // stereo input/output
 	setNumInputs  ( 2 );

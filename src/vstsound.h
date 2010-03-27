@@ -31,7 +31,7 @@
 
 
 /* Classes ********************************************************************/
-class CVSTSound : public CSoundBase
+class CSound : public CSoundBase
 {
 public:
     CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg );

@@ -28,11 +28,16 @@
 // copy the VST SDK in the llcon/windows directory: "llcon/windows/vstsdk2.4" to
 // get it work
 #include "audioeffectx.h"
+#include <qtimer.h>
+#include "global.h"
+#include "client.h"
 
 
 /* Classes ********************************************************************/
-class CLlconVST : public AudioEffectX
+class CLlconVST : public AudioEffectX, public QObject
 {
+    Q_OBJECT
+
 public:
 	CLlconVST ( audioMasterCallback AudioMaster );
 
@@ -50,6 +55,8 @@ public:
 protected:
     bool GetName ( char* cName );
 	char strProgName[kVstMaxProgNameLen + 1];
+
+    CClient Client;
 };
 
 #endif /* !defined ( LLCONVST_HOIHGE76G34528_3_434DFGUHF1912__INCLUDED_ ) */

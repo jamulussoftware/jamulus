@@ -34,7 +34,7 @@
 
 
 /* Classes ********************************************************************/
-class CLlconVST : public AudioEffectX, public QObject
+class CLlconVST : public QObject, public AudioEffectX
 {
     Q_OBJECT
 
@@ -57,6 +57,10 @@ protected:
 	char strProgName[kVstMaxProgNameLen + 1];
 
     CClient Client;
+    QTimer  TimerOnOff;
+
+protected slots:
+    void OnTimerOnOff();
 };
 
 #endif /* !defined ( LLCONVST_HOIHGE76G34528_3_434DFGUHF1912__INCLUDED_ ) */

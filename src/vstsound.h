@@ -34,20 +34,12 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg );
+    CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg ) :
+        CSoundBase ( true, fpNewCallback, arg )
+    {
+        // TODO
+    }
     virtual ~CSound() {}
-
-    // these functions are not actually used -> dummies
-    virtual int  Init ( const int ) {}
-    virtual void Start() {}
-    virtual void Stop() {}
-    virtual void OpenDriverSetup() {}
-    int          GetNumDev() { return 1; }
-    QString      GetDeviceName ( const int iDiD ) { return "VST"; }
-    QString      SetDev ( const int iNewDev ) {}
-    int          GetDev() { return 0; }
-
-protected:
 };
 
 #endif // !defined ( _VSTSOUND_H__9518A346345768_11D3_8C0D_EEBF182CF549__INCLUDED_ )

@@ -49,6 +49,11 @@ CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
     // set default program name
     GetName ( strProgName );
 
+    // we want a single shot timer to shut down the connection if no
+    // processing is done anymore (VST host has stopped the stream)
+    TimerOnOff.setSingleShot ( true );
+    TimerOnOff.setInterval ( VST_STOP_TIMER_INTERVAL );
+
     // connect timer event
     connect ( &TimerOnOff, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerOnOff() ) );
@@ -64,13 +69,17 @@ bool CLlconVST::GetName ( char* cName )
 
 void CLlconVST::OnTimerOnOff()
 {
-    // TODO
+    // stop client since VST host seems to have stopped
+    Client.Stop();
 }
 
 void CLlconVST::processReplacing ( float**  pvIn,
                                    float**  pvOut,
                                    VstInt32 iNumSamples )
 {
+    // reset stop timer
+    TimerOnOff.start();
+
     // get pointers to actual buffers
     float* pfIn0  = pvIn[0];
     float* pfIn1  = pvIn[1];
@@ -91,6 +100,9 @@ void CLlconVST::processDoubleReplacing ( double** pvIn,
                                          double** pvOut,
                                          VstInt32 iNumSamples )
 {
+    // reset stop timer
+    TimerOnOff.start();
+
     // get pointers to actual buffers
     double* pdIn0  = pvIn[0];
     double* pdIn1  = pvIn[1];

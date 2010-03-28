@@ -48,6 +48,10 @@ CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
 
     // set default program name
     GetName ( strProgName );
+
+    // connect timer event
+    connect ( &TimerOnOff, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerOnOff() ) );
 }
 
 bool CLlconVST::GetName ( char* cName )
@@ -56,6 +60,11 @@ bool CLlconVST::GetName ( char* cName )
     // vendor string
 	vst_strncpy ( cName, "Llcon", kVstMaxEffectNameLen );
 	return true;
+}
+
+void CLlconVST::OnTimerOnOff()
+{
+    // TODO
 }
 
 void CLlconVST::processReplacing ( float**  pvIn,

@@ -33,6 +33,11 @@
 #include "client.h"
 
 
+/* Definitions ****************************************************************/
+// timeout after which the llcon client is stopped
+#define VST_STOP_TIMER_INTERVAL     1000
+
+
 /* Classes ********************************************************************/
 class CLlconVST : public QObject, public AudioEffectX
 {

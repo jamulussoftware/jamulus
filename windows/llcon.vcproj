@@ -755,6 +755,7 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="VST Release|Win32"
+					ExcludedFromBuild="true"
 					>
 					<Tool
 						Name="VCCLCompilerTool"

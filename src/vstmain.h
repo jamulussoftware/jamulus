@@ -46,8 +46,7 @@ class CLlconVST : public QObject, public AudioEffectX
 public:
 	CLlconVST ( audioMasterCallback AudioMaster );
 
-	virtual void processReplacing       ( float**  pvIn, float**  pvOut, VstInt32 iNumSamples );
-	virtual void processDoubleReplacing ( double** pvIn, double** pvOut, VstInt32 iNumSamples );
+	virtual void processReplacing ( float**  pvIn, float**  pvOut, VstInt32 iNumSamples );
 
     virtual void setProgramName ( char* cName ) { vst_strncpy ( strProgName, cName, kVstMaxProgNameLen ); }
     virtual void getProgramName ( char* cName ) { vst_strncpy ( cName, strProgName, kVstMaxProgNameLen ); }

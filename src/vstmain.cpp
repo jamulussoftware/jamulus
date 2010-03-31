@@ -44,7 +44,6 @@ CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
 
     // capabilities of llcon VST plugin
 	canProcessReplacing ();	// supports replacing output
-	canDoubleReplacing  (); // supports double precision processing
 
     // set default program name
     GetName ( strProgName );
@@ -93,28 +92,5 @@ void CLlconVST::processReplacing ( float**  pvIn,
     {
         pfOut0[i] = pfIn0[i];
         pfOut1[i] = pfIn1[i];
-    }
-}
-
-void CLlconVST::processDoubleReplacing ( double** pvIn,
-                                         double** pvOut,
-                                         VstInt32 iNumSamples )
-{
-    // reset stop timer
-    TimerOnOff.start();
-
-    // get pointers to actual buffers
-    double* pdIn0  = pvIn[0];
-    double* pdIn1  = pvIn[1];
-    double* pdOut0 = pvOut[0];
-    double* pdOut1 = pvOut[1];
-
-
-// TODO here we just copy the data -> add llcon processing here!
-
-    for ( int i = 0; i < iNumSamples; i++ )
-    {
-        pdOut0[i] = pdIn0[i];
-        pdOut1[i] = pdIn1[i];
     }
 }

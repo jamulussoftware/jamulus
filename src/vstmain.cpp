@@ -51,7 +51,7 @@ CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
     // we want a single shot timer to shut down the connection if no
     // processing is done anymore (VST host has stopped the stream)
     TimerOnOff.setSingleShot ( true );
-    TimerOnOff.setInterval ( VST_STOP_TIMER_INTERVAL );
+    TimerOnOff.setInterval   ( VST_STOP_TIMER_INTERVAL );
 
     // connect timer event
     connect ( &TimerOnOff, SIGNAL ( timeout() ),
@@ -76,8 +76,19 @@ void CLlconVST::processReplacing ( float**  pvIn,
                                    float**  pvOut,
                                    VstInt32 iNumSamples )
 {
+    int i, j;
+
     // reset stop timer
     TimerOnOff.start();
+
+    // check if client is running, if not, start it
+    if ( !Client.IsRunning() )
+    {
+
+// TODO set iNumSamples in Sound class somehow
+
+        Client.Start();
+    }
 
     // get pointers to actual buffers
     float* pfIn0  = pvIn[0];
@@ -85,12 +96,26 @@ void CLlconVST::processReplacing ( float**  pvIn,
     float* pfOut0 = pvOut[0];
     float* pfOut1 = pvOut[1];
 
-
-// TODO here we just copy the data -> add llcon processing here!
-
-    for ( int i = 0; i < iNumSamples; i++ )
+    // copy input data
+    for ( i = 0, j = 0; i < iNumSamples; i++, j += 2 )
     {
-        pfOut0[i] = pfIn0[i];
-        pfOut1[i] = pfIn1[i];
+/*
+        pSound->vecsTmpAudioSndCrdStereo[j]     = pfIn0[i];
+        pSound->vecsTmpAudioSndCrdStereo[j + 1] = pfIn1[i];
+*/
+    }
+
+/*
+    // call processing callback function
+    pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
+*/
+
+    // copy output data
+    for ( i = 0, j = 0; i < iNumSamples; i++, j += 2 )
+    {
+/*
+        pfOut0[i] = pSound->vecsTmpAudioSndCrdStereo[j];
+        pfOut1[i] = pSound->vecsTmpAudioSndCrdStereo[j + 1];
+*/
     }
 }

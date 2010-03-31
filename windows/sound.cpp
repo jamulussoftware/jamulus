@@ -460,7 +460,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
         iASIOBufferSizeMono =
             GetActualBufferSize ( iNewPrefMonoBufferSize );
 
-        // init base clasee
+        // init base class
         CSoundBase::Init ( iASIOBufferSizeMono );
 
         // set internal buffer size value and calculate stereo buffer size

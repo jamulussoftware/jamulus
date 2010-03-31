@@ -40,6 +40,18 @@ public:
         // TODO
     }
     virtual ~CSound() {}
+
+    virtual int Init ( const int iNewPrefMonoBufferSize )
+    {
+        // TODO we have to query the current VST frame size somehow
+
+const int iVSTMonoBufferSize = iNewPrefMonoBufferSize;
+
+        // init base class
+        CSoundBase::Init ( iVSTMonoBufferSize );
+
+        return iVSTMonoBufferSize;
+    }
 };
 
 #endif // !defined ( _VSTSOUND_H__9518A346345768_11D3_8C0D_EEBF182CF549__INCLUDED_ )

@@ -43,7 +43,7 @@ CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
 	setUniqueID ( 'Llco' );
 
     // capabilities of llcon VST plugin
-	canProcessReplacing ();	// supports replacing output
+	canProcessReplacing();	// supports replacing output
 
     // set default program name
     GetName ( strProgName );
@@ -56,6 +56,9 @@ CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
     // connect timer event
     connect ( &TimerOnOff, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerOnOff() ) );
+
+// TODO settings
+Client.SetServerAddr ( DEFAULT_SERVER_ADDRESS );
 }
 
 bool CLlconVST::GetName ( char* cName )

@@ -41,18 +41,21 @@ public:
 
     // special VST functions
     void SetMonoBufferSize ( const int iNVBS ) { iVSTMonoBufferSize = iNVBS; }
-    CVector<int16_t>* GetBuffer() { return &vecsAudioSndCrdStereo; }
-    void VSTProcessCallback ( CVector<int16_t>& psData )
+    void VSTProcessCallback()
     {
-        CSoundBase::ProcessCallback ( psData );
+        CSoundBase::ProcessCallback ( vecsTmpAudioSndCrdStereo );
     }
 
     virtual int Init ( const int )
     {
         // init base class
         CSoundBase::Init ( iVSTMonoBufferSize );
+        vecsTmpAudioSndCrdStereo.Init ( 2 * iVSTMonoBufferSize /* stereo */);
         return iVSTMonoBufferSize;
     }
+
+    // this vector must be accessible from the outside (quick hack solution)
+    CVector<int16_t> vecsTmpAudioSndCrdStereo;
 
 protected:
     int iVSTMonoBufferSize;

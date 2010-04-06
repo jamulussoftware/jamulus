@@ -35,23 +35,27 @@ class CSound : public CSoundBase
 {
 public:
     CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg ) :
-        CSoundBase ( true, fpNewCallback, arg )
-    {
-        // TODO
-    }
+      CSoundBase ( true, fpNewCallback, arg ), iVSTMonoBufferSize ( 0 ) {}
+
     virtual ~CSound() {}
 
-    virtual int Init ( const int iNewPrefMonoBufferSize )
+    // special VST functions
+    void SetMonoBufferSize ( const int iNVBS ) { iVSTMonoBufferSize = iNVBS; }
+    CVector<int16_t>* GetBuffer() { return &vecsAudioSndCrdStereo; }
+    void VSTProcessCallback ( CVector<int16_t>& psData )
     {
-        // TODO we have to query the current VST frame size somehow
+        CSoundBase::ProcessCallback ( psData );
+    }
 
-const int iVSTMonoBufferSize = iNewPrefMonoBufferSize;
-
+    virtual int Init ( const int )
+    {
         // init base class
         CSoundBase::Init ( iVSTMonoBufferSize );
-
         return iVSTMonoBufferSize;
     }
+
+protected:
+    int iVSTMonoBufferSize;
 };
 
 #endif // !defined ( _VSTSOUND_H__9518A346345768_11D3_8C0D_EEBF182CF549__INCLUDED_ )

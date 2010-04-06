@@ -84,9 +84,8 @@ void CLlconVST::processReplacing ( float**  pvIn,
     // check if client is running, if not, start it
     if ( !Client.IsRunning() )
     {
-
-// TODO set iNumSamples in Sound class somehow
-
+        // set buffer size and start
+        Client.GetSound()->SetMonoBufferSize ( iNumSamples );
         Client.Start();
     }
 
@@ -99,23 +98,18 @@ void CLlconVST::processReplacing ( float**  pvIn,
     // copy input data
     for ( i = 0, j = 0; i < iNumSamples; i++, j += 2 )
     {
-/*
-        pSound->vecsTmpAudioSndCrdStereo[j]     = pfIn0[i];
-        pSound->vecsTmpAudioSndCrdStereo[j + 1] = pfIn1[i];
-*/
+        (*Client.GetSound()->GetBuffer())[j]     = pfIn0[i];
+        (*Client.GetSound()->GetBuffer())[j + 1] = pfIn1[i];
     }
 
-/*
     // call processing callback function
-    pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
-*/
+    Client.GetSound()->VSTProcessCallback (
+        *Client.GetSound()->GetBuffer() );
 
     // copy output data
     for ( i = 0, j = 0; i < iNumSamples; i++, j += 2 )
     {
-/*
-        pfOut0[i] = pSound->vecsTmpAudioSndCrdStereo[j];
-        pfOut1[i] = pSound->vecsTmpAudioSndCrdStereo[j + 1];
-*/
+        pfOut0[i] = (*Client.GetSound()->GetBuffer())[j];
+        pfOut1[i] = (*Client.GetSound()->GetBuffer())[j + 1];
     }
 }

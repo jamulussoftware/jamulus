@@ -218,6 +218,11 @@ public:
     CVector<QString>        vstrIPAddress;
     QString                 strName;
 
+#ifdef LLCON_VST_PLUGIN
+    // VST version must have direct access to sound object
+    CSound* GetSound() { return &Sound; }
+#endif
+
 protected:
     // callback function must be static, otherwise it does not work
     static void  AudioCallback ( CVector<short>& psData, void* arg );

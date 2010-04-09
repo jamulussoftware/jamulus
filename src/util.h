@@ -40,7 +40,7 @@ using namespace std; // because of the library: "vector"
 # include <windows.h>
 # include <mmsystem.h>
 #else
-# if defined ( __APPLE__ ) || defined ( __MACOSX )
+# if defined ( _IS_QMAKE_CONFIG )
 #  include "ui_aboutdlgbase.h"
 # else
 #  include "moc/aboutdlgbase.h"

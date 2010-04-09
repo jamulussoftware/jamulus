@@ -9,7 +9,8 @@ INCLUDEPATH += src \
     libs/celt
 
 DEFINES += USE_ALLOCA \
-    _REENTRANT
+    _REENTRANT \
+    _IS_QMAKE_CONFIG
 
 macx {
     HEADERS += mac/sound.h

@@ -33,7 +33,7 @@
 #ifdef _WIN32
 # include "../windows/moc/chatdlgbase.h"
 #else
-# if defined ( __APPLE__ ) || defined ( __MACOSX )
+# if defined ( _IS_QMAKE_CONFIG )
 #  include "ui_chatdlgbase.h"
 # else
 #  include "moc/chatdlgbase.h"

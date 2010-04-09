@@ -36,7 +36,7 @@
 #ifdef _WIN32
 # include "../windows/moc/llconserverdlgbase.h"
 #else
-# if defined ( __APPLE__ ) || defined ( __MACOSX )
+# if defined ( _IS_QMAKE_CONFIG )
 #  include "ui_llconserverdlgbase.h"
 # else
 #  include "moc/llconserverdlgbase.h"

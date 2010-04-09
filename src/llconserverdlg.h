@@ -36,7 +36,7 @@
 #ifdef _WIN32
 # include "../windows/moc/llconserverdlgbase.h"
 #else
-# if defined ( _IS_QMAKE_CONFIG )
+# ifdef _IS_QMAKE_CONFIG
 #  include "ui_llconserverdlgbase.h"
 # else
 #  include "moc/llconserverdlgbase.h"

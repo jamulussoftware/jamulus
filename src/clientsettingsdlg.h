@@ -40,7 +40,7 @@
 #ifdef _WIN32
 # include "../windows/moc/clientsettingsdlgbase.h"
 #else
-# if defined ( _IS_QMAKE_CONFIG )
+# ifdef _IS_QMAKE_CONFIG
 #  include "ui_clientsettingsdlgbase.h"
 # else
 #  include "moc/clientsettingsdlgbase.h"

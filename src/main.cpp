@@ -186,7 +186,7 @@ int main ( int argc, char** argv )
 #endif
 
     // init resources
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+#ifdef _IS_QMAKE_CONFIG
     Q_INIT_RESOURCE(resources);
 #else
     extern int qInitResources();

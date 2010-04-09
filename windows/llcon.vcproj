@@ -1647,6 +1647,10 @@
 			>
 		</File>
 		<File
+			RelativePath="..\llcon.pro"
+			>
+		</File>
+		<File
 			RelativePath="MocQT.bat"
 			>
 		</File>

@@ -27,12 +27,18 @@ win32 {
         -framework AudioToolbox \
         -framework AudioUnit
 } else:unix {
-    HEADERS += linux/sound.h
-    SOURCES += linux/sound.cpp
+	# only include jack support if CONFIG nosound is not set
+	nosoundoption = $$find(CONFIG, "nosound")
+	count(nosoundoption, 0) {
+		message(Jack Audio Interface Enabled.)
 
-	DEFINES += WITH_SOUND
+		HEADERS += linux/sound.h
+		SOURCES += linux/sound.cpp
 
-    LIBS += -ljack
+		DEFINES += WITH_SOUND
+
+		LIBS += -ljack
+	}
 }
 
 RCC_DIR = src/res

@@ -12,7 +12,10 @@ DEFINES += USE_ALLOCA \
     _REENTRANT \
     _IS_QMAKE_CONFIG
 
-macx {
+win32 {
+    HEADERS += windows/sound.h
+    SOURCES += windows/sound.cpp
+} else:macx {
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp
     RC_FILE = mac/llcon.icns
@@ -23,6 +26,13 @@ macx {
         -framework CoreAudio \
         -framework AudioToolbox \
         -framework AudioUnit
+} else:unix {
+    HEADERS += linux/sound.h
+    SOURCES += linux/sound.cpp
+
+	DEFINES += WITH_SOUND
+
+    LIBS += -ljack
 }
 
 RCC_DIR = src/res

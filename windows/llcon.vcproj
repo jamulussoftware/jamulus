@@ -1643,6 +1643,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\deploy_windows.bat"
+			>
+		</File>
+		<File
 			RelativePath="..\INSTALL"
 			>
 		</File>

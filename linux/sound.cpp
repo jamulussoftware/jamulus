@@ -241,7 +241,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     return 0; // zero on success, non-zero on error 
 }
 
-int CSound::bufferSizeCallback ( jack_nframes_t nframes, void *arg )
+int CSound::bufferSizeCallback ( jack_nframes_t, void *arg )
 {
     CSound* pSound = reinterpret_cast<CSound*> ( arg );
 
@@ -250,7 +250,7 @@ int CSound::bufferSizeCallback ( jack_nframes_t nframes, void *arg )
     return 0; // zero on success, non-zero on error
 }
 
-void CSound::shutdownCallback ( void *arg )
+void CSound::shutdownCallback ( void* )
 {
     // without a Jack server, our software makes no sense to run, throw
     // error message

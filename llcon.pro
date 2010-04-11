@@ -67,7 +67,6 @@ HEADERS += src/buffer.h \
     src/chatdlg.h \
     src/llconclientdlg.h \
     src/clientsettingsdlg.h \
-    libs/celt/ecintrin.h \
     libs/celt/celt.h \
     libs/celt/celt_types.h \
     libs/celt/celt_header.h \

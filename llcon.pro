@@ -27,18 +27,16 @@ win32 {
         -framework AudioToolbox \
         -framework AudioUnit
 } else:unix {
-	# only include jack support if CONFIG nosound is not set
-	nosoundoption = $$find(CONFIG, "nosound")
-	count(nosoundoption, 0) {
-		message(Jack Audio Interface Enabled.)
+    # only include jack support if CONFIG nosound is not set
+    nosoundoption = $$find(CONFIG, "nosound")
+    count(nosoundoption, 0) {
+        message(Jack Audio Interface Enabled.)
 
-		HEADERS += linux/sound.h
-		SOURCES += linux/sound.cpp
-
-		DEFINES += WITH_SOUND
-
-		LIBS += -ljack
-	}
+        HEADERS += linux/sound.h
+        SOURCES += linux/sound.cpp
+        DEFINES += WITH_SOUND
+        LIBS += -ljack
+    }
 }
 
 RCC_DIR = src/res
@@ -140,3 +138,59 @@ SOURCES += src/buffer.cpp \
     libs/celt/rangeenc.c \
     libs/celt/rate.c \
     libs/celt/vq.c
+
+DISTFILES += AUTHORS \
+    COPYING \
+    NEWS \
+    TODO \
+    README \
+    INSTALL \
+    ChangeLog \
+    libs\celt\AUTHORS \
+    libs\celt\ChangeLog \
+    libs\celt\COPYING \
+    libs\celt\INSTALL \
+    libs\celt\NEWS \
+    libs\celt\README \
+    libs\celt\README_LLCON \
+    libs\celt\TODO \
+    src/res/faderbackground.png \
+    src/res/faderhandle.png \
+    src/res/faderhandlesmall.png \
+    src/res/ledbuttonnotpressed.png \
+    src/res/ledbuttonpressed.png \
+    src/res/mixerboardbackground.png \
+    src/res/gig.png \
+    src/res/mainicon.png \
+    src/res/CLEDBlack.png \
+    src/res/CLEDGrey.png \
+    src/res/CLEDGreen.png \
+    src/res/CLEDYellow.png \
+    src/res/CLEDRed.png \
+    src/res/CLEDDisabledSmall.png \
+    src/res/CLEDBlackSmall.png \
+    src/res/CLEDGreySmall.png \
+    src/res/CLEDGreenSmall.png \
+    src/res/CLEDYellowSmall.png \
+    src/res/CLEDRedSmall.png \
+    src/res/VLEDBlack.png \
+    src/res/VLEDGrey.png \
+    src/res/VLEDGreen.png \
+    src/res/VLEDYellow.png \
+    src/res/VLEDRed.png \
+    src/res/VLEDDisabledSmall.png \
+    src/res/VLEDBlackSmall.png \
+    src/res/VLEDGreySmall.png \
+    src/res/VLEDGreenSmall.png \
+    src/res/VLEDYellowSmall.png \
+    src/res/VLEDRedSmall.png \
+    src/res/VRLEDBlack.png \
+    src/res/VRLEDGrey.png \
+    src/res/VRLEDGreen.png \
+    src/res/VRLEDYellow.png \
+    src/res/VRLEDRed.png \
+    src/res/VRLEDBlackSmall.png \
+    src/res/VRLEDGreySmall.png \
+    src/res/VRLEDGreenSmall.png \
+    src/res/VRLEDYellowSmall.png \
+    src/res/VRLEDRedSmall.png

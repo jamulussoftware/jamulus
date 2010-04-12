@@ -12,6 +12,8 @@ devenv llcon.sln /build "Release|Win32"
 rem create installer -----------------------------------------------------------
 %NSIS_PATH%\makensis.exe installer.nsi
 
+move llconinstaller.exe ../deploy/llcon-version-installer.exe
+
 goto endofskript
 
 :vsenvproblem

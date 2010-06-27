@@ -212,6 +212,8 @@ public:
     void SendPingMess()
         { Channel.CreatePingMes ( PreciseTime.elapsed() ); };
 
+    int EstimatedOverallDelay ( const int iPingTimeMs );
+
     CChannel* GetChannel() { return &Channel; }
 
     // settings

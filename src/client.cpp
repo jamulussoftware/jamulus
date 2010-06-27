@@ -937,3 +937,44 @@ void CClient::UpdateSocketBufferSize()
         }
     }
 }
+
+int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
+{
+/*
+    For estimating the overall delay, use the following assumptions:
+    - the mean delay of a cyclic buffer is half the buffer size (since
+      for the average it is assumed that the buffer is half filled)
+    - consider the jitter buffer on the server side, too
+*/
+    // 2 times buffers at client and server divided by 2 (half the buffer
+    // for the delay) is simply the total socket buffer size
+    const double dTotalJitterBufferDelayMs =
+        SYSTEM_BLOCK_DURATION_MS_FLOAT * GetSockBufNumFrames();
+
+    // we assume that we have two period sizes for the input and one for the
+    // output, therefore we have "3 *" instead of "2 *" (for input and output)
+    // the actual sound card buffer size, also consider delay introduced by
+    // sound card conversion buffer by using
+    // "GetSndCrdConvBufAdditionalDelayMonoBlSize"
+    const double dTotalSoundCardDelayMs =
+        ( 3 * GetSndCrdActualMonoBlSize() +
+        GetSndCrdConvBufAdditionalDelayMonoBlSize() ) *
+        1000 / SYSTEM_SAMPLE_RATE;
+
+    // network packets are of the same size as the audio packets per definition
+    // if no sound card conversion buffer is used
+    const double dDelayToFillNetworkPacketsMs =
+        GetSystemMonoBlSize() * 1000 / SYSTEM_SAMPLE_RATE;
+
+    // CELT additional delay at small frame sizes is half a frame size
+    const double dAdditionalAudioCodecDelayMs =
+        SYSTEM_BLOCK_DURATION_MS_FLOAT / 2;
+
+    const double dTotalBufferDelayMs =
+        dDelayToFillNetworkPacketsMs +
+        dTotalJitterBufferDelayMs +
+        dTotalSoundCardDelayMs +
+        dAdditionalAudioCodecDelayMs;
+
+    return LlconMath::round ( dTotalBufferDelayMs + iPingTimeMs );
+}

@@ -51,7 +51,7 @@
 /* Definitions ****************************************************************/
 // update time for GUI controls
 #define DISPLAY_UPDATE_TIME         1000 // ms
-#define PING_UPDATE_TIME            500 // ms
+#define PING_UPDATE_TIME            500  // ms
 
 
 /* Classes ********************************************************************/
@@ -64,6 +64,9 @@ public:
         Qt::WindowFlags f = 0 );
 
     void SetStatus ( const int iMessType, const int iStatus );
+    void SetPingTimeResult ( const int iPingTime,
+                             const int iOverallDelayMs,
+                             const int iOverallDelayLEDColor );
 
 protected:
     void    UpdateJitterBufferFrame();
@@ -72,18 +75,15 @@ protected:
     QString GenSndCrdBufferDelayString ( const int iFrameSize,
                                          const QString strAddText = "" );
 
-    virtual void showEvent ( QShowEvent* );
-    virtual void hideEvent ( QHideEvent* );
+    virtual void showEvent ( QShowEvent* ) { UpdateDisplay(); }
 
     CClient*     pClient;
     QTimer       TimerStatus;
-    QTimer       TimerPing;
     QButtonGroup SndCrdBufferDelayButtonGroup;
     void         UpdateDisplay();
 
  public slots:
     void OnTimerStatus() { UpdateDisplay(); }
-    void OnTimerPing();
     void OnSliderNetBuf ( int value );
     void OnSliderSndCrdBufferDelay ( int value );
     void OnAutoJitBuf ( int value );
@@ -92,7 +92,6 @@ protected:
     void OnUseHighQualityAudioStateChanged ( int value );
     void OnUseStereoStateChanged ( int value );
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
-    void OnPingTimeResult ( int iPingTime );
     void OnSoundCrdSelection ( int iSndDevIdx );
     void OnSndCrdLeftInChannelSelection ( int iChanIdx );
     void OnSndCrdRightInChannelSelection ( int iChanIdx );

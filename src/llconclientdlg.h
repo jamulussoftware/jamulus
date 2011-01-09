@@ -56,12 +56,12 @@
 #define CON_BUT_DISCONNECTTEXT      "D&isconnect"
 
 // update time for GUI controls
-#define LEVELMETER_UPDATE_TIME      100 // ms
+#define LEVELMETER_UPDATE_TIME      100  // ms
 #define STATUSBAR_UPDATE_TIME       1000 // ms
 
 // range for signal level meter
 #define LOW_BOUND_SIG_METER         ( -50.0 ) // dB
-#define UPPER_BOUND_SIG_METER       ( 0.0 ) // dB
+#define UPPER_BOUND_SIG_METER       ( 0.0 )   // dB
 
 
 /* Classes ********************************************************************/
@@ -87,6 +87,7 @@ protected:
     bool               bUnreadChatMessage;
     QTimer             TimerSigMet;
     QTimer             TimerStatus;
+    QTimer             TimerPing;
 
     virtual void       customEvent ( QEvent* Event );
     virtual void       closeEvent  ( QCloseEvent* Event );
@@ -102,6 +103,8 @@ public slots:
     void OnConnectDisconBut();
     void OnTimerSigMet();
     void OnTimerStatus() { UpdateDisplay(); }
+    void OnTimerPing();
+    void OnPingTimeResult ( int iPingTime );
     void OnOpenGeneralSettings();
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnSliderAudInFader ( int value );

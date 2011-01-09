@@ -330,9 +330,6 @@ cbGUIDesignFancy->setVisible ( false );
     QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerStatus() ) );
 
-    QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerPing() ) );
-
     // slider controls
     QObject::connect ( SliderNetBuf, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderNetBuf ( int ) ) );
@@ -374,9 +371,6 @@ cbGUIDesignFancy->setVisible ( false );
         this, SLOT ( OnDriverSetupBut() ) );
 
     // misc
-    QObject::connect ( pClient, SIGNAL ( PingTimeReceived ( int ) ),
-        this, SLOT ( OnPingTimeResult ( int ) ) );
-
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
         SIGNAL ( buttonClicked ( QAbstractButton* ) ), this,
         SLOT ( OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* ) ) );
@@ -492,20 +486,6 @@ void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
     // for other OS, no sound card channel selection is supported
     FrameSoundcardChannelSelection->setVisible ( false );
 #endif
-}
-
-void CClientSettingsDlg::showEvent ( QShowEvent* )
-{
-    // only activate ping timer if window is actually shown
-    TimerPing.start ( PING_UPDATE_TIME );
-
-    UpdateDisplay();
-}
-
-void CClientSettingsDlg::hideEvent ( QHideEvent* )
-{
-    // if window is closed, stop timer for ping
-    TimerPing.stop();
 }
 
 void CClientSettingsDlg::OnDriverSetupBut()
@@ -627,17 +607,10 @@ void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::OnTimerPing()
+void CClientSettingsDlg::SetPingTimeResult ( const int iPingTime,
+                                             const int iOverallDelayMs,
+                                             const int iOverallDelayLEDColor )
 {
-    // send ping message to server
-    pClient->SendPingMess();
-}
-
-void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
-{
-    // calculate overall delay
-    const int iOverallDelayMs = pClient->EstimatedOverallDelay ( iPingTime );
-
     // apply values to GUI labels, take special care if ping time exceeds
     // a certain value
     if ( iPingTime > 500 )
@@ -655,22 +628,8 @@ void CClientSettingsDlg::OnPingTimeResult ( int iPingTime )
             QString().setNum ( iOverallDelayMs ) + " ms" );
     }
 
-    // color definition: < 40 ms green, < 65 ms yellow, otherwise red
-    if ( iOverallDelayMs <= 40 )
-    {
-        CLEDOverallDelay->SetLight ( MUL_COL_LED_GREEN );
-    }
-    else
-    {
-        if ( iOverallDelayMs <= 65 )
-        {
-            CLEDOverallDelay->SetLight ( MUL_COL_LED_YELLOW );
-        }
-        else
-        {
-            CLEDOverallDelay->SetLight ( MUL_COL_LED_RED );
-        }
-    }
+    // set current LED status
+    CLEDOverallDelay->SetLight ( iOverallDelayLEDColor );
 }
 
 void CClientSettingsDlg::UpdateDisplay()

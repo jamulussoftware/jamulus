@@ -324,6 +324,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerStatus() ) );
 
+    QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerPing() ) );
+
     // sliders
     QObject::connect ( SliderAudInFader, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnSliderAudInFader ( int ) ) );
@@ -364,6 +367,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( pClient,
         SIGNAL ( ChatTextReceived ( QString ) ),
         this, SLOT ( OnChatTextReceived ( QString ) ) );
+
+    QObject::connect ( pClient, SIGNAL ( PingTimeReceived ( int ) ),
+        this, SLOT ( OnPingTimeResult ( int ) ) );
 
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( GUIDesignChanged() ),
         this, SLOT ( OnGUIDesignChanged() ) );
@@ -646,6 +652,41 @@ void CLlconClientDlg::OnTimerSigMet()
     MultiColorLEDBarInputLevelR->setValue ( (int) ceil ( dCurSigLevelR ) );
 }
 
+void CLlconClientDlg::OnTimerPing()
+{
+    // send ping message to server
+    pClient->SendPingMess();
+}
+
+void CLlconClientDlg::OnPingTimeResult ( int iPingTime )
+{
+    // calculate overall delay
+    const int iOverallDelayMs = pClient->EstimatedOverallDelay ( iPingTime );
+
+    // color definition: <= 40 ms green, <= 65 ms yellow, otherwise red
+    int iOverallDelayLEDColor;
+    if ( iOverallDelayMs <= 40 )
+    {
+        iOverallDelayLEDColor = MUL_COL_LED_GREEN;
+    }
+    else
+    {
+        if ( iOverallDelayMs <= 65 )
+        {
+            iOverallDelayLEDColor = MUL_COL_LED_YELLOW;
+        }
+        else
+        {
+            iOverallDelayLEDColor = MUL_COL_LED_RED;
+        }
+    }
+
+    // set ping time result to general settings dialog
+    ClientSettingsDlg.SetPingTimeResult ( iPingTime,
+                                          iOverallDelayMs,
+                                          iOverallDelayLEDColor );
+}
+
 void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
 {
     // start/stop client, set button text
@@ -675,8 +716,9 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
             {
                 PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
 
-                // start timer for level meter bar
+                // start timer for level meter bar and ping time measurement
                 TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
+                TimerPing.start ( PING_UPDATE_TIME );
             }
         }
         else
@@ -706,6 +748,9 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
         TimerSigMet.stop();
         MultiColorLEDBarInputLevelL->setValue ( 0 );
         MultiColorLEDBarInputLevelR->setValue ( 0 );
+
+        // stop ping time measurement timer
+        TimerPing.stop();
 
         // immediately update status bar
         OnTimerStatus();

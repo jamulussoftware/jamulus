@@ -34,6 +34,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     pClient ( pNCliP ),
     QDialog ( parent, f ),
     bUnreadChatMessage ( false ),
+    iErrorStatusCounter ( 0 ),
     ClientSettingsDlg ( pNCliP, parent
 #ifdef _WIN32
                         // this somehow only works reliable on Windows
@@ -388,6 +389,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
 
     // Timers ------------------------------------------------------------------
+    // set error status timer to a single shot timer
+    TimerErrorStatus.setSingleShot ( true );
+
     // start timer for status bar
     TimerStatus.start ( STATUSBAR_UPDATE_TIME );
 }
@@ -668,23 +672,45 @@ void CLlconClientDlg::OnPingTimeResult ( int iPingTime )
     if ( iOverallDelayMs <= 40 )
     {
         iOverallDelayLEDColor = MUL_COL_LED_GREEN;
+
+        // reset ping error counter
+        iErrorStatusCounter = 0;
     }
     else
     {
         if ( iOverallDelayMs <= 65 )
         {
             iOverallDelayLEDColor = MUL_COL_LED_YELLOW;
+
+            // reset ping error counter
+            iErrorStatusCounter = 0;
         }
         else
         {
             iOverallDelayLEDColor = MUL_COL_LED_RED;
+
+            iErrorStatusCounter++;
+            if ( iErrorStatusCounter >= NUM_HIGH_PINGS_UNTIL_ERROR )
+            {
+                // delay too long, show error status in main window
+                TimerErrorStatus.start ( ERROR_STATUS_DISPLAY_TIME );
+
+                // avoid integer overrun of error state but keep
+                // error state valid
+                iErrorStatusCounter = NUM_HIGH_PINGS_UNTIL_ERROR;
+            }
         }
     }
 
-    // set ping time result to general settings dialog
-    ClientSettingsDlg.SetPingTimeResult ( iPingTime,
-                                          iOverallDelayMs,
-                                          iOverallDelayLEDColor );
+    // only update delay information on settings dialog if it is visible to
+    // avoid CPU load on working thread if not necessary
+    if ( ClientSettingsDlg.isVisible() )
+    {
+        // set ping time result to general settings dialog
+        ClientSettingsDlg.SetPingTimeResult ( iPingTime,
+                                              iOverallDelayMs,
+                                              iOverallDelayLEDColor );
+    }
 }
 
 void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
@@ -715,6 +741,10 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
             if ( bStartOk )
             {
                 PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
+
+                // reset ping error counter and timer
+                iErrorStatusCounter = 0;
+                TimerErrorStatus.stop();
 
                 // start timer for level meter bar and ping time measurement
                 TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
@@ -765,11 +795,20 @@ void CLlconClientDlg::UpdateDisplay()
     // show connection status in status bar
     if ( pClient->IsConnected() && pClient->IsRunning() )
     {
-        QString strStatus = tr ( "Connected" );
+        QString strStatus;
+        if ( TimerErrorStatus.isActive() )
+        {
+            // right now we only have one error case: delay too high
+            strStatus = tr ( "<font color=""red""><b>Audio delay too long</b></font>" );
+        }
+        else
+        {
+            strStatus = tr ( "Connected" );
+        }
 
         if ( bUnreadChatMessage )
         {
-            strStatus += ", <b>New Chat</b>";
+            strStatus += ", <b>New chat</b>";
         }
 
         TextLabelStatus->setText ( strStatus );

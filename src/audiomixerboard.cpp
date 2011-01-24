@@ -174,8 +174,9 @@ void CChannelFader::Reset()
 
 void CChannelFader::OnGainValueChanged ( int value )
 {
-    // if mute flag is set, do not apply the new fader value
-    if ( pcbMute->checkState() == Qt::Unchecked )
+    // if mute flag is set or other channel is on solo, do not apply the new
+    // fader value
+    if ( ( pcbMute->checkState() == Qt::Unchecked ) && !bOtherChannelIsSolo )
     {
         // emit signal for new fader gain value
         emit gainValueChanged ( CalcFaderGain ( value ) );
@@ -209,8 +210,11 @@ void CChannelFader::SetMute ( const bool bState )
 void CChannelFader::ResetSoloState()
 {
     // reset solo state -> since solo state means that this channel is not
-    // muted but all others, we simply have to uncheck the check box
+    // muted but all others, we simply have to uncheck the check box (make
+    // sure the setChecked does not fire a signal)
+    pcbSolo->blockSignals ( true );
     pcbSolo->setChecked ( false );
+    pcbSolo->blockSignals ( false );
 }
 
 void CChannelFader::SetOtherSoloState ( const bool bState )
@@ -222,7 +226,11 @@ void CChannelFader::SetOtherSoloState ( const bool bState )
     // our solo state since only one channel can be set to solo
     if ( bState && pcbSolo->isChecked() )
     {
+        // we do not want to fire a signal with the following set function
+        // -> block signals temporarily
+        pcbSolo->blockSignals ( true );
         pcbSolo->setChecked ( false );
+        pcbSolo->blockSignals ( false );
     }
 
     // if other channel is solo, mute this channel, else enable channel gain
@@ -411,7 +419,8 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecCh
     emit NumClientsChanged ( iNumConnectedClients );
 }
 
-void CAudioMixerBoard::OnChSoloStateChanged ( const int iChannelIdx, const int iValue )
+void CAudioMixerBoard::OnChSoloStateChanged ( const int iChannelIdx,
+                                              const int iValue )
 {
     // if channel iChannelIdx has just activated the solo switch, mute all
     // other channels, else enable them again
@@ -430,6 +439,12 @@ void CAudioMixerBoard::OnChSoloStateChanged ( const int iChannelIdx, const int i
             }
         }
     }
+
+    // set "other solo state" always to false for the current fader at which the
+    // status was changed because if solo is enabled, it has to be "false" and
+    // in case solo is just disabled (check was removed by the user), also no
+    // other channel can be solo at this time
+    vecpChanFader[iChannelIdx]->SetOtherSoloState ( false );
 }
 
 QString CAudioMixerBoard::GenFaderText ( CChannelShortInfo& ChanInfo )

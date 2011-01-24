@@ -10,7 +10,7 @@ devenv llcon.sln /clean "Release|Win32"
 devenv llcon.sln /build "Release|Win32"
 
 rem create installer -----------------------------------------------------------
-%NSIS_PATH%\makensis.exe installer.nsi
+"%NSIS_PATH%\makensis.exe" installer.nsi
 
 move llconinstaller.exe ../deploy/llcon-version-installer.exe
 

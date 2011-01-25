@@ -213,7 +213,9 @@ void CChannelFader::ResetSoloState()
     // muted but all others, we simply have to uncheck the check box (make
     // sure the setChecked does not fire a signal)
     pcbSolo->blockSignals ( true );
-    pcbSolo->setChecked ( false );
+    {
+        pcbSolo->setChecked ( false );
+    }
     pcbSolo->blockSignals ( false );
 }
 
@@ -229,7 +231,9 @@ void CChannelFader::SetOtherSoloState ( const bool bState )
         // we do not want to fire a signal with the following set function
         // -> block signals temporarily
         pcbSolo->blockSignals ( true );
-        pcbSolo->setChecked ( false );
+        {
+            pcbSolo->setChecked ( false );
+        }
         pcbSolo->blockSignals ( false );
     }
 

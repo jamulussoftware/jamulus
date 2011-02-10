@@ -567,7 +567,7 @@
         <item>
          <widget class="QLabel" name="TextUpstream" >
           <property name="text" >
-           <string>Upstream Rate</string>
+           <string>Audio Stream Rate</string>
           </property>
          </widget>
         </item>

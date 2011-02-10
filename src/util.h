@@ -32,6 +32,8 @@
 #include <qlabel.h>
 #include <qdatetime.h>
 #include <qfile.h>
+#include <qdesktopservices.h>
+#include <qurl.h>
 #include <vector>
 #include "global.h"
 using namespace std; // because of the library: "vector"
@@ -356,6 +358,8 @@ protected:
 public slots:
     void OnHelpWhatsThis() { QWhatsThis::enterWhatsThisMode(); }
     void OnHelpAbout() { AboutDlg.exec(); }
+    void OnHelpDownloadLink()
+        { QDesktopServices::openUrl ( QUrl ( LLCON_DOWNLOAD_URL ) ); }
 };
 
 

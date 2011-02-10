@@ -408,6 +408,10 @@ CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
         SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
 
     addSeparator();
+    addAction ( tr ( "&Download Link..." ), this,
+        SLOT ( OnHelpDownloadLink() ) );
+
+    addSeparator();
     addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
 }
 

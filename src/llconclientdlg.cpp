@@ -799,7 +799,7 @@ void CLlconClientDlg::UpdateDisplay()
         if ( TimerErrorStatus.isActive() )
         {
             // right now we only have one error case: delay too high
-            strStatus = tr ( "<font color=""red""><b>Audio delay too long</b></font>" );
+            strStatus = tr ( "<font color=""red""><b>Audio delay too large</b></font>" );
         }
         else
         {

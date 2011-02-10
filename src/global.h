@@ -52,6 +52,9 @@
 // default server address
 #define DEFAULT_SERVER_ADDRESS          "llcon.dyndns.org"
 
+// download URL
+#define LLCON_DOWNLOAD_URL              "http://sourceforge.net/projects/llcon/files"
+
 // defined port number for client and server
 #define LLCON_DEFAULT_PORT_NUMBER       22124
 

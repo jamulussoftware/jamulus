@@ -2,6 +2,8 @@
 
 - show warning in main window if audio delay is too long
 
+- added download link in help menu
+
 - bug fix: solo switch did not work correctly
 
 

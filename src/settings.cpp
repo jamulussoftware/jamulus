@@ -32,21 +32,9 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     bool         bValue;
     QDomDocument IniXMLDocument;
 
-    // load data from init-file
-    // prepare file name for loading initialization data from XML file
-    QString sCurFileName = sFileName;
-    if ( sCurFileName.isEmpty() )
-    {
-        // if no file name is available, use default file name
-        sCurFileName =
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
-            QApplication::applicationDirPath() + "/" +
-#endif
-			LLCON_INIT_FILE_NAME;
-    }
-
-    // read data from file if possible
-    QFile file ( sCurFileName );
+    // prepare file name for loading initialization data from XML file and read
+    // data from file if possible
+    QFile file ( GetIniFileNameWithPath ( sFileName ) );
     if ( file.open ( QIODevice::ReadOnly ) )
     {
         QTextStream in ( &file );
@@ -276,25 +264,43 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     SetFlagIniSet ( IniXMLDocument, "client", "stereoaudio",
         pClient->GetUseStereo() );
 
-    // prepare file name for storing initialization data in XML file
-    QString sCurFileName = sFileName;
-    if ( sCurFileName.isEmpty() )
-    {
-        // if no file name is available, use default file name
-        sCurFileName =
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
-		QApplication::applicationDirPath() + "/" +
-#endif
-			LLCON_INIT_FILE_NAME;
-    }
-
-    // store XML data in file
-    QFile file ( sCurFileName );
+    // prepare file name for storing initialization data in XML file and store
+    // XML data in file
+    QFile file ( GetIniFileNameWithPath ( sFileName ) );
     if ( file.open ( QIODevice::WriteOnly ) )
     {
         QTextStream out ( &file );
         out << IniXMLDocument.toString();
     }
+}
+
+QString CSettings::GetIniFileNameWithPath ( const QString& sFileName )
+{
+    // return the file name with complete path, take care if given file name is
+    // empty
+    QString sCurFileName = sFileName;
+    if ( sCurFileName.isEmpty() )
+    {
+        // we use the Qt default setting file paths for the different OSs by
+        // utilizing the QSettings class
+        const QSettings TempSettingsObject (
+            QSettings::IniFormat, QSettings::UserScope, APP_NAME, APP_NAME );
+
+        const QString sConfigDir =
+            QFileInfo ( TempSettingsObject.fileName() ).absolutePath();
+
+        // make sure the directory exists
+        if ( !QFile::exists ( sConfigDir ) )
+        {
+            QDir TempDirectoryObject;
+            TempDirectoryObject.mkpath ( sConfigDir );
+        }
+
+        // append the actual file name
+        sCurFileName = sConfigDir + "/" + DEFAULT_INI_FILE_NAME;
+    }
+
+    return sCurFileName;
 }
 
 void CSettings::SetNumericIniSet ( QDomDocument& xmlFile, const QString& strSection,

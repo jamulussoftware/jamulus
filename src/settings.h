@@ -27,14 +27,11 @@
 
 #include <qdom.h>
 #include <qfile.h>
+#include <qsettings.h>
+#include <qdir.h>
 #include <qtextstream.h>
 #include "global.h"
 #include "client.h"
-
-
-/* Definitions ****************************************************************/
-// name of the init-file
-#define LLCON_INIT_FILE_NAME        "llcon.ini"
 
 
 /* Classes ********************************************************************/
@@ -49,6 +46,8 @@ public:
 protected:
     void ReadIniFile ( const QString& sFileName );
     void WriteIniFile ( const QString& sFileName );
+
+    QString GetIniFileNameWithPath ( const QString& sFileName );
 
     // init file access function for read/write
     void SetNumericIniSet ( QDomDocument& xmlFile, const QString& strSection,

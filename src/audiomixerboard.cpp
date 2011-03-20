@@ -152,13 +152,6 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pFader->setStyleSheet  ( "" );
         pcbMute->setStyleSheet ( "" );
         pcbSolo->setStyleSheet ( "" );
-
-/*
-// TEST
-        pFader->setStyleSheet (
-            "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
-*/
-
         pcbMute->setText       ( "Mute" );
         pcbSolo->setText       ( "Solo" );
         break;
@@ -335,36 +328,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) :
 
 void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
 {
-    // apply GUI design to current window
-    switch ( eNewDesign )
-    {
-    case GD_ORIGINAL:
-/*
-        // group box
-        setStyleSheet (
-            "QGroupBox { border-image:  url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
-            "            border-top:    34px transparent;"
-            "            border-bottom: 40px transparent;"
-            "            border-left:   30px transparent;"
-            "            border-right:  40px transparent;"
-            "            padding:       -5px;"
-            "            margin:        -5px, -5px, 0px, 0px; }"
-            "QGroupBox::title { margin-top:       13px;"
-            "                   margin-left:      35px;"
-            "                   background-color: transparent;"
-            "                   color:            rgb(148, 148, 148); }" );
-        layout()->setMargin ( 3 );
-*/
-        break;
-
-    default:
-        // reset style sheet and set original paramters
-        setStyleSheet ( "" );
-        layout()->setMargin ( 9 );
-        break;
-    }
-
-    // also apply GUI design to child GUI controls
+    // apply GUI design to child GUI controls
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->SetGUIDesign ( eNewDesign );

@@ -823,98 +823,16 @@ void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         border-right:  40px transparent;"
             "                         padding:       -5px;"
             "                         margin:        -5px, -5px, 0px, 0px; }"
-            "QLabel { color: rgb(148, 148, 148);"
-            "         font:  bold; }"
-            "QRadioButton { color: rgb(148, 148, 148);"
-            "               font:  bold; }"
-            "QGroupBox::title { color: rgb(148, 148, 148); }" );
-
-/*
-        // group box
-        groupBoxLocal->setStyleSheet (
-            "QGroupBox { border-image:  url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
-            "            border-top:    34px transparent;"
-            "            border-bottom: 40px transparent;"
-            "            border-left:   30px transparent;"
-            "            border-right:  40px transparent;"
-            "            padding:       -5px;"
-            "            margin:        -5px, -5px, 0px, 0px; }"
-            "QGroupBox::title { margin-top:       13px;"
-            "                   margin-left:      35px;"
-            "                   background-color: transparent;"
-            "                   color:            rgb(148, 148, 148); }" );
-        groupBoxLocal->layout()->setMargin ( 3 );
-*/
-/*
-        // audio fader
-        SliderAudInFader->setStyleSheet (
-            "QSlider { background-image: url(:/png/fader/res/faderbackground.png);"
-            "          width:            45px; }"
-            "QSlider::groove { image: url(); }"
-            "QSlider::handle { image: url(:/png/fader/res/faderhandlesmall.png); }" );
-        TextLabelAudFader->setStyleSheet (
-            "QLabel { color: rgb(148, 148, 148);"
-            "         font:  bold; }" );
-        TextAudInFader->setStyleSheet (
-            "QLabel { color: rgb(148, 148, 148);"
-            "         font:  bold; }" );
-
-        // Reverberation
-        SliderAudReverb->setStyleSheet (
-            "QSlider { background-image: url(:/png/fader/res/faderbackground.png);"
-            "          width:            45px; }"
-            "QSlider::groove { image: url(); }"
-            "QSlider::handle { image: url(:/png/fader/res/faderhandlesmall.png); }" );
-
-        RadioButtonRevSelL->setStyleSheet (
-            "QRadioButton { color: rgb(148, 148, 148);"
-            "               font:  bold; }" );
-        RadioButtonRevSelR->setStyleSheet (
-            "QRadioButton { color: rgb(148, 148, 148);"
-            "               font:  bold; }" );
-
-        TextLabelAudReverb->setStyleSheet (
-            "QLabel { color: rgb(148, 148, 148);"
-            "         font:  bold; }" );
-*/
+            "QLabel {                 color:          rgb(148, 148, 148);"
+            "                         font:           bold; }"
+            "QRadioButton {           color:          rgb(148, 148, 148);"
+            "                         font:           bold; }"
+            "QGroupBox::title {       color:          rgb(148, 148, 148); }" );
          break;
 
     default:
         // reset style sheet and set original paramters
-
-/*
-backgroundFrame->setStyleSheet ( "QFrame#backgroundFrame { border-image: url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
-                      "  border-top:    34px transparent;"
-                      "  border-bottom: 40px transparent;"
-                      "  border-left:   30px transparent;"
-                      "  border-right:  40px transparent;"
-                      "  padding:       -5px;"
-                      "  margin:        -5px, -5px, 0px, 0px; }"
-                      "QLabel { color: rgb(148, 148, 148);"
-                      "     font:  bold; }"
-                      "QRadioButton {color: rgb(148, 148, 148);"
-                      "     font:  bold; }");
-*/
-//        groupBoxLocal->setStyleSheet       ( "" );
-//        groupBoxLocal->layout()->setMargin ( 9 );
-
-
         backgroundFrame->setStyleSheet    ( "" );
-        SliderAudInFader->setStyleSheet   ( "" );
-        SliderAudReverb->setStyleSheet    ( "" );
-        RadioButtonRevSelL->setStyleSheet ( "" );
-        RadioButtonRevSelR->setStyleSheet ( "" );
-        TextLabelAudReverb->setStyleSheet ( "" );
-        TextLabelAudFader->setStyleSheet  ( "" );
-        TextAudInFader->setStyleSheet     ( "" );
-
-/*
-SliderAudInFader->setStyleSheet (
-    "QSlider { background-image: url(:/png/fader/res/faderbackground.png);"
-    "          width:            45px; }"
-    "QSlider::groove { image: url(); }"
-    "QSlider::handle { image: url(:/png/fader/res/faderhandlesmall.png); }" );
-*/
         break;
     }
 

@@ -36,7 +36,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
     strName ( "" ),
     bOpenChatOnNewMessage ( true ),
-    eGUIDesign ( GD_STANDARD ),
+    eGUIDesign ( GD_ORIGINAL ),
     bDoAutoSockBufSize ( true ),
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
 	// we assume on Mac always the preferred frame size works fine

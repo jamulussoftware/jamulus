@@ -56,9 +56,8 @@
 #define CON_BUT_DISCONNECTTEXT      "D&isconnect"
 
 // update time for GUI controls
-#define LEVELMETER_UPDATE_TIME      100  // ms
-#define STATUSBAR_UPDATE_TIME       1000 // ms
-#define ERROR_STATUS_DISPLAY_TIME   3000 // ms
+#define LEVELMETER_UPDATE_TIME      100   // ms
+#define LED_BAR_UPDATE_TIME         1000  // ms
 
 // range for signal level meter
 #define LOW_BOUND_SIG_METER         ( -50.0 ) // dB
@@ -89,11 +88,9 @@ protected:
     CClient*           pClient;
     bool               bConnected;
     bool               bUnreadChatMessage;
-    int                iErrorStatusCounter;
     QTimer             TimerSigMet;
     QTimer             TimerStatus;
     QTimer             TimerPing;
-    QTimer             TimerErrorStatus;
 
     virtual void       customEvent ( QEvent* Event );
     virtual void       closeEvent  ( QCloseEvent* Event );

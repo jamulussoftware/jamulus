@@ -34,7 +34,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     pClient ( pNCliP ),
     QDialog ( parent, f ),
     bUnreadChatMessage ( false ),
-    iErrorStatusCounter ( 0 ),
     ClientSettingsDlg ( pNCliP, parent
 #ifdef _WIN32
                         // this somehow only works reliable on Windows
@@ -74,10 +73,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QString strInpLevHAccText  = tr ( "Input level meter" );
     QString strInpLevHAccDescr = tr ( "Simulates an analog LED level meter." );
 
-    TextLabelInputLevelL->setWhatsThis                    ( strInpLevH );
-    TextLabelInputLevelL->setToolTip                      ( strInpLevHTT );
-    TextLabelInputLevelR->setWhatsThis                    ( strInpLevH );
-    TextLabelInputLevelR->setToolTip                      ( strInpLevHTT );
     MultiColorLEDBarInputLevelL->setWhatsThis             ( strInpLevH );
     MultiColorLEDBarInputLevelL->setAccessibleName        ( strInpLevHAccText );
     MultiColorLEDBarInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );
@@ -102,11 +97,11 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "and disconnecting the llcon software." ) );
 
     // status bar
-    TextLabelStatus->setWhatsThis ( tr ( "<b>Status Bar:</b> In the status bar "
-        "different messages are displayed. E.g., if an error occurred or the "
-        "status of the connection is shown." ) );
+//    TextLabelStatus->setWhatsThis ( tr ( "<b>Status Bar:</b> In the status bar "
+//        "different messages are displayed. E.g., if an error occurred or the "
+//        "status of the connection is shown." ) );
 
-    TextLabelStatus->setAccessibleName ( tr ( "Status bar" ) );
+//    TextLabelStatus->setAccessibleName ( tr ( "Status bar" ) );
 
     // server address
     QString strServAddrH = tr ( "<b>Server Address:</b> The IP address or URL "
@@ -185,9 +180,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     RadioButtonRevSelR->setWhatsThis ( strRevChanSel );
     RadioButtonRevSelR->setAccessibleName ( tr ( "Right channel selection for reverberation" ) );
 
-    // overall status
-    LEDOverallStatus->setWhatsThis ( tr ( "<b>Overall Status:</b> "
-        "The light next to the status bar shows the current audio/streaming "
+    // buffers LED
+    LEDBuffers->setWhatsThis ( tr ( "<b>Buffers Status LED:</b> "
+        "The buffers status LED indicator shows the current audio/streaming "
         "status. If the light is green, there are no buffer overruns/underruns "
         "and the audio stream is not interrupted. If the light is red, the "
         "audio stream is interrupted caused by one of the following problems:"
@@ -201,7 +196,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "<li>The CPU of the client or server is at 100%.</li>"
         "</ul>" ) );
 
-    LEDOverallStatus->setAccessibleName ( tr ( "Overall status LED indicator" ) );
+    LEDBuffers->setAccessibleName ( tr ( "Buffers status LED indicator" ) );
 
 
     // init GUI design
@@ -239,6 +234,12 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     MultiColorLEDBarInputLevelL->setValue ( 0 );
     MultiColorLEDBarInputLevelR->setValue ( 0 );
 
+    // init status LEDs
+    LEDConnection->SetUpdateTime ( 2 * LED_BAR_UPDATE_TIME );
+    LEDChat->SetUpdateTime ( 2 * LED_BAR_UPDATE_TIME );
+    LEDDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME );
+    LEDDelay->Reset();
+
 
     // init slider controls ---
     // audio in fader
@@ -272,7 +273,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     {
         MultiColorLEDBarInputLevelL->setEnabled ( false );
         MultiColorLEDBarInputLevelR->setEnabled ( false );
-        LEDOverallStatus->setEnabled ( false );
+        LEDConnection->setEnabled ( false );
+        LEDBuffers->setEnabled ( false );
+        LEDDelay->setEnabled ( false );
+        LEDChat->setEnabled ( false );
         PushButtonConnect->setFocus();
     }
 
@@ -389,11 +393,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
 
     // Timers ------------------------------------------------------------------
-    // set error status timer to a single shot timer
-    TimerErrorStatus.setSingleShot ( true );
-
     // start timer for status bar
-    TimerStatus.start ( STATUSBAR_UPDATE_TIME );
+    TimerStatus.start ( LED_BAR_UPDATE_TIME );
 }
 
 void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
@@ -553,6 +554,8 @@ void CLlconClientDlg::OnDisconnected()
 {
     // channel is now disconnected, clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
+
+    UpdateDisplay();
 }
 
 void CLlconClientDlg::OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo )
@@ -672,33 +675,16 @@ void CLlconClientDlg::OnPingTimeResult ( int iPingTime )
     if ( iOverallDelayMs <= 40 )
     {
         iOverallDelayLEDColor = MUL_COL_LED_GREEN;
-
-        // reset ping error counter
-        iErrorStatusCounter = 0;
     }
     else
     {
         if ( iOverallDelayMs <= 65 )
         {
             iOverallDelayLEDColor = MUL_COL_LED_YELLOW;
-
-            // reset ping error counter
-            iErrorStatusCounter = 0;
         }
         else
         {
             iOverallDelayLEDColor = MUL_COL_LED_RED;
-
-            iErrorStatusCounter++;
-            if ( iErrorStatusCounter >= NUM_HIGH_PINGS_UNTIL_ERROR )
-            {
-                // delay too long, show error status in main window
-                TimerErrorStatus.start ( ERROR_STATUS_DISPLAY_TIME );
-
-                // avoid integer overrun of error state but keep
-                // error state valid
-                iErrorStatusCounter = NUM_HIGH_PINGS_UNTIL_ERROR;
-            }
         }
     }
 
@@ -711,6 +697,9 @@ void CLlconClientDlg::OnPingTimeResult ( int iPingTime )
                                               iOverallDelayMs,
                                               iOverallDelayLEDColor );
     }
+
+    // update delay LED on the main window
+    LEDDelay->SetLight ( iOverallDelayLEDColor );
 }
 
 void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
@@ -742,10 +731,6 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
             {
                 PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
 
-                // reset ping error counter and timer
-                iErrorStatusCounter = 0;
-                TimerErrorStatus.stop();
-
                 // start timer for level meter bar and ping time measurement
                 TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
                 TimerPing.start ( PING_UPDATE_TIME );
@@ -753,12 +738,8 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
         }
         else
         {
-            // Restart timer to ensure that the text is visible at
-            // least the time for one complete interval
-            TimerStatus.start ( STATUSBAR_UPDATE_TIME );
-
-            // show the error in the status bar
-            TextLabelStatus->setText ( tr ( "Invalid address" ) );
+            // show the error as red light
+            LEDConnection->SetLight ( MUL_COL_LED_RED );
         }
     }
     else
@@ -782,8 +763,18 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
         // stop ping time measurement timer
         TimerPing.stop();
 
-        // immediately update status bar
-        OnTimerStatus();
+
+// TODO is this still required???
+// immediately update status bar
+OnTimerStatus();
+
+// TODO this seems not to work, LEDs are still updated afterwards...
+// reset LEDs
+LEDConnection->Reset();
+LEDBuffers->Reset();
+LEDDelay->Reset();
+LEDChat->Reset();
+
 
         // clear mixer board (remove all faders)
         MainMixerBoard->HideAll();
@@ -792,36 +783,30 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
 
 void CLlconClientDlg::UpdateDisplay()
 {
-    // show connection status in status bar
-    if ( pClient->IsConnected() && pClient->IsRunning() )
+    // update status LEDs
+    if ( pClient->IsRunning() )
     {
-        QString strStatus;
-        if ( TimerErrorStatus.isActive() )
+        if ( pClient->IsConnected() )
         {
-            // right now we only have one error case: delay too high
-            strStatus = tr ( "<font color=""red""><b>Audio delay too large</b></font>" );
+            // chat LED
+            if ( bUnreadChatMessage )
+            {
+                LEDChat->SetLight ( MUL_COL_LED_GREEN );
+            }
+            else
+            {
+                LEDChat->Reset();
+            }
+
+            // connection LED
+            LEDConnection->SetLight ( MUL_COL_LED_GREEN );
         }
         else
         {
-            strStatus = tr ( "Connected" );
+            // connection LED
+            LEDConnection->SetLight ( MUL_COL_LED_RED );
         }
-
-        if ( bUnreadChatMessage )
-        {
-            strStatus += ", <b>New chat</b>";
-        }
-
-        TextLabelStatus->setText ( strStatus );
     }
-    else
-    {
-        TextLabelStatus->setText ( tr ( "Disconnected" ) );
-    }
-
-// TEST
-//TextLabelStatus->setText ( QString( "Time: %1, Netw: %2" ).arg ( pClient->GetTimingStdDev() ).arg ( pClient->GetChannel()->GetTimingStdDev() ) );
-//TextLabelStatus->setText ( QString( "Buf. Err. Rate: %1 %" ).arg ( pClient->GetChannel()->GetJitterBufferErrorRate() * 100.0 ) );
-
 }
 
 void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
@@ -830,6 +815,21 @@ void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
     switch ( eNewDesign )
     {
     case GD_ORIGINAL:
+        backgroundFrame->setStyleSheet (
+            "QFrame#backgroundFrame { border-image:  url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
+            "                         border-top:    34px transparent;"
+            "                         border-bottom: 40px transparent;"
+            "                         border-left:   30px transparent;"
+            "                         border-right:  40px transparent;"
+            "                         padding:       -5px;"
+            "                         margin:        -5px, -5px, 0px, 0px; }"
+            "QLabel { color: rgb(148, 148, 148);"
+            "         font:  bold; }"
+            "QRadioButton { color: rgb(148, 148, 148);"
+            "               font:  bold; }"
+            "QGroupBox::title { color: rgb(148, 148, 148); }" );
+
+/*
         // group box
         groupBoxLocal->setStyleSheet (
             "QGroupBox { border-image:  url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
@@ -844,7 +844,8 @@ void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                   background-color: transparent;"
             "                   color:            rgb(148, 148, 148); }" );
         groupBoxLocal->layout()->setMargin ( 3 );
-
+*/
+/*
         // audio fader
         SliderAudInFader->setStyleSheet (
             "QSlider { background-image: url(:/png/fader/res/faderbackground.png);"
@@ -875,19 +876,45 @@ void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
         TextLabelAudReverb->setStyleSheet (
             "QLabel { color: rgb(148, 148, 148);"
             "         font:  bold; }" );
+*/
          break;
 
     default:
         // reset style sheet and set original paramters
-        groupBoxLocal->setStyleSheet       ( "" );
-        groupBoxLocal->layout()->setMargin ( 9 );
-        SliderAudInFader->setStyleSheet    ( "" );
-        SliderAudReverb->setStyleSheet     ( "" );
-        RadioButtonRevSelL->setStyleSheet  ( "" );
-        RadioButtonRevSelR->setStyleSheet  ( "" );
-        TextLabelAudReverb->setStyleSheet  ( "" );
-        TextLabelAudFader->setStyleSheet   ( "" );
-        TextAudInFader->setStyleSheet      ( "" );
+
+/*
+backgroundFrame->setStyleSheet ( "QFrame#backgroundFrame { border-image: url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
+                      "  border-top:    34px transparent;"
+                      "  border-bottom: 40px transparent;"
+                      "  border-left:   30px transparent;"
+                      "  border-right:  40px transparent;"
+                      "  padding:       -5px;"
+                      "  margin:        -5px, -5px, 0px, 0px; }"
+                      "QLabel { color: rgb(148, 148, 148);"
+                      "     font:  bold; }"
+                      "QRadioButton {color: rgb(148, 148, 148);"
+                      "     font:  bold; }");
+*/
+//        groupBoxLocal->setStyleSheet       ( "" );
+//        groupBoxLocal->layout()->setMargin ( 9 );
+
+
+        backgroundFrame->setStyleSheet    ( "" );
+        SliderAudInFader->setStyleSheet   ( "" );
+        SliderAudReverb->setStyleSheet    ( "" );
+        RadioButtonRevSelL->setStyleSheet ( "" );
+        RadioButtonRevSelR->setStyleSheet ( "" );
+        TextLabelAudReverb->setStyleSheet ( "" );
+        TextLabelAudFader->setStyleSheet  ( "" );
+        TextAudInFader->setStyleSheet     ( "" );
+
+/*
+SliderAudInFader->setStyleSheet (
+    "QSlider { background-image: url(:/png/fader/res/faderbackground.png);"
+    "          width:            45px; }"
+    "QSlider::groove { image: url(); }"
+    "QSlider::handle { image: url(:/png/fader/res/faderhandlesmall.png); }" );
+*/
         break;
     }
 
@@ -908,12 +935,15 @@ void CLlconClientDlg::customEvent ( QEvent* Event )
         case MS_SOUND_OUT:
         case MS_JIT_BUF_PUT:
         case MS_JIT_BUF_GET:
-            // show overall status -> if any LED goes red, this LED will go red
-            LEDOverallStatus->SetLight ( iStatus );
+            // buffer status -> if any buffer goes red, this LED will go red
+            LEDBuffers->SetLight ( iStatus );
             break;
 
         case MS_RESET_ALL:
-            LEDOverallStatus->Reset();
+            LEDConnection->Reset();
+            LEDBuffers->Reset();
+            LEDDelay->Reset();
+            LEDChat->Reset();
             break;
 
         case MS_SET_JIT_BUF_SIZE:

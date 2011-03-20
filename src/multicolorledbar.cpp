@@ -36,21 +36,21 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f )
     iNumLEDs = NUM_STEPS_INP_LEV_METER;
 
     // create layout and set spacing to zero
-    pMainLayout = new QHBoxLayout ( this );
-    pMainLayout->setAlignment ( Qt::AlignVCenter );
+    pMainLayout = new QVBoxLayout ( this );
+    pMainLayout->setAlignment ( Qt::AlignHCenter );
     pMainLayout->setMargin    ( 0 );
     pMainLayout->setSpacing   ( 0 );
 
     // create LEDs
     vecpLEDs.Init ( iNumLEDs );
-    for ( int iLEDIdx = 0; iLEDIdx < iNumLEDs; iLEDIdx++ )
+    for ( int iLEDIdx = iNumLEDs - 1; iLEDIdx >= 0; iLEDIdx-- )
     {
         // create LED object
         vecpLEDs[iLEDIdx] = new cLED ( parent );
 
-        // add LED to layout with spacer (do not add spacer on the left of the
+        // add LED to layout with spacer (do not add spacer on the bottom of the
         // first LED)
-        if ( iLEDIdx > 0 )
+        if ( iLEDIdx < iNumLEDs - 1 )
         {
             pMainLayout->addStretch();
         }
@@ -135,10 +135,10 @@ void CMultiColorLEDBar::setValue ( const int value )
 
 CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
     BitmCubeRoundDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDDisabledSmall.png" ) ),
-    BitmCubeRoundGrey     ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreySmall.png" ) ),
-    BitmCubeRoundGreen    ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDGreenSmall.png" ) ),
-    BitmCubeRoundYellow   ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDYellowSmall.png" ) ),
-    BitmCubeRoundRed      ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDRedSmall.png" ) )
+    BitmCubeRoundGrey     ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreySmall.png" ) ),
+    BitmCubeRoundGreen    ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreenSmall.png" ) ),
+    BitmCubeRoundYellow   ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDYellowSmall.png" ) ),
+    BitmCubeRoundRed      ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDRedSmall.png" ) )
 {
     // create LED label
     pLEDLabel = new QLabel ( "", parent );

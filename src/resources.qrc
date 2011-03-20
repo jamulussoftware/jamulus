@@ -11,6 +11,10 @@
         <file>res/CLEDRedSmall.png</file>
         <file>res/CLEDYellow.png</file>
         <file>res/CLEDYellowSmall.png</file>
+        <file>res/HLEDGreenSmall.png</file>
+        <file>res/HLEDGreySmall.png</file>
+        <file>res/HLEDRedSmall.png</file>
+        <file>res/HLEDYellowSmall.png</file>
         <file>res/VLEDBlack.png</file>
         <file>res/VLEDBlackSmall.png</file>
         <file>res/VLEDDisabledSmall.png</file>
@@ -43,6 +47,8 @@
     </qresource>
     <qresource prefix="/png/main" >
         <file>res/gig.png</file>
+        <file>res/llconfronticon.png</file>
+        <file>res/logopicture.png</file>
         <file>res/mainicon.png</file>
     </qresource>
 </RCC>

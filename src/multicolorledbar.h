@@ -75,7 +75,7 @@ protected:
     void Reset ( const bool bEnabled );
     virtual void changeEvent ( QEvent* curEvent );
 
-    QHBoxLayout*     pMainLayout;
+    QVBoxLayout*     pMainLayout;
 
     int              iNumLEDs;
     CVector<cLED*>   vecpLEDs;

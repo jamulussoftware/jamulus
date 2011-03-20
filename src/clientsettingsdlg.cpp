@@ -279,12 +279,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         cbGUIDesignFancy->setCheckState ( Qt::Checked );
     }
 
-
-// TODO we disable the fancy GUI switch because the new design
-// is not yet finished
-cbGUIDesignFancy->setVisible ( false );
-
-
     // "High Quality Audio" check box
     if ( pClient->GetCELTHighQuality() )
     {

@@ -113,10 +113,9 @@
 #define MAX_NUM_SERVER_ADDR_ITEMS       6
 
 // defines for LED input level meter
-#define NUM_STEPS_INP_LEV_METER         10
-#define YELLOW_BOUND_INP_LEV_METER      7
-#define RED_BOUND_INP_LEV_METER         9
-
+#define NUM_STEPS_INP_LEV_METER         8
+#define RED_BOUND_INP_LEV_METER         7
+#define YELLOW_BOUND_INP_LEV_METER      5
 
 // maximum number of internet connections (channels)
 // if you want to change this paramter, there has to be done code modifications
@@ -128,7 +127,6 @@
 // this parameter can safely be changed from 1 to MAX_NUM_CHANNELS
 // without any other changes in the code
 #define USED_NUM_CHANNELS               6 // used number channels for server
-
 
 // length of the moving average buffer for response time measurement
 #define TIME_MOV_AV_RESPONSE            30 // seconds

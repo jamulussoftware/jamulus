@@ -55,6 +55,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
         "         border-radius:    4px;"
         "         padding:          4px;"
         "         background-color: white;"
+        "         color:            black;"
         "         font:             bold; }" );
 
     // add user controls to grid
@@ -151,6 +152,13 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pFader->setStyleSheet  ( "" );
         pcbMute->setStyleSheet ( "" );
         pcbSolo->setStyleSheet ( "" );
+
+/*
+// TEST
+        pFader->setStyleSheet (
+            "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
+*/
+
         pcbMute->setText       ( "Mute" );
         pcbSolo->setText       ( "Solo" );
         break;
@@ -331,6 +339,7 @@ void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
     switch ( eNewDesign )
     {
     case GD_ORIGINAL:
+/*
         // group box
         setStyleSheet (
             "QGroupBox { border-image:  url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
@@ -345,6 +354,7 @@ void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                   background-color: transparent;"
             "                   color:            rgb(148, 148, 148); }" );
         layout()->setMargin ( 3 );
+*/
         break;
 
     default:

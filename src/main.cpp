@@ -201,6 +201,17 @@ int main ( int argc, char** argv )
     {
         if ( bIsClient )
         {
+
+/*
+// TEST run client and server at the same time
+CServer Server ( strLoggingFileName.c_str(),
+     iPortNumber,
+     strHTMLStatusFileName.c_str(),
+     strHistoryFileName.c_str(),
+     strServerName.c_str() );
+*/
+
+
             // client
             // actual client object
             CClient Client ( iPortNumber );

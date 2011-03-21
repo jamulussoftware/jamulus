@@ -173,12 +173,35 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     RadioButtonRevSelR->setWhatsThis ( strRevChanSel );
     RadioButtonRevSelR->setAccessibleName ( tr ( "Right channel selection for reverberation" ) );
 
+    // connection LED
+    QString strLEDConnection = tr ( "<b>Connection Status LED:</b> "
+        "The connection status LED indicator shows the current connection "
+        "status. If the light is green, a successful connection to the "
+        "server is established. If the light blinks red right after "
+        "pressing the connect button, the server address is invalid. "
+        "If the light turns red and stays red, the connection to the "
+        "server is lost." );
 
+    TextLabelConnection->setWhatsThis ( strLEDConnection );
+    LEDConnection->setWhatsThis       ( strLEDConnection );
 
-// TODO description of all LEDs
+    LEDConnection->setAccessibleName ( tr ( "Connection status LED indicator" ) );
+
+    // delay LED
+    QString strLEDDelay = tr ( "<b>Delay Status LED:</b> "
+        "The delay status LED indicator shows the current audio delay "
+        "status. If the light is green, the delay is perfect for a jam "
+        "session. If the ligth is yellow, a session is still possible but "
+        "it may harder to perform. If the light is red, the delay is too "
+        "long for jamming" );
+
+    TextLabelDelay->setWhatsThis ( strLEDDelay );
+    LEDDelay->setWhatsThis       ( strLEDDelay );
+
+    LEDDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
 
     // buffers LED
-    LEDBuffers->setWhatsThis ( tr ( "<b>Buffers Status LED:</b> "
+    QString strLEDBuffers =  tr ( "<b>Buffers Status LED:</b> "
         "The buffers status LED indicator shows the current audio/streaming "
         "status. If the light is green, there are no buffer overruns/underruns "
         "and the audio stream is not interrupted. If the light is red, the "
@@ -191,20 +214,22 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "<li>The upload or download stream rate is too high for the current "
         "available internet bandwidth.</li>"
         "<li>The CPU of the client or server is at 100%.</li>"
-        "</ul>" ) );
+        "</ul>" );
+
+    TextLabelBuffers->setWhatsThis ( strLEDBuffers );
+    LEDBuffers->setWhatsThis       ( strLEDBuffers );
 
     LEDBuffers->setAccessibleName ( tr ( "Buffers status LED indicator" ) );
 
+    // chat LED
+    QString strLEDChat =  tr ( "<b>Chat Status LED:</b> "
+        "If the option Open Chat on New Message is not activated, this "
+        "status LED will turn green on a new received chat message." );
 
-    // status bar
-//    TextLabelStatus->setWhatsThis ( tr ( "<b>Status Bar:</b> In the status bar "
-//        "different messages are displayed. E.g., if an error occurred or the "
-//        "status of the connection is shown." ) );
+    TextLabelChat->setWhatsThis ( strLEDChat );
+    LEDChat->setWhatsThis       ( strLEDChat );
 
-//    TextLabelStatus->setAccessibleName ( tr ( "Status bar" ) );
-
-
-
+    LEDBuffers->setAccessibleName ( tr ( "Chat status LED indicator" ) );
 
 
     // init GUI design

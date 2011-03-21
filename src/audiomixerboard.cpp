@@ -38,9 +38,6 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pcbSolo   = new QCheckBox ( "Solo",       pNW );
     pLabel    = new QLabel    ( "",           pNW );
 
-    // setup layout
-    pMainGrid->setSpacing ( 2 );
-
     // setup slider
     pFader->setPageStep ( 1 );
     pFader->setTickPosition ( QSlider::TicksBothSides );
@@ -124,8 +121,8 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
 
         // mute button
         pcbMute->setStyleSheet (
-            "QCheckBox::indicator { width:  43px;"
-            "                       height: 24px; }"
+            "QCheckBox::indicator { width:  38px;"
+            "                       height: 21px; }"
             "QCheckBox::indicator:unchecked {"
             "    image: url(:/png/fader/res/ledbuttonnotpressed.png); }"
             "QCheckBox::indicator:checked {"
@@ -136,8 +133,8 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
 
         // solo button
         pcbSolo->setStyleSheet (
-            "QCheckBox::indicator { width:  43px;"
-            "                       height: 24px; }"
+            "QCheckBox::indicator { width:  38px;"
+            "                       height: 21px; }"
             "QCheckBox::indicator:unchecked {"
             "    image: url(:/png/fader/res/ledbuttonnotpressed.png); }"
             "QCheckBox::indicator:checked {"

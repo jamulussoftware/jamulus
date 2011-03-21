@@ -96,13 +96,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "Disconnect, i.e., it implements a toggle functionality for connecting "
         "and disconnecting the llcon software." ) );
 
-    // status bar
-//    TextLabelStatus->setWhatsThis ( tr ( "<b>Status Bar:</b> In the status bar "
-//        "different messages are displayed. E.g., if an error occurred or the "
-//        "status of the connection is shown." ) );
-
-//    TextLabelStatus->setAccessibleName ( tr ( "Status bar" ) );
-
     // server address
     QString strServAddrH = tr ( "<b>Server Address:</b> The IP address or URL "
         "of the server running the llcon server software must be set here. "
@@ -180,6 +173,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     RadioButtonRevSelR->setWhatsThis ( strRevChanSel );
     RadioButtonRevSelR->setAccessibleName ( tr ( "Right channel selection for reverberation" ) );
 
+
+
+// TODO description of all LEDs
+
     // buffers LED
     LEDBuffers->setWhatsThis ( tr ( "<b>Buffers Status LED:</b> "
         "The buffers status LED indicator shows the current audio/streaming "
@@ -197,6 +194,17 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "</ul>" ) );
 
     LEDBuffers->setAccessibleName ( tr ( "Buffers status LED indicator" ) );
+
+
+    // status bar
+//    TextLabelStatus->setWhatsThis ( tr ( "<b>Status Bar:</b> In the status bar "
+//        "different messages are displayed. E.g., if an error occurred or the "
+//        "status of the connection is shown." ) );
+
+//    TextLabelStatus->setAccessibleName ( tr ( "Status bar" ) );
+
+
+
 
 
     // init GUI design

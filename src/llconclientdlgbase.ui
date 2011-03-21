@@ -592,9 +592,7 @@
             <item>
              <widget class="QSlider" name="SliderAudInFader" >
               <property name="styleSheet" >
-               <string>
-
-    QSlider::handle { image: url(res/faderhandlesmall.png); }</string>
+               <string/>
               </property>
               <property name="pageStep" >
                <number>1</number>

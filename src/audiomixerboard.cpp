@@ -279,7 +279,7 @@ double CChannelFader::CalcFaderGain ( const int value )
 /******************************************************************************\
 * CAudioMixerBoard                                                             *
 \******************************************************************************/
-CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags f ) :
+CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     QGroupBox ( parent )
 {
     // set title text and title properties

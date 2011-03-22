@@ -22,32 +22,36 @@
  *
 \******************************************************************************/
 
-llcon
------
+llcon, Internet Jam Session Software
+------------------------------------
 
-Low-Latency Connection / client and server (http://llcon.sourceforge.net)
+llcon, Low-Latency (Internet) Connection tool
+Under the GNU General Public License (GPL)
+http://llcon.sourceforge.net
 
 
 INTRODUCTION:
-The llcon software enables musicians to play together over the internet. The
-way it works is that there must be one server which collects the audio data
-from each client, mixes all together and sends the mix back to each client.
-The minimum internet connection speed at each client must be 256 kbps upstream
-and 1 Mbit downstream. The server software must be located at a server with a
-very fast internet connection (at least 1 Mbps for up- and downstream) and a
-very low ping time. To get satisfactory results, the ping time from the client
-computer to the server should not exceed 30 ms average and the network jitter
-should be as low as 2-5 ms (To get a low ping time on DSL connections, an
-extra option "DSL fast path" should be enabled by your internet provider).
+The llcon software enables musicians to perform real-time jam sessions over
+the internet. There is one server running the llcon server software which
+collects the audio data from each llcon client software, mixes the audio data
+and sends the mix back to each client.
 
-The llcon software package includes both, the server and the client
-functionality which can be selected by using command line arguments.
+The minimum internet connection speed at each client must be 128 kbps for up-
+and downstream. To get satisfactory results, the ping time from the client
+computer to the server should not exceed 40 ms average.
+
+Llcon runs under Windows (ASIO), MacOS (Core Audio) and Linux (Jack). The llcon
+software package includes both, the client and the server functionality which
+can be selected by using command line arguments.
 
 For starting server type ./llcon -s
 
-For test purpose it is possible to run server and client on the same computer. For
-this setup first start the server and then the client. Type in 127.0.0.1 for the
-IP address in the client software.
+The audio is compressed with the CELT audio codec to ensure a low delay and a
+low upload/download rate.
+
+For test purpose it is possible to run server and client on the same computer.
+For this setup first start the server and then the client. Type in 127.0.0.1 for
+the IP address in the client software.
 
 
 EXTERNAL CODE:
@@ -62,8 +66,7 @@ source:
 - Audio reverberation code: by Perry R. Cook and Gary P. Scavone, 1995 - 2004
   (taken from "The Synthesis ToolKit in C++ (STK)")
 
-- Some parts are taken from the project "Dream: a PC-based Digital Radio Mondiale
-  (DRM) receiver" written by one of the llcon authors, Volker Fischer:
+- Parts from Dream DRM Receiver by Volker Fischer and Alexander Kurpiers:
   http://drm.sf.net
   
 - Some pixmaps are from Clker.com - vector clip art online,

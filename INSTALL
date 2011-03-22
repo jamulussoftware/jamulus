@@ -41,16 +41,17 @@ Linux:
 Required packages: QT4 (devel packages, too!), Jack (devel packages, too!)
 
 - cd llcon
-- sh bootstrap
-- ./configure
+- qmake llcon.pro
 - make
-- run llcon/linux/llcon
-
-NOTES:
-- if the file "bootstrap" is not available, skip this step
+- run ./llcon
 
 
 Mac:
 ----
 
-TODO: "qmake -spec /usr/local/Qt4.6/mkspecs/macx-g++ -macx -o Makefile llcon.pro"
+- cd llcon
+- qmake -spec /usr/local/Qt4.6/mkspecs/macx-g++ -macx -o Makefile llcon.pro
+- make
+- run ./llcon
+
+NOTE: You may have to adjust the Qt4.x path to your Qt version

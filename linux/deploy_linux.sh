@@ -2,8 +2,7 @@
 cd ..
 
 make distclean
-sh bootstrap
-./configure
+qmake llcon.pro
 make -j2
 make dist
 

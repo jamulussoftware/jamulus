@@ -48,3 +48,9 @@ Required packages: QT4 (devel packages, too!), Jack (devel packages, too!)
 
 NOTES:
 - if the file "bootstrap" is not available, skip this step
+
+
+Mac:
+----
+
+TODO: "qmake -spec /usr/local/Qt4.6/mkspecs/macx-g++ -macx -o Makefile llcon.pro"

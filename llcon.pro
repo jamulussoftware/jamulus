@@ -153,43 +153,53 @@ DISTFILES += AUTHORS \
     libs\celt\README \
     libs\celt\README_LLCON \
     libs\celt\TODO \
+    src/res/CLEDBlack.png \
+    src/res/CLEDBlackSmall.png \
+    src/res/CLEDDisabledSmall.png \
+    src/res/CLEDGreen.png \
+    src/res/CLEDGreenSmall.png \
+    src/res/CLEDGrey.png \
+    src/res/CLEDGreySmall.png \
+    src/res/CLEDRed.png \
+    src/res/CLEDRedSmall.png \
+    src/res/CLEDYellow.png \
+    src/res/CLEDYellowSmall.png \
     src/res/faderbackground.png \
     src/res/faderhandle.png \
     src/res/faderhandlesmall.png \
+    src/res/gig.png \
+    src/res/HLEDGreen.png \
+    src/res/HLEDGreenSmall.png \
+    src/res/HLEDGrey.png \
+    src/res/HLEDGreySmall.png \
+    src/res/HLEDRed.png \
+    src/res/HLEDRedSmall.png \
+    src/res/HLEDYellow.png \
+    src/res/HLEDYellowSmall.png \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
-    src/res/mixerboardbackground.png \
-    src/res/gig.png \
+    src/res/llconfronticon.png \
+    src/res/logopicture.png \
     src/res/mainicon.png \
-    src/res/CLEDBlack.png \
-    src/res/CLEDGrey.png \
-    src/res/CLEDGreen.png \
-    src/res/CLEDYellow.png \
-    src/res/CLEDRed.png \
-    src/res/CLEDDisabledSmall.png \
-    src/res/CLEDBlackSmall.png \
-    src/res/CLEDGreySmall.png \
-    src/res/CLEDGreenSmall.png \
-    src/res/CLEDYellowSmall.png \
-    src/res/CLEDRedSmall.png \
+    src/res/mixerboardbackground.png \
     src/res/VLEDBlack.png \
-    src/res/VLEDGrey.png \
-    src/res/VLEDGreen.png \
-    src/res/VLEDYellow.png \
-    src/res/VLEDRed.png \
-    src/res/VLEDDisabledSmall.png \
     src/res/VLEDBlackSmall.png \
-    src/res/VLEDGreySmall.png \
+    src/res/VLEDDisabledSmall.png \
+    src/res/VLEDGreen.png \
     src/res/VLEDGreenSmall.png \
-    src/res/VLEDYellowSmall.png \
+    src/res/VLEDGrey.png \
+    src/res/VLEDGreySmall.png \
+    src/res/VLEDRed.png \
     src/res/VLEDRedSmall.png \
+    src/res/VLEDYellow.png \
+    src/res/VLEDYellowSmall.png \
     src/res/VRLEDBlack.png \
-    src/res/VRLEDGrey.png \
-    src/res/VRLEDGreen.png \
-    src/res/VRLEDYellow.png \
-    src/res/VRLEDRed.png \
     src/res/VRLEDBlackSmall.png \
-    src/res/VRLEDGreySmall.png \
+    src/res/VRLEDGreen.png \
     src/res/VRLEDGreenSmall.png \
-    src/res/VRLEDYellowSmall.png \
-    src/res/VRLEDRedSmall.png
+    src/res/VRLEDGrey.png \
+    src/res/VRLEDGreySmall.png \
+    src/res/VRLEDRed.png \
+    src/res/VRLEDRedSmall.png \
+    src/res/VRLEDYellow.png \
+    src/res/VRLEDYellowSmall.png

@@ -195,11 +195,14 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "The delay status LED indicator shows the current audio delay "
         "status. If the light is green, the delay is perfect for a jam "
         "session. If the ligth is yellow, a session is still possible but "
-        "it may harder to perform. If the light is red, the delay is too "
-        "long for jamming" );
+        "it may be harder to play. If the light is red, the delay is too "
+        "large for jamming." );
 
     TextLabelDelay->setWhatsThis ( strLEDDelay );
     LEDDelay->setWhatsThis       ( strLEDDelay );
+    LEDDelay->setToolTip ( tr ( "If this LED indicator turns red, "
+        "you will not have much fun using the llcon software." ) +
+        TOOLTIP_COM_END_TEXT );
 
     LEDDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
 

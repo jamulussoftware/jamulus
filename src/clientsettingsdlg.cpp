@@ -217,7 +217,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     TextUpstreamValue->setWhatsThis     ( strConnStats );
     CLEDOverallDelay->setWhatsThis      ( strConnStats );
     CLEDOverallDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-        "you will not have much fun using the llcon software..." ) +
+        "you will not have much fun using the llcon software." ) +
         TOOLTIP_COM_END_TEXT );
 
 

@@ -73,6 +73,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QString strInpLevHAccText  = tr ( "Input level meter" );
     QString strInpLevHAccDescr = tr ( "Simulates an analog LED level meter." );
 
+    TextInputLEDMeter->setWhatsThis                       ( strInpLevH );
+    TextLevelMeterLeft->setWhatsThis                      ( strInpLevH );
+    TextLevelMeterRight->setWhatsThis                     ( strInpLevH );
     MultiColorLEDBarInputLevelL->setWhatsThis             ( strInpLevH );
     MultiColorLEDBarInputLevelL->setAccessibleName        ( strInpLevHAccText );
     MultiColorLEDBarInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );

@@ -667,6 +667,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\serverlist.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\serverlogging.cpp"
 				>
 			</File>
@@ -1508,6 +1512,10 @@
 			</File>
 			<File
 				RelativePath="..\src\server.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\serverlist.h"
 				>
 			</File>
 			<File

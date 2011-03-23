@@ -48,25 +48,26 @@ FORMS += src/llconclientdlgbase.ui \
     src/chatdlgbase.ui \
     src/aboutdlgbase.ui
 
-HEADERS += src/buffer.h \
-    src/global.h \
-    src/socket.h \
+HEADERS += src/audiomixerboard.h \
+    src/buffer.h \
     src/channel.h \
-    src/util.h \
+    src/chatdlg.h \
     src/client.h \
-    src/server.h \
-    src/settings.h \
-    src/protocol.h \
+    src/clientsettingsdlg.h \
+    src/global.h \
+    src/llconclientdlg.h \
+    src/llconserverdlg.h \
     src/multicolorled.h \
     src/multicolorledbar.h \
-    src/audiomixerboard.h \
+    src/protocol.h \
+    src/server.h \
+    src/serverlist.h \
     src/serverlogging.h \
-    src/testbench.h \
+    src/settings.h \
+    src/socket.h \
     src/soundbase.h \
-    src/llconserverdlg.h \
-    src/chatdlg.h \
-    src/llconclientdlg.h \
-    src/clientsettingsdlg.h \
+    src/testbench.h \
+    src/util.h \
     libs/celt/celt.h \
     libs/celt/celt_types.h \
     libs/celt/celt_header.h \
@@ -99,24 +100,25 @@ HEADERS += src/buffer.h \
     libs/celt/stack_alloc.h \
     libs/celt/vq.h
 
-SOURCES += src/buffer.cpp \
-    src/main.cpp \
-    src/socket.cpp \
+SOURCES += src/audiomixerboard.cpp \
+    src/buffer.cpp \
     src/channel.cpp \
-    src/util.cpp \
-    src/llconclientdlg.cpp \
-    src/clientsettingsdlg.cpp \
-    src/llconserverdlg.cpp \
     src/chatdlg.cpp \
     src/client.cpp \
-    src/server.cpp \
-    src/settings.cpp \
-    src/protocol.cpp \
+    src/clientsettingsdlg.cpp \
+    src/llconclientdlg.cpp \
+    src/llconserverdlg.cpp \
+    src/main.cpp \
     src/multicolorled.cpp \
     src/multicolorledbar.cpp \
-    src/audiomixerboard.cpp \
+    src/protocol.cpp \
+    src/server.cpp \
+    src/serverlist.cpp \
     src/serverlogging.cpp \
+    src/settings.cpp \
+    src/socket.cpp \
     src/soundbase.cpp \
+    src/util.cpp \
     libs/celt/bands.c \
     libs/celt/celt.c \
     libs/celt/cwrs.c \
@@ -139,12 +141,12 @@ SOURCES += src/buffer.cpp \
     libs/celt/vq.c
 
 DISTFILES += AUTHORS \
-    COPYING \
-    NEWS \
-    TODO \
-    README \
-    INSTALL \
     ChangeLog \
+    COPYING \
+    INSTALL \
+    NEWS \
+    README \
+    TODO \
     libs\celt\AUTHORS \
     libs\celt\ChangeLog \
     libs\celt\COPYING \

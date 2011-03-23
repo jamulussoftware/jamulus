@@ -43,7 +43,7 @@
 #define PROTMESSID_NET_BLSI_FACTOR            12 // OLD (not used anymore)
 #define PROTMESSID_CHANNEL_GAIN               13 // set channel gain for mix
 #define PROTMESSID_CONN_CLIENTS_LIST          14 // connected client list
-#define PROTMESSID_SERVER_FULL                15 // server full message
+#define PROTMESSID_SERVER_FULL                15 // OLD (not used anymore)
 #define PROTMESSID_REQ_CONN_CLIENTS_LIST      16 // request connected client list
 #define PROTMESSID_CHANNEL_NAME               17 // set channel name for fader tag
 #define PROTMESSID_CHAT_TEXT                  18 // contains a chat text
@@ -52,6 +52,22 @@
 #define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   21 // request properties for network transport
 #define PROTMESSID_DISCONNECTION              22 // disconnection
 #define PROTMESSID_REQ_CHANNEL_NAME           23 // request channel name for fader tag
+
+// message IDs of connection less messages (CLM) -> start at 1000
+
+// TODO implementation of the messages...
+
+#define PROTMESSID_CLM_PING_MS                1001 // for measuring ping time
+#define PROTMESSID_CLM_SERVER_FULL            1002 // server full message
+#define PROTMESSID_CLM_SERVER_LIST            1003 // server list
+#define PROTMESSID_CLM_REQ_SERVER_LIST        1004 // request server list
+#define PROTMESSID_CLM_SEND_EMPTY_MESSAGE     1005 // an empty message shall be send
+#define PROTMESSID_CLM_EMPTY_MESSAGE          1006 // empty message
+#define PROTMESSID_CLM_REGISTER_SERVER        1007 // register server
+#define PROTMESSID_CLM_UNREGISTER_SERVER      1008 // unregister server
+
+
+
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)

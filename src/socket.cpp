@@ -99,7 +99,7 @@ void CSocket::OnDataReceived()
 
         if ( bIsClient )
         {
-            // client
+            // client:
             // check if packet comes from the server we want to connect
             if ( !( pChannel->GetAddress() == RecHostAddr ) )
             {
@@ -124,7 +124,7 @@ void CSocket::OnDataReceived()
         }
         else
         {
-            // server
+            // server:
             if ( pServer->PutData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
             {
                 // this was an audio packet, start server

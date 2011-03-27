@@ -36,7 +36,7 @@ CHistoryGraph::CHistoryGraph() :
     iYAxisEnd         ( 24 ),
     iNumTicksY        ( 5 ),
     iGridFrameOffset  ( 10 ),
-    iGridWidthWeekend ( 3 ), // should be odd value
+    iGridWidthWeekend ( 3 ), // should be an odd value
     iTextOffsetToGrid ( 3 ),
     iXAxisTextHeight  ( 22 ),
     iMarkerSizeNewCon ( 11 ),

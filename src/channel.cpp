@@ -25,7 +25,7 @@
 #include "channel.h"
 
 
-/* Implementation *************************************************************/
+// CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
     bIsServer ( bNIsServer ),
     vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
@@ -545,4 +545,11 @@ int CChannel::GetUploadRateKbps()
     return ( iNetwFrameSize * iNetwFrameSizeFact + 28 /* header */ ) *
         8 /* bits per byte */ *
         SYSTEM_SAMPLE_RATE / iAudioSizeOut / 1000;
+}
+
+
+// CConnectionLessChannel implementation ***************************************
+CConnectionLessChannel::CConnectionLessChannel()
+{
+
 }

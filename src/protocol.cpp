@@ -287,6 +287,19 @@ void CProtocol::CreateAndImmSendAcknMess ( const int& iID,
     emit MessReadyForSending ( vecAcknMessage );
 }
 
+void CProtocol::CreateAndImmSendConLessMessage ( const int               iID,
+                                                 const CVector<uint8_t>& vecData )
+{
+    CVector<uint8_t> vecNewMessage;
+
+    // build complete message (counter per definition=0 for connection less
+    // messages)
+    GenMessageFrame ( vecNewMessage, 0, iID, vecData );
+
+    // immediately send message
+    emit MessReadyForSending ( vecNewMessage );
+}
+
 bool CProtocol::IsProtocolMessage ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytes )
 {
@@ -296,7 +309,11 @@ bool CProtocol::IsProtocolMessage ( const CVector<uint8_t>& vecbyData,
     int              iRecCounter, iRecID;
     CVector<uint8_t> vecData;
 
-    return !ParseMessageFrame ( vecbyData, iNumBytes, iRecCounter, iRecID, vecData );
+    return !ParseMessageFrame ( vecbyData,
+                                iNumBytes,
+                                iRecCounter,
+                                iRecID,
+                                vecData );
 }
 
 bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
@@ -789,7 +806,8 @@ bool CProtocol::EvaluateChatTextMes ( const CVector<uint8_t>& vecData )
     return false; // no error
 }
 
-void CProtocol::CreatePingMes ( const int iMs )
+void CProtocol::CreatePingMes ( const int iMs,
+                                const bool bIsConnectionLess )
 {
     unsigned int iPos = 0; // init position pointer
 
@@ -799,7 +817,15 @@ void CProtocol::CreatePingMes ( const int iMs )
     // byte-by-byte copying of the string data
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iMs ), 4 );
 
-    CreateAndSendMessage ( PROTMESSID_PING_MS, vecData );
+    // distinguish between connection less and with connection transmission
+    if ( bIsConnectionLess )
+    {
+        CreateAndImmSendConLessMessage ( PROTMESSID_CLM_PING_MS, vecData );
+    }
+    else
+    {
+        CreateAndSendMessage ( PROTMESSID_PING_MS, vecData );
+    }
 }
 
 bool CProtocol::EvaluatePingMes ( const CVector<uint8_t>& vecData )

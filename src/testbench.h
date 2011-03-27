@@ -109,7 +109,7 @@ public slots:
             break;
 
         case 7:
-            Protocol.CreatePingMes ( GenRandomIntInRange ( 0, 100000 ) );
+            Protocol.CreatePingMes ( GenRandomIntInRange ( 0, 100000 ), false );
             break;
 
         case 8:

@@ -861,6 +861,12 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
 
         if ( iCurChanID == INVALID_CHANNEL_ID )
         {
+
+
+// TODO at this point we have to check for connection less protocol messages!
+
+
+
             // a new client is calling, look for free channel
             iCurChanID = GetFreeChan();
 

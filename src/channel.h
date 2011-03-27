@@ -119,7 +119,7 @@ public:
     void CreateReqJitBufMes()                             { Protocol.CreateReqJitBufMes(); }
     void CreateReqConnClientsList()                       { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText ) { Protocol.CreateChatTextMes ( strChatText ); }
-    void CreatePingMes ( const int iMs )                  { Protocol.CreatePingMes ( iMs ); }
+    void CreatePingMes ( const int iMs )                  { Protocol.CreatePingMes ( iMs, false ); }
 
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo )
     { 
@@ -189,5 +189,26 @@ signals:
     void ReqNetTranspProps();
     void Disconnected();
 };
+
+
+class CConnectionLessChannel : public QObject
+{
+    Q_OBJECT
+
+public:
+    CConnectionLessChannel();
+    virtual ~CConnectionLessChannel() {}
+
+    void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
+    CHostAddress GetAddress() const { return InetAddr; }
+
+protected:
+    // connection parameters
+    CHostAddress InetAddr;
+
+    // network protocol
+    CProtocol    Protocol;
+};
+
 
 #endif /* !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

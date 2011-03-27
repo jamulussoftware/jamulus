@@ -141,8 +141,10 @@ protected:
 };
 
 
-class CServerList : public QList<CServerListProperties>
+class CServerList : public QList<CServerListProperties>//, public QObject
 {
+//    Q_OBJECT
+
 public:
     CServerList() {}
     virtual ~CServerList() {}

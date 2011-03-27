@@ -53,10 +53,8 @@
 #define PROTMESSID_DISCONNECTION              22 // disconnection
 #define PROTMESSID_REQ_CHANNEL_NAME           23 // request channel name for fader tag
 
-// message IDs of connection less messages (CLM) -> start at 1000
-
-// TODO implementation of the messages...
-
+// message IDs of connection less messages (CLM)
+// DEFINITION -> start at 1000, end at 1999
 #define PROTMESSID_CLM_PING_MS                1001 // for measuring ping time
 #define PROTMESSID_CLM_SERVER_FULL            1002 // server full message
 #define PROTMESSID_CLM_SERVER_LIST            1003 // server list
@@ -65,8 +63,6 @@
 #define PROTMESSID_CLM_EMPTY_MESSAGE          1006 // empty message
 #define PROTMESSID_CLM_REGISTER_SERVER        1007 // register server
 #define PROTMESSID_CLM_UNREGISTER_SERVER      1008 // unregister server
-
-
 
 
 // lengths of message as defined in protocol.cpp file
@@ -96,7 +92,7 @@ public:
     void CreateChanNameMes ( const QString strName );
     void CreateReqChanNameMes();
     void CreateChatTextMes ( const QString strChatText );
-    void CreatePingMes ( const int iMs );
+    void CreatePingMes ( const int iMs, const bool bIsConnectionLess );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
     void CreateReqNetwTranspPropsMes();
 
@@ -160,6 +156,9 @@ protected:
     void SendMessage();
 
     void CreateAndSendMessage ( const int iID, const CVector<uint8_t>& vecData );
+
+    void CreateAndImmSendConLessMessage ( const int iID,
+                                          const CVector<uint8_t>& vecData );
 
     bool EvaluateJitBufMes             ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();

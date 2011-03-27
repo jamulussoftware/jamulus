@@ -97,10 +97,14 @@ public:
     void CreateReqNetwTranspPropsMes();
 
     void CreateAndImmSendDisconnectionMes();
+    void CreateAndImmSendServerFullMes();
     void CreateAndImmSendAcknMess ( const int& iID, const int& iCnt );
 
     bool ParseMessage ( const CVector<uint8_t>& vecbyData,
                         const int iNumBytes );
+
+    bool ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
+                                      const int               iNumBytes );
 
     bool IsProtocolMessage ( const CVector<uint8_t>& vecbyData,
                              const int               iNumBytes );

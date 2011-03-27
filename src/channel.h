@@ -202,6 +202,14 @@ public:
     void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
     CHostAddress GetAddress() const { return InetAddr; }
 
+    bool ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
+                                      const int               iNumBytes )
+    {
+        return Protocol.ParseConnectionLessMessage ( vecbyData, iNumBytes );
+    }
+
+    void CreateAndImmSendServerFullMes() { Protocol.CreateAndImmSendServerFullMes(); }
+
 protected:
     // connection parameters
     CHostAddress InetAddr;

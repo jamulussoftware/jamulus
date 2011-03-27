@@ -408,10 +408,6 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     bRet = EvaluateReqJitBufMes();
                     break;
 
-                case PROTMESSID_SERVER_FULL:
-                    bRet = EvaluateServerFullMes();
-                    break;
-
                 case PROTMESSID_CHANNEL_GAIN:
                     bRet = EvaluateChanGainMes ( vecData );
                     break;
@@ -471,6 +467,69 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
     return bRet;
 }
 
+bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
+                                             const int               iNumBytes )
+{
+/*
+    return code: false -> ok; true -> error
+*/
+    bool             bRet = false;
+    int              iRecCounter, iRecID;
+    CVector<uint8_t> vecData;
+
+    if ( !ParseMessageFrame ( vecbyData, iNumBytes, iRecCounter, iRecID, vecData ) )
+    {
+        if ( IsConnectionLessMessageID ( iRecID ) )
+        {
+            // check which type of message we received and do action
+            switch ( iRecID ) 
+            {
+            case PROTMESSID_CLM_PING_MS:
+                bRet = EvaluatePingMes ( vecData );
+                break;
+
+            case PROTMESSID_CLM_SERVER_FULL:
+                bRet = EvaluateServerFullMes();
+                break;
+
+            case PROTMESSID_CLM_SERVER_LIST:
+// TODO
+                break;
+
+            case PROTMESSID_CLM_REQ_SERVER_LIST:
+// TODO
+                break;
+
+            case PROTMESSID_CLM_SEND_EMPTY_MESSAGE:
+// TODO
+                break;
+
+            case PROTMESSID_CLM_EMPTY_MESSAGE:
+// TODO
+                break;
+
+            case PROTMESSID_CLM_REGISTER_SERVER:
+// TODO
+                break;
+
+            case PROTMESSID_CLM_UNREGISTER_SERVER:
+// TODO
+                break;
+            }
+        }
+        else
+        {
+            bRet = true; // return error code
+        }
+    }
+    else
+    {
+        bRet = true; // return error code
+    }
+
+    return bRet;
+}
+
 
 // Access-functions for creating and parsing messages --------------------------
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )
@@ -512,7 +571,8 @@ bool CProtocol::EvaluateJitBufMes ( const CVector<uint8_t>& vecData )
 
 void CProtocol::CreateReqJitBufMes()
 {
-    CreateAndSendMessage ( PROTMESSID_REQ_JITT_BUF_SIZE, CVector<uint8_t> ( 0 ) );
+    CreateAndSendMessage ( PROTMESSID_REQ_JITT_BUF_SIZE,
+                           CVector<uint8_t> ( 0 ) );
 }
 
 bool CProtocol::EvaluateReqJitBufMes()
@@ -526,14 +586,6 @@ bool CProtocol::EvaluateReqJitBufMes()
 void CProtocol::CreateServerFullMes()
 {
     CreateAndSendMessage ( PROTMESSID_SERVER_FULL, CVector<uint8_t> ( 0 ) );
-}
-
-bool CProtocol::EvaluateServerFullMes()
-{
-    // invoke message action
-    emit ServerFull();
-
-    return false; // no error
 }
 
 void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
@@ -1018,6 +1070,22 @@ bool CProtocol::EvaluateDisconnectionMes()
 {
     // invoke message action
     emit Disconnection();
+
+    return false; // no error
+}
+
+
+// Connection less messages ----------------------------------------------------
+void CProtocol::CreateAndImmSendServerFullMes()
+{
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SERVER_FULL,
+                                     CVector<uint8_t> ( 0 ) );
+}
+
+bool CProtocol::EvaluateServerFullMes()
+{
+    // invoke message action
+    emit ServerFull();
 
     return false; // no error
 }

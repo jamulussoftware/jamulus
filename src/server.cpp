@@ -861,47 +861,49 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
 
         if ( iCurChanID == INVALID_CHANNEL_ID )
         {
+            // this is a new client, we then first check if this is a connection
+            // less message before we create a new official channel (note that
+            // we have to set the internet address first, before we parse the
+            // connection less message!)
+            ConnLessChannel.SetAddress ( HostAdr );
 
-
-// TODO at this point we have to check for connection less protocol messages!
-
-
-
-            // a new client is calling, look for free channel
-            iCurChanID = GetFreeChan();
-
-            if ( iCurChanID != INVALID_CHANNEL_ID )
+            if ( ConnLessChannel.ParseConnectionLessMessage ( vecbyRecBuf,
+                                                              iNumBytesRead ) )
             {
-                // initialize current channel by storing the calling host
-                // address
-                vecChannels[iCurChanID].SetAddress ( HostAdr );
+                // a new client is calling, look for free channel
+                iCurChanID = GetFreeChan();
 
-                // reset channel name
-                vecChannels[iCurChanID].ResetName();
-
-                // reset the channel gains of current channel, at the same
-                // time reset gains of this channel ID for all other channels
-                for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+                if ( iCurChanID != INVALID_CHANNEL_ID )
                 {
-                    vecChannels[iCurChanID].SetGain ( i, (double) 1.0 );
+                    // initialize current channel by storing the calling host
+                    // address
+                    vecChannels[iCurChanID].SetAddress ( HostAdr );
 
-                    // other channels (we do not distinguish the case if
-                    // i == iCurChanID for simplicity)
-                    vecChannels[i].SetGain ( iCurChanID, (double) 1.0 );
+                    // reset channel name
+                    vecChannels[iCurChanID].ResetName();
+
+                    // reset the channel gains of current channel, at the same
+                    // time reset gains of this channel ID for all other channels
+                    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+                    {
+                        vecChannels[iCurChanID].SetGain ( i, (double) 1.0 );
+
+                        // other channels (we do not distinguish the case if
+                        // i == iCurChanID for simplicity)
+                        vecChannels[i].SetGain ( iCurChanID, (double) 1.0 );
+                    }
+
+                    // set flag for new reserved channel
+                    bNewChannelReserved = true;
                 }
+                else
+                {
+                    // no free channel available
+                    bChanOK = false;
 
-                // set flag for new reserved channel
-                bNewChannelReserved = true;
-            }
-            else
-            {
-                // no free channel available
-                bChanOK = false;
-
-                // create and send "server full" message
-
-// TODO problem: if channel is not officially connected, we cannot send messages
-
+                    // create and send "server full" message
+                    ConnLessChannel.CreateAndImmSendServerFullMes();
+                }
             }
         }
 

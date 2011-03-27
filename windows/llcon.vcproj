@@ -477,6 +477,10 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\connectdlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\llconclientdlg.cpp"
 				>
 				<FileConfiguration
@@ -953,6 +957,10 @@
 							PreprocessorDefinitions=""
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\moc\moc_connectdlg.cpp"
+					>
 				</File>
 				<File
 					RelativePath="moc\moc_llconclientdlg.cpp"
@@ -1488,6 +1496,10 @@
 			</File>
 			<File
 				RelativePath="..\src\clientsettingsdlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\connectdlg.h"
 				>
 			</File>
 			<File

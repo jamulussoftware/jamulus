@@ -35,6 +35,7 @@ rem .h --------------
 %qtdir%\bin\moc.exe ..\src\clientsettingsdlg.h -o moc\moc_clientsettingsdlg.cpp
 %qtdir%\bin\moc.exe ..\src\llconserverdlg.h -o moc\moc_llconserverdlg.cpp
 %qtdir%\bin\moc.exe ..\src\chatdlg.h -o moc\moc_chatdlg.cpp
+%qtdir%\bin\moc.exe ..\src\connectdlg.h -o moc\moc_connectdlg.cpp
 %qtdir%\bin\moc.exe ..\src\server.h -o moc\moc_server.cpp
 %qtdir%\bin\moc.exe ..\src\client.h -o moc\moc_client.cpp
 %qtdir%\bin\moc.exe ..\src\socket.h -o moc\moc_socket.cpp
@@ -53,6 +54,7 @@ rem .ui -------------
 %qtdir%\bin\uic.exe ..\src\clientsettingsdlgbase.ui -o moc\clientsettingsdlgbase.h
 %qtdir%\bin\uic.exe ..\src\llconserverdlgbase.ui -o moc\llconserverdlgbase.h
 %qtdir%\bin\uic.exe ..\src\chatdlgbase.ui -o moc\chatdlgbase.h
+%qtdir%\bin\uic.exe ..\src\connectdlgbase.ui -o moc\connectdlgbase.h
 
 
 rem .qrc ------------

@@ -46,6 +46,7 @@ FORMS += src/llconclientdlgbase.ui \
     src/llconserverdlgbase.ui \
     src/clientsettingsdlgbase.ui \
     src/chatdlgbase.ui \
+    src/connectdlgbase.ui \
     src/aboutdlgbase.ui
 
 HEADERS += src/audiomixerboard.h \
@@ -54,6 +55,7 @@ HEADERS += src/audiomixerboard.h \
     src/chatdlg.h \
     src/client.h \
     src/clientsettingsdlg.h \
+    src/connectdlg.h \
     src/global.h \
     src/llconclientdlg.h \
     src/llconserverdlg.h \
@@ -106,6 +108,7 @@ SOURCES += src/audiomixerboard.cpp \
     src/chatdlg.cpp \
     src/client.cpp \
     src/clientsettingsdlg.cpp \
+    src/connectdlg.cpp \
     src/llconclientdlg.cpp \
     src/llconserverdlg.cpp \
     src/main.cpp \

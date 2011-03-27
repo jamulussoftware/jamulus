@@ -27,9 +27,9 @@
 
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
-    bIsServer ( bNIsServer ),
     vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
     bIsEnabled ( false ),
+    bIsServer ( bNIsServer ),
     iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_DEFAULT ),
     iNetwFrameSize ( 20 ), // must be > 0 and should be close to a valid size
     iNumAudioChannels ( 1 ) // mono

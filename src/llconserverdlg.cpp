@@ -27,7 +27,7 @@
 
 /* Implementation *************************************************************/
 CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
-    : pServer ( pNServP ), QDialog ( parent )
+    : QDialog ( parent ), pServer ( pNServP )
 {
     setupUi ( this );
 

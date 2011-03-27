@@ -149,33 +149,34 @@ protected:
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
-    CChannel            vecChannels[MAX_NUM_CHANNELS];
-    QMutex              Mutex;
+    CChannel               vecChannels[MAX_NUM_CHANNELS];
+    CConnectionLessChannel ConnLessChannel;
+    QMutex                 Mutex;
 
     // audio encoder/decoder
-    CELTMode*           CeltModeMono[MAX_NUM_CHANNELS];
-    CELTEncoder*        CeltEncoderMono[MAX_NUM_CHANNELS];
-    CELTDecoder*        CeltDecoderMono[MAX_NUM_CHANNELS];
-    CELTMode*           CeltModeStereo[MAX_NUM_CHANNELS];
-    CELTEncoder*        CeltEncoderStereo[MAX_NUM_CHANNELS];
-    CELTDecoder*        CeltDecoderStereo[MAX_NUM_CHANNELS];
+    CELTMode*              CeltModeMono[MAX_NUM_CHANNELS];
+    CELTEncoder*           CeltEncoderMono[MAX_NUM_CHANNELS];
+    CELTDecoder*           CeltDecoderMono[MAX_NUM_CHANNELS];
+    CELTMode*              CeltModeStereo[MAX_NUM_CHANNELS];
+    CELTEncoder*           CeltEncoderStereo[MAX_NUM_CHANNELS];
+    CELTDecoder*           CeltDecoderStereo[MAX_NUM_CHANNELS];
 
-    CVector<QString>    vstrChatColors;
+    CVector<QString>       vstrChatColors;
 
     // actual working objects
-    CSocket             Socket;
-    CCycleTimeVariance  CycleTimeVariance;
+    CSocket                Socket;
+    CCycleTimeVariance     CycleTimeVariance;
 
     // logging
-    CServerLogging      Logging;
+    CServerLogging         Logging;
 
     // HTML file server status
-    bool                bWriteStatusHTMLFile;
-    QString             strServerHTMLFileListName;
-    QString             strServerNameWithPort;
+    bool                   bWriteStatusHTMLFile;
+    QString                strServerHTMLFileListName;
+    QString                strServerNameWithPort;
 
-    CHighPrecisionTimer HighPrecisionTimer;
-    CVector<short>      vecsSendData;
+    CHighPrecisionTimer    HighPrecisionTimer;
+    CVector<short>         vecsSendData;
 
 public slots:
     void OnTimer();

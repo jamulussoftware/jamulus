@@ -70,36 +70,43 @@ protected:
     void AddMarker ( const SHistoryData& curHistoryData );
     void Save ( const QString sFileName );
 
-    bool    bDoHistory;
-    int     iYAxisStart;
-    int     iYAxisEnd;
-    int     iNumTicksX;
-    int     iNumTicksY;
-    int     iGridFrameOffset;
-    int     iGridWidthWeekend;
-    int     iTextOffsetToGrid;
-    int     iTextOffsetX;
-    int     iXAxisTextHeight;
-    int     iMarkerSizeNewCon;
-    int     iMarkerSizeServSt;
-    double  dXSpace;
-    int     iYSpace;
-    QFont   AxisFont;
-    QColor  PlotBackgroundColor;
-    QColor  PlotFrameColor;
-    QColor  PlotGridColor;
-    QColor  PlotTextColor;
-    QColor  PlotMarkerNewColor;
-    QColor  PlotMarkerNewLocalColor;
-    QColor  PlotMarkerStopColor;
-    QDate   curDate;
-    QImage  PlotPixmap;
-    QRect   PlotCanvasRect;
-    QRect   PlotGridFrame;
     QString sFileName;
-    QTimer  TimerDailyUpdate;
 
+    bool                bDoHistory;
     CFIFO<SHistoryData> vHistoryDataFifo;
+
+    QRect               PlotCanvasRect;
+
+    int                 iNumTicksX;
+    int                 iYAxisStart;
+    int                 iYAxisEnd;
+    int                 iNumTicksY;
+    int                 iGridFrameOffset;
+    int                 iGridWidthWeekend;
+    int                 iTextOffsetToGrid;
+    int                 iXAxisTextHeight;
+    int                 iMarkerSizeNewCon;
+    int                 iMarkerSizeServSt;
+	
+    QFont               AxisFont;
+    int                 iTextOffsetX;
+
+    QColor              PlotBackgroundColor;
+    QColor              PlotFrameColor;
+    QColor              PlotGridColor;
+    QColor              PlotTextColor;
+    QColor              PlotMarkerNewColor;
+    QColor              PlotMarkerNewLocalColor;
+    QColor              PlotMarkerStopColor;
+
+    QImage              PlotPixmap;
+
+    double              dXSpace;
+    int                 iYSpace;
+
+    QDate               curDate;
+    QRect               PlotGridFrame;
+    QTimer              TimerDailyUpdate;
 
 public slots:
     void OnTimerDailyUpdate() { Update(); }

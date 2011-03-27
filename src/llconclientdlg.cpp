@@ -31,8 +31,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
                                    const bool      bNewDisalbeLEDs,
                                    QWidget*        parent,
                                    Qt::WindowFlags f ) :
-    pClient ( pNCliP ),
     QDialog ( parent, f ),
+    pClient ( pNCliP ),
     bUnreadChatMessage ( false ),
     ClientSettingsDlg ( pNCliP, parent
 #ifdef _WIN32

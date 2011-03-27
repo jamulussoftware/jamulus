@@ -27,7 +27,7 @@
 
 /* Implementation *************************************************************/
 CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
-    Qt::WindowFlags f ) : pClient ( pNCliP ), QDialog ( parent, f )
+    Qt::WindowFlags f ) : QDialog ( parent, f ), pClient ( pNCliP )
 {
     setupUi ( this );
 

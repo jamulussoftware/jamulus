@@ -120,6 +120,10 @@ void CSocket::OnDataReceived()
             case PS_PROT_ERR:
                 PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW );
                 break;
+
+            default:
+                // other put data states need not to be considered here
+                break;
             }
         }
         else

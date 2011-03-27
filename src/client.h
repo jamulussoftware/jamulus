@@ -217,8 +217,8 @@ public:
     CChannel* GetChannel() { return &Channel; }
 
     // settings
-    CVector<QString>        vstrIPAddress;
-    QString                 strName;
+    CVector<QString> vstrIPAddress;
+    QString          strName;
 
 #ifdef LLCON_VST_PLUGIN
     // VST version must have direct access to sound object

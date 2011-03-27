@@ -27,17 +27,18 @@
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16 iPortNumber ) :
-    Channel ( false ), /* we need a client channel -> "false" */
-    Sound ( AudioCallback, this ),
-    Socket ( &Channel, iPortNumber ),
-    iAudioInFader ( AUD_FADER_IN_MIDDLE ),
-    iReverbLevel ( 0 ),
-    bReverbOnLeftChan ( false ),
     vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
     strName ( "" ),
-    bOpenChatOnNewMessage ( true ),
-    eGUIDesign ( GD_ORIGINAL ),
+    Channel ( false ), /* we need a client channel -> "false" */
     bDoAutoSockBufSize ( true ),
+    iCeltNumCodedBytes ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
+    bCeltDoHighQuality ( false ),
+    bUseStereo ( false ),
+    Socket ( &Channel, iPortNumber ),
+    Sound ( AudioCallback, this ),
+    iAudioInFader ( AUD_FADER_IN_MIDDLE ),
+    bReverbOnLeftChan ( false ),
+    iReverbLevel ( 0 ),
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
 	// we assume on Mac always the preferred frame size works fine
     iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED ),
@@ -47,14 +48,13 @@ CClient::CClient ( const quint16 iPortNumber ) :
 	iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
 	iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
 #endif
+    bSndCrdConversionBufferRequired ( false ),
+    iSndCardMonoBlockSizeSamConvBuff ( 0 ),
     bFraSiFactPrefSupported ( false ),
     bFraSiFactDefSupported ( false ),
     bFraSiFactSafeSupported ( false ),
-    iCeltNumCodedBytes ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
-    bCeltDoHighQuality ( false ),
-    bUseStereo ( false ),
-    bSndCrdConversionBufferRequired ( false ),
-    iSndCardMonoBlockSizeSamConvBuff ( 0 )
+    bOpenChatOnNewMessage ( true ),
+    eGUIDesign ( GD_ORIGINAL )
 {
     // init audio encoder/decoder (mono)
     CeltModeMono = celt_mode_create (

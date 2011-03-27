@@ -335,6 +335,19 @@ bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
 if ( rand() < ( RAND_MAX / 2 ) ) return false;
 */
 
+        // in case this is a connection less message, we do not process it here
+        if ( IsConnectionLessMessageID ( iRecID ) )
+        {
+
+
+// TODO fire signal so that an other class can process this type of message
+
+
+            // return function without issuing an error code (since it is a
+            // regular message but will just not processed here)
+            return false;
+        }
+
         // In case we received a message and returned an answer but our answer
         // did not make it to the receiver, he will resend his message. We check
         // here if the message is the same as the old one, and if this is the

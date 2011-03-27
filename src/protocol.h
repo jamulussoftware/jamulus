@@ -54,7 +54,7 @@
 #define PROTMESSID_REQ_CHANNEL_NAME           23 // request channel name for fader tag
 
 // message IDs of connection less messages (CLM)
-// DEFINITION -> start at 1000, end at 1999
+// DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
 #define PROTMESSID_CLM_PING_MS                1001 // for measuring ping time
 #define PROTMESSID_CLM_SERVER_FULL            1002 // server full message
 #define PROTMESSID_CLM_SERVER_LIST            1003 // server list
@@ -152,6 +152,9 @@ protected:
     uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
                                 unsigned int& iPos,
                                 const unsigned int iNumOfBytes );
+
+    bool IsConnectionLessMessageID ( const int iID ) const
+        { return (iID >= 1000) & (iID < 2000); }
 
     void SendMessage();
 

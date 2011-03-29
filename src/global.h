@@ -128,6 +128,9 @@
 // without any other changes in the code
 #define USED_NUM_CHANNELS               6 // used number channels for server
 
+// defines the time interval at which the ping time is updated in the GUI
+#define PING_UPDATE_TIME                500 // ms
+
 // length of the moving average buffer for response time measurement
 #define TIME_MOV_AV_RESPONSE            30 // seconds
 

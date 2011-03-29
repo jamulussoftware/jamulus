@@ -45,7 +45,16 @@ class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
     Q_OBJECT
 
 public:
+    CConnectDlg ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
 protected:
+    QTimer TimerPing;
 
+    virtual void showEvent ( QShowEvent* );
+    virtual void hideEvent ( QHideEvent* );
+
+    void OnPingTimeResult ( int iPingTime );
+
+public slots:
+    void OnTimerPing();
 };

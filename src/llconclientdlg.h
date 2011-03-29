@@ -39,6 +39,7 @@
 #include "audiomixerboard.h"
 #include "clientsettingsdlg.h"
 #include "chatdlg.h"
+#include "connectdlg.h"
 #ifdef _WIN32
 # include "../windows/moc/llconclientdlgbase.h"
 #else
@@ -101,6 +102,7 @@ protected:
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
+    CConnectDlg        ConnectDlg;
 
 public slots:
     void OnConnectDisconBut();

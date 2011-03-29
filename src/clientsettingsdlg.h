@@ -51,7 +51,6 @@
 /* Definitions ****************************************************************/
 // update time for GUI controls
 #define DISPLAY_UPDATE_TIME         1000 // ms
-#define PING_UPDATE_TIME            500  // ms
 
 
 /* Classes ********************************************************************/

@@ -105,8 +105,8 @@ class CMultColLEDListViewItem : public CMultiColorLED
     Q_OBJECT
 
 public:
-    CMultColLEDListViewItem ( const int iNewCol ) : pListViewItem ( NULL ),
-        iColumn ( iNewCol ) {}
+    CMultColLEDListViewItem ( const int iNewCol )
+        : pListViewItem ( NULL ), iColumn ( iNewCol ) {}
 
     void SetListViewItemPointer ( QTreeWidgetItem* pNewListViewItem )
     {
@@ -131,8 +131,8 @@ protected:
 class CServerListViewItem : public QTreeWidgetItem
 {
 public:
-    CServerListViewItem ( QTreeWidget* parent ) : QTreeWidgetItem ( parent ),
-        LED0 ( 2 ), LED1 ( 3 )
+    CServerListViewItem ( QTreeWidget* parent )
+        : QTreeWidgetItem ( parent ), LED0 ( 2 ), LED1 ( 3 )
     {
         LED0.SetListViewItemPointer ( this );
         LED1.SetListViewItemPointer ( this );
@@ -142,13 +142,36 @@ public:
     {
         switch ( iWhichLED )
         {
-        case 0: LED0.SetLight ( iNewStatus ); break;
-        case 1: LED1.SetLight ( iNewStatus ); break;
+        case 0:
+            LED0.SetLight ( iNewStatus );
+            break;
+
+        case 1:
+            LED1.SetLight ( iNewStatus );
+            break;
         }
     }
 
 protected:
     CMultColLEDListViewItem LED0, LED1;
+};
+
+
+class CConnectionServerListViewItem : public QTreeWidgetItem
+{
+public:
+    CConnectionServerListViewItem ( QTreeWidget* parent )
+        : QTreeWidgetItem ( parent ), LED ( 4 )
+    {
+        LED.SetListViewItemPointer ( this );
+    }
+
+    void Reset() { LED.Reset(); }
+    void SetUpdateTime ( const int iNUTi ) { LED.SetUpdateTime ( iNUTi ); }
+    void SetLight ( int iNewStatus ) { LED.SetLight ( iNewStatus ); }
+
+protected:
+    CMultColLEDListViewItem LED;
 };
 
 #endif // _MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_

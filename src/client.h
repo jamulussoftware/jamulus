@@ -236,6 +236,7 @@ protected:
 
     // only one channel is needed for client application
     CChannel                Channel;
+    CConnectionLessChannel  ConnLessChannel;
     bool                    bDoAutoSockBufSize;
 
     // audio encoder/decoder

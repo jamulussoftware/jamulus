@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
-    <height>350</height>
+    <width>569</width>
+    <height>355</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -29,22 +29,22 @@
      </property>
      <column>
       <property name="text" >
-       <string>Server IP : Port</string>
+       <string>Server Name</string>
       </property>
      </column>
      <column>
       <property name="text" >
-       <string>Name</string>
+       <string>Country</string>
       </property>
      </column>
      <column>
       <property name="text" >
-       <string>Ping Time</string>
+       <string>Clients</string>
       </property>
      </column>
      <column>
       <property name="text" >
-       <string>Ping Status</string>
+       <string>Ping Time/ms</string>
       </property>
      </column>
     </widget>

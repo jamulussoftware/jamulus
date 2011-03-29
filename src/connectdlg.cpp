@@ -26,3 +26,57 @@
 
 
 /* Implementation *************************************************************/
+CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f ) :
+    QDialog ( parent, f )
+{
+    setupUi ( this );
+
+
+    // add help text to controls -----------------------------------------------
+
+// TODO
+
+
+    // set up list view for connected clients
+    ListViewServers->setColumnWidth ( 0, 170 );
+    ListViewServers->setColumnWidth ( 1, 130 );
+    ListViewServers->setColumnWidth ( 2, 55 );
+    ListViewServers->setColumnWidth ( 3, 80 );
+    ListViewServers->clear();
+
+
+//TextLabelPingTime->setText ( "" );
+
+
+    // Connections -------------------------------------------------------------
+    // timers
+    QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerPing() ) );
+}
+
+void CConnectDlg::showEvent ( QShowEvent* )
+{
+    // only activate ping timer if window is actually shown
+    TimerPing.start ( PING_UPDATE_TIME );
+
+//    UpdateDisplay();
+}
+	
+void CConnectDlg::hideEvent ( QHideEvent* )
+{
+    // if window is closed, stop timer for ping
+    TimerPing.stop();
+}
+
+void CConnectDlg::OnTimerPing()
+{
+    // send ping message to server
+//    pClient->SendPingMess();
+}
+
+void CConnectDlg::OnPingTimeResult ( int iPingTime )
+{
+
+// TODO
+//    TextLabelPingTime->setText ( sErrorText );
+}

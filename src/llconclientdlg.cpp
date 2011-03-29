@@ -45,7 +45,13 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
               // this somehow only works reliable on Windows
               , Qt::WindowMinMaxButtonsHint
 #endif
-            )
+            ),
+    ConnectDlg ( parent
+#ifdef _WIN32
+                 // this somehow only works reliable on Windows
+                 , Qt::WindowMinMaxButtonsHint
+#endif
+               )
 {
     setupUi ( this );
 
@@ -434,12 +440,18 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // Timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start ( LED_BAR_UPDATE_TIME );
+
+
+// TEST
+ConnectDlg.show();
+
 }
 
 void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
 {
-    // if settings dialog or chat dialog is open, close it
+    // if settings/connect dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
+    ConnectDlg.close();
     ChatDlg.close();
 
     // if connected, terminate connection

@@ -551,5 +551,5 @@ int CChannel::GetUploadRateKbps()
 // CConnectionLessChannel implementation ***************************************
 CConnectionLessChannel::CConnectionLessChannel()
 {
-
+    // TODO
 }

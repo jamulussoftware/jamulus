@@ -89,6 +89,10 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
         this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
 
+    QObject::connect ( &ConnLessChannel,
+        SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
+        this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
+
     QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
         this, SLOT ( OnReqJittBufSize() ) );
 
@@ -121,6 +125,14 @@ void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, Channel.GetAddress() );
+}
+
+void CClient::OnSendCLProtMessage ( CHostAddress     InetAddr,
+                                    CVector<uint8_t> vecMessage )
+{
+    // the protocol queries me to call the function to send the message
+    // send it through the network
+    Socket.SendPacket ( vecMessage, InetAddr );
 }
 
 void CClient::OnNewConnection()

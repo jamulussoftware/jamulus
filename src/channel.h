@@ -119,7 +119,7 @@ public:
     void CreateReqJitBufMes()                             { Protocol.CreateReqJitBufMes(); }
     void CreateReqConnClientsList()                       { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText ) { Protocol.CreateChatTextMes ( strChatText ); }
-    void CreatePingMes ( const int iMs )                  { Protocol.CreatePingMes ( iMs, false ); }
+    void CreatePingMes ( const int iMs )                  { Protocol.CreatePingMes ( iMs ); }
 
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo )
     { 
@@ -199,23 +199,23 @@ public:
     CConnectionLessChannel();
     virtual ~CConnectionLessChannel() {}
 
-    void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
-    CHostAddress GetAddress() const { return InetAddr; }
-
     bool ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
-                                      const int               iNumBytes )
+                                      const int               iNumBytes,
+                                      const CHostAddress&     InetAddr )
     {
-        return Protocol.ParseConnectionLessMessage ( vecbyData, iNumBytes );
+        return Protocol.ParseConnectionLessMessage ( vecbyData, iNumBytes, InetAddr );
     }
 
-    void CreateAndImmSendServerFullMes() { Protocol.CreateAndImmSendServerFullMes(); }
+    void CreateCLServerFullMes ( const CHostAddress& InetAddr )
+        { Protocol.CreateCLServerFullMes ( InetAddr ); }
 
 protected:
-    // connection parameters
-    CHostAddress InetAddr;
-
     // network protocol
-    CProtocol    Protocol;
+    CProtocol Protocol;
+
+signals:
+    void CLMessReadyForSending ( CHostAddress     InetAddr,
+                                 CVector<uint8_t> vecMessage );
 };
 
 

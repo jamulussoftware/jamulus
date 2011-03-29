@@ -75,7 +75,7 @@ public slots:
     void OnTimer()
     {
         // generate random protocol message
-        switch ( GenRandomIntInRange ( 0, 11 ) )
+        switch ( GenRandomIntInRange ( 0, 10 ) )
         {
         case 0:
             Protocol.CreateJitBufMes ( GenRandomIntInRange ( 0, 10 ) );
@@ -91,41 +91,37 @@ public slots:
             break;
 
         case 3:
-            Protocol.CreateServerFullMes();
-            break;
-
-        case 4:
             Protocol.CreateReqConnClientsList();
             break;
 
-        case 5:
+        case 4:
             Protocol.CreateChanNameMes ( QString ( "test%1" ).arg (
                 GenRandomIntInRange ( 0, 1000 ) ) );
             break;
 
-        case 6:
+        case 5:
             Protocol.CreateChatTextMes ( QString ( "test%1" ).arg (
                 GenRandomIntInRange ( 0, 1000 ) ) );
             break;
 
-        case 7:
-            Protocol.CreatePingMes ( GenRandomIntInRange ( 0, 100000 ), false );
+        case 6:
+            Protocol.CreatePingMes ( GenRandomIntInRange ( 0, 100000 ) );
             break;
 
-        case 8:
+        case 7:
             Protocol.CreateReqNetwTranspPropsMes();
             break;
 
-        case 9:
+        case 8:
             Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
                 GenRandomIntInRange ( -100, 100 ) );
             break;
 
-        case 10:
+        case 9:
             Protocol.CreateAndImmSendDisconnectionMes();
             break;
 
-        case 11:
+        case 10:
             // arbitrary "audio" packet (with random sizes)
             CVector<uint8_t> vecMessage ( GenRandomIntInRange ( 1, 1000 ) );
             OnSendProtMessage ( vecMessage );

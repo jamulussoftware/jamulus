@@ -87,24 +87,26 @@ public:
     void CreateReqJitBufMes();
     void CreateChanGainMes ( const int iChanID, const double dGain );
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
-    void CreateServerFullMes();
     void CreateReqConnClientsList();
     void CreateChanNameMes ( const QString strName );
     void CreateReqChanNameMes();
     void CreateChatTextMes ( const QString strChatText );
-    void CreatePingMes ( const int iMs, const bool bIsConnectionLess );
+    void CreatePingMes ( const int iMs );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
     void CreateReqNetwTranspPropsMes();
 
+    void CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs );
+    void CreateCLServerFullMes ( const CHostAddress& InetAddr );
+
     void CreateAndImmSendDisconnectionMes();
-    void CreateAndImmSendServerFullMes();
     void CreateAndImmSendAcknMess ( const int& iID, const int& iCnt );
 
     bool ParseMessage ( const CVector<uint8_t>& vecbyData,
                         const int iNumBytes );
 
     bool ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
-                                      const int               iNumBytes );
+                                      const int               iNumBytes,
+                                      const CHostAddress&     InetAddr );
 
     bool IsProtocolMessage ( const CVector<uint8_t>& vecbyData,
                              const int               iNumBytes );
@@ -165,7 +167,8 @@ protected:
     void CreateAndSendMessage ( const int iID, const CVector<uint8_t>& vecData );
 
     void CreateAndImmSendConLessMessage ( const int iID,
-                                          const CVector<uint8_t>& vecData );
+                                          const CVector<uint8_t>& vecData,
+                                          const CHostAddress& InetAddr );
 
     bool EvaluateJitBufMes             ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();
@@ -180,6 +183,10 @@ protected:
     bool EvaluateNetwTranspPropsMes    ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
     bool EvaluateDisconnectionMes();
+
+    bool EvaluateCLPingMes             ( const CHostAddress& InetAddr,
+                                         const CVector<uint8_t>& vecData );
+    bool EvaluateCLServerFullMes();
 
     int                     iOldRecID, iOldRecCnt;
 
@@ -196,6 +203,8 @@ public slots:
 signals:
     // transmitting
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
+    void CLMessReadyForSending ( CHostAddress     InetAddr,
+                                 CVector<uint8_t> vecMessage );
 
     // receiving
     void ChangeJittBufSize ( int iNewJitBufSize );
@@ -212,6 +221,8 @@ signals:
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void ReqNetTranspProps();
     void Disconnection();
+
+    void CLPingReceived ( CHostAddress InetAddr, int iMs );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

@@ -8,7 +8,8 @@
 Protocol message definition
 ---------------------------
 
-- All messages received need to be acknowledged by an acknowledge packet
+- All messages received need to be acknowledged by an acknowledge packet (except
+  of connection less messages)
 
 
 
@@ -18,9 +19,9 @@ MAIN FRAME
     +-------------+------------+------------+------------------+ ...
     | 2 bytes TAG | 2 bytes ID | 1 byte cnt | 2 bytes length n | ...
     +-------------+------------+------------+------------------+ ...
-       ... --------------+-------------+
-       ...  n bytes data | 2 bytes CRC |
-       ... --------------+-------------+
+        ... --------------+-------------+
+        ...  n bytes data | 2 bytes CRC |
+        ... --------------+-------------+
 
 - TAG is an all zero bit word to identify protocol messages
 - message ID defined by the defines PROTMESSID_x
@@ -31,10 +32,11 @@ MAIN FRAME
   Generator polynom: G_16(x) = x^16 + x^12 + x^5 + 1, initial state: all ones
 
 
+
 MESSAGES
 --------
 
-- Acknowledgement message:                    PROTMESSID_ACKN
+- PROTMESSID_ACKN: Acknowledgement message
 
     +-----------------------------------+
     | 2 bytes ID of message to be ackn. |
@@ -43,47 +45,43 @@ MESSAGES
     note: the cnt value is the same as of the message to be acknowledged
 
 
-- Jitter buffer size:                         PROTMESSID_JITT_BUF_SIZE
+- PROTMESSID_JITT_BUF_SIZE: Jitter buffer size
 
     +--------------------------+
     | 2 bytes number of blocks |
     +--------------------------+
 
 
-- Request jitter buffer size:                 PROTMESSID_REQ_JITT_BUF_SIZE
+- PROTMESSID_REQ_JITT_BUF_SIZE: Request jitter buffer size
 
     note: does not have any data -> n = 0
 
 
-- Server full message:                        PROTMESSID_SERVER_FULL
-
-    note: does not have any data -> n = 0
-
-
-- Gain of channel:                            PROTMESSID_CHANNEL_GAIN
+- PROTMESSID_CHANNEL_GAIN: Gain of channel
 
     +-------------------+--------------+
     | 1 byte channel ID | 2 bytes gain |
     +-------------------+--------------+
 
 
-- IP number and name of connected clients:    PROTMESSID_CONN_CLIENTS_LIST
+- PROTMESSID_CONN_CLIENTS_LIST: IP number and name of connected clients
 
     for each connected client append following data:
 
     +-------------------+--------------------+------------------+ ...
     | 1 byte channel ID | 4 bytes IP address | 2 bytes number n | ...
     +-------------------+--------------------+------------------+ ...
-       ... ----------------------+
-       ...  n bytes UTF-8 string |
-       ... ----------------------+
+        ... ----------------------+
+        ...  n bytes UTF-8 string |
+        ... ----------------------+
 
-- Request connected clients list:             PROTMESSID_REQ_CONN_CLIENTS_LIST
+
+- PROTMESSID_REQ_CONN_CLIENTS_LIST: Request connected clients list
 
     note: does not have any data -> n = 0
 
 
-- Name of channel:                            PROTMESSID_CHANNEL_NAME
+- PROTMESSID_CHANNEL_NAME: Name of channel
 
     for each connected client append following data:
 
@@ -91,33 +89,37 @@ MESSAGES
     | 2 bytes number n | n bytes UTF-8 string |
     +------------------+----------------------+
 
-- Request name of channel:                    PROTMESSID_REQ_CHANNEL_NAME
 
-- Chat text:                                  PROTMESSID_CHAT_TEXT
+- PROTMESSID_REQ_CHANNEL_NAME: Request name of channel
+
+    note: does not have any data -> n = 0
+
+
+- PROTMESSID_CHAT_TEXT: Chat text
 
     +------------------+----------------------+
     | 2 bytes number n | n bytes UTF-8 string |
     +------------------+----------------------+
 
 
-- Ping message (for measuring the ping time): PROTMESSID_PING_MS
+- PROTMESSID_PING_MS: Ping message (for measuring the ping time)
 
     +-----------------------------+
     | 4 bytes transmit time in ms |
     +-----------------------------+
 
 
-- Properties for network transport:           PROTMESSID_NETW_TRANSPORT_PROPS
+- PROTMESSID_NETW_TRANSPORT_PROPS: Properties for network transport
 
     +------------------------+-------------------------+-----------------+ ...
     | 4 bytes base netw size | 2 bytes block size fact | 1 byte num chan | ...
     +------------------------+-------------------------+-----------------+ ...
-       ... ------------------+-----------------------+ ...
-       ...  4 bytes sam rate | 2 bytes audiocod type | ...
-       ... ------------------+-----------------------+ ...
-       ... -----------------+----------------------+
-       ...  2 bytes version | 4 bytes audiocod arg | 
-       ... -----------------+----------------------+
+        ... ------------------+-----------------------+ ...
+        ...  4 bytes sam rate | 2 bytes audiocod type | ...
+        ... ------------------+-----------------------+ ...
+        ... -----------------+----------------------+
+        ...  2 bytes version | 4 bytes audiocod arg | 
+        ... -----------------+----------------------+
 
     - "base netw size":  length of the base network packet (frame) in bytes
     - "block size fact": block size factor
@@ -130,12 +132,26 @@ MESSAGES
     - "audiocod arg":    argument for the audio coder, if not used this value shall be set to 0
 
 
-- Request properties for network transport:   PROTMESSID_REQ_NETW_TRANSPORT_PROPS
+- PROTMESSID_REQ_NETW_TRANSPORT_PROPS: Request properties for network transport
 
     note: does not have any data -> n = 0
 
 
-- Disconnect message:                         PROTMESSID_DISCONNECTION
+- PROTMESSID_DISCONNECTION: Disconnect message
+
+    note: does not have any data -> n = 0
+
+
+
+CONNECTION LESS MESSAGES
+------------------------
+
+- PROTMESSID_CLM_PING_MS: Connection less ping message (for measuring the ping time)
+
+    note: same definition as PROTMESSID_PING_MS
+
+
+- PROTMESSID_SERVER_FULL: Connection less server full message
 
     note: does not have any data -> n = 0
 
@@ -288,7 +304,8 @@ void CProtocol::CreateAndImmSendAcknMess ( const int& iID,
 }
 
 void CProtocol::CreateAndImmSendConLessMessage ( const int               iID,
-                                                 const CVector<uint8_t>& vecData )
+                                                 const CVector<uint8_t>& vecData,
+                                                 const CHostAddress&     InetAddr )
 {
     CVector<uint8_t> vecNewMessage;
 
@@ -297,7 +314,7 @@ void CProtocol::CreateAndImmSendConLessMessage ( const int               iID,
     GenMessageFrame ( vecNewMessage, 0, iID, vecData );
 
     // immediately send message
-    emit MessReadyForSending ( vecNewMessage );
+    emit CLMessReadyForSending ( InetAddr, vecNewMessage );
 }
 
 bool CProtocol::IsProtocolMessage ( const CVector<uint8_t>& vecbyData,
@@ -468,7 +485,8 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 }
 
 bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
-                                             const int               iNumBytes )
+                                             const int               iNumBytes,
+                                             const CHostAddress&     InetAddr )
 {
 /*
     return code: false -> ok; true -> error
@@ -485,11 +503,11 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
             switch ( iRecID ) 
             {
             case PROTMESSID_CLM_PING_MS:
-                bRet = EvaluatePingMes ( vecData );
+                bRet = EvaluateCLPingMes ( InetAddr, vecData );
                 break;
 
             case PROTMESSID_CLM_SERVER_FULL:
-                bRet = EvaluateServerFullMes();
+                bRet = EvaluateCLServerFullMes();
                 break;
 
             case PROTMESSID_CLM_SERVER_LIST:
@@ -581,11 +599,6 @@ bool CProtocol::EvaluateReqJitBufMes()
     emit ReqJittBufSize();
 
     return false; // no error
-}
-
-void CProtocol::CreateServerFullMes()
-{
-    CreateAndSendMessage ( PROTMESSID_SERVER_FULL, CVector<uint8_t> ( 0 ) );
 }
 
 void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
@@ -871,8 +884,7 @@ bool CProtocol::EvaluateChatTextMes ( const CVector<uint8_t>& vecData )
     return false; // no error
 }
 
-void CProtocol::CreatePingMes ( const int iMs,
-                                const bool bIsConnectionLess )
+void CProtocol::CreatePingMes ( const int iMs )
 {
     unsigned int iPos = 0; // init position pointer
 
@@ -882,15 +894,7 @@ void CProtocol::CreatePingMes ( const int iMs,
     // byte-by-byte copying of the string data
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iMs ), 4 );
 
-    // distinguish between connection less and with connection transmission
-    if ( bIsConnectionLess )
-    {
-        CreateAndImmSendConLessMessage ( PROTMESSID_CLM_PING_MS, vecData );
-    }
-    else
-    {
-        CreateAndSendMessage ( PROTMESSID_PING_MS, vecData );
-    }
+    CreateAndSendMessage ( PROTMESSID_PING_MS, vecData );
 }
 
 bool CProtocol::EvaluatePingMes ( const CVector<uint8_t>& vecData )
@@ -1076,13 +1080,46 @@ bool CProtocol::EvaluateDisconnectionMes()
 
 
 // Connection less messages ----------------------------------------------------
-void CProtocol::CreateAndImmSendServerFullMes()
+void CProtocol::CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs )
 {
-    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SERVER_FULL,
-                                     CVector<uint8_t> ( 0 ) );
+    unsigned int iPos = 0; // init position pointer
+
+    // build data vector (4 bytes long)
+    CVector<uint8_t> vecData ( 4 );
+
+    // byte-by-byte copying of the string data
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iMs ), 4 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_PING_MS,
+                                     vecData,
+                                     InetAddr );
 }
 
-bool CProtocol::EvaluateServerFullMes()
+bool CProtocol::EvaluateCLPingMes ( const CHostAddress& InetAddr,
+                                    const CVector<uint8_t>& vecData )
+{
+    unsigned int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 4 )
+    {
+        return true;
+    }
+
+    emit CLPingReceived ( InetAddr,
+                          static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) ) );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLServerFullMes ( const CHostAddress& InetAddr )
+{
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SERVER_FULL,
+                                     CVector<uint8_t> ( 0 ),
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLServerFullMes()
 {
     // invoke message action
     emit ServerFull();

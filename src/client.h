@@ -293,6 +293,7 @@ protected:
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
+    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
     void OnReqJittBufSize() { Channel.CreateJitBufMes ( Channel.GetSockBufNumFrames() ); }
     void OnReqChanName() { Channel.SetRemoteName ( strName ); }
     void OnNewConnection();

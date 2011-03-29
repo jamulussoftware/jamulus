@@ -272,6 +272,10 @@ CServer::CServer ( const QString& strLoggingFileName,
     QObject::connect ( &HighPrecisionTimer, SIGNAL ( timeout() ),
         this, SLOT ( OnTimer() ) );
 
+    QObject::connect ( &ConnLessChannel,
+        SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
+        this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
+
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
@@ -352,6 +356,14 @@ void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, vecChannels[iChID].GetAddress() );
+}
+
+void CServer::OnSendCLProtMessage ( CHostAddress     InetAddr,
+                                    CVector<uint8_t> vecMessage )
+{
+    // the protocol queries me to call the function to send the message
+    // send it through the network
+    Socket.SendPacket ( vecMessage, InetAddr );
 }
 
 void CServer::Start()
@@ -862,13 +874,10 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
         if ( iCurChanID == INVALID_CHANNEL_ID )
         {
             // this is a new client, we then first check if this is a connection
-            // less message before we create a new official channel (note that
-            // we have to set the internet address first, before we parse the
-            // connection less message!)
-            ConnLessChannel.SetAddress ( HostAdr );
-
+            // less message before we create a new official channel
             if ( ConnLessChannel.ParseConnectionLessMessage ( vecbyRecBuf,
-                                                              iNumBytesRead ) )
+                                                              iNumBytesRead, 
+                                                              HostAdr ) )
             {
                 // a new client is calling, look for free channel
                 iCurChanID = GetFreeChan();
@@ -902,7 +911,7 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
                     bChanOK = false;
 
                     // create and send "server full" message
-                    ConnLessChannel.CreateAndImmSendServerFullMes();
+                    ConnLessChannel.CreateCLServerFullMes ( HostAdr );
                 }
             }
         }

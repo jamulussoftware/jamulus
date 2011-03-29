@@ -551,5 +551,8 @@ int CChannel::GetUploadRateKbps()
 // CConnectionLessChannel implementation ***************************************
 CConnectionLessChannel::CConnectionLessChannel()
 {
-    // TODO
+    // connections -------------------------------------------------------------
+    QObject::connect ( &Protocol,
+        SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
+        SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ) );
 }

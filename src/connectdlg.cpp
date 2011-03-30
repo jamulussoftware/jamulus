@@ -47,7 +47,6 @@ CConnectDlg::CConnectDlg ( CClient* pNCliP, QWidget* parent,
 
 // TEST
 pListViewItem = new QTreeWidgetItem ( ListViewServers );
-//TextLabelPingTime->setText ( "" );
 
 
     // Connections -------------------------------------------------------------
@@ -75,8 +74,8 @@ void CConnectDlg::OnTimerPing()
     // send ping message to server
 
 // TEST
-//pClient->SendCLPingMess ( pClient->GetChannel()->
-//                          const CHostAddress& InetAddr );
+//QHostAddress test ( "127.0.0.1" );
+//pClient->SendCLPingMess ( CHostAddress ( test, 22124 ) );
 
 }
 

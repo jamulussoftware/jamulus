@@ -34,7 +34,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     iCeltNumCodedBytes ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
     bCeltDoHighQuality ( false ),
     bUseStereo ( false ),
-    Socket ( &Channel, iPortNumber ),
+    Socket ( &Channel, &ConnLessChannel, iPortNumber ),
     Sound ( AudioCallback, this ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan ( false ),
@@ -89,10 +89,6 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
         this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
 
-    QObject::connect ( &ConnLessChannel,
-        SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
-        this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
-
     QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
         this, SLOT ( OnReqJittBufSize() ) );
 
@@ -110,11 +106,19 @@ CClient::CClient ( const quint16 iPortNumber ) :
     QObject::connect ( &Channel, SIGNAL ( NewConnection() ),
         this, SLOT ( OnNewConnection() ) );
 
-    QObject::connect ( &Channel, SIGNAL ( ChatTextReceived ( QString ) ),
-        this, SIGNAL ( ChatTextReceived ( QString ) ) );
+    QObject::connect ( &Channel,
+        SIGNAL ( ChatTextReceived ( QString ) ),
+        SIGNAL ( ChatTextReceived ( QString ) ) );
 
     QObject::connect ( &Channel, SIGNAL ( PingReceived ( int ) ),
         this, SLOT ( OnReceivePingMessage ( int ) ) );
+
+    QObject::connect ( &ConnLessChannel,
+        SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
+        this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
+
+    QObject::connect ( &ConnLessChannel, SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
+        this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
 
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest() ),
         this, SLOT ( OnSndCrdReinitRequest() ) );
@@ -159,6 +163,17 @@ void CClient::OnReceivePingMessage ( int iMs )
     if ( iCurDiff >= 0 )
     {
         emit PingTimeReceived ( iCurDiff );
+    }
+}
+
+void CClient::OnCLPingReceived ( CHostAddress InetAddr, int iMs )
+{
+    // calculate difference between received time in ms and current time in ms,
+    // take care of wrap arounds (if wrapping, do not use result)
+    const int iCurDiff = PreciseTime.elapsed() - iMs;
+    if ( iCurDiff >= 0 )
+    {
+        emit CLPingTimeReceived ( InetAddr, iCurDiff );
     }
 }
 

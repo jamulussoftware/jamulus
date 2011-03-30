@@ -46,11 +46,16 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket ( CChannel* pNewChannel, const quint16 iPortNumber ) :
-        pChannel( pNewChannel ), bIsClient ( true ) { Init ( iPortNumber ); }
-    CSocket ( CServer* pNServP, const quint16 iPortNumber ) :
-        pServer ( pNServP ), bIsClient ( false )
-        { Init ( iPortNumber ); }
+    CSocket ( CChannel* pNewChannel,
+              CConnectionLessChannel* pNewCLChannel,
+              const quint16 iPortNumber )
+        : pChannel( pNewChannel ), pConnLessChannel ( pNewCLChannel ),
+          bIsClient ( true ) { Init ( iPortNumber ); }
+
+    CSocket ( CServer* pNServP,
+              const quint16 iPortNumber )
+        : pServer ( pNServP ), bIsClient ( false ) { Init ( iPortNumber ); }
+
     virtual ~CSocket() {}
 
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
@@ -59,15 +64,16 @@ public:
 protected:
     void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );
 
-    QUdpSocket       SocketDevice;
+    QUdpSocket              SocketDevice;
 
-    CVector<uint8_t> vecbyRecBuf;
-    CHostAddress     RecHostAddr;
+    CVector<uint8_t>        vecbyRecBuf;
+    CHostAddress            RecHostAddr;
 
-    CChannel*        pChannel; // for client
-    CServer*         pServer;  // for server
+    CChannel*               pChannel;         // for client
+    CConnectionLessChannel* pConnLessChannel; // for client
+    CServer*                pServer;          // for server
 
-    bool             bIsClient;
+    bool                    bIsClient;
 
 public slots:
     void OnDataReceived();

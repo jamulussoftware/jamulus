@@ -46,7 +46,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
               , Qt::WindowMinMaxButtonsHint
 #endif
             ),
-    ConnectDlg ( parent
+    ConnectDlg ( pNCliP, parent
 #ifdef _WIN32
                  // this somehow only works reliable on Windows
                  , Qt::WindowMinMaxButtonsHint
@@ -421,6 +421,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( pClient, SIGNAL ( PingTimeReceived ( int ) ),
         this, SLOT ( OnPingTimeResult ( int ) ) );
 
+    QObject::connect ( pClient, SIGNAL ( CLPingTimeReceived ( CHostAddress, int ) ),
+        this, SLOT ( OnCLPingTimeResult ( CHostAddress, int ) ) );
+
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( GUIDesignChanged() ),
         this, SLOT ( OnGUIDesignChanged() ) );
 
@@ -751,6 +754,17 @@ void CLlconClientDlg::OnPingTimeResult ( int iPingTime )
 
     // update delay LED on the main window
     LEDDelay->SetLight ( iOverallDelayLEDColor );
+}
+
+void CLlconClientDlg::OnCLPingTimeResult ( CHostAddress InetAddr,
+                                           int          iPingTime )
+{
+
+// TODO evaluate the background color for the ping time result in the
+// table in this function (see function above, there also the LED color
+// is calculated so we do the other here, too)
+
+    ConnectDlg.SetPingTimeResult ( InetAddr, iPingTime );
 }
 
 void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )

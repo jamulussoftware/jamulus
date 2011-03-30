@@ -84,11 +84,13 @@ CChannel::CChannel ( const bool bNIsServer ) :
     QObject::connect( &Protocol, SIGNAL ( ChangeChanName ( QString ) ),
         this, SLOT ( OnChangeChanName ( QString ) ) );
 
-    QObject::connect( &Protocol, SIGNAL ( ChatTextReceived ( QString ) ),
-        this, SIGNAL ( ChatTextReceived ( QString ) ) );
+    QObject::connect( &Protocol,
+        SIGNAL ( ChatTextReceived ( QString ) ),
+        SIGNAL ( ChatTextReceived ( QString ) ) );
 
-    QObject::connect( &Protocol, SIGNAL ( PingReceived ( int ) ),
-        this, SIGNAL ( PingReceived ( int ) ) );
+    QObject::connect( &Protocol,
+        SIGNAL ( PingReceived ( int ) ),
+        SIGNAL ( PingReceived ( int ) ) );
 
     QObject::connect ( &Protocol,
         SIGNAL ( NetTranspPropsReceived ( CNetworkTransportProps ) ),
@@ -555,4 +557,8 @@ CConnectionLessChannel::CConnectionLessChannel()
     QObject::connect ( &Protocol,
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ) );
+
+    QObject::connect( &Protocol,
+        SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
+        SIGNAL ( CLPingReceived ( CHostAddress, int ) ) );
 }

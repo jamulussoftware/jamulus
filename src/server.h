@@ -182,6 +182,8 @@ public slots:
     void OnTimer();
     void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+    void OnCLPingReceived ( CHostAddress InetAddr, int iMs )
+        { ConnLessChannel.CreateCLPingMes ( InetAddr, iMs ); }
 
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!

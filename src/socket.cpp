@@ -1,5 +1,5 @@
 /******************************************************************************\
- * opyright (c) 2004-2011
+ * Copyright (c) 2004-2011
  *
  * Author(s):
  *  Volker Fischer
@@ -103,6 +103,13 @@ void CSocket::OnDataReceived()
             // check if packet comes from the server we want to connect
             if ( !( pChannel->GetAddress() == RecHostAddr ) )
             {
+                // this is an unknown address, try to parse connection less
+                // message
+                pConnLessChannel->ParseConnectionLessMessage ( vecbyRecBuf,
+                                                               iNumBytesRead, 
+                                                               RecHostAddr );
+
+                // do not perform any other action on this received packet
                 return;
             }
 

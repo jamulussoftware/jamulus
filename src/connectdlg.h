@@ -28,6 +28,7 @@
 #include <qwhatsthis.h>
 #include <qtimer.h>
 #include "global.h"
+#include "client.h"
 #ifdef _WIN32
 # include "../windows/moc/connectdlgbase.h"
 #else
@@ -45,15 +46,22 @@ class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
     Q_OBJECT
 
 public:
-    CConnectDlg ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    CConnectDlg ( CClient* pNCliP, QWidget* parent = 0, Qt::WindowFlags f = 0 );
+
+    void AddPingTime ( QString strChatText );
+    void SetPingTimeResult ( CHostAddress& InetAddr, const int iPingTime );
 
 protected:
-    QTimer TimerPing;
-
     virtual void showEvent ( QShowEvent* );
     virtual void hideEvent ( QHideEvent* );
 
-    void OnPingTimeResult ( int iPingTime );
+    CClient* pClient;
+    QTimer   TimerPing;
+
+
+// TEST
+QTreeWidgetItem* pListViewItem;
+
 
 public slots:
     void OnTimerPing();

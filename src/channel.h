@@ -209,6 +209,9 @@ public:
     void CreateCLServerFullMes ( const CHostAddress& InetAddr )
         { Protocol.CreateCLServerFullMes ( InetAddr ); }
 
+    void CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs )
+        { Protocol.CreateCLPingMes ( InetAddr, iMs ); }
+
 protected:
     // network protocol
     CProtocol Protocol;
@@ -216,6 +219,8 @@ protected:
 signals:
     void CLMessReadyForSending ( CHostAddress     InetAddr,
                                  CVector<uint8_t> vecMessage );
+
+    void CLPingReceived ( CHostAddress InetAddr, int iMs );
 };
 
 

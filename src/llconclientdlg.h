@@ -110,6 +110,7 @@ public slots:
     void OnTimerStatus() { UpdateDisplay(); }
     void OnTimerPing();
     void OnPingTimeResult ( int iPingTime );
+    void OnCLPingTimeResult ( CHostAddress InetAddr, int iPingTime );
     void OnOpenGeneralSettings();
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnSliderAudInFader ( int value );

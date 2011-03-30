@@ -212,6 +212,9 @@ public:
     void SendPingMess()
         { Channel.CreatePingMes ( PreciseTime.elapsed() ); };
 
+    void SendCLPingMess ( const CHostAddress& InetAddr )
+        { ConnLessChannel.CreateCLPingMes ( InetAddr, PreciseTime.elapsed() ); };
+
     int EstimatedOverallDelay ( const int iPingTimeMs );
 
     CChannel* GetChannel() { return &Channel; }
@@ -293,17 +296,21 @@ protected:
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
     void OnReqJittBufSize() { Channel.CreateJitBufMes ( Channel.GetSockBufNumFrames() ); }
     void OnReqChanName() { Channel.SetRemoteName ( strName ); }
     void OnNewConnection();
     void OnReceivePingMessage ( int iMs );
+
+    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+    void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
+
     void OnSndCrdReinitRequest();
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
     void PingTimeReceived ( int iPingTime );
+    void CLPingTimeReceived ( CHostAddress InetAddr, int iPingTime );
     void Disconnected();
     void Stopped();
 };

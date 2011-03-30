@@ -26,8 +26,9 @@
 
 
 /* Implementation *************************************************************/
-CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f ) :
-    QDialog ( parent, f )
+CConnectDlg::CConnectDlg ( CClient* pNCliP, QWidget* parent,
+                           Qt::WindowFlags f )
+    : QDialog ( parent, f ), pClient ( pNCliP )
 {
     setupUi ( this );
 
@@ -44,7 +45,8 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f ) :
     ListViewServers->setColumnWidth ( 3, 80 );
     ListViewServers->clear();
 
-
+// TEST
+pListViewItem = new QTreeWidgetItem ( ListViewServers );
 //TextLabelPingTime->setText ( "" );
 
 
@@ -71,12 +73,18 @@ void CConnectDlg::hideEvent ( QHideEvent* )
 void CConnectDlg::OnTimerPing()
 {
     // send ping message to server
-//    pClient->SendPingMess();
+
+// TEST
+//pClient->SendCLPingMess ( pClient->GetChannel()->
+//                          const CHostAddress& InetAddr );
+
 }
 
-void CConnectDlg::OnPingTimeResult ( int iPingTime )
+void CConnectDlg::SetPingTimeResult ( CHostAddress& InetAddr,
+                                      const int iPingTime )
 {
 
-// TODO
-//    TextLabelPingTime->setText ( sErrorText );
+// TEST
+pListViewItem->setText ( 0, QString().setNum ( iPingTime ) );
+
 }

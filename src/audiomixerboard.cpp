@@ -97,8 +97,9 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     QObject::connect ( pcbMute, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnMuteStateChanged ( int ) ) );
 
-    QObject::connect ( pcbSolo, SIGNAL ( stateChanged ( int ) ),
-        this, SIGNAL ( soloStateChanged ( int ) ) );
+    QObject::connect ( pcbSolo,
+        SIGNAL ( stateChanged ( int ) ),
+        SIGNAL ( soloStateChanged ( int ) ) );
 }
 
 void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )

@@ -210,10 +210,10 @@ public:
         { Channel.CreateChatTextMes ( strChatText ); }
 
     void SendPingMess()
-        { Channel.CreatePingMes ( PreciseTime.elapsed() ); };
+        { Channel.CreatePingMes ( PreparePingMessage() ); };
 
     void SendCLPingMess ( const CHostAddress& InetAddr )
-        { ConnLessChannel.CreateCLPingMes ( InetAddr, PreciseTime.elapsed() ); };
+        { ConnLessChannel.CreateCLPingMes ( InetAddr, PreparePingMessage() ); };
 
     int EstimatedOverallDelay ( const int iPingTimeMs );
 
@@ -236,6 +236,9 @@ protected:
     void         ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
     void         ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
     void         UpdateSocketBufferSize();
+
+    int          PreparePingMessage();
+    int          EvaluatePingMessage ( const int iMs );
 
     // only one channel is needed for client application
     CChannel                Channel;

@@ -157,9 +157,8 @@ void CClient::OnNewConnection()
 
 void CClient::OnReceivePingMessage ( int iMs )
 {
-    // calculate difference between received time in ms and current time in ms,
     // take care of wrap arounds (if wrapping, do not use result)
-    const int iCurDiff = PreciseTime.elapsed() - iMs;
+    const int iCurDiff = EvaluatePingMessage ( iMs );
     if ( iCurDiff >= 0 )
     {
         emit PingTimeReceived ( iCurDiff );
@@ -168,13 +167,24 @@ void CClient::OnReceivePingMessage ( int iMs )
 
 void CClient::OnCLPingReceived ( CHostAddress InetAddr, int iMs )
 {
-    // calculate difference between received time in ms and current time in ms,
     // take care of wrap arounds (if wrapping, do not use result)
-    const int iCurDiff = PreciseTime.elapsed() - iMs;
+    const int iCurDiff = EvaluatePingMessage ( iMs );
     if ( iCurDiff >= 0 )
     {
         emit CLPingTimeReceived ( InetAddr, iCurDiff );
     }
+}
+
+int CClient::PreparePingMessage()
+{
+    // transmit the current precise time (in ms)
+    return PreciseTime.elapsed();
+}
+
+int CClient::EvaluatePingMessage ( const int iMs )
+{
+    // calculate difference between received time in ms and current time in ms
+    return PreciseTime.elapsed() - iMs;
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )

@@ -1257,6 +1257,7 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress& InetAddr,
 
     // TODO
 
+    return false; // no error
 }
 
 

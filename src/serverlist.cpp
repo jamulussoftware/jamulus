@@ -24,3 +24,37 @@
 
 #include "serverlist.h"
 
+
+/* Implementation *************************************************************/
+CServerListManager::CServerListManager ( const bool NbEbld )
+    : bEnabled ( NbEbld )
+{
+    // connections -------------------------------------------------------------
+    QObject::connect ( &TimerPollList, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerPollList() ) );
+
+    // Timers ------------------------------------------------------------------
+    // start timer for polling the server list
+    if ( bEnabled )
+    {
+        // 1 minute = 60 * 1000 ms
+        TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
+    }
+}
+
+void CServerListManager::OnTimerPollList()
+{
+    QMutexLocker locker ( &Mutex );
+
+    // check all list entries if they are still valid
+    for ( int iIdx = 0; iIdx < ServerList.size(); iIdx++ )
+    {
+        // 1 minute = 60 * 1000 ms
+        if ( ServerList[iIdx].RegisterTime.elapsed() >
+                ( SERVLIST_TIME_OUT_MINUTES * 60000 ) )
+        {
+            // remove this list entry
+            ServerList.removeAt ( iIdx );
+        }
+    }
+}

@@ -107,7 +107,6 @@ public:
               const QString& strHTMLStatusFileName,
               const QString& strHistoryFileName,
               const QString& strServerNameForHTMLStatusFile );
-    virtual ~CServer() {}
 
     void Start();
     void Stop();

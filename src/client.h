@@ -83,7 +83,6 @@ class CClient : public QObject
 
 public:
     CClient ( const quint16 iPortNumber );
-    virtual ~CClient() {}
 
     void   Start();
     void   Stop();

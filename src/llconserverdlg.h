@@ -56,7 +56,6 @@ class CLlconServerDlg : public QDialog, private Ui_CLlconServerDlgBase
 
 public:
     CLlconServerDlg ( CServer* pNServP, QWidget* parent = 0 );
-    virtual ~CLlconServerDlg() {}
 
 protected:
     QTimer                          Timer;

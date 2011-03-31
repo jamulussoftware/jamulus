@@ -41,7 +41,6 @@ public:
         void* pParg ) : fpProcessCallback ( fpNewProcessCallback ),
         pProcessCallbackArg ( pParg ), bRun ( false ),
         bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ) {}
-    virtual ~CSoundBase() {}
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();

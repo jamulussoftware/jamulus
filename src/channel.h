@@ -61,7 +61,6 @@ public:
     // we have to make "server" the default since I do not see a chance to
     // use constructor initialization in the server for a vector of channels
     CChannel ( const bool bNIsServer = true );
-    virtual ~CChannel() {}
 
     EPutDataStat PutData ( const CVector<uint8_t>& vecbyData,
                            int iNumBytes );
@@ -197,7 +196,6 @@ class CConnectionLessChannel : public QObject
 
 public:
     CConnectionLessChannel();
-    virtual ~CConnectionLessChannel() {}
 
     bool ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
                                       const int               iNumBytes,

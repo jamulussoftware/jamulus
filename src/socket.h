@@ -56,8 +56,6 @@ public:
               const quint16 iPortNumber )
         : pServer ( pNServP ), bIsClient ( false ) { Init ( iPortNumber ); }
 
-    virtual ~CSocket() {}
-
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
                       const CHostAddress& HostAddr );
 

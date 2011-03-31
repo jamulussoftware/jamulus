@@ -74,9 +74,11 @@ inline short Double2Short ( const double dInput )
 }
 
 // debug error handling
-void DebugError ( const QString& pchErDescr, const QString& pchPar1Descr, 
-                  const double dPar1, const QString& pchPar2Descr,
-                  const double dPar2 );
+void DebugError ( const QString& pchErDescr,
+                  const QString& pchPar1Descr, 
+                  const double   dPar1,
+                  const QString& pchPar2Descr,
+                  const double   dPar2 );
 
 
 /******************************************************************************\
@@ -88,7 +90,6 @@ public:
     CVector() : iVectorSize ( 0 ) { pData = this->begin(); }
     CVector ( const int iNeSi ) { Init(iNeSi); }
     CVector ( const int iNeSi, const TData tInVa ) { Init ( iNeSi, tInVa ); }
-    virtual ~CVector() {}
 
     /* Copy constructor: The order of the initialization list must not be
        changed. First, the base class must be initialized, then the pData
@@ -369,7 +370,6 @@ class CStereoSignalLevelMeter
 {
 public:
     CStereoSignalLevelMeter() { Reset(); }
-    virtual ~CStereoSignalLevelMeter() {}
 
     void   Update ( CVector<short>& vecsAudio );
     double MicLevelLeft()  { return CalcLogResult ( dCurLevelL ); }
@@ -528,7 +528,6 @@ class CCRC
 public:
     CCRC() : iPoly ( ( 1 << 5 ) | ( 1 << 12 ) ), iBitOutMask ( 1 << 16 )
         { Reset(); }
-    virtual ~CCRC() {}
 
     void Reset();
     void AddByte ( const uint8_t byNewInput );

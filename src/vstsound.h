@@ -37,8 +37,6 @@ public:
     CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg ) :
       CSoundBase ( true, fpNewCallback, arg ), iVSTMonoBufferSize ( 0 ) {}
 
-    virtual ~CSound() {}
-
     // special VST functions
     void SetMonoBufferSize ( const int iNVBS ) { iVSTMonoBufferSize = iNVBS; }
     void VSTProcessCallback()

@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2010
+ * Copyright (c) 2004-2011
  *
  * Author(s):
  *  Volker Fischer
@@ -142,7 +142,7 @@ void CSound::OpenCoreAudio()
 
     // set up stream format
     AudioStreamBasicDescription streamFormat;
-    streamFormat.mSampleRate       = SYSTEM_SAMPLE_RATE;
+    streamFormat.mSampleRate       = SYSTEM_SAMPLE_RATE_HZ;
     streamFormat.mFormatID         = kAudioFormatLinearPCM;
     streamFormat.mFormatFlags      = kAudioFormatFlagIsSignedInteger;
     streamFormat.mFramesPerPacket  = 1;
@@ -183,12 +183,12 @@ void CSound::OpenCoreAudio()
                            &inputSampleRate,
                            &size );
 
-    if ( static_cast<int> ( inputSampleRate ) != SYSTEM_SAMPLE_RATE )
+    if ( static_cast<int> ( inputSampleRate ) != SYSTEM_SAMPLE_RATE_HZ )
     {
         throw CGenErr ( QString ( tr ( "Current system audio input device sample "
             "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
             "Applications->Utilities and try to set a sample rate of %2 Hz." ) ).arg (
-            static_cast<int> ( inputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE ) );
+            static_cast<int> ( inputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE_HZ ) );
     }
 
     // check output device sample rate
@@ -201,12 +201,12 @@ void CSound::OpenCoreAudio()
                            &outputSampleRate,
                            &size );
 
-    if ( static_cast<int> ( outputSampleRate ) != SYSTEM_SAMPLE_RATE )
+    if ( static_cast<int> ( outputSampleRate ) != SYSTEM_SAMPLE_RATE_HZ )
     {
         throw CGenErr ( QString ( tr ( "Current system audio output device sample "
             "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
             "Applications->Utilities and try to set a sample rate of %2 Hz." ) ).arg (
-            static_cast<int> ( outputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE ) );
+            static_cast<int> ( outputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE_HZ ) );
     }
 
     // allocate memory for buffer struct

@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2010
+ * Copyright (c) 2004-2011
  *
  * Author(s):
  *  Volker Fischer
@@ -48,7 +48,7 @@ void CSound::OpenJack()
     jack_on_shutdown ( pJackClient, shutdownCallback, this );
 
 // TEST check sample rate, if not correct, just fire error
-if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE )
+if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
 {
     throw CGenErr ( tr ( "Jack server sample rate is different from "
         "required one" ) );

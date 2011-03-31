@@ -37,7 +37,7 @@ CHighPrecisionTimer::CHighPrecisionTimer() :
     // calculate delay in mach absolute time
     const uint64_t iNsDelay =
         ( (uint64_t) SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) /
-        (uint64_t) SYSTEM_SAMPLE_RATE; // in ns
+        (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
 
     struct mach_timebase_info timeBaseInfo;
     mach_timebase_info ( &timeBaseInfo );
@@ -94,7 +94,7 @@ CHighPrecisionTimer::CHighPrecisionTimer()
 #if ( SYSTEM_FRAME_SIZE_SAMPLES != 128 )
 # error "Only system frame size of 128 samples is supported by this module"
 #endif
-#if SYSTEM_SAMPLE_RATE != 48000
+#if SYSTEM_SAMPLE_RATE_HZ != 48000
 # error "Only a system sample rate of 48 kHz is supported by this module"
 #endif
 
@@ -181,7 +181,7 @@ CServer::CServer ( const QString& strLoggingFileName,
     {
         // init audio endocder/decoder (mono)
         CeltModeMono[i] = celt_mode_create (
-            SYSTEM_SAMPLE_RATE, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
+            SYSTEM_SAMPLE_RATE_HZ, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
         CeltEncoderMono[i] = celt_encoder_create ( CeltModeMono[i] );
         CeltDecoderMono[i] = celt_decoder_create ( CeltModeMono[i] );
@@ -194,7 +194,7 @@ CServer::CServer ( const QString& strLoggingFileName,
 
         // init audio endocder/decoder (stereo)
         CeltModeStereo[i] = celt_mode_create (
-            SYSTEM_SAMPLE_RATE, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
+            SYSTEM_SAMPLE_RATE_HZ, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
         CeltEncoderStereo[i] = celt_encoder_create ( CeltModeStereo[i] );
         CeltDecoderStereo[i] = celt_decoder_create ( CeltModeStereo[i] );
@@ -219,7 +219,7 @@ CServer::CServer ( const QString& strLoggingFileName,
 
     // init moving average buffer for response time evaluation
     CycleTimeVariance.Init ( SYSTEM_FRAME_SIZE_SAMPLES,
-        SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
+        SYSTEM_SAMPLE_RATE_HZ, TIME_MOV_AV_RESPONSE_SECONDS );
 
     // enable history graph (if requested)
     if ( !strHistoryFileName.isEmpty() )

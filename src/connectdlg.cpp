@@ -58,7 +58,7 @@ pListViewItem = new QTreeWidgetItem ( ListViewServers );
 void CConnectDlg::showEvent ( QShowEvent* )
 {
     // only activate ping timer if window is actually shown
-    TimerPing.start ( PING_UPDATE_TIME );
+    TimerPing.start ( PING_UPDATE_TIME_MS );
 
 //    UpdateDisplay();
 }

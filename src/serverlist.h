@@ -27,8 +27,9 @@
 
 #include <qlocale.h>
 #include <qlist.h>
+#include <qtimer.h>
 #include "global.h"
-
+#include "util.h"
 
 /*
 MAIN POINTS:
@@ -112,11 +113,35 @@ public:
         strCity          ( "" ),
         iNumClients      ( 0 ),
         iMaxNumClients   ( 0 ),
-        bPermanentOnline ( false ) {}
+        bPermanentOnline ( false ) { RegisterTime.start(); }
+
+    CServerListProperties (
+        const CHostAddress&     NIAddr,
+        const QString&          NsName,
+        const QString&          NsTopic,
+        const QLocale::Country& NeCountry,
+        const QString&          NsCity,
+        const int               NiNumClients,
+        const int               NiMaxNumClients,
+        const bool              NbPermOnline) :
+        InetAddr         ( NIAddr ),
+        strName          ( NsName ),
+        strTopic         ( NsTopic ),
+        eCountry         ( NeCountry ),
+        strCity          ( NsCity ),
+        iNumClients      ( NiNumClients ),
+        iMaxNumClients   ( NiMaxNumClients ),
+        bPermanentOnline ( NbPermOnline ) { RegisterTime.start(); }
 
     virtual ~CServerListProperties() {}
 
-protected:
+public:
+    // time on which the entry was registered
+    QTime            RegisterTime;
+
+    // internet address of the server
+    CHostAddress     InetAddr;
+
     // name of the server
     QString          strName;
 
@@ -141,27 +166,20 @@ protected:
 };
 
 
-class CServerList : public QList<CServerListProperties>//, public QObject
+class CServerListManager : public QObject
 {
-//    Q_OBJECT
+    Q_OBJECT
 
-public:
-    CServerList() {}
-    virtual ~CServerList() {}
-
-protected:
-
-};
-
-
-class CServerListManager
-{
 public:
     CServerListManager() {}
     virtual ~CServerListManager() {}
 
 protected:
+    QTimer                       TimerPollList;
+    QList<CServerListProperties> ServerList;
 
+public slots:
+    void OnTimerPollList() { /* TODO */ }
 };
 
 #endif /* !defined ( SERVERLIST_HOIJH8OUWEF_WFEIOBU_3_43445KJIUHF1912__INCLUDED_ ) */

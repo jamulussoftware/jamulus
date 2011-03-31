@@ -280,9 +280,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     MultiColorLEDBarInputLevelR->setValue ( 0 );
 
     // init status LEDs
-    LEDConnection->SetUpdateTime ( 2 * LED_BAR_UPDATE_TIME );
-    LEDChat->SetUpdateTime ( 2 * LED_BAR_UPDATE_TIME );
-    LEDDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME );
+    LEDConnection->SetUpdateTime ( 2 * LED_BAR_UPDATE_TIME_MS );
+    LEDChat->SetUpdateTime       ( 2 * LED_BAR_UPDATE_TIME_MS );
+    LEDDelay->SetUpdateTime      ( 2 * PING_UPDATE_TIME_MS );
     LEDDelay->Reset();
 
 
@@ -442,7 +442,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar
-    TimerStatus.start ( LED_BAR_UPDATE_TIME );
+    TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
 
 
 // TEST
@@ -797,8 +797,8 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
                 PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
 
                 // start timer for level meter bar and ping time measurement
-                TimerSigMet.start ( LEVELMETER_UPDATE_TIME );
-                TimerPing.start ( PING_UPDATE_TIME );
+                TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+                TimerPing.start   ( PING_UPDATE_TIME_MS );
             }
         }
         else

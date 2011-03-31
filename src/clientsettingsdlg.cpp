@@ -236,7 +236,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 #endif
 
     // init delay and other information controls
-    CLEDOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME );
+    CLEDOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME_MS );
     CLEDOverallDelay->Reset();
     TextLabelPingTime->setText     ( "" );
     TextLabelOverallDelay->setText ( "" );
@@ -394,7 +394,7 @@ QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int iFrameSize,
     // use two times the buffer delay for the entire delay since
     // we have input and output
     return QString().setNum ( (double) iFrameSize * 2 *
-        1000 / SYSTEM_SAMPLE_RATE, 'f', 2 ) + " ms (" +
+        1000 / SYSTEM_SAMPLE_RATE_HZ, 'f', 2 ) + " ms (" +
         QString().setNum ( iFrameSize ) + strAddText + ")";
 }
 

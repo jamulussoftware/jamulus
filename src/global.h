@@ -62,7 +62,7 @@
 #define LLCON_DEFAULT_PORT_NUMBER       22124
 
 // system sample rate (the sound card and audio coder works on this sample rate)
-#define SYSTEM_SAMPLE_RATE              48000
+#define SYSTEM_SAMPLE_RATE_HZ           48000 // Hz
 
 // System block size, this is the block size on which the audio coder works.
 // All other block sizes must be a multiple of this size
@@ -70,7 +70,7 @@
 
 #define SYSTEM_BLOCK_DURATION_MS_FLOAT  \
     ( static_cast<double> ( SYSTEM_FRAME_SIZE_SAMPLES ) / \
-    SYSTEM_SAMPLE_RATE * 1000 )
+    SYSTEM_SAMPLE_RATE_HZ * 1000 )
 
 // define the allowed audio frame size factors (since the
 // "SYSTEM_FRAME_SIZE_SAMPLES" is quite small, it may be that on some
@@ -128,11 +128,24 @@
 // without any other changes in the code
 #define USED_NUM_CHANNELS               6 // used number channels for server
 
+
 // defines the time interval at which the ping time is updated in the GUI
-#define PING_UPDATE_TIME                500 // ms
+#define PING_UPDATE_TIME_MS             500 // ms
+
+// time-out until a registered server is deleted from the server list if no
+// new registering was made in minutes
+#define SERVLIST_TIME_OUT_MINUTES       60 // minutes
+
+// poll time for server list (to check if entries are time-out)
+#define SERVLIST_POLL_TIME_MINUTES      1 // minute
+
+// time until a slave server registers in the server list
+#define SERVLIST_REGIST_INTERV_MINUTES  30 // minutes
+
 
 // length of the moving average buffer for response time measurement
-#define TIME_MOV_AV_RESPONSE            30 // seconds
+#define TIME_MOV_AV_RESPONSE_SECONDS    30 // seconds
+
 
 // Maximum length of fader tag and text message strings (Since for chat messages
 // some HTML code is added, we also have to define a second length which includes

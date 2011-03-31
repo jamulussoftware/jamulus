@@ -388,24 +388,32 @@ class CHostAddress
 {
 public:
     CHostAddress() :
-        InetAddr ( (quint32) 0 ),
+        InetAddr ( static_cast<quint32> ( 0 ) ),
         iPort ( 0 ) {}
 
     CHostAddress ( const QHostAddress NInetAddr,
-                   const quint16 iNPort ) :
+                   const quint16      iNPort ) :
         InetAddr ( NInetAddr ),
         iPort ( iNPort ) {}
 
     CHostAddress ( const CHostAddress& NHAddr ) :
         InetAddr ( NHAddr.InetAddr ),
-        iPort ( NHAddr.iPort ) {}
+        iPort    ( NHAddr.iPort ) {}
 
-    // copy and compare operators
+    // copy operator
     CHostAddress& operator= ( const CHostAddress& NHAddr )
-        { InetAddr = NHAddr.InetAddr; iPort = NHAddr.iPort; return *this; }
+    {
+        InetAddr = NHAddr.InetAddr;
+        iPort    = NHAddr.iPort;
+        return *this;
+    }
 
+    // compare operator
     bool operator== ( const CHostAddress& CompAddr ) // compare operator
-        { return ( ( CompAddr.InetAddr == InetAddr ) && ( CompAddr.iPort == iPort ) ); }
+    {
+        return ( ( CompAddr.InetAddr == InetAddr ) &&
+                 ( CompAddr.iPort    == iPort ) );
+    }
 
     QString GetIpAddressStringNoLastByte() const
     {
@@ -425,7 +433,7 @@ public:
         iIpAddr ( 0 ),
         strName ( "" ) {}
 
-    CChannelShortInfo ( const int iNID,
+    CChannelShortInfo ( const int     iNID,
                         const quint32 nIP,
                         const QString nN ) :
         iChanID ( iNID ),
@@ -468,13 +476,13 @@ public:
         eAudioCodingType       ( CT_NONE ),
         iAudioCodingArg        ( 0 ) {}
 
-    CNetworkTransportProps ( const uint32_t iNBNPS,
-                             const uint16_t iNBSF,
-                             const uint32_t iNNACH,
-                             const uint32_t iNSR,
+    CNetworkTransportProps ( const uint32_t      iNBNPS,
+                             const uint16_t      iNBSF,
+                             const uint32_t      iNNACH,
+                             const uint32_t      iNSR,
                              const EAudComprType eNACT,
-                             const uint32_t iNVers,
-                             const int32_t iNACA ) :
+                             const uint32_t      iNVers,
+                             const int32_t       iNACA ) :
         iBaseNetworkPacketSize ( iNBNPS ),
         iBlockSizeFact         ( iNBSF ),
         iNumAudioChannels      ( iNNACH ),
@@ -581,8 +589,8 @@ public:
         dIntervalTime ( 0.0 ), iNewValueBoundFactor ( 0 ) {}
 
     void Init ( const int iNewBlockLengthAtSystemSampleRate,
-                const int iNewSystemSampleRate,
-                const int iHistoryLengthTime,
+                const int iNewSystemSampleRateHz,
+                const int iHistoryLengthTimeSec,
                 const int iNewNewValueBoundFactor = 4 )
     {
         // store block size and new value bound factor
@@ -591,11 +599,11 @@ public:
 
         // calculate interval time
         dIntervalTime = static_cast<double> (
-            iBlockLengthAtSystemSampleRate ) * 1000 / iNewSystemSampleRate;
+            iBlockLengthAtSystemSampleRate ) * 1000 / iNewSystemSampleRateHz;
 
         // calculate actual moving average length and initialize buffer
-        RespTimeMoAvBuf.Init ( iHistoryLengthTime *
-            iNewSystemSampleRate / iNewBlockLengthAtSystemSampleRate );
+        RespTimeMoAvBuf.Init ( iHistoryLengthTimeSec *
+            iNewSystemSampleRateHz / iNewBlockLengthAtSystemSampleRate );
     }
 
     int GetBlockLength() { return iBlockLengthAtSystemSampleRate; }

@@ -220,14 +220,14 @@ QString CSound::CheckDeviceCapabilities()
     // message is returned.
 
     // check the sample rate
-    const ASIOError CanSaRateReturn = ASIOCanSampleRate ( SYSTEM_SAMPLE_RATE );
+    const ASIOError CanSaRateReturn = ASIOCanSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
     if ( ( CanSaRateReturn == ASE_NoClock ) ||
          ( CanSaRateReturn == ASE_NotPresent ) )
     {
         // return error string
         return tr ( "The audio device does not support the "
             "required sample rate. The required sample rate is: " ) +
-            QString().setNum ( SYSTEM_SAMPLE_RATE ) + " Hz";
+            QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + " Hz";
     }
 
     // check the number of available channels
@@ -467,7 +467,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
         iASIOBufferSizeStereo = 2 * iASIOBufferSizeMono;
 
         // set the sample rate
-        ASIOSetSampleRate ( SYSTEM_SAMPLE_RATE );
+        ASIOSetSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
 
         // create memory for intermediate audio buffer
         vecsTmpAudioSndCrdStereo.Init ( iASIOBufferSizeStereo );

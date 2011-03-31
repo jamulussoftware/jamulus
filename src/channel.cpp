@@ -37,7 +37,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     // initial value for connection time out counter, we calculate the total
     // number of samples here and subtract the number of samples of the block
     // which we take out of the buffer to be independent of block sizes
-    iConTimeOutStartVal = CON_TIME_OUT_SEC_MAX * SYSTEM_SAMPLE_RATE;
+    iConTimeOutStartVal = CON_TIME_OUT_SEC_MAX * SYSTEM_SAMPLE_RATE_HZ;
 
     // init time-out for the buffer with zero -> no connection
     iConTimeOut = 0;
@@ -47,7 +47,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
     // initialize cycle time variance measurement with defaults
     CycleTimeVariance.Init ( SYSTEM_FRAME_SIZE_SAMPLES,
-        SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
+        SYSTEM_SAMPLE_RATE_HZ, TIME_MOV_AV_RESPONSE_SECONDS );
 
     // initialize channel name
     ResetName();
@@ -155,7 +155,7 @@ void CChannel::SetAudioStreamProperties ( const int iNewNetwFrameSize,
 
     // initialize and reset cycle time variance measurement
     CycleTimeVariance.Init ( iNetwFrameSizeFact * SYSTEM_FRAME_SIZE_SAMPLES,
-        SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
+        SYSTEM_SAMPLE_RATE_HZ, TIME_MOV_AV_RESPONSE_SECONDS );
 
     CycleTimeVariance.Reset();
 
@@ -321,7 +321,7 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
         iNetwFrameSize,
         iNetwFrameSizeFact,
         iNumAudioChannels,
-        SYSTEM_SAMPLE_RATE,
+        SYSTEM_SAMPLE_RATE_HZ,
         CT_CELT, // always CELT coding
         0, // version of the codec
         0 );
@@ -546,7 +546,7 @@ int CChannel::GetUploadRateKbps()
     // 8 (UDP) + 20 (IP without optional fields) = 28 bytes
     return ( iNetwFrameSize * iNetwFrameSizeFact + 28 /* header */ ) *
         8 /* bits per byte */ *
-        SYSTEM_SAMPLE_RATE / iAudioSizeOut / 1000;
+        SYSTEM_SAMPLE_RATE_HZ / iAudioSizeOut / 1000;
 }
 
 

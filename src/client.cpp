@@ -58,7 +58,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
 {
     // init audio encoder/decoder (mono)
     CeltModeMono = celt_mode_create (
-        SYSTEM_SAMPLE_RATE, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
+        SYSTEM_SAMPLE_RATE_HZ, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
     CeltEncoderMono = celt_encoder_create ( CeltModeMono );
     CeltDecoderMono = celt_decoder_create ( CeltModeMono );
@@ -71,7 +71,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
 
     // init audio encoder/decoder (stereo)
     CeltModeStereo = celt_mode_create (
-        SYSTEM_SAMPLE_RATE, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
+        SYSTEM_SAMPLE_RATE_HZ, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
     CeltEncoderStereo = celt_encoder_create ( CeltModeStereo );
     CeltDecoderStereo = celt_decoder_create ( CeltModeStereo );
@@ -557,13 +557,13 @@ void CClient::Init()
 
     // init response time evaluation
     CycleTimeVariance.Init ( iMonoBlockSizeSam,
-        SYSTEM_SAMPLE_RATE, TIME_MOV_AV_RESPONSE );
+        SYSTEM_SAMPLE_RATE_HZ, TIME_MOV_AV_RESPONSE_SECONDS );
 
     CycleTimeVariance.Reset();
 
     // init reverberation
-    AudioReverbL.Init ( SYSTEM_SAMPLE_RATE );
-    AudioReverbR.Init ( SYSTEM_SAMPLE_RATE );
+    AudioReverbL.Init ( SYSTEM_SAMPLE_RATE_HZ );
+    AudioReverbR.Init ( SYSTEM_SAMPLE_RATE_HZ );
 
     // inits for CELT coding
     if ( bCeltDoHighQuality )
@@ -931,7 +931,7 @@ void CClient::UpdateSocketBufferSize()
         const double dAudioBufferDurationMs =
             ( GetSndCrdActualMonoBlSize() +
               GetSndCrdConvBufAdditionalDelayMonoBlSize() ) *
-            1000 / SYSTEM_SAMPLE_RATE;
+            1000 / SYSTEM_SAMPLE_RATE_HZ;
 
         // jitter introduced in the server by the timer implementation
         const double dServerJitterMs = 0.666666; // ms
@@ -996,12 +996,12 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     const double dTotalSoundCardDelayMs =
         ( 3 * GetSndCrdActualMonoBlSize() +
         GetSndCrdConvBufAdditionalDelayMonoBlSize() ) *
-        1000 / SYSTEM_SAMPLE_RATE;
+        1000 / SYSTEM_SAMPLE_RATE_HZ;
 
     // network packets are of the same size as the audio packets per definition
     // if no sound card conversion buffer is used
     const double dDelayToFillNetworkPacketsMs =
-        GetSystemMonoBlSize() * 1000 / SYSTEM_SAMPLE_RATE;
+        GetSystemMonoBlSize() * 1000 / SYSTEM_SAMPLE_RATE_HZ;
 
     // CELT additional delay at small frame sizes is half a frame size
     const double dAdditionalAudioCodecDelayMs =

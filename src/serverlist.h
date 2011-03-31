@@ -73,60 +73,40 @@ class CServerListProperties
 {
 public:
     CServerListProperties() :
-        strName          ( "" ),
-        strTopic         ( "" ),
-        eCountry         ( QLocale::AnyCountry ),
-        strCity          ( "" ),
-        iNumClients      ( 0 ),
-        iMaxNumClients   ( 0 ),
-        bPermanentOnline ( false ) { RegisterTime.start(); }
+        ServerInfo ( "",
+                     "",
+                     QLocale::AnyCountry,
+                     "",
+                     0,
+                     0,
+                     false ) { RegisterTime.start(); }
 
-    CServerListProperties (
-        const CHostAddress&     NIAddr,
-        const QString&          NsName,
-        const QString&          NsTopic,
-        const QLocale::Country& NeCountry,
-        const QString&          NsCity,
-        const int               NiNumClients,
-        const int               NiMaxNumClients,
-        const bool              NbPermOnline) :
-        InetAddr         ( NIAddr ),
-        strName          ( NsName ),
-        strTopic         ( NsTopic ),
-        eCountry         ( NeCountry ),
-        strCity          ( NsCity ),
-        iNumClients      ( NiNumClients ),
-        iMaxNumClients   ( NiMaxNumClients ),
-        bPermanentOnline ( NbPermOnline ) { RegisterTime.start(); }
+    CServerListProperties ( const CHostAddress&     NIAddr,
+                            const QString&          NsName,
+                            const QString&          NsTopic,
+                            const QLocale::Country& NeCountry,
+                            const QString&          NsCity,
+                            const int               NiNumClients,
+                            const int               NiMaxNumClients,
+                            const bool              NbPermOnline)
+        : InetAddr ( NIAddr ), ServerInfo ( NsName,
+                                            NsTopic,
+                                            NeCountry,
+                                            NsCity,
+                                            NiNumClients,
+                                            NiMaxNumClients,
+                                            NbPermOnline )
+        { RegisterTime.start(); }
 
 public:
     // time on which the entry was registered
-    QTime            RegisterTime;
+    QTime        RegisterTime;
 
     // internet address of the server
-    CHostAddress     InetAddr;
+    CHostAddress InetAddr;
 
-    // name of the server
-    QString          strName;
-
-    // topic of the current jam session or server
-    QString          strTopic;
-
-    // country in which the server is located
-    QLocale::Country eCountry;
-
-    // city in which the server is located
-    QString          strCity;
-
-    // current number of connected clients
-    int              iNumClients;
-
-    // maximum number of clients which can connect to the server at the same
-    // time
-    int              iMaxNumClients;
-
-    // is the server permanently online or not (flag)
-    bool             bPermanentOnline;
+    // infos of the server
+    CServerInfo  ServerInfo;
 };
 
 

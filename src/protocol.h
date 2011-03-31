@@ -97,6 +97,8 @@ public:
 
     void CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLServerFullMes ( const CHostAddress& InetAddr );
+    void CreateCLRegisterServerMes ( const CHostAddress& InetAddr,
+                                     const CServerInfo&  ServerInfo );
 
     void CreateAndImmSendDisconnectionMes();
     void CreateAndImmSendAcknMess ( const int& iID, const int& iCnt );
@@ -187,6 +189,8 @@ protected:
     bool EvaluateCLPingMes             ( const CHostAddress& InetAddr,
                                          const CVector<uint8_t>& vecData );
     bool EvaluateCLServerFullMes();
+    bool EvaluateCLRegisterServerMes   ( const CHostAddress& InetAddr,
+                                         const CVector<uint8_t>& vecData );
 
     int                     iOldRecID, iOldRecCnt;
 

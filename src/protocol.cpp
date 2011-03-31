@@ -123,13 +123,16 @@ MESSAGES
 
     - "base netw size":  length of the base network packet (frame) in bytes
     - "block size fact": block size factor
-    - "num chan":        number of channels of the audio signal, e.g. "2" is stereo
+    - "num chan":        number of channels of the audio signal, e.g. "2" is
+                         stereo
     - "sam rate":        sample rate of the audio stream
     - "audiocod type":   audio coding type, the following types are supported:
                           - 0: none, no audio coding applied
                           - 1: CELT
-    - "version":         version of the audio coder, if not used this value shall be set to 0
-    - "audiocod arg":    argument for the audio coder, if not used this value shall be set to 0
+    - "version":         version of the audio coder, if not used this value
+                         shall be set to 0
+    - "audiocod arg":    argument for the audio coder, if not used this value
+                         shall be set to 0
 
 
 - PROTMESSID_REQ_NETW_TRANSPORT_PROPS: Request properties for network transport
@@ -146,7 +149,8 @@ MESSAGES
 CONNECTION LESS MESSAGES
 ------------------------
 
-- PROTMESSID_CLM_PING_MS: Connection less ping message (for measuring the ping time)
+- PROTMESSID_CLM_PING_MS: Connection less ping message (for measuring the ping
+                          time)
 
     note: same definition as PROTMESSID_PING_MS
 
@@ -154,6 +158,35 @@ CONNECTION LESS MESSAGES
 - PROTMESSID_SERVER_FULL: Connection less server full message
 
     note: does not have any data -> n = 0
+
+
+- PROTMESSID_CLM_REGISTER_SERVER: Register a server, providing server
+                                  information
+
+    +------------------+----------------------------------+ ...
+    | 2 bytes number n | n bytes UTF-8 string server name | ...
+    +------------------+----------------------------------+ ...
+        ... -----------------+----------------------------+ ...
+        ... 2 bytes number n | n bytes UTF-8 string topic | ...
+        ... -----------------+----------------------------+ ...
+        ... ----------------+------------------+---------------------------+ ...
+        ... 2 bytes country | 2 bytes number n | n bytes UTF-8 string city | ...
+        ... ----------------+------------------+---------------------------+ ...
+        ... --------------------------------+ ...
+        ... 1 byte number connected clients | ...
+        ... --------------------------------+ ...
+        ... ---------------------------------+---------------------+
+        ... 1 byte maximum connected clients | 1 byte is permanent |
+        ... ---------------------------------+---------------------+
+
+    - "country" is according to "Common Locale Data Repository" which is used in
+      the QLocale class
+    - "connected clients" is the current number of connected clients
+    - "maximum connected clients" is the maximum number of clients which can
+      be connected to the server at the same time
+    - "is permanent" is a flag which indicates if the server is permanent
+      online or not. If this value is any value <> 0 indicates that the server
+      is permanent online.
 
 
  ******************************************************************************
@@ -553,7 +586,7 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 {
     CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
-    unsigned int     iPos = 0; // init position pointer
+    unsigned int     iPos = 0;      // init position pointer
 
     // build data vector
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iJitBufSize ), 2 );
@@ -604,7 +637,7 @@ bool CProtocol::EvaluateReqJitBufMes()
 void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
 {
     CVector<uint8_t> vecData ( 3 ); // 3 bytes of data
-    unsigned int     iPos = 0; // init position pointer
+    unsigned int     iPos = 0;      // init position pointer
 
     // build data vector
     // channel ID
@@ -612,6 +645,7 @@ void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
 
     // actual gain, we convert from double with range 0..1 to integer
     const int iCurGain = static_cast<int> ( dGain * ( 1 << 15 ) );
+
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iCurGain ), 2 );
 
     CreateAndSendMessage ( PROTMESSID_CHANNEL_GAIN, vecData );
@@ -752,8 +786,8 @@ bool CProtocol::EvaluateReqConnClientsList()
 
 void CProtocol::CreateChanNameMes ( const QString strName )
 {
-    unsigned int  iPos = 0; // init position pointer
-    const int     iStrLen = strName.size(); // get string size
+    unsigned int iPos = 0; // init position pointer
+    const int    iStrLen = strName.size(); // get string size
 
     // size of current list entry
     const int iEntrLen = 2 /* string size */ + iStrLen;
@@ -825,8 +859,8 @@ bool CProtocol::EvaluateReqChanNameMes()
 
 void CProtocol::CreateChatTextMes ( const QString strChatText )
 {
-    unsigned int  iPos = 0; // init position pointer
-    const int     iStrLen = strChatText.size(); // get string size
+    unsigned int iPos = 0; // init position pointer
+    const int    iStrLen = strChatText.size(); // get string size
 
     // size of message body
     const int iEntrLen = 2 /* string size */ + iStrLen;
@@ -917,9 +951,14 @@ void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrPr
     unsigned int  iPos = 0; // init position pointer
 
     // size of current message body
-    const int iEntrLen = 4 /* netw size */ + 2 /* block size fact */ +
-        1 /* num chan */ + 4 /* sam rate */ + 2 /* audiocod type */ +
-        2 /* version */ + 4 /* audiocod arg */;
+    const int iEntrLen =
+        4 /* netw size */ +
+        2 /* block size fact */ +
+        1 /* num chan */ +
+        4 /* sam rate */ +
+        2 /* audiocod type */ +
+        2 /* version */ +
+        4 /* audiocod arg */;
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
@@ -961,9 +1000,14 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     CNetworkTransportProps ReceivedNetwTranspProps;
 
     // size of current message body
-    const int iEntrLen = 4 /* netw size */ + 2 /* block size fact */ +
-        1 /* num chan */ + 4 /* sam rate */ + 2 /* audiocod type */ +
-        2 /* version */ + 4 /* audiocod arg */;
+    const int iEntrLen =
+        4 /* netw size */ +
+        2 /* block size fact */ +
+        1 /* num chan */ +
+        4 /* sam rate */ +
+        2 /* audiocod type */ +
+        2 /* version */ +
+        4 /* audiocod arg */;
 
     // check size
     if ( vecData.Size() != iEntrLen )
@@ -1125,6 +1169,94 @@ bool CProtocol::EvaluateCLServerFullMes()
     emit ServerFull();
 
     return false; // no error
+}
+
+void CProtocol::CreateCLRegisterServerMes ( const CHostAddress& InetAddr,
+                                            const CServerInfo&  ServerInfo )
+{
+    unsigned int iPos = 0; // init position pointer
+
+    // current string sizes
+    const int iNameLen  = ServerInfo.strName.size();
+    const int iTopicLen = ServerInfo.strTopic.size();
+    const int iCityLen  = ServerInfo.strCity.size();
+
+    // size of current message body
+    const int iEntrLen =
+        2 /* name string size */ + iNameLen +
+        2 /* topic string size */ + iTopicLen +
+        2 /* country */ +
+        2 /* city string size */ + iCityLen +
+        1 /* number of connected clients */ +
+        1 /* maximum number of connected clients */ +
+        1 /* is permanent flag */;
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // number of bytes for name string (2 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( iNameLen ), 2 );
+
+    // name string (n bytes)
+    for ( int j = 0; j < iNameLen; j++ )
+    {
+        // byte-by-byte copying of the string data
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( ServerInfo.strName[j].toAscii() ), 1 );
+    }
+
+    // number of bytes for topic string (2 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( iTopicLen ), 2 );
+
+    // topic string (n bytes)
+    for ( int j = 0; j < iTopicLen; j++ )
+    {
+        // byte-by-byte copying of the string data
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( ServerInfo.strTopic[j].toAscii() ), 1 );
+    }
+
+    // country (2 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( ServerInfo.eCountry ), 2 );
+
+    // number of bytes for city string (2 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( iCityLen ), 2 );
+
+    // city string (n bytes)
+    for ( int j = 0; j < iCityLen; j++ )
+    {
+        // byte-by-byte copying of the string data
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( ServerInfo.strCity[j].toAscii() ), 1 );
+    }
+
+    // number of connected clients (1 byte)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( ServerInfo.iNumClients ), 1 );
+
+    // maximum number of connected clients (1 byte)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( ServerInfo.iMaxNumClients ), 1 );
+
+    // is permanent flag (1 byte)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( ServerInfo.bPermanentOnline ), 1 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REGISTER_SERVER,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress& InetAddr,
+                                              const CVector<uint8_t>& vecData )
+{
+
+    // TODO
+
 }
 
 

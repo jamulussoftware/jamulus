@@ -34,6 +34,7 @@
 #include <qfile.h>
 #include <qdesktopservices.h>
 #include <qurl.h>
+#include <qlocale.h>
 #include <vector>
 #include "global.h"
 using namespace std; // because of the library: "vector"
@@ -384,6 +385,8 @@ protected:
     double dCurLevelR;
 };
 
+
+// Host address ----------------------------------------------------------------
 class CHostAddress
 {
 public:
@@ -394,7 +397,7 @@ public:
     CHostAddress ( const QHostAddress NInetAddr,
                    const quint16      iNPort ) :
         InetAddr ( NInetAddr ),
-        iPort ( iNPort ) {}
+        iPort    ( iNPort ) {}
 
     CHostAddress ( const CHostAddress& NHAddr ) :
         InetAddr ( NHAddr.InetAddr ),
@@ -425,6 +428,8 @@ public:
     quint16      iPort;
 };
 
+
+// Short info of a channel -----------------------------------------------------
 class CChannelShortInfo
 {
 public:
@@ -445,12 +450,70 @@ public:
     QString strName;
 };
 
+
+// Server info -----------------------------------------------------------------
+class CServerInfo
+{
+public:
+    CServerInfo() :
+        strName          ( "" ),
+        strTopic         ( "" ),
+        eCountry         ( QLocale::AnyCountry ),
+        strCity          ( "" ),
+        iNumClients      ( 0 ),
+        iMaxNumClients   ( 0 ),
+        bPermanentOnline ( false ) {}
+
+    CServerInfo (
+        const QString&          NsName,
+        const QString&          NsTopic,
+        const QLocale::Country& NeCountry,
+        const QString&          NsCity,
+        const int               NiNumClients,
+        const int               NiMaxNumClients,
+        const bool              NbPermOnline) :
+        strName          ( NsName ),
+        strTopic         ( NsTopic ),
+        eCountry         ( NeCountry ),
+        strCity          ( NsCity ),
+        iNumClients      ( NiNumClients ),
+        iMaxNumClients   ( NiMaxNumClients ),
+        bPermanentOnline ( NbPermOnline ) {}
+
+public:
+    // name of the server
+    QString          strName;
+
+    // topic of the current jam session or server
+    QString          strTopic;
+
+    // country in which the server is located
+    QLocale::Country eCountry;
+
+    // city in which the server is located
+    QString          strCity;
+
+    // current number of connected clients
+    int              iNumClients;
+
+    // maximum number of clients which can connect to the server at the same
+    // time
+    int              iMaxNumClients;
+
+    // is the server permanently online or not (flag)
+    bool             bPermanentOnline;
+};
+
+
+// Audio compression type enum -------------------------------------------------
 enum EAudComprType
 {
     CT_NONE = 0,
     CT_CELT = 1
 };
 
+
+// Get data status enum --------------------------------------------------------
 enum EGetDataStat
 {
     GS_BUFFER_OK,
@@ -459,12 +522,16 @@ enum EGetDataStat
     GS_CHAN_NOT_CONNECTED
 };
 
+
+// GUI design enum -------------------------------------------------------------
 enum EGUIDesign
 {
     GD_STANDARD = 0,
     GD_ORIGINAL = 1
 };
 
+
+// Network transport properties ------------------------------------------------
 class CNetworkTransportProps
 {
 public:
@@ -501,7 +568,7 @@ public:
 };
 
 
-// Audio Reverbration ----------------------------------------------------------
+// Audio reverbration ----------------------------------------------------------
 class CAudioReverb
 {
 public:
@@ -553,7 +620,7 @@ public:
 
 
 // Precise time ----------------------------------------------------------------
-// needed for ping measurement
+// required for ping measurement
 class CPreciseTime
 {
 public:
@@ -658,6 +725,7 @@ protected:
     double            dIntervalTime;
     int               iNewValueBoundFactor;
 };
+
 
 // Error rate measurement ------------------------------------------------------
 class CErrorRate

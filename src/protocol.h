@@ -158,13 +158,18 @@ protected:
                           const uint32_t     iVal,
                           const unsigned int iNumOfBytes );
 
-    void PutStringOnStream ( CVector<uint8_t>&  vecData,
+    void PutStringOnStream ( CVector<uint8_t>&  vecIn,
                              unsigned int&      iPos,
                              const QString&     sString );
 
     uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
                                 unsigned int&           iPos,
                                 const unsigned int      iNumOfBytes );
+
+    bool GetStringFromStream ( const CVector<uint8_t>& vecIn,
+                               unsigned int&           iPos,
+                               const unsigned int      iMaxStringLen,
+                               QString&                strOut );
 
     bool IsConnectionLessMessageID ( const int iID ) const
         { return (iID >= 1000) & (iID < 2000); }

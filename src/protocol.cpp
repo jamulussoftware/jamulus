@@ -582,7 +582,9 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
 }
 
 
-// Access-functions for creating and parsing messages --------------------------
+/******************************************************************************\
+* Access-functions for creating and parsing messages                           *
+\******************************************************************************/
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 {
     CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
@@ -705,17 +707,8 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
         PutValOnStream ( vecData, iPos,
             static_cast<uint32_t> ( vecChanInfo[i].iIpAddr ), 4 );
 
-        // number of bytes for name string (2 bytes)
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( iCurStrLen ), 2 );
-
-        // name string (n bytes)
-        for ( int j = 0; j < iCurStrLen; j++ )
-        {
-            // byte-by-byte copying of the string data
-            PutValOnStream ( vecData, iPos,
-                static_cast<uint32_t> ( vecChanInfo[i].strName[j].toAscii() ), 1 );
-        }
+        // name string
+        PutStringOnStream ( vecData, iPos, vecChanInfo[i].strName );
     }
 
     CreateAndSendMessage ( PROTMESSID_CONN_CLIENTS_LIST, vecData );
@@ -795,16 +788,8 @@ void CProtocol::CreateChanNameMes ( const QString strName )
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
 
-    // number of bytes for name string (2 bytes)
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iStrLen ), 2 );
-
-    // name string (n bytes)
-    for ( int i = 0; i < iStrLen; i++ )
-    {
-        // byte-by-byte copying of the string data
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( strName[i].toAscii() ), 1 );
-    }
+    // name string
+    PutStringOnStream ( vecData, iPos, strName );
 
     CreateAndSendMessage ( PROTMESSID_CHANNEL_NAME, vecData );
 }
@@ -868,16 +853,8 @@ void CProtocol::CreateChatTextMes ( const QString strChatText )
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
 
-    // number of bytes for chat text string (2 bytes)
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iStrLen ), 2 );
-
-    // chat text string (n bytes)
-    for ( int i = 0; i < iStrLen; i++ )
-    {
-        // byte-by-byte copying of the string data
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( strChatText[i].toAscii() ), 1 );
-    }
+    // chat text
+    PutStringOnStream ( vecData, iPos, strChatText );
 
     CreateAndSendMessage ( PROTMESSID_CHAT_TEXT, vecData );
 }
@@ -1194,45 +1171,18 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress& InetAddr,
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
 
-    // number of bytes for name string (2 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( iNameLen ), 2 );
+    // name
+    PutStringOnStream ( vecData, iPos, ServerInfo.strName );
 
-    // name string (n bytes)
-    for ( int j = 0; j < iNameLen; j++ )
-    {
-        // byte-by-byte copying of the string data
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( ServerInfo.strName[j].toAscii() ), 1 );
-    }
-
-    // number of bytes for topic string (2 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( iTopicLen ), 2 );
-
-    // topic string (n bytes)
-    for ( int j = 0; j < iTopicLen; j++ )
-    {
-        // byte-by-byte copying of the string data
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( ServerInfo.strTopic[j].toAscii() ), 1 );
-    }
+    // topic
+    PutStringOnStream ( vecData, iPos, ServerInfo.strTopic );
 
     // country (2 bytes)
     PutValOnStream ( vecData, iPos,
         static_cast<uint32_t> ( ServerInfo.eCountry ), 2 );
 
-    // number of bytes for city string (2 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( iCityLen ), 2 );
-
-    // city string (n bytes)
-    for ( int j = 0; j < iCityLen; j++ )
-    {
-        // byte-by-byte copying of the string data
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( ServerInfo.strCity[j].toAscii() ), 1 );
-    }
+    // city
+    PutStringOnStream ( vecData, iPos, ServerInfo.strCity );
 
     // number of connected clients (1 byte)
     PutValOnStream ( vecData, iPos,
@@ -1262,7 +1212,7 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress& InetAddr,
 
 
 /******************************************************************************\
-* Message generation (parsing)                                                 *
+* Message generation and parsing                                               *
 \******************************************************************************/
 bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
                                     const int               iNumBytesIn,
@@ -1270,7 +1220,7 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
                                     int&                    iID,
                                     CVector<uint8_t>&       vecData )
 {
-    int iLenBy, i;
+    int          iLenBy, i;
     unsigned int iCurPos;
 
     // vector must be at least "MESS_LEN_WITHOUT_DATA_BYTE" bytes long
@@ -1280,7 +1230,7 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
     }
 
 
-    // decode header -----
+    // Decode header -----------------------------------------------------------
     iCurPos = 0; // start from beginning
 
     // 2 bytes TAG
@@ -1292,13 +1242,13 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
         return true; // return error code
     }
 
-    /* 2 bytes ID */
+    // 2 bytes ID
     iID = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
 
-    /* 1 byte cnt */
+    // 1 byte cnt
     iCnt = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 1 ) );
 
-    /* 2 bytes length */
+    // 2 bytes length
     iLenBy = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
 
     // make sure the length is correct
@@ -1308,11 +1258,11 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
     }
 
 
-    // now check CRC -----
+    // Now check CRC -----------------------------------------------------------
     CCRC CRCObj;
     const int iLenCRCCalc = MESS_HEADER_LENGTH_BYTE + iLenBy;
 
-    iCurPos = 0; // start from beginning
+    iCurPos = 0; // start from the beginning
     for ( i = 0; i < iLenCRCCalc; i++ )
     {
         CRCObj.AddByte ( static_cast<uint8_t> ( 
@@ -1325,7 +1275,7 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
     }
 
 
-    // extract actual data -----
+    // Extract actual data -----------------------------------------------------
     vecData.Init ( iLenBy );
     iCurPos = MESS_HEADER_LENGTH_BYTE; // start from beginning of data
     for ( i = 0; i < iLenBy; i++ )
@@ -1374,7 +1324,8 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>&       vecOut,
     // init message vector
     vecOut.Init ( iTotLenByte );
 
-    // encode header -----
+
+    // Encode header -----------------------------------------------------------
     unsigned int iCurPos = 0; // init position pointer
 
     // 2 bytes TAG (all zero bits)
@@ -1400,7 +1351,8 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>&       vecOut,
             static_cast<uint32_t> ( vecData[i] ), 1 );
     }
 
-    // encode CRC -----
+
+    // Encode CRC --------------------------------------------------------------
     CCRC CRCObj;
     iCurPos = 0; // start from beginning
 
@@ -1433,5 +1385,25 @@ void CProtocol::PutValOnStream ( CVector<uint8_t>&  vecIn,
             ( iVal >> ( i * 8 /* size of byte */ ) ) & 255 /* 11111111 */;
 
         iPos++;
+    }
+}
+
+void CProtocol::PutStringOnStream ( CVector<uint8_t>&  vecData,
+                                    unsigned int&      iPos,
+                                    const QString&     sString )
+{
+    // get the string size
+    const int iCurStrLen = sString.size();
+
+    // number of bytes for string (2 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( iCurStrLen ), 2 );
+
+    // actual string (n bytes)
+    for ( int j = 0; j < iCurStrLen; j++ )
+    {
+        // byte-by-byte copying of the string data
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( sString[j].toAscii() ), 1 );
     }
 }

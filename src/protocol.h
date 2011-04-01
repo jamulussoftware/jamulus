@@ -101,10 +101,11 @@ public:
                                      const CServerInfo&  ServerInfo );
 
     void CreateAndImmSendDisconnectionMes();
-    void CreateAndImmSendAcknMess ( const int& iID, const int& iCnt );
+    void CreateAndImmSendAcknMess ( const int& iID,
+                                    const int& iCnt );
 
     bool ParseMessage ( const CVector<uint8_t>& vecbyData,
-                        const int iNumBytes );
+                        const int               iNumBytes );
 
     bool ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
                                       const int               iNumBytes,
@@ -133,44 +134,49 @@ protected:
             return *this; 
         }
 
-        CVector<uint8_t>    vecMessage;
-        int                 iID, iCnt;
+        CVector<uint8_t> vecMessage;
+        int              iID, iCnt;
     };
 
     void EnqueueMessage ( CVector<uint8_t>& vecMessage,
-                          const int iCnt,
-                          const int iID );
+                          const int         iCnt,
+                          const int         iID );
 
     bool ParseMessageFrame ( const CVector<uint8_t>& vecIn,
-                             const int iNumBytesIn,
-                             int& iCnt,
-                             int& iID,
-                             CVector<uint8_t>& vecData );
+                             const int               iNumBytesIn,
+                             int&                    iCnt,
+                             int&                    iID,
+                             CVector<uint8_t>&       vecData );
 
-    void GenMessageFrame ( CVector<uint8_t>& vecOut,
-                           const int iCnt,
-                           const int iID,
+    void GenMessageFrame ( CVector<uint8_t>&       vecOut,
+                           const int               iCnt,
+                           const int               iID,
                            const CVector<uint8_t>& vecData );
 
-    void PutValOnStream ( CVector<uint8_t>& vecIn,
-                          unsigned int& iPos,
-                          const uint32_t iVal,
+    void PutValOnStream ( CVector<uint8_t>&  vecIn,
+                          unsigned int&      iPos,
+                          const uint32_t     iVal,
                           const unsigned int iNumOfBytes );
 
+    void PutStringOnStream ( CVector<uint8_t>&  vecData,
+                             unsigned int&      iPos,
+                             const QString&     sString );
+
     uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
-                                unsigned int& iPos,
-                                const unsigned int iNumOfBytes );
+                                unsigned int&           iPos,
+                                const unsigned int      iNumOfBytes );
 
     bool IsConnectionLessMessageID ( const int iID ) const
         { return (iID >= 1000) & (iID < 2000); }
 
     void SendMessage();
 
-    void CreateAndSendMessage ( const int iID, const CVector<uint8_t>& vecData );
+    void CreateAndSendMessage ( const int               iID,
+                                const CVector<uint8_t>& vecData );
 
-    void CreateAndImmSendConLessMessage ( const int iID,
+    void CreateAndImmSendConLessMessage ( const int               iID,
                                           const CVector<uint8_t>& vecData,
-                                          const CHostAddress& InetAddr );
+                                          const CHostAddress&     InetAddr );
 
     bool EvaluateJitBufMes             ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();
@@ -186,13 +192,14 @@ protected:
     bool EvaluateReqNetwTranspPropsMes();
     bool EvaluateDisconnectionMes();
 
-    bool EvaluateCLPingMes             ( const CHostAddress& InetAddr,
+    bool EvaluateCLPingMes             ( const CHostAddress&     InetAddr,
                                          const CVector<uint8_t>& vecData );
     bool EvaluateCLServerFullMes();
-    bool EvaluateCLRegisterServerMes   ( const CHostAddress& InetAddr,
+    bool EvaluateCLRegisterServerMes   ( const CHostAddress&     InetAddr,
                                          const CVector<uint8_t>& vecData );
 
-    int                     iOldRecID, iOldRecCnt;
+    int                     iOldRecID;
+    int                     iOldRecCnt;
 
     // these two objects must be sequred by a mutex
     uint8_t                 iCounter;

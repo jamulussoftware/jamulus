@@ -302,27 +302,31 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     // connections -------------------------------------------------------------
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
-    QObject::connect ( vecpChanFader[0], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh0 ( double ) ) );
-    QObject::connect ( vecpChanFader[1], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh1 ( double ) ) );
-    QObject::connect ( vecpChanFader[2], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh2 ( double ) ) );
-    QObject::connect ( vecpChanFader[3], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh3 ( double ) ) );
-    QObject::connect ( vecpChanFader[4], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh4 ( double ) ) );
-    QObject::connect ( vecpChanFader[5], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh5 ( double ) ) );
-    QObject::connect ( vecpChanFader[6], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh6 ( double ) ) );
-    QObject::connect ( vecpChanFader[7], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh7 ( double ) ) );
-    QObject::connect ( vecpChanFader[8], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh8 ( double ) ) );
-    QObject::connect ( vecpChanFader[9], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh9 ( double ) ) );
+    QObject::connect ( vecpChanFader[0],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh0  ( double ) ) );
+    QObject::connect ( vecpChanFader[1],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh1  ( double ) ) );
+    QObject::connect ( vecpChanFader[2],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh2  ( double ) ) );
+    QObject::connect ( vecpChanFader[3],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh3  ( double ) ) );
+    QObject::connect ( vecpChanFader[4],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh4  ( double ) ) );
+    QObject::connect ( vecpChanFader[5],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh5  ( double ) ) );
+    QObject::connect ( vecpChanFader[6],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh6  ( double ) ) );
+    QObject::connect ( vecpChanFader[7],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh7  ( double ) ) );
+    QObject::connect ( vecpChanFader[8],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh8  ( double ) ) );
+    QObject::connect ( vecpChanFader[9],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh9  ( double ) ) );
+    QObject::connect ( vecpChanFader[10], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh10 ( double ) ) );
+    QObject::connect ( vecpChanFader[11], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh11 ( double ) ) );
 
-    QObject::connect ( vecpChanFader[0], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh0 ( int ) ) );
-    QObject::connect ( vecpChanFader[1], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh1 ( int ) ) );
-    QObject::connect ( vecpChanFader[2], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh2 ( int ) ) );
-    QObject::connect ( vecpChanFader[3], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh3 ( int ) ) );
-    QObject::connect ( vecpChanFader[4], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh4 ( int ) ) );
-    QObject::connect ( vecpChanFader[5], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh5 ( int ) ) );
-    QObject::connect ( vecpChanFader[6], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh6 ( int ) ) );
-    QObject::connect ( vecpChanFader[7], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh7 ( int ) ) );
-    QObject::connect ( vecpChanFader[8], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh8 ( int ) ) );
-    QObject::connect ( vecpChanFader[9], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh9 ( int ) ) );
+    QObject::connect ( vecpChanFader[0],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh0  ( int ) ) );
+    QObject::connect ( vecpChanFader[1],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh1  ( int ) ) );
+    QObject::connect ( vecpChanFader[2],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh2  ( int ) ) );
+    QObject::connect ( vecpChanFader[3],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh3  ( int ) ) );
+    QObject::connect ( vecpChanFader[4],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh4  ( int ) ) );
+    QObject::connect ( vecpChanFader[5],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh5  ( int ) ) );
+    QObject::connect ( vecpChanFader[6],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh6  ( int ) ) );
+    QObject::connect ( vecpChanFader[7],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh7  ( int ) ) );
+    QObject::connect ( vecpChanFader[8],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh8  ( int ) ) );
+    QObject::connect ( vecpChanFader[9],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh9  ( int ) ) );
+    QObject::connect ( vecpChanFader[10], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh10 ( int ) ) );
+    QObject::connect ( vecpChanFader[11], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh11 ( int ) ) );
 }
 
 void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )

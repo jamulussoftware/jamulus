@@ -60,6 +60,7 @@ private network.
 #if !defined ( SERVERLIST_HOIJH8OUWEF_WFEIOBU_3_43445KJIUHF1912__INCLUDED_ )
 #define SERVERLIST_HOIJH8OUWEF_WFEIOBU_3_43445KJIUHF1912__INCLUDED_
 
+#include <qobject.h>
 #include <qlocale.h>
 #include <qlist.h>
 #include <qtimer.h>

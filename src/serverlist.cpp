@@ -29,6 +29,7 @@
 CServerListManager::CServerListManager ( const bool NbEbld )
     : bEnabled ( NbEbld )
 {
+/*
     // connections -------------------------------------------------------------
     QObject::connect ( &TimerPollList, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerPollList() ) );
@@ -40,8 +41,9 @@ CServerListManager::CServerListManager ( const bool NbEbld )
         // 1 minute = 60 * 1000 ms
         TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
     }
+    */
 }
-
+/*
 void CServerListManager::OnTimerPollList()
 {
     QMutexLocker locker ( &Mutex );
@@ -58,3 +60,4 @@ void CServerListManager::OnTimerPollList()
         }
     }
 }
+*/

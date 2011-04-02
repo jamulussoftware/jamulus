@@ -154,6 +154,9 @@
 #define MAX_LEN_FADER_TAG               16
 #define MAX_LEN_CHAT_TEXT               1600
 #define MAX_LEN_CHAT_TEXT_PLUS_HTML     1800
+#define MAX_LEN_SERVER_NAME             20
+#define MAX_LEN_SERVER_TOPIC            32
+#define MAX_LEN_SERVER_CITY             20
 
 // common tool tip bottom line text
 #define TOOLTIP_COM_END_TEXT            tr ( \

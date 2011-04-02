@@ -163,21 +163,21 @@ CONNECTION LESS MESSAGES
 - PROTMESSID_CLM_REGISTER_SERVER: Register a server, providing server
                                   information
 
-    +------------------+----------------------------------+ ...
-    | 2 bytes number n | n bytes UTF-8 string server name | ...
-    +------------------+----------------------------------+ ...
+    +-----------------+---------------------------------+ ...
+    | 2 bytes country | 1 byte number connected clients | ...
+    +-----------------+---------------------------------+ ...
+        ... ---------------------------------+---------------------+ ...
+        ... 1 byte maximum connected clients | 1 byte is permanent | ...
+        ... ---------------------------------+---------------------+ ...
+        ... -----------------+----------------------------------+ ...
+        ... 2 bytes number n | n bytes UTF-8 string server name | ...
+        ... -----------------+----------------------------------+ ...
         ... -----------------+----------------------------+ ...
         ... 2 bytes number n | n bytes UTF-8 string topic | ...
         ... -----------------+----------------------------+ ...
-        ... ----------------+------------------+---------------------------+ ...
-        ... 2 bytes country | 2 bytes number n | n bytes UTF-8 string city | ...
-        ... ----------------+------------------+---------------------------+ ...
-        ... --------------------------------+ ...
-        ... 1 byte number connected clients | ...
-        ... --------------------------------+ ...
-        ... ---------------------------------+---------------------+
-        ... 1 byte maximum connected clients | 1 byte is permanent |
-        ... ---------------------------------+---------------------+
+        ... -----------------+---------------------------+
+        ... 2 bytes number n | n bytes UTF-8 string city |
+        ... -----------------+---------------------------+
 
     - "country" is according to "Common Locale Data Repository" which is used in
       the QLocale class
@@ -717,14 +717,14 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
 
 bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
 {
-    unsigned int               iPos = 0; // init position pointer
+    unsigned int               iPos     = 0; // init position pointer
     const unsigned int         iDataLen = vecData.Size();
     CVector<CChannelShortInfo> vecChanInfo ( 0 );
 
     while ( iPos < iDataLen )
     {
-        // check size (the first 5 bytes)
-        if ( iDataLen - iPos < 5 )
+        // check size (the next 5 bytes)
+        if ( ( iDataLen - iPos ) < 5 )
         {
             return true; // return error code
         }
@@ -749,6 +749,12 @@ bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
 
         // add channel information to vector
         vecChanInfo.Add ( CChannelShortInfo ( iChanID, iIpAddr, strCurStr ) );
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
     }
 
     // invoke message action
@@ -801,8 +807,8 @@ bool CProtocol::EvaluateChanNameMes ( const CVector<uint8_t>& vecData )
         return true; // return error code
     }
 
-    // check size
-    if ( ( vecData.Size() - 2 ) != strName.size() )
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != vecData.Size() )
     {
         return true; // return error code
     }
@@ -857,8 +863,8 @@ bool CProtocol::EvaluateChatTextMes ( const CVector<uint8_t>& vecData )
         return true; // return error code
     }
 
-    // check size
-    if ( ( vecData.Size() - 2 ) != strChatText.size() )
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != vecData.Size() )
     {
         return true; // return error code
     }
@@ -1118,7 +1124,7 @@ void CProtocol::CreateCLServerFullMes ( const CHostAddress& InetAddr )
 bool CProtocol::EvaluateCLServerFullMes()
 {
     // invoke message action
-    emit ServerFull();
+    emit ServerFullMesReceived();
 
     return false; // no error
 }
@@ -1135,29 +1141,20 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress& InetAddr,
 
     // size of current message body
     const int iEntrLen =
-        2 /* name string size */ + iNameLen +
-        2 /* topic string size */ + iTopicLen +
         2 /* country */ +
-        2 /* city string size */ + iCityLen +
         1 /* number of connected clients */ +
         1 /* maximum number of connected clients */ +
-        1 /* is permanent flag */;
+        1 /* is permanent flag */ +
+        2 /* name string size */ + iNameLen +
+        2 /* topic string size */ + iTopicLen +
+        2 /* city string size */ + iCityLen;
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
 
-    // name
-    PutStringOnStream ( vecData, iPos, ServerInfo.strName );
-
-    // topic
-    PutStringOnStream ( vecData, iPos, ServerInfo.strTopic );
-
     // country (2 bytes)
     PutValOnStream ( vecData, iPos,
         static_cast<uint32_t> ( ServerInfo.eCountry ), 2 );
-
-    // city
-    PutStringOnStream ( vecData, iPos, ServerInfo.strCity );
 
     // number of connected clients (1 byte)
     PutValOnStream ( vecData, iPos,
@@ -1167,20 +1164,87 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress& InetAddr,
     PutValOnStream ( vecData, iPos,
         static_cast<uint32_t> ( ServerInfo.iMaxNumClients ), 1 );
 
-    // is permanent flag (1 byte)
+    // "is permanent" flag (1 byte)
     PutValOnStream ( vecData, iPos,
         static_cast<uint32_t> ( ServerInfo.bPermanentOnline ), 1 );
+
+    // name
+    PutStringOnStream ( vecData, iPos, ServerInfo.strName );
+
+    // topic
+    PutStringOnStream ( vecData, iPos, ServerInfo.strTopic );
+
+    // city
+    PutStringOnStream ( vecData, iPos, ServerInfo.strCity );
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REGISTER_SERVER,
                                      vecData,
                                      InetAddr );
 }
 
-bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress& InetAddr,
+bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
                                               const CVector<uint8_t>& vecData )
 {
+    unsigned int       iPos     = 0; // init position pointer
+    const unsigned int iDataLen = vecData.Size();
+    CServerInfo        RecServerInfo;
 
-    // TODO
+    // check size (the first 5 bytes)
+    if ( iDataLen < 5 )
+    {
+        return true; // return error code
+    }
+
+    // country (2 bytes)
+    RecServerInfo.eCountry =
+        static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+    // number of connected clients (1 byte)
+    RecServerInfo.iNumClients =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // maximum number of connected clients (1 byte)
+    RecServerInfo.iMaxNumClients =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // "is permanent" flag (1 byte)
+    RecServerInfo.bPermanentOnline =
+        static_cast<bool> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // server name
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_SERVER_NAME,
+                               RecServerInfo.strName ) )
+    {
+        return true; // return error code
+    }
+
+    // server topic
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_SERVER_TOPIC,
+                               RecServerInfo.strTopic ) )
+    {
+        return true; // return error code
+    }
+
+    // server city
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_SERVER_CITY,
+                               RecServerInfo.strCity ) )
+    {
+        return true; // return error code
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    emit CLRegisterServerReceived ( InetAddr, RecServerInfo );
 
     return false; // no error
 }

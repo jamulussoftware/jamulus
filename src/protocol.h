@@ -187,7 +187,6 @@ protected:
     bool EvaluateReqJitBufMes();
     bool EvaluateChanGainMes           ( const CVector<uint8_t>& vecData );
     bool EvaluateConClientListMes      ( const CVector<uint8_t>& vecData );
-    bool EvaluateServerFullMes();
     bool EvaluateReqConnClientsList();
     bool EvaluateChanNameMes           ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChanNameMes();
@@ -228,7 +227,7 @@ signals:
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ChangeChanGain ( int iChanID, double dNewGain );
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
-    void ServerFull();
+    void ServerFullMesReceived();
     void ReqConnClientsList();
     void ChangeChanName ( QString strName );
     void ReqChanName();
@@ -239,6 +238,7 @@ signals:
     void Disconnection();
 
     void CLPingReceived ( CHostAddress InetAddr, int iMs );
+    void CLRegisterServerReceived ( CHostAddress InetAddr, CServerInfo ServerInfo );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

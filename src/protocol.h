@@ -154,21 +154,21 @@ protected:
                            const CVector<uint8_t>& vecData );
 
     void PutValOnStream ( CVector<uint8_t>&  vecIn,
-                          unsigned int&      iPos,
+                          int&               iPos,
                           const uint32_t     iVal,
-                          const unsigned int iNumOfBytes );
+                          const int          iNumOfBytes );
 
     void PutStringOnStream ( CVector<uint8_t>&  vecIn,
-                             unsigned int&      iPos,
+                             int&               iPos,
                              const QString&     sString );
 
     uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
-                                unsigned int&           iPos,
-                                const unsigned int      iNumOfBytes );
+                                int&                    iPos,
+                                const int               iNumOfBytes );
 
     bool GetStringFromStream ( const CVector<uint8_t>& vecIn,
-                               unsigned int&           iPos,
-                               const unsigned int      iMaxStringLen,
+                               int&                    iPos,
+                               const int               iMaxStringLen,
                                QString&                strOut );
 
     bool IsConnectionLessMessageID ( const int iID ) const

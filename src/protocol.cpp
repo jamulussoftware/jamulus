@@ -324,7 +324,7 @@ void CProtocol::CreateAndImmSendAcknMess ( const int& iID,
 {
     CVector<uint8_t> vecAcknMessage;
     CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
-    unsigned int     iPos = 0; // init position pointer
+    int              iPos = 0; // init position pointer
 
     // build data vector
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iID ), 2 );
@@ -417,7 +417,7 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
             if ( iRecID == PROTMESSID_ACKN )
             {
                 // extract data from stream and emit signal for received value
-                unsigned int iPos = 0;
+                int       iPos = 0;
                 const int iData =
                     static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
@@ -588,7 +588,7 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 {
     CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
-    unsigned int     iPos = 0;      // init position pointer
+    int              iPos = 0;      // init position pointer
 
     // build data vector
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iJitBufSize ), 2 );
@@ -598,7 +598,7 @@ void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 
 bool CProtocol::EvaluateJitBufMes ( const CVector<uint8_t>& vecData )
 {
-    unsigned int iPos = 0; // init position pointer
+    int iPos = 0; // init position pointer
 
     // check size
     if ( vecData.Size() != 2 )
@@ -639,7 +639,7 @@ bool CProtocol::EvaluateReqJitBufMes()
 void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
 {
     CVector<uint8_t> vecData ( 3 ); // 3 bytes of data
-    unsigned int     iPos = 0;      // init position pointer
+    int              iPos = 0;      // init position pointer
 
     // build data vector
     // channel ID
@@ -655,7 +655,7 @@ void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
 
 bool CProtocol::EvaluateChanGainMes ( const CVector<uint8_t>& vecData )
 {
-    unsigned int iPos = 0; // init position pointer
+    int iPos = 0; // init position pointer
 
     // check size
     if ( vecData.Size() != 3 )
@@ -686,7 +686,7 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
 
     // build data vector
     CVector<uint8_t> vecData ( 0 );
-    unsigned int     iPos = 0; // init position pointer
+    int              iPos = 0; // init position pointer
 
     for ( int i = 0; i < iNumClients; i++ )
     {
@@ -717,8 +717,8 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
 
 bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
 {
-    unsigned int               iPos     = 0; // init position pointer
-    const unsigned int         iDataLen = vecData.Size();
+    int                        iPos     = 0; // init position pointer
+    const int                  iDataLen = vecData.Size();
     CVector<CChannelShortInfo> vecChanInfo ( 0 );
 
     while ( iPos < iDataLen )
@@ -778,8 +778,8 @@ bool CProtocol::EvaluateReqConnClientsList()
 
 void CProtocol::CreateChanNameMes ( const QString strName )
 {
-    unsigned int iPos = 0; // init position pointer
-    const int    iStrLen = strName.size(); // get string size
+    int       iPos    = 0; // init position pointer
+    const int iStrLen = strName.size(); // get string size
 
     // size of current list entry
     const int iEntrLen = 2 /* string size */ + iStrLen;
@@ -795,7 +795,7 @@ void CProtocol::CreateChanNameMes ( const QString strName )
 
 bool CProtocol::EvaluateChanNameMes ( const CVector<uint8_t>& vecData )
 {
-    unsigned int iPos = 0; // init position pointer
+    int iPos = 0; // init position pointer
 
     // channel name
     QString strName;
@@ -834,8 +834,8 @@ bool CProtocol::EvaluateReqChanNameMes()
 
 void CProtocol::CreateChatTextMes ( const QString strChatText )
 {
-    unsigned int iPos    = 0; // init position pointer
-    const int    iStrLen = strChatText.size(); // get string size
+    int       iPos    = 0; // init position pointer
+    const int iStrLen = strChatText.size(); // get string size
 
     // size of message body
     const int iEntrLen = 2 /* string size */ + iStrLen;
@@ -851,7 +851,7 @@ void CProtocol::CreateChatTextMes ( const QString strChatText )
 
 bool CProtocol::EvaluateChatTextMes ( const CVector<uint8_t>& vecData )
 {
-    unsigned int iPos = 0; // init position pointer
+    int iPos = 0; // init position pointer
 
     // chat text
     QString strChatText;
@@ -877,7 +877,7 @@ bool CProtocol::EvaluateChatTextMes ( const CVector<uint8_t>& vecData )
 
 void CProtocol::CreatePingMes ( const int iMs )
 {
-    unsigned int iPos = 0; // init position pointer
+    int iPos = 0; // init position pointer
 
     // build data vector (4 bytes long)
     CVector<uint8_t> vecData ( 4 );
@@ -890,7 +890,7 @@ void CProtocol::CreatePingMes ( const int iMs )
 
 bool CProtocol::EvaluatePingMes ( const CVector<uint8_t>& vecData )
 {
-    unsigned int iPos = 0; // init position pointer
+    int iPos = 0; // init position pointer
 
     // check size
     if ( vecData.Size() != 4 )
@@ -905,7 +905,7 @@ bool CProtocol::EvaluatePingMes ( const CVector<uint8_t>& vecData )
 
 void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps )
 {
-    unsigned int  iPos = 0; // init position pointer
+    int iPos = 0; // init position pointer
 
     // size of current message body
     const int iEntrLen =
@@ -953,7 +953,7 @@ void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrPr
 
 bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
 {
-    unsigned int           iPos = 0; // init position pointer
+    int                    iPos = 0; // init position pointer
     CNetworkTransportProps ReceivedNetwTranspProps;
 
     // size of current message body
@@ -1084,7 +1084,7 @@ bool CProtocol::EvaluateDisconnectionMes()
 // Connection less messages ----------------------------------------------------
 void CProtocol::CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs )
 {
-    unsigned int iPos = 0; // init position pointer
+    int iPos = 0; // init position pointer
 
     // build data vector (4 bytes long)
     CVector<uint8_t> vecData ( 4 );
@@ -1100,7 +1100,7 @@ void CProtocol::CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs )
 bool CProtocol::EvaluateCLPingMes ( const CHostAddress& InetAddr,
                                     const CVector<uint8_t>& vecData )
 {
-    unsigned int iPos = 0; // init position pointer
+    int iPos = 0; // init position pointer
 
     // check size
     if ( vecData.Size() != 4 )
@@ -1132,7 +1132,7 @@ bool CProtocol::EvaluateCLServerFullMes()
 void CProtocol::CreateCLRegisterServerMes ( const CHostAddress& InetAddr,
                                             const CServerInfo&  ServerInfo )
 {
-    unsigned int iPos = 0; // init position pointer
+    int iPos = 0; // init position pointer
 
     // current string sizes
     const int iNameLen  = ServerInfo.strName.size();
@@ -1185,9 +1185,9 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress& InetAddr,
 bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
                                               const CVector<uint8_t>& vecData )
 {
-    unsigned int       iPos     = 0; // init position pointer
-    const unsigned int iDataLen = vecData.Size();
-    CServerInfo        RecServerInfo;
+    int         iPos     = 0; // init position pointer
+    const int   iDataLen = vecData.Size();
+    CServerInfo RecServerInfo;
 
     // check size (the first 5 bytes)
     if ( iDataLen < 5 )
@@ -1259,8 +1259,9 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
                                     int&                    iID,
                                     CVector<uint8_t>&       vecData )
 {
-    int          iLenBy, i;
-    unsigned int iCurPos;
+    int i;
+    int iLenBy;
+    int iCurPos;
 
     // vector must be at least "MESS_LEN_WITHOUT_DATA_BYTE" bytes long
     if ( iNumBytesIn < MESS_LEN_WITHOUT_DATA_BYTE )
@@ -1327,18 +1328,18 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
 }
 
 uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
-                                       unsigned int&           iPos,
-                                       const unsigned int      iNumOfBytes )
+                                       int&                    iPos,
+                                       const int               iNumOfBytes )
 {
 /*
     note: iPos is automatically incremented in this function
 */
     // 4 bytes maximum since we return uint32
     Q_ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
-    Q_ASSERT ( static_cast<unsigned int> ( vecIn.Size() ) >= iPos + iNumOfBytes );
+    Q_ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
 
     uint32_t iRet = 0;
-    for ( unsigned int i = 0; i < iNumOfBytes; i++ )
+    for ( int i = 0; i < iNumOfBytes; i++ )
     {
         iRet |= vecIn[iPos] << ( i * 8 /* size of byte */ );
         iPos++;
@@ -1348,23 +1349,23 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
 }
 
 bool CProtocol::GetStringFromStream ( const CVector<uint8_t>& vecIn,
-                                      unsigned int&           iPos,
-                                      const unsigned int      iMaxStringLen,
+                                      int&                    iPos,
+                                      const int               iMaxStringLen,
                                       QString&                strOut )
 {
 /*
     note: iPos is automatically incremented in this function
 */
     // check if at least two bytes are available
-    const unsigned int iInLen = vecIn.Size();
+    const int iInLen = vecIn.Size();
     if ( ( iInLen - iPos ) < 2 )
     {
         return true; // return error code
     }
 
     // number of bytes for string (2 bytes)
-    const unsigned int iStrLen =
-        static_cast<unsigned int> ( GetValFromStream ( vecIn, iPos, 2 ) );
+    const int iStrLen =
+        static_cast<int> ( GetValFromStream ( vecIn, iPos, 2 ) );
 
     if ( ( ( iInLen - iPos ) < iStrLen ) ||
          ( iStrLen > iMaxStringLen ) )
@@ -1374,7 +1375,7 @@ bool CProtocol::GetStringFromStream ( const CVector<uint8_t>& vecIn,
 
     // string (n bytes)
     strOut = "";
-    for ( unsigned int i = 0; i < iStrLen; i++ )
+    for ( int i = 0; i < iStrLen; i++ )
     {
         // byte-by-byte copying of the string data
         int iData = static_cast<int> ( GetValFromStream ( vecIn, iPos, 1 ) );
@@ -1402,7 +1403,7 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>&       vecOut,
 
 
     // Encode header -----------------------------------------------------------
-    unsigned int iCurPos = 0; // init position pointer
+    int iCurPos = 0; // init position pointer
 
     // 2 bytes TAG (all zero bits)
     PutValOnStream ( vecOut, iCurPos,
@@ -1444,18 +1445,18 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>&       vecOut,
 }
 
 void CProtocol::PutValOnStream ( CVector<uint8_t>&  vecIn,
-                                 unsigned int&      iPos,
+                                 int&               iPos,
                                  const uint32_t     iVal,
-                                 const unsigned int iNumOfBytes )
+                                 const int          iNumOfBytes )
 {
 /*
     note: iPos is automatically incremented in this function
 */
     // 4 bytes maximum since we use uint32
     Q_ASSERT ( ( iNumOfBytes > 0 ) && ( iNumOfBytes <= 4 ) );
-    Q_ASSERT ( static_cast<unsigned int> ( vecIn.Size() ) >= iPos + iNumOfBytes );
+    Q_ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
 
-    for ( unsigned int i = 0; i < iNumOfBytes; i++ )
+    for ( int i = 0; i < iNumOfBytes; i++ )
     {
         vecIn[iPos] =
             ( iVal >> ( i * 8 /* size of byte */ ) ) & 255 /* 11111111 */;
@@ -1464,9 +1465,9 @@ void CProtocol::PutValOnStream ( CVector<uint8_t>&  vecIn,
     }
 }
 
-void CProtocol::PutStringOnStream ( CVector<uint8_t>&  vecIn,
-                                    unsigned int&      iPos,
-                                    const QString&     sString )
+void CProtocol::PutStringOnStream ( CVector<uint8_t>& vecIn,
+                                    int&              iPos,
+                                    const QString&    sString )
 {
     // get the string size
     const int iStrLen = sString.size();

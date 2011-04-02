@@ -902,6 +902,7 @@ bool CProtocol::EvaluatePingMes ( const CVector<uint8_t>& vecData )
         return true; // return error code
     }
 
+    // invoke message action
     emit PingReceived ( static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) ) );
 
     return false; // no error
@@ -1112,6 +1113,7 @@ bool CProtocol::EvaluateCLPingMes ( const CHostAddress& InetAddr,
         return true; // return error code
     }
 
+    // invoke message action
     emit CLPingReceived ( InetAddr,
                           static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) ) );
 
@@ -1243,6 +1245,7 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
         return true; // return error code
     }
 
+    // invoke message action
     emit CLRegisterServerReceived ( InetAddr, RecServerInfo );
 
     return false; // no error
@@ -1317,7 +1320,92 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
 bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
                                           const CVector<uint8_t>& vecData )
 {
-    // TODO
+    int                  iPos     = 0; // init position pointer
+    const int            iDataLen = vecData.Size();
+    CVector<CServerInfo> vecServerInfo ( 0 );
+
+    while ( iPos < iDataLen )
+    {
+        // check size (the next 11 bytes)
+        if ( ( iDataLen - iPos ) < 11 )
+        {
+            return true; // return error code
+        }
+
+        // IP address (4 bytes)
+        const quint32 iIpAddr =
+            static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+        // port number (2 bytes)
+        const quint16 iPort =
+            static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+        // country (2 bytes)
+        const QLocale::Country eCountry =
+            static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+        // number of connected clients (1 byte)
+        const int iNumClients =
+            static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+        // maximum number of connected clients (1 byte)
+        const int iMaxNumClients =
+            static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+        // "is permanent" flag (1 byte)
+        const bool bPermanentOnline =
+            static_cast<bool> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+        // server name
+        QString strName;
+        if ( GetStringFromStream ( vecData,
+                                   iPos,
+                                   MAX_LEN_SERVER_NAME,
+                                   strName ) )
+        {
+            return true; // return error code
+        }
+
+        // server topic
+        QString strTopic;
+        if ( GetStringFromStream ( vecData,
+                                   iPos,
+                                   MAX_LEN_SERVER_TOPIC,
+                                   strTopic ) )
+        {
+            return true; // return error code
+        }
+
+        // server city
+        QString strCity;
+        if ( GetStringFromStream ( vecData,
+                                   iPos,
+                                   MAX_LEN_SERVER_CITY,
+                                   strCity ) )
+        {
+            return true; // return error code
+        }
+
+        // add server information to vector
+        vecServerInfo.Add (
+            CServerInfo ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
+                          strName,
+                          strTopic,
+                          eCountry,
+                          strCity,
+                          iNumClients,
+                          iMaxNumClients,
+                          bPermanentOnline ) );
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit CLServerListReceived ( InetAddr, vecServerInfo );
 
     return false; // no error
 }

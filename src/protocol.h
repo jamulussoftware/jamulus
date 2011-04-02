@@ -244,6 +244,8 @@ signals:
     void CLPingReceived ( CHostAddress InetAddr, int iMs );
     void CLRegisterServerReceived ( CHostAddress    InetAddr,
                                     CServerCoreInfo ServerInfo );
+    void CLServerListReceived ( CHostAddress         InetAddr,
+                                CVector<CServerInfo> vecServerInfo );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

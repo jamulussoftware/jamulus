@@ -70,46 +70,40 @@ private network.
 
 
 /* Classes ********************************************************************/
-class CServerListProperties
+class CServerListEntry : public CServerInfo
 {
 public:
-    CServerListProperties() :
-        ServerInfo ( "",
-                     "",
-                     QLocale::AnyCountry,
-                     "",
-                     0,
-                     0,
-                     false ) { RegisterTime.start(); }
+    CServerListEntry() :
+        CServerInfo ( CHostAddress(), 
+                      "",
+                      "",
+                      QLocale::AnyCountry,
+                      "",
+                      0,
+                      0,
+                      false ) { RegisterTime.start(); }
 
-    CServerListProperties ( const CHostAddress&     NIAddr,
-                            const QString&          NsName,
-                            const QString&          NsTopic,
-                            const QLocale::Country& NeCountry,
-                            const QString&          NsCity,
-                            const int               NiNumClients,
-                            const int               NiMaxNumClients,
-                            const bool              NbPermOnline)
-        : InetAddr ( NIAddr ), ServerInfo ( NsName,
-                                            NsTopic,
-                                            NeCountry,
-                                            NsCity,
-                                            NiNumClients,
-                                            NiMaxNumClients,
-                                            NbPermOnline )
-        { RegisterTime.start(); }
+    CServerListEntry ( const CHostAddress&     NIAddr,
+                       const QString&          NsName,
+                       const QString&          NsTopic,
+                       const QLocale::Country& NeCountry,
+                       const QString&          NsCity,
+                       const int               NiNumClients,
+                       const int               NiMaxNumClients,
+                       const bool              NbPermOnline)
+        : CServerInfo ( NIAddr, 
+                        NsName,
+                        NsTopic,
+                        NeCountry,
+                        NsCity,
+                        NiNumClients,
+                        NiMaxNumClients,
+                        NbPermOnline ) { RegisterTime.start(); }
 
 public:
     // time on which the entry was registered
-    QTime        RegisterTime;
-
-    // internet address of the server
-    CHostAddress InetAddr;
-
-    // infos of the server
-    CServerInfo  ServerInfo;
+    QTime RegisterTime;
 };
-
 
 class CServerListManager : public QObject
 {
@@ -119,10 +113,10 @@ public:
     CServerListManager ( const bool NbEbld );
 
 protected:
-    QTimer                       TimerPollList;
-    QMutex                       Mutex;
-    QList<CServerListProperties> ServerList;
-    bool                         bEnabled;
+    QTimer                  TimerPollList;
+    QMutex                  Mutex;
+    QList<CServerListEntry> ServerList;
+    bool                    bEnabled;
 
 public slots:
     void OnTimerPollList();

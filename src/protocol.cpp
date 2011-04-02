@@ -555,16 +555,8 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
 // TODO
                 break;
 
-            case PROTMESSID_CLM_EMPTY_MESSAGE:
-// TODO
-                break;
-
             case PROTMESSID_CLM_REGISTER_SERVER:
-// TODO
-                break;
-
-            case PROTMESSID_CLM_UNREGISTER_SERVER:
-// TODO
+                bRet = EvaluateCLRegisterServerMes ( InetAddr, vecData );
                 break;
             }
         }
@@ -1129,8 +1121,8 @@ bool CProtocol::EvaluateCLServerFullMes()
     return false; // no error
 }
 
-void CProtocol::CreateCLRegisterServerMes ( const CHostAddress& InetAddr,
-                                            const CServerInfo&  ServerInfo )
+void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
+                                            const CServerCoreInfo& ServerInfo )
 {
     int iPos = 0; // init position pointer
 
@@ -1185,9 +1177,9 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress& InetAddr,
 bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
                                               const CVector<uint8_t>& vecData )
 {
-    int         iPos     = 0; // init position pointer
-    const int   iDataLen = vecData.Size();
-    CServerInfo RecServerInfo;
+    int             iPos     = 0; // init position pointer
+    const int       iDataLen = vecData.Size();
+    CServerCoreInfo RecServerInfo;
 
     // check size (the first 5 bytes)
     if ( iDataLen < 5 )
@@ -1248,6 +1240,21 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
 
     return false; // no error
 }
+
+
+void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
+                                        const CVector<CServerInfo> vecServerInfo )
+{
+    // TODO
+}
+
+/*
+bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
+                                          const CVector<uint8_t>& vecData )
+{
+    // TODO
+}
+*/
 
 
 /******************************************************************************\

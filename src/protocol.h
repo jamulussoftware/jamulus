@@ -62,7 +62,7 @@
 #define PROTMESSID_CLM_SEND_EMPTY_MESSAGE     1005 // an empty message shall be send
 #define PROTMESSID_CLM_EMPTY_MESSAGE          1006 // empty message
 #define PROTMESSID_CLM_REGISTER_SERVER        1007 // register server
-#define PROTMESSID_CLM_UNREGISTER_SERVER      1008 // unregister server
+#define PROTMESSID_CLM_UNREGISTER_SERVER      1008 // unregister server -> TODO
 
 
 // lengths of message as defined in protocol.cpp file
@@ -97,8 +97,10 @@ public:
 
     void CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLServerFullMes ( const CHostAddress& InetAddr );
-    void CreateCLRegisterServerMes ( const CHostAddress& InetAddr,
-                                     const CServerInfo&  ServerInfo );
+    void CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
+                                     const CServerCoreInfo& ServerInfo );
+    void CreateCLServerListMes ( const CHostAddress&        InetAddr,
+                                 const CVector<CServerInfo> vecServerInfo );
 
     void CreateAndImmSendDisconnectionMes();
     void CreateAndImmSendAcknMess ( const int& iID,
@@ -238,7 +240,8 @@ signals:
     void Disconnection();
 
     void CLPingReceived ( CHostAddress InetAddr, int iMs );
-    void CLRegisterServerReceived ( CHostAddress InetAddr, CServerInfo ServerInfo );
+    void CLRegisterServerReceived ( CHostAddress    InetAddr,
+                                    CServerCoreInfo ServerInfo );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

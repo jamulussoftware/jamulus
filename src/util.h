@@ -452,10 +452,10 @@ public:
 
 
 // Server info -----------------------------------------------------------------
-class CServerInfo
+class CServerCoreInfo
 {
 public:
-    CServerInfo() :
+    CServerCoreInfo() :
         strName          ( "" ),
         strTopic         ( "" ),
         eCountry         ( QLocale::AnyCountry ),
@@ -464,7 +464,7 @@ public:
         iMaxNumClients   ( 0 ),
         bPermanentOnline ( false ) {}
 
-    CServerInfo (
+    CServerCoreInfo (
         const QString&          NsName,
         const QString&          NsTopic,
         const QLocale::Country& NeCountry,
@@ -502,6 +502,40 @@ public:
 
     // is the server permanently online or not (flag)
     bool             bPermanentOnline;
+};
+
+class CServerInfo : public CServerCoreInfo
+{
+public:
+    CServerInfo() :
+        CServerCoreInfo ( "",
+                          "",
+                          QLocale::AnyCountry,
+                          "",
+                          0,
+                          0,
+                          false ), InetAddr ( CHostAddress() ) {}
+
+    CServerInfo (
+        const CHostAddress&     NIAddr,
+        const QString&          NsName,
+        const QString&          NsTopic,
+        const QLocale::Country& NeCountry,
+        const QString&          NsCity,
+        const int               NiNumClients,
+        const int               NiMaxNumClients,
+        const bool              NbPermOnline) :
+            CServerCoreInfo ( NsName,
+                              NsTopic,
+                              NeCountry,
+                              NsCity,
+                              NiNumClients,
+                              NiMaxNumClients,
+                              NbPermOnline ), InetAddr ( NIAddr ) {}
+
+public:
+    // internet address of the server
+    CHostAddress InetAddr;
 };
 
 

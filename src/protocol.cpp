@@ -189,6 +189,18 @@ CONNECTION LESS MESSAGES
       is permanent online.
 
 
+- PROTMESSID_CLM_SERVER_LIST: Server list message
+
+    for each registered server append following data:
+
+    +--------------------+--------------+--------------------------------+
+    | 4 bytes IP address | 2 bytes port | PROTMESSID_CLM_REGISTER_SERVER |
+    +--------------------+--------------+--------------------------------+
+
+    - "PROTMESSID_CLM_REGISTER_SERVER" means that exactly the same message body
+      of the PROTMESSID_CLM_REGISTER_SERVER message is used
+
+
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -544,7 +556,7 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
                 break;
 
             case PROTMESSID_CLM_SERVER_LIST:
-// TODO
+                bRet = EvaluateCLServerListMes ( InetAddr, vecData );
                 break;
 
             case PROTMESSID_CLM_REQ_SERVER_LIST:
@@ -1126,20 +1138,15 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
 {
     int iPos = 0; // init position pointer
 
-    // current string sizes
-    const int iNameLen  = ServerInfo.strName.size();
-    const int iTopicLen = ServerInfo.strTopic.size();
-    const int iCityLen  = ServerInfo.strCity.size();
-
     // size of current message body
     const int iEntrLen =
         2 /* country */ +
         1 /* number of connected clients */ +
         1 /* maximum number of connected clients */ +
         1 /* is permanent flag */ +
-        2 /* name string size */ + iNameLen +
-        2 /* topic string size */ + iTopicLen +
-        2 /* city string size */ + iCityLen;
+        2 /* name string size */ + ServerInfo.strName.size() +
+        2 /* topic string size */ + ServerInfo.strTopic.size() +
+        2 /* city string size */ + ServerInfo.strCity.size();
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
@@ -1245,16 +1252,75 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
 void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
                                         const CVector<CServerInfo> vecServerInfo )
 {
-    // TODO
+    const int iNumServers = vecServerInfo.Size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( 0 );
+    int              iPos = 0; // init position pointer
+
+    for ( int i = 0; i < iNumServers; i++ )
+    {
+        // size of current list entry
+        const int iCurListEntrLen =
+            4 /* IP address */ +
+            2 /* port number */ +
+            2 /* country */ +
+            1 /* number of connected clients */ +
+            1 /* maximum number of connected clients */ +
+            1 /* is permanent flag */ +
+            2 /* name string size */ + vecServerInfo[i].strName.size() +
+            2 /* topic string size */ + vecServerInfo[i].strTopic.size() +
+            2 /* city string size */ + vecServerInfo[i].strCity.size();
+
+        // make space for new data
+        vecData.Enlarge ( iCurListEntrLen );
+
+        // IP address (4 bytes)
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> (
+            vecServerInfo[i].HostAddr.InetAddr.toIPv4Address() ), 4 );
+
+        // port number (2 bytes)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecServerInfo[i].HostAddr.iPort ), 2 );
+
+        // country (2 bytes)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecServerInfo[i].eCountry ), 2 );
+
+        // number of connected clients (1 byte)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecServerInfo[i].iNumClients ), 1 );
+
+        // maximum number of connected clients (1 byte)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecServerInfo[i].iMaxNumClients ), 1 );
+
+        // "is permanent" flag (1 byte)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecServerInfo[i].bPermanentOnline ), 1 );
+
+        // name
+        PutStringOnStream ( vecData, iPos, vecServerInfo[i].strName );
+
+        // topic
+        PutStringOnStream ( vecData, iPos, vecServerInfo[i].strTopic );
+
+        // city
+        PutStringOnStream ( vecData, iPos, vecServerInfo[i].strCity );
+    }
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SERVER_LIST,
+                                     vecData,
+                                     InetAddr );
 }
 
-/*
 bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
                                           const CVector<uint8_t>& vecData )
 {
     // TODO
+
+    return false; // no error
 }
-*/
 
 
 /******************************************************************************\

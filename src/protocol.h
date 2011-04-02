@@ -203,6 +203,8 @@ protected:
     bool EvaluateCLServerFullMes();
     bool EvaluateCLRegisterServerMes   ( const CHostAddress&     InetAddr,
                                          const CVector<uint8_t>& vecData );
+    bool EvaluateCLServerListMes       ( const CHostAddress&     InetAddr,
+                                         const CVector<uint8_t>& vecData );
 
     int                     iOldRecID;
     int                     iOldRecCnt;

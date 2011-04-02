@@ -514,10 +514,10 @@ public:
                           "",
                           0,
                           0,
-                          false ), InetAddr ( CHostAddress() ) {}
+                          false ), HostAddr ( CHostAddress() ) {}
 
     CServerInfo (
-        const CHostAddress&     NIAddr,
+        const CHostAddress&     NHAddr,
         const QString&          NsName,
         const QString&          NsTopic,
         const QLocale::Country& NeCountry,
@@ -531,11 +531,11 @@ public:
                               NsCity,
                               NiNumClients,
                               NiMaxNumClients,
-                              NbPermOnline ), InetAddr ( NIAddr ) {}
+                              NbPermOnline ), HostAddr ( NHAddr ) {}
 
 public:
     // internet address of the server
-    CHostAddress InetAddr;
+    CHostAddress HostAddr;
 };
 
 

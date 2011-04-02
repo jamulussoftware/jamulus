@@ -83,7 +83,7 @@ public:
                       0,
                       false ) { RegisterTime.start(); }
 
-    CServerListEntry ( const CHostAddress&     NIAddr,
+    CServerListEntry ( const CHostAddress&     NHAddr,
                        const QString&          NsName,
                        const QString&          NsTopic,
                        const QLocale::Country& NeCountry,
@@ -91,7 +91,7 @@ public:
                        const int               NiNumClients,
                        const int               NiMaxNumClients,
                        const bool              NbPermOnline)
-        : CServerInfo ( NIAddr, 
+        : CServerInfo ( NHAddr, 
                         NsName,
                         NsTopic,
                         NeCountry,

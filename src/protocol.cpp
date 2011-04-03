@@ -206,6 +206,12 @@ CONNECTION LESS MESSAGES
     note: does not have any data -> n = 0
 
 
+- PROTMESSID_CLM_SEND_EMPTY_MESSAGE: Send "empty message" message
+
+    +--------------------+--------------+
+    | 4 bytes IP address | 2 bytes port |
+    +--------------------+--------------+
+
 
  ******************************************************************************
  *
@@ -570,7 +576,7 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
                 break;
 
             case PROTMESSID_CLM_SEND_EMPTY_MESSAGE:
-// TODO
+                bRet = EvaluateCLSendEmptyMesMes ( InetAddr, vecData );
                 break;
 
             case PROTMESSID_CLM_REGISTER_SERVER:
@@ -892,7 +898,7 @@ void CProtocol::CreatePingMes ( const int iMs )
     // build data vector (4 bytes long)
     CVector<uint8_t> vecData ( 4 );
 
-    // byte-by-byte copying of the string data
+    // transmit time (4 bytes)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iMs ), 4 );
 
     CreateAndSendMessage ( PROTMESSID_PING_MS, vecData );
@@ -1100,7 +1106,7 @@ void CProtocol::CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs )
     // build data vector (4 bytes long)
     CVector<uint8_t> vecData ( 4 );
 
-    // byte-by-byte copying of the string data
+    // transmit time (4 bytes)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iMs ), 4 );
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_PING_MS,
@@ -1429,6 +1435,60 @@ bool CProtocol::EvaluateCLReqServerListMes ( const CHostAddress& InetAddr )
     emit CLReqServerList ( InetAddr );
 
     return false; // no error
+}
+
+void CProtocol::CreateCLSendEmptyMesMes ( const CHostAddress& InetAddr,
+                                          const CHostAddress& TargetInetAddr )
+{
+    int iPos = 0; // init position pointer
+
+    // build data vector (6 bytes long)
+    CVector<uint8_t> vecData ( 6 );
+
+    // IP address (4 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> (
+        TargetInetAddr.InetAddr.toIPv4Address() ), 4 );
+
+    // port number (2 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( TargetInetAddr.iPort ), 2 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SEND_EMPTY_MESSAGE,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLSendEmptyMesMes ( const CHostAddress&     InetAddr,
+                                            const CVector<uint8_t>& vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 6 )
+    {
+        return true; // return error code
+    }
+
+    // IP address (4 bytes)
+    const quint32 iIpAddr =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+    // port number (2 bytes)
+    const quint16 iPort =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+    // invoke message action
+    emit CLSendEmptyMes ( InetAddr,
+                          CHostAddress ( QHostAddress ( iIpAddr ), iPort ) );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLEmptyMes ( const CHostAddress& InetAddr )
+{
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_EMPTY_MESSAGE,
+                                     CVector<uint8_t> ( 0 ),
+                                     InetAddr );
 }
 
 

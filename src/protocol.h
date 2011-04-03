@@ -57,12 +57,12 @@
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
 #define PROTMESSID_CLM_PING_MS                1001 // for measuring ping time
 #define PROTMESSID_CLM_SERVER_FULL            1002 // server full message
-#define PROTMESSID_CLM_SERVER_LIST            1003 // server list
-#define PROTMESSID_CLM_REQ_SERVER_LIST        1004 // request server list
-#define PROTMESSID_CLM_SEND_EMPTY_MESSAGE     1005 // an empty message shall be send
-#define PROTMESSID_CLM_EMPTY_MESSAGE          1006 // empty message
-#define PROTMESSID_CLM_REGISTER_SERVER        1007 // register server
-#define PROTMESSID_CLM_UNREGISTER_SERVER      1008 // unregister server -> TODO
+#define PROTMESSID_CLM_REGISTER_SERVER        1003 // register server
+#define PROTMESSID_CLM_UNREGISTER_SERVER      1004 // unregister server -> TODO
+#define PROTMESSID_CLM_SERVER_LIST            1005 // server list
+#define PROTMESSID_CLM_REQ_SERVER_LIST        1006 // request server list
+#define PROTMESSID_CLM_SEND_EMPTY_MESSAGE     1007 // an empty message shall be send
+#define PROTMESSID_CLM_EMPTY_MESSAGE          1008 // empty message
 
 
 // lengths of message as defined in protocol.cpp file
@@ -102,6 +102,9 @@ public:
     void CreateCLServerListMes ( const CHostAddress&        InetAddr,
                                  const CVector<CServerInfo> vecServerInfo );
     void CreateCLReqServerListMes ( const CHostAddress& InetAddr );
+    void CreateCLSendEmptyMesMes ( const CHostAddress& InetAddr,
+                                   const CHostAddress& TargetInetAddr );
+    void CreateCLEmptyMes ( const CHostAddress& InetAddr );
 
     void CreateAndImmSendDisconnectionMes();
     void CreateAndImmSendAcknMess ( const int& iID,
@@ -207,6 +210,8 @@ protected:
     bool EvaluateCLServerListMes       ( const CHostAddress&     InetAddr,
                                          const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerListMes    ( const CHostAddress& InetAddr );
+    bool EvaluateCLSendEmptyMesMes     ( const CHostAddress& InetAddr,
+                                         const CVector<uint8_t>& vecData );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -249,6 +254,8 @@ signals:
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );
     void CLReqServerList ( CHostAddress InetAddr );
+    void CLSendEmptyMes ( CHostAddress InetAddr,
+                          CHostAddress TargetInetAddr );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

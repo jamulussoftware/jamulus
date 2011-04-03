@@ -101,6 +101,7 @@ public:
                                      const CServerCoreInfo& ServerInfo );
     void CreateCLServerListMes ( const CHostAddress&        InetAddr,
                                  const CVector<CServerInfo> vecServerInfo );
+    void CreateCLReqServerListMes ( const CHostAddress& InetAddr );
 
     void CreateAndImmSendDisconnectionMes();
     void CreateAndImmSendAcknMess ( const int& iID,
@@ -205,6 +206,7 @@ protected:
                                          const CVector<uint8_t>& vecData );
     bool EvaluateCLServerListMes       ( const CHostAddress&     InetAddr,
                                          const CVector<uint8_t>& vecData );
+    bool EvaluateCLReqServerListMes    ( const CHostAddress& InetAddr );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -246,6 +248,7 @@ signals:
                                     CServerCoreInfo ServerInfo );
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );
+    void CLReqServerList ( CHostAddress InetAddr );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

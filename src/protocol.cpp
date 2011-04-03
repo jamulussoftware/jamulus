@@ -201,6 +201,12 @@ CONNECTION LESS MESSAGES
       of the PROTMESSID_CLM_REGISTER_SERVER message is used
 
 
+- PROTMESSID_CLM_REQ_SERVER_LIST: Request server list
+
+    note: does not have any data -> n = 0
+
+
+
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -560,7 +566,7 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
                 break;
 
             case PROTMESSID_CLM_REQ_SERVER_LIST:
-// TODO
+                bRet = EvaluateCLReqServerListMes ( InetAddr );
                 break;
 
             case PROTMESSID_CLM_SEND_EMPTY_MESSAGE:
@@ -1406,6 +1412,21 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
 
     // invoke message action
     emit CLServerListReceived ( InetAddr, vecServerInfo );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLReqServerListMes ( const CHostAddress& InetAddr )
+{
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REQ_SERVER_LIST,
+                                     CVector<uint8_t> ( 0 ),
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLReqServerListMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLReqServerList ( InetAddr );
 
     return false; // no error
 }

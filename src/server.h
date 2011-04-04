@@ -115,12 +115,13 @@ public:
     bool GetTimingStdDev ( double& dCurTiStdDev );
 
     bool PutData ( const CVector<uint8_t>& vecbyRecBuf,
-                   const int iNumBytesRead, const CHostAddress& HostAdr );
+                   const int               iNumBytesRead,
+                   const CHostAddress&     HostAdr );
 
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
-                          CVector<QString>& vecsName,
-                          CVector<int>& veciJitBufNumFrames,
-                          CVector<int>& veciNetwFrameSizeFact );
+                          CVector<QString>&      vecsName,
+                          CVector<int>&          veciJitBufNumFrames,
+                          CVector<int>&          veciNetwFrameSizeFact );
 
 protected:
     // access functions for actual channels
@@ -135,14 +136,14 @@ protected:
     CVector<CChannelShortInfo> CreateChannelList();
     void CreateAndSendChanListForAllConChannels();
     void CreateAndSendChanListForThisChan ( const int iCurChanID );
-    void CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
+    void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                   const QString& strChatText );
     void WriteHTMLChannelList();
 
-    CVector<int16_t> ProcessData ( const int iCurIndex,
+    CVector<int16_t> ProcessData ( const int                   iCurIndex,
                                    CVector<CVector<int16_t> >& vecvecsData,
-                                   CVector<double>& vecdGains,
-                                   CVector<int>& vecNumAudioChannels );
+                                   CVector<double>&            vecdGains,
+                                   CVector<int>&               vecNumAudioChannels );
 
     virtual void     customEvent ( QEvent* Event );
 

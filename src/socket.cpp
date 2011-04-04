@@ -60,8 +60,10 @@ void CSocket::Init ( const quint16 iPortNumber )
 }
 
 void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
-                           const CHostAddress& HostAddr )
+                           const CHostAddress&     HostAddr )
 {
+    QMutexLocker locker ( &Mutex );
+
     const int iVecSizeOut = vecbySendBuf.Size();
 
     if ( iVecSizeOut != 0 )
@@ -72,7 +74,9 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
         // const char*)
         SocketDevice.writeDatagram (
             (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-            iVecSizeOut, HostAddr.InetAddr, HostAddr.iPort );
+            iVecSizeOut,
+            HostAddr.InetAddr,
+            HostAddr.iPort );
     }
 }
 
@@ -86,7 +90,9 @@ void CSocket::OnDataReceived()
         // read block from network interface and query address of sender
         const int iNumBytesRead =
             SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
-            MAX_SIZE_BYTES_NETW_BUF, &SenderAddress, &SenderPort );
+                                        MAX_SIZE_BYTES_NETW_BUF,
+                                        &SenderAddress,
+                                        &SenderPort );
 
         // check if an error occurred
         if ( iNumBytesRead < 0 )

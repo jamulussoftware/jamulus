@@ -74,14 +74,14 @@ class CServerListEntry : public CServerInfo
 {
 public:
     CServerListEntry() :
-        CServerInfo ( CHostAddress(), 
+        CServerInfo ( CHostAddress(),
                       "",
                       "",
                       QLocale::AnyCountry,
                       "",
                       0,
                       0,
-                      false ) { RegisterTime.start(); }
+                      false ) { UpdateRegistration(); }
 
     CServerListEntry ( const CHostAddress&     NHAddr,
                        const QString&          NsName,
@@ -91,14 +91,28 @@ public:
                        const int               NiNumClients,
                        const int               NiMaxNumClients,
                        const bool              NbPermOnline)
-        : CServerInfo ( NHAddr, 
+        : CServerInfo ( NHAddr,
                         NsName,
                         NsTopic,
                         NeCountry,
                         NsCity,
                         NiNumClients,
                         NiMaxNumClients,
-                        NbPermOnline ) { RegisterTime.start(); }
+                        NbPermOnline ) { UpdateRegistration(); }
+
+    CServerListEntry ( const CHostAddress&    NHAddr,
+                       const CServerCoreInfo& NewCoreServerInfo )
+        : CServerInfo ( NHAddr,
+                        NewCoreServerInfo.strName,
+                        NewCoreServerInfo.strTopic,
+                        NewCoreServerInfo.eCountry,
+                        NewCoreServerInfo.strCity,
+                        NewCoreServerInfo.iNumClients,
+                        NewCoreServerInfo.iMaxNumClients,
+                        NewCoreServerInfo.bPermanentOnline )
+        { UpdateRegistration(); }
+
+    void UpdateRegistration() { RegisterTime.start(); }
 
 public:
     // time on which the entry was registered
@@ -112,6 +126,8 @@ class CServerListManager : public QObject
 public:
     CServerListManager ( const bool NbEbld );
 
+    void RegisterServer ( const CHostAddress&    InetAddr,
+                          const CServerCoreInfo& ServerInfo );
 protected:
     QTimer                  TimerPollList;
     QMutex                  Mutex;

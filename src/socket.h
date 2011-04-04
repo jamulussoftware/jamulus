@@ -29,6 +29,7 @@
 #include <qmessagebox.h>
 #include <qudpsocket.h>
 #include <qsocketnotifier.h>
+#include <qmutex.h>
 #include <vector>
 #include "global.h"
 #include "channel.h"
@@ -63,6 +64,7 @@ protected:
     void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );
 
     QUdpSocket              SocketDevice;
+    QMutex                  Mutex;
 
     CVector<uint8_t>        vecbyRecBuf;
     CHostAddress            RecHostAddr;

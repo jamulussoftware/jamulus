@@ -894,6 +894,7 @@ void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         font:           bold; }"
             "QGroupBox::title {       color:          rgb(148, 148, 148); }" );
 
+#ifdef _WIN32
 // Workaround QT-Windows problem: This should not be necessary since in the
 // background frame the style sheet for QRadioButton was already set. But it
 // seems that it is only applied if the style was set to default and then back
@@ -902,6 +903,7 @@ RadioButtonRevSelL->setStyleSheet ( "color: rgb(148, 148, 148);"
                                     "font:  bold;" );
 RadioButtonRevSelR->setStyleSheet ( "color: rgb(148, 148, 148);"
                                     "font:  bold;" );
+#endif
 
         break;
 
@@ -909,9 +911,11 @@ RadioButtonRevSelR->setStyleSheet ( "color: rgb(148, 148, 148);"
         // reset style sheet and set original paramters
         backgroundFrame->setStyleSheet ( "" );
 
+#ifdef _WIN32
 // Workaround QT-Windows problem: See above description
 RadioButtonRevSelL->setStyleSheet ( "" );
 RadioButtonRevSelR->setStyleSheet ( "" );
+#endif
 
         break;
     }

@@ -57,6 +57,12 @@ pListViewItem = new QTreeWidgetItem ( ListViewServers );
 
 void CConnectDlg::showEvent ( QShowEvent* )
 {
+
+// TODO get the IP address of the Master Server when the connect dialog is
+// opened -> this seems to be the correct time to do it, use the
+// "CClient::SetServerAddr" functionality (extract it to another place...)
+
+
     // only activate ping timer if window is actually shown
     TimerPing.start ( PING_UPDATE_TIME_MS );
 

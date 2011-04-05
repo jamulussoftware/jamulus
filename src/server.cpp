@@ -168,9 +168,12 @@ CServer::CServer ( const QString& strLoggingFileName,
                    const quint16  iPortNumber,
                    const QString& strHTMLStatusFileName,
                    const QString& strHistoryFileName,
-                   const QString& strServerNameForHTMLStatusFile ) :
+                   const QString& strServerNameForHTMLStatusFile,
+                   const bool     bIsCentralServer,
+                   const QString& strCentralServer ) :
     Socket ( this, iPortNumber ),
-    bWriteStatusHTMLFile ( false )
+    bWriteStatusHTMLFile ( false ),
+    ServerListManager ( bIsCentralServer ) // enable server list for central server
 {
     int i;
 
@@ -267,7 +270,7 @@ CServer::CServer ( const QString& strLoggingFileName,
     }
 
 
-    // connections -------------------------------------------------------------
+    // Connections -------------------------------------------------------------
     // connect timer timeout signal
     QObject::connect ( &HighPrecisionTimer, SIGNAL ( timeout() ),
         this, SLOT ( OnTimer() ) );
@@ -804,7 +807,7 @@ void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
 void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
                                                        const QString& strChatText )
 {
-    // create message which is sent to all connected clients -------------------
+    // Create message which is sent to all connected clients -------------------
     // get client name, if name is empty, use IP address instead
     QString ChanName = vecChannels[iCurChanID].GetName();
     if ( ChanName.isEmpty() )
@@ -823,7 +826,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
         "</b></font> " + strChatText;
 
 
-    // send chat text to all connected clients ---------------------------------
+    // Send chat text to all connected clients ---------------------------------
     for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
         if ( vecChannels[i].IsConnected() )

@@ -90,7 +90,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pLabel->setAccessibleName ( "Mixer level label (fader tag)" );
 
 
-    // connections -------------------------------------------------------------
+    // Connections -------------------------------------------------------------
     QObject::connect ( pFader, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnGainValueChanged ( int ) ) );
 
@@ -299,7 +299,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
 
 
-    // connections -------------------------------------------------------------
+    // Connections -------------------------------------------------------------
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     QObject::connect ( vecpChanFader[0],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh0  ( double ) ) );

@@ -53,7 +53,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     ResetName();
 
 
-    // connections -------------------------------------------------------------
+    // Connections -------------------------------------------------------------
     QObject::connect ( &Protocol,
         SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
         this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
@@ -553,7 +553,7 @@ int CChannel::GetUploadRateKbps()
 // CConnectionLessChannel implementation ***************************************
 CConnectionLessChannel::CConnectionLessChannel()
 {
-    // connections -------------------------------------------------------------
+    // Connections -------------------------------------------------------------
     QObject::connect ( &Protocol,
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ) );

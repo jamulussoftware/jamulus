@@ -55,7 +55,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 {
     setupUi ( this );
 
-    // add help text to controls -----------------------------------------------
+    // Add help text to controls -----------------------------------------------
     // input level meter
     QString strInpLevH = tr ( "<b>Input Level Meter:</b> The input level "
         "indicators show the current input level of the two stereo channels "

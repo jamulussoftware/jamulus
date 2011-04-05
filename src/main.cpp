@@ -49,19 +49,21 @@ int main ( int argc, char** argv )
     bool        bUseGUI               = true;
     bool        bConnectOnStartup     = false;
     bool        bDisalbeLEDs          = false;
+    bool        bIsCentralServer      = false;
     quint16     iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
     std::string strIniFileName        = "";
     std::string strHTMLStatusFileName = "";
     std::string strServerName         = "";
     std::string strLoggingFileName    = "";
     std::string strHistoryFileName    = "";
+    std::string strCentralServer      = "";
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
     // Start with first argument, therefore "i = 1"
     for ( int i = 1; i < argc; i++ )
     {
-        // server mode flag ----------------------------------------------------
+        // Server mode flag ----------------------------------------------------
         if ( GetFlagArgument ( argv, i, "-s", "--server" ) )
         {
             bIsClient = false;
@@ -70,7 +72,7 @@ int main ( int argc, char** argv )
         }
 
 
-        // use GUI flag --------------------------------------------------------
+        // Use GUI flag --------------------------------------------------------
         if ( GetFlagArgument ( argv, i, "-n", "--nogui" ) )
         {
             bUseGUI = false;
@@ -79,7 +81,7 @@ int main ( int argc, char** argv )
         }
 
 
-        // disable LEDs flag ---------------------------------------------------
+        // Disable LEDs flag ---------------------------------------------------
         if ( GetFlagArgument ( argv, i, "-d", "--disableleds" ) )
         {
             bDisalbeLEDs = true;
@@ -88,7 +90,7 @@ int main ( int argc, char** argv )
         }
 
 
-        // use logging ---------------------------------------------------------
+        // Use logging ---------------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
         {
             strLoggingFileName = strArgument;
@@ -97,7 +99,7 @@ int main ( int argc, char** argv )
         }
 
 
-        // port number ---------------------------------------------------------
+        // Port number ---------------------------------------------------------
         if ( GetNumericArgument ( argc, argv, i, "-p", "--port",
                                   0, 65535, rDbleArgument ) )
         {
@@ -132,7 +134,16 @@ int main ( int argc, char** argv )
         }
 
 
-        // initialization file -------------------------------------------------
+        // Central server ------------------------------------------------------
+        if ( GetStringArgument ( argc, argv, i, "-e", "--centralserver", strArgument ) )
+        {
+            strCentralServer = strArgument;
+            cout << "- central server: " << strCentralServer << std::endl;
+            continue;
+        }
+
+
+        // Initialization file -------------------------------------------------
         if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
         {
             strIniFileName = strArgument;
@@ -141,7 +152,7 @@ int main ( int argc, char** argv )
         }
 
 
-        // connect on startup --------------------------------------------------
+        // Connect on startup --------------------------------------------------
         if ( GetFlagArgument ( argv, i, "-c", "--connect" ) )
         {
             bConnectOnStartup = true;
@@ -150,7 +161,7 @@ int main ( int argc, char** argv )
         }
 
 
-        // help (usage) flag ---------------------------------------------------
+        // Help (usage) flag ---------------------------------------------------
         if ( ( !strcmp ( argv[i], "--help" ) ) ||
              ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
         {
@@ -159,7 +170,7 @@ int main ( int argc, char** argv )
             exit ( 1 );
         }
 
-        // unknown option ------------------------------------------------------
+        // Unknown option ------------------------------------------------------
         cerr << argv[0] << ": ";
         cerr << "Unknown option '" << argv[i] << "' -- use '--help' for help"
             << endl;
@@ -169,6 +180,15 @@ int main ( int argc, char** argv )
 #if !( defined ( __APPLE__ ) || defined ( __MACOSX ) )
         exit ( 1 );
 #endif
+    }
+
+    // per definition: if we are in server mode and the central server address
+    // is the localhost address, we are in central server mode
+    if ( !bIsClient && !strCentralServer.empty() )
+    {
+        bIsCentralServer =
+            ( !strCentralServer.compare ( "localhost" ) ||
+              !strCentralServer.compare ( "127.0.0.1" ) );
     }
 
     // Application object
@@ -201,18 +221,7 @@ int main ( int argc, char** argv )
     {
         if ( bIsClient )
         {
-
-/*
-// TEST run client and server at the same time
-CServer Server ( strLoggingFileName.c_str(),
-     iPortNumber,
-     strHTMLStatusFileName.c_str(),
-     strHistoryFileName.c_str(),
-     strServerName.c_str() );
-*/
-
-
-            // client
+            // Client:
             // actual client object
             CClient Client ( iPortNumber );
 
@@ -250,7 +259,7 @@ CServer Server ( strLoggingFileName.c_str(),
         }
         else
         {
-            // server
+            // Server:
             // actual server object
 
 // TODO use QString
@@ -259,7 +268,9 @@ CServer Server ( strLoggingFileName.c_str(),
                              iPortNumber,
                              strHTMLStatusFileName.c_str(),
                              strHistoryFileName.c_str(),
-                             strServerName.c_str() );
+                             strServerName.c_str(),
+                             bIsCentralServer,
+                             strCentralServer.c_str() );
 
             if ( bUseGUI )
             {
@@ -313,21 +324,20 @@ std::string UsageArguments ( char **argv )
         "Usage: " + std::string ( argv[0] ) + " [option] [argument]\n"
         "Recognized options:\n"
         "  -s, --server               start server\n"
-        "  -n, --nogui                disable GUI (only avaiable for server)\n"
+        "  -n, --nogui                disable GUI (server only)\n"
         "  -l, --log                  enable logging, set file name\n"
-        "  -i, --inifile              initialization file name (only available for\n"
-        "                             client)\n"
-        "  -p, --port                 local port number (only avaiable for server)\n"
-        "  -m, --htmlstatus           enable HTML status file, set file name (only\n"
-        "                             available for server)\n"
-        "  -a, --servername           server name required for HTML status (only\n"
-        "                             available for server)\n"
+        "  -i, --inifile              initialization file name (client only)\n"
+        "  -p, --port                 local port number (server only)\n"
+        "  -m, --htmlstatus           enable HTML status file, set file name (server\n"
+        "                             only)\n"
+        "  -a, --servername           server name, required for HTML status (server\n"
+        "                             only)\n"
         "  -y, --history              enable connection history and set file\n"
-        "                             name (only available for server)\n"
-        "  -c, --connect              connect to last server on startup (only\n"
-        "                             available for client)\n"
-        "  -d, --disableleds          disable LEDs in main window (only available\n"
-        "                             for client)\n"
+        "                             name (server only)\n"
+        "  -e, --centralserver        address of the central server (server only)\n"
+        "  -c, --connect              connect to last server on startup (client\n"
+        "                             only)\n"
+        "  -d, --disableleds          disable LEDs in main window (client only)\n"
         "  -h, -?, --help             this help text\n"
         "Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }

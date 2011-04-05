@@ -33,7 +33,7 @@ CConnectDlg::CConnectDlg ( CClient* pNCliP, QWidget* parent,
     setupUi ( this );
 
 
-    // add help text to controls -----------------------------------------------
+    // Add help text to controls -----------------------------------------------
 
 // TODO
 

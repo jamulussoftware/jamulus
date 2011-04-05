@@ -83,7 +83,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
 #endif
 
 
-    // connections -------------------------------------------------------------
+    // Connections -------------------------------------------------------------
     // connection for protocol
     QObject::connect ( &Channel,
         SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),

@@ -283,6 +283,15 @@ CServer::CServer ( const QString& strLoggingFileName,
         SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
         this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
 
+    QObject::connect ( &ConnLessChannel,
+        SIGNAL ( CLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ),
+        this, SLOT ( OnCLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ) );
+
+    QObject::connect ( &ConnLessChannel,
+        SIGNAL ( CLSendEmptyMes ( CHostAddress ) ),
+        this, SLOT ( OnCLSendEmptyMes ( CHostAddress ) ) );
+
+
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message

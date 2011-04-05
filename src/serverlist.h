@@ -128,6 +128,9 @@ public:
 
     void RegisterServer ( const CHostAddress&    InetAddr,
                           const CServerCoreInfo& ServerInfo );
+
+    void QueryServerList ( const CHostAddress& InetAddr );
+
 protected:
     QTimer                  TimerPollList;
     QMutex                  Mutex;

@@ -210,8 +210,7 @@ protected:
     bool EvaluateCLServerListMes       ( const CHostAddress&     InetAddr,
                                          const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerListMes    ( const CHostAddress& InetAddr );
-    bool EvaluateCLSendEmptyMesMes     ( const CHostAddress& InetAddr,
-                                         const CVector<uint8_t>& vecData );
+    bool EvaluateCLSendEmptyMesMes     ( const CVector<uint8_t>& vecData );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -254,8 +253,7 @@ signals:
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );
     void CLReqServerList ( CHostAddress InetAddr );
-    void CLSendEmptyMes ( CHostAddress InetAddr,
-                          CHostAddress TargetInetAddr );
+    void CLSendEmptyMes ( CHostAddress TargetInetAddr );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

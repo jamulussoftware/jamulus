@@ -86,43 +86,65 @@ void CServerListManager::RegisterServer ( const CHostAddress&    InetAddr,
 
     if ( bEnabled )
     {
-        // define invalid index used as a flag
-        const int ciInvalidIdx = -1;
+        const int iCurServerListSize = ServerList.size();
 
-        // Check if server is already registered. Use IP number and port number
-        // to fully identify a server. The very first list entry must not be
-        // checked since this is per definition the central server (i.e., this
-        // server)
-        int iSelIdx = ciInvalidIdx; // initialize with an illegal value
-        for ( int iIdx = 1; iIdx < ServerList.size(); iIdx++ )
+        // check for maximum allowed number of servers in the server list
+        if ( iCurServerListSize < MAX_NUM_SERVERS_IN_SERVER_LIST )
         {
-            if ( ServerList[iIdx].HostAddr == InetAddr )
-            {
-                // store entry index
-                iSelIdx = iIdx;
+            // define invalid index used as a flag
+            const int ciInvalidIdx = -1;
 
-                // entry found, leave for-loop
-                continue;
+            // Check if server is already registered. Use IP number and port
+            // number to fully identify a server. The very first list entry must
+            // not be checked since this is per definition the central server
+            // (i.e., this server)
+            int iSelIdx = ciInvalidIdx; // initialize with an illegal value
+            for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
+            {
+                if ( ServerList[iIdx].HostAddr == InetAddr )
+                {
+                    // store entry index
+                    iSelIdx = iIdx;
+
+                    // entry found, leave for-loop
+                    continue;
+                }
+            }
+
+            // if server is not yet registered, we have to create a new entry
+            if ( iSelIdx == ciInvalidIdx )
+            {
+                // create a new server list entry and init with received data
+                ServerList.append ( CServerListEntry ( InetAddr, ServerInfo ) );
+            }
+            else
+            {
+                // update all data and call update registration function
+                ServerList[iSelIdx].strName          = ServerInfo.strName;
+                ServerList[iSelIdx].strTopic         = ServerInfo.strTopic;
+                ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
+                ServerList[iSelIdx].strCity          = ServerInfo.strCity;
+                ServerList[iSelIdx].iNumClients      = ServerInfo.iNumClients;
+                ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
+                ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
+                ServerList[iSelIdx].UpdateRegistration();
             }
         }
+    }
+}
 
-        // if server is not yet registered, we have to create a new entry
-        if ( iSelIdx == ciInvalidIdx )
-        {
-            // create a new server list entry and init with received data
-            ServerList.append ( CServerListEntry ( InetAddr, ServerInfo ) );
-        }
-        else
-        {
-            // update all data and call update registration function
-            ServerList[iSelIdx].strName          = ServerInfo.strName;
-            ServerList[iSelIdx].strTopic         = ServerInfo.strTopic;
-            ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
-            ServerList[iSelIdx].strCity          = ServerInfo.strCity;
-            ServerList[iSelIdx].iNumClients      = ServerInfo.iNumClients;
-            ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
-            ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
-            ServerList[iSelIdx].UpdateRegistration();
-        }
+void CServerListManager::QueryServerList ( const CHostAddress& InetAddr )
+{
+    QMutexLocker locker ( &Mutex );
+
+    if ( bEnabled )
+    {
+
+// TODO
+
+// extract the list data in message or transmit directly?
+
+// create "send empty message" for all registered servers
+
     }
 }

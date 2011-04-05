@@ -561,4 +561,12 @@ CConnectionLessChannel::CConnectionLessChannel()
     QObject::connect( &Protocol,
         SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
         SIGNAL ( CLPingReceived ( CHostAddress, int ) ) );
+
+    QObject::connect( &Protocol,
+        SIGNAL ( CLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ),
+        SIGNAL ( CLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ) );
+
+    QObject::connect( &Protocol,
+        SIGNAL ( CLSendEmptyMes ( CHostAddress, CHostAddress ) ),
+        SIGNAL ( CLSendEmptyMes ( CHostAddress, CHostAddress ) ) );
 }

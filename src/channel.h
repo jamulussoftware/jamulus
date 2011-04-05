@@ -210,6 +210,9 @@ public:
     void CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs )
         { Protocol.CreateCLPingMes ( InetAddr, iMs ); }
 
+    void CreateCLEmptyMes ( const CHostAddress& InetAddr )
+        { Protocol.CreateCLEmptyMes ( InetAddr ); }
+
 protected:
     // network protocol
     CProtocol Protocol;
@@ -219,6 +222,10 @@ signals:
                                  CVector<uint8_t> vecMessage );
 
     void CLPingReceived ( CHostAddress InetAddr, int iMs );
+    void CLRegisterServerReceived ( CHostAddress    InetAddr,
+                                    CServerCoreInfo ServerInfo );
+    void CLSendEmptyMes ( CHostAddress InetAddr,
+                          CHostAddress TargetInetAddr );
 };
 
 

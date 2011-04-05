@@ -128,6 +128,8 @@
 // without any other changes in the code
 #define USED_NUM_CHANNELS               6 // used number channels for server
 
+// maximum number of servers registered in the server list
+#define MAX_NUM_SERVERS_IN_SERVER_LIST  100
 
 // defines the time interval at which the ping time is updated in the GUI
 #define PING_UPDATE_TIME_MS             500 // ms

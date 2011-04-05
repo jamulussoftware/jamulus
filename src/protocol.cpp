@@ -577,7 +577,7 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
                 break;
 
             case PROTMESSID_CLM_SEND_EMPTY_MESSAGE:
-                bRet = EvaluateCLSendEmptyMesMes ( InetAddr, vecData );
+                bRet = EvaluateCLSendEmptyMesMes ( vecData );
                 break;
 
             case PROTMESSID_CLM_REGISTER_SERVER:
@@ -1459,8 +1459,7 @@ void CProtocol::CreateCLSendEmptyMesMes ( const CHostAddress& InetAddr,
                                      InetAddr );
 }
 
-bool CProtocol::EvaluateCLSendEmptyMesMes ( const CHostAddress&     InetAddr,
-                                            const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateCLSendEmptyMesMes ( const CVector<uint8_t>& vecData )
 {
     int iPos = 0; // init position pointer
 
@@ -1479,8 +1478,7 @@ bool CProtocol::EvaluateCLSendEmptyMesMes ( const CHostAddress&     InetAddr,
         static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // invoke message action
-    emit CLSendEmptyMes ( InetAddr,
-                          CHostAddress ( QHostAddress ( iIpAddr ), iPort ) );
+    emit CLSendEmptyMes ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ) );
 
     return false; // no error
 }

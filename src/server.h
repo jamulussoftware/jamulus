@@ -188,8 +188,19 @@ public slots:
     void OnTimer();
     void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs )
         { ConnLessChannel.CreateCLPingMes ( InetAddr, iMs ); }
+
+    void OnCLSendEmptyMes ( CHostAddress TargetInetAddr )
+        { ConnLessChannel.CreateCLEmptyMes ( TargetInetAddr ); }
+
+    void OnCLRegisterServerReceived ( CHostAddress    InetAddr,
+                                      CServerCoreInfo ServerInfo )
+    {
+        ServerListManager.RegisterServer ( InetAddr, ServerInfo );
+    }
+
 
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!

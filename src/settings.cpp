@@ -44,7 +44,7 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     }
 
 
-    // actual settings data ---------------------------------------------------
+    // Actual settings data ---------------------------------------------------
     // IP addresses
     for ( int iIPAddrIdx = 0; iIPAddrIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIPAddrIdx++ )
     {
@@ -191,7 +191,7 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     QDomDocument IniXMLDocument;
 
 
-    // actual settings data ---------------------------------------------------
+    // Actual settings data ---------------------------------------------------
     // IP addresses
     for ( int iIPAddrIdx = 0; iIPAddrIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIPAddrIdx++ )
     {

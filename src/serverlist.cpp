@@ -33,7 +33,7 @@ CServerListManager::CServerListManager ( const bool NbEbld )
     // never be deleted
     ServerList.clear();
 
-// per definition the client substitudes the IP address of the master server
+// per definition the client substitudes the IP address of the central server
 // itself for his server list
 ServerList.append ( CServerListEntry (
     CHostAddress(),
@@ -47,9 +47,10 @@ ServerList.append ( CServerListEntry (
 
 
 
-    // connections -------------------------------------------------------------
+    // Connections -------------------------------------------------------------
     QObject::connect ( &TimerPollList, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerPollList() ) );
+
 
     // Timers ------------------------------------------------------------------
     // start timer for polling the server list
@@ -64,7 +65,7 @@ void CServerListManager::OnTimerPollList()
 {
     QMutexLocker locker ( &Mutex );
 
-    // check all list entries except of the very first one (which is the master
+    // check all list entries except of the very first one (which is the central
     // server entry) if they are still valid
     for ( int iIdx = 1; iIdx < ServerList.size(); iIdx++ )
     {
@@ -83,41 +84,45 @@ void CServerListManager::RegisterServer ( const CHostAddress&    InetAddr,
 {
     QMutexLocker locker ( &Mutex );
 
-    // define invalid index used as a flag
-    const int ciInvalidIdx = -1;
-
-    // Check if server is already registered. Use IP number and port number to
-    // fully identify a server. The very first list entry must not be checked
-    // since this is per definition the master server (i.e., this server)
-    int iSelIdx = ciInvalidIdx; // initialize with an illegal value
-    for ( int iIdx = 1; iIdx < ServerList.size(); iIdx++ )
+    if ( bEnabled )
     {
-        if ( ServerList[iIdx].HostAddr == InetAddr )
+        // define invalid index used as a flag
+        const int ciInvalidIdx = -1;
+
+        // Check if server is already registered. Use IP number and port number
+        // to fully identify a server. The very first list entry must not be
+        // checked since this is per definition the central server (i.e., this
+        // server)
+        int iSelIdx = ciInvalidIdx; // initialize with an illegal value
+        for ( int iIdx = 1; iIdx < ServerList.size(); iIdx++ )
         {
-            // store entry index
-            iSelIdx = iIdx;
+            if ( ServerList[iIdx].HostAddr == InetAddr )
+            {
+                // store entry index
+                iSelIdx = iIdx;
 
-            // entry found, leave for-loop
-            continue;
+                // entry found, leave for-loop
+                continue;
+            }
         }
-    }
 
-    // if server is not yet registered, we have to create a new entry
-    if ( iSelIdx == ciInvalidIdx )
-    {
-        // create a new server list entry and init with received data
-        ServerList.append ( CServerListEntry ( InetAddr, ServerInfo ) );
-    }
-    else
-    {
-        // update all data and call update registration function
-        ServerList[iSelIdx].strName          = ServerInfo.strName;
-        ServerList[iSelIdx].strTopic         = ServerInfo.strTopic;
-        ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
-        ServerList[iSelIdx].strCity          = ServerInfo.strCity;
-        ServerList[iSelIdx].iNumClients      = ServerInfo.iNumClients;
-        ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
-        ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
-        ServerList[iSelIdx].UpdateRegistration();
+        // if server is not yet registered, we have to create a new entry
+        if ( iSelIdx == ciInvalidIdx )
+        {
+            // create a new server list entry and init with received data
+            ServerList.append ( CServerListEntry ( InetAddr, ServerInfo ) );
+        }
+        else
+        {
+            // update all data and call update registration function
+            ServerList[iSelIdx].strName          = ServerInfo.strName;
+            ServerList[iSelIdx].strTopic         = ServerInfo.strTopic;
+            ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
+            ServerList[iSelIdx].strCity          = ServerInfo.strCity;
+            ServerList[iSelIdx].iNumClients      = ServerInfo.iNumClients;
+            ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
+            ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
+            ServerList[iSelIdx].UpdateRegistration();
+        }
     }
 }

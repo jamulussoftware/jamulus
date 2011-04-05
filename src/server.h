@@ -35,6 +35,7 @@
 #include "channel.h"
 #include "util.h"
 #include "serverlogging.h"
+#include "serverlist.h"
 
 
 /* Definitions ****************************************************************/
@@ -106,7 +107,9 @@ public:
               const quint16  iPortNumber,
               const QString& strHTMLStatusFileName,
               const QString& strHistoryFileName,
-              const QString& strServerNameForHTMLStatusFile );
+              const QString& strServerNameForHTMLStatusFile,
+              const bool     bIsCentralServer,
+              const QString& strCentralServer );
 
     void Start();
     void Stop();
@@ -177,6 +180,9 @@ protected:
 
     CHighPrecisionTimer    HighPrecisionTimer;
     CVector<short>         vecsSendData;
+
+    // server list
+    CServerListManager     ServerListManager;
 
 public slots:
     void OnTimer();

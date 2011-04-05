@@ -804,7 +804,7 @@ void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
     vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo );
 }
 
-void CServer::CreateAndSendChatTextForAllConChannels ( const int iCurChanID,
+void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                        const QString& strChatText )
 {
     // Create message which is sent to all connected clients -------------------

@@ -62,7 +62,8 @@ CHistoryGraph::CHistoryGraph() :
     PlotPixmap = PlotPixmap.scaled (
         PlotCanvasRect.width(), PlotCanvasRect.height() );
 
-    // connections
+
+    // Connections -------------------------------------------------------------
     QObject::connect ( &TimerDailyUpdate, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerDailyUpdate() ) );
 }
@@ -100,7 +101,7 @@ void CHistoryGraph::DrawFrame ( const int iNewNumTicksX )
     QPainter PlotPainter ( &PlotPixmap );
 
 
-    // create actual plot region (grid frame) ----------------------------------
+    // Create actual plot region (grid frame) ----------------------------------
     PlotPainter.setPen ( PlotFrameColor );
     PlotPainter.drawRect ( PlotGridFrame );
 

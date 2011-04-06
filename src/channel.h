@@ -189,43 +189,4 @@ signals:
     void Disconnected();
 };
 
-
-class CConnectionLessChannel : public QObject
-{
-    Q_OBJECT
-
-public:
-    CConnectionLessChannel();
-
-    bool ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
-                                      const int               iNumBytes,
-                                      const CHostAddress&     InetAddr )
-    {
-        return Protocol.ParseConnectionLessMessage ( vecbyData, iNumBytes, InetAddr );
-    }
-
-    void CreateCLServerFullMes ( const CHostAddress& InetAddr )
-        { Protocol.CreateCLServerFullMes ( InetAddr ); }
-
-    void CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs )
-        { Protocol.CreateCLPingMes ( InetAddr, iMs ); }
-
-    void CreateCLEmptyMes ( const CHostAddress& InetAddr )
-        { Protocol.CreateCLEmptyMes ( InetAddr ); }
-
-protected:
-    // network protocol
-    CProtocol Protocol;
-
-signals:
-    void CLMessReadyForSending ( CHostAddress     InetAddr,
-                                 CVector<uint8_t> vecMessage );
-
-    void CLPingReceived ( CHostAddress InetAddr, int iMs );
-    void CLRegisterServerReceived ( CHostAddress    InetAddr,
-                                    CServerCoreInfo ServerInfo );
-    void CLSendEmptyMes ( CHostAddress TargetInetAddr );
-};
-
-
 #endif /* !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

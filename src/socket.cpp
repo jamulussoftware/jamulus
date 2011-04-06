@@ -111,9 +111,9 @@ void CSocket::OnDataReceived()
             {
                 // this is an unknown address, try to parse connection less
                 // message
-                pConnLessChannel->ParseConnectionLessMessage ( vecbyRecBuf,
-                                                               iNumBytesRead, 
-                                                               RecHostAddr );
+                pConnLessProtocol->ParseConnectionLessMessage ( vecbyRecBuf,
+                                                                iNumBytesRead, 
+                                                                RecHostAddr );
 
                 // do not perform any other action on this received packet
                 return;

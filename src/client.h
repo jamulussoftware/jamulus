@@ -212,7 +212,7 @@ public:
         { Channel.CreatePingMes ( PreparePingMessage() ); };
 
     void SendCLPingMess ( const CHostAddress& InetAddr )
-        { ConnLessChannel.CreateCLPingMes ( InetAddr, PreparePingMessage() ); };
+        { ConnLessProtocol.CreateCLPingMes ( InetAddr, PreparePingMessage() ); };
 
     int EstimatedOverallDelay ( const int iPingTimeMs );
 
@@ -241,7 +241,7 @@ protected:
 
     // only one channel is needed for client application
     CChannel                Channel;
-    CConnectionLessChannel  ConnLessChannel;
+    CProtocol               ConnLessProtocol;
     bool                    bDoAutoSockBufSize;
 
     // audio encoder/decoder

@@ -152,37 +152,37 @@ protected:
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
-    CChannel               vecChannels[MAX_NUM_CHANNELS];
-    CConnectionLessChannel ConnLessChannel;
-    QMutex                 Mutex;
+    CChannel            vecChannels[MAX_NUM_CHANNELS];
+    CProtocol           ConnLessProtocol;
+    QMutex              Mutex;
 
     // audio encoder/decoder
-    CELTMode*              CeltModeMono[MAX_NUM_CHANNELS];
-    CELTEncoder*           CeltEncoderMono[MAX_NUM_CHANNELS];
-    CELTDecoder*           CeltDecoderMono[MAX_NUM_CHANNELS];
-    CELTMode*              CeltModeStereo[MAX_NUM_CHANNELS];
-    CELTEncoder*           CeltEncoderStereo[MAX_NUM_CHANNELS];
-    CELTDecoder*           CeltDecoderStereo[MAX_NUM_CHANNELS];
+    CELTMode*           CeltModeMono[MAX_NUM_CHANNELS];
+    CELTEncoder*        CeltEncoderMono[MAX_NUM_CHANNELS];
+    CELTDecoder*        CeltDecoderMono[MAX_NUM_CHANNELS];
+    CELTMode*           CeltModeStereo[MAX_NUM_CHANNELS];
+    CELTEncoder*        CeltEncoderStereo[MAX_NUM_CHANNELS];
+    CELTDecoder*        CeltDecoderStereo[MAX_NUM_CHANNELS];
 
-    CVector<QString>       vstrChatColors;
+    CVector<QString>    vstrChatColors;
 
     // actual working objects
-    CSocket                Socket;
-    CCycleTimeVariance     CycleTimeVariance;
+    CSocket             Socket;
+    CCycleTimeVariance  CycleTimeVariance;
 
     // logging
-    CServerLogging         Logging;
+    CServerLogging      Logging;
 
     // HTML file server status
-    bool                   bWriteStatusHTMLFile;
-    QString                strServerHTMLFileListName;
-    QString                strServerNameWithPort;
+    bool                bWriteStatusHTMLFile;
+    QString             strServerHTMLFileListName;
+    QString             strServerNameWithPort;
 
-    CHighPrecisionTimer    HighPrecisionTimer;
-    CVector<short>         vecsSendData;
+    CHighPrecisionTimer HighPrecisionTimer;
+    CVector<short>      vecsSendData;
 
     // server list
-    CServerListManager     ServerListManager;
+    CServerListManager  ServerListManager;
 
 public slots:
     void OnTimer();
@@ -190,10 +190,10 @@ public slots:
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
 
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs )
-        { ConnLessChannel.CreateCLPingMes ( InetAddr, iMs ); }
+        { ConnLessProtocol.CreateCLPingMes ( InetAddr, iMs ); }
 
     void OnCLSendEmptyMes ( CHostAddress TargetInetAddr )
-        { ConnLessChannel.CreateCLEmptyMes ( TargetInetAddr ); }
+        { ConnLessProtocol.CreateCLEmptyMes ( TargetInetAddr ); }
 
     void OnCLRegisterServerReceived ( CHostAddress    InetAddr,
                                       CServerCoreInfo ServerInfo )

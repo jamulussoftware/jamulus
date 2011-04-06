@@ -548,25 +548,3 @@ int CChannel::GetUploadRateKbps()
         8 /* bits per byte */ *
         SYSTEM_SAMPLE_RATE_HZ / iAudioSizeOut / 1000;
 }
-
-
-// CConnectionLessChannel implementation ***************************************
-CConnectionLessChannel::CConnectionLessChannel()
-{
-    // Connections -------------------------------------------------------------
-    QObject::connect ( &Protocol,
-        SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
-        SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ) );
-
-    QObject::connect( &Protocol,
-        SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
-        SIGNAL ( CLPingReceived ( CHostAddress, int ) ) );
-
-    QObject::connect( &Protocol,
-        SIGNAL ( CLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ),
-        SIGNAL ( CLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ) );
-
-    QObject::connect( &Protocol,
-        SIGNAL ( CLSendEmptyMes ( CHostAddress ) ),
-        SIGNAL ( CLSendEmptyMes ( CHostAddress ) ) );
-}

@@ -33,6 +33,7 @@
 #include <vector>
 #include "global.h"
 #include "channel.h"
+#include "protocol.h"
 #include "util.h"
 
 // The header file server.h requires to include this header file so we get a
@@ -47,10 +48,10 @@ class CSocket : public QObject
     Q_OBJECT
 
 public:
-    CSocket ( CChannel* pNewChannel,
-              CConnectionLessChannel* pNewCLChannel,
+    CSocket ( CChannel*     pNewChannel,
+              CProtocol*    pNewCLProtocol,
               const quint16 iPortNumber )
-        : pChannel( pNewChannel ), pConnLessChannel ( pNewCLChannel ),
+        : pChannel( pNewChannel ), pConnLessProtocol ( pNewCLProtocol ),
           bIsClient ( true ) { Init ( iPortNumber ); }
 
     CSocket ( CServer* pNServP,
@@ -63,17 +64,17 @@ public:
 protected:
     void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );
 
-    QUdpSocket              SocketDevice;
-    QMutex                  Mutex;
+    QUdpSocket       SocketDevice;
+    QMutex           Mutex;
 
-    CVector<uint8_t>        vecbyRecBuf;
-    CHostAddress            RecHostAddr;
+    CVector<uint8_t> vecbyRecBuf;
+    CHostAddress     RecHostAddr;
 
-    CChannel*               pChannel;         // for client
-    CConnectionLessChannel* pConnLessChannel; // for client
-    CServer*                pServer;          // for server
+    CChannel*        pChannel;          // for client
+    CProtocol*       pConnLessProtocol; // for client
+    CServer*         pServer;           // for server
 
-    bool                    bIsClient;
+    bool             bIsClient;
 
 public slots:
     void OnDataReceived();

@@ -34,7 +34,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     iCeltNumCodedBytes ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
     bCeltDoHighQuality ( false ),
     bUseStereo ( false ),
-    Socket ( &Channel, &ConnLessChannel, iPortNumber ),
+    Socket ( &Channel, &ConnLessProtocol, iPortNumber ),
     Sound ( AudioCallback, this ),
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan ( false ),
@@ -113,11 +113,11 @@ CClient::CClient ( const quint16 iPortNumber ) :
     QObject::connect ( &Channel, SIGNAL ( PingReceived ( int ) ),
         this, SLOT ( OnReceivePingMessage ( int ) ) );
 
-    QObject::connect ( &ConnLessChannel,
+    QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
         this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
 
-    QObject::connect ( &ConnLessChannel, SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
+    QObject::connect ( &ConnLessProtocol, SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
         this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
 
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest() ),

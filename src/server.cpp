@@ -275,19 +275,19 @@ CServer::CServer ( const QString& strLoggingFileName,
     QObject::connect ( &HighPrecisionTimer, SIGNAL ( timeout() ),
         this, SLOT ( OnTimer() ) );
 
-    QObject::connect ( &ConnLessChannel,
+    QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
         this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
 
-    QObject::connect ( &ConnLessChannel,
+    QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
         this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
 
-    QObject::connect ( &ConnLessChannel,
+    QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ),
         this, SLOT ( OnCLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ) );
 
-    QObject::connect ( &ConnLessChannel,
+    QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLSendEmptyMes ( CHostAddress ) ),
         this, SLOT ( OnCLSendEmptyMes ( CHostAddress ) ) );
 
@@ -903,9 +903,9 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
         {
             // this is a new client, we then first check if this is a connection
             // less message before we create a new official channel
-            if ( ConnLessChannel.ParseConnectionLessMessage ( vecbyRecBuf,
-                                                              iNumBytesRead, 
-                                                              HostAdr ) )
+            if ( ConnLessProtocol.ParseConnectionLessMessage ( vecbyRecBuf,
+                                                               iNumBytesRead, 
+                                                               HostAdr ) )
             {
                 // a new client is calling, look for free channel
                 iCurChanID = GetFreeChan();
@@ -939,7 +939,7 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
                     bChanOK = false;
 
                     // create and send "server full" message
-                    ConnLessChannel.CreateCLServerFullMes ( HostAdr );
+                    ConnLessProtocol.CreateCLServerFullMes ( HostAdr );
                 }
             }
         }

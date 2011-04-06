@@ -25,7 +25,7 @@
 #include <qapplication.h>
 #include <qmessagebox.h>
 #include <qdir.h>
-#include <iostream>
+#include <qtextstream.h>
 #include "global.h"
 #include "llconclientdlg.h"
 #include "llconserverdlg.h"
@@ -35,28 +35,36 @@
 
 // Implementation **************************************************************
 // these pointers are only used for the post-event routine
-QApplication* pApp   = NULL;
-QDialog* pMainWindow = NULL;
+QApplication* pApp        = NULL;
+QDialog*      pMainWindow = NULL;
 
 
 int main ( int argc, char** argv )
 {
-    std::string strArgument;
+#ifdef _WIN32
+    // no console on windows -> just write in string and dump it
+    QString strDummySink;
+    QTextStream tsConsole ( &strDummySink );
+#else
+    QTextStream tsConsole ( stdout );
+#endif
+    QString     strArgument;
     double      rDbleArgument;
 
-    // check if server or client application shall be started
-    bool        bIsClient             = true;
-    bool        bUseGUI               = true;
-    bool        bConnectOnStartup     = false;
-    bool        bDisalbeLEDs          = false;
-    bool        bIsCentralServer      = false;
-    quint16     iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
-    std::string strIniFileName        = "";
-    std::string strHTMLStatusFileName = "";
-    std::string strServerName         = "";
-    std::string strLoggingFileName    = "";
-    std::string strHistoryFileName    = "";
-    std::string strCentralServer      = "";
+    // initialize all flags and string which might be changed by command line
+    // arguments
+    bool    bIsClient             = true;
+    bool    bUseGUI               = true;
+    bool    bConnectOnStartup     = false;
+    bool    bDisalbeLEDs          = false;
+    bool    bIsCentralServer      = false;
+    quint16 iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
+    QString strIniFileName        = "";
+    QString strHTMLStatusFileName = "";
+    QString strServerName         = "";
+    QString strLoggingFileName    = "";
+    QString strHistoryFileName    = "";
+    QString strCentralServer      = "";
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -64,116 +72,173 @@ int main ( int argc, char** argv )
     for ( int i = 1; i < argc; i++ )
     {
         // Server mode flag ----------------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-s", "--server" ) )
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-s",
+                               "--server" ) )
         {
             bIsClient = false;
-            cout << "- server mode chosen" << std::endl;
+            tsConsole << "- server mode chosen" << endl;
             continue;
         }
 
 
         // Use GUI flag --------------------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-n", "--nogui" ) )
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-n",
+                               "--nogui" ) )
         {
             bUseGUI = false;
-            cout << "- no GUI mode chosen" << std::endl;
+            tsConsole << "- no GUI mode chosen" << endl;
             continue;
         }
 
 
         // Disable LEDs flag ---------------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-d", "--disableleds" ) )
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-d",
+                               "--disableleds" ) )
         {
             bDisalbeLEDs = true;
-            cout << "- disable LEDs in main window" << std::endl;
+            tsConsole << "- disable LEDs in main window" << endl;
             continue;
         }
 
 
         // Use logging ---------------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-l", "--log", strArgument ) )
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-l",
+                                 "--log",
+                                 strArgument ) )
         {
             strLoggingFileName = strArgument;
-            cout << "- logging file name: " << strLoggingFileName << std::endl;
+            tsConsole << "- logging file name: " << strLoggingFileName << endl;
             continue;
         }
 
 
         // Port number ---------------------------------------------------------
-        if ( GetNumericArgument ( argc, argv, i, "-p", "--port",
-                                  0, 65535, rDbleArgument ) )
+        if ( GetNumericArgument ( tsConsole,
+                                  argc,
+                                  argv,
+                                  i,
+                                  "-p",
+                                  "--port",
+                                  0,
+                                  65535,
+                                  rDbleArgument ) )
         {
             iPortNumber = static_cast<quint16> ( rDbleArgument );
-            cout << "- selected port number: " << iPortNumber << std::endl;
+            tsConsole << "- selected port number: " << iPortNumber << endl;
             continue;
         }
 
 
         // HTML status file ----------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-m", "--htmlstatus", strArgument ) )
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-m",
+                                 "--htmlstatus",
+                                 strArgument ) )
         {
             strHTMLStatusFileName = strArgument;
-            cout << "- HTML status file name: " << strHTMLStatusFileName << std::endl;
+            tsConsole << "- HTML status file name: " << strHTMLStatusFileName << endl;
             continue;
         }
 
-        if ( GetStringArgument ( argc, argv, i, "-a", "--servername", strArgument ) )
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-a",
+                                 "--servername",
+                                 strArgument ) )
         {
             strServerName = strArgument;
-            cout << "- server name for HTML status file: " << strServerName << std::endl;
+            tsConsole << "- server name for HTML status file: " << strServerName << endl;
             continue;
         }
 
 
         // HTML status file ----------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-y", "--history", strArgument ) )
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-y",
+                                 "--history",
+                                 strArgument ) )
         {
             strHistoryFileName = strArgument;
-            cout << "- history file name: " << strHistoryFileName << std::endl;
+            tsConsole << "- history file name: " << strHistoryFileName << endl;
             continue;
         }
 
 
         // Central server ------------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-e", "--centralserver", strArgument ) )
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-e",
+                                 "--centralserver",
+                                 strArgument ) )
         {
             strCentralServer = strArgument;
-            cout << "- central server: " << strCentralServer << std::endl;
+            tsConsole << "- central server: " << strCentralServer << endl;
             continue;
         }
 
 
         // Initialization file -------------------------------------------------
-        if ( GetStringArgument ( argc, argv, i, "-i", "--inifile", strArgument ) )
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-i",
+                                 "--inifile",
+                                 strArgument ) )
         {
             strIniFileName = strArgument;
-            cout << "- initialization file name: " << strIniFileName << std::endl;
+            tsConsole << "- initialization file name: " << strIniFileName << endl;
             continue;
         }
 
 
         // Connect on startup --------------------------------------------------
-        if ( GetFlagArgument ( argv, i, "-c", "--connect" ) )
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-c",
+                               "--connect" ) )
         {
             bConnectOnStartup = true;
-            cout << "- connect on startup enabled" << std::endl;
+            tsConsole << "- connect on startup enabled" << endl;
             continue;
         }
 
 
         // Help (usage) flag ---------------------------------------------------
         if ( ( !strcmp ( argv[i], "--help" ) ) ||
-             ( !strcmp ( argv[i], "-h" ) ) || ( !strcmp ( argv[i], "-?" ) ) )
+             ( !strcmp ( argv[i], "-h" ) ) ||
+             ( !strcmp ( argv[i], "-?" ) ) )
         {
-            const std::string strHelp = UsageArguments(argv);
-            cout << strHelp;
+            const QString strHelp = UsageArguments ( argv );
+            tsConsole << strHelp << endl;
+
             exit ( 1 );
         }
 
         // Unknown option ------------------------------------------------------
-        cerr << argv[0] << ": ";
-        cerr << "Unknown option '" << argv[i] << "' -- use '--help' for help"
-            << endl;
+        tsConsole << argv[0] << ": ";
+        tsConsole << "Unknown option '" <<
+            argv[i] << "' -- use '--help' for help" << endl;
 
 // clicking on the Mac application bundle, the actual application
 // is called with weird command line args -> do not exit on these
@@ -182,9 +247,16 @@ int main ( int argc, char** argv )
 #endif
     }
 
+    // per definition: if we are in "GUI" server mode and no central server
+    // address is given, we use the default central server address
+    if ( !bIsClient && bUseGUI && strCentralServer.isEmpty() )
+    {
+        strCentralServer = DEFAULT_SERVER_ADDRESS;
+    }
+
     // per definition: if we are in server mode and the central server address
     // is the localhost address, we are in central server mode
-    if ( !bIsClient && !strCentralServer.empty() )
+    if ( !bIsClient && !strCentralServer.isEmpty() )
     {
         bIsCentralServer =
             ( !strCentralServer.compare ( "localhost" ) ||
@@ -213,6 +285,7 @@ int main ( int argc, char** argv )
     qInitResources();
 #endif
 
+
 // TEST -> activate the following line to activate the test bench,
 //CTestbench Testbench ( "127.0.0.1", LLCON_DEFAULT_PORT_NUMBER );
 
@@ -227,15 +300,13 @@ int main ( int argc, char** argv )
 
             // load settings from init-file
             CSettings Settings ( &Client );
-
-
-// TODO use QString
-
-            Settings.Load ( strIniFileName.c_str() );
+            Settings.Load ( strIniFileName );
 
             // GUI object
             CLlconClientDlg ClientDlg (
-                &Client, bConnectOnStartup, bDisalbeLEDs,
+                &Client,
+                bConnectOnStartup,
+                bDisalbeLEDs,
                 0
 #ifdef _WIN32
                 // this somehow only works reliable on Windows
@@ -245,32 +316,26 @@ int main ( int argc, char** argv )
 
             // set main window
             pMainWindow = &ClientDlg;
-            pApp = &app; // Needed for post-event routine
+            pApp        = &app; // Needed for post-event routine
 
             // show dialog
             ClientDlg.show();
             app.exec();
 
             // save settings to init-file
-
-// TODO use QString
-
-            Settings.Save ( strIniFileName.c_str() );
+            Settings.Save ( strIniFileName );
         }
         else
         {
             // Server:
             // actual server object
-
-// TODO use QString
-
-            CServer Server ( strLoggingFileName.c_str(),
+            CServer Server ( strLoggingFileName,
                              iPortNumber,
-                             strHTMLStatusFileName.c_str(),
-                             strHistoryFileName.c_str(),
-                             strServerName.c_str(),
+                             strHTMLStatusFileName,
+                             strHistoryFileName,
+                             strServerName,
                              bIsCentralServer,
-                             strCentralServer.c_str() );
+                             strCentralServer );
 
             if ( bUseGUI )
             {
@@ -279,7 +344,7 @@ int main ( int argc, char** argv )
 
                 // set main window
                 pMainWindow = &ServerDlg;
-                pApp = &app; // needed for post-event routine
+                pApp        = &app; // needed for post-event routine
 
                 // show dialog
                 ServerDlg.show();
@@ -288,9 +353,7 @@ int main ( int argc, char** argv )
             else
             {
                 // only start application without using the GUI
-                cout <<
-                    CAboutDlg::GetVersionAndNameStr ( false ).toStdString() <<
-                    std::endl;
+                tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
 
                 app.exec();
             }
@@ -302,12 +365,15 @@ int main ( int argc, char** argv )
         // show generic error
         if ( bUseGUI )
         {
-            QMessageBox::critical (
-                0, APP_NAME, generr.GetErrorText(), "Quit", 0 );
+            QMessageBox::critical ( 0,
+                                    APP_NAME,
+                                    generr.GetErrorText(),
+                                    "Quit",
+                                    0 );
         }
         else
         {
-            qDebug() << generr.GetErrorText();
+            tsConsole << generr.GetErrorText() << endl;
         }
     }
 
@@ -318,36 +384,37 @@ int main ( int argc, char** argv )
 /******************************************************************************\
 * Command Line Argument Parsing                                                *
 \******************************************************************************/
-std::string UsageArguments ( char **argv )
+QString UsageArguments ( char **argv )
 {
     return
-        "Usage: " + std::string ( argv[0] ) + " [option] [argument]\n"
-        "Recognized options:\n"
-        "  -s, --server               start server\n"
-        "  -n, --nogui                disable GUI (server only)\n"
-        "  -l, --log                  enable logging, set file name\n"
-        "  -i, --inifile              initialization file name (client only)\n"
-        "  -p, --port                 local port number (server only)\n"
-        "  -m, --htmlstatus           enable HTML status file, set file name (server\n"
-        "                             only)\n"
-        "  -a, --servername           server name, required for HTML status (server\n"
-        "                             only)\n"
-        "  -y, --history              enable connection history and set file\n"
-        "                             name (server only)\n"
-        "  -e, --centralserver        address of the central server (server only)\n"
-        "  -c, --connect              connect to last server on startup (client\n"
-        "                             only)\n"
-        "  -d, --disableleds          disable LEDs in main window (client only)\n"
-        "  -h, -?, --help             this help text\n"
-        "Example: " + std::string ( argv[0] ) + " -l -inifile myinifile.ini\n";
+        "Usage: " + QString ( argv[0] ) + " [option] [argument]\n"
+        "\nRecognized options:\n"
+        "  -s, --server          start server\n"
+        "  -n, --nogui           disable GUI (server only)\n"
+        "  -l, --log             enable logging, set file name\n"
+        "  -i, --inifile         initialization file name (client only)\n"
+        "  -p, --port            local port number (server only)\n"
+        "  -m, --htmlstatus      enable HTML status file, set file name (server\n"
+        "                        only)\n"
+        "  -a, --servername      server name, required for HTML status (server\n"
+        "                        only)\n"
+        "  -y, --history         enable connection history and set file\n"
+        "                        name (server only)\n"
+        "  -e, --centralserver   address of the central server (server only)\n"
+        "  -c, --connect         connect to last server on startup (client\n"
+        "                        only)\n"
+        "  -d, --disableleds     disable LEDs in main window (client only)\n"
+        "  -h, -?, --help        this help text\n"
+        "\nExample: " + QString ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }
 
-bool GetFlagArgument ( char** argv,
-                       int& i,
-                       std::string strShortOpt,
-                       std::string strLongOpt )
+bool GetFlagArgument ( char**  argv,
+                       int&    i,
+                       QString strShortOpt,
+                       QString strLongOpt )
 {
-    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) ||
+         ( !strLongOpt.compare ( argv[i] ) ) )
     {
         return true;
     }
@@ -357,19 +424,21 @@ bool GetFlagArgument ( char** argv,
     }
 }
 
-bool GetStringArgument ( int argc,
-                         char** argv,
-                         int& i,
-                         std::string strShortOpt,
-                         std::string strLongOpt,
-                         std::string& strArg )
+bool GetStringArgument ( QTextStream& tsConsole,
+                         int          argc,
+                         char**       argv,
+                         int&         i,
+                         QString      strShortOpt,
+                         QString      strLongOpt,
+                         QString&     strArg )
 {
-    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) ||
+         ( !strLongOpt.compare ( argv[i] ) ) )
     {
         if ( ++i >= argc )
         {
-            cerr << argv[0] << ": ";
-            cerr << "'" << strLongOpt << "' needs a string argument" << endl;
+            tsConsole << argv[0] << ": ";
+            tsConsole << "'" << strLongOpt << "' needs a string argument" << endl;
             exit ( 1 );
         }
 
@@ -383,32 +452,42 @@ bool GetStringArgument ( int argc,
     }
 }
 
-bool GetNumericArgument ( int argc,
-                          char** argv,
-                          int& i,
-                          std::string strShortOpt,
-                          std::string strLongOpt,
-                          double rRangeStart,
-                          double rRangeStop,
-                          double& rValue)
+bool GetNumericArgument ( QTextStream& tsConsole,
+                          int          argc,
+                          char**       argv,
+                          int&         i,
+                          QString      strShortOpt,
+                          QString      strLongOpt,
+                          double       rRangeStart,
+                          double       rRangeStop,
+                          double&      rValue )
 {
-    if ( ( !strShortOpt.compare ( argv[i] ) ) || ( !strLongOpt.compare ( argv[i] ) ) )
+    if ( ( !strShortOpt.compare ( argv[i] ) ) ||
+         ( !strLongOpt.compare ( argv[i] ) ) )
     {
         if ( ++i >= argc )
         {
-            cerr << argv[0] << ": ";
-            cerr << "'" << strLongOpt << "' needs a numeric argument between "
-                << rRangeStart << " and " << rRangeStop << endl;
+            tsConsole << argv[0] << ": ";
+
+            tsConsole << "'" <<
+                strLongOpt << "' needs a numeric argument between " <<
+                rRangeStart << " and " << rRangeStop << endl;
+
             exit ( 1 );
         }
 
         char *p;
         rValue = strtod ( argv[i], &p );
-        if ( *p || rValue < rRangeStart || rValue > rRangeStop )
+        if ( *p ||
+             ( rValue < rRangeStart ) ||
+             ( rValue > rRangeStop ) )
         {
-            cerr << argv[0] << ": ";
-            cerr << "'" << strLongOpt << "' needs a numeric argument between "
-                << rRangeStart << " and " << rRangeStop << endl;
+            tsConsole << argv[0] << ": ";
+
+            tsConsole << "'" <<
+                strLongOpt << "' needs a numeric argument between " <<
+                rRangeStart << " and " << rRangeStop << endl;
+
             exit ( 1 );
         }
 
@@ -425,8 +504,8 @@ bool GetNumericArgument ( int argc,
 * Window Message System                                                        *
 \******************************************************************************/
 void PostWinMessage ( const _MESSAGE_IDENT MessID,
-                      const int iMessageParam,
-                      const int iChanNum )
+                      const int            iMessageParam,
+                      const int            iChanNum )
 {
     // first check if application is initialized
     if ( pApp != NULL )

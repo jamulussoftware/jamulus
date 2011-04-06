@@ -567,6 +567,6 @@ CConnectionLessChannel::CConnectionLessChannel()
         SIGNAL ( CLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ) );
 
     QObject::connect( &Protocol,
-        SIGNAL ( CLSendEmptyMes ( CHostAddress, CHostAddress ) ),
-        SIGNAL ( CLSendEmptyMes ( CHostAddress, CHostAddress ) ) );
+        SIGNAL ( CLSendEmptyMes ( CHostAddress ) ),
+        SIGNAL ( CLSendEmptyMes ( CHostAddress ) ) );
 }

@@ -250,13 +250,34 @@ public:
 
 /* Prototypes for global functions ********************************************/
 // command line parsing, TODO do not declare functions globally but in a class
-std::string UsageArguments     ( char** argv );
-bool        GetFlagArgument    ( char** argv, int& i, std::string strShortOpt, std::string strLongOpt );
-bool        GetStringArgument  ( int argc, char** argv, int& i, std::string strShortOpt, std::string strLongOpt, std::string& strArg );
-bool        GetNumericArgument ( int argc, char** argv, int& i, std::string strShortOpt, std::string strLongOpt, double rRangeStart, double rRangeStop, double& rValue);
+QString UsageArguments ( char** argv );
+
+bool    GetFlagArgument ( char**  argv,
+                          int&    i,
+                          QString strShortOpt,
+                          QString strLongOpt );
+
+bool    GetStringArgument ( QTextStream& tsConsole,
+                            int          argc,
+                            char**       argv,
+                            int&         i,
+                            QString      strShortOpt,
+                            QString      strLongOpt,
+                            QString&     strArg );
+
+bool    GetNumericArgument ( QTextStream& tsConsole,
+                             int          argc,
+                             char**       argv,
+                             int&         i,
+                             QString      strShortOpt,
+                             QString      strLongOpt,
+                             double       rRangeStart,
+                             double       rRangeStop,
+                             double&      rValue);
 
 // posting a window message
-void PostWinMessage ( const _MESSAGE_IDENT MessID, const int iMessageParam = 0,
-                      const int iChanNum = 0 );
+void PostWinMessage ( const _MESSAGE_IDENT MessID,
+                      const int            iMessageParam = 0,
+                      const int            iChanNum = 0 );
 
 #endif /* !defined ( GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_ ) */

@@ -224,8 +224,7 @@ signals:
     void CLPingReceived ( CHostAddress InetAddr, int iMs );
     void CLRegisterServerReceived ( CHostAddress    InetAddr,
                                     CServerCoreInfo ServerInfo );
-    void CLSendEmptyMes ( CHostAddress InetAddr,
-                          CHostAddress TargetInetAddr );
+    void CLSendEmptyMes ( CHostAddress TargetInetAddr );
 };
 
 

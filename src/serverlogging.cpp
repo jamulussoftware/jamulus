@@ -339,8 +339,8 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
         ClientInetAddr.toString() + ", connected";
 
 #ifndef _WIN32
-    QTextStream tsConsoloeStream ( stdout );
-    tsConsoloeStream << strLogStr << endl; // on console
+    QTextStream tsConsoleStream ( stdout );
+    tsConsoleStream << strLogStr << endl; // on console
 #endif
     *this << strLogStr; // in log file
 
@@ -354,8 +354,8 @@ void CServerLogging::AddServerStopped()
         "-------------------------------------";
 
 #ifndef _WIN32
-    QTextStream tsConsoloeStream ( stdout );
-    tsConsoloeStream << strLogStr << endl; // on console
+    QTextStream tsConsoleStream ( stdout );
+    tsConsoleStream << strLogStr << endl; // on console
 #endif
     *this << strLogStr; // in log file
 

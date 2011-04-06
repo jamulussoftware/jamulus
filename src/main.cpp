@@ -43,13 +43,13 @@ int main ( int argc, char** argv )
 {
 #ifdef _WIN32
     // no console on windows -> just write in string and dump it
-    QString strDummySink;
+    QString     strDummySink;
     QTextStream tsConsole ( &strDummySink );
 #else
     QTextStream tsConsole ( stdout );
 #endif
-    QString     strArgument;
-    double      rDbleArgument;
+    QString strArgument;
+    double  rDbleArgument;
 
     // initialize all flags and string which might be changed by command line
     // arguments

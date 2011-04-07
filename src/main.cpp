@@ -259,7 +259,7 @@ int main ( int argc, char** argv )
     if ( !bIsClient && !strCentralServer.isEmpty() )
     {
         bIsCentralServer =
-            ( !strCentralServer.compare ( "localhost" ) ||
+            ( !strCentralServer.toLower().compare ( "localhost" ) ||
               !strCentralServer.compare ( "127.0.0.1" ) );
     }
 

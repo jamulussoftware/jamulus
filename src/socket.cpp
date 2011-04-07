@@ -32,14 +32,25 @@ void CSocket::Init ( const quint16 iPortNumber )
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
 
-    // initialize the listening socket, per definition use the port number plus
-    // one for the client to make it possible to run server and client on the
-    // same computer
+    // initialize the listening socket
     bool bSuccess;
     if ( bIsClient )
     {
-        bSuccess = SocketDevice.bind (
-            QHostAddress( QHostAddress::Any ), iPortNumber + 1 );
+        // Per definition use the port number plus one for the client to make
+        // it possible to run server and client on the same computer. If the
+        // port is not available, try "NUM_SOCKET_PORTS_TO_TRY" times with
+        // incremented port numbers
+        quint16 iClientPortIncrement = 1; // start value: port nubmer plus one
+        bSuccess                     = false; // initialization for while loop
+        while ( !bSuccess &&
+                ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
+        {
+            bSuccess = SocketDevice.bind (
+                QHostAddress( QHostAddress::Any ),
+                iPortNumber + iClientPortIncrement );
+
+            iClientPortIncrement++;
+        }
     }
     else
     {

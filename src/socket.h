@@ -42,6 +42,11 @@
 class CServer; // forward declaration of CServer
 
 
+/* Definitions ****************************************************************/
+// number of ports we try to bind until we give up
+#define NUM_SOCKET_PORTS_TO_TRY         50
+
+
 /* Classes ********************************************************************/
 class CSocket : public QObject
 {
@@ -59,7 +64,7 @@ public:
         : pServer ( pNServP ), bIsClient ( false ) { Init ( iPortNumber ); }
 
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
-                      const CHostAddress& HostAddr );
+                      const CHostAddress&     HostAddr );
 
 protected:
     void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );

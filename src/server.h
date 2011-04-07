@@ -108,6 +108,7 @@ public:
               const QString& strHTMLStatusFileName,
               const QString& strHistoryFileName,
               const QString& strServerNameForHTMLStatusFile,
+              const bool     bServerListEnabled,
               const bool     bIsCentralServer,
               const QString& strCentralServer );
 

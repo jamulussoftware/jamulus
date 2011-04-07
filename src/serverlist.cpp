@@ -26,8 +26,9 @@
 
 
 /* Implementation *************************************************************/
-CServerListManager::CServerListManager ( const bool NbEbld )
-    : bEnabled ( NbEbld )
+CServerListManager::CServerListManager ( const bool NbEbld,
+                                         const bool NbIsCentralServer )
+    : bIsCentralServer ( NbIsCentralServer )
 {
     // per definition, the very first entry is this server and this entry will
     // never be deleted
@@ -52,15 +53,38 @@ ServerList.append ( CServerListEntry (
         this, SLOT ( OnTimerPollList() ) );
 
 
-    // Timers ------------------------------------------------------------------
-    // start timer for polling the server list
+    // call set enable function after the connection of the timer since in this
+    // function the timer gets started
+    SetEnabled ( NbEbld );
+}
+
+void CServerListManager::SetEnabled ( const bool bState )
+{
+    QMutexLocker locker ( &Mutex );
+
+    bEnabled = bState;
+
     if ( bEnabled )
     {
-        // 1 minute = 60 * 1000 ms
-        TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
+        if ( bIsCentralServer )
+        {
+            // start timer for polling the server list if enabled
+            // 1 minute = 60 * 1000 ms
+            TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
+        }
+    }
+    else
+    {
+        if ( bIsCentralServer )
+        {
+            // disable service -> stop timer
+            TimerPollList.stop();
+        }
     }
 }
 
+
+/* Central server functionality ***********************************************/
 void CServerListManager::OnTimerPollList()
 {
     QMutexLocker locker ( &Mutex );
@@ -84,7 +108,7 @@ void CServerListManager::RegisterServer ( const CHostAddress&    InetAddr,
 {
     QMutexLocker locker ( &Mutex );
 
-    if ( bEnabled )
+    if ( bIsCentralServer && bEnabled )
     {
         const int iCurServerListSize = ServerList.size();
 
@@ -137,7 +161,7 @@ void CServerListManager::QueryServerList ( const CHostAddress& InetAddr )
 {
     QMutexLocker locker ( &Mutex );
 
-    if ( bEnabled )
+    if ( bIsCentralServer && bEnabled )
     {
 
 // TODO
@@ -148,3 +172,8 @@ void CServerListManager::QueryServerList ( const CHostAddress& InetAddr )
 
     }
 }
+
+
+/* Slave server functionality *************************************************/
+
+// TODO

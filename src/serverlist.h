@@ -124,7 +124,10 @@ class CServerListManager : public QObject
     Q_OBJECT
 
 public:
-    CServerListManager ( const bool NbEbld );
+    CServerListManager ( const bool NbEbld,
+                         const bool NbIsCentralServer );
+
+    void SetEnabled ( const bool bState );
 
     void RegisterServer ( const CHostAddress&    InetAddr,
                           const CServerCoreInfo& ServerInfo );
@@ -136,6 +139,7 @@ protected:
     QMutex                  Mutex;
     QList<CServerListEntry> ServerList;
     bool                    bEnabled;
+    bool                    bIsCentralServer;
 
 public slots:
     void OnTimerPollList();

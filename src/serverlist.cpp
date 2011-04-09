@@ -173,17 +173,24 @@ void CServerListManager::QueryServerList ( const CHostAddress& InetAddr )
         // copy the list (we have to copy it since the message requires
         // a vector but the list is actually stored in a QList object and
         // not in a vector object
-        for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
+        for ( int iIdx = 0; iIdx < iCurServerListSize; iIdx++ )
         {
+            // copy list item
             vecServerInfo[iIdx] = ServerList[iIdx];
+
+            // create "send empty message" for all registered servers (except
+            // of the very first list entry since this is this server (central
+            // server) per definition)
+            if ( iIdx > 0 )
+            {
+                pConnLessProtocol->CreateCLSendEmptyMesMes ( 
+                    vecServerInfo[iIdx].HostAddr,
+                    InetAddr );
+            }
         }
 
         // send the server list to the client
         pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo );
-
-
-// TODO create "send empty message" for all registered servers
-
     }
 }
 

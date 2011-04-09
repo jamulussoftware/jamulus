@@ -26,12 +26,30 @@
 
 
 /* Implementation *************************************************************/
-CServerListManager::CServerListManager ( const bool NbEbld,
-                                         const bool NbIsCentralServer,
-                                         CProtocol* pNConLProt )
-    : bIsCentralServer ( NbIsCentralServer ),
+CServerListManager::CServerListManager ( const QString& sNCentServAddr,
+                                         CProtocol*     pNConLProt )
+    : strCentralServerAddress ( sNCentServAddr ),
       pConnLessProtocol ( pNConLProt )
 {
+    // per definition: If the central server address is empty, the server list
+    // is disabled.
+    // per definition: If we are in server mode and the central server address
+    // is the localhost address, we are in central server mode. For the central
+    // server, the server list is always enabled.
+    if ( !strCentralServerAddress.isEmpty() )
+    {
+        bIsCentralServer =
+            ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
+              !strCentralServerAddress.compare ( "127.0.0.1" ) );
+
+        bEnabled = true;
+    }
+    else
+    {
+        bIsCentralServer = false;
+        bEnabled         = true;
+    }
+
     // per definition, the very first entry is this server and this entry will
     // never be deleted
     ServerList.clear();
@@ -60,7 +78,7 @@ ServerList.append ( CServerListEntry (
 
     // call set enable function after the connection of the timer since in this
     // function the timer gets started
-    SetEnabled ( NbEbld );
+    SetEnabled ( bEnabled );
 }
 
 void CServerListManager::SetEnabled ( const bool bState )
@@ -82,6 +100,14 @@ void CServerListManager::SetEnabled ( const bool bState )
             // start timer for registering this server at the central server
             // 1 minute = 60 * 1000 ms
             TimerRegistering.start ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
+
+
+// TODO initiate a registration right away so we do not have to wait for the
+// first time out of the timer
+// TEST we cannot call RegisterServer directly since we would get a mutex dead lock
+QTimer::singleShot(1, this, SLOT ( OnTimerRegistering() ) );
+
+
         }
     }
     else
@@ -215,12 +241,18 @@ void CServerListManager::OnTimerRegistering()
 
     if ( !bIsCentralServer && bEnabled )
     {
-        // for the slave server, the slave server properties are store in the
+        // For the slave server, the slave server properties are store in the
         // very first item in the server list (which is actually no server list
-        // but just one item long for the slave server)
-
-// TODO
-
-//        pConnLessProtocol->CreateCLRegisterServerMes (, ServerList[0] );
+        // but just one item long for the slave server).
+        // Note that we always have to parse the server address again since if
+        // it is an URL of a dynamic IP address, the IP address might have
+        // changed in the meanwhile.
+        CHostAddress HostAddress;
+        if ( LlconNetwUtil().ParseNetworkAddress ( strCentralServerAddress,
+                                                   HostAddress ) )
+        {
+            pConnLessProtocol->CreateCLRegisterServerMes ( HostAddress,
+                                                           ServerList[0] );
+        }
     }
 }

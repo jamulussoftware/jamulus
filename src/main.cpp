@@ -57,8 +57,6 @@ int main ( int argc, char** argv )
     bool    bUseGUI               = true;
     bool    bConnectOnStartup     = false;
     bool    bDisalbeLEDs          = false;
-    bool    bIsCentralServer      = false;
-    bool    bServerListEnabled    = false;
     quint16 iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
     QString strIniFileName        = "";
     QString strHTMLStatusFileName = "";
@@ -250,29 +248,11 @@ int main ( int argc, char** argv )
 
 
     // Dependencies ------------------------------------------------------------
-
-
-// TEST for implementation and debugging, always enable the server list
-bServerListEnabled = true;
-
-
     // per definition: if we are in "GUI" server mode and no central server
     // address is given, we use the default central server address
     if ( !bIsClient && bUseGUI && strCentralServer.isEmpty() )
     {
         strCentralServer = DEFAULT_SERVER_ADDRESS;
-    }
-
-    // per definition: If we are in server mode and the central server address
-    // is the localhost address, we are in central server mode. For the central
-    // server, the server list is always enabled.
-    if ( !bIsClient && !strCentralServer.isEmpty() )
-    {
-        bIsCentralServer =
-            ( !strCentralServer.toLower().compare ( "localhost" ) ||
-              !strCentralServer.compare ( "127.0.0.1" ) );
-
-        bServerListEnabled = true;
     }
 
 
@@ -348,8 +328,6 @@ bServerListEnabled = true;
                              strHTMLStatusFileName,
                              strHistoryFileName,
                              strServerName,
-                             bServerListEnabled,
-                             bIsCentralServer,
                              strCentralServer );
 
             if ( bUseGUI )

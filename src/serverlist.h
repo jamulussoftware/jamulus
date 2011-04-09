@@ -125,9 +125,8 @@ class CServerListManager : public QObject
     Q_OBJECT
 
 public:
-    CServerListManager ( const bool NbEbld,
-                         const bool NbIsCentralServer,
-                         CProtocol* pNConLProt );
+    CServerListManager ( const QString& sNCentServAddr,
+                         CProtocol*     pNConLProt );
 
     void SetEnabled ( const bool bState );
     bool GetEnabled() const { return bEnabled; }
@@ -143,6 +142,7 @@ protected:
     QTimer                  TimerRegistering;
     QMutex                  Mutex;
     QList<CServerListEntry> ServerList;
+    QString                 strCentralServerAddress;
     bool                    bEnabled;
     bool                    bIsCentralServer;
 

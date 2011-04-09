@@ -169,13 +169,10 @@ CServer::CServer ( const QString& strLoggingFileName,
                    const QString& strHTMLStatusFileName,
                    const QString& strHistoryFileName,
                    const QString& strServerNameForHTMLStatusFile,
-                   const bool     bServerListEnabled,
-                   const bool     bIsCentralServer,
                    const QString& strCentralServer ) :
     Socket ( this, iPortNumber ),
     bWriteStatusHTMLFile ( false ),
-    ServerListManager ( bServerListEnabled,
-                        bIsCentralServer,
+    ServerListManager ( strCentralServer,
                         &ConnLessProtocol )
 {
     int i;

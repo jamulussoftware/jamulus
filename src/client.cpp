@@ -189,46 +189,19 @@ int CClient::EvaluatePingMessage ( const int iMs )
 
 bool CClient::SetServerAddr ( QString strNAddr )
 {
-    QHostAddress InetAddr;
-    quint16      iNetPort = LLCON_DEFAULT_PORT_NUMBER;
-
-    // parse input address for the type [IP address]:[port number]
-    QString strPort = strNAddr.section ( ":", 1, 1 );
-    if ( !strPort.isEmpty() )
+    CHostAddress HostAddress;
+    if ( LlconNetwUtil().ParseNetworkAddress ( strNAddr,
+                                               HostAddress ) )
     {
-        // a colon is present in the address string, try to extract port number
-        iNetPort = strPort.toInt();
+        // apply address to the channel
+        Channel.SetAddress ( HostAddress );
 
-        // extract address port before colon (should be actual internet address)
-        strNAddr = strNAddr.section ( ":", 0, 0 );
+        return true;
     }
-
-    // first try if this is an IP number an can directly applied to QHostAddress
-    if ( !InetAddr.setAddress ( strNAddr ) )
+    else
     {
-        // it was no vaild IP address, try to get host by name, assuming
-        // that the string contains a valid host name string
-        QHostInfo HostInfo = QHostInfo::fromName ( strNAddr );
-
-        if ( HostInfo.error() == QHostInfo::NoError )
-        {
-            // apply IP address to QT object
-             if ( !HostInfo.addresses().isEmpty() )
-             {
-                 // use the first IP address
-                 InetAddr = HostInfo.addresses().first();
-             }
-        }
-        else
-        {
-            return false; // invalid address
-        }
+        return false; // invalid address
     }
-
-    // apply address (the server port is fixed and always the same)
-    Channel.SetAddress ( CHostAddress ( InetAddr, iNetPort ) );
-
-    return true;
 }
 
 void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )

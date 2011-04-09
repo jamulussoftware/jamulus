@@ -108,8 +108,8 @@ double CStereoSignalLevelMeter::CalcLogResult ( const double& dLinearLevel )
 // CRC -------------------------------------------------------------------------
 void CCRC::Reset()
 {
-    /* Init state shift-register with ones. Set all registers to "1" with
-       bit-wise not operation */
+    // init state shift-register with ones. Set all registers to "1" with
+    // bit-wise not operation
     iStateShiftReg = ~uint32_t ( 0 );
 }
 
@@ -120,9 +120,9 @@ void CCRC::AddByte ( const uint8_t byNewInput )
         // shift bits in shift-register for transistion
         iStateShiftReg <<= 1;
 
-        /* Take bit, which was shifted out of the register-size and place it
-           at the beginning (LSB)
-           (If condition is not satisfied, implicitely a "0" is added) */
+        // take bit, which was shifted out of the register-size and place it
+        // at the beginning (LSB)
+        // (If condition is not satisfied, implicitely a "0" is added)
         if ( ( iStateShiftReg & iBitOutMask) > 0 )
         {
             iStateShiftReg |= 1;
@@ -300,7 +300,7 @@ double CAudioReverb::ProcessSample ( const double input )
 
 
 /******************************************************************************\
-* GUI utilities                                                                *
+* GUI Utilities                                                                *
 \******************************************************************************/
 // About dialog ----------------------------------------------------------------
 CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
@@ -417,7 +417,55 @@ CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
 
 
 /******************************************************************************\
-* Global functions implementation                                              *
+* Other Classes                                                                *
+\******************************************************************************/
+bool LlconNetwUtil::ParseNetworkAddress ( QString        strAddress,
+                                          CHostAddress&  HostAddress )
+{
+    QHostAddress InetAddr;
+    quint16      iNetPort = LLCON_DEFAULT_PORT_NUMBER;
+
+    // parse input address for the type [IP address]:[port number]
+    QString strPort = strAddress.section ( ":", 1, 1 );
+    if ( !strPort.isEmpty() )
+    {
+        // a colon is present in the address string, try to extract port number
+        iNetPort = strPort.toInt();
+
+        // extract address port before colon (should be actual internet address)
+        strAddress = strAddress.section ( ":", 0, 0 );
+    }
+
+    // first try if this is an IP number an can directly applied to QHostAddress
+    if ( !InetAddr.setAddress ( strAddress ) )
+    {
+        // it was no vaild IP address, try to get host by name, assuming
+        // that the string contains a valid host name string
+        const QHostInfo HostInfo = QHostInfo::fromName ( strAddress );
+
+        if ( HostInfo.error() == QHostInfo::NoError )
+        {
+            // apply IP address to QT object
+             if ( !HostInfo.addresses().isEmpty() )
+             {
+                 // use the first IP address
+                 InetAddr = HostInfo.addresses().first();
+             }
+        }
+        else
+        {
+            return false; // invalid address
+        }
+    }
+
+    HostAddress = CHostAddress ( InetAddr, iNetPort );
+
+    return true;
+}
+
+
+/******************************************************************************\
+* Global Functions Implementation                                              *
 \******************************************************************************/
 void DebugError ( const QString& pchErDescr, const QString& pchPar1Descr, 
                   const double dPar1, const QString& pchPar2Descr,

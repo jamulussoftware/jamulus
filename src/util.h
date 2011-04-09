@@ -26,6 +26,7 @@
 #define UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_
 
 #include <qhostaddress.h>
+#include <qhostinfo.h>
 #include <qmenu.h>
 #include <qwhatsthis.h>
 #include <qtextbrowser.h>
@@ -83,7 +84,7 @@ void DebugError ( const QString& pchErDescr,
 
 
 /******************************************************************************\
-* CVector base class                                                           *
+* CVector Base Class                                                           *
 \******************************************************************************/
 template<class TData> class CVector : public std::vector<TData>
 {
@@ -92,10 +93,10 @@ public:
     CVector ( const int iNeSi ) { Init(iNeSi); }
     CVector ( const int iNeSi, const TData tInVa ) { Init ( iNeSi, tInVa ); }
 
-    /* Copy constructor: The order of the initialization list must not be
-       changed. First, the base class must be initialized, then the pData
-       pointer must be set to the new data source. The bit access is, by
-       default, reset */
+    // Copy constructor: The order of the initialization list must not be
+    // changed. First, the base class must be initialized, then the pData
+    // pointer must be set to the new data source. The bit access is, by
+    // default, reset.
     CVector ( const CVector<TData>& vecI ) :
         std::vector<TData> ( static_cast<const std::vector<TData>&> ( vecI ) ), 
         iVectorSize ( vecI.Size() ) { pData = this->begin(); }
@@ -111,8 +112,8 @@ public:
 
     inline int Size() const { return iVectorSize; }
 
-    /* This operator allows for a l-value assignment of this object:
-       CVector[x] = y is possible */
+    // This operator allows for a l-value assignment of this object:
+    // CVector[x] = y is possible
     inline TData& operator[] ( const int iPos ) {
 #ifdef _DEBUG_
         if ( ( iPos < 0 ) || ( iPos > iVectorSize - 1 ) )
@@ -135,9 +136,9 @@ public:
 
     inline CVector<TData>& operator= ( const CVector<TData>& vecI ) {
 #ifdef _DEBUG_
-        /* Vectors which shall be copied MUST have same size! (If this is 
-           satisfied, the parameter "iVectorSize" must not be adjusted as
-           a side effect) */
+        // Vectors which shall be copied MUST have same size! (If this is 
+        // satisfied, the parameter "iVectorSize" must not be adjusted as
+        // a side effect)
         if ( vecI.Size() != iVectorSize )
         {
             DebugError ( "Vector operator=() different size", "Vector size",
@@ -146,8 +147,8 @@ public:
 #endif
         vector<TData>::operator= ( vecI );
 
-        /* Reset my data pointer in case, the operator=() of the base class
-           did change the actual memory */
+        // reset my data pointer in case, the operator=() of the base class
+        // did change the actual memory
         pData = this->begin();
 
         return *this;
@@ -164,8 +165,8 @@ template<class TData> void CVector<TData>::Init ( const int iNewSize )
 {
     iVectorSize = iNewSize;
 
-    /* Clear old buffer and reserve memory for new buffer, get iterator
-       for pointer operations */
+    // clear old buffer and reserve memory for new buffer, get iterator
+    // for pointer operations
     this->clear();
     this->resize ( iNewSize );
     pData = this->begin();
@@ -186,8 +187,8 @@ template<class TData> void CVector<TData>::Enlarge ( const int iAddedSize )
     iVectorSize += iAddedSize;
     this->resize ( iVectorSize );
 
-    /* We have to reset the pointer since it could be that the vector size was
-       zero before enlarging the vector */
+    // we have to reset the pointer since it could be that the vector size was
+    // zero before enlarging the vector
     pData = this->begin();
 }
 
@@ -202,7 +203,7 @@ template<class TData> void CVector<TData>::Reset ( const TData tResetVal )
 
 
 /******************************************************************************\
-* CFIFO class (first in, first out)                                            *
+* CFIFO Class (First In, First Out)                                            *
 \******************************************************************************/
 template<class TData> class CFIFO : public CVector<TData>
 {
@@ -249,7 +250,7 @@ template<class TData> void CFIFO<TData>::Add ( const TData tNewD )
 
 
 /******************************************************************************\
-* CMovingAv class (moving average)                                             *
+* CMovingAv Class (Moving Average)                                             *
 \******************************************************************************/
 template<class TData> class CMovingAv : public CVector<TData>
 {
@@ -307,7 +308,7 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
 /*
     Optimized calculation of the moving average. We only add a new value and
     subtract the old value from the result. We only need one addition and a
-    history buffer
+    history buffer.
 */
     // subtract oldest value
     tCurAvResult -= this->pData[iCurIdx];
@@ -332,7 +333,7 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
 
 
 /******************************************************************************\
-* GUI utilities                                                                *
+* GUI Utilities                                                                *
 \******************************************************************************/
 // About dialog ----------------------------------------------------------------
 class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
@@ -365,8 +366,10 @@ public slots:
 };
 
 
-/* Other Classes **************************************************************/
-// Stereo Signal Level Meter ---------------------------------------------------
+/******************************************************************************\
+* Other Classes                                                                *
+\******************************************************************************/
+// Stereo signal level meter ---------------------------------------------------
 class CStereoSignalLevelMeter
 {
 public:
@@ -599,6 +602,15 @@ public:
     EAudComprType eAudioCodingType;
     uint32_t      iVersion;
     int32_t       iAudioCodingArg;
+};
+
+
+// Network utility functions ---------------------------------------------------
+class LlconNetwUtil
+{
+public:
+    static bool ParseNetworkAddress ( QString        strAddress,
+                                      CHostAddress&  HostAddress );
 };
 
 

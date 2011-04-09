@@ -289,6 +289,10 @@ CServer::CServer ( const QString& strLoggingFileName,
         this, SLOT ( OnCLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ) );
 
     QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLReqServerList ( CHostAddress ) ),
+        this, SLOT ( OnCLReqServerList ( CHostAddress ) ) );
+
+    QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLSendEmptyMes ( CHostAddress ) ),
         this, SLOT ( OnCLSendEmptyMes ( CHostAddress ) ) );
 

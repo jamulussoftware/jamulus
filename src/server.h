@@ -196,6 +196,9 @@ public slots:
     void OnCLSendEmptyMes ( CHostAddress TargetInetAddr )
         { ConnLessProtocol.CreateCLEmptyMes ( TargetInetAddr ); }
 
+    void OnCLReqServerList ( CHostAddress InetAddr )
+        { ServerListManager.QueryServerList ( InetAddr ); }
+
     void OnCLRegisterServerReceived ( CHostAddress    InetAddr,
                                       CServerCoreInfo ServerInfo )
     {

@@ -27,8 +27,10 @@
 
 /* Implementation *************************************************************/
 CServerListManager::CServerListManager ( const bool NbEbld,
-                                         const bool NbIsCentralServer )
-    : bIsCentralServer ( NbIsCentralServer )
+                                         const bool NbIsCentralServer,
+                                         CProtocol* pNConLProt )
+    : bIsCentralServer ( NbIsCentralServer ),
+      pConnLessProtocol ( pNConLProt )
 {
     // per definition, the very first entry is this server and this entry will
     // never be deleted
@@ -163,12 +165,24 @@ void CServerListManager::QueryServerList ( const CHostAddress& InetAddr )
 
     if ( bIsCentralServer && bEnabled )
     {
+        const int iCurServerListSize = ServerList.size();
 
-// TODO
+        // allocate memory for the entire list
+        CVector<CServerInfo> vecServerInfo ( iCurServerListSize );
 
-// extract the list data in message or transmit directly?
+        // copy the list (we have to copy it since the message requires
+        // a vector but the list is actually stored in a QList object and
+        // not in a vector object
+        for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
+        {
+            vecServerInfo[iIdx] = ServerList[iIdx];
+        }
 
-// create "send empty message" for all registered servers
+        // send the server list to the client
+        pConnLessProtocol->CreateCLServerListMes ( InetAddr, vecServerInfo );
+
+
+// TODO create "send empty message" for all registered servers
 
     }
 }

@@ -67,6 +67,7 @@ private network.
 #include <qmutex.h>
 #include "global.h"
 #include "util.h"
+#include "protocol.h"
 
 
 /* Classes ********************************************************************/
@@ -125,7 +126,8 @@ class CServerListManager : public QObject
 
 public:
     CServerListManager ( const bool NbEbld,
-                         const bool NbIsCentralServer );
+                         const bool NbIsCentralServer,
+                         CProtocol* pNConLProt );
 
     void SetEnabled ( const bool bState );
 
@@ -140,6 +142,8 @@ protected:
     QList<CServerListEntry> ServerList;
     bool                    bEnabled;
     bool                    bIsCentralServer;
+
+    CProtocol*              pConnLessProtocol;
 
 public slots:
     void OnTimerPollList();

@@ -174,7 +174,9 @@ CServer::CServer ( const QString& strLoggingFileName,
                    const QString& strCentralServer ) :
     Socket ( this, iPortNumber ),
     bWriteStatusHTMLFile ( false ),
-    ServerListManager ( bServerListEnabled, bIsCentralServer )
+    ServerListManager ( bServerListEnabled,
+                        bIsCentralServer,
+                        &ConnLessProtocol )
 {
     int i;
 

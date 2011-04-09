@@ -130,6 +130,8 @@ public:
                          CProtocol* pNConLProt );
 
     void SetEnabled ( const bool bState );
+    bool GetEnabled() const { return bEnabled; }
+    bool GetIsCentralServer() const { return bIsCentralServer; }
 
     void RegisterServer ( const CHostAddress&    InetAddr,
                           const CServerCoreInfo& ServerInfo );
@@ -138,6 +140,7 @@ public:
 
 protected:
     QTimer                  TimerPollList;
+    QTimer                  TimerRegistering;
     QMutex                  Mutex;
     QList<CServerListEntry> ServerList;
     bool                    bEnabled;
@@ -147,6 +150,7 @@ protected:
 
 public slots:
     void OnTimerPollList();
+    void OnTimerRegistering();
 };
 
 #endif /* !defined ( SERVERLIST_HOIJH8OUWEF_WFEIOBU_3_43445KJIUHF1912__INCLUDED_ ) */

@@ -194,7 +194,15 @@ public slots:
         { ConnLessProtocol.CreateCLPingMes ( InetAddr, iMs ); }
 
     void OnCLSendEmptyMes ( CHostAddress TargetInetAddr )
-        { ConnLessProtocol.CreateCLEmptyMes ( TargetInetAddr ); }
+    {
+        // only send empty message if server list is enabled and this is not
+        // the central server
+        if ( ServerListManager.GetEnabled() &&
+             !ServerListManager.GetIsCentralServer() )
+        {
+            ConnLessProtocol.CreateCLEmptyMes ( TargetInetAddr );
+        }
+    }
 
     void OnCLReqServerList ( CHostAddress InetAddr )
         { ServerListManager.QueryServerList ( InetAddr ); }

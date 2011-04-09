@@ -54,6 +54,9 @@ ServerList.append ( CServerListEntry (
     QObject::connect ( &TimerPollList, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerPollList() ) );
 
+    QObject::connect ( &TimerRegistering, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerRegistering() ) );
+
 
     // call set enable function after the connection of the timer since in this
     // function the timer gets started
@@ -74,13 +77,23 @@ void CServerListManager::SetEnabled ( const bool bState )
             // 1 minute = 60 * 1000 ms
             TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
         }
+        else
+        {
+            // start timer for registering this server at the central server
+            // 1 minute = 60 * 1000 ms
+            TimerRegistering.start ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
+        }
     }
     else
     {
+        // disable service -> stop timer
         if ( bIsCentralServer )
         {
-            // disable service -> stop timer
             TimerPollList.stop();
+        }
+        else
+        {
+            TimerRegistering.stop();
         }
     }
 }
@@ -196,5 +209,18 @@ void CServerListManager::QueryServerList ( const CHostAddress& InetAddr )
 
 
 /* Slave server functionality *************************************************/
+void CServerListManager::OnTimerRegistering()
+{
+    QMutexLocker locker ( &Mutex );
+
+    if ( !bIsCentralServer && bEnabled )
+    {
+        // for the slave server, the slave server properties are store in the
+        // very first item in the server list (which is actually no server list
+        // but just one item long for the slave server)
 
 // TODO
+
+//        pConnLessProtocol->CreateCLRegisterServerMes (, ServerList[0] );
+    }
+}

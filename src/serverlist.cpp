@@ -97,17 +97,20 @@ void CServerListManager::SetEnabled ( const bool bState )
         }
         else
         {
+            // initiate registration right away so that we do not have to wait
+            // for the first time out of the timer until the slave server gets
+            // registered at the central server, note that we have to unlock
+            // the mutex before calling the function since inside this function
+            // the mutex is locked, too
+            locker.unlock();
+            {
+                OnTimerRegistering();
+            }
+            locker.relock();
+
             // start timer for registering this server at the central server
             // 1 minute = 60 * 1000 ms
             TimerRegistering.start ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
-
-
-// TODO initiate a registration right away so we do not have to wait for the
-// first time out of the timer
-// TEST we cannot call RegisterServer directly since we would get a mutex dead lock
-QTimer::singleShot(1, this, SLOT ( OnTimerRegistering() ) );
-
-
         }
     }
     else

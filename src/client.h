@@ -205,14 +205,17 @@ public:
 
     void SetRemoteName() { Channel.SetRemoteName ( strName ); }
 
-    void SendTextMess ( const QString& strChatText )
+    void CreateChatTextMes ( const QString& strChatText )
         { Channel.CreateChatTextMes ( strChatText ); }
 
-    void SendPingMess()
-        { Channel.CreatePingMes ( PreparePingMessage() ); };
+    void CreatePingMes()
+        { Channel.CreatePingMes ( PreparePingMessage() ); }
 
-    void SendCLPingMess ( const CHostAddress& InetAddr )
-        { ConnLessProtocol.CreateCLPingMes ( InetAddr, PreparePingMessage() ); };
+    void CreateCLPingMes ( const CHostAddress& InetAddr )
+        { ConnLessProtocol.CreateCLPingMes ( InetAddr, PreparePingMessage() ); }
+
+    void CreateCLReqServerListMes ( const CHostAddress& InetAddr )
+        { ConnLessProtocol.CreateCLReqServerListMes ( InetAddr ); }
 
     int EstimatedOverallDelay ( const int iPingTimeMs );
 
@@ -312,6 +315,8 @@ signals:
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
     void PingTimeReceived ( int iPingTime );
+    void CLServerListReceived ( CHostAddress         InetAddr,
+                                CVector<CServerInfo> vecServerInfo );
     void CLPingTimeReceived ( CHostAddress InetAddr, int iPingTime );
     void Disconnected();
     void Stopped();

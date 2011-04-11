@@ -26,9 +26,9 @@
 
 
 /* Implementation *************************************************************/
-CConnectDlg::CConnectDlg ( CClient* pNCliP, QWidget* parent,
-                           Qt::WindowFlags f )
-    : QDialog ( parent, f ), pClient ( pNCliP )
+CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
+    : QDialog ( parent, f ),
+      bServerListReceived ( false )
 {
     setupUi ( this );
 
@@ -53,26 +53,69 @@ pListViewItem = new QTreeWidgetItem ( ListViewServers );
     // timers
     QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerPing() ) );
+
+    QObject::connect ( &TimerReRequestServList, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerReRequestServList() ) );
 }
 
 void CConnectDlg::showEvent ( QShowEvent* )
 {
+    // reset flag (on opening the connect dialg, we always want to request a new
+    // updated server list per definition)
+    bServerListReceived = false;
 
-// TODO get the IP address of the Master Server when the connect dialog is
-// opened -> this seems to be the correct time to do it, use the
-// "CClient::SetServerAddr" functionality (extract it to another place...)
+// TEST
+QString strNAddr = "llcon.dyndns.org:22122";
 
 
-    // only activate ping timer if window is actually shown
-    TimerPing.start ( PING_UPDATE_TIME_MS );
+    // get the IP address of the central server (using the ParseNetworAddress
+    // function) when the connect dialog is opened, this seems to be the correct
+    // time to do it
+    if ( LlconNetwUtil().ParseNetworkAddress ( strNAddr,
+                                               CentralServerAddress ) )
+    {
+        // send the request for the server list
+        emit ReqServerListQuery ( CentralServerAddress );
+
+        // start timer, if this message did not get any respond to retransmit
+        // the server list request message
+        TimerReRequestServList.start ( SERV_LIST_REQ_UPDATE_TIME_MS );
+    }
+
+
+
+// TODO
+// only activate ping timer if window is actually shown
+//TimerPing.start ( PING_UPDATE_TIME_MS );
 
 //    UpdateDisplay();
 }
 	
 void CConnectDlg::hideEvent ( QHideEvent* )
 {
-    // if window is closed, stop timer for ping
+    // if window is closed, stop timers
     TimerPing.stop();
+    TimerReRequestServList.stop();
+}
+
+void CConnectDlg::OnTimerReRequestServList()
+{
+    // if the server list is not yet received, retransmit the request for the
+    // server list
+    if ( !bServerListReceived )
+    {
+        emit ReqServerListQuery ( CentralServerAddress );
+    }
+}
+
+void CConnectDlg::SetServerList ( const CVector<CServerInfo>& vecServerInfo )
+{
+    // set flag
+    bServerListReceived = true;
+
+
+// TODO
+
 }
 
 void CConnectDlg::OnTimerPing()
@@ -81,7 +124,7 @@ void CConnectDlg::OnTimerPing()
 
 // TEST
 //QHostAddress test ( "127.0.0.1" );
-//pClient->SendCLPingMess ( CHostAddress ( test, 22124 ) );
+//emit CreateCLPingMes ( CHostAddress ( test, 22124 ) );
 
 }
 

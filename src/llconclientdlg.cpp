@@ -46,7 +46,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
               , Qt::WindowMinMaxButtonsHint
 #endif
             ),
-    ConnectDlg ( pNCliP, parent
+    ConnectDlg ( parent
 #ifdef _WIN32
                  // this somehow only works reliable on Windows
                  , Qt::WindowMinMaxButtonsHint
@@ -421,6 +421,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( pClient, SIGNAL ( PingTimeReceived ( int ) ),
         this, SLOT ( OnPingTimeResult ( int ) ) );
 
+    QObject::connect ( pClient,
+        SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ),
+        this, SLOT ( OnCLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ) );
+
     QObject::connect ( pClient, SIGNAL ( CLPingTimeReceived ( CHostAddress, int ) ),
         this, SLOT ( OnCLPingTimeResult ( CHostAddress, int ) ) );
 
@@ -438,6 +442,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
     QObject::connect ( &ChatDlg, SIGNAL ( NewLocalInputText ( QString ) ),
         this, SLOT ( OnNewLocalInputText ( QString ) ) );
+
+    QObject::connect ( &ConnectDlg, SIGNAL ( NewLocalInputText ( CHostAddress ) ),
+        this, SLOT ( OnReqServerListQuery ( CHostAddress ) ) );
 
 
     // Timers ------------------------------------------------------------------
@@ -716,7 +723,7 @@ void CLlconClientDlg::OnTimerSigMet()
 void CLlconClientDlg::OnTimerPing()
 {
     // send ping message to server
-    pClient->SendPingMess();
+    pClient->CreatePingMes();
 }
 
 void CLlconClientDlg::OnPingTimeResult ( int iPingTime )

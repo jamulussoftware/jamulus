@@ -27,6 +27,7 @@
 #include <qpushbutton.h>
 #include <qwhatsthis.h>
 #include <qtimer.h>
+#include <qmutex.h>
 #include "global.h"
 #include "client.h"
 #ifdef _WIN32
@@ -40,24 +41,31 @@
 #endif
 
 
+/* Definitions ****************************************************************/
+// defines the time interval at which the request server list message is re-
+// transmitted until it is received
+#define SERV_LIST_REQ_UPDATE_TIME_MS       2000 // ms
+
+
 /* Classes ********************************************************************/
 class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
 {
     Q_OBJECT
 
 public:
-    CConnectDlg ( CClient* pNCliP, QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    CConnectDlg ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
-    void AddPingTime ( QString strChatText );
+    void SetServerList ( const CVector<CServerInfo>& vecServerInfo );
     void SetPingTimeResult ( CHostAddress& InetAddr, const int iPingTime );
 
 protected:
     virtual void showEvent ( QShowEvent* );
     virtual void hideEvent ( QHideEvent* );
 
-    CClient* pClient;
-    QTimer   TimerPing;
-
+    QTimer       TimerPing;
+    QTimer       TimerReRequestServList;
+    CHostAddress CentralServerAddress;
+    bool         bServerListReceived;
 
 // TEST
 QTreeWidgetItem* pListViewItem;
@@ -65,4 +73,8 @@ QTreeWidgetItem* pListViewItem;
 
 public slots:
     void OnTimerPing();
+    void OnTimerReRequestServList();
+
+signals:
+    void ReqServerListQuery ( CHostAddress InetAddr );
 };

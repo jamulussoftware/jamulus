@@ -107,28 +107,54 @@ protected:
 public slots:
     void OnConnectDisconBut();
     void OnTimerSigMet();
-    void OnTimerStatus() { UpdateDisplay(); }
+
+    void OnTimerStatus()
+        { UpdateDisplay(); }
+
     void OnTimerPing();
     void OnPingTimeResult ( int iPingTime );
     void OnCLPingTimeResult ( CHostAddress InetAddr, int iPingTime );
     void OnOpenGeneralSettings();
-    void OnOpenChatDialog() { ShowChatWindow(); }
+
+    void OnOpenChatDialog()
+        { ShowChatWindow(); }
+
     void OnSliderAudInFader ( int value );
-    void OnSliderAudReverb ( int value ) { pClient->SetReverbLevel ( value ); }
-    void OnRevSelL() { pClient->SetReverbOnLeftChan ( true ); }
-    void OnRevSelR() { pClient->SetReverbOnLeftChan ( false ); }
+
+    void OnSliderAudReverb ( int value )
+        { pClient->SetReverbLevel ( value ); }
+
+    void OnRevSelL()
+        { pClient->SetReverbOnLeftChan ( true ); }
+
+    void OnRevSelR()
+        { pClient->SetReverbOnLeftChan ( false ); }
+
     void OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
-    void OnChangeChanGain ( int iId, double dGain )
-        { pClient->SetRemoteChanGain ( iId, dGain ); }
     void OnFaderTagTextChanged ( const QString& strNewName );
     void OnChatTextReceived ( QString strChatText );
+
+    void OnChangeChanGain ( int iId, double dGain )
+        { pClient->SetRemoteChanGain ( iId, dGain ); }
+
     void OnNewLocalInputText ( QString strChatText )
-        { pClient->SendTextMess ( strChatText ); }
+        { pClient->CreateChatTextMes ( strChatText ); }
+
+    void OnReqServerListQuery ( CHostAddress InetAddr )
+        { pClient->CreateCLReqServerListMes ( InetAddr ); }
+
+    void OnCLServerListReceived ( CHostAddress         InetAddr,
+                                  CVector<CServerInfo> vecServerInfo )
+        { ConnectDlg.SetServerList ( vecServerInfo ); }
+
     void OnLineEditServerAddrTextChanged ( const QString );
     void OnLineEditServerAddrActivated ( int index );
     void OnDisconnected();
     void OnStopped();
-    void OnGUIDesignChanged() { SetGUIDesign ( pClient->GetGUIDesign() ); }
+
+    void OnGUIDesignChanged()
+        { SetGUIDesign ( pClient->GetGUIDesign() ); }
+
     void OnStereoCheckBoxChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
 };

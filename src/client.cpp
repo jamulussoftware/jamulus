@@ -117,6 +117,10 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
         this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
 
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ),
+        SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ) );
+
     QObject::connect ( &ConnLessProtocol, SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
         this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
 

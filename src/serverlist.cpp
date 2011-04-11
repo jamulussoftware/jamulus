@@ -240,6 +240,8 @@ void CServerListManager::QueryServerList ( const CHostAddress& InetAddr )
 /* Slave server functionality *************************************************/
 void CServerListManager::OnTimerRegistering()
 {
+    // we need the lock since the user might change the server properties at
+    // any time
     QMutexLocker locker ( &Mutex );
 
     if ( !bIsCentralServer && bEnabled )

@@ -38,8 +38,7 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
     // set up list view for connected clients
     ListViewClients->setColumnWidth ( 0, 170 );
     ListViewClients->setColumnWidth ( 1, 130 );
-    ListViewClients->setColumnWidth ( 2, 40 );
-    ListViewClients->setColumnWidth ( 3, 40 );
+    ListViewClients->setColumnWidth ( 2, 60 );
     ListViewClients->clear();
 
     // insert items in reverse order because in Windows all of them are
@@ -50,9 +49,6 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
         vecpListViewItems[i] = new CServerListViewItem ( ListViewClients );
         vecpListViewItems[i]->setHidden ( true );
     }
-
-    // Init timing jitter text label
-    TextLabelResponseTime->setText ( "" );
 
 
     // Main menu bar -----------------------------------------------------------
@@ -79,56 +75,46 @@ void CLlconServerDlg::OnTimer()
     CVector<QString>      vecsName;
     CVector<int>          veciJitBufNumFrames;
     CVector<int>          veciNetwFrameSizeFact;
-    double                dCurTiStdDev;
 
     ListViewMutex.lock();
-
-    pServer->GetConCliParam ( vecHostAddresses, vecsName, veciJitBufNumFrames,
-        veciNetwFrameSizeFact );
-
-    // fill list with connected clients
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
     {
-        if ( !( vecHostAddresses[i].InetAddr == QHostAddress ( (quint32) 0 ) ) )
+        pServer->GetConCliParam ( vecHostAddresses,
+                                  vecsName,
+                                  veciJitBufNumFrames,
+                                  veciNetwFrameSizeFact );
+
+        // fill list with connected clients
+        for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
         {
-            // IP, port number
-            vecpListViewItems[i]->setText ( 0, QString("%1 : %2" ).
-                arg ( vecHostAddresses[i].InetAddr.toString() ).
-                arg ( vecHostAddresses[i].iPort ) );
+            if ( !( vecHostAddresses[i].InetAddr == QHostAddress ( (quint32) 0 ) ) )
+            {
+                // IP, port number
+                vecpListViewItems[i]->setText ( 0, QString("%1 : %2" ).
+                    arg ( vecHostAddresses[i].InetAddr.toString() ).
+                    arg ( vecHostAddresses[i].iPort ) );
 
-            // name
-            vecpListViewItems[i]->setText ( 1, vecsName[i] );
+                // name
+                vecpListViewItems[i]->setText ( 1, vecsName[i] );
 
-            // jitter buffer size (polling for updates)
-            vecpListViewItems[i]->setText ( 4,
-                QString().setNum ( veciJitBufNumFrames[i] ) );
+                // jitter buffer size (polling for updates)
+                vecpListViewItems[i]->setText ( 3,
+                    QString().setNum ( veciJitBufNumFrames[i] ) );
 
-            // out network block size
-            vecpListViewItems[i]->setText ( 5,
-                QString().setNum ( static_cast<double> (
-                veciNetwFrameSizeFact[i] * SYSTEM_BLOCK_DURATION_MS_FLOAT
-                ), 'f', 2 ) );
+                // out network block size
+                vecpListViewItems[i]->setText ( 4,
+                    QString().setNum ( static_cast<double> (
+                    veciNetwFrameSizeFact[i] * SYSTEM_BLOCK_DURATION_MS_FLOAT
+                    ), 'f', 2 ) );
 
-            vecpListViewItems[i]->setHidden ( false );
-        }
-        else
-        {
-            vecpListViewItems[i]->setHidden ( true );
+                vecpListViewItems[i]->setHidden ( false );
+            }
+            else
+            {
+                vecpListViewItems[i]->setHidden ( true );
+            }
         }
     }
-
     ListViewMutex.unlock();
-
-    // response time (if available)
-    if ( pServer->GetTimingStdDev ( dCurTiStdDev ) )
-    {
-        TextLabelResponseTime->setText ( QString().
-            setNum ( dCurTiStdDev, 'f', 2 ) + " ms" );
-    }
-    else
-    {
-        TextLabelResponseTime->setText ( "---" );
-    }
 }
 
 void CLlconServerDlg::customEvent ( QEvent* Event )
@@ -136,22 +122,19 @@ void CLlconServerDlg::customEvent ( QEvent* Event )
     if ( Event->type() == QEvent::User + 11 )
     {
         ListViewMutex.lock();
-
-        const int iMessType = ( (CLlconEvent*) Event )->iMessType;
-        const int iStatus   = ( (CLlconEvent*) Event )->iStatus;
-        const int iChanNum  = ( (CLlconEvent*) Event )->iChanNum;
-
-        switch(iMessType)
         {
-        case MS_JIT_BUF_PUT:
-            vecpListViewItems[iChanNum]->SetLight ( 0, iStatus );
-            break;
+            const int iMessType = ( (CLlconEvent*) Event )->iMessType;
+            const int iStatus   = ( (CLlconEvent*) Event )->iStatus;
+            const int iChanNum  = ( (CLlconEvent*) Event )->iChanNum;
 
-        case MS_JIT_BUF_GET:
-            vecpListViewItems[iChanNum]->SetLight ( 1, iStatus );
-            break;
+            switch(iMessType)
+            {
+            case MS_JIT_BUF_PUT:
+            case MS_JIT_BUF_GET:
+                vecpListViewItems[iChanNum]->SetLight ( iStatus );
+                break;
+            }
         }
-
         ListViewMutex.unlock();
     }
 }

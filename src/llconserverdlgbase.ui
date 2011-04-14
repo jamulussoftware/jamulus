@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>765</width>
+    <width>580</width>
     <height>315</height>
    </rect>
   </property>
@@ -51,22 +51,17 @@
      </column>
      <column>
       <property name="text" >
-       <string>Put</string>
+       <string>Buffers</string>
       </property>
      </column>
      <column>
       <property name="text" >
-       <string>Get</string>
+       <string>Jitter Buffer Size</string>
       </property>
      </column>
      <column>
       <property name="text" >
-       <string>Jitter buffer size</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Block Size Out</string>
+       <string>Block Size Out/ms</string>
       </property>
      </column>
     </widget>
@@ -92,42 +87,6 @@
       <widget class="QLabel" name="TextLabelNameVersion" >
        <property name="text" >
         <string>TextLabelNameVersion</string>
-       </property>
-       <property name="wordWrap" >
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType" >
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>72</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QLabel" name="TextLabel1" >
-       <property name="text" >
-        <string>Timing Standard Deviation:</string>
-       </property>
-       <property name="wordWrap" >
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="TextLabelResponseTime" >
-       <property name="text" >
-        <string>TextLabelResponseTime</string>
        </property>
        <property name="wordWrap" >
         <bool>false</bool>

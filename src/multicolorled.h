@@ -132,28 +132,18 @@ class CServerListViewItem : public QTreeWidgetItem
 {
 public:
     CServerListViewItem ( QTreeWidget* parent )
-        : QTreeWidgetItem ( parent ), LED0 ( 2 ), LED1 ( 3 )
+        : QTreeWidgetItem ( parent ), LED ( 2 )
     {
-        LED0.SetListViewItemPointer ( this );
-        LED1.SetListViewItemPointer ( this );
+        LED.SetListViewItemPointer ( this );
     }
 
-    void SetLight ( int iWhichLED, int iNewStatus )
+    void SetLight ( int iNewStatus )
     {
-        switch ( iWhichLED )
-        {
-        case 0:
-            LED0.SetLight ( iNewStatus );
-            break;
-
-        case 1:
-            LED1.SetLight ( iNewStatus );
-            break;
-        }
+        LED.SetLight ( iNewStatus );
     }
 
 protected:
-    CMultColLEDListViewItem LED0, LED1;
+    CMultColLEDListViewItem LED;
 };
 
 

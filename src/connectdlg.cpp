@@ -45,9 +45,6 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
     ListViewServers->setColumnWidth ( 3, 80 );
     ListViewServers->clear();
 
-// TEST
-pListViewItem = new QTreeWidgetItem ( ListViewServers );
-
 
     // Connections -------------------------------------------------------------
     // timers
@@ -108,14 +105,36 @@ void CConnectDlg::OnTimerReRequestServList()
     }
 }
 
-void CConnectDlg::SetServerList ( const CVector<CServerInfo>& vecServerInfo )
+void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
+                                  const CVector<CServerInfo>& vecServerInfo )
 {
     // set flag
     bServerListReceived = true;
 
+    // first clear list
+    ListViewServers->clear();
 
-// TODO
+    // add list item for each server in the server list
+    for ( int iIdx = 0; iIdx < vecServerInfo.Size(); iIdx++ )
+    {
+        QTreeWidgetItem* pNewListViewItem =
+            new QTreeWidgetItem ( ListViewServers );
 
+        // server name
+        pNewListViewItem->setText ( 0, vecServerInfo[iIdx].strName );
+
+        // server country
+        pNewListViewItem->setText ( 1,
+            QLocale::countryToString ( vecServerInfo[iIdx].eCountry ) );
+
+        // number of clients
+        pNewListViewItem->setText ( 2,
+            QString().setNum ( vecServerInfo[iIdx].iNumClients ) );
+
+        // store host address
+        pNewListViewItem->setData ( 0, Qt::UserRole,
+            vecServerInfo[iIdx].HostAddr.toString() );
+    }
 }
 
 void CConnectDlg::OnTimerPing()
@@ -129,10 +148,11 @@ void CConnectDlg::OnTimerPing()
 }
 
 void CConnectDlg::SetPingTimeResult ( CHostAddress& InetAddr,
-                                      const int iPingTime )
+                                      const int     iPingTime )
 {
 
-// TEST
-pListViewItem->setText ( 0, QString().setNum ( iPingTime ) );
+//    ListViewServers->
+//// TEST
+//pListViewItem->setText ( 0, QString().setNum ( iPingTime ) );
 
 }

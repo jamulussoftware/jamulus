@@ -28,6 +28,7 @@
 #include <qwhatsthis.h>
 #include <qtimer.h>
 #include <qmutex.h>
+#include <qlocale.h>
 #include "global.h"
 #include "client.h"
 #ifdef _WIN32
@@ -55,7 +56,9 @@ class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
 public:
     CConnectDlg ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
-    void SetServerList ( const CVector<CServerInfo>& vecServerInfo );
+    void SetServerList ( const CHostAddress&         InetAddr,
+                         const CVector<CServerInfo>& vecServerInfo );
+
     void SetPingTimeResult ( CHostAddress& InetAddr, const int iPingTime );
 
 protected:
@@ -66,10 +69,6 @@ protected:
     QTimer       TimerReRequestServList;
     CHostAddress CentralServerAddress;
     bool         bServerListReceived;
-
-// TEST
-QTreeWidgetItem* pListViewItem;
-
 
 public slots:
     void OnTimerPing();

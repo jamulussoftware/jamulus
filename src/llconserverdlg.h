@@ -58,13 +58,13 @@ public:
     CLlconServerDlg ( CServer* pNServP, QWidget* parent = 0 );
 
 protected:
-    QTimer                          Timer;
-    CServer*                        pServer;
+    QTimer                        Timer;
+    CServer*                      pServer;
 
-    CVector<CServerListViewItem*>   vecpListViewItems;
-    QMutex                          ListViewMutex;
+    CVector<CServerListViewItem*> vecpListViewItems;
+    QMutex                        ListViewMutex;
 
-    QMenuBar*                       pMenu;
+    QMenuBar*                     pMenu;
 
     virtual void customEvent ( QEvent* Event );
     void UpdateSliderNetBuf();

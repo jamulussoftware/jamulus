@@ -427,6 +427,12 @@ public:
         return InetAddr.toString().section ( ".", 0, 2 ) + ".x";
     }
 
+    QString toString() const
+    {
+        // return in the format [IP number]:[port]
+        return InetAddr.toString() + ":" + QString().setNum ( iPort );
+    }
+
     QHostAddress InetAddr;
     quint16      iPort;
 };

@@ -74,11 +74,6 @@ ServerList.append ( CServerListEntry (
 
     QObject::connect ( &TimerRegistering, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerRegistering() ) );
-
-
-    // call set enable function after the connection of the timer since in this
-    // function the timer gets started
-    SetEnabled ( bEnabled );
 }
 
 void CServerListManager::SetEnabled ( const bool bState )

@@ -36,11 +36,11 @@ void CSocket::Init ( const quint16 iPortNumber )
     bool bSuccess;
     if ( bIsClient )
     {
-        // Per definition use the port number plus one for the client to make
+        // Per definition use the port number plus ten for the client to make
         // it possible to run server and client on the same computer. If the
         // port is not available, try "NUM_SOCKET_PORTS_TO_TRY" times with
         // incremented port numbers
-        quint16 iClientPortIncrement = 1; // start value: port nubmer plus one
+        quint16 iClientPortIncrement = 10; // start value: port nubmer plus ten
         bSuccess                     = false; // initialization for while loop
         while ( !bSuccess &&
                 ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
@@ -54,6 +54,9 @@ void CSocket::Init ( const quint16 iPortNumber )
     }
     else
     {
+        // for the server, only try the given port number and do not try out
+        // other port numbers to bind since it is imporatant that the server
+        // gets the desired port number
         bSuccess = SocketDevice.bind (
             QHostAddress ( QHostAddress::Any ), iPortNumber );
     }

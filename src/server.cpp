@@ -381,6 +381,11 @@ CServer::CServer ( const QString& strLoggingFileName,
     QObject::connect ( &vecChannels[9],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh9 ( int ) ) );
     QObject::connect ( &vecChannels[10], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh10 ( int ) ) );
     QObject::connect ( &vecChannels[11], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh11 ( int ) ) );
+
+
+    // set enable of the server list, must be done after the connections, we use
+    // the information about the enable status of the serverlist object itself
+    ServerListManager.SetEnabled ( ServerListManager.GetEnabled() );
 }
 
 void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
@@ -945,6 +950,12 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
                     // create and send "server full" message
                     ConnLessProtocol.CreateCLServerFullMes ( HostAdr );
                 }
+            }
+            else
+            {
+                // this was a connection less protocol message, return accoring
+                // state
+                bChanOK = false;
             }
         }
 

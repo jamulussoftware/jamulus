@@ -145,7 +145,7 @@ public slots:
 
     void OnCLServerListReceived ( CHostAddress         InetAddr,
                                   CVector<CServerInfo> vecServerInfo )
-        { ConnectDlg.SetServerList ( vecServerInfo ); }
+        { ConnectDlg.SetServerList ( InetAddr, vecServerInfo ); }
 
     void OnLineEditServerAddrTextChanged ( const QString );
     void OnLineEditServerAddrActivated ( int index );

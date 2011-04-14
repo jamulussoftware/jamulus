@@ -443,7 +443,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( &ChatDlg, SIGNAL ( NewLocalInputText ( QString ) ),
         this, SLOT ( OnNewLocalInputText ( QString ) ) );
 
-    QObject::connect ( &ConnectDlg, SIGNAL ( NewLocalInputText ( CHostAddress ) ),
+    QObject::connect ( &ConnectDlg, SIGNAL ( ReqServerListQuery ( CHostAddress ) ),
         this, SLOT ( OnReqServerListQuery ( CHostAddress ) ) );
 
 

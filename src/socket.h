@@ -59,7 +59,7 @@ public:
         : pChannel( pNewChannel ), pConnLessProtocol ( pNewCLProtocol ),
           bIsClient ( true ) { Init ( iPortNumber ); }
 
-    CSocket ( CServer* pNServP,
+    CSocket ( CServer*      pNServP,
               const quint16 iPortNumber )
         : pServer ( pNServP ), bIsClient ( false ) { Init ( iPortNumber ); }
 

@@ -61,6 +61,7 @@ void CConnectDlg::showEvent ( QShowEvent* )
     // updated server list per definition)
     bServerListReceived = false;
 
+
 // TEST
 QString strNAddr = "llcon.dyndns.org:22122";
 
@@ -78,14 +79,6 @@ QString strNAddr = "llcon.dyndns.org:22122";
         // the server list request message
         TimerReRequestServList.start ( SERV_LIST_REQ_UPDATE_TIME_MS );
     }
-
-
-
-// TODO
-// only activate ping timer if window is actually shown
-//TimerPing.start ( PING_UPDATE_TIME_MS );
-
-//    UpdateDisplay();
 }
 	
 void CConnectDlg::hideEvent ( QHideEvent* )
@@ -115,7 +108,9 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
     ListViewServers->clear();
 
     // add list item for each server in the server list
-    for ( int iIdx = 0; iIdx < vecServerInfo.Size(); iIdx++ )
+    const int iServerInfoLen = vecServerInfo.Size();
+
+    for ( int iIdx = 0; iIdx < iServerInfoLen; iIdx++ )
     {
         QTreeWidgetItem* pNewListViewItem =
             new QTreeWidgetItem ( ListViewServers );
@@ -131,28 +126,70 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         pNewListViewItem->setText ( 2,
             QString().setNum ( vecServerInfo[iIdx].iNumClients ) );
 
-        // store host address
-        pNewListViewItem->setData ( 0, Qt::UserRole,
-            vecServerInfo[iIdx].HostAddr.toString() );
+        // store host address, note that for the very first entry which is
+        // the central server, we have to use the receive host address
+        // instead
+        if ( iIdx > 0 )
+        {
+            pNewListViewItem->setData ( 0, Qt::UserRole,
+                vecServerInfo[iIdx].HostAddr.toString() );
+        }
+        else
+        {
+            // substitude the receive host address for central server
+            pNewListViewItem->setData ( 0, Qt::UserRole, InetAddr.toString() );
+        }
+
+
+// TEST
+pNewListViewItem->setText ( 2,
+    pNewListViewItem->data ( 0, Qt::UserRole ).toString() );
+
+
     }
+
+    // start the ping timer since the server list is filled now
+    TimerPing.start ( PING_UPDATE_TIME_MS );
 }
 
 void CConnectDlg::OnTimerPing()
 {
-    // send ping message to server
+    // send ping messages to the servers in the list
+    const int iServerListLen = ListViewServers->topLevelItemCount();
 
-// TEST
-//QHostAddress test ( "127.0.0.1" );
-//emit CreateCLPingMes ( CHostAddress ( test, 22124 ) );
+    for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+    {
+        CHostAddress CurServerAddress;
 
+        // try to parse host address string which is stored as user data
+        // in the server list item GUI control element
+        if ( LlconNetwUtil().ParseNetworkAddress (
+                ListViewServers->topLevelItem ( iIdx )->
+                data ( 0, Qt::UserRole ).toString(),
+                CurServerAddress ) )
+        {
+            // if address is valid, send ping
+            emit CreateCLPingMes ( CurServerAddress );
+        }
+    }
 }
 
 void CConnectDlg::SetPingTimeResult ( CHostAddress& InetAddr,
                                       const int     iPingTime )
 {
+    // apply the received ping time to the correct server list entry
+    const int iServerListLen = ListViewServers->topLevelItemCount();
 
-//    ListViewServers->
-//// TEST
-//pListViewItem->setText ( 0, QString().setNum ( iPingTime ) );
-
+    for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+    {
+        // compare the received address with the user data string of the
+        // host address by a string compare
+        if ( !ListViewServers->topLevelItem ( iIdx )->
+                data ( 0, Qt::UserRole ).toString().
+                compare ( InetAddr.toString() ) )
+        {
+            ListViewServers->topLevelItem ( iIdx )->
+                setText ( 3, QString().setNum ( iPingTime ) );
+        }
+    }
 }

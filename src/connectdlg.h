@@ -76,4 +76,5 @@ public slots:
 
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );
+    void CreateCLPingMes ( CHostAddress InetAddr );
 };

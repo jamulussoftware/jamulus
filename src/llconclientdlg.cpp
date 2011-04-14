@@ -446,6 +446,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( &ConnectDlg, SIGNAL ( ReqServerListQuery ( CHostAddress ) ),
         this, SLOT ( OnReqServerListQuery ( CHostAddress ) ) );
 
+    QObject::connect ( &ConnectDlg, SIGNAL ( CreateCLPingMes ( CHostAddress ) ),
+        this, SLOT ( OnCreateCLPingMes ( CHostAddress ) ) );
+
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar

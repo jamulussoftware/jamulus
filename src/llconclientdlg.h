@@ -143,6 +143,9 @@ public slots:
     void OnReqServerListQuery ( CHostAddress InetAddr )
         { pClient->CreateCLReqServerListMes ( InetAddr ); }
 
+    void OnCreateCLPingMes ( CHostAddress InetAddr )
+        { pClient->CreateCLPingMes ( InetAddr ); }
+
     void OnCLServerListReceived ( CHostAddress         InetAddr,
                                   CVector<CServerInfo> vecServerInfo )
         { ConnectDlg.SetServerList ( InetAddr, vecServerInfo ); }

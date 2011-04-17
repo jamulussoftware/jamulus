@@ -44,7 +44,7 @@
      </column>
      <column>
       <property name="text" >
-       <string>Ping Time/ms</string>
+       <string>Ping Time</string>
       </property>
      </column>
     </widget>

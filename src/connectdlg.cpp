@@ -115,6 +115,10 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         QTreeWidgetItem* pNewListViewItem =
             new QTreeWidgetItem ( ListViewServers );
 
+        // make the entry invisible (will be set to visible on successful ping
+        // result)
+        pNewListViewItem->setHidden ( true );
+
         // server name
         pNewListViewItem->setText ( 0, vecServerInfo[iIdx].strName );
 
@@ -188,8 +192,19 @@ void CConnectDlg::SetPingTimeResult ( CHostAddress& InetAddr,
                 data ( 0, Qt::UserRole ).toString().
                 compare ( InetAddr.toString() ) )
         {
+            // a ping time was received, set item to visible
+            ListViewServers->topLevelItem ( iIdx )->setHidden ( false );
+
+// TEST
+QFont test = ListViewServers->topLevelItem ( iIdx )->font( 3 );
+test.setBold ( true );
+ListViewServers->topLevelItem ( iIdx )->setFont ( 3, test );
+
+ListViewServers->topLevelItem ( iIdx )->setTextColor ( 3, Qt::red );
+
+            // update ping text
             ListViewServers->topLevelItem ( iIdx )->
-                setText ( 3, QString().setNum ( iPingTime ) );
+                setText ( 3, QString().setNum ( iPingTime ) + " ms" );
         }
     }
 }

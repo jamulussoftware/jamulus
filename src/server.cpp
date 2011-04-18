@@ -831,8 +831,8 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
     if ( ChanName.isEmpty() )
     {
         // convert IP address to text and show it
-        ChanName =
-            vecChannels[iCurChanID].GetAddress().GetIpAddressStringNoLastByte();
+        ChanName = vecChannels[iCurChanID].GetAddress().
+            toString ( CHostAddress::SM_IP_NO_LAST_BYTE );
     }
 
     // add time and name of the client at the beginning of the message text and
@@ -1114,8 +1114,8 @@ void CServer::WriteHTMLChannelList()
                 {
                     // convert IP address to text and show it, remove last
                     // digits
-                    strCurChanName =
-                        vecChannels[i].GetAddress().GetIpAddressStringNoLastByte();
+                    strCurChanName = vecChannels[i].GetAddress().
+                        toString ( CHostAddress::SM_IP_NO_LAST_BYTE );
                 }
 
                 streamFileOut << "  <li>" << strCurChanName << "</li>" << endl;

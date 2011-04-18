@@ -769,12 +769,28 @@ void CLlconClientDlg::OnPingTimeResult ( int iPingTime )
 void CLlconClientDlg::OnCLPingTimeResult ( CHostAddress InetAddr,
                                            int          iPingTime )
 {
+    // color definition: <= 25 ms green, <= 50 ms yellow, otherwise red
+    int iPingTimeLEDColor;
+    if ( iPingTime <= 25 )
+    {
+        iPingTimeLEDColor = MUL_COL_LED_GREEN;
+    }
+    else
+    {
+        if ( iPingTime <= 50 )
+        {
+            iPingTimeLEDColor = MUL_COL_LED_YELLOW;
+        }
+        else
+        {
+            iPingTimeLEDColor = MUL_COL_LED_RED;
+        }
+    }
 
-// TODO evaluate the background color for the ping time result in the
-// table in this function (see function above, there also the LED color
-// is calculated so we do the other here, too)
-
-    ConnectDlg.SetPingTimeResult ( InetAddr, iPingTime );
+    // update connection dialog server list
+    ConnectDlg.SetPingTimeResult ( InetAddr,
+                                   iPingTime,
+                                   iPingTimeLEDColor );
 }
 
 void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )

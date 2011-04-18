@@ -47,6 +47,11 @@
        <string>Ping Time</string>
       </property>
      </column>
+     <column>
+      <property name="text" >
+       <string>Address</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>

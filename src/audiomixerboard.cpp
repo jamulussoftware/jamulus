@@ -438,7 +438,7 @@ QString CAudioMixerBoard::GenFaderText ( CChannelShortInfo& ChanInfo )
         const CHostAddress TempAddr =
             CHostAddress ( QHostAddress ( ChanInfo.iIpAddr ), 0 );
 
-        return TempAddr.GetIpAddressStringNoLastByte();
+        return TempAddr.toString ( CHostAddress::SM_IP_NO_LAST_BYTE );
     }
     else
     {

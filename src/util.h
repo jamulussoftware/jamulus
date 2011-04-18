@@ -393,6 +393,13 @@ protected:
 class CHostAddress
 {
 public:
+    enum EStringMode
+    {
+        SM_IP_PORT,
+        SM_IP_NO_LAST_BYTE,
+        SM_IP_NO_LAST_BYTE_PORT
+    };
+
     CHostAddress() :
         InetAddr ( static_cast<quint32> ( 0 ) ),
         iPort ( 0 ) {}
@@ -421,16 +428,25 @@ public:
                  ( CompAddr.iPort    == iPort ) );
     }
 
-    QString GetIpAddressStringNoLastByte() const
+    QString toString ( const EStringMode eStringMode = SM_IP_PORT ) const
     {
-        // remove the last byte of the IP address
-        return InetAddr.toString().section ( ".", 0, 2 ) + ".x";
-    }
+        QString strReturn = InetAddr.toString();
 
-    QString toString() const
-    {
-        // return in the format [IP number]:[port]
-        return InetAddr.toString() + ":" + QString().setNum ( iPort );
+        if ( ( eStringMode == SM_IP_NO_LAST_BYTE ) ||
+             ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
+        {
+            // replace last byte by an "x"
+            strReturn = strReturn.section ( ".", 0, 2 ) + ".x";
+        }
+
+        if ( ( eStringMode == SM_IP_PORT ) ||
+             ( eStringMode == SM_IP_NO_LAST_BYTE_PORT ) )
+        {
+            // add port number after a semicolon
+            strReturn += ":" + QString().setNum ( iPort );
+        }
+
+        return strReturn;
     }
 
     QHostAddress InetAddr;

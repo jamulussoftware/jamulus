@@ -134,6 +134,10 @@
 // defines the time interval at which the ping time is updated in the GUI
 #define PING_UPDATE_TIME_MS             500 // ms
 
+// defines the time interval at which the ping time is updated for the server
+// list
+#define PING_UPDATE_TIME_SERVER_LIST_MS 2000 // ms
+
 // time-out until a registered server is deleted from the server list if no
 // new registering was made in minutes
 #define SERVLIST_TIME_OUT_MINUTES       60 // minutes

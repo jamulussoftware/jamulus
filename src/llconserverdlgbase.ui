@@ -41,7 +41,7 @@
      </property>
      <column>
       <property name="text" >
-       <string>Client IP : Port</string>
+       <string>Client IP:Port</string>
       </property>
      </column>
      <column>

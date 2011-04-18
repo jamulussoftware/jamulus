@@ -59,7 +59,9 @@ public:
     void SetServerList ( const CHostAddress&         InetAddr,
                          const CVector<CServerInfo>& vecServerInfo );
 
-    void SetPingTimeResult ( CHostAddress& InetAddr, const int iPingTime );
+    void SetPingTimeResult ( CHostAddress& InetAddr,
+                             const int     iPingTime,
+                             const int     iPingTimeLEDColor );
 
 protected:
     virtual void showEvent ( QShowEvent* );

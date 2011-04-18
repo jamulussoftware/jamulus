@@ -43,7 +43,7 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
     ListViewServers->setColumnWidth ( 1, 130 );
     ListViewServers->setColumnWidth ( 2, 55 );
     ListViewServers->setColumnWidth ( 3, 65 );
-    ListViewServers->setColumnWidth ( 4, 150 );
+    ListViewServers->setColumnWidth ( 4, 140 );
     ListViewServers->clear();
 
 

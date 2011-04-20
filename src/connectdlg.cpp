@@ -171,7 +171,9 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
             CurHostAddress.toString() );
     }
 
-    // start the ping timer since the server list is filled now
+    // immediately issue the ping measurements and start the ping timer since
+    // the server list is filled now
+    OnTimerPing();
     TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
 }
 

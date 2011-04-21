@@ -220,7 +220,7 @@ void CServerListManager::QueryServerList ( const CHostAddress& InetAddr )
             // he has to connect to the local host address, unfortunately, the
             // port number is not known (because of NAT port translating) so we
             // assume that it is the default llcon port number
-            if ( vecServerInfo[iIdx].HostAddr == InetAddr )
+            if ( vecServerInfo[iIdx].HostAddr.InetAddr == InetAddr.InetAddr )
             {
                 vecServerInfo[iIdx].HostAddr.InetAddr.
                     setAddress ( QHostAddress::LocalHost );

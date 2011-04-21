@@ -73,6 +73,8 @@ protected:
     bool         bServerListReceived;
 
 public slots:
+    void OnLineEditServerAddrTextChanged ( const QString );
+    void OnLineEditServerAddrActivated ( int index );
     void OnTimerPing();
     void OnTimerReRequestServList();
 

@@ -34,9 +34,37 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
 
 
     // Add help text to controls -----------------------------------------------
+    // server address
+    QString strServAddrH = tr ( "<b>Server Address:</b> The IP address or URL "
+        "of the server running the llcon server software must be set here. "
+        "A list of the most recent used server URLs is available for "
+        "selection. If an invalid address was chosen, an error message is "
+        "shown in the status bar." );
+
+    TextLabelServerAddr->setWhatsThis            ( strServAddrH );
+    LineEditServerAddr->setWhatsThis             ( strServAddrH );
+
+    LineEditServerAddr->setAccessibleName        ( tr ( "Server address edit box" ) );
+    LineEditServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
+        "URL. It also stores old URLs in the combo box list." ) );
+
+
+    // init server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
+    LineEditServerAddr->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
+    LineEditServerAddr->setInsertPolicy ( QComboBox::InsertAtTop );
+
+    // load data from ini file
+    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
+    {
+//        if ( !pClient->vstrIPAddress[iLEIdx].isEmpty() )
+        {
 
 // TODO
+//            LineEditServerAddr->addItem ( pClient->vstrIPAddress[iLEIdx] );
 
+
+        }
+    }
 
     // set up list view for connected clients
     ListViewServers->setColumnWidth ( 0, 170 );
@@ -48,6 +76,13 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
 
 
     // Connections -------------------------------------------------------------
+    // line edits
+    QObject::connect ( LineEditServerAddr, SIGNAL ( editTextChanged ( const QString ) ),
+        this, SLOT ( OnLineEditServerAddrTextChanged ( const QString ) ) );
+
+    QObject::connect ( LineEditServerAddr, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnLineEditServerAddrActivated ( int ) ) );
+
     // timers
     QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerPing() ) );
@@ -175,6 +210,26 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
     // the server list is filled now
     OnTimerPing();
     TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
+}
+
+void CConnectDlg::OnLineEditServerAddrTextChanged ( const QString )
+{
+    // if the maximum number of items in the combo box is reached,
+    // delete the last item so that the new item can be added (first
+    // in - first out)
+    if ( LineEditServerAddr->count() == MAX_NUM_SERVER_ADDR_ITEMS )
+    {
+        LineEditServerAddr->removeItem ( MAX_NUM_SERVER_ADDR_ITEMS - 1 );
+    }
+}
+
+void CConnectDlg::OnLineEditServerAddrActivated ( int index )
+{
+    // move activated list item to the top
+    const QString strCurIPAddress = LineEditServerAddr->itemText ( index );
+    LineEditServerAddr->removeItem ( index );
+    LineEditServerAddr->insertItem ( 0, strCurIPAddress );
+    LineEditServerAddr->setCurrentIndex ( 0 );
 }
 
 void CConnectDlg::OnTimerPing()

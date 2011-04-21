@@ -215,27 +215,32 @@ void CServerListManager::QueryServerList ( const CHostAddress& InetAddr )
             // copy list item
             vecServerInfo[iIdx] = ServerList[iIdx];
 
-            // check if the address of the client which is requesting the list
-            // is the same address as one server in the list -> in this case
-            // he has to connect to the local host address, unfortunately, the
-            // port number is not known (because of NAT port translating) so we
-            // assume that it is the default llcon port number
-            if ( vecServerInfo[iIdx].HostAddr.InetAddr == InetAddr.InetAddr )
-            {
-                vecServerInfo[iIdx].HostAddr.InetAddr.
-                    setAddress ( QHostAddress::LocalHost );
-
-                vecServerInfo[iIdx].HostAddr.iPort = LLCON_DEFAULT_PORT_NUMBER;
-            }
-
-            // create "send empty message" for all registered servers (except
-            // of the very first list entry since this is this server (central
-            // server) per definition)
             if ( iIdx > 0 )
             {
-                pConnLessProtocol->CreateCLSendEmptyMesMes ( 
-                    vecServerInfo[iIdx].HostAddr,
-                    InetAddr );
+                // check if the address of the client which is requesting the
+                // list is the same address as one server in the list -> in this
+                // case he has to connect to the local host address,
+                // unfortunately, the port number is not known (because of NAT
+                // port translating) so we assume that it is the default llcon
+                // port number
+                if ( vecServerInfo[iIdx].HostAddr.InetAddr == InetAddr.InetAddr )
+                {
+                    vecServerInfo[iIdx].HostAddr.InetAddr.
+                        setAddress ( QHostAddress::LocalHost );
+
+                    vecServerInfo[iIdx].HostAddr.iPort = LLCON_DEFAULT_PORT_NUMBER;
+                }
+                else
+                {
+                    // create "send empty message" for all registered servers
+                    // (except of the very first list entry since this is this
+                    // server (central server) per definition) and also it is
+                    // not required to send this message, if the server is on
+                    // the same computer
+                    pConnLessProtocol->CreateCLSendEmptyMesMes ( 
+                        vecServerInfo[iIdx].HostAddr,
+                        InetAddr );
+                }
             }
         }
 

@@ -456,6 +456,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
 
 // TEST
+ConnectDlg.LoadStoredServers ( pClient->vstrIPAddress );
 ConnectDlg.show();
 
 }

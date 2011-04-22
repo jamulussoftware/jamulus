@@ -59,6 +59,8 @@ public:
     void SetServerList ( const CHostAddress&         InetAddr,
                          const CVector<CServerInfo>& vecServerInfo );
 
+    void LoadStoredServers ( const CVector<QString>& vstrIPAddress );
+
     void SetPingTimeResult ( CHostAddress& InetAddr,
                              const int     iPingTime,
                              const int     iPingTimeLEDColor );

@@ -53,19 +53,6 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
     LineEditServerAddr->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
     LineEditServerAddr->setInsertPolicy ( QComboBox::InsertAtTop );
 
-    // load data from ini file
-    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
-    {
-//        if ( !pClient->vstrIPAddress[iLEIdx].isEmpty() )
-        {
-
-// TODO
-//            LineEditServerAddr->addItem ( pClient->vstrIPAddress[iLEIdx] );
-
-
-        }
-    }
-
     // set up list view for connected clients
     ListViewServers->setColumnWidth ( 0, 170 );
     ListViewServers->setColumnWidth ( 1, 130 );
@@ -89,6 +76,18 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
 
     QObject::connect ( &TimerReRequestServList, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerReRequestServList() ) );
+}
+
+void CConnectDlg::LoadStoredServers ( const CVector<QString>& vstrIPAddress )
+{
+    // load stored IP addresses in combo box
+    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
+    {
+        if ( !vstrIPAddress[iLEIdx].isEmpty() )
+        {
+            LineEditServerAddr->addItem ( vstrIPAddress[iLEIdx] );
+        }
+    }
 }
 
 void CConnectDlg::showEvent ( QShowEvent* )
@@ -122,6 +121,17 @@ void CConnectDlg::hideEvent ( QHideEvent* )
     // if window is closed, stop timers
     TimerPing.stop();
     TimerReRequestServList.stop();
+
+// TODO
+/*
+// store IP addresses
+for ( int iLEIdx = 0; iLEIdx < LineEditServerAddr->count(); iLEIdx++ )
+{
+    pClient->vstrIPAddress[iLEIdx] =
+        LineEditServerAddr->itemText ( iLEIdx );
+}
+*/
+
 }
 
 void CConnectDlg::OnTimerReRequestServList()

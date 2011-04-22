@@ -182,6 +182,7 @@ void CServerListManager::RegisterServer ( const CHostAddress&    InetAddr,
             else
             {
                 // update all data and call update registration function
+                ServerList[iSelIdx].HostAddr         = InetAddr; // because of port number
                 ServerList[iSelIdx].strName          = ServerInfo.strName;
                 ServerList[iSelIdx].strTopic         = ServerInfo.strTopic;
                 ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;

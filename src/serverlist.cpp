@@ -150,21 +150,20 @@ void CServerListManager::RegisterServer ( const CHostAddress&    InetAddr,
     if ( bIsCentralServer && bEnabled )
     {
         const int iCurServerListSize = ServerList.size();
-
+        
         // check for maximum allowed number of servers in the server list
         if ( iCurServerListSize < MAX_NUM_SERVERS_IN_SERVER_LIST )
         {
             // define invalid index used as a flag
             const int ciInvalidIdx = -1;
 
-            // Check if server is already registered. Use IP number and port
-            // number to fully identify a server. The very first list entry must
-            // not be checked since this is per definition the central server
-            // (i.e., this server)
+            // Check if server is already registered. Use IP number to identify
+            // a server. The very first list entry must not be checked since
+            // this is per definition the central server (i.e., this server)
             int iSelIdx = ciInvalidIdx; // initialize with an illegal value
             for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
             {
-                if ( ServerList[iIdx].HostAddr == InetAddr )
+                if ( ServerList[iIdx].HostAddr.InetAddr == InetAddr.InetAddr )
                 {
                     // store entry index
                     iSelIdx = iIdx;

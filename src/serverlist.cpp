@@ -225,8 +225,8 @@ void CServerListManager::QueryServerList ( const CHostAddress& InetAddr )
                 // port number
                 if ( vecServerInfo[iIdx].HostAddr.InetAddr == InetAddr.InetAddr )
                 {
-                    vecServerInfo[iIdx].HostAddr.InetAddr.
-                        setAddress ( QHostAddress::LocalHost );
+                    vecServerInfo[iIdx].HostAddr.InetAddr =
+                        QHostAddress ( QHostAddress::LocalHost );
 
                     vecServerInfo[iIdx].HostAddr.iPort = LLCON_DEFAULT_PORT_NUMBER;
                 }

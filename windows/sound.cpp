@@ -591,9 +591,9 @@ CSound::~CSound()
 }
 
 // ASIO callbacks -------------------------------------------------------------
-ASIOTime* CSound::bufferSwitchTimeInfo ( ASIOTime* timeInfo,
-                                         long      index,
-                                         ASIOBool  processNow )
+ASIOTime* CSound::bufferSwitchTimeInfo ( ASIOTime*,
+                                         long     index,
+                                         ASIOBool processNow )
 {
     bufferSwitch ( index, processNow );
     return 0L;
@@ -622,7 +622,7 @@ bool CSound::CheckSampleTypeSupported ( const ASIOSampleType SamType )
         ( SamType == ASIOSTInt32MSB24 ) );
 }
 
-void CSound::bufferSwitch ( long index, ASIOBool processNow )
+void CSound::bufferSwitch ( long index, ASIOBool )
 {
     int iCurSample;
 
@@ -1080,10 +1080,10 @@ void CSound::bufferSwitch ( long index, ASIOBool processNow )
     pSound->ASIOMutex.unlock();
 }
 
-long CSound::asioMessages ( long    selector,
-                            long    value,
-                            void*   message,
-                            double* opt )
+long CSound::asioMessages ( long selector,
+                            long,
+                            void*,
+                            double* )
 {
     long ret = 0;
     switch ( selector )

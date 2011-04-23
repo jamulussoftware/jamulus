@@ -120,8 +120,10 @@ void CSocket::OnDataReceived()
         if ( bIsClient )
         {
             // client:
-            // check if packet comes from the server we want to connect
-            if ( !( pChannel->GetAddress() == RecHostAddr ) )
+            // check if packet comes from the server we want to connect and that
+            // the channel is enabled
+            if ( !( pChannel->GetAddress() == RecHostAddr ) ||
+                 !pChannel->IsEnabled() )
             {
                 // this is an unknown address, try to parse connection less
                 // message

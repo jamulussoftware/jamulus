@@ -734,8 +734,8 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
         ConnectDlg.LoadStoredServers ( pClient->vstrIPAddress );
         ConnectDlg.exec();
 
-        // check if cancel was pressed
-        if ( !ConnectDlg.GetCancelPressed() )
+        // check if state is OK (e.g., no Cancel was pressed)
+        if ( ConnectDlg.GetStateOK() )
         {
             const QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
 

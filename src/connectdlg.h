@@ -65,7 +65,7 @@ public:
                              const int     iPingTime,
                              const int     iPingTimeLEDColor );
 
-    bool GetCancelPressed() const { return bCancelPressed; }
+    bool GetStateOK() const { return bStateOK; }
     bool GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }
 
@@ -79,12 +79,12 @@ protected:
     CVector<QString> vstrIPAddresses;
     QString          strSelectedAddress;
     bool             bServerListReceived;
-    bool             bCancelPressed;
+    bool             bStateOK;
     bool             bServerListItemWasChosen;
 
 public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
-    void OnCancelButtonClicked();
+    void OnConnectButtonClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
 

@@ -81,6 +81,7 @@ protected:
     bool             bCancelPressed;
 
 public slots:
+    void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnCancelButtonClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();

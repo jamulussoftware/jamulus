@@ -42,8 +42,8 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
         "A list of the most recent used server URLs is available for "
         "selection." );
 
-    TextLabelServerAddr->setWhatsThis            ( strServAddrH );
-    LineEditServerAddr->setWhatsThis             ( strServAddrH );
+    TextLabelServerAddr->setWhatsThis ( strServAddrH );
+    LineEditServerAddr->setWhatsThis  ( strServAddrH );
 
     LineEditServerAddr->setAccessibleName        ( tr ( "Server address edit box" ) );
     LineEditServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
@@ -51,7 +51,7 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
 
 
     // init server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
-    LineEditServerAddr->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
+    LineEditServerAddr->setMaxCount     ( MAX_NUM_SERVER_ADDR_ITEMS );
     LineEditServerAddr->setInsertPolicy ( QComboBox::NoInsert );
 
     // set up list view for connected clients
@@ -64,6 +64,11 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
 
 
     // Connections -------------------------------------------------------------
+    // list view
+    QObject::connect ( ListViewServers,
+        SIGNAL ( itemDoubleClicked ( QTreeWidgetItem*, int ) ),
+        this, SLOT ( OnServerListItemDoubleClicked ( QTreeWidgetItem*, int ) ) );
+
     // buttons
     QObject::connect ( CancelButton, SIGNAL ( clicked() ),
         this, SLOT ( OnCancelButtonClicked() ) );
@@ -100,6 +105,9 @@ void CConnectDlg::showEvent ( QShowEvent* )
 
     // clear current address
     strSelectedAddress = "";
+
+    // clear server list view
+    ListViewServers->clear();
 
 
 // TEST
@@ -157,8 +165,9 @@ void CConnectDlg::OnTimerReRequestServList()
 void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
                                   const CVector<CServerInfo>& vecServerInfo )
 {
-    // set flag
+    // set flag and disable timer for resend server list request
     bServerListReceived = true;
+    TimerReRequestServList.stop();
 
     // first clear list
     ListViewServers->clear();
@@ -230,6 +239,16 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
     // the server list is filled now
     OnTimerPing();
     TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
+}
+
+void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item,
+                                                  int )
+{
+    // if a server list item was double clicked, close dialog and connect
+    if ( Item != 0 )
+    {
+        close();
+    }
 }
 
 void CConnectDlg::OnCancelButtonClicked()

@@ -63,12 +63,17 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
 
 
     // Connections -------------------------------------------------------------
+    // buttons
+    QObject::connect ( CancelButton, SIGNAL ( clicked() ),
+        this, SLOT ( OnCancelButtonClicked() ) );
+
     // line edits
     QObject::connect ( LineEditServerAddr, SIGNAL ( editTextChanged ( const QString ) ),
         this, SLOT ( OnLineEditServerAddrTextChanged ( const QString ) ) );
 
     QObject::connect ( LineEditServerAddr, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnLineEditServerAddrActivated ( int ) ) );
+
 
     // timers
     QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
@@ -92,9 +97,10 @@ void CConnectDlg::LoadStoredServers ( const CVector<QString>& vstrIPAddress )
 
 void CConnectDlg::showEvent ( QShowEvent* )
 {
-    // reset flag (on opening the connect dialg, we always want to request a new
-    // updated server list per definition)
+    // reset flags (on opening the connect dialg, we always want to request a
+    // new updated server list per definition)
     bServerListReceived = false;
+    bCancelPressed      = false;
 
 
 // TEST
@@ -231,6 +237,15 @@ void CConnectDlg::OnLineEditServerAddrTextChanged ( const QString )
     {
         LineEditServerAddr->removeItem ( MAX_NUM_SERVER_ADDR_ITEMS - 1 );
     }
+}
+
+void CConnectDlg::OnCancelButtonClicked()
+{
+    // set cancel flag
+    bCancelPressed = true;
+
+    // close dialog
+    close();
 }
 
 void CConnectDlg::OnLineEditServerAddrActivated ( int index )

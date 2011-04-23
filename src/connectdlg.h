@@ -73,8 +73,10 @@ protected:
     QTimer       TimerReRequestServList;
     CHostAddress CentralServerAddress;
     bool         bServerListReceived;
+    bool         bCancelPressed;
 
 public slots:
+    void OnCancelButtonClicked();
     void OnLineEditServerAddrTextChanged ( const QString );
     void OnLineEditServerAddrActivated ( int index );
     void OnTimerPing();

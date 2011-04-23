@@ -39,15 +39,8 @@ CClient::CClient ( const quint16 iPortNumber ) :
     iAudioInFader ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan ( false ),
     iReverbLevel ( 0 ),
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
-	// we assume on Mac always the preferred frame size works fine
     iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED ),
     iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED ),
-#else
-	// if ASIO4All is used, it is safer to use the default value
-	iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
-	iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT ),
-#endif
     bSndCrdConversionBufferRequired ( false ),
     iSndCardMonoBlockSizeSamConvBuff ( 0 ),
     bFraSiFactPrefSupported ( false ),

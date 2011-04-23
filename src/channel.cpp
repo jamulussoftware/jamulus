@@ -30,7 +30,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
     bIsEnabled ( false ),
     bIsServer ( bNIsServer ),
-    iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_DEFAULT ),
+    iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_PREFERRED ),
     iNetwFrameSize ( 20 ), // must be > 0 and should be close to a valid size
     iNumAudioChannels ( 1 ) // mono
 {

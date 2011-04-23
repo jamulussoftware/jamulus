@@ -30,7 +30,7 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
     : QDialog ( parent, f ),
       strSelectedAddress       ( "" ),
       bServerListReceived      ( false ),
-      bCancelPressed           ( false ),
+      bStateOK                 ( false ),
       bServerListItemWasChosen ( false )
 {
     setupUi ( this );
@@ -57,10 +57,9 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
 
     // set up list view for connected clients
     ListViewServers->setColumnWidth ( 0, 170 );
-    ListViewServers->setColumnWidth ( 1, 130 );
+    ListViewServers->setColumnWidth ( 1, 65 );
     ListViewServers->setColumnWidth ( 2, 55 );
-    ListViewServers->setColumnWidth ( 3, 65 );
-    ListViewServers->setColumnWidth ( 4, 140 );
+    ListViewServers->setColumnWidth ( 3, 130 );
     ListViewServers->clear();
 
 
@@ -72,10 +71,10 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
 
     // buttons
     QObject::connect ( CancelButton, SIGNAL ( clicked() ),
-        this, SLOT ( OnCancelButtonClicked() ) );
+        this, SLOT ( close() ) );
 
     QObject::connect ( ConnectButton, SIGNAL ( clicked() ),
-        this, SLOT ( close() ) );
+        this, SLOT ( OnConnectButtonClicked() ) );
 
     // timers
     QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
@@ -103,7 +102,7 @@ void CConnectDlg::showEvent ( QShowEvent* )
     // reset flags (on opening the connect dialg, we always want to request a
     // new updated server list per definition)
     bServerListReceived      = false;
-    bCancelPressed           = false;
+    bStateOK                 = false;
     bServerListItemWasChosen = false;
 
     // clear current address
@@ -184,29 +183,6 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
 
     for ( int iIdx = 0; iIdx < iServerInfoLen; iIdx++ )
     {
-        QTreeWidgetItem* pNewListViewItem =
-            new QTreeWidgetItem ( ListViewServers );
-
-        // make the entry invisible (will be set to visible on successful ping
-        // result)
-        pNewListViewItem->setHidden ( true );
-
-        // server name
-        pNewListViewItem->setText ( 0, vecServerInfo[iIdx].strName );
-
-        // server country
-        pNewListViewItem->setText ( 1,
-            QLocale::countryToString ( vecServerInfo[iIdx].eCountry ) );
-
-        // number of clients
-        pNewListViewItem->setText ( 2,
-            QString().setNum ( vecServerInfo[iIdx].iNumClients ) );
-
-        // the ping time shall be shown in bold font
-        QFont CurPingTimeFont = pNewListViewItem->font( 3 );
-        CurPingTimeFont.setBold ( true );
-        pNewListViewItem->setFont ( 3, CurPingTimeFont );
-
         // get the host address, note that for the very first entry which is
         // the central server, we have to use the receive host address
         // instead
@@ -221,21 +197,50 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
             CurHostAddress = InetAddr;
         }
 
-        // IP address and port (use IP number without last byte)
-        // Definition: If the port number is the default port number, we do not
-        // show it.
-        if ( vecServerInfo[iIdx].HostAddr.iPort == LLCON_DEFAULT_PORT_NUMBER )
+        // create new list view item
+        QTreeWidgetItem* pNewListViewItem =
+            new QTreeWidgetItem ( ListViewServers );
+
+        // make the entry invisible (will be set to visible on successful ping
+        // result)
+        pNewListViewItem->setHidden ( true );
+
+        // server name (if empty, show host address instead)
+        if ( !vecServerInfo[iIdx].strName.isEmpty() )
         {
-            // only show IP number, no port number
-            pNewListViewItem->setText ( 4, CurHostAddress.
-                toString ( CHostAddress::SM_IP_NO_LAST_BYTE ) );
+            pNewListViewItem->setText ( 0, vecServerInfo[iIdx].strName );
         }
         else
         {
-            // show IP number and port
-            pNewListViewItem->setText ( 4, CurHostAddress.
-                toString ( CHostAddress::SM_IP_NO_LAST_BYTE_PORT ) );
+            // IP address and port (use IP number without last byte)
+            // Definition: If the port number is the default port number, we do
+            // not show it.
+            if ( vecServerInfo[iIdx].HostAddr.iPort == LLCON_DEFAULT_PORT_NUMBER )
+            {
+                // only show IP number, no port number
+                pNewListViewItem->setText ( 0, CurHostAddress.
+                    toString ( CHostAddress::SM_IP_NO_LAST_BYTE ) );
+            }
+            else
+            {
+                // show IP number and port
+                pNewListViewItem->setText ( 0, CurHostAddress.
+                    toString ( CHostAddress::SM_IP_NO_LAST_BYTE_PORT ) );
+            }
         }
+
+        // the ping time shall be shown in bold font
+        QFont CurPingTimeFont = pNewListViewItem->font( 3 );
+        CurPingTimeFont.setBold ( true );
+        pNewListViewItem->setFont ( 1, CurPingTimeFont );
+
+        // number of clients
+        pNewListViewItem->setText ( 2,
+            QString().setNum ( vecServerInfo[iIdx].iNumClients ) );
+
+        // server country
+        pNewListViewItem->setText ( 3,
+            QLocale::countryToString ( vecServerInfo[iIdx].eCountry ) );
 
         // store host address
         pNewListViewItem->setData ( 0, Qt::UserRole,
@@ -258,10 +263,10 @@ void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item,
     }
 }
 
-void CConnectDlg::OnCancelButtonClicked()
+void CConnectDlg::OnConnectButtonClicked()
 {
-    // set cancel flag
-    bCancelPressed = true;
+    // set state OK flag
+    bStateOK = true;
 
     // close dialog
     close();
@@ -309,23 +314,23 @@ void CConnectDlg::SetPingTimeResult ( CHostAddress& InetAddr,
             {
             case MUL_COL_LED_GREEN:
                 ListViewServers->
-                    topLevelItem ( iIdx )->setTextColor ( 3, Qt::darkGreen );
+                    topLevelItem ( iIdx )->setTextColor ( 1, Qt::darkGreen );
                 break;
 
             case MUL_COL_LED_YELLOW:
                 ListViewServers->
-                    topLevelItem ( iIdx )->setTextColor ( 3, Qt::darkYellow );
+                    topLevelItem ( iIdx )->setTextColor ( 1, Qt::darkYellow );
                 break;
 
             case MUL_COL_LED_RED:
                 ListViewServers->
-                    topLevelItem ( iIdx )->setTextColor ( 3, Qt::red );
+                    topLevelItem ( iIdx )->setTextColor ( 1, Qt::red );
                 break;
             }
 
             // update ping text
             ListViewServers->topLevelItem ( iIdx )->
-                setText ( 3, QString().setNum ( iPingTime ) + " ms" );
+                setText ( 1, QString().setNum ( iPingTime ) + " ms" );
 
             // a ping time was received, set item to visible
             ListViewServers->topLevelItem ( iIdx )->setHidden ( false );

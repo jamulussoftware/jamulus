@@ -15,6 +15,10 @@ DEFINES += USE_ALLOCA \
 win32 {
     HEADERS += windows/sound.h
     SOURCES += windows/sound.cpp
+    INCLUDEPATH += windows/ASIOSDK2/common \
+        windows/ASIOSDK2/host \
+        windows/ASIOSDK2/host/pc \
+        /libs/celt
 } else:macx {
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp

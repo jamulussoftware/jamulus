@@ -13,12 +13,20 @@ DEFINES += USE_ALLOCA \
     _IS_QMAKE_CONFIG
 
 win32 {
+    DEFINES -= UNICODE
     HEADERS += windows/sound.h
-    SOURCES += windows/sound.cpp
+    SOURCES += windows/sound.cpp \
+        windows/ASIOSDK2/common/asio.cpp \
+        windows/ASIOSDK2/host/asiodrivers.cpp \
+        windows/ASIOSDK2/host/pc/asiolist.cpp
     INCLUDEPATH += windows/ASIOSDK2/common \
         windows/ASIOSDK2/host \
         windows/ASIOSDK2/host/pc \
-        /libs/celt
+        libs/celt
+    LIBS += ole32.lib \
+        user32.lib \
+        advapi32.lib \
+        winmm.lib
 } else:macx {
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp

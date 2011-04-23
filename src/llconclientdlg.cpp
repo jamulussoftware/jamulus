@@ -739,7 +739,11 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
         {
             const QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
 
-            if ( !strSelectedAddress.isEmpty() )
+            // only store new host address in our data base if the address is
+            // not empty and it was not a server list item (only the addresses
+            // typed in manually are stored by definition)
+            if ( !strSelectedAddress.isEmpty() &&
+                 !ConnectDlg.GetServerListItemWasChosen() )
             {
                 CVector<QString> vstrTempList ( 0 );
 

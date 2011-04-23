@@ -72,6 +72,7 @@ public:
     bool IsConnected() const { return iConTimeOut > 0; }
 
     void SetEnable ( const bool bNEnStat );
+    bool IsEnabled() { return bIsEnabled; }
 
     void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
     bool GetAddress ( CHostAddress& RetAddr );

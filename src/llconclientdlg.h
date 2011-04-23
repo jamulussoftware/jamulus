@@ -152,8 +152,6 @@ public slots:
                                   CVector<CServerInfo> vecServerInfo )
         { ConnectDlg.SetServerList ( InetAddr, vecServerInfo ); }
 
-    void OnLineEditServerAddrTextChanged ( const QString );
-    void OnLineEditServerAddrActivated ( int index );
     void OnDisconnected();
     void OnStopped();
 

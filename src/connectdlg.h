@@ -59,26 +59,29 @@ public:
     void SetServerList ( const CHostAddress&         InetAddr,
                          const CVector<CServerInfo>& vecServerInfo );
 
-    void LoadStoredServers ( const CVector<QString>& vstrIPAddress );
+    void LoadStoredServers ( const CVector<QString>& vstrNewIPAddresses );
 
     void SetPingTimeResult ( CHostAddress& InetAddr,
                              const int     iPingTime,
                              const int     iPingTimeLEDColor );
 
+    bool GetCancelPressed() const { return bCancelPressed; }
+    QString GetSelectedAddress() const { return strSelectedAddress; }
+
 protected:
     virtual void showEvent ( QShowEvent* );
     virtual void hideEvent ( QHideEvent* );
 
-    QTimer       TimerPing;
-    QTimer       TimerReRequestServList;
-    CHostAddress CentralServerAddress;
-    bool         bServerListReceived;
-    bool         bCancelPressed;
+    QTimer           TimerPing;
+    QTimer           TimerReRequestServList;
+    CHostAddress     CentralServerAddress;
+    CVector<QString> vstrIPAddresses;
+    QString          strSelectedAddress;
+    bool             bServerListReceived;
+    bool             bCancelPressed;
 
 public slots:
     void OnCancelButtonClicked();
-    void OnLineEditServerAddrTextChanged ( const QString );
-    void OnLineEditServerAddrActivated ( int index );
     void OnTimerPing();
     void OnTimerReRequestServList();
 

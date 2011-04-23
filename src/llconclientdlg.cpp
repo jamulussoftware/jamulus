@@ -105,20 +105,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "Disconnect, i.e., it implements a toggle functionality for connecting "
         "and disconnecting the llcon software." ) );
 
-    // server address
-    QString strServAddrH = tr ( "<b>Server Address:</b> The IP address or URL "
-        "of the server running the llcon server software must be set here. "
-        "A list of the most recent used server URLs is available for "
-        "selection. If an invalid address was chosen, an error message is "
-        "shown in the status bar." );
-
-    TextLabelServerAddr->setWhatsThis            ( strServAddrH );
-    LineEditServerAddr->setWhatsThis             ( strServAddrH );
-
-    LineEditServerAddr->setAccessibleName        ( tr ( "Server address edit box" ) );
-    LineEditServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
-        "URL. It also stores old URLs in the combo box list." ) );
-
     // fader tag
     QString strFaderTag = tr ( "<b>Fader Tag:</b> The fader tag of the local "
         "client is set in the fader tag edit box. This tag will appear "
@@ -253,22 +239,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // init fader tag line edit
     LineEditFaderTag->setText ( pClient->strName );
 
-    // init server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
-    LineEditServerAddr->setMaxCount ( MAX_NUM_SERVER_ADDR_ITEMS );
-    LineEditServerAddr->setInsertPolicy ( QComboBox::InsertAtTop );
-
-    // load data from ini file
-    for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
-    {
-        if ( !pClient->vstrIPAddress[iLEIdx].isEmpty() )
-        {
-            LineEditServerAddr->addItem ( pClient->vstrIPAddress[iLEIdx] );
-        }
-    }
-
-    // we want the cursor to be at IP address line edit at startup
-    LineEditServerAddr->setFocus();
-
     // init status label
     OnTimerStatus();
 
@@ -395,12 +365,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( LineEditFaderTag, SIGNAL ( textChanged ( const QString& ) ),
         this, SLOT ( OnFaderTagTextChanged ( const QString& ) ) );
 
-    QObject::connect ( LineEditServerAddr, SIGNAL ( editTextChanged ( const QString ) ),
-        this, SLOT ( OnLineEditServerAddrTextChanged ( const QString ) ) );
-
-    QObject::connect ( LineEditServerAddr, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnLineEditServerAddrActivated ( int ) ) );
-
     // other
     QObject::connect ( pClient,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
@@ -453,13 +417,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // Timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
-
-
-// TEST
-ConnectDlg.LoadStoredServers ( pClient->vstrIPAddress );
-ConnectDlg.setModal ( true );
-ConnectDlg.show();
-
 }
 
 void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
@@ -473,13 +430,6 @@ void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
     if ( pClient->IsRunning() )
     {
         pClient->Stop();
-    }
-
-    // store IP addresses
-    for ( int iLEIdx = 0; iLEIdx < LineEditServerAddr->count(); iLEIdx++ )
-    {
-        pClient->vstrIPAddress[iLEIdx] =
-            LineEditServerAddr->itemText ( iLEIdx );
     }
 
     // store fader tag
@@ -549,26 +499,6 @@ void CLlconClientDlg::OnSliderAudInFader ( int value )
 {
     pClient->SetAudioInFader ( value );
     UpdateAudioFaderSlider();
-}
-
-void CLlconClientDlg::OnLineEditServerAddrTextChanged ( const QString )
-{
-    // if the maximum number of items in the combo box is reached,
-    // delete the last item so that the new item can be added (first
-    // in - first out)
-    if ( LineEditServerAddr->count() == MAX_NUM_SERVER_ADDR_ITEMS )
-    {
-        LineEditServerAddr->removeItem ( MAX_NUM_SERVER_ADDR_ITEMS - 1 );
-    }
-}
-
-void CLlconClientDlg::OnLineEditServerAddrActivated ( int index )
-{
-    // move activated list item to the top
-    const QString strCurIPAddress = LineEditServerAddr->itemText ( index );
-    LineEditServerAddr->removeItem ( index );
-    LineEditServerAddr->insertItem ( 0, strCurIPAddress );
-    LineEditServerAddr->setCurrentIndex ( 0 );
 }
 
 void CLlconClientDlg::OnConnectDisconBut()
@@ -800,39 +730,73 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
     // start/stop client, set button text
     if ( bDoStart )
     {
-        // set address and check if address is valid
-        if ( pClient->SetServerAddr ( LineEditServerAddr->currentText() ) )
+        // init the connect dialog and execute it (modal dialog)
+        ConnectDlg.LoadStoredServers ( pClient->vstrIPAddress );
+        ConnectDlg.exec();
+
+        // check if cancel was pressed
+        if ( !ConnectDlg.GetCancelPressed() )
         {
-            bool bStartOk = true;
+            const QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
 
-            // try to start client, if error occurred, do not go in
-            // running state but show error message
-            try
+            if ( !strSelectedAddress.isEmpty() )
             {
-                pClient->Start();
+                CVector<QString> vstrTempList ( 0 );
+
+                // store the new address in the current server storage list at
+                // the top, make sure we do not have more than allowed stored
+                // servers
+                vstrTempList.Add ( strSelectedAddress );
+                for ( int iIdx = 0; ( iIdx < pClient->vstrIPAddress.Size() ) &&
+                                    ( iIdx < ( MAX_NUM_SERVER_ADDR_ITEMS - 1 ) ); iIdx++ )
+                {
+                    // only add old server address if it is not the same as the
+                    // selected one
+                    if ( pClient->vstrIPAddress[iIdx].compare ( strSelectedAddress ) )
+                    {
+                        vstrTempList.Add ( pClient->vstrIPAddress[iIdx] );
+                    }
+                }
+
+                // copy new generated list to client
+                pClient->vstrIPAddress = vstrTempList;
             }
 
-            catch ( CGenErr generr )
+            // set address and check if address is valid
+            if ( pClient->SetServerAddr ( strSelectedAddress ) )
             {
-                QMessageBox::critical (
-                    this, APP_NAME, generr.GetErrorText(), "Close", 0 );
+                bool bStartOk = true;
 
-                bStartOk = false;
+                // try to start client, if error occurred, do not go in
+                // running state but show error message
+                try
+                {
+                    pClient->Start();
+                }
+
+                catch ( CGenErr generr )
+                {
+                    QMessageBox::critical (
+                        this, APP_NAME, generr.GetErrorText(), "Close", 0 );
+
+                    bStartOk = false;
+                }
+
+                if ( bStartOk )
+                {
+                    PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
+
+                    // start timer for level meter bar and ping time measurement
+                    TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+                    TimerPing.start   ( PING_UPDATE_TIME_MS );
+                }
+            }
+            else
+            {
+                // show the error as red light
+                LEDConnection->SetLight ( MUL_COL_LED_RED );
             }
 
-            if ( bStartOk )
-            {
-                PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
-
-                // start timer for level meter bar and ping time measurement
-                TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
-                TimerPing.start   ( PING_UPDATE_TIME_MS );
-            }
-        }
-        else
-        {
-            // show the error as red light
-            LEDConnection->SetLight ( MUL_COL_LED_RED );
         }
     }
     else

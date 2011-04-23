@@ -123,7 +123,7 @@ protected:
     // callbacks
     static void      bufferSwitch ( long index, ASIOBool processNow );
     static ASIOTime* bufferSwitchTimeInfo ( ASIOTime* timeInfo, long index, ASIOBool processNow );
-    static void      sampleRateChanged ( ASIOSampleRate sRate ) {}
+    static void      sampleRateChanged ( ASIOSampleRate ) {}
     static long      asioMessages ( long selector, long value, void* message, double* opt );
 
     long             lNumDevs;

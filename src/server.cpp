@@ -953,7 +953,7 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
             }
             else
             {
-                // this was a connection less protocol message, return accoring
+                // this was a connection less protocol message, return according
                 // state
                 bChanOK = false;
             }

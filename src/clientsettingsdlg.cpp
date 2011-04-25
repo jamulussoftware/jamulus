@@ -47,7 +47,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "the check Auto is enabled, the jitter buffer is set automatically "
         "based on measurements of the network and sound card timing jitter. If "
         "the Auto check is enabled, the jitter buffer size fader is disabled "
-        "(cannot be moved by the mouse)." );
+        "(it cannot be moved by the mouse)." );
 
     QString strJitterBufferSizeTT = tr ( "In case the Auto setting of the "
         "jitter buffer is enabled, the network buffer is set to a conservative "
@@ -169,7 +169,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "message check box" ) );
 
     cbOpenChatOnNewMessage->setToolTip ( tr ( "If Open Chat on New Message "
-        "is disabled, a hint in the main window status bar is shown when a "
+        "is disabled, a LED in the main window turns green when a "
         "new message has arrived." ) + TOOLTIP_COM_END_TEXT );
 
     // use high quality audio

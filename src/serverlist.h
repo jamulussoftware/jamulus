@@ -122,6 +122,7 @@ class CServerListManager : public QObject
 
 public:
     CServerListManager ( const QString& sNCentServAddr,
+                         const QString& strServerInfo,
                          CProtocol*     pNConLProt );
 
     void SetEnabled ( const bool bState );

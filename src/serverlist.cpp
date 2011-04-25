@@ -27,6 +27,7 @@
 
 /* Implementation *************************************************************/
 CServerListManager::CServerListManager ( const QString& sNCentServAddr,
+                                         const QString& strServerInfo,
                                          CProtocol*     pNConLProt )
     : strCentralServerAddress ( sNCentServAddr ),
       pConnLessProtocol ( pNConLProt )
@@ -54,17 +55,46 @@ CServerListManager::CServerListManager ( const QString& sNCentServAddr,
     // never be deleted
     ServerList.clear();
 
-// per definition the client substitudes the IP address of the central server
-// itself for his server list
-ServerList.append ( CServerListEntry (
-    CHostAddress(),
-    "Master Server", // TEST
-    "",
-    QLocale::Germany, // TEST
-    "Munich", // TEST
-    USED_NUM_CHANNELS,
-    true ) ); // TEST
+    // init server list entry (server info for this server) with defaults, per
+    // definition the client substitudes the IP address of the central server
+    // itself for his server list
+    CServerListEntry ThisServerListEntry (
+        CHostAddress(),
+        "",
+        "",
+        QLocale::AnyCountry,
+        "",
+        USED_NUM_CHANNELS,
+        false );
 
+    // parse the server info string according to definition:
+    // [name];[city];[country as QLocale ID]
+    if ( !strServerInfo.isEmpty() )
+    {
+        // split the different parameter strings
+        QStringList slSeparateParameters = strServerInfo.split ( ";" );
+
+        // per definition, we expect three parameters
+        if ( slSeparateParameters.count() == 3 )
+        {
+            // [name]
+            ThisServerListEntry.strName = slSeparateParameters[0];
+
+            // [city]
+            ThisServerListEntry.strCity = slSeparateParameters[1];
+
+            // [country as QLocale ID]
+            const int iCountry = slSeparateParameters[2].toInt();
+            if ( ( iCountry >= 0 ) && ( iCountry <= QLocale::LastCountry ) )
+            {
+                ThisServerListEntry.eCountry = static_cast<QLocale::Country> (
+                    iCountry );
+            }
+        }
+    }
+
+    // per definition, the first entry in the server list it the own server
+    ServerList.append ( ThisServerListEntry );
 
 
     // Connections -------------------------------------------------------------

@@ -64,6 +64,7 @@ int main ( int argc, char** argv )
     QString strLoggingFileName    = "";
     QString strHistoryFileName    = "";
     QString strCentralServer      = "";
+    QString strServerInfo         = "";
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -192,6 +193,21 @@ int main ( int argc, char** argv )
         {
             strCentralServer = strArgument;
             tsConsole << "- central server: " << strCentralServer << endl;
+            continue;
+        }
+
+
+        // Server info ---------------------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-o",
+                                 "--serverinfo",
+                                 strArgument ) )
+        {
+            strServerInfo = strArgument;
+            tsConsole << "- server info: " << strServerInfo << endl;
             continue;
         }
 
@@ -328,7 +344,8 @@ int main ( int argc, char** argv )
                              strHTMLStatusFileName,
                              strHistoryFileName,
                              strServerName,
-                             strCentralServer );
+                             strCentralServer,
+                             strServerInfo );
 
             if ( bUseGUI )
             {
@@ -394,6 +411,9 @@ QString UsageArguments ( char **argv )
         "  -y, --history         enable connection history and set file\n"
         "                        name (server only)\n"
         "  -e, --centralserver   address of the central server (server only)\n"
+        "  -o, --serverinfo      infos of the server in the format:"
+        "                        [name];[city];[country as QLocale ID] (server "
+        "                        only)\n"
         "  -c, --connect         connect to last server on startup (client\n"
         "                        only)\n"
         "  -d, --disableleds     disable LEDs in main window (client only)\n"

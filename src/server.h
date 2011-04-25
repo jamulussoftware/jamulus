@@ -108,7 +108,8 @@ public:
               const QString& strHTMLStatusFileName,
               const QString& strHistoryFileName,
               const QString& strServerNameForHTMLStatusFile,
-              const QString& strCentralServer );
+              const QString& strCentralServer,
+              const QString& strServerInfo );
 
     void Start();
     void Stop();

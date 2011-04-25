@@ -56,13 +56,14 @@
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
 #define PROTMESSID_CLM_PING_MS                1001 // for measuring ping time
-#define PROTMESSID_CLM_SERVER_FULL            1002 // server full message
-#define PROTMESSID_CLM_REGISTER_SERVER        1003 // register server
-#define PROTMESSID_CLM_UNREGISTER_SERVER      1004 // unregister server -> TODO
-#define PROTMESSID_CLM_SERVER_LIST            1005 // server list
-#define PROTMESSID_CLM_REQ_SERVER_LIST        1006 // request server list
-#define PROTMESSID_CLM_SEND_EMPTY_MESSAGE     1007 // an empty message shall be send
-#define PROTMESSID_CLM_EMPTY_MESSAGE          1008 // empty message
+#define PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS 1002 // for ping time and num. of clients info
+#define PROTMESSID_CLM_SERVER_FULL            1003 // server full message
+#define PROTMESSID_CLM_REGISTER_SERVER        1004 // register server
+#define PROTMESSID_CLM_UNREGISTER_SERVER      1005 // unregister server -> TODO
+#define PROTMESSID_CLM_SERVER_LIST            1006 // server list
+#define PROTMESSID_CLM_REQ_SERVER_LIST        1007 // request server list
+#define PROTMESSID_CLM_SEND_EMPTY_MESSAGE     1008 // an empty message shall be send
+#define PROTMESSID_CLM_EMPTY_MESSAGE          1009 // empty message
 
 
 // lengths of message as defined in protocol.cpp file
@@ -96,6 +97,9 @@ public:
     void CreateReqNetwTranspPropsMes();
 
     void CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs );
+    void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
+                                         const int iMs,
+                                         const int iNumClients );
     void CreateCLServerFullMes ( const CHostAddress& InetAddr );
     void CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
                                      const CServerCoreInfo& ServerInfo );
@@ -204,6 +208,8 @@ protected:
 
     bool EvaluateCLPingMes             ( const CHostAddress&     InetAddr,
                                          const CVector<uint8_t>& vecData );
+    bool EvaluateCLPingWithNumClientsMes ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
     bool EvaluateCLServerFullMes();
     bool EvaluateCLRegisterServerMes   ( const CHostAddress&     InetAddr,
                                          const CVector<uint8_t>& vecData );
@@ -248,6 +254,9 @@ signals:
     void Disconnection();
 
     void CLPingReceived ( CHostAddress InetAddr, int iMs );
+    void CLPingWithNumClientsReceived ( CHostAddress InetAddr,
+                                        int iMs,
+                                        int iNumClients );
     void CLRegisterServerReceived ( CHostAddress    InetAddr,
                                     CServerCoreInfo ServerInfo );
     void CLServerListReceived ( CHostAddress         InetAddr,

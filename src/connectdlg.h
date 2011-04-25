@@ -61,9 +61,10 @@ public:
 
     void LoadStoredServers ( const CVector<QString>& vstrNewIPAddresses );
 
-    void SetPingTimeResult ( CHostAddress& InetAddr,
-                             const int     iPingTime,
-                             const int     iPingTimeLEDColor );
+    void SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
+                                          const int     iPingTime,
+                                          const int     iPingTimeLEDColor,
+                                          const int     iNumClients );
 
     bool GetStateOK() const { return bStateOK; }
     bool GetServerListItemWasChosen() const { return bServerListItemWasChosen; }

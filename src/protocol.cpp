@@ -155,6 +155,17 @@ CONNECTION LESS MESSAGES
     note: same definition as PROTMESSID_PING_MS
 
 
+
+- PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS: Connection less ping message (for
+                                         measuring the ping time) with the
+                                         info about the current number of
+                                         connected clients
+
+    +-----------------------------+---------------------------------+
+    | 4 bytes transmit time in ms | 1 byte number connected clients |
+    +-----------------------------+---------------------------------+
+
+
 - PROTMESSID_SERVER_FULL: Connection less server full message
 
     note: does not have any data -> n = 0
@@ -163,30 +174,29 @@ CONNECTION LESS MESSAGES
 - PROTMESSID_CLM_REGISTER_SERVER: Register a server, providing server
                                   information
 
-    +-----------------+---------------------------------+ ...
-    | 2 bytes country | 1 byte number connected clients | ...
-    +-----------------+---------------------------------+ ...
-        ... ---------------------------------+---------------------+ ...
-        ... 1 byte maximum connected clients | 1 byte is permanent | ...
-        ... ---------------------------------+---------------------+ ...
-        ... -----------------+----------------------------------+ ...
-        ... 2 bytes number n | n bytes UTF-8 string server name | ...
-        ... -----------------+----------------------------------+ ...
-        ... -----------------+----------------------------+ ...
-        ... 2 bytes number n | n bytes UTF-8 string topic | ...
-        ... -----------------+----------------------------+ ...
-        ... -----------------+---------------------------+
-        ... 2 bytes number n | n bytes UTF-8 string city |
-        ... -----------------+---------------------------+
+    +-----------------+----------------------------------+ ...
+    | 2 bytes country | 1 byte maximum connected clients | ...
+    +-----------------+----------------------------------+ ...
+        ... ---------------------+------------------+ ...
+        ...  1 byte is permanent | 2 bytes number n | ...
+        ... ---------------------+------------------+ ...
+        ... ----------------------------------+ ...
+        ...  n bytes UTF-8 string server name | ...
+        ... ----------------------------------+ ...
+        ... ------------------+----------------------------+ ...
+        ...  2 bytes number n | n bytes UTF-8 string topic | ...
+        ... ------------------+----------------------------+ ...
+        ... ------------------+---------------------------+
+        ...  2 bytes number n | n bytes UTF-8 string city |
+        ... ------------------+---------------------------+
 
-    - "country" is according to "Common Locale Data Repository" which is used in
-      the QLocale class
-    - "connected clients" is the current number of connected clients
     - "maximum connected clients" is the maximum number of clients which can
       be connected to the server at the same time
     - "is permanent" is a flag which indicates if the server is permanent
       online or not. If this value is any value <> 0 indicates that the server
       is permanent online.
+    - "country" is according to "Common Locale Data Repository" which is used in
+      the QLocale class
 
 
 - PROTMESSID_CLM_SERVER_LIST: Server list message
@@ -562,6 +572,10 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
             {
             case PROTMESSID_CLM_PING_MS:
                 bRet = EvaluateCLPingMes ( InetAddr, vecData );
+                break;
+
+            case PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS:
+                bRet = EvaluateCLPingWithNumClientsMes ( InetAddr, vecData );
                 break;
 
             case PROTMESSID_CLM_SERVER_FULL:
@@ -1133,6 +1147,51 @@ bool CProtocol::EvaluateCLPingMes ( const CHostAddress& InetAddr,
     return false; // no error
 }
 
+void CProtocol::CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
+                                                const int           iMs,
+                                                const int           iNumClients )
+{
+    int iPos = 0; // init position pointer
+
+    // build data vector (5 bytes long)
+    CVector<uint8_t> vecData ( 5 );
+
+    // transmit time (4 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iMs ), 4 );
+
+    // current number of connected clients (1 byte)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iNumClients ), 1 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLPingWithNumClientsMes ( const CHostAddress&     InetAddr,
+                                                  const CVector<uint8_t>& vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 5 )
+    {
+        return true; // return error code
+    }
+
+    // transmit time
+    const int iCurMs =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+    // current number of connected clients
+    const int iCurNumClients =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // invoke message action
+    emit CLPingWithNumClientsReceived ( InetAddr, iCurMs, iCurNumClients );
+
+    return false; // no error
+}
+
 void CProtocol::CreateCLServerFullMes ( const CHostAddress& InetAddr )
 {
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SERVER_FULL,
@@ -1156,7 +1215,6 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
     // size of current message body
     const int iEntrLen =
         2 /* country */ +
-        1 /* number of connected clients */ +
         1 /* maximum number of connected clients */ +
         1 /* is permanent flag */ +
         2 /* name string size */ + ServerInfo.strName.size() +
@@ -1169,10 +1227,6 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
     // country (2 bytes)
     PutValOnStream ( vecData, iPos,
         static_cast<uint32_t> ( ServerInfo.eCountry ), 2 );
-
-    // number of connected clients (1 byte)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( ServerInfo.iNumClients ), 1 );
 
     // maximum number of connected clients (1 byte)
     PutValOnStream ( vecData, iPos,
@@ -1203,8 +1257,8 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
     const int       iDataLen = vecData.Size();
     CServerCoreInfo RecServerInfo;
 
-    // check size (the first 5 bytes)
-    if ( iDataLen < 5 )
+    // check size (the first 4 bytes)
+    if ( iDataLen < 4 )
     {
         return true; // return error code
     }
@@ -1212,10 +1266,6 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
     // country (2 bytes)
     RecServerInfo.eCountry =
         static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
-
-    // number of connected clients (1 byte)
-    RecServerInfo.iNumClients =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // maximum number of connected clients (1 byte)
     RecServerInfo.iMaxNumClients =
@@ -1281,7 +1331,6 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
             4 /* IP address */ +
             2 /* port number */ +
             2 /* country */ +
-            1 /* number of connected clients */ +
             1 /* maximum number of connected clients */ +
             1 /* is permanent flag */ +
             2 /* name string size */ + vecServerInfo[i].strName.size() +
@@ -1302,10 +1351,6 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
         // country (2 bytes)
         PutValOnStream ( vecData, iPos,
             static_cast<uint32_t> ( vecServerInfo[i].eCountry ), 2 );
-
-        // number of connected clients (1 byte)
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecServerInfo[i].iNumClients ), 1 );
 
         // maximum number of connected clients (1 byte)
         PutValOnStream ( vecData, iPos,
@@ -1339,8 +1384,8 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
 
     while ( iPos < iDataLen )
     {
-        // check size (the next 11 bytes)
-        if ( ( iDataLen - iPos ) < 11 )
+        // check size (the next 10 bytes)
+        if ( ( iDataLen - iPos ) < 10 )
         {
             return true; // return error code
         }
@@ -1356,10 +1401,6 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
         // country (2 bytes)
         const QLocale::Country eCountry =
             static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
-
-        // number of connected clients (1 byte)
-        const int iNumClients =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
         // maximum number of connected clients (1 byte)
         const int iMaxNumClients =
@@ -1406,7 +1447,6 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
                           strTopic,
                           eCountry,
                           strCity,
-                          iNumClients,
                           iMaxNumClients,
                           bPermanentOnline ) );
     }

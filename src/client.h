@@ -307,7 +307,9 @@ public slots:
     void OnReceivePingMessage ( int iMs );
 
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
-    void OnCLPingReceived ( CHostAddress InetAddr, int iMs );
+    void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr,
+                                          int iMs,
+                                          int iNumClients );
 
     void OnSndCrdReinitRequest();
 
@@ -317,7 +319,9 @@ signals:
     void PingTimeReceived ( int iPingTime );
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );
-    void CLPingTimeReceived ( CHostAddress InetAddr, int iPingTime );
+    void CLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
+                                            int iPingTime,
+                                            int iNumClients );
     void Disconnected();
     void Stopped();
 };

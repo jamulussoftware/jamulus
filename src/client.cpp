@@ -114,8 +114,9 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ),
         SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ) );
 
-    QObject::connect ( &ConnLessProtocol, SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
-        this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
+        this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest() ),
         this, SLOT ( OnSndCrdReinitRequest() ) );
@@ -162,13 +163,17 @@ void CClient::OnReceivePingMessage ( int iMs )
     }
 }
 
-void CClient::OnCLPingReceived ( CHostAddress InetAddr, int iMs )
+void CClient::OnCLPingWithNumClientsReceived ( CHostAddress InetAddr,
+                                               int          iMs,
+                                               int          iNumClients )
 {
     // take care of wrap arounds (if wrapping, do not use result)
     const int iCurDiff = EvaluatePingMessage ( iMs );
     if ( iCurDiff >= 0 )
     {
-        emit CLPingTimeReceived ( InetAddr, iCurDiff );
+        emit CLPingTimeWithNumClientsReceived ( InetAddr,
+                                                iCurDiff,
+                                                iNumClients );
     }
 }
 

@@ -487,7 +487,6 @@ public:
         strTopic         ( "" ),
         eCountry         ( QLocale::AnyCountry ),
         strCity          ( "" ),
-        iNumClients      ( 0 ),
         iMaxNumClients   ( 0 ),
         bPermanentOnline ( false ) {}
 
@@ -496,14 +495,12 @@ public:
         const QString&          NsTopic,
         const QLocale::Country& NeCountry,
         const QString&          NsCity,
-        const int               NiNumClients,
         const int               NiMaxNumClients,
         const bool              NbPermOnline) :
         strName          ( NsName ),
         strTopic         ( NsTopic ),
         eCountry         ( NeCountry ),
         strCity          ( NsCity ),
-        iNumClients      ( NiNumClients ),
         iMaxNumClients   ( NiMaxNumClients ),
         bPermanentOnline ( NbPermOnline ) {}
 
@@ -519,9 +516,6 @@ public:
 
     // city in which the server is located
     QString          strCity;
-
-    // current number of connected clients
-    int              iNumClients;
 
     // maximum number of clients which can connect to the server at the same
     // time
@@ -540,7 +534,6 @@ public:
                           QLocale::AnyCountry,
                           "",
                           0,
-                          0,
                           false ), HostAddr ( CHostAddress() ) {}
 
     CServerInfo (
@@ -549,14 +542,12 @@ public:
         const QString&          NsTopic,
         const QLocale::Country& NeCountry,
         const QString&          NsCity,
-        const int               NiNumClients,
         const int               NiMaxNumClients,
         const bool              NbPermOnline) :
             CServerCoreInfo ( NsName,
                               NsTopic,
                               NeCountry,
                               NsCity,
-                              NiNumClients,
                               NiMaxNumClients,
                               NbPermOnline ), HostAddr ( NHAddr ) {}
 

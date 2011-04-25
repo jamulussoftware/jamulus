@@ -115,7 +115,9 @@ public slots:
 
     void OnTimerPing();
     void OnPingTimeResult ( int iPingTime );
-    void OnCLPingTimeResult ( CHostAddress InetAddr, int iPingTime );
+    void OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
+                                              int          iPingTime,
+                                              int          iNumClients );
     void OnOpenGeneralSettings();
 
     void OnOpenChatDialog()

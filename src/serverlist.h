@@ -81,7 +81,6 @@ public:
                       QLocale::AnyCountry,
                       "",
                       0,
-                      0,
                       false ) { UpdateRegistration(); }
 
     CServerListEntry ( const CHostAddress&     NHAddr,
@@ -89,7 +88,6 @@ public:
                        const QString&          NsTopic,
                        const QLocale::Country& NeCountry,
                        const QString&          NsCity,
-                       const int               NiNumClients,
                        const int               NiMaxNumClients,
                        const bool              NbPermOnline)
         : CServerInfo ( NHAddr,
@@ -97,7 +95,6 @@ public:
                         NsTopic,
                         NeCountry,
                         NsCity,
-                        NiNumClients,
                         NiMaxNumClients,
                         NbPermOnline ) { UpdateRegistration(); }
 
@@ -108,7 +105,6 @@ public:
                         NewCoreServerInfo.strTopic,
                         NewCoreServerInfo.eCountry,
                         NewCoreServerInfo.strCity,
-                        NewCoreServerInfo.iNumClients,
                         NewCoreServerInfo.iMaxNumClients,
                         NewCoreServerInfo.bPermanentOnline )
         { UpdateRegistration(); }

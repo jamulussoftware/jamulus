@@ -62,7 +62,6 @@ ServerList.append ( CServerListEntry (
     "",
     QLocale::Germany, // TEST
     "Munich", // TEST
-    0, // will be updated later
     USED_NUM_CHANNELS,
     true ) ); // TEST
 
@@ -187,7 +186,6 @@ void CServerListManager::RegisterServer ( const CHostAddress&    InetAddr,
                 ServerList[iSelIdx].strTopic         = ServerInfo.strTopic;
                 ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
                 ServerList[iSelIdx].strCity          = ServerInfo.strCity;
-                ServerList[iSelIdx].iNumClients      = ServerInfo.iNumClients;
                 ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
                 ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
                 ServerList[iSelIdx].UpdateRegistration();

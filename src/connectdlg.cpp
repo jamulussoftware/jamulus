@@ -234,13 +234,16 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         CurPingTimeFont.setBold ( true );
         pNewListViewItem->setFont ( 1, CurPingTimeFont );
 
-        // number of clients
-        pNewListViewItem->setText ( 2,
-            QString().setNum ( vecServerInfo[iIdx].iNumClients ) );
+        // server location (city and country)
+        QString strLocation = vecServerInfo[iIdx].strCity;
+        if ( !strLocation.isEmpty() )
+        {
+            strLocation += ", ";
+        }
+        strLocation +=
+            QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
 
-        // server country
-        pNewListViewItem->setText ( 3,
-            QLocale::countryToString ( vecServerInfo[iIdx].eCountry ) );
+        pNewListViewItem->setText ( 3, strLocation );
 
         // store host address
         pNewListViewItem->setData ( 0, Qt::UserRole,
@@ -294,9 +297,10 @@ void CConnectDlg::OnTimerPing()
     }
 }
 
-void CConnectDlg::SetPingTimeResult ( CHostAddress& InetAddr,
-                                      const int     iPingTime,
-                                      const int     iPingTimeLEDColor )
+void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
+                                                   const int     iPingTime,
+                                                   const int     iPingTimeLEDColor,
+                                                   const int     iNumClients )
 {
     // apply the received ping time to the correct server list entry
     const int iServerListLen = ListViewServers->topLevelItemCount();
@@ -331,6 +335,10 @@ void CConnectDlg::SetPingTimeResult ( CHostAddress& InetAddr,
             // update ping text
             ListViewServers->topLevelItem ( iIdx )->
                 setText ( 1, QString().setNum ( iPingTime ) + " ms" );
+
+            // update number of clients text
+            ListViewServers->topLevelItem ( iIdx )->
+                setText ( 2, QString().setNum ( iNumClients ) );
 
             // a ping time was received, set item to visible
             ListViewServers->topLevelItem ( iIdx )->setHidden ( false );

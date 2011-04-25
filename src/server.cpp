@@ -870,6 +870,23 @@ int CServer::GetFreeChan()
     return INVALID_CHANNEL_ID;
 }
 
+int CServer::GetNumberOfConnectedClients()
+{
+    int iNumConnClients = 0;
+
+    // check all possible channels for connection status
+    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            // this channel is connected, increment counter
+            iNumConnClients += 1;
+        }
+    }
+
+    return iNumConnClients;
+}
+
 int CServer::CheckAddr ( const CHostAddress& Addr )
 {
     CHostAddress InetAddr;

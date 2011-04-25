@@ -389,8 +389,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ),
         this, SLOT ( OnCLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ) );
 
-    QObject::connect ( pClient, SIGNAL ( CLPingTimeReceived ( CHostAddress, int ) ),
-        this, SLOT ( OnCLPingTimeResult ( CHostAddress, int ) ) );
+    QObject::connect ( pClient,
+        SIGNAL ( CLPingTimeWithNumClientsReceived ( CHostAddress, int, int ) ),
+        this, SLOT ( OnCLPingTimeWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( GUIDesignChanged() ),
         this, SLOT ( OnGUIDesignChanged() ) );
@@ -698,8 +699,9 @@ void CLlconClientDlg::OnPingTimeResult ( int iPingTime )
     LEDDelay->SetLight ( iOverallDelayLEDColor );
 }
 
-void CLlconClientDlg::OnCLPingTimeResult ( CHostAddress InetAddr,
-                                           int          iPingTime )
+void CLlconClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
+                                                           int          iPingTime,
+                                                           int          iNumClients )
 {
     // color definition: <= 25 ms green, <= 50 ms yellow, otherwise red
     int iPingTimeLEDColor;
@@ -720,9 +722,10 @@ void CLlconClientDlg::OnCLPingTimeResult ( CHostAddress InetAddr,
     }
 
     // update connection dialog server list
-    ConnectDlg.SetPingTimeResult ( InetAddr,
-                                   iPingTime,
-                                   iPingTimeLEDColor );
+    ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr,
+                                                iPingTime,
+                                                iPingTimeLEDColor,
+                                                iNumClients );
 }
 
 void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )

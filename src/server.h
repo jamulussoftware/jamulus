@@ -135,6 +135,7 @@ protected:
 
     int CheckAddr ( const CHostAddress& Addr );
     int GetFreeChan();
+    int GetNumberOfConnectedClients();
     CVector<CChannelShortInfo> CreateChannelList();
     void CreateAndSendChanListForAllConChannels();
     void CreateAndSendChanListForThisChan ( const int iCurChanID );
@@ -189,7 +190,11 @@ public slots:
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
 
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs )
-        { ConnLessProtocol.CreateCLPingMes ( InetAddr, iMs ); }
+    {
+        ConnLessProtocol.CreateCLPingWithNumClientsMes ( InetAddr,
+                                                         iMs,
+                                                         GetNumberOfConnectedClients() );
+    }
 
     void OnCLSendEmptyMes ( CHostAddress TargetInetAddr )
     {

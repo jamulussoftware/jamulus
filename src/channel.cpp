@@ -339,7 +339,7 @@ void CChannel::OnDisconnection()
 }
 
 EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
-                                 int iNumBytes )
+                                 int                     iNumBytes )
 {
     EPutDataStat eRet = PS_GEN_ERROR;
 

@@ -46,8 +46,9 @@
 #define VERSION                         "3.1.3cvs"
 #define APP_NAME                        "llcon"
 
-// default name of the ini-file
+// default names of the ini-file for client and server
 #define DEFAULT_INI_FILE_NAME           "llcon.ini"
+#define DEFAULT_INI_FILE_NAME_SERVER    "llconserver.ini"
 
 // file name for logging file
 #define DEFAULT_LOG_FILE_NAME           "llconsrvlog.txt"

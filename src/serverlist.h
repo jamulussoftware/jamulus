@@ -127,12 +127,32 @@ public:
 
     void SetEnabled ( const bool bState );
     bool GetEnabled() const { return bEnabled; }
+
     bool GetIsCentralServer() const { return bIsCentralServer; }
 
     void RegisterServer ( const CHostAddress&    InetAddr,
                           const CServerCoreInfo& ServerInfo );
 
     void QueryServerList ( const CHostAddress& InetAddr );
+
+
+    // set server infos -> per definition the server info of this server is
+    // stored in the first entry of the list, we assume here that the first
+    // entry is correctly created in the constructor of the class
+    void SetServerName ( const QString& strNewName )
+        { ServerList[0].strName = strNewName; }
+
+    QString GetServerName() { return ServerList[0].strName; }
+
+    void SetServerCity ( const QString& strNewCity )
+        { ServerList[0].strCity = strNewCity; }
+
+    QString GetServerCity() { return ServerList[0].strCity; }
+
+    void SetServerCountry ( const QLocale::Country eNewCountry )
+        { ServerList[0].eCountry = eNewCountry; }
+
+    QLocale::Country GetServerCountry() { return ServerList[0].eCountry; }
 
 protected:
     QTimer                  TimerPollList;

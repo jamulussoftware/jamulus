@@ -32,13 +32,15 @@
 #include <qtextstream.h>
 #include "global.h"
 #include "client.h"
+#include "server.h"
 
 
 /* Classes ********************************************************************/
 class CSettings
 {
 public:
-    CSettings ( CClient* pNCliP ) : pClient ( pNCliP ) {}
+    CSettings ( CClient* pNCliP ) : pClient ( pNCliP ), bIsClient ( true ) {}
+    CSettings ( CServer* pNSerP ) : pServer ( pNSerP ), bIsClient ( false ) {}
 
     void Load ( const QString& sFileName = "" ) { ReadIniFile ( sFileName ); }
     void Save ( const QString& sFileName = "" ) { WriteIniFile ( sFileName ); }
@@ -66,8 +68,11 @@ protected:
     void PutIniSetting ( QDomDocument& xmlFile, const QString& sSection,
                          const QString& sKey, const QString& sValue = "" );
 
-    // pointer to the client object needed for the various settings
-    CClient* pClient;
+    // pointer to the client/server object which stores the various settings
+    CClient* pClient; // for client
+    CServer* pServer; // for server
+
+    bool     bIsClient;
 };
 
 #endif // !defined ( SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_ )

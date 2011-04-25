@@ -45,143 +45,166 @@ void CSettings::ReadIniFile ( const QString& sFileName )
 
 
     // Actual settings data ---------------------------------------------------
-    // IP addresses
-    for ( int iIPAddrIdx = 0; iIPAddrIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIPAddrIdx++ )
+    if ( bIsClient )
     {
-        QString sDefaultIP = "";
+        // client:
 
-        // use default only for first entry
-        if ( iIPAddrIdx == 0 )
+        // IP addresses
+        for ( int iIPAddrIdx = 0; iIPAddrIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIPAddrIdx++ )
         {
-            sDefaultIP = DEFAULT_SERVER_ADDRESS;
+            QString sDefaultIP = "";
+
+            // use default only for first entry
+            if ( iIPAddrIdx == 0 )
+            {
+                sDefaultIP = DEFAULT_SERVER_ADDRESS;
+            }
+
+            pClient->vstrIPAddress[iIPAddrIdx] =
+                GetIniSetting ( IniXMLDocument, "client",
+                QString ( "ipaddress%1" ).arg ( iIPAddrIdx ), sDefaultIP );
         }
 
-        pClient->vstrIPAddress[iIPAddrIdx] =
-            GetIniSetting ( IniXMLDocument, "client",
-            QString ( "ipaddress%1" ).arg ( iIPAddrIdx ), sDefaultIP );
-    }
+        // name
+        pClient->strName = GetIniSetting ( IniXMLDocument, "client", "name" );
 
-    // name
-    pClient->strName = GetIniSetting ( IniXMLDocument, "client", "name" );
+        // audio fader
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad",
+             AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
+        {
+            pClient->SetAudioInFader ( iValue );
+        }
 
-    // audio fader
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad",
-         AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
-    {
-        pClient->SetAudioInFader ( iValue );
-    }
+        // reverberation level
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev",
+             0, AUD_REVERB_MAX, iValue ) )
+        {
+            pClient->SetReverbLevel ( iValue );
+        }
 
-    // reverberation level
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev",
-         0, AUD_REVERB_MAX, iValue ) )
-    {
-        pClient->SetReverbLevel ( iValue );
-    }
+        // reverberation channel assignment
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
+        {
+            pClient->SetReverbOnLeftChan ( bValue );
+        }
 
-    // reverberation channel assignment
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "reverblchan", bValue ) )
-    {
-        pClient->SetReverbOnLeftChan ( bValue );
-    }
+        // sound card selection
+        // special case with this setting: the sound card initialization depends
+        // on this setting call, therefore, if no setting file parameter could
+        // be retrieved, the sound card is initialized with a default setting
+        // defined here
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
+             1, MAX_NUMBER_SOUND_CARDS, iValue ) )
+        {
+            pClient->SetSndCrdDev ( iValue );
+        }
+        else
+        {
+            // use "INVALID_SNC_CARD_DEVICE" to tell the sound card driver that
+            // no device selection was done previously
+            pClient->SetSndCrdDev ( INVALID_SNC_CARD_DEVICE );
+        }
 
-    // sound card selection
-    // special case with this setting: the sound card initialization depends on this setting
-    // call, therefore, if no setting file parameter could be retrieved, the sound card is
-    // initialized with a default setting defined here
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
-         1, MAX_NUMBER_SOUND_CARDS, iValue ) )
-    {
-        pClient->SetSndCrdDev ( iValue );
+        // sound card channel mapping settings: make sure these settings are
+        // set AFTER the sound card device is set, otherwise the settings are
+        // overwritten by the defaults
+        //
+        // sound card left input channel mapping
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch",
+             0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+        {
+            pClient->SetSndCrdLeftInputChannel ( iValue );
+        }
+
+        // sound card right input channel mapping
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch",
+             0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+        {
+            pClient->SetSndCrdRightInputChannel ( iValue );
+        }
+
+        // sound card left output channel mapping
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch",
+             0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+        {
+            pClient->SetSndCrdLeftOutputChannel ( iValue );
+        }
+
+        // sound card right output channel mapping
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch",
+             0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+        {
+            pClient->SetSndCrdRightOutputChannel ( iValue );
+        }
+
+        // sound card preferred buffer size index
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx",
+             FRAME_SIZE_FACTOR_PREFERRED, FRAME_SIZE_FACTOR_SAFE, iValue ) )
+        {
+            // additional check required since only a subset of factors are
+            // defined
+            if ( ( iValue == FRAME_SIZE_FACTOR_PREFERRED ) ||
+                 ( iValue == FRAME_SIZE_FACTOR_DEFAULT ) ||
+                 ( iValue == FRAME_SIZE_FACTOR_SAFE ) )
+            {
+                pClient->SetSndCrdPrefFrameSizeFactor ( iValue );
+            }
+        }
+
+        // automatic network jitter buffer size setting
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", bValue ) )
+        {
+            pClient->SetDoAutoSockBufSize ( bValue );
+        }
+
+        // network jitter buffer size
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf",
+             MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
+        {
+            pClient->SetSockBufNumFrames ( iValue );
+        }
+
+        // flag whether the chat window shall be opened on a new chat message
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage", bValue ) )
+        {
+            pClient->SetOpenChatOnNewMessage ( bValue );
+        }
+
+        // GUI design
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign",
+             0, 1 /* GD_ORIGINAL */, iValue ) )
+        {
+            pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
+        }
+
+        // flag whether using high quality audio or not
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "highqualityaudio", bValue ) )
+        {
+            pClient->SetCELTHighQuality ( bValue );
+        }
+
+        // flag whether stereo mode is used
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "stereoaudio", bValue ) )
+        {
+            pClient->SetUseStereo ( bValue );
+        }
     }
     else
     {
-        // use "INVALID_SNC_CARD_DEVICE" to tell the sound card driver that no
-        // device selection was done previously
-        pClient->SetSndCrdDev ( INVALID_SNC_CARD_DEVICE );
-    }
+        // server:
 
-    // sound card channel mapping settings: make sure these settings are
-    // set AFTER the sound card device is set, otherwise the settings are
-    // overwritten by the defaults
-    //
-    // sound card left input channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch",
-         0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
-    {
-        pClient->SetSndCrdLeftInputChannel ( iValue );
-    }
+        // name
+        pServer->SetServerName ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
 
-    // sound card right input channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch",
-         0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
-    {
-        pClient->SetSndCrdRightInputChannel ( iValue );
-    }
+        // city
+        pServer->SetServerCity ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
 
-    // sound card left output channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch",
-         0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
-    {
-        pClient->SetSndCrdLeftOutputChannel ( iValue );
-    }
-
-    // sound card right output channel mapping
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch",
-         0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
-    {
-        pClient->SetSndCrdRightOutputChannel ( iValue );
-    }
-
-    // sound card preferred buffer size index
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx",
-         FRAME_SIZE_FACTOR_PREFERRED, FRAME_SIZE_FACTOR_SAFE, iValue ) )
-    {
-        // additional check required since only a subset of factors are
-        // defined
-        if ( ( iValue == FRAME_SIZE_FACTOR_PREFERRED ) ||
-             ( iValue == FRAME_SIZE_FACTOR_DEFAULT ) ||
-             ( iValue == FRAME_SIZE_FACTOR_SAFE ) )
+        // country
+        if ( GetNumericIniSet ( IniXMLDocument, "server", "country",
+             0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
         {
-            pClient->SetSndCrdPrefFrameSizeFactor ( iValue );
+            pServer->SetServerCountry ( static_cast<QLocale::Country> ( iValue ) );
         }
-    }
-
-    // automatic network jitter buffer size setting
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "autojitbuf", bValue ) )
-    {
-        pClient->SetDoAutoSockBufSize ( bValue );
-    }
-
-    // network jitter buffer size
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbuf",
-         MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
-    {
-        pClient->SetSockBufNumFrames ( iValue );
-    }
-
-    // flag whether the chat window shall be opened on a new chat message
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage", bValue ) )
-    {
-        pClient->SetOpenChatOnNewMessage ( bValue );
-    }
-
-    // GUI design
-    if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign",
-         0, 1 /* GD_ORIGINAL */, iValue ) )
-    {
-        pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
-    }
-
-    // flag whether using high quality audio or not
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "highqualityaudio", bValue ) )
-    {
-        pClient->SetCELTHighQuality ( bValue );
-    }
-
-    // flag whether stereo mode is used
-    if ( GetFlagIniSet ( IniXMLDocument, "client", "stereoaudio", bValue ) )
-    {
-        pClient->SetUseStereo ( bValue );
     }
 }
 
@@ -192,77 +215,98 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
 
     // Actual settings data ---------------------------------------------------
-    // IP addresses
-    for ( int iIPAddrIdx = 0; iIPAddrIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIPAddrIdx++ )
+    if ( bIsClient )
     {
-        PutIniSetting ( IniXMLDocument, "client",
-            QString ( "ipaddress%1" ).arg ( iIPAddrIdx ),
-            pClient->vstrIPAddress[iIPAddrIdx] );
+        // client:
+
+        // IP addresses
+        for ( int iIPAddrIdx = 0; iIPAddrIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIPAddrIdx++ )
+        {
+            PutIniSetting ( IniXMLDocument, "client",
+                QString ( "ipaddress%1" ).arg ( iIPAddrIdx ),
+                pClient->vstrIPAddress[iIPAddrIdx] );
+        }
+
+        // name
+        PutIniSetting ( IniXMLDocument, "client", "name",
+            pClient->strName );
+
+        // audio fader
+        SetNumericIniSet ( IniXMLDocument, "client", "audfad",
+            pClient->GetAudioInFader() );
+
+        // reverberation level
+        SetNumericIniSet ( IniXMLDocument, "client", "revlev",
+            pClient->GetReverbLevel() );
+
+        // reverberation channel assignment
+        SetFlagIniSet ( IniXMLDocument, "client", "reverblchan",
+            pClient->IsReverbOnLeftChan() );
+
+        // sound card selection
+        SetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
+            pClient->GetSndCrdDev() );
+
+        // sound card left input channel mapping
+        SetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch",
+            pClient->GetSndCrdLeftInputChannel() );
+
+        // sound card right input channel mapping
+        SetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch",
+            pClient->GetSndCrdRightInputChannel() );
+
+        // sound card left output channel mapping
+        SetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch",
+            pClient->GetSndCrdLeftOutputChannel() );
+
+        // sound card right output channel mapping
+        SetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch",
+            pClient->GetSndCrdRightOutputChannel() );
+
+        // sound card preferred buffer size index
+        SetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx",
+            pClient->GetSndCrdPrefFrameSizeFactor() );
+
+        // automatic network jitter buffer size setting
+        SetFlagIniSet ( IniXMLDocument, "client", "autojitbuf",
+            pClient->GetDoAutoSockBufSize() );
+
+        // network jitter buffer size
+        SetNumericIniSet ( IniXMLDocument, "client", "jitbuf",
+            pClient->GetSockBufNumFrames() );
+
+        // flag whether the chat window shall be opened on a new chat message
+        SetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage",
+            pClient->GetOpenChatOnNewMessage() );
+
+        // GUI design
+        SetNumericIniSet ( IniXMLDocument, "client", "guidesign",
+            static_cast<int> ( pClient->GetGUIDesign() ) );
+
+        // flag whether using high quality audio or not
+        SetFlagIniSet ( IniXMLDocument, "client", "highqualityaudio",
+            pClient->GetCELTHighQuality() );
+
+        // flag whether stereo mode is used
+        SetFlagIniSet ( IniXMLDocument, "client", "stereoaudio",
+            pClient->GetUseStereo() );
     }
+    else
+    {
+        // server:
 
-    // name
-    PutIniSetting ( IniXMLDocument, "client", "name",
-        pClient->strName );
+        // name
+        PutIniSetting ( IniXMLDocument, "server", "name",
+            pServer->GetServerName() );
 
-    // audio fader
-    SetNumericIniSet ( IniXMLDocument, "client", "audfad",
-        pClient->GetAudioInFader() );
+        // city
+        PutIniSetting ( IniXMLDocument, "server", "city",
+            pServer->GetServerCity() );
 
-    // reverberation level
-    SetNumericIniSet ( IniXMLDocument, "client", "revlev",
-        pClient->GetReverbLevel() );
-
-    // reverberation channel assignment
-    SetFlagIniSet ( IniXMLDocument, "client", "reverblchan",
-        pClient->IsReverbOnLeftChan() );
-
-    // sound card selection
-    SetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
-        pClient->GetSndCrdDev() );
-
-    // sound card left input channel mapping
-    SetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch",
-        pClient->GetSndCrdLeftInputChannel() );
-
-    // sound card right input channel mapping
-    SetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch",
-        pClient->GetSndCrdRightInputChannel() );
-
-    // sound card left output channel mapping
-    SetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch",
-        pClient->GetSndCrdLeftOutputChannel() );
-
-    // sound card right output channel mapping
-    SetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch",
-        pClient->GetSndCrdRightOutputChannel() );
-
-    // sound card preferred buffer size index
-    SetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx",
-        pClient->GetSndCrdPrefFrameSizeFactor() );
-
-    // automatic network jitter buffer size setting
-    SetFlagIniSet ( IniXMLDocument, "client", "autojitbuf",
-        pClient->GetDoAutoSockBufSize() );
-
-    // network jitter buffer size
-    SetNumericIniSet ( IniXMLDocument, "client", "jitbuf",
-        pClient->GetSockBufNumFrames() );
-
-    // flag whether the chat window shall be opened on a new chat message
-    SetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage",
-        pClient->GetOpenChatOnNewMessage() );
-
-    // GUI design
-    SetNumericIniSet ( IniXMLDocument, "client", "guidesign",
-        static_cast<int> ( pClient->GetGUIDesign() ) );
-
-    // flag whether using high quality audio or not
-    SetFlagIniSet ( IniXMLDocument, "client", "highqualityaudio",
-        pClient->GetCELTHighQuality() );
-
-    // flag whether stereo mode is used
-    SetFlagIniSet ( IniXMLDocument, "client", "stereoaudio",
-        pClient->GetUseStereo() );
+        // country
+        SetNumericIniSet ( IniXMLDocument, "server", "country",
+            static_cast<int> ( pServer->GetServerCountry() ) );
+    }
 
     // prepare file name for storing initialization data in XML file and store
     // XML data in file
@@ -274,6 +318,8 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     }
 }
 
+
+// Help functions **************************************************************
 QString CSettings::GetIniFileNameWithPath ( const QString& sFileName )
 {
     // return the file name with complete path, take care if given file name is
@@ -297,7 +343,14 @@ QString CSettings::GetIniFileNameWithPath ( const QString& sFileName )
         }
 
         // append the actual file name
-        sCurFileName = sConfigDir + "/" + DEFAULT_INI_FILE_NAME;
+        if ( bIsClient )
+        {
+            sCurFileName = sConfigDir + "/" + DEFAULT_INI_FILE_NAME;
+        }
+        else
+        {
+            sCurFileName = sConfigDir + "/" + DEFAULT_INI_FILE_NAME_SERVER;
+        }
     }
 
     return sCurFileName;

@@ -126,6 +126,22 @@ public:
                           CVector<int>&          veciJitBufNumFrames,
                           CVector<int>&          veciNetwFrameSizeFact );
 
+    void SetServerName ( const QString& strNewName )
+        { ServerListManager.SetServerName ( strNewName ); }
+
+    QString GetServerName() { return ServerListManager.GetServerName(); }
+
+    void SetServerCity ( const QString& strNewCity )
+        { ServerListManager.SetServerCity ( strNewCity ); }
+
+    QString GetServerCity() { return ServerListManager.GetServerCity(); }
+
+    void SetServerCountry ( const QLocale::Country eNewCountry )
+        { ServerListManager.SetServerCountry ( eNewCountry ); }
+
+    QLocale::Country GetServerCountry()
+        { return ServerListManager.GetServerCountry(); }
+
 protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum )

@@ -349,6 +349,10 @@ int main ( int argc, char** argv )
 
             if ( bUseGUI )
             {
+                // load settings from init-file
+                CSettings Settings ( &Server );
+                Settings.Load ( strIniFileName );
+
                 // GUI object for the server
                 CLlconServerDlg ServerDlg ( &Server, 0 );
 
@@ -359,6 +363,9 @@ int main ( int argc, char** argv )
                 // show dialog
                 ServerDlg.show();
                 app.exec();
+
+                // save settings to init-file
+                Settings.Save ( strIniFileName );
             }
             else
             {

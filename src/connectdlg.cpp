@@ -259,10 +259,11 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
 void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item,
                                                   int )
 {
-    // if a server list item was double clicked, close dialog and connect
+    // if a server list item was double clicked, it is the same as if the
+    // connect button was clicked
     if ( Item != 0 )
     {
-        close();
+        OnConnectButtonClicked();
     }
 }
 

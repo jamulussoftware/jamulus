@@ -240,8 +240,11 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         {
             strLocation += ", ";
         }
-        strLocation +=
-            QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
+        if ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry )
+        {
+            strLocation +=
+                QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
+        }
 
         pNewListViewItem->setText ( 3, strLocation );
 

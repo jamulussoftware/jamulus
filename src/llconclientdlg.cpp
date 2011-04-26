@@ -748,20 +748,25 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
             if ( !strSelectedAddress.isEmpty() &&
                  !ConnectDlg.GetServerListItemWasChosen() )
             {
-                CVector<QString> vstrTempList ( 0 );
+                CVector<QString> vstrTempList ( MAX_NUM_SERVER_ADDR_ITEMS, "" );
 
                 // store the new address in the current server storage list at
                 // the top, make sure we do not have more than allowed stored
                 // servers
-                vstrTempList.Add ( strSelectedAddress );
-                for ( int iIdx = 0; ( iIdx < pClient->vstrIPAddress.Size() ) &&
-                                    ( iIdx < ( MAX_NUM_SERVER_ADDR_ITEMS - 1 ) ); iIdx++ )
+                vstrTempList[0]  = strSelectedAddress;
+                int iTempListCnt = 1;
+
+                for ( int iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
                 {
                     // only add old server address if it is not the same as the
                     // selected one
-                    if ( pClient->vstrIPAddress[iIdx].compare ( strSelectedAddress ) )
+                    if ( ( pClient->vstrIPAddress[iIdx].compare ( strSelectedAddress ) ) &&
+                         ( iTempListCnt < MAX_NUM_SERVER_ADDR_ITEMS ) )
                     {
-                        vstrTempList.Add ( pClient->vstrIPAddress[iIdx] );
+                        vstrTempList[iTempListCnt] =
+                            pClient->vstrIPAddress[iIdx];
+
+                        iTempListCnt++;
                     }
                 }
 

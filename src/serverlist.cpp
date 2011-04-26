@@ -62,7 +62,7 @@ CServerListManager::CServerListManager ( const QString& sNCentServAddr,
         CHostAddress(),
         "",
         "",
-        QLocale::AnyCountry,
+        QLocale::system().country(),
         "",
         USED_NUM_CHANNELS,
         false );

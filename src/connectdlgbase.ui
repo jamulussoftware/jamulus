@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>584</width>
-    <height>256</height>
+    <width>464</width>
+    <height>255</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -34,7 +34,7 @@
      </column>
      <column>
       <property name="text" >
-       <string>Country</string>
+       <string>Ping Time</string>
       </property>
      </column>
      <column>
@@ -44,12 +44,7 @@
      </column>
      <column>
       <property name="text" >
-       <string>Ping Time</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
-       <string>Address</string>
+       <string>Location</string>
       </property>
      </column>
     </widget>

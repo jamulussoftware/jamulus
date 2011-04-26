@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>580</width>
-    <height>315</height>
+    <width>588</width>
+    <height>438</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -19,21 +19,6 @@
    <bool>true</bool>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="spacing" >
-    <number>6</number>
-   </property>
-   <property name="leftMargin" >
-    <number>9</number>
-   </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>9</number>
-   </property>
    <item>
     <widget class="QTreeWidget" name="ListViewClients" >
      <property name="rootIsDecorated" >
@@ -64,6 +49,81 @@
        <string>Block Size Out/ms</string>
       </property>
      </column>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="CheckBoxRegisterServer" >
+     <property name="text" >
+      <string>Register Server</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" >
+     <item>
+      <widget class="QLabel" name="LabelCentralServerAddress" >
+       <property name="text" >
+        <string>Central Server Address:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="CheckBoxDefaultCentralServer" >
+       <property name="text" >
+        <string>Default</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="LineEditCentralServerAddress" />
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Server Info</string>
+     </property>
+     <layout class="QHBoxLayout" >
+      <item>
+       <layout class="QVBoxLayout" >
+        <item>
+         <widget class="QLabel" name="LabelServerName" >
+          <property name="text" >
+           <string>Name</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="LabelLocationCity" >
+          <property name="text" >
+           <string>Location: City</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="LabelLocationCountry" >
+          <property name="text" >
+           <string>Location: Country</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" >
+        <item>
+         <widget class="QLineEdit" name="LineEditServerName" />
+        </item>
+        <item>
+         <widget class="QLineEdit" name="LineEditLocationCity" />
+        </item>
+        <item>
+         <widget class="QComboBox" name="ComboBoxLocationCountry" />
+        </item>
+       </layout>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>

@@ -49,6 +49,37 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
         vecpListViewItems[i] = new CServerListViewItem ( ListViewClients );
         vecpListViewItems[i]->setHidden ( true );
     }
+    
+    // update server name line edit
+    LineEditServerName->setText ( pServer->GetServerName() );
+
+    // update server city line edit
+    LineEditLocationCity->setText ( pServer->GetServerCity() );
+
+    // load country combo box with all available countries
+    ComboBoxLocationCountry->setInsertPolicy ( QComboBox::NoInsert );
+    ComboBoxLocationCountry->clear();
+
+    for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry );
+          iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
+    {
+        // add all countries except of the "Default" country
+        if ( static_cast<QLocale::Country> ( iCurCntry ) != QLocale::AnyCountry )
+        {
+            // store the country enum index together with the string (this is
+            // important since we sort the combo box items later on)
+            ComboBoxLocationCountry->addItem ( QLocale::countryToString (
+                static_cast<QLocale::Country> ( iCurCntry ) ), iCurCntry );
+        }
+    }
+
+    // sort country combo box items in alphabetical order
+    ComboBoxLocationCountry->model()->sort ( 0, Qt::AscendingOrder );
+
+    // select current country
+    ComboBoxLocationCountry->setCurrentIndex (
+        ComboBoxLocationCountry->findData (
+        static_cast<int> ( pServer->GetServerCountry() ) ) );
 
 
     // Main menu bar -----------------------------------------------------------

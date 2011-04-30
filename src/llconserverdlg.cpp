@@ -49,7 +49,11 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
         vecpListViewItems[i] = new CServerListViewItem ( ListViewClients );
         vecpListViewItems[i]->setHidden ( true );
     }
-    
+
+    // update central server name line edit
+    LineEditCentralServerAddress->setText (
+        pServer->GetServerListCentralServerAddress() );
+
     // update server name line edit
     LineEditServerName->setText ( pServer->GetServerName() );
 
@@ -81,6 +85,16 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
         ComboBoxLocationCountry->findData (
         static_cast<int> ( pServer->GetServerCountry() ) ) );
 
+    // update register server check box
+    if ( pServer->GetServerListEnabled() )
+    {
+        cbRegisterServer->setCheckState ( Qt::Checked );
+    }
+    else
+    {
+        cbRegisterServer->setCheckState ( Qt::Unchecked );
+    }
+
 
     // Main menu bar -----------------------------------------------------------
     pMenu = new QMenuBar ( this );
@@ -91,6 +105,25 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
 
 
     // Connections -------------------------------------------------------------
+    // check boxes
+    QObject::connect ( cbRegisterServer, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnRegisterServerStateChanged ( int ) ) );
+
+    // line edits
+    QObject::connect ( LineEditCentralServerAddress,
+        SIGNAL ( textChanged ( const QString& ) ),
+        this, SLOT ( OnLineEditCentralServerAddressTextChanged ( const QString& ) ) );
+
+    QObject::connect ( LineEditServerName, SIGNAL ( textChanged ( const QString& ) ),
+        this, SLOT ( OnLineEditServerNameTextChanged ( const QString& ) ) );
+
+    QObject::connect ( LineEditLocationCity, SIGNAL ( textChanged ( const QString& ) ),
+        this, SLOT ( OnLineEditLocationCityTextChanged ( const QString& ) ) );
+
+    // combo boxes
+    QObject::connect ( ComboBoxLocationCountry, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnComboBoxLocationCountryActivated ( int ) ) );
+
     // timers
     QObject::connect ( &Timer, SIGNAL ( timeout() ), this, SLOT ( OnTimer() ) );
 
@@ -98,6 +131,52 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
     // Timers ------------------------------------------------------------------
     // start timer for GUI controls
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
+}
+
+void CLlconServerDlg::OnRegisterServerStateChanged ( int value )
+{
+    const bool bEnabled = ( value == Qt::Checked );
+
+    // if register server is not enabled, we disable all the configuration
+    // controls for the server list
+    LabelCentralServerAddress->setEnabled    ( bEnabled );
+    cbDefaultCentralServer->setEnabled       ( bEnabled );
+    LineEditCentralServerAddress->setEnabled ( bEnabled );
+    GroupBoxServerInfo->setEnabled           ( bEnabled );
+
+    // apply new setting to the server and update it
+    pServer->SetServerListEnabled ( bEnabled );
+    pServer->UpdateServerList();
+}
+
+void CLlconServerDlg::OnLineEditCentralServerAddressTextChanged ( const QString& strNewAddr )
+{
+    // apply new setting to the server and update it
+    pServer->SetServerListCentralServerAddress ( strNewAddr );
+    pServer->UpdateServerList();
+}
+
+void CLlconServerDlg::OnLineEditServerNameTextChanged ( const QString& strNewName )
+{
+    // apply new setting to the server and update it
+    pServer->SetServerName ( strNewName );
+    pServer->UpdateServerList();
+}
+
+void CLlconServerDlg::OnLineEditLocationCityTextChanged ( const QString& strNewCity )
+{
+    // apply new setting to the server and update it
+    pServer->SetServerCity ( strNewCity );
+    pServer->UpdateServerList();
+}
+
+void CLlconServerDlg::OnComboBoxLocationCountryActivated ( int iCntryListItem )
+{
+    // apply new setting to the server and update it
+    pServer->SetServerCountry ( static_cast<QLocale::Country> (
+        ComboBoxLocationCountry->itemData ( iCntryListItem ).toInt() ) );
+
+    pServer->UpdateServerList();
 }
 
 void CLlconServerDlg::OnTimer()

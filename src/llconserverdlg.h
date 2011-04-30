@@ -70,5 +70,10 @@ protected:
     void UpdateSliderNetBuf();
 
 public slots:
+    void OnRegisterServerStateChanged ( int value );
+    void OnLineEditCentralServerAddressTextChanged ( const QString& strNewAddr );
+    void OnLineEditServerNameTextChanged ( const QString& strNewName );
+    void OnLineEditLocationCityTextChanged ( const QString& strNewCity );
+    void OnComboBoxLocationCountryActivated ( int iCntryListItem );
     void OnTimer();
 };

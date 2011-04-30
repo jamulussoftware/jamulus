@@ -126,6 +126,21 @@ public:
                           CVector<int>&          veciJitBufNumFrames,
                           CVector<int>&          veciNetwFrameSizeFact );
 
+
+    // Server list management --------------------------------------------------
+    void UpdateServerList() { ServerListManager.Update(); }
+
+    void SetServerListEnabled ( const bool bState )
+        { ServerListManager.SetEnabled ( bState ); }
+
+    bool GetServerListEnabled() { return ServerListManager.GetEnabled(); }
+
+    void SetServerListCentralServerAddress ( const QString& sNCentServAddr )
+        { ServerListManager.SetCentralServerAddress ( sNCentServAddr ); }
+
+    QString GetServerListCentralServerAddress()
+        { return ServerListManager.GetCentralServerAddress(); }
+
     void SetServerName ( const QString& strNewName )
         { ServerListManager.SetServerName ( strNewName ); }
 

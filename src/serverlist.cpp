@@ -29,27 +29,10 @@
 CServerListManager::CServerListManager ( const QString& sNCentServAddr,
                                          const QString& strServerInfo,
                                          CProtocol*     pNConLProt )
-    : strCentralServerAddress ( sNCentServAddr ),
-      pConnLessProtocol ( pNConLProt )
+    : pConnLessProtocol ( pNConLProt )
 {
-    // per definition: If the central server address is empty, the server list
-    // is disabled.
-    // per definition: If we are in server mode and the central server address
-    // is the localhost address, we are in central server mode. For the central
-    // server, the server list is always enabled.
-    if ( !strCentralServerAddress.isEmpty() )
-    {
-        bIsCentralServer =
-            ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
-              !strCentralServerAddress.compare ( "127.0.0.1" ) );
-
-        bEnabled = true;
-    }
-    else
-    {
-        bIsCentralServer = false;
-        bEnabled         = true;
-    }
+    // set the central server address
+    SetCentralServerAddress ( sNCentServAddr );
 
     // per definition, the very first entry is this server and this entry will
     // never be deleted
@@ -105,11 +88,35 @@ CServerListManager::CServerListManager ( const QString& sNCentServAddr,
         this, SLOT ( OnTimerRegistering() ) );
 }
 
-void CServerListManager::SetEnabled ( const bool bState )
+void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr )
 {
     QMutexLocker locker ( &Mutex );
 
-    bEnabled = bState;
+    strCentralServerAddress = sNCentServAddr;
+
+    // per definition: If the central server address is empty, the server list
+    // is disabled.
+    // per definition: If we are in server mode and the central server address
+    // is the localhost address, we are in central server mode. For the central
+    // server, the server list is always enabled.
+    if ( !strCentralServerAddress.isEmpty() )
+    {
+        bIsCentralServer =
+            ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
+              !strCentralServerAddress.compare ( "127.0.0.1" ) );
+
+        bEnabled = true;
+    }
+    else
+    {
+        bIsCentralServer = false;
+        bEnabled         = true;
+    }
+}
+
+void CServerListManager::Update()
+{
+    QMutexLocker locker ( &Mutex );
 
     if ( bEnabled )
     {

@@ -353,6 +353,10 @@ int main ( int argc, char** argv )
                 CSettings Settings ( &Server );
                 Settings.Load ( strIniFileName );
 
+                // update server list AFTER restoring the settings from the
+                // settings file
+                Server.UpdateServerList();
+
                 // GUI object for the server
                 CLlconServerDlg ServerDlg ( &Server, 0 );
 
@@ -369,6 +373,9 @@ int main ( int argc, char** argv )
             }
             else
             {
+                // update serverlist
+                Server.UpdateServerList();
+
                 // only start application without using the GUI
                 tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
 

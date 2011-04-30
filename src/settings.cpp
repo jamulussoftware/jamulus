@@ -193,11 +193,21 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     {
         // server:
 
+        // central server address
+        pServer->SetServerListCentralServerAddress (
+            GetIniSetting ( IniXMLDocument, "server", "centralservaddr" ) );
+
+        // server list enabled flag
+        if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) )
+        {
+            pServer->SetServerListEnabled ( bValue );
+        }
+
         // name
         pServer->SetServerName ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
 
         // city
-        pServer->SetServerCity ( GetIniSetting ( IniXMLDocument, "server", "name" ) );
+        pServer->SetServerCity ( GetIniSetting ( IniXMLDocument, "server", "city" ) );
 
         // country
         if ( GetNumericIniSet ( IniXMLDocument, "server", "country",
@@ -294,6 +304,14 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     else
     {
         // server:
+
+        // central server address
+        PutIniSetting ( IniXMLDocument, "server", "centralservaddr",
+            pServer->GetServerListCentralServerAddress() );
+
+        // server list enabled flag
+        SetFlagIniSet ( IniXMLDocument, "server", "servlistenabled",
+            pServer->GetServerListEnabled() );
 
         // name
         PutIniSetting ( IniXMLDocument, "server", "name",

@@ -125,8 +125,15 @@ public:
                          const QString& strServerInfo,
                          CProtocol*     pNConLProt );
 
-    void SetEnabled ( const bool bState );
+    // the update has to be called if any change to the server list
+    // properties was done
+    void Update();
+
+    void SetEnabled ( const bool bState ) { bEnabled = bState; }
     bool GetEnabled() const { return bEnabled; }
+
+    void SetCentralServerAddress ( const QString sNCentServAddr );
+    QString GetCentralServerAddress() { return strCentralServerAddress; }
 
     bool GetIsCentralServer() const { return bIsCentralServer; }
 

@@ -52,7 +52,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="CheckBoxRegisterServer" >
+    <widget class="QCheckBox" name="cbRegisterServer" >
      <property name="text" >
       <string>Register Server</string>
      </property>
@@ -68,7 +68,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QCheckBox" name="CheckBoxDefaultCentralServer" >
+      <widget class="QCheckBox" name="cbDefaultCentralServer" >
        <property name="text" >
         <string>Default</string>
        </property>
@@ -80,7 +80,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox" >
+    <widget class="QGroupBox" name="GroupBoxServerInfo" >
      <property name="title" >
       <string>Server Info</string>
      </property>

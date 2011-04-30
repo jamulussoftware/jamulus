@@ -141,6 +141,12 @@ public:
     QString GetServerListCentralServerAddress()
         { return ServerListManager.GetCentralServerAddress(); }
 
+    void SetUseDefaultCentralServerAddress ( const bool bNUDCSeAddr )
+        { ServerListManager.SetUseDefaultCentralServerAddress ( bNUDCSeAddr ); }
+
+    bool GetUseDefaultCentralServerAddress()
+        { return ServerListManager.GetUseDefaultCentralServerAddress(); }
+
     void SetServerName ( const QString& strNewName )
         { ServerListManager.SetServerName ( strNewName ); }
 

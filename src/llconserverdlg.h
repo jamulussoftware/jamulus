@@ -67,12 +67,12 @@ protected:
     QMenuBar*                     pMenu;
 
     virtual void customEvent ( QEvent* Event );
-    void         UpdateServerInfosDependency ( const bool bState );
-
+    void         UpdateGUIDependencies();
 
 public slots:
     void OnRegisterServerStateChanged ( int value );
-    void OnLineEditCentralServerAddressTextChanged ( const QString& strNewAddr );
+    void OnDefaultCentralServerStateChanged ( int value );
+    void OnLineEditCentralServerAddressEditingFinished();
     void OnLineEditServerNameTextChanged ( const QString& strNewName );
     void OnLineEditLocationCityTextChanged ( const QString& strNewCity );
     void OnComboBoxLocationCountryActivated ( int iCntryListItem );

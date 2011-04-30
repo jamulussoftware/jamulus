@@ -31,6 +31,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 {
     setupUi ( this );
 
+
     // Add help text to controls -----------------------------------------------
     // jitter buffer
     QString strJitterBufferSize = tr ( "<b>Jitter Buffer Size:</b> The jitter "

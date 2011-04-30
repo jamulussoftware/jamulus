@@ -135,6 +135,12 @@ public:
     void SetCentralServerAddress ( const QString sNCentServAddr );
     QString GetCentralServerAddress() { return strCentralServerAddress; }
 
+    void SetUseDefaultCentralServerAddress ( const bool bNUDCSeAddr )
+        { bUseDefaultCentralServerAddress = bNUDCSeAddr; }
+
+    bool GetUseDefaultCentralServerAddress()
+        { return bUseDefaultCentralServerAddress; }
+
     bool GetIsCentralServer() const { return bIsCentralServer; }
 
     void RegisterServer ( const CHostAddress&    InetAddr,
@@ -169,6 +175,7 @@ protected:
     QString                 strCentralServerAddress;
     bool                    bEnabled;
     bool                    bIsCentralServer;
+    bool                    bUseDefaultCentralServerAddress;
 
     CProtocol*              pConnLessProtocol;
 

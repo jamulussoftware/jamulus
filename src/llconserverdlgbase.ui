@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>588</width>
-    <height>438</height>
+    <height>378</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -68,14 +68,14 @@
       </widget>
      </item>
      <item>
+      <widget class="QLineEdit" name="LineEditCentralServerAddress" />
+     </item>
+     <item>
       <widget class="QCheckBox" name="cbDefaultCentralServer" >
        <property name="text" >
         <string>Default</string>
        </property>
       </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="LineEditCentralServerAddress" />
      </item>
     </layout>
    </item>

@@ -55,6 +55,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 {
     setupUi ( this );
 
+
     // Add help text to controls -----------------------------------------------
     // input level meter
     QString strInpLevH = tr ( "<b>Input Level Meter:</b> The input level "

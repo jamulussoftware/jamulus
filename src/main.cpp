@@ -349,6 +349,11 @@ int main ( int argc, char** argv )
 
             if ( bUseGUI )
             {
+                // special case for the GUI mode: as the default we want to use
+                // the default central server address (if not given in the
+                // settings file)
+                Server.SetUseDefaultCentralServerAddress ( true );
+
                 // load settings from init-file
                 CSettings Settings ( &Server );
                 Settings.Load ( strIniFileName );

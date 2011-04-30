@@ -31,6 +31,75 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
 {
     setupUi ( this );
 
+
+    // Add help text to controls -----------------------------------------------
+    // client list
+    ListViewClients->setWhatsThis ( tr ( "<b>Client List:</b> The client list "
+        "shows all clients which are currently connected to this server. Some "
+        "informations about the clients like the IP address, name, buffer "
+        "state are given for each connected client." ) );
+
+    ListViewClients->setAccessibleName ( tr ( "Connected clients list view" ) );
+
+    // register server flag
+    cbRegisterServer->setWhatsThis ( tr ( "<b>Register Server Status:</b> If "
+        "the register server check box is checked, this server registers "
+        "itself at the central server so that all " ) + APP_NAME +
+        tr ( " users can see the server in the connect dialog server list and "
+        "connect to it. The registering of the server is renewed periodically "
+        "to make sure that all servers in the connect dialog server list are "
+        "actually available." ) );
+
+    // central server address
+    QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
+        "Central server address is the IP address or URL of the central server "
+        "at which this server is registered. If the Default check box is "
+        "checked, the default central server address is shown read-only." );
+
+    LabelCentralServerAddress->setWhatsThis    ( strCentrServAddr );
+    cbDefaultCentralServer->setWhatsThis       ( strCentrServAddr );
+    LineEditCentralServerAddress->setWhatsThis ( strCentrServAddr );
+
+    cbDefaultCentralServer->setAccessibleName (
+        tr ( "Default central server check box" ) );
+
+    LineEditCentralServerAddress->setAccessibleName (
+        tr ( "Central server address line edit" ) );
+
+    // server name
+    QString strServName = tr ( "<b>Server Name:</b> The server name identifies "
+        "your server in the connect dialog server list at the clients. If no "
+        "name is given, the IP address is shown instead." );
+
+    LabelServerName->setWhatsThis    ( strServName );
+    LineEditServerName->setWhatsThis ( strServName );
+
+    LineEditServerName->setAccessibleName ( tr ( "Server name line edit" ) );
+
+    // location city
+    QString strLocCity = tr ( "<b>Location City:</b> The city in which this "
+        "server is located can be set here. If a city name is entered, it "
+        "will be shown in the connect dialog server list at the clients." );
+
+    LabelLocationCity->setWhatsThis    ( strLocCity );
+    LineEditLocationCity->setWhatsThis ( strLocCity );
+
+    LineEditLocationCity->setAccessibleName ( tr (
+        "City where the server is located line edit" ) );
+
+    // location country
+    QString strLocCountry = tr ( "<b>Location country:</b> The country in "
+        "which this server is located can be set here. If a country is "
+        "entered, it will be shown in the connect dialog server list at the "
+        "clients." );
+
+    LabelLocationCountry->setWhatsThis    ( strLocCountry );
+    ComboBoxLocationCountry->setWhatsThis ( strLocCountry );
+
+    ComboBoxLocationCountry->setAccessibleName ( tr (
+        "Country where the server is located combo box" ) );
+
+
     // set text for version and application name
     TextLabelNameVersion->setText ( QString ( APP_NAME ) +
         tr ( " server " ) + QString ( VERSION ) );
@@ -53,6 +122,16 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
     // update central server name line edit
     LineEditCentralServerAddress->setText (
         pServer->GetServerListCentralServerAddress() );
+
+    // update default central server address check box
+    if ( pServer->GetUseDefaultCentralServerAddress() )
+    {
+        cbDefaultCentralServer->setCheckState ( Qt::Checked );
+    }
+    else
+    {
+        cbDefaultCentralServer->setCheckState ( Qt::Unchecked );
+    }
 
     // update server name line edit
     LineEditServerName->setText ( pServer->GetServerName() );
@@ -86,9 +165,7 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
         static_cast<int> ( pServer->GetServerCountry() ) ) );
 
     // update register server check box
-    const bool bCurSerListEnabled = pServer->GetServerListEnabled();
-
-    if ( bCurSerListEnabled )
+    if ( pServer->GetServerListEnabled() )
     {
         cbRegisterServer->setCheckState ( Qt::Checked );
     }
@@ -97,8 +174,8 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
         cbRegisterServer->setCheckState ( Qt::Unchecked );
     }
 
-    // update GUI dependency
-    UpdateServerInfosDependency ( bCurSerListEnabled );
+    // update GUI dependencies
+    UpdateGUIDependencies();
 
 
     // Main menu bar -----------------------------------------------------------
@@ -114,10 +191,13 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
     QObject::connect ( cbRegisterServer, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnRegisterServerStateChanged ( int ) ) );
 
+    QObject::connect ( cbDefaultCentralServer, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnDefaultCentralServerStateChanged ( int ) ) );
+
     // line edits
     QObject::connect ( LineEditCentralServerAddress,
-        SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnLineEditCentralServerAddressTextChanged ( const QString& ) ) );
+        SIGNAL ( editingFinished() ),
+        this, SLOT ( OnLineEditCentralServerAddressEditingFinished() ) );
 
     QObject::connect ( LineEditServerName, SIGNAL ( textChanged ( const QString& ) ),
         this, SLOT ( OnLineEditServerNameTextChanged ( const QString& ) ) );
@@ -138,27 +218,33 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
 }
 
-void CLlconServerDlg::OnRegisterServerStateChanged ( int value )
+void CLlconServerDlg::OnDefaultCentralServerStateChanged ( int value )
 {
-    const bool bEnabled = ( value == Qt::Checked );
-
-    // update GUI dependency
-    UpdateServerInfosDependency ( bEnabled );
-
     // apply new setting to the server and update it
-    pServer->SetServerListEnabled ( bEnabled );
+    pServer->SetUseDefaultCentralServerAddress ( value == Qt::Checked );
     pServer->UpdateServerList();
+
+    // update GUI dependencies
+    UpdateGUIDependencies();
 }
 
-void CLlconServerDlg::OnLineEditCentralServerAddressTextChanged ( const QString& strNewAddr )
+void CLlconServerDlg::OnRegisterServerStateChanged ( int value )
 {
     // apply new setting to the server and update it
-    pServer->SetServerListCentralServerAddress ( strNewAddr );
+    pServer->SetServerListEnabled ( value == Qt::Checked );
+    pServer->UpdateServerList();
 
-// TODO
-// only apply this in case the focus is lost and the name has actually changed!
-pServer->UpdateServerList();
+    // update GUI dependencies
+    UpdateGUIDependencies();
+}
 
+void CLlconServerDlg::OnLineEditCentralServerAddressEditingFinished()
+{
+    // apply new setting to the server and update it
+    pServer->SetServerListCentralServerAddress (
+        LineEditCentralServerAddress->text() );
+
+    pServer->UpdateServerList();
 }
 
 void CLlconServerDlg::OnLineEditServerNameTextChanged ( const QString& strNewName )
@@ -250,14 +336,41 @@ void CLlconServerDlg::OnTimer()
     ListViewMutex.unlock();
 }
 
-void CLlconServerDlg::UpdateServerInfosDependency ( const bool bState )
+void CLlconServerDlg::UpdateGUIDependencies()
 {
+    // get the states which define the GUI dependencies from the server
+    const bool bCurSerListEnabled = pServer->GetServerListEnabled();
+
+    const bool bCurUseDefCentServAddr =
+        pServer->GetUseDefaultCentralServerAddress();
+
     // if register server is not enabled, we disable all the configuration
     // controls for the server list
-    LabelCentralServerAddress->setEnabled    ( bState );
-    cbDefaultCentralServer->setEnabled       ( bState );
-    LineEditCentralServerAddress->setEnabled ( bState );
-    GroupBoxServerInfo->setEnabled           ( bState );
+    cbDefaultCentralServer->setEnabled       ( bCurSerListEnabled );
+    LineEditCentralServerAddress->setEnabled ( bCurSerListEnabled );
+    GroupBoxServerInfo->setEnabled           ( bCurSerListEnabled );
+
+    // If the default central server address is enabled, the line edit shows
+    // the default server and is not editable. Make sure the line edit does not
+    // fire signals when we update the text.
+    LineEditCentralServerAddress->blockSignals ( true );
+    {
+        if ( bCurUseDefCentServAddr )
+        {
+            LineEditCentralServerAddress->setText ( DEFAULT_SERVER_ADDRESS );
+        }
+        else
+        {
+            LineEditCentralServerAddress->setText (
+                pServer->GetServerListCentralServerAddress() );
+        }
+    }
+    LineEditCentralServerAddress->blockSignals ( false );
+
+    // the line edit of the central server address is only enabled, if the
+    // server list is enabled and not the default address is used
+    LineEditCentralServerAddress->setEnabled (
+        !bCurUseDefCentServAddr && bCurSerListEnabled );
 }
 
 void CLlconServerDlg::customEvent ( QEvent* Event )

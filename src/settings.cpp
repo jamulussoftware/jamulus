@@ -197,6 +197,12 @@ void CSettings::ReadIniFile ( const QString& sFileName )
         pServer->SetServerListCentralServerAddress (
             GetIniSetting ( IniXMLDocument, "server", "centralservaddr" ) );
 
+        // use default central server address flag
+        if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
+        {
+            pServer->SetUseDefaultCentralServerAddress ( bValue );
+        }
+
         // server list enabled flag
         if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) )
         {
@@ -308,6 +314,10 @@ void CSettings::WriteIniFile ( const QString& sFileName )
         // central server address
         PutIniSetting ( IniXMLDocument, "server", "centralservaddr",
             pServer->GetServerListCentralServerAddress() );
+
+        // use default central server address flag
+        SetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr",
+            pServer->GetUseDefaultCentralServerAddress() );
 
         // server list enabled flag
         SetFlagIniSet ( IniXMLDocument, "server", "servlistenabled",

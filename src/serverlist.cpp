@@ -29,7 +29,8 @@
 CServerListManager::CServerListManager ( const QString& sNCentServAddr,
                                          const QString& strServerInfo,
                                          CProtocol*     pNConLProt )
-    : pConnLessProtocol ( pNConLProt )
+    : bUseDefaultCentralServerAddress ( false ),
+      pConnLessProtocol               ( pNConLProt )
 {
     // set the central server address
     SetCentralServerAddress ( sNCentServAddr );
@@ -294,6 +295,17 @@ void CServerListManager::OnTimerRegistering()
 
     if ( !bIsCentralServer && bEnabled )
     {
+        // get the correct central server address
+        QString strCurCentrServAddr;
+        if ( bUseDefaultCentralServerAddress )
+        {
+            strCurCentrServAddr = DEFAULT_SERVER_ADDRESS;
+        }
+        else
+        {
+            strCurCentrServAddr = strCentralServerAddress;
+        }
+
         // For the slave server, the slave server properties are store in the
         // very first item in the server list (which is actually no server list
         // but just one item long for the slave server).
@@ -301,7 +313,7 @@ void CServerListManager::OnTimerRegistering()
         // it is an URL of a dynamic IP address, the IP address might have
         // changed in the meanwhile.
         CHostAddress HostAddress;
-        if ( LlconNetwUtil().ParseNetworkAddress ( strCentralServerAddress,
+        if ( LlconNetwUtil().ParseNetworkAddress ( strCurCentrServAddr,
                                                    HostAddress ) )
         {
             pConnLessProtocol->CreateCLRegisterServerMes ( HostAddress,

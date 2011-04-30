@@ -31,7 +31,8 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
 {
     setupUi ( this );
 
-    // add help text to controls -----------------------------------------------
+
+    // Add help text to controls -----------------------------------------------
     lineEditLocalInputText->setAccessibleName ( "New chat text edit box" );
     TextViewChatWindow->setAccessibleName ( "Chat history" );
 

@@ -86,7 +86,9 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
         static_cast<int> ( pServer->GetServerCountry() ) ) );
 
     // update register server check box
-    if ( pServer->GetServerListEnabled() )
+    const bool bCurSerListEnabled = pServer->GetServerListEnabled();
+
+    if ( bCurSerListEnabled )
     {
         cbRegisterServer->setCheckState ( Qt::Checked );
     }
@@ -94,6 +96,9 @@ CLlconServerDlg::CLlconServerDlg ( CServer* pNServP, QWidget* parent )
     {
         cbRegisterServer->setCheckState ( Qt::Unchecked );
     }
+
+    // update GUI dependency
+    UpdateServerInfosDependency ( bCurSerListEnabled );
 
 
     // Main menu bar -----------------------------------------------------------
@@ -137,12 +142,8 @@ void CLlconServerDlg::OnRegisterServerStateChanged ( int value )
 {
     const bool bEnabled = ( value == Qt::Checked );
 
-    // if register server is not enabled, we disable all the configuration
-    // controls for the server list
-    LabelCentralServerAddress->setEnabled    ( bEnabled );
-    cbDefaultCentralServer->setEnabled       ( bEnabled );
-    LineEditCentralServerAddress->setEnabled ( bEnabled );
-    GroupBoxServerInfo->setEnabled           ( bEnabled );
+    // update GUI dependency
+    UpdateServerInfosDependency ( bEnabled );
 
     // apply new setting to the server and update it
     pServer->SetServerListEnabled ( bEnabled );
@@ -153,21 +154,43 @@ void CLlconServerDlg::OnLineEditCentralServerAddressTextChanged ( const QString&
 {
     // apply new setting to the server and update it
     pServer->SetServerListCentralServerAddress ( strNewAddr );
-    pServer->UpdateServerList();
+
+// TODO
+// only apply this in case the focus is lost and the name has actually changed!
+pServer->UpdateServerList();
+
 }
 
 void CLlconServerDlg::OnLineEditServerNameTextChanged ( const QString& strNewName )
 {
-    // apply new setting to the server and update it
-    pServer->SetServerName ( strNewName );
-    pServer->UpdateServerList();
+    // check length
+    if ( strNewName.length() <= MAX_LEN_SERVER_NAME )
+    {
+        // apply new setting to the server and update it
+        pServer->SetServerName ( strNewName );
+        pServer->UpdateServerList();
+    }
+    else
+    {
+        // text is too long, update control with shortend text
+        LineEditServerName->setText ( strNewName.left ( MAX_LEN_SERVER_NAME ) );
+    }
 }
 
 void CLlconServerDlg::OnLineEditLocationCityTextChanged ( const QString& strNewCity )
 {
-    // apply new setting to the server and update it
-    pServer->SetServerCity ( strNewCity );
-    pServer->UpdateServerList();
+    // check length
+    if ( strNewCity.length() <= MAX_LEN_SERVER_CITY )
+    {
+        // apply new setting to the server and update it
+        pServer->SetServerCity ( strNewCity );
+        pServer->UpdateServerList();
+    }
+    else
+    {
+        // text is too long, update control with shortend text
+        LineEditLocationCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
+    }
 }
 
 void CLlconServerDlg::OnComboBoxLocationCountryActivated ( int iCntryListItem )
@@ -225,6 +248,16 @@ void CLlconServerDlg::OnTimer()
         }
     }
     ListViewMutex.unlock();
+}
+
+void CLlconServerDlg::UpdateServerInfosDependency ( const bool bState )
+{
+    // if register server is not enabled, we disable all the configuration
+    // controls for the server list
+    LabelCentralServerAddress->setEnabled    ( bState );
+    cbDefaultCentralServer->setEnabled       ( bState );
+    LineEditCentralServerAddress->setEnabled ( bState );
+    GroupBoxServerInfo->setEnabled           ( bState );
 }
 
 void CLlconServerDlg::customEvent ( QEvent* Event )

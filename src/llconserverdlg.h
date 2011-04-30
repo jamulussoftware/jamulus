@@ -67,7 +67,8 @@ protected:
     QMenuBar*                     pMenu;
 
     virtual void customEvent ( QEvent* Event );
-    void UpdateSliderNetBuf();
+    void         UpdateServerInfosDependency ( const bool bState );
+
 
 public slots:
     void OnRegisterServerStateChanged ( int value );

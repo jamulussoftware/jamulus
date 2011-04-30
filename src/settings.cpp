@@ -374,16 +374,21 @@ QString CSettings::GetIniFileNameWithPath ( const QString& sFileName )
     return sCurFileName;
 }
 
-void CSettings::SetNumericIniSet ( QDomDocument& xmlFile, const QString& strSection,
-                                   const QString& strKey, const int iValue )
+void CSettings::SetNumericIniSet ( QDomDocument&  xmlFile,
+                                   const QString& strSection,
+                                   const QString& strKey,
+                                   const int      iValue )
 {
     // convert input parameter which is an integer to string and store
     PutIniSetting ( xmlFile, strSection, strKey, QString("%1").arg(iValue) );
 }
 
-bool CSettings::GetNumericIniSet ( const QDomDocument& xmlFile, const QString& strSection,
-                                   const QString& strKey, const int iRangeStart,
-                                   const int iRangeStop, int& iValue )
+bool CSettings::GetNumericIniSet ( const QDomDocument& xmlFile,
+                                   const QString&      strSection,
+                                   const QString&      strKey,
+                                   const int           iRangeStart,
+                                   const int           iRangeStop,
+                                   int&                iValue )
 {
     // init return value
     bool bReturn = false;
@@ -406,8 +411,10 @@ bool CSettings::GetNumericIniSet ( const QDomDocument& xmlFile, const QString& s
     return bReturn;
 }
 
-void CSettings::SetFlagIniSet ( QDomDocument& xmlFile, const QString& strSection,
-                                const QString& strKey, const bool bValue )
+void CSettings::SetFlagIniSet ( QDomDocument&  xmlFile,
+                                const QString& strSection,
+                                const QString& strKey,
+                                const bool     bValue )
 {
     // we encode true -> "1" and false -> "0"
     if ( bValue == true )
@@ -420,8 +427,10 @@ void CSettings::SetFlagIniSet ( QDomDocument& xmlFile, const QString& strSection
     }
 }
 
-bool CSettings::GetFlagIniSet ( const QDomDocument& xmlFile, const QString& strSection,
-                                const QString& strKey, bool& bValue )
+bool CSettings::GetFlagIniSet ( const QDomDocument& xmlFile,
+                                const QString&      strSection,
+                                const QString&      strKey,
+                                bool&               bValue )
 {
     // init return value
     bool bReturn = false;
@@ -447,8 +456,10 @@ bool CSettings::GetFlagIniSet ( const QDomDocument& xmlFile, const QString& strS
 
 
 // Init-file routines using XML ***********************************************
-QString CSettings::GetIniSetting ( const QDomDocument& xmlFile, const QString& sSection,
-                                   const QString& sKey, const QString& sDefaultVal )
+QString CSettings::GetIniSetting ( const QDomDocument& xmlFile,
+                                   const QString&      sSection,
+                                   const QString&      sKey,
+                                   const QString&      sDefaultVal )
 {
     // init return parameter with default value
     QString sResult ( sDefaultVal );
@@ -469,8 +480,10 @@ QString CSettings::GetIniSetting ( const QDomDocument& xmlFile, const QString& s
     return sResult;
 }
 
-void CSettings::PutIniSetting ( QDomDocument& xmlFile, const QString& sSection,
-                                const QString& sKey, const QString& sValue )
+void CSettings::PutIniSetting ( QDomDocument&  xmlFile,
+                                const QString& sSection,
+                                const QString& sKey,
+                                const QString& sValue )
 {
     // check if section is already there, if not then create it
     QDomElement xmlSection = xmlFile.firstChildElement ( sSection );

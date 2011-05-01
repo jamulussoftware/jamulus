@@ -84,7 +84,7 @@ protected:
     bool             bServerListItemWasChosen;
 
 public slots:
-    void OnServerListItemClicked ( QTreeWidgetItem* Item, int );
+    void OnServerListItemSelectionChanged();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnLineEditServerAddrEditTextChanged ( const QString& );
     void OnConnectButtonClicked();

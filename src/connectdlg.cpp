@@ -66,8 +66,8 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
     // Connections -------------------------------------------------------------
     // list view
     QObject::connect ( ListViewServers,
-        SIGNAL ( itemClicked ( QTreeWidgetItem*, int ) ),
-        this, SLOT ( OnServerListItemClicked ( QTreeWidgetItem*, int ) ) );
+        SIGNAL ( itemSelectionChanged() ),
+        this, SLOT ( OnServerListItemSelectionChanged() ) );
 
     QObject::connect ( ListViewServers,
         SIGNAL ( itemDoubleClicked ( QTreeWidgetItem*, int ) ),
@@ -268,16 +268,21 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
     TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
 }
 
-void CConnectDlg::OnServerListItemClicked ( QTreeWidgetItem* Item,
-                                            int )
+void CConnectDlg::OnServerListItemSelectionChanged()
 {
-    // if an item is clicked, copy the server name to the combo box
-    if ( Item != 0 )
+    // get current selected item (we are only interested in the first selcted
+    // item)
+    QList<QTreeWidgetItem*> CurSelListItemList =
+        ListViewServers->selectedItems();
+
+    // if an item is clicked/selected, copy the server name to the combo box
+    if ( CurSelListItemList.count() > 0 )
     {
         // make sure no signals are send when we change the text
         LineEditServerAddr->blockSignals ( true );
         {
-            LineEditServerAddr->setEditText ( Item->text ( 0 ) );
+            LineEditServerAddr->setEditText (
+                CurSelListItemList[0]->text ( 0 ) );
         }
         LineEditServerAddr->blockSignals ( false );
     }

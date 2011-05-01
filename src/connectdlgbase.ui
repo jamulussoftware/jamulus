@@ -54,7 +54,7 @@
      <item>
       <widget class="QLabel" name="TextLabelServerAddr" >
        <property name="text" >
-        <string>Server Address</string>
+        <string>Server Name/Address</string>
        </property>
        <property name="alignment" >
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

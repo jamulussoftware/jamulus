@@ -66,6 +66,10 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
     // Connections -------------------------------------------------------------
     // list view
     QObject::connect ( ListViewServers,
+        SIGNAL ( itemClicked ( QTreeWidgetItem*, int ) ),
+        this, SLOT ( OnServerListItemClicked ( QTreeWidgetItem*, int ) ) );
+
+    QObject::connect ( ListViewServers,
         SIGNAL ( itemDoubleClicked ( QTreeWidgetItem*, int ) ),
         this, SLOT ( OnServerListItemDoubleClicked ( QTreeWidgetItem*, int ) ) );
 
@@ -257,6 +261,16 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
     // the server list is filled now
     OnTimerPing();
     TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
+}
+
+void CConnectDlg::OnServerListItemClicked ( QTreeWidgetItem* Item,
+                                            int )
+{
+    // if an item is clicked, copy the server name to the combo box
+    if ( Item != 0 )
+    {
+        LineEditServerAddr->setEditText ( Item->text ( 0 ) );
+    }
 }
 
 void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item,

@@ -363,7 +363,14 @@ int main ( int argc, char** argv )
                 Server.UpdateServerList();
 
                 // GUI object for the server
-                CLlconServerDlg ServerDlg ( &Server, 0 );
+                CLlconServerDlg ServerDlg (
+                    &Server,
+                    0
+#ifdef _WIN32
+                    // this somehow only works reliable on Windows
+                    , Qt::WindowMinMaxButtonsHint
+#endif
+                    );
 
                 // set main window
                 pMainWindow = &ServerDlg;

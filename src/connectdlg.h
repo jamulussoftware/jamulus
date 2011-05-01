@@ -84,6 +84,7 @@ protected:
     bool             bServerListItemWasChosen;
 
 public slots:
+    void OnServerListItemClicked ( QTreeWidgetItem* Item, int );
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnConnectButtonClicked();
     void OnTimerPing();

@@ -55,7 +55,9 @@ class CLlconServerDlg : public QDialog, private Ui_CLlconServerDlgBase
     Q_OBJECT
 
 public:
-    CLlconServerDlg ( CServer* pNServP, QWidget* parent = 0 );
+    CLlconServerDlg ( CServer*        pNServP,
+                      QWidget*        parent = 0,
+                      Qt::WindowFlags f = 0 );
 
 protected:
     QTimer                        Timer;

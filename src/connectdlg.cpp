@@ -73,6 +73,11 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
         SIGNAL ( itemDoubleClicked ( QTreeWidgetItem*, int ) ),
         this, SLOT ( OnServerListItemDoubleClicked ( QTreeWidgetItem*, int ) ) );
 
+    // combo boxes
+    QObject::connect ( LineEditServerAddr,
+        SIGNAL ( editTextChanged ( const QString& ) ),
+        this, SLOT ( OnLineEditServerAddrEditTextChanged ( const QString& ) ) );
+
     // buttons
     QObject::connect ( CancelButton, SIGNAL ( clicked() ),
         this, SLOT ( close() ) );
@@ -269,7 +274,12 @@ void CConnectDlg::OnServerListItemClicked ( QTreeWidgetItem* Item,
     // if an item is clicked, copy the server name to the combo box
     if ( Item != 0 )
     {
-        LineEditServerAddr->setEditText ( Item->text ( 0 ) );
+        // make sure no signals are send when we change the text
+        LineEditServerAddr->blockSignals ( true );
+        {
+            LineEditServerAddr->setEditText ( Item->text ( 0 ) );
+        }
+        LineEditServerAddr->blockSignals ( false );
     }
 }
 
@@ -282,6 +292,13 @@ void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item,
     {
         OnConnectButtonClicked();
     }
+}
+
+void CConnectDlg::OnLineEditServerAddrEditTextChanged ( const QString& )
+{
+    // in the server address combo box, a text was changed, remove selection
+    // in the server list (if any)
+    ListViewServers->clearSelection();
 }
 
 void CConnectDlg::OnConnectButtonClicked()

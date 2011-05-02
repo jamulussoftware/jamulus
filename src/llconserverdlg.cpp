@@ -121,10 +121,6 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
         vecpListViewItems[i]->setHidden ( true );
     }
 
-    // update central server name line edit
-    LineEditCentralServerAddress->setText (
-        pServer->GetServerListCentralServerAddress() );
-
     // update default central server address check box
     if ( pServer->GetUseDefaultCentralServerAddress() )
     {
@@ -348,9 +344,8 @@ void CLlconServerDlg::UpdateGUIDependencies()
 
     // if register server is not enabled, we disable all the configuration
     // controls for the server list
-    cbDefaultCentralServer->setEnabled       ( bCurSerListEnabled );
-    LineEditCentralServerAddress->setEnabled ( bCurSerListEnabled );
-    GroupBoxServerInfo->setEnabled           ( bCurSerListEnabled );
+    cbDefaultCentralServer->setEnabled ( bCurSerListEnabled );
+    GroupBoxServerInfo->setEnabled     ( bCurSerListEnabled );
 
     // If the default central server address is enabled, the line edit shows
     // the default server and is not editable. Make sure the line edit does not

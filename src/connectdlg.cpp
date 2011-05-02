@@ -28,6 +28,7 @@
 /* Implementation *************************************************************/
 CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
     : QDialog ( parent, f ),
+      strCentralServerAddress  ( "" ),
       strSelectedAddress       ( "" ),
       bServerListReceived      ( false ),
       bStateOK                 ( false ),
@@ -93,8 +94,12 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
         this, SLOT ( OnTimerReRequestServList() ) );
 }
 
-void CConnectDlg::LoadStoredServers ( const CVector<QString>& vstrIPAddresses )
+void CConnectDlg::Init ( const QString           strNewCentralServerAddr, 
+                         const CVector<QString>& vstrIPAddresses )
 {
+    // take central server address string
+    strCentralServerAddress = strNewCentralServerAddr;
+
     // load stored IP addresses in combo box
     LineEditServerAddr->clear();
     for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
@@ -120,15 +125,10 @@ void CConnectDlg::showEvent ( QShowEvent* )
     // clear server list view
     ListViewServers->clear();
 
-
-// TEST
-QString strNAddr = "llcon.dyndns.org:22122";
-
-
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
     // time to do it
-    if ( LlconNetwUtil().ParseNetworkAddress ( strNAddr,
+    if ( LlconNetwUtil().ParseNetworkAddress ( strCentralServerAddress,
                                                CentralServerAddress ) )
     {
         // send the request for the server list

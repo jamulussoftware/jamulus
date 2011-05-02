@@ -27,27 +27,29 @@
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16 iPortNumber ) :
-    vstrIPAddress ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-    strName ( "" ),
-    Channel ( false ), /* we need a client channel -> "false" */
-    bDoAutoSockBufSize ( true ),
-    iCeltNumCodedBytes ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
-    bCeltDoHighQuality ( false ),
-    bUseStereo ( false ),
-    Socket ( &Channel, &ConnLessProtocol, iPortNumber ),
-    Sound ( AudioCallback, this ),
-    iAudioInFader ( AUD_FADER_IN_MIDDLE ),
-    bReverbOnLeftChan ( false ),
-    iReverbLevel ( 0 ),
-    iSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED ),
-    iSndCrdFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED ),
-    bSndCrdConversionBufferRequired ( false ),
+    vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
+    strName                          ( "" ),
+    Channel                          ( false ), /* we need a client channel -> "false" */
+    bDoAutoSockBufSize               ( true ),
+    iCeltNumCodedBytes               ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
+    bCeltDoHighQuality               ( false ),
+    bUseStereo                       ( false ),
+    Socket                           ( &Channel, &ConnLessProtocol, iPortNumber ),
+    Sound                            ( AudioCallback, this ),
+    iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
+    bReverbOnLeftChan                ( false ),
+    iReverbLevel                     ( 0 ),
+    iSndCrdPrefFrameSizeFactor       ( FRAME_SIZE_FACTOR_PREFERRED ),
+    iSndCrdFrameSizeFactor           ( FRAME_SIZE_FACTOR_PREFERRED ),
+    bSndCrdConversionBufferRequired  ( false ),
     iSndCardMonoBlockSizeSamConvBuff ( 0 ),
-    bFraSiFactPrefSupported ( false ),
-    bFraSiFactDefSupported ( false ),
-    bFraSiFactSafeSupported ( false ),
-    bOpenChatOnNewMessage ( true ),
-    eGUIDesign ( GD_ORIGINAL )
+    bFraSiFactPrefSupported          ( false ),
+    bFraSiFactDefSupported           ( false ),
+    bFraSiFactSafeSupported          ( false ),
+    bOpenChatOnNewMessage            ( true ),
+    eGUIDesign                       ( GD_ORIGINAL ),
+    strCentralServerAddress          ( "" ),
+    bUseDefaultCentralServerAddress  ( true )
 {
     // init audio encoder/decoder (mono)
     CeltModeMono = celt_mode_create (

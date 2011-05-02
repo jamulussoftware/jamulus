@@ -195,6 +195,23 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     cbUseStereo->setAccessibleName ( tr ( "Stereo check box" ) );
 
+    // central server address
+    QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
+        "Central server address is the IP address or URL of the central server "
+        "at which the server list of the connection dialog is managed. If the "
+        "Default check box is checked, the default central server address is "
+        "shown read-only." );
+
+    LabelCentralServerAddress->setWhatsThis    ( strCentrServAddr );
+    cbDefaultCentralServer->setWhatsThis       ( strCentrServAddr );
+    LineEditCentralServerAddress->setWhatsThis ( strCentrServAddr );
+
+    cbDefaultCentralServer->setAccessibleName (
+        tr ( "Default central server check box" ) );
+
+    LineEditCentralServerAddress->setAccessibleName (
+        tr ( "Central server address line edit" ) );
+
     // current connection status parameter
     QString strConnStats = tr ( "<b>Current Connection Status "
         "Parameter:</b> The ping time is the time required for the audio "
@@ -300,6 +317,17 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         cbUseStereo->setCheckState ( Qt::Unchecked );
     }
 
+    // update default central server address check box
+    if ( pClient->GetUseDefaultCentralServerAddress() )
+    {
+        cbDefaultCentralServer->setCheckState ( Qt::Checked );
+    }
+    else
+    {
+        cbDefaultCentralServer->setCheckState ( Qt::Unchecked );
+    }
+    UpdateCentralServerDependency();
+
     // set text for sound card buffer delay radio buttons
     rButBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES,
@@ -344,6 +372,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     QObject::connect ( cbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnAutoJitBuf ( int ) ) );
+
+    QObject::connect ( cbDefaultCentralServer, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnDefaultCentralServerStateChanged ( int ) ) );
+
+    // line edits
+    QObject::connect ( LineEditCentralServerAddress,
+        SIGNAL ( editingFinished() ),
+        this, SLOT ( OnLineEditCentralServerAddressEditingFinished() ) );
 
     // combo boxes
     QObject::connect ( cbSoundcard, SIGNAL ( activated ( int ) ),
@@ -483,6 +519,33 @@ void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
 #endif
 }
 
+void CClientSettingsDlg::UpdateCentralServerDependency()
+{
+    const bool bCurUseDefCentServAddr =
+        pClient->GetUseDefaultCentralServerAddress();
+
+    // If the default central server address is enabled, the line edit shows
+    // the default server and is not editable. Make sure the line edit does not
+    // fire signals when we update the text.
+    LineEditCentralServerAddress->blockSignals ( true );
+    {
+        if ( bCurUseDefCentServAddr )
+        {
+            LineEditCentralServerAddress->setText ( DEFAULT_SERVER_ADDRESS );
+        }
+        else
+        {
+            LineEditCentralServerAddress->setText (
+                pClient->GetServerListCentralServerAddress() );
+        }
+    }
+    LineEditCentralServerAddress->blockSignals ( false );
+
+    // the line edit of the central server address is only enabled, if not the
+    // default address is used
+    LineEditCentralServerAddress->setEnabled ( !bCurUseDefCentServAddr );
+}
+
 void CClientSettingsDlg::OnDriverSetupBut()
 {
     pClient->OpenSndCrdDriverSetup();
@@ -580,6 +643,22 @@ void CClientSettingsDlg::OnUseStereoStateChanged ( int value )
     pClient->SetUseStereo ( value == Qt::Checked );
     emit StereoCheckBoxChanged();
     UpdateDisplay(); // upload rate will be changed
+}
+
+void CClientSettingsDlg::OnDefaultCentralServerStateChanged ( int value )
+{
+    // apply new setting to the client
+    pClient->SetUseDefaultCentralServerAddress ( value == Qt::Checked );
+
+    // update GUI dependencies
+    UpdateCentralServerDependency();
+}
+
+void CClientSettingsDlg::OnLineEditCentralServerAddressEditingFinished()
+{
+    // store new setting in the client
+    pClient->SetServerListCentralServerAddress (
+        LineEditCentralServerAddress->text() );
 }
 
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )

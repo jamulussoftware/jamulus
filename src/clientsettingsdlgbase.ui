@@ -192,7 +192,7 @@
       <item>
        <widget class="QComboBox" name="cbSoundcard" >
         <property name="sizePolicy" >
-         <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -443,6 +443,34 @@
        </widget>
       </item>
       <item>
+       <layout class="QHBoxLayout" >
+        <item>
+         <widget class="QLabel" name="LabelCentralServerAddress" >
+          <property name="text" >
+           <string>Central Server Address:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="cbDefaultCentralServer" >
+          <property name="text" >
+           <string>Default</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="LineEditCentralServerAddress" >
+        <property name="sizePolicy" >
+         <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer>
         <property name="orientation" >
          <enum>Qt::Vertical</enum>
@@ -450,7 +478,7 @@
         <property name="sizeHint" >
          <size>
           <width>201</width>
-          <height>81</height>
+          <height>21</height>
          </size>
         </property>
        </spacer>
@@ -610,6 +638,25 @@
    <header>multicolorled.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>cbAutoJitBuf</tabstop>
+  <tabstop>SliderNetBuf</tabstop>
+  <tabstop>cbSoundcard</tabstop>
+  <tabstop>cbLInChan</tabstop>
+  <tabstop>cbRInChan</tabstop>
+  <tabstop>cbLOutChan</tabstop>
+  <tabstop>cbROutChan</tabstop>
+  <tabstop>rButBufferDelayPreferred</tabstop>
+  <tabstop>rButBufferDelayDefault</tabstop>
+  <tabstop>rButBufferDelaySafe</tabstop>
+  <tabstop>ButtonDriverSetup</tabstop>
+  <tabstop>cbOpenChatOnNewMessage</tabstop>
+  <tabstop>cbGUIDesignFancy</tabstop>
+  <tabstop>cbUseHighQualityAudio</tabstop>
+  <tabstop>cbUseStereo</tabstop>
+  <tabstop>cbDefaultCentralServer</tabstop>
+  <tabstop>LineEditCentralServerAddress</tabstop>
+ </tabstops>
  <resources>
   <include location="resources.qrc" />
  </resources>

@@ -106,6 +106,18 @@ public:
     bool GetUseStereo() const { return bUseStereo; }
     void SetUseStereo ( const bool bNUseStereo );
 
+    void SetServerListCentralServerAddress ( const QString& sNCentServAddr )
+        { strCentralServerAddress = sNCentServAddr; }
+
+    QString GetServerListCentralServerAddress()
+        { return strCentralServerAddress; }
+
+    void SetUseDefaultCentralServerAddress ( const bool bNUDCSeAddr )
+        { bUseDefaultCentralServerAddress = bNUDCSeAddr; }
+
+    bool GetUseDefaultCentralServerAddress()
+        { return bUseDefaultCentralServerAddress; }
+
     int GetAudioInFader() const { return iAudioInFader; }
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
@@ -290,6 +302,9 @@ protected:
     bool                    bOpenChatOnNewMessage;
     EGUIDesign              eGUIDesign;
 
+    QString                 strCentralServerAddress;
+    bool                    bUseDefaultCentralServerAddress;
+
     CVector<int16_t>        vecsAudioSndCrdMono;
     CVector<double>         vecdAudioStereo;
     CVector<int16_t>        vecsNetwork;
@@ -323,7 +338,6 @@ signals:
                                             int iPingTime,
                                             int iNumClients );
     void Disconnected();
-    void Stopped();
 };
 
 #endif /* !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

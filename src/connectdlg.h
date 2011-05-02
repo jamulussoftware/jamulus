@@ -56,10 +56,11 @@ class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
 public:
     CConnectDlg ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
+    void Init ( const QString           strNewCentralServerAddr, 
+                const CVector<QString>& vstrIPAddresses );
+
     void SetServerList ( const CHostAddress&         InetAddr,
                          const CVector<CServerInfo>& vecServerInfo );
-
-    void LoadStoredServers ( const CVector<QString>& vstrNewIPAddresses );
 
     void SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
                                           const int     iPingTime,
@@ -76,6 +77,7 @@ protected:
 
     QTimer           TimerPing;
     QTimer           TimerReRequestServList;
+    QString          strCentralServerAddress;
     CHostAddress     CentralServerAddress;
     CVector<QString> vstrIPAddresses;
     QString          strSelectedAddress;

@@ -376,10 +376,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         this, SLOT ( OnDisconnected() ) );
 
     QObject::connect ( pClient,
-        SIGNAL ( Stopped() ),
-        this, SLOT ( OnStopped() ) );
-
-    QObject::connect ( pClient,
         SIGNAL ( ChatTextReceived ( QString ) ),
         this, SLOT ( OnChatTextReceived ( QString ) ) );
 
@@ -508,11 +504,6 @@ void CLlconClientDlg::OnConnectDisconBut()
     // the connect/disconnect button implements a toggle functionality
     // -> apply inverted running state
     ConnectDisconnect ( !pClient->IsRunning() );
-}
-
-void CLlconClientDlg::OnStopped()
-{
-    ConnectDisconnect ( false );
 }
 
 void CLlconClientDlg::OnOpenGeneralSettings()
@@ -734,8 +725,19 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
     // start/stop client, set button text
     if ( bDoStart )
     {
+        // get the central server address string
+        QString strCurCentServAddr;
+        if ( pClient->GetUseDefaultCentralServerAddress() )
+        {
+            strCurCentServAddr = DEFAULT_SERVER_ADDRESS;
+        }
+        else
+        {
+            strCurCentServAddr = pClient->GetServerListCentralServerAddress();
+        }
+
         // init the connect dialog and execute it (modal dialog)
-        ConnectDlg.LoadStoredServers ( pClient->vstrIPAddress );
+        ConnectDlg.Init ( strCurCentServAddr, pClient->vstrIPAddress );
         ConnectDlg.exec();
 
         // check if state is OK (e.g., no Cancel was pressed)

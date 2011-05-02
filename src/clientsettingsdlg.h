@@ -71,6 +71,7 @@ protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
     void    UpdateSoundChannelSelectionFrame();
+    void    UpdateCentralServerDependency();
     QString GenSndCrdBufferDelayString ( const int iFrameSize,
                                          const QString strAddText = "" );
 
@@ -90,6 +91,8 @@ protected:
     void OnGUIDesignFancyStateChanged ( int value );
     void OnUseHighQualityAudioStateChanged ( int value );
     void OnUseStereoStateChanged ( int value );
+    void OnDefaultCentralServerStateChanged ( int value );
+    void OnLineEditCentralServerAddressEditingFinished();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnSoundCrdSelection ( int iSndDevIdx );
     void OnSndCrdLeftInChannelSelection ( int iChanIdx );

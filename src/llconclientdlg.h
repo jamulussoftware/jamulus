@@ -155,7 +155,6 @@ public slots:
         { ConnectDlg.SetServerList ( InetAddr, vecServerInfo ); }
 
     void OnDisconnected();
-    void OnStopped();
 
     void OnGUIDesignChanged()
         { SetGUIDesign ( pClient->GetGUIDesign() ); }

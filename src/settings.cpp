@@ -188,6 +188,16 @@ void CSettings::ReadIniFile ( const QString& sFileName )
         {
             pClient->SetUseStereo ( bValue );
         }
+
+        // central server address
+        pClient->SetServerListCentralServerAddress (
+            GetIniSetting ( IniXMLDocument, "client", "centralservaddr" ) );
+
+        // use default central server address flag
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
+        {
+            pClient->SetUseDefaultCentralServerAddress ( bValue );
+        }
     }
     else
     {
@@ -306,6 +316,14 @@ void CSettings::WriteIniFile ( const QString& sFileName )
         // flag whether stereo mode is used
         SetFlagIniSet ( IniXMLDocument, "client", "stereoaudio",
             pClient->GetUseStereo() );
+
+        // central server address
+        PutIniSetting ( IniXMLDocument, "client", "centralservaddr",
+            pClient->GetServerListCentralServerAddress() );
+
+        // use default central server address flag
+        SetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr",
+            pClient->GetUseDefaultCentralServerAddress() );
     }
     else
     {

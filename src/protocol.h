@@ -59,7 +59,7 @@
 #define PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS 1002 // for ping time and num. of clients info
 #define PROTMESSID_CLM_SERVER_FULL            1003 // server full message
 #define PROTMESSID_CLM_REGISTER_SERVER        1004 // register server
-#define PROTMESSID_CLM_UNREGISTER_SERVER      1005 // unregister server -> TODO
+#define PROTMESSID_CLM_UNREGISTER_SERVER      1005 // unregister server
 #define PROTMESSID_CLM_SERVER_LIST            1006 // server list
 #define PROTMESSID_CLM_REQ_SERVER_LIST        1007 // request server list
 #define PROTMESSID_CLM_SEND_EMPTY_MESSAGE     1008 // an empty message shall be send
@@ -103,6 +103,7 @@ public:
     void CreateCLServerFullMes ( const CHostAddress& InetAddr );
     void CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
                                      const CServerCoreInfo& ServerInfo );
+    void CreateCLUnregisterServerMes ( const CHostAddress& InetAddr );
     void CreateCLServerListMes ( const CHostAddress&        InetAddr,
                                  const CVector<CServerInfo> vecServerInfo );
     void CreateCLReqServerListMes ( const CHostAddress& InetAddr );
@@ -206,17 +207,18 @@ protected:
     bool EvaluateReqNetwTranspPropsMes();
     bool EvaluateDisconnectionMes();
 
-    bool EvaluateCLPingMes             ( const CHostAddress&     InetAddr,
-                                         const CVector<uint8_t>& vecData );
+    bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
     bool EvaluateCLPingWithNumClientsMes ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLServerFullMes();
-    bool EvaluateCLRegisterServerMes   ( const CHostAddress&     InetAddr,
-                                         const CVector<uint8_t>& vecData );
-    bool EvaluateCLServerListMes       ( const CHostAddress&     InetAddr,
-                                         const CVector<uint8_t>& vecData );
-    bool EvaluateCLReqServerListMes    ( const CHostAddress& InetAddr );
-    bool EvaluateCLSendEmptyMesMes     ( const CVector<uint8_t>& vecData );
+    bool EvaluateCLRegisterServerMes     ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
+    bool EvaluateCLUnregisterServerMes   ( const CHostAddress&     InetAddr );
+    bool EvaluateCLServerListMes         ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
+    bool EvaluateCLReqServerListMes      ( const CHostAddress& InetAddr );
+    bool EvaluateCLSendEmptyMesMes       ( const CVector<uint8_t>& vecData );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -259,6 +261,7 @@ signals:
                                         int iNumClients );
     void CLRegisterServerReceived ( CHostAddress    InetAddr,
                                     CServerCoreInfo ServerInfo );
+    void CLUnregisterServerReceived ( CHostAddress InetAddr );
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );
     void CLReqServerList ( CHostAddress InetAddr );

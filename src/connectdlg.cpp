@@ -245,7 +245,8 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
 
         // server location (city and country)
         QString strLocation = vecServerInfo[iIdx].strCity;
-        if ( !strLocation.isEmpty() )
+        if ( ( !strLocation.isEmpty() ) &&
+             ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry ) )
         {
             strLocation += ", ";
         }

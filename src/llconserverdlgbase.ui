@@ -54,7 +54,7 @@
    <item>
     <widget class="QCheckBox" name="cbRegisterServer" >
      <property name="text" >
-      <string>Register Server</string>
+      <string>Register My Server at Central Server</string>
      </property>
     </widget>
    </item>
@@ -82,7 +82,7 @@
    <item>
     <widget class="QGroupBox" name="GroupBoxServerInfo" >
      <property name="title" >
-      <string>Server Info</string>
+      <string>My Server Info</string>
      </property>
      <layout class="QHBoxLayout" >
       <item>

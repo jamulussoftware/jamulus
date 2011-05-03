@@ -29,11 +29,25 @@
 CServerListManager::CServerListManager ( const QString& sNCentServAddr,
                                          const QString& strServerInfo,
                                          CProtocol*     pNConLProt )
-    : bUseDefaultCentralServerAddress ( false ),
+    : iNumPredefinedServers           ( 0 ),
+      bUseDefaultCentralServerAddress ( false ),
       pConnLessProtocol               ( pNConLProt )
 {
     // set the central server address
     SetCentralServerAddress ( sNCentServAddr );
+
+    // prepare the server info information
+    QStringList slServInfoSeparateParams;
+    int         iServInfoNumSplitItems = 0;
+
+    if ( !strServerInfo.isEmpty() )
+    {
+        // split the different parameter strings
+        slServInfoSeparateParams = strServerInfo.split ( ";" );
+
+        // get the number of items in the split list
+        iServInfoNumSplitItems = slServInfoSeparateParams.count();
+    }
 
     // per definition, the very first entry is this server and this entry will
     // never be deleted
@@ -49,36 +63,86 @@ CServerListManager::CServerListManager ( const QString& sNCentServAddr,
         QLocale::system().country(),
         "",
         USED_NUM_CHANNELS,
-        false );
+        true );
 
     // parse the server info string according to definition:
-    // [name];[city];[country as QLocale ID]
-    if ( !strServerInfo.isEmpty() )
+    // [this server name];[this server city]; ...
+    //    [this server country as QLocale ID]; ...
+    // per definition, we expect at least three parameters
+    if ( iServInfoNumSplitItems >= 3 )
     {
-        // split the different parameter strings
-        QStringList slSeparateParameters = strServerInfo.split ( ";" );
+        // [this server name]
+        ThisServerListEntry.strName = slServInfoSeparateParams[0];
 
-        // per definition, we expect three parameters
-        if ( slSeparateParameters.count() == 3 )
+        // [this server city]
+        ThisServerListEntry.strCity = slServInfoSeparateParams[1];
+
+        // [this server country as QLocale ID]
+        const int iCountry = slServInfoSeparateParams[2].toInt();
+        if ( ( iCountry >= 0 ) && ( iCountry <= QLocale::LastCountry ) )
         {
-            // [name]
-            ThisServerListEntry.strName = slSeparateParameters[0];
-
-            // [city]
-            ThisServerListEntry.strCity = slSeparateParameters[1];
-
-            // [country as QLocale ID]
-            const int iCountry = slSeparateParameters[2].toInt();
-            if ( ( iCountry >= 0 ) && ( iCountry <= QLocale::LastCountry ) )
-            {
-                ThisServerListEntry.eCountry = static_cast<QLocale::Country> (
-                    iCountry );
-            }
+            ThisServerListEntry.eCountry = static_cast<QLocale::Country> (
+                iCountry );
         }
     }
 
     // per definition, the first entry in the server list it the own server
     ServerList.append ( ThisServerListEntry );
+
+    // parse the predefined server infos (if any) according to definition:
+    // [server1 address];[server1 name];[server1 city]; ...
+    //    [server1 country as QLocale ID]; ...
+    //    [server2 address];[server2 name];[server2 city]; ...
+    //    [server2 country as QLocale ID]; ...
+    //    ...
+    int iCurUsedServInfoSplitItems = 3; // three items are used for this server
+
+    // we always expect four items per new server, also check for maximum
+    // allowed number of servers in the server list
+    while ( ( iServInfoNumSplitItems - iCurUsedServInfoSplitItems >= 4 ) &&
+            ( iNumPredefinedServers <= MAX_NUM_SERVERS_IN_SERVER_LIST ) )
+    {
+        // create a new server list entry
+        CServerListEntry NewServerListEntry (
+            CHostAddress(),
+            "",
+            "",
+            QLocale::AnyCountry,
+            "",
+            USED_NUM_CHANNELS,
+            true );
+
+        // [server n address]
+        LlconNetwUtil().ParseNetworkAddress (
+            slServInfoSeparateParams[iCurUsedServInfoSplitItems],
+            NewServerListEntry.HostAddr );
+
+        // [server n name]
+        NewServerListEntry.strName =
+            slServInfoSeparateParams[iCurUsedServInfoSplitItems + 1];
+
+        // [server n city]
+        NewServerListEntry.strCity =
+            slServInfoSeparateParams[iCurUsedServInfoSplitItems + 2];
+
+        // [server n country as QLocale ID]
+        const int iCountry =
+            slServInfoSeparateParams[iCurUsedServInfoSplitItems + 3].toInt();
+
+        if ( ( iCountry >= 0 ) && ( iCountry <= QLocale::LastCountry ) )
+        {
+            NewServerListEntry.eCountry = static_cast<QLocale::Country> (
+                iCountry );
+        }
+
+        // add the new server to the server list
+        ServerList.append ( NewServerListEntry );
+
+        // we have used four items and have created one predefined server
+        // (adjust counters)
+        iCurUsedServInfoSplitItems += 4;
+        iNumPredefinedServers++;
+    }
 
 
     // Connections -------------------------------------------------------------
@@ -166,8 +230,8 @@ void CServerListManager::OnTimerPollList()
     QMutexLocker locker ( &Mutex );
 
     // check all list entries except of the very first one (which is the central
-    // server entry) if they are still valid
-    for ( int iIdx = 1; iIdx < ServerList.size(); iIdx++ )
+    // server entry) and the predefined servers if they are still valid
+    for ( int iIdx = 1 + iNumPredefinedServers; iIdx < ServerList.size(); iIdx++ )
     {
         // 1 minute = 60 * 1000 ms
         if ( ServerList[iIdx].RegisterTime.elapsed() >
@@ -227,6 +291,31 @@ void CServerListManager::RegisterServer ( const CHostAddress&    InetAddr,
                 ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
                 ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
                 ServerList[iSelIdx].UpdateRegistration();
+            }
+        }
+    }
+}
+
+void CServerListManager::UnregisterServer ( const CHostAddress& InetAddr )
+{
+    QMutexLocker locker ( &Mutex );
+
+    if ( bIsCentralServer && bEnabled )
+    {
+        const int iCurServerListSize = ServerList.size();
+
+        // Find the server to unregister in the list. The very first list entry
+        // must not be checked since this is per definition the central server
+        // (i.e., this server), also the predefined servers must not be checked
+        for ( int iIdx = 1 + iNumPredefinedServers; iIdx < iCurServerListSize; iIdx++ )
+        {
+            if ( ServerList[iIdx].HostAddr == InetAddr )
+            {
+                // remove this list entry
+                ServerList.removeAt ( iIdx );
+
+                // entry found, leave for-loop
+                continue;
             }
         }
     }

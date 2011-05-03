@@ -254,6 +254,11 @@ public slots:
         ServerListManager.RegisterServer ( InetAddr, ServerInfo );
     }
 
+    void OnCLUnregisterServerReceived ( CHostAddress InetAddr )
+    {
+        ServerListManager.UnregisterServer ( InetAddr );
+    }
+
 
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!

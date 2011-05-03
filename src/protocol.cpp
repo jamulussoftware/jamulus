@@ -199,6 +199,12 @@ CONNECTION LESS MESSAGES
       the QLocale class
 
 
+
+- PROTMESSID_CLM_UNREGISTER_SERVER: Unregister a server
+
+    note: does not have any data -> n = 0
+
+
 - PROTMESSID_CLM_SERVER_LIST: Server list message
 
     for each registered server append following data:
@@ -596,6 +602,10 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
 
             case PROTMESSID_CLM_REGISTER_SERVER:
                 bRet = EvaluateCLRegisterServerMes ( InetAddr, vecData );
+                break;
+
+            case PROTMESSID_CLM_UNREGISTER_SERVER:
+                bRet = EvaluateCLUnregisterServerMes ( InetAddr );
                 break;
             }
         }
@@ -1314,6 +1324,20 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
     return false; // no error
 }
 
+void CProtocol::CreateCLUnregisterServerMes ( const CHostAddress& InetAddr )
+{
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_UNREGISTER_SERVER,
+                                     CVector<uint8_t> ( 0 ),
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLUnregisterServerMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLUnregisterServerReceived ( InetAddr );
+
+    return false; // no error
+}
 
 void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
                                         const CVector<CServerInfo> vecServerInfo )

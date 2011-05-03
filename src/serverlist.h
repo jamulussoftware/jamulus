@@ -146,6 +146,8 @@ public:
     void RegisterServer ( const CHostAddress&    InetAddr,
                           const CServerCoreInfo& ServerInfo );
 
+    void UnregisterServer ( const CHostAddress& InetAddr );
+
     void QueryServerList ( const CHostAddress& InetAddr );
 
 
@@ -173,6 +175,7 @@ protected:
     QMutex                  Mutex;
     QList<CServerListEntry> ServerList;
     QString                 strCentralServerAddress;
+    int                     iNumPredefinedServers;
     bool                    bEnabled;
     bool                    bIsCentralServer;
     bool                    bUseDefaultCentralServerAddress;

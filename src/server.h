@@ -130,6 +130,8 @@ public:
     // Server list management --------------------------------------------------
     void UpdateServerList() { ServerListManager.Update(); }
 
+    void UnregisterSlaveServer() { ServerListManager.SlaveServerUnregister(); }
+
     void SetServerListEnabled ( const bool bState )
         { ServerListManager.SetEnabled ( bState ); }
 

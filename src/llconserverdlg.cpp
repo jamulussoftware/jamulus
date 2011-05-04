@@ -228,9 +228,21 @@ void CLlconServerDlg::OnDefaultCentralServerStateChanged ( int value )
 
 void CLlconServerDlg::OnRegisterServerStateChanged ( int value )
 {
+    const bool bRegState = ( value == Qt::Checked );
+
     // apply new setting to the server and update it
-    pServer->SetServerListEnabled ( value == Qt::Checked );
-    pServer->UpdateServerList();
+    pServer->SetServerListEnabled ( bRegState );
+
+    // If registering is enabled, update data. If registering is disabled,
+    // unregister slave server
+    if ( bRegState )
+    {
+        pServer->UpdateServerList();
+    }
+    else
+    {
+        pServer->UnregisterSlaveServer();
+    }
 
     // update GUI dependencies
     UpdateGUIDependencies();

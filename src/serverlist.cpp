@@ -376,37 +376,43 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
 
 
 /* Slave server functionality *************************************************/
-void CServerListManager::OnTimerRegistering()
+void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
 {
     // we need the lock since the user might change the server properties at
     // any time
     QMutexLocker locker ( &Mutex );
 
-    if ( !bIsCentralServer && bEnabled )
+    // get the correct central server address
+    QString strCurCentrServAddr;
+    if ( bUseDefaultCentralServerAddress )
     {
-        // get the correct central server address
-        QString strCurCentrServAddr;
-        if ( bUseDefaultCentralServerAddress )
+        strCurCentrServAddr = DEFAULT_SERVER_ADDRESS;
+    }
+    else
+    {
+        strCurCentrServAddr = strCentralServerAddress;
+    }
+
+    // For the slave server, the slave server properties are store in the
+    // very first item in the server list (which is actually no server list
+    // but just one item long for the slave server).
+    // Note that we always have to parse the server address again since if
+    // it is an URL of a dynamic IP address, the IP address might have
+    // changed in the meanwhile.
+    CHostAddress HostAddress;
+    if ( LlconNetwUtil().ParseNetworkAddress ( strCurCentrServAddr,
+                                               HostAddress ) )
+    {
+        if ( bIsRegister )
         {
-            strCurCentrServAddr = DEFAULT_SERVER_ADDRESS;
+            // register server
+            pConnLessProtocol->CreateCLRegisterServerMes ( HostAddress,
+                                                           ServerList[0] );
         }
         else
         {
-            strCurCentrServAddr = strCentralServerAddress;
-        }
-
-        // For the slave server, the slave server properties are store in the
-        // very first item in the server list (which is actually no server list
-        // but just one item long for the slave server).
-        // Note that we always have to parse the server address again since if
-        // it is an URL of a dynamic IP address, the IP address might have
-        // changed in the meanwhile.
-        CHostAddress HostAddress;
-        if ( LlconNetwUtil().ParseNetworkAddress ( strCurCentrServAddr,
-                                                   HostAddress ) )
-        {
-            pConnLessProtocol->CreateCLRegisterServerMes ( HostAddress,
-                                                           ServerList[0] );
+            // unregister server
+            pConnLessProtocol->CreateCLUnregisterServerMes ( HostAddress );
         }
     }
 }

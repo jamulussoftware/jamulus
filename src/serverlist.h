@@ -150,6 +150,7 @@ public:
 
     void CentralServerQueryServerList ( const CHostAddress& InetAddr );
 
+    void SlaveServerUnregister() { SlaveServerRegisterServer ( false ); }
 
     // set server infos -> per definition the server info of this server is
     // stored in the first entry of the list, we assume here that the first
@@ -170,6 +171,8 @@ public:
     QLocale::Country GetServerCountry() { return ServerList[0].eCountry; }
 
 protected:
+    void SlaveServerRegisterServer ( const bool bIsRegister );
+
     QTimer                  TimerPollList;
     QTimer                  TimerRegistering;
     QMutex                  Mutex;
@@ -184,7 +187,7 @@ protected:
 
 public slots:
     void OnTimerPollList();
-    void OnTimerRegistering();
+    void OnTimerRegistering() { SlaveServerRegisterServer ( true ); }
 };
 
 #endif /* !defined ( SERVERLIST_HOIJH8OUWEF_WFEIOBU_3_43445KJIUHF1912__INCLUDED_ ) */

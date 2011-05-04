@@ -30,6 +30,7 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
     : QDialog ( parent, f ),
       strCentralServerAddress  ( "" ),
       strSelectedAddress       ( "" ),
+      strSelectedServerName    ( "" ),
       bServerListReceived      ( false ),
       bStateOK                 ( false ),
       bServerListItemWasChosen ( false )
@@ -119,8 +120,9 @@ void CConnectDlg::showEvent ( QShowEvent* )
     bStateOK                 = false;
     bServerListItemWasChosen = false;
 
-    // clear current address
-    strSelectedAddress = "";
+    // clear current address and name
+    strSelectedAddress    = "";
+    strSelectedServerName = "";
 
     // clear server list view
     ListViewServers->clear();
@@ -153,6 +155,9 @@ void CConnectDlg::hideEvent ( QHideEvent* )
         // get host address from selected list view item as a string
         strSelectedAddress =
             CurSelListItemList[0]->data ( 0, Qt::UserRole ).toString();
+
+        // store selected server name
+        strSelectedServerName = CurSelListItemList[0]->text ( 0 );
 
         // set flag that a server list item was chosen to connect
         bServerListItemWasChosen = true;

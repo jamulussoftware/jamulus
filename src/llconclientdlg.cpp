@@ -799,7 +799,24 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
 
                 if ( bStartOk )
                 {
+                    // change connect button text to "disconnect"
                     PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
+
+                    // set server name in audio mixer group box title
+                    if ( ConnectDlg.GetServerListItemWasChosen() )
+                    {
+                        // in case a server in the server list was chosen,
+                        // display the server name of the server list
+                        MainMixerBoard->SetServerName (
+                            ConnectDlg.GetSelectedServerName() );
+                    }
+                    else
+                    {
+                        // an item of the server address combo box was chosen,
+                        // just show the address string as it was entered by the
+                        // user
+                        MainMixerBoard->SetServerName ( strSelectedAddress );
+                    }
 
                     // start timer for level meter bar and ping time measurement
                     TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
@@ -825,7 +842,11 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
             pClient->Stop();
         }
 
+        // change connect button text to "connect"
         PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
+
+        // reset server name in audio mixer group box title
+        MainMixerBoard->SetServerName ( "" );
 
         // stop timer for level meter bars and reset them
         TimerSigMet.stop();

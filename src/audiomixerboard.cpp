@@ -281,8 +281,8 @@ double CChannelFader::CalcFaderGain ( const int value )
 CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     QGroupBox ( parent )
 {
-    // set title text and title properties
-    setTitle ( "Server" );
+    // set title text (default: no server given)
+    SetServerName ( "" );
 
     // add hboxlayout
     pMainLayout = new QHBoxLayout ( this );
@@ -327,6 +327,19 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     QObject::connect ( vecpChanFader[9],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh9  ( int ) ) );
     QObject::connect ( vecpChanFader[10], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh10 ( int ) ) );
     QObject::connect ( vecpChanFader[11], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChangedCh11 ( int ) ) );
+}
+
+void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
+{
+    // set title text of the group box
+    if ( strNewServerName.isEmpty() )
+    {
+        setTitle ( "Server" );
+    }
+    else
+    {
+        setTitle ( "Server: " + strNewServerName );
+    }
 }
 
 void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )

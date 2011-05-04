@@ -101,6 +101,7 @@ public:
 
     void HideAll();
     void ApplyNewConClientList ( CVector<CChannelShortInfo>& vecChanInfo );
+    void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
 
 protected:

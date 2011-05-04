@@ -407,7 +407,7 @@
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType" >
-             <enum>QSizePolicy::Expanding</enum>
+             <enum>QSizePolicy::Minimum</enum>
             </property>
             <property name="sizeHint" >
              <size>
@@ -445,7 +445,7 @@
         <item>
          <widget class="QLineEdit" name="LineEditFaderTag" >
           <property name="sizePolicy" >
-           <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
+           <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -470,7 +470,7 @@
              <enum>Qt::Horizontal</enum>
             </property>
             <property name="sizeType" >
-             <enum>QSizePolicy::Expanding</enum>
+             <enum>QSizePolicy::Minimum</enum>
             </property>
             <property name="sizeHint" >
              <size>

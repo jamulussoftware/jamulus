@@ -70,6 +70,7 @@ public:
     bool GetStateOK() const { return bStateOK; }
     bool GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }
+    QString GetSelectedServerName() const { return strSelectedServerName; }
 
 protected:
     virtual void showEvent ( QShowEvent* );
@@ -81,6 +82,7 @@ protected:
     CHostAddress     CentralServerAddress;
     CVector<QString> vstrIPAddresses;
     QString          strSelectedAddress;
+    QString          strSelectedServerName;
     bool             bServerListReceived;
     bool             bStateOK;
     bool             bServerListItemWasChosen;

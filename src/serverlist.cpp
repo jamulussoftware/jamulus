@@ -286,14 +286,18 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             }
             else
             {
-                // update all data and call update registration function
-                ServerList[iSelIdx].strName          = ServerInfo.strName;
-                ServerList[iSelIdx].strTopic         = ServerInfo.strTopic;
-                ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
-                ServerList[iSelIdx].strCity          = ServerInfo.strCity;
-                ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
-                ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
-                ServerList[iSelIdx].UpdateRegistration();
+                // do not update the information in the predefined servers
+                if ( iSelIdx > iNumPredefinedServers )
+                {
+                    // update all data and call update registration function
+                    ServerList[iSelIdx].strName          = ServerInfo.strName;
+                    ServerList[iSelIdx].strTopic         = ServerInfo.strTopic;
+                    ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
+                    ServerList[iSelIdx].strCity          = ServerInfo.strCity;
+                    ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
+                    ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
+                    ServerList[iSelIdx].UpdateRegistration();
+                }
             }
         }
     }

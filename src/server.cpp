@@ -173,7 +173,8 @@ CServer::CServer ( const QString& strLoggingFileName,
                    const QString& strServerInfo ) :
     Socket ( this, iPortNumber ),
     bWriteStatusHTMLFile ( false ),
-    ServerListManager ( strCentralServer,
+    ServerListManager ( iPortNumber,
+                        strCentralServer,
                         strServerInfo,
                         &ConnLessProtocol )
 {

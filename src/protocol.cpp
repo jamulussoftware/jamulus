@@ -174,9 +174,12 @@ CONNECTION LESS MESSAGES
 - PROTMESSID_CLM_REGISTER_SERVER: Register a server, providing server
                                   information
 
-    +-----------------+----------------------------------+ ...
-    | 2 bytes country | 1 byte maximum connected clients | ...
-    +-----------------+----------------------------------+ ...
+    +--------------+ ...
+    | 2 bytes port | ...
+    +--------------+ ...
+        ... -----------------+----------------------------------+ ...
+        ...  2 bytes country | 1 byte maximum connected clients | ...
+        ... -----------------+----------------------------------+ ...
         ... ---------------------+------------------+ ...
         ...  1 byte is permanent | 2 bytes number n | ...
         ... ---------------------+------------------+ ...
@@ -1224,6 +1227,7 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
 
     // size of current message body
     const int iEntrLen =
+        2 /* port number */ +
         2 /* country */ +
         1 /* maximum number of connected clients */ +
         1 /* is permanent flag */ +
@@ -1233,6 +1237,10 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
+
+    // port number (2 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( ServerInfo.iLocalPortNumber ), 2 );
 
     // country (2 bytes)
     PutValOnStream ( vecData, iPos,
@@ -1267,11 +1275,15 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
     const int       iDataLen = vecData.Size();
     CServerCoreInfo RecServerInfo;
 
-    // check size (the first 4 bytes)
-    if ( iDataLen < 4 )
+    // check size (the first 6 bytes)
+    if ( iDataLen < 6 )
     {
         return true; // return error code
     }
+
+    // port number (2 bytes)
+    RecServerInfo.iLocalPortNumber =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // country (2 bytes)
     RecServerInfo.eCountry =
@@ -1467,6 +1479,7 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
         // add server information to vector
         vecServerInfo.Add (
             CServerInfo ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
+                          iPort,
                           strName,
                           strTopic,
                           eCountry,

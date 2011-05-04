@@ -76,6 +76,7 @@ class CServerListEntry : public CServerInfo
 public:
     CServerListEntry() :
         CServerInfo ( CHostAddress(),
+                      0,
                       "",
                       "",
                       QLocale::AnyCountry,
@@ -84,6 +85,7 @@ public:
                       false ) { UpdateRegistration(); }
 
     CServerListEntry ( const CHostAddress&     NHAddr,
+                       const quint16           NLocPort,
                        const QString&          NsName,
                        const QString&          NsTopic,
                        const QLocale::Country& NeCountry,
@@ -91,6 +93,7 @@ public:
                        const int               NiMaxNumClients,
                        const bool              NbPermOnline)
         : CServerInfo ( NHAddr,
+                        NLocPort,
                         NsName,
                         NsTopic,
                         NeCountry,
@@ -101,6 +104,7 @@ public:
     CServerListEntry ( const CHostAddress&    NHAddr,
                        const CServerCoreInfo& NewCoreServerInfo )
         : CServerInfo ( NHAddr,
+                        NewCoreServerInfo.iLocalPortNumber,
                         NewCoreServerInfo.strName,
                         NewCoreServerInfo.strTopic,
                         NewCoreServerInfo.eCountry,
@@ -121,7 +125,8 @@ class CServerListManager : public QObject
     Q_OBJECT
 
 public:
-    CServerListManager ( const QString& sNCentServAddr,
+    CServerListManager ( const quint16  iNPortNum,
+                         const QString& sNCentServAddr,
                          const QString& strServerInfo,
                          CProtocol*     pNConLProt );
 
@@ -176,7 +181,10 @@ protected:
     QTimer                  TimerPollList;
     QTimer                  TimerRegistering;
     QMutex                  Mutex;
+
     QList<CServerListEntry> ServerList;
+
+    quint16                 iPortNumber;
     QString                 strCentralServerAddress;
     int                     iNumPredefinedServers;
     bool                    bEnabled;

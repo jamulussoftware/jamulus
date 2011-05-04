@@ -243,8 +243,8 @@ void CServerListManager::OnTimerPollList()
     }
 }
 
-void CServerListManager::RegisterServer ( const CHostAddress&    InetAddr,
-                                          const CServerCoreInfo& ServerInfo )
+void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    InetAddr,
+                                                       const CServerCoreInfo& ServerInfo )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -296,7 +296,7 @@ void CServerListManager::RegisterServer ( const CHostAddress&    InetAddr,
     }
 }
 
-void CServerListManager::UnregisterServer ( const CHostAddress& InetAddr )
+void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& InetAddr )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -321,7 +321,7 @@ void CServerListManager::UnregisterServer ( const CHostAddress& InetAddr )
     }
 }
 
-void CServerListManager::QueryServerList ( const CHostAddress& InetAddr )
+void CServerListManager::CentralServerQueryServerList ( const CHostAddress& InetAddr )
 {
     QMutexLocker locker ( &Mutex );
 

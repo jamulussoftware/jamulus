@@ -143,12 +143,12 @@ public:
 
     bool GetIsCentralServer() const { return bIsCentralServer; }
 
-    void RegisterServer ( const CHostAddress&    InetAddr,
-                          const CServerCoreInfo& ServerInfo );
+    void CentralServerRegisterServer ( const CHostAddress&    InetAddr,
+                                       const CServerCoreInfo& ServerInfo );
 
-    void UnregisterServer ( const CHostAddress& InetAddr );
+    void CentralServerUnregisterServer ( const CHostAddress& InetAddr );
 
-    void QueryServerList ( const CHostAddress& InetAddr );
+    void CentralServerQueryServerList ( const CHostAddress& InetAddr );
 
 
     // set server infos -> per definition the server info of this server is

@@ -246,17 +246,17 @@ public slots:
     }
 
     void OnCLReqServerList ( CHostAddress InetAddr )
-        { ServerListManager.QueryServerList ( InetAddr ); }
+        { ServerListManager.CentralServerQueryServerList ( InetAddr ); }
 
     void OnCLRegisterServerReceived ( CHostAddress    InetAddr,
                                       CServerCoreInfo ServerInfo )
     {
-        ServerListManager.RegisterServer ( InetAddr, ServerInfo );
+        ServerListManager.CentralServerRegisterServer ( InetAddr, ServerInfo );
     }
 
     void OnCLUnregisterServerReceived ( CHostAddress InetAddr )
     {
-        ServerListManager.UnregisterServer ( InetAddr );
+        ServerListManager.CentralServerUnregisterServer ( InetAddr );
     }
 
 

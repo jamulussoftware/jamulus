@@ -290,12 +290,14 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
                 if ( iSelIdx > iNumPredefinedServers )
                 {
                     // update all data and call update registration function
+                    ServerList[iSelIdx].iLocalPortNumber = ServerInfo.iLocalPortNumber;
                     ServerList[iSelIdx].strName          = ServerInfo.strName;
                     ServerList[iSelIdx].strTopic         = ServerInfo.strTopic;
                     ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
                     ServerList[iSelIdx].strCity          = ServerInfo.strCity;
                     ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
                     ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
+
                     ServerList[iSelIdx].UpdateRegistration();
                 }
             }
@@ -359,9 +361,15 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
 
                     // take the local port number instead of the received port
                     // number since some NAT (network address translation) might
-                    // have changed the port
-                    vecServerInfo[iIdx].HostAddr.iPort =
-                        ServerList[iIdx].iLocalPortNumber;
+                    // have changed the port, note that the predefined servers
+                    // are treated differently, for these we assume that the
+                    // received port number is the same as the actual port
+                    // number
+                    if ( iIdx > iNumPredefinedServers )
+                    {
+                        vecServerInfo[iIdx].HostAddr.iPort =
+                            ServerList[iIdx].iLocalPortNumber;
+                    }
                 }
                 else
                 {

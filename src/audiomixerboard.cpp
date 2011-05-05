@@ -338,7 +338,7 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
     }
     else
     {
-        setTitle ( "Server: " + strNewServerName );
+        setTitle ( strNewServerName );
     }
 }
 

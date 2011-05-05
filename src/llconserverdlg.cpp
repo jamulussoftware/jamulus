@@ -318,9 +318,8 @@ void CLlconServerDlg::OnTimer()
             if ( !( vecHostAddresses[i].InetAddr == QHostAddress ( (quint32) 0 ) ) )
             {
                 // IP, port number
-                vecpListViewItems[i]->setText ( 0, QString("%1 : %2" ).
-                    arg ( vecHostAddresses[i].InetAddr.toString() ).
-                    arg ( vecHostAddresses[i].iPort ) );
+                vecpListViewItems[i]->setText ( 0,
+                    vecHostAddresses[i].toString ( CHostAddress::SM_IP_PORT ) );
 
                 // name
                 vecpListViewItems[i]->setText ( 1, vecsName[i] );

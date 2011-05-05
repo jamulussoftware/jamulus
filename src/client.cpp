@@ -435,11 +435,7 @@ void CClient::Stop()
     // receive mechanism with the next command, we do not evaluate any
     // respond from the server, therefore we just hope that the message
     // gets its way to the server, if not, the old behaviour time-out
-    // disconnects the connection anyway. Send the message three times
-    // to increase the probability that at least one message makes it
-    // through).
-    Channel.CreateAndImmSendDisconnectionMes();
-    Channel.CreateAndImmSendDisconnectionMes();
+    // disconnects the connection anyway).
     Channel.CreateAndImmSendDisconnectionMes();
 
     // disable channel

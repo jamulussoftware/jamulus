@@ -1,11 +1,18 @@
-3.1.3
+4.0.0
 
 - new GUI style of the main window, added switch for selecting the GUI style
   in the settings window
 
-- ini-file is stored in the home directory instead of the application directory
+- a list of available servers is shown on pressing the connect button, the list
+  is managed by a central server, any private server is added automatically if
+  the registering setting is enabled
 
 - the Qt project file is now used for Linux, too
+
+- ini-file is stored in the home directory instead of the application directory
+
+- added server settings in the GUI for the server list and added ini file
+  support to store the settings
 
 
 3.1.2

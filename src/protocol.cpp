@@ -574,6 +574,12 @@ bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
 
     if ( !ParseMessageFrame ( vecbyData, iNumBytes, iRecCounter, iRecID, vecData ) )
     {
+
+/*
+// TEST channel implementation: randomly delete protocol messages (50 % loss)
+if ( rand() < ( RAND_MAX / 2 ) ) return false;
+*/
+
         if ( IsConnectionLessMessageID ( iRecID ) )
         {
             // check which type of message we received and do action

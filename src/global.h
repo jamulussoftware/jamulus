@@ -43,7 +43,7 @@
 
 // version and application name (always use this version)
 #undef VERSION
-#define VERSION                         "3.1.3cvs"
+#define VERSION                         "4.0.0cvs"
 #define APP_NAME                        "llcon"
 
 // default names of the ini-file for client and server

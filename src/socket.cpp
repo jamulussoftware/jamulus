@@ -127,9 +127,23 @@ void CSocket::OnDataReceived()
             {
                 // this is an unknown address, try to parse connection less
                 // message
-                pConnLessProtocol->ParseConnectionLessMessage ( vecbyRecBuf,
-                                                                iNumBytesRead, 
-                                                                RecHostAddr );
+                if ( pConnLessProtocol->ParseConnectionLessMessage ( vecbyRecBuf,
+                                                                     iNumBytesRead, 
+                                                                     RecHostAddr ) )
+                {
+                    // message coult not be parsed, check if the packet comes
+                    // from the server we just connected -> if yes, send
+                    // disconnect message since the server may not know that we
+                    // are not connected anymore
+                    if ( pChannel->GetAddress() == RecHostAddr )
+                    {
+                        // the channel has to be enabled for sending a message,
+                        // disable the channel again afterwards
+                        pChannel->SetEnable ( true );
+                        pChannel->CreateAndImmSendDisconnectionMes();
+                        pChannel->SetEnable ( false );
+                    }
+                }
 
                 // do not perform any other action on this received packet
                 return;

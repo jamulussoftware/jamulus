@@ -1,41 +1,16 @@
 <RCC>
     <qresource prefix="/png/LEDs" >
-        <file>res/CLEDBlack.png</file>
-        <file>res/CLEDBlackSmall.png</file>
         <file>res/CLEDDisabledSmall.png</file>
-        <file>res/CLEDGreen.png</file>
+        <file>res/CLEDGreenArrow.png</file>
         <file>res/CLEDGreenSmall.png</file>
-        <file>res/CLEDGrey.png</file>
+        <file>res/CLEDGreyArrow.png</file>
         <file>res/CLEDGreySmall.png</file>
-        <file>res/CLEDRed.png</file>
         <file>res/CLEDRedSmall.png</file>
-        <file>res/CLEDYellow.png</file>
         <file>res/CLEDYellowSmall.png</file>
         <file>res/HLEDGreenSmall.png</file>
         <file>res/HLEDGreySmall.png</file>
         <file>res/HLEDRedSmall.png</file>
         <file>res/HLEDYellowSmall.png</file>
-        <file>res/VLEDBlack.png</file>
-        <file>res/VLEDBlackSmall.png</file>
-        <file>res/VLEDDisabledSmall.png</file>
-        <file>res/VLEDGreen.png</file>
-        <file>res/VLEDGreenSmall.png</file>
-        <file>res/VLEDGrey.png</file>
-        <file>res/VLEDGreySmall.png</file>
-        <file>res/VLEDRed.png</file>
-        <file>res/VLEDRedSmall.png</file>
-        <file>res/VLEDYellow.png</file>
-        <file>res/VLEDYellowSmall.png</file>
-        <file>res/VRLEDBlack.png</file>
-        <file>res/VRLEDBlackSmall.png</file>
-        <file>res/VRLEDGreen.png</file>
-        <file>res/VRLEDGreenSmall.png</file>
-        <file>res/VRLEDGrey.png</file>
-        <file>res/VRLEDGreySmall.png</file>
-        <file>res/VRLEDRed.png</file>
-        <file>res/VRLEDRedSmall.png</file>
-        <file>res/VRLEDYellow.png</file>
-        <file>res/VRLEDYellowSmall.png</file>
     </qresource>
     <qresource prefix="/png/fader" >
         <file>res/faderbackground.png</file>

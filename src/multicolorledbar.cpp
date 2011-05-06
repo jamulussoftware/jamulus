@@ -134,7 +134,7 @@ void CMultiColorLEDBar::setValue ( const int value )
 }
 
 CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
-    BitmCubeRoundDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/VLEDDisabledSmall.png" ) ),
+    BitmCubeRoundDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),
     BitmCubeRoundGrey     ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreySmall.png" ) ),
     BitmCubeRoundGreen    ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreenSmall.png" ) ),
     BitmCubeRoundYellow   ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDYellowSmall.png" ) ),

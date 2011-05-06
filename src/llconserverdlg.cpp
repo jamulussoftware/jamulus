@@ -29,7 +29,10 @@
 CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
                                    QWidget*        parent,
                                    Qt::WindowFlags f )
-    : QDialog ( parent, f ), pServer ( pNServP )
+    : QDialog                  ( parent, f ),
+      pServer                  ( pNServP ),
+      BitmapSystemTrayInactive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreyArrow.png" ) ),
+      BitmapSystemTrayActive   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenArrow.png" ) )
 {
     setupUi ( this );
 
@@ -101,6 +104,31 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
     ComboBoxLocationCountry->setAccessibleName ( tr (
         "Country where the server is located combo box" ) );
 
+
+    // check if system tray icon can be used
+    bSystemTrayIconAvaialbe = SystemTrayIcon.isSystemTrayAvailable();
+
+    // init system tray icon
+    if ( bSystemTrayIconAvaialbe )
+    {
+        // prepare context menu to be added to the system tray icon
+        pSystemTrayIconMenu = new QMenu ( this );
+
+        pSystemTrayIconMenu->addAction ( tr ( "E&xit" ),
+            this, SLOT ( OnSysTrayMenuExit() ) );
+
+        pSystemTrayIconMenu->addSeparator();
+
+        pSystemTrayIconMenu->setDefaultAction ( pSystemTrayIconMenu->addAction (
+            tr ( "&Open " ) + APP_NAME + tr ( " server" ),
+            this, SLOT ( OnSysTrayMenuOpen() ) ) );
+
+        SystemTrayIcon.setContextMenu ( pSystemTrayIconMenu );
+
+        // show icon of state "inactive"
+        SystemTrayIcon.setIcon ( QIcon ( BitmapSystemTrayInactive ) );
+        SystemTrayIcon.show();
+    }
 
     // set text for version and application name
     TextLabelNameVersion->setText ( QString ( APP_NAME ) +
@@ -209,6 +237,13 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
 
     // timers
     QObject::connect ( &Timer, SIGNAL ( timeout() ), this, SLOT ( OnTimer() ) );
+
+    // other
+    QObject::connect ( pServer, SIGNAL ( Started() ),
+        this, SLOT ( OnServerStarted() ) );
+
+    QObject::connect ( pServer, SIGNAL ( Stopped() ),
+        this, SLOT ( OnServerStopped() ) );
 
 
     // Timers ------------------------------------------------------------------
@@ -379,6 +414,34 @@ void CLlconServerDlg::UpdateGUIDependencies()
     // server list is enabled and not the default address is used
     LineEditCentralServerAddress->setEnabled (
         !bCurUseDefCentServAddr && bCurSerListEnabled );
+}
+
+void CLlconServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )
+{
+    if ( bSystemTrayIconAvaialbe )
+    {
+        if ( bIsActive )
+        {
+            SystemTrayIcon.setIcon ( QIcon ( BitmapSystemTrayActive ) );
+        }
+        else
+        {
+            SystemTrayIcon.setIcon ( QIcon ( BitmapSystemTrayInactive ) );
+        }
+    }
+}
+
+void CLlconServerDlg::hideEvent ( QHideEvent* )
+{
+// TODO seems not to work correctly...
+/*
+    // if we have a system tray icon, we make the window invisible if it is
+    // minimized
+    if ( bSystemTrayIconAvaialbe )
+    {
+        setVisible ( false );
+    }
+*/
 }
 
 void CLlconServerDlg::customEvent ( QEvent* Event )

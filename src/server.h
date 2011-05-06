@@ -224,6 +224,10 @@ protected:
     // server list
     CServerListManager  ServerListManager;
 
+signals:
+    void Started();
+    void Stopped();
+
 public slots:
     void OnTimer();
     void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );

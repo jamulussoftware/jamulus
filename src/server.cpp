@@ -415,6 +415,9 @@ void CServer::Start()
 
         // init time for response time evaluation
         CycleTimeVariance.Reset();
+
+        // emit start signal
+        emit Started();
     }
 }
 
@@ -431,6 +434,9 @@ void CServer::Stop()
 
         // logging (add "server stopped" logging entry)
         Logging.AddServerStopped();
+
+        // emit stopped signal
+        emit Stopped();
     }
 }
 

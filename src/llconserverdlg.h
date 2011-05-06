@@ -30,6 +30,7 @@
 #include <qslider.h>
 #include <qmenubar.h>
 #include <qlayout.h>
+#include <qsystemtrayicon.h>
 #include "global.h"
 #include "server.h"
 #include "multicolorled.h"
@@ -60,6 +61,11 @@ public:
                       Qt::WindowFlags f = 0 );
 
 protected:
+    virtual void customEvent ( QEvent* Event );
+    virtual void hideEvent   ( QHideEvent* );
+    void         UpdateGUIDependencies();
+    void         UpdateSystemTrayIcon ( const bool bIsActive );
+
     QTimer                        Timer;
     CServer*                      pServer;
 
@@ -68,8 +74,11 @@ protected:
 
     QMenuBar*                     pMenu;
 
-    virtual void customEvent ( QEvent* Event );
-    void         UpdateGUIDependencies();
+    bool                          bSystemTrayIconAvaialbe;
+    QSystemTrayIcon               SystemTrayIcon;
+    QPixmap                       BitmapSystemTrayInactive;
+    QPixmap                       BitmapSystemTrayActive;
+    QMenu*                        pSystemTrayIconMenu;
 
 public slots:
     void OnRegisterServerStateChanged ( int value );
@@ -79,4 +88,8 @@ public slots:
     void OnLineEditLocationCityTextChanged ( const QString& strNewCity );
     void OnComboBoxLocationCountryActivated ( int iCntryListItem );
     void OnTimer();
+    void OnServerStarted() { UpdateSystemTrayIcon ( true ); }
+    void OnServerStopped() { UpdateSystemTrayIcon ( false ); }
+    void OnSysTrayMenuOpen() { showNormal(); raise(); }
+    void OnSysTrayMenuExit() { close(); }
 };

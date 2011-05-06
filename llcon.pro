@@ -175,8 +175,10 @@ DISTFILES += AUTHORS \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \
     src/res/CLEDGreen.png \
+    src/res/CLEDGreenArrow.png \
     src/res/CLEDGreenSmall.png \
     src/res/CLEDGrey.png \
+    src/res/CLEDGreyArrow.png \
     src/res/CLEDGreySmall.png \
     src/res/CLEDRed.png \
     src/res/CLEDRedSmall.png \

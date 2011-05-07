@@ -31,27 +31,12 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
                                    const bool      bNewDisalbeLEDs,
                                    QWidget*        parent,
                                    Qt::WindowFlags f ) :
-    QDialog ( parent, f ),
-    pClient ( pNCliP ),
+    QDialog            ( parent, f ),
+    pClient            ( pNCliP ),
     bUnreadChatMessage ( false ),
-    ClientSettingsDlg ( pNCliP, parent
-#ifdef _WIN32
-                        // this somehow only works reliable on Windows
-                        , Qt::WindowMinMaxButtonsHint
-#endif
-                      ),
-    ChatDlg ( parent
-#ifdef _WIN32
-              // this somehow only works reliable on Windows
-              , Qt::WindowMinMaxButtonsHint
-#endif
-            ),
-    ConnectDlg ( parent
-#ifdef _WIN32
-                 // this somehow only works reliable on Windows
-                 , Qt::WindowMinMaxButtonsHint
-#endif
-               )
+    ClientSettingsDlg  ( pNCliP, parent, Qt::Window ),
+    ChatDlg            ( parent, Qt::Window ),
+    ConnectDlg         ( parent, Qt::Dialog )
 {
     setupUi ( this );
 

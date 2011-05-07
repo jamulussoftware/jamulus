@@ -317,12 +317,8 @@ int main ( int argc, char** argv )
                 &Client,
                 bConnectOnStartup,
                 bDisalbeLEDs,
-                0
-#ifdef _WIN32
-                // this somehow only works reliable on Windows
-                , Qt::WindowMinMaxButtonsHint
-#endif
-                );
+                0,
+                Qt::Window );
 
             // set main window
             pMainWindow = &ClientDlg;
@@ -365,12 +361,8 @@ int main ( int argc, char** argv )
                 // GUI object for the server
                 CLlconServerDlg ServerDlg (
                     &Server,
-                    0
-#ifdef _WIN32
-                    // this somehow only works reliable on Windows
-                    , Qt::WindowMinMaxButtonsHint
-#endif
-                    );
+                    0,
+                    Qt::Window );
 
                 // set main window
                 pMainWindow = &ServerDlg;

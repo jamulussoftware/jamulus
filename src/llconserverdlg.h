@@ -61,10 +61,12 @@ public:
                       Qt::WindowFlags f = 0 );
 
 protected:
-    virtual void customEvent ( QEvent* Event );
-    virtual void hideEvent   ( QHideEvent* );
+    virtual void customEvent ( QEvent* pEvent );
+    virtual void changeEvent ( QEvent* pEvent );
+
     void         UpdateGUIDependencies();
     void         UpdateSystemTrayIcon ( const bool bIsActive );
+    void         ShowWindowInForeground() { showNormal(); raise(); }
 
     QTimer                        Timer;
     CServer*                      pServer;
@@ -90,6 +92,7 @@ public slots:
     void OnTimer();
     void OnServerStarted() { UpdateSystemTrayIcon ( true ); }
     void OnServerStopped() { UpdateSystemTrayIcon ( false ); }
-    void OnSysTrayMenuOpen() { showNormal(); raise(); }
+    void OnSysTrayMenuOpen() { ShowWindowInForeground(); }
     void OnSysTrayMenuExit() { close(); }
+    void OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason );
 };

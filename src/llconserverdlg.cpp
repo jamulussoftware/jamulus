@@ -140,6 +140,12 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
     ListViewClients->setColumnWidth ( 2, 60 );
     ListViewClients->clear();
 
+
+// TEST workaround for resize problem of window after iconize in task bar
+ListViewClients->setMinimumWidth ( 170 + 130 + 60 + 205 );
+ListViewClients->setMinimumHeight ( 140 );
+
+
     // insert items in reverse order because in Windows all of them are
     // always visible -> put first item on the top
     vecpListViewItems.Init ( USED_NUM_CHANNELS );
@@ -204,8 +210,17 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
     UpdateGUIDependencies();
 
 
+    // View menu  --------------------------------------------------------------
+    QMenu* pViewMenu = new QMenu ( "&Window", this );
+
+    pViewMenu->addAction ( tr ( "E&xit" ), this,
+        SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
+
+
     // Main menu bar -----------------------------------------------------------
     pMenu = new QMenuBar ( this );
+
+    pMenu->addMenu ( pViewMenu );
     pMenu->addMenu ( new CLlconHelpMenu ( this ) );
 
     // Now tell the layout about the menu
@@ -244,6 +259,10 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
 
     QObject::connect ( pServer, SIGNAL ( Stopped() ),
         this, SLOT ( OnServerStopped() ) );
+
+    QObject::connect ( &SystemTrayIcon,
+        SIGNAL ( activated ( QSystemTrayIcon::ActivationReason ) ),
+        this, SLOT ( OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ) ) );
 
 
     // Timers ------------------------------------------------------------------
@@ -331,6 +350,15 @@ void CLlconServerDlg::OnComboBoxLocationCountryActivated ( int iCntryListItem )
         ComboBoxLocationCountry->itemData ( iCntryListItem ).toInt() ) );
 
     pServer->UpdateServerList();
+}
+
+void CLlconServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason )
+{
+    // on double click on the icon, show window in fore ground
+    if ( ActReason == QSystemTrayIcon::DoubleClick )
+    {
+        ShowWindowInForeground();
+    }
 }
 
 void CLlconServerDlg::OnTimer()
@@ -431,28 +459,31 @@ void CLlconServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )
     }
 }
 
-void CLlconServerDlg::hideEvent ( QHideEvent* )
+void CLlconServerDlg::changeEvent ( QEvent* pEvent )
 {
-// TODO seems not to work correctly...
-/*
     // if we have a system tray icon, we make the window invisible if it is
     // minimized
-    if ( bSystemTrayIconAvaialbe )
+    if ( bSystemTrayIconAvaialbe &&
+         ( pEvent->type() == QEvent::WindowStateChange ) )
     {
-        setVisible ( false );
+        if ( isMinimized() )
+        {
+            // we have to call the hide function from another thread -> use
+            // the timer for this purpose
+            QTimer::singleShot ( 0, this, SLOT ( hide() ) );
+        }
     }
-*/
 }
 
-void CLlconServerDlg::customEvent ( QEvent* Event )
+void CLlconServerDlg::customEvent ( QEvent* pEvent )
 {
-    if ( Event->type() == QEvent::User + 11 )
+    if ( pEvent->type() == QEvent::User + 11 )
     {
         ListViewMutex.lock();
         {
-            const int iMessType = ( (CLlconEvent*) Event )->iMessType;
-            const int iStatus   = ( (CLlconEvent*) Event )->iStatus;
-            const int iChanNum  = ( (CLlconEvent*) Event )->iChanNum;
+            const int iMessType = ( (CLlconEvent*) pEvent )->iMessType;
+            const int iStatus   = ( (CLlconEvent*) pEvent )->iStatus;
+            const int iChanNum  = ( (CLlconEvent*) pEvent )->iChanNum;
 
             switch(iMessType)
             {

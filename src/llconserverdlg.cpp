@@ -37,6 +37,17 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
     setupUi ( this );
 
 
+
+// TEST
+#ifdef _WIN32
+/*
+QSettings RegSettings ( "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+                        QSettings::NativeFormat );
+RegSettings.setValue ( "llcon server", QCoreApplication::applicationFilePath() );
+*/
+#endif
+
+
     // Add help text to controls -----------------------------------------------
     // client list
     ListViewClients->setWhatsThis ( tr ( "<b>Client List:</b> The client list "

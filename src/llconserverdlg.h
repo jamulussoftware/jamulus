@@ -31,6 +31,7 @@
 #include <qmenubar.h>
 #include <qlayout.h>
 #include <qsystemtrayicon.h>
+#include <qsettings.h>
 #include "global.h"
 #include "server.h"
 #include "multicolorled.h"

@@ -1,13 +1,14 @@
 ; llcon NSIS installer script
 
-!define APP_NAME       "Llcon"
-!define APP_EXE        "llcon.exe"
-!define UNINSTALL_EXE  "Uninstall.exe"
-!define INSTALLER_NAME "llconinstaller.exe"
-!define VS_REDIST_PATH "C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\BootStrapper\Packages\vcredist_x86\"
-;!define VS_REDIST_PATH "C:\Programme\Microsoft Visual Studio 8\SDK\v2.0\BootStrapper\Packages\vcredist_x86\"
-!define VS_REDIST_EXE  "vcredist_x86.exe"
-!define UNINST_KEY     "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
+!define APP_NAME          "Llcon"
+!define REG_AUTO_RUN_NAME "llcon server"
+!define APP_EXE			  "llcon.exe"
+!define UNINSTALL_EXE     "Uninstall.exe"
+!define INSTALLER_NAME    "llconinstaller.exe"
+!define VS_REDIST_PATH    "C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\BootStrapper\Packages\vcredist_x86\"
+;!define VS_REDIST_PATH   "C:\Programme\Microsoft Visual Studio 8\SDK\v2.0\BootStrapper\Packages\vcredist_x86\"
+!define VS_REDIST_EXE     "vcredist_x86.exe"
+!define UNINST_KEY        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
 
 
 SetCompressor lzma
@@ -72,6 +73,9 @@ SectionEnd
 Section "Uninstall"
 
 DeleteRegKey HKLM "${UNINST_KEY}"
+
+; the software may have written an auto run entry in the registry, remove it
+DeleteRegKey HKEY_CURRENT_USER "Software\Microsoft\Windows\CurrentVersion\Run\${REG_AUTO_RUN_NAME}"
 
 Delete "$DESKTOP\${APP_NAME}.lnk"
 Delete "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"

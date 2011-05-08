@@ -84,22 +84,22 @@ protected:
 
  public slots:
     void OnTimerStatus() { UpdateDisplay(); }
-    void OnSliderNetBuf ( int value );
+    void OnNetBufValueChanged ( int value );
     void OnSliderSndCrdBufferDelay ( int value );
-    void OnAutoJitBuf ( int value );
+    void OnAutoJitBufStateChanged ( int value );
     void OnOpenChatOnNewMessageStateChanged ( int value );
     void OnGUIDesignFancyStateChanged ( int value );
     void OnUseHighQualityAudioStateChanged ( int value );
     void OnUseStereoStateChanged ( int value );
     void OnDefaultCentralServerStateChanged ( int value );
-    void OnLineEditCentralServerAddressEditingFinished();
+    void OnCentralServerAddressEditingFinished();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
-    void OnSoundCrdSelection ( int iSndDevIdx );
-    void OnSndCrdLeftInChannelSelection ( int iChanIdx );
-    void OnSndCrdRightInChannelSelection ( int iChanIdx );
-    void OnSndCrdLeftOutChannelSelection ( int iChanIdx );
-    void OnSndCrdRightOutChannelSelection ( int iChanIdx );
-    void OnDriverSetupBut();
+    void OnSoundcardActivated ( int iSndDevIdx );
+    void OnLInChanActivated ( int iChanIdx );
+    void OnRInChanActivated ( int iChanIdx );
+    void OnLOutChanActivated ( int iChanIdx );
+    void OnROutChanActivated ( int iChanIdx );
+    void OnDriverSetupClicked();
 
 signals:
     void GUIDesignChanged();

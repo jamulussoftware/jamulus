@@ -65,28 +65,28 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QString strInpLevHAccText  = tr ( "Input level meter" );
     QString strInpLevHAccDescr = tr ( "Simulates an analog LED level meter." );
 
-    TextInputLEDMeter->setWhatsThis                       ( strInpLevH );
-    TextLevelMeterLeft->setWhatsThis                      ( strInpLevH );
-    TextLevelMeterRight->setWhatsThis                     ( strInpLevH );
-    MultiColorLEDBarInputLevelL->setWhatsThis             ( strInpLevH );
-    MultiColorLEDBarInputLevelL->setAccessibleName        ( strInpLevHAccText );
-    MultiColorLEDBarInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );
-    MultiColorLEDBarInputLevelL->setToolTip               ( strInpLevHTT );
-    MultiColorLEDBarInputLevelR->setWhatsThis             ( strInpLevH );
-    MultiColorLEDBarInputLevelR->setAccessibleName        ( strInpLevHAccText );
-    MultiColorLEDBarInputLevelR->setAccessibleDescription ( strInpLevHAccDescr );
-    MultiColorLEDBarInputLevelR->setToolTip               ( strInpLevHTT );
+    lblInputLEDMeter->setWhatsThis           ( strInpLevH );
+    lblLevelMeterLeft->setWhatsThis          ( strInpLevH );
+    lblLevelMeterRight->setWhatsThis         ( strInpLevH );
+    lbrInputLevelL->setWhatsThis             ( strInpLevH );
+    lbrInputLevelL->setAccessibleName        ( strInpLevHAccText );
+    lbrInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );
+    lbrInputLevelL->setToolTip               ( strInpLevHTT );
+    lbrInputLevelR->setWhatsThis             ( strInpLevH );
+    lbrInputLevelR->setAccessibleName        ( strInpLevHAccText );
+    lbrInputLevelR->setAccessibleDescription ( strInpLevHAccDescr );
+    lbrInputLevelR->setToolTip               ( strInpLevHTT );
 
     // connect/disconnect button
-    PushButtonConnect->setWhatsThis ( tr ( "<b>Connect / Disconnect Button:"
+    butConnect->setWhatsThis ( tr ( "<b>Connect / Disconnect Button:"
         "</b> Push this button to connect the server. A valid IP address has "
         "to be specified before. If the client is connected, pressing this "
         "button will disconnect the connection." ) );
 
-    PushButtonConnect->setAccessibleName (
+    butConnect->setAccessibleName (
         tr ( "Connect and disconnect toggle button" ) );
 
-    PushButtonConnect->setAccessibleDescription ( tr ( "Clicking on this "
+    butConnect->setAccessibleDescription ( tr ( "Clicking on this "
         "button changes the caption of the button from Connect to "
         "Disconnect, i.e., it implements a toggle functionality for connecting "
         "and disconnecting the llcon software." ) );
@@ -103,12 +103,12 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "pseoudonym here so that the other musicians can identify you." ) +
         TOOLTIP_COM_END_TEXT;
 
-    TextLabelServerTag->setWhatsThis ( strFaderTag );
-    TextLabelServerTag->setToolTip   ( strFaderTagTT );
-    LineEditFaderTag->setWhatsThis   ( strFaderTag );
-    LineEditFaderTag->setToolTip     ( strFaderTagTT );
+    lblServerTag->setWhatsThis ( strFaderTag );
+    lblServerTag->setToolTip   ( strFaderTagTT );
+    edtFaderTag->setWhatsThis  ( strFaderTag );
+    edtFaderTag->setToolTip    ( strFaderTagTT );
 
-    LineEditFaderTag->setAccessibleName ( tr ( "Fader tag edit box" ) );
+    edtFaderTag->setAccessibleName ( tr ( "Fader tag edit box" ) );
 
     // local audio input fader
     QString strAudFader = tr ( "<b>Local Audio Input Fader:</b> With the "
@@ -120,10 +120,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "a direction where the label above the fader shows <i>L -x</i>, where "
         "<i>x</i> is the current attenuation indication. " );
 
-    TextAudInFader->setWhatsThis        ( strAudFader );
-    SliderAudInFader->setWhatsThis      ( strAudFader );
+    lblAudioPan->setWhatsThis ( strAudFader );
+    sldAudioPan->setWhatsThis ( strAudFader );
 
-    SliderAudInFader->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
+    sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
 
     // reverberation level
     QString strAudReverb = tr ( "<b>Reverberation Level:</b> A reverberation "
@@ -138,10 +138,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "minimum (which is the default setting), the reverberation effect is "
         "switched off and does not cause any additional CPU usage." );
 
-    TextLabelAudReverb->setWhatsThis   ( strAudReverb );
-    SliderAudReverb->setWhatsThis      ( strAudReverb );
+    lblAudioReverb->setWhatsThis ( strAudReverb );
+    sldAudioReverb->setWhatsThis ( strAudReverb );
 
-    SliderAudReverb->setAccessibleName ( tr ( "Reverberation effect level setting" ) );
+    sldAudioReverb->setAccessibleName ( tr ( "Reverberation effect level setting" ) );
 
     // reverberation channel selection
     QString strRevChanSel = tr ( "<b>Reverberation Channel Selection:</b> "
@@ -149,10 +149,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "reverberation effect is applied can be chosen. Either the left "
         "or right input channel can be selected." );
 
-    RadioButtonRevSelL->setWhatsThis ( strRevChanSel );
-    RadioButtonRevSelL->setAccessibleName ( tr ( "Left channel selection for reverberation" ) );
-    RadioButtonRevSelR->setWhatsThis ( strRevChanSel );
-    RadioButtonRevSelR->setAccessibleName ( tr ( "Right channel selection for reverberation" ) );
+    rbtReverbSelL->setWhatsThis ( strRevChanSel );
+    rbtReverbSelL->setAccessibleName ( tr ( "Left channel selection for reverberation" ) );
+    rbtReverbSelR->setWhatsThis ( strRevChanSel );
+    rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverberation" ) );
 
     // connection LED
     QString strLEDConnection = tr ( "<b>Connection Status LED:</b> "
@@ -163,10 +163,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "If the light turns red and stays red, the connection to the "
         "server is lost." );
 
-    TextLabelConnection->setWhatsThis ( strLEDConnection );
-    LEDConnection->setWhatsThis       ( strLEDConnection );
+    lblConnection->setWhatsThis ( strLEDConnection );
+    ledConnection->setWhatsThis ( strLEDConnection );
 
-    LEDConnection->setAccessibleName ( tr ( "Connection status LED indicator" ) );
+    ledConnection->setAccessibleName ( tr ( "Connection status LED indicator" ) );
 
     // delay LED
     QString strLEDDelay = tr ( "<b>Delay Status LED:</b> "
@@ -176,13 +176,13 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "it may be harder to play. If the light is red, the delay is too "
         "large for jamming." );
 
-    TextLabelDelay->setWhatsThis ( strLEDDelay );
-    LEDDelay->setWhatsThis       ( strLEDDelay );
-    LEDDelay->setToolTip ( tr ( "If this LED indicator turns red, "
+    lblDelay->setWhatsThis ( strLEDDelay );
+    ledDelay->setWhatsThis ( strLEDDelay );
+    ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
         "you will not have much fun using the llcon software." ) +
         TOOLTIP_COM_END_TEXT );
 
-    LEDDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
+    ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
 
     // buffers LED
     QString strLEDBuffers =  tr ( "<b>Buffers Status LED:</b> "
@@ -200,20 +200,20 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "<li>The CPU of the client or server is at 100%.</li>"
         "</ul>" );
 
-    TextLabelBuffers->setWhatsThis ( strLEDBuffers );
-    LEDBuffers->setWhatsThis       ( strLEDBuffers );
+    lblBuffers->setWhatsThis ( strLEDBuffers );
+    ledBuffers->setWhatsThis ( strLEDBuffers );
 
-    LEDBuffers->setAccessibleName ( tr ( "Buffers status LED indicator" ) );
+    ledBuffers->setAccessibleName ( tr ( "Buffers status LED indicator" ) );
 
     // chat LED
     QString strLEDChat =  tr ( "<b>Chat Status LED:</b> "
         "If the option Open Chat on New Message is not activated, this "
         "status LED will turn green on a new received chat message." );
 
-    TextLabelChat->setWhatsThis ( strLEDChat );
-    LEDChat->setWhatsThis       ( strLEDChat );
+    lblChat->setWhatsThis ( strLEDChat );
+    ledChat->setWhatsThis ( strLEDChat );
 
-    LEDBuffers->setAccessibleName ( tr ( "Chat status LED indicator" ) );
+    ledBuffers->setAccessibleName ( tr ( "Chat status LED indicator" ) );
 
 
     // init GUI design
@@ -223,36 +223,36 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     MainMixerBoard->HideAll();
 
     // init fader tag line edit
-    LineEditFaderTag->setText ( pClient->strName );
+    edtFaderTag->setText ( pClient->strName );
 
     // init status label
     OnTimerStatus();
 
     // init connection button text
-    PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
+    butConnect->setText ( CON_BUT_CONNECTTEXT );
 
     // init input level meter bars
-    MultiColorLEDBarInputLevelL->setValue ( 0 );
-    MultiColorLEDBarInputLevelR->setValue ( 0 );
+    lbrInputLevelL->setValue ( 0 );
+    lbrInputLevelR->setValue ( 0 );
 
     // init status LEDs
-    LEDConnection->SetUpdateTime ( 2 * LED_BAR_UPDATE_TIME_MS );
-    LEDChat->SetUpdateTime       ( 2 * LED_BAR_UPDATE_TIME_MS );
-    LEDDelay->SetUpdateTime      ( 2 * PING_UPDATE_TIME_MS );
-    LEDDelay->Reset();
+    ledConnection->SetUpdateTime ( 2 * LED_BAR_UPDATE_TIME_MS );
+    ledChat->SetUpdateTime       ( 2 * LED_BAR_UPDATE_TIME_MS );
+    ledDelay->SetUpdateTime      ( 2 * PING_UPDATE_TIME_MS );
+    ledDelay->Reset();
 
 
     // init slider controls ---
     // audio in fader
-    SliderAudInFader->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
-    SliderAudInFader->setTickInterval ( AUD_FADER_IN_MAX / 5 );
+    sldAudioPan->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
+    sldAudioPan->setTickInterval ( AUD_FADER_IN_MAX / 5 );
     UpdateAudioFaderSlider();
 
     // audio reverberation
-    SliderAudReverb->setRange ( 0, AUD_REVERB_MAX );
+    sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
     const int iCurAudReverb = pClient->GetReverbLevel();
-    SliderAudReverb->setValue ( iCurAudReverb );
-    SliderAudReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
+    sldAudioReverb->setValue ( iCurAudReverb );
+    sldAudioReverb->setTickInterval ( AUD_REVERB_MAX / 5 );
 
     // init reverb channel
     UpdateRevSelection();
@@ -272,13 +272,13 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // disable LEDs in main window if requested
     if ( bNewDisalbeLEDs )
     {
-        MultiColorLEDBarInputLevelL->setEnabled ( false );
-        MultiColorLEDBarInputLevelR->setEnabled ( false );
-        LEDConnection->setEnabled ( false );
-        LEDBuffers->setEnabled ( false );
-        LEDDelay->setEnabled ( false );
-        LEDChat->setEnabled ( false );
-        PushButtonConnect->setFocus();
+        lbrInputLevelL->setEnabled ( false );
+        lbrInputLevelR->setEnabled ( false );
+        ledConnection->setEnabled ( false );
+        ledBuffers->setEnabled ( false );
+        ledDelay->setEnabled ( false );
+        ledChat->setEnabled ( false );
+        butConnect->setFocus();
     }
 
 
@@ -289,7 +289,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // Better solution: increase thread priority of worker thread (since the
     // user can always highlight the button manually, too) -> TODO
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
-    PushButtonConnect->setDefault ( false );
+    butConnect->setDefault ( false );
 #endif
 
 
@@ -320,7 +320,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
     // Connections -------------------------------------------------------------
     // push-buttons
-    QObject::connect ( PushButtonConnect, SIGNAL ( clicked() ),
+    QObject::connect ( butConnect, SIGNAL ( clicked() ),
         this, SLOT ( OnConnectDisconBut() ) );
 
     // timers
@@ -334,21 +334,21 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         this, SLOT ( OnTimerPing() ) );
 
     // sliders
-    QObject::connect ( SliderAudInFader, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnSliderAudInFader ( int ) ) );
+    QObject::connect ( sldAudioPan, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnAudioPanValueChanged ( int ) ) );
 
-    QObject::connect ( SliderAudReverb, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnSliderAudReverb ( int ) ) );
+    QObject::connect ( sldAudioReverb, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnAudioReverbValueChanged ( int ) ) );
 
     // radio buttons
-    QObject::connect ( RadioButtonRevSelL, SIGNAL ( clicked() ),
-        this, SLOT ( OnRevSelL() ) );
+    QObject::connect ( rbtReverbSelL, SIGNAL ( clicked() ),
+        this, SLOT ( OnReverbSelLClicked() ) );
 
-    QObject::connect ( RadioButtonRevSelR, SIGNAL ( clicked() ),
-        this, SLOT ( OnRevSelR() ) );
+    QObject::connect ( rbtReverbSelR, SIGNAL ( clicked() ),
+        this, SLOT ( OnReverbSelRClicked() ) );
 
     // line edits
-    QObject::connect ( LineEditFaderTag, SIGNAL ( textChanged ( const QString& ) ),
+    QObject::connect ( edtFaderTag, SIGNAL ( textChanged ( const QString& ) ),
         this, SLOT ( OnFaderTagTextChanged ( const QString& ) ) );
 
     // other
@@ -416,7 +416,7 @@ void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
     }
 
     // store fader tag
-    pClient->strName = LineEditFaderTag->text();
+    pClient->strName = edtFaderTag->text();
 
     // default implementation of this event handler routine
     Event->accept();
@@ -426,26 +426,26 @@ void CLlconClientDlg::UpdateAudioFaderSlider()
 {
     // update slider and label of audio fader
     const int iCurAudInFader = pClient->GetAudioInFader();
-    SliderAudInFader->setValue ( iCurAudInFader );
+    sldAudioPan->setValue ( iCurAudInFader );
 
     // show in label the center position and what channel is
     // attenuated
     if ( iCurAudInFader == AUD_FADER_IN_MIDDLE )
     {
-        TextLabelAudFader->setText ( "Center" );
+        lblAudioPanValue->setText ( "Center" );
     }
     else
     {
         if ( iCurAudInFader > AUD_FADER_IN_MIDDLE )
         {
             // attenuation on right channel
-            TextLabelAudFader->setText ( "R -" +
+            lblAudioPanValue->setText ( "R -" +
                 QString().setNum ( iCurAudInFader - AUD_FADER_IN_MIDDLE ) );
         }
         else
         {
             // attenuation on left channel
-            TextLabelAudFader->setText ( "L -" +
+            lblAudioPanValue->setText ( "L -" +
                 QString().setNum ( AUD_FADER_IN_MIDDLE - iCurAudInFader ) );
         }
     }
@@ -457,28 +457,28 @@ void CLlconClientDlg::UpdateRevSelection()
     {
         // for stereo make channel selection invisible since
         // reverberation effect is always applied to both channels
-        RadioButtonRevSelL->setVisible ( false );
-        RadioButtonRevSelR->setVisible ( false );
+        rbtReverbSelL->setVisible ( false );
+        rbtReverbSelR->setVisible ( false );
     }
     else
     {
         // make radio buttons visible
-        RadioButtonRevSelL->setVisible ( true );
-        RadioButtonRevSelR->setVisible ( true );
+        rbtReverbSelL->setVisible ( true );
+        rbtReverbSelR->setVisible ( true );
 
         // update value
         if ( pClient->IsReverbOnLeftChan() )
         {
-            RadioButtonRevSelL->setChecked ( true );
+            rbtReverbSelL->setChecked ( true );
         }
         else
         {
-            RadioButtonRevSelR->setChecked ( true );
+            rbtReverbSelR->setChecked ( true );
         }
     }
 }
 
-void CLlconClientDlg::OnSliderAudInFader ( int value )
+void CLlconClientDlg::OnAudioPanValueChanged ( int value )
 {
     pClient->SetAudioInFader ( value );
     UpdateAudioFaderSlider();
@@ -596,7 +596,7 @@ void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
     else
     {
         // text is too long, update control with shortend text
-        LineEditFaderTag->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
+        edtFaderTag->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
     }
 }
 
@@ -629,8 +629,8 @@ void CLlconClientDlg::OnTimerSigMet()
     }
 
     // show current level
-    MultiColorLEDBarInputLevelL->setValue ( (int) ceil ( dCurSigLevelL ) );
-    MultiColorLEDBarInputLevelR->setValue ( (int) ceil ( dCurSigLevelR ) );
+    lbrInputLevelL->setValue ( (int) ceil ( dCurSigLevelL ) );
+    lbrInputLevelR->setValue ( (int) ceil ( dCurSigLevelR ) );
 }
 
 void CLlconClientDlg::OnTimerPing()
@@ -673,7 +673,7 @@ void CLlconClientDlg::OnPingTimeResult ( int iPingTime )
     }
 
     // update delay LED on the main window
-    LEDDelay->SetLight ( iOverallDelayLEDColor );
+    ledDelay->SetLight ( iOverallDelayLEDColor );
 }
 
 void CLlconClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
@@ -785,7 +785,7 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
                 if ( bStartOk )
                 {
                     // change connect button text to "disconnect"
-                    PushButtonConnect->setText ( CON_BUT_DISCONNECTTEXT );
+                    butConnect->setText ( CON_BUT_DISCONNECTTEXT );
 
                     // set server name in audio mixer group box title
                     if ( ConnectDlg.GetServerListItemWasChosen() )
@@ -811,7 +811,7 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
             else
             {
                 // show the error as red light
-                LEDConnection->SetLight ( MUL_COL_LED_RED );
+                ledConnection->SetLight ( MUL_COL_LED_RED );
             }
 
         }
@@ -828,15 +828,15 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
         }
 
         // change connect button text to "connect"
-        PushButtonConnect->setText ( CON_BUT_CONNECTTEXT );
+        butConnect->setText ( CON_BUT_CONNECTTEXT );
 
         // reset server name in audio mixer group box title
         MainMixerBoard->SetServerName ( "" );
 
         // stop timer for level meter bars and reset them
         TimerSigMet.stop();
-        MultiColorLEDBarInputLevelL->setValue ( 0 );
-        MultiColorLEDBarInputLevelR->setValue ( 0 );
+        lbrInputLevelL->setValue ( 0 );
+        lbrInputLevelR->setValue ( 0 );
 
         // stop ping time measurement timer
         TimerPing.stop();
@@ -848,10 +848,10 @@ OnTimerStatus();
 
 // TODO this seems not to work, LEDs are still updated afterwards...
 // reset LEDs
-LEDConnection->Reset();
-LEDBuffers->Reset();
-LEDDelay->Reset();
-LEDChat->Reset();
+ledConnection->Reset();
+ledBuffers->Reset();
+ledDelay->Reset();
+ledChat->Reset();
 
 
         // clear mixer board (remove all faders)
@@ -869,20 +869,20 @@ void CLlconClientDlg::UpdateDisplay()
             // chat LED
             if ( bUnreadChatMessage )
             {
-                LEDChat->SetLight ( MUL_COL_LED_GREEN );
+                ledChat->SetLight ( MUL_COL_LED_GREEN );
             }
             else
             {
-                LEDChat->Reset();
+                ledChat->Reset();
             }
 
             // connection LED
-            LEDConnection->SetLight ( MUL_COL_LED_GREEN );
+            ledConnection->SetLight ( MUL_COL_LED_GREEN );
         }
         else
         {
             // connection LED
-            LEDConnection->SetLight ( MUL_COL_LED_RED );
+            ledConnection->SetLight ( MUL_COL_LED_RED );
         }
     }
 }
@@ -912,10 +912,10 @@ void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
 // background frame the style sheet for QRadioButton was already set. But it
 // seems that it is only applied if the style was set to default and then back
 // to GD_ORIGINAL. This seems to be a QT related issue...
-RadioButtonRevSelL->setStyleSheet ( "color: rgb(148, 148, 148);"
-                                    "font:  bold;" );
-RadioButtonRevSelR->setStyleSheet ( "color: rgb(148, 148, 148);"
-                                    "font:  bold;" );
+rbtReverbSelL->setStyleSheet ( "color: rgb(148, 148, 148);"
+                               "font:  bold;" );
+rbtReverbSelR->setStyleSheet ( "color: rgb(148, 148, 148);"
+                               "font:  bold;" );
 #endif
 
         break;
@@ -926,8 +926,8 @@ RadioButtonRevSelR->setStyleSheet ( "color: rgb(148, 148, 148);"
 
 #ifdef _WIN32
 // Workaround QT-Windows problem: See above description
-RadioButtonRevSelL->setStyleSheet ( "" );
-RadioButtonRevSelR->setStyleSheet ( "" );
+rbtReverbSelL->setStyleSheet ( "" );
+rbtReverbSelR->setStyleSheet ( "" );
 #endif
 
         break;
@@ -951,14 +951,14 @@ void CLlconClientDlg::customEvent ( QEvent* Event )
         case MS_JIT_BUF_PUT:
         case MS_JIT_BUF_GET:
             // buffer status -> if any buffer goes red, this LED will go red
-            LEDBuffers->SetLight ( iStatus );
+            ledBuffers->SetLight ( iStatus );
             break;
 
         case MS_RESET_ALL:
-            LEDConnection->Reset();
-            LEDBuffers->Reset();
-            LEDDelay->Reset();
-            LEDChat->Reset();
+            ledConnection->Reset();
+            ledBuffers->Reset();
+            ledDelay->Reset();
+            ledChat->Reset();
             break;
 
         case MS_SET_JIT_BUF_SIZE:

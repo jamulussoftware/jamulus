@@ -23,7 +23,7 @@
   </property>
   <layout class="QVBoxLayout" >
    <item>
-    <widget class="QTreeWidget" name="ListViewServers" >
+    <widget class="QTreeWidget" name="lvwServers" >
      <property name="editTriggers" >
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
@@ -61,7 +61,7 @@
    <item>
     <layout class="QHBoxLayout" >
      <item>
-      <widget class="QLabel" name="TextLabelServerAddr" >
+      <widget class="QLabel" name="lblServerAddr" >
        <property name="text" >
         <string>Server Name/Address</string>
        </property>
@@ -71,7 +71,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="LineEditServerAddr" >
+      <widget class="QComboBox" name="cbxServerAddr" >
        <property name="editable" >
         <bool>true</bool>
        </property>
@@ -95,14 +95,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="CancelButton" >
+      <widget class="QPushButton" name="butCancel" >
        <property name="text" >
         <string>C&amp;ancel</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="ConnectButton" >
+      <widget class="QPushButton" name="butConnect" >
        <property name="text" >
         <string>&amp;Connect</string>
        </property>

@@ -123,15 +123,15 @@ public slots:
     void OnOpenChatDialog()
         { ShowChatWindow(); }
 
-    void OnSliderAudInFader ( int value );
+    void OnAudioPanValueChanged ( int value );
 
-    void OnSliderAudReverb ( int value )
+    void OnAudioReverbValueChanged ( int value )
         { pClient->SetReverbLevel ( value ); }
 
-    void OnRevSelL()
+    void OnReverbSelLClicked()
         { pClient->SetReverbOnLeftChan ( true ); }
 
-    void OnRevSelR()
+    void OnReverbSelRClicked()
         { pClient->SetReverbOnLeftChan ( false ); }
 
     void OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );

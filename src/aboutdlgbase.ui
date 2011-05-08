@@ -66,7 +66,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="TextLabelVersion" >
+          <widget class="QLabel" name="lblVersion" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
              <horstretch>0</horstretch>
@@ -121,7 +121,7 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="TextLabelAuthorNames" >
+            <widget class="QLabel" name="lblAuthorNames" >
              <property name="text" >
               <string>Author: Volker Fischer</string>
              </property>
@@ -131,7 +131,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="TextLabelCopyright" >
+            <widget class="QLabel" name="lblCopyright" >
              <property name="text" >
               <string>Copyright (C) 2005 - 2011</string>
              </property>
@@ -165,7 +165,7 @@
      <item>
       <layout class="QVBoxLayout" >
        <item>
-        <widget class="QLabel" name="label" >
+        <widget class="QLabel" name="pxlGigPicture" >
          <property name="text" >
           <string/>
          </property>
@@ -195,7 +195,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QTextBrowser" name="TextViewCredits" />
+    <widget class="QTextBrowser" name="txvCredits" />
    </item>
    <item>
     <layout class="QHBoxLayout" >
@@ -249,7 +249,7 @@
  </widget>
  <tabstops>
   <tabstop>buttonOk</tabstop>
-  <tabstop>TextViewCredits</tabstop>
+  <tabstop>txvCredits</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc" />

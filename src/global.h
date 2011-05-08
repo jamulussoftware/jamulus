@@ -4,6 +4,23 @@
  * Author(s):
  *  Volker Fischer
  *
+
+Prefix definitions for the GUI:
+
+label:        lbl
+combo box:    cbx
+line edit:    edt
+list view:    lvw
+check box:    chb
+radio button: rbt
+button:       but
+text view:    txv
+slider:       sld
+LED:          led
+group box:    grb
+pixmap label: pxl
+LED bar:      lbr
+
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or modify it under

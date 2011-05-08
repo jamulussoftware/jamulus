@@ -33,56 +33,56 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
 
 
     // Add help text to controls -----------------------------------------------
-    lineEditLocalInputText->setAccessibleName ( "New chat text edit box" );
-    TextViewChatWindow->setAccessibleName ( "Chat history" );
+    edtLocalInputText->setAccessibleName ( "New chat text edit box" );
+    txvChatWindow->setAccessibleName     ( "Chat history" );
 
 
     // clear chat window and edit line
-    TextViewChatWindow->clear();
-    lineEditLocalInputText->clear();
+    txvChatWindow->clear();
+    edtLocalInputText->clear();
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( lineEditLocalInputText,
+    QObject::connect ( edtLocalInputText,
         SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnChatTextChanged ( const QString& ) ) );
+        this, SLOT ( OnLocalInputTextTextChanged ( const QString& ) ) );
 
-    QObject::connect ( lineEditLocalInputText, SIGNAL ( returnPressed() ),
-        this, SLOT ( OnNewLocalInputText() ) );
+    QObject::connect ( edtLocalInputText, SIGNAL ( returnPressed() ),
+        this, SLOT ( OnLocalInputTextReturnPressed() ) );
 
-    QObject::connect ( pbClear, SIGNAL ( pressed() ),
-        this, SLOT ( OnClearButtonPressed() ) );
+    QObject::connect ( butClear, SIGNAL ( pressed() ),
+        this, SLOT ( OnClearPressed() ) );
 }
 
-void CChatDlg::OnChatTextChanged ( const QString& strNewText )
+void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
 {
     // check and correct length
     if ( strNewText.length() > MAX_LEN_CHAT_TEXT )
     {
         // text is too long, update control with shortend text
-        lineEditLocalInputText->setText ( strNewText.left ( MAX_LEN_CHAT_TEXT ) );
+        edtLocalInputText->setText ( strNewText.left ( MAX_LEN_CHAT_TEXT ) );
     }
 }
 
-void CChatDlg::OnNewLocalInputText()
+void CChatDlg::OnLocalInputTextReturnPressed()
 {
     // send new text and clear line afterwards
-    emit NewLocalInputText ( lineEditLocalInputText->text() );
-    lineEditLocalInputText->clear();
+    emit NewLocalInputText ( edtLocalInputText->text() );
+    edtLocalInputText->clear();
 }
 
-void CChatDlg::OnClearButtonPressed()
+void CChatDlg::OnClearPressed()
 {
     // clear chat window
-    TextViewChatWindow->clear();
+    txvChatWindow->clear();
 }
 
 void CChatDlg::AddChatText ( QString strChatText )
 {
     // add new text in chat window
-    TextViewChatWindow->append ( strChatText );
+    txvChatWindow->append ( strChatText );
 
     // notify accessibility plugin that text has changed
-    QAccessible::updateAccessibility ( TextViewChatWindow, 0,
+    QAccessible::updateAccessibility ( txvChatWindow, 0,
         QAccessible::ValueChanged );
 }

@@ -26,14 +26,14 @@
   </property>
   <layout class="QVBoxLayout" >
    <item>
-    <widget class="QTextBrowser" name="TextViewChatWindow" >
+    <widget class="QTextBrowser" name="txvChatWindow" >
      <property name="textInteractionFlags" >
       <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse|Qt::NoTextInteraction|Qt::TextBrowserInteraction|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QLineEdit" name="lineEditLocalInputText" />
+    <widget class="QLineEdit" name="edtLocalInputText" />
    </item>
    <item>
     <layout class="QHBoxLayout" >
@@ -54,7 +54,7 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pbClear" >
+      <widget class="QPushButton" name="butClear" >
        <property name="text" >
         <string>Cl&amp;ear</string>
        </property>
@@ -81,9 +81,9 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>lineEditLocalInputText</tabstop>
-  <tabstop>TextViewChatWindow</tabstop>
-  <tabstop>pbClear</tabstop>
+  <tabstop>edtLocalInputText</tabstop>
+  <tabstop>txvChatWindow</tabstop>
+  <tabstop>butClear</tabstop>
   <tabstop>buttonClose</tabstop>
  </tabstops>
  <resources>

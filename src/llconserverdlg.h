@@ -90,10 +90,10 @@ public slots:
     void OnRegisterServerStateChanged ( int value );
     void OnDefaultCentralServerStateChanged ( int value );
     void OnStartOnOSStartStateChanged ( int value );
-    void OnLineEditCentralServerAddressEditingFinished();
-    void OnLineEditServerNameTextChanged ( const QString& strNewName );
-    void OnLineEditLocationCityTextChanged ( const QString& strNewCity );
-    void OnComboBoxLocationCountryActivated ( int iCntryListItem );
+    void OnCentralServerAddressEditingFinished();
+    void OnServerNameTextChanged ( const QString& strNewName );
+    void OnLocationCityTextChanged ( const QString& strNewCity );
+    void OnLocationCountryActivated ( int iCntryListItem );
     void OnTimer();
     void OnServerStarted() { UpdateSystemTrayIcon ( true ); }
     void OnServerStopped() { UpdateSystemTrayIcon ( false ); }

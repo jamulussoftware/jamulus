@@ -45,47 +45,46 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
         "A list of the most recent used server URLs is available for "
         "selection." );
 
-    TextLabelServerAddr->setWhatsThis ( strServAddrH );
-    LineEditServerAddr->setWhatsThis  ( strServAddrH );
+    lblServerAddr->setWhatsThis ( strServAddrH );
+    cbxServerAddr->setWhatsThis ( strServAddrH );
 
-    LineEditServerAddr->setAccessibleName        ( tr ( "Server address edit box" ) );
-    LineEditServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
+    cbxServerAddr->setAccessibleName        ( tr ( "Server address edit box" ) );
+    cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
         "URL. It also stores old URLs in the combo box list." ) );
 
 
     // init server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
-    LineEditServerAddr->setMaxCount     ( MAX_NUM_SERVER_ADDR_ITEMS );
-    LineEditServerAddr->setInsertPolicy ( QComboBox::NoInsert );
+    cbxServerAddr->setMaxCount     ( MAX_NUM_SERVER_ADDR_ITEMS );
+    cbxServerAddr->setInsertPolicy ( QComboBox::NoInsert );
 
     // set up list view for connected clients
-    ListViewServers->setColumnWidth ( 0, 170 );
-    ListViewServers->setColumnWidth ( 1, 65 );
-    ListViewServers->setColumnWidth ( 2, 55 );
-    ListViewServers->setColumnWidth ( 3, 130 );
-    ListViewServers->clear();
+    lvwServers->setColumnWidth ( 0, 170 );
+    lvwServers->setColumnWidth ( 1, 65 );
+    lvwServers->setColumnWidth ( 2, 55 );
+    lvwServers->setColumnWidth ( 3, 130 );
+    lvwServers->clear();
 
 
     // Connections -------------------------------------------------------------
     // list view
-    QObject::connect ( ListViewServers,
+    QObject::connect ( lvwServers,
         SIGNAL ( itemSelectionChanged() ),
         this, SLOT ( OnServerListItemSelectionChanged() ) );
 
-    QObject::connect ( ListViewServers,
+    QObject::connect ( lvwServers,
         SIGNAL ( itemDoubleClicked ( QTreeWidgetItem*, int ) ),
         this, SLOT ( OnServerListItemDoubleClicked ( QTreeWidgetItem*, int ) ) );
 
     // combo boxes
-    QObject::connect ( LineEditServerAddr,
-        SIGNAL ( editTextChanged ( const QString& ) ),
-        this, SLOT ( OnLineEditServerAddrEditTextChanged ( const QString& ) ) );
+    QObject::connect ( cbxServerAddr, SIGNAL ( editTextChanged ( const QString& ) ),
+        this, SLOT ( OnServerAddrEditTextChanged ( const QString& ) ) );
 
     // buttons
-    QObject::connect ( CancelButton, SIGNAL ( clicked() ),
+    QObject::connect ( butCancel, SIGNAL ( clicked() ),
         this, SLOT ( close() ) );
 
-    QObject::connect ( ConnectButton, SIGNAL ( clicked() ),
-        this, SLOT ( OnConnectButtonClicked() ) );
+    QObject::connect ( butConnect, SIGNAL ( clicked() ),
+        this, SLOT ( OnConnectClicked() ) );
 
     // timers
     QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
@@ -102,12 +101,12 @@ void CConnectDlg::Init ( const QString           strNewCentralServerAddr,
     strCentralServerAddress = strNewCentralServerAddr;
 
     // load stored IP addresses in combo box
-    LineEditServerAddr->clear();
+    cbxServerAddr->clear();
     for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
     {
         if ( !vstrIPAddresses[iLEIdx].isEmpty() )
         {
-            LineEditServerAddr->addItem ( vstrIPAddresses[iLEIdx] );
+            cbxServerAddr->addItem ( vstrIPAddresses[iLEIdx] );
         }
     }
 }
@@ -125,7 +124,7 @@ void CConnectDlg::showEvent ( QShowEvent* )
     strSelectedServerName = "";
 
     // clear server list view
-    ListViewServers->clear();
+    lvwServers->clear();
 
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
@@ -147,8 +146,7 @@ void CConnectDlg::hideEvent ( QHideEvent* )
     // get the IP address to be used according to the following definitions:
     // - if the list has focus and a line is selected, use this line
     // - if the list has no focus, use the current combo box text
-    QList<QTreeWidgetItem*> CurSelListItemList =
-        ListViewServers->selectedItems();
+    QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
 
     if ( CurSelListItemList.count() > 0 )
     {
@@ -164,7 +162,7 @@ void CConnectDlg::hideEvent ( QHideEvent* )
     }
     else
     {
-        strSelectedAddress = LineEditServerAddr->currentText();
+        strSelectedAddress = cbxServerAddr->currentText();
     }
 
     // if window is closed, stop timers
@@ -190,7 +188,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
     TimerReRequestServList.stop();
 
     // first clear list
-    ListViewServers->clear();
+    lvwServers->clear();
 
     // add list item for each server in the server list
     const int iServerInfoLen = vecServerInfo.Size();
@@ -212,8 +210,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         }
 
         // create new list view item
-        QTreeWidgetItem* pNewListViewItem =
-            new QTreeWidgetItem ( ListViewServers );
+        QTreeWidgetItem* pNewListViewItem = new QTreeWidgetItem ( lvwServers );
 
         // make the entry invisible (will be set to visible on successful ping
         // result)
@@ -278,19 +275,17 @@ void CConnectDlg::OnServerListItemSelectionChanged()
 {
     // get current selected item (we are only interested in the first selcted
     // item)
-    QList<QTreeWidgetItem*> CurSelListItemList =
-        ListViewServers->selectedItems();
+    QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
 
     // if an item is clicked/selected, copy the server name to the combo box
     if ( CurSelListItemList.count() > 0 )
     {
         // make sure no signals are send when we change the text
-        LineEditServerAddr->blockSignals ( true );
+        cbxServerAddr->blockSignals ( true );
         {
-            LineEditServerAddr->setEditText (
-                CurSelListItemList[0]->text ( 0 ) );
+            cbxServerAddr->setEditText ( CurSelListItemList[0]->text ( 0 ) );
         }
-        LineEditServerAddr->blockSignals ( false );
+        cbxServerAddr->blockSignals ( false );
     }
 }
 
@@ -301,18 +296,18 @@ void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item,
     // connect button was clicked
     if ( Item != 0 )
     {
-        OnConnectButtonClicked();
+        OnConnectClicked();
     }
 }
 
-void CConnectDlg::OnLineEditServerAddrEditTextChanged ( const QString& )
+void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
 {
     // in the server address combo box, a text was changed, remove selection
     // in the server list (if any)
-    ListViewServers->clearSelection();
+    lvwServers->clearSelection();
 }
 
-void CConnectDlg::OnConnectButtonClicked()
+void CConnectDlg::OnConnectClicked()
 {
     // set state OK flag
     bStateOK = true;
@@ -324,7 +319,7 @@ void CConnectDlg::OnConnectButtonClicked()
 void CConnectDlg::OnTimerPing()
 {
     // send ping messages to the servers in the list
-    const int iServerListLen = ListViewServers->topLevelItemCount();
+    const int iServerListLen = lvwServers->topLevelItemCount();
 
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
     {
@@ -333,7 +328,7 @@ void CConnectDlg::OnTimerPing()
         // try to parse host address string which is stored as user data
         // in the server list item GUI control element
         if ( LlconNetwUtil().ParseNetworkAddress (
-                ListViewServers->topLevelItem ( iIdx )->
+                lvwServers->topLevelItem ( iIdx )->
                 data ( 0, Qt::UserRole ).toString(),
                 CurServerAddress ) )
         {
@@ -349,13 +344,13 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
                                                    const int     iNumClients )
 {
     // apply the received ping time to the correct server list entry
-    const int iServerListLen = ListViewServers->topLevelItemCount();
+    const int iServerListLen = lvwServers->topLevelItemCount();
 
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
     {
         // compare the received address with the user data string of the
         // host address by a string compare
-        if ( !ListViewServers->topLevelItem ( iIdx )->
+        if ( !lvwServers->topLevelItem ( iIdx )->
                 data ( 0, Qt::UserRole ).toString().
                 compare ( InetAddr.toString() ) )
         {
@@ -363,31 +358,31 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
             switch ( iPingTimeLEDColor )
             {
             case MUL_COL_LED_GREEN:
-                ListViewServers->
+                lvwServers->
                     topLevelItem ( iIdx )->setTextColor ( 1, Qt::darkGreen );
                 break;
 
             case MUL_COL_LED_YELLOW:
-                ListViewServers->
+                lvwServers->
                     topLevelItem ( iIdx )->setTextColor ( 1, Qt::darkYellow );
                 break;
 
             case MUL_COL_LED_RED:
-                ListViewServers->
+                lvwServers->
                     topLevelItem ( iIdx )->setTextColor ( 1, Qt::red );
                 break;
             }
 
             // update ping text
-            ListViewServers->topLevelItem ( iIdx )->
+            lvwServers->topLevelItem ( iIdx )->
                 setText ( 1, QString().setNum ( iPingTime ) + " ms" );
 
             // update number of clients text
-            ListViewServers->topLevelItem ( iIdx )->
+            lvwServers->topLevelItem ( iIdx )->
                 setText ( 2, QString().setNum ( iNumClients ) );
 
             // a ping time was received, set item to visible
-            ListViewServers->topLevelItem ( iIdx )->setHidden ( false );
+            lvwServers->topLevelItem ( iIdx )->setHidden ( false );
         }
     }
 }

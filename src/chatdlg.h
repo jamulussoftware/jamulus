@@ -52,9 +52,9 @@ public:
     void AddChatText ( QString strChatText );
 
 public slots:
-    void OnNewLocalInputText();
-    void OnChatTextChanged ( const QString& strNewText );
-    void OnClearButtonPressed();
+    void OnLocalInputTextReturnPressed();
+    void OnLocalInputTextTextChanged ( const QString& strNewText );
+    void OnClearPressed();
 
 signals:
     void NewLocalInputText ( QString strNewText );

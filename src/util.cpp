@@ -308,8 +308,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     setupUi ( this );
 
     // set the text for the about dialog html text control
-    TextViewCredits->setOpenExternalLinks ( true );
-    TextViewCredits->setText (
+    txvCredits->setOpenExternalLinks ( true );
+    txvCredits->setText (
         "<p>" // general description of llcon software
         "<big><b>llcon</b> " + tr("The llcon software enables musicians to "
         "perform real-time jam sessions over the internet. There is a llcon "
@@ -350,7 +350,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "</center><br>");
 
     // set version number in about dialog
-    TextLabelVersion->setText ( GetVersionAndNameStr() );
+    lblVersion->setText ( GetVersionAndNameStr() );
 }
 
 QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )

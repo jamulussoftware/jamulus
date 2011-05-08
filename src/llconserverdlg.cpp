@@ -40,15 +40,15 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
 
     // Add help text to controls -----------------------------------------------
     // client list
-    ListViewClients->setWhatsThis ( tr ( "<b>Client List:</b> The client list "
+    lvwClients->setWhatsThis ( tr ( "<b>Client List:</b> The client list "
         "shows all clients which are currently connected to this server. Some "
         "informations about the clients like the IP address, name, buffer "
         "state are given for each connected client." ) );
 
-    ListViewClients->setAccessibleName ( tr ( "Connected clients list view" ) );
+    lvwClients->setAccessibleName ( tr ( "Connected clients list view" ) );
 
     // register server flag
-    cbRegisterServer->setWhatsThis ( tr ( "<b>Register Server Status:</b> If "
+    chbRegisterServer->setWhatsThis ( tr ( "<b>Register Server Status:</b> If "
         "the register server check box is checked, this server registers "
         "itself at the central server so that all " ) + APP_NAME +
         tr ( " users can see the server in the connect dialog server list and "
@@ -62,14 +62,14 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
         "at which this server is registered. If the Default check box is "
         "checked, the default central server address is shown read-only." );
 
-    LabelCentralServerAddress->setWhatsThis    ( strCentrServAddr );
-    cbDefaultCentralServer->setWhatsThis       ( strCentrServAddr );
-    LineEditCentralServerAddress->setWhatsThis ( strCentrServAddr );
+    lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
+    chbDefaultCentralServer->setWhatsThis ( strCentrServAddr );
+    edtCentralServerAddress->setWhatsThis ( strCentrServAddr );
 
-    cbDefaultCentralServer->setAccessibleName (
+    chbDefaultCentralServer->setAccessibleName (
         tr ( "Default central server check box" ) );
 
-    LineEditCentralServerAddress->setAccessibleName (
+    edtCentralServerAddress->setAccessibleName (
         tr ( "Central server address line edit" ) );
 
     // server name
@@ -77,20 +77,20 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
         "your server in the connect dialog server list at the clients. If no "
         "name is given, the IP address is shown instead." );
 
-    LabelServerName->setWhatsThis    ( strServName );
-    LineEditServerName->setWhatsThis ( strServName );
+    lblServerName->setWhatsThis ( strServName );
+    edtServerName->setWhatsThis ( strServName );
 
-    LineEditServerName->setAccessibleName ( tr ( "Server name line edit" ) );
+    edtServerName->setAccessibleName ( tr ( "Server name line edit" ) );
 
     // location city
     QString strLocCity = tr ( "<b>Location City:</b> The city in which this "
         "server is located can be set here. If a city name is entered, it "
         "will be shown in the connect dialog server list at the clients." );
 
-    LabelLocationCity->setWhatsThis    ( strLocCity );
-    LineEditLocationCity->setWhatsThis ( strLocCity );
+    lblLocationCity->setWhatsThis ( strLocCity );
+    edtLocationCity->setWhatsThis ( strLocCity );
 
-    LineEditLocationCity->setAccessibleName ( tr (
+    edtLocationCity->setAccessibleName ( tr (
         "City where the server is located line edit" ) );
 
     // location country
@@ -99,10 +99,10 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
         "entered, it will be shown in the connect dialog server list at the "
         "clients." );
 
-    LabelLocationCountry->setWhatsThis    ( strLocCountry );
-    ComboBoxLocationCountry->setWhatsThis ( strLocCountry );
+    lblLocationCountry->setWhatsThis ( strLocCountry );
+    cbxLocationCountry->setWhatsThis ( strLocCountry );
 
-    ComboBoxLocationCountry->setAccessibleName ( tr (
+    cbxLocationCountry->setAccessibleName ( tr (
         "Country where the server is located combo box" ) );
 
 
@@ -141,19 +141,19 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
     }
 
     // set text for version and application name
-    TextLabelNameVersion->setText ( QString ( APP_NAME ) +
+    lblNameVersion->setText ( QString ( APP_NAME ) +
         tr ( " server " ) + QString ( VERSION ) );
 
     // set up list view for connected clients
-    ListViewClients->setColumnWidth ( 0, 170 );
-    ListViewClients->setColumnWidth ( 1, 130 );
-    ListViewClients->setColumnWidth ( 2, 60 );
-    ListViewClients->clear();
+    lvwClients->setColumnWidth ( 0, 170 );
+    lvwClients->setColumnWidth ( 1, 130 );
+    lvwClients->setColumnWidth ( 2, 60 );
+    lvwClients->clear();
 
 
 // TEST workaround for resize problem of window after iconize in task bar
-ListViewClients->setMinimumWidth ( 170 + 130 + 60 + 205 );
-ListViewClients->setMinimumHeight ( 140 );
+lvwClients->setMinimumWidth ( 170 + 130 + 60 + 205 );
+lvwClients->setMinimumHeight ( 140 );
 
 
     // insert items in reverse order because in Windows all of them are
@@ -161,29 +161,29 @@ ListViewClients->setMinimumHeight ( 140 );
     vecpListViewItems.Init ( USED_NUM_CHANNELS );
     for ( int i = USED_NUM_CHANNELS - 1; i >= 0; i-- )
     {
-        vecpListViewItems[i] = new CServerListViewItem ( ListViewClients );
+        vecpListViewItems[i] = new CServerListViewItem ( lvwClients );
         vecpListViewItems[i]->setHidden ( true );
     }
 
     // update default central server address check box
     if ( pServer->GetUseDefaultCentralServerAddress() )
     {
-        cbDefaultCentralServer->setCheckState ( Qt::Checked );
+        chbDefaultCentralServer->setCheckState ( Qt::Checked );
     }
     else
     {
-        cbDefaultCentralServer->setCheckState ( Qt::Unchecked );
+        chbDefaultCentralServer->setCheckState ( Qt::Unchecked );
     }
 
     // update server name line edit
-    LineEditServerName->setText ( pServer->GetServerName() );
+    edtServerName->setText ( pServer->GetServerName() );
 
     // update server city line edit
-    LineEditLocationCity->setText ( pServer->GetServerCity() );
+    edtLocationCity->setText ( pServer->GetServerCity() );
 
     // load country combo box with all available countries
-    ComboBoxLocationCountry->setInsertPolicy ( QComboBox::NoInsert );
-    ComboBoxLocationCountry->clear();
+    cbxLocationCountry->setInsertPolicy ( QComboBox::NoInsert );
+    cbxLocationCountry->clear();
 
     for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry );
           iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
@@ -193,42 +193,42 @@ ListViewClients->setMinimumHeight ( 140 );
         {
             // store the country enum index together with the string (this is
             // important since we sort the combo box items later on)
-            ComboBoxLocationCountry->addItem ( QLocale::countryToString (
+            cbxLocationCountry->addItem ( QLocale::countryToString (
                 static_cast<QLocale::Country> ( iCurCntry ) ), iCurCntry );
         }
     }
 
     // sort country combo box items in alphabetical order
-    ComboBoxLocationCountry->model()->sort ( 0, Qt::AscendingOrder );
+    cbxLocationCountry->model()->sort ( 0, Qt::AscendingOrder );
 
     // select current country
-    ComboBoxLocationCountry->setCurrentIndex (
-        ComboBoxLocationCountry->findData (
+    cbxLocationCountry->setCurrentIndex (
+        cbxLocationCountry->findData (
         static_cast<int> ( pServer->GetServerCountry() ) ) );
 
     // update register server check box
     if ( pServer->GetServerListEnabled() )
     {
-        cbRegisterServer->setCheckState ( Qt::Checked );
+        chbRegisterServer->setCheckState ( Qt::Checked );
     }
     else
     {
-        cbRegisterServer->setCheckState ( Qt::Unchecked );
+        chbRegisterServer->setCheckState ( Qt::Unchecked );
     }
 
     // update start minimized check box (only available for Windows)
 #ifndef _WIN32
-    cbStartOnOSStart->setVisible ( false );
+    chbStartOnOSStart->setVisible ( false );
 #else
     const bool bCurAutoStartMinState = pServer->GetAutoRunMinimized();
 
     if ( bCurAutoStartMinState )
     {
-        cbStartOnOSStart->setCheckState ( Qt::Checked );
+        chbStartOnOSStart->setCheckState ( Qt::Checked );
     }
     else
     {
-        cbStartOnOSStart->setCheckState ( Qt::Unchecked );
+        chbStartOnOSStart->setCheckState ( Qt::Unchecked );
     }
 
     // modify registry according to setting (this is just required in case a
@@ -259,29 +259,28 @@ ListViewClients->setMinimumHeight ( 140 );
 
     // Connections -------------------------------------------------------------
     // check boxes
-    QObject::connect ( cbRegisterServer, SIGNAL ( stateChanged ( int ) ),
+    QObject::connect ( chbRegisterServer, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnRegisterServerStateChanged ( int ) ) );
 
-    QObject::connect ( cbDefaultCentralServer, SIGNAL ( stateChanged ( int ) ),
+    QObject::connect ( chbDefaultCentralServer, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnDefaultCentralServerStateChanged ( int ) ) );
 
-    QObject::connect ( cbStartOnOSStart, SIGNAL ( stateChanged ( int ) ),
+    QObject::connect ( chbStartOnOSStart, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnStartOnOSStartStateChanged ( int ) ) );
 
     // line edits
-    QObject::connect ( LineEditCentralServerAddress,
-        SIGNAL ( editingFinished() ),
-        this, SLOT ( OnLineEditCentralServerAddressEditingFinished() ) );
+    QObject::connect ( edtCentralServerAddress, SIGNAL ( editingFinished() ),
+        this, SLOT ( OnCentralServerAddressEditingFinished() ) );
 
-    QObject::connect ( LineEditServerName, SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnLineEditServerNameTextChanged ( const QString& ) ) );
+    QObject::connect ( edtServerName, SIGNAL ( textChanged ( const QString& ) ),
+        this, SLOT ( OnServerNameTextChanged ( const QString& ) ) );
 
-    QObject::connect ( LineEditLocationCity, SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnLineEditLocationCityTextChanged ( const QString& ) ) );
+    QObject::connect ( edtLocationCity, SIGNAL ( textChanged ( const QString& ) ),
+        this, SLOT ( OnLocationCityTextChanged ( const QString& ) ) );
 
     // combo boxes
-    QObject::connect ( ComboBoxLocationCountry, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnComboBoxLocationCountryActivated ( int ) ) );
+    QObject::connect ( cbxLocationCountry, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnLocationCountryActivated ( int ) ) );
 
     // timers
     QObject::connect ( &Timer, SIGNAL ( timeout() ), this, SLOT ( OnTimer() ) );
@@ -356,16 +355,16 @@ void CLlconServerDlg::OnRegisterServerStateChanged ( int value )
     UpdateGUIDependencies();
 }
 
-void CLlconServerDlg::OnLineEditCentralServerAddressEditingFinished()
+void CLlconServerDlg::OnCentralServerAddressEditingFinished()
 {
     // apply new setting to the server and update it
     pServer->SetServerListCentralServerAddress (
-        LineEditCentralServerAddress->text() );
+        edtCentralServerAddress->text() );
 
     pServer->UpdateServerList();
 }
 
-void CLlconServerDlg::OnLineEditServerNameTextChanged ( const QString& strNewName )
+void CLlconServerDlg::OnServerNameTextChanged ( const QString& strNewName )
 {
     // check length
     if ( strNewName.length() <= MAX_LEN_SERVER_NAME )
@@ -377,11 +376,11 @@ void CLlconServerDlg::OnLineEditServerNameTextChanged ( const QString& strNewNam
     else
     {
         // text is too long, update control with shortend text
-        LineEditServerName->setText ( strNewName.left ( MAX_LEN_SERVER_NAME ) );
+        edtServerName->setText ( strNewName.left ( MAX_LEN_SERVER_NAME ) );
     }
 }
 
-void CLlconServerDlg::OnLineEditLocationCityTextChanged ( const QString& strNewCity )
+void CLlconServerDlg::OnLocationCityTextChanged ( const QString& strNewCity )
 {
     // check length
     if ( strNewCity.length() <= MAX_LEN_SERVER_CITY )
@@ -393,15 +392,15 @@ void CLlconServerDlg::OnLineEditLocationCityTextChanged ( const QString& strNewC
     else
     {
         // text is too long, update control with shortend text
-        LineEditLocationCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
+        edtLocationCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
     }
 }
 
-void CLlconServerDlg::OnComboBoxLocationCountryActivated ( int iCntryListItem )
+void CLlconServerDlg::OnLocationCountryActivated ( int iCntryListItem )
 {
     // apply new setting to the server and update it
     pServer->SetServerCountry ( static_cast<QLocale::Country> (
-        ComboBoxLocationCountry->itemData ( iCntryListItem ).toInt() ) );
+        cbxLocationCountry->itemData ( iCntryListItem ).toInt() ) );
 
     pServer->UpdateServerList();
 }
@@ -472,29 +471,29 @@ void CLlconServerDlg::UpdateGUIDependencies()
 
     // if register server is not enabled, we disable all the configuration
     // controls for the server list
-    cbDefaultCentralServer->setEnabled ( bCurSerListEnabled );
-    GroupBoxServerInfo->setEnabled     ( bCurSerListEnabled );
+    chbDefaultCentralServer->setEnabled ( bCurSerListEnabled );
+    grbServerInfo->setEnabled           ( bCurSerListEnabled );
 
     // If the default central server address is enabled, the line edit shows
     // the default server and is not editable. Make sure the line edit does not
     // fire signals when we update the text.
-    LineEditCentralServerAddress->blockSignals ( true );
+    edtCentralServerAddress->blockSignals ( true );
     {
         if ( bCurUseDefCentServAddr )
         {
-            LineEditCentralServerAddress->setText ( DEFAULT_SERVER_ADDRESS );
+            edtCentralServerAddress->setText ( DEFAULT_SERVER_ADDRESS );
         }
         else
         {
-            LineEditCentralServerAddress->setText (
+            edtCentralServerAddress->setText (
                 pServer->GetServerListCentralServerAddress() );
         }
     }
-    LineEditCentralServerAddress->blockSignals ( false );
+    edtCentralServerAddress->blockSignals ( false );
 
     // the line edit of the central server address is only enabled, if the
     // server list is enabled and not the default address is used
-    LineEditCentralServerAddress->setEnabled (
+    edtCentralServerAddress->setEnabled (
         !bCurUseDefCentServAddr && bCurSerListEnabled );
 }
 

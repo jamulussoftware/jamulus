@@ -20,7 +20,7 @@
   </property>
   <layout class="QVBoxLayout" >
    <item>
-    <widget class="QTreeWidget" name="ListViewClients" >
+    <widget class="QTreeWidget" name="lvwClients" >
      <property name="rootIsDecorated" >
       <bool>false</bool>
      </property>
@@ -52,14 +52,14 @@
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="cbStartOnOSStart" >
+    <widget class="QCheckBox" name="chbStartOnOSStart" >
      <property name="text" >
       <string>Start Minimized on Windows Start</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="cbRegisterServer" >
+    <widget class="QCheckBox" name="chbRegisterServer" >
      <property name="text" >
       <string>Register My Server in the Server List at the Central Server</string>
      </property>
@@ -68,17 +68,17 @@
    <item>
     <layout class="QHBoxLayout" >
      <item>
-      <widget class="QLabel" name="LabelCentralServerAddress" >
+      <widget class="QLabel" name="lblCentralServerAddress" >
        <property name="text" >
         <string>Central Server Address:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="LineEditCentralServerAddress" />
+      <widget class="QLineEdit" name="edtCentralServerAddress" />
      </item>
      <item>
-      <widget class="QCheckBox" name="cbDefaultCentralServer" >
+      <widget class="QCheckBox" name="chbDefaultCentralServer" >
        <property name="text" >
         <string>Default</string>
        </property>
@@ -87,7 +87,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="GroupBoxServerInfo" >
+    <widget class="QGroupBox" name="grbServerInfo" >
      <property name="title" >
       <string>My Server Info</string>
      </property>
@@ -95,21 +95,21 @@
       <item>
        <layout class="QVBoxLayout" >
         <item>
-         <widget class="QLabel" name="LabelServerName" >
+         <widget class="QLabel" name="lblServerName" >
           <property name="text" >
            <string>Name</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="LabelLocationCity" >
+         <widget class="QLabel" name="lblLocationCity" >
           <property name="text" >
            <string>Location: City</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="LabelLocationCountry" >
+         <widget class="QLabel" name="lblLocationCountry" >
           <property name="text" >
            <string>Location: Country</string>
           </property>
@@ -120,13 +120,13 @@
       <item>
        <layout class="QVBoxLayout" >
         <item>
-         <widget class="QLineEdit" name="LineEditServerName" />
+         <widget class="QLineEdit" name="edtServerName" />
         </item>
         <item>
-         <widget class="QLineEdit" name="LineEditLocationCity" />
+         <widget class="QLineEdit" name="edtLocationCity" />
         </item>
         <item>
-         <widget class="QComboBox" name="ComboBoxLocationCountry" />
+         <widget class="QComboBox" name="cbxLocationCountry" />
         </item>
        </layout>
       </item>
@@ -151,7 +151,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QLabel" name="TextLabelNameVersion" >
+      <widget class="QLabel" name="lblNameVersion" >
        <property name="text" >
         <string>TextLabelNameVersion</string>
        </property>

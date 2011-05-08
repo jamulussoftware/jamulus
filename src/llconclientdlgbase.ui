@@ -61,7 +61,7 @@
             <item>
              <layout class="QHBoxLayout" >
               <item>
-               <widget class="QLabel" name="PixmapLabelCorrados" >
+               <widget class="QLabel" name="pxlLogo" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
                   <horstretch>0</horstretch>
@@ -113,7 +113,7 @@
             <item>
              <layout class="QHBoxLayout" >
               <item>
-               <widget class="QLabel" name="TextLabelConnection" >
+               <widget class="QLabel" name="lblConnection" >
                 <property name="text" >
                  <string>Connection</string>
                 </property>
@@ -126,7 +126,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CMultiColorLED" native="1" name="LEDConnection" >
+               <widget class="CMultiColorLED" native="1" name="ledConnection" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                   <horstretch>0</horstretch>
@@ -165,7 +165,7 @@
             <item>
              <layout class="QHBoxLayout" >
               <item>
-               <widget class="QLabel" name="TextLabelDelay" >
+               <widget class="QLabel" name="lblDelay" >
                 <property name="text" >
                  <string>Delay</string>
                 </property>
@@ -178,7 +178,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CMultiColorLED" native="1" name="LEDDelay" >
+               <widget class="CMultiColorLED" native="1" name="ledDelay" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                   <horstretch>0</horstretch>
@@ -217,7 +217,7 @@
             <item>
              <layout class="QHBoxLayout" >
               <item>
-               <widget class="QLabel" name="TextLabelBuffers" >
+               <widget class="QLabel" name="lblBuffers" >
                 <property name="text" >
                  <string>Buffers</string>
                 </property>
@@ -230,7 +230,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CMultiColorLED" native="1" name="LEDBuffers" >
+               <widget class="CMultiColorLED" native="1" name="ledBuffers" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                   <horstretch>0</horstretch>
@@ -269,7 +269,7 @@
             <item>
              <layout class="QHBoxLayout" >
               <item>
-               <widget class="QLabel" name="TextLabelChat" >
+               <widget class="QLabel" name="lblChat" >
                 <property name="text" >
                  <string>Chat</string>
                 </property>
@@ -282,7 +282,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CMultiColorLED" native="1" name="LEDChat" >
+               <widget class="CMultiColorLED" native="1" name="ledChat" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
                   <horstretch>0</horstretch>
@@ -330,7 +330,7 @@
           <item>
            <layout class="QVBoxLayout" >
             <item>
-             <widget class="QLabel" name="TextInputLEDMeter" >
+             <widget class="QLabel" name="lblInputLEDMeter" >
               <property name="text" >
                <string>Input</string>
               </property>
@@ -342,7 +342,7 @@
             <item>
              <layout class="QHBoxLayout" >
               <item>
-               <widget class="CMultiColorLEDBar" native="1" name="MultiColorLEDBarInputLevelL" >
+               <widget class="CMultiColorLEDBar" native="1" name="lbrInputLevelL" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
                   <horstretch>0</horstretch>
@@ -358,7 +358,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CMultiColorLEDBar" native="1" name="MultiColorLEDBarInputLevelR" >
+               <widget class="CMultiColorLEDBar" native="1" name="lbrInputLevelR" >
                 <property name="sizePolicy" >
                  <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
                   <horstretch>0</horstretch>
@@ -378,7 +378,7 @@
             <item>
              <layout class="QHBoxLayout" >
               <item>
-               <widget class="QLabel" name="TextLevelMeterLeft" >
+               <widget class="QLabel" name="lblLevelMeterLeft" >
                 <property name="text" >
                  <string>L</string>
                 </property>
@@ -388,7 +388,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="TextLevelMeterRight" >
+               <widget class="QLabel" name="lblLevelMeterRight" >
                 <property name="text" >
                  <string>R</string>
                 </property>
@@ -427,7 +427,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="TextLabelServerTag" >
+         <widget class="QLabel" name="lblServerTag" >
           <property name="sizePolicy" >
            <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
             <horstretch>0</horstretch>
@@ -443,7 +443,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="LineEditFaderTag" >
+         <widget class="QLineEdit" name="edtFaderTag" >
           <property name="sizePolicy" >
            <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
             <horstretch>0</horstretch>
@@ -455,7 +455,7 @@
         <item>
          <layout class="QHBoxLayout" >
           <item>
-           <widget class="QPushButton" name="PushButtonConnect" >
+           <widget class="QPushButton" name="butConnect" >
             <property name="text" >
              <string>C&amp;onnect</string>
             </property>
@@ -499,7 +499,7 @@
            <number>3</number>
           </property>
           <item>
-           <widget class="QLabel" name="TextAudInFader" >
+           <widget class="QLabel" name="lblAudioPan" >
             <property name="text" >
              <string>Pan</string>
             </property>
@@ -509,7 +509,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="TextLabelAudFader" >
+           <widget class="QLabel" name="lblAudioPanValue" >
             <property name="minimumSize" >
              <size>
               <width>50</width>
@@ -561,7 +561,7 @@
              </spacer>
             </item>
             <item>
-             <widget class="QSlider" name="SliderAudInFader" >
+             <widget class="QSlider" name="sldAudioPan" >
               <property name="styleSheet" >
                <string/>
               </property>
@@ -616,7 +616,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="QLabel" name="TextLabelAudReverb" >
+             <widget class="QLabel" name="lblAudioReverb" >
               <property name="text" >
                <string>Reverb</string>
               </property>
@@ -659,7 +659,7 @@
                </spacer>
               </item>
               <item>
-               <widget class="QSlider" name="SliderAudReverb" >
+               <widget class="QSlider" name="sldAudioReverb" >
                 <property name="pageStep" >
                  <number>1</number>
                 </property>
@@ -697,14 +697,14 @@
              <number>3</number>
             </property>
             <item>
-             <widget class="QRadioButton" name="RadioButtonRevSelL" >
+             <widget class="QRadioButton" name="rbtReverbSelL" >
               <property name="text" >
                <string>Left</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QRadioButton" name="RadioButtonRevSelR" >
+             <widget class="QRadioButton" name="rbtReverbSelR" >
               <property name="text" >
                <string>Right</string>
               </property>
@@ -750,12 +750,12 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>PushButtonConnect</tabstop>
-  <tabstop>LineEditFaderTag</tabstop>
-  <tabstop>SliderAudInFader</tabstop>
-  <tabstop>SliderAudReverb</tabstop>
-  <tabstop>RadioButtonRevSelL</tabstop>
-  <tabstop>RadioButtonRevSelR</tabstop>
+  <tabstop>butConnect</tabstop>
+  <tabstop>edtFaderTag</tabstop>
+  <tabstop>sldAudioPan</tabstop>
+  <tabstop>sldAudioReverb</tabstop>
+  <tabstop>rbtReverbSelL</tabstop>
+  <tabstop>rbtReverbSelR</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc" />

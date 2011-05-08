@@ -90,8 +90,8 @@ protected:
 public slots:
     void OnServerListItemSelectionChanged();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
-    void OnLineEditServerAddrEditTextChanged ( const QString& );
-    void OnConnectButtonClicked();
+    void OnServerAddrEditTextChanged ( const QString& );
+    void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();
 

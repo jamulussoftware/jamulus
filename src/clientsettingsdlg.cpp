@@ -59,20 +59,20 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "of dropouts is reached. The LED indicator will visualize the audio "
         "dropouts by a red light" ) + TOOLTIP_COM_END_TEXT;
 
-    TextNetBuf->setWhatsThis           ( strJitterBufferSize );
-    TextNetBuf->setToolTip             ( strJitterBufferSizeTT );
-    GroupBoxJitterBuffer->setWhatsThis ( strJitterBufferSize );
-    GroupBoxJitterBuffer->setToolTip   ( strJitterBufferSizeTT );
-    SliderNetBuf->setWhatsThis         ( strJitterBufferSize );
-    SliderNetBuf->setAccessibleName    ( tr ( "Jitter buffer slider control" ) );
-    SliderNetBuf->setToolTip           ( strJitterBufferSizeTT );
-    cbAutoJitBuf->setAccessibleName    ( tr ( "Auto jitter buffer switch" ) );
-    cbAutoJitBuf->setToolTip           ( strJitterBufferSizeTT );
-    CLEDNetw->setAccessibleName        ( tr ( "Jitter buffer status LED indicator" ) );
-    CLEDNetw->setToolTip               ( strJitterBufferSizeTT );
+    TextNetBuf->setWhatsThis         ( strJitterBufferSize );
+    TextNetBuf->setToolTip           ( strJitterBufferSizeTT );
+    grbJitterBuffer->setWhatsThis    ( strJitterBufferSize );
+    grbJitterBuffer->setToolTip      ( strJitterBufferSizeTT );
+    sldNetBuf->setWhatsThis          ( strJitterBufferSize );
+    sldNetBuf->setAccessibleName     ( tr ( "Jitter buffer slider control" ) );
+    sldNetBuf->setToolTip            ( strJitterBufferSizeTT );
+    chbAutoJitBuf->setAccessibleName ( tr ( "Auto jitter buffer switch" ) );
+    chbAutoJitBuf->setToolTip        ( strJitterBufferSizeTT );
+    ledNetw->setAccessibleName       ( tr ( "Jitter buffer status LED indicator" ) );
+    ledNetw->setToolTip              ( strJitterBufferSizeTT );
 
     // sound card device
-    cbSoundcard->setWhatsThis ( tr ( "<b>Sound Card Device:</b> The ASIO "
+    cbxSoundcard->setWhatsThis ( tr ( "<b>Sound Card Device:</b> The ASIO "
         "driver (sound card) can be selected using llcon under the Windows "
         "operating system. Under Linux, no sound card selection is possible "
         "(always wave mapper is shown and cannot be changed). If the selected "
@@ -82,9 +82,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "is stopped, the driver is changed and the connection is started again "
         "automatically." ) );
 
-    cbSoundcard->setAccessibleName ( tr ( "Sound card device selector combo box" ) );
+    cbxSoundcard->setAccessibleName ( tr ( "Sound card device selector combo box" ) );
 
-    cbSoundcard->setToolTip ( tr ( "In case the <b>ASIO4ALL</b> driver is used, "
+    cbxSoundcard->setToolTip ( tr ( "In case the <b>ASIO4ALL</b> driver is used, "
         "please note that this driver usually introduces approx. 10-30 ms of "
         "additional audio delay. Using a sound card with a native ASIO driver "
         "is therefore recommended.<br>If you are using the <b>kX ASIO</b> "
@@ -100,16 +100,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "Right channel) a different actual sound card channel can be "
         "selected." );
 
-    lbInChannelMapping->setWhatsThis ( strSndCrdChanMapp );
-    lbOutChannelMapping->setWhatsThis ( strSndCrdChanMapp );
-    cbLInChan->setWhatsThis ( strSndCrdChanMapp );
-    cbLInChan->setAccessibleName ( tr ( "Left input channel selection combo box" ) );
-    cbRInChan->setWhatsThis ( strSndCrdChanMapp );
-    cbRInChan->setAccessibleName ( tr ( "Right input channel selection combo box" ) );
-    cbLOutChan->setWhatsThis ( strSndCrdChanMapp );
-    cbLOutChan->setAccessibleName ( tr ( "Left output channel selection combo box" ) );
-    cbROutChan->setWhatsThis ( strSndCrdChanMapp );
-    cbROutChan->setAccessibleName ( tr ( "Right output channel selection combo box" ) );
+    lblInChannelMapping->setWhatsThis ( strSndCrdChanMapp );
+    lblOutChannelMapping->setWhatsThis ( strSndCrdChanMapp );
+    cbxLInChan->setWhatsThis ( strSndCrdChanMapp );
+    cbxLInChan->setAccessibleName ( tr ( "Left input channel selection combo box" ) );
+    cbxRInChan->setWhatsThis ( strSndCrdChanMapp );
+    cbxRInChan->setAccessibleName ( tr ( "Right input channel selection combo box" ) );
+    cbxLOutChan->setWhatsThis ( strSndCrdChanMapp );
+    cbxLOutChan->setAccessibleName ( tr ( "Left output channel selection combo box" ) );
+    cbxROutChan->setWhatsThis ( strSndCrdChanMapp );
+    cbxROutChan->setAccessibleName ( tr ( "Right output channel selection combo box" ) );
 
     // sound card buffer delay
     QString strSndCrdBufDelay = tr ( "<b>Sound Card Buffer Delay:</b> The "
@@ -148,43 +148,43 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "use the Jack configuration tool to change the buffer size." ) +
         TOOLTIP_COM_END_TEXT;
 
-    rButBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
-    rButBufferDelayPreferred->setAccessibleName ( tr ( "128 samples setting radio button" ) );
-    rButBufferDelayPreferred->setToolTip ( strSndCrdBufDelayTT );
-    rButBufferDelayDefault->setWhatsThis ( strSndCrdBufDelay );
-    rButBufferDelayDefault->setAccessibleName ( tr ( "256 samples setting radio button" ) );
-    rButBufferDelayDefault->setToolTip ( strSndCrdBufDelayTT );
-    rButBufferDelaySafe->setWhatsThis ( strSndCrdBufDelay );
-    rButBufferDelaySafe->setAccessibleName ( tr ( "512 samples setting radio button" ) );
-    rButBufferDelaySafe->setToolTip ( strSndCrdBufDelayTT );
-    ButtonDriverSetup->setWhatsThis ( strSndCrdBufDelay );
-    ButtonDriverSetup->setAccessibleName ( tr ( "ASIO setup push button" ) );
-    ButtonDriverSetup->setToolTip ( strSndCrdBufDelayTT );
+    rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
+    rbtBufferDelayPreferred->setAccessibleName ( tr ( "128 samples setting radio button" ) );
+    rbtBufferDelayPreferred->setToolTip ( strSndCrdBufDelayTT );
+    rbtBufferDelayDefault->setWhatsThis ( strSndCrdBufDelay );
+    rbtBufferDelayDefault->setAccessibleName ( tr ( "256 samples setting radio button" ) );
+    rbtBufferDelayDefault->setToolTip ( strSndCrdBufDelayTT );
+    rbtBufferDelaySafe->setWhatsThis ( strSndCrdBufDelay );
+    rbtBufferDelaySafe->setAccessibleName ( tr ( "512 samples setting radio button" ) );
+    rbtBufferDelaySafe->setToolTip ( strSndCrdBufDelayTT );
+    butDriverSetup->setWhatsThis ( strSndCrdBufDelay );
+    butDriverSetup->setAccessibleName ( tr ( "ASIO setup push button" ) );
+    butDriverSetup->setToolTip ( strSndCrdBufDelayTT );
 
     // open chat on new message
-    cbOpenChatOnNewMessage->setWhatsThis ( tr ( "<b>Open Chat on New "
+    chbOpenChatOnNewMessage->setWhatsThis ( tr ( "<b>Open Chat on New "
         "Message:</b> If this checkbox is enabled, the chat window will "
         "open on any incoming chat text if it not already opened." ) );
 
-    cbOpenChatOnNewMessage->setAccessibleName ( tr ( "Open chat on new "
+    chbOpenChatOnNewMessage->setAccessibleName ( tr ( "Open chat on new "
         "message check box" ) );
 
-    cbOpenChatOnNewMessage->setToolTip ( tr ( "If Open Chat on New Message "
+    chbOpenChatOnNewMessage->setToolTip ( tr ( "If Open Chat on New Message "
         "is disabled, a LED in the main window turns green when a "
         "new message has arrived." ) + TOOLTIP_COM_END_TEXT );
 
     // use high quality audio
-    cbUseHighQualityAudio->setWhatsThis ( tr ( "<b>Use High Quality Audio</b> "
+    chbUseHighQualityAudio->setWhatsThis ( tr ( "<b>Use High Quality Audio</b> "
         "Enabling ""Use High Quality Audio"" will improve the audio quality "
         "by increasing the stream data rate. Make sure that the current "
         "upload rate does not exceed the available bandwidth of your "
         "internet connection." ) );
 
-    cbUseHighQualityAudio->setAccessibleName ( tr ( "Use high quality audio "
+    chbUseHighQualityAudio->setAccessibleName ( tr ( "Use high quality audio "
         "check box" ) );
 
     // use stereo
-    cbUseStereo->setWhatsThis ( tr ( "<b>Stereo Streaming</b> "
+    chbUseStereo->setWhatsThis ( tr ( "<b>Stereo Streaming</b> "
         "Enables the stereo streaming mode. If not checked, a mono streaming "
         "mode is used. Enabling the stereo streaming mode will increase the "
         "stream data rate. Make sure that the current upload rate does not "
@@ -193,7 +193,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "for the reverberation effect will be available on the main window "
         "since the effect is applied on both channels in this case." ) );
 
-    cbUseStereo->setAccessibleName ( tr ( "Stereo check box" ) );
+    chbUseStereo->setAccessibleName ( tr ( "Stereo check box" ) );
 
     // central server address
     QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
@@ -202,14 +202,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "Default check box is checked, the default central server address is "
         "shown read-only." );
 
-    LabelCentralServerAddress->setWhatsThis    ( strCentrServAddr );
-    cbDefaultCentralServer->setWhatsThis       ( strCentrServAddr );
-    LineEditCentralServerAddress->setWhatsThis ( strCentrServAddr );
+    lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
+    chbDefaultCentralServer->setWhatsThis ( strCentrServAddr );
+    edtCentralServerAddress->setWhatsThis ( strCentrServAddr );
 
-    cbDefaultCentralServer->setAccessibleName (
+    chbDefaultCentralServer->setAccessibleName (
         tr ( "Default central server check box" ) );
 
-    LineEditCentralServerAddress->setAccessibleName (
+    edtCentralServerAddress->setAccessibleName (
         tr ( "Central server address line edit" ) );
 
     // current connection status parameter
@@ -227,52 +227,52 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "higher than the available rate (check the upstream capabilities of "
         "your internet connection by, e.g., using speedtest.net)." );
 
-    TextPingTime->setWhatsThis          ( strConnStats );
-    TextLabelPingTime->setWhatsThis     ( strConnStats );
-    TextOverallDelay->setWhatsThis      ( strConnStats );
-    TextLabelOverallDelay->setWhatsThis ( strConnStats );
-    TextUpstream->setWhatsThis          ( strConnStats );
-    TextUpstreamValue->setWhatsThis     ( strConnStats );
-    CLEDOverallDelay->setWhatsThis      ( strConnStats );
-    CLEDOverallDelay->setToolTip ( tr ( "If this LED indicator turns red, "
+    lblPingTime->setWhatsThis          ( strConnStats );
+    lblPingTimeValue->setWhatsThis     ( strConnStats );
+    lblOverallDelay->setWhatsThis      ( strConnStats );
+    lblOverallDelayValue->setWhatsThis ( strConnStats );
+    lblUpstream->setWhatsThis          ( strConnStats );
+    lblUpstreamValue->setWhatsThis     ( strConnStats );
+    ledOverallDelay->setWhatsThis      ( strConnStats );
+    ledOverallDelay->setToolTip ( tr ( "If this LED indicator turns red, "
         "you will not have much fun using the llcon software." ) +
         TOOLTIP_COM_END_TEXT );
 
 
     // init driver button
 #ifdef _WIN32
-    ButtonDriverSetup->setText ( "ASIO Setup" );
+    butDriverSetup->setText ( "ASIO Setup" );
 #else
     // no use for this button for Linux right now, maybe later used
     // for Jack
-    ButtonDriverSetup->hide();
+    butDriverSetup->hide();
 
     // for Jack interface, we cannot choose the audio hardware from
     // within the llcon software, hide the combo box
-    TextSoundcardDevice->hide();
-    cbSoundcard->hide();
+    lblSoundcardDevice->hide();
+    cbxSoundcard->hide();
 #endif
 
     // init delay and other information controls
-    CLEDOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME_MS );
-    CLEDOverallDelay->Reset();
-    TextLabelPingTime->setText     ( "" );
-    TextLabelOverallDelay->setText ( "" );
-    TextUpstreamValue->setText     ( "" );
+    ledOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME_MS );
+    ledOverallDelay->Reset();
+    lblPingTimeValue->setText     ( "" );
+    lblOverallDelayValue->setText ( "" );
+    lblUpstreamValue->setText     ( "" );
 
 
     // init slider controls ---
     // network buffer
-    SliderNetBuf->setRange ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
+    sldNetBuf->setRange ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
     UpdateJitterBufferFrame();
 
     // init combo box containing all available sound cards in the system
-    cbSoundcard->clear();
+    cbxSoundcard->clear();
     for ( int iSndDevIdx = 0; iSndDevIdx < pClient->GetSndCrdNumDev(); iSndDevIdx++ )
     {
-        cbSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ) );
+        cbxSoundcard->addItem ( pClient->GetSndCrdDeviceName ( iSndDevIdx ) );
     }
-    cbSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
+    cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
 
     // init sound card channel selection frame
     UpdateSoundChannelSelectionFrame();
@@ -280,70 +280,70 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // "OpenChatOnNewMessage" check box
     if ( pClient->GetOpenChatOnNewMessage() )
     {
-        cbOpenChatOnNewMessage->setCheckState ( Qt::Checked );
+        chbOpenChatOnNewMessage->setCheckState ( Qt::Checked );
     }
     else
     {
-        cbOpenChatOnNewMessage->setCheckState ( Qt::Unchecked );
+        chbOpenChatOnNewMessage->setCheckState ( Qt::Unchecked );
     }
 
     // fancy GUI design check box
     if ( pClient->GetGUIDesign() == GD_STANDARD )
     {
-        cbGUIDesignFancy->setCheckState ( Qt::Unchecked );
+        chbGUIDesignFancy->setCheckState ( Qt::Unchecked );
     }
     else
     {
-        cbGUIDesignFancy->setCheckState ( Qt::Checked );
+        chbGUIDesignFancy->setCheckState ( Qt::Checked );
     }
 
     // "High Quality Audio" check box
     if ( pClient->GetCELTHighQuality() )
     {
-        cbUseHighQualityAudio->setCheckState ( Qt::Checked );
+        chbUseHighQualityAudio->setCheckState ( Qt::Checked );
     }
     else
     {
-        cbUseHighQualityAudio->setCheckState ( Qt::Unchecked );
+        chbUseHighQualityAudio->setCheckState ( Qt::Unchecked );
     }
 
     // "Stereo" check box
     if ( pClient->GetUseStereo() )
     {
-        cbUseStereo->setCheckState ( Qt::Checked );
+        chbUseStereo->setCheckState ( Qt::Checked );
     }
     else
     {
-        cbUseStereo->setCheckState ( Qt::Unchecked );
+        chbUseStereo->setCheckState ( Qt::Unchecked );
     }
 
     // update default central server address check box
     if ( pClient->GetUseDefaultCentralServerAddress() )
     {
-        cbDefaultCentralServer->setCheckState ( Qt::Checked );
+        chbDefaultCentralServer->setCheckState ( Qt::Checked );
     }
     else
     {
-        cbDefaultCentralServer->setCheckState ( Qt::Unchecked );
+        chbDefaultCentralServer->setCheckState ( Qt::Unchecked );
     }
     UpdateCentralServerDependency();
 
     // set text for sound card buffer delay radio buttons
-    rButBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
+    rbtBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES,
         ", preferred" ) );
 
-    rButBufferDelayDefault->setText ( GenSndCrdBufferDelayString (
+    rbtBufferDelayDefault->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES,
         ", default" ) );
 
-    rButBufferDelaySafe->setText ( GenSndCrdBufferDelayString (
+    rbtBufferDelaySafe->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES ) );
 
     // sound card buffer delay inits
-    SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelayPreferred );
-    SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelayDefault );
-    SndCrdBufferDelayButtonGroup.addButton ( rButBufferDelaySafe );
+    SndCrdBufferDelayButtonGroup.addButton ( rbtBufferDelayPreferred );
+    SndCrdBufferDelayButtonGroup.addButton ( rbtBufferDelayDefault );
+    SndCrdBufferDelayButtonGroup.addButton ( rbtBufferDelaySafe );
 
     UpdateSoundCardFrame();
 
@@ -354,52 +354,51 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         this, SLOT ( OnTimerStatus() ) );
 
     // slider controls
-    QObject::connect ( SliderNetBuf, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnSliderNetBuf ( int ) ) );
+    QObject::connect ( sldNetBuf, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnNetBufValueChanged ( int ) ) );
 
     // check boxes
-    QObject::connect ( cbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
+    QObject::connect ( chbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnOpenChatOnNewMessageStateChanged ( int ) ) );
 
-    QObject::connect ( cbGUIDesignFancy, SIGNAL ( stateChanged ( int ) ),
+    QObject::connect ( chbGUIDesignFancy, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnGUIDesignFancyStateChanged ( int ) ) );
 
-    QObject::connect ( cbUseHighQualityAudio, SIGNAL ( stateChanged ( int ) ),
+    QObject::connect ( chbUseHighQualityAudio, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnUseHighQualityAudioStateChanged ( int ) ) );
 
-    QObject::connect ( cbUseStereo, SIGNAL ( stateChanged ( int ) ),
+    QObject::connect ( chbUseStereo, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnUseStereoStateChanged ( int ) ) );
 
-    QObject::connect ( cbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnAutoJitBuf ( int ) ) );
+    QObject::connect ( chbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnAutoJitBufStateChanged ( int ) ) );
 
-    QObject::connect ( cbDefaultCentralServer, SIGNAL ( stateChanged ( int ) ),
+    QObject::connect ( chbDefaultCentralServer, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnDefaultCentralServerStateChanged ( int ) ) );
 
     // line edits
-    QObject::connect ( LineEditCentralServerAddress,
-        SIGNAL ( editingFinished() ),
-        this, SLOT ( OnLineEditCentralServerAddressEditingFinished() ) );
+    QObject::connect ( edtCentralServerAddress, SIGNAL ( editingFinished() ),
+        this, SLOT ( OnCentralServerAddressEditingFinished() ) );
 
     // combo boxes
-    QObject::connect ( cbSoundcard, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnSoundCrdSelection ( int ) ) );
+    QObject::connect ( cbxSoundcard, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnSoundcardActivated ( int ) ) );
 
-    QObject::connect ( cbLInChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnSndCrdLeftInChannelSelection ( int ) ) );
+    QObject::connect ( cbxLInChan, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnLInChanActivated ( int ) ) );
 
-    QObject::connect ( cbRInChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnSndCrdRightInChannelSelection ( int ) ) );
+    QObject::connect ( cbxRInChan, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnRInChanActivated ( int ) ) );
 
-    QObject::connect ( cbLOutChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnSndCrdLeftOutChannelSelection ( int ) ) );
+    QObject::connect ( cbxLOutChan, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnLOutChanActivated ( int ) ) );
 
-    QObject::connect ( cbROutChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnSndCrdRightOutChannelSelection ( int ) ) );
+    QObject::connect ( cbxROutChan, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnROutChanActivated ( int ) ) );
 
     // buttons
-    QObject::connect ( ButtonDriverSetup, SIGNAL ( clicked() ),
-        this, SLOT ( OnDriverSetupBut() ) );
+    QObject::connect ( butDriverSetup, SIGNAL ( clicked() ),
+        this, SLOT ( OnDriverSetupClicked() ) );
 
     // misc
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
@@ -416,13 +415,13 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
 {
     // update slider value and text
     const int iCurNumNetBuf = pClient->GetSockBufNumFrames();
-    SliderNetBuf->setValue ( iCurNumNetBuf );
+    sldNetBuf->setValue ( iCurNumNetBuf );
     TextNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
 
     // if auto setting is enabled, disable slider control
-    cbAutoJitBuf->setChecked (  pClient->GetDoAutoSockBufSize() );
-    SliderNetBuf->setEnabled ( !pClient->GetDoAutoSockBufSize() );
-    TextNetBuf->setEnabled   ( !pClient->GetDoAutoSockBufSize() );
+    chbAutoJitBuf->setChecked (  pClient->GetDoAutoSockBufSize() );
+    sldNetBuf->setEnabled     ( !pClient->GetDoAutoSockBufSize() );
+    TextNetBuf->setEnabled    ( !pClient->GetDoAutoSockBufSize() );
 }
 
 QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int iFrameSize,
@@ -449,25 +448,25 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     // are disabeld and unchecked.).
     SndCrdBufferDelayButtonGroup.setExclusive ( false );
 
-    rButBufferDelayPreferred->setChecked ( iCurActualBufSize ==
+    rbtBufferDelayPreferred->setChecked ( iCurActualBufSize ==
         SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED );
 
-    rButBufferDelayDefault->setChecked ( iCurActualBufSize ==
+    rbtBufferDelayDefault->setChecked ( iCurActualBufSize ==
         SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT );
 
-    rButBufferDelaySafe->setChecked ( iCurActualBufSize ==
+    rbtBufferDelaySafe->setChecked ( iCurActualBufSize ==
         SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE );
 
     SndCrdBufferDelayButtonGroup.setExclusive ( true );
 
     // disable radio buttons which are not supported by audio interface
-    rButBufferDelayPreferred->setEnabled (
+    rbtBufferDelayPreferred->setEnabled (
         pClient->GetFraSiFactPrefSupported() );
 
-    rButBufferDelayDefault->setEnabled (
+    rbtBufferDelayDefault->setEnabled (
         pClient->GetFraSiFactDefSupported() );
 
-    rButBufferDelaySafe->setEnabled (
+    rbtBufferDelaySafe->setEnabled (
         pClient->GetFraSiFactSafeSupported() );
 }
 
@@ -492,26 +491,26 @@ void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
         FrameSoundcardChannelSelection->setVisible ( true );
 
         // input
-        cbLInChan->clear();
-        cbRInChan->clear();
+        cbxLInChan->clear();
+        cbxRInChan->clear();
         for ( iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumInputChannels(); iSndChanIdx++ )
         {
-            cbLInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
-            cbRInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
+            cbxLInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
+            cbxRInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
         }
-        cbLInChan->setCurrentIndex ( pClient->GetSndCrdLeftInputChannel() );
-        cbRInChan->setCurrentIndex ( pClient->GetSndCrdRightInputChannel() );
+        cbxLInChan->setCurrentIndex ( pClient->GetSndCrdLeftInputChannel() );
+        cbxRInChan->setCurrentIndex ( pClient->GetSndCrdRightInputChannel() );
 
         // output
-        cbLOutChan->clear();
-        cbROutChan->clear();
+        cbxLOutChan->clear();
+        cbxROutChan->clear();
         for ( iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumOutputChannels(); iSndChanIdx++ )
         {
-            cbLOutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );
-            cbROutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );
+            cbxLOutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );
+            cbxROutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );
         }
-        cbLOutChan->setCurrentIndex ( pClient->GetSndCrdLeftOutputChannel() );
-        cbROutChan->setCurrentIndex ( pClient->GetSndCrdRightOutputChannel() );
+        cbxLOutChan->setCurrentIndex ( pClient->GetSndCrdLeftOutputChannel() );
+        cbxROutChan->setCurrentIndex ( pClient->GetSndCrdRightOutputChannel() );
     }
 #else
     // for other OS, no sound card channel selection is supported
@@ -527,31 +526,31 @@ void CClientSettingsDlg::UpdateCentralServerDependency()
     // If the default central server address is enabled, the line edit shows
     // the default server and is not editable. Make sure the line edit does not
     // fire signals when we update the text.
-    LineEditCentralServerAddress->blockSignals ( true );
+    edtCentralServerAddress->blockSignals ( true );
     {
         if ( bCurUseDefCentServAddr )
         {
-            LineEditCentralServerAddress->setText ( DEFAULT_SERVER_ADDRESS );
+            edtCentralServerAddress->setText ( DEFAULT_SERVER_ADDRESS );
         }
         else
         {
-            LineEditCentralServerAddress->setText (
+            edtCentralServerAddress->setText (
                 pClient->GetServerListCentralServerAddress() );
         }
     }
-    LineEditCentralServerAddress->blockSignals ( false );
+    edtCentralServerAddress->blockSignals ( false );
 
     // the line edit of the central server address is only enabled, if not the
     // default address is used
-    LineEditCentralServerAddress->setEnabled ( !bCurUseDefCentServAddr );
+    edtCentralServerAddress->setEnabled ( !bCurUseDefCentServAddr );
 }
 
-void CClientSettingsDlg::OnDriverSetupBut()
+void CClientSettingsDlg::OnDriverSetupClicked()
 {
     pClient->OpenSndCrdDriverSetup();
 }
 
-void CClientSettingsDlg::OnSliderNetBuf ( int value )
+void CClientSettingsDlg::OnNetBufValueChanged ( int value )
 {
     pClient->SetSockBufNumFrames ( value );
     UpdateJitterBufferFrame();
@@ -563,7 +562,7 @@ void CClientSettingsDlg::OnSliderSndCrdBufferDelay ( int value )
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
+void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
 {
     const QString strError = pClient->SetSndCrdDev ( iSndDevIdx );
 
@@ -576,37 +575,37 @@ void CClientSettingsDlg::OnSoundCrdSelection ( int iSndDevIdx )
             "Ok", 0 );
 
         // recover old selection
-        cbSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
+        cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
     }
     UpdateSoundChannelSelectionFrame();
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::OnSndCrdLeftInChannelSelection ( int iChanIdx )
+void CClientSettingsDlg::OnLInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdLeftInputChannel ( iChanIdx );
     UpdateSoundChannelSelectionFrame();
 }
 
-void CClientSettingsDlg::OnSndCrdRightInChannelSelection ( int iChanIdx )
+void CClientSettingsDlg::OnRInChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdRightInputChannel ( iChanIdx );
     UpdateSoundChannelSelectionFrame();
 }
 
-void CClientSettingsDlg::OnSndCrdLeftOutChannelSelection ( int iChanIdx )
+void CClientSettingsDlg::OnLOutChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdLeftOutputChannel ( iChanIdx );
     UpdateSoundChannelSelectionFrame();
 }
 
-void CClientSettingsDlg::OnSndCrdRightOutChannelSelection ( int iChanIdx )
+void CClientSettingsDlg::OnROutChanActivated ( int iChanIdx )
 {
     pClient->SetSndCrdRightOutputChannel ( iChanIdx );
     UpdateSoundChannelSelectionFrame();
 }
 
-void CClientSettingsDlg::OnAutoJitBuf ( int value )
+void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 {
     pClient->SetDoAutoSockBufSize ( value == Qt::Checked );
     UpdateJitterBufferFrame();
@@ -654,26 +653,26 @@ void CClientSettingsDlg::OnDefaultCentralServerStateChanged ( int value )
     UpdateCentralServerDependency();
 }
 
-void CClientSettingsDlg::OnLineEditCentralServerAddressEditingFinished()
+void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
 {
     // store new setting in the client
     pClient->SetServerListCentralServerAddress (
-        LineEditCentralServerAddress->text() );
+        edtCentralServerAddress->text() );
 }
 
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )
 {
-    if ( button == rButBufferDelayPreferred )
+    if ( button == rbtBufferDelayPreferred )
     {
         pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_PREFERRED );
     }
 
-    if ( button == rButBufferDelayDefault )
+    if ( button == rbtBufferDelayDefault )
     {
         pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_DEFAULT );
     }
 
-    if ( button == rButBufferDelaySafe )
+    if ( button == rbtBufferDelaySafe )
     {
         pClient->SetSndCrdPrefFrameSizeFactor ( FRAME_SIZE_FACTOR_SAFE );
     }
@@ -692,18 +691,18 @@ void CClientSettingsDlg::SetPingTimeResult ( const int iPingTime,
         const QString sErrorText =
             "<font color=""red""><b>&#62;500 ms</b></font>";
 
-        TextLabelPingTime->setText ( sErrorText );
-        TextLabelOverallDelay->setText ( sErrorText );
+        lblPingTimeValue->setText     ( sErrorText );
+        lblOverallDelayValue->setText ( sErrorText );
     }
     else
     {
-        TextLabelPingTime->setText ( QString().setNum ( iPingTime ) + " ms" );
-        TextLabelOverallDelay->setText (
+        lblPingTimeValue->setText ( QString().setNum ( iPingTime ) + " ms" );
+        lblOverallDelayValue->setText (
             QString().setNum ( iOverallDelayMs ) + " ms" );
     }
 
     // set current LED status
-    CLEDOverallDelay->SetLight ( iOverallDelayLEDColor );
+    ledOverallDelay->SetLight ( iOverallDelayLEDColor );
 }
 
 void CClientSettingsDlg::UpdateDisplay()
@@ -715,14 +714,14 @@ void CClientSettingsDlg::UpdateDisplay()
     if ( !pClient->IsRunning() )
     {
         // clear text labels with client parameters
-        TextLabelPingTime->setText     ( "" );
-        TextLabelOverallDelay->setText ( "" );
-        TextUpstreamValue->setText     ( "" );
+        lblPingTimeValue->setText     ( "" );
+        lblOverallDelayValue->setText ( "" );
+        lblUpstreamValue->setText     ( "" );
     }
     else
     {
         // update upstream rate information label (only if client is running)
-        TextUpstreamValue->setText (
+        lblUpstreamValue->setText (
             QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
     }
 }
@@ -734,11 +733,11 @@ void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
     case MS_JIT_BUF_PUT:
     case MS_JIT_BUF_GET:
         // network LED shows combined status of put and get
-        CLEDNetw->SetLight ( iStatus );
+        ledNetw->SetLight ( iStatus );
         break;
 
     case MS_RESET_ALL:
-        CLEDNetw->Reset();
+        ledNetw->Reset();
         break;
     }
 }

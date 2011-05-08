@@ -20,13 +20,13 @@
   </property>
   <layout class="QHBoxLayout" >
    <item>
-    <widget class="QGroupBox" name="GroupBoxJitterBuffer" >
+    <widget class="QGroupBox" name="grbJitterBuffer" >
      <property name="title" >
       <string>Jitter Buffer</string>
      </property>
      <layout class="QVBoxLayout" >
       <item>
-       <widget class="QCheckBox" name="cbAutoJitBuf" >
+       <widget class="QCheckBox" name="chbAutoJitBuf" >
         <property name="text" >
          <string>Auto</string>
         </property>
@@ -85,7 +85,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QSlider" name="SliderNetBuf" >
+         <widget class="QSlider" name="sldNetBuf" >
           <property name="pageStep" >
            <number>1</number>
           </property>
@@ -134,7 +134,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="CMultiColorLED" native="1" name="CLEDNetw" >
+         <widget class="CMultiColorLED" native="1" name="ledNetw" >
           <property name="sizePolicy" >
            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
             <horstretch>0</horstretch>
@@ -177,20 +177,20 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="GroupBoxSoundCard" >
+    <widget class="QGroupBox" name="grbSoundCard" >
      <property name="title" >
       <string>Soundcard</string>
      </property>
      <layout class="QVBoxLayout" >
       <item>
-       <widget class="QLabel" name="TextSoundcardDevice" >
+       <widget class="QLabel" name="lblSoundcardDevice" >
         <property name="text" >
          <string>Device</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="cbSoundcard" >
+       <widget class="QComboBox" name="cbxSoundcard" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
           <horstretch>0</horstretch>
@@ -233,7 +233,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="lbInChannelMapping" >
+          <widget class="QLabel" name="lblInChannelMapping" >
            <property name="text" >
             <string>Input Channel Mapping</string>
            </property>
@@ -247,7 +247,7 @@
            <item>
             <layout class="QVBoxLayout" >
              <item>
-              <widget class="QLabel" name="labelLInChan" >
+              <widget class="QLabel" name="lblLInChan" >
                <property name="sizePolicy" >
                 <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
                  <horstretch>0</horstretch>
@@ -260,7 +260,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="labelRInChan" >
+              <widget class="QLabel" name="lblRInChan" >
                <property name="sizePolicy" >
                 <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
                  <horstretch>0</horstretch>
@@ -280,17 +280,17 @@
               <number>3</number>
              </property>
              <item>
-              <widget class="QComboBox" name="cbLInChan" />
+              <widget class="QComboBox" name="cbxLInChan" />
              </item>
              <item>
-              <widget class="QComboBox" name="cbRInChan" />
+              <widget class="QComboBox" name="cbxRInChan" />
              </item>
             </layout>
            </item>
           </layout>
          </item>
          <item>
-          <widget class="QLabel" name="lbOutChannelMapping" >
+          <widget class="QLabel" name="lblOutChannelMapping" >
            <property name="text" >
             <string>Output Channel Mapping</string>
            </property>
@@ -304,7 +304,7 @@
            <item>
             <layout class="QVBoxLayout" >
              <item>
-              <widget class="QLabel" name="labelLOutChan" >
+              <widget class="QLabel" name="lblLOutChan" >
                <property name="sizePolicy" >
                 <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
                  <horstretch>0</horstretch>
@@ -317,7 +317,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="labelROutChan" >
+              <widget class="QLabel" name="lblROutChan" >
                <property name="sizePolicy" >
                 <sizepolicy vsizetype="Preferred" hsizetype="Maximum" >
                  <horstretch>0</horstretch>
@@ -337,10 +337,10 @@
               <number>3</number>
              </property>
              <item>
-              <widget class="QComboBox" name="cbLOutChan" />
+              <widget class="QComboBox" name="cbxLOutChan" />
              </item>
              <item>
-              <widget class="QComboBox" name="cbROutChan" />
+              <widget class="QComboBox" name="cbxROutChan" />
              </item>
             </layout>
            </item>
@@ -363,34 +363,34 @@
        </spacer>
       </item>
       <item>
-       <widget class="QGroupBox" name="GroupBoxSoundCrdBufDelay" >
+       <widget class="QGroupBox" name="grbSoundCrdBufDelay" >
         <property name="title" >
          <string>Buffer Delay</string>
         </property>
         <layout class="QVBoxLayout" >
          <item>
-          <widget class="QRadioButton" name="rButBufferDelayPreferred" >
+          <widget class="QRadioButton" name="rbtBufferDelayPreferred" >
            <property name="text" >
             <string>(preferred)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="rButBufferDelayDefault" >
+          <widget class="QRadioButton" name="rbtBufferDelayDefault" >
            <property name="text" >
             <string>(default)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="rButBufferDelaySafe" >
+          <widget class="QRadioButton" name="rbtBufferDelaySafe" >
            <property name="text" >
             <string>(safe)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="ButtonDriverSetup" >
+          <widget class="QPushButton" name="butDriverSetup" >
            <property name="text" >
             <string>Driver Setup</string>
            </property>
@@ -403,27 +403,27 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="GroupBoxMeasureResults" >
+    <widget class="QGroupBox" name="grbMeasureResults" >
      <property name="title" >
       <string>Misc</string>
      </property>
      <layout class="QVBoxLayout" >
       <item>
-       <widget class="QCheckBox" name="cbOpenChatOnNewMessage" >
+       <widget class="QCheckBox" name="chbOpenChatOnNewMessage" >
         <property name="text" >
          <string>Open Chat on New Message</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="cbGUIDesignFancy" >
+       <widget class="QCheckBox" name="chbGUIDesignFancy" >
         <property name="text" >
          <string>Fancy GUI Design</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="cbUseHighQualityAudio" >
+       <widget class="QCheckBox" name="chbUseHighQualityAudio" >
         <property name="windowModality" >
          <enum>Qt::NonModal</enum>
         </property>
@@ -433,7 +433,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="cbUseStereo" >
+       <widget class="QCheckBox" name="chbUseStereo" >
         <property name="windowModality" >
          <enum>Qt::NonModal</enum>
         </property>
@@ -445,14 +445,14 @@
       <item>
        <layout class="QHBoxLayout" >
         <item>
-         <widget class="QLabel" name="LabelCentralServerAddress" >
+         <widget class="QLabel" name="lblCentralServerAddress" >
           <property name="text" >
            <string>Central Server Address:</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="cbDefaultCentralServer" >
+         <widget class="QCheckBox" name="chbDefaultCentralServer" >
           <property name="text" >
            <string>Default</string>
           </property>
@@ -461,7 +461,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QLineEdit" name="LineEditCentralServerAddress" >
+       <widget class="QLineEdit" name="edtCentralServerAddress" >
         <property name="sizePolicy" >
          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
           <horstretch>0</horstretch>
@@ -486,14 +486,14 @@
       <item>
        <layout class="QHBoxLayout" >
         <item>
-         <widget class="QLabel" name="TextPingTime" >
+         <widget class="QLabel" name="lblPingTime" >
           <property name="text" >
            <string>Ping Time</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="TextLabelPingTime" >
+         <widget class="QLabel" name="lblPingTimeValue" >
           <property name="sizePolicy" >
            <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
             <horstretch>0</horstretch>
@@ -522,7 +522,7 @@
       <item>
        <layout class="QHBoxLayout" >
         <item>
-         <widget class="QLabel" name="TextOverallDelay" >
+         <widget class="QLabel" name="lblOverallDelay" >
           <property name="text" >
            <string>Overall Delay</string>
           </property>
@@ -534,7 +534,7 @@
            <number>3</number>
           </property>
           <item>
-           <widget class="QLabel" name="TextLabelOverallDelay" >
+           <widget class="QLabel" name="lblOverallDelayValue" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Maximum" hsizetype="Preferred" >
               <horstretch>0</horstretch>
@@ -565,7 +565,7 @@
            </widget>
           </item>
           <item>
-           <widget class="CMultiColorLED" native="1" name="CLEDOverallDelay" >
+           <widget class="CMultiColorLED" native="1" name="ledOverallDelay" >
             <property name="sizePolicy" >
              <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
               <horstretch>0</horstretch>
@@ -593,14 +593,14 @@
       <item>
        <layout class="QHBoxLayout" >
         <item>
-         <widget class="QLabel" name="TextUpstream" >
+         <widget class="QLabel" name="lblUpstream" >
           <property name="text" >
            <string>Audio Stream Rate</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="TextUpstreamValue" >
+         <widget class="QLabel" name="lblUpstreamValue" >
           <property name="minimumSize" >
            <size>
             <width>0</width>
@@ -639,23 +639,23 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>cbAutoJitBuf</tabstop>
-  <tabstop>SliderNetBuf</tabstop>
-  <tabstop>cbSoundcard</tabstop>
-  <tabstop>cbLInChan</tabstop>
-  <tabstop>cbRInChan</tabstop>
-  <tabstop>cbLOutChan</tabstop>
-  <tabstop>cbROutChan</tabstop>
-  <tabstop>rButBufferDelayPreferred</tabstop>
-  <tabstop>rButBufferDelayDefault</tabstop>
-  <tabstop>rButBufferDelaySafe</tabstop>
-  <tabstop>ButtonDriverSetup</tabstop>
-  <tabstop>cbOpenChatOnNewMessage</tabstop>
-  <tabstop>cbGUIDesignFancy</tabstop>
-  <tabstop>cbUseHighQualityAudio</tabstop>
-  <tabstop>cbUseStereo</tabstop>
-  <tabstop>cbDefaultCentralServer</tabstop>
-  <tabstop>LineEditCentralServerAddress</tabstop>
+  <tabstop>chbAutoJitBuf</tabstop>
+  <tabstop>sldNetBuf</tabstop>
+  <tabstop>cbxSoundcard</tabstop>
+  <tabstop>cbxLInChan</tabstop>
+  <tabstop>cbxRInChan</tabstop>
+  <tabstop>cbxLOutChan</tabstop>
+  <tabstop>cbxROutChan</tabstop>
+  <tabstop>rbtBufferDelayPreferred</tabstop>
+  <tabstop>rbtBufferDelayDefault</tabstop>
+  <tabstop>rbtBufferDelaySafe</tabstop>
+  <tabstop>butDriverSetup</tabstop>
+  <tabstop>chbOpenChatOnNewMessage</tabstop>
+  <tabstop>chbGUIDesignFancy</tabstop>
+  <tabstop>chbUseHighQualityAudio</tabstop>
+  <tabstop>chbUseStereo</tabstop>
+  <tabstop>chbDefaultCentralServer</tabstop>
+  <tabstop>edtCentralServerAddress</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc" />

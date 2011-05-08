@@ -132,6 +132,9 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
 
         SystemTrayIcon.setContextMenu ( pSystemTrayIconMenu );
 
+        // set tool text
+        SystemTrayIcon.setToolTip ( QString ( APP_NAME ) + tr ( " server" ) );
+
         // show icon of state "inactive"
         SystemTrayIcon.setIcon ( QIcon ( BitmapSystemTrayInactive ) );
         SystemTrayIcon.show();
@@ -298,6 +301,18 @@ ListViewClients->setMinimumHeight ( 140 );
     // Timers ------------------------------------------------------------------
     // start timer for GUI controls
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
+}
+
+void CLlconServerDlg::closeEvent ( QCloseEvent* Event )
+{
+    // if server was registered at the central server, unregister on shutdown
+    if ( pServer->GetServerListEnabled() )
+    {
+        pServer->UnregisterSlaveServer();
+    }
+
+    // default implementation of this event handler routine
+    Event->accept();
 }
 
 void CLlconServerDlg::OnStartOnOSStartStateChanged ( int value )

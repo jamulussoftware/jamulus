@@ -46,6 +46,9 @@
 #define VERSION                         "4.0.0cvs"
 #define APP_NAME                        "llcon"
 
+// Windows registry key name of auto run entry for the server
+#define AUTORUN_SERVER_REG_NAME         "llcon server"
+
 // default names of the ini-file for client and server
 #define DEFAULT_INI_FILE_NAME           "llcon.ini"
 #define DEFAULT_INI_FILE_NAME_SERVER    "llconserver.ini"

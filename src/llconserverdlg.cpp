@@ -27,6 +27,7 @@
 
 /* Implementation *************************************************************/
 CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
+                                   const bool      bStartMinimized,
                                    QWidget*        parent,
                                    Qt::WindowFlags f )
     : QDialog                  ( parent, f ),
@@ -35,18 +36,6 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
       BitmapSystemTrayActive   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenArrow.png" ) )
 {
     setupUi ( this );
-
-
-
-// TEST
-#ifdef _WIN32
-/*
-QSettings RegSettings ( "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
-                        QSettings::NativeFormat );
-RegSettings.setValue ( "llcon server",
-                       QCoreApplication::applicationFilePath().replace ( "/", "\\" ) );
-*/
-#endif
 
 
     // Add help text to controls -----------------------------------------------
@@ -115,6 +104,16 @@ RegSettings.setValue ( "llcon server",
 
     ComboBoxLocationCountry->setAccessibleName ( tr (
         "Country where the server is located combo box" ) );
+
+
+
+// TODO does not work!
+// act on "start minimized" flag
+if ( bStartMinimized )
+{
+    hide();
+}
+
 
 
     // check if system tray icon can be used
@@ -218,6 +217,26 @@ ListViewClients->setMinimumHeight ( 140 );
         cbRegisterServer->setCheckState ( Qt::Unchecked );
     }
 
+    // update start minimized check box (only available for Windows)
+#ifndef _WIN32
+    cbStartOnOSStart->setVisible ( false );
+#else
+    const bool bCurAutoStartMinState = pServer->GetAutoRunMinimized();
+
+    if ( bCurAutoStartMinState )
+    {
+        cbStartOnOSStart->setCheckState ( Qt::Checked );
+    }
+    else
+    {
+        cbStartOnOSStart->setCheckState ( Qt::Unchecked );
+    }
+
+    // modify registry according to setting (this is just required in case a
+    // user has changed the registry by hand)
+    ModifyAutoStartEntry ( bCurAutoStartMinState );
+#endif
+
     // update GUI dependencies
     UpdateGUIDependencies();
 
@@ -246,6 +265,9 @@ ListViewClients->setMinimumHeight ( 140 );
 
     QObject::connect ( cbDefaultCentralServer, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnDefaultCentralServerStateChanged ( int ) ) );
+
+    QObject::connect ( cbStartOnOSStart, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnStartOnOSStartStateChanged ( int ) ) );
 
     // line edits
     QObject::connect ( LineEditCentralServerAddress,
@@ -280,6 +302,15 @@ ListViewClients->setMinimumHeight ( 140 );
     // Timers ------------------------------------------------------------------
     // start timer for GUI controls
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
+}
+
+void CLlconServerDlg::OnStartOnOSStartStateChanged ( int value )
+{
+    const bool bCurAutoStartMinState = ( value == Qt::Checked );
+
+    // update registry and server setting (for ini file)
+    pServer->SetAutoRunMinimized ( bCurAutoStartMinState );
+    ModifyAutoStartEntry         ( bCurAutoStartMinState );
 }
 
 void CLlconServerDlg::OnDefaultCentralServerStateChanged ( int value )
@@ -468,6 +499,47 @@ void CLlconServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )
         {
             SystemTrayIcon.setIcon ( QIcon ( BitmapSystemTrayInactive ) );
         }
+    }
+}
+
+void CLlconServerDlg::ModifyAutoStartEntry ( const bool bDoAutoStart )
+{
+// auto start is currently only supported for Windows
+#ifdef _WIN32
+    // init settings object so that it points to the correct place in the
+    // Windows registry for the auto run entry
+    QSettings RegSettings ( "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+                            QSettings::NativeFormat );
+
+    // create start string of auto run entry
+    QString strRegValue =
+        QCoreApplication::applicationFilePath().replace ( "/", "\\" ) +
+        " --startminimized";
+#endif
+
+    if ( bDoAutoStart )
+    {
+#ifdef _WIN32
+        // ckeck if registry entry is correctly present, if not, correct
+        const bool bWriteRegValue = strRegValue.compare (
+            RegSettings.value ( AUTORUN_SERVER_REG_NAME ).toString() );
+
+        if ( bWriteRegValue )
+        {
+            // write reg key in the registry
+            RegSettings.setValue ( AUTORUN_SERVER_REG_NAME, strRegValue );
+        }
+#endif
+    }
+    else
+    {
+#ifdef _WIN32
+        // delete reg key if present
+        if ( RegSettings.contains ( AUTORUN_SERVER_REG_NAME ) )
+        {
+            RegSettings.remove ( AUTORUN_SERVER_REG_NAME );
+        }
+#endif
     }
 }
 

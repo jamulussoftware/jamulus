@@ -176,7 +176,8 @@ CServer::CServer ( const QString& strLoggingFileName,
     ServerListManager ( iPortNumber,
                         strCentralServer,
                         strServerInfo,
-                        &ConnLessProtocol )
+                        &ConnLessProtocol ),
+    bAutoRunMinimized ( false )
 {
     int i;
 

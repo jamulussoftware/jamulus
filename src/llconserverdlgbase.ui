@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>588</width>
-    <height>378</height>
+    <height>386</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -52,9 +52,16 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="cbStartOnOSStart" >
+     <property name="text" >
+      <string>Start Minimized on Windows Start</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QCheckBox" name="cbRegisterServer" >
      <property name="text" >
-      <string>Register My Server at Central Server</string>
+      <string>Register My Server in the Server List at the Central Server</string>
      </property>
     </widget>
    </item>

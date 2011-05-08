@@ -58,6 +58,7 @@ class CLlconServerDlg : public QDialog, private Ui_CLlconServerDlgBase
 
 public:
     CLlconServerDlg ( CServer*        pNServP,
+                      const bool      bStartMinimized,
                       QWidget*        parent = 0,
                       Qt::WindowFlags f = 0 );
 
@@ -68,6 +69,7 @@ protected:
     void         UpdateGUIDependencies();
     void         UpdateSystemTrayIcon ( const bool bIsActive );
     void         ShowWindowInForeground() { showNormal(); raise(); }
+    void         ModifyAutoStartEntry ( const bool bDoAutoStart );
 
     QTimer                        Timer;
     CServer*                      pServer;
@@ -86,6 +88,7 @@ protected:
 public slots:
     void OnRegisterServerStateChanged ( int value );
     void OnDefaultCentralServerStateChanged ( int value );
+    void OnStartOnOSStartStateChanged ( int value );
     void OnLineEditCentralServerAddressEditingFinished();
     void OnLineEditServerNameTextChanged ( const QString& strNewName );
     void OnLineEditLocationCityTextChanged ( const QString& strNewCity );

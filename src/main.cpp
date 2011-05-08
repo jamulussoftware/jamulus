@@ -55,6 +55,7 @@ int main ( int argc, char** argv )
     // arguments
     bool    bIsClient             = true;
     bool    bUseGUI               = true;
+    bool    bStartMinimized       = false;
     bool    bConnectOnStartup     = false;
     bool    bDisalbeLEDs          = false;
     quint16 iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
@@ -91,6 +92,18 @@ int main ( int argc, char** argv )
         {
             bUseGUI = false;
             tsConsole << "- no GUI mode chosen" << endl;
+            continue;
+        }
+
+
+        // Start minimized -----------------------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-z",
+                               "--startminimized" ) )
+        {
+            bStartMinimized = true;
+            tsConsole << "- start minimized enabled" << endl;
             continue;
         }
 
@@ -361,6 +374,7 @@ int main ( int argc, char** argv )
                 // GUI object for the server
                 CLlconServerDlg ServerDlg (
                     &Server,
+                    bStartMinimized,
                     0,
                     Qt::Window );
 
@@ -419,6 +433,7 @@ QString UsageArguments ( char **argv )
         "\nRecognized options:\n"
         "  -s, --server          start server\n"
         "  -n, --nogui           disable GUI (server only)\n"
+        "  -z, --startminimized  start minimizied (server only)\n"
         "  -l, --log             enable logging, set file name\n"
         "  -i, --inifile         initialization file name (client only)\n"
         "  -p, --port            local port number (server only)\n"

@@ -165,6 +165,13 @@ public:
     QLocale::Country GetServerCountry()
         { return ServerListManager.GetServerCountry(); }
 
+
+    // GUI settings ------------------------------------------------------------
+    void SetAutoRunMinimized ( const bool NAuRuMin )
+        { bAutoRunMinimized = NAuRuMin; }
+
+    bool GetAutoRunMinimized() { return bAutoRunMinimized; }
+
 protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum )
@@ -223,6 +230,9 @@ protected:
 
     // server list
     CServerListManager  ServerListManager;
+
+    // GUI settings
+    bool                bAutoRunMinimized;
 
 signals:
     void Started();

@@ -231,6 +231,12 @@ void CSettings::ReadIniFile ( const QString& sFileName )
         {
             pServer->SetServerCountry ( static_cast<QLocale::Country> ( iValue ) );
         }
+
+        // start minimized on OS start
+        if ( GetFlagIniSet ( IniXMLDocument, "server", "autostartmin", bValue ) )
+        {
+            pServer->SetAutoRunMinimized ( bValue );
+        }
     }
 }
 
@@ -352,6 +358,10 @@ void CSettings::WriteIniFile ( const QString& sFileName )
         // country
         SetNumericIniSet ( IniXMLDocument, "server", "country",
             static_cast<int> ( pServer->GetServerCountry() ) );
+
+        // start minimized on OS start
+        SetFlagIniSet ( IniXMLDocument, "server", "autostartmin",
+            pServer->GetAutoRunMinimized() );
     }
 
     // prepare file name for storing initialization data in XML file and store

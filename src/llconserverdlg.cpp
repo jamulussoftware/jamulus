@@ -106,15 +106,11 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
         "Country where the server is located combo box" ) );
 
 
-
-// TODO does not work!
-// act on "start minimized" flag
-if ( bStartMinimized )
-{
-    hide();
-}
-
-
+    // act on "start minimized" flag
+    if ( bStartMinimized )
+    {
+        showMinimized();
+    }
 
     // check if system tray icon can be used
     bSystemTrayIconAvaialbe = SystemTrayIcon.isSystemTrayAvailable();
@@ -514,7 +510,7 @@ void CLlconServerDlg::ModifyAutoStartEntry ( const bool bDoAutoStart )
     // create start string of auto run entry
     QString strRegValue =
         QCoreApplication::applicationFilePath().replace ( "/", "\\" ) +
-        " --startminimized";
+        " -s --startminimized";
 #endif
 
     if ( bDoAutoStart )

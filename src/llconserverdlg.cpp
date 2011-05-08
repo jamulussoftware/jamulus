@@ -43,7 +43,8 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
 /*
 QSettings RegSettings ( "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
                         QSettings::NativeFormat );
-RegSettings.setValue ( "llcon server", QCoreApplication::applicationFilePath() );
+RegSettings.setValue ( "llcon server",
+                       QCoreApplication::applicationFilePath().replace ( "/", "\\" ) );
 */
 #endif
 

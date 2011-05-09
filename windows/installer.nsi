@@ -28,6 +28,13 @@ Page instfiles
 
 Section
 
+  ; check if software is currently running
+  FindProcDLL::FindProc "${APP_EXE}"
+  IntCmp $R0 1 0 notRunning
+    MessageBox MB_OK|MB_ICONEXCLAMATION "${APP_NAME} is running. Please close it and run the setup again." /SD IDOK
+    Abort
+  notRunning:
+
   ; add reg keys so that software appears in Windows "Add/Remove Software"
   WriteRegStr HKLM "${UNINST_KEY}" "DisplayName" "${APP_NAME} (remove only)"
   WriteRegStr HKLM "${UNINST_KEY}" "UninstallString" '"$INSTDIR\${UNINSTALL_EXE}"'

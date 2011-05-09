@@ -47,6 +47,13 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
 
     lvwClients->setAccessibleName ( tr ( "Connected clients list view" ) );
 
+    // start minimized on operating system start
+    chbStartOnOSStart->setWhatsThis ( tr ( "<b>Start Minimized on Operating "
+        "System Start:</b> If the start minimized on operating system start "
+        "check box is checked, the " ) + APP_NAME + tr ( " server will be "
+        "started when the operating system starts up and is automatically "
+        "minimized to a system task bar icon." ) );
+
     // register server flag
     chbRegisterServer->setWhatsThis ( tr ( "<b>Register Server Status:</b> If "
         "the register server check box is checked, this server registers "

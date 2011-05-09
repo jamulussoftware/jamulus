@@ -33,8 +33,19 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
 
 
     // Add help text to controls -----------------------------------------------
-    edtLocalInputText->setAccessibleName ( "New chat text edit box" );
-    txvChatWindow->setAccessibleName     ( "Chat history" );
+    // chat window
+    txvChatWindow->setWhatsThis ( tr ( "<b>Chat Window:</b> The chat window "
+        "shows a history of all chat messages." ) );
+
+    txvChatWindow->setAccessibleName ( tr ( "Chat history" ) );
+
+    // input message text
+    edtLocalInputText->setWhatsThis ( tr ( "<b>Input Message Text:</b> Enter "
+        "the chat message text in the edit box and press enter to send the "
+        "message to the server which distributes the message to all connected "
+        "clients. Your message will then show up in the chat window." ) );
+
+    edtLocalInputText->setAccessibleName ( tr ( "New chat text edit box" ) );
 
 
     // clear chat window and edit line

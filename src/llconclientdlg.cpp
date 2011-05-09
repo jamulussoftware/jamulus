@@ -120,8 +120,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "a direction where the label above the fader shows <i>L -x</i>, where "
         "<i>x</i> is the current attenuation indication. " );
 
-    lblAudioPan->setWhatsThis ( strAudFader );
-    sldAudioPan->setWhatsThis ( strAudFader );
+    lblAudioPan->setWhatsThis      ( strAudFader );
+    lblAudioPanValue->setWhatsThis ( strAudFader );
+    sldAudioPan->setWhatsThis      ( strAudFader );
 
     sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
 

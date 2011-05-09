@@ -84,10 +84,10 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
         "Only one channel at a time can be set to solo." );
     pcbSolo->setAccessibleName ( "Solo button" );
 
-    pLabel->setWhatsThis ( "<b>Mixer Fader Label:</b> Label (fader tag) "
-        "identifying the connected client. The tag name can be set in the "
-        "clients main window." );
-    pLabel->setAccessibleName ( "Mixer level label (fader tag)" );
+    pLabel->setWhatsThis ( "<b>Fader Tag:</b> The fader tag "
+        "identifies the connected client. The tag name can be set in the "
+        "main window." );
+    pLabel->setAccessibleName ( "Mixer channel label (fader tag)" );
 
 
     // Connections -------------------------------------------------------------

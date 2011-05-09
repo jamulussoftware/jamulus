@@ -39,10 +39,25 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
 
 
     // Add help text to controls -----------------------------------------------
+    // server list
+    lvwServers->setWhatsThis ( tr ( "<b>Server List:</b> The server list shows "
+        "a list of available servers which are registered at the central "
+        "server. Select a server from the list and press the connect button to "
+        "connect to this server. Alternatively, double click a server from "
+        "the list to connect to it.<br>"
+        "Note that it may take some time to retrieve the server list from the "
+        "central server. If no valid central server address is specified in "
+        "the settings, no server list will be available." ) );
+
+    lvwServers->setAccessibleName ( tr ( "Server list view" ) );
+
     // server address
     QString strServAddrH = tr ( "<b>Server Address:</b> The IP address or URL "
-        "of the server running the llcon server software must be set here. "
-        "A list of the most recent used server URLs is available for "
+        "of the server running the llcon server software must be set here. An "
+        "optional port number can be added after the IP address or URL using "
+        "a comma as a separator, e.g, <i>" ) + DEFAULT_SERVER_ADDRESS + ":" +
+        QString().setNum ( LLCON_DEFAULT_PORT_NUMBER ) + tr ( "</i>. A list of "
+        "the most recent used server IP addresses or URLs is available for "
         "selection." );
 
     lblServerAddr->setWhatsThis ( strServAddrH );
@@ -50,7 +65,7 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
 
     cbxServerAddr->setAccessibleName        ( tr ( "Server address edit box" ) );
     cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
-        "URL. It also stores old URLs in the combo box list." ) );
+        "IP address or URL. It also stores old URLs in the combo box list." ) );
 
 
     // init server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)

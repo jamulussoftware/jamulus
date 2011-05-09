@@ -711,15 +711,9 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
     if ( bDoStart )
     {
         // get the central server address string
-        QString strCurCentServAddr;
-        if ( pClient->GetUseDefaultCentralServerAddress() )
-        {
-            strCurCentServAddr = DEFAULT_SERVER_ADDRESS;
-        }
-        else
-        {
-            strCurCentServAddr = pClient->GetServerListCentralServerAddress();
-        }
+        const QString strCurCentServAddr =
+            SELECT_SERVER_ADDRESS ( pClient->GetUseDefaultCentralServerAddress(),
+                                    pClient->GetServerListCentralServerAddress() );
 
         // init the connect dialog and execute it (modal dialog)
         ConnectDlg.Init ( strCurCentServAddr, pClient->vstrIPAddress );

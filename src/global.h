@@ -75,6 +75,7 @@ LED bar:      lbr
 
 // default server address
 #define DEFAULT_SERVER_ADDRESS          "llcon.dyndns.org"
+#define SELECT_SERVER_ADDRESS(a, b)     ((a) ? (DEFAULT_SERVER_ADDRESS) : (b))
 
 // download URL
 #define LLCON_DOWNLOAD_URL              "http://sourceforge.net/projects/llcon/files"

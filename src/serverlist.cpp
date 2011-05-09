@@ -399,15 +399,9 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
     QMutexLocker locker ( &Mutex );
 
     // get the correct central server address
-    QString strCurCentrServAddr;
-    if ( bUseDefaultCentralServerAddress )
-    {
-        strCurCentrServAddr = DEFAULT_SERVER_ADDRESS;
-    }
-    else
-    {
-        strCurCentrServAddr = strCentralServerAddress;
-    }
+    const QString strCurCentrServAddr =
+        SELECT_SERVER_ADDRESS ( bUseDefaultCentralServerAddress,
+                                strCentralServerAddress );
 
     // For the slave server, the slave server properties are store in the
     // very first item in the server list (which is actually no server list

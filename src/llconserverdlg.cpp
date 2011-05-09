@@ -479,15 +479,9 @@ void CLlconServerDlg::UpdateGUIDependencies()
     // fire signals when we update the text.
     edtCentralServerAddress->blockSignals ( true );
     {
-        if ( bCurUseDefCentServAddr )
-        {
-            edtCentralServerAddress->setText ( DEFAULT_SERVER_ADDRESS );
-        }
-        else
-        {
-            edtCentralServerAddress->setText (
-                pServer->GetServerListCentralServerAddress() );
-        }
+        edtCentralServerAddress->setText (
+            SELECT_SERVER_ADDRESS ( bCurUseDefCentServAddr,
+                                    pServer->GetServerListCentralServerAddress() ) );
     }
     edtCentralServerAddress->blockSignals ( false );
 

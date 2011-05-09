@@ -528,15 +528,9 @@ void CClientSettingsDlg::UpdateCentralServerDependency()
     // fire signals when we update the text.
     edtCentralServerAddress->blockSignals ( true );
     {
-        if ( bCurUseDefCentServAddr )
-        {
-            edtCentralServerAddress->setText ( DEFAULT_SERVER_ADDRESS );
-        }
-        else
-        {
-            edtCentralServerAddress->setText (
-                pClient->GetServerListCentralServerAddress() );
-        }
+        edtCentralServerAddress->setText (
+            SELECT_SERVER_ADDRESS ( bCurUseDefCentServAddr,
+                                    pClient->GetServerListCentralServerAddress() ) );
     }
     edtCentralServerAddress->blockSignals ( false );
 

@@ -103,7 +103,8 @@ class CServer : public QObject
     Q_OBJECT
 
 public:
-    CServer ( const QString& strLoggingFileName,
+    CServer ( const int      iNewNumChan,
+              const QString& strLoggingFileName,
               const quint16  iPortNumber,
               const QString& strHTMLStatusFileName,
               const QString& strHistoryFileName,
@@ -200,6 +201,7 @@ protected:
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
     CChannel            vecChannels[MAX_NUM_CHANNELS];
+    int                 iNumChannels;
     CProtocol           ConnLessProtocol;
     QMutex              Mutex;
 

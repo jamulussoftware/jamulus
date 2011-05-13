@@ -128,6 +128,7 @@ public:
     CServerListManager ( const quint16  iNPortNum,
                          const QString& sNCentServAddr,
                          const QString& strServerInfo,
+                         const int      iNumChannels,
                          CProtocol*     pNConLProt );
 
     // the update has to be called if any change to the server list

@@ -165,8 +165,8 @@ lvwClients->setMinimumHeight ( 140 );
 
     // insert items in reverse order because in Windows all of them are
     // always visible -> put first item on the top
-    vecpListViewItems.Init ( USED_NUM_CHANNELS );
-    for ( int i = USED_NUM_CHANNELS - 1; i >= 0; i-- )
+    vecpListViewItems.Init ( MAX_NUM_CHANNELS );
+    for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
     {
         vecpListViewItems[i] = new CServerListViewItem ( lvwClients );
         vecpListViewItems[i]->setHidden ( true );
@@ -435,8 +435,11 @@ void CLlconServerDlg::OnTimer()
                                   veciJitBufNumFrames,
                                   veciNetwFrameSizeFact );
 
+        // we assume that all vectors have the same length
+        const int iNumChannels = vecHostAddresses.Size();
+
         // fill list with connected clients
-        for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+        for ( int i = 0; i < iNumChannels; i++ )
         {
             if ( !( vecHostAddresses[i].InetAddr == QHostAddress ( (quint32) 0 ) ) )
             {

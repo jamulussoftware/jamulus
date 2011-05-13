@@ -58,6 +58,7 @@ int main ( int argc, char** argv )
     bool    bStartMinimized       = false;
     bool    bConnectOnStartup     = false;
     bool    bDisalbeLEDs          = false;
+    int     iNumServerChannels    = DEFAULT_USED_NUM_CHANNELS;
     quint16 iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
     QString strIniFileName        = "";
     QString strHTMLStatusFileName = "";
@@ -94,6 +95,27 @@ int main ( int argc, char** argv )
             tsConsole << "- no GUI mode chosen" << endl;
             continue;
         }
+
+
+        // Maximum number of channels ------------------------------------------
+        if ( GetNumericArgument ( tsConsole,
+                                  argc,
+                                  argv,
+                                  i,
+                                  "-u",
+                                  "--numchannels",
+                                  1,
+                                  MAX_NUM_CHANNELS,
+                                  rDbleArgument ) )
+        {
+            iNumServerChannels = static_cast<int> ( rDbleArgument );
+
+            tsConsole << "- maximum number of channels: "
+                << iNumServerChannels << endl;
+
+            continue;
+        }
+
 
 
         // Start minimized -----------------------------------------------------
@@ -348,7 +370,8 @@ int main ( int argc, char** argv )
         {
             // Server:
             // actual server object
-            CServer Server ( strLoggingFileName,
+            CServer Server ( iNumServerChannels,
+                             strLoggingFileName,
                              iPortNumber,
                              strHTMLStatusFileName,
                              strHistoryFileName,
@@ -433,6 +456,7 @@ QString UsageArguments ( char **argv )
         "\nRecognized options:\n"
         "  -s, --server          start server\n"
         "  -n, --nogui           disable GUI (server only)\n"
+        "  -u, --numchannels     maximum number of channels (server only)\n"
         "  -z, --startminimized  start minimizied (server only)\n"
         "  -l, --log             enable logging, set file name\n"
         "  -i, --inifile         initialization file name (client only)\n"

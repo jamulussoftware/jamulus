@@ -148,7 +148,7 @@ LED bar:      lbr
 // actual number of used channels in the server
 // this parameter can safely be changed from 1 to MAX_NUM_CHANNELS
 // without any other changes in the code
-#define USED_NUM_CHANNELS               6 // used number channels for server
+#define DEFAULT_USED_NUM_CHANNELS       6 // default used number channels for server
 
 // maximum number of servers registered in the server list
 #define MAX_NUM_SERVERS_IN_SERVER_LIST  100

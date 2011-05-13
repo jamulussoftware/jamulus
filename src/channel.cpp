@@ -27,7 +27,7 @@
 
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
-    vecdGains ( USED_NUM_CHANNELS, (double) 1.0 ),
+    vecdGains ( MAX_NUM_CHANNELS, (double) 1.0 ),
     bIsEnabled ( false ),
     bIsServer ( bNIsServer ),
     iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_PREFERRED ),
@@ -189,7 +189,7 @@ void CChannel::SetGain ( const int iChanID, const double dNewGain )
     QMutexLocker locker ( &Mutex );
 
     // set value (make sure channel ID is in range)
-    if ( ( iChanID >= 0 ) && ( iChanID < USED_NUM_CHANNELS ) )
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
         vecdGains[iChanID] = dNewGain;
     }
@@ -200,7 +200,7 @@ double CChannel::GetGain ( const int iChanID )
     QMutexLocker locker ( &Mutex );
 
     // get value (make sure channel ID is in range)
-    if ( ( iChanID >= 0 ) && ( iChanID < USED_NUM_CHANNELS ) )
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
         return vecdGains[iChanID];
     }

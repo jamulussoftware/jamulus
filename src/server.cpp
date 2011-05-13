@@ -164,27 +164,30 @@ void CHighPrecisionTimer::OnTimer()
 
 
 // CServer implementation ******************************************************
-CServer::CServer ( const QString& strLoggingFileName,
+CServer::CServer ( const int      iNewNumChan,
+                   const QString& strLoggingFileName,
                    const quint16  iPortNumber,
                    const QString& strHTMLStatusFileName,
                    const QString& strHistoryFileName,
                    const QString& strServerNameForHTMLStatusFile,
                    const QString& strCentralServer,
                    const QString& strServerInfo ) :
-    Socket ( this, iPortNumber ),
+    iNumChannels         ( iNewNumChan ),
+    Socket               ( this, iPortNumber ),
     bWriteStatusHTMLFile ( false ),
-    ServerListManager ( iPortNumber,
-                        strCentralServer,
-                        strServerInfo,
-                        &ConnLessProtocol ),
-    bAutoRunMinimized ( false )
+    ServerListManager    ( iPortNumber,
+                           strCentralServer,
+                           strServerInfo,
+                           iNewNumChan,
+                           &ConnLessProtocol ),
+    bAutoRunMinimized    ( false )
 {
     int i;
 
     // create CELT encoder/decoder for each channel (must be done before
     // enabling the channels), create a mono and stereo encoder/decoder
     // for each channel
-    for ( i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( i = 0; i < iNumChannels; i++ )
     {
         // init audio endocder/decoder (mono)
         CeltModeMono[i] = celt_mode_create (
@@ -268,7 +271,7 @@ CServer::CServer ( const QString& strLoggingFileName,
 
     // enable all channels (for the server all channel must be enabled the
     // entire life time of the software)
-    for ( i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( i = 0; i < iNumChannels; i++ )
     {
         vecChannels[i].SetEnable ( true );
     }
@@ -459,7 +462,7 @@ void CServer::OnTimer()
     {
         // first, get number and IDs of connected channels
         vecChanID.Init ( 0 );
-        for ( i = 0; i < USED_NUM_CHANNELS; i++ )
+        for ( i = 0; i < iNumChannels; i++ )
         {
             if ( vecChannels[i].IsConnected() )
             {
@@ -785,7 +788,7 @@ CVector<CChannelShortInfo> CServer::CreateChannelList()
     CVector<CChannelShortInfo> vecChanInfo ( 0 );
 
     // look for free channels
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < iNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -806,7 +809,7 @@ void CServer::CreateAndSendChanListForAllConChannels()
     CVector<CChannelShortInfo> vecChanInfo ( CreateChannelList() );
 
     // now send connected channels list to all connected clients
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < iNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -854,7 +857,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
 
 
     // Send chat text to all connected clients ---------------------------------
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < iNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -867,7 +870,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
 int CServer::GetFreeChan()
 {
     // look for a free channel
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < iNumChannels; i++ )
     {
         if ( !vecChannels[i].IsConnected() )
         {
@@ -884,7 +887,7 @@ int CServer::GetNumberOfConnectedClients()
     int iNumConnClients = 0;
 
     // check all possible channels for connection status
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < iNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -901,7 +904,7 @@ int CServer::CheckAddr ( const CHostAddress& Addr )
     CHostAddress InetAddr;
 
     // check for all possible channels if IP is already in use
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < iNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -956,7 +959,7 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
 
                     // reset the channel gains of current channel, at the same
                     // time reset gains of this channel ID for all other channels
-                    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+                    for ( int i = 0; i < iNumChannels; i++ )
                     {
                         vecChannels[iCurChanID].SetGain ( i, (double) 1.0 );
 
@@ -1062,13 +1065,13 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
     CHostAddress InetAddr;
 
     // init return values
-    vecHostAddresses.Init      ( USED_NUM_CHANNELS );
-    vecsName.Init              ( USED_NUM_CHANNELS );
-    veciJitBufNumFrames.Init   ( USED_NUM_CHANNELS );
-    veciNetwFrameSizeFact.Init ( USED_NUM_CHANNELS );
+    vecHostAddresses.Init      ( iNumChannels );
+    vecsName.Init              ( iNumChannels );
+    veciJitBufNumFrames.Init   ( iNumChannels );
+    veciNetwFrameSizeFact.Init ( iNumChannels );
 
     // check all possible channels
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < iNumChannels; i++ )
     {
         if ( vecChannels[i].GetAddress ( InetAddr ) )
         {
@@ -1112,7 +1115,7 @@ void CServer::WriteHTMLChannelList()
 
     // get the number of connected clients
     int iNumConnClients = 0;
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < iNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -1129,7 +1132,7 @@ void CServer::WriteHTMLChannelList()
     else
     {
         // write entry for each connected client
-        for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+        for ( int i = 0; i < iNumChannels; i++ )
         {
             if ( vecChannels[i].IsConnected() )
             {

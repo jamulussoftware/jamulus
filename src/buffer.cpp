@@ -35,7 +35,7 @@ void CNetBuf::Init ( const int iNewBlockSize,
     // store block size value
     iBlockSize = iNewBlockSize;
 
-    // total size -> size of one block times number of blocks
+    // total size -> size of one block times the number of blocks
     CBufferBase<uint8_t>::Init ( iNewBlockSize * iNewNumBlocks );
 
     // use the "get" flag to make sure the buffer is cleared
@@ -46,7 +46,7 @@ void CNetBuf::Init ( const int iNewBlockSize,
 }
 
 bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
-                    const int iInSize )
+                    const int               iInSize )
 {
     bool bPutOK = true;
 

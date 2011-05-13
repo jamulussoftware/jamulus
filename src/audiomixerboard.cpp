@@ -345,7 +345,7 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
 {
     // apply GUI design to child GUI controls
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->SetGUIDesign ( eNewDesign );
     }
@@ -354,7 +354,7 @@ void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
 void CAudioMixerBoard::HideAll()
 {
     // make all controls invisible
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->Hide();
     }
@@ -370,7 +370,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecCh
 
     // search for channels with are already present and preserver their gain
     // setting, for all other channels, reset gain
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         bool bFaderIsUsed = false;
 
@@ -422,7 +422,7 @@ void CAudioMixerBoard::OnChSoloStateChanged ( const int iChannelIdx,
         ( static_cast<Qt::CheckState> ( iValue ) == Qt::Checked );
 
     // apply "other solo state" for all other channels
-    for ( int i = 0; i < USED_NUM_CHANNELS; i++ )
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         if ( i != iChannelIdx )
         {

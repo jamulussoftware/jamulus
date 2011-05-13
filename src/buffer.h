@@ -54,7 +54,8 @@ public:
         eBufState = CBufferBase<TData>::BS_EMPTY;
     }
 
-    virtual bool Put ( const CVector<TData>& vecData, const int iInSize )
+    virtual bool Put ( const CVector<TData>& vecData,
+                       const int             iInSize )
     {
         // copy new data in internal buffer
         int iCurPos = 0;
@@ -187,6 +188,58 @@ public:
 
 protected:
     enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
+
+    void PutSimulation ( const int iInSize )
+    {
+        // in this simulation only the buffer pointers and the buffer state
+        // is updated, no actual data is transferred
+        if ( iPutPos + iInSize > iMemSize )
+        {
+            // data must be written in two steps because of wrap around
+            iPutPos += iInSize - iMemSize - 1;
+        }
+        else
+        {
+            // data can be written in one step
+            iPutPos += iInSize - 1;
+        }
+
+        // set buffer state flag
+        if ( iPutPos == iGetPos )
+        {
+            eBufState = CBufferBase<TData>::BS_FULL;
+        }
+        else
+        {
+            eBufState = CBufferBase<TData>::BS_OK;
+        }
+    }
+
+    void GetSimulation ( const int iInSize )
+    {
+        // in this simulation only the buffer pointers and the buffer state
+        // is updated, no actual data is transferred
+        if ( iGetPos + iInSize > iMemSize )
+        {
+            // data must be read in two steps because of wrap around
+            iGetPos += iInSize - iMemSize - 1;
+        }
+        else
+        {
+            // data can be read in one step
+            iGetPos += iInSize - 1;
+        }
+
+        // set buffer state flag
+        if ( iPutPos == iGetPos )
+        {
+            eBufState = CBufferBase<TData>::BS_EMPTY;
+        }
+        else
+        {
+            eBufState = CBufferBase<TData>::BS_OK;
+        }
+    }
 
     CVector<TData> vecMemory;
     int            iMemSize;

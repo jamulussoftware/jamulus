@@ -29,6 +29,7 @@
 CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& sNCentServAddr,
                                          const QString& strServerInfo,
+                                         const int      iNumChannels,
                                          CProtocol*     pNConLProt )
     : iPortNumber                     ( iNPortNum ),
       iNumPredefinedServers           ( 0 ),
@@ -65,7 +66,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         "",
         QLocale::system().country(),
         "",
-        USED_NUM_CHANNELS,
+        iNumChannels,
         true );
 
     // parse the server info string according to definition:
@@ -113,7 +114,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
             "",
             QLocale::AnyCountry,
             "",
-            USED_NUM_CHANNELS,
+            iNumChannels,
             true );
 
         // [server n address]

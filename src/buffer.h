@@ -193,15 +193,10 @@ protected:
     {
         // in this simulation only the buffer pointers and the buffer state
         // is updated, no actual data is transferred
-        if ( iPutPos + iInSize > iMemSize )
+        iPutPos += iInSize;
+        if ( iPutPos >= iMemSize )
         {
-            // data must be written in two steps because of wrap around
-            iPutPos += iInSize - iMemSize - 1;
-        }
-        else
-        {
-            // data can be written in one step
-            iPutPos += iInSize - 1;
+            iPutPos -= iMemSize;
         }
 
         // set buffer state flag
@@ -219,15 +214,10 @@ protected:
     {
         // in this simulation only the buffer pointers and the buffer state
         // is updated, no actual data is transferred
-        if ( iGetPos + iInSize > iMemSize )
+        iGetPos += iInSize;
+        if ( iGetPos >= iMemSize )
         {
-            // data must be read in two steps because of wrap around
-            iGetPos += iInSize - iMemSize - 1;
-        }
-        else
-        {
-            // data can be read in one step
-            iGetPos += iInSize - 1;
+            iGetPos -= iMemSize;
         }
 
         // set buffer state flag
@@ -252,24 +242,36 @@ protected:
 class CNetBuf : public CBufferBase<uint8_t>
 {
 public:
-    void Init ( const int iNewBlockSize, const int iNewNumBlocks );
+    virtual void Init ( const int iNewBlockSize, const int iNewNumBlocks );
     int GetSize() { return iMemSize / iBlockSize; }
 
-    bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
-    bool Get ( CVector<uint8_t>& vecbyData );
-
-    double GetErrorRate() { return ErrorRateStatistic.GetAverage(); }
+    virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
+    virtual bool Get ( CVector<uint8_t>& vecbyData );
 
 protected:
     enum EClearType { CT_PUT, CT_GET };
 
     void Clear ( const EClearType eClearType );
 
-    int              iBlockSize;
-    int              iNumInvalidElements;
+    int iBlockSize;
+    int iNumInvalidElements;
+};
 
+
+// Network buffer (jitter buffer) with statistic calculations ------------------
+class CNetBufWithStats : public CNetBuf
+{
+public:
+    virtual void Init ( const int iNewBlockSize, const int iNewNumBlocks );
+
+    virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
+    virtual bool Get ( CVector<uint8_t>& vecbyData );
+
+    double GetErrorRate() { return ErrorRateStatistic.GetAverage(); }
+
+protected:
     // statistic
-    CErrorRate       ErrorRateStatistic;
+    CErrorRate ErrorRateStatistic;
 };
 
 

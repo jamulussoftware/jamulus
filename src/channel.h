@@ -143,7 +143,7 @@ protected:
     CVector<double>     vecdGains;
 
     // network jitter-buffer
-    CNetBuf             SockBuf;
+    CNetBufWithStats    SockBuf;
     int                 iCurSockBufNumFrames;
 
     CCycleTimeVariance  CycleTimeVariance;

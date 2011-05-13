@@ -28,7 +28,7 @@
 #include "buffer.h"
 
 
-/* Implementation *************************************************************/
+/* Network buffer implementation **********************************************/
 void CNetBuf::Init ( const int iNewBlockSize,
                      const int iNewNumBlocks )
 {
@@ -40,9 +40,6 @@ void CNetBuf::Init ( const int iNewBlockSize,
 
     // use the "get" flag to make sure the buffer is cleared
     Clear ( CT_GET );
-
-    // init statistic
-    ErrorRateStatistic.Init ( MAX_STATISTIC_COUNT );
 }
 
 bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
@@ -69,9 +66,6 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
 
     // copy new data in internal buffer (implemented in base class)
     CBufferBase<uint8_t>::Put ( vecbyData, iInSize );
-
-    // update statistic
-    ErrorRateStatistic.Update ( !bPutOK );
 
     return bPutOK;
 }
@@ -119,9 +113,6 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
     // copy data from internal buffer in output buffer (implemented in base
     // class)
     CBufferBase<uint8_t>::Get ( vecbyData );
-
-    // update statistic
-    ErrorRateStatistic.Update ( !bGetOK );
 
     return bGetOK;
 }
@@ -238,4 +229,39 @@ void CNetBuf::Clear ( const EClearType eClearType )
             eBufState = CNetBuf::BS_OK;
         }
     }
+}
+
+
+/* Network buffer with statistic calculations implementation ******************/
+void CNetBufWithStats::Init ( const int iNewBlockSize,
+                              const int iNewNumBlocks )
+{
+    // call base class Init
+    CNetBuf::Init ( iNewBlockSize, iNewNumBlocks );
+
+    // init statistic
+    ErrorRateStatistic.Init ( MAX_STATISTIC_COUNT );
+}
+
+bool CNetBufWithStats::Put ( const CVector<uint8_t>& vecbyData,
+                             const int               iInSize )
+{
+    // call base class Put
+    const bool bPutOK = CNetBuf::Put ( vecbyData, iInSize );
+
+    // update statistic
+    ErrorRateStatistic.Update ( !bPutOK );
+
+    return bPutOK;
+}
+
+bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData )
+{
+    // call base class Get
+    const bool bGetOK = CNetBuf::Get ( vecbyData );
+
+    // update statistic
+    ErrorRateStatistic.Update ( !bGetOK );
+
+    return bGetOK;
 }

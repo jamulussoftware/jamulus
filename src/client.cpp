@@ -421,11 +421,11 @@ void CClient::Stop()
     // stop audio interface
     Sound.Stop();
 
-    // wait for approx. 300 ms to make sure no audio packet is still in the
+    // wait for approx. 100 ms to make sure no audio packet is still in the
     // network queue causing the channel to be reconnected right after having
     // received the disconnect message (seems not to gain much, disconnect is
     // still not working reliably)
-    QTime dieTime = QTime::currentTime().addMSecs ( 300 );
+    QTime dieTime = QTime::currentTime().addMSecs ( 100 );
     while ( QTime::currentTime() < dieTime )
     {
 	    QCoreApplication::processEvents ( QEventLoop::AllEvents, 100 );

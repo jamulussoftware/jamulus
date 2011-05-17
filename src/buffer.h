@@ -34,54 +34,188 @@
 // blocks we have 30 s / 2.33 ms * 2 = 25714
 #define MAX_STATISTIC_COUNT                 25714
 
+// number of simulation network jitter buffers for evaluating the statistic
+#define NUM_STAT_SIMULATION_BUFFERS         9
+
 
 /* Classes ********************************************************************/
 // Buffer base class -----------------------------------------------------------
 template<class TData> class CBufferBase
 {
 public:
-    virtual void Init ( const int iNewMemSize )
+    CBufferBase ( const bool bNIsSim = false ) :
+       bIsSimulation ( bNIsSim ), bIsInitialized ( false ) {}
+
+    void SetIsSimulation ( const bool bNIsSim ) { bIsSimulation = bNIsSim; }
+
+    virtual void Init ( const int  iNewMemSize,
+                        const bool bPreserve = false )
     {
+        // in simulation mode the size is not changed during operation -> we do
+        // not have to implement special code for this case
+        // only enter the "preserve" branch, if object was already initialized
+        if ( bPreserve && ( !bIsSimulation ) && bIsInitialized )
+        {
+            // copy old data in new vector using get pointer as zero per
+            // definition
+
+            int iCurPos;
+
+            // copy current data in temporary vector
+            CVector<TData> vecTempMemory ( vecMemory );
+
+            // resize actual buffer memory
+            vecMemory.Init ( iNewMemSize );
+
+            // get maximum number of data to be copied
+            int iCopyLen = GetAvailData();
+            if ( iCopyLen > iNewMemSize )
+            {
+                iCopyLen = iNewMemSize;
+            }
+
+            // set correct buffer state
+            if ( iCopyLen >= iNewMemSize )
+            {
+                eBufState = CBufferBase<TData>::BS_FULL;
+            }
+            else
+            {
+                if ( iCopyLen == 0 )
+                {
+                    eBufState = CBufferBase<TData>::BS_EMPTY;
+                }
+                else
+                {
+                    eBufState = CBufferBase<TData>::BS_OK;
+                }
+            }
+
+            if ( iGetPos < iPutPos )
+            {
+                // "get" position is before "put" position -> no wrap around
+                for ( iCurPos = 0; iCurPos < iCopyLen; iCurPos++ )
+                {
+                    vecMemory[iCurPos] = vecTempMemory[iGetPos + iCurPos];
+                }
+
+                // update put pointer
+                if ( eBufState == CBufferBase<TData>::BS_FULL )
+                {
+                    iPutPos = 0;
+                }
+                else
+                {
+                    iPutPos -= iGetPos;
+                }
+            }
+            else
+            {
+                // "put" position is before "get" position -> wrap around
+                bool bEnoughSpaceForSecondPart = true;
+                int  iFirstPartLen             = iMemSize - iGetPos;
+
+                // check that first copy length is not larger then new memory
+                if ( iFirstPartLen > iCopyLen )
+                {
+                    iFirstPartLen             = iCopyLen;
+                    bEnoughSpaceForSecondPart = false;
+                }
+
+                for ( iCurPos = 0; iCurPos < iFirstPartLen; iCurPos++ )
+                {
+                    vecMemory[iCurPos] = vecTempMemory[iGetPos + iCurPos];
+                }
+
+                if ( bEnoughSpaceForSecondPart )
+                {
+                    // calculate remaining copy length
+                    const int iRemainingCopyLen = iCopyLen - iFirstPartLen;
+
+                    // perform copying of second part
+                    for ( iCurPos = 0; iCurPos < iRemainingCopyLen; iCurPos++ )
+                    {
+                        vecMemory[iCurPos + iFirstPartLen] =
+                            vecTempMemory[iCurPos];
+                    }
+                }
+
+                // update put pointer
+                if ( eBufState == CBufferBase<TData>::BS_FULL )
+                {
+                    iPutPos = 0;
+                }
+                else
+                {
+                    iPutPos += iFirstPartLen;
+                }
+            }
+
+            // update get position -> zero per definition
+            iGetPos = 0;
+        }
+        else
+        {
+            // allocate memory for actual data buffer
+            if ( !bIsSimulation )
+            {
+                vecMemory.Init ( iNewMemSize );
+            }
+
+            // init buffer pointers and buffer state (empty buffer)
+            iGetPos   = 0;
+            iPutPos   = 0;
+            eBufState = CBufferBase<TData>::BS_EMPTY;
+        }
+
         // store total memory size value
         iMemSize = iNewMemSize;
 
-        // allocate memory for actual data buffer
-        vecMemory.Init ( iNewMemSize );
-
-        // init buffer pointers and buffer state (empty buffer)
-        iGetPos   = 0;
-        iPutPos   = 0;
-        eBufState = CBufferBase<TData>::BS_EMPTY;
+        // set initialized flag
+        bIsInitialized = true;
     }
 
     virtual bool Put ( const CVector<TData>& vecData,
                        const int             iInSize )
     {
-        // copy new data in internal buffer
-        int iCurPos = 0;
-        if ( iPutPos + iInSize > iMemSize )
+        if ( bIsSimulation )
         {
-            // remaining space size for second block
-            const int iRemSpace = iPutPos + iInSize - iMemSize;
-
-            // data must be written in two steps because of wrap around
-            while ( iPutPos < iMemSize )
+            // in this simulation only the buffer pointers and the buffer state
+            // is updated, no actual data is transferred
+            iPutPos += iInSize;
+            if ( iPutPos >= iMemSize )
             {
-                vecMemory[iPutPos++] = vecData[iCurPos++];
-            }
-
-            for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
-            {
-                vecMemory[iPutPos] = vecData[iCurPos++];
+                iPutPos -= iMemSize;
             }
         }
         else
         {
-            // data can be written in one step
-            const int iEnd = iPutPos + iInSize;
-            while ( iPutPos < iEnd )
+            // copy new data in internal buffer
+            int iCurPos = 0;
+            if ( iPutPos + iInSize > iMemSize )
             {
-                vecMemory[iPutPos++] = vecData[iCurPos++];
+                // remaining space size for second block
+                const int iRemSpace = iPutPos + iInSize - iMemSize;
+
+                // data must be written in two steps because of wrap around
+                while ( iPutPos < iMemSize )
+                {
+                    vecMemory[iPutPos++] = vecData[iCurPos++];
+                }
+
+                for ( iPutPos = 0; iPutPos < iRemSpace; iPutPos++ )
+                {
+                    vecMemory[iPutPos] = vecData[iCurPos++];
+                }
+            }
+            else
+            {
+                // data can be written in one step
+                const int iEnd = iPutPos + iInSize;
+                while ( iPutPos < iEnd )
+                {
+                    vecMemory[iPutPos++] = vecData[iCurPos++];
+                }
             }
         }
 
@@ -103,31 +237,44 @@ public:
         // get size of data to be get from the buffer
         const int iInSize = vecData.Size();
 
-        // copy data from internal buffer in output buffer
-        int iCurPos = 0;
-        if ( iGetPos + iInSize > iMemSize )
+        if ( bIsSimulation )
         {
-            // remaining data size for second block
-            const int iRemData = iGetPos + iInSize - iMemSize;
-
-            // data must be read in two steps because of wrap around
-            while ( iGetPos < iMemSize )
+            // in this simulation only the buffer pointers and the buffer state
+            // is updated, no actual data is transferred
+            iGetPos += iInSize;
+            if ( iGetPos >= iMemSize )
             {
-                vecData[iCurPos++] = vecMemory[iGetPos++];
-            }
-
-            for ( iGetPos = 0; iGetPos < iRemData; iGetPos++ )
-            {
-                vecData[iCurPos++] = vecMemory[iGetPos];
+                iGetPos -= iMemSize;
             }
         }
         else
         {
-            // data can be read in one step
-            const int iEnd = iGetPos + iInSize;
-            while ( iGetPos < iEnd )
+            // copy data from internal buffer in output buffer
+            int iCurPos = 0;
+            if ( iGetPos + iInSize > iMemSize )
             {
-                vecData[iCurPos++] = vecMemory[iGetPos++];
+                // remaining data size for second block
+                const int iRemData = iGetPos + iInSize - iMemSize;
+
+                // data must be read in two steps because of wrap around
+                while ( iGetPos < iMemSize )
+                {
+                    vecData[iCurPos++] = vecMemory[iGetPos++];
+                }
+
+                for ( iGetPos = 0; iGetPos < iRemData; iGetPos++ )
+                {
+                    vecData[iCurPos++] = vecMemory[iGetPos];
+                }
+            }
+            else
+            {
+                // data can be read in one step
+                const int iEnd = iGetPos + iInSize;
+                while ( iGetPos < iEnd )
+                {
+                    vecData[iCurPos++] = vecMemory[iGetPos++];
+                }
             }
         }
 
@@ -189,52 +336,13 @@ public:
 protected:
     enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
 
-    void PutSimulation ( const int iInSize )
-    {
-        // in this simulation only the buffer pointers and the buffer state
-        // is updated, no actual data is transferred
-        iPutPos += iInSize;
-        if ( iPutPos >= iMemSize )
-        {
-            iPutPos -= iMemSize;
-        }
-
-        // set buffer state flag
-        if ( iPutPos == iGetPos )
-        {
-            eBufState = CBufferBase<TData>::BS_FULL;
-        }
-        else
-        {
-            eBufState = CBufferBase<TData>::BS_OK;
-        }
-    }
-
-    void GetSimulation ( const int iInSize )
-    {
-        // in this simulation only the buffer pointers and the buffer state
-        // is updated, no actual data is transferred
-        iGetPos += iInSize;
-        if ( iGetPos >= iMemSize )
-        {
-            iGetPos -= iMemSize;
-        }
-
-        // set buffer state flag
-        if ( iPutPos == iGetPos )
-        {
-            eBufState = CBufferBase<TData>::BS_EMPTY;
-        }
-        else
-        {
-            eBufState = CBufferBase<TData>::BS_OK;
-        }
-    }
-
     CVector<TData> vecMemory;
     int            iMemSize;
-    int            iGetPos, iPutPos;
+    int            iGetPos;
+    int            iPutPos;
     EBufState      eBufState;
+    bool           bIsSimulation;
+    bool           bIsInitialized;
 };
 
 
@@ -242,7 +350,13 @@ protected:
 class CNetBuf : public CBufferBase<uint8_t>
 {
 public:
-    virtual void Init ( const int iNewBlockSize, const int iNewNumBlocks );
+    CNetBuf ( const bool bNewIsSim = false ) :
+       CBufferBase<uint8_t> ( bNewIsSim ) {}
+
+    virtual void Init ( const int  iNewBlockSize,
+                        const int  iNewNumBlocks,
+                        const bool bPreserve = false );
+
     int GetSize() { return iMemSize / iBlockSize; }
 
     virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
@@ -258,21 +372,37 @@ protected:
 };
 
 
+/*
+// This is a test class which provides statistic for a certain number of
+// simulation buffers -> was intended to improve the auto jitter buffer
+// setting but we stick to the old auto mechanism because of some draw backs
+// of the simulated jitter buffers like that if burst errors occur, we would
+// have to exclude it to not to effect the error rate too much and others...
+
 // Network buffer (jitter buffer) with statistic calculations ------------------
 class CNetBufWithStats : public CNetBuf
 {
 public:
-    virtual void Init ( const int iNewBlockSize, const int iNewNumBlocks );
+    CNetBufWithStats();
+
+    virtual void Init ( const int iNewBlockSize,
+                        const int iNewNumBlocks,
+                        const bool bPreserve = false );
 
     virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
     virtual bool Get ( CVector<uint8_t>& vecbyData );
 
-    double GetErrorRate() { return ErrorRateStatistic.GetAverage(); }
+// TEST
+void StoreAllSimAverages();
 
 protected:
-    // statistic
-    CErrorRate ErrorRateStatistic;
+    // statistic (do not use the vector class since the classes do not have
+    // appropriate copy constructor/operator)
+    CErrorRate ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS];
+    CNetBuf    SimulationBuffer[NUM_STAT_SIMULATION_BUFFERS];
+    int        viBufSizesForSim[NUM_STAT_SIMULATION_BUFFERS];
 };
+*/
 
 
 // Conversion buffer (very simple buffer) --------------------------------------

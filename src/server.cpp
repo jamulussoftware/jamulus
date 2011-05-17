@@ -225,8 +225,6 @@ CServer::CServer ( const int      iNewNumChan,
     vstrChatColors[4] = "maroon";
     vstrChatColors[5] = "coral";
 
-    vecsSendData.Init ( SYSTEM_FRAME_SIZE_SAMPLES );
-
     // init moving average buffer for response time evaluation
     CycleTimeVariance.Init ( SYSTEM_FRAME_SIZE_SAMPLES,
         SYSTEM_SAMPLE_RATE_HZ, TIME_MOV_AV_RESPONSE_SECONDS );
@@ -598,10 +596,10 @@ void CServer::OnTimer()
 
             // generate a sparate mix for each channel
             // actual processing of audio data -> mix
-            vecsSendData = ProcessData ( i,
-                                         vecvecsData,
-                                         vecvecdGains[i],
-                                         vecNumAudioChannels );
+            CVector<short> vecsSendData ( ProcessData ( i,
+                                                        vecvecsData,
+                                                        vecvecdGains[i],
+                                                        vecNumAudioChannels ) );
 
             // get current number of CELT coded bytes
             const int iCeltNumCodedBytes =

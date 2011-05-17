@@ -546,7 +546,7 @@ void CClientSettingsDlg::OnDriverSetupClicked()
 
 void CClientSettingsDlg::OnNetBufValueChanged ( int value )
 {
-    pClient->SetSockBufNumFrames ( value );
+    pClient->SetSockBufNumFrames ( value, true );
     UpdateJitterBufferFrame();
 }
 

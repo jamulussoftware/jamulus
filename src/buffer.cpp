@@ -29,17 +29,21 @@
 
 
 /* Network buffer implementation **********************************************/
-void CNetBuf::Init ( const int iNewBlockSize,
-                     const int iNewNumBlocks )
+void CNetBuf::Init ( const int  iNewBlockSize,
+                     const int  iNewNumBlocks,
+                     const bool bPreserve )
 {
     // store block size value
     iBlockSize = iNewBlockSize;
 
     // total size -> size of one block times the number of blocks
-    CBufferBase<uint8_t>::Init ( iNewBlockSize * iNewNumBlocks );
+    CBufferBase<uint8_t>::Init ( iNewBlockSize * iNewNumBlocks, bPreserve );
 
     // use the "get" flag to make sure the buffer is cleared
-    Clear ( CT_GET );
+    if ( !bPreserve )
+    {
+        Clear ( CT_GET );
+    }
 }
 
 bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
@@ -180,7 +184,10 @@ void CNetBuf::Clear ( const EClearType eClearType )
     if ( eClearType == CT_GET )
     {
         // clear buffer since we had a buffer underrun
-        vecMemory.Reset ( 0 );
+        if ( !bIsSimulation )
+        {
+            vecMemory.Reset ( 0 );
+        }
 
         // reset buffer pointers so that they are at maximum distance after
         // the get operation (assign new fill level value to the get pointer)
@@ -233,14 +240,48 @@ void CNetBuf::Clear ( const EClearType eClearType )
 
 
 /* Network buffer with statistic calculations implementation ******************/
+/*
+CNetBufWithStats::CNetBufWithStats() :
+    CNetBuf ( false ) // base class init: no simulation mode
+{
+    // define the sizes of the simulation buffers,
+    // must be NUM_STAT_SIMULATION_BUFFERS elements!
+    viBufSizesForSim[0] = 2;
+    viBufSizesForSim[1] = 3;
+    viBufSizesForSim[2] = 4;
+    viBufSizesForSim[3] = 5;
+    viBufSizesForSim[4] = 6;
+    viBufSizesForSim[5] = 7;
+    viBufSizesForSim[6] = 8;
+    viBufSizesForSim[7] = 10;
+    viBufSizesForSim[8] = 12;
+
+    // set all simulation buffers in simulation mode
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+    {
+        SimulationBuffer[i].SetIsSimulation ( true );
+    }
+}
+
 void CNetBufWithStats::Init ( const int iNewBlockSize,
-                              const int iNewNumBlocks )
+                              const int iNewNumBlocks,
+                              const bool bPreserve )
 {
     // call base class Init
-    CNetBuf::Init ( iNewBlockSize, iNewNumBlocks );
+    CNetBuf::Init ( iNewBlockSize, iNewNumBlocks, bPreserve );
 
-    // init statistic
-    ErrorRateStatistic.Init ( MAX_STATISTIC_COUNT );
+    // inits for statistics calculation
+    if ( !bPreserve )
+    {
+        for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+        {
+            // init simulation buffers with the correct size
+            SimulationBuffer[i].Init ( iNewBlockSize, viBufSizesForSim[i] );
+
+            // init statistics
+            ErrorRateStatistic[i].Init ( MAX_STATISTIC_COUNT );
+        }
+    }
 }
 
 bool CNetBufWithStats::Put ( const CVector<uint8_t>& vecbyData,
@@ -249,8 +290,12 @@ bool CNetBufWithStats::Put ( const CVector<uint8_t>& vecbyData,
     // call base class Put
     const bool bPutOK = CNetBuf::Put ( vecbyData, iInSize );
 
-    // update statistic
-    ErrorRateStatistic.Update ( !bPutOK );
+    // update statistics calculations
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+    {
+        ErrorRateStatistic[i].Update (
+            !SimulationBuffer[i].Put ( vecbyData, iInSize ) );
+    }
 
     return bPutOK;
 }
@@ -260,8 +305,31 @@ bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData )
     // call base class Get
     const bool bGetOK = CNetBuf::Get ( vecbyData );
 
-    // update statistic
-    ErrorRateStatistic.Update ( !bGetOK );
+    // update statistics calculations
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+    {
+        ErrorRateStatistic[i].Update (
+            !SimulationBuffer[i].Get ( vecbyData ) );
+    }
 
     return bGetOK;
 }
+
+// TEST for debugging
+void CNetBufWithStats::StoreAllSimAverages()
+{
+    FILE* pFile = fopen ( "c:\\temp\\test.dat", "w" );
+
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
+    {
+        fprintf ( pFile, "%e, ", ErrorRateStatistic[i].GetAverage() );
+    }
+    fprintf ( pFile, "%e", ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() );
+
+    fprintf ( pFile, "\n" );
+    fclose ( pFile );
+
+// scilab:
+// close;x=read('c:/temp/test.dat',-1,9);plot2d( [2, 3, 4, 5, 6, 7, 8, 10, 12], x, style=-1 , logflag = 'nl');plot2d([2 12],[1 1]*0.01);plot2d([2 12],[1 1]*0.005);x
+}
+*/

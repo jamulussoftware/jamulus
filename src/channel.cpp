@@ -163,7 +163,8 @@ void CChannel::SetAudioStreamProperties ( const int iNewNetwFrameSize,
     CreateNetTranspPropsMessFromCurrentSettings();
 }
 
-bool CChannel::SetSockBufNumFrames ( const int iNewNumFrames )
+bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
+                                     const bool bPreserve )
 {
     QMutexLocker locker ( &Mutex ); // this operation must be done with mutex
 
@@ -176,7 +177,7 @@ bool CChannel::SetSockBufNumFrames ( const int iNewNumFrames )
 
         // the network block size is a multiple of the minimum network
         // block size
-        SockBuf.Init ( iNetwFrameSize, iNewNumFrames );
+        SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bPreserve );
 
         return false; // -> no error
     }
@@ -259,7 +260,7 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 {
-    SetSockBufNumFrames ( iNewJitBufSize );
+    SetSockBufNumFrames ( iNewJitBufSize, true );
 }
 
 void CChannel::OnChangeChanGain ( int iChanID, double dNewGain )

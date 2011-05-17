@@ -134,13 +134,14 @@ public:
 
     void SetDoAutoSockBufSize ( const bool bValue ) { bDoAutoSockBufSize = bValue; }
     bool GetDoAutoSockBufSize() const { return bDoAutoSockBufSize; }
-    void SetSockBufNumFrames ( const int iNumBlocks )
+    void SetSockBufNumFrames ( const int  iNumBlocks,
+                               const bool bPreserve = false )
     {
         // only change parameter if new parameter is different from current one
         if ( Channel.GetSockBufNumFrames() != iNumBlocks )
         {
             // set the new socket size (number of frames)
-            if ( !Channel.SetSockBufNumFrames ( iNumBlocks ) )
+            if ( !Channel.SetSockBufNumFrames ( iNumBlocks, bPreserve ) )
             {
                 // if setting of socket buffer size was successful,
                 // tell the server that size has changed

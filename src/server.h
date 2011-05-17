@@ -228,7 +228,6 @@ protected:
     QString             strServerNameWithPort;
 
     CHighPrecisionTimer HighPrecisionTimer;
-    CVector<short>      vecsSendData;
 
     // server list
     CServerListManager  ServerListManager;

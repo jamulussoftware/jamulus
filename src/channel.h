@@ -91,7 +91,8 @@ public:
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Protocol.CreateChanGainMes ( iId, dGain ); }
 
-    bool SetSockBufNumFrames ( const int iNewNumFrames );
+    bool SetSockBufNumFrames ( const int  iNewNumFrames,
+                               const bool bPreserve = false );
     int GetSockBufNumFrames() const { return iCurSockBufNumFrames; }
 
     int GetUploadRateKbps();
@@ -105,8 +106,6 @@ public:
     int GetNetwFrameSizeFact() const { return iNetwFrameSizeFact; }
     int GetNetwFrameSize() const { return iNetwFrameSize; }
     int GetNumAudioChannels() const { return iNumAudioChannels; }
-
-    double GetJitterBufferErrorRate() { return SockBuf.GetErrorRate(); }
 
     // network protocol interface
     void CreateJitBufMes ( const int iJitBufSize )
@@ -143,7 +142,7 @@ protected:
     CVector<double>     vecdGains;
 
     // network jitter-buffer
-    CNetBufWithStats    SockBuf;
+    CNetBuf             SockBuf;
     int                 iCurSockBufNumFrames;
 
     CCycleTimeVariance  CycleTimeVariance;

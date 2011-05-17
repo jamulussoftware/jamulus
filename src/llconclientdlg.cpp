@@ -957,7 +957,7 @@ void CLlconClientDlg::customEvent ( QEvent* Event )
             break;
 
         case MS_SET_JIT_BUF_SIZE:
-            pClient->SetSockBufNumFrames ( iStatus );
+            pClient->SetSockBufNumFrames ( iStatus, true );
             break;
         }
 

@@ -467,9 +467,11 @@ bool LlconNetwUtil::ParseNetworkAddress ( QString        strAddress,
 /******************************************************************************\
 * Global Functions Implementation                                              *
 \******************************************************************************/
-void DebugError ( const QString& pchErDescr, const QString& pchPar1Descr, 
-                  const double dPar1, const QString& pchPar2Descr,
-                  const double dPar2 )
+void DebugError ( const QString& pchErDescr,
+                  const QString& pchPar1Descr, 
+                  const double   dPar1,
+                  const QString& pchPar2Descr,
+                  const double   dPar2 )
 {
     QFile File ( "DebugError.dat" );
     if ( File.open ( QIODevice::Append ) )

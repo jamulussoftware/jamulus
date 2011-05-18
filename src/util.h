@@ -796,43 +796,4 @@ protected:
     int               iNewValueBoundFactor;
 };
 
-
-// Error rate measurement ------------------------------------------------------
-class CErrorRate
-{
-public:
-    CErrorRate() {}
-
-    void Init ( const int iHistoryLength )
-    {
-        // initialize buffer
-        ErrorsMovAvBuf.Init ( iHistoryLength );
-    }
-
-    void Reset()
-    {
-        ErrorsMovAvBuf.Reset();
-    }
-
-    void Update ( const bool bState )
-    {
-        // add errors as values 0 and 1 to get correct error rate average
-        if ( bState )
-        {
-            ErrorsMovAvBuf.Add ( 1.0 );
-        }
-        else
-        {
-            ErrorsMovAvBuf.Add ( 0.0 );
-        }
-    }
-
-    // return the standard deviation, for that we need to calculate
-    // the sqaure root
-    double GetAverage() { return ErrorsMovAvBuf.GetAverage(); }
-
-protected:
-    CMovingAv<double> ErrorsMovAvBuf;
-};
-
 #endif /* !defined ( UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

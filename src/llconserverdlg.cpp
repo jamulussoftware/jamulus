@@ -115,12 +115,6 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
         "Country where the server is located combo box" ) );
 
 
-    // act on "start minimized" flag
-    if ( bStartMinimized )
-    {
-        showMinimized();
-    }
-
     // check if system tray icon can be used
     bSystemTrayIconAvaialbe = SystemTrayIcon.isSystemTrayAvailable();
 
@@ -151,6 +145,13 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
         // show icon of state "inactive"
         SystemTrayIcon.setIcon ( QIcon ( BitmapSystemTrayInactive ) );
         SystemTrayIcon.show();
+    }
+
+    // act on "start minimized" flag (note, this has to be done after setting
+    // the correct value for the system tray icon availablility)
+    if ( bStartMinimized )
+    {
+        showMinimized();
     }
 
     // set text for version and application name

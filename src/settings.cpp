@@ -371,6 +371,8 @@ void CSettings::WriteIniFile ( const QString& sFileName )
     {
         QTextStream out ( &file );
         out << IniXMLDocument.toString();
+
+        file.close();
     }
 }
 

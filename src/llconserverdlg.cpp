@@ -133,6 +133,10 @@ CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
 
         pSystemTrayIconMenu->addSeparator();
 
+        pSystemTrayIconMenu->addAction (
+            tr ( "&Hide " ) + APP_NAME + tr ( " server" ),
+            this, SLOT ( OnSysTrayMenuHide() ) );
+
         pSystemTrayIconMenu->setDefaultAction ( pSystemTrayIconMenu->addAction (
             tr ( "&Open " ) + APP_NAME + tr ( " server" ),
             this, SLOT ( OnSysTrayMenuOpen() ) ) );

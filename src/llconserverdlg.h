@@ -98,6 +98,7 @@ public slots:
     void OnServerStarted() { UpdateSystemTrayIcon ( true ); }
     void OnServerStopped() { UpdateSystemTrayIcon ( false ); }
     void OnSysTrayMenuOpen() { ShowWindowInForeground(); }
+    void OnSysTrayMenuHide() { hide(); }
     void OnSysTrayMenuExit() { close(); }
     void OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason );
 };

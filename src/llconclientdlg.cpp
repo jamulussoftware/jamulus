@@ -813,7 +813,6 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
                 // show the error as red light
                 ledConnection->SetLight ( MUL_COL_LED_RED );
             }
-
         }
     }
     else

@@ -27,12 +27,14 @@
 
 /* Implementation *************************************************************/
 CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
+                                   CSettings*      pNSetP,
                                    const bool      bNewConnectOnStartup,
                                    const bool      bNewDisalbeLEDs,
                                    QWidget*        parent,
                                    Qt::WindowFlags f ) :
     QDialog            ( parent, f ),
     pClient            ( pNCliP ),
+    pSettings          ( pNSetP ),
     bUnreadChatMessage ( false ),
     ClientSettingsDlg  ( pNCliP, parent, Qt::Window ),
     ChatDlg            ( parent, Qt::Window ),
@@ -375,6 +377,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( pClient,
         SIGNAL ( CLPingTimeWithNumClientsReceived ( CHostAddress, int, int ) ),
         this, SLOT ( OnCLPingTimeWithNumClientsReceived ( CHostAddress, int, int ) ) );
+
+    QObject::connect ( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
+        this, SLOT ( OnAboutToQuit() ) );
 
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( GUIDesignChanged() ),
         this, SLOT ( OnGUIDesignChanged() ) );

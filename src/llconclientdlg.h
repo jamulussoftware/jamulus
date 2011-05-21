@@ -35,6 +35,7 @@
 #include <qlayout.h>
 #include "global.h"
 #include "client.h"
+#include "settings.h"
 #include "multicolorled.h"
 #include "audiomixerboard.h"
 #include "clientsettingsdlg.h"
@@ -75,6 +76,7 @@ class CLlconClientDlg : public QDialog, private Ui_CLlconClientDlgBase
 
 public:
     CLlconClientDlg ( CClient*        pNCliP,
+                      CSettings*      pNSetP,
                       const bool      bNewConnectOnStartup,
                       const bool      bNewDisalbeLEDs,
                       QWidget*        parent = 0,
@@ -89,6 +91,8 @@ protected:
     void               ConnectDisconnect ( const bool bDoStart );
 
     CClient*           pClient;
+    CSettings*         pSettings;
+
     bool               bConnected;
     bool               bUnreadChatMessage;
     QTimer             TimerSigMet;
@@ -107,6 +111,8 @@ protected:
     CConnectDlg        ConnectDlg;
 
 public slots:
+    void OnAboutToQuit() { pSettings->Save(); }
+
     void OnConnectDisconBut();
     void OnTimerSigMet();
 

@@ -27,11 +27,13 @@
 
 /* Implementation *************************************************************/
 CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
+                                   CSettings*      pNSetP,
                                    const bool      bStartMinimized,
                                    QWidget*        parent,
                                    Qt::WindowFlags f )
     : QDialog                  ( parent, f ),
       pServer                  ( pNServP ),
+      pSettings                ( pNSetP ),
       BitmapSystemTrayInactive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreyArrow.png" ) ),
       BitmapSystemTrayActive   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenArrow.png" ) )
 {
@@ -302,6 +304,9 @@ lvwClients->setMinimumHeight ( 140 );
 
     QObject::connect ( pServer, SIGNAL ( Stopped() ),
         this, SLOT ( OnServerStopped() ) );
+
+    QObject::connect ( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
+        this, SLOT ( OnAboutToQuit() ) );
 
     QObject::connect ( &SystemTrayIcon,
         SIGNAL ( activated ( QSystemTrayIcon::ActivationReason ) ),

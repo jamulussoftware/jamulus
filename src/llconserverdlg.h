@@ -34,6 +34,7 @@
 #include <qsettings.h>
 #include "global.h"
 #include "server.h"
+#include "settings.h"
 #include "multicolorled.h"
 #ifdef _WIN32
 # include "../windows/moc/llconserverdlgbase.h"
@@ -58,6 +59,7 @@ class CLlconServerDlg : public QDialog, private Ui_CLlconServerDlgBase
 
 public:
     CLlconServerDlg ( CServer*        pNServP,
+                      CSettings*      pNSetP,
                       const bool      bStartMinimized,
                       QWidget*        parent = 0,
                       Qt::WindowFlags f = 0 );
@@ -74,6 +76,7 @@ protected:
 
     QTimer                        Timer;
     CServer*                      pServer;
+    CSettings*                    pSettings;
 
     CVector<CServerListViewItem*> vecpListViewItems;
     QMutex                        ListViewMutex;
@@ -87,6 +90,8 @@ protected:
     QMenu*                        pSystemTrayIconMenu;
 
 public slots:
+    void OnAboutToQuit() { pSettings->Save(); }
+
     void OnRegisterServerStateChanged ( int value );
     void OnDefaultCentralServerStateChanged ( int value );
     void OnStartOnOSStartStateChanged ( int value );

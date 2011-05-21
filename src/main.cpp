@@ -350,6 +350,7 @@ int main ( int argc, char** argv )
             // GUI object
             CLlconClientDlg ClientDlg (
                 &Client,
+                &Settings,
                 bConnectOnStartup,
                 bDisalbeLEDs,
                 0,
@@ -362,9 +363,6 @@ int main ( int argc, char** argv )
             // show dialog
             ClientDlg.show();
             app.exec();
-
-            // save settings to init-file
-            Settings.Save();
         }
         else
         {
@@ -397,6 +395,7 @@ int main ( int argc, char** argv )
                 // GUI object for the server
                 CLlconServerDlg ServerDlg (
                     &Server,
+                    &Settings,
                     bStartMinimized,
                     0,
                     Qt::Window );
@@ -408,9 +407,6 @@ int main ( int argc, char** argv )
                 // show dialog
                 ServerDlg.show();
                 app.exec();
-
-                // save settings to init-file
-                Settings.Save();
             }
             else
             {

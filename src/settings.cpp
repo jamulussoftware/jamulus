@@ -26,7 +26,7 @@
 
 
 /* Implementation *************************************************************/
-void CSettings::ReadIniFile ( const QString& sFileName )
+void CSettings::Load()
 {
     int          iValue;
     bool         bValue;
@@ -34,7 +34,7 @@ void CSettings::ReadIniFile ( const QString& sFileName )
 
     // prepare file name for loading initialization data from XML file and read
     // data from file if possible
-    QFile file ( GetIniFileNameWithPath ( sFileName ) );
+    QFile file ( strFileName );
     if ( file.open ( QIODevice::ReadOnly ) )
     {
         QTextStream in ( &file );
@@ -240,7 +240,7 @@ void CSettings::ReadIniFile ( const QString& sFileName )
     }
 }
 
-void CSettings::WriteIniFile ( const QString& sFileName )
+void CSettings::Save()
 {
     // create XML document for storing initialization parameters
     QDomDocument IniXMLDocument;
@@ -366,7 +366,7 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
     // prepare file name for storing initialization data in XML file and store
     // XML data in file
-    QFile file ( GetIniFileNameWithPath ( sFileName ) );
+    QFile file ( strFileName );
     if ( file.open ( QIODevice::WriteOnly ) )
     {
         QTextStream out ( &file );
@@ -378,12 +378,12 @@ void CSettings::WriteIniFile ( const QString& sFileName )
 
 
 // Help functions **************************************************************
-QString CSettings::GetIniFileNameWithPath ( const QString& sFileName )
+void CSettings::SetFileName ( const QString& sNFiName )
 {
     // return the file name with complete path, take care if given file name is
     // empty
-    QString sCurFileName = sFileName;
-    if ( sCurFileName.isEmpty() )
+    strFileName = sNFiName;
+    if ( strFileName.isEmpty() )
     {
         // we use the Qt default setting file paths for the different OSs by
         // utilizing the QSettings class
@@ -403,15 +403,13 @@ QString CSettings::GetIniFileNameWithPath ( const QString& sFileName )
         // append the actual file name
         if ( bIsClient )
         {
-            sCurFileName = sConfigDir + "/" + DEFAULT_INI_FILE_NAME;
+            strFileName = sConfigDir + "/" + DEFAULT_INI_FILE_NAME;
         }
         else
         {
-            sCurFileName = sConfigDir + "/" + DEFAULT_INI_FILE_NAME_SERVER;
+            strFileName = sConfigDir + "/" + DEFAULT_INI_FILE_NAME_SERVER;
         }
     }
-
-    return sCurFileName;
 }
 
 void CSettings::SetNumericIniSet ( QDomDocument&  xmlFile,

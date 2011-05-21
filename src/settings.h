@@ -39,17 +39,19 @@
 class CSettings
 {
 public:
-    CSettings ( CClient* pNCliP ) : pClient ( pNCliP ), bIsClient ( true ) {}
-    CSettings ( CServer* pNSerP ) : pServer ( pNSerP ), bIsClient ( false ) {}
+    CSettings ( CClient* pNCliP, const QString& sNFiName ) :
+        pClient ( pNCliP ), bIsClient ( true )
+        { SetFileName ( sNFiName ); }
 
-    void Load ( const QString& sFileName = "" ) { ReadIniFile ( sFileName ); }
-    void Save ( const QString& sFileName = "" ) { WriteIniFile ( sFileName ); }
+    CSettings ( CServer* pNSerP, const QString& sNFiName ) :
+        pServer ( pNSerP ), bIsClient ( false )
+        { SetFileName ( sNFiName ); }
+
+    void Load();
+    void Save();
 
 protected:
-    void ReadIniFile ( const QString& sFileName );
-    void WriteIniFile ( const QString& sFileName );
-
-    QString GetIniFileNameWithPath ( const QString& sFileName );
+    void SetFileName ( const QString& sNFiName );
 
     // init file access function for read/write
     void SetNumericIniSet ( QDomDocument& xmlFile, const QString& strSection,
@@ -73,6 +75,7 @@ protected:
     CServer* pServer; // for server
 
     bool     bIsClient;
+    QString  strFileName;
 };
 
 #endif // !defined ( SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_ )

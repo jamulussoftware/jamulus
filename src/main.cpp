@@ -344,8 +344,8 @@ int main ( int argc, char** argv )
             CClient Client ( iPortNumber );
 
             // load settings from init-file
-            CSettings Settings ( &Client );
-            Settings.Load ( strIniFileName );
+            CSettings Settings ( &Client, strIniFileName );
+            Settings.Load();
 
             // GUI object
             CLlconClientDlg ClientDlg (
@@ -364,7 +364,7 @@ int main ( int argc, char** argv )
             app.exec();
 
             // save settings to init-file
-            Settings.Save ( strIniFileName );
+            Settings.Save();
         }
         else
         {
@@ -387,8 +387,8 @@ int main ( int argc, char** argv )
                 Server.SetUseDefaultCentralServerAddress ( true );
 
                 // load settings from init-file
-                CSettings Settings ( &Server );
-                Settings.Load ( strIniFileName );
+                CSettings Settings ( &Server, strIniFileName );
+                Settings.Load();
 
                 // update server list AFTER restoring the settings from the
                 // settings file
@@ -410,7 +410,7 @@ int main ( int argc, char** argv )
                 app.exec();
 
                 // save settings to init-file
-                Settings.Save ( strIniFileName );
+                Settings.Save();
             }
             else
             {

@@ -30,7 +30,6 @@ CClient::CClient ( const quint16 iPortNumber ) :
     vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
     strName                          ( "" ),
     Channel                          ( false ), /* we need a client channel -> "false" */
-    bDoAutoSockBufSize               ( true ),
     iCeltNumCodedBytes               ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
     bCeltDoHighQuality               ( false ),
     bUseStereo                       ( false ),
@@ -428,7 +427,12 @@ void CClient::Stop()
     QTime DieTime = QTime::currentTime().addMSecs ( 100 );
     while ( QTime::currentTime() < DieTime )
     {
-        QCoreApplication::processEvents ( QEventLoop::AllEvents, 100 );
+        // exclude user input events because if we use AllEvents, it happens
+        // that if the user initiates a connection and disconnection quickly
+        // (e.g. quickly pressing enter five times), the software can get into
+        // an unknown state
+        QCoreApplication::processEvents (
+            QEventLoop::ExcludeUserInputEvents, 100 );
     }
 
     // Send disconnect message to server (Since we disable our protocol
@@ -877,75 +881,18 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         vecsStereoSndCrd.Reset ( 0 );
     }
 
-    // update response time measurement and socket buffer size
+    // update response time measurement
     CycleTimeVariance.Update();
-    UpdateSocketBufferSize();
-}
 
-void CClient::UpdateSocketBufferSize()
-{
-    // just update the socket buffer size if auto setting is enabled, otherwise
-    // do nothing
-    if ( bDoAutoSockBufSize )
-    {
-        // We use the time response measurement for the automatic setting.
-        // Assumptions:
-        // - the audio interface/network jitter is assumed to be Gaussian
-        // - the buffer size is set to 3.3 times the standard deviation of
-        //   the jitter (~98% of the jitter should be fit in the
-        //   buffer)
-        // - introduce a hysteresis to avoid switching the buffer sizes all the
-        //   time in case the time response measurement is close to a bound
-        // - only use time response measurement results if averaging buffer is
-        //   completely filled
-        const double dHysteresis = 0.3;
+    // calculate current buffer setting
+    const double dAudioBufferDurationMs =
+        ( GetSndCrdActualMonoBlSize() +
+          GetSndCrdConvBufAdditionalDelayMonoBlSize() ) *
+        1000 / SYSTEM_SAMPLE_RATE_HZ;
 
-        // calculate current buffer setting
-        const double dAudioBufferDurationMs =
-            ( GetSndCrdActualMonoBlSize() +
-              GetSndCrdConvBufAdditionalDelayMonoBlSize() ) *
-            1000 / SYSTEM_SAMPLE_RATE_HZ;
-
-        // jitter introduced in the server by the timer implementation
-        const double dServerJitterMs = 0.666666; // ms
-
-        // accumulate the standard deviations of input network stream and
-        // internal timer,
-        // add 0.5 to "round up" -> ceil,
-        // divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
-        // one block in the jitter buffer
-        const double dEstCurBufSet = ( dAudioBufferDurationMs + dServerJitterMs +
-            3.3 * ( Channel.GetTimingStdDev() + CycleTimeVariance.GetStdDev() ) ) /
-            SYSTEM_BLOCK_DURATION_MS_FLOAT + 0.5;
-
-        // upper/lower hysteresis decision
-        const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );
-        const int iLowerHystDec = LlconMath().round ( dEstCurBufSet + dHysteresis );
-
-        // if both decisions are equal than use the result
-        if ( iUpperHystDec == iLowerHystDec )
-        {
-            // set the socket buffer via the main window thread since somehow
-            // it gives a protocol deadlock if we call the SetSocketBufSize()
-            // function directly
-            PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
-        }
-        else
-        {
-            // we are in the middle of the decision region, use
-            // previous setting for determing the new decision
-            if ( !( ( GetSockBufNumFrames() == iUpperHystDec ) ||
-                    ( GetSockBufNumFrames() == iLowerHystDec ) ) )
-            {
-                // The old result is not near the new decision,
-                // use per definition the upper decision.
-                // Set the socket buffer via the main window thread since somehow
-                // it gives a protocol deadlock if we call the SetSocketBufSize()
-                // function directly.
-                PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
-            }
-        }
-    }
+    // update and socket buffer size
+    Channel.UpdateSocketBufferSize ( dAudioBufferDurationMs,
+                                     CycleTimeVariance.GetStdDev() );
 }
 
 int CClient::EstimatedOverallDelay ( const int iPingTimeMs )

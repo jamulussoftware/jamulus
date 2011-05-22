@@ -79,6 +79,9 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
     lvwServers->setColumnWidth ( 3, 130 );
     lvwServers->clear();
 
+    // make sure the connect button has the focus
+    butConnect->setFocus();
+
 
     // Connections -------------------------------------------------------------
     // list view

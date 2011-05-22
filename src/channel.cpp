@@ -27,12 +27,13 @@
 
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
-    vecdGains ( MAX_NUM_CHANNELS, (double) 1.0 ),
-    bIsEnabled ( false ),
-    bIsServer ( bNIsServer ),
+    vecdGains          ( MAX_NUM_CHANNELS, (double) 1.0 ),
+    bIsEnabled         ( false ),
+    bIsServer          ( bNIsServer ),
+    bDoAutoSockBufSize ( true ),
     iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_PREFERRED ),
-    iNetwFrameSize ( 20 ), // must be > 0 and should be close to a valid size
-    iNumAudioChannels ( 1 ) // mono
+    iNetwFrameSize     ( 20 ), // must be > 0 and should be close to a valid size
+    iNumAudioChannels  ( 1 ) // mono
 {
     // initial value for connection time out counter, we calculate the total
     // number of samples here and subtract the number of samples of the block
@@ -172,14 +173,31 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
     if ( ( iNewNumFrames >= MIN_NET_BUF_SIZE_NUM_BL ) &&
          ( iNewNumFrames <= MAX_NET_BUF_SIZE_NUM_BL ) )
     {
-        // store new value
-        iCurSockBufNumFrames = iNewNumFrames;
+        // only apply parameter if new parameter is different from current one
+        if ( iCurSockBufNumFrames != iNewNumFrames )
+        {
+            // store new value
+            iCurSockBufNumFrames = iNewNumFrames;
 
-        // the network block size is a multiple of the minimum network
-        // block size
-        SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bPreserve );
+            // the network block size is a multiple of the minimum network
+            // block size
+            SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bPreserve );
 
-        return false; // -> no error
+
+// TEST in case we are the client, tell the server that the size has changed
+if ( !bIsServer && bPreserve )
+{
+
+// TODO this function call causes the lock up of the protocol mechanism when the
+// SetSockBufNumFrames is called directly from UpdateSocketBufferSize
+// -> find and fix the problem!
+
+    CreateJitBufMes ( iNewNumFrames );
+}
+
+
+            return false; // -> no error
+        }
     }
 
     return true; // set error flag
@@ -548,4 +566,82 @@ int CChannel::GetUploadRateKbps()
     return ( iNetwFrameSize * iNetwFrameSizeFact + 28 /* header */ ) *
         8 /* bits per byte */ *
         SYSTEM_SAMPLE_RATE_HZ / iAudioSizeOut / 1000;
+}
+
+
+
+
+// TEST
+void CChannel::UpdateSocketBufferSize ( const double dAudioBufferDurationMs,
+                                        const double dLocalStdDev )
+{
+    // just update the socket buffer size if auto setting is enabled, otherwise
+    // do nothing
+    if ( bDoAutoSockBufSize )
+    {
+        // We use the time response measurement for the automatic setting.
+        // Assumptions:
+        // - the audio interface/network jitter is assumed to be Gaussian
+        // - the buffer size is set to 3.3 times the standard deviation of
+        //   the jitter (~98% of the jitter should be fit in the
+        //   buffer)
+        // - introduce a hysteresis to avoid switching the buffer sizes all the
+        //   time in case the time response measurement is close to a bound
+        // - only use time response measurement results if averaging buffer is
+        //   completely filled
+        const double dHysteresis = 0.3;
+
+        // jitter introduced in the server by the timer implementation
+
+// TODO remove this!
+const double dServerJitterMs = 0.666666; // ms
+
+
+        // accumulate the standard deviations of input network stream and
+        // internal timer,
+        // add 0.5 to "round up" -> ceil,
+        // divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
+        // one block in the jitter buffer
+        const double dEstCurBufSet = ( dAudioBufferDurationMs + dServerJitterMs +
+            3.3 * ( GetTimingStdDev() + dLocalStdDev ) ) /
+            SYSTEM_BLOCK_DURATION_MS_FLOAT + 0.5;
+
+        // upper/lower hysteresis decision
+        const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );
+        const int iLowerHystDec = LlconMath().round ( dEstCurBufSet + dHysteresis );
+
+        // if both decisions are equal than use the result
+        if ( iUpperHystDec == iLowerHystDec )
+        {
+            // set the socket buffer via the main window thread since somehow
+            // it gives a protocol deadlock if we call the SetSocketBufSize()
+            // function directly
+
+// TEST
+            PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
+
+//SetSockBufNumFrames ( iUpperHystDec, true );
+
+        }
+        else
+        {
+            // we are in the middle of the decision region, use
+            // previous setting for determing the new decision
+            if ( !( ( GetSockBufNumFrames() == iUpperHystDec ) ||
+                    ( GetSockBufNumFrames() == iLowerHystDec ) ) )
+            {
+                // The old result is not near the new decision,
+                // use per definition the upper decision.
+                // Set the socket buffer via the main window thread since somehow
+                // it gives a protocol deadlock if we call the SetSocketBufSize()
+                // function directly.
+
+// TEST
+                PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
+
+//SetSockBufNumFrames ( iUpperHystDec, true );
+
+            }
+        }
+    }
 }

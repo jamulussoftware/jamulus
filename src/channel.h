@@ -96,6 +96,12 @@ public:
                                const bool bPreserve = false );
     int GetSockBufNumFrames() const { return iCurSockBufNumFrames; }
 
+
+// TEST
+void UpdateSocketBufferSize ( const double dAudioBufferDurationMs,
+                              const double dLocalStdDev );
+
+
     int GetUploadRateKbps();
 
     double GetTimingStdDev() { return CycleTimeVariance.GetStdDev(); }
@@ -104,8 +110,13 @@ public:
     void SetAudioStreamProperties ( const int iNewNetwFrameSize,
                                     const int iNewNetwFrameSizeFact,
                                     const int iNewNumAudioChannels );
+
+    void SetDoAutoSockBufSize ( const bool bValue ) { bDoAutoSockBufSize = bValue; }
+    bool GetDoAutoSockBufSize() const { return bDoAutoSockBufSize; }
+
     int GetNetwFrameSizeFact() const { return iNetwFrameSizeFact; }
     int GetNetwFrameSize() const { return iNetwFrameSize; }
+
     int GetNumAudioChannels() const { return iNumAudioChannels; }
 
     // network protocol interface
@@ -160,6 +171,7 @@ protected:
     bool                bIsEnabled;
     bool                bIsServer;
 
+    bool                bDoAutoSockBufSize;
     int                 iNetwFrameSizeFact;
     int                 iNetwFrameSize;
 

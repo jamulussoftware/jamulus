@@ -132,21 +132,24 @@ public:
         AudioReverbR.Clear();
     }
 
-    void SetDoAutoSockBufSize ( const bool bValue ) { bDoAutoSockBufSize = bValue; }
-    bool GetDoAutoSockBufSize() const { return bDoAutoSockBufSize; }
+    void SetDoAutoSockBufSize ( const bool bValue )
+        { Channel.SetDoAutoSockBufSize ( bValue ); }
+
+    bool GetDoAutoSockBufSize() const { return Channel.GetDoAutoSockBufSize(); }
+
     void SetSockBufNumFrames ( const int  iNumBlocks,
                                const bool bPreserve = false )
     {
-        // only change parameter if new parameter is different from current one
-        if ( Channel.GetSockBufNumFrames() != iNumBlocks )
+        // set the new socket size (number of frames)
+        if ( !Channel.SetSockBufNumFrames ( iNumBlocks, bPreserve ) )
         {
-            // set the new socket size (number of frames)
-            if ( !Channel.SetSockBufNumFrames ( iNumBlocks, bPreserve ) )
-            {
-                // if setting of socket buffer size was successful,
-                // tell the server that size has changed
-                Channel.CreateJitBufMes ( iNumBlocks );
-            }
+            // if setting of socket buffer size was successful,
+            // tell the server that the size has changed
+
+// TEST is done in channel now
+//            Channel.CreateJitBufMes ( iNumBlocks );
+
+
         }
     }
     int GetSockBufNumFrames() { return Channel.GetSockBufNumFrames(); }
@@ -245,20 +248,18 @@ public:
 
 protected:
     // callback function must be static, otherwise it does not work
-    static void  AudioCallback ( CVector<short>& psData, void* arg );
+    static void AudioCallback ( CVector<short>& psData, void* arg );
 
-    void         Init();
-    void         ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
-    void         ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
-    void         UpdateSocketBufferSize();
+    void        Init();
+    void        ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
+    void        ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
 
-    int          PreparePingMessage();
-    int          EvaluatePingMessage ( const int iMs );
+    int         PreparePingMessage();
+    int         EvaluatePingMessage ( const int iMs );
 
     // only one channel is needed for client application
     CChannel                Channel;
     CProtocol               ConnLessProtocol;
-    bool                    bDoAutoSockBufSize;
 
     // audio encoder/decoder
     CELTMode*               CeltModeMono;

@@ -64,6 +64,7 @@
 #define PROTMESSID_CLM_REQ_SERVER_LIST        1007 // request server list
 #define PROTMESSID_CLM_SEND_EMPTY_MESSAGE     1008 // an empty message shall be send
 #define PROTMESSID_CLM_EMPTY_MESSAGE          1009 // empty message
+#define PROTMESSID_CLM_DISCONNECTION          1010 // disconnection
 
 
 // lengths of message as defined in protocol.cpp file
@@ -110,10 +111,7 @@ public:
     void CreateCLSendEmptyMesMes ( const CHostAddress& InetAddr,
                                    const CHostAddress& TargetInetAddr );
     void CreateCLEmptyMes ( const CHostAddress& InetAddr );
-
-    void CreateAndImmSendDisconnectionMes();
-    void CreateAndImmSendAcknMess ( const int& iID,
-                                    const int& iCnt );
+    void CreateCLDisconnection ( const CHostAddress& InetAddr );
 
     bool ParseMessage ( const CVector<uint8_t>& vecbyData,
                         const int               iNumBytes );
@@ -124,6 +122,12 @@ public:
 
     bool IsProtocolMessage ( const CVector<uint8_t>& vecbyData,
                              const int               iNumBytes );
+
+    void CreateAndImmSendDisconnectionMes();
+
+    // this function is public because we need it in the test bench
+    void CreateAndImmSendAcknMess ( const int& iID,
+                                    const int& iCnt );
 
 protected:
     class CSendMessage
@@ -219,6 +223,7 @@ protected:
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLReqServerListMes      ( const CHostAddress& InetAddr );
     bool EvaluateCLSendEmptyMesMes       ( const CVector<uint8_t>& vecData );
+    bool EvaluateCLDisconnectionMes      ( const CHostAddress& InetAddr );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -266,6 +271,7 @@ signals:
                                 CVector<CServerInfo> vecServerInfo );
     void CLReqServerList ( CHostAddress InetAddr );
     void CLSendEmptyMes ( CHostAddress TargetInetAddr );
+    void CLDisconnection ( CHostAddress InetAddr );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

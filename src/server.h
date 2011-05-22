@@ -183,6 +183,7 @@ protected:
 
     int CheckAddr ( const CHostAddress& Addr );
     int GetFreeChan();
+    int FindChannel ( const CHostAddress& InetAddr );
     int GetNumberOfConnectedClients();
     CVector<CChannelShortInfo> CreateChannelList();
     void CreateAndSendChanListForAllConChannels();
@@ -275,6 +276,8 @@ public slots:
     {
         ServerListManager.CentralServerUnregisterServer ( InetAddr );
     }
+
+    void OnCLDisconnection ( CHostAddress InetAddr );
 
 
     // CODE TAG: MAX_NUM_CHANNELS_TAG

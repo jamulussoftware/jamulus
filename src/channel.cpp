@@ -331,7 +331,7 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
     Protocol.CreateNetwTranspPropsMes ( NetworkTransportProps );
 }
 
-void CChannel::OnDisconnection()
+void CChannel::Disconnect()
 {
     // set time out counter to a small value > 0 so that the next time a
     // received audio block is queried, the disconnection is performed

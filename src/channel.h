@@ -70,6 +70,7 @@ public:
 
     void ResetTimeOutCounter() { iConTimeOut = iConTimeOutStartVal; }
     bool IsConnected() const { return iConTimeOut > 0; }
+    void Disconnect();
 
     void SetEnable ( const bool bNEnStat );
     bool IsEnabled() { return bIsEnabled; }
@@ -173,7 +174,7 @@ public slots:
     void OnChangeChanName ( QString strName );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();
-    void OnDisconnection();
+    void OnDisconnection() { Disconnect(); }
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );

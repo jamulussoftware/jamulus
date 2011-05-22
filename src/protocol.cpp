@@ -33,8 +33,8 @@ MAIN FRAME
 
 
 
-MESSAGES
---------
+MESSAGES (with connection)
+--------------------------
 
 - PROTMESSID_ACKN: Acknowledgement message
 
@@ -202,7 +202,6 @@ CONNECTION LESS MESSAGES
       the QLocale class
 
 
-
 - PROTMESSID_CLM_UNREGISTER_SERVER: Unregister a server
 
     note: does not have any data -> n = 0
@@ -230,6 +229,11 @@ CONNECTION LESS MESSAGES
     +--------------------+--------------+
     | 4 bytes IP address | 2 bytes port |
     +--------------------+--------------+
+
+
+- PROTMESSID_CLM_DISCONNECTION: Disconnect message
+
+    note: does not have any data -> n = 0
 
 
  ******************************************************************************
@@ -615,6 +619,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
             case PROTMESSID_CLM_UNREGISTER_SERVER:
                 bRet = EvaluateCLUnregisterServerMes ( InetAddr );
+                break;
+
+            case PROTMESSID_CLM_DISCONNECTION:
+                bRet = EvaluateCLDisconnectionMes ( InetAddr );
                 break;
             }
         }
@@ -1568,9 +1576,26 @@ bool CProtocol::EvaluateCLSendEmptyMesMes ( const CVector<uint8_t>& vecData )
 
 void CProtocol::CreateCLEmptyMes ( const CHostAddress& InetAddr )
 {
+    // special message: for this message there exist no Evaluate
+    // function
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_EMPTY_MESSAGE,
                                      CVector<uint8_t> ( 0 ),
                                      InetAddr );
+}
+
+void CProtocol::CreateCLDisconnection ( const CHostAddress& InetAddr )
+{
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_DISCONNECTION,
+                                     CVector<uint8_t> ( 0 ),
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLDisconnectionMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLDisconnection ( InetAddr );
+
+    return false; // no error
 }
 
 

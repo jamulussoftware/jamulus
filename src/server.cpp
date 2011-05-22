@@ -304,6 +304,10 @@ CServer::CServer ( const int      iNewNumChan,
         SIGNAL ( CLSendEmptyMes ( CHostAddress ) ),
         this, SLOT ( OnCLSendEmptyMes ( CHostAddress ) ) );
 
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLDisconnection ( CHostAddress ) ),
+        this, SLOT ( OnCLDisconnection ( CHostAddress ) ) );
+
 
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
@@ -405,6 +409,18 @@ void CServer::OnSendCLProtMessage ( CHostAddress     InetAddr,
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, InetAddr );
+}
+
+void CServer::OnCLDisconnection ( CHostAddress InetAddr )
+{
+    // check if the given address is actually a client which is connected to
+    // this server, if yes, disconnect it
+    const int iCurChanID = FindChannel ( InetAddr );
+
+    if ( iCurChanID != INVALID_CHANNEL_ID )
+    {
+        vecChannels[iCurChanID].Disconnect();
+    }
 }
 
 void CServer::Start()
@@ -871,6 +887,21 @@ int CServer::GetFreeChan()
     for ( int i = 0; i < iNumChannels; i++ )
     {
         if ( !vecChannels[i].IsConnected() )
+        {
+            return i;
+        }
+    }
+
+    // no free channel found, return invalid ID
+    return INVALID_CHANNEL_ID;
+}
+
+int CServer::FindChannel ( const CHostAddress& InetAddr )
+{
+    // look for a channel with the given internet address
+    for ( int i = 0; i < iNumChannels; i++ )
+    {
+        if ( vecChannels[i].GetAddress() == InetAddr )
         {
             return i;
         }

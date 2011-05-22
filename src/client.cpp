@@ -425,10 +425,10 @@ void CClient::Stop()
     // network queue causing the channel to be reconnected right after having
     // received the disconnect message (seems not to gain much, disconnect is
     // still not working reliably)
-    QTime dieTime = QTime::currentTime().addMSecs ( 100 );
-    while ( QTime::currentTime() < dieTime )
+    QTime DieTime = QTime::currentTime().addMSecs ( 100 );
+    while ( QTime::currentTime() < DieTime )
     {
-	    QCoreApplication::processEvents ( QEventLoop::AllEvents, 100 );
+        QCoreApplication::processEvents ( QEventLoop::AllEvents, 100 );
     }
 
     // Send disconnect message to server (Since we disable our protocol

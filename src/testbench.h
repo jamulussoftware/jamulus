@@ -230,12 +230,12 @@ public slots:
             break;
 
         case 20:
-            Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
-                GenRandomIntInRange ( -100, 100 ) );
+            Protocol.CreateCLDisconnection ( CurHostAddress );
             break;
 
         case 21:
-            Protocol.CreateAndImmSendDisconnectionMes();
+            Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
+                GenRandomIntInRange ( -100, 100 ) );
             break;
 
         case 22:

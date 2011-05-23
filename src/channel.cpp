@@ -94,15 +94,16 @@ CChannel::CChannel ( const bool bNIsServer ) :
         SIGNAL ( PingReceived ( int ) ) );
 
     QObject::connect ( &Protocol,
+        SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ),
+        SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ) );
+
+    QObject::connect ( &Protocol,
         SIGNAL ( NetTranspPropsReceived ( CNetworkTransportProps ) ),
         this, SLOT ( OnNetTranspPropsReceived ( CNetworkTransportProps ) ) );
 
     QObject::connect ( &Protocol,
         SIGNAL ( ReqNetTranspProps() ),
         this, SLOT ( OnReqNetTranspProps() ) );
-
-    QObject::connect ( &Protocol, SIGNAL ( Disconnection() ),
-        this, SLOT ( OnDisconnection() ) );
 }
 
 bool CChannel::ProtocolIsEnabled()
@@ -351,10 +352,14 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
 
 void CChannel::Disconnect()
 {
-    // set time out counter to a small value > 0 so that the next time a
-    // received audio block is queried, the disconnection is performed
-    // (assuming that no audio packet is received in the meantime)
-    iConTimeOut = 1; // a small number > 0
+    // we only have to disconnect the channel if it is actually connected
+    if ( IsConnected() )
+    {
+        // set time out counter to a small value > 0 so that the next time a
+        // received audio block is queried, the disconnection is performed
+        // (assuming that no audio packet is received in the meantime)
+        iConTimeOut = 1; // a small number > 0
+    }
 }
 
 EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,

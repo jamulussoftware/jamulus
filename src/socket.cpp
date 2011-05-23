@@ -137,20 +137,7 @@ void CSocket::OnDataReceived()
                     // are not connected anymore
                     if ( pChannel->GetAddress() == RecHostAddr )
                     {
-
-
-// TEST old code -> to be removed because this is not working!!!
-/*
-pChannel->SetEnable ( true );
-pChannel->CreateAndImmSendDisconnectionMes();
-pChannel->SetEnable ( false );
-*/
-
-// TODO this does not work because for a connected channel at the server, no
-// connection less protocol messages are accepted
-
-//                        pConnLessProtocol->CreateCLDisconnection ( RecHostAddr );
-
+                        pConnLessProtocol->CreateCLDisconnection ( RecHostAddr );
                     }
                 }
 

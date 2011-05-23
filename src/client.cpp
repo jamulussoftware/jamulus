@@ -83,6 +83,10 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
         this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
 
+    QObject::connect ( &Channel,
+        SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ),
+        this, SLOT ( OnDetectedCLMessage ( CVector<uint8_t>, int ) ) );
+
     QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
         this, SLOT ( OnReqJittBufSize() ) );
 
@@ -136,6 +140,16 @@ void CClient::OnSendCLProtMessage ( CHostAddress     InetAddr,
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, InetAddr );
+}
+
+void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyData,
+                                    int              iNumBytes )
+{
+    // this is a special case: we received a connection less message but we are
+    // in a connection
+    ConnLessProtocol.ParseConnectionLessMessage ( vecbyData,
+                                                  iNumBytes,
+                                                  Channel.GetAddress() );
 }
 
 void CClient::OnNewConnection()
@@ -420,6 +434,9 @@ void CClient::Stop()
     // stop audio interface
     Sound.Stop();
 
+    // disable channel
+    Channel.SetEnable ( false );
+
     // wait for approx. 100 ms to make sure no audio packet is still in the
     // network queue causing the channel to be reconnected right after having
     // received the disconnect message (seems not to gain much, disconnect is
@@ -440,10 +457,7 @@ void CClient::Stop()
     // respond from the server, therefore we just hope that the message
     // gets its way to the server, if not, the old behaviour time-out
     // disconnects the connection anyway).
-    Channel.CreateAndImmSendDisconnectionMes();
-
-    // disable channel
-    Channel.SetEnable ( false );
+    ConnLessProtocol.CreateCLDisconnection ( Channel.GetAddress() );
 
     // reset current signal level and LEDs
     SignalLevelMeter.Reset();

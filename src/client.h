@@ -318,6 +318,7 @@ protected:
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
+    void OnDetectedCLMessage ( CVector<uint8_t> vecbyData, int iNumBytes );
     void OnReqJittBufSize() { Channel.CreateJitBufMes ( Channel.GetSockBufNumFrames() ); }
     void OnReqChanName() { Channel.SetRemoteName ( strName ); }
     void OnNewConnection();
@@ -325,8 +326,8 @@ public slots:
 
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr,
-                                          int iMs,
-                                          int iNumClients );
+                                          int          iMs,
+                                          int          iNumClients );
 
     void OnSndCrdReinitRequest();
 
@@ -337,8 +338,8 @@ signals:
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );
     void CLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
-                                            int iPingTime,
-                                            int iNumClients );
+                                            int          iPingTime,
+                                            int          iNumClients );
     void Disconnected();
 };
 

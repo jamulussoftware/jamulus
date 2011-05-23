@@ -138,8 +138,6 @@ void UpdateSocketBufferSize ( const double dAudioBufferDurationMs,
     }
 
     void CreateNetTranspPropsMessFromCurrentSettings();
-    void CreateAndImmSendDisconnectionMes()
-        { Protocol.CreateAndImmSendDisconnectionMes(); }
 
 protected:
     bool ProtocolIsEnabled(); 
@@ -186,7 +184,6 @@ public slots:
     void OnChangeChanName ( QString strName );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();
-    void OnDisconnection() { Disconnect(); }
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
@@ -200,6 +197,8 @@ signals:
     void PingReceived ( int iMs );
     void ReqNetTranspProps();
     void Disconnected();
+    void DetectedCLMessage ( CVector<uint8_t> vecbyData,
+                             int              iNumBytes );
 };
 
 #endif /* !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

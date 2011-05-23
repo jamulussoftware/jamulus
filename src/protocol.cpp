@@ -140,11 +140,6 @@ MESSAGES (with connection)
     note: does not have any data -> n = 0
 
 
-- PROTMESSID_DISCONNECTION: Disconnect message
-
-    note: does not have any data -> n = 0
-
-
 
 CONNECTION LESS MESSAGES
 ------------------------
@@ -436,10 +431,9 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
         // in case this is a connection less message, we do not process it here
         if ( IsConnectionLessMessageID ( iRecID ) )
         {
-
-
-// TODO fire signal so that an other class can process this type of message
-
+            // fire a signal so that an other class can process this type of
+            // message
+            emit DetectedCLMessage ( vecbyData, iNumBytes );
 
             // return function without issuing an error code (since it is a
             // regular message but will just not processed here)
@@ -540,10 +534,6 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
                 case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
                     bRet = EvaluateReqNetwTranspPropsMes();
-                    break;
-
-                case PROTMESSID_DISCONNECTION:
-                    bRet = EvaluateDisconnectionMes();
                     break;
                 }
 
@@ -1104,37 +1094,6 @@ bool CProtocol::EvaluateReqNetwTranspPropsMes()
 {
     // invoke message action
     emit ReqNetTranspProps();
-
-    return false; // no error
-}
-
-void CProtocol::CreateAndImmSendDisconnectionMes()
-{
-    CVector<uint8_t> vecDisconMessage;
-    int              iCurCounter;
-
-    Mutex.lock();
-    {
-        // store current counter value
-        iCurCounter = iCounter;
-
-        // increase counter (wraps around automatically)
-        iCounter++;
-    }
-    Mutex.unlock();
-
-    // build complete message
-    GenMessageFrame ( vecDisconMessage, iCurCounter,
-        PROTMESSID_DISCONNECTION, CVector<uint8_t> ( 0 ) );
-
-    // immediately send acknowledge message
-    emit MessReadyForSending ( vecDisconMessage );
-}
-
-bool CProtocol::EvaluateDisconnectionMes()
-{
-    // invoke message action
-    emit Disconnection();
 
     return false; // no error
 }

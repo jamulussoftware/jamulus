@@ -325,6 +325,20 @@ CServer::CServer ( const int      iNewNumChan,
     QObject::connect ( &vecChannels[10], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh10 ( CVector<uint8_t> ) ) );
     QObject::connect ( &vecChannels[11], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh11 ( CVector<uint8_t> ) ) );
 
+    // a connection less protocol message was detected
+    QObject::connect ( &vecChannels[0],  SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh0  ( CVector<uint8_t>, int ) ) );
+    QObject::connect ( &vecChannels[1],  SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh1  ( CVector<uint8_t>, int ) ) );
+    QObject::connect ( &vecChannels[2],  SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh2  ( CVector<uint8_t>, int ) ) );
+    QObject::connect ( &vecChannels[3],  SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh3  ( CVector<uint8_t>, int ) ) );
+    QObject::connect ( &vecChannels[4],  SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh4  ( CVector<uint8_t>, int ) ) );
+    QObject::connect ( &vecChannels[5],  SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh5  ( CVector<uint8_t>, int ) ) );
+    QObject::connect ( &vecChannels[6],  SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh6  ( CVector<uint8_t>, int ) ) );
+    QObject::connect ( &vecChannels[7],  SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh7  ( CVector<uint8_t>, int ) ) );
+    QObject::connect ( &vecChannels[8],  SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh8  ( CVector<uint8_t>, int ) ) );
+    QObject::connect ( &vecChannels[9],  SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh9  ( CVector<uint8_t>, int ) ) );
+    QObject::connect ( &vecChannels[10], SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh10 ( CVector<uint8_t>, int ) ) );
+    QObject::connect ( &vecChannels[11], SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ), this, SLOT ( OnDetCLMessCh11 ( CVector<uint8_t>, int ) ) );
+
     // request jitter buffer size
     QObject::connect ( &vecChannels[0],  SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh0() ) );
     QObject::connect ( &vecChannels[1],  SIGNAL ( NewConnection() ), this, SLOT ( OnNewConnectionCh1() ) );
@@ -409,6 +423,17 @@ void CServer::OnSendCLProtMessage ( CHostAddress     InetAddr,
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, InetAddr );
+}
+
+void CServer::OnDetCLMess ( const CVector<uint8_t>& vecbyData,
+                            const int               iNumBytes,
+                            const CHostAddress&     InetAddr )
+{
+    // this is a special case: we received a connection less message but we are
+    // in a connection
+    ConnLessProtocol.ParseConnectionLessMessage ( vecbyData,
+                                                  iNumBytes,
+                                                  InetAddr );
 }
 
 void CServer::OnCLDisconnection ( CHostAddress InetAddr )

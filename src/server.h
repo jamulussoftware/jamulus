@@ -245,6 +245,10 @@ public slots:
     void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
 
+    void OnDetCLMess ( const CVector<uint8_t>& vecbyData,
+                       const int               iNumBytes,
+                       const CHostAddress&     InetAddr );
+
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs )
     {
         ConnLessProtocol.CreateCLPingWithNumClientsMes ( InetAddr,
@@ -295,6 +299,19 @@ public slots:
     void OnSendProtMessCh9  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 9,  mess ); }
     void OnSendProtMessCh10 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 10, mess ); }
     void OnSendProtMessCh11 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 11, mess ); }
+
+    void OnDetCLMessCh0  ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[0].GetAddress() ); }
+    void OnDetCLMessCh1  ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[1].GetAddress() ); }
+    void OnDetCLMessCh2  ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[2].GetAddress() ); }
+    void OnDetCLMessCh3  ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[3].GetAddress() ); }
+    void OnDetCLMessCh4  ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[4].GetAddress() ); }
+    void OnDetCLMessCh5  ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[5].GetAddress() ); }
+    void OnDetCLMessCh6  ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[6].GetAddress() ); }
+    void OnDetCLMessCh7  ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[7].GetAddress() ); }
+    void OnDetCLMessCh8  ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[8].GetAddress() ); }
+    void OnDetCLMessCh9  ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[9].GetAddress() ); }
+    void OnDetCLMessCh10 ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[10].GetAddress() ); }
+    void OnDetCLMessCh11 ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[11].GetAddress() ); }
 
     void OnNewConnectionCh0()  { vecChannels[0].CreateReqJitBufMes(); }
     void OnNewConnectionCh1()  { vecChannels[1].CreateReqJitBufMes(); }

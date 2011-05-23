@@ -50,7 +50,7 @@
 #define PROTMESSID_PING_MS                    19 // for measuring ping time
 #define PROTMESSID_NETW_TRANSPORT_PROPS       20 // properties for network transport
 #define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   21 // request properties for network transport
-#define PROTMESSID_DISCONNECTION              22 // disconnection
+#define PROTMESSID_DISCONNECTION              22 // OLD (not used anymore)
 #define PROTMESSID_REQ_CHANNEL_NAME           23 // request channel name for fader tag
 
 // message IDs of connection less messages (CLM)
@@ -122,8 +122,6 @@ public:
 
     bool IsProtocolMessage ( const CVector<uint8_t>& vecbyData,
                              const int               iNumBytes );
-
-    void CreateAndImmSendDisconnectionMes();
 
     // this function is public because we need it in the test bench
     void CreateAndImmSendAcknMess ( const int& iID,
@@ -209,7 +207,6 @@ protected:
     bool EvaluatePingMes               ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes    ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
-    bool EvaluateDisconnectionMes();
 
     bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
@@ -240,7 +237,7 @@ public slots:
 
 signals:
     // transmitting
-    void MessReadyForSending ( CVector<uint8_t> vecMessage );
+    void MessReadyForSending   ( CVector<uint8_t> vecMessage );
     void CLMessReadyForSending ( CHostAddress     InetAddr,
                                  CVector<uint8_t> vecMessage );
 
@@ -258,20 +255,23 @@ signals:
     void PingReceived ( int iMs );
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void ReqNetTranspProps();
-    void Disconnection();
 
-    void CLPingReceived ( CHostAddress InetAddr, int iMs );
-    void CLPingWithNumClientsReceived ( CHostAddress InetAddr,
-                                        int iMs,
-                                        int iNumClients );
-    void CLRegisterServerReceived ( CHostAddress    InetAddr,
-                                    CServerCoreInfo ServerInfo );
-    void CLUnregisterServerReceived ( CHostAddress InetAddr );
-    void CLServerListReceived ( CHostAddress         InetAddr,
-                                CVector<CServerInfo> vecServerInfo );
-    void CLReqServerList ( CHostAddress InetAddr );
-    void CLSendEmptyMes ( CHostAddress TargetInetAddr );
-    void CLDisconnection ( CHostAddress InetAddr );
+    void CLPingReceived               ( CHostAddress         InetAddr,
+                                        int                  iMs );
+    void CLPingWithNumClientsReceived ( CHostAddress         InetAddr,
+                                        int                  iMs,
+                                        int                  iNumClients );
+    void CLRegisterServerReceived     ( CHostAddress         InetAddr,
+                                        CServerCoreInfo      ServerInfo );
+    void CLUnregisterServerReceived   ( CHostAddress         InetAddr );
+    void CLServerListReceived         ( CHostAddress         InetAddr,
+                                        CVector<CServerInfo> vecServerInfo );
+    void CLReqServerList              ( CHostAddress         InetAddr );
+    void CLSendEmptyMes               ( CHostAddress         TargetInetAddr );
+    void CLDisconnection              ( CHostAddress         InetAddr );
+
+    void DetectedCLMessage ( CVector<uint8_t> vecbyData,
+                             int              iNumBytes );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

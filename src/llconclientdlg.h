@@ -153,8 +153,8 @@ public slots:
     void OnReqServerListQuery ( CHostAddress InetAddr )
         { pClient->CreateCLReqServerListMes ( InetAddr ); }
 
-    void OnCreateCLPingMes ( CHostAddress InetAddr )
-        { pClient->CreateCLPingMes ( InetAddr ); }
+    void OnCreateCLServerListPingMes ( CHostAddress InetAddr )
+        { pClient->CreateCLServerListPingMes ( InetAddr ); }
 
     void OnCLServerListReceived ( CHostAddress         InetAddr,
                                   CVector<CServerInfo> vecServerInfo )

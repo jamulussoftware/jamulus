@@ -285,8 +285,8 @@ CServer::CServer ( const int      iNewNumChan,
         this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
 
     QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
-        this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
+        SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
+        this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ),

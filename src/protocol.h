@@ -99,8 +99,8 @@ public:
 
     void CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
-                                         const int iMs,
-                                         const int iNumClients );
+                                         const int           iMs,
+                                         const int           iNumClients );
     void CreateCLServerFullMes ( const CHostAddress& InetAddr );
     void CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
                                      const CServerCoreInfo& ServerInfo );

@@ -399,8 +399,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( &ConnectDlg, SIGNAL ( ReqServerListQuery ( CHostAddress ) ),
         this, SLOT ( OnReqServerListQuery ( CHostAddress ) ) );
 
-    QObject::connect ( &ConnectDlg, SIGNAL ( CreateCLPingMes ( CHostAddress ) ),
-        this, SLOT ( OnCreateCLPingMes ( CHostAddress ) ) );
+    QObject::connect ( &ConnectDlg, SIGNAL ( CreateCLServerListPingMes ( CHostAddress ) ),
+        this, SLOT ( OnCreateCLServerListPingMes ( CHostAddress ) ) );
 
 
     // Timers ------------------------------------------------------------------

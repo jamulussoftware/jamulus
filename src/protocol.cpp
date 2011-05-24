@@ -147,8 +147,9 @@ CONNECTION LESS MESSAGES
 - PROTMESSID_CLM_PING_MS: Connection less ping message (for measuring the ping
                           time)
 
-    note: same definition as PROTMESSID_PING_MS
-
+    +-----------------------------+
+    | 4 bytes transmit time in ms |
+    +-----------------------------+
 
 
 - PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS: Connection less ping message (for

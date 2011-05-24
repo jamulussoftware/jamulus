@@ -351,7 +351,7 @@ void CConnectDlg::OnTimerPing()
                 CurServerAddress ) )
         {
             // if address is valid, send ping
-            emit CreateCLPingMes ( CurServerAddress );
+            emit CreateCLServerListPingMes ( CurServerAddress );
         }
     }
 }

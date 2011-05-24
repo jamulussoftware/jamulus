@@ -227,8 +227,17 @@ public:
     void CreatePingMes()
         { Channel.CreatePingMes ( PreparePingMessage() ); }
 
-    void CreateCLPingMes ( const CHostAddress& InetAddr )
-        { ConnLessProtocol.CreateCLPingMes ( InetAddr, PreparePingMessage() ); }
+// TODO
+//void CreateCLPingMes ( const CHostAddress& InetAddr )
+//    { ConnLessProtocol.CreateCLPingMes ( InetAddr, PreparePingMessage() ); }
+
+
+    void CreateCLServerListPingMes ( const CHostAddress& InetAddr )
+    {
+        ConnLessProtocol.CreateCLPingWithNumClientsMes ( InetAddr,
+                                                         PreparePingMessage(),
+                                                         0 /* dummy */ );
+    }
 
     void CreateCLReqServerListMes ( const CHostAddress& InetAddr )
         { ConnLessProtocol.CreateCLReqServerListMes ( InetAddr ); }

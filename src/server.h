@@ -249,7 +249,9 @@ public slots:
                        const int               iNumBytes,
                        const CHostAddress&     InetAddr );
 
-    void OnCLPingReceived ( CHostAddress InetAddr, int iMs )
+    void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr,
+                                          int          iMs,
+                                          int )
     {
         ConnLessProtocol.CreateCLPingWithNumClientsMes ( InetAddr,
                                                          iMs,

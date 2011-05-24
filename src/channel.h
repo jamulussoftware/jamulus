@@ -130,7 +130,6 @@ void UpdateSocketBufferSize ( const double dAudioBufferDurationMs,
     void CreateReqJitBufMes()                             { Protocol.CreateReqJitBufMes(); }
     void CreateReqConnClientsList()                       { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText ) { Protocol.CreateChatTextMes ( strChatText ); }
-    void CreatePingMes ( const int iMs )                  { Protocol.CreatePingMes ( iMs ); }
 
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo )
     { 
@@ -194,7 +193,6 @@ signals:
     void NameHasChanged();
     void ReqChanName();
     void ChatTextReceived ( QString strChatText );
-    void PingReceived ( int iMs );
     void ReqNetTranspProps();
     void Disconnected();
     void DetectedCLMessage ( CVector<uint8_t> vecbyData,

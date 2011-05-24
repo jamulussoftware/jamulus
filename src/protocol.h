@@ -47,7 +47,7 @@
 #define PROTMESSID_REQ_CONN_CLIENTS_LIST      16 // request connected client list
 #define PROTMESSID_CHANNEL_NAME               17 // set channel name for fader tag
 #define PROTMESSID_CHAT_TEXT                  18 // contains a chat text
-#define PROTMESSID_PING_MS                    19 // for measuring ping time
+#define PROTMESSID_PING_MS                    19 // OLD (not used anymore)
 #define PROTMESSID_NETW_TRANSPORT_PROPS       20 // properties for network transport
 #define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   21 // request properties for network transport
 #define PROTMESSID_DISCONNECTION              22 // OLD (not used anymore)
@@ -93,7 +93,6 @@ public:
     void CreateChanNameMes ( const QString strName );
     void CreateReqChanNameMes();
     void CreateChatTextMes ( const QString strChatText );
-    void CreatePingMes ( const int iMs );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
     void CreateReqNetwTranspPropsMes();
 
@@ -204,7 +203,6 @@ protected:
     bool EvaluateChanNameMes           ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChanNameMes();
     bool EvaluateChatTextMes           ( const CVector<uint8_t>& vecData );
-    bool EvaluatePingMes               ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes    ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
 
@@ -252,7 +250,6 @@ signals:
     void ChangeChanName ( QString strName );
     void ReqChanName();
     void ChatTextReceived ( QString strChatText );
-    void PingReceived ( int iMs );
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void ReqNetTranspProps();
 

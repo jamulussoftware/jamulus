@@ -249,6 +249,9 @@ public slots:
                        const int               iNumBytes,
                        const CHostAddress&     InetAddr );
 
+    void OnCLPingReceived ( CHostAddress InetAddr, int iMs )
+        { ConnLessProtocol.CreateCLPingMes ( InetAddr, iMs ); }
+
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr,
                                           int          iMs,
                                           int )
@@ -366,19 +369,6 @@ public slots:
     void OnChatTextReceivedCh9  ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 9,  strChatText ); }
     void OnChatTextReceivedCh10 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 10, strChatText ); }
     void OnChatTextReceivedCh11 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 11, strChatText ); }
-
-    void OnPingReceivedCh0  ( int iMs ) { vecChannels[0].CreatePingMes ( iMs ); }
-    void OnPingReceivedCh1  ( int iMs ) { vecChannels[1].CreatePingMes ( iMs ); }
-    void OnPingReceivedCh2  ( int iMs ) { vecChannels[2].CreatePingMes ( iMs ); }
-    void OnPingReceivedCh3  ( int iMs ) { vecChannels[3].CreatePingMes ( iMs ); }
-    void OnPingReceivedCh4  ( int iMs ) { vecChannels[4].CreatePingMes ( iMs ); }
-    void OnPingReceivedCh5  ( int iMs ) { vecChannels[5].CreatePingMes ( iMs ); }
-    void OnPingReceivedCh6  ( int iMs ) { vecChannels[6].CreatePingMes ( iMs ); }
-    void OnPingReceivedCh7  ( int iMs ) { vecChannels[7].CreatePingMes ( iMs ); }
-    void OnPingReceivedCh8  ( int iMs ) { vecChannels[8].CreatePingMes ( iMs ); }
-    void OnPingReceivedCh9  ( int iMs ) { vecChannels[9].CreatePingMes ( iMs ); }
-    void OnPingReceivedCh10 ( int iMs ) { vecChannels[10].CreatePingMes ( iMs ); }
-    void OnPingReceivedCh11 ( int iMs ) { vecChannels[11].CreatePingMes ( iMs ); }
 };
 
 #endif /* !defined ( SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ ) */

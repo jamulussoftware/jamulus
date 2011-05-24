@@ -641,8 +641,8 @@ void CLlconClientDlg::OnTimerSigMet()
 
 void CLlconClientDlg::OnTimerPing()
 {
-    // send ping message to server
-    pClient->CreatePingMes();
+    // send ping message to the server
+    pClient->CreateCLPingMes();
 }
 
 void CLlconClientDlg::OnPingTimeResult ( int iPingTime )

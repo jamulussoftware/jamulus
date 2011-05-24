@@ -108,9 +108,6 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( ChatTextReceived ( QString ) ),
         SIGNAL ( ChatTextReceived ( QString ) ) );
 
-    QObject::connect ( &Channel, SIGNAL ( PingReceived ( int ) ),
-        this, SLOT ( OnReceivePingMessage ( int ) ) );
-
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
         this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
@@ -118,6 +115,10 @@ CClient::CClient ( const quint16 iPortNumber ) :
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ),
         SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ) );
+
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
+        this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
 
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
@@ -168,13 +169,18 @@ void CClient::OnNewConnection()
     Channel.CreateJitBufMes ( Channel.GetSockBufNumFrames() );
 }
 
-void CClient::OnReceivePingMessage ( int iMs )
+void CClient::OnCLPingReceived ( CHostAddress InetAddr,
+                                 int          iMs )
 {
-    // take care of wrap arounds (if wrapping, do not use result)
-    const int iCurDiff = EvaluatePingMessage ( iMs );
-    if ( iCurDiff >= 0 )
+    // make sure we are running and the server address is correct
+    if ( IsRunning() && ( InetAddr == Channel.GetAddress() ) )
     {
-        emit PingTimeReceived ( iCurDiff );
+        // take care of wrap arounds (if wrapping, do not use result)
+        const int iCurDiff = EvaluatePingMessage ( iMs );
+        if ( iCurDiff >= 0 )
+        {
+            emit PingTimeReceived ( iCurDiff );
+        }
     }
 }
 

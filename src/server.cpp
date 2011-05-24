@@ -285,6 +285,10 @@ CServer::CServer ( const int      iNewNumChan,
         this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
 
     QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
+        this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
+
+    QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
         this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
@@ -394,20 +398,6 @@ CServer::CServer ( const int      iNewNumChan,
     QObject::connect ( &vecChannels[9],  SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh9 ( QString ) ) );
     QObject::connect ( &vecChannels[10], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh10 ( QString ) ) );
     QObject::connect ( &vecChannels[11], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh11 ( QString ) ) );
-
-    // ping message received
-    QObject::connect ( &vecChannels[0],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh0 ( int ) ) );
-    QObject::connect ( &vecChannels[1],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh1 ( int ) ) );
-    QObject::connect ( &vecChannels[2],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh2 ( int ) ) );
-    QObject::connect ( &vecChannels[3],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh3 ( int ) ) );
-    QObject::connect ( &vecChannels[4],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh4 ( int ) ) );
-    QObject::connect ( &vecChannels[5],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh5 ( int ) ) );
-    QObject::connect ( &vecChannels[6],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh6 ( int ) ) );
-    QObject::connect ( &vecChannels[7],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh7 ( int ) ) );
-    QObject::connect ( &vecChannels[8],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh8 ( int ) ) );
-    QObject::connect ( &vecChannels[9],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh9 ( int ) ) );
-    QObject::connect ( &vecChannels[10], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh10 ( int ) ) );
-    QObject::connect ( &vecChannels[11], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh11 ( int ) ) );
 }
 
 void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )

@@ -224,13 +224,8 @@ public:
     void CreateChatTextMes ( const QString& strChatText )
         { Channel.CreateChatTextMes ( strChatText ); }
 
-    void CreatePingMes()
-        { Channel.CreatePingMes ( PreparePingMessage() ); }
-
-// TODO
-//void CreateCLPingMes ( const CHostAddress& InetAddr )
-//    { ConnLessProtocol.CreateCLPingMes ( InetAddr, PreparePingMessage() ); }
-
+    void CreateCLPingMes()
+        { ConnLessProtocol.CreateCLPingMes ( Channel.GetAddress(), PreparePingMessage() ); }
 
     void CreateCLServerListPingMes ( const CHostAddress& InetAddr )
     {
@@ -331,7 +326,8 @@ public slots:
     void OnReqJittBufSize() { Channel.CreateJitBufMes ( Channel.GetSockBufNumFrames() ); }
     void OnReqChanName() { Channel.SetRemoteName ( strName ); }
     void OnNewConnection();
-    void OnReceivePingMessage ( int iMs );
+    void OnCLPingReceived ( CHostAddress InetAddr,
+                            int          iMs );
 
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr,

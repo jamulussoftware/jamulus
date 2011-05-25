@@ -570,10 +570,6 @@ int CChannel::GetUploadRateKbps()
         SYSTEM_SAMPLE_RATE_HZ / iAudioSizeOut / 1000;
 }
 
-
-
-
-// TEST
 void CChannel::UpdateSocketBufferSize ( const double dAudioBufferDurationMs,
                                         const double dLocalStdDev )
 {

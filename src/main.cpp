@@ -404,8 +404,12 @@ int main ( int argc, char** argv )
                 pMainWindow = &ServerDlg;
                 pApp        = &app; // needed for post-event routine
 
-                // show dialog
-                ServerDlg.show();
+                // show dialog (if not the minimized flag is set)
+                if ( !bStartMinimized )
+                {
+                    ServerDlg.show();
+                }
+
                 app.exec();
             }
             else

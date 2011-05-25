@@ -621,7 +621,7 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
 
 /******************************************************************************\
-* Access-functions for creating and parsing messages                           *
+* Access functions for creating and parsing messages                           *
 \******************************************************************************/
 void CProtocol::CreateJitBufMes ( const int iJitBufSize )
 {

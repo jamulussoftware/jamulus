@@ -140,17 +140,7 @@ public:
     void SetSockBufNumFrames ( const int  iNumBlocks,
                                const bool bPreserve = false )
     {
-        // set the new socket size (number of frames)
-        if ( !Channel.SetSockBufNumFrames ( iNumBlocks, bPreserve ) )
-        {
-            // if setting of socket buffer size was successful,
-            // tell the server that the size has changed
-
-// TEST is done in channel now
-//            Channel.CreateJitBufMes ( iNumBlocks );
-
-
-        }
+        Channel.SetSockBufNumFrames ( iNumBlocks, bPreserve );
     }
     int GetSockBufNumFrames() { return Channel.GetSockBufNumFrames(); }
 

@@ -959,10 +959,6 @@ void CLlconClientDlg::customEvent ( QEvent* Event )
             ledDelay->Reset();
             ledChat->Reset();
             break;
-
-        case MS_SET_JIT_BUF_SIZE:
-            pClient->SetSockBufNumFrames ( iStatus, true );
-            break;
         }
 
         // update general settings dialog, too

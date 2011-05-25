@@ -197,7 +197,7 @@ protected:
                                    CVector<double>&            vecdGains,
                                    CVector<int>&               vecNumAudioChannels );
 
-    virtual void     customEvent ( QEvent* Event );
+    virtual void     customEvent ( QEvent* pEvent );
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator

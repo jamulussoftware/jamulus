@@ -185,13 +185,13 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
             // the buffer is changed), tell the server that the size has changed
             if ( !bIsServer && bPreserve )
             {
-
-// TODO this function call causes the lock up of the protocol mechanism when the
-// SetSockBufNumFrames is called directly from UpdateSocketBufferSize
-// -> find and fix the problem!
-
-CreateJitBufMes ( iNewNumFrames );
-
+                // we cannot call the "CreateJitBufMes" function directly since
+                // this would give us problems with different threads (e.g. the
+                // audio thread) and the protocol mechanism (problem with
+                // qRegisterMetaType(), etc.)
+                // reuse the request jitter buffer size signal here since it
+                // does exactly what we want
+                emit ReqJittBufSize();
             }
 
             return false; // -> no error
@@ -612,13 +612,7 @@ const double dServerJitterMs = 0.666666; // ms
         if ( iUpperHystDec == iLowerHystDec )
         {
             // updatet the socket buffer size with the new value
-
-// TEST
-PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
-
-// TODO remove MS_SET_JIT_BUF_SIZE!
-//SetSockBufNumFrames ( iUpperHystDec, true );
-
+            SetSockBufNumFrames ( iUpperHystDec, true );
         }
         else
         {
@@ -630,13 +624,7 @@ PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
                 // The old result is not near the new decision,
                 // use per definition the upper decision.
                 // updatet the socket buffer size with the new value
-
-// TEST
-PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
-
-// TODO remove MS_SET_JIT_BUF_SIZE!
-//SetSockBufNumFrames ( iUpperHystDec, true );
-
+                SetSockBufNumFrames ( iUpperHystDec, true );
             }
         }
     }

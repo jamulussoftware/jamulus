@@ -1219,11 +1219,11 @@ bool CServer::GetTimingStdDev ( double& dCurTiStdDev )
     }
 }
 
-void CServer::customEvent ( QEvent* Event )
+void CServer::customEvent ( QEvent* pEvent )
 {
-    if ( Event->type() == QEvent::User + 11 )
+    if ( pEvent->type() == QEvent::User + 11 )
     {
-        const int iMessType = ( ( CLlconEvent* ) Event )->iMessType;
+        const int iMessType = ( (CLlconEvent*) pEvent )->iMessType;
 
         switch ( iMessType )
         {

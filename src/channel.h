@@ -96,11 +96,8 @@ public:
                                const bool bPreserve = false );
     int GetSockBufNumFrames() const { return iCurSockBufNumFrames; }
 
-
-// TEST
-void UpdateSocketBufferSize ( const double dAudioBufferDurationMs,
-                              const double dLocalStdDev );
-
+    void UpdateSocketBufferSize ( const double dAudioBufferDurationMs,
+                                  const double dLocalStdDev );
 
     int GetUploadRateKbps();
 

@@ -229,7 +229,6 @@ typedef unsigned int                    _MESSAGE_IDENT;
 #define MS_JIT_BUF_GET                  4
 #define MS_PACKET_RECEIVED              5
 #define MS_ERROR_IN_THREAD              6
-#define MS_SET_JIT_BUF_SIZE             7
 
 #define MUL_COL_LED_RED                 0
 #define MUL_COL_LED_YELLOW              1

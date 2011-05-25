@@ -180,18 +180,19 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
             // block size
             SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bPreserve );
 
-
-// TEST in case we are the client, tell the server that the size has changed
-if ( !bIsServer && bPreserve )
-{
+            // in case we are the client and a change in the buffer is done (not
+            // an initialization, we assume that "preserve" is only used in case
+            // the buffer is changed), tell the server that the size has changed
+            if ( !bIsServer && bPreserve )
+            {
 
 // TODO this function call causes the lock up of the protocol mechanism when the
 // SetSockBufNumFrames is called directly from UpdateSocketBufferSize
 // -> find and fix the problem!
 
-    CreateJitBufMes ( iNewNumFrames );
-}
+CreateJitBufMes ( iNewNumFrames );
 
+            }
 
             return false; // -> no error
         }
@@ -614,13 +615,12 @@ const double dServerJitterMs = 0.666666; // ms
         // if both decisions are equal than use the result
         if ( iUpperHystDec == iLowerHystDec )
         {
-            // set the socket buffer via the main window thread since somehow
-            // it gives a protocol deadlock if we call the SetSocketBufSize()
-            // function directly
+            // updatet the socket buffer size with the new value
 
 // TEST
-            PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
+PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
 
+// TODO remove MS_SET_JIT_BUF_SIZE!
 //SetSockBufNumFrames ( iUpperHystDec, true );
 
         }
@@ -633,13 +633,12 @@ const double dServerJitterMs = 0.666666; // ms
             {
                 // The old result is not near the new decision,
                 // use per definition the upper decision.
-                // Set the socket buffer via the main window thread since somehow
-                // it gives a protocol deadlock if we call the SetSocketBufSize()
-                // function directly.
+                // updatet the socket buffer size with the new value
 
 // TEST
-                PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
+PostWinMessage ( MS_SET_JIT_BUF_SIZE, iUpperHystDec );
 
+// TODO remove MS_SET_JIT_BUF_SIZE!
 //SetSockBufNumFrames ( iUpperHystDec, true );
 
             }

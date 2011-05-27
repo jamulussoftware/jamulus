@@ -101,14 +101,12 @@ public:
 
     int GetUploadRateKbps();
 
-    double GetTimingStdDev() { return CycleTimeVariance.GetStdDev(); }
-
     // set/get network out buffer size and size factor
     void SetAudioStreamProperties ( const int iNewNetwFrameSize,
                                     const int iNewNetwFrameSizeFact,
                                     const int iNewNumAudioChannels );
 
-    void SetDoAutoSockBufSize ( const bool bValue ) { bDoAutoSockBufSize = bValue; }
+    void SetDoAutoSockBufSize ( const bool bValue );
     bool GetDoAutoSockBufSize() const { return bDoAutoSockBufSize; }
 
     int GetNetwFrameSizeFact() const { return iNetwFrameSizeFact; }
@@ -150,6 +148,7 @@ protected:
     // network jitter-buffer
     CNetBuf             SockBuf;
     int                 iCurSockBufNumFrames;
+    bool                bDoAutoSockBufSize;
 
     CCycleTimeVariance  CycleTimeVariance;
 
@@ -165,7 +164,6 @@ protected:
     bool                bIsEnabled;
     bool                bIsServer;
 
-    bool                bDoAutoSockBufSize;
     int                 iNetwFrameSizeFact;
     int                 iNetwFrameSize;
 

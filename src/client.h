@@ -144,6 +144,18 @@ public:
     }
     int GetSockBufNumFrames() { return Channel.GetSockBufNumFrames(); }
 
+    void SetServerSockBufNumFrames ( const int  iNumBlocks  )
+    {
+        iServerSockBufNumFrames = iNumBlocks;
+
+        // if auto setting is disabled, inform the server about the new size
+        if ( !GetDoAutoSockBufSize() )
+        {
+            Channel.CreateJitBufMes ( iServerSockBufNumFrames );
+        }
+    }
+    int GetServerSockBufNumFrames() { return iServerSockBufNumFrames; }
+
     int GetUploadRateKbps() { return Channel.GetUploadRateKbps(); }
 
     // sound card device selection
@@ -250,6 +262,7 @@ protected:
 
     int         PreparePingMessage();
     int         EvaluatePingMessage ( const int iMs );
+    void        CreateServerJitterBufferMessage();
 
     // only one channel is needed for client application
     CChannel                Channel;
@@ -305,6 +318,9 @@ protected:
     CVector<double>         vecdAudioStereo;
     CVector<int16_t>        vecsNetwork;
 
+    // server settings
+    int                     iServerSockBufNumFrames;
+
     // for ping measurement
     CPreciseTime            PreciseTime;
 
@@ -313,7 +329,7 @@ protected:
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnDetectedCLMessage ( CVector<uint8_t> vecbyData, int iNumBytes );
-    void OnReqJittBufSize() { Channel.CreateJitBufMes ( Channel.GetSockBufNumFrames() ); }
+    void OnReqJittBufSize() { CreateServerJitterBufferMessage(); }
     void OnReqChanName() { Channel.SetRemoteName ( strName ); }
     void OnNewConnection();
     void OnCLPingReceived ( CHostAddress InetAddr,

@@ -164,6 +164,13 @@ void CSettings::Load()
             pClient->SetSockBufNumFrames ( iValue );
         }
 
+        // network jitter buffer size for server
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "jitbufserver",
+             MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
+        {
+            pClient->SetServerSockBufNumFrames ( iValue );
+        }
+
         // flag whether the chat window shall be opened on a new chat message
         if ( GetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage", bValue ) )
         {
@@ -306,6 +313,10 @@ void CSettings::Save()
         // network jitter buffer size
         SetNumericIniSet ( IniXMLDocument, "client", "jitbuf",
             pClient->GetSockBufNumFrames() );
+
+        // network jitter buffer size for server
+        SetNumericIniSet ( IniXMLDocument, "client", "jitbufserver",
+            pClient->GetServerSockBufNumFrames() );
 
         // flag whether the chat window shall be opened on a new chat message
         SetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage",

@@ -85,6 +85,7 @@ protected:
  public slots:
     void OnTimerStatus() { UpdateDisplay(); }
     void OnNetBufValueChanged ( int value );
+    void OnNetBufServerValueChanged ( int value );
     void OnSliderSndCrdBufferDelay ( int value );
     void OnAutoJitBufStateChanged ( int value );
     void OnOpenChatOnNewMessageStateChanged ( int value );

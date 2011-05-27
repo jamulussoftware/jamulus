@@ -48,7 +48,8 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bOpenChatOnNewMessage            ( true ),
     eGUIDesign                       ( GD_ORIGINAL ),
     strCentralServerAddress          ( "" ),
-    bUseDefaultCentralServerAddress  ( true )
+    bUseDefaultCentralServerAddress  ( true ),
+    iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL )
 {
     // init audio encoder/decoder (mono)
     CeltModeMono = celt_mode_create (
@@ -166,7 +167,21 @@ void CClient::OnNewConnection()
     // not get the list because the server does not know about a new connection.
     // Same problem is with the jitter buffer message.
     Channel.CreateReqConnClientsList();
-    Channel.CreateJitBufMes ( Channel.GetSockBufNumFrames() );
+    CreateServerJitterBufferMessage();
+}
+
+void CClient::CreateServerJitterBufferMessage()
+{
+    // in case auto jitter buffer size is enabled, we have to transmit a
+    // special value
+    if ( GetDoAutoSockBufSize() )
+    {
+        Channel.CreateJitBufMes ( AUTO_NET_BUF_SIZE_FOR_PROTOCOL );
+    }
+    else
+    {
+        Channel.CreateJitBufMes ( GetServerSockBufNumFrames() );
+    }
 }
 
 void CClient::OnCLPingReceived ( CHostAddress InetAddr,
@@ -906,11 +921,11 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
     // calculate current buffer setting
     const double dAudioBufferDurationMs =
-        ( GetSndCrdActualMonoBlSize() +
-          GetSndCrdConvBufAdditionalDelayMonoBlSize() ) *
+        static_cast<double> ( GetSndCrdActualMonoBlSize() +
+                              GetSndCrdConvBufAdditionalDelayMonoBlSize() ) *
         1000 / SYSTEM_SAMPLE_RATE_HZ;
 
-    // update and socket buffer size
+    // update socket buffer size
     Channel.UpdateSocketBufferSize ( dAudioBufferDurationMs,
                                      CycleTimeVariance.GetStdDev() );
 }
@@ -923,10 +938,11 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
       for the average it is assumed that the buffer is half filled)
     - consider the jitter buffer on the server side, too
 */
-    // 2 times buffers at client and server divided by 2 (half the buffer
-    // for the delay) is simply the total socket buffer size
-    const double dTotalJitterBufferDelayMs =
-        SYSTEM_BLOCK_DURATION_MS_FLOAT * GetSockBufNumFrames();
+    // the buffer sizes at client and server divided by 2 (half the buffer
+    // for the delay) is the total socket buffer size
+    const double dTotalJitterBufferDelayMs = SYSTEM_BLOCK_DURATION_MS_FLOAT *
+        static_cast<double> ( GetSockBufNumFrames() +
+                              GetServerSockBufNumFrames() ) / 2;
 
     // we assume that we have two period sizes for the input and one for the
     // output, therefore we have "3 *" instead of "2 *" (for input and output)

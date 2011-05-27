@@ -648,8 +648,9 @@ bool CProtocol::EvaluateJitBufMes ( const CVector<uint8_t>& vecData )
     const int iData =
         static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
-    if ( ( iData < MIN_NET_BUF_SIZE_NUM_BL ) ||
-         ( iData > MAX_NET_BUF_SIZE_NUM_BL ) )
+    if ( ( ( iData < MIN_NET_BUF_SIZE_NUM_BL ) ||
+           ( iData > MAX_NET_BUF_SIZE_NUM_BL ) ) &&
+         ( iData != AUTO_NET_BUF_SIZE_FOR_PROTOCOL ) )
     {
         return true; // return error code
     }

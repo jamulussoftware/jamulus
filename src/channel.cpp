@@ -28,9 +28,9 @@
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains          ( MAX_NUM_CHANNELS, (double) 1.0 ),
+    bDoAutoSockBufSize ( true ),
     bIsEnabled         ( false ),
     bIsServer          ( bNIsServer ),
-    bDoAutoSockBufSize ( true ),
     iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_PREFERRED ),
     iNetwFrameSize     ( 20 ), // must be > 0 and should be close to a valid size
     iNumAudioChannels  ( 1 ) // mono
@@ -180,18 +180,18 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
             // block size
             SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bPreserve );
 
-            // in case we are the client and a change in the buffer is done (not
-            // an initialization, we assume that "preserve" is only used in case
-            // the buffer is changed), tell the server that the size has changed
-            if ( !bIsServer && bPreserve )
+            // only in case we are the server and auto jitter buffer setting is
+            // enabled, we have to report the current setting to the client
+            if ( bIsServer && bDoAutoSockBufSize )
             {
                 // we cannot call the "CreateJitBufMes" function directly since
                 // this would give us problems with different threads (e.g. the
-                // audio thread) and the protocol mechanism (problem with
+                // timer thread) and the protocol mechanism (problem with
                 // qRegisterMetaType(), etc.)
-                // reuse the request jitter buffer size signal here since it
-                // does exactly what we want
-                emit ReqJittBufSize();
+
+// TODO create new message, this one only works for client...
+//emit ReqJittBufSize();
+
             }
 
             return false; // -> no error
@@ -201,7 +201,26 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
     return true; // set error flag
 }
 
-void CChannel::SetGain ( const int iChanID, const double dNewGain )
+void CChannel::SetDoAutoSockBufSize ( const bool bValue )
+{
+    // in case auto socket buffer size was just enabled, reset statistic and in
+    // case of the client, inform the server about the change
+    if ( ( bDoAutoSockBufSize != bValue ) && bValue )
+    {
+        CycleTimeVariance.Reset();
+
+        if ( !bIsServer )
+        {
+            CreateJitBufMes ( AUTO_NET_BUF_SIZE_FOR_PROTOCOL );
+        }
+    }
+
+    // store new setting
+    bDoAutoSockBufSize = bValue;
+}
+
+void CChannel::SetGain ( const int    iChanID,
+                         const double dNewGain )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -276,10 +295,19 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 {
-    SetSockBufNumFrames ( iNewJitBufSize, true );
+    // first check for special case: auto setting
+    if ( iNewJitBufSize == AUTO_NET_BUF_SIZE_FOR_PROTOCOL )
+    {
+        SetDoAutoSockBufSize ( true );
+    }
+    else
+    {
+        SetSockBufNumFrames ( iNewJitBufSize, true );
+    }
 }
 
-void CChannel::OnChangeChanGain ( int iChanID, double dNewGain )
+void CChannel::OnChangeChanGain ( int    iChanID,
+                                  double dNewGain )
 {
     SetGain ( iChanID, dNewGain );
 }
@@ -426,8 +454,8 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                     }
 
                     // update cycle time variance measurement (this is only
-                    // used by the client so do not update for server channel)
-                    if ( !bIsServer )
+                    // used in case auto socket buffer size is enabled)
+                    if ( bDoAutoSockBufSize )
                     {
                         CycleTimeVariance.Update();
                     }
@@ -466,7 +494,7 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
 
 // TODO check the conditions: !bIsProtocolPacket should always be true
 // since we can only get here if bNewConnection, should we really put
-// !bIsAudioPacket in here, because shouldn't we always quere the audio
+// !bIsAudioPacket in here, because shouldn't we always query the audio
 // properties on a new connection?
 
             if ( bIsServer && ( !bIsProtocolPacket ) && ( !bIsAudioPacket ) )
@@ -587,22 +615,29 @@ void CChannel::UpdateSocketBufferSize ( const double dAudioBufferDurationMs,
         //   time in case the time response measurement is close to a bound
         // - only use time response measurement results if averaging buffer is
         //   completely filled
+        // - we need at least a jitter buffer size of the audio packet duration
+        //   -> add audio buffer duration
         const double dHysteresis = 0.3;
-
-        // jitter introduced in the server by the timer implementation
-
-// TODO remove this!
-const double dServerJitterMs = 0.666666; // ms
-
 
         // accumulate the standard deviations of input network stream and
         // internal timer,
         // add 0.5 to "round up" -> ceil,
         // divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
         // one block in the jitter buffer
-        const double dEstCurBufSet = ( dAudioBufferDurationMs + dServerJitterMs +
-            3.3 * ( GetTimingStdDev() + dLocalStdDev ) ) /
+        const double dEstCurBufSet = ( dAudioBufferDurationMs +
+            3.3 * ( CycleTimeVariance.GetStdDev() + dLocalStdDev ) ) /
             SYSTEM_BLOCK_DURATION_MS_FLOAT + 0.5;
+
+/*
+// TEST
+//if (bIsServer) {
+static FILE* pFile = fopen ( "c:\\temp\\test.dat", "w" );
+fprintf ( pFile, "%e %e %e %e\n", CycleTimeVariance.GetStdDev(), dLocalStdDev, dAudioBufferDurationMs, dEstCurBufSet );
+fflush ( pFile );
+// close;x=read('c:/temp/test.dat',-1,4);plot(x)
+//}
+*/
+
 
         // upper/lower hysteresis decision
         const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );

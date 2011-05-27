@@ -39,37 +39,45 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "size of this jitter buffer has therefore influence on the quality of "
         "the audio stream (how many dropouts occur) and the overall delay "
         "(the longer the buffer, the higher the delay).<br>"
-        "Dropouts in the audio stream are indicated by the light on the bottom "
-        "of the jitter buffer size fader. If the light turns to red, a buffer "
+        "The jitter buffer size can be manually chosen for the local client "
+        "and the remote server. For the local jitter buffer, dropouts in the "
+        "audio stream are indicated by the light on the bottom "
+        "of the jitter buffer size faders. If the light turns to red, a buffer "
         "overrun/underrun took place and the audio stream is interrupted.<br>"
         "The jitter buffer setting is therefore a trade-off between audio "
         "quality and overall delay.<br>"
         "An auto setting of the jitter buffer size setting is available. If "
-        "the check Auto is enabled, the jitter buffer is set automatically "
+        "the check Auto is enabled, the jitter buffers of the local client and "
+        "the remote server are set automatically "
         "based on measurements of the network and sound card timing jitter. If "
-        "the Auto check is enabled, the jitter buffer size fader is disabled "
-        "(it cannot be moved by the mouse)." );
+        "the <i>auto</i> check is enabled, the jitter buffer size faders are "
+        "disabled (they cannot be moved with the mouse)." );
 
-    QString strJitterBufferSizeTT = tr ( "In case the Auto setting of the "
-        "jitter buffer is enabled, the network buffer is set to a conservative "
+    QString strJitterBufferSizeTT = tr ( "In case the auto setting of the "
+        "jitter buffer is enabled, the network buffers of the local client and "
+        "the remote server are set to a conservative "
         "value to minimize the audio dropout probability. To <b>tweak the "
-        "audio delay/latency</b> it is recommended to disable the Auto "
+        "audio delay/latency</b> it is recommended to disable the auto setting "
         "functionality and to <b>lower the jitter buffer size manually</b> by "
-        "using the slider until your personal acceptable limit of the amount "
+        "using the sliders until your personal acceptable limit of the amount "
         "of dropouts is reached. The LED indicator will visualize the audio "
-        "dropouts by a red light" ) + TOOLTIP_COM_END_TEXT;
+        "dropouts of the local jitter buffer by a red light" ) +
+        TOOLTIP_COM_END_TEXT;
 
-    TextNetBuf->setWhatsThis         ( strJitterBufferSize );
-    TextNetBuf->setToolTip           ( strJitterBufferSizeTT );
-    grbJitterBuffer->setWhatsThis    ( strJitterBufferSize );
-    grbJitterBuffer->setToolTip      ( strJitterBufferSizeTT );
-    sldNetBuf->setWhatsThis          ( strJitterBufferSize );
-    sldNetBuf->setAccessibleName     ( tr ( "Jitter buffer slider control" ) );
-    sldNetBuf->setToolTip            ( strJitterBufferSizeTT );
-    chbAutoJitBuf->setAccessibleName ( tr ( "Auto jitter buffer switch" ) );
-    chbAutoJitBuf->setToolTip        ( strJitterBufferSizeTT );
-    ledNetw->setAccessibleName       ( tr ( "Jitter buffer status LED indicator" ) );
-    ledNetw->setToolTip              ( strJitterBufferSizeTT );
+    lblNetBuf->setWhatsThis            ( strJitterBufferSize );
+    lblNetBuf->setToolTip              ( strJitterBufferSizeTT );
+    grbJitterBuffer->setWhatsThis      ( strJitterBufferSize );
+    grbJitterBuffer->setToolTip        ( strJitterBufferSizeTT );
+    sldNetBuf->setWhatsThis            ( strJitterBufferSize );
+    sldNetBuf->setAccessibleName       ( tr ( "Local jitter buffer slider control" ) );
+    sldNetBuf->setToolTip              ( strJitterBufferSizeTT );
+    sldNetBufServer->setWhatsThis      ( strJitterBufferSize );
+    sldNetBufServer->setAccessibleName ( tr ( "Server jitter buffer slider control" ) );
+    sldNetBufServer->setToolTip        ( strJitterBufferSizeTT );
+    chbAutoJitBuf->setAccessibleName   ( tr ( "Auto jitter buffer switch" ) );
+    chbAutoJitBuf->setToolTip          ( strJitterBufferSizeTT );
+    ledNetw->setAccessibleName         ( tr ( "Jitter buffer status LED indicator" ) );
+    ledNetw->setToolTip                ( strJitterBufferSizeTT );
 
     // sound card device
     cbxSoundcard->setWhatsThis ( tr ( "<b>Sound Card Device:</b> The ASIO "
@@ -262,8 +270,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
 
     // init slider controls ---
-    // network buffer
-    sldNetBuf->setRange ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
+    // network buffer sliders
+    sldNetBuf->setRange       ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
+    sldNetBufServer->setRange ( MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL );
     UpdateJitterBufferFrame();
 
     // init combo box containing all available sound cards in the system
@@ -357,6 +366,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( sldNetBuf, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnNetBufValueChanged ( int ) ) );
 
+    QObject::connect ( sldNetBufServer, SIGNAL ( valueChanged ( int ) ),
+        this, SLOT ( OnNetBufServerValueChanged ( int ) ) );
+
     // check boxes
     QObject::connect ( chbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnOpenChatOnNewMessageStateChanged ( int ) ) );
@@ -416,12 +428,20 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
     // update slider value and text
     const int iCurNumNetBuf = pClient->GetSockBufNumFrames();
     sldNetBuf->setValue ( iCurNumNetBuf );
-    TextNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
+    lblNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
+
+    const int iCurNumNetBufServer = pClient->GetServerSockBufNumFrames();
+    sldNetBufServer->setValue ( iCurNumNetBufServer );
+    lblNetBufServer->setText ( "Size: " + QString().setNum ( iCurNumNetBufServer ) );
 
     // if auto setting is enabled, disable slider control
-    chbAutoJitBuf->setChecked (  pClient->GetDoAutoSockBufSize() );
-    sldNetBuf->setEnabled     ( !pClient->GetDoAutoSockBufSize() );
-    TextNetBuf->setEnabled    ( !pClient->GetDoAutoSockBufSize() );
+    chbAutoJitBuf->setChecked        (  pClient->GetDoAutoSockBufSize() );
+    sldNetBuf->setEnabled            ( !pClient->GetDoAutoSockBufSize() );
+    lblNetBuf->setEnabled            ( !pClient->GetDoAutoSockBufSize() );
+    lblNetBufLabel->setEnabled       ( !pClient->GetDoAutoSockBufSize() );
+    sldNetBufServer->setEnabled      ( !pClient->GetDoAutoSockBufSize() );
+    lblNetBufServer->setEnabled      ( !pClient->GetDoAutoSockBufSize() );
+    lblNetBufServerLabel->setEnabled ( !pClient->GetDoAutoSockBufSize() );
 }
 
 QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int iFrameSize,
@@ -547,6 +567,12 @@ void CClientSettingsDlg::OnDriverSetupClicked()
 void CClientSettingsDlg::OnNetBufValueChanged ( int value )
 {
     pClient->SetSockBufNumFrames ( value, true );
+    UpdateJitterBufferFrame();
+}
+
+void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
+{
+    pClient->SetServerSockBufNumFrames ( value );
     UpdateJitterBufferFrame();
 }
 

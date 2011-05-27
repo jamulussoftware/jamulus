@@ -662,6 +662,11 @@ void CServer::OnTimer()
             Socket.SendPacket (
                 vecChannels[iCurChanID].PrepSendPacket ( vecCeltData ),
                 vecChannels[iCurChanID].GetAddress() );
+
+            // update socket buffer size
+            vecChannels[iCurChanID].UpdateSocketBufferSize (
+                SYSTEM_BLOCK_DURATION_MS_FLOAT,
+                CycleTimeVariance.GetStdDev() );
         }
     }
     else

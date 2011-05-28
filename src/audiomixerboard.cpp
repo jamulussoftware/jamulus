@@ -122,37 +122,17 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
             "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
 
         // mute button
-        pcbMute->setStyleSheet (
-            "QCheckBox::indicator { width:  38px;"
-            "                       height: 21px; }"
-            "QCheckBox::indicator:unchecked {"
-            "    image: url(:/png/fader/res/ledbuttonnotpressed.png); }"
-            "QCheckBox::indicator:checked {"
-            "    image: url(:/png/fader/res/ledbuttonpressed.png); }"
-            "QCheckBox { color: rgb(148, 148, 148);"
-            "            font:  bold; }" );
         pcbMute->setText ( "MUTE" );
 
         // solo button
-        pcbSolo->setStyleSheet (
-            "QCheckBox::indicator { width:  38px;"
-            "                       height: 21px; }"
-            "QCheckBox::indicator:unchecked {"
-            "    image: url(:/png/fader/res/ledbuttonnotpressed.png); }"
-            "QCheckBox::indicator:checked {"
-            "    image: url(:/png/fader/res/ledbuttonpressed.png); }"
-            "QCheckBox { color: rgb(148, 148, 148);"
-            "            font:  bold; }" );
         pcbSolo->setText ( "SOLO" );
         break;
 
     default:
         // reset style sheet and set original paramters
-        pFader->setStyleSheet  ( "" );
-        pcbMute->setStyleSheet ( "" );
-        pcbSolo->setStyleSheet ( "" );
-        pcbMute->setText       ( "Mute" );
-        pcbSolo->setText       ( "Solo" );
+        pFader->setStyleSheet ( "" );
+        pcbMute->setText      ( "Mute" );
+        pcbSolo->setText      ( "Solo" );
         break;
     }
 }

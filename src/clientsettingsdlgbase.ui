@@ -237,6 +237,9 @@
            <property name="text" >
             <string>Driver Setup</string>
            </property>
+           <property name="autoDefault" >
+            <bool>false</bool>
+           </property>
           </widget>
          </item>
         </layout>

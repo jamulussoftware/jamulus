@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>345</width>
-    <height>338</height>
+    <height>382</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -427,6 +427,20 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="chbSettings" >
+          <property name="text" >
+           <string>Settings</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="chbChat" >
+          <property name="text" >
+           <string>Chat</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="lblServerTag" >
           <property name="sizePolicy" >
            <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
@@ -752,6 +766,8 @@
  <tabstops>
   <tabstop>butConnect</tabstop>
   <tabstop>edtFaderTag</tabstop>
+  <tabstop>chbChat</tabstop>
+  <tabstop>chbSettings</tabstop>
   <tabstop>sldAudioPan</tabstop>
   <tabstop>sldAudioReverb</tabstop>
   <tabstop>rbtReverbSelL</tabstop>

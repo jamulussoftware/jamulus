@@ -322,9 +322,16 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
 
     // Connections -------------------------------------------------------------
-    // push-buttons
+    // push buttons
     QObject::connect ( butConnect, SIGNAL ( clicked() ),
         this, SLOT ( OnConnectDisconBut() ) );
+
+    // check boxes
+    QObject::connect ( chbSettings, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnSettingsStateChanged ( int ) ) );
+
+    QObject::connect ( chbChat, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnChatStateChanged ( int ) ) );
 
     // timers
     QObject::connect ( &TimerSigMet, SIGNAL ( timeout() ),
@@ -497,16 +504,6 @@ void CLlconClientDlg::OnConnectDisconBut()
     ConnectDisconnect ( !pClient->IsRunning() );
 }
 
-void CLlconClientDlg::OnOpenGeneralSettings()
-{
-    // open general settings dialog
-    ClientSettingsDlg.show();
-
-    // make sure dialog is upfront and has focus
-    ClientSettingsDlg.raise();
-    ClientSettingsDlg.activateWindow();
-}
-
 void CLlconClientDlg::OnChatTextReceived ( QString strChatText )
 {
     // init flag (will maybe overwritten later in this function)
@@ -573,6 +570,16 @@ void CLlconClientDlg::SetMyWindowTitle ( const int iNumClients )
     }
 }
 
+void CLlconClientDlg::ShowGeneralSettings()
+{
+    // open general settings dialog
+    ClientSettingsDlg.show();
+
+    // make sure dialog is upfront and has focus
+    ClientSettingsDlg.raise();
+    ClientSettingsDlg.activateWindow();
+}
+
 void CLlconClientDlg::ShowChatWindow()
 {
     // open chat dialog
@@ -586,6 +593,30 @@ void CLlconClientDlg::ShowChatWindow()
     bUnreadChatMessage = false;
 
     UpdateDisplay();
+}
+
+void CLlconClientDlg::OnSettingsStateChanged ( int value )
+{
+    if ( value == Qt::Checked )
+    {
+        ShowGeneralSettings();
+    }
+    else
+    {
+        ClientSettingsDlg.hide();
+    }
+}
+
+void CLlconClientDlg::OnChatStateChanged ( int value )
+{
+    if ( value == Qt::Checked )
+    {
+        ShowChatWindow();
+    }
+    else
+    {
+        ChatDlg.hide();
+    }
 }
 
 void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
@@ -904,7 +935,15 @@ void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         font:           bold; }"
             "QRadioButton {           color:          rgb(148, 148, 148);"
             "                         font:           bold; }"
-            "QGroupBox::title {       color:          rgb(148, 148, 148); }" );
+            "QGroupBox::title {       color:          rgb(148, 148, 148); }"
+            "QCheckBox::indicator {   width:          38px;"
+            "                         height:         21px; }"
+            "QCheckBox::indicator:unchecked {"
+            "                         image:          url(:/png/fader/res/ledbuttonnotpressed.png); }"
+            "QCheckBox::indicator:checked {"
+            "                         image:          url(:/png/fader/res/ledbuttonpressed.png); }"
+            "QCheckBox {              color:          rgb(148, 148, 148);"
+            "                         font:           bold; }" );            
 
 #ifdef _WIN32
 // Workaround QT-Windows problem: This should not be necessary since in the

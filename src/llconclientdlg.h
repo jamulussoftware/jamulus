@@ -85,6 +85,7 @@ public:
 protected:
     void               SetGUIDesign ( const EGUIDesign eNewDesign );
     void               SetMyWindowTitle ( const int iNumClients );
+    void               ShowGeneralSettings();
     void               ShowChatWindow();
     void               UpdateAudioFaderSlider();
     void               UpdateRevSelection();
@@ -124,10 +125,12 @@ public slots:
     void OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
                                               int          iPingTime,
                                               int          iNumClients );
-    void OnOpenGeneralSettings();
 
-    void OnOpenChatDialog()
-        { ShowChatWindow(); }
+    void OnOpenGeneralSettings() { ShowGeneralSettings(); }
+    void OnOpenChatDialog() { ShowChatWindow(); }
+
+    void OnSettingsStateChanged ( int value );
+    void OnChatStateChanged ( int value );
 
     void OnAudioPanValueChanged ( int value );
 

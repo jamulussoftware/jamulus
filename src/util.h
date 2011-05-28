@@ -727,7 +727,7 @@ public:
     void Init ( const int iNewBlockLengthAtSystemSampleRate,
                 const int iNewSystemSampleRateHz,
                 const int iHistoryLengthTimeSec,
-                const int iNewNewValueBoundFactor = 4 )
+                const int iNewNewValueBoundFactor = 10 )
     {
         // store block size and new value bound factor
         iBlockLengthAtSystemSampleRate = iNewBlockLengthAtSystemSampleRate;

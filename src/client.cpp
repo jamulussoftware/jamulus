@@ -160,8 +160,8 @@ void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyData,
 void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )
 {
     // we received a jitter buffer size changed message from the server,
-    // only apply this value if auto jitter buffer size is disabled
-    if ( !GetDoAutoSockBufSize() )
+    // only apply this value if auto jitter buffer size is enabled
+    if ( GetDoAutoSockBufSize() )
     {
         // Note: Do not use the "SetServerSockBufNumFrames" function for setting
         // the new server jitter buffer size since then a message would be sent

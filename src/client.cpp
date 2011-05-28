@@ -946,15 +946,8 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     // update response time measurement
     CycleTimeVariance.Update();
 
-    // calculate current buffer setting
-    const double dAudioBufferDurationMs =
-        static_cast<double> ( GetSndCrdActualMonoBlSize() +
-                              GetSndCrdConvBufAdditionalDelayMonoBlSize() ) *
-        1000 / SYSTEM_SAMPLE_RATE_HZ;
-
     // update socket buffer size
-    Channel.UpdateSocketBufferSize ( dAudioBufferDurationMs,
-                                     CycleTimeVariance.GetStdDev() );
+    Channel.UpdateSocketBufferSize ( CycleTimeVariance.GetStdDev() );
 }
 
 int CClient::EstimatedOverallDelay ( const int iPingTimeMs )

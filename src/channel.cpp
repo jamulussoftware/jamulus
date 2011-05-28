@@ -359,6 +359,9 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
 
         // init conversion buffer
         ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+
+        // reset statistic
+        CycleTimeVariance.Reset();
     }
 }
 
@@ -605,8 +608,7 @@ int CChannel::GetUploadRateKbps()
         SYSTEM_SAMPLE_RATE_HZ / iAudioSizeOut / 1000;
 }
 
-void CChannel::UpdateSocketBufferSize ( const double dAudioBufferDurationMs,
-                                        const double dLocalStdDev )
+void CChannel::UpdateSocketBufferSize ( const double dLocalStdDev )
 {
     // just update the socket buffer size if auto setting is enabled, otherwise
     // do nothing
@@ -631,7 +633,7 @@ void CChannel::UpdateSocketBufferSize ( const double dAudioBufferDurationMs,
         // add 0.5 to "round up" -> ceil,
         // divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
         // one block in the jitter buffer
-        const double dEstCurBufSet = ( dAudioBufferDurationMs +
+        const double dEstCurBufSet = ( SYSTEM_BLOCK_DURATION_MS_FLOAT +
             3.3 * ( CycleTimeVariance.GetStdDev() + dLocalStdDev ) ) /
             SYSTEM_BLOCK_DURATION_MS_FLOAT + 0.5;
 

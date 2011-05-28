@@ -717,8 +717,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>chbAutoJitBuf</tabstop>
-  <tabstop>sldNetBuf</tabstop>
   <tabstop>cbxSoundcard</tabstop>
   <tabstop>cbxLInChan</tabstop>
   <tabstop>cbxRInChan</tabstop>
@@ -728,6 +726,9 @@
   <tabstop>rbtBufferDelayDefault</tabstop>
   <tabstop>rbtBufferDelaySafe</tabstop>
   <tabstop>butDriverSetup</tabstop>
+  <tabstop>chbAutoJitBuf</tabstop>
+  <tabstop>sldNetBuf</tabstop>
+  <tabstop>sldNetBufServer</tabstop>
   <tabstop>chbOpenChatOnNewMessage</tabstop>
   <tabstop>chbGUIDesignFancy</tabstop>
   <tabstop>chbUseHighQualityAudio</tabstop>

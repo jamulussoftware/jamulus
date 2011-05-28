@@ -679,7 +679,6 @@ void CServer::OnTimer()
 
             // update socket buffer size
             vecChannels[iCurChanID].UpdateSocketBufferSize (
-                SYSTEM_BLOCK_DURATION_MS_FLOAT,
                 CycleTimeVariance.GetStdDev() );
         }
     }

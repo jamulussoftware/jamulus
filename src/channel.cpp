@@ -647,7 +647,6 @@ fflush ( pFile );
 //}
 */
 
-
         // upper/lower hysteresis decision
         const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );
         const int iLowerHystDec = LlconMath().round ( dEstCurBufSet + dHysteresis );

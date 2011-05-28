@@ -183,6 +183,8 @@ signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
     void NewConnection();
     void ReqJittBufSize();
+    void JittBufSizeChanged ( int iNewJitBufSize );
+    void ServerAutoSockBufSizeChange ( int iNNumFra );
     void ReqConnClientsList();
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
     void NameHasChanged();

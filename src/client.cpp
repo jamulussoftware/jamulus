@@ -91,6 +91,9 @@ CClient::CClient ( const quint16 iPortNumber ) :
     QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
         this, SLOT ( OnReqJittBufSize() ) );
 
+    QObject::connect ( &Channel, SIGNAL ( JittBufSizeChanged ( int ) ),
+        this, SLOT ( OnJittBufSizeChanged ( int ) ) );
+
     QObject::connect ( &Channel, SIGNAL ( ReqChanName() ),
         this, SLOT ( OnReqChanName() ) );
 
@@ -152,6 +155,19 @@ void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyData,
     ConnLessProtocol.ParseConnectionLessMessage ( vecbyData,
                                                   iNumBytes,
                                                   Channel.GetAddress() );
+}
+
+void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )
+{
+    // we received a jitter buffer size changed message from the server,
+    // only apply this value if auto jitter buffer size is disabled
+    if ( !GetDoAutoSockBufSize() )
+    {
+        // Note: Do not use the "SetServerSockBufNumFrames" function for setting
+        // the new server jitter buffer size since then a message would be sent
+        // to the server which is incorrect.
+        iServerSockBufNumFrames = iNewJitBufSize;
+    }
 }
 
 void CClient::OnNewConnection()
@@ -229,15 +245,11 @@ int CClient::EvaluatePingMessage ( const int iMs )
 
 void CClient::SetDoAutoSockBufSize ( const bool bValue )
 {
-    // only act on new parameter if it is different from the current one
-    if ( Channel.GetDoAutoSockBufSize() != bValue )
-    {
-        // first, set new value in the channel object
-        Channel.SetDoAutoSockBufSize ( bValue );
+    // first, set new value in the channel object
+    Channel.SetDoAutoSockBufSize ( bValue );
 
-        // inform the server about the change
-        CreateServerJitterBufferMessage();
-    }
+    // inform the server about the change
+    CreateServerJitterBufferMessage();
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )

@@ -188,10 +188,7 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
                 // this would give us problems with different threads (e.g. the
                 // timer thread) and the protocol mechanism (problem with
                 // qRegisterMetaType(), etc.)
-
-// TODO create new message, this one only works for client...
-//emit ReqJittBufSize();
-
+                emit ServerAutoSockBufSizeChange ( iNewNumFrames );
             }
 
             return false; // -> no error
@@ -295,16 +292,24 @@ void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 
 void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
 {
-    // first check for special case: auto setting
-    if ( iNewJitBufSize == AUTO_NET_BUF_SIZE_FOR_PROTOCOL )
+    // for server apply setting, for client emit message
+    if ( bIsServer )
     {
-        SetDoAutoSockBufSize ( true );
+        // first check for special case: auto setting
+        if ( iNewJitBufSize == AUTO_NET_BUF_SIZE_FOR_PROTOCOL )
+        {
+            SetDoAutoSockBufSize ( true );
+        }
+        else
+        {
+            // manual setting is received, turn OFF auto setting and apply new value
+            SetDoAutoSockBufSize ( false );
+            SetSockBufNumFrames ( iNewJitBufSize, true );
+        }
     }
     else
     {
-        // manual setting is received, turn OFF auto setting and apply new value
-        SetDoAutoSockBufSize ( false );
-        SetSockBufNumFrames ( iNewJitBufSize, true );
+        emit JittBufSizeChanged ( iNewJitBufSize );
     }
 }
 

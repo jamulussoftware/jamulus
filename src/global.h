@@ -116,7 +116,7 @@ LED bar:      lbr
 // minimum/maximum network buffer size (which can be chosen by slider)
 #define MIN_NET_BUF_SIZE_NUM_BL         1  // number of blocks
 #define MAX_NET_BUF_SIZE_NUM_BL         20 // number of blocks
-#define AUTO_NET_BUF_SIZE_FOR_PROTOCOL  -1 // auto set parameter (only used for protocol)
+#define AUTO_NET_BUF_SIZE_FOR_PROTOCOL  ( MAX_NET_BUF_SIZE_NUM_BL + 1 ) // auto set parameter (only used for protocol)
 
 // default network buffer size
 #define DEF_NET_BUF_SIZE_NUM_BL         10 // number of blocks

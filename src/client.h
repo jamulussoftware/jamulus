@@ -328,6 +328,7 @@ public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnDetectedCLMessage ( CVector<uint8_t> vecbyData, int iNumBytes );
     void OnReqJittBufSize() { CreateServerJitterBufferMessage(); }
+    void OnJittBufSizeChanged ( int iNewJitBufSize );
     void OnReqChanName() { Channel.SetRemoteName ( strName ); }
     void OnNewConnection();
     void OnCLPingReceived ( CHostAddress InetAddr,

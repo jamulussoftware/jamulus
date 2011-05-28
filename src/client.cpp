@@ -172,10 +172,12 @@ void CClient::OnNewConnection()
 
 void CClient::CreateServerJitterBufferMessage()
 {
-    // in case auto jitter buffer size is enabled, we have to transmit a
-    // special value
+    // per definition in the client: if auto jitter buffer is enabled, both,
+    // the client and server shall use an auto jitter buffer
     if ( GetDoAutoSockBufSize() )
     {
+        // in case auto jitter buffer size is enabled, we have to transmit a
+        // special value
         Channel.CreateJitBufMes ( AUTO_NET_BUF_SIZE_FOR_PROTOCOL );
     }
     else
@@ -223,6 +225,19 @@ int CClient::EvaluatePingMessage ( const int iMs )
 {
     // calculate difference between received time in ms and current time in ms
     return PreciseTime.elapsed() - iMs;
+}
+
+void CClient::SetDoAutoSockBufSize ( const bool bValue )
+{
+    // only act on new parameter if it is different from the current one
+    if ( Channel.GetDoAutoSockBufSize() != bValue )
+    {
+        // first, set new value in the channel object
+        Channel.SetDoAutoSockBufSize ( bValue );
+
+        // inform the server about the change
+        CreateServerJitterBufferMessage();
+    }
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )

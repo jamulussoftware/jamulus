@@ -132,9 +132,7 @@ public:
         AudioReverbR.Clear();
     }
 
-    void SetDoAutoSockBufSize ( const bool bValue )
-        { Channel.SetDoAutoSockBufSize ( bValue ); }
-
+    void SetDoAutoSockBufSize ( const bool bValue );
     bool GetDoAutoSockBufSize() const { return Channel.GetDoAutoSockBufSize(); }
 
     void SetSockBufNumFrames ( const int  iNumBlocks,

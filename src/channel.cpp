@@ -203,20 +203,20 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
 
 void CChannel::SetDoAutoSockBufSize ( const bool bValue )
 {
-    // in case auto socket buffer size was just enabled, reset statistic and in
-    // case of the client, inform the server about the change
-    if ( ( bDoAutoSockBufSize != bValue ) && bValue )
+    QMutexLocker locker ( &Mutex );
+
+    // only act on new value if it is different from the current one
+    if ( bDoAutoSockBufSize != bValue )
     {
-        CycleTimeVariance.Reset();
-
-        if ( !bIsServer )
+        if ( bValue )
         {
-            CreateJitBufMes ( AUTO_NET_BUF_SIZE_FOR_PROTOCOL );
+            // in case auto socket buffer size was just enabled, reset statistic
+            CycleTimeVariance.Reset();
         }
-    }
 
-    // store new setting
-    bDoAutoSockBufSize = bValue;
+        // store new setting
+        bDoAutoSockBufSize = bValue;
+    }
 }
 
 void CChannel::SetGain ( const int    iChanID,
@@ -302,6 +302,8 @@ void CChannel::OnJittBufSizeChange ( int iNewJitBufSize )
     }
     else
     {
+        // manual setting is received, turn OFF auto setting and apply new value
+        SetDoAutoSockBufSize ( false );
         SetSockBufNumFrames ( iNewJitBufSize, true );
     }
 }

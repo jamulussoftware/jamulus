@@ -117,8 +117,7 @@ public slots:
     void OnConnectDisconBut();
     void OnTimerSigMet();
 
-    void OnTimerStatus()
-        { UpdateDisplay(); }
+    void OnTimerStatus() { UpdateDisplay(); }
 
     void OnTimerPing();
     void OnPingTimeResult ( int iPingTime );

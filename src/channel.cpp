@@ -626,7 +626,7 @@ void CChannel::UpdateSocketBufferSize ( const double dLocalStdDev )
         //   completely filled
         // - we need at least a jitter buffer size of the audio packet duration
         //   -> add audio buffer duration
-        const double dHysteresis = 0.3;
+        const double dHysteresis = 0.2;
 
         // accumulate the standard deviations of input network stream and
         // internal timer,

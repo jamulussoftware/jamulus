@@ -915,6 +915,33 @@ void CLlconClientDlg::UpdateDisplay()
             ledConnection->SetLight ( MUL_COL_LED_RED );
         }
     }
+
+    // update settings/chat buttons (do not fire signals since it is an update)
+    if ( chbSettings->isChecked() && !ClientSettingsDlg.isVisible() )
+    {
+        chbSettings->blockSignals ( true );
+        chbSettings->setChecked   ( false );
+        chbSettings->blockSignals ( false );
+    }
+    if ( !chbSettings->isChecked() && ClientSettingsDlg.isVisible() )
+    {
+        chbSettings->blockSignals ( true );
+        chbSettings->setChecked   ( true );
+        chbSettings->blockSignals ( false );
+    }
+
+    if ( chbChat->isChecked() && !ChatDlg.isVisible() )
+    {
+        chbChat->blockSignals ( true );
+        chbChat->setChecked   ( false );
+        chbChat->blockSignals ( false );
+    }
+    if ( !chbChat->isChecked() && ChatDlg.isVisible() )
+    {
+        chbChat->blockSignals ( true );
+        chbChat->setChecked   ( true );
+        chbChat->blockSignals ( false );
+    }
 }
 
 void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )

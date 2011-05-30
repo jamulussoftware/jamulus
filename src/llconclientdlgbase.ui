@@ -449,7 +449,7 @@
            </sizepolicy>
           </property>
           <property name="text" >
-           <string>Fader Tag</string>
+           <string>Your Alias/Instrument</string>
           </property>
           <property name="wordWrap" >
            <bool>false</bool>

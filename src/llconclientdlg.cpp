@@ -94,12 +94,13 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "and disconnecting the llcon software." ) );
 
     // fader tag
-    QString strFaderTag = tr ( "<b>Fader Tag:</b> The fader tag of the local "
-        "client is set in the fader tag edit box. This tag will appear "
-        "at your fader on the mixer board when you are connected to a llcon "
-        "server. This tag will also show up at each client which is connected "
-        "to the same server as the local client. If the fader tag is empty, "
-        "the IP address of the client is displayed instead." );
+    QString strFaderTag = tr ( "<b>Your Alias/Instrument:</b> Set your name "
+        "or an alias here so that the other musicians you want to play with "
+        "know who you are. Additionally you may enter the instrument you play. "
+        "What you set here will appear at your fader on the mixer board when "
+        "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
+        "also show up at each client which is connected to the same server as "
+        "you. If the fader tag is empty, the IP address is shown instead." );
 
     QString strFaderTagTT = tr ( "Set your name and/or instrument and/or "
         "pseoudonym here so that the other musicians can identify you." ) +

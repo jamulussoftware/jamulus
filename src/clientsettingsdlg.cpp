@@ -82,22 +82,24 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // sound card device
     cbxSoundcard->setWhatsThis ( tr ( "<b>Sound Card Device:</b> The ASIO "
         "driver (sound card) can be selected using llcon under the Windows "
-        "operating system. Under Linux, no sound card selection is possible "
-        "(always wave mapper is shown and cannot be changed). If the selected "
-        "ASIO driver is not valid an error message is shown and the previous "
-        "valid driver is selected.<br>"
+        "operating system. Under MacOS/Linux, no sound card selection is "
+        "possible. If the selected ASIO driver is not valid an error message "
+        "is shown and the previous valid driver is selected.<br>"
         "If the driver is selected during an active connection, the connection "
         "is stopped, the driver is changed and the connection is started again "
         "automatically." ) );
 
     cbxSoundcard->setAccessibleName ( tr ( "Sound card device selector combo box" ) );
 
+#ifdef _WIN32
+    // set Windows specific tool tip
     cbxSoundcard->setToolTip ( tr ( "In case the <b>ASIO4ALL</b> driver is used, "
         "please note that this driver usually introduces approx. 10-30 ms of "
         "additional audio delay. Using a sound card with a native ASIO driver "
         "is therefore recommended.<br>If you are using the <b>kX ASIO</b> "
         "driver, make sure to connect the ASIO inputs in the kX DSP settings "
         "panel." ) + TOOLTIP_COM_END_TEXT );
+#endif
 
     // sound card input/output channel mapping
     QString strSndCrdChanMapp = tr ( "<b>Sound Card Channel Mapping:</b> "
@@ -171,7 +173,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // open chat on new message
     chbOpenChatOnNewMessage->setWhatsThis ( tr ( "<b>Open Chat on New "
-        "Message:</b> If this checkbox is enabled, the chat window will "
+        "Message:</b> If enabled, the chat window will "
         "open on any incoming chat text if it not already opened." ) );
 
     chbOpenChatOnNewMessage->setAccessibleName ( tr ( "Open chat on new "
@@ -181,10 +183,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "is disabled, a LED in the main window turns green when a "
         "new message has arrived." ) + TOOLTIP_COM_END_TEXT );
 
+    // fancy skin
+    chbGUIDesignFancy->setWhatsThis ( tr ( "<b>Fancy Skin:</b> If enabled, "
+        "a fancy skin will be applied to the main window." ) );
+
+    chbGUIDesignFancy->setAccessibleName ( tr ( "Fancy skin check box" ) );
+
     // use high quality audio
-    chbUseHighQualityAudio->setWhatsThis ( tr ( "<b>Use High Quality Audio</b> "
-        "Enabling ""Use High Quality Audio"" will improve the audio quality "
-        "by increasing the stream data rate. Make sure that the current "
+    chbUseHighQualityAudio->setWhatsThis ( tr ( "<b>Use High Quality Audio:</b> "
+        "If enabled, it will improve the audio quality "
+        "by increasing the audio stream data rate. Make sure that the current "
         "upload rate does not exceed the available bandwidth of your "
         "internet connection." ) );
 
@@ -251,14 +259,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 #ifdef _WIN32
     butDriverSetup->setText ( "ASIO Setup" );
 #else
-    // no use for this button for Linux right now, maybe later used
-    // for Jack
+    // no use for this button for MacOS/Linux right now -> hide it
     butDriverSetup->hide();
+#endif
 
-    // for Jack interface, we cannot choose the audio hardware from
-    // within the llcon software, hide the combo box
-    lblSoundcardDevice->hide();
-    cbxSoundcard->hide();
+    // set sound card selection to read-only for MacOS/Linux
+#ifndef _WIN32
+    cbxSoundcard->setEnabled ( false );
 #endif
 
     // init delay and other information controls

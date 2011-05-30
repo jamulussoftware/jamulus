@@ -499,7 +499,7 @@
       <item>
        <widget class="QCheckBox" name="chbGUIDesignFancy" >
         <property name="text" >
-         <string>Fancy GUI Design</string>
+         <string>Fancy Skin</string>
         </property>
        </widget>
       </item>
@@ -587,12 +587,6 @@
             <height>20</height>
            </size>
           </property>
-          <property name="frameShape" >
-           <enum>QFrame::Panel</enum>
-          </property>
-          <property name="frameShadow" >
-           <enum>QFrame::Sunken</enum>
-          </property>
           <property name="text" >
            <string>val</string>
           </property>
@@ -633,12 +627,6 @@
               <weight>75</weight>
               <bold>true</bold>
              </font>
-            </property>
-            <property name="frameShape" >
-             <enum>QFrame::Panel</enum>
-            </property>
-            <property name="frameShadow" >
-             <enum>QFrame::Sunken</enum>
             </property>
             <property name="text" >
              <string>val</string>
@@ -693,12 +681,6 @@
             <weight>75</weight>
             <bold>true</bold>
            </font>
-          </property>
-          <property name="frameShape" >
-           <enum>QFrame::Panel</enum>
-          </property>
-          <property name="frameShadow" >
-           <enum>QFrame::Sunken</enum>
           </property>
           <property name="text" >
            <string>val</string>

@@ -66,6 +66,10 @@ public:
     virtual void Start();
     virtual void Stop();
 
+    // device cannot be set under Linux
+    virtual int     GetNumDev()                 { return 1; }
+    virtual QString GetDeviceName ( const int ) { return "Jack"; }
+
     // these variables should be protected but cannot since we want
     // to access them from the callback function
     CVector<short> vecsTmpAudioSndCrdStereo;

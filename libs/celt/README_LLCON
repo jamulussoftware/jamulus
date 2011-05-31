@@ -6,3 +6,36 @@ Basically the files in celt-0.6.1/libcelt are used.
 Changes made to libcelt to be compatible to llcon:
 
 - replaced all "restricted" by "__restricted" and all "inline" by "__inline"
+
+
+----------------------------------------------------------------------------------
+Attempt to use newer version failed due to the following reasons:
+
+- Audio artifacts with high frequency sine waves is still present.
+- PLC seems not to work better than the old version (maybe the integration in llcon
+  was not correct and caused the behaviour).
+- No bit stream compatibility to the old version of CELT previously used in llcon.
+
+INTEGRATION ATTEMPT OF VERSION 0.11.1 -> LOG
+
+The CELT library version 0.11.1 is used.
+
+Basically the files in celt-0.11.1/libcelt are used.
+
+NOTE That "static_modes_fixed.c", "dump_modes.c", "testcelt.c" must not be included in the project.
+
+NOTE For debugging, the function "ec_bsr" must be removed in "ecintrin.h"
+
+Changes made to libcelt to be compatible to llcon:
+
+- replaced all "restricted" by "__restricted" and all "inline" by "__inline"
+
+- moved static definitions of "eband5ms" and "band_allocation" from "modes.c" at the
+  beginning of "static_modes_float.c"
+
+INTEGRATION in the llcon software:
+- celt_mode_create: The number of channels parameter must be removed
+- celt_encoder_create -> celt_encoder_create_custom with additional parameter number of channels
+- celt_decode: Additional parameter: frame size (always SYSTEM_FRAME_SIZE_SAMPLES for llcon)
+- celt_encode: The NULL parmeter must be replaced by the frame size (always SYSTEM_FRAME_SIZE_SAMPLES for llcon)
+- CUSTOM_MODES preprocessor macro must be defined

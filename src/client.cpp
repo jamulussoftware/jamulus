@@ -595,7 +595,7 @@ void CClient::Init()
     vecdAudioStereo.Init     ( iStereoBlockSizeSam );
 
     // init response time evaluation
-    CycleTimeVariance.Init ( iMonoBlockSizeSam,
+    CycleTimeVariance.Init ( SYSTEM_FRAME_SIZE_SAMPLES,
         SYSTEM_SAMPLE_RATE_HZ, TIME_MOV_AV_RESPONSE_SECONDS );
 
     CycleTimeVariance.Reset();

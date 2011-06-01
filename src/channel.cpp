@@ -151,10 +151,7 @@ void CChannel::SetAudioStreamProperties ( const int iNewNetwFrameSize,
     // init conversion buffer
     ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
 
-    // initialize and reset cycle time variance measurement
-    CycleTimeVariance.Init ( iNetwFrameSizeFact * SYSTEM_FRAME_SIZE_SAMPLES,
-        SYSTEM_SAMPLE_RATE_HZ, TIME_MOV_AV_RESPONSE_SECONDS );
-
+    // reset cycle time variance measurement
     CycleTimeVariance.Reset();
 
     // tell the server that audio coding has changed
@@ -641,9 +638,9 @@ void CChannel::UpdateSocketBufferSize ( const double dLocalStdDev )
 // TEST
 //if (bIsServer) {
 static FILE* pFile = fopen ( "c:\\temp\\test.dat", "w" );
-fprintf ( pFile, "%e %e %e %e\n", CycleTimeVariance.GetStdDev(), dLocalStdDev, dAudioBufferDurationMs, dEstCurBufSet );
+fprintf ( pFile, "%e %e %e\n", CycleTimeVariance.GetStdDev(), dLocalStdDev, dEstCurBufSet );
 fflush ( pFile );
-// close;x=read('c:/temp/test.dat',-1,4);plot(x)
+// close;x=read('c:/temp/test.dat',-1,3);plot(x)
 //}
 */
 

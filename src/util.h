@@ -727,7 +727,7 @@ public:
     void Init ( const int iNewBlockLengthAtSystemSampleRate,
                 const int iNewSystemSampleRateHz,
                 const int iHistoryLengthTimeSec,
-                const int iNewNewValueBoundFactor = 10 )
+                const int iNewNewValueBoundFactor = MAX_NET_BUF_SIZE_NUM_BL )
     {
         // store block size and new value bound factor
         iBlockLengthAtSystemSampleRate = iNewBlockLengthAtSystemSampleRate;
@@ -759,6 +759,14 @@ public:
         // is correct at the block period time)
         const double dCurAddVal =
             static_cast<double> ( CurTime - TimeLastBlock ) - dIntervalTime;
+
+/*
+// TEST
+static FILE* pFile = fopen ( "c:\\temp\\test.dat", "w" );
+fprintf ( pFile, "%e %e\n", dCurAddVal, iNewValueBoundFactor * dIntervalTime );
+fflush ( pFile );
+// close;x=read('c:/temp/test.dat',-1,2);plot(x)
+*/
 
         if ( iNewValueBoundFactor > 0 )
         {

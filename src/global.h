@@ -81,7 +81,7 @@ LED bar:      lbr
 #define LLCON_DOWNLOAD_URL              "http://sourceforge.net/projects/llcon/files"
 
 // defined port number for client and server
-#define LLCON_DEFAULT_PORT_NUMBER       22122
+#define LLCON_DEFAULT_PORT_NUMBER       22124
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ           48000 // Hz

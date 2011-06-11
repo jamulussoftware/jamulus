@@ -31,13 +31,8 @@
 
 /* Definitions ****************************************************************/
 // each regular buffer access lead to a count for put and get, assuming 2.33 ms
-// blocks we have 30 s / 2.33 ms * 2 = 25714
-//#define MAX_STATISTIC_COUNT                 25714
-
-// TEST
-// 7 / 0.00266 * 2 = 5263.1579
-#define MAX_STATISTIC_COUNT 3759
-
+// blocks we have 5 * 60 s / 2.33 ms * 2 = 22500
+#define MAX_STATISTIC_COUNT                 225000
 
 // number of simulation network jitter buffers for evaluating the statistic
 #define NUM_STAT_SIMULATION_BUFFERS         13

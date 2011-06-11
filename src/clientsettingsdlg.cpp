@@ -271,9 +271,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // init delay and other information controls
     ledOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME_MS );
     ledOverallDelay->Reset();
-    lblPingTimeValue->setText     ( "" );
-    lblOverallDelayValue->setText ( "" );
-    lblUpstreamValue->setText     ( "" );
+    lblPingTimeValue->setText     ( "---" );
+    lblOverallDelayValue->setText ( "---" );
+    lblUpstreamValue->setText     ( "---" );
 
 
     // init slider controls ---
@@ -350,8 +350,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         ", preferred" ) );
 
     rbtBufferDelayDefault->setText ( GenSndCrdBufferDelayString (
-        FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES,
-        ", default" ) );
+        FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES ) );
 
     rbtBufferDelaySafe->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES ) );
@@ -741,9 +740,9 @@ void CClientSettingsDlg::UpdateDisplay()
     if ( !pClient->IsRunning() )
     {
         // clear text labels with client parameters
-        lblPingTimeValue->setText     ( "" );
-        lblOverallDelayValue->setText ( "" );
-        lblUpstreamValue->setText     ( "" );
+        lblPingTimeValue->setText     ( "---" );
+        lblOverallDelayValue->setText ( "---" );
+        lblUpstreamValue->setText     ( "---" );
     }
     else
     {

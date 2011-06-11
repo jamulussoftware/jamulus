@@ -132,6 +132,11 @@ public:
 
     void CreateNetTranspPropsMessFromCurrentSettings();
 
+
+// TEST
+void StoreAllSimAverages() { SockBuf.StoreAllSimAverages(); }
+
+
 protected:
     bool ProtocolIsEnabled(); 
 
@@ -145,7 +150,7 @@ protected:
     CVector<double>     vecdGains;
 
     // network jitter-buffer
-    CNetBuf             SockBuf;
+    CNetBufWithStats    SockBuf;
     int                 iCurSockBufNumFrames;
     bool                bDoAutoSockBufSize;
 

@@ -1218,25 +1218,6 @@ void CServer::WriteHTMLChannelList()
     streamFileOut << "</ul>" << endl;
 }
 
-bool CServer::GetTimingStdDev ( double& dCurTiStdDev )
-{
-    dCurTiStdDev = 0.0; // init return value
-
-    // only return value if server is active and the actual measurement is
-    // updated
-    if ( IsRunning() )
-    {
-        // return the standard deviation
-        dCurTiStdDev = CycleTimeVariance.GetStdDev();
-
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 void CServer::customEvent ( QEvent* pEvent )
 {
     if ( pEvent->type() == QEvent::User + 11 )

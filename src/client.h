@@ -92,8 +92,6 @@ public:
     double MicLevelR() { return SignalLevelMeter.MicLevelRight(); }
     bool   IsConnected() { return Channel.IsConnected(); }
 
-    double GetTimingStdDev() { return CycleTimeVariance.GetStdDev(); }
-
     bool GetOpenChatOnNewMessage() const { return bOpenChatOnNewMessage; }
     void SetOpenChatOnNewMessage ( const bool bNV ) { bOpenChatOnNewMessage = bNV; }
 

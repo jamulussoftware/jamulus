@@ -60,7 +60,7 @@ LED bar:      lbr
 
 // version and application name (always use this version)
 #undef VERSION
-#define VERSION                         "4.0.0cvs"
+#define VERSION                         "3.2.0cvs"
 #define APP_NAME                        "llcon"
 
 // Windows registry key name of auto run entry for the server

@@ -255,20 +255,25 @@ template<class TData> void CFIFO<TData>::Add ( const TData tNewD )
 template<class TData> class CMovingAv : public CVector<TData>
 {
 public:
-    CMovingAv() : CVector<TData>(), iCurIdx ( 0 ), iNorm ( 0 ),
-        tCurAvResult ( TData ( 0 ) ) {}
-    CMovingAv ( const int iNeSi ) : CVector<TData> ( iNeSi ), iCurIdx ( 0 ),
-        iNorm ( 0 ), tCurAvResult ( TData ( 0 ) ) {}
-    CMovingAv ( const int iNeSi, const TData tInVa ) :
-        CVector<TData> ( iNeSi, tInVa ), iCurIdx ( 0 ), iNorm ( 0 ),
-        tCurAvResult ( TData ( 0 ) ) {}
+    CMovingAv() :
+        CVector<TData>(),
+        iCurIdx ( 0 ),
+        iNorm ( 0 ),
+        tCurAvResult ( TData ( 0 ) ),
+        tNoDataResult ( TData ( 0 ) ) {}
 
     void Add ( const TData tNewD );
+    
+    void Init ( const int iNewSize,
+                const TData tNNoDRes = TData ( 0 ) );
+
+    void Reset();
+
     inline TData GetAverage()
     {
         if ( this->iNorm == 0 )
         {
-            return TData ( 0 );
+            return tNoDataResult;
         }
         else
         {
@@ -276,22 +281,22 @@ public:
         }
     }
 
-    virtual void Init ( const int iNewSize );
-    void InitVec ( const int iNewSize, const int iNewVecSize );
-    void Reset();
     bool IsInitialized() { return ( this->iNorm == this->iVectorSize ); }
 
 protected:
-    int     iCurIdx;
-    int     iNorm;
-    TData   tCurAvResult;
+    int   iCurIdx;
+    int   iNorm;
+    TData tCurAvResult;
+    TData tNoDataResult;
 };
 
-template<class TData> void CMovingAv<TData>::Init ( const int iNewSize )
+template<class TData> void CMovingAv<TData>::Init ( const int   iNewSize,
+                                                    const TData tNNoDRes )
 {
-    iNorm        = 0;
-    iCurIdx      = 0;
-    tCurAvResult = TData ( 0 ); // only for scalars!
+    iNorm         = 0;
+    iCurIdx       = 0;
+    tCurAvResult  = TData ( 0 ); // only for scalars!
+    tNoDataResult = tNNoDRes;
     CVector<TData>::Init ( iNewSize );
 }
 
@@ -768,18 +773,11 @@ fflush ( pFile );
 // close;x=read('c:/temp/test.dat',-1,2);plot(x)
 */
 
-        if ( iNewValueBoundFactor > 0 )
+        // check if new value is in range (lower and upper bound)
+        if ( ( fabs ( dCurAddVal ) <= ( iNewValueBoundFactor * dIntervalTime ) ) )// &&
+//             ( fabs ( dCurAddVal ) >= dIntervalTime ) )
         {
-            // check if new value is in range
-            if ( fabs ( dCurAddVal ) < ( iNewValueBoundFactor * dIntervalTime ) )
-            {
-                // add squared value
-                RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal );
-            }
-        }
-        else
-        {
-            // new value bound is not used, add new value (add squared value)
+            // add squared value
             RespTimeMoAvBuf.Add ( dCurAddVal * dCurAddVal );
         }
 
@@ -802,6 +800,63 @@ protected:
     int               iBlockLengthAtSystemSampleRate;
     double            dIntervalTime;
     int               iNewValueBoundFactor;
+};
+
+
+// Error rate measurement ------------------------------------------------------
+class CErrorRate
+{
+public:
+    CErrorRate() {}
+
+    void Init ( const int  iHistoryLength,
+                const bool bNBlockOnDoubleErr = false )
+    {
+        // initialize buffer (use "no data result" of 1.0 which stands for the
+        // worst error rate possible)
+        ErrorsMovAvBuf.Init ( iHistoryLength, 1.0f );
+
+        bPreviousState = true;
+
+        // store setting
+        bBlockOnDoubleErrors = bNBlockOnDoubleErr;
+    }
+
+    void Reset()
+    {
+        ErrorsMovAvBuf.Reset();
+        bPreviousState = true;
+    }
+
+    void Update ( const bool bState )
+    {
+        // if two states were false, do not use the new value
+        if ( bBlockOnDoubleErrors && bPreviousState && bState )
+        {
+            return;
+        }
+
+        // add errors as values 0 and 1 to get correct error rate average
+        if ( bState )
+        {
+            ErrorsMovAvBuf.Add ( 1.0f );
+        }
+        else
+        {
+            ErrorsMovAvBuf.Add ( 0.0f );
+
+        }
+
+        // store state
+        bPreviousState = bState;
+    }
+
+    double GetAverage() { return ErrorsMovAvBuf.GetAverage(); }
+
+protected:
+    CMovingAv<float> ErrorsMovAvBuf;
+    bool             bBlockOnDoubleErrors;
+    bool             bPreviousState;
 };
 
 #endif /* !defined ( UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

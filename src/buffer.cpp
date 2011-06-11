@@ -54,11 +54,37 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
     // Check if there is not enough space available -> correct
     if ( GetAvailSpace() < iInSize )
     {
+/*
         // not enough space in buffer for put operation, correct buffer to
         // prepare for new data
         Clear ( CT_PUT );
 
         bPutOK = false; // return error flag
+*/
+
+/*
+// TEST invalidate last written block for better PLC
+// ATTENTION: We assume that mem size is factor of block size here!!!!
+if ( !bIsSimulation )
+{
+    if ( iPutPos == 0 )
+    {
+        for ( int iPos = iMemSize - iInSize; iPos < iMemSize; iPos++ )
+        {
+            vecMemory[iPos] = 0;
+        }
+    }
+    else
+    {
+        for ( int iPos = iPutPos - iInSize; iPos < iPutPos; iPos++ )
+        {
+            vecMemory[iPos] = 0;
+        }
+    }
+}
+*/
+
+return false;
 
         // check for special case: buffer memory is not sufficient
         if ( iInSize > iMemSize )
@@ -86,7 +112,7 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
     {
         return false;
     }
-
+/*
     // check for invalid data in buffer
     if ( iNumInvalidElements > 0 )
     {
@@ -96,15 +122,19 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
 
         bGetOK = false; // return error flag
     }
+*/
 
     // Check if there is not enough data available -> correct
     if ( GetAvailData() < iInSize )
     {
+/*
         // not enough data in buffer for get operation, correct buffer to
         // prepare for getting data
         Clear ( CT_GET );
 
         bGetOK = false; // return error flag
+*/
+return false;
 
         // check for special case: buffer memory is not sufficient
         if ( iInSize > iMemSize )
@@ -118,11 +148,33 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
     // class)
     CBufferBase<uint8_t>::Get ( vecbyData );
 
+/*
+// TEST check for all zero packet
+bool bAllZeroPacket = true;
+for ( int iPos = 0; iPos < iInSize; iPos++ )
+{
+    if ( vecbyData[iPos] != 0 )
+    {
+        bAllZeroPacket = false;
+    }
+}
+if ( bAllZeroPacket )
+{
+    return false;
+}
+*/
+
     return bGetOK;
 }
 
 void CNetBuf::Clear ( const EClearType eClearType )
 {
+
+// TEST
+CBufferBase<uint8_t>::Clear ( eClearType );
+
+
+/*
     // Define the number of blocks bound for the "random offset" (1) algorithm.
     // If we are above the bound, we use the "middle of buffer" (2) algorithm.
     //
@@ -177,6 +229,13 @@ void CNetBuf::Clear ( const EClearType eClearType )
             // 1: 0   /   2: 0   /   3: 1   /   4: 1   /   5: 2 ...)
             iNewFillLevel =
                 ( ( ( iMemSize - iBlockSize) / 2 ) / iBlockSize ) * iBlockSize;
+
+
+// TEST
+iNewFillLevel += static_cast<int> ( static_cast<double> ( rand() ) *
+                iNumBlocksBoundInclForRandom / RAND_MAX ) * iBlockSize - 
+                iNumBlocksBoundInclForRandom / 2 * iBlockSize;
+
         }
     }
 
@@ -184,7 +243,10 @@ void CNetBuf::Clear ( const EClearType eClearType )
     if ( eClearType == CT_GET )
     {
         // clear buffer since we had a buffer underrun
-        vecMemory.Reset ( 0 );
+        if ( !bIsSimulation )
+        {
+            vecMemory.Reset ( 0 );
+        }
 
         // reset buffer pointers so that they are at maximum distance after
         // the get operation (assign new fill level value to the get pointer)
@@ -233,4 +295,143 @@ void CNetBuf::Clear ( const EClearType eClearType )
             eBufState = CNetBuf::BS_OK;
         }
     }
+
+// TEST
+//iNumInvalidElements = 8 * iMemSize;
+*/
+}
+
+
+/* Network buffer with statistic calculations implementation ******************/
+CNetBufWithStats::CNetBufWithStats() :
+    CNetBuf ( false ) // base class init: no simulation mode
+{
+    // define the sizes of the simulation buffers,
+    // must be NUM_STAT_SIMULATION_BUFFERS elements!
+    viBufSizesForSim[0] = 2;
+    viBufSizesForSim[1] = 3;
+    viBufSizesForSim[2] = 4;
+    viBufSizesForSim[3] = 5;
+    viBufSizesForSim[4] = 6;
+    viBufSizesForSim[5] = 7;
+    viBufSizesForSim[6] = 8;
+    viBufSizesForSim[7] = 9;
+    viBufSizesForSim[8] = 10;
+    viBufSizesForSim[9] = 12;
+    viBufSizesForSim[10] = 14;
+    viBufSizesForSim[11] = 17;
+    viBufSizesForSim[12] = 20;
+
+    // set all simulation buffers in simulation mode
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+    {
+        SimulationBuffer[i].SetIsSimulation ( true );
+    }
+}
+
+void CNetBufWithStats::Init ( const int  iNewBlockSize,
+                              const int  iNewNumBlocks,
+                              const bool bPreserve )
+{
+    // call base class Init
+    CNetBuf::Init ( iNewBlockSize, iNewNumBlocks, bPreserve );
+
+    // inits for statistics calculation
+    if ( !bPreserve )
+    {
+        for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+        {
+            // init simulation buffers with the correct size
+            SimulationBuffer[i].Init ( iNewBlockSize, viBufSizesForSim[i] );
+
+            // init statistics
+            ErrorRateStatistic[i].Init ( 80000, true );//TEST!!!!!//MAX_STATISTIC_COUNT );
+        }
+    }
+}
+
+bool CNetBufWithStats::Put ( const CVector<uint8_t>& vecbyData,
+                             const int               iInSize )
+{
+    // call base class Put
+    const bool bPutOK = CNetBuf::Put ( vecbyData, iInSize );
+
+    // update statistics calculations
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+    {
+        ErrorRateStatistic[i].Update (
+            !SimulationBuffer[i].Put ( vecbyData, iInSize ) );
+    }
+
+    return bPutOK;
+}
+
+bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData )
+{
+    // call base class Get
+    const bool bGetOK = CNetBuf::Get ( vecbyData );
+
+    // update statistics calculations
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+    {
+        ErrorRateStatistic[i].Update (
+            !SimulationBuffer[i].Get ( vecbyData ) );
+    }
+
+    return bGetOK;
+}
+
+// TEST
+int CNetBufWithStats::GetAutoSetting()
+{
+
+/*
+// TEST
+if ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() > 0.06 )
+{
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+    {
+        ErrorRateStatistic[i].Reset();
+    }
+}
+*/
+
+
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
+    {
+        if ( ErrorRateStatistic[i].GetAverage() <= 0.005)//TEST!!!!! 0.005 )
+        {
+            return viBufSizesForSim[i];
+        }
+    }
+    return viBufSizesForSim[NUM_STAT_SIMULATION_BUFFERS - 1];
+}
+
+
+// TEST for debugging
+void CNetBufWithStats::StoreAllSimAverages()
+{
+
+    FILE* pFile = fopen ( "c:\\temp\\test.dat", "w" );
+
+
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
+    {
+        fprintf ( pFile, "%e, ", ErrorRateStatistic[i].GetAverage() );
+    }
+    fprintf ( pFile, "%e", ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() );
+    fprintf ( pFile, "\n" );
+
+
+/*
+const int iLen = ErrorRateStatistic[4].ErrorsMovAvBuf.Size();
+for ( int i = 0; i < iLen; i++ )
+{
+    fprintf ( pFile, "%e\n", ErrorRateStatistic[4].ErrorsMovAvBuf[i] );
+}
+*/
+    fclose ( pFile );
+
+// scilab:
+// close;x=read('c:/temp/test.dat',-1,13);plot2d([2,3,4,5,6,7,8,9,10,12,14,17,20], x, style=-1 , logflag = 'nl');plot2d([2 20],[1 1]*0.01);plot2d([2 20],[1 1]*0.005);x
 }

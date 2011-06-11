@@ -567,6 +567,30 @@
       <item>
        <layout class="QHBoxLayout" >
         <item>
+         <widget class="QLabel" name="lblUpstream" >
+          <property name="text" >
+           <string>Audio Stream Rate</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblUpstreamValue" >
+          <property name="minimumSize" >
+           <size>
+            <width>0</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text" >
+           <string>val</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" >
+        <item>
          <widget class="QLabel" name="lblPingTime" >
           <property name="text" >
            <string>Ping Time</string>
@@ -622,12 +646,6 @@
               <height>20</height>
              </size>
             </property>
-            <property name="font" >
-             <font>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
             <property name="text" >
              <string>val</string>
             </property>
@@ -656,36 +674,6 @@
            </widget>
           </item>
          </layout>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" >
-        <item>
-         <widget class="QLabel" name="lblUpstream" >
-          <property name="text" >
-           <string>Audio Stream Rate</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="lblUpstreamValue" >
-          <property name="minimumSize" >
-           <size>
-            <width>0</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="font" >
-           <font>
-            <weight>75</weight>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text" >
-           <string>val</string>
-          </property>
-         </widget>
         </item>
        </layout>
       </item>

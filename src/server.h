@@ -116,8 +116,6 @@ public:
     void Stop();
     bool IsRunning() { return HighPrecisionTimer.isActive(); }
 
-    bool GetTimingStdDev ( double& dCurTiStdDev );
-
     bool PutData ( const CVector<uint8_t>& vecbyRecBuf,
                    const int               iNumBytesRead,
                    const CHostAddress&     HostAdr );

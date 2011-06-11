@@ -924,6 +924,21 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
     }
 
+
+/*
+// TEST
+// fid=fopen('v.dat','r');x=fread(fid,'int16');fclose(fid);
+static FILE* pFileDelay = fopen("c:\\temp\\test2.dat", "wb");
+short sData[2];
+for (i = 0; i < iMonoBlockSizeSam; i++)
+{
+    sData[0] = (short) vecsAudioSndCrdMono[i];
+    fwrite(&sData, size_t(2), size_t(1), pFileDelay);
+}
+fflush(pFileDelay);
+*/
+
+
     // check if channel is connected
     if ( Channel.IsConnected() )
     {

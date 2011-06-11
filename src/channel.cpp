@@ -611,6 +611,20 @@ void CChannel::UpdateSocketBufferSize ( const double dLocalStdDev )
     // do nothing
     if ( bDoAutoSockBufSize )
     {
+
+// TEST
+SetSockBufNumFrames ( SockBuf.GetAutoSetting(), true );
+
+/*
+#ifdef _WIN32
+// TEST
+static FILE* pFile = fopen ( "c:\\temp\\test.dat", "w" );
+fprintf ( pFile, "%d\n", SockBuf.GetAutoSetting() );
+fflush ( pFile );
+#endif
+*/
+
+/*
         // We use the time response measurement for the automatic setting.
         // Assumptions:
         // - the audio interface/network jitter is assumed to be Gaussian
@@ -633,7 +647,7 @@ void CChannel::UpdateSocketBufferSize ( const double dLocalStdDev )
         const double dEstCurBufSet = ( SYSTEM_BLOCK_DURATION_MS_FLOAT +
             3.3 * ( CycleTimeVariance.GetStdDev() + dLocalStdDev ) ) /
             SYSTEM_BLOCK_DURATION_MS_FLOAT + 0.5;
-
+*/
 /*
 // TEST
 //if (bIsServer) {
@@ -643,7 +657,7 @@ fflush ( pFile );
 // close;x=read('c:/temp/test.dat',-1,3);plot(x)
 //}
 */
-
+/*
         // upper/lower hysteresis decision
         const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );
         const int iLowerHystDec = LlconMath().round ( dEstCurBufSet + dHysteresis );
@@ -667,5 +681,6 @@ fflush ( pFile );
                 SetSockBufNumFrames ( iUpperHystDec, true );
             }
         }
+*/
     }
 }

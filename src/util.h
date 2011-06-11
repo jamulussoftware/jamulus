@@ -259,44 +259,44 @@ public:
         CVector<TData>(),
         iCurIdx ( 0 ),
         iNorm ( 0 ),
-        tCurAvResult ( TData ( 0 ) ),
-        tNoDataResult ( TData ( 0 ) ) {}
+        dCurAvResult ( 0 ),
+        dNoDataResult ( 0 ) {}
 
     void Add ( const TData tNewD );
     
-    void Init ( const int iNewSize,
-                const TData tNNoDRes = TData ( 0 ) );
+    void Init ( const int    iNewSize,
+                const double dNNoDRes = 0 );
 
     void Reset();
 
-    inline TData GetAverage()
+    inline double GetAverage()
     {
         if ( this->iNorm == 0 )
         {
-            return tNoDataResult;
+            return dNoDataResult;
         }
         else
         {
-            return tCurAvResult / this->iNorm;
+            return dCurAvResult / this->iNorm;
         }
     }
 
     bool IsInitialized() { return ( this->iNorm == this->iVectorSize ); }
 
 protected:
-    int   iCurIdx;
-    int   iNorm;
-    TData tCurAvResult;
-    TData tNoDataResult;
+    int    iCurIdx;
+    int    iNorm;
+    double dCurAvResult;
+    double dNoDataResult;
 };
 
-template<class TData> void CMovingAv<TData>::Init ( const int   iNewSize,
-                                                    const TData tNNoDRes )
+template<class TData> void CMovingAv<TData>::Init ( const int    iNewSize,
+                                                    const double dNNoDRes )
 {
     iNorm         = 0;
     iCurIdx       = 0;
-    tCurAvResult  = TData ( 0 ); // only for scalars!
-    tNoDataResult = tNNoDRes;
+    dCurAvResult  = 0; // only for scalars!
+    dNoDataResult = dNNoDRes;
     CVector<TData>::Init ( iNewSize );
 }
 
@@ -304,7 +304,7 @@ template<class TData> void CMovingAv<TData>::Reset()
 {
     iNorm        = 0;
     iCurIdx      = 0;
-    tCurAvResult = TData ( 0 ); // only for scalars!
+    dCurAvResult = 0; // only for scalars!
     CVector<TData>::Reset ( TData ( 0 ) );
 }
 
@@ -316,10 +316,10 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
     history buffer.
 */
     // subtract oldest value
-    tCurAvResult -= this->pData[iCurIdx];
+    dCurAvResult -= this->pData[iCurIdx];
 
     // add new value and write in memory
-    tCurAvResult += tNewD;
+    dCurAvResult += tNewD;
     this->pData[iCurIdx] = tNewD;
 
     // increase position pointer and test if wrap
@@ -814,7 +814,7 @@ public:
     {
         // initialize buffer (use "no data result" of 1.0 which stands for the
         // worst error rate possible)
-        ErrorsMovAvBuf.Init ( iHistoryLength, 1.0f );
+        ErrorsMovAvBuf.Init ( iHistoryLength, 1.0 );
 
         bPreviousState = true;
 
@@ -839,11 +839,11 @@ public:
         // add errors as values 0 and 1 to get correct error rate average
         if ( bState )
         {
-            ErrorsMovAvBuf.Add ( 1.0f );
+            ErrorsMovAvBuf.Add ( 1 );
         }
         else
         {
-            ErrorsMovAvBuf.Add ( 0.0f );
+            ErrorsMovAvBuf.Add ( 0 );
 
         }
 
@@ -854,9 +854,9 @@ public:
     double GetAverage() { return ErrorsMovAvBuf.GetAverage(); }
 
 protected:
-    CMovingAv<float> ErrorsMovAvBuf;
-    bool             bBlockOnDoubleErrors;
-    bool             bPreviousState;
+    CMovingAv<char> ErrorsMovAvBuf;
+    bool            bBlockOnDoubleErrors;
+    bool            bPreviousState;
 };
 
 #endif /* !defined ( UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

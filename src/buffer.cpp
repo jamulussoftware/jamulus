@@ -345,7 +345,7 @@ void CNetBufWithStats::Init ( const int  iNewBlockSize,
             SimulationBuffer[i].Init ( iNewBlockSize, viBufSizesForSim[i] );
 
             // init statistics
-            ErrorRateStatistic[i].Init ( 80000, true );//TEST!!!!!//MAX_STATISTIC_COUNT );
+            ErrorRateStatistic[i].Init ( MAX_STATISTIC_COUNT, true );
         }
     }
 }
@@ -381,25 +381,14 @@ bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData )
     return bGetOK;
 }
 
-// TEST
 int CNetBufWithStats::GetAutoSetting()
 {
-
-/*
-// TEST
-if ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() > 0.06 )
-{
-    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
-    {
-        ErrorRateStatistic[i].Reset();
-    }
-}
-*/
-
-
+    // Use a specified error bound to identify the best buffer size for the
+    // current network situation. Start with the smallest buffer and
+    // test for the error rate until the rate is below the bound.
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
-        if ( ErrorRateStatistic[i].GetAverage() <= 0.005)//TEST!!!!! 0.005 )
+        if ( ErrorRateStatistic[i].GetAverage() <= 0.005 )
         {
             return viBufSizesForSim[i];
         }

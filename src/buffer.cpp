@@ -77,8 +77,9 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
         return false;
     }
 
-    // check for invalid data in buffer
-    if ( iNumInvalidElements > 0 )
+    // check for invalid data in buffer (not applicable for simulation
+    // buffers)
+    if ( ( iNumInvalidElements > 0 ) && !bIsSimulation )
     {
         // decrease number of invalid elements by one
         iNumInvalidElements -= 1;

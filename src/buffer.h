@@ -335,9 +335,8 @@ public:
 
 protected:
     enum EBufState { BS_OK, BS_FULL, BS_EMPTY };
-    enum EClearType { CT_PUT, CT_GET };
 
-    virtual void Clear ( const EClearType eClearType )
+    virtual void Clear()
     {
         // clear memory
         if ( !bIsSimulation )
@@ -378,8 +377,6 @@ public:
     virtual bool Get ( CVector<uint8_t>& vecbyData );
 
 protected:
-    virtual void Clear ( const EClearType eClearType );
-
     int iBlockSize;
     int iNumInvalidElements;
 };

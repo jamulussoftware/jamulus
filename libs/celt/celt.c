@@ -1233,8 +1233,8 @@ static void celt_decode_lost(CELTDecoder * __restrict st, celt_word16_t * __rest
       st->last_pitch_index = pitch_index;
    } else {
       pitch_index = st->last_pitch_index;
-      if (st->loss_count < 5)
-         fade = QCONST16(.8f,15);
+      if (st->loss_count < 15)
+         fade = QCONST16(.7f,15);
       else
          fade = 0;
    }

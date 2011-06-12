@@ -380,6 +380,22 @@ public slots:
     void OnServerAutoSockBufSizeChangeCh9  ( int iNNumFra ) { vecChannels[9].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh10 ( int iNNumFra ) { vecChannels[10].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh11 ( int iNNumFra ) { vecChannels[11].CreateJitBufMes ( iNNumFra ); }
+
+
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+void OnPingReceivedCh0  ( int iMs ) { vecChannels[0].CreatePingMes ( iMs ); }
+void OnPingReceivedCh1  ( int iMs ) { vecChannels[1].CreatePingMes ( iMs ); }
+void OnPingReceivedCh2  ( int iMs ) { vecChannels[2].CreatePingMes ( iMs ); }
+void OnPingReceivedCh3  ( int iMs ) { vecChannels[3].CreatePingMes ( iMs ); }
+void OnPingReceivedCh4  ( int iMs ) { vecChannels[4].CreatePingMes ( iMs ); }
+void OnPingReceivedCh5  ( int iMs ) { vecChannels[5].CreatePingMes ( iMs ); }
+void OnPingReceivedCh6  ( int iMs ) { vecChannels[6].CreatePingMes ( iMs ); }
+void OnPingReceivedCh7  ( int iMs ) { vecChannels[7].CreatePingMes ( iMs ); }
+void OnPingReceivedCh8  ( int iMs ) { vecChannels[8].CreatePingMes ( iMs ); }
+void OnPingReceivedCh9  ( int iMs ) { vecChannels[9].CreatePingMes ( iMs ); }
+void OnPingReceivedCh10 ( int iMs ) { vecChannels[10].CreatePingMes ( iMs ); }
+void OnPingReceivedCh11 ( int iMs ) { vecChannels[11].CreatePingMes ( iMs ); }
+
 };
 
 #endif /* !defined ( SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ ) */

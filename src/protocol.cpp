@@ -518,6 +518,11 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     bRet = EvaluateChatTextMes ( vecData );
                     break;
 
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+case PROTMESSID_PING_MS:
+    bRet = EvaluatePingMes ( vecData );
+    break;
+
                 case PROTMESSID_NETW_TRANSPORT_PROPS:
                     bRet = EvaluateNetwTranspPropsMes ( vecData );
                     break;
@@ -913,6 +918,38 @@ bool CProtocol::EvaluateChatTextMes ( const CVector<uint8_t>& vecData )
 
     return false; // no error
 }
+
+
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+void CProtocol::CreatePingMes ( const int iMs )
+{
+    int iPos = 0; // init position pointer
+
+    // build data vector (4 bytes long)
+    CVector<uint8_t> vecData ( 4 );
+
+    // transmit time (4 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iMs ), 4 );
+
+    CreateAndSendMessage ( PROTMESSID_PING_MS, vecData );
+}
+
+bool CProtocol::EvaluatePingMes ( const CVector<uint8_t>& vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 4 )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit PingReceived ( static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) ) );
+
+    return false; // no error
+}
+
 
 void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps )
 {

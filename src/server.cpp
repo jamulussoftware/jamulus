@@ -412,6 +412,22 @@ CServer::CServer ( const int      iNewNumChan,
     QObject::connect ( &vecChannels[9],  SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh9 ( int ) ) );
     QObject::connect ( &vecChannels[10], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh10 ( int ) ) );
     QObject::connect ( &vecChannels[11], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh11 ( int ) ) );
+
+
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+QObject::connect ( &vecChannels[0],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh0 ( int ) ) );
+QObject::connect ( &vecChannels[1],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh1 ( int ) ) );
+QObject::connect ( &vecChannels[2],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh2 ( int ) ) );
+QObject::connect ( &vecChannels[3],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh3 ( int ) ) );
+QObject::connect ( &vecChannels[4],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh4 ( int ) ) );
+QObject::connect ( &vecChannels[5],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh5 ( int ) ) );
+QObject::connect ( &vecChannels[6],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh6 ( int ) ) );
+QObject::connect ( &vecChannels[7],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh7 ( int ) ) );
+QObject::connect ( &vecChannels[8],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh8 ( int ) ) );
+QObject::connect ( &vecChannels[9],  SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh9 ( int ) ) );
+QObject::connect ( &vecChannels[10], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh10 ( int ) ) );
+QObject::connect ( &vecChannels[11], SIGNAL ( PingReceived ( int ) ), this, SLOT ( OnPingReceivedCh11 ( int ) ) );
+
 }
 
 void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )

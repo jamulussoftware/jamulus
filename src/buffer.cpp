@@ -125,10 +125,10 @@ CNetBufWithStats::CNetBufWithStats() :
     viBufSizesForSim[6] = 8;
     viBufSizesForSim[7] = 9;
     viBufSizesForSim[8] = 10;
-    viBufSizesForSim[9] = 12;
-    viBufSizesForSim[10] = 14;
-    viBufSizesForSim[11] = 17;
-    viBufSizesForSim[12] = 20;
+    viBufSizesForSim[9] = 11;
+    viBufSizesForSim[10] = 12;
+    viBufSizesForSim[11] = 14;
+    viBufSizesForSim[12] = 16;
 
     // set all simulation buffers in simulation mode
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
@@ -209,7 +209,7 @@ int CNetBufWithStats::GetAutoSetting()
 void CNetBufWithStats::StoreAllSimAverages()
 {
 
-    FILE* pFile = fopen ( "c:\\temp\\test.dat", "w" );
+    FILE* pFile = fopen ( "c:\\temp\\test1.dat", "w" );
 
 
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
@@ -230,5 +230,5 @@ for ( int i = 0; i < iLen; i++ )
     fclose ( pFile );
 
 // scilab:
-// close;x=read('c:/temp/test.dat',-1,13);plot2d([2,3,4,5,6,7,8,9,10,12,14,17,20], x, style=-1 , logflag = 'nl');plot2d([2 20],[1 1]*0.01);plot2d([2 20],[1 1]*0.005);x
+// close;x=read('c:/temp/test.dat',-1,13);plot2d([2,3,4,5,6,7,8,9,10,11,12,14,16], x, style=-1 , logflag = 'nl');plot2d([2 20],[1 1]*0.01);plot2d([2 20],[1 1]*0.005);x
 }

@@ -320,8 +320,6 @@ protected:
     // for ping measurement
     CPreciseTime            PreciseTime;
 
-    CCycleTimeVariance      CycleTimeVariance;
-
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnDetectedCLMessage ( CVector<uint8_t> vecbyData, int iNumBytes );

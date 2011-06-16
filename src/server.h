@@ -216,7 +216,6 @@ protected:
 
     // actual working objects
     CSocket             Socket;
-    CCycleTimeVariance  CycleTimeVariance;
 
     // logging
     CServerLogging      Logging;

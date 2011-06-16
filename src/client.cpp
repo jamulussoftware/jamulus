@@ -594,12 +594,6 @@ void CClient::Init()
     vecsAudioSndCrdMono.Init ( iMonoBlockSizeSam );
     vecdAudioStereo.Init     ( iStereoBlockSizeSam );
 
-    // init response time evaluation
-    CycleTimeVariance.Init ( SYSTEM_FRAME_SIZE_SAMPLES,
-        SYSTEM_SAMPLE_RATE_HZ, TIME_MOV_AV_RESPONSE_SECONDS );
-
-    CycleTimeVariance.Reset();
-
     // init reverberation
     AudioReverbL.Init ( SYSTEM_SAMPLE_RATE_HZ );
     AudioReverbR.Init ( SYSTEM_SAMPLE_RATE_HZ );
@@ -957,9 +951,6 @@ fflush(pFileDelay);
         // if not connected, clear data
         vecsStereoSndCrd.Reset ( 0 );
     }
-
-    // update response time measurement
-    CycleTimeVariance.Update();
 
     // update socket buffer size
     Channel.UpdateSocketBufferSize();

@@ -225,10 +225,6 @@ CServer::CServer ( const int      iNewNumChan,
     vstrChatColors[4] = "maroon";
     vstrChatColors[5] = "coral";
 
-    // init moving average buffer for response time evaluation
-    CycleTimeVariance.Init ( SYSTEM_FRAME_SIZE_SAMPLES,
-        SYSTEM_SAMPLE_RATE_HZ, TIME_MOV_AV_RESPONSE_SECONDS );
-
     // enable history graph (if requested)
     if ( !strHistoryFileName.isEmpty() )
     {
@@ -476,9 +472,6 @@ void CServer::Start()
         // start timer
         HighPrecisionTimer.Start();
 
-        // init time for response time evaluation
-        CycleTimeVariance.Reset();
-
         // emit start signal
         emit Started();
     }
@@ -703,9 +696,6 @@ void CServer::OnTimer()
         // does not consume any significant CPU when no client is connected.
         Stop();
     }
-
-    // update response time measurement
-    CycleTimeVariance.Update();
 }
 
 CVector<int16_t> CServer::ProcessData ( const int                   iCurIndex,

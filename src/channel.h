@@ -105,7 +105,9 @@ public:
                                     const int iNewNetwFrameSizeFact,
                                     const int iNewNumAudioChannels );
 
-    void SetDoAutoSockBufSize ( const bool bValue );
+    void SetDoAutoSockBufSize ( const bool bValue )
+        { bDoAutoSockBufSize = bValue; }
+
     bool GetDoAutoSockBufSize() const { return bDoAutoSockBufSize; }
 
     int GetNetwFrameSizeFact() const { return iNetwFrameSizeFact; }
@@ -154,8 +156,6 @@ protected:
     CNetBufWithStats    SockBuf;
     int                 iCurSockBufNumFrames;
     bool                bDoAutoSockBufSize;
-
-    CCycleTimeVariance  CycleTimeVariance;
 
     // network output conversion buffer
     CConvBuf<uint8_t>   ConvBuf;

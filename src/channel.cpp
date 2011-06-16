@@ -46,10 +46,6 @@ CChannel::CChannel ( const bool bNIsServer ) :
     // init the socket buffer
     SetSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL );
 
-    // initialize cycle time variance measurement with defaults
-    CycleTimeVariance.Init ( SYSTEM_FRAME_SIZE_SAMPLES,
-        SYSTEM_SAMPLE_RATE_HZ, TIME_MOV_AV_RESPONSE_SECONDS );
-
     // initialize channel name
     ResetName();
 
@@ -156,9 +152,6 @@ void CChannel::SetAudioStreamProperties ( const int iNewNetwFrameSize,
     // init conversion buffer
     ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
 
-    // reset cycle time variance measurement
-    CycleTimeVariance.Reset();
-
     // tell the server that audio coding has changed
     CreateNetTranspPropsMessFromCurrentSettings();
 }
@@ -198,24 +191,6 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
     }
 
     return true; // set error flag
-}
-
-void CChannel::SetDoAutoSockBufSize ( const bool bValue )
-{
-    QMutexLocker locker ( &Mutex );
-
-    // only act on new value if it is different from the current one
-    if ( bDoAutoSockBufSize != bValue )
-    {
-        if ( bValue )
-        {
-            // in case auto socket buffer size was just enabled, reset statistic
-            CycleTimeVariance.Reset();
-        }
-
-        // store new setting
-        bDoAutoSockBufSize = bValue;
-    }
 }
 
 void CChannel::SetGain ( const int    iChanID,
@@ -361,9 +336,6 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
 
         // init conversion buffer
         ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
-
-        // reset statistic
-        CycleTimeVariance.Reset();
     }
 }
 
@@ -464,13 +436,6 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                     {
                         eRet = PS_AUDIO_ERR;
                     }
-
-                    // update cycle time variance measurement (this is only
-                    // used in case auto socket buffer size is enabled)
-                    if ( bDoAutoSockBufSize )
-                    {
-                        CycleTimeVariance.Update();
-                    }
                 }
                 else
                 {
@@ -513,9 +478,6 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
             {
                 Protocol.CreateReqNetwTranspPropsMes();
             }
-
-            // reset cycle time variance measurement
-            CycleTimeVariance.Reset();
 
             // inform other objects that new connection was established
             emit NewConnection();

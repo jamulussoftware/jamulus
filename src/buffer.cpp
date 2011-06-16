@@ -155,6 +155,16 @@ void CNetBufWithStats::Init ( const int  iNewBlockSize,
             // init statistics
             ErrorRateStatistic[i].Init ( MAX_STATISTIC_COUNT, true );
         }
+
+        // start initialization phase of IIR filtering, use half the size of
+        // the error rate statistic buffers which should be ok for a good
+        // initialization value (initialization phase should be as short as
+        // possible
+        iInitCounter = MAX_STATISTIC_COUNT / 2;
+
+        // init auto buffer setting with a meaningful value (should not be used
+        // anyway)
+        iCurAutoBufferSizeSetting = 5;
     }
 }
 
@@ -186,31 +196,96 @@ bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData )
             !SimulationBuffer[i].Get ( vecbyData ) );
     }
 
+    // update auto setting
+    UpdateAutoSetting();
+
     return bGetOK;
 }
 
-int CNetBufWithStats::GetAutoSetting()
+void CNetBufWithStats::UpdateAutoSetting()
 {
+    int  iCurDecision;
+    bool bDecisionFound = false;
+
+
+    // Get error rate decision -------------------------------------------------
     // Use a specified error bound to identify the best buffer size for the
     // current network situation. Start with the smallest buffer and
     // test for the error rate until the rate is below the bound.
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
-        if ( ErrorRateStatistic[i].GetAverage() <= 0.005 )
+        if ( ( !bDecisionFound ) &&
+             ( ErrorRateStatistic[i].GetAverage() <= 0.005 ) )
         {
-            return viBufSizesForSim[i];
+            iCurDecision   = viBufSizesForSim[i];
+            bDecisionFound = true;
         }
     }
-    return viBufSizesForSim[NUM_STAT_SIMULATION_BUFFERS - 1];
+
+    if ( !bDecisionFound )
+    {
+        // in case no buffer is below bound, use largest buffer size
+        iCurDecision = viBufSizesForSim[NUM_STAT_SIMULATION_BUFFERS - 1];
+    }
+
+
+    // Post calculation (filtering) --------------------------------------------
+    if ( iInitCounter > 0 )
+    {
+        // for initialization phase, use current decision without applying
+        // any filtering
+        iCurAutoBufferSizeSetting = iCurDecision;
+
+        // decrease init counter
+        iInitCounter--;
+
+        if ( iInitCounter == 0 )
+        {
+            // initialization phase is at the end now, init parameters for
+            // regular estimation phase
+            dCurIIRFilterResult = iCurDecision;
+            iCurDecidedResult   = iCurDecision;
+        }
+    }
+    else
+    {
+        // Define different weigths for up and down direction. Up direction
+        // filtering shall be slower than for down direction since we assume
+        // that the lower value is the actual value which can be used for
+        // the current network condition. If the current error rate estimation
+        // is higher, it may be a temporary problem which should not change
+        // the current jitter buffer size significantly.
+        const double dWeightUp   = 0.999995;
+        const double dWeightDown = 0.9999;
+
+        // apply non-linear IIR filter
+        LlconMath().UpDownIIR1( dCurIIRFilterResult,
+                                static_cast<double> ( iCurDecision ),
+                                dWeightUp,
+                                dWeightDown);
+
+        // apply a hysteresis
+        iCurAutoBufferSizeSetting =
+            LlconMath().DecideWithHysteresis ( dCurIIRFilterResult,
+                                               iCurDecidedResult,
+                                               0.1 );
+    }
+
+/*
+#ifdef _WIN32
+// TEST
+static FILE* pFile = fopen ( "c:\\temp\\test.dat", "w" );
+fprintf ( pFile, "%d %e %d\n", iCurDecision, dCurIIRFilterResult, GetAutoSetting() );
+fflush ( pFile );
+#endif
+*/
 }
 
 
 // TEST for debugging
 void CNetBufWithStats::StoreAllSimAverages()
 {
-
     FILE* pFile = fopen ( "c:\\temp\\test1.dat", "w" );
-
 
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
@@ -219,14 +294,6 @@ void CNetBufWithStats::StoreAllSimAverages()
     fprintf ( pFile, "%e", ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() );
     fprintf ( pFile, "\n" );
 
-
-/*
-const int iLen = ErrorRateStatistic[4].ErrorsMovAvBuf.Size();
-for ( int i = 0; i < iLen; i++ )
-{
-    fprintf ( pFile, "%e\n", ErrorRateStatistic[4].ErrorsMovAvBuf[i] );
-}
-*/
     fclose ( pFile );
 
 // scilab:

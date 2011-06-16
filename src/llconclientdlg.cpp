@@ -46,10 +46,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // Add help text to controls -----------------------------------------------
     // input level meter
     QString strInpLevH = tr ( "<b>Input Level Meter:</b> The input level "
-        "indicators show the current input level of the two stereo channels "
-        "of the current selected audio input. The upper level display belongs "
-        "to the left channel and the lower level display to the right channel "
-        "of the audio input.<br>"
+        "indicators show the input level of the two stereo channels "
+        "of the current selected audio input.<br>"
         "Make sure not to clip the input signal to avoid distortions of the "
         "audio signal." );
 
@@ -81,9 +79,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
     // connect/disconnect button
     butConnect->setWhatsThis ( tr ( "<b>Connect / Disconnect Button:"
-        "</b> Push this button to connect the server. A valid IP address has "
-        "to be specified before. If the client is connected, pressing this "
-        "button will disconnect the connection." ) );
+        "</b> Push this button to connect a server. A dialog where you can "
+        "select a server will open. If you are connected, pressing this "
+        "button will end the session." ) );
 
     butConnect->setAccessibleName (
         tr ( "Connect and disconnect toggle button" ) );
@@ -116,12 +114,12 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // local audio input fader
     QString strAudFader = tr ( "<b>Local Audio Input Fader:</b> With the "
         "audio fader, the relative levels of the left and right local audio "
-        "channels can be changed. It acts like a panning between the two "
-        "channels. If, e.g., a microphone is connected to the right input "
-        "channel and an instrument is connected to the left input channel "
-        "which is much louder than the microphone, move the audio fader in "
-        "a direction where the label above the fader shows <i>L -x</i>, where "
-        "<i>x</i> is the current attenuation indication. " );
+        "channels can be changed. For a mono signal it acts like a panning "
+        "between the two channels. If, e.g., a microphone is connected to "
+        "the right input channel and an instrument is connected to the left "
+        "input channel which is much louder than the microphone, move the "
+        "audio fader in a direction where the label above the fader shows "
+        "<i>L -x</i>, where <i>x</i> is the current attenuation indicator. " );
 
     lblAudioPan->setWhatsThis      ( strAudFader );
     lblAudioPanValue->setWhatsThis ( strAudFader );
@@ -131,8 +129,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
 
     // reverberation level
     QString strAudReverb = tr ( "<b>Reverberation Level:</b> A reverberation "
-        "effect can be applied to one local audio channel. The channel "
-        "selection and the reverberation level can be modified. If, e.g., "
+        "effect can be applied to one local mono audio channel or to both "
+        "channels in stereo mode. The mone channel selection and the "
+        "reverberation level can be modified. If, e.g., "
         "the microphone signal is fed into the right audio channel of the "
         "sound card and a reverberation effect shall be applied, set the "
         "channel selector to right and move the fader upwards until the "

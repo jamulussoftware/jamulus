@@ -50,7 +50,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "the check Auto is enabled, the jitter buffers of the local client and "
         "the remote server are set automatically "
         "based on measurements of the network and sound card timing jitter. If "
-        "the <i>auto</i> check is enabled, the jitter buffer size faders are "
+        "the <i>Auto</i> check is enabled, the jitter buffer size faders are "
         "disabled (they cannot be moved with the mouse)." );
 
     QString strJitterBufferSizeTT = tr ( "In case the auto setting of the "
@@ -129,8 +129,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "<ul>"
         "<li>128 samples: This is the preferred setting since it gives lowest "
         "latency but does not work with all sound cards.</li>"
-        "<li>256 samples: This is the default setting and should work on most "
-        "of the available sound cards.</li>"
+        "<li>256 samples: This setting should work on most of the available "
+        "sound cards.</li>"
         "<li>512 samples: This setting should only be used if only a very slow "
         "computer or a slow internet connection is available.</li>"
         "</ul>"
@@ -148,7 +148,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "the higher the probability of red light in the status indicator (drop "
         "outs) and the higher the upload rate and the lower the overall "
         "delay.<br>"
-        "The jitter buffer setting is therefore a trade-off between audio "
+        "The buffer setting is therefore a trade-off between audio "
         "quality and overall delay." );
 
     QString strSndCrdBufDelayTT = tr ( "If the buffer delay settings are "

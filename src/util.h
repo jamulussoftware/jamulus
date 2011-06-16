@@ -691,6 +691,39 @@ public:
     {
         return (int) ( ( x - floor ( x ) ) >= 0.5 ) ? ceil(x) : floor(x);
     }
+
+    static void UpDownIIR1 ( double&       dOldValue,
+                             const double& dNewValue,
+                             const double& dWeightUp,
+                             const double& dWeightDown )
+    {
+        // different IIR weights for up and down direction
+        if ( dNewValue < dOldValue )
+        {
+            dOldValue =
+                dOldValue * dWeightDown + (1.0 - dWeightDown) * dNewValue;
+        }
+        else
+        {
+            dOldValue =
+                dOldValue * dWeightUp + (1.0 - dWeightUp) * dNewValue;
+        }
+    }
+
+    static int DecideWithHysteresis ( const double dValue,
+                                      const int    iOldValue,
+                                      const double dHysteresis )
+    {
+        // apply hysteresis
+        if ( dValue > static_cast<double> ( iOldValue ) )
+        {
+            return round ( dValue - dHysteresis );
+        }
+        else
+        {
+            return round ( dValue + dHysteresis );
+        }
+    }
 };
 
 

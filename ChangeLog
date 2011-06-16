@@ -7,6 +7,10 @@
   is managed by a central server, any private server is added automatically if
   the registering setting is enabled
 
+- the jitter buffer size can be independently set for client and server
+
+- improved auto jitter buffer algorithm
+
 - the Qt project file is now used for Linux, too
 
 - ini-file is stored in the home directory instead of the application directory

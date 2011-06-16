@@ -31,8 +31,8 @@
 
 /* Definitions ****************************************************************/
 // each regular buffer access lead to a count for put and get, assuming 2.66 ms
-// blocks we have 2 * 60 s / 2.66 ms * 2 = 90000
-#define MAX_STATISTIC_COUNT                 90000
+// blocks we have 15 s / 2.66 ms * 2 = approx. 11000
+#define MAX_STATISTIC_COUNT                 11000
 
 // number of simulation network jitter buffers for evaluating the statistic
 #define NUM_STAT_SIMULATION_BUFFERS         13
@@ -395,16 +395,24 @@ public:
     virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
     virtual bool Get ( CVector<uint8_t>& vecbyData );
 
+    int GetAutoSetting() { return iCurAutoBufferSizeSetting; }
+
 // TEST
 void StoreAllSimAverages();
-int GetAutoSetting();
 
 protected:
+    void UpdateAutoSetting();
+
     // statistic (do not use the vector class since the classes do not have
     // appropriate copy constructor/operator)
     CErrorRate ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS];
     CNetBuf    SimulationBuffer[NUM_STAT_SIMULATION_BUFFERS];
     int        viBufSizesForSim[NUM_STAT_SIMULATION_BUFFERS];
+
+    double     dCurIIRFilterResult;
+    int        iCurDecidedResult;
+    int        iInitCounter;
+    int        iCurAutoBufferSizeSetting;
 };
 
 

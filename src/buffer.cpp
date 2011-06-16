@@ -204,7 +204,7 @@ bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData )
 
 void CNetBufWithStats::UpdateAutoSetting()
 {
-    int  iCurDecision;
+    int  iCurDecision   = 0; // dummy initialization
     bool bDecisionFound = false;
 
 

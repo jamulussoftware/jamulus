@@ -694,8 +694,7 @@ void CServer::OnTimer()
                 vecChannels[iCurChanID].GetAddress() );
 
             // update socket buffer size
-            vecChannels[iCurChanID].UpdateSocketBufferSize (
-                CycleTimeVariance.GetStdDev() );
+            vecChannels[iCurChanID].UpdateSocketBufferSize();
         }
     }
     else

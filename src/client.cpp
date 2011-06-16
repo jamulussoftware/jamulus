@@ -962,7 +962,7 @@ fflush(pFileDelay);
     CycleTimeVariance.Update();
 
     // update socket buffer size
-    Channel.UpdateSocketBufferSize ( CycleTimeVariance.GetStdDev() );
+    Channel.UpdateSocketBufferSize();
 }
 
 int CClient::EstimatedOverallDelay ( const int iPingTimeMs )

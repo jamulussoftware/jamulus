@@ -96,7 +96,7 @@ public:
                                const bool bPreserve = false );
     int GetSockBufNumFrames() const { return iCurSockBufNumFrames; }
 
-    void UpdateSocketBufferSize ( const double dLocalStdDev );
+    void UpdateSocketBufferSize();
 
     int GetUploadRateKbps();
 

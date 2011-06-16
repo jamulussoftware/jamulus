@@ -610,82 +610,14 @@ int CChannel::GetUploadRateKbps()
         SYSTEM_SAMPLE_RATE_HZ / iAudioSizeOut / 1000;
 }
 
-void CChannel::UpdateSocketBufferSize ( const double dLocalStdDev )
+void CChannel::UpdateSocketBufferSize()
 {
     // just update the socket buffer size if auto setting is enabled, otherwise
     // do nothing
     if ( bDoAutoSockBufSize )
     {
-
-// TEST
-SetSockBufNumFrames ( SockBuf.GetAutoSetting(), true );
-
-/*
-#ifdef _WIN32
-// TEST
-static FILE* pFile = fopen ( "c:\\temp\\test.dat", "w" );
-fprintf ( pFile, "%d\n", SockBuf.GetAutoSetting() );
-fflush ( pFile );
-#endif
-*/
-
-/*
-        // We use the time response measurement for the automatic setting.
-        // Assumptions:
-        // - the audio interface/network jitter is assumed to be Gaussian
-        // - the buffer size is set to 3.3 times the standard deviation of
-        //   the jitter (~98% of the jitter should be fit in the
-        //   buffer)
-        // - introduce a hysteresis to avoid switching the buffer sizes all the
-        //   time in case the time response measurement is close to a bound
-        // - only use time response measurement results if averaging buffer is
-        //   completely filled
-        // - we need at least a jitter buffer size of the audio packet duration
-        //   -> add audio buffer duration
-        const double dHysteresis = 0.2;
-
-        // accumulate the standard deviations of input network stream and
-        // internal timer,
-        // add 0.5 to "round up" -> ceil,
-        // divide by MIN_SERVER_BLOCK_DURATION_MS because this is the size of
-        // one block in the jitter buffer
-        const double dEstCurBufSet = ( SYSTEM_BLOCK_DURATION_MS_FLOAT +
-            3.3 * ( CycleTimeVariance.GetStdDev() + dLocalStdDev ) ) /
-            SYSTEM_BLOCK_DURATION_MS_FLOAT + 0.5;
-*/
-/*
-// TEST
-//if (bIsServer) {
-static FILE* pFile = fopen ( "c:\\temp\\test.dat", "w" );
-fprintf ( pFile, "%e %e %e\n", CycleTimeVariance.GetStdDev(), dLocalStdDev, dEstCurBufSet );
-fflush ( pFile );
-// close;x=read('c:/temp/test.dat',-1,3);plot(x)
-//}
-*/
-/*
-        // upper/lower hysteresis decision
-        const int iUpperHystDec = LlconMath().round ( dEstCurBufSet - dHysteresis );
-        const int iLowerHystDec = LlconMath().round ( dEstCurBufSet + dHysteresis );
-
-        // if both decisions are equal than use the result
-        if ( iUpperHystDec == iLowerHystDec )
-        {
-            // updatet the socket buffer size with the new value
-            SetSockBufNumFrames ( iUpperHystDec, true );
-        }
-        else
-        {
-            // we are in the middle of the decision region, use
-            // previous setting for determing the new decision
-            if ( !( ( GetSockBufNumFrames() == iUpperHystDec ) ||
-                    ( GetSockBufNumFrames() == iLowerHystDec ) ) )
-            {
-                // The old result is not near the new decision,
-                // use per definition the upper decision.
-                // updatet the socket buffer size with the new value
-                SetSockBufNumFrames ( iUpperHystDec, true );
-            }
-        }
-*/
+        // use auto setting result from channel, make sure we preserve the
+        // buffer memory since we just adjust the size here
+        SetSockBufNumFrames ( SockBuf.GetAutoSetting(), true );
     }
 }

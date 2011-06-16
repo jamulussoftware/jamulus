@@ -255,8 +255,9 @@ void CNetBufWithStats::UpdateAutoSetting()
         // the current network condition. If the current error rate estimation
         // is higher, it may be a temporary problem which should not change
         // the current jitter buffer size significantly.
-        const double dWeightUp   = 0.999995;
-        const double dWeightDown = 0.9999;
+        const double dWeightUp        = 0.999995;
+        const double dWeightDown      = 0.9999;
+        const double dHysteresisValue = 0.1;
 
         // apply non-linear IIR filter
         LlconMath().UpDownIIR1( dCurIIRFilterResult,
@@ -268,7 +269,7 @@ void CNetBufWithStats::UpdateAutoSetting()
         iCurAutoBufferSizeSetting =
             LlconMath().DecideWithHysteresis ( dCurIIRFilterResult,
                                                iCurDecidedResult,
-                                               0.1 );
+                                               dHysteresisValue );
     }
 
 /*

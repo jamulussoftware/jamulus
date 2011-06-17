@@ -213,7 +213,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // central server address
     QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
-        "Central server address is the IP address or URL of the central server "
+        "central server address is the IP address or URL of the central server "
         "at which the server list of the connection dialog is managed. If the "
         "Default check box is checked, the default central server address is "
         "shown read-only." );

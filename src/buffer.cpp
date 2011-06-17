@@ -97,7 +97,7 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
         // to avoid the unmusical noise resulting from a very short drop
         // out (note that if you want to change this value, also change
         // the value in celt_decode_lost in celt.c)
-        iNumInvalidElements = 15;
+        iNumInvalidElements = 10;
 
         return false;
     }

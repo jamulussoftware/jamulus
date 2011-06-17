@@ -945,7 +945,7 @@ void CLlconClientDlg::UpdateDisplay()
 
 
 // TEST
-pClient->GetChannel()->StoreAllSimAverages();
+//pClient->GetChannel()->StoreAllSimAverages();
 
 }
 

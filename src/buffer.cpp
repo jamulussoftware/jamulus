@@ -207,6 +207,9 @@ void CNetBufWithStats::UpdateAutoSetting()
     int  iCurDecision   = 0; // dummy initialization
     bool bDecisionFound = false;
 
+    // definition of the error bound
+    const double dErrorBound = 0.0025;
+
 
     // Get error rate decision -------------------------------------------------
     // Use a specified error bound to identify the best buffer size for the
@@ -215,7 +218,7 @@ void CNetBufWithStats::UpdateAutoSetting()
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
         if ( ( !bDecisionFound ) &&
-             ( ErrorRateStatistic[i].GetAverage() <= 0.005 ) )
+             ( ErrorRateStatistic[i].GetAverage() <= dErrorBound ) )
         {
             iCurDecision   = viBufSizesForSim[i];
             bDecisionFound = true;

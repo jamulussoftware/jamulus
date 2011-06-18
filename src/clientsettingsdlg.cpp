@@ -441,16 +441,18 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
     lblNetBufServer->setText ( "Size: " + QString().setNum ( iCurNumNetBufServer ) );
 
     // if auto setting is enabled, disable slider control
-    chbAutoJitBuf->setChecked        (  pClient->GetDoAutoSockBufSize() );
-    sldNetBuf->setEnabled            ( !pClient->GetDoAutoSockBufSize() );
-    lblNetBuf->setEnabled            ( !pClient->GetDoAutoSockBufSize() );
-    lblNetBufLabel->setEnabled       ( !pClient->GetDoAutoSockBufSize() );
-    sldNetBufServer->setEnabled      ( !pClient->GetDoAutoSockBufSize() );
-    lblNetBufServer->setEnabled      ( !pClient->GetDoAutoSockBufSize() );
-    lblNetBufServerLabel->setEnabled ( !pClient->GetDoAutoSockBufSize() );
+    const bool bIsAutoSockBufSize = pClient->GetDoAutoSockBufSize();
+
+    chbAutoJitBuf->setChecked        (  bIsAutoSockBufSize );
+    sldNetBuf->setEnabled            ( !bIsAutoSockBufSize );
+    lblNetBuf->setEnabled            ( !bIsAutoSockBufSize );
+    lblNetBufLabel->setEnabled       ( !bIsAutoSockBufSize );
+    sldNetBufServer->setEnabled      ( !bIsAutoSockBufSize );
+    lblNetBufServer->setEnabled      ( !bIsAutoSockBufSize );
+    lblNetBufServerLabel->setEnabled ( !bIsAutoSockBufSize );
 }
 
-QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int iFrameSize,
+QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int     iFrameSize,
                                                          const QString strAddText )
 {
     // use two times the buffer delay for the entire delay since

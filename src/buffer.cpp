@@ -116,16 +116,16 @@ CNetBufWithStats::CNetBufWithStats() :
 {
     // define the sizes of the simulation buffers,
     // must be NUM_STAT_SIMULATION_BUFFERS elements!
-    viBufSizesForSim[0] = 2;
-    viBufSizesForSim[1] = 3;
-    viBufSizesForSim[2] = 4;
-    viBufSizesForSim[3] = 5;
-    viBufSizesForSim[4] = 6;
-    viBufSizesForSim[5] = 7;
-    viBufSizesForSim[6] = 8;
-    viBufSizesForSim[7] = 9;
-    viBufSizesForSim[8] = 10;
-    viBufSizesForSim[9] = 11;
+    viBufSizesForSim[0]  = 2;
+    viBufSizesForSim[1]  = 3;
+    viBufSizesForSim[2]  = 4;
+    viBufSizesForSim[3]  = 5;
+    viBufSizesForSim[4]  = 6;
+    viBufSizesForSim[5]  = 7;
+    viBufSizesForSim[6]  = 8;
+    viBufSizesForSim[7]  = 9;
+    viBufSizesForSim[8]  = 10;
+    viBufSizesForSim[9]  = 11;
     viBufSizesForSim[10] = 12;
     viBufSizesForSim[11] = 14;
     viBufSizesForSim[12] = 16;
@@ -199,6 +199,26 @@ bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData )
     // update auto setting
     UpdateAutoSetting();
 
+
+// TEST
+// sometimes in the very first period after a connection we get a bad error
+// rate result -> delete this from the initialization phase
+const double dInitState =
+    ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].InitializationState();
+
+if ( dInitState < 0.2 )
+{
+    if ( ( dInitState > 0.1 ) &&
+         ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() > ERROR_RATE_BOUND ) )
+    {
+        for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+        {
+            ErrorRateStatistic[i].Reset();
+        }
+    }
+}
+
+
     return bGetOK;
 }
 
@@ -206,9 +226,6 @@ void CNetBufWithStats::UpdateAutoSetting()
 {
     int  iCurDecision   = 0; // dummy initialization
     bool bDecisionFound = false;
-
-    // definition of the error bound
-    const double dErrorBound = 0.0025;
 
 
     // Get error rate decision -------------------------------------------------
@@ -218,7 +235,7 @@ void CNetBufWithStats::UpdateAutoSetting()
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
         if ( ( !bDecisionFound ) &&
-             ( ErrorRateStatistic[i].GetAverage() <= dErrorBound ) )
+             ( ErrorRateStatistic[i].GetAverage() <= ERROR_RATE_BOUND ) )
         {
             iCurDecision   = viBufSizesForSim[i];
             bDecisionFound = true;

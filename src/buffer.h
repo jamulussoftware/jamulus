@@ -34,6 +34,9 @@
 // blocks we have 15 s / 2.66 ms * 2 = approx. 11000
 #define MAX_STATISTIC_COUNT                 11000
 
+// definition of the error bound
+#define ERROR_RATE_BOUND                    0.002
+
 // number of simulation network jitter buffers for evaluating the statistic
 #define NUM_STAT_SIMULATION_BUFFERS         13
 

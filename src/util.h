@@ -281,7 +281,8 @@ public:
         }
     }
 
-    bool IsInitialized() { return ( this->iNorm == this->iVectorSize ); }
+    double InitializationState() const
+        { return static_cast<double> ( this->iNorm ) / this->iVectorSize; }
 
 protected:
     int    iCurIdx;
@@ -803,6 +804,7 @@ public:
     }
 
     double GetAverage() { return ErrorsMovAvBuf.GetAverage(); }
+    double InitializationState() { return ErrorsMovAvBuf.InitializationState(); } 
 
 protected:
     CMovingAv<char> ErrorsMovAvBuf;

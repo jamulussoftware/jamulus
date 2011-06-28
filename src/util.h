@@ -155,8 +155,8 @@ public:
     }
 
 protected:
-    typename std::vector<TData>::iterator   pData;
-    int                                     iVectorSize;
+    typename std::vector<TData>::iterator pData;
+    int                                   iVectorSize;
 };
 
 
@@ -172,7 +172,7 @@ template<class TData> void CVector<TData>::Init ( const int iNewSize )
     pData = this->begin();
 }
 
-template<class TData> void CVector<TData>::Init ( const int iNewSize, 
+template<class TData> void CVector<TData>::Init ( const int   iNewSize, 
                                                   const TData tIniVal )
 {
     // call actual init routine
@@ -271,6 +271,7 @@ public:
 
     inline double GetAverage()
     {
+        // make sure we do not divide by zero
         if ( this->iNorm == 0 )
         {
             return dNoDataResult;
@@ -282,7 +283,17 @@ public:
     }
 
     double InitializationState() const
-        { return static_cast<double> ( this->iNorm ) / this->iVectorSize; }
+    {
+        // make sure we do not divide by zero
+        if ( this->iVectorSize != 0 )
+        {
+            return static_cast<double> ( this->iNorm ) / this->iVectorSize;
+        }
+        else
+        {
+            return 0;
+        }
+     }
 
 protected:
     int    iCurIdx;

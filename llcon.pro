@@ -163,14 +163,14 @@ DISTFILES += AUTHORS \
     NEWS \
     README \
     TODO \
-    libs\celt\AUTHORS \
-    libs\celt\ChangeLog \
-    libs\celt\COPYING \
-    libs\celt\INSTALL \
-    libs\celt\NEWS \
-    libs\celt\README \
-    libs\celt\README_LLCON \
-    libs\celt\TODO \
+    libs/celt/AUTHORS \
+    libs/celt/ChangeLog \
+    libs/celt/COPYING \
+    libs/celt/INSTALL \
+    libs/celt/NEWS \
+    libs/celt/README \
+    libs/celt/README_LLCON \
+    libs/celt/TODO \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

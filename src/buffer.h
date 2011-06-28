@@ -78,7 +78,7 @@ public:
             }
 
             // set correct buffer state
-            if ( iCopyLen >= iNewMemSize )
+            if ( iCopyLen == iNewMemSize )
             {
                 eBufState = CBufferBase<TData>::BS_FULL;
             }
@@ -101,16 +101,6 @@ public:
                 {
                     vecMemory[iCurPos] = vecTempMemory[iGetPos + iCurPos];
                 }
-
-                // update put pointer
-                if ( eBufState == CBufferBase<TData>::BS_FULL )
-                {
-                    iPutPos = 0;
-                }
-                else
-                {
-                    iPutPos -= iGetPos;
-                }
             }
             else
             {
@@ -119,7 +109,7 @@ public:
                 int  iFirstPartLen             = iMemSize - iGetPos;
 
                 // check that first copy length is not larger then new memory
-                if ( iFirstPartLen > iCopyLen )
+                if ( iFirstPartLen >= iCopyLen )
                 {
                     iFirstPartLen             = iCopyLen;
                     bEnoughSpaceForSecondPart = false;
@@ -142,16 +132,16 @@ public:
                             vecTempMemory[iCurPos];
                     }
                 }
+            }
 
-                // update put pointer
-                if ( eBufState == CBufferBase<TData>::BS_FULL )
-                {
-                    iPutPos = 0;
-                }
-                else
-                {
-                    iPutPos += iFirstPartLen;
-                }
+            // update put pointer
+            if ( eBufState == CBufferBase<TData>::BS_FULL )
+            {
+                iPutPos = 0;
+            }
+            else
+            {
+                iPutPos = iCopyLen;
             }
 
             // update get position -> zero per definition
@@ -222,6 +212,12 @@ public:
             }
         }
 
+        // take care about wrap around of put pointer
+        if ( iPutPos == iMemSize )
+        {
+            iPutPos = 0;
+        }
+
         // set buffer state flag
         if ( iPutPos == iGetPos )
         {
@@ -279,6 +275,12 @@ public:
                     vecData[iCurPos++] = vecMemory[iGetPos++];
                 }
             }
+        }
+
+        // take care about wrap around of get pointer
+        if ( iGetPos == iMemSize )
+        {
+            iGetPos = 0;
         }
 
         // set buffer state flag

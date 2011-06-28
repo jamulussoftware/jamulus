@@ -206,10 +206,9 @@ bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData )
 const double dInitState =
     ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].InitializationState();
 
-if ( dInitState < 0.2 )
+if ( dInitState < 0.1 )
 {
-    if ( ( dInitState > 0.1 ) &&
-         ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() > ERROR_RATE_BOUND ) )
+    if ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() > ERROR_RATE_BOUND )
     {
         for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
         {

@@ -59,7 +59,8 @@ class CSound : public CSoundBase
 {
 public:
     CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
-        CSoundBase ( true, fpNewProcessCallback, arg ) { OpenJack(); }
+        CSoundBase ( true, fpNewProcessCallback, arg ), iJACKBufferSizeMono ( 0 ),
+        iJACKBufferSizeStero ( 0 ) { OpenJack(); }
     virtual ~CSound() { CloseJack(); }
 
     virtual int  Init  ( const int iNewPrefMonoBufferSize );

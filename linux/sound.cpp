@@ -67,6 +67,14 @@ if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
     output_port_right = jack_port_register ( pJackClient, "output right",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
 
+    if ( ( input_port_left   == NULL ) ||
+         ( input_port_right  == NULL ) ||
+         ( output_port_left  == NULL ) ||
+         ( output_port_right == NULL ) )
+    {
+        throw CGenErr ( tr ( "Jack port registering failed" ) );
+    }
+
     const char** ports;
 
     // tell the JACK server that we are ready to roll
@@ -257,3 +265,4 @@ void CSound::shutdownCallback ( void* )
     throw CGenErr ( tr ( "Jack server was shut down" ) );
 }
 #endif // WITH_SOUND
+

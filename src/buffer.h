@@ -38,7 +38,7 @@
 #define ERROR_RATE_BOUND                    0.002
 
 // number of simulation network jitter buffers for evaluating the statistic
-#define NUM_STAT_SIMULATION_BUFFERS         13
+#define NUM_STAT_SIMULATION_BUFFERS         11
 
 
 /* Classes ********************************************************************/

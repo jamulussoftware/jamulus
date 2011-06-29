@@ -127,8 +127,6 @@ CNetBufWithStats::CNetBufWithStats() :
     viBufSizesForSim[8]  = 10;
     viBufSizesForSim[9]  = 11;
     viBufSizesForSim[10] = 12;
-    viBufSizesForSim[11] = 14;
-    viBufSizesForSim[12] = 16;
 
     // set all simulation buffers in simulation mode
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
@@ -156,15 +154,20 @@ void CNetBufWithStats::Init ( const int  iNewBlockSize,
             ErrorRateStatistic[i].Init ( MAX_STATISTIC_COUNT, true );
         }
 
-        // start initialization phase of IIR filtering, use half the size of
-        // the error rate statistic buffers which should be ok for a good
+        // start initialization phase of IIR filtering, use a quarter the size
+        // of the error rate statistic buffers which should be ok for a good
         // initialization value (initialization phase should be as short as
         // possible
-        iInitCounter = MAX_STATISTIC_COUNT / 2;
+        iInitCounter = MAX_STATISTIC_COUNT / 4;
 
         // init auto buffer setting with a meaningful value (should not be used
         // anyway)
         iCurAutoBufferSizeSetting = 5;
+
+// TEST
+dCurIIRFilterResult = iCurAutoBufferSizeSetting;
+iCurDecidedResult   = iCurAutoBufferSizeSetting;
+
     }
 }
 
@@ -206,7 +209,7 @@ bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData )
 const double dInitState =
     ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].InitializationState();
 
-if ( dInitState < 0.1 )
+if ( ( dInitState > 0.15 ) && ( dInitState < 0.16 ) )
 {
     if ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() > ERROR_RATE_BOUND )
     {
@@ -227,6 +230,26 @@ void CNetBufWithStats::UpdateAutoSetting()
     bool bDecisionFound = false;
 
 
+// TEST initialization phase
+const double dInitState =
+    ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].InitializationState();
+
+const bool bIsInitePhase = ( dInitState < 0.7 );
+
+double dErrorRateBound = ERROR_RATE_BOUND;
+
+/*
+if ( bIsInitePhase )
+{
+    const double dCurErrRateLargestBuffer =
+        ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage();
+
+    dErrorRateBound = dCurErrRateLargestBuffer +
+        (1.0 - dCurErrRateLargestBuffer) / 500;
+}
+*/
+
+
     // Get error rate decision -------------------------------------------------
     // Use a specified error bound to identify the best buffer size for the
     // current network situation. Start with the smallest buffer and
@@ -234,7 +257,7 @@ void CNetBufWithStats::UpdateAutoSetting()
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
         if ( ( !bDecisionFound ) &&
-             ( ErrorRateStatistic[i].GetAverage() <= ERROR_RATE_BOUND ) )
+             ( ErrorRateStatistic[i].GetAverage() <= dErrorRateBound ) )
         {
             iCurDecision   = viBufSizesForSim[i];
             bDecisionFound = true;
@@ -249,6 +272,23 @@ void CNetBufWithStats::UpdateAutoSetting()
 
 
     // Post calculation (filtering) --------------------------------------------
+
+// TEST
+double dWeightUp   = 0.999995;
+double dWeightDown = 0.9999;
+
+if ( iInitCounter > 0 )
+{
+    // decrease init counter
+    iInitCounter--;
+
+dWeightUp   = 0.9995;
+dWeightDown = 0.999;
+}
+
+
+
+/*
     if ( iInitCounter > 0 )
     {
         // for initialization phase, use current decision without applying
@@ -267,6 +307,7 @@ void CNetBufWithStats::UpdateAutoSetting()
         }
     }
     else
+*/
     {
         // Define different weigths for up and down direction. Up direction
         // filtering shall be slower than for down direction since we assume
@@ -274,8 +315,8 @@ void CNetBufWithStats::UpdateAutoSetting()
         // the current network condition. If the current error rate estimation
         // is higher, it may be a temporary problem which should not change
         // the current jitter buffer size significantly.
-        const double dWeightUp        = 0.999995;
-        const double dWeightDown      = 0.9999;
+//        const double dWeightUp        = 0.999995;
+//        const double dWeightDown      = 0.9999;
         const double dHysteresisValue = 0.1;
 
         // apply non-linear IIR filter
@@ -317,5 +358,5 @@ void CNetBufWithStats::StoreAllSimAverages()
     fclose ( pFile );
 
 // scilab:
-// close;x=read('c:/temp/test.dat',-1,13);plot2d([2,3,4,5,6,7,8,9,10,11,12,14,16], x, style=-1 , logflag = 'nl');plot2d([2 20],[1 1]*0.01);plot2d([2 20],[1 1]*0.005);x
+// close;x=read('c:/temp/test.dat',-1,13);plot2d([2,3,4,5,6,7,8,9,10,11,12], x, style=-1 , logflag = 'nl');plot2d([2 20],[1 1]*0.01);plot2d([2 20],[1 1]*0.005);x
 }

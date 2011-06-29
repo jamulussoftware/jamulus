@@ -159,7 +159,7 @@ void CSound::Stop()
     CSoundBase::Stop();
 }
 
-int CSound::Init ( const int iNewPrefMonoBufferSize )
+int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
 {
 // try setting buffer size
 // TODO seems not to work! -> no audio after this operation!
@@ -201,8 +201,11 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
         // copy input data
         for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
         {
-            pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( in_left[i] * _MAXSHORT );
-            pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( in_right[i] * _MAXSHORT );
+            pSound->vecsTmpAudioSndCrdStereo[2 * i] =
+                (short) ( in_left[i] * _MAXSHORT );
+
+            pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
+                (short) ( in_right[i] * _MAXSHORT );
         }
 
         // call processing callback function
@@ -239,11 +242,11 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             pSound->output_port_right, nframes );
 
         // clear output data
-        for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
-        {
-            out_left[i]  = 0;
-            out_right[i] = 0;
-        }
+        memset ( out_left,
+            0, sizeof ( jack_default_audio_sample_t ) * nframes );
+
+        memset ( out_right,
+            0, sizeof ( jack_default_audio_sample_t ) * nframes );
     }
 
     return 0; // zero on success, non-zero on error 

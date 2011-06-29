@@ -160,14 +160,11 @@ void CNetBufWithStats::Init ( const int  iNewBlockSize,
         // possible
         iInitCounter = MAX_STATISTIC_COUNT / 4;
 
-        // init auto buffer setting with a meaningful value (should not be used
-        // anyway)
+        // init auto buffer setting with a meaningful value, also init the
+        // IIR parameter with this value
         iCurAutoBufferSizeSetting = 5;
-
-// TEST
-dCurIIRFilterResult = iCurAutoBufferSizeSetting;
-iCurDecidedResult   = iCurAutoBufferSizeSetting;
-
+        dCurIIRFilterResult       = iCurAutoBufferSizeSetting;
+        iCurDecidedResult         = iCurAutoBufferSizeSetting;
     }
 }
 
@@ -230,26 +227,6 @@ void CNetBufWithStats::UpdateAutoSetting()
     bool bDecisionFound = false;
 
 
-// TEST initialization phase
-const double dInitState =
-    ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].InitializationState();
-
-const bool bIsInitePhase = ( dInitState < 0.7 );
-
-double dErrorRateBound = ERROR_RATE_BOUND;
-
-/*
-if ( bIsInitePhase )
-{
-    const double dCurErrRateLargestBuffer =
-        ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage();
-
-    dErrorRateBound = dCurErrRateLargestBuffer +
-        (1.0 - dCurErrRateLargestBuffer) / 500;
-}
-*/
-
-
     // Get error rate decision -------------------------------------------------
     // Use a specified error bound to identify the best buffer size for the
     // current network situation. Start with the smallest buffer and
@@ -257,7 +234,7 @@ if ( bIsInitePhase )
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
         if ( ( !bDecisionFound ) &&
-             ( ErrorRateStatistic[i].GetAverage() <= dErrorRateBound ) )
+             ( ErrorRateStatistic[i].GetAverage() <= ERROR_RATE_BOUND ) )
         {
             iCurDecision   = viBufSizesForSim[i];
             bDecisionFound = true;
@@ -272,91 +249,38 @@ if ( bIsInitePhase )
 
 
     // Post calculation (filtering) --------------------------------------------
+    // Define different weigths for up and down direction. Up direction
+    // filtering shall be slower than for down direction since we assume
+    // that the lower value is the actual value which can be used for
+    // the current network condition. If the current error rate estimation
+    // is higher, it may be a temporary problem which should not change
+    // the current jitter buffer size significantly.
+    // For the initialization phase, use lower weight values to get faster
+    // adaptation.
+    double dWeightUp              = 0.999995;
+    double dWeightDown            = 0.9999;
+    const double dHysteresisValue = 0.1;
 
-// TEST
-double dWeightUp   = 0.999995;
-double dWeightDown = 0.9999;
-
-if ( iInitCounter > 0 )
-{
-    // decrease init counter
-    iInitCounter--;
-
-dWeightUp   = 0.9995;
-dWeightDown = 0.999;
-}
-
-
-
-/*
+    // check for initialization phase
     if ( iInitCounter > 0 )
     {
-        // for initialization phase, use current decision without applying
-        // any filtering
-        iCurAutoBufferSizeSetting = iCurDecision;
-
         // decrease init counter
         iInitCounter--;
 
-        if ( iInitCounter == 0 )
-        {
-            // initialization phase is at the end now, init parameters for
-            // regular estimation phase
-            dCurIIRFilterResult = iCurDecision;
-            iCurDecidedResult   = iCurDecision;
-        }
-    }
-    else
-*/
-    {
-        // Define different weigths for up and down direction. Up direction
-        // filtering shall be slower than for down direction since we assume
-        // that the lower value is the actual value which can be used for
-        // the current network condition. If the current error rate estimation
-        // is higher, it may be a temporary problem which should not change
-        // the current jitter buffer size significantly.
-//        const double dWeightUp        = 0.999995;
-//        const double dWeightDown      = 0.9999;
-        const double dHysteresisValue = 0.1;
-
-        // apply non-linear IIR filter
-        LlconMath().UpDownIIR1( dCurIIRFilterResult,
-                                static_cast<double> ( iCurDecision ),
-                                dWeightUp,
-                                dWeightDown);
-
-        // apply a hysteresis
-        iCurAutoBufferSizeSetting =
-            LlconMath().DecideWithHysteresis ( dCurIIRFilterResult,
-                                               iCurDecidedResult,
-                                               dHysteresisValue );
+        // overwrite weigth values with lower values
+        dWeightUp   = 0.9995;
+        dWeightDown = 0.999;
     }
 
-/*
-#ifdef _WIN32
-// TEST
-static FILE* pFile = fopen ( "c:\\temp\\test.dat", "w" );
-fprintf ( pFile, "%d %e %d\n", iCurDecision, dCurIIRFilterResult, GetAutoSetting() );
-fflush ( pFile );
-#endif
-*/
-}
+    // apply non-linear IIR filter
+    LlconMath().UpDownIIR1( dCurIIRFilterResult,
+                            static_cast<double> ( iCurDecision ),
+                            dWeightUp,
+                            dWeightDown);
 
-
-// TEST for debugging
-void CNetBufWithStats::StoreAllSimAverages()
-{
-    FILE* pFile = fopen ( "c:\\temp\\test1.dat", "w" );
-
-    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
-    {
-        fprintf ( pFile, "%e, ", ErrorRateStatistic[i].GetAverage() );
-    }
-    fprintf ( pFile, "%e", ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() );
-    fprintf ( pFile, "\n" );
-
-    fclose ( pFile );
-
-// scilab:
-// close;x=read('c:/temp/test.dat',-1,13);plot2d([2,3,4,5,6,7,8,9,10,11,12], x, style=-1 , logflag = 'nl');plot2d([2 20],[1 1]*0.01);plot2d([2 20],[1 1]*0.005);x
+    // apply a hysteresis
+    iCurAutoBufferSizeSetting =
+        LlconMath().DecideWithHysteresis ( dCurIIRFilterResult,
+                                           iCurDecidedResult,
+                                           dHysteresisValue );
 }

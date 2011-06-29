@@ -942,11 +942,6 @@ void CLlconClientDlg::UpdateDisplay()
         chbChat->setChecked   ( true );
         chbChat->blockSignals ( false );
     }
-
-
-// TEST
-//pClient->GetChannel()->StoreAllSimAverages();
-
 }
 
 void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )

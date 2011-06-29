@@ -402,9 +402,6 @@ public:
 
     int GetAutoSetting() { return iCurAutoBufferSizeSetting; }
 
-// TEST
-void StoreAllSimAverages();
-
 protected:
     void UpdateAutoSetting();
 

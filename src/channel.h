@@ -135,11 +135,6 @@ public:
 
     void CreateNetTranspPropsMessFromCurrentSettings();
 
-
-// TEST
-void StoreAllSimAverages() { SockBuf.StoreAllSimAverages(); }
-
-
 protected:
     bool ProtocolIsEnabled(); 
 

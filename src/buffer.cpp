@@ -162,7 +162,7 @@ void CNetBufWithStats::Init ( const int  iNewBlockSize,
 
         // init auto buffer setting with a meaningful value, also init the
         // IIR parameter with this value
-        iCurAutoBufferSizeSetting = 5;
+        iCurAutoBufferSizeSetting = 6;
         dCurIIRFilterResult       = iCurAutoBufferSizeSetting;
         iCurDecidedResult         = iCurAutoBufferSizeSetting;
     }
@@ -198,25 +198,6 @@ bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData )
 
     // update auto setting
     UpdateAutoSetting();
-
-
-// TEST
-// sometimes in the very first period after a connection we get a bad error
-// rate result -> delete this from the initialization phase
-const double dInitState =
-    ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].InitializationState();
-
-if ( ( dInitState > 0.15 ) && ( dInitState < 0.16 ) )
-{
-    if ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].GetAverage() > ERROR_RATE_BOUND )
-    {
-        for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
-        {
-            ErrorRateStatistic[i].Reset();
-        }
-    }
-}
-
 
     return bGetOK;
 }
@@ -283,4 +264,21 @@ void CNetBufWithStats::UpdateAutoSetting()
         LlconMath().DecideWithHysteresis ( dCurIIRFilterResult,
                                            iCurDecidedResult,
                                            dHysteresisValue );
+
+
+    // Initialization phase check and correction -------------------------------
+    // sometimes in the very first period after a connection we get a bad error
+    // rate result -> delete this from the initialization phase
+    if ( iInitCounter == MAX_STATISTIC_COUNT / 8 )
+    {
+        // check error rate of the largest buffer as the indicator
+        if ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].
+             GetAverage() > ERROR_RATE_BOUND )
+        {
+            for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+            {
+                ErrorRateStatistic[i].Reset();
+            }
+        }
+    }
 }

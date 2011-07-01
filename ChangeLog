@@ -18,6 +18,8 @@
 - added server settings in the GUI for the server list and added ini file
   support to store the settings
 
+- bug fix: fixed Jack audio interface instability
+
 
 3.1.2
 

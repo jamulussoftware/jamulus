@@ -7,6 +7,8 @@ if "%VSINSTALLDIR%" == "" goto vsenvproblem
 
 rem clean and compile solution -------------------------------------------------
 devenv llcon.sln /clean "Release|Win32"
+
+call MocQT
 devenv llcon.sln /build "Release|Win32"
 
 rem create installer -----------------------------------------------------------

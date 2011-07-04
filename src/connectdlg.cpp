@@ -391,9 +391,17 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
                 break;
             }
 
-            // update ping text
-            lvwServers->topLevelItem ( iIdx )->
-                setText ( 1, QString().setNum ( iPingTime ) + " ms" );
+            // update ping text, take special care if ping time exceeds a
+            // certain value
+            if ( iPingTime > 500 )
+            {
+                lvwServers->topLevelItem ( iIdx )->setText ( 1, ">500 ms" );
+            }
+            else
+            {
+                lvwServers->topLevelItem ( iIdx )->
+                    setText ( 1, QString().setNum ( iPingTime ) + " ms" );
+            }
 
             // update number of clients text
             lvwServers->topLevelItem ( iIdx )->

@@ -93,6 +93,10 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
         SIGNAL ( itemDoubleClicked ( QTreeWidgetItem*, int ) ),
         this, SLOT ( OnServerListItemDoubleClicked ( QTreeWidgetItem*, int ) ) );
 
+    QObject::connect ( lvwServers, // to get default return key behaviour working
+        SIGNAL ( activated ( QModelIndex ) ),
+        this, SLOT ( OnConnectClicked() ) );
+
     // combo boxes
     QObject::connect ( cbxServerAddr, SIGNAL ( editTextChanged ( const QString& ) ),
         this, SLOT ( OnServerAddrEditTextChanged ( const QString& ) ) );

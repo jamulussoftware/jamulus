@@ -58,10 +58,7 @@ public:
     virtual void OpenDriverSetup() { ASIOControlPanel(); }
 
     // device selection
-    virtual int     GetNumDev() { return lNumDevs; }
-    virtual QString GetDeviceName ( const int iDiD ) { return cDriverNames[iDiD]; }
     virtual QString SetDev ( const int iNewDev );
-    virtual int     GetDev() { return lCurDev; }
 
     // channel selection
     virtual int     GetNumInputChannels() { return static_cast<int> ( lNumInChan ); }
@@ -126,9 +123,7 @@ protected:
     static void      sampleRateChanged ( ASIOSampleRate ) {}
     static long      asioMessages ( long selector, long value, void* message, double* opt );
 
-    long             lNumDevs;
-    long             lCurDev;
-    char*            cDriverNames[MAX_NUMBER_SOUND_CARDS];
+    char* cDriverNames[MAX_NUMBER_SOUND_CARDS];
 };
 
 #endif // !defined ( _SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_ )

@@ -26,6 +26,21 @@
 
 
 /* Implementation *************************************************************/
+CSoundBase::CSoundBase ( const bool bNewIsCallbackAudioInterface,
+                         void (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
+                         void* pParg ) :
+    fpProcessCallback ( fpNewProcessCallback ),
+    pProcessCallbackArg ( pParg ), bRun ( false ),
+    bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface )
+{
+    // initializations for the sound card names (default)
+    lNumDevs          = 1;
+    strDriverNames[0] = "Default";
+
+    // set current device
+    lCurDev = 0; // default device
+}
+
 int CSoundBase::Init ( const int iNewPrefMonoBufferSize )
 {
     // init audio sound card buffer

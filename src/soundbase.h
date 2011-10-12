@@ -26,6 +26,7 @@
 #define SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_
 
 #include <qthread.h>
+#include <qstring.h>
 #include "global.h"
 #include "util.h"
 
@@ -38,19 +39,19 @@ class CSoundBase : public QThread
 public:
     CSoundBase ( const bool bNewIsCallbackAudioInterface,
         void (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
-        void* pParg ) : fpProcessCallback ( fpNewProcessCallback ),
-        pProcessCallbackArg ( pParg ), bRun ( false ),
-        bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ) {}
+        void* pParg );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
 
+    // device selection
+    virtual int     GetNumDev() { return lNumDevs; }
+    virtual QString GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
+
     // dummy implementations in base class
-    virtual int     GetNumDev()                 { return 1; }
-    virtual QString GetDeviceName ( const int ) { return "Default"; }
     virtual QString SetDev ( const int )        { return ""; }
-    virtual int     GetDev()                    { return 0; }
+    virtual int     GetDev()                    { return lCurDev; }
 
     virtual int     GetNumInputChannels() { return 2; }
     virtual QString GetInputChannelName ( const int ) { return "Default"; }
@@ -95,6 +96,10 @@ protected:
     bool bIsCallbackAudioInterface;
 
     CVector<int16_t> vecsAudioSndCrdStereo;
+
+    long    lNumDevs;
+    long    lCurDev;
+    QString strDriverNames[MAX_NUMBER_SOUND_CARDS];
 
 signals:
     void ReinitRequest();

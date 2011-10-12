@@ -539,6 +539,7 @@ CSound::CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), 
     // get available ASIO driver names in system
     for ( i = 0; i < MAX_NUMBER_SOUND_CARDS; i++ )
     {
+        // allocate memory for driver names
         cDriverNames[i] = new char[32];
     }
 
@@ -557,6 +558,13 @@ CSound::CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), 
             "the ASIO4All or kX driver." ) );
     }
     asioDrivers->removeCurrentDriver();
+
+    // copy driver names to base class but internally we still have to use
+    // the char* variable because of the ASIO API :-(
+    for ( i = 0; i < lNumDevs; i++ )
+    {
+        strDriverNames[i] = cDriverNames[i];
+    }
 
     // init device index with illegal value to show that driver is not initialized
     lCurDev = -1;

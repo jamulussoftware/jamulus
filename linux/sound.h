@@ -59,17 +59,13 @@ class CSound : public CSoundBase
 {
 public:
     CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
-        CSoundBase ( true, fpNewProcessCallback, arg ), iJACKBufferSizeMono ( 0 ),
+        CSoundBase ( "Jack", true, fpNewProcessCallback, arg ), iJACKBufferSizeMono ( 0 ),
         iJACKBufferSizeStero ( 0 ) { OpenJack(); }
     virtual ~CSound() { CloseJack(); }
 
-    virtual int  Init  ( const int iNewPrefMonoBufferSize );
+    virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
-
-    // device cannot be set under Linux
-    virtual int     GetNumDev()                 { return 1; }
-    virtual QString GetDeviceName ( const int ) { return "Jack"; }
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function

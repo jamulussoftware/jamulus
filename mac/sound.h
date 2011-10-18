@@ -38,16 +38,12 @@ class CSound : public CSoundBase
 {
 public:
     CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
-        CSoundBase ( true, fpNewProcessCallback, arg ) { OpenCoreAudio(); }
+        CSoundBase ( "CoreAudio", true, fpNewProcessCallback, arg ) { OpenCoreAudio(); }
     virtual ~CSound() { CloseCoreAudio(); }
 
     virtual int  Init  ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
-
-    // device cannot be set under MacOS
-    virtual int     GetNumDev()                 { return 1; }
-    virtual QString GetDeviceName ( const int ) { return "Core Audio"; }
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function

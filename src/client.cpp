@@ -455,6 +455,18 @@ void CClient::OnSndCrdReinitRequest()
 
     // reinit the driver (we use the currently selected driver) and
     // init client object, too
+
+// TODO possible bug: In ASIO driver if set dev is called, the driver is
+// unloaded. See ASIO manual: "Note: A host application has to defer
+// processing of these notification to a later "secure" time as the
+// driver has finish its processing of the notification. Especially on
+// the kAsioResetRequest it is a bad idea to unload the driver during
+// the asioMessage callback since the callback has to return back into
+// the driver, which is no longer present."
+
+// TODO write separate driver reset function in sound base instead
+// of doing setdev with the old driver ID -> avoid unloading driver
+
     Sound.SetDev ( Sound.GetDev() );
     Init();
 

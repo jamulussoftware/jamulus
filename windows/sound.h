@@ -49,16 +49,13 @@ class CSound : public CSoundBase
 {
 public:
     CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg );
-    virtual ~CSound();
+    virtual ~CSound() { UnloadCurrentDriver(); }
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
 
     virtual void OpenDriverSetup() { ASIOControlPanel(); }
-
-    // device selection
-    virtual QString SetDev ( const int iNewDev );
 
     // channel selection
     virtual int     GetNumInputChannels() { return static_cast<int> ( lNumInChan ); }
@@ -76,8 +73,8 @@ public:
     virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
 
 protected:
-    QVector<QString> LoadAndInitializeFirstValidDriver();
-    QString          LoadAndInitializeDriver ( int iIdx );
+    virtual QString  LoadAndInitializeDriver ( int iIdx );
+    virtual void     UnloadCurrentDriver();
     int              GetActualBufferSize ( const int iDesiredBufferSizeMono );
     QString          CheckDeviceCapabilities();
     bool             CheckSampleTypeSupported ( const ASIOSampleType SamType );

@@ -27,6 +27,7 @@
 
 #include <qthread.h>
 #include <qstring.h>
+#include <qmessagebox.h>
 #include "global.h"
 #include "util.h"
 
@@ -37,7 +38,8 @@ class CSoundBase : public QThread
     Q_OBJECT
 
 public:
-    CSoundBase ( const bool bNewIsCallbackAudioInterface,
+    CSoundBase ( const QString& strNewSystemDriverTechniqueName,
+        const bool bNewIsCallbackAudioInterface,
         void (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
         void* pParg );
 
@@ -48,10 +50,8 @@ public:
     // device selection
     virtual int     GetNumDev() { return lNumDevs; }
     virtual QString GetDeviceName ( const int iDiD ) { return strDriverNames[iDiD]; }
-
-    // dummy implementations in base class
-    virtual QString SetDev ( const int )        { return ""; }
-    virtual int     GetDev()                    { return lCurDev; }
+    virtual QString SetDev ( const int );
+    virtual int     GetDev() { return lCurDev; }
 
     virtual int     GetNumInputChannels() { return 2; }
     virtual QString GetInputChannelName ( const int ) { return "Default"; }
@@ -76,6 +76,11 @@ public:
     void EmitReinitRequestSignal() { emit ReinitRequest(); }
 
 protected:
+    // driver handling
+    virtual QString  LoadAndInitializeDriver ( int ) { return ""; };
+    virtual void     UnloadCurrentDriver() {}
+    QVector<QString> LoadAndInitializeFirstValidDriver();
+
     // function pointer to callback function
     void (*fpProcessCallback) ( CVector<int16_t>& psData, void* arg );
     void* pProcessCallbackArg;
@@ -93,13 +98,15 @@ protected:
 
     void run();
     bool bRun;
-    bool bIsCallbackAudioInterface;
+
+    bool             bIsCallbackAudioInterface;
+    QString          strSystemDriverTechniqueName;
 
     CVector<int16_t> vecsAudioSndCrdStereo;
 
-    long    lNumDevs;
-    long    lCurDev;
-    QString strDriverNames[MAX_NUMBER_SOUND_CARDS];
+    long             lNumDevs;
+    long             lCurDev;
+    QString          strDriverNames[MAX_NUMBER_SOUND_CARDS];
 
 signals:
     void ReinitRequest();

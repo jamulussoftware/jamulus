@@ -190,7 +190,6 @@ DISTFILES += AUTHORS \
     src/res/faderbackground.png \
     src/res/faderhandle.png \
     src/res/faderhandlesmall.png \
-    src/res/gig.png \
     src/res/HLEDGreen.png \
     src/res/HLEDGreenSmall.png \
     src/res/HLEDGrey.png \

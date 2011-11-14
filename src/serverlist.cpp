@@ -90,7 +90,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         }
     }
 
-    // per definition, the first entry in the server list it the own server
+    // per definition, the first entry in the server list is the own server
     ServerList.append ( ThisServerListEntry );
 
     // parse the predefined server infos (if any) according to definition:
@@ -234,8 +234,10 @@ void CServerListManager::OnTimerPollList()
 {
     QMutexLocker locker ( &Mutex );
 
-    // check all list entries except of the very first one (which is the central
-    // server entry) and the predefined servers if they are still valid
+    // Check all list entries except of the very first one (which is the central
+    // server entry) and the predefined servers if they are still valid.
+    // Note that we have to use "ServerList.size()" function in the for loop
+    // since we may remove elements from the server list inside the for loop.
     for ( int iIdx = 1 + iNumPredefinedServers; iIdx < ServerList.size(); iIdx++ )
     {
         // 1 minute = 60 * 1000 ms
@@ -316,7 +318,7 @@ void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& Ine
 
         // Find the server to unregister in the list. The very first list entry
         // must not be checked since this is per definition the central server
-        // (i.e., this server), also the predefined servers must not be checked
+        // (i.e., this server), also the predefined servers must not be checked.
         for ( int iIdx = 1 + iNumPredefinedServers; iIdx < iCurServerListSize; iIdx++ )
         {
             if ( ServerList[iIdx].HostAddr == InetAddr )
@@ -324,8 +326,11 @@ void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& Ine
                 // remove this list entry
                 ServerList.removeAt ( iIdx );
 
-                // entry found, leave for-loop
-                continue;
+                // entry found, leave for-loop (it is important to exit the
+                // for loop since when we remove an item from the server list,
+                // "iCurServerListSize" is not correct anymore and we could get
+                // a segmentation fault)
+                break;
             }
         }
     }

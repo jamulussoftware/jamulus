@@ -72,12 +72,16 @@ CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
     cbxServerAddr->setMaxCount     ( MAX_NUM_SERVER_ADDR_ITEMS );
     cbxServerAddr->setInsertPolicy ( QComboBox::NoInsert );
 
-    // set up list view for connected clients
+    // set up list view for connected clients (note that the last column size
+    // must not be specified since this column takes all the remaining space)
     lvwServers->setColumnWidth ( 0, 170 );
     lvwServers->setColumnWidth ( 1, 65 );
     lvwServers->setColumnWidth ( 2, 55 );
-    lvwServers->setColumnWidth ( 3, 130 );
     lvwServers->clear();
+
+    // add invisible column which is used for sorting the list
+    lvwServers->setColumnCount ( 5 );
+    lvwServers->hideColumn ( 4 );
 
     // make sure the connect button has the focus
     butConnect->setFocus();
@@ -282,6 +286,10 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
 
         pNewListViewItem->setText ( 3, strLocation );
 
+        // init the minimum ping time with a large number (note that this number
+        // must fit in an integer type)
+        pNewListViewItem->setText ( 4, "99999999" );
+
         // store host address
         pNewListViewItem->setData ( 0, Qt::UserRole,
             CurHostAddress.toString() );
@@ -410,6 +418,20 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
             // update number of clients text
             lvwServers->topLevelItem ( iIdx )->
                 setText ( 2, QString().setNum ( iNumClients ) );
+
+            // update minimum ping time column (invisible, used for sorting) if
+            // the new value is smaller than the old value
+            if ( lvwServers->topLevelItem ( iIdx )->text ( 4 ).toInt() > iPingTime )
+            {
+                // we pad to a total of 8 characters with zeros to make sure the
+                // sorting is done correctly
+                lvwServers->topLevelItem ( iIdx )->
+                    setText ( 4, QString ( "%1" ).arg (
+                    iPingTime, 8, 10, QLatin1Char( '0' ) ) );
+
+                // update the sorting (lowest number on top)
+                lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
+            }
 
             // a ping time was received, set item to visible
             lvwServers->topLevelItem ( iIdx )->setHidden ( false );

@@ -419,6 +419,9 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
             lvwServers->topLevelItem ( iIdx )->
                 setText ( 2, QString().setNum ( iNumClients ) );
 
+            // a ping time was received, set item to visible
+            lvwServers->topLevelItem ( iIdx )->setHidden ( false );
+
             // update minimum ping time column (invisible, used for sorting) if
             // the new value is smaller than the old value
             if ( lvwServers->topLevelItem ( iIdx )->text ( 4 ).toInt() > iPingTime )
@@ -429,12 +432,11 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
                     setText ( 4, QString ( "%1" ).arg (
                     iPingTime, 8, 10, QLatin1Char( '0' ) ) );
 
-                // update the sorting (lowest number on top)
+                // Update the sorting (lowest number on top).
+                // Note that the sorting must be the last action for the current
+                // item since the topLevelItem ( iIdx ) is then no longer valid.
                 lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
             }
-
-            // a ping time was received, set item to visible
-            lvwServers->topLevelItem ( iIdx )->setHidden ( false );
         }
     }
 }

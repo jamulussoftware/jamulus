@@ -79,6 +79,7 @@ public:
                       CSettings*      pNSetP,
                       const bool      bNewConnectOnStartup,
                       const bool      bNewDisalbeLEDs,
+                      const bool      bNewShowComplRegConnList,
                       QWidget*        parent = 0,
                       Qt::WindowFlags f = 0 );
 

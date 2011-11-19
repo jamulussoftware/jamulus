@@ -5,6 +5,12 @@ TODO working on bug fix: Windows: driver is changed during connection results
      sometimes in lowed noise
 
 
+- connect dialog list is sorted by the ping time
+
+- software icon changed
+
+- bug fix: fixed crash on slave server unregistering
+
 
 3.2.0
 

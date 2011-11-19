@@ -26,11 +26,14 @@
 
 
 /* Implementation *************************************************************/
-CConnectDlg::CConnectDlg ( QWidget* parent, Qt::WindowFlags f )
+CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
+                           QWidget* parent,
+                           Qt::WindowFlags f )
     : QDialog ( parent, f ),
       strCentralServerAddress  ( "" ),
       strSelectedAddress       ( "" ),
       strSelectedServerName    ( "" ),
+      bShowCompleteRegList     ( bNewShowCompleteRegList ),
       bServerListReceived      ( false ),
       bStateOK                 ( false ),
       bServerListItemWasChosen ( false )
@@ -239,8 +242,11 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         QTreeWidgetItem* pNewListViewItem = new QTreeWidgetItem ( lvwServers );
 
         // make the entry invisible (will be set to visible on successful ping
-        // result)
-        pNewListViewItem->setHidden ( true );
+        // result) if the complete list of registered servers shall not be shown
+        if ( !bShowCompleteRegList )
+        {
+            pNewListViewItem->setHidden ( true );
+        }
 
         // server name (if empty, show host address instead)
         if ( !vecServerInfo[iIdx].strName.isEmpty() )

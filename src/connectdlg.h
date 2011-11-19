@@ -54,7 +54,9 @@ class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
     Q_OBJECT
 
 public:
-    CConnectDlg ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    CConnectDlg ( const bool bNewShowCompleteRegList,
+                  QWidget* parent = 0,
+                  Qt::WindowFlags f = 0 );
 
     void Init ( const QString           strNewCentralServerAddr, 
                 const CVector<QString>& vstrIPAddresses );
@@ -83,6 +85,7 @@ protected:
     CVector<QString> vstrIPAddresses;
     QString          strSelectedAddress;
     QString          strSelectedServerName;
+    bool             bShowCompleteRegList;
     bool             bServerListReceived;
     bool             bStateOK;
     bool             bServerListItemWasChosen;

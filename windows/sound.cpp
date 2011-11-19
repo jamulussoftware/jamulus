@@ -972,6 +972,16 @@ long CSound::asioMessages ( long selector,
 
 // TODO implement separate ASIO reset function in base class!
 
+// kAsioBufferSizeChange:
+// Informs the application that the driver has a new preferred buffer size.
+//
+// kAsioResetRequest:
+// Requests a driver reset. If accepted, this will close the driver
+// (ASIOExit() ) and re-open it again (ASIOInit() etc.) at the next
+// "safe" time (usually during the application IDLE time). Some
+// drivers need to reconfigure for instance when the sample rate
+// changes, or some basic changes have been made in ASIOControlPanel().
+
 
             pSound->EmitReinitRequestSignal();
             ret = 1L; // 1L if request is accepted or 0 otherwise

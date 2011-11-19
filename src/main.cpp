@@ -58,6 +58,7 @@ int main ( int argc, char** argv )
     bool    bStartMinimized       = false;
     bool    bConnectOnStartup     = false;
     bool    bDisalbeLEDs          = false;
+    bool    bShowComplRegConnList = false;
     int     iNumServerChannels    = DEFAULT_USED_NUM_CHANNELS;
     quint16 iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
     QString strIniFileName        = "";
@@ -138,6 +139,21 @@ int main ( int argc, char** argv )
         {
             bDisalbeLEDs = true;
             tsConsole << "- disable LEDs in main window" << endl;
+            continue;
+        }
+
+
+        // Show all registered servers in the server list ----------------------
+        // Undocumented debugging command line argument: Show all registered
+        // servers in the server list regardless if a ping to the server is
+        // possible or not
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--showallservers", // no short form
+                               "--showallservers" ) )
+        {
+            bShowComplRegConnList = true;
+            tsConsole << "- show all registered servers in server list" << endl;
             continue;
         }
 
@@ -353,6 +369,7 @@ int main ( int argc, char** argv )
                 &Settings,
                 bConnectOnStartup,
                 bDisalbeLEDs,
+                bShowComplRegConnList,
                 0,
                 Qt::Window );
 

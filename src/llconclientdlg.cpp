@@ -30,6 +30,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
                                    CSettings*      pNSetP,
                                    const bool      bNewConnectOnStartup,
                                    const bool      bNewDisalbeLEDs,
+                                   const bool      bNewShowComplRegConnList,
                                    QWidget*        parent,
                                    Qt::WindowFlags f ) :
     QDialog            ( parent, f ),
@@ -38,7 +39,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     bUnreadChatMessage ( false ),
     ClientSettingsDlg  ( pNCliP, parent, Qt::Window ),
     ChatDlg            ( parent, Qt::Window ),
-    ConnectDlg         ( parent, Qt::Dialog )
+    ConnectDlg         ( bNewShowComplRegConnList, parent, Qt::Dialog )
 {
     setupUi ( this );
 

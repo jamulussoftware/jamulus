@@ -58,6 +58,9 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
         "         color:            black;"
         "         font:             bold; }" );
 
+    // set margins of the layout to zero to get maximum space for the controls
+    pMainGrid->setContentsMargins ( 0, 0, 0, 0 );
+
     // add user controls to grid
     pMainGrid->addWidget( pFader,  0, Qt::AlignHCenter );
     pMainGrid->addWidget( pcbMute, 0, Qt::AlignLeft );

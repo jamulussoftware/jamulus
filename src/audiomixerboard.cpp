@@ -31,12 +31,15 @@
 CChannelFader::CChannelFader ( QWidget*     pNW,
                                QHBoxLayout* pParentLayout )
 {
-    // create new GUI control objects and store pointers to them
-    pMainGrid = new QVBoxLayout();
-    pFader    = new QSlider   ( Qt::Vertical, pNW );
-    pcbMute   = new QCheckBox ( "Mute",       pNW );
-    pcbSolo   = new QCheckBox ( "Solo",       pNW );
-    pLabel    = new QLabel    ( "",           pNW );
+    // create new GUI control objects and store pointers to them (note that
+    // QWidget takes the ownership of the pMainGrid so that this only has
+    // to be created locally in this constructor)
+    pFrame                 = new QFrame      ( pNW );
+    QVBoxLayout* pMainGrid = new QVBoxLayout ( pFrame );
+    pFader                 = new QSlider     ( Qt::Vertical, pFrame );
+    pcbMute                = new QCheckBox   ( "Mute",       pFrame );
+    pcbSolo                = new QCheckBox   ( "Solo",       pFrame );
+    pLabel                 = new QLabel      ( "",           pFrame );
 
     // setup slider
     pFader->setPageStep ( 1 );
@@ -61,8 +64,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pMainGrid->addWidget( pcbSolo, 0, Qt::AlignLeft );
     pMainGrid->addWidget( pLabel,  0, Qt::AlignHCenter );
 
-    // add fader layout to audio mixer board layout
-    pParentLayout->addLayout ( pMainGrid );
+    // add fader frame to audio mixer board layout
+    pParentLayout->addWidget( pFrame );
 
     // reset current fader
     Reset();

@@ -25,6 +25,7 @@
 #if !defined ( MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_ )
 #define MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_
 
+#include <qframe.h>
 #include <qgroupbox.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
@@ -49,19 +50,10 @@ class CChannelFader : public QObject
 
 public:
     CChannelFader ( QWidget* pNW, QHBoxLayout* pParentLayout );
-    ~CChannelFader()
-    {
-        pLabel->close();
-        pcbMute->close();
-        pcbSolo->close();
-        pFader->close();
-
-        // TODO get rid of pMainGrid
-    }
 
     void SetText ( const QString sText );
-    void Show() { pLabel->show(); pcbMute->show(); pcbSolo->show(); pFader->show(); }
-    void Hide() { pLabel->hide(); pcbMute->hide(); pcbSolo->hide(); pFader->hide(); }
+    void Show() { pFrame->show(); }
+    void Hide() { pFrame->hide(); }
     bool IsVisible() { return pLabel->isVisible(); }
     void SetGUIDesign ( const EGUIDesign eNewDesign );
 
@@ -74,11 +66,11 @@ protected:
     double CalcFaderGain ( const int value );
     void   SetMute ( const bool bState );
 
-    QVBoxLayout* pMainGrid;
-    QSlider*     pFader;
-    QCheckBox*   pcbMute;
-    QCheckBox*   pcbSolo;
-    QLabel*      pLabel;
+    QFrame*    pFrame;
+    QSlider*   pFader;
+    QCheckBox* pcbMute;
+    QCheckBox* pcbSolo;
+    QLabel*    pLabel;
 
     bool         bOtherChannelIsSolo;
 

@@ -61,9 +61,14 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
     // check device capabilities if it fullfills our requirements
     const QString strStat = CheckDeviceCapabilities();
 
-    // store ID of selected driver if initialization was successful
+    // check if device is capable
     if ( strStat.isEmpty() )
     {
+        // the device has changed, per definition we reset the channel
+        // mapping to the defaults (first two available channels)
+        ResetChannelMapping();
+
+        // store ID of selected driver if initialization was successful
         lCurDev = iDriverIdx;
     }
     else
@@ -167,10 +172,6 @@ QString CSound::CheckDeviceCapabilities()
             return tr ( "Required audio sample format not available." );
         }
     }
-
-    // the device has changed, per definition we reset the channel
-    // mapping to the defaults (first two available channels)
-    ResetChannelMapping();
 
     // everything is ok, return empty string for "no error" case
     return "";

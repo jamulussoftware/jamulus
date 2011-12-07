@@ -42,13 +42,6 @@ CSound* pSound;
 \******************************************************************************/
 QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
 {
-    // first check and correct input parameter
-    if ( iDriverIdx >= lNumDevs )
-    {
-        // we assume here that at least one driver is in the system
-        iDriverIdx = 0;
-    }
-
     // load driver
     loadAsioDriver ( cDriverNames[iDriverIdx] );
     if ( ASIOInit ( &driverInfo ) != ASE_OK )
@@ -82,7 +75,7 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
 
 void CSound::UnloadCurrentDriver()
 {
-    // cleanup ASIO stuff
+    // clean up ASIO stuff
     ASIOStop();
     ASIODisposeBuffers();
     ASIOExit();
@@ -439,8 +432,8 @@ CSound::CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), 
         strDriverNames[i] = cDriverNames[i];
     }
 
-    // init device index with illegal value to show that driver is not initialized
-    lCurDev = -1;
+    // init device index as not initialized (invalid)
+    lCurDev = INVALID_SNC_CARD_DEVICE;
 
     // init channel mapping
     ResetChannelMapping();

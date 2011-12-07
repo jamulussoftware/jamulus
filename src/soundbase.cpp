@@ -132,11 +132,18 @@ void CSoundBase::run()
 \******************************************************************************/
 QString CSoundBase::SetDev ( const int iNewDev )
 {
-    QString strReturn         = ""; // init with no error
-    bool    bTryLoadAnyDriver = false;
+    // init return parameter with "no error"
+    QString strReturn = "";
+
+    // first check if valid input parameter
+    if ( iNewDev >= lNumDevs )
+    {
+        // we should actually never get here...
+        return tr ( "Invalid device selection." );
+    }
 
     // check if an ASIO driver was already initialized
-    if ( lCurDev >= 0 )
+    if ( lCurDev != INVALID_SNC_CARD_DEVICE )
     {
         // a device was already been initialized and is used, first clean up
         // driver
@@ -175,6 +182,9 @@ QString CSoundBase::SetDev ( const int iNewDev )
     }
     else
     {
+        // init flag for "load any driver"
+        bool bTryLoadAnyDriver = false;
+
         if ( iNewDev != INVALID_SNC_CARD_DEVICE )
         {
             // This is the first time a driver is to be initialized, we first
@@ -195,31 +205,31 @@ QString CSoundBase::SetDev ( const int iNewDev )
             // try to find one usable driver (select the first valid driver)
             bTryLoadAnyDriver = true;
         }
-    }
 
-    if ( bTryLoadAnyDriver )
-    {
-        // try to load and initialize any valid driver
-        QVector<QString> vsErrorList =
-            LoadAndInitializeFirstValidDriver();
-
-        if ( !vsErrorList.isEmpty() )
+        if ( bTryLoadAnyDriver )
         {
-            // create error message with all details
-            QString sErrorMessage = tr ( "<b>No usable " ) +
-                strSystemDriverTechniqueName + tr ( " audio device "
-                "(driver) found.</b><br><br>"
-                "In the following there is a list of all available drivers "
-                "with the associated error message:<ul>" );
+            // try to load and initialize any valid driver
+            QVector<QString> vsErrorList =
+                LoadAndInitializeFirstValidDriver();
 
-            for ( int i = 0; i < lNumDevs; i++ )
+            if ( !vsErrorList.isEmpty() )
             {
-                sErrorMessage += "<li><b>" + GetDeviceName ( i ) + "</b>: " +
-                    vsErrorList[i] + "</li>";
-            }
-            sErrorMessage += "</ul>";
+                // create error message with all details
+                QString sErrorMessage = tr ( "<b>No usable " ) +
+                    strSystemDriverTechniqueName + tr ( " audio device "
+                    "(driver) found.</b><br><br>"
+                    "In the following there is a list of all available drivers "
+                    "with the associated error message:<ul>" );
 
-            throw CGenErr ( sErrorMessage );
+                for ( int i = 0; i < lNumDevs; i++ )
+                {
+                    sErrorMessage += "<li><b>" + GetDeviceName ( i ) + "</b>: " +
+                        vsErrorList[i] + "</li>";
+                }
+                sErrorMessage += "</ul>";
+
+                throw CGenErr ( sErrorMessage );
+            }
         }
     }
 

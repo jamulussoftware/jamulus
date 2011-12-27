@@ -388,6 +388,13 @@ void CSound::Stop()
 
     // call base class
     CSoundBase::Stop();
+
+    // make sure the working thread is actually done
+    // (by checking the locked state)
+    if ( ASIOMutex.tryLock ( 5000 ) )
+    {
+        ASIOMutex.unlock();
+    }
 }
 
 CSound::CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg ) :

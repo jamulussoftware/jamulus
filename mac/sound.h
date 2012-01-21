@@ -37,11 +37,10 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
-        CSoundBase ( "CoreAudio", true, fpNewProcessCallback, arg ) { OpenCoreAudio(); }
+    CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg );
     virtual ~CSound() { CloseCoreAudio(); }
 
-    virtual int  Init  ( const int iNewPrefMonoBufferSize );
+    virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
 
@@ -52,10 +51,21 @@ public:
     int            iCoreAudioBufferSizeStero;
 
 protected:
+    virtual QString  LoadAndInitializeDriver ( int iIdx );
+    QString CheckDeviceCapabilities ( ComponentInstance& NewAudioInputUnit,
+                                      ComponentInstance& NewAudioOutputUnit );
+
     void OpenCoreAudio();
     void CloseCoreAudio();
-    UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID, const bool bIsInput,
-                           UInt32 iPrefBufferSize );
+
+    UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID,
+                           const bool     bIsInput,
+                           UInt32         iPrefBufferSize );
+
+    void GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
+                               QString&            strDeviceName,
+                               bool&               bIsInput,
+                               bool&               bIsOutput );
 
     // callbacks
     static OSStatus processInput ( void* inRefCon,AudioUnitRenderActionFlags* ioActionFlags,
@@ -66,10 +76,15 @@ protected:
         const AudioTimeStamp*, UInt32, UInt32,
         AudioBufferList* ioData );
 
-    ComponentInstance audioInputUnit;
-    AudioDeviceID     audioInputDevice;
-    ComponentInstance audioOutputUnit;
-    AudioDeviceID     audioOutputDevice;
+    AudioStreamBasicDescription streamFormat;
+
+    AURenderCallbackStruct      inputCallbackStruct;
+    AURenderCallbackStruct      outputCallbackStruct;
+
+    ComponentInstance           audioInputUnit;
+    AudioDeviceID               audioInputDevice;
+    ComponentInstance           audioOutputUnit;
+    AudioDeviceID               audioOutputDevice;
 
     AudioBufferList*  pBufferList;
 

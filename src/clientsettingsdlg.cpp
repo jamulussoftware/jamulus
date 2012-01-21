@@ -263,11 +263,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     butDriverSetup->hide();
 #endif
 
-    // set sound card selection to read-only for MacOS/Linux
-#ifndef _WIN32
-    cbxSoundcard->setEnabled ( false );
-#endif
-
     // init delay and other information controls
     ledOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME_MS );
     ledOverallDelay->Reset();

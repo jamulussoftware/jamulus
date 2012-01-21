@@ -77,7 +77,7 @@ public:
 
 protected:
     // driver handling
-    virtual QString  LoadAndInitializeDriver ( int ) { return ""; };
+    virtual QString  LoadAndInitializeDriver ( int ) { return ""; }
     virtual void     UnloadCurrentDriver() {}
     QVector<QString> LoadAndInitializeFirstValidDriver();
 

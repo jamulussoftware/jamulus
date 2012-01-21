@@ -123,7 +123,7 @@ LED bar:      lbr
 
 // maximum number of recognized sound cards installed in the system,
 // definition for "no device"
-#define MAX_NUMBER_SOUND_CARDS          10
+#define MAX_NUMBER_SOUND_CARDS          30
 #define INVALID_SNC_CARD_DEVICE         -1
 
 // define the maximum number of audio channel for input/output we can store

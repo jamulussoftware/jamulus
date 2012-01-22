@@ -5,6 +5,8 @@ TODO working on bug fix: Windows: driver is changed during connection results
      sometimes in lowed noise
 
 
+- support for audio device selection under Mac OS
+
 - connect dialog list is sorted by the ping time
 
 - software icon changed
@@ -120,7 +122,7 @@ TODO working on bug fix: Windows: driver is changed during connection results
 
 - introduced new audio codec "CELT", not compatible to old versions
 
-- only the sound card frame sizes 128, 256 and 512 is allowed (since other
+- only the sound card frame sizes 128, 256 and 512 are allowed (since other
   frame sizes require additional conversion buffers which introduce delay)
 
 - IMA-ADPCM, MS-ADPCM removed

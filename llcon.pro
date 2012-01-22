@@ -40,8 +40,8 @@ win32 {
         -framework AudioToolbox \
         -framework AudioUnit
 } else:unix {
-	# we assume that stdint.h is always present in a Linux system
-	DEFINES += HAVE_STDINT_H
+    # we assume that stdint.h is always present in a Linux system
+    DEFINES += HAVE_STDINT_H
 
     # only include jack support if CONFIG nosound is not set
     nosoundoption = $$find(CONFIG, "nosound")

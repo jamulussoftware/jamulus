@@ -113,47 +113,48 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
 
     // always add system default devices for input and output as first entry
     lNumDevs = 0;
-    strDriverNames[lNumDevs] = "System Default Device";
+    strDriverNames[lNumDevs] = "System Default In/Out Devices";
     lNumDevs++;
-
 /*
     // add detected devices (also check for maximum allowed sound cards!)
+    //
+    // we add combined entries for input and output for each device so that we
+    // do not need two combo boxes in the GUI for input and output (therefore
+    // all possible combinations are required)
     for ( UInt32 i = 0; ( i < deviceCount ) && ( i < MAX_NUMBER_SOUND_CARDS - 1 ); i++ )
     {
+        for ( UInt32 j = 0; ( j < deviceCount ) && ( j < MAX_NUMBER_SOUND_CARDS - 1 ); j++ )
+        {
+            // get device infos for both current devices
+            QString strDevicName_i;
+            bool    bIsInput_i;
+            bool    bIsOutput_i;
+            QString strDevicName_j;
+            bool    bIsInput_j;
+            bool    bIsOutput_j;
 
-// TODO
-//for ( UInt32 j = 0; ( j < deviceCount ) && ( j < MAX_NUMBER_SOUND_CARDS - 1 ); j++ )
-//{
-//    if ( i != j )
-//    {
-//
-//    }
-//}
+            GetAudioDeviceInfos ( audioDevices[i],
+                                  strDevicName_i,
+                                  bIsInput_i,
+                                  bIsOutput_i );
 
+            GetAudioDeviceInfos ( audioDevices[j],
+                                  strDevicName_j,
+                                  bIsInput_j,
+                                  bIsOutput_j );
 
-        QString strDevicName;
-        bool    bIsInput;
-        bool    bIsOutput;
+            // check if i device is input and j device is output
+            if ( bIsInput_i && bIsOutput_j )
+            {
+                strDriverNames[lNumDevs] = "in: " +
+                    strDevicName_i + "/out: " +
+                    strDevicName_j;
 
-        GetAudioDeviceInfos ( audioDevices[i],
-                              strDevicName,
-                              bIsInput,
-                              bIsOutput );
-
-// TEST
-if ( bIsInput && bIsOutput )
-    strDriverNames[lNumDevs] = "in/out";
-else if ( !bIsInput && !bIsOutput )
-    strDriverNames[lNumDevs] = "";
-else if ( bIsInput )
-    strDriverNames[lNumDevs] = "in";
-else if ( bIsOutput )
-    strDriverNames[lNumDevs] = "out";
-
-        lNumDevs++;
+                lNumDevs++;
+            }
+        }
     }
 */
-
     OpenCoreAudio();
 
     // init device index as not initialized (invalid)

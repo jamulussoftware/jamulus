@@ -31,7 +31,7 @@
 /* Implementation *************************************************************/
 // external references
 extern AsioDrivers* asioDrivers;
-bool   loadAsioDriver ( char *name );
+bool   loadAsioDriver ( char* name );
 
 // pointer to our sound object
 CSound* pSound;

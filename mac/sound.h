@@ -52,10 +52,10 @@ public:
 
 protected:
     virtual QString  LoadAndInitializeDriver ( int iIdx );
+
     QString CheckDeviceCapabilities ( ComponentInstance& NewAudioInputUnit,
                                       ComponentInstance& NewAudioOutputUnit );
 
-    void OpenCoreAudio();
     void CloseCoreAudio();
 
     UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID,
@@ -68,13 +68,19 @@ protected:
                                bool&               bIsOutput );
 
     // callbacks
-    static OSStatus processInput ( void* inRefCon,AudioUnitRenderActionFlags* ioActionFlags,
-        const AudioTimeStamp* inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames,
-        AudioBufferList* );
+    static OSStatus processInput ( void*                       inRefCon,
+                                   AudioUnitRenderActionFlags* ioActionFlags,
+                                   const AudioTimeStamp*       inTimeStamp,
+                                   UInt32                      inBusNumber,
+                                   UInt32                      inNumberFrames,
+                                   AudioBufferList* );
 
-    static OSStatus processOutput ( void* inRefCon,AudioUnitRenderActionFlags*,
-        const AudioTimeStamp*, UInt32, UInt32,
-        AudioBufferList* ioData );
+    static OSStatus processOutput ( void*                       inRefCon,
+                                    AudioUnitRenderActionFlags*,
+                                    const AudioTimeStamp*,
+                                    UInt32,
+                                    UInt32,
+                                    AudioBufferList*            ioData );
 
     AudioStreamBasicDescription streamFormat;
 
@@ -82,13 +88,13 @@ protected:
     AURenderCallbackStruct      outputCallbackStruct;
 
     ComponentInstance           audioInputUnit;
-    AudioDeviceID               audioInputDevice;
+    AudioDeviceID               audioInputDevice[MAX_NUMBER_SOUND_CARDS];
     ComponentInstance           audioOutputUnit;
-    AudioDeviceID               audioOutputDevice;
+    AudioDeviceID               audioOutputDevice[MAX_NUMBER_SOUND_CARDS];
 
-    AudioBufferList*  pBufferList;
+    AudioBufferList*            pBufferList;
 
-    QMutex            Mutex;
+    QMutex                      Mutex;
 };
 
 #endif // !defined(_SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_)

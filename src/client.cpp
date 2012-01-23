@@ -468,7 +468,16 @@ void CClient::OnSndCrdReinitRequest()
 // of doing setdev with the old driver ID -> avoid unloading driver
 
     Sound.SetDev ( Sound.GetDev() );
+
+// This is a test. We reuse the SndCrdReinitRequest which was
+// initially only intended for the Windows OS. But for Mac we
+// must not call the client Init function to work properly, therefore
+// we add the preprocesser check here
+// TODO better solution was to introduce a new signal in the sound base
+// and a new signal handler in the client
+#if !defined ( __APPLE__ ) && !defined ( __MACOSX )
     Init();
+#endif
 
     if ( bWasRunning )
     {

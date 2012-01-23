@@ -69,6 +69,12 @@ protected:
                                bool&               bIsOutput );
 
     // callbacks
+    static OSStatus deviceNotification ( AudioDeviceID,
+                                         UInt32,
+                                         Boolean,
+                                         AudioDevicePropertyID inPropertyID,
+                                         void*                 inRefCon );
+
     static OSStatus processInput ( void*                       inRefCon,
                                    AudioUnitRenderActionFlags* ioActionFlags,
                                    const AudioTimeStamp*       inTimeStamp,

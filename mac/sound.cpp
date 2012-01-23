@@ -306,6 +306,14 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
     {
         // store ID of selected driver if initialization was successful
         lCurDev = iDriverIdx;
+
+        // setup callback for xruns (only for input is enough)
+        AudioDeviceAddPropertyListener ( audioInputDevice[lCurDev],
+                                         0,
+                                         true,
+                                         kAudioDeviceProcessorOverload,
+                                         deviceNotification,
+                                         this );
     }
 
     return strStat;
@@ -358,7 +366,7 @@ QString CSound::CheckDeviceCapabilities ( ComponentInstance& NewAudioInputUnit,
 
 void CSound::CloseCoreAudio()
 {
-    // clean up "gOutputUnit"
+    // clean up
     AudioUnitUninitialize ( audioInputUnit );
     AudioUnitUninitialize ( audioOutputUnit );
     CloseComponent        ( audioInputUnit );
@@ -437,7 +445,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     pBufferList->mBuffers[0].mDataByteSize   = iCoreAudioBufferSizeMono * 4; // 2 bytes, 2 channels
     pBufferList->mBuffers[0].mData           = &vecsTmpAudioSndCrdStereo[0];
 
-    // initialize unit
+    // initialize units
     if ( AudioUnitInitialize ( audioInputUnit ) )
     {
         throw CGenErr ( tr ( "Initialization of CoreAudio failed" ) );
@@ -475,6 +483,27 @@ UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID,
                              &iActualMonoBufferSize );
 
     return iActualMonoBufferSize;
+}
+
+OSStatus CSound::deviceNotification ( AudioDeviceID,
+                                      UInt32,
+                                      Boolean,
+                                      AudioDevicePropertyID inPropertyID,
+                                      void*                 inRefCon )
+{
+    CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
+
+    if ( inPropertyID == kAudioDeviceProcessorOverload )
+    {
+        // xrun handling (it is important to act on xruns under CoreAudio
+        // since it seems that the xrun situation stays stable for a
+        // while and would give you a long time bad audio
+
+// TEST we reuse the signal which was intended only for Windows OS but
+// with a modification in the client (see client.cpp)
+pSound->EmitReinitRequestSignal();
+
+    }
 }
 
 OSStatus CSound::processInput ( void*                       inRefCon,

@@ -504,6 +504,8 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
 pSound->EmitReinitRequestSignal();
 
     }
+
+    return noErr;
 }
 
 OSStatus CSound::processInput ( void*                       inRefCon,

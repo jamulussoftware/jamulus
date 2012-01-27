@@ -77,9 +77,9 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
 
     // set up list view for connected clients (note that the last column size
     // must not be specified since this column takes all the remaining space)
-    lvwServers->setColumnWidth ( 0, 170 );
+    lvwServers->setColumnWidth ( 0, 165 );
     lvwServers->setColumnWidth ( 1, 65 );
-    lvwServers->setColumnWidth ( 2, 55 );
+    lvwServers->setColumnWidth ( 2, 60 );
     lvwServers->clear();
 
     // add invisible column which is used for sorting the list

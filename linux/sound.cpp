@@ -256,7 +256,7 @@ int CSound::bufferSizeCallback ( jack_nframes_t, void *arg )
 {
     CSound* pSound = reinterpret_cast<CSound*> ( arg );
 
-    pSound->EmitReinitRequestSignal();
+    pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART_AND_INIT );
 
     return 0; // zero on success, non-zero on error
 }

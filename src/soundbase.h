@@ -32,6 +32,16 @@
 #include "util.h"
 
 
+// TODO better solution with enum definition
+// problem: in signals it seems not to work to use CSoundBase::ESndCrdResetType
+enum ESndCrdResetType
+{
+    RS_ONLY_RESTART,
+    RS_ONLY_RESTART_AND_INIT,
+    RS_RELOAD_RESTART_AND_INIT
+};
+
+
 /* Classes ********************************************************************/
 class CSoundBase : public QThread
 {
@@ -73,7 +83,8 @@ public:
 
     // TODO this should be protected but since it is used
     // in a callback function it has to be public -> better solution
-    void EmitReinitRequestSignal() { emit ReinitRequest(); }
+    void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType )
+        { emit ReinitRequest ( eSndCrdResetType ); }
 
 protected:
     // driver handling
@@ -109,7 +120,7 @@ protected:
     QString          strDriverNames[MAX_NUMBER_SOUND_CARDS];
 
 signals:
-    void ReinitRequest();
+    void ReinitRequest ( ESndCrdResetType eSndCrdResetType );
 };
 
 #endif /* !defined ( SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_ ) */

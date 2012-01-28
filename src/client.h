@@ -335,7 +335,7 @@ public slots:
                                           int          iMs,
                                           int          iNumClients );
 
-    void OnSndCrdReinitRequest();
+    void OnSndCrdReinitRequest ( ESndCrdResetType eSndCrdResetType );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );

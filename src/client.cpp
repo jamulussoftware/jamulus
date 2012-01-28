@@ -128,8 +128,8 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
         this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
-    QObject::connect ( &Sound, SIGNAL ( ReinitRequest() ),
-        this, SLOT ( OnSndCrdReinitRequest() ) );
+    QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( ESndCrdResetType ) ),
+        this, SLOT ( OnSndCrdReinitRequest ( ESndCrdResetType ) ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -443,7 +443,7 @@ void CClient::SetSndCrdRightOutputChannel ( const int iNewChan )
     }
 }
 
-void CClient::OnSndCrdReinitRequest()
+void CClient::OnSndCrdReinitRequest ( ESndCrdResetType eSndCrdResetType )
 {
     // if client was running then first
     // stop it and restart again after new initialization
@@ -453,31 +453,20 @@ void CClient::OnSndCrdReinitRequest()
         Sound.Stop();
     }
 
-    // reinit the driver (we use the currently selected driver) and
-    // init client object, too
+    // perform reinit request as indicated by the request type parameter
+    if ( eSndCrdResetType != RS_ONLY_RESTART )
+    {
+        if ( eSndCrdResetType != RS_ONLY_RESTART_AND_INIT )
+        {
+            // reinit the driver if requested
+            // (we use the currently selected driver)
+            Sound.SetDev ( Sound.GetDev() );
+        }
 
-// TODO possible bug: In ASIO driver if set dev is called, the driver is
-// unloaded. See ASIO manual: "Note: A host application has to defer
-// processing of these notification to a later "secure" time as the
-// driver has finish its processing of the notification. Especially on
-// the kAsioResetRequest it is a bad idea to unload the driver during
-// the asioMessage callback since the callback has to return back into
-// the driver, which is no longer present."
-
-// TODO write separate driver reset function in sound base instead
-// of doing setdev with the old driver ID -> avoid unloading driver
-
-    Sound.SetDev ( Sound.GetDev() );
-
-// This is a test. We reuse the SndCrdReinitRequest which was
-// initially only intended for the Windows OS. But for Mac we
-// must not call the client Init function to work properly, therefore
-// we add the preprocesser check here
-// TODO better solution was to introduce a new signal in the sound base
-// and a new signal handler in the client
-#if !defined ( __APPLE__ ) && !defined ( __MACOSX )
-    Init();
-#endif
+        // init client object (must always be performed if the driver
+        // was changed)
+        Init();
+    }
 
     if ( bWasRunning )
     {

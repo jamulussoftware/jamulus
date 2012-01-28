@@ -498,11 +498,7 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
         // xrun handling (it is important to act on xruns under CoreAudio
         // since it seems that the xrun situation stays stable for a
         // while and would give you a long time bad audio
-
-// TEST we reuse the signal which was intended only for Windows OS but
-// with a modification in the client (see client.cpp)
-pSound->EmitReinitRequestSignal();
-
+        pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART );
     }
 
     return noErr;

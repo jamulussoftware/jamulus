@@ -36,7 +36,7 @@
 // problem: in signals it seems not to work to use CSoundBase::ESndCrdResetType
 enum ESndCrdResetType
 {
-    RS_ONLY_RESTART,
+    RS_ONLY_RESTART = 1,
     RS_ONLY_RESTART_AND_INIT,
     RS_RELOAD_RESTART_AND_INIT
 };
@@ -120,7 +120,7 @@ protected:
     QString          strDriverNames[MAX_NUMBER_SOUND_CARDS];
 
 signals:
-    void ReinitRequest ( ESndCrdResetType eSndCrdResetType );
+    void ReinitRequest ( int iSndCrdResetType );
 };
 
 #endif /* !defined ( SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_ ) */

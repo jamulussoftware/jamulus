@@ -128,8 +128,8 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
         this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
-    QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( ESndCrdResetType ) ),
-        this, SLOT ( OnSndCrdReinitRequest ( ESndCrdResetType ) ) );
+    QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
+        this, SLOT ( OnSndCrdReinitRequest ( int ) ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -443,8 +443,13 @@ void CClient::SetSndCrdRightOutputChannel ( const int iNewChan )
     }
 }
 
-void CClient::OnSndCrdReinitRequest ( ESndCrdResetType eSndCrdResetType )
+void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
 {
+    // in older QT versions, enums cannot easily be used in signals without
+    // registering them -> workaroud: we use the int type and cast to the enum
+    const ESndCrdResetType eSndCrdResetType =
+        static_cast<ESndCrdResetType> ( iSndCrdResetType );
+
     // if client was running then first
     // stop it and restart again after new initialization
     const bool bWasRunning = Sound.IsRunning();

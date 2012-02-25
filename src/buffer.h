@@ -35,7 +35,7 @@
 #define MAX_STATISTIC_COUNT                 11000
 
 // definition of the error bound
-#define ERROR_RATE_BOUND                    0.002
+#define ERROR_RATE_BOUND                    0.001
 
 // number of simulation network jitter buffers for evaluating the statistic
 #define NUM_STAT_SIMULATION_BUFFERS         11

@@ -181,6 +181,8 @@ protected:
 
     QTimer                  TimerPollList;
     QTimer                  TimerRegistering;
+    QTimer                  TimerPingServerInList;
+
     QMutex                  Mutex;
 
     QList<CServerListEntry> ServerList;
@@ -196,6 +198,7 @@ protected:
 
 public slots:
     void OnTimerPollList();
+    void OnTimerPingServerInList();
     void OnTimerRegistering() { SlaveServerRegisterServer ( true ); }
 };
 

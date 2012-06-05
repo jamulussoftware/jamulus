@@ -168,6 +168,9 @@ LED bar:      lbr
 // poll time for server list (to check if entries are time-out)
 #define SERVLIST_POLL_TIME_MINUTES      1 // minute
 
+// time interval for sending ping messages to servers in the server list
+#define SERVLIST_UPDATE_PING_SERVERS_MS 59000 // ms
+
 // time until a slave server registers in the server list
 #define SERVLIST_REGIST_INTERV_MINUTES  30 // minutes
 

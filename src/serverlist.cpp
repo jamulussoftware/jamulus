@@ -134,8 +134,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
         if ( ( iCountry >= 0 ) && ( iCountry <= QLocale::LastCountry ) )
         {
-            NewServerListEntry.eCountry =
-                static_cast<QLocale::Country> ( iCountry );
+            NewServerListEntry.eCountry = static_cast<QLocale::Country> (
+                iCountry );
         }
 
         // add the new server to the server list
@@ -144,7 +144,6 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         // we have used four items and have created one predefined server
         // (adjust counters)
         iCurUsedServInfoSplitItems += 4;
-
         iNumPredefinedServers++;
     }
 
@@ -152,6 +151,9 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     // Connections -------------------------------------------------------------
     QObject::connect ( &TimerPollList, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerPollList() ) );
+
+    QObject::connect ( &TimerPingServerInList, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerPingServerInList() ) );
 
     QObject::connect ( &TimerRegistering, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerRegistering() ) );
@@ -194,6 +196,9 @@ void CServerListManager::Update()
             // start timer for polling the server list if enabled
             // 1 minute = 60 * 1000 ms
             TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
+
+            // start timer for sending ping messages to servers in the list
+            TimerPingServerInList.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
         }
         else
         {
@@ -219,6 +224,7 @@ void CServerListManager::Update()
         if ( bIsCentralServer )
         {
             TimerPollList.stop();
+            TimerPingServerInList.stop();
         }
         else
         {
@@ -229,6 +235,29 @@ void CServerListManager::Update()
 
 
 /* Central server functionality ***********************************************/
+void CServerListManager::OnTimerPingServerInList()
+{
+    QMutexLocker locker ( &Mutex );
+
+    const int iCurServerListSize = ServerList.size();
+
+    // Send ping to list entries except of the very first one (which is the central
+    // server entry) and the predefined servers. Also, do not send the ping to
+    // servers which use the local port number since no port translation has
+    // been done and therefore the probability is high that a port forwarding was
+    // installed by the user of this server.
+    for ( int iIdx = 1 + iNumPredefinedServers; iIdx < iCurServerListSize; iIdx++ )
+    {
+        if ( ServerList[iIdx].HostAddr.iPort != ServerList[iIdx].iLocalPortNumber )
+        {
+            // send ping message to keep NAT port open at slave server
+            pConnLessProtocol->CreateCLPingMes ( 
+                ServerList[iIdx].HostAddr,
+                0 /* dummy */ );
+        }
+    }
+}
+
 void CServerListManager::OnTimerPollList()
 {
     QMutexLocker locker ( &Mutex );
@@ -268,7 +297,6 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             // a server. The very first list entry must not be checked since
             // this is per definition the central server (i.e., this server)
             int iSelIdx = ciInvalidIdx; // initialize with an illegal value
-
             for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
             {
                 if ( ServerList[iIdx].HostAddr == InetAddr )
@@ -285,8 +313,6 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             if ( iSelIdx == ciInvalidIdx )
             {
                 // create a new server list entry and init with received data
-                // (note that the "update registration" is called in the
-                // constructor of the server list entry)
                 ServerList.append ( CServerListEntry ( InetAddr, ServerInfo ) );
             }
             else
@@ -351,7 +377,7 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
 
         // copy the list (we have to copy it since the message requires
         // a vector but the list is actually stored in a QList object and
-        // not in a vector object)
+        // not in a vector object
         for ( int iIdx = 0; iIdx < iCurServerListSize; iIdx++ )
         {
             // copy list item
@@ -418,7 +444,6 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
     // it is an URL of a dynamic IP address, the IP address might have
     // changed in the meanwhile.
     CHostAddress HostAddress;
-
     if ( LlconNetwUtil().ParseNetworkAddress ( strCurCentrServAddr,
                                                HostAddress ) )
     {

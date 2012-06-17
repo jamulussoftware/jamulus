@@ -241,20 +241,14 @@ void CServerListManager::OnTimerPingServerInList()
 
     const int iCurServerListSize = ServerList.size();
 
-    // Send ping to list entries except of the very first one (which is the central
-    // server entry) and the predefined servers. Also, do not send the ping to
-    // servers which use the local port number since no port translation has
-    // been done and therefore the probability is high that a port forwarding was
-    // installed by the user of this server.
+    // send ping to list entries except of the very first one (which is the central
+    // server entry) and the predefined servers
     for ( int iIdx = 1 + iNumPredefinedServers; iIdx < iCurServerListSize; iIdx++ )
     {
-        if ( ServerList[iIdx].HostAddr.iPort != ServerList[iIdx].iLocalPortNumber )
-        {
-            // send ping message to keep NAT port open at slave server
-            pConnLessProtocol->CreateCLPingMes ( 
-                ServerList[iIdx].HostAddr,
-                0 /* dummy */ );
-        }
+        // send ping message to keep NAT port open at slave server
+        pConnLessProtocol->CreateCLPingMes ( 
+            ServerList[iIdx].HostAddr,
+            0 /* dummy */ );
     }
 }
 
@@ -437,7 +431,7 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
         SELECT_SERVER_ADDRESS ( bUseDefaultCentralServerAddress,
                                 strCentralServerAddress );
 
-    // For the slave server, the slave server properties are store in the
+    // For the slave server, the slave server properties are stored in the
     // very first item in the server list (which is actually no server list
     // but just one item long for the slave server).
     // Note that we always have to parse the server address again since if

@@ -357,16 +357,13 @@ void CLlconServerDlg::OnRegisterServerStateChanged ( int value )
     // apply new setting to the server and update it
     pServer->SetServerListEnabled ( bRegState );
 
-    // If registering is enabled, update data. If registering is disabled,
-    // unregister slave server
-    if ( bRegState )
-    {
-        pServer->UpdateServerList();
-    }
-    else
+    // if registering is disabled, unregister slave server
+    if ( !bRegState )
     {
         pServer->UnregisterSlaveServer();
     }
+
+    pServer->UpdateServerList();
 
     // update GUI dependencies
     UpdateGUIDependencies();

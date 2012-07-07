@@ -364,14 +364,13 @@ int main ( int argc, char** argv )
             Settings.Load();
 
             // GUI object
-            CLlconClientDlg ClientDlg (
-                &Client,
-                &Settings,
-                bConnectOnStartup,
-                bDisalbeLEDs,
-                bShowComplRegConnList,
-                0,
-                Qt::Window );
+            CLlconClientDlg ClientDlg ( &Client,
+                                        &Settings,
+                                        bConnectOnStartup,
+                                        bDisalbeLEDs,
+                                        bShowComplRegConnList,
+                                        0,
+                                        Qt::Window );
 
             // set main window
             pMainWindow = &ClientDlg;
@@ -410,12 +409,11 @@ int main ( int argc, char** argv )
                 Server.UpdateServerList();
 
                 // GUI object for the server
-                CLlconServerDlg ServerDlg (
-                    &Server,
-                    &Settings,
-                    bStartMinimized,
-                    0,
-                    Qt::Window );
+                CLlconServerDlg ServerDlg ( &Server,
+                                            &Settings,
+                                            bStartMinimized,
+                                            0,
+                                            Qt::Window );
 
                 // set main window
                 pMainWindow = &ServerDlg;

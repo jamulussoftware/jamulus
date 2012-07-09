@@ -650,8 +650,8 @@ public:
 class LlconNetwUtil
 {
 public:
-    static bool ParseNetworkAddress ( QString        strAddress,
-                                      CHostAddress&  HostAddress );
+    static bool ParseNetworkAddress ( QString       strAddress,
+                                      CHostAddress& HostAddress );
 };
 
 

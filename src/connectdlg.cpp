@@ -169,7 +169,7 @@ void CConnectDlg::showEvent ( QShowEvent* )
         TimerReRequestServList.start ( SERV_LIST_REQ_UPDATE_TIME_MS );
     }
 }
-	
+
 void CConnectDlg::hideEvent ( QHideEvent* )
 {
     // get the IP address to be used according to the following definitions:
@@ -289,6 +289,13 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
             strLocation +=
                 QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
         }
+
+// for debugging, plot address infos in connect dialog
+// Do not enable this for official versions!
+#if 0
+strLocation += ", " + vecServerInfo[iIdx].HostAddr.InetAddr.toString() +
+    ":" + QString().setNum ( vecServerInfo[iIdx].HostAddr.iPort );
+#endif
 
         pNewListViewItem->setText ( 3, strLocation );
 

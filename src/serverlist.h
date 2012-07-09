@@ -182,6 +182,7 @@ protected:
     QTimer                  TimerPollList;
     QTimer                  TimerRegistering;
     QTimer                  TimerPingServerInList;
+    QTimer                  TimerPingCentralServer;
 
     QMutex                  Mutex;
 
@@ -194,11 +195,14 @@ protected:
     bool                    bIsCentralServer;
     bool                    bUseDefaultCentralServerAddress;
 
+    CHostAddress            SlaveCurCentServerHostAddress;
+
     CProtocol*              pConnLessProtocol;
 
 public slots:
     void OnTimerPollList();
     void OnTimerPingServerInList();
+    void OnTimerPingCentralServer();
     void OnTimerRegistering() { SlaveServerRegisterServer ( true ); }
 };
 

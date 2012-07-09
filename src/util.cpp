@@ -419,11 +419,14 @@ CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
 /******************************************************************************\
 * Other Classes                                                                *
 \******************************************************************************/
-bool LlconNetwUtil::ParseNetworkAddress ( QString        strAddress,
-                                          CHostAddress&  HostAddress )
+bool LlconNetwUtil::ParseNetworkAddress ( QString       strAddress,
+                                          CHostAddress& HostAddress )
 {
     QHostAddress InetAddr;
     quint16      iNetPort = LLCON_DEFAULT_PORT_NUMBER;
+
+    // init requested host address with invalid address first
+    HostAddress = CHostAddress();
 
     // parse input address for the type [IP address]:[port number]
     QString strPort = strAddress.section ( ":", 1, 1 );

@@ -172,7 +172,7 @@ LED bar:      lbr
 #define SERVLIST_UPDATE_PING_SERVERS_MS 59000 // ms
 
 // time until a slave server registers in the server list
-#define SERVLIST_REGIST_INTERV_MINUTES  30 // minutes
+#define SERVLIST_REGIST_INTERV_MINUTES  15 // minutes
 
 
 // length of the moving average buffer for response time measurement

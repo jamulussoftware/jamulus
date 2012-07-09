@@ -155,6 +155,9 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     QObject::connect ( &TimerPingServerInList, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerPingServerInList() ) );
 
+    QObject::connect ( &TimerPingCentralServer, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerPingCentralServer() ) );
+
     QObject::connect ( &TimerRegistering, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerRegistering() ) );
 }
@@ -216,6 +219,14 @@ void CServerListManager::Update()
             // start timer for registering this server at the central server
             // 1 minute = 60 * 1000 ms
             TimerRegistering.start ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
+
+            // Start timer for ping the central server in short intervals to
+            // keep the port open at the NAT router.
+            // If no NAT is used, we send the messages anyway since they do
+            // not hurt (very low traffic). We also reuse the same update
+            // time as used in the central server for pinging the slave
+            // servers.
+            TimerPingCentralServer.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
         }
     }
     else
@@ -229,6 +240,7 @@ void CServerListManager::Update()
         else
         {
             TimerRegistering.stop();
+            TimerPingCentralServer.stop();
         }
     }
 }
@@ -245,10 +257,8 @@ void CServerListManager::OnTimerPingServerInList()
     // server entry) and the predefined servers
     for ( int iIdx = 1 + iNumPredefinedServers; iIdx < iCurServerListSize; iIdx++ )
     {
-        // send ping message to keep NAT port open at slave server
-        pConnLessProtocol->CreateCLPingMes ( 
-            ServerList[iIdx].HostAddr,
-            0 /* dummy */ );
+        // send empty message to keep NAT port open at slave server
+        pConnLessProtocol->CreateCLEmptyMes ( ServerList[iIdx].HostAddr );
     }
 }
 
@@ -420,6 +430,19 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
 
 
 /* Slave server functionality *************************************************/
+void CServerListManager::OnTimerPingCentralServer()
+{
+    QMutexLocker locker ( &Mutex );
+
+    // first check if central server address is valid
+    if ( !( SlaveCurCentServerHostAddress == CHostAddress() ) )
+    {
+        // send empty message to central server to keep NAT port open -> we do
+        // not require any answer from the central server
+        pConnLessProtocol->CreateCLEmptyMes ( SlaveCurCentServerHostAddress );
+    }
+}
+
 void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
 {
     // we need the lock since the user might change the server properties at
@@ -437,20 +460,19 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
     // Note that we always have to parse the server address again since if
     // it is an URL of a dynamic IP address, the IP address might have
     // changed in the meanwhile.
-    CHostAddress HostAddress;
     if ( LlconNetwUtil().ParseNetworkAddress ( strCurCentrServAddr,
-                                               HostAddress ) )
+                                               SlaveCurCentServerHostAddress ) )
     {
         if ( bIsRegister )
         {
             // register server
-            pConnLessProtocol->CreateCLRegisterServerMes ( HostAddress,
+            pConnLessProtocol->CreateCLRegisterServerMes ( SlaveCurCentServerHostAddress,
                                                            ServerList[0] );
         }
         else
         {
             // unregister server
-            pConnLessProtocol->CreateCLUnregisterServerMes ( HostAddress );
+            pConnLessProtocol->CreateCLUnregisterServerMes ( SlaveCurCentServerHostAddress );
         }
     }
 }

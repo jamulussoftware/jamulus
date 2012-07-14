@@ -30,11 +30,13 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& sNCentServAddr,
                                          const QString& strServerInfo,
                                          const int      iNumChannels,
+                                         const bool     bNCentServPingServerInList,
                                          CProtocol*     pNConLProt )
     : iPortNumber                     ( iNPortNum ),
       iNumPredefinedServers           ( 0 ),
       bUseDefaultCentralServerAddress ( false ),
-      pConnLessProtocol               ( pNConLProt )
+      pConnLessProtocol               ( pNConLProt ),
+      bCentServPingServerInList       ( bNCentServPingServerInList )
 {
     // set the central server address
     SetCentralServerAddress ( sNCentServAddr );
@@ -200,8 +202,11 @@ void CServerListManager::Update()
             // 1 minute = 60 * 1000 ms
             TimerPollList.start ( SERVLIST_POLL_TIME_MINUTES * 60000 );
 
-            // start timer for sending ping messages to servers in the list
-            TimerPingServerInList.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
+            if ( bCentServPingServerInList )
+            {
+                // start timer for sending ping messages to servers in the list
+                TimerPingServerInList.start ( SERVLIST_UPDATE_PING_SERVERS_MS );
+            }
         }
         else
         {
@@ -235,7 +240,11 @@ void CServerListManager::Update()
         if ( bIsCentralServer )
         {
             TimerPollList.stop();
-            TimerPingServerInList.stop();
+
+            if ( bCentServPingServerInList )
+            {
+                TimerPingServerInList.stop();
+            }
         }
         else
         {

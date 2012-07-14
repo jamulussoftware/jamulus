@@ -171,7 +171,8 @@ CServer::CServer ( const int      iNewNumChan,
                    const QString& strHistoryFileName,
                    const QString& strServerNameForHTMLStatusFile,
                    const QString& strCentralServer,
-                   const QString& strServerInfo ) :
+                   const QString& strServerInfo,
+                   const bool     bNCentServPingServerInList ) :
     iNumChannels         ( iNewNumChan ),
     Socket               ( this, iPortNumber ),
     bWriteStatusHTMLFile ( false ),
@@ -179,6 +180,7 @@ CServer::CServer ( const int      iNewNumChan,
                            strCentralServer,
                            strServerInfo,
                            iNewNumChan,
+                           bNCentServPingServerInList,
                            &ConnLessProtocol ),
     bAutoRunMinimized    ( false )
 {

@@ -110,7 +110,8 @@ public:
               const QString& strHistoryFileName,
               const QString& strServerNameForHTMLStatusFile,
               const QString& strCentralServer,
-              const QString& strServerInfo );
+              const QString& strServerInfo,
+              const bool     bNCentServPingServerInList );
 
     void Start();
     void Stop();

@@ -53,21 +53,22 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
-    bool    bIsClient             = true;
-    bool    bUseGUI               = true;
-    bool    bStartMinimized       = false;
-    bool    bConnectOnStartup     = false;
-    bool    bDisalbeLEDs          = false;
-    bool    bShowComplRegConnList = false;
-    int     iNumServerChannels    = DEFAULT_USED_NUM_CHANNELS;
-    quint16 iPortNumber           = LLCON_DEFAULT_PORT_NUMBER;
-    QString strIniFileName        = "";
-    QString strHTMLStatusFileName = "";
-    QString strServerName         = "";
-    QString strLoggingFileName    = "";
-    QString strHistoryFileName    = "";
-    QString strCentralServer      = "";
-    QString strServerInfo         = "";
+    bool    bIsClient                 = true;
+    bool    bUseGUI                   = true;
+    bool    bStartMinimized           = false;
+    bool    bConnectOnStartup         = false;
+    bool    bDisalbeLEDs              = false;
+    bool    bShowComplRegConnList     = false;
+    bool    bCentServPingServerInList = false;
+    int     iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
+    quint16 iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
+    QString strIniFileName            = "";
+    QString strHTMLStatusFileName     = "";
+    QString strServerName             = "";
+    QString strLoggingFileName        = "";
+    QString strHistoryFileName        = "";
+    QString strCentralServer          = "";
+    QString strServerInfo             = "";
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -139,6 +140,18 @@ int main ( int argc, char** argv )
         {
             bDisalbeLEDs = true;
             tsConsole << "- disable LEDs in main window" << endl;
+            continue;
+        }
+
+
+        // Ping servers in list for central server -----------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-g",
+                               "--pingservers" ) )
+        {
+            bCentServPingServerInList = true;
+            tsConsole << "- ping servers in slave server list" << endl;
             continue;
         }
 
@@ -391,7 +404,8 @@ int main ( int argc, char** argv )
                              strHistoryFileName,
                              strServerName,
                              strCentralServer,
-                             strServerInfo );
+                             strServerInfo,
+                             bCentServPingServerInList );
 
             if ( bUseGUI )
             {
@@ -469,30 +483,32 @@ QString UsageArguments ( char **argv )
     return
         "Usage: " + QString ( argv[0] ) + " [option] [argument]\n"
         "\nRecognized options:\n"
-        "  -s, --server          start server\n"
-        "  -n, --nogui           disable GUI (server only)\n"
-        "  -u, --numchannels     maximum number of channels (server only)\n"
-        "  -z, --startminimized  start minimizied (server only)\n"
-        "  -l, --log             enable logging, set file name\n"
-        "  -i, --inifile         initialization file name (client only)\n"
-        "  -p, --port            local port number (server only)\n"
-        "  -m, --htmlstatus      enable HTML status file, set file name (server\n"
-        "                        only)\n"
         "  -a, --servername      server name, required for HTML status (server\n"
         "                        only)\n"
-        "  -y, --history         enable connection history and set file\n"
-        "                        name (server only)\n"
+        "  -c, --connect         connect to last server on startup (client\n"
+        "                        only)\n"
+        "  -d, --disableleds     disable LEDs in main window (client only)\n"
         "  -e, --centralserver   address of the central server (server only)\n"
+        "  -g, --pingservers     ping servers in list to keep NAT port open\n"
+        "                        (central server only)\n"
+        "  -h, -?, --help        this help text\n"
+        "  -i, --inifile         initialization file name (client only)\n"
+        "  -l, --log             enable logging, set file name\n"
+        "  -m, --htmlstatus      enable HTML status file, set file name (server\n"
+        "                        only)\n"
+        "  -n, --nogui           disable GUI (server only)\n"
         "  -o, --serverinfo      infos of the server(s) in the format:\n"
         "                        [name];[city];[country as QLocale ID]; ...\n"
         "                        [server1 address];[server1 name]; ...\n"
         "                        [server1 city]; ...\n"
         "                        [server1 country as QLocale ID]; ...\n"
         "                        [server2 address]; ... (server only)\n"
-        "  -c, --connect         connect to last server on startup (client\n"
-        "                        only)\n"
-        "  -d, --disableleds     disable LEDs in main window (client only)\n"
-        "  -h, -?, --help        this help text\n"
+        "  -p, --port            local port number (server only)\n"
+        "  -s, --server          start server\n"
+        "  -u, --numchannels     maximum number of channels (server only)\n"
+        "  -y, --history         enable connection history and set file\n"
+        "                        name (server only)\n"
+        "  -z, --startminimized  start minimizied (server only)\n"
         "\nExample: " + QString ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }
 

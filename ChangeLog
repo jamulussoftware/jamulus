@@ -1,7 +1,15 @@
-3.2.2
+3.2.3
 
 TODO: Mac OS 64bit support
 
+
+3.2.2
+
+- changed auto jitter buffer property to reduce audio drop outs
+
+- bug fix: mechanism to keep port in NAT of slave server open works now correctly
+
+- bug fix: slave server unregistering may not be successful
 
 
 3.2.1

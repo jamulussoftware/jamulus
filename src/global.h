@@ -1,9 +1,17 @@
 /******************************************************************************\
- * Copyright (c) 2004-2011
+ * \copyright (c) 2004-2013
+ * \author    Volker Fischer
  *
- * Author(s):
- *  Volker Fischer
- *
+
+\mainpage Llcon source code documentation
+
+\section intro_sec Introduction
+
+The llcon software enables musicians to perform real-time jam sessions over the
+internet. There is one server running the llcon server software which collects
+the audio data from each llcon client, mixes the audio data and sends the mix
+back to each client.
+
 
 Prefix definitions for the GUI:
 
@@ -48,6 +56,9 @@ LED bar:      lbr
 #include <stdio.h>
 #include <math.h>
 #include <string>
+#ifndef _WIN32
+# include <unistd.h> // solves a compile problem on recent Ubuntu
+#endif
 #ifdef HAVE_CONFIG_H
 # include "config.h"
 #endif

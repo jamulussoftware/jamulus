@@ -27,7 +27,7 @@
 
 #include <windows.h>
 #include <QMutex>
-#include <QMessagebox>
+#include <QMessageBox>
 #include "../src/util.h"
 #include "../src/global.h"
 #include "../src/soundbase.h"

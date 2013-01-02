@@ -25,10 +25,10 @@
 #if !defined ( TESTBENCH_HOIHJH8_3_43445KJIUHF1912__INCLUDED_ )
 #define TESTBENCH_HOIHJH8_3_43445KJIUHF1912__INCLUDED_
 
-#include <qobject.h>
-#include <qtimer.h>
-#include <qdatetime.h>
-#include <qhostaddress.h>
+#include <QObject>
+#include <QTimer>
+#include <QDateTime>
+#include <QHostAddress>
 #include "global.h"
 #include "socket.h"
 #include "protocol.h"

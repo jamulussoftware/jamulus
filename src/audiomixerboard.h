@@ -25,15 +25,15 @@
 #if !defined ( MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_ )
 #define MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_
 
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qcheckbox.h>
-#include <qlayout.h>
-#include <qstring.h>
-#include <qslider.h>
-#include <qsizepolicy.h>
-#include <qhostaddress.h>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QCheckBox>
+#include <QLayout>
+#include <QString>
+#include <QSlider>
+#include <QSizePolicy>
+#include <QHostAddress>
 #include "global.h"
 #include "util.h"
 

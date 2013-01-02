@@ -25,10 +25,10 @@
 #if !defined ( SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ )
 #define SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_
 
-#include <qobject.h>
-#include <qtimer.h>
-#include <qdatetime.h>
-#include <qhostaddress.h>
+#include <QObject>
+#include <QTimer>
+#include <QDateTime>
+#include <QHostAddress>
 #include "celt.h"
 #include "global.h"
 #include "socket.h"

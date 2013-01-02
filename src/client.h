@@ -25,12 +25,11 @@
 #if !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ )
 #define CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_
 
-#include <qglobal.h>
-#include <qhostaddress.h>
-#include <qhostinfo.h>
-#include <qstring.h>
-#include <qdatetime.h>
-#include <qmessagebox.h>
+#include <QHostAddress>
+#include <QHostInfo>
+#include <QString>
+#include <QDateTime>
+#include <QMessageBox>
 #include "celt.h"
 #include "global.h"
 #include "socket.h"

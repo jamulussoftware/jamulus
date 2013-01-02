@@ -25,10 +25,10 @@
 #if !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ )
 #define CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_
 
-#include <qthread.h>
-#include <qdatetime.h>
-#include <qfile.h>
-#include <qtextstream.h>
+#include <QThread>
+#include <QDateTime>
+#include <QFile>
+#include <QTextStream>
 #include "global.h"
 #include "buffer.h"
 #include "util.h"

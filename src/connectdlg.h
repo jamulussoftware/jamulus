@@ -22,13 +22,13 @@
  *
 \******************************************************************************/
 
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qwhatsthis.h>
-#include <qtimer.h>
-#include <qmutex.h>
-#include <qlocale.h>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QWhatsThis>
+#include <QTimer>
+#include <QMutex>
+#include <QLocale>
 #include "global.h"
 #include "client.h"
 #ifdef _WIN32

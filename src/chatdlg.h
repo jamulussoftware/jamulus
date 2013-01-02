@@ -22,13 +22,13 @@
  *
 \******************************************************************************/
 
-#include <qlabel.h>
-#include <qstring.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qwhatsthis.h>
-#include <qlayout.h>
-#include <qaccessible.h>
+#include <QLabel>
+#include <QString>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QWhatsThis>
+#include <QLayout>
+#include <QAccessible>
 #include "global.h"
 #ifdef _WIN32
 # include "../windows/moc/chatdlgbase.h"

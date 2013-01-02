@@ -22,16 +22,17 @@
  *
 \******************************************************************************/
 
-#include <qlabel.h>
-#include <qlistview.h>
-#include <qtimer.h>
-#include <qpixmap.h>
-#include <qthread.h>
-#include <qslider.h>
-#include <qmenubar.h>
-#include <qlayout.h>
-#include <qsystemtrayicon.h>
-#include <qsettings.h>
+#include <QCloseEvent>
+#include <QLabel>
+#include <QListView>
+#include <QTimer>
+#include <QPixmap>
+#include <QThread>
+#include <QSlider>
+#include <QMenuBar>
+#include <QLayout>
+#include <QSystemTrayIcon>
+#include <QSettings>
 #include "global.h"
 #include "server.h"
 #include "settings.h"

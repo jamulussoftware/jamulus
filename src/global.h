@@ -50,9 +50,9 @@ LED bar:      lbr
 #if !defined ( GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_ )
 #define GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_
 
-#include <qstring.h>
-#include <qevent.h>
-#include <qdebug.h>
+#include <QString>
+#include <QEvent>
+#include <QDebug>
 #include <stdio.h>
 #include <math.h>
 #include <string>

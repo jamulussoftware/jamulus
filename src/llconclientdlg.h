@@ -22,17 +22,17 @@
  *
 \******************************************************************************/
 
-#include <qlabel.h>
-#include <qstring.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qprogressbar.h>
-#include <qwhatsthis.h>
-#include <qtimer.h>
-#include <qslider.h>
-#include <qradiobutton.h>
-#include <qmenubar.h>
-#include <qlayout.h>
+#include <QLabel>
+#include <QString>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QProgressBar>
+#include <QWhatsThis>
+#include <QTimer>
+#include <QSlider>
+#include <QRadioButton>
+#include <QMenuBar>
+#include <QLayout>
 #include "global.h"
 #include "client.h"
 #include "settings.h"

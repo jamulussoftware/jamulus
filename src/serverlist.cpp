@@ -35,8 +35,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     : iPortNumber                     ( iNPortNum ),
       iNumPredefinedServers           ( 0 ),
       bUseDefaultCentralServerAddress ( false ),
-      pConnLessProtocol               ( pNConLProt ),
-      bCentServPingServerInList       ( bNCentServPingServerInList )
+      bCentServPingServerInList       ( bNCentServPingServerInList ),
+      pConnLessProtocol               ( pNConLProt )
 {
     // set the central server address
     SetCentralServerAddress ( sNCentServAddr );

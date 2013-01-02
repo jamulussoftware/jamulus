@@ -26,8 +26,8 @@
 #define _SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_
 
 #include <windows.h>
-#include <qmutex.h>
-#include <qmessagebox.h>
+#include <QMutex>
+#include <QMessagebox>
 #include "../src/util.h"
 #include "../src/global.h"
 #include "../src/soundbase.h"

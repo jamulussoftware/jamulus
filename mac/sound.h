@@ -28,7 +28,7 @@
 #include <CoreServices/CoreServices.h>
 #include <AudioUnit/AudioUnit.h>
 #include <CoreAudio/AudioHardware.h>
-#include <qmutex.h>
+#include <QMutex>
 #include "util.h"
 #include "soundbase.h"
 #include "global.h"

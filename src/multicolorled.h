@@ -32,11 +32,11 @@
 #if !defined ( _MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_ )
 #define _MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_
 
-#include <qlabel.h>
-#include <qpixmap.h>
-#include <qtimer.h>
-#include <qtreewidget.h>
-#include <qicon.h>
+#include <QLabel>
+#include <QPixmap>
+#include <QTimer>
+#include <QTreeWidget>
+#include <QIcon>
 #include "global.h"
 
 

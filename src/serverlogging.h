@@ -25,13 +25,13 @@
 #if !defined ( SERVERLOGGING_HOIHOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ )
 #define SERVERLOGGING_HOIHOKIH83JH8_3_43445KJIUHF1912__INCLUDED_
 
-#include <qimage.h>
-#include <qpainter.h>
-#include <qdatetime.h>
-#include <qhostaddress.h>
-#include <qfile.h>
-#include <qstring.h>
-#include <qtimer.h>
+#include <QImage>
+#include <QPainter>
+#include <QDateTime>
+#include <QHostAddress>
+#include <QFile>
+#include <QString>
+#include <QTimer>
 #include "global.h"
 #include "util.h"
 

@@ -25,9 +25,9 @@
 #if !defined ( SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_ )
 #define SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_
 
-#include <qthread.h>
-#include <qstring.h>
-#include <qmessagebox.h>
+#include <QThread>
+#include <QString>
+#include <QMessageBox>
 #include "global.h"
 #include "util.h"
 

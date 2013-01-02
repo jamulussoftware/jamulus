@@ -25,11 +25,11 @@
 #if !defined ( SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_ )
 #define SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_
 
-#include <qdom.h>
-#include <qfile.h>
-#include <qsettings.h>
-#include <qdir.h>
-#include <qtextstream.h>
+#include <QDomDocument>
+#include <QFile>
+#include <QSettings>
+#include <QDir>
+#include <QTextStream>
 #include "global.h"
 #include "client.h"
 #include "server.h"

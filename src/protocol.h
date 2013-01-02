@@ -25,10 +25,9 @@
 #if !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ )
 #define PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_
 
-#include <qglobal.h>
-#include <qmutex.h>
-#include <qtimer.h>
-#include <qdatetime.h>
+#include <QMutex>
+#include <QTimer>
+#include <QDateTime>
 #include <list>
 #include "global.h"
 #include "util.h"

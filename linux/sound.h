@@ -31,7 +31,7 @@
 #include <sys/ioctl.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <qthread.h>
+#include <QThread>
 #include <string.h>
 #include "util.h"
 #include "soundbase.h"

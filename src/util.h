@@ -25,17 +25,17 @@
 #if !defined ( UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_ )
 #define UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_
 
-#include <qhostaddress.h>
-#include <qhostinfo.h>
-#include <qmenu.h>
-#include <qwhatsthis.h>
-#include <qtextbrowser.h>
-#include <qlabel.h>
-#include <qdatetime.h>
-#include <qfile.h>
-#include <qdesktopservices.h>
-#include <qurl.h>
-#include <qlocale.h>
+#include <QHostAddress>
+#include <QHostInfo>
+#include <QMenu>
+#include <QWhatsThis>
+#include <QTextBrowser>
+#include <QLabel>
+#include <QDateTime>
+#include <QFile>
+#include <QDesktopServices>
+#include <QUrl>
+#include <QLocale>
 #include <vector>
 #include "global.h"
 using namespace std; // because of the library: "vector"

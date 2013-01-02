@@ -25,10 +25,10 @@
 #if !defined ( _MULTCOLORLEDBAR_H__FD6B49B5_87DF_48DD_E1606C2AC__INCLUDED_ )
 #define _MULTCOLORLEDBAR_H__FD6B49B5_87DF_48DD_E1606C2AC__INCLUDED_
 
-#include <qframe.h>
-#include <qpixmap.h>
-#include <qtimer.h>
-#include <qlayout.h>
+#include <QFrame>
+#include <QPixmap>
+#include <QTimer>
+#include <QLayout>
 #include "util.h"
 #include "global.h"
 

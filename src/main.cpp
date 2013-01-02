@@ -22,10 +22,10 @@
  *
 \******************************************************************************/
 
-#include <qapplication.h>
-#include <qmessagebox.h>
-#include <qdir.h>
-#include <qtextstream.h>
+#include <QApplication>
+#include <QMessageBox>
+#include <QDir>
+#include <QTextStream>
 #include "global.h"
 #include "llconclientdlg.h"
 #include "llconserverdlg.h"

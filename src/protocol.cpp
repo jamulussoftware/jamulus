@@ -1788,6 +1788,6 @@ void CProtocol::PutStringOnStream ( CVector<uint8_t>& vecIn,
     {
         // byte-by-byte copying of the string data
         PutValOnStream ( vecIn, iPos,
-            static_cast<uint32_t> ( sString[j].toAscii() ), 1 );
+            static_cast<uint32_t> ( sString[j].toLatin1() ), 1 );
     }
 }

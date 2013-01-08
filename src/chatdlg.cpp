@@ -94,6 +94,11 @@ void CChatDlg::AddChatText ( QString strChatText )
     txvChatWindow->append ( strChatText );
 
     // notify accessibility plugin that text has changed
-    QAccessible::updateAccessibility ( txvChatWindow, 0,
-        QAccessible::ValueChanged );
+    QAccessible::updateAccessibility (
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+        txvChatWindow, 0, QAccessible::ValueChanged
+#else
+        new QAccessibleEvent ( txvChatWindow, QAccessible::ValueChanged )
+#endif
+        );
 }

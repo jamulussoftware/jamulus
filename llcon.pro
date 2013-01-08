@@ -2,7 +2,8 @@ CONFIG += qt \
     thread \
     release
 
-QT += network \
+QT += widgets \
+    network \
     xml
 
 INCLUDEPATH += src \

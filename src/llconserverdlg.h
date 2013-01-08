@@ -37,11 +37,11 @@
 #include "server.h"
 #include "settings.h"
 #include "multicolorled.h"
-#ifdef _WIN32
-# include "../windows/moc/llconserverdlgbase.h"
+#ifdef _IS_QMAKE_CONFIG
+# include "ui_llconserverdlgbase.h"
 #else
-# ifdef _IS_QMAKE_CONFIG
-#  include "ui_llconserverdlgbase.h"
+# ifdef _WIN32
+#  include "../windows/moc/llconserverdlgbase.h" // required if llcon.sln and MocQT.bat are used
 # else
 #  include "moc/llconserverdlgbase.h"
 # endif

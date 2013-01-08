@@ -31,11 +31,11 @@
 #include <QLocale>
 #include "global.h"
 #include "client.h"
-#ifdef _WIN32
-# include "../windows/moc/connectdlgbase.h"
+#ifdef _IS_QMAKE_CONFIG
+# include "ui_connectdlgbase.h"
 #else
-# ifdef _IS_QMAKE_CONFIG
-#  include "ui_connectdlgbase.h"
+# ifdef _WIN32
+#  include "../windows/moc/connectdlgbase.h" // required if llcon.sln and MocQT.bat are used
 # else
 #  include "moc/connectdlgbase.h"
 # endif

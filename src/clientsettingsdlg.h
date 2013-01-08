@@ -37,11 +37,11 @@
 #include "global.h"
 #include "client.h"
 #include "multicolorled.h"
-#ifdef _WIN32
-# include "../windows/moc/clientsettingsdlgbase.h"
+#ifdef _IS_QMAKE_CONFIG
+# include "ui_clientsettingsdlgbase.h"
 #else
-# ifdef _IS_QMAKE_CONFIG
-#  include "ui_clientsettingsdlgbase.h"
+# ifdef _WIN32
+#  include "../windows/moc/clientsettingsdlgbase.h" // required if llcon.sln and MocQT.bat are used
 # else
 #  include "moc/clientsettingsdlgbase.h"
 # endif

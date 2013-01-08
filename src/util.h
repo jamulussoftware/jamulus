@@ -40,12 +40,15 @@
 #include "global.h"
 using namespace std; // because of the library: "vector"
 #ifdef _WIN32
-# include "../windows/moc/aboutdlgbase.h"
+# define NOMINMAX // solves a compiler error in qdatetime.h (Qt5)
 # include <windows.h>
 # include <mmsystem.h>
+#endif
+#ifdef _IS_QMAKE_CONFIG
+# include "ui_aboutdlgbase.h"
 #else
-# ifdef _IS_QMAKE_CONFIG
-#  include "ui_aboutdlgbase.h"
+# ifdef _WIN32
+#  include "../windows/moc/aboutdlgbase.h" // required if llcon.sln and MocQT.bat are used
 # else
 #  include "moc/aboutdlgbase.h"
 # endif

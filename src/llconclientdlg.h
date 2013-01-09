@@ -41,15 +41,7 @@
 #include "clientsettingsdlg.h"
 #include "chatdlg.h"
 #include "connectdlg.h"
-#ifdef _IS_QMAKE_CONFIG
-# include "ui_llconclientdlgbase.h"
-#else
-# ifdef _WIN32
-#  include "../windows/moc/llconclientdlgbase.h" // required if llcon.sln and MocQT.bat are used
-# else
-#  include "moc/llconclientdlgbase.h"
-# endif
-#endif
+#include "ui_llconclientdlgbase.h"
 
 
 /* Definitions ****************************************************************/

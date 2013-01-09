@@ -352,12 +352,7 @@ int main ( int argc, char** argv )
 #endif
 
     // init resources
-#ifdef _IS_QMAKE_CONFIG
     Q_INIT_RESOURCE(resources);
-#else
-    extern int qInitResources();
-    qInitResources();
-#endif
 
 
 // TEST -> activate the following line to activate the test bench,

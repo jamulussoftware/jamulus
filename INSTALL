@@ -26,13 +26,11 @@
 Windows:
 --------
 
-Rquired software: QT4, Visual Studio 2005, ASIO development files
+Rquired software: QT, a compiler like Visual Studio, ASIO development files
 
 - copy ASIO development files in llcon/windows directory so that, e.g., the
-  directory llcon\windows\ASIOSDK2\common exists 
-- run llcon/windows/MocQT.bat
-- open llcon.sln in your Visual Studio environment and compile
-- run llcon/windows/Release/llcon.exe
+  directory llcon\windows\ASIOSDK2\common exists
+- open llcon.pro in Qt Creator and compile
 
 
 Linux:

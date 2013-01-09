@@ -10,8 +10,7 @@ INCLUDEPATH += src \
     libs/celt
 
 DEFINES += USE_ALLOCA \
-    _REENTRANT \
-    _IS_QMAKE_CONFIG
+    _REENTRANT
 
 win32 {
     DEFINES -= UNICODE

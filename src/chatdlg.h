@@ -30,15 +30,7 @@
 #include <QLayout>
 #include <QAccessible>
 #include "global.h"
-#ifdef _IS_QMAKE_CONFIG
-# include "ui_chatdlgbase.h"
-#else
-# ifdef _WIN32
-#  include "../windows/moc/chatdlgbase.h" // required if llcon.sln and MocQT.bat are used
-# else
-#  include "moc/chatdlgbase.h"
-# endif
-#endif
+#include "ui_chatdlgbase.h"
 
 
 /* Classes ********************************************************************/

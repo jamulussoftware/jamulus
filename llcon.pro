@@ -22,8 +22,7 @@ win32 {
     RC_FILE = windows/llcon.rc
     INCLUDEPATH += windows/ASIOSDK2/common \
         windows/ASIOSDK2/host \
-        windows/ASIOSDK2/host/pc \
-        libs/celt
+        windows/ASIOSDK2/host/pc
     LIBS += ole32.lib \
         user32.lib \
         advapi32.lib \

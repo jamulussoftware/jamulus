@@ -52,6 +52,15 @@ win32 {
         DEFINES += WITH_SOUND
         LIBS += -ljack
     }
+
+    # Linux is our source distribution, include sources from other OSs
+    DISTFILES += mac/sound.h \
+        mac/sound.cpp \
+        mac/llcon.icns \
+        windows/sound.h \
+        windows/sound.cpp \
+        windows/llcon.rc \
+        windows/mainicon.ico
 }
 
 RCC_DIR = src/res

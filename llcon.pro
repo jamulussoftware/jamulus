@@ -13,7 +13,7 @@ DEFINES += USE_ALLOCA \
     _REENTRANT
 
 win32 {
-    DEFINES -= UNICODE
+    DEFINES -= UNICODE # fixes issue with ASIO SDK (asiolist.cpp is not unicode compatible)
     DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     HEADERS += windows/sound.h
     SOURCES += windows/sound.cpp \

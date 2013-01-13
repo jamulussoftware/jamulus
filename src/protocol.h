@@ -165,14 +165,14 @@ protected:
                            const int               iID,
                            const CVector<uint8_t>& vecData );
 
-    void PutValOnStream ( CVector<uint8_t>&  vecIn,
-                          int&               iPos,
-                          const uint32_t     iVal,
-                          const int          iNumOfBytes );
+    void PutValOnStream ( CVector<uint8_t>& vecIn,
+                          int&              iPos,
+                          const uint32_t    iVal,
+                          const int         iNumOfBytes );
 
-    void PutStringOnStream ( CVector<uint8_t>&  vecIn,
-                             int&               iPos,
-                             const QString&     sString );
+    void PutStringUTF8OnStream ( CVector<uint8_t>& vecIn,
+                                 int&              iPos,
+                                 const QByteArray& sStringUTF8 );
 
     uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
                                 int&                    iPos,

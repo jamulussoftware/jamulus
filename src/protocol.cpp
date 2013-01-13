@@ -734,12 +734,16 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
 
     for ( int i = 0; i < iNumClients; i++ )
     {
-        // current string size
-        const int iCurStrLen = vecChanInfo[i].strName.size();
+        // convert name string to utf-8
+        const QByteArray strUTF8Name = vecChanInfo[i].strName.toUtf8();
+
+        // current utf-8 string size
+        const int iCurStrUTF8Len = strUTF8Name.size();
 
         // size of current list entry
         const int iCurListEntrLen =
-            1 /* chan ID */ + 4 /* IP addr. */ + 2 /* str. size */ + iCurStrLen;
+            1 /* chan ID */ + 4 /* IP addr. */ +
+            2 /* utf-8 str. size */ + iCurStrUTF8Len;
 
         // make space for new data
         vecData.Enlarge ( iCurListEntrLen );
@@ -753,7 +757,7 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
             static_cast<uint32_t> ( vecChanInfo[i].iIpAddr ), 4 );
 
         // name string
-        PutStringOnStream ( vecData, iPos, vecChanInfo[i].strName );
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
     }
 
     CreateAndSendMessage ( PROTMESSID_CONN_CLIENTS_LIST, vecData );
@@ -822,17 +826,21 @@ bool CProtocol::EvaluateReqConnClientsList()
 
 void CProtocol::CreateChanNameMes ( const QString strName )
 {
-    int       iPos    = 0; // init position pointer
-    const int iStrLen = strName.size(); // get string size
+    int iPos = 0; // init position pointer
+
+    // convert name string to utf-8
+    const QByteArray strUTF8Name = strName.toUtf8();
+
+    const int iStrUTF8Len = strUTF8Name.size(); // get utf-8 string size
 
     // size of current list entry
-    const int iEntrLen = 2 /* string size */ + iStrLen;
+    const int iEntrLen = 2 /* utf-8 string size */ + iStrUTF8Len;
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
 
     // name string
-    PutStringOnStream ( vecData, iPos, strName );
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
 
     CreateAndSendMessage ( PROTMESSID_CHANNEL_NAME, vecData );
 }
@@ -878,17 +886,21 @@ bool CProtocol::EvaluateReqChanNameMes()
 
 void CProtocol::CreateChatTextMes ( const QString strChatText )
 {
-    int       iPos    = 0; // init position pointer
-    const int iStrLen = strChatText.size(); // get string size
+    int iPos = 0; // init position pointer
+
+    // convert chat text string to utf-8
+    const QByteArray strUTF8ChatText = strChatText.toUtf8();
+
+    const int iStrUTF8Len = strUTF8ChatText.size(); // get utf-8 string size
 
     // size of message body
-    const int iEntrLen = 2 /* string size */ + iStrLen;
+    const int iEntrLen = 2 /* utf-8 string size */ + iStrUTF8Len;
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
 
     // chat text
-    PutStringOnStream ( vecData, iPos, strChatText );
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8ChatText );
 
     CreateAndSendMessage ( PROTMESSID_CHAT_TEXT, vecData );
 }
@@ -1197,15 +1209,20 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
 {
     int iPos = 0; // init position pointer
 
+    // convert server info strings to utf-8
+    const QByteArray strUTF8Name  = ServerInfo.strName.toUtf8();
+    const QByteArray strUTF8Topic = ServerInfo.strTopic.toUtf8();
+    const QByteArray strUTF8City  = ServerInfo.strCity.toUtf8();
+
     // size of current message body
     const int iEntrLen =
         2 /* port number */ +
         2 /* country */ +
         1 /* maximum number of connected clients */ +
         1 /* is permanent flag */ +
-        2 /* name string size */ + ServerInfo.strName.size() +
-        2 /* topic string size */ + ServerInfo.strTopic.size() +
-        2 /* city string size */ + ServerInfo.strCity.size();
+        2 /* name utf-8 string size */ + strUTF8Name.size() +
+        2 /* topic utf-8 string size */ + strUTF8Topic.size() +
+        2 /* city utf-8 string size */ + strUTF8City.size();
 
     // build data vector
     CVector<uint8_t> vecData ( iEntrLen );
@@ -1227,13 +1244,13 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
         static_cast<uint32_t> ( ServerInfo.bPermanentOnline ), 1 );
 
     // name
-    PutStringOnStream ( vecData, iPos, ServerInfo.strName );
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
 
     // topic
-    PutStringOnStream ( vecData, iPos, ServerInfo.strTopic );
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8Topic );
 
     // city
-    PutStringOnStream ( vecData, iPos, ServerInfo.strCity );
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8City );
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REGISTER_SERVER,
                                      vecData,
@@ -1334,6 +1351,11 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
 
     for ( int i = 0; i < iNumServers; i++ )
     {
+        // convert server list strings to utf-8
+        const QByteArray strUTF8Name  = vecServerInfo[i].strName.toUtf8();
+        const QByteArray strUTF8Topic = vecServerInfo[i].strTopic.toUtf8();
+        const QByteArray strUTF8City  = vecServerInfo[i].strCity.toUtf8();
+
         // size of current list entry
         const int iCurListEntrLen =
             4 /* IP address */ +
@@ -1341,9 +1363,9 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
             2 /* country */ +
             1 /* maximum number of connected clients */ +
             1 /* is permanent flag */ +
-            2 /* name string size */ + vecServerInfo[i].strName.size() +
-            2 /* topic string size */ + vecServerInfo[i].strTopic.size() +
-            2 /* city string size */ + vecServerInfo[i].strCity.size();
+            2 /* name utf-8 string size */ + strUTF8Name.size() +
+            2 /* topic utf-8 string size */ + strUTF8Topic.size() +
+            2 /* city utf-8 string size */ + strUTF8City.size();
 
         // make space for new data
         vecData.Enlarge ( iCurListEntrLen );
@@ -1369,13 +1391,13 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
             static_cast<uint32_t> ( vecServerInfo[i].bPermanentOnline ), 1 );
 
         // name
-        PutStringOnStream ( vecData, iPos, vecServerInfo[i].strName );
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
 
         // topic
-        PutStringOnStream ( vecData, iPos, vecServerInfo[i].strTopic );
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8Topic );
 
         // city
-        PutStringOnStream ( vecData, iPos, vecServerInfo[i].strCity );
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8City );
     }
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_SERVER_LIST,
@@ -1607,9 +1629,11 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
 
     // Now check CRC -----------------------------------------------------------
     CCRC CRCObj;
+
     const int iLenCRCCalc = MESS_HEADER_LENGTH_BYTE + iLenBy;
 
     iCurPos = 0; // start from the beginning
+
     for ( i = 0; i < iLenCRCCalc; i++ )
     {
         CRCObj.AddByte ( static_cast<uint8_t> ( 
@@ -1624,7 +1648,9 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
 
     // Extract actual data -----------------------------------------------------
     vecData.Init ( iLenBy );
+
     iCurPos = MESS_HEADER_LENGTH_BYTE; // start from beginning of data
+
     for ( i = 0; i < iLenBy; i++ )
     {
         vecData[i] = static_cast<uint8_t> (
@@ -1646,6 +1672,7 @@ uint32_t CProtocol::GetValFromStream ( const CVector<uint8_t>& vecIn,
     Q_ASSERT ( vecIn.Size() >= iPos + iNumOfBytes );
 
     uint32_t iRet = 0;
+
     for ( int i = 0; i < iNumOfBytes; i++ )
     {
         iRet |= vecIn[iPos] << ( i * 8 /* size of byte */ );
@@ -1663,30 +1690,40 @@ bool CProtocol::GetStringFromStream ( const CVector<uint8_t>& vecIn,
 /*
     note: iPos is automatically incremented in this function
 */
-    // check if at least two bytes are available
     const int iInLen = vecIn.Size();
+
+    // check if at least two bytes are available
     if ( ( iInLen - iPos ) < 2 )
     {
         return true; // return error code
     }
 
-    // number of bytes for string (2 bytes)
-    const int iStrLen =
+    // number of bytes for utf-8 string (2 bytes)
+    const int iStrUTF8Len =
         static_cast<int> ( GetValFromStream ( vecIn, iPos, 2 ) );
 
-    if ( ( ( iInLen - iPos ) < iStrLen ) ||
-         ( iStrLen > iMaxStringLen ) )
+    // (note that iPos was incremented by 2 in the above code!)
+    if ( ( iInLen - iPos ) < iStrUTF8Len )
     {
         return true; // return error code
     }
 
     // string (n bytes)
-    strOut = "";
-    for ( int i = 0; i < iStrLen; i++ )
+    QByteArray sStringUTF8;
+
+    for ( int i = 0; i < iStrUTF8Len; i++ )
     {
         // byte-by-byte copying of the string data
-        int iData = static_cast<int> ( GetValFromStream ( vecIn, iPos, 1 ) );
-        strOut += QString ( (char*) &iData );
+        sStringUTF8.append ( static_cast<char> ( GetValFromStream ( vecIn, iPos, 1 ) ) );
+    }
+
+    // convert utf-8 byte array in the return string
+    strOut = QString::fromUtf8 ( sStringUTF8 );
+
+    // check length of actual string
+    if ( strOut.size() > iMaxStringLen )
+    {
+        return true; // return error code
     }
 
     return false; // no error
@@ -1738,9 +1775,11 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>&       vecOut,
 
     // Encode CRC --------------------------------------------------------------
     CCRC CRCObj;
+
     iCurPos = 0; // start from beginning
 
     const int iLenCRCCalc = MESS_HEADER_LENGTH_BYTE + iDataLenByte;
+
     for ( i = 0; i < iLenCRCCalc; i++ )
     {
         CRCObj.AddByte ( static_cast<uint8_t> ( 
@@ -1772,22 +1811,22 @@ void CProtocol::PutValOnStream ( CVector<uint8_t>&  vecIn,
     }
 }
 
-void CProtocol::PutStringOnStream ( CVector<uint8_t>& vecIn,
-                                    int&              iPos,
-                                    const QString&    sString )
+void CProtocol::PutStringUTF8OnStream ( CVector<uint8_t>& vecIn,
+                                        int&              iPos,
+                                        const QByteArray& sStringUTF8 )
 {
-    // get the string size
-    const int iStrLen = sString.size();
+    // get the utf-8 string size
+    const int iStrUTF8Len = sStringUTF8.size();
 
-    // number of bytes for string (2 bytes)
+    // number of bytes for utf-8 string (2 bytes)
     PutValOnStream ( vecIn, iPos,
-        static_cast<uint32_t> ( iStrLen ), 2 );
+        static_cast<uint32_t> ( iStrUTF8Len ), 2 );
 
-    // actual string (n bytes)
-    for ( int j = 0; j < iStrLen; j++ )
+    // actual utf-8 string (n bytes)
+    for ( int j = 0; j < iStrUTF8Len; j++ )
     {
-        // byte-by-byte copying of the string data
+        // byte-by-byte copying of the utf-8 string data
         PutValOnStream ( vecIn, iPos,
-            static_cast<uint32_t> ( sString[j].toLatin1() ), 1 );
+            static_cast<uint32_t> ( sStringUTF8[j] ), 1 );
     }
 }

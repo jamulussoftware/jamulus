@@ -2,6 +2,8 @@
 
 TODO: Mac OS 64bit support
 
+- bug fix: strings in the protocol are now utf-8 coded
+
 
 3.2.2
 

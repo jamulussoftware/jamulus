@@ -14,6 +14,7 @@ DEFINES += USE_ALLOCA \
 
 win32 {
     DEFINES -= UNICODE
+    DEFINES += NOMINMAX # solves a compiler error in qdatetime.h (Qt5)
     HEADERS += windows/sound.h
     SOURCES += windows/sound.cpp \
         windows/ASIOSDK2/common/asio.cpp \

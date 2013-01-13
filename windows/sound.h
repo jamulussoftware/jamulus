@@ -25,7 +25,6 @@
 #if !defined ( _SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_ )
 #define _SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_
 
-#define NOMINMAX // solves a compiler error in qdatetime.h (Qt5)
 #include <windows.h>
 #include <QMutex>
 #include <QMessageBox>

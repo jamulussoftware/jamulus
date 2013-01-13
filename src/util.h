@@ -40,7 +40,6 @@
 #include "global.h"
 using namespace std; // because of the library: "vector"
 #ifdef _WIN32
-# define NOMINMAX // solves a compiler error in qdatetime.h (Qt5)
 # include <windows.h>
 # include <mmsystem.h>
 #endif

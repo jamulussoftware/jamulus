@@ -2,6 +2,8 @@
 
 TODO: Mac OS 64bit support
 
+- the source code is now compatible to Qt5
+
 - bug fix: strings in the protocol are now utf-8 coded
 
 

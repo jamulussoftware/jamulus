@@ -5,8 +5,8 @@
 !define AUTORUN_NAME      "llcon server"
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define INSTALLER_NAME    "llconinstaller.exe"
-!define VS_REDIST_PATH    "C:\Program Files\Microsoft Visual Studio 8\SDK\v2.0\BootStrapper\Packages\vcredist_x86\"
-;!define VS_REDIST_PATH   "C:\Programme\Microsoft Visual Studio 8\SDK\v2.0\BootStrapper\Packages\vcredist_x86\"
+!define VS_REDIST_PATH    "C:\Program Files\Microsoft Visual Studio 10.0\SDK\v3.5\BootStrapper\Packages\vcredist_x86\"
+;!define VS_REDIST_PATH   "C:\Programme\Microsoft Visual Studio 10.0\SDK\v3.5\BootStrapper\Packages\vcredist_x86\"
 !define VS_REDIST_EXE     "vcredist_x86.exe"
 !define UNINST_KEY        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
 !define AUTORUN_KEY       "Software\Microsoft\Windows\CurrentVersion\Run"
@@ -42,13 +42,14 @@ Section
   SetOutPath       $INSTDIR
 
   ; main application
-  File             "Release\${APP_EXE}"
+  File             "..\..\llcon-build-Desktop_Qt_5_0_0_MSVC2010_32bit_SDK-Release\release\${APP_EXE}"
 
   ; QT dlls
-  File             "$%QTDIR%\bin\QtCore4.dll"
-  File             "$%QTDIR%\bin\QtGui4.dll"
-  File             "$%QTDIR%\bin\QtNetwork4.dll"
-  File             "$%QTDIR%\bin\QtXml4.dll"
+  File             "$%QTDIR%\bin\Qt5Core.dll"
+  File             "$%QTDIR%\bin\Qt5Gui.dll"
+  File             "$%QTDIR%\bin\Qt5Widgets.dll"
+  File             "$%QTDIR%\bin\Qt5Network.dll"
+  File             "$%QTDIR%\bin\Qt5Xml.dll"
 
   ; other files
   File             "..\COPYING"
@@ -73,7 +74,7 @@ Section
 
   ; accessible qt plugin
   SetOutPath       $INSTDIR\accessible
-  File             "$%QTDIR%\plugins\accessible\qtaccessiblewidgets4.dll"
+  File             "$%QTDIR%\plugins\accessible\qtaccessiblewidgets.dll"
 
 SectionEnd
 
@@ -93,12 +94,13 @@ RMDIR  "$SMPROGRAMS\${APP_NAME}"
 
 Delete $INSTDIR\${UNINSTALL_EXE}
 Delete $INSTDIR\${APP_EXE}
-Delete $INSTDIR\QtCore4.dll
-Delete $INSTDIR\QtGui4.dll
-Delete $INSTDIR\QtNetwork4.dll
-Delete $INSTDIR\QtXml4.dll
+Delete $INSTDIR\Qt5Core.dll
+Delete $INSTDIR\Qt5Gui.dll
+Delete $INSTDIR\Qt5Widgets.dll
+Delete $INSTDIR\Qt5Network.dll
+Delete $INSTDIR\Qt5Xml.dll
 Delete $INSTDIR\COPYING
-Delete $INSTDIR\accessible\qtaccessiblewidgets4.dll
+Delete $INSTDIR\accessible\qtaccessiblewidgets.dll
 RMDir  $INSTDIR\accessible
 RMDir  $INSTDIR
 

@@ -133,7 +133,7 @@
            <item>
             <widget class="QLabel" name="lblCopyright" >
              <property name="text" >
-              <string>Copyright (C) 2005 - 2011</string>
+              <string>Copyright (C) 2005 - 2013</string>
              </property>
              <property name="wordWrap" >
               <bool>false</bool>

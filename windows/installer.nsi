@@ -5,6 +5,7 @@
 !define AUTORUN_NAME      "llcon server"
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define INSTALLER_NAME    "llconinstaller.exe"
+!define BINARY_PATH       "..\..\llcon-build-Desktop_Qt_5_0_0_MSVC2010_32bit_SDK-Release\release\"
 !define VS_REDIST_PATH    "C:\Program Files\Microsoft Visual Studio 10.0\SDK\v3.5\BootStrapper\Packages\vcredist_x86\"
 ;!define VS_REDIST_PATH   "C:\Programme\Microsoft Visual Studio 10.0\SDK\v3.5\BootStrapper\Packages\vcredist_x86\"
 !define VS_REDIST_EXE     "vcredist_x86.exe"
@@ -42,7 +43,7 @@ Section
   SetOutPath       $INSTDIR
 
   ; main application
-  File             "..\..\llcon-build-Desktop_Qt_5_0_0_MSVC2010_32bit_SDK-Release\release\${APP_EXE}"
+  File             "${BINARY_PATH}${APP_EXE}"
 
   ; QT dlls
   File             "$%QTDIR%\bin\Qt5Core.dll"
@@ -50,6 +51,12 @@ Section
   File             "$%QTDIR%\bin\Qt5Widgets.dll"
   File             "$%QTDIR%\bin\Qt5Network.dll"
   File             "$%QTDIR%\bin\Qt5Xml.dll"
+  File             "$%QTDIR%\bin\D3DCompiler_43.dll"
+  File             "$%QTDIR%\bin\icudt49.dll"
+  File             "$%QTDIR%\bin\icuin49.dll"
+  File             "$%QTDIR%\bin\icuuc49.dll"
+  File             "$%QTDIR%\bin\libEGL.dll"
+  File             "$%QTDIR%\bin\libGLESv2.dll"
 
   ; other files
   File             "..\COPYING"
@@ -99,6 +106,12 @@ Delete $INSTDIR\Qt5Gui.dll
 Delete $INSTDIR\Qt5Widgets.dll
 Delete $INSTDIR\Qt5Network.dll
 Delete $INSTDIR\Qt5Xml.dll
+Delete $INSTDIR\D3DCompiler_43.dll
+Delete $INSTDIR\icudt49.dll
+Delete $INSTDIR\icuin49.dll
+Delete $INSTDIR\icuuc49.dll
+Delete $INSTDIR\libEGL.dll
+Delete $INSTDIR\libGLESv2.dll
 Delete $INSTDIR\COPYING
 Delete $INSTDIR\accessible\qtaccessiblewidgets.dll
 RMDir  $INSTDIR\accessible

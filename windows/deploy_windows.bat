@@ -5,13 +5,17 @@ set NSIS_PATH=%PROGRAMFILES%\NSIS
 
 if "%VSINSTALLDIR%" == "" goto vsenvproblem
 
-rem clean and compile solution -------------------------------------------------
-devenv llcon.sln /clean "Release|Win32"
+rem create visual studio project file ------------------------------------------
+cd ..
+set QMAKESPEC=win32-msvc2010
+qmake -tp vc
 
-call MocQT
-devenv llcon.sln /build "Release|Win32"
+rem clean and compile solution -------------------------------------------------
+vcexpress llcon.vcxproj /clean "Release|Win32"
+vcexpress llcon.vcxproj /build "Release|Win32"
 
 rem create installer -----------------------------------------------------------
+cd windows
 "%NSIS_PATH%\makensis.exe" installer.nsi
 
 move llconinstaller.exe ../deploy/llcon-version-installer.exe

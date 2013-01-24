@@ -5,7 +5,7 @@
 !define AUTORUN_NAME      "llcon server"
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define INSTALLER_NAME    "llconinstaller.exe"
-!define BINARY_PATH       "..\..\llcon-build-Desktop_Qt_5_0_0_MSVC2010_32bit_SDK-Release\release\"
+!define BINARY_PATH       "..\release\"
 !define VS_REDIST_PATH    "C:\Program Files\Microsoft Visual Studio 10.0\SDK\v3.5\BootStrapper\Packages\vcredist_x86\"
 ;!define VS_REDIST_PATH   "C:\Programme\Microsoft Visual Studio 10.0\SDK\v3.5\BootStrapper\Packages\vcredist_x86\"
 !define VS_REDIST_EXE     "vcredist_x86.exe"

@@ -82,7 +82,8 @@ protected:
     void               ShowChatWindow();
     void               UpdateAudioFaderSlider();
     void               UpdateRevSelection();
-    void               ConnectDisconnect ( const bool bDoStart );
+    void               ConnectDisconnect ( const bool bDoStart,
+                                           const bool bConnectOnStartup = false );
 
     CClient*           pClient;
     CSettings*         pSettings;

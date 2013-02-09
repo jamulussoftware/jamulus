@@ -266,9 +266,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     if ( bNewConnectOnStartup )
     {
         // since the software starts up right now, the previous state was
-        // "not connected" so that a call to "OnConnectDisconBut()" will
-        // start the connection
-        OnConnectDisconBut();
+        // "not connected" so we start the connection
+        ConnectDisconnect ( true, true );
     }
 
 
@@ -743,57 +742,84 @@ void CLlconClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr
                                                 iNumClients );
 }
 
-void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart )
+void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart,
+                                          const bool bConnectOnStartup )
 {
     // start/stop client, set button text
     if ( bDoStart )
     {
-        // get the central server address string
-        const QString strCurCentServAddr =
-            SELECT_SERVER_ADDRESS ( pClient->GetUseDefaultCentralServerAddress(),
-                                    pClient->GetServerListCentralServerAddress() );
+        QString strSelectedAddress;
+        bool    bConnectStateOK = false; // init flag
 
-        // init the connect dialog and execute it (modal dialog)
-        ConnectDlg.Init ( strCurCentServAddr, pClient->vstrIPAddress );
-        ConnectDlg.exec();
-
-        // check if state is OK (e.g., no Cancel was pressed)
-        if ( ConnectDlg.GetStateOK() )
+        // only show connection dialog if this is not a connection on startup
+        if ( bConnectOnStartup )
         {
-            const QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
+            // per definition use the last connection (first entry in the
+            // stored address list)
+            strSelectedAddress = pClient->vstrIPAddress[0];
 
-            // only store new host address in our data base if the address is
-            // not empty and it was not a server list item (only the addresses
-            // typed in manually are stored by definition)
-            if ( !strSelectedAddress.isEmpty() &&
-                 !ConnectDlg.GetServerListItemWasChosen() )
+            // only if address is not empty, start the client
+            if ( !strSelectedAddress.isEmpty() )
             {
-                CVector<QString> vstrTempList ( MAX_NUM_SERVER_ADDR_ITEMS, "" );
+                bConnectStateOK = true;
+            }
+        }
+        else
+        {
+            // get the central server address string
+            const QString strCurCentServAddr =
+                SELECT_SERVER_ADDRESS ( pClient->GetUseDefaultCentralServerAddress(),
+                                        pClient->GetServerListCentralServerAddress() );
 
-                // store the new address in the current server storage list at
-                // the top, make sure we do not have more than allowed stored
-                // servers
-                vstrTempList[0]  = strSelectedAddress;
-                int iTempListCnt = 1;
+            // init the connect dialog and execute it (modal dialog)
+            ConnectDlg.Init ( strCurCentServAddr, pClient->vstrIPAddress );
+            ConnectDlg.exec();
 
-                for ( int iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
+            // check if state is OK (e.g., no Cancel was pressed)
+            if ( ConnectDlg.GetStateOK() )
+            {
+                strSelectedAddress = ConnectDlg.GetSelectedAddress();
+
+                // only store new host address in our data base if the address is
+                // not empty and it was not a server list item (only the addresses
+                // typed in manually are stored by definition)
+                if ( !strSelectedAddress.isEmpty() &&
+                     !ConnectDlg.GetServerListItemWasChosen() )
                 {
-                    // only add old server address if it is not the same as the
-                    // selected one
-                    if ( ( pClient->vstrIPAddress[iIdx].compare ( strSelectedAddress ) ) &&
-                         ( iTempListCnt < MAX_NUM_SERVER_ADDR_ITEMS ) )
-                    {
-                        vstrTempList[iTempListCnt] =
-                            pClient->vstrIPAddress[iIdx];
+                    CVector<QString> vstrTempList ( MAX_NUM_SERVER_ADDR_ITEMS, "" );
 
-                        iTempListCnt++;
+                    // store the new address in the current server storage list at
+                    // the top, make sure we do not have more than allowed stored
+                    // servers
+                    vstrTempList[0]  = strSelectedAddress;
+                    int iTempListCnt = 1;
+
+                    for ( int iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
+                    {
+                        // only add old server address if it is not the same as the
+                        // selected one
+                        if ( ( pClient->vstrIPAddress[iIdx].compare ( strSelectedAddress ) ) &&
+                             ( iTempListCnt < MAX_NUM_SERVER_ADDR_ITEMS ) )
+                        {
+                            vstrTempList[iTempListCnt] =
+                                pClient->vstrIPAddress[iIdx];
+
+                            iTempListCnt++;
+                        }
                     }
+
+                    // copy new generated list to client
+                    pClient->vstrIPAddress = vstrTempList;
                 }
 
-                // copy new generated list to client
-                pClient->vstrIPAddress = vstrTempList;
+                // everything was ok with the connection dialog, set flag
+                bConnectStateOK = true;
             }
+        }
 
+        // only start connection action if the connection state is ok
+        if ( bConnectStateOK )
+        {
             // set address and check if address is valid
             if ( pClient->SetServerAddr ( strSelectedAddress ) )
             {

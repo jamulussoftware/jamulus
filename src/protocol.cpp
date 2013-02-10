@@ -76,6 +76,22 @@ MESSAGES (with connection)
         ... ----------------------+
 
 
+- PROTMESSID_CONN_CLIENTS_LIST_ADD: Additional information about connected
+                                    clients
+
+    for each connected client append following data:
+
+    +-------------------+-----------------+--------------------+ ...
+    | 1 byte channel ID | 2 bytes country | 4 bytes instrument | ...
+    +-------------------+-----------------+--------------------+ ...
+        ... --------------------+ ...
+        ...  1 byte skill level | ...
+        ... --------------------+ ...
+        ... ------------------+---------------------------+
+        ...  2 bytes number n | n bytes UTF-8 string city |
+        ... ------------------+---------------------------+
+
+
 - PROTMESSID_REQ_CONN_CLIENTS_LIST: Request connected clients list
 
     note: does not have any data -> n = 0
@@ -502,6 +518,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     bRet = EvaluateConClientListMes ( vecData );
                     break;
 
+                case PROTMESSID_CONN_CLIENTS_LIST_ADD:
+                    bRet = EvaluateConClientListAddMes ( vecData );
+                    break;
+
                 case PROTMESSID_REQ_CONN_CLIENTS_LIST:
                     bRet = EvaluateReqConnClientsList();
                     break;
@@ -737,18 +757,15 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
         // convert name string to utf-8
         const QByteArray strUTF8Name = vecChanInfo[i].strName.toUtf8();
 
-        // current utf-8 string size
-        const int iCurStrUTF8Len = strUTF8Name.size();
-
         // size of current list entry
         const int iCurListEntrLen =
             1 /* chan ID */ + 4 /* IP addr. */ +
-            2 /* utf-8 str. size */ + iCurStrUTF8Len;
+            2 /* utf-8 str. size */ + strUTF8Name.size();
 
         // make space for new data
         vecData.Enlarge ( iCurListEntrLen );
 
-        // channel ID
+        // channel ID (1 byte)
         PutValOnStream ( vecData, iPos,
             static_cast<uint32_t> ( vecChanInfo[i].iChanID ), 1 );
 
@@ -807,6 +824,111 @@ bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
 
     // invoke message action
     emit ConClientListMesReceived ( vecChanInfo );
+
+    return false; // no error
+}
+
+void CProtocol::CreateConClientListAddMes ( const CVector<CChannelAdditionalInfo>& vecChanInfo )
+{
+    const int iNumClients = vecChanInfo.Size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( 0 );
+    int              iPos = 0; // init position pointer
+
+    for ( int i = 0; i < iNumClients; i++ )
+    {
+        // convert city string to utf-8
+        const QByteArray strUTF8City = vecChanInfo[i].strCity.toUtf8();
+
+        // size of current list entry
+        const int iCurListEntrLen =
+            1 /* chan ID */ + 2 /* country */ +
+            4 /* instrument */ + 1 /* skill level */ +
+            2 /* utf-8 str. size */ + strUTF8City.size();
+
+        // make space for new data
+        vecData.Enlarge ( iCurListEntrLen );
+
+        // channel ID (1 byte)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecChanInfo[i].iChanID ), 1 );
+
+        // country (2 bytes)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecChanInfo[i].eCountry ), 2 );
+
+        // instrument (4 bytes)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecChanInfo[i].iInstrument ), 4 );
+
+        // skill level (1 byte)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecChanInfo[i].iSkillLevel ), 1 );
+
+        // city
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8City );
+    }
+
+    CreateAndSendMessage ( PROTMESSID_CONN_CLIENTS_LIST_ADD, vecData );
+}
+
+bool CProtocol::EvaluateConClientListAddMes ( const CVector<uint8_t>& vecData )
+{
+    int                             iPos     = 0; // init position pointer
+    const int                       iDataLen = vecData.Size();
+    CVector<CChannelAdditionalInfo> vecChanInfo ( 0 );
+
+    while ( iPos < iDataLen )
+    {
+        // check size (the next 8 bytes)
+        if ( ( iDataLen - iPos ) < 8 )
+        {
+            return true; // return error code
+        }
+
+        // channel ID (1 byte)
+        const int iChanID =
+            static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+        // country (2 bytes)
+        const QLocale::Country eCountry =
+            static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+        // instrument (4 bytes)
+        const int iInstrument =
+            static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+        // skill level (1 byte)
+        const int iSkillLevel =
+            static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+        // city
+        QString strCurStr;
+        if ( GetStringFromStream ( vecData,
+                                   iPos,
+                                   MAX_LEN_SERVER_CITY,
+                                   strCurStr ) )
+        {
+            return true; // return error code
+        }
+
+        // add channel information to vector
+        vecChanInfo.Add ( CChannelAdditionalInfo ( iChanID,
+                                                   eCountry,
+                                                   strCurStr,
+                                                   iInstrument,
+                                                   iSkillLevel ) );
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit ConClientListAddMesReceived ( vecChanInfo );
 
     return false; // no error
 }

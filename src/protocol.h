@@ -51,6 +51,7 @@
 #define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   21 // request properties for network transport
 #define PROTMESSID_DISCONNECTION              22 // OLD (not used anymore)
 #define PROTMESSID_REQ_CHANNEL_NAME           23 // request channel name for fader tag
+#define PROTMESSID_CONN_CLIENTS_LIST_ADD      24 // additional infos for connected clients
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -88,6 +89,7 @@ public:
     void CreateReqJitBufMes();
     void CreateChanGainMes ( const int iChanID, const double dGain );
     void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
+    void CreateConClientListAddMes ( const CVector<CChannelAdditionalInfo>& vecChanInfo );
     void CreateReqConnClientsList();
     void CreateChanNameMes ( const QString strName );
     void CreateReqChanNameMes();
@@ -199,6 +201,7 @@ protected:
     bool EvaluateReqJitBufMes();
     bool EvaluateChanGainMes           ( const CVector<uint8_t>& vecData );
     bool EvaluateConClientListMes      ( const CVector<uint8_t>& vecData );
+    bool EvaluateConClientListAddMes   ( const CVector<uint8_t>& vecData );
     bool EvaluateReqConnClientsList();
     bool EvaluateChanNameMes           ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChanNameMes();
@@ -246,6 +249,7 @@ signals:
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ChangeChanGain ( int iChanID, double dNewGain );
     void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
+    void ConClientListAddMesReceived ( CVector<CChannelAdditionalInfo> vecChanInfo );
     void ServerFullMesReceived();
     void ReqConnClientsList();
     void ChangeChanName ( QString strName );

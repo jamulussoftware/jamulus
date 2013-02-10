@@ -71,8 +71,9 @@ protected:
     QCheckBox* pcbMute;
     QCheckBox* pcbSolo;
     QLabel*    pLabel;
+    QLabel*    pInstrument;
 
-    bool         bOtherChannelIsSolo;
+    bool       bOtherChannelIsSolo;
 
 public slots:
     void OnGainValueChanged ( int value );

@@ -34,12 +34,15 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     // create new GUI control objects and store pointers to them (note that
     // QWidget takes the ownership of the pMainGrid so that this only has
     // to be created locally in this constructor)
-    pFrame                 = new QFrame      ( pNW );
-    QVBoxLayout* pMainGrid = new QVBoxLayout ( pFrame );
-    pFader                 = new QSlider     ( Qt::Vertical, pFrame );
-    pcbMute                = new QCheckBox   ( "Mute",       pFrame );
-    pcbSolo                = new QCheckBox   ( "Solo",       pFrame );
-    pLabel                 = new QLabel      ( "",           pFrame );
+    pFrame                   = new QFrame      ( pNW );
+    QVBoxLayout* pMainGrid   = new QVBoxLayout ( pFrame );
+    pFader                   = new QSlider     ( Qt::Vertical, pFrame );
+    pcbMute                  = new QCheckBox   ( "Mute",       pFrame );
+    pcbSolo                  = new QCheckBox   ( "Solo",       pFrame );
+    QGroupBox* pLabelInstBox = new QGroupBox   ( pFrame );
+    pLabel                   = new QLabel      ( "",           pFrame );
+    pInstrument              = new QLabel      ( pFrame );
+    QHBoxLayout* pLabelGrid  = new QHBoxLayout ( pLabelInstBox );
 
     // setup slider
     pFader->setPageStep ( 1 );
@@ -47,53 +50,83 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setRange ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
-    // setup fader tag label (use white background of label)
+    // setup group box for label/instrument picture (use white background of
+    // label and set a thick black border with nice round edges)
+    pLabelInstBox->setStyleSheet (
+        "QGroupBox { border:           2px solid black;"
+        "            border-radius:    4px;"
+        "            padding:          3px;"
+        "            background-color: white; }" );
+
+    // setup fader tag label (black bold text which is centered)
     pLabel->setTextFormat ( Qt::PlainText ); 	 
-	pLabel->setAlignment ( Qt::AlignHCenter );
+    pLabel->setAlignment ( Qt::AlignHCenter );
     pLabel->setStyleSheet (
-        "QLabel { border:           2px solid black;"
-        "         border-radius:    4px;"
-        "         padding:          4px;"
-        "         background-color: white;"
-        "         color:            black;"
+        "QLabel { color:            black;"
         "         font:             bold; }" );
 
-    // set margins of the layout to zero to get maximum space for the controls
+    // set margins of the layouts to zero to get maximum space for the controls
     pMainGrid->setContentsMargins ( 0, 0, 0, 0 );
+    pLabelGrid->setContentsMargins ( 0, 0, 0, 0 );
+    pLabelGrid->setSpacing ( 1 ); // only minimal space between picture and text
 
-    // add user controls to grid
-    pMainGrid->addWidget( pFader,  0, Qt::AlignHCenter );
-    pMainGrid->addWidget( pcbMute, 0, Qt::AlignLeft );
-    pMainGrid->addWidget( pcbSolo, 0, Qt::AlignLeft );
-    pMainGrid->addWidget( pLabel,  0, Qt::AlignHCenter );
+    // add user controls to the grids
+    pLabelGrid->addWidget ( pInstrument );
+    pLabelGrid->addWidget ( pLabel, 0 );
+
+    pMainGrid->addWidget ( pFader,  0, Qt::AlignHCenter );
+    pMainGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
+    pMainGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
+    pMainGrid->addWidget ( pLabelInstBox );
 
     // add fader frame to audio mixer board layout
     pParentLayout->addWidget( pFrame );
+
+
+
+
+// TEST
+const bool bInstPictUsed = false;
+if ( bInstPictUsed )
+{
+    pInstrument->setPixmap ( QPixmap ( ":/png/main/res/llconfronticon.png" ) );
+    pInstrument->setVisible ( true );
+}
+else
+{
+    pInstrument->setVisible ( false );
+}
+
+
 
     // reset current fader
     Reset();
 
     // add help text to controls
-    pFader->setWhatsThis ( "<b>Mixer Fader:</b> Adjusts the audio level of "
+    pFader->setWhatsThis ( tr ( "<b>Mixer Fader:</b> Adjusts the audio level of "
         "this channel. All connected clients at the server will be assigned "
-        "an audio fader at each client." );
-    pFader->setAccessibleName ( "Mixer level setting of the connected client "
-        "at the server" );
+        "an audio fader at each client." ) );
+    pFader->setAccessibleName ( tr ( "Mixer level setting of the connected client "
+        "at the server" ) );
 
-    pcbMute->setWhatsThis ( "<b>Mute:</b> With the Mute checkbox, the current "
-        "audio channel can be muted." );
-    pcbMute->setAccessibleName ( "Mute button" );
+    pcbMute->setWhatsThis ( tr ( "<b>Mute:</b> With the Mute checkbox, the current "
+        "audio channel can be muted." ) );
+    pcbMute->setAccessibleName ( tr ( "Mute button" ) );
 
-    pcbSolo->setWhatsThis ( "<b>Solo:</b> With the Solo checkbox, the current "
+    pcbSolo->setWhatsThis ( tr ( "<b>Solo:</b> With the Solo checkbox, the current "
         "audio channel can be set to solo which means that all other channels "
         "except of the current channel are muted.<br>"
-        "Only one channel at a time can be set to solo." );
-    pcbSolo->setAccessibleName ( "Solo button" );
+        "Only one channel at a time can be set to solo." ) );
+    pcbSolo->setAccessibleName ( tr ( "Solo button" ) );
 
-    pLabel->setWhatsThis ( "<b>Fader Tag:</b> The fader tag "
-        "identifies the connected client. The tag name can be set in the "
-        "main window." );
-    pLabel->setAccessibleName ( "Mixer channel label (fader tag)" );
+    QString strFaderText = tr ( "<b>Fader Tag:</b> The fader tag "
+        "identifies the connected client. The tag name and the picture of your "
+        "instrument can be set in the main window." );
+
+    pInstrument->setWhatsThis ( strFaderText );
+    pInstrument->setAccessibleName ( tr ( "Mixer channel instrument picture" ) );
+    pLabel->setWhatsThis ( strFaderText );
+    pLabel->setAccessibleName ( tr ( "Mixer channel label (fader tag)" ) );
 
 
     // Connections -------------------------------------------------------------
@@ -354,8 +387,8 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecCh
     // get number of connected clients
     const int iNumConnectedClients = vecChanInfo.Size();
 
-    // search for channels with are already present and preserver their gain
-    // setting, for all other channels, reset gain
+    // search for channels with are already present and preserve their gain
+    // setting, for all other channels reset gain
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         bool bFaderIsUsed = false;

@@ -334,7 +334,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "</b></p>"
         "<ul>"
         "<li>Qt cross-platform application framework: "
-        "<i><a href=""http://trolltech.com"">http://trolltech.com</a></i></li>"
+        "<i><a href=""http://qt.digia.com"">http://qt.digia.com</a></i></li>"
         "<li>The CELT ultra-low delay audio codec: "
         "<i><a href=""http://www.celt-codec.org"">http://www.celt-codec.org</a></i></li>"
         "<li>Audio reverberation code: by Perry R. Cook and Gary P. Scavone, "
@@ -344,8 +344,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<li>Parts from Dream DRM Receiver by Volker Fischer and Alexander "
         "Kurpiers: "
         "<i><a href=""http://drm.sf.net"">http://drm.sf.net</a></i></li>"
-        "<li>Some pixmaps are from <i>Clker.com - vector clip art online, "
-        "royalty free & public domain</i></li>"
+        "<li>Some pixmaps are from the Open Clip Art Library (OCAL): "
+        "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></li>"
         "</ul>"
         "</center><br>");
 

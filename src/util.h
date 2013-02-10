@@ -489,6 +489,45 @@ public:
 };
 
 
+// Additional info of a channel ------------------------------------------------
+class CChannelAdditionalInfo
+{
+public:
+    CChannelAdditionalInfo() :
+        iChanID     ( 0 ),
+        eCountry    ( QLocale::AnyCountry ),
+        strCity     ( "" ),
+        iInstrument ( 0 ),
+        iSkillLevel ( 0 ) {}
+
+    CChannelAdditionalInfo ( const int               iNID,
+                             const QLocale::Country& NeCountry,
+                             const QString&          NsCity,
+                             const int               NiInstrument,
+                             const int               NiSkillLevel ) :
+        iChanID     ( iNID ),
+        eCountry    ( NeCountry ),
+        strCity     ( NsCity ),
+        iInstrument ( NiInstrument ),
+        iSkillLevel ( NiSkillLevel ) {}
+
+    // ID of the channel
+    int              iChanID;
+
+    // country in which the client is located
+    QLocale::Country eCountry;
+
+    // city in which the client is located
+    QString          strCity;
+
+    // instrument ID of the client (which instrument is he/she playing)
+    int              iInstrument;
+
+    // skill level of the musician
+    int              iSkillLevel;
+};
+
+
 // Server info -----------------------------------------------------------------
 class CServerCoreInfo
 {
@@ -518,7 +557,6 @@ public:
         iMaxNumClients   ( NiMaxNumClients ),
         bPermanentOnline ( NbPermOnline ) {}
 
-public:
     // local port number of the server
     quint16          iLocalPortNumber;
 

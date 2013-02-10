@@ -62,8 +62,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pLabel->setTextFormat ( Qt::PlainText ); 	 
     pLabel->setAlignment ( Qt::AlignHCenter );
     pLabel->setStyleSheet (
-        "QLabel { color:            black;"
-        "         font:             bold; }" );
+        "QLabel { color: black;"
+        "         font:  bold; }" );
 
     // set margins of the layouts to zero to get maximum space for the controls
     pMainGrid->setContentsMargins ( 0, 0, 0, 0 );

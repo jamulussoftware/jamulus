@@ -783,6 +783,7 @@
  <tabstops>
   <tabstop>butConnect</tabstop>
   <tabstop>edtFaderTag</tabstop>
+  <tabstop>butInstPicture</tabstop>
   <tabstop>chbChat</tabstop>
   <tabstop>chbSettings</tabstop>
   <tabstop>sldAudioPan</tabstop>

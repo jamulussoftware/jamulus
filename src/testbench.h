@@ -94,11 +94,11 @@ protected:
 public slots:
     void OnTimer()
     {
-        CVector<CChannelShortInfo> vecChanInfo ( 1 );
-        CNetworkTransportProps     NetTrProps;
-        CServerCoreInfo            ServerInfo;
-        CVector<CServerInfo>       vecServerInfo ( 1 );
-        CHostAddress               CurHostAddress ( QHostAddress ( sAddress ), iPort );
+        CVector<CChannelInfo>  vecChanInfo ( 1 );
+        CNetworkTransportProps NetTrProps;
+        CServerCoreInfo        ServerInfo;
+        CVector<CServerInfo>   vecServerInfo ( 1 );
+        CHostAddress           CurHostAddress ( QHostAddress ( sAddress ), iPort );
 
         // generate random protocol message
         switch ( GenRandomIntInRange ( 0, 21 ) )
@@ -121,7 +121,7 @@ public slots:
             vecChanInfo[0].iIpAddr = GenRandomIntInRange ( 0, 100000 );
             vecChanInfo[0].strName = GenRandomString();
 
-            Protocol.CreateConClientListMes ( vecChanInfo );
+            Protocol.CreateConClientListNameMes ( vecChanInfo );
             break;
 
         case 4:
@@ -133,7 +133,7 @@ public slots:
             break;
 
         case 6:
-            Protocol.CreateReqChanNameMes();
+            Protocol.CreateReqChanInfoMes();
             break;
 
         case 7:

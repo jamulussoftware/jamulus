@@ -68,7 +68,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     // set margins of the layouts to zero to get maximum space for the controls
     pMainGrid->setContentsMargins ( 0, 0, 0, 0 );
     pLabelGrid->setContentsMargins ( 0, 0, 0, 0 );
-    pLabelGrid->setSpacing ( 1 ); // only minimal space between picture and text
+    pLabelGrid->setSpacing ( 2 ); // only minimal space between picture and text
 
     // add user controls to the grids
     pLabelGrid->addWidget ( pInstrument );
@@ -81,23 +81,6 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     // add fader frame to audio mixer board layout
     pParentLayout->addWidget( pFrame );
-
-
-
-
-// TEST
-const bool bInstPictUsed = false;
-if ( bInstPictUsed )
-{
-    pInstrument->setPixmap ( QPixmap ( ":/png/main/res/llconfronticon.png" ) );
-    pInstrument->setVisible ( true );
-}
-else
-{
-    pInstrument->setVisible ( false );
-}
-
-
 
     // reset current fader
     Reset();
@@ -161,17 +144,17 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
             "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
 
         // mute button
-        pcbMute->setText ( "MUTE" );
+        pcbMute->setText ( tr ( "MUTE" ) );
 
         // solo button
-        pcbSolo->setText ( "SOLO" );
+        pcbSolo->setText ( tr ( "SOLO" ) );
         break;
 
     default:
         // reset style sheet and set original paramters
         pFader->setStyleSheet ( "" );
-        pcbMute->setText      ( "Mute" );
-        pcbSolo->setText      ( "Solo" );
+        pcbMute->setText      ( tr ( "Mute" ) );
+        pcbSolo->setText      ( tr ( "Solo" ) );
         break;
     }
 }
@@ -185,7 +168,8 @@ void CChannelFader::Reset()
     pcbMute->setChecked ( false );
     pcbSolo->setChecked ( false );
 
-    // clear label
+    // clear instrument picture and label text
+    pInstrument->setVisible ( false );
     pLabel->setText ( "" );
 
     bOtherChannelIsSolo = false;
@@ -286,6 +270,29 @@ void CChannelFader::SetText ( const QString sText )
     pLabel->setText ( sModText );
 }
 
+void CChannelFader::SetInstrumentPicture ( const int iInstrument )
+{
+    // get the resource reference string for this instrument
+    const QString strCurResourceRef =
+        CInstPictures::GetResourceReference ( iInstrument );
+
+    // first check if instrument picture is used or not and if it is valid
+    if ( CInstPictures::IsNotUsedInstrument ( iInstrument ) &&
+         ( !strCurResourceRef.isEmpty() ) )
+    {
+        // disable instrument picture
+        pInstrument->setVisible ( false );
+    }
+    else
+    {
+        // set correct picture
+        pInstrument->setPixmap ( QPixmap ( strCurResourceRef ) );
+
+        // enable instrument picture
+        pInstrument->setVisible ( true );
+    }
+}
+
 double CChannelFader::CalcFaderGain ( const int value )
 {
     // convert actual slider range in gain values
@@ -382,7 +389,7 @@ void CAudioMixerBoard::HideAll()
     emit NumClientsChanged ( 0 ); // -> no clients connected
 }
 
-void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecChanInfo )
+void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )
 {
     // get number of connected clients
     const int iNumConnectedClients = vecChanInfo.Size();
@@ -415,7 +422,20 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelShortInfo>& vecCh
                 }
 
                 // update text
-                vecpChanFader[i]->SetText ( GenFaderText ( vecChanInfo[j] ) );
+                vecpChanFader[i]->
+                    SetText ( GenFaderText ( vecChanInfo[j] ) );
+
+                // update other channel infos (only available for new protocol
+                // which is not compatible with old versions -> this way we make
+                // sure that the protocol which transferrs only the name does
+                // change the other client infos
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED #### -> the "if-condition" can be removed later on...
+                if ( !vecChanInfo[j].bOnlyNameIsUsed )
+                {
+                    // update instrument picture
+                    vecpChanFader[i]->
+                        SetInstrumentPicture ( vecChanInfo[j].iInstrument );
+                }
 
                 bFaderIsUsed = true;
             }
@@ -460,7 +480,7 @@ void CAudioMixerBoard::OnChSoloStateChanged ( const int iChannelIdx,
     vecpChanFader[iChannelIdx]->SetOtherSoloState ( false );
 }
 
-QString CAudioMixerBoard::GenFaderText ( CChannelShortInfo& ChanInfo )
+QString CAudioMixerBoard::GenFaderText ( CChannelInfo& ChanInfo )
 {
     // if text is empty, show IP address instead
     if ( ChanInfo.strName.isEmpty() )

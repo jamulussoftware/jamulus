@@ -100,6 +100,7 @@ protected:
 
     QMenu*             pViewMenu;
     QMenuBar*          pMenu;
+    QMenu*             pInstrPictPopupMenu;
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
@@ -109,6 +110,7 @@ public slots:
     void OnAboutToQuit() { pSettings->Save(); }
 
     void OnConnectDisconBut();
+    void OnInstPictureBut();
     void OnTimerSigMet();
 
     void OnTimerStatus() { UpdateDisplay(); }
@@ -121,6 +123,8 @@ public slots:
 
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }
     void OnOpenChatDialog() { ShowChatWindow(); }
+
+    void OnInstPicturesMenuTriggered ( QAction* SelAction );
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
@@ -136,7 +140,7 @@ public slots:
     void OnReverbSelRClicked()
         { pClient->SetReverbOnLeftChan ( false ); }
 
-    void OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
+    void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnFaderTagTextChanged ( const QString& strNewName );
     void OnChatTextReceived ( QString strChatText );
 

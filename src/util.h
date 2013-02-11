@@ -378,8 +378,48 @@ public slots:
 
 
 /******************************************************************************\
-* Other Classes                                                                *
+* Other Classes/Enums                                                          *
 \******************************************************************************/
+
+// Audio compression type enum -------------------------------------------------
+enum EAudComprType
+{
+    // used for protocol -> enum values must be fixed!
+    CT_NONE = 0,
+    CT_CELT = 1
+};
+
+
+// Get data status enum --------------------------------------------------------
+enum EGetDataStat
+{
+    GS_BUFFER_OK,
+    GS_BUFFER_UNDERRUN,
+    GS_CHAN_NOW_DISCONNECTED,
+    GS_CHAN_NOT_CONNECTED
+};
+
+
+// GUI design enum -------------------------------------------------------------
+enum EGUIDesign
+{
+    // used for settings -> enum values must be fixed!
+    GD_STANDARD = 0,
+    GD_ORIGINAL = 1
+};
+
+
+// Skill level enum ------------------------------------------------------------
+enum ESkillLevel
+{
+    // used for protocol -> enum values must be fixed!
+    SL_NOT_SET = 0,
+    SL_BEGINNER = 1,
+    SL_INTERMEDIATE = 2,
+    SL_PROFESSIONAL = 3
+};
+
+
 // Stereo signal level meter ---------------------------------------------------
 class CStereoSignalLevelMeter
 {
@@ -433,7 +473,7 @@ public:
     }
 
     // compare operator
-    bool operator== ( const CHostAddress& CompAddr ) // compare operator
+    bool operator== ( const CHostAddress& CompAddr )
     {
         return ( ( CompAddr.InetAddr == InetAddr ) &&
                  ( CompAddr.iPort    == iPort ) );
@@ -467,52 +507,99 @@ public:
 };
 
 
-// Short info of a channel -----------------------------------------------------
-class CChannelShortInfo
+// Instrument picture data base ------------------------------------------------
+// this is a pure static class
+class CInstPictures
 {
 public:
-    CChannelShortInfo() :
-        iChanID ( 0 ),
-        iIpAddr ( 0 ),
-        strName ( "" ) {}
+    enum EInstCategory
+    {
+        IC_OTHER_INSTRUMENT,
+        IC_WIND_INSTRUMENT,
+        IC_STRING_INSTRUMENT,
+        IC_PLUCKING_INSTRUMENT,
+        IC_PERCUSSION_INSTRUMENT,
+        IC_KEYBOARD_INSTRUMENT
+    };
 
-    CChannelShortInfo ( const int     iNID,
-                        const quint32 nIP,
-                        const QString nN ) :
-        iChanID ( iNID ),
-        iIpAddr ( nIP ),
-        strName ( nN ) {}
+    // per definition: the very first instrument is the "not used" instrument
+    static int  GetNotUsedInstrument() { return 0; }
+    static bool IsNotUsedInstrument ( const int iInstrument ) { return iInstrument == 0; }
 
-    int     iChanID;
-    quint32 iIpAddr;
-    QString strName;
+    static int GetNumAvailableInst() { return GetTable().Size(); }
+    static QString GetResourceReference ( const int iInstrument );
+    static QString GetName ( const int iInstrument );
+
+// TODO make use of instrument category (not yet implemented)
+
+protected:
+    class CInstPictProps
+    {
+    public:
+        CInstPictProps() :
+            strName              ( "" ),
+            strResourceReference ( "" ),
+            eInstCategory        ( IC_OTHER_INSTRUMENT ) {}
+
+        CInstPictProps ( const QString       NsName,
+                         const QString       NsResRef,
+                         const EInstCategory NeInstCat ) :
+            strName              ( NsName ),
+            strResourceReference ( NsResRef ),
+            eInstCategory        ( NeInstCat ) {}
+
+        QString       strName;
+        QString       strResourceReference;
+        EInstCategory eInstCategory;
+    };
+
+    static bool IsInstIndexInRange ( const int iIdx );
+
+    static CVector<CInstPictProps>& GetTable();
 };
 
 
-// Additional info of a channel ------------------------------------------------
-class CChannelAdditionalInfo
+// Info of a channel -----------------------------------------------------------
+class CChannelCoreInfo
 {
 public:
-    CChannelAdditionalInfo() :
-        iChanID     ( 0 ),
-        eCountry    ( QLocale::AnyCountry ),
-        strCity     ( "" ),
-        iInstrument ( 0 ),
-        iSkillLevel ( 0 ) {}
+    CChannelCoreInfo() :
+        strName         ( "" ),
+        eCountry        ( QLocale::AnyCountry ),
+        strCity         ( "" ),
+        iInstrument     ( CInstPictures::GetNotUsedInstrument() ),
+        eSkillLevel     ( SL_NOT_SET ) {}
 
-    CChannelAdditionalInfo ( const int               iNID,
-                             const QLocale::Country& NeCountry,
-                             const QString&          NsCity,
-                             const int               NiInstrument,
-                             const int               NiSkillLevel ) :
-        iChanID     ( iNID ),
+    CChannelCoreInfo ( const QString           NsName,
+                       const QLocale::Country& NeCountry,
+                       const QString&          NsCity,
+                       const int               NiInstrument,
+                       const ESkillLevel       NeSkillLevel ) :
+        strName     ( NsName ),
         eCountry    ( NeCountry ),
         strCity     ( NsCity ),
         iInstrument ( NiInstrument ),
-        iSkillLevel ( NiSkillLevel ) {}
+        eSkillLevel ( NeSkillLevel ) {}
 
-    // ID of the channel
-    int              iChanID;
+    CChannelCoreInfo ( const CChannelCoreInfo& NCorInf ) :
+        strName     ( NCorInf.strName ),
+        eCountry    ( NCorInf.eCountry ),
+        strCity     ( NCorInf.strCity ),
+        iInstrument ( NCorInf.iInstrument ),
+        eSkillLevel ( NCorInf.eSkillLevel ) {}
+
+    // compare operator
+    bool operator!= ( const CChannelCoreInfo& CompChanInfo )
+    {
+        return ( ( CompChanInfo.strName     != strName ) ||
+                 ( CompChanInfo.eCountry    != eCountry ) ||
+                 ( CompChanInfo.strCity     != strCity ) ||
+                 ( CompChanInfo.iInstrument != iInstrument ) ||
+                 ( CompChanInfo.eSkillLevel != eSkillLevel ) );
+    }
+
+    // fader tag text (channel name)
+    QString          strName;
 
     // country in which the client is located
     QLocale::Country eCountry;
@@ -524,7 +611,65 @@ public:
     int              iInstrument;
 
     // skill level of the musician
-    int              iSkillLevel;
+    ESkillLevel      eSkillLevel;
+};
+
+class CChannelInfo : public CChannelCoreInfo
+{
+public:
+    CChannelInfo() :
+        iChanID ( 0 ),
+        iIpAddr ( 0 ),
+        bOnlyNameIsUsed ( false ) {}
+
+    CChannelInfo ( const int               NiID,
+                   const quint32           NiIP,
+                   const CChannelCoreInfo& NCorInf ) :
+        CChannelCoreInfo ( NCorInf ),
+        iChanID ( NiID ),
+        iIpAddr ( NiIP ),
+        bOnlyNameIsUsed ( false ) {}
+
+    CChannelInfo ( const int               NiID,
+                   const quint32           NiIP,
+                   const QString           NsName,
+                   const QLocale::Country& NeCountry,
+                   const QString&          NsCity,
+                   const int               NiInstrument,
+                   const ESkillLevel       NeSkillLevel ) :
+        CChannelCoreInfo ( NsName,
+                           NeCountry,
+                           NsCity,
+                           NiInstrument,
+                           NeSkillLevel ),
+        iChanID ( NiID ),
+        iIpAddr ( NiIP ),
+        bOnlyNameIsUsed ( false ) {}
+
+
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+CChannelInfo ( const int               NiID,
+               const quint32           NiIP,
+               const QString           NsName ) :
+    CChannelCoreInfo ( NsName,
+                       QLocale::AnyCountry,
+                       "",
+                       CInstPictures::GetNotUsedInstrument(),
+                       SL_NOT_SET ),
+    iChanID ( NiID ),
+    iIpAddr ( NiIP ),
+    bOnlyNameIsUsed ( true ) {}
+
+// in old versions, the name was the only client info -> to be removed
+// when compatiblility to old versions is removed
+bool bOnlyNameIsUsed;
+
+
+    // ID of the channel
+    int     iChanID;
+
+    // IP address of the channel
+    quint32 iIpAddr;
 };
 
 
@@ -584,13 +729,7 @@ class CServerInfo : public CServerCoreInfo
 {
 public:
     CServerInfo() :
-        CServerCoreInfo ( 0,
-                          "",
-                          "",
-                          QLocale::AnyCountry,
-                          "",
-                          0,
-                          false ), HostAddr ( CHostAddress() ) {}
+        HostAddr ( CHostAddress() ) {}
 
     CServerInfo (
         const CHostAddress&     NHAddr,
@@ -609,35 +748,8 @@ public:
                               NiMaxNumClients,
                               NbPermOnline ), HostAddr ( NHAddr ) {}
 
-public:
     // internet address of the server
     CHostAddress HostAddr;
-};
-
-
-// Audio compression type enum -------------------------------------------------
-enum EAudComprType
-{
-    CT_NONE = 0,
-    CT_CELT = 1
-};
-
-
-// Get data status enum --------------------------------------------------------
-enum EGetDataStat
-{
-    GS_BUFFER_OK,
-    GS_BUFFER_UNDERRUN,
-    GS_CHAN_NOW_DISCONNECTED,
-    GS_CHAN_NOT_CONNECTED
-};
-
-
-// GUI design enum -------------------------------------------------------------
-enum EGUIDesign
-{
-    GD_STANDARD = 0,
-    GD_ORIGINAL = 1
 };
 
 

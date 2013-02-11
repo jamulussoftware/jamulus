@@ -95,7 +95,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // fader tag
     QString strFaderTag = tr ( "<b>Your Alias/Instrument:</b> Set your name "
         "or an alias here so that the other musicians you want to play with "
-        "know who you are. Additionally you may enter the instrument you play. "
+        "know who you are. Additionally you may set an instrument picture of "
+        "the instrument you play. "
         "What you set here will appear at your fader on the mixer board when "
         "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
         "also show up at each client which is connected to the same server as "
@@ -109,8 +110,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     lblServerTag->setToolTip   ( strFaderTagTT );
     edtFaderTag->setWhatsThis  ( strFaderTag );
     edtFaderTag->setToolTip    ( strFaderTagTT );
-
     edtFaderTag->setAccessibleName ( tr ( "Fader tag edit box" ) );
+    butInstPicture->setWhatsThis  ( strFaderTag );
+    butInstPicture->setToolTip    ( strFaderTagTT );
+    butInstPicture->setAccessibleName ( tr ( "Instrument picture button" ) );
 
     // local audio input fader
     QString strAudFader = tr ( "<b>Local Audio Input Fader:</b> With the "
@@ -226,8 +229,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // reset mixer board
     MainMixerBoard->HideAll();
 
-    // init fader tag line edit
-    edtFaderTag->setText ( pClient->strName );
+    // init fader tag line edit and instrument picture
+    edtFaderTag->setText ( pClient->ChannelInfo.strName );
+    butInstPicture->setIcon ( QIcon (
+        CInstPictures::GetResourceReference ( pClient->ChannelInfo.iInstrument ) ) );
 
     // init status label
     OnTimerStatus();
@@ -321,10 +326,32 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     layout()->setMenuBar ( pMenu );
 
 
+    // Instrument pictures popup menu ------------------------------------------
+    pInstrPictPopupMenu = new QMenu ( this );
+
+    // add an entry for all known instruments
+    for ( int iCurInst = 0; iCurInst < CInstPictures::GetNumAvailableInst(); iCurInst++ )
+    {
+        // create a menu action with text and image
+        QAction* pCurAction = new QAction (
+            QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ),
+            CInstPictures::GetName ( iCurInst ),
+            this );
+
+        // add data to identify the action data when it is triggered
+        pCurAction->setData ( iCurInst );
+
+        pInstrPictPopupMenu->addAction ( pCurAction );
+    }
+
+
     // Connections -------------------------------------------------------------
     // push buttons
     QObject::connect ( butConnect, SIGNAL ( clicked() ),
         this, SLOT ( OnConnectDisconBut() ) );
+
+    QObject::connect ( butInstPicture, SIGNAL ( clicked() ),
+        this, SLOT ( OnInstPictureBut() ) );
 
     // check boxes
     QObject::connect ( chbSettings, SIGNAL ( stateChanged ( int ) ),
@@ -361,10 +388,18 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     QObject::connect ( edtFaderTag, SIGNAL ( textChanged ( const QString& ) ),
         this, SLOT ( OnFaderTagTextChanged ( const QString& ) ) );
 
+    // menus
+    QObject::connect ( pInstrPictPopupMenu, SIGNAL ( triggered ( QAction* ) ),
+        this, SLOT ( OnInstPicturesMenuTriggered ( QAction* ) ) );
+
     // other
     QObject::connect ( pClient,
-        SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
-        this, SLOT ( OnConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
+        SIGNAL ( ConClientListNameMesReceived ( CVector<CChannelInfo> ) ),
+        this, SLOT ( OnConClientListMesReceived ( CVector<CChannelInfo> ) ) );
+
+    QObject::connect ( pClient,
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
+        this, SLOT ( OnConClientListMesReceived ( CVector<CChannelInfo> ) ) );
 
     QObject::connect ( pClient,
         SIGNAL ( Disconnected() ),
@@ -429,7 +464,7 @@ void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
     }
 
     // store fader tag
-    pClient->strName = edtFaderTag->text();
+    pClient->ChannelInfo.strName = edtFaderTag->text();
 
     // default implementation of this event handler routine
     Event->accept();
@@ -504,6 +539,30 @@ void CLlconClientDlg::OnConnectDisconBut()
     ConnectDisconnect ( !pClient->IsRunning() );
 }
 
+void CLlconClientDlg::OnInstPictureBut()
+{
+    // open a menu which shows all available instrument pictures which
+    // always appears at the same position relative to the instrument
+    // picture button
+    pInstrPictPopupMenu->exec ( this->mapToGlobal ( butInstPicture->pos() ) );
+}
+
+void CLlconClientDlg::OnInstPicturesMenuTriggered ( QAction* SelAction )
+{
+    // get selected instrument
+    const int iSelInstrument = SelAction->data().toInt();
+
+    // set the new value in the data base
+    pClient->ChannelInfo.iInstrument = iSelInstrument;
+
+    // update channel info at the server
+    pClient->SetRemoteInfo();
+
+    // update icon on the instrument selection button
+    butInstPicture->setIcon ( QIcon (
+        CInstPictures::GetResourceReference ( iSelInstrument ) ) );
+}
+
 void CLlconClientDlg::OnChatTextReceived ( QString strChatText )
 {
     // init flag (will maybe overwritten later in this function)
@@ -535,9 +594,9 @@ void CLlconClientDlg::OnDisconnected()
     UpdateDisplay();
 }
 
-void CLlconClientDlg::OnConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo )
+void CLlconClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 {
-    // update mixer board
+    // update mixer board with the additional client infos
     MainMixerBoard->ApplyNewConClientList ( vecChanInfo );
 }
 
@@ -625,10 +684,10 @@ void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
     if ( strNewName.length() <= MAX_LEN_FADER_TAG )
     {
         // refresh internal name parameter
-        pClient->strName = strNewName;
+        pClient->ChannelInfo.strName = strNewName;
 
-        // update name at server
-        pClient->SetRemoteName();
+        // update channel info at the server
+        pClient->SetRemoteInfo();
     }
     else
     {

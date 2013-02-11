@@ -79,6 +79,11 @@ Section
   ; cleanup: remove temporary Microsoft Visual Studio redistributable executable
   Delete           $INSTDIR\${VS_REDIST_EXE}
 
+  ; additional platform dlls
+  SetOutPath       $INSTDIR\platforms
+  File             "$%QTDIR%\plugins\platforms\qwindows.dll"
+  File             "$%QTDIR%\plugins\platforms\qminimal.dll"  
+
   ; accessible qt plugin
   SetOutPath       $INSTDIR\accessible
   File             "$%QTDIR%\plugins\accessible\qtaccessiblewidgets.dll"
@@ -113,6 +118,8 @@ Delete $INSTDIR\icuuc49.dll
 Delete $INSTDIR\libEGL.dll
 Delete $INSTDIR\libGLESv2.dll
 Delete $INSTDIR\COPYING
+Delete $INSTDIR\platforms\qwindows.dll
+Delete $INSTDIR\platforms\qminimal.dll
 Delete $INSTDIR\accessible\qtaccessiblewidgets.dll
 RMDir  $INSTDIR\accessible
 RMDir  $INSTDIR

@@ -277,8 +277,8 @@ void CChannelFader::SetInstrumentPicture ( const int iInstrument )
         CInstPictures::GetResourceReference ( iInstrument );
 
     // first check if instrument picture is used or not and if it is valid
-    if ( CInstPictures::IsNotUsedInstrument ( iInstrument ) &&
-         ( !strCurResourceRef.isEmpty() ) )
+    if ( CInstPictures::IsNotUsedInstrument ( iInstrument ) ||
+         strCurResourceRef.isEmpty() )
     {
         // disable instrument picture
         pInstrument->setVisible ( false );

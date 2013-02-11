@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2011
+ * Copyright (c) 2004-2013
  *
  * Author(s):
  *	Volker Fischer
@@ -59,15 +59,16 @@ This code contains open source code from different sources. The developer(s) wan
 to thank the developer of this code for making their efforts available under open
 source:
 
-- Qt cross-platform application framework: http://trolltech.com
+- Qt cross-platform application framework: http://qt.digia.com
 
 - The CELT ultra-low delay audio codec: http://www.celt-codec.org
 
 - Audio reverberation code: by Perry R. Cook and Gary P. Scavone, 1995 - 2004
-  (taken from "The Synthesis ToolKit in C++ (STK)")
+  (taken from "The Synthesis ToolKit in C++ (STK)"):
+  http://ccrma.stanford.edu/software/stk
 
 - Parts from Dream DRM Receiver by Volker Fischer and Alexander Kurpiers:
   http://drm.sf.net
   
-- Some pixmaps are from Clker.com - vector clip art online,
-  royalty free & public domain
+- Some pixmaps are from the Open Clip Art Library (OCAL):
+  http://openclipart.org

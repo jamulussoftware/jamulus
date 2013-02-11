@@ -69,6 +69,7 @@ int main ( int argc, char** argv )
     QString strHistoryFileName        = "";
     QString strCentralServer          = "";
     QString strServerInfo             = "";
+    QString strWelcomeMessage         = "";
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -159,7 +160,7 @@ int main ( int argc, char** argv )
         // Show all registered servers in the server list ----------------------
         // Undocumented debugging command line argument: Show all registered
         // servers in the server list regardless if a ping to the server is
-        // possible or not
+        // possible or not.
         if ( GetFlagArgument ( argv,
                                i,
                                "--showallservers", // no short form
@@ -272,6 +273,21 @@ int main ( int argc, char** argv )
         {
             strServerInfo = strArgument;
             tsConsole << "- server info: " << strServerInfo << endl;
+            continue;
+        }
+
+
+        // Server welcome message ----------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-w",
+                                 "--welcomemessage",
+                                 strArgument ) )
+        {
+            strWelcomeMessage = strArgument;
+            tsConsole << "- welcome message: " << strWelcomeMessage << endl;
             continue;
         }
 
@@ -400,6 +416,7 @@ int main ( int argc, char** argv )
                              strServerName,
                              strCentralServer,
                              strServerInfo,
+                             strWelcomeMessage,
                              bCentServPingServerInList );
 
             if ( bUseGUI )
@@ -501,6 +518,7 @@ QString UsageArguments ( char **argv )
         "  -p, --port            local port number (server only)\n"
         "  -s, --server          start server\n"
         "  -u, --numchannels     maximum number of channels (server only)\n"
+        "  -w, --welcomemessage  welcome message on connect (server only)\n"
         "  -y, --history         enable connection history and set file\n"
         "                        name (server only)\n"
         "  -z, --startminimized  start minimizied (server only)\n"

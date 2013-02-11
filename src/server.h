@@ -111,6 +111,7 @@ public:
               const QString& strServerNameForHTMLStatusFile,
               const QString& strCentralServer,
               const QString& strServerInfo,
+              const QString& strNewWelcomeMessage,
               const bool     bNCentServPingServerInList );
 
     void Start();
@@ -233,6 +234,9 @@ protected:
 
     // GUI settings
     bool                bAutoRunMinimized;
+
+    // messaging
+    QString             strWelcomeMessage;
 
 signals:
     void Started();

@@ -172,6 +172,7 @@ CServer::CServer ( const int      iNewNumChan,
                    const QString& strServerNameForHTMLStatusFile,
                    const QString& strCentralServer,
                    const QString& strServerInfo,
+                   const QString& strNewWelcomeMessage,
                    const bool     bNCentServPingServerInList ) :
     iNumChannels         ( iNewNumChan ),
     Socket               ( this, iPortNumber ),
@@ -182,7 +183,8 @@ CServer::CServer ( const int      iNewNumChan,
                            iNewNumChan,
                            bNCentServPingServerInList,
                            &ConnLessProtocol ),
-    bAutoRunMinimized    ( false )
+    bAutoRunMinimized    ( false ),
+    strWelcomeMessage    ( strNewWelcomeMessage )
 {
     int i;
 
@@ -1123,6 +1125,17 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
 // since old versions of the llcon software did not implement the channel name
 // request message, we have to explicitely send the channel list here
 CreateAndSendChanListForAllConChannels();
+
+            // send welcome message (if enabled)
+            if ( !strWelcomeMessage.isEmpty() )
+            {
+                // create formated server welcome message and send it just to
+                // the client which just connected to the server
+                const QString strWelcomeMessageFormated =
+                    "<b>Server Welcome Message:</b> " + strWelcomeMessage;
+
+                vecChannels[iCurChanID].CreateChatTextMes ( strWelcomeMessageFormated );
+            }
         }
     }
     Mutex.unlock();

@@ -184,7 +184,7 @@ protected:
     int GetFreeChan();
     int FindChannel ( const CHostAddress& InetAddr );
     int GetNumberOfConnectedClients();
-    CVector<CChannelShortInfo> CreateChannelList();
+    CVector<CChannelInfo> CreateChannelList();
     void CreateAndSendChanListForAllConChannels();
     void CreateAndSendChanListForThisChan ( const int iCurChanID );
     void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
@@ -342,18 +342,18 @@ public slots:
     void OnReqConnClientsListCh10() { CreateAndSendChanListForThisChan ( 10 ); }
     void OnReqConnClientsListCh11() { CreateAndSendChanListForThisChan ( 11 ); }
 
-    void OnNameHasChangedCh0()  { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh1()  { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh2()  { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh3()  { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh4()  { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh5()  { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh6()  { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh7()  { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh8()  { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh9()  { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh10() { CreateAndSendChanListForAllConChannels(); }
-    void OnNameHasChangedCh11() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh0()  { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh1()  { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh2()  { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh3()  { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh4()  { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh5()  { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh6()  { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh7()  { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh8()  { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh9()  { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh10() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh11() { CreateAndSendChanListForAllConChannels(); }
 
     void OnChatTextReceivedCh0  ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 0,  strChatText ); }
     void OnChatTextReceivedCh1  ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 1,  strChatText ); }

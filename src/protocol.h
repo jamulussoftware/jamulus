@@ -41,7 +41,7 @@
 #define PROTMESSID_REQ_JITT_BUF_SIZE          11 // request jitter buffer size
 #define PROTMESSID_NET_BLSI_FACTOR            12 // OLD (not used anymore)
 #define PROTMESSID_CHANNEL_GAIN               13 // set channel gain for mix
-#define PROTMESSID_CONN_CLIENTS_LIST          14 // connected client list
+#define PROTMESSID_CONN_CLIENTS_LIST_NAME     14 // connected client list
 #define PROTMESSID_SERVER_FULL                15 // OLD (not used anymore)
 #define PROTMESSID_REQ_CONN_CLIENTS_LIST      16 // request connected client list
 #define PROTMESSID_CHANNEL_NAME               17 // set channel name for fader tag
@@ -50,8 +50,9 @@
 #define PROTMESSID_NETW_TRANSPORT_PROPS       20 // properties for network transport
 #define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   21 // request properties for network transport
 #define PROTMESSID_DISCONNECTION              22 // OLD (not used anymore)
-#define PROTMESSID_REQ_CHANNEL_NAME           23 // request channel name for fader tag
-#define PROTMESSID_CONN_CLIENTS_LIST_ADD      24 // additional infos for connected clients
+#define PROTMESSID_REQ_CHANNEL_INFOS          23 // request channel infos for fader tag
+#define PROTMESSID_CONN_CLIENTS_LIST          24 // channel infos for connected clients
+#define PROTMESSID_CHANNEL_INFOS              25 // set channel infos
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -88,11 +89,12 @@ public:
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
     void CreateChanGainMes ( const int iChanID, const double dGain );
-    void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo );
-    void CreateConClientListAddMes ( const CVector<CChannelAdditionalInfo>& vecChanInfo );
+    void CreateConClientListNameMes ( const CVector<CChannelInfo>& vecChanInfo );
+    void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo );
     void CreateReqConnClientsList();
     void CreateChanNameMes ( const QString strName );
-    void CreateReqChanNameMes();
+    void CreateChanInfoMes ( const CChannelCoreInfo ChanInfo );
+    void CreateReqChanInfoMes();
     void CreateChatTextMes ( const QString strChatText );
     void CreatePingMes ( const int iMs );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
@@ -200,11 +202,12 @@ protected:
     bool EvaluateJitBufMes             ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();
     bool EvaluateChanGainMes           ( const CVector<uint8_t>& vecData );
+    bool EvaluateConClientListNameMes  ( const CVector<uint8_t>& vecData );
     bool EvaluateConClientListMes      ( const CVector<uint8_t>& vecData );
-    bool EvaluateConClientListAddMes   ( const CVector<uint8_t>& vecData );
     bool EvaluateReqConnClientsList();
     bool EvaluateChanNameMes           ( const CVector<uint8_t>& vecData );
-    bool EvaluateReqChanNameMes();
+    bool EvaluateChanInfoMes           ( const CVector<uint8_t>& vecData );
+    bool EvaluateReqChanInfoMes();
     bool EvaluateChatTextMes           ( const CVector<uint8_t>& vecData );
     bool EvaluatePingMes               ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes    ( const CVector<uint8_t>& vecData );
@@ -248,12 +251,13 @@ signals:
     void ReqJittBufSize();
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ChangeChanGain ( int iChanID, double dNewGain );
-    void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
-    void ConClientListAddMesReceived ( CVector<CChannelAdditionalInfo> vecChanInfo );
+    void ConClientListNameMesReceived ( CVector<CChannelInfo> vecChanInfo );
+    void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ServerFullMesReceived();
     void ReqConnClientsList();
     void ChangeChanName ( QString strName );
-    void ReqChanName();
+    void ChangeChanInfo ( CChannelCoreInfo ChanInfo );
+    void ReqChanInfo();
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );

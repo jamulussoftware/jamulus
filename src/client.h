@@ -216,7 +216,7 @@ public:
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Channel.SetRemoteChanGain ( iId, dGain ); }
 
-    void SetRemoteName() { Channel.SetRemoteName ( strName ); }
+    void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
     void CreateChatTextMes ( const QString& strChatText )
         { Channel.CreateChatTextMes ( strChatText ); }
@@ -240,7 +240,7 @@ public:
 
     // settings
     CVector<QString> vstrIPAddress;
-    QString          strName;
+    CChannelCoreInfo ChannelInfo;
 
 #ifdef LLCON_VST_PLUGIN
     // VST version must have direct access to sound object
@@ -324,7 +324,7 @@ public slots:
     void OnDetectedCLMessage ( CVector<uint8_t> vecbyData, int iNumBytes );
     void OnReqJittBufSize() { CreateServerJitterBufferMessage(); }
     void OnJittBufSizeChanged ( int iNewJitBufSize );
-    void OnReqChanName() { Channel.SetRemoteName ( strName ); }
+    void OnReqChanInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
     void OnNewConnection();
     void OnCLPingReceived ( CHostAddress InetAddr,
                             int          iMs );
@@ -337,7 +337,8 @@ public slots:
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
 
 signals:
-    void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
+    void ConClientListNameMesReceived ( CVector<CChannelInfo> vecChanInfo );
+    void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
     void PingTimeReceived ( int iPingTime );
     void CLServerListReceived ( CHostAddress         InetAddr,

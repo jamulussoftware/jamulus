@@ -66,7 +66,15 @@ void CSettings::Load()
         }
 
         // name
-        pClient->strName = GetIniSetting ( IniXMLDocument, "client", "name" );
+        pClient->ChannelInfo.strName =
+            GetIniSetting ( IniXMLDocument, "client", "name" );
+
+        // instrument
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "instrument",
+            0, CInstPictures::GetNumAvailableInst() - 1, iValue ) )
+        {
+            pClient->ChannelInfo.iInstrument = iValue;
+        }
 
         // audio fader
         if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad",
@@ -268,7 +276,11 @@ void CSettings::Save()
 
         // name
         PutIniSetting ( IniXMLDocument, "client", "name",
-            pClient->strName );
+            pClient->ChannelInfo.strName );
+
+        // instrument
+        SetNumericIniSet ( IniXMLDocument, "client", "instrument",
+            pClient->ChannelInfo.iInstrument );
 
         // audio fader
         SetNumericIniSet ( IniXMLDocument, "client", "audfad",

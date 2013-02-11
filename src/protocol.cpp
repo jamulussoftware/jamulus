@@ -64,7 +64,7 @@ MESSAGES (with connection)
     +-------------------+--------------+
 
 
-- PROTMESSID_CONN_CLIENTS_LIST: IP number and name of connected clients
+- PROTMESSID_CONN_CLIENTS_LIST_NAME: IP number and name of connected clients
 
     for each connected client append following data:
 
@@ -76,17 +76,19 @@ MESSAGES (with connection)
         ... ----------------------+
 
 
-- PROTMESSID_CONN_CLIENTS_LIST_ADD: Additional information about connected
-                                    clients
+- PROTMESSID_CONN_CLIENTS_LIST: Information about connected clients
 
     for each connected client append following data:
 
     +-------------------+-----------------+--------------------+ ...
     | 1 byte channel ID | 2 bytes country | 4 bytes instrument | ...
     +-------------------+-----------------+--------------------+ ...
-        ... --------------------+ ...
-        ...  1 byte skill level | ...
-        ... --------------------+ ...
+        ... --------------------+--------------------+ ...
+        ...  1 byte skill level | 4 bytes IP address | ...
+        ... --------------------+--------------------+ ...
+        ... ------------------+---------------------------+
+        ...  2 bytes number n | n bytes UTF-8 string name |
+        ... ------------------+---------------------------+
         ... ------------------+---------------------------+
         ...  2 bytes number n | n bytes UTF-8 string city |
         ... ------------------+---------------------------+
@@ -99,14 +101,28 @@ MESSAGES (with connection)
 
 - PROTMESSID_CHANNEL_NAME: Name of channel
 
-    for each connected client append following data:
-
     +------------------+----------------------+
     | 2 bytes number n | n bytes UTF-8 string |
     +------------------+----------------------+
 
 
-- PROTMESSID_REQ_CHANNEL_NAME: Request name of channel
+- PROTMESSID_CHANNEL_INFOS: Information about the channel
+
+    +-----------------+--------------------+ ...
+    | 2 bytes country | 4 bytes instrument | ...
+    +-----------------+--------------------+ ...
+        ... --------------------+ ...
+        ...  1 byte skill level | ...
+        ... --------------------+ ...
+        ... ------------------+---------------------------+ ...
+        ...  2 bytes number n | n bytes UTF-8 string name | ...
+        ... ------------------+---------------------------+ ...
+        ... ------------------+---------------------------+
+        ...  2 bytes number n | n bytes UTF-8 string city |
+        ... ------------------+---------------------------+
+
+
+- PROTMESSID_REQ_CHANNEL_INFOS: Request infos of the channel
 
     note: does not have any data -> n = 0
 
@@ -514,24 +530,30 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                     bRet = EvaluateChanGainMes ( vecData );
                     break;
 
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+case PROTMESSID_CONN_CLIENTS_LIST_NAME:
+    bRet = EvaluateConClientListNameMes ( vecData );
+    break;
+
                 case PROTMESSID_CONN_CLIENTS_LIST:
                     bRet = EvaluateConClientListMes ( vecData );
-                    break;
-
-                case PROTMESSID_CONN_CLIENTS_LIST_ADD:
-                    bRet = EvaluateConClientListAddMes ( vecData );
                     break;
 
                 case PROTMESSID_REQ_CONN_CLIENTS_LIST:
                     bRet = EvaluateReqConnClientsList();
                     break;
 
-                case PROTMESSID_CHANNEL_NAME:
-                    bRet = EvaluateChanNameMes ( vecData );
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+case PROTMESSID_CHANNEL_NAME:
+    bRet = EvaluateChanNameMes ( vecData );
+    break;
+
+                case PROTMESSID_CHANNEL_INFOS:
+                    bRet = EvaluateChanInfoMes ( vecData );
                     break;
 
-                case PROTMESSID_REQ_CHANNEL_NAME:
-                    bRet = EvaluateReqChanNameMes();
+                case PROTMESSID_REQ_CHANNEL_INFOS:
+                    bRet = EvaluateReqChanInfoMes();
                     break;
 
                 case PROTMESSID_CHAT_TEXT:
@@ -744,7 +766,7 @@ bool CProtocol::EvaluateChanGainMes ( const CVector<uint8_t>& vecData )
     return false; // no error
 }
 
-void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo )
+void CProtocol::CreateConClientListNameMes ( const CVector<CChannelInfo>& vecChanInfo )
 {
     const int iNumClients = vecChanInfo.Size();
 
@@ -777,14 +799,14 @@ void CProtocol::CreateConClientListMes ( const CVector<CChannelShortInfo>& vecCh
         PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
     }
 
-    CreateAndSendMessage ( PROTMESSID_CONN_CLIENTS_LIST, vecData );
+    CreateAndSendMessage ( PROTMESSID_CONN_CLIENTS_LIST_NAME, vecData );
 }
 
-bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateConClientListNameMes ( const CVector<uint8_t>& vecData )
 {
-    int                        iPos     = 0; // init position pointer
-    const int                  iDataLen = vecData.Size();
-    CVector<CChannelShortInfo> vecChanInfo ( 0 );
+    int                   iPos     = 0; // init position pointer
+    const int             iDataLen = vecData.Size();
+    CVector<CChannelInfo> vecChanInfo ( 0 );
 
     while ( iPos < iDataLen )
     {
@@ -813,7 +835,7 @@ bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
         }
 
         // add channel information to vector
-        vecChanInfo.Add ( CChannelShortInfo ( iChanID, iIpAddr, strCurStr ) );
+        vecChanInfo.Add ( CChannelInfo ( iChanID, iIpAddr, strCurStr ) );
     }
 
     // check size: all data is read, the position must now be at the end
@@ -823,12 +845,12 @@ bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
     }
 
     // invoke message action
-    emit ConClientListMesReceived ( vecChanInfo );
+    emit ConClientListNameMesReceived ( vecChanInfo );
 
     return false; // no error
 }
 
-void CProtocol::CreateConClientListAddMes ( const CVector<CChannelAdditionalInfo>& vecChanInfo )
+void CProtocol::CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo )
 {
     const int iNumClients = vecChanInfo.Size();
 
@@ -838,13 +860,16 @@ void CProtocol::CreateConClientListAddMes ( const CVector<CChannelAdditionalInfo
 
     for ( int i = 0; i < iNumClients; i++ )
     {
-        // convert city string to utf-8
+        // convert strings to utf-8
+        const QByteArray strUTF8Name = vecChanInfo[i].strName.toUtf8();
         const QByteArray strUTF8City = vecChanInfo[i].strCity.toUtf8();
 
         // size of current list entry
         const int iCurListEntrLen =
             1 /* chan ID */ + 2 /* country */ +
             4 /* instrument */ + 1 /* skill level */ +
+            4 /* IP address */ +
+            2 /* utf-8 str. size */ + strUTF8Name.size() +
             2 /* utf-8 str. size */ + strUTF8City.size();
 
         // make space for new data
@@ -864,25 +889,32 @@ void CProtocol::CreateConClientListAddMes ( const CVector<CChannelAdditionalInfo
 
         // skill level (1 byte)
         PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecChanInfo[i].iSkillLevel ), 1 );
+            static_cast<uint32_t> ( vecChanInfo[i].eSkillLevel ), 1 );
+
+        // IP address (4 bytes)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecChanInfo[i].iIpAddr ), 4 );
+
+        // name
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
 
         // city
         PutStringUTF8OnStream ( vecData, iPos, strUTF8City );
     }
 
-    CreateAndSendMessage ( PROTMESSID_CONN_CLIENTS_LIST_ADD, vecData );
+    CreateAndSendMessage ( PROTMESSID_CONN_CLIENTS_LIST, vecData );
 }
 
-bool CProtocol::EvaluateConClientListAddMes ( const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateConClientListMes ( const CVector<uint8_t>& vecData )
 {
-    int                             iPos     = 0; // init position pointer
-    const int                       iDataLen = vecData.Size();
-    CVector<CChannelAdditionalInfo> vecChanInfo ( 0 );
+    int                   iPos     = 0; // init position pointer
+    const int             iDataLen = vecData.Size();
+    CVector<CChannelInfo> vecChanInfo ( 0 );
 
     while ( iPos < iDataLen )
     {
-        // check size (the next 8 bytes)
-        if ( ( iDataLen - iPos ) < 8 )
+        // check size (the next 12 bytes)
+        if ( ( iDataLen - iPos ) < 12 )
         {
             return true; // return error code
         }
@@ -900,25 +932,41 @@ bool CProtocol::EvaluateConClientListAddMes ( const CVector<uint8_t>& vecData )
             static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
 
         // skill level (1 byte)
-        const int iSkillLevel =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+        const ESkillLevel eSkillLevel =
+            static_cast<ESkillLevel> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+        // IP address (4 bytes)
+        const int iIpAddr =
+            static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+        // name
+        QString strCurName;
+        if ( GetStringFromStream ( vecData,
+                                   iPos,
+                                   MAX_LEN_FADER_TAG,
+                                   strCurName ) )
+        {
+            return true; // return error code
+        }
 
         // city
-        QString strCurStr;
+        QString strCurCity;
         if ( GetStringFromStream ( vecData,
                                    iPos,
                                    MAX_LEN_SERVER_CITY,
-                                   strCurStr ) )
+                                   strCurCity ) )
         {
             return true; // return error code
         }
 
         // add channel information to vector
-        vecChanInfo.Add ( CChannelAdditionalInfo ( iChanID,
-                                                   eCountry,
-                                                   strCurStr,
-                                                   iInstrument,
-                                                   iSkillLevel ) );
+        vecChanInfo.Add ( CChannelInfo ( iChanID,
+                                         iIpAddr,
+                                         strCurName,
+                                         eCountry,
+                                         strCurCity,
+                                         iInstrument,
+                                         eSkillLevel ) );
     }
 
     // check size: all data is read, the position must now be at the end
@@ -928,7 +976,7 @@ bool CProtocol::EvaluateConClientListAddMes ( const CVector<uint8_t>& vecData )
     }
 
     // invoke message action
-    emit ConClientListAddMesReceived ( vecChanInfo );
+    emit ConClientListMesReceived ( vecChanInfo );
 
     return false; // no error
 }
@@ -993,15 +1041,108 @@ bool CProtocol::EvaluateChanNameMes ( const CVector<uint8_t>& vecData )
     return false; // no error
 }
 
-void CProtocol::CreateReqChanNameMes()
+void CProtocol::CreateChanInfoMes ( const CChannelCoreInfo ChanInfo )
 {
-    CreateAndSendMessage ( PROTMESSID_REQ_CHANNEL_NAME, CVector<uint8_t> ( 0 ) );
+    int iPos = 0; // init position pointer
+
+    // convert strings to utf-8
+    const QByteArray strUTF8Name = ChanInfo.strName.toUtf8();
+    const QByteArray strUTF8City = ChanInfo.strCity.toUtf8();
+
+    // size of current list entry
+    const int iEntrLen =
+        2 /* country */ +
+        4 /* instrument */ + 1 /* skill level */ +
+        2 /* utf-8 str. size */ + strUTF8Name.size() +
+        2 /* utf-8 str. size */ + strUTF8City.size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // country (2 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( ChanInfo.eCountry ), 2 );
+
+    // instrument (4 bytes)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( ChanInfo.iInstrument ), 4 );
+
+    // skill level (1 byte)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( ChanInfo.eSkillLevel ), 1 );
+
+    // name
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
+
+    // city
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8City );
+
+    CreateAndSendMessage ( PROTMESSID_CHANNEL_INFOS, vecData );
 }
 
-bool CProtocol::EvaluateReqChanNameMes()
+bool CProtocol::EvaluateChanInfoMes ( const CVector<uint8_t>& vecData )
+{
+    int              iPos     = 0; // init position pointer
+    const int        iDataLen = vecData.Size();
+    CChannelCoreInfo ChanInfo;
+
+    // check size (the first 7 bytes)
+    if ( iDataLen < 7 )
+    {
+        return true; // return error code
+    }
+
+    // country (2 bytes)
+    ChanInfo.eCountry =
+        static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+    // instrument (4 bytes)
+    ChanInfo.iInstrument =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+    // skill level (1 byte)
+    ChanInfo.eSkillLevel =
+        static_cast<ESkillLevel> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // name
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_FADER_TAG,
+                               ChanInfo.strName ) )
+    {
+        return true; // return error code
+    }
+
+    // city
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_SERVER_CITY,
+                               ChanInfo.strCity ) )
+    {
+        return true; // return error code
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit ChangeChanInfo ( ChanInfo );
+
+    return false; // no error
+}
+
+void CProtocol::CreateReqChanInfoMes()
+{
+    CreateAndSendMessage ( PROTMESSID_REQ_CHANNEL_INFOS, CVector<uint8_t> ( 0 ) );
+}
+
+bool CProtocol::EvaluateReqChanInfoMes()
 {
     // invoke message action
-    emit ReqChanName();
+    emit ReqChanInfo();
 
     return false; // no error
 }

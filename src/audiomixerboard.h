@@ -52,6 +52,7 @@ public:
     CChannelFader ( QWidget* pNW, QHBoxLayout* pParentLayout );
 
     void SetText ( const QString sText );
+    void SetInstrumentPicture ( const int iInstrument );
     void Show() { pFrame->show(); }
     void Hide() { pFrame->hide(); }
     bool IsVisible() { return pLabel->isVisible(); }
@@ -93,12 +94,12 @@ public:
     CAudioMixerBoard ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
     void HideAll();
-    void ApplyNewConClientList ( CVector<CChannelShortInfo>& vecChanInfo );
+    void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
 
 protected:
-    QString GenFaderText ( CChannelShortInfo& ChanInfo );
+    QString GenFaderText ( CChannelInfo& ChanInfo );
     void OnChSoloStateChanged ( const int iChannelIdx, const int iValue );
 
     CVector<CChannelFader*> vecpChanFader;

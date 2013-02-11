@@ -2,6 +2,11 @@
 
 TODO: Mac OS 64bit support
 
+- support for an instrument picture on the fader tag
+
+- a server welcome message can be shown on a connect to the
+  server (the message is shown in the chat dialog of the client)
+
 - the source code is now compatible to Qt5
 
 - bug fix: strings in the protocol are now utf-8 coded

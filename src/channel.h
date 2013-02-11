@@ -79,12 +79,21 @@ public:
     bool GetAddress ( CHostAddress& RetAddr );
     CHostAddress GetAddress() const { return InetAddr; }
 
-    void ResetName() { sName = ""; } // reset does not emit a message
+    void ResetInfo() { ChannelInfo = CChannelCoreInfo(); } // reset does not emit a message
     void SetName ( const QString sNNa );
     QString GetName();
+    void SetChanInfo ( const CChannelCoreInfo& NChanInf );
+    CChannelCoreInfo& GetChanInfo() { return ChannelInfo; }
 
-    void SetRemoteName ( const QString strName ) { Protocol.CreateChanNameMes ( strName ); }
-    void CreateReqChanNameMes()                  { Protocol.CreateReqChanNameMes(); }
+    void SetRemoteInfo ( const CChannelCoreInfo ChInfo )
+    {
+        // because of compatibility to old versions, we also have to send the
+        // channel name message extra
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+Protocol.CreateChanNameMes ( ChInfo.strName );
+        Protocol.CreateChanInfoMes ( ChInfo );
+    }
+    void CreateReqChanInfoMes() { Protocol.CreateReqChanInfoMes(); }
 
     void SetGain ( const int iChanID, const double dNewGain );
     double GetGain ( const int iChanID );
@@ -128,10 +137,12 @@ public:
     void CreateChatTextMes ( const QString& strChatText ) { Protocol.CreateChatTextMes ( strChatText ); }
     void CreatePingMes ( const int iMs )                  { Protocol.CreatePingMes ( iMs ); }
 
-    void CreateConClientListMes ( const CVector<CChannelShortInfo>& vecChanInfo )
-    { 
-        Protocol.CreateConClientListMes ( vecChanInfo );
-    }
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+void CreateConClientListNameMes ( const CVector<CChannelInfo>& vecChanInfo )
+    { Protocol.CreateConClientListNameMes ( vecChanInfo ); }
+
+    void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo )
+        { Protocol.CreateConClientListMes ( vecChanInfo ); }
 
     void CreateNetTranspPropsMessFromCurrentSettings();
 
@@ -139,43 +150,44 @@ protected:
     bool ProtocolIsEnabled(); 
 
     // connection parameters
-    CHostAddress        InetAddr;
+    CHostAddress      InetAddr;
 
-    // channel name
-    QString             sName;
+    // channel info
+    CChannelCoreInfo  ChannelInfo;
 
     // mixer and effect settings
-    CVector<double>     vecdGains;
+    CVector<double>   vecdGains;
 
     // network jitter-buffer
-    CNetBufWithStats    SockBuf;
-    int                 iCurSockBufNumFrames;
-    bool                bDoAutoSockBufSize;
+    CNetBufWithStats  SockBuf;
+    int               iCurSockBufNumFrames;
+    bool              bDoAutoSockBufSize;
 
     // network output conversion buffer
-    CConvBuf<uint8_t>   ConvBuf;
+    CConvBuf<uint8_t> ConvBuf;
 
     // network protocol
-    CProtocol           Protocol;
+    CProtocol         Protocol;
 
-    int                 iConTimeOut;
-    int                 iConTimeOutStartVal;
+    int               iConTimeOut;
+    int               iConTimeOutStartVal;
 
-    bool                bIsEnabled;
-    bool                bIsServer;
+    bool              bIsEnabled;
+    bool              bIsServer;
 
-    int                 iNetwFrameSizeFact;
-    int                 iNetwFrameSize;
+    int               iNetwFrameSizeFact;
+    int               iNetwFrameSize;
 
-    int                 iNumAudioChannels;
+    int               iNumAudioChannels;
 
-    QMutex              Mutex;
+    QMutex            Mutex;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnJittBufSizeChange ( int iNewJitBufSize );
     void OnChangeChanGain ( int iChanID, double dNewGain );
     void OnChangeChanName ( QString strName );
+    void OnChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();
 
@@ -186,9 +198,10 @@ signals:
     void JittBufSizeChanged ( int iNewJitBufSize );
     void ServerAutoSockBufSizeChange ( int iNNumFra );
     void ReqConnClientsList();
-    void ConClientListMesReceived ( CVector<CChannelShortInfo> vecChanInfo );
-    void NameHasChanged();
-    void ReqChanName();
+    void ConClientListNameMesReceived ( CVector<CChannelInfo> vecChanInfo );
+    void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
+    void ChanInfoHasChanged();
+    void ReqChanInfo();
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );
     void ReqNetTranspProps();

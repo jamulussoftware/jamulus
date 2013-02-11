@@ -28,7 +28,7 @@
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16 iPortNumber ) :
     vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
-    strName                          ( "" ),
+    ChannelInfo                      (),
     Channel                          ( false ), /* we need a client channel -> "false" */
     iCeltNumCodedBytes               ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
     bCeltDoHighQuality               ( false ),
@@ -94,12 +94,16 @@ CClient::CClient ( const quint16 iPortNumber ) :
     QObject::connect ( &Channel, SIGNAL ( JittBufSizeChanged ( int ) ),
         this, SLOT ( OnJittBufSizeChanged ( int ) ) );
 
-    QObject::connect ( &Channel, SIGNAL ( ReqChanName() ),
-        this, SLOT ( OnReqChanName() ) );
+    QObject::connect ( &Channel, SIGNAL ( ReqChanInfo() ),
+        this, SLOT ( OnReqChanInfo() ) );
 
     QObject::connect ( &Channel,
-        SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
-        SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
+        SIGNAL ( ConClientListNameMesReceived ( CVector<CChannelInfo> ) ),
+        SIGNAL ( ConClientListNameMesReceived ( CVector<CChannelInfo> ) ) );
+
+    QObject::connect ( &Channel,
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ) );
 
     QObject::connect ( &Channel,
         SIGNAL ( Disconnected() ),
@@ -172,9 +176,9 @@ void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )
 
 void CClient::OnNewConnection()
 {
-    // a new connection was successfully initiated, send name and request
+    // a new connection was successfully initiated, send infos and request
     // connected clients list
-    Channel.SetRemoteName ( strName );
+    Channel.SetRemoteInfo ( ChannelInfo );
 
     // We have to send a connected clients list request since it can happen
     // that we just had connected to the server and then disconnected but

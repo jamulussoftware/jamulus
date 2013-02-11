@@ -369,19 +369,19 @@ CServer::CServer ( const int      iNewNumChan,
     QObject::connect ( &vecChannels[10], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh10() ) );
     QObject::connect ( &vecChannels[11], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh11() ) );
 
-    // channel name has changed
-    QObject::connect ( &vecChannels[0],  SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh0() ) );
-    QObject::connect ( &vecChannels[1],  SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh1() ) );
-    QObject::connect ( &vecChannels[2],  SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh2() ) );
-    QObject::connect ( &vecChannels[3],  SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh3() ) );
-    QObject::connect ( &vecChannels[4],  SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh4() ) );
-    QObject::connect ( &vecChannels[5],  SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh5() ) );
-    QObject::connect ( &vecChannels[6],  SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh6() ) );
-    QObject::connect ( &vecChannels[7],  SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh7() ) );
-    QObject::connect ( &vecChannels[8],  SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh8() ) );
-    QObject::connect ( &vecChannels[9],  SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh9() ) );
-    QObject::connect ( &vecChannels[10], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh10() ) );
-    QObject::connect ( &vecChannels[11], SIGNAL ( NameHasChanged() ), this, SLOT ( OnNameHasChangedCh11() ) );
+    // channel info has changed
+    QObject::connect ( &vecChannels[0],  SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh0() ) );
+    QObject::connect ( &vecChannels[1],  SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh1() ) );
+    QObject::connect ( &vecChannels[2],  SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh2() ) );
+    QObject::connect ( &vecChannels[3],  SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh3() ) );
+    QObject::connect ( &vecChannels[4],  SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh4() ) );
+    QObject::connect ( &vecChannels[5],  SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh5() ) );
+    QObject::connect ( &vecChannels[6],  SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh6() ) );
+    QObject::connect ( &vecChannels[7],  SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh7() ) );
+    QObject::connect ( &vecChannels[8],  SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh8() ) );
+    QObject::connect ( &vecChannels[9],  SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh9() ) );
+    QObject::connect ( &vecChannels[10], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh10() ) );
+    QObject::connect ( &vecChannels[11], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh11() ) );
 
     // chat text received
     QObject::connect ( &vecChannels[0],  SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh0 ( QString ) ) );
@@ -837,9 +837,9 @@ CVector<int16_t> CServer::ProcessData ( const int                   iCurIndex,
     return vecsOutData;
 }
 
-CVector<CChannelShortInfo> CServer::CreateChannelList()
+CVector<CChannelInfo> CServer::CreateChannelList()
 {
-    CVector<CChannelShortInfo> vecChanInfo ( 0 );
+    CVector<CChannelInfo> vecChanInfo ( 0 );
 
     // look for free channels
     for ( int i = 0; i < iNumChannels; i++ )
@@ -847,10 +847,10 @@ CVector<CChannelShortInfo> CServer::CreateChannelList()
         if ( vecChannels[i].IsConnected() )
         {
             // append channel ID, IP address and channel name to storing vectors
-            vecChanInfo.Add ( CChannelShortInfo (
+            vecChanInfo.Add ( CChannelInfo (
                 i, // ID
                 vecChannels[i].GetAddress().InetAddr.toIPv4Address(), // IP address
-                vecChannels[i].GetName() /* name */ ) );
+                vecChannels[i].GetChanInfo() ) );
         }
     }
 
@@ -860,7 +860,7 @@ CVector<CChannelShortInfo> CServer::CreateChannelList()
 void CServer::CreateAndSendChanListForAllConChannels()
 {
     // create channel list
-    CVector<CChannelShortInfo> vecChanInfo ( CreateChannelList() );
+    CVector<CChannelInfo> vecChanInfo ( CreateChannelList() );
 
     // now send connected channels list to all connected clients
     for ( int i = 0; i < iNumChannels; i++ )
@@ -868,6 +868,8 @@ void CServer::CreateAndSendChanListForAllConChannels()
         if ( vecChannels[i].IsConnected() )
         {
             // send message
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+vecChannels[i].CreateConClientListNameMes ( vecChanInfo );
             vecChannels[i].CreateConClientListMes ( vecChanInfo );
         }
     }
@@ -882,9 +884,11 @@ void CServer::CreateAndSendChanListForAllConChannels()
 void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
 {
     // create channel list
-    CVector<CChannelShortInfo> vecChanInfo ( CreateChannelList() );
+    CVector<CChannelInfo> vecChanInfo ( CreateChannelList() );
 
     // now send connected channels list to the channel with the ID "iCurChanID"
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+vecChannels[iCurChanID].CreateConClientListNameMes ( vecChanInfo );
     vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo );
 }
 
@@ -894,6 +898,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
     // Create message which is sent to all connected clients -------------------
     // get client name, if name is empty, use IP address instead
     QString ChanName = vecChannels[iCurChanID].GetName();
+
     if ( ChanName.isEmpty() )
     {
         // convert IP address to text and show it
@@ -904,6 +909,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
     // add time and name of the client at the beginning of the message text and
     // use different colors
     QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
+
     const QString strActualMessageText =
         "<font color=""" + sCurColor + """>(" +
         QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>" + ChanName +
@@ -1023,8 +1029,8 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
                     // address
                     vecChannels[iCurChanID].SetAddress ( HostAdr );
 
-                    // reset channel name
-                    vecChannels[iCurChanID].ResetName();
+                    // reset channel info
+                    vecChannels[iCurChanID].ResetInfo();
 
                     // reset the channel gains of current channel, at the same
                     // time reset gains of this channel ID for all other channels
@@ -1111,7 +1117,7 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
             // was restartet, it is important that we send the channel list
             // at this place.
             vecChannels[iCurChanID].ResetTimeOutCounter();
-            vecChannels[iCurChanID].CreateReqChanNameMes();
+            vecChannels[iCurChanID].CreateReqChanInfoMes();
 
 // COMPATIBILITY ISSUE
 // since old versions of the llcon software did not implement the channel name
@@ -1170,7 +1176,7 @@ void CServer::StartStatusHTMLFileWriting ( const QString& strNewFileName,
 void CServer::WriteHTMLChannelList()
 {
     // create channel list
-    CVector<CChannelShortInfo> vecChanInfo ( CreateChannelList() );
+    CVector<CChannelInfo> vecChanInfo ( CreateChannelList() );
 
     // prepare file and stream
     QFile serverFileListFile ( strServerHTMLFileListName );

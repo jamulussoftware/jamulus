@@ -46,8 +46,8 @@ CChannel::CChannel ( const bool bNIsServer ) :
     // init the socket buffer
     SetSockBufNumFrames ( DEF_NET_BUF_SIZE_NUM_BL );
 
-    // initialize channel name
-    ResetName();
+    // initialize channel info
+    ResetInfo();
 
 
     // Connections -------------------------------------------------------------
@@ -64,22 +64,29 @@ CChannel::CChannel ( const bool bNIsServer ) :
         SIGNAL ( ReqJittBufSize() ) );
 
     QObject::connect ( &Protocol,
-        SIGNAL ( ReqChanName() ),
-        SIGNAL ( ReqChanName() ) );
+        SIGNAL ( ReqChanInfo() ),
+        SIGNAL ( ReqChanInfo() ) );
 
     QObject::connect ( &Protocol,
         SIGNAL ( ReqConnClientsList() ),
         SIGNAL ( ReqConnClientsList() ) );
 
     QObject::connect ( &Protocol,
-        SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ),
-        SIGNAL ( ConClientListMesReceived ( CVector<CChannelShortInfo> ) ) );
+        SIGNAL ( ConClientListNameMesReceived ( CVector<CChannelInfo> ) ),
+        SIGNAL ( ConClientListNameMesReceived ( CVector<CChannelInfo> ) ) );
+
+    QObject::connect ( &Protocol,
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
+        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ) );
 
     QObject::connect( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
     QObject::connect( &Protocol, SIGNAL ( ChangeChanName ( QString ) ),
         this, SLOT ( OnChangeChanName ( QString ) ) );
+
+    QObject::connect( &Protocol, SIGNAL ( ChangeChanInfo ( CChannelCoreInfo ) ),
+        this, SLOT ( OnChangeChanInfo ( CChannelCoreInfo ) ) );
 
     QObject::connect( &Protocol,
         SIGNAL ( ChatTextReceived ( QString ) ),
@@ -220,17 +227,29 @@ double CChannel::GetGain ( const int iChanID )
     }
 }
 
+void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
+{
+    // apply value (if different from previous one)
+    if ( ChannelInfo != NChanInf )
+    {
+        ChannelInfo = NChanInf;
+
+        // fire message that the channel info has changed
+        emit ChanInfoHasChanged();
+    }
+}
+
 void CChannel::SetName ( const QString strNewName )
 {
     bool bNameHasChanged = false;
 
     Mutex.lock();
     {
-        // apply value (if different from previous name)
-        if ( sName.compare ( strNewName ) )
+        // apply value (if different from previous one)
+        if ( ChannelInfo.strName.compare ( strNewName ) )
         {
-            sName           = strNewName;
-            bNameHasChanged = true;
+            ChannelInfo.strName = strNewName;
+            bNameHasChanged     = true;
         }
     }
     Mutex.unlock();
@@ -239,7 +258,7 @@ void CChannel::SetName ( const QString strNewName )
     if ( bNameHasChanged )
     {
         // the "emit" has to be done outside the mutexed region
-        emit NameHasChanged();
+        emit ChanInfoHasChanged();
     }
 }
 QString CChannel::GetName()
@@ -248,7 +267,7 @@ QString CChannel::GetName()
     // read here -> use mutex to secure access
     QMutexLocker locker ( &Mutex );
 
-    return sName;
+    return ChannelInfo.strName;
 }
 
 void CChannel::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -299,6 +318,11 @@ void CChannel::OnChangeChanGain ( int    iChanID,
 void CChannel::OnChangeChanName ( QString strName )
 {
     SetName ( strName );
+}
+
+void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo )
+{
+    SetChanInfo ( ChanInfo );
 }
 
 bool CChannel::GetAddress ( CHostAddress& RetAddr )

@@ -36,6 +36,14 @@
         <file>res/instraccordeon.png</file>
         <file>res/instrcello.png</file>
         <file>res/instrtrombone.png</file>
+        <file>res/instrfrenchhorn.png</file>
+        <file>res/instrtuba.png</file>
+        <file>res/instrdoublebass.png</file>
+        <file>res/instrgrandpiano.png</file>
+        <file>res/instrsynthesizer.png</file>
+        <file>res/instrvocal.png</file>
+        <file>res/instrdjembe.png</file>
+        <file>res/instrharmonica.png</file>
     </qresource>
     <qresource prefix="/png/main" >
         <file>res/llconfronticon.png</file>

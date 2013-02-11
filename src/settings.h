@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2007
+ * Copyright (c) 2004-2013
  *
  * Author(s):
  *  Volker Fischer
@@ -54,21 +54,38 @@ protected:
     void SetFileName ( const QString& sNFiName );
 
     // init file access function for read/write
-    void SetNumericIniSet ( QDomDocument& xmlFile, const QString& strSection,
-                            const QString& strKey, const int iValue = 0 );
-    bool GetNumericIniSet ( const QDomDocument& xmlFile, const QString& strSection,
-                            const QString& strKey, const int iRangeStart,
-                            const int iRangeStop, int& iValue );
-    void SetFlagIniSet ( QDomDocument& xmlFile, const QString& strSection,
-                         const QString& strKey, const bool bValue = false );
-    bool GetFlagIniSet ( const QDomDocument& xmlFile, const QString& strSection,
-                         const QString& strKey, bool& bValue );
+    void SetNumericIniSet ( QDomDocument&  xmlFile,
+                            const QString& strSection,
+                            const QString& strKey,
+                            const int      iValue = 0 );
+
+    bool GetNumericIniSet ( const QDomDocument& xmlFile,
+                            const QString&      strSection,
+                            const QString&      strKey,
+                            const int           iRangeStart,
+                            const int           iRangeStop,
+                            int&                iValue );
+
+    void SetFlagIniSet ( QDomDocument&  xmlFile,
+                         const QString& strSection,
+                         const QString& strKey,
+                         const bool     bValue = false );
+
+    bool GetFlagIniSet ( const QDomDocument& xmlFile,
+                         const QString&      strSection,
+                         const QString&      strKey,
+                         bool&               bValue );
 
     // actual working function for init-file access
-    QString GetIniSetting( const QDomDocument& xmlFile, const QString& sSection,
-                           const QString& sKey, const QString& sDefaultVal = "" );
-    void PutIniSetting ( QDomDocument& xmlFile, const QString& sSection,
-                         const QString& sKey, const QString& sValue = "" );
+    QString GetIniSetting( const QDomDocument& xmlFile,
+                           const QString&      sSection,
+                           const QString&      sKey,
+                           const QString&      sDefaultVal = "" );
+
+    void PutIniSetting ( QDomDocument&  xmlFile,
+                         const QString& sSection,
+                         const QString& sKey,
+                         const QString& sValue = "" );
 
     // pointer to the client/server object which stores the various settings
     CClient* pClient; // for client

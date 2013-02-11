@@ -20,6 +20,23 @@
         <file>res/ledbuttonpressed.png</file>
         <file>res/mixerboardbackground.png</file>
     </qresource>
+    <qresource prefix="/png/instr" >
+        <file>res/instrnone.png</file>
+        <file>res/instrbassguitar.png</file>
+        <file>res/instrclarinet.png</file>
+        <file>res/instrdrumset.png</file>
+        <file>res/instreguitar.png</file>
+        <file>res/instrsaxophone.png</file>
+        <file>res/instrtrumpet.png</file>
+        <file>res/instrmicrophone.png</file>
+        <file>res/instrkeyboard.png</file>
+        <file>res/instrviolin.png</file>
+        <file>res/instraguitar.png</file>
+        <file>res/instrflute.png</file>
+        <file>res/instraccordeon.png</file>
+        <file>res/instrcello.png</file>
+        <file>res/instrtrombone.png</file>
+    </qresource>
     <qresource prefix="/png/main" >
         <file>res/llconfronticon.png</file>
         <file>res/logopicture.png</file>

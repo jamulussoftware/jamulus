@@ -1299,7 +1299,8 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     ReceivedNetwTranspProps.iBaseNetworkPacketSize =
         static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 4 ) );
 
-    if ( ( ReceivedNetwTranspProps.iBaseNetworkPacketSize < 1 ) ||
+    // at least CELT_MINIMUM_NUM_BYTES bytes are required for the CELC codec
+    if ( ( ReceivedNetwTranspProps.iBaseNetworkPacketSize < CELT_MINIMUM_NUM_BYTES ) ||
          ( ReceivedNetwTranspProps.iBaseNetworkPacketSize > MAX_SIZE_BYTES_NETW_BUF ) )
     {
         return true; // return error code

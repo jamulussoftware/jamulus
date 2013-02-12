@@ -115,6 +115,10 @@ LED bar:      lbr
 // low complexity CELT encoder (if defined)
 #define USE_LOW_COMPLEXITY_CELT_ENC
 
+// define the minimum allowed number of coded bytes for CELT (the encoder
+// gets in trouble if the value is too low)
+#define CELT_MINIMUM_NUM_BYTES          10
+
 // define the maximum mono audio buffer size at a sample rate
 // of 48 kHz, this is important for defining the maximum number
 // of bytes to be expected from the network interface

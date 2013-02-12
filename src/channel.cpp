@@ -30,11 +30,11 @@ CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains          ( MAX_NUM_CHANNELS, (double) 1.0 ),
     bDoAutoSockBufSize ( true ),
     bIsEnabled         ( false ),
-    bIsServer          ( bNIsServer ),
-    iNetwFrameSizeFact ( FRAME_SIZE_FACTOR_PREFERRED ),
-    iNetwFrameSize     ( 20 ), // must be > 0 and should be close to a valid size
-    iNumAudioChannels  ( 1 ) // mono
+    bIsServer          ( bNIsServer )
 {
+    // reset network transport properties
+    ResetNetworkTransportProperties();
+
     // initial value for connection time out counter, we calculate the total
     // number of samples here and subtract the number of samples of the block
     // which we take out of the buffer to be independent of block sizes
@@ -440,11 +440,6 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
         {
             Mutex.lock();
             {
-
-
-// TODO only process data if network properties protocol message has been arrived
-
-
                 // only process audio if packet has correct size
                 if ( iNumBytes == ( iNetwFrameSize * iNetwFrameSizeFact ) )
                 {
@@ -537,6 +532,9 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
             // channel is just disconnected
             eGetStatus  = GS_CHAN_NOW_DISCONNECTED;
             iConTimeOut = 0; // make sure we do not have negative values
+
+            // reset network transport properties
+            ResetNetworkTransportProperties();
 
             // emit message
             emit Disconnected();

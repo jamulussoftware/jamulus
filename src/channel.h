@@ -147,7 +147,17 @@ void CreateConClientListNameMes ( const CVector<CChannelInfo>& vecChanInfo )
     void CreateNetTranspPropsMessFromCurrentSettings();
 
 protected:
-    bool ProtocolIsEnabled(); 
+    bool ProtocolIsEnabled();
+
+    void ResetNetworkTransportProperties()
+    {
+        // set it to a state were no decoding is ever possible (since we want
+        // only to decode data when a network transport property message is
+        // received with the correct values
+        iNetwFrameSizeFact = FRAME_SIZE_FACTOR_PREFERRED;
+        iNetwFrameSize     = CELT_MINIMUM_NUM_BYTES;
+        iNumAudioChannels  = 1; // mono
+    }
 
     // connection parameters
     CHostAddress      InetAddr;

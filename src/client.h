@@ -66,6 +66,7 @@
 // CELT number of coded bytes per audio packet
 // 24: mono low/normal quality   156 kbsp (128) / 114 kbps (256)
 // 44: mono high quality         216 kbps (128) / 174 kbps (256)
+// NOTE: Must be > CELT_MINIMUM_NUM_BYTES (greater, not equal to!)
 #define CELT_NUM_BYTES_MONO_NORMAL_QUALITY      24
 #define CELT_NUM_BYTES_MONO_HIGH_QUALITY        44
 

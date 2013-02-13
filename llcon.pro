@@ -95,7 +95,7 @@ HEADERS += src/audiomixerboard.h \
     src/soundbase.h \
     src/testbench.h \
     src/util.h \
-    libs/celt/celt.h \
+    libs/celt/cc6_celt.h \
     libs/celt/celt_types.h \
     libs/celt/celt_header.h \
     libs/celt/_kiss_fft_guts.h \
@@ -233,4 +233,27 @@ DISTFILES += AUTHORS \
     src/res/VRLEDRed.png \
     src/res/VRLEDRedSmall.png \
     src/res/VRLEDYellow.png \
-    src/res/VRLEDYellowSmall.png
+    src/res/VRLEDYellowSmall.png \
+    src/res/instraccordeon.png \
+    src/res/instraguitar.png \
+    src/res/instrbassguitar.png \
+    src/res/instrcello.png \
+    src/res/instrclarinet.png \
+    src/res/instrdjembe.png \
+    src/res/instrdoublebass.png \
+    src/res/instrdrumset.png \
+    src/res/instreguitar.png \
+    src/res/instrflute.png \
+    src/res/instrfrenchhorn.png \
+    src/res/instrgrandpiano.png \
+    src/res/instrharmonica.png \
+    src/res/instrkeyboard.png \
+    src/res/instrmicrophone.png \
+    src/res/instrnone.png \
+    src/res/instrsaxophone.png \
+    src/res/instrsynthesizer.png \
+    src/res/instrtrombone.png \
+    src/res/instrtrumpet.png \
+    src/res/instrtuba.png \
+    src/res/instrviolin.png \
+    src/res/instrvocal.png

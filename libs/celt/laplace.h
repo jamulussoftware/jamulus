@@ -29,8 +29,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "entenc.h"
-#include "entdec.h"
+#include "cc6_entenc.h"
+#include "cc6_entdec.h"
 
 int ec_laplace_get_start_freq(int decay);
 

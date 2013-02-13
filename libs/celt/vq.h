@@ -36,8 +36,8 @@
 #ifndef VQ_H
 #define VQ_H
 
-#include "entenc.h"
-#include "entdec.h"
+#include "cc6_entenc.h"
+#include "cc6_entdec.h"
 #include "modes.h"
 
 /** Algebraic pulse-vector quantiser. The signal x is replaced by the sum of 

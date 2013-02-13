@@ -34,8 +34,8 @@
 
 #include "cc6_arch.h"
 #include "modes.h"
-#include "entenc.h"
-#include "entdec.h"
+#include "cc6_entenc.h"
+#include "cc6_entdec.h"
 #include "mathops.h"
 
 static __inline celt_word16_t amp2Log(celt_word32_t amp)

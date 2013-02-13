@@ -39,7 +39,7 @@
 #define BITROUND 8
 #define BITOVERFLOW 30000
 
-#include "cwrs.h"
+#include "cc6_cwrs.h"
 
 static __inline int bits2pulses(const CELTMode *m, const celt_int16_t *cache, int N, int bits)
 {

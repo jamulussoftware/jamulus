@@ -34,7 +34,7 @@
 #if !defined(_entcode_H)
 # define _entcode_H (1)
 # include <limits.h>
-# include "ecintrin.h"
+# include "cc6_ecintrin.h"
 
 
 

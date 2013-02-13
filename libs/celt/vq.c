@@ -34,7 +34,7 @@
 #endif
 
 #include "mathops.h"
-#include "cwrs.h"
+#include "cc6_cwrs.h"
 #include "vq.h"
 #include "cc6_arch.h"
 #include "os_support.h"

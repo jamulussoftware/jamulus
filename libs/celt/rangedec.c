@@ -34,7 +34,7 @@
 #endif
 
 #include "cc6_arch.h"
-#include "entdec.h"
+#include "cc6_entdec.h"
 #include "mfrngcod.h"
 
 

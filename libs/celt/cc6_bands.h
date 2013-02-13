@@ -34,8 +34,8 @@
 
 #include "cc6_arch.h"
 #include "modes.h"
-#include "entenc.h"
-#include "entdec.h"
+#include "cc6_entenc.h"
+#include "cc6_entdec.h"
 #include "rate.h"
 
 /** Compute the amplitude (sqrt energy) in each of the bands 

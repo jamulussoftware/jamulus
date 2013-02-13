@@ -37,7 +37,7 @@
 #include "cc6_bands.h"
 #include "modes.h"
 #include "vq.h"
-#include "cwrs.h"
+#include "cc6_cwrs.h"
 #include "stack_alloc.h"
 #include "os_support.h"
 #include "mathops.h"

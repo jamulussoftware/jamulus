@@ -33,8 +33,8 @@
 
 #include "cc6_arch.h"
 #include "stack_alloc.h"
-#include "entenc.h"
-#include "entdec.h"
+#include "cc6_entenc.h"
+#include "cc6_entdec.h"
 
 int log2_frac(ec_uint32 val, int frac);
 

@@ -34,7 +34,7 @@
 #endif
 
 #include "os_support.h"
-#include "entenc.h"
+#include "cc6_entenc.h"
 #include "cc6_arch.h"
 
 

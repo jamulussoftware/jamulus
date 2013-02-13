@@ -35,11 +35,11 @@
 
 #include <math.h>
 #include "modes.h"
-#include "cwrs.h"
+#include "cc6_cwrs.h"
 #include "cc6_arch.h"
 #include "os_support.h"
 
-#include "entcode.h"
+#include "cc6_entcode.h"
 #include "rate.h"
 
 

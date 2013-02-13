@@ -31,7 +31,7 @@
 
 #if !defined(_mfrngcode_H)
 # define _mfrngcode_H (1)
-# include "entcode.h"
+# include "cc6_entcode.h"
 
 /*Constants used by the entropy encoder/decoder.*/
 

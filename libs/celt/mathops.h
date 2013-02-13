@@ -36,7 +36,7 @@
 #define MATHOPS_H
 
 #include "cc6_arch.h"
-#include "entcode.h"
+#include "cc6_entcode.h"
 #include "os_support.h"
 
 #ifndef OVERRIDE_CELT_ILOG2

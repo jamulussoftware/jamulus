@@ -43,7 +43,7 @@
 #include "kiss_fftr.h"
 #include "cc6_bands.h"
 #include "modes.h"
-#include "entcode.h"
+#include "cc6_entcode.h"
 #include "quant_bands.h"
 #include "psy.h"
 #include "rate.h"

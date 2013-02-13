@@ -103,11 +103,11 @@ HEADERS += src/audiomixerboard.h \
     libs/celt/cc6_bands.h \
     libs/celt/fixed_c5x.h \
     libs/celt/fixed_c6x.h \
-    libs/celt/cwrs.h \
-    libs/celt/ecintrin.h \
-    libs/celt/entcode.h \
-    libs/celt/entdec.h \
-    libs/celt/entenc.h \
+    libs/celt/cc6_cwrs.h \
+    libs/celt/cc6_ecintrin.h \
+    libs/celt/cc6_entcode.h \
+    libs/celt/cc6_entdec.h \
+    libs/celt/cc6_entenc.h \
     libs/celt/fixed_generic.h \
     libs/celt/float_cast.h \
     libs/celt/kfft_double.h \
@@ -150,9 +150,9 @@ SOURCES += src/audiomixerboard.cpp \
     libs/celt/cc6_bands.c \
     libs/celt/cc6_celt.c \
     libs/celt/cc6_cwrs.c \
-    libs/celt/entcode.c \
-    libs/celt/entdec.c \
-    libs/celt/entenc.c \
+    libs/celt/cc6_entcode.c \
+    libs/celt/cc6_entdec.c \
+    libs/celt/cc6_entenc.c \
     libs/celt/header.c \
     libs/celt/kfft_single.c \
     libs/celt/cc6__kiss_fft.c \

@@ -33,7 +33,7 @@
 #include "config.h"
 #endif
 
-#include "entcode.h"
+#include "cc6_entcode.h"
 
 
 

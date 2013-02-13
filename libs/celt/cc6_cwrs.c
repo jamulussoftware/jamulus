@@ -36,7 +36,7 @@
 #include "os_support.h"
 #include <stdlib.h>
 #include <string.h>
-#include "cwrs.h"
+#include "cc6_cwrs.h"
 #include "mathops.h"
 #include "cc6_arch.h"
 

@@ -35,9 +35,9 @@
 #include "cc6_celt_types.h"
 #include "cc6_celt.h"
 #include "cc6_arch.h"
-#include "mdct.h"
-#include "psy.h"
-#include "pitch.h"
+#include "cc6_mdct.h"
+#include "cc6_psy.h"
+#include "cc6_pitch.h"
 
 #define CELT_BITSTREAM_VERSION 0x80000009
 

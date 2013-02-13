@@ -34,11 +34,11 @@
 #endif
 
 #include "cc6_celt.h"
-#include "modes.h"
-#include "rate.h"
-#include "os_support.h"
-#include "stack_alloc.h"
-#include "quant_bands.h"
+#include "cc6_modes.h"
+#include "cc6_rate.h"
+#include "cc6_os_support.h"
+#include "cc6_stack_alloc.h"
+#include "cc6_quant_bands.h"
 
 #ifdef STATIC_MODES
 #include "static_modes.c"

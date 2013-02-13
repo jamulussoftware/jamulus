@@ -33,12 +33,12 @@
 #include "config.h"
 #endif
 
-#include "quant_bands.h"
-#include "laplace.h"
+#include "cc6_quant_bands.h"
+#include "cc6_laplace.h"
 #include <math.h>
-#include "os_support.h"
+#include "cc6_os_support.h"
 #include "cc6_arch.h"
-#include "mathops.h"
+#include "cc6_mathops.h"
 #include "cc6_stack_alloc.h"
 
 #ifdef FIXED_POINT

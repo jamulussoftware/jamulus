@@ -33,7 +33,7 @@
 #include "config.h"
 #endif
 
-#include "laplace.h"
+#include "cc6_laplace.h"
 
 int ec_laplace_get_start_freq(int decay)
 {

@@ -38,8 +38,8 @@
 #ifndef _PITCH_H
 #define _PITCH_H
 
-#include "kiss_fftr.h"
-#include "psy.h"
+#include "cc6_kiss_fftr.h"
+#include "cc6_psy.h"
 #include "cc6_modes.h"
 
 kiss_fftr_cfg pitch_state_alloc(int max_lag);

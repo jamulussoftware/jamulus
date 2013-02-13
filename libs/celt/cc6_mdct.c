@@ -46,11 +46,11 @@
 #include "config.h"
 #endif
 
-#include "mdct.h"
+#include "cc6_mdct.h"
 #include "cc6_kfft_double.h"
 #include <math.h>
 #include "cc6_os_support.h"
-#include "mathops.h"
+#include "cc6_mathops.h"
 #include "cc6_stack_alloc.h"
 
 #ifndef M_PI

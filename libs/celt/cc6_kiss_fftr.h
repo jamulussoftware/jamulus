@@ -19,7 +19,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #ifndef KISS_FTR_H
 #define KISS_FTR_H
 
-#include "kiss_fft.h"
+#include "cc6_kiss_fft.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

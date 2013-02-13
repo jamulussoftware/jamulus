@@ -43,10 +43,10 @@
 #include "kiss_fftr.h"*/
 #include "cc6_kfft_single.h"
 
-#include "pitch.h"
-#include "psy.h"
-#include "os_support.h"
-#include "mathops.h"
+#include "cc6_pitch.h"
+#include "cc6_psy.h"
+#include "cc6_os_support.h"
+#include "cc6_mathops.h"
 #include "cc6_modes.h"
 #include "cc6_stack_alloc.h"
 

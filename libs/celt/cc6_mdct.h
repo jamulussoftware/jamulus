@@ -45,7 +45,7 @@
 #ifndef MDCT_H
 #define MDCT_H
 
-#include "kiss_fft.h"
+#include "cc6_kiss_fft.h"
 #include "cc6_arch.h"
 
 typedef struct {

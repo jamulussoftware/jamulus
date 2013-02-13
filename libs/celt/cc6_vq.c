@@ -33,11 +33,11 @@
 #include "config.h"
 #endif
 
-#include "mathops.h"
+#include "cc6_mathops.h"
 #include "cc6_cwrs.h"
-#include "vq.h"
+#include "cc6_vq.h"
 #include "cc6_arch.h"
-#include "os_support.h"
+#include "cc6_os_support.h"
 
 /** Takes the pitch vector and the decoded residual vector, computes the gain
     that will give ||p+g*y||=1 and mixes the residual with the pitch. */

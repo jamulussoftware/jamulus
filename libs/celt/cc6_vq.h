@@ -38,7 +38,7 @@
 
 #include "cc6_entenc.h"
 #include "cc6_entdec.h"
-#include "modes.h"
+#include "cc6_modes.h"
 
 /** Algebraic pulse-vector quantiser. The signal x is replaced by the sum of 
   * the pitch and a combination of pulses such that its norm is still equal 

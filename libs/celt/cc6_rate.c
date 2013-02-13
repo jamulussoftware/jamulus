@@ -37,10 +37,10 @@
 #include "cc6_modes.h"
 #include "cc6_cwrs.h"
 #include "cc6_arch.h"
-#include "os_support.h"
+#include "cc6_os_support.h"
 
 #include "cc6_entcode.h"
-#include "rate.h"
+#include "cc6_rate.h"
 
 
 #ifndef STATIC_MODES

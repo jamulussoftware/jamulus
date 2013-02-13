@@ -33,12 +33,12 @@
 #include "config.h"
 #endif
 
-#include "psy.h"
+#include "cc6_psy.h"
 #include <math.h>
-#include "os_support.h"
+#include "cc6_os_support.h"
 #include "cc6_arch.h"
 #include "cc6_stack_alloc.h"
-#include "mathops.h"
+#include "cc6_mathops.h"
 
 /* The Vorbis freq<->Bark mapping */
 #define toBARK(n)   (13.1f*atan(.00074f*(n))+2.24f*atan((n)*(n)*1.85e-8f)+1e-4f*(n))

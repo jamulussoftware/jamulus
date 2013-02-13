@@ -112,20 +112,20 @@ HEADERS += src/audiomixerboard.h \
     libs/celt/cc6_float_cast.h \
     libs/celt/cc6_kfft_double.h \
     libs/celt/cc6_kfft_single.h \
-    libs/celt/kiss_fft.h \
-    libs/celt/kiss_fftr.h \
-    libs/celt/laplace.h \
-    libs/celt/mdct.h \
-    libs/celt/mfrngcod.h \
-    libs/celt/mathops.h \
-    libs/celt/modes.h \
-    libs/celt/os_support.h \
-    libs/celt/pitch.h \
-    libs/celt/psy.h \
-    libs/celt/quant_bands.h \
-    libs/celt/rate.h \
-    libs/celt/stack_alloc.h \
-    libs/celt/vq.h
+    libs/celt/cc6_kiss_fft.h \
+    libs/celt/cc6_kiss_fftr.h \
+    libs/celt/cc6_laplace.h \
+    libs/celt/cc6_mdct.h \
+    libs/celt/cc6_mfrngcod.h \
+    libs/celt/cc6_mathops.h \
+    libs/celt/cc6_modes.h \
+    libs/celt/cc6_os_support.h \
+    libs/celt/cc6_pitch.h \
+    libs/celt/cc6_psy.h \
+    libs/celt/cc6_quant_bands.h \
+    libs/celt/cc6_rate.h \
+    libs/celt/cc6_stack_alloc.h \
+    libs/celt/cc6_vq.h
 
 SOURCES += src/audiomixerboard.cpp \
     src/buffer.cpp \
@@ -157,16 +157,16 @@ SOURCES += src/audiomixerboard.cpp \
     libs/celt/cc6_kfft_single.c \
     libs/celt/cc6__kiss_fft.c \
     libs/celt/cc6__kiss_fftr.c \
-    libs/celt/laplace.c \
-    libs/celt/mdct.c \
-    libs/celt/modes.c \
-    libs/celt/pitch.c \
-    libs/celt/psy.c \
-    libs/celt/quant_bands.c \
-    libs/celt/rangedec.c \
-    libs/celt/rangeenc.c \
-    libs/celt/rate.c \
-    libs/celt/vq.c
+    libs/celt/cc6_laplace.c \
+    libs/celt/cc6_mdct.c \
+    libs/celt/cc6_modes.c \
+    libs/celt/cc6_pitch.c \
+    libs/celt/cc6_psy.c \
+    libs/celt/cc6_quant_bands.c \
+    libs/celt/cc6_rangedec.c \
+    libs/celt/cc6_rangeenc.c \
+    libs/celt/cc6_rate.c \
+    libs/celt/cc6_vq.c
 
 DISTFILES += AUTHORS \
     ChangeLog \

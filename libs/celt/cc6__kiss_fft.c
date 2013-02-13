@@ -21,8 +21,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #  endif
 #endif
 
-#include "_kiss_fft_guts.h"
-#include "arch.h"
+#include "cc6__kiss_fft_guts.h"
+#include "cc6_arch.h"
 #include "os_support.h"
 #include "mathops.h"
 #include "stack_alloc.h"

@@ -34,7 +34,7 @@
 #endif
 
 #include <math.h>
-#include "bands.h"
+#include "cc6_bands.h"
 #include "modes.h"
 #include "vq.h"
 #include "cwrs.h"

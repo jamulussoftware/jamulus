@@ -39,7 +39,7 @@
 #include "config.h"
 #endif
 
-/*#include "_kiss_fft_guts.h"
+/*#include "cc6__kiss_fft_guts.h"
 #include "kiss_fftr.h"*/
 #include "kfft_single.h"
 

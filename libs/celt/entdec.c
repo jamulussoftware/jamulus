@@ -36,7 +36,7 @@
 #include <stddef.h>
 #include "entdec.h"
 #include "os_support.h"
-#include "arch.h"
+#include "cc6_arch.h"
 
 
 void ec_byte_readinit(ec_byte_buffer *_b,unsigned char *_buf,long _bytes){

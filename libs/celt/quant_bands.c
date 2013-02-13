@@ -37,7 +37,7 @@
 #include "laplace.h"
 #include <math.h>
 #include "os_support.h"
-#include "arch.h"
+#include "cc6_arch.h"
 #include "mathops.h"
 #include "stack_alloc.h"
 

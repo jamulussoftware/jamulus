@@ -36,7 +36,7 @@
 #include <math.h>
 #include "modes.h"
 #include "cwrs.h"
-#include "arch.h"
+#include "cc6_arch.h"
 #include "os_support.h"
 
 #include "entcode.h"

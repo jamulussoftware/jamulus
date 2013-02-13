@@ -38,7 +38,7 @@
 #include <string.h>
 #include "cwrs.h"
 #include "mathops.h"
-#include "arch.h"
+#include "cc6_arch.h"
 
 /*Guaranteed to return a conservatively large estimate of the binary logarithm
    with frac bits of fractional precision.

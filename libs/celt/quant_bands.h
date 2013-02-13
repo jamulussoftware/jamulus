@@ -32,7 +32,7 @@
 #ifndef QUANT_BANDS
 #define QUANT_BANDS
 
-#include "arch.h"
+#include "cc6_arch.h"
 #include "modes.h"
 #include "entenc.h"
 #include "entdec.h"

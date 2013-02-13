@@ -25,7 +25,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #include "os_support.h"
 #include "mathops.h"
 #include "kiss_fftr.h"
-#include "_kiss_fft_guts.h"
+#include "cc6__kiss_fft_guts.h"
 
 
 kiss_fftr_cfg kiss_fftr_alloc(int nfft,void * mem,size_t * lenmem)

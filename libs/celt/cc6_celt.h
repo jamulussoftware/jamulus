@@ -37,7 +37,7 @@
 #ifndef CELT_H
 #define CELT_H
 
-#include "celt_types.h"
+#include "cc6_celt_types.h"
 
 #ifdef __cplusplus
 extern "C" {

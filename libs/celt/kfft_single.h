@@ -71,7 +71,7 @@
 
 #include "kiss_fft.h"
 #include "kiss_fftr.h"
-#include "_kiss_fft_guts.h"
+#include "cc6__kiss_fft_guts.h"
 
 #define real16_fft_alloc(length) kiss_fftr_alloc_celt_single(length, 0, 0);
 #define real16_fft_free(state) kiss_fft_free(state)

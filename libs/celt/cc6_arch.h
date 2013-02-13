@@ -35,7 +35,7 @@
 #ifndef ARCH_H
 #define ARCH_H
 
-#include "celt_types.h"
+#include "cc6_celt_types.h"
 
 #define CELT_SIG_SCALE 32768.
 

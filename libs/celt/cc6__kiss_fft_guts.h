@@ -50,7 +50,7 @@ struct kiss_fft_state{
    C_ADDTO( res , a)    : res += a
  * */
 #ifdef FIXED_POINT
-#include "arch.h"
+#include "cc6_arch.h"
 
 #ifdef DOUBLE_PRECISION
 

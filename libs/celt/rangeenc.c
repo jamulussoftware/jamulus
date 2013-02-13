@@ -33,7 +33,7 @@
 #include "config.h"
 #endif
 
-#include "arch.h"
+#include "cc6_arch.h"
 #include "entenc.h"
 #include "mfrngcod.h"
 

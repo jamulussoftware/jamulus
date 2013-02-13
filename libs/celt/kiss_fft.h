@@ -21,7 +21,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 #include <stdlib.h>
 #include <math.h>
-#include "arch.h"
+#include "cc6_arch.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,7 +50,7 @@ extern "C" {
 
 
 #ifdef FIXED_POINT
-#include "arch.h"	
+#include "cc6_arch.h"
 #ifdef DOUBLE_PRECISION
 #  define kiss_fft_scalar celt_int32_t
 #  define kiss_twiddle_scalar celt_int32_t

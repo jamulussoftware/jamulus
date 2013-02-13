@@ -35,7 +35,7 @@
 
 #include "os_support.h"
 #include "entenc.h"
-#include "arch.h"
+#include "cc6_arch.h"
 
 
 #define EC_BUFFER_INCREMENT (256)

@@ -35,7 +35,7 @@
 #ifdef ENABLE_TI_DSPLIB
 
 #include "dsplib.h"
-#include "_kiss_fft_guts.h"
+#include "cc6__kiss_fft_guts.h"
 
 #define cpx32_fft_alloc(length) NULL
 #define cpx32_fft_free(state)
@@ -56,7 +56,7 @@
 #else /* ENABLE_TI_DSPLIB */
 
 #include "kiss_fft.h"
-#include "_kiss_fft_guts.h"
+#include "cc6__kiss_fft_guts.h"
 
 #define cpx32_fft_alloc(length) kiss_fft_alloc(length, 0, 0);
 #define cpx32_fft_free(state) kiss_fft_free(state)

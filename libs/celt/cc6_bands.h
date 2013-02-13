@@ -32,7 +32,7 @@
 #ifndef BANDS_H
 #define BANDS_H
 
-#include "arch.h"
+#include "cc6_arch.h"
 #include "modes.h"
 #include "entenc.h"
 #include "entdec.h"

@@ -29,7 +29,7 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "celt_types.h"
+#include "cc6_celt_types.h"
 
 #if !defined(_entcode_H)
 # define _entcode_H (1)

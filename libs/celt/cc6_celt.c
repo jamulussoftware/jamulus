@@ -41,7 +41,7 @@
 #include "cc6_celt.h"
 #include "pitch.h"
 #include "kiss_fftr.h"
-#include "bands.h"
+#include "cc6_bands.h"
 #include "modes.h"
 #include "entcode.h"
 #include "quant_bands.h"

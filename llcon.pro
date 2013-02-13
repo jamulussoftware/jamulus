@@ -96,11 +96,11 @@ HEADERS += src/audiomixerboard.h \
     src/testbench.h \
     src/util.h \
     libs/celt/cc6_celt.h \
-    libs/celt/celt_types.h \
+    libs/celt/cc6_celt_types.h \
     libs/celt/cc6_celt_header.h \
-    libs/celt/_kiss_fft_guts.h \
-    libs/celt/arch.h \
-    libs/celt/bands.h \
+    libs/celt/cc6__kiss_fft_guts.h \
+    libs/celt/cc6_arch.h \
+    libs/celt/cc6_bands.h \
     libs/celt/fixed_c5x.h \
     libs/celt/fixed_c6x.h \
     libs/celt/cwrs.h \

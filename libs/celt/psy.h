@@ -31,7 +31,7 @@
 #ifndef PSY_H
 #define PSY_H
 
-#include "arch.h"
+#include "cc6_arch.h"
 #include "cc6_celt.h"
 
 struct PsyDecay {

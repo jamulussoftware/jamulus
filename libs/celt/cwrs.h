@@ -31,7 +31,7 @@
 #ifndef CWRS_H
 #define CWRS_H
 
-#include "arch.h"
+#include "cc6_arch.h"
 #include "stack_alloc.h"
 #include "entenc.h"
 #include "entdec.h"

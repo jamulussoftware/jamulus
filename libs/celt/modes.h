@@ -32,9 +32,9 @@
 #ifndef MODES_H
 #define MODES_H
 
-#include "celt_types.h"
+#include "cc6_celt_types.h"
 #include "cc6_celt.h"
-#include "arch.h"
+#include "cc6_arch.h"
 #include "mdct.h"
 #include "psy.h"
 #include "pitch.h"

@@ -40,7 +40,7 @@
 #endif
 
 /*#include "cc6__kiss_fft_guts.h"
-#include "kiss_fftr.h"*/
+#include "cc6_kiss_fftr.h"*/
 #include "cc6_kfft_single.h"
 
 #include "cc6_pitch.h"

@@ -35,10 +35,10 @@
 
 #ifdef FIXED_POINT
 
-#include "kfft_single.h"
+#include "cc6_kfft_single.h"
 
 #define SKIP_CONFIG_H
-#include "kiss_fft.c"
-#include "kiss_fftr.c"
+#include "cc6_kiss_fft.c"
+#include "cc6_kiss_fftr.c"
 
 #endif

@@ -33,11 +33,11 @@
 #include "config.h"
 #endif
 
-#include "os_support.h"
+#include "cc6_os_support.h"
 #include <stdlib.h>
 #include <string.h>
 #include "cc6_cwrs.h"
-#include "mathops.h"
+#include "cc6_mathops.h"
 #include "cc6_arch.h"
 
 /*Guaranteed to return a conservatively large estimate of the binary logarithm

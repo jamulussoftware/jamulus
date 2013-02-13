@@ -35,13 +35,13 @@
 
 #include <math.h>
 #include "cc6_bands.h"
-#include "modes.h"
-#include "vq.h"
+#include "cc6_modes.h"
+#include "cc6_vq.h"
 #include "cc6_cwrs.h"
-#include "stack_alloc.h"
-#include "os_support.h"
-#include "mathops.h"
-#include "rate.h"
+#include "cc6_stack_alloc.h"
+#include "cc6_os_support.h"
+#include "cc6_mathops.h"
+#include "cc6_rate.h"
 
 const celt_word16_t sqrtC_1[2] = {QCONST16(1.f, 14), QCONST16(1.414214f, 14)};
 

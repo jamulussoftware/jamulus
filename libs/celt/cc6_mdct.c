@@ -49,9 +49,9 @@
 #include "mdct.h"
 #include "cc6_kfft_double.h"
 #include <math.h>
-#include "os_support.h"
+#include "cc6_os_support.h"
 #include "mathops.h"
-#include "stack_alloc.h"
+#include "cc6_stack_alloc.h"
 
 #ifndef M_PI
 #define M_PI 3.141592653

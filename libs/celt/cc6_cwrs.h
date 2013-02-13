@@ -32,7 +32,7 @@
 #define CWRS_H
 
 #include "cc6_arch.h"
-#include "stack_alloc.h"
+#include "cc6_stack_alloc.h"
 #include "cc6_entenc.h"
 #include "cc6_entdec.h"
 

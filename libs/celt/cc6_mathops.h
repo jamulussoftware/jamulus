@@ -37,7 +37,7 @@
 
 #include "cc6_arch.h"
 #include "cc6_entcode.h"
-#include "os_support.h"
+#include "cc6_os_support.h"
 
 #ifndef OVERRIDE_CELT_ILOG2
 /** Integer log in base2. Undefined for zero and negative numbers */
@@ -163,7 +163,7 @@ static inline float celt_exp2(float x)
 
 #ifdef FIXED_POINT
 
-#include "os_support.h"
+#include "cc6_os_support.h"
 
 #ifndef OVERRIDE_CELT_MAXABS16
 static inline celt_word16_t celt_maxabs16(celt_word16_t *x, int len)

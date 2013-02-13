@@ -33,10 +33,10 @@
 #define BANDS_H
 
 #include "cc6_arch.h"
-#include "modes.h"
+#include "cc6_modes.h"
 #include "cc6_entenc.h"
 #include "cc6_entdec.h"
-#include "rate.h"
+#include "cc6_rate.h"
 
 /** Compute the amplitude (sqrt energy) in each of the bands 
  * @param m Mode data 

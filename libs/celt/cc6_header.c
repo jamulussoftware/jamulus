@@ -34,8 +34,8 @@
 #endif
 
 #include "cc6_celt_header.h"
-#include "os_support.h"
-#include "modes.h"
+#include "cc6_os_support.h"
+#include "cc6_modes.h"
 
 /*typedef struct {
    char         codec_id[8];

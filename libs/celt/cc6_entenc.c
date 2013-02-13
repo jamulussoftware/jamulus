@@ -33,7 +33,7 @@
 #include "config.h"
 #endif
 
-#include "os_support.h"
+#include "cc6_os_support.h"
 #include "cc6_entenc.h"
 #include "cc6_arch.h"
 

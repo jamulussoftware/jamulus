@@ -69,8 +69,8 @@
 
 #endif /* FIXED_POINT */
 
-#include "kiss_fft.h"
-#include "kiss_fftr.h"
+#include "cc6_kiss_fft.h"
+#include "cc6_kiss_fftr.h"
 #include "cc6__kiss_fft_guts.h"
 
 #define real16_fft_alloc(length) kiss_fftr_alloc_celt_single(length, 0, 0);

@@ -33,7 +33,7 @@
 #define QUANT_BANDS
 
 #include "cc6_arch.h"
-#include "modes.h"
+#include "cc6_modes.h"
 #include "cc6_entenc.h"
 #include "cc6_entdec.h"
 #include "mathops.h"

@@ -22,9 +22,9 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #  endif
 #endif
 
-#include "os_support.h"
-#include "mathops.h"
-#include "kiss_fftr.h"
+#include "cc6_os_support.h"
+#include "cc6_mathops.h"
+#include "cc6_kiss_fftr.h"
 #include "cc6__kiss_fft_guts.h"
 
 

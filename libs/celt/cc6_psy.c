@@ -37,7 +37,7 @@
 #include <math.h>
 #include "os_support.h"
 #include "cc6_arch.h"
-#include "stack_alloc.h"
+#include "cc6_stack_alloc.h"
 #include "mathops.h"
 
 /* The Vorbis freq<->Bark mapping */

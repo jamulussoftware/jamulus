@@ -39,7 +39,7 @@
 #include "os_support.h"
 #include "cc6_arch.h"
 #include "mathops.h"
-#include "stack_alloc.h"
+#include "cc6_stack_alloc.h"
 
 #ifdef FIXED_POINT
 const celt_word16_t eMeans[24] = {1920, -341, -512, -107, 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};

@@ -34,7 +34,7 @@
 #endif
 
 #include <math.h>
-#include "modes.h"
+#include "cc6_modes.h"
 #include "cc6_cwrs.h"
 #include "cc6_arch.h"
 #include "os_support.h"

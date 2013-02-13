@@ -18,11 +18,11 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 #define MIN(a,b) ((a)<(b) ? (a):(b))
 #define MAX(a,b) ((a)>(b) ? (a):(b))
 
-/* kiss_fft.h
+/* cc6_kiss_fft.h
    defines kiss_fft_scalar as either short or a float type
    and defines
    typedef struct { kiss_fft_scalar r; kiss_fft_scalar i; }kiss_fft_cpx; */
-#include "kiss_fft.h"
+#include "cc6_kiss_fft.h"
 
 #define MAXFACTORS 32
 /* e.g. an fft of length 128 has 4 factors 

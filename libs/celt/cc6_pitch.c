@@ -47,8 +47,8 @@
 #include "psy.h"
 #include "os_support.h"
 #include "mathops.h"
-#include "modes.h"
-#include "stack_alloc.h"
+#include "cc6_modes.h"
+#include "cc6_stack_alloc.h"
 
 kiss_fftr_cfg pitch_state_alloc(int max_lag)
 {

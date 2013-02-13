@@ -40,7 +40,7 @@
 
 #include "kiss_fftr.h"
 #include "psy.h"
-#include "modes.h"
+#include "cc6_modes.h"
 
 kiss_fftr_cfg pitch_state_alloc(int max_lag);
 void pitch_state_free(kiss_fftr_cfg st);

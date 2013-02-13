@@ -55,7 +55,7 @@
 
 #else /* ENABLE_TI_DSPLIB */
 
-#include "kiss_fft.h"
+#include "cc6_kiss_fft.h"
 #include "cc6__kiss_fft_guts.h"
 
 #define cpx32_fft_alloc(length) kiss_fft_alloc(length, 0, 0);

@@ -35,20 +35,20 @@
 
 #define CELT_C
 
-#include "os_support.h"
-#include "mdct.h"
+#include "cc6_os_support.h"
+#include "cc6_mdct.h"
 #include <math.h>
 #include "cc6_celt.h"
-#include "pitch.h"
-#include "kiss_fftr.h"
+#include "cc6_pitch.h"
+#include "cc6_kiss_fftr.h"
 #include "cc6_bands.h"
-#include "modes.h"
+#include "cc6_modes.h"
 #include "cc6_entcode.h"
-#include "quant_bands.h"
-#include "psy.h"
-#include "rate.h"
-#include "stack_alloc.h"
-#include "mathops.h"
+#include "cc6_quant_bands.h"
+#include "cc6_psy.h"
+#include "cc6_rate.h"
+#include "cc6_stack_alloc.h"
+#include "cc6_mathops.h"
 #include "cc6_float_cast.h"
 #include <stdarg.h>
 

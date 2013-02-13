@@ -7,6 +7,7 @@ Changes made to libcelt to be compatible to llcon:
 
 - replaced all "restricted" by "__restricted" and all "inline" by "__inline"
 
+- added a "cc6_" prior to all file names, functions and global variables
 
 ----------------------------------------------------------------------------------
 Attempt to use newer version failed due to the following reasons:

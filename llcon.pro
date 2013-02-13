@@ -97,7 +97,7 @@ HEADERS += src/audiomixerboard.h \
     src/util.h \
     libs/celt/cc6_celt.h \
     libs/celt/celt_types.h \
-    libs/celt/celt_header.h \
+    libs/celt/cc6_celt_header.h \
     libs/celt/_kiss_fft_guts.h \
     libs/celt/arch.h \
     libs/celt/bands.h \
@@ -155,7 +155,7 @@ SOURCES += src/audiomixerboard.cpp \
     libs/celt/entenc.c \
     libs/celt/header.c \
     libs/celt/kfft_single.c \
-    libs/celt/_kiss_fft.c \
+    libs/celt/cc6__kiss_fft.c \
     libs/celt/_kiss_fftr.c \
     libs/celt/laplace.c \
     libs/celt/mdct.c \

@@ -12,7 +12,7 @@
  ********************************************************************
 
  function: #ifdef jail to whip a few platforms into the UNIX ideal.
- last mod: $Id: celt_types.h,v 1.1 2009-08-12 18:50:49 corrados Exp $
+ last mod: $Id: cc6_celt_types.h,v 1.1 2013-02-13 17:02:23 corrados Exp $
 
  ********************************************************************/
 /**

@@ -29,7 +29,7 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QHostAddress>
-#include "celt.h"
+#include "cc6_celt.h"
 #include "global.h"
 #include "socket.h"
 #include "channel.h"

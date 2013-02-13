@@ -38,7 +38,7 @@
 #include "os_support.h"
 #include "mdct.h"
 #include <math.h>
-#include "celt.h"
+#include "cc6_celt.h"
 #include "pitch.h"
 #include "kiss_fftr.h"
 #include "bands.h"

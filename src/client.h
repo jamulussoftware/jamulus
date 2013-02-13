@@ -30,7 +30,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QMessageBox>
-#include "celt.h"
+#include "cc6_celt.h"
 #include "global.h"
 #include "socket.h"
 #include "channel.h"

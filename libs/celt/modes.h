@@ -33,7 +33,7 @@
 #define MODES_H
 
 #include "celt_types.h"
-#include "celt.h"
+#include "cc6_celt.h"
 #include "arch.h"
 #include "mdct.h"
 #include "psy.h"

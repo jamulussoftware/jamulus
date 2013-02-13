@@ -36,7 +36,7 @@
 extern "C" {
 #endif
 
-#include "celt.h"
+#include "cc6_celt.h"
 #include "celt_types.h"
 
 /** Header data to be used for Ogg files (or possibly other encapsulation) 

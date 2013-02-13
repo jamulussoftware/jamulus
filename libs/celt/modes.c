@@ -33,7 +33,7 @@
 #include "config.h"
 #endif
 
-#include "celt.h"
+#include "cc6_celt.h"
 #include "modes.h"
 #include "rate.h"
 #include "os_support.h"

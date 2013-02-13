@@ -32,7 +32,7 @@
 #define PSY_H
 
 #include "arch.h"
-#include "celt.h"
+#include "cc6_celt.h"
 
 struct PsyDecay {
    /*celt_word16_t *decayL;*/

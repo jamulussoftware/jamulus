@@ -618,17 +618,17 @@ class CChannelInfo : public CChannelCoreInfo
 {
 public:
     CChannelInfo() :
+        bOnlyNameIsUsed ( false ),
         iChanID ( 0 ),
-        iIpAddr ( 0 ),
-        bOnlyNameIsUsed ( false ) {}
+        iIpAddr ( 0 ) {}
 
     CChannelInfo ( const int               NiID,
                    const quint32           NiIP,
                    const CChannelCoreInfo& NCorInf ) :
         CChannelCoreInfo ( NCorInf ),
+        bOnlyNameIsUsed ( false ),
         iChanID ( NiID ),
-        iIpAddr ( NiIP ),
-        bOnlyNameIsUsed ( false ) {}
+        iIpAddr ( NiIP ) {}
 
     CChannelInfo ( const int               NiID,
                    const quint32           NiIP,
@@ -642,9 +642,9 @@ public:
                            NsCity,
                            NiInstrument,
                            NeSkillLevel ),
+        bOnlyNameIsUsed ( false ),
         iChanID ( NiID ),
-        iIpAddr ( NiIP ),
-        bOnlyNameIsUsed ( false ) {}
+        iIpAddr ( NiIP ) {}
 
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
@@ -656,9 +656,9 @@ CChannelInfo ( const int               NiID,
                        "",
                        CInstPictures::GetNotUsedInstrument(),
                        SL_NOT_SET ),
+    bOnlyNameIsUsed ( true ),
     iChanID ( NiID ),
-    iIpAddr ( NiIP ),
-    bOnlyNameIsUsed ( true ) {}
+    iIpAddr ( NiIP ) {}
 
 // in old versions, the name was the only client info -> to be removed
 // when compatiblility to old versions is removed

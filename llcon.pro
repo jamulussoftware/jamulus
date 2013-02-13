@@ -147,16 +147,16 @@ SOURCES += src/audiomixerboard.cpp \
     src/socket.cpp \
     src/soundbase.cpp \
     src/util.cpp \
-    libs/celt/bands.c \
-    libs/celt/celt.c \
-    libs/celt/cwrs.c \
+    libs/celt/cc6_bands.c \
+    libs/celt/cc6_celt.c \
+    libs/celt/cc6_cwrs.c \
     libs/celt/entcode.c \
     libs/celt/entdec.c \
     libs/celt/entenc.c \
     libs/celt/header.c \
     libs/celt/kfft_single.c \
     libs/celt/cc6__kiss_fft.c \
-    libs/celt/_kiss_fftr.c \
+    libs/celt/cc6__kiss_fftr.c \
     libs/celt/laplace.c \
     libs/celt/mdct.c \
     libs/celt/modes.c \

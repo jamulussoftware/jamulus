@@ -41,7 +41,7 @@
 
 /*#include "cc6__kiss_fft_guts.h"
 #include "kiss_fftr.h"*/
-#include "kfft_single.h"
+#include "cc6_kfft_single.h"
 
 #include "pitch.h"
 #include "psy.h"

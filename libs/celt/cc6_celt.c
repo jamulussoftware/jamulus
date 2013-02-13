@@ -49,7 +49,7 @@
 #include "rate.h"
 #include "stack_alloc.h"
 #include "mathops.h"
-#include "float_cast.h"
+#include "cc6_float_cast.h"
 #include <stdarg.h>
 
 static const celt_word16_t preemph = QCONST16(0.8f,15);

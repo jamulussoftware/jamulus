@@ -47,7 +47,7 @@
 #endif
 
 #include "mdct.h"
-#include "kfft_double.h"
+#include "cc6_kfft_double.h"
 #include <math.h>
 #include "os_support.h"
 #include "mathops.h"

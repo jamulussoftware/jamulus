@@ -111,7 +111,7 @@ typedef celt_word32_t celt_mask_t;
 #include "fixed_debug.h"
 #else
 
-#include "fixed_generic.h"
+#include "cc6_fixed_generic.h"
 
 #ifdef ARM5E_ASM
 #include "fixed_arm5e.h"
@@ -120,9 +120,9 @@ typedef celt_word32_t celt_mask_t;
 #elif defined (BFIN_ASM)
 #include "fixed_bfin.h"
 #elif defined (TI_C5X_ASM)
-#include "fixed_c5x.h"
+#include "cc6_fixed_c5x.h"
 #elif defined (TI_C6X_ASM)
-#include "fixed_c6x.h"
+#include "cc6_fixed_c6x.h"
 #endif
 
 #endif

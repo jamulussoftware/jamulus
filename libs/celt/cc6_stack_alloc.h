@@ -32,8 +32,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef STACK_ALLOC_H
-#define STACK_ALLOC_H
+#ifndef cc6_STACK_ALLOC_H
+#define cc6_STACK_ALLOC_H
 
 #ifdef USE_ALLOCA
 # ifdef WIN32
@@ -48,7 +48,7 @@
 #endif
 
 /**
- * @def ALIGN(stack, size)
+ * @def cc6_ALIGN(stack, size)
  *
  * Aligns the stack to a 'size' boundary
  *
@@ -57,7 +57,7 @@
  */
 
 /**
- * @def PUSH(stack, size, type)
+ * @def cc6_PUSH(stack, size, type)
  *
  * Allocates 'size' elements of type 'type' on the stack
  *
@@ -67,7 +67,7 @@
  */
 
 /**
- * @def VARDECL(var)
+ * @def cc6_VARDECL(var)
  *
  * Declare variable on stack
  *
@@ -75,7 +75,7 @@
  */
 
 /**
- * @def ALLOC(var, size, type)
+ * @def cc6_ALLOC(var, size, type)
  *
  * Allocate 'size' elements of 'type' on stack
  *
@@ -87,26 +87,26 @@
 
 #if defined(VAR_ARRAYS)
 
-#define VARDECL(type, var)
-#define ALLOC(var, size, type) type var[size]
-#define SAVE_STACK
-#define RESTORE_STACK
-#define ALLOC_STACK
+#define cc6_VARDECL(type, var)
+#define cc6_ALLOC(var, size, type) type var[size]
+#define cc6_SAVE_STACK
+#define cc6_RESTORE_STACK
+#define cc6_ALLOC_STACK
 
 #elif defined(USE_ALLOCA)
 
-#define VARDECL(type, var) type *var
-#define ALLOC(var, size, type) var = ((type*)alloca(sizeof(type)*(size)))
-#define SAVE_STACK
-#define RESTORE_STACK
-#define ALLOC_STACK
+#define cc6_VARDECL(type, var) type *var
+#define cc6_ALLOC(var, size, type) var = ((type*)alloca(sizeof(type)*(size)))
+#define cc6_SAVE_STACK
+#define cc6_RESTORE_STACK
+#define cc6_ALLOC_STACK
 
 #else
 
 #ifdef CELT_C
-char *global_stack=0;
+char *cc6_global_stack=0;
 #else
-extern char *global_stack;
+extern char *cc6_global_stack;
 #endif /*CELT_C*/
 
 #ifdef ENABLE_VALGRIND
@@ -114,31 +114,31 @@ extern char *global_stack;
 #include <valgrind/memcheck.h>
 
 #ifdef CELT_C
-char *global_stack_top=0;
+char *cc6_global_stack_top=0;
 #else
-extern char *global_stack_top;
+extern char *cc6_global_stack_top;
 #endif /*CELT_C*/
 
-#define ALIGN(stack, size) ((stack) += ((size) - (long)(stack)) & ((size) - 1))
-#define PUSH(stack, size, type) (VALGRIND_MAKE_MEM_NOACCESS(stack, global_stack_top-stack),ALIGN((stack),sizeof(type)/sizeof(char)),VALGRIND_MAKE_MEM_UNDEFINED(stack, ((size)*sizeof(type)/sizeof(char))),(stack)+=(2*(size)*sizeof(type)/sizeof(char)),(type*)((stack)-(2*(size)*sizeof(type)/sizeof(char))))
-#define RESTORE_STACK ((global_stack = _saved_stack),VALGRIND_MAKE_MEM_NOACCESS(global_stack, global_stack_top-global_stack))
-#define ALLOC_STACK ((global_stack = (global_stack==0) ? ((global_stack_top=celt_alloc_scratch(GLOBAL_STACK_SIZE*2)+(GLOBAL_STACK_SIZE*2))-(GLOBAL_STACK_SIZE*2)) : global_stack),VALGRIND_MAKE_MEM_NOACCESS(global_stack, global_stack_top-global_stack))
+#define cc6_ALIGN(stack, size) ((stack) += ((size) - (long)(stack)) & ((size) - 1))
+#define cc6_PUSH(stack, size, type) (VALGRIND_MAKE_MEM_NOACCESS(stack, cc6_global_stack_top-stack),cc6_ALIGN((stack),sizeof(type)/sizeof(char)),VALGRIND_MAKE_MEM_UNDEFINED(stack, ((size)*sizeof(type)/sizeof(char))),(stack)+=(2*(size)*sizeof(type)/sizeof(char)),(type*)((stack)-(2*(size)*sizeof(type)/sizeof(char))))
+#define cc6_RESTORE_STACK ((cc6_global_stack = _saved_stack),VALGRIND_MAKE_MEM_NOACCESS(cc6_global_stack, cc6_global_stack_top-cc6_global_stack))
+#define cc6_ALLOC_STACK ((cc6_global_stack = (cc6_global_stack==0) ? ((cc6_global_stack_top=cc6_celt_alloc_scratch(cc6_GLOBAL_STACK_SIZE*2)+(cc6_GLOBAL_STACK_SIZE*2))-(cc6_GLOBAL_STACK_SIZE*2)) : cc6_global_stack),VALGRIND_MAKE_MEM_NOACCESS(cc6_global_stack, cc6_global_stack_top-cc6_global_stack))
 
 #else 
 
-#define ALIGN(stack, size) ((stack) += ((size) - (long)(stack)) & ((size) - 1))
-#define PUSH(stack, size, type) (ALIGN((stack),sizeof(type)/sizeof(char)),(stack)+=(size)*(sizeof(type)/sizeof(char)),(type*)((stack)-(size)*(sizeof(type)/sizeof(char))))
-#define RESTORE_STACK (global_stack = _saved_stack)
-#define ALLOC_STACK (global_stack = (global_stack==0) ? celt_alloc_scratch(GLOBAL_STACK_SIZE) : global_stack)
+#define cc6_ALIGN(stack, size) ((stack) += ((size) - (long)(stack)) & ((size) - 1))
+#define cc6_PUSH(stack, size, type) (cc6_ALIGN((stack),sizeof(type)/sizeof(char)),(stack)+=(size)*(sizeof(type)/sizeof(char)),(type*)((stack)-(size)*(sizeof(type)/sizeof(char))))
+#define cc6_RESTORE_STACK (cc6_global_stack = _saved_stack)
+#define cc6_ALLOC_STACK (cc6_global_stack = (cc6_global_stack==0) ? cc6_celt_alloc_scratch(cc6_GLOBAL_STACK_SIZE) : cc6_global_stack)
 
 #endif /*ENABLE_VALGRIND*/ 
 
 #include "os_support.h"
-#define VARDECL(type, var) type *var
-#define ALLOC(var, size, type) var = PUSH(global_stack, size, type)
-#define SAVE_STACK char *_saved_stack = global_stack;
+#define cc6_VARDECL(type, var) type *var
+#define cc6_ALLOC(var, size, type) var = cc6_PUSH(cc6_global_stack, size, type)
+#define cc6_SAVE_STACK char *_saved_stack = cc6_global_stack;
 
 #endif /*VAR_ARRAYS*/
 
 
-#endif /*STACK_ALLOC_H*/
+#endif /*cc6_STACK_ALLOC_H*/

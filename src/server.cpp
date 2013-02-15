@@ -194,29 +194,29 @@ CServer::CServer ( const int      iNewNumChan,
     for ( i = 0; i < iNumChannels; i++ )
     {
         // init audio endocder/decoder (mono)
-        CeltModeMono[i] = celt_mode_create (
+        CeltModeMono[i] = cc6_celt_mode_create (
             SYSTEM_SAMPLE_RATE_HZ, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
-        CeltEncoderMono[i] = celt_encoder_create ( CeltModeMono[i] );
-        CeltDecoderMono[i] = celt_decoder_create ( CeltModeMono[i] );
+        CeltEncoderMono[i] = cc6_celt_encoder_create ( CeltModeMono[i] );
+        CeltDecoderMono[i] = cc6_celt_decoder_create ( CeltModeMono[i] );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
         // set encoder low complexity
-        celt_encoder_ctl ( CeltEncoderMono[i],
-            CELT_SET_COMPLEXITY_REQUEST, celt_int32_t ( 1 ) );
+        cc6_celt_encoder_ctl ( CeltEncoderMono[i],
+            cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
 #endif
 
         // init audio endocder/decoder (stereo)
-        CeltModeStereo[i] = celt_mode_create (
+        CeltModeStereo[i] = cc6_celt_mode_create (
             SYSTEM_SAMPLE_RATE_HZ, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
-        CeltEncoderStereo[i] = celt_encoder_create ( CeltModeStereo[i] );
-        CeltDecoderStereo[i] = celt_decoder_create ( CeltModeStereo[i] );
+        CeltEncoderStereo[i] = cc6_celt_encoder_create ( CeltModeStereo[i] );
+        CeltDecoderStereo[i] = cc6_celt_decoder_create ( CeltModeStereo[i] );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
         // set encoder low complexity
-        celt_encoder_ctl ( CeltEncoderStereo[i],
-            CELT_SET_COMPLEXITY_REQUEST, celt_int32_t ( 1 ) );
+        cc6_celt_encoder_ctl ( CeltEncoderStereo[i],
+            cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
 #endif
     }
 
@@ -584,18 +584,18 @@ void CServer::OnTimer()
                 if ( iCurNumAudChan == 1 )
                 {
                     // mono
-                    celt_decode ( CeltDecoderMono[iCurChanID],
-                                  &vecbyData[0],
-                                  iCeltNumCodedBytes,
-                                  &vecvecsData[i][0] );
+                    cc6_celt_decode ( CeltDecoderMono[iCurChanID],
+                                      &vecbyData[0],
+                                      iCeltNumCodedBytes,
+                                      &vecvecsData[i][0] );
                 }
                 else
                 {
                     // stereo
-                    celt_decode ( CeltDecoderStereo[iCurChanID],
-                                  &vecbyData[0],
-                                  iCeltNumCodedBytes,
-                                  &vecvecsData[i][0] );
+                    cc6_celt_decode ( CeltDecoderStereo[iCurChanID],
+                                      &vecbyData[0],
+                                      iCeltNumCodedBytes,
+                                      &vecvecsData[i][0] );
                 }
             }
             else
@@ -604,18 +604,18 @@ void CServer::OnTimer()
                 if ( iCurNumAudChan == 1 )
                 {
                     // mono
-                    celt_decode ( CeltDecoderMono[iCurChanID],
-                                  NULL,
-                                  0,
-                                  &vecvecsData[i][0] );
+                    cc6_celt_decode ( CeltDecoderMono[iCurChanID],
+                                      NULL,
+                                      0,
+                                      &vecvecsData[i][0] );
                 }
                 else
                 {
                     // stereo
-                    celt_decode ( CeltDecoderStereo[iCurChanID],
-                                  NULL,
-                                  0,
-                                  &vecvecsData[i][0] );
+                    cc6_celt_decode ( CeltDecoderStereo[iCurChanID],
+                                      NULL,
+                                      0,
+                                      &vecvecsData[i][0] );
                 }
             }
 
@@ -669,20 +669,20 @@ void CServer::OnTimer()
             if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
             {
                 // mono
-                celt_encode ( CeltEncoderMono[iCurChanID],
-                              &vecsSendData[0],
-                              NULL,
-                              &vecCeltData[0],
-                              iCeltNumCodedBytes );
+                cc6_celt_encode ( CeltEncoderMono[iCurChanID],
+                                  &vecsSendData[0],
+                                  NULL,
+                                  &vecCeltData[0],
+                                  iCeltNumCodedBytes );
             }
             else
             {
                 // stereo
-                celt_encode ( CeltEncoderStereo[iCurChanID],
-                              &vecsSendData[0],
-                              NULL,
-                              &vecCeltData[0],
-                              iCeltNumCodedBytes );
+                cc6_celt_encode ( CeltEncoderStereo[iCurChanID],
+                                  &vecsSendData[0],
+                                  NULL,
+                                  &vecCeltData[0],
+                                  iCeltNumCodedBytes );
             }
 
             // send separate mix to current clients

@@ -665,7 +665,7 @@ int cc6_celt_encode_float(cc6_CELTEncoder * __restrict st, const cc6_celt_sig_t 
 
    cc6_compute_band_energies(st->mode, freq, bandE);
    for (i=0;i<st->mode->nbEBands*C;i++)
-      bandLogE[i] = amp2Log(bandE[i]);
+      bandLogE[i] = cc6_amp2Log(bandE[i]);
 
    /* Don't use intra energy when we're operating at low bit-rate */
    intra_ener = st->force_intra || (st->delayedIntra && nbCompressedBytes > st->mode->nbEBands);

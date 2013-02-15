@@ -29,32 +29,32 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef RATE_H
-#define RATE_H
+#ifndef cc6_RATE_H
+#define cc6_RATE_H
 
-#define MAX_PULSES 128
-#define LOG_MAX_PULSES 7
+#define cc6_MAX_PULSES 128
+#define cc6_LOG_MAX_PULSES 7
 
-#define BITRES 4
-#define BITROUND 8
-#define BITOVERFLOW 30000
+#define cc6_BITRES 4
+#define cc6_BITROUND 8
+#define cc6_BITOVERFLOW 30000
 
 #include "cc6_cwrs.h"
 
-static __inline int bits2pulses(const CELTMode *m, const celt_int16_t *cache, int N, int bits)
+static __inline int cc6_bits2pulses(const cc6_CELTMode *m, const cc6_celt_int16_t *cache, int N, int bits)
 {
    int i;
    int lo, hi;
    lo = 0;
-   hi = MAX_PULSES-1;
+   hi = cc6_MAX_PULSES-1;
    
 #if 0 /* Disabled until we can make that useful */
-   /* Use of more than MAX_PULSES is disabled until we are able to cwrs that decently */
-   if (bits > cache[MAX_PULSES-1] && N<=4)
+   /* Use of more than cc6_MAX_PULSES is disabled until we are able to cwrs that decently */
+   if (bits > cache[cc6_MAX_PULSES-1] && N<=4)
    {
       /*int pulses;
       pulses = 127;
-      while (16 + log2_frac(2*(pulses+1)*(pulses+1) + 1, 4) <= bits && pulses < 32767)
+      while (16 + cc6_log2_frac(2*(pulses+1)*(pulses+1) + 1, 4) <= bits && pulses < 32767)
          pulses++;*/
       lo = 127;
       switch (N)
@@ -64,7 +64,7 @@ static __inline int bits2pulses(const CELTMode *m, const celt_int16_t *cache, in
             for (i=0;i<10;i++)
             {
                int pulses = (lo+hi)>>1;
-               if (log2_frac(((UMUL16_16(pulses,pulses)>>1)+1)>>1, 4) > bits)
+               if (cc6_log2_frac(((cc6_UMUL16_16(pulses,pulses)>>1)+1)>>1, 4) > bits)
                   hi = pulses;
                else
                   lo = pulses;
@@ -75,7 +75,7 @@ static __inline int bits2pulses(const CELTMode *m, const celt_int16_t *cache, in
             for (i=0;i<10;i++)
             {
                int pulses = (lo+hi)>>1;
-               if (log2_frac((UMUL32(UMUL16_16(pulses,pulses)+2,pulses))/3<<3, 4) > bits)
+               if (cc6_log2_frac((cc6_UMUL32(cc6_UMUL16_16(pulses,pulses)+2,pulses))/3<<3, 4) > bits)
                   hi = pulses;
                else
                   lo = pulses;
@@ -88,7 +88,7 @@ static __inline int bits2pulses(const CELTMode *m, const celt_int16_t *cache, in
    /* Instead of using the "bisection condition" we use a fixed number of 
    iterations because it should be faster */
    /*while (hi-lo != 1)*/
-   for (i=0;i<LOG_MAX_PULSES;i++)
+   for (i=0;i<cc6_LOG_MAX_PULSES;i++)
    {
       int mid = (lo+hi)>>1;
       /* OPT: Make sure this is implemented with a conditional move */
@@ -104,19 +104,19 @@ static __inline int bits2pulses(const CELTMode *m, const celt_int16_t *cache, in
 }
 
 
-static __inline int pulses2bits(const celt_int16_t *cache, int N, int pulses)
+static __inline int cc6_pulses2bits(const cc6_celt_int16_t *cache, int N, int pulses)
 {
-#if 0 /* Use of more than MAX_PULSES is disabled until we are able to cwrs that decently */
+#if 0 /* Use of more than cc6_MAX_PULSES is disabled until we are able to cwrs that decently */
    if (pulses > 127)
    {
       int bits;
       switch (N)
       {
          case 3:
-            bits = log2_frac(((UMUL16_16(pulses,pulses)>>1)+1)>>1, 4);
+            bits = cc6_log2_frac(((cc6_UMUL16_16(pulses,pulses)>>1)+1)>>1, 4);
             break;
          case 4:
-            bits = log2_frac((UMUL32(UMUL16_16(pulses,pulses)+2,pulses))/3<<3, 4);
+            bits = cc6_log2_frac((cc6_UMUL32(cc6_UMUL16_16(pulses,pulses)+2,pulses))/3<<3, 4);
             break;
       }
       /*printf ("%d <- %d\n", bits, pulses);*/
@@ -127,7 +127,7 @@ static __inline int pulses2bits(const celt_int16_t *cache, int N, int pulses)
 }
 
 /** Computes a cache of the pulses->bits mapping in each band */
-celt_int16_t **compute_alloc_cache(CELTMode *m, int C);
+cc6_celt_int16_t **cc6_compute_alloc_cache(cc6_CELTMode *m, int C);
 
 /** Compute the pulse allocation, i.e. how many pulses will go in each
   * band. 
@@ -138,7 +138,7 @@ celt_int16_t **compute_alloc_cache(CELTMode *m, int C);
  @param pulses Number of pulses per band (returned)
  @return Total number of bits allocated
 */
-void compute_allocation(const CELTMode *m, int *offsets, int total, int *pulses, int *ebits, int *fine_priority);
+void cc6_compute_allocation(const cc6_CELTMode *m, int *offsets, int total, int *pulses, int *ebits, int *fine_priority);
 
 
 #endif

@@ -265,12 +265,12 @@ protected:
     CProtocol               ConnLessProtocol;
 
     // audio encoder/decoder
-    CELTMode*               CeltModeMono;
-    CELTEncoder*            CeltEncoderMono;
-    CELTDecoder*            CeltDecoderMono;
-    CELTMode*               CeltModeStereo;
-    CELTEncoder*            CeltEncoderStereo;
-    CELTDecoder*            CeltDecoderStereo;
+    cc6_CELTMode*           CeltModeMono;
+    cc6_CELTEncoder*        CeltEncoderMono;
+    cc6_CELTDecoder*        CeltDecoderMono;
+    cc6_CELTMode*           CeltModeStereo;
+    cc6_CELTEncoder*        CeltEncoderStereo;
+    cc6_CELTDecoder*        CeltDecoderStereo;
     int                     iCeltNumCodedBytes;
     bool                    bCeltDoHighQuality;
     bool                    bUseStereo;

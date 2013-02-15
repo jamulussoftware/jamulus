@@ -207,12 +207,12 @@ protected:
     QMutex              Mutex;
 
     // audio encoder/decoder
-    CELTMode*           CeltModeMono[MAX_NUM_CHANNELS];
-    CELTEncoder*        CeltEncoderMono[MAX_NUM_CHANNELS];
-    CELTDecoder*        CeltDecoderMono[MAX_NUM_CHANNELS];
-    CELTMode*           CeltModeStereo[MAX_NUM_CHANNELS];
-    CELTEncoder*        CeltEncoderStereo[MAX_NUM_CHANNELS];
-    CELTDecoder*        CeltDecoderStereo[MAX_NUM_CHANNELS];
+    cc6_CELTMode*       CeltModeMono[MAX_NUM_CHANNELS];
+    cc6_CELTEncoder*    CeltEncoderMono[MAX_NUM_CHANNELS];
+    cc6_CELTDecoder*    CeltDecoderMono[MAX_NUM_CHANNELS];
+    cc6_CELTMode*       CeltModeStereo[MAX_NUM_CHANNELS];
+    cc6_CELTEncoder*    CeltEncoderStereo[MAX_NUM_CHANNELS];
+    cc6_CELTDecoder*    CeltDecoderStereo[MAX_NUM_CHANNELS];
 
     CVector<QString>    vstrChatColors;
 

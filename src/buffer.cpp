@@ -96,7 +96,7 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
         // in case we have a buffer underrun, invalidate the next 15 blocks
         // to avoid the unmusical noise resulting from a very short drop
         // out (note that if you want to change this value, also change
-        // the value in celt_decode_lost in celt.c)
+        // the value in cc6_celt_decode_lost in cc6_celt.c)
         iNumInvalidElements = 10;
 
         return false;

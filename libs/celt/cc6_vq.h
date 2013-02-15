@@ -33,8 +33,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef VQ_H
-#define VQ_H
+#ifndef cc6_VQ_H
+#define cc6_VQ_H
 
 #include "cc6_entenc.h"
 #include "cc6_entdec.h"
@@ -50,7 +50,7 @@
  * @param p Pitch vector (it is assumed that p+x is a unit vector)
  * @param enc Entropy encoder state
 */
-void alg_quant(celt_norm_t *X, celt_mask_t *W, int N, int K, celt_norm_t *P, ec_enc *enc);
+void cc6_alg_quant(cc6_celt_norm_t *X, cc6_celt_mask_t *W, int N, int K, cc6_celt_norm_t *P, cc6_ec_enc *enc);
 
 /** Algebraic pulse decoder
  * @param x Decoded normalised spectrum (returned)
@@ -59,9 +59,9 @@ void alg_quant(celt_norm_t *X, celt_mask_t *W, int N, int K, celt_norm_t *P, ec_
  * @param p Pitch vector (automatically added to x)
  * @param dec Entropy decoder state
  */
-void alg_unquant(celt_norm_t *X, int N, int K, celt_norm_t *P, ec_dec *dec);
+void cc6_alg_unquant(cc6_celt_norm_t *X, int N, int K, cc6_celt_norm_t *P, cc6_ec_dec *dec);
 
-celt_word16_t renormalise_vector(celt_norm_t *X, celt_word16_t value, int N, int stride);
+cc6_celt_word16_t cc6_renormalise_vector(cc6_celt_norm_t *X, cc6_celt_word16_t value, int N, int stride);
 
 /** Intra-frame predictor that matches a section of the current frame (at lower
  * frequencies) to encode the current band.
@@ -74,6 +74,6 @@ celt_word16_t renormalise_vector(celt_norm_t *X, celt_word16_t value, int N, int
  * @param B Stride (number of channels multiplied by the number of MDCTs per frame)
  * @param N0 Number of valid offsets
  */
-void intra_fold(const CELTMode *m, celt_norm_t * __restrict x, int N, int *pulses, celt_norm_t *Y, celt_norm_t * __restrict P, int N0, int B);
+void cc6_intra_fold(const cc6_CELTMode *m, cc6_celt_norm_t * __restrict x, int N, int *pulses, cc6_celt_norm_t *Y, cc6_celt_norm_t * __restrict P, int N0, int B);
 
-#endif /* VQ_H */
+#endif /* cc6_VQ_H */

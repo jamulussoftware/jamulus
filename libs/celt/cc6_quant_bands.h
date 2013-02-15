@@ -29,8 +29,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef QUANT_BANDS
-#define QUANT_BANDS
+#ifndef cc6_QUANT_BANDS
+#define cc6_QUANT_BANDS
 
 #include "cc6_arch.h"
 #include "cc6_modes.h"
@@ -38,33 +38,33 @@
 #include "cc6_entdec.h"
 #include "cc6_mathops.h"
 
-static __inline celt_word16_t amp2Log(celt_word32_t amp)
+static __inline cc6_celt_word16_t cc6_amp2Log(cc6_celt_word32_t amp)
 {
-	return celt_log2(MAX32(QCONST32(.001f,14),SHL32(amp,2)));
+    return cc6_celt_log2(cc6_MAX32(cc6_QCONST32(.001f,14),cc6_SHL32(amp,2)));
 }
 
-static __inline celt_word32_t log2Amp(celt_word16_t lg)
+static __inline cc6_celt_word32_t cc6_log2Amp(cc6_celt_word16_t lg)
 {
-	return PSHR32(celt_exp2(SHL16(lg,3)),4);
+    return cc6_PSHR32(cc6_celt_exp2(cc6_SHL16(lg,3)),4);
 }
 
-int *quant_prob_alloc(const CELTMode *m);
-void quant_prob_free(int *freq);
+int *cc6_quant_prob_alloc(const cc6_CELTMode *m);
+void cc6_quant_prob_free(int *freq);
 
-void compute_fine_allocation(const CELTMode *m, int *bits, int budget);
+void cc6_compute_fine_allocation(const cc6_CELTMode *m, int *bits, int budget);
 
-int intra_decision(celt_word16_t *eBands, celt_word16_t *oldEBands, int len);
+int cc6_intra_decision(cc6_celt_word16_t *eBands, cc6_celt_word16_t *oldEBands, int len);
 
-unsigned quant_coarse_energy(const CELTMode *m, celt_word16_t *eBands, celt_word16_t *oldEBands, int budget, int intra, int *prob, celt_word16_t *error, ec_enc *enc);
+unsigned cc6_quant_coarse_energy(const cc6_CELTMode *m, cc6_celt_word16_t *eBands, cc6_celt_word16_t *oldEBands, int budget, int intra, int *prob, cc6_celt_word16_t *error, cc6_ec_enc *enc);
 
-void quant_fine_energy(const CELTMode *m, celt_ener_t *eBands, celt_word16_t *oldEBands, celt_word16_t *error, int *fine_quant, ec_enc *enc);
+void cc6_quant_fine_energy(const cc6_CELTMode *m, cc6_celt_ener_t *eBands, cc6_celt_word16_t *oldEBands, cc6_celt_word16_t *error, int *fine_quant, cc6_ec_enc *enc);
 
-void quant_energy_finalise(const CELTMode *m, celt_ener_t *eBands, celt_word16_t *oldEBands, celt_word16_t *error, int *fine_quant, int *fine_priority, int bits_left, ec_enc *enc);
+void cc6_quant_energy_finalise(const cc6_CELTMode *m, cc6_celt_ener_t *eBands, cc6_celt_word16_t *oldEBands, cc6_celt_word16_t *error, int *fine_quant, int *fine_priority, int bits_left, cc6_ec_enc *enc);
 
-void unquant_coarse_energy(const CELTMode *m, celt_ener_t *eBands, celt_word16_t *oldEBands, int budget, int intra, int *prob, ec_dec *dec);
+void cc6_unquant_coarse_energy(const cc6_CELTMode *m, cc6_celt_ener_t *eBands, cc6_celt_word16_t *oldEBands, int budget, int intra, int *prob, cc6_ec_dec *dec);
 
-void unquant_fine_energy(const CELTMode *m, celt_ener_t *eBands, celt_word16_t *oldEBands, int *fine_quant, ec_dec *dec);
+void cc6_unquant_fine_energy(const cc6_CELTMode *m, cc6_celt_ener_t *eBands, cc6_celt_word16_t *oldEBands, int *fine_quant, cc6_ec_dec *dec);
 
-void unquant_energy_finalise(const CELTMode *m, celt_ener_t *eBands, celt_word16_t *oldEBands, int *fine_quant, int *fine_priority, int bits_left, ec_dec *dec);
+void cc6_unquant_energy_finalise(const cc6_CELTMode *m, cc6_celt_ener_t *eBands, cc6_celt_word16_t *oldEBands, int *fine_quant, int *fine_priority, int bits_left, cc6_ec_dec *dec);
 
-#endif /* QUANT_BANDS */
+#endif /* cc6_QUANT_BANDS */

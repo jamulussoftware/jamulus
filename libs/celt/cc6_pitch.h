@@ -35,19 +35,19 @@
 */
 
 
-#ifndef _PITCH_H
-#define _PITCH_H
+#ifndef cc6__PITCH_H
+#define cc6__PITCH_H
 
 #include "cc6_kiss_fftr.h"
 #include "cc6_psy.h"
 #include "cc6_modes.h"
 
-kiss_fftr_cfg pitch_state_alloc(int max_lag);
-void pitch_state_free(kiss_fftr_cfg st);
+cc6_kiss_fftr_cfg cc6_pitch_state_alloc(int max_lag);
+void cc6_pitch_state_free(cc6_kiss_fftr_cfg st);
 
 /** Find the optimal delay for the pitch prediction. Computation is
     done in the frequency domain, both to save time and to make it
     easier to apply psychoacoustic weighting */
-void find_spectral_pitch(const CELTMode *m, kiss_fftr_cfg fft, const struct PsyDecay *decay, const celt_sig_t *x, const celt_sig_t *y, const celt_word16_t *window, celt_word16_t * __restrict X, int len, int max_pitch, int *pitch);
+void cc6_find_spectral_pitch(const cc6_CELTMode *m, cc6_kiss_fftr_cfg fft, const struct cc6_PsyDecay *decay, const cc6_celt_sig_t *x, const cc6_celt_sig_t *y, const cc6_celt_word16_t *window, cc6_celt_word16_t * __restrict X, int len, int max_pitch, int *pitch);
 
 #endif

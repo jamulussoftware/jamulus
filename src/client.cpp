@@ -52,29 +52,29 @@ CClient::CClient ( const quint16 iPortNumber ) :
     iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL )
 {
     // init audio encoder/decoder (mono)
-    CeltModeMono = celt_mode_create (
+    CeltModeMono = cc6_celt_mode_create (
         SYSTEM_SAMPLE_RATE_HZ, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
-    CeltEncoderMono = celt_encoder_create ( CeltModeMono );
-    CeltDecoderMono = celt_decoder_create ( CeltModeMono );
+    CeltEncoderMono = cc6_celt_encoder_create ( CeltModeMono );
+    CeltDecoderMono = cc6_celt_decoder_create ( CeltModeMono );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
-    celt_encoder_ctl ( CeltEncoderMono,
-        CELT_SET_COMPLEXITY_REQUEST, celt_int32_t ( 1 ) );
+    cc6_celt_encoder_ctl ( CeltEncoderMono,
+        cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
 #endif
 
     // init audio encoder/decoder (stereo)
-    CeltModeStereo = celt_mode_create (
+    CeltModeStereo = cc6_celt_mode_create (
         SYSTEM_SAMPLE_RATE_HZ, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
-    CeltEncoderStereo = celt_encoder_create ( CeltModeStereo );
-    CeltDecoderStereo = celt_decoder_create ( CeltModeStereo );
+    CeltEncoderStereo = cc6_celt_encoder_create ( CeltModeStereo );
+    CeltDecoderStereo = cc6_celt_decoder_create ( CeltModeStereo );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
-    celt_encoder_ctl ( CeltEncoderStereo,
-        CELT_SET_COMPLEXITY_REQUEST, celt_int32_t ( 1 ) );
+    cc6_celt_encoder_ctl ( CeltEncoderStereo,
+        cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
 #endif
 
 
@@ -861,20 +861,20 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         if ( bUseStereo )
         {
             // encode current audio frame with CELT encoder
-            celt_encode ( CeltEncoderStereo,
-                          &vecsNetwork[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
-                          NULL,
-                          &vecCeltData[0],
-                          iCeltNumCodedBytes );
+            cc6_celt_encode ( CeltEncoderStereo,
+                              &vecsNetwork[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                              NULL,
+                              &vecCeltData[0],
+                              iCeltNumCodedBytes );
         }
         else
         {
             // encode current audio frame with CELT encoder
-            celt_encode ( CeltEncoderMono,
-                          &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
-                          NULL,
-                          &vecCeltData[0],
-                          iCeltNumCodedBytes );
+            cc6_celt_encode ( CeltEncoderMono,
+                              &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                              NULL,
+                              &vecCeltData[0],
+                              iCeltNumCodedBytes );
         }
 
         // send coded audio through the network
@@ -904,17 +904,17 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         {
             if ( bUseStereo )
             {
-                celt_decode ( CeltDecoderStereo,
-                              &vecbyNetwData[0],
-                              iCeltNumCodedBytes,
-                              &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+                cc6_celt_decode ( CeltDecoderStereo,
+                                  &vecbyNetwData[0],
+                                  iCeltNumCodedBytes,
+                                  &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
             }
             else
             {
-                celt_decode ( CeltDecoderMono,
-                              &vecbyNetwData[0],
-                              iCeltNumCodedBytes,
-                              &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
+                cc6_celt_decode ( CeltDecoderMono,
+                                  &vecbyNetwData[0],
+                                  iCeltNumCodedBytes,
+                                  &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
             }
         }
         else
@@ -922,17 +922,17 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             // lost packet
             if ( bUseStereo )
             {
-                celt_decode ( CeltDecoderStereo,
-                              NULL,
-                              0,
-                              &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+                cc6_celt_decode ( CeltDecoderStereo,
+                                  NULL,
+                                  0,
+                                  &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
             }
             else
             {
-                celt_decode ( CeltDecoderMono,
-                              NULL,
-                              0,
-                              &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
+                cc6_celt_decode ( CeltDecoderMono,
+                                  NULL,
+                                  0,
+                                  &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
             }
         }
     }

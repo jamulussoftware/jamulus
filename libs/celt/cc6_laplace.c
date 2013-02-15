@@ -35,15 +35,15 @@
 
 #include "cc6_laplace.h"
 
-int ec_laplace_get_start_freq(int decay)
+int cc6_ec_laplace_get_start_freq(int decay)
 {
-   int fs = (((ec_uint32)32768)*(16384-decay))/(16384+decay);
+   int fs = (((cc6_ec_uint32)32768)*(16384-decay))/(16384+decay);
    /* Making fs even so we're sure that all the range is used for +/- values */
    fs -= (fs&1);
    return fs;
 }
 
-void ec_laplace_encode_start(ec_enc *enc, int *value, int decay, int fs)
+void cc6_ec_laplace_encode_start(cc6_ec_enc *enc, int *value, int decay, int fs)
 {
    int i;
    int fl;
@@ -63,7 +63,7 @@ void ec_laplace_encode_start(ec_enc *enc, int *value, int decay, int fs)
       tmp_l = fl;
       tmp_s = fs;
       fl += fs*2;
-      fs = (fs*(ec_int32)decay)>>14;
+      fs = (fs*(cc6_ec_int32)decay)>>14;
       if (fs == 0)
       {
          if (fl+2 <= ft)
@@ -84,17 +84,17 @@ void ec_laplace_encode_start(ec_enc *enc, int *value, int decay, int fs)
       fl = 0;
    if (s)
       fl += fs;
-   ec_encode(enc, fl, fl+fs, ft);
+   cc6_ec_encode(enc, fl, fl+fs, ft);
 }
 
-void ec_laplace_encode(ec_enc *enc, int *value, int decay)
+void cc6_ec_laplace_encode(cc6_ec_enc *enc, int *value, int decay)
 {
-   int fs = ec_laplace_get_start_freq(decay);
-   ec_laplace_encode_start(enc, value, decay, fs);
+   int fs = cc6_ec_laplace_get_start_freq(decay);
+   cc6_ec_laplace_encode_start(enc, value, decay, fs);
 }
 
 
-int ec_laplace_decode_start(ec_dec *dec, int decay, int fs)
+int cc6_ec_laplace_decode_start(cc6_ec_dec *dec, int decay, int fs)
 {
    int val=0;
    int fl, fh, fm;
@@ -102,11 +102,11 @@ int ec_laplace_decode_start(ec_dec *dec, int decay, int fs)
    fl = 0;
    ft = 32768;
    fh = fs;
-   fm = ec_decode(dec, ft);
+   fm = cc6_ec_decode(dec, ft);
    while (fm >= fh && fs != 0)
    {
       fl = fh;
-      fs = (fs*(ec_int32)decay)>>14;
+      fs = (fs*(cc6_ec_int32)decay)>>14;
       if (fs == 0 && fh+2 <= ft)
       {
          fs = 1;
@@ -127,12 +127,12 @@ int ec_laplace_decode_start(ec_dec *dec, int decay, int fs)
    /* Preventing an infinite loop in case something screws up in the decoding */
    if (fl==fh)
       fl--;
-   ec_dec_update(dec, fl, fh, ft);
+   cc6_ec_dec_update(dec, fl, fh, ft);
    return val;
 }
 
-int ec_laplace_decode(ec_dec *dec, int decay)
+int cc6_ec_laplace_decode(cc6_ec_dec *dec, int decay)
 {
-   int fs = ec_laplace_get_start_freq(decay);
-   return ec_laplace_decode_start(dec, decay, fs);
+   int fs = cc6_ec_laplace_get_start_freq(decay);
+   return cc6_ec_laplace_decode_start(dec, decay, fs);
 }

@@ -28,23 +28,23 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef CWRS_H
-#define CWRS_H
+#ifndef cc6_CWRS_H
+#define cc6_CWRS_H
 
 #include "cc6_arch.h"
 #include "cc6_stack_alloc.h"
 #include "cc6_entenc.h"
 #include "cc6_entdec.h"
 
-int log2_frac(ec_uint32 val, int frac);
+int cc6_log2_frac(cc6_ec_uint32 val, int frac);
 
 /* Whether the CWRS codebook will fit into 32 bits */
-int fits_in32(int _n, int _m);
+int cc6_fits_in32(int _n, int _m);
 
-void get_required_bits(celt_int16_t *bits, int N, int K, int frac);
+void cc6_get_required_bits(cc6_celt_int16_t *bits, int N, int K, int frac);
 
-void encode_pulses(int *_y, int N, int K, ec_enc *enc);
+void cc6_encode_pulses(int *_y, int N, int K, cc6_ec_enc *enc);
 
-void decode_pulses(int *_y, int N, int K, ec_dec *dec);
+void cc6_decode_pulses(int *_y, int N, int K, cc6_ec_dec *dec);
 
-#endif /* CWRS_H */
+#endif /* cc6_CWRS_H */

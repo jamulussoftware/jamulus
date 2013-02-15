@@ -12,148 +12,148 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef KISS_FFT_GUTS_H
-#define KISS_FFT_GUTS_H
+#ifndef cc6_KISS_FFT_GUTS_H
+#define cc6_KISS_FFT_GUTS_H
 
-#define MIN(a,b) ((a)<(b) ? (a):(b))
-#define MAX(a,b) ((a)>(b) ? (a):(b))
+#define cc6_MIN(a,b) ((a)<(b) ? (a):(b))
+#define cc6_MAX(a,b) ((a)>(b) ? (a):(b))
 
 /* cc6_kiss_fft.h
-   defines kiss_fft_scalar as either short or a float type
+   defines cc6_kiss_fft_scalar as either short or a float type
    and defines
-   typedef struct { kiss_fft_scalar r; kiss_fft_scalar i; }kiss_fft_cpx; */
+   typedef struct { cc6_kiss_fft_scalar r; cc6_kiss_fft_scalar i; }cc6_kiss_fft_cpx; */
 #include "cc6_kiss_fft.h"
 
-#define MAXFACTORS 32
+#define cc6_MAXFACTORS 32
 /* e.g. an fft of length 128 has 4 factors 
  as far as kissfft is concerned
  4*4*4*2
  */
 
-struct kiss_fft_state{
+struct cc6_kiss_fft_state{
     int nfft;
 #ifndef FIXED_POINT
-    kiss_fft_scalar scale;
+    cc6_kiss_fft_scalar scale;
 #endif
-    int factors[2*MAXFACTORS];
+    int factors[2*cc6_MAXFACTORS];
     int *bitrev;
-    kiss_twiddle_cpx twiddles[1];
+    cc6_kiss_twiddle_cpx twiddles[1];
 };
 
 /*
   Explanation of macros dealing with complex math:
 
-   C_MUL(m,a,b)         : m = a*b
-   C_FIXDIV( c , div )  : if a fixed point impl., c /= div. noop otherwise
-   C_SUB( res, a,b)     : res = a - b
-   C_SUBFROM( res , a)  : res -= a
-   C_ADDTO( res , a)    : res += a
+   cc6_C_MUL(m,a,b)         : m = a*b
+   cc6_C_FIXDIV( c , div )  : if a fixed point impl., c /= div. noop otherwise
+   cc6_C_SUB( res, a,b)     : res = a - b
+   cc6_C_SUBFROM( res , a)  : res -= a
+   cc6_C_ADDTO( res , a)    : res += a
  * */
 #ifdef FIXED_POINT
 #include "cc6_arch.h"
 
 #ifdef DOUBLE_PRECISION
 
-# define FRACBITS 31
-# define SAMPPROD celt_int64_t 
-#define SAMP_MAX 2147483647
+# define cc6_FRACBITS 31
+# define cc6_SAMPPROD cc6_celt_int64_t
+#define cc6_SAMP_MAX 2147483647
 #ifdef MIXED_PRECISION
-#define TWID_MAX 32767
-#define TRIG_UPSCALE 1
+#define cc6_TWID_MAX 32767
+#define cc6_TRIG_UPSCALE 1
 #else
-#define TRIG_UPSCALE 65536
-#define TWID_MAX 2147483647
+#define cc6_TRIG_UPSCALE 65536
+#define cc6_TWID_MAX 2147483647
 #endif
-#define EXT32(a) (a)
+#define cc6_EXT32(a) (a)
 
 #else /* DOUBLE_PRECISION */
 
-# define FRACBITS 15
-# define SAMPPROD celt_int32_t 
-#define SAMP_MAX 32767
-#define TRIG_UPSCALE 1
-#define EXT32(a) EXTEND32(a)
+# define cc6_FRACBITS 15
+# define cc6_SAMPPROD cc6_celt_int32_t
+#define cc6_SAMP_MAX 32767
+#define cc6_TRIG_UPSCALE 1
+#define cc6_EXT32(a) cc6_EXTEND32(a)
 
 #endif /* !DOUBLE_PRECISION */
 
-#define SAMP_MIN -SAMP_MAX
+#define cc6_SAMP_MIN -cc6_SAMP_MAX
 
 #if defined(CHECK_OVERFLOW)
-#  define CHECK_OVERFLOW_OP(a,op,b)  \
-	if ( (SAMPPROD)(a) op (SAMPPROD)(b) > SAMP_MAX || (SAMPPROD)(a) op (SAMPPROD)(b) < SAMP_MIN ) { \
-		fprintf(stderr,"WARNING:overflow @ " __FILE__ "(%d): (%d " #op" %d) = %ld\n",__LINE__,(a),(b),(SAMPPROD)(a) op (SAMPPROD)(b) );  }
+#  define cc6_CHECK_OVERFLOW_OP(a,op,b)  \
+    if ( (cc6_SAMPPROD)(a) op (cc6_SAMPPROD)(b) > cc6_SAMP_MAX || (cc6_SAMPPROD)(a) op (cc6_SAMPPROD)(b) < cc6_SAMP_MIN ) { \
+        fprintf(stderr,"WARNING:overflow @ " __FILE__ "(%d): (%d " #op" %d) = %ld\n",__LINE__,(a),(b),(cc6_SAMPPROD)(a) op (cc6_SAMPPROD)(b) );  }
 #endif
 
-#   define smul(a,b) ( (SAMPPROD)(a)*(b) )
-#   define sround( x )  (kiss_fft_scalar)( ( (x) + ((SAMPPROD)1<<(FRACBITS-1)) ) >> FRACBITS )
+#   define cc6_smul(a,b) ( (cc6_SAMPPROD)(a)*(b) )
+#   define cc6_sround( x )  (cc6_kiss_fft_scalar)( ( (x) + ((cc6_SAMPPROD)1<<(cc6_FRACBITS-1)) ) >> cc6_FRACBITS )
 
 #ifdef MIXED_PRECISION
 
-#   define S_MUL(a,b) MULT16_32_Q15(b, a)
+#   define cc6_S_MUL(a,b) cc6_MULT16_32_Q15(b, a)
 
-#   define C_MUL(m,a,b) \
-      do{ (m).r = SUB32(S_MUL((a).r,(b).r) , S_MUL((a).i,(b).i)); \
-          (m).i = ADD32(S_MUL((a).r,(b).i) , S_MUL((a).i,(b).r)); }while(0)
+#   define cc6_C_MUL(m,a,b) \
+      do{ (m).r = cc6_SUB32(cc6_S_MUL((a).r,(b).r) , cc6_S_MUL((a).i,(b).i)); \
+          (m).i = cc6_ADD32(cc6_S_MUL((a).r,(b).i) , cc6_S_MUL((a).i,(b).r)); }while(0)
 
-#   define C_MULC(m,a,b) \
-      do{ (m).r = ADD32(S_MUL((a).r,(b).r) , S_MUL((a).i,(b).i)); \
-          (m).i = SUB32(S_MUL((a).i,(b).r) , S_MUL((a).r,(b).i)); }while(0)
+#   define cc6_C_MULC(m,a,b) \
+      do{ (m).r = cc6_ADD32(cc6_S_MUL((a).r,(b).r) , cc6_S_MUL((a).i,(b).i)); \
+          (m).i = cc6_SUB32(cc6_S_MUL((a).i,(b).r) , cc6_S_MUL((a).r,(b).i)); }while(0)
 
-#   define C_MUL4(m,a,b) \
-      do{ (m).r = SHR(SUB32(S_MUL((a).r,(b).r) , S_MUL((a).i,(b).i)),2); \
-          (m).i = SHR(ADD32(S_MUL((a).r,(b).i) , S_MUL((a).i,(b).r)),2); }while(0)
+#   define cc6_C_MUL4(m,a,b) \
+      do{ (m).r = cc6_SHR(cc6_SUB32(cc6_S_MUL((a).r,(b).r) , cc6_S_MUL((a).i,(b).i)),2); \
+          (m).i = cc6_SHR(cc6_ADD32(cc6_S_MUL((a).r,(b).i) , cc6_S_MUL((a).i,(b).r)),2); }while(0)
 
-#   define C_MULBYSCALAR( c, s ) \
-      do{ (c).r =  S_MUL( (c).r , s ) ;\
-          (c).i =  S_MUL( (c).i , s ) ; }while(0)
+#   define cc6_C_MULBYSCALAR( c, s ) \
+      do{ (c).r =  cc6_S_MUL( (c).r , s ) ;\
+          (c).i =  cc6_S_MUL( (c).i , s ) ; }while(0)
 
-#   define DIVSCALAR(x,k) \
-        (x) = S_MUL(  x, (TWID_MAX-((k)>>1))/(k)+1 )
+#   define cc6_DIVSCALAR(x,k) \
+        (x) = cc6_S_MUL(  x, (cc6_TWID_MAX-((k)>>1))/(k)+1 )
 
-#   define C_FIXDIV(c,div) \
-        do {    DIVSCALAR( (c).r , div);  \
-                DIVSCALAR( (c).i  , div); }while (0)
+#   define cc6_C_FIXDIV(c,div) \
+        do {    cc6_DIVSCALAR( (c).r , div);  \
+                cc6_DIVSCALAR( (c).i  , div); }while (0)
 
-#define  C_ADD( res, a,b)\
-    do {(res).r=ADD32((a).r,(b).r);  (res).i=ADD32((a).i,(b).i); \
+#define  cc6_C_ADD( res, a,b)\
+    do {(res).r=cc6_ADD32((a).r,(b).r);  (res).i=cc6_ADD32((a).i,(b).i); \
     }while(0)
-#define  C_SUB( res, a,b)\
-    do {(res).r=SUB32((a).r,(b).r);  (res).i=SUB32((a).i,(b).i); \
+#define  cc6_C_SUB( res, a,b)\
+    do {(res).r=cc6_SUB32((a).r,(b).r);  (res).i=cc6_SUB32((a).i,(b).i); \
     }while(0)
-#define C_ADDTO( res , a)\
-    do {(res).r = ADD32((res).r, (a).r);  (res).i = ADD32((res).i,(a).i);\
+#define cc6_C_ADDTO( res , a)\
+    do {(res).r = cc6_ADD32((res).r, (a).r);  (res).i = cc6_ADD32((res).i,(a).i);\
     }while(0)
 
-#define C_SUBFROM( res , a)\
-    do {(res).r = ADD32((res).r,(a).r);  (res).i = SUB32((res).i,(a).i); \
+#define cc6_C_SUBFROM( res , a)\
+    do {(res).r = cc6_ADD32((res).r,(a).r);  (res).i = cc6_SUB32((res).i,(a).i); \
     }while(0)
 
 #else /* MIXED_PRECISION */
-#   define sround4( x )  (kiss_fft_scalar)( ( (x) + ((SAMPPROD)1<<(FRACBITS-1)) ) >> (FRACBITS+2) )
+#   define cc6_sround4( x )  (cc6_kiss_fft_scalar)( ( (x) + ((cc6_SAMPPROD)1<<(cc6_FRACBITS-1)) ) >> (cc6_FRACBITS+2) )
 
-#   define S_MUL(a,b) sround( smul(a,b) )
+#   define cc6_S_MUL(a,b) cc6_sround( cc6_smul(a,b) )
 
-#   define C_MUL(m,a,b) \
-      do{ (m).r = sround( smul((a).r,(b).r) - smul((a).i,(b).i) ); \
-          (m).i = sround( smul((a).r,(b).i) + smul((a).i,(b).r) ); }while(0)
-#   define C_MULC(m,a,b) \
-      do{ (m).r = sround( smul((a).r,(b).r) + smul((a).i,(b).i) ); \
-          (m).i = sround( smul((a).i,(b).r) - smul((a).r,(b).i) ); }while(0)
+#   define cc6_C_MUL(m,a,b) \
+      do{ (m).r = cc6_sround( cc6_smul((a).r,(b).r) - cc6_smul((a).i,(b).i) ); \
+          (m).i = cc6_sround( cc6_smul((a).r,(b).i) + cc6_smul((a).i,(b).r) ); }while(0)
+#   define cc6_C_MULC(m,a,b) \
+      do{ (m).r = cc6_sround( cc6_smul((a).r,(b).r) + cc6_smul((a).i,(b).i) ); \
+          (m).i = cc6_sround( cc6_smul((a).i,(b).r) - cc6_smul((a).r,(b).i) ); }while(0)
 
-#   define C_MUL4(m,a,b) \
-               do{ (m).r = sround4( smul((a).r,(b).r) - smul((a).i,(b).i) ); \
-               (m).i = sround4( smul((a).r,(b).i) + smul((a).i,(b).r) ); }while(0)
+#   define cc6_C_MUL4(m,a,b) \
+               do{ (m).r = cc6_sround4( cc6_smul((a).r,(b).r) - cc6_smul((a).i,(b).i) ); \
+               (m).i = cc6_sround4( cc6_smul((a).r,(b).i) + cc6_smul((a).i,(b).r) ); }while(0)
 
-#   define C_MULBYSCALAR( c, s ) \
-               do{ (c).r =  sround( smul( (c).r , s ) ) ;\
-               (c).i =  sround( smul( (c).i , s ) ) ; }while(0)
+#   define cc6_C_MULBYSCALAR( c, s ) \
+               do{ (c).r =  cc6_sround( cc6_smul( (c).r , s ) ) ;\
+               (c).i =  cc6_sround( cc6_smul( (c).i , s ) ) ; }while(0)
 
-#   define DIVSCALAR(x,k) \
-	(x) = sround( smul(  x, SAMP_MAX/k ) )
+#   define cc6_DIVSCALAR(x,k) \
+    (x) = cc6_sround( cc6_smul(  x, cc6_SAMP_MAX/k ) )
 
-#   define C_FIXDIV(c,div) \
-	do {    DIVSCALAR( (c).r , div);  \
-		DIVSCALAR( (c).i  , div); }while (0)
+#   define cc6_C_FIXDIV(c,div) \
+    do {    cc6_DIVSCALAR( (c).r , div);  \
+        cc6_DIVSCALAR( (c).i  , div); }while (0)
 
 #endif /* !MIXED_PRECISION */
 
@@ -161,85 +161,85 @@ struct kiss_fft_state{
 
 #else  /* not FIXED_POINT*/
 
-#define EXT32(a) (a)
+#define cc6_EXT32(a) (a)
 
-#   define S_MUL(a,b) ( (a)*(b) )
-#define C_MUL(m,a,b) \
+#   define cc6_S_MUL(a,b) ( (a)*(b) )
+#define cc6_C_MUL(m,a,b) \
     do{ (m).r = (a).r*(b).r - (a).i*(b).i;\
         (m).i = (a).r*(b).i + (a).i*(b).r; }while(0)
-#define C_MULC(m,a,b) \
+#define cc6_C_MULC(m,a,b) \
     do{ (m).r = (a).r*(b).r + (a).i*(b).i;\
         (m).i = (a).i*(b).r - (a).r*(b).i; }while(0)
 
-#define C_MUL4(m,a,b) C_MUL(m,a,b)
+#define cc6_C_MUL4(m,a,b) cc6_C_MUL(m,a,b)
 
-#   define C_FIXDIV(c,div) /* NOOP */
-#   define C_MULBYSCALAR( c, s ) \
+#   define cc6_C_FIXDIV(c,div) /* NOOP */
+#   define cc6_C_MULBYSCALAR( c, s ) \
     do{ (c).r *= (s);\
         (c).i *= (s); }while(0)
 #endif
 
 
 
-#ifndef CHECK_OVERFLOW_OP
-#  define CHECK_OVERFLOW_OP(a,op,b) /* noop */
+#ifndef cc6_CHECK_OVERFLOW_OP
+#  define cc6_CHECK_OVERFLOW_OP(a,op,b) /* noop */
 #endif
 
-#ifndef C_ADD
-#define  C_ADD( res, a,b)\
+#ifndef cc6_C_ADD
+#define  cc6_C_ADD( res, a,b)\
     do { \
-	    CHECK_OVERFLOW_OP((a).r,+,(b).r)\
-	    CHECK_OVERFLOW_OP((a).i,+,(b).i)\
+        cc6_CHECK_OVERFLOW_OP((a).r,+,(b).r)\
+        cc6_CHECK_OVERFLOW_OP((a).i,+,(b).i)\
 	    (res).r=(a).r+(b).r;  (res).i=(a).i+(b).i; \
     }while(0)
-#define  C_SUB( res, a,b)\
+#define  cc6_C_SUB( res, a,b)\
     do { \
-	    CHECK_OVERFLOW_OP((a).r,-,(b).r)\
-	    CHECK_OVERFLOW_OP((a).i,-,(b).i)\
+        cc6_CHECK_OVERFLOW_OP((a).r,-,(b).r)\
+        cc6_CHECK_OVERFLOW_OP((a).i,-,(b).i)\
 	    (res).r=(a).r-(b).r;  (res).i=(a).i-(b).i; \
     }while(0)
-#define C_ADDTO( res , a)\
+#define cc6_C_ADDTO( res , a)\
     do { \
-	    CHECK_OVERFLOW_OP((res).r,+,(a).r)\
-	    CHECK_OVERFLOW_OP((res).i,+,(a).i)\
+        cc6_CHECK_OVERFLOW_OP((res).r,+,(a).r)\
+        cc6_CHECK_OVERFLOW_OP((res).i,+,(a).i)\
 	    (res).r += (a).r;  (res).i += (a).i;\
     }while(0)
 
-#define C_SUBFROM( res , a)\
+#define cc6_C_SUBFROM( res , a)\
     do {\
-	    CHECK_OVERFLOW_OP((res).r,-,(a).r)\
-	    CHECK_OVERFLOW_OP((res).i,-,(a).i)\
+        cc6_CHECK_OVERFLOW_OP((res).r,-,(a).r)\
+        cc6_CHECK_OVERFLOW_OP((res).i,-,(a).i)\
 	    (res).r -= (a).r;  (res).i -= (a).i; \
     }while(0)
-#endif /* C_ADD defined */
+#endif /* cc6_C_ADD defined */
 
 #ifdef FIXED_POINT
-/*#  define KISS_FFT_COS(phase)  TRIG_UPSCALE*floor(MIN(32767,MAX(-32767,.5+32768 * cos (phase))))
-#  define KISS_FFT_SIN(phase)  TRIG_UPSCALE*floor(MIN(32767,MAX(-32767,.5+32768 * sin (phase))))*/
-#  define KISS_FFT_COS(phase)  floor(.5+TWID_MAX*cos (phase))
-#  define KISS_FFT_SIN(phase)  floor(.5+TWID_MAX*sin (phase))
-#  define HALF_OF(x) ((x)>>1)
+/*#  define cc6_KISS_FFT_COS(phase)  cc6_TRIG_UPSCALE*floor(cc6_MIN(32767,cc6_MAX(-32767,.5+32768 * cos (phase))))
+#  define cc6_KISS_FFT_SIN(phase)  cc6_TRIG_UPSCALE*floor(cc6_MIN(32767,cc6_MAX(-32767,.5+32768 * sin (phase))))*/
+#  define cc6_KISS_FFT_COS(phase)  floor(.5+cc6_TWID_MAX*cos (phase))
+#  define cc6_KISS_FFT_SIN(phase)  floor(.5+cc6_TWID_MAX*sin (phase))
+#  define cc6_HALF_OF(x) ((x)>>1)
 #elif defined(USE_SIMD)
-#  define KISS_FFT_COS(phase) _mm_set1_ps( cos(phase) )
-#  define KISS_FFT_SIN(phase) _mm_set1_ps( sin(phase) )
-#  define HALF_OF(x) ((x)*_mm_set1_ps(.5))
+#  define cc6_KISS_FFT_COS(phase) _mm_set1_ps( cos(phase) )
+#  define cc6_KISS_FFT_SIN(phase) _mm_set1_ps( sin(phase) )
+#  define cc6_HALF_OF(x) ((x)*_mm_set1_ps(.5))
 #else
-#  define KISS_FFT_COS(phase) (kiss_fft_scalar) cos(phase)
-#  define KISS_FFT_SIN(phase) (kiss_fft_scalar) sin(phase)
-#  define HALF_OF(x) ((x)*.5)
+#  define cc6_KISS_FFT_COS(phase) (cc6_kiss_fft_scalar) cos(phase)
+#  define cc6_KISS_FFT_SIN(phase) (cc6_kiss_fft_scalar) sin(phase)
+#  define cc6_HALF_OF(x) ((x)*.5)
 #endif
 
 #define  kf_cexp(x,phase) \
 	do{ \
-		(x)->r = KISS_FFT_COS(phase);\
-		(x)->i = KISS_FFT_SIN(phase);\
+        (x)->r = cc6_KISS_FFT_COS(phase);\
+        (x)->i = cc6_KISS_FFT_SIN(phase);\
 	}while(0)
    
 #define  kf_cexp2(x,phase) \
    do{ \
-      (x)->r = TRIG_UPSCALE*celt_cos_norm((phase));\
-      (x)->i = TRIG_UPSCALE*celt_cos_norm((phase)-32768);\
+      (x)->r = cc6_TRIG_UPSCALE*cc6_celt_cos_norm((phase));\
+      (x)->i = cc6_TRIG_UPSCALE*cc6_celt_cos_norm((phase)-32768);\
 }while(0)
 
 
-#endif /* KISS_FFT_GUTS_H */
+#endif /* cc6_KISS_FFT_GUTS_H */

@@ -41,18 +41,18 @@
 #include "cc6_mathops.h"
 
 /* The Vorbis freq<->Bark mapping */
-#define toBARK(n)   (13.1f*atan(.00074f*(n))+2.24f*atan((n)*(n)*1.85e-8f)+1e-4f*(n))
-#define fromBARK(z) (102.f*(z)-2.f*pow(z,2.f)+.4f*pow(z,3.f)+pow(1.46f,z)-1.f)
+#define cc6_toBARK(n)   (13.1f*atan(.00074f*(n))+2.24f*atan((n)*(n)*1.85e-8f)+1e-4f*(n))
+#define cc6_fromBARK(z) (102.f*(z)-2.f*pow(z,2.f)+.4f*pow(z,3.f)+pow(1.46f,z)-1.f)
 
 #ifndef STATIC_MODES
 /* Psychoacoustic spreading function. The idea here is compute a first order 
    recursive filter. The filter coefficient is frequency dependent and 
    chosen such that we have a -10dB/Bark slope on the right side and a -25dB/Bark
    slope on the left side. */
-void psydecay_init(struct PsyDecay *decay, int len, celt_int32_t Fs)
+void cc6_psydecay_init(struct cc6_PsyDecay *decay, int len, cc6_celt_int32_t Fs)
 {
    int i;
-   celt_word16_t *decayR = (celt_word16_t*)celt_alloc(sizeof(celt_word16_t)*len);
+   cc6_celt_word16_t *decayR = (cc6_celt_word16_t*)cc6_celt_alloc(sizeof(cc6_celt_word16_t)*len);
    decay->decayR = decayR;
    if (decayR==NULL)
      return;
@@ -67,30 +67,30 @@ void psydecay_init(struct PsyDecay *decay, int len, celt_int32_t Fs)
       /* Back to FFT bin units */
       deriv *= Fs*(1/(2.f*len));
       /* decay corresponding to -10dB/Bark */
-      decayR[i] = Q15ONE*pow(.1f, deriv);
+      decayR[i] = cc6_Q15ONE*pow(.1f, deriv);
       /* decay corresponding to -25dB/Bark */
-      /*decay->decayL[i] = Q15ONE*pow(0.0031623f, deriv);*/
+      /*decay->decayL[i] = cc6_Q15ONE*pow(0.0031623f, deriv);*/
       /*printf ("%f %f\n", decayL[i], decayR[i]);*/
    }
 }
 
-void psydecay_clear(struct PsyDecay *decay)
+void cc6_psydecay_clear(struct cc6_PsyDecay *decay)
 {
-   celt_free((celt_word16_t *)decay->decayR);
-   /*celt_free(decay->decayL);*/
+   cc6_celt_free((cc6_celt_word16_t *)decay->decayR);
+   /*cc6_celt_free(decay->decayL);*/
 }
 #endif
 
-static void spreading_func(const struct PsyDecay *d, celt_word32_t * __restrict psd, int len)
+static void cc6_spreading_func(const struct cc6_PsyDecay *d, cc6_celt_word32_t * __restrict psd, int len)
 {
    int i;
-   celt_word32_t mem;
+   cc6_celt_word32_t mem;
    /* Compute right slope (-10 dB/Bark) */
    mem=psd[0];
    for (i=0;i<len;i++)
    {
       /* psd = (1-decay)*psd + decay*mem */
-      psd[i] = EPSILON + psd[i] + MULT16_32_Q15(d->decayR[i],mem-psd[i]);
+      psd[i] = cc6_EPSILON + psd[i] + cc6_MULT16_32_Q15(d->decayR[i],mem-psd[i]);
       mem = psd[i];
    }
    /* Compute left slope (-25 dB/Bark) */
@@ -99,9 +99,9 @@ static void spreading_func(const struct PsyDecay *d, celt_word32_t * __restrict 
    {
       /* Left side has around twice the slope as the right side, so we just
          square the coef instead of storing two sets of decay coefs */
-      celt_word16_t decayL = MULT16_16_Q15(d->decayR[i], d->decayR[i]);
+      cc6_celt_word16_t decayL = cc6_MULT16_16_Q15(d->decayR[i], d->decayR[i]);
       /* psd = (1-decay)*psd + decay*mem */
-      psd[i] = EPSILON + psd[i] + MULT16_32_Q15(decayL,mem-psd[i]);
+      psd[i] = cc6_EPSILON + psd[i] + cc6_MULT16_32_Q15(decayL,mem-psd[i]);
       mem = psd[i];
    }
 #if 0 /* Prints signal and mask energy per critical band */
@@ -109,11 +109,11 @@ static void spreading_func(const struct PsyDecay *d, celt_word32_t * __restrict 
    {
       int start,end;
       int j;
-      celt_word32_t Esig=0, Emask=0;
-      start = (int)floor(fromBARK((float)i)*(2*len)/Fs);
+      cc6_celt_word32_t Esig=0, Emask=0;
+      start = (int)floor(cc6_fromBARK((float)i)*(2*len)/Fs);
       if (start<0)
          start = 0;
-      end = (int)ceil(fromBARK((float)(i+1))*(2*len)/Fs);
+      end = (int)ceil(cc6_fromBARK((float)(i+1))*(2*len)/Fs);
       if (end<=start)
          end = start+1;
       if (end>len-1)
@@ -130,26 +130,26 @@ static void spreading_func(const struct PsyDecay *d, celt_word32_t * __restrict 
 }
 
 /* Compute a marking threshold from the spectrum X. */
-void compute_masking(const struct PsyDecay *decay, celt_word16_t *X, celt_mask_t * __restrict mask, int len)
+void cc6_compute_masking(const struct cc6_PsyDecay *decay, cc6_celt_word16_t *X, cc6_celt_mask_t * __restrict mask, int len)
 {
    int i;
    int N;
    N=len>>1;
-   mask[0] = MULT16_16(X[0], X[0]);
+   mask[0] = cc6_MULT16_16(X[0], X[0]);
    for (i=1;i<N;i++)
-      mask[i] = ADD32(MULT16_16(X[i*2], X[i*2]), MULT16_16(X[i*2+1], X[i*2+1]));
+      mask[i] = cc6_ADD32(cc6_MULT16_16(X[i*2], X[i*2]), cc6_MULT16_16(X[i*2+1], X[i*2+1]));
    /* TODO: Do tone masking */
    /* Noise masking */
-   spreading_func(decay, mask, N);
+   cc6_spreading_func(decay, mask, N);
 }
 
 #ifdef EXP_PSY /* Not needed for now, but will be useful in the future */
-void compute_mdct_masking(const struct PsyDecay *decay, celt_word32_t *X, celt_word16_t *tonality, celt_word16_t *long_window, celt_mask_t *mask, int len)
+void cc6_compute_mdct_masking(const struct cc6_PsyDecay *decay, cc6_celt_word32_t *X, cc6_celt_word16_t *tonality, cc6_celt_word16_t *long_window, cc6_celt_mask_t *mask, int len)
 {
    int i;
-   VARDECL(float, psd);
-   SAVE_STACK;
-   ALLOC(psd, len, float);
+   cc6_VARDECL(float, psd);
+   cc6_SAVE_STACK;
+   cc6_ALLOC(psd, len, float);
    for (i=0;i<len;i++)
       psd[i] = X[i]*X[i]*tonality[i];
    for (i=1;i<len-1;i++)
@@ -159,15 +159,15 @@ void compute_mdct_masking(const struct PsyDecay *decay, celt_word32_t *X, celt_w
    mask[len-1] = .5*(psd[len-1]+psd[len-2]);
    /* TODO: Do tone masking */
    /* Noise masking */
-   spreading_func(decay, mask, len);
-   RESTORE_STACK;  
+   cc6_spreading_func(decay, mask, len);
+   cc6_RESTORE_STACK;
 }
 
-void compute_tonality(const CELTMode *m, celt_word16_t * restrict X, celt_word16_t * mem, int len, celt_word16_t *tonality, int mdct_size)
+void cc6_compute_tonality(const cc6_CELTMode *m, cc6_celt_word16_t * restrict X, cc6_celt_word16_t * mem, int len, cc6_celt_word16_t *tonality, int mdct_size)
 {
    int i;
-   celt_word16_t norm_1;
-   celt_word16_t *mem2;
+   cc6_celt_word16_t norm_1;
+   cc6_celt_word16_t *mem2;
    int N = len>>2;
 
    mem2 = mem+2*N;
@@ -176,13 +176,13 @@ void compute_tonality(const CELTMode *m, celt_word16_t * restrict X, celt_word16
    tonality[0] = 1;
    for (i=1;i<N;i++)
    {
-      celt_word16_t re, im, re2, im2;
+      cc6_celt_word16_t re, im, re2, im2;
       re = X[2*i];
       im = X[2*i+1];
       /* Normalise spectrum */
-      norm_1 = celt_rsqrt(.01+MAC16_16(MULT16_16(re,re), im,im));
-      re = MULT16_16(re, norm_1);
-      im = MULT16_16(im, norm_1);
+      norm_1 = cc6_celt_rsqrt(.01+cc6_MAC16_16(cc6_MULT16_16(re,re), im,im));
+      re = cc6_MULT16_16(re, norm_1);
+      im = cc6_MULT16_16(im, norm_1);
       /* Phase derivative */
       re2 = re*mem[2*i] + im*mem[2*i+1];
       im2 = im*mem[2*i] - re*mem[2*i+1];

@@ -31,29 +31,29 @@
 
 #include "cc6_celt_types.h"
 
-#if !defined(_entcode_H)
-# define _entcode_H (1)
+#if !defined(cc6__entcode_H)
+# define cc6__entcode_H (1)
 # include <limits.h>
 # include "cc6_ecintrin.h"
 
 
 
-typedef celt_int32_t ec_int32;
-typedef celt_uint32_t ec_uint32;
-typedef celt_uint64_t ec_uint64;
-typedef struct ec_byte_buffer ec_byte_buffer;
+typedef cc6_celt_int32_t cc6_ec_int32;
+typedef cc6_celt_uint32_t cc6_ec_uint32;
+typedef cc6_celt_uint64_t cc6_ec_uint64;
+typedef struct cc6_ec_byte_buffer cc6_ec_byte_buffer;
 
 
 
 /*The number of bits to code at a time when coding bits directly.*/
-# define EC_UNIT_BITS  (8)
+# define cc6_EC_UNIT_BITS  (8)
 /*The mask for the given bits.*/
-# define EC_UNIT_MASK  ((1U<<EC_UNIT_BITS)-1)
+# define cc6_EC_UNIT_MASK  ((1U<<cc6_EC_UNIT_BITS)-1)
 
 
 
 /*Simple libogg1-style buffer.*/
-struct ec_byte_buffer{
+struct cc6_ec_byte_buffer{
   unsigned char *buf;
   unsigned char *ptr;
   long           storage;
@@ -61,35 +61,35 @@ struct ec_byte_buffer{
 };
 
 /*Encoding functions.*/
-void ec_byte_writeinit_buffer(ec_byte_buffer *_b, unsigned char *_buf, long _size);
-void ec_byte_writeinit(ec_byte_buffer *_b);
-void ec_byte_writetrunc(ec_byte_buffer *_b,long _bytes);
-void ec_byte_write1(ec_byte_buffer *_b,unsigned _value);
-void ec_byte_write4(ec_byte_buffer *_b,ec_uint32 _value);
-void ec_byte_writecopy(ec_byte_buffer *_b,void *_source,long _bytes);
-void ec_byte_writeclear(ec_byte_buffer *_b);
+void cc6_ec_byte_writeinit_buffer(cc6_ec_byte_buffer *_b, unsigned char *_buf, long _size);
+void cc6_ec_byte_writeinit(cc6_ec_byte_buffer *_b);
+void cc6_ec_byte_writetrunc(cc6_ec_byte_buffer *_b,long _bytes);
+void cc6_ec_byte_write1(cc6_ec_byte_buffer *_b,unsigned _value);
+void cc6_ec_byte_write4(cc6_ec_byte_buffer *_b,cc6_ec_uint32 _value);
+void cc6_ec_byte_writecopy(cc6_ec_byte_buffer *_b,void *_source,long _bytes);
+void cc6_ec_byte_writeclear(cc6_ec_byte_buffer *_b);
 /*Decoding functions.*/
-void ec_byte_readinit(ec_byte_buffer *_b,unsigned char *_buf,long _bytes);
-int ec_byte_look1(ec_byte_buffer *_b);
-int ec_byte_look4(ec_byte_buffer *_b,ec_uint32 *_val);
-void ec_byte_adv1(ec_byte_buffer *_b);
-void ec_byte_adv4(ec_byte_buffer *_b);
-int ec_byte_read1(ec_byte_buffer *_b);
-int ec_byte_read4(ec_byte_buffer *_b,ec_uint32 *_val);
+void cc6_ec_byte_readinit(cc6_ec_byte_buffer *_b,unsigned char *_buf,long _bytes);
+int cc6_ec_byte_look1(cc6_ec_byte_buffer *_b);
+int cc6_ec_byte_look4(cc6_ec_byte_buffer *_b,cc6_ec_uint32 *_val);
+void cc6_ec_byte_adv1(cc6_ec_byte_buffer *_b);
+void cc6_ec_byte_adv4(cc6_ec_byte_buffer *_b);
+int cc6_ec_byte_read1(cc6_ec_byte_buffer *_b);
+int cc6_ec_byte_read4(cc6_ec_byte_buffer *_b,cc6_ec_uint32 *_val);
 /*Shared functions.*/
-static __inline void ec_byte_reset(ec_byte_buffer *_b){
+static __inline void cc6_ec_byte_reset(cc6_ec_byte_buffer *_b){
    _b->ptr=_b->buf;
 }
 
-static __inline long ec_byte_bytes(ec_byte_buffer *_b){
+static __inline long cc6_ec_byte_bytes(cc6_ec_byte_buffer *_b){
    return _b->ptr-_b->buf;
 }
 
-static __inline unsigned char *ec_byte_get_buffer(ec_byte_buffer *_b){
+static __inline unsigned char *cc6_ec_byte_get_buffer(cc6_ec_byte_buffer *_b){
    return _b->buf;
 }
 
-int ec_ilog(ec_uint32 _v);
-int ec_ilog64(ec_uint64 _v);
+int cc6_ec_ilog(cc6_ec_uint32 _v);
+int cc6_ec_ilog64(cc6_ec_uint64 _v);
 
 #endif

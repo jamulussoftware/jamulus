@@ -31,8 +31,8 @@
    POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef OS_SUPPORT_H
-#define OS_SUPPORT_H
+#ifndef cc6_OS_SUPPORT_H
+#define cc6_OS_SUPPORT_H
 
 #ifdef CUSTOM_SUPPORT
 #  include "custom_support.h"
@@ -42,10 +42,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/** Speex wrapper for calloc. To do your own dynamic allocation, all you need to do is replace this function, celt_realloc and celt_free 
-    NOTE: celt_alloc needs to CLEAR THE MEMORY */
+/** Speex wrapper for calloc. To do your own dynamic allocation, all you need to do is replace this function, cc6_celt_realloc and celt_free
+    NOTE: cc6_celt_alloc needs to CLEAR THE MEMORY */
 #ifndef OVERRIDE_CELT_ALLOC
-static __inline void *celt_alloc (int size)
+static __inline void *cc6_celt_alloc (int size)
 {
    /* WARNING: this is not equivalent to malloc(). If you want to use malloc() 
       or your own allocator, YOU NEED TO CLEAR THE MEMORY ALLOCATED. Otherwise
@@ -56,7 +56,7 @@ static __inline void *celt_alloc (int size)
 
 /** Same as celt_alloc, except that the area is only needed inside a Speex call (might cause problem with wideband though) */
 #ifndef OVERRIDE_CELT_ALLOC_SCRATCH
-static __inline void *celt_alloc_scratch (int size)
+static __inline void *cc6_celt_alloc_scratch (int size)
 {
    /* Scratch space doesn't need to be cleared */
    return calloc(size,1);
@@ -65,15 +65,15 @@ static __inline void *celt_alloc_scratch (int size)
 
 /** Speex wrapper for realloc. To do your own dynamic allocation, all you need to do is replace this function, celt_alloc and celt_free */
 #ifndef OVERRIDE_CELT_REALLOC
-static __inline void *celt_realloc (void *ptr, int size)
+static __inline void *cc6_celt_realloc (void *ptr, int size)
 {
    return realloc(ptr, size);
 }
 #endif
 
-/** Speex wrapper for calloc. To do your own dynamic allocation, all you need to do is replace this function, celt_realloc and celt_alloc */
+/** Speex wrapper for calloc. To do your own dynamic allocation, all you need to do is replace this function, cc6_celt_realloc and celt_alloc */
 #ifndef OVERRIDE_CELT_FREE
-static __inline void celt_free (void *ptr)
+static __inline void cc6_celt_free (void *ptr)
 {
    free(ptr);
 }
@@ -81,7 +81,7 @@ static __inline void celt_free (void *ptr)
 
 /** Same as celt_free, except that the area is only needed inside a Speex call (might cause problem with wideband though) */
 #ifndef OVERRIDE_CELT_FREE_SCRATCH
-static __inline void celt_free_scratch (void *ptr)
+static __inline void cc6_celt_free_scratch (void *ptr)
 {
    free(ptr);
 }
@@ -89,23 +89,23 @@ static __inline void celt_free_scratch (void *ptr)
 
 /** Copy n bytes of memory from src to dst. The 0* term provides compile-time type checking  */
 #ifndef OVERRIDE_CELT_COPY
-#define CELT_COPY(dst, src, n) (memcpy((dst), (src), (n)*sizeof(*(dst)) + 0*((dst)-(src)) ))
+#define cc6_CELT_COPY(dst, src, n) (memcpy((dst), (src), (n)*sizeof(*(dst)) + 0*((dst)-(src)) ))
 #endif
 
 /** Copy n bytes of memory from src to dst, allowing overlapping regions. The 0* term 
     provides compile-time type checking */
 #ifndef OVERRIDE_CELT_MOVE
-#define CELT_MOVE(dst, src, n) (memmove((dst), (src), (n)*sizeof(*(dst)) + 0*((dst)-(src)) ))
+#define cc6_CELT_MOVE(dst, src, n) (memmove((dst), (src), (n)*sizeof(*(dst)) + 0*((dst)-(src)) ))
 #endif
 
 /** Set n bytes of memory to value of c, starting at address s */
 #ifndef OVERRIDE_CELT_MEMSET
-#define CELT_MEMSET(dst, c, n) (memset((dst), (c), (n)*sizeof(*(dst))))
+#define cc6_CELT_MEMSET(dst, c, n) (memset((dst), (c), (n)*sizeof(*(dst))))
 #endif
 
 
 #ifndef OVERRIDE_CELT_FATAL
-static __inline void _celt_fatal(const char *str, const char *file, int line)
+static __inline void cc6__celt_fatal(const char *str, const char *file, int line)
 {
    fprintf (stderr, "Fatal (internal) error in %s, line %d: %s\n", file, line, str);
    abort();
@@ -113,7 +113,7 @@ static __inline void _celt_fatal(const char *str, const char *file, int line)
 #endif
 
 #ifndef OVERRIDE_CELT_WARNING
-static __inline void celt_warning(const char *str)
+static __inline void cc6_celt_warning(const char *str)
 {
 #ifndef DISABLE_WARNINGS
    fprintf (stderr, "warning: %s\n", str);
@@ -122,7 +122,7 @@ static __inline void celt_warning(const char *str)
 #endif
 
 #ifndef OVERRIDE_CELT_WARNING_INT
-static __inline void celt_warning_int(const char *str, int val)
+static __inline void cc6_celt_warning_int(const char *str, int val)
 {
 #ifndef DISABLE_WARNINGS
    fprintf (stderr, "warning: %s %d\n", str, val);
@@ -131,7 +131,7 @@ static __inline void celt_warning_int(const char *str, int val)
 #endif
 
 #ifndef OVERRIDE_CELT_NOTIFY
-static __inline void celt_notify(const char *str)
+static __inline void cc6_celt_notify(const char *str)
 {
 #ifndef DISABLE_NOTIFICATIONS
    fprintf (stderr, "notification: %s\n", str);
@@ -146,5 +146,5 @@ static __inline void celt_notify(const char *str)
 #pragma GCC poison malloc free realloc calloc
 #endif*/
 
-#endif /* OS_SUPPORT_H */
+#endif /* cc6_OS_SUPPORT_H */
 

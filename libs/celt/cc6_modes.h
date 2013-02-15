@@ -29,8 +29,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MODES_H
-#define MODES_H
+#ifndef cc6_MODES_H
+#define cc6_MODES_H
 
 #include "cc6_celt_types.h"
 #include "cc6_celt.h"
@@ -39,38 +39,38 @@
 #include "cc6_psy.h"
 #include "cc6_pitch.h"
 
-#define CELT_BITSTREAM_VERSION 0x80000009
+#define cc6_CELT_BITSTREAM_VERSION 0x80000009
 
 #ifdef STATIC_MODES
 #include "static_modes.h"
 #endif
 
-#define MAX_PERIOD 1024
+#define cc6_MAX_PERIOD 1024
 
-#ifndef CHANNELS
+#ifndef cc6_CHANNELS
 # ifdef DISABLE_STEREO
-#  define CHANNELS(mode) (1)
+#  define cc6_CHANNELS(mode) (1)
 # else
-#  define CHANNELS(mode) ((mode)->nbChannels)
+#  define cc6_CHANNELS(mode) ((mode)->nbChannels)
 # endif
 #endif
 
-#define MDCT(mode) (&(mode)->mdct)
+#define cc6_MDCT(mode) (&(mode)->mdct)
 
-#ifndef OVERLAP
-#define OVERLAP(mode) ((mode)->overlap)
+#ifndef cc6_OVERLAP
+#define cc6_OVERLAP(mode) ((mode)->overlap)
 #endif
 
-#ifndef FRAMESIZE
-#define FRAMESIZE(mode) ((mode)->mdctSize)
+#ifndef cc6_FRAMESIZE
+#define cc6_FRAMESIZE(mode) ((mode)->mdctSize)
 #endif
 
 /** Mode definition (opaque)
  @brief Mode definition 
  */
-struct CELTMode {
-   celt_uint32_t marker_start;
-   celt_int32_t Fs;
+struct cc6_CELTMode {
+   cc6_celt_uint32_t marker_start;
+   cc6_celt_int32_t Fs;
    int          overlap;
    int          mdctSize;
    int          nbChannels;
@@ -79,33 +79,33 @@ struct CELTMode {
    int          nbPBands;
    int          pitchEnd;
    
-   const celt_int16_t   *eBands;   /**< Definition for each "pseudo-critical band" */
-   const celt_int16_t   *pBands;   /**< Definition of the bands used for the pitch */
+   const cc6_celt_int16_t   *eBands;   /**< Definition for each "pseudo-critical band" */
+   const cc6_celt_int16_t   *pBands;   /**< Definition of the bands used for the pitch */
    
-   celt_word16_t ePredCoef;/**< Prediction coefficient for the energy encoding */
+   cc6_celt_word16_t ePredCoef;/**< Prediction coefficient for the energy encoding */
    
    int          nbAllocVectors; /**< Number of lines in the matrix below */
-   const celt_int16_t   *allocVectors;   /**< Number of bits in each band for several rates */
+   const cc6_celt_int16_t   *allocVectors;   /**< Number of bits in each band for several rates */
    
-   const celt_int16_t * const *bits; /**< Cache for pulses->bits mapping in each band */
+   const cc6_celt_int16_t * const *bits; /**< Cache for pulses->bits mapping in each band */
 
    /* Stuff that could go in the {en,de}coder, but we save space this way */
-   mdct_lookup mdct;
-   kiss_fftr_cfg fft;
+   cc6_mdct_lookup mdct;
+   cc6_kiss_fftr_cfg fft;
 
-   const celt_word16_t *window;
+   const cc6_celt_word16_t *window;
 
    int         nbShortMdcts;
    int         shortMdctSize;
-   mdct_lookup shortMdct;
-   const celt_word16_t *shortWindow;
+   cc6_mdct_lookup shortMdct;
+   const cc6_celt_word16_t *shortWindow;
 
-   struct PsyDecay psy;
+   struct cc6_PsyDecay psy;
 
    int *prob;
-   celt_uint32_t marker_end;
+   cc6_celt_uint32_t marker_end;
 };
 
-int check_mode(const CELTMode *mode);
+int cc6_check_mode(const cc6_CELTMode *mode);
 
 #endif

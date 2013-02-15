@@ -16,20 +16,20 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef KISS_FTR_H
-#define KISS_FTR_H
+#ifndef cc6_KISS_FTR_H
+#define cc6_KISS_FTR_H
 
 #include "cc6_kiss_fft.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define kiss_fftr_alloc SUF(kiss_fftr_alloc,KF_SUFFIX)
-#define kiss_fftr_inplace SUF(kiss_fftr_inplace,KF_SUFFIX)
-#define kiss_fftr_alloc SUF(kiss_fftr_alloc,KF_SUFFIX)
-#define kiss_fftr_twiddles SUF(kiss_fftr_twiddles,KF_SUFFIX)
-#define kiss_fftr SUF(kiss_fftr,KF_SUFFIX)
-#define kiss_fftri SUF(kiss_fftri,KF_SUFFIX)
+#define cc6_kiss_fftr_alloc cc6_SUF(cc6_kiss_fftr_alloc,cc6_KF_SUFFIX)
+#define cc6_kiss_fftr_inplace cc6_SUF(cc6_kiss_fftr_inplace,cc6_KF_SUFFIX)
+#define cc6_kiss_fftr_alloc cc6_SUF(cc6_kiss_fftr_alloc,cc6_KF_SUFFIX)
+#define cc6_kiss_fftr_twiddles cc6_SUF(cc6_kiss_fftr_twiddles,cc6_KF_SUFFIX)
+#define cc6_kiss_fftr cc6_SUF(cc6_kiss_fftr,cc6_KF_SUFFIX)
+#define cc6_kiss_fftri cc6_SUF(cc6_kiss_fftri,cc6_KF_SUFFIX)
 
 /* 
  
@@ -39,18 +39,18 @@ extern "C" {
  
  */
 
-struct kiss_fftr_state{
-      kiss_fft_cfg substate;
-      kiss_twiddle_cpx * super_twiddles;
+struct cc6_kiss_fftr_state{
+      cc6_kiss_fft_cfg substate;
+      cc6_kiss_twiddle_cpx * super_twiddles;
 #ifdef USE_SIMD    
       long pad;
 #endif    
    };
 
-typedef struct kiss_fftr_state *kiss_fftr_cfg;
+typedef struct cc6_kiss_fftr_state *cc6_kiss_fftr_cfg;
 
 
-kiss_fftr_cfg kiss_fftr_alloc(int nfft,void * mem, size_t * lenmem);
+cc6_kiss_fftr_cfg cc6_kiss_fftr_alloc(int nfft,void * mem, size_t * lenmem);
 /*
  nfft must be even
 
@@ -62,19 +62,19 @@ kiss_fftr_cfg kiss_fftr_alloc(int nfft,void * mem, size_t * lenmem);
  input timedata has nfft scalar points
  output freqdata has nfft/2+1 complex points, packed into nfft scalar points
 */
-void kiss_fftr_twiddles(kiss_fftr_cfg st,kiss_fft_scalar *freqdata);
+void cc6_kiss_fftr_twiddles(cc6_kiss_fftr_cfg st,cc6_kiss_fft_scalar *freqdata);
 
-void kiss_fftr(kiss_fftr_cfg st,const kiss_fft_scalar *timedata,kiss_fft_scalar *freqdata);
-void kiss_fftr_inplace(kiss_fftr_cfg st, kiss_fft_scalar *X);
+void cc6_kiss_fftr(cc6_kiss_fftr_cfg st,const cc6_kiss_fft_scalar *timedata,cc6_kiss_fft_scalar *freqdata);
+void cc6_kiss_fftr_inplace(cc6_kiss_fftr_cfg st, cc6_kiss_fft_scalar *X);
 
-void kiss_fftri(kiss_fftr_cfg st,const kiss_fft_scalar *freqdata, kiss_fft_scalar *timedata);
+void cc6_kiss_fftri(cc6_kiss_fftr_cfg st,const cc6_kiss_fft_scalar *freqdata, cc6_kiss_fft_scalar *timedata);
 
 /*
  input freqdata has  nfft/2+1 complex points, packed into nfft scalar points
  output timedata has nfft scalar points
 */
 
-#define kiss_fftr_free speex_free
+#define cc6_kiss_fftr_free speex_free
 
 #ifdef __cplusplus
 }

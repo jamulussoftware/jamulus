@@ -42,26 +42,26 @@
    and scaling in many places. 
 */
 
-#ifndef MDCT_H
-#define MDCT_H
+#ifndef cc6_MDCT_H
+#define cc6_MDCT_H
 
 #include "cc6_kiss_fft.h"
 #include "cc6_arch.h"
 
 typedef struct {
    int n;
-   kiss_fft_cfg kfft;
-   kiss_twiddle_scalar * __restrict trig;
-} mdct_lookup;
+   cc6_kiss_fft_cfg kfft;
+   cc6_kiss_twiddle_scalar * __restrict trig;
+} cc6_mdct_lookup;
 
-void mdct_init(mdct_lookup *l,int N);
-void mdct_clear(mdct_lookup *l);
+void cc6_mdct_init(cc6_mdct_lookup *l,int N);
+void cc6_mdct_clear(cc6_mdct_lookup *l);
 
 /** Compute a forward MDCT and scale by 4/N */
-void mdct_forward(const mdct_lookup *l, kiss_fft_scalar *in, kiss_fft_scalar *out, const celt_word16_t *window, int overlap);
+void cc6_mdct_forward(const cc6_mdct_lookup *l, cc6_kiss_fft_scalar *in, cc6_kiss_fft_scalar *out, const cc6_celt_word16_t *window, int overlap);
 
 /** Compute a backward MDCT (no scaling) and performs weighted overlap-add 
     (scales implicitly by 1/2) */
-void mdct_backward(const mdct_lookup *l, kiss_fft_scalar *in, kiss_fft_scalar *out, const celt_word16_t * __restrict window, int overlap);
+void cc6_mdct_backward(const cc6_mdct_lookup *l, cc6_kiss_fft_scalar *in, cc6_kiss_fft_scalar *out, const cc6_celt_word16_t * __restrict window, int overlap);
 
 #endif

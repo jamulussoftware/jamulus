@@ -29,25 +29,25 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef KFFT_SINGLE_H
-#define KFFT_SINGLE_H
+#ifndef cc6_KFFT_SINGLE_H
+#define cc6_KFFT_SINGLE_H
 
 #ifdef ENABLE_TI_DSPLIB
 
 #include "dsplib.h"
 
-#define real16_fft_alloc(length) NULL
-#define real16_fft_free(state)
-#define BITREV(state, i) (i)
+#define cc6_real16_fft_alloc(length) NULL
+#define cc6_real16_fft_free(state)
+#define cc6_BITREV(state, i) (i)
 
-#define real16_fft_inplace(state, X, nx)\
+#define cc6_real16_fft_inplace(state, X, nx)\
     (\
       cfft_SCALE(X,nx/2),\
       cbrev(X,X,nx/2),\
       unpack(X,nx)\
     )
 
-#define real16_ifft(state, X, Y, nx) \
+#define cc6_real16_ifft(state, X, Y, nx) \
     (\
       unpacki(X, nx),\
       cifft_NOSCALE(X,nx/2),\
@@ -73,12 +73,12 @@
 #include "cc6_kiss_fftr.h"
 #include "cc6__kiss_fft_guts.h"
 
-#define real16_fft_alloc(length) kiss_fftr_alloc_celt_single(length, 0, 0);
-#define real16_fft_free(state) kiss_fft_free(state)
-#define real16_fft_inplace(state, X, nx) kiss_fftr_inplace(state,X)
-#define BITREV(state, i) ((state)->substate->bitrev[i])
-#define real16_ifft(state, X, Y, nx) kiss_fftri(state,X, Y)
+#define cc6_real16_fft_alloc(length) cc6_kiss_fftr_alloc_celt_single(length, 0, 0);
+#define cc6_real16_fft_free(state) cc6_kiss_fft_free(state)
+#define cc6_real16_fft_inplace(state, X, nx) cc6_kiss_fftr_inplace(state,X)
+#define cc6_BITREV(state, i) ((state)->substate->bitrev[i])
+#define cc6_real16_ifft(state, X, Y, nx) cc6_kiss_fftri(state,X, Y)
 
 #endif /* !ENABLE_TI_DSPLIB */
 
-#endif /* KFFT_SINGLE_H */
+#endif /* cc6_KFFT_SINGLE_H */

@@ -10,8 +10,8 @@
 
 /* Version 1.1 */
 
-#ifndef FLOAT_CAST_H
-#define FLOAT_CAST_H
+#ifndef cc6_FLOAT_CAST_H
+#define cc6_FLOAT_CAST_H
 
 /*============================================================================ 
 **	On Intel Pentium processors (especially PIII and probably P4), converting
@@ -59,7 +59,7 @@
 	#define	__USE_ISOC99	1
 
 	#include	<math.h>
-	#define float2int(x) lrintf(x)
+    #define cc6_float2int(x) lrintf(x)
 
 #elif (defined(HAVE_LRINT))
 
@@ -70,7 +70,7 @@
 #define	__USE_ISOC99	1
 
 #include	<math.h>
-#define float2int(x) lrint(x)
+#define cc6_float2int(x) lrint(x)
 
 #elif (defined (WIN32) || defined (_WIN32))
 
@@ -81,7 +81,7 @@
 	*/
 	
 	__inline long int 
-	float2int (float flt)
+    cc6_float2int (float flt)
 	{	int intgr;
 
 		_asm
@@ -101,9 +101,9 @@
 
 	#include	<math.h>
 
-	#define	float2int(flt)		((int)(floor(.5+flt)))
+    #define	cc6_float2int(flt)		((int)(floor(.5+flt)))
 
 #endif
 
 
-#endif /* FLOAT_CAST_H */
+#endif /* cc6_FLOAT_CAST_H */

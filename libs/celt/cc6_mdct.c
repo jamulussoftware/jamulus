@@ -53,68 +53,68 @@
 #include "cc6_mathops.h"
 #include "cc6_stack_alloc.h"
 
-#ifndef M_PI
-#define M_PI 3.141592653
+#ifndef cc6_M_PI
+#define cc6_M_PI 3.141592653
 #endif
 
-void mdct_init(mdct_lookup *l,int N)
+void cc6_mdct_init(cc6_mdct_lookup *l,int N)
 {
    int i;
    int N2;
    l->n = N;
    N2 = N>>1;
-   l->kfft = cpx32_fft_alloc(N>>2);
+   l->kfft = cc6_cpx32_fft_alloc(N>>2);
    if (l->kfft==NULL)
      return;
-   l->trig = (kiss_twiddle_scalar*)celt_alloc(N2*sizeof(kiss_twiddle_scalar));
+   l->trig = (cc6_kiss_twiddle_scalar*)cc6_celt_alloc(N2*sizeof(cc6_kiss_twiddle_scalar));
    if (l->trig==NULL)
      return;
    /* We have enough points that sine isn't necessary */
 #if defined(FIXED_POINT)
 #if defined(DOUBLE_PRECISION) & !defined(MIXED_PRECISION)
    for (i=0;i<N2;i++)
-      l->trig[i] = SAMP_MAX*cos(2*M_PI*(i+1./8.)/N);
+      l->trig[i] = cc6_SAMP_MAX*cos(2*cc6_M_PI*(i+1./8.)/N);
 #else
    for (i=0;i<N2;i++)
-      l->trig[i] = TRIG_UPSCALE*celt_cos_norm(DIV32(ADD32(SHL32(EXTEND32(i),17),16386),N));
+      l->trig[i] = cc6_TRIG_UPSCALE*cc6_celt_cos_norm(cc6_DIV32(cc6_ADD32(cc6_SHL32(cc6_EXTEND32(i),17),16386),N));
 #endif
 #else
    for (i=0;i<N2;i++)
-      l->trig[i] = cos(2*M_PI*(i+1./8.)/N);
+      l->trig[i] = cos(2*cc6_M_PI*(i+1./8.)/N);
 #endif
 }
 
-void mdct_clear(mdct_lookup *l)
+void cc6_mdct_clear(cc6_mdct_lookup *l)
 {
-   cpx32_fft_free(l->kfft);
-   celt_free(l->trig);
+   cc6_cpx32_fft_free(l->kfft);
+   cc6_celt_free(l->trig);
 }
 
-void mdct_forward(const mdct_lookup *l, kiss_fft_scalar *in, kiss_fft_scalar * __restrict out, const celt_word16_t *window, int overlap)
+void cc6_mdct_forward(const cc6_mdct_lookup *l, cc6_kiss_fft_scalar *in, cc6_kiss_fft_scalar * __restrict out, const cc6_celt_word16_t *window, int overlap)
 {
    int i;
    int N, N2, N4;
-   VARDECL(kiss_fft_scalar, f);
-   SAVE_STACK;
+   cc6_VARDECL(cc6_kiss_fft_scalar, f);
+   cc6_SAVE_STACK;
    N = l->n;
    N2 = N>>1;
    N4 = N>>2;
-   ALLOC(f, N2, kiss_fft_scalar);
+   cc6_ALLOC(f, N2, cc6_kiss_fft_scalar);
    
    /* Consider the input to be compused of four blocks: [a, b, c, d] */
    /* Window, shuffle, fold */
    {
       /* Temp pointers to make it really clear to the compiler what we're doing */
-      const kiss_fft_scalar * __restrict xp1 = in+(overlap>>1);
-      const kiss_fft_scalar * __restrict xp2 = in+N2-1+(overlap>>1);
-      kiss_fft_scalar * __restrict yp = out;
-      const celt_word16_t * __restrict wp1 = window+(overlap>>1);
-      const celt_word16_t * __restrict wp2 = window+(overlap>>1)-1;
+      const cc6_kiss_fft_scalar * __restrict xp1 = in+(overlap>>1);
+      const cc6_kiss_fft_scalar * __restrict xp2 = in+N2-1+(overlap>>1);
+      cc6_kiss_fft_scalar * __restrict yp = out;
+      const cc6_celt_word16_t * __restrict wp1 = window+(overlap>>1);
+      const cc6_celt_word16_t * __restrict wp2 = window+(overlap>>1)-1;
       for(i=0;i<(overlap>>2);i++)
       {
          /* Real part arranged as -d-cR, Imag part arranged as -b+aR*/
-         *yp++ = MULT16_32_Q15(*wp2, xp1[N2]) + MULT16_32_Q15(*wp1,*xp2);
-         *yp++ = MULT16_32_Q15(*wp1, *xp1)    - MULT16_32_Q15(*wp2, xp2[-N2]);
+         *yp++ = cc6_MULT16_32_Q15(*wp2, xp1[N2]) + cc6_MULT16_32_Q15(*wp1,*xp2);
+         *yp++ = cc6_MULT16_32_Q15(*wp1, *xp1)    - cc6_MULT16_32_Q15(*wp2, xp2[-N2]);
          xp1+=2;
          xp2-=2;
          wp1+=2;
@@ -133,8 +133,8 @@ void mdct_forward(const mdct_lookup *l, kiss_fft_scalar *in, kiss_fft_scalar * _
       for(;i<N4;i++)
       {
          /* Real part arranged as a-bR, Imag part arranged as -c-dR */
-         *yp++ =  -MULT16_32_Q15(*wp1, xp1[-N2]) + MULT16_32_Q15(*wp2, *xp2);
-         *yp++ = MULT16_32_Q15(*wp2, *xp1)     + MULT16_32_Q15(*wp1, xp2[N2]);
+         *yp++ =  -cc6_MULT16_32_Q15(*wp1, xp1[-N2]) + cc6_MULT16_32_Q15(*wp2, *xp2);
+         *yp++ = cc6_MULT16_32_Q15(*wp2, *xp1)     + cc6_MULT16_32_Q15(*wp1, xp2[N2]);
          xp1+=2;
          xp2-=2;
          wp1+=2;
@@ -143,68 +143,68 @@ void mdct_forward(const mdct_lookup *l, kiss_fft_scalar *in, kiss_fft_scalar * _
    }
    /* Pre-rotation */
    {
-      kiss_fft_scalar * __restrict yp = out;
-      kiss_fft_scalar *t = &l->trig[0];
+      cc6_kiss_fft_scalar * __restrict yp = out;
+      cc6_kiss_fft_scalar *t = &l->trig[0];
       for(i=0;i<N4;i++)
       {
-         kiss_fft_scalar re, im;
+         cc6_kiss_fft_scalar re, im;
          re = yp[0];
          im = yp[1];
-         *yp++ = -S_MUL(re,t[0])  +  S_MUL(im,t[N4]);
-         *yp++ = -S_MUL(im,t[0])  -  S_MUL(re,t[N4]);
+         *yp++ = -cc6_S_MUL(re,t[0])  +  cc6_S_MUL(im,t[N4]);
+         *yp++ = -cc6_S_MUL(im,t[0])  -  cc6_S_MUL(re,t[N4]);
          t++;
       }
    }
 
    /* N/4 complex FFT, down-scales by 4/N */
-   cpx32_fft(l->kfft, out, f, N4);
+   cc6_cpx32_fft(l->kfft, out, f, N4);
 
    /* Post-rotate */
    {
       /* Temp pointers to make it really clear to the compiler what we're doing */
-      const kiss_fft_scalar * __restrict fp = f;
-      kiss_fft_scalar * __restrict yp1 = out;
-      kiss_fft_scalar * __restrict yp2 = out+N2-1;
-      kiss_fft_scalar *t = &l->trig[0];
+      const cc6_kiss_fft_scalar * __restrict fp = f;
+      cc6_kiss_fft_scalar * __restrict yp1 = out;
+      cc6_kiss_fft_scalar * __restrict yp2 = out+N2-1;
+      cc6_kiss_fft_scalar *t = &l->trig[0];
       /* Temp pointers to make it really clear to the compiler what we're doing */
       for(i=0;i<N4;i++)
       {
-         *yp1 = -S_MUL(fp[1],t[N4]) + S_MUL(fp[0],t[0]);
-         *yp2 = -S_MUL(fp[0],t[N4]) - S_MUL(fp[1],t[0]);
+         *yp1 = -cc6_S_MUL(fp[1],t[N4]) + cc6_S_MUL(fp[0],t[0]);
+         *yp2 = -cc6_S_MUL(fp[0],t[N4]) - cc6_S_MUL(fp[1],t[0]);
          fp += 2;
          yp1 += 2;
          yp2 -= 2;
          t++;
       }
    }
-   RESTORE_STACK;
+   cc6_RESTORE_STACK;
 }
 
 
-void mdct_backward(const mdct_lookup *l, kiss_fft_scalar *in, kiss_fft_scalar * __restrict out, const celt_word16_t * __restrict window, int overlap)
+void cc6_mdct_backward(const cc6_mdct_lookup *l, cc6_kiss_fft_scalar *in, cc6_kiss_fft_scalar * __restrict out, const cc6_celt_word16_t * __restrict window, int overlap)
 {
    int i;
    int N, N2, N4;
-   VARDECL(kiss_fft_scalar, f);
-   VARDECL(kiss_fft_scalar, f2);
-   SAVE_STACK;
+   cc6_VARDECL(cc6_kiss_fft_scalar, f);
+   cc6_VARDECL(cc6_kiss_fft_scalar, f2);
+   cc6_SAVE_STACK;
    N = l->n;
    N2 = N>>1;
    N4 = N>>2;
-   ALLOC(f, N2, kiss_fft_scalar);
-   ALLOC(f2, N2, kiss_fft_scalar);
+   cc6_ALLOC(f, N2, cc6_kiss_fft_scalar);
+   cc6_ALLOC(f2, N2, cc6_kiss_fft_scalar);
    
    /* Pre-rotate */
    {
       /* Temp pointers to make it really clear to the compiler what we're doing */
-      const kiss_fft_scalar * __restrict xp1 = in;
-      const kiss_fft_scalar * __restrict xp2 = in+N2-1;
-      kiss_fft_scalar * __restrict yp = f2;
-      kiss_fft_scalar *t = &l->trig[0];
+      const cc6_kiss_fft_scalar * __restrict xp1 = in;
+      const cc6_kiss_fft_scalar * __restrict xp2 = in+N2-1;
+      cc6_kiss_fft_scalar * __restrict yp = f2;
+      cc6_kiss_fft_scalar *t = &l->trig[0];
       for(i=0;i<N4;i++) 
       {
-         *yp++ = -S_MUL(*xp2, t[0])  - S_MUL(*xp1,t[N4]);
-         *yp++ =  S_MUL(*xp2, t[N4]) - S_MUL(*xp1,t[0]);
+         *yp++ = -cc6_S_MUL(*xp2, t[0])  - cc6_S_MUL(*xp1,t[N4]);
+         *yp++ =  cc6_S_MUL(*xp2, t[N4]) - cc6_S_MUL(*xp1,t[0]);
          xp1+=2;
          xp2-=2;
          t++;
@@ -212,29 +212,29 @@ void mdct_backward(const mdct_lookup *l, kiss_fft_scalar *in, kiss_fft_scalar * 
    }
 
    /* Inverse N/4 complex FFT. This one should *not* downscale even in fixed-point */
-   cpx32_ifft(l->kfft, f2, f, N4);
+   cc6_cpx32_ifft(l->kfft, f2, f, N4);
    
    /* Post-rotate */
    {
-      kiss_fft_scalar * __restrict fp = f;
-      kiss_fft_scalar *t = &l->trig[0];
+      cc6_kiss_fft_scalar * __restrict fp = f;
+      cc6_kiss_fft_scalar *t = &l->trig[0];
 
       for(i=0;i<N4;i++)
       {
-         kiss_fft_scalar re, im;
+         cc6_kiss_fft_scalar re, im;
          re = fp[0];
          im = fp[1];
          /* We'd scale up by 2 here, but instead it's done when mixing the windows */
-         *fp++ = S_MUL(re,*t) + S_MUL(im,t[N4]);
-         *fp++ = S_MUL(im,*t) - S_MUL(re,t[N4]);
+         *fp++ = cc6_S_MUL(re,*t) + cc6_S_MUL(im,t[N4]);
+         *fp++ = cc6_S_MUL(im,*t) - cc6_S_MUL(re,t[N4]);
          t++;
       }
    }
    /* De-shuffle the components for the middle of the window only */
    {
-      const kiss_fft_scalar * __restrict fp1 = f;
-      const kiss_fft_scalar * __restrict fp2 = f+N2-1;
-      kiss_fft_scalar * __restrict yp = f2;
+      const cc6_kiss_fft_scalar * __restrict fp1 = f;
+      const cc6_kiss_fft_scalar * __restrict fp2 = f+N2-1;
+      cc6_kiss_fft_scalar * __restrict yp = f2;
       for(i = 0; i < N4; i++)
       {
          *yp++ =-*fp1;
@@ -246,11 +246,11 @@ void mdct_backward(const mdct_lookup *l, kiss_fft_scalar *in, kiss_fft_scalar * 
 
    /* Mirror on both sides for TDAC */
    {
-      kiss_fft_scalar * __restrict fp1 = f2+N4-1;
-      kiss_fft_scalar * __restrict xp1 = out+N2-1;
-      kiss_fft_scalar * __restrict yp1 = out+N4-overlap/2;
-      const celt_word16_t * __restrict wp1 = window;
-      const celt_word16_t * __restrict wp2 = window+overlap-1;
+      cc6_kiss_fft_scalar * __restrict fp1 = f2+N4-1;
+      cc6_kiss_fft_scalar * __restrict xp1 = out+N2-1;
+      cc6_kiss_fft_scalar * __restrict yp1 = out+N4-overlap/2;
+      const cc6_celt_word16_t * __restrict wp1 = window;
+      const cc6_celt_word16_t * __restrict wp2 = window+overlap-1;
       for(i = 0; i< N4-overlap/2; i++)
       {
          *xp1 = *fp1;
@@ -259,20 +259,20 @@ void mdct_backward(const mdct_lookup *l, kiss_fft_scalar *in, kiss_fft_scalar * 
       }
       for(; i < N4; i++)
       {
-         kiss_fft_scalar x1;
+         cc6_kiss_fft_scalar x1;
          x1 = *fp1--;
-         *yp1++ +=-MULT16_32_Q15(*wp1, x1);
-         *xp1-- += MULT16_32_Q15(*wp2, x1);
+         *yp1++ +=-cc6_MULT16_32_Q15(*wp1, x1);
+         *xp1-- += cc6_MULT16_32_Q15(*wp2, x1);
          wp1++;
          wp2--;
       }
    }
    {
-      kiss_fft_scalar * __restrict fp2 = f2+N4;
-      kiss_fft_scalar * __restrict xp2 = out+N2;
-      kiss_fft_scalar * __restrict yp2 = out+N-1-(N4-overlap/2);
-      const celt_word16_t * __restrict wp1 = window;
-      const celt_word16_t * __restrict wp2 = window+overlap-1;
+      cc6_kiss_fft_scalar * __restrict fp2 = f2+N4;
+      cc6_kiss_fft_scalar * __restrict xp2 = out+N2;
+      cc6_kiss_fft_scalar * __restrict yp2 = out+N-1-(N4-overlap/2);
+      const cc6_celt_word16_t * __restrict wp1 = window;
+      const cc6_celt_word16_t * __restrict wp2 = window+overlap-1;
       for(i = 0; i< N4-overlap/2; i++)
       {
          *xp2 = *fp2;
@@ -281,15 +281,15 @@ void mdct_backward(const mdct_lookup *l, kiss_fft_scalar *in, kiss_fft_scalar * 
       }
       for(; i < N4; i++)
       {
-         kiss_fft_scalar x2;
+         cc6_kiss_fft_scalar x2;
          x2 = *fp2++;
-         *yp2--  = MULT16_32_Q15(*wp1, x2);
-         *xp2++  = MULT16_32_Q15(*wp2, x2);
+         *yp2--  = cc6_MULT16_32_Q15(*wp1, x2);
+         *xp2++  = cc6_MULT16_32_Q15(*wp2, x2);
          wp1++;
          wp2--;
       }
    }
-   RESTORE_STACK;
+   cc6_RESTORE_STACK;
 }
 
 

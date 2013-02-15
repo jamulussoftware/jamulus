@@ -44,56 +44,56 @@
 #include "static_modes.c"
 #endif
 
-#define MODEVALID   0xa110ca7e
-#define MODEPARTIAL 0x7eca10a1
-#define MODEFREED   0xb10cf8ee
+#define cc6_MODEVALID   0xa110ca7e
+#define cc6_MODEPARTIAL 0x7eca10a1
+#define cc6_MODEFREED   0xb10cf8ee
 
-#ifndef M_PI
-#define M_PI 3.141592653
+#ifndef cc6_M_PI
+#define cc6_M_PI 3.141592653
 #endif
 
 
-int celt_mode_info(const CELTMode *mode, int request, celt_int32_t *value)
+int cc6_celt_mode_info(const cc6_CELTMode *mode, int request, cc6_celt_int32_t *value)
 {
-   if (check_mode(mode) != CELT_OK)
-      return CELT_INVALID_MODE;
+   if (cc6_check_mode(mode) != cc6_CELT_OK)
+      return cc6_CELT_INVALID_MODE;
    switch (request)
    {
-      case CELT_GET_FRAME_SIZE:
+      case cc6_CELT_GET_FRAME_SIZE:
          *value = mode->mdctSize;
          break;
-      case CELT_GET_LOOKAHEAD:
+      case cc6_CELT_GET_LOOKAHEAD:
          *value = mode->overlap;
          break;
-      case CELT_GET_NB_CHANNELS:
+      case cc6_CELT_GET_NB_CHANNELS:
          *value = mode->nbChannels;
          break;
-      case CELT_GET_BITSTREAM_VERSION:
-         *value = CELT_BITSTREAM_VERSION;
+      case cc6_CELT_GET_BITSTREAM_VERSION:
+         *value = cc6_CELT_BITSTREAM_VERSION;
          break;
-      case CELT_GET_SAMPLE_RATE:
+      case cc6_CELT_GET_SAMPLE_RATE:
          *value = mode->Fs;
          break;
       default:
-         return CELT_UNIMPLEMENTED;
+         return cc6_CELT_UNIMPLEMENTED;
    }
-   return CELT_OK;
+   return cc6_CELT_OK;
 }
 
 #ifndef STATIC_MODES
 
-#define PBANDS 8
+#define cc6_PBANDS 8
 
 #ifdef STDIN_TUNING
-int MIN_BINS;
+int cc6_MIN_BINS;
 #else
-#define MIN_BINS 3
+#define cc6_MIN_BINS 3
 #endif
 
 /* Defining 25 critical bands for the full 0-20 kHz audio bandwidth
    Taken from http://ccrma.stanford.edu/~jos/bbt/Bark_Frequency_Scale.html */
-#define BARK_BANDS 25
-static const celt_int16_t bark_freq[BARK_BANDS+1] = {
+#define cc6_BARK_BANDS 25
+static const cc6_celt_int16_t bark_freq[cc6_BARK_BANDS+1] = {
       0,   100,   200,   300,   400,
     510,   630,   770,   920,  1080,
    1270,  1480,  1720,  2000,  2320,
@@ -101,17 +101,17 @@ static const celt_int16_t bark_freq[BARK_BANDS+1] = {
    6400,  7700,  9500, 12000, 15500,
   20000};
 
-static const celt_int16_t pitch_freq[PBANDS+1] ={0, 345, 689, 1034, 1378, 2067, 3273, 5340, 6374};
+static const cc6_celt_int16_t pitch_freq[cc6_PBANDS+1] ={0, 345, 689, 1034, 1378, 2067, 3273, 5340, 6374};
 
 /* This allocation table is per critical band. When creating a mode, the bits get added together 
    into the codec bands, which are sometimes larger than one critical band at low frequency */
 
 #ifdef STDIN_TUNING
-int BITALLOC_SIZE;
-int *band_allocation;
+int cc6_BITALLOC_SIZE;
+int *cc6_band_allocation;
 #else
-#define BITALLOC_SIZE 12
-static const int band_allocation[BARK_BANDS*BITALLOC_SIZE] = 
+#define cc6_BITALLOC_SIZE 12
+static const int cc6_band_allocation[cc6_BARK_BANDS*cc6_BITALLOC_SIZE] =
    /* 0 100 200 300 400 510 630 770 920 1k  1.2 1.5 1.7 2k  2.3 2.7 3.1 3.7 4.4 5.3 6.4 7.7 9.5 12k 15k  */
    {  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /*0*/
       2,  2,  1,  1,  2,  2,  1,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, /*1*/
@@ -128,15 +128,15 @@ static const int band_allocation[BARK_BANDS*BITALLOC_SIZE] =
    };
 #endif
 
-static celt_int16_t *compute_ebands(celt_int32_t Fs, int frame_size, int *nbEBands)
+static cc6_celt_int16_t *cc6_compute_ebands(cc6_celt_int32_t Fs, int frame_size, int *nbEBands)
 {
-   celt_int16_t *eBands;
+   cc6_celt_int16_t *eBands;
    int i, res, min_width, lin, low, high, nBark;
    res = (Fs+frame_size)/(2*frame_size);
-   min_width = MIN_BINS*res;
+   min_width = cc6_MIN_BINS*res;
 
    /* Find the number of critical bands supported by our sampling rate */
-   for (nBark=1;nBark<BARK_BANDS;nBark++)
+   for (nBark=1;nBark<cc6_BARK_BANDS;nBark++)
     if (bark_freq[nBark+1]*2 >= Fs)
        break;
 
@@ -145,24 +145,24 @@ static celt_int16_t *compute_ebands(celt_int32_t Fs, int frame_size, int *nbEBan
       if (bark_freq[lin+1]-bark_freq[lin] >= min_width)
          break;
    
-   low = ((bark_freq[lin]/res)+(MIN_BINS-1))/MIN_BINS;
+   low = ((bark_freq[lin]/res)+(cc6_MIN_BINS-1))/cc6_MIN_BINS;
    high = nBark-lin;
    *nbEBands = low+high;
-   eBands = celt_alloc(sizeof(celt_int16_t)*(*nbEBands+2));
+   eBands = cc6_celt_alloc(sizeof(cc6_celt_int16_t)*(*nbEBands+2));
    
    if (eBands==NULL)
       return NULL;
    
    /* Linear spacing (min_width) */
    for (i=0;i<low;i++)
-      eBands[i] = MIN_BINS*i;
+      eBands[i] = cc6_MIN_BINS*i;
    /* Spacing follows critical bands */
    for (i=0;i<high;i++)
       eBands[i+low] = (bark_freq[lin+i]+res/2)/res;
    /* Enforce the minimum spacing at the boundary */
    for (i=0;i<*nbEBands;i++)
-      if (eBands[i] < MIN_BINS*i)
-         eBands[i] = MIN_BINS*i;
+      if (eBands[i] < cc6_MIN_BINS*i)
+         eBands[i] = cc6_MIN_BINS*i;
    eBands[*nbEBands] = (bark_freq[nBark]+res/2)/res;
    eBands[*nbEBands+1] = frame_size;
    if (eBands[*nbEBands] > eBands[*nbEBands+1])
@@ -172,22 +172,22 @@ static celt_int16_t *compute_ebands(celt_int32_t Fs, int frame_size, int *nbEBan
    return eBands;
 }
 
-static void compute_pbands(CELTMode *mode, int res)
+static void cc6_compute_pbands(cc6_CELTMode *mode, int res)
 {
    int i;
-   celt_int16_t *pBands;
-   pBands=celt_alloc(sizeof(celt_int16_t)*(PBANDS+2));
+   cc6_celt_int16_t *pBands;
+   pBands=cc6_celt_alloc(sizeof(cc6_celt_int16_t)*(cc6_PBANDS+2));
    mode->pBands = pBands;
    if (pBands==NULL)
      return;
-   mode->nbPBands = PBANDS;
-   for (i=0;i<PBANDS+1;i++)
+   mode->nbPBands = cc6_PBANDS;
+   for (i=0;i<cc6_PBANDS+1;i++)
    {
       pBands[i] = (pitch_freq[i]+res/2)/res;
       if (pBands[i] < mode->eBands[i])
          pBands[i] = mode->eBands[i];
    }
-   pBands[PBANDS+1] = mode->eBands[mode->nbEBands+1];
+   pBands[cc6_PBANDS+1] = mode->eBands[mode->nbEBands+1];
    for (i=1;i<mode->nbPBands+1;i++)
    {
       int j;
@@ -203,35 +203,35 @@ static void compute_pbands(CELTMode *mode, int res)
             pBands[i] = mode->eBands[j+1];
       }
    }
-   mode->pitchEnd = pBands[PBANDS];
+   mode->pitchEnd = pBands[cc6_PBANDS];
 }
 
-static void compute_allocation_table(CELTMode *mode, int res)
+static void cc6_compute_allocation_table(cc6_CELTMode *mode, int res)
 {
    int i, j, nBark;
-   celt_int16_t *allocVectors;
-   const int C = CHANNELS(mode);
+   cc6_celt_int16_t *allocVectors;
+   const int C = cc6_CHANNELS(mode);
 
    /* Find the number of critical bands supported by our sampling rate */
-   for (nBark=1;nBark<BARK_BANDS;nBark++)
+   for (nBark=1;nBark<cc6_BARK_BANDS;nBark++)
     if (bark_freq[nBark+1]*2 >= mode->Fs)
        break;
 
-   mode->nbAllocVectors = BITALLOC_SIZE;
-   allocVectors = celt_alloc(sizeof(celt_int16_t)*(BITALLOC_SIZE*mode->nbEBands));
+   mode->nbAllocVectors = cc6_BITALLOC_SIZE;
+   allocVectors = cc6_celt_alloc(sizeof(cc6_celt_int16_t)*(cc6_BITALLOC_SIZE*mode->nbEBands));
    if (allocVectors==NULL)
       return;
    /* Compute per-codec-band allocation from per-critical-band matrix */
-   for (i=0;i<BITALLOC_SIZE;i++)
+   for (i=0;i<cc6_BITALLOC_SIZE;i++)
    {
-      celt_int32_t current = 0;
+      cc6_celt_int32_t current = 0;
       int eband = 0;
       for (j=0;j<nBark;j++)
       {
          int edge, low;
-         celt_int32_t alloc;
+         cc6_celt_int32_t alloc;
          edge = mode->eBands[eband+1]*res;
-         alloc = band_allocation[i*BARK_BANDS+j];
+         alloc = cc6_band_allocation[i*cc6_BARK_BANDS+j];
          alloc = alloc*C*mode->mdctSize;
          if (edge < bark_freq[j+1])
          {
@@ -254,26 +254,26 @@ static void compute_allocation_table(CELTMode *mode, int res)
 
 #endif /* STATIC_MODES */
 
-CELTMode *celt_mode_create(celt_int32_t Fs, int channels, int frame_size, int *error)
+cc6_CELTMode *cc6_celt_mode_create(cc6_celt_int32_t Fs, int channels, int frame_size, int *error)
 {
    int i;
 #ifdef STDIN_TUNING
-   scanf("%d ", &MIN_BINS);
-   scanf("%d ", &BITALLOC_SIZE);
-   band_allocation = celt_alloc(sizeof(int)*BARK_BANDS*BITALLOC_SIZE);
-   for (i=0;i<BARK_BANDS*BITALLOC_SIZE;i++)
+   scanf("%d ", &cc6_MIN_BINS);
+   scanf("%d ", &cc6_BITALLOC_SIZE);
+   cc6_band_allocation = cc6_celt_alloc(sizeof(int)*cc6_BARK_BANDS*cc6_BITALLOC_SIZE);
+   for (i=0;i<cc6_BARK_BANDS*cc6_BITALLOC_SIZE;i++)
    {
-      scanf("%d ", band_allocation+i);
+      scanf("%d ", cc6_band_allocation+i);
    }
 #endif
 #ifdef STATIC_MODES
-   const CELTMode *m = NULL;
-   CELTMode *mode=NULL;
-   ALLOC_STACK;
+   const cc6_CELTMode *m = NULL;
+   cc6_CELTMode *mode=NULL;
+   cc6_ALLOC_STACK;
 #if !defined(VAR_ARRAYS) && !defined(USE_ALLOCA)
-   if (global_stack==NULL)
+   if (cc6_global_stack==NULL)
    {
-      celt_free(global_stack);
+      cc6_celt_free(cc6_global_stack);
       goto failure;
    }
 #endif 
@@ -289,25 +289,25 @@ CELTMode *celt_mode_create(celt_int32_t Fs, int channels, int frame_size, int *e
    }
    if (m == NULL)
    {
-      celt_warning("Mode not included as part of the static modes");
+      cc6_celt_warning("Mode not included as part of the static modes");
       if (error)
-         *error = CELT_BAD_ARG;
+         *error = cc6_CELT_BAD_ARG;
       return NULL;
    }
-   mode = (CELTMode*)celt_alloc(sizeof(CELTMode));
+   mode = (cc6_CELTMode*)cc6_celt_alloc(sizeof(cc6_CELTMode));
    if (mode==NULL)
       goto failure;
-   CELT_COPY(mode, m, 1);
-   mode->marker_start = MODEPARTIAL;
+   cc6_CELT_COPY(mode, m, 1);
+   mode->marker_start = cc6_MODEPARTIAL;
 #else
    int res;
-   CELTMode *mode=NULL;
-   celt_word16_t *window;
-   ALLOC_STACK;
+   cc6_CELTMode *mode=NULL;
+   cc6_celt_word16_t *window;
+   cc6_ALLOC_STACK;
 #if !defined(VAR_ARRAYS) && !defined(USE_ALLOCA)
-   if (global_stack==NULL)
+   if (cc6_global_stack==NULL)
    {
-      celt_free(global_stack);
+      cc6_celt_free(cc6_global_stack);
       goto failure;
    }
 #endif 
@@ -316,41 +316,41 @@ CELTMode *celt_mode_create(celt_int32_t Fs, int channels, int frame_size, int *e
    
    if (Fs < 32000 || Fs > 96000)
    {
-      celt_warning("Sampling rate must be between 32 kHz and 96 kHz");
+      cc6_celt_warning("Sampling rate must be between 32 kHz and 96 kHz");
       if (error)
-         *error = CELT_BAD_ARG;
+         *error = cc6_CELT_BAD_ARG;
       return NULL;
    }
    if (channels < 0 || channels > 2)
    {
-      celt_warning("Only mono and stereo supported");
+      cc6_celt_warning("Only mono and stereo supported");
       if (error)
-         *error = CELT_BAD_ARG;
+         *error = cc6_CELT_BAD_ARG;
       return NULL;
    }
    if (frame_size < 64 || frame_size > 1024 || frame_size%2!=0)
    {
-      celt_warning("Only even frame sizes from 64 to 1024 are supported");
+      cc6_celt_warning("Only even frame sizes from 64 to 1024 are supported");
       if (error)
-         *error = CELT_BAD_ARG;
+         *error = cc6_CELT_BAD_ARG;
       return NULL;
    }
    res = (Fs+frame_size)/(2*frame_size);
    
-   mode = celt_alloc(sizeof(CELTMode));
+   mode = cc6_celt_alloc(sizeof(cc6_CELTMode));
    if (mode==NULL)
       goto failure;
-   mode->marker_start = MODEPARTIAL;
+   mode->marker_start = cc6_MODEPARTIAL;
    mode->Fs = Fs;
    mode->mdctSize = frame_size;
    mode->nbChannels = channels;
-   mode->eBands = compute_ebands(Fs, frame_size, &mode->nbEBands);
+   mode->eBands = cc6_compute_ebands(Fs, frame_size, &mode->nbEBands);
    if (mode->eBands==NULL)
       goto failure;
-   compute_pbands(mode, res);
+   cc6_compute_pbands(mode, res);
    if (mode->pBands==NULL)
       goto failure;
-   mode->ePredCoef = QCONST16(.8f,15);
+   mode->ePredCoef = cc6_QCONST16(.8f,15);
 
    if (frame_size > 640 && (frame_size%16)==0)
    {
@@ -384,29 +384,29 @@ CELTMode *celt_mode_create(celt_int32_t Fs, int channels, int frame_size, int *e
    else
       mode->overlap = (frame_size>>3)<<2;
 
-   compute_allocation_table(mode, res);
+   cc6_compute_allocation_table(mode, res);
    if (mode->allocVectors==NULL)
       goto failure;
    
-   window = (celt_word16_t*)celt_alloc(mode->overlap*sizeof(celt_word16_t));
+   window = (cc6_celt_word16_t*)cc6_celt_alloc(mode->overlap*sizeof(cc6_celt_word16_t));
    if (window==NULL)
       goto failure;
 
 #ifndef FIXED_POINT
    for (i=0;i<mode->overlap;i++)
-      window[i] = Q15ONE*sin(.5*M_PI* sin(.5*M_PI*(i+.5)/mode->overlap) * sin(.5*M_PI*(i+.5)/mode->overlap));
+      window[i] = cc6_Q15ONE*sin(.5*cc6_M_PI* sin(.5*cc6_M_PI*(i+.5)/mode->overlap) * sin(.5*cc6_M_PI*(i+.5)/mode->overlap));
 #else
    for (i=0;i<mode->overlap;i++)
-      window[i] = MIN32(32767,32768.*sin(.5*M_PI* sin(.5*M_PI*(i+.5)/mode->overlap) * sin(.5*M_PI*(i+.5)/mode->overlap)));
+      window[i] = cc6_MIN32(32767,32768.*sin(.5*cc6_M_PI* sin(.5*cc6_M_PI*(i+.5)/mode->overlap) * sin(.5*cc6_M_PI*(i+.5)/mode->overlap)));
 #endif
    mode->window = window;
 
-   mode->bits = (const celt_int16_t **)compute_alloc_cache(mode, 1);
+   mode->bits = (const cc6_celt_int16_t **)cc6_compute_alloc_cache(mode, 1);
    if (mode->bits==NULL)
       goto failure;
 
 #ifndef SHORTCUTS
-   psydecay_init(&mode->psy, MAX_PERIOD/2, mode->Fs);
+   cc6_psydecay_init(&mode->psy, cc6_MAX_PERIOD/2, mode->Fs);
    if (mode->psy.decayR==NULL)
       goto failure;
 #endif
@@ -416,59 +416,59 @@ CELTMode *celt_mode_create(celt_int32_t Fs, int channels, int frame_size, int *e
 #ifdef DISABLE_STEREO
    if (channels > 1)
    {
-      celt_warning("Stereo support was disable from this build");
+      cc6_celt_warning("Stereo support was disable from this build");
       if (error)
-         *error = CELT_BAD_ARG;
+         *error = cc6_CELT_BAD_ARG;
       return NULL;
    }
 #endif
 
-   mdct_init(&mode->mdct, 2*mode->mdctSize);
-   mode->fft = pitch_state_alloc(MAX_PERIOD);
+   cc6_mdct_init(&mode->mdct, 2*mode->mdctSize);
+   mode->fft = cc6_pitch_state_alloc(cc6_MAX_PERIOD);
 
    mode->shortMdctSize = mode->mdctSize/mode->nbShortMdcts;
-   mdct_init(&mode->shortMdct, 2*mode->shortMdctSize);
+   cc6_mdct_init(&mode->shortMdct, 2*mode->shortMdctSize);
    mode->shortWindow = mode->window;
-   mode->prob = quant_prob_alloc(mode);
+   mode->prob = cc6_quant_prob_alloc(mode);
    if ((mode->mdct.trig==NULL) || (mode->mdct.kfft==NULL) || (mode->fft==NULL) ||
        (mode->shortMdct.trig==NULL) || (mode->shortMdct.kfft==NULL) || (mode->prob==NULL))
      goto failure;
 
-   mode->marker_start = MODEVALID;
-   mode->marker_end   = MODEVALID;
+   mode->marker_start = cc6_MODEVALID;
+   mode->marker_end   = cc6_MODEVALID;
    if (error)
-      *error = CELT_OK;
+      *error = cc6_CELT_OK;
    return mode;
 failure: 
    if (error)
-      *error = CELT_INVALID_MODE;
+      *error = cc6_CELT_INVALID_MODE;
    if (mode!=NULL)
-      celt_mode_destroy(mode);
+      cc6_celt_mode_destroy(mode);
    return NULL;
 }
 
-void celt_mode_destroy(CELTMode *mode)
+void cc6_celt_mode_destroy(cc6_CELTMode *mode)
 {
    int i;
-   const celt_int16_t *prevPtr = NULL;
+   const cc6_celt_int16_t *prevPtr = NULL;
    if (mode == NULL)
    {
-      celt_warning("NULL passed to celt_mode_destroy");
+      cc6_celt_warning("NULL passed to cc6_celt_mode_destroy");
       return;
    }
 
-   if (mode->marker_start == MODEFREED || mode->marker_end == MODEFREED)
+   if (mode->marker_start == cc6_MODEFREED || mode->marker_end == cc6_MODEFREED)
    {
-      celt_warning("Freeing a mode which has already been freed"); 
+      cc6_celt_warning("Freeing a mode which has already been freed");
       return;
    }
 
-   if (mode->marker_start != MODEVALID && mode->marker_start != MODEPARTIAL)
+   if (mode->marker_start != cc6_MODEVALID && mode->marker_start != cc6_MODEPARTIAL)
    {
-      celt_warning("This is not a valid CELT mode structure");
+      cc6_celt_warning("This is not a valid CELT mode structure");
       return;  
    }
-   mode->marker_start = MODEFREED;
+   mode->marker_start = cc6_MODEFREED;
 #ifndef STATIC_MODES
    if (mode->bits!=NULL)
    {
@@ -477,38 +477,38 @@ void celt_mode_destroy(CELTMode *mode)
          if (mode->bits[i] != prevPtr)
          {
             prevPtr = mode->bits[i];
-            celt_free((int*)mode->bits[i]);
+            cc6_celt_free((int*)mode->bits[i]);
           }
       }
    }   
-   celt_free((int**)mode->bits);
-   celt_free((int*)mode->eBands);
-   celt_free((int*)mode->pBands);
-   celt_free((int*)mode->allocVectors);
+   cc6_celt_free((int**)mode->bits);
+   cc6_celt_free((int*)mode->eBands);
+   cc6_celt_free((int*)mode->pBands);
+   cc6_celt_free((int*)mode->allocVectors);
    
-   celt_free((celt_word16_t*)mode->window);
+   cc6_celt_free((cc6_celt_word16_t*)mode->window);
 
 #ifndef SHORTCUTS
-   psydecay_clear(&mode->psy);
+   cc6_psydecay_clear(&mode->psy);
 #endif
 #endif
-   mdct_clear(&mode->mdct);
-   mdct_clear(&mode->shortMdct);
-   pitch_state_free(mode->fft);
-   quant_prob_free(mode->prob);
-   mode->marker_end = MODEFREED;
-   celt_free((CELTMode *)mode);
+   cc6_mdct_clear(&mode->mdct);
+   cc6_mdct_clear(&mode->shortMdct);
+   cc6_pitch_state_free(mode->fft);
+   cc6_quant_prob_free(mode->prob);
+   mode->marker_end = cc6_MODEFREED;
+   cc6_celt_free((cc6_CELTMode *)mode);
 }
 
-int check_mode(const CELTMode *mode)
+int cc6_check_mode(const cc6_CELTMode *mode)
 {
    if (mode==NULL)
-      return CELT_INVALID_MODE;
-   if (mode->marker_start == MODEVALID && mode->marker_end == MODEVALID)
-      return CELT_OK;
-   if (mode->marker_start == MODEFREED || mode->marker_end == MODEFREED)
-      celt_warning("Using a mode that has already been freed");
+      return cc6_CELT_INVALID_MODE;
+   if (mode->marker_start == cc6_MODEVALID && mode->marker_end == cc6_MODEVALID)
+      return cc6_CELT_OK;
+   if (mode->marker_start == cc6_MODEFREED || mode->marker_end == cc6_MODEFREED)
+      cc6_celt_warning("Using a mode that has already been freed");
    else
-      celt_warning("This is not a valid CELT mode");
-   return CELT_INVALID_MODE;
+      cc6_celt_warning("This is not a valid CELT mode");
+   return cc6_CELT_INVALID_MODE;
 }

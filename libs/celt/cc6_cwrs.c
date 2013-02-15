@@ -44,10 +44,10 @@
    with frac bits of fractional precision.
   Tested for all possible 32-bit inputs with frac=4, where the maximum
    overestimation is 0.06254243 bits.*/
-int log2_frac(ec_uint32 val, int frac)
+int cc6_log2_frac(cc6_ec_uint32 val, int frac)
 {
   int l;
-  l=EC_ILOG(val);
+  l=cc6_EC_ILOG(val);
   if(val&val-1){
     /*This is (val>>l-16), but guaranteed to round up, even if adding a bias
        before the shift would cause overflow (e.g., for 0xFFFFxxxx).*/
@@ -71,10 +71,10 @@ int log2_frac(ec_uint32 val, int frac)
   else return l-1<<frac;
 }
 
-#define MASK32 (0xFFFFFFFF)
+#define cc6_MASK32 (0xFFFFFFFF)
 
-/*INV_TABLE[i] holds the multiplicative inverse of (2*i+1) mod 2**32.*/
-static const celt_uint32_t INV_TABLE[128]={
+/*cc6_INV_TABLE[i] holds the multiplicative inverse of (2*i+1) mod 2**32.*/
+static const cc6_celt_uint32_t cc6_INV_TABLE[128]={
   0x00000001,0xAAAAAAAB,0xCCCCCCCD,0xB6DB6DB7,
   0x38E38E39,0xBA2E8BA3,0xC4EC4EC5,0xEEEEEEEF,
   0xF0F0F0F1,0x286BCA1B,0x3CF3CF3D,0xE9BD37A7,
@@ -113,38 +113,38 @@ static const celt_uint32_t INV_TABLE[128]={
   _a, _b, _c, and _d may be arbitrary so long as the arbitrary precision result
    fits in 32 bits, but currently the table for multiplicative inverses is only
    valid for _d<128.*/
-static __inline celt_uint32_t imusdiv32odd(celt_uint32_t _a,celt_uint32_t _b,
- celt_uint32_t _c,int _d){
-  return (_a*_b-_c)*INV_TABLE[_d]&MASK32;
+static __inline cc6_celt_uint32_t cc6_imusdiv32odd(cc6_celt_uint32_t _a,cc6_celt_uint32_t _b,
+ cc6_celt_uint32_t _c,int _d){
+  return (_a*_b-_c)*cc6_INV_TABLE[_d]&cc6_MASK32;
 }
 
 /*Computes (_a*_b-_c)/_d when the quotient is known to be exact.
-  _d does not actually have to be even, but imusdiv32odd will be faster when
+  _d does not actually have to be even, but cc6_imusdiv32odd will be faster when
    it's odd, so you should use that instead.
   _a and _d are assumed to be small (e.g., _a*_d fits in 32 bits; currently the
    table for multiplicative inverses is only valid for _d<=256).
   _b and _c may be arbitrary so long as the arbitrary precision reuslt fits in
    32 bits.*/
-static __inline celt_uint32_t imusdiv32even(celt_uint32_t _a,celt_uint32_t _b,
- celt_uint32_t _c,int _d){
-  celt_uint32_t inv;
+static __inline cc6_celt_uint32_t cc6_imusdiv32even(cc6_celt_uint32_t _a,cc6_celt_uint32_t _b,
+ cc6_celt_uint32_t _c,int _d){
+  cc6_celt_uint32_t inv;
   int           mask;
   int           shift;
   int           one;
-  celt_assert(_d>0);
-  shift=EC_ILOG(_d^_d-1);
-  celt_assert(_d<=256);
-  inv=INV_TABLE[_d-1>>shift];
+  cc6_celt_assert(_d>0);
+  shift=cc6_EC_ILOG(_d^_d-1);
+  cc6_celt_assert(_d<=256);
+  inv=cc6_INV_TABLE[_d-1>>shift];
   shift--;
   one=1<<shift;
   mask=one-1;
   return (_a*(_b>>shift)-(_c>>shift)+
-   (_a*(_b&mask)+one-(_c&mask)>>shift)-1)*inv&MASK32;
+   (_a*(_b&mask)+one-(_c&mask)>>shift)-1)*inv&cc6_MASK32;
 }
 
 /*Compute floor(sqrt(_val)) with exact arithmetic.
   This has been tested on all possible 32-bit inputs.*/
-static unsigned isqrt32(celt_uint32_t _val){
+static unsigned cc6_isqrt32(cc6_celt_uint32_t _val){
   unsigned b;
   unsigned g;
   int      bshift;
@@ -153,11 +153,11 @@ static unsigned isqrt32(celt_uint32_t _val){
     The main idea is to search for the largest binary digit b such that
      (g+b)*(g+b) <= _val, and add it to the solution g.*/
   g=0;
-  bshift=EC_ILOG(_val)-1>>1;
+  bshift=cc6_EC_ILOG(_val)-1>>1;
   b=1U<<bshift;
   do{
-    celt_uint32_t t;
-    t=((celt_uint32_t)g<<1)+b<<bshift;
+    cc6_celt_uint32_t t;
+    t=((cc6_celt_uint32_t)g<<1)+b<<bshift;
     if(t<=_val){
       g+=b;
       _val-=t;
@@ -172,25 +172,25 @@ static unsigned isqrt32(celt_uint32_t _val){
 #if 0
 /*Compute floor(sqrt(_val)) with exact arithmetic.
   This has been tested on all possible 36-bit inputs.*/
-static celt_uint32_t isqrt36(celt_uint64_t _val){
-  celt_uint32_t val32;
-  celt_uint32_t b;
-  celt_uint32_t g;
+static cc6_celt_uint32_t isqrt36(cc6_celt_uint64_t _val){
+  cc6_celt_uint32_t val32;
+  cc6_celt_uint32_t b;
+  cc6_celt_uint32_t g;
   int           bshift;
   g=0;
   b=0x20000;
   for(bshift=18;bshift-->13;){
-    celt_uint64_t t;
-    t=((celt_uint64_t)g<<1)+b<<bshift;
+    cc6_celt_uint64_t t;
+    t=((cc6_celt_uint64_t)g<<1)+b<<bshift;
     if(t<=_val){
       g+=b;
       _val-=t;
     }
     b>>=1;
   }
-  val32=(celt_uint32_t)_val;
+  val32=(cc6_celt_uint32_t)_val;
   for(;bshift>=0;bshift--){
-    celt_uint32_t t;
+    cc6_celt_uint32_t t;
     t=(g<<1)+b<<bshift;
     if(t<=val32){
       g+=b;
@@ -323,12 +323,12 @@ static celt_uint32_t isqrt36(celt_uint64_t _val){
 
 /*Determines if V(N,K) fits in a 32-bit unsigned integer.
   N and K are themselves limited to 15 bits.*/
-int fits_in32(int _n, int _k)
+int cc6_fits_in32(int _n, int _k)
 {
-   static const celt_int16_t maxN[15] = {
+   static const cc6_celt_int16_t maxN[15] = {
       32767, 32767, 32767, 1476, 283, 109,  60,  40,
        29,  24,  20,  18,  16,  14,  13};
-   static const celt_int16_t maxK[15] = {
+   static const cc6_celt_int16_t maxK[15] = {
       32767, 32767, 32767, 32767, 1172, 238,  95,  53,
        36,  27,  22,  18,  16,  15,  13};
    if (_n>=14)
@@ -343,67 +343,67 @@ int fits_in32(int _n, int _k)
 }
 
 /*Compute U(1,_k).*/
-static __inline unsigned ucwrs1(int _k){
+static __inline unsigned cc6_ucwrs1(int _k){
   return _k?1:0;
 }
 
 /*Compute V(1,_k).*/
-static __inline unsigned ncwrs1(int _k){
+static __inline unsigned cc6_ncwrs1(int _k){
   return _k?2:1;
 }
 
 /*Compute U(2,_k).
   Note that this may be called with _k=32768 (maxK[2]+1).*/
-static __inline unsigned ucwrs2(unsigned _k){
+static __inline unsigned cc6_ucwrs2(unsigned _k){
   return _k?_k+(_k-1):0;
 }
 
 /*Compute V(2,_k).*/
-static __inline celt_uint32_t ncwrs2(int _k){
-  return _k?4*(celt_uint32_t)_k:1;
+static __inline cc6_celt_uint32_t cc6_ncwrs2(int _k){
+  return _k?4*(cc6_celt_uint32_t)_k:1;
 }
 
 /*Compute U(3,_k).
   Note that this may be called with _k=32768 (maxK[3]+1).*/
-static __inline celt_uint32_t ucwrs3(unsigned _k){
-  return _k?(2*(celt_uint32_t)_k-2)*_k+1:0;
+static __inline cc6_celt_uint32_t cc6_ucwrs3(unsigned _k){
+  return _k?(2*(cc6_celt_uint32_t)_k-2)*_k+1:0;
 }
 
 /*Compute V(3,_k).*/
-static __inline celt_uint32_t ncwrs3(int _k){
-  return _k?2*(2*(unsigned)_k*(celt_uint32_t)_k+1):1;
+static __inline cc6_celt_uint32_t cc6_ncwrs3(int _k){
+  return _k?2*(2*(unsigned)_k*(cc6_celt_uint32_t)_k+1):1;
 }
 
 /*Compute U(4,_k).*/
-static __inline celt_uint32_t ucwrs4(int _k){
-  return _k?imusdiv32odd(2*_k,(2*_k-3)*(celt_uint32_t)_k+4,3,1):0;
+static __inline cc6_celt_uint32_t cc6_ucwrs4(int _k){
+  return _k?cc6_imusdiv32odd(2*_k,(2*_k-3)*(cc6_celt_uint32_t)_k+4,3,1):0;
 }
 
 /*Compute V(4,_k).*/
-static __inline celt_uint32_t ncwrs4(int _k){
-  return _k?((_k*(celt_uint32_t)_k+2)*_k)/3<<3:1;
+static __inline cc6_celt_uint32_t cc6_ncwrs4(int _k){
+  return _k?((_k*(cc6_celt_uint32_t)_k+2)*_k)/3<<3:1;
 }
 
 /*Compute U(5,_k).*/
-static __inline celt_uint32_t ucwrs5(int _k){
-  return _k?(((((_k-2)*(unsigned)_k+5)*(celt_uint32_t)_k-4)*_k)/3<<1)+1:0;
+static __inline cc6_celt_uint32_t cc6_ucwrs5(int _k){
+  return _k?(((((_k-2)*(unsigned)_k+5)*(cc6_celt_uint32_t)_k-4)*_k)/3<<1)+1:0;
 }
 
 /*Compute V(5,_k).*/
-static __inline celt_uint32_t ncwrs5(int _k){
-  return _k?(((_k*(unsigned)_k+5)*(celt_uint32_t)_k*_k)/3<<2)+2:1;
+static __inline cc6_celt_uint32_t cc6_ncwrs5(int _k){
+  return _k?(((_k*(unsigned)_k+5)*(cc6_celt_uint32_t)_k*_k)/3<<2)+2:1;
 }
 
 /*Computes the next row/column of any recurrence that obeys the relation
    u[i][j]=u[i-1][j]+u[i][j-1]+u[i-1][j-1].
   _ui0 is the base case for the new row/column.*/
-static __inline void unext(celt_uint32_t *_ui,unsigned _len,celt_uint32_t _ui0){
-  celt_uint32_t ui1;
+static __inline void cc6_unext(cc6_celt_uint32_t *_ui,unsigned _len,cc6_celt_uint32_t _ui0){
+  cc6_celt_uint32_t ui1;
   unsigned      j;
   /*This do-while will overrun the array if we don't have storage for at least
      2 values.*/
   j=1; do {
-    ui1=UADD32(UADD32(_ui[j],_ui[j-1]),_ui0);
+    ui1=cc6_UADD32(cc6_UADD32(_ui[j],_ui[j-1]),_ui0);
     _ui[j-1]=_ui0;
     _ui0=ui1;
   } while (++j<_len);
@@ -413,13 +413,13 @@ static __inline void unext(celt_uint32_t *_ui,unsigned _len,celt_uint32_t _ui0){
 /*Computes the previous row/column of any recurrence that obeys the relation
    u[i-1][j]=u[i][j]-u[i][j-1]-u[i-1][j-1].
   _ui0 is the base case for the new row/column.*/
-static __inline void uprev(celt_uint32_t *_ui,unsigned _n,celt_uint32_t _ui0){
-  celt_uint32_t ui1;
+static __inline void cc6_uprev(cc6_celt_uint32_t *_ui,unsigned _n,cc6_celt_uint32_t _ui0){
+  cc6_celt_uint32_t ui1;
   unsigned      j;
   /*This do-while will overrun the array if we don't have storage for at least
      2 values.*/
   j=1; do {
-    ui1=USUB32(USUB32(_ui[j],_ui[j-1]),_ui0);
+    ui1=cc6_USUB32(cc6_USUB32(_ui[j],_ui[j-1]),_ui0);
     _ui[j-1]=_ui0;
     _ui0=ui1;
   } while (++j<_n);
@@ -428,35 +428,35 @@ static __inline void uprev(celt_uint32_t *_ui,unsigned _n,celt_uint32_t _ui0){
 
 /*Compute V(_n,_k), as well as U(_n,0..._k+1).
   _u: On exit, _u[i] contains U(_n,i) for i in [0..._k+1].*/
-static celt_uint32_t ncwrs_urow(unsigned _n,unsigned _k,celt_uint32_t *_u){
-  celt_uint32_t um2;
+static cc6_celt_uint32_t cc6_ncwrs_urow(unsigned _n,unsigned _k,cc6_celt_uint32_t *_u){
+  cc6_celt_uint32_t um2;
   unsigned      len;
   unsigned      k;
   len=_k+2;
   /*We require storage at least 3 values (e.g., _k>0).*/
-  celt_assert(len>=3);
+  cc6_celt_assert(len>=3);
   _u[0]=0;
   _u[1]=um2=1;
   if(_n<=6 || _k>255){
     /*If _n==0, _u[0] should be 1 and the rest should be 0.*/
     /*If _n==1, _u[i] should be 1 for i>1.*/
-    celt_assert(_n>=2);
+    cc6_celt_assert(_n>=2);
     /*If _k==0, the following do-while loop will overflow the buffer.*/
-    celt_assert(_k>0);
+    cc6_celt_assert(_k>0);
     k=2;
     do _u[k]=(k<<1)-1;
     while(++k<len);
-    for(k=2;k<_n;k++)unext(_u+1,_k+1,1);
+    for(k=2;k<_n;k++)cc6_unext(_u+1,_k+1,1);
   }
   else{
-    celt_uint32_t um1;
-    celt_uint32_t n2m1;
+    cc6_celt_uint32_t um1;
+    cc6_celt_uint32_t n2m1;
     _u[2]=n2m1=um1=(_n<<1)-1;
     for(k=3;k<len;k++){
       /*U(N,K) = ((2*N-1)*U(N,K-1)-U(N,K-2))/(K-1) + U(N,K-2)*/
-      _u[k]=um2=imusdiv32even(n2m1,um1,um2,k-1)+um2;
+      _u[k]=um2=cc6_imusdiv32even(n2m1,um1,um2,k-1)+um2;
       if(++k>=len)break;
-      _u[k]=um1=imusdiv32odd(n2m1,um2,um1,k-1>>1)+um1;
+      _u[k]=um1=cc6_imusdiv32odd(n2m1,um2,um1,k-1>>1)+um1;
     }
   }
   return _u[_k]+_u[_k+1];
@@ -466,7 +466,7 @@ static celt_uint32_t ncwrs_urow(unsigned _n,unsigned _k,celt_uint32_t *_u){
 /*Returns the _i'th combination of _k elements (at most 32767) chosen from a
    set of size 1 with associated sign bits.
   _y: Returns the vector of pulses.*/
-static __inline void cwrsi1(int _k,celt_uint32_t _i,int *_y){
+static __inline void cc6_cwrsi1(int _k,cc6_celt_uint32_t _i,int *_y){
   int s;
   s=-(int)_i;
   _y[0]=_k+s^s;
@@ -475,53 +475,53 @@ static __inline void cwrsi1(int _k,celt_uint32_t _i,int *_y){
 /*Returns the _i'th combination of _k elements (at most 32767) chosen from a
    set of size 2 with associated sign bits.
   _y: Returns the vector of pulses.*/
-static __inline void cwrsi2(int _k,celt_uint32_t _i,int *_y){
-  celt_uint32_t p;
+static __inline void cc6_cwrsi2(int _k,cc6_celt_uint32_t _i,int *_y){
+  cc6_celt_uint32_t p;
   int           s;
   int           yj;
-  p=ucwrs2(_k+1U);
+  p=cc6_ucwrs2(_k+1U);
   s=-(_i>=p);
   _i-=p&s;
   yj=_k;
   _k=_i+1>>1;
-  p=ucwrs2(_k);
+  p=cc6_ucwrs2(_k);
   _i-=p;
   yj-=_k;
   _y[0]=yj+s^s;
-  cwrsi1(_k,_i,_y+1);
+  cc6_cwrsi1(_k,_i,_y+1);
 }
 
 /*Returns the _i'th combination of _k elements (at most 32767) chosen from a
    set of size 3 with associated sign bits.
   _y: Returns the vector of pulses.*/
-static void cwrsi3(int _k,celt_uint32_t _i,int *_y){
-  celt_uint32_t p;
+static void cc6_cwrsi3(int _k,cc6_celt_uint32_t _i,int *_y){
+  cc6_celt_uint32_t p;
   int           s;
   int           yj;
-  p=ucwrs3(_k+1U);
+  p=cc6_ucwrs3(_k+1U);
   s=-(_i>=p);
   _i-=p&s;
   yj=_k;
-  /*Finds the maximum _k such that ucwrs3(_k)<=_i (tested for all
+  /*Finds the maximum _k such that cc6_ucwrs3(_k)<=_i (tested for all
      _i<2147418113=U(3,32768)).*/
-  _k=_i>0?isqrt32(2*_i-1)+1>>1:0;
-  p=ucwrs3(_k);
+  _k=_i>0?cc6_isqrt32(2*_i-1)+1>>1:0;
+  p=cc6_ucwrs3(_k);
   _i-=p;
   yj-=_k;
   _y[0]=yj+s^s;
-  cwrsi2(_k,_i,_y+1);
+  cc6_cwrsi2(_k,_i,_y+1);
 }
 
 /*Returns the _i'th combination of _k elements (at most 1172) chosen from a set
    of size 4 with associated sign bits.
   _y: Returns the vector of pulses.*/
-static void cwrsi4(int _k,celt_uint32_t _i,int *_y){
-  celt_uint32_t p;
+static void cc6_cwrsi4(int _k,cc6_celt_uint32_t _i,int *_y){
+  cc6_celt_uint32_t p;
   int           s;
   int           yj;
   int           kl;
   int           kr;
-  p=ucwrs4(_k+1);
+  p=cc6_ucwrs4(_k+1);
   s=-(_i>=p);
   _i-=p&s;
   yj=_k;
@@ -532,7 +532,7 @@ static void cwrsi4(int _k,celt_uint32_t _i,int *_y){
   kr=_k;
   for(;;){
     _k=kl+kr>>1;
-    p=ucwrs4(_k);
+    p=cc6_ucwrs4(_k);
     if(p<_i){
       if(_k>=kr)break;
       kl=_k+1;
@@ -543,26 +543,26 @@ static void cwrsi4(int _k,celt_uint32_t _i,int *_y){
   _i-=p;
   yj-=_k;
   _y[0]=yj+s^s;
-  cwrsi3(_k,_i,_y+1);
+  cc6_cwrsi3(_k,_i,_y+1);
 }
 
 /*Returns the _i'th combination of _k elements (at most 238) chosen from a set
    of size 5 with associated sign bits.
   _y: Returns the vector of pulses.*/
-static void cwrsi5(int _k,celt_uint32_t _i,int *_y){
-  celt_uint32_t p;
+static void cc6_cwrsi5(int _k,cc6_celt_uint32_t _i,int *_y){
+  cc6_celt_uint32_t p;
   int           s;
   int           yj;
-  p=ucwrs5(_k+1);
+  p=cc6_ucwrs5(_k+1);
   s=-(_i>=p);
   _i-=p&s;
   yj=_k;
 #if 0
-  /*Finds the maximum _k such that ucwrs5(_k)<=_i (tested for all
+  /*Finds the maximum _k such that cc6_ucwrs5(_k)<=_i (tested for all
      _i<2157192969=U(5,239)).*/
-  if(_i>=0x2AAAAAA9UL)_k=isqrt32(2*isqrt36(10+6*(celt_uint64_t)_i)-7)+1>>1;
-  else _k=_i>0?isqrt32(2*(celt_uint32_t)isqrt32(10+6*_i)-7)+1>>1:0;
-  p=ucwrs5(_k);
+  if(_i>=0x2AAAAAA9UL)_k=cc6_isqrt32(2*isqrt36(10+6*(cc6_celt_uint64_t)_i)-7)+1>>1;
+  else _k=_i>0?cc6_isqrt32(2*(cc6_celt_uint32_t)cc6_isqrt32(10+6*_i)-7)+1>>1:0;
+  p=cc6_ucwrs5(_k);
 #else 
   /* A binary search on U(5,K) avoids the need for 64-bit arithmetic */
   {
@@ -570,7 +570,7 @@ static void cwrsi5(int _k,celt_uint32_t _i,int *_y){
     int kr=_k;
     for(;;){
       _k=kl+kr>>1;
-      p=ucwrs5(_k);
+      p=cc6_ucwrs5(_k);
       if(p<_i){
         if(_k>=kr)break;
         kl=_k+1;
@@ -583,7 +583,7 @@ static void cwrsi5(int _k,celt_uint32_t _i,int *_y){
   _i-=p;
   yj-=_k;
   _y[0]=yj+s^s;
-  cwrsi4(_k,_i,_y+1);
+  cc6_cwrsi4(_k,_i,_y+1);
 }
 
 /*Returns the _i'th combination of _k elements chosen from a set of size _n
@@ -591,12 +591,12 @@ static void cwrsi5(int _k,celt_uint32_t _i,int *_y){
   _y: Returns the vector of pulses.
   _u: Must contain entries [0..._k+1] of row _n of U() on input.
       Its contents will be destructively modified.*/
-static void cwrsi(int _n,int _k,celt_uint32_t _i,int *_y,celt_uint32_t *_u){
+static void cc6_cwrsi(int _n,int _k,cc6_celt_uint32_t _i,int *_y,cc6_celt_uint32_t *_u){
   int j;
-  celt_assert(_n>0);
+  cc6_celt_assert(_n>0);
   j=0;
   do{
-    celt_uint32_t p;
+    cc6_celt_uint32_t p;
     int           s;
     int           yj;
     p=_u[_k+1];
@@ -608,7 +608,7 @@ static void cwrsi(int _n,int _k,celt_uint32_t _i,int *_y,celt_uint32_t *_u){
     _i-=p;
     yj-=_k;
     _y[j]=yj+s^s;
-    uprev(_u,_k+2,0);
+    cc6_uprev(_u,_k+2,0);
   }
   while(++j<_n);
 }
@@ -618,7 +618,7 @@ static void cwrsi(int _n,int _k,celt_uint32_t _i,int *_y,celt_uint32_t *_u){
    of size 1 with associated sign bits.
   _y: The vector of pulses, whose sum of absolute values is K.
   _k: Returns K.*/
-static __inline celt_uint32_t icwrs1(const int *_y,int *_k){
+static __inline cc6_celt_uint32_t cc6_icwrs1(const int *_y,int *_k){
   *_k=abs(_y[0]);
   return _y[0]<0;
 }
@@ -627,13 +627,13 @@ static __inline celt_uint32_t icwrs1(const int *_y,int *_k){
    of size 2 with associated sign bits.
   _y: The vector of pulses, whose sum of absolute values is K.
   _k: Returns K.*/
-static __inline celt_uint32_t icwrs2(const int *_y,int *_k){
-  celt_uint32_t i;
+static __inline cc6_celt_uint32_t cc6_icwrs2(const int *_y,int *_k){
+  cc6_celt_uint32_t i;
   int           k;
-  i=icwrs1(_y+1,&k);
-  i+=ucwrs2(k);
+  i=cc6_icwrs1(_y+1,&k);
+  i+=cc6_ucwrs2(k);
   k+=abs(_y[0]);
-  if(_y[0]<0)i+=ucwrs2(k+1U);
+  if(_y[0]<0)i+=cc6_ucwrs2(k+1U);
   *_k=k;
   return i;
 }
@@ -642,13 +642,13 @@ static __inline celt_uint32_t icwrs2(const int *_y,int *_k){
    of size 3 with associated sign bits.
   _y: The vector of pulses, whose sum of absolute values is K.
   _k: Returns K.*/
-static __inline celt_uint32_t icwrs3(const int *_y,int *_k){
-  celt_uint32_t i;
+static __inline cc6_celt_uint32_t cc6_icwrs3(const int *_y,int *_k){
+  cc6_celt_uint32_t i;
   int           k;
-  i=icwrs2(_y+1,&k);
-  i+=ucwrs3(k);
+  i=cc6_icwrs2(_y+1,&k);
+  i+=cc6_ucwrs3(k);
   k+=abs(_y[0]);
-  if(_y[0]<0)i+=ucwrs3(k+1U);
+  if(_y[0]<0)i+=cc6_ucwrs3(k+1U);
   *_k=k;
   return i;
 }
@@ -657,13 +657,13 @@ static __inline celt_uint32_t icwrs3(const int *_y,int *_k){
    of size 4 with associated sign bits.
   _y: The vector of pulses, whose sum of absolute values is K.
   _k: Returns K.*/
-static __inline celt_uint32_t icwrs4(const int *_y,int *_k){
-  celt_uint32_t i;
+static __inline cc6_celt_uint32_t cc6_icwrs4(const int *_y,int *_k){
+  cc6_celt_uint32_t i;
   int           k;
-  i=icwrs3(_y+1,&k);
-  i+=ucwrs4(k);
+  i=cc6_icwrs3(_y+1,&k);
+  i+=cc6_ucwrs4(k);
   k+=abs(_y[0]);
-  if(_y[0]<0)i+=ucwrs4(k+1);
+  if(_y[0]<0)i+=cc6_ucwrs4(k+1);
   *_k=k;
   return i;
 }
@@ -672,13 +672,13 @@ static __inline celt_uint32_t icwrs4(const int *_y,int *_k){
    of size 5 with associated sign bits.
   _y: The vector of pulses, whose sum of absolute values is K.
   _k: Returns K.*/
-static __inline celt_uint32_t icwrs5(const int *_y,int *_k){
-  celt_uint32_t i;
+static __inline cc6_celt_uint32_t cc6_icwrs5(const int *_y,int *_k){
+  cc6_celt_uint32_t i;
   int           k;
-  i=icwrs4(_y+1,&k);
-  i+=ucwrs5(k);
+  i=cc6_icwrs4(_y+1,&k);
+  i+=cc6_ucwrs5(k);
   k+=abs(_y[0]);
-  if(_y[0]<0)i+=ucwrs5(k+1);
+  if(_y[0]<0)i+=cc6_ucwrs5(k+1);
   *_k=k;
   return i;
 }
@@ -687,22 +687,22 @@ static __inline celt_uint32_t icwrs5(const int *_y,int *_k){
    of size _n with associated sign bits.
   _y:  The vector of pulses, whose sum of absolute values must be _k.
   _nc: Returns V(_n,_k).*/
-celt_uint32_t icwrs(int _n,int _k,celt_uint32_t *_nc,const int *_y,
- celt_uint32_t *_u){
-  celt_uint32_t i;
+cc6_celt_uint32_t cc6_icwrs(int _n,int _k,cc6_celt_uint32_t *_nc,const int *_y,
+ cc6_celt_uint32_t *_u){
+  cc6_celt_uint32_t i;
   int           j;
   int           k;
   /*We can't unroll the first two iterations of the loop unless _n>=2.*/
-  celt_assert(_n>=2);
+  cc6_celt_assert(_n>=2);
   _u[0]=0;
   for(k=1;k<=_k+1;k++)_u[k]=(k<<1)-1;
-  i=icwrs1(_y+_n-1,&k);
+  i=cc6_icwrs1(_y+_n-1,&k);
   j=_n-2;
   i+=_u[k];
   k+=abs(_y[j]);
   if(_y[j]<0)i+=_u[k+1];
   while(j-->0){
-    unext(_u,_k+2,0);
+    cc6_unext(_u,_k+2,0);
     i+=_u[k];
     k+=abs(_y[j]);
     if(_y[j]<0)i+=_u[k+1];
@@ -712,19 +712,19 @@ celt_uint32_t icwrs(int _n,int _k,celt_uint32_t *_nc,const int *_y,
 }
 
 
-/*Computes get_required_bits when splitting is required.
+/*Computes cc6_get_required_bits when splitting is required.
   _left_bits and _right_bits must contain the required bits for the left and
    right sides of the split, respectively (which themselves may require
    splitting).*/
-static void get_required_split_bits(celt_int16_t *_bits,
- const celt_int16_t *_left_bits,const celt_int16_t *_right_bits,
+static void cc6_get_required_split_bits(cc6_celt_int16_t *_bits,
+ const cc6_celt_int16_t *_left_bits,const cc6_celt_int16_t *_right_bits,
  int _n,int _maxk,int _frac){
   int k;
   for(k=_maxk;k-->0;){
     /*If we've reached a k where everything fits in 32 bits, evaluate the
        remaining required bits directly.*/
-    if(fits_in32(_n,k)){
-      get_required_bits(_bits,_n,k+1,_frac);
+    if(cc6_fits_in32(_n,k)){
+      cc6_get_required_bits(_bits,_n,k+1,_frac);
       break;
     }
     else{
@@ -739,135 +739,135 @@ static void get_required_split_bits(celt_int16_t *_bits,
         split_bits=_left_bits[i]+_right_bits[k-i];
         if(split_bits>worst_bits)worst_bits=split_bits;
       }
-      _bits[k]=log2_frac(k+1,_frac)+worst_bits;
+      _bits[k]=cc6_log2_frac(k+1,_frac)+worst_bits;
     }
   }
 }
 
-/*Computes get_required_bits for a pair of N values.
+/*Computes cc6_get_required_bits for a pair of N values.
   _n1 and _n2 must either be equal or two consecutive integers.
   Returns the buffer used to store the required bits for _n2, which is either
    _bits1 if _n1==_n2 or _bits2 if _n1+1==_n2.*/
-static celt_int16_t *get_required_bits_pair(celt_int16_t *_bits1,
- celt_int16_t *_bits2,celt_int16_t *_tmp,int _n1,int _n2,int _maxk,int _frac){
-  celt_int16_t *tmp2;
+static cc6_celt_int16_t *cc6_get_required_bits_pair(cc6_celt_int16_t *_bits1,
+ cc6_celt_int16_t *_bits2,cc6_celt_int16_t *_tmp,int _n1,int _n2,int _maxk,int _frac){
+  cc6_celt_int16_t *tmp2;
   /*If we only need a single set of required bits...*/
   if(_n1==_n2){
     /*Stop recursing if everything fits.*/
-    if(fits_in32(_n1,_maxk-1))get_required_bits(_bits1,_n1,_maxk,_frac);
+    if(cc6_fits_in32(_n1,_maxk-1))cc6_get_required_bits(_bits1,_n1,_maxk,_frac);
     else{
-      _tmp=get_required_bits_pair(_bits2,_tmp,_bits1,
+      _tmp=cc6_get_required_bits_pair(_bits2,_tmp,_bits1,
        _n1>>1,_n1+1>>1,_maxk,_frac);
-      get_required_split_bits(_bits1,_bits2,_tmp,_n1,_maxk,_frac);
+      cc6_get_required_split_bits(_bits1,_bits2,_tmp,_n1,_maxk,_frac);
     }
     return _bits1;
   }
   /*Otherwise we need two distinct sets...*/
-  celt_assert(_n1+1==_n2);
+  cc6_celt_assert(_n1+1==_n2);
   /*Stop recursing if everything fits.*/
-  if(fits_in32(_n2,_maxk-1)){
-    get_required_bits(_bits1,_n1,_maxk,_frac);
-    get_required_bits(_bits2,_n2,_maxk,_frac);
+  if(cc6_fits_in32(_n2,_maxk-1)){
+    cc6_get_required_bits(_bits1,_n1,_maxk,_frac);
+    cc6_get_required_bits(_bits2,_n2,_maxk,_frac);
   }
   /*Otherwise choose an evaluation order that doesn't require extra buffers.*/
   else if(_n1&1){
     /*This special case isn't really needed, but can save some work.*/
-    if(fits_in32(_n1,_maxk-1)){
-      tmp2=get_required_bits_pair(_tmp,_bits1,_bits2,
+    if(cc6_fits_in32(_n1,_maxk-1)){
+      tmp2=cc6_get_required_bits_pair(_tmp,_bits1,_bits2,
        _n2>>1,_n2>>1,_maxk,_frac);
-      get_required_split_bits(_bits2,_tmp,tmp2,_n2,_maxk,_frac);
-      get_required_bits(_bits1,_n1,_maxk,_frac);
+      cc6_get_required_split_bits(_bits2,_tmp,tmp2,_n2,_maxk,_frac);
+      cc6_get_required_bits(_bits1,_n1,_maxk,_frac);
     }
     else{
-      _tmp=get_required_bits_pair(_bits2,_tmp,_bits1,
+      _tmp=cc6_get_required_bits_pair(_bits2,_tmp,_bits1,
        _n1>>1,_n1+1>>1,_maxk,_frac);
-      get_required_split_bits(_bits1,_bits2,_tmp,_n1,_maxk,_frac);
-      get_required_split_bits(_bits2,_tmp,_tmp,_n2,_maxk,_frac);
+      cc6_get_required_split_bits(_bits1,_bits2,_tmp,_n1,_maxk,_frac);
+      cc6_get_required_split_bits(_bits2,_tmp,_tmp,_n2,_maxk,_frac);
     }
   }
   else{
     /*There's no need to special case _n1 fitting by itself, since _n2 requires
        us to recurse for both values anyway.*/
-    tmp2=get_required_bits_pair(_tmp,_bits1,_bits2,
+    tmp2=cc6_get_required_bits_pair(_tmp,_bits1,_bits2,
      _n2>>1,_n2+1>>1,_maxk,_frac);
-    get_required_split_bits(_bits2,_tmp,tmp2,_n2,_maxk,_frac);
-    get_required_split_bits(_bits1,_tmp,_tmp,_n1,_maxk,_frac);
+    cc6_get_required_split_bits(_bits2,_tmp,tmp2,_n2,_maxk,_frac);
+    cc6_get_required_split_bits(_bits1,_tmp,_tmp,_n1,_maxk,_frac);
   }
   return _bits2;
 }
 
-void get_required_bits(celt_int16_t *_bits,int _n,int _maxk,int _frac){
+void cc6_get_required_bits(cc6_celt_int16_t *_bits,int _n,int _maxk,int _frac){
   int k;
   /*_maxk==0 => there's nothing to do.*/
-  celt_assert(_maxk>0);
-  if(fits_in32(_n,_maxk-1)){
+  cc6_celt_assert(_maxk>0);
+  if(cc6_fits_in32(_n,_maxk-1)){
     _bits[0]=0;
     if(_maxk>1){
-      VARDECL(celt_uint32_t,u);
-      SAVE_STACK;
-      ALLOC(u,_maxk+1U,celt_uint32_t);
-      ncwrs_urow(_n,_maxk-1,u);
-      for(k=1;k<_maxk;k++)_bits[k]=log2_frac(u[k]+u[k+1],_frac);
-      RESTORE_STACK;
+      cc6_VARDECL(cc6_celt_uint32_t,u);
+      cc6_SAVE_STACK;
+      cc6_ALLOC(u,_maxk+1U,cc6_celt_uint32_t);
+      cc6_ncwrs_urow(_n,_maxk-1,u);
+      for(k=1;k<_maxk;k++)_bits[k]=cc6_log2_frac(u[k]+u[k+1],_frac);
+      cc6_RESTORE_STACK;
     }
   }
   else{
-    VARDECL(celt_int16_t,n1bits);
-    VARDECL(celt_int16_t,n2bits_buf);
-    celt_int16_t *n2bits;
-    SAVE_STACK;
-    ALLOC(n1bits,_maxk,celt_int16_t);
-    ALLOC(n2bits_buf,_maxk,celt_int16_t);
-    n2bits=get_required_bits_pair(n1bits,n2bits_buf,_bits,
+    cc6_VARDECL(cc6_celt_int16_t,n1bits);
+    cc6_VARDECL(cc6_celt_int16_t,n2bits_buf);
+    cc6_celt_int16_t *n2bits;
+    cc6_SAVE_STACK;
+    cc6_ALLOC(n1bits,_maxk,cc6_celt_int16_t);
+    cc6_ALLOC(n2bits_buf,_maxk,cc6_celt_int16_t);
+    n2bits=cc6_get_required_bits_pair(n1bits,n2bits_buf,_bits,
      _n>>1,_n+1>>1,_maxk,_frac);
-    get_required_split_bits(_bits,n1bits,n2bits,_n,_maxk,_frac);
-    RESTORE_STACK;
+    cc6_get_required_split_bits(_bits,n1bits,n2bits,_n,_maxk,_frac);
+    cc6_RESTORE_STACK;
   }
 }
 
 
-static __inline void encode_pulses32(int _n,int _k,const int *_y,ec_enc *_enc){
-  celt_uint32_t i;
+static __inline void cc6_encode_pulses32(int _n,int _k,const int *_y,cc6_ec_enc *_enc){
+  cc6_celt_uint32_t i;
   switch(_n){
     case 1:{
-      i=icwrs1(_y,&_k);
-      celt_assert(ncwrs1(_k)==2);
-      ec_enc_bits(_enc,i,1);
+      i=cc6_icwrs1(_y,&_k);
+      cc6_celt_assert(cc6_ncwrs1(_k)==2);
+      cc6_ec_enc_bits(_enc,i,1);
     }break;
     case 2:{
-      i=icwrs2(_y,&_k);
-      ec_enc_uint(_enc,i,ncwrs2(_k));
+      i=cc6_icwrs2(_y,&_k);
+      cc6_ec_enc_uint(_enc,i,cc6_ncwrs2(_k));
     }break;
     case 3:{
-      i=icwrs3(_y,&_k);
-      ec_enc_uint(_enc,i,ncwrs3(_k));
+      i=cc6_icwrs3(_y,&_k);
+      cc6_ec_enc_uint(_enc,i,cc6_ncwrs3(_k));
     }break;
     case 4:{
-      i=icwrs4(_y,&_k);
-      ec_enc_uint(_enc,i,ncwrs4(_k));
+      i=cc6_icwrs4(_y,&_k);
+      cc6_ec_enc_uint(_enc,i,cc6_ncwrs4(_k));
     }break;
     case 5:{
-      i=icwrs5(_y,&_k);
-      ec_enc_uint(_enc,i,ncwrs5(_k));
+      i=cc6_icwrs5(_y,&_k);
+      cc6_ec_enc_uint(_enc,i,cc6_ncwrs5(_k));
     }break;
     default:{
-      VARDECL(celt_uint32_t,u);
-      celt_uint32_t nc;
-      SAVE_STACK;
-      ALLOC(u,_k+2U,celt_uint32_t);
-      i=icwrs(_n,_k,&nc,_y,u);
-      ec_enc_uint(_enc,i,nc);
-      RESTORE_STACK;
+      cc6_VARDECL(cc6_celt_uint32_t,u);
+      cc6_celt_uint32_t nc;
+      cc6_SAVE_STACK;
+      cc6_ALLOC(u,_k+2U,cc6_celt_uint32_t);
+      i=cc6_icwrs(_n,_k,&nc,_y,u);
+      cc6_ec_enc_uint(_enc,i,nc);
+      cc6_RESTORE_STACK;
     }break;
   }
 }
 
-void encode_pulses(int *_y, int N, int K, ec_enc *enc)
+void cc6_encode_pulses(int *_y, int N, int K, cc6_ec_enc *enc)
 {
    if (K==0) {
-   } else if(fits_in32(N,K))
+   } else if(cc6_fits_in32(N,K))
    {
-      encode_pulses32(N, K, _y, enc);
+      cc6_encode_pulses32(N, K, _y, enc);
    } else {
      int i;
      int count=0;
@@ -875,46 +875,46 @@ void encode_pulses(int *_y, int N, int K, ec_enc *enc)
      split = (N+1)/2;
      for (i=0;i<split;i++)
         count += abs(_y[i]);
-     ec_enc_uint(enc,count,K+1);
-     encode_pulses(_y, split, count, enc);
-     encode_pulses(_y+split, N-split, K-count, enc);
+     cc6_ec_enc_uint(enc,count,K+1);
+     cc6_encode_pulses(_y, split, count, enc);
+     cc6_encode_pulses(_y+split, N-split, K-count, enc);
    }
 }
 
-static __inline void decode_pulses32(int _n,int _k,int *_y,ec_dec *_dec){
+static __inline void cc6_decode_pulses32(int _n,int _k,int *_y,cc6_ec_dec *_dec){
   switch(_n){
     case 1:{
-      celt_assert(ncwrs1(_k)==2);
-      cwrsi1(_k,ec_dec_bits(_dec,1),_y);
+      cc6_celt_assert(cc6_ncwrs1(_k)==2);
+      cc6_cwrsi1(_k,cc6_ec_dec_bits(_dec,1),_y);
     }break;
-    case 2:cwrsi2(_k,ec_dec_uint(_dec,ncwrs2(_k)),_y);break;
-    case 3:cwrsi3(_k,ec_dec_uint(_dec,ncwrs3(_k)),_y);break;
-    case 4:cwrsi4(_k,ec_dec_uint(_dec,ncwrs4(_k)),_y);break;
-    case 5:cwrsi5(_k,ec_dec_uint(_dec,ncwrs5(_k)),_y);break;
+    case 2:cc6_cwrsi2(_k,cc6_ec_dec_uint(_dec,cc6_ncwrs2(_k)),_y);break;
+    case 3:cc6_cwrsi3(_k,cc6_ec_dec_uint(_dec,cc6_ncwrs3(_k)),_y);break;
+    case 4:cc6_cwrsi4(_k,cc6_ec_dec_uint(_dec,cc6_ncwrs4(_k)),_y);break;
+    case 5:cc6_cwrsi5(_k,cc6_ec_dec_uint(_dec,cc6_ncwrs5(_k)),_y);break;
     default:{
-      VARDECL(celt_uint32_t,u);
-      SAVE_STACK;
-      ALLOC(u,_k+2U,celt_uint32_t);
-      cwrsi(_n,_k,ec_dec_uint(_dec,ncwrs_urow(_n,_k,u)),_y,u);
-      RESTORE_STACK;
+      cc6_VARDECL(cc6_celt_uint32_t,u);
+      cc6_SAVE_STACK;
+      cc6_ALLOC(u,_k+2U,cc6_celt_uint32_t);
+      cc6_cwrsi(_n,_k,cc6_ec_dec_uint(_dec,cc6_ncwrs_urow(_n,_k,u)),_y,u);
+      cc6_RESTORE_STACK;
     }
   }
 }
 
-void decode_pulses(int *_y, int N, int K, ec_dec *dec)
+void cc6_decode_pulses(int *_y, int N, int K, cc6_ec_dec *dec)
 {
    if (K==0) {
       int i;
       for (i=0;i<N;i++)
          _y[i] = 0;
-   } else if(fits_in32(N,K))
+   } else if(cc6_fits_in32(N,K))
    {
-      decode_pulses32(N, K, _y, dec);
+      cc6_decode_pulses32(N, K, _y, dec);
    } else {
      int split;
-     int count = ec_dec_uint(dec,K+1);
+     int count = cc6_ec_dec_uint(dec,K+1);
      split = (N+1)/2;
-     decode_pulses(_y, split, count, dec);
-     decode_pulses(_y+split, N-split, K-count, dec);
+     cc6_decode_pulses(_y, split, count, dec);
+     cc6_decode_pulses(_y+split, N-split, K-count, dec);
    }
 }

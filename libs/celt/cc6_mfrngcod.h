@@ -29,32 +29,32 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#if !defined(_mfrngcode_H)
-# define _mfrngcode_H (1)
+#if !defined(cc6__mfrngcode_H)
+# define cc6__mfrngcode_H (1)
 # include "cc6_entcode.h"
 
 /*Constants used by the entropy encoder/decoder.*/
 
 /*The number of bits to output at a time.*/
-# define EC_SYM_BITS   (8)
+# define cc6_EC_SYM_BITS   (8)
 /*The total number of bits in each of the state registers.*/
-# define EC_CODE_BITS  (32)
+# define cc6_EC_CODE_BITS  (32)
 /*The maximum symbol value.*/
-# define EC_SYM_MAX    ((1U<<EC_SYM_BITS)-1)
+# define cc6_EC_SYM_MAX    ((1U<<cc6_EC_SYM_BITS)-1)
 /*Bits to shift by to move a symbol into the high-order position.*/
-# define EC_CODE_SHIFT (EC_CODE_BITS-EC_SYM_BITS-1)
+# define cc6_EC_CODE_SHIFT (cc6_EC_CODE_BITS-cc6_EC_SYM_BITS-1)
 /*Carry bit of the high-order range symbol.*/
-# define EC_CODE_TOP   (((ec_uint32)1U)<<EC_CODE_BITS-1)
+# define cc6_EC_CODE_TOP   (((cc6_ec_uint32)1U)<<cc6_EC_CODE_BITS-1)
 /*Low-order bit of the high-order range symbol.*/
-# define EC_CODE_BOT   (EC_CODE_TOP>>EC_SYM_BITS)
+# define cc6_EC_CODE_BOT   (cc6_EC_CODE_TOP>>cc6_EC_SYM_BITS)
 /*Code for which propagating carries are possible.*/
-# define EC_CODE_CARRY (((ec_uint32)EC_SYM_MAX)<<EC_CODE_SHIFT)
+# define cc6_EC_CODE_CARRY (((cc6_ec_uint32)cc6_EC_SYM_MAX)<<cc6_EC_CODE_SHIFT)
 /*The number of bits available for the last, partial symbol in the code field.*/
-# define EC_CODE_EXTRA ((EC_CODE_BITS-2)%EC_SYM_BITS+1)
+# define cc6_EC_CODE_EXTRA ((cc6_EC_CODE_BITS-2)%cc6_EC_SYM_BITS+1)
 /*A mask for the bits available in the coding buffer.
   This allows different platforms to use a variable with more bits, if it is
    convenient.
-  We will only use EC_CODE_BITS of it.*/
-# define EC_CODE_MASK  ((((ec_uint32)1U)<<EC_CODE_BITS-1)-1<<1|1)
+  We will only use cc6_EC_CODE_BITS of it.*/
+# define cc6_EC_CODE_MASK  ((((cc6_ec_uint32)1U)<<cc6_EC_CODE_BITS-1)-1<<1|1)
 
 #endif

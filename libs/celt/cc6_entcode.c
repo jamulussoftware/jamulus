@@ -41,9 +41,9 @@
 
 
 
-int ec_ilog(ec_uint32 _v){
+int cc6_ec_ilog(cc6_ec_uint32 _v){
 #if defined(EC_CLZ)
-  return EC_CLZ0-EC_CLZ(_v);
+  return cc6_EC_CLZ0-EC_CLZ(_v);
 #else
   /*On a Pentium M, this branchless version tested as the fastest on
      1,000,000,000 random 32-bit integers, edging out a similar version with

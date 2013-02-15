@@ -29,24 +29,24 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef KFFT_DOUBLE_H
-#define KFFT_DOUBLE_H
+#ifndef cc6_KFFT_DOUBLE_H
+#define cc6_KFFT_DOUBLE_H
 
 #ifdef ENABLE_TI_DSPLIB
 
 #include "dsplib.h"
 #include "cc6__kiss_fft_guts.h"
 
-#define cpx32_fft_alloc(length) NULL
-#define cpx32_fft_free(state)
+#define cc6_cpx32_fft_alloc(length) NULL
+#define cc6_cpx32_fft_free(state)
 
-#define cpx32_fft(state, X, Y, nx)\
+#define cc6_cpx32_fft(state, X, Y, nx)\
     (\
       cfft32_SCALE(X,nx),\
       cbrev32(X,Y,nx)\
     )
 
-#define cpx32_ifft(state, X, Y, nx) \
+#define cc6_cpx32_ifft(state, X, Y, nx) \
     (\
       cifft32_NOSCALE(X,nx),\
       cbrev32(X,Y,nx)\
@@ -58,11 +58,11 @@
 #include "cc6_kiss_fft.h"
 #include "cc6__kiss_fft_guts.h"
 
-#define cpx32_fft_alloc(length) kiss_fft_alloc(length, 0, 0);
-#define cpx32_fft_free(state) kiss_fft_free(state)
-#define cpx32_fft(state, X, Y, nx) kiss_fft(state,(const kiss_fft_cpx *)(X), (kiss_fft_cpx *)(Y))
-#define cpx32_ifft(state, X, Y, nx) kiss_ifft(state,(const kiss_fft_cpx *)(X), (kiss_fft_cpx *)(Y))
+#define cc6_cpx32_fft_alloc(length) cc6_kiss_fft_alloc(length, 0, 0);
+#define cc6_cpx32_fft_free(state) cc6_kiss_fft_free(state)
+#define cc6_cpx32_fft(state, X, Y, nx) cc6_kiss_fft(state,(const cc6_kiss_fft_cpx *)(X), (cc6_kiss_fft_cpx *)(Y))
+#define cc6_cpx32_ifft(state, X, Y, nx) cc6_kiss_ifft(state,(const cc6_kiss_fft_cpx *)(X), (cc6_kiss_fft_cpx *)(Y))
 
 #endif /* !ENABLE_TI_DSPLIB */
 
-#endif /* KFFT_DOUBLE_H */
+#endif /* cc6_KFFT_DOUBLE_H */

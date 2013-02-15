@@ -32,53 +32,53 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef FIXED_C6X_H
-#define FIXED_C6X_H
+#ifndef cc6_FIXED_C6X_H
+#define cc6_FIXED_C6X_H
 
-#undef MULT16_16SU 
-#define MULT16_16SU(a,b) _mpysu(a,b)
+#undef cc6_MULT16_16SU
+#define cc6_MULT16_16SU(a,b) _mpysu(a,b)
 
-#undef MULT_16_16
-#define MULT_16_16(a,b) _mpy(a,b)
+#undef cc6_MULT_16_16
+#define cc6_MULT_16_16(a,b) _mpy(a,b)
 
-#define celt_ilog2(x) (30 - _norm(x))
-#define OVERRIDE_CELT_ILOG2
+#define cc6_celt_ilog2(x) (30 - _norm(x))
+#define cc6_OVERRIDE_CELT_ILOG2
 
-#undef MULT16_32_Q15
-#define MULT16_32_Q15(a,b) ADD32(SHL(_mpylh(a,b),1), SHR(_mpsu(a,b),15)
+#undef cc6_MULT16_32_Q15
+#define cc6_MULT16_32_Q15(a,b) cc6_ADD32(cc6_SHL(_mpylh(a,b),1), cc6_SHR(_mpsu(a,b),15)
 
 #if 0
 #include "dsplib.h"
 
-#undef MAX16
-#define MAX16(a,b) _max(a,b)
+#undef cc6_MAX16
+#define cc6_MAX16(a,b) _max(a,b)
 
-#undef MIN16
-#define MIN16(a,b) _min(a,b)
+#undef cc6_MIN16
+#define cc6_MIN16(a,b) _min(a,b)
 
-#undef MAX32
-#define MAX32(a,b) _lmax(a,b)
+#undef cc6_MAX32
+#define cc6_MAX32(a,b) _lmax(a,b)
 
-#undef MIN32
-#define MIN32(a,b) _lmin(a,b)
+#undef cc6_MIN32
+#define cc6_MIN32(a,b) _lmin(a,b)
 
-#undef VSHR32
-#define VSHR32(a, shift) _lshl(a,-(shift))
+#undef cc6_VSHR32
+#define cc6_VSHR32(a, shift) _lshl(a,-(shift))
 
-#undef MULT16_16_Q15
-#define MULT16_16_Q15(a,b) (_smpy(a,b))
+#undef cc6_MULT16_16_Q15
+#define cc6_MULT16_16_Q15(a,b) (_smpy(a,b))
 
-#define celt_maxabs16(x, len) MAX16(maxval((DATA *)x, len),-minval((DATA *)x, len))
-#define OVERRIDE_CELT_MAXABS16
+#define cc6_celt_maxabs16(x, len) cc6_MAX16(maxval((DATA *)x, len),-minval((DATA *)x, len))
+#define cc6_OVERRIDE_CELT_MAXABS16
 
-#define OVERRIDE_FIND_MAX16
-static inline int find_max16(celt_word16_t *x, int len)
+#define cc6_OVERRIDE_FIND_MAX16
+static inline int cc6_find_max16(cc6_celt_word16_t *x, int len)
 {
-   DATA max_corr16 = -VERY_LARGE16;
+   DATA max_corr16 = -cc6_VERY_LARGE16;
    DATA pitch16 = 0;
    maxvec((DATA *)x, len, &max_corr16, &pitch16);
    return pitch16;
 }
 #endif
 
-#endif /* FIXED_C6X_H */
+#endif /* cc6_FIXED_C6X_H */

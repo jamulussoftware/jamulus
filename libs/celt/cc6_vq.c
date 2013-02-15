@@ -41,27 +41,27 @@
 
 /** Takes the pitch vector and the decoded residual vector, computes the gain
     that will give ||p+g*y||=1 and mixes the residual with the pitch. */
-static void mix_pitch_and_residual(int * __restrict iy, celt_norm_t * __restrict X, int N, int K, const celt_norm_t * __restrict P)
+static void cc6_mix_pitch_and_residual(int * __restrict iy, cc6_celt_norm_t * __restrict X, int N, int K, const cc6_celt_norm_t * __restrict P)
 {
    int i;
-   celt_word32_t Ryp, Ryy, Rpp;
-   celt_word16_t ryp, ryy, rpp;
-   celt_word32_t g;
-   VARDECL(celt_norm_t, y);
+   cc6_celt_word32_t Ryp, Ryy, Rpp;
+   cc6_celt_word16_t ryp, ryy, rpp;
+   cc6_celt_word32_t g;
+   cc6_VARDECL(cc6_celt_norm_t, y);
 #ifdef FIXED_POINT
    int yshift;
 #endif
-   SAVE_STACK;
+   cc6_SAVE_STACK;
 #ifdef FIXED_POINT
-   yshift = 13-celt_ilog2(K);
+   yshift = 13-cc6_celt_ilog2(K);
 #endif
-   ALLOC(y, N, celt_norm_t);
+   cc6_ALLOC(y, N, cc6_celt_norm_t);
 
    Rpp = 0;
    i=0;
    do {
-      Rpp = MAC16_16(Rpp,P[i],P[i]);
-      y[i] = SHL16(iy[i],yshift);
+      Rpp = cc6_MAC16_16(Rpp,P[i],P[i]);
+      y[i] = cc6_SHL16(iy[i],yshift);
    } while (++i < N);
 
    Ryp = 0;
@@ -69,50 +69,50 @@ static void mix_pitch_and_residual(int * __restrict iy, celt_norm_t * __restrict
    /* If this doesn't generate a dual MAC (on supported archs), fire the compiler guy */
    i=0;
    do {
-      Ryp = MAC16_16(Ryp, y[i], P[i]);
-      Ryy = MAC16_16(Ryy, y[i], y[i]);
+      Ryp = cc6_MAC16_16(Ryp, y[i], P[i]);
+      Ryy = cc6_MAC16_16(Ryy, y[i], y[i]);
    } while (++i < N);
 
-   ryp = ROUND16(Ryp,14);
-   ryy = ROUND16(Ryy,14);
-   rpp = ROUND16(Rpp,14);
+   ryp = cc6_ROUND16(Ryp,14);
+   ryy = cc6_ROUND16(Ryy,14);
+   rpp = cc6_ROUND16(Rpp,14);
    /* g = (sqrt(Ryp^2 + Ryy - Rpp*Ryy)-Ryp)/Ryy */
-   g = MULT16_32_Q15(celt_sqrt(MAC16_16(Ryy, ryp,ryp) - MULT16_16(ryy,rpp)) - ryp,
-                     celt_rcp(SHR32(Ryy,9)));
+   g = cc6_MULT16_32_Q15(cc6_celt_sqrt(cc6_MAC16_16(Ryy, ryp,ryp) - cc6_MULT16_16(ryy,rpp)) - ryp,
+                     cc6_celt_rcp(cc6_SHR32(Ryy,9)));
 
    i=0;
    do 
-      X[i] = ADD16(P[i], ROUND16(MULT16_16(y[i], g),11));
+      X[i] = cc6_ADD16(P[i], cc6_ROUND16(cc6_MULT16_16(y[i], g),11));
    while (++i < N);
 
-   RESTORE_STACK;
+   cc6_RESTORE_STACK;
 }
 
 
-void alg_quant(celt_norm_t *X, celt_mask_t *W, int N, int K, celt_norm_t *P, ec_enc *enc)
+void cc6_alg_quant(cc6_celt_norm_t *X, cc6_celt_mask_t *W, int N, int K, cc6_celt_norm_t *P, cc6_ec_enc *enc)
 {
-   VARDECL(celt_norm_t, y);
-   VARDECL(int, iy);
-   VARDECL(celt_word16_t, signx);
+   cc6_VARDECL(cc6_celt_norm_t, y);
+   cc6_VARDECL(int, iy);
+   cc6_VARDECL(cc6_celt_word16_t, signx);
    int j, is;
-   celt_word16_t s;
+   cc6_celt_word16_t s;
    int pulsesLeft;
-   celt_word32_t sum;
-   celt_word32_t xy, yy, yp;
-   celt_word16_t Rpp;
+   cc6_celt_word32_t sum;
+   cc6_celt_word32_t xy, yy, yp;
+   cc6_celt_word16_t Rpp;
    int N_1; /* Inverse of N, in Q14 format (even for float) */
 #ifdef FIXED_POINT
    int yshift;
 #endif
-   SAVE_STACK;
+   cc6_SAVE_STACK;
 
 #ifdef FIXED_POINT
-   yshift = 13-celt_ilog2(K);
+   yshift = 13-cc6_celt_ilog2(K);
 #endif
 
-   ALLOC(y, N, celt_norm_t);
-   ALLOC(iy, N, int);
-   ALLOC(signx, N, celt_word16_t);
+   cc6_ALLOC(y, N, cc6_celt_norm_t);
+   cc6_ALLOC(iy, N, int);
+   cc6_ALLOC(signx, N, cc6_celt_word16_t);
    N_1 = 512/N;
 
    sum = 0;
@@ -127,11 +127,11 @@ void alg_quant(celt_norm_t *X, celt_mask_t *W, int N, int K, celt_norm_t *P, ec_
       }
       iy[j] = 0;
       y[j] = 0;
-      sum = MAC16_16(sum, P[j],P[j]);
+      sum = cc6_MAC16_16(sum, P[j],P[j]);
    } while (++j<N);
-   Rpp = ROUND16(sum, NORM_SHIFT);
+   Rpp = cc6_ROUND16(sum, cc6_NORM_SHIFT);
 
-   celt_assert2(Rpp<=NORM_SCALING, "Rpp should never have a norm greater than unity");
+   cc6_celt_assert2(Rpp<=cc6_NORM_SCALING, "Rpp should never have a norm greater than unity");
 
    xy = yy = yp = 0;
 
@@ -140,7 +140,7 @@ void alg_quant(celt_norm_t *X, celt_mask_t *W, int N, int K, celt_norm_t *P, ec_
    /* Do a pre-search by projecting on the pyramid */
    if (K > (N>>1))
    {
-      celt_word16_t rcp;
+      cc6_celt_word16_t rcp;
       sum=0;
       j=0; do {
          sum += X[j];
@@ -149,41 +149,41 @@ void alg_quant(celt_norm_t *X, celt_mask_t *W, int N, int K, celt_norm_t *P, ec_
 #ifdef FIXED_POINT
       if (sum <= K)
 #else
-      if (sum <= EPSILON)
+      if (sum <= cc6_EPSILON)
 #endif
       {
-         X[0] = QCONST16(1.f,14);
+         X[0] = cc6_QCONST16(1.f,14);
          j=1; do
             X[j]=0;
          while (++j<N);
-         sum = QCONST16(1.f,14);
+         sum = cc6_QCONST16(1.f,14);
       }
       /* Do we have sufficient accuracy here? */
-      rcp = EXTRACT16(MULT16_32_Q16(K-1, celt_rcp(sum)));
+      rcp = cc6_EXTRACT16(cc6_MULT16_32_Q16(K-1, cc6_celt_rcp(sum)));
       j=0; do {
 #ifdef FIXED_POINT
          /* It's really important to round *towards zero* here */
-         iy[j] = MULT16_16_Q15(X[j],rcp);
+         iy[j] = cc6_MULT16_16_Q15(X[j],rcp);
 #else
          iy[j] = floor(rcp*X[j]);
 #endif
-         y[j] = SHL16(iy[j],yshift);
-         yy = MAC16_16(yy, y[j],y[j]);
-         xy = MAC16_16(xy, X[j],y[j]);
+         y[j] = cc6_SHL16(iy[j],yshift);
+         yy = cc6_MAC16_16(yy, y[j],y[j]);
+         xy = cc6_MAC16_16(xy, X[j],y[j]);
          yp += P[j]*y[j];
          y[j] *= 2;
          pulsesLeft -= iy[j];
       }  while (++j<N);
    }
-   celt_assert2(pulsesLeft>=1, "Allocated too many pulses in the quick pass");
+   cc6_celt_assert2(pulsesLeft>=1, "Allocated too many pulses in the quick pass");
 
    while (pulsesLeft > 1)
    {
       int pulsesAtOnce=1;
       int best_id;
-      celt_word16_t magnitude;
-      celt_word32_t best_num = -VERY_LARGE16;
-      celt_word16_t best_den = 0;
+      cc6_celt_word16_t magnitude;
+      cc6_celt_word32_t best_num = -cc6_VERY_LARGE16;
+      cc6_celt_word16_t best_den = 0;
 #ifdef FIXED_POINT
       int rshift;
 #endif
@@ -192,33 +192,33 @@ void alg_quant(celt_norm_t *X, celt_mask_t *W, int N, int K, celt_norm_t *P, ec_
       if (pulsesAtOnce<1)
          pulsesAtOnce = 1;
 #ifdef FIXED_POINT
-      rshift = yshift+1+celt_ilog2(K-pulsesLeft+pulsesAtOnce);
+      rshift = yshift+1+cc6_celt_ilog2(K-pulsesLeft+pulsesAtOnce);
 #endif
-      magnitude = SHL16(pulsesAtOnce, yshift);
+      magnitude = cc6_SHL16(pulsesAtOnce, yshift);
 
       best_id = 0;
       /* The squared magnitude term gets added anyway, so we might as well 
          add it outside the loop */
-      yy = MAC16_16(yy, magnitude,magnitude);
+      yy = cc6_MAC16_16(yy, magnitude,magnitude);
       /* Choose between fast and accurate strategy depending on where we are in the search */
          /* This should ensure that anything we can process will have a better score */
       j=0;
       do {
-         celt_word16_t Rxy, Ryy;
+         cc6_celt_word16_t Rxy, Ryy;
          /* Select sign based on X[j] alone */
          s = magnitude;
          /* Temporary sums of the new pulse(s) */
-         Rxy = EXTRACT16(SHR32(MAC16_16(xy, s,X[j]),rshift));
+         Rxy = cc6_EXTRACT16(cc6_SHR32(cc6_MAC16_16(xy, s,X[j]),rshift));
          /* We're multiplying y[j] by two so we don't have to do it here */
-         Ryy = EXTRACT16(SHR32(MAC16_16(yy, s,y[j]),rshift));
+         Ryy = cc6_EXTRACT16(cc6_SHR32(cc6_MAC16_16(yy, s,y[j]),rshift));
             
             /* Approximate score: we maximise Rxy/sqrt(Ryy) (we're guaranteed that 
          Rxy is positive because the sign is pre-computed) */
-         Rxy = MULT16_16_Q15(Rxy,Rxy);
+         Rxy = cc6_MULT16_16_Q15(Rxy,Rxy);
             /* The idea is to check for num/den >= best_num/best_den, but that way
          we can do it without any division */
          /* OPT: Make sure to use conditional moves here */
-         if (MULT16_16(best_den, Rxy) > MULT16_16(Ryy, best_num))
+         if (cc6_MULT16_16(best_den, Rxy) > cc6_MULT16_16(Ryy, best_num))
          {
             best_den = Ryy;
             best_num = Rxy;
@@ -228,13 +228,13 @@ void alg_quant(celt_norm_t *X, celt_mask_t *W, int N, int K, celt_norm_t *P, ec_
       
       j = best_id;
       is = pulsesAtOnce;
-      s = SHL16(is, yshift);
+      s = cc6_SHL16(is, yshift);
 
       /* Updating the sums of the new pulse(s) */
-      xy = xy + MULT16_16(s,X[j]);
+      xy = xy + cc6_MULT16_16(s,X[j]);
       /* We're multiplying y[j] by two so we don't have to do it here */
-      yy = yy + MULT16_16(s,y[j]);
-      yp = yp + MULT16_16(s, P[j]);
+      yy = yy + cc6_MULT16_16(s,y[j]);
+      yp = yp + cc6_MULT16_16(s, P[j]);
 
       /* Only now that we've made the final choice, update y/iy */
       /* Multiplying y[j] by 2 so we don't have to do it everywhere else */
@@ -245,40 +245,40 @@ void alg_quant(celt_norm_t *X, celt_mask_t *W, int N, int K, celt_norm_t *P, ec_
    
    if (pulsesLeft > 0)
    {
-      celt_word16_t g;
-      celt_word16_t best_num = -VERY_LARGE16;
-      celt_word16_t best_den = 0;
+      cc6_celt_word16_t g;
+      cc6_celt_word16_t best_num = -cc6_VERY_LARGE16;
+      cc6_celt_word16_t best_den = 0;
       int best_id = 0;
-      celt_word16_t magnitude = SHL16(1, yshift);
+      cc6_celt_word16_t magnitude = cc6_SHL16(1, yshift);
 
       /* The squared magnitude term gets added anyway, so we might as well 
       add it outside the loop */
-      yy = MAC16_16(yy, magnitude,magnitude);
+      yy = cc6_MAC16_16(yy, magnitude,magnitude);
       j=0;
       do {
-         celt_word16_t Rxy, Ryy, Ryp;
-         celt_word16_t num;
+         cc6_celt_word16_t Rxy, Ryy, Ryp;
+         cc6_celt_word16_t num;
          /* Select sign based on X[j] alone */
          s = magnitude;
          /* Temporary sums of the new pulse(s) */
-         Rxy = ROUND16(MAC16_16(xy, s,X[j]), 14);
+         Rxy = cc6_ROUND16(cc6_MAC16_16(xy, s,X[j]), 14);
          /* We're multiplying y[j] by two so we don't have to do it here */
-         Ryy = ROUND16(MAC16_16(yy, s,y[j]), 14);
-         Ryp = ROUND16(MAC16_16(yp, s,P[j]), 14);
+         Ryy = cc6_ROUND16(cc6_MAC16_16(yy, s,y[j]), 14);
+         Ryp = cc6_ROUND16(cc6_MAC16_16(yp, s,P[j]), 14);
 
             /* Compute the gain such that ||p + g*y|| = 1 
          ...but instead, we compute g*Ryy to avoid dividing */
-         g = celt_psqrt(MULT16_16(Ryp,Ryp) + MULT16_16(Ryy,QCONST16(1.f,14)-Rpp)) - Ryp;
+         g = cc6_celt_psqrt(cc6_MULT16_16(Ryp,Ryp) + cc6_MULT16_16(Ryy,cc6_QCONST16(1.f,14)-Rpp)) - Ryp;
             /* Knowing that gain, what's the error: (x-g*y)^2 
          (result is negated and we discard x^2 because it's constant) */
          /* score = 2*g*Rxy - g*g*Ryy;*/
 #ifdef FIXED_POINT
          /* No need to multiply Rxy by 2 because we did it earlier */
-         num = MULT16_16_Q15(ADD16(SUB16(Rxy,g),Rxy),g);
+         num = cc6_MULT16_16_Q15(cc6_ADD16(cc6_SUB16(Rxy,g),Rxy),g);
 #else
          num = g*(2*Rxy-g);
 #endif
-         if (MULT16_16(best_den, num) > MULT16_16(Ryy, best_num))
+         if (cc6_MULT16_16(best_den, num) > cc6_MULT16_16(Ryy, best_num))
          {
             best_den = Ryy;
             best_num = num;
@@ -289,65 +289,65 @@ void alg_quant(celt_norm_t *X, celt_mask_t *W, int N, int K, celt_norm_t *P, ec_
    }
    j=0;
    do {
-      P[j] = MULT16_16(signx[j],P[j]);
-      X[j] = MULT16_16(signx[j],X[j]);
+      P[j] = cc6_MULT16_16(signx[j],P[j]);
+      X[j] = cc6_MULT16_16(signx[j],X[j]);
       if (signx[j] < 0)
          iy[j] = -iy[j];
    } while (++j<N);
-   encode_pulses(iy, N, K, enc);
+   cc6_encode_pulses(iy, N, K, enc);
    
    /* Recompute the gain in one pass to reduce the encoder-decoder mismatch
    due to the recursive computation used in quantisation. */
-   mix_pitch_and_residual(iy, X, N, K, P);
-   RESTORE_STACK;
+   cc6_mix_pitch_and_residual(iy, X, N, K, P);
+   cc6_RESTORE_STACK;
 }
 
 
 /** Decode pulse vector and combine the result with the pitch vector to produce
     the final normalised signal in the current band. */
-void alg_unquant(celt_norm_t *X, int N, int K, celt_norm_t *P, ec_dec *dec)
+void cc6_alg_unquant(cc6_celt_norm_t *X, int N, int K, cc6_celt_norm_t *P, cc6_ec_dec *dec)
 {
-   VARDECL(int, iy);
-   SAVE_STACK;
-   ALLOC(iy, N, int);
-   decode_pulses(iy, N, K, dec);
-   mix_pitch_and_residual(iy, X, N, K, P);
-   RESTORE_STACK;
+   cc6_VARDECL(int, iy);
+   cc6_SAVE_STACK;
+   cc6_ALLOC(iy, N, int);
+   cc6_decode_pulses(iy, N, K, dec);
+   cc6_mix_pitch_and_residual(iy, X, N, K, P);
+   cc6_RESTORE_STACK;
 }
 
-celt_word16_t renormalise_vector(celt_norm_t *X, celt_word16_t value, int N, int stride)
+cc6_celt_word16_t cc6_renormalise_vector(cc6_celt_norm_t *X, cc6_celt_word16_t value, int N, int stride)
 {
    int i;
-   celt_word32_t E = EPSILON;
-   celt_word16_t rE;
-   celt_word16_t g;
-   celt_norm_t *xptr = X;
+   cc6_celt_word32_t E = cc6_EPSILON;
+   cc6_celt_word16_t rE;
+   cc6_celt_word16_t g;
+   cc6_celt_norm_t *xptr = X;
    for (i=0;i<N;i++)
    {
-      E = MAC16_16(E, *xptr, *xptr);
+      E = cc6_MAC16_16(E, *xptr, *xptr);
       xptr += stride;
    }
 
-   rE = celt_sqrt(E);
+   rE = cc6_celt_sqrt(E);
 #ifdef FIXED_POINT
    if (rE <= 128)
-      g = Q15ONE;
+      g = cc6_Q15ONE;
    else
 #endif
-      g = MULT16_16_Q15(value,celt_rcp(SHL32(rE,9)));
+      g = cc6_MULT16_16_Q15(value,cc6_celt_rcp(cc6_SHL32(rE,9)));
    xptr = X;
    for (i=0;i<N;i++)
    {
-      *xptr = PSHR32(MULT16_16(g, *xptr),8);
+      *xptr = cc6_PSHR32(cc6_MULT16_16(g, *xptr),8);
       xptr += stride;
    }
    return rE;
 }
 
-static void fold(const CELTMode *m, int N, celt_norm_t *Y, celt_norm_t * __restrict P, int N0, int B)
+static void cc6_fold(const cc6_CELTMode *m, int N, cc6_celt_norm_t *Y, cc6_celt_norm_t * __restrict P, int N0, int B)
 {
    int j;
-   const int C = CHANNELS(m);
+   const int C = cc6_CHANNELS(m);
    int id = (N0*C) % (C*B);
    /* Here, we assume that id will never be greater than N0, i.e. that 
       no band is wider than N0. In the unlikely case it happens, we set
@@ -370,22 +370,22 @@ static void fold(const CELTMode *m, int N, celt_norm_t *Y, celt_norm_t * __restr
          P[j] = Y[id++];
 }
 
-void intra_fold(const CELTMode *m, celt_norm_t * __restrict x, int N, int *pulses, celt_norm_t *Y, celt_norm_t * __restrict P, int N0, int B)
+void cc6_intra_fold(const cc6_CELTMode *m, cc6_celt_norm_t * __restrict x, int N, int *pulses, cc6_celt_norm_t *Y, cc6_celt_norm_t * __restrict P, int N0, int B)
 {
    int c;
-   celt_word16_t pred_gain;
-   const int C = CHANNELS(m);
+   cc6_celt_word16_t pred_gain;
+   const int C = cc6_CHANNELS(m);
 
-   fold(m, N, Y, P, N0, B);
+   cc6_fold(m, N, Y, P, N0, B);
    c=0;
    do {
       int K = pulses[c];
       if (K==0)
-         pred_gain = Q15ONE;
+         pred_gain = cc6_Q15ONE;
       else
-         pred_gain = celt_div((celt_word32_t)MULT16_16(Q15_ONE,N),(celt_word32_t)(N+2*K*(K+1)));
+         pred_gain = cc6_celt_div((cc6_celt_word32_t)cc6_MULT16_16(cc6_Q15_ONE,N),(cc6_celt_word32_t)(N+2*K*(K+1)));
 
-      renormalise_vector(P+c, pred_gain, N, C);
+      cc6_renormalise_vector(P+c, pred_gain, N, C);
    } while (++c < C);
 }
 

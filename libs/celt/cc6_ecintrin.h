@@ -32,8 +32,8 @@
 /*Some common macros for potential platform-specific optimization.*/
 #include <math.h>
 #include <limits.h>
-#if !defined(_ecintrin_H)
-# define _ecintrin_H (1)
+#if !defined(cc6__ecintrin_H)
+# define cc6__ecintrin_H (1)
 
 /*Some specific platforms may have optimized intrinsic or inline assembly
    versions of these functions which can substantially improve performance.
@@ -60,77 +60,77 @@
    are just as fast, and do not require any special target architecture.
   Earlier gcc versions (3.x) compiled both code to the same assembly
    instructions, because of the way they represented ((_b)>(_a)) internally.*/
-#define EC_MAXI(_a,_b)      ((_a)-((_a)-(_b)&-((_b)>(_a))))
-#define EC_MINI(_a,_b)      ((_a)+((_b)-(_a)&-((_b)<(_a))))
+#define cc6_EC_MAXI(_a,_b)      ((_a)-((_a)-(_b)&-((_b)>(_a))))
+#define cc6_EC_MINI(_a,_b)      ((_a)+((_b)-(_a)&-((_b)<(_a))))
 /*This has a chance of compiling branchless, and is just as fast as the
    bit-twiddling method, which is slightly less portable, since it relies on a
    sign-extended rightshift, which is not guaranteed by ANSI (but present on
    every relevant platform).*/
-#define EC_SIGNI(_a)        (((_a)>0)-((_a)<0))
+#define cc6_EC_SIGNI(_a)        (((_a)>0)-((_a)<0))
 /*Slightly more portable than relying on a sign-extended right-shift (which is
    not guaranteed by ANSI), and just as fast, since gcc (3.x and 4.x both)
    compile it into the right-shift anyway.*/
-#define EC_SIGNMASK(_a)     (-((_a)<0))
+#define cc6_EC_SIGNMASK(_a)     (-((_a)<0))
 /*Clamps an integer into the given range.
   If _a>_c, then the lower bound _a is respected over the upper bound _c (this
    behavior is required to meet our documented API behavior).
   _a: The lower bound.
   _b: The value to clamp.
   _c: The upper boud.*/
-#define EC_CLAMPI(_a,_b,_c) (EC_MAXI(_a,EC_MINI(_b,_c)))
+#define cc6_EC_CLAMPI(_a,_b,_c) (cc6_EC_MAXI(_a,cc6_EC_MINI(_b,_c)))
 
 
 /*Count leading zeros.
-  This macro should only be used for implementing ec_ilog(), if it is defined.
-  All other code should use EC_ILOG() instead.*/
+  This macro should only be used for implementing cc6_ec_ilog(), if it is defined.
+  All other code should use cc6_EC_ILOG() instead.*/
 #ifdef __GNUC_PREREQ
 #if __GNUC_PREREQ(3,4)
 # if INT_MAX>=2147483647
-#  define EC_CLZ0 sizeof(unsigned)*CHAR_BIT
-#  define EC_CLZ(_x) (__builtin_clz(_x))
+#  define cc6_EC_CLZ0 sizeof(unsigned)*CHAR_BIT
+#  define cc6_EC_CLZ(_x) (__builtin_clz(_x))
 # elif LONG_MAX>=2147483647L
-#  define EC_CLZ0 sizeof(unsigned long)*CHAR_BIT
-#  define EC_CLZ(_x) (__builtin_clzl(_x))
+#  define cc6_EC_CLZ0 sizeof(unsigned long)*CHAR_BIT
+#  define cc6_EC_CLZ(_x) (__builtin_clzl(_x))
 # endif
 #endif
 #endif
 
-#if defined(EC_CLZ)
+#if defined(cc6_EC_CLZ)
 /*Note that __builtin_clz is not defined when _x==0, according to the gcc
    documentation (and that of the BSR instruction that implements it on x86).
   The majority of the time we can never pass it zero.
   When we need to, it can be special cased.*/
-# define EC_ILOG(_x) (EC_CLZ0-EC_CLZ(_x))
+# define cc6_EC_ILOG(_x) (cc6_EC_CLZ0-cc6_EC_CLZ(_x))
 #elif defined(ENABLE_TI_DSPLIB)
 #include "dsplib.h"
-#define EC_ILOG(x) (31 - _lnorm(x))
+#define cc6_EC_ILOG(x) (31 - _lnorm(x))
 #else
-# define EC_ILOG(_x) (ec_ilog(_x))
+# define cc6_EC_ILOG(_x) (cc6_ec_ilog(_x))
 #endif
 
 #ifdef __GNUC_PREREQ
 #if __GNUC_PREREQ(3,4)
 # if INT_MAX>=9223372036854775807
-#  define EC_CLZ64_0 sizeof(unsigned)*CHAR_BIT
-#  define EC_CLZ64(_x) (__builtin_clz(_x))
+#  define cc6_EC_CLZ64_0 sizeof(unsigned)*CHAR_BIT
+#  define cc6_EC_CLZ64(_x) (__builtin_clz(_x))
 # elif LONG_MAX>=9223372036854775807L
-#  define EC_CLZ64_0 sizeof(unsigned long)*CHAR_BIT
-#  define EC_CLZ64(_x) (__builtin_clzl(_x))
+#  define cc6_EC_CLZ64_0 sizeof(unsigned long)*CHAR_BIT
+#  define cc6_EC_CLZ64(_x) (__builtin_clzl(_x))
 # elif LLONG_MAX>=9223372036854775807LL
-#  define EC_CLZ64_0 sizeof(unsigned long long)*CHAR_BIT
-#  define EC_CLZ64(_x) (__builtin_clzll(_x))
+#  define cc6_EC_CLZ64_0 sizeof(unsigned long long)*CHAR_BIT
+#  define cc6_EC_CLZ64(_x) (__builtin_clzll(_x))
 # endif
 #endif
 #endif
 
-#if defined(EC_CLZ64)
+#if defined(cc6_EC_CLZ64)
 /*Note that __builtin_clz is not defined when _x==0, according to the gcc
    documentation (and that of the BSR instruction that implements it on x86).
   The majority of the time we can never pass it zero.
   When we need to, it can be special cased.*/
-# define EC_ILOG64(_x) (EC_CLZ64_0-EC_CLZ64(_x))
+# define cc6_EC_ILOG64(_x) (cc6_EC_CLZ64_0-cc6_EC_CLZ64(_x))
 #else
-# define EC_ILOG64(_x) (ec_ilog64(_x))
+# define cc6_EC_ILOG64(_x) (cc6_ec_ilog64(_x))
 #endif
 
 #endif

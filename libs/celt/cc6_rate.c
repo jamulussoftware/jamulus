@@ -45,14 +45,14 @@
 
 #ifndef STATIC_MODES
 
-celt_int16_t **compute_alloc_cache(CELTMode *m, int C)
+cc6_celt_int16_t **cc6_compute_alloc_cache(cc6_CELTMode *m, int C)
 {
    int i, prevN;
    int error = 0;
-   celt_int16_t **bits;
-   const celt_int16_t *eBands = m->eBands;
+   cc6_celt_int16_t **bits;
+   const cc6_celt_int16_t *eBands = m->eBands;
 
-   bits = celt_alloc(m->nbEBands*sizeof(celt_int16_t*));
+   bits = cc6_celt_alloc(m->nbEBands*sizeof(cc6_celt_int16_t*));
    if (bits==NULL)
      return NULL;
         
@@ -64,9 +64,9 @@ celt_int16_t **compute_alloc_cache(CELTMode *m, int C)
       {
          bits[i] = bits[i-1];
       } else {
-         bits[i] = celt_alloc(MAX_PULSES*sizeof(celt_int16_t));
+         bits[i] = cc6_celt_alloc(cc6_MAX_PULSES*sizeof(cc6_celt_int16_t));
          if (bits[i]!=NULL) {
-           get_required_bits(bits[i], N, MAX_PULSES, BITRES);
+           cc6_get_required_bits(bits[i], N, cc6_MAX_PULSES, cc6_BITRES);
          } else {
             error=1;
          }
@@ -75,7 +75,7 @@ celt_int16_t **compute_alloc_cache(CELTMode *m, int C)
    }
    if (error)
    {
-      const celt_int16_t *prevPtr = NULL;
+      const cc6_celt_int16_t *prevPtr = NULL;
       if (bits!=NULL)
       {
          for (i=0;i<m->nbEBands;i++)
@@ -83,7 +83,7 @@ celt_int16_t **compute_alloc_cache(CELTMode *m, int C)
             if (bits[i] != prevPtr)
             {
                prevPtr = bits[i];
-               celt_free((int*)bits[i]);
+               cc6_celt_free((int*)bits[i]);
             }
          }
       free(bits);
@@ -97,22 +97,22 @@ celt_int16_t **compute_alloc_cache(CELTMode *m, int C)
 
 
 
-static void interp_bits2pulses(const CELTMode *m, int *bits1, int *bits2, int total, int *bits, int *ebits, int *fine_priority, int len)
+static void cc6_interp_bits2pulses(const cc6_CELTMode *m, int *bits1, int *bits2, int total, int *bits, int *ebits, int *fine_priority, int len)
 {
    int psum;
    int lo, hi;
    int j;
-   const int C = CHANNELS(m);
-   SAVE_STACK;
+   const int C = cc6_CHANNELS(m);
+   cc6_SAVE_STACK;
    lo = 0;
-   hi = 1<<BITRES;
+   hi = 1<<cc6_BITRES;
    while (hi-lo != 1)
    {
       int mid = (lo+hi)>>1;
       psum = 0;
       for (j=0;j<len;j++)
-         psum += ((1<<BITRES)-mid)*bits1[j] + mid*bits2[j];
-      if (psum > (total<<BITRES))
+         psum += ((1<<cc6_BITRES)-mid)*bits1[j] + mid*bits2[j];
+      if (psum > (total<<cc6_BITRES))
          hi = mid;
       else
          lo = mid;
@@ -121,13 +121,13 @@ static void interp_bits2pulses(const CELTMode *m, int *bits1, int *bits2, int to
    /*printf ("interp bisection gave %d\n", lo);*/
    for (j=0;j<len;j++)
    {
-      bits[j] = ((1<<BITRES)-lo)*bits1[j] + lo*bits2[j];
+      bits[j] = ((1<<cc6_BITRES)-lo)*bits1[j] + lo*bits2[j];
       psum += bits[j];
    }
    /* Allocate the remaining bits */
    {
       int left, perband;
-      left = (total<<BITRES)-psum;
+      left = (total<<cc6_BITRES)-psum;
       perband = left/len;
       for (j=0;j<len;j++)
          bits[j] += perband;
@@ -141,8 +141,8 @@ static void interp_bits2pulses(const CELTMode *m, int *bits1, int *bits2, int to
       int offset;
 
       N=m->eBands[j+1]-m->eBands[j]; 
-      d=C*N<<BITRES; 
-      offset = 50 - log2_frac(N, 4);
+      d=C*N<<cc6_BITRES;
+      offset = 50 - cc6_log2_frac(N, 4);
       /* Offset for the number of fine bits compared to their "fair share" of total/N */
       offset = bits[j]-offset*N*C;
       if (offset < 0)
@@ -151,29 +151,29 @@ static void interp_bits2pulses(const CELTMode *m, int *bits1, int *bits2, int to
       fine_priority[j] = ebits[j]*d >= offset;
 
       /* Make sure not to bust */
-      if (C*ebits[j] > (bits[j]>>BITRES))
-         ebits[j] = bits[j]/C >> BITRES;
+      if (C*ebits[j] > (bits[j]>>cc6_BITRES))
+         ebits[j] = bits[j]/C >> cc6_BITRES;
 
       if (ebits[j]>7)
          ebits[j]=7;
       /* The bits used for fine allocation can't be used for pulses */
-      bits[j] -= C*ebits[j]<<BITRES;
+      bits[j] -= C*ebits[j]<<cc6_BITRES;
       if (bits[j] < 0)
          bits[j] = 0;
    }
-   RESTORE_STACK;
+   cc6_RESTORE_STACK;
 }
 
-void compute_allocation(const CELTMode *m, int *offsets, int total, int *pulses, int *ebits, int *fine_priority)
+void cc6_compute_allocation(const cc6_CELTMode *m, int *offsets, int total, int *pulses, int *ebits, int *fine_priority)
 {
    int lo, hi, len, j;
-   VARDECL(int, bits1);
-   VARDECL(int, bits2);
-   SAVE_STACK;
+   cc6_VARDECL(int, bits1);
+   cc6_VARDECL(int, bits2);
+   cc6_SAVE_STACK;
    
    len = m->nbEBands;
-   ALLOC(bits1, len, int);
-   ALLOC(bits2, len, int);
+   cc6_ALLOC(bits1, len, int);
+   cc6_ALLOC(bits2, len, int);
 
    lo = 0;
    hi = m->nbAllocVectors - 1;
@@ -183,14 +183,14 @@ void compute_allocation(const CELTMode *m, int *offsets, int total, int *pulses,
       int mid = (lo+hi) >> 1;
       for (j=0;j<len;j++)
       {
-         bits1[j] = (m->allocVectors[mid*len+j] + offsets[j])<<BITRES;
+         bits1[j] = (m->allocVectors[mid*len+j] + offsets[j])<<cc6_BITRES;
          if (bits1[j] < 0)
             bits1[j] = 0;
          psum += bits1[j];
          /*printf ("%d ", bits[j]);*/
       }
       /*printf ("\n");*/
-      if (psum > (total<<BITRES))
+      if (psum > (total<<cc6_BITRES))
          hi = mid;
       else
          lo = mid;
@@ -206,7 +206,7 @@ void compute_allocation(const CELTMode *m, int *offsets, int total, int *pulses,
       if (bits2[j] < 0)
          bits2[j] = 0;
    }
-   interp_bits2pulses(m, bits1, bits2, total, pulses, ebits, fine_priority, len);
-   RESTORE_STACK;
+   cc6_interp_bits2pulses(m, bits1, bits2, total, pulses, ebits, fine_priority, len);
+   cc6_RESTORE_STACK;
 }
 

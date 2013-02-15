@@ -32,7 +32,7 @@
 #include "cc6_entenc.h"
 #include "cc6_entdec.h"
 
-int ec_laplace_get_start_freq(int decay);
+int cc6_ec_laplace_get_start_freq(int decay);
 
 /** Encode a value that is assumed to be the realisation of a
     Laplace-distributed random process
@@ -40,9 +40,9 @@ int ec_laplace_get_start_freq(int decay);
  @param value Value to encode
  @param decay Probability of the value +/- 1, multiplied by 16384
 */
-void ec_laplace_encode(ec_enc *enc, int *value, int decay);
+void cc6_ec_laplace_encode(cc6_ec_enc *enc, int *value, int decay);
 
-void ec_laplace_encode_start(ec_enc *enc, int *value, int decay, int fs);
+void cc6_ec_laplace_encode_start(cc6_ec_enc *enc, int *value, int decay, int fs);
 
 /** Decode a value that is assumed to be the realisation of a
     Laplace-distributed random process
@@ -50,6 +50,6 @@ void ec_laplace_encode_start(ec_enc *enc, int *value, int decay, int fs);
  @param decay Probability of the value +/- 1, multiplied by 16384
  @return Value decoded
  */
-int ec_laplace_decode(ec_dec *dec, int decay);
+int cc6_ec_laplace_decode(cc6_ec_dec *dec, int decay);
 
-int ec_laplace_decode_start(ec_dec *dec, int decay, int fs);
+int cc6_ec_laplace_decode_start(cc6_ec_dec *dec, int decay, int fs);

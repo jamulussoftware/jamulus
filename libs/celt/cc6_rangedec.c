@@ -96,87 +96,87 @@
    end code returned if needed, this function will continue to return zero each
    time it is called.
   Return: The next byte of input.*/
-static int ec_dec_in(ec_dec *_this){
+static int cc6_ec_dec_in(cc6_ec_dec *_this){
   int ret;
-  ret=ec_byte_read1(_this->buf);
+  ret=cc6_ec_byte_read1(_this->buf);
   if(ret<0){
     ret=0;
     /*Needed to keep oc_dec_tell() operating correctly.*/
-    ec_byte_adv1(_this->buf);
+    cc6_ec_byte_adv1(_this->buf);
   }
   return ret;
 }
 
 /*Normalizes the contents of dif and rng so that rng lies entirely in the
    high-order symbol.*/
-static __inline void ec_dec_normalize(ec_dec *_this){
+static __inline void cc6_ec_dec_normalize(cc6_ec_dec *_this){
   /*If the range is too small, rescale it and input some bits.*/
-  while(_this->rng<=EC_CODE_BOT){
+  while(_this->rng<=cc6_EC_CODE_BOT){
     int sym;
-    _this->rng<<=EC_SYM_BITS;
+    _this->rng<<=cc6_EC_SYM_BITS;
     /*Use up the remaining bits from our last symbol.*/
-    sym=_this->rem<<EC_CODE_EXTRA&EC_SYM_MAX;
+    sym=_this->rem<<cc6_EC_CODE_EXTRA&cc6_EC_SYM_MAX;
     /*Read the next value from the input.*/
-    _this->rem=ec_dec_in(_this);
+    _this->rem=cc6_ec_dec_in(_this);
     /*Take the rest of the bits we need from this new symbol.*/
-    sym|=_this->rem>>EC_SYM_BITS-EC_CODE_EXTRA;
-    _this->dif=(_this->dif<<EC_SYM_BITS)-sym&EC_CODE_MASK;
-    /*dif can never be larger than EC_CODE_TOP.
+    sym|=_this->rem>>cc6_EC_SYM_BITS-cc6_EC_CODE_EXTRA;
+    _this->dif=(_this->dif<<cc6_EC_SYM_BITS)-sym&cc6_EC_CODE_MASK;
+    /*dif can never be larger than cc6_EC_CODE_TOP.
       This is equivalent to the slightly more readable:
-      if(_this->dif>EC_CODE_TOP)_this->dif-=EC_CODE_TOP;*/
-    _this->dif^=_this->dif&_this->dif-1&EC_CODE_TOP;
+      if(_this->dif>cc6_EC_CODE_TOP)_this->dif-=cc6_EC_CODE_TOP;*/
+    _this->dif^=_this->dif&_this->dif-1&cc6_EC_CODE_TOP;
   }
 }
 
-void ec_dec_init(ec_dec *_this,ec_byte_buffer *_buf){
+void cc6_ec_dec_init(cc6_ec_dec *_this,cc6_ec_byte_buffer *_buf){
   _this->buf=_buf;
-  _this->rem=ec_dec_in(_this);
-  _this->rng=1U<<EC_CODE_EXTRA;
-  _this->dif=_this->rng-(_this->rem>>EC_SYM_BITS-EC_CODE_EXTRA);
+  _this->rem=cc6_ec_dec_in(_this);
+  _this->rng=1U<<cc6_EC_CODE_EXTRA;
+  _this->dif=_this->rng-(_this->rem>>cc6_EC_SYM_BITS-cc6_EC_CODE_EXTRA);
   /*Normalize the interval.*/
-  ec_dec_normalize(_this);
+  cc6_ec_dec_normalize(_this);
 }
 
 
-unsigned ec_decode(ec_dec *_this,unsigned _ft){
+unsigned cc6_ec_decode(cc6_ec_dec *_this,unsigned _ft){
   unsigned s;
   _this->nrm=_this->rng/_ft;
   s=(unsigned)((_this->dif-1)/_this->nrm);
-  return _ft-EC_MINI(s+1,_ft);
+  return _ft-cc6_EC_MINI(s+1,_ft);
 }
 
-unsigned ec_decode_bin(ec_dec *_this,unsigned bits){
+unsigned cc6_ec_decode_bin(cc6_ec_dec *_this,unsigned bits){
    unsigned s;
-   ec_uint32 ft;
-   ft = (ec_uint32)1<<bits;
+   cc6_ec_uint32 ft;
+   ft = (cc6_ec_uint32)1<<bits;
    _this->nrm=_this->rng>>bits;
    s=(unsigned)((_this->dif-1)/_this->nrm);
-   return ft-EC_MINI(s+1,ft);
+   return ft-cc6_EC_MINI(s+1,ft);
 }
 
-void ec_dec_update(ec_dec *_this,unsigned _fl,unsigned _fh,unsigned _ft){
-  ec_uint32 s;
-  s=IMUL32(_this->nrm,(_ft-_fh));
+void cc6_ec_dec_update(cc6_ec_dec *_this,unsigned _fl,unsigned _fh,unsigned _ft){
+  cc6_ec_uint32 s;
+  s=cc6_IMUL32(_this->nrm,(_ft-_fh));
   _this->dif-=s;
-  _this->rng=_fl>0?IMUL32(_this->nrm,(_fh-_fl)):_this->rng-s;
-  ec_dec_normalize(_this);
+  _this->rng=_fl>0?cc6_IMUL32(_this->nrm,(_fh-_fl)):_this->rng-s;
+  cc6_ec_dec_normalize(_this);
 }
 
-long ec_dec_tell(ec_dec *_this,int _b){
-  ec_uint32 r;
+long cc6_ec_dec_tell(cc6_ec_dec *_this,int _b){
+  cc6_ec_uint32 r;
   int       l;
   long      nbits;
-  nbits=(ec_byte_bytes(_this->buf)-(EC_CODE_BITS+EC_SYM_BITS-1)/EC_SYM_BITS)*
-   EC_SYM_BITS;
+  nbits=(cc6_ec_byte_bytes(_this->buf)-(cc6_EC_CODE_BITS+cc6_EC_SYM_BITS-1)/cc6_EC_SYM_BITS)*
+   cc6_EC_SYM_BITS;
   /*To handle the non-integral number of bits still left in the encoder state,
      we compute the number of bits of low that must be encoded to ensure that
      the value is inside the range for any possible subsequent bits.
     Note that this is subtly different than the actual value we would end the
      stream with, which tries to make as many of the trailing bits zeros as
      possible.*/
-  nbits+=EC_CODE_BITS;
+  nbits+=cc6_EC_CODE_BITS;
   nbits<<=_b;
-  l=EC_ILOG(_this->rng);
+  l=cc6_EC_ILOG(_this->rng);
   r=_this->rng>>l-16;
   while(_b-->0){
     int b;
@@ -189,13 +189,13 @@ long ec_dec_tell(ec_dec *_this,int _b){
 }
 
 #if 0
-int ec_dec_done(ec_dec *_this){
+int cc6_ec_dec_done(cc6_ec_dec *_this){
   unsigned low;
   int      ret;
   /*Check to make sure we've used all the input bytes.
     This ensures that no more ones would ever be inserted into the decoder.*/
-  if(_this->buf->ptr-ec_byte_get_buffer(_this->buf)<=
-   ec_byte_bytes(_this->buf)){
+  if(_this->buf->ptr-cc6_ec_byte_get_buffer(_this->buf)<=
+   cc6_ec_byte_bytes(_this->buf)){
     return 0;
   }
   /*We compute the smallest finitely odd fraction that fits inside the current
@@ -207,11 +207,11 @@ int ec_dec_done(ec_dec *_this){
   low=/*What we want: _this->top-_this->rng; What we have:*/_this->dif
   if(low){
     unsigned end;
-    end=EC_CODE_TOP;
+    end=cc6_EC_CODE_TOP;
     /*Ensure that the next free end is in the range.*/
     if(end-low>=_this->rng){
       unsigned msk;
-      msk=EC_CODE_TOP-1;
+      msk=cc6_EC_CODE_TOP-1;
       do{
         msk>>=1;
         end=(low+msk)&~msk|msk+1;

@@ -34,8 +34,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef CELT_H
-#define CELT_H
+#ifndef cc6_CELT_H
+#define cc6_CELT_H
 
 #include "cc6_celt_types.h"
 
@@ -44,64 +44,64 @@ extern "C" {
 #endif
 
 #if defined(__GNUC__) && defined(CELT_BUILD)
-#define EXPORT __attribute__ ((visibility ("default")))
+#define cc6_EXPORT __attribute__ ((visibility ("default")))
 #elif defined(WIN32)
-#define EXPORT __declspec(dllexport)
+#define cc6_EXPORT __declspec(dllexport)
 #else
-#define EXPORT
+#define cc6_EXPORT
 #endif
 
-#define _celt_check_int(x) (((void)((x) == (celt_int32_t)0)), (celt_int32_t)(x))
-#define _celt_check_mode_ptr_ptr(ptr) ((ptr) + ((ptr) - (CELTMode**)(ptr)))
+#define cc6__celt_check_int(x) (((void)((x) == (cc6_celt_int32_t)0)), (cc6_celt_int32_t)(x))
+#define cc6__celt_check_mode_ptr_ptr(ptr) ((ptr) + ((ptr) - (cc6_CELTMode**)(ptr)))
 
 /* Error codes */
 /** No error */
-#define CELT_OK                0
+#define cc6_CELT_OK                0
 /** An (or more) invalid argument (e.g. out of range) */
-#define CELT_BAD_ARG          -1
+#define cc6_CELT_BAD_ARG          -1
 /** The mode struct passed is invalid */
-#define CELT_INVALID_MODE     -2
+#define cc6_CELT_INVALID_MODE     -2
 /** An internal error was detected */
-#define CELT_INTERNAL_ERROR   -3
+#define cc6_CELT_INTERNAL_ERROR   -3
 /** The data passed (e.g. compressed data to decoder) is corrupted */
-#define CELT_CORRUPTED_DATA   -4
+#define cc6_CELT_CORRUPTED_DATA   -4
 /** Invalid/unsupported request number */
-#define CELT_UNIMPLEMENTED    -5
+#define cc6_CELT_UNIMPLEMENTED    -5
 /** An encoder or decoder structure is invalid or already freed */
-#define CELT_INVALID_STATE    -6
+#define cc6_CELT_INVALID_STATE    -6
 
 /* Requests */
-#define CELT_GET_MODE_REQUEST    1
-/** Get the CELTMode used by an encoder or decoder */
-#define CELT_GET_MODE(x) CELT_GET_MODE_REQUEST, _celt_check_mode_ptr_ptr(x)
-#define CELT_SET_COMPLEXITY_REQUEST    2
+#define cc6_CELT_GET_MODE_REQUEST    1
+/** Get the cc6_CELTMode used by an encoder or decoder */
+#define cc6_CELT_GET_MODE(x) cc6_CELT_GET_MODE_REQUEST, cc6__celt_check_mode_ptr_ptr(x)
+#define cc6_CELT_SET_COMPLEXITY_REQUEST    2
 /** Controls the complexity from 0-10 (int) */
-#define CELT_SET_COMPLEXITY(x) CELT_SET_COMPLEXITY_REQUEST, _celt_check_int(x)
-#define CELT_SET_PREDICTION_REQUEST    4
+#define cc6_CELT_SET_COMPLEXITY(x) cc6_CELT_SET_COMPLEXITY_REQUEST, cc6__celt_check_int(x)
+#define cc6_CELT_SET_PREDICTION_REQUEST    4
 /** Controls the use of interframe prediction.
     0=Independent frames
     1=Short term interframe prediction allowed
     2=Long term prediction allowed
  */
-#define CELT_SET_PREDICTION(x) CELT_SET_PREDICTION_REQUEST, _celt_check_int(x)
-#define CELT_SET_VBR_RATE_REQUEST    6
+#define cc6_CELT_SET_PREDICTION(x) cc6_CELT_SET_PREDICTION_REQUEST, cc6__celt_check_int(x)
+#define cc6_CELT_SET_VBR_RATE_REQUEST    6
 /** Set the target VBR rate in bits per second(int); 0=CBR (default) */
-#define CELT_SET_VBR_RATE(x) CELT_SET_VBR_RATE_REQUEST, _celt_check_int(x)
+#define cc6_CELT_SET_VBR_RATE(x) cc6_CELT_SET_VBR_RATE_REQUEST, cc6__celt_check_int(x)
 /** Reset the encoder/decoder memories to zero*/
-#define CELT_RESET_STATE_REQUEST        8
-#define CELT_RESET_STATE       CELT_RESET_STATE_REQUEST
+#define cc6_CELT_RESET_STATE_REQUEST        8
+#define cc6_CELT_RESET_STATE       cc6_CELT_RESET_STATE_REQUEST
 
 /** GET the frame size used in the current mode */
-#define CELT_GET_FRAME_SIZE   1000
+#define cc6_CELT_GET_FRAME_SIZE   1000
 /** GET the lookahead used in the current mode */
-#define CELT_GET_LOOKAHEAD    1001
+#define cc6_CELT_GET_LOOKAHEAD    1001
 /** GET the number of channels used in the current mode */
-#define CELT_GET_NB_CHANNELS  1002
+#define cc6_CELT_GET_NB_CHANNELS  1002
 /** GET the sample rate used in the current mode */
-#define CELT_GET_SAMPLE_RATE  1003
+#define cc6_CELT_GET_SAMPLE_RATE  1003
 
 /** GET the bit-stream version for compatibility check */
-#define CELT_GET_BITSTREAM_VERSION 2000
+#define cc6_CELT_GET_BITSTREAM_VERSION 2000
 
 
 /** Contains the state of an encoder. One encoder state is needed 
@@ -109,18 +109,18 @@ extern "C" {
     stream. Do *not* re-initialise the state for every frame.
    @brief Encoder state
  */
-typedef struct CELTEncoder CELTEncoder;
+typedef struct cc6_CELTEncoder cc6_CELTEncoder;
 
 /** State of the decoder. One decoder state is needed for each stream.
     It is initialised once at the beginning of the stream. Do *not*
     re-initialise the state for every frame */
-typedef struct CELTDecoder CELTDecoder;
+typedef struct cc6_CELTDecoder cc6_CELTDecoder;
 
 /** The mode contains all the information necessary to create an
     encoder. Both the encoder and decoder need to be initialised
     with exactly the same mode, otherwise the quality will be very 
     bad */
-typedef struct CELTMode CELTMode;
+typedef struct cc6_CELTMode cc6_CELTMode;
 
 
 /** \defgroup codec Encoding and decoding */
@@ -138,16 +138,16 @@ typedef struct CELTMode CELTMode;
  @param error Returned error code (if NULL, no error will be returned)
  @return A newly created mode
 */
-EXPORT CELTMode *celt_mode_create(celt_int32_t Fs, int channels, int frame_size, int *error);
+cc6_EXPORT cc6_CELTMode *cc6_celt_mode_create(cc6_celt_int32_t Fs, int channels, int frame_size, int *error);
 
 /** Destroys a mode struct. Only call this after all encoders and 
     decoders using this mode are destroyed as well.
  @param mode Mode to be destroyed
 */
-EXPORT void celt_mode_destroy(CELTMode *mode);
+cc6_EXPORT void cc6_celt_mode_destroy(cc6_CELTMode *mode);
 
 /** Query information from a mode */
-EXPORT int celt_mode_info(const CELTMode *mode, int request, celt_int32_t *value);
+cc6_EXPORT int cc6_celt_mode_info(const cc6_CELTMode *mode, int request, cc6_celt_int32_t *value);
 
 /* Encoder stuff */
 
@@ -159,12 +159,12 @@ EXPORT int celt_mode_info(const CELTMode *mode, int request, celt_int32_t *value
  *  decoder)
  @return Newly created encoder state.
 */
-EXPORT CELTEncoder *celt_encoder_create(const CELTMode *mode);
+cc6_EXPORT cc6_CELTEncoder *cc6_celt_encoder_create(const cc6_CELTMode *mode);
 
 /** Destroys a an encoder state.
  @param st Encoder state to be destroyed
  */
-EXPORT void celt_encoder_destroy(CELTEncoder *st);
+cc6_EXPORT void cc6_celt_encoder_destroy(cc6_CELTEncoder *st);
 
 /** Encodes a frame of audio.
  @param st Encoder state
@@ -188,7 +188,7 @@ EXPORT void celt_encoder_destroy(CELTEncoder *st);
  *       the length returned be somehow transmitted to the decoder. Otherwise, no
  *       decoding is possible.
 */
-EXPORT int celt_encode_float(CELTEncoder *st, const float *pcm, float *optional_synthesis, unsigned char *compressed, int nbCompressedBytes);
+cc6_EXPORT int cc6_celt_encode_float(cc6_CELTEncoder *st, const float *pcm, float *optional_synthesis, unsigned char *compressed, int nbCompressedBytes);
 
 /** Encodes a frame of audio.
  @param st Encoder state
@@ -208,7 +208,7 @@ EXPORT int celt_encode_float(CELTEncoder *st, const float *pcm, float *optional_
  *       the length returned be somehow transmitted to the decoder. Otherwise, no
  *       decoding is possible.
  */
-EXPORT int celt_encode(CELTEncoder *st, const celt_int16_t *pcm, celt_int16_t *optional_synthesis, unsigned char *compressed, int nbCompressedBytes);
+cc6_EXPORT int cc6_celt_encode(cc6_CELTEncoder *st, const cc6_celt_int16_t *pcm, cc6_celt_int16_t *optional_synthesis, unsigned char *compressed, int nbCompressedBytes);
 
 /** Query and set encoder parameters 
  @param st Encoder state
@@ -216,7 +216,7 @@ EXPORT int celt_encode(CELTEncoder *st, const celt_int16_t *pcm, celt_int16_t *o
  @param value Pointer to a 32-bit int value
  @return Error code
 */
-EXPORT int celt_encoder_ctl(CELTEncoder * st, int request, ...);
+cc6_EXPORT int cc6_celt_encoder_ctl(cc6_CELTEncoder * st, int request, ...);
 
 /* Decoder stuff */
 
@@ -227,12 +227,12 @@ EXPORT int celt_encoder_ctl(CELTEncoder * st, int request, ...);
              stream (must be the same characteristics as used for the encoder)
  @return Newly created decoder state.
  */
-EXPORT CELTDecoder *celt_decoder_create(const CELTMode *mode);
+cc6_EXPORT cc6_CELTDecoder *cc6_celt_decoder_create(const cc6_CELTMode *mode);
 
 /** Destroys a a decoder state.
  @param st Decoder state to be destroyed
  */
-EXPORT void celt_decoder_destroy(CELTDecoder *st);
+cc6_EXPORT void cc6_celt_decoder_destroy(cc6_CELTDecoder *st);
 
 /** Decodes a frame of audio.
  @param st Decoder state
@@ -243,7 +243,7 @@ EXPORT void celt_decoder_destroy(CELTDecoder *st);
             returned here in float format. 
  @return Error code.
    */
-EXPORT int celt_decode_float(CELTDecoder *st, const unsigned char *data, int len, float *pcm);
+cc6_EXPORT int cc6_celt_decode_float(cc6_CELTDecoder *st, const unsigned char *data, int len, float *pcm);
 
 /** Decodes a frame of audio.
  @param st Decoder state
@@ -254,7 +254,7 @@ EXPORT int celt_decode_float(CELTDecoder *st, const unsigned char *data, int len
             returned here in 16-bit PCM format (native endian). 
  @return Error code.
  */
-EXPORT int celt_decode(CELTDecoder *st, const unsigned char *data, int len, celt_int16_t *pcm);
+cc6_EXPORT int cc6_celt_decode(cc6_CELTDecoder *st, const unsigned char *data, int len, cc6_celt_int16_t *pcm);
 
 /** Query and set decoder parameters
    @param st Decoder state
@@ -262,7 +262,7 @@ EXPORT int celt_decode(CELTDecoder *st, const unsigned char *data, int len, celt
    @param value Pointer to a 32-bit int value
    @return Error code
  */
-EXPORT int celt_decoder_ctl(CELTDecoder * st, int request, ...);
+cc6_EXPORT int cc6_celt_decoder_ctl(cc6_CELTDecoder * st, int request, ...);
 
 
 /*  @} */
@@ -272,4 +272,4 @@ EXPORT int celt_decoder_ctl(CELTDecoder * st, int request, ...);
 }
 #endif
 
-#endif /*CELT_H */
+#endif /*cc6_CELT_H */

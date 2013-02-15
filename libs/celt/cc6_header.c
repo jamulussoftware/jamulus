@@ -40,19 +40,19 @@
 /*typedef struct {
    char         codec_id[8];
    char         codec_version[20];
-   celt_int32_t version_id;
-   celt_int32_t header_size;
-   celt_int32_t mode;
-   celt_int32_t sample_rate;
-   celt_int32_t nb_channels;
-   celt_int32_t bytes_per_packet;
-   celt_int32_t extra_headers;
-} CELTHeader;*/
+   cc6_celt_int32_t version_id;
+   cc6_celt_int32_t header_size;
+   cc6_celt_int32_t mode;
+   cc6_celt_int32_t sample_rate;
+   cc6_celt_int32_t nb_channels;
+   cc6_celt_int32_t bytes_per_packet;
+   cc6_celt_int32_t extra_headers;
+} cc6_CELTHeader;*/
 
-static  celt_uint32_t
-_le_32 (celt_uint32_t i)
+static  cc6_celt_uint32_t
+cc6__le_32 (cc6_celt_uint32_t i)
 {
-   celt_uint32_t ret=i;
+   cc6_celt_uint32_t ret=i;
 #if !defined(__LITTLE_ENDIAN__) && ( defined(WORDS_BIGENDIAN) || defined(__BIG_ENDIAN__) )
    ret =  (i>>24);
    ret += (i>>8) & 0x0000ff00;
@@ -62,18 +62,18 @@ _le_32 (celt_uint32_t i)
    return ret;
 }
 
-int celt_header_init(CELTHeader *header, const CELTMode *m)
+int cc6_celt_header_init(cc6_CELTHeader *header, const cc6_CELTMode *m)
 {
 
-   if (check_mode(m) != CELT_OK)
-     return CELT_INVALID_MODE;
+   if (cc6_check_mode(m) != cc6_CELT_OK)
+     return cc6_CELT_INVALID_MODE;
    if (header==NULL)
-     return CELT_BAD_ARG;        
+     return cc6_CELT_BAD_ARG;
 
-   CELT_COPY(header->codec_id, "CELT    ", 8);
-   CELT_COPY(header->codec_version, "experimental        ", 20);
+   cc6_CELT_COPY(header->codec_id, "CELT    ", 8);
+   cc6_CELT_COPY(header->codec_version, "experimental        ", 20);
 
-   celt_mode_info(m, CELT_GET_BITSTREAM_VERSION, &header->version_id);
+   cc6_celt_mode_info(m, cc6_CELT_GET_BITSTREAM_VERSION, &header->version_id);
    header->header_size = 56;
    header->sample_rate = m->Fs;
    header->nb_channels = m->nbChannels;
@@ -81,59 +81,59 @@ int celt_header_init(CELTHeader *header, const CELTMode *m)
    header->overlap = m->overlap;
    header->bytes_per_packet = -1;
    header->extra_headers = 0;
-   return CELT_OK;
+   return cc6_CELT_OK;
 }
 
-int celt_header_to_packet(const CELTHeader *header, unsigned char *packet, celt_uint32_t size)
+int cc6_celt_header_to_packet(const cc6_CELTHeader *header, unsigned char *packet, cc6_celt_uint32_t size)
 {
-   celt_int32_t * h;
+   cc6_celt_int32_t * h;
 
    if ((size < 56) || (header==NULL) || (packet==NULL))
-     return CELT_BAD_ARG; /* FAIL */
+     return cc6_CELT_BAD_ARG; /* FAIL */
 
-   CELT_MEMSET(packet, 0, sizeof(*header));
+   cc6_CELT_MEMSET(packet, 0, sizeof(*header));
    /* FIXME: Do it in an alignment-safe manner */
 
    /* Copy ident and version */
-   CELT_COPY(packet, (unsigned char*)header, 28);
+   cc6_CELT_COPY(packet, (unsigned char*)header, 28);
 
    /* Copy the int32 fields */
-   h = (celt_int32_t*)(packet+28);
-   *h++ = _le_32 (header->version_id);
-   *h++ = _le_32 (header->header_size);
-   *h++ = _le_32 (header->sample_rate);
-   *h++ = _le_32 (header->nb_channels);
-   *h++ = _le_32 (header->frame_size);
-   *h++ = _le_32 (header->overlap);
-   *h++ = _le_32 (header->bytes_per_packet);
-   *h   = _le_32 (header->extra_headers);
+   h = (cc6_celt_int32_t*)(packet+28);
+   *h++ = cc6__le_32 (header->version_id);
+   *h++ = cc6__le_32 (header->header_size);
+   *h++ = cc6__le_32 (header->sample_rate);
+   *h++ = cc6__le_32 (header->nb_channels);
+   *h++ = cc6__le_32 (header->frame_size);
+   *h++ = cc6__le_32 (header->overlap);
+   *h++ = cc6__le_32 (header->bytes_per_packet);
+   *h   = cc6__le_32 (header->extra_headers);
 
    return sizeof(*header);
 }
 
-int celt_header_from_packet(const unsigned char *packet, celt_uint32_t size, CELTHeader *header)
+int cc6_celt_header_from_packet(const unsigned char *packet, cc6_celt_uint32_t size, cc6_CELTHeader *header)
 {
-   celt_int32_t * h;
+   cc6_celt_int32_t * h;
 
    if ((size < 56) || (header==NULL) || (packet==NULL))
-     return CELT_BAD_ARG; /* FAIL */
+     return cc6_CELT_BAD_ARG; /* FAIL */
 
-   CELT_MEMSET((unsigned char*)header, 0, sizeof(*header));
+   cc6_CELT_MEMSET((unsigned char*)header, 0, sizeof(*header));
    /* FIXME: Do it in an alignment-safe manner */
 
    /* Copy ident and version */
-   CELT_COPY((unsigned char*)header, packet, 28);
+   cc6_CELT_COPY((unsigned char*)header, packet, 28);
 
    /* Copy the int32 fields */
-   h = (celt_int32_t*)(packet+28);
-   header->version_id       = _le_32(*h++);
-   header->header_size      = _le_32(*h++);
-   header->sample_rate      = _le_32(*h++);
-   header->nb_channels      = _le_32(*h++);
-   header->frame_size       = _le_32(*h++);
-   header->overlap          = _le_32(*h++);
-   header->bytes_per_packet = _le_32(*h++);
-   header->extra_headers    = _le_32(*h);
+   h = (cc6_celt_int32_t*)(packet+28);
+   header->version_id       = cc6__le_32(*h++);
+   header->header_size      = cc6__le_32(*h++);
+   header->sample_rate      = cc6__le_32(*h++);
+   header->nb_channels      = cc6__le_32(*h++);
+   header->frame_size       = cc6__le_32(*h++);
+   header->overlap          = cc6__le_32(*h++);
+   header->bytes_per_packet = cc6__le_32(*h++);
+   header->extra_headers    = cc6__le_32(*h);
 
    return sizeof(*header);
 }

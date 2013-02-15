@@ -50,22 +50,22 @@
 #include "cc6_modes.h"
 #include "cc6_stack_alloc.h"
 
-kiss_fftr_cfg pitch_state_alloc(int max_lag)
+cc6_kiss_fftr_cfg cc6_pitch_state_alloc(int max_lag)
 {
-   return real16_fft_alloc(max_lag);
+   return cc6_real16_fft_alloc(max_lag);
 }
 
-void pitch_state_free(kiss_fftr_cfg st)
+void cc6_pitch_state_free(cc6_kiss_fftr_cfg st)
 {
-   real16_fft_free(st);
+   cc6_real16_fft_free(st);
 }
 
 #ifdef FIXED_POINT
-static void normalise16(celt_word16_t *x, int len, celt_word16_t val)
+static void cc6_normalise16(cc6_celt_word16_t *x, int len, cc6_celt_word16_t val)
 {
    int i;
-   celt_word16_t maxabs;
-   maxabs = celt_maxabs16(x,len);
+   cc6_celt_word16_t maxabs;
+   maxabs = cc6_celt_maxabs16(x,len);
    if (maxabs > val)
    {
       int shift = 0;
@@ -78,7 +78,7 @@ static void normalise16(celt_word16_t *x, int len, celt_word16_t val)
          return;
       i=0;
       do{
-         x[i] = SHR16(x[i], shift);
+         x[i] = cc6_SHR16(x[i], shift);
       } while (++i<len);
    } else {
       int shift=0;
@@ -94,51 +94,51 @@ static void normalise16(celt_word16_t *x, int len, celt_word16_t val)
          return;
       i=0;
       do{
-         x[i] = SHL16(x[i], shift);
+         x[i] = cc6_SHL16(x[i], shift);
       } while (++i<len);
    }
 }
 #else
-#define normalise16(x,len,val)
+#define cc6_normalise16(x,len,val)
 #endif
 
-#define INPUT_SHIFT 15
+#define cc6_INPUT_SHIFT 15
 
-void find_spectral_pitch(const CELTMode *m, kiss_fftr_cfg fft, const struct PsyDecay *decay, const celt_sig_t * __restrict x, const celt_sig_t * __restrict y, const celt_word16_t * __restrict window, celt_word16_t * __restrict spectrum, int len, int max_pitch, int *pitch)
+void cc6_find_spectral_pitch(const cc6_CELTMode *m, cc6_kiss_fftr_cfg fft, const struct cc6_PsyDecay *decay, const cc6_celt_sig_t * __restrict x, const cc6_celt_sig_t * __restrict y, const cc6_celt_word16_t * __restrict window, cc6_celt_word16_t * __restrict spectrum, int len, int max_pitch, int *pitch)
 {
    int c, i;
-   VARDECL(celt_word16_t, _X);
-   VARDECL(celt_word16_t, _Y);
-   const celt_word16_t * __restrict wptr;
+   cc6_VARDECL(cc6_celt_word16_t, _X);
+   cc6_VARDECL(cc6_celt_word16_t, _Y);
+   const cc6_celt_word16_t * __restrict wptr;
 #ifndef SHORTCUTS
-   VARDECL(celt_mask_t, curve);
+   cc6_VARDECL(cc6_celt_mask_t, curve);
 #endif
-   celt_word16_t * __restrict X, * __restrict Y;
-   celt_word16_t * __restrict Xptr, * __restrict Yptr;
-   const celt_sig_t * __restrict yptr;
+   cc6_celt_word16_t * __restrict X, * __restrict Y;
+   cc6_celt_word16_t * __restrict Xptr, * __restrict Yptr;
+   const cc6_celt_sig_t * __restrict yptr;
    int n2;
    int L2;
-   const int C = CHANNELS(m);
-   const int overlap = OVERLAP(m);
-   const int lag = MAX_PERIOD;
-   SAVE_STACK;
+   const int C = cc6_CHANNELS(m);
+   const int overlap = cc6_OVERLAP(m);
+   const int lag = cc6_MAX_PERIOD;
+   cc6_SAVE_STACK;
    n2 = lag>>1;
    L2 = len>>1;
-   ALLOC(_X, lag, celt_word16_t);
+   cc6_ALLOC(_X, lag, cc6_celt_word16_t);
    X = _X;
 #ifndef SHORTCUTS
-   ALLOC(curve, n2, celt_mask_t);
+   cc6_ALLOC(curve, n2, cc6_celt_mask_t);
 #endif
-   CELT_MEMSET(X,0,lag);
+   cc6_CELT_MEMSET(X,0,lag);
    /* Sum all channels of the current frame and copy into X in bit-reverse order */
    for (c=0;c<C;c++)
    {
-      const celt_sig_t * __restrict xptr = &x[c];
+      const cc6_celt_sig_t * __restrict xptr = &x[c];
       for (i=0;i<L2;i++)
       {
-         X[2*BITREV(fft,i)] += SHR32(*xptr,INPUT_SHIFT);
+         X[2*cc6_BITREV(fft,i)] += cc6_SHR32(*xptr,cc6_INPUT_SHIFT);
          xptr += C;
-         X[2*BITREV(fft,i)+1] += SHR32(*xptr,INPUT_SHIFT);
+         X[2*cc6_BITREV(fft,i)+1] += cc6_SHR32(*xptr,cc6_INPUT_SHIFT);
          xptr += C;
       }
    }
@@ -147,16 +147,16 @@ void find_spectral_pitch(const CELTMode *m, kiss_fftr_cfg fft, const struct PsyD
    wptr = window;
    for (i=0;i<overlap>>1;i++)
    {
-      X[2*BITREV(fft,i)]        = MULT16_16_Q15(wptr[0], X[2*BITREV(fft,i)]);
-      X[2*BITREV(fft,i)+1]      = MULT16_16_Q15(wptr[1], X[2*BITREV(fft,i)+1]);
-      X[2*BITREV(fft,L2-i-1)]   = MULT16_16_Q15(wptr[1], X[2*BITREV(fft,L2-i-1)]);
-      X[2*BITREV(fft,L2-i-1)+1] = MULT16_16_Q15(wptr[0], X[2*BITREV(fft,L2-i-1)+1]);
+      X[2*cc6_BITREV(fft,i)]        = cc6_MULT16_16_Q15(wptr[0], X[2*cc6_BITREV(fft,i)]);
+      X[2*cc6_BITREV(fft,i)+1]      = cc6_MULT16_16_Q15(wptr[1], X[2*cc6_BITREV(fft,i)+1]);
+      X[2*cc6_BITREV(fft,L2-i-1)]   = cc6_MULT16_16_Q15(wptr[1], X[2*cc6_BITREV(fft,L2-i-1)]);
+      X[2*cc6_BITREV(fft,L2-i-1)+1] = cc6_MULT16_16_Q15(wptr[0], X[2*cc6_BITREV(fft,L2-i-1)+1]);
       wptr += 2;
    }
-   normalise16(X, lag, 8192);
+   cc6_normalise16(X, lag, 8192);
    /*for (i=0;i<lag;i++) printf ("%d ", X[i]);printf ("\n");*/
    /* Forward real FFT (in-place) */
-   real16_fft_inplace(fft, X, lag);
+   cc6_real16_fft_inplace(fft, X, lag);
 
    if (spectrum)
    {
@@ -167,19 +167,19 @@ void find_spectral_pitch(const CELTMode *m, kiss_fftr_cfg fft, const struct PsyD
       }
    }
 #ifndef SHORTCUTS
-   compute_masking(decay, X, curve, lag);
+   cc6_compute_masking(decay, X, curve, lag);
 #endif
    
    /* Deferred allocation to reduce peak stack usage */
-   ALLOC(_Y, lag, celt_word16_t);
+   cc6_ALLOC(_Y, lag, cc6_celt_word16_t);
    Y = _Y;
    yptr = &y[0];
    /* Copy first channel of the past audio into Y in bit-reverse order */
    for (i=0;i<n2;i++)
    {
-      Y[2*BITREV(fft,i)] = SHR32(*yptr,INPUT_SHIFT);
+      Y[2*cc6_BITREV(fft,i)] = cc6_SHR32(*yptr,cc6_INPUT_SHIFT);
       yptr += C;
-      Y[2*BITREV(fft,i)+1] = SHR32(*yptr,INPUT_SHIFT);
+      Y[2*cc6_BITREV(fft,i)+1] = cc6_SHR32(*yptr,cc6_INPUT_SHIFT);
       yptr += C;
    }
    /* Add remaining channels into Y in bit-reverse order */
@@ -188,50 +188,50 @@ void find_spectral_pitch(const CELTMode *m, kiss_fftr_cfg fft, const struct PsyD
       yptr = &y[c];
       for (i=0;i<n2;i++)
       {
-         Y[2*BITREV(fft,i)] += SHR32(*yptr,INPUT_SHIFT);
+         Y[2*cc6_BITREV(fft,i)] += cc6_SHR32(*yptr,cc6_INPUT_SHIFT);
          yptr += C;
-         Y[2*BITREV(fft,i)+1] += SHR32(*yptr,INPUT_SHIFT);
+         Y[2*cc6_BITREV(fft,i)+1] += cc6_SHR32(*yptr,cc6_INPUT_SHIFT);
          yptr += C;
       }
    }
-   normalise16(Y, lag, 8192);
+   cc6_normalise16(Y, lag, 8192);
    /* Forward real FFT (in-place) */
-   real16_fft_inplace(fft, Y, lag);
+   cc6_real16_fft_inplace(fft, Y, lag);
 
    /* Compute cross-spectrum using the inverse masking curve as weighting */
    Xptr = &X[2];
    Yptr = &Y[2];
    for (i=1;i<n2;i++)
    {
-      celt_word16_t Xr, Xi, n;
+      cc6_celt_word16_t Xr, Xi, n;
       /* weight = 1/sqrt(curve) */
       Xr = Xptr[0];
       Xi = Xptr[1];
 #ifdef SHORTCUTS
-      /*n = SHR32(32767,(celt_ilog2(EPSILON+curve[i])>>1));*/
-      n = 1+(8192>>(celt_ilog2(1+MULT16_16(Xr,Xr)+MULT16_16(Xi,Xi))>>1));
+      /*n = cc6_SHR32(32767,(cc6_celt_ilog2(cc6_EPSILON+curve[i])>>1));*/
+      n = 1+(8192>>(cc6_celt_ilog2(1+cc6_MULT16_16(Xr,Xr)+cc6_MULT16_16(Xi,Xi))>>1));
       /* Pre-multiply X by n, so we can keep everything in 16 bits */
-      Xr = MULT16_16_16(n, Xr);
-      Xi = MULT16_16_16(n, Xi);
+      Xr = cc6_MULT16_16_16(n, Xr);
+      Xi = cc6_MULT16_16_16(n, Xi);
 #else
-      n = celt_rsqrt(EPSILON+curve[i]);
+      n = cc6_celt_rsqrt(cc6_EPSILON+curve[i]);
       /* Pre-multiply X by n, so we can keep everything in 16 bits */
-      Xr = EXTRACT16(SHR32(MULT16_16(n, Xr),3));
-      Xi = EXTRACT16(SHR32(MULT16_16(n, Xi),3));
+      Xr = cc6_EXTRACT16(cc6_SHR32(cc6_MULT16_16(n, Xr),3));
+      Xi = cc6_EXTRACT16(cc6_SHR32(cc6_MULT16_16(n, Xi),3));
 #endif
       /* Cross-spectrum between X and conj(Y) */
-      *Xptr++ = ADD16(MULT16_16_Q15(Xr, Yptr[0]), MULT16_16_Q15(Xi,Yptr[1]));
-      *Xptr++ = SUB16(MULT16_16_Q15(Xr, Yptr[1]), MULT16_16_Q15(Xi,Yptr[0]));
+      *Xptr++ = cc6_ADD16(cc6_MULT16_16_Q15(Xr, Yptr[0]), cc6_MULT16_16_Q15(Xi,Yptr[1]));
+      *Xptr++ = cc6_SUB16(cc6_MULT16_16_Q15(Xr, Yptr[1]), cc6_MULT16_16_Q15(Xi,Yptr[0]));
       Yptr += 2;
    }
    /*printf ("\n");*/
    X[0] = X[1] = 0;
    /*for (i=0;i<lag;i++) printf ("%d ", X[i]);printf ("\n");*/
-   normalise16(X, lag, 50);
+   cc6_normalise16(X, lag, 50);
    /* Inverse half-complex to real FFT gives us the correlation */
-   real16_ifft(fft, X, Y, lag);
+   cc6_real16_ifft(fft, X, Y, lag);
    
    /* The peak in the correlation gives us the pitch */
-   *pitch = find_max16(Y, max_pitch);
-   RESTORE_STACK;
+   *pitch = cc6_find_max16(Y, max_pitch);
+   cc6_RESTORE_STACK;
 }

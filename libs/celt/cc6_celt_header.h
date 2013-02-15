@@ -29,8 +29,8 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef CELT_HEADER_H
-#define CELT_HEADER_H
+#ifndef cc6_CELT_HEADER_H
+#define cc6_CELT_HEADER_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,27 +43,27 @@ extern "C" {
     @brief Header data 
  */
 typedef struct {
-   char         codec_id[8];       /**< MUST be "CELT    " (four spaces) */
-   char         codec_version[20]; /**< Version used (as string) */
-   celt_int32_t version_id;        /**< Version id (negative for until stream is frozen) */
-   celt_int32_t header_size;       /**< Size of this header */
-   celt_int32_t sample_rate;       /**< Sampling rate of the original audio */
-   celt_int32_t nb_channels;       /**< Number of channels */
-   celt_int32_t frame_size;        /**< Samples per frame (per channel) */
-   celt_int32_t overlap;           /**< Overlapping samples (per channel) */
-   celt_int32_t bytes_per_packet;  /**< Number of bytes per compressed packet (0 if unknown) */
-   celt_int32_t extra_headers;     /**< Number of additional headers that follow this header */
-} CELTHeader;
+   char             codec_id[8];       /**< MUST be "CELT    " (four spaces) */
+   char             codec_version[20]; /**< Version used (as string) */
+   cc6_celt_int32_t version_id;        /**< Version id (negative for until stream is frozen) */
+   cc6_celt_int32_t header_size;       /**< Size of this header */
+   cc6_celt_int32_t sample_rate;       /**< Sampling rate of the original audio */
+   cc6_celt_int32_t nb_channels;       /**< Number of channels */
+   cc6_celt_int32_t frame_size;        /**< Samples per frame (per channel) */
+   cc6_celt_int32_t overlap;           /**< Overlapping samples (per channel) */
+   cc6_celt_int32_t bytes_per_packet;  /**< Number of bytes per compressed packet (0 if unknown) */
+   cc6_celt_int32_t extra_headers;     /**< Number of additional headers that follow this header */
+} cc6_CELTHeader;
 
 /** Creates a basic header struct */
-EXPORT int celt_header_init(CELTHeader *header, const CELTMode *m);
+cc6_EXPORT int cc6_celt_header_init(cc6_CELTHeader *header, const cc6_CELTMode *m);
 
-EXPORT int celt_header_to_packet(const CELTHeader *header, unsigned char *packet, celt_uint32_t size);
+cc6_EXPORT int cc6_celt_header_to_packet(const cc6_CELTHeader *header, unsigned char *packet, cc6_celt_uint32_t size);
 
-EXPORT int celt_header_from_packet(const unsigned char *packet, celt_uint32_t size, CELTHeader *header);
+cc6_EXPORT int cc6_celt_header_from_packet(const unsigned char *packet, cc6_celt_uint32_t size, cc6_CELTHeader *header);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* CELT_HEADER_H */
+#endif /* cc6_CELT_HEADER_H */

@@ -38,49 +38,49 @@
 #include "cc6_arch.h"
 
 
-#define EC_BUFFER_INCREMENT (256)
+#define cc6_EC_BUFFER_INCREMENT (256)
 
-void ec_byte_writeinit_buffer(ec_byte_buffer *_b, unsigned char *_buf, long _size){
+void cc6_ec_byte_writeinit_buffer(cc6_ec_byte_buffer *_b, unsigned char *_buf, long _size){
   _b->ptr=_b->buf=_buf;
   _b->storage=_size;
   _b->resizable = 0;
 }
 
-void ec_byte_writeinit(ec_byte_buffer *_b){
-  _b->ptr=_b->buf=celt_alloc(EC_BUFFER_INCREMENT*sizeof(char));
-  _b->storage=EC_BUFFER_INCREMENT;
+void cc6_ec_byte_writeinit(cc6_ec_byte_buffer *_b){
+  _b->ptr=_b->buf=cc6_celt_alloc(cc6_EC_BUFFER_INCREMENT*sizeof(char));
+  _b->storage=cc6_EC_BUFFER_INCREMENT;
   _b->resizable = 1;
 }
 
-void ec_byte_writetrunc(ec_byte_buffer *_b,long _bytes){
+void cc6_ec_byte_writetrunc(cc6_ec_byte_buffer *_b,long _bytes){
   _b->ptr=_b->buf+_bytes;
 }
 
-void ec_byte_write1(ec_byte_buffer *_b,unsigned _value){
+void cc6_ec_byte_write1(cc6_ec_byte_buffer *_b,unsigned _value){
   ptrdiff_t endbyte;
   endbyte=_b->ptr-_b->buf;
   if(endbyte>=_b->storage){
     if (_b->resizable){
-      _b->buf=celt_realloc(_b->buf,(_b->storage+EC_BUFFER_INCREMENT)*sizeof(char));
-      _b->storage+=EC_BUFFER_INCREMENT;
+      _b->buf=cc6_celt_realloc(_b->buf,(_b->storage+cc6_EC_BUFFER_INCREMENT)*sizeof(char));
+      _b->storage+=cc6_EC_BUFFER_INCREMENT;
       _b->ptr=_b->buf+endbyte;
     } else {
-      celt_fatal("range encoder overflow\n");
+      cc6_celt_fatal("range encoder overflow\n");
     }
   }
   *(_b->ptr++)=(unsigned char)_value;
 }
 
-void ec_byte_write4(ec_byte_buffer *_b,ec_uint32 _value){
+void cc6_ec_byte_write4(cc6_ec_byte_buffer *_b,cc6_ec_uint32 _value){
   ptrdiff_t endbyte;
   endbyte=_b->ptr-_b->buf;
   if(endbyte+4>_b->storage){
     if (_b->resizable){
-      _b->buf=celt_realloc(_b->buf,(_b->storage+EC_BUFFER_INCREMENT)*sizeof(char));
-      _b->storage+=EC_BUFFER_INCREMENT;
+      _b->buf=cc6_celt_realloc(_b->buf,(_b->storage+cc6_EC_BUFFER_INCREMENT)*sizeof(char));
+      _b->storage+=cc6_EC_BUFFER_INCREMENT;
       _b->ptr=_b->buf+endbyte;
     } else {
-      celt_fatal("range encoder overflow\n");
+      cc6_celt_fatal("range encoder overflow\n");
     }
   }
   *(_b->ptr++)=(unsigned char)_value;
@@ -92,57 +92,57 @@ void ec_byte_write4(ec_byte_buffer *_b,ec_uint32 _value){
   *(_b->ptr++)=(unsigned char)_value;
 }
 
-void ec_byte_writecopy(ec_byte_buffer *_b,void *_source,long _bytes){
+void cc6_ec_byte_writecopy(cc6_ec_byte_buffer *_b,void *_source,long _bytes){
   ptrdiff_t endbyte;
   endbyte=_b->ptr-_b->buf;
   if(endbyte+_bytes>_b->storage){
     if (_b->resizable){
-      _b->storage=endbyte+_bytes+EC_BUFFER_INCREMENT;
-      _b->buf=celt_realloc(_b->buf,_b->storage*sizeof(char));
+      _b->storage=endbyte+_bytes+cc6_EC_BUFFER_INCREMENT;
+      _b->buf=cc6_celt_realloc(_b->buf,_b->storage*sizeof(char));
       _b->ptr=_b->buf+endbyte;
     } else {
-      celt_fatal("range encoder overflow\n");
+      cc6_celt_fatal("range encoder overflow\n");
     }
   }
   memmove(_b->ptr,_source,_bytes);
   _b->ptr+=_bytes;
 }
 
-void ec_byte_writeclear(ec_byte_buffer *_b){
-  celt_free(_b->buf);
+void cc6_ec_byte_writeclear(cc6_ec_byte_buffer *_b){
+  cc6_celt_free(_b->buf);
 }
 
 
 
-void ec_enc_bits(ec_enc *_this,ec_uint32 _fl,int _ftb){
+void cc6_ec_enc_bits(cc6_ec_enc *_this,cc6_ec_uint32 _fl,int _ftb){
   unsigned fl;
   unsigned ft;
-  while(_ftb>EC_UNIT_BITS){
-    _ftb-=EC_UNIT_BITS;
-    fl=(unsigned)(_fl>>_ftb)&EC_UNIT_MASK;
-    ec_encode_bin(_this,fl,fl+1,EC_UNIT_BITS);
+  while(_ftb>cc6_EC_UNIT_BITS){
+    _ftb-=cc6_EC_UNIT_BITS;
+    fl=(unsigned)(_fl>>_ftb)&cc6_EC_UNIT_MASK;
+    cc6_ec_encode_bin(_this,fl,fl+1,cc6_EC_UNIT_BITS);
   }
   ft=1<<_ftb;
   fl=(unsigned)_fl&ft-1;
-  ec_encode_bin(_this,fl,fl+1,_ftb);
+  cc6_ec_encode_bin(_this,fl,fl+1,_ftb);
 }
 
-void ec_enc_uint(ec_enc *_this,ec_uint32 _fl,ec_uint32 _ft){
+void cc6_ec_enc_uint(cc6_ec_enc *_this,cc6_ec_uint32 _fl,cc6_ec_uint32 _ft){
   unsigned  ft;
   unsigned  fl;
   int       ftb;
-  /*In order to optimize EC_ILOG(), it is undefined for the value 0.*/
-  celt_assert(_ft>1);
+  /*In order to optimize cc6_EC_ILOG(), it is undefined for the value 0.*/
+  cc6_celt_assert(_ft>1);
   _ft--;
-  ftb=EC_ILOG(_ft);
-  if(ftb>EC_UNIT_BITS){
-    ftb-=EC_UNIT_BITS;
+  ftb=cc6_EC_ILOG(_ft);
+  if(ftb>cc6_EC_UNIT_BITS){
+    ftb-=cc6_EC_UNIT_BITS;
     ft=(_ft>>ftb)+1;
     fl=(unsigned)(_fl>>ftb);
-    ec_encode(_this,fl,fl+1,ft);
-    ec_enc_bits(_this,_fl,ftb);
+    cc6_ec_encode(_this,fl,fl+1,ft);
+    cc6_ec_enc_bits(_this,_fl,ftb);
   } else {
-    ec_encode(_this,_fl,_fl+1,_ft+1);
+    cc6_ec_encode(_this,_fl,_fl+1,_ft+1);
   }
 }
 

@@ -32,80 +32,80 @@
    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef ARCH_H
-#define ARCH_H
+#ifndef cc6_ARCH_H
+#define cc6_ARCH_H
 
 #include "cc6_celt_types.h"
 
-#define CELT_SIG_SCALE 32768.
+#define cc6_CELT_SIG_SCALE 32768.
 
-#define celt_fatal(str) _celt_fatal(str, __FILE__, __LINE__);
+#define cc6_celt_fatal(str) cc6__celt_fatal(str, __FILE__, __LINE__);
 #ifdef ENABLE_ASSERTIONS
-#define celt_assert(cond) {if (!(cond)) {celt_fatal("assertion failed: " #cond);}}
-#define celt_assert2(cond, message) {if (!(cond)) {celt_fatal("assertion failed: " #cond "\n" message);}}
+#define cc6_celt_assert(cond) {if (!(cond)) {cc6_celt_fatal("assertion failed: " #cond);}}
+#define cc6_celt_assert2(cond, message) {if (!(cond)) {cc6_celt_fatal("assertion failed: " #cond "\n" message);}}
 #else
-#define celt_assert(cond)
-#define celt_assert2(cond, message)
+#define cc6_celt_assert(cond)
+#define cc6_celt_assert2(cond, message)
 #endif
 
-#define IMUL32(a,b) ((a)*(b))
-#define UMUL32(a,b) ((celt_int32_t)(a)*(celt_int32_t)(b))
-#define UMUL16_16(a,b) ((celt_int32_t)(a)*(celt_int32_t)(b))
+#define cc6_IMUL32(a,b) ((a)*(b))
+#define cc6_UMUL32(a,b) ((cc6_celt_int32_t)(a)*(cc6_celt_int32_t)(b))
+#define cc6_UMUL16_16(a,b) ((cc6_celt_int32_t)(a)*(cc6_celt_int32_t)(b))
 
-#define ABS(x) ((x) < 0 ? (-(x)) : (x))      /**< Absolute integer value. */
-#define ABS16(x) ((x) < 0 ? (-(x)) : (x))    /**< Absolute 16-bit value.  */
-#define MIN16(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum 16-bit value.   */
-#define MAX16(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum 16-bit value.   */
-#define ABS32(x) ((x) < 0 ? (-(x)) : (x))    /**< Absolute 32-bit value.  */
-#define MIN32(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum 32-bit value.   */
-#define MAX32(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum 32-bit value.   */
-#define IMIN(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum int value.   */
-#define IMAX(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum int value.   */
-#define UADD32(a,b) ((a)+(b))
-#define USUB32(a,b) ((a)-(b))
+#define cc6_ABS(x) ((x) < 0 ? (-(x)) : (x))      /**< Absolute integer value. */
+#define cc6_ABS16(x) ((x) < 0 ? (-(x)) : (x))    /**< Absolute 16-bit value.  */
+#define cc6_MIN16(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum 16-bit value.   */
+#define cc6_MAX16(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum 16-bit value.   */
+#define cc6_ABS32(x) ((x) < 0 ? (-(x)) : (x))    /**< Absolute 32-bit value.  */
+#define cc6_MIN32(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum 32-bit value.   */
+#define cc6_MAX32(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum 32-bit value.   */
+#define cc6_IMIN(a,b) ((a) < (b) ? (a) : (b))   /**< Minimum int value.   */
+#define cc6_IMAX(a,b) ((a) > (b) ? (a) : (b))   /**< Maximum int value.   */
+#define cc6_UADD32(a,b) ((a)+(b))
+#define cc6_USUB32(a,b) ((a)-(b))
 
-#define PRINT_MIPS(file)
+#define cc6_PRINT_MIPS(file)
 
 #ifdef FIXED_POINT
 
-typedef celt_int16_t celt_word16_t;
-typedef celt_int32_t celt_word32_t;
+typedef cc6_celt_int16_t cc6_celt_word16_t;
+typedef cc6_celt_int32_t cc6_celt_word32_t;
 
-typedef celt_word32_t celt_sig_t;
-typedef celt_word16_t celt_norm_t;
-typedef celt_word32_t celt_ener_t;
-typedef celt_word16_t celt_pgain_t;
-typedef celt_word32_t celt_mask_t;
+typedef cc6_celt_word32_t cc6_celt_sig_t;
+typedef cc6_celt_word16_t cc6_celt_norm_t;
+typedef cc6_celt_word32_t cc6_celt_ener_t;
+typedef cc6_celt_word16_t cc6_celt_pgain_t;
+typedef cc6_celt_word32_t cc6_celt_mask_t;
 
-#define Q15ONE 32767
-#define Q30ONE 1073741823
+#define cc6_Q15ONE 32767
+#define cc6_Q30ONE 1073741823
 
-#define SIG_SHIFT 12
+#define cc6_SIG_SHIFT 12
 
-#define NORM_SCALING 16384
-#define NORM_SCALING_1 (1.f/16384.f)
-#define NORM_SHIFT 14
+#define cc6_NORM_SCALING 16384
+#define cc6_NORM_SCALING_1 (1.f/16384.f)
+#define cc6_NORM_SHIFT 14
 
-#define ENER_SCALING 16384.f
-#define ENER_SCALING_1 (1.f/16384.f)
-#define ENER_SHIFT 14
+#define cc6_ENER_SCALING 16384.f
+#define cc6_ENER_SCALING_1 (1.f/16384.f)
+#define cc6_ENER_SHIFT 14
 
-#define PGAIN_SCALING 32768.f
-#define PGAIN_SCALING_1 (1.f/32768.f)
-#define PGAIN_SHIFT 15
+#define cc6_PGAIN_SCALING 32768.f
+#define cc6_PGAIN_SCALING_1 (1.f/32768.f)
+#define cc6_PGAIN_SHIFT 15
 
-#define DB_SCALING 256.f
-#define DB_SCALING_1 (1.f/256.f)
+#define cc6_DB_SCALING 256.f
+#define cc6_DB_SCALING_1 (1.f/256.f)
 
-#define EPSILON 1
-#define VERY_SMALL 0
-#define VERY_LARGE32 ((celt_word32_t)2147483647)
-#define VERY_LARGE16 ((celt_word16_t)32767)
-#define Q15_ONE ((celt_word16_t)32767)
-#define Q15_ONE_1 (1.f/32768.f)
+#define cc6_EPSILON 1
+#define cc6_VERY_SMALL 0
+#define cc6_VERY_LARGE32 ((cc6_celt_word32_t)2147483647)
+#define cc6_VERY_LARGE16 ((cc6_celt_word16_t)32767)
+#define cc6_Q15_ONE ((cc6_celt_word16_t)32767)
+#define cc6_Q15_ONE_1 (1.f/32768.f)
 
-#define SCALEIN(a)	(a)
-#define SCALEOUT(a)	(a)
+#define cc6_SCALEIN(a)	(a)
+#define cc6_SCALEOUT(a)	(a)
 
 #ifdef FIXED_DEBUG
 #include "fixed_debug.h"
@@ -130,98 +130,98 @@ typedef celt_word32_t celt_mask_t;
 
 #else /* FIXED_POINT */
 
-typedef float celt_word16_t;
-typedef float celt_word32_t;
+typedef float cc6_celt_word16_t;
+typedef float cc6_celt_word32_t;
 
-typedef float celt_sig_t;
-typedef float celt_norm_t;
-typedef float celt_ener_t;
-typedef float celt_pgain_t;
-typedef float celt_mask_t;
+typedef float cc6_celt_sig_t;
+typedef float cc6_celt_norm_t;
+typedef float cc6_celt_ener_t;
+typedef float cc6_celt_pgain_t;
+typedef float cc6_celt_mask_t;
 
-#define Q15ONE 1.0f
-#define Q30ONE 1.0f
+#define cc6_Q15ONE 1.0f
+#define cc6_Q30ONE 1.0f
 
-#define NORM_SCALING 1.f
-#define NORM_SCALING_1 1.f
-#define ENER_SCALING 1.f
-#define ENER_SCALING_1 1.f
-#define PGAIN_SCALING 1.f
-#define PGAIN_SCALING_1 1.f
+#define cc6_NORM_SCALING 1.f
+#define cc6_NORM_SCALING_1 1.f
+#define cc6_ENER_SCALING 1.f
+#define cc6_ENER_SCALING_1 1.f
+#define cc6_PGAIN_SCALING 1.f
+#define cc6_PGAIN_SCALING_1 1.f
 
-#define DB_SCALING 1.f
-#define DB_SCALING_1 1.f
+#define cc6_DB_SCALING 1.f
+#define cc6_DB_SCALING_1 1.f
 
-#define EPSILON 1e-15f
-#define VERY_SMALL 1e-15f
-#define VERY_LARGE32 1e15f
-#define VERY_LARGE16 1e15f
-#define Q15_ONE ((celt_word16_t)1.f)
-#define Q15_ONE_1 ((celt_word16_t)1.f)
+#define cc6_EPSILON 1e-15f
+#define cc6_VERY_SMALL 1e-15f
+#define cc6_VERY_LARGE32 1e15f
+#define cc6_VERY_LARGE16 1e15f
+#define cc6_Q15_ONE ((cc6_celt_word16_t)1.f)
+#define cc6_Q15_ONE_1 ((cc6_celt_word16_t)1.f)
 
-#define QCONST16(x,bits) (x)
-#define QCONST32(x,bits) (x)
+#define cc6_QCONST16(x,bits) (x)
+#define cc6_QCONST32(x,bits) (x)
 
-#define NEG16(x) (-(x))
-#define NEG32(x) (-(x))
-#define EXTRACT16(x) (x)
-#define EXTEND32(x) (x)
-#define SHR16(a,shift) (a)
-#define SHL16(a,shift) (a)
-#define SHR32(a,shift) (a)
-#define SHL32(a,shift) (a)
-#define PSHR16(a,shift) (a)
-#define PSHR32(a,shift) (a)
-#define VSHR32(a,shift) (a)
-#define SATURATE16(x,a) (x)
-#define SATURATE32(x,a) (x)
+#define cc6_NEG16(x) (-(x))
+#define cc6_NEG32(x) (-(x))
+#define cc6_EXTRACT16(x) (x)
+#define cc6_EXTEND32(x) (x)
+#define cc6_SHR16(a,shift) (a)
+#define cc6_SHL16(a,shift) (a)
+#define cc6_SHR32(a,shift) (a)
+#define cc6_SHL32(a,shift) (a)
+#define cc6_PSHR16(a,shift) (a)
+#define cc6_PSHR32(a,shift) (a)
+#define cc6_VSHR32(a,shift) (a)
+#define cc6_SATURATE16(x,a) (x)
+#define cc6_SATURATE32(x,a) (x)
 
-#define PSHR(a,shift)   (a)
-#define SHR(a,shift)    (a)
-#define SHL(a,shift)    (a)
-#define SATURATE(x,a)   (x)
+#define cc6_PSHR(a,shift)   (a)
+#define cc6_SHR(a,shift)    (a)
+#define cc6_SHL(a,shift)    (a)
+#define cc6_SATURATE(x,a)   (x)
 
-#define ROUND16(a,shift)  (a)
-#define HALF32(x)       (.5f*(x))
+#define cc6_ROUND16(a,shift)  (a)
+#define cc6_HALF32(x)       (.5f*(x))
 
-#define ADD16(a,b) ((a)+(b))
-#define SUB16(a,b) ((a)-(b))
-#define ADD32(a,b) ((a)+(b))
-#define SUB32(a,b) ((a)-(b))
-#define MULT16_16_16(a,b)     ((a)*(b))
-#define MULT16_16(a,b)     ((celt_word32_t)(a)*(celt_word32_t)(b))
-#define MAC16_16(c,a,b)     ((c)+(celt_word32_t)(a)*(celt_word32_t)(b))
+#define cc6_ADD16(a,b) ((a)+(b))
+#define cc6_SUB16(a,b) ((a)-(b))
+#define cc6_ADD32(a,b) ((a)+(b))
+#define cc6_SUB32(a,b) ((a)-(b))
+#define cc6_MULT16_16_16(a,b)     ((a)*(b))
+#define cc6_MULT16_16(a,b)     ((cc6_celt_word32_t)(a)*(cc6_celt_word32_t)(b))
+#define cc6_MAC16_16(c,a,b)     ((c)+(cc6_celt_word32_t)(a)*(cc6_celt_word32_t)(b))
 
-#define MULT16_32_Q11(a,b)     ((a)*(b))
-#define MULT16_32_Q13(a,b)     ((a)*(b))
-#define MULT16_32_Q14(a,b)     ((a)*(b))
-#define MULT16_32_Q15(a,b)     ((a)*(b))
-#define MULT16_32_Q16(a,b)     ((a)*(b))
-#define MULT16_32_P15(a,b)     ((a)*(b))
+#define cc6_MULT16_32_Q11(a,b)     ((a)*(b))
+#define cc6_MULT16_32_Q13(a,b)     ((a)*(b))
+#define cc6_MULT16_32_Q14(a,b)     ((a)*(b))
+#define cc6_MULT16_32_Q15(a,b)     ((a)*(b))
+#define cc6_MULT16_32_Q16(a,b)     ((a)*(b))
+#define cc6_MULT16_32_P15(a,b)     ((a)*(b))
 
-#define MULT32_32_Q31(a,b)     ((a)*(b))
+#define cc6_MULT32_32_Q31(a,b)     ((a)*(b))
 
-#define MAC16_32_Q11(c,a,b)     ((c)+(a)*(b))
-#define MAC16_32_Q15(c,a,b)     ((c)+(a)*(b))
+#define cc6_MAC16_32_Q11(c,a,b)     ((c)+(a)*(b))
+#define cc6_MAC16_32_Q15(c,a,b)     ((c)+(a)*(b))
 
-#define MAC16_16_Q11(c,a,b)     ((c)+(a)*(b))
-#define MAC16_16_Q13(c,a,b)     ((c)+(a)*(b))
-#define MAC16_16_P13(c,a,b)     ((c)+(a)*(b))
-#define MULT16_16_Q11_32(a,b)     ((a)*(b))
-#define MULT16_16_Q13(a,b)     ((a)*(b))
-#define MULT16_16_Q14(a,b)     ((a)*(b))
-#define MULT16_16_Q15(a,b)     ((a)*(b))
-#define MULT16_16_P15(a,b)     ((a)*(b))
-#define MULT16_16_P13(a,b)     ((a)*(b))
-#define MULT16_16_P14(a,b)     ((a)*(b))
+#define cc6_MAC16_16_Q11(c,a,b)     ((c)+(a)*(b))
+#define cc6_MAC16_16_Q13(c,a,b)     ((c)+(a)*(b))
+#define cc6_MAC16_16_P13(c,a,b)     ((c)+(a)*(b))
+#define cc6_MULT16_16_Q11_32(a,b)     ((a)*(b))
+#define cc6_MULT16_16_Q13(a,b)     ((a)*(b))
+#define cc6_MULT16_16_Q14(a,b)     ((a)*(b))
+#define cc6_MULT16_16_Q15(a,b)     ((a)*(b))
+#define cc6_MULT16_16_P15(a,b)     ((a)*(b))
+#define cc6_MULT16_16_P13(a,b)     ((a)*(b))
+#define cc6_MULT16_16_P14(a,b)     ((a)*(b))
 
-#define DIV32_16(a,b)     (((celt_word32_t)(a))/(celt_word16_t)(b))
-#define PDIV32_16(a,b)     (((celt_word32_t)(a))/(celt_word16_t)(b))
-#define DIV32(a,b)     (((celt_word32_t)(a))/(celt_word32_t)(b))
-#define PDIV32(a,b)     (((celt_word32_t)(a))/(celt_word32_t)(b))
+#define cc6_DIV32_16(a,b)     (((cc6_celt_word32_t)(a))/(cc6_celt_word16_t)(b))
+#define cc6_PDIV32_16(a,b)     (((cc6_celt_word32_t)(a))/(cc6_celt_word16_t)(b))
+#define cc6_DIV32(a,b)     (((cc6_celt_word32_t)(a))/(cc6_celt_word32_t)(b))
+#define cc6_PDIV32(a,b)     (((cc6_celt_word32_t)(a))/(cc6_celt_word32_t)(b))
 
-#define SCALEIN(a)	((a)*CELT_SIG_SCALE)
-#define SCALEOUT(a)	((a)*(1/CELT_SIG_SCALE))
+#define cc6_SCALEIN(a)	((a)*cc6_CELT_SIG_SCALE)
+#define cc6_SCALEOUT(a)	((a)*(1/cc6_CELT_SIG_SCALE))
 
 #endif /* !FIXED_POINT */
 
@@ -229,24 +229,24 @@ typedef float celt_mask_t;
 #if defined (CONFIG_TI_C54X) || defined (CONFIG_TI_C55X)
 
 /* 2 on TI C5x DSP */
-#define BYTES_PER_CHAR 2 
-#define BITS_PER_CHAR 16
-#define LOG2_BITS_PER_CHAR 4
+#define cc6_BYTES_PER_CHAR 2
+#define cc6_BITS_PER_CHAR 16
+#define cc6_LOG2_BITS_PER_CHAR 4
 
 #else /* CONFIG_TI_C54X */
 
-#define BYTES_PER_CHAR 1
-#define BITS_PER_CHAR 8
-#define LOG2_BITS_PER_CHAR 3
+#define cc6_BYTES_PER_CHAR 1
+#define cc6_BITS_PER_CHAR 8
+#define cc6_LOG2_BITS_PER_CHAR 3
 
 #endif /* !CONFIG_TI_C54X */
 
-#ifndef GLOBAL_STACK_SIZE 
+#ifndef cc6_GLOBAL_STACK_SIZE
 #ifdef FIXED_POINT
-#define GLOBAL_STACK_SIZE 100000
+#define cc6_GLOBAL_STACK_SIZE 100000
 #else
-#define GLOBAL_STACK_SIZE 100000
+#define cc6_GLOBAL_STACK_SIZE 100000
 #endif
 #endif 
 
-#endif /* ARCH_H */
+#endif /* cc6_ARCH_H */

@@ -207,23 +207,26 @@ CServer::CServer ( const int      iNewNumChan,
             cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
 #endif
 
-        OpusEncoderMono[i] = opus_encoder_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                                   1,
-                                                   OPUS_APPLICATION_RESTRICTED_LOWDELAY,
-                                                   &iOpusError );
+        OpusMode[i] = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                                SYSTEM_FRAME_SIZE_SAMPLES,
+                                                &iOpusError );
 
-        OpusDecoderMono[i] = opus_decoder_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                                   1,
-                                                   &iOpusError );
+        OpusEncoderMono[i] = opus_custom_encoder_create ( OpusMode[i],
+                                                          1,
+                                                          &iOpusError );
+
+        OpusDecoderMono[i] = opus_custom_decoder_create ( OpusMode[i],
+                                                          1,
+                                                          &iOpusError );
 
         // we require a constant bit rate
-        opus_encoder_ctl ( OpusEncoderMono[i],
-                           OPUS_SET_VBR ( 0 ) );
+        opus_custom_encoder_ctl ( OpusEncoderMono[i],
+                                  OPUS_SET_VBR ( 0 ) );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
         // set encoder low complexity
-        opus_encoder_ctl ( OpusEncoderMono[i],
-                           OPUS_SET_COMPLEXITY ( 1 ) );
+        opus_custom_encoder_ctl ( OpusEncoderMono[i],
+                                  OPUS_SET_COMPLEXITY ( 1 ) );
 #endif
 
         // init audio endocder/decoder (stereo)
@@ -239,23 +242,22 @@ CServer::CServer ( const int      iNewNumChan,
             cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
 #endif
 
-        OpusEncoderStereo[i] = opus_encoder_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                                     2,
-                                                     OPUS_APPLICATION_RESTRICTED_LOWDELAY,
-                                                     &iOpusError );
+        OpusEncoderStereo[i] = opus_custom_encoder_create ( OpusMode[i],
+                                                            2,
+                                                            &iOpusError );
 
-        OpusDecoderStereo[i] = opus_decoder_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                                     2,
-                                                     &iOpusError );
+        OpusDecoderStereo[i] = opus_custom_decoder_create ( OpusMode[i],
+                                                            2,
+                                                            &iOpusError );
 
         // we require a constant bit rate
-        opus_encoder_ctl ( OpusEncoderStereo[i],
-                           OPUS_SET_VBR ( 0 ) );
+        opus_custom_encoder_ctl ( OpusEncoderStereo[i],
+                                  OPUS_SET_VBR ( 0 ) );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
         // set encoder low complexity
-        opus_encoder_ctl ( OpusEncoderStereo[i],
-                           OPUS_SET_COMPLEXITY ( 1 ) );
+        opus_custom_encoder_ctl ( OpusEncoderStereo[i],
+                                  OPUS_SET_COMPLEXITY ( 1 ) );
 #endif
     }
 
@@ -633,12 +635,11 @@ void CServer::OnTimer()
                     }
                     else
                     {
-                        opus_decode ( OpusDecoderMono[iCurChanID],
-                                      &vecbyData[0],
-                                      iCeltNumCodedBytes,
-                                      &vecvecsData[i][0],
-                                      SYSTEM_FRAME_SIZE_SAMPLES,
-                                      0 );
+                        opus_custom_decode ( OpusDecoderMono[iCurChanID],
+                                             &vecbyData[0],
+                                             iCeltNumCodedBytes,
+                                             &vecvecsData[i][0],
+                                             SYSTEM_FRAME_SIZE_SAMPLES );
                     }
                 }
                 else
@@ -654,12 +655,11 @@ void CServer::OnTimer()
                     }
                     else
                     {
-                        opus_decode ( OpusDecoderStereo[iCurChanID],
-                                      &vecbyData[0],
-                                      iCeltNumCodedBytes,
-                                      &vecvecsData[i][0],
-                                      SYSTEM_FRAME_SIZE_SAMPLES,
-                                      0 );
+                        opus_custom_decode ( OpusDecoderStereo[iCurChanID],
+                                             &vecbyData[0],
+                                             iCeltNumCodedBytes,
+                                             &vecvecsData[i][0],
+                                             SYSTEM_FRAME_SIZE_SAMPLES );
                     }
                 }
             }
@@ -679,12 +679,11 @@ void CServer::OnTimer()
                     }
                     else
                     {
-                        opus_decode ( OpusDecoderMono[iCurChanID],
-                                      NULL,
-                                      iCeltNumCodedBytes,
-                                      &vecvecsData[i][0],
-                                      SYSTEM_FRAME_SIZE_SAMPLES,
-                                      0 );
+                        opus_custom_decode ( OpusDecoderMono[iCurChanID],
+                                             NULL,
+                                             iCeltNumCodedBytes,
+                                             &vecvecsData[i][0],
+                                             SYSTEM_FRAME_SIZE_SAMPLES );
                     }
                 }
                 else
@@ -700,12 +699,11 @@ void CServer::OnTimer()
                     }
                     else
                     {
-                        opus_decode ( OpusDecoderStereo[iCurChanID],
-                                      NULL,
-                                      iCeltNumCodedBytes,
-                                      &vecvecsData[i][0],
-                                      SYSTEM_FRAME_SIZE_SAMPLES,
-                                      0 );
+                        opus_custom_decode ( OpusDecoderStereo[iCurChanID],
+                                             NULL,
+                                             iCeltNumCodedBytes,
+                                             &vecvecsData[i][0],
+                                             SYSTEM_FRAME_SIZE_SAMPLES );
                     }
                 }
             }
@@ -784,14 +782,14 @@ const int iCeltBitRateBitsPerSec =
 // TODO find a better place than this: the setting does not change all the time
 //      so for speed optimization it would be better to set it only if the network
 //      frame size is changed
-opus_encoder_ctl ( OpusEncoderMono[iCurChanID],
-                   OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+opus_custom_encoder_ctl ( OpusEncoderMono[iCurChanID],
+                          OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
 
-                    opus_encode ( OpusEncoderMono[iCurChanID],
-                                  &vecsSendData[0],
-                                  SYSTEM_FRAME_SIZE_SAMPLES,
-                                  &vecCeltData[0],
-                                  iCeltNumCodedBytes );
+                    opus_custom_encode ( OpusEncoderMono[iCurChanID],
+                                         &vecsSendData[0],
+                                         SYSTEM_FRAME_SIZE_SAMPLES,
+                                         &vecCeltData[0],
+                                         iCeltNumCodedBytes );
                 }
             }
             else
@@ -811,14 +809,14 @@ opus_encoder_ctl ( OpusEncoderMono[iCurChanID],
 // TODO find a better place than this: the setting does not change all the time
 //      so for speed optimization it would be better to set it only if the network
 //      frame size is changed
-opus_encoder_ctl ( OpusEncoderStereo[iCurChanID],
-                   OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+opus_custom_encoder_ctl ( OpusEncoderStereo[iCurChanID],
+                          OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
 
-                    opus_encode ( OpusEncoderStereo[iCurChanID],
-                                  &vecsSendData[0],
-                                  SYSTEM_FRAME_SIZE_SAMPLES,
-                                  &vecCeltData[0],
-                                  iCeltNumCodedBytes );
+                    opus_custom_encode ( OpusEncoderStereo[iCurChanID],
+                                         &vecsSendData[0],
+                                         SYSTEM_FRAME_SIZE_SAMPLES,
+                                         &vecCeltData[0],
+                                         iCeltNumCodedBytes );
                 }
             }
 

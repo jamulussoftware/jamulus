@@ -30,7 +30,7 @@
 #include <QDateTime>
 #include <QHostAddress>
 #include "cc6_celt.h"
-#include "opus.h"
+#include "opus_custom.h"
 #include "global.h"
 #include "socket.h"
 #include "channel.h"
@@ -214,10 +214,11 @@ protected:
     cc6_CELTMode*       CeltModeStereo[MAX_NUM_CHANNELS];
     cc6_CELTEncoder*    CeltEncoderStereo[MAX_NUM_CHANNELS];
     cc6_CELTDecoder*    CeltDecoderStereo[MAX_NUM_CHANNELS];
-    OpusEncoder*        OpusEncoderMono[MAX_NUM_CHANNELS];
-    OpusDecoder*        OpusDecoderMono[MAX_NUM_CHANNELS];
-    OpusEncoder*        OpusEncoderStereo[MAX_NUM_CHANNELS];
-    OpusDecoder*        OpusDecoderStereo[MAX_NUM_CHANNELS];
+    OpusCustomMode*     OpusMode[MAX_NUM_CHANNELS];
+    OpusCustomEncoder*  OpusEncoderMono[MAX_NUM_CHANNELS];
+    OpusCustomDecoder*  OpusDecoderMono[MAX_NUM_CHANNELS];
+    OpusCustomEncoder*  OpusEncoderStereo[MAX_NUM_CHANNELS];
+    OpusCustomDecoder*  OpusDecoderStereo[MAX_NUM_CHANNELS];
 
     CVector<QString>    vstrChatColors;
 

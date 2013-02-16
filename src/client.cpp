@@ -67,23 +67,26 @@ CClient::CClient ( const quint16 iPortNumber ) :
         cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
 #endif
 
-    OpusEncoderMono = opus_encoder_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                            1,
-                                            OPUS_APPLICATION_RESTRICTED_LOWDELAY,
-                                            &iOpusError );
+    OpusMode = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                         SYSTEM_FRAME_SIZE_SAMPLES,
+                                         &iOpusError );
 
-    OpusDecoderMono = opus_decoder_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                            1,
-                                            &iOpusError );
+    OpusEncoderMono = opus_custom_encoder_create ( OpusMode,
+                                                   1,
+                                                   &iOpusError );
+
+    OpusDecoderMono = opus_custom_decoder_create ( OpusMode,
+                                                   1,
+                                                   &iOpusError );
 
     // we require a constant bit rate
-    opus_encoder_ctl ( OpusEncoderMono,
-                       OPUS_SET_VBR ( 0 ) );
+    opus_custom_encoder_ctl ( OpusEncoderMono,
+                              OPUS_SET_VBR ( 0 ) );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
-    opus_encoder_ctl ( OpusEncoderMono,
-                       OPUS_SET_COMPLEXITY ( 1 ) );
+    opus_custom_encoder_ctl ( OpusEncoderMono,
+                              OPUS_SET_COMPLEXITY ( 1 ) );
 #endif
 
     // init audio encoder/decoder (stereo)
@@ -99,23 +102,22 @@ CClient::CClient ( const quint16 iPortNumber ) :
         cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
 #endif
 
-    OpusEncoderStereo = opus_encoder_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                              2,
-                                              OPUS_APPLICATION_RESTRICTED_LOWDELAY,
-                                              &iOpusError );
+    OpusEncoderStereo = opus_custom_encoder_create ( OpusMode,
+                                                     2,
+                                                     &iOpusError );
 
-    OpusDecoderStereo = opus_decoder_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                              2,
-                                              &iOpusError );
+    OpusDecoderStereo = opus_custom_decoder_create ( OpusMode,
+                                                     2,
+                                                     &iOpusError );
 
     // we require a constant bit rate
-    opus_encoder_ctl ( OpusEncoderStereo,
-                       OPUS_SET_VBR ( 0 ) );
+    opus_custom_encoder_ctl ( OpusEncoderStereo,
+                              OPUS_SET_VBR ( 0 ) );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
-    opus_encoder_ctl ( OpusEncoderStereo,
-                       OPUS_SET_COMPLEXITY ( 1 ) );
+    opus_custom_encoder_ctl ( OpusEncoderStereo,
+                              OPUS_SET_COMPLEXITY ( 1 ) );
 #endif
 
 
@@ -731,13 +733,13 @@ void CClient::Init()
 
     if ( bUseStereo )
     {
-        opus_encoder_ctl ( OpusEncoderStereo,
-                           OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+        opus_custom_encoder_ctl ( OpusEncoderStereo,
+                                  OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
     }
     else
     {
-        opus_encoder_ctl ( OpusEncoderMono,
-                           OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+        opus_custom_encoder_ctl ( OpusEncoderMono,
+                                  OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
     }
 
     // inits for network and channel
@@ -971,11 +973,11 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             }
             else
             {
-                opus_encode ( OpusEncoderStereo,
-                              &vecsNetwork[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
-                              SYSTEM_FRAME_SIZE_SAMPLES,
-                              &vecCeltData[0],
-                              iCeltNumCodedBytes );
+                opus_custom_encode ( OpusEncoderStereo,
+                                     &vecsNetwork[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                                     SYSTEM_FRAME_SIZE_SAMPLES,
+                                     &vecCeltData[0],
+                                     iCeltNumCodedBytes );
             }
         }
         else
@@ -991,11 +993,11 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             }
             else
             {
-                opus_encode ( OpusEncoderMono,
-                              &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
-                              SYSTEM_FRAME_SIZE_SAMPLES,
-                              &vecCeltData[0],
-                              iCeltNumCodedBytes );
+                opus_custom_encode ( OpusEncoderMono,
+                                     &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                                     SYSTEM_FRAME_SIZE_SAMPLES,
+                                     &vecCeltData[0],
+                                     iCeltNumCodedBytes );
             }
         }
 
@@ -1035,12 +1037,11 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 }
                 else
                 {
-                    opus_decode ( OpusDecoderStereo,
-                                  &vecbyNetwData[0],
-                                  iCeltNumCodedBytes,
-                                  &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
-                                  SYSTEM_FRAME_SIZE_SAMPLES,
-                                  0 );
+                    opus_custom_decode ( OpusDecoderStereo,
+                                         &vecbyNetwData[0],
+                                         iCeltNumCodedBytes,
+                                         &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                                         SYSTEM_FRAME_SIZE_SAMPLES );
                 }
             }
             else
@@ -1054,12 +1055,11 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 }
                 else
                 {
-                    opus_decode ( OpusDecoderMono,
-                                  &vecbyNetwData[0],
-                                  iCeltNumCodedBytes,
-                                  &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
-                                  SYSTEM_FRAME_SIZE_SAMPLES,
-                                  0 );
+                    opus_custom_decode ( OpusDecoderMono,
+                                         &vecbyNetwData[0],
+                                         iCeltNumCodedBytes,
+                                         &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                                         SYSTEM_FRAME_SIZE_SAMPLES );
                 }
             }
         }
@@ -1077,12 +1077,11 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 }
                 else
                 {
-                    opus_decode ( OpusDecoderStereo,
-                                  NULL,
-                                  iCeltNumCodedBytes,
-                                  &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
-                                  SYSTEM_FRAME_SIZE_SAMPLES,
-                                  0 );
+                    opus_custom_decode ( OpusDecoderStereo,
+                                         NULL,
+                                         iCeltNumCodedBytes,
+                                         &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                                         SYSTEM_FRAME_SIZE_SAMPLES );
                 }
             }
             else
@@ -1096,12 +1095,11 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 }
                 else
                 {
-                    opus_decode ( OpusDecoderMono,
-                                  NULL,
-                                  iCeltNumCodedBytes,
-                                  &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
-                                  SYSTEM_FRAME_SIZE_SAMPLES,
-                                  0 );
+                    opus_custom_decode ( OpusDecoderMono,
+                                         NULL,
+                                         iCeltNumCodedBytes,
+                                         &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                                         SYSTEM_FRAME_SIZE_SAMPLES );
                 }
             }
         }

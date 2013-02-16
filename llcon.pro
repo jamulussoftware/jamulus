@@ -134,6 +134,7 @@ HEADERS += src/audiomixerboard.h \
     libs/celt/cc6_vq.h \
     libs/opus/include/opus.h \
     libs/opus/include/opus_multistream.h \
+    libs/opus/include/opus_custom.h \
     libs/opus/src/opus_private.h \
     libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \

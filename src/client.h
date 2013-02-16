@@ -31,7 +31,7 @@
 #include <QDateTime>
 #include <QMessageBox>
 #include "cc6_celt.h"
-#include "opus.h"
+#include "opus_custom.h"
 #include "global.h"
 #include "socket.h"
 #include "channel.h"
@@ -275,10 +275,11 @@ void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
     cc6_CELTMode*           CeltModeStereo;
     cc6_CELTEncoder*        CeltEncoderStereo;
     cc6_CELTDecoder*        CeltDecoderStereo;
-    OpusEncoder*            OpusEncoderMono;
-    OpusDecoder*            OpusDecoderMono;
-    OpusEncoder*            OpusEncoderStereo;
-    OpusDecoder*            OpusDecoderStereo;
+    OpusCustomMode*         OpusMode;
+    OpusCustomEncoder*      OpusEncoderMono;
+    OpusCustomDecoder*      OpusDecoderMono;
+    OpusCustomEncoder*      OpusEncoderStereo;
+    OpusCustomDecoder*      OpusDecoderStereo;
     EAudComprType           eAudioCompressionType;
     int                     iCeltNumCodedBytes;
     bool                    bCeltDoHighQuality;

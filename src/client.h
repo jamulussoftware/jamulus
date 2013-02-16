@@ -31,6 +31,7 @@
 #include <QDateTime>
 #include <QMessageBox>
 #include "cc6_celt.h"
+#include "opus.h"
 #include "global.h"
 #include "socket.h"
 #include "channel.h"
@@ -271,6 +272,10 @@ protected:
     cc6_CELTMode*           CeltModeStereo;
     cc6_CELTEncoder*        CeltEncoderStereo;
     cc6_CELTDecoder*        CeltDecoderStereo;
+    OpusEncoder*            OpusEncoderMono;
+    OpusDecoder*            OpusDecoderMono;
+    OpusEncoder*            OpusEncoderStereo;
+    OpusDecoder*            OpusDecoderStereo;
     int                     iCeltNumCodedBytes;
     bool                    bCeltDoHighQuality;
     bool                    bUseStereo;

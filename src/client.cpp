@@ -51,6 +51,8 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bUseDefaultCentralServerAddress  ( true ),
     iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL )
 {
+    int iOpusError;
+
     // init audio encoder/decoder (mono)
     CeltModeMono = cc6_celt_mode_create (
         SYSTEM_SAMPLE_RATE_HZ, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
@@ -64,6 +66,21 @@ CClient::CClient ( const quint16 iPortNumber ) :
         cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
 #endif
 
+    OpusEncoderMono = opus_encoder_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                            1,
+                                            OPUS_APPLICATION_RESTRICTED_LOWDELAY,
+                                            &iOpusError );
+
+    OpusDecoderMono = opus_decoder_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                            1,
+                                            &iOpusError );
+
+#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+    // set encoder low complexity
+    opus_encoder_ctl ( OpusEncoderMono,
+                       OPUS_SET_COMPLEXITY ( 1 ) );
+#endif
+
     // init audio encoder/decoder (stereo)
     CeltModeStereo = cc6_celt_mode_create (
         SYSTEM_SAMPLE_RATE_HZ, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
@@ -75,6 +92,21 @@ CClient::CClient ( const quint16 iPortNumber ) :
     // set encoder low complexity
     cc6_celt_encoder_ctl ( CeltEncoderStereo,
         cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
+#endif
+
+    OpusEncoderStereo = opus_encoder_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                              2,
+                                              OPUS_APPLICATION_RESTRICTED_LOWDELAY,
+                                              &iOpusError );
+
+    OpusDecoderStereo = opus_decoder_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                              2,
+                                              &iOpusError );
+
+#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+    // set encoder low complexity
+    opus_encoder_ctl ( OpusEncoderStereo,
+                       OPUS_SET_COMPLEXITY ( 1 ) );
 #endif
 
 

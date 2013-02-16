@@ -186,6 +186,7 @@ CServer::CServer ( const int      iNewNumChan,
     bAutoRunMinimized    ( false ),
     strWelcomeMessage    ( strNewWelcomeMessage )
 {
+    int iOpusError;
     int i;
 
     // create CELT encoder/decoder for each channel (must be done before
@@ -206,6 +207,21 @@ CServer::CServer ( const int      iNewNumChan,
             cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
 #endif
 
+        OpusEncoderMono[i] = opus_encoder_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                                   1,
+                                                   OPUS_APPLICATION_RESTRICTED_LOWDELAY,
+                                                   &iOpusError );
+
+        OpusDecoderMono[i] = opus_decoder_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                                   1,
+                                                   &iOpusError );
+
+#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+        // set encoder low complexity
+        opus_encoder_ctl ( OpusEncoderMono[i],
+                           OPUS_SET_COMPLEXITY ( 1 ) );
+#endif
+
         // init audio endocder/decoder (stereo)
         CeltModeStereo[i] = cc6_celt_mode_create (
             SYSTEM_SAMPLE_RATE_HZ, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
@@ -217,6 +233,21 @@ CServer::CServer ( const int      iNewNumChan,
         // set encoder low complexity
         cc6_celt_encoder_ctl ( CeltEncoderStereo[i],
             cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
+#endif
+
+        OpusEncoderStereo[i] = opus_encoder_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                                     2,
+                                                     OPUS_APPLICATION_RESTRICTED_LOWDELAY,
+                                                     &iOpusError );
+
+        OpusDecoderStereo[i] = opus_decoder_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                                     2,
+                                                     &iOpusError );
+
+#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+        // set encoder low complexity
+        opus_encoder_ctl ( OpusEncoderStereo[i],
+                           OPUS_SET_COMPLEXITY ( 1 ) );
 #endif
     }
 

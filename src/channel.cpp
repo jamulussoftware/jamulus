@@ -97,6 +97,11 @@ QObject::connect( &Protocol,
     SIGNAL ( PingReceived ( int ) ),
     SIGNAL ( PingReceived ( int ) ) );
 
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+QObject::connect ( &Protocol,
+    SIGNAL ( OpusSupported() ),
+    SIGNAL ( OpusSupported() ) );
+
     QObject::connect ( &Protocol,
         SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ),
         SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ) );
@@ -141,7 +146,8 @@ void CChannel::SetEnable ( const bool bNEnStat )
     }
 }
 
-void CChannel::SetAudioStreamProperties ( const int iNewNetwFrameSize,
+void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
+                                          const int iNewNetwFrameSize,
                                           const int iNewNetwFrameSizeFact,
                                           const int iNewNumAudioChannels )
 {
@@ -149,9 +155,10 @@ void CChannel::SetAudioStreamProperties ( const int iNewNetwFrameSize,
     QMutexLocker locker ( &Mutex );
 
     // store new values
-    iNumAudioChannels  = iNewNumAudioChannels;
-    iNetwFrameSize     = iNewNetwFrameSize;
-    iNetwFrameSizeFact = iNewNetwFrameSizeFact;
+    eAudioCompressionType = eNewAudComprType;
+    iNumAudioChannels     = iNewNumAudioChannels;
+    iNetwFrameSize        = iNewNetwFrameSize;
+    iNetwFrameSizeFact    = iNewNetwFrameSizeFact;
 
     // init socket buffer
     SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
@@ -346,20 +353,30 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
     // only the server shall act on network transport properties message
     if ( bIsServer )
     {
-        QMutexLocker locker ( &Mutex );
+        Mutex.lock();
+        {
+            // store received parameters
+            eAudioCompressionType = NetworkTransportProps.eAudioCodingType;
+            iNumAudioChannels     = NetworkTransportProps.iNumAudioChannels;
+            iNetwFrameSizeFact    = NetworkTransportProps.iBlockSizeFact;
+            iNetwFrameSize =
+                NetworkTransportProps.iBaseNetworkPacketSize;
 
-        // store received parameters
-        iNumAudioChannels  = NetworkTransportProps.iNumAudioChannels;
-        iNetwFrameSizeFact = NetworkTransportProps.iBlockSizeFact;
-        iNetwFrameSize =
-            NetworkTransportProps.iBaseNetworkPacketSize;
+            // update socket buffer (the network block size is a multiple of the
+            // minimum network frame size
+            SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
 
-        // update socket buffer (the network block size is a multiple of the
-        // minimum network frame size
-        SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+            // init conversion buffer
+            ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+        }
+        Mutex.unlock();
 
-        // init conversion buffer
-        ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+        // if old CELT codec is used, inform the client that the new OPUS codec
+        // is supported
+        if ( eAudioCompressionType != CT_OPUS )
+        {
+            Protocol.CreateOpusSupportedMes();
+        }
     }
 }
 
@@ -375,7 +392,7 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
         iNetwFrameSizeFact,
         iNumAudioChannels,
         SYSTEM_SAMPLE_RATE_HZ,
-        CT_CELT, // always CELT coding
+        eAudioCompressionType,
         0, // version of the codec
         0 );
 

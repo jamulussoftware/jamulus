@@ -110,7 +110,8 @@ Protocol.CreateChanNameMes ( ChInfo.strName );
     int GetUploadRateKbps();
 
     // set/get network out buffer size and size factor
-    void SetAudioStreamProperties ( const int iNewNetwFrameSize,
+    void SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
+                                    const int iNewNetwFrameSize,
                                     const int iNewNetwFrameSizeFact,
                                     const int iNewNumAudioChannels );
 
@@ -122,6 +123,7 @@ Protocol.CreateChanNameMes ( ChInfo.strName );
     int GetNetwFrameSizeFact() const { return iNetwFrameSizeFact; }
     int GetNetwFrameSize() const { return iNetwFrameSize; }
 
+    EAudComprType GetAudioCompressionType() { return eAudioCompressionType; }
     int GetNumAudioChannels() const { return iNumAudioChannels; }
 
     // network protocol interface
@@ -153,10 +155,11 @@ protected:
     {
         // set it to a state were no decoding is ever possible (since we want
         // only to decode data when a network transport property message is
-        // received with the correct values
-        iNetwFrameSizeFact = FRAME_SIZE_FACTOR_PREFERRED;
-        iNetwFrameSize     = CELT_MINIMUM_NUM_BYTES;
-        iNumAudioChannels  = 1; // mono
+        // received with the correct values)
+        eAudioCompressionType = CT_NONE;
+        iNetwFrameSizeFact    = FRAME_SIZE_FACTOR_PREFERRED;
+        iNetwFrameSize        = CELT_MINIMUM_NUM_BYTES;
+        iNumAudioChannels     = 1; // mono
     }
 
     // connection parameters
@@ -188,6 +191,7 @@ protected:
     int               iNetwFrameSizeFact;
     int               iNetwFrameSize;
 
+    EAudComprType     eAudioCompressionType;
     int               iNumAudioChannels;
 
     QMutex            Mutex;
@@ -212,6 +216,7 @@ signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChanInfoHasChanged();
     void ReqChanInfo();
+    void OpusSupported();
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );
     void ReqNetTranspProps();

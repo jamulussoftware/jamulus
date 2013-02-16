@@ -30,6 +30,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
     ChannelInfo                      (),
     Channel                          ( false ), /* we need a client channel -> "false" */
+    eAudioCompressionType            ( CT_OPUS ),
     iCeltNumCodedBytes               ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
     bCeltDoHighQuality               ( false ),
     bUseStereo                       ( false ),
@@ -75,6 +76,10 @@ CClient::CClient ( const quint16 iPortNumber ) :
                                             1,
                                             &iOpusError );
 
+    // we require a constant bit rate
+    opus_encoder_ctl ( OpusEncoderMono,
+                       OPUS_SET_VBR ( 0 ) );
+
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
     opus_encoder_ctl ( OpusEncoderMono,
@@ -102,6 +107,10 @@ CClient::CClient ( const quint16 iPortNumber ) :
     OpusDecoderStereo = opus_decoder_create ( SYSTEM_SAMPLE_RATE_HZ,
                                               2,
                                               &iOpusError );
+
+    // we require a constant bit rate
+    opus_encoder_ctl ( OpusEncoderStereo,
+                       OPUS_SET_VBR ( 0 ) );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
@@ -147,6 +156,12 @@ CClient::CClient ( const quint16 iPortNumber ) :
     QObject::connect ( &Channel,
         SIGNAL ( ChatTextReceived ( QString ) ),
         SIGNAL ( ChatTextReceived ( QString ) ) );
+
+
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+QObject::connect ( &Channel, SIGNAL ( OpusSupported() ),
+    this, SLOT ( OnOpusSupported() ) );
+
 
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
@@ -334,6 +349,36 @@ void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
     }
 }
 
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+void CClient::OnOpusSupported()
+{
+    if ( eAudioCompressionType != CT_OPUS )
+    {
+        SetAudoCompressiontype ( CT_OPUS );
+    }
+}
+
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+void CClient::SetAudoCompressiontype ( const EAudComprType eNAudCompressionType )
+{
+    // init with new parameter, if client was running then first
+    // stop it and restart again after new initialization
+    const bool bWasRunning = Sound.IsRunning();
+    if ( bWasRunning )
+    {
+        Sound.Stop();
+    }
+
+    // set new parameter
+    eAudioCompressionType = eNAudCompressionType;
+    Init();
+
+    if ( bWasRunning )
+    {
+        Sound.Start();
+    }
+}
+
 void CClient::SetCELTHighQuality ( const bool bNCeltHighQualityFlag )
 {
     // init with new parameter, if client was running then first
@@ -518,6 +563,11 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
 
 void CClient::Start()
 {
+
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+// our first attempt is always to use the old code
+eAudioCompressionType = CT_CELT;
+
     // init object
     Init();
 
@@ -674,6 +724,22 @@ void CClient::Init()
     }
     vecCeltData.Init ( iCeltNumCodedBytes );
 
+    // calculate and set the bit rate
+    const int iCeltBitRateBitsPerSec =
+        ( SYSTEM_SAMPLE_RATE_HZ * iCeltNumCodedBytes * 8 ) /
+        SYSTEM_FRAME_SIZE_SAMPLES;
+
+    if ( bUseStereo )
+    {
+        opus_encoder_ctl ( OpusEncoderStereo,
+                           OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+    }
+    else
+    {
+        opus_encoder_ctl ( OpusEncoderMono,
+                           OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+    }
+
     // inits for network and channel
     vecbyNetwData.Init ( iCeltNumCodedBytes );
     if ( bUseStereo )
@@ -681,7 +747,8 @@ void CClient::Init()
         vecsNetwork.Init ( iStereoBlockSizeSam );
 
         // set the channel network properties
-        Channel.SetAudioStreamProperties ( iCeltNumCodedBytes,
+        Channel.SetAudioStreamProperties ( eAudioCompressionType,
+                                           iCeltNumCodedBytes,
                                            iSndCrdFrameSizeFactor,
                                            2 );
     }
@@ -690,7 +757,8 @@ void CClient::Init()
         vecsNetwork.Init ( iMonoBlockSizeSam );
 
         // set the channel network properties
-        Channel.SetAudioStreamProperties ( iCeltNumCodedBytes,
+        Channel.SetAudioStreamProperties ( eAudioCompressionType,
+                                           iCeltNumCodedBytes,
                                            iSndCrdFrameSizeFactor,
                                            1 );
     }
@@ -892,21 +960,43 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     {
         if ( bUseStereo )
         {
-            // encode current audio frame with CELT encoder
-            cc6_celt_encode ( CeltEncoderStereo,
+            // encode current audio frame
+            if ( eAudioCompressionType == CT_CELT )
+            {
+                cc6_celt_encode ( CeltEncoderStereo,
+                                  &vecsNetwork[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                                  NULL,
+                                  &vecCeltData[0],
+                                  iCeltNumCodedBytes );
+            }
+            else
+            {
+                opus_encode ( OpusEncoderStereo,
                               &vecsNetwork[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
-                              NULL,
+                              SYSTEM_FRAME_SIZE_SAMPLES,
                               &vecCeltData[0],
                               iCeltNumCodedBytes );
+            }
         }
         else
         {
-            // encode current audio frame with CELT encoder
-            cc6_celt_encode ( CeltEncoderMono,
+            // encode current audio frame
+            if ( eAudioCompressionType == CT_CELT )
+            {
+                cc6_celt_encode ( CeltEncoderMono,
+                                  &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                                  NULL,
+                                  &vecCeltData[0],
+                                  iCeltNumCodedBytes );
+            }
+            else
+            {
+                opus_encode ( OpusEncoderMono,
                               &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
-                              NULL,
+                              SYSTEM_FRAME_SIZE_SAMPLES,
                               &vecCeltData[0],
                               iCeltNumCodedBytes );
+            }
         }
 
         // send coded audio through the network
@@ -936,17 +1026,41 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         {
             if ( bUseStereo )
             {
-                cc6_celt_decode ( CeltDecoderStereo,
+                if ( eAudioCompressionType == CT_CELT )
+                {
+                    cc6_celt_decode ( CeltDecoderStereo,
+                                      &vecbyNetwData[0],
+                                      iCeltNumCodedBytes,
+                                      &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+                }
+                else
+                {
+                    opus_decode ( OpusDecoderStereo,
                                   &vecbyNetwData[0],
                                   iCeltNumCodedBytes,
-                                  &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+                                  &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                                  SYSTEM_FRAME_SIZE_SAMPLES,
+                                  0 );
+                }
             }
             else
             {
-                cc6_celt_decode ( CeltDecoderMono,
+                if ( eAudioCompressionType == CT_CELT )
+                {
+                    cc6_celt_decode ( CeltDecoderMono,
+                                      &vecbyNetwData[0],
+                                      iCeltNumCodedBytes,
+                                      &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
+                }
+                else
+                {
+                    opus_decode ( OpusDecoderMono,
                                   &vecbyNetwData[0],
                                   iCeltNumCodedBytes,
-                                  &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
+                                  &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                                  SYSTEM_FRAME_SIZE_SAMPLES,
+                                  0 );
+                }
             }
         }
         else
@@ -954,17 +1068,41 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             // lost packet
             if ( bUseStereo )
             {
-                cc6_celt_decode ( CeltDecoderStereo,
+                if ( eAudioCompressionType == CT_CELT )
+                {
+                    cc6_celt_decode ( CeltDecoderStereo,
+                                      NULL,
+                                      0,
+                                      &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+                }
+                else
+                {
+                    opus_decode ( OpusDecoderStereo,
                                   NULL,
-                                  0,
-                                  &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+                                  iCeltNumCodedBytes,
+                                  &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                                  SYSTEM_FRAME_SIZE_SAMPLES,
+                                  0 );
+                }
             }
             else
             {
-                cc6_celt_decode ( CeltDecoderMono,
+                if ( eAudioCompressionType == CT_CELT )
+                {
+                    cc6_celt_decode ( CeltDecoderMono,
+                                      NULL,
+                                      0,
+                                      &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
+                }
+                else
+                {
+                    opus_decode ( OpusDecoderMono,
                                   NULL,
-                                  0,
-                                  &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
+                                  iCeltNumCodedBytes,
+                                  &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                                  SYSTEM_FRAME_SIZE_SAMPLES,
+                                  0 );
+                }
             }
         }
     }

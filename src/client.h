@@ -261,6 +261,9 @@ protected:
     int         EvaluatePingMessage ( const int iMs );
     void        CreateServerJitterBufferMessage();
 
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
+
     // only one channel is needed for client application
     CChannel                Channel;
     CProtocol               ConnLessProtocol;
@@ -276,6 +279,7 @@ protected:
     OpusDecoder*            OpusDecoderMono;
     OpusEncoder*            OpusEncoderStereo;
     OpusDecoder*            OpusDecoderStereo;
+    EAudComprType           eAudioCompressionType;
     int                     iCeltNumCodedBytes;
     bool                    bCeltDoHighQuality;
     bool                    bUseStereo;
@@ -341,6 +345,9 @@ public slots:
                                           int          iNumClients );
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
+
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+void OnOpusSupported();
 
 signals:
     void ConClientListNameMesReceived ( CVector<CChannelInfo> vecChanInfo );

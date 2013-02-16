@@ -154,6 +154,7 @@ MESSAGES (with connection)
     - "audiocod type":   audio coding type, the following types are supported:
                           - 0: none, no audio coding applied
                           - 1: CELT
+                          - 2: OPUS
     - "version":         version of the audio coder, if not used this value
                          shall be set to 0
     - "audiocod arg":    argument for the audio coder, if not used this value
@@ -164,6 +165,11 @@ MESSAGES (with connection)
 
     note: does not have any data -> n = 0
 
+
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+- PROTMESSID_OPUS_SUPPORTED: Informs that OPUS codec is supported
+
+    note: does not have any data -> n = 0
 
 
 CONNECTION LESS MESSAGES
@@ -572,6 +578,11 @@ case PROTMESSID_PING_MS:
                 case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
                     bRet = EvaluateReqNetwTranspPropsMes();
                     break;
+
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+case PROTMESSID_OPUS_SUPPORTED:
+    bRet = EvaluateOpusSupportedMes();
+    break;
                 }
 
                 // immediately send acknowledge message
@@ -1337,7 +1348,8 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
         static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     if ( ( iRecCodingType != CT_NONE ) &&
-         ( iRecCodingType != CT_CELT ) )
+         ( iRecCodingType != CT_CELT ) &&
+         ( iRecCodingType != CT_OPUS ) )
     {
         return true;
     }
@@ -1369,6 +1381,20 @@ bool CProtocol::EvaluateReqNetwTranspPropsMes()
 {
     // invoke message action
     emit ReqNetTranspProps();
+
+    return false; // no error
+}
+
+void CProtocol::CreateOpusSupportedMes()
+{
+    CreateAndSendMessage ( PROTMESSID_OPUS_SUPPORTED,
+                           CVector<uint8_t> ( 0 ) );
+}
+
+bool CProtocol::EvaluateOpusSupportedMes()
+{
+    // invoke message action
+    emit OpusSupported();
 
     return false; // no error
 }

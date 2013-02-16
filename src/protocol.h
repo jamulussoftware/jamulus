@@ -53,6 +53,7 @@
 #define PROTMESSID_REQ_CHANNEL_INFOS          23 // request channel infos for fader tag
 #define PROTMESSID_CONN_CLIENTS_LIST          24 // channel infos for connected clients
 #define PROTMESSID_CHANNEL_INFOS              25 // set channel infos
+#define PROTMESSID_OPUS_SUPPORTED             26 // tells that OPUS codec is supported
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -99,6 +100,7 @@ public:
     void CreatePingMes ( const int iMs );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
     void CreateReqNetwTranspPropsMes();
+    void CreateOpusSupportedMes();
 
     void CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
@@ -212,6 +214,7 @@ protected:
     bool EvaluatePingMes               ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes    ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
+    bool EvaluateOpusSupportedMes();
 
     bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
@@ -258,6 +261,7 @@ signals:
     void ChangeChanName ( QString strName );
     void ChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void ReqChanInfo();
+    void OpusSupported();
     void ChatTextReceived ( QString strChatText );
     void PingReceived ( int iMs );
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );

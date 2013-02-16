@@ -330,20 +330,17 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "USA"
         "</font></p><br>"
         "<p><b>" + // libraries used by this compilation of llcon
-        tr("llcon uses the following libraries, resources or code snippets:") +
+        tr ( "llcon uses the following libraries, resources or code snippets:" ) +
         "</b></p>"
         "<ul>"
         "<li>Qt cross-platform application framework: "
         "<i><a href=""http://qt.digia.com"">http://qt.digia.com</a></i></li>"
-        "<li>The CELT ultra-low delay audio codec: "
-        "<i><a href=""http://www.celt-codec.org"">http://www.celt-codec.org</a></i></li>"
+        "<li>Opus Interactive Audio Codec: "
+        "<i><a href=""http://www.opus-codec.org"">http://www.opus-codec.org</a></i></li>"
         "<li>Audio reverberation code: by Perry R. Cook and Gary P. Scavone, "
         "1995 - 2004 (taken from "
         "<i><a href=""http://ccrma.stanford.edu/software/stk"">"
         "The Synthesis ToolKit in C++ (STK)</a></i>)</li>"
-        "<li>Parts from Dream DRM Receiver by Volker Fischer and Alexander "
-        "Kurpiers: "
-        "<i><a href=""http://drm.sf.net"">http://drm.sf.net</a></i></li>"
         "<li>Some pixmaps are from the Open Clip Art Library (OCAL): "
         "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></li>"
         "</ul>"

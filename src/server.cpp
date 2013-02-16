@@ -216,6 +216,10 @@ CServer::CServer ( const int      iNewNumChan,
                                                    1,
                                                    &iOpusError );
 
+        // we require a constant bit rate
+        opus_encoder_ctl ( OpusEncoderMono[i],
+                           OPUS_SET_VBR ( 0 ) );
+
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
         // set encoder low complexity
         opus_encoder_ctl ( OpusEncoderMono[i],
@@ -243,6 +247,10 @@ CServer::CServer ( const int      iNewNumChan,
         OpusDecoderStereo[i] = opus_decoder_create ( SYSTEM_SAMPLE_RATE_HZ,
                                                      2,
                                                      &iOpusError );
+
+        // we require a constant bit rate
+        opus_encoder_ctl ( OpusEncoderStereo[i],
+                           OPUS_SET_VBR ( 0 ) );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
         // set encoder low complexity
@@ -615,18 +623,44 @@ void CServer::OnTimer()
                 if ( iCurNumAudChan == 1 )
                 {
                     // mono
-                    cc6_celt_decode ( CeltDecoderMono[iCurChanID],
+
+                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
+                    {
+                        cc6_celt_decode ( CeltDecoderMono[iCurChanID],
+                                          &vecbyData[0],
+                                          iCeltNumCodedBytes,
+                                          &vecvecsData[i][0] );
+                    }
+                    else
+                    {
+                        opus_decode ( OpusDecoderMono[iCurChanID],
                                       &vecbyData[0],
                                       iCeltNumCodedBytes,
-                                      &vecvecsData[i][0] );
+                                      &vecvecsData[i][0],
+                                      SYSTEM_FRAME_SIZE_SAMPLES,
+                                      0 );
+                    }
                 }
                 else
                 {
                     // stereo
-                    cc6_celt_decode ( CeltDecoderStereo[iCurChanID],
+
+                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
+                    {
+                        cc6_celt_decode ( CeltDecoderStereo[iCurChanID],
+                                          &vecbyData[0],
+                                          iCeltNumCodedBytes,
+                                          &vecvecsData[i][0] );
+                    }
+                    else
+                    {
+                        opus_decode ( OpusDecoderStereo[iCurChanID],
                                       &vecbyData[0],
                                       iCeltNumCodedBytes,
-                                      &vecvecsData[i][0] );
+                                      &vecvecsData[i][0],
+                                      SYSTEM_FRAME_SIZE_SAMPLES,
+                                      0 );
+                    }
                 }
             }
             else
@@ -635,18 +669,44 @@ void CServer::OnTimer()
                 if ( iCurNumAudChan == 1 )
                 {
                     // mono
-                    cc6_celt_decode ( CeltDecoderMono[iCurChanID],
+
+                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
+                    {
+                        cc6_celt_decode ( CeltDecoderMono[iCurChanID],
+                                          NULL,
+                                          0,
+                                          &vecvecsData[i][0] );
+                    }
+                    else
+                    {
+                        opus_decode ( OpusDecoderMono[iCurChanID],
                                       NULL,
-                                      0,
-                                      &vecvecsData[i][0] );
+                                      iCeltNumCodedBytes,
+                                      &vecvecsData[i][0],
+                                      SYSTEM_FRAME_SIZE_SAMPLES,
+                                      0 );
+                    }
                 }
                 else
                 {
                     // stereo
-                    cc6_celt_decode ( CeltDecoderStereo[iCurChanID],
+
+                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
+                    {
+                        cc6_celt_decode ( CeltDecoderStereo[iCurChanID],
+                                          NULL,
+                                          0,
+                                          &vecvecsData[i][0] );
+                    }
+                    else
+                    {
+                        opus_decode ( OpusDecoderStereo[iCurChanID],
                                       NULL,
-                                      0,
-                                      &vecvecsData[i][0] );
+                                      iCeltNumCodedBytes,
+                                      &vecvecsData[i][0],
+                                      SYSTEM_FRAME_SIZE_SAMPLES,
+                                      0 );
+                    }
                 }
             }
 
@@ -694,26 +754,72 @@ void CServer::OnTimer()
             const int iCeltNumCodedBytes =
                 vecChannels[iCurChanID].GetNetwFrameSize();
 
+
+// TODO find a better place than this: the setting does not change all the time
+//      so for speed optimization it would be better to set it only if the network
+//      frame size is changed
+const int iCeltBitRateBitsPerSec =
+    ( SYSTEM_SAMPLE_RATE_HZ * iCeltNumCodedBytes * 8 ) /
+    SYSTEM_FRAME_SIZE_SAMPLES;
+
+
             // CELT encoding
             CVector<unsigned char> vecCeltData ( iCeltNumCodedBytes );
 
             if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
             {
                 // mono
-                cc6_celt_encode ( CeltEncoderMono[iCurChanID],
+
+                if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
+                {
+                    cc6_celt_encode ( CeltEncoderMono[iCurChanID],
+                                      &vecsSendData[0],
+                                      NULL,
+                                      &vecCeltData[0],
+                                      iCeltNumCodedBytes );
+                }
+                else
+                {
+
+// TODO find a better place than this: the setting does not change all the time
+//      so for speed optimization it would be better to set it only if the network
+//      frame size is changed
+opus_encoder_ctl ( OpusEncoderMono[iCurChanID],
+                   OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+
+                    opus_encode ( OpusEncoderMono[iCurChanID],
                                   &vecsSendData[0],
-                                  NULL,
+                                  SYSTEM_FRAME_SIZE_SAMPLES,
                                   &vecCeltData[0],
                                   iCeltNumCodedBytes );
+                }
             }
             else
             {
                 // stereo
-                cc6_celt_encode ( CeltEncoderStereo[iCurChanID],
+
+                if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
+                {
+                    cc6_celt_encode ( CeltEncoderStereo[iCurChanID],
+                                      &vecsSendData[0],
+                                      NULL,
+                                      &vecCeltData[0],
+                                      iCeltNumCodedBytes );
+                }
+                else
+                {
+// TODO find a better place than this: the setting does not change all the time
+//      so for speed optimization it would be better to set it only if the network
+//      frame size is changed
+opus_encoder_ctl ( OpusEncoderStereo[iCurChanID],
+                   OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+
+                    opus_encode ( OpusEncoderStereo[iCurChanID],
                                   &vecsSendData[0],
-                                  NULL,
+                                  SYSTEM_FRAME_SIZE_SAMPLES,
                                   &vecCeltData[0],
                                   iCeltNumCodedBytes );
+                }
             }
 
             // send separate mix to current clients

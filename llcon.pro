@@ -7,9 +7,15 @@ QT += widgets \
     xml
 
 INCLUDEPATH += src \
-    libs/celt
+    libs/celt \
+    libs/opus/include \
+    libs/opus/celt \
+    libs/opus/silk \
+    libs/opus/silk/float
 
-DEFINES += USE_ALLOCA \
+DEFINES += OPUS_BUILD \
+    USE_ALLOCA \
+    CUSTOM_MODES \
     _REENTRANT
 
 win32 {
@@ -125,7 +131,62 @@ HEADERS += src/audiomixerboard.h \
     libs/celt/cc6_quant_bands.h \
     libs/celt/cc6_rate.h \
     libs/celt/cc6_stack_alloc.h \
-    libs/celt/cc6_vq.h
+    libs/celt/cc6_vq.h \
+    libs/opus/include/opus.h \
+    libs/opus/include/opus_multistream.h \
+    libs/opus/src/opus_private.h \
+    libs/opus/celt/arch.h \
+    libs/opus/celt/bands.h \
+    libs/opus/celt/celt.h \
+    libs/opus/include/opus_types.h \
+    libs/opus/include/opus_defines.h \
+    libs/opus/include/opus_custom.h \
+    libs/opus/celt/cwrs.h \
+    libs/opus/celt/ecintrin.h \
+    libs/opus/celt/entcode.h \
+    libs/opus/celt/entdec.h \
+    libs/opus/celt/entenc.h \
+    libs/opus/celt/fixed_debug.h \
+    libs/opus/celt/fixed_generic.h \
+    libs/opus/celt/float_cast.h \
+    libs/opus/celt/_kiss_fft_guts.h \
+    libs/opus/celt/kiss_fft.h \
+    libs/opus/celt/laplace.h \
+    libs/opus/celt/mathops.h \
+    libs/opus/celt/mdct.h \
+    libs/opus/celt/mfrngcod.h \
+    libs/opus/celt/modes.h \
+    libs/opus/celt/os_support.h \
+    libs/opus/celt/pitch.h \
+    libs/opus/celt/celt_lpc.h \
+    libs/opus/celt/quant_bands.h \
+    libs/opus/celt/rate.h \
+    libs/opus/celt/stack_alloc.h \
+    libs/opus/celt/vq.h \
+    libs/opus/celt/static_modes_float.h \
+    libs/opus/celt/static_modes_fixed.h \
+    libs/opus/silk/debug.h \
+    libs/opus/silk/control.h \
+    libs/opus/silk/errors.h \
+    libs/opus/silk/API.h \
+    libs/opus/silk/typedef.h \
+    libs/opus/silk/define.h \
+    libs/opus/silk/main.h \
+    libs/opus/silk/PLC.h \
+    libs/opus/silk/structs.h \
+    libs/opus/silk/tables.h \
+    libs/opus/silk/tuning_parameters.h \
+    libs/opus/silk/Inlines.h \
+    libs/opus/silk/MacroCount.h \
+    libs/opus/silk/MacroDebug.h \
+    libs/opus/silk/macros.h \
+    libs/opus/silk/pitch_est_defines.h \
+    libs/opus/silk/resampler_private.h \
+    libs/opus/silk/resampler_rom.h \
+    libs/opus/silk/resampler_structs.h \
+    libs/opus/silk/float/main_FLP.h \
+    libs/opus/silk/float/structs_FLP.h \
+    libs/opus/silk/float/SigProc_FLP.h
 
 SOURCES += src/audiomixerboard.cpp \
     src/buffer.cpp \
@@ -166,7 +227,135 @@ SOURCES += src/audiomixerboard.cpp \
     libs/celt/cc6_rangedec.c \
     libs/celt/cc6_rangeenc.c \
     libs/celt/cc6_rate.c \
-    libs/celt/cc6_vq.c
+    libs/celt/cc6_vq.c \
+    libs/opus/src/opus.c \
+    libs/opus/src/opus_decoder.c \
+    libs/opus/src/opus_encoder.c \
+    libs/opus/src/opus_multistream.c \
+    libs/opus/src/repacketizer.c \
+    libs/opus/celt/bands.c \
+    libs/opus/celt/celt.c \
+    libs/opus/celt/cwrs.c \
+    libs/opus/celt/entcode.c \
+    libs/opus/celt/entdec.c \
+    libs/opus/celt/entenc.c \
+    libs/opus/celt/kiss_fft.c \
+    libs/opus/celt/laplace.c \
+    libs/opus/celt/mathops.c \
+    libs/opus/celt/mdct.c \
+    libs/opus/celt/modes.c \
+    libs/opus/celt/pitch.c \
+    libs/opus/celt/celt_lpc.c \
+    libs/opus/celt/quant_bands.c \
+    libs/opus/celt/rate.c \
+    libs/opus/celt/vq.c \
+    libs/opus/silk/CNG.c \
+    libs/opus/silk/code_signs.c \
+    libs/opus/silk/init_decoder.c \
+    libs/opus/silk/decode_core.c \
+    libs/opus/silk/decode_frame.c \
+    libs/opus/silk/decode_parameters.c \
+    libs/opus/silk/decode_indices.c \
+    libs/opus/silk/decode_pulses.c \
+    libs/opus/silk/decoder_set_fs.c \
+    libs/opus/silk/dec_API.c \
+    libs/opus/silk/enc_API.c \
+    libs/opus/silk/encode_indices.c \
+    libs/opus/silk/encode_pulses.c \
+    libs/opus/silk/gain_quant.c \
+    libs/opus/silk/interpolate.c \
+    libs/opus/silk/LP_variable_cutoff.c \
+    libs/opus/silk/NLSF_decode.c \
+    libs/opus/silk/NSQ.c \
+    libs/opus/silk/NSQ_del_dec.c \
+    libs/opus/silk/PLC.c \
+    libs/opus/silk/shell_coder.c \
+    libs/opus/silk/tables_gain.c \
+    libs/opus/silk/tables_LTP.c \
+    libs/opus/silk/tables_NLSF_CB_NB_MB.c \
+    libs/opus/silk/tables_NLSF_CB_WB.c \
+    libs/opus/silk/tables_other.c \
+    libs/opus/silk/tables_pitch_lag.c \
+    libs/opus/silk/tables_pulses_per_block.c \
+    libs/opus/silk/VAD.c \
+    libs/opus/silk/control_audio_bandwidth.c \
+    libs/opus/silk/quant_LTP_gains.c \
+    libs/opus/silk/VQ_WMat_EC.c \
+    libs/opus/silk/HP_variable_cutoff.c \
+    libs/opus/silk/NLSF_encode.c \
+    libs/opus/silk/NLSF_VQ.c \
+    libs/opus/silk/NLSF_unpack.c \
+    libs/opus/silk/NLSF_del_dec_quant.c \
+    libs/opus/silk/process_NLSFs.c \
+    libs/opus/silk/stereo_LR_to_MS.c \
+    libs/opus/silk/stereo_MS_to_LR.c \
+    libs/opus/silk/check_control_input.c \
+    libs/opus/silk/control_SNR.c \
+    libs/opus/silk/init_encoder.c \
+    libs/opus/silk/control_codec.c \
+    libs/opus/silk/A2NLSF.c \
+    libs/opus/silk/ana_filt_bank_1.c \
+    libs/opus/silk/biquad_alt.c \
+    libs/opus/silk/bwexpander_32.c \
+    libs/opus/silk/bwexpander.c \
+    libs/opus/silk/debug.c \
+    libs/opus/silk/decode_pitch.c \
+    libs/opus/silk/inner_prod_aligned.c \
+    libs/opus/silk/lin2log.c \
+    libs/opus/silk/log2lin.c \
+    libs/opus/silk/LPC_analysis_filter.c \
+    libs/opus/silk/LPC_inv_pred_gain.c \
+    libs/opus/silk/table_LSF_cos.c \
+    libs/opus/silk/NLSF2A.c \
+    libs/opus/silk/NLSF_stabilize.c \
+    libs/opus/silk/NLSF_VQ_weights_laroia.c \
+    libs/opus/silk/pitch_est_tables.c \
+    libs/opus/silk/resampler.c \
+    libs/opus/silk/resampler_down2_3.c \
+    libs/opus/silk/resampler_down2.c \
+    libs/opus/silk/resampler_private_AR2.c \
+    libs/opus/silk/resampler_private_down_FIR.c \
+    libs/opus/silk/resampler_private_IIR_FIR.c \
+    libs/opus/silk/resampler_private_up2_HQ.c \
+    libs/opus/silk/resampler_rom.c \
+    libs/opus/silk/sigm_Q15.c \
+    libs/opus/silk/sort.c \
+    libs/opus/silk/sum_sqr_shift.c \
+    libs/opus/silk/stereo_decode_pred.c \
+    libs/opus/silk/stereo_encode_pred.c \
+    libs/opus/silk/stereo_find_predictor.c \
+    libs/opus/silk/stereo_quant_pred.c \
+    libs/opus/silk/float/apply_sine_window_FLP.c \
+    libs/opus/silk/float/corrMatrix_FLP.c \
+    libs/opus/silk/float/encode_frame_FLP.c \
+    libs/opus/silk/float/find_LPC_FLP.c \
+    libs/opus/silk/float/find_LTP_FLP.c \
+    libs/opus/silk/float/find_pitch_lags_FLP.c \
+    libs/opus/silk/float/find_pred_coefs_FLP.c \
+    libs/opus/silk/float/LPC_analysis_filter_FLP.c \
+    libs/opus/silk/float/LTP_analysis_filter_FLP.c \
+    libs/opus/silk/float/LTP_scale_ctrl_FLP.c \
+    libs/opus/silk/float/noise_shape_analysis_FLP.c \
+    libs/opus/silk/float/prefilter_FLP.c \
+    libs/opus/silk/float/process_gains_FLP.c \
+    libs/opus/silk/float/regularize_correlations_FLP.c \
+    libs/opus/silk/float/residual_energy_FLP.c \
+    libs/opus/silk/float/solve_LS_FLP.c \
+    libs/opus/silk/float/warped_autocorrelation_FLP.c \
+    libs/opus/silk/float/wrappers_FLP.c \
+    libs/opus/silk/float/autocorrelation_FLP.c \
+    libs/opus/silk/float/burg_modified_FLP.c \
+    libs/opus/silk/float/bwexpander_FLP.c \
+    libs/opus/silk/float/energy_FLP.c \
+    libs/opus/silk/float/inner_product_FLP.c \
+    libs/opus/silk/float/k2a_FLP.c \
+    libs/opus/silk/float/levinsondurbin_FLP.c \
+    libs/opus/silk/float/LPC_inv_pred_gain_FLP.c \
+    libs/opus/silk/float/pitch_analysis_core_FLP.c \
+    libs/opus/silk/float/scale_copy_vector_FLP.c \
+    libs/opus/silk/float/scale_vector_FLP.c \
+    libs/opus/silk/float/schur_FLP.c \
+    libs/opus/silk/float/sort_FLP.c
 
 DISTFILES += AUTHORS \
     ChangeLog \

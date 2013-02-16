@@ -386,7 +386,8 @@ enum EAudComprType
 {
     // used for protocol -> enum values must be fixed!
     CT_NONE = 0,
-    CT_CELT = 1
+    CT_CELT = 1,
+    CT_OPUS = 2
 };
 
 

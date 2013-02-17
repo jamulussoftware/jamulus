@@ -311,11 +311,12 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     txvCredits->setOpenExternalLinks ( true );
     txvCredits->setText (
         "<p>" // general description of llcon software
-        "<big><b>llcon</b> " + tr("The llcon software enables musicians to "
-        "perform real-time jam sessions over the internet. There is a llcon "
-        "server which collects the audio data from each llcon client, "
-        "mixes the audio data and sends the mix back to each client.") +
-        "</big></p><br>"
+        "<big>" + tr( "The " ) + APP_NAME +
+        tr ( " software enables musicians to perform real-time jam sessions "
+        "over the internet. There is a " ) + APP_NAME + tr ( " "
+        "server which collects the audio data from each " ) +
+        APP_NAME + tr ( " client, mixes the audio data and sends the mix back "
+        "to each client.") + "</big></p><br>"
         "<p><font face=\"courier\">" // GPL header text
         "This program is free software; you can redistribute it and/or modify "
         "it under the terms of the GNU General Public License as published by "
@@ -329,8 +330,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 "
         "USA"
         "</font></p><br>"
-        "<p><b>" + // libraries used by this compilation of llcon
-        tr ( "llcon uses the following libraries, resources or code snippets:" ) +
+        "<p><b>" + APP_NAME + // libraries used by this compilation of llcon
+        tr ( " uses the following libraries, resources or code snippets:" ) +
         "</b></p>"
         "<ul>"
         "<li>Qt cross-platform application framework: "
@@ -364,7 +365,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
         strVersionText += " *** ";
     }
 
-    strVersionText += tr ( "llcon, Version " ) + VERSION;
+    strVersionText += APP_NAME + tr ( ", Version " ) + VERSION;
 
     if ( bWithHtml )
     {
@@ -375,7 +376,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
         strVersionText += "\n *** ";
     }
 
-    strVersionText += tr ( "llcon, Low-Latency (internet) CONnection" );
+    strVersionText += APP_NAME + tr ( ", Internet Jam Session Software" );
 
     if ( bWithHtml )
     {

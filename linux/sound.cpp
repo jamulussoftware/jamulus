@@ -31,7 +31,7 @@ void CSound::OpenJack()
     jack_status_t JackStatus;
 
     // try to become a client of the JACK server
-    pJackClient = jack_client_open ( "llcon", JackNullOption, &JackStatus );
+    pJackClient = jack_client_open ( APP_NAME, JackNullOption, &JackStatus );
     if ( pJackClient == NULL )
     {
         throw CGenErr ( tr ( "Jack server not running" ) );

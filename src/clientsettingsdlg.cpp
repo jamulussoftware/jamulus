@@ -81,10 +81,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // sound card device
     cbxSoundcard->setWhatsThis ( tr ( "<b>Sound Card Device:</b> The ASIO "
-        "driver (sound card) can be selected using llcon under the Windows "
-        "operating system. Under MacOS/Linux, no sound card selection is "
-        "possible. If the selected ASIO driver is not valid an error message "
-        "is shown and the previous valid driver is selected.<br>"
+        "driver (sound card) can be selected using " ) + APP_NAME +
+        tr ( " under the Windows operating system. Under MacOS/Linux, no sound "
+        "card selection is possible. If the selected ASIO driver is not valid "
+        "an error message is shown and the previous valid driver is selected.<br>"
         "If the driver is selected during an active connection, the connection "
         "is stopped, the driver is changed and the connection is started again "
         "automatically." ) );
@@ -123,8 +123,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // sound card buffer delay
     QString strSndCrdBufDelay = tr ( "<b>Sound Card Buffer Delay:</b> The "
-        "buffer delay setting is a fundamental setting of the llcon software. "
-        "This setting has influence on many connection properties.<br>"
+        "buffer delay setting is a fundamental setting of the " ) +
+        APP_NAME + tr ( " software. This setting has influence on many "
+        "connection properties.<br>"
         "Three buffer sizes are supported:"
         "<ul>"
         "<li>128 samples: This is the preferred setting since it gives lowest "
@@ -135,14 +136,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "computer or a slow internet connection is available.</li>"
         "</ul>"
         "Some sound card driver do not allow the buffer delay to be changed "
-        "from within the llcon software. In this case the buffer delay setting "
+        "from within the " ) + APP_NAME +
+        tr ( " software. In this case the buffer delay setting "
         "is disabled. To change the actual buffer delay, this "
         "setting has to be changed in the sound card driver. On Windows, press "
         "the ASIO Setup button to open the driver settings panel. On Linux, "
         "use the Jack configuration tool to change the buffer size.<br>"
         "If no buffer size is selected and all settings are disabled, an "
-        "unsupported buffer size is used by the driver. The llcon software "
-        "will still work with this setting but with restricted performannce.<br>"
+        "unsupported buffer size is used by the driver. The " ) + APP_NAME +
+        tr ( " software will still work with this setting but with restricted "
+        "performannce.<br>"
         "The actual buffer delay has influence on the connection status, the "
         "current upload rate and the overall delay. The lower the buffer size, "
         "the higher the probability of red light in the status indicator (drop "
@@ -153,10 +156,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     QString strSndCrdBufDelayTT = tr ( "If the buffer delay settings are "
         "disabled, it is prohibited by the audio driver to modify this "
-        "setting from within the llcon software. On Windows, press "
-        "the ASIO Setup button to open the driver settings panel. On Linux, "
-        "use the Jack configuration tool to change the buffer size." ) +
-        TOOLTIP_COM_END_TEXT;
+        "setting from within the " ) + APP_NAME +
+        tr ( " software. On Windows, press the ASIO Setup button to open the "
+        "driver settings panel. On Linux, use the Jack configuration tool to "
+        "change the buffer size." ) + TOOLTIP_COM_END_TEXT;
 
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
     rbtBufferDelayPreferred->setAccessibleName ( tr ( "128 samples setting radio button" ) );
@@ -251,8 +254,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     lblUpstreamValue->setWhatsThis     ( strConnStats );
     ledOverallDelay->setWhatsThis      ( strConnStats );
     ledOverallDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-        "you will not have much fun using the llcon software." ) +
-        TOOLTIP_COM_END_TEXT );
+        "you will not have much fun using the " ) + APP_NAME +
+        tr ( " software." ) + TOOLTIP_COM_END_TEXT );
 
 
     // init driver button

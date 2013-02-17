@@ -52,14 +52,17 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         "Make sure not to clip the input signal to avoid distortions of the "
         "audio signal." );
 
-    QString strInpLevHTT = tr ( "If the llcon software is connected and "
+    QString strInpLevHTT = tr ( "If the " ) + APP_NAME +
+        tr ( " software is connected and "
         "you play your instrument/sing in the microphone, the LED level "
         "meter should flicker. If this is not the case, you have "
         "probably selected the wrong input channel (e.g. line in instead "
         "of the microphone input) or set the input gain too low in the "
-        "(Windows) audio mixer.<br>For a proper usage of the llcon software, "
+        "(Windows) audio mixer.<br>For a proper usage of the " ) + APP_NAME +
+        tr ( " software, "
         "you should not hear your singing/instrument in the loudspeaker or "
-        "your headphone when the llcon software is not connected. This can "
+        "your headphone when the " ) + APP_NAME +
+        tr ( " software is not connected. This can "
         "be achieved by muting your input audio channel in the Playback "
         "mixer (<b>not</b> the Recording mixer!)." ) + TOOLTIP_COM_END_TEXT;
 
@@ -186,8 +189,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     lblDelay->setWhatsThis ( strLEDDelay );
     ledDelay->setWhatsThis ( strLEDDelay );
     ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-        "you will not have much fun using the llcon software." ) +
-        TOOLTIP_COM_END_TEXT );
+        "you will not have much fun using the " ) + APP_NAME +
+        tr ( " software." ) + TOOLTIP_COM_END_TEXT );
 
     ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
 

@@ -1,3 +1,5 @@
+TARGET = llcon
+
 CONFIG += qt \
     thread \
     release
@@ -373,6 +375,13 @@ DISTFILES += AUTHORS \
     libs/celt/README \
     libs/celt/README_LLCON \
     libs/celt/TODO \
+    libs/opus/AUTHORS \
+    libs/opus/ChangeLog \
+    libs/opus/COPYING \
+    libs/opus/INSTALL \
+    libs/opus/NEWS \
+    libs/opus/README \
+    libs/opus/README_LLCON \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

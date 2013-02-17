@@ -64,7 +64,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
     cc6_celt_encoder_ctl ( CeltEncoderMono,
-        cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
+                           cc6_CELT_SET_COMPLEXITY ( 1 ) );
 #endif
 
     OpusMode = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
@@ -99,7 +99,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
     cc6_celt_encoder_ctl ( CeltEncoderStereo,
-        cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
+                           cc6_CELT_SET_COMPLEXITY ( 1 ) );
 #endif
 
     OpusEncoderStereo = opus_custom_encoder_create ( OpusMode,
@@ -730,20 +730,19 @@ void CClient::Init()
     }
     vecCeltData.Init ( iCeltNumCodedBytes );
 
-    // calculate and set the bit rate
-    const int iCeltBitRateBitsPerSec =
-        ( SYSTEM_SAMPLE_RATE_HZ * iCeltNumCodedBytes * 8 ) /
-        SYSTEM_FRAME_SIZE_SAMPLES;
-
     if ( bUseStereo )
     {
         opus_custom_encoder_ctl ( OpusEncoderStereo,
-                                  OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+                                  OPUS_SET_BITRATE (
+                                      CalcBitRateBitsPerSecFromCodedBytes (
+                                          iCeltNumCodedBytes ) ) );
     }
     else
     {
         opus_custom_encoder_ctl ( OpusEncoderMono,
-                                  OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+                                  OPUS_SET_BITRATE (
+                                      CalcBitRateBitsPerSecFromCodedBytes (
+                                          iCeltNumCodedBytes ) ) );
     }
 
     // inits for network and channel

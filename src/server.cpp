@@ -204,7 +204,7 @@ CServer::CServer ( const int      iNewNumChan,
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
         // set encoder low complexity
         cc6_celt_encoder_ctl ( CeltEncoderMono[i],
-            cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
+                               cc6_CELT_SET_COMPLEXITY ( 1 ) );
 #endif
 
         OpusMode[i] = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
@@ -239,7 +239,7 @@ CServer::CServer ( const int      iNewNumChan,
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
         // set encoder low complexity
         cc6_celt_encoder_ctl ( CeltEncoderStereo[i],
-            cc6_CELT_SET_COMPLEXITY_REQUEST, cc6_celt_int32_t ( 1 ) );
+                               cc6_CELT_SET_COMPLEXITY ( 1 ) );
 #endif
 
         OpusEncoderStereo[i] = opus_custom_encoder_create ( OpusMode[i],
@@ -752,21 +752,12 @@ void CServer::OnTimer()
             const int iCeltNumCodedBytes =
                 vecChannels[iCurChanID].GetNetwFrameSize();
 
-
-// TODO find a better place than this: the setting does not change all the time
-//      so for speed optimization it would be better to set it only if the network
-//      frame size is changed
-const int iCeltBitRateBitsPerSec =
-    ( SYSTEM_SAMPLE_RATE_HZ * iCeltNumCodedBytes * 8 ) /
-    SYSTEM_FRAME_SIZE_SAMPLES;
-
-
             // CELT encoding
             CVector<unsigned char> vecCeltData ( iCeltNumCodedBytes );
 
             if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
             {
-                // mono
+                // mono:
 
                 if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
                 {
@@ -783,7 +774,7 @@ const int iCeltBitRateBitsPerSec =
 //      so for speed optimization it would be better to set it only if the network
 //      frame size is changed
 opus_custom_encoder_ctl ( OpusEncoderMono[iCurChanID],
-                          OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes ) ) );
 
                     opus_custom_encode ( OpusEncoderMono[iCurChanID],
                                          &vecsSendData[0],
@@ -794,7 +785,7 @@ opus_custom_encoder_ctl ( OpusEncoderMono[iCurChanID],
             }
             else
             {
-                // stereo
+                // stereo:
 
                 if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
                 {
@@ -810,7 +801,7 @@ opus_custom_encoder_ctl ( OpusEncoderMono[iCurChanID],
 //      so for speed optimization it would be better to set it only if the network
 //      frame size is changed
 opus_custom_encoder_ctl ( OpusEncoderStereo[iCurChanID],
-                          OPUS_SET_BITRATE ( iCeltBitRateBitsPerSec ) );
+                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes ) ) );
 
                     opus_custom_encode ( OpusEncoderStereo[iCurChanID],
                                          &vecsSendData[0],

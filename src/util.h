@@ -76,6 +76,14 @@ void DebugError ( const QString& pchErDescr,
                   const QString& pchPar2Descr,
                   const double   dPar2 );
 
+// calculate the bit rate in bits per second from the number of coded bytes
+inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes )
+{
+    return ( SYSTEM_SAMPLE_RATE_HZ * iCeltNumCodedBytes * 8 ) /
+        SYSTEM_FRAME_SIZE_SAMPLES;
+}
+
+
 
 /******************************************************************************\
 * CVector Base Class                                                           *

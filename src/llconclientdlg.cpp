@@ -269,6 +269,9 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // init reverb channel
     UpdateRevSelection();
 
+    // set window title (with no clients connected -> "0")
+    SetMyWindowTitle ( 0 );
+
 
     // connect on startup ---
     if ( bNewConnectOnStartup )

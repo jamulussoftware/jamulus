@@ -349,6 +349,9 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
+
+    // set window title
+    setWindowTitle ( tr ( "About " ) + APP_NAME );
 }
 
 QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )

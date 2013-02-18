@@ -93,7 +93,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     butConnect->setAccessibleDescription ( tr ( "Clicking on this "
         "button changes the caption of the button from Connect to "
         "Disconnect, i.e., it implements a toggle functionality for connecting "
-        "and disconnecting the llcon software." ) );
+        "and disconnecting the " ) + APP_NAME + tr ( " software." ) );
 
     // fader tag
     QString strFaderTag = tr ( "<b>Your Alias/Instrument:</b> Set your name "

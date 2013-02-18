@@ -10,7 +10,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>llcon</string>
+   <string></string>
   </property>
   <property name="windowIcon" >
    <iconset resource="resources.qrc" >:/png/main/res/mainicon.png</iconset>

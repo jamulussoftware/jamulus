@@ -16,7 +16,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle" >
-   <string>About llcon</string>
+   <string>About</string>
   </property>
   <property name="windowIcon" >
    <iconset resource="resources.qrc" >:/png/main/res/mainicon.png</iconset>

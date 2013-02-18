@@ -253,6 +253,9 @@ lvwClients->setMinimumHeight ( 140 );
     // update GUI dependencies
     UpdateGUIDependencies();
 
+    // set window title
+    setWindowTitle ( APP_NAME + tr ( " Server" ) );
+
 
     // View menu  --------------------------------------------------------------
     QMenu* pViewMenu = new QMenu ( "&Window", this );

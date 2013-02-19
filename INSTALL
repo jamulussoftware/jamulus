@@ -43,6 +43,9 @@ Required packages: QT4 (devel packages, too!), Jack (devel packages, too!)
 - make
 - run ./llcon
 
+Use qmake "CONFIG+=nosound" llcon.pro for pure server installation which
+does not require the Jack packages.
+
 
 Mac:
 ----

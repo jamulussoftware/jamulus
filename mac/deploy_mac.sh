@@ -7,21 +7,21 @@ cd ..
 
 
 # first clean up
-rm -rf llcon.app
+rm -rf Jamulus.app
 make clean
 
 # make everything
 make -j2
 
 # call qt mac deploy tool
-macdeployqt llcon.app -dmg
+macdeployqt Jamulus.app -dmg
 
 # create zip file including COPYING file
-zip llcon-version-mac.zip llcon.dmg COPYING
+zip Jamulus-version-mac.zip Jamulus.dmg COPYING
 
 # move new file in deploy directory
-mv llcon-version-mac.zip deploy/llcon-version-mac.zip
+mv Jamulus-version-mac.zip deploy/Jamulus-version-mac.zip
 
 # cleanup and go back to original directory
-rm llcon.dmg
+rm Jamulus.dmg
 cd mac

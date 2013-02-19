@@ -1,4 +1,4 @@
-TARGET = llcon
+TARGET = Jamulus
 
 CONFIG += qt \
     thread \

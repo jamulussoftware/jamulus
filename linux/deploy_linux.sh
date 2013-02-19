@@ -6,5 +6,5 @@ qmake llcon.pro
 make -j2
 make dist
 
-mv *.tar.gz deploy/llcon-version.tar.gz
+mv *.tar.gz deploy/Jamulus-version.tar.gz
 cd linux

@@ -1,6 +1,11 @@
-3.2.3
+3.3.1
 
 TODO: Mac OS 64bit support
+
+
+3.3.0
+
+- renamed the software from llcon to Jamulus
 
 - support for an instrument picture on the fader tag
 

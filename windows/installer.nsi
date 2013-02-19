@@ -1,10 +1,10 @@
 ; llcon NSIS installer script
 
-!define APP_NAME          "Llcon"
-!define APP_EXE			  "llcon.exe"
+!define APP_NAME          "Jamulus"
+!define APP_EXE           "Jamulus.exe"
 !define AUTORUN_NAME      "llcon server"
 !define UNINSTALL_EXE     "Uninstall.exe"
-!define INSTALLER_NAME    "llconinstaller.exe"
+!define INSTALLER_NAME    "Jamulusinstaller.exe"
 !define BINARY_PATH       "..\release\"
 !define VS_REDIST_PATH    "C:\Program Files\Microsoft Visual Studio 10.0\SDK\v3.5\BootStrapper\Packages\vcredist_x86\"
 ;!define VS_REDIST_PATH   "C:\Programme\Microsoft Visual Studio 10.0\SDK\v3.5\BootStrapper\Packages\vcredist_x86\"
@@ -73,7 +73,7 @@ Section
 
   CreateDirectory  "$SMPROGRAMS\${APP_NAME}"
   CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk" "$INSTDIR\${APP_EXE}"
-  CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${APP_NAME} server.lnk" "$INSTDIR\${APP_EXE}" "-s"
+  CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk" "$INSTDIR\${APP_EXE}" "-s"
   CreateShortCut   "$SMPROGRAMS\${APP_NAME}\${UNINSTALL_EXE}.lnk" "$INSTDIR\${UNINSTALL_EXE}"
 
   ; cleanup: remove temporary Microsoft Visual Studio redistributable executable
@@ -120,6 +120,7 @@ Delete $INSTDIR\libGLESv2.dll
 Delete $INSTDIR\COPYING
 Delete $INSTDIR\platforms\qwindows.dll
 Delete $INSTDIR\platforms\qminimal.dll
+RMDir  $INSTDIR\platforms
 Delete $INSTDIR\accessible\qtaccessiblewidgets.dll
 RMDir  $INSTDIR\accessible
 RMDir  $INSTDIR

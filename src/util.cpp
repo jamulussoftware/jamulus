@@ -379,7 +379,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
         strVersionText += "\n *** ";
     }
 
-    strVersionText += APP_NAME + tr ( ", Internet Jam Session Software" );
+    strVersionText += tr ( "Internet Jam Session Software" );
 
     if ( bWithHtml )
     {

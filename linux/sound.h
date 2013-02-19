@@ -94,13 +94,8 @@ class CSound : public CSoundBase
 {
 public:
     CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ), void* pParg ) :
-        CSoundBase ( false, fpNewProcessCallback, pParg ) {}
+        CSoundBase ( "nosound", false, fpNewProcessCallback, pParg ) {}
     virtual ~CSound() {}
-
-    // dummy definitions
-    virtual int  Init  ( const int iNewPrefMonoBufferSize ) { return CSoundBase::Init ( iNewPrefMonoBufferSize ); }
-    virtual bool Read  ( CVector<short>& ) { printf ( "no sound!" ); return false; }
-    virtual bool Write ( CVector<short>& ) { printf ( "no sound!" ); return false; }
 };
 #endif // WITH_SOUND
 

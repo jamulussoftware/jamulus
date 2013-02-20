@@ -83,6 +83,14 @@ CClient::CClient ( const quint16 iPortNumber ) :
     opus_custom_encoder_ctl ( OpusEncoderMono,
                               OPUS_SET_VBR ( 0 ) );
 
+    // we expect packet loss, tell the encoder about it
+    opus_custom_encoder_ctl ( OpusEncoderMono,
+                              OPUS_SET_PACKET_LOSS_PERC ( OPUS_EXPECTED_PACKET_LOSS_PERC ) );
+
+    // we want as low delay as possible
+    opus_custom_encoder_ctl ( OpusEncoderMono,
+                              OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
     opus_custom_encoder_ctl ( OpusEncoderMono,
@@ -113,6 +121,14 @@ CClient::CClient ( const quint16 iPortNumber ) :
     // we require a constant bit rate
     opus_custom_encoder_ctl ( OpusEncoderStereo,
                               OPUS_SET_VBR ( 0 ) );
+
+    // we expect packet loss, tell the encoder about it
+    opus_custom_encoder_ctl ( OpusEncoderStereo,
+                              OPUS_SET_PACKET_LOSS_PERC ( OPUS_EXPECTED_PACKET_LOSS_PERC ) );
+
+    // we want as low delay as possible
+    opus_custom_encoder_ctl ( OpusEncoderStereo,
+                              OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
 
 #ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
@@ -354,13 +370,9 @@ void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 void CClient::OnOpusSupported()
 {
-// TODO do NOT switch to OPUS since the PLC seems to be much worse in OPUS
-// compared to the good old CELT version
-// -> find out why this is the case and as soon as the issue is solved,
-//    enable OPUS again...
     if ( eAudioCompressionType != CT_OPUS )
     {
-//        SetAudoCompressiontype ( CT_OPUS );
+        SetAudoCompressiontype ( CT_OPUS );
     }
 }
 

@@ -137,13 +137,12 @@ HEADERS += src/audiomixerboard.h \
     libs/opus/include/opus.h \
     libs/opus/include/opus_multistream.h \
     libs/opus/include/opus_custom.h \
+    libs/opus/include/opus_types.h \
+    libs/opus/include/opus_defines.h \
     libs/opus/src/opus_private.h \
     libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \
     libs/opus/celt/celt.h \
-    libs/opus/include/opus_types.h \
-    libs/opus/include/opus_defines.h \
-    libs/opus/include/opus_custom.h \
     libs/opus/celt/cwrs.h \
     libs/opus/celt/ecintrin.h \
     libs/opus/celt/entcode.h \

@@ -176,6 +176,7 @@ HEADERS += src/audiomixerboard.h \
     libs/opus/silk/define.h \
     libs/opus/silk/main.h \
     libs/opus/silk/PLC.h \
+    libs/opus/silk/SigProc_FIX.h \
     libs/opus/silk/structs.h \
     libs/opus/silk/tables.h \
     libs/opus/silk/tuning_parameters.h \

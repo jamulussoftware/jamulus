@@ -115,7 +115,7 @@ LED bar:      lbr
 // low complexity CELT encoder (if defined)
 #define USE_LOW_COMPLEXITY_CELT_ENC
 
-// percentage of expected packet loss percentage in the OPUS encoder
+// percentage of expected packet loss in the OPUS encoder
 #define OPUS_EXPECTED_PACKET_LOSS_PERC  10
 
 // define the minimum allowed number of coded bytes for CELT (the encoder

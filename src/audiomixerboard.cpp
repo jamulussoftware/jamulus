@@ -480,6 +480,12 @@ void CAudioMixerBoard::OnChSoloStateChanged ( const int iChannelIdx,
     vecpChanFader[iChannelIdx]->SetOtherSoloState ( false );
 }
 
+void CAudioMixerBoard::OnGainValueChanged ( const int    iChannelIdx,
+                                            const double dValue )
+{
+    emit ChangeChanGain ( iChannelIdx,  dValue );
+}
+
 QString CAudioMixerBoard::GenFaderText ( CChannelInfo& ChanInfo )
 {
     // if text is empty, show IP address instead

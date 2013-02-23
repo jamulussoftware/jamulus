@@ -101,6 +101,7 @@ public:
 protected:
     QString GenFaderText ( CChannelInfo& ChanInfo );
     void OnChSoloStateChanged ( const int iChannelIdx, const int iValue );
+    void OnGainValueChanged ( const int iChannelIdx, const double dValue );
 
     CVector<CChannelFader*> vecpChanFader;
     QHBoxLayout*            pMainLayout;
@@ -108,18 +109,18 @@ protected:
 public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
-    void OnGainValueChangedCh0  ( double dValue ) { emit ChangeChanGain ( 0,  dValue ); }
-    void OnGainValueChangedCh1  ( double dValue ) { emit ChangeChanGain ( 1,  dValue ); }
-    void OnGainValueChangedCh2  ( double dValue ) { emit ChangeChanGain ( 2,  dValue ); }
-    void OnGainValueChangedCh3  ( double dValue ) { emit ChangeChanGain ( 3,  dValue ); }
-    void OnGainValueChangedCh4  ( double dValue ) { emit ChangeChanGain ( 4,  dValue ); }
-    void OnGainValueChangedCh5  ( double dValue ) { emit ChangeChanGain ( 5,  dValue ); }
-    void OnGainValueChangedCh6  ( double dValue ) { emit ChangeChanGain ( 6,  dValue ); }
-    void OnGainValueChangedCh7  ( double dValue ) { emit ChangeChanGain ( 7,  dValue ); }
-    void OnGainValueChangedCh8  ( double dValue ) { emit ChangeChanGain ( 8,  dValue ); }
-    void OnGainValueChangedCh9  ( double dValue ) { emit ChangeChanGain ( 9,  dValue ); }
-    void OnGainValueChangedCh10 ( double dValue ) { emit ChangeChanGain ( 10, dValue ); }
-    void OnGainValueChangedCh11 ( double dValue ) { emit ChangeChanGain ( 11, dValue ); }
+    void OnGainValueChangedCh0  ( double dValue ) { OnGainValueChanged ( 0,  dValue ); }
+    void OnGainValueChangedCh1  ( double dValue ) { OnGainValueChanged ( 1,  dValue ); }
+    void OnGainValueChangedCh2  ( double dValue ) { OnGainValueChanged ( 2,  dValue ); }
+    void OnGainValueChangedCh3  ( double dValue ) { OnGainValueChanged ( 3,  dValue ); }
+    void OnGainValueChangedCh4  ( double dValue ) { OnGainValueChanged ( 4,  dValue ); }
+    void OnGainValueChangedCh5  ( double dValue ) { OnGainValueChanged ( 5,  dValue ); }
+    void OnGainValueChangedCh6  ( double dValue ) { OnGainValueChanged ( 6,  dValue ); }
+    void OnGainValueChangedCh7  ( double dValue ) { OnGainValueChanged ( 7,  dValue ); }
+    void OnGainValueChangedCh8  ( double dValue ) { OnGainValueChanged ( 8,  dValue ); }
+    void OnGainValueChangedCh9  ( double dValue ) { OnGainValueChanged ( 9,  dValue ); }
+    void OnGainValueChangedCh10 ( double dValue ) { OnGainValueChanged ( 10, dValue ); }
+    void OnGainValueChangedCh11 ( double dValue ) { OnGainValueChanged ( 11, dValue ); }
 
     void OnChSoloStateChangedCh0  ( int value ) { OnChSoloStateChanged ( 0,  value ); }
     void OnChSoloStateChangedCh1  ( int value ) { OnChSoloStateChanged ( 1,  value ); }

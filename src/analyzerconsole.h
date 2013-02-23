@@ -85,7 +85,6 @@ protected:
 
 public slots:
     void OnTimerErrRateUpdate();
-    void OnResizeEvent ( QResizeEvent* event );
 };
 
 #endif // ANALYZERCONSOLE_H__FD6BKUBVE723IUH06C2AC__INCLUDED_

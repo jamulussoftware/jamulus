@@ -66,47 +66,24 @@ CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
     QObject::connect ( &TimerErrRateUpdate, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerErrRateUpdate() ) );
 
-    // window events
-    QObject::connect ( this, SIGNAL ( resizeEvent ( QResizeEvent* ) ),
-        this, SLOT ( OnResizeEvent ( QResizeEvent* ) ) );
-
 
     // Timers ------------------------------------------------------------------
     // start timer for error rate graph
     TimerErrRateUpdate.start ( ERR_RATE_GRAPH_UPDATE_TIME_MS );
 }
 
-void CAnalyzerConsole::OnResizeEvent ( QResizeEvent* event )
-{
-
-}
-
 void CAnalyzerConsole::OnTimerErrRateUpdate()
 {
-
+    // generate current graph image
     DrawFrame();
     DrawErrorRateTrace();
 
-
-pGraphErrRate->setPixmap ( QPixmap().fromImage ( GraphImage ) );
-
-
+    // set new image to the label
+    pGraphErrRate->setPixmap ( QPixmap().fromImage ( GraphImage ) );
 }
 
 void CAnalyzerConsole::DrawFrame()
 {
-/*
-    // scale image to correct size
-    GraphImage = GraphImage.scaled (
-        pTabWidgetBufErrRate->width(), pTabWidgetBufErrRate->height() );
-
-    // generate plot grid frame rectangle
-    GraphGridFrame.setRect ( pTabWidgetBufErrRate->x() + iGridFrameOffset,
-        pTabWidgetBufErrRate->y() + iGridFrameOffset,
-        pTabWidgetBufErrRate->width() - 2 * iGridFrameOffset,
-        pTabWidgetBufErrRate->height() - 2 * iGridFrameOffset - iXAxisTextHeight );
-*/
-
     // scale image to correct size
     GraphImage = GraphImage.scaled (
         GraphErrRateCanvasRect.width(), GraphErrRateCanvasRect.height() );
@@ -116,8 +93,6 @@ void CAnalyzerConsole::DrawFrame()
         GraphErrRateCanvasRect.y() + iGridFrameOffset,
         GraphErrRateCanvasRect.width() - 2 * iGridFrameOffset,
         GraphErrRateCanvasRect.height() - 2 * iGridFrameOffset - iXAxisTextHeight );
-
-
 
     GraphImage.fill ( GraphBackgroundColor.rgb() ); // fill background
 
@@ -131,8 +106,6 @@ void CAnalyzerConsole::DrawFrame()
 
 void CAnalyzerConsole::DrawErrorRateTrace()
 {
-    int i;
-
     // create painter
     QPainter GraphPainter ( &GraphImage );
 
@@ -156,18 +129,19 @@ void CAnalyzerConsole::DrawErrorRateTrace()
     const double dXSpace =
         static_cast<double> ( GraphGridFrame.width() ) / ( iNumBuffers - 1 );
 
-    // plot the limit line
+    // plot the limit line as dashed line
+    const double dYValLimitInGraph = CalcYPosInGraph ( dMin, dMax, dLogLimit );
 
+    GraphPainter.setPen ( QPen ( QBrush ( LineLimitColor ),
+                                 iLineWidth,
+                                 Qt::DashLine ) );
 
-// TEST
-const double dYValLimitInGraph = CalcYPosInGraph ( dMin, dMax, dLogLimit );
-GraphPainter.setPen ( QPen ( QBrush ( LineLimitColor ), iLineWidth, Qt::DashLine ) );
-GraphPainter.drawLine ( QPoint ( GraphGridFrame.x(), dYValLimitInGraph ),
-                        QPoint ( GraphGridFrame.x() + GraphGridFrame.width(), dYValLimitInGraph ) );
-
+    GraphPainter.drawLine ( QPoint ( GraphGridFrame.x(), dYValLimitInGraph ),
+                            QPoint ( GraphGridFrame.x() +
+                                     GraphGridFrame.width(), dYValLimitInGraph ) );
 
     // plot the data
-    for ( i = 0; i < iNumBuffers; i++ )
+    for ( int i = 0; i < iNumBuffers; i++ )
     {
         // data convert in log domain
         // check for special case if error rate is 0 (which would lead to -Inf
@@ -187,14 +161,21 @@ GraphPainter.drawLine ( QPoint ( GraphGridFrame.x(), dYValLimitInGraph ),
             GraphGridFrame.x() + static_cast<int> ( dXSpace * i ),
             CalcYPosInGraph ( dMin, dMax, vecButErrorRates[i] ) );
 
+        // draw a marker and a solid line which goes from the bottom to the
+        // marker (similar to Matlab stem() function)
+        GraphPainter.setPen ( QPen ( QBrush ( LineColor ),
+                                     iMarkerSize,
+                                     Qt::SolidLine,
+                                     Qt::RoundCap ) );
 
-// TEST
-GraphPainter.setPen ( QPen ( QBrush ( LineColor ), iMarkerSize, Qt::SolidLine, Qt::RoundCap ) );
-GraphPainter.drawPoint ( curPoint );
-GraphPainter.setPen ( QPen ( QBrush ( LineColor ), iLineWidth ) );
-GraphPainter.drawLine ( QPoint ( curPoint.x(), GraphGridFrame.y() + GraphGridFrame.height() ), curPoint );
+        GraphPainter.drawPoint ( curPoint );
 
+        GraphPainter.setPen ( QPen ( QBrush ( LineColor ), iLineWidth ) );
 
+        GraphPainter.drawLine ( QPoint ( curPoint.x(),
+                                         GraphGridFrame.y() +
+                                         GraphGridFrame.height() ),
+                                curPoint );
     }
 }
 

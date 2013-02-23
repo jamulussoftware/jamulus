@@ -41,6 +41,7 @@
 #include "clientsettingsdlg.h"
 #include "chatdlg.h"
 #include "connectdlg.h"
+#include "analyzerconsole.h"
 #include "ui_llconclientdlgbase.h"
 
 

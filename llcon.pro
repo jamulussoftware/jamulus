@@ -103,6 +103,7 @@ HEADERS += src/audiomixerboard.h \
     src/soundbase.h \
     src/testbench.h \
     src/util.h \
+    src/analyzerconsole.h \
     libs/celt/cc6_celt.h \
     libs/celt/cc6_celt_types.h \
     libs/celt/cc6_celt_header.h \
@@ -211,6 +212,7 @@ SOURCES += src/audiomixerboard.cpp \
     src/socket.cpp \
     src/soundbase.cpp \
     src/util.cpp \
+    src/analyzerconsole.cpp \
     libs/celt/cc6_bands.c \
     libs/celt/cc6_celt.c \
     libs/celt/cc6_cwrs.c \

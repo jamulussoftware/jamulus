@@ -70,7 +70,7 @@ protected:
     void AddMarker ( const SHistoryData& curHistoryData );
     void Save ( const QString sFileName );
 
-    QString sFileName;
+    QString             sFileName;
 
     bool                bDoHistory;
     CFIFO<SHistoryData> vHistoryDataFifo;

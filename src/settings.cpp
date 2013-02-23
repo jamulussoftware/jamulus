@@ -62,7 +62,7 @@ void CSettings::Load()
 
             pClient->vstrIPAddress[iIPAddrIdx] =
                 GetIniSetting ( IniXMLDocument, "client",
-                QString ( "ipaddress%1" ).arg ( iIPAddrIdx ), sDefaultIP );
+                                QString ( "ipaddress%1" ).arg ( iIPAddrIdx ), sDefaultIP );
         }
 
         // name
@@ -270,8 +270,8 @@ void CSettings::Save()
         for ( int iIPAddrIdx = 0; iIPAddrIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIPAddrIdx++ )
         {
             PutIniSetting ( IniXMLDocument, "client",
-                QString ( "ipaddress%1" ).arg ( iIPAddrIdx ),
-                pClient->vstrIPAddress[iIPAddrIdx] );
+                            QString ( "ipaddress%1" ).arg ( iIPAddrIdx ),
+                            pClient->vstrIPAddress[iIPAddrIdx] );
         }
 
         // name

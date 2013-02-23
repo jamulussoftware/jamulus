@@ -853,8 +853,7 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart,
                 {
                     // store new address at the top of the list, if the list was already
                     // full, the last element is thrown out
-                    pClient->vstrIPAddress.AddStringFiFoWithCompare ( strSelectedAddress,
-                                                                      MAX_NUM_SERVER_ADDR_ITEMS );
+                    pClient->vstrIPAddress.AddStringFiFoWithCompare ( strSelectedAddress );
                 }
 
                 // everything was ok with the connection dialog, set flag

@@ -112,8 +112,7 @@ public:
     void Enlarge ( const int iAddedSize );
     void Add ( const TData& tI ) { Enlarge ( 1 ); pData[iVectorSize - 1] = tI; }
 
-    void AddStringFiFoWithCompare ( const QString strNewValue,
-                                    const int     iMaxElements );
+    void AddStringFiFoWithCompare ( const QString strNewValue );
 
     inline int Size() const { return iVectorSize; }
 
@@ -207,10 +206,9 @@ template<class TData> void CVector<TData>::Reset ( const TData tResetVal )
 }
 
 // note: this is only supported for string vectors
-template<class TData> void CVector<TData>::AddStringFiFoWithCompare ( const QString strNewValue,
-                                                                      const int     iMaxElements )
+template<class TData> void CVector<TData>::AddStringFiFoWithCompare ( const QString strNewValue )
 {
-    CVector<QString> vstrTempList ( iMaxElements, "" );
+    CVector<QString> vstrTempList ( iVectorSize, "" );
 
     // store the new element in the current storage list at
     // the top, make sure we do not have more than allowed stored
@@ -218,12 +216,12 @@ template<class TData> void CVector<TData>::AddStringFiFoWithCompare ( const QStr
     vstrTempList[0]  = strNewValue;
     int iTempListCnt = 1;
 
-    for ( int iIdx = 0; iIdx < iMaxElements; iIdx++ )
+    for ( int iIdx = 0; iIdx < iVectorSize; iIdx++ )
     {
         // only add old element if it is not the same as the
         // selected one
         if ( ( pData[iIdx].compare ( strNewValue ) ) &&
-             ( iTempListCnt < iMaxElements ) )
+             ( iTempListCnt < iVectorSize ) )
         {
             vstrTempList[iTempListCnt] = pData[iIdx];
 

@@ -238,7 +238,8 @@ public:
 
     int EstimatedOverallDelay ( const int iPingTimeMs );
 
-    CChannel* GetChannel() { return &Channel; }
+    void GetBufErrorRates ( CVector<double>& vecErrRates, double& dLimit )
+        { Channel.GetBufErrorRates ( vecErrRates, dLimit ); }
 
     // settings
     CVector<QString> vstrIPAddress;

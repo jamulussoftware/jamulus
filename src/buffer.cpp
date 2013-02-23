@@ -135,6 +135,21 @@ CNetBufWithStats::CNetBufWithStats() :
     }
 }
 
+void CNetBufWithStats::GetErrorRates ( CVector<double>& vecErrRates,
+                                       double&          dLimit )
+{
+    // get all the averages of the error statistic
+    vecErrRates.Init ( NUM_STAT_SIMULATION_BUFFERS );
+
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
+    {
+        vecErrRates[i] = ErrorRateStatistic[i].GetAverage();
+    }
+
+    // get the limit for decision
+    dLimit = ERROR_RATE_BOUND;
+}
+
 void CNetBufWithStats::Init ( const int  iNewBlockSize,
                               const int  iNewNumBlocks,
                               const bool bPreserve )

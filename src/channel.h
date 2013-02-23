@@ -123,6 +123,9 @@ Protocol.CreateChanNameMes ( ChInfo.strName );
     int GetNetwFrameSizeFact() const { return iNetwFrameSizeFact; }
     int GetNetwFrameSize() const { return iNetwFrameSize; }
 
+    void GetBufErrorRates ( CVector<double>& vecErrRates, double& dLimit )
+        { SockBuf.GetErrorRates ( vecErrRates, dLimit ); }
+
     EAudComprType GetAudioCompressionType() { return eAudioCompressionType; }
     int GetNumAudioChannels() const { return iNumAudioChannels; }
 

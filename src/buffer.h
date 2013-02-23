@@ -401,6 +401,7 @@ public:
     virtual bool Get ( CVector<uint8_t>& vecbyData );
 
     int GetAutoSetting() { return iCurAutoBufferSizeSetting; }
+    void GetErrorRates ( CVector<double>& vecErrRates, double& dLimit );
 
 protected:
     void UpdateAutoSetting();

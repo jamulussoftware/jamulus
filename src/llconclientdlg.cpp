@@ -851,30 +851,10 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart,
                 if ( !strSelectedAddress.isEmpty() &&
                      !ConnectDlg.GetServerListItemWasChosen() )
                 {
-                    CVector<QString> vstrTempList ( MAX_NUM_SERVER_ADDR_ITEMS, "" );
-
-                    // store the new address in the current server storage list at
-                    // the top, make sure we do not have more than allowed stored
-                    // servers
-                    vstrTempList[0]  = strSelectedAddress;
-                    int iTempListCnt = 1;
-
-                    for ( int iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
-                    {
-                        // only add old server address if it is not the same as the
-                        // selected one
-                        if ( ( pClient->vstrIPAddress[iIdx].compare ( strSelectedAddress ) ) &&
-                             ( iTempListCnt < MAX_NUM_SERVER_ADDR_ITEMS ) )
-                        {
-                            vstrTempList[iTempListCnt] =
-                                pClient->vstrIPAddress[iIdx];
-
-                            iTempListCnt++;
-                        }
-                    }
-
-                    // copy new generated list to client
-                    pClient->vstrIPAddress = vstrTempList;
+                    // store new address at the top of the list, if the list was already
+                    // full, the last element is thrown out
+                    pClient->vstrIPAddress.AddStringFiFoWithCompare ( strSelectedAddress,
+                                                                      MAX_NUM_SERVER_ADDR_ITEMS );
                 }
 
                 // everything was ok with the connection dialog, set flag

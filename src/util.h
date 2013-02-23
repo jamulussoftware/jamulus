@@ -92,7 +92,7 @@ template<class TData> class CVector : public std::vector<TData>
 {
 public:
     CVector() : iVectorSize ( 0 ) { pData = this->begin(); }
-    CVector ( const int iNeSi ) { Init(iNeSi); }
+    CVector ( const int iNeSi ) { Init ( iNeSi ); }
     CVector ( const int iNeSi, const TData tInVa ) { Init ( iNeSi, tInVa ); }
 
     // Copy constructor: The order of the initialization list must not be
@@ -111,6 +111,9 @@ public:
 
     void Enlarge ( const int iAddedSize );
     void Add ( const TData& tI ) { Enlarge ( 1 ); pData[iVectorSize - 1] = tI; }
+
+    void AddStringFiFoWithCompare ( const QString strNewValue,
+                                    const int     iMaxElements );
 
     inline int Size() const { return iVectorSize; }
 
@@ -202,6 +205,36 @@ template<class TData> void CVector<TData>::Reset ( const TData tResetVal )
         pData[i] = tResetVal;
     }
 }
+
+// note: this is only supported for string vectors
+template<class TData> void CVector<TData>::AddStringFiFoWithCompare ( const QString strNewValue,
+                                                                      const int     iMaxElements )
+{
+    CVector<QString> vstrTempList ( iMaxElements, "" );
+
+    // store the new element in the current storage list at
+    // the top, make sure we do not have more than allowed stored
+    // elements
+    vstrTempList[0]  = strNewValue;
+    int iTempListCnt = 1;
+
+    for ( int iIdx = 0; iIdx < iMaxElements; iIdx++ )
+    {
+        // only add old element if it is not the same as the
+        // selected one
+        if ( ( pData[iIdx].compare ( strNewValue ) ) &&
+             ( iTempListCnt < iMaxElements ) )
+        {
+            vstrTempList[iTempListCnt] = pData[iIdx];
+
+            iTempListCnt++;
+        }
+    }
+
+    // copy new generated list to data base
+    *this = vstrTempList;
+}
+
 
 
 /******************************************************************************\

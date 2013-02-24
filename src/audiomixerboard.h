@@ -61,7 +61,9 @@ public:
     void ResetSoloState();
     void SetOtherSoloState ( const bool bState );
 
-    void Reset();
+    int  GetFaderLevel() { return pFader->value(); }
+    bool IsDefaultFaderLevel() { return GetFaderLevel() == AUD_MIX_FADER_MAX; }
+    void Reset ( const int iLevelValue = AUD_MIX_FADER_MAX );
 
 protected:
     double CalcFaderGain ( const int value );
@@ -99,12 +101,19 @@ public:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
 
 protected:
-    QString GenFaderText ( CChannelInfo& ChanInfo );
+    QString GenFaderText ( const CChannelInfo& ChanInfo );
+
+    int GetStoredFaderLevel ( const CChannelInfo& ChanInfo );
+    void StoreFaderLevel ( CChannelFader* pChanFader );
+
     void OnChSoloStateChanged ( const int iChannelIdx, const int iValue );
     void OnGainValueChanged ( const int iChannelIdx, const double dValue );
 
     CVector<CChannelFader*> vecpChanFader;
     QHBoxLayout*            pMainLayout;
+
+    CVector<QString>        vecStoredFaderTags;
+    CVector<int>            vecStoredFaderGains;
 
 public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG

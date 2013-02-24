@@ -71,7 +71,7 @@ LED bar:      lbr
 
 // version and application name (always use this version)
 #undef VERSION
-#define VERSION                         "3.3.0cvs"
+#define VERSION                         "3.3.0"
 #define APP_NAME                        "Jamulus"
 
 // Windows registry key name of auto run entry for the server

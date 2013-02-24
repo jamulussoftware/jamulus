@@ -454,6 +454,15 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // Timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
+
+
+// TODO finish work on analyzer console and put this in a hidden View menu entry
+/*
+// TEST
+CAnalyzerConsole* pAnalyzerConsole = new CAnalyzerConsole ( pClient, this );
+pAnalyzerConsole->show();
+*/
+
 }
 
 void CLlconClientDlg::closeEvent ( QCloseEvent* Event )

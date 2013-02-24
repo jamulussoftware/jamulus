@@ -22,29 +22,29 @@
  *
 \******************************************************************************/
 
-llcon, Internet Jam Session Software
+Jamulus - Internet Jam Session Software
 ------------------------------------
 
-llcon, Low-Latency (Internet) Connection tool
+Low-Latency (Internet) Connection tool
 Under the GNU General Public License (GPL)
 http://llcon.sourceforge.net
 
 
 INTRODUCTION:
-The llcon software enables musicians to perform real-time jam sessions over
-the internet. There is one server running the llcon server software which
-collects the audio data from each llcon client software, mixes the audio data
+The Jamulus software enables musicians to perform real-time jam sessions over
+the internet. There is one server running the Jamulus server software which
+collects the audio data from each Jamulus client software, mixes the audio data
 and sends the mix back to each client.
 
 The minimum internet connection speed at each client must be 128 kbps for up-
 and downstream. To get satisfactory results, the ping time from the client
 computer to the server should not exceed 40 ms average.
 
-Llcon runs under Windows (ASIO), MacOS (Core Audio) and Linux (Jack). The llcon
+Jamulus runs under Windows (ASIO), MacOS (Core Audio) and Linux (Jack). The Jamulus
 software package includes both, the client and the server functionality which
 can be selected by using command line arguments.
 
-For starting the server type ./llcon -s
+For starting the server type ./Jamulus -s
 
 The audio is compressed with the OPUS audio codec to ensure a low delay and a
 low upload/download rate.

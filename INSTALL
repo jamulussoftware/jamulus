@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2011
+ * Copyright (c) 2004-2013
  *
  * Author(s):
  *	Volker Fischer
@@ -50,9 +50,8 @@ does not require the Jack packages.
 Mac:
 ----
 
-- cd llcon
-- qmake -spec /usr/local/Qt4.6/mkspecs/macx-g++ -macx -o Makefile llcon.pro
-- make
-- run ./llcon
+Download and install Apple Xcode and QT SDK for Mac.
 
-NOTE: You may have to adjust the Qt4.x path to your Qt version
+- cd llcon
+- qmake llcon.pro
+- open llcon.xcodeproj and compile & run

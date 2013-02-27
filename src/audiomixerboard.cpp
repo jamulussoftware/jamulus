@@ -114,7 +114,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     // Connections -------------------------------------------------------------
     QObject::connect ( pFader, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnGainValueChanged ( int ) ) );
+        this, SLOT ( OnLevelValueChanged ( int ) ) );
 
     QObject::connect ( pcbMute, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnMuteStateChanged ( int ) ) );
@@ -159,10 +159,10 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     }
 }
 
-void CChannelFader::Reset ( const int iLevelValue )
+void CChannelFader::Reset()
 {
     // init gain value -> maximum value as definition according to server
-    pFader->setValue ( iLevelValue );
+    pFader->setValue ( AUD_MIX_FADER_MAX );
 
     // reset mute/solo check boxes
     pcbMute->setChecked ( false );
@@ -171,24 +171,31 @@ void CChannelFader::Reset ( const int iLevelValue )
     // clear instrument picture and label text
     pInstrument->setVisible ( false );
     pLabel->setText ( "" );
+    strReceivedName = "";
 
     bOtherChannelIsSolo = false;
+}
 
-    // if the reset value is not the default one, tell the server about it
-    if ( iLevelValue != AUD_MIX_FADER_MAX )
+void CChannelFader::SetFaderLevel ( const int iLevel )
+{
+    // first make a range check
+    if ( ( iLevel >= 0 ) && ( iLevel <= AUD_MIX_FADER_MAX ) )
     {
-        emit gainValueChanged ( CalcFaderGain ( iLevelValue ) );
+        // we set the new fader level in the GUI (slider control) and also tell the
+        // server about the change
+        pFader->setValue       ( iLevel );
+        SendFaderLevelToServer ( iLevel );
     }
 }
 
-void CChannelFader::OnGainValueChanged ( int value )
+void CChannelFader::SendFaderLevelToServer ( const int iLevel )
 {
     // if mute flag is set or other channel is on solo, do not apply the new
     // fader value
     if ( ( pcbMute->checkState() == Qt::Unchecked ) && !bOtherChannelIsSolo )
     {
         // emit signal for new fader gain value
-        emit gainValueChanged ( CalcFaderGain ( value ) );
+        emit gainValueChanged ( CalcFaderGain ( iLevel ) );
     }
 }
 
@@ -254,26 +261,29 @@ void CChannelFader::SetOtherSoloState ( const bool bState )
     }
 }
 
-void CChannelFader::SetText ( const QString sText )
+void CChannelFader::SetText ( const CChannelInfo& ChanInfo )
 {
-    const int iBreakPos = MAX_LEN_FADER_TAG / 2;
+    // store original received name
+    strReceivedName = ChanInfo.strName;
 
     // break text at predefined position, if text is too short, break anyway to
     // make sure we have two lines for fader tag
-    QString sModText = sText;
+    const int iBreakPos = MAX_LEN_FADER_TAG / 2;
 
-    if ( sModText.length() > iBreakPos )
+    QString strModText = GenFaderText ( ChanInfo );
+
+    if ( strModText.length() > iBreakPos )
     {
-        sModText.insert ( iBreakPos, QString ( "\n" ) );
+        strModText.insert ( iBreakPos, QString ( "\n" ) );
     }
     else
     {
         // insert line break at the beginning of the string -> make sure
         // if we only have one line that the text appears at the bottom line
-        sModText.prepend ( QString ( "\n" ) );
+        strModText.prepend ( QString ( "\n" ) );
     }
 
-    pLabel->setText ( sModText );
+    pLabel->setText ( strModText );
 }
 
 void CChannelFader::SetInstrumentPicture ( const int iInstrument )
@@ -304,6 +314,25 @@ double CChannelFader::CalcFaderGain ( const int value )
     // convert actual slider range in gain values
     // and normalize so that maximum gain is 1
     return static_cast<double> ( value ) / AUD_MIX_FADER_MAX;
+}
+
+QString CChannelFader::GenFaderText ( const CChannelInfo& ChanInfo )
+{
+    // if text is empty, show IP address instead
+    if ( ChanInfo.strName.isEmpty() )
+    {
+        // convert IP address to text and show it (use dummy port number
+        // since it is not used here)
+        const CHostAddress TempAddr =
+            CHostAddress ( QHostAddress ( ChanInfo.iIpAddr ), 0 );
+
+        return TempAddr.toString ( CHostAddress::SM_IP_NO_LAST_BYTE );
+    }
+    else
+    {
+        // show name of channel
+        return ChanInfo.strName;
+    }
 }
 
 
@@ -391,7 +420,7 @@ void CAudioMixerBoard::HideAll()
     // make all controls invisible
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        // before hiding the fader, store its level (if some conditions are fulfulled)
+        // before hiding the fader, store its level (if some conditions are fullfilled)
         StoreFaderLevel ( vecpChanFader[i] );
 
         vecpChanFader[i]->Hide();
@@ -420,7 +449,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                 // check if fader was already in use -> preserve gain value
                 if ( !vecpChanFader[i]->IsVisible() )
                 {
-                    vecpChanFader[i]->Reset ( GetStoredFaderLevel ( vecChanInfo[j] ) );
+                    vecpChanFader[i]->Reset();
 
                     // show fader
                     vecpChanFader[i]->Show();
@@ -433,9 +462,24 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                     vecpChanFader[i]->ResetSoloState();
                 }
 
-                // update text
-                vecpChanFader[i]->
-                    SetText ( GenFaderText ( vecChanInfo[j] ) );
+                // update text (if different from the current one)
+                if ( vecpChanFader[i]->GetReceivedName().compare ( vecChanInfo[j].strName ) )
+                {
+                    // set the text in the fader
+                    vecpChanFader[i]->SetText ( vecChanInfo[j] );
+
+                    // the text has actually changed, search in the list of
+                    // stored gains if we have a matching entry
+                    const int iStoredFaderLevel =
+                        GetStoredFaderLevel ( vecChanInfo[j] );
+
+                    // only apply retreived fader level if it is different from
+                    // the default one
+                    if ( iStoredFaderLevel != AUD_MIX_FADER_MAX )
+                    {
+                        vecpChanFader[i]->SetFaderLevel ( iStoredFaderLevel );
+                    }
+                }
 
                 // update other channel infos (only available for new protocol
                 // which is not compatible with old versions -> this way we make
@@ -456,7 +500,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
         // if current fader is not used, hide it
         if ( !bFaderIsUsed )
         {
-            // before hiding the fader, store its level (if some conditions are fulfulled)
+            // before hiding the fader, store its level (if some conditions are fullfilled)
             StoreFaderLevel ( vecpChanFader[i] );
 
             vecpChanFader[i]->Hide();
@@ -498,59 +542,68 @@ void CAudioMixerBoard::OnChSoloStateChanged ( const int iChannelIdx,
 void CAudioMixerBoard::OnGainValueChanged ( const int    iChannelIdx,
                                             const double dValue )
 {
-    emit ChangeChanGain ( iChannelIdx,  dValue );
-}
-
-QString CAudioMixerBoard::GenFaderText ( const CChannelInfo& ChanInfo )
-{
-    // if text is empty, show IP address instead
-    if ( ChanInfo.strName.isEmpty() )
-    {
-        // convert IP address to text and show it (use dummy port number
-        // since it is not used here)
-        const CHostAddress TempAddr =
-            CHostAddress ( QHostAddress ( ChanInfo.iIpAddr ), 0 );
-
-        return TempAddr.toString ( CHostAddress::SM_IP_NO_LAST_BYTE );
-    }
-    else
-    {
-        // show name of channel
-        return ChanInfo.strName;
-    }
+    emit ChangeChanGain ( iChannelIdx, dValue );
 }
 
 void CAudioMixerBoard::StoreFaderLevel ( CChannelFader* pChanFader )
 {
-
-// TODO fix all the outstanding issues
-
-/*
-    // if the fader was visible and its gain value was not the default
-    // one, we store the old gain
+    // if the fader was visible and the name is not empty, we store the old gain
     if ( pChanFader->IsVisible() &&
-         !pChanFader->IsDefaultFaderLevel() )
+         !pChanFader->GetReceivedName().isEmpty() )
     {
+        // init temporary list count (may be overwritten later on)
+        int iTempListCnt = 0;
 
-        // TODO the actual strName is not preserved in the fader -> problem: maybe
-        // the IP address was substituted which we do not want to use for our
-        // level storage!!!!
-        // TODO solve this problem
+        // check if the new fader level is the default one -> in that case the
+        // entry must be deleted from the list if currently present in the list
+        const bool bNewLevelIsDefaultFaderLevel =
+            ( pChanFader->GetFaderLevel() == AUD_MIX_FADER_MAX );
+
+        // add the new entry at the top of the list and get the index of the old
+        // position of the entry in the list (in case it was there before)
 
 
-        // TODO implementation
-        // use modified AddStringFiFoWithCompare function (which returns the indices)
 
+// TODO this does not work for removing an entry, i.e., if bNewLevelIsDefaultFaderLevel is true!!!!!
+// -> fix this bug!!!
+
+
+
+const int iOldIdx =
+    vecStoredFaderTags.AddStringFiFoWithCompare ( pChanFader->GetReceivedName() );
+
+        CVector<int> viOldFaderGains ( vecStoredFaderGains );
+
+        // if the new value is not the default value, put it on the top of the
+        // list, otherwise just remove it from the list
+        if ( !bNewLevelIsDefaultFaderLevel )
+        {
+            // current fader level is at the top of the list
+            vecStoredFaderGains[0] = pChanFader->GetFaderLevel();
+            iTempListCnt           = 1;
+        }
+
+        for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
+        {
+            // first check if we still have space in our data storage
+            if ( iTempListCnt < MAX_NUM_STORED_FADER_LEVELS )
+            {
+                // check for the old index of the current entry (this has to be
+                // skipped), note that per definition: the old index is an illegal
+                // index in case the entry was not present in the vector before
+                if ( iIdx != iOldIdx )
+                {
+                    vecStoredFaderGains[iTempListCnt] = viOldFaderGains[iIdx];
+
+                    iTempListCnt++;
+                }
+            }
+        }
     }
-*/
 }
 
 int CAudioMixerBoard::GetStoredFaderLevel ( const CChannelInfo& ChanInfo )
 {
-
-// TODO enable the following code as soon as the above problems are solved
-
-/*
     // only do the check if the name string is not empty
     if ( !ChanInfo.strName.isEmpty() )
     {
@@ -564,7 +617,6 @@ int CAudioMixerBoard::GetStoredFaderLevel ( const CChannelInfo& ChanInfo )
             }
         }
     }
-*/
 
     // return default value
     return AUD_MIX_FADER_MAX;

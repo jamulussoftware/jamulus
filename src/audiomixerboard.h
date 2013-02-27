@@ -51,7 +51,8 @@ class CChannelFader : public QObject
 public:
     CChannelFader ( QWidget* pNW, QHBoxLayout* pParentLayout );
 
-    void SetText ( const QString sText );
+    void SetText ( const CChannelInfo& ChanInfo );
+    QString GetReceivedName() { return strReceivedName; }
     void SetInstrumentPicture ( const int iInstrument );
     void Show() { pFrame->show(); }
     void Hide() { pFrame->hide(); }
@@ -61,13 +62,15 @@ public:
     void ResetSoloState();
     void SetOtherSoloState ( const bool bState );
 
+    void SetFaderLevel ( const int iLevel );
     int  GetFaderLevel() { return pFader->value(); }
-    bool IsDefaultFaderLevel() { return GetFaderLevel() == AUD_MIX_FADER_MAX; }
-    void Reset ( const int iLevelValue = AUD_MIX_FADER_MAX );
+    void Reset();
 
 protected:
-    double CalcFaderGain ( const int value );
-    void   SetMute ( const bool bState );
+    double  CalcFaderGain ( const int value );
+    void    SetMute ( const bool bState );
+    QString GenFaderText ( const CChannelInfo& ChanInfo );
+    void    SendFaderLevelToServer ( const int iLevel );
 
     QFrame*    pFrame;
     QSlider*   pFader;
@@ -76,10 +79,12 @@ protected:
     QLabel*    pLabel;
     QLabel*    pInstrument;
 
+    QString    strReceivedName;
+
     bool       bOtherChannelIsSolo;
 
 public slots:
-    void OnGainValueChanged ( int value );
+    void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value ); }
     void OnMuteStateChanged ( int value );
 
 signals:
@@ -101,8 +106,6 @@ public:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
 
 protected:
-    QString GenFaderText ( const CChannelInfo& ChanInfo );
-
     int GetStoredFaderLevel ( const CChannelInfo& ChanInfo );
     void StoreFaderLevel ( CChannelFader* pChanFader );
 

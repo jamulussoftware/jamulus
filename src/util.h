@@ -112,7 +112,7 @@ public:
     void Enlarge ( const int iAddedSize );
     void Add ( const TData& tI ) { Enlarge ( 1 ); pData[iVectorSize - 1] = tI; }
 
-    void AddStringFiFoWithCompare ( const QString strNewValue );
+    int AddStringFiFoWithCompare ( const QString strNewValue );
 
     inline int Size() const { return iVectorSize; }
 
@@ -206,8 +206,9 @@ template<class TData> void CVector<TData>::Reset ( const TData tResetVal )
 }
 
 // note: this is only supported for string vectors
-template<class TData> void CVector<TData>::AddStringFiFoWithCompare ( const QString strNewValue )
+template<class TData> int CVector<TData>::AddStringFiFoWithCompare ( const QString strNewValue )
 {
+    int              iOldIndex = -1; // init with illegal index per definition
     CVector<QString> vstrTempList ( iVectorSize, "" );
 
     // store the new element in the current storage list at
@@ -218,19 +219,28 @@ template<class TData> void CVector<TData>::AddStringFiFoWithCompare ( const QStr
 
     for ( int iIdx = 0; iIdx < iVectorSize; iIdx++ )
     {
-        // only add old element if it is not the same as the
-        // selected one
-        if ( ( pData[iIdx].compare ( strNewValue ) ) &&
-             ( iTempListCnt < iVectorSize ) )
+        // first check if we still have space in our data storage
+        if ( iTempListCnt < iVectorSize )
         {
-            vstrTempList[iTempListCnt] = pData[iIdx];
+            // only add old element if it is not the same as the
+            // selected one
+            if ( pData[iIdx].compare ( strNewValue ) )
+            {
+                vstrTempList[iTempListCnt] = pData[iIdx];
 
-            iTempListCnt++;
+                iTempListCnt++;
+            }
+            else
+            {
+                iOldIndex = iIdx;
+            }
         }
     }
 
     // copy new generated list to data base
     *this = vstrTempList;
+
+    return iOldIndex;
 }
 
 

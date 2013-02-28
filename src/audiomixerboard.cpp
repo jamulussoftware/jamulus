@@ -340,9 +340,9 @@ QString CChannelFader::GenFaderText ( const CChannelInfo& ChanInfo )
 * CAudioMixerBoard                                                             *
 \******************************************************************************/
 CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
-    QGroupBox           ( parent ),
-    vecStoredFaderTags  ( MAX_NUM_STORED_FADER_LEVELS, "" ),
-    vecStoredFaderGains ( MAX_NUM_STORED_FADER_LEVELS, AUD_MIX_FADER_MAX )
+    QGroupBox            ( parent ),
+    vecStoredFaderTags   ( MAX_NUM_STORED_FADER_LEVELS, "" ),
+    vecStoredFaderLevels ( MAX_NUM_STORED_FADER_LEVELS, AUD_MIX_FADER_MAX )
 {
     // set title text (default: no server given)
     SetServerName ( "" );
@@ -551,6 +551,8 @@ void CAudioMixerBoard::StoreFaderLevel ( CChannelFader* pChanFader )
     if ( pChanFader->IsVisible() &&
          !pChanFader->GetReceivedName().isEmpty() )
     {
+        CVector<int> viOldStoredFaderLevels ( vecStoredFaderLevels );
+
         // init temporary list count (may be overwritten later on)
         int iTempListCnt = 0;
 
@@ -559,28 +561,17 @@ void CAudioMixerBoard::StoreFaderLevel ( CChannelFader* pChanFader )
         const bool bNewLevelIsDefaultFaderLevel =
             ( pChanFader->GetFaderLevel() == AUD_MIX_FADER_MAX );
 
-        // add the new entry at the top of the list and get the index of the old
-        // position of the entry in the list (in case it was there before)
-
-
-
-// TODO this does not work for removing an entry, i.e., if bNewLevelIsDefaultFaderLevel is true!!!!!
-// -> fix this bug!!!
-
-
-
-const int iOldIdx =
-    vecStoredFaderTags.AddStringFiFoWithCompare ( pChanFader->GetReceivedName() );
-
-        CVector<int> viOldFaderGains ( vecStoredFaderGains );
-
         // if the new value is not the default value, put it on the top of the
         // list, otherwise just remove it from the list
+        const int iOldIdx =
+            vecStoredFaderTags.StringFiFoWithCompare ( pChanFader->GetReceivedName(),
+                                                       !bNewLevelIsDefaultFaderLevel );
+
         if ( !bNewLevelIsDefaultFaderLevel )
         {
             // current fader level is at the top of the list
-            vecStoredFaderGains[0] = pChanFader->GetFaderLevel();
-            iTempListCnt           = 1;
+            vecStoredFaderLevels[0] = pChanFader->GetFaderLevel();
+            iTempListCnt            = 1;
         }
 
         for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
@@ -593,7 +584,7 @@ const int iOldIdx =
                 // index in case the entry was not present in the vector before
                 if ( iIdx != iOldIdx )
                 {
-                    vecStoredFaderGains[iTempListCnt] = viOldFaderGains[iIdx];
+                    vecStoredFaderLevels[iTempListCnt] = viOldStoredFaderLevels[iIdx];
 
                     iTempListCnt++;
                 }
@@ -613,7 +604,7 @@ int CAudioMixerBoard::GetStoredFaderLevel ( const CChannelInfo& ChanInfo )
             if ( !vecStoredFaderTags[iIdx].compare ( ChanInfo.strName ) )
             {
                 // use stored level value (return it)
-                return vecStoredFaderGains[iIdx];
+                return vecStoredFaderLevels[iIdx];
             }
         }
     }

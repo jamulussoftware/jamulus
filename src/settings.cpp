@@ -28,6 +28,7 @@
 /* Implementation *************************************************************/
 void CSettings::Load()
 {
+    int          iIdx;
     int          iValue;
     bool         bValue;
     QDomDocument IniXMLDocument;
@@ -50,19 +51,38 @@ void CSettings::Load()
         // client:
 
         // IP addresses
-        for ( int iIPAddrIdx = 0; iIPAddrIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIPAddrIdx++ )
+        for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
         {
             QString sDefaultIP = "";
 
             // use default only for first entry
-            if ( iIPAddrIdx == 0 )
+            if ( iIdx == 0 )
             {
                 sDefaultIP = DEFAULT_SERVER_ADDRESS;
             }
 
-            pClient->vstrIPAddress[iIPAddrIdx] =
+            pClient->vstrIPAddress[iIdx] =
                 GetIniSetting ( IniXMLDocument, "client",
-                                QString ( "ipaddress%1" ).arg ( iIPAddrIdx ), sDefaultIP );
+                                QString ( "ipaddress%1" ).arg ( iIdx ), sDefaultIP );
+        }
+
+        // stored fader tags
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
+        {
+            pClient->vecStoredFaderTags[iIdx] =
+                GetIniSetting ( IniXMLDocument, "client",
+                                QString ( "storedfadertag%1" ).arg ( iIdx ), "" );
+        }
+
+        // stored fader levels
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
+        {
+            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "storedfaderlevel%1" ).arg ( iIdx ),
+                 0, AUD_MIX_FADER_MAX, iValue ) )
+            {
+                pClient->vecStoredFaderLevels[iIdx] = iValue;
+
+            }
         }
 
         // name
@@ -71,7 +91,7 @@ void CSettings::Load()
 
         // instrument
         if ( GetNumericIniSet ( IniXMLDocument, "client", "instrument",
-            0, CInstPictures::GetNumAvailableInst() - 1, iValue ) )
+             0, CInstPictures::GetNumAvailableInst() - 1, iValue ) )
         {
             pClient->ChannelInfo.iInstrument = iValue;
         }
@@ -257,6 +277,8 @@ void CSettings::Load()
 
 void CSettings::Save()
 {
+    int iIdx;
+
     // create XML document for storing initialization parameters
     QDomDocument IniXMLDocument;
 
@@ -267,11 +289,27 @@ void CSettings::Save()
         // client:
 
         // IP addresses
-        for ( int iIPAddrIdx = 0; iIPAddrIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIPAddrIdx++ )
+        for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
         {
             PutIniSetting ( IniXMLDocument, "client",
-                            QString ( "ipaddress%1" ).arg ( iIPAddrIdx ),
-                            pClient->vstrIPAddress[iIPAddrIdx] );
+                            QString ( "ipaddress%1" ).arg ( iIdx ),
+                            pClient->vstrIPAddress[iIdx] );
+        }
+
+        // stored fader tags
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
+        {
+            PutIniSetting ( IniXMLDocument, "client",
+                            QString ( "storedfadertag%1" ).arg ( iIdx ),
+                            pClient->vecStoredFaderTags[iIdx] );
+        }
+
+        // stored fader levels
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
+        {
+            SetNumericIniSet ( IniXMLDocument, "client",
+                               QString ( "storedfaderlevel%1" ).arg ( iIdx ),
+                               pClient->vecStoredFaderLevels[iIdx] );
         }
 
         // name

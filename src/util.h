@@ -112,7 +112,8 @@ public:
     void Enlarge ( const int iAddedSize );
     void Add ( const TData& tI ) { Enlarge ( 1 ); pData[iVectorSize - 1] = tI; }
 
-    int AddStringFiFoWithCompare ( const QString strNewValue );
+    int StringFiFoWithCompare ( const QString strNewValue,
+                                const bool    bDoAdding = true );
 
     inline int Size() const { return iVectorSize; }
 
@@ -206,16 +207,25 @@ template<class TData> void CVector<TData>::Reset ( const TData tResetVal )
 }
 
 // note: this is only supported for string vectors
-template<class TData> int CVector<TData>::AddStringFiFoWithCompare ( const QString strNewValue )
+template<class TData> int CVector<TData>::StringFiFoWithCompare ( const QString strNewValue,
+                                                                  const bool    bDoAdding )
 {
-    int              iOldIndex = -1; // init with illegal index per definition
     CVector<QString> vstrTempList ( iVectorSize, "" );
 
-    // store the new element in the current storage list at
-    // the top, make sure we do not have more than allowed stored
-    // elements
-    vstrTempList[0]  = strNewValue;
-    int iTempListCnt = 1;
+    // init with illegal index per definition
+    int iOldIndex = -1;
+
+    // init temporary list count (may be overwritten later on)
+    int iTempListCnt = 0;
+
+    if ( bDoAdding )
+    {
+        // store the new element in the current storage list at
+        // the top, make sure we do not have more than allowed stored
+        // elements
+        vstrTempList[0] = strNewValue;
+        iTempListCnt    = 1;
+    }
 
     for ( int iIdx = 0; iIdx < iVectorSize; iIdx++ )
     {

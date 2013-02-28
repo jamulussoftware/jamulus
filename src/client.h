@@ -244,6 +244,8 @@ public:
     // settings
     CVector<QString> vstrIPAddress;
     CChannelCoreInfo ChannelInfo;
+    CVector<QString> vecStoredFaderTags;
+    CVector<int>     vecStoredFaderLevels;
 
 #ifdef LLCON_VST_PLUGIN
     // VST version must have direct access to sound object

@@ -232,6 +232,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // reset mixer board
     MainMixerBoard->HideAll();
 
+    // restore fader settings
+    MainMixerBoard->vecStoredFaderTags   = pClient->vecStoredFaderTags;
+    MainMixerBoard->vecStoredFaderLevels = pClient->vecStoredFaderLevels;
+
     // init fader tag line edit and instrument picture
     edtFaderTag->setText ( pClient->ChannelInfo.strName );
     butInstPicture->setIcon ( QIcon (
@@ -480,6 +484,13 @@ void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
 
     // store fader tag
     pClient->ChannelInfo.strName = edtFaderTag->text();
+
+    // store mixer fader settings (we have to hide all mixer faders first to
+    // initiate a storage of the current mixer fader levels in case we are
+    // just in a connected state)
+    MainMixerBoard->HideAll();
+    pClient->vecStoredFaderTags   = MainMixerBoard->vecStoredFaderTags;
+    pClient->vecStoredFaderLevels = MainMixerBoard->vecStoredFaderLevels;
 
     // default implementation of this event handler routine
     Event->accept();
@@ -862,7 +873,7 @@ void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart,
                 {
                     // store new address at the top of the list, if the list was already
                     // full, the last element is thrown out
-                    pClient->vstrIPAddress.AddStringFiFoWithCompare ( strSelectedAddress );
+                    pClient->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
                 }
 
                 // everything was ok with the connection dialog, set flag

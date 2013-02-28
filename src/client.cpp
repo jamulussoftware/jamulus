@@ -29,6 +29,8 @@
 CClient::CClient ( const quint16 iPortNumber ) :
     vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
     ChannelInfo                      (),
+    vecStoredFaderTags               ( MAX_NUM_STORED_FADER_LEVELS, "" ),
+    vecStoredFaderLevels             ( MAX_NUM_STORED_FADER_LEVELS, AUD_MIX_FADER_MAX ),
     Channel                          ( false ), /* we need a client channel -> "false" */
     eAudioCompressionType            ( CT_OPUS ),
     iCeltNumCodedBytes               ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),

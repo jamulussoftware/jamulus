@@ -38,11 +38,6 @@
 #include "util.h"
 
 
-/* Definitions ****************************************************************/
-// audio mixer fader range
-#define AUD_MIX_FADER_MAX           100
-
-
 /* Classes ********************************************************************/
 class CChannelFader : public QObject
 {
@@ -105,6 +100,10 @@ public:
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
 
+    // settings
+    CVector<QString> vecStoredFaderTags;
+    CVector<int>     vecStoredFaderLevels;
+
 protected:
     int GetStoredFaderLevel ( const CChannelInfo& ChanInfo );
     void StoreFaderLevel ( CChannelFader* pChanFader );
@@ -114,9 +113,6 @@ protected:
 
     CVector<CChannelFader*> vecpChanFader;
     QHBoxLayout*            pMainLayout;
-
-    CVector<QString>        vecStoredFaderTags;
-    CVector<int>            vecStoredFaderGains;
 
 public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG

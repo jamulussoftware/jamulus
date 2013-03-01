@@ -462,12 +462,9 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                     vecpChanFader[i]->ResetSoloState();
                 }
 
-                // update text (if different from the current one)
+                // restore gain (if new name is different from the current one)
                 if ( vecpChanFader[i]->GetReceivedName().compare ( vecChanInfo[j].strName ) )
                 {
-                    // set the text in the fader
-                    vecpChanFader[i]->SetText ( vecChanInfo[j] );
-
                     // the text has actually changed, search in the list of
                     // stored gains if we have a matching entry
                     const int iStoredFaderLevel =
@@ -480,6 +477,9 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                         vecpChanFader[i]->SetFaderLevel ( iStoredFaderLevel );
                     }
                 }
+
+                // set the text in the fader
+                vecpChanFader[i]->SetText ( vecChanInfo[j] );
 
                 // update other channel infos (only available for new protocol
                 // which is not compatible with old versions -> this way we make

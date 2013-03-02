@@ -59,6 +59,7 @@ int main ( int argc, char** argv )
     bool    bConnectOnStartup         = false;
     bool    bDisalbeLEDs              = false;
     bool    bShowComplRegConnList     = false;
+    bool    bShowAnalyzerConsole      = false;
     bool    bCentServPingServerInList = false;
     int     iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
     quint16 iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
@@ -168,6 +169,20 @@ int main ( int argc, char** argv )
         {
             bShowComplRegConnList = true;
             tsConsole << "- show all registered servers in server list" << endl;
+            continue;
+        }
+
+
+        // Show analyzer console -----------------------------------------------
+        // Undocumented debugging command line argument: Show the analyzer
+        // console to debug network buffer properties.
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--showanalyzerconsole", // no short form
+                               "--showanalyzerconsole" ) )
+        {
+            bShowAnalyzerConsole = true;
+            tsConsole << "- show analyzer console" << endl;
             continue;
         }
 
@@ -393,6 +408,7 @@ int main ( int argc, char** argv )
                                         bConnectOnStartup,
                                         bDisalbeLEDs,
                                         bShowComplRegConnList,
+                                        bShowAnalyzerConsole,
                                         0,
                                         Qt::Window );
 

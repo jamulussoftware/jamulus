@@ -31,6 +31,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
                                    const bool      bNewConnectOnStartup,
                                    const bool      bNewDisalbeLEDs,
                                    const bool      bNewShowComplRegConnList,
+                                   const bool      bShowAnalyzerConsole,
                                    QWidget*        parent,
                                    Qt::WindowFlags f ) :
     QDialog            ( parent, f ),
@@ -39,7 +40,8 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     bUnreadChatMessage ( false ),
     ClientSettingsDlg  ( pNCliP, parent, Qt::Window ),
     ChatDlg            ( parent, Qt::Window ),
-    ConnectDlg         ( bNewShowComplRegConnList, parent, Qt::Dialog )
+    ConnectDlg         ( bNewShowComplRegConnList, parent, Qt::Dialog ),
+    AnalyzerConsole    ( pNCliP, parent, Qt::Window )
 {
     setupUi ( this );
 
@@ -320,6 +322,13 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     pViewMenu->addAction ( tr ( "&General Settings..." ), this,
         SLOT ( OnOpenGeneralSettings() ) );
 
+    // optionally show analyzer console entry
+    if ( bShowAnalyzerConsole )
+    {
+        pViewMenu->addAction ( tr ( "&Analyzer Console..." ), this,
+            SLOT ( OnOpenAnalyzerConsole() ) );
+    }
+
     pViewMenu->addSeparator();
 
     pViewMenu->addAction ( tr ( "E&xit" ), this,
@@ -458,15 +467,6 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     // Timers ------------------------------------------------------------------
     // start timer for status bar
     TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
-
-
-// TODO finish work on analyzer console and put this in a hidden View menu entry
-/*
-// TEST
-CAnalyzerConsole* pAnalyzerConsole = new CAnalyzerConsole ( pClient, this );
-pAnalyzerConsole->show();
-*/
-
 }
 
 void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
@@ -475,6 +475,7 @@ void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
     ClientSettingsDlg.close();
     ConnectDlg.close();
     ChatDlg.close();
+    AnalyzerConsole.close();
 
     // if connected, terminate connection
     if ( pClient->IsRunning() )
@@ -678,6 +679,16 @@ void CLlconClientDlg::ShowChatWindow()
     bUnreadChatMessage = false;
 
     UpdateDisplay();
+}
+
+void CLlconClientDlg::ShowAnalyzerConsole()
+{
+    // open analyzer console dialog
+    AnalyzerConsole.show();
+
+    // make sure dialog is upfront and has focus
+    AnalyzerConsole.raise();
+    AnalyzerConsole.activateWindow();
 }
 
 void CLlconClientDlg::OnSettingsStateChanged ( int value )

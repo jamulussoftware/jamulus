@@ -73,6 +73,7 @@ public:
                       const bool      bNewConnectOnStartup,
                       const bool      bNewDisalbeLEDs,
                       const bool      bNewShowComplRegConnList,
+                      const bool      bShowAnalyzerConsole,
                       QWidget*        parent = 0,
                       Qt::WindowFlags f = 0 );
 
@@ -81,6 +82,7 @@ protected:
     void               SetMyWindowTitle ( const int iNumClients );
     void               ShowGeneralSettings();
     void               ShowChatWindow();
+    void               ShowAnalyzerConsole();
     void               UpdateAudioFaderSlider();
     void               UpdateRevSelection();
     void               ConnectDisconnect ( const bool bDoStart,
@@ -106,6 +108,7 @@ protected:
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
     CConnectDlg        ConnectDlg;
+    CAnalyzerConsole   AnalyzerConsole;
 
 public slots:
     void OnAboutToQuit() { pSettings->Save(); }
@@ -124,6 +127,7 @@ public slots:
 
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }
     void OnOpenChatDialog() { ShowChatWindow(); }
+    void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
 
     void OnInstPicturesMenuTriggered ( QAction* SelAction );
 

@@ -65,11 +65,18 @@ CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
     // timers
     QObject::connect ( &TimerErrRateUpdate, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerErrRateUpdate() ) );
+}
 
-
-    // Timers ------------------------------------------------------------------
+void CAnalyzerConsole::showEvent ( QShowEvent* )
+{
     // start timer for error rate graph
     TimerErrRateUpdate.start ( ERR_RATE_GRAPH_UPDATE_TIME_MS );
+}
+
+void CAnalyzerConsole::hideEvent ( QHideEvent* )
+{
+    // if window is closed, stop timer
+    TimerErrRateUpdate.stop();
 }
 
 void CAnalyzerConsole::OnTimerErrRateUpdate()

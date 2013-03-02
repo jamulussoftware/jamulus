@@ -52,6 +52,9 @@ public:
 
 
 protected:
+    virtual void showEvent ( QShowEvent* );
+    virtual void hideEvent ( QHideEvent* );
+
     void DrawFrame();
     void DrawErrorRateTrace();
     int  CalcYPosInGraph ( const double dAxisMin,

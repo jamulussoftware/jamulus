@@ -77,7 +77,6 @@ signals:
 # include <mach/mach_error.h>
 # include <mach/mach_time.h>
 #else
-# include <time.h>
 # include <sys/time.h>
 #endif
 

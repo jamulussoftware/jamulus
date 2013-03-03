@@ -135,9 +135,9 @@ void CHighPrecisionTimer::Start()
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
         NextEnd = mach_absolute_time();
 #else
-        clock_gettime ( CLOCK_MONOTONIC, NextEnd );
+        clock_gettime ( CLOCK_MONOTONIC, &NextEnd );
 #endif
-        NextEnd += Delay;
+        NextEnd = NextEnd + Delay;
 
         // start thread
         QThread::start();
@@ -169,11 +169,11 @@ void CHighPrecisionTimer::run()
 #else
         clock_nanosleep ( CLOCK_MONOTONIC,
                           TIMER_ABSTIME,
-                          NextEnd,
+                          &NextEnd,
                           NULL );
 #endif
 
-        NextEnd += Delay;
+        NextEnd = NextEnd + Delay;
     }
 }
 #endif

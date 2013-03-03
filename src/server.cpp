@@ -26,67 +26,7 @@
 
 
 // CHighPrecisionTimer implementation ******************************************
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
-#include <mach/mach.h>
-#include <mach/mach_error.h>
-#include <mach/mach_time.h>
-
-CHighPrecisionTimer::CHighPrecisionTimer() :
-    bRun ( false )
-{
-    // calculate delay in mach absolute time
-    const uint64_t iNsDelay =
-        ( (uint64_t) SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) /
-        (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
-
-    struct mach_timebase_info timeBaseInfo;
-    mach_timebase_info ( &timeBaseInfo );
-
-    iMachDelay = ( iNsDelay * (uint64_t) timeBaseInfo.denom ) /
-        (uint64_t) timeBaseInfo.numer;
-}
-
-void CHighPrecisionTimer::Start()
-{
-    // only start if not already running
-    if ( !bRun )
-    {
-        // set run flag
-        bRun = true;
-
-        // set initial end time
-        iNextEnd = mach_absolute_time() + iMachDelay;
-
-        // start thread
-        QThread::start();
-    }
-}
-
-void CHighPrecisionTimer::Stop()
-{
-    // set flag so that thread can leave the main loop
-    bRun = false;
-
-    // give thread some time to terminate
-    wait ( 5000 );
-}
-
-void CHighPrecisionTimer::run()
-{
-    // loop until the thread shall be terminated
-    while ( bRun )
-    {
-        // call processing routine by fireing signal
-        emit timeout();
-
-        // now wait until the next buffer shall be processed (we
-        // use the "increment method" to make sure we do not introduce
-        // a timing drift)
-        mach_wait_until(iNextEnd);
-        iNextEnd += iMachDelay;
-    }
-}
-#else
+#ifdef _WIN32
 CHighPrecisionTimer::CHighPrecisionTimer()
 {
     // add some error checking, the high precision timer implementation only
@@ -94,7 +34,7 @@ CHighPrecisionTimer::CHighPrecisionTimer()
 #if ( SYSTEM_FRAME_SIZE_SAMPLES != 128 )
 # error "Only system frame size of 128 samples is supported by this module"
 #endif
-#if SYSTEM_SAMPLE_RATE_HZ != 48000
+#if ( SYSTEM_SAMPLE_RATE_HZ != 48000 )
 # error "Only a system sample rate of 48 kHz is supported by this module"
 #endif
 
@@ -158,6 +98,82 @@ void CHighPrecisionTimer::OnTimer()
     {
         // next high precision timer interval
         iIntervalCounter++;
+    }
+}
+#else // Mac and Linux
+CHighPrecisionTimer::CHighPrecisionTimer() :
+    bRun ( false )
+{
+    // calculate delay in ns
+    const uint64_t iNsDelay =
+        ( (uint64_t) SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) /
+        (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
+
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+    // calculate delay in mach absolute time
+    struct mach_timebase_info timeBaseInfo;
+    mach_timebase_info ( &timeBaseInfo );
+
+    Delay = ( iNsDelay * (uint64_t) timeBaseInfo.denom ) /
+        (uint64_t) timeBaseInfo.numer;
+#else
+    // set delay
+    Delay.tv_sec  = 0;
+    Delay.tv_nsec = iNsDelay;
+#endif
+}
+
+void CHighPrecisionTimer::Start()
+{
+    // only start if not already running
+    if ( !bRun )
+    {
+        // set run flag
+        bRun = true;
+
+        // set initial end time
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+        NextEnd = mach_absolute_time();
+#else
+        clock_gettime ( CLOCK_MONOTONIC, NextEnd );
+#endif
+        NextEnd += Delay;
+
+        // start thread
+        QThread::start();
+    }
+}
+
+void CHighPrecisionTimer::Stop()
+{
+    // set flag so that thread can leave the main loop
+    bRun = false;
+
+    // give thread some time to terminate
+    wait ( 5000 );
+}
+
+void CHighPrecisionTimer::run()
+{
+    // loop until the thread shall be terminated
+    while ( bRun )
+    {
+        // call processing routine by fireing signal
+        emit timeout();
+
+        // now wait until the next buffer shall be processed (we
+        // use the "increment method" to make sure we do not introduce
+        // a timing drift)
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+        mach_wait_until ( NextEnd );
+#else
+        clock_nanosleep ( CLOCK_MONOTONIC,
+                          TIMER_ABSTIME,
+                          NextEnd,
+                          NULL );
+#endif
+
+        NextEnd += Delay;
     }
 }
 #endif

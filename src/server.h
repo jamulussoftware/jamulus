@@ -43,36 +43,10 @@
 // no valid channel number
 #define INVALID_CHANNEL_ID                  ( MAX_NUM_CHANNELS + 1 )
 
-// minimum timer precision
-#define MIN_TIMER_RESOLUTION_MS             1 // ms
-
 
 /* Classes ********************************************************************/
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
-// using mach timers for Mac
-class CHighPrecisionTimer : public QThread
-{
-    Q_OBJECT
-
-public:
-    CHighPrecisionTimer();
-
-    void Start();
-    void Stop();
-    bool isActive() { return bRun; }
-
-protected:
-    virtual void run();
-
-    bool     bRun;
-    uint64_t iMachDelay;
-    uint64_t iNextEnd;
-
-signals:
-    void timeout();
-};
-#else
-// using QTimer for Windows and Linux
+#if ( defined ( WIN32 ) || defined ( _WIN32 ) )
+// using QTimer for Windows
 class CHighPrecisionTimer : public QObject
 {
     Q_OBJECT
@@ -92,6 +66,43 @@ protected:
 
 public slots:
     void OnTimer();
+
+signals:
+    void timeout();
+};
+#else
+// using mach timers for Mac and nanosleep for Linux
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+# include <mach/mach.h>
+# include <mach/mach_error.h>
+# include <mach/mach_time.h>
+#else
+# include <sys/time.h>
+#endif
+
+class CHighPrecisionTimer : public QThread
+{
+    Q_OBJECT
+
+public:
+    CHighPrecisionTimer();
+
+    void Start();
+    void Stop();
+    bool isActive() { return bRun; }
+
+protected:
+    virtual void run();
+
+    bool bRun;
+
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+    uint64_t Delay;
+    uint64_t NextEnd;
+#else
+    timespec Delay;
+    timespec NextEnd;
+#endif
 
 signals:
     void timeout();

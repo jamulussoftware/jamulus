@@ -43,6 +43,12 @@ CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
     LineLimitColor         ( Qt::red ),
     GraphImage             ( 1, 1, QImage::Format_RGB32 )
 {
+    // set the window icon and title text
+    const QIcon icon = QIcon ( QString::fromUtf8 ( ":/png/main/res/mainicon.png" ) );
+    setWindowIcon ( icon );
+    setWindowTitle ( tr ( "Analyzer Console" ) );
+
+    // create main layout
     QVBoxLayout* pMainLayout = new QVBoxLayout;
 
     // create and add main tab widget
@@ -58,7 +64,8 @@ CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
     pGraphErrRate = new QLabel ( this );
     pTabErrRateLayout->addWidget ( pGraphErrRate );
 
-    pMainTabWidget->addTab ( pTabWidgetBufErrRate, "Error Rate" );
+    pMainTabWidget->addTab ( pTabWidgetBufErrRate,
+                             tr ( "Error Rate of Each Buffer Size" ) );
 
 
     // Connections -------------------------------------------------------------

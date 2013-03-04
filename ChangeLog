@@ -1,6 +1,8 @@
 3.3.1
 
-TODO: Mac OS 64bit support
+- store fader level settings
+
+- improved server performance under Linux
 
 
 3.3.0

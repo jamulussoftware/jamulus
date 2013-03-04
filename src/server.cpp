@@ -118,8 +118,7 @@ CHighPrecisionTimer::CHighPrecisionTimer() :
         (uint64_t) timeBaseInfo.numer;
 #else
     // set delay
-    Delay.tv_sec  = 0;
-    Delay.tv_nsec = iNsDelay;
+    Delay = iNsDelay;
 #endif
 }
 
@@ -133,12 +132,16 @@ void CHighPrecisionTimer::Start()
 
         // set initial end time
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
-        NextEnd = mach_absolute_time();
-        NextEnd += Delay;
+        NextEnd = mach_absolute_time() + Delay;
 #else
         clock_gettime ( CLOCK_MONOTONIC, &NextEnd );
-        NextEnd.tv_sec  += Delay.tv_sec;
-        NextEnd.tv_nsec += Delay.tv_nsec;
+
+        NextEnd.tv_nsec += Delay;
+        if ( NextEnd.tv_nsec >= 1000000000L )
+        {
+            NextEnd.tv_sec++;
+            NextEnd.tv_nsec -= 1000000000L;
+        }
 #endif
 
         // start thread
@@ -176,8 +179,12 @@ void CHighPrecisionTimer::run()
                           &NextEnd,
                           NULL );
 
-        NextEnd.tv_sec  += Delay.tv_sec;
-        NextEnd.tv_nsec += Delay.tv_nsec;
+        NextEnd.tv_nsec += Delay;
+        if ( NextEnd.tv_nsec >= 1000000000L )
+        {
+            NextEnd.tv_sec++;
+            NextEnd.tv_nsec -= 1000000000L;
+        }
 #endif
     }
 }

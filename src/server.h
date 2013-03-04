@@ -100,7 +100,7 @@ protected:
     uint64_t Delay;
     uint64_t NextEnd;
 #else
-    timespec Delay;
+    long     Delay;
     timespec NextEnd;
 #endif
 

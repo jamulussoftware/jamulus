@@ -31,6 +31,7 @@ CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
                                      Qt::WindowFlags ) :
     QDialog                ( parent ),
     pClient                ( pNCliP ),
+    GraphImage             ( 1, 1, QImage::Format_RGB32 ),
     GraphErrRateCanvasRect ( 0, 0, 600, 450 ), // defines total size of graph
     iGridFrameOffset       ( 10 ),
     iLineWidth             ( 2 ),
@@ -40,8 +41,7 @@ CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
     GraphFrameColor        ( Qt::black ), // frame
     GraphGridColor         ( Qt::gray ), // grid
     LineColor              ( Qt::blue ),
-    LineLimitColor         ( Qt::red ),
-    GraphImage             ( 1, 1, QImage::Format_RGB32 )
+    LineLimitColor         ( Qt::red )
 {
     // set the window icon and title text
     const QIcon icon = QIcon ( QString::fromUtf8 ( ":/png/main/res/mainicon.png" ) );

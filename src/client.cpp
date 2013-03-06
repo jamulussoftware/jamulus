@@ -372,13 +372,9 @@ void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 void CClient::OnOpusSupported()
 {
-// TODO do NOT switch to OPUS since the PLC seems to be much worse in OPUS
-// compared to the good old CELT version
-// -> find out why this is the case and as soon as the issue is solved,
-//    enable OPUS again...
     if ( eAudioCompressionType != CT_OPUS )
     {
-//        SetAudoCompressiontype ( CT_OPUS );
+        SetAudoCompressiontype ( CT_OPUS );
     }
 }
 

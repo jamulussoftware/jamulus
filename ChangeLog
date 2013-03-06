@@ -1,8 +1,13 @@
 3.3.1
 
+- enabled the OPUS codec
+
 - store fader level settings
 
 - improved server performance under Linux
+
+- changed the nework buffer for improved OPUS PLC
+  performance
 
 
 3.3.0

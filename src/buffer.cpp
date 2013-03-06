@@ -77,28 +77,9 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
         return false;
     }
 
-    // check for invalid data in buffer (not applicable for simulation
-    // buffers)
-    if ( ( iNumInvalidElements > 0 ) && !bIsSimulation )
-    {
-        // decrease number of invalid elements by one
-        iNumInvalidElements -= 1;
-
-        // return error flag, do not return function here since we have
-        // to call the base Get function to pick one block out of the
-        // buffer
-        bGetOK = false;
-    }
-
-    // check if there is not enough data available -> correct
+    // check if there is not enough data available
     if ( GetAvailData() < iInSize )
     {
-        // in case we have a buffer underrun, invalidate the next 15 blocks
-        // to avoid the unmusical noise resulting from a very short drop
-        // out (note that if you want to change this value, also change
-        // the value in cc6_celt_decode_lost in cc6_celt.c)
-        iNumInvalidElements = 10;
-
         return false;
     }
 

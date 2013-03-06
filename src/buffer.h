@@ -383,7 +383,6 @@ public:
 
 protected:
     int iBlockSize;
-    int iNumInvalidElements;
 };
 
 

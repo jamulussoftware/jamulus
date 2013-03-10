@@ -298,6 +298,7 @@ void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
     int                     iCeltNumCodedBytes;
     bool                    bCeltDoHighQuality;
     bool                    bUseStereo;
+    bool                    bIsInitializationPhase;
     CVector<unsigned char>  vecCeltData;
 
     CSocket                 Socket;

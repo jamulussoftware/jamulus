@@ -36,6 +36,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     iCeltNumCodedBytes               ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
     bCeltDoHighQuality               ( false ),
     bUseStereo                       ( false ),
+    bIsInitializationPhase           ( true ),
     Socket                           ( &Channel, &ConnLessProtocol, iPortNumber ),
     Sound                            ( AudioCallback, this ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
@@ -804,6 +805,9 @@ void CClient::Init()
                                            iSndCrdFrameSizeFactor,
                                            1 );
     }
+
+    // reset initialization phase flag
+    bIsInitializationPhase = true;
 }
 
 void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
@@ -1066,6 +1070,10 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         // CELT decoding
         if ( bReceiveDataOk )
         {
+            // on any valid received packet, we clear the initialization phase
+            // flag
+            bIsInitializationPhase = false;
+
             if ( bUseStereo )
             {
                 if ( eAudioCompressionType == CT_CELT )
@@ -1160,8 +1168,9 @@ fflush(pFileDelay);
 */
 
 
-    // check if channel is connected
-    if ( Channel.IsConnected() )
+    // check if channel is connected and if we do not have the initialization
+    // phase
+    if ( Channel.IsConnected() && ( !bIsInitializationPhase ) )
     {
         if ( !bUseStereo )
         {

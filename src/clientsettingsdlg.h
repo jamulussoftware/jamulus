@@ -59,6 +59,8 @@ public:
                              const int iOverallDelayMs,
                              const int iOverallDelayLEDColor );
 
+    void UpdateDisplay();
+
 protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
@@ -72,7 +74,6 @@ protected:
     CClient*     pClient;
     QTimer       TimerStatus;
     QButtonGroup SndCrdBufferDelayButtonGroup;
-    void         UpdateDisplay();
 
  public slots:
     void OnTimerStatus() { UpdateDisplay(); }

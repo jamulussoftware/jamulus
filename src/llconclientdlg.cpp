@@ -439,6 +439,10 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
         SIGNAL ( CLPingTimeWithNumClientsReceived ( CHostAddress, int, int ) ),
         this, SLOT ( OnCLPingTimeWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
+    QObject::connect ( pClient,
+        SIGNAL ( UpstreamRateChanged() ),
+        this, SLOT ( OnUpstreamRateChanged() ) );
+
     QObject::connect ( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
         this, SLOT ( OnAboutToQuit() ) );
 

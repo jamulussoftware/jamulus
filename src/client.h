@@ -65,16 +65,27 @@
 #define AUD_REVERB_MAX                          100
 
 // CELT number of coded bytes per audio packet
-// 24: mono low/normal quality   156 kbsp (128) / 114 kbps (256)
+// 24: mono low/normal quality   156 kbps (128) / 114 kbps (256)
 // 44: mono high quality         216 kbps (128) / 174 kbps (256)
 // NOTE: Must be > CELT_MINIMUM_NUM_BYTES (greater, not equal to!)
 #define CELT_NUM_BYTES_MONO_NORMAL_QUALITY      24
 #define CELT_NUM_BYTES_MONO_HIGH_QUALITY        44
 
-// 46: stereo low/normal quality   222 kbsp (128) / 180 kbps (256)
+// 46: stereo low/normal quality   222 kbps (128) / 180 kbps (256)
 // 70: stereo high quality         294 kbps (128) / 252 kbps (256)
 #define CELT_NUM_BYTES_STEREO_NORMAL_QUALITY    46
 #define CELT_NUM_BYTES_STEREO_HIGH_QUALITY      70
+
+
+// OPUS number of coded bytes per audio packet
+// TODO we have to use new numbers for OPUS to avoid that old CELT packets
+// are used in the OPUS decoder (which gives a bad noise output signal).
+// Later on when the CELT is completely removed we could set the OPUS
+// numbers back to the original CELT values (to reduce network load)
+#define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY      25
+#define OPUS_NUM_BYTES_MONO_HIGH_QUALITY        45
+#define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY    47
+#define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY      71
 
 
 /* Classes ********************************************************************/
@@ -364,6 +375,9 @@ signals:
                                             int          iPingTime,
                                             int          iNumClients );
     void Disconnected();
+
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+void UpstreamRateChanged();
 };
 
 #endif /* !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

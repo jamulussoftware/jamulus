@@ -167,6 +167,9 @@ public slots:
 
     void OnDisconnected();
 
+    void OnUpstreamRateChanged()
+        { ClientSettingsDlg.UpdateDisplay(); }
+
     void OnGUIDesignChanged()
         { SetGUIDesign ( pClient->GetGUIDesign() ); }
 

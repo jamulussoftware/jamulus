@@ -85,10 +85,6 @@ CClient::CClient ( const quint16 iPortNumber ) :
     opus_custom_encoder_ctl ( OpusEncoderMono,
                               OPUS_SET_VBR ( 0 ) );
 
-    // we expect packet loss, tell the encoder about it
-    opus_custom_encoder_ctl ( OpusEncoderMono,
-                              OPUS_SET_PACKET_LOSS_PERC ( OPUS_EXPECTED_PACKET_LOSS_PERC ) );
-
     // we want as low delay as possible
     opus_custom_encoder_ctl ( OpusEncoderMono,
                               OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
@@ -123,10 +119,6 @@ CClient::CClient ( const quint16 iPortNumber ) :
     // we require a constant bit rate
     opus_custom_encoder_ctl ( OpusEncoderStereo,
                               OPUS_SET_VBR ( 0 ) );
-
-    // we expect packet loss, tell the encoder about it
-    opus_custom_encoder_ctl ( OpusEncoderStereo,
-                              OPUS_SET_PACKET_LOSS_PERC ( OPUS_EXPECTED_PACKET_LOSS_PERC ) );
 
     // we want as low delay as possible
     opus_custom_encoder_ctl ( OpusEncoderStereo,
@@ -376,6 +368,9 @@ void CClient::OnOpusSupported()
     {
         SetAudoCompressiontype ( CT_OPUS );
     }
+
+    // inform the GUI about the change of the network rate
+    emit UpstreamRateChanged();
 }
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
@@ -724,22 +719,50 @@ void CClient::Init()
     {
         if ( bUseStereo )
         {
-            iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_HIGH_QUALITY;
+            if ( eAudioCompressionType == CT_CELT )
+            {
+                iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_HIGH_QUALITY;
+            }
+            else
+            {
+                iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
+            }
         }
         else
         {
-            iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_HIGH_QUALITY;
+            if ( eAudioCompressionType == CT_CELT )
+            {
+                iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_HIGH_QUALITY;
+            }
+            else
+            {
+                iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;
+            }
         }
     }
     else
     {
         if ( bUseStereo )
         {
-            iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_NORMAL_QUALITY;
+            if ( eAudioCompressionType == CT_CELT )
+            {
+                iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_NORMAL_QUALITY;
+            }
+            else
+            {
+                iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY;
+            }
         }
         else
         {
-            iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_NORMAL_QUALITY;
+            if ( eAudioCompressionType == CT_CELT )
+            {
+                iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_NORMAL_QUALITY;
+            }
+            else
+            {
+                iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_NORMAL_QUALITY;
+            }
         }
     }
     vecCeltData.Init ( iCeltNumCodedBytes );

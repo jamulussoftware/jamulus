@@ -251,10 +251,6 @@ CServer::CServer ( const int      iNewNumChan,
         opus_custom_encoder_ctl ( OpusEncoderMono[i],
                                   OPUS_SET_VBR ( 0 ) );
 
-        // we expect packet loss, tell the encoder about it
-        opus_custom_encoder_ctl ( OpusEncoderMono[i],
-                                  OPUS_SET_PACKET_LOSS_PERC ( OPUS_EXPECTED_PACKET_LOSS_PERC ) );
-
         // we want as low delay as possible
         opus_custom_encoder_ctl ( OpusEncoderMono[i],
                                   OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
@@ -289,10 +285,6 @@ CServer::CServer ( const int      iNewNumChan,
         // we require a constant bit rate
         opus_custom_encoder_ctl ( OpusEncoderStereo[i],
                                   OPUS_SET_VBR ( 0 ) );
-
-        // we expect packet loss, tell the encoder about it
-        opus_custom_encoder_ctl ( OpusEncoderStereo[i],
-                                  OPUS_SET_PACKET_LOSS_PERC ( OPUS_EXPECTED_PACKET_LOSS_PERC ) );
 
         // we want as low delay as possible
         opus_custom_encoder_ctl ( OpusEncoderStereo[i],

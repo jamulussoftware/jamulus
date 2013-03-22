@@ -250,10 +250,10 @@ void CNetBufWithStats::UpdateAutoSetting()
     }
 
     // apply non-linear IIR filter
-    LlconMath().UpDownIIR1( dCurIIRFilterResult,
-                            static_cast<double> ( iCurDecision ),
-                            dWeightUp,
-                            dWeightDown);
+    LlconMath().UpDownIIR1 ( dCurIIRFilterResult,
+                             static_cast<double> ( iCurDecision ),
+                             dWeightUp,
+                             dWeightDown );
 
     // apply a hysteresis
     iCurAutoBufferSizeSetting =

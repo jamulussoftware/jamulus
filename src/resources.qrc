@@ -46,7 +46,7 @@
         <file>res/instrharmonica.png</file>
     </qresource>
     <qresource prefix="/png/main" >
-        <file>res/llconfronticon.png</file>
+        <file>res/fronticon.png</file>
         <file>res/logopicture.png</file>
         <file>res/mainicon.png</file>
     </qresource>

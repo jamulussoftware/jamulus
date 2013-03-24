@@ -410,7 +410,7 @@ DISTFILES += AUTHORS \
     src/res/HLEDYellowSmall.png \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
-    src/res/llconfronticon.png \
+    src/res/fronticon.png \
     src/res/logopicture.png \
     src/res/mainicon.png \
     src/res/mixerboardbackground.png \

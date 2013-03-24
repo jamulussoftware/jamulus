@@ -69,7 +69,7 @@
                  </sizepolicy>
                 </property>
                 <property name="pixmap" >
-                 <pixmap resource="resources.qrc" >:/png/main/res/llconfronticon.png</pixmap>
+                 <pixmap resource="resources.qrc" >:/png/main/res/fronticon.png</pixmap>
                 </property>
                 <property name="alignment" >
                  <set>Qt::AlignCenter</set>

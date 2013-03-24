@@ -1,7 +1,5 @@
 VERSION = 3.3.1cvs
 
-TARGET = Jamulus
-
 CONFIG += qt \
     thread \
     release

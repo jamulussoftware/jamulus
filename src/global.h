@@ -75,14 +75,14 @@ LED bar:      lbr
 #define APP_NAME                        "Jamulus"
 
 // Windows registry key name of auto run entry for the server
-#define AUTORUN_SERVER_REG_NAME         "llcon server"
+#define AUTORUN_SERVER_REG_NAME         "Jamulus server"
 
 // default names of the ini-file for client and server
-#define DEFAULT_INI_FILE_NAME           "llcon.ini"
-#define DEFAULT_INI_FILE_NAME_SERVER    "llconserver.ini"
+#define DEFAULT_INI_FILE_NAME           "Jamulus.ini"
+#define DEFAULT_INI_FILE_NAME_SERVER    "Jamulusserver.ini"
 
 // file name for logging file
-#define DEFAULT_LOG_FILE_NAME           "llconsrvlog.txt"
+#define DEFAULT_LOG_FILE_NAME           "Jamulussrvlog.txt"
 
 // default server address
 #define DEFAULT_SERVER_ADDRESS          "llcon.dyndns.org"

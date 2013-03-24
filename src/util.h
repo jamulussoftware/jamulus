@@ -418,12 +418,12 @@ public:
 
 
 // Help menu -------------------------------------------------------------------
-class CLlconHelpMenu : public QMenu
+class CHelpMenu : public QMenu
 {
     Q_OBJECT
 
 public:
-    CLlconHelpMenu ( QWidget* parent = 0 );
+    CHelpMenu ( QWidget* parent = 0 );
 
 protected:
     CAboutDlg AboutDlg;

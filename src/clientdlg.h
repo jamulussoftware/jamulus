@@ -63,19 +63,19 @@
 
 
 /* Classes ********************************************************************/
-class CLlconClientDlg : public QDialog, private Ui_CLlconClientDlgBase
+class CClientDlg : public QDialog, private Ui_CClientDlgBase
 {
     Q_OBJECT
 
 public:
-    CLlconClientDlg ( CClient*        pNCliP,
-                      CSettings*      pNSetP,
-                      const bool      bNewConnectOnStartup,
-                      const bool      bNewDisalbeLEDs,
-                      const bool      bNewShowComplRegConnList,
-                      const bool      bShowAnalyzerConsole,
-                      QWidget*        parent = 0,
-                      Qt::WindowFlags f = 0 );
+    CClientDlg ( CClient*        pNCliP,
+                 CSettings*      pNSetP,
+                 const bool      bNewConnectOnStartup,
+                 const bool      bNewDisalbeLEDs,
+                 const bool      bNewShowComplRegConnList,
+                 const bool      bShowAnalyzerConsole,
+                 QWidget*        parent = 0,
+                 Qt::WindowFlags f = 0 );
 
 protected:
     void               SetGUIDesign ( const EGUIDesign eNewDesign );

@@ -26,11 +26,11 @@
 
 
 /* Implementation *************************************************************/
-CLlconServerDlg::CLlconServerDlg ( CServer*        pNServP,
-                                   CSettings*      pNSetP,
-                                   const bool      bStartMinimized,
-                                   QWidget*        parent,
-                                   Qt::WindowFlags f )
+CServerDlg::CServerDlg ( CServer*        pNServP,
+                         CSettings*      pNSetP,
+                         const bool      bStartMinimized,
+                         QWidget*        parent,
+                         Qt::WindowFlags f )
     : QDialog                  ( parent, f ),
       pServer                  ( pNServP ),
       pSettings                ( pNSetP ),
@@ -268,7 +268,7 @@ lvwClients->setMinimumHeight ( 140 );
     pMenu = new QMenuBar ( this );
 
     pMenu->addMenu ( pViewMenu );
-    pMenu->addMenu ( new CLlconHelpMenu ( this ) );
+    pMenu->addMenu ( new CHelpMenu ( this ) );
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
@@ -322,7 +322,7 @@ lvwClients->setMinimumHeight ( 140 );
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
 }
 
-void CLlconServerDlg::closeEvent ( QCloseEvent* Event )
+void CServerDlg::closeEvent ( QCloseEvent* Event )
 {
     // if server was registered at the central server, unregister on shutdown
     if ( pServer->GetServerListEnabled() )
@@ -334,7 +334,7 @@ void CLlconServerDlg::closeEvent ( QCloseEvent* Event )
     Event->accept();
 }
 
-void CLlconServerDlg::OnStartOnOSStartStateChanged ( int value )
+void CServerDlg::OnStartOnOSStartStateChanged ( int value )
 {
     const bool bCurAutoStartMinState = ( value == Qt::Checked );
 
@@ -343,7 +343,7 @@ void CLlconServerDlg::OnStartOnOSStartStateChanged ( int value )
     ModifyAutoStartEntry         ( bCurAutoStartMinState );
 }
 
-void CLlconServerDlg::OnDefaultCentralServerStateChanged ( int value )
+void CServerDlg::OnDefaultCentralServerStateChanged ( int value )
 {
     // apply new setting to the server and update it
     pServer->SetUseDefaultCentralServerAddress ( value == Qt::Checked );
@@ -353,7 +353,7 @@ void CLlconServerDlg::OnDefaultCentralServerStateChanged ( int value )
     UpdateGUIDependencies();
 }
 
-void CLlconServerDlg::OnRegisterServerStateChanged ( int value )
+void CServerDlg::OnRegisterServerStateChanged ( int value )
 {
     const bool bRegState = ( value == Qt::Checked );
 
@@ -372,7 +372,7 @@ void CLlconServerDlg::OnRegisterServerStateChanged ( int value )
     UpdateGUIDependencies();
 }
 
-void CLlconServerDlg::OnCentralServerAddressEditingFinished()
+void CServerDlg::OnCentralServerAddressEditingFinished()
 {
     // apply new setting to the server and update it
     pServer->SetServerListCentralServerAddress (
@@ -381,7 +381,7 @@ void CLlconServerDlg::OnCentralServerAddressEditingFinished()
     pServer->UpdateServerList();
 }
 
-void CLlconServerDlg::OnServerNameTextChanged ( const QString& strNewName )
+void CServerDlg::OnServerNameTextChanged ( const QString& strNewName )
 {
     // check length
     if ( strNewName.length() <= MAX_LEN_SERVER_NAME )
@@ -397,7 +397,7 @@ void CLlconServerDlg::OnServerNameTextChanged ( const QString& strNewName )
     }
 }
 
-void CLlconServerDlg::OnLocationCityTextChanged ( const QString& strNewCity )
+void CServerDlg::OnLocationCityTextChanged ( const QString& strNewCity )
 {
     // check length
     if ( strNewCity.length() <= MAX_LEN_SERVER_CITY )
@@ -413,7 +413,7 @@ void CLlconServerDlg::OnLocationCityTextChanged ( const QString& strNewCity )
     }
 }
 
-void CLlconServerDlg::OnLocationCountryActivated ( int iCntryListItem )
+void CServerDlg::OnLocationCountryActivated ( int iCntryListItem )
 {
     // apply new setting to the server and update it
     pServer->SetServerCountry ( static_cast<QLocale::Country> (
@@ -422,7 +422,7 @@ void CLlconServerDlg::OnLocationCountryActivated ( int iCntryListItem )
     pServer->UpdateServerList();
 }
 
-void CLlconServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason )
+void CServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason )
 {
     // on double click on the icon, show window in fore ground
     if ( ActReason == QSystemTrayIcon::DoubleClick )
@@ -431,7 +431,7 @@ void CLlconServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason Act
     }
 }
 
-void CLlconServerDlg::OnTimer()
+void CServerDlg::OnTimer()
 {
     CVector<CHostAddress> vecHostAddresses;
     CVector<QString>      vecsName;
@@ -481,7 +481,7 @@ void CLlconServerDlg::OnTimer()
     ListViewMutex.unlock();
 }
 
-void CLlconServerDlg::UpdateGUIDependencies()
+void CServerDlg::UpdateGUIDependencies()
 {
     // get the states which define the GUI dependencies from the server
     const bool bCurSerListEnabled = pServer->GetServerListEnabled();
@@ -511,7 +511,7 @@ void CLlconServerDlg::UpdateGUIDependencies()
         !bCurUseDefCentServAddr && bCurSerListEnabled );
 }
 
-void CLlconServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )
+void CServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )
 {
     if ( bSystemTrayIconAvaialbe )
     {
@@ -526,7 +526,7 @@ void CLlconServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )
     }
 }
 
-void CLlconServerDlg::ModifyAutoStartEntry ( const bool bDoAutoStart )
+void CServerDlg::ModifyAutoStartEntry ( const bool bDoAutoStart )
 {
 // auto start is currently only supported for Windows
 #ifdef _WIN32
@@ -567,7 +567,7 @@ void CLlconServerDlg::ModifyAutoStartEntry ( const bool bDoAutoStart )
     }
 }
 
-void CLlconServerDlg::changeEvent ( QEvent* pEvent )
+void CServerDlg::changeEvent ( QEvent* pEvent )
 {
     // if we have a system tray icon, we make the window invisible if it is
     // minimized
@@ -583,15 +583,15 @@ void CLlconServerDlg::changeEvent ( QEvent* pEvent )
     }
 }
 
-void CLlconServerDlg::customEvent ( QEvent* pEvent )
+void CServerDlg::customEvent ( QEvent* pEvent )
 {
     if ( pEvent->type() == QEvent::User + 11 )
     {
         ListViewMutex.lock();
         {
-            const int iMessType = ( (CLlconEvent*) pEvent )->iMessType;
-            const int iStatus   = ( (CLlconEvent*) pEvent )->iStatus;
-            const int iChanNum  = ( (CLlconEvent*) pEvent )->iChanNum;
+            const int iMessType = ( (CCustomEvent*) pEvent )->iMessType;
+            const int iStatus   = ( (CCustomEvent*) pEvent )->iStatus;
+            const int iChanNum  = ( (CCustomEvent*) pEvent )->iChanNum;
 
             switch(iMessType)
             {

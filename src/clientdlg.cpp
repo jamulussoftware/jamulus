@@ -26,14 +26,14 @@
 
 
 /* Implementation *************************************************************/
-CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
-                                   CSettings*      pNSetP,
-                                   const bool      bNewConnectOnStartup,
-                                   const bool      bNewDisalbeLEDs,
-                                   const bool      bNewShowComplRegConnList,
-                                   const bool      bShowAnalyzerConsole,
-                                   QWidget*        parent,
-                                   Qt::WindowFlags f ) :
+CClientDlg::CClientDlg ( CClient*        pNCliP,
+                         CSettings*      pNSetP,
+                         const bool      bNewConnectOnStartup,
+                         const bool      bNewDisalbeLEDs,
+                         const bool      bNewShowComplRegConnList,
+                         const bool      bShowAnalyzerConsole,
+                         QWidget*        parent,
+                         Qt::WindowFlags f ) :
     QDialog            ( parent, f ),
     pClient            ( pNCliP ),
     pSettings          ( pNSetP ),
@@ -339,7 +339,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     pMenu = new QMenuBar ( this );
 
     pMenu->addMenu ( pViewMenu );
-    pMenu->addMenu ( new CLlconHelpMenu ( this ) );
+    pMenu->addMenu ( new CHelpMenu ( this ) );
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
@@ -473,7 +473,7 @@ CLlconClientDlg::CLlconClientDlg ( CClient*        pNCliP,
     TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
 }
 
-void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
+void CClientDlg::closeEvent ( QCloseEvent* Event )
 {
     // if settings/connect dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
@@ -501,7 +501,7 @@ void CLlconClientDlg::closeEvent ( QCloseEvent* Event )
     Event->accept();
 }
 
-void CLlconClientDlg::UpdateAudioFaderSlider()
+void CClientDlg::UpdateAudioFaderSlider()
 {
     // update slider and label of audio fader
     const int iCurAudInFader = pClient->GetAudioInFader();
@@ -530,7 +530,7 @@ void CLlconClientDlg::UpdateAudioFaderSlider()
     }
 }
 
-void CLlconClientDlg::UpdateRevSelection()
+void CClientDlg::UpdateRevSelection()
 {
     if ( pClient->GetUseStereo() )
     {
@@ -557,20 +557,20 @@ void CLlconClientDlg::UpdateRevSelection()
     }
 }
 
-void CLlconClientDlg::OnAudioPanValueChanged ( int value )
+void CClientDlg::OnAudioPanValueChanged ( int value )
 {
     pClient->SetAudioInFader ( value );
     UpdateAudioFaderSlider();
 }
 
-void CLlconClientDlg::OnConnectDisconBut()
+void CClientDlg::OnConnectDisconBut()
 {
     // the connect/disconnect button implements a toggle functionality
     // -> apply inverted running state
     ConnectDisconnect ( !pClient->IsRunning() );
 }
 
-void CLlconClientDlg::OnInstPictureBut()
+void CClientDlg::OnInstPictureBut()
 {
     // open a menu which shows all available instrument pictures which
     // always appears at the same position relative to the instrument
@@ -578,7 +578,7 @@ void CLlconClientDlg::OnInstPictureBut()
     pInstrPictPopupMenu->exec ( this->mapToGlobal ( butInstPicture->pos() ) );
 }
 
-void CLlconClientDlg::OnInstPicturesMenuTriggered ( QAction* SelAction )
+void CClientDlg::OnInstPicturesMenuTriggered ( QAction* SelAction )
 {
     // get selected instrument
     const int iSelInstrument = SelAction->data().toInt();
@@ -594,7 +594,7 @@ void CLlconClientDlg::OnInstPicturesMenuTriggered ( QAction* SelAction )
         CInstPictures::GetResourceReference ( iSelInstrument ) ) );
 }
 
-void CLlconClientDlg::OnChatTextReceived ( QString strChatText )
+void CClientDlg::OnChatTextReceived ( QString strChatText )
 {
     // init flag (will maybe overwritten later in this function)
     bUnreadChatMessage = false;
@@ -617,7 +617,7 @@ void CLlconClientDlg::OnChatTextReceived ( QString strChatText )
     UpdateDisplay();
 }
 
-void CLlconClientDlg::OnDisconnected()
+void CClientDlg::OnDisconnected()
 {
     // channel is now disconnected, clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
@@ -625,19 +625,19 @@ void CLlconClientDlg::OnDisconnected()
     UpdateDisplay();
 }
 
-void CLlconClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
+void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 {
     // update mixer board with the additional client infos
     MainMixerBoard->ApplyNewConClientList ( vecChanInfo );
 }
 
-void CLlconClientDlg::OnNumClientsChanged ( int iNewNumClients )
+void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
 {
     // update window title
     SetMyWindowTitle ( iNewNumClients );
 }
 
-void CLlconClientDlg::SetMyWindowTitle ( const int iNumClients )
+void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 {
     // show number of connected clients in window title (and therefore also in
     // the task bar of the OS)
@@ -660,7 +660,7 @@ void CLlconClientDlg::SetMyWindowTitle ( const int iNumClients )
     }
 }
 
-void CLlconClientDlg::ShowGeneralSettings()
+void CClientDlg::ShowGeneralSettings()
 {
     // open general settings dialog
     ClientSettingsDlg.show();
@@ -670,7 +670,7 @@ void CLlconClientDlg::ShowGeneralSettings()
     ClientSettingsDlg.activateWindow();
 }
 
-void CLlconClientDlg::ShowChatWindow()
+void CClientDlg::ShowChatWindow()
 {
     // open chat dialog
     ChatDlg.show();
@@ -685,7 +685,7 @@ void CLlconClientDlg::ShowChatWindow()
     UpdateDisplay();
 }
 
-void CLlconClientDlg::ShowAnalyzerConsole()
+void CClientDlg::ShowAnalyzerConsole()
 {
     // open analyzer console dialog
     AnalyzerConsole.show();
@@ -695,7 +695,7 @@ void CLlconClientDlg::ShowAnalyzerConsole()
     AnalyzerConsole.activateWindow();
 }
 
-void CLlconClientDlg::OnSettingsStateChanged ( int value )
+void CClientDlg::OnSettingsStateChanged ( int value )
 {
     if ( value == Qt::Checked )
     {
@@ -707,7 +707,7 @@ void CLlconClientDlg::OnSettingsStateChanged ( int value )
     }
 }
 
-void CLlconClientDlg::OnChatStateChanged ( int value )
+void CClientDlg::OnChatStateChanged ( int value )
 {
     if ( value == Qt::Checked )
     {
@@ -719,7 +719,7 @@ void CLlconClientDlg::OnChatStateChanged ( int value )
     }
 }
 
-void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
+void CClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
 {
     // check length
     if ( strNewName.length() <= MAX_LEN_FADER_TAG )
@@ -737,7 +737,7 @@ void CLlconClientDlg::OnFaderTagTextChanged ( const QString& strNewName )
     }
 }
 
-void CLlconClientDlg::OnTimerSigMet()
+void CClientDlg::OnTimerSigMet()
 {
     // get current input levels
     double dCurSigLevelL = pClient->MicLevelL();
@@ -770,13 +770,13 @@ void CLlconClientDlg::OnTimerSigMet()
     lbrInputLevelR->setValue ( (int) ceil ( dCurSigLevelR ) );
 }
 
-void CLlconClientDlg::OnTimerPing()
+void CClientDlg::OnTimerPing()
 {
     // send ping message to the server
     pClient->CreateCLPingMes();
 }
 
-void CLlconClientDlg::OnPingTimeResult ( int iPingTime )
+void CClientDlg::OnPingTimeResult ( int iPingTime )
 {
     // calculate overall delay
     const int iOverallDelayMs = pClient->EstimatedOverallDelay ( iPingTime );
@@ -813,9 +813,9 @@ void CLlconClientDlg::OnPingTimeResult ( int iPingTime )
     ledDelay->SetLight ( iOverallDelayLEDColor );
 }
 
-void CLlconClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
-                                                           int          iPingTime,
-                                                           int          iNumClients )
+void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
+                                                      int          iPingTime,
+                                                      int          iNumClients )
 {
     // color definition: <= 25 ms green, <= 50 ms yellow, otherwise red
     int iPingTimeLEDColor;
@@ -842,8 +842,8 @@ void CLlconClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr
                                                 iNumClients );
 }
 
-void CLlconClientDlg::ConnectDisconnect ( const bool bDoStart,
-                                          const bool bConnectOnStartup )
+void CClientDlg::ConnectDisconnect ( const bool bDoStart,
+                                     const bool bConnectOnStartup )
 {
     // start/stop client, set button text
     if ( bDoStart )
@@ -995,7 +995,7 @@ ledChat->Reset();
     }
 }
 
-void CLlconClientDlg::UpdateDisplay()
+void CClientDlg::UpdateDisplay()
 {
     // update status LEDs
     if ( pClient->IsRunning() )
@@ -1050,7 +1050,7 @@ void CLlconClientDlg::UpdateDisplay()
     }
 }
 
-void CLlconClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
+void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
 {
     // apply GUI design to current window
     switch ( eNewDesign )
@@ -1108,12 +1108,12 @@ rbtReverbSelR->setStyleSheet ( "" );
     MainMixerBoard->SetGUIDesign ( eNewDesign );
 }
 
-void CLlconClientDlg::customEvent ( QEvent* Event )
+void CClientDlg::customEvent ( QEvent* Event )
 {
     if ( Event->type() == QEvent::User + 11 )
     {
-        const int iMessType = ( (CLlconEvent*) Event )->iMessType;
-        const int iStatus =   ( (CLlconEvent*) Event )->iStatus;
+        const int iMessType = ( (CCustomEvent*) Event )->iMessType;
+        const int iStatus =   ( (CCustomEvent*) Event )->iStatus;
 
         switch ( iMessType )
         {

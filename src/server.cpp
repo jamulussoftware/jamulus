@@ -1410,7 +1410,7 @@ void CServer::customEvent ( QEvent* pEvent )
 {
     if ( pEvent->type() == QEvent::User + 11 )
     {
-        const int iMessType = ( (CLlconEvent*) pEvent )->iMessType;
+        const int iMessType = ( (CCustomEvent*) pEvent )->iMessType;
 
         switch ( iMessType )
         {

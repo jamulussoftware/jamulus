@@ -402,7 +402,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
 
 
 // Help menu -------------------------------------------------------------------
-CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
+CHelpMenu::CHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
 {
     // standard help menu consists of about and what's this help
     addAction ( tr ( "What's &This" ), this,

@@ -174,7 +174,7 @@ void CSocket::OnDataReceived()
                 // tell the server object to wake up if it
                 // is in sleep mode (Qt will delete the event object when done)
                 QCoreApplication::postEvent ( pServer,
-                    new CLlconEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
+                    new CCustomEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
             }
         }
     }

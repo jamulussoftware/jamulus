@@ -46,16 +46,16 @@
 
 
 /* Classes ********************************************************************/
-class CLlconServerDlg : public QDialog, private Ui_CLlconServerDlgBase
+class CServerDlg : public QDialog, private Ui_CServerDlgBase
 {
     Q_OBJECT
 
 public:
-    CLlconServerDlg ( CServer*        pNServP,
-                      CSettings*      pNSetP,
-                      const bool      bStartMinimized,
-                      QWidget*        parent = 0,
-                      Qt::WindowFlags f = 0 );
+    CServerDlg ( CServer*        pNServP,
+                 CSettings*      pNSetP,
+                 const bool      bStartMinimized,
+                 QWidget*        parent = 0,
+                 Qt::WindowFlags f = 0 );
 
 protected:
     virtual void customEvent ( QEvent* pEvent );

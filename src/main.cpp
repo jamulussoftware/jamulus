@@ -403,14 +403,14 @@ int main ( int argc, char** argv )
             Settings.Load();
 
             // GUI object
-            CLlconClientDlg ClientDlg ( &Client,
-                                        &Settings,
-                                        bConnectOnStartup,
-                                        bDisalbeLEDs,
-                                        bShowComplRegConnList,
-                                        bShowAnalyzerConsole,
-                                        0,
-                                        Qt::Window );
+            CClientDlg ClientDlg ( &Client,
+                                   &Settings,
+                                   bConnectOnStartup,
+                                   bDisalbeLEDs,
+                                   bShowComplRegConnList,
+                                   bShowAnalyzerConsole,
+                                   0,
+                                   Qt::Window );
 
             // set main window
             pMainWindow = &ClientDlg;
@@ -451,11 +451,11 @@ int main ( int argc, char** argv )
                 Server.UpdateServerList();
 
                 // GUI object for the server
-                CLlconServerDlg ServerDlg ( &Server,
-                                            &Settings,
-                                            bStartMinimized,
-                                            0,
-                                            Qt::Window );
+                CServerDlg ServerDlg ( &Server,
+                                       &Settings,
+                                       bStartMinimized,
+                                       0,
+                                       Qt::Window );
 
                 // set main window
                 pMainWindow = &ServerDlg;
@@ -643,10 +643,10 @@ void PostWinMessage ( const _MESSAGE_IDENT MessID,
     // first check if application is initialized
     if ( pApp != NULL )
     {
-        CLlconEvent* LlconEv =
-            new CLlconEvent ( MessID, iMessageParam, iChanNum );
+        CCustomEvent* CustomEvent =
+            new CCustomEvent ( MessID, iMessageParam, iChanNum );
 
         // Qt will delete the event object when done
-        QCoreApplication::postEvent ( pMainWindow, LlconEv );
+        QCoreApplication::postEvent ( pMainWindow, CustomEvent );
     }
 }

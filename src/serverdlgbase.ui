@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>CLlconServerDlgBase</class>
- <widget class="QDialog" name="CLlconServerDlgBase" >
+ <class>CServerDlgBase</class>
+ <widget class="QDialog" name="CServerDlgBase" >
   <property name="geometry" >
    <rect>
     <x>0</x>

@@ -3,7 +3,7 @@
  * \author    Volker Fischer
  *
 
-\mainpage Llcon source code documentation
+\mainpage Jamulus source code documentation
 
 \section intro_sec Introduction
 
@@ -285,10 +285,10 @@ protected:
     QString strErrorType;
 };
 
-class CLlconEvent : public QEvent
+class CCustomEvent : public QEvent
 {
 public:
-    CLlconEvent ( int iNewMeTy, int iNewSt, int iNewChN = 0 ) : 
+    CCustomEvent ( int iNewMeTy, int iNewSt, int iNewChN = 0 ) :
         QEvent ( QEvent::Type ( QEvent::User + 11 ) ), iMessType ( iNewMeTy ), iStatus ( iNewSt ),
         iChanNum ( iNewChN ) {}
 

@@ -41,6 +41,7 @@ win32 {
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp
     RC_FILE = mac/mainicon.icns
+	CONFIG += x86
 
     LIBS += -framework CoreFoundation \
         -framework CoreServices \

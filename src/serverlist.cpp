@@ -118,7 +118,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                               true );
 
         // [server n address]
-        LlconNetwUtil().ParseNetworkAddress (
+        NetworkUtil().ParseNetworkAddress (
             slServInfoSeparateParams[iCurUsedServInfoSplitItems],
             NewServerListEntry.HostAddr );
 
@@ -469,8 +469,8 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
     // Note that we always have to parse the server address again since if
     // it is an URL of a dynamic IP address, the IP address might have
     // changed in the meanwhile.
-    if ( LlconNetwUtil().ParseNetworkAddress ( strCurCentrServAddr,
-                                               SlaveCurCentServerHostAddress ) )
+    if ( NetworkUtil().ParseNetworkAddress ( strCurCentrServAddr,
+                                             SlaveCurCentServerHostAddress ) )
     {
         if ( bIsRegister )
         {

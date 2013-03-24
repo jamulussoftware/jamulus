@@ -159,8 +159,8 @@ void CConnectDlg::showEvent ( QShowEvent* )
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
     // time to do it
-    if ( LlconNetwUtil().ParseNetworkAddress ( strCentralServerAddress,
-                                               CentralServerAddress ) )
+    if ( NetworkUtil().ParseNetworkAddress ( strCentralServerAddress,
+                                             CentralServerAddress ) )
     {
         // send the request for the server list
         emit ReqServerListQuery ( CentralServerAddress );
@@ -371,7 +371,7 @@ void CConnectDlg::OnTimerPing()
 
         // try to parse host address string which is stored as user data
         // in the server list item GUI control element
-        if ( LlconNetwUtil().ParseNetworkAddress (
+        if ( NetworkUtil().ParseNetworkAddress (
                 lvwServers->topLevelItem ( iIdx )->
                 data ( 0, Qt::UserRole ).toString(),
                 CurServerAddress ) )

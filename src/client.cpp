@@ -319,8 +319,8 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
 bool CClient::SetServerAddr ( QString strNAddr )
 {
     CHostAddress HostAddress;
-    if ( LlconNetwUtil().ParseNetworkAddress ( strNAddr,
-                                               HostAddress ) )
+    if ( NetworkUtil().ParseNetworkAddress ( strNAddr,
+                                             HostAddress ) )
     {
         // apply address to the channel
         Channel.SetAddress ( HostAddress );
@@ -1231,5 +1231,5 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
         dTotalSoundCardDelayMs +
         dAdditionalAudioCodecDelayMs;
 
-    return LlconMath::round ( dTotalBufferDelayMs + iPingTimeMs );
+    return MathUtils::round ( dTotalBufferDelayMs + iPingTimeMs );
 }

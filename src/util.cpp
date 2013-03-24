@@ -421,8 +421,8 @@ CLlconHelpMenu::CLlconHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
 * Other Classes                                                                *
 \******************************************************************************/
 // Network utility functions ---------------------------------------------------
-bool LlconNetwUtil::ParseNetworkAddress ( QString       strAddress,
-                                          CHostAddress& HostAddress )
+bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
+                                        CHostAddress& HostAddress )
 {
     QHostAddress InetAddr;
     quint16      iNetPort = LLCON_DEFAULT_PORT_NUMBER;

@@ -851,7 +851,7 @@ public:
 
 
 // Network utility functions ---------------------------------------------------
-class LlconNetwUtil
+class NetworkUtil
 {
 public:
     static bool ParseNetworkAddress ( QString       strAddress,
@@ -900,7 +900,7 @@ protected:
 
 
 // Mathematics utilities -------------------------------------------------------
-class LlconMath
+class MathUtils
 {
 public:
     static int round ( double x )

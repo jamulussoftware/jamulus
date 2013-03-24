@@ -8,6 +8,12 @@
 
 - changed the nework buffer for improved OPUS PLC
   performance
+  
+- added protocol overhead for DSL line for upload rate calculation
+
+- fixed outstanding renaming from llcon to Jamulus
+
+- bug fix: the overall delay was not correctly calculated
 
 
 3.3.0

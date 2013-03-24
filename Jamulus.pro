@@ -40,7 +40,7 @@ win32 {
 } else:macx {
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp
-    RC_FILE = mac/llcon.icns
+    RC_FILE = mac/mainicon.icns
 
     LIBS += -framework CoreFoundation \
         -framework CoreServices \
@@ -65,10 +65,10 @@ win32 {
     # Linux is our source distribution, include sources from other OSs
     DISTFILES += mac/sound.h \
         mac/sound.cpp \
-        mac/llcon.icns \
+        mac/mainicon.icns \
         windows/sound.h \
         windows/sound.cpp \
-        windows/llcon.rc \
+        windows/mainicon.rc \
         windows/mainicon.ico
 }
 

@@ -29,7 +29,7 @@ win32 {
         windows/ASIOSDK2/common/asio.cpp \
         windows/ASIOSDK2/host/asiodrivers.cpp \
         windows/ASIOSDK2/host/pc/asiolist.cpp
-    RC_FILE = windows/llcon.rc
+    RC_FILE = windows/mainicon.rc
     INCLUDEPATH += windows/ASIOSDK2/common \
         windows/ASIOSDK2/host \
         windows/ASIOSDK2/host/pc

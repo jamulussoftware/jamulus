@@ -85,7 +85,7 @@ LED bar:      lbr
 #define DEFAULT_LOG_FILE_NAME           "Jamulussrvlog.txt"
 
 // default server address
-#define DEFAULT_SERVER_ADDRESS          "llcon.dyndns.org"
+#define DEFAULT_SERVER_ADDRESS          "jamulus.dyndns.org"
 #define SELECT_SERVER_ADDRESS(a, b)     ((a) ? (DEFAULT_SERVER_ADDRESS) : (b))
 
 // download URL

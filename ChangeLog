@@ -10,7 +10,7 @@
 
 - improved server performance under Linux
 
-- changed the nework buffer for improved OPUS PLC
+- changed the network buffer for improved OPUS PLC
   performance
   
 - added protocol overhead for DSL line for upload rate calculation

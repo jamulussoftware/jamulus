@@ -1,3 +1,5 @@
+VERSION = 3.3.1cvs
+
 TARGET = Jamulus
 
 CONFIG += qt \
@@ -15,7 +17,8 @@ INCLUDEPATH += src \
     libs/opus/silk \
     libs/opus/silk/float
 
-DEFINES += OPUS_BUILD \
+DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
+    OPUS_BUILD \
     USE_ALLOCA \
     CUSTOM_MODES \
     _REENTRANT

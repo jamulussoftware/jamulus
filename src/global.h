@@ -69,9 +69,9 @@ LED bar:      lbr
 //#define _DEBUG_
 #undef _DEBUG_
 
-// version and application name (always use this version)
+// version and application name (use version from qt prject file)
 #undef VERSION
-#define VERSION                         "3.3.1cvs"
+#define VERSION                         APP_VERSION
 #define APP_NAME                        "Jamulus"
 
 // Windows registry key name of auto run entry for the server

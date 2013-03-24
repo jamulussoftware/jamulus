@@ -1,8 +1,8 @@
-; llcon NSIS installer script
+; Jamulus NSIS installer script
 
 !define APP_NAME          "Jamulus"
 !define APP_EXE           "Jamulus.exe"
-!define AUTORUN_NAME      "llcon server"
+!define AUTORUN_NAME      "Jamulus server"
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define INSTALLER_NAME    "Jamulusinstaller.exe"
 !define BINARY_PATH       "..\release\"

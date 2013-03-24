@@ -7,9 +7,9 @@
 
 \section intro_sec Introduction
 
-The llcon software enables musicians to perform real-time jam sessions over the
-internet. There is one server running the llcon server software which collects
-the audio data from each llcon client, mixes the audio data and sends the mix
+The Jamulus software enables musicians to perform real-time jam sessions over the
+internet. There is one server running the Jamulus server software which collects
+the audio data from each Jamulus client, mixes the audio data and sends the mix
 back to each client.
 
 

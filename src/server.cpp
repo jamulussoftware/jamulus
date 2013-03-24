@@ -39,7 +39,7 @@ CHighPrecisionTimer::CHighPrecisionTimer()
 #endif
 
     // Since QT only supports a minimum timer resolution of 1 ms but for our
-    // llcon server we require a timer interval of 2.333 ms for 128 samples
+    // server we require a timer interval of 2.333 ms for 128 samples
     // frame size at 48 kHz sampling rate.
     // To support this interval, we use a timer with 2 ms
     // resolution and fire the actual frame timer if the error to the actual
@@ -1284,7 +1284,7 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
             vecChannels[iCurChanID].CreateReqChanInfoMes();
 
 // COMPATIBILITY ISSUE
-// since old versions of the llcon software did not implement the channel name
+// since old versions of the software did not implement the channel name
 // request message, we have to explicitely send the channel list here
 CreateAndSendChanListForAllConChannels();
 

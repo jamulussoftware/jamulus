@@ -480,7 +480,7 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                     eRet = PS_PROT_ERR;
                 }
 
-                // all network packets except of valid llcon protocol messages
+                // all network packets except of valid protocol messages
                 // regardless if they are valid or invalid audio packets lead to
                 // a state change to a connected channel
                 // this is because protocol messages can only be sent on a

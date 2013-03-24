@@ -191,8 +191,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
             // try to load the selected driver, if this fails, we try to load
             // the first available driver in the system. If this fails, too, we
             // throw an error that no driver is available -> it does not make
-            // sense to start the llcon software if no audio hardware is
-            // available.
+            // sense to start the software if no audio hardware is available.
             if ( !LoadAndInitializeDriver ( iNewDev ).isEmpty() )
             {
                 // loading and initializing the new driver failed, try to find

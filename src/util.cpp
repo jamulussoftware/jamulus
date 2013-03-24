@@ -310,7 +310,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     // set the text for the about dialog html text control
     txvCredits->setOpenExternalLinks ( true );
     txvCredits->setText (
-        "<p>" // general description of llcon software
+        "<p>" // general description of software
         "<big>" + tr( "The " ) + APP_NAME +
         tr ( " software enables musicians to perform real-time jam sessions "
         "over the internet. There is a " ) + APP_NAME + tr ( " "
@@ -330,7 +330,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 "
         "USA"
         "</font></p><br>"
-        "<p><b>" + APP_NAME + // libraries used by this compilation of llcon
+        "<p><b>" + APP_NAME + // libraries used by this compilation
         tr ( " uses the following libraries, resources or code snippets:" ) +
         "</b></p>"
         "<ul>"

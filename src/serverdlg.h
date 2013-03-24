@@ -37,7 +37,7 @@
 #include "server.h"
 #include "settings.h"
 #include "multicolorled.h"
-#include "ui_llconserverdlgbase.h"
+#include "ui_serverdlgbase.h"
 
 
 /* Definitions ****************************************************************/

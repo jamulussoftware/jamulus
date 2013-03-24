@@ -75,8 +75,8 @@ win32 {
 RCC_DIR = src/res
 RESOURCES += src/resources.qrc
 
-FORMS += src/llconclientdlgbase.ui \
-    src/llconserverdlgbase.ui \
+FORMS += src/clientdlgbase.ui \
+    src/serverdlgbase.ui \
     src/clientsettingsdlgbase.ui \
     src/chatdlgbase.ui \
     src/connectdlgbase.ui \
@@ -90,8 +90,8 @@ HEADERS += src/audiomixerboard.h \
     src/clientsettingsdlg.h \
     src/connectdlg.h \
     src/global.h \
-    src/llconclientdlg.h \
-    src/llconserverdlg.h \
+    src/clientdlg.h \
+    src/serverdlg.h \
     src/multicolorled.h \
     src/multicolorledbar.h \
     src/protocol.h \
@@ -199,8 +199,8 @@ SOURCES += src/audiomixerboard.cpp \
     src/client.cpp \
     src/clientsettingsdlg.cpp \
     src/connectdlg.cpp \
-    src/llconclientdlg.cpp \
-    src/llconserverdlg.cpp \
+    src/clientdlg.cpp \
+    src/serverdlg.cpp \
     src/main.cpp \
     src/multicolorled.cpp \
     src/multicolorledbar.cpp \

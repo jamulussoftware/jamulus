@@ -674,13 +674,13 @@ void CClient::Init()
     {
         // An unsupported sound card buffer size is currently used -> we have
         // to use a conversion buffer. Per definition we use the smallest buffer
-        // size as llcon frame size
+        // size as the current frame size
 
         // store actual sound card buffer size (stereo)
         iSndCardMonoBlockSizeSamConvBuff             = iMonoBlockSizeSam;
         const int iSndCardStereoBlockSizeSamConvBuff = 2 * iMonoBlockSizeSam;
 
-        // overwrite block size by smallest supported llcon buffer size
+        // overwrite block size by smallest supported buffer size
         iSndCrdFrameSizeFactor = FRAME_SIZE_FACTOR_PREFERRED;
         iMonoBlockSizeSam =
             SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED;

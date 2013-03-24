@@ -8,13 +8,13 @@
 Currently, if you want to run a private server, you have to open the firewall of
 your computer at the correct ports and introduce a port forwarding at your
 router to get it work. Using a central server simplifies the process. The user
-who wants to run a llcon server just registers his server a the central server
+who wants to run a server just registers his server a the central server
 and a mechanism implemented in the protocol opens the firewall similar to STUN.
 
 REQUIREMENTS:
 
-The client sets the URL of the central llcon server and can get a list of all
-currently activated and registered private llcon servers. If the user clicks on
+The client sets the URL of the central server and can get a list of all
+currently activated and registered private servers. If the user clicks on
 the server of his choice, he gets connected to this server.
 
 The server list must be available in both cases: if the client is connected to

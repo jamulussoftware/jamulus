@@ -2,7 +2,7 @@
 cd ..
 
 make distclean
-qmake llcon.pro
+qmake Jamulus.pro
 make -j2
 make dist
 

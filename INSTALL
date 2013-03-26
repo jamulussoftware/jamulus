@@ -42,6 +42,7 @@ Required packages: QT4 (devel packages, too!), Jack (devel packages, too!)
 				   sudo apt-get install build-essential libqt4-dev libjack-dev
 
 - qmake Jamulus.pro
+- make clean
 - make
 - run ./Jamulus
 

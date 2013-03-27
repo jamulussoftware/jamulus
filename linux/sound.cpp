@@ -32,6 +32,7 @@ void CSound::OpenJack()
 
     // try to become a client of the JACK server
     pJackClient = jack_client_open ( APP_NAME, JackNullOption, &JackStatus );
+
     if ( pJackClient == NULL )
     {
         throw CGenErr ( tr ( "Jack server not running" ) );
@@ -51,7 +52,10 @@ void CSound::OpenJack()
 if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
 {
     throw CGenErr ( tr ( "Jack server sample rate is different from "
-        "required one" ) );
+        "the required one. The required sample rate is: " ) +
+        QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + tr ( " Hz. You can "
+        "use a tool like QJackCtrl to adjust the Jack server sample "
+        "rate." ) );
 }
 
     // create four ports (two for input, two for output -> stereo)

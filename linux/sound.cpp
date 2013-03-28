@@ -1,10 +1,11 @@
 /******************************************************************************\
- * Copyright (c) 2004-2011
+ * Copyright (c) 2004-2013
  *
  * Author(s):
  *  Volker Fischer
  *
  * This code is based on the simple_client example of the Jack audio interface.
+ *
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -35,7 +36,11 @@ void CSound::OpenJack()
 
     if ( pJackClient == NULL )
     {
-        throw CGenErr ( tr ( "Jack server not running" ) );
+        throw CGenErr ( tr ( "The Jack server is not running. This software "
+            "requires a Jack server to run. Normally if the Jack server is "
+            "not running this software will automatically start the Jack server. "
+            "It seems that this auto start has not worked. Try to start the Jack "
+            "server manually." ) );
     }
 
     // tell the JACK server to call "process()" whenever
@@ -48,15 +53,18 @@ void CSound::OpenJack()
     // register shutdown callback function
     jack_on_shutdown ( pJackClient, shutdownCallback, this );
 
-// TEST check sample rate, if not correct, just fire error
-if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
-{
-    throw CGenErr ( tr ( "Jack server sample rate is different from "
-        "the required one. The required sample rate is: " ) +
-        QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + tr ( " Hz. You can "
-        "use a tool like QJackCtrl to adjust the Jack server sample "
-        "rate." ) );
-}
+    // check sample rate, if not correct, just fire error
+    if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
+    {
+        throw CGenErr ( tr ( "The Jack server sample rate is different from "
+            "the required one. The required sample rate is: <b>" ) +
+            QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + tr ( " Hz</b>. You can "
+            "use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
+            "to adjust the Jack server sample rate.<br>Make sure to set the "
+            "<b>Frames/Period</b> to a low value like <b>" ) +
+            QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) +
+            tr ( "</b> to achieve a low delay." ) );
+    }
 
     // create four ports (two for input, two for output -> stereo)
     input_port_left = jack_port_register ( pJackClient, "input left",
@@ -76,7 +84,7 @@ if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
          ( output_port_left  == NULL ) ||
          ( output_port_right == NULL ) )
     {
-        throw CGenErr ( tr ( "Jack port registering failed" ) );
+        throw CGenErr ( tr ( "The Jack port registering failed." ) );
     }
 
     const char** ports;
@@ -84,7 +92,7 @@ if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
     // tell the JACK server that we are ready to roll
     if ( jack_activate ( pJackClient ) )
     {
-        throw CGenErr ( tr ( "Cannot activate client" ) );
+        throw CGenErr ( tr ( "Cannot activate the Jack client." ) );
     }
 
     // connect the ports, note: you cannot do this before
@@ -94,21 +102,31 @@ if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
     if ( ( ports = jack_get_ports ( pJackClient, NULL, NULL,
            JackPortIsPhysical | JackPortIsOutput ) ) == NULL )
     {
-        throw CGenErr ( tr ( "Cannot find any physical capture ports" ) );
+        throw CGenErr ( tr ( "There are no physical capture ports available. "
+            "This software requires at least one stereo input channel available. "
+            "Maybe you have selected the wrong sound card in the Jack server "
+            "configuration.<br>"
+            "You can use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
+            "to adjust the Jack server settings." ) );
     }
 
     if ( !ports[1] )
     {
-        throw CGenErr ( tr ( "Cannot find enough physical capture ports" ) );
+        throw CGenErr ( tr ( "There are no physical capture ports available. "
+            "This software requires at least one stereo input channel available. "
+            "Maybe you have selected the wrong sound card in the Jack server "
+            "configuration.<br>"
+            "You can use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
+            "to adjust the Jack server settings." ) );
     }
 
     if ( jack_connect ( pJackClient, ports[0], jack_port_name ( input_port_left ) ) )
     {
-        throw CGenErr ( tr ( "Cannot connect input ports" ) );
+        throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
     }
     if ( jack_connect ( pJackClient, ports[1], jack_port_name ( input_port_right ) ) )
     {
-        throw CGenErr ( tr ( "Cannot connect input ports" ) );
+        throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
     }
 
     free ( ports );
@@ -116,21 +134,31 @@ if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
     if ( ( ports = jack_get_ports ( pJackClient, NULL, NULL,
            JackPortIsPhysical | JackPortIsInput ) ) == NULL )
     {
-        throw CGenErr ( tr ( "Cannot find any physical playback ports" ) );
+        throw CGenErr ( tr ( "There are no physical playback ports available. "
+            "This software requires at least one stereo output channel available. "
+            "Maybe you have selected the wrong sound card in the Jack server "
+            "configuration.<br>"
+            "You can use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
+            "to adjust the Jack server settings." ) );
     }
 
     if ( !ports[1] )
     {
-        throw CGenErr ( tr ( "Cannot find enough physical playback ports" ) );
+        throw CGenErr ( tr ( "There are no physical playback ports available. "
+            "This software requires at least one stereo output channel available. "
+            "Maybe you have selected the wrong sound card in the Jack server "
+            "configuration.<br>"
+            "You can use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
+            "to adjust the Jack server settings." ) );
     }
 
     if ( jack_connect ( pJackClient, jack_port_name ( output_port_left ), ports[0] ) )
     {
-        throw CGenErr ( tr ( "Cannot connect output ports" ) );
+        throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
     }
     if ( jack_connect ( pJackClient, jack_port_name ( output_port_right ), ports[1] ) )
     {
-        throw CGenErr ( tr ( "Cannot connect output ports" ) );
+        throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
     }
 
     free ( ports );
@@ -269,7 +297,9 @@ void CSound::shutdownCallback ( void* )
 {
     // without a Jack server, our software makes no sense to run, throw
     // error message
-    throw CGenErr ( tr ( "Jack server was shut down" ) );
+    throw CGenErr ( tr ( "The Jack server was shut down. This software "
+        "requires a Jack server to run. Try to restart the software to "
+        "solve the issue." ) );
 }
 #endif // WITH_SOUND
 

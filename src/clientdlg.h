@@ -80,13 +80,15 @@ public:
 protected:
     void               SetGUIDesign ( const EGUIDesign eNewDesign );
     void               SetMyWindowTitle ( const int iNumClients );
+    void               ShowConnectionSetupDialog();
     void               ShowGeneralSettings();
     void               ShowChatWindow();
     void               ShowAnalyzerConsole();
     void               UpdateAudioFaderSlider();
     void               UpdateRevSelection();
-    void               ConnectDisconnect ( const bool bDoStart,
-                                           const bool bConnectOnStartup = false );
+    void               Connect ( const QString& strSelectedAddress,
+                                 const QString& strMixerBoardLabel );
+    void               Disconnect();
 
     CClient*           pClient;
     CSettings*         pSettings;
@@ -125,6 +127,7 @@ public slots:
                                               int          iPingTime,
                                               int          iNumClients );
 
+    void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
@@ -165,6 +168,7 @@ public slots:
                                   CVector<CServerInfo> vecServerInfo )
         { ConnectDlg.SetServerList ( InetAddr, vecServerInfo ); }
 
+    void OnConnectDlgAccepted();
     void OnDisconnected();
 
     void OnUpstreamRateChanged()

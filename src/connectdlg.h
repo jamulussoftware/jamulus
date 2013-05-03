@@ -61,7 +61,6 @@ public:
                                           const int     iPingTimeLEDColor,
                                           const int     iNumClients );
 
-    bool GetStateOK() const { return bStateOK; }
     bool GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }
     QString GetSelectedServerName() const { return strSelectedServerName; }
@@ -79,7 +78,6 @@ protected:
     QString          strSelectedServerName;
     bool             bShowCompleteRegList;
     bool             bServerListReceived;
-    bool             bStateOK;
     bool             bServerListItemWasChosen;
 
 public slots:

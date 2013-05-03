@@ -279,16 +279,24 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     SetMyWindowTitle ( 0 );
 
 
-    // connect on startup ---
+    // Connect on startup ------------------------------------------------------
     if ( bNewConnectOnStartup )
     {
-        // since the software starts up right now, the previous state was
-        // "not connected" so we start the connection
-        ConnectDisconnect ( true, true );
+        // per definition use the last connection (first entry in the
+        // stored address list)
+        const QString strSelectedAddress = pClient->vstrIPAddress[0];
+
+        // only if address is not empty, start the client
+        if ( !strSelectedAddress.isEmpty() )
+        {
+            // initiate connection (always show the address in the mixer board
+            // (no alias))
+            Connect ( strSelectedAddress, strSelectedAddress );
+        }
     }
 
 
-    // disable controls on request ---
+    // Disable controls on request ---------------------------------------------
     // disable LEDs in main window if requested
     if ( bNewDisalbeLEDs )
     {
@@ -316,7 +324,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // View menu  --------------------------------------------------------------
     pViewMenu = new QMenu ( "&View", this );
 
-    pViewMenu->addAction ( tr ( "&Chat..." ), this,
+    pViewMenu->addAction ( tr ( "&Connection Setup..." ), this,
+        SLOT ( OnOpenConnectionSetupDialog() ) );
+
+    pViewMenu->addAction ( tr ( "C&hat..." ), this,
         SLOT ( OnOpenChatDialog() ) );
 
     pViewMenu->addAction ( tr ( "&General Settings..." ), this,
@@ -467,6 +478,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( &ConnectDlg, SIGNAL ( CreateCLServerListPingMes ( CHostAddress ) ),
         this, SLOT ( OnCreateCLServerListPingMes ( CHostAddress ) ) );
 
+    QObject::connect ( &ConnectDlg, SIGNAL ( accepted() ),
+        this, SLOT ( OnConnectDlgAccepted() ) );
+
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar
@@ -563,11 +577,69 @@ void CClientDlg::OnAudioPanValueChanged ( int value )
     UpdateAudioFaderSlider();
 }
 
+void CClientDlg::OnConnectDlgAccepted()
+{
+    // get the address from the connect dialog
+    const QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
+
+    // only store new host address in our data base if the address is
+    // not empty and it was not a server list item (only the addresses
+    // typed in manually are stored by definition)
+    if ( !strSelectedAddress.isEmpty() &&
+         !ConnectDlg.GetServerListItemWasChosen() )
+    {
+        // store new address at the top of the list, if the list was already
+        // full, the last element is thrown out
+        pClient->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
+    }
+
+    // get name to be set in audio mixer group box title
+    QString strMixerBoardLabel;
+
+    if ( ConnectDlg.GetServerListItemWasChosen() )
+    {
+        // in case a server in the server list was chosen,
+        // display the server name of the server list
+        strMixerBoardLabel = ConnectDlg.GetSelectedServerName();
+    }
+    else
+    {
+        // an item of the server address combo box was chosen,
+        // just show the address string as it was entered by the
+        // user
+        strMixerBoardLabel = strSelectedAddress;
+    }
+
+    // first check if we are already connected, if this is the case we have to
+    // disconnect the old server first
+    if ( pClient->IsRunning() )
+    {
+        Disconnect();
+    }
+
+    // initiate connection
+    Connect ( strSelectedAddress, strMixerBoardLabel );
+}
+
 void CClientDlg::OnConnectDisconBut()
 {
     // the connect/disconnect button implements a toggle functionality
-    // -> apply inverted running state
-    ConnectDisconnect ( !pClient->IsRunning() );
+    if ( pClient->IsRunning() )
+    {
+        Disconnect();
+    }
+    else
+    {
+        ShowConnectionSetupDialog();
+    }
+}
+
+void CClientDlg::OnDisconnected()
+{
+    // channel is now disconnected, clear mixer board (remove all faders)
+    MainMixerBoard->HideAll();
+
+    UpdateDisplay();
 }
 
 void CClientDlg::OnInstPictureBut()
@@ -617,14 +689,6 @@ void CClientDlg::OnChatTextReceived ( QString strChatText )
     UpdateDisplay();
 }
 
-void CClientDlg::OnDisconnected()
-{
-    // channel is now disconnected, clear mixer board (remove all faders)
-    MainMixerBoard->HideAll();
-
-    UpdateDisplay();
-}
-
 void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 {
     // update mixer board with the additional client infos
@@ -658,6 +722,24 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
                 QString ( " (%1 users)" ).arg ( iNumClients ) );
         }
     }
+}
+
+void CClientDlg::ShowConnectionSetupDialog()
+{
+    // get the central server address string
+    const QString strCurCentServAddr =
+        SELECT_SERVER_ADDRESS ( pClient->GetUseDefaultCentralServerAddress(),
+                                pClient->GetServerListCentralServerAddress() );
+
+    // init the connect dialog
+    ConnectDlg.Init ( strCurCentServAddr, pClient->vstrIPAddress );
+
+    // show connect dialog
+    ConnectDlg.show();
+
+    // make sure dialog is upfront and has focus
+    ConnectDlg.raise();
+    ConnectDlg.activateWindow();
 }
 
 void CClientDlg::ShowGeneralSettings()
@@ -842,140 +924,69 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
                                                 iNumClients );
 }
 
-void CClientDlg::ConnectDisconnect ( const bool bDoStart,
-                                     const bool bConnectOnStartup )
+void CClientDlg::Connect ( const QString& strSelectedAddress,
+                           const QString& strMixerBoardLabel )
 {
-    // start/stop client, set button text
-    if ( bDoStart )
+    // set address and check if address is valid
+    if ( pClient->SetServerAddr ( strSelectedAddress ) )
     {
-        QString strSelectedAddress;
-        bool    bConnectStateOK = false; // init flag
-
-        // only show connection dialog if this is not a connection on startup
-        if ( bConnectOnStartup )
+        // try to start client, if error occurred, do not go in
+        // running state but show error message
+        try
         {
-            // per definition use the last connection (first entry in the
-            // stored address list)
-            strSelectedAddress = pClient->vstrIPAddress[0];
-
-            // only if address is not empty, start the client
-            if ( !strSelectedAddress.isEmpty() )
-            {
-                bConnectStateOK = true;
-            }
-        }
-        else
-        {
-            // get the central server address string
-            const QString strCurCentServAddr =
-                SELECT_SERVER_ADDRESS ( pClient->GetUseDefaultCentralServerAddress(),
-                                        pClient->GetServerListCentralServerAddress() );
-
-            // init the connect dialog and execute it (modal dialog)
-            ConnectDlg.Init ( strCurCentServAddr, pClient->vstrIPAddress );
-            ConnectDlg.exec();
-
-            // check if state is OK (e.g., no Cancel was pressed)
-            if ( ConnectDlg.GetStateOK() )
-            {
-                strSelectedAddress = ConnectDlg.GetSelectedAddress();
-
-                // only store new host address in our data base if the address is
-                // not empty and it was not a server list item (only the addresses
-                // typed in manually are stored by definition)
-                if ( !strSelectedAddress.isEmpty() &&
-                     !ConnectDlg.GetServerListItemWasChosen() )
-                {
-                    // store new address at the top of the list, if the list was already
-                    // full, the last element is thrown out
-                    pClient->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
-                }
-
-                // everything was ok with the connection dialog, set flag
-                bConnectStateOK = true;
-            }
+            pClient->Start();
         }
 
-        // only start connection action if the connection state is ok
-        if ( bConnectStateOK )
+        catch ( CGenErr generr )
         {
-            // set address and check if address is valid
-            if ( pClient->SetServerAddr ( strSelectedAddress ) )
-            {
-                bool bStartOk = true;
+            // show error message and return the function
+            QMessageBox::critical (
+                this, APP_NAME, generr.GetErrorText(), "Close", 0 );
 
-                // try to start client, if error occurred, do not go in
-                // running state but show error message
-                try
-                {
-                    pClient->Start();
-                }
-
-                catch ( CGenErr generr )
-                {
-                    QMessageBox::critical (
-                        this, APP_NAME, generr.GetErrorText(), "Close", 0 );
-
-                    bStartOk = false;
-                }
-
-                if ( bStartOk )
-                {
-                    // change connect button text to "disconnect"
-                    butConnect->setText ( CON_BUT_DISCONNECTTEXT );
-
-                    // set server name in audio mixer group box title
-                    if ( ConnectDlg.GetServerListItemWasChosen() )
-                    {
-                        // in case a server in the server list was chosen,
-                        // display the server name of the server list
-                        MainMixerBoard->SetServerName (
-                            ConnectDlg.GetSelectedServerName() );
-                    }
-                    else
-                    {
-                        // an item of the server address combo box was chosen,
-                        // just show the address string as it was entered by the
-                        // user
-                        MainMixerBoard->SetServerName ( strSelectedAddress );
-                    }
-
-                    // start timer for level meter bar and ping time measurement
-                    TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
-                    TimerPing.start   ( PING_UPDATE_TIME_MS );
-                }
-            }
-            else
-            {
-                // show the error as red light
-                ledConnection->SetLight ( MUL_COL_LED_RED );
-            }
+            return;
         }
+
+        // change connect button text to "disconnect"
+        butConnect->setText ( CON_BUT_DISCONNECTTEXT );
+
+        // set server name in audio mixer group box title
+        MainMixerBoard->SetServerName ( strMixerBoardLabel );
+
+        // start timer for level meter bar and ping time measurement
+        TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+        TimerPing.start ( PING_UPDATE_TIME_MS );
     }
     else
     {
-        // only stop client if currently running, in case we received
-        // the stopped message, the client is already stopped but the
-        // connect/disconnect button and other GUI controls must be
-        // updated
-        if ( pClient->IsRunning() )
-        {
-            pClient->Stop();
-        }
+        // show the error as red light
+        ledConnection->SetLight ( MUL_COL_LED_RED );
+    }
+}
 
-        // change connect button text to "connect"
-        butConnect->setText ( CON_BUT_CONNECTTEXT );
+void CClientDlg::Disconnect()
+{
+    // only stop client if currently running, in case we received
+    // the stopped message, the client is already stopped but the
+    // connect/disconnect button and other GUI controls must be
+    // updated
+    if ( pClient->IsRunning() )
+    {
+        pClient->Stop();
+    }
 
-        // reset server name in audio mixer group box title
-        MainMixerBoard->SetServerName ( "" );
+    // change connect button text to "connect"
+    butConnect->setText ( CON_BUT_CONNECTTEXT );
 
-        // stop timer for level meter bars and reset them
-        TimerSigMet.stop();
-        lbrInputLevelL->setValue ( 0 );
-        lbrInputLevelR->setValue ( 0 );
+    // reset server name in audio mixer group box title
+    MainMixerBoard->SetServerName ( "" );
 
-        // stop ping time measurement timer
-        TimerPing.stop();
+    // stop timer for level meter bars and reset them
+    TimerSigMet.stop();
+    lbrInputLevelL->setValue ( 0 );
+    lbrInputLevelR->setValue ( 0 );
+
+    // stop ping time measurement timer
+    TimerPing.stop();
 
 
 // TODO is this still required???
@@ -990,9 +1001,8 @@ ledDelay->Reset();
 ledChat->Reset();
 
 
-        // clear mixer board (remove all faders)
-        MainMixerBoard->HideAll();
-    }
+    // clear mixer board (remove all faders)
+    MainMixerBoard->HideAll();
 }
 
 void CClientDlg::UpdateDisplay()

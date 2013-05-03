@@ -35,7 +35,6 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
       strSelectedServerName    ( "" ),
       bShowCompleteRegList     ( bNewShowCompleteRegList ),
       bServerListReceived      ( false ),
-      bStateOK                 ( false ),
       bServerListItemWasChosen ( false )
 {
     setupUi ( this );
@@ -132,6 +131,7 @@ void CConnectDlg::Init ( const QString           strNewCentralServerAddr,
 
     // load stored IP addresses in combo box
     cbxServerAddr->clear();
+
     for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
     {
         if ( !vstrIPAddresses[iLEIdx].isEmpty() )
@@ -146,7 +146,6 @@ void CConnectDlg::showEvent ( QShowEvent* )
     // reset flags (on opening the connect dialg, we always want to request a
     // new updated server list per definition)
     bServerListReceived      = false;
-    bStateOK                 = false;
     bServerListItemWasChosen = false;
 
     // clear current address and name
@@ -173,28 +172,6 @@ void CConnectDlg::showEvent ( QShowEvent* )
 
 void CConnectDlg::hideEvent ( QHideEvent* )
 {
-    // get the IP address to be used according to the following definitions:
-    // - if the list has focus and a line is selected, use this line
-    // - if the list has no focus, use the current combo box text
-    QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
-
-    if ( CurSelListItemList.count() > 0 )
-    {
-        // get host address from selected list view item as a string
-        strSelectedAddress =
-            CurSelListItemList[0]->data ( 0, Qt::UserRole ).toString();
-
-        // store selected server name
-        strSelectedServerName = CurSelListItemList[0]->text ( 0 );
-
-        // set flag that a server list item was chosen to connect
-        bServerListItemWasChosen = true;
-    }
-    else
-    {
-        strSelectedAddress = cbxServerAddr->currentText();
-    }
-
     // if window is closed, stop timers
     TimerPing.stop();
     TimerReRequestServList.stop();
@@ -353,11 +330,30 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
 
 void CConnectDlg::OnConnectClicked()
 {
-    // set state OK flag
-    bStateOK = true;
+    // get the IP address to be used according to the following definitions:
+    // - if the list has focus and a line is selected, use this line
+    // - if the list has no focus, use the current combo box text
+    QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
 
-    // close dialog
-    close();
+    if ( CurSelListItemList.count() > 0 )
+    {
+        // get host address from selected list view item as a string
+        strSelectedAddress =
+            CurSelListItemList[0]->data ( 0, Qt::UserRole ).toString();
+
+        // store selected server name
+        strSelectedServerName = CurSelListItemList[0]->text ( 0 );
+
+        // set flag that a server list item was chosen to connect
+        bServerListItemWasChosen = true;
+    }
+    else
+    {
+        strSelectedAddress = cbxServerAddr->currentText();
+    }
+
+    // tell the parent window that the connection shall be initiated
+    done ( QDialog::Accepted );
 }
 
 void CConnectDlg::OnTimerPing()

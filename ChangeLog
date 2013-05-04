@@ -1,6 +1,9 @@
 3.3.2
 
-- the connection setup dialog can now be opened during a connection
+
+TODO: This feature is disabled for now since it does not work as expected (we
+      get audio drop outs if the list is open during a connection) 
+DISABLED: - the connection setup dialog can now be opened during a connection
 
 
 

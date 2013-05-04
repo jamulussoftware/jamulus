@@ -440,7 +440,7 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
                 // sorting is done correctly
                 lvwServers->topLevelItem ( iIdx )->
                     setText ( 4, QString ( "%1" ).arg (
-                    iPingTime, 8, 10, QLatin1Char( '0' ) ) );
+                    iPingTime, 8, 10, QLatin1Char ( '0' ) ) );
 
                 // Update the sorting (lowest number on top).
                 // Note that the sorting must be the last action for the current

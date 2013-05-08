@@ -64,7 +64,7 @@ void CStereoSignalLevelMeter::Update ( CVector<short>& vecsAudio )
     dCurLevelR = UpdateCurLevel ( dCurLevelR, sMaxR );
 }
 
-double CStereoSignalLevelMeter::UpdateCurLevel ( double dCurLevel,
+double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
                                                  const short& sMax )
 {
     // decrease max with time

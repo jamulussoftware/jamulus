@@ -493,7 +493,8 @@ public:
 
 protected:
     double CalcLogResult  ( const double& dLinearLevel );
-    double UpdateCurLevel ( double dCurLevel, const short& sMax );
+    double UpdateCurLevel ( double       dCurLevel,
+                            const short& sMax );
 
     double dCurLevelL;
     double dCurLevelR;

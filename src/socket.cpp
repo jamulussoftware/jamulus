@@ -34,6 +34,7 @@ void CSocket::Init ( const quint16 iPortNumber )
 
     // initialize the listening socket
     bool bSuccess;
+
     if ( bIsClient )
     {
         // Per definition use the port number plus ten for the client to make
@@ -125,8 +126,11 @@ void CSocket::OnDataReceived()
             if ( !( pChannel->GetAddress() == RecHostAddr ) ||
                  !pChannel->IsEnabled() )
             {
-                // this is an unknown address, try to parse connection less
-                // message
+                // this is an unknown address or we are not connected, try to
+                // parse connection less message (we have this case when we,
+                // e.g., open the connection setup dialog since then we are not
+                // yet connected but talk to the central server with the
+                // connection less protocol)
                 if ( pConnLessProtocol->ParseConnectionLessMessage ( vecbyRecBuf,
                                                                      iNumBytesRead, 
                                                                      RecHostAddr ) )

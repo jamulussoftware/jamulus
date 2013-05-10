@@ -56,10 +56,8 @@ class CSocket : public QObject
 
 public:
     CSocket ( CChannel*     pNewChannel,
-              CProtocol*    pNewCLProtocol,
               const quint16 iPortNumber )
-        : pChannel( pNewChannel ), pConnLessProtocol ( pNewCLProtocol ),
-          bIsClient ( true ) { Init ( iPortNumber ); }
+        : pChannel( pNewChannel ), bIsClient ( true ) { Init ( iPortNumber ); }
 
     CSocket ( CServer*      pNServP,
               const quint16 iPortNumber )
@@ -77,9 +75,8 @@ protected:
     CVector<uint8_t> vecbyRecBuf;
     CHostAddress     RecHostAddr;
 
-    CChannel*        pChannel;          // for client
-    CProtocol*       pConnLessProtocol; // for client
-    CServer*         pServer;           // for server
+    CChannel*        pChannel; // for client
+    CServer*         pServer;  // for server
 
     bool             bIsClient;
 
@@ -106,12 +103,11 @@ class CHighPrioSocket
 {
 public:
     CHighPrioSocket ( CChannel*     pNewChannel,
-                      CProtocol*    pNewCLProtocol,
                       const quint16 iPortNumber )
     {
 
         // TEST
-        worker = new CSocket ( pNewChannel, pNewCLProtocol, iPortNumber );
+        worker = new CSocket ( pNewChannel, iPortNumber );
         worker->moveToThread(&workerThread);
         workerThread.start(QThread::TimeCriticalPriority);
 

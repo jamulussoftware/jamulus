@@ -37,7 +37,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bCeltDoHighQuality               ( false ),
     bUseStereo                       ( false ),
     bIsInitializationPhase           ( true ),
-    Socket                           ( &Channel, &ConnLessProtocol, iPortNumber ),
+    Socket                           ( &Channel, iPortNumber ),
     Sound                            ( AudioCallback, this ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan                ( false ),

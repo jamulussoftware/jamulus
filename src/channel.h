@@ -137,6 +137,7 @@ Protocol.CreateChanNameMes ( ChInfo.strName );
             Protocol.CreateJitBufMes ( iJitBufSize );
         }
     }
+    void CreateReqNetwTranspPropsMes()                    { Protocol.CreateReqNetwTranspPropsMes(); }
     void CreateReqJitBufMes()                             { Protocol.CreateReqJitBufMes(); }
     void CreateReqConnClientsList()                       { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText ) { Protocol.CreateChatTextMes ( strChatText ); }

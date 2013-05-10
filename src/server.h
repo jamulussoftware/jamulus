@@ -262,6 +262,7 @@ signals:
 public slots:
     void OnTimer();
     void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
+    void OnNewConnection ( int iChID );
     void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
 
     void OnDetCLMess ( const CVector<uint8_t>& vecbyData,
@@ -337,18 +338,18 @@ public slots:
     void OnDetCLMessCh10 ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[10].GetAddress() ); }
     void OnDetCLMessCh11 ( CVector<uint8_t> vData, int iNBy ) { OnDetCLMess ( vData, iNBy, vecChannels[11].GetAddress() ); }
 
-    void OnNewConnectionCh0()  { vecChannels[0].CreateReqJitBufMes(); }
-    void OnNewConnectionCh1()  { vecChannels[1].CreateReqJitBufMes(); }
-    void OnNewConnectionCh2()  { vecChannels[2].CreateReqJitBufMes(); }
-    void OnNewConnectionCh3()  { vecChannels[3].CreateReqJitBufMes(); }
-    void OnNewConnectionCh4()  { vecChannels[4].CreateReqJitBufMes(); }
-    void OnNewConnectionCh5()  { vecChannels[5].CreateReqJitBufMes(); }
-    void OnNewConnectionCh6()  { vecChannels[6].CreateReqJitBufMes(); }
-    void OnNewConnectionCh7()  { vecChannels[7].CreateReqJitBufMes(); }
-    void OnNewConnectionCh8()  { vecChannels[8].CreateReqJitBufMes(); }
-    void OnNewConnectionCh9()  { vecChannels[9].CreateReqJitBufMes(); }
-    void OnNewConnectionCh10() { vecChannels[10].CreateReqJitBufMes(); }
-    void OnNewConnectionCh11() { vecChannels[11].CreateReqJitBufMes(); }
+    void OnNewConnectionCh0()  { OnNewConnection ( 0 ); }
+    void OnNewConnectionCh1()  { OnNewConnection ( 1 ); }
+    void OnNewConnectionCh2()  { OnNewConnection ( 2 ); }
+    void OnNewConnectionCh3()  { OnNewConnection ( 3 ); }
+    void OnNewConnectionCh4()  { OnNewConnection ( 4 ); }
+    void OnNewConnectionCh5()  { OnNewConnection ( 5 ); }
+    void OnNewConnectionCh6()  { OnNewConnection ( 6 ); }
+    void OnNewConnectionCh7()  { OnNewConnection ( 7 ); }
+    void OnNewConnectionCh8()  { OnNewConnection ( 8 ); }
+    void OnNewConnectionCh9()  { OnNewConnection ( 9 ); }
+    void OnNewConnectionCh10() { OnNewConnection ( 10 ); }
+    void OnNewConnectionCh11() { OnNewConnection ( 11 ); }
 
     void OnReqConnClientsListCh0()  { CreateAndSendChanListForThisChan ( 0 ); }
     void OnReqConnClientsListCh1()  { CreateAndSendChanListForThisChan ( 1 ); }

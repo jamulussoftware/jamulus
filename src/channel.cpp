@@ -419,7 +419,6 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
 
     // init flags
     bool bIsProtocolPacket = false;
-    bool bIsAudioPacket    = false;
     bool bNewConnection    = false;
 
     if ( bIsEnabled )
@@ -460,9 +459,6 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                 // only process audio if packet has correct size
                 if ( iNumBytes == ( iNetwFrameSize * iNetwFrameSizeFact ) )
                 {
-                    // set audio packet flag
-                    bIsAudioPacket = true;
-
                     // store new packet in jitter buffer
                     if ( SockBuf.Put ( vecbyData, iNumBytes ) )
                     {
@@ -488,6 +484,8 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                 // about the audio packet properties via the protocol
 
                 // check if channel was not connected, this is a new connection
+                // (do not fire an event directly since we are inside a mutex
+                // region -> to avoid a dead-lock)
                 bNewConnection = !IsConnected();
 
                 // reset time-out counter
@@ -498,23 +496,6 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
 
         if ( bNewConnection )
         {
-            // if this is a new connection and the current network packet is
-            // neither an audio or protocol packet, we have to query the
-            // network transport properties for the audio packets
-            // (this is only required for server since we defined that the
-            // server has to send with the same properties as sent by
-            // the client)
-
-// TODO check the conditions: !bIsProtocolPacket should always be true
-// since we can only get here if bNewConnection, should we really put
-// !bIsAudioPacket in here, because shouldn't we always query the audio
-// properties on a new connection?
-
-            if ( bIsServer && ( !bIsProtocolPacket ) && ( !bIsAudioPacket ) )
-            {
-                Protocol.CreateReqNetwTranspPropsMes();
-            }
-
             // inform other objects that new connection was established
             emit NewConnection();
         }

@@ -514,6 +514,21 @@ void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
     Socket.SendPacket ( vecMessage, vecChannels[iChID].GetAddress() );
 }
 
+void CServer::OnNewConnection ( int iChID )
+{
+    // on a new connection we query the network transport properties for the
+    // audio packets (to use the correct network block size and audio
+    // compression properties, etc.)
+    vecChannels[iChID].CreateReqNetwTranspPropsMes();
+
+    // this is a new connection, query the jitter buffer size we shall use
+    // for this client (note that at the same time on a new connection the
+    // client sends the jitter buffer size by default but maybe we have
+    // reached a state where this did not happen because of network trouble,
+    // client or server thinks that the connection was still active, etc.)
+    vecChannels[iChID].CreateReqJitBufMes();
+}
+
 void CServer::OnSendCLProtMessage ( CHostAddress     InetAddr,
                                     CVector<uint8_t> vecMessage )
 {

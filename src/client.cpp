@@ -133,7 +133,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
 
 
     // Connections -------------------------------------------------------------
-    // connection for protocol
+    // connections for the protocol mechanism
     QObject::connect ( &Channel,
         SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
         this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
@@ -192,8 +192,13 @@ QObject::connect ( &Channel, SIGNAL ( OpusSupported() ),
         SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
         this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
+
+    // other
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
         this, SLOT ( OnSndCrdReinitRequest ( int ) ) );
+
+    QObject::connect ( &Socket, SIGNAL ( InvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ),
+        this, SLOT ( OnInvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ) );
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -209,6 +214,30 @@ void CClient::OnSendCLProtMessage ( CHostAddress     InetAddr,
     // the protocol queries me to call the function to send the message
     // send it through the network
     Socket.SendPacket ( vecMessage, InetAddr );
+}
+
+void CClient::OnInvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
+                                        int              iNumBytesRead,
+                                        CHostAddress     RecHostAddr )
+{
+    // this is an unknown address or we are not connected, try to
+    // parse connection less message (we have this case when we,
+    // e.g., open the connection setup dialog since then we are not
+    // yet connected but talk to the central server with the
+    // connection less protocol)
+    if ( ConnLessProtocol.ParseConnectionLessMessage ( vecbyRecBuf,
+                                                       iNumBytesRead,
+                                                       RecHostAddr ) )
+    {
+        // message coult not be parsed, check if the packet comes
+        // from the server we just connected -> if yes, send
+        // disconnect message since the server may not know that we
+        // are not connected anymore
+        if ( Channel.   GetAddress() == RecHostAddr )
+        {
+            ConnLessProtocol.CreateCLDisconnection ( RecHostAddr );
+        }
+    }
 }
 
 void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyData,

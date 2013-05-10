@@ -121,57 +121,45 @@ void CSocket::OnDataReceived()
         if ( bIsClient )
         {
             // client:
+
             // check if packet comes from the server we want to connect and that
             // the channel is enabled
-            if ( !( pChannel->GetAddress() == RecHostAddr ) ||
-                 !pChannel->IsEnabled() )
+            if ( ( pChannel->GetAddress() == RecHostAddr ) &&
+                 pChannel->IsEnabled() )
             {
-                // this is an unknown address or we are not connected, try to
-                // parse connection less message (we have this case when we,
-                // e.g., open the connection setup dialog since then we are not
-                // yet connected but talk to the central server with the
-                // connection less protocol)
-                if ( pConnLessProtocol->ParseConnectionLessMessage ( vecbyRecBuf,
-                                                                     iNumBytesRead, 
-                                                                     RecHostAddr ) )
+                // this network packet is valid, put it in the channel
+                switch ( pChannel->PutData ( vecbyRecBuf, iNumBytesRead ) )
                 {
-                    // message coult not be parsed, check if the packet comes
-                    // from the server we just connected -> if yes, send
-                    // disconnect message since the server may not know that we
-                    // are not connected anymore
-                    if ( pChannel->GetAddress() == RecHostAddr )
-                    {
-                        pConnLessProtocol->CreateCLDisconnection ( RecHostAddr );
-                    }
+                case PS_AUDIO_OK:
+                    PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN );
+                    break;
+
+                case PS_AUDIO_ERR:
+                case PS_GEN_ERROR:
+                    PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED );
+                    break;
+
+                case PS_PROT_ERR:
+                    PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW );
+                    break;
+
+                default:
+                    // other put data states need not to be considered here
+                    break;
                 }
-
-                // do not perform any other action on this received packet
-                return;
             }
-
-            switch ( pChannel->PutData ( vecbyRecBuf, iNumBytesRead ) )
+            else
             {
-            case PS_AUDIO_OK:
-                PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN );
-                break;
-
-            case PS_AUDIO_ERR:
-            case PS_GEN_ERROR:
-                PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED );
-                break;
-
-            case PS_PROT_ERR:
-                PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW );
-                break;
-
-            default:
-                // other put data states need not to be considered here
-                break;
+                // inform about received invalid packet by fireing an event
+                emit InvalidPacketReceived ( vecbyRecBuf,
+                                             iNumBytesRead,
+                                             RecHostAddr );
             }
         }
         else
         {
             // server:
+
             if ( pServer->PutData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
             {
                 // this was an audio packet, start server

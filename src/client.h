@@ -347,6 +347,9 @@ void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
+    void OnInvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
+                                   int              iNumBytesRead,
+                                   CHostAddress     RecHostAddr );
     void OnDetectedCLMessage ( CVector<uint8_t> vecbyData, int iNumBytes );
     void OnReqJittBufSize() { CreateServerJitterBufferMessage(); }
     void OnJittBufSizeChanged ( int iNewJitBufSize );

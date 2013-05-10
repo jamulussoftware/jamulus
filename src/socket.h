@@ -29,6 +29,7 @@
 #include <QMessageBox>
 #include <QUdpSocket>
 #include <QSocketNotifier>
+#include <QThread>
 #include <QMutex>
 #include <vector>
 #include "global.h"
@@ -48,6 +49,7 @@ class CServer; // forward declaration of CServer
 
 
 /* Classes ********************************************************************/
+/* Base socket class ---------------------------------------------------------*/
 class CSocket : public QObject
 {
     Q_OBJECT
@@ -83,6 +85,50 @@ protected:
 
 public slots:
     void OnDataReceived();
+
+signals:
+    void InvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
+                                 int              iNumBytesRead,
+                                 CHostAddress     RecHostAddr );
 };
+
+
+/* Socket which runs in a separate high priority thread ----------------------*/
+
+/*
+// TEST
+
+// http://qt-project.org/forums/viewthread/14393
+// http://qt-project.org/doc/qt-5.0/qtcore/qthread.html#Priority-enum
+// http://qt-project.org/wiki/Threads_Events_QObjects
+
+class CHighPrioSocket
+{
+public:
+    CHighPrioSocket ( CChannel*     pNewChannel,
+                      CProtocol*    pNewCLProtocol,
+                      const quint16 iPortNumber )
+    {
+
+        // TEST
+        worker = new CSocket ( pNewChannel, pNewCLProtocol, iPortNumber );
+        worker->moveToThread(&workerThread);
+        workerThread.start(QThread::TimeCriticalPriority);
+
+    }
+
+    void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
+                      const CHostAddress&     HostAddr )
+    {
+        worker->SendPacket ( vecbySendBuf, HostAddr );
+    }
+
+protected:
+
+    // TEST
+    QThread  workerThread;
+    CSocket* worker;
+};
+*/
 
 #endif /* !defined ( SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

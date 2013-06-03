@@ -537,15 +537,15 @@ void CServer::OnSendCLProtMessage ( CHostAddress     InetAddr,
     Socket.SendPacket ( vecMessage, InetAddr );
 }
 
-void CServer::OnDetCLMess ( const CVector<uint8_t>& vecbyData,
-                            const int               iNumBytes,
+void CServer::OnDetCLMess ( const CVector<uint8_t>& vecbyMesBodyData,
+                            const int               iRecID,
                             const CHostAddress&     InetAddr )
 {
     // this is a special case: we received a connection less message but we are
     // in a connection
-    ConnLessProtocol.ParseConnectionLessMessage ( vecbyData,
-                                                  iNumBytes,
-                                                  InetAddr );
+    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData,
+                                                      iRecID,
+                                                      InetAddr );
 }
 
 void CServer::OnCLDisconnection ( CHostAddress InetAddr )
@@ -1195,9 +1195,9 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
         {
             // this is a new client, we then first check if this is a connection
             // less message before we create a new official channel
-            if ( ConnLessProtocol.ParseConnectionLessMessage ( vecbyRecBuf,
-                                                               iNumBytesRead, 
-                                                               HostAdr ) )
+            if ( ConnLessProtocol.ParseConnectionLessMessageWithFrame ( vecbyRecBuf,
+                                                                        iNumBytesRead,
+                                                                        HostAdr ) )
             {
                 // a new client is calling, look for free channel
                 iCurChanID = GetFreeChan();

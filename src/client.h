@@ -301,7 +301,11 @@ void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
     bool                    bIsInitializationPhase;
     CVector<unsigned char>  vecCeltData;
 
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+    CHighPrioSocket         Socket;
+#else
     CSocket                 Socket;
+#endif
     CSound                  Sound;
     CStereoSignalLevelMeter SignalLevelMeter;
 
@@ -350,7 +354,7 @@ public slots:
     void OnInvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
                                    int              iNumBytesRead,
                                    CHostAddress     RecHostAddr );
-    void OnDetectedCLMessage ( CVector<uint8_t> vecbyData, int iNumBytes );
+    void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID );
     void OnReqJittBufSize() { CreateServerJitterBufferMessage(); }
     void OnJittBufSizeChanged ( int iNewJitBufSize );
     void OnReqChanInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }

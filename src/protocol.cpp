@@ -425,175 +425,167 @@ void CProtocol::CreateAndImmSendConLessMessage ( const int               iID,
     emit CLMessReadyForSending ( InetAddr, vecNewMessage );
 }
 
-bool CProtocol::IsProtocolMessage ( const CVector<uint8_t>& vecbyData,
-                                    const int               iNumBytes )
-{
-/*
-    just check if this is a protocol message but do not act on message
-*/
-    int              iRecCounter, iRecID;
-    CVector<uint8_t> vecData;
-
-    return !ParseMessageFrame ( vecbyData,
-                                iNumBytes,
-                                iRecCounter,
-                                iRecID,
-                                vecData );
-}
-
-bool CProtocol::ParseMessage ( const CVector<uint8_t>& vecbyData,
-                               const int               iNumBytes )
+bool CProtocol::ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+                                   const int               iRecCounter,
+                                   const int               iRecID )
 {
 /*
     return code: false -> ok; true -> error
 */
-    bool             bRet = false;
-    bool             bSendNextMess;
-    int              iRecCounter, iRecID;
-    CVector<uint8_t> vecData;
-
-    if ( !ParseMessageFrame ( vecbyData, iNumBytes, iRecCounter, iRecID, vecData ) )
-    {
+    bool bRet = false;
+    bool bSendNextMess;
 
 /*
 // TEST channel implementation: randomly delete protocol messages (50 % loss)
 if ( rand() < ( RAND_MAX / 2 ) ) return false;
 */
 
-        // in case this is a connection less message, we do not process it here
-        if ( IsConnectionLessMessageID ( iRecID ) )
+    // In case we received a message and returned an answer but our answer
+    // did not make it to the receiver, he will resend his message. We check
+    // here if the message is the same as the old one, and if this is the
+    // case, just resend our old answer again
+    if ( ( iOldRecID == iRecID ) && ( iOldRecCnt == iRecCounter ) )
+    {
+        // acknowledgments are not acknowledged
+        if ( iRecID != PROTMESSID_ACKN )
         {
-            // fire a signal so that an other class can process this type of
-            // message
-            emit DetectedCLMessage ( vecbyData, iNumBytes );
-
-            // return function without issuing an error code (since it is a
-            // regular message but will just not processed here)
-            return false;
+            // resend acknowledgement
+            CreateAndImmSendAcknMess ( iRecID, iRecCounter );
         }
-
-        // In case we received a message and returned an answer but our answer
-        // did not make it to the receiver, he will resend his message. We check
-        // here if the message is the same as the old one, and if this is the
-        // case, just resend our old answer again
-        if ( ( iOldRecID == iRecID ) && ( iOldRecCnt == iRecCounter ) )
+    }
+    else
+    {
+        // special treatment for acknowledge messages
+        if ( iRecID == PROTMESSID_ACKN )
         {
-            // acknowledgments are not acknowledged
-            if ( iRecID != PROTMESSID_ACKN )
+            // extract data from stream and emit signal for received value
+            int       iPos = 0;
+            const int iData =
+                static_cast<int> ( GetValFromStream ( vecbyMesBodyData, iPos, 2 ) );
+
+            Mutex.lock();
             {
-                // resend acknowledgement
-                CreateAndImmSendAcknMess ( iRecID, iRecCounter );
+                // check if this is the correct acknowledgment
+                bSendNextMess = false;
+                if ( !SendMessQueue.empty() )
+                {
+                    if ( ( SendMessQueue.front().iCnt == iRecCounter ) &&
+                         ( SendMessQueue.front().iID == iData ) )
+                    {
+                        // message acknowledged, remove from queue
+                        SendMessQueue.pop_front();
+
+                        // send next message in queue
+                        bSendNextMess = true;
+                    }
+                }
+            }
+            Mutex.unlock();
+
+            if ( bSendNextMess )
+            {
+                SendMessage();
             }
         }
         else
         {
-            // special treatment for acknowledge messages
-            if ( iRecID == PROTMESSID_ACKN )
+            // check which type of message we received and do action
+            switch ( iRecID )
             {
-                // extract data from stream and emit signal for received value
-                int       iPos = 0;
-                const int iData =
-                    static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+            case PROTMESSID_JITT_BUF_SIZE:
+                bRet = EvaluateJitBufMes ( vecbyMesBodyData );
+                break;
 
-                Mutex.lock();
-                {
-                    // check if this is the correct acknowledgment
-                    bSendNextMess = false;
-                    if ( !SendMessQueue.empty() )
-                    {
-                        if ( ( SendMessQueue.front().iCnt == iRecCounter ) &&
-                             ( SendMessQueue.front().iID == iData ) )
-                        {
-                            // message acknowledged, remove from queue
-                            SendMessQueue.pop_front();
+            case PROTMESSID_REQ_JITT_BUF_SIZE:
+                bRet = EvaluateReqJitBufMes();
+                break;
 
-                            // send next message in queue
-                            bSendNextMess = true;
-                        }
-                    }
-                }
-                Mutex.unlock();
-
-                if ( bSendNextMess )
-                {
-                    SendMessage();
-                }
-            }
-            else
-            {
-                // check which type of message we received and do action
-                switch ( iRecID ) 
-                {
-                case PROTMESSID_JITT_BUF_SIZE:
-                    bRet = EvaluateJitBufMes ( vecData );
-                    break;
-
-                case PROTMESSID_REQ_JITT_BUF_SIZE:
-                    bRet = EvaluateReqJitBufMes();
-                    break;
-
-                case PROTMESSID_CHANNEL_GAIN:
-                    bRet = EvaluateChanGainMes ( vecData );
-                    break;
+            case PROTMESSID_CHANNEL_GAIN:
+                bRet = EvaluateChanGainMes ( vecbyMesBodyData );
+                break;
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 case PROTMESSID_CONN_CLIENTS_LIST_NAME:
-    bRet = EvaluateConClientListNameMes ( vecData );
+    bRet = EvaluateConClientListNameMes ( vecbyMesBodyData );
     break;
 
-                case PROTMESSID_CONN_CLIENTS_LIST:
-                    bRet = EvaluateConClientListMes ( vecData );
-                    break;
+            case PROTMESSID_CONN_CLIENTS_LIST:
+                bRet = EvaluateConClientListMes ( vecbyMesBodyData );
+                break;
 
-                case PROTMESSID_REQ_CONN_CLIENTS_LIST:
-                    bRet = EvaluateReqConnClientsList();
-                    break;
+            case PROTMESSID_REQ_CONN_CLIENTS_LIST:
+                bRet = EvaluateReqConnClientsList();
+                break;
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 case PROTMESSID_CHANNEL_NAME:
-    bRet = EvaluateChanNameMes ( vecData );
+    bRet = EvaluateChanNameMes ( vecbyMesBodyData );
     break;
 
-                case PROTMESSID_CHANNEL_INFOS:
-                    bRet = EvaluateChanInfoMes ( vecData );
-                    break;
+            case PROTMESSID_CHANNEL_INFOS:
+                bRet = EvaluateChanInfoMes ( vecbyMesBodyData );
+                break;
 
-                case PROTMESSID_REQ_CHANNEL_INFOS:
-                    bRet = EvaluateReqChanInfoMes();
-                    break;
+            case PROTMESSID_REQ_CHANNEL_INFOS:
+                bRet = EvaluateReqChanInfoMes();
+                break;
 
-                case PROTMESSID_CHAT_TEXT:
-                    bRet = EvaluateChatTextMes ( vecData );
-                    break;
+            case PROTMESSID_CHAT_TEXT:
+                bRet = EvaluateChatTextMes ( vecbyMesBodyData );
+                break;
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 case PROTMESSID_PING_MS:
-    bRet = EvaluatePingMes ( vecData );
+    bRet = EvaluatePingMes ( vecbyMesBodyData );
     break;
 
-                case PROTMESSID_NETW_TRANSPORT_PROPS:
-                    bRet = EvaluateNetwTranspPropsMes ( vecData );
-                    break;
+            case PROTMESSID_NETW_TRANSPORT_PROPS:
+                bRet = EvaluateNetwTranspPropsMes ( vecbyMesBodyData );
+                break;
 
-                case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
-                    bRet = EvaluateReqNetwTranspPropsMes();
-                    break;
+            case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
+                bRet = EvaluateReqNetwTranspPropsMes();
+                break;
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 case PROTMESSID_OPUS_SUPPORTED:
     bRet = EvaluateOpusSupportedMes();
     break;
-                }
-
-                // immediately send acknowledge message
-                CreateAndImmSendAcknMess ( iRecID, iRecCounter );
-
-                // save current message ID and counter to find out if message
-                // was resent
-                iOldRecID  = iRecID;
-                iOldRecCnt = iRecCounter;
             }
+
+            // immediately send acknowledge message
+            CreateAndImmSendAcknMess ( iRecID, iRecCounter );
+
+            // save current message ID and counter to find out if message
+            // was resent
+            iOldRecID  = iRecID;
+            iOldRecCnt = iRecCounter;
         }
+    }
+
+    return bRet;
+}
+
+bool CProtocol::ParseConnectionLessMessageWithFrame ( const CVector<uint8_t>& vecbyData,
+                                                      const int               iNumBytesIn,
+                                                      const CHostAddress&     InetAddr )
+{
+/*
+    return code: false -> ok; true -> error
+*/
+    bool             bRet = false;
+    int              iRecCounter, iRecID;
+    CVector<uint8_t> vecbyMesBodyData;
+
+    if ( !ParseMessageFrame ( vecbyData,
+                              iNumBytesIn,
+                              vecbyMesBodyData,
+                              iRecCounter,
+                              iRecID ) )
+    {
+        bRet = ParseConnectionLessMessageBody ( vecbyMesBodyData,
+                                                iRecID,
+                                                InetAddr );
     }
     else
     {
@@ -603,70 +595,60 @@ case PROTMESSID_OPUS_SUPPORTED:
     return bRet;
 }
 
-bool CProtocol::ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
-                                             const int               iNumBytes,
-                                             const CHostAddress&     InetAddr )
+bool CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+                                                 const int               iRecID,
+                                                 const CHostAddress&     InetAddr )
 {
 /*
     return code: false -> ok; true -> error
 */
-    bool             bRet = false;
-    int              iRecCounter, iRecID;
-    CVector<uint8_t> vecData;
-
-    if ( !ParseMessageFrame ( vecbyData, iNumBytes, iRecCounter, iRecID, vecData ) )
-    {
+    bool bRet = false;
 
 /*
 // TEST channel implementation: randomly delete protocol messages (50 % loss)
 if ( rand() < ( RAND_MAX / 2 ) ) return false;
 */
 
-        if ( IsConnectionLessMessageID ( iRecID ) )
+    if ( IsConnectionLessMessageID ( iRecID ) )
+    {
+        // check which type of message we received and do action
+        switch ( iRecID )
         {
-            // check which type of message we received and do action
-            switch ( iRecID ) 
-            {
-            case PROTMESSID_CLM_PING_MS:
-                bRet = EvaluateCLPingMes ( InetAddr, vecData );
-                break;
+        case PROTMESSID_CLM_PING_MS:
+            bRet = EvaluateCLPingMes ( InetAddr, vecbyMesBodyData );
+            break;
 
-            case PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS:
-                bRet = EvaluateCLPingWithNumClientsMes ( InetAddr, vecData );
-                break;
+        case PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS:
+            bRet = EvaluateCLPingWithNumClientsMes ( InetAddr, vecbyMesBodyData );
+            break;
 
-            case PROTMESSID_CLM_SERVER_FULL:
-                bRet = EvaluateCLServerFullMes();
-                break;
+        case PROTMESSID_CLM_SERVER_FULL:
+            bRet = EvaluateCLServerFullMes();
+            break;
 
-            case PROTMESSID_CLM_SERVER_LIST:
-                bRet = EvaluateCLServerListMes ( InetAddr, vecData );
-                break;
+        case PROTMESSID_CLM_SERVER_LIST:
+            bRet = EvaluateCLServerListMes ( InetAddr, vecbyMesBodyData );
+            break;
 
-            case PROTMESSID_CLM_REQ_SERVER_LIST:
-                bRet = EvaluateCLReqServerListMes ( InetAddr );
-                break;
+        case PROTMESSID_CLM_REQ_SERVER_LIST:
+            bRet = EvaluateCLReqServerListMes ( InetAddr );
+            break;
 
-            case PROTMESSID_CLM_SEND_EMPTY_MESSAGE:
-                bRet = EvaluateCLSendEmptyMesMes ( vecData );
-                break;
+        case PROTMESSID_CLM_SEND_EMPTY_MESSAGE:
+            bRet = EvaluateCLSendEmptyMesMes ( vecbyMesBodyData );
+            break;
 
-            case PROTMESSID_CLM_REGISTER_SERVER:
-                bRet = EvaluateCLRegisterServerMes ( InetAddr, vecData );
-                break;
+        case PROTMESSID_CLM_REGISTER_SERVER:
+            bRet = EvaluateCLRegisterServerMes ( InetAddr, vecbyMesBodyData );
+            break;
 
-            case PROTMESSID_CLM_UNREGISTER_SERVER:
-                bRet = EvaluateCLUnregisterServerMes ( InetAddr );
-                break;
+        case PROTMESSID_CLM_UNREGISTER_SERVER:
+            bRet = EvaluateCLUnregisterServerMes ( InetAddr );
+            break;
 
-            case PROTMESSID_CLM_DISCONNECTION:
-                bRet = EvaluateCLDisconnectionMes ( InetAddr );
-                break;
-            }
-        }
-        else
-        {
-            bRet = true; // return error code
+        case PROTMESSID_CLM_DISCONNECTION:
+            bRet = EvaluateCLDisconnectionMes ( InetAddr );
+            break;
         }
     }
     else
@@ -1872,11 +1854,11 @@ bool CProtocol::EvaluateCLDisconnectionMes ( const CHostAddress& InetAddr )
 /******************************************************************************\
 * Message generation and parsing                                               *
 \******************************************************************************/
-bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
+bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
+                                    CVector<uint8_t>&       vecbyMesBodyData,
                                     int&                    iCnt,
-                                    int&                    iID,
-                                    CVector<uint8_t>&       vecData )
+                                    int&                    iID )
 {
     int i;
     int iLenBy;
@@ -1893,7 +1875,7 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
     iCurPos = 0; // start from beginning
 
     // 2 bytes TAG
-    const int iTag = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
+    const int iTag = static_cast<int> ( GetValFromStream ( vecbyData, iCurPos, 2 ) );
 
     // check if tag is correct
     if ( iTag != 0 )
@@ -1902,13 +1884,13 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
     }
 
     // 2 bytes ID
-    iID = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
+    iID = static_cast<int> ( GetValFromStream ( vecbyData, iCurPos, 2 ) );
 
     // 1 byte cnt
-    iCnt = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 1 ) );
+    iCnt = static_cast<int> ( GetValFromStream ( vecbyData, iCurPos, 1 ) );
 
     // 2 bytes length
-    iLenBy = static_cast<int> ( GetValFromStream ( vecIn, iCurPos, 2 ) );
+    iLenBy = static_cast<int> ( GetValFromStream ( vecbyData, iCurPos, 2 ) );
 
     // make sure the length is correct
     if ( iLenBy != iNumBytesIn - MESS_LEN_WITHOUT_DATA_BYTE )
@@ -1927,24 +1909,24 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecIn,
     for ( i = 0; i < iLenCRCCalc; i++ )
     {
         CRCObj.AddByte ( static_cast<uint8_t> ( 
-            GetValFromStream ( vecIn, iCurPos, 1 ) ) );
+            GetValFromStream ( vecbyData, iCurPos, 1 ) ) );
     }
 
-    if ( CRCObj.GetCRC () != GetValFromStream ( vecIn, iCurPos, 2 ) )
+    if ( CRCObj.GetCRC () != GetValFromStream ( vecbyData, iCurPos, 2 ) )
     {
         return true; // return error code
     }
 
 
     // Extract actual data -----------------------------------------------------
-    vecData.Init ( iLenBy );
+    vecbyMesBodyData.Init ( iLenBy );
 
     iCurPos = MESS_HEADER_LENGTH_BYTE; // start from beginning of data
 
     for ( i = 0; i < iLenBy; i++ )
     {
-        vecData[i] = static_cast<uint8_t> (
-            GetValFromStream ( vecIn, iCurPos, 1 ) );
+        vecbyMesBodyData[i] = static_cast<uint8_t> (
+            GetValFromStream ( vecbyData, iCurPos, 1 ) );
     }
 
     return false; // no error

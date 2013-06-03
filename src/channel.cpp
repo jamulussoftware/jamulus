@@ -103,16 +103,20 @@ QObject::connect ( &Protocol,
     SIGNAL ( OpusSupported() ) );
 
     QObject::connect ( &Protocol,
-        SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ),
-        SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ) );
-
-    QObject::connect ( &Protocol,
         SIGNAL ( NetTranspPropsReceived ( CNetworkTransportProps ) ),
         this, SLOT ( OnNetTranspPropsReceived ( CNetworkTransportProps ) ) );
 
     QObject::connect ( &Protocol,
         SIGNAL ( ReqNetTranspProps() ),
         this, SLOT ( OnReqNetTranspProps() ) );
+
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+    // this connection is intended for a thread transition if we have a
+    // separate socket thread running
+    QObject::connect ( this,
+        SIGNAL ( ParseMessageBody ( CVector<uint8_t>, int, int ) ),
+        this, SLOT ( OnParseMessageBody ( CVector<uint8_t>, int, int ) ) );
+#endif
 }
 
 bool CChannel::ProtocolIsEnabled()
@@ -151,60 +155,83 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
                                           const int iNewNetwFrameSizeFact,
                                           const int iNewNumAudioChannels )
 {
-    // this function is intended for the server (not the client)
-    QMutexLocker locker ( &Mutex );
+/*
+    this function is intended for the server (not the client)
+*/
 
-    // store new values
-    eAudioCompressionType = eNewAudComprType;
-    iNumAudioChannels     = iNewNumAudioChannels;
-    iNetwFrameSize        = iNewNetwFrameSize;
-    iNetwFrameSizeFact    = iNewNetwFrameSizeFact;
+    CNetworkTransportProps NetworkTransportProps;
 
-    // init socket buffer
-    SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+    Mutex.lock();
+    {
+        // store new values
+        eAudioCompressionType = eNewAudComprType;
+        iNumAudioChannels     = iNewNumAudioChannels;
+        iNetwFrameSize        = iNewNetwFrameSize;
+        iNetwFrameSizeFact    = iNewNetwFrameSizeFact;
 
-    // init conversion buffer
-    ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+        // init socket buffer
+        SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
 
-    // tell the server that audio coding has changed
-    CreateNetTranspPropsMessFromCurrentSettings();
+        // init conversion buffer
+        ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+
+        // fill network transport properties struct
+        NetworkTransportProps =
+            GetNetworkTransportPropsFromCurrentSettings();
+    }
+    Mutex.unlock();
+
+    // tell the server about the new network settings
+    Protocol.CreateNetwTranspPropsMes ( NetworkTransportProps );
 }
 
 bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
                                      const bool bPreserve )
 {
-    QMutexLocker locker ( &Mutex ); // this operation must be done with mutex
+    bool ReturnValue           = true;  // init with error
+    bool bCurDoAutoSockBufSize = false; // we have to init but init values does not matter
 
-    // first check for valid input parameter range
-    if ( ( iNewNumFrames >= MIN_NET_BUF_SIZE_NUM_BL ) &&
-         ( iNewNumFrames <= MAX_NET_BUF_SIZE_NUM_BL ) )
+    Mutex.lock();
     {
-        // only apply parameter if new parameter is different from current one
-        if ( iCurSockBufNumFrames != iNewNumFrames )
+        // first check for valid input parameter range
+        if ( ( iNewNumFrames >= MIN_NET_BUF_SIZE_NUM_BL ) &&
+             ( iNewNumFrames <= MAX_NET_BUF_SIZE_NUM_BL ) )
         {
-            // store new value
-            iCurSockBufNumFrames = iNewNumFrames;
-
-            // the network block size is a multiple of the minimum network
-            // block size
-            SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bPreserve );
-
-            // only in case we are the server and auto jitter buffer setting is
-            // enabled, we have to report the current setting to the client
-            if ( bIsServer && bDoAutoSockBufSize )
+            // only apply parameter if new parameter is different from current one
+            if ( iCurSockBufNumFrames != iNewNumFrames )
             {
-                // we cannot call the "CreateJitBufMes" function directly since
-                // this would give us problems with different threads (e.g. the
-                // timer thread) and the protocol mechanism (problem with
-                // qRegisterMetaType(), etc.)
-                emit ServerAutoSockBufSizeChange ( iNewNumFrames );
-            }
+                // store new value
+                iCurSockBufNumFrames = iNewNumFrames;
 
-            return false; // -> no error
+                // the network block size is a multiple of the minimum network
+                // block size
+                SockBuf.Init ( iNetwFrameSize, iNewNumFrames, bPreserve );
+
+                // store current auto socket buffer size setting in the mutex
+                // region since if we use the current parameter below in the
+                // if condition, it may have been changed in between the time
+                // when we have left the mutex region and entered the if
+                // condition
+                bCurDoAutoSockBufSize = bDoAutoSockBufSize;
+
+                ReturnValue = false; // -> no error
+            }
         }
     }
+    Mutex.unlock();
 
-    return true; // set error flag
+    // only in case there is no error, we are the server and auto jitter buffer
+    // setting is enabled, we have to report the current setting to the client
+    if ( !ReturnValue && bIsServer && bCurDoAutoSockBufSize )
+    {
+        // we cannot call the "CreateJitBufMes" function directly since
+        // this would give us problems with different threads (e.g. the
+        // timer thread) and the protocol mechanism (problem with
+        // qRegisterMetaType(), etc.)
+        emit ServerAutoSockBufSizeChange ( iNewNumFrames );
+    }
+
+    return ReturnValue; // set error flag
 }
 
 void CChannel::SetGain ( const int    iChanID,
@@ -373,7 +400,7 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
 
         // if old CELT codec is used, inform the client that the new OPUS codec
         // is supported
-        if ( eAudioCompressionType != CT_OPUS )
+        if ( NetworkTransportProps.eAudioCodingType != CT_OPUS )
         {
             Protocol.CreateOpusSupportedMes();
         }
@@ -382,12 +409,15 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
 
 void CChannel::OnReqNetTranspProps()
 {
-    CreateNetTranspPropsMessFromCurrentSettings();
+    // fill network transport properties struct from current settings and send it
+    Protocol.CreateNetwTranspPropsMes ( GetNetworkTransportPropsFromCurrentSettings() );
 }
 
-void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
+CNetworkTransportProps CChannel::GetNetworkTransportPropsFromCurrentSettings()
 {
-    CNetworkTransportProps NetworkTransportProps (
+    // use current stored settings of the channel to fill the network transport
+    // properties structure
+    return CNetworkTransportProps (
         iNetwFrameSize,
         iNetwFrameSizeFact,
         iNumAudioChannels,
@@ -395,9 +425,6 @@ void CChannel::CreateNetTranspPropsMessFromCurrentSettings()
         eAudioCompressionType,
         0, // version of the codec
         0 );
-
-    // send current network transport properties
-    Protocol.CreateNetwTranspPropsMes ( NetworkTransportProps );
 }
 
 void CChannel::Disconnect()
@@ -415,45 +442,88 @@ void CChannel::Disconnect()
 EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                                  int                     iNumBytes )
 {
-    EPutDataStat eRet = PS_GEN_ERROR;
+/*
+    Note that this function might be called from a different thread (separate
+    Socket thread) and therefore we should not call functions which emit signals
+    themself directly but emit a signal here so that the thread transition is
+    done as early as possible.
+    This is the reason why "ParseMessageBody" is not called directly but through a
+    signal-slot mechanism.
+*/
 
-    // init flags
-    bool bIsProtocolPacket = false;
-    bool bNewConnection    = false;
+    // init return state
+    EPutDataStat eRet = PS_GEN_ERROR;
 
     if ( bIsEnabled )
     {
-        // first check if this is protocol data
-        // only use protocol data if protocol mechanism is enabled
-        if ( ProtocolIsEnabled() )
+        int              iRecCounter;
+        int              iRecID;
+        CVector<uint8_t> vecbyMesBodyData;
+
+        // init flag
+        bool bNewConnection = false;
+
+        // check if this is a protocol message by trying to parse the message
+        // frame
+        if ( !Protocol.ParseMessageFrame ( vecbyData,
+                                           iNumBytes,
+                                           vecbyMesBodyData,
+                                           iRecCounter,
+                                           iRecID ) )
         {
-            // parse the message assuming this is a protocol message
-            if ( !Protocol.ParseMessage ( vecbyData, iNumBytes ) )
+            // This is a protocol message:
+
+            // only use protocol data if protocol mechanism is enabled
+            if ( ProtocolIsEnabled() )
             {
-                // set status flags
-                eRet              = PS_PROT_OK;
-                bIsProtocolPacket = true;
+                // in case this is a connection less message, we do not process it here
+                if ( Protocol.IsConnectionLessMessageID ( iRecID ) )
+                {
+                    // fire a signal so that an other class can process this type of
+                    // message
+                    emit DetectedCLMessage ( vecbyMesBodyData, iRecID );
+
+                    // set status flag
+                    eRet = PS_PROT_OK;
+                }
+                else
+                {
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+                    // parse the message assuming this is a regular protocol message
+                    emit ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
+
+                    // note that protocol OK is not correct here since we do not
+                    // check if the protocol was ok since we emit just a signal
+                    // and do not get any feedback on the protocol decoding state
+                    eRet = PS_PROT_OK;
+#else
+                    // parse the message assuming this is a protocol message
+                    if ( !Protocol.ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID ) )
+                    {
+                        // set status flag
+                        eRet = PS_PROT_OK;
+                    }
+#endif
+                }
+            }
+            else
+            {
+                // In case we are the server and the current channel is not
+                // connected, we do not evaluate protocol messages but these
+                // messages could start the server which is not desired,
+                // especially not for the disconnect messages.
+                // We now do not start the server if a valid protocol message
+                // was received but only start the server on audio packets.
+
+                // set status flag
+                eRet = PS_PROT_OK_MESS_NOT_EVALUATED;
             }
         }
         else
         {
-            // In case we are the server and the current channel is not
-            // connected, we do not evaluate protocal messages but these
-            // messages could start the server which is not desired, especially
-            // not for the disconnect messages.
-            // We now do not start the server if a valid protocol message
-            // was received but only start the server on audio packets
-            if ( Protocol.IsProtocolMessage ( vecbyData, iNumBytes ) )
-            {
-                // set status flags
-                eRet              = PS_PROT_OK_MESS_NOT_EVALUATED;
-                bIsProtocolPacket = true;
-            }
-        }
+            // This seems to be an audio packet (only try to parse audio if it
+            // was not a protocol packet):
 
-        // only try to parse audio if it was not a protocol packet
-        if ( !bIsProtocolPacket )
-        {
             Mutex.lock();
             {
                 // only process audio if packet has correct size
@@ -476,12 +546,12 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                     eRet = PS_PROT_ERR;
                 }
 
-                // all network packets except of valid protocol messages
+                // All network packets except of valid protocol messages
                 // regardless if they are valid or invalid audio packets lead to
-                // a state change to a connected channel
-                // this is because protocol messages can only be sent on a
+                // a state change to a connected channel.
+                // This is because protocol messages can only be sent on a
                 // connected channel and the client has to inform the server
-                // about the audio packet properties via the protocol
+                // about the audio packet properties via the protocol.
 
                 // check if channel was not connected, this is a new connection
                 // (do not fire an event directly since we are inside a mutex
@@ -506,55 +576,62 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
 
 EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
 {
-    QMutexLocker locker ( &Mutex );
-
     EGetDataStat eGetStatus;
 
-    const bool bSockBufState = SockBuf.Get ( vecbyData );
-
-    // decrease time-out counter
-    if ( iConTimeOut > 0 )
+    Mutex.lock();
     {
-        // subtract the number of samples of the current block since the
-        // time out counter is based on samples not on blocks (definition:
-        // always one atomic block is get by using the GetData() function
-        // where the atomic block size is "SYSTEM_FRAME_SIZE_SAMPLES")
+        // the socket access must be inside a mutex
+        const bool bSockBufState = SockBuf.Get ( vecbyData );
+
+        // decrease time-out counter
+        if ( iConTimeOut > 0 )
+        {
+            // subtract the number of samples of the current block since the
+            // time out counter is based on samples not on blocks (definition:
+            // always one atomic block is get by using the GetData() function
+            // where the atomic block size is "SYSTEM_FRAME_SIZE_SAMPLES")
 
 // TODO this code only works with the above assumption -> better
 // implementation so that we are not depending on assumptions
 
-        iConTimeOut -= SYSTEM_FRAME_SIZE_SAMPLES;
+            iConTimeOut -= SYSTEM_FRAME_SIZE_SAMPLES;
 
-        if ( iConTimeOut <= 0 )
-        {
-            // channel is just disconnected
-            eGetStatus  = GS_CHAN_NOW_DISCONNECTED;
-            iConTimeOut = 0; // make sure we do not have negative values
-
-            // reset network transport properties
-            ResetNetworkTransportProperties();
-
-            // emit message
-            emit Disconnected();
-        }
-        else
-        {
-            if ( bSockBufState )
+            if ( iConTimeOut <= 0 )
             {
-                // everything is ok
-                eGetStatus = GS_BUFFER_OK;
+                // channel is just disconnected
+                eGetStatus  = GS_CHAN_NOW_DISCONNECTED;
+                iConTimeOut = 0; // make sure we do not have negative values
+
+                // reset network transport properties
+                ResetNetworkTransportProperties();
             }
             else
             {
-                // channel is not yet disconnected but no data in buffer
-                eGetStatus = GS_BUFFER_UNDERRUN;
+                if ( bSockBufState )
+                {
+                    // everything is ok
+                    eGetStatus = GS_BUFFER_OK;
+                }
+                else
+                {
+                    // channel is not yet disconnected but no data in buffer
+                    eGetStatus = GS_BUFFER_UNDERRUN;
+                }
             }
         }
+        else
+        {
+            // channel is disconnected
+            eGetStatus = GS_CHAN_NOT_CONNECTED;
+        }
     }
-    else
+    Mutex.unlock();
+
+    // in case we are just disconnected, we have to fire a message
+    if ( eGetStatus == GS_CHAN_NOW_DISCONNECTED )
     {
-        // channel is disconnected
-        eGetStatus = GS_CHAN_NOT_CONNECTED;
+        // emit message
+        emit Disconnected();
     }
 
     return eGetStatus;

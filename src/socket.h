@@ -90,41 +90,58 @@ signals:
 };
 
 
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
 /* Socket which runs in a separate high priority thread ----------------------*/
-
-/*
-// TEST
-
-// http://qt-project.org/forums/viewthread/14393
-// http://qt-project.org/doc/qt-5.0/qtcore/qthread.html#Priority-enum
-// http://qt-project.org/wiki/Threads_Events_QObjects
-
-class CHighPrioSocket
+class CHighPrioSocket : public QObject
 {
+    Q_OBJECT
+
 public:
     CHighPrioSocket ( CChannel*     pNewChannel,
                       const quint16 iPortNumber )
     {
 
-        // TEST
-        worker = new CSocket ( pNewChannel, iPortNumber );
-        worker->moveToThread(&workerThread);
-        workerThread.start(QThread::TimeCriticalPriority);
+// TEST we have to register some classes to the Qt signal/slot mechanism
+// since now we actually have thread crossings with the new code
+qRegisterMetaType<CVector<uint8_t> > ( "CVector<uint8_t>" );
+qRegisterMetaType<CHostAddress> ( "CHostAddress" );
 
+
+// TEST actual creation of the new thread, see internet references below:
+// http://qt-project.org/forums/viewthread/14393
+// http://qt-project.org/doc/qt-5.0/qtcore/qthread.html#Priority-enum
+// http://qt-project.org/wiki/Threads_Events_QObjects
+
+pSocket = new CSocket ( pNewChannel, iPortNumber );
+pSocket->moveToThread ( &NetworkWorkerThread );
+NetworkWorkerThread.start ( QThread::TimeCriticalPriority );
+
+
+        QObject::connect ( pSocket,
+            SIGNAL ( InvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ),
+            SIGNAL ( InvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ) );
+    }
+
+    virtual ~CHighPrioSocket()
+    {
+        NetworkWorkerThread.exit();
     }
 
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
                       const CHostAddress&     HostAddr )
     {
-        worker->SendPacket ( vecbySendBuf, HostAddr );
+        pSocket->SendPacket ( vecbySendBuf, HostAddr );
     }
 
 protected:
+    QThread  NetworkWorkerThread;
+    CSocket* pSocket;
 
-    // TEST
-    QThread  workerThread;
-    CSocket* worker;
+signals:
+    void InvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
+                                 int              iNumBytesRead,
+                                 CHostAddress     RecHostAddr );
 };
-*/
+#endif
 
 #endif /* !defined ( SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

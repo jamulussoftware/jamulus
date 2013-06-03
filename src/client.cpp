@@ -225,29 +225,29 @@ void CClient::OnInvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
     // e.g., open the connection setup dialog since then we are not
     // yet connected but talk to the central server with the
     // connection less protocol)
-    if ( ConnLessProtocol.ParseConnectionLessMessage ( vecbyRecBuf,
-                                                       iNumBytesRead,
-                                                       RecHostAddr ) )
+    if ( ConnLessProtocol.ParseConnectionLessMessageWithFrame ( vecbyRecBuf,
+                                                                iNumBytesRead,
+                                                                RecHostAddr ) )
     {
         // message coult not be parsed, check if the packet comes
         // from the server we just connected -> if yes, send
         // disconnect message since the server may not know that we
         // are not connected anymore
-        if ( Channel.   GetAddress() == RecHostAddr )
+        if ( Channel.GetAddress() == RecHostAddr )
         {
             ConnLessProtocol.CreateCLDisconnection ( RecHostAddr );
         }
     }
 }
 
-void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyData,
-                                    int              iNumBytes )
+void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,
+                                    int              iRecID )
 {
     // this is a special case: we received a connection less message but we are
     // in a connection
-    ConnLessProtocol.ParseConnectionLessMessage ( vecbyData,
-                                                  iNumBytes,
-                                                  Channel.GetAddress() );
+    ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData,
+                                                      iRecID,
+                                                      Channel.GetAddress() );
 }
 
 void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )

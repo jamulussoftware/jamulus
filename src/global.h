@@ -65,6 +65,24 @@ LED bar:      lbr
 
 
 /* Definitions ****************************************************************/
+
+
+
+// The receive socket should be put in a high priority thread to ensure the GUI
+// does not effect the stability of the audio stream (e.g. if the GUI is on
+// high load because of a table update, the incoming network packets must still
+// be put in the jitter buffer with highest priority).
+// Unfortunately, the current implementation of the separate thread does not
+// work correctly. Therefore we introduced this macro to enable/disable the new
+// code. If the new code is enabled, under Windows Qt warnings like
+// "QSocketNotifier: Multiple socket notifiers for same socket" appear and after
+// a while the receive socket does not receive any new network packets anymore.
+// This has to be solved!
+//#define ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+#undef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+
+
+
 // define this macro to get debug output
 //#define _DEBUG_
 #undef _DEBUG_

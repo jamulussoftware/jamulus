@@ -118,15 +118,26 @@ public:
     void CreateCLEmptyMes ( const CHostAddress& InetAddr );
     void CreateCLDisconnection ( const CHostAddress& InetAddr );
 
-    bool ParseMessage ( const CVector<uint8_t>& vecbyData,
-                        const int               iNumBytes );
+    bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
+                             const int               iNumBytesIn,
+                             CVector<uint8_t>&       vecbyMesBodyData,
+                             int&                    iRecCounter,
+                             int&                    iRecID );
 
-    bool ParseConnectionLessMessage ( const CVector<uint8_t>& vecbyData,
-                                      const int               iNumBytes,
-                                      const CHostAddress&     InetAddr );
+    bool ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+                            const int               iRecCounter,
+                            const int               iRecID );
 
-    bool IsProtocolMessage ( const CVector<uint8_t>& vecbyData,
-                             const int               iNumBytes );
+    bool ParseConnectionLessMessageWithFrame ( const CVector<uint8_t>& vecbyData,
+                                               const int               iNumBytesIn,
+                                               const CHostAddress&     InetAddr );
+
+    bool ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+                                          const int               iRecID,
+                                          const CHostAddress&     InetAddr );
+
+    bool IsConnectionLessMessageID ( const int iID ) const
+        { return (iID >= 1000) & (iID < 2000); }
 
     // this function is public because we need it in the test bench
     void CreateAndImmSendAcknMess ( const int& iID,
@@ -160,12 +171,6 @@ protected:
                           const int         iCnt,
                           const int         iID );
 
-    bool ParseMessageFrame ( const CVector<uint8_t>& vecIn,
-                             const int               iNumBytesIn,
-                             int&                    iCnt,
-                             int&                    iID,
-                             CVector<uint8_t>&       vecData );
-
     void GenMessageFrame ( CVector<uint8_t>&       vecOut,
                            const int               iCnt,
                            const int               iID,
@@ -188,9 +193,6 @@ protected:
                                int&                    iPos,
                                const int               iMaxStringLen,
                                QString&                strOut );
-
-    bool IsConnectionLessMessageID ( const int iID ) const
-        { return (iID >= 1000) & (iID < 2000); }
 
     void SendMessage();
 
@@ -280,9 +282,6 @@ signals:
     void CLReqServerList              ( CHostAddress         InetAddr );
     void CLSendEmptyMes               ( CHostAddress         TargetInetAddr );
     void CLDisconnection              ( CHostAddress         InetAddr );
-
-    void DetectedCLMessage ( CVector<uint8_t> vecbyData,
-                             int              iNumBytes );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

@@ -324,17 +324,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // View menu  --------------------------------------------------------------
     pViewMenu = new QMenu ( "&View", this );
 
-
-// TODO This View menu item is disabled for now. The reason for that is that if
-// if the connection setup dialog is opened during an active connection, we will
-// get audio drop outs everytime the ping times in the list are updated which is
-// not acceptable.
-// Fix the issue with the thread priorities and enable the menu item again...
-/*
     pViewMenu->addAction ( tr ( "&Connection Setup..." ), this,
         SLOT ( OnOpenConnectionSetupDialog() ) );
-*/
-
 
     pViewMenu->addAction ( tr ( "C&hat..." ), this,
         SLOT ( OnOpenChatDialog() ) );

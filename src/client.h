@@ -82,6 +82,13 @@
 // are used in the OPUS decoder (which gives a bad noise output signal).
 // Later on when the CELT is completely removed we could set the OPUS
 // numbers back to the original CELT values (to reduce network load)
+
+// calculation to get from the number of bytes to the code rate in bps:
+// rate [pbs] = Fs / L * N * 8, where
+// Fs: sampling rate (SYSTEM_SAMPLE_RATE_HZ)
+// L:  number of samples per packet (SYSTEM_FRAME_SIZE_SAMPLES)
+// N:  number of bytes per packet (values below)
+
 #define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY      25
 #define OPUS_NUM_BYTES_MONO_HIGH_QUALITY        45
 #define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY    47

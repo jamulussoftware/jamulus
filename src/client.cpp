@@ -33,8 +33,8 @@ CClient::CClient ( const quint16 iPortNumber ) :
     vecStoredFaderLevels             ( MAX_NUM_STORED_FADER_LEVELS, AUD_MIX_FADER_MAX ),
     Channel                          ( false ), /* we need a client channel -> "false" */
     eAudioCompressionType            ( CT_OPUS ),
-    iCeltNumCodedBytes               ( CELT_NUM_BYTES_MONO_NORMAL_QUALITY ),
-    bCeltDoHighQuality               ( false ),
+    iCeltNumCodedBytes               ( CELT_NUM_BYTES_MONO_LOW_QUALITY ),
+    eAudioQuality                    ( AQ_LOW ),
     bUseStereo                       ( false ),
     bIsInitializationPhase           ( true ),
     Socket                           ( &Channel, iPortNumber ),
@@ -424,7 +424,7 @@ void CClient::SetAudoCompressiontype ( const EAudComprType eNAudCompressionType 
     }
 }
 
-void CClient::SetCELTHighQuality ( const bool bNCeltHighQualityFlag )
+void CClient::SetAudioQuality ( const EAudioQuality eNAudioQuality )
 {
     // init with new parameter, if client was running then first
     // stop it and restart again after new initialization
@@ -435,7 +435,7 @@ void CClient::SetCELTHighQuality ( const bool bNCeltHighQualityFlag )
     }
 
     // set new parameter
-    bCeltDoHighQuality = bNCeltHighQualityFlag;
+    eAudioQuality = eNAudioQuality;
     Init();
 
     if ( bWasRunning )
@@ -744,29 +744,29 @@ void CClient::Init()
     AudioReverbL.Init ( SYSTEM_SAMPLE_RATE_HZ );
     AudioReverbR.Init ( SYSTEM_SAMPLE_RATE_HZ );
 
-    // inits for CELT coding
-    if ( bCeltDoHighQuality )
+    // inits for audio coding
+    if ( eAudioCompressionType == CT_CELT )
     {
         if ( bUseStereo )
         {
-            if ( eAudioCompressionType == CT_CELT )
+            if ( eAudioQuality == AQ_LOW )
             {
-                iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_HIGH_QUALITY;
+                iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_LOW_QUALITY;
             }
             else
             {
-                iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
+                iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_NORMAL_QUALITY;
             }
         }
         else
         {
-            if ( eAudioCompressionType == CT_CELT )
+            if ( eAudioQuality == AQ_LOW )
             {
-                iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_HIGH_QUALITY;
+                iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_LOW_QUALITY;
             }
             else
             {
-                iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;
+                iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_NORMAL_QUALITY;
             }
         }
     }
@@ -774,24 +774,36 @@ void CClient::Init()
     {
         if ( bUseStereo )
         {
-            if ( eAudioCompressionType == CT_CELT )
+            switch ( eAudioQuality )
             {
-                iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_NORMAL_QUALITY;
-            }
-            else
-            {
+            case AQ_LOW:
+                iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_LOW_QUALITY;
+                break;
+
+            case AQ_NORMAL:
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY;
+                break;
+
+            case AQ_HIGH:
+                iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
+                break;
             }
         }
         else
         {
-            if ( eAudioCompressionType == CT_CELT )
+            switch ( eAudioQuality )
             {
-                iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_NORMAL_QUALITY;
-            }
-            else
-            {
+            case AQ_LOW:
+                iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_LOW_QUALITY;
+                break;
+
+            case AQ_NORMAL:
                 iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_NORMAL_QUALITY;
+                break;
+
+            case AQ_HIGH:
+                iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;
+                break;
             }
         }
     }

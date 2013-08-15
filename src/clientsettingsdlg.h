@@ -83,7 +83,6 @@ protected:
     void OnAutoJitBufStateChanged ( int value );
     void OnOpenChatOnNewMessageStateChanged ( int value );
     void OnGUIDesignFancyStateChanged ( int value );
-    void OnUseHighQualityAudioStateChanged ( int value );
     void OnUseStereoStateChanged ( int value );
     void OnDefaultCentralServerStateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
@@ -93,6 +92,7 @@ protected:
     void OnRInChanActivated ( int iChanIdx );
     void OnLOutChanActivated ( int iChanIdx );
     void OnROutChanActivated ( int iChanIdx );
+    void OnAudioQualityActivated ( int iQualityIdx );
     void OnDriverSetupClicked();
 
 signals:

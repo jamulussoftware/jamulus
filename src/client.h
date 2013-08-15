@@ -65,17 +65,16 @@
 #define AUD_REVERB_MAX                          100
 
 // CELT number of coded bytes per audio packet
-// 24: mono low/normal quality   156 kbps (128) / 114 kbps (256)
-// 44: mono high quality         216 kbps (128) / 174 kbps (256)
+// 24: mono low quality            156 kbps (128) / 114 kbps (256)
+// 44: mono normal quality         216 kbps (128) / 174 kbps (256)
 // NOTE: Must be > CELT_MINIMUM_NUM_BYTES (greater, not equal to!)
-#define CELT_NUM_BYTES_MONO_NORMAL_QUALITY      24
-#define CELT_NUM_BYTES_MONO_HIGH_QUALITY        44
+#define CELT_NUM_BYTES_MONO_LOW_QUALITY         24
+#define CELT_NUM_BYTES_MONO_NORMAL_QUALITY      44
 
-// 46: stereo low/normal quality   222 kbps (128) / 180 kbps (256)
-// 70: stereo high quality         294 kbps (128) / 252 kbps (256)
-#define CELT_NUM_BYTES_STEREO_NORMAL_QUALITY    46
-#define CELT_NUM_BYTES_STEREO_HIGH_QUALITY      70
-
+// 46: stereo low quality          222 kbps (128) / 180 kbps (256)
+// 70: stereo normal quality       294 kbps (128) / 252 kbps (256)
+#define CELT_NUM_BYTES_STEREO_LOW_QUALITY       46
+#define CELT_NUM_BYTES_STEREO_NORMAL_QUALITY    70
 
 // OPUS number of coded bytes per audio packet
 // TODO we have to use new numbers for OPUS to avoid that old CELT packets
@@ -88,11 +87,13 @@
 // Fs: sampling rate (SYSTEM_SAMPLE_RATE_HZ)
 // L:  number of samples per packet (SYSTEM_FRAME_SIZE_SAMPLES)
 // N:  number of bytes per packet (values below)
+#define OPUS_NUM_BYTES_MONO_LOW_QUALITY         25
+#define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY      45
+#define OPUS_NUM_BYTES_MONO_HIGH_QUALITY        71
 
-#define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY      25
-#define OPUS_NUM_BYTES_MONO_HIGH_QUALITY        45
-#define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY    47
-#define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY      71
+#define OPUS_NUM_BYTES_STEREO_LOW_QUALITY       47
+#define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY    71
+#define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY      142
 
 
 /* Classes ********************************************************************/
@@ -115,10 +116,10 @@ public:
     void SetOpenChatOnNewMessage ( const bool bNV ) { bOpenChatOnNewMessage = bNV; }
 
     EGUIDesign GetGUIDesign() const { return eGUIDesign; }
-    void SetGUIDesign ( const EGUIDesign bNGD ) { eGUIDesign = bNGD; }
+    void SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
 
-    bool GetCELTHighQuality() const { return bCeltDoHighQuality; }
-    void SetCELTHighQuality ( const bool bNCeltHighQualityFlag );
+    EAudioQuality GetAudioQuality() const { return eAudioQuality; }
+    void SetAudioQuality ( const EAudioQuality eNAudioQuality );
 
     bool GetUseStereo() const { return bUseStereo; }
     void SetUseStereo ( const bool bNUseStereo );
@@ -303,7 +304,7 @@ void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
     OpusCustomDecoder*      OpusDecoderStereo;
     EAudComprType           eAudioCompressionType;
     int                     iCeltNumCodedBytes;
-    bool                    bCeltDoHighQuality;
+    EAudioQuality           eAudioQuality;
     bool                    bUseStereo;
     bool                    bIsInitializationPhase;
     CVector<unsigned char>  vecCeltData;

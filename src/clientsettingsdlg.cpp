@@ -192,15 +192,17 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     chbGUIDesignFancy->setAccessibleName ( tr ( "Fancy skin check box" ) );
 
-    // use high quality audio
-    chbUseHighQualityAudio->setWhatsThis ( tr ( "<b>Use High Quality Audio:</b> "
-        "If enabled, it will improve the audio quality "
-        "by increasing the audio stream data rate. Make sure that the current "
+    // audio quality
+    QString strAudioQuality = tr ( "<b>Audio Quality:</b> "
+        "Select the desired audio quality. A low, normal or high audio "
+        "quality can be selected. The higher the audio quality, the higher "
+        "the audio stream data rate. Make sure that the current "
         "upload rate does not exceed the available bandwidth of your "
-        "internet connection." ) );
+        "internet connection." );
 
-    chbUseHighQualityAudio->setAccessibleName ( tr ( "Use high quality audio "
-        "check box" ) );
+    lblAudioQuality->setWhatsThis ( strAudioQuality );
+    cbxAudioQuality->setWhatsThis ( strAudioQuality );
+    cbxAudioQuality->setAccessibleName ( tr ( "Audio quality combo box" ) );
 
     // use stereo
     chbUseStereo->setWhatsThis ( tr ( "<b>Stereo Streaming</b> "
@@ -311,15 +313,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         chbGUIDesignFancy->setCheckState ( Qt::Checked );
     }
 
-    // "High Quality Audio" check box
-    if ( pClient->GetCELTHighQuality() )
-    {
-        chbUseHighQualityAudio->setCheckState ( Qt::Checked );
-    }
-    else
-    {
-        chbUseHighQualityAudio->setCheckState ( Qt::Unchecked );
-    }
+    // "Audio Quality" combo box
+    cbxAudioQuality->clear();
+    cbxAudioQuality->addItem ( "Low" );    // AQ_LOW
+    cbxAudioQuality->addItem ( "Normal" ); // AQ_NORMAL
+    cbxAudioQuality->addItem ( "High" );   // AQ_HIGH
+    cbxAudioQuality->setCurrentIndex ( static_cast<int> ( pClient->GetAudioQuality() ) );
 
     // "Stereo" check box
     if ( pClient->GetUseStereo() )
@@ -380,9 +379,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( chbGUIDesignFancy, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnGUIDesignFancyStateChanged ( int ) ) );
 
-    QObject::connect ( chbUseHighQualityAudio, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnUseHighQualityAudioStateChanged ( int ) ) );
-
     QObject::connect ( chbUseStereo, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnUseStereoStateChanged ( int ) ) );
 
@@ -411,6 +407,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     QObject::connect ( cbxROutChan, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnROutChanActivated ( int ) ) );
+
+    QObject::connect ( cbxAudioQuality, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnAudioQualityActivated ( int ) ) );
 
     // buttons
     QObject::connect ( butDriverSetup, SIGNAL ( clicked() ),
@@ -631,6 +630,12 @@ void CClientSettingsDlg::OnROutChanActivated ( int iChanIdx )
     UpdateSoundChannelSelectionFrame();
 }
 
+void CClientSettingsDlg::OnAudioQualityActivated ( int iQualityIdx )
+{
+    pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iQualityIdx ) );
+    UpdateDisplay(); // upload rate will be changed
+}
+
 void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 {
     pClient->SetDoAutoSockBufSize ( value == Qt::Checked );
@@ -655,12 +660,6 @@ void CClientSettingsDlg::OnGUIDesignFancyStateChanged ( int value )
     }
     emit GUIDesignChanged();
     UpdateDisplay();
-}
-
-void CClientSettingsDlg::OnUseHighQualityAudioStateChanged ( int value )
-{
-    pClient->SetCELTHighQuality ( value == Qt::Checked );
-    UpdateDisplay(); // upload rate will be changed
 }
 
 void CClientSettingsDlg::OnUseStereoStateChanged ( int value )

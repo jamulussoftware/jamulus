@@ -212,10 +212,11 @@ void CSettings::Load()
             pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
         }
 
-        // flag whether using high quality audio or not
-        if ( GetFlagIniSet ( IniXMLDocument, "client", "highqualityaudio", bValue ) )
+        // audio quality
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "audioquality",
+             0, 2 /* AQ_HIGH */, iValue ) )
         {
-            pClient->SetCELTHighQuality ( bValue );
+            pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
         }
 
         // flag whether stereo mode is used
@@ -376,9 +377,9 @@ void CSettings::Save()
         SetNumericIniSet ( IniXMLDocument, "client", "guidesign",
             static_cast<int> ( pClient->GetGUIDesign() ) );
 
-        // flag whether using high quality audio or not
-        SetFlagIniSet ( IniXMLDocument, "client", "highqualityaudio",
-            pClient->GetCELTHighQuality() );
+        // audio quality
+        SetNumericIniSet ( IniXMLDocument, "client", "audioquality",
+            static_cast<int> ( pClient->GetAudioQuality() ) );
 
         // flag whether stereo mode is used
         SetFlagIniSet ( IniXMLDocument, "client", "stereoaudio",

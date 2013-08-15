@@ -6,6 +6,8 @@ TODO: This feature is disabled for now since it does not work as expected (we
 DISABLED: - the connection setup dialog can now be opened during a connection
 
 
+- support for three audio quality settings: low, normal and high
+
 
 3.3.1
 

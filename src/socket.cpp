@@ -70,8 +70,19 @@ void CSocket::Init ( const quint16 iPortNumber )
     }
 
     // connect the "activated" signal
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+    // We have to use a blocked queued connection since in case we use a
+    // separate socket thread, the "readyRead" signal would occur and our
+    // "OnDataReceived" function would be run in another thread. This could
+    // lead to a situation that a new "readRead" occurs while the processing
+    // of the previous signal was not finished -> the error: "Multiple
+    // socket notifiers for same socket" may occur.
+    QObject::connect ( &SocketDevice, SIGNAL ( readyRead() ),
+        this, SLOT ( OnDataReceived() ), Qt::BlockingQueuedConnection );
+#else
     QObject::connect ( &SocketDevice, SIGNAL ( readyRead() ),
         this, SLOT ( OnDataReceived() ) );
+#endif
 }
 
 void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,

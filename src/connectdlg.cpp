@@ -429,8 +429,14 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
             lvwServers->topLevelItem ( iIdx )->
                 setText ( 2, QString().setNum ( iNumClients ) );
 
-            // a ping time was received, set item to visible
-            lvwServers->topLevelItem ( iIdx )->setHidden ( false );
+            // a ping time was received, set item to visible (note that we have
+            // to check if the item is hidden, otherwise we get a lot of CPU
+            // usage by calling "setHidden(false)" even if the item was already
+            // visible)
+            if ( lvwServers->topLevelItem ( iIdx )->isHidden() )
+            {
+                lvwServers->topLevelItem ( iIdx )->setHidden ( false );
+            }
 
             // update minimum ping time column (invisible, used for sorting) if
             // the new value is smaller than the old value

@@ -42,16 +42,17 @@ class CTestbench : public QObject
 
 public:
     CTestbench ( QString sNewAddress, quint16 iNewPort ) :
-        sAddress ( sNewAddress ), iPort ( iNewPort )
+        sAddress ( sNewAddress ),
+        iPort    ( iNewPort )
     {
         // bind socket (try 100 port numbers)
         quint16 iPortIncrement = 0;     // start value: port nubmer plus ten
         bool    bSuccess       = false; // initialization for while loop
+
         while ( !bSuccess && ( iPortIncrement <= 100 ) )
         {
-            bSuccess = UdpSocket.bind (
-                QHostAddress( QHostAddress::Any ),
-                22222 + iPortIncrement );
+            bSuccess = UdpSocket.bind ( QHostAddress( QHostAddress::Any ),
+                                        22222 + iPortIncrement );
 
             iPortIncrement++;
         }
@@ -76,12 +77,14 @@ protected:
 
     QString GenRandomString() const
     {
-        const int iLen = GenRandomIntInRange ( 0, 111 );
+        const int iLen      = GenRandomIntInRange ( 0, 111 );
         QString   strReturn = "";
+
         for ( int i = 0; i < iLen; i++ )
         {
             strReturn += static_cast<char> ( GenRandomIntInRange ( 0, 255 ) );
         }
+
         return strReturn;
     }
 
@@ -99,9 +102,10 @@ public slots:
         CServerCoreInfo        ServerInfo;
         CVector<CServerInfo>   vecServerInfo ( 1 );
         CHostAddress           CurHostAddress ( QHostAddress ( sAddress ), iPort );
+        CChannelCoreInfo       ChannelCoreInfo;
 
         // generate random protocol message
-        switch ( GenRandomIntInRange ( 0, 21 ) )
+        switch ( GenRandomIntInRange ( 0, 25 ) )
         {
         case 0:
             Protocol.CreateJitBufMes ( GenRandomIntInRange ( 0, 10 ) );
@@ -113,7 +117,7 @@ public slots:
 
         case 2:
             Protocol.CreateChanGainMes ( GenRandomIntInRange ( 0, 20 ),
-                GenRandomIntInRange ( -100, 100 ) );
+                                         GenRandomIntInRange ( -100, 100 ) );
             break;
 
         case 3:
@@ -125,22 +129,48 @@ public slots:
             break;
 
         case 4:
-            Protocol.CreateReqConnClientsList();
+            vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
+            vecChanInfo[0].iIpAddr = GenRandomIntInRange ( 0, 100000 );
+            vecChanInfo[0].strName = GenRandomString();
+
+            Protocol.CreateConClientListMes ( vecChanInfo );
             break;
 
         case 5:
-            Protocol.CreateChanNameMes ( GenRandomString() );
+            Protocol.CreateReqConnClientsList();
             break;
 
         case 6:
-            Protocol.CreateReqChanInfoMes();
+            Protocol.CreateChanNameMes ( GenRandomString() );
             break;
 
         case 7:
-            Protocol.CreateChatTextMes ( GenRandomString() );
+            ChannelCoreInfo.eCountry =
+                static_cast<QLocale::Country> ( GenRandomIntInRange ( 0, 100 ) );
+
+            ChannelCoreInfo.eSkillLevel =
+                static_cast<ESkillLevel> ( GenRandomIntInRange ( 0, 3 ) );
+
+            ChannelCoreInfo.iInstrument = GenRandomIntInRange ( 0, 100000 );
+            ChannelCoreInfo.strCity     = GenRandomString();
+            ChannelCoreInfo.strName     = GenRandomString();
+
+            Protocol.CreateChanInfoMes ( ChannelCoreInfo );
             break;
 
         case 8:
+            Protocol.CreateReqChanInfoMes();
+            break;
+
+        case 9:
+            Protocol.CreateChatTextMes ( GenRandomString() );
+            break;
+
+        case 10:
+            Protocol.CreatePingMes ( GenRandomIntInRange ( 0, 100000 ) );
+            break;
+
+        case 11:
             NetTrProps.eAudioCodingType =
                 static_cast<EAudComprType> ( GenRandomIntInRange ( 0, 2 ) );
 
@@ -154,26 +184,30 @@ public slots:
             Protocol.CreateNetwTranspPropsMes ( NetTrProps );
             break;
 
-        case 9:
+        case 12:
             Protocol.CreateReqNetwTranspPropsMes();
             break;
 
-        case 10:
+        case 13:
+            Protocol.CreateOpusSupportedMes();
+            break;
+
+        case 14:
             Protocol.CreateCLPingMes ( CurHostAddress,
                                        GenRandomIntInRange ( -2, 1000 ) );
             break;
 
-        case 11:
+        case 15:
             Protocol.CreateCLPingWithNumClientsMes ( CurHostAddress,
                                                      GenRandomIntInRange ( -2, 1000 ),
                                                      GenRandomIntInRange ( -2, 1000 ) );
             break;
 
-        case 12:
+        case 16:
             Protocol.CreateCLServerFullMes ( CurHostAddress );
             break;
 
-        case 13:
+        case 17:
             ServerInfo.bPermanentOnline =
                 static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
 
@@ -190,11 +224,11 @@ public slots:
                                                  ServerInfo );
             break;
 
-        case 14:
+        case 18:
             Protocol.CreateCLUnregisterServerMes ( CurHostAddress );
             break;
 
-        case 15:
+        case 19:
             vecServerInfo[0].bPermanentOnline =
                 static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
 
@@ -212,29 +246,29 @@ public slots:
                                              vecServerInfo );
             break;
 
-        case 16:
+        case 20:
             Protocol.CreateCLReqServerListMes ( CurHostAddress );
             break;
 
-        case 17:
+        case 21:
             Protocol.CreateCLSendEmptyMesMes ( CurHostAddress,
                                                CurHostAddress );
             break;
 
-        case 18:
+        case 22:
             Protocol.CreateCLEmptyMes ( CurHostAddress );
             break;
 
-        case 19:
+        case 23:
             Protocol.CreateCLDisconnection ( CurHostAddress );
             break;
 
-        case 20:
+        case 24:
             Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
                 GenRandomIntInRange ( -100, 100 ) );
             break;
 
-        case 21:
+        case 25:
             // arbitrary "audio" packet (with random sizes)
             CVector<uint8_t> vecMessage ( GenRandomIntInRange ( 1, 1000 ) );
             OnSendProtMessage ( vecMessage );

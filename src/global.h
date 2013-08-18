@@ -74,8 +74,12 @@ LED bar:      lbr
 // be put in the jitter buffer with highest priority).
 // Since the new code is still in "experimental state", we introduced this macro
 // to enable/disable the new code.
-#define ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-//#undef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+//
+// I disabled the new code again since it seems not to improve the situation
+// much. Maybe things must be tweaked for it to work correctly...
+//
+//#define ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+#undef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
 
 
 

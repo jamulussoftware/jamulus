@@ -100,23 +100,21 @@ public:
     CHighPrioSocket ( CChannel*     pNewChannel,
                       const quint16 iPortNumber )
     {
+        // we have to register some classes to the Qt signal/slot mechanism
+        // since we have thread crossings with the threaded code
+        qRegisterMetaType<CVector<uint8_t> > ( "CVector<uint8_t>" );
+        qRegisterMetaType<CHostAddress> ( "CHostAddress" );
 
-// TEST we have to register some classes to the Qt signal/slot mechanism
-// since now we actually have thread crossings with the new code
-qRegisterMetaType<CVector<uint8_t> > ( "CVector<uint8_t>" );
-qRegisterMetaType<CHostAddress> ( "CHostAddress" );
+        // Creation of the new socket thread which has to have the highest
+        // possible thread priority to make sure the jitter buffer is reliably
+        // filled with the network audio packets and does not get interrupted
+        // by other GUI threads. The following code is based on:
+        // http://qt-project.org/wiki/Threads_Events_QObjects
+        pSocket = new CSocket ( pNewChannel, iPortNumber );
+        pSocket->moveToThread ( &NetworkWorkerThread );
+        NetworkWorkerThread.start ( QThread::TimeCriticalPriority );
 
-
-// TEST actual creation of the new thread, see internet references below:
-// http://qt-project.org/forums/viewthread/14393
-// http://qt-project.org/doc/qt-5.0/qtcore/qthread.html#Priority-enum
-// http://qt-project.org/wiki/Threads_Events_QObjects
-
-pSocket = new CSocket ( pNewChannel, iPortNumber );
-pSocket->moveToThread ( &NetworkWorkerThread );
-NetworkWorkerThread.start ( QThread::TimeCriticalPriority );
-
-
+        // connect the "InvalidPacketReceived" signal
         QObject::connect ( pSocket,
             SIGNAL ( InvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ),
             SIGNAL ( InvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ) );

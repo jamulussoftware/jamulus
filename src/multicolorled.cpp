@@ -102,9 +102,9 @@ void CMultiColorLED::OnTimerYellowLight()
 
 void CMultiColorLED::UpdateColor()
 {
-    /* Red light has highest priority, then comes yellow and at the end, we
-       decide to set green light. Allways check the current color of the
-       control before setting the color to prevent flicking */
+    // Red light has highest priority, then comes yellow and at the end, we
+    // decide to set green light. Allways check the current color of the
+    // control before setting the color to prevent flickering
     if ( bFlagRedLi )
     {
         if ( eColorFlag != RL_RED )

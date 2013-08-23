@@ -65,9 +65,6 @@ LED bar:      lbr
 
 
 /* Definitions ****************************************************************/
-
-
-
 // The receive socket should be put in a high priority thread to ensure the GUI
 // does not effect the stability of the audio stream (e.g. if the GUI is on
 // high load because of a table update, the incoming network packets must still
@@ -76,12 +73,12 @@ LED bar:      lbr
 // to enable/disable the new code.
 //
 // I disabled the new code again since it seems not to improve the situation
-// much. Maybe things must be tweaked for it to work correctly...
+// much. Maybe things must be tweaked for it to work correctly. Since the more
+// threads we have the higher is the risk of software crashes, I will only
+// enable the new code on significant performance gain.
 //
 //#define ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
 #undef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-
-
 
 // define this macro to get debug output
 //#define _DEBUG_

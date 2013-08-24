@@ -1,4 +1,4 @@
-VERSION = 3.3.2cvs
+VERSION = 3.3.2
 
 CONFIG += qt \
     thread \

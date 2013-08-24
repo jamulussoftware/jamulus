@@ -1,10 +1,6 @@
 3.3.2
 
-
-TODO: This feature is disabled for now since it does not work as expected (we
-      get audio drop outs if the list is open during a connection) 
-DISABLED: - the connection setup dialog can now be opened during a connection
-
+- the connection setup dialog can now be opened during a connection
 
 - support for three audio quality settings: low, normal and high
 

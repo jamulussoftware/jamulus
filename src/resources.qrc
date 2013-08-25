@@ -44,7 +44,8 @@
         <file>res/instrvocal.png</file>
         <file>res/instrdjembe.png</file>
         <file>res/instrharmonica.png</file>
-        <file>res/instrecorder.png</file>
+        <file>res/instrrecorder.png</file>
+        <file>res/instrlistener.png</file>
     </qresource>
     <qresource prefix="/png/main" >
         <file>res/fronticon.png</file>

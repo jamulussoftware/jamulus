@@ -46,6 +46,7 @@
         <file>res/instrharmonica.png</file>
         <file>res/instrrecorder.png</file>
         <file>res/instrlistener.png</file>
+        <file>res/instrstreamer.png</file>
     </qresource>
     <qresource prefix="/png/main" >
         <file>res/fronticon.png</file>

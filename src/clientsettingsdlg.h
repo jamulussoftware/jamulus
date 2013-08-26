@@ -51,8 +51,9 @@ class CClientSettingsDlg : public QDialog, private Ui_CClientSettingsDlgBase
     Q_OBJECT
 
 public:
-    CClientSettingsDlg ( CClient* pNCliP, QWidget* parent = 0,
-        Qt::WindowFlags f = 0 );
+    CClientSettingsDlg ( CClient* pNCliP,
+                         QWidget* parent = 0,
+                         Qt::WindowFlags f = 0 );
 
     void SetStatus ( const int iMessType, const int iStatus );
     void SetPingTimeResult ( const int iPingTime,

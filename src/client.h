@@ -266,6 +266,15 @@ public:
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
 
+    // window position/state settings
+    QByteArray       vecWindowPosMain;
+    QByteArray       vecWindowPosSettings;
+    QByteArray       vecWindowPosChat;
+    QByteArray       vecWindowPosConnect;
+    bool             bWindowWasShownSettings;
+    bool             bWindowWasShownChat;
+    bool             bWindowWasShownConnect;
+
 #ifdef LLCON_VST_PLUGIN
     // VST version must have direct access to sound object
     CSound* GetSound() { return &Sound; }

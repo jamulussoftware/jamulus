@@ -375,6 +375,47 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     }
 
 
+    // Window positions --------------------------------------------------------
+    // main window
+    if ( !pClient->vecWindowPosMain.isEmpty() && !pClient->vecWindowPosMain.isNull() )
+    {
+        restoreGeometry ( pClient->vecWindowPosMain );
+    }
+
+    // settings window
+    if ( !pClient->vecWindowPosSettings.isEmpty() && !pClient->vecWindowPosSettings.isNull() )
+    {
+        ClientSettingsDlg.restoreGeometry ( pClient->vecWindowPosSettings );
+    }
+
+    if ( pClient->bWindowWasShownSettings )
+    {
+        ShowGeneralSettings();
+    }
+
+    // chat window
+    if ( !pClient->vecWindowPosChat.isEmpty() && !pClient->vecWindowPosChat.isNull() )
+    {
+        ChatDlg.restoreGeometry ( pClient->vecWindowPosChat );
+    }
+
+    if ( pClient->bWindowWasShownChat )
+    {
+        ShowChatWindow();
+    }
+
+    // connection setup window
+    if ( !pClient->vecWindowPosConnect.isEmpty() && !pClient->vecWindowPosConnect.isNull() )
+    {
+        ConnectDlg.restoreGeometry ( pClient->vecWindowPosConnect );
+    }
+
+    if ( pClient->bWindowWasShownConnect )
+    {
+        ShowConnectionSetupDialog();
+    }
+
+
     // Connections -------------------------------------------------------------
     // push buttons
     QObject::connect ( butConnect, SIGNAL ( clicked() ),
@@ -489,10 +530,20 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
 void CClientDlg::closeEvent ( QCloseEvent* Event )
 {
+    // store window positions
+    pClient->vecWindowPosMain     = saveGeometry();
+    pClient->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
+    pClient->vecWindowPosChat     = ChatDlg.saveGeometry();
+    pClient->vecWindowPosConnect  = ConnectDlg.saveGeometry();
+
+    pClient->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
+    pClient->bWindowWasShownChat     = ChatDlg.isVisible();
+    pClient->bWindowWasShownConnect  = ConnectDlg.isVisible();
+
     // if settings/connect dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
-    ConnectDlg.close();
     ChatDlg.close();
+    ConnectDlg.close();
     AnalyzerConsole.close();
 
     // if connected, terminate connection

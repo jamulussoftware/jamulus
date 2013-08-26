@@ -31,6 +31,13 @@ CClient::CClient ( const quint16 iPortNumber ) :
     ChannelInfo                      (),
     vecStoredFaderTags               ( MAX_NUM_STORED_FADER_LEVELS, "" ),
     vecStoredFaderLevels             ( MAX_NUM_STORED_FADER_LEVELS, AUD_MIX_FADER_MAX ),
+    vecWindowPosMain                 (), // empty array
+    vecWindowPosSettings             (), // empty array
+    vecWindowPosChat                 (), // empty array
+    vecWindowPosConnect              (), // empty array
+    bWindowWasShownSettings          ( false ),
+    bWindowWasShownChat              ( false ),
+    bWindowWasShownConnect           ( false ),
     Channel                          ( false ), /* we need a client channel -> "false" */
     eAudioCompressionType            ( CT_OPUS ),
     iCeltNumCodedBytes               ( CELT_NUM_BYTES_MONO_LOW_QUALITY ),

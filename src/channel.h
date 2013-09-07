@@ -141,7 +141,6 @@ Protocol.CreateChanNameMes ( ChInfo.strName );
     void CreateReqJitBufMes()                             { Protocol.CreateReqJitBufMes(); }
     void CreateReqConnClientsList()                       { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText ) { Protocol.CreateChatTextMes ( strChatText ); }
-    void CreatePingMes ( const int iMs )                  { Protocol.CreatePingMes ( iMs ); }
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 void CreateConClientListNameMes ( const CVector<CChannelInfo>& vecChanInfo )
@@ -228,7 +227,6 @@ signals:
     void ReqChanInfo();
     void OpusSupported();
     void ChatTextReceived ( QString strChatText );
-    void PingReceived ( int iMs );
     void ReqNetTranspProps();
     void Disconnected();
 

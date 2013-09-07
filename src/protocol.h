@@ -97,7 +97,6 @@ public:
     void CreateChanInfoMes ( const CChannelCoreInfo ChanInfo );
     void CreateReqChanInfoMes();
     void CreateChatTextMes ( const QString strChatText );
-    void CreatePingMes ( const int iMs );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
     void CreateReqNetwTranspPropsMes();
     void CreateOpusSupportedMes();
@@ -213,7 +212,6 @@ protected:
     bool EvaluateChanInfoMes           ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChanInfoMes();
     bool EvaluateChatTextMes           ( const CVector<uint8_t>& vecData );
-    bool EvaluatePingMes               ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes    ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
     bool EvaluateOpusSupportedMes();
@@ -265,7 +263,6 @@ signals:
     void ReqChanInfo();
     void OpusSupported();
     void ChatTextReceived ( QString strChatText );
-    void PingReceived ( int iMs );
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void ReqNetTranspProps();
 

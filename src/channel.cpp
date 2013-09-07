@@ -93,11 +93,6 @@ CChannel::CChannel ( const bool bNIsServer ) :
         SIGNAL ( ChatTextReceived ( QString ) ) );
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-QObject::connect( &Protocol,
-    SIGNAL ( PingReceived ( int ) ),
-    SIGNAL ( PingReceived ( int ) ) );
-
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 QObject::connect ( &Protocol,
     SIGNAL ( OpusSupported() ),
     SIGNAL ( OpusSupported() ) );

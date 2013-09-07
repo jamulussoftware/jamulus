@@ -105,7 +105,7 @@ public slots:
         CChannelCoreInfo       ChannelCoreInfo;
 
         // generate random protocol message
-        switch ( GenRandomIntInRange ( 0, 25 ) )
+        switch ( GenRandomIntInRange ( 0, 24 ) )
         {
         case 0:
             Protocol.CreateJitBufMes ( GenRandomIntInRange ( 0, 10 ) );
@@ -167,10 +167,6 @@ public slots:
             break;
 
         case 10:
-            Protocol.CreatePingMes ( GenRandomIntInRange ( 0, 100000 ) );
-            break;
-
-        case 11:
             NetTrProps.eAudioCodingType =
                 static_cast<EAudComprType> ( GenRandomIntInRange ( 0, 2 ) );
 
@@ -184,30 +180,30 @@ public slots:
             Protocol.CreateNetwTranspPropsMes ( NetTrProps );
             break;
 
-        case 12:
+        case 11:
             Protocol.CreateReqNetwTranspPropsMes();
             break;
 
-        case 13:
+        case 12:
             Protocol.CreateOpusSupportedMes();
             break;
 
-        case 14:
+        case 13:
             Protocol.CreateCLPingMes ( CurHostAddress,
                                        GenRandomIntInRange ( -2, 1000 ) );
             break;
 
-        case 15:
+        case 14:
             Protocol.CreateCLPingWithNumClientsMes ( CurHostAddress,
                                                      GenRandomIntInRange ( -2, 1000 ),
                                                      GenRandomIntInRange ( -2, 1000 ) );
             break;
 
-        case 16:
+        case 15:
             Protocol.CreateCLServerFullMes ( CurHostAddress );
             break;
 
-        case 17:
+        case 16:
             ServerInfo.bPermanentOnline =
                 static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
 
@@ -224,11 +220,11 @@ public slots:
                                                  ServerInfo );
             break;
 
-        case 18:
+        case 17:
             Protocol.CreateCLUnregisterServerMes ( CurHostAddress );
             break;
 
-        case 19:
+        case 18:
             vecServerInfo[0].bPermanentOnline =
                 static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
 
@@ -246,29 +242,29 @@ public slots:
                                              vecServerInfo );
             break;
 
-        case 20:
+        case 19:
             Protocol.CreateCLReqServerListMes ( CurHostAddress );
             break;
 
-        case 21:
+        case 20:
             Protocol.CreateCLSendEmptyMesMes ( CurHostAddress,
                                                CurHostAddress );
             break;
 
-        case 22:
+        case 21:
             Protocol.CreateCLEmptyMes ( CurHostAddress );
             break;
 
-        case 23:
+        case 22:
             Protocol.CreateCLDisconnection ( CurHostAddress );
             break;
 
-        case 24:
+        case 23:
             Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
                 GenRandomIntInRange ( -100, 100 ) );
             break;
 
-        case 25:
+        case 24:
             // arbitrary "audio" packet (with random sizes)
             CVector<uint8_t> vecMessage ( GenRandomIntInRange ( 1, 1000 ) );
             OnSendProtMessage ( vecMessage );

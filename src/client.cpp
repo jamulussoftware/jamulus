@@ -177,11 +177,9 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( ChatTextReceived ( QString ) ),
         SIGNAL ( ChatTextReceived ( QString ) ) );
 
-
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 QObject::connect ( &Channel, SIGNAL ( OpusSupported() ),
     this, SLOT ( OnOpusSupported() ) );
-
 
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),

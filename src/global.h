@@ -180,7 +180,7 @@ LED bar:      lbr
 // if you want to change this paramter, there has to be done code modifications
 // on other places, too! The code tag "MAX_NUM_CHANNELS_TAG" shows these places
 // (just search for the tag in the entire code)
-#define MAX_NUM_CHANNELS                12 // max number channels for server
+#define MAX_NUM_CHANNELS                20 // max number channels for server
 
 // actual number of used channels in the server
 // this parameter can safely be changed from 1 to MAX_NUM_CHANNELS

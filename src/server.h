@@ -324,6 +324,14 @@ public slots:
     void OnSendProtMessCh9  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 9,  mess ); }
     void OnSendProtMessCh10 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 10, mess ); }
     void OnSendProtMessCh11 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 11, mess ); }
+    void OnSendProtMessCh12 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 12, mess ); }
+    void OnSendProtMessCh13 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 13, mess ); }
+    void OnSendProtMessCh14 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 14, mess ); }
+    void OnSendProtMessCh15 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 15, mess ); }
+    void OnSendProtMessCh16 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 16, mess ); }
+    void OnSendProtMessCh17 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 17, mess ); }
+    void OnSendProtMessCh18 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 18, mess ); }
+    void OnSendProtMessCh19 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 19, mess ); }
 
     void OnDetCLMessCh0  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[0].GetAddress() ); }
     void OnDetCLMessCh1  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[1].GetAddress() ); }
@@ -337,6 +345,14 @@ public slots:
     void OnDetCLMessCh9  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[9].GetAddress() ); }
     void OnDetCLMessCh10 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[10].GetAddress() ); }
     void OnDetCLMessCh11 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[11].GetAddress() ); }
+    void OnDetCLMessCh12 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[12].GetAddress() ); }
+    void OnDetCLMessCh13 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[13].GetAddress() ); }
+    void OnDetCLMessCh14 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[14].GetAddress() ); }
+    void OnDetCLMessCh15 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[15].GetAddress() ); }
+    void OnDetCLMessCh16 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[16].GetAddress() ); }
+    void OnDetCLMessCh17 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[17].GetAddress() ); }
+    void OnDetCLMessCh18 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[18].GetAddress() ); }
+    void OnDetCLMessCh19 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[19].GetAddress() ); }
 
     void OnNewConnectionCh0()  { OnNewConnection ( 0 ); }
     void OnNewConnectionCh1()  { OnNewConnection ( 1 ); }
@@ -350,6 +366,14 @@ public slots:
     void OnNewConnectionCh9()  { OnNewConnection ( 9 ); }
     void OnNewConnectionCh10() { OnNewConnection ( 10 ); }
     void OnNewConnectionCh11() { OnNewConnection ( 11 ); }
+    void OnNewConnectionCh12() { OnNewConnection ( 12 ); }
+    void OnNewConnectionCh13() { OnNewConnection ( 13 ); }
+    void OnNewConnectionCh14() { OnNewConnection ( 14 ); }
+    void OnNewConnectionCh15() { OnNewConnection ( 15 ); }
+    void OnNewConnectionCh16() { OnNewConnection ( 16 ); }
+    void OnNewConnectionCh17() { OnNewConnection ( 17 ); }
+    void OnNewConnectionCh18() { OnNewConnection ( 18 ); }
+    void OnNewConnectionCh19() { OnNewConnection ( 19 ); }
 
     void OnReqConnClientsListCh0()  { CreateAndSendChanListForThisChan ( 0 ); }
     void OnReqConnClientsListCh1()  { CreateAndSendChanListForThisChan ( 1 ); }
@@ -363,6 +387,14 @@ public slots:
     void OnReqConnClientsListCh9()  { CreateAndSendChanListForThisChan ( 9 ); }
     void OnReqConnClientsListCh10() { CreateAndSendChanListForThisChan ( 10 ); }
     void OnReqConnClientsListCh11() { CreateAndSendChanListForThisChan ( 11 ); }
+    void OnReqConnClientsListCh12() { CreateAndSendChanListForThisChan ( 12 ); }
+    void OnReqConnClientsListCh13() { CreateAndSendChanListForThisChan ( 13 ); }
+    void OnReqConnClientsListCh14() { CreateAndSendChanListForThisChan ( 14 ); }
+    void OnReqConnClientsListCh15() { CreateAndSendChanListForThisChan ( 15 ); }
+    void OnReqConnClientsListCh16() { CreateAndSendChanListForThisChan ( 16 ); }
+    void OnReqConnClientsListCh17() { CreateAndSendChanListForThisChan ( 17 ); }
+    void OnReqConnClientsListCh18() { CreateAndSendChanListForThisChan ( 18 ); }
+    void OnReqConnClientsListCh19() { CreateAndSendChanListForThisChan ( 19 ); }
 
     void OnChanInfoHasChangedCh0()  { CreateAndSendChanListForAllConChannels(); }
     void OnChanInfoHasChangedCh1()  { CreateAndSendChanListForAllConChannels(); }
@@ -376,6 +408,14 @@ public slots:
     void OnChanInfoHasChangedCh9()  { CreateAndSendChanListForAllConChannels(); }
     void OnChanInfoHasChangedCh10() { CreateAndSendChanListForAllConChannels(); }
     void OnChanInfoHasChangedCh11() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh12() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh13() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh14() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh15() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh16() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh17() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh18() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh19() { CreateAndSendChanListForAllConChannels(); }
 
     void OnChatTextReceivedCh0  ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 0,  strChatText ); }
     void OnChatTextReceivedCh1  ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 1,  strChatText ); }
@@ -389,6 +429,14 @@ public slots:
     void OnChatTextReceivedCh9  ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 9,  strChatText ); }
     void OnChatTextReceivedCh10 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 10, strChatText ); }
     void OnChatTextReceivedCh11 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 11, strChatText ); }
+    void OnChatTextReceivedCh12 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 12, strChatText ); }
+    void OnChatTextReceivedCh13 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 13, strChatText ); }
+    void OnChatTextReceivedCh14 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 14, strChatText ); }
+    void OnChatTextReceivedCh15 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 15, strChatText ); }
+    void OnChatTextReceivedCh16 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 16, strChatText ); }
+    void OnChatTextReceivedCh17 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 17, strChatText ); }
+    void OnChatTextReceivedCh18 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 18, strChatText ); }
+    void OnChatTextReceivedCh19 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 19, strChatText ); }
 
     void OnServerAutoSockBufSizeChangeCh0  ( int iNNumFra ) { vecChannels[0].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh1  ( int iNNumFra ) { vecChannels[1].CreateJitBufMes ( iNNumFra ); }
@@ -402,6 +450,14 @@ public slots:
     void OnServerAutoSockBufSizeChangeCh9  ( int iNNumFra ) { vecChannels[9].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh10 ( int iNNumFra ) { vecChannels[10].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh11 ( int iNNumFra ) { vecChannels[11].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh12 ( int iNNumFra ) { vecChannels[12].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh13 ( int iNNumFra ) { vecChannels[13].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh14 ( int iNNumFra ) { vecChannels[14].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh15 ( int iNNumFra ) { vecChannels[15].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh16 ( int iNNumFra ) { vecChannels[16].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh17 ( int iNNumFra ) { vecChannels[17].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh18 ( int iNNumFra ) { vecChannels[18].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh19 ( int iNNumFra ) { vecChannels[19].CreateJitBufMes ( iNNumFra ); }
 };
 
 #endif /* !defined ( SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ ) */

@@ -129,6 +129,14 @@ public slots:
     void OnGainValueChangedCh9  ( double dValue ) { OnGainValueChanged ( 9,  dValue ); }
     void OnGainValueChangedCh10 ( double dValue ) { OnGainValueChanged ( 10, dValue ); }
     void OnGainValueChangedCh11 ( double dValue ) { OnGainValueChanged ( 11, dValue ); }
+    void OnGainValueChangedCh12 ( double dValue ) { OnGainValueChanged ( 12, dValue ); }
+    void OnGainValueChangedCh13 ( double dValue ) { OnGainValueChanged ( 13, dValue ); }
+    void OnGainValueChangedCh14 ( double dValue ) { OnGainValueChanged ( 14, dValue ); }
+    void OnGainValueChangedCh15 ( double dValue ) { OnGainValueChanged ( 15, dValue ); }
+    void OnGainValueChangedCh16 ( double dValue ) { OnGainValueChanged ( 16, dValue ); }
+    void OnGainValueChangedCh17 ( double dValue ) { OnGainValueChanged ( 17, dValue ); }
+    void OnGainValueChangedCh18 ( double dValue ) { OnGainValueChanged ( 18, dValue ); }
+    void OnGainValueChangedCh19 ( double dValue ) { OnGainValueChanged ( 19, dValue ); }
 
     void OnChSoloStateChangedCh0  ( int value ) { OnChSoloStateChanged ( 0,  value ); }
     void OnChSoloStateChangedCh1  ( int value ) { OnChSoloStateChanged ( 1,  value ); }
@@ -142,6 +150,14 @@ public slots:
     void OnChSoloStateChangedCh9  ( int value ) { OnChSoloStateChanged ( 9,  value ); }
     void OnChSoloStateChangedCh10 ( int value ) { OnChSoloStateChanged ( 10, value ); }
     void OnChSoloStateChangedCh11 ( int value ) { OnChSoloStateChanged ( 11, value ); }
+    void OnChSoloStateChangedCh12 ( int value ) { OnChSoloStateChanged ( 12, value ); }
+    void OnChSoloStateChangedCh13 ( int value ) { OnChSoloStateChanged ( 13, value ); }
+    void OnChSoloStateChangedCh14 ( int value ) { OnChSoloStateChanged ( 14, value ); }
+    void OnChSoloStateChangedCh15 ( int value ) { OnChSoloStateChanged ( 15, value ); }
+    void OnChSoloStateChangedCh16 ( int value ) { OnChSoloStateChanged ( 16, value ); }
+    void OnChSoloStateChangedCh17 ( int value ) { OnChSoloStateChanged ( 17, value ); }
+    void OnChSoloStateChangedCh18 ( int value ) { OnChSoloStateChanged ( 18, value ); }
+    void OnChSoloStateChangedCh19 ( int value ) { OnChSoloStateChanged ( 19, value ); }
 
 signals:
     void ChangeChanGain ( int iId, double dGain );

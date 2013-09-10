@@ -52,11 +52,10 @@ public:
     void Show() { pFrame->show(); }
     void Hide() { pFrame->hide(); }
     bool IsVisible() { return pLabel->isVisible(); }
+    bool IsSolo() { return pcbSolo->isChecked(); }
     void SetGUIDesign ( const EGUIDesign eNewDesign );
 
-    void ResetSoloState();
-    void SetOtherSoloState ( const bool bState );
-
+    void UpdateSoloState ( const bool bNewOtherSoloState );
     void SetFaderLevel ( const int iLevel );
     int  GetFaderLevel() { return pFader->value(); }
     void Reset();
@@ -107,8 +106,8 @@ public:
 protected:
     int GetStoredFaderLevel ( const CChannelInfo& ChanInfo );
     void StoreFaderLevel ( CChannelFader* pChanFader );
+    void UpdateSoloStates();
 
-    void OnChSoloStateChanged ( const int iChannelIdx, const int iValue );
     void OnGainValueChanged ( const int iChannelIdx, const double dValue );
 
     CVector<CChannelFader*> vecpChanFader;
@@ -138,26 +137,7 @@ public slots:
     void OnGainValueChangedCh18 ( double dValue ) { OnGainValueChanged ( 18, dValue ); }
     void OnGainValueChangedCh19 ( double dValue ) { OnGainValueChanged ( 19, dValue ); }
 
-    void OnChSoloStateChangedCh0  ( int value ) { OnChSoloStateChanged ( 0,  value ); }
-    void OnChSoloStateChangedCh1  ( int value ) { OnChSoloStateChanged ( 1,  value ); }
-    void OnChSoloStateChangedCh2  ( int value ) { OnChSoloStateChanged ( 2,  value ); }
-    void OnChSoloStateChangedCh3  ( int value ) { OnChSoloStateChanged ( 3,  value ); }
-    void OnChSoloStateChangedCh4  ( int value ) { OnChSoloStateChanged ( 4,  value ); }
-    void OnChSoloStateChangedCh5  ( int value ) { OnChSoloStateChanged ( 5,  value ); }
-    void OnChSoloStateChangedCh6  ( int value ) { OnChSoloStateChanged ( 6,  value ); }
-    void OnChSoloStateChangedCh7  ( int value ) { OnChSoloStateChanged ( 7,  value ); }
-    void OnChSoloStateChangedCh8  ( int value ) { OnChSoloStateChanged ( 8,  value ); }
-    void OnChSoloStateChangedCh9  ( int value ) { OnChSoloStateChanged ( 9,  value ); }
-    void OnChSoloStateChangedCh10 ( int value ) { OnChSoloStateChanged ( 10, value ); }
-    void OnChSoloStateChangedCh11 ( int value ) { OnChSoloStateChanged ( 11, value ); }
-    void OnChSoloStateChangedCh12 ( int value ) { OnChSoloStateChanged ( 12, value ); }
-    void OnChSoloStateChangedCh13 ( int value ) { OnChSoloStateChanged ( 13, value ); }
-    void OnChSoloStateChangedCh14 ( int value ) { OnChSoloStateChanged ( 14, value ); }
-    void OnChSoloStateChangedCh15 ( int value ) { OnChSoloStateChanged ( 15, value ); }
-    void OnChSoloStateChangedCh16 ( int value ) { OnChSoloStateChanged ( 16, value ); }
-    void OnChSoloStateChangedCh17 ( int value ) { OnChSoloStateChanged ( 17, value ); }
-    void OnChSoloStateChangedCh18 ( int value ) { OnChSoloStateChanged ( 18, value ); }
-    void OnChSoloStateChangedCh19 ( int value ) { OnChSoloStateChanged ( 19, value ); }
+    void OnChSoloStateChanged() { UpdateSoloStates(); }
 
 signals:
     void ChangeChanGain ( int iId, double dGain );

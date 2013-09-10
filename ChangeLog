@@ -4,6 +4,9 @@
 
 - added new instrument pictures for "Recorder", "Streamer" and "Listener"
 
+- the solo state of a mixer fader is not exclusive any more and the solo
+  state is preserved if the number of mixer faders changes
+
 
 3.3.2
 

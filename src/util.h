@@ -110,7 +110,11 @@ public:
     void Reset ( const TData tResetVal );
 
     void Enlarge ( const int iAddedSize );
-    void Add ( const TData& tI ) { Enlarge ( 1 ); pData[iVectorSize - 1] = tI; }
+    void Add ( const TData& tI )
+    {
+        Enlarge ( 1 );
+        pData[iVectorSize - 1] = tI;
+    }
 
     int StringFiFoWithCompare ( const QString strNewValue,
                                 const bool    bDoAdding = true );
@@ -119,7 +123,8 @@ public:
 
     // This operator allows for a l-value assignment of this object:
     // CVector[x] = y is possible
-    inline TData& operator[] ( const int iPos ) {
+    inline TData& operator[] ( const int iPos )
+    {
 #ifdef _DEBUG_
         if ( ( iPos < 0 ) || ( iPos > iVectorSize - 1 ) )
         {
@@ -127,9 +132,11 @@ public:
                 iVectorSize, "New parameter", iPos );
         }
 #endif
-        return pData[iPos]; }
+        return pData[iPos];
+    }
 
-    inline TData operator[] ( const int iPos ) const {
+    inline TData operator[] ( const int iPos ) const
+    {
 #ifdef _DEBUG_
         if ( ( iPos < 0 ) || ( iPos > iVectorSize - 1 ) )
         {
@@ -137,9 +144,11 @@ public:
                 iVectorSize, "New parameter", iPos );
         }
 #endif
-        return pData[iPos]; }
+        return pData[iPos];
+    }
 
-    inline CVector<TData>& operator= ( const CVector<TData>& vecI ) {
+    inline CVector<TData>& operator= ( const CVector<TData>& vecI )
+    {
 #ifdef _DEBUG_
         // Vectors which shall be copied MUST have same size! (If this is 
         // satisfied, the parameter "iVectorSize" must not be adjusted as
@@ -270,7 +279,8 @@ public:
     inline TData Get() { return this->pData[iCurIdx]; }
 
     virtual void Init ( const int iNewSize );
-    virtual void Init ( const int iNewSize, const TData tIniVal );
+    virtual void Init ( const int   iNewSize,
+                        const TData tIniVal );
 
 protected:
     int iCurIdx;
@@ -282,7 +292,7 @@ template<class TData> void CFIFO<TData>::Init ( const int iNewSize )
     CVector<TData>::Init ( iNewSize );
 }
 
-template<class TData> void CFIFO<TData>::Init ( const int iNewSize,
+template<class TData> void CFIFO<TData>::Init ( const int   iNewSize,
                                                 const TData tIniVal )
 {
     iCurIdx = 0;
@@ -499,12 +509,16 @@ public:
     void   Update ( CVector<short>& vecsAudio );
     double MicLevelLeft()  { return CalcLogResult ( dCurLevelL ); }
     double MicLevelRight() { return CalcLogResult ( dCurLevelR ); }
-    void   Reset()         { dCurLevelL = 0.0; dCurLevelR = 0.0; }
+    void   Reset()
+    {
+        dCurLevelL = 0.0;
+        dCurLevelR = 0.0;
+    }
 
 protected:
     double CalcLogResult  ( const double& dLinearLevel );
-    double UpdateCurLevel ( double       dCurLevel,
-                            const short& sMax );
+    double UpdateCurLevel ( double        dCurLevel,
+                            const short&  sMax );
 
     double dCurLevelL;
     double dCurLevelR;
@@ -876,7 +890,7 @@ class CAudioReverb
 public:
     CAudioReverb() {}
     
-    void   Init ( const int iSampleRate, const double rT60 = (double) 5.0 );
+    void   Init ( const int iSampleRate, const double rT60 = (double) 1.1 );
     void   Clear();
     double ProcessSample ( const double input );
 
@@ -884,10 +898,10 @@ protected:
     void setT60 ( const double rT60, const int iSampleRate );
     bool isPrime ( const int number );
 
-    CFIFO<int>  allpassDelays_[3];
-    CFIFO<int>  combDelays_[4];
-    double      allpassCoefficient_;
-    double      combCoefficient_[4];
+    CFIFO<int> allpassDelays_[3];
+    CFIFO<int> combDelays_[4];
+    double     allpassCoefficient_;
+    double     combCoefficient_[4];
 };
 
 

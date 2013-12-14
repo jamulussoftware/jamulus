@@ -236,20 +236,20 @@ void CSettings::Load()
         }
 
         // window position of the main window
-        pClient->vecWindowPosMain = QByteArray().fromBase64 (
-            GetIniSetting ( IniXMLDocument, "client", "winposmain" ).toLatin1() );
+        pClient->vecWindowPosMain = FromBase64 (
+            GetIniSetting ( IniXMLDocument, "client", "winposmain" ) );
 
         // window position of the settings window
-        pClient->vecWindowPosSettings = QByteArray().fromBase64 (
-            GetIniSetting ( IniXMLDocument, "client", "winposset" ).toLatin1() );
+        pClient->vecWindowPosSettings = FromBase64 (
+            GetIniSetting ( IniXMLDocument, "client", "winposset" ) );
 
         // window position of the chat window
-        pClient->vecWindowPosChat = QByteArray().fromBase64 (
-            GetIniSetting ( IniXMLDocument, "client", "winposchat" ).toLatin1() );
+        pClient->vecWindowPosChat = FromBase64 (
+            GetIniSetting ( IniXMLDocument, "client", "winposchat" ) );
 
         // window position of the connect window
-        pClient->vecWindowPosConnect = QByteArray().fromBase64 (
-            GetIniSetting ( IniXMLDocument, "client", "winposcon" ).toLatin1() );
+        pClient->vecWindowPosConnect = FromBase64 (
+            GetIniSetting ( IniXMLDocument, "client", "winposcon" ) );
 
         // visibility state of the settings window
         if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisset", bValue ) )
@@ -429,19 +429,19 @@ void CSettings::Save()
 
         // window position of the main window
         PutIniSetting ( IniXMLDocument, "client", "winposmain",
-            QString().fromLatin1 ( pClient->vecWindowPosMain.toBase64() ) );
+            ToBase64 ( pClient->vecWindowPosMain ) );
 
         // window position of the settings window
         PutIniSetting ( IniXMLDocument, "client", "winposset",
-            QString().fromLatin1 ( pClient->vecWindowPosSettings.toBase64() ) );
+            ToBase64 ( pClient->vecWindowPosSettings ) );
 
         // window position of the chat window
         PutIniSetting ( IniXMLDocument, "client", "winposchat",
-            QString().fromLatin1 ( pClient->vecWindowPosChat.toBase64() ) );
+            ToBase64 ( pClient->vecWindowPosChat ) );
 
         // window position of the connect window
         PutIniSetting ( IniXMLDocument, "client", "winposcon",
-            QString().fromLatin1 ( pClient->vecWindowPosConnect.toBase64() ) );
+            ToBase64 ( pClient->vecWindowPosConnect ) );
 
         // visibility state of the settings window
         SetFlagIniSet ( IniXMLDocument, "client", "winvisset",

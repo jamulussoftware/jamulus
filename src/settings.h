@@ -53,6 +53,11 @@ public:
 protected:
     void SetFileName ( const QString& sNFiName );
 
+    QString ToBase64 ( const QByteArray strIn ) const
+        { return QString::fromLatin1 ( strIn.toBase64() ); }
+    QByteArray FromBase64 ( const QString strIn ) const
+        { return QByteArray::fromBase64 ( strIn.toLatin1() ); }
+
     // init file access function for read/write
     void SetNumericIniSet ( QDomDocument&  xmlFile,
                             const QString& strSection,

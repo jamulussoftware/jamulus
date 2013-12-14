@@ -202,17 +202,17 @@ protected:
                                           const CVector<uint8_t>& vecData,
                                           const CHostAddress&     InetAddr );
 
-    bool EvaluateJitBufMes             ( const CVector<uint8_t>& vecData );
+    bool EvaluateJitBufMes            ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();
-    bool EvaluateChanGainMes           ( const CVector<uint8_t>& vecData );
-    bool EvaluateConClientListNameMes  ( const CVector<uint8_t>& vecData );
-    bool EvaluateConClientListMes      ( const CVector<uint8_t>& vecData );
+    bool EvaluateChanGainMes          ( const CVector<uint8_t>& vecData );
+    bool EvaluateConClientListNameMes ( const CVector<uint8_t>& vecData );
+    bool EvaluateConClientListMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateReqConnClientsList();
-    bool EvaluateChanNameMes           ( const CVector<uint8_t>& vecData );
-    bool EvaluateChanInfoMes           ( const CVector<uint8_t>& vecData );
+    bool EvaluateChanNameMes          ( const CVector<uint8_t>& vecData );
+    bool EvaluateChanInfoMes          ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChanInfoMes();
-    bool EvaluateChatTextMes           ( const CVector<uint8_t>& vecData );
-    bool EvaluateNetwTranspPropsMes    ( const CVector<uint8_t>& vecData );
+    bool EvaluateChatTextMes          ( const CVector<uint8_t>& vecData );
+    bool EvaluateNetwTranspPropsMes   ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
     bool EvaluateOpusSupportedMes();
 

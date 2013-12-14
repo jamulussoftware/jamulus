@@ -167,7 +167,8 @@ uint32_t CCRC::GetCRC()
     three series allpass units, followed by four parallel comb filters, and two
     decorrelation delay lines in parallel at the output.
 */
-void CAudioReverb::Init ( const int iSampleRate, const double rT60 )
+void CAudioReverb::Init ( const int    iSampleRate,
+                          const double rT60 )
 {
     int delay, i;
 
@@ -252,7 +253,7 @@ void CAudioReverb::Clear()
 }
 
 void CAudioReverb::setT60 ( const double rT60,
-                            const int iSampleRate )
+                            const int    iSampleRate )
 {
     // set the reverberation T60 decay time
     for ( int i = 0; i < 4; i++ )

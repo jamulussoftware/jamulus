@@ -6,6 +6,8 @@
 
 - the solo state of a mixer fader is not exclusive any more and the solo
   state is preserved if the number of mixer faders changes
+  
+- bug fix: support for correct utf-8 storage of names in the ini-file
 
 
 3.3.2

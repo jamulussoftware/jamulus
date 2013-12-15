@@ -53,10 +53,23 @@ public:
 protected:
     void SetFileName ( const QString& sNFiName );
 
+    // The following functions implement the conversion from the general string
+    // to base64 (which should be used for binary data in XML files). This
+    // enables arbitrary utf8 characters to be used as the names in the GUI.
+    //
+    // ATTENTION: The "FromBase64[...]" functions must be used with caution!
+    //            The reason is that if the FromBase64ToByteArray() is used to
+    //            assign the stored value to a QString, this is incorrect but
+    //            will not generate a compile error since there is a default
+    //            conversion available for QByteArray to QString.
     QString ToBase64 ( const QByteArray strIn ) const
         { return QString::fromLatin1 ( strIn.toBase64() ); }
-    QByteArray FromBase64 ( const QString strIn ) const
+    QString ToBase64 ( const QString strIn ) const
+        { return ToBase64 ( strIn.toUtf8() ); }
+    QByteArray FromBase64ToByteArray ( const QString strIn ) const
         { return QByteArray::fromBase64 ( strIn.toLatin1() ); }
+    QString FromBase64ToString ( const QString strIn ) const
+        { return QString::fromUtf8 ( FromBase64ToByteArray ( strIn ) ); }
 
     // init file access function for read/write
     void SetNumericIniSet ( QDomDocument&  xmlFile,

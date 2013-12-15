@@ -69,9 +69,9 @@ void CSettings::Load()
         // stored fader tags
         for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
         {
-            pClient->vecStoredFaderTags[iIdx] =
+            pClient->vecStoredFaderTags[iIdx] = FromBase64ToString (
                 GetIniSetting ( IniXMLDocument, "client",
-                                QString ( "storedfadertag%1" ).arg ( iIdx ), "" );
+                                QString ( "storedfadertag%1_base64" ).arg ( iIdx ), "" ) );
         }
 
         // stored fader levels
@@ -81,13 +81,12 @@ void CSettings::Load()
                  0, AUD_MIX_FADER_MAX, iValue ) )
             {
                 pClient->vecStoredFaderLevels[iIdx] = iValue;
-
             }
         }
 
         // name
-        pClient->ChannelInfo.strName =
-            GetIniSetting ( IniXMLDocument, "client", "name" );
+        pClient->ChannelInfo.strName = FromBase64ToString (
+            GetIniSetting ( IniXMLDocument, "client", "name_base64" ) );
 
         // instrument
         if ( GetNumericIniSet ( IniXMLDocument, "client", "instrument",
@@ -236,20 +235,20 @@ void CSettings::Load()
         }
 
         // window position of the main window
-        pClient->vecWindowPosMain = FromBase64 (
-            GetIniSetting ( IniXMLDocument, "client", "winposmain" ) );
+        pClient->vecWindowPosMain = FromBase64ToByteArray (
+            GetIniSetting ( IniXMLDocument, "client", "winposmain_base64" ) );
 
         // window position of the settings window
-        pClient->vecWindowPosSettings = FromBase64 (
-            GetIniSetting ( IniXMLDocument, "client", "winposset" ) );
+        pClient->vecWindowPosSettings = FromBase64ToByteArray (
+            GetIniSetting ( IniXMLDocument, "client", "winposset_base64" ) );
 
         // window position of the chat window
-        pClient->vecWindowPosChat = FromBase64 (
-            GetIniSetting ( IniXMLDocument, "client", "winposchat" ) );
+        pClient->vecWindowPosChat = FromBase64ToByteArray (
+            GetIniSetting ( IniXMLDocument, "client", "winposchat_base64" ) );
 
         // window position of the connect window
-        pClient->vecWindowPosConnect = FromBase64 (
-            GetIniSetting ( IniXMLDocument, "client", "winposcon" ) );
+        pClient->vecWindowPosConnect = FromBase64ToByteArray (
+            GetIniSetting ( IniXMLDocument, "client", "winposcon_base64" ) );
 
         // visibility state of the settings window
         if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisset", bValue ) )
@@ -335,8 +334,8 @@ void CSettings::Save()
         for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
         {
             PutIniSetting ( IniXMLDocument, "client",
-                            QString ( "storedfadertag%1" ).arg ( iIdx ),
-                            pClient->vecStoredFaderTags[iIdx] );
+                            QString ( "storedfadertag%1_base64" ).arg ( iIdx ),
+                            ToBase64 ( pClient->vecStoredFaderTags[iIdx] ) );
         }
 
         // stored fader levels
@@ -348,8 +347,8 @@ void CSettings::Save()
         }
 
         // name
-        PutIniSetting ( IniXMLDocument, "client", "name",
-            pClient->ChannelInfo.strName );
+        PutIniSetting ( IniXMLDocument, "client", "name_base64",
+            ToBase64 ( pClient->ChannelInfo.strName ) );
 
         // instrument
         SetNumericIniSet ( IniXMLDocument, "client", "instrument",
@@ -428,19 +427,19 @@ void CSettings::Save()
             pClient->GetUseDefaultCentralServerAddress() );
 
         // window position of the main window
-        PutIniSetting ( IniXMLDocument, "client", "winposmain",
+        PutIniSetting ( IniXMLDocument, "client", "winposmain_base64",
             ToBase64 ( pClient->vecWindowPosMain ) );
 
         // window position of the settings window
-        PutIniSetting ( IniXMLDocument, "client", "winposset",
+        PutIniSetting ( IniXMLDocument, "client", "winposset_base64",
             ToBase64 ( pClient->vecWindowPosSettings ) );
 
         // window position of the chat window
-        PutIniSetting ( IniXMLDocument, "client", "winposchat",
+        PutIniSetting ( IniXMLDocument, "client", "winposchat_base64",
             ToBase64 ( pClient->vecWindowPosChat ) );
 
         // window position of the connect window
-        PutIniSetting ( IniXMLDocument, "client", "winposcon",
+        PutIniSetting ( IniXMLDocument, "client", "winposcon_base64",
             ToBase64 ( pClient->vecWindowPosConnect ) );
 
         // visibility state of the settings window

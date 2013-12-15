@@ -890,9 +890,10 @@ class CAudioReverb
 public:
     CAudioReverb() {}
     
-    void   Init ( const int iSampleRate, const double rT60 = (double) 1.1 );
-    void   Clear();
-    double ProcessSample ( const double input );
+    void Init ( const int iSampleRate, const double rT60 = (double) 1.1 );
+    void Clear();
+    void ProcessSample ( int16_t&     input,
+                         const double dAttenuation );
 
 protected:
     void setT60 ( const double rT60, const int iSampleRate );

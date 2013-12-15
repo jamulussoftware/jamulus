@@ -263,7 +263,8 @@ void CAudioReverb::setT60 ( const double rT60,
     }
 }
 
-double CAudioReverb::ProcessSample ( const double input )
+void CAudioReverb::ProcessSample ( int16_t&     input,
+                                   const double dAttenuation )
 {
     // compute one output sample
     double temp, temp0, temp1, temp2;
@@ -296,7 +297,9 @@ double CAudioReverb::ProcessSample ( const double input )
     combDelays_[2].Add ( (int) temp5 );
     combDelays_[3].Add ( (int) temp6 );
 
-    return ( temp3 + temp4 + temp5 + temp6 ) * (double) 0.5;
+    // inplace apply the attenuated reverb signal
+    input = Double2Short ( input +
+        ( temp3 + temp4 + temp5 + temp6 ) * (double) 0.5 * dAttenuation );
 }
 
 

@@ -357,8 +357,6 @@ void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
     bool                    bUseDefaultCentralServerAddress;
 
     CVector<int16_t>        vecsAudioSndCrdMono;
-    CVector<double>         vecdAudioStereo;
-    CVector<int16_t>        vecsNetwork;
 
     // server settings
     int                     iServerSockBufNumFrames;

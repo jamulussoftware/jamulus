@@ -743,7 +743,6 @@ void CClient::Init()
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
     vecsAudioSndCrdMono.Init ( iMonoBlockSizeSam );
-    vecdAudioStereo.Init     ( iStereoBlockSizeSam );
 
     // init reverberation
     AudioReverbL.Init ( SYSTEM_SAMPLE_RATE_HZ );
@@ -833,8 +832,6 @@ void CClient::Init()
     vecbyNetwData.Init ( iCeltNumCodedBytes );
     if ( bUseStereo )
     {
-        vecsNetwork.Init ( iStereoBlockSizeSam );
-
         // set the channel network properties
         Channel.SetAudioStreamProperties ( eAudioCompressionType,
                                            iCeltNumCodedBytes,
@@ -843,8 +840,6 @@ void CClient::Init()
     }
     else
     {
-        vecsNetwork.Init ( iMonoBlockSizeSam );
-
         // set the channel network properties
         Channel.SetAudioStreamProperties ( eAudioCompressionType,
                                            iCeltNumCodedBytes,
@@ -904,12 +899,6 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     // update stereo signal level meter
     SignalLevelMeter.Update ( vecsStereoSndCrd );
 
-    // convert data from short to double
-    for ( i = 0; i < iStereoBlockSizeSam; i++ )
-    {
-        vecdAudioStereo[i] = static_cast<double> ( vecsStereoSndCrd[i] );
-    }
-
     // add reverberation effect if activated
     if ( iReverbLevel != 0 )
     {
@@ -923,12 +912,10 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
             {
                 // left channel
-                vecdAudioStereo[i] +=
-                    dRevLev * AudioReverbL.ProcessSample ( vecdAudioStereo[i] );
+                AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], dRevLev );
 
                 // right channel
-                vecdAudioStereo[i + 1] +=
-                    dRevLev * AudioReverbR.ProcessSample ( vecdAudioStereo[i + 1] );
+                AudioReverbR.ProcessSample ( vecsStereoSndCrd[i + 1], dRevLev );
             }
         }
         else
@@ -938,8 +925,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
                 {
                     // left channel
-                    vecdAudioStereo[i] +=
-                        dRevLev * AudioReverbL.ProcessSample ( vecdAudioStereo[i] );
+                    AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], dRevLev );
                 }
             }
             else
@@ -947,8 +933,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 for ( i = 1; i < iStereoBlockSizeSam; i += 2 )
                 {
                     // right channel
-                    vecdAudioStereo[i] +=
-                        dRevLev * AudioReverbR.ProcessSample ( vecdAudioStereo[i] );
+                    AudioReverbR.ProcessSample ( vecsStereoSndCrd[i], dRevLev );
                 }
             }
         }
@@ -958,22 +943,18 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     // from double to short
     if ( iAudioInFader == AUD_FADER_IN_MIDDLE )
     {
-        if ( bUseStereo )
+        // no action require if fader is in the middle and stereo is used
+        if ( !bUseStereo )
         {
-            // perform type conversion
-            for ( i = 0; i < iStereoBlockSizeSam; i++ )
-            {
-                vecsNetwork[i] = Double2Short ( vecdAudioStereo[i] );
-            }
-        }
-        else
-        {
-            // mix channels together
+            // mix channels together (store result in first half of the vector)
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
-                vecsNetwork[i] =
-                    Double2Short ( ( vecdAudioStereo[j] +
-                    vecdAudioStereo[j + 1] ) / 2 );
+                // for the sum make sure we have more bits available (cast to
+                // int32), after the normalization by 2, the result will fit
+                // into the old size so that cast to int16 is safe
+                vecsStereoSndCrd[i] = static_cast<int16_t> (
+                    ( static_cast<int32_t> ( vecsStereoSndCrd[j] ) +
+                      vecsStereoSndCrd[j + 1] ) / 2 );
             }
         }
     }
@@ -991,11 +972,8 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
                 {
                     // attenuation on right channel
-                    vecsNetwork[j] = Double2Short (
-                        vecdAudioStereo[j] );
-
-                    vecsNetwork[j + 1] = Double2Short (
-                        dAttFactStereo * vecdAudioStereo[j + 1] );
+                    vecsStereoSndCrd[j + 1] = Double2Short (
+                        dAttFactStereo * vecsStereoSndCrd[j + 1] );
                 }
             }
             else
@@ -1003,11 +981,8 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
                 {
                     // attenuation on left channel
-                    vecsNetwork[j] = Double2Short (
-                        dAttFactStereo * vecdAudioStereo[j] );
-
-                    vecsNetwork[j + 1] = Double2Short (
-                        vecdAudioStereo[j + 1] );
+                    vecsStereoSndCrd[j] = Double2Short (
+                        dAttFactStereo * vecsStereoSndCrd[j] );
                 }
             }
         }
@@ -1029,20 +1004,22 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             {
                 for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
                 {
-                    // attenuation on right channel
-                    vecsNetwork[i] = Double2Short (
-                        dAmplFactMono * vecdAudioStereo[j] +
-                        dAttFactMono * vecdAudioStereo[j + 1] );
+                    // attenuation on right channel (store result in first half
+                    // of the vector)
+                    vecsStereoSndCrd[i] = Double2Short (
+                        dAmplFactMono * vecsStereoSndCrd[j] +
+                        dAttFactMono * vecsStereoSndCrd[j + 1] );
                 }
             }
             else
             {
                 for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
                 {
-                    // attenuation on left channel
-                    vecsNetwork[i] = Double2Short (
-                        dAmplFactMono * vecdAudioStereo[j + 1] +
-                        dAttFactMono * vecdAudioStereo[j] );
+                    // attenuation on left channel (store result in first half
+                    // of the vector)
+                    vecsStereoSndCrd[i] = Double2Short (
+                        dAmplFactMono * vecsStereoSndCrd[j + 1] +
+                        dAttFactMono * vecsStereoSndCrd[j] );
                 }
             }
         }
@@ -1056,7 +1033,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             if ( eAudioCompressionType == CT_CELT )
             {
                 cc6_celt_encode ( CeltEncoderStereo,
-                                  &vecsNetwork[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                                  &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
                                   NULL,
                                   &vecCeltData[0],
                                   iCeltNumCodedBytes );
@@ -1064,7 +1041,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             else
             {
                 opus_custom_encode ( OpusEncoderStereo,
-                                     &vecsNetwork[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                                     &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
                                      SYSTEM_FRAME_SIZE_SAMPLES,
                                      &vecCeltData[0],
                                      iCeltNumCodedBytes );
@@ -1076,7 +1053,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             if ( eAudioCompressionType == CT_CELT )
             {
                 cc6_celt_encode ( CeltEncoderMono,
-                                  &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                                  &vecsStereoSndCrd[i * SYSTEM_FRAME_SIZE_SAMPLES],
                                   NULL,
                                   &vecCeltData[0],
                                   iCeltNumCodedBytes );
@@ -1084,7 +1061,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             else
             {
                 opus_custom_encode ( OpusEncoderMono,
-                                     &vecsNetwork[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                                     &vecsStereoSndCrd[i * SYSTEM_FRAME_SIZE_SAMPLES],
                                      SYSTEM_FRAME_SIZE_SAMPLES,
                                      &vecCeltData[0],
                                      iCeltNumCodedBytes );

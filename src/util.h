@@ -37,6 +37,7 @@
 #include <QUrl>
 #include <QLocale>
 #include <vector>
+#include <algorithm>
 #include "global.h"
 using namespace std; // because of the library: "vector"
 #ifdef _WIN32

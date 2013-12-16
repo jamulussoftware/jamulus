@@ -204,11 +204,13 @@ public:
             else
             {
                 // data can be written in one step
-                const int iEnd = iPutPos + iInSize;
-                while ( iPutPos < iEnd )
-                {
-                    vecMemory[iPutPos++] = vecData[iCurPos++];
-                }
+                std::copy ( vecData.begin(),
+                            vecData.begin() + iInSize,
+                            vecMemory.begin() + iPutPos );
+
+                // set the put position one block further (no wrap around needs
+                // to be considered here)
+                iPutPos += iInSize;
             }
         }
 
@@ -269,11 +271,16 @@ public:
             else
             {
                 // data can be read in one step
-                const int iEnd = iGetPos + iInSize;
-                while ( iGetPos < iEnd )
-                {
-                    vecData[iCurPos++] = vecMemory[iGetPos++];
-                }
+                const std::vector<TData>::const_iterator ItMemoryGetPos =
+                    vecMemory.begin() + iGetPos;
+
+                std::copy ( ItMemoryGetPos,
+                            ItMemoryGetPos + iInSize,
+                            vecData.begin() );
+
+                // set the get position one block further (no wrap around needs
+                // to be considered here)
+                iGetPos += iInSize;
             }
         }
 

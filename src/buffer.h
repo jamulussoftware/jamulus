@@ -271,11 +271,8 @@ public:
             else
             {
                 // data can be read in one step
-                const std::vector<TData>::const_iterator ItMemoryGetPos =
-                    vecMemory.begin() + iGetPos;
-
-                std::copy ( ItMemoryGetPos,
-                            ItMemoryGetPos + iInSize,
+                std::copy ( vecMemory.begin() + iGetPos,
+                            vecMemory.begin() + iGetPos + iInSize,
                             vecData.begin() );
 
                 // set the get position one block further (no wrap around needs

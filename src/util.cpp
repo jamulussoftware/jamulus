@@ -48,16 +48,10 @@ void CStereoSignalLevelMeter::Update ( CVector<short>& vecsAudio )
     for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
     {
         // left channel
-        if ( sMaxL < vecsAudio[i] )
-        {
-            sMaxL = vecsAudio[i];
-        }
+        sMaxL = std::max ( sMaxL, vecsAudio[i] );
 
         // right channel
-        if ( sMaxR < vecsAudio[i + 1] )
-        {
-            sMaxR = vecsAudio[i + 1];
-        }
+        sMaxR = std::max ( sMaxR, vecsAudio[i + 1] );
     }
 
     dCurLevelL = UpdateCurLevel ( dCurLevelL, sMaxL );

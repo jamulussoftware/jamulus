@@ -6,7 +6,9 @@
 
 - the solo state of a mixer fader is not exclusive any more and the solo
   state is preserved if the number of mixer faders changes
-  
+
+- more precise sound card latency estimation under Windows
+
 - bug fix: support for correct utf-8 storage of names in the ini-file
 
 

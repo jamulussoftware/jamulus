@@ -363,6 +363,24 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
             2 /* in/out */ * NUM_IN_OUT_CHANNELS /* stereo */,
             iASIOBufferSizeMono, &asioCallbacks );
 
+        // query the latency of the driver
+        long lInputLatency  = 0;
+        long lOutputLatency = 0;
+
+        if ( ASIOGetLatencies ( &lInputLatency, &lOutputLatency ) != ASE_NotPresent )
+        {
+            // add the input and output latencies (returned in number of
+            // samples) and calculate the time in ms
+            dInOutLatencyMs =
+                ( static_cast<double> ( lInputLatency ) + lOutputLatency ) /
+                SYSTEM_SAMPLE_RATE_HZ * 1000;
+        }
+        else
+        {
+            // no latency available
+            dInOutLatencyMs = 0.0;
+        }
+
         // check wether the driver requires the ASIOOutputReady() optimization
         // (can be used by the driver to reduce output latency by one block)
         bASIOPostOutput = ( ASIOOutputReady() == ASE_OK );
@@ -402,7 +420,8 @@ CSound::CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), 
     vSelectedInputChannels  ( NUM_IN_OUT_CHANNELS ),
     vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS ),
     lNumInChan              ( 0 ),
-    lNumOutChan             ( 0 )
+    lNumOutChan             ( 0 ),
+    dInOutLatencyMs         ( 0.0 ) // "0.0" means that no latency value is available
 {
     int i;
 

@@ -1229,15 +1229,32 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
         static_cast<double> ( GetSockBufNumFrames() +
                               GetServerSockBufNumFrames() ) / 2;
 
-    // we assume that we have two period sizes for the input and one for the
-    // output, therefore we have "3 *" instead of "2 *" (for input and output)
-    // the actual sound card buffer size, also consider delay introduced by
-    // sound card conversion buffer by using
-    // "GetSndCrdConvBufAdditionalDelayMonoBlSize"
-    const double dTotalSoundCardDelayMs =
-        ( 3 * GetSndCrdActualMonoBlSize() +
-        GetSndCrdConvBufAdditionalDelayMonoBlSize() ) *
+    // consider delay introduced by the sound card conversion buffer by using
+    // "GetSndCrdConvBufAdditionalDelayMonoBlSize()"
+    double dTotalSoundCardDelayMs = GetSndCrdConvBufAdditionalDelayMonoBlSize() *
         1000 / SYSTEM_SAMPLE_RATE_HZ;
+
+    // try to get the actual input/output sound card delay from the audio
+    // interface, per definition it is not available if a 0 is returned
+    const double dSoundCardInputOutputLatencyMs = Sound.GetInOutLatencyMs();
+
+    if ( dSoundCardInputOutputLatencyMs == 0.0 )
+    {
+        // use an alternative aproach for estimating the sound card delay:
+        //
+        // we assume that we have two period sizes for the input and one for the
+        // output, therefore we have "3 *" instead of "2 *" (for input and output)
+        // the actual sound card buffer size
+        // "GetSndCrdConvBufAdditionalDelayMonoBlSize"
+        dTotalSoundCardDelayMs +=
+            ( 3 * GetSndCrdActualMonoBlSize() ) *
+            1000 / SYSTEM_SAMPLE_RATE_HZ;
+    }
+    else
+    {
+        // add the actual sound card latency in ms
+        dTotalSoundCardDelayMs += dSoundCardInputOutputLatencyMs;
+    }
 
     // network packets are of the same size as the audio packets per definition
     // if no sound card conversion buffer is used

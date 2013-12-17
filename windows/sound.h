@@ -72,6 +72,8 @@ public:
     virtual int     GetLeftOutputChannel()  { return vSelectedOutputChannels[0]; }
     virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
 
+    virtual double  GetInOutLatencyMs() { return dInOutLatencyMs; }
+
 protected:
     virtual QString  LoadAndInitializeDriver ( int iIdx );
     virtual void     UnloadCurrentDriver();
@@ -85,6 +87,7 @@ protected:
 
     long             lNumInChan;
     long             lNumOutChan;
+    double           dInOutLatencyMs;
     CVector<int>     vSelectedInputChannels;
     CVector<int>     vSelectedOutputChannels;
 

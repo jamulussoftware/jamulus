@@ -372,8 +372,8 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
             // add the input and output latencies (returned in number of
             // samples) and calculate the time in ms
             dInOutLatencyMs =
-                ( static_cast<double> ( lInputLatency ) + lOutputLatency ) /
-                SYSTEM_SAMPLE_RATE_HZ * 1000;
+                ( static_cast<double> ( lInputLatency ) + lOutputLatency ) *
+                1000 / SYSTEM_SAMPLE_RATE_HZ;
         }
         else
         {

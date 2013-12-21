@@ -40,8 +40,8 @@
 #include "rate.h"
 
 #ifdef FIXED_POINT
-/* Mean energy in each band quantized in Q6 */
-static const signed char eMeans[25] = {
+/* Mean energy in each band quantized in Q4 */
+const signed char eMeans[25] = {
       103,100, 92, 85, 81,
        77, 72, 70, 78, 75,
        73, 71, 78, 74, 69,
@@ -49,8 +49,8 @@ static const signed char eMeans[25] = {
        60, 60, 60, 60, 60
 };
 #else
-/* Mean energy in each band quantized in Q6 and converted back to float */
-static const opus_val16 eMeans[25] = {
+/* Mean energy in each band quantized in Q4 and converted back to float */
+const opus_val16 eMeans[25] = {
       6.437500f, 6.250000f, 5.750000f, 5.312500f, 5.062500f,
       4.812500f, 4.500000f, 4.375000f, 4.875000f, 4.687500f,
       4.562500f, 4.437500f, 4.875000f, 4.625000f, 4.312500f,
@@ -157,7 +157,7 @@ static int quant_coarse_energy_impl(const CELTMode *m, int start, int end,
       const opus_val16 *eBands, opus_val16 *oldEBands,
       opus_int32 budget, opus_int32 tell,
       const unsigned char *prob_model, opus_val16 *error, ec_enc *enc,
-      int C, int LM, int intra, opus_val16 max_decay)
+      int C, int LM, int intra, opus_val16 max_decay, int lfe)
 {
    int i, c;
    int badness = 0;
@@ -222,6 +222,8 @@ static int quant_coarse_energy_impl(const CELTMode *m, int start, int end,
             if (bits_left < 16)
                qi = IMAX(-1, qi);
          }
+         if (lfe && i>=2)
+            qi = IMIN(qi, 0);
          if (budget-tell >= 15)
          {
             int pi;
@@ -253,13 +255,13 @@ static int quant_coarse_energy_impl(const CELTMode *m, int start, int end,
          prev[c] = prev[c] + SHL32(q,7) - MULT16_16(beta,PSHR32(q,8));
       } while (++c < C);
    }
-   return badness;
+   return lfe ? 0 : badness;
 }
 
 void quant_coarse_energy(const CELTMode *m, int start, int end, int effEnd,
       const opus_val16 *eBands, opus_val16 *oldEBands, opus_uint32 budget,
       opus_val16 *error, ec_enc *enc, int C, int LM, int nbAvailableBytes,
-      int force_intra, opus_val32 *delayedIntra, int two_pass, int loss_rate)
+      int force_intra, opus_val32 *delayedIntra, int two_pass, int loss_rate, int lfe)
 {
    int intra;
    opus_val16 max_decay;
@@ -280,9 +282,6 @@ void quant_coarse_energy(const CELTMode *m, int start, int end, int effEnd,
    if (tell+3 > budget)
       two_pass = intra = 0;
 
-   /* Encode the global flags using a simple probability model
-      (first symbols in the stream) */
-
    max_decay = QCONST16(16.f,DB_SHIFT);
    if (end-start>10)
    {
@@ -292,6 +291,8 @@ void quant_coarse_energy(const CELTMode *m, int start, int end, int effEnd,
       max_decay = MIN32(max_decay, .125f*nbAvailableBytes);
 #endif
    }
+   if (lfe)
+      max_decay=3;
    enc_start_state = *enc;
 
    ALLOC(oldEBands_intra, C*m->nbEBands, opus_val16);
@@ -301,7 +302,7 @@ void quant_coarse_energy(const CELTMode *m, int start, int end, int effEnd,
    if (two_pass || intra)
    {
       badness1 = quant_coarse_energy_impl(m, start, end, eBands, oldEBands_intra, budget,
-            tell, e_prob_model[LM][1], error_intra, enc, C, LM, 1, max_decay);
+            tell, e_prob_model[LM][1], error_intra, enc, C, LM, 1, max_decay, lfe);
    }
 
    if (!intra)
@@ -311,6 +312,7 @@ void quant_coarse_energy(const CELTMode *m, int start, int end, int effEnd,
       opus_int32 tell_intra;
       opus_uint32 nstart_bytes;
       opus_uint32 nintra_bytes;
+      opus_uint32 save_bytes;
       int badness2;
       VARDECL(unsigned char, intra_bits);
 
@@ -321,14 +323,17 @@ void quant_coarse_energy(const CELTMode *m, int start, int end, int effEnd,
       nstart_bytes = ec_range_bytes(&enc_start_state);
       nintra_bytes = ec_range_bytes(&enc_intra_state);
       intra_buf = ec_get_buffer(&enc_intra_state) + nstart_bytes;
-      ALLOC(intra_bits, nintra_bytes-nstart_bytes, unsigned char);
+      save_bytes = nintra_bytes-nstart_bytes;
+      if (save_bytes == 0)
+         save_bytes = ALLOC_NONE;
+      ALLOC(intra_bits, save_bytes, unsigned char);
       /* Copy bits from intra bit-stream */
       OPUS_COPY(intra_bits, intra_buf, nintra_bytes - nstart_bytes);
 
       *enc = enc_start_state;
 
       badness2 = quant_coarse_energy_impl(m, start, end, eBands, oldEBands, budget,
-            tell, e_prob_model[LM][intra], error, enc, C, LM, 0, max_decay);
+            tell, e_prob_model[LM][intra], error, enc, C, LM, 0, max_decay, lfe);
 
       if (two_pass && (badness1 < badness2 || (badness1 == badness2 && ((opus_int32)ec_tell_frac(enc))+intra_bias > tell_intra)))
       {
@@ -533,25 +538,6 @@ void unquant_energy_finalise(const CELTMode *m, int start, int end, opus_val16 *
          } while (++c < C);
       }
    }
-}
-
-void log2Amp(const CELTMode *m, int start, int end,
-      celt_ener *eBands, const opus_val16 *oldEBands, int C)
-{
-   int c, i;
-   c=0;
-   do {
-      for (i=0;i<start;i++)
-         eBands[i+c*m->nbEBands] = 0;
-      for (;i<end;i++)
-      {
-         opus_val16 lg = ADD16(oldEBands[i+c*m->nbEBands],
-                         SHL16((opus_val16)eMeans[i],6));
-         eBands[i+c*m->nbEBands] = PSHR32(celt_exp2(lg),4);
-      }
-      for (;i<m->nbEBands;i++)
-         eBands[i+c*m->nbEBands] = 0;
-   } while (++c < C);
 }
 
 void amp2Log2(const CELTMode *m, int effEnd, int end,

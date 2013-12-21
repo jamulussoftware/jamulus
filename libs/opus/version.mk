@@ -1,2 +1,2 @@
 # static version string; update manually every release.
-OPUS_VERSION = "1.0.2"
+PACKAGE_VERSION = "1.1-beta"

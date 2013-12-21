@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -30,10 +30,11 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 #include "main_FIX.h"
+#include "stack_alloc.h"
 #include "tuning_parameters.h"
 
 /* Prefilter for finding Quantizer input signal */
-static __inline void silk_prefilt_FIX(
+static OPUS_INLINE void silk_prefilt_FIX(
     silk_prefilter_state_FIX    *P,                         /* I/O  state                               */
     opus_int32                  st_res_Q12[],               /* I    short term residual signal          */
     opus_int32                  xw_Q3[],                    /* O    prefiltered signal                  */
@@ -101,14 +102,17 @@ void silk_prefilter_FIX(
     opus_int32 *pxw_Q3;
     opus_int   HarmShapeGain_Q12, Tilt_Q14;
     opus_int32 HarmShapeFIRPacked_Q12, LF_shp_Q14;
-    opus_int32 x_filt_Q12[ MAX_SUB_FRAME_LENGTH ];
-    opus_int32 st_res_Q2[ MAX_SUB_FRAME_LENGTH + MAX_LPC_ORDER ];
+    VARDECL( opus_int32, x_filt_Q12 );
+    VARDECL( opus_int32, st_res_Q2 );
     opus_int16 B_Q10[ 2 ];
+    SAVE_STACK;
 
     /* Set up pointers */
     px  = x;
     pxw_Q3 = xw_Q3;
     lag = P->lagPrev;
+    ALLOC( x_filt_Q12, psEnc->sCmn.subfr_length, opus_int32 );
+    ALLOC( st_res_Q2, psEnc->sCmn.subfr_length, opus_int32 );
     for( k = 0; k < psEnc->sCmn.nb_subfr; k++ ) {
         /* Update Variables that change per sub frame */
         if( psEnc->sCmn.indices.signalType == TYPE_VOICED ) {
@@ -148,10 +152,11 @@ void silk_prefilter_FIX(
     }
 
     P->lagPrev = psEncCtrl->pitchL[ psEnc->sCmn.nb_subfr - 1 ];
+    RESTORE_STACK;
 }
 
 /* Prefilter for finding Quantizer input signal */
-static __inline void silk_prefilt_FIX(
+static OPUS_INLINE void silk_prefilt_FIX(
     silk_prefilter_state_FIX    *P,                         /* I/O  state                               */
     opus_int32                  st_res_Q12[],               /* I    short term residual signal          */
     opus_int32                  xw_Q3[],                    /* O    prefiltered signal                  */

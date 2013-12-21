@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -32,6 +32,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "SigProc_FIX.h"
 #include "define.h"
 #include "tuning_parameters.h"
+#include "pitch.h"
 
 #define MAX_FRAME_SIZE              384             /* subfr_length * nb_subfr = ( 0.005 * 16000 + 16 ) * 4 = 384 */
 
@@ -49,7 +50,8 @@ void silk_burg_modified(
     const opus_int32            minInvGain_Q30,     /* I    Inverse of max prediction gain                              */
     const opus_int              subfr_length,       /* I    Input signal subframe length (incl. D preceding samples)    */
     const opus_int              nb_subfr,           /* I    Number of subframes stacked in x                            */
-    const opus_int              D                   /* I    Order                                                       */
+    const opus_int              D,                  /* I    Order                                                       */
+    int                         arch                /* I    Run-time architecture                                       */
 )
 {
     opus_int         k, n, s, lz, rshifts, rshifts_extra, reached_max_gain;
@@ -60,6 +62,7 @@ void silk_burg_modified(
     opus_int32       Af_QA[       SILK_MAX_ORDER_LPC ];
     opus_int32       CAf[ SILK_MAX_ORDER_LPC + 1 ];
     opus_int32       CAb[ SILK_MAX_ORDER_LPC + 1 ];
+    opus_int32       xcorr[ SILK_MAX_ORDER_LPC ];
 
     silk_assert( subfr_length * nb_subfr <= MAX_FRAME_SIZE );
 
@@ -93,10 +96,17 @@ void silk_burg_modified(
         }
     } else {
         for( s = 0; s < nb_subfr; s++ ) {
+            int i;
+            opus_int32 d;
             x_ptr = x + s * subfr_length;
+            celt_pitch_xcorr(x_ptr, x_ptr + 1, xcorr, subfr_length - D, D, arch );
             for( n = 1; n < D + 1; n++ ) {
-                C_first_row[ n - 1 ] += silk_LSHIFT32(
-                    silk_inner_prod_aligned( x_ptr, x_ptr + n, subfr_length - n ), -rshifts );
+               for ( i = n + subfr_length - D, d = 0; i < subfr_length; i++ )
+                  d = MAC16_16( d, x_ptr[ i ], x_ptr[ i - n ] );
+               xcorr[ n - 1 ] += d;
+            }
+            for( n = 1; n < D + 1; n++ ) {
+                C_first_row[ n - 1 ] += silk_LSHIFT32( xcorr[ n - 1 ], -rshifts );
             }
         }
     }
@@ -263,7 +273,7 @@ void silk_burg_modified(
             tmp1 = silk_SMLAWW( tmp1, Atmp1, Atmp1 );                                               /* Q16 */
             A_Q16[ k ] = -Atmp1;
         }
-        *res_nrg = silk_SMLAWW( nrg, silk_SMMUL( FIND_LPC_COND_FAC, C0 ), -tmp1 );                  /* Q( -rshifts ) */
+        *res_nrg = silk_SMLAWW( nrg, silk_SMMUL( SILK_FIX_CONST( FIND_LPC_COND_FAC, 32 ), C0 ), -tmp1 );/* Q( -rshifts ) */
         *res_nrg_Q = -rshifts;
-    }   
+    }
 }

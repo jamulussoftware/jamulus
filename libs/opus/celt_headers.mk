@@ -2,6 +2,7 @@ CELT_HEAD = \
 celt/arch.h \
 celt/bands.h \
 celt/celt.h \
+celt/cpu_support.h \
 include/opus_types.h \
 include/opus_defines.h \
 include/opus_custom.h \
@@ -28,4 +29,11 @@ celt/rate.h \
 celt/stack_alloc.h \
 celt/vq.h \
 celt/static_modes_float.h \
-celt/static_modes_fixed.h
+celt/static_modes_fixed.h \
+celt/arm/armcpu.h \
+celt/arm/fixed_armv4.h \
+celt/arm/fixed_armv5e.h \
+celt/arm/kiss_fft_armv4.h \
+celt/arm/kiss_fft_armv5e.h \
+celt/arm/pitch_arm.h \
+celt/x86/pitch_sse.h

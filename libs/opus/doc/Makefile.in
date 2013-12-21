@@ -54,7 +54,10 @@ subdir = doc
 DIST_COMMON = $(srcdir)/Doxyfile.in $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/as-gcc-inline-assembly.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -84,6 +87,9 @@ AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 CC = @CC@
+CCAS = @CCAS@
+CCASDEPMODE = @CCASDEPMODE@
+CCASFLAGS = @CCASFLAGS@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
@@ -102,6 +108,7 @@ EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
 HAVE_DOXYGEN = @HAVE_DOXYGEN@
+HAVE_PERL = @HAVE_PERL@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -124,10 +131,13 @@ NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
+OPUS_ARM_MAY_HAVE_EDSP = @OPUS_ARM_MAY_HAVE_EDSP@
+OPUS_ARM_MAY_HAVE_MEDIA = @OPUS_ARM_MAY_HAVE_MEDIA@
+OPUS_ARM_MAY_HAVE_NEON = @OPUS_ARM_MAY_HAVE_NEON@
+OPUS_HAVE_RTCD = @OPUS_HAVE_RTCD@
 OPUS_LT_AGE = @OPUS_LT_AGE@
 OPUS_LT_CURRENT = @OPUS_LT_CURRENT@
 OPUS_LT_REVISION = @OPUS_LT_REVISION@
-OPUS_VERSION = @OPUS_VERSION@
 OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
@@ -139,15 +149,11 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PC_BUILD = @PC_BUILD@
-PC_LIBM = @PC_LIBM@
 RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
-SIZE16 = @SIZE16@
-SIZE32 = @SIZE32@
 STRIP = @STRIP@
-SYMBOL_VISIBILITY = @SYMBOL_VISIBILITY@
 VERSION = @VERSION@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -210,7 +216,9 @@ DOCINPUTS = $(top_srcdir)/include/opus.h \
             $(top_srcdir)/doc/footer.html \
             $(top_srcdir)/doc/customdoxygen.css
 
-EXTRA_DIST = customdoxygen.css Doxyfile.in footer.html header.html opus_logo.svg
+EXTRA_DIST = customdoxygen.css Doxyfile.in footer.html header.html \
+             opus_logo.svg trivial_example.c
+
 all: all-am
 
 .SUFFIXES:
@@ -416,8 +424,8 @@ uninstall-am: uninstall-local
 @HAVE_DOXYGEN_TRUE@	touch $@
 
 @HAVE_DOXYGEN_TRUE@install-data-local:
+@HAVE_DOXYGEN_TRUE@	$(INSTALL) -d $(DESTDIR)$(docdir)/html/search
 @HAVE_DOXYGEN_TRUE@	for f in `find html -type f \! -name "installdox"`; do	\
-@HAVE_DOXYGEN_TRUE@		$(INSTALL) -d $(DESTDIR)$(docdir)/html/search;	\
 @HAVE_DOXYGEN_TRUE@		$(INSTALL_DATA) $$f $(DESTDIR)$(docdir)/$$f;	\
 @HAVE_DOXYGEN_TRUE@	done
 

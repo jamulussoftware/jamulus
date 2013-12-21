@@ -61,46 +61,59 @@ DIST_COMMON = README $(am__configure_deps) \
 	$(srcdir)/config.h.in $(srcdir)/opus-uninstalled.pc.in \
 	$(srcdir)/opus.pc.in $(srcdir)/opus_headers.mk \
 	$(srcdir)/opus_sources.mk $(srcdir)/silk_headers.mk \
-	$(srcdir)/silk_sources.mk $(top_srcdir)/configure AUTHORS \
-	COPYING ChangeLog INSTALL NEWS compile config.guess config.sub \
-	depcomp install-sh ltmain.sh missing
+	$(srcdir)/silk_sources.mk $(top_srcdir)/celt/arm/armopts.s.in \
+	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL NEWS \
+	compile config.guess config.sub depcomp install-sh ltmain.sh \
+	missing
 @FIXED_POINT_TRUE@am__append_1 = $(SILK_SOURCES_FIXED)
 @FIXED_POINT_FALSE@am__append_2 = $(SILK_SOURCES_FLOAT)
-noinst_PROGRAMS = opus_demo$(EXEEXT) repacketizer_demo$(EXEEXT) \
-	opus_compare$(EXEEXT) tests/test_opus_api$(EXEEXT) \
-	tests/test_opus_encode$(EXEEXT) \
-	tests/test_opus_decode$(EXEEXT) \
-	celt/tests/test_unit_cwrs32$(EXEEXT) \
-	celt/tests/test_unit_dft$(EXEEXT) \
-	celt/tests/test_unit_entropy$(EXEEXT) \
-	celt/tests/test_unit_laplace$(EXEEXT) \
-	celt/tests/test_unit_mathops$(EXEEXT) \
-	celt/tests/test_unit_mdct$(EXEEXT) \
-	celt/tests/test_unit_rotation$(EXEEXT) \
-	celt/tests/test_unit_types$(EXEEXT) $(am__EXEEXT_1)
-TESTS = celt/tests/test_unit_types$(EXEEXT) \
-	celt/tests/test_unit_mathops$(EXEEXT) \
-	celt/tests/test_unit_entropy$(EXEEXT) \
-	celt/tests/test_unit_laplace$(EXEEXT) \
-	celt/tests/test_unit_dft$(EXEEXT) \
-	celt/tests/test_unit_mdct$(EXEEXT) \
-	celt/tests/test_unit_rotation$(EXEEXT) \
-	celt/tests/test_unit_cwrs32$(EXEEXT) \
-	tests/test_opus_api$(EXEEXT) tests/test_opus_decode$(EXEEXT) \
-	tests/test_opus_encode$(EXEEXT)
-@CUSTOM_MODES_TRUE@am__append_3 = include/opus_custom.h
-@CUSTOM_MODES_TRUE@am__append_4 = opus_custom_demo
+@DISABLE_FLOAT_API_FALSE@am__append_3 = $(OPUS_SOURCES_FLOAT)
+@CPU_ARM_TRUE@am__append_4 = $(CELT_SOURCES_ARM)
+@CPU_ARM_TRUE@am__append_5 = $(SILK_SOURCES_ARM)
+@EXTRA_PROGRAMS_TRUE@noinst_PROGRAMS = opus_demo$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	repacketizer_demo$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	opus_compare$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_api$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_encode$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_decode$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_padding$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_cwrs32$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_dft$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_entropy$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_laplace$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_mathops$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_mdct$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_rotation$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_types$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	$(am__EXEEXT_1)
+@EXTRA_PROGRAMS_TRUE@TESTS = celt/tests/test_unit_types$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_mathops$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_entropy$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_laplace$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_dft$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_mdct$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_rotation$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_cwrs32$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_api$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_decode$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_encode$(EXEEXT) \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_padding$(EXEEXT)
+@CUSTOM_MODES_TRUE@am__append_6 = include/opus_custom.h
+@CUSTOM_MODES_TRUE@@EXTRA_PROGRAMS_TRUE@am__append_7 = opus_custom_demo
 subdir = .
 SUBDIRS =
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/as-gcc-inline-assembly.m4 \
+	$(top_srcdir)/m4/libtool.m4 $(top_srcdir)/m4/ltoptions.m4 \
+	$(top_srcdir)/m4/ltsugar.m4 $(top_srcdir)/m4/ltversion.m4 \
+	$(top_srcdir)/m4/lt~obsolete.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES = opus.pc opus-uninstalled.pc
+CONFIG_CLEAN_FILES = opus.pc opus-uninstalled.pc celt/arm/armopts.s
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -132,17 +145,20 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(m4datadir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(pkgincludedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libopus_la_LIBADD =
-am__libopus_la_SOURCES_DIST = celt/bands.c celt/celt.c celt/cwrs.c \
+am__DEPENDENCIES_1 =
+libopus_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
+am__libopus_la_SOURCES_DIST = celt/bands.c celt/celt.c \
+	celt/celt_encoder.c celt/celt_decoder.c celt/cwrs.c \
 	celt/entcode.c celt/entdec.c celt/entenc.c celt/kiss_fft.c \
 	celt/laplace.c celt/mathops.c celt/mdct.c celt/modes.c \
 	celt/pitch.c celt/celt_lpc.c celt/quant_bands.c celt/rate.c \
-	celt/vq.c silk/CNG.c silk/code_signs.c silk/init_decoder.c \
-	silk/decode_core.c silk/decode_frame.c \
-	silk/decode_parameters.c silk/decode_indices.c \
-	silk/decode_pulses.c silk/decoder_set_fs.c silk/dec_API.c \
-	silk/enc_API.c silk/encode_indices.c silk/encode_pulses.c \
-	silk/gain_quant.c silk/interpolate.c silk/LP_variable_cutoff.c \
+	celt/vq.c celt/arm/armcpu.c celt/arm/arm_celt_map.c silk/CNG.c \
+	silk/code_signs.c silk/init_decoder.c silk/decode_core.c \
+	silk/decode_frame.c silk/decode_parameters.c \
+	silk/decode_indices.c silk/decode_pulses.c \
+	silk/decoder_set_fs.c silk/dec_API.c silk/enc_API.c \
+	silk/encode_indices.c silk/encode_pulses.c silk/gain_quant.c \
+	silk/interpolate.c silk/LP_variable_cutoff.c \
 	silk/NLSF_decode.c silk/NSQ.c silk/NSQ_del_dec.c silk/PLC.c \
 	silk/shell_coder.c silk/tables_gain.c silk/tables_LTP.c \
 	silk/tables_NLSF_CB_NB_MB.c silk/tables_NLSF_CB_WB.c \
@@ -205,14 +221,19 @@ am__libopus_la_SOURCES_DIST = celt/bands.c celt/celt.c celt/cwrs.c \
 	silk/float/scale_copy_vector_FLP.c \
 	silk/float/scale_vector_FLP.c silk/float/schur_FLP.c \
 	silk/float/sort_FLP.c src/opus.c src/opus_decoder.c \
-	src/opus_encoder.c src/opus_multistream.c src/repacketizer.c
+	src/opus_encoder.c src/opus_multistream.c \
+	src/opus_multistream_encoder.c src/opus_multistream_decoder.c \
+	src/repacketizer.c src/analysis.c src/mlp.c src/mlp_data.c
 am__dirstamp = $(am__leading_dot)dirstamp
-am__objects_1 = celt/bands.lo celt/celt.lo celt/cwrs.lo \
-	celt/entcode.lo celt/entdec.lo celt/entenc.lo celt/kiss_fft.lo \
-	celt/laplace.lo celt/mathops.lo celt/mdct.lo celt/modes.lo \
-	celt/pitch.lo celt/celt_lpc.lo celt/quant_bands.lo \
-	celt/rate.lo celt/vq.lo
-am__objects_2 = silk/fixed/LTP_analysis_filter_FIX.lo \
+am__objects_1 = celt/arm/armcpu.lo celt/arm/arm_celt_map.lo
+@CPU_ARM_TRUE@am__objects_2 = $(am__objects_1)
+am__objects_3 = celt/bands.lo celt/celt.lo celt/celt_encoder.lo \
+	celt/celt_decoder.lo celt/cwrs.lo celt/entcode.lo \
+	celt/entdec.lo celt/entenc.lo celt/kiss_fft.lo celt/laplace.lo \
+	celt/mathops.lo celt/mdct.lo celt/modes.lo celt/pitch.lo \
+	celt/celt_lpc.lo celt/quant_bands.lo celt/rate.lo celt/vq.lo \
+	$(am__objects_2)
+am__objects_4 = silk/fixed/LTP_analysis_filter_FIX.lo \
 	silk/fixed/LTP_scale_ctrl_FIX.lo silk/fixed/corrMatrix_FIX.lo \
 	silk/fixed/encode_frame_FIX.lo silk/fixed/find_LPC_FIX.lo \
 	silk/fixed/find_LTP_FIX.lo silk/fixed/find_pitch_lags_FIX.lo \
@@ -229,8 +250,8 @@ am__objects_2 = silk/fixed/LTP_analysis_filter_FIX.lo \
 	silk/fixed/pitch_analysis_core_FIX.lo \
 	silk/fixed/vector_ops_FIX.lo silk/fixed/schur64_FIX.lo \
 	silk/fixed/schur_FIX.lo
-@FIXED_POINT_TRUE@am__objects_3 = $(am__objects_2)
-am__objects_4 = silk/float/apply_sine_window_FLP.lo \
+@FIXED_POINT_TRUE@am__objects_5 = $(am__objects_4)
+am__objects_6 = silk/float/apply_sine_window_FLP.lo \
 	silk/float/corrMatrix_FLP.lo silk/float/encode_frame_FLP.lo \
 	silk/float/find_LPC_FLP.lo silk/float/find_LTP_FLP.lo \
 	silk/float/find_pitch_lags_FLP.lo \
@@ -252,8 +273,9 @@ am__objects_4 = silk/float/apply_sine_window_FLP.lo \
 	silk/float/scale_copy_vector_FLP.lo \
 	silk/float/scale_vector_FLP.lo silk/float/schur_FLP.lo \
 	silk/float/sort_FLP.lo
-@FIXED_POINT_FALSE@am__objects_5 = $(am__objects_4)
-am__objects_6 = silk/CNG.lo silk/code_signs.lo silk/init_decoder.lo \
+@FIXED_POINT_FALSE@am__objects_7 = $(am__objects_6)
+am__objects_8 =
+am__objects_9 = silk/CNG.lo silk/code_signs.lo silk/init_decoder.lo \
 	silk/decode_core.lo silk/decode_frame.lo \
 	silk/decode_parameters.lo silk/decode_indices.lo \
 	silk/decode_pulses.lo silk/decoder_set_fs.lo silk/dec_API.lo \
@@ -287,87 +309,160 @@ am__objects_6 = silk/CNG.lo silk/code_signs.lo silk/init_decoder.lo \
 	silk/sigm_Q15.lo silk/sort.lo silk/sum_sqr_shift.lo \
 	silk/stereo_decode_pred.lo silk/stereo_encode_pred.lo \
 	silk/stereo_find_predictor.lo silk/stereo_quant_pred.lo \
-	$(am__objects_3) $(am__objects_5)
-am__objects_7 = src/opus.lo src/opus_decoder.lo src/opus_encoder.lo \
-	src/opus_multistream.lo src/repacketizer.lo
-am_libopus_la_OBJECTS = $(am__objects_1) $(am__objects_6) \
-	$(am__objects_7)
-libopus_la_OBJECTS = $(am_libopus_la_OBJECTS)
+	$(am__objects_5) $(am__objects_7) $(am__objects_8)
+am__objects_10 = src/analysis.lo src/mlp.lo src/mlp_data.lo
+@DISABLE_FLOAT_API_FALSE@am__objects_11 = $(am__objects_10)
+am__objects_12 = src/opus.lo src/opus_decoder.lo src/opus_encoder.lo \
+	src/opus_multistream.lo src/opus_multistream_encoder.lo \
+	src/opus_multistream_decoder.lo src/repacketizer.lo \
+	$(am__objects_11)
+am_libopus_la_OBJECTS = $(am__objects_3) $(am__objects_9) \
+	$(am__objects_12)
+am__objects_13 = celt/arm/celt_pitch_xcorr_arm-gnu.lo
+@CPU_ARM_TRUE@@OPUS_ARM_EXTERNAL_ASM_TRUE@nodist_libopus_la_OBJECTS =  \
+@CPU_ARM_TRUE@@OPUS_ARM_EXTERNAL_ASM_TRUE@	$(am__objects_13)
+libopus_la_OBJECTS = $(am_libopus_la_OBJECTS) \
+	$(nodist_libopus_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 libopus_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(libopus_la_LDFLAGS) $(LDFLAGS) -o $@
-@CUSTOM_MODES_TRUE@am__EXEEXT_1 = opus_custom_demo$(EXEEXT)
+@CUSTOM_MODES_TRUE@@EXTRA_PROGRAMS_TRUE@am__EXEEXT_1 = opus_custom_demo$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
-am_celt_tests_test_unit_cwrs32_OBJECTS =  \
-	celt/tests/test_unit_cwrs32.$(OBJEXT)
+am__celt_tests_test_unit_cwrs32_SOURCES_DIST =  \
+	celt/tests/test_unit_cwrs32.c
+@EXTRA_PROGRAMS_TRUE@am_celt_tests_test_unit_cwrs32_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_cwrs32.$(OBJEXT)
 celt_tests_test_unit_cwrs32_OBJECTS =  \
 	$(am_celt_tests_test_unit_cwrs32_OBJECTS)
-celt_tests_test_unit_cwrs32_DEPENDENCIES =
-am_celt_tests_test_unit_dft_OBJECTS =  \
-	celt/tests/test_unit_dft.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_cwrs32_DEPENDENCIES =  \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__celt_tests_test_unit_dft_SOURCES_DIST =  \
+	celt/tests/test_unit_dft.c
+@EXTRA_PROGRAMS_TRUE@am_celt_tests_test_unit_dft_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_dft.$(OBJEXT)
 celt_tests_test_unit_dft_OBJECTS =  \
 	$(am_celt_tests_test_unit_dft_OBJECTS)
-celt_tests_test_unit_dft_DEPENDENCIES =
-am_celt_tests_test_unit_entropy_OBJECTS =  \
-	celt/tests/test_unit_entropy.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_dft_DEPENDENCIES =  \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__celt_tests_test_unit_entropy_SOURCES_DIST =  \
+	celt/tests/test_unit_entropy.c
+@EXTRA_PROGRAMS_TRUE@am_celt_tests_test_unit_entropy_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_entropy.$(OBJEXT)
 celt_tests_test_unit_entropy_OBJECTS =  \
 	$(am_celt_tests_test_unit_entropy_OBJECTS)
-celt_tests_test_unit_entropy_DEPENDENCIES =
-am_celt_tests_test_unit_laplace_OBJECTS =  \
-	celt/tests/test_unit_laplace.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_entropy_DEPENDENCIES =  \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__celt_tests_test_unit_laplace_SOURCES_DIST =  \
+	celt/tests/test_unit_laplace.c
+@EXTRA_PROGRAMS_TRUE@am_celt_tests_test_unit_laplace_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_laplace.$(OBJEXT)
 celt_tests_test_unit_laplace_OBJECTS =  \
 	$(am_celt_tests_test_unit_laplace_OBJECTS)
-celt_tests_test_unit_laplace_DEPENDENCIES =
-am_celt_tests_test_unit_mathops_OBJECTS =  \
-	celt/tests/test_unit_mathops.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_laplace_DEPENDENCIES =  \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__celt_tests_test_unit_mathops_SOURCES_DIST =  \
+	celt/tests/test_unit_mathops.c
+@EXTRA_PROGRAMS_TRUE@am_celt_tests_test_unit_mathops_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_mathops.$(OBJEXT)
 celt_tests_test_unit_mathops_OBJECTS =  \
 	$(am_celt_tests_test_unit_mathops_OBJECTS)
-celt_tests_test_unit_mathops_DEPENDENCIES =
-am_celt_tests_test_unit_mdct_OBJECTS =  \
-	celt/tests/test_unit_mdct.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_mathops_DEPENDENCIES =  \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__celt_tests_test_unit_mdct_SOURCES_DIST =  \
+	celt/tests/test_unit_mdct.c
+@EXTRA_PROGRAMS_TRUE@am_celt_tests_test_unit_mdct_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_mdct.$(OBJEXT)
 celt_tests_test_unit_mdct_OBJECTS =  \
 	$(am_celt_tests_test_unit_mdct_OBJECTS)
-celt_tests_test_unit_mdct_DEPENDENCIES =
-am_celt_tests_test_unit_rotation_OBJECTS =  \
-	celt/tests/test_unit_rotation.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_mdct_DEPENDENCIES =  \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__celt_tests_test_unit_rotation_SOURCES_DIST =  \
+	celt/tests/test_unit_rotation.c
+@EXTRA_PROGRAMS_TRUE@am_celt_tests_test_unit_rotation_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_rotation.$(OBJEXT)
 celt_tests_test_unit_rotation_OBJECTS =  \
 	$(am_celt_tests_test_unit_rotation_OBJECTS)
-celt_tests_test_unit_rotation_DEPENDENCIES =
-am_celt_tests_test_unit_types_OBJECTS =  \
-	celt/tests/test_unit_types.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_rotation_DEPENDENCIES =  \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__celt_tests_test_unit_types_SOURCES_DIST =  \
+	celt/tests/test_unit_types.c
+@EXTRA_PROGRAMS_TRUE@am_celt_tests_test_unit_types_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	celt/tests/test_unit_types.$(OBJEXT)
 celt_tests_test_unit_types_OBJECTS =  \
 	$(am_celt_tests_test_unit_types_OBJECTS)
-celt_tests_test_unit_types_DEPENDENCIES =
-am_opus_compare_OBJECTS = src/opus_compare.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_types_DEPENDENCIES =  \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__opus_compare_SOURCES_DIST = src/opus_compare.c
+@EXTRA_PROGRAMS_TRUE@am_opus_compare_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	src/opus_compare.$(OBJEXT)
 opus_compare_OBJECTS = $(am_opus_compare_OBJECTS)
-opus_compare_DEPENDENCIES =
+@EXTRA_PROGRAMS_TRUE@opus_compare_DEPENDENCIES =  \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
 am__opus_custom_demo_SOURCES_DIST = celt/opus_custom_demo.c
-@CUSTOM_MODES_TRUE@am_opus_custom_demo_OBJECTS =  \
-@CUSTOM_MODES_TRUE@	celt/opus_custom_demo.$(OBJEXT)
+@CUSTOM_MODES_TRUE@@EXTRA_PROGRAMS_TRUE@am_opus_custom_demo_OBJECTS = celt/opus_custom_demo.$(OBJEXT)
 opus_custom_demo_OBJECTS = $(am_opus_custom_demo_OBJECTS)
-@CUSTOM_MODES_TRUE@opus_custom_demo_DEPENDENCIES = libopus.la
-am_opus_demo_OBJECTS = src/opus_demo.$(OBJEXT)
+@CUSTOM_MODES_TRUE@@EXTRA_PROGRAMS_TRUE@opus_custom_demo_DEPENDENCIES =  \
+@CUSTOM_MODES_TRUE@@EXTRA_PROGRAMS_TRUE@	libopus.la \
+@CUSTOM_MODES_TRUE@@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__opus_demo_SOURCES_DIST = src/opus_demo.c
+@EXTRA_PROGRAMS_TRUE@am_opus_demo_OBJECTS = src/opus_demo.$(OBJEXT)
 opus_demo_OBJECTS = $(am_opus_demo_OBJECTS)
-opus_demo_DEPENDENCIES = libopus.la
-am_repacketizer_demo_OBJECTS = src/repacketizer_demo.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@opus_demo_DEPENDENCIES = libopus.la \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__repacketizer_demo_SOURCES_DIST = src/repacketizer_demo.c
+@EXTRA_PROGRAMS_TRUE@am_repacketizer_demo_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	src/repacketizer_demo.$(OBJEXT)
 repacketizer_demo_OBJECTS = $(am_repacketizer_demo_OBJECTS)
-repacketizer_demo_DEPENDENCIES = libopus.la
-am_tests_test_opus_api_OBJECTS = tests/test_opus_api.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@repacketizer_demo_DEPENDENCIES = libopus.la \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__tests_test_opus_api_SOURCES_DIST = tests/test_opus_api.c \
+	tests/test_opus_common.h
+@EXTRA_PROGRAMS_TRUE@am_tests_test_opus_api_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_api.$(OBJEXT)
 tests_test_opus_api_OBJECTS = $(am_tests_test_opus_api_OBJECTS)
-tests_test_opus_api_DEPENDENCIES = libopus.la
-am_tests_test_opus_decode_OBJECTS = tests/test_opus_decode.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_api_DEPENDENCIES = libopus.la \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__tests_test_opus_decode_SOURCES_DIST = tests/test_opus_decode.c \
+	tests/test_opus_common.h
+@EXTRA_PROGRAMS_TRUE@am_tests_test_opus_decode_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_decode.$(OBJEXT)
 tests_test_opus_decode_OBJECTS = $(am_tests_test_opus_decode_OBJECTS)
-tests_test_opus_decode_DEPENDENCIES = libopus.la
-am_tests_test_opus_encode_OBJECTS = tests/test_opus_encode.$(OBJEXT)
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_decode_DEPENDENCIES = libopus.la \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__tests_test_opus_encode_SOURCES_DIST = tests/test_opus_encode.c \
+	tests/test_opus_common.h
+@EXTRA_PROGRAMS_TRUE@am_tests_test_opus_encode_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_encode.$(OBJEXT)
 tests_test_opus_encode_OBJECTS = $(am_tests_test_opus_encode_OBJECTS)
-tests_test_opus_encode_DEPENDENCIES = libopus.la
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_encode_DEPENDENCIES = libopus.la \
+@EXTRA_PROGRAMS_TRUE@	$(am__DEPENDENCIES_1)
+am__tests_test_opus_padding_SOURCES_DIST = tests/test_opus_padding.c \
+	tests/test_opus_common.h
+@EXTRA_PROGRAMS_TRUE@am_tests_test_opus_padding_OBJECTS =  \
+@EXTRA_PROGRAMS_TRUE@	tests/test_opus_padding.$(OBJEXT)
+tests_test_opus_padding_OBJECTS =  \
+	$(am_tests_test_opus_padding_OBJECTS)
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_padding_DEPENDENCIES =  \
+@EXTRA_PROGRAMS_TRUE@	libopus.la $(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
 am__mv = mv -f
+CPPASCOMPILE = $(CCAS) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CCASFLAGS) $(CCASFLAGS)
+LTCPPASCOMPILE = $(LIBTOOL) $(AM_V_lt) $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=compile $(CCAS) $(DEFS) \
+	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+	$(AM_CCASFLAGS) $(CCASFLAGS)
+AM_V_CPPAS = $(am__v_CPPAS_@AM_V@)
+am__v_CPPAS_ = $(am__v_CPPAS_@AM_DEFAULT_V@)
+am__v_CPPAS_0 = @echo "  CPPAS " $@;
+AM_V_at = $(am__v_at_@AM_V@)
+am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
+am__v_at_0 = @
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -377,9 +472,6 @@ LTCOMPILE = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 AM_V_CC = $(am__v_CC_@AM_V@)
 am__v_CC_ = $(am__v_CC_@AM_DEFAULT_V@)
 am__v_CC_0 = @echo "  CC    " $@;
-AM_V_at = $(am__v_at_@AM_V@)
-am__v_at_ = $(am__v_at_@AM_DEFAULT_V@)
-am__v_at_0 = @
 CCLD = $(CC)
 LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
@@ -390,7 +482,8 @@ am__v_CCLD_0 = @echo "  CCLD  " $@;
 AM_V_GEN = $(am__v_GEN_@AM_V@)
 am__v_GEN_ = $(am__v_GEN_@AM_DEFAULT_V@)
 am__v_GEN_0 = @echo "  GEN   " $@;
-SOURCES = $(libopus_la_SOURCES) $(celt_tests_test_unit_cwrs32_SOURCES) \
+SOURCES = $(libopus_la_SOURCES) $(nodist_libopus_la_SOURCES) \
+	$(celt_tests_test_unit_cwrs32_SOURCES) \
 	$(celt_tests_test_unit_dft_SOURCES) \
 	$(celt_tests_test_unit_entropy_SOURCES) \
 	$(celt_tests_test_unit_laplace_SOURCES) \
@@ -401,20 +494,25 @@ SOURCES = $(libopus_la_SOURCES) $(celt_tests_test_unit_cwrs32_SOURCES) \
 	$(opus_custom_demo_SOURCES) $(opus_demo_SOURCES) \
 	$(repacketizer_demo_SOURCES) $(tests_test_opus_api_SOURCES) \
 	$(tests_test_opus_decode_SOURCES) \
-	$(tests_test_opus_encode_SOURCES)
+	$(tests_test_opus_encode_SOURCES) \
+	$(tests_test_opus_padding_SOURCES)
 DIST_SOURCES = $(am__libopus_la_SOURCES_DIST) \
-	$(celt_tests_test_unit_cwrs32_SOURCES) \
-	$(celt_tests_test_unit_dft_SOURCES) \
-	$(celt_tests_test_unit_entropy_SOURCES) \
-	$(celt_tests_test_unit_laplace_SOURCES) \
-	$(celt_tests_test_unit_mathops_SOURCES) \
-	$(celt_tests_test_unit_mdct_SOURCES) \
-	$(celt_tests_test_unit_rotation_SOURCES) \
-	$(celt_tests_test_unit_types_SOURCES) $(opus_compare_SOURCES) \
-	$(am__opus_custom_demo_SOURCES_DIST) $(opus_demo_SOURCES) \
-	$(repacketizer_demo_SOURCES) $(tests_test_opus_api_SOURCES) \
-	$(tests_test_opus_decode_SOURCES) \
-	$(tests_test_opus_encode_SOURCES)
+	$(am__celt_tests_test_unit_cwrs32_SOURCES_DIST) \
+	$(am__celt_tests_test_unit_dft_SOURCES_DIST) \
+	$(am__celt_tests_test_unit_entropy_SOURCES_DIST) \
+	$(am__celt_tests_test_unit_laplace_SOURCES_DIST) \
+	$(am__celt_tests_test_unit_mathops_SOURCES_DIST) \
+	$(am__celt_tests_test_unit_mdct_SOURCES_DIST) \
+	$(am__celt_tests_test_unit_rotation_SOURCES_DIST) \
+	$(am__celt_tests_test_unit_types_SOURCES_DIST) \
+	$(am__opus_compare_SOURCES_DIST) \
+	$(am__opus_custom_demo_SOURCES_DIST) \
+	$(am__opus_demo_SOURCES_DIST) \
+	$(am__repacketizer_demo_SOURCES_DIST) \
+	$(am__tests_test_opus_api_SOURCES_DIST) \
+	$(am__tests_test_opus_decode_SOURCES_DIST) \
+	$(am__tests_test_opus_encode_SOURCES_DIST) \
+	$(am__tests_test_opus_padding_SOURCES_DIST)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -490,6 +588,9 @@ AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 CC = @CC@
+CCAS = @CCAS@
+CCASDEPMODE = @CCASDEPMODE@
+CCASFLAGS = @CCASFLAGS@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
@@ -508,6 +609,7 @@ EXEEXT = @EXEEXT@
 FGREP = @FGREP@
 GREP = @GREP@
 HAVE_DOXYGEN = @HAVE_DOXYGEN@
+HAVE_PERL = @HAVE_PERL@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
@@ -530,10 +632,13 @@ NM = @NM@
 NMEDIT = @NMEDIT@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
+OPUS_ARM_MAY_HAVE_EDSP = @OPUS_ARM_MAY_HAVE_EDSP@
+OPUS_ARM_MAY_HAVE_MEDIA = @OPUS_ARM_MAY_HAVE_MEDIA@
+OPUS_ARM_MAY_HAVE_NEON = @OPUS_ARM_MAY_HAVE_NEON@
+OPUS_HAVE_RTCD = @OPUS_HAVE_RTCD@
 OPUS_LT_AGE = @OPUS_LT_AGE@
 OPUS_LT_CURRENT = @OPUS_LT_CURRENT@
 OPUS_LT_REVISION = @OPUS_LT_REVISION@
-OPUS_VERSION = @OPUS_VERSION@
 OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
 PACKAGE = @PACKAGE@
@@ -545,15 +650,11 @@ PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PC_BUILD = @PC_BUILD@
-PC_LIBM = @PC_LIBM@
 RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
-SIZE16 = @SIZE16@
-SIZE32 = @SIZE32@
 STRIP = @STRIP@
-SYMBOL_VISIBILITY = @SYMBOL_VISIBILITY@
 VERSION = @VERSION@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
@@ -608,25 +709,26 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = subdir-objects
+ACLOCAL_AMFLAGS = -I m4
 lib_LTLIBRARIES = libopus.la
 DIST_SUBDIRS = doc
-INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/celt -I$(top_srcdir)/silk -I$(top_srcdir)/silk/float -I$(top_srcdir)/silk/fixed
-CELT_SOURCES = celt/bands.c \
-celt/celt.c \
-celt/cwrs.c \
-celt/entcode.c \
-celt/entdec.c \
-celt/entenc.c \
-celt/kiss_fft.c \
-celt/laplace.c \
-celt/mathops.c \
-celt/mdct.c \
-celt/modes.c \
-celt/pitch.c \
-celt/celt_lpc.c \
-celt/quant_bands.c \
-celt/rate.c \
-celt/vq.c
+AM_CPPFLAGS = -I$(top_srcdir)/include -I$(top_srcdir)/celt -I$(top_srcdir)/silk \
+              -I$(top_srcdir)/silk/float -I$(top_srcdir)/silk/fixed
+
+CELT_SOURCES = celt/bands.c celt/celt.c celt/celt_encoder.c \
+	celt/celt_decoder.c celt/cwrs.c celt/entcode.c celt/entdec.c \
+	celt/entenc.c celt/kiss_fft.c celt/laplace.c celt/mathops.c \
+	celt/mdct.c celt/modes.c celt/pitch.c celt/celt_lpc.c \
+	celt/quant_bands.c celt/rate.c celt/vq.c $(am__append_4)
+CELT_SOURCES_ARM = \
+celt/arm/armcpu.c \
+celt/arm/arm_celt_map.c
+
+CELT_SOURCES_ARM_ASM = \
+celt/arm/celt_pitch_xcorr_arm.s
+
+CELT_AM_SOURCES_ARM_ASM = \
+celt/arm/armopts.s.in
 
 SILK_SOURCES = silk/CNG.c silk/code_signs.c silk/init_decoder.c \
 	silk/decode_core.c silk/decode_frame.c \
@@ -659,7 +761,7 @@ SILK_SOURCES = silk/CNG.c silk/code_signs.c silk/init_decoder.c \
 	silk/sigm_Q15.c silk/sort.c silk/sum_sqr_shift.c \
 	silk/stereo_decode_pred.c silk/stereo_encode_pred.c \
 	silk/stereo_find_predictor.c silk/stereo_quant_pred.c \
-	$(am__append_1) $(am__append_2)
+	$(am__append_1) $(am__append_2) $(am__append_5)
 SILK_SOURCES_FIXED = \
 silk/fixed/LTP_analysis_filter_FIX.c \
 silk/fixed/LTP_scale_ctrl_FIX.c \
@@ -720,16 +822,28 @@ silk/float/scale_vector_FLP.c \
 silk/float/schur_FLP.c \
 silk/float/sort_FLP.c
 
-OPUS_SOURCES = src/opus.c \
-src/opus_decoder.c \
-src/opus_encoder.c \
-src/opus_multistream.c \
-src/repacketizer.c
+OPUS_SOURCES = src/opus.c src/opus_decoder.c src/opus_encoder.c \
+	src/opus_multistream.c src/opus_multistream_encoder.c \
+	src/opus_multistream_decoder.c src/repacketizer.c \
+	$(am__append_3)
+OPUS_SOURCES_FLOAT = \
+src/analysis.c \
+src/mlp.c \
+src/mlp_data.c
+
+@CPU_ARM_TRUE@@OPUS_ARM_EXTERNAL_ASM_TRUE@nodist_libopus_la_SOURCES = $(CELT_SOURCES_ARM_ASM:.s=-gnu.S)
+@CPU_ARM_TRUE@@OPUS_ARM_EXTERNAL_ASM_TRUE@BUILT_SOURCES = $(CELT_SOURCES_ARM_ASM:.s=-gnu.S) \
+@CPU_ARM_TRUE@@OPUS_ARM_EXTERNAL_ASM_TRUE@ $(CELT_AM_SOURCES_ARM_ASM:.s.in=.s) \
+@CPU_ARM_TRUE@@OPUS_ARM_EXTERNAL_ASM_TRUE@ $(CELT_AM_SOURCES_ARM_ASM:.s.in=-gnu.S)
+
+CLEANFILES = $(CELT_SOURCES_ARM_ASM:.s=-gnu.S) \
+ $(CELT_AM_SOURCES_ARM_ASM:.s.in=-gnu.S)
 
 CELT_HEAD = \
 celt/arch.h \
 celt/bands.h \
 celt/celt.h \
+celt/cpu_support.h \
 include/opus_types.h \
 include/opus_defines.h \
 include/opus_custom.h \
@@ -756,7 +870,14 @@ celt/rate.h \
 celt/stack_alloc.h \
 celt/vq.h \
 celt/static_modes_float.h \
-celt/static_modes_fixed.h
+celt/static_modes_fixed.h \
+celt/arm/armcpu.h \
+celt/arm/fixed_armv4.h \
+celt/arm/fixed_armv5e.h \
+celt/arm/kiss_fft_armv4.h \
+celt/arm/kiss_fft_armv5e.h \
+celt/arm/pitch_arm.h \
+celt/x86/pitch_sse.h
 
 SILK_HEAD = \
 silk/debug.h \
@@ -779,6 +900,10 @@ silk/resampler_private.h \
 silk/resampler_rom.h \
 silk/resampler_structs.h \
 silk/SigProc_FIX.h \
+silk/arm/macros_armv4.h \
+silk/arm/macros_armv5e.h \
+silk/arm/SigProc_FIX_armv4.h \
+silk/arm/SigProc_FIX_armv5e.h \
 silk/fixed/main_FIX.h \
 silk/fixed/structs_FIX.h \
 silk/float/main_FLP.h \
@@ -788,68 +913,76 @@ silk/float/SigProc_FLP.h
 OPUS_HEAD = \
 include/opus.h \
 include/opus_multistream.h \
-src/opus_private.h
+src/opus_private.h \
+src/analysis.h \
+src/mlp.h \
+src/tansig_table.h
 
 libopus_la_SOURCES = $(CELT_SOURCES) $(SILK_SOURCES) $(OPUS_SOURCES)
 libopus_la_LDFLAGS = -no-undefined -version-info @OPUS_LT_CURRENT@:@OPUS_LT_REVISION@:@OPUS_LT_AGE@
+libopus_la_LIBADD = $(LIBM)
 pkginclude_HEADERS = include/opus.h include/opus_multistream.h \
-	include/opus_types.h include/opus_defines.h $(am__append_3)
+	include/opus_types.h include/opus_defines.h $(am__append_6)
 noinst_HEADERS = $(OPUS_HEAD) $(SILK_HEAD) $(CELT_HEAD)
-opus_demo_SOURCES = src/opus_demo.c
-opus_demo_LDADD = libopus.la -lm
-repacketizer_demo_SOURCES = src/repacketizer_demo.c
-repacketizer_demo_LDADD = libopus.la -lm
-opus_compare_SOURCES = src/opus_compare.c
-opus_compare_LDADD = -lm
-tests_test_opus_api_SOURCES = tests/test_opus_api.c tests/test_opus_common.h
-tests_test_opus_api_LDADD = libopus.la -lm
-tests_test_opus_encode_SOURCES = tests/test_opus_encode.c tests/test_opus_common.h
-tests_test_opus_encode_LDADD = libopus.la -lm
-tests_test_opus_decode_SOURCES = tests/test_opus_decode.c tests/test_opus_common.h
-tests_test_opus_decode_LDADD = libopus.la -lm
-celt_tests_test_unit_cwrs32_SOURCES = celt/tests/test_unit_cwrs32.c
-celt_tests_test_unit_cwrs32_LDADD = -lm
-celt_tests_test_unit_dft_SOURCES = celt/tests/test_unit_dft.c
-celt_tests_test_unit_dft_LDADD = -lm
-celt_tests_test_unit_entropy_SOURCES = celt/tests/test_unit_entropy.c
-celt_tests_test_unit_entropy_LDADD = -lm
-celt_tests_test_unit_laplace_SOURCES = celt/tests/test_unit_laplace.c
-celt_tests_test_unit_laplace_LDADD = -lm
-celt_tests_test_unit_mathops_SOURCES = celt/tests/test_unit_mathops.c
-celt_tests_test_unit_mathops_LDADD = -lm
-celt_tests_test_unit_mdct_SOURCES = celt/tests/test_unit_mdct.c
-celt_tests_test_unit_mdct_LDADD = -lm
-celt_tests_test_unit_rotation_SOURCES = celt/tests/test_unit_rotation.c
-celt_tests_test_unit_rotation_LDADD = -lm
-celt_tests_test_unit_types_SOURCES = celt/tests/test_unit_types.c
-celt_tests_test_unit_types_LDADD = -lm
-@CUSTOM_MODES_TRUE@opus_custom_demo_SOURCES = celt/opus_custom_demo.c
-@CUSTOM_MODES_TRUE@opus_custom_demo_LDADD = libopus.la -lm
+@EXTRA_PROGRAMS_TRUE@opus_demo_SOURCES = src/opus_demo.c
+@EXTRA_PROGRAMS_TRUE@opus_demo_LDADD = libopus.la $(LIBM)
+@EXTRA_PROGRAMS_TRUE@repacketizer_demo_SOURCES = src/repacketizer_demo.c
+@EXTRA_PROGRAMS_TRUE@repacketizer_demo_LDADD = libopus.la $(LIBM)
+@EXTRA_PROGRAMS_TRUE@opus_compare_SOURCES = src/opus_compare.c
+@EXTRA_PROGRAMS_TRUE@opus_compare_LDADD = $(LIBM)
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_api_SOURCES = tests/test_opus_api.c tests/test_opus_common.h
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_api_LDADD = libopus.la $(LIBM)
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_encode_SOURCES = tests/test_opus_encode.c tests/test_opus_common.h
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_encode_LDADD = libopus.la $(LIBM)
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_decode_SOURCES = tests/test_opus_decode.c tests/test_opus_common.h
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_decode_LDADD = libopus.la $(LIBM)
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_padding_SOURCES = tests/test_opus_padding.c tests/test_opus_common.h
+@EXTRA_PROGRAMS_TRUE@tests_test_opus_padding_LDADD = libopus.la $(LIBM)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_cwrs32_SOURCES = celt/tests/test_unit_cwrs32.c
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_cwrs32_LDADD = $(LIBM)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_dft_SOURCES = celt/tests/test_unit_dft.c
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_dft_LDADD = $(LIBM)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_entropy_SOURCES = celt/tests/test_unit_entropy.c
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_entropy_LDADD = $(LIBM)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_laplace_SOURCES = celt/tests/test_unit_laplace.c
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_laplace_LDADD = $(LIBM)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_mathops_SOURCES = celt/tests/test_unit_mathops.c
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_mathops_LDADD = $(LIBM)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_mdct_SOURCES = celt/tests/test_unit_mdct.c
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_mdct_LDADD = $(LIBM)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_rotation_SOURCES = celt/tests/test_unit_rotation.c
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_rotation_LDADD = $(LIBM)
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_types_SOURCES = celt/tests/test_unit_types.c
+@EXTRA_PROGRAMS_TRUE@celt_tests_test_unit_types_LDADD = $(LIBM)
+@CUSTOM_MODES_TRUE@@EXTRA_PROGRAMS_TRUE@opus_custom_demo_SOURCES = celt/opus_custom_demo.c
+@CUSTOM_MODES_TRUE@@EXTRA_PROGRAMS_TRUE@opus_custom_demo_LDADD = libopus.la $(LIBM)
 EXTRA_DIST = version.mk \
-	     opus.pc.in \
+             opus.pc.in \
              opus-uninstalled.pc.in \
              opus.m4 \
              Makefile.unix \
              tests/run_vectors.sh \
-             opus.sln \
-             celt/celt.vcxproj \
-             celt/celt.vcxproj.filters \
-             src/opus_demo.vcxproj \
-             src/opus.vcxproj \
-             src/opus.vcxproj.filters \
-             src/opus_demo.vcxproj.filters \
-             tests/test_opus_decode.vcxproj.filters \
-             tests/test_opus_decode.vcxproj \
-             tests/test_opus_encode.vcxproj.filters \
-             tests/test_opus_encode.vcxproj \
-             tests/test_opus_api.vcxproj.filters \
-             tests/test_opus_api.vcxproj \
-             silk/float/silk_float.vcxproj.filters \
-             silk/float/silk_float.vcxproj \
-             silk/fixed/silk_fixed.vcxproj.filters \
-             silk/fixed/silk_fixed.vcxproj \
-             silk/silk_common.vcxproj \
-             silk/silk_common.vcxproj.filters \
+             celt/arm/arm2gnu.pl \
+             celt/arm/celt_pitch_xcorr_arm.s \
+             win32/VS2010/silk_float.vcxproj \
+             win32/VS2010/celt.vcxproj.filters \
+             win32/VS2010/opus.vcxproj \
+             win32/VS2010/silk_common.vcxproj.filters \
+             win32/VS2010/silk_float.vcxproj.filters \
+             win32/VS2010/test_opus_encode.vcxproj.filters \
+             win32/VS2010/silk_common.vcxproj \
+             win32/VS2010/test_opus_encode.vcxproj \
+             win32/VS2010/opus_demo.vcxproj \
+             win32/VS2010/test_opus_api.vcxproj.filters \
+             win32/VS2010/test_opus_api.vcxproj \
+             win32/VS2010/test_opus_decode.vcxproj.filters \
+             win32/VS2010/silk_fixed.vcxproj.filters \
+             win32/VS2010/opus_demo.vcxproj.filters \
+             win32/VS2010/silk_fixed.vcxproj \
+             win32/VS2010/opus.vcxproj.filters \
+             win32/VS2010/test_opus_decode.vcxproj \
+             win32/VS2010/celt.vcxproj \
+             win32/VS2010/opus.sln \
              win32/genversion.bat \
              win32/config.h
 
@@ -857,11 +990,11 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = opus.pc
 m4datadir = $(datadir)/aclocal
 m4data_DATA = opus.m4
-all: config.h
+all: $(BUILT_SOURCES) config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .c .lo .o .obj
+.SUFFIXES: .S .c .lo .o .obj
 am--refresh: Makefile
 	@:
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am $(srcdir)/celt_sources.mk $(srcdir)/silk_sources.mk $(srcdir)/opus_sources.mk $(srcdir)/celt_headers.mk $(srcdir)/silk_headers.mk $(srcdir)/opus_headers.mk $(am__configure_deps)
@@ -916,6 +1049,8 @@ opus.pc: $(top_builddir)/config.status $(srcdir)/opus.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 opus-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/opus-uninstalled.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
+celt/arm/armopts.s: $(top_builddir)/config.status $(top_srcdir)/celt/arm/armopts.s.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
 	@list='$(lib_LTLIBRARIES)'; test -n "$(libdir)" || list=; \
@@ -956,6 +1091,10 @@ celt/$(DEPDIR)/$(am__dirstamp):
 	@: > celt/$(DEPDIR)/$(am__dirstamp)
 celt/bands.lo: celt/$(am__dirstamp) celt/$(DEPDIR)/$(am__dirstamp)
 celt/celt.lo: celt/$(am__dirstamp) celt/$(DEPDIR)/$(am__dirstamp)
+celt/celt_encoder.lo: celt/$(am__dirstamp) \
+	celt/$(DEPDIR)/$(am__dirstamp)
+celt/celt_decoder.lo: celt/$(am__dirstamp) \
+	celt/$(DEPDIR)/$(am__dirstamp)
 celt/cwrs.lo: celt/$(am__dirstamp) celt/$(DEPDIR)/$(am__dirstamp)
 celt/entcode.lo: celt/$(am__dirstamp) celt/$(DEPDIR)/$(am__dirstamp)
 celt/entdec.lo: celt/$(am__dirstamp) celt/$(DEPDIR)/$(am__dirstamp)
@@ -971,6 +1110,16 @@ celt/quant_bands.lo: celt/$(am__dirstamp) \
 	celt/$(DEPDIR)/$(am__dirstamp)
 celt/rate.lo: celt/$(am__dirstamp) celt/$(DEPDIR)/$(am__dirstamp)
 celt/vq.lo: celt/$(am__dirstamp) celt/$(DEPDIR)/$(am__dirstamp)
+celt/arm/$(am__dirstamp):
+	@$(MKDIR_P) celt/arm
+	@: > celt/arm/$(am__dirstamp)
+celt/arm/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) celt/arm/$(DEPDIR)
+	@: > celt/arm/$(DEPDIR)/$(am__dirstamp)
+celt/arm/armcpu.lo: celt/arm/$(am__dirstamp) \
+	celt/arm/$(DEPDIR)/$(am__dirstamp)
+celt/arm/arm_celt_map.lo: celt/arm/$(am__dirstamp) \
+	celt/arm/$(DEPDIR)/$(am__dirstamp)
 silk/$(am__dirstamp):
 	@$(MKDIR_P) silk
 	@: > silk/$(am__dirstamp)
@@ -1249,7 +1398,16 @@ src/opus_decoder.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/opus_encoder.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 src/opus_multistream.lo: src/$(am__dirstamp) \
 	src/$(DEPDIR)/$(am__dirstamp)
+src/opus_multistream_encoder.lo: src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
+src/opus_multistream_decoder.lo: src/$(am__dirstamp) \
+	src/$(DEPDIR)/$(am__dirstamp)
 src/repacketizer.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/analysis.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/mlp.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+src/mlp_data.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
+celt/arm/celt_pitch_xcorr_arm-gnu.lo: celt/arm/$(am__dirstamp) \
+	celt/arm/$(DEPDIR)/$(am__dirstamp)
 libopus.la: $(libopus_la_OBJECTS) $(libopus_la_DEPENDENCIES) $(EXTRA_libopus_la_DEPENDENCIES) 
 	$(AM_V_CCLD)$(libopus_la_LINK) -rpath $(libdir) $(libopus_la_OBJECTS) $(libopus_la_LIBADD) $(LIBS)
 
@@ -1348,13 +1506,28 @@ tests/test_opus_encode.$(OBJEXT): tests/$(am__dirstamp) \
 tests/test_opus_encode$(EXEEXT): $(tests_test_opus_encode_OBJECTS) $(tests_test_opus_encode_DEPENDENCIES) $(EXTRA_tests_test_opus_encode_DEPENDENCIES) tests/$(am__dirstamp)
 	@rm -f tests/test_opus_encode$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(tests_test_opus_encode_OBJECTS) $(tests_test_opus_encode_LDADD) $(LIBS)
+tests/test_opus_padding.$(OBJEXT): tests/$(am__dirstamp) \
+	tests/$(DEPDIR)/$(am__dirstamp)
+tests/test_opus_padding$(EXEEXT): $(tests_test_opus_padding_OBJECTS) $(tests_test_opus_padding_DEPENDENCIES) $(EXTRA_tests_test_opus_padding_DEPENDENCIES) tests/$(am__dirstamp)
+	@rm -f tests/test_opus_padding$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(tests_test_opus_padding_OBJECTS) $(tests_test_opus_padding_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f celt/arm/arm_celt_map.$(OBJEXT)
+	-rm -f celt/arm/arm_celt_map.lo
+	-rm -f celt/arm/armcpu.$(OBJEXT)
+	-rm -f celt/arm/armcpu.lo
+	-rm -f celt/arm/celt_pitch_xcorr_arm-gnu.$(OBJEXT)
+	-rm -f celt/arm/celt_pitch_xcorr_arm-gnu.lo
 	-rm -f celt/bands.$(OBJEXT)
 	-rm -f celt/bands.lo
 	-rm -f celt/celt.$(OBJEXT)
 	-rm -f celt/celt.lo
+	-rm -f celt/celt_decoder.$(OBJEXT)
+	-rm -f celt/celt_decoder.lo
+	-rm -f celt/celt_encoder.$(OBJEXT)
+	-rm -f celt/celt_encoder.lo
 	-rm -f celt/celt_lpc.$(OBJEXT)
 	-rm -f celt/celt_lpc.lo
 	-rm -f celt/cwrs.$(OBJEXT)
@@ -1656,6 +1829,12 @@ mostlyclean-compile:
 	-rm -f silk/tables_pitch_lag.lo
 	-rm -f silk/tables_pulses_per_block.$(OBJEXT)
 	-rm -f silk/tables_pulses_per_block.lo
+	-rm -f src/analysis.$(OBJEXT)
+	-rm -f src/analysis.lo
+	-rm -f src/mlp.$(OBJEXT)
+	-rm -f src/mlp.lo
+	-rm -f src/mlp_data.$(OBJEXT)
+	-rm -f src/mlp_data.lo
 	-rm -f src/opus.$(OBJEXT)
 	-rm -f src/opus.lo
 	-rm -f src/opus_compare.$(OBJEXT)
@@ -1666,18 +1845,25 @@ mostlyclean-compile:
 	-rm -f src/opus_encoder.lo
 	-rm -f src/opus_multistream.$(OBJEXT)
 	-rm -f src/opus_multistream.lo
+	-rm -f src/opus_multistream_decoder.$(OBJEXT)
+	-rm -f src/opus_multistream_decoder.lo
+	-rm -f src/opus_multistream_encoder.$(OBJEXT)
+	-rm -f src/opus_multistream_encoder.lo
 	-rm -f src/repacketizer.$(OBJEXT)
 	-rm -f src/repacketizer.lo
 	-rm -f src/repacketizer_demo.$(OBJEXT)
 	-rm -f tests/test_opus_api.$(OBJEXT)
 	-rm -f tests/test_opus_decode.$(OBJEXT)
 	-rm -f tests/test_opus_encode.$(OBJEXT)
+	-rm -f tests/test_opus_padding.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@celt/$(DEPDIR)/bands.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@celt/$(DEPDIR)/celt.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@celt/$(DEPDIR)/celt_decoder.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@celt/$(DEPDIR)/celt_encoder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@celt/$(DEPDIR)/celt_lpc.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@celt/$(DEPDIR)/cwrs.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@celt/$(DEPDIR)/entcode.Plo@am__quote@
@@ -1693,6 +1879,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@celt/$(DEPDIR)/quant_bands.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@celt/$(DEPDIR)/rate.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@celt/$(DEPDIR)/vq.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@celt/arm/$(DEPDIR)/arm_celt_map.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@celt/arm/$(DEPDIR)/armcpu.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@celt/arm/$(DEPDIR)/celt_pitch_xcorr_arm-gnu.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@celt/tests/$(DEPDIR)/test_unit_cwrs32.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@celt/tests/$(DEPDIR)/test_unit_dft.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@celt/tests/$(DEPDIR)/test_unit_entropy.Po@am__quote@
@@ -1833,17 +2022,47 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@silk/float/$(DEPDIR)/sort_FLP.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@silk/float/$(DEPDIR)/warped_autocorrelation_FLP.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@silk/float/$(DEPDIR)/wrappers_FLP.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/analysis.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/mlp.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/mlp_data.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/opus.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/opus_compare.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/opus_decoder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/opus_demo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/opus_encoder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/opus_multistream.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/opus_multistream_decoder.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/opus_multistream_encoder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/repacketizer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/repacketizer_demo.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_opus_api.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_opus_decode.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_opus_encode.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@tests/$(DEPDIR)/test_opus_padding.Po@am__quote@
+
+.S.o:
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+@am__fastdepCCAS_TRUE@	$(CPPASCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCCAS_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CPPASCOMPILE) -c -o $@ $<
+
+.S.obj:
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+@am__fastdepCCAS_TRUE@	$(CPPASCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+@am__fastdepCCAS_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(CPPASCOMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.S.lo:
+@am__fastdepCCAS_TRUE@	$(AM_V_CPPAS)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`;\
+@am__fastdepCCAS_TRUE@	$(LTCPPASCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCCAS_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Plo
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCCAS_FALSE@	DEPDIR=$(DEPDIR) $(CCASDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCCAS_FALSE@	$(AM_V_CPPAS@am__nodep@)$(LTCPPASCOMPILE) -c -o $@ $<
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
@@ -1875,6 +2094,7 @@ mostlyclean-libtool:
 clean-libtool:
 	-rm -rf .libs _libs
 	-rm -rf celt/.libs celt/_libs
+	-rm -rf celt/arm/.libs celt/arm/_libs
 	-rm -rf celt/tests/.libs celt/tests/_libs
 	-rm -rf silk/.libs silk/_libs
 	-rm -rf silk/fixed/.libs silk/fixed/_libs
@@ -2233,6 +2453,9 @@ distdir: $(DISTFILES)
 	      || exit 1; \
 	  fi; \
 	done
+	$(MAKE) $(AM_MAKEFLAGS) \
+	  top_distdir="$(top_distdir)" distdir="$(distdir)" \
+	  dist-hook
 	-test -n "$(am__skip_mode_fix)" \
 	|| find "$(distdir)" -type d ! -perm -755 \
 		-exec chmod u+rwx,go+rx {} \; -o \
@@ -2365,7 +2588,8 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 	$(MAKE) $(AM_MAKEFLAGS) check-TESTS
-check: check-recursive
+check: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) check-recursive
 all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(DATA) $(HEADERS) \
 		config.h all-local
 installdirs: installdirs-recursive
@@ -2373,7 +2597,8 @@ installdirs-am:
 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(m4datadir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(pkgincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-recursive
+install: $(BUILT_SOURCES)
+	$(MAKE) $(AM_MAKEFLAGS) install-recursive
 install-exec: install-exec-recursive
 install-data: install-data-recursive
 uninstall: uninstall-recursive
@@ -2395,12 +2620,15 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
 	-rm -f celt/$(DEPDIR)/$(am__dirstamp)
 	-rm -f celt/$(am__dirstamp)
+	-rm -f celt/arm/$(DEPDIR)/$(am__dirstamp)
+	-rm -f celt/arm/$(am__dirstamp)
 	-rm -f celt/tests/$(DEPDIR)/$(am__dirstamp)
 	-rm -f celt/tests/$(am__dirstamp)
 	-rm -f silk/$(DEPDIR)/$(am__dirstamp)
@@ -2417,6 +2645,7 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
+	-test -z "$(BUILT_SOURCES)" || rm -f $(BUILT_SOURCES)
 clean: clean-recursive
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool clean-local \
@@ -2424,7 +2653,7 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool clean-local \
 
 distclean: distclean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf celt/$(DEPDIR) celt/tests/$(DEPDIR) silk/$(DEPDIR) silk/fixed/$(DEPDIR) silk/float/$(DEPDIR) src/$(DEPDIR) tests/$(DEPDIR)
+	-rm -rf celt/$(DEPDIR) celt/arm/$(DEPDIR) celt/tests/$(DEPDIR) silk/$(DEPDIR) silk/fixed/$(DEPDIR) silk/float/$(DEPDIR) src/$(DEPDIR) tests/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-libtool distclean-tags
@@ -2473,7 +2702,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-recursive
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf celt/$(DEPDIR) celt/tests/$(DEPDIR) silk/$(DEPDIR) silk/fixed/$(DEPDIR) silk/float/$(DEPDIR) src/$(DEPDIR) tests/$(DEPDIR)
+	-rm -rf celt/$(DEPDIR) celt/arm/$(DEPDIR) celt/tests/$(DEPDIR) silk/$(DEPDIR) silk/fixed/$(DEPDIR) silk/float/$(DEPDIR) src/$(DEPDIR) tests/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -2494,15 +2723,16 @@ uninstall-am: uninstall-libLTLIBRARIES uninstall-local \
 	uninstall-m4dataDATA uninstall-pkgconfigDATA \
 	uninstall-pkgincludeHEADERS
 
-.MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) all check-am \
-	ctags-recursive install-am install-strip tags-recursive
+.MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) all check \
+	check-am ctags-recursive install install-am install-strip \
+	tags-recursive
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am all-local am--refresh check check-TESTS check-am \
 	clean clean-generic clean-libLTLIBRARIES clean-libtool \
 	clean-local clean-noinstPROGRAMS ctags ctags-recursive dist \
-	dist-all dist-bzip2 dist-gzip dist-lzip dist-lzma dist-shar \
-	dist-tarZ dist-xz dist-zip distcheck distclean \
+	dist-all dist-bzip2 dist-gzip dist-hook dist-lzip dist-lzma \
+	dist-shar dist-tarZ dist-xz dist-zip distcheck distclean \
 	distclean-compile distclean-generic distclean-hdr \
 	distclean-libtool distclean-tags distcleancheck distdir \
 	distuninstallcheck dvi dvi-am html html-am info info-am \
@@ -2520,6 +2750,10 @@ uninstall-am: uninstall-libLTLIBRARIES uninstall-local \
 	uninstall-local uninstall-m4dataDATA uninstall-pkgconfigDATA \
 	uninstall-pkgincludeHEADERS
 
+
+# Provide the full test output for failed tests when using the parallel
+# test suite (which is enabled by default with automake 1.13+).
+export VERBOSE = yes
 
 # Targets to build and install just the library without the docs
 opus check-opus install-opus: export NO_DOXYGEN = 1
@@ -2548,7 +2782,53 @@ clean-local:
 uninstall-local:
 	( cd doc && $(MAKE) $(AM_MAKEFLAGS) uninstall )
 
+# We check this every time make is run, with configure.ac being touched to
+# trigger an update of the build system files if update_version changes the
+# current PACKAGE_VERSION (or if package_version was modified manually by a
+# user with either AUTO_UPDATE=no or no update_version script present - the
+# latter being the normal case for tarball releases).
+#
+# We can't just add the package_version file to CONFIGURE_DEPENDENCIES since
+# simply running autoconf will not actually regenerate configure for us when
+# the content of that file changes (due to autoconf dependency checking not
+# knowing about that without us creating yet another file for it to include).
+#
+# The MAKECMDGOALS check is a gnu-make'ism, but will degrade 'gracefully' for
+# makes that don't support it.  The only loss of functionality is not forcing
+# an update of package_version for `make dist` if AUTO_UPDATE=no, but that is
+# unlikely to be a real problem for any real user.
+$(top_srcdir)/configure.ac: force
+	@case "$(MAKECMDGOALS)" in \
+	    dist-hook)                             exit 0       ;; \
+	    dist-* | dist | distcheck | distclean) _arg=release ;; \
+	esac; \
+	if ! $(top_srcdir)/update_version $$_arg 2> /dev/null; then \
+	    if [ ! -e $(top_srcdir)/package_version ]; then \
+		echo 'PACKAGE_VERSION="unknown"' > $(top_srcdir)/package_version; \
+	    fi; \
+	    . $(top_srcdir)/package_version || exit 1; \
+	    [ "$(PACKAGE_VERSION)" != "$$PACKAGE_VERSION" ] || exit 0; \
+	fi; \
+	touch $@
+
+force:
+
+# Create a minimal package_version file when make dist is run.
+dist-hook:
+	echo 'PACKAGE_VERSION="$(PACKAGE_VERSION)"' > $(top_distdir)/package_version
+
 .PHONY: opus check-opus install-opus docs install-docs
+
+# automake doesn't do dependency tracking for asm files, that I can tell
+$(CELT_SOURCES_ARM_ASM:%.s=%-gnu.S): celt/arm/armopts-gnu.S
+$(CELT_SOURCES_ARM_ASM:%.s=%-gnu.S): $(top_srcdir)/celt/arm/arm2gnu.pl
+
+# convert ARM asm to GNU as format
+%-gnu.S: $(top_srcdir)/%.s
+	$(top_srcdir)/celt/arm/arm2gnu.pl < $< > $@
+# For autoconf-modified sources (e.g., armopts.s)
+%-gnu.S: %.s
+	$(top_srcdir)/celt/arm/arm2gnu.pl < $< > $@
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

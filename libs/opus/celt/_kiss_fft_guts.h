@@ -94,6 +94,14 @@
     do {(res).r = ADD32((res).r,(a).r);  (res).i = SUB32((res).i,(a).i); \
     }while(0)
 
+#if defined(OPUS_ARM_INLINE_ASM)
+#include "arm/kiss_fft_armv4.h"
+#endif
+
+#if defined(OPUS_ARM_INLINE_EDSP)
+#include "arm/kiss_fft_armv5e.h"
+#endif
+
 #else  /* not FIXED_POINT*/
 
 #   define S_MUL(a,b) ( (a)*(b) )

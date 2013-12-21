@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -30,9 +30,10 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 #include "main.h"
+#include "stack_alloc.h"
 
 /* Generates excitation for CNG LPC synthesis */
-static __inline void silk_CNG_exc(
+static OPUS_INLINE void silk_CNG_exc(
     opus_int32                       residual_Q10[],     /* O    CNG residual signal Q10                     */
     opus_int32                       exc_buf_Q14[],      /* I    Random samples buffer Q10                   */
     opus_int32                       Gain_Q16,           /* I    Gain to apply                               */
@@ -86,8 +87,8 @@ void silk_CNG(
     opus_int   i, subfr;
     opus_int32 sum_Q6, max_Gain_Q16;
     opus_int16 A_Q12[ MAX_LPC_ORDER ];
-    opus_int32 CNG_sig_Q10[ MAX_FRAME_LENGTH + MAX_LPC_ORDER ];
     silk_CNG_struct *psCNG = &psDec->sCNG;
+    SAVE_STACK;
 
     if( psDec->fs_kHz != psCNG->fs_kHz ) {
         /* Reset state */
@@ -123,6 +124,9 @@ void silk_CNG(
 
     /* Add CNG when packet is lost or during DTX */
     if( psDec->lossCnt ) {
+        VARDECL( opus_int32, CNG_sig_Q10 );
+
+        ALLOC( CNG_sig_Q10, length + MAX_LPC_ORDER, opus_int32 );
 
         /* Generate CNG excitation */
         silk_CNG_exc( CNG_sig_Q10 + MAX_LPC_ORDER, psCNG->CNG_exc_buf_Q14, psCNG->CNG_smth_Gain_Q16, length, &psCNG->rand_seed );
@@ -164,4 +168,5 @@ void silk_CNG(
     } else {
         silk_memset( psCNG->CNG_synth_state, 0, psDec->LPC_order *  sizeof( opus_int32 ) );
     }
+    RESTORE_STACK;
 }

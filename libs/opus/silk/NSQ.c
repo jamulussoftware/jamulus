@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -30,8 +30,9 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 #include "main.h"
+#include "stack_alloc.h"
 
-static __inline void silk_nsq_scale_states(
+static OPUS_INLINE void silk_nsq_scale_states(
     const silk_encoder_state *psEncC,           /* I    Encoder State                   */
     silk_nsq_state      *NSQ,                   /* I/O  NSQ state                       */
     const opus_int32    x_Q3[],                 /* I    input in Q3                     */
@@ -45,7 +46,7 @@ static __inline void silk_nsq_scale_states(
     const opus_int      signal_type             /* I    Signal type                     */
 );
 
-static __inline void silk_noise_shape_quantizer(
+static OPUS_INLINE void silk_noise_shape_quantizer(
     silk_nsq_state      *NSQ,                   /* I/O  NSQ state                       */
     opus_int            signalType,             /* I    Signal type                     */
     const opus_int32    x_sc_Q10[],             /* I                                    */
@@ -88,11 +89,12 @@ void silk_NSQ(
     opus_int            k, lag, start_idx, LSF_interpolation_flag;
     const opus_int16    *A_Q12, *B_Q14, *AR_shp_Q13;
     opus_int16          *pxq;
-    opus_int32          sLTP_Q15[ 2 * MAX_FRAME_LENGTH ];
-    opus_int16          sLTP[     2 * MAX_FRAME_LENGTH ];
+    VARDECL( opus_int32, sLTP_Q15 );
+    VARDECL( opus_int16, sLTP );
     opus_int32          HarmShapeFIRPacked_Q14;
     opus_int            offset_Q10;
-    opus_int32          x_sc_Q10[ MAX_SUB_FRAME_LENGTH ];
+    VARDECL( opus_int32, x_sc_Q10 );
+    SAVE_STACK;
 
     NSQ->rand_seed = psIndices->Seed;
 
@@ -109,6 +111,10 @@ void silk_NSQ(
         LSF_interpolation_flag = 1;
     }
 
+    ALLOC( sLTP_Q15,
+           psEncC->ltp_mem_length + psEncC->frame_length, opus_int32 );
+    ALLOC( sLTP, psEncC->ltp_mem_length + psEncC->frame_length, opus_int16 );
+    ALLOC( x_sc_Q10, psEncC->subfr_length, opus_int32 );
     /* Set up pointers to start of sub frame */
     NSQ->sLTP_shp_buf_idx = psEncC->ltp_mem_length;
     NSQ->sLTP_buf_idx     = psEncC->ltp_mem_length;
@@ -160,12 +166,13 @@ void silk_NSQ(
     /* DEBUG_STORE_DATA( enc.pcm, &NSQ->xq[ psEncC->ltp_mem_length ], psEncC->frame_length * sizeof( opus_int16 ) ) */
     silk_memmove( NSQ->xq,           &NSQ->xq[           psEncC->frame_length ], psEncC->ltp_mem_length * sizeof( opus_int16 ) );
     silk_memmove( NSQ->sLTP_shp_Q14, &NSQ->sLTP_shp_Q14[ psEncC->frame_length ], psEncC->ltp_mem_length * sizeof( opus_int32 ) );
+    RESTORE_STACK;
 }
 
 /***********************************/
 /* silk_noise_shape_quantizer  */
 /***********************************/
-static __inline void silk_noise_shape_quantizer(
+static OPUS_INLINE void silk_noise_shape_quantizer(
     silk_nsq_state      *NSQ,                   /* I/O  NSQ state                       */
     opus_int            signalType,             /* I    Signal type                     */
     const opus_int32    x_sc_Q10[],             /* I                                    */
@@ -363,7 +370,7 @@ static __inline void silk_noise_shape_quantizer(
     silk_memcpy( NSQ->sLPC_Q14, &NSQ->sLPC_Q14[ length ], NSQ_LPC_BUF_LENGTH * sizeof( opus_int32 ) );
 }
 
-static __inline void silk_nsq_scale_states(
+static OPUS_INLINE void silk_nsq_scale_states(
     const silk_encoder_state *psEncC,           /* I    Encoder State                   */
     silk_nsq_state      *NSQ,                   /* I/O  NSQ state                       */
     const opus_int32    x_Q3[],                 /* I    input in Q3                     */

@@ -64,14 +64,14 @@ extern "C" {
 /**Export control for opus functions */
 
 #ifndef OPUS_EXPORT
-# if defined(__GNUC__) && defined(OPUS_BUILD)
-#  define OPUS_EXPORT __attribute__ ((visibility ("default")))
-# elif defined(WIN32) && !defined(__MINGW32__)
+# if defined(WIN32)
 #  ifdef OPUS_BUILD
 #   define OPUS_EXPORT __declspec(dllexport)
 #  else
 #   define OPUS_EXPORT
 #  endif
+# elif defined(__GNUC__) && defined(OPUS_BUILD)
+#  define OPUS_EXPORT __attribute__ ((visibility ("default")))
 # else
 #  define OPUS_EXPORT
 # endif
@@ -96,6 +96,18 @@ extern "C" {
 # endif
 #else
 # define OPUS_RESTRICT restrict
+#endif
+
+#if (!defined(__STDC_VERSION__) || (__STDC_VERSION__ < 199901L) )
+# if OPUS_GNUC_PREREQ(2,7)
+#  define OPUS_INLINE __inline__
+# elif (defined(_MSC_VER))
+#  define OPUS_INLINE __inline
+# else
+#  define OPUS_INLINE
+# endif
+#else
+# define OPUS_INLINE inline
 #endif
 
 /**Warning attributes for opus functions
@@ -148,8 +160,11 @@ extern "C" {
 #define OPUS_GET_GAIN_REQUEST                4045 /* Should have been 4035 */
 #define OPUS_SET_LSB_DEPTH_REQUEST           4036
 #define OPUS_GET_LSB_DEPTH_REQUEST           4037
-
 #define OPUS_GET_LAST_PACKET_DURATION_REQUEST 4039
+#define OPUS_SET_EXPERT_FRAME_DURATION_REQUEST 4040
+#define OPUS_GET_EXPERT_FRAME_DURATION_REQUEST 4041
+#define OPUS_SET_PREDICTION_DISABLED_REQUEST 4042
+#define OPUS_GET_PREDICTION_DISABLED_REQUEST 4043
 
 /* Don't use 4045, it's already taken by OPUS_GET_GAIN_REQUEST */
 
@@ -157,6 +172,7 @@ extern "C" {
 #define __opus_check_int(x) (((void)((x) == (opus_int32)0)), (opus_int32)(x))
 #define __opus_check_int_ptr(ptr) ((ptr) + ((ptr) - (opus_int32*)(ptr)))
 #define __opus_check_uint_ptr(ptr) ((ptr) + ((ptr) - (opus_uint32*)(ptr)))
+#define __opus_check_val16_ptr(ptr) ((ptr) + ((ptr) - (opus_val16*)(ptr)))
 /** @endcond */
 
 /** @defgroup opus_ctlvalues Pre-defined values for CTL interface
@@ -184,6 +200,14 @@ extern "C" {
 #define OPUS_BANDWIDTH_WIDEBAND              1103 /**< 8 kHz bandpass @hideinitializer*/
 #define OPUS_BANDWIDTH_SUPERWIDEBAND         1104 /**<12 kHz bandpass @hideinitializer*/
 #define OPUS_BANDWIDTH_FULLBAND              1105 /**<20 kHz bandpass @hideinitializer*/
+
+#define OPUS_FRAMESIZE_ARG                   5000 /**< Select frame size from the argument (default) */
+#define OPUS_FRAMESIZE_2_5_MS                5001 /**< Use 2.5 ms frames */
+#define OPUS_FRAMESIZE_5_MS                  5002 /**< Use 5 ms frames */
+#define OPUS_FRAMESIZE_10_MS                 5003 /**< Use 10 ms frames */
+#define OPUS_FRAMESIZE_20_MS                 5004 /**< Use 20 ms frames */
+#define OPUS_FRAMESIZE_40_MS                 5005 /**< Use 40 ms frames */
+#define OPUS_FRAMESIZE_60_MS                 5006 /**< Use 60 ms frames */
 
 /**@}*/
 
@@ -525,6 +549,53 @@ extern "C" {
   * @param[out] x <tt>opus_int32 *</tt>: Number of samples (at current sampling rate).
   * @hideinitializer */
 #define OPUS_GET_LAST_PACKET_DURATION(x) OPUS_GET_LAST_PACKET_DURATION_REQUEST, __opus_check_int_ptr(x)
+
+/** Configures the encoder's use of variable duration frames.
+  * When variable duration is enabled, the encoder is free to use a shorter frame
+  * size than the one requested in the opus_encode*() call.
+  * It is then the user's responsibility
+  * to verify how much audio was encoded by checking the ToC byte of the encoded
+  * packet. The part of the audio that was not encoded needs to be resent to the
+  * encoder for the next call. Do not use this option unless you <b>really</b>
+  * know what you are doing.
+  * @see OPUS_GET_EXPERT_VARIABLE_DURATION
+  * @param[in] x <tt>opus_int32</tt>: Allowed values:
+  * <dl>
+  * <dt>OPUS_FRAMESIZE_ARG</dt><dd>Select frame size from the argument (default).</dd>
+  * <dt>OPUS_FRAMESIZE_2_5_MS</dt><dd>Use 2.5 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_5_MS</dt><dd>Use 2.5 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_10_MS</dt><dd>Use 10 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_20_MS</dt><dd>Use 20 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_40_MS</dt><dd>Use 40 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_60_MS</dt><dd>Use 60 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_VARIABLE</dt><dd>Optimize the frame size dynamically.</dd>
+  * </dl>
+  * @hideinitializer */
+#define OPUS_SET_EXPERT_FRAME_DURATION(x) OPUS_SET_EXPERT_FRAME_DURATION_REQUEST, __opus_check_int(x)
+/** Gets the encoder's configured use of variable duration frames.
+  * @see OPUS_SET_EXPERT_VARIABLE_DURATION
+  * @param[out] x <tt>opus_int32 *</tt>: Returns one of the following values:
+  * <dl>
+  * <dt>OPUS_FRAMESIZE_ARG</dt><dd>Select frame size from the argument (default).</dd>
+  * <dt>OPUS_FRAMESIZE_2_5_MS</dt><dd>Use 2.5 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_5_MS</dt><dd>Use 2.5 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_10_MS</dt><dd>Use 10 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_20_MS</dt><dd>Use 20 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_40_MS</dt><dd>Use 40 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_60_MS</dt><dd>Use 60 ms frames.</dd>
+  * <dt>OPUS_FRAMESIZE_VARIABLE</dt><dd>Optimize the frame size dynamically.</dd>
+  * </dl>
+  * @hideinitializer */
+#define OPUS_GET_EXPERT_FRAME_DURATION(x) OPUS_GET_EXPERT_FRAME_DURATION_REQUEST, __opus_check_int_ptr(x)
+
+/** If set to 1, disables almost all use of prediction, making frames almost
+    completely independent. This reduces quality. (default : 0)
+  * @hideinitializer */
+#define OPUS_SET_PREDICTION_DISABLED(x) OPUS_SET_PREDICTION_DISABLED_REQUEST, __opus_check_int(x)
+/** Gets the encoder's configured prediction status.
+  * @hideinitializer */
+#define OPUS_GET_PREDICTION_DISABLED(x) OPUS_GET_PREDICTION_DISABLED_REQUEST, __opus_check_int_ptr(x)
+
 /**@}*/
 
 /** @defgroup opus_genericctls Generic CTLs

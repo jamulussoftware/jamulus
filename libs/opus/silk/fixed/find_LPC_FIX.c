@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -30,6 +30,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 #include "main_FIX.h"
+#include "stack_alloc.h"
 #include "tuning_parameters.h"
 
 /* Finds LPC vector from correlations, and converts to NLSF */
@@ -51,7 +52,7 @@ void silk_find_LPC_FIX(
     opus_int     res_nrg_interp_Q, res_nrg_Q, res_tmp_nrg_Q;
     opus_int16   a_tmp_Q12[ MAX_LPC_ORDER ];
     opus_int16   NLSF0_Q15[ MAX_LPC_ORDER ];
-    opus_int16   LPC_res[ MAX_FRAME_LENGTH + MAX_NB_SUBFR * MAX_LPC_ORDER ];
+    SAVE_STACK;
 
     subfr_length = psEncC->subfr_length + psEncC->predictLPCOrder;
 
@@ -59,11 +60,13 @@ void silk_find_LPC_FIX(
     psEncC->indices.NLSFInterpCoef_Q2 = 4;
 
     /* Burg AR analysis for the full frame */
-    silk_burg_modified( &res_nrg, &res_nrg_Q, a_Q16, x, minInvGain_Q30, subfr_length, psEncC->nb_subfr, psEncC->predictLPCOrder );
+    silk_burg_modified( &res_nrg, &res_nrg_Q, a_Q16, x, minInvGain_Q30, subfr_length, psEncC->nb_subfr, psEncC->predictLPCOrder, psEncC->arch );
 
     if( psEncC->useInterpolatedNLSFs && !psEncC->first_frame_after_reset && psEncC->nb_subfr == MAX_NB_SUBFR ) {
+        VARDECL( opus_int16, LPC_res );
+
         /* Optimal solution for last 10 ms */
-        silk_burg_modified( &res_tmp_nrg, &res_tmp_nrg_Q, a_tmp_Q16, x + 2 * subfr_length, minInvGain_Q30, subfr_length, 2, psEncC->predictLPCOrder );
+        silk_burg_modified( &res_tmp_nrg, &res_tmp_nrg_Q, a_tmp_Q16, x + 2 * subfr_length, minInvGain_Q30, subfr_length, 2, psEncC->predictLPCOrder, psEncC->arch );
 
         /* subtract residual energy here, as that's easier than adding it to the    */
         /* residual energy of the first 10 ms in each iteration of the search below */
@@ -80,6 +83,8 @@ void silk_find_LPC_FIX(
 
         /* Convert to NLSFs */
         silk_A2NLSF( NLSF_Q15, a_tmp_Q16, psEncC->predictLPCOrder );
+
+        ALLOC( LPC_res, 2 * subfr_length, opus_int16 );
 
         /* Search over interpolation indices to find the one with lowest residual energy */
         for( k = 3; k >= 0; k-- ) {
@@ -142,4 +147,5 @@ void silk_find_LPC_FIX(
     }
 
     silk_assert( psEncC->indices.NLSFInterpCoef_Q2 == 4 || ( psEncC->useInterpolatedNLSFs && !psEncC->first_frame_after_reset && psEncC->nb_subfr == MAX_NB_SUBFR ) );
+    RESTORE_STACK;
 }

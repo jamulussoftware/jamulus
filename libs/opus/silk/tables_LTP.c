@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -265,6 +265,30 @@ const opus_int8 * const silk_LTP_vq_ptrs_Q7[NB_LTP_CBKS] = {
     (opus_int8 *)&silk_LTP_gain_vq_0[0][0],
     (opus_int8 *)&silk_LTP_gain_vq_1[0][0],
     (opus_int8 *)&silk_LTP_gain_vq_2[0][0]
+};
+
+/* Maximum frequency-dependent response of the pitch taps above,
+   computed as max(abs(freqz(taps))) */
+static const opus_uint8 silk_LTP_gain_vq_0_gain[8] = {
+      46,      2,     90,     87,     93,     91,     82,     98
+};
+
+static const opus_uint8 silk_LTP_gain_vq_1_gain[16] = {
+     109,    120,    118,     12,    113,    115,    117,    119,
+      99,     59,     87,    111,     63,    111,    112,     80
+};
+
+static const opus_uint8 silk_LTP_gain_vq_2_gain[32] = {
+     126,    124,    125,    124,    129,    121,    126,     23,
+     132,    127,    127,    127,    126,    127,    122,    133,
+     130,    134,    101,    118,    119,    145,    126,     86,
+     124,    120,    123,    119,    170,    173,    107,    109
+};
+
+const opus_uint8 * const silk_LTP_vq_gain_ptrs_Q7[NB_LTP_CBKS] = {
+    &silk_LTP_gain_vq_0_gain[0],
+    &silk_LTP_gain_vq_1_gain[0],
+    &silk_LTP_gain_vq_2_gain[0]
 };
 
 const opus_int8 silk_LTP_vq_sizes[NB_LTP_CBKS] = {

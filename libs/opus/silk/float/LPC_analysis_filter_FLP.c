@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -40,7 +40,7 @@ POSSIBILITY OF SUCH DAMAGE.
 /************************************************/
 
 /* 16th order LPC analysis filter, does not write first 16 samples */
-static __inline void silk_LPC_analysis_filter16_FLP(
+static OPUS_INLINE void silk_LPC_analysis_filter16_FLP(
           silk_float                 r_LPC[],            /* O    LPC residual signal                     */
     const silk_float                 PredCoef[],         /* I    LPC coefficients                        */
     const silk_float                 s[],                /* I    Input signal                            */
@@ -78,7 +78,7 @@ static __inline void silk_LPC_analysis_filter16_FLP(
 }
 
 /* 12th order LPC analysis filter, does not write first 12 samples */
-static __inline void silk_LPC_analysis_filter12_FLP(
+static OPUS_INLINE void silk_LPC_analysis_filter12_FLP(
           silk_float                 r_LPC[],            /* O    LPC residual signal                     */
     const silk_float                 PredCoef[],         /* I    LPC coefficients                        */
     const silk_float                 s[],                /* I    Input signal                            */
@@ -112,7 +112,7 @@ static __inline void silk_LPC_analysis_filter12_FLP(
 }
 
 /* 10th order LPC analysis filter, does not write first 10 samples */
-static __inline void silk_LPC_analysis_filter10_FLP(
+static OPUS_INLINE void silk_LPC_analysis_filter10_FLP(
           silk_float                 r_LPC[],            /* O    LPC residual signal                     */
     const silk_float                 PredCoef[],         /* I    LPC coefficients                        */
     const silk_float                 s[],                /* I    Input signal                            */
@@ -144,7 +144,7 @@ static __inline void silk_LPC_analysis_filter10_FLP(
 }
 
 /* 8th order LPC analysis filter, does not write first 8 samples */
-static __inline void silk_LPC_analysis_filter8_FLP(
+static OPUS_INLINE void silk_LPC_analysis_filter8_FLP(
           silk_float                 r_LPC[],            /* O    LPC residual signal                     */
     const silk_float                 PredCoef[],         /* I    LPC coefficients                        */
     const silk_float                 s[],                /* I    Input signal                            */
@@ -174,7 +174,7 @@ static __inline void silk_LPC_analysis_filter8_FLP(
 }
 
 /* 6th order LPC analysis filter, does not write first 6 samples */
-static __inline void silk_LPC_analysis_filter6_FLP(
+static OPUS_INLINE void silk_LPC_analysis_filter6_FLP(
           silk_float                 r_LPC[],            /* O    LPC residual signal                     */
     const silk_float                 PredCoef[],         /* I    LPC coefficients                        */
     const silk_float                 s[],                /* I    Input signal                            */

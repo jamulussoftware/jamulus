@@ -1,4 +1,4 @@
-/* Copyright (c) 2011 Xiph.Org Foundation
+/* Copyright (c) 2011-2013 Xiph.Org Foundation
    Written by Gregory Maxwell */
 /*
    Redistribution and use in source and binary forms, with or without
@@ -93,7 +93,7 @@ static void int_to_char(opus_uint32 i, unsigned char ch[4])
     ch[3] = i&0xFF;
 }
 
-static inline void save_packet(unsigned char* p, int len, opus_uint32 rng)
+static OPUS_INLINE void save_packet(unsigned char* p, int len, opus_uint32 rng)
 {
    FILE *fout;
    unsigned char int_field[4];
@@ -130,7 +130,7 @@ int run_test1(int no_fuzz)
    short *outbuf;
    short *out2buf;
    opus_int32 bitrate_bps;
-   unsigned char packet[MAX_PACKET];
+   unsigned char packet[MAX_PACKET+257];
    opus_uint32 enc_final_range;
    opus_uint32 dec_final_range;
    int fswitch;
@@ -247,7 +247,23 @@ int run_test1(int no_fuzz)
          do {
             int bw,len,out_samples,frame_size;
             frame_size=frame[j];
-            if(fast_rand()%50==0)opus_encoder_ctl(enc, OPUS_RESET_STATE);
+            if((fast_rand()&255)==0)
+            {
+               if(opus_encoder_ctl(enc, OPUS_RESET_STATE)!=OPUS_OK)test_failed();
+               if(opus_decoder_ctl(dec, OPUS_RESET_STATE)!=OPUS_OK)test_failed();
+               if((fast_rand()&1)!=0)
+               {
+                  if(opus_decoder_ctl(dec_err[fast_rand()&1], OPUS_RESET_STATE)!=OPUS_OK)test_failed();
+               }
+            }
+            if((fast_rand()&127)==0)
+            {
+               if(opus_decoder_ctl(dec_err[fast_rand()&1], OPUS_RESET_STATE)!=OPUS_OK)test_failed();
+            }
+            if(fast_rand()%10==0){
+               int complex=fast_rand()%11;
+               if(opus_encoder_ctl(enc, OPUS_SET_COMPLEXITY(complex))!=OPUS_OK)test_failed();
+            }
             if(fast_rand()%50==0)opus_decoder_ctl(dec, OPUS_RESET_STATE);
             if(opus_encoder_ctl(enc, OPUS_SET_INBAND_FEC(rc==0))!=OPUS_OK)test_failed();
             if(opus_encoder_ctl(enc, OPUS_SET_FORCE_MODE(MODE_SILK_ONLY+modes[j]))!=OPUS_OK)test_failed();
@@ -264,6 +280,21 @@ int run_test1(int no_fuzz)
             len = opus_encode(enc, &inbuf[i<<1], frame_size, packet, MAX_PACKET);
             if(len<0 || len>MAX_PACKET)test_failed();
             if(opus_encoder_ctl(enc, OPUS_GET_FINAL_RANGE(&enc_final_range))!=OPUS_OK)test_failed();
+            if((fast_rand()&3)==0)
+            {
+               if(opus_packet_pad(packet,len,len+1)!=OPUS_OK)test_failed();
+               len++;
+            }
+            if((fast_rand()&7)==0)
+            {
+               if(opus_packet_pad(packet,len,len+256)!=OPUS_OK)test_failed();
+               len+=256;
+            }
+            if((fast_rand()&3)==0)
+            {
+               len=opus_packet_unpad(packet,len);
+               if(len<1)test_failed();
+            }
             out_samples = opus_decode(dec, packet, len, &outbuf[i<<1], MAX_FRAME_SAMP, 0);
             if(out_samples!=frame_size)test_failed();
             if(opus_decoder_ctl(dec, OPUS_GET_FINAL_RANGE(&dec_final_range))!=OPUS_OK)test_failed();
@@ -304,13 +335,43 @@ int run_test1(int no_fuzz)
          if(opus_multistream_encoder_ctl(MSenc, OPUS_SET_BITRATE(rate))!=OPUS_OK)test_failed();
          count=i=0;
          do {
-            int len,out_samples,frame_size,loss;
+            int pred,len,out_samples,frame_size,loss;
+            if(opus_multistream_encoder_ctl(MSenc, OPUS_GET_PREDICTION_DISABLED(&pred))!=OPUS_OK)test_failed();
+            if(opus_multistream_encoder_ctl(MSenc, OPUS_SET_PREDICTION_DISABLED((int)(fast_rand()&15)<(pred?11:4)))!=OPUS_OK)test_failed();
             frame_size=frame[j];
             if(opus_multistream_encoder_ctl(MSenc, OPUS_SET_COMPLEXITY((count>>2)%11))!=OPUS_OK)test_failed();
             if(opus_multistream_encoder_ctl(MSenc, OPUS_SET_PACKET_LOSS_PERC((fast_rand()&15)&(fast_rand()%15)))!=OPUS_OK)test_failed();
+            if((fast_rand()&255)==0)
+            {
+               if(opus_multistream_encoder_ctl(MSenc, OPUS_RESET_STATE)!=OPUS_OK)test_failed();
+               if(opus_multistream_decoder_ctl(MSdec, OPUS_RESET_STATE)!=OPUS_OK)test_failed();
+               if((fast_rand()&3)!=0)
+               {
+                  if(opus_multistream_decoder_ctl(MSdec_err, OPUS_RESET_STATE)!=OPUS_OK)test_failed();
+               }
+            }
+            if((fast_rand()&255)==0)
+            {
+               if(opus_multistream_decoder_ctl(MSdec_err, OPUS_RESET_STATE)!=OPUS_OK)test_failed();
+            }
             len = opus_multistream_encode(MSenc, &inbuf[i<<1], frame_size, packet, MAX_PACKET);
             if(len<0 || len>MAX_PACKET)test_failed();
             if(opus_multistream_encoder_ctl(MSenc, OPUS_GET_FINAL_RANGE(&enc_final_range))!=OPUS_OK)test_failed();
+            if((fast_rand()&3)==0)
+            {
+               if(opus_multistream_packet_pad(packet,len,len+1,2)!=OPUS_OK)test_failed();
+               len++;
+            }
+            if((fast_rand()&7)==0)
+            {
+               if(opus_multistream_packet_pad(packet,len,len+256,2)!=OPUS_OK)test_failed();
+               len+=256;
+            }
+            if((fast_rand()&3)==0)
+            {
+               len=opus_multistream_packet_unpad(packet,len,2);
+               if(len<1)test_failed();
+            }
             out_samples = opus_multistream_decode(MSdec, packet, len, out2buf, MAX_FRAME_SAMP, 0);
             if(out_samples!=frame_size*6)test_failed();
             if(opus_multistream_decoder_ctl(MSdec, OPUS_GET_FINAL_RANGE(&dec_final_range))!=OPUS_OK)test_failed();
@@ -393,9 +454,13 @@ int run_test1(int no_fuzz)
    }while(i<SAMPLES*4);
    fprintf(stdout,"    All framesize pairs switching encode, %d frames OK.\n",count);
 
+   if(opus_encoder_ctl(enc, OPUS_RESET_STATE)!=OPUS_OK)test_failed();
    opus_encoder_destroy(enc);
+   if(opus_multistream_encoder_ctl(MSenc, OPUS_RESET_STATE)!=OPUS_OK)test_failed();
    opus_multistream_encoder_destroy(MSenc);
+   if(opus_decoder_ctl(dec, OPUS_RESET_STATE)!=OPUS_OK)test_failed();
    opus_decoder_destroy(dec);
+   if(opus_multistream_decoder_ctl(MSdec, OPUS_RESET_STATE)!=OPUS_OK)test_failed();
    opus_multistream_decoder_destroy(MSdec);
    opus_multistream_decoder_destroy(MSdec_err);
    for(i=0;i<10;i++)opus_decoder_destroy(dec_err[i]);

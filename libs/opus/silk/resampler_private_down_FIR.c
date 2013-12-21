@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -31,8 +31,9 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #include "SigProc_FIX.h"
 #include "resampler_private.h"
+#include "stack_alloc.h"
 
-static __inline opus_int16 *silk_resampler_private_down_FIR_INTERPOL(
+static OPUS_INLINE opus_int16 *silk_resampler_private_down_FIR_INTERPOL(
     opus_int16          *out,
     opus_int32          *buf,
     const opus_int16    *FIR_Coefs,
@@ -151,11 +152,14 @@ void silk_resampler_private_down_FIR(
     silk_resampler_state_struct *S = (silk_resampler_state_struct *)SS;
     opus_int32 nSamplesIn;
     opus_int32 max_index_Q16, index_increment_Q16;
-    opus_int32 buf[ RESAMPLER_MAX_BATCH_SIZE_IN + SILK_RESAMPLER_MAX_FIR_ORDER ];
+    VARDECL( opus_int32, buf );
     const opus_int16 *FIR_Coefs;
+    SAVE_STACK;
+
+    ALLOC( buf, S->batchSize + S->FIR_Order, opus_int32 );
 
     /* Copy buffered samples to start of buffer */
-    silk_memcpy( buf, S->sFIR, S->FIR_Order * sizeof( opus_int32 ) );
+    silk_memcpy( buf, S->sFIR.i32, S->FIR_Order * sizeof( opus_int32 ) );
 
     FIR_Coefs = &S->Coefs[ 2 ];
 
@@ -185,5 +189,6 @@ void silk_resampler_private_down_FIR(
     }
 
     /* Copy last part of filtered signal to the state for the next call */
-    silk_memcpy( S->sFIR, &buf[ nSamplesIn ], S->FIR_Order * sizeof( opus_int32 ) );
+    silk_memcpy( S->sFIR.i32, &buf[ nSamplesIn ], S->FIR_Order * sizeof( opus_int32 ) );
+    RESTORE_STACK;
 }

@@ -40,7 +40,7 @@
 #define MULT16_32_Q16(a,b) ADD32(MULT16_16((a),SHR((b),16)), SHR(MULT16_16SU((a),((b)&0x0000ffff)),16))
 
 /** 16x32 multiplication, followed by a 16-bit shift right (round-to-nearest). Results fits in 32 bits */
-#define MULT16_32_P16(a,b) ADD32(MULT16_16((a),SHR((b),16)), PSHR(MULT16_16((a),((b)&0x0000ffff)),16))
+#define MULT16_32_P16(a,b) ADD32(MULT16_16((a),SHR((b),16)), PSHR(MULT16_16SU((a),((b)&0x0000ffff)),16))
 
 /** 16x32 multiplication, followed by a 15-bit shift right. Results fits in 32 bits */
 #define MULT16_32_Q15(a,b) ADD32(SHL(MULT16_16((a),SHR((b),16)),1), SHR(MULT16_16SU((a),((b)&0x0000ffff)),15))
@@ -84,6 +84,8 @@
 #define PSHR(a,shift) (SHR((a)+((EXTEND32(1)<<((shift))>>1)),shift))
 #define SATURATE(x,a) (((x)>(a) ? (a) : (x)<-(a) ? -(a) : (x)))
 
+#define SATURATE16(x) (EXTRACT16((x)>32767 ? 32767 : (x)<-32768 ? -32768 : (x)))
+
 /** Shift by a and round-to-neareast 32-bit value. Result is a 16-bit value */
 #define ROUND16(x,a) (EXTRACT16(PSHR32((x),(a))))
 /** Divide by two */
@@ -108,10 +110,13 @@
 
 /** 16x16 multiply-add where the result fits in 32 bits */
 #define MAC16_16(c,a,b) (ADD32((c),MULT16_16((a),(b))))
-/** 16x32 multiply-add, followed by a 15-bit shift right. Results fits in 32 bits */
+/** 16x32 multiply, followed by a 15-bit shift right and 32-bit add.
+    b must fit in 31 bits.
+    Result fits in 32 bits. */
 #define MAC16_32_Q15(c,a,b) ADD32(c,ADD32(MULT16_16((a),SHR((b),15)), SHR(MULT16_16((a),((b)&0x00007fff)),15)))
 
 #define MULT16_16_Q11_32(a,b) (SHR(MULT16_16((a),(b)),11))
+#define MULT16_16_Q11(a,b) (SHR(MULT16_16((a),(b)),11))
 #define MULT16_16_Q13(a,b) (SHR(MULT16_16((a),(b)),13))
 #define MULT16_16_Q14(a,b) (SHR(MULT16_16((a),(b)),14))
 #define MULT16_16_Q15(a,b) (SHR(MULT16_16((a),(b)),15))

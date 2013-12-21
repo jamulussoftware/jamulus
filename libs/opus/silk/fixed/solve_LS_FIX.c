@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -30,6 +30,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 #include "main_FIX.h"
+#include "stack_alloc.h"
 #include "tuning_parameters.h"
 
 /*****************************/
@@ -42,7 +43,7 @@ typedef struct {
 } inv_D_t;
 
 /* Factorize square matrix A into LDL form */
-static __inline void silk_LDL_factorize_FIX(
+static OPUS_INLINE void silk_LDL_factorize_FIX(
     opus_int32          *A,         /* I/O Pointer to Symetric Square Matrix                            */
     opus_int            M,          /* I   Size of Matrix                                               */
     opus_int32          *L_Q16,     /* I/O Pointer to Square Upper triangular Matrix                    */
@@ -50,7 +51,7 @@ static __inline void silk_LDL_factorize_FIX(
 );
 
 /* Solve Lx = b, when L is lower triangular and has ones on the diagonal */
-static __inline void silk_LS_SolveFirst_FIX(
+static OPUS_INLINE void silk_LS_SolveFirst_FIX(
     const opus_int32    *L_Q16,     /* I    Pointer to Lower Triangular Matrix                          */
     opus_int            M,          /* I    Dim of Matrix equation                                      */
     const opus_int32    *b,         /* I    b Vector                                                    */
@@ -58,14 +59,14 @@ static __inline void silk_LS_SolveFirst_FIX(
 );
 
 /* Solve L^t*x = b, where L is lower triangular with ones on the diagonal */
-static __inline void silk_LS_SolveLast_FIX(
+static OPUS_INLINE void silk_LS_SolveLast_FIX(
     const opus_int32    *L_Q16,     /* I    Pointer to Lower Triangular Matrix                          */
     const opus_int      M,          /* I    Dim of Matrix equation                                      */
     const opus_int32    *b,         /* I    b Vector                                                    */
     opus_int32          *x_Q16      /* O    x Vector                                                    */
 );
 
-static __inline void silk_LS_divide_Q16_FIX(
+static OPUS_INLINE void silk_LS_divide_Q16_FIX(
     opus_int32          T[],        /* I/O  Numenator vector                                            */
     inv_D_t             *inv_D,     /* I    1 / D vector                                                */
     opus_int            M           /* I    dimension                                                   */
@@ -79,11 +80,13 @@ void silk_solve_LDL_FIX(
     opus_int32                      *x_Q16                                  /* O    Pointer to x solution vector                                                */
 )
 {
-    opus_int32 L_Q16[  MAX_MATRIX_SIZE * MAX_MATRIX_SIZE ];
+    VARDECL( opus_int32, L_Q16 );
     opus_int32 Y[      MAX_MATRIX_SIZE ];
     inv_D_t   inv_D[  MAX_MATRIX_SIZE ];
+    SAVE_STACK;
 
     silk_assert( M <= MAX_MATRIX_SIZE );
+    ALLOC( L_Q16, M * M, opus_int32 );
 
     /***************************************************
     Factorize A by LDL such that A = L*D*L',
@@ -107,9 +110,10 @@ void silk_solve_LDL_FIX(
     x = inv(L') * inv(D) * Y
     *****************************************************/
     silk_LS_SolveLast_FIX( L_Q16, M, Y, x_Q16 );
+    RESTORE_STACK;
 }
 
-static __inline void silk_LDL_factorize_FIX(
+static OPUS_INLINE void silk_LDL_factorize_FIX(
     opus_int32          *A,         /* I/O Pointer to Symetric Square Matrix                            */
     opus_int            M,          /* I   Size of Matrix                                               */
     opus_int32          *L_Q16,     /* I/O Pointer to Square Upper triangular Matrix                    */
@@ -181,7 +185,7 @@ static __inline void silk_LDL_factorize_FIX(
     silk_assert( status == 0 );
 }
 
-static __inline void silk_LS_divide_Q16_FIX(
+static OPUS_INLINE void silk_LS_divide_Q16_FIX(
     opus_int32          T[],        /* I/O  Numenator vector                                            */
     inv_D_t             *inv_D,     /* I    1 / D vector                                                */
     opus_int            M           /* I    dimension                                                   */
@@ -201,7 +205,7 @@ static __inline void silk_LS_divide_Q16_FIX(
 }
 
 /* Solve Lx = b, when L is lower triangular and has ones on the diagonal */
-static __inline void silk_LS_SolveFirst_FIX(
+static OPUS_INLINE void silk_LS_SolveFirst_FIX(
     const opus_int32    *L_Q16,     /* I    Pointer to Lower Triangular Matrix                          */
     opus_int            M,          /* I    Dim of Matrix equation                                      */
     const opus_int32    *b,         /* I    b Vector                                                    */
@@ -223,7 +227,7 @@ static __inline void silk_LS_SolveFirst_FIX(
 }
 
 /* Solve L^t*x = b, where L is lower triangular with ones on the diagonal */
-static __inline void silk_LS_SolveLast_FIX(
+static OPUS_INLINE void silk_LS_SolveLast_FIX(
     const opus_int32    *L_Q16,     /* I    Pointer to Lower Triangular Matrix                          */
     const opus_int      M,          /* I    Dim of Matrix equation                                      */
     const opus_int32    *b,         /* I    b Vector                                                    */

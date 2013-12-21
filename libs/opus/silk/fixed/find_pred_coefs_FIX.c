@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -30,6 +30,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 #include "main_FIX.h"
+#include "stack_alloc.h"
 
 void silk_find_pred_coefs_FIX(
     silk_encoder_state_FIX          *psEnc,                                 /* I/O  encoder state                                                               */
@@ -40,13 +41,14 @@ void silk_find_pred_coefs_FIX(
 )
 {
     opus_int         i;
-    opus_int32       WLTP[ MAX_NB_SUBFR * LTP_ORDER * LTP_ORDER ];
     opus_int32       invGains_Q16[ MAX_NB_SUBFR ], local_gains[ MAX_NB_SUBFR ], Wght_Q15[ MAX_NB_SUBFR ];
     opus_int16       NLSF_Q15[ MAX_LPC_ORDER ];
     const opus_int16 *x_ptr;
-    opus_int16       *x_pre_ptr, LPC_in_pre[ MAX_NB_SUBFR * MAX_LPC_ORDER + MAX_FRAME_LENGTH ];
+    opus_int16       *x_pre_ptr;
+    VARDECL( opus_int16, LPC_in_pre );
     opus_int32       tmp, min_gain_Q16, minInvGain_Q30;
     opus_int         LTP_corrs_rshift[ MAX_NB_SUBFR ];
+    SAVE_STACK;
 
     /* weighting for weighted least squares */
     min_gain_Q16 = silk_int32_MAX >> 6;
@@ -71,11 +73,18 @@ void silk_find_pred_coefs_FIX(
         local_gains[ i ] = silk_DIV32( ( (opus_int32)1 << 16 ), invGains_Q16[ i ] );
     }
 
+    ALLOC( LPC_in_pre,
+           psEnc->sCmn.nb_subfr * psEnc->sCmn.predictLPCOrder
+               + psEnc->sCmn.frame_length, opus_int16 );
     if( psEnc->sCmn.indices.signalType == TYPE_VOICED ) {
+        VARDECL( opus_int32, WLTP );
+
         /**********/
         /* VOICED */
         /**********/
         silk_assert( psEnc->sCmn.ltp_mem_length - psEnc->sCmn.predictLPCOrder >= psEncCtrl->pitchL[ 0 ] + LTP_ORDER / 2 );
+
+        ALLOC( WLTP, psEnc->sCmn.nb_subfr * LTP_ORDER * LTP_ORDER, opus_int32 );
 
         /* LTP analysis */
         silk_find_LTP_FIX( psEncCtrl->LTPCoef_Q14, WLTP, &psEncCtrl->LTPredCodGain_Q7,
@@ -84,7 +93,7 @@ void silk_find_pred_coefs_FIX(
 
         /* Quantize LTP gain parameters */
         silk_quant_LTP_gains( psEncCtrl->LTPCoef_Q14, psEnc->sCmn.indices.LTPIndex, &psEnc->sCmn.indices.PERIndex,
-            WLTP, psEnc->sCmn.mu_LTP_Q9, psEnc->sCmn.LTPQuantLowComplexity, psEnc->sCmn.nb_subfr);
+            &psEnc->sCmn.sum_log_gain_Q7, WLTP, psEnc->sCmn.mu_LTP_Q9, psEnc->sCmn.LTPQuantLowComplexity, psEnc->sCmn.nb_subfr);
 
         /* Control LTP scaling */
         silk_LTP_scale_ctrl_FIX( psEnc, psEncCtrl, condCoding );
@@ -109,6 +118,7 @@ void silk_find_pred_coefs_FIX(
 
         silk_memset( psEncCtrl->LTPCoef_Q14, 0, psEnc->sCmn.nb_subfr * LTP_ORDER * sizeof( opus_int16 ) );
         psEncCtrl->LTPredCodGain_Q7 = 0;
+		psEnc->sCmn.sum_log_gain_Q7 = 0;
     }
 
     /* Limit on total predictive coding gain */
@@ -133,4 +143,5 @@ void silk_find_pred_coefs_FIX(
 
     /* Copy to prediction struct for use in next frame for interpolation */
     silk_memcpy( psEnc->sCmn.prev_NLSFq_Q15, NLSF_Q15, sizeof( psEnc->sCmn.prev_NLSFq_Q15 ) );
+    RESTORE_STACK;
 }

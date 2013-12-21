@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -73,7 +73,8 @@ opus_int silk_encode_frame_FIX(
 
 /* Initializes the Silk encoder state */
 opus_int silk_init_encoder(
-    silk_encoder_state_Fxx          *psEnc                                  /* I/O  Pointer to Silk FIX encoder state                                           */
+    silk_encoder_state_Fxx          *psEnc,                                 /* I/O  Pointer to Silk FIX encoder state                                           */
+    int                              arch                                   /* I    Run-time architecture                                                       */
 );
 
 /* Control the Silk encoder */
@@ -104,7 +105,8 @@ void silk_noise_shape_analysis_FIX(
     silk_encoder_state_FIX          *psEnc,                                 /* I/O  Encoder state FIX                                                           */
     silk_encoder_control_FIX        *psEncCtrl,                             /* I/O  Encoder control FIX                                                         */
     const opus_int16                *pitch_res,                             /* I    LPC residual from pitch analysis                                            */
-    const opus_int16                *x                                      /* I    Input signal [ frame_length + la_shape ]                                    */
+    const opus_int16                *x,                                     /* I    Input signal [ frame_length + la_shape ]                                    */
+    int                              arch                                   /* I    Run-time architecture                                                       */
 );
 
 /* Autocorrelations for a warped frequency axis */
@@ -132,7 +134,8 @@ void silk_find_pitch_lags_FIX(
     silk_encoder_state_FIX          *psEnc,                                 /* I/O  encoder state                                                               */
     silk_encoder_control_FIX        *psEncCtrl,                             /* I/O  encoder control                                                             */
     opus_int16                      res[],                                  /* O    residual                                                                    */
-    const opus_int16                x[]                                     /* I    Speech signal                                                               */
+    const opus_int16                x[],                                    /* I    Speech signal                                                               */
+    int                             arch                                    /* I    Run-time architecture                                                       */
 );
 
 /* Find LPC and LTP coefficients */

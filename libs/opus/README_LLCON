@@ -1,5 +1,0 @@
-The OPUS library version 1.0.2 is used.
-
-Changes made to OPUS to be compatible to llcon:
-
-- replaced all "inline" by "__inline"

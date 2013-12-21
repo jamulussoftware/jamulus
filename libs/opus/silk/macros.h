@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -32,7 +32,10 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "config.h"
 #endif
 
-/* This is an inline header file for general platform. */
+#include "opus_types.h"
+#include "opus_defines.h"
+
+/* This is an OPUS_INLINE header file for general platform. */
 
 /* (a32 * (opus_int32)((opus_int16)(b32))) >> 16 output have to be 32bit int */
 #define silk_SMULWB(a32, b32)            ((((a32) >> 16) * (opus_int32)((opus_int16)(b32))) + ((((a32) & 0x0000FFFF) * (opus_int32)((opus_int16)(b32))) >> 16))
@@ -76,59 +79,36 @@ POSSIBILITY OF SUCH DAMAGE.
                                         (( (a) & ((b)^0x80000000) & 0x80000000) ? silk_int32_MIN : (a)-(b)) :    \
                                         ((((a)^0x80000000) & (b)  & 0x80000000) ? silk_int32_MAX : (a)-(b)) )
 
-static __inline opus_int32 silk_CLZ16(opus_int16 in16)
+#include "ecintrin.h"
+
+static OPUS_INLINE opus_int32 silk_CLZ16(opus_int16 in16)
 {
-    opus_int32 out32 = 0;
-    if( in16 == 0 ) {
-        return 16;
-    }
-    /* test nibbles */
-    if( in16 & 0xFF00 ) {
-        if( in16 & 0xF000 ) {
-            in16 >>= 12;
-        } else {
-            out32 += 4;
-            in16 >>= 8;
-        }
-    } else {
-        if( in16 & 0xFFF0 ) {
-            out32 += 8;
-            in16 >>= 4;
-        } else {
-            out32 += 12;
-        }
-    }
-    /* test bits and return */
-    if( in16 & 0xC ) {
-        if( in16 & 0x8 )
-            return out32 + 0;
-        else
-            return out32 + 1;
-    } else {
-        if( in16 & 0xE )
-            return out32 + 2;
-        else
-            return out32 + 3;
-    }
+    return 32 - EC_ILOG(in16<<16|0x8000);
 }
 
-static __inline opus_int32 silk_CLZ32(opus_int32 in32)
+static OPUS_INLINE opus_int32 silk_CLZ32(opus_int32 in32)
 {
-    /* test highest 16 bits and convert to opus_int16 */
-    if( in32 & 0xFFFF0000 ) {
-        return silk_CLZ16((opus_int16)(in32 >> 16));
-    } else {
-        return silk_CLZ16((opus_int16)in32) + 16;
-    }
+    return in32 ? 32 - EC_ILOG(in32) : 32;
 }
 
 /* Row based */
-#define matrix_ptr(Matrix_base_adr, row, column, N)         *(Matrix_base_adr + ((row)*(N)+(column)))
-#define matrix_adr(Matrix_base_adr, row, column, N)          (Matrix_base_adr + ((row)*(N)+(column)))
+#define matrix_ptr(Matrix_base_adr, row, column, N) \
+    (*((Matrix_base_adr) + ((row)*(N)+(column))))
+#define matrix_adr(Matrix_base_adr, row, column, N) \
+      ((Matrix_base_adr) + ((row)*(N)+(column)))
 
 /* Column based */
 #ifndef matrix_c_ptr
-#   define matrix_c_ptr(Matrix_base_adr, row, column, M)    *(Matrix_base_adr + ((row)+(M)*(column)))
+#   define matrix_c_ptr(Matrix_base_adr, row, column, M) \
+    (*((Matrix_base_adr) + ((row)+(M)*(column))))
+#endif
+
+#ifdef OPUS_ARM_INLINE_ASM
+#include "arm/macros_armv4.h"
+#endif
+
+#ifdef OPUS_ARM_INLINE_EDSP
+#include "arm/macros_armv5e.h"
 #endif
 
 #endif /* SILK_MACROS_H */

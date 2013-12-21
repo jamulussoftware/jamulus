@@ -8,11 +8,11 @@ this list of conditions and the following disclaimer.
 - Redistributions in binary form must reproduce the above copyright
 notice, this list of conditions and the following disclaimer in the
 documentation and/or other materials provided with the distribution.
-- Neither the name of Internet Society, IETF or IETF Trust, nor the 
+- Neither the name of Internet Society, IETF or IETF Trust, nor the
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -30,13 +30,14 @@ POSSIBILITY OF SUCH DAMAGE.
 #endif
 
 #include "main_FIX.h"
+#include "stack_alloc.h"
 #include "tuning_parameters.h"
 
 /* Compute gain to make warped filter coefficients have a zero mean log frequency response on a   */
 /* non-warped frequency scale. (So that it can be implemented with a minimum-phase monic filter.) */
 /* Note: A monic filter is one with the first coefficient equal to 1.0. In Silk we omit the first */
 /* coefficient in an array of coefficients, for monic filters.                                    */
-static __inline opus_int32 warped_gain( /* gain in Q16*/
+static OPUS_INLINE opus_int32 warped_gain( /* gain in Q16*/
     const opus_int32     *coefs_Q24,
     opus_int             lambda_Q16,
     opus_int             order
@@ -55,7 +56,7 @@ static __inline opus_int32 warped_gain( /* gain in Q16*/
 
 /* Convert warped filter coefficients to monic pseudo-warped coefficients and limit maximum     */
 /* amplitude of monic warped coefficients by using bandwidth expansion on the true coefficients */
-static __inline void limit_warped_coefs(
+static OPUS_INLINE void limit_warped_coefs(
     opus_int32           *coefs_syn_Q24,
     opus_int32           *coefs_ana_Q24,
     opus_int             lambda_Q16,
@@ -144,7 +145,8 @@ void silk_noise_shape_analysis_FIX(
     silk_encoder_state_FIX          *psEnc,                                 /* I/O  Encoder state FIX                                                           */
     silk_encoder_control_FIX        *psEncCtrl,                             /* I/O  Encoder control FIX                                                         */
     const opus_int16                *pitch_res,                             /* I    LPC residual from pitch analysis                                            */
-    const opus_int16                *x                                      /* I    Input signal [ frame_length + la_shape ]                                    */
+    const opus_int16                *x,                                     /* I    Input signal [ frame_length + la_shape ]                                    */
+    int                              arch                                   /* I    Run-time architecture                                                       */
 )
 {
     silk_shape_state_FIX *psShapeSt = &psEnc->sShape;
@@ -156,8 +158,9 @@ void silk_noise_shape_analysis_FIX(
     opus_int32   refl_coef_Q16[ MAX_SHAPE_LPC_ORDER ];
     opus_int32   AR1_Q24[       MAX_SHAPE_LPC_ORDER ];
     opus_int32   AR2_Q24[       MAX_SHAPE_LPC_ORDER ];
-    opus_int16   x_windowed[    SHAPE_LPC_WIN_MAX ];
+    VARDECL( opus_int16, x_windowed );
     const opus_int16 *x_ptr, *pitch_res_ptr;
+    SAVE_STACK;
 
     /* Point to start of first LPC analysis block */
     x_ptr = x - psEnc->sCmn.la_shape;
@@ -258,6 +261,7 @@ void silk_noise_shape_analysis_FIX(
     /********************************************/
     /* Compute noise shaping AR coefs and gains */
     /********************************************/
+    ALLOC( x_windowed, psEnc->sCmn.shapeWinLength, opus_int16 );
     for( k = 0; k < psEnc->sCmn.nb_subfr; k++ ) {
         /* Apply window: sine slope followed by flat part followed by cosine slope */
         opus_int shift, slope_part, flat_part;
@@ -278,7 +282,7 @@ void silk_noise_shape_analysis_FIX(
             silk_warped_autocorrelation_FIX( auto_corr, &scale, x_windowed, warping_Q16, psEnc->sCmn.shapeWinLength, psEnc->sCmn.shapingLPCOrder );
         } else {
             /* Calculate regular auto correlation */
-            silk_autocorr( auto_corr, &scale, x_windowed, psEnc->sCmn.shapeWinLength, psEnc->sCmn.shapingLPCOrder + 1 );
+            silk_autocorr( auto_corr, &scale, x_windowed, psEnc->sCmn.shapeWinLength, psEnc->sCmn.shapingLPCOrder + 1, arch );
         }
 
         /* Add white noise, as a fraction of energy */
@@ -437,4 +441,5 @@ void silk_noise_shape_analysis_FIX(
         psEncCtrl->HarmShapeGain_Q14[ k ] = ( opus_int )silk_RSHIFT_ROUND( psShapeSt->HarmShapeGain_smth_Q16, 2 );
         psEncCtrl->Tilt_Q14[ k ]          = ( opus_int )silk_RSHIFT_ROUND( psShapeSt->Tilt_smth_Q16,          2 );
     }
+    RESTORE_STACK;
 }

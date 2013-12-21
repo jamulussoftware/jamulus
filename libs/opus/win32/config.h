@@ -12,7 +12,7 @@ documentation and/or other materials provided with the distribution.
 names of specific contributors, may be used to endorse or promote
 products derived from this software without specific prior written
 permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS”
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
@@ -28,10 +28,6 @@ POSSIBILITY OF SUCH DAMAGE.
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define CELT_BUILD            1
-
-#define inline __inline
-
 #define USE_ALLOCA            1
 
 /* Comment out the next line for floating-point code */
@@ -39,11 +35,11 @@ POSSIBILITY OF SUCH DAMAGE.
 
 #define OPUS_BUILD            1
 
-/* Get rid of the CELT VS compile warnings */
-#if 1
-#pragma warning(disable : 4996)/* This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. */
+/* Enable SSE functions, if compiled with SSE/SSE2 (note that AMD64 implies SSE2) */
+#if defined(_M_X64) || (defined(_M_IX86_FP) && (_M_IX86_FP >= 1))
+#define __SSE__               1
 #endif
 
 #include "version.h"
 
-#endif CONFIG_H
+#endif /* CONFIG_H */

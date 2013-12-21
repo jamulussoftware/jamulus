@@ -9,6 +9,8 @@
 
 - more precise sound card latency estimation under Windows
 
+- integrated a new OPUS version: v1.1
+
 - bug fix: support for correct utf-8 storage of names in the ini-file
 
 

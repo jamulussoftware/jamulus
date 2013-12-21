@@ -41,7 +41,7 @@ win32 {
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp
     RC_FILE = mac/mainicon.icns
-	CONFIG += x86
+    CONFIG += x86
 
     LIBS += -framework CoreFoundation \
         -framework CoreServices \
@@ -142,9 +142,13 @@ HEADERS += src/audiomixerboard.h \
     libs/opus/include/opus_types.h \
     libs/opus/include/opus_defines.h \
     libs/opus/src/opus_private.h \
+    libs/opus/src/analysis.h \
+    libs/opus/src/mlp.h \
+    libs/opus/src/tansig_table.h \
     libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \
     libs/opus/celt/celt.h \
+    libs/opus/celt/cpu_support.h \
     libs/opus/celt/cwrs.h \
     libs/opus/celt/ecintrin.h \
     libs/opus/celt/entcode.h \
@@ -169,6 +173,13 @@ HEADERS += src/audiomixerboard.h \
     libs/opus/celt/vq.h \
     libs/opus/celt/static_modes_float.h \
     libs/opus/celt/static_modes_fixed.h \
+    libs/opus/celt/arm/armcpu.h \
+    libs/opus/celt/arm/fixed_armv4.h \
+    libs/opus/celt/arm/fixed_armv5e.h \
+    libs/opus/celt/arm/kiss_fft_armv4.h \
+    libs/opus/celt/arm/kiss_fft_armv5e.h \
+    libs/opus/celt/arm/pitch_arm.h \
+    libs/opus/celt/x86/pitch_sse.h \
     libs/opus/silk/debug.h \
     libs/opus/silk/control.h \
     libs/opus/silk/errors.h \
@@ -178,6 +189,10 @@ HEADERS += src/audiomixerboard.h \
     libs/opus/silk/main.h \
     libs/opus/silk/PLC.h \
     libs/opus/silk/SigProc_FIX.h \
+    libs/opus/silk/arm/macros_armv4.h \
+    libs/opus/silk/arm/macros_armv5e.h \
+    libs/opus/silk/arm/SigProc_FIX_armv4.h \
+    libs/opus/silk/arm/SigProc_FIX_armv5e.h \
     libs/opus/silk/structs.h \
     libs/opus/silk/tables.h \
     libs/opus/silk/tuning_parameters.h \
@@ -238,9 +253,16 @@ SOURCES += src/audiomixerboard.cpp \
     libs/opus/src/opus_decoder.c \
     libs/opus/src/opus_encoder.c \
     libs/opus/src/opus_multistream.c \
+    libs/opus/src/opus_multistream_encoder.c \
+    libs/opus/src/opus_multistream_decoder.c \
     libs/opus/src/repacketizer.c \
+    libs/opus/src/analysis.c \
+    libs/opus/src/mlp.c \
+    libs/opus/src/mlp_data.c \
     libs/opus/celt/bands.c \
     libs/opus/celt/celt.c \
+    libs/opus/celt/celt_encoder.c \
+    libs/opus/celt/celt_decoder.c \
     libs/opus/celt/cwrs.c \
     libs/opus/celt/entcode.c \
     libs/opus/celt/entdec.c \
@@ -255,6 +277,8 @@ SOURCES += src/audiomixerboard.cpp \
     libs/opus/celt/quant_bands.c \
     libs/opus/celt/rate.c \
     libs/opus/celt/vq.c \
+    libs/opus/celt/arm/armcpu.c \
+    libs/opus/celt/arm/arm_celt_map.c \
     libs/opus/silk/CNG.c \
     libs/opus/silk/code_signs.c \
     libs/opus/silk/init_decoder.c \
@@ -385,6 +409,8 @@ DISTFILES += AUTHORS \
     libs/opus/NEWS \
     libs/opus/README \
     libs/opus/README_LLCON \
+    libs/opus/celt/arm/armopts.s.in \
+    libs/opus/celt/arm/celt_pitch_xcorr_arm.s \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

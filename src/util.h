@@ -111,20 +111,20 @@ public:
 
     void Enlarge ( const int iAddedSize )
     {
-        resize ( size() + iAddedSize );
+        std::vector<TData>::resize ( std::vector<TData>::size() + iAddedSize );
     }
 
     void Add ( const TData& tI )
     {
         Enlarge ( 1 );
-        back() = tI;
+        std::vector<TData>::back() = tI;
     }
 
     int StringFiFoWithCompare ( const QString strNewValue,
                                 const bool    bDoAdding = true );
 
     // this function simply converts the type of size to integer
-    inline int Size() const { return size(); }
+    inline int Size() const { return std::vector<TData>::size(); }
 
     // This operator allows for a l-value assignment of this object:
     // CVector[x] = y is possible
@@ -173,8 +173,8 @@ public:
 template<class TData> void CVector<TData>::Init ( const int iNewSize )
 {
     // clear old buffer and reserve memory for new buffer
-    clear();
-    resize ( iNewSize );
+    std::vector<TData>::clear();
+    std::vector<TData>::resize ( iNewSize );
 }
 
 template<class TData> void CVector<TData>::Init ( const int   iNewSize, 
@@ -248,7 +248,7 @@ public:
         CVector<TData> ( iNeSi, tInVa ), iCurIdx ( 0 ) {}
 
     void Add ( const TData tNewD );
-    inline TData Get() { return operator[] ( iCurIdx ); }
+    inline TData Get() { return CVector<TData>::operator[] ( iCurIdx ); }
 
     virtual void Init ( const int iNewSize );
 
@@ -274,12 +274,12 @@ template<class TData> void CFIFO<TData>::Init ( const int   iNewSize,
 
 template<class TData> void CFIFO<TData>::Add ( const TData tNewD )
 {
-    operator[] ( iCurIdx ) = tNewD;
+    CVector<TData>::operator[] ( iCurIdx ) = tNewD;
 
     // increment index and check for wrap around
     iCurIdx++;
 
-    if ( iCurIdx >= Size() )
+    if ( iCurIdx >= CVector<TData>::Size() )
     {
         iCurIdx = 0;
     }
@@ -322,9 +322,9 @@ public:
     double InitializationState() const
     {
         // make sure we do not divide by zero
-        if ( Size() != 0 )
+        if ( CVector<TData>::Size() != 0 )
         {
-            return static_cast<double> ( iNorm ) / Size();
+            return static_cast<double> ( iNorm ) / CVector<TData>::Size();
         }
         else
         {
@@ -366,21 +366,21 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
 */
 
     // subtract oldest value
-    dCurAvResult -= operator[] ( iCurIdx );
+    dCurAvResult -= CVector<TData>::operator[] ( iCurIdx );
 
     // add new value and write in memory
     dCurAvResult += tNewD;
-    operator[] ( iCurIdx ) = tNewD;
+    CVector<TData>::operator[] ( iCurIdx ) = tNewD;
 
     // increase position pointer and test if wrap
     iCurIdx++;
-    if ( iCurIdx >= Size() )
+    if ( iCurIdx >= CVector<TData>::Size() )
     {
         iCurIdx = 0;
     }
 
     // take care of norm
-    if ( iNorm < Size() )
+    if ( iNorm < CVector<TData>::Size() )
     {
         iNorm++;
     }

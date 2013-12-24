@@ -92,134 +92,105 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes )
 template<class TData> class CVector : public std::vector<TData>
 {
 public:
-    CVector() : iVectorSize ( 0 ) { pData = this->begin(); }
+    CVector() {}
     CVector ( const int iNeSi ) { Init ( iNeSi ); }
-    CVector ( const int iNeSi, const TData tInVa ) { Init ( iNeSi, tInVa ); }
-
-    // Copy constructor: The order of the initialization list must not be
-    // changed. First, the base class must be initialized, then the pData
-    // pointer must be set to the new data source. The bit access is, by
-    // default, reset.
-    CVector ( const CVector<TData>& vecI ) :
-        std::vector<TData> ( static_cast<const std::vector<TData>&> ( vecI ) ), 
-        iVectorSize ( vecI.Size() ) { pData = this->begin(); }
+    CVector ( const int   iNeSi,
+              const TData tInVa ) { Init ( iNeSi, tInVa ); }
 
     void Init ( const int iNewSize );
 
     // use this init to give all elements a defined value
-    void Init ( const int iNewSize, const TData tIniVal );
-    void Reset ( const TData tResetVal );
+    void Init ( const int   iNewSize,
+                const TData tIniVal );
 
-    void Enlarge ( const int iAddedSize );
+    // set all values to the given reset value
+    void Reset ( const TData tResetVal )
+    {
+        std::fill ( this->begin(), this->end(), tResetVal );
+    }
+
+    void Enlarge ( const int iAddedSize )
+    {
+        resize ( size() + iAddedSize );
+    }
+
     void Add ( const TData& tI )
     {
         Enlarge ( 1 );
-        pData[iVectorSize - 1] = tI;
+        back() = tI;
     }
 
     int StringFiFoWithCompare ( const QString strNewValue,
                                 const bool    bDoAdding = true );
 
-    inline int Size() const { return iVectorSize; }
+    // this function simply converts the type of size to integer
+    inline int Size() const { return size(); }
 
     // This operator allows for a l-value assignment of this object:
     // CVector[x] = y is possible
     inline TData& operator[] ( const int iPos )
     {
 #ifdef _DEBUG_
-        if ( ( iPos < 0 ) || ( iPos > iVectorSize - 1 ) )
+        if ( ( iPos < 0 ) || ( iPos > Size() - 1 ) )
         {
             DebugError ( "Writing vector out of bounds", "Vector size",
-                iVectorSize, "New parameter", iPos );
+                Size(), "New parameter", iPos );
         }
 #endif
-        return pData[iPos];
+        return std::vector<TData>::operator[] ( iPos );
     }
 
     inline TData operator[] ( const int iPos ) const
     {
 #ifdef _DEBUG_
-        if ( ( iPos < 0 ) || ( iPos > iVectorSize - 1 ) )
+        if ( ( iPos < 0 ) || ( iPos > Size() - 1 ) )
         {
             DebugError ( "Reading vector out of bounds", "Vector size",
-                iVectorSize, "New parameter", iPos );
+                Size(), "New parameter", iPos );
         }
 #endif
-        return pData[iPos];
+        return std::vector<TData>::operator[] ( iPos );
     }
 
     inline CVector<TData>& operator= ( const CVector<TData>& vecI )
     {
 #ifdef _DEBUG_
-        // Vectors which shall be copied MUST have same size! (If this is 
-        // satisfied, the parameter "iVectorSize" must not be adjusted as
-        // a side effect)
-        if ( vecI.Size() != iVectorSize )
+        // vectors which shall be copied MUST have same size!
+        if ( vecI.Size() != Size() )
         {
             DebugError ( "Vector operator=() different size", "Vector size",
-                iVectorSize, "New parameter", vecI.Size() );
+                Size(), "New parameter", vecI.Size() );
         }
 #endif
-        vector<TData>::operator= ( vecI );
-
-        // reset my data pointer in case, the operator=() of the base class
-        // did change the actual memory
-        pData = this->begin();
+        std::vector<TData>::operator= ( vecI );
 
         return *this;
     }
-
-protected:
-    typename std::vector<TData>::iterator pData;
-    int                                   iVectorSize;
 };
 
 
 /* Implementation *************************************************************/
 template<class TData> void CVector<TData>::Init ( const int iNewSize )
 {
-    iVectorSize = iNewSize;
-
-    // clear old buffer and reserve memory for new buffer, get iterator
-    // for pointer operations
-    this->clear();
-    this->resize ( iNewSize );
-    pData = this->begin();
+    // clear old buffer and reserve memory for new buffer
+    clear();
+    resize ( iNewSize );
 }
 
 template<class TData> void CVector<TData>::Init ( const int   iNewSize, 
                                                   const TData tIniVal )
 {
-    // call actual init routine
+    // call actual init routine and reset all values to the given value
     Init ( iNewSize );
-
-    // set values
     Reset ( tIniVal );
-}
-
-template<class TData> void CVector<TData>::Enlarge ( const int iAddedSize )
-{
-    iVectorSize += iAddedSize;
-    this->resize ( iVectorSize );
-
-    // we have to reset the pointer since it could be that the vector size was
-    // zero before enlarging the vector
-    pData = this->begin();
-}
-
-template<class TData> void CVector<TData>::Reset ( const TData tResetVal )
-{
-    // set all values to reset value
-    for ( int i = 0; i < iVectorSize; i++ )
-    {
-        pData[i] = tResetVal;
-    }
 }
 
 // note: this is only supported for string vectors
 template<class TData> int CVector<TData>::StringFiFoWithCompare ( const QString strNewValue,
                                                                   const bool    bDoAdding )
 {
+    const int iVectorSize = Size();
+
     CVector<QString> vstrTempList ( iVectorSize, "" );
 
     // init with illegal index per definition
@@ -244,9 +215,9 @@ template<class TData> int CVector<TData>::StringFiFoWithCompare ( const QString 
         {
             // only add old element if it is not the same as the
             // selected one
-            if ( pData[iIdx].compare ( strNewValue ) )
+            if ( operator[] ( iIdx ).compare ( strNewValue ) )
             {
-                vstrTempList[iTempListCnt] = pData[iIdx];
+                vstrTempList[iTempListCnt] = operator[] ( iIdx );
 
                 iTempListCnt++;
             }
@@ -271,15 +242,16 @@ template<class TData> int CVector<TData>::StringFiFoWithCompare ( const QString 
 template<class TData> class CFIFO : public CVector<TData>
 {
 public:
-    CFIFO() : CVector<TData>(), iCurIdx ( 0 ) {}
-    CFIFO ( const int iNeSi ) : CVector<TData>(iNeSi), iCurIdx ( 0 ) {}
+    CFIFO() : iCurIdx ( 0 ) {}
+    CFIFO ( const int iNeSi ) : CVector<TData> ( iNeSi ), iCurIdx ( 0 ) {}
     CFIFO ( const int iNeSi, const TData tInVa ) :
         CVector<TData> ( iNeSi, tInVa ), iCurIdx ( 0 ) {}
 
     void Add ( const TData tNewD );
-    inline TData Get() { return this->pData[iCurIdx]; }
+    inline TData Get() { return operator[] ( iCurIdx ); }
 
     virtual void Init ( const int iNewSize );
+
     virtual void Init ( const int   iNewSize,
                         const TData tIniVal );
 
@@ -302,11 +274,12 @@ template<class TData> void CFIFO<TData>::Init ( const int   iNewSize,
 
 template<class TData> void CFIFO<TData>::Add ( const TData tNewD )
 {
-    this->pData[iCurIdx] = tNewD;
+    operator[] ( iCurIdx ) = tNewD;
 
-    // increment index
+    // increment index and check for wrap around
     iCurIdx++;
-    if ( iCurIdx >= this->iVectorSize )
+
+    if ( iCurIdx >= Size() )
     {
         iCurIdx = 0;
     }
@@ -336,22 +309,22 @@ public:
     inline double GetAverage()
     {
         // make sure we do not divide by zero
-        if ( this->iNorm == 0 )
+        if ( iNorm == 0 )
         {
             return dNoDataResult;
         }
         else
         {
-            return dCurAvResult / this->iNorm;
+            return dCurAvResult / iNorm;
         }
     }
 
     double InitializationState() const
     {
         // make sure we do not divide by zero
-        if ( this->iVectorSize != 0 )
+        if ( Size() != 0 )
         {
-            return static_cast<double> ( this->iNorm ) / this->iVectorSize;
+            return static_cast<double> ( iNorm ) / Size();
         }
         else
         {
@@ -391,24 +364,25 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
     subtract the old value from the result. We only need one addition and a
     history buffer.
 */
+
     // subtract oldest value
-    dCurAvResult -= this->pData[iCurIdx];
+    dCurAvResult -= operator[] ( iCurIdx );
 
     // add new value and write in memory
     dCurAvResult += tNewD;
-    this->pData[iCurIdx] = tNewD;
+    operator[] ( iCurIdx ) = tNewD;
 
     // increase position pointer and test if wrap
     iCurIdx++;
-    if ( iCurIdx >= this->iVectorSize )
+    if ( iCurIdx >= Size() )
     {
         iCurIdx = 0;
     }
 
     // take care of norm
-    if ( this->iNorm < this->iVectorSize )
+    if ( iNorm < Size() )
     {
-        this->iNorm++;
+        iNorm++;
     }
 }
 

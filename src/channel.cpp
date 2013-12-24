@@ -151,7 +151,7 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
                                           const int iNewNumAudioChannels )
 {
 /*
-    this function is intended for the server (not the client)
+    this function is intended for the client (not the server)
 */
 
     CNetworkTransportProps NetworkTransportProps;
@@ -186,14 +186,14 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
     bool ReturnValue           = true;  // init with error
     bool bCurDoAutoSockBufSize = false; // we have to init but init values does not matter
 
-    Mutex.lock();
+    // first check for valid input parameter range
+    if ( ( iNewNumFrames >= MIN_NET_BUF_SIZE_NUM_BL ) &&
+         ( iNewNumFrames <= MAX_NET_BUF_SIZE_NUM_BL ) )
     {
-        // first check for valid input parameter range
-        if ( ( iNewNumFrames >= MIN_NET_BUF_SIZE_NUM_BL ) &&
-             ( iNewNumFrames <= MAX_NET_BUF_SIZE_NUM_BL ) )
+        // only apply parameter if new parameter is different from current one
+        if ( iCurSockBufNumFrames != iNewNumFrames )
         {
-            // only apply parameter if new parameter is different from current one
-            if ( iCurSockBufNumFrames != iNewNumFrames )
+            Mutex.lock();
             {
                 // store new value
                 iCurSockBufNumFrames = iNewNumFrames;
@@ -211,9 +211,9 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
 
                 ReturnValue = false; // -> no error
             }
+            Mutex.unlock();
         }
     }
-    Mutex.unlock();
 
     // only in case there is no error, we are the server and auto jitter buffer
     // setting is enabled, we have to report the current setting to the client
@@ -636,20 +636,17 @@ CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<uint8_t>& vecbyNPacket
 {
     QMutexLocker locker ( &Mutex );
 
-    // if the block is not ready we have to initialize with zero length to
-    // tell the following network send routine that nothing should be sent
-    CVector<uint8_t> vecbySendBuf ( 0 );
-
     // use conversion buffer to convert sound card block size in network
     // block size
     if ( ConvBuf.Put ( vecbyNPacket ) )
     {
         // a packet is ready
-        vecbySendBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
-        vecbySendBuf = ConvBuf.Get();
+        return ConvBuf.Get();
     }
 
-    return vecbySendBuf;
+    // if the block is not ready we have to initialize with zero length to
+    // tell the following network send routine that nothing should be sent
+    return CVector<uint8_t> ( 0 );
 }
 
 int CChannel::GetUploadRateKbps()

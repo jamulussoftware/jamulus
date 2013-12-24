@@ -446,29 +446,27 @@ public:
 
     bool Put ( const CVector<TData>& vecsData )
     {
+        // calculate the input size and the end position after copying
         const int iVecSize = vecsData.Size();
-
-        // copy new data in internal buffer
-        int iCurPos = 0;
-        const int iEnd = iPutPos + iVecSize;
+        const int iEnd     = iPutPos + iVecSize;
 
         // first check for buffer overrun
         if ( iEnd <= iMemSize )
         {
-            // actual copy operation
-            while ( iPutPos < iEnd )
-            {
-                vecsMemory[iPutPos++] = vecsData[iCurPos++];
-            }
+            // copy new data in internal buffer
+            std::copy ( vecsData.begin(),
+                        vecsData.begin() + iVecSize,
+                        vecsMemory.begin() + iPutPos );
+
+            // set buffer pointer one block further
+            iPutPos = iEnd;
 
             // return "buffer is ready for readout" flag
             return ( iEnd == iMemSize );
         }
-        else
-        {
-            // buffer overrun or not initialized, return "not ready"
-            return false;
-        }
+
+        // buffer overrun or not initialized, return "not ready"
+        return false;
     }
 
     CVector<TData> Get()

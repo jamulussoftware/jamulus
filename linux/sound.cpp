@@ -103,17 +103,7 @@ void CSound::OpenJack()
            JackPortIsPhysical | JackPortIsOutput ) ) == NULL )
     {
         throw CGenErr ( tr ( "There are no physical capture ports available. "
-            "This software requires at least one stereo input channel available. "
-            "Maybe you have selected the wrong sound card in the Jack server "
-            "configuration.<br>"
-            "You can use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
-            "to adjust the Jack server settings." ) );
-    }
-
-    if ( !ports[1] )
-    {
-        throw CGenErr ( tr ( "There are no physical capture ports available. "
-            "This software requires at least one stereo input channel available. "
+            "This software requires at least one input channel available. "
             "Maybe you have selected the wrong sound card in the Jack server "
             "configuration.<br>"
             "You can use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
@@ -124,9 +114,15 @@ void CSound::OpenJack()
     {
         throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
     }
-    if ( jack_connect ( pJackClient, ports[1], jack_port_name ( input_port_right ) ) )
+
+    // before connecting the second stereo channel, check if the input is not
+    // mono
+    if ( ports[1] )
     {
-        throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
+        if ( jack_connect ( pJackClient, ports[1], jack_port_name ( input_port_right ) ) )
+        {
+            throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
+        }
     }
 
     free ( ports );
@@ -135,30 +131,27 @@ void CSound::OpenJack()
            JackPortIsPhysical | JackPortIsInput ) ) == NULL )
     {
         throw CGenErr ( tr ( "There are no physical playback ports available. "
-            "This software requires at least one stereo output channel available. "
+            "This software requires at least one output channel available. "
             "Maybe you have selected the wrong sound card in the Jack server "
             "configuration.<br>"
             "You can use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
             "to adjust the Jack server settings." ) );
     }
 
-    if ( !ports[1] )
-    {
-        throw CGenErr ( tr ( "There are no physical playback ports available. "
-            "This software requires at least one stereo output channel available. "
-            "Maybe you have selected the wrong sound card in the Jack server "
-            "configuration.<br>"
-            "You can use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
-            "to adjust the Jack server settings." ) );
-    }
 
     if ( jack_connect ( pJackClient, jack_port_name ( output_port_left ), ports[0] ) )
     {
         throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
     }
-    if ( jack_connect ( pJackClient, jack_port_name ( output_port_right ), ports[1] ) )
+
+    // before connecting the second stereo channel, check if the output is not
+    // mono
+    if ( ports[1] )
     {
-        throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
+        if ( jack_connect ( pJackClient, jack_port_name ( output_port_right ), ports[1] ) )
+        {
+            throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
+        }
     }
 
     free ( ports );
@@ -302,4 +295,3 @@ void CSound::shutdownCallback ( void* )
         "solve the issue." ) );
 }
 #endif // WITH_SOUND
-

@@ -43,6 +43,8 @@ using namespace std; // because of the library: "vector"
 #ifdef _WIN32
 # include <windows.h>
 # include <mmsystem.h>
+#elif !defined ( __APPLE__ ) && !defined ( __MACOSX )
+# include <sys/time.h>
 #endif
 #include "ui_aboutdlgbase.h"
 
@@ -961,8 +963,12 @@ public:
     {
 #ifdef _WIN32
         return timeGetTime();
-#else
+#elif defined ( __APPLE__ ) || defined ( __MACOSX )
         return QTime().elapsed();
+#else
+        timespec tp;
+        clock_gettime ( CLOCK_MONOTONIC, &tp );
+        return tp.tv_nsec / 1000000; // convert ns in ms
 #endif
     }
 };

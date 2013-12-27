@@ -72,13 +72,13 @@ signals:
 };
 #else
 // using mach timers for Mac and nanosleep for Linux
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
-# include <mach/mach.h>
-# include <mach/mach_error.h>
-# include <mach/mach_time.h>
-#else
-# include <sys/time.h>
-#endif
+# if defined ( __APPLE__ ) || defined ( __MACOSX )
+#  include <mach/mach.h>
+#  include <mach/mach_error.h>
+#  include <mach/mach_time.h>
+# else
+#  include <sys/time.h>
+# endif
 
 class CHighPrecisionTimer : public QThread
 {
@@ -96,13 +96,13 @@ protected:
 
     bool bRun;
 
-#if defined ( __APPLE__ ) || defined ( __MACOSX )
+# if defined ( __APPLE__ ) || defined ( __MACOSX )
     uint64_t Delay;
     uint64_t NextEnd;
-#else
+# else
     long     Delay;
     timespec NextEnd;
-#endif
+# endif
 
 signals:
     void timeout();

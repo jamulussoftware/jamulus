@@ -48,6 +48,12 @@ win32 {
         -framework CoreAudio \
         -framework AudioToolbox \
         -framework AudioUnit
+} else:android {
+    HEADERS += android/sound.h
+    SOURCES += android/sound.cpp
+    LIBS += -lOpenSLES
+    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+    OTHER_FILES += android/AndroidManifest.xml
 } else:unix {
     # we assume that stdint.h is always present in a Linux system
     DEFINES += HAVE_STDINT_H
@@ -70,7 +76,10 @@ win32 {
         windows/sound.h \
         windows/sound.cpp \
         windows/mainicon.rc \
-        windows/mainicon.ico
+        windows/mainicon.ico \
+        android/AndroidManifest.xml \
+        android/sound.h \
+        android/sound.cpp
 }
 
 RCC_DIR = src/res

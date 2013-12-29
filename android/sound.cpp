@@ -183,6 +183,7 @@ void CSound::CloseOpenSL()
 void CSound::Start()
 {
     // start the rendering
+    (*recorder)->SetRecordState ( recorder, SL_RECORDSTATE_RECORDING );
     (*player)->SetPlayState ( player, SL_PLAYSTATE_PLAYING );
 
     // call base class
@@ -192,6 +193,7 @@ void CSound::Start()
 void CSound::Stop()
 {
     // stop the audio stream
+    (*recorder)->SetRecordState ( recorder, SL_RECORDSTATE_STOPPED );
     (*player)->SetPlayState ( player, SL_PLAYSTATE_STOPPED );
 
     // clear the buffers
@@ -203,76 +205,20 @@ void CSound::Stop()
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
-/*
-    UInt32 iActualMonoBufferSize;
-
-    // Error message string: in case buffer sizes on input and output cannot be
-    // set to the same value
-    const QString strErrBufSize = tr ( "The buffer sizes of the current "
-        "input and output audio device cannot be set to a common value. Please "
-        "choose other input/output audio devices in your system settings." );
-
-    // try to set input buffer size
-    iActualMonoBufferSize =
-        SetBufferSize ( audioInputDevice[lCurDev], true, iNewPrefMonoBufferSize );
-
-    if ( iActualMonoBufferSize != static_cast<UInt32> ( iNewPrefMonoBufferSize ) )
-    {
-        // try to set the input buffer size to the output so that we
-        // have a matching pair
-        if ( SetBufferSize ( audioOutputDevice[lCurDev], false, iActualMonoBufferSize ) !=
-             iActualMonoBufferSize )
-        {
-            throw CGenErr ( strErrBufSize );
-        }
-    }
-    else
-    {
-        // try to set output buffer size
-        if ( SetBufferSize ( audioOutputDevice[lCurDev], false, iNewPrefMonoBufferSize ) !=
-             static_cast<UInt32> ( iNewPrefMonoBufferSize ) )
-        {
-            throw CGenErr ( strErrBufSize );
-        }
-    }
-*/
-
-/*
-// TEST
-int iActualMonoBufferSize = iNewPrefMonoBufferSize;
-
-
     // store buffer size
-    iOpenSLBufferSizeMono = iActualMonoBufferSize;
+    iOpenSLBufferSizeMono = iNewPrefMonoBufferSize;
 
     // init base class
     CSoundBase::Init ( iOpenSLBufferSizeMono );
 
     // set internal buffer size value and calculate stereo buffer size
-    iOpenSLBufferSizeStero = 2 * iOpenSLBufferSizeMono;
+
+// TODO: somehow if the following line is enabled, we get a crash...
+
+    iOpenSLBufferSizeStereo = 2 * iOpenSLBufferSizeMono;
 
     // create memory for intermediate audio buffer
-    vecsTmpAudioSndCrdStereo.Init ( iOpenSLBufferSizeStero );
-*/
-
-/*
-    // fill audio unit buffer struct
-    pBufferList->mNumberBuffers              = 1;
-    pBufferList->mBuffers[0].mNumberChannels = 2; // stereo
-    pBufferList->mBuffers[0].mDataByteSize   = iCoreAudioBufferSizeMono * 4; // 2 bytes, 2 channels
-    pBufferList->mBuffers[0].mData           = &vecsTmpAudioSndCrdStereo[0];
-
-    // initialize units
-    if ( AudioUnitInitialize ( audioInputUnit ) )
-    {
-        throw CGenErr ( tr ( "Initialization of CoreAudio failed" ) );
-    }
-
-    if ( AudioUnitInitialize ( audioOutputUnit ) )
-    {
-        throw CGenErr ( tr ( "Initialization of CoreAudio failed" ) );
-    }
-*/
+    vecsTmpAudioSndCrdStereo.Init ( iOpenSLBufferSizeStereo );
 
     return iOpenSLBufferSizeMono;
 }
@@ -282,12 +228,18 @@ void CSound::processInput ( SLAndroidSimpleBufferQueueItf bufferQueue,
 {
     CSound* pSound = reinterpret_cast<CSound*> ( instance );
 
+    // only process if we are running
+    if ( !pSound->bRun )
+    {
+        return;
+    }
+
     QMutexLocker locker ( &pSound->Mutex );
 
     // enqueue the buffer for record
     (*bufferQueue)->Enqueue ( bufferQueue,
                               &pSound->vecsTmpAudioSndCrdStereo[0],
-                              pSound->iOpenSLBufferSizeStero );
+                              pSound->iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
 
     // call processing callback function
     pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
@@ -298,10 +250,16 @@ void CSound::processOutput ( SLAndroidSimpleBufferQueueItf bufferQueue,
 {
     CSound* pSound = reinterpret_cast<CSound*> ( instance );
 
+    // only process if we are running
+    if ( !pSound->bRun )
+    {
+        return;
+    }
+
     QMutexLocker locker ( &pSound->Mutex );
 
     // enqueue the buffer for playback
     (*bufferQueue)->Enqueue ( bufferQueue,
                               &pSound->vecsTmpAudioSndCrdStereo[0],
-                              pSound->iOpenSLBufferSizeStero );
+                              pSound->iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
 }

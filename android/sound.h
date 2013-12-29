@@ -47,7 +47,7 @@ public:
     // to access them from the callback function
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iOpenSLBufferSizeMono;
-    int            iOpenSLBufferSizeStero;
+    int            iOpenSLBufferSizeStereo;
 
 protected:
 

@@ -63,29 +63,81 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
                                  nullptr,
                                  nullptr );
 
-
+    // realize the output mix
     (*outputMixObject)->Realize ( outputMixObject,
                                   SL_BOOLEAN_FALSE );
 
-    // configure the output buffer queue.
+    // configure the audio (data) source for input
+    SLDataLocator_IODevice micLocator;
+    micLocator.locatorType = SL_DATALOCATOR_IODEVICE;
+    micLocator.deviceType  = SL_IODEVICE_AUDIOINPUT;
+    micLocator.deviceID    = SL_DEFAULTDEVICEID_AUDIOINPUT;
+    micLocator.device      = nullptr;
+
+    SLDataSource inDataSource;
+    inDataSource.pLocator = &micLocator;
+    inDataSource.pFormat  = nullptr;
+
+    // configure the input buffer queue
+    SLDataLocator_AndroidSimpleBufferQueue inBufferQueue;
+    inBufferQueue.locatorType = SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE;
+    inBufferQueue.numBuffers  = 1; // max number of buffers in queue
+
+    // configure the audio (data) sink for input
+    SLDataSink inDataSink;
+    inDataSink.pLocator = &inBufferQueue;
+    inDataSink.pFormat  = &streamFormat;
+
+    // create the audio recorder
+    const SLInterfaceID recorderIds[] = { SL_IID_ANDROIDSIMPLEBUFFERQUEUE };
+    const SLboolean recorderReq[]     = { SL_BOOLEAN_TRUE };
+
+    (*engine)->CreateAudioRecorder ( engine,
+                                     &recorderObject,
+                                     &inDataSource,
+                                     &inDataSink,
+                                     1,
+                                     recorderIds,
+                                     recorderReq );
+
+    // realize the audio recorder
+    (*recorderObject)->Realize ( recorderObject,
+                                 SL_BOOLEAN_FALSE );
+
+    // get the audio recorder interface
+    (*recorderObject)->GetInterface ( recorderObject,
+                                      SL_IID_RECORD,
+                                      &recorder );
+
+    // get the audio recorder simple buffer queue interface
+    (*recorderObject)->GetInterface ( recorderObject,
+                                      SL_IID_ANDROIDSIMPLEBUFFERQUEUE,
+                                      &recorderSimpleBufQueue );
+
+    // register the audio input callback
+    (*recorderSimpleBufQueue)->RegisterCallback ( recorderSimpleBufQueue,
+                                                  processInput,
+                                                  this );
+
+    // configure the output buffer queue
     SLDataLocator_AndroidSimpleBufferQueue outBufferQueue;
     outBufferQueue.locatorType = SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE;
     outBufferQueue.numBuffers  = 1; // max number of buffers in queue
 
-    // configure the audio (data) source
-    SLDataSource dataSource;
-    dataSource.pLocator = &outBufferQueue;
-    dataSource.pFormat  = &streamFormat;
+    // configure the audio (data) source for output
+    SLDataSource outDataSource;
+    outDataSource.pLocator = &outBufferQueue;
+    outDataSource.pFormat  = &streamFormat;
 
     // configure the output mix
     SLDataLocator_OutputMix outputMix;
     outputMix.locatorType = SL_DATALOCATOR_OUTPUTMIX;
     outputMix.outputMix   = outputMixObject;
 
-    // configure the audio (data) sink
-    SLDataSink dataSink;
-    dataSink.pLocator = &outputMix;
-    dataSink.pFormat  = nullptr;
+    // configure the audio (data) sink for output
+    SLDataSink outDataSink;
+    outDataSink.pLocator = &outputMix;
+    outDataSink.pFormat  = nullptr;
 
     // create the audio player
     const SLInterfaceID playerIds[] = { SL_IID_ANDROIDSIMPLEBUFFERQUEUE };
@@ -93,8 +145,8 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
 
     (*engine)->CreateAudioPlayer ( engine,
                                    &playerObject,
-                                   &dataSource,
-                                   &dataSink,
+                                   &outDataSource,
+                                   &outDataSink,
                                    1,
                                    playerIds,
                                    playerReq );
@@ -122,6 +174,7 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
 void CSound::CloseOpenSL()
 {
     // clean up
+    (*recorderObject)->Destroy ( recorderObject );
     (*playerObject)->Destroy ( playerObject );
     (*outputMixObject)->Destroy ( outputMixObject );
     (*engineObject)->Destroy ( engineObject );
@@ -224,41 +277,30 @@ int iActualMonoBufferSize = iNewPrefMonoBufferSize;
     return iOpenSLBufferSizeMono;
 }
 
-/*
-OSStatus CSound::processInput ( void*                       inRefCon,
-                                AudioUnitRenderActionFlags* ioActionFlags,
-                                const AudioTimeStamp*       inTimeStamp,
-                                UInt32                      inBusNumber,
-                                UInt32                      inNumberFrames,
-                                AudioBufferList* )
-{
-    CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
-
-    QMutexLocker locker ( &pSound->Mutex );
-
-    // get the new audio data
-    AudioUnitRender ( pSound->audioInputUnit,
-                      ioActionFlags,
-                      inTimeStamp,
-                      inBusNumber,
-                      inNumberFrames,
-                      pSound->pBufferList );
-
-    // call processing callback function
-    pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
-
-    return noErr;
-}
-*/
-
-void CSound::processOutput ( SLAndroidSimpleBufferQueueItf bufferQueue,
-                             void*                         instance)
+void CSound::processInput ( SLAndroidSimpleBufferQueueItf bufferQueue,
+                            void*                         instance )
 {
     CSound* pSound = reinterpret_cast<CSound*> ( instance );
 
     QMutexLocker locker ( &pSound->Mutex );
 
-    // enqueue the buffer for playback.
+    // enqueue the buffer for record
+    (*bufferQueue)->Enqueue ( bufferQueue,
+                              &pSound->vecsTmpAudioSndCrdStereo[0],
+                              pSound->iOpenSLBufferSizeStero );
+
+    // call processing callback function
+    pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
+}
+
+void CSound::processOutput ( SLAndroidSimpleBufferQueueItf bufferQueue,
+                             void*                         instance )
+{
+    CSound* pSound = reinterpret_cast<CSound*> ( instance );
+
+    QMutexLocker locker ( &pSound->Mutex );
+
+    // enqueue the buffer for playback
     (*bufferQueue)->Enqueue ( bufferQueue,
                               &pSound->vecsTmpAudioSndCrdStereo[0],
                               pSound->iOpenSLBufferSizeStero );

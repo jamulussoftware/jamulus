@@ -53,21 +53,18 @@ protected:
 
     void CloseOpenSL();
 
-/*
     // callbacks
-    static OSStatus processInput ( void*                       inRefCon,
-                                   AudioUnitRenderActionFlags* ioActionFlags,
-                                   const AudioTimeStamp*       inTimeStamp,
-                                   UInt32                      inBusNumber,
-                                   UInt32                      inNumberFrames,
-                                   AudioBufferList* );
-*/
+    static void processInput ( SLAndroidSimpleBufferQueueItf bufferQueue,
+                               void*                         instance );
 
     static void processOutput ( SLAndroidSimpleBufferQueueItf bufferQueue,
-                                void*                         instance);
+                                void*                         instance );
 
     SLObjectItf                   engineObject;
     SLEngineItf                   engine;
+    SLObjectItf                   recorderObject;
+    SLRecordItf                   recorder;
+    SLAndroidSimpleBufferQueueItf recorderSimpleBufQueue;
     SLObjectItf                   outputMixObject;
     SLObjectItf                   playerObject;
     SLPlayItf                     player;

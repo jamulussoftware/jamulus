@@ -14,14 +14,14 @@
 - bug fix: support for correct utf-8 storage of names in the ini-file
 
 
-3.3.2
+3.3.2 (2013-08-24)
 
 - the connection setup dialog can now be opened during a connection
 
 - support for three audio quality settings: low, normal and high
 
 
-3.3.1
+3.3.1 (2013-03-24)
 
 - enabled the OPUS codec
 
@@ -38,7 +38,7 @@
 - bug fix: the overall delay was not correctly calculated
 
 
-3.3.0
+3.3.0 (2013-02-24)
 
 - renamed the software from llcon to Jamulus
 
@@ -52,7 +52,7 @@
 - bug fix: strings in the protocol are now utf-8 coded
 
 
-3.2.2
+3.2.2 (2012-07-15)
 
 - changed auto jitter buffer property to reduce audio drop outs
 
@@ -61,7 +61,7 @@
 - bug fix: slave server unregistering may not be successful
 
 
-3.2.1
+3.2.1 (2012-02-02)
 
 - support for audio device selection under Mac OS
 
@@ -74,7 +74,7 @@
 - bug fix: fixed crash on slave server unregistering
 
 
-3.2.0
+3.2.0 (2011-07-23)
 
 - new GUI style of the main window, added switch for selecting the GUI style
   in the settings window
@@ -97,7 +97,7 @@
 - bug fix: fixed Jack audio interface instability
 
 
-3.1.2
+3.1.2 (2011-03-02)
 
 - show warning in main window if audio delay is too long
 
@@ -106,14 +106,14 @@
 - bug fix: solo switch did not work correctly
 
 
-3.1.1
+3.1.1 (2010-07-01)
 
 - added stereo audio channel support
 
 - added input/output audio channel mapping for ASIO audio interface
 
 
-3.1.0
+3.1.0 (2010-03-16)
 
 - support for MacOS (using CoreAudio audio interface)
 
@@ -127,7 +127,7 @@
 - bug fix for M-Audio Delta ASIO driver
 
 
-3.0.3
+3.0.3 (2009-12-05)
 
 - accessibility improvements
 
@@ -148,7 +148,7 @@
 - bug fix: fix for disconnect issue at the server
 
 
-3.0.2
+3.0.2 (2009-09-21)
 
 - new server features: for chat messages the time stamp is also shown, parsing
   of existing log file supported
@@ -166,7 +166,7 @@
   the channel name was not updated correctly at the server
 
 
-3.0.1
+3.0.1 (2009-08-23)
 
 - use low complexity CELT encoder profile, this lowers audio dropout
   probability on slow computers
@@ -178,7 +178,7 @@
   of network trouble)
 
 
-3.0.0
+3.0.0 (2009-08-19)
 
 - introduced new audio codec "CELT", not compatible to old versions
 
@@ -192,7 +192,7 @@
 - various bug fixes (e.g. disconnecting did not work reliably)
 
 
-2.3.0
+2.3.0 (2009-07-09)
 
 - new system sample rate of 33 kHz to improve audio quality, not compatible
   to old versions
@@ -202,7 +202,7 @@
 - added command line argument for connecting a server at software start-up
 
 
-2.2.2
+2.2.2 (2009-05-14)
 
 - "Mute" and "Solo" check boxes for each connected client fader
 
@@ -215,12 +215,12 @@
 - better behaviour on disconnection (introduced disconnection protocol message)
 
 
-2.2.1
+2.2.1 (2009-03-29)
 
 - bug fix and improvements for automatic jitter buffer size setting
 
 
-2.2.0
+2.2.0 (2009-03-13)
 
 - added Jack audio interface (Linux)
 
@@ -236,7 +236,7 @@
   clients)
 
 
-2.1.4
+2.1.4 (2009-02-15)
 
 - added automatic jitter buffer size setting
 
@@ -246,7 +246,7 @@
   significant CPU)
 
 
-2.1.3
+2.1.3 (2008-11-02)
 
 - added sound card selection
 
@@ -255,7 +255,7 @@
 - added total delay display
 
 
-2.1.2
+2.1.2 (2008-08-15)
 
 - audio compression type can be selected (IMA ADPCM, MS ADPCM, None)
 
@@ -265,7 +265,7 @@
 - bug fix: ping time measurement problems on Windows OS fixed
 
 
-2.1.1
+2.1.1 (2008-08-03)
 
 - added a chat window
 
@@ -276,17 +276,17 @@
 - ping time information in general settings dialog added
 
 
-2.1.0
+2.1.0 (2008-07-17)
 
 - ASIO support
 
 
-2.0.0
+2.0.0 (2008-03-29)
 
 - first QT4 compatible release
 
 
-0.9.9
+0.9.9 (2007-09-10)
 
 - new client settings dialog
 
@@ -294,7 +294,7 @@
   at the server
 
 
-0.9.4
+0.9.4 (2006-03-10)
 
 - added a protocol mechanism, now it is possible to set the jitter buffer in the
   server according to the setting in the client (they are coupled now)
@@ -305,6 +305,6 @@
   size (improves latency)
 
 
-0.9.1
+0.9.1 (2006-01-28)
 
 - initial version

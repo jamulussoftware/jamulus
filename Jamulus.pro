@@ -417,7 +417,6 @@ DISTFILES += AUTHORS \
     libs/opus/INSTALL \
     libs/opus/NEWS \
     libs/opus/README \
-    libs/opus/README_LLCON \
     libs/opus/celt/arm/armopts.s.in \
     libs/opus/celt/arm/celt_pitch_xcorr_arm.s \
     src/res/CLEDBlack.png \

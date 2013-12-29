@@ -27,6 +27,7 @@
 
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
+#include <QMutex>
 #include "soundbase.h"
 #include "global.h"
 
@@ -49,64 +50,31 @@ public:
     int            iOpenSLBufferSizeStero;
 
 protected:
-/*
-    virtual QString  LoadAndInitializeDriver ( int iIdx );
-
-    QString CheckDeviceCapabilities ( ComponentInstance& NewAudioInputUnit,
-                                      ComponentInstance& NewAudioOutputUnit );
-*/
 
     void CloseOpenSL();
 
 /*
-    UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID,
-                           const bool     bIsInput,
-                           UInt32         iPrefBufferSize );
-
-    void GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
-                               QString&            strDeviceName,
-                               bool&               bIsInput,
-                               bool&               bIsOutput );
-*/
-
-/*
     // callbacks
-    static OSStatus deviceNotification ( AudioDeviceID,
-                                         UInt32,
-                                         Boolean,
-                                         AudioDevicePropertyID inPropertyID,
-                                         void*                 inRefCon );
-
     static OSStatus processInput ( void*                       inRefCon,
                                    AudioUnitRenderActionFlags* ioActionFlags,
                                    const AudioTimeStamp*       inTimeStamp,
                                    UInt32                      inBusNumber,
                                    UInt32                      inNumberFrames,
                                    AudioBufferList* );
-
-    static OSStatus processOutput ( void*                       inRefCon,
-                                    AudioUnitRenderActionFlags*,
-                                    const AudioTimeStamp*,
-                                    UInt32,
-                                    UInt32,
-                                    AudioBufferList*            ioData );
 */
 
-/*
-    AudioStreamBasicDescription streamFormat;
+    static void processOutput ( SLAndroidSimpleBufferQueueItf bufferQueue,
+                                void*                         instance);
 
-    AURenderCallbackStruct      inputCallbackStruct;
-    AURenderCallbackStruct      outputCallbackStruct;
+    SLObjectItf                   engineObject;
+    SLEngineItf                   engine;
+    SLObjectItf                   outputMixObject;
+    SLObjectItf                   playerObject;
+    SLPlayItf                     player;
+    SLAndroidSimpleBufferQueueItf playerSimpleBufQueue;
 
-    ComponentInstance           audioInputUnit;
-    AudioDeviceID               audioInputDevice[MAX_NUMBER_SOUND_CARDS];
-    ComponentInstance           audioOutputUnit;
-    AudioDeviceID               audioOutputDevice[MAX_NUMBER_SOUND_CARDS];
+    QMutex                        Mutex;
 
-    AudioBufferList*            pBufferList;
-
-    QMutex                      Mutex;
-*/
 };
 
 #endif // !defined(_SOUND_H__9518A621345F78_3638457H73245GUIG9__INCLUDED_)

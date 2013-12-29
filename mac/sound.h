@@ -49,7 +49,7 @@ public:
     // to access them from the callback function
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iCoreAudioBufferSizeMono;
-    int            iCoreAudioBufferSizeStero;
+    int            iCoreAudioBufferSizeStereo;
 
 protected:
     virtual QString  LoadAndInitializeDriver ( int iIdx );

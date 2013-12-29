@@ -434,10 +434,10 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     CSoundBase::Init ( iCoreAudioBufferSizeMono );
 
     // set internal buffer size value and calculate stereo buffer size
-    iCoreAudioBufferSizeStero = 2 * iCoreAudioBufferSizeMono;
+    iCoreAudioBufferSizeStereo = 2 * iCoreAudioBufferSizeMono;
 
     // create memory for intermediate audio buffer
-    vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStero );
+    vecsTmpAudioSndCrdStereo.Init ( iCoreAudioBufferSizeStereo );
 
     // fill audio unit buffer struct
     pBufferList->mNumberBuffers              = 1;

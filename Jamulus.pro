@@ -484,9 +484,12 @@ DISTFILES += AUTHORS \
     src/res/instrgrandpiano.png \
     src/res/instrharmonica.png \
     src/res/instrkeyboard.png \
+    src/res/instrlistener.png \
     src/res/instrmicrophone.png \
     src/res/instrnone.png \
+    src/res/instrrecorder.png \
     src/res/instrsaxophone.png \
+    src/res/instrstreamer.png \
     src/res/instrsynthesizer.png \
     src/res/instrtrombone.png \
     src/res/instrtrumpet.png \

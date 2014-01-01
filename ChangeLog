@@ -1,3 +1,9 @@
+3.3.4
+
+- true stereo reverberation effect (previously it was a mono reverberation
+  effect on both stereo channels)
+
+
 3.3.3
 
 - support for storing/recovering the window positions

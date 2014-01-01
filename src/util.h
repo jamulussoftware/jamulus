@@ -869,17 +869,20 @@ public:
     
     void Init ( const int iSampleRate, const double rT60 = (double) 1.1 );
     void Clear();
-    void ProcessSample ( int16_t&     input,
+    void ProcessSample ( int16_t&     iInputOutputLeft,
+                         int16_t&     iInputOutputRight,
                          const double dAttenuation );
 
 protected:
     void setT60 ( const double rT60, const int iSampleRate );
     bool isPrime ( const int number );
 
-    CFIFO<int> allpassDelays_[3];
-    CFIFO<int> combDelays_[4];
-    double     allpassCoefficient_;
-    double     combCoefficient_[4];
+    CFIFO<double> allpassDelays[3];
+    CFIFO<double> combDelays[4];
+    CFIFO<double> outLeftDelay;
+    CFIFO<double> outRightDelay;
+    double        allpassCoefficient;
+    double        combCoefficient[4];
 };
 
 

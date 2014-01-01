@@ -911,11 +911,8 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             // for stereo always apply reverberation effect on both channels
             for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
             {
-                // left channel
-                AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], dRevLev );
-
-                // right channel
-                AudioReverbR.ProcessSample ( vecsStereoSndCrd[i + 1], dRevLev );
+                // both channels (stereo)
+                AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], vecsStereoSndCrd[i + 1], dRevLev );
             }
         }
         else
@@ -925,7 +922,8 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
                 {
                     // left channel
-                    AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], dRevLev );
+                    int16_t sRightDummy = 0; // has to be 0 for mono reverb
+                    AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], sRightDummy, dRevLev );
                 }
             }
             else
@@ -933,7 +931,8 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 for ( i = 1; i < iStereoBlockSizeSam; i += 2 )
                 {
                     // right channel
-                    AudioReverbR.ProcessSample ( vecsStereoSndCrd[i], dRevLev );
+                    int16_t sRightDummy = 0; // has to be 0 for mono reverb
+                    AudioReverbR.ProcessSample ( vecsStereoSndCrd[i], sRightDummy, dRevLev );
                 }
             }
         }

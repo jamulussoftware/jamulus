@@ -877,8 +877,23 @@ protected:
     void setT60 ( const double rT60, const int iSampleRate );
     bool isPrime ( const int number );
 
+    class COnePole
+    {
+    public:
+        COnePole() : dA ( 0 ), dB ( 0 ) { Reset(); }
+        void setPole ( const double dPole );
+        double Calc ( const double dIn );
+        void Reset() { dLastSample = 0; }
+
+    protected:
+        double dA;
+        double dB;
+        double dLastSample;
+    };
+
     CFIFO<double> allpassDelays[3];
     CFIFO<double> combDelays[4];
+    COnePole      combFilters[4];
     CFIFO<double> outLeftDelay;
     CFIFO<double> outRightDelay;
     double        allpassCoefficient;

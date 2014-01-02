@@ -198,6 +198,7 @@ void CAudioReverb::Init ( const int    iSampleRate,
     for ( i = 0; i < 4; i++ )
     {
         combDelays[i].Init ( lengths[i] );
+        combFilters[i].setPole ( 0.2 );
     }
 
     setT60 ( rT60, iSampleRate );
@@ -246,6 +247,10 @@ void CAudioReverb::Clear()
     combDelays[1].Reset ( 0 );
     combDelays[2].Reset ( 0 );
     combDelays[3].Reset ( 0 );
+    combFilters[0].Reset();
+    combFilters[1].Reset();
+    combFilters[2].Reset();
+    combFilters[3].Reset();
     outRightDelay.Reset ( 0 );
     outLeftDelay.Reset ( 0 );
 }
@@ -259,6 +264,21 @@ void CAudioReverb::setT60 ( const double rT60,
         combCoefficient[i] = pow ( (double) 10.0, (double) ( -3.0 *
             combDelays[i].Size() / ( rT60 * iSampleRate ) ) );
     }
+}
+
+void CAudioReverb::COnePole::setPole ( const double dPole )
+{
+    // calculate IIR filter coefficients based on the pole value
+    dA = -dPole;
+    dB = 1.0 - dPole;
+}
+
+double CAudioReverb::COnePole::Calc ( const double dIn )
+{
+    // calculate IIR filter
+    dLastSample = dB * dIn - dA * dLastSample;
+
+    return dLastSample;
 }
 
 void CAudioReverb::ProcessSample ( int16_t&     iInputOutputLeft,
@@ -290,10 +310,10 @@ void CAudioReverb::ProcessSample ( int16_t&     iInputOutputLeft,
     allpassDelays[2].Add ( temp2 );
     temp2 = - ( allpassCoefficient * temp2 ) + temp;
 
-    const double temp3 = temp2 + ( combCoefficient[0] * combDelays[0].Get() );
-    const double temp4 = temp2 + ( combCoefficient[1] * combDelays[1].Get() );
-    const double temp5 = temp2 + ( combCoefficient[2] * combDelays[2].Get() );
-    const double temp6 = temp2 + ( combCoefficient[3] * combDelays[3].Get() );
+    const double temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
+    const double temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
+    const double temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
+    const double temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
 
     combDelays[0].Add ( temp3 );
     combDelays[1].Add ( temp4 );

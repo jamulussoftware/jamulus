@@ -82,47 +82,17 @@ void CSoundBase::Stop()
 
 void CSoundBase::run()
 {
-    // Set thread priority (The working thread should have a higher
-    // priority than the GUI)
-#ifdef _WIN32
-    SetThreadPriority ( GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL );
-#else
-/*
-    // set the process to realtime privs, taken from
-    // "http://www.gardena.net/benno/linux/audio" but does not seem to work,
-    // maybe a problem with user rights
-    struct sched_param schp;
-    memset ( &schp, 0, sizeof ( schp ) );
-    schp.sched_priority = sched_get_priority_max ( SCHED_FIFO );
-    sched_setscheduler ( 0, SCHED_FIFO, &schp );
-*/
-#endif
-
     // main loop of working thread
     while ( bRun )
     {
         // get audio from sound card (blocking function)
-        if ( Read ( vecsAudioSndCrdStereo ) )
-        {
-            PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_RED );
-        }
-        else
-        {
-            PostWinMessage ( MS_SOUND_IN, MUL_COL_LED_GREEN );
-        }
+        Read ( vecsAudioSndCrdStereo );
 
         // process audio data
         (*fpProcessCallback) ( vecsAudioSndCrdStereo, pProcessCallbackArg );
 
         // play the new block
-        if ( Write ( vecsAudioSndCrdStereo ) )
-        {
-            PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_RED );
-        }
-        else
-        {
-            PostWinMessage ( MS_SOUND_OUT, MUL_COL_LED_GREEN );
-        }
+        Write ( vecsAudioSndCrdStereo );
     }
 }
 

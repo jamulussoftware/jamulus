@@ -1178,8 +1178,6 @@ void CClientDlg::customEvent ( QEvent* Event )
 
         switch ( iMessType )
         {
-        case MS_SOUND_IN:
-        case MS_SOUND_OUT:
         case MS_JIT_BUF_PUT:
         case MS_JIT_BUF_GET:
             // buffer status -> if any buffer goes red, this LED will go red

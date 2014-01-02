@@ -262,13 +262,10 @@ typedef unsigned char      uint8_t;
 
 /* Definitions for window message system ------------------------------------ */
 typedef unsigned int                    _MESSAGE_IDENT;
-#define MS_RESET_ALL                    0   // MS: Message
-#define MS_SOUND_IN                     1
-#define MS_SOUND_OUT                    2
-#define MS_JIT_BUF_PUT                  3
-#define MS_JIT_BUF_GET                  4
-#define MS_PACKET_RECEIVED              5
-#define MS_ERROR_IN_THREAD              6
+#define MS_RESET_ALL                    0 // MS: Message
+#define MS_JIT_BUF_PUT                  1
+#define MS_JIT_BUF_GET                  2
+#define MS_PACKET_RECEIVED              3
 
 #define MUL_COL_LED_RED                 0
 #define MUL_COL_LED_YELLOW              1

@@ -10,6 +10,13 @@ cd ..
 set QMAKESPEC=win32-msvc2010
 qmake -tp vc
 
+
+rem TODO Qt 5.2 qmake inserts a line in the project file which does not compile on msvc2010
+rem -> as a workaround we remove that line here
+copy Jamulus.vcxproj JamulusUnmod.vcxproj
+type JamulusUnmod.vcxproj | findstr /v "<DebugInformationFormat>None</DebugInformationFormat>" > Jamulus.vcxproj
+
+
 rem clean and compile solution -------------------------------------------------
 vcexpress Jamulus.vcxproj /clean "Release|Win32"
 vcexpress Jamulus.vcxproj /build "Release|Win32"

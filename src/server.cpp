@@ -1277,7 +1277,8 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
         if ( bChanOK )
         {
             // put packet in socket buffer
-            if ( vecChannels[iCurChanID].PutData ( vecbyRecBuf, iNumBytesRead ) == PS_PROT_OK_MESS_NOT_EVALUATED )
+            if ( vecChannels[iCurChanID].PutData ( vecbyRecBuf,
+                                                   iNumBytesRead ) == PS_PROT_OK_MESS_NOT_EVALUATED )
             {
                 // set flag
                 bIsNotEvaluatedProtocolMessage = true;

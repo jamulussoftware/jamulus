@@ -197,7 +197,7 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
 // JACK callbacks --------------------------------------------------------------
 int CSound::process ( jack_nframes_t nframes, void* arg )
 {
-    CSound* pSound = reinterpret_cast<CSound*> ( arg );
+    CSound* pSound = static_cast<CSound*> ( arg );
     int     i;
 
     if ( pSound->IsRunning() )
@@ -267,7 +267,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
 
 int CSound::bufferSizeCallback ( jack_nframes_t, void *arg )
 {
-    CSound* pSound = reinterpret_cast<CSound*> ( arg );
+    CSound* pSound = static_cast<CSound*> ( arg );
 
     pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART_AND_INIT );
 

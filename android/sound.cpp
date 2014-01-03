@@ -226,7 +226,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 void CSound::processInput ( SLAndroidSimpleBufferQueueItf bufferQueue,
                             void*                         instance )
 {
-    CSound* pSound = reinterpret_cast<CSound*> ( instance );
+    CSound* pSound = static_cast<CSound*> ( instance );
 
     // only process if we are running
     if ( !pSound->bRun )
@@ -248,7 +248,7 @@ void CSound::processInput ( SLAndroidSimpleBufferQueueItf bufferQueue,
 void CSound::processOutput ( SLAndroidSimpleBufferQueueItf bufferQueue,
                              void*                         instance )
 {
-    CSound* pSound = reinterpret_cast<CSound*> ( instance );
+    CSound* pSound = static_cast<CSound*> ( instance );
 
     // only process if we are running
     if ( !pSound->bRun )

@@ -491,7 +491,7 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
                                       AudioDevicePropertyID inPropertyID,
                                       void*                 inRefCon )
 {
-    CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
+    CSound* pSound = static_cast<CSound*> ( inRefCon );
 
     if ( inPropertyID == kAudioDeviceProcessorOverload )
     {
@@ -511,7 +511,7 @@ OSStatus CSound::processInput ( void*                       inRefCon,
                                 UInt32                      inNumberFrames,
                                 AudioBufferList* )
 {
-    CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
+    CSound* pSound = static_cast<CSound*> ( inRefCon );
 
     QMutexLocker locker ( &pSound->Mutex );
 
@@ -536,7 +536,7 @@ OSStatus CSound::processOutput ( void*                       inRefCon,
                                  UInt32,
                                  AudioBufferList*            ioData )
 {
-    CSound* pSound = reinterpret_cast<CSound*> ( inRefCon );
+    CSound* pSound = static_cast<CSound*> ( inRefCon );
 
     QMutexLocker locker ( &pSound->Mutex );
 

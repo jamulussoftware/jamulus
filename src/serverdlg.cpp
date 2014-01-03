@@ -44,8 +44,8 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     // client list
     lvwClients->setWhatsThis ( tr ( "<b>Client List:</b> The client list "
         "shows all clients which are currently connected to this server. Some "
-        "informations about the clients like the IP address, name, buffer "
-        "state are given for each connected client." ) );
+        "informations about the clients like the IP address and name are given "
+        "for each connected client." ) );
 
     lvwClients->setAccessibleName ( tr ( "Connected clients list view" ) );
 
@@ -161,7 +161,6 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     // set up list view for connected clients
     lvwClients->setColumnWidth ( 0, 170 );
     lvwClients->setColumnWidth ( 1, 130 );
-    lvwClients->setColumnWidth ( 2, 60 );
     lvwClients->clear();
 
 
@@ -175,7 +174,7 @@ lvwClients->setMinimumHeight ( 140 );
     vecpListViewItems.Init ( MAX_NUM_CHANNELS );
     for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
     {
-        vecpListViewItems[i] = new CServerListViewItem ( lvwClients );
+        vecpListViewItems[i] = new QTreeWidgetItem ( lvwClients );
         vecpListViewItems[i]->setHidden ( true );
     }
 
@@ -461,11 +460,11 @@ void CServerDlg::OnTimer()
                 vecpListViewItems[i]->setText ( 1, vecsName[i] );
 
                 // jitter buffer size (polling for updates)
-                vecpListViewItems[i]->setText ( 3,
+                vecpListViewItems[i]->setText ( 2,
                     QString().setNum ( veciJitBufNumFrames[i] ) );
 
                 // out network block size
-                vecpListViewItems[i]->setText ( 4,
+                vecpListViewItems[i]->setText ( 3,
                     QString().setNum ( static_cast<double> (
                     veciNetwFrameSizeFact[i] * SYSTEM_BLOCK_DURATION_MS_FLOAT
                     ), 'f', 2 ) );
@@ -580,27 +579,5 @@ void CServerDlg::changeEvent ( QEvent* pEvent )
             // the timer for this purpose
             QTimer::singleShot ( 0, this, SLOT ( hide() ) );
         }
-    }
-}
-
-void CServerDlg::customEvent ( QEvent* pEvent )
-{
-    if ( pEvent->type() == QEvent::User + 11 )
-    {
-        ListViewMutex.lock();
-        {
-            const int iMessType = ( (CCustomEvent*) pEvent )->iMessType;
-            const int iStatus   = ( (CCustomEvent*) pEvent )->iStatus;
-            const int iChanNum  = ( (CCustomEvent*) pEvent )->iChanNum;
-
-            switch(iMessType)
-            {
-            case MS_JIT_BUF_PUT:
-            case MS_JIT_BUF_GET:
-                vecpListViewItems[iChanNum]->SetLight ( iStatus );
-                break;
-            }
-        }
-        ListViewMutex.unlock();
     }
 }

@@ -36,11 +36,6 @@
      </column>
      <column>
       <property name="text" >
-       <string>Buffers</string>
-      </property>
-     </column>
-     <column>
-      <property name="text" >
        <string>Jitter Buffer Size</string>
       </property>
      </column>

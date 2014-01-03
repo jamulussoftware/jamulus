@@ -260,16 +260,13 @@ typedef unsigned char      uint8_t;
 #endif
 
 
-/* Definitions for window message system ------------------------------------ */
-typedef unsigned int                    _MESSAGE_IDENT;
-#define MS_RESET_ALL                    0 // MS: Message
-#define MS_JIT_BUF_PUT                  1
-#define MS_JIT_BUF_GET                  2
-#define MS_PACKET_RECEIVED              3
-
+/* Pseudo enum definitions -------------------------------------------------- */
 #define MUL_COL_LED_RED                 0
 #define MUL_COL_LED_YELLOW              1
 #define MUL_COL_LED_GREEN               2
+
+// definition for custom event
+#define MS_PACKET_RECEIVED              0
 
 
 /* Classes ********************************************************************/
@@ -336,10 +333,5 @@ bool    GetNumericArgument ( QTextStream& tsConsole,
                              double       rRangeStart,
                              double       rRangeStop,
                              double&      rValue);
-
-// posting a window message
-void PostWinMessage ( const _MESSAGE_IDENT MessID,
-                      const int            iMessageParam = 0,
-                      const int            iChanNum = 0 );
 
 #endif /* !defined ( GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_ ) */

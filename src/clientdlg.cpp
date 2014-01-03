@@ -254,10 +254,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     lbrInputLevelR->setValue ( 0 );
 
     // init status LEDs
-    ledConnection->SetUpdateTime ( 2 * LED_BAR_UPDATE_TIME_MS );
-    ledChat->SetUpdateTime       ( 2 * LED_BAR_UPDATE_TIME_MS );
-    ledDelay->SetUpdateTime      ( 2 * PING_UPDATE_TIME_MS );
+    ledConnection->Reset();
+    ledBuffers->Reset();
     ledDelay->Reset();
+    ledChat->Reset();
 
 
     // init slider controls ---
@@ -434,6 +434,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // timers
     QObject::connect ( &TimerSigMet, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerSigMet() ) );
+
+    QObject::connect ( &TimerBuffersLED, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerBuffersLED() ) );
 
     QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerStatus() ) );
@@ -903,6 +906,25 @@ void CClientDlg::OnTimerSigMet()
     lbrInputLevelR->setValue ( (int) ceil ( dCurSigLevelR ) );
 }
 
+void CClientDlg::OnTimerBuffersLED()
+{
+    int iCurStatus;
+
+    // get and reset current buffer state and set LED from that flag
+    if ( pClient->GetAndResetbJitterBufferOKFlag() )
+    {
+        iCurStatus = MUL_COL_LED_GREEN;
+    }
+    else
+    {
+        iCurStatus = MUL_COL_LED_RED;
+    }
+
+    // update the buffer LED and the general settings dialog, too
+    ledBuffers->SetLight ( iCurStatus );
+    ClientSettingsDlg.SetStatus ( iCurStatus );
+}
+
 void CClientDlg::OnTimerPing()
 {
     // send ping message to the server
@@ -1005,6 +1027,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
 
         // start timer for level meter bar and ping time measurement
         TimerSigMet.start ( LEVELMETER_UPDATE_TIME_MS );
+        TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
         TimerPing.start ( PING_UPDATE_TIME_MS );
     }
     else
@@ -1036,7 +1059,8 @@ void CClientDlg::Disconnect()
     lbrInputLevelL->setValue ( 0 );
     lbrInputLevelR->setValue ( 0 );
 
-    // stop ping time measurement timer
+    // stop other timers
+    TimerBuffersLED.stop();
     TimerPing.stop();
 
 
@@ -1044,13 +1068,13 @@ void CClientDlg::Disconnect()
 // immediately update status bar
 OnTimerStatus();
 
-// TODO this seems not to work, LEDs are still updated afterwards...
-// reset LEDs
-ledConnection->Reset();
-ledBuffers->Reset();
-ledDelay->Reset();
-ledChat->Reset();
 
+    // reset LEDs
+    ledConnection->Reset();
+    ledBuffers->Reset();
+    ledDelay->Reset();
+    ledChat->Reset();
+    ClientSettingsDlg.ResetStatus();
 
     // clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
@@ -1167,32 +1191,4 @@ rbtReverbSelR->setStyleSheet ( "" );
 
     // also apply GUI design to child GUI controls
     MainMixerBoard->SetGUIDesign ( eNewDesign );
-}
-
-void CClientDlg::customEvent ( QEvent* Event )
-{
-    if ( Event->type() == QEvent::User + 11 )
-    {
-        const int iMessType = ( (CCustomEvent*) Event )->iMessType;
-        const int iStatus =   ( (CCustomEvent*) Event )->iStatus;
-
-        switch ( iMessType )
-        {
-        case MS_JIT_BUF_PUT:
-        case MS_JIT_BUF_GET:
-            // buffer status -> if any buffer goes red, this LED will go red
-            ledBuffers->SetLight ( iStatus );
-            break;
-
-        case MS_RESET_ALL:
-            ledConnection->Reset();
-            ledBuffers->Reset();
-            ledDelay->Reset();
-            ledChat->Reset();
-            break;
-        }
-
-        // update general settings dialog, too
-        ClientSettingsDlg.SetStatus ( iMessType, iStatus );
-    }
 }

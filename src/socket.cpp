@@ -117,6 +117,21 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
     }
 }
 
+bool CSocket::GetAndResetbJitterBufferOKFlag()
+{
+    // check jitter buffer status
+    if ( !bJitterBufferOK )
+    {
+        // reset flag and return "not OK" status
+        bJitterBufferOK = true;
+        return false;
+    }
+
+    // the buffer was OK, we do not have to reset anything and just return the
+    // OK status
+    return true;
+}
+
 void CSocket::OnDataReceived()
 {
     while ( SocketDevice.hasPendingDatagrams() )
@@ -152,21 +167,9 @@ void CSocket::OnDataReceived()
                 // this network packet is valid, put it in the channel
                 switch ( pChannel->PutData ( vecbyRecBuf, iNumBytesRead ) )
                 {
-                case PS_AUDIO_OK:
-                    PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN );
-                    break;
-
                 case PS_AUDIO_ERR:
                 case PS_GEN_ERROR:
-                    PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED );
-                    break;
-
-                case PS_PROT_ERR:
-                    PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW );
-                    break;
-
-                default:
-                    // other put data states need not to be considered here
+                    bJitterBufferOK = false;
                     break;
                 }
             }

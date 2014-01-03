@@ -798,16 +798,6 @@ void CServer::OnTimer()
                     }
                 }
             }
-
-            // send message for get status (for GUI)
-            if ( eGetStat == GS_BUFFER_OK )
-            {
-                PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN, iCurChanID );
-            }
-            else
-            {
-                PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED, iCurChanID );
-            }
         }
 
         // a channel is now disconnected, take action on it
@@ -1287,28 +1277,10 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
         if ( bChanOK )
         {
             // put packet in socket buffer
-            switch ( vecChannels[iCurChanID].PutData ( vecbyRecBuf, iNumBytesRead ) )
+            if ( vecChannels[iCurChanID].PutData ( vecbyRecBuf, iNumBytesRead ) == PS_PROT_OK_MESS_NOT_EVALUATED )
             {
-            case PS_AUDIO_OK:
-                PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_GREEN, iCurChanID );
-                break;
-
-            case PS_AUDIO_ERR:
-                PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_RED, iCurChanID );
-                break;
-
-            case PS_PROT_ERR:
-                PostWinMessage ( MS_JIT_BUF_PUT, MUL_COL_LED_YELLOW, iCurChanID );
-                break;
-
-            case PS_PROT_OK_MESS_NOT_EVALUATED:
-                bIsNotEvaluatedProtocolMessage = true; // set flag
-                break;
-
-            case PS_GEN_ERROR:
-            case PS_PROT_OK:
-                // for these cases, do nothing
-                break;
+                // set flag
+                bIsNotEvaluatedProtocolMessage = true;
             }
         }
 

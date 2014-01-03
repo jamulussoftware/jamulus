@@ -269,7 +269,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 #endif
 
     // init delay and other information controls
-    ledOverallDelay->SetUpdateTime ( 2 * PING_UPDATE_TIME_MS );
+    ledNetw->Reset();
     ledOverallDelay->Reset();
     lblPingTimeValue->setText     ( "---" );
     lblOverallDelayValue->setText ( "---" );
@@ -748,21 +748,5 @@ void CClientSettingsDlg::UpdateDisplay()
         // update upstream rate information label (only if client is running)
         lblUpstreamValue->setText (
             QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
-    }
-}
-
-void CClientSettingsDlg::SetStatus ( const int iMessType, const int iStatus )
-{
-    switch ( iMessType )
-    {
-    case MS_JIT_BUF_PUT:
-    case MS_JIT_BUF_GET:
-        // network LED shows combined status of put and get
-        ledNetw->SetLight ( iStatus );
-        break;
-
-    case MS_RESET_ALL:
-        ledNetw->Reset();
-        break;
     }
 }

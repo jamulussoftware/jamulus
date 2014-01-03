@@ -57,14 +57,20 @@ class CSocket : public QObject
 public:
     CSocket ( CChannel*     pNewChannel,
               const quint16 iPortNumber )
-        : pChannel( pNewChannel ), bIsClient ( true ) { Init ( iPortNumber ); }
+        : pChannel ( pNewChannel ),
+          bIsClient ( true ),
+          bJitterBufferOK ( true ) { Init ( iPortNumber ); }
 
     CSocket ( CServer*      pNServP,
               const quint16 iPortNumber )
-        : pServer ( pNServP ), bIsClient ( false ) { Init ( iPortNumber ); }
+        : pServer ( pNServP ),
+          bIsClient ( false ),
+          bJitterBufferOK ( true ) { Init ( iPortNumber ); }
 
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
                       const CHostAddress&     HostAddr );
+
+    bool GetAndResetbJitterBufferOKFlag();
 
 protected:
     void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );
@@ -79,6 +85,8 @@ protected:
     CServer*         pServer;  // for server
 
     bool             bIsClient;
+
+    bool             bJitterBufferOK;
 
 public slots:
     void OnDataReceived();

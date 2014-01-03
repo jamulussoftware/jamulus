@@ -36,7 +36,6 @@
 #include "global.h"
 #include "server.h"
 #include "settings.h"
-#include "multicolorled.h"
 #include "ui_serverdlgbase.h"
 
 
@@ -58,7 +57,6 @@ public:
                  Qt::WindowFlags f = 0 );
 
 protected:
-    virtual void customEvent ( QEvent* pEvent );
     virtual void changeEvent ( QEvent* pEvent );
     virtual void closeEvent  ( QCloseEvent* Event );
 
@@ -71,7 +69,7 @@ protected:
     CServer*                      pServer;
     CSettings*                    pSettings;
 
-    CVector<CServerListViewItem*> vecpListViewItems;
+    CVector<QTreeWidgetItem*>     vecpListViewItems;
     QMutex                        ListViewMutex;
 
     QMenuBar*                     pMenu;

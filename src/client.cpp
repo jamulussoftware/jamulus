@@ -58,6 +58,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bFraSiFactSafeSupported          ( false ),
     bOpenChatOnNewMessage            ( true ),
     eGUIDesign                       ( GD_ORIGINAL ),
+    bJitterBufferOK                  ( true ),
     strCentralServerAddress          ( "" ),
     bUseDefaultCentralServerAddress  ( true ),
     iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL )
@@ -367,6 +368,29 @@ bool CClient::SetServerAddr ( QString strNAddr )
     }
 }
 
+bool CClient::GetAndResetbJitterBufferOKFlag()
+{
+    // get the socket buffer put status flag and reset it
+    const bool bSocketJitBufOKFlag = Socket.GetAndResetbJitterBufferOKFlag();
+
+    if ( !bJitterBufferOK )
+    {
+        // our jitter buffer get status is not OK so the overall status of the
+        // jitter buffer is also not OK (we do not have to consider the status
+        // of the socket buffer put status flag)
+
+        // reset flag before returning the function
+        bJitterBufferOK = true;
+        return false;
+    }
+
+    // the jitter buffer get (our own status flag) is OK, the final status
+    // now depends on the jitter buffer put status flag from the socket
+    // since per definition the jitter buffer status is OK if both the
+    // put and get status are OK
+    return bSocketJitBufOKFlag;
+}
+
 void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
 {
     // first check new input parameter
@@ -659,8 +683,8 @@ void CClient::Stop()
     ConnLessProtocol.CreateCLDisconnection ( Channel.GetAddress() );
 
     // reset current signal level and LEDs
+    bJitterBufferOK = true;
     SignalLevelMeter.Reset();
-    PostWinMessage ( MS_RESET_ALL, 0 );
 }
 
 void CClient::Init()
@@ -854,7 +878,7 @@ void CClient::Init()
 void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
 {
     // get the pointer to the object
-    CClient* pMyClientObj = reinterpret_cast<CClient*> ( arg );
+    CClient* pMyClientObj = static_cast<CClient*> ( arg );
 
     // process audio data
     pMyClientObj->ProcessSndCrdAudioData ( psData );
@@ -1080,13 +1104,10 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         const bool bReceiveDataOk =
             ( Channel.GetData ( vecbyNetwData ) == GS_BUFFER_OK );
 
-        if ( bReceiveDataOk )
+        // invalidate the buffer OK status flag if necessary
+        if ( !bReceiveDataOk )
         {
-            PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_GREEN );
-        }
-        else
-        {
-            PostWinMessage ( MS_JIT_BUF_GET, MUL_COL_LED_RED );
+            bJitterBufferOK = false;
         }
 
         // CELT decoding

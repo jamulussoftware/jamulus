@@ -108,8 +108,12 @@ public:
     void   Stop();
     bool   IsRunning() { return Sound.IsRunning(); }
     bool   SetServerAddr ( QString strNAddr );
+
     double MicLevelL() { return SignalLevelMeter.MicLevelLeft(); }
     double MicLevelR() { return SignalLevelMeter.MicLevelRight(); }
+
+    bool   GetAndResetbJitterBufferOKFlag();
+
     bool   IsConnected() { return Channel.IsConnected(); }
 
     bool GetOpenChatOnNewMessage() const { return bOpenChatOnNewMessage; }
@@ -352,6 +356,8 @@ void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
 
     bool                    bOpenChatOnNewMessage;
     EGUIDesign              eGUIDesign;
+
+    bool                    bJitterBufferOK;
 
     QString                 strCentralServerAddress;
     bool                    bUseDefaultCentralServerAddress;

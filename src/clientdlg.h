@@ -52,6 +52,7 @@
 
 // update time for GUI controls
 #define LEVELMETER_UPDATE_TIME_MS   100   // ms
+#define BUFFER_LED_UPDATE_TIME_MS   300   // ms
 #define LED_BAR_UPDATE_TIME_MS      1000  // ms
 
 // range for signal level meter
@@ -96,10 +97,10 @@ protected:
     bool               bConnected;
     bool               bUnreadChatMessage;
     QTimer             TimerSigMet;
+    QTimer             TimerBuffersLED;
     QTimer             TimerStatus;
     QTimer             TimerPing;
 
-    virtual void       customEvent ( QEvent* Event );
     virtual void       closeEvent  ( QCloseEvent* Event );
     void               UpdateDisplay();
 
@@ -118,6 +119,7 @@ public slots:
     void OnConnectDisconBut();
     void OnInstPictureBut();
     void OnTimerSigMet();
+    void OnTimerBuffersLED();
 
     void OnTimerStatus() { UpdateDisplay(); }
 

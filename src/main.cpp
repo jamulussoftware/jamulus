@@ -639,22 +639,3 @@ bool GetNumericArgument ( QTextStream& tsConsole,
         return false;
     }
 }
-
-
-/******************************************************************************\
-* Window Message System                                                        *
-\******************************************************************************/
-void PostWinMessage ( const _MESSAGE_IDENT MessID,
-                      const int            iMessageParam,
-                      const int            iChanNum )
-{
-    // first check if application is initialized
-    if ( pApp != NULL )
-    {
-        CCustomEvent* CustomEvent =
-            new CCustomEvent ( MessID, iMessageParam, iChanNum );
-
-        // Qt will delete the event object when done
-        QCoreApplication::postEvent ( pMainWindow, CustomEvent );
-    }
-}

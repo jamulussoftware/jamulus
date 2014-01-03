@@ -55,7 +55,9 @@ public:
                          QWidget* parent = 0,
                          Qt::WindowFlags f = 0 );
 
-    void SetStatus ( const int iMessType, const int iStatus );
+    void SetStatus ( const int iStatus ) { ledNetw->SetLight ( iStatus ); }
+    void ResetStatus() { ledNetw->Reset(); }
+
     void SetPingTimeResult ( const int iPingTime,
                              const int iOverallDelayMs,
                              const int iOverallDelayLEDColor );

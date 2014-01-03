@@ -34,29 +34,17 @@
 
 #include <QLabel>
 #include <QPixmap>
-#include <QTimer>
-#include <QTreeWidget>
 #include <QIcon>
 #include "global.h"
-
-
-/* Definitions ****************************************************************/
-#define DEFAULT_UPDATE_TIME             300
-
-// the red and yellow light should be on at least this interval
-#define MIN_TIME_FOR_RED_LIGHT          100
 
 
 /* Classes ********************************************************************/
 class CMultiColorLED : public QLabel
 {
-    Q_OBJECT
-
 public:
     CMultiColorLED ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
 
     void Reset();
-    void SetUpdateTime ( const int iNUTi );
     void SetLight ( const int iNewStatus );
 
 protected:
@@ -71,7 +59,7 @@ protected:
     ELightColor eColorFlag;
 
     virtual void changeEvent ( QEvent* curEvent );
-    void UpdateColor();
+    void SetColor ( const ELightColor eNewColorFlag );
 
     QPixmap BitmCubeDisabled;
     QPixmap BitmCubeGrey;
@@ -79,89 +67,11 @@ protected:
     QPixmap BitmCubeYellow;
     QPixmap BitmCubeRed;
 
-    QTimer  TimerRedLight;
-    QTimer  TimerGreenLight;
-    QTimer  TimerYellowLight;
-
     int     iUpdateTime;
 
     bool    bFlagRedLi;
     bool    bFlagGreenLi;
     bool    bFlagYellowLi;
-
-protected slots:
-    void         OnTimerRedLight();
-    void         OnTimerGreenLight();
-    void         OnTimerYellowLight();
-    virtual void OnNewPixmap ( const QPixmap& newPixmap ) { setPixmap ( newPixmap ); }
-
-signals:
-    void newPixmap ( const QPixmap& newPixmap );
-};
-
-
-class CMultColLEDListViewItem : public CMultiColorLED
-{
-    Q_OBJECT
-
-public:
-    CMultColLEDListViewItem ( const int iNewCol )
-        : pListViewItem ( NULL ), iColumn ( iNewCol ) {}
-
-    void SetListViewItemPointer ( QTreeWidgetItem* pNewListViewItem )
-    {
-        pListViewItem = pNewListViewItem;
-    }
-
-protected slots:
-    virtual void OnNewPixmap ( const QPixmap& newPixmap )
-    {
-        if ( pListViewItem != NULL )
-        {
-            pListViewItem->setIcon ( iColumn, QIcon ( newPixmap ) );
-        }
-    }
-
-protected:
-    QTreeWidgetItem* pListViewItem;
-    int              iColumn;
-};
-
-
-class CServerListViewItem : public QTreeWidgetItem
-{
-public:
-    CServerListViewItem ( QTreeWidget* parent )
-        : QTreeWidgetItem ( parent ), LED ( 2 )
-    {
-        LED.SetListViewItemPointer ( this );
-    }
-
-    void SetLight ( int iNewStatus )
-    {
-        LED.SetLight ( iNewStatus );
-    }
-
-protected:
-    CMultColLEDListViewItem LED;
-};
-
-
-class CConnectionServerListViewItem : public QTreeWidgetItem
-{
-public:
-    CConnectionServerListViewItem ( QTreeWidget* parent )
-        : QTreeWidgetItem ( parent ), LED ( 4 )
-    {
-        LED.SetListViewItemPointer ( this );
-    }
-
-    void Reset() { LED.Reset(); }
-    void SetUpdateTime ( const int iNUTi ) { LED.SetUpdateTime ( iNUTi ); }
-    void SetLight ( int iNewStatus ) { LED.SetLight ( iNewStatus ); }
-
-protected:
-    CMultColLEDListViewItem LED;
 };
 
 #endif // _MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_

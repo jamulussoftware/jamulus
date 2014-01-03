@@ -43,25 +43,6 @@ CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     // set init bitmap
     setPixmap ( BitmCubeGrey );
     eColorFlag = RL_GREY;
-
-    // init update time
-    SetUpdateTime ( DEFAULT_UPDATE_TIME );
-
-    // init timers -> we want to have single shot timers
-    TimerRedLight.setSingleShot    ( true );
-    TimerGreenLight.setSingleShot  ( true );
-    TimerYellowLight.setSingleShot ( true );
-
-    // connect timer events to the desired slots
-    connect ( &TimerRedLight, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerRedLight() ) );
-    connect ( &TimerGreenLight, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerGreenLight() ) );
-    connect ( &TimerYellowLight, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerYellowLight() ) );
-
-    connect ( this, SIGNAL ( newPixmap ( const QPixmap& ) ),
-        this, SLOT ( OnNewPixmap ( const QPixmap& ) ) );
 }
 
 void CMultiColorLED::changeEvent ( QEvent* curEvent )
@@ -71,75 +52,56 @@ void CMultiColorLED::changeEvent ( QEvent* curEvent )
     {
         if ( this->isEnabled() )
         {
-            emit newPixmap ( BitmCubeGrey );
+            setPixmap ( BitmCubeGrey );
             eColorFlag = RL_GREY;
         }
         else
         {
-            emit newPixmap ( BitmCubeDisabled );
+            setPixmap ( BitmCubeDisabled );
             eColorFlag = RL_DISABLED;
         }
     }
 }
 
-void CMultiColorLED::OnTimerRedLight() 
+void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
 {
-    bFlagRedLi = false;
-    UpdateColor();
-}
-
-void CMultiColorLED::OnTimerGreenLight() 
-{
-    bFlagGreenLi = false;
-    UpdateColor();
-}
-
-void CMultiColorLED::OnTimerYellowLight() 
-{
-    bFlagYellowLi = false;
-    UpdateColor();
-}
-
-void CMultiColorLED::UpdateColor()
-{
-    // Red light has highest priority, then comes yellow and at the end, we
-    // decide to set green light. Allways check the current color of the
-    // control before setting the color to prevent flickering
-    if ( bFlagRedLi )
+    switch ( eNewColorFlag )
     {
+    case RL_RED:
+        // red
         if ( eColorFlag != RL_RED )
         {
-            emit newPixmap ( BitmCubeRed );
+            setPixmap ( BitmCubeRed );
             eColorFlag = RL_RED;
         }
-        return;
-    }
+        break;
 
-    if ( bFlagYellowLi )
-    {
+    case RL_YELLOW:
+        // yellow
         if ( eColorFlag != RL_YELLOW )
         {
-            emit newPixmap ( BitmCubeYellow );
+            setPixmap ( BitmCubeYellow );
             eColorFlag = RL_YELLOW;
         }
-        return;
-    }
+        break;
 
-    if ( bFlagGreenLi )
-    {
+    case RL_GREEN:
+        // green
         if ( eColorFlag != RL_GREEN )
         {
-            emit newPixmap ( BitmCubeGreen );
+            setPixmap ( BitmCubeGreen );
             eColorFlag = RL_GREEN;
         }
-        return;
-    }
+        break;
 
-    // if no color is active, set control to grey light
-    if ( eColorFlag != RL_GREY )
-    {
-        setPixmap ( BitmCubeGrey );
-        eColorFlag = RL_GREY;
+    default:
+        // if no color is active, set control to grey light
+        if ( eColorFlag != RL_GREY )
+        {
+            setPixmap ( BitmCubeGrey );
+            eColorFlag = RL_GREY;
+        }
+        break;
     }
 }
 
@@ -147,12 +109,7 @@ void CMultiColorLED::Reset()
 {
     if ( this->isEnabled() )
     {
-        // reset color flags
-        bFlagRedLi    = false;
-        bFlagGreenLi  = false;
-        bFlagYellowLi = false;
-
-        UpdateColor();
+        SetColor ( RL_GREY );
     }
 }
 
@@ -163,41 +120,16 @@ void CMultiColorLED::SetLight ( const int iNewStatus )
         switch ( iNewStatus )
         {
         case MUL_COL_LED_GREEN:
-            // green light
-            bFlagGreenLi = true;
-            TimerGreenLight.start();
+            SetColor ( RL_GREEN );
             break;
 
         case MUL_COL_LED_YELLOW:
-            // yellow light
-            bFlagYellowLi = true;
-            TimerYellowLight.start();
+            SetColor ( RL_YELLOW );
             break;
 
         case MUL_COL_LED_RED:
-            // red light
-            bFlagRedLi = true;
-            TimerRedLight.start();
+            SetColor ( RL_RED );
             break;
         }
-
-        UpdateColor();
     }
-}
-
-void CMultiColorLED::SetUpdateTime ( const int iNUTi )
-{
-    // avoid too short intervals
-    if ( iNUTi < MIN_TIME_FOR_RED_LIGHT )
-    {
-        iUpdateTime = MIN_TIME_FOR_RED_LIGHT;
-    }
-    else
-    {
-        iUpdateTime = iNUTi;
-    }
-
-    TimerGreenLight.setInterval  ( iUpdateTime );
-    TimerYellowLight.setInterval ( iUpdateTime );
-    TimerRedLight.setInterval    ( iUpdateTime );
 }

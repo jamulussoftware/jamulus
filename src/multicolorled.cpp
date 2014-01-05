@@ -50,7 +50,7 @@ void CMultiColorLED::changeEvent ( QEvent* curEvent )
     // act on enabled changed state
     if ( curEvent->type() == QEvent::EnabledChange )
     {
-        if ( this->isEnabled() )
+        if ( isEnabled() )
         {
             setPixmap ( BitmCubeGrey );
             eColorFlag = RL_GREY;
@@ -107,29 +107,16 @@ void CMultiColorLED::SetColor ( const ELightColor eNewColorFlag )
 
 void CMultiColorLED::Reset()
 {
-    if ( this->isEnabled() )
+    if ( isEnabled() )
     {
         SetColor ( RL_GREY );
     }
 }
 
-void CMultiColorLED::SetLight ( const int iNewStatus )
+void CMultiColorLED::SetLight ( const ELightColor eNewStatus )
 {
-    if ( this->isEnabled() )
+    if ( isEnabled() )
     {
-        switch ( iNewStatus )
-        {
-        case MUL_COL_LED_GREEN:
-            SetColor ( RL_GREEN );
-            break;
-
-        case MUL_COL_LED_YELLOW:
-            SetColor ( RL_YELLOW );
-            break;
-
-        case MUL_COL_LED_RED:
-            SetColor ( RL_RED );
-            break;
-        }
+        SetColor ( eNewStatus );
     }
 }

@@ -55,12 +55,12 @@ public:
                          QWidget* parent = 0,
                          Qt::WindowFlags f = 0 );
 
-    void SetStatus ( const int iStatus ) { ledNetw->SetLight ( iStatus ); }
+    void SetStatus ( const CMultiColorLED::ELightColor eStatus ) { ledNetw->SetLight ( eStatus ); }
     void ResetStatus() { ledNetw->Reset(); }
 
-    void SetPingTimeResult ( const int iPingTime,
-                             const int iOverallDelayMs,
-                             const int iOverallDelayLEDColor );
+    void SetPingTimeResult ( const int                         iPingTime,
+                             const int                         iOverallDelayMs,
+                             const CMultiColorLED::ELightColor eOverallDelayLEDColor );
 
     void UpdateDisplay();
 

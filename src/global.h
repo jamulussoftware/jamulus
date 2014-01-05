@@ -261,10 +261,6 @@ typedef unsigned char      uint8_t;
 
 
 /* Pseudo enum definitions -------------------------------------------------- */
-#define MUL_COL_LED_RED                 0
-#define MUL_COL_LED_YELLOW              1
-#define MUL_COL_LED_GREEN               2
-
 // definition for custom event
 #define MS_PACKET_RECEIVED              0
 

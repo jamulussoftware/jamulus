@@ -31,6 +31,7 @@
 #include <QLocale>
 #include "global.h"
 #include "client.h"
+#include "multicolorled.h"
 #include "ui_connectdlgbase.h"
 
 
@@ -56,10 +57,10 @@ public:
     void SetServerList ( const CHostAddress&         InetAddr,
                          const CVector<CServerInfo>& vecServerInfo );
 
-    void SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
-                                          const int     iPingTime,
-                                          const int     iPingTimeLEDColor,
-                                          const int     iNumClients );
+    void SetPingTimeAndNumClientsResult ( CHostAddress&                     InetAddr,
+                                          const int                         iPingTime,
+                                          const CMultiColorLED::ELightColor ePingTimeLEDColor,
+                                          const int                         iNumClients );
 
     bool GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }

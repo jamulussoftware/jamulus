@@ -42,12 +42,6 @@
 class CMultiColorLED : public QLabel
 {
 public:
-    CMultiColorLED ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
-
-    void Reset();
-    void SetLight ( const int iNewStatus );
-
-protected:
     enum ELightColor
     {
         RL_DISABLED,
@@ -56,6 +50,13 @@ protected:
         RL_YELLOW,
         RL_RED
     };
+
+    CMultiColorLED ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+
+    void Reset();
+    void SetLight ( const ELightColor eNewStatus );
+
+protected:
     ELightColor eColorFlag;
 
     virtual void changeEvent ( QEvent* curEvent );

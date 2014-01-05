@@ -908,21 +908,21 @@ void CClientDlg::OnTimerSigMet()
 
 void CClientDlg::OnTimerBuffersLED()
 {
-    int iCurStatus;
+    CMultiColorLED::ELightColor eCurStatus;
 
     // get and reset current buffer state and set LED from that flag
     if ( pClient->GetAndResetbJitterBufferOKFlag() )
     {
-        iCurStatus = MUL_COL_LED_GREEN;
+        eCurStatus = CMultiColorLED::RL_GREEN;
     }
     else
     {
-        iCurStatus = MUL_COL_LED_RED;
+        eCurStatus = CMultiColorLED::RL_RED;
     }
 
     // update the buffer LED and the general settings dialog, too
-    ledBuffers->SetLight ( iCurStatus );
-    ClientSettingsDlg.SetStatus ( iCurStatus );
+    ledBuffers->SetLight ( eCurStatus );
+    ClientSettingsDlg.SetStatus ( eCurStatus );
 }
 
 void CClientDlg::OnTimerPing()
@@ -937,20 +937,21 @@ void CClientDlg::OnPingTimeResult ( int iPingTime )
     const int iOverallDelayMs = pClient->EstimatedOverallDelay ( iPingTime );
 
     // color definition: <= 40 ms green, <= 65 ms yellow, otherwise red
-    int iOverallDelayLEDColor;
+    CMultiColorLED::ELightColor eOverallDelayLEDColor;
+
     if ( iOverallDelayMs <= 40 )
     {
-        iOverallDelayLEDColor = MUL_COL_LED_GREEN;
+        eOverallDelayLEDColor = CMultiColorLED::RL_GREEN;
     }
     else
     {
         if ( iOverallDelayMs <= 65 )
         {
-            iOverallDelayLEDColor = MUL_COL_LED_YELLOW;
+            eOverallDelayLEDColor = CMultiColorLED::RL_YELLOW;
         }
         else
         {
-            iOverallDelayLEDColor = MUL_COL_LED_RED;
+            eOverallDelayLEDColor = CMultiColorLED::RL_RED;
         }
     }
 
@@ -961,11 +962,11 @@ void CClientDlg::OnPingTimeResult ( int iPingTime )
         // set ping time result to general settings dialog
         ClientSettingsDlg.SetPingTimeResult ( iPingTime,
                                               iOverallDelayMs,
-                                              iOverallDelayLEDColor );
+                                              eOverallDelayLEDColor );
     }
 
     // update delay LED on the main window
-    ledDelay->SetLight ( iOverallDelayLEDColor );
+    ledDelay->SetLight ( eOverallDelayLEDColor );
 }
 
 void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
@@ -973,27 +974,28 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
                                                       int          iNumClients )
 {
     // color definition: <= 25 ms green, <= 50 ms yellow, otherwise red
-    int iPingTimeLEDColor;
+    CMultiColorLED::ELightColor ePingTimeLEDColor;
+
     if ( iPingTime <= 25 )
     {
-        iPingTimeLEDColor = MUL_COL_LED_GREEN;
+        ePingTimeLEDColor = CMultiColorLED::RL_GREEN;
     }
     else
     {
         if ( iPingTime <= 50 )
         {
-            iPingTimeLEDColor = MUL_COL_LED_YELLOW;
+            ePingTimeLEDColor = CMultiColorLED::RL_YELLOW;
         }
         else
         {
-            iPingTimeLEDColor = MUL_COL_LED_RED;
+            ePingTimeLEDColor = CMultiColorLED::RL_RED;
         }
     }
 
     // update connection dialog server list
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr,
                                                 iPingTime,
-                                                iPingTimeLEDColor,
+                                                ePingTimeLEDColor,
                                                 iNumClients );
 }
 
@@ -1033,7 +1035,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
     else
     {
         // show the error as red light
-        ledConnection->SetLight ( MUL_COL_LED_RED );
+        ledConnection->SetLight ( CMultiColorLED::RL_RED );
     }
 }
 
@@ -1090,7 +1092,7 @@ void CClientDlg::UpdateDisplay()
             // chat LED
             if ( bUnreadChatMessage )
             {
-                ledChat->SetLight ( MUL_COL_LED_GREEN );
+                ledChat->SetLight ( CMultiColorLED::RL_GREEN );
             }
             else
             {
@@ -1098,12 +1100,12 @@ void CClientDlg::UpdateDisplay()
             }
 
             // connection LED
-            ledConnection->SetLight ( MUL_COL_LED_GREEN );
+            ledConnection->SetLight ( CMultiColorLED::RL_GREEN );
         }
         else
         {
             // connection LED
-            ledConnection->SetLight ( MUL_COL_LED_RED );
+            ledConnection->SetLight ( CMultiColorLED::RL_RED );
         }
     }
 

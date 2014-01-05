@@ -378,10 +378,10 @@ void CConnectDlg::OnTimerPing()
     }
 }
 
-void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
-                                                   const int     iPingTime,
-                                                   const int     iPingTimeLEDColor,
-                                                   const int     iNumClients )
+void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                     InetAddr,
+                                                   const int                         iPingTime,
+                                                   const CMultiColorLED::ELightColor ePingTimeLEDColor,
+                                                   const int                         iNumClients )
 {
     // apply the received ping time to the correct server list entry
     const int iServerListLen = lvwServers->topLevelItemCount();
@@ -395,19 +395,19 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress& InetAddr,
                 compare ( InetAddr.toString() ) )
         {
             // update the color of the ping time font
-            switch ( iPingTimeLEDColor )
+            switch ( ePingTimeLEDColor )
             {
-            case MUL_COL_LED_GREEN:
+            case CMultiColorLED::RL_GREEN:
                 lvwServers->
                     topLevelItem ( iIdx )->setTextColor ( 1, Qt::darkGreen );
                 break;
 
-            case MUL_COL_LED_YELLOW:
+            case CMultiColorLED::RL_YELLOW:
                 lvwServers->
                     topLevelItem ( iIdx )->setTextColor ( 1, Qt::darkYellow );
                 break;
 
-            case MUL_COL_LED_RED:
+            case CMultiColorLED::RL_RED:
                 lvwServers->
                     topLevelItem ( iIdx )->setTextColor ( 1, Qt::red );
                 break;

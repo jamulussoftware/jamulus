@@ -705,9 +705,9 @@ void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton
     UpdateDisplay();
 }
 
-void CClientSettingsDlg::SetPingTimeResult ( const int iPingTime,
-                                             const int iOverallDelayMs,
-                                             const int iOverallDelayLEDColor )
+void CClientSettingsDlg::SetPingTimeResult ( const int                         iPingTime,
+                                             const int                         iOverallDelayMs,
+                                             const CMultiColorLED::ELightColor eOverallDelayLEDColor )
 {
     // apply values to GUI labels, take special care if ping time exceeds
     // a certain value
@@ -727,7 +727,7 @@ void CClientSettingsDlg::SetPingTimeResult ( const int iPingTime,
     }
 
     // set current LED status
-    ledOverallDelay->SetLight ( iOverallDelayLEDColor );
+    ledOverallDelay->SetLight ( eOverallDelayLEDColor );
 }
 
 void CClientSettingsDlg::UpdateDisplay()

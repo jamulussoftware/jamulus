@@ -27,7 +27,7 @@
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
-void CStereoSignalLevelMeter::Update ( CVector<short>& vecsAudio )
+void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio )
 {
     // get the stereo vector size
     const int iStereoVecSize = vecsAudio.Size();
@@ -45,6 +45,7 @@ void CStereoSignalLevelMeter::Update ( CVector<short>& vecsAudio )
     //
     short sMaxL = 0;
     short sMaxR = 0;
+
     for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
     {
         // left channel

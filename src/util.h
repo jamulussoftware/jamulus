@@ -483,7 +483,7 @@ class CStereoSignalLevelMeter
 public:
     CStereoSignalLevelMeter() { Reset(); }
 
-    void   Update ( CVector<short>& vecsAudio );
+    void   Update ( const CVector<short>& vecsAudio );
     double MicLevelLeft()  { return CalcLogResult ( dCurLevelL ); }
     double MicLevelRight() { return CalcLogResult ( dCurLevelR ); }
     void   Reset()

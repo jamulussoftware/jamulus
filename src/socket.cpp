@@ -47,7 +47,7 @@ void CSocket::Init ( const quint16 iPortNumber )
                 ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
         {
             bSuccess = SocketDevice.bind (
-                QHostAddress( QHostAddress::Any ),
+                QHostAddress ( QHostAddress::Any ),
                 iPortNumber + iClientPortIncrement );
 
             iClientPortIncrement++;
@@ -187,6 +187,14 @@ void CSocket::OnDataReceived()
 
             if ( pServer->PutData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
             {
+
+
+// TODO: we should only post the event in case the server is turned off for
+//       speed optimization and avoiding possible locks
+//if ( !pServer->IsRunning() )
+//{
+
+
                 // this was an audio packet, start server
                 // tell the server object to wake up if it
                 // is in sleep mode (Qt will delete the event object when done)

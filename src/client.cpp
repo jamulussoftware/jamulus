@@ -1098,6 +1098,24 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
 
     // Receive signal ----------------------------------------------------------
+
+
+// TODO: Get all the received packets from the Socket interface here in this
+//       high priority thread and put them in the jitter buffer. This has the
+//       advantage that we only have two threads, one low priority thread for
+//       the GUI and one high priority thread for the audio and socket.
+// PROBLEMS: - If we are not connected, the old callback mechanism in the socket
+//             must be used instead
+//           - The ping message relys on that the packet is immediatly parsed
+//             not only if an audio packet has to be processed. Therefore the
+//             ping measurements will be too high which is not acceptable.
+//           - The thread synchronization is more critical than in the current
+//             implementation so that crashes may occur.
+//
+// e.g., do the following:
+// Socket.GetDataFromSocket();
+
+
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
         // receive a new block

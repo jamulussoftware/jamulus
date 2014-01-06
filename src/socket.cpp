@@ -187,19 +187,13 @@ void CSocket::OnDataReceived()
 
             if ( pServer->PutData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
             {
-
-
-// TODO: we should only post the event in case the server is turned off for
-//       speed optimization and avoiding possible locks
-//if ( !pServer->IsRunning() )
-//{
-
-
-                // this was an audio packet, start server
-                // tell the server object to wake up if it
-                // is in sleep mode (Qt will delete the event object when done)
-                QCoreApplication::postEvent ( pServer,
-                    new CCustomEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
+                // this was an audio packet, start server if it is in sleep mode
+                if ( !pServer->IsRunning() )
+                {
+                    // (note that Qt will delete the event object when done)
+                    QCoreApplication::postEvent ( pServer,
+                        new CCustomEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
+                }
             }
         }
     }

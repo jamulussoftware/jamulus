@@ -1092,8 +1092,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
 
         // send coded audio through the network
-        Socket.SendPacket ( Channel.PrepSendPacket ( vecCeltData ),
-            Channel.GetAddress() );
+        Channel.PrepAndSendPacket ( &Socket, vecCeltData );
     }
 
 

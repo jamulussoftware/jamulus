@@ -33,14 +33,14 @@
 #include <QMutex>
 #include <vector>
 #include "global.h"
-#include "channel.h"
 #include "protocol.h"
 #include "util.h"
 
-// The header file server.h requires to include this header file so we get a
-// cyclic dependency. To solve this issue, a prototype of the server class is
-// defined here.
-class CServer; // forward declaration of CServer
+// The header files channel.h and server.h require to include this header file
+// so we get a cyclic dependency. To solve this issue, a prototype of the
+// channel class and server class is defined here.
+class CServer;  // forward declaration of CServer
+class CChannel; // forward declaration of CChannel
 
 
 /* Definitions ****************************************************************/

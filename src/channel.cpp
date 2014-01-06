@@ -621,7 +621,8 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
     return eGetStatus;
 }
 
-CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<uint8_t>& vecbyNPacket )
+void CChannel::PrepAndSendPacket ( CSocket*                pSocket,
+                                   const CVector<uint8_t>& vecbyNPacket )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -629,13 +630,8 @@ CVector<uint8_t> CChannel::PrepSendPacket ( const CVector<uint8_t>& vecbyNPacket
     // block size
     if ( ConvBuf.Put ( vecbyNPacket ) )
     {
-        // a packet is ready
-        return ConvBuf.Get();
+        pSocket->SendPacket ( ConvBuf.Get(), GetAddress() );
     }
-
-    // if the block is not ready we have to initialize with zero length to
-    // tell the following network send routine that nothing should be sent
-    return CVector<uint8_t> ( 0 );
 }
 
 int CChannel::GetUploadRateKbps()

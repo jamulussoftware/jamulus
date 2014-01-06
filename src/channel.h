@@ -33,6 +33,7 @@
 #include "buffer.h"
 #include "util.h"
 #include "protocol.h"
+#include "socket.h"
 
 
 /* Definitions ****************************************************************/
@@ -66,7 +67,8 @@ public:
                            int iNumBytes );
     EGetDataStat GetData ( CVector<uint8_t>& vecbyData );
 
-    CVector<uint8_t> PrepSendPacket ( const CVector<uint8_t>& vecbyNPacket );
+    void PrepAndSendPacket ( CSocket*                pSocket,
+                             const CVector<uint8_t>& vecbyNPacket );
 
     void ResetTimeOutCounter() { iConTimeOut = iConTimeOutStartVal; }
     bool IsConnected() const { return iConTimeOut > 0; }
@@ -77,7 +79,7 @@ public:
 
     void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
     bool GetAddress ( CHostAddress& RetAddr );
-    CHostAddress GetAddress() const { return InetAddr; }
+    CHostAddress& GetAddress() { return InetAddr; }
 
     void ResetInfo() { ChannelInfo = CChannelCoreInfo(); } // reset does not emit a message
     void SetName ( const QString sNNa );

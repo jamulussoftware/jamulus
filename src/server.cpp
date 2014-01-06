@@ -898,9 +898,7 @@ opus_custom_encoder_ctl ( OpusEncoderStereo[iCurChanID],
             }
 
             // send separate mix to current clients
-            Socket.SendPacket (
-                vecChannels[iCurChanID].PrepSendPacket ( vecCeltData ),
-                vecChannels[iCurChanID].GetAddress() );
+            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket, vecCeltData );
 
             // update socket buffer size
             vecChannels[iCurChanID].UpdateSocketBufferSize();

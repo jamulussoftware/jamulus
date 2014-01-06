@@ -1113,7 +1113,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 //             implementation so that crashes may occur.
 //
 // e.g., do the following:
-// Socket.GetDataFromSocket();
+// Socket.OnDataReceived();
 
 
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )

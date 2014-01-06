@@ -407,7 +407,7 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
                     topLevelItem ( iIdx )->setTextColor ( 1, Qt::darkYellow );
                 break;
 
-            case CMultiColorLED::RL_RED:
+            default: // including "CMultiColorLED::RL_RED"
                 lvwServers->
                     topLevelItem ( iIdx )->setTextColor ( 1, Qt::red );
                 break;

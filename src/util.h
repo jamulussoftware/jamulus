@@ -938,12 +938,12 @@ public:
         if ( dNewValue < dOldValue )
         {
             dOldValue =
-                dOldValue * dWeightDown + (1.0 - dWeightDown) * dNewValue;
+                dOldValue * dWeightDown + ( 1.0 - dWeightDown ) * dNewValue;
         }
         else
         {
             dOldValue =
-                dOldValue * dWeightUp + (1.0 - dWeightUp) * dNewValue;
+                dOldValue * dWeightUp + ( 1.0 - dWeightUp ) * dNewValue;
         }
     }
 

@@ -208,11 +208,13 @@ public slots:
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
     void OnParseMessageBody ( CVector<uint8_t> vecbyMesBodyData,
                               int              iRecCounter,
-                              int              iRecID ) { Protocol.ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID ); }
-#endif
+                              int              iRecID )
+    {
+        // note that the return value is ignored here
+        Protocol.ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
+    }
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
@@ -233,11 +235,9 @@ signals:
     void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,
                              int              iRecID );
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
     void ParseMessageBody ( CVector<uint8_t> vecbyMesBodyData,
                             int              iRecCounter,
                             int              iRecID );
-#endif
 };
 
 #endif /* !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

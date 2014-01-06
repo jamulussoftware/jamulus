@@ -105,13 +105,11 @@ QObject::connect ( &Protocol,
         SIGNAL ( ReqNetTranspProps() ),
         this, SLOT ( OnReqNetTranspProps() ) );
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
     // this connection is intended for a thread transition if we have a
     // separate socket thread running
     QObject::connect ( this,
         SIGNAL ( ParseMessageBody ( CVector<uint8_t>, int, int ) ),
         this, SLOT ( OnParseMessageBody ( CVector<uint8_t>, int, int ) ) );
-#endif
 }
 
 bool CChannel::ProtocolIsEnabled()
@@ -483,7 +481,6 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                 }
                 else
                 {
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
                     // parse the message assuming this is a regular protocol message
                     emit ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
 
@@ -491,14 +488,6 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                     // check if the protocol was ok since we emit just a signal
                     // and do not get any feedback on the protocol decoding state
                     eRet = PS_PROT_OK;
-#else
-                    // parse the message assuming this is a protocol message
-                    if ( !Protocol.ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID ) )
-                    {
-                        // set status flag
-                        eRet = PS_PROT_OK;
-                    }
-#endif
                 }
             }
             else

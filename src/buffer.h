@@ -469,7 +469,7 @@ public:
         return false;
     }
 
-    CVector<TData>& Get()
+    const CVector<TData>& Get()
     {
         iPutPos = 0;
         return vecsMemory;

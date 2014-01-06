@@ -79,7 +79,7 @@ public:
 
     void SetAddress ( const CHostAddress NAddr ) { InetAddr = NAddr; }
     bool GetAddress ( CHostAddress& RetAddr );
-    CHostAddress& GetAddress() { return InetAddr; }
+    const CHostAddress& GetAddress() const { return InetAddr; }
 
     void ResetInfo() { ChannelInfo = CChannelCoreInfo(); } // reset does not emit a message
     void SetName ( const QString sNNa );

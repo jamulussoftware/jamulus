@@ -535,7 +535,7 @@ public:
     }
 
     // compare operator
-    bool operator== ( const CHostAddress& CompAddr )
+    bool operator== ( const CHostAddress& CompAddr ) const
     {
         return ( ( CompAddr.InetAddr == InetAddr ) &&
                  ( CompAddr.iPort    == iPort ) );

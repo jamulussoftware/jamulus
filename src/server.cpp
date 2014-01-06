@@ -145,7 +145,7 @@ void CHighPrecisionTimer::Start()
 #endif
 
         // start thread
-        QThread::start();
+        QThread::start ( QThread::TimeCriticalPriority );
     }
 }
 
@@ -164,6 +164,11 @@ void CHighPrecisionTimer::run()
     while ( bRun )
     {
         // call processing routine by fireing signal
+
+// TODO by emit a signal we leave the high priority thread -> maybe use some
+//      other connection type to have something like a true callback, e.g.
+//      "Qt::DirectConnection" -> Can this work?
+
         emit timeout();
 
         // now wait until the next buffer shall be processed (we

@@ -197,7 +197,7 @@ void CHighPrecisionTimer::run()
 
 
 // CServer implementation ******************************************************
-CServer::CServer ( const int      iNewNumChan,
+CServer::CServer ( const int      iNewMaxNumChan,
                    const QString& strLoggingFileName,
                    const quint16  iPortNumber,
                    const QString& strHTMLStatusFileName,
@@ -207,13 +207,13 @@ CServer::CServer ( const int      iNewNumChan,
                    const QString& strServerInfo,
                    const QString& strNewWelcomeMessage,
                    const bool     bNCentServPingServerInList ) :
-    iNumChannels         ( iNewNumChan ),
+    iMaxNumChannels      ( iNewMaxNumChan ),
     Socket               ( this, iPortNumber ),
     bWriteStatusHTMLFile ( false ),
     ServerListManager    ( iPortNumber,
                            strCentralServer,
                            strServerInfo,
-                           iNewNumChan,
+                           iNewMaxNumChan,
                            bNCentServPingServerInList,
                            &ConnLessProtocol ),
     bAutoRunMinimized    ( false ),
@@ -225,7 +225,7 @@ CServer::CServer ( const int      iNewNumChan,
     // create CELT encoder/decoder for each channel (must be done before
     // enabling the channels), create a mono and stereo encoder/decoder
     // for each channel
-    for ( i = 0; i < iNumChannels; i++ )
+    for ( i = 0; i < iMaxNumChannels; i++ )
     {
         // init audio endocder/decoder (mono)
         CeltModeMono[i] = cc6_celt_mode_create (
@@ -311,6 +311,11 @@ CServer::CServer ( const int      iNewNumChan,
     vstrChatColors[4] = "maroon";
     vstrChatColors[5] = "coral";
 
+    // allocate memory for the channel IDs vector for the current connected
+    // channels where we assume the worst case that all possible channels are
+    // used
+    vecChanIDsCurConChan.Init ( iMaxNumChannels );
+
     // enable history graph (if requested)
     if ( !strHistoryFileName.isEmpty() )
     {
@@ -351,7 +356,7 @@ CServer::CServer ( const int      iNewNumChan,
 
     // enable all channels (for the server all channel must be enabled the
     // entire life time of the software)
-    for ( i = 0; i < iNumChannels; i++ )
+    for ( i = 0; i < iMaxNumChannels; i++ )
     {
         vecChannels[i].SetEnable ( true );
     }
@@ -641,12 +646,15 @@ void CServer::OnTimer()
 {
     int i, j;
 
-    CVector<int>               vecChanID;
-    CVector<CVector<double> >  vecvecdGains;
-    CVector<CVector<int16_t> > vecvecsData;
-    CVector<int>               vecNumAudioChannels;
+// TODO avoid allocating memory in the time critical processing routine
+CVector<CVector<double> >  vecvecdGains;
+CVector<CVector<int16_t> > vecvecsData;
+CVector<int>               vecNumAudioChannels;
+
 
     // Get data from all connected clients -------------------------------------
+    // some inits
+    int  iNumClients               = 0; // init connected client counter
     bool bChannelIsNowDisconnected = false;
 
     // Make put and get calls thread safe. Do not forget to unlock mutex
@@ -654,28 +662,36 @@ void CServer::OnTimer()
     Mutex.lock();
     {
         // first, get number and IDs of connected channels
-        vecChanID.Init ( 0 );
-        for ( i = 0; i < iNumChannels; i++ )
+        for ( i = 0; i < iMaxNumChannels; i++ )
         {
             if ( vecChannels[i].IsConnected() )
             {
-                // add ID and data
-                vecChanID.Add ( i );
+                // add ID and increment counter (note that the vector length is
+                // according to the worst case scenario, if the number of
+                // connected clients is less, only a subset of elements of this
+                // vector are actually used and the others are dummy elements)
+                vecChanIDsCurConChan[iNumClients] = i;
+                iNumClients++;
             }
         }
 
-        // process connected channels
-        const int iNumCurConnChan = vecChanID.Size();
-
         // init temporary vectors
-        vecvecdGains.Init        ( iNumCurConnChan );
-        vecvecsData.Init         ( iNumCurConnChan );
-        vecNumAudioChannels.Init ( iNumCurConnChan );
 
-        for ( i = 0; i < iNumCurConnChan; i++ )
+// TODO in the entire realtime timer routine including the ProcessData no
+//      memory must be allocated -> use member variables for the vectors and
+//      only change the size on changing the number of connected clients at
+//      the server
+
+// TODO avoid allocating memory in the time critical processing routine
+vecvecdGains.Init        ( iNumClients );
+vecvecsData.Init         ( iNumClients );
+vecNumAudioChannels.Init ( iNumClients );
+
+        // process connected channels
+        for ( i = 0; i < iNumClients; i++ )
         {
             // get actual ID of current channel
-            const int iCurChanID = vecChanID[i];
+            const int iCurChanID = vecChanIDsCurConChan[i];
 
             // get and store number of audio channels
             const int iCurNumAudChan =
@@ -684,17 +700,18 @@ void CServer::OnTimer()
             vecNumAudioChannels[i] = iCurNumAudChan;
 
             // init vectors storing information of all channels
-            vecvecdGains[i].Init ( iNumCurConnChan );
+            vecvecdGains[i].Init ( iNumClients );
             vecvecsData[i].Init  ( iCurNumAudChan * SYSTEM_FRAME_SIZE_SAMPLES );
 
             // get gains of all connected channels
-            for ( j = 0; j < iNumCurConnChan; j++ )
+            for ( j = 0; j < iNumClients; j++ )
             {
                 // The second index of "vecvecdGains" does not represent
-                // the channel ID! Therefore we have to use "vecChanID" to
-                // query the IDs of the currently connected channels
+                // the channel ID! Therefore we have to use
+                // "vecChanIDsCurConChan" to query the IDs of the currently
+                // connected channels
                 vecvecdGains[i][j] =
-                    vecChannels[iCurChanID].GetGain( vecChanID[j] );
+                    vecChannels[iCurChanID].GetGain( vecChanIDsCurConChan[j] );
             }
 
             // get current number of CELT coded bytes
@@ -702,7 +719,8 @@ void CServer::OnTimer()
                 vecChannels[iCurChanID].GetNetwFrameSize();
 
             // init temporal data vector and clear input buffers
-            CVector<uint8_t> vecbyData ( iCeltNumCodedBytes );
+// TODO avoid allocating memory in the time critical processing routine
+CVector<uint8_t> vecbyData ( iCeltNumCodedBytes );
 
             // get data
             const EGetDataStat eGetStat =
@@ -816,8 +834,6 @@ void CServer::OnTimer()
 
 
     // Process data ------------------------------------------------------------
-    const int iNumClients = vecChanID.Size();
-
     // Check if at least one client is connected. If not, stop server until
     // one client is connected.
     if ( iNumClients != 0 )
@@ -825,21 +841,34 @@ void CServer::OnTimer()
         for ( int i = 0; i < iNumClients; i++ )
         {
             // get actual ID of current channel
-            const int iCurChanID = vecChanID[i];
+            const int iCurChanID = vecChanIDsCurConChan[i];
+
+            // get number of audio channels of current channel
+            const int iCurNumAudChan = vecNumAudioChannels[i];
+
+            // calculate the number of samples for output vector
+            const int iNumOutSamples =
+                iCurNumAudChan * SYSTEM_FRAME_SIZE_SAMPLES;
+
+            // allocate memory for the send data vector
+// TODO avoid allocating memory in the time critical processing routine
+CVector<int16_t> vecsSendData ( iNumOutSamples );
 
             // generate a sparate mix for each channel
             // actual processing of audio data -> mix
-            CVector<short> vecsSendData ( ProcessData ( i,
-                                                        vecvecsData,
-                                                        vecvecdGains[i],
-                                                        vecNumAudioChannels ) );
+            ProcessData ( iCurNumAudChan,
+                          vecvecsData,
+                          vecvecdGains[i],
+                          vecNumAudioChannels,
+                          vecsSendData );
 
             // get current number of CELT coded bytes
             const int iCeltNumCodedBytes =
                 vecChannels[iCurChanID].GetNetwFrameSize();
 
             // CELT encoding
-            CVector<unsigned char> vecCeltData ( iCeltNumCodedBytes );
+// TODO avoid allocating memory in the time critical processing routine
+CVector<unsigned char> vecCeltData ( iCeltNumCodedBytes );
 
             if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
             {
@@ -912,40 +941,41 @@ opus_custom_encoder_ctl ( OpusEncoderStereo[iCurChanID],
     }
 }
 
-CVector<int16_t> CServer::ProcessData ( const int                   iCurIndex,
-                                        CVector<CVector<int16_t> >& vecvecsData,
-                                        CVector<double>&            vecdGains,
-                                        CVector<int>&               vecNumAudioChannels )
+/// @brief Mix all audio data from all clients together.
+void CServer::ProcessData ( const int                         iCurNumAudChan,
+                            const CVector<CVector<int16_t> >& vecvecsData,
+                            const CVector<double>&            vecdGains,
+                            const CVector<int>&               vecNumAudioChannels,
+                            CVector<int16_t>&                 vecsOutData )
 {
     int i, j, k;
 
-    // get number of audio channels of current channel
-    const int iCurNumAudChan = vecNumAudioChannels[iCurIndex];
-
-    // number of samples for output vector
-    const int iNumOutSamples = iCurNumAudChan * SYSTEM_FRAME_SIZE_SAMPLES;
-
-    // init return vector with zeros since we mix all channels on that vector
-    CVector<int16_t> vecsOutData ( iNumOutSamples, 0 );
-
+    // get the number of clients
     const int iNumClients = vecvecsData.Size();
 
-    // mix all audio data from all clients together
+    // init return vector with zeros since we mix all channels on that vector
+    vecsOutData.Reset ( 0 );
+
+    // distinguish between stereo and mono mode
     if ( iCurNumAudChan == 1 )
     {
         // Mono target channel -------------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
+            // get a reference to the audio data and gain of the current client
+            const CVector<int16_t>& vecsData = vecvecsData[j];
+            const double            dGain    = vecdGains[j];
+
             // if channel gain is 1, avoid multiplication for speed optimization
-            if ( vecdGains[j] == static_cast<double> ( 1.0 ) )
+            if ( dGain == static_cast<double> ( 1.0 ) )
             {
                 if ( vecNumAudioChannels[j] == 1 )
                 {
                     // mono
                     for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++ )
                     {
-                        vecsOutData[i] =
-                            Double2Short ( vecsOutData[i] + vecvecsData[j][i] );
+                        vecsOutData[i] = Double2Short (
+                            static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
                     }
                 }
                 else
@@ -955,7 +985,7 @@ CVector<int16_t> CServer::ProcessData ( const int                   iCurIndex,
                     {
                         vecsOutData[i] =
                             Double2Short ( vecsOutData[i] +
-                            ( vecvecsData[j][k] + vecvecsData[j][k + 1] ) / 2 );
+                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2 );
                     }
                 }
             }
@@ -966,9 +996,8 @@ CVector<int16_t> CServer::ProcessData ( const int                   iCurIndex,
                     // mono
                     for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++ )
                     {
-                        vecsOutData[i] =
-                            Double2Short ( vecsOutData[i] +
-                            vecvecsData[j][i] * vecdGains[j] );
+                        vecsOutData[i] = Double2Short (
+                            vecsOutData[i] + vecsData[i] * dGain );
                     }
                 }
                 else
@@ -977,8 +1006,8 @@ CVector<int16_t> CServer::ProcessData ( const int                   iCurIndex,
                     for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++, k += 2 )
                     {
                         vecsOutData[i] =
-                            Double2Short ( vecsOutData[i] + vecdGains[j] *
-                            ( vecvecsData[j][k] + vecvecsData[j][k + 1] ) / 2 );
+                            Double2Short ( vecsOutData[i] + dGain *
+                            ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2 );
                     }
                 }
             }
@@ -989,8 +1018,12 @@ CVector<int16_t> CServer::ProcessData ( const int                   iCurIndex,
         // Stereo target channel -----------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
+            // get a reference to the audio data and gain of the current client
+            const CVector<int16_t>& vecsData = vecvecsData[j];
+            const double            dGain    = vecdGains[j];
+
             // if channel gain is 1, avoid multiplication for speed optimization
-            if ( vecdGains[j] == static_cast<double> ( 1.0 ) )
+            if ( dGain == static_cast<double> ( 1.0 ) )
             {
                 if ( vecNumAudioChannels[j] == 1 )
                 {
@@ -998,21 +1031,21 @@ CVector<int16_t> CServer::ProcessData ( const int                   iCurIndex,
                     for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++, k += 2 )
                     {
                         // left channel
-                        vecsOutData[k] =
-                            Double2Short ( vecsOutData[k] + vecvecsData[j][i] );
+                        vecsOutData[k] = Double2Short (
+                            static_cast<double> ( vecsOutData[k] ) + vecsData[i] );
 
                         // right channel
-                        vecsOutData[k + 1] =
-                            Double2Short ( vecsOutData[k + 1] + vecvecsData[j][i] );
+                        vecsOutData[k + 1] = Double2Short (
+                            static_cast<double> ( vecsOutData[k + 1] ) + vecsData[i] );
                     }
                 }
                 else
                 {
                     // stereo
-                    for ( i = 0; i < iNumOutSamples; i++ )
+                    for ( i = 0; i < ( 2 * SYSTEM_FRAME_SIZE_SAMPLES ); i++ )
                     {
-                        vecsOutData[i] =
-                            Double2Short ( vecsOutData[i] + vecvecsData[j][i] );
+                        vecsOutData[i] = Double2Short (
+                            static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
                     }
                 }
             }
@@ -1025,28 +1058,25 @@ CVector<int16_t> CServer::ProcessData ( const int                   iCurIndex,
                     {
                         // left channel
                         vecsOutData[k] = Double2Short (
-                            vecsOutData[k] + vecvecsData[j][i] * vecdGains[j] );
+                            vecsOutData[k] + vecsData[i] * dGain );
 
                         // right channel
                         vecsOutData[k + 1] = Double2Short (
-                            vecsOutData[k + 1] + vecvecsData[j][i] * vecdGains[j] );
+                            vecsOutData[k + 1] + vecsData[i] * dGain );
                     }
                 }
                 else
                 {
                     // stereo
-                    for ( i = 0; i < iNumOutSamples; i++ )
+                    for ( i = 0; i < ( 2 * SYSTEM_FRAME_SIZE_SAMPLES ); i++ )
                     {
-                        vecsOutData[i] =
-                            Double2Short ( vecsOutData[i] +
-                            vecvecsData[j][i] * vecdGains[j] );
+                        vecsOutData[i] = Double2Short (
+                            vecsOutData[i] + vecsData[i] * dGain );
                     }
                 }
             }
         }
     }
-
-    return vecsOutData;
 }
 
 CVector<CChannelInfo> CServer::CreateChannelList()
@@ -1054,7 +1084,7 @@ CVector<CChannelInfo> CServer::CreateChannelList()
     CVector<CChannelInfo> vecChanInfo ( 0 );
 
     // look for free channels
-    for ( int i = 0; i < iNumChannels; i++ )
+    for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -1075,7 +1105,7 @@ void CServer::CreateAndSendChanListForAllConChannels()
     CVector<CChannelInfo> vecChanInfo ( CreateChannelList() );
 
     // now send connected channels list to all connected clients
-    for ( int i = 0; i < iNumChannels; i++ )
+    for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -1129,7 +1159,7 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
 
 
     // Send chat text to all connected clients ---------------------------------
-    for ( int i = 0; i < iNumChannels; i++ )
+    for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
@@ -1142,24 +1172,9 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
 int CServer::GetFreeChan()
 {
     // look for a free channel
-    for ( int i = 0; i < iNumChannels; i++ )
+    for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         if ( !vecChannels[i].IsConnected() )
-        {
-            return i;
-        }
-    }
-
-    // no free channel found, return invalid ID
-    return INVALID_CHANNEL_ID;
-}
-
-int CServer::FindChannel ( const CHostAddress& InetAddr )
-{
-    // look for a channel with the given internet address
-    for ( int i = 0; i < iNumChannels; i++ )
-    {
-        if ( vecChannels[i].GetAddress() == InetAddr )
         {
             return i;
         }
@@ -1174,34 +1189,33 @@ int CServer::GetNumberOfConnectedClients()
     int iNumConnClients = 0;
 
     // check all possible channels for connection status
-    for ( int i = 0; i < iNumChannels; i++ )
+    for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         if ( vecChannels[i].IsConnected() )
         {
             // this channel is connected, increment counter
-            iNumConnClients += 1;
+            iNumConnClients++;
         }
     }
 
     return iNumConnClients;
 }
 
-int CServer::CheckAddr ( const CHostAddress& Addr )
+int CServer::FindChannel ( const CHostAddress& CheckAddr )
 {
     CHostAddress InetAddr;
 
     // check for all possible channels if IP is already in use
-    for ( int i = 0; i < iNumChannels; i++ )
+    for ( int i = 0; i < iMaxNumChannels; i++ )
     {
-        if ( vecChannels[i].IsConnected() )
+        // the "GetAddress" gives a valid address and returns true if the
+        // channel is connected
+        if ( vecChannels[i].GetAddress ( InetAddr ) )
         {
-            if ( vecChannels[i].GetAddress ( InetAddr ) )
+            // IP found, return channel number
+            if ( InetAddr == CheckAddr )
             {
-                // IP found, return channel number
-                if ( InetAddr == Addr )
-                {
-                    return i;
-                }
+                return i;
             }
         }
     }
@@ -1222,7 +1236,7 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
     {
         // Get channel ID ------------------------------------------------------
         // check address
-        int iCurChanID = CheckAddr ( HostAdr );
+        int iCurChanID = FindChannel ( HostAdr );
 
         if ( iCurChanID == INVALID_CHANNEL_ID )
         {
@@ -1246,7 +1260,7 @@ bool CServer::PutData ( const CVector<uint8_t>& vecbyRecBuf,
 
                     // reset the channel gains of current channel, at the same
                     // time reset gains of this channel ID for all other channels
-                    for ( int i = 0; i < iNumChannels; i++ )
+                    for ( int i = 0; i < iMaxNumChannels; i++ )
                     {
                         vecChannels[iCurChanID].SetGain ( i, (double) 1.0 );
 
@@ -1346,13 +1360,13 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
     CHostAddress InetAddr;
 
     // init return values
-    vecHostAddresses.Init      ( iNumChannels );
-    vecsName.Init              ( iNumChannels );
-    veciJitBufNumFrames.Init   ( iNumChannels );
-    veciNetwFrameSizeFact.Init ( iNumChannels );
+    vecHostAddresses.Init      ( iMaxNumChannels );
+    vecsName.Init              ( iMaxNumChannels );
+    veciJitBufNumFrames.Init   ( iMaxNumChannels );
+    veciNetwFrameSizeFact.Init ( iMaxNumChannels );
 
     // check all possible channels
-    for ( int i = 0; i < iNumChannels; i++ )
+    for ( int i = 0; i < iMaxNumChannels; i++ )
     {
         if ( vecChannels[i].GetAddress ( InetAddr ) )
         {
@@ -1381,11 +1395,9 @@ void CServer::StartStatusHTMLFileWriting ( const QString& strNewFileName,
 
 void CServer::WriteHTMLChannelList()
 {
-    // create channel list
-    CVector<CChannelInfo> vecChanInfo ( CreateChannelList() );
-
     // prepare file and stream
     QFile serverFileListFile ( strServerHTMLFileListName );
+
     if ( !serverFileListFile.open ( QIODevice::WriteOnly | QIODevice::Text ) )
     {
         return;
@@ -1394,18 +1406,8 @@ void CServer::WriteHTMLChannelList()
     QTextStream streamFileOut ( &serverFileListFile );
     streamFileOut << strServerNameWithPort << endl << "<ul>" << endl;
 
-    // get the number of connected clients
-    int iNumConnClients = 0;
-    for ( int i = 0; i < iNumChannels; i++ )
-    {
-        if ( vecChannels[i].IsConnected() )
-        {
-            iNumConnClients++;
-        }
-    }
-
     // depending on number of connected clients write list
-    if ( iNumConnClients == 0 )
+    if ( GetNumberOfConnectedClients() == 0 )
     {
         // no clients are connected -> empty server
         streamFileOut << "  No client connected" << endl;
@@ -1413,7 +1415,7 @@ void CServer::WriteHTMLChannelList()
     else
     {
         // write entry for each connected client
-        for ( int i = 0; i < iNumChannels; i++ )
+        for ( int i = 0; i < iMaxNumChannels; i++ )
         {
             if ( vecChannels[i].IsConnected() )
             {

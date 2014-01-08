@@ -115,7 +115,7 @@ class CServer : public QObject
     Q_OBJECT
 
 public:
-    CServer ( const int      iNewNumChan,
+    CServer ( const int      iNewMaxNumChan,
               const QString& strLoggingFileName,
               const quint16  iPortNumber,
               const QString& strHTMLStatusFileName,
@@ -193,9 +193,8 @@ protected:
     void StartStatusHTMLFileWriting ( const QString& strNewFileName,
                                       const QString& strNewServerNameWithPort );
 
-    int CheckAddr ( const CHostAddress& Addr );
     int GetFreeChan();
-    int FindChannel ( const CHostAddress& InetAddr );
+    int FindChannel ( const CHostAddress& CheckAddr );
     int GetNumberOfConnectedClients();
     CVector<CChannelInfo> CreateChannelList();
     void CreateAndSendChanListForAllConChannels();
@@ -204,17 +203,18 @@ protected:
                                                   const QString& strChatText );
     void WriteHTMLChannelList();
 
-    CVector<int16_t> ProcessData ( const int                   iCurIndex,
-                                   CVector<CVector<int16_t> >& vecvecsData,
-                                   CVector<double>&            vecdGains,
-                                   CVector<int>&               vecNumAudioChannels );
+    void ProcessData ( const int                         iCurNumAudChan,
+                       const CVector<CVector<int16_t> >& vecvecsData,
+                       const CVector<double>&            vecdGains,
+                       const CVector<int>&               vecNumAudioChannels,
+                       CVector<int16_t>&                 vecsOutData );
 
-    virtual void     customEvent ( QEvent* pEvent );
+    virtual void customEvent ( QEvent* pEvent );
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
     CChannel            vecChannels[MAX_NUM_CHANNELS];
-    int                 iNumChannels;
+    int                 iMaxNumChannels;
     CProtocol           ConnLessProtocol;
     QMutex              Mutex;
 
@@ -232,6 +232,7 @@ protected:
     OpusCustomDecoder*  OpusDecoderStereo[MAX_NUM_CHANNELS];
 
     CVector<QString>    vstrChatColors;
+    CVector<int>        vecChanIDsCurConChan;
 
     // actual working objects
     CSocket             Socket;

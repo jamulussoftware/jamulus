@@ -139,6 +139,11 @@ public:
         pSocket->SendPacket ( vecbySendBuf, HostAddr );
     }
 
+    bool GetAndResetbJitterBufferOKFlag()
+    {
+        pSocket->GetAndResetbJitterBufferOKFlag();
+    }
+
 protected:
     QThread  NetworkWorkerThread;
     CSocket* pSocket;

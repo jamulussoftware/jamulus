@@ -137,6 +137,9 @@ LED bar:      lbr
 // define the maximum mono audio buffer size at a sample rate
 // of 48 kHz, this is important for defining the maximum number
 // of bytes to be expected from the network interface
+
+// TODO check why this number is so large...?
+
 #define MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ 4096
 
 // Maximum block size for network input buffer. Consider a maximum sample rate

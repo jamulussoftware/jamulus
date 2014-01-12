@@ -311,10 +311,33 @@ CServer::CServer ( const int      iNewMaxNumChan,
     vstrChatColors[4] = "maroon";
     vstrChatColors[5] = "coral";
 
-    // allocate memory for the channel IDs vector for the current connected
-    // channels where we assume the worst case that all possible channels are
-    // used
+
+    // To avoid audio clitches, in the entire realtime timer audio processing
+    // routine including the ProcessData no memory must be allocated. Since we
+    // do not know the required sizes for the vectors, we allocate memory for
+    // the worst case here:
+
+    // we always use stereo audio buffers (which is the worst case)
+    vecsSendData.Init ( 2 * SYSTEM_FRAME_SIZE_SAMPLES );
+
+    // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init ( iMaxNumChannels );
+    vecvecdGains.Init         ( iMaxNumChannels );
+    vecvecsData.Init          ( iMaxNumChannels );
+    vecNumAudioChannels.Init  ( iMaxNumChannels );
+
+    for ( i = 0; i < iMaxNumChannels; i++ )
+    {
+        // init vectors storing information of all channels
+        vecvecdGains[i].Init ( iMaxNumChannels );
+
+        // we always use stereo audio buffers (see "vecsSendData")
+        vecvecsData[i].Init  ( 2 * SYSTEM_FRAME_SIZE_SAMPLES );
+    }
+
+    // allocate worst case memory for the coded data
+    vecbyCodedData.Init ( MAX_SIZE_BYTES_NETW_BUF );
+
 
     // enable history graph (if requested)
     if ( !strHistoryFileName.isEmpty() )
@@ -646,11 +669,6 @@ void CServer::OnTimer()
 {
     int i, j;
 
-// TODO avoid allocating memory in the time critical processing routine
-CVector<CVector<double> >  vecvecdGains;
-CVector<CVector<int16_t> > vecvecsData;
-CVector<int>               vecNumAudioChannels;
-
 
     // Get data from all connected clients -------------------------------------
     // some inits
@@ -675,18 +693,6 @@ CVector<int>               vecNumAudioChannels;
             }
         }
 
-        // init temporary vectors
-
-// TODO in the entire realtime timer routine including the ProcessData no
-//      memory must be allocated -> use member variables for the vectors and
-//      only change the size on changing the number of connected clients at
-//      the server
-
-// TODO avoid allocating memory in the time critical processing routine
-vecvecdGains.Init        ( iNumClients );
-vecvecsData.Init         ( iNumClients );
-vecNumAudioChannels.Init ( iNumClients );
-
         // process connected channels
         for ( i = 0; i < iNumClients; i++ )
         {
@@ -698,10 +704,6 @@ vecNumAudioChannels.Init ( iNumClients );
                 vecChannels[iCurChanID].GetNumAudioChannels();
 
             vecNumAudioChannels[i] = iCurNumAudChan;
-
-            // init vectors storing information of all channels
-            vecvecdGains[i].Init ( iNumClients );
-            vecvecsData[i].Init  ( iCurNumAudChan * SYSTEM_FRAME_SIZE_SAMPLES );
 
             // get gains of all connected channels
             for ( j = 0; j < iNumClients; j++ )
@@ -718,13 +720,10 @@ vecNumAudioChannels.Init ( iNumClients );
             const int iCeltNumCodedBytes =
                 vecChannels[iCurChanID].GetNetwFrameSize();
 
-            // init temporal data vector and clear input buffers
-// TODO avoid allocating memory in the time critical processing routine
-CVector<uint8_t> vecbyData ( iCeltNumCodedBytes );
-
             // get data
             const EGetDataStat eGetStat =
-                vecChannels[iCurChanID].GetData ( vecbyData );
+                vecChannels[iCurChanID].GetData ( vecbyCodedData,
+                                                  iCeltNumCodedBytes );
 
             // if channel was just disconnected, set flag that connected
             // client list is sent to all other clients
@@ -743,14 +742,14 @@ CVector<uint8_t> vecbyData ( iCeltNumCodedBytes );
                     if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
                     {
                         cc6_celt_decode ( CeltDecoderMono[iCurChanID],
-                                          &vecbyData[0],
+                                          &vecbyCodedData[0],
                                           iCeltNumCodedBytes,
                                           &vecvecsData[i][0] );
                     }
                     else
                     {
                         opus_custom_decode ( OpusDecoderMono[iCurChanID],
-                                             &vecbyData[0],
+                                             &vecbyCodedData[0],
                                              iCeltNumCodedBytes,
                                              &vecvecsData[i][0],
                                              SYSTEM_FRAME_SIZE_SAMPLES );
@@ -763,14 +762,14 @@ CVector<uint8_t> vecbyData ( iCeltNumCodedBytes );
                     if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
                     {
                         cc6_celt_decode ( CeltDecoderStereo[iCurChanID],
-                                          &vecbyData[0],
+                                          &vecbyCodedData[0],
                                           iCeltNumCodedBytes,
                                           &vecvecsData[i][0] );
                     }
                     else
                     {
                         opus_custom_decode ( OpusDecoderStereo[iCurChanID],
-                                             &vecbyData[0],
+                                             &vecbyCodedData[0],
                                              iCeltNumCodedBytes,
                                              &vecvecsData[i][0],
                                              SYSTEM_FRAME_SIZE_SAMPLES );
@@ -846,30 +845,20 @@ CVector<uint8_t> vecbyData ( iCeltNumCodedBytes );
             // get number of audio channels of current channel
             const int iCurNumAudChan = vecNumAudioChannels[i];
 
-            // calculate the number of samples for output vector
-            const int iNumOutSamples =
-                iCurNumAudChan * SYSTEM_FRAME_SIZE_SAMPLES;
-
-            // allocate memory for the send data vector
-// TODO avoid allocating memory in the time critical processing routine
-CVector<int16_t> vecsSendData ( iNumOutSamples );
-
             // generate a sparate mix for each channel
             // actual processing of audio data -> mix
-            ProcessData ( iCurNumAudChan,
-                          vecvecsData,
+            ProcessData ( vecvecsData,
                           vecvecdGains[i],
                           vecNumAudioChannels,
-                          vecsSendData );
+                          vecsSendData,
+                          iCurNumAudChan,
+                          iNumClients );
 
             // get current number of CELT coded bytes
             const int iCeltNumCodedBytes =
                 vecChannels[iCurChanID].GetNetwFrameSize();
 
-            // CELT encoding
-// TODO avoid allocating memory in the time critical processing routine
-CVector<unsigned char> vecCeltData ( iCeltNumCodedBytes );
-
+            // OPUS/CELT encoding
             if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
             {
                 // mono:
@@ -879,7 +868,7 @@ CVector<unsigned char> vecCeltData ( iCeltNumCodedBytes );
                     cc6_celt_encode ( CeltEncoderMono[iCurChanID],
                                       &vecsSendData[0],
                                       NULL,
-                                      &vecCeltData[0],
+                                      &vecbyCodedData[0],
                                       iCeltNumCodedBytes );
                 }
                 else
@@ -894,7 +883,7 @@ opus_custom_encoder_ctl ( OpusEncoderMono[iCurChanID],
                     opus_custom_encode ( OpusEncoderMono[iCurChanID],
                                          &vecsSendData[0],
                                          SYSTEM_FRAME_SIZE_SAMPLES,
-                                         &vecCeltData[0],
+                                         &vecbyCodedData[0],
                                          iCeltNumCodedBytes );
                 }
             }
@@ -907,11 +896,12 @@ opus_custom_encoder_ctl ( OpusEncoderMono[iCurChanID],
                     cc6_celt_encode ( CeltEncoderStereo[iCurChanID],
                                       &vecsSendData[0],
                                       NULL,
-                                      &vecCeltData[0],
+                                      &vecbyCodedData[0],
                                       iCeltNumCodedBytes );
                 }
                 else
                 {
+
 // TODO find a better place than this: the setting does not change all the time
 //      so for speed optimization it would be better to set it only if the network
 //      frame size is changed
@@ -921,13 +911,15 @@ opus_custom_encoder_ctl ( OpusEncoderStereo[iCurChanID],
                     opus_custom_encode ( OpusEncoderStereo[iCurChanID],
                                          &vecsSendData[0],
                                          SYSTEM_FRAME_SIZE_SAMPLES,
-                                         &vecCeltData[0],
+                                         &vecbyCodedData[0],
                                          iCeltNumCodedBytes );
                 }
             }
 
             // send separate mix to current clients
-            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket, vecCeltData );
+            vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
+                                                        vecbyCodedData,
+                                                        iCeltNumCodedBytes );
 
             // update socket buffer size
             vecChannels[iCurChanID].UpdateSocketBufferSize();
@@ -942,16 +934,14 @@ opus_custom_encoder_ctl ( OpusEncoderStereo[iCurChanID],
 }
 
 /// @brief Mix all audio data from all clients together.
-void CServer::ProcessData ( const int                         iCurNumAudChan,
-                            const CVector<CVector<int16_t> >& vecvecsData,
+void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                             const CVector<double>&            vecdGains,
                             const CVector<int>&               vecNumAudioChannels,
-                            CVector<int16_t>&                 vecsOutData )
+                            CVector<int16_t>&                 vecsOutData,
+                            const int                         iCurNumAudChan,
+                            const int                         iNumClients )
 {
     int i, j, k;
-
-    // get the number of clients
-    const int iNumClients = vecvecsData.Size();
 
     // init return vector with zeros since we mix all channels on that vector
     vecsOutData.Reset ( 0 );

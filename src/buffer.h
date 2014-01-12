@@ -72,6 +72,7 @@ public:
 
             // get maximum number of data to be copied
             int iCopyLen = GetAvailData();
+
             if ( iCopyLen > iNewMemSize )
             {
                 iCopyLen = iNewMemSize;
@@ -176,6 +177,7 @@ public:
             // in this simulation only the buffer pointers and the buffer state
             // is updated, no actual data is transferred
             iPutPos += iInSize;
+
             if ( iPutPos >= iMemSize )
             {
                 iPutPos -= iMemSize;
@@ -185,6 +187,7 @@ public:
         {
             // copy new data in internal buffer
             int iCurPos = 0;
+
             if ( iPutPos + iInSize > iMemSize )
             {
                 // remaining space size for second block
@@ -233,16 +236,15 @@ public:
         return true; // no error check in base class, alyways return ok
     }
 
-    virtual bool Get ( CVector<TData>& vecData )
+    virtual bool Get ( CVector<TData>& vecData,
+                       const int       iOutSize )
     {
-        // get size of data to be get from the buffer
-        const int iInSize = vecData.Size();
-
         if ( bIsSimulation )
         {
             // in this simulation only the buffer pointers and the buffer state
             // is updated, no actual data is transferred
-            iGetPos += iInSize;
+            iGetPos += iOutSize;
+
             if ( iGetPos >= iMemSize )
             {
                 iGetPos -= iMemSize;
@@ -252,10 +254,11 @@ public:
         {
             // copy data from internal buffer in output buffer
             int iCurPos = 0;
-            if ( iGetPos + iInSize > iMemSize )
+
+            if ( iGetPos + iOutSize > iMemSize )
             {
                 // remaining data size for second block
-                const int iRemData = iGetPos + iInSize - iMemSize;
+                const int iRemData = iGetPos + iOutSize - iMemSize;
 
                 // data must be read in two steps because of wrap around
                 while ( iGetPos < iMemSize )
@@ -272,12 +275,12 @@ public:
             {
                 // data can be read in one step
                 std::copy ( vecMemory.begin() + iGetPos,
-                            vecMemory.begin() + iGetPos + iInSize,
+                            vecMemory.begin() + iGetPos + iOutSize,
                             vecData.begin() );
 
                 // set the get position one block further (no wrap around needs
                 // to be considered here)
-                iGetPos += iInSize;
+                iGetPos += iOutSize;
             }
         }
 
@@ -383,7 +386,7 @@ public:
     int GetSize() { return iMemSize / iBlockSize; }
 
     virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
-    virtual bool Get ( CVector<uint8_t>& vecbyData );
+    virtual bool Get ( CVector<uint8_t>& vecbyData, const int iOutSize );
 
 protected:
     int iBlockSize;
@@ -401,7 +404,7 @@ public:
                         const bool bPreserve = false );
 
     virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
-    virtual bool Get ( CVector<uint8_t>& vecbyData );
+    virtual bool Get ( CVector<uint8_t>& vecbyData, const int iOutSize );
 
     int GetAutoSetting() { return iCurAutoBufferSizeSetting; }
     void GetErrorRates ( CVector<double>& vecErrRates, double& dLimit );
@@ -444,11 +447,11 @@ public:
 
     int GetSize() const { return iMemSize; }
 
-    bool Put ( const CVector<TData>& vecsData )
+    bool Put ( const CVector<TData>& vecsData,
+               const int             iVecSize )
     {
         // calculate the input size and the end position after copying
-        const int iVecSize = vecsData.Size();
-        const int iEnd     = iPutPos + iVecSize;
+        const int iEnd = iPutPos + iVecSize;
 
         // first check for buffer overrun
         if ( iEnd <= iMemSize )

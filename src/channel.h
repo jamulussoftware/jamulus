@@ -64,11 +64,13 @@ public:
     CChannel ( const bool bNIsServer = true );
 
     EPutDataStat PutData ( const CVector<uint8_t>& vecbyData,
-                           int iNumBytes );
-    EGetDataStat GetData ( CVector<uint8_t>& vecbyData );
+                           const int               iNumBytes );
+    EGetDataStat GetData ( CVector<uint8_t>& vecbyData,
+                           const int         iNumBytes );
 
     void PrepAndSendPacket ( CSocket*                pSocket,
-                             const CVector<uint8_t>& vecbyNPacket );
+                             const CVector<uint8_t>& vecbyNPacket,
+                             const int               iNPacketLen );
 
     void ResetTimeOutCounter() { iConTimeOut = iConTimeOutStartVal; }
     bool IsConnected() const { return iConTimeOut > 0; }

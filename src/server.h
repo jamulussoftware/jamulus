@@ -203,58 +203,65 @@ protected:
                                                   const QString& strChatText );
     void WriteHTMLChannelList();
 
-    void ProcessData ( const int                         iCurNumAudChan,
-                       const CVector<CVector<int16_t> >& vecvecsData,
+    void ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                        const CVector<double>&            vecdGains,
                        const CVector<int>&               vecNumAudioChannels,
-                       CVector<int16_t>&                 vecsOutData );
+                       CVector<int16_t>&                 vecsOutData,
+                       const int                         iCurNumAudChan,
+                       const int                         iNumClients );
 
     virtual void customEvent ( QEvent* pEvent );
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
-    CChannel            vecChannels[MAX_NUM_CHANNELS];
-    int                 iMaxNumChannels;
-    CProtocol           ConnLessProtocol;
-    QMutex              Mutex;
+    CChannel                   vecChannels[MAX_NUM_CHANNELS];
+    int                        iMaxNumChannels;
+    CProtocol                  ConnLessProtocol;
+    QMutex                     Mutex;
 
     // audio encoder/decoder
-    cc6_CELTMode*       CeltModeMono[MAX_NUM_CHANNELS];
-    cc6_CELTEncoder*    CeltEncoderMono[MAX_NUM_CHANNELS];
-    cc6_CELTDecoder*    CeltDecoderMono[MAX_NUM_CHANNELS];
-    cc6_CELTMode*       CeltModeStereo[MAX_NUM_CHANNELS];
-    cc6_CELTEncoder*    CeltEncoderStereo[MAX_NUM_CHANNELS];
-    cc6_CELTDecoder*    CeltDecoderStereo[MAX_NUM_CHANNELS];
-    OpusCustomMode*     OpusMode[MAX_NUM_CHANNELS];
-    OpusCustomEncoder*  OpusEncoderMono[MAX_NUM_CHANNELS];
-    OpusCustomDecoder*  OpusDecoderMono[MAX_NUM_CHANNELS];
-    OpusCustomEncoder*  OpusEncoderStereo[MAX_NUM_CHANNELS];
-    OpusCustomDecoder*  OpusDecoderStereo[MAX_NUM_CHANNELS];
+    cc6_CELTMode*              CeltModeMono[MAX_NUM_CHANNELS];
+    cc6_CELTEncoder*           CeltEncoderMono[MAX_NUM_CHANNELS];
+    cc6_CELTDecoder*           CeltDecoderMono[MAX_NUM_CHANNELS];
+    cc6_CELTMode*              CeltModeStereo[MAX_NUM_CHANNELS];
+    cc6_CELTEncoder*           CeltEncoderStereo[MAX_NUM_CHANNELS];
+    cc6_CELTDecoder*           CeltDecoderStereo[MAX_NUM_CHANNELS];
+    OpusCustomMode*            OpusMode[MAX_NUM_CHANNELS];
+    OpusCustomEncoder*         OpusEncoderMono[MAX_NUM_CHANNELS];
+    OpusCustomDecoder*         OpusDecoderMono[MAX_NUM_CHANNELS];
+    OpusCustomEncoder*         OpusEncoderStereo[MAX_NUM_CHANNELS];
+    OpusCustomDecoder*         OpusDecoderStereo[MAX_NUM_CHANNELS];
 
-    CVector<QString>    vstrChatColors;
-    CVector<int>        vecChanIDsCurConChan;
+    CVector<QString>           vstrChatColors;
+    CVector<int>               vecChanIDsCurConChan;
+
+    CVector<CVector<double> >  vecvecdGains;
+    CVector<CVector<int16_t> > vecvecsData;
+    CVector<int>               vecNumAudioChannels;
+    CVector<int16_t>           vecsSendData;
+    CVector<uint8_t>           vecbyCodedData;
 
     // actual working objects
-    CSocket             Socket;
+    CSocket                    Socket;
 
     // logging
-    CServerLogging      Logging;
+    CServerLogging             Logging;
 
     // HTML file server status
-    bool                bWriteStatusHTMLFile;
-    QString             strServerHTMLFileListName;
-    QString             strServerNameWithPort;
+    bool                       bWriteStatusHTMLFile;
+    QString                    strServerHTMLFileListName;
+    QString                    strServerNameWithPort;
 
-    CHighPrecisionTimer HighPrecisionTimer;
+    CHighPrecisionTimer        HighPrecisionTimer;
 
     // server list
-    CServerListManager  ServerListManager;
+    CServerListManager         ServerListManager;
 
     // GUI settings
-    bool                bAutoRunMinimized;
+    bool                       bAutoRunMinimized;
 
     // messaging
-    QString             strWelcomeMessage;
+    QString                    strWelcomeMessage;
 
 signals:
     void Started();

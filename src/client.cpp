@@ -896,16 +896,16 @@ void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsStereoSndCrd )
         while ( SndCrdConversionBufferIn.GetAvailData() >= iStereoBlockSizeSam )
         {
             // get one block of data for processing
-            SndCrdConversionBufferIn.Get ( vecDataConvBuf );
+            SndCrdConversionBufferIn.Get ( vecDataConvBuf, iStereoBlockSizeSam );
 
             // process audio data
             ProcessAudioDataIntern ( vecDataConvBuf );
 
-            SndCrdConversionBufferOut.Put ( vecDataConvBuf, vecDataConvBuf.Size() );
+            SndCrdConversionBufferOut.Put ( vecDataConvBuf, iStereoBlockSizeSam );
         }
 
         // get processed sound card block out of the conversion buffer
-        SndCrdConversionBufferOut.Get ( vecsStereoSndCrd );
+        SndCrdConversionBufferOut.Get ( vecsStereoSndCrd, vecsStereoSndCrd.Size() );
     }
     else
     {
@@ -1092,7 +1092,9 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
 
         // send coded audio through the network
-        Channel.PrepAndSendPacket ( &Socket, vecCeltData );
+        Channel.PrepAndSendPacket ( &Socket,
+                                    vecCeltData,
+                                    iCeltNumCodedBytes );
     }
 
 
@@ -1119,7 +1121,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     {
         // receive a new block
         const bool bReceiveDataOk =
-            ( Channel.GetData ( vecbyNetwData ) == GS_BUFFER_OK );
+            ( Channel.GetData ( vecbyNetwData, iCeltNumCodedBytes ) == GS_BUFFER_OK );
 
         // invalidate the buffer OK status flag if necessary
         if ( !bReceiveDataOk )

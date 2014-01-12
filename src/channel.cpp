@@ -51,6 +51,9 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
 
     // Connections -------------------------------------------------------------
+    qRegisterMetaType<CVector<uint8_t> > ( "CVector<uint8_t>" );
+    qRegisterMetaType<CHostAddress> ( "CHostAddress" );
+
     QObject::connect ( &Protocol,
         SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
         this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
@@ -433,7 +436,7 @@ void CChannel::Disconnect()
 }
 
 EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
-                                 int                     iNumBytes )
+                                 const int               iNumBytes )
 {
 /*
     Note that this function might be called from a different thread (separate
@@ -558,14 +561,15 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
     return eRet;
 }
 
-EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
+EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData,
+                                 const int         iNumBytes )
 {
     EGetDataStat eGetStatus;
 
     Mutex.lock();
     {
         // the socket access must be inside a mutex
-        const bool bSockBufState = SockBuf.Get ( vecbyData );
+        const bool bSockBufState = SockBuf.Get ( vecbyData, iNumBytes );
 
         // decrease time-out counter
         if ( iConTimeOut > 0 )
@@ -622,13 +626,14 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData )
 }
 
 void CChannel::PrepAndSendPacket ( CSocket*                pSocket,
-                                   const CVector<uint8_t>& vecbyNPacket )
+                                   const CVector<uint8_t>& vecbyNPacket,
+                                   const int               iNPacketLen )
 {
     QMutexLocker locker ( &Mutex );
 
     // use conversion buffer to convert sound card block size in network
     // block size
-    if ( ConvBuf.Put ( vecbyNPacket ) )
+    if ( ConvBuf.Put ( vecbyNPacket, iNPacketLen ) )
     {
         pSocket->SendPacket ( ConvBuf.Get(), GetAddress() );
     }

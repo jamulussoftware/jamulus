@@ -64,28 +64,26 @@ bool CNetBuf::Put ( const CVector<uint8_t>& vecbyData,
     return bPutOK;
 }
 
-bool CNetBuf::Get ( CVector<uint8_t>& vecbyData )
+bool CNetBuf::Get ( CVector<uint8_t>& vecbyData,
+                    const int         iOutSize )
 {
     bool bGetOK = true; // init return value
 
-    // get size of data to be get from the buffer
-    const int iInSize = vecbyData.Size();
-
     // check size
-    if ( ( iInSize == 0 ) || ( iInSize != iBlockSize ) )
+    if ( ( iOutSize == 0 ) || ( iOutSize != iBlockSize ) )
     {
         return false;
     }
 
     // check if there is not enough data available
-    if ( GetAvailData() < iInSize )
+    if ( GetAvailData() < iOutSize )
     {
         return false;
     }
 
     // copy data from internal buffer in output buffer (implemented in base
     // class)
-    CBufferBase<uint8_t>::Get ( vecbyData );
+    CBufferBase<uint8_t>::Get ( vecbyData, iOutSize );
 
     return bGetOK;
 }
@@ -180,16 +178,17 @@ bool CNetBufWithStats::Put ( const CVector<uint8_t>& vecbyData,
     return bPutOK;
 }
 
-bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData )
+bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData,
+                             const int         iOutSize )
 {
     // call base class Get
-    const bool bGetOK = CNetBuf::Get ( vecbyData );
+    const bool bGetOK = CNetBuf::Get ( vecbyData, iOutSize );
 
     // update statistics calculations
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
     {
         ErrorRateStatistic[i].Update (
-            !SimulationBuffer[i].Get ( vecbyData ) );
+            !SimulationBuffer[i].Get ( vecbyData, iOutSize ) );
     }
 
     // update auto setting

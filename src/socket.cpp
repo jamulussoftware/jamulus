@@ -171,6 +171,10 @@ void CSocket::OnDataReceived()
                 case PS_GEN_ERROR:
                     bJitterBufferOK = false;
                     break;
+
+                default:
+                    // do nothing
+                    break;
                 }
             }
             else

@@ -191,8 +191,10 @@ void CChannelFader::SetFaderLevel ( const int iLevel )
 void CChannelFader::SendFaderLevelToServer ( const int iLevel )
 {
     // if mute flag is set or other channel is on solo, do not apply the new
-    // fader value
-    if ( ( pcbMute->checkState() == Qt::Unchecked ) && !bOtherChannelIsSolo )
+    // fader value (exception: we are on solo, in that case we ignore the
+    // "other channel is on solo" flag)
+    if ( ( pcbMute->checkState() == Qt::Unchecked ) &&
+         ( !bOtherChannelIsSolo || IsSolo() ) )
     {
         // emit signal for new fader gain value
         emit gainValueChanged ( CalcFaderGain ( iLevel ) );

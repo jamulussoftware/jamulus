@@ -547,8 +547,8 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
     if ( pChanFader->IsVisible() &&
          !pChanFader->GetReceivedName().isEmpty() )
     {
-        CVector<int>  viOldStoredFaderLevels ( vecStoredFaderLevels );
-        CVector<bool> vbOldStoredFaderIsSolo ( vecStoredFaderIsSolo );
+        CVector<int> viOldStoredFaderLevels ( vecStoredFaderLevels );
+        CVector<int> vbOldStoredFaderIsSolo ( vecStoredFaderIsSolo );
 
         // init temporary list count (may be overwritten later on)
         int iTempListCnt = 0;
@@ -610,7 +610,7 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
             {
                 // copy stored settings values
                 iStoredFaderLevel  = vecStoredFaderLevels[iIdx];
-                bStoredFaderIsSolo = vecStoredFaderIsSolo[iIdx];
+                bStoredFaderIsSolo = vecStoredFaderIsSolo[iIdx] != false;
 
                 // values found and copied, return OK
                 return true;

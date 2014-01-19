@@ -269,7 +269,7 @@ public:
     CChannelCoreInfo ChannelInfo;
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
-    CVector<bool>    vecStoredFaderIsSolo;
+    CVector<int>     vecStoredFaderIsSolo;
 
     // window position/state settings
     QByteArray       vecWindowPosMain;

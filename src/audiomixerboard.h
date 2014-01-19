@@ -103,7 +103,7 @@ public:
     // settings
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
-    CVector<bool>    vecStoredFaderIsSolo;
+    CVector<int>     vecStoredFaderIsSolo;
 
 protected:
     bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,

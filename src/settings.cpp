@@ -363,7 +363,7 @@ void CSettings::Save()
         {
             SetFlagIniSet ( IniXMLDocument, "client",
                             QString ( "storedfaderissolo%1" ).arg ( iIdx ),
-                            pClient->vecStoredFaderIsSolo[iIdx] );
+                            pClient->vecStoredFaderIsSolo[iIdx] != false );
         }
 
         // name

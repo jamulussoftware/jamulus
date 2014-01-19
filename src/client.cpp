@@ -29,8 +29,9 @@
 CClient::CClient ( const quint16 iPortNumber ) :
     vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
     ChannelInfo                      (),
-    vecStoredFaderTags               ( MAX_NUM_STORED_FADER_LEVELS, "" ),
-    vecStoredFaderLevels             ( MAX_NUM_STORED_FADER_LEVELS, AUD_MIX_FADER_MAX ),
+    vecStoredFaderTags               ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
+    vecStoredFaderLevels             ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
+    vecStoredFaderIsSolo             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     vecWindowPosMain                 (), // empty array
     vecWindowPosSettings             (), // empty array
     vecWindowPosChat                 (), // empty array

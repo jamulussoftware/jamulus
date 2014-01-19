@@ -67,7 +67,7 @@ void CSettings::Load()
         }
 
         // stored fader tags
-        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
             pClient->vecStoredFaderTags[iIdx] = FromBase64ToString (
                 GetIniSetting ( IniXMLDocument, "client",
@@ -75,12 +75,24 @@ void CSettings::Load()
         }
 
         // stored fader levels
-        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
-            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "storedfaderlevel%1" ).arg ( iIdx ),
-                 0, AUD_MIX_FADER_MAX, iValue ) )
+            if ( GetNumericIniSet ( IniXMLDocument, "client",
+                                    QString ( "storedfaderlevel%1" ).arg ( iIdx ),
+                                    0, AUD_MIX_FADER_MAX, iValue ) )
             {
                 pClient->vecStoredFaderLevels[iIdx] = iValue;
+            }
+        }
+
+        // stored fader solo state
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+        {
+            if ( GetFlagIniSet ( IniXMLDocument, "client",
+                                 QString ( "storedfaderissolo%1" ).arg ( iIdx ),
+                                 bValue ) )
+            {
+                pClient->vecStoredFaderIsSolo[iIdx] = bValue;
             }
         }
 
@@ -331,7 +343,7 @@ void CSettings::Save()
         }
 
         // stored fader tags
-        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
             PutIniSetting ( IniXMLDocument, "client",
                             QString ( "storedfadertag%1_base64" ).arg ( iIdx ),
@@ -339,11 +351,19 @@ void CSettings::Save()
         }
 
         // stored fader levels
-        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
             SetNumericIniSet ( IniXMLDocument, "client",
                                QString ( "storedfaderlevel%1" ).arg ( iIdx ),
                                pClient->vecStoredFaderLevels[iIdx] );
+        }
+
+        // stored fader solo states
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+        {
+            SetFlagIniSet ( IniXMLDocument, "client",
+                            QString ( "storedfaderissolo%1" ).arg ( iIdx ),
+                            pClient->vecStoredFaderIsSolo[iIdx] );
         }
 
         // name

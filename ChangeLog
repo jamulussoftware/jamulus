@@ -3,6 +3,9 @@
 - true stereo reverberation effect (previously it was a mono reverberation
   effect on both stereo channels)
 
+- store fader solo state
+
+- bug fix: the fader level could not be changed if fader was on solo  
 
 3.3.3
 

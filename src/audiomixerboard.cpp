@@ -188,6 +188,12 @@ void CChannelFader::SetFaderLevel ( const int iLevel )
     }
 }
 
+void CChannelFader::SetFaderIsSolo ( const bool bIsSolo )
+{
+    // changing the state automatically emits the signal, too
+    pcbSolo->setChecked ( bIsSolo );
+}
+
 void CChannelFader::SendFaderLevelToServer ( const int iLevel )
 {
     // if mute flag is set or other channel is on solo, do not apply the new
@@ -234,7 +240,7 @@ void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
     if ( !pcbMute->isChecked() )
     {
         // mute channel if we are not solo but another channel is solo
-        SetMute ( ( !IsSolo() && bOtherChannelIsSolo ) );
+        SetMute ( bOtherChannelIsSolo && !IsSolo() );
     }
 }
 
@@ -318,8 +324,9 @@ QString CChannelFader::GenFaderText ( const CChannelInfo& ChanInfo )
 \******************************************************************************/
 CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     QGroupBox            ( parent ),
-    vecStoredFaderTags   ( MAX_NUM_STORED_FADER_LEVELS, "" ),
-    vecStoredFaderLevels ( MAX_NUM_STORED_FADER_LEVELS, AUD_MIX_FADER_MAX )
+    vecStoredFaderTags   ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
+    vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
+    vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false )
 {
     // set title text (default: no server given)
     SetServerName ( "" );
@@ -414,7 +421,7 @@ void CAudioMixerBoard::HideAll()
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         // before hiding the fader, store its level (if some conditions are fullfilled)
-        StoreFaderLevel ( vecpChanFader[i] );
+        StoreFaderSettings ( vecpChanFader[i] );
 
         vecpChanFader[i]->Hide();
     }
@@ -453,15 +460,16 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                 if ( vecpChanFader[i]->GetReceivedName().compare ( vecChanInfo[j].strName ) )
                 {
                     // the text has actually changed, search in the list of
-                    // stored gains if we have a matching entry
-                    const int iStoredFaderLevel =
-                        GetStoredFaderLevel ( vecChanInfo[j] );
+                    // stored settings if we have a matching entry
+                    int  iStoredFaderLevel;
+                    bool bStoredFaderIsSolo;
 
-                    // only apply retreived fader level if it is different from
-                    // the default one
-                    if ( iStoredFaderLevel != AUD_MIX_FADER_MAX )
+                    if ( GetStoredFaderSettings ( vecChanInfo[j],
+                                                  iStoredFaderLevel,
+                                                  bStoredFaderIsSolo ) )
                     {
                         vecpChanFader[i]->SetFaderLevel ( iStoredFaderLevel );
+                        vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
                     }
                 }
 
@@ -488,7 +496,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
         if ( !bFaderIsUsed )
         {
             // before hiding the fader, store its level (if some conditions are fullfilled)
-            StoreFaderLevel ( vecpChanFader[i] );
+            StoreFaderSettings ( vecpChanFader[i] );
 
             vecpChanFader[i]->Hide();
         }
@@ -533,39 +541,45 @@ void CAudioMixerBoard::OnGainValueChanged ( const int    iChannelIdx,
     emit ChangeChanGain ( iChannelIdx, dValue );
 }
 
-void CAudioMixerBoard::StoreFaderLevel ( CChannelFader* pChanFader )
+void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
 {
     // if the fader was visible and the name is not empty, we store the old gain
     if ( pChanFader->IsVisible() &&
          !pChanFader->GetReceivedName().isEmpty() )
     {
-        CVector<int> viOldStoredFaderLevels ( vecStoredFaderLevels );
+        CVector<int>  viOldStoredFaderLevels ( vecStoredFaderLevels );
+        CVector<bool> vbOldStoredFaderIsSolo ( vecStoredFaderIsSolo );
 
         // init temporary list count (may be overwritten later on)
         int iTempListCnt = 0;
 
-        // check if the new fader level is the default one -> in that case the
-        // entry must be deleted from the list if currently present in the list
-        const bool bNewLevelIsDefaultFaderLevel =
-            ( pChanFader->GetFaderLevel() == AUD_MIX_FADER_MAX );
+        // check if the new fader level and solo state is the default one -> in
+        // that case the entry must be deleted from the list if currently
+        // present in the list
+        const bool bNewFaderLevelAndSoloIsDefault =
+            (
+                ( pChanFader->GetFaderLevel() == AUD_MIX_FADER_MAX ) &&
+                ( !pChanFader->IsSolo() ) // solo=OFF is the default
+            );
 
         // if the new value is not the default value, put it on the top of the
         // list, otherwise just remove it from the list
         const int iOldIdx =
             vecStoredFaderTags.StringFiFoWithCompare ( pChanFader->GetReceivedName(),
-                                                       !bNewLevelIsDefaultFaderLevel );
+                                                       !bNewFaderLevelAndSoloIsDefault );
 
-        if ( !bNewLevelIsDefaultFaderLevel )
+        if ( !bNewFaderLevelAndSoloIsDefault )
         {
-            // current fader level is at the top of the list
+            // current fader level and solo state is at the top of the list
             vecStoredFaderLevels[0] = pChanFader->GetFaderLevel();
+            vecStoredFaderIsSolo[0] = pChanFader->IsSolo();
             iTempListCnt            = 1;
         }
 
-        for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
+        for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
             // first check if we still have space in our data storage
-            if ( iTempListCnt < MAX_NUM_STORED_FADER_LEVELS )
+            if ( iTempListCnt < MAX_NUM_STORED_FADER_SETTINGS )
             {
                 // check for the old index of the current entry (this has to be
                 // skipped), note that per definition: the old index is an illegal
@@ -573,6 +587,7 @@ void CAudioMixerBoard::StoreFaderLevel ( CChannelFader* pChanFader )
                 if ( iIdx != iOldIdx )
                 {
                     vecStoredFaderLevels[iTempListCnt] = viOldStoredFaderLevels[iIdx];
+                    vecStoredFaderIsSolo[iTempListCnt] = vbOldStoredFaderIsSolo[iIdx];
 
                     iTempListCnt++;
                 }
@@ -581,22 +596,28 @@ void CAudioMixerBoard::StoreFaderLevel ( CChannelFader* pChanFader )
     }
 }
 
-int CAudioMixerBoard::GetStoredFaderLevel ( const CChannelInfo& ChanInfo )
+bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
+                                                int&                iStoredFaderLevel,
+                                                bool&               bStoredFaderIsSolo )
 {
     // only do the check if the name string is not empty
     if ( !ChanInfo.strName.isEmpty() )
     {
-        for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_LEVELS; iIdx++ )
+        for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
             // check if fader text is already known in the list
             if ( !vecStoredFaderTags[iIdx].compare ( ChanInfo.strName ) )
             {
-                // use stored level value (return it)
-                return vecStoredFaderLevels[iIdx];
+                // copy stored settings values
+                iStoredFaderLevel  = vecStoredFaderLevels[iIdx];
+                bStoredFaderIsSolo = vecStoredFaderIsSolo[iIdx];
+
+                // values found and copied, return OK
+                return true;
             }
         }
     }
 
-    // return default value
-    return AUD_MIX_FADER_MAX;
+    // return "not OK" since we did not find matching fader settings
+    return false;
 }

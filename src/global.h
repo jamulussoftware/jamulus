@@ -171,8 +171,8 @@ LED bar:      lbr
 // maximum number of elemts in the server address combo box
 #define MAX_NUM_SERVER_ADDR_ITEMS       6
 
-// maximum number of fader levels to be stored (together with the fader tags)
-#define MAX_NUM_STORED_FADER_LEVELS     10
+// maximum number of fader settings to be stored (together with the fader tags)
+#define MAX_NUM_STORED_FADER_SETTINGS   20
 
 // defines for LED input level meter
 #define NUM_STEPS_INP_LEV_METER         8

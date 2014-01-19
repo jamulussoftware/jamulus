@@ -237,6 +237,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // restore fader settings
     MainMixerBoard->vecStoredFaderTags   = pClient->vecStoredFaderTags;
     MainMixerBoard->vecStoredFaderLevels = pClient->vecStoredFaderLevels;
+    MainMixerBoard->vecStoredFaderIsSolo = pClient->vecStoredFaderIsSolo;
 
     // init fader tag line edit and instrument picture
     edtFaderTag->setText ( pClient->ChannelInfo.strName );
@@ -564,6 +565,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     MainMixerBoard->HideAll();
     pClient->vecStoredFaderTags   = MainMixerBoard->vecStoredFaderTags;
     pClient->vecStoredFaderLevels = MainMixerBoard->vecStoredFaderLevels;
+    pClient->vecStoredFaderIsSolo = MainMixerBoard->vecStoredFaderIsSolo;
 
     // default implementation of this event handler routine
     Event->accept();

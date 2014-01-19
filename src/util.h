@@ -128,46 +128,45 @@ public:
     // this function simply converts the type of size to integer
     inline int Size() const { return std::vector<TData>::size(); }
 
+#ifdef _DEBUG_
     // This operator allows for a l-value assignment of this object:
     // CVector[x] = y is possible
     inline TData& operator[] ( const int iPos )
     {
-#ifdef _DEBUG_
         if ( ( iPos < 0 ) || ( iPos > Size() - 1 ) )
         {
             DebugError ( "Writing vector out of bounds", "Vector size",
                 Size(), "New parameter", iPos );
         }
-#endif
+
         return std::vector<TData>::operator[] ( iPos );
     }
 
     inline TData operator[] ( const int iPos ) const
     {
-#ifdef _DEBUG_
         if ( ( iPos < 0 ) || ( iPos > Size() - 1 ) )
         {
             DebugError ( "Reading vector out of bounds", "Vector size",
                 Size(), "New parameter", iPos );
         }
-#endif
+
         return std::vector<TData>::operator[] ( iPos );
     }
 
     inline CVector<TData>& operator= ( const CVector<TData>& vecI )
     {
-#ifdef _DEBUG_
         // vectors which shall be copied MUST have same size!
         if ( vecI.Size() != Size() )
         {
             DebugError ( "Vector operator=() different size", "Vector size",
                 Size(), "New parameter", vecI.Size() );
         }
-#endif
+
         std::vector<TData>::operator= ( vecI );
 
         return *this;
     }
+#endif
 };
 
 

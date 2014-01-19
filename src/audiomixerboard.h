@@ -57,6 +57,7 @@ public:
 
     void UpdateSoloState ( const bool bNewOtherSoloState );
     void SetFaderLevel ( const int iLevel );
+    void SetFaderIsSolo ( const bool bIsSolo );
     int  GetFaderLevel() { return pFader->value(); }
     void Reset();
 
@@ -102,10 +103,13 @@ public:
     // settings
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
+    CVector<bool>    vecStoredFaderIsSolo;
 
 protected:
-    int GetStoredFaderLevel ( const CChannelInfo& ChanInfo );
-    void StoreFaderLevel ( CChannelFader* pChanFader );
+    bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
+                                  int&                iStoredFaderLevel,
+                                  bool&               bStoredFaderIsSolo );
+    void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
 
     void OnGainValueChanged ( const int iChannelIdx, const double dValue );

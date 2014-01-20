@@ -89,6 +89,11 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     // make sure the connect button has the focus
     butConnect->setFocus();
 
+#ifdef ANDROID
+    // for the android version maximize the window
+    setWindowState ( Qt::WindowMaximized );
+#endif
+
 
     // Connections -------------------------------------------------------------
     // list view

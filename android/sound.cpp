@@ -205,6 +205,13 @@ void CSound::Stop()
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
+
+
+// TODO make use of the following:
+// String sampleRate = am.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE));
+// String framesPerBuffer = am.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER));
+
+
     // store buffer size
     iOpenSLBufferSizeMono = iNewPrefMonoBufferSize;
 
@@ -215,7 +222,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 
 // TODO: somehow if the following line is enabled, we get a crash...
 
-    iOpenSLBufferSizeStereo = 2 * iOpenSLBufferSizeMono;
+//    iOpenSLBufferSizeStereo = 2 * iOpenSLBufferSizeMono;
 
     // create memory for intermediate audio buffer
     vecsTmpAudioSndCrdStereo.Init ( iOpenSLBufferSizeStereo );

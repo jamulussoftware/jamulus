@@ -219,10 +219,7 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     CSoundBase::Init ( iOpenSLBufferSizeMono );
 
     // set internal buffer size value and calculate stereo buffer size
-
-// TODO: somehow if the following line is enabled, we get a crash...
-
-//    iOpenSLBufferSizeStereo = 2 * iOpenSLBufferSizeMono;
+    iOpenSLBufferSizeStereo = 2 * iOpenSLBufferSizeMono;
 
     // create memory for intermediate audio buffer
     vecsTmpAudioSndCrdStereo.Init ( iOpenSLBufferSizeStereo );

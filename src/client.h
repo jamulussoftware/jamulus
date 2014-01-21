@@ -46,10 +46,14 @@
 #  if defined ( __APPLE__ ) || defined ( __MACOSX )
 #   include "../mac/sound.h"
 #  else
-#   include "../linux/sound.h"
-#   include <sched.h>
-#   include <socket.h>
-#   include <netdb.h>
+#   ifdef ANDROID
+#    include "../android/sound.h"
+#   else
+#    include "../linux/sound.h"
+#    include <sched.h>
+#    include <socket.h>
+#    include <netdb.h>
+#   endif
 #  endif
 # endif
 #endif

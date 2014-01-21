@@ -110,15 +110,21 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
                                       &recorder );
 
     // get the audio recorder simple buffer queue interface
+// TEST
+SLresult test =
     (*recorderObject)->GetInterface ( recorderObject,
                                       SL_IID_ANDROIDSIMPLEBUFFERQUEUE,
                                       &recorderSimpleBufQueue );
-
+// TEST
+if ( test == SL_RESULT_SUCCESS )
+{
     // register the audio input callback
     (*recorderSimpleBufQueue)->RegisterCallback ( recorderSimpleBufQueue,
                                                   processInput,
                                                   this );
-
+}
+// TEST
+#if 0
     // configure the output buffer queue
     SLDataLocator_AndroidSimpleBufferQueue outBufferQueue;
     outBufferQueue.locatorType = SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE;
@@ -169,6 +175,7 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     (*playerSimpleBufQueue)->RegisterCallback ( playerSimpleBufQueue,
                                                 processOutput,
                                                 this );
+#endif
 }
 
 void CSound::CloseOpenSL()

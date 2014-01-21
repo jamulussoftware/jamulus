@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2013
+ * Copyright (c) 2004-2014
  *
  * Author(s):
  *	Volker Fischer
@@ -36,10 +36,10 @@ Rquired software: QT, a compiler like Visual Studio, ASIO development files
 Linux:
 ------
 
-Required packages: QT4 (devel packages, too!), Jack (devel packages, too!)
+Required packages: Build-Essential, QT4 (devel packages, too!), Jack (devel packages, too!)
                    On the most common Linux distributions, the following
-				   command should prepare the system for compilation:
-				   sudo apt-get install build-essential libqt4-dev libjack-dev
+                   command should prepare the system for compilation:
+                   sudo apt-get install build-essential libqt4-dev libjack-dev
 
 - qmake Jamulus.pro
 - make clean
@@ -49,6 +49,8 @@ Required packages: QT4 (devel packages, too!), Jack (devel packages, too!)
 Use qmake "CONFIG+=nosound" Jamulus.pro for pure server installation which
 does not require the Jack packages.
 
+Note that the "make clean" is essential to remove the automatically generated Qt files which
+are present in the .tar.gz file and may not match the Qt version you are using.
 
 Mac:
 ----

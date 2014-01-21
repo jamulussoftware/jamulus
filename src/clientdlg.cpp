@@ -1078,7 +1078,7 @@ OnTimerStatus();
     ledBuffers->Reset();
     ledDelay->Reset();
     ledChat->Reset();
-    ClientSettingsDlg.ResetStatus();
+    ClientSettingsDlg.ResetStatusAndPingLED();
 
     // clear mixer board (remove all faders)
     MainMixerBoard->HideAll();

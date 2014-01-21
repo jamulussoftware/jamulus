@@ -56,7 +56,12 @@ public:
                          Qt::WindowFlags f = 0 );
 
     void SetStatus ( const CMultiColorLED::ELightColor eStatus ) { ledNetw->SetLight ( eStatus ); }
-    void ResetStatus() { ledNetw->Reset(); }
+
+    void ResetStatusAndPingLED()
+    {
+        ledNetw->Reset();
+        ledOverallDelay->Reset();
+    }
 
     void SetPingTimeResult ( const int                         iPingTime,
                              const int                         iOverallDelayMs,

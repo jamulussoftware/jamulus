@@ -43,6 +43,7 @@ void CSocket::Init ( const quint16 iPortNumber )
         // incremented port numbers
         quint16 iClientPortIncrement = 10; // start value: port nubmer plus ten
         bSuccess                     = false; // initialization for while loop
+
         while ( !bSuccess &&
                 ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
         {
@@ -136,9 +137,6 @@ void CSocket::OnDataReceived()
 {
     while ( SocketDevice.hasPendingDatagrams() )
     {
-        QHostAddress SenderAddress;
-        quint16      SenderPort;
-
         // read block from network interface and query address of sender
         const int iNumBytesRead =
             SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
@@ -153,7 +151,8 @@ void CSocket::OnDataReceived()
         }
 
         // convert address of client
-        const CHostAddress RecHostAddr ( SenderAddress, SenderPort );
+        RecHostAddr.InetAddr = SenderAddress;
+        RecHostAddr.iPort    = SenderPort;
 
         if ( bIsClient )
         {

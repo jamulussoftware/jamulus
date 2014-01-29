@@ -51,8 +51,10 @@ CChannel::CChannel ( const bool bNIsServer ) :
 
 
     // Connections -------------------------------------------------------------
-    qRegisterMetaType<CVector<uint8_t> > ( "CVector<uint8_t>" );
-    qRegisterMetaType<CHostAddress> ( "CHostAddress" );
+
+// TODO if we later do not fire vectors in the emits, we can remove this again
+qRegisterMetaType<CVector<uint8_t> > ( "CVector<uint8_t>" );
+qRegisterMetaType<CHostAddress> ( "CHostAddress" );
 
     QObject::connect ( &Protocol,
         SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
@@ -477,6 +479,7 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                 {
                     // fire a signal so that an other class can process this type of
                     // message
+// TODO a copy of the vector is used -> avoid malloc in real-time routine
                     emit DetectedCLMessage ( vecbyMesBodyData, iRecID );
 
                     // set status flag
@@ -485,6 +488,7 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                 else
                 {
                     // parse the message assuming this is a regular protocol message
+// TODO a copy of the vector is used -> avoid malloc in real-time routine
                     emit ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
 
                     // note that protocol OK is not correct here since we do not
@@ -624,6 +628,23 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData,
 
     return eGetStatus;
 }
+
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+void CChannel::PrepAndSendPacketHPS ( CHighPrioSocket*        pSocket,
+                                      const CVector<uint8_t>& vecbyNPacket,
+                                      const int               iNPacketLen )
+{
+// TODO Doubled code!!! Same code as in PrepAndSendPacket (see below)!!!
+    QMutexLocker locker ( &Mutex );
+
+    // use conversion buffer to convert sound card block size in network
+    // block size
+    if ( ConvBuf.Put ( vecbyNPacket, iNPacketLen ) )
+    {
+        pSocket->SendPacket ( ConvBuf.Get(), GetAddress() );
+    }
+}
+#endif
 
 void CChannel::PrepAndSendPacket ( CSocket*                pSocket,
                                    const CVector<uint8_t>& vecbyNPacket,

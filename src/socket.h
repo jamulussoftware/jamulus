@@ -110,11 +110,6 @@ public:
     CHighPrioSocket ( CChannel*     pNewChannel,
                       const quint16 iPortNumber )
     {
-        // we have to register some classes to the Qt signal/slot mechanism
-        // since we have thread crossings with the threaded code
-        qRegisterMetaType<CVector<uint8_t> > ( "CVector<uint8_t>" );
-        qRegisterMetaType<CHostAddress> ( "CHostAddress" );
-
         // Creation of the new socket thread which has to have the highest
         // possible thread priority to make sure the jitter buffer is reliably
         // filled with the network audio packets and does not get interrupted
@@ -143,7 +138,7 @@ public:
 
     bool GetAndResetbJitterBufferOKFlag()
     {
-        pSocket->GetAndResetbJitterBufferOKFlag();
+        return pSocket->GetAndResetbJitterBufferOKFlag();
     }
 
 protected:

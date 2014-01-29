@@ -68,9 +68,16 @@ public:
     EGetDataStat GetData ( CVector<uint8_t>& vecbyData,
                            const int         iNumBytes );
 
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+    void PrepAndSendPacketHPS ( CHighPrioSocket*        pSocket,
+                                const CVector<uint8_t>& vecbyNPacket,
+                                const int               iNPacketLen );
+#endif
+
     void PrepAndSendPacket ( CSocket*                pSocket,
                              const CVector<uint8_t>& vecbyNPacket,
                              const int               iNPacketLen );
+
 
     void ResetTimeOutCounter() { iConTimeOut = iConTimeOutStartVal; }
     bool IsConnected() const { return iConTimeOut > 0; }

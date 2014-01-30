@@ -32,11 +32,11 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     // set up stream format
     SLDataFormat_PCM streamFormat;
     streamFormat.formatType    = SL_DATAFORMAT_PCM;
-    streamFormat.numChannels   = 2;
-    streamFormat.samplesPerSec = SYSTEM_SAMPLE_RATE_HZ * 1000; // unit is mHz
+    streamFormat.numChannels   = 1;// TEST 2;
+    streamFormat.samplesPerSec = SL_SAMPLINGRATE_16;//TEST SYSTEM_SAMPLE_RATE_HZ * 1000; // unit is mHz
     streamFormat.bitsPerSample = SL_PCMSAMPLEFORMAT_FIXED_16;
     streamFormat.containerSize = 16;
-    streamFormat.channelMask   = SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT;
+    streamFormat.channelMask   = SL_SPEAKER_FRONT_CENTER;// TEST SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT;
     streamFormat.endianness    = SL_BYTEORDER_LITTLEENDIAN;
 
     // create the OpenSL root engine object
@@ -101,8 +101,6 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
                                      recorderReq );
 
     // realize the audio recorder
-// TEST
-SLresult test =
     (*recorderObject)->Realize ( recorderObject,
                                  SL_BOOLEAN_FALSE );
 
@@ -112,21 +110,15 @@ SLresult test =
                                       &recorder );
 
     // get the audio recorder simple buffer queue interface
-// TEST
-//SLresult test =
     (*recorderObject)->GetInterface ( recorderObject,
                                       SL_IID_ANDROIDSIMPLEBUFFERQUEUE,
                                       &recorderSimpleBufQueue );
-// TEST
-if ( test == SL_RESULT_SUCCESS )
-{
+
     // register the audio input callback
     (*recorderSimpleBufQueue)->RegisterCallback ( recorderSimpleBufQueue,
                                                   processInput,
                                                   this );
-}
-// TEST
-#if 0
+
     // configure the output buffer queue
     SLDataLocator_AndroidSimpleBufferQueue outBufferQueue;
     outBufferQueue.locatorType = SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE;
@@ -177,7 +169,6 @@ if ( test == SL_RESULT_SUCCESS )
     (*playerSimpleBufQueue)->RegisterCallback ( playerSimpleBufQueue,
                                                 processOutput,
                                                 this );
-#endif
 }
 
 void CSound::CloseOpenSL()

@@ -29,15 +29,24 @@
 CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
     CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg )
 {
-    // set up stream format
-    SLDataFormat_PCM streamFormat;
-    streamFormat.formatType    = SL_DATAFORMAT_PCM;
-    streamFormat.numChannels   = 1;// TEST 2;
-    streamFormat.samplesPerSec = SL_SAMPLINGRATE_16;//TEST SYSTEM_SAMPLE_RATE_HZ * 1000; // unit is mHz
-    streamFormat.bitsPerSample = SL_PCMSAMPLEFORMAT_FIXED_16;
-    streamFormat.containerSize = 16;
-    streamFormat.channelMask   = SL_SPEAKER_FRONT_CENTER;// TEST SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT;
-    streamFormat.endianness    = SL_BYTEORDER_LITTLEENDIAN;
+    // set up stream formats for input and output
+    SLDataFormat_PCM inStreamFormat;
+    inStreamFormat.formatType    = SL_DATAFORMAT_PCM;
+    inStreamFormat.numChannels   = 1;
+    inStreamFormat.samplesPerSec = SL_SAMPLINGRATE_16;
+    inStreamFormat.bitsPerSample = SL_PCMSAMPLEFORMAT_FIXED_16;
+    inStreamFormat.containerSize = 16;
+    inStreamFormat.channelMask   = SL_SPEAKER_FRONT_CENTER;
+    inStreamFormat.endianness    = SL_BYTEORDER_LITTLEENDIAN;
+
+    SLDataFormat_PCM outStreamFormat;
+    outStreamFormat.formatType    = SL_DATAFORMAT_PCM;
+    outStreamFormat.numChannels   = 2;
+    outStreamFormat.samplesPerSec = SYSTEM_SAMPLE_RATE_HZ * 1000; // unit is mHz
+    outStreamFormat.bitsPerSample = SL_PCMSAMPLEFORMAT_FIXED_16;
+    outStreamFormat.containerSize = 16;
+    outStreamFormat.channelMask   = SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT;
+    outStreamFormat.endianness    = SL_BYTEORDER_LITTLEENDIAN;
 
     // create the OpenSL root engine object
     slCreateEngine ( &engineObject,
@@ -86,7 +95,7 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     // configure the audio (data) sink for input
     SLDataSink inDataSink;
     inDataSink.pLocator = &inBufferQueue;
-    inDataSink.pFormat  = &streamFormat;
+    inDataSink.pFormat  = &inStreamFormat;
 
     // create the audio recorder
     const SLInterfaceID recorderIds[] = { SL_IID_ANDROIDSIMPLEBUFFERQUEUE };
@@ -127,7 +136,7 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     // configure the audio (data) source for output
     SLDataSource outDataSource;
     outDataSource.pLocator = &outBufferQueue;
-    outDataSource.pFormat  = &streamFormat;
+    outDataSource.pFormat  = &outStreamFormat;
 
     // configure the output mix
     SLDataLocator_OutputMix outputMix;

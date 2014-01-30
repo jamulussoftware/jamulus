@@ -77,9 +77,16 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
 
     // set up list view for connected clients (note that the last column size
     // must not be specified since this column takes all the remaining space)
+#ifdef ANDROID
+    // for Android we need larger numbers because of the default font size
+    lvwServers->setColumnWidth ( 0, 200 );
+    lvwServers->setColumnWidth ( 1, 130 );
+    lvwServers->setColumnWidth ( 2, 100 );
+#else
     lvwServers->setColumnWidth ( 0, 165 );
     lvwServers->setColumnWidth ( 1, 65 );
     lvwServers->setColumnWidth ( 2, 60 );
+#endif
     lvwServers->clear();
 
     // add invisible column which is used for sorting the list

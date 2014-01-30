@@ -90,7 +90,7 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     // configure the input buffer queue
     SLDataLocator_AndroidSimpleBufferQueue inBufferQueue;
     inBufferQueue.locatorType = SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE;
-    inBufferQueue.numBuffers  = 1; // max number of buffers in queue
+    inBufferQueue.numBuffers  = 2; // max number of buffers in queue
 
     // configure the audio (data) sink for input
     SLDataSink inDataSink;
@@ -131,7 +131,7 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     // configure the output buffer queue
     SLDataLocator_AndroidSimpleBufferQueue outBufferQueue;
     outBufferQueue.locatorType = SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE;
-    outBufferQueue.numBuffers  = 1; // max number of buffers in queue
+    outBufferQueue.numBuffers  = 2; // max number of buffers in queue
 
     // configure the audio (data) source for output
     SLDataSource outDataSource;
@@ -191,6 +191,31 @@ void CSound::CloseOpenSL()
 
 void CSound::Start()
 {
+// TEST We have to supply the interface with initial buffers, otherwise
+// the rendering will not start. As a quick hack we use the buffers in
+// an unknown state which could lead to lowed noises at the very startup
+// of the rendering (which is not too bad).
+// Note that the number of buffers enqueued here must match the maximum
+// numbers of buffers configured in the constructor of this class.
+
+    // enqueue initial buffers for record
+    (*recorderSimpleBufQueue)->Enqueue ( recorderSimpleBufQueue,
+                                         &vecsTmpAudioSndCrdStereo[0],
+                                         iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
+
+    (*recorderSimpleBufQueue)->Enqueue ( recorderSimpleBufQueue,
+                                         &vecsTmpAudioSndCrdStereo[0],
+                                         iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
+
+    // enqueue initial buffers for playback
+    (*playerSimpleBufQueue)->Enqueue ( playerSimpleBufQueue,
+                                       &vecsTmpAudioSndCrdStereo[0],
+                                       iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
+
+    (*playerSimpleBufQueue)->Enqueue ( playerSimpleBufQueue,
+                                       &vecsTmpAudioSndCrdStereo[0],
+                                       iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
+
     // start the rendering
     (*recorder)->SetRecordState ( recorder, SL_RECORDSTATE_RECORDING );
     (*player)->SetPlayState ( player, SL_PLAYSTATE_PLAYING );

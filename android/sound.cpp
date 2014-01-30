@@ -101,6 +101,8 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
                                      recorderReq );
 
     // realize the audio recorder
+// TEST
+SLresult test =
     (*recorderObject)->Realize ( recorderObject,
                                  SL_BOOLEAN_FALSE );
 
@@ -111,7 +113,7 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
 
     // get the audio recorder simple buffer queue interface
 // TEST
-SLresult test =
+//SLresult test =
     (*recorderObject)->GetInterface ( recorderObject,
                                       SL_IID_ANDROIDSIMPLEBUFFERQUEUE,
                                       &recorderSimpleBufQueue );

@@ -254,6 +254,18 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
 // TODO make use of the following:
 // String sampleRate = am.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE));
 // String framesPerBuffer = am.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER));
+/*
+// get the Audio IO DEVICE CAPABILITIES interface
+SLAudioIODeviceCapabilitiesItf audioCapabilities;
+
+(*engineObject)->GetInterface ( engineObject,
+    SL_IID_AUDIOIODEVICECAPABILITIES,
+    &audioCapabilities );
+
+(*audioCapabilities)->QueryAudioInputCapabilities ( audioCapabilities,
+                                                    inputDeviceIDs[i],
+                                                    &audioInputDescriptor );
+*/
 
 
     // store buffer size
@@ -311,8 +323,6 @@ for ( int i = 0; i < pSound->iModifiedInBufSize; i++ )
             pSound->vecsTmpAudioInSndCrd[i];
 }
 
-    // call processing callback function
-    pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
 }
 
 void CSound::processOutput ( SLAndroidSimpleBufferQueueItf bufferQueue,
@@ -327,6 +337,9 @@ void CSound::processOutput ( SLAndroidSimpleBufferQueueItf bufferQueue,
     }
 
     QMutexLocker locker ( &pSound->Mutex );
+
+    // call processing callback function
+    pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
 
     // enqueue the buffer for playback
     (*bufferQueue)->Enqueue ( bufferQueue,

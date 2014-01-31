@@ -375,14 +375,6 @@ int main ( int argc, char** argv )
     // set application priority class -> high priority
     SetPriorityClass ( GetCurrentProcess(), HIGH_PRIORITY_CLASS );
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-    // Since we have a higher priority for the entire application, we can give
-    // the GUI thread the lowest possible priority which is still above the
-    // Windows "normal" priority so that it does not slow down the sound card
-    // and network working threads.
-    QThread::currentThread()->setPriority ( QThread::LowestPriority );
-#endif
-
     // For accessible support we need to add a plugin to qt. The plugin has to
     // be located in the install directory of the software by the installer.
     // Here, we set the path to our application path.

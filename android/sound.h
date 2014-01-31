@@ -46,11 +46,17 @@ public:
     // these variables should be protected but cannot since we want
     // to access them from the callback function
     CVector<short> vecsTmpAudioSndCrdStereo;
+
+// TEST
+CVector<short> vecsTmpAudioInSndCrd;
+int            iModifiedInBufSize;
+
     int            iOpenSLBufferSizeMono;
     int            iOpenSLBufferSizeStereo;
 
 protected:
 
+    void InitializeOpenSL();
     void CloseOpenSL();
 
     // callbacks

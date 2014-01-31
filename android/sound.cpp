@@ -29,6 +29,11 @@
 CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
     CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg )
 {
+
+}
+
+void CSound::InitializeOpenSL()
+{
     // set up stream formats for input and output
     SLDataFormat_PCM inStreamFormat;
     inStreamFormat.formatType    = SL_DATAFORMAT_PCM;
@@ -191,6 +196,8 @@ void CSound::CloseOpenSL()
 
 void CSound::Start()
 {
+    InitializeOpenSL();
+
 // TEST We have to supply the interface with initial buffers, otherwise
 // the rendering will not start. As a quick hack we use the buffers in
 // an unknown state which could lead to lowed noises at the very startup
@@ -231,10 +238,13 @@ void CSound::Stop()
     (*player)->SetPlayState ( player, SL_PLAYSTATE_STOPPED );
 
     // clear the buffers
+    (*recorderSimpleBufQueue)->Clear ( recorderSimpleBufQueue );
     (*playerSimpleBufQueue)->Clear ( playerSimpleBufQueue );
 
     // call base class
     CSoundBase::Stop();
+
+    CloseOpenSL();
 }
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
@@ -258,6 +268,20 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     // create memory for intermediate audio buffer
     vecsTmpAudioSndCrdStereo.Init ( iOpenSLBufferSizeStereo );
 
+
+// TEST
+#if ( SYSTEM_SAMPLE_RATE_HZ != 48000 )
+# error "Only a system sample rate of 48 kHz is supported by this module"
+#endif
+// audio interface number of channels is 1 and the sample rate
+// is 16 kHz -> just copy samples and perform no filtering as a
+// first simple solution
+// 48 kHz / 16 kHz = factor 3 (note that the buffer size mono might
+// be divisible by three, therefore we will get a lot of drop outs)
+iModifiedInBufSize = iOpenSLBufferSizeMono / 3;
+vecsTmpAudioInSndCrd.Init ( iModifiedInBufSize );
+
+
     return iOpenSLBufferSizeMono;
 }
 
@@ -276,8 +300,16 @@ void CSound::processInput ( SLAndroidSimpleBufferQueueItf bufferQueue,
 
     // enqueue the buffer for record
     (*bufferQueue)->Enqueue ( bufferQueue,
-                              &pSound->vecsTmpAudioSndCrdStereo[0],
-                              pSound->iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
+                              &pSound->vecsTmpAudioInSndCrd[0],
+                              pSound->iModifiedInBufSize * 2 /* 2 bytes */ );
+
+// upsampling (without filtering) and channel management
+for ( int i = 0; i < pSound->iModifiedInBufSize; i++ )
+{
+    pSound->vecsTmpAudioSndCrdStereo[6 * i] =
+        pSound->vecsTmpAudioSndCrdStereo[6 * i + 1] =
+            pSound->vecsTmpAudioInSndCrd[i];
+}
 
     // call processing callback function
     pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );

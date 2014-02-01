@@ -74,6 +74,8 @@ void CSocket::Init ( const quint16 iPortNumber )
 #ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
     if ( bIsClient )
     {
+// TEST We do a test where we call "waitForReadyRead" instead of even driven method.
+/*
         // We have to use a blocked queued connection since in case we use a
         // separate socket thread, the "readyRead" signal would occur and our
         // "OnDataReceived" function would be run in another thread. This could
@@ -82,6 +84,7 @@ void CSocket::Init ( const quint16 iPortNumber )
         // socket notifiers for same socket" may occur.
         QObject::connect ( &SocketDevice, SIGNAL ( readyRead() ),
             this, SLOT ( OnDataReceived() ), Qt::BlockingQueuedConnection );
+*/
     }
     else
     {

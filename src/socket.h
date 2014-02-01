@@ -72,6 +72,11 @@ public:
 
     bool GetAndResetbJitterBufferOKFlag();
 
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+// TEST
+void waitForReadyRead() { SocketDevice.waitForReadyRead(); }
+#endif
+
 protected:
     void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );
 
@@ -117,6 +122,9 @@ public:
         // http://qt-project.org/wiki/Threads_Events_QObjects
         pSocket = new CSocket ( pNewChannel, iPortNumber );
         pSocket->moveToThread ( &NetworkWorkerThread );
+
+        NetworkWorkerThread.SetSocket ( pSocket );
+
         NetworkWorkerThread.start ( QThread::TimeCriticalPriority );
 
         // connect the "InvalidPacketReceived" signal
@@ -142,8 +150,35 @@ public:
     }
 
 protected:
-    QThread  NetworkWorkerThread;
-    CSocket* pSocket;
+    class CSocketThread : public QThread
+    {
+    public:
+        CSocketThread ( CSocket* pNewSocket = NULL, QObject* parent = 0 ) :
+          pSocket ( pNewSocket ), QThread ( parent ), bRun ( true ) {}
+
+        void SetSocket ( CSocket* pNewSocket ) { pSocket = pNewSocket; }
+        void Stop() { bRun = false;
+// TODO wait for thread to be deleted...
+        }
+
+    protected:
+        void run() {
+            if ( pSocket != NULL )
+            {
+                while ( bRun )
+                {
+                    pSocket->waitForReadyRead();
+                    pSocket->OnDataReceived();
+                }
+            }
+        }
+
+        CSocket* pSocket;
+        bool     bRun;
+    };
+
+    CSocketThread NetworkWorkerThread;
+    CSocket*      pSocket;
 
 signals:
     void InvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,

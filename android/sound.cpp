@@ -199,11 +199,10 @@ void CSound::Start()
     InitializeOpenSL();
 
 // TEST We have to supply the interface with initial buffers, otherwise
-// the rendering will not start. As a quick hack we use the buffers in
-// an unknown state which could lead to lowed noises at the very startup
-// of the rendering (which is not too bad).
+// the rendering will not start.
 // Note that the number of buffers enqueued here must match the maximum
 // numbers of buffers configured in the constructor of this class.
+vecsTmpAudioSndCrdStereo.Reset ( 0 );
 
     // enqueue initial buffers for record
     (*recorderSimpleBufQueue)->Enqueue ( recorderSimpleBufQueue,
@@ -316,6 +315,7 @@ void CSound::processInput ( SLAndroidSimpleBufferQueueItf bufferQueue,
                               pSound->iModifiedInBufSize * 2 /* 2 bytes */ );
 
 // upsampling (without filtering) and channel management
+pSound->vecsTmpAudioSndCrdStereo.Reset ( 0 );
 for ( int i = 0; i < pSound->iModifiedInBufSize; i++ )
 {
     pSound->vecsTmpAudioSndCrdStereo[6 * i] =

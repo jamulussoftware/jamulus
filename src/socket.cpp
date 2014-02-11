@@ -57,7 +57,7 @@ void CSocket::Init ( const quint16 iPortNumber )
 
 #ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
         // preinitialize socket in address (only the port number is missing)
-        SOCKADDR_IN UdpSocketInAddr;
+        sockaddr_in UdpSocketInAddr;
         UdpSocketInAddr.sin_family      = AF_INET;
         UdpSocketInAddr.sin_addr.s_addr = INADDR_ANY;
 
@@ -67,8 +67,8 @@ void CSocket::Init ( const quint16 iPortNumber )
             UdpSocketInAddr.sin_port = htons ( iPortNumber + iClientPortIncrement );
 
             bSuccess = ( bind ( UdpSocket ,
-                                (SOCKADDR*) &UdpSocketInAddr,
-                                sizeof ( SOCKADDR_IN ) ) == 0 );
+                                (sockaddr*) &UdpSocketInAddr,
+                                sizeof ( sockaddr_in ) ) == 0 );
 
             iClientPortIncrement++;
         }
@@ -169,7 +169,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
         // note that the client uses the socket directly for performance reasons
         if ( bIsClient )
         {
-            SOCKADDR_IN UdpSocketOutAddr;
+            sockaddr_in UdpSocketOutAddr;
 
             UdpSocketOutAddr.sin_family      = AF_INET;
             UdpSocketOutAddr.sin_port        = htons ( HostAddr.iPort );
@@ -179,8 +179,8 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
                      (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
                      iVecSizeOut,
                      0,
-                     (SOCKADDR*) &UdpSocketOutAddr,
-                     sizeof ( SOCKADDR_IN ) );
+                     (sockaddr*) &UdpSocketOutAddr,
+                     sizeof ( sockaddr_in ) );
         }
         else
         {
@@ -219,14 +219,18 @@ void CSocket::OnDataReceived()
     {
         // read block from network interface and query address of sender
 #ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-        SOCKADDR_IN SenderAddr;
-        int SenderAddrSize = sizeof ( SOCKADDR_IN );
+        sockaddr_in SenderAddr;
+#ifdef _WIN32
+        int SenderAddrSize = sizeof ( sockaddr_in );
+#else
+        socklen_t SenderAddrSize = sizeof ( sockaddr_in );
+#endif
 
         const long iNumBytesRead = recvfrom ( UdpSocket,
                                               (char*) &vecbyRecBuf[0],
                                               MAX_SIZE_BYTES_NETW_BUF,
                                               0,
-                                              (SOCKADDR*) &SenderAddr,
+                                              (sockaddr*) &SenderAddr,
                                               &SenderAddrSize );
 #else
         const int iNumBytesRead =

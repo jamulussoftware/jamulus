@@ -35,6 +35,12 @@
 #include "global.h"
 #include "protocol.h"
 #include "util.h"
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+# ifndef _WIN32
+#  include <netinet/in.h>
+#  include <sys/socket.h>
+# endif
+#endif
 
 // The header files channel.h and server.h require to include this header file
 // so we get a cyclic dependency. To solve this issue, a prototype of the

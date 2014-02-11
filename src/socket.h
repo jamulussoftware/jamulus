@@ -163,7 +163,7 @@ protected:
     {
     public:
         CSocketThread ( CSocket* pNewSocket = NULL, QObject* parent = 0 ) :
-          pSocket ( pNewSocket ), QThread ( parent ), bRun ( true ) {}
+          QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) {}
 
         void SetSocket ( CSocket* pNewSocket ) { pSocket = pNewSocket; }
         void Stop() { bRun = false;

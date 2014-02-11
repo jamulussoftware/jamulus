@@ -489,7 +489,7 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                     // message
 // TODO a copy of the vector is used -> avoid malloc in real-time routine
 #ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-                    emit pSocket->DetectedCLMessage ( vecbyMesBodyData, iRecID );
+                    pSocket->EmitDetectedCLMessage ( vecbyMesBodyData, iRecID );
 #else
                     emit DetectedCLMessage ( vecbyMesBodyData, iRecID );
 #endif
@@ -502,7 +502,7 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                     // parse the message assuming this is a regular protocol message
 // TODO a copy of the vector is used -> avoid malloc in real-time routine
 #ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-                    emit pSocket->ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
+                    pSocket->EmitParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
 #else
                     emit ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
 #endif

@@ -74,11 +74,30 @@ public:
 
     bool GetAndResetbJitterBufferOKFlag();
 
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+    void EmitDetectedCLMessage ( const CVector<uint8_t>& vecbyMesBodyData,
+                                 const int               iRecID )
+    {
+        emit DetectedCLMessage ( vecbyMesBodyData, iRecID );
+    }
+
+    void EmitParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
+                                const int               iRecCounter,
+                                const int               iRecID )
+    {
+        emit ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
+    }
+#endif
+
 protected:
     void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );
 
 #ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+# ifdef _WIN32
     SOCKET           UdpSocket;
+# else
+    int              UdpSocket;
+# endif
 #endif
     QUdpSocket       SocketDevice;
 

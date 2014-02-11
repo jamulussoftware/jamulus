@@ -63,8 +63,14 @@ public:
     // use constructor initialization in the server for a vector of channels
     CChannel ( const bool bNIsServer = true );
 
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+    EPutDataStat PutData ( const CVector<uint8_t>& vecbyData,
+                           const int               iNumBytes,
+                           CSocket*                pSocket = 0 ); // TODO remove the "= 0"!
+#else
     EPutDataStat PutData ( const CVector<uint8_t>& vecbyData,
                            const int               iNumBytes );
+#endif
     EGetDataStat GetData ( CVector<uint8_t>& vecbyData,
                            const int         iNumBytes );
 
@@ -226,6 +232,14 @@ public slots:
         // note that the return value is ignored here
         Protocol.ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
     }
+
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,
+                           int              iRecID )
+{
+    emit DetectedCLMessage ( vecbyMesBodyData, iRecID );
+}
+#endif
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );

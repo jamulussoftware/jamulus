@@ -67,20 +67,21 @@ public:
           bIsClient ( false ),
           bJitterBufferOK ( true ) { Init ( iPortNumber ); }
 
+    virtual ~CSocket();
+
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
                       const CHostAddress&     HostAddr );
 
     bool GetAndResetbJitterBufferOKFlag();
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-// TEST
-void waitForReadyRead() { SocketDevice.waitForReadyRead(); }
-#endif
-
 protected:
     void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );
 
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+    SOCKET           UdpSocket;
+#endif
     QUdpSocket       SocketDevice;
+
     QMutex           Mutex;
 
     CVector<uint8_t> vecbyRecBuf;
@@ -99,6 +100,14 @@ public slots:
     void OnDataReceived();
 
 signals:
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+    void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,
+                             int              iRecID );
+
+    void ParseMessageBody ( CVector<uint8_t> vecbyMesBodyData,
+                            int              iRecCounter,
+                            int              iRecID );
+#endif
     void InvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
                                  int              iNumBytesRead,
                                  CHostAddress     RecHostAddr );
@@ -167,7 +176,6 @@ protected:
             {
                 while ( bRun )
                 {
-                    pSocket->waitForReadyRead();
                     pSocket->OnDataReceived();
                 }
             }

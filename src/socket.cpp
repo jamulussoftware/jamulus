@@ -29,6 +29,17 @@
 /* Implementation *************************************************************/
 void CSocket::Init ( const quint16 iPortNumber )
 {
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+# ifdef _WIN32
+    // for the Windows socket usage we have to start it up first
+    WSADATA wsa;
+    WSAStartup ( MAKEWORD(1, 0), &wsa ); // TODO check for error and exit application on error
+# endif
+
+    // create the UDP socket
+    UdpSocket = socket ( AF_INET, SOCK_DGRAM, 0 );
+#endif
+
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
 
@@ -44,6 +55,24 @@ void CSocket::Init ( const quint16 iPortNumber )
         quint16 iClientPortIncrement = 10; // start value: port nubmer plus ten
         bSuccess                     = false; // initialization for while loop
 
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+        // preinitialize socket in address (only the port number is missing)
+        SOCKADDR_IN UdpSocketInAddr;
+        UdpSocketInAddr.sin_family      = AF_INET;
+        UdpSocketInAddr.sin_addr.s_addr = INADDR_ANY;
+
+        while ( !bSuccess &&
+                ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
+        {
+            UdpSocketInAddr.sin_port = htons ( iPortNumber + iClientPortIncrement );
+
+            bSuccess = ( bind ( UdpSocket ,
+                                (SOCKADDR*) &UdpSocketInAddr,
+                                sizeof ( SOCKADDR_IN ) ) == 0 );
+
+            iClientPortIncrement++;
+        }
+#else
         while ( !bSuccess &&
                 ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
         {
@@ -53,6 +82,7 @@ void CSocket::Init ( const quint16 iPortNumber )
 
             iClientPortIncrement++;
         }
+#endif
     }
     else
     {
@@ -85,6 +115,18 @@ void CSocket::Init ( const quint16 iPortNumber )
         QObject::connect ( &SocketDevice, SIGNAL ( readyRead() ),
             this, SLOT ( OnDataReceived() ), Qt::BlockingQueuedConnection );
 */
+
+
+// TEST
+QObject::connect ( this,
+    SIGNAL ( ParseMessageBody ( CVector<uint8_t>, int, int ) ),
+    pChannel, SLOT ( OnParseMessageBody ( CVector<uint8_t>, int, int ) ) );
+
+QObject::connect ( this,
+    SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ),
+    pChannel, SLOT ( OnDetectedCLMessage ( CVector<uint8_t>, int ) ) );
+
+
     }
     else
     {
@@ -97,6 +139,16 @@ void CSocket::Init ( const quint16 iPortNumber )
 #else
     QObject::connect ( &SocketDevice, SIGNAL ( readyRead() ),
         this, SLOT ( OnDataReceived() ) );
+#endif
+}
+
+CSocket::~CSocket()
+{
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+# ifdef _WIN32
+    // the Windows socket must be cleanup on shutdown
+    WSACleanup();
+# endif
 #endif
 }
 
@@ -113,11 +165,34 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
         // char vector in "const char*", for this we first convert the const
         // uint8_t vector in a read/write uint8_t vector and then do the cast to
         // const char*)
-        SocketDevice.writeDatagram (
-            (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-            iVecSizeOut,
-            HostAddr.InetAddr,
-            HostAddr.iPort );
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+        // note that the client uses the socket directly for performance reasons
+        if ( bIsClient )
+        {
+            SOCKADDR_IN UdpSocketOutAddr;
+
+            UdpSocketOutAddr.sin_family      = AF_INET;
+            UdpSocketOutAddr.sin_port        = htons ( HostAddr.iPort );
+			UdpSocketOutAddr.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
+
+            sendto ( UdpSocket,
+                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                     iVecSizeOut,
+                     0,
+                     (SOCKADDR*) &UdpSocketOutAddr,
+                     sizeof ( SOCKADDR_IN ) );
+        }
+        else
+        {
+#endif
+            SocketDevice.writeDatagram (
+                (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                iVecSizeOut,
+                HostAddr.InetAddr,
+                HostAddr.iPort );
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+        }
+#endif
     }
 }
 
@@ -138,14 +213,28 @@ bool CSocket::GetAndResetbJitterBufferOKFlag()
 
 void CSocket::OnDataReceived()
 {
+#ifndef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
     while ( SocketDevice.hasPendingDatagrams() )
+#endif
     {
         // read block from network interface and query address of sender
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+        SOCKADDR_IN SenderAddr;
+        int SenderAddrSize = sizeof ( SOCKADDR_IN );
+
+        const long iNumBytesRead = recvfrom ( UdpSocket,
+                                              (char*) &vecbyRecBuf[0],
+                                              MAX_SIZE_BYTES_NETW_BUF,
+                                              0,
+                                              (SOCKADDR*) &SenderAddr,
+                                              &SenderAddrSize );
+#else
         const int iNumBytesRead =
             SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
                                         MAX_SIZE_BYTES_NETW_BUF,
                                         &SenderAddress,
                                         &SenderPort );
+#endif
 
         // check if an error occurred
         if ( iNumBytesRead < 0 )
@@ -154,8 +243,13 @@ void CSocket::OnDataReceived()
         }
 
         // convert address of client
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+        RecHostAddr.InetAddr.setAddress ( ntohl ( SenderAddr.sin_addr.s_addr ) );
+        RecHostAddr.iPort = ntohs ( SenderAddr.sin_port );
+#else
         RecHostAddr.InetAddr = SenderAddress;
         RecHostAddr.iPort    = SenderPort;
+#endif
 
         if ( bIsClient )
         {
@@ -167,7 +261,11 @@ void CSocket::OnDataReceived()
                  pChannel->IsEnabled() )
             {
                 // this network packet is valid, put it in the channel
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+                switch ( pChannel->PutData ( vecbyRecBuf, iNumBytesRead, this ) )
+#else
                 switch ( pChannel->PutData ( vecbyRecBuf, iNumBytesRead ) )
+#endif
                 {
                 case PS_AUDIO_ERR:
                 case PS_GEN_ERROR:

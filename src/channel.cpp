@@ -112,9 +112,11 @@ QObject::connect ( &Protocol,
 
     // this connection is intended for a thread transition if we have a
     // separate socket thread running
+#ifndef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
     QObject::connect ( this,
         SIGNAL ( ParseMessageBody ( CVector<uint8_t>, int, int ) ),
         this, SLOT ( OnParseMessageBody ( CVector<uint8_t>, int, int ) ) );
+#endif
 }
 
 bool CChannel::ProtocolIsEnabled()
@@ -437,8 +439,14 @@ void CChannel::Disconnect()
     }
 }
 
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
+                                 const int               iNumBytes,
+                                 CSocket*                pSocket )
+#else
 EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                                  const int               iNumBytes )
+#endif
 {
 /*
     Note that this function might be called from a different thread (separate
@@ -480,7 +488,11 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                     // fire a signal so that an other class can process this type of
                     // message
 // TODO a copy of the vector is used -> avoid malloc in real-time routine
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+                    emit pSocket->DetectedCLMessage ( vecbyMesBodyData, iRecID );
+#else
                     emit DetectedCLMessage ( vecbyMesBodyData, iRecID );
+#endif
 
                     // set status flag
                     eRet = PS_PROT_OK;
@@ -489,7 +501,11 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                 {
                     // parse the message assuming this is a regular protocol message
 // TODO a copy of the vector is used -> avoid malloc in real-time routine
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+                    emit pSocket->ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
+#else
                     emit ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
+#endif
 
                     // note that protocol OK is not correct here since we do not
                     // check if the protocol was ok since we emit just a signal
@@ -558,6 +574,11 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
         if ( bNewConnection )
         {
             // inform other objects that new connection was established
+
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+// TODO socket thread???
+#endif
+
             emit NewConnection();
         }
     }

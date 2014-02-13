@@ -107,20 +107,20 @@ public slots:
         // generate random protocol message
         switch ( GenRandomIntInRange ( 0, 24 ) )
         {
-        case 0:
+        case 0: // PROTMESSID_JITT_BUF_SIZE
             Protocol.CreateJitBufMes ( GenRandomIntInRange ( 0, 10 ) );
             break;
 
-        case 1:
+        case 1: // PROTMESSID_REQ_JITT_BUF_SIZE
             Protocol.CreateReqJitBufMes();
             break;
 
-        case 2:
+        case 2: // PROTMESSID_CHANNEL_GAIN
             Protocol.CreateChanGainMes ( GenRandomIntInRange ( 0, 20 ),
                                          GenRandomIntInRange ( -100, 100 ) );
             break;
 
-        case 3:
+        case 3: // PROTMESSID_CONN_CLIENTS_LIST_NAME
             vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
             vecChanInfo[0].iIpAddr = GenRandomIntInRange ( 0, 100000 );
             vecChanInfo[0].strName = GenRandomString();
@@ -128,7 +128,7 @@ public slots:
             Protocol.CreateConClientListNameMes ( vecChanInfo );
             break;
 
-        case 4:
+        case 4: // PROTMESSID_CONN_CLIENTS_LIST
             vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
             vecChanInfo[0].iIpAddr = GenRandomIntInRange ( 0, 100000 );
             vecChanInfo[0].strName = GenRandomString();
@@ -136,37 +136,37 @@ public slots:
             Protocol.CreateConClientListMes ( vecChanInfo );
             break;
 
-        case 5:
+        case 5: // PROTMESSID_REQ_CONN_CLIENTS_LIST
             Protocol.CreateReqConnClientsList();
             break;
 
-        case 6:
+        case 6: // PROTMESSID_CHANNEL_NAME
             Protocol.CreateChanNameMes ( GenRandomString() );
             break;
 
-        case 7:
+        case 7: // PROTMESSID_CHANNEL_INFOS
             ChannelCoreInfo.eCountry =
                 static_cast<QLocale::Country> ( GenRandomIntInRange ( 0, 100 ) );
 
             ChannelCoreInfo.eSkillLevel =
                 static_cast<ESkillLevel> ( GenRandomIntInRange ( 0, 3 ) );
 
-            ChannelCoreInfo.iInstrument = GenRandomIntInRange ( 0, 100000 );
+            ChannelCoreInfo.iInstrument = GenRandomIntInRange ( 0, 100 );
             ChannelCoreInfo.strCity     = GenRandomString();
             ChannelCoreInfo.strName     = GenRandomString();
 
             Protocol.CreateChanInfoMes ( ChannelCoreInfo );
             break;
 
-        case 8:
+        case 8: // PROTMESSID_REQ_CHANNEL_INFOS
             Protocol.CreateReqChanInfoMes();
             break;
 
-        case 9:
+        case 9: // PROTMESSID_CHAT_TEXT
             Protocol.CreateChatTextMes ( GenRandomString() );
             break;
 
-        case 10:
+        case 10: // PROTMESSID_NETW_TRANSPORT_PROPS
             NetTrProps.eAudioCodingType =
                 static_cast<EAudComprType> ( GenRandomIntInRange ( 0, 2 ) );
 
@@ -180,30 +180,30 @@ public slots:
             Protocol.CreateNetwTranspPropsMes ( NetTrProps );
             break;
 
-        case 11:
+        case 11: // PROTMESSID_REQ_NETW_TRANSPORT_PROPS
             Protocol.CreateReqNetwTranspPropsMes();
             break;
 
-        case 12:
+        case 12: // PROTMESSID_OPUS_SUPPORTED
             Protocol.CreateOpusSupportedMes();
             break;
 
-        case 13:
+        case 13: // PROTMESSID_CLM_PING_MS
             Protocol.CreateCLPingMes ( CurHostAddress,
                                        GenRandomIntInRange ( -2, 1000 ) );
             break;
 
-        case 14:
+        case 14: // PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS
             Protocol.CreateCLPingWithNumClientsMes ( CurHostAddress,
                                                      GenRandomIntInRange ( -2, 1000 ),
                                                      GenRandomIntInRange ( -2, 1000 ) );
             break;
 
-        case 15:
+        case 15: // PROTMESSID_CLM_SERVER_FULL
             Protocol.CreateCLServerFullMes ( CurHostAddress );
             break;
 
-        case 16:
+        case 16: // PROTMESSID_CLM_REGISTER_SERVER
             ServerInfo.bPermanentOnline =
                 static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
 
@@ -220,11 +220,11 @@ public slots:
                                                  ServerInfo );
             break;
 
-        case 17:
+        case 17: // PROTMESSID_CLM_UNREGISTER_SERVER
             Protocol.CreateCLUnregisterServerMes ( CurHostAddress );
             break;
 
-        case 18:
+        case 18: // PROTMESSID_CLM_SERVER_LIST
             vecServerInfo[0].bPermanentOnline =
                 static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
 
@@ -242,24 +242,24 @@ public slots:
                                              vecServerInfo );
             break;
 
-        case 19:
+        case 19: // PROTMESSID_CLM_REQ_SERVER_LIST
             Protocol.CreateCLReqServerListMes ( CurHostAddress );
             break;
 
-        case 20:
+        case 20: // PROTMESSID_CLM_SEND_EMPTY_MESSAGE
             Protocol.CreateCLSendEmptyMesMes ( CurHostAddress,
                                                CurHostAddress );
             break;
 
-        case 21:
+        case 21: // PROTMESSID_CLM_EMPTY_MESSAGE
             Protocol.CreateCLEmptyMes ( CurHostAddress );
             break;
 
-        case 22:
+        case 22: // PROTMESSID_CLM_DISCONNECTION
             Protocol.CreateCLDisconnection ( CurHostAddress );
             break;
 
-        case 23:
+        case 23: // PROTMESSID_ACKN
             Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
                 GenRandomIntInRange ( -100, 100 ) );
             break;

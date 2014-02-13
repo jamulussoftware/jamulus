@@ -162,6 +162,8 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
     CNetworkTransportProps NetworkTransportProps;
 
     Mutex.lock();
+    MutexSocketBuf.lock();
+    MutexConvBuf.lock();
     {
         // store new values
         eAudioCompressionType = eNewAudComprType;
@@ -179,6 +181,8 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         NetworkTransportProps =
             GetNetworkTransportPropsFromCurrentSettings();
     }
+    MutexConvBuf.unlock();
+    MutexSocketBuf.unlock();
     Mutex.unlock();
 
     // tell the server about the new network settings
@@ -198,7 +202,7 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
         // only apply parameter if new parameter is different from current one
         if ( iCurSockBufNumFrames != iNewNumFrames )
         {
-            Mutex.lock();
+            MutexSocketBuf.lock();
             {
                 // store new value
                 iCurSockBufNumFrames = iNewNumFrames;
@@ -216,7 +220,7 @@ bool CChannel::SetSockBufNumFrames ( const int  iNewNumFrames,
 
                 ReturnValue = false; // -> no error
             }
-            Mutex.unlock();
+            MutexSocketBuf.unlock();
         }
     }
 
@@ -381,6 +385,8 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
     if ( bIsServer )
     {
         Mutex.lock();
+        MutexSocketBuf.lock();
+        MutexConvBuf.lock();
         {
             // store received parameters
             eAudioCompressionType = NetworkTransportProps.eAudioCodingType;
@@ -396,6 +402,8 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             // init conversion buffer
             ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
         }
+        MutexConvBuf.unlock();
+        MutexSocketBuf.unlock();
         Mutex.unlock();
 
         // if old CELT codec is used, inform the client that the new OPUS codec
@@ -531,7 +539,7 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
             // This seems to be an audio packet (only try to parse audio if it
             // was not a protocol packet):
 
-            Mutex.lock();
+            MutexSocketBuf.lock();
             {
                 // only process audio if packet has correct size
                 if ( iNumBytes == ( iNetwFrameSize * iNetwFrameSizeFact ) )
@@ -568,18 +576,17 @@ EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
                 // reset time-out counter
                 ResetTimeOutCounter();
             }
-            Mutex.unlock();
+            MutexSocketBuf.unlock();
         }
 
         if ( bNewConnection )
         {
             // inform other objects that new connection was established
-
 #ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-// TODO socket thread???
-#endif
-
+            pSocket->EmitNewConnection();
+#else
             emit NewConnection();
+#endif
         }
     }
 
@@ -591,7 +598,7 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData,
 {
     EGetDataStat eGetStatus;
 
-    Mutex.lock();
+    MutexSocketBuf.lock();
     {
         // the socket access must be inside a mutex
         const bool bSockBufState = SockBuf.Get ( vecbyData, iNumBytes );
@@ -638,7 +645,7 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData,
             eGetStatus = GS_CHAN_NOT_CONNECTED;
         }
     }
-    Mutex.unlock();
+    MutexSocketBuf.unlock();
 
     // in case we are just disconnected, we have to fire a message
     if ( eGetStatus == GS_CHAN_NOW_DISCONNECTED )
@@ -656,7 +663,7 @@ void CChannel::PrepAndSendPacketHPS ( CHighPrioSocket*        pSocket,
                                       const int               iNPacketLen )
 {
 // TODO Doubled code!!! Same code as in PrepAndSendPacket (see below)!!!
-    QMutexLocker locker ( &Mutex );
+    QMutexLocker locker ( &MutexConvBuf );
 
     // use conversion buffer to convert sound card block size in network
     // block size
@@ -671,7 +678,7 @@ void CChannel::PrepAndSendPacket ( CSocket*                pSocket,
                                    const CVector<uint8_t>& vecbyNPacket,
                                    const int               iNPacketLen )
 {
-    QMutexLocker locker ( &Mutex );
+    QMutexLocker locker ( &MutexConvBuf );
 
     // use conversion buffer to convert sound card block size in network
     // block size

@@ -95,6 +95,11 @@ public:
     {
         emit ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
     }
+
+    void EmitNewConnection()
+    {
+        emit NewConnection();
+    }
 #endif
 
 protected:
@@ -134,6 +139,8 @@ signals:
     void ParseMessageBody ( CVector<uint8_t> vecbyMesBodyData,
                             int              iRecCounter,
                             int              iRecID );
+
+    void NewConnection();
 #endif
     void InvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
                                  int              iNumBytesRead,

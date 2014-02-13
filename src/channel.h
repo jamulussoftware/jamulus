@@ -215,6 +215,8 @@ protected:
     int               iNumAudioChannels;
 
     QMutex            Mutex;
+    QMutex            MutexSocketBuf;
+    QMutex            MutexConvBuf;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
@@ -238,6 +240,11 @@ void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,
                            int              iRecID )
 {
     emit DetectedCLMessage ( vecbyMesBodyData, iRecID );
+}
+
+void OnNewConnection()
+{
+    emit NewConnection();
 }
 #endif
 

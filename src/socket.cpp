@@ -126,6 +126,9 @@ QObject::connect ( this,
     SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ),
     pChannel, SLOT ( OnDetectedCLMessage ( CVector<uint8_t>, int ) ) );
 
+QObject::connect ( this,
+    SIGNAL ( NewConnection ( CVector<uint8_t>, int ) ),
+    pChannel, SLOT ( OnNewConnection ( CVector<uint8_t>, int ) ) );
 
     }
     else

@@ -81,6 +81,8 @@ public:
     bool GetAndResetbJitterBufferOKFlag();
 
 #ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+    void Close();
+
     void EmitDetectedCLMessage ( const CVector<uint8_t>& vecbyMesBodyData,
                                  const int               iRecID )
     {
@@ -147,22 +149,22 @@ class CHighPrioSocket : public QObject
 
 public:
     CHighPrioSocket ( CChannel*     pNewChannel,
-                      const quint16 iPortNumber )
+                      const quint16 iPortNumber ) :
+        Socket ( pNewChannel, iPortNumber )
     {
         // Creation of the new socket thread which has to have the highest
         // possible thread priority to make sure the jitter buffer is reliably
         // filled with the network audio packets and does not get interrupted
         // by other GUI threads. The following code is based on:
         // http://qt-project.org/wiki/Threads_Events_QObjects
-        pSocket = new CSocket ( pNewChannel, iPortNumber );
-        pSocket->moveToThread ( &NetworkWorkerThread );
+        Socket.moveToThread ( &NetworkWorkerThread );
 
-        NetworkWorkerThread.SetSocket ( pSocket );
+        NetworkWorkerThread.SetSocket ( &Socket );
 
         NetworkWorkerThread.start ( QThread::TimeCriticalPriority );
 
         // connect the "InvalidPacketReceived" signal
-        QObject::connect ( pSocket,
+        QObject::connect ( &Socket,
             SIGNAL ( InvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ),
             SIGNAL ( InvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ) );
     }
@@ -175,12 +177,12 @@ public:
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
                       const CHostAddress&     HostAddr )
     {
-        pSocket->SendPacket ( vecbySendBuf, HostAddr );
+        Socket.SendPacket ( vecbySendBuf, HostAddr );
     }
 
     bool GetAndResetbJitterBufferOKFlag()
     {
-        return pSocket->GetAndResetbJitterBufferOKFlag();
+        return Socket.GetAndResetbJitterBufferOKFlag();
     }
 
 protected:
@@ -190,17 +192,30 @@ protected:
         CSocketThread ( CSocket* pNewSocket = NULL, QObject* parent = 0 ) :
           QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) {}
 
-        void SetSocket ( CSocket* pNewSocket ) { pSocket = pNewSocket; }
-        void Stop() { bRun = false;
-// TODO wait for thread to be deleted...
+        virtual ~CSocketThread()
+        {
+            // disable run flag so that the thread loop can be exit
+            bRun = false;
+
+            // to leave blocking wait for receive
+            pSocket->Close();
+
+            // give thread some time to terminate
+            wait ( 5000 );
         }
+
+        void SetSocket ( CSocket* pNewSocket ) { pSocket = pNewSocket; }
 
     protected:
         void run() {
+            // make sure the socket pointer is initialized (should be always the
+            // case)
             if ( pSocket != NULL )
             {
                 while ( bRun )
                 {
+                    // this function is a blocking function (waiting for network
+                    // packets to be received and processed)
                     pSocket->OnDataReceived();
                 }
             }
@@ -211,7 +226,7 @@ protected:
     };
 
     CSocketThread NetworkWorkerThread;
-    CSocket*      pSocket;
+    CSocket       Socket;
 
 signals:
     void InvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,

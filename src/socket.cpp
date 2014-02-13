@@ -142,6 +142,15 @@ QObject::connect ( this,
 #endif
 }
 
+#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+void CSocket::Close()
+{
+    // closesocket will cause recvfrom to return with an error because the
+    // socket is closed -> then the thread can safely be shut down
+    closesocket ( UdpSocket );
+}
+#endif
+
 CSocket::~CSocket()
 {
 #ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
@@ -240,8 +249,8 @@ void CSocket::OnDataReceived()
                                         &SenderPort );
 #endif
 
-        // check if an error occurred
-        if ( iNumBytesRead < 0 )
+        // check if an error occurred or no data could be read
+        if ( iNumBytesRead <= 0 )
         {
             return;
         }

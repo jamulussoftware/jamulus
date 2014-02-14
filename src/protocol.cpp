@@ -1824,7 +1824,6 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     int&                    iID )
 {
     int i;
-    int iLenBy;
     int iCurPos;
 
     // vector must be at least "MESS_LEN_WITHOUT_DATA_BYTE" bytes long
@@ -1853,7 +1852,7 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
     iCnt = static_cast<int> ( GetValFromStream ( vecbyData, iCurPos, 1 ) );
 
     // 2 bytes length
-    iLenBy = static_cast<int> ( GetValFromStream ( vecbyData, iCurPos, 2 ) );
+    const int iLenBy = static_cast<int> ( GetValFromStream ( vecbyData, iCurPos, 2 ) );
 
     // make sure the length is correct
     if ( iLenBy != iNumBytesIn - MESS_LEN_WITHOUT_DATA_BYTE )
@@ -1882,6 +1881,10 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
 
 
     // Extract actual data -----------------------------------------------------
+
+// TODO this memory allocation is done in the real time thread but should be
+//      done in the low prioirity protocol management thread
+
     vecbyMesBodyData.Init ( iLenBy );
 
     iCurPos = MESS_HEADER_LENGTH_BYTE; // start from beginning of data

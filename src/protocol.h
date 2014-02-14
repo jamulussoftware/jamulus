@@ -69,6 +69,9 @@
 #define PROTMESSID_CLM_DISCONNECTION          1010 // disconnection
 
 
+// TODO implement message for querying the version and operating system of the server
+
+
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
 #define MESS_LEN_WITHOUT_DATA_BYTE      ( MESS_HEADER_LENGTH_BYTE + 2 /* CRC (2) */ )
@@ -117,11 +120,11 @@ public:
     void CreateCLEmptyMes ( const CHostAddress& InetAddr );
     void CreateCLDisconnection ( const CHostAddress& InetAddr );
 
-    bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
-                             const int               iNumBytesIn,
-                             CVector<uint8_t>&       vecbyMesBodyData,
-                             int&                    iRecCounter,
-                             int&                    iRecID );
+    static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
+                                    const int               iNumBytesIn,
+                                    CVector<uint8_t>&       vecbyMesBodyData,
+                                    int&                    iRecCounter,
+                                    int&                    iRecID );
 
     bool ParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
                             const int               iRecCounter,
@@ -184,9 +187,9 @@ protected:
                                  int&              iPos,
                                  const QByteArray& sStringUTF8 );
 
-    uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
-                                int&                    iPos,
-                                const int               iNumOfBytes );
+    static uint32_t GetValFromStream ( const CVector<uint8_t>& vecIn,
+                                       int&                    iPos,
+                                       const int               iNumOfBytes );
 
     bool GetStringFromStream ( const CVector<uint8_t>& vecIn,
                                int&                    iPos,

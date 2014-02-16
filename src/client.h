@@ -327,11 +327,7 @@ void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
     bool                    bIsInitializationPhase;
     CVector<unsigned char>  vecCeltData;
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
     CHighPrioSocket         Socket;
-#else
-    CSocket                 Socket;
-#endif
     CSound                  Sound;
     CStereoSignalLevelMeter SignalLevelMeter;
 
@@ -377,10 +373,12 @@ void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
-    void OnInvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
-                                   int              iNumBytesRead,
-                                   CHostAddress     RecHostAddr );
-    void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData, int iRecID );
+    void OnInvalidPacketReceived ( CHostAddress RecHostAddr );
+
+    void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,
+                               int              iRecID,
+                               CHostAddress     RecHostAddr );
+
     void OnReqJittBufSize() { CreateServerJitterBufferMessage(); }
     void OnJittBufSizeChanged ( int iNewJitBufSize );
     void OnReqChanInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
@@ -388,7 +386,9 @@ public slots:
     void OnCLPingReceived ( CHostAddress InetAddr,
                             int          iMs );
 
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
+    void OnSendCLProtMessage ( CHostAddress     InetAddr,
+                               CVector<uint8_t> vecMessage );
+
     void OnCLPingWithNumClientsReceived ( CHostAddress InetAddr,
                                           int          iMs,
                                           int          iNumClients );
@@ -403,8 +403,10 @@ signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
     void PingTimeReceived ( int iPingTime );
+
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );
+
     void CLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
                                             int          iPingTime,
                                             int          iNumClients );

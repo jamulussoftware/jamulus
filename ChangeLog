@@ -5,6 +5,9 @@
 
 - store fader solo state
 
+- improved stability of the audio stream by reducing audio drop outs (by
+  using a separate socket thread)
+
 - bug fix: the fader level could not be changed if fader was on solo  
 
 3.3.3

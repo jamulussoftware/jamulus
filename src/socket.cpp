@@ -29,19 +29,25 @@
 /* Implementation *************************************************************/
 void CSocket::Init ( const quint16 iPortNumber )
 {
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-# ifdef _WIN32
+#ifdef _WIN32
     // for the Windows socket usage we have to start it up first
+
+// TODO check for error and exit application on error
+
     WSADATA wsa;
-    WSAStartup ( MAKEWORD(1, 0), &wsa ); // TODO check for error and exit application on error
-# endif
+    WSAStartup ( MAKEWORD(1, 0), &wsa );
+#endif
 
     // create the UDP socket
     UdpSocket = socket ( AF_INET, SOCK_DGRAM, 0 );
-#endif
 
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
+
+    // preinitialize socket in address (only the port number is missing)
+    sockaddr_in UdpSocketInAddr;
+    UdpSocketInAddr.sin_family      = AF_INET;
+    UdpSocketInAddr.sin_addr.s_addr = INADDR_ANY;
 
     // initialize the listening socket
     bool bSuccess;
@@ -55,12 +61,6 @@ void CSocket::Init ( const quint16 iPortNumber )
         quint16 iClientPortIncrement = 10; // start value: port nubmer plus ten
         bSuccess                     = false; // initialization for while loop
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-        // preinitialize socket in address (only the port number is missing)
-        sockaddr_in UdpSocketInAddr;
-        UdpSocketInAddr.sin_family      = AF_INET;
-        UdpSocketInAddr.sin_addr.s_addr = INADDR_ANY;
-
         while ( !bSuccess &&
                 ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
         {
@@ -72,25 +72,17 @@ void CSocket::Init ( const quint16 iPortNumber )
 
             iClientPortIncrement++;
         }
-#else
-        while ( !bSuccess &&
-                ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
-        {
-            bSuccess = SocketDevice.bind (
-                QHostAddress ( QHostAddress::Any ),
-                iPortNumber + iClientPortIncrement );
-
-            iClientPortIncrement++;
-        }
-#endif
     }
     else
     {
         // for the server, only try the given port number and do not try out
         // other port numbers to bind since it is imporatant that the server
         // gets the desired port number
-        bSuccess = SocketDevice.bind (
-            QHostAddress ( QHostAddress::Any ), iPortNumber );
+        UdpSocketInAddr.sin_port = htons ( iPortNumber );
+
+        bSuccess = ( bind ( UdpSocket ,
+                            (sockaddr*) &UdpSocketInAddr,
+                            sizeof ( sockaddr_in ) ) == 0 );
     }
 
     if ( !bSuccess )
@@ -100,67 +92,66 @@ void CSocket::Init ( const quint16 iPortNumber )
             "the software is already running).", "Network Error" );
     }
 
-    // connect the "activated" signal
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
+
+    // Connections -------------------------------------------------------------
+    // it is important to do the following connections in this class since we
+    // have a thread transition
+
+    // we have different connections for client and server
     if ( bIsClient )
     {
-// TEST We do a test where we call "waitForReadyRead" instead of even driven method.
-/*
-        // We have to use a blocked queued connection since in case we use a
-        // separate socket thread, the "readyRead" signal would occur and our
-        // "OnDataReceived" function would be run in another thread. This could
-        // lead to a situation that a new "readRead" occurs while the processing
-        // of the previous signal was not finished -> the error: "Multiple
-        // socket notifiers for same socket" may occur.
-        QObject::connect ( &SocketDevice, SIGNAL ( readyRead() ),
-            this, SLOT ( OnDataReceived() ), Qt::BlockingQueuedConnection );
-*/
+        // client connections:
 
+        QObject::connect ( this,
+            SIGNAL ( ProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ),
+            pChannel, SLOT ( OnProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ) );
 
-// TEST
-QObject::connect ( this,
-    SIGNAL ( ParseMessageBody ( CVector<uint8_t>, int, int ) ),
-    pChannel, SLOT ( OnParseMessageBody ( CVector<uint8_t>, int, int ) ) );
+        QObject::connect ( this,
+            SIGNAL ( ProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ),
+            pChannel, SLOT ( OnProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ) );
 
-QObject::connect ( this,
-    SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ),
-    pChannel, SLOT ( OnDetectedCLMessage ( CVector<uint8_t>, int ) ) );
-
-QObject::connect ( this,
-    SIGNAL ( NewConnection ( CVector<uint8_t>, int ) ),
-    pChannel, SLOT ( OnNewConnection ( CVector<uint8_t>, int ) ) );
-
+        QObject::connect ( this,
+            SIGNAL ( NewConnection() ),
+            pChannel, SLOT ( OnNewConnection() ) );
     }
     else
     {
-        // the server does not use a separate socket thread right now, in that
-        // case we must not use the blocking queued connection, otherwise we
-        // would get a dead lock
-        QObject::connect ( &SocketDevice, SIGNAL ( readyRead() ),
-            this, SLOT ( OnDataReceived() ) );
+        // server connections:
+
+        QObject::connect ( this,
+            SIGNAL ( ProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ),
+            pServer, SLOT ( OnProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ) );
+
+        QObject::connect ( this,
+            SIGNAL ( ProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ),
+            pServer, SLOT ( OnProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ) );
+
+        QObject::connect ( this,
+            SIGNAL ( NewConnection ( int, CHostAddress ) ),
+            pServer, SLOT ( OnNewConnection ( int, CHostAddress ) ) );
+
+        QObject::connect ( this,
+            SIGNAL ( ServerFull ( CHostAddress ) ),
+            pServer, SLOT ( OnServerFull ( CHostAddress ) ) );
     }
-#else
-    QObject::connect ( &SocketDevice, SIGNAL ( readyRead() ),
-        this, SLOT ( OnDataReceived() ) );
-#endif
 }
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
 void CSocket::Close()
 {
     // closesocket will cause recvfrom to return with an error because the
     // socket is closed -> then the thread can safely be shut down
+#ifdef _WIN32
     closesocket ( UdpSocket );
-}
+#else
+    close ( UdpSocket );
 #endif
+}
 
 CSocket::~CSocket()
 {
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-# ifdef _WIN32
+#ifdef _WIN32
     // the Windows socket must be cleanup on shutdown
     WSACleanup();
-# endif
 #endif
 }
 
@@ -177,34 +168,18 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
         // char vector in "const char*", for this we first convert the const
         // uint8_t vector in a read/write uint8_t vector and then do the cast to
         // const char*)
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-        // note that the client uses the socket directly for performance reasons
-        if ( bIsClient )
-        {
-            sockaddr_in UdpSocketOutAddr;
+        sockaddr_in UdpSocketOutAddr;
 
-            UdpSocketOutAddr.sin_family      = AF_INET;
-            UdpSocketOutAddr.sin_port        = htons ( HostAddr.iPort );
-			UdpSocketOutAddr.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
+        UdpSocketOutAddr.sin_family      = AF_INET;
+        UdpSocketOutAddr.sin_port        = htons ( HostAddr.iPort );
+        UdpSocketOutAddr.sin_addr.s_addr = htonl ( HostAddr.InetAddr.toIPv4Address() );
 
-            sendto ( UdpSocket,
-                     (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                     iVecSizeOut,
-                     0,
-                     (sockaddr*) &UdpSocketOutAddr,
-                     sizeof ( sockaddr_in ) );
-        }
-        else
-        {
-#endif
-            SocketDevice.writeDatagram (
-                (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
-                iVecSizeOut,
-                HostAddr.InetAddr,
-                HostAddr.iPort );
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-        }
-#endif
+        sendto ( UdpSocket,
+                 (const char*) &( (CVector<uint8_t>) vecbySendBuf )[0],
+                 iVecSizeOut,
+                 0,
+                 (sockaddr*) &UdpSocketOutAddr,
+                 sizeof ( sockaddr_in ) );
     }
 }
 
@@ -225,88 +200,107 @@ bool CSocket::GetAndResetbJitterBufferOKFlag()
 
 void CSocket::OnDataReceived()
 {
-#ifndef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-    while ( SocketDevice.hasPendingDatagrams() )
-#endif
-    {
-        // read block from network interface and query address of sender
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-        sockaddr_in SenderAddr;
+/*
+    The strategy of this function is that only the "put audio" function is
+    called directly (i.e. the high thread priority is used) and all other less
+    important things like protocol parsing and acting on protocol messages is
+    done in the low priority thread. To get a thread transition, we have to
+    use the signal/slot mechanism (i.e. we use messages for that).
+*/
+
+    // read block from network interface and query address of sender
+    sockaddr_in SenderAddr;
 #ifdef _WIN32
-        int SenderAddrSize = sizeof ( sockaddr_in );
+    int SenderAddrSize = sizeof ( sockaddr_in );
 #else
-        socklen_t SenderAddrSize = sizeof ( sockaddr_in );
+    socklen_t SenderAddrSize = sizeof ( sockaddr_in );
 #endif
 
-        const long iNumBytesRead = recvfrom ( UdpSocket,
-                                              (char*) &vecbyRecBuf[0],
-                                              MAX_SIZE_BYTES_NETW_BUF,
-                                              0,
-                                              (sockaddr*) &SenderAddr,
-                                              &SenderAddrSize );
-#else
-        const int iNumBytesRead =
-            SocketDevice.readDatagram ( (char*) &vecbyRecBuf[0],
-                                        MAX_SIZE_BYTES_NETW_BUF,
-                                        &SenderAddress,
-                                        &SenderPort );
-#endif
+    const long iNumBytesRead = recvfrom ( UdpSocket,
+                                          (char*) &vecbyRecBuf[0],
+                                          MAX_SIZE_BYTES_NETW_BUF,
+                                          0,
+                                          (sockaddr*) &SenderAddr,
+                                          &SenderAddrSize );
 
-        // check if an error occurred or no data could be read
-        if ( iNumBytesRead <= 0 )
+    // check if an error occurred or no data could be read
+    if ( iNumBytesRead <= 0 )
+    {
+        return;
+    }
+
+    // convert address of client
+    RecHostAddr.InetAddr.setAddress ( ntohl ( SenderAddr.sin_addr.s_addr ) );
+    RecHostAddr.iPort = ntohs ( SenderAddr.sin_port );
+
+
+    // check if this is a protocol message
+    int              iRecCounter;
+    int              iRecID;
+    CVector<uint8_t> vecbyMesBodyData;
+
+    if ( !CProtocol::ParseMessageFrame ( vecbyRecBuf,
+                                         iNumBytesRead,
+                                         vecbyMesBodyData,
+                                         iRecCounter,
+                                         iRecID ) )
+    {
+        // this is a protocol message, check the type of the message
+        if ( CProtocol::IsConnectionLessMessageID ( iRecID ) )
         {
-            return;
+
+// TODO a copy of the vector is used -> avoid malloc in real-time routine
+
+            emit ProtcolCLMessageReceived ( iRecID, vecbyMesBodyData, RecHostAddr );
         }
+        else
+        {
 
-        // convert address of client
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-        RecHostAddr.InetAddr.setAddress ( ntohl ( SenderAddr.sin_addr.s_addr ) );
-        RecHostAddr.iPort = ntohs ( SenderAddr.sin_port );
-#else
-        RecHostAddr.InetAddr = SenderAddress;
-        RecHostAddr.iPort    = SenderPort;
-#endif
+// TODO a copy of the vector is used -> avoid malloc in real-time routine
 
+            emit ProtcolMessageReceived ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
+        }
+    }
+    else
+    {
+        // this is most probably a regular audio packet
         if ( bIsClient )
         {
             // client:
 
-            // check if packet comes from the server we want to connect and that
-            // the channel is enabled
-            if ( ( pChannel->GetAddress() == RecHostAddr ) &&
-                 pChannel->IsEnabled() )
+            switch ( pChannel->PutAudioData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
             {
-                // this network packet is valid, put it in the channel
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-                switch ( pChannel->PutData ( vecbyRecBuf, iNumBytesRead, this ) )
-#else
-                switch ( pChannel->PutData ( vecbyRecBuf, iNumBytesRead ) )
-#endif
-                {
-                case PS_AUDIO_ERR:
-                case PS_GEN_ERROR:
-                    bJitterBufferOK = false;
-                    break;
+            case PS_AUDIO_ERR:
+            case PS_GEN_ERROR:
+                bJitterBufferOK = false;
+                break;
 
-                default:
-                    // do nothing
-                    break;
-                }
-            }
-            else
-            {
+            case PS_NEW_CONNECTION:
+                // inform other objects that new connection was established
+                emit NewConnection();
+                break;
+
+            case PS_AUDIO_INVALID:
                 // inform about received invalid packet by fireing an event
-                emit InvalidPacketReceived ( vecbyRecBuf,
-                                             iNumBytesRead,
-                                             RecHostAddr );
+                emit InvalidPacketReceived ( RecHostAddr );
+                break;
+
+            default:
+                // do nothing
+                break;
             }
         }
         else
         {
             // server:
 
-            if ( pServer->PutData ( vecbyRecBuf, iNumBytesRead, RecHostAddr ) )
+            int iCurChanID;
+
+            if ( pServer->PutAudioData ( vecbyRecBuf, iNumBytesRead, RecHostAddr, iCurChanID ) )
             {
+                // we have a new connection, emit a signal
+                emit NewConnection ( iCurChanID, RecHostAddr );
+
                 // this was an audio packet, start server if it is in sleep mode
                 if ( !pServer->IsRunning() )
                 {
@@ -314,6 +308,13 @@ void CSocket::OnDataReceived()
                     QCoreApplication::postEvent ( pServer,
                         new CCustomEvent ( MS_PACKET_RECEIVED, 0, 0 ) );
                 }
+            }
+
+            // check if no channel is available
+            if ( iCurChanID == INVALID_CHANNEL_ID )
+            {
+                // fire message for the state that no free channel is available
+                emit ServerFull ( RecHostAddr );
             }
         }
     }

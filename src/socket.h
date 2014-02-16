@@ -27,20 +27,17 @@
 
 #include <QObject>
 #include <QMessageBox>
-#include <QUdpSocket>
-#include <QSocketNotifier>
 #include <QThread>
 #include <QMutex>
 #include <vector>
 #include "global.h"
 #include "protocol.h"
 #include "util.h"
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-# ifndef _WIN32
-#  include <netinet/in.h>
-#  include <sys/socket.h>
-# endif
+#ifndef _WIN32
+# include <netinet/in.h>
+# include <sys/socket.h>
 #endif
+
 
 // The header files channel.h and server.h require to include this header file
 // so we get a cyclic dependency. To solve this issue, a prototype of the
@@ -55,7 +52,7 @@ class CChannel; // forward declaration of CChannel
 
 
 /* Classes ********************************************************************/
-/* Base socket class ---------------------------------------------------------*/
+/* Base socket class -------------------------------------------------------- */
 class CSocket : public QObject
 {
     Q_OBJECT
@@ -79,40 +76,16 @@ public:
                       const CHostAddress&     HostAddr );
 
     bool GetAndResetbJitterBufferOKFlag();
-
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
     void Close();
-
-    void EmitDetectedCLMessage ( const CVector<uint8_t>& vecbyMesBodyData,
-                                 const int               iRecID )
-    {
-        emit DetectedCLMessage ( vecbyMesBodyData, iRecID );
-    }
-
-    void EmitParseMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
-                                const int               iRecCounter,
-                                const int               iRecID )
-    {
-        emit ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
-    }
-
-    void EmitNewConnection()
-    {
-        emit NewConnection();
-    }
-#endif
 
 protected:
     void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-# ifdef _WIN32
+#ifdef _WIN32
     SOCKET           UdpSocket;
-# else
+#else
     int              UdpSocket;
-# endif
 #endif
-    QUdpSocket       SocketDevice;
 
     QMutex           Mutex;
 
@@ -132,53 +105,54 @@ public slots:
     void OnDataReceived();
 
 signals:
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-    void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,
-                             int              iRecID );
+    void NewConnection(); // for the client
 
-    void ParseMessageBody ( CVector<uint8_t> vecbyMesBodyData,
-                            int              iRecCounter,
-                            int              iRecID );
+    void NewConnection ( int          iChID,
+                         CHostAddress RecHostAddr ); // for the server
 
-    void NewConnection();
-#endif
-    void InvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
-                                 int              iNumBytesRead,
-                                 CHostAddress     RecHostAddr );
+    void ServerFull ( CHostAddress RecHostAddr );
+
+    void InvalidPacketReceived ( CHostAddress RecHostAddr );
+
+    void ProtcolMessageReceived ( int              iRecCounter,
+                                  int              iRecID,
+                                  CVector<uint8_t> vecbyMesBodyData,
+                                  CHostAddress     HostAdr );
+
+    void ProtcolCLMessageReceived ( int              iRecID,
+                                    CVector<uint8_t> vecbyMesBodyData,
+                                    CHostAddress     HostAdr );
 };
 
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-/* Socket which runs in a separate high priority thread ----------------------*/
+/* Socket which runs in a separate high priority thread --------------------- */
+// The receive socket should be put in a high priority thread to ensure the GUI
+// does not effect the stability of the audio stream (e.g. if the GUI is on
+// high load because of a table update, the incoming network packets must still
+// be put in the jitter buffer with highest priority).
 class CHighPrioSocket : public QObject
 {
     Q_OBJECT
 
 public:
     CHighPrioSocket ( CChannel*     pNewChannel,
-                      const quint16 iPortNumber ) :
-        Socket ( pNewChannel, iPortNumber )
-    {
-        // Creation of the new socket thread which has to have the highest
-        // possible thread priority to make sure the jitter buffer is reliably
-        // filled with the network audio packets and does not get interrupted
-        // by other GUI threads. The following code is based on:
-        // http://qt-project.org/wiki/Threads_Events_QObjects
-        Socket.moveToThread ( &NetworkWorkerThread );
+                      const quint16 iPortNumber )
+        : Socket ( pNewChannel, iPortNumber ) { Init(); }
 
-        NetworkWorkerThread.SetSocket ( &Socket );
-
-        NetworkWorkerThread.start ( QThread::TimeCriticalPriority );
-
-        // connect the "InvalidPacketReceived" signal
-        QObject::connect ( &Socket,
-            SIGNAL ( InvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ),
-            SIGNAL ( InvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ) );
-    }
+    CHighPrioSocket ( CServer*      pNewServer,
+                      const quint16 iPortNumber )
+        : Socket ( pNewServer, iPortNumber ) { Init(); }
 
     virtual ~CHighPrioSocket()
     {
         NetworkWorkerThread.exit();
+    }
+
+    void Start()
+    {
+        // starts the high priority socket receive thread (with using blocking
+        // socket request call)
+        NetworkWorkerThread.start ( QThread::TimeCriticalPriority );
     }
 
     void SendPacket ( const CVector<uint8_t>& vecbySendBuf,
@@ -232,14 +206,20 @@ protected:
         bool     bRun;
     };
 
+    void Init()
+    {
+        // Creation of the new socket thread which has to have the highest
+        // possible thread priority to make sure the jitter buffer is reliably
+        // filled with the network audio packets and does not get interrupted
+        // by other GUI threads. The following code is based on:
+        // http://qt-project.org/wiki/Threads_Events_QObjects
+        Socket.moveToThread ( &NetworkWorkerThread );
+
+        NetworkWorkerThread.SetSocket ( &Socket );
+    }
+
     CSocketThread NetworkWorkerThread;
     CSocket       Socket;
-
-signals:
-    void InvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
-                                 int              iNumBytesRead,
-                                 CHostAddress     RecHostAddr );
 };
-#endif
 
 #endif /* !defined ( SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

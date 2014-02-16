@@ -36,7 +36,8 @@ win32 {
     LIBS += ole32.lib \
         user32.lib \
         advapi32.lib \
-        winmm.lib
+        winmm.lib \
+        ws2_32.lib
 } else:macx {
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp

@@ -130,9 +130,10 @@ public:
     void Stop();
     bool IsRunning() { return HighPrecisionTimer.isActive(); }
 
-    bool PutData ( const CVector<uint8_t>& vecbyRecBuf,
-                   const int               iNumBytesRead,
-                   const CHostAddress&     HostAdr );
+    bool PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,
+                        const int               iNumBytesRead,
+                        const CHostAddress&     HostAdr,
+                        int&                    iCurChanID );
 
     void GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
                           CVector<QString>&      vecsName,
@@ -242,7 +243,7 @@ protected:
     CVector<uint8_t>           vecbyCodedData;
 
     // actual working objects
-    CSocket                    Socket;
+    CHighPrioSocket            Socket;
 
     // logging
     CServerLogging             Logging;
@@ -269,13 +270,26 @@ signals:
 
 public slots:
     void OnTimer();
-    void OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage );
-    void OnNewConnection ( int iChID );
-    void OnSendCLProtMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage );
 
-    void OnDetCLMess ( const CVector<uint8_t>& vecbyMesBodyData,
-                       const int               iRecID,
-                       const CHostAddress&     InetAddr );
+    void OnSendProtMessage ( int              iChID,
+                             CVector<uint8_t> vecMessage );
+
+    void OnNewConnection ( int          iChID,
+                           CHostAddress RecHostAddr );
+
+    void OnServerFull ( CHostAddress RecHostAddr );
+
+    void OnSendCLProtMessage ( CHostAddress     InetAddr,
+                               CVector<uint8_t> vecMessage );
+
+    void OnProtcolCLMessageReceived ( int              iRecID,
+                                      CVector<uint8_t> vecbyMesBodyData,
+                                      CHostAddress     RecHostAddr );
+
+    void OnProtcolMessageReceived ( int              iRecCounter,
+                                    int              iRecID,
+                                    CVector<uint8_t> vecbyMesBodyData,
+                                    CHostAddress     RecHostAddr );
 
     void OnCLPingReceived ( CHostAddress InetAddr, int iMs )
         { ConnLessProtocol.CreateCLPingMes ( InetAddr, iMs ); }
@@ -340,48 +354,6 @@ public slots:
     void OnSendProtMessCh17 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 17, mess ); }
     void OnSendProtMessCh18 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 18, mess ); }
     void OnSendProtMessCh19 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 19, mess ); }
-
-    void OnDetCLMessCh0  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[0].GetAddress() ); }
-    void OnDetCLMessCh1  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[1].GetAddress() ); }
-    void OnDetCLMessCh2  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[2].GetAddress() ); }
-    void OnDetCLMessCh3  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[3].GetAddress() ); }
-    void OnDetCLMessCh4  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[4].GetAddress() ); }
-    void OnDetCLMessCh5  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[5].GetAddress() ); }
-    void OnDetCLMessCh6  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[6].GetAddress() ); }
-    void OnDetCLMessCh7  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[7].GetAddress() ); }
-    void OnDetCLMessCh8  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[8].GetAddress() ); }
-    void OnDetCLMessCh9  ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[9].GetAddress() ); }
-    void OnDetCLMessCh10 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[10].GetAddress() ); }
-    void OnDetCLMessCh11 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[11].GetAddress() ); }
-    void OnDetCLMessCh12 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[12].GetAddress() ); }
-    void OnDetCLMessCh13 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[13].GetAddress() ); }
-    void OnDetCLMessCh14 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[14].GetAddress() ); }
-    void OnDetCLMessCh15 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[15].GetAddress() ); }
-    void OnDetCLMessCh16 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[16].GetAddress() ); }
-    void OnDetCLMessCh17 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[17].GetAddress() ); }
-    void OnDetCLMessCh18 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[18].GetAddress() ); }
-    void OnDetCLMessCh19 ( CVector<uint8_t> vData, int iID ) { OnDetCLMess ( vData, iID, vecChannels[19].GetAddress() ); }
-
-    void OnNewConnectionCh0()  { OnNewConnection ( 0 ); }
-    void OnNewConnectionCh1()  { OnNewConnection ( 1 ); }
-    void OnNewConnectionCh2()  { OnNewConnection ( 2 ); }
-    void OnNewConnectionCh3()  { OnNewConnection ( 3 ); }
-    void OnNewConnectionCh4()  { OnNewConnection ( 4 ); }
-    void OnNewConnectionCh5()  { OnNewConnection ( 5 ); }
-    void OnNewConnectionCh6()  { OnNewConnection ( 6 ); }
-    void OnNewConnectionCh7()  { OnNewConnection ( 7 ); }
-    void OnNewConnectionCh8()  { OnNewConnection ( 8 ); }
-    void OnNewConnectionCh9()  { OnNewConnection ( 9 ); }
-    void OnNewConnectionCh10() { OnNewConnection ( 10 ); }
-    void OnNewConnectionCh11() { OnNewConnection ( 11 ); }
-    void OnNewConnectionCh12() { OnNewConnection ( 12 ); }
-    void OnNewConnectionCh13() { OnNewConnection ( 13 ); }
-    void OnNewConnectionCh14() { OnNewConnection ( 14 ); }
-    void OnNewConnectionCh15() { OnNewConnection ( 15 ); }
-    void OnNewConnectionCh16() { OnNewConnection ( 16 ); }
-    void OnNewConnectionCh17() { OnNewConnection ( 17 ); }
-    void OnNewConnectionCh18() { OnNewConnection ( 18 ); }
-    void OnNewConnectionCh19() { OnNewConnection ( 19 ); }
 
     void OnReqConnClientsListCh0()  { CreateAndSendChanListForThisChan ( 0 ); }
     void OnReqConnClientsListCh1()  { CreateAndSendChanListForThisChan ( 1 ); }

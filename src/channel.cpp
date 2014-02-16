@@ -109,14 +109,6 @@ QObject::connect ( &Protocol,
     QObject::connect ( &Protocol,
         SIGNAL ( ReqNetTranspProps() ),
         this, SLOT ( OnReqNetTranspProps() ) );
-
-    // this connection is intended for a thread transition if we have a
-    // separate socket thread running
-#ifndef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-    QObject::connect ( this,
-        SIGNAL ( ParseMessageBody ( CVector<uint8_t>, int, int ) ),
-        this, SLOT ( OnParseMessageBody ( CVector<uint8_t>, int, int ) ) );
-#endif
 }
 
 bool CChannel::ProtocolIsEnabled()
@@ -447,147 +439,82 @@ void CChannel::Disconnect()
     }
 }
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
-                                 const int               iNumBytes,
-                                 CSocket*                pSocket )
-#else
-EPutDataStat CChannel::PutData ( const CVector<uint8_t>& vecbyData,
-                                 const int               iNumBytes )
-#endif
+void CChannel::PutProtcolData ( const int               iRecCounter,
+                                const int               iRecID,
+                                const CVector<uint8_t>& vecbyMesBodyData,
+                                const CHostAddress&     RecHostAddr )
 {
-/*
-    Note that this function might be called from a different thread (separate
-    Socket thread) and therefore we should not call functions which emit signals
-    themself directly but emit a signal here so that the thread transition is
-    done as early as possible.
-    This is the reason why "ParseMessageBody" is not called directly but through a
-    signal-slot mechanism.
-*/
+    // Only process protocol message if:
+    // - for client only: the packet comes from the server we want to talk to
+    // - the channel is enabled
+    // - the protocol mechanism is enabled
+    if ( ( bIsServer || ( GetAddress() == RecHostAddr ) ) &&
+         IsEnabled() &&
+         ProtocolIsEnabled() )
+    {
+        // parse the message assuming this is a regular protocol message
+        Protocol.ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
+    }
+}
 
+EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
+                                      const int               iNumBytes,
+                                      CHostAddress            RecHostAddr )
+{
     // init return state
     EPutDataStat eRet = PS_GEN_ERROR;
 
-    if ( bIsEnabled )
+    // Only process audio data if:
+    // - for client only: the packet comes from the server we want to talk to
+    // - the channel is enabled
+    if ( ( bIsServer || ( GetAddress() == RecHostAddr ) ) &&
+         IsEnabled() )
     {
-        int              iRecCounter;
-        int              iRecID;
-        CVector<uint8_t> vecbyMesBodyData;
-
-        // init flag
-        bool bNewConnection = false;
-
-        // check if this is a protocol message by trying to parse the message
-        // frame
-        if ( !Protocol.ParseMessageFrame ( vecbyData,
-                                           iNumBytes,
-                                           vecbyMesBodyData,
-                                           iRecCounter,
-                                           iRecID ) )
+        MutexSocketBuf.lock();
         {
-            // This is a protocol message:
-
-            // only use protocol data if protocol mechanism is enabled
-            if ( ProtocolIsEnabled() )
+            // only process audio if packet has correct size
+            if ( iNumBytes == ( iNetwFrameSize * iNetwFrameSizeFact ) )
             {
-                // in case this is a connection less message, we do not process it here
-                if ( Protocol.IsConnectionLessMessageID ( iRecID ) )
+                // store new packet in jitter buffer
+                if ( SockBuf.Put ( vecbyData, iNumBytes ) )
                 {
-                    // fire a signal so that an other class can process this type of
-                    // message
-// TODO a copy of the vector is used -> avoid malloc in real-time routine
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-                    pSocket->EmitDetectedCLMessage ( vecbyMesBodyData, iRecID );
-#else
-                    emit DetectedCLMessage ( vecbyMesBodyData, iRecID );
-#endif
-
-                    // set status flag
-                    eRet = PS_PROT_OK;
+                    eRet = PS_AUDIO_OK;
                 }
                 else
                 {
-                    // parse the message assuming this is a regular protocol message
-// TODO a copy of the vector is used -> avoid malloc in real-time routine
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-                    pSocket->EmitParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
-#else
-                    emit ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
-#endif
-
-                    // note that protocol OK is not correct here since we do not
-                    // check if the protocol was ok since we emit just a signal
-                    // and do not get any feedback on the protocol decoding state
-                    eRet = PS_PROT_OK;
+                    eRet = PS_AUDIO_ERR;
                 }
             }
             else
             {
-                // In case we are the server and the current channel is not
-                // connected, we do not evaluate protocol messages but these
-                // messages could start the server which is not desired,
-                // especially not for the disconnect messages.
-                // We now do not start the server if a valid protocol message
-                // was received but only start the server on audio packets.
-
-                // set status flag
-                eRet = PS_PROT_OK_MESS_NOT_EVALUATED;
+                // the protocol parsing failed and this was no audio block,
+                // we treat this as protocol error (unkown packet)
+                eRet = PS_PROT_ERR;
             }
-        }
-        else
-        {
-            // This seems to be an audio packet (only try to parse audio if it
-            // was not a protocol packet):
 
-            MutexSocketBuf.lock();
+            // All network packets except of valid protocol messages
+            // regardless if they are valid or invalid audio packets lead to
+            // a state change to a connected channel.
+            // This is because protocol messages can only be sent on a
+            // connected channel and the client has to inform the server
+            // about the audio packet properties via the protocol.
+
+            // check if channel was not connected, this is a new connection
+            if ( !IsConnected() )
             {
-                // only process audio if packet has correct size
-                if ( iNumBytes == ( iNetwFrameSize * iNetwFrameSizeFact ) )
-                {
-                    // store new packet in jitter buffer
-                    if ( SockBuf.Put ( vecbyData, iNumBytes ) )
-                    {
-                        eRet = PS_AUDIO_OK;
-                    }
-                    else
-                    {
-                        eRet = PS_AUDIO_ERR;
-                    }
-                }
-                else
-                {
-                    // the protocol parsing failed and this was no audio block,
-                    // we treat this as protocol error (unkown packet)
-                    eRet = PS_PROT_ERR;
-                }
-
-                // All network packets except of valid protocol messages
-                // regardless if they are valid or invalid audio packets lead to
-                // a state change to a connected channel.
-                // This is because protocol messages can only be sent on a
-                // connected channel and the client has to inform the server
-                // about the audio packet properties via the protocol.
-
-                // check if channel was not connected, this is a new connection
-                // (do not fire an event directly since we are inside a mutex
-                // region -> to avoid a dead-lock)
-                bNewConnection = !IsConnected();
-
-                // reset time-out counter
-                ResetTimeOutCounter();
+                // overwrite status
+                eRet = PS_NEW_CONNECTION;
             }
-            MutexSocketBuf.unlock();
-        }
 
-        if ( bNewConnection )
-        {
-            // inform other objects that new connection was established
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-            pSocket->EmitNewConnection();
-#else
-            emit NewConnection();
-#endif
+            // reset time-out counter (note that this must be done after the
+            // "IsConnected()" query above)
+            ResetTimeOutCounter();
         }
+        MutexSocketBuf.unlock();
+    }
+    else
+    {
+        eRet = PS_AUDIO_INVALID;
     }
 
     return eRet;
@@ -657,24 +584,7 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData,
     return eGetStatus;
 }
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-void CChannel::PrepAndSendPacketHPS ( CHighPrioSocket*        pSocket,
-                                      const CVector<uint8_t>& vecbyNPacket,
-                                      const int               iNPacketLen )
-{
-// TODO Doubled code!!! Same code as in PrepAndSendPacket (see below)!!!
-    QMutexLocker locker ( &MutexConvBuf );
-
-    // use conversion buffer to convert sound card block size in network
-    // block size
-    if ( ConvBuf.Put ( vecbyNPacket, iNPacketLen ) )
-    {
-        pSocket->SendPacket ( ConvBuf.Get(), GetAddress() );
-    }
-}
-#endif
-
-void CChannel::PrepAndSendPacket ( CSocket*                pSocket,
+void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
                                    const CVector<uint8_t>& vecbyNPacket,
                                    const int               iNPacketLen )
 {

@@ -47,9 +47,11 @@ enum EPutDataStat
     PS_GEN_ERROR,
     PS_AUDIO_OK,
     PS_AUDIO_ERR,
+    PS_AUDIO_INVALID,
     PS_PROT_OK,
     PS_PROT_OK_MESS_NOT_EVALUATED,
-    PS_PROT_ERR
+    PS_PROT_ERR,
+    PS_NEW_CONNECTION
 };
 
 
@@ -63,27 +65,21 @@ public:
     // use constructor initialization in the server for a vector of channels
     CChannel ( const bool bNIsServer = true );
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-    EPutDataStat PutData ( const CVector<uint8_t>& vecbyData,
-                           const int               iNumBytes,
-                           CSocket*                pSocket = 0 ); // TODO remove the "= 0"!
-#else
-    EPutDataStat PutData ( const CVector<uint8_t>& vecbyData,
-                           const int               iNumBytes );
-#endif
+    void PutProtcolData ( const int               iRecCounter,
+                          const int               iRecID,
+                          const CVector<uint8_t>& vecbyMesBodyData,
+                          const CHostAddress&     RecHostAddr );
+
+    EPutDataStat PutAudioData ( const CVector<uint8_t>& vecbyData,
+                                const int               iNumBytes,
+                                CHostAddress            RecHostAddr );
+
     EGetDataStat GetData ( CVector<uint8_t>& vecbyData,
                            const int         iNumBytes );
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-    void PrepAndSendPacketHPS ( CHighPrioSocket*        pSocket,
-                                const CVector<uint8_t>& vecbyNPacket,
-                                const int               iNPacketLen );
-#endif
-
-    void PrepAndSendPacket ( CSocket*                pSocket,
+    void PrepAndSendPacket ( CHighPrioSocket*        pSocket,
                              const CVector<uint8_t>& vecbyNPacket,
                              const int               iNPacketLen );
-
 
     void ResetTimeOutCounter() { iConTimeOut = iConTimeOutStartVal; }
     bool IsConnected() const { return iConTimeOut > 0; }
@@ -235,18 +231,22 @@ public slots:
         Protocol.ParseMessageBody ( vecbyMesBodyData, iRecCounter, iRecID );
     }
 
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-void OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,
-                           int              iRecID )
-{
-    emit DetectedCLMessage ( vecbyMesBodyData, iRecID );
-}
+    void OnProtcolMessageReceived ( int              iRecCounter,
+                                    int              iRecID,
+                                    CVector<uint8_t> vecbyMesBodyData,
+                                    CHostAddress     RecHostAddr )
+    {
+        PutProtcolData ( iRecCounter, iRecID, vecbyMesBodyData, RecHostAddr );
+    }
 
-void OnNewConnection()
-{
-    emit NewConnection();
-}
-#endif
+    void OnProtcolCLMessageReceived ( int              iRecID,
+                                      CVector<uint8_t> vecbyMesBodyData,
+                                      CHostAddress     RecHostAddr )
+    {
+        emit DetectedCLMessage ( vecbyMesBodyData, iRecID, RecHostAddr );
+    }
+
+    void OnNewConnection() { emit NewConnection(); }
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );
@@ -265,7 +265,8 @@ signals:
     void Disconnected();
 
     void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,
-                             int              iRecID );
+                             int              iRecID,
+                             CHostAddress     RecHostAddr );
 
     void ParseMessageBody ( CVector<uint8_t> vecbyMesBodyData,
                             int              iRecCounter,

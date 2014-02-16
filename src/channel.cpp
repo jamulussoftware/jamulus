@@ -154,8 +154,6 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
     CNetworkTransportProps NetworkTransportProps;
 
     Mutex.lock();
-    MutexSocketBuf.lock();
-    MutexConvBuf.lock();
     {
         // store new values
         eAudioCompressionType = eNewAudComprType;
@@ -163,18 +161,24 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         iNetwFrameSize        = iNewNetwFrameSize;
         iNetwFrameSizeFact    = iNewNetwFrameSizeFact;
 
-        // init socket buffer
-        SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+        MutexSocketBuf.lock();
+        {
+            // init socket buffer
+            SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+        }
+        MutexSocketBuf.unlock();
 
-        // init conversion buffer
-        ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+        MutexConvBuf.lock();
+        {
+            // init conversion buffer
+            ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+        }
+        MutexConvBuf.unlock();
 
         // fill network transport properties struct
         NetworkTransportProps =
             GetNetworkTransportPropsFromCurrentSettings();
     }
-    MutexConvBuf.unlock();
-    MutexSocketBuf.unlock();
     Mutex.unlock();
 
     // tell the server about the new network settings
@@ -377,8 +381,6 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
     if ( bIsServer )
     {
         Mutex.lock();
-        MutexSocketBuf.lock();
-        MutexConvBuf.lock();
         {
             // store received parameters
             eAudioCompressionType = NetworkTransportProps.eAudioCodingType;
@@ -387,15 +389,21 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             iNetwFrameSize =
                 NetworkTransportProps.iBaseNetworkPacketSize;
 
-            // update socket buffer (the network block size is a multiple of the
-            // minimum network frame size
-            SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+            MutexSocketBuf.lock();
+            {
+                // update socket buffer (the network block size is a multiple of the
+                // minimum network frame size
+                SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
+            }
+            MutexSocketBuf.unlock();
 
-            // init conversion buffer
-            ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+            MutexConvBuf.lock();
+            {
+                // init conversion buffer
+                ConvBuf.Init ( iNetwFrameSize * iNetwFrameSizeFact );
+            }
+            MutexConvBuf.unlock();
         }
-        MutexConvBuf.unlock();
-        MutexSocketBuf.unlock();
         Mutex.unlock();
 
         // if old CELT codec is used, inform the client that the new OPUS codec

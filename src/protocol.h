@@ -130,10 +130,6 @@ public:
                             const int               iRecCounter,
                             const int               iRecID );
 
-    bool ParseConnectionLessMessageWithFrame ( const CVector<uint8_t>& vecbyData,
-                                               const int               iNumBytesIn,
-                                               const CHostAddress&     InetAddr );
-
     bool ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
                                           const int               iRecID,
                                           const CHostAddress&     InetAddr );

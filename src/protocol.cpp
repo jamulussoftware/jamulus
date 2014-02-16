@@ -561,35 +561,6 @@ case PROTMESSID_OPUS_SUPPORTED:
     return bRet;
 }
 
-bool CProtocol::ParseConnectionLessMessageWithFrame ( const CVector<uint8_t>& vecbyData,
-                                                      const int               iNumBytesIn,
-                                                      const CHostAddress&     InetAddr )
-{
-/*
-    return code: false -> ok; true -> error
-*/
-    bool             bRet = false;
-    int              iRecCounter, iRecID;
-    CVector<uint8_t> vecbyMesBodyData;
-
-    if ( !ParseMessageFrame ( vecbyData,
-                              iNumBytesIn,
-                              vecbyMesBodyData,
-                              iRecCounter,
-                              iRecID ) )
-    {
-        bRet = ParseConnectionLessMessageBody ( vecbyMesBodyData,
-                                                iRecID,
-                                                InetAddr );
-    }
-    else
-    {
-        bRet = true; // return error code
-    }
-
-    return bRet;
-}
-
 bool CProtocol::ParseConnectionLessMessageBody ( const CVector<uint8_t>& vecbyMesBodyData,
                                                  const int               iRecID,
                                                  const CHostAddress&     InetAddr )

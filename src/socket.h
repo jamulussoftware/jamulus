@@ -216,10 +216,18 @@ protected:
         Socket.moveToThread ( &NetworkWorkerThread );
 
         NetworkWorkerThread.SetSocket ( &Socket );
+
+        // connect the "InvalidPacketReceived" signal
+        QObject::connect ( &Socket,
+            SIGNAL ( InvalidPacketReceived ( CHostAddress ) ),
+            SIGNAL ( InvalidPacketReceived ( CHostAddress ) ) );
     }
 
     CSocketThread NetworkWorkerThread;
     CSocket       Socket;
+
+signals:
+    void InvalidPacketReceived ( CHostAddress RecHostAddr );
 };
 
 #endif /* !defined ( SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

@@ -148,8 +148,8 @@ CClient::CClient ( const quint16 iPortNumber ) :
         this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
 
     QObject::connect ( &Channel,
-        SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int ) ),
-        this, SLOT ( OnDetectedCLMessage ( CVector<uint8_t>, int ) ) );
+        SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int, CHostAddress ) ),
+        this, SLOT ( OnDetectedCLMessage ( CVector<uint8_t>, int, CHostAddress ) ) );
 
     QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
         this, SLOT ( OnReqJittBufSize() ) );
@@ -204,8 +204,13 @@ QObject::connect ( &Channel, SIGNAL ( OpusSupported() ),
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
         this, SLOT ( OnSndCrdReinitRequest ( int ) ) );
 
-    QObject::connect ( &Socket, SIGNAL ( InvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ),
-        this, SLOT ( OnInvalidPacketReceived ( CVector<uint8_t>, int, CHostAddress ) ) );
+    QObject::connect ( &Socket, SIGNAL ( InvalidPacketReceived ( CHostAddress ) ),
+        this, SLOT ( OnInvalidPacketReceived ( CHostAddress ) ) );
+
+
+    // start the socket (it is important to start the socket after all
+    // initializations and connections)
+    Socket.Start();
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
@@ -223,38 +228,26 @@ void CClient::OnSendCLProtMessage ( CHostAddress     InetAddr,
     Socket.SendPacket ( vecMessage, InetAddr );
 }
 
-void CClient::OnInvalidPacketReceived ( CVector<uint8_t> vecbyRecBuf,
-                                        int              iNumBytesRead,
-                                        CHostAddress     RecHostAddr )
+void CClient::OnInvalidPacketReceived ( CHostAddress RecHostAddr )
 {
-    // this is an unknown address or we are not connected, try to
-    // parse connection less message (we have this case when we,
-    // e.g., open the connection setup dialog since then we are not
-    // yet connected but talk to the central server with the
-    // connection less protocol)
-    if ( ConnLessProtocol.ParseConnectionLessMessageWithFrame ( vecbyRecBuf,
-                                                                iNumBytesRead,
-                                                                RecHostAddr ) )
+    // message coult not be parsed, check if the packet comes
+    // from the server we just connected -> if yes, send
+    // disconnect message since the server may not know that we
+    // are not connected anymore
+    if ( Channel.GetAddress() == RecHostAddr )
     {
-        // message coult not be parsed, check if the packet comes
-        // from the server we just connected -> if yes, send
-        // disconnect message since the server may not know that we
-        // are not connected anymore
-        if ( Channel.GetAddress() == RecHostAddr )
-        {
-            ConnLessProtocol.CreateCLDisconnection ( RecHostAddr );
-        }
+        ConnLessProtocol.CreateCLDisconnection ( RecHostAddr );
     }
 }
 
 void CClient::OnDetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,
-                                    int              iRecID )
+                                    int              iRecID,
+                                    CHostAddress     RecHostAddr )
 {
-    // this is a special case: we received a connection less message but we are
-    // in a connection
+    // connection less messages are always processed
     ConnLessProtocol.ParseConnectionLessMessageBody ( vecbyMesBodyData,
                                                       iRecID,
-                                                      Channel.GetAddress() );
+                                                      RecHostAddr );
 }
 
 void CClient::OnJittBufSizeChanged ( int iNewJitBufSize )
@@ -1093,37 +1086,13 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
 
         // send coded audio through the network
-#ifdef ENABLE_RECEIVE_SOCKET_IN_SEPARATE_THREAD
-        Channel.PrepAndSendPacketHPS ( &Socket,
-                                       vecCeltData,
-                                       iCeltNumCodedBytes );
-#else
         Channel.PrepAndSendPacket ( &Socket,
                                     vecCeltData,
                                     iCeltNumCodedBytes );
-#endif
     }
 
 
     // Receive signal ----------------------------------------------------------
-
-
-// TODO: Get all the received packets from the Socket interface here in this
-//       high priority thread and put them in the jitter buffer. This has the
-//       advantage that we only have two threads, one low priority thread for
-//       the GUI and one high priority thread for the audio and socket.
-// PROBLEMS: - If we are not connected, the old callback mechanism in the socket
-//             must be used instead
-//           - The ping message relys on that the packet is immediatly parsed
-//             not only if an audio packet has to be processed. Therefore the
-//             ping measurements will be too high which is not acceptable.
-//           - The thread synchronization is more critical than in the current
-//             implementation so that crashes may occur.
-//
-// e.g., do the following:
-// Socket.OnDataReceived();
-
-
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
         // receive a new block

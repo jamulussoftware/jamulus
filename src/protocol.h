@@ -138,8 +138,8 @@ public:
                                           const int               iRecID,
                                           const CHostAddress&     InetAddr );
 
-    bool IsConnectionLessMessageID ( const int iID ) const
-        { return (iID >= 1000) & (iID < 2000); }
+    static bool IsConnectionLessMessageID ( const int iID )
+        { return ( iID >= 1000 ) && ( iID < 2000 ); }
 
     // this function is public because we need it in the test bench
     void CreateAndImmSendAcknMess ( const int& iID,

@@ -28,6 +28,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QDateTime>
+#include <QUdpSocket>
 #include <QHostAddress>
 #include "global.h"
 #include "socket.h"

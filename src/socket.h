@@ -145,7 +145,7 @@ public:
 
     virtual ~CHighPrioSocket()
     {
-        NetworkWorkerThread.exit();
+        NetworkWorkerThread.Stop();
     }
 
     void Start()
@@ -173,7 +173,7 @@ protected:
         CSocketThread ( CSocket* pNewSocket = NULL, QObject* parent = 0 ) :
           QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) {}
 
-        virtual ~CSocketThread()
+        void Stop()
         {
             // disable run flag so that the thread loop can be exit
             bRun = false;

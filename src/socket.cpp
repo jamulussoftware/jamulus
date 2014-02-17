@@ -138,12 +138,12 @@ void CSocket::Init ( const quint16 iPortNumber )
 
 void CSocket::Close()
 {
+#ifdef _WIN32
     // closesocket will cause recvfrom to return with an error because the
     // socket is closed -> then the thread can safely be shut down
-#ifdef _WIN32
-// TODO also use shutdown of the socket on Windows...
-closesocket ( UdpSocket );
+    closesocket ( UdpSocket );
 #else
+    // on OSs other than Windows, the shutdown call cancels the recvfrom
     shutdown ( UdpSocket, SHUT_RDWR );
 #endif
 }

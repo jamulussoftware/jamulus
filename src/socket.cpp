@@ -141,17 +141,21 @@ void CSocket::Close()
     // closesocket will cause recvfrom to return with an error because the
     // socket is closed -> then the thread can safely be shut down
 #ifdef _WIN32
-    closesocket ( UdpSocket );
+// TODO also use shutdown of the socket on Windows...
+closesocket ( UdpSocket );
 #else
-    close ( UdpSocket );
+    shutdown ( UdpSocket, SHUT_RDWR );
 #endif
 }
 
 CSocket::~CSocket()
 {
+    // cleanup the socket (on Windows the WSA cleanup must also be called)
 #ifdef _WIN32
-    // the Windows socket must be cleanup on shutdown
+    closesocket ( UdpSocket );
     WSACleanup();
+#else
+    close ( UdpSocket );
 #endif
 }
 

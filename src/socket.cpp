@@ -142,8 +142,11 @@ void CSocket::Close()
     // closesocket will cause recvfrom to return with an error because the
     // socket is closed -> then the thread can safely be shut down
     closesocket ( UdpSocket );
+#elif defined ( __APPLE__ ) || defined ( __MACOSX )
+    // on Mac the general close has the same effect as closesocket on Windows
+    close ( UdpSocket );
 #else
-    // on OSs other than Windows, the shutdown call cancels the recvfrom
+    // on Linux the shutdown call cancels the recvfrom
     shutdown ( UdpSocket, SHUT_RDWR );
 #endif
 }

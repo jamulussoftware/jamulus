@@ -186,7 +186,7 @@ void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr 
     else
     {
         bIsCentralServer = false;
-        bEnabled         = true;
+        bEnabled         = false;
     }
 }
 

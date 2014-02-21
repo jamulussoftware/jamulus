@@ -886,6 +886,7 @@ public:
         case OT_ANDROID: return "Android"; break;
         case OT_I_OS:    return "iOS";     break;
         case OT_UNIX:    return "Unix";    break;
+        default:         return "Unknown"; break;
         }
     }
 

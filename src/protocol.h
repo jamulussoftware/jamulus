@@ -67,10 +67,8 @@
 #define PROTMESSID_CLM_SEND_EMPTY_MESSAGE     1008 // an empty message shall be send
 #define PROTMESSID_CLM_EMPTY_MESSAGE          1009 // empty message
 #define PROTMESSID_CLM_DISCONNECTION          1010 // disconnection
-
-
-// TODO implement message for querying the version and operating system of the server
-
+#define PROTMESSID_CLM_VERSION_AND_OS         1011 // version number and operating system
+#define PROTMESSID_CLM_REQ_VERSION_AND_OS     1012 // request version number and operating system
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -104,21 +102,23 @@ public:
     void CreateReqNetwTranspPropsMes();
     void CreateOpusSupportedMes();
 
-    void CreateCLPingMes ( const CHostAddress& InetAddr, const int iMs );
+    void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
                                          const int           iMs,
                                          const int           iNumClients );
-    void CreateCLServerFullMes ( const CHostAddress& InetAddr );
-    void CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
-                                     const CServerCoreInfo& ServerInfo );
-    void CreateCLUnregisterServerMes ( const CHostAddress& InetAddr );
-    void CreateCLServerListMes ( const CHostAddress&        InetAddr,
-                                 const CVector<CServerInfo> vecServerInfo );
-    void CreateCLReqServerListMes ( const CHostAddress& InetAddr );
-    void CreateCLSendEmptyMesMes ( const CHostAddress& InetAddr,
-                                   const CHostAddress& TargetInetAddr );
-    void CreateCLEmptyMes ( const CHostAddress& InetAddr );
-    void CreateCLDisconnection ( const CHostAddress& InetAddr );
+    void CreateCLServerFullMes         ( const CHostAddress& InetAddr );
+    void CreateCLRegisterServerMes     ( const CHostAddress&    InetAddr,
+                                         const CServerCoreInfo& ServerInfo );
+    void CreateCLUnregisterServerMes   ( const CHostAddress& InetAddr );
+    void CreateCLServerListMes         ( const CHostAddress&        InetAddr,
+                                         const CVector<CServerInfo> vecServerInfo );
+    void CreateCLReqServerListMes      ( const CHostAddress& InetAddr );
+    void CreateCLSendEmptyMesMes       ( const CHostAddress& InetAddr,
+                                         const CHostAddress& TargetInetAddr );
+    void CreateCLEmptyMes              ( const CHostAddress& InetAddr );
+    void CreateCLDisconnection         ( const CHostAddress& InetAddr );
+    void CreateCLVersionAndOSMes       ( const CHostAddress& InetAddr );
+    void CreateCLReqVersionAndOSMes    ( const CHostAddress& InetAddr );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -228,6 +228,9 @@ protected:
     bool EvaluateCLReqServerListMes      ( const CHostAddress& InetAddr );
     bool EvaluateCLSendEmptyMesMes       ( const CVector<uint8_t>& vecData );
     bool EvaluateCLDisconnectionMes      ( const CHostAddress& InetAddr );
+    bool EvaluateCLVersionAndOSMes       ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
+    bool EvaluateCLReqVersionAndOSMes    ( const CHostAddress& InetAddr );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -265,19 +268,23 @@ signals:
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void ReqNetTranspProps();
 
-    void CLPingReceived               ( CHostAddress         InetAddr,
-                                        int                  iMs );
-    void CLPingWithNumClientsReceived ( CHostAddress         InetAddr,
-                                        int                  iMs,
-                                        int                  iNumClients );
-    void CLRegisterServerReceived     ( CHostAddress         InetAddr,
-                                        CServerCoreInfo      ServerInfo );
-    void CLUnregisterServerReceived   ( CHostAddress         InetAddr );
-    void CLServerListReceived         ( CHostAddress         InetAddr,
-                                        CVector<CServerInfo> vecServerInfo );
-    void CLReqServerList              ( CHostAddress         InetAddr );
-    void CLSendEmptyMes               ( CHostAddress         TargetInetAddr );
-    void CLDisconnection              ( CHostAddress         InetAddr );
+    void CLPingReceived               ( CHostAddress           InetAddr,
+                                        int                    iMs );
+    void CLPingWithNumClientsReceived ( CHostAddress           InetAddr,
+                                        int                    iMs,
+                                        int                    iNumClients );
+    void CLRegisterServerReceived     ( CHostAddress           InetAddr,
+                                        CServerCoreInfo        ServerInfo );
+    void CLUnregisterServerReceived   ( CHostAddress           InetAddr );
+    void CLServerListReceived         ( CHostAddress           InetAddr,
+                                        CVector<CServerInfo>   vecServerInfo );
+    void CLReqServerList              ( CHostAddress           InetAddr );
+    void CLSendEmptyMes               ( CHostAddress           TargetInetAddr );
+    void CLDisconnection              ( CHostAddress           InetAddr );
+    void CLVersionAndOSReceived       ( CHostAddress           InetAddr,
+                                        COSUtil::EOpSystemType eOSType,
+                                        QString                strVersion );
+    void CLReqVersionAndOS            ( CHostAddress           InetAddr );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

@@ -385,7 +385,17 @@ void CConnectDlg::OnTimerPing()
                 CurServerAddress ) )
         {
             // if address is valid, send ping
+
+// TEST send request for version and OS instead of ping message
+const bool bEnableVerOSDebugging = false; // if this is set the "false", we have to regular version
+if ( bEnableVerOSDebugging )
+{
+    emit CreateCLServerListReqVerAndOSMes ( CurServerAddress );
+}
+else
+{
             emit CreateCLServerListPingMes ( CurServerAddress );
+}
         }
     }
 }
@@ -465,6 +475,36 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
                 // item since the topLevelItem ( iIdx ) is then no longer valid.
                 lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
             }
+        }
+    }
+}
+
+void CConnectDlg::SetVersionAndOSType ( CHostAddress           InetAddr,
+                                        COSUtil::EOpSystemType eOSType,
+                                        QString                strVersion )
+{
+    // apply the received version and OS type to the correct server list entry
+    const int iServerListLen = lvwServers->topLevelItemCount();
+
+    for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+    {
+        // compare the received address with the user data string of the
+        // host address by a string compare
+        if ( !lvwServers->topLevelItem ( iIdx )->
+                data ( 0, Qt::UserRole ).toString().
+                compare ( InetAddr.toString() ) )
+        {
+// TEST since this is just a debug info, we just reuse the ping column (note
+// the we have to replace the ping message emit with the version and OS request
+// so that this works, see above code)
+lvwServers->topLevelItem ( iIdx )->
+    setText ( 1, strVersion + "/" + COSUtil::GetOperatingSystemString ( eOSType ) );
+
+// a version and OS type was received, set item to visible
+if ( lvwServers->topLevelItem ( iIdx )->isHidden() )
+{
+    lvwServers->topLevelItem ( iIdx )->setHidden ( false );
+}
         }
     }
 }

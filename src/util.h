@@ -861,6 +861,49 @@ public:
 };
 
 
+// Operating system utility functions ------------------------------------------
+class COSUtil
+{
+public:
+    enum EOpSystemType
+    {
+        // used for protocol -> enum values must be fixed!
+        OT_WINDOWS = 0,
+        OT_MAC_OS = 1,
+        OT_LINUX = 2,
+        OT_ANDROID = 3,
+        OT_I_OS = 4,
+        OT_UNIX = 5
+    };
+
+    static QString GetOperatingSystemString ( const EOpSystemType eOSType )
+    {
+        switch ( eOSType )
+        {
+        case OT_WINDOWS: return "Windows"; break;
+        case OT_MAC_OS:  return "MacOS";   break;
+        case OT_LINUX:   return "Linux";   break;
+        case OT_ANDROID: return "Android"; break;
+        case OT_I_OS:    return "iOS";     break;
+        case OT_UNIX:    return "Unix";    break;
+        }
+    }
+
+    static EOpSystemType GetOperatingSystem()
+    {
+#ifdef _WIN32
+    return OT_WINDOWS;
+#elif defined ( __APPLE__ ) || defined ( __MACOSX )
+    return OT_MAC_OS;
+#elif definded ( ANDROID )
+    return OT_ANDROID;
+#else
+    return OT_LINUX;
+#endif
+    }
+};
+
+
 // Audio reverbration ----------------------------------------------------------
 class CAudioReverb
 {

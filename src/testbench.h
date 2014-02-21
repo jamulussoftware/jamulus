@@ -106,7 +106,7 @@ public slots:
         CChannelCoreInfo       ChannelCoreInfo;
 
         // generate random protocol message
-        switch ( GenRandomIntInRange ( 0, 24 ) )
+        switch ( GenRandomIntInRange ( 0, 26 ) )
         {
         case 0: // PROTMESSID_JITT_BUF_SIZE
             Protocol.CreateJitBufMes ( GenRandomIntInRange ( 0, 10 ) );
@@ -260,12 +260,20 @@ public slots:
             Protocol.CreateCLDisconnection ( CurHostAddress );
             break;
 
-        case 23: // PROTMESSID_ACKN
-            Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
-                GenRandomIntInRange ( -100, 100 ) );
+        case 23: // PROTMESSID_CLM_VERSION_AND_OS
+            Protocol.CreateCLVersionAndOSMes ( CurHostAddress );
             break;
 
-        case 24:
+        case 24: // PROTMESSID_CLM_REQ_VERSION_AND_OS
+            Protocol.CreateCLReqVersionAndOSMes ( CurHostAddress );
+            break;
+
+        case 25: // PROTMESSID_ACKN
+            Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
+                                                GenRandomIntInRange ( -100, 100 ) );
+            break;
+
+        case 26:
             // arbitrary "audio" packet (with random sizes)
             CVector<uint8_t> vecMessage ( GenRandomIntInRange ( 1, 1000 ) );
             OnSendProtMessage ( vecMessage );

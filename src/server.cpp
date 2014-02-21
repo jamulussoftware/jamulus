@@ -422,6 +422,9 @@ CServer::CServer ( const int      iNewMaxNumChan,
         SIGNAL ( CLDisconnection ( CHostAddress ) ),
         this, SLOT ( OnCLDisconnection ( CHostAddress ) ) );
 
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLReqVersionAndOS ( CHostAddress ) ),
+        this, SLOT ( OnCLReqVersionAndOS ( CHostAddress ) ) );
 
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!

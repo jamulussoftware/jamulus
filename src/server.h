@@ -317,6 +317,9 @@ public slots:
     void OnCLReqServerList ( CHostAddress InetAddr )
         { ServerListManager.CentralServerQueryServerList ( InetAddr ); }
 
+    void OnCLReqVersionAndOS ( CHostAddress InetAddr )
+        { ConnLessProtocol.CreateCLVersionAndOSMes ( InetAddr ); }
+
     void OnCLRegisterServerReceived ( CHostAddress    InetAddr,
                                       CServerCoreInfo ServerInfo )
     {

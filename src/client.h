@@ -260,6 +260,11 @@ public:
                                                          0 /* dummy */ );
     }
 
+    void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr )
+    {
+        ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr );
+    }
+
     void CreateCLReqServerListMes ( const CHostAddress& InetAddr )
         { ConnLessProtocol.CreateCLReqServerListMes ( InetAddr ); }
 
@@ -410,6 +415,11 @@ signals:
     void CLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
                                             int          iPingTime,
                                             int          iNumClients );
+
+    void CLVersionAndOSReceived ( CHostAddress           InetAddr,
+                                  COSUtil::EOpSystemType eOSType,
+                                  QString                strVersion );
+
     void Disconnected();
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####

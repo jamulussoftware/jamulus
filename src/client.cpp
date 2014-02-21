@@ -199,6 +199,9 @@ QObject::connect ( &Channel, SIGNAL ( OpusSupported() ),
         SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
         this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),
+        SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
 
     // other
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),

@@ -62,6 +62,10 @@ public:
                                           const CMultiColorLED::ELightColor ePingTimeLEDColor,
                                           const int                         iNumClients );
 
+    void SetVersionAndOSType ( CHostAddress           InetAddr,
+                               COSUtil::EOpSystemType eOSType,
+                               QString                strVersion );
+
     bool GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }
     QString GetSelectedServerName() const { return strSelectedServerName; }
@@ -92,4 +96,5 @@ public slots:
 signals:
     void ReqServerListQuery ( CHostAddress InetAddr );
     void CreateCLServerListPingMes ( CHostAddress InetAddr );
+    void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
 };

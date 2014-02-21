@@ -496,6 +496,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         this, SLOT ( OnCLPingTimeWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
     QObject::connect ( pClient,
+        SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),
+        this, SLOT ( OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
+
+    QObject::connect ( pClient,
         SIGNAL ( UpstreamRateChanged() ),
         this, SLOT ( OnUpstreamRateChanged() ) );
 
@@ -522,6 +526,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     QObject::connect ( &ConnectDlg, SIGNAL ( CreateCLServerListPingMes ( CHostAddress ) ),
         this, SLOT ( OnCreateCLServerListPingMes ( CHostAddress ) ) );
+
+    QObject::connect ( &ConnectDlg, SIGNAL ( CreateCLServerListReqVerAndOSMes ( CHostAddress ) ),
+        this, SLOT ( OnCreateCLServerListReqVerAndOSMes ( CHostAddress ) ) );
 
     QObject::connect ( &ConnectDlg, SIGNAL ( accepted() ),
         this, SLOT ( OnConnectDlgAccepted() ) );

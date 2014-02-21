@@ -263,6 +263,17 @@ CONNECTION LESS MESSAGES
     note: does not have any data -> n = 0
 
 
+- PROTMESSID_CLM_VERSION_AND_OS: Version number and operating system
+
+    +-------------------------+------------------+------------------------------+
+    | 1 byte operating system | 2 bytes number n | n bytes UTF-8 string version |
+    +-------------------------+------------------+------------------------------+
+
+
+- PROTMESSID_CLM_REQ_VERSION_AND_OS: Request version number and operating system
+
+    note: does not have any data -> n = 0
+
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -614,6 +625,14 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
         case PROTMESSID_CLM_DISCONNECTION:
             bRet = EvaluateCLDisconnectionMes ( InetAddr );
+            break;
+
+        case PROTMESSID_CLM_VERSION_AND_OS:
+            bRet = EvaluateCLVersionAndOSMes ( InetAddr, vecbyMesBodyData );
+            break;
+
+        case PROTMESSID_CLM_REQ_VERSION_AND_OS:
+            bRet = EvaluateCLReqVersionAndOSMes ( InetAddr );
             break;
         }
     }
@@ -1780,6 +1799,89 @@ bool CProtocol::EvaluateCLDisconnectionMes ( const CHostAddress& InetAddr )
 {
     // invoke message action
     emit CLDisconnection ( InetAddr );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLVersionAndOSMes ( const CHostAddress& InetAddr )
+{
+    int iPos = 0; // init position pointer
+
+    // get the version number string
+    const QString strVerion = VERSION;
+
+    // convert version string to utf-8
+    const QByteArray strUTF8Version = strVerion.toUtf8();
+
+    // size of current message body
+    const int iEntrLen =
+        1 /* operating system */ +
+        2 /* version utf-8 string size */ + strUTF8Version.size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // operating system (1 byte)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( COSUtil::GetOperatingSystem() ), 1 );
+
+    // version
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8Version );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_VERSION_AND_OS,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLVersionAndOSMes ( const CHostAddress&     InetAddr,
+                                            const CVector<uint8_t>& vecData )
+{
+    int       iPos = 0; // init position pointer
+    const int iDataLen = vecData.Size();
+
+    // check size (the first 1 byte)
+    if ( iDataLen < 1 )
+    {
+        return true; // return error code
+    }
+
+    // operating system (1 byte)
+    const COSUtil::EOpSystemType eOSType =
+        static_cast<COSUtil::EOpSystemType> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // version text
+    QString strVersion;
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_VERSION_TEXT,
+                               strVersion ) )
+    {
+        return true; // return error code
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit CLVersionAndOSReceived ( InetAddr, eOSType, strVersion );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLReqVersionAndOSMes ( const CHostAddress& InetAddr )
+{
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REQ_VERSION_AND_OS,
+                                     CVector<uint8_t> ( 0 ),
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLReqVersionAndOSMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLReqVersionAndOS ( InetAddr );
 
     return false; // no error
 }

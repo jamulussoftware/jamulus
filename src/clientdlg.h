@@ -129,6 +129,11 @@ public slots:
                                               int          iPingTime,
                                               int          iNumClients );
 
+    void OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
+                                    COSUtil::EOpSystemType eOSType,
+                                    QString                strVersion )
+        { ConnectDlg.SetVersionAndOSType ( InetAddr, eOSType, strVersion ); }
+
     void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }
     void OnOpenChatDialog() { ShowChatWindow(); }
@@ -165,6 +170,9 @@ public slots:
 
     void OnCreateCLServerListPingMes ( CHostAddress InetAddr )
         { pClient->CreateCLServerListPingMes ( InetAddr ); }
+
+    void OnCreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr )
+        { pClient->CreateCLServerListReqVerAndOSMes ( InetAddr ); }
 
     void OnCLServerListReceived ( CHostAddress         InetAddr,
                                   CVector<CServerInfo> vecServerInfo )

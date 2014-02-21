@@ -895,7 +895,7 @@ public:
     return OT_WINDOWS;
 #elif defined ( __APPLE__ ) || defined ( __MACOSX )
     return OT_MAC_OS;
-#elif definded ( ANDROID )
+#elif defined ( ANDROID )
     return OT_ANDROID;
 #else
     return OT_LINUX;

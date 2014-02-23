@@ -937,8 +937,18 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         const double dRevLev =
             static_cast<double> ( iReverbLevel ) / AUD_REVERB_MAX / 2;
 
-        if ( eAudioChannelConf == CC_MONO )
+        if ( eAudioChannelConf == CC_STEREO )
         {
+            // for stereo always apply reverberation effect on both channels
+            for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
+            {
+                // both channels (stereo)
+                AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], vecsStereoSndCrd[i + 1], dRevLev );
+            }
+        }
+        else
+        {
+            // mono and mono-in/stereo out mode
             if ( bReverbOnLeftChan )
             {
                 for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
@@ -958,15 +968,6 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 }
             }
         }
-        else
-        {
-            // for stereo always apply reverberation effect on both channels
-            for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
-            {
-                // both channels (stereo)
-                AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], vecsStereoSndCrd[i + 1], dRevLev );
-            }
-        }
     }
 
     // mix both signals depending on the fading setting, convert
@@ -974,7 +975,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     if ( iAudioInFader == AUD_FADER_IN_MIDDLE )
     {
         // no action require if fader is in the middle and stereo is used
-        if ( eAudioChannelConf == CC_MONO )
+        if ( eAudioChannelConf != CC_STEREO )
         {
             // mix channels together (store result in first half of the vector)
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
@@ -990,9 +991,35 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     }
     else
     {
-        if ( eAudioChannelConf == CC_MONO )
+        if ( eAudioChannelConf == CC_STEREO )
         {
-            // mono
+            // stereo
+            const double dAttFactStereo = static_cast<double> (
+                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
+                AUD_FADER_IN_MIDDLE;
+
+            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
+            {
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on right channel
+                    vecsStereoSndCrd[j + 1] = Double2Short (
+                        dAttFactStereo * vecsStereoSndCrd[j + 1] );
+                }
+            }
+            else
+            {
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on left channel
+                    vecsStereoSndCrd[j] = Double2Short (
+                        dAttFactStereo * vecsStereoSndCrd[j] );
+                }
+            }
+        }
+        else
+        {
+            // mono and mono-in/stereo out mode
             // make sure that in the middle position the two channels are
             // amplified by 1/2, if the pan is set to one channel, this
             // channel should have an amplification of 1
@@ -1027,31 +1054,21 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 }
             }
         }
-        else
-        {
-            // stereo
-            const double dAttFactStereo = static_cast<double> (
-                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
-                AUD_FADER_IN_MIDDLE;
+    }
 
-            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
-            {
-                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-                {
-                    // attenuation on right channel
-                    vecsStereoSndCrd[j + 1] = Double2Short (
-                        dAttFactStereo * vecsStereoSndCrd[j + 1] );
-                }
-            }
-            else
-            {
-                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-                {
-                    // attenuation on left channel
-                    vecsStereoSndCrd[j] = Double2Short (
-                        dAttFactStereo * vecsStereoSndCrd[j] );
-                }
-            }
+    // Support for mono-in/stereo-out mode: Per definition this mode works in
+    // full stereo mode at the transmission level. The only thing which is done
+    // is to mix both sound card inputs together and then put this signal on
+    // both stereo channels to be transmitted to the server.
+    if ( eAudioChannelConf == CC_MONO_IN_STEREO_OUT )
+    {
+        // copy mono data in stereo sound card buffer (note that since the input
+        // and output is the same buffer, we have to start from the end not to
+        // overwrite input values)
+        for ( i = iMonoBlockSizeSam - 1, j = iStereoBlockSizeSam - 2; i >= 0; i--, j -= 2 )
+        {
+            vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
+                vecsStereoSndCrd[i];
         }
     }
 

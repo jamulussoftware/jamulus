@@ -199,9 +199,11 @@ QObject::connect ( &Channel, SIGNAL ( OpusSupported() ),
         SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
         this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
+#endif
 
     // other
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),

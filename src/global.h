@@ -69,6 +69,11 @@ LED bar:      lbr
 //#define _DEBUG_
 #undef _DEBUG_
 
+// define this macro if the version and operating system debugging shall
+// be enabled in the client (the ping time column in the connect dialog then
+// shows the requested information instead of the ping time)
+#undef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
+
 // version and application name (use version from qt prject file)
 #undef VERSION
 #define VERSION                         APP_VERSION

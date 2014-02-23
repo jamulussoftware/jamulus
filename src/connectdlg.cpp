@@ -384,18 +384,12 @@ void CConnectDlg::OnTimerPing()
                 data ( 0, Qt::UserRole ).toString(),
                 CurServerAddress ) )
         {
-            // if address is valid, send ping
-
-// TEST send request for version and OS instead of ping message
-const bool bEnableVerOSDebugging = false; // if this is set the "false", we have to regular version
-if ( bEnableVerOSDebugging )
-{
-    emit CreateCLServerListReqVerAndOSMes ( CurServerAddress );
-}
-else
-{
+            // if address is valid, send ping or the version and OS request
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
+            emit CreateCLServerListReqVerAndOSMes ( CurServerAddress );
+#else
             emit CreateCLServerListPingMes ( CurServerAddress );
-}
+#endif
         }
     }
 }
@@ -479,6 +473,7 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
     }
 }
 
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
 void CConnectDlg::SetVersionAndOSType ( CHostAddress           InetAddr,
                                         COSUtil::EOpSystemType eOSType,
                                         QString                strVersion )
@@ -508,3 +503,4 @@ if ( lvwServers->topLevelItem ( iIdx )->isHidden() )
         }
     }
 }
+#endif

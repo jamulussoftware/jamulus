@@ -129,10 +129,12 @@ public slots:
                                               int          iPingTime,
                                               int          iNumClients );
 
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
                                     COSUtil::EOpSystemType eOSType,
                                     QString                strVersion )
         { ConnectDlg.SetVersionAndOSType ( InetAddr, eOSType, strVersion ); }
+#endif
 
     void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }

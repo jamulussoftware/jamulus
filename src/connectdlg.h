@@ -62,9 +62,11 @@ public:
                                           const CMultiColorLED::ELightColor ePingTimeLEDColor,
                                           const int                         iNumClients );
 
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void SetVersionAndOSType ( CHostAddress           InetAddr,
                                COSUtil::EOpSystemType eOSType,
                                QString                strVersion );
+#endif
 
     bool GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }

@@ -495,9 +495,11 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         SIGNAL ( CLPingTimeWithNumClientsReceived ( CHostAddress, int, int ) ),
         this, SLOT ( OnCLPingTimeWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
+#ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( pClient,
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),
         this, SLOT ( OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
+#endif
 
     QObject::connect ( pClient,
         SIGNAL ( UpstreamRateChanged() ),

@@ -427,6 +427,17 @@ public slots:
 * Other Classes/Enums                                                          *
 \******************************************************************************/
 
+
+// Audio channel configuration -------------------------------------------------
+enum EAudChanConf
+{
+    // used for settings -> enum values must be fixed!
+    CC_MONO = 0,
+    CC_MONO_IN_STEREO_OUT = 1,
+    CC_STEREO = 2
+};
+
+
 // Audio compression type enum -------------------------------------------------
 enum EAudComprType
 {

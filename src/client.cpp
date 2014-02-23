@@ -43,7 +43,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     eAudioCompressionType            ( CT_OPUS ),
     iCeltNumCodedBytes               ( CELT_NUM_BYTES_MONO_LOW_QUALITY ),
     eAudioQuality                    ( AQ_LOW ),
-    bUseStereo                       ( false ),
+    eAudioChannelConf                ( CC_MONO ),
     bIsInitializationPhase           ( true ),
     Socket                           ( &Channel, iPortNumber ),
     Sound                            ( AudioCallback, this ),
@@ -483,7 +483,14 @@ void CClient::SetUseStereo ( const bool bNUseStereo )
     }
 
     // set new parameter
-    bUseStereo = bNUseStereo;
+    if ( bNUseStereo )
+    {
+        eAudioChannelConf = CC_STEREO;
+    }
+    else
+    {
+        eAudioChannelConf = CC_MONO;
+    }
     Init();
 
     if ( bWasRunning )
@@ -774,18 +781,7 @@ void CClient::Init()
     // inits for audio coding
     if ( eAudioCompressionType == CT_CELT )
     {
-        if ( bUseStereo )
-        {
-            if ( eAudioQuality == AQ_LOW )
-            {
-                iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_LOW_QUALITY;
-            }
-            else
-            {
-                iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_NORMAL_QUALITY;
-            }
-        }
-        else
+        if ( eAudioChannelConf == CC_MONO )
         {
             if ( eAudioQuality == AQ_LOW )
             {
@@ -796,27 +792,21 @@ void CClient::Init()
                 iCeltNumCodedBytes = CELT_NUM_BYTES_MONO_NORMAL_QUALITY;
             }
         }
+        else
+        {
+            if ( eAudioQuality == AQ_LOW )
+            {
+                iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_LOW_QUALITY;
+            }
+            else
+            {
+                iCeltNumCodedBytes = CELT_NUM_BYTES_STEREO_NORMAL_QUALITY;
+            }
+        }
     }
     else
     {
-        if ( bUseStereo )
-        {
-            switch ( eAudioQuality )
-            {
-            case AQ_LOW:
-                iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_LOW_QUALITY;
-                break;
-
-            case AQ_NORMAL:
-                iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY;
-                break;
-
-            case AQ_HIGH:
-                iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
-                break;
-            }
-        }
-        else
+        if ( eAudioChannelConf == CC_MONO )
         {
             switch ( eAudioQuality )
             {
@@ -833,19 +823,36 @@ void CClient::Init()
                 break;
             }
         }
+        else
+        {
+            switch ( eAudioQuality )
+            {
+            case AQ_LOW:
+                iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_LOW_QUALITY;
+                break;
+
+            case AQ_NORMAL:
+                iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY;
+                break;
+
+            case AQ_HIGH:
+                iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
+                break;
+            }
+        }
     }
     vecCeltData.Init ( iCeltNumCodedBytes );
 
-    if ( bUseStereo )
+    if ( eAudioChannelConf == CC_MONO )
     {
-        opus_custom_encoder_ctl ( OpusEncoderStereo,
+        opus_custom_encoder_ctl ( OpusEncoderMono,
                                   OPUS_SET_BITRATE (
                                       CalcBitRateBitsPerSecFromCodedBytes (
                                           iCeltNumCodedBytes ) ) );
     }
     else
     {
-        opus_custom_encoder_ctl ( OpusEncoderMono,
+        opus_custom_encoder_ctl ( OpusEncoderStereo,
                                   OPUS_SET_BITRATE (
                                       CalcBitRateBitsPerSecFromCodedBytes (
                                           iCeltNumCodedBytes ) ) );
@@ -853,13 +860,14 @@ void CClient::Init()
 
     // inits for network and channel
     vecbyNetwData.Init ( iCeltNumCodedBytes );
-    if ( bUseStereo )
+
+    if ( eAudioChannelConf == CC_MONO )
     {
         // set the channel network properties
         Channel.SetAudioStreamProperties ( eAudioCompressionType,
                                            iCeltNumCodedBytes,
                                            iSndCrdFrameSizeFactor,
-                                           2 );
+                                           1 );
     }
     else
     {
@@ -867,7 +875,7 @@ void CClient::Init()
         Channel.SetAudioStreamProperties ( eAudioCompressionType,
                                            iCeltNumCodedBytes,
                                            iSndCrdFrameSizeFactor,
-                                           1 );
+                                           2 );
     }
 
     // reset initialization phase flag
@@ -929,16 +937,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         const double dRevLev =
             static_cast<double> ( iReverbLevel ) / AUD_REVERB_MAX / 2;
 
-        if ( bUseStereo )
-        {
-            // for stereo always apply reverberation effect on both channels
-            for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
-            {
-                // both channels (stereo)
-                AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], vecsStereoSndCrd[i + 1], dRevLev );
-            }
-        }
-        else
+        if ( eAudioChannelConf == CC_MONO )
         {
             if ( bReverbOnLeftChan )
             {
@@ -959,6 +958,15 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 }
             }
         }
+        else
+        {
+            // for stereo always apply reverberation effect on both channels
+            for ( i = 0; i < iStereoBlockSizeSam; i += 2 )
+            {
+                // both channels (stereo)
+                AudioReverbL.ProcessSample ( vecsStereoSndCrd[i], vecsStereoSndCrd[i + 1], dRevLev );
+            }
+        }
     }
 
     // mix both signals depending on the fading setting, convert
@@ -966,7 +974,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     if ( iAudioInFader == AUD_FADER_IN_MIDDLE )
     {
         // no action require if fader is in the middle and stereo is used
-        if ( !bUseStereo )
+        if ( eAudioChannelConf == CC_MONO )
         {
             // mix channels together (store result in first half of the vector)
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
@@ -982,38 +990,12 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     }
     else
     {
-        if ( bUseStereo )
-        {
-            // stereo
-            const double dAttFactStereo = static_cast<double> (
-                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
-                AUD_FADER_IN_MIDDLE;
-
-            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
-            {
-                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-                {
-                    // attenuation on right channel
-                    vecsStereoSndCrd[j + 1] = Double2Short (
-                        dAttFactStereo * vecsStereoSndCrd[j + 1] );
-                }
-            }
-            else
-            {
-                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-                {
-                    // attenuation on left channel
-                    vecsStereoSndCrd[j] = Double2Short (
-                        dAttFactStereo * vecsStereoSndCrd[j] );
-                }
-            }
-        }
-        else
+        if ( eAudioChannelConf == CC_MONO )
         {
             // mono
             // make sure that in the middle position the two channels are
             // amplified by 1/2, if the pan is set to one channel, this
-            // channel should have an amplification of 1 
+            // channel should have an amplification of 1
             const double dAttFactMono = static_cast<double> (
                 AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
                 AUD_FADER_IN_MIDDLE / 2;
@@ -1045,31 +1027,37 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 }
             }
         }
+        else
+        {
+            // stereo
+            const double dAttFactStereo = static_cast<double> (
+                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
+                AUD_FADER_IN_MIDDLE;
+
+            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
+            {
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on right channel
+                    vecsStereoSndCrd[j + 1] = Double2Short (
+                        dAttFactStereo * vecsStereoSndCrd[j + 1] );
+                }
+            }
+            else
+            {
+                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+                {
+                    // attenuation on left channel
+                    vecsStereoSndCrd[j] = Double2Short (
+                        dAttFactStereo * vecsStereoSndCrd[j] );
+                }
+            }
+        }
     }
 
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
-        if ( bUseStereo )
-        {
-            // encode current audio frame
-            if ( eAudioCompressionType == CT_CELT )
-            {
-                cc6_celt_encode ( CeltEncoderStereo,
-                                  &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
-                                  NULL,
-                                  &vecCeltData[0],
-                                  iCeltNumCodedBytes );
-            }
-            else
-            {
-                opus_custom_encode ( OpusEncoderStereo,
-                                     &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
-                                     SYSTEM_FRAME_SIZE_SAMPLES,
-                                     &vecCeltData[0],
-                                     iCeltNumCodedBytes );
-            }
-        }
-        else
+        if ( eAudioChannelConf == CC_MONO )
         {
             // encode current audio frame
             if ( eAudioCompressionType == CT_CELT )
@@ -1084,6 +1072,26 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             {
                 opus_custom_encode ( OpusEncoderMono,
                                      &vecsStereoSndCrd[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                                     SYSTEM_FRAME_SIZE_SAMPLES,
+                                     &vecCeltData[0],
+                                     iCeltNumCodedBytes );
+            }
+        }
+        else
+        {
+            // encode current audio frame
+            if ( eAudioCompressionType == CT_CELT )
+            {
+                cc6_celt_encode ( CeltEncoderStereo,
+                                  &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                                  NULL,
+                                  &vecCeltData[0],
+                                  iCeltNumCodedBytes );
+            }
+            else
+            {
+                opus_custom_encode ( OpusEncoderStereo,
+                                     &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
                                      SYSTEM_FRAME_SIZE_SAMPLES,
                                      &vecCeltData[0],
                                      iCeltNumCodedBytes );
@@ -1117,25 +1125,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             // flag
             bIsInitializationPhase = false;
 
-            if ( bUseStereo )
-            {
-                if ( eAudioCompressionType == CT_CELT )
-                {
-                    cc6_celt_decode ( CeltDecoderStereo,
-                                      &vecbyNetwData[0],
-                                      iCeltNumCodedBytes,
-                                      &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
-                }
-                else
-                {
-                    opus_custom_decode ( OpusDecoderStereo,
-                                         &vecbyNetwData[0],
-                                         iCeltNumCodedBytes,
-                                         &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
-                                         SYSTEM_FRAME_SIZE_SAMPLES );
-                }
-            }
-            else
+            if ( eAudioChannelConf == CC_MONO )
             {
                 if ( eAudioCompressionType == CT_CELT )
                 {
@@ -1150,6 +1140,24 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                                          &vecbyNetwData[0],
                                          iCeltNumCodedBytes,
                                          &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                                         SYSTEM_FRAME_SIZE_SAMPLES );
+                }
+            }
+            else
+            {
+                if ( eAudioCompressionType == CT_CELT )
+                {
+                    cc6_celt_decode ( CeltDecoderStereo,
+                                      &vecbyNetwData[0],
+                                      iCeltNumCodedBytes,
+                                      &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+                }
+                else
+                {
+                    opus_custom_decode ( OpusDecoderStereo,
+                                         &vecbyNetwData[0],
+                                         iCeltNumCodedBytes,
+                                         &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
                                          SYSTEM_FRAME_SIZE_SAMPLES );
                 }
             }
@@ -1157,25 +1165,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         else
         {
             // lost packet
-            if ( bUseStereo )
-            {
-                if ( eAudioCompressionType == CT_CELT )
-                {
-                    cc6_celt_decode ( CeltDecoderStereo,
-                                      NULL,
-                                      0,
-                                      &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
-                }
-                else
-                {
-                    opus_custom_decode ( OpusDecoderStereo,
-                                         NULL,
-                                         iCeltNumCodedBytes,
-                                         &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
-                                         SYSTEM_FRAME_SIZE_SAMPLES );
-                }
-            }
-            else
+            if ( eAudioChannelConf == CC_MONO )
             {
                 if ( eAudioCompressionType == CT_CELT )
                 {
@@ -1190,6 +1180,24 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                                          NULL,
                                          iCeltNumCodedBytes,
                                          &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
+                                         SYSTEM_FRAME_SIZE_SAMPLES );
+                }
+            }
+            else
+            {
+                if ( eAudioCompressionType == CT_CELT )
+                {
+                    cc6_celt_decode ( CeltDecoderStereo,
+                                      NULL,
+                                      0,
+                                      &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
+                }
+                else
+                {
+                    opus_custom_decode ( OpusDecoderStereo,
+                                         NULL,
+                                         iCeltNumCodedBytes,
+                                         &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
                                          SYSTEM_FRAME_SIZE_SAMPLES );
                 }
             }
@@ -1215,7 +1223,7 @@ fflush(pFileDelay);
     // phase
     if ( Channel.IsConnected() && ( !bIsInitializationPhase ) )
     {
-        if ( !bUseStereo )
+        if ( eAudioChannelConf == CC_MONO )
         {
             // copy mono data in stereo sound card buffer
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )

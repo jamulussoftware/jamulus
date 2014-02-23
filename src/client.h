@@ -129,7 +129,7 @@ public:
     EAudioQuality GetAudioQuality() const { return eAudioQuality; }
     void SetAudioQuality ( const EAudioQuality eNAudioQuality );
 
-    bool GetUseStereo() const { return bUseStereo; }
+    bool GetUseStereo() const { return ( eAudioChannelConf == CC_STEREO ); }
     void SetUseStereo ( const bool bNUseStereo );
 
     void SetServerListCentralServerAddress ( const QString& sNCentServAddr )
@@ -328,7 +328,7 @@ void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
     EAudComprType           eAudioCompressionType;
     int                     iCeltNumCodedBytes;
     EAudioQuality           eAudioQuality;
-    bool                    bUseStereo;
+    EAudChanConf            eAudioChannelConf;
     bool                    bIsInitializationPhase;
     CVector<unsigned char>  vecCeltData;
 

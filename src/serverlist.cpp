@@ -34,7 +34,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          CProtocol*     pNConLProt )
     : iPortNumber                     ( iNPortNum ),
       iNumPredefinedServers           ( 0 ),
-      bUseDefaultCentralServerAddress ( false ),
+      bUseDefaultCentralServerAddress ( false ), // must be false for the "no GUI" case
       bCentServPingServerInList       ( bNCentServPingServerInList ),
       pConnLessProtocol               ( pNConLProt )
 {
@@ -178,8 +178,11 @@ void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr 
     if ( !strCentralServerAddress.isEmpty() )
     {
         bIsCentralServer =
-            ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
-              !strCentralServerAddress.compare ( "127.0.0.1" ) );
+            (
+              ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
+                !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
+              ( !bUseDefaultCentralServerAddress )
+            );
 
         bEnabled = true;
     }

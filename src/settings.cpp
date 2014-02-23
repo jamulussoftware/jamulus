@@ -284,15 +284,17 @@ void CSettings::Load()
     {
         // server:
 
-        // central server address
-        pServer->SetServerListCentralServerAddress (
-            GetIniSetting ( IniXMLDocument, "server", "centralservaddr" ) );
-
-        // use default central server address flag
+        // use default central server address flag (note that it is important
+        // to set this setting prior to the "central server address")
         if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
         {
             pServer->SetUseDefaultCentralServerAddress ( bValue );
         }
+
+        // central server address (to be set after the "use default central
+        // server address)
+        pServer->SetServerListCentralServerAddress (
+            GetIniSetting ( IniXMLDocument, "server", "centralservaddr" ) );
 
         // server list enabled flag
         if ( GetFlagIniSet ( IniXMLDocument, "server", "servlistenabled", bValue ) )

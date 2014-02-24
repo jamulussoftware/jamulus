@@ -497,7 +497,7 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
     {
         // xrun handling (it is important to act on xruns under CoreAudio
         // since it seems that the xrun situation stays stable for a
-        // while and would give you a long time bad audio
+        // while and would give you a long time bad audio)
         pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART );
     }
 

@@ -189,6 +189,6 @@ public slots:
     void OnGUIDesignChanged()
         { SetGUIDesign ( pClient->GetGUIDesign() ); }
 
-    void OnStereoCheckBoxChanged() { UpdateRevSelection(); }
+    void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
 };

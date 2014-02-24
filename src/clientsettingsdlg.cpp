@@ -192,6 +192,28 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     chbGUIDesignFancy->setAccessibleName ( tr ( "Fancy skin check box" ) );
 
+    // audio channels
+    QString strAudioChannels = tr ( "<b>Audio Channels:</b> "
+        "Select the number of audio channels to be used. There are three "
+        "modes available. The mono and stereo modes use one and two "
+        "audio channels respectively. In the mono-in/stereo-out mode "
+        "the audio signal which is sent to the server is mono but the "
+        "return signal is stereo. This is useful for the case that the "
+        "sound card puts the instrument on one input channel and the "
+        "microphone on the other channel. In that case the two input signals "
+        "can be mixed to one mono channel but the server mix can be heard in "
+        "stereo.<br>"
+        "Enabling the stereo streaming mode will increase the "
+        "stream data rate. Make sure that the current upload rate does not "
+        "exceed the available bandwidth of your internet connection.<br>"
+        "In case of the stereo streaming mode, no audio channel selection "
+        "for the reverberation effect will be available on the main window "
+        "since the effect is applied on both channels in this case." );
+
+    lblAudioChannels->setWhatsThis ( strAudioChannels );
+    cbxAudioChannels->setWhatsThis ( strAudioChannels );
+    cbxAudioChannels->setAccessibleName ( tr ( "Audio channels combo box" ) );
+
     // audio quality
     QString strAudioQuality = tr ( "<b>Audio Quality:</b> "
         "Select the desired audio quality. A low, normal or high audio "
@@ -203,18 +225,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     lblAudioQuality->setWhatsThis ( strAudioQuality );
     cbxAudioQuality->setWhatsThis ( strAudioQuality );
     cbxAudioQuality->setAccessibleName ( tr ( "Audio quality combo box" ) );
-
-    // use stereo
-    chbUseStereo->setWhatsThis ( tr ( "<b>Stereo Streaming</b> "
-        "Enables the stereo streaming mode. If not checked, a mono streaming "
-        "mode is used. Enabling the stereo streaming mode will increase the "
-        "stream data rate. Make sure that the current upload rate does not "
-        "exceed the available bandwidth of your internet connection.<br>"
-        "In case of the stereo streaming mode, no audio channel selection "
-        "for the reverberation effect will be available on the main window "
-        "since the effect is applied on both channels in this case." ) );
-
-    chbUseStereo->setAccessibleName ( tr ( "Stereo check box" ) );
 
     // central server address
     QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
@@ -313,22 +323,19 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         chbGUIDesignFancy->setCheckState ( Qt::Checked );
     }
 
+    // "Audio Channels" combo box
+    cbxAudioChannels->clear();
+    cbxAudioChannels->addItem ( "Mono" );               // CC_MONO
+    cbxAudioChannels->addItem ( "Mono-in/Stereo-out" ); // CC_MONO_IN_STEREO_OUT
+    cbxAudioChannels->addItem ( "Stereo" );             // CC_STEREO
+    cbxAudioChannels->setCurrentIndex ( static_cast<int> ( pClient->GetAudioChannels() ) );
+
     // "Audio Quality" combo box
     cbxAudioQuality->clear();
     cbxAudioQuality->addItem ( "Low" );    // AQ_LOW
     cbxAudioQuality->addItem ( "Normal" ); // AQ_NORMAL
     cbxAudioQuality->addItem ( "High" );   // AQ_HIGH
     cbxAudioQuality->setCurrentIndex ( static_cast<int> ( pClient->GetAudioQuality() ) );
-
-    // "Stereo" check box
-    if ( pClient->GetUseStereo() )
-    {
-        chbUseStereo->setCheckState ( Qt::Checked );
-    }
-    else
-    {
-        chbUseStereo->setCheckState ( Qt::Unchecked );
-    }
 
     // update default central server address check box
     if ( pClient->GetUseDefaultCentralServerAddress() )
@@ -379,9 +386,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( chbGUIDesignFancy, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnGUIDesignFancyStateChanged ( int ) ) );
 
-    QObject::connect ( chbUseStereo, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnUseStereoStateChanged ( int ) ) );
-
     QObject::connect ( chbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnAutoJitBufStateChanged ( int ) ) );
 
@@ -407,6 +411,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     QObject::connect ( cbxROutChan, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnROutChanActivated ( int ) ) );
+
+    QObject::connect ( cbxAudioChannels, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnAudioChannelsActivated ( int ) ) );
 
     QObject::connect ( cbxAudioQuality, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnAudioQualityActivated ( int ) ) );
@@ -630,6 +637,13 @@ void CClientSettingsDlg::OnROutChanActivated ( int iChanIdx )
     UpdateSoundChannelSelectionFrame();
 }
 
+void CClientSettingsDlg::OnAudioChannelsActivated ( int iChanIdx )
+{
+    pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iChanIdx ) );
+    emit AudioChannelsChanged();
+    UpdateDisplay(); // upload rate will be changed
+}
+
 void CClientSettingsDlg::OnAudioQualityActivated ( int iQualityIdx )
 {
     pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iQualityIdx ) );
@@ -660,13 +674,6 @@ void CClientSettingsDlg::OnGUIDesignFancyStateChanged ( int value )
     }
     emit GUIDesignChanged();
     UpdateDisplay();
-}
-
-void CClientSettingsDlg::OnUseStereoStateChanged ( int value )
-{
-    pClient->SetUseStereo ( value == Qt::Checked );
-    emit StereoCheckBoxChanged();
-    UpdateDisplay(); // upload rate will be changed
 }
 
 void CClientSettingsDlg::OnDefaultCentralServerStateChanged ( int value )

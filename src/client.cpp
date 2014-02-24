@@ -472,7 +472,7 @@ void CClient::SetAudioQuality ( const EAudioQuality eNAudioQuality )
     }
 }
 
-void CClient::SetUseStereo ( const bool bNUseStereo )
+void CClient::SetAudioChannels ( const EAudChanConf eNAudChanConf )
 {
     // init with new parameter, if client was running then first
     // stop it and restart again after new initialization
@@ -483,14 +483,7 @@ void CClient::SetUseStereo ( const bool bNUseStereo )
     }
 
     // set new parameter
-    if ( bNUseStereo )
-    {
-        eAudioChannelConf = CC_STEREO;
-    }
-    else
-    {
-        eAudioChannelConf = CC_MONO;
-    }
+    eAudioChannelConf = eNAudChanConf;
     Init();
 
     if ( bWasRunning )

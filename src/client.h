@@ -129,8 +129,8 @@ public:
     EAudioQuality GetAudioQuality() const { return eAudioQuality; }
     void SetAudioQuality ( const EAudioQuality eNAudioQuality );
 
-    bool GetUseStereo() const { return ( eAudioChannelConf == CC_STEREO ); }
-    void SetUseStereo ( const bool bNUseStereo );
+    EAudChanConf GetAudioChannels() const { return eAudioChannelConf; }
+    void SetAudioChannels ( const EAudChanConf eNAudChanConf );
 
     void SetServerListCentralServerAddress ( const QString& sNCentServAddr )
         { strCentralServerAddress = sNCentServAddr; }

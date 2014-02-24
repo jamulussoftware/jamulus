@@ -511,8 +511,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( GUIDesignChanged() ),
         this, SLOT ( OnGUIDesignChanged() ) );
 
-    QObject::connect ( &ClientSettingsDlg, SIGNAL ( StereoCheckBoxChanged() ),
-        this, SLOT ( OnStereoCheckBoxChanged() ) );
+    QObject::connect ( &ClientSettingsDlg, SIGNAL ( AudioChannelsChanged() ),
+        this, SLOT ( OnAudioChannelsChanged() ) );
 
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
@@ -611,7 +611,7 @@ void CClientDlg::UpdateAudioFaderSlider()
 
 void CClientDlg::UpdateRevSelection()
 {
-    if ( pClient->GetUseStereo() )
+    if ( pClient->GetAudioChannels() == CC_STEREO )
     {
         // for stereo make channel selection invisible since
         // reverberation effect is always applied to both channels

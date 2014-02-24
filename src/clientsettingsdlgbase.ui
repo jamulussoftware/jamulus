@@ -482,11 +482,18 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="chbUseStereo">
-        <property name="text">
-         <string>Stereo Streaming</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="lblAudioChannels">
+          <property name="text">
+           <string>Audio Channels</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="cbxAudioChannels"/>
+        </item>
+       </layout>
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
@@ -683,7 +690,8 @@
   <tabstop>sldNetBufServer</tabstop>
   <tabstop>chbOpenChatOnNewMessage</tabstop>
   <tabstop>chbGUIDesignFancy</tabstop>
-  <tabstop>chbUseStereo</tabstop>
+  <tabstop>cbxAudioChannels</tabstop>
+  <tabstop>cbxAudioQuality</tabstop>
   <tabstop>chbDefaultCentralServer</tabstop>
   <tabstop>edtCentralServerAddress</tabstop>
  </tabstops>

@@ -223,17 +223,18 @@ void CSettings::Load()
             pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
         }
 
+        // audio channels
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "audiochannels",
+             0, 2 /* CC_STEREO */, iValue ) )
+        {
+            pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iValue ) );
+        }
+
         // audio quality
         if ( GetNumericIniSet ( IniXMLDocument, "client", "audioquality",
              0, 2 /* AQ_HIGH */, iValue ) )
         {
             pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iValue ) );
-        }
-
-        // flag whether stereo mode is used
-        if ( GetFlagIniSet ( IniXMLDocument, "client", "stereoaudio", bValue ) )
-        {
-            pClient->SetUseStereo ( bValue );
         }
 
         // central server address
@@ -432,13 +433,13 @@ void CSettings::Save()
         SetNumericIniSet ( IniXMLDocument, "client", "guidesign",
             static_cast<int> ( pClient->GetGUIDesign() ) );
 
+        // audio channels
+        SetNumericIniSet ( IniXMLDocument, "client", "audiochannels",
+            static_cast<int> ( pClient->GetAudioChannels() ) );
+
         // audio quality
         SetNumericIniSet ( IniXMLDocument, "client", "audioquality",
             static_cast<int> ( pClient->GetAudioQuality() ) );
-
-        // flag whether stereo mode is used
-        SetFlagIniSet ( IniXMLDocument, "client", "stereoaudio",
-            pClient->GetUseStereo() );
 
         // central server address
         PutIniSetting ( IniXMLDocument, "client", "centralservaddr",

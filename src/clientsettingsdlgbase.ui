@@ -466,7 +466,7 @@
      <property name="title">
       <string>Misc</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <widget class="QCheckBox" name="chbOpenChatOnNewMessage">
         <property name="text">
@@ -482,30 +482,34 @@
        </widget>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="lblAudioChannels">
-          <property name="text">
-           <string>Audio Channels</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbxAudioChannels"/>
-        </item>
-       </layout>
-      </item>
-      <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLabel" name="lblAudioQuality">
-          <property name="text">
-           <string>Audio Quality</string>
-          </property>
-         </widget>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QLabel" name="lblAudioChannels">
+            <property name="text">
+             <string>Audio Channels</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblAudioQuality">
+            <property name="text">
+             <string>Audio Quality</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QComboBox" name="cbxAudioQuality"/>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QComboBox" name="cbxAudioChannels"/>
+          </item>
+          <item>
+           <widget class="QComboBox" name="cbxAudioQuality"/>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>

@@ -288,7 +288,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     pViewMenu->addAction ( tr ( "C&hat..." ), this,
         SLOT ( OnOpenChatDialog() ) );
 
-    pViewMenu->addAction ( tr ( "&General Settings..." ), this,
+    pViewMenu->addAction ( tr ( "&Settings..." ), this,
         SLOT ( OnOpenGeneralSettings() ) );
 
     // optionally show analyzer console entry

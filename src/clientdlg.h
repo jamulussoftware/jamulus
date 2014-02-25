@@ -83,7 +83,7 @@ protected:
     void               SetMyWindowTitle ( const int iNumClients );
     void               ShowConnectionSetupDialog();
     void               ShowGeneralSettings();
-    void               ShowChatWindow();
+    void               ShowChatWindow ( const bool bForceRaise = true );
     void               ShowAnalyzerConsole();
     void               UpdateAudioFaderSlider();
     void               UpdateRevSelection();
@@ -95,7 +95,6 @@ protected:
     CSettings*         pSettings;
 
     bool               bConnected;
-    bool               bUnreadChatMessage;
     QTimer             TimerSigMet;
     QTimer             TimerBuffersLED;
     QTimer             TimerStatus;

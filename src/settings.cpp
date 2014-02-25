@@ -210,12 +210,6 @@ void CSettings::Load()
             pClient->SetServerSockBufNumFrames ( iValue );
         }
 
-        // flag whether the chat window shall be opened on a new chat message
-        if ( GetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage", bValue ) )
-        {
-            pClient->SetOpenChatOnNewMessage ( bValue );
-        }
-
         // GUI design
         if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign",
              0, 1 /* GD_ORIGINAL */, iValue ) )
@@ -424,10 +418,6 @@ void CSettings::Save()
         // network jitter buffer size for server
         SetNumericIniSet ( IniXMLDocument, "client", "jitbufserver",
             pClient->GetServerSockBufNumFrames() );
-
-        // flag whether the chat window shall be opened on a new chat message
-        SetFlagIniSet ( IniXMLDocument, "client", "openchatonnewmessage",
-            pClient->GetOpenChatOnNewMessage() );
 
         // GUI design
         SetNumericIniSet ( IniXMLDocument, "client", "guidesign",

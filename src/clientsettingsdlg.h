@@ -89,7 +89,6 @@ protected:
     void OnNetBufServerValueChanged ( int value );
     void OnSliderSndCrdBufferDelay ( int value );
     void OnAutoJitBufStateChanged ( int value );
-    void OnOpenChatOnNewMessageStateChanged ( int value );
     void OnGUIDesignFancyStateChanged ( int value );
     void OnDefaultCentralServerStateChanged ( int value );
     void OnCentralServerAddressEditingFinished();

@@ -57,7 +57,6 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bFraSiFactPrefSupported          ( false ),
     bFraSiFactDefSupported           ( false ),
     bFraSiFactSafeSupported          ( false ),
-    bOpenChatOnNewMessage            ( true ),
     eGUIDesign                       ( GD_ORIGINAL ),
     bJitterBufferOK                  ( true ),
     strCentralServerAddress          ( "" ),

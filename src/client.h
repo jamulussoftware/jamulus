@@ -120,9 +120,6 @@ public:
 
     bool   IsConnected() { return Channel.IsConnected(); }
 
-    bool GetOpenChatOnNewMessage() const { return bOpenChatOnNewMessage; }
-    void SetOpenChatOnNewMessage ( const bool bNV ) { bOpenChatOnNewMessage = bNV; }
-
     EGUIDesign GetGUIDesign() const { return eGUIDesign; }
     void SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
 
@@ -360,7 +357,6 @@ void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
     int                     iMonoBlockSizeSam;
     int                     iStereoBlockSizeSam;
 
-    bool                    bOpenChatOnNewMessage;
     EGUIDesign              eGUIDesign;
 
     bool                    bJitterBufferOK;

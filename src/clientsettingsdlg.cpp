@@ -174,18 +174,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     butDriverSetup->setAccessibleName ( tr ( "ASIO setup push button" ) );
     butDriverSetup->setToolTip ( strSndCrdBufDelayTT );
 
-    // open chat on new message
-    chbOpenChatOnNewMessage->setWhatsThis ( tr ( "<b>Open Chat on New "
-        "Message:</b> If enabled, the chat window will "
-        "open on any incoming chat text if it not already opened." ) );
-
-    chbOpenChatOnNewMessage->setAccessibleName ( tr ( "Open chat on new "
-        "message check box" ) );
-
-    chbOpenChatOnNewMessage->setToolTip ( tr ( "If Open Chat on New Message "
-        "is disabled, a LED in the main window turns green when a "
-        "new message has arrived." ) + TOOLTIP_COM_END_TEXT );
-
     // fancy skin
     chbGUIDesignFancy->setWhatsThis ( tr ( "<b>Fancy Skin:</b> If enabled, "
         "a fancy skin will be applied to the main window." ) );
@@ -303,16 +291,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // init sound card channel selection frame
     UpdateSoundChannelSelectionFrame();
 
-    // "OpenChatOnNewMessage" check box
-    if ( pClient->GetOpenChatOnNewMessage() )
-    {
-        chbOpenChatOnNewMessage->setCheckState ( Qt::Checked );
-    }
-    else
-    {
-        chbOpenChatOnNewMessage->setCheckState ( Qt::Unchecked );
-    }
-
     // fancy GUI design check box
     if ( pClient->GetGUIDesign() == GD_STANDARD )
     {
@@ -380,9 +358,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         this, SLOT ( OnNetBufServerValueChanged ( int ) ) );
 
     // check boxes
-    QObject::connect ( chbOpenChatOnNewMessage, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnOpenChatOnNewMessageStateChanged ( int ) ) );
-
     QObject::connect ( chbGUIDesignFancy, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnGUIDesignFancyStateChanged ( int ) ) );
 
@@ -654,12 +629,6 @@ void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 {
     pClient->SetDoAutoSockBufSize ( value == Qt::Checked );
     UpdateJitterBufferFrame();
-}
-
-void CClientSettingsDlg::OnOpenChatOnNewMessageStateChanged ( int value )
-{
-    pClient->SetOpenChatOnNewMessage ( value == Qt::Checked );
-    UpdateDisplay();
 }
 
 void CClientSettingsDlg::OnGUIDesignFancyStateChanged ( int value )

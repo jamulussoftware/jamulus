@@ -37,7 +37,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QDialog            ( parent, f ),
     pClient            ( pNCliP ),
     pSettings          ( pNSetP ),
-    bUnreadChatMessage ( false ),
     ClientSettingsDlg  ( pNCliP, parent, Qt::Window ),
     ChatDlg            ( parent, Qt::Window ),
     ConnectDlg         ( bNewShowComplRegConnList, parent, Qt::Dialog ),
@@ -217,17 +216,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     ledBuffers->setAccessibleName ( tr ( "Buffers status LED indicator" ) );
 
-    // chat LED
-    QString strLEDChat =  tr ( "<b>Chat Status LED:</b> "
-        "If the option Open Chat on New Message is not activated, this "
-        "status LED will turn green on a new received chat message." );
-
-    lblChat->setWhatsThis ( strLEDChat );
-    ledChat->setWhatsThis ( strLEDChat );
-
-    ledBuffers->setAccessibleName ( tr ( "Chat status LED indicator" ) );
-
-
     // init GUI design
     SetGUIDesign ( pClient->GetGUIDesign() );
 
@@ -258,7 +246,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     ledConnection->Reset();
     ledBuffers->Reset();
     ledDelay->Reset();
-    ledChat->Reset();
 
 
     // init slider controls ---
@@ -306,7 +293,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         ledConnection->setEnabled ( false );
         ledBuffers->setEnabled ( false );
         ledDelay->setEnabled ( false );
-        ledChat->setEnabled ( false );
         butConnect->setFocus();
     }
 
@@ -733,23 +719,11 @@ void CClientDlg::OnInstPicturesMenuTriggered ( QAction* SelAction )
 
 void CClientDlg::OnChatTextReceived ( QString strChatText )
 {
-    // init flag (will maybe overwritten later in this function)
-    bUnreadChatMessage = false;
-
     ChatDlg.AddChatText ( strChatText );
 
-    // if requested, open window
-    if ( pClient->GetOpenChatOnNewMessage() )
-    {
-        ShowChatWindow();
-    }
-    else
-    {
-        if ( !ChatDlg.isVisible() )
-        {
-            bUnreadChatMessage = true;
-        }
-    }
+    // open window (note that we do not want to force the dialog to be upfront
+    // always when a new message arrives since this is annoying)
+    ShowChatWindow ( false );
 
     UpdateDisplay();
 }
@@ -817,17 +791,17 @@ void CClientDlg::ShowGeneralSettings()
     ClientSettingsDlg.activateWindow();
 }
 
-void CClientDlg::ShowChatWindow()
+void CClientDlg::ShowChatWindow ( const bool bForceRaise )
 {
-    // open chat dialog
-    ChatDlg.show();
+    // open chat dialog if it is not visible
+    if ( bForceRaise || !ChatDlg.isVisible() )
+    {
+        ChatDlg.show();
 
-    // make sure dialog is upfront and has focus
-    ChatDlg.raise();
-    ChatDlg.activateWindow();
-
-    // chat dialog is opened, reset unread message flag
-    bUnreadChatMessage = false;
+        // make sure dialog is upfront and has focus
+        ChatDlg.raise();
+        ChatDlg.activateWindow();
+    }
 
     UpdateDisplay();
 }
@@ -1086,7 +1060,6 @@ OnTimerStatus();
     ledConnection->Reset();
     ledBuffers->Reset();
     ledDelay->Reset();
-    ledChat->Reset();
     ClientSettingsDlg.ResetStatusAndPingLED();
 
     // clear mixer board (remove all faders)
@@ -1100,16 +1073,6 @@ void CClientDlg::UpdateDisplay()
     {
         if ( pClient->IsConnected() )
         {
-            // chat LED
-            if ( bUnreadChatMessage )
-            {
-                ledChat->SetLight ( CMultiColorLED::RL_GREEN );
-            }
-            else
-            {
-                ledChat->Reset();
-            }
-
             // connection LED
             ledConnection->SetLight ( CMultiColorLED::RL_GREEN );
         }

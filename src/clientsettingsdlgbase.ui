@@ -468,20 +468,6 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QCheckBox" name="chbOpenChatOnNewMessage">
-        <property name="text">
-         <string>Open Chat on New Message</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="chbGUIDesignFancy">
-        <property name="text">
-         <string>Fancy Skin</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -512,6 +498,13 @@
          </layout>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chbGUIDesignFancy">
+        <property name="text">
+         <string>Fancy Skin</string>
+        </property>
+       </widget>
       </item>
       <item>
        <layout class="QHBoxLayout">
@@ -692,7 +685,6 @@
   <tabstop>chbAutoJitBuf</tabstop>
   <tabstop>sldNetBuf</tabstop>
   <tabstop>sldNetBufServer</tabstop>
-  <tabstop>chbOpenChatOnNewMessage</tabstop>
   <tabstop>chbGUIDesignFancy</tabstop>
   <tabstop>cbxAudioChannels</tabstop>
   <tabstop>cbxAudioQuality</tabstop>

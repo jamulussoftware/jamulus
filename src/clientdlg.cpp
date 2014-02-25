@@ -164,20 +164,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     rbtReverbSelR->setWhatsThis ( strRevChanSel );
     rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverberation" ) );
 
-    // connection LED
-    QString strLEDConnection = tr ( "<b>Connection Status LED:</b> "
-        "The connection status LED indicator shows the current connection "
-        "status. If the light is green, a successful connection to the "
-        "server is established. If the light blinks red right after "
-        "pressing the connect button, the server address is invalid. "
-        "If the light turns red and stays red, the connection to the "
-        "server is lost." );
-
-    lblConnection->setWhatsThis ( strLEDConnection );
-    ledConnection->setWhatsThis ( strLEDConnection );
-
-    ledConnection->setAccessibleName ( tr ( "Connection status LED indicator" ) );
-
     // delay LED
     QString strLEDDelay = tr ( "<b>Delay Status LED:</b> "
         "The delay status LED indicator shows the current audio delay "
@@ -242,7 +228,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     lbrInputLevelR->setValue ( 0 );
 
     // init status LEDs
-    ledConnection->Reset();
     ledBuffers->Reset();
     ledDelay->Reset();
 
@@ -673,8 +658,10 @@ void CClientDlg::OnConnectDisconBut()
 
 void CClientDlg::OnDisconnected()
 {
-    // channel is now disconnected, clear mixer board (remove all faders)
+    // channel is now disconnected, clear mixer board (remove all faders) and
+    // reset the delay LED (since this is only updated on an active connection)
     MainMixerBoard->HideAll();
+    ledDelay->Reset();
 
     UpdateDisplay();
 }
@@ -1003,11 +990,6 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
         TimerBuffersLED.start ( BUFFER_LED_UPDATE_TIME_MS );
         TimerPing.start ( PING_UPDATE_TIME_MS );
     }
-    else
-    {
-        // show the error as red light
-        ledConnection->SetLight ( CMultiColorLED::RL_RED );
-    }
 }
 
 void CClientDlg::Disconnect()
@@ -1043,7 +1025,6 @@ OnTimerStatus();
 
 
     // reset LEDs
-    ledConnection->Reset();
     ledBuffers->Reset();
     ledDelay->Reset();
     ClientSettingsDlg.ResetStatusAndPingLED();
@@ -1054,21 +1035,6 @@ OnTimerStatus();
 
 void CClientDlg::UpdateDisplay()
 {
-    // update status LEDs
-    if ( pClient->IsRunning() )
-    {
-        if ( pClient->IsConnected() )
-        {
-            // connection LED
-            ledConnection->SetLight ( CMultiColorLED::RL_GREEN );
-        }
-        else
-        {
-            // connection LED
-            ledConnection->SetLight ( CMultiColorLED::RL_RED );
-        }
-    }
-
     // update settings/chat buttons (do not fire signals since it is an update)
     if ( chbSettings->isChecked() && !ClientSettingsDlg.isVisible() )
     {

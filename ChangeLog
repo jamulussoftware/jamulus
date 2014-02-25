@@ -6,14 +6,16 @@
 - added a mono-in/stereo-out mode to support special sound cards which have
   mono inputs for the instrument and a microphone but have stereo outputs
 
-- store fader solo state
+- store fader solo state in the ini file
 
 - improved stability of the audio stream by reducing audio drop outs (by
   using a separate socket thread)
 
+- removed unnecessary settings and LED indicators
+
 - bug fix: the fader level could not be changed if the fader was on solo  
 
-3.3.3
+3.3.3 (2013-12-30)
 
 - support for storing/recovering the window positions
 

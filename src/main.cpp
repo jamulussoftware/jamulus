@@ -57,7 +57,6 @@ int main ( int argc, char** argv )
     bool    bUseGUI                   = true;
     bool    bStartMinimized           = false;
     bool    bConnectOnStartup         = false;
-    bool    bDisalbeLEDs              = false;
     bool    bShowComplRegConnList     = false;
     bool    bShowAnalyzerConsole      = false;
     bool    bCentServPingServerInList = false;
@@ -130,18 +129,6 @@ int main ( int argc, char** argv )
         {
             bStartMinimized = true;
             tsConsole << "- start minimized enabled" << endl;
-            continue;
-        }
-
-
-        // Disable LEDs flag ---------------------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-d",
-                               "--disableleds" ) )
-        {
-            bDisalbeLEDs = true;
-            tsConsole << "- disable LEDs in main window" << endl;
             continue;
         }
 
@@ -406,7 +393,6 @@ int main ( int argc, char** argv )
             CClientDlg ClientDlg ( &Client,
                                    &Settings,
                                    bConnectOnStartup,
-                                   bDisalbeLEDs,
                                    bShowComplRegConnList,
                                    bShowAnalyzerConsole,
                                    0,
@@ -515,7 +501,6 @@ QString UsageArguments ( char **argv )
         "                        only)\n"
         "  -c, --connect         connect to last server on startup (client\n"
         "                        only)\n"
-        "  -d, --disableleds     disable LEDs in main window (client only)\n"
         "  -e, --centralserver   address of the central server (server only)\n"
         "  -g, --pingservers     ping servers in list to keep NAT port open\n"
         "                        (central server only)\n"

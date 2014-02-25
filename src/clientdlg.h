@@ -72,7 +72,6 @@ public:
     CClientDlg ( CClient*        pNCliP,
                  CSettings*      pNSetP,
                  const bool      bNewConnectOnStartup,
-                 const bool      bNewDisalbeLEDs,
                  const bool      bNewShowComplRegConnList,
                  const bool      bShowAnalyzerConsole,
                  QWidget*        parent = 0,

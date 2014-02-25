@@ -29,7 +29,6 @@
 CClientDlg::CClientDlg ( CClient*        pNCliP,
                          CSettings*      pNSetP,
                          const bool      bNewConnectOnStartup,
-                         const bool      bNewDisalbeLEDs,
                          const bool      bNewShowComplRegConnList,
                          const bool      bShowAnalyzerConsole,
                          QWidget*        parent,
@@ -281,19 +280,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
             // (no alias))
             Connect ( strSelectedAddress, strSelectedAddress );
         }
-    }
-
-
-    // Disable controls on request ---------------------------------------------
-    // disable LEDs in main window if requested
-    if ( bNewDisalbeLEDs )
-    {
-        lbrInputLevelL->setEnabled ( false );
-        lbrInputLevelR->setEnabled ( false );
-        ledConnection->setEnabled ( false );
-        ledBuffers->setEnabled ( false );
-        ledDelay->setEnabled ( false );
-        butConnect->setFocus();
     }
 
 

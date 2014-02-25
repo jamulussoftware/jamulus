@@ -307,6 +307,8 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
         // store ID of selected driver if initialization was successful
         lCurDev = iDriverIdx;
 
+// TODO why is only the input enough...?
+
         // setup callback for xruns (only for input is enough)
         AudioDeviceAddPropertyListener ( audioInputDevice[lCurDev],
                                          0,

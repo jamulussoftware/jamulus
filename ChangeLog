@@ -3,12 +3,15 @@
 - true stereo reverberation effect (previously it was a mono reverberation
   effect on both stereo channels)
 
+- added a mono-in/stereo-out mode to support special sound cards which have
+  mono inputs for the instrument and a microphone but have stereo outputs
+
 - store fader solo state
 
 - improved stability of the audio stream by reducing audio drop outs (by
   using a separate socket thread)
 
-- bug fix: the fader level could not be changed if fader was on solo  
+- bug fix: the fader level could not be changed if the fader was on solo  
 
 3.3.3
 

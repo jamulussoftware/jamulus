@@ -51,8 +51,8 @@ public:
 
     void SetIsSimulation ( const bool bNIsSim ) { bIsSimulation = bNIsSim; }
 
-    virtual void Init ( const int  iNewMemSize,
-                        const bool bPreserve = false )
+    void Init ( const int  iNewMemSize,
+                const bool bPreserve = false )
     {
         // in simulation mode the size is not changed during operation -> we do
         // not have to implement special code for this case
@@ -379,9 +379,9 @@ public:
     CNetBuf ( const bool bNewIsSim = false ) :
        CBufferBase<uint8_t> ( bNewIsSim ) {}
 
-    virtual void Init ( const int  iNewBlockSize,
-                        const int  iNewNumBlocks,
-                        const bool bPreserve = false );
+    void Init ( const int  iNewBlockSize,
+                const int  iNewNumBlocks,
+                const bool bPreserve = false );
 
     int GetSize() { return iMemSize / iBlockSize; }
 
@@ -399,9 +399,9 @@ class CNetBufWithStats : public CNetBuf
 public:
     CNetBufWithStats();
 
-    virtual void Init ( const int iNewBlockSize,
-                        const int iNewNumBlocks,
-                        const bool bPreserve = false );
+    void Init ( const int iNewBlockSize,
+                const int iNewNumBlocks,
+                const bool bPreserve = false );
 
     virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
     virtual bool Get ( CVector<uint8_t>& vecbyData, const int iOutSize );

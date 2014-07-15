@@ -1956,7 +1956,7 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
     // Extract actual data -----------------------------------------------------
 
 // TODO this memory allocation is done in the real time thread but should be
-//      done in the low prioirity protocol management thread
+//      done in the low priority protocol management thread
 
     vecbyMesBodyData.Init ( iLenBy );
 

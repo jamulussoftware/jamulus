@@ -1,3 +1,13 @@
+3.3.5
+
+
+TODO:
+#introduce CONFIG flag to exclude legacy CELT code from Jamulus (completely)
+#introduce CONFIG flag to use external OPUS library (initially only for Linux)
+#add a Linux desktop link for Jamulus
+
+
+
 3.3.4
 
 - true stereo reverberation effect (previously it was a mono reverberation

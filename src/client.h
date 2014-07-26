@@ -30,8 +30,14 @@
 #include <QString>
 #include <QDateTime>
 #include <QMessageBox>
-#include "cc6_celt.h"
-#include "opus_custom.h"
+#ifdef USE_LEGACY_CELT
+# include "cc6_celt.h"
+#endif
+#ifdef USE_OPUS_SHARED_LIB
+# include "opus/opus_custom.h"
+#else
+# include "opus_custom.h"
+#endif
 #include "global.h"
 #include "socket.h"
 #include "channel.h"
@@ -304,19 +310,23 @@ protected:
     void        CreateServerJitterBufferMessage();
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+#ifdef USE_LEGACY_CELT
 void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
+#endif
 
     // only one channel is needed for client application
     CChannel                Channel;
     CProtocol               ConnLessProtocol;
 
     // audio encoder/decoder
+#ifdef USE_LEGACY_CELT
     cc6_CELTMode*           CeltModeMono;
     cc6_CELTEncoder*        CeltEncoderMono;
     cc6_CELTDecoder*        CeltDecoderMono;
     cc6_CELTMode*           CeltModeStereo;
     cc6_CELTEncoder*        CeltEncoderStereo;
     cc6_CELTDecoder*        CeltDecoderStereo;
+#endif
     OpusCustomMode*         OpusMode;
     OpusCustomEncoder*      OpusEncoderMono;
     OpusCustomDecoder*      OpusDecoderMono;
@@ -397,7 +407,9 @@ public slots:
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+#ifdef USE_LEGACY_CELT
 void OnOpusSupported();
+#endif
 
 signals:
     void ConClientListNameMesReceived ( CVector<CChannelInfo> vecChanInfo );
@@ -421,7 +433,9 @@ signals:
     void Disconnected();
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+#ifdef USE_LEGACY_CELT
 void UpstreamRateChanged();
+#endif
 };
 
 #endif /* !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

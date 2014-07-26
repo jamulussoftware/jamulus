@@ -554,9 +554,11 @@ case PROTMESSID_CHANNEL_NAME:
                 break;
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+#ifdef USE_LEGACY_CELT
 case PROTMESSID_OPUS_SUPPORTED:
     bRet = EvaluateOpusSupportedMes();
     break;
+#endif
             }
 
             // immediately send acknowledge message
@@ -1282,8 +1284,9 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     const int iRecCodingType =
         static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
-    if ( ( iRecCodingType != CT_NONE ) &&
-         ( iRecCodingType != CT_CELT ) &&
+    // note that CT_NONE is not a valid setting but only used for server
+    // initialization
+    if ( ( iRecCodingType != CT_CELT ) &&
          ( iRecCodingType != CT_OPUS ) )
     {
         return true;
@@ -1326,6 +1329,7 @@ void CProtocol::CreateOpusSupportedMes()
                            CVector<uint8_t> ( 0 ) );
 }
 
+#ifdef USE_LEGACY_CELT
 bool CProtocol::EvaluateOpusSupportedMes()
 {
     // invoke message action
@@ -1333,6 +1337,7 @@ bool CProtocol::EvaluateOpusSupportedMes()
 
     return false; // no error
 }
+#endif
 
 
 // Connection less messages ----------------------------------------------------

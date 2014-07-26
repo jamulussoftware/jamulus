@@ -8,9 +8,11 @@ QT += widgets \
     network \
     xml
 
-INCLUDEPATH += src \
-    libs/celt \
-    libs/opus/include \
+INCLUDEPATH += src
+
+INCLUDEPATH_CELT = libs/celt
+
+INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/celt \
     libs/opus/silk \
     libs/opus/silk/float
@@ -114,8 +116,9 @@ HEADERS += src/audiomixerboard.h \
     src/soundbase.h \
     src/testbench.h \
     src/util.h \
-    src/analyzerconsole.h \
-    libs/celt/cc6_celt.h \
+    src/analyzerconsole.h
+
+HEADERS_CELT = libs/celt/cc6_celt.h \
     libs/celt/cc6_celt_types.h \
     libs/celt/cc6_celt_header.h \
     libs/celt/cc6__kiss_fft_guts.h \
@@ -145,8 +148,9 @@ HEADERS += src/audiomixerboard.h \
     libs/celt/cc6_quant_bands.h \
     libs/celt/cc6_rate.h \
     libs/celt/cc6_stack_alloc.h \
-    libs/celt/cc6_vq.h \
-    libs/opus/include/opus.h \
+    libs/celt/cc6_vq.h
+
+HEADERS_OPUS = libs/opus/include/opus.h \
     libs/opus/include/opus_multistream.h \
     libs/opus/include/opus_custom.h \
     libs/opus/include/opus_types.h \
@@ -238,8 +242,9 @@ SOURCES += src/audiomixerboard.cpp \
     src/socket.cpp \
     src/soundbase.cpp \
     src/util.cpp \
-    src/analyzerconsole.cpp \
-    libs/celt/cc6_bands.c \
+    src/analyzerconsole.cpp
+
+SOURCES_CELT = libs/celt/cc6_bands.c \
     libs/celt/cc6_celt.c \
     libs/celt/cc6_cwrs.c \
     libs/celt/cc6_entcode.c \
@@ -258,8 +263,9 @@ SOURCES += src/audiomixerboard.cpp \
     libs/celt/cc6_rangedec.c \
     libs/celt/cc6_rangeenc.c \
     libs/celt/cc6_rate.c \
-    libs/celt/cc6_vq.c \
-    libs/opus/src/opus.c \
+    libs/celt/cc6_vq.c
+
+SOURCES_OPUS = libs/opus/src/opus.c \
     libs/opus/src/opus_decoder.c \
     libs/opus/src/opus_encoder.c \
     libs/opus/src/opus_multistream.c \
@@ -404,22 +410,6 @@ DISTFILES += AUTHORS \
     NEWS \
     README \
     TODO \
-    libs/celt/AUTHORS \
-    libs/celt/ChangeLog \
-    libs/celt/COPYING \
-    libs/celt/INSTALL \
-    libs/celt/NEWS \
-    libs/celt/README \
-    libs/celt/README_LLCON \
-    libs/celt/TODO \
-    libs/opus/AUTHORS \
-    libs/opus/ChangeLog \
-    libs/opus/COPYING \
-    libs/opus/INSTALL \
-    libs/opus/NEWS \
-    libs/opus/README \
-    libs/opus/celt/arm/armopts.s.in \
-    libs/opus/celt/arm/celt_pitch_xcorr_arm.s \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \
@@ -497,3 +487,47 @@ DISTFILES += AUTHORS \
     src/res/instrtuba.png \
     src/res/instrviolin.png \
     src/res/instrvocal.png
+
+DISTFILES_CELT += libs/celt/AUTHORS \
+    libs/celt/ChangeLog \
+    libs/celt/COPYING \
+    libs/celt/INSTALL \
+    libs/celt/NEWS \
+    libs/celt/README \
+    libs/celt/README_LLCON \
+    libs/celt/TODO
+
+DISTFILES_OPUS += libs/opus/AUTHORS \
+    libs/opus/ChangeLog \
+    libs/opus/COPYING \
+    libs/opus/INSTALL \
+    libs/opus/NEWS \
+    libs/opus/README \
+    libs/opus/celt/arm/armopts.s.in \
+    libs/opus/celt/arm/celt_pitch_xcorr_arm.s \
+
+# exclude CELT support if requested
+!contains(CONFIG, "nocelt") {
+    message(Legacy support for CELT enabled.)
+
+    INCLUDEPATH += $$INCLUDEPATH_CELT
+    HEADERS += $$HEADERS_CELT
+    SOURCES += $$SOURCES_CELT
+    DISTFILES += $$DISTFILES_CELT
+    DEFINES += USE_LEGACY_CELT
+}
+
+# use external OPUS library if requested
+contains(CONFIG, "opus_shared_lib") {
+    message(OPUS codec is used from a shared library.)
+
+    unix {
+        LIBS += -llibopus
+        DEFINES += USE_OPUS_SHARED_LIB
+    }
+} else {
+    INCLUDEPATH += $$INCLUDEPATH_OPUS
+    HEADERS += $$HEADERS_OPUS
+    SOURCES += $$SOURCES_OPUS
+    DISTFILES += $$DISTFILES_OPUS
+}

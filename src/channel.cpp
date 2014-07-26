@@ -98,9 +98,11 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
         SIGNAL ( ChatTextReceived ( QString ) ) );
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+#ifdef USE_LEGACY_CELT
 QObject::connect ( &Protocol,
     SIGNAL ( OpusSupported() ),
     SIGNAL ( OpusSupported() ) );
+#endif
 
     QObject::connect ( &Protocol,
         SIGNAL ( NetTranspPropsReceived ( CNetworkTransportProps ) ),
@@ -380,6 +382,24 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
     // only the server shall act on network transport properties message
     if ( bIsServer )
     {
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+        // if old CELT codec is used, inform the client that the new OPUS codec
+        // is supported
+        if ( NetworkTransportProps.eAudioCodingType != CT_OPUS )
+        {
+            Protocol.CreateOpusSupportedMes();
+        }
+
+#ifndef USE_LEGACY_CELT
+        // in case legacy support for CELT is not enabled, we refuse the
+        // complete network transport properties if the audio coding type
+        // is set to CELT
+        if ( NetworkTransportProps.eAudioCodingType == CT_CELT )
+        {
+            return;
+        }
+#endif
+
         Mutex.lock();
         {
             // store received parameters
@@ -405,13 +425,6 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             MutexConvBuf.unlock();
         }
         Mutex.unlock();
-
-        // if old CELT codec is used, inform the client that the new OPUS codec
-        // is supported
-        if ( NetworkTransportProps.eAudioCodingType != CT_OPUS )
-        {
-            Protocol.CreateOpusSupportedMes();
-        }
     }
 }
 

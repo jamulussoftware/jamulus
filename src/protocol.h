@@ -213,7 +213,9 @@ protected:
     bool EvaluateChatTextMes          ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes   ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
+#ifdef USE_LEGACY_CELT
     bool EvaluateOpusSupportedMes();
+#endif
 
     bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );

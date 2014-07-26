@@ -29,8 +29,14 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QHostAddress>
-#include "cc6_celt.h"
-#include "opus_custom.h"
+#ifdef USE_LEGACY_CELT
+# include "cc6_celt.h"
+#endif
+#ifdef USE_OPUS_SHARED_LIB
+# include "opus/opus_custom.h"
+#else
+# include "opus_custom.h"
+#endif
 #include "global.h"
 #include "socket.h"
 #include "channel.h"
@@ -221,12 +227,14 @@ protected:
     QMutex                     Mutex;
 
     // audio encoder/decoder
+#ifdef USE_LEGACY_CELT
     cc6_CELTMode*              CeltModeMono[MAX_NUM_CHANNELS];
     cc6_CELTEncoder*           CeltEncoderMono[MAX_NUM_CHANNELS];
     cc6_CELTDecoder*           CeltDecoderMono[MAX_NUM_CHANNELS];
     cc6_CELTMode*              CeltModeStereo[MAX_NUM_CHANNELS];
     cc6_CELTEncoder*           CeltEncoderStereo[MAX_NUM_CHANNELS];
     cc6_CELTDecoder*           CeltDecoderStereo[MAX_NUM_CHANNELS];
+#endif
     OpusCustomMode*            OpusMode[MAX_NUM_CHANNELS];
     OpusCustomEncoder*         OpusEncoderMono[MAX_NUM_CHANNELS];
     OpusCustomDecoder*         OpusDecoderMono[MAX_NUM_CHANNELS];

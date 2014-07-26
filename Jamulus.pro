@@ -1,5 +1,11 @@
 VERSION = 3.3.5cvs
 
+# use target name which does not use a captital letter at the beginning
+contains(CONFIG, "noupcasename") {
+    message(The target name is jamulus instead of Jamulus.)
+    TARGET = jamulus
+}
+
 CONFIG += qt \
     thread \
     release
@@ -410,6 +416,7 @@ DISTFILES += AUTHORS \
     NEWS \
     README \
     TODO \
+    src/res/jamulus.desktop \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

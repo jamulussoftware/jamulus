@@ -41,7 +41,7 @@ CClient::CClient ( const quint16 iPortNumber ) :
     bWindowWasShownConnect           ( false ),
     Channel                          ( false ), /* we need a client channel -> "false" */
     eAudioCompressionType            ( CT_OPUS ),
-    iCeltNumCodedBytes               ( CELT_NUM_BYTES_MONO_LOW_QUALITY ),
+    iCeltNumCodedBytes               ( OPUS_NUM_BYTES_MONO_LOW_QUALITY ),
     eAudioQuality                    ( AQ_LOW ),
     eAudioChannelConf                ( CC_MONO ),
     bIsInitializationPhase           ( true ),

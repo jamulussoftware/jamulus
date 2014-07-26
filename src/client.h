@@ -74,17 +74,19 @@
 // audio reverberation range
 #define AUD_REVERB_MAX                          100
 
+#ifdef USE_LEGACY_CELT
 // CELT number of coded bytes per audio packet
 // 24: mono low quality            156 kbps (128) / 114 kbps (256)
 // 44: mono normal quality         216 kbps (128) / 174 kbps (256)
 // NOTE: Must be > CELT_MINIMUM_NUM_BYTES (greater, not equal to!)
-#define CELT_NUM_BYTES_MONO_LOW_QUALITY         24
-#define CELT_NUM_BYTES_MONO_NORMAL_QUALITY      44
+# define CELT_NUM_BYTES_MONO_LOW_QUALITY         24
+# define CELT_NUM_BYTES_MONO_NORMAL_QUALITY      44
 
 // 46: stereo low quality          222 kbps (128) / 180 kbps (256)
 // 70: stereo normal quality       294 kbps (128) / 252 kbps (256)
-#define CELT_NUM_BYTES_STEREO_LOW_QUALITY       46
-#define CELT_NUM_BYTES_STEREO_NORMAL_QUALITY    70
+# define CELT_NUM_BYTES_STEREO_LOW_QUALITY       46
+# define CELT_NUM_BYTES_STEREO_NORMAL_QUALITY    70
+#endif
 
 // OPUS number of coded bytes per audio packet
 // TODO we have to use new numbers for OPUS to avoid that old CELT packets

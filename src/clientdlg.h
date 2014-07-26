@@ -181,8 +181,10 @@ public slots:
     void OnConnectDlgAccepted();
     void OnDisconnected();
 
+#ifdef USE_LEGACY_CELT
     void OnUpstreamRateChanged()
         { ClientSettingsDlg.UpdateDisplay(); }
+#endif
 
     void OnGUIDesignChanged()
         { SetGUIDesign ( pClient->GetGUIDesign() ); }

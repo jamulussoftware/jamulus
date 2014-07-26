@@ -66,16 +66,18 @@ CClient::CClient ( const quint16 iPortNumber ) :
     int iOpusError;
 
     // init audio encoder/decoder (mono)
+#ifdef USE_LEGACY_CELT
     CeltModeMono = cc6_celt_mode_create (
         SYSTEM_SAMPLE_RATE_HZ, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
     CeltEncoderMono = cc6_celt_encoder_create ( CeltModeMono );
     CeltDecoderMono = cc6_celt_decoder_create ( CeltModeMono );
 
-#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+# ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
     cc6_celt_encoder_ctl ( CeltEncoderMono,
                            cc6_CELT_SET_COMPLEXITY ( 1 ) );
+# endif
 #endif
 
     OpusMode = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
@@ -105,16 +107,18 @@ CClient::CClient ( const quint16 iPortNumber ) :
 #endif
 
     // init audio encoder/decoder (stereo)
+#ifdef USE_LEGACY_CELT
     CeltModeStereo = cc6_celt_mode_create (
         SYSTEM_SAMPLE_RATE_HZ, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
     CeltEncoderStereo = cc6_celt_encoder_create ( CeltModeStereo );
     CeltDecoderStereo = cc6_celt_decoder_create ( CeltModeStereo );
 
-#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+# ifdef USE_LOW_COMPLEXITY_CELT_ENC
     // set encoder low complexity
     cc6_celt_encoder_ctl ( CeltEncoderStereo,
                            cc6_CELT_SET_COMPLEXITY ( 1 ) );
+# endif
 #endif
 
     OpusEncoderStereo = opus_custom_encoder_create ( OpusMode,
@@ -179,8 +183,10 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( ChatTextReceived ( QString ) ) );
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+#ifdef USE_LEGACY_CELT
 QObject::connect ( &Channel, SIGNAL ( OpusSupported() ),
     this, SLOT ( OnOpusSupported() ) );
+#endif
 
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
@@ -419,6 +425,7 @@ void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
 }
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+#ifdef USE_LEGACY_CELT
 void CClient::OnOpusSupported()
 {
     if ( eAudioCompressionType != CT_OPUS )
@@ -429,8 +436,10 @@ void CClient::OnOpusSupported()
     // inform the GUI about the change of the network rate
     emit UpstreamRateChanged();
 }
+#endif
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+#ifdef USE_LEGACY_CELT
 void CClient::SetAudoCompressiontype ( const EAudComprType eNAudCompressionType )
 {
     // init with new parameter, if client was running then first
@@ -450,6 +459,7 @@ void CClient::SetAudoCompressiontype ( const EAudComprType eNAudCompressionType 
         Sound.Start();
     }
 }
+#endif
 
 void CClient::SetAudioQuality ( const EAudioQuality eNAudioQuality )
 {
@@ -637,8 +647,12 @@ void CClient::Start()
 {
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+#ifdef USE_LEGACY_CELT
 // our first attempt is always to use the old code
 eAudioCompressionType = CT_CELT;
+#else
+    eAudioCompressionType = CT_OPUS;
+#endif
 
     // init object
     Init();
@@ -771,6 +785,7 @@ void CClient::Init()
     AudioReverbR.Init ( SYSTEM_SAMPLE_RATE_HZ );
 
     // inits for audio coding
+#ifdef USE_LEGACY_CELT
     if ( eAudioCompressionType == CT_CELT )
     {
         if ( eAudioChannelConf == CC_MONO )
@@ -797,6 +812,7 @@ void CClient::Init()
         }
     }
     else
+#endif
     {
         if ( eAudioChannelConf == CC_MONO )
         {
@@ -1069,6 +1085,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         if ( eAudioChannelConf == CC_MONO )
         {
             // encode current audio frame
+#ifdef USE_LEGACY_CELT
             if ( eAudioCompressionType == CT_CELT )
             {
                 cc6_celt_encode ( CeltEncoderMono,
@@ -1078,6 +1095,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                                   iCeltNumCodedBytes );
             }
             else
+#endif
             {
                 opus_custom_encode ( OpusEncoderMono,
                                      &vecsStereoSndCrd[i * SYSTEM_FRAME_SIZE_SAMPLES],
@@ -1089,6 +1107,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         else
         {
             // encode current audio frame
+#ifdef USE_LEGACY_CELT
             if ( eAudioCompressionType == CT_CELT )
             {
                 cc6_celt_encode ( CeltEncoderStereo,
@@ -1098,6 +1117,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                                   iCeltNumCodedBytes );
             }
             else
+#endif
             {
                 opus_custom_encode ( OpusEncoderStereo,
                                      &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
@@ -1136,6 +1156,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
             if ( eAudioChannelConf == CC_MONO )
             {
+#ifdef USE_LEGACY_CELT
                 if ( eAudioCompressionType == CT_CELT )
                 {
                     cc6_celt_decode ( CeltDecoderMono,
@@ -1144,6 +1165,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                                       &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
                 }
                 else
+#endif
                 {
                     opus_custom_decode ( OpusDecoderMono,
                                          &vecbyNetwData[0],
@@ -1154,6 +1176,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             }
             else
             {
+#ifdef USE_LEGACY_CELT
                 if ( eAudioCompressionType == CT_CELT )
                 {
                     cc6_celt_decode ( CeltDecoderStereo,
@@ -1162,6 +1185,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                                       &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
                 }
                 else
+#endif
                 {
                     opus_custom_decode ( OpusDecoderStereo,
                                          &vecbyNetwData[0],
@@ -1176,6 +1200,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             // lost packet
             if ( eAudioChannelConf == CC_MONO )
             {
+#ifdef USE_LEGACY_CELT
                 if ( eAudioCompressionType == CT_CELT )
                 {
                     cc6_celt_decode ( CeltDecoderMono,
@@ -1184,6 +1209,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                                       &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES] );
                 }
                 else
+#endif
                 {
                     opus_custom_decode ( OpusDecoderMono,
                                          NULL,
@@ -1194,6 +1220,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             }
             else
             {
+#ifdef USE_LEGACY_CELT
                 if ( eAudioCompressionType == CT_CELT )
                 {
                     cc6_celt_decode ( CeltDecoderStereo,
@@ -1202,6 +1229,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                                       &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES] );
                 }
                 else
+#endif
                 {
                     opus_custom_decode ( OpusDecoderStereo,
                                          NULL,

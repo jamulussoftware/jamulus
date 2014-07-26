@@ -228,16 +228,18 @@ CServer::CServer ( const int      iNewMaxNumChan,
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
         // init audio endocder/decoder (mono)
+#ifdef USE_LEGACY_CELT
         CeltModeMono[i] = cc6_celt_mode_create (
             SYSTEM_SAMPLE_RATE_HZ, 1, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
         CeltEncoderMono[i] = cc6_celt_encoder_create ( CeltModeMono[i] );
         CeltDecoderMono[i] = cc6_celt_decoder_create ( CeltModeMono[i] );
 
-#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+# ifdef USE_LOW_COMPLEXITY_CELT_ENC
         // set encoder low complexity
         cc6_celt_encoder_ctl ( CeltEncoderMono[i],
                                cc6_CELT_SET_COMPLEXITY ( 1 ) );
+# endif
 #endif
 
         OpusMode[i] = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
@@ -267,16 +269,18 @@ CServer::CServer ( const int      iNewMaxNumChan,
 #endif
 
         // init audio endocder/decoder (stereo)
+#ifdef USE_LEGACY_CELT
         CeltModeStereo[i] = cc6_celt_mode_create (
             SYSTEM_SAMPLE_RATE_HZ, 2, SYSTEM_FRAME_SIZE_SAMPLES, NULL );
 
         CeltEncoderStereo[i] = cc6_celt_encoder_create ( CeltModeStereo[i] );
         CeltDecoderStereo[i] = cc6_celt_decoder_create ( CeltModeStereo[i] );
 
-#ifdef USE_LOW_COMPLEXITY_CELT_ENC
+# ifdef USE_LOW_COMPLEXITY_CELT_ENC
         // set encoder low complexity
         cc6_celt_encoder_ctl ( CeltEncoderStereo[i],
                                cc6_CELT_SET_COMPLEXITY ( 1 ) );
+# endif
 #endif
 
         OpusEncoderStereo[i] = opus_custom_encoder_create ( OpusMode[i],
@@ -747,7 +751,7 @@ void CServer::OnTimer()
                 if ( iCurNumAudChan == 1 )
                 {
                     // mono
-
+#ifdef USE_LEGACY_CELT
                     if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
                     {
                         cc6_celt_decode ( CeltDecoderMono[iCurChanID],
@@ -756,6 +760,7 @@ void CServer::OnTimer()
                                           &vecvecsData[i][0] );
                     }
                     else
+#endif
                     {
                         opus_custom_decode ( OpusDecoderMono[iCurChanID],
                                              &vecbyCodedData[0],
@@ -767,7 +772,7 @@ void CServer::OnTimer()
                 else
                 {
                     // stereo
-
+#ifdef USE_LEGACY_CELT
                     if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
                     {
                         cc6_celt_decode ( CeltDecoderStereo[iCurChanID],
@@ -776,6 +781,7 @@ void CServer::OnTimer()
                                           &vecvecsData[i][0] );
                     }
                     else
+#endif
                     {
                         opus_custom_decode ( OpusDecoderStereo[iCurChanID],
                                              &vecbyCodedData[0],
@@ -791,7 +797,7 @@ void CServer::OnTimer()
                 if ( iCurNumAudChan == 1 )
                 {
                     // mono
-
+#ifdef USE_LEGACY_CELT
                     if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
                     {
                         cc6_celt_decode ( CeltDecoderMono[iCurChanID],
@@ -800,6 +806,7 @@ void CServer::OnTimer()
                                           &vecvecsData[i][0] );
                     }
                     else
+#endif
                     {
                         opus_custom_decode ( OpusDecoderMono[iCurChanID],
                                              NULL,
@@ -811,7 +818,7 @@ void CServer::OnTimer()
                 else
                 {
                     // stereo
-
+#ifdef USE_LEGACY_CELT
                     if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
                     {
                         cc6_celt_decode ( CeltDecoderStereo[iCurChanID],
@@ -820,6 +827,7 @@ void CServer::OnTimer()
                                           &vecvecsData[i][0] );
                     }
                     else
+#endif
                     {
                         opus_custom_decode ( OpusDecoderStereo[iCurChanID],
                                              NULL,
@@ -871,7 +879,7 @@ void CServer::OnTimer()
             if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
             {
                 // mono:
-
+#ifdef USE_LEGACY_CELT
                 if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
                 {
                     cc6_celt_encode ( CeltEncoderMono[iCurChanID],
@@ -881,6 +889,7 @@ void CServer::OnTimer()
                                       iCeltNumCodedBytes );
                 }
                 else
+#endif
                 {
 
 // TODO find a better place than this: the setting does not change all the time
@@ -899,7 +908,7 @@ opus_custom_encoder_ctl ( OpusEncoderMono[iCurChanID],
             else
             {
                 // stereo:
-
+#ifdef USE_LEGACY_CELT
                 if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_CELT )
                 {
                     cc6_celt_encode ( CeltEncoderStereo[iCurChanID],
@@ -909,6 +918,7 @@ opus_custom_encoder_ctl ( OpusEncoderMono[iCurChanID],
                                       iCeltNumCodedBytes );
                 }
                 else
+#endif
                 {
 
 // TODO find a better place than this: the setting does not change all the time

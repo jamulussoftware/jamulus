@@ -1,12 +1,9 @@
 3.3.5
 
+- new compile config options for disabling old CELT, use OPUS in a shared
+  library and change the executable name
 
-TODO:
-#introduce CONFIG flag to exclude legacy CELT code from Jamulus (completely)
-#introduce CONFIG flag to use external OPUS library (initially only for Linux)
-#add a Linux desktop link for Jamulus
-
-
+- added a Linux jamulus.desktop file
 
 3.3.4
 

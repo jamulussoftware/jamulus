@@ -72,6 +72,12 @@ win32 {
     count(nosoundoption, 0) {
         message(Jack Audio Interface Enabled.)
 
+        !exists(/usr/include/jack/jack.h) {
+            !exists(/usr/local/include/jack/jack.h) {
+                 message(Warning: jack.h was not found at the usual place, maybe the jack dev packet is missing)
+            }
+        }
+
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
         DEFINES += WITH_SOUND
@@ -529,6 +535,12 @@ contains(CONFIG, "opus_shared_lib") {
     message(OPUS codec is used from a shared library.)
 
     unix {
+        !exists(/usr/include/opus/opus_custom.h) {
+            !exists(/usr/local/include/opus/opus_custom.h) {
+                 message(Header opus_custom.h was not found at the usual place. Maybe the opus dev packet is missing.)
+            }
+        }
+
         LIBS += -llibopus
         DEFINES += USE_OPUS_SHARED_LIB
     }

@@ -541,7 +541,7 @@ contains(CONFIG, "opus_shared_lib") {
             }
         }
 
-        LIBS += -llibopus
+        LIBS += -lopus
         DEFINES += USE_OPUS_SHARED_LIB
     }
 } else {

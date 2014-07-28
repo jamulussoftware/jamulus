@@ -759,8 +759,9 @@ void CServer::OnTimer()
                                           iCeltNumCodedBytes,
                                           &vecvecsData[i][0] );
                     }
-                    else
 #endif
+
+                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
                     {
                         opus_custom_decode ( OpusDecoderMono[iCurChanID],
                                              &vecbyCodedData[0],
@@ -780,8 +781,9 @@ void CServer::OnTimer()
                                           iCeltNumCodedBytes,
                                           &vecvecsData[i][0] );
                     }
-                    else
 #endif
+
+                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
                     {
                         opus_custom_decode ( OpusDecoderStereo[iCurChanID],
                                              &vecbyCodedData[0],
@@ -805,8 +807,9 @@ void CServer::OnTimer()
                                           0,
                                           &vecvecsData[i][0] );
                     }
-                    else
 #endif
+
+                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
                     {
                         opus_custom_decode ( OpusDecoderMono[iCurChanID],
                                              NULL,
@@ -826,8 +829,9 @@ void CServer::OnTimer()
                                           0,
                                           &vecvecsData[i][0] );
                     }
-                    else
 #endif
+
+                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
                     {
                         opus_custom_decode ( OpusDecoderStereo[iCurChanID],
                                              NULL,
@@ -888,8 +892,9 @@ void CServer::OnTimer()
                                       &vecbyCodedData[0],
                                       iCeltNumCodedBytes );
                 }
-                else
 #endif
+
+                if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
                 {
 
 // TODO find a better place than this: the setting does not change all the time
@@ -917,8 +922,9 @@ opus_custom_encoder_ctl ( OpusEncoderMono[iCurChanID],
                                       &vecbyCodedData[0],
                                       iCeltNumCodedBytes );
                 }
-                else
 #endif
+
+                if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
                 {
 
 // TODO find a better place than this: the setting does not change all the time

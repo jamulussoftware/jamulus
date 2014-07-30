@@ -36,10 +36,10 @@ Rquired software: QT, a compiler like Visual Studio, ASIO development files
 Linux:
 ------
 
-Required packages: Build-Essential, QT5 (devel packages, too!), Jack (devel packages, too!)
+Required packages: Build-Essential, QT4 (devel packages, too!), Jack (devel packages, too!)
                    On the most common Linux distributions, the following
                    command should prepare the system for compilation:
-                   sudo apt-get install build-essential libqt5-dev libjack-dev
+                   sudo apt-get install build-essential libqt4-dev libjack-dev
 
 - qmake Jamulus.pro
 - make clean

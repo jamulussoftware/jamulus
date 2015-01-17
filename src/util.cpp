@@ -349,12 +349,12 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     txvCredits->setOpenExternalLinks ( true );
     txvCredits->setText (
         "<p>" // general description of software
-        "<big>" + tr( "The " ) + APP_NAME +
+        "<big>" + tr ( "The " ) + APP_NAME +
         tr ( " software enables musicians to perform real-time jam sessions "
         "over the internet. There is a " ) + APP_NAME + tr ( " "
         "server which collects the audio data from each " ) +
         APP_NAME + tr ( " client, mixes the audio data and sends the mix back "
-        "to each client.") + "</big></p><br>"
+        "to each client." ) + "</big></p><br>"
         "<p><font face=\"courier\">" // GPL header text
         "This program is free software; you can redistribute it and/or modify "
         "it under the terms of the GNU General Public License as published by "
@@ -436,6 +436,85 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
     }
 
     return strVersionText;
+}
+
+
+// Licence dialog --------------------------------------------------------------
+CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
+{
+/*
+    The licence dialog is structured as follows:
+    - text box with the licence text on the top
+    - check box: I &agree to the above licence terms
+    - Accept button (disabled if check box not checked)
+    - Decline button
+*/
+    setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/mainicon.png" ) ) );
+    resize ( 700, 450 );
+
+    QVBoxLayout*  pLayout    = new QVBoxLayout;
+    QHBoxLayout*  pSubLayout = new QHBoxLayout;
+    QTextBrowser* txvLicence = new QTextBrowser ( this );
+    QCheckBox*    chbAgree   = new QCheckBox ( "I &agree to the above licence terms", this );
+    butAccept                = new QPushButton ( "Accept", this );
+    QPushButton*  butDecline = new QPushButton ( "Decline", this );
+
+    pSubLayout->addStretch();
+    pSubLayout->addWidget ( chbAgree );
+    pSubLayout->addWidget ( butAccept );
+    pSubLayout->addWidget ( butDecline );
+    pLayout->addWidget    ( txvLicence );
+    pLayout->addLayout    ( pSubLayout );
+    setLayout             ( pLayout );
+
+    // set some properties
+    butAccept->setEnabled ( false );
+    butAccept->setDefault ( true );
+    txvLicence->setOpenExternalLinks ( true );
+
+    // define the licence text (similar to what we have in Ninjam)
+    txvLicence->setText (
+        "<p><big>" + tr (
+        "By connecting to this server and agreeing to this notice, you agree to the "
+        "following:" ) + "</big></p><p><big>" + tr (
+        "You agree that all data, sounds, or other works transmitted to this server "
+        "are owned and created by you or your licensors, and that you are making these "
+        "data, sounds or other works available via the following Creative Commons "
+        "License (for more information on this license, see "
+        "<i><a href=""http://creativecommons.org/licenses/by-nc-sa/4.0"">"
+        "http://creativecommons.org/licenses/by-nc-sa/4.0</a></i>):" ) + "</big></p>" +
+        "<h3>Attribution-NonCommercial-ShareAlike 4.0</h3>" +
+        "<p>" + tr ( "You are free to:" ) +
+        "<ul>"
+        "<li><b>" + tr ( "Share" ) + "</b> - " +
+        tr ( "copy and redistribute the material in any medium or format" ) + "</li>"
+        "<li><b>" + tr ( "Adapt" ) + "</b> - " +
+        tr ( "remix, transform, and build upon the material" ) + "</li>"
+        "</ul>" + tr ( "The licensor cannot revoke these freedoms as long as you follow the "
+        "license terms." ) + "</p>"
+        "<p>" + tr ( "Under the following terms:" ) +
+        "<ul>"
+        "<li><b>" + tr ( "Attribution" ) + "</b> - " +
+        tr ( "You must give appropriate credit, provide a link to the license, and indicate "
+        "if changes were made. You may do so in any reasonable manner, but not in any way "
+        "that suggests the licensor endorses you or your use." ) + "</li>"
+        "<li><b>" + tr ( "NonCommercial" ) + "</b> - " +
+        tr ( "You may not use the material for commercial purposes." ) + "</li>"
+        "<li><b>" + tr ( "ShareAlike" ) + "</b> - " +
+        tr ( "If you remix, transform, or build upon the material, you must distribute your "
+        "contributions under the same license as the original." ) + "</li>"
+        "</ul><b>" + tr ( "No additional restrictions" ) + "</b> — " +
+        tr ( "You may not apply legal terms or technological measures that legally restrict "
+        "others from doing anything the license permits." ) + "</p>" );
+
+    QObject::connect ( chbAgree, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnAgreeStateChanged ( int ) ) );
+
+    QObject::connect ( butAccept, SIGNAL ( clicked() ),
+        this, SLOT ( accept() ) );
+
+    QObject::connect ( butDecline, SIGNAL ( clicked() ),
+        this, SLOT ( reject() ) );
 }
 
 

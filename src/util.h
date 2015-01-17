@@ -31,6 +31,7 @@
 #include <QWhatsThis>
 #include <QTextBrowser>
 #include <QLabel>
+#include <QCheckBox>
 #include <QDateTime>
 #include <QFile>
 #include <QDesktopServices>
@@ -405,6 +406,22 @@ public:
     CAboutDlg ( QWidget* parent = 0 );
 
     static QString GetVersionAndNameStr ( const bool bWithHtml = true );
+};
+
+
+// Licence dialog --------------------------------------------------------------
+class CLicenceDlg : public QDialog
+{
+    Q_OBJECT
+
+public:
+    CLicenceDlg ( QWidget* parent = 0 );
+
+protected:
+    QPushButton* butAccept;
+
+public slots:
+    void OnAgreeStateChanged ( int value ) { butAccept->setEnabled ( value == Qt::Checked ); }
 };
 
 

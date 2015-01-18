@@ -498,6 +498,14 @@ enum EGUIDesign
 };
 
 
+// Server licence type enum ----------------------------------------------------
+enum ELicenceType
+{
+    // used for protocol -> enum values must be fixed!
+    LT_CREATIVECOMMONS = 0
+};
+
+
 // Skill level enum ------------------------------------------------------------
 enum ESkillLevel
 {

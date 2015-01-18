@@ -54,6 +54,7 @@
 #define PROTMESSID_CONN_CLIENTS_LIST          24 // channel infos for connected clients
 #define PROTMESSID_CHANNEL_INFOS              25 // set channel infos
 #define PROTMESSID_OPUS_SUPPORTED             26 // tells that OPUS codec is supported
+#define PROTMESSID_LICENCE_REQUIRED           27 // licence required
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -100,6 +101,7 @@ public:
     void CreateChatTextMes ( const QString strChatText );
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
     void CreateReqNetwTranspPropsMes();
+    void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
     void CreateOpusSupportedMes();
 
     void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
@@ -213,6 +215,7 @@ protected:
     bool EvaluateChatTextMes          ( const CVector<uint8_t>& vecData );
     bool EvaluateNetwTranspPropsMes   ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
+    bool EvaluateLicenceRequiredMes   ( const CVector<uint8_t>& vecData );
 #ifdef USE_LEGACY_CELT
     bool EvaluateOpusSupportedMes();
 #endif
@@ -269,6 +272,7 @@ signals:
     void ChatTextReceived ( QString strChatText );
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void ReqNetTranspProps();
+    void LicenceRequired ( ELicenceType eLicenceType );
 
     void CLPingReceived               ( CHostAddress           InetAddr,
                                         int                    iMs );

@@ -166,6 +166,13 @@ MESSAGES (with connection)
     note: does not have any data -> n = 0
 
 
+- PROTMESSID_LICENCE_REQUIRED: Licence required to connect to the server
+
+    +---------------------+
+    | 1 byte licence type |
+    +---------------------+
+
+
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 - PROTMESSID_OPUS_SUPPORTED: Informs that OPUS codec is supported
 
@@ -551,6 +558,10 @@ case PROTMESSID_CHANNEL_NAME:
 
             case PROTMESSID_REQ_NETW_TRANSPORT_PROPS:
                 bRet = EvaluateReqNetwTranspPropsMes();
+                break;
+
+            case PROTMESSID_LICENCE_REQUIRED:
+                bRet = EvaluateLicenceRequiredMes ( vecbyMesBodyData );
                 break;
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
@@ -1319,6 +1330,42 @@ bool CProtocol::EvaluateReqNetwTranspPropsMes()
 {
     // invoke message action
     emit ReqNetTranspProps();
+
+    return false; // no error
+}
+
+void CProtocol::CreateLicenceRequiredMes ( const ELicenceType eLicenceType )
+{
+    CVector<uint8_t> vecData ( 1 ); // 1 bytes of data
+    int              iPos = 0;      // init position pointer
+
+    // build data vector
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( eLicenceType ), 1 );
+
+    CreateAndSendMessage ( PROTMESSID_LICENCE_REQUIRED, vecData );
+}
+
+bool CProtocol::EvaluateLicenceRequiredMes ( const CVector<uint8_t>& vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 1 )
+    {
+        return true; // return error code
+    }
+
+    // extract licence type
+    const ELicenceType eLicenceType =
+        static_cast<ELicenceType> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    if ( eLicenceType != LT_CREATIVECOMMONS )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit LicenceRequired ( eLicenceType );
 
     return false; // no error
 }

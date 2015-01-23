@@ -53,7 +53,7 @@
         <file>res/logopicture.png</file>
         <file>res/mainicon.png</file>
     </qresource>
-    <qresource prefix="/new/flags">
+    <qresource prefix="/png/flags">
         <file>res/flags/ad.png</file>
         <file>res/flags/ae.png</file>
         <file>res/flags/af.png</file>

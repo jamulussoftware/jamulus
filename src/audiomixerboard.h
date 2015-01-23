@@ -49,9 +49,10 @@ public:
     void SetText ( const CChannelInfo& ChanInfo );
     QString GetReceivedName() { return strReceivedName; }
     void SetInstrumentPicture ( const int iInstrument );
+    void SetCountryFlag ( const QLocale::Country eCountry );
     void Show() { pFrame->show(); }
     void Hide() { pFrame->hide(); }
-    bool IsVisible() { return pLabel->isVisible(); }
+    bool IsVisible() { return plblLabel->isVisible(); }
     bool IsSolo() { return pcbSolo->isChecked(); }
     void SetGUIDesign ( const EGUIDesign eNewDesign );
 
@@ -71,8 +72,9 @@ protected:
     QSlider*   pFader;
     QCheckBox* pcbMute;
     QCheckBox* pcbSolo;
-    QLabel*    pLabel;
-    QLabel*    pInstrument;
+    QLabel*    plblLabel;
+    QLabel*    plblInstrument;
+    QLabel*    plblCountryFlag;
 
     QString    strReceivedName;
 

@@ -40,8 +40,9 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pcbMute                  = new QCheckBox   ( "Mute",       pFrame );
     pcbSolo                  = new QCheckBox   ( "Solo",       pFrame );
     QGroupBox* pLabelInstBox = new QGroupBox   ( pFrame );
-    pLabel                   = new QLabel      ( "",           pFrame );
-    pInstrument              = new QLabel      ( pFrame );
+    plblLabel                = new QLabel      ( "",           pFrame );
+    plblInstrument           = new QLabel      ( pFrame );
+    plblCountryFlag          = new QLabel      ( pFrame );
     QHBoxLayout* pLabelGrid  = new QHBoxLayout ( pLabelInstBox );
 
     // setup slider
@@ -59,9 +60,9 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
         "            background-color: white; }" );
 
     // setup fader tag label (black bold text which is centered)
-    pLabel->setTextFormat ( Qt::PlainText ); 	 
-    pLabel->setAlignment ( Qt::AlignHCenter );
-    pLabel->setStyleSheet (
+    plblLabel->setTextFormat ( Qt::PlainText );
+    plblLabel->setAlignment ( Qt::AlignHCenter );
+    plblLabel->setStyleSheet (
         "QLabel { color: black;"
         "         font:  bold; }" );
 
@@ -71,8 +72,9 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pLabelGrid->setSpacing ( 2 ); // only minimal space between picture and text
 
     // add user controls to the grids
-    pLabelGrid->addWidget ( pInstrument );
-    pLabelGrid->addWidget ( pLabel, 0 );
+    pLabelGrid->addWidget ( plblInstrument );
+    pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter );
+    pLabelGrid->addWidget ( plblCountryFlag, 0, Qt::AlignRight );
 
     pMainGrid->addWidget ( pFader,  0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
@@ -103,13 +105,15 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pcbSolo->setAccessibleName ( tr ( "Solo button" ) );
 
     QString strFaderText = tr ( "<b>Fader Tag:</b> The fader tag "
-        "identifies the connected client. The tag name and the picture of your "
-        "instrument can be set in the main window." );
+        "identifies the connected client. The tag name, the picture of your "
+        "instrument and a flag of your country can be set in the main window." );
 
-    pInstrument->setWhatsThis ( strFaderText );
-    pInstrument->setAccessibleName ( tr ( "Mixer channel instrument picture" ) );
-    pLabel->setWhatsThis ( strFaderText );
-    pLabel->setAccessibleName ( tr ( "Mixer channel label (fader tag)" ) );
+    plblInstrument->setWhatsThis ( strFaderText );
+    plblInstrument->setAccessibleName ( tr ( "Mixer channel instrument picture" ) );
+    plblLabel->setWhatsThis ( strFaderText );
+    plblLabel->setAccessibleName ( tr ( "Mixer channel label (fader tag)" ) );
+    plblCountryFlag->setWhatsThis ( strFaderText );
+    plblCountryFlag->setAccessibleName ( tr ( "Mixer channel country flag" ) );
 
 
     // Connections -------------------------------------------------------------
@@ -168,9 +172,12 @@ void CChannelFader::Reset()
     pcbMute->setChecked ( false );
     pcbSolo->setChecked ( false );
 
-    // clear instrument picture and label text
-    pInstrument->setVisible ( false );
-    pLabel->setText ( "" );
+    // clear instrument picture, country flag, tool tips and label text
+    plblInstrument->setVisible ( false );
+    plblInstrument->setToolTip ( "" );
+    plblCountryFlag->setVisible ( false );
+    plblCountryFlag->setToolTip ( "" );
+    plblLabel->setText ( "" );
     strReceivedName = "";
 
     bOtherChannelIsSolo = false;
@@ -249,8 +256,7 @@ void CChannelFader::SetText ( const CChannelInfo& ChanInfo )
     // store original received name
     strReceivedName = ChanInfo.strName;
 
-    // break text at predefined position, if text is too short, break anyway to
-    // make sure we have two lines for fader tag
+    // break text at predefined position
     const int iBreakPos = MAX_LEN_FADER_TAG / 2;
 
     QString strModText = GenFaderText ( ChanInfo );
@@ -259,14 +265,8 @@ void CChannelFader::SetText ( const CChannelInfo& ChanInfo )
     {
         strModText.insert ( iBreakPos, QString ( "\n" ) );
     }
-    else
-    {
-        // insert line break at the beginning of the string -> make sure
-        // if we only have one line that the text appears at the bottom line
-        strModText.prepend ( QString ( "\n" ) );
-    }
 
-    pLabel->setText ( strModText );
+    plblLabel->setText ( strModText );
 }
 
 void CChannelFader::SetInstrumentPicture ( const int iInstrument )
@@ -279,16 +279,48 @@ void CChannelFader::SetInstrumentPicture ( const int iInstrument )
     if ( CInstPictures::IsNotUsedInstrument ( iInstrument ) ||
          strCurResourceRef.isEmpty() )
     {
-        // disable instrument picture
-        pInstrument->setVisible ( false );
+        // disable instrument picture and tool tip
+        plblInstrument->setVisible ( false );
+        plblInstrument->setToolTip ( "" );
     }
     else
     {
-        // set correct picture
-        pInstrument->setPixmap ( QPixmap ( strCurResourceRef ) );
+        // set correct picture and tool tip text
+        plblInstrument->setPixmap ( QPixmap ( strCurResourceRef ) );
+        plblInstrument->setToolTip ( CInstPictures::GetName ( iInstrument ) );
 
         // enable instrument picture
-        pInstrument->setVisible ( true );
+        plblInstrument->setVisible ( true );
+    }
+}
+
+void CChannelFader::SetCountryFlag ( const QLocale::Country eCountry )
+{
+    if ( eCountry != QLocale::AnyCountry )
+    {
+        // get the resource reference string for this country flag
+        const QString strCurResourceRef = ":/png/flags/res/flags/" +
+            QLocale ( QLocale::AnyLanguage, eCountry ).bcp47Name() + ".png";
+
+        // try to load the country flag icon
+        QPixmap CountryFlagPixmap ( strCurResourceRef );
+
+        // first check if resource reference was valid
+        if ( CountryFlagPixmap.isNull() )
+        {
+            // disable country flag and tool tip
+            plblCountryFlag->setVisible ( false );
+            plblCountryFlag->setToolTip ( "" );
+        }
+        else
+        {
+            // set correct picture and tool tip text
+            plblCountryFlag->setPixmap ( CountryFlagPixmap );
+            plblCountryFlag->setToolTip ( QLocale::countryToString ( eCountry ) );
+
+            // enable country flag
+            plblCountryFlag->setVisible ( true );
+        }
     }
 }
 
@@ -486,6 +518,10 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                     // update instrument picture
                     vecpChanFader[i]->
                         SetInstrumentPicture ( vecChanInfo[j].iInstrument );
+
+                    // update country flag
+                    vecpChanFader[i]->
+                        SetCountryFlag ( vecChanInfo[j].eCountry );
                 }
 
                 bFaderIsUsed = true;

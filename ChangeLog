@@ -1,11 +1,17 @@
-3.3.5
+3.3.6
+
+- a licence agreement dialog can be requested by the server
+
+
+
+3.3.5 (2014-07-30)
 
 - new compile config options for disabling old CELT, use OPUS in a shared
   library and change the executable name
 
 - added a Linux jamulus.desktop file
 
-3.3.4
+3.3.4 (2014-02-25)
 
 - true stereo reverberation effect (previously it was a mono reverberation
   effect on both stereo channels)

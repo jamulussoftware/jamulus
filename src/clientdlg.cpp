@@ -441,7 +441,16 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         SIGNAL ( ChatTextReceived ( QString ) ),
         this, SLOT ( OnChatTextReceived ( QString ) ) );
 
-    QObject::connect ( pClient, SIGNAL ( PingTimeReceived ( int ) ),
+    // This connection is a special case. On receiving a licence required message via the
+    // protocol, a modal licence dialog is opened. Since this blocks the thread, we need
+    // a queued connection to make sure the core protocol mechanism is not blocked, too.
+    qRegisterMetaType<ELicenceType> ( "ELicenceType" );
+    QObject::connect ( pClient,
+        SIGNAL ( LicenceRequired ( ELicenceType ) ),
+        this, SLOT ( OnLicenceRequired ( ELicenceType ) ), Qt::QueuedConnection );
+
+    QObject::connect ( pClient,
+        SIGNAL ( PingTimeReceived ( int ) ),
         this, SLOT ( OnPingTimeResult ( int ) ) );
 
     QObject::connect ( pClient,
@@ -701,6 +710,25 @@ void CClientDlg::OnChatTextReceived ( QString strChatText )
     ShowChatWindow ( false );
 
     UpdateDisplay();
+}
+
+void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
+{
+    // right now only the creative common licence is supported
+    if ( eLicenceType == LT_CREATIVECOMMONS )
+    {
+        CLicenceDlg LicenceDlg;
+
+// TODO mute the client
+
+        // Open the licence dialog and check if the licence was accepted. In
+        // case the dialog is just closed or the decline button was pressed,
+        // disconnect from that server.
+        if ( !LicenceDlg.exec() )
+        {
+            Disconnect();
+        }
+    }
 }
 
 void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )

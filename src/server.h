@@ -121,16 +121,17 @@ class CServer : public QObject
     Q_OBJECT
 
 public:
-    CServer ( const int      iNewMaxNumChan,
-              const QString& strLoggingFileName,
-              const quint16  iPortNumber,
-              const QString& strHTMLStatusFileName,
-              const QString& strHistoryFileName,
-              const QString& strServerNameForHTMLStatusFile,
-              const QString& strCentralServer,
-              const QString& strServerInfo,
-              const QString& strNewWelcomeMessage,
-              const bool     bNCentServPingServerInList );
+    CServer ( const int          iNewMaxNumChan,
+              const QString&     strLoggingFileName,
+              const quint16      iPortNumber,
+              const QString&     strHTMLStatusFileName,
+              const QString&     strHistoryFileName,
+              const QString&     strServerNameForHTMLStatusFile,
+              const QString&     strCentralServer,
+              const QString&     strServerInfo,
+              const QString&     strNewWelcomeMessage,
+              const bool         bNCentServPingServerInList,
+              const ELicenceType eNLicenceType );
 
     void Start();
     void Stop();
@@ -271,6 +272,7 @@ protected:
 
     // messaging
     QString                    strWelcomeMessage;
+    ELicenceType               eLicenceType;
 
 signals:
     void Started();

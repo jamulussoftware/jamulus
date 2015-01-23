@@ -182,6 +182,10 @@ CClient::CClient ( const quint16 iPortNumber ) :
         SIGNAL ( ChatTextReceived ( QString ) ),
         SIGNAL ( ChatTextReceived ( QString ) ) );
 
+    QObject::connect( &Channel,
+        SIGNAL ( LicenceRequired ( ELicenceType ) ),
+        SIGNAL ( LicenceRequired ( ELicenceType ) ) );
+
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 #ifdef USE_LEGACY_CELT
 QObject::connect ( &Channel, SIGNAL ( OpusSupported() ),

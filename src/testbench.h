@@ -104,9 +104,10 @@ public slots:
         CVector<CServerInfo>   vecServerInfo ( 1 );
         CHostAddress           CurHostAddress ( QHostAddress ( sAddress ), iPort );
         CChannelCoreInfo       ChannelCoreInfo;
+        ELicenceType           eLicenceType;
 
         // generate random protocol message
-        switch ( GenRandomIntInRange ( 0, 26 ) )
+        switch ( GenRandomIntInRange ( 0, 27 ) )
         {
         case 0: // PROTMESSID_JITT_BUF_SIZE
             Protocol.CreateJitBufMes ( GenRandomIntInRange ( 0, 10 ) );
@@ -167,7 +168,14 @@ public slots:
             Protocol.CreateChatTextMes ( GenRandomString() );
             break;
 
-        case 10: // PROTMESSID_NETW_TRANSPORT_PROPS
+        case 10: // PROTMESSID_LICENCE_REQUIRED
+            eLicenceType =
+                static_cast<ELicenceType> ( GenRandomIntInRange ( 0, 1 ) );
+
+            Protocol.CreateLicenceRequiredMes ( eLicenceType );
+            break;
+
+        case 11: // PROTMESSID_NETW_TRANSPORT_PROPS
             NetTrProps.eAudioCodingType =
                 static_cast<EAudComprType> ( GenRandomIntInRange ( 0, 2 ) );
 
@@ -181,30 +189,30 @@ public slots:
             Protocol.CreateNetwTranspPropsMes ( NetTrProps );
             break;
 
-        case 11: // PROTMESSID_REQ_NETW_TRANSPORT_PROPS
+        case 12: // PROTMESSID_REQ_NETW_TRANSPORT_PROPS
             Protocol.CreateReqNetwTranspPropsMes();
             break;
 
-        case 12: // PROTMESSID_OPUS_SUPPORTED
+        case 13: // PROTMESSID_OPUS_SUPPORTED
             Protocol.CreateOpusSupportedMes();
             break;
 
-        case 13: // PROTMESSID_CLM_PING_MS
+        case 14: // PROTMESSID_CLM_PING_MS
             Protocol.CreateCLPingMes ( CurHostAddress,
                                        GenRandomIntInRange ( -2, 1000 ) );
             break;
 
-        case 14: // PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS
+        case 15: // PROTMESSID_CLM_PING_MS_WITHNUMCLIENTS
             Protocol.CreateCLPingWithNumClientsMes ( CurHostAddress,
                                                      GenRandomIntInRange ( -2, 1000 ),
                                                      GenRandomIntInRange ( -2, 1000 ) );
             break;
 
-        case 15: // PROTMESSID_CLM_SERVER_FULL
+        case 16: // PROTMESSID_CLM_SERVER_FULL
             Protocol.CreateCLServerFullMes ( CurHostAddress );
             break;
 
-        case 16: // PROTMESSID_CLM_REGISTER_SERVER
+        case 17: // PROTMESSID_CLM_REGISTER_SERVER
             ServerInfo.bPermanentOnline =
                 static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
 
@@ -221,11 +229,11 @@ public slots:
                                                  ServerInfo );
             break;
 
-        case 17: // PROTMESSID_CLM_UNREGISTER_SERVER
+        case 18: // PROTMESSID_CLM_UNREGISTER_SERVER
             Protocol.CreateCLUnregisterServerMes ( CurHostAddress );
             break;
 
-        case 18: // PROTMESSID_CLM_SERVER_LIST
+        case 19: // PROTMESSID_CLM_SERVER_LIST
             vecServerInfo[0].bPermanentOnline =
                 static_cast<bool> ( GenRandomIntInRange ( 0, 1 ) );
 
@@ -243,37 +251,37 @@ public slots:
                                              vecServerInfo );
             break;
 
-        case 19: // PROTMESSID_CLM_REQ_SERVER_LIST
+        case 20: // PROTMESSID_CLM_REQ_SERVER_LIST
             Protocol.CreateCLReqServerListMes ( CurHostAddress );
             break;
 
-        case 20: // PROTMESSID_CLM_SEND_EMPTY_MESSAGE
+        case 21: // PROTMESSID_CLM_SEND_EMPTY_MESSAGE
             Protocol.CreateCLSendEmptyMesMes ( CurHostAddress,
                                                CurHostAddress );
             break;
 
-        case 21: // PROTMESSID_CLM_EMPTY_MESSAGE
+        case 22: // PROTMESSID_CLM_EMPTY_MESSAGE
             Protocol.CreateCLEmptyMes ( CurHostAddress );
             break;
 
-        case 22: // PROTMESSID_CLM_DISCONNECTION
+        case 23: // PROTMESSID_CLM_DISCONNECTION
             Protocol.CreateCLDisconnection ( CurHostAddress );
             break;
 
-        case 23: // PROTMESSID_CLM_VERSION_AND_OS
+        case 24: // PROTMESSID_CLM_VERSION_AND_OS
             Protocol.CreateCLVersionAndOSMes ( CurHostAddress );
             break;
 
-        case 24: // PROTMESSID_CLM_REQ_VERSION_AND_OS
+        case 25: // PROTMESSID_CLM_REQ_VERSION_AND_OS
             Protocol.CreateCLReqVersionAndOSMes ( CurHostAddress );
             break;
 
-        case 25: // PROTMESSID_ACKN
+        case 26: // PROTMESSID_ACKN
             Protocol.CreateAndImmSendAcknMess ( GenRandomIntInRange ( -10, 100 ),
                                                 GenRandomIntInRange ( -100, 100 ) );
             break;
 
-        case 26:
+        case 27:
             // arbitrary "audio" packet (with random sizes)
             CVector<uint8_t> vecMessage ( GenRandomIntInRange ( 1, 1000 ) );
             OnSendProtMessage ( vecMessage );

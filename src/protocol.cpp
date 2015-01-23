@@ -200,7 +200,7 @@ CONNECTION LESS MESSAGES
     +-----------------------------+---------------------------------+
 
 
-- PROTMESSID_SERVER_FULL: Connection less server full message
+- PROTMESSID_CLM_SERVER_FULL: Connection less server full message
 
     note: does not have any data -> n = 0
 
@@ -1359,7 +1359,8 @@ bool CProtocol::EvaluateLicenceRequiredMes ( const CVector<uint8_t>& vecData )
     const ELicenceType eLicenceType =
         static_cast<ELicenceType> ( GetValFromStream ( vecData, iPos, 1 ) );
 
-    if ( eLicenceType != LT_CREATIVECOMMONS )
+    if ( ( eLicenceType != LT_CREATIVECOMMONS ) &&
+         ( eLicenceType != LT_NO_LICENCE ) )
     {
         return true; // return error code
     }

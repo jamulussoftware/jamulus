@@ -53,23 +53,24 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
-    bool    bIsClient                 = true;
-    bool    bUseGUI                   = true;
-    bool    bStartMinimized           = false;
-    bool    bConnectOnStartup         = false;
-    bool    bShowComplRegConnList     = false;
-    bool    bShowAnalyzerConsole      = false;
-    bool    bCentServPingServerInList = false;
-    int     iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
-    quint16 iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
-    QString strIniFileName            = "";
-    QString strHTMLStatusFileName     = "";
-    QString strServerName             = "";
-    QString strLoggingFileName        = "";
-    QString strHistoryFileName        = "";
-    QString strCentralServer          = "";
-    QString strServerInfo             = "";
-    QString strWelcomeMessage         = "";
+    bool         bIsClient                 = true;
+    bool         bUseGUI                   = true;
+    bool         bStartMinimized           = false;
+    bool         bConnectOnStartup         = false;
+    bool         bShowComplRegConnList     = false;
+    bool         bShowAnalyzerConsole      = false;
+    bool         bCentServPingServerInList = false;
+    int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
+    quint16      iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
+    ELicenceType eLicenceType              = LT_NO_LICENCE;
+    QString      strIniFileName            = "";
+    QString      strHTMLStatusFileName     = "";
+    QString      strServerName             = "";
+    QString      strLoggingFileName        = "";
+    QString      strHistoryFileName        = "";
+    QString      strCentralServer          = "";
+    QString      strServerInfo             = "";
+    QString      strWelcomeMessage         = "";
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -96,6 +97,19 @@ int main ( int argc, char** argv )
         {
             bUseGUI = false;
             tsConsole << "- no GUI mode chosen" << endl;
+            continue;
+        }
+
+
+        // Use licence flag ----------------------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-L",
+                               "--licence" ) )
+        {
+            // right now only the creative commons licence is supported
+            eLicenceType = LT_CREATIVECOMMONS;
+            tsConsole << "- licence required" << endl;
             continue;
         }
 
@@ -419,7 +433,8 @@ int main ( int argc, char** argv )
                              strCentralServer,
                              strServerInfo,
                              strWelcomeMessage,
-                             bCentServPingServerInList );
+                             bCentServPingServerInList,
+                             eLicenceType );
 
             if ( bUseGUI )
             {
@@ -507,6 +522,8 @@ QString UsageArguments ( char **argv )
         "  -h, -?, --help        this help text\n"
         "  -i, --inifile         initialization file name (client only)\n"
         "  -l, --log             enable logging, set file name\n"
+        "  -L, --licence         a licence must be accepted on a new\n"
+        "                        connection (server only)\n"
         "  -m, --htmlstatus      enable HTML status file, set file name (server\n"
         "                        only)\n"
         "  -n, --nogui           disable GUI (server only)\n"

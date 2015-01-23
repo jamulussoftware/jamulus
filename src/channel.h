@@ -150,10 +150,11 @@ Protocol.CreateChanNameMes ( ChInfo.strName );
             Protocol.CreateJitBufMes ( iJitBufSize );
         }
     }
-    void CreateReqNetwTranspPropsMes()                    { Protocol.CreateReqNetwTranspPropsMes(); }
-    void CreateReqJitBufMes()                             { Protocol.CreateReqJitBufMes(); }
-    void CreateReqConnClientsList()                       { Protocol.CreateReqConnClientsList(); }
-    void CreateChatTextMes ( const QString& strChatText ) { Protocol.CreateChatTextMes ( strChatText ); }
+    void CreateReqNetwTranspPropsMes()                       { Protocol.CreateReqNetwTranspPropsMes(); }
+    void CreateReqJitBufMes()                                { Protocol.CreateReqJitBufMes(); }
+    void CreateReqConnClientsList()                          { Protocol.CreateReqConnClientsList(); }
+    void CreateChatTextMes ( const QString& strChatText )    { Protocol.CreateChatTextMes ( strChatText ); }
+    void CreateLicReqMes ( const ELicenceType eLicenceType ) { Protocol.CreateLicenceRequiredMes ( eLicenceType ); }
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 void CreateConClientListNameMes ( const CVector<CChannelInfo>& vecChanInfo )
@@ -262,6 +263,7 @@ signals:
     void OpusSupported();
     void ChatTextReceived ( QString strChatText );
     void ReqNetTranspProps();
+    void LicenceRequired ( ELicenceType eLicenceType );
     void Disconnected();
 
     void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,

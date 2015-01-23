@@ -197,16 +197,17 @@ void CHighPrecisionTimer::run()
 
 
 // CServer implementation ******************************************************
-CServer::CServer ( const int      iNewMaxNumChan,
-                   const QString& strLoggingFileName,
-                   const quint16  iPortNumber,
-                   const QString& strHTMLStatusFileName,
-                   const QString& strHistoryFileName,
-                   const QString& strServerNameForHTMLStatusFile,
-                   const QString& strCentralServer,
-                   const QString& strServerInfo,
-                   const QString& strNewWelcomeMessage,
-                   const bool     bNCentServPingServerInList ) :
+CServer::CServer ( const int          iNewMaxNumChan,
+                   const QString&     strLoggingFileName,
+                   const quint16      iPortNumber,
+                   const QString&     strHTMLStatusFileName,
+                   const QString&     strHistoryFileName,
+                   const QString&     strServerNameForHTMLStatusFile,
+                   const QString&     strCentralServer,
+                   const QString&     strServerInfo,
+                   const QString&     strNewWelcomeMessage,
+                   const bool         bNCentServPingServerInList,
+                   const ELicenceType eNLicenceType ) :
     iMaxNumChannels      ( iNewMaxNumChan ),
     Socket               ( this, iPortNumber ),
     bWriteStatusHTMLFile ( false ),
@@ -217,7 +218,8 @@ CServer::CServer ( const int      iNewMaxNumChan,
                            bNCentServPingServerInList,
                            &ConnLessProtocol ),
     bAutoRunMinimized    ( false ),
-    strWelcomeMessage    ( strNewWelcomeMessage )
+    strWelcomeMessage    ( strNewWelcomeMessage ),
+    eLicenceType         ( eNLicenceType )
 {
     int iOpusError;
     int i;
@@ -607,6 +609,12 @@ CreateAndSendChanListForAllConChannels();
             "<b>Server Welcome Message:</b> " + strWelcomeMessage;
 
         vecChannels[iChID].CreateChatTextMes ( strWelcomeMessageFormated );
+    }
+
+    // send licence request message (if enabled)
+    if ( eLicenceType != LT_NO_LICENCE )
+    {
+        vecChannels[iChID].CreateLicReqMes ( eLicenceType );
     }
 }
 

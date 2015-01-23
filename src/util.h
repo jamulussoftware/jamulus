@@ -502,7 +502,8 @@ enum EGUIDesign
 enum ELicenceType
 {
     // used for protocol -> enum values must be fixed!
-    LT_CREATIVECOMMONS = 0
+    LT_NO_LICENCE = 0,
+    LT_CREATIVECOMMONS = 1
 };
 
 

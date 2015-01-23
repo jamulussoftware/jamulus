@@ -417,6 +417,7 @@ signals:
     void ConClientListNameMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
+    void LicenceRequired ( ELicenceType eLicenceType );
     void PingTimeReceived ( int iPingTime );
 
     void CLServerListReceived ( CHostAddress         InetAddr,

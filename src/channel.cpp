@@ -111,6 +111,10 @@ QObject::connect ( &Protocol,
     QObject::connect ( &Protocol,
         SIGNAL ( ReqNetTranspProps() ),
         this, SLOT ( OnReqNetTranspProps() ) );
+
+    QObject::connect( &Protocol,
+        SIGNAL ( LicenceRequired ( ELicenceType ) ),
+        SIGNAL ( LicenceRequired ( ELicenceType ) ) );
 }
 
 bool CChannel::ProtocolIsEnabled()

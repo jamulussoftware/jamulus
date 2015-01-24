@@ -662,6 +662,15 @@ protected:
 };
 
 
+// Country flag icon data base -------------------------------------------------
+// this is a pure static class
+class CCountyFlagIcons
+{
+public:
+    static QString GetResourceReference ( const QLocale::Country eCountry );
+};
+
+
 // Info of a channel -----------------------------------------------------------
 class CChannelCoreInfo
 {

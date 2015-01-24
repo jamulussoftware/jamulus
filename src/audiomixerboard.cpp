@@ -298,12 +298,9 @@ void CChannelFader::SetCountryFlag ( const QLocale::Country eCountry )
 {
     if ( eCountry != QLocale::AnyCountry )
     {
-        // get the resource reference string for this country flag
-        const QString strCurResourceRef = ":/png/flags/res/flags/" +
-            QLocale ( QLocale::AnyLanguage, eCountry ).bcp47Name() + ".png";
-
         // try to load the country flag icon
-        QPixmap CountryFlagPixmap ( strCurResourceRef );
+        QPixmap CountryFlagPixmap (
+            CCountyFlagIcons::GetResourceReference ( eCountry ) );
 
         // first check if resource reference was valid
         if ( CountryFlagPixmap.isNull() )
@@ -321,6 +318,12 @@ void CChannelFader::SetCountryFlag ( const QLocale::Country eCountry )
             // enable country flag
             plblCountryFlag->setVisible ( true );
         }
+    }
+    else
+    {
+        // disable country flag and tool tip
+        plblCountryFlag->setVisible ( false );
+        plblCountryFlag->setToolTip ( "" );
     }
 }
 

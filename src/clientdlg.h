@@ -105,6 +105,7 @@ protected:
     QMenu*             pViewMenu;
     QMenuBar*          pMenu;
     QMenu*             pInstrPictPopupMenu;
+    QMenu*             pCountryFlagPopupMenu;
 
     CClientSettingsDlg ClientSettingsDlg;
     CChatDlg           ChatDlg;
@@ -116,6 +117,7 @@ public slots:
 
     void OnConnectDisconBut();
     void OnInstPictureBut();
+    void OnCountryFlagBut();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
 
@@ -140,6 +142,7 @@ public slots:
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
 
     void OnInstPicturesMenuTriggered ( QAction* SelAction );
+    void OnCountryFlagMenuTriggered ( QAction* SelAction );
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );

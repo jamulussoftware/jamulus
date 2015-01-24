@@ -107,6 +107,18 @@ void CSettings::Load()
             pClient->ChannelInfo.iInstrument = iValue;
         }
 
+        // country
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "country",
+             0, static_cast<int> ( QLocale::LastCountry ), iValue ) )
+        {
+            pClient->ChannelInfo.eCountry = static_cast<QLocale::Country> ( iValue );
+        }
+        else
+        {
+            // if no country is given, use the one from the operating system
+            pClient->ChannelInfo.eCountry = QLocale::system().country();
+        }
+
         // audio fader
         if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad",
              AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
@@ -370,6 +382,10 @@ void CSettings::Save()
         // instrument
         SetNumericIniSet ( IniXMLDocument, "client", "instrument",
             pClient->ChannelInfo.iInstrument );
+
+        // country
+        SetNumericIniSet ( IniXMLDocument, "client", "country",
+            static_cast<int> ( pClient->ChannelInfo.eCountry ) );
 
         // audio fader
         SetNumericIniSet ( IniXMLDocument, "client", "audfad",

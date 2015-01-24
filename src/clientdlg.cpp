@@ -96,17 +96,17 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         "and disconnecting the " ) + APP_NAME + tr ( " software." ) );
 
     // fader tag
-    QString strFaderTag = tr ( "<b>Your Alias/Instrument:</b> Set your name "
+    QString strFaderTag = tr ( "<b>Your Alias/Instrument/Country:</b> Set your name "
         "or an alias here so that the other musicians you want to play with "
         "know who you are. Additionally you may set an instrument picture of "
-        "the instrument you play. "
+        "the instrument you play and a flag of the country you are living. "
         "What you set here will appear at your fader on the mixer board when "
         "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
         "also show up at each client which is connected to the same server as "
         "you. If the fader tag is empty, the IP address is shown instead." );
 
     QString strFaderTagTT = tr ( "Set your name and/or instrument and/or "
-        "pseoudonym here so that the other musicians can identify you." ) +
+        "country here so that the other musicians can identify you." ) +
         TOOLTIP_COM_END_TEXT;
 
     lblServerTag->setWhatsThis ( strFaderTag );
@@ -117,6 +117,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     butInstPicture->setWhatsThis  ( strFaderTag );
     butInstPicture->setToolTip    ( strFaderTagTT );
     butInstPicture->setAccessibleName ( tr ( "Instrument picture button" ) );
+    butCountryFlag->setWhatsThis  ( strFaderTag );
+    butCountryFlag->setToolTip    ( strFaderTagTT );
+    butCountryFlag->setAccessibleName ( tr ( "Country flag button" ) );
 
     // local audio input fader
     QString strAudFader = tr ( "<b>Local Audio Input Fader:</b> With the "
@@ -212,10 +215,14 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     MainMixerBoard->vecStoredFaderLevels = pClient->vecStoredFaderLevels;
     MainMixerBoard->vecStoredFaderIsSolo = pClient->vecStoredFaderIsSolo;
 
-    // init fader tag line edit and instrument picture
+    // init fader tag line edit, instrument picture and country flag
     edtFaderTag->setText ( pClient->ChannelInfo.strName );
+
     butInstPicture->setIcon ( QIcon (
         CInstPictures::GetResourceReference ( pClient->ChannelInfo.iInstrument ) ) );
+
+    butCountryFlag->setIcon ( QIcon (
+        CCountyFlagIcons::GetResourceReference ( pClient->ChannelInfo.eCountry ) ) );
 
     // init status label
     OnTimerStatus();
@@ -333,6 +340,51 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     }
 
 
+    // Country flag icons popup menu -------------------------------------------
+    pCountryFlagPopupMenu = new QMenu ( this );
+
+    // add an entry for all known country flags
+    for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry );
+          iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
+    {
+        // the "Default" country gets a special icon
+        QIcon   CurFlagIcon;
+        QString sCurCountryName;
+
+        if ( static_cast<QLocale::Country> ( iCurCntry ) == QLocale::AnyCountry )
+        {
+            // default icon and name for no flag selected
+            CurFlagIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
+            sCurCountryName = "None";
+        }
+        else
+        {
+            // get current country enum
+            QLocale::Country eCountry =
+                static_cast<QLocale::Country> ( iCurCntry );
+
+            // get resource file name
+            CurFlagIcon.addFile ( CCountyFlagIcons::GetResourceReference ( eCountry ) );
+
+            // get the country name
+            sCurCountryName = QLocale::countryToString ( eCountry );
+        }
+
+        // only add the entry if a flag is available
+        if ( !CurFlagIcon.isNull() )
+        {
+            // create a menu action with text and image
+            QAction* pCurAction =
+                new QAction ( CurFlagIcon, sCurCountryName, this );
+
+            // add data to identify the action data when it is triggered
+            pCurAction->setData ( iCurCntry );
+
+            pCountryFlagPopupMenu->addAction ( pCurAction );
+        }
+    }
+
+
     // Window positions --------------------------------------------------------
     // main window
     if ( !pClient->vecWindowPosMain.isEmpty() && !pClient->vecWindowPosMain.isNull() )
@@ -382,6 +434,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( butInstPicture, SIGNAL ( clicked() ),
         this, SLOT ( OnInstPictureBut() ) );
 
+    QObject::connect ( butCountryFlag, SIGNAL ( clicked() ),
+        this, SLOT ( OnCountryFlagBut() ) );
+
     // check boxes
     QObject::connect ( chbSettings, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnSettingsStateChanged ( int ) ) );
@@ -423,6 +478,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // menus
     QObject::connect ( pInstrPictPopupMenu, SIGNAL ( triggered ( QAction* ) ),
         this, SLOT ( OnInstPicturesMenuTriggered ( QAction* ) ) );
+
+    QObject::connect ( pCountryFlagPopupMenu, SIGNAL ( triggered ( QAction* ) ),
+        this, SLOT ( OnCountryFlagMenuTriggered ( QAction* ) ) );
 
     // other
     QObject::connect ( pClient,
@@ -685,6 +743,14 @@ void CClientDlg::OnInstPictureBut()
     pInstrPictPopupMenu->exec ( this->mapToGlobal ( butInstPicture->pos() ) );
 }
 
+void CClientDlg::OnCountryFlagBut()
+{
+    // open a menu which shows all available country flags which
+    // always appears at the same position relative to the country
+    // flags button
+    pCountryFlagPopupMenu->exec ( this->mapToGlobal ( butCountryFlag->pos() ) );
+}
+
 void CClientDlg::OnInstPicturesMenuTriggered ( QAction* SelAction )
 {
     // get selected instrument
@@ -699,6 +765,23 @@ void CClientDlg::OnInstPicturesMenuTriggered ( QAction* SelAction )
     // update icon on the instrument selection button
     butInstPicture->setIcon ( QIcon (
         CInstPictures::GetResourceReference ( iSelInstrument ) ) );
+}
+
+void CClientDlg::OnCountryFlagMenuTriggered ( QAction* SelAction )
+{
+    // get selected country
+    const QLocale::Country eSelCountry =
+        static_cast<QLocale::Country> ( SelAction->data().toInt() );
+
+    // set the new value in the data base
+    pClient->ChannelInfo.eCountry = eSelCountry;
+
+    // update channel info at the server
+    pClient->SetRemoteInfo();
+
+    // update icon on the instrument selection button
+    butCountryFlag->setIcon ( QIcon (
+        CCountyFlagIcons::GetResourceReference ( eSelCountry ) ) );
 }
 
 void CClientDlg::OnChatTextReceived ( QString strChatText )

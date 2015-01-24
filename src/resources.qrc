@@ -54,6 +54,7 @@
         <file>res/mainicon.png</file>
     </qresource>
     <qresource prefix="/png/flags">
+        <file>res/flags/flagnone.png</file>
         <file>res/flags/ad.png</file>
         <file>res/flags/ae.png</file>
         <file>res/flags/af.png</file>

@@ -682,6 +682,43 @@ QString CCountyFlagIcons::GetResourceReference ( const QLocale::Country eCountry
     }
     else
     {
+
+// NOTE: The following code was introduced to support old QT versions. The problem
+//       is that the number of countries displayed is less than the one displayed
+//       with the new code below (which is disabled). Therefore, as soon as the
+//       compatibility to the very old versions of QT is not required anymore, use
+//       the new code.
+
+// COMPATIBLE FOR OLD QT VERSIONS:
+        // There is no direct query of the country code in Qt, therefore we use a
+        // workaround: Get the matching locales name and split the name of
+        // that since the second part is the country code
+        QLocale CurLocale ( QLocale::AnyLanguage, eCountry );
+
+        // note: in case the country was not found, the constructor of QLocale uses
+        // the system default, therefore we only want to use countries which are not
+        // the default except of the case that the country is the system default
+        if ( !( ( eCountry != QLocale::system().country() ) &&
+                ( CurLocale.country() == QLocale::system().country() ) ) )
+        {
+            QStringList vstrLocParts = CurLocale.name().split("_");
+
+            // the second split contains the name we need
+            if ( vstrLocParts.size() > 1 )
+            {
+                strReturn =
+                    ":/png/flags/res/flags/" + vstrLocParts.at ( 1 ).toLower() + ".png";
+
+                // check if file actually exists, if not then invalidate reference
+                if ( !QFile::exists ( strReturn ) )
+                {
+                    strReturn = "";
+                }
+            }
+        }
+
+// AT LEAST QT 4.8 IS REQUIRED:
+/*
         // There is no direct query of the country code in Qt, therefore we use a
         // workaround: Get the matching locales properties and split the name of
         // that since the second part is the country code
@@ -707,6 +744,7 @@ QString CCountyFlagIcons::GetResourceReference ( const QLocale::Country eCountry
                 }
             }
         }
+*/
     }
 
     return strReturn;

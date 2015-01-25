@@ -34,16 +34,17 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     // create new GUI control objects and store pointers to them (note that
     // QWidget takes the ownership of the pMainGrid so that this only has
     // to be created locally in this constructor)
-    pFrame                   = new QFrame      ( pNW );
-    QVBoxLayout* pMainGrid   = new QVBoxLayout ( pFrame );
-    pFader                   = new QSlider     ( Qt::Vertical, pFrame );
-    pcbMute                  = new QCheckBox   ( "Mute",       pFrame );
-    pcbSolo                  = new QCheckBox   ( "Solo",       pFrame );
-    QGroupBox* pLabelInstBox = new QGroupBox   ( pFrame );
-    plblLabel                = new QLabel      ( "",           pFrame );
-    plblInstrument           = new QLabel      ( pFrame );
-    plblCountryFlag          = new QLabel      ( pFrame );
-    QHBoxLayout* pLabelGrid  = new QHBoxLayout ( pLabelInstBox );
+    pFrame                      = new QFrame      ( pNW );
+    QVBoxLayout* pMainGrid      = new QVBoxLayout ( pFrame );
+    pFader                      = new QSlider     ( Qt::Vertical, pFrame );
+    pcbMute                     = new QCheckBox   ( "Mute",       pFrame );
+    pcbSolo                     = new QCheckBox   ( "Solo",       pFrame );
+    QGroupBox* pLabelInstBox    = new QGroupBox   ( pFrame );
+    plblLabel                   = new QLabel      ( "",           pFrame );
+    plblInstrument              = new QLabel      ( pFrame );
+    plblCountryFlag             = new QLabel      ( pFrame );
+    QHBoxLayout* pLabelGrid     = new QHBoxLayout ( pLabelInstBox );
+    QVBoxLayout* pLabelPictGrid = new QVBoxLayout();
 
     // setup slider
     pFader->setPageStep ( 1 );
@@ -60,8 +61,9 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
         "            background-color: white; }" );
 
     // setup fader tag label (black bold text which is centered)
-    plblLabel->setTextFormat ( Qt::PlainText );
-    plblLabel->setAlignment ( Qt::AlignHCenter );
+    plblLabel->setTextFormat    ( Qt::PlainText );
+    plblLabel->setAlignment     ( Qt::AlignHCenter | Qt::AlignVCenter );
+    plblLabel->setMinimumHeight ( 40 ); // maximum hight of the instrument+flag pictures
     plblLabel->setStyleSheet (
         "QLabel { color: black;"
         "         font:  bold; }" );
@@ -72,9 +74,10 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pLabelGrid->setSpacing ( 2 ); // only minimal space between picture and text
 
     // add user controls to the grids
-    pLabelGrid->addWidget ( plblInstrument );
+    pLabelPictGrid->addWidget ( plblCountryFlag, 0, Qt::AlignHCenter );
+    pLabelPictGrid->addWidget ( plblInstrument,  0, Qt::AlignHCenter );
+    pLabelGrid->addLayout ( pLabelPictGrid );
     pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter );
-    pLabelGrid->addWidget ( plblCountryFlag, 0, Qt::AlignRight );
 
     pMainGrid->addWidget ( pFader,  0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );

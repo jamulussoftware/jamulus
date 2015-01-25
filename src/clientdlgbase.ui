@@ -350,6 +350,9 @@
         </item>
         <item>
          <layout class="QHBoxLayout">
+          <property name="spacing">
+           <number>3</number>
+          </property>
           <item>
            <widget class="QLineEdit" name="edtFaderTag">
             <property name="sizePolicy">
@@ -360,7 +363,7 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>40</width>
+              <width>90</width>
               <height>0</height>
              </size>
             </property>

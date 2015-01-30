@@ -48,8 +48,7 @@ public:
 
     void SetText ( const CChannelInfo& ChanInfo );
     QString GetReceivedName() { return strReceivedName; }
-    void SetInstrumentPicture ( const int iInstrument );
-    void SetCountryFlag ( const QLocale::Country eCountry );
+    void SetChannelInfos ( const CChannelInfo& cChanInfo );
     void Show() { pFrame->show(); }
     void Hide() { pFrame->hide(); }
     bool IsVisible() { return plblLabel->isVisible(); }

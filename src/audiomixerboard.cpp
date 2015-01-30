@@ -176,12 +176,19 @@ void CChannelFader::Reset()
     pcbSolo->setChecked ( false );
 
     // clear instrument picture, country flag, tool tips and label text
+    plblLabel->setText ( "" );
+    plblLabel->setToolTip ( "" );
     plblInstrument->setVisible ( false );
     plblInstrument->setToolTip ( "" );
     plblCountryFlag->setVisible ( false );
     plblCountryFlag->setToolTip ( "" );
-    plblLabel->setText ( "" );
     strReceivedName = "";
+
+    // set a defined tool tip time out
+    const int iToolTipDurMs = 30000;
+    plblLabel->setToolTipDuration ( iToolTipDurMs );
+    plblInstrument->setToolTipDuration ( iToolTipDurMs );
+    plblCountryFlag->setToolTipDuration ( iToolTipDurMs );
 
     bOtherChannelIsSolo = false;
 }
@@ -272,51 +279,54 @@ void CChannelFader::SetText ( const CChannelInfo& ChanInfo )
     plblLabel->setText ( strModText );
 }
 
-void CChannelFader::SetInstrumentPicture ( const int iInstrument )
+void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 {
+    // init properties for the tool tip
+    int              iTTInstrument = CInstPictures::GetNotUsedInstrument();
+    QLocale::Country eTTCountry    = QLocale::AnyCountry;
+
+
+    // Instrument picture ------------------------------------------------------
     // get the resource reference string for this instrument
     const QString strCurResourceRef =
-        CInstPictures::GetResourceReference ( iInstrument );
+        CInstPictures::GetResourceReference ( cChanInfo.iInstrument );
 
     // first check if instrument picture is used or not and if it is valid
-    if ( CInstPictures::IsNotUsedInstrument ( iInstrument ) ||
+    if ( CInstPictures::IsNotUsedInstrument ( cChanInfo.iInstrument ) ||
          strCurResourceRef.isEmpty() )
     {
-        // disable instrument picture and tool tip
+        // disable instrument picture
         plblInstrument->setVisible ( false );
-        plblInstrument->setToolTip ( "" );
     }
     else
     {
-        // set correct picture and tool tip text
+        // set correct picture
         plblInstrument->setPixmap ( QPixmap ( strCurResourceRef ) );
-        plblInstrument->setToolTip ( CInstPictures::GetName ( iInstrument ) );
+        iTTInstrument = cChanInfo.iInstrument;
 
         // enable instrument picture
         plblInstrument->setVisible ( true );
     }
-}
 
-void CChannelFader::SetCountryFlag ( const QLocale::Country eCountry )
-{
-    if ( eCountry != QLocale::AnyCountry )
+
+    // Country flag icon -------------------------------------------------------
+    if ( cChanInfo.eCountry != QLocale::AnyCountry )
     {
         // try to load the country flag icon
         QPixmap CountryFlagPixmap (
-            CCountyFlagIcons::GetResourceReference ( eCountry ) );
+            CCountyFlagIcons::GetResourceReference ( cChanInfo.eCountry ) );
 
         // first check if resource reference was valid
         if ( CountryFlagPixmap.isNull() )
         {
-            // disable country flag and tool tip
+            // disable country flag
             plblCountryFlag->setVisible ( false );
-            plblCountryFlag->setToolTip ( "" );
         }
         else
         {
-            // set correct picture and tool tip text
+            // set correct picture
             plblCountryFlag->setPixmap ( CountryFlagPixmap );
-            plblCountryFlag->setToolTip ( QLocale::countryToString ( eCountry ) );
+            eTTCountry = cChanInfo.eCountry;
 
             // enable country flag
             plblCountryFlag->setVisible ( true );
@@ -324,10 +334,78 @@ void CChannelFader::SetCountryFlag ( const QLocale::Country eCountry )
     }
     else
     {
-        // disable country flag and tool tip
+        // disable country flag
         plblCountryFlag->setVisible ( false );
-        plblCountryFlag->setToolTip ( "" );
     }
+
+
+    // Tool tip ----------------------------------------------------------------
+    // complete musician profile in the tool tip
+    QString strToolTip = "";
+
+    // alias/name
+    if ( !strReceivedName.isEmpty() )
+    {
+        strToolTip += "<h4>Alias/Name</h4>" + strReceivedName;
+    }
+
+    // instrument
+    if ( !CInstPictures::IsNotUsedInstrument ( iTTInstrument ) )
+    {
+        strToolTip += "<h4>Instrument</h4>" +
+            CInstPictures::GetName ( iTTInstrument );
+    }
+
+    // location
+    if ( ( eTTCountry != QLocale::AnyCountry ) ||
+         ( !cChanInfo.strCity.isEmpty() ) )
+    {
+        strToolTip += "<h4>Location</h4>";
+
+        if ( !cChanInfo.strCity.isEmpty() )
+        {
+            strToolTip += cChanInfo.strCity;
+
+            if ( eTTCountry != QLocale::AnyCountry )
+            {
+                strToolTip += ", ";
+            }
+        }
+
+        if ( eTTCountry != QLocale::AnyCountry )
+        {
+            strToolTip += QLocale::countryToString ( eTTCountry );
+        }
+    }
+
+    // skill level
+    if ( cChanInfo.eSkillLevel != SL_NOT_SET )
+    {
+        switch ( cChanInfo.eSkillLevel )
+        {
+        case SL_BEGINNER:
+            strToolTip += "<h4>Skill Level</h4>Beginner";
+            break;
+
+        case SL_INTERMEDIATE:
+            strToolTip += "<h4>Skill Level</h4>Intermediate";
+            break;
+
+        case SL_PROFESSIONAL:
+            strToolTip += "<h4>Skill Level</h4>Expert";
+            break;
+        }
+    }
+
+    // if no information is given, leave the tool tip empty, otherwise add header
+    if ( !strToolTip.isEmpty() )
+    {
+        strToolTip.prepend ( "<h3>Musician Profile</h3>" );
+    }
+
+    plblCountryFlag->setToolTip ( strToolTip );
+    plblInstrument->setToolTip  ( strToolTip );
+    plblLabel->setToolTip       ( strToolTip );
 }
 
 double CChannelFader::CalcFaderGain ( const int value )
@@ -521,13 +599,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED #### -> the "if-condition" can be removed later on...
                 if ( !vecChanInfo[j].bOnlyNameIsUsed )
                 {
-                    // update instrument picture
-                    vecpChanFader[i]->
-                        SetInstrumentPicture ( vecChanInfo[j].iInstrument );
-
-                    // update country flag
-                    vecpChanFader[i]->
-                        SetCountryFlag ( vecChanInfo[j].eCountry );
+                    vecpChanFader[i]->SetChannelInfos ( vecChanInfo[j] );
                 }
 
                 bFaderIsUsed = true;

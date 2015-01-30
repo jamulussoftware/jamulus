@@ -23,6 +23,7 @@
 \******************************************************************************/
 
 #include "util.h"
+#include "client.h"
 
 
 /* Implementation *************************************************************/
@@ -454,7 +455,7 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/mainicon.png" ) ) );
     resize ( 700, 450 );
 
-    QVBoxLayout*  pLayout    = new QVBoxLayout;
+    QVBoxLayout*  pLayout    = new QVBoxLayout ( this );
     QHBoxLayout*  pSubLayout = new QHBoxLayout;
     QTextBrowser* txvLicence = new QTextBrowser ( this );
     QCheckBox*    chbAgree   = new QCheckBox ( "I &agree to the above licence terms", this );
@@ -467,7 +468,6 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     pSubLayout->addWidget ( butDecline );
     pLayout->addWidget    ( txvLicence );
     pLayout->addLayout    ( pSubLayout );
-    setLayout             ( pLayout );
 
     // set some properties
     butAccept->setEnabled ( false );
@@ -517,6 +517,257 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
 
     QObject::connect ( butDecline, SIGNAL ( clicked() ),
         this, SLOT ( reject() ) );
+}
+
+
+// Musician profile dialog -----------------------------------------------------
+CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
+                           QWidget* parent ) :
+    QDialog ( parent ),
+    pClient ( pNCliP )
+{
+/*
+    The musician profile dialog is structured as follows:
+    - label with edit box for alias/name
+    - label with combo box for instrument
+    - label with combo box for country flag
+    - label with edit box for city
+    - label with combo box for skill level
+    - OK button
+*/
+    setWindowTitle ( "Musician Profile" );
+    setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/mainicon.png" ) ) );
+
+    QVBoxLayout* pLayout          = new QVBoxLayout ( this );
+    QHBoxLayout* pMainSubLayout   = new QHBoxLayout;
+    QHBoxLayout* pButSubLayout    = new QHBoxLayout;
+    QVBoxLayout* pMLeftSubLayout  = new QVBoxLayout;
+    QVBoxLayout* pMRightSubLayout = new QVBoxLayout;
+    QLabel*      plblAlias        = new QLabel ( "Alias/Name", this );
+    pedtAlias                     = new QLineEdit ( this );
+    QLabel*      plblInstrument   = new QLabel ( "Instrument", this );
+    pcbxInstrument                = new QComboBox ( this );
+    QLabel*      plblCountry      = new QLabel ( "Country", this );
+    pcbxCountry                   = new QComboBox ( this );
+    QLabel*      plblCity         = new QLabel ( "City", this );
+    pedtCity                      = new QLineEdit ( this );
+    QLabel*      plblSkill        = new QLabel ( "Skill", this );
+    pcbxSkill                     = new QComboBox ( this );
+    QPushButton* butOK            = new QPushButton ( "&OK", this );
+
+    pMLeftSubLayout->addWidget ( plblAlias );
+    pMLeftSubLayout->addWidget ( plblInstrument );
+    pMLeftSubLayout->addWidget ( plblCountry );
+    pMLeftSubLayout->addWidget ( plblCity );
+    pMLeftSubLayout->addWidget ( plblSkill );
+    pMRightSubLayout->addWidget ( pedtAlias );
+    pMRightSubLayout->addWidget ( pcbxInstrument );
+    pMRightSubLayout->addWidget ( pcbxCountry );
+    pMRightSubLayout->addWidget ( pedtCity );
+    pMRightSubLayout->addWidget ( pcbxSkill );
+    pMainSubLayout->addLayout ( pMLeftSubLayout );
+    pMainSubLayout->addLayout ( pMRightSubLayout );
+    pButSubLayout->addStretch();
+    pButSubLayout->addWidget ( butOK );
+    pLayout->addLayout ( pMainSubLayout );
+    pLayout->addLayout ( pButSubLayout );
+
+    // set some properties
+    butOK->setDefault ( true );
+
+
+    // Instrument pictures combo box -------------------------------------------
+    // add an entry for all known instruments
+    for ( int iCurInst = 0; iCurInst < CInstPictures::GetNumAvailableInst(); iCurInst++ )
+    {
+        // create a combo box item with text and image
+        pcbxInstrument->addItem (
+            QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ),
+            CInstPictures::GetName ( iCurInst ),
+            iCurInst );
+    }
+
+
+    // Country flag icons combo box --------------------------------------------
+    // add an entry for all known country flags
+    for ( int iCurCntry = static_cast<int> ( QLocale::AnyCountry );
+          iCurCntry < static_cast<int> ( QLocale::LastCountry ); iCurCntry++ )
+    {
+        // exclude the "None" entry since it is added after the sorting
+        if ( static_cast<QLocale::Country> ( iCurCntry ) != QLocale::AnyCountry )
+        {
+            // get current country enum
+            QLocale::Country eCountry =
+                static_cast<QLocale::Country> ( iCurCntry );
+
+            // try to load icon from resource file name
+            QIcon CurFlagIcon;
+            CurFlagIcon.addFile ( CCountyFlagIcons::GetResourceReference ( eCountry ) );
+
+            // only add the entry if a flag is available
+            if ( !CurFlagIcon.isNull() )
+            {
+                // create a combo box item with text and image
+                pcbxCountry->addItem ( QIcon ( CurFlagIcon ),
+                                       QLocale::countryToString ( eCountry ),
+                                       iCurCntry );
+            }
+        }
+    }
+
+    // sort country combo box items in alphabetical order
+    pcbxCountry->model()->sort ( 0, Qt::AscendingOrder );
+
+    // the "None" country gets a special icon and is the very first item
+    QIcon FlagNoneIcon;
+    FlagNoneIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
+    pcbxCountry->insertItem ( 0,
+                              FlagNoneIcon,
+                              "None",
+                              static_cast<int> ( QLocale::AnyCountry ) );
+
+
+    // Skill level combo box ---------------------------------------------------
+    pcbxSkill->addItem ( "Not Set",      SL_NOT_SET );
+    pcbxSkill->addItem ( "Beginner",     SL_BEGINNER );
+    pcbxSkill->addItem ( "Intermediate", SL_INTERMEDIATE );
+    pcbxSkill->addItem ( "Expert",       SL_PROFESSIONAL );
+
+
+    // Add help text to controls -----------------------------------------------
+    // fader tag
+    QString strFaderTag = tr ( "<b>Musician Profile:</b> Set your name "
+        "or an alias here so that the other musicians you want to play with "
+        "know who you are. Additionally you may set an instrument picture of "
+        "the instrument you play and a flag of the country you are living. "
+        "The city you live in and the skill level of playing your instrument "
+        "may also be added.\n"
+        "What you set here will appear at your fader on the mixer board when "
+        "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
+        "also show up at each client which is connected to the same server as "
+        "you. If the name is left empty, the IP address is shown instead." );
+
+    pedtAlias->setWhatsThis ( strFaderTag );
+    pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );
+    pcbxInstrument->setWhatsThis ( strFaderTag );
+    pcbxInstrument->setAccessibleName ( tr ( "Instrument picture button" ) );
+    pcbxCountry->setWhatsThis ( strFaderTag );
+    pcbxCountry->setAccessibleName ( tr ( "Country flag button" ) );
+    pedtCity->setWhatsThis ( strFaderTag );
+    pedtCity->setAccessibleName ( tr ( "City edit box" ) );
+    pcbxSkill->setWhatsThis ( strFaderTag );
+    pcbxSkill->setAccessibleName ( tr ( "Skill level combo box" ) );
+
+
+    // Connections -------------------------------------------------------------
+    QObject::connect ( pedtAlias, SIGNAL ( textChanged ( const QString& ) ),
+        this, SLOT ( OnAliasTextChanged ( const QString& ) ) );
+
+    QObject::connect ( pcbxInstrument, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnInstrumentActivated ( int ) ) );
+
+    QObject::connect ( pcbxCountry, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnCountryActivated ( int ) ) );
+
+    QObject::connect ( pedtCity, SIGNAL ( textChanged ( const QString& ) ),
+        this, SLOT ( OnCityTextChanged ( const QString& ) ) );
+
+    QObject::connect ( pcbxSkill, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnSkillActivated ( int ) ) );
+
+    QObject::connect ( butOK, SIGNAL ( clicked() ),
+        this, SLOT ( accept() ) );
+}
+
+void CMusProfDlg::showEvent ( QShowEvent* )
+{
+    // Update the controls with the current client settings --------------------
+
+    // set the name
+    pedtAlias->setText ( pClient->ChannelInfo.strName );
+
+    // select current instrument
+    pcbxInstrument->setCurrentIndex (
+        pcbxInstrument->findData ( pClient->ChannelInfo.iInstrument ) );
+
+    // select current country
+    pcbxCountry->setCurrentIndex (
+        pcbxCountry->findData (
+        static_cast<int> ( pClient->ChannelInfo.eCountry ) ) );
+
+    // set the city
+    pedtCity->setText ( pClient->ChannelInfo.strCity );
+
+    // select the skill level
+    pcbxSkill->setCurrentIndex (
+        pcbxSkill->findData (
+        static_cast<int> ( pClient->ChannelInfo.eSkillLevel ) ) );
+}
+
+void CMusProfDlg::OnAliasTextChanged ( const QString& strNewName )
+{
+    // check length
+    if ( strNewName.length() <= MAX_LEN_FADER_TAG )
+    {
+        // refresh internal name parameter
+        pClient->ChannelInfo.strName = strNewName;
+
+        // update channel info at the server
+        pClient->SetRemoteInfo();
+    }
+    else
+    {
+        // text is too long, update control with shortend text
+        pedtAlias->setText ( strNewName.left ( MAX_LEN_FADER_TAG ) );
+    }
+}
+
+void CMusProfDlg::OnInstrumentActivated ( int iCntryListItem )
+{
+    // set the new value in the data base
+    pClient->ChannelInfo.iInstrument =
+        pcbxInstrument->itemData ( iCntryListItem ).toInt();
+
+    // update channel info at the server
+    pClient->SetRemoteInfo();
+}
+
+void CMusProfDlg::OnCountryActivated ( int iCntryListItem )
+{
+    // set the new value in the data base
+    pClient->ChannelInfo.eCountry = static_cast<QLocale::Country> (
+        pcbxCountry->itemData ( iCntryListItem ).toInt() );
+
+    // update channel info at the server
+    pClient->SetRemoteInfo();
+}
+
+void CMusProfDlg::OnCityTextChanged ( const QString& strNewCity )
+{
+    // check length
+    if ( strNewCity.length() <= MAX_LEN_SERVER_CITY )
+    {
+        // refresh internal name parameter
+        pClient->ChannelInfo.strCity = strNewCity;
+
+        // update channel info at the server
+        pClient->SetRemoteInfo();
+    }
+    else
+    {
+        // text is too long, update control with shortend text
+        pedtCity->setText ( strNewCity.left ( MAX_LEN_SERVER_CITY ) );
+    }
+}
+
+void CMusProfDlg::OnSkillActivated ( int iCntryListItem )
+{
+    // set the new value in the data base
+    pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> (
+        pcbxSkill->itemData ( iCntryListItem ).toInt() );
+
+    // update channel info at the server
+    pClient->SetRemoteInfo();
 }
 
 

@@ -32,6 +32,8 @@
 #include <QTextBrowser>
 #include <QLabel>
 #include <QCheckBox>
+#include <QComboBox>
+#include <QLineEdit>
 #include <QDateTime>
 #include <QFile>
 #include <QDesktopServices>
@@ -52,6 +54,9 @@ using namespace std; // because of the library: "vector"
 # include <sys/time.h>
 #endif
 #include "ui_aboutdlgbase.h"
+
+
+class CClient;  // forward declaration of CClient
 
 
 /* Definitions ****************************************************************/
@@ -422,6 +427,35 @@ protected:
 
 public slots:
     void OnAgreeStateChanged ( int value ) { butAccept->setEnabled ( value == Qt::Checked ); }
+};
+
+
+// Musician profile dialog -----------------------------------------------------
+class CMusProfDlg : public QDialog
+{
+    Q_OBJECT
+
+public:
+    CMusProfDlg ( CClient* pNCliP,
+                  QWidget* parent = 0 );
+
+protected:
+    virtual void showEvent ( QShowEvent* );
+
+    QLineEdit* pedtAlias;
+    QComboBox* pcbxInstrument;
+    QComboBox* pcbxCountry;
+    QLineEdit* pedtCity;
+    QComboBox* pcbxSkill;
+
+    CClient* pClient;
+
+public slots:
+    void OnAliasTextChanged ( const QString& strNewName );
+    void OnInstrumentActivated ( int iCntryListItem );
+    void OnCountryActivated ( int iCntryListItem );
+    void OnCityTextChanged ( const QString& strNewName );
+    void OnSkillActivated ( int iCntryListItem );
 };
 
 

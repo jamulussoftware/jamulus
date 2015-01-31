@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>345</width>
-    <height>382</height>
+    <height>363</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -339,68 +339,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="lblServerTag">
+         <widget class="QCheckBox" name="chbProfile">
           <property name="text">
-           <string>Alias/Instrument/Country</string>
-          </property>
-          <property name="wordWrap">
-           <bool>false</bool>
+           <string>My Profile</string>
           </property>
          </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout">
-          <property name="spacing">
-           <number>3</number>
-          </property>
-          <item>
-           <widget class="QLineEdit" name="edtFaderTag">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Ignored" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>90</width>
-              <height>0</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="butInstPicture">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/png/instr/res/instrnone.png</normaloff>:/png/instr/res/instrnone.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="butCountryFlag">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/png/flags/res/flags/flagnone.png</normaloff>:/png/flags/res/flags/flagnone.png</iconset>
-            </property>
-           </widget>
-          </item>
-         </layout>
         </item>
         <item>
          <layout class="QHBoxLayout">
@@ -659,9 +602,6 @@
  </customwidgets>
  <tabstops>
   <tabstop>butConnect</tabstop>
-  <tabstop>edtFaderTag</tabstop>
-  <tabstop>butInstPicture</tabstop>
-  <tabstop>butCountryFlag</tabstop>
   <tabstop>chbChat</tabstop>
   <tabstop>chbSettings</tabstop>
   <tabstop>sldAudioPan</tabstop>

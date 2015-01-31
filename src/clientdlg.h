@@ -118,8 +118,6 @@ public slots:
     void OnAboutToQuit() { pSettings->Save(); }
 
     void OnConnectDisconBut();
-    void OnInstPictureBut();
-    void OnCountryFlagBut();
     void OnTimerSigMet();
     void OnTimerBuffersLED();
 
@@ -144,11 +142,9 @@ public slots:
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
 
-    void OnInstPicturesMenuTriggered ( QAction* SelAction );
-    void OnCountryFlagMenuTriggered ( QAction* SelAction );
-
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
+    void OnProfileStateChanged ( int value );
 
     void OnAudioPanValueChanged ( int value );
 
@@ -162,7 +158,6 @@ public slots:
         { pClient->SetReverbOnLeftChan ( false ); }
 
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
-    void OnFaderTagTextChanged ( const QString& strNewName );
     void OnChatTextReceived ( QString strChatText );
     void OnLicenceRequired ( ELicenceType eLicenceType );
 

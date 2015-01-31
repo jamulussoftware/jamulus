@@ -35,9 +35,11 @@ CClient::CClient ( const quint16 iPortNumber ) :
     vecWindowPosMain                 (), // empty array
     vecWindowPosSettings             (), // empty array
     vecWindowPosChat                 (), // empty array
+    vecWindowPosProfile              (), // empty array
     vecWindowPosConnect              (), // empty array
     bWindowWasShownSettings          ( false ),
     bWindowWasShownChat              ( false ),
+    bWindowWasShownProfile           ( false ),
     bWindowWasShownConnect           ( false ),
     Channel                          ( false ), /* we need a client channel -> "false" */
     eAudioCompressionType            ( CT_OPUS ),

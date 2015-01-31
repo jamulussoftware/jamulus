@@ -289,9 +289,11 @@ public:
     QByteArray       vecWindowPosMain;
     QByteArray       vecWindowPosSettings;
     QByteArray       vecWindowPosChat;
+    QByteArray       vecWindowPosProfile;
     QByteArray       vecWindowPosConnect;
     bool             bWindowWasShownSettings;
     bool             bWindowWasShownChat;
+    bool             bWindowWasShownProfile;
     bool             bWindowWasShownConnect;
 
 #ifdef LLCON_VST_PLUGIN

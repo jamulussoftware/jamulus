@@ -553,7 +553,7 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     pedtCity                      = new QLineEdit ( this );
     QLabel*      plblSkill        = new QLabel ( "Skill", this );
     pcbxSkill                     = new QComboBox ( this );
-    QPushButton* butOK            = new QPushButton ( "&OK", this );
+    QPushButton* butClose         = new QPushButton ( "&Close", this );
 
     pMLeftSubLayout->addStretch();
     pMLeftSubLayout->addWidget ( plblAlias );
@@ -574,12 +574,14 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     pMainSubLayout->addLayout ( pMLeftSubLayout );
     pMainSubLayout->addLayout ( pMRightSubLayout );
     pButSubLayout->addStretch();
-    pButSubLayout->addWidget ( butOK );
+    pButSubLayout->addWidget ( butClose );
     pLayout->addLayout ( pMainSubLayout );
     pLayout->addLayout ( pButSubLayout );
 
-    // set some properties
-    butOK->setDefault ( true );
+    // we do not want to close button to be a default one (the mouse pointer
+    // may jump to that button which we want to avoid)
+    butClose->setAutoDefault ( false );
+    butClose->setDefault ( false );
 
 
     // Instrument pictures combo box -------------------------------------------
@@ -681,7 +683,7 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     QObject::connect ( pcbxSkill, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnSkillActivated ( int ) ) );
 
-    QObject::connect ( butOK, SIGNAL ( clicked() ),
+    QObject::connect ( butClose, SIGNAL ( clicked() ),
         this, SLOT ( accept() ) );
 }
 

@@ -66,8 +66,10 @@ protected:
     void    SetMute ( const bool bState );
     QString GenFaderText ( const CChannelInfo& ChanInfo );
     void    SendFaderLevelToServer ( const int iLevel );
+    void    SetupFaderTag ( const ESkillLevel eSkillLevel );
 
     QFrame*    pFrame;
+    QGroupBox* pLabelInstBox;
     QSlider*   pFader;
     QCheckBox* pcbMute;
     QCheckBox* pcbSolo;

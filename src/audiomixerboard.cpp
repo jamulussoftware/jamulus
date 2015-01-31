@@ -39,7 +39,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader                      = new QSlider     ( Qt::Vertical, pFrame );
     pcbMute                     = new QCheckBox   ( "Mute",       pFrame );
     pcbSolo                     = new QCheckBox   ( "Solo",       pFrame );
-    QGroupBox* pLabelInstBox    = new QGroupBox   ( pFrame );
+    pLabelInstBox               = new QGroupBox   ( pFrame );
     plblLabel                   = new QLabel      ( "",           pFrame );
     plblInstrument              = new QLabel      ( pFrame );
     plblCountryFlag             = new QLabel      ( pFrame );
@@ -51,14 +51,6 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setTickPosition ( QSlider::TicksBothSides );
     pFader->setRange ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
-
-    // setup group box for label/instrument picture (use white background of
-    // label and set a thick black border with nice round edges)
-    pLabelInstBox->setStyleSheet (
-        "QGroupBox { border:           2px solid black;"
-        "            border-radius:    4px;"
-        "            padding:          3px;"
-        "            background-color: white; }" );
 
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat    ( Qt::PlainText );
@@ -166,6 +158,38 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     }
 }
 
+void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
+{
+    // setup group box for label/instrument picture: set a thick black border
+    // with nice round edges
+    QString strStile =
+        "QGroupBox { border:           2px solid black;"
+        "            border-radius:    4px;"
+        "            padding:          3px;";
+
+    // the background color depends on the skill level
+    switch ( eSkillLevel )
+    {
+    case SL_BEGINNER:
+        strStile += "background-color: rgb(225, 225, 255); }";
+        break;
+
+    case SL_INTERMEDIATE:
+        strStile += "background-color: rgb(225, 255, 225); }";
+        break;
+
+    case SL_PROFESSIONAL:
+        strStile += "background-color: rgb(255, 225, 225); }";
+        break;
+
+    default:
+        strStile += "background-color: white; }";
+        break;
+    }
+
+    pLabelInstBox->setStyleSheet ( strStile );
+}
+
 void CChannelFader::Reset()
 {
     // init gain value -> maximum value as definition according to server
@@ -183,6 +207,7 @@ void CChannelFader::Reset()
     plblCountryFlag->setVisible ( false );
     plblCountryFlag->setToolTip ( "" );
     strReceivedName = "";
+    SetupFaderTag ( SL_NOT_SET );
 
     // set a defined tool tip time out
     const int iToolTipDurMs = 30000;
@@ -337,6 +362,10 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         // disable country flag
         plblCountryFlag->setVisible ( false );
     }
+
+
+    // Skill level background color --------------------------------------------
+    SetupFaderTag ( cChanInfo.eSkillLevel );
 
 
     // Tool tip ----------------------------------------------------------------

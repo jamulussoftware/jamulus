@@ -119,6 +119,17 @@ void CSettings::Load()
             pClient->ChannelInfo.eCountry = QLocale::system().country();
         }
 
+        // city
+        pClient->ChannelInfo.strCity = FromBase64ToString (
+            GetIniSetting ( IniXMLDocument, "client", "city_base64" ) );
+
+        // skill level
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "skill",
+             0, 3 /* SL_PROFESSIONAL */, iValue ) )
+        {
+            pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> ( iValue );
+        }
+
         // audio fader
         if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad",
              AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
@@ -265,6 +276,10 @@ void CSettings::Load()
         pClient->vecWindowPosChat = FromBase64ToByteArray (
             GetIniSetting ( IniXMLDocument, "client", "winposchat_base64" ) );
 
+        // window position of the musician profile window
+        pClient->vecWindowPosProfile = FromBase64ToByteArray (
+            GetIniSetting ( IniXMLDocument, "client", "winposprofile_base64" ) );
+
         // window position of the connect window
         pClient->vecWindowPosConnect = FromBase64ToByteArray (
             GetIniSetting ( IniXMLDocument, "client", "winposcon_base64" ) );
@@ -279,6 +294,12 @@ void CSettings::Load()
         if ( GetFlagIniSet ( IniXMLDocument, "client", "winvischat", bValue ) )
         {
             pClient->bWindowWasShownChat = bValue;
+        }
+
+        // visibility state of the musician profile window
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "winvisprofile", bValue ) )
+        {
+            pClient->bWindowWasShownProfile = bValue;
         }
 
         // visibility state of the connect window
@@ -387,6 +408,14 @@ void CSettings::Save()
         SetNumericIniSet ( IniXMLDocument, "client", "country",
             static_cast<int> ( pClient->ChannelInfo.eCountry ) );
 
+        // city
+        PutIniSetting ( IniXMLDocument, "client", "city_base64",
+            ToBase64 ( pClient->ChannelInfo.strCity ) );
+
+        // skill level
+        SetNumericIniSet ( IniXMLDocument, "client", "skill",
+            static_cast<int> ( pClient->ChannelInfo.eSkillLevel ) );
+
         // audio fader
         SetNumericIniSet ( IniXMLDocument, "client", "audfad",
             pClient->GetAudioInFader() );
@@ -467,6 +496,10 @@ void CSettings::Save()
         PutIniSetting ( IniXMLDocument, "client", "winposchat_base64",
             ToBase64 ( pClient->vecWindowPosChat ) );
 
+        // window position of the musician profile window
+        PutIniSetting ( IniXMLDocument, "client", "winposprofile_base64",
+            ToBase64 ( pClient->vecWindowPosProfile ) );
+
         // window position of the connect window
         PutIniSetting ( IniXMLDocument, "client", "winposcon_base64",
             ToBase64 ( pClient->vecWindowPosConnect ) );
@@ -478,6 +511,10 @@ void CSettings::Save()
         // visibility state of the chat window
         SetFlagIniSet ( IniXMLDocument, "client", "winvischat",
             pClient->bWindowWasShownChat );
+
+        // visibility state of the musician profile window
+        SetFlagIniSet ( IniXMLDocument, "client", "winvisprofile",
+            pClient->bWindowWasShownProfile );
 
         // visibility state of the connect window
         SetFlagIniSet ( IniXMLDocument, "client", "winviscon",

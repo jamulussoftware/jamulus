@@ -555,11 +555,17 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     pcbxSkill                     = new QComboBox ( this );
     QPushButton* butOK            = new QPushButton ( "&OK", this );
 
+    pMLeftSubLayout->addStretch();
     pMLeftSubLayout->addWidget ( plblAlias );
+    pMLeftSubLayout->addStretch();
     pMLeftSubLayout->addWidget ( plblInstrument );
+    pMLeftSubLayout->addStretch();
     pMLeftSubLayout->addWidget ( plblCountry );
+    pMLeftSubLayout->addStretch();
     pMLeftSubLayout->addWidget ( plblCity );
+    pMLeftSubLayout->addStretch();
     pMLeftSubLayout->addWidget ( plblSkill );
+    pMLeftSubLayout->addStretch();
     pMRightSubLayout->addWidget ( pedtAlias );
     pMRightSubLayout->addWidget ( pcbxInstrument );
     pMRightSubLayout->addWidget ( pcbxCountry );

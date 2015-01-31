@@ -39,7 +39,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     ClientSettingsDlg  ( pNCliP, parent, Qt::Window ),
     ChatDlg            ( parent, Qt::Window ),
     ConnectDlg         ( bNewShowComplRegConnList, parent, Qt::Dialog ),
-    AnalyzerConsole    ( pNCliP, parent, Qt::Window )
+    AnalyzerConsole    ( pNCliP, parent, Qt::Window ),
+    MusicianProfileDlg ( pNCliP, parent )
 {
     setupUi ( this );
 
@@ -292,6 +293,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     pViewMenu->addAction ( tr ( "&Connection Setup..." ), this,
         SLOT ( OnOpenConnectionSetupDialog() ) );
 
+    pViewMenu->addAction ( tr ( "My &Profile..." ), this,
+        SLOT ( OnOpenMusicianProfileDialog() ) );
+
     pViewMenu->addAction ( tr ( "C&hat..." ), this,
         SLOT ( OnOpenChatDialog() ) );
 
@@ -412,6 +416,17 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     if ( pClient->bWindowWasShownChat )
     {
         ShowChatWindow();
+    }
+
+    // musician profile window
+    if ( !pClient->vecWindowPosProfile.isEmpty() && !pClient->vecWindowPosProfile.isNull() )
+    {
+        MusicianProfileDlg.restoreGeometry ( pClient->vecWindowPosProfile );
+    }
+
+    if ( pClient->bWindowWasShownProfile )
+    {
+        ShowMusicianProfileDialog();
     }
 
     // connection setup window
@@ -573,15 +588,18 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     pClient->vecWindowPosMain     = saveGeometry();
     pClient->vecWindowPosSettings = ClientSettingsDlg.saveGeometry();
     pClient->vecWindowPosChat     = ChatDlg.saveGeometry();
+    pClient->vecWindowPosProfile  = MusicianProfileDlg.saveGeometry();
     pClient->vecWindowPosConnect  = ConnectDlg.saveGeometry();
 
     pClient->bWindowWasShownSettings = ClientSettingsDlg.isVisible();
     pClient->bWindowWasShownChat     = ChatDlg.isVisible();
+    pClient->bWindowWasShownProfile  = MusicianProfileDlg.isVisible();
     pClient->bWindowWasShownConnect  = ConnectDlg.isVisible();
 
     // if settings/connect dialog or chat dialog is open, close it
     ClientSettingsDlg.close();
     ChatDlg.close();
+    MusicianProfileDlg.close();
     ConnectDlg.close();
     AnalyzerConsole.close();
 
@@ -865,6 +883,16 @@ void CClientDlg::ShowConnectionSetupDialog()
     // make sure dialog is upfront and has focus
     ConnectDlg.raise();
     ConnectDlg.activateWindow();
+}
+
+void CClientDlg::ShowMusicianProfileDialog()
+{
+    // show musician profile dialog
+    MusicianProfileDlg.show();
+
+    // make sure dialog is upfront and has focus
+    MusicianProfileDlg.raise();
+    MusicianProfileDlg.activateWindow();
 }
 
 void CClientDlg::ShowGeneralSettings()

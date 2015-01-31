@@ -81,6 +81,7 @@ protected:
     void               SetGUIDesign ( const EGUIDesign eNewDesign );
     void               SetMyWindowTitle ( const int iNumClients );
     void               ShowConnectionSetupDialog();
+    void               ShowMusicianProfileDialog();
     void               ShowGeneralSettings();
     void               ShowChatWindow ( const bool bForceRaise = true );
     void               ShowAnalyzerConsole();
@@ -111,6 +112,7 @@ protected:
     CChatDlg           ChatDlg;
     CConnectDlg        ConnectDlg;
     CAnalyzerConsole   AnalyzerConsole;
+    CMusProfDlg        MusicianProfileDlg;
 
 public slots:
     void OnAboutToQuit() { pSettings->Save(); }
@@ -137,6 +139,7 @@ public slots:
 #endif
 
     void OnOpenConnectionSetupDialog() { ShowConnectionSetupDialog(); }
+    void OnOpenMusicianProfileDialog() { ShowMusicianProfileDialog(); }
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }

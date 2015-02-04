@@ -636,10 +636,32 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
 
 
     // Skill level combo box ---------------------------------------------------
-    pcbxSkill->addItem ( "Not Set",      SL_NOT_SET );
-    pcbxSkill->addItem ( "Beginner",     SL_BEGINNER );
-    pcbxSkill->addItem ( "Intermediate", SL_INTERMEDIATE );
-    pcbxSkill->addItem ( "Expert",       SL_PROFESSIONAL );
+    // create a pixmap showing the skill level colors
+    QPixmap SLPixmap ( 16, 11 ); // same size as the country flags
+
+    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_NOT_SET,
+                                      RGBCOL_G_SL_NOT_SET,
+                                      RGBCOL_B_SL_NOT_SET ) );
+
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), "None", SL_NOT_SET );
+
+    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_BEGINNER,
+                                      RGBCOL_G_SL_BEGINNER,
+                                      RGBCOL_B_SL_BEGINNER ) );
+
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), "Beginner", SL_BEGINNER );
+
+    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_INTERMEDIATE,
+                                      RGBCOL_G_SL_INTERMEDIATE,
+                                      RGBCOL_B_SL_INTERMEDIATE ) );
+
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), "Intermediate", SL_INTERMEDIATE );
+
+    SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_SL_PROFESSIONAL,
+                                      RGBCOL_G_SL_SL_PROFESSIONAL,
+                                      RGBCOL_B_SL_SL_PROFESSIONAL ) );
+
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), "Expert", SL_PROFESSIONAL );
 
 
     // Add help text to controls -----------------------------------------------

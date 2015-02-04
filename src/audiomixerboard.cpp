@@ -209,11 +209,13 @@ void CChannelFader::Reset()
     strReceivedName = "";
     SetupFaderTag ( SL_NOT_SET );
 
-    // set a defined tool tip time out
+    // set a defined tool tip time out (only available in Qt5)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     const int iToolTipDurMs = 30000;
-    plblLabel->setToolTipDuration ( iToolTipDurMs );
-    plblInstrument->setToolTipDuration ( iToolTipDurMs );
+    plblLabel->setToolTipDuration       ( iToolTipDurMs );
+    plblInstrument->setToolTipDuration  ( iToolTipDurMs );
     plblCountryFlag->setToolTipDuration ( iToolTipDurMs );
+#endif
 
     bOtherChannelIsSolo = false;
 }

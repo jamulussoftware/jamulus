@@ -171,19 +171,31 @@ void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
     switch ( eSkillLevel )
     {
     case SL_BEGINNER:
-        strStile += "background-color: rgb(225, 225, 255); }";
+        strStile += QString ( "background-color: rgb(%1, %2, %3); }" ).
+            arg ( RGBCOL_R_SL_BEGINNER ).
+            arg ( RGBCOL_G_SL_BEGINNER ).
+            arg ( RGBCOL_B_SL_BEGINNER );
         break;
 
     case SL_INTERMEDIATE:
-        strStile += "background-color: rgb(225, 255, 225); }";
+        strStile += QString ( "background-color: rgb(%1, %2, %3); }" ).
+            arg ( RGBCOL_R_SL_INTERMEDIATE ).
+            arg ( RGBCOL_G_SL_INTERMEDIATE ).
+            arg ( RGBCOL_B_SL_INTERMEDIATE );
         break;
 
     case SL_PROFESSIONAL:
-        strStile += "background-color: rgb(255, 225, 225); }";
+        strStile += QString ( "background-color: rgb(%1, %2, %3); }" ).
+            arg ( RGBCOL_R_SL_SL_PROFESSIONAL ).
+            arg ( RGBCOL_G_SL_SL_PROFESSIONAL ).
+            arg ( RGBCOL_B_SL_SL_PROFESSIONAL );
         break;
 
     default:
-        strStile += "background-color: white; }";
+        strStile += QString ( "background-color: rgb(%1, %2, %3); }" ).
+            arg ( RGBCOL_R_SL_NOT_SET ).
+            arg ( RGBCOL_G_SL_NOT_SET ).
+            arg ( RGBCOL_B_SL_NOT_SET );
         break;
     }
 

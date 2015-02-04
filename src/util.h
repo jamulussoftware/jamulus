@@ -555,9 +555,9 @@ enum ESkillLevel
 #define RGBCOL_R_SL_NOT_SET         255
 #define RGBCOL_G_SL_NOT_SET         255
 #define RGBCOL_B_SL_NOT_SET         255
-#define RGBCOL_R_SL_BEGINNER        225
-#define RGBCOL_G_SL_BEGINNER        225
-#define RGBCOL_B_SL_BEGINNER        255
+#define RGBCOL_R_SL_BEGINNER        255
+#define RGBCOL_G_SL_BEGINNER        255
+#define RGBCOL_B_SL_BEGINNER        200
 #define RGBCOL_R_SL_INTERMEDIATE    225
 #define RGBCOL_G_SL_INTERMEDIATE    255
 #define RGBCOL_B_SL_INTERMEDIATE    225

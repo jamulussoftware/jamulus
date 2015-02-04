@@ -538,44 +538,44 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     setWindowTitle ( "Musician Profile" );
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/mainicon.png" ) ) );
 
-    QVBoxLayout* pLayout          = new QVBoxLayout ( this );
-    QHBoxLayout* pMainSubLayout   = new QHBoxLayout;
-    QHBoxLayout* pButSubLayout    = new QHBoxLayout;
-    QVBoxLayout* pMLeftSubLayout  = new QVBoxLayout;
-    QVBoxLayout* pMRightSubLayout = new QVBoxLayout;
-    QLabel*      plblAlias        = new QLabel ( "Alias/Name", this );
-    pedtAlias                     = new QLineEdit ( this );
-    QLabel*      plblInstrument   = new QLabel ( "Instrument", this );
-    pcbxInstrument                = new QComboBox ( this );
-    QLabel*      plblCountry      = new QLabel ( "Country", this );
-    pcbxCountry                   = new QComboBox ( this );
-    QLabel*      plblCity         = new QLabel ( "City", this );
-    pedtCity                      = new QLineEdit ( this );
-    QLabel*      plblSkill        = new QLabel ( "Skill", this );
-    pcbxSkill                     = new QComboBox ( this );
-    QPushButton* butClose         = new QPushButton ( "&Close", this );
+    QVBoxLayout* pLayout        = new QVBoxLayout ( this );
+    QHBoxLayout* pButSubLayout  = new QHBoxLayout;
+    QLabel*      plblAlias      = new QLabel ( "Alias/Name", this );
+    pedtAlias                   = new QLineEdit ( this );
+    QLabel*      plblInstrument = new QLabel ( "Instrument", this );
+    pcbxInstrument              = new QComboBox ( this );
+    QLabel*      plblCountry    = new QLabel ( "Country", this );
+    pcbxCountry                 = new QComboBox ( this );
+    QLabel*      plblCity       = new QLabel ( "City", this );
+    pedtCity                    = new QLineEdit ( this );
+    QLabel*      plblSkill      = new QLabel ( "Skill", this );
+    pcbxSkill                   = new QComboBox ( this );
+    QPushButton* butClose       = new QPushButton ( "&Close", this );
 
-    pMLeftSubLayout->addStretch();
-    pMLeftSubLayout->addWidget ( plblAlias );
-    pMLeftSubLayout->addStretch();
-    pMLeftSubLayout->addWidget ( plblInstrument );
-    pMLeftSubLayout->addStretch();
-    pMLeftSubLayout->addWidget ( plblCountry );
-    pMLeftSubLayout->addStretch();
-    pMLeftSubLayout->addWidget ( plblCity );
-    pMLeftSubLayout->addStretch();
-    pMLeftSubLayout->addWidget ( plblSkill );
-    pMLeftSubLayout->addStretch();
-    pMRightSubLayout->addWidget ( pedtAlias );
-    pMRightSubLayout->addWidget ( pcbxInstrument );
-    pMRightSubLayout->addWidget ( pcbxCountry );
-    pMRightSubLayout->addWidget ( pedtCity );
-    pMRightSubLayout->addWidget ( pcbxSkill );
-    pMainSubLayout->addLayout ( pMLeftSubLayout );
-    pMainSubLayout->addLayout ( pMRightSubLayout );
+    QGridLayout* pGridLayout = new QGridLayout;
+    plblAlias->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
+    pGridLayout->addWidget ( plblAlias, 0, 0 );
+    pGridLayout->addWidget ( pedtAlias, 0, 1 );
+
+    plblInstrument->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
+    pGridLayout->addWidget ( plblInstrument, 1, 0 );
+    pGridLayout->addWidget ( pcbxInstrument, 1, 1 );
+
+    plblCountry->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
+    pGridLayout->addWidget ( plblCountry, 2, 0 );
+    pGridLayout->addWidget ( pcbxCountry, 2, 1 );
+
+    plblCity->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
+    pGridLayout->addWidget ( plblCity, 3, 0 );
+    pGridLayout->addWidget ( pedtCity, 3, 1 );
+
+    plblSkill->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
+    pGridLayout->addWidget ( plblSkill, 4, 0 );
+    pGridLayout->addWidget ( pcbxSkill, 4, 1 );
+
     pButSubLayout->addStretch();
     pButSubLayout->addWidget ( butClose );
-    pLayout->addLayout ( pMainSubLayout );
+    pLayout->addLayout ( pGridLayout );
     pLayout->addLayout ( pButSubLayout );
 
     // we do not want to close button to be a default one (the mouse pointer

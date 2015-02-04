@@ -1,6 +1,18 @@
 3.3.7
 
 
+TODO change all 2014 to 2015
+TODO add a second licence alternative
+
+
+- added a musician profile dialog (some settings in the main window
+  were removed)
+
+- a tool tip for the fader tag shows the complete musician profile
+
+- the city and skill level can be set in the musician profile
+
+- added new instrument picture for "Guitar+Vocal"
 
 
 3.3.6

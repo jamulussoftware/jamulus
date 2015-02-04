@@ -656,7 +656,8 @@ public:
         IC_STRING_INSTRUMENT,
         IC_PLUCKING_INSTRUMENT,
         IC_PERCUSSION_INSTRUMENT,
-        IC_KEYBOARD_INSTRUMENT
+        IC_KEYBOARD_INSTRUMENT,
+        IC_MULTIPLE_INSTRUMENT
     };
 
     // per definition: the very first instrument is the "not used" instrument

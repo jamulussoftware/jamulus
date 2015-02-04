@@ -47,6 +47,7 @@
         <file>res/instrrecorder.png</file>
         <file>res/instrlistener.png</file>
         <file>res/instrstreamer.png</file>
+        <file>res/instrguitarvocal.png</file>
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>

@@ -500,6 +500,7 @@ DISTFILES += AUTHORS \
     src/res/instrtuba.png \
     src/res/instrviolin.png \
     src/res/instrvocal.png \
+    src/res/instrguitarvocal.png \
     src/res/flags/flagnone.png \
     src/res/flags/ad.png \
     src/res/flags/ae.png \

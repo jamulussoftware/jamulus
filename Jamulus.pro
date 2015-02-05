@@ -1,4 +1,4 @@
-VERSION = 3.3.7
+VERSION = 3.3.8cvs
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {

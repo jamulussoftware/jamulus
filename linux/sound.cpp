@@ -212,13 +212,16 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             pSound->input_port_right, nframes );
 
         // copy input data
-        for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
+        if ( in_left != 0 && in_right != 0 )
         {
-            pSound->vecsTmpAudioSndCrdStereo[2 * i] =
-                (short) ( in_left[i] * _MAXSHORT );
+            for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
+            {
+                pSound->vecsTmpAudioSndCrdStereo[2 * i] =
+                    (short) ( in_left[i] * _MAXSHORT );
 
-            pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
-                (short) ( in_right[i] * _MAXSHORT );
+                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
+                    (short) ( in_right[i] * _MAXSHORT );
+            }
         }
 
         // call processing callback function
@@ -234,13 +237,16 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             pSound->output_port_right, nframes );
 
         // copy output data
-        for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
+        if ( out_left != 0 && out_right != 0 )
         {
-            out_left[i] = (jack_default_audio_sample_t)
-                pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
+            for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
+            {
+                out_left[i] = (jack_default_audio_sample_t)
+                    pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
 
-            out_right[i] = (jack_default_audio_sample_t)
-                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
+                out_right[i] = (jack_default_audio_sample_t)
+                    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
+            }
         }
     }
     else
@@ -255,11 +261,14 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             pSound->output_port_right, nframes );
 
         // clear output data
-        memset ( out_left,
-            0, sizeof ( jack_default_audio_sample_t ) * nframes );
+        if ( out_left != 0 && out_right != 0 )
+        {
+            memset ( out_left,
+                0, sizeof ( jack_default_audio_sample_t ) * nframes );
 
-        memset ( out_right,
-            0, sizeof ( jack_default_audio_sample_t ) * nframes );
+            memset ( out_right,
+                0, sizeof ( jack_default_audio_sample_t ) * nframes );
+        }
     }
 
     return 0; // zero on success, non-zero on error 

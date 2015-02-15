@@ -422,22 +422,23 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     }
 
     // skill level
-    if ( cChanInfo.eSkillLevel != SL_NOT_SET )
+    switch ( cChanInfo.eSkillLevel )
     {
-        switch ( cChanInfo.eSkillLevel )
-        {
-        case SL_BEGINNER:
-            strToolTip += "<h4>Skill Level</h4>Beginner";
-            break;
+    case SL_BEGINNER:
+        strToolTip += "<h4>Skill Level</h4>Beginner";
+        break;
 
-        case SL_INTERMEDIATE:
-            strToolTip += "<h4>Skill Level</h4>Intermediate";
-            break;
+    case SL_INTERMEDIATE:
+        strToolTip += "<h4>Skill Level</h4>Intermediate";
+        break;
 
-        case SL_PROFESSIONAL:
-            strToolTip += "<h4>Skill Level</h4>Expert";
-            break;
-        }
+    case SL_PROFESSIONAL:
+        strToolTip += "<h4>Skill Level</h4>Expert";
+        break;
+
+    case SL_NOT_SET:
+        // skill level not set, do not add this entry
+        break;
     }
 
     // if no information is given, leave the tool tip empty, otherwise add header

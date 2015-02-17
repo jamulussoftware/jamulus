@@ -368,7 +368,12 @@ static void celt_decode_lost(CELTDecoder * OPUS_RESTRICT st, opus_val16 * OPUS_R
    loss_count = st->loss_count;
    start = st->start;
    downsample = st->downsample;
-   noise_based = loss_count >= 5 || start != 0;
+
+   // The pitch based PLC seems to introduce loud low bandwidth noise which
+   // is very annoying. We simply disable the pitch based PLC and only use the
+   // noise based PLC which seems to work much better
+   noise_based = 1;//loss_count >= 5 || start != 0;
+
    ALLOC(scratch, noise_based?N*C:N, celt_sig);
    if (noise_based)
    {

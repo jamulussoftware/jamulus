@@ -690,6 +690,11 @@ void CServer::OnTimer()
 {
     int i, j;
 
+/*
+// TEST do a timer jitter measurement
+static CTimingMeas JitterMeas ( 1000, "test2.dat" );
+JitterMeas.Measure();
+*/
 
     // Get data from all connected clients -------------------------------------
     // some inits

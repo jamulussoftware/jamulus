@@ -1308,7 +1308,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     // Consider the jitter buffer on the client and on the server side, too.
     const double dTotalJitterBufferDelayMs = SYSTEM_BLOCK_DURATION_MS_FLOAT *
         static_cast<double> ( GetSockBufNumFrames() +
-                              GetServerSockBufNumFrames() ) * 0.8f;
+                              GetServerSockBufNumFrames() ) * 0.7f;
 
     // consider delay introduced by the sound card conversion buffer by using
     // "GetSndCrdConvBufAdditionalDelayMonoBlSize()"

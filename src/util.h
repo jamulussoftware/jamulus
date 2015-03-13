@@ -39,6 +39,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QLocale>
+#include <QElapsedTimer>
 #include <vector>
 #include <algorithm>
 #include "global.h"
@@ -1132,6 +1133,61 @@ public:
         return tp.tv_nsec / 1000000; // convert ns in ms
 #endif
     }
+};
+
+
+// Timing measurement ----------------------------------------------------------
+// intended for debugging the timing jitter of the sound card or server timer
+class CTimingMeas
+{
+public:
+    CTimingMeas ( const int iNNMeas, const QString strNFName = "" ) :
+        iNumMeas ( iNNMeas ), vElapsedTimes ( iNNMeas ), strFileName ( strNFName ) { Reset(); }
+
+    void Reset() { iCnt = -1; }
+    void Measure()
+    {
+        // exclude the very first measurement (initialization phase)
+        if ( iCnt == -1 )
+        {
+            iCnt = 0;
+        }
+        else
+        {
+            // store current measurement
+            vElapsedTimes[iCnt++] = ElapsedTimer.nsecsElapsed();
+
+            // reset count if number of measurements are done
+            if ( iCnt >= iNumMeas )
+            {
+                iCnt = 0;
+
+                // store results in a file if file name is given
+                if ( !strFileName.isEmpty() )
+                {
+                    QFile File ( strFileName );
+
+                    if ( File.open ( QIODevice::WriteOnly | QIODevice::Text ) )
+                    {
+                        QTextStream streamFile ( &File );
+                        for ( int i = 0; i < iNumMeas; i++ )
+                        {
+                            // convert ns in ms and store the value
+                            streamFile << static_cast<double> ( vElapsedTimes[i] ) / 1000000 << endl;
+                        }
+                    }
+                }
+            }
+        }
+        ElapsedTimer.start();
+    }
+
+protected:
+    int           iNumMeas;
+    CVector<int>  vElapsedTimes;
+    QString       strFileName;
+    QElapsedTimer ElapsedTimer;
+    int           iCnt;
 };
 
 

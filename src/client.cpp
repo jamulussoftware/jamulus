@@ -1301,17 +1301,14 @@ fflush(pFileDelay);
 
 int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 {
-/*
-    For estimating the overall delay, use the following assumptions:
-    - the mean delay of a cyclic buffer is half the buffer size (since
-      for the average it is assumed that the buffer is half filled)
-    - consider the jitter buffer on the server side, too
-*/
-    // the buffer sizes at client and server divided by 2 (half the buffer
-    // for the delay) is the total socket buffer size
+    // If the jitter buffers are set effectively, i.e. they are exactly the
+    // size of the network jitter, then the delay of the buffer is the buffer
+    // length. Since that is usually not the case but the buffers are usually
+    // a bit larger than necessary, we introduce some factor for compensation.
+    // Consider the jitter buffer on the client and on the server side, too.
     const double dTotalJitterBufferDelayMs = SYSTEM_BLOCK_DURATION_MS_FLOAT *
         static_cast<double> ( GetSockBufNumFrames() +
-                              GetServerSockBufNumFrames() ) / 2;
+                              GetServerSockBufNumFrames() ) * 0.8f;
 
     // consider delay introduced by the sound card conversion buffer by using
     // "GetSndCrdConvBufAdditionalDelayMonoBlSize()"

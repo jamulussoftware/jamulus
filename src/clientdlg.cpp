@@ -928,16 +928,16 @@ void CClientDlg::OnPingTimeResult ( int iPingTime )
     // calculate overall delay
     const int iOverallDelayMs = pClient->EstimatedOverallDelay ( iPingTime );
 
-    // color definition: <= 40 ms green, <= 65 ms yellow, otherwise red
+    // color definition: <= 42 ms green, <= 70 ms yellow, otherwise red
     CMultiColorLED::ELightColor eOverallDelayLEDColor;
 
-    if ( iOverallDelayMs <= 40 )
+    if ( iOverallDelayMs <= 42 )
     {
         eOverallDelayLEDColor = CMultiColorLED::RL_GREEN;
     }
     else
     {
-        if ( iOverallDelayMs <= 65 )
+        if ( iOverallDelayMs <= 70 )
         {
             eOverallDelayLEDColor = CMultiColorLED::RL_YELLOW;
         }

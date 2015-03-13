@@ -907,6 +907,13 @@ void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
 
 void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsStereoSndCrd )
 {
+
+/*
+// TEST do a soundcard jitter measurement
+static CTimingMeas JitterMeas ( 1000, "test2.dat" );
+JitterMeas.Measure();
+*/
+
     // check if a conversion buffer is required or not
     if ( bSndCrdConversionBufferRequired )
     {

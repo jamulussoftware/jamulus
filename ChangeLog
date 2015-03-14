@@ -2,6 +2,10 @@
 
 - improved audio quality in bad network conditions
 
+- more realistic overall delay estimation
+
+- improvement of auto jitter buffer detection in bad network conditions
+
 
 
 

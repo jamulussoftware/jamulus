@@ -233,21 +233,8 @@ void CNetBufWithStats::UpdateAutoSetting()
     // the current jitter buffer size significantly.
     // For the initialization phase, use lower weight values to get faster
     // adaptation.
-
-
-// TODO The alpha values are not correct if we use larger buffer sizes like, e.g., 512 samples.
-// TODO How does the buffer knows which buffer size is used since it only works on coded bytes
-//      from the OPUS codec?
-// Possible calculation:
-// alpha values at N = 128 samples block size: up   = 0.999995
-//                                             down = 0.9999
-// with R = 1 / N * ( ( 1 - alpha ) / alpha )
-//                                         ->  R_up   = 3.9062695313732476e-8
-//                                         ->  R_down = 7.813281328131953e-7
-// Calculate the new alpha for the new block size N_new:
-// alpha_new = 1 / N_new / ( R_x + 1 / N_new )
-
-
+    // Note that the following definitions of the weigh constants assume a block
+    // size of 128 samples at a sampling rate of 48 kHz.
     double dWeightUp              = 0.999995;
     double dWeightDown            = 0.9999;
     const double dHysteresisValue = 0.1;
@@ -259,9 +246,6 @@ void CNetBufWithStats::UpdateAutoSetting()
         iInitCounter--;
 
         // overwrite weigth values with lower values
-
-// TODO see above calculation
-
         dWeightUp   = 0.9995;
         dWeightDown = 0.999;
     }

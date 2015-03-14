@@ -41,7 +41,8 @@ CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
     GraphFrameColor        ( Qt::black ), // frame
     GraphGridColor         ( Qt::gray ), // grid
     LineColor              ( Qt::blue ),
-    LineLimitColor         ( Qt::red )
+    LineLimitColor         ( Qt::green ),
+    LineMaxUpLimitColor    ( Qt::red )
 {
     // set the window icon and title text
     const QIcon icon = QIcon ( QString::fromUtf8 ( ":/png/main/res/mainicon.png" ) );
@@ -126,14 +127,16 @@ void CAnalyzerConsole::DrawErrorRateTrace()
     // get the network buffer error rates to be displayed
     CVector<double> vecButErrorRates;
     double          dLimit;
+    double          dMaxUpLimit;
 
-    pClient->GetBufErrorRates ( vecButErrorRates, dLimit );
+    pClient->GetBufErrorRates ( vecButErrorRates, dLimit, dMaxUpLimit );
 
     // get the number of data elements
     const int iNumBuffers = vecButErrorRates.Size();
 
-    // convert the limit in the log domain
-    const double dLogLimit = log10 ( dLimit );
+    // convert the limits in the log domain
+    const double dLogLimit      = log10 ( dLimit );
+    const double dLogMaxUpLimit = log10 ( dMaxUpLimit );
 
     // use fixed y-axis scale where the limit line is in the middle of the graph
     const double dMax = 0;
@@ -153,6 +156,17 @@ void CAnalyzerConsole::DrawErrorRateTrace()
     GraphPainter.drawLine ( QPoint ( GraphGridFrame.x(), dYValLimitInGraph ),
                             QPoint ( GraphGridFrame.x() +
                                      GraphGridFrame.width(), dYValLimitInGraph ) );
+
+    // plot the maximum upper limit line as a dashed line
+    const double dYValMaxUpLimitInGraph = CalcYPosInGraph ( dMin, dMax, dLogMaxUpLimit );
+
+    GraphPainter.setPen ( QPen ( QBrush ( LineMaxUpLimitColor ),
+                                 iLineWidth,
+                                 Qt::DashLine ) );
+
+    GraphPainter.drawLine ( QPoint ( GraphGridFrame.x(), dYValMaxUpLimitInGraph ),
+                            QPoint ( GraphGridFrame.x() +
+                                     GraphGridFrame.width(), dYValMaxUpLimitInGraph ) );
 
     // plot the data
     for ( int i = 0; i < iNumBuffers; i++ )

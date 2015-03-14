@@ -115,7 +115,8 @@ CNetBufWithStats::CNetBufWithStats() :
 }
 
 void CNetBufWithStats::GetErrorRates ( CVector<double>& vecErrRates,
-                                       double&          dLimit )
+                                       double&          dLimit,
+                                       double&          dMaxUpLimit )
 {
     // get all the averages of the error statistic
     vecErrRates.Init ( NUM_STAT_SIMULATION_BUFFERS );
@@ -125,8 +126,9 @@ void CNetBufWithStats::GetErrorRates ( CVector<double>& vecErrRates,
         vecErrRates[i] = ErrorRateStatistic[i].GetAverage();
     }
 
-    // get the limit for decision
-    dLimit = ERROR_RATE_BOUND;
+    // get the limits for the decisions
+    dLimit      = ERROR_RATE_BOUND;
+    dMaxUpLimit = UP_MAX_ERROR_BOUND;
 }
 
 void CNetBufWithStats::Init ( const int  iNewBlockSize,
@@ -199,14 +201,17 @@ bool CNetBufWithStats::Get ( CVector<uint8_t>& vecbyData,
 
 void CNetBufWithStats::UpdateAutoSetting()
 {
-    int  iCurDecision   = 0; // dummy initialization
-    bool bDecisionFound = false;
+    int  iCurDecision      = 0; // dummy initialization
+    int  iCurMaxUpDecision = 0; // dummy initialization
+    bool bDecisionFound;
 
 
-    // Get error rate decision -------------------------------------------------
+    // Get regular error rate decision -----------------------------------------
     // Use a specified error bound to identify the best buffer size for the
     // current network situation. Start with the smallest buffer and
     // test for the error rate until the rate is below the bound.
+    bDecisionFound = false;
+
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
         if ( ( !bDecisionFound ) &&
@@ -224,6 +229,30 @@ void CNetBufWithStats::UpdateAutoSetting()
     }
 
 
+    // Get maximum upper error rate decision -----------------------------------
+    // Use a specified error bound to identify the maximum upper error rate
+    // to identify if we have a too low buffer setting which gives a very
+    // bad performance constantly. Start with the smallest buffer and
+    // test for the error rate until the rate is below the bound.
+    bDecisionFound = false;
+
+    for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
+    {
+        if ( ( !bDecisionFound ) &&
+             ( ErrorRateStatistic[i].GetAverage() <= UP_MAX_ERROR_BOUND ) )
+        {
+            iCurMaxUpDecision = viBufSizesForSim[i];
+            bDecisionFound    = true;
+        }
+    }
+
+    if ( !bDecisionFound )
+    {
+        // in case no buffer is below bound, use largest buffer size
+        iCurMaxUpDecision = viBufSizesForSim[NUM_STAT_SIMULATION_BUFFERS - 1];
+    }
+
+
     // Post calculation (filtering) --------------------------------------------
     // Define different weigths for up and down direction. Up direction
     // filtering shall be slower than for down direction since we assume
@@ -235,9 +264,10 @@ void CNetBufWithStats::UpdateAutoSetting()
     // adaptation.
     // Note that the following definitions of the weigh constants assume a block
     // size of 128 samples at a sampling rate of 48 kHz.
-    double dWeightUp              = 0.999995;
-    double dWeightDown            = 0.9999;
-    const double dHysteresisValue = 0.1;
+    double       dWeightUp          = 0.999995;
+    double       dWeightDown        = 0.9999;
+    const double dHysteresisValue   = 0.1;
+    bool         bUseFastAdaptation = false;
 
     // check for initialization phase
     if ( iInitCounter > 0 )
@@ -245,6 +275,20 @@ void CNetBufWithStats::UpdateAutoSetting()
         // decrease init counter
         iInitCounter--;
 
+        // use the fast adaptation
+        bUseFastAdaptation = true;
+    }
+
+    // if the current detected buffer setting is below the maximum upper bound
+    // decision, then we enable a booster to go up to the minimum required
+    // number of buffer blocks (i.e. we use weights for fast adaptation)
+    if ( iCurAutoBufferSizeSetting < iCurMaxUpDecision )
+    {
+        bUseFastAdaptation = true;
+    }
+
+    if ( bUseFastAdaptation )
+    {
         // overwrite weigth values with lower values
         dWeightUp   = 0.9995;
         dWeightDown = 0.999;
@@ -255,6 +299,22 @@ void CNetBufWithStats::UpdateAutoSetting()
                              static_cast<double> ( iCurDecision ),
                              dWeightUp,
                              dWeightDown );
+
+/*
+// TEST store important detection parameters in file for debugging
+static FILE* pFile = fopen ( "test.dat", "w" );
+static int icnt = 0;
+if ( icnt == 50 )
+{
+    fprintf ( pFile, "%d %e\n", iCurDecision, dCurIIRFilterResult );
+    fflush ( pFile );
+    icnt = 0;
+}
+else
+{
+    icnt++;
+}
+*/
 
     // apply a hysteresis
     iCurAutoBufferSizeSetting =

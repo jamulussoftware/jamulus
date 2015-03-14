@@ -82,6 +82,7 @@ protected:
     QColor      GraphGridColor;
     QColor      LineColor;
     QColor      LineLimitColor;
+    QColor      LineMaxUpLimitColor;
 
     QTimer      TimerErrRateUpdate;
 

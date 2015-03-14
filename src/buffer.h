@@ -34,8 +34,13 @@
 // blocks we have 15 s / 2.66 ms * 2 = approx. 11000
 #define MAX_STATISTIC_COUNT                 11000
 
-// definition of the error bound
+// definition of the upper error bound of the jitter buffers
 #define ERROR_RATE_BOUND                    0.001
+
+// definition of the upper jitter buffer error bound, if that one is reached we
+// have to speed up the filtering to quickly get out of a incorrect buffer
+// size state
+#define UP_MAX_ERROR_BOUND                  0.01
 
 // number of simulation network jitter buffers for evaluating the statistic
 #define NUM_STAT_SIMULATION_BUFFERS         11
@@ -407,7 +412,9 @@ public:
     virtual bool Get ( CVector<uint8_t>& vecbyData, const int iOutSize );
 
     int GetAutoSetting() { return iCurAutoBufferSizeSetting; }
-    void GetErrorRates ( CVector<double>& vecErrRates, double& dLimit );
+    void GetErrorRates ( CVector<double>& vecErrRates,
+                         double&          dLimit,
+                         double&          dMaxUpLimit );
 
 protected:
     void UpdateAutoSetting();

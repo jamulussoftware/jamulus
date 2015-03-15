@@ -101,8 +101,10 @@ void CSound::OpenJack()
     // running
 
     // try to connect physical input ports
-    if ( ( ports = jack_get_ports ( pJackClient, NULL, NULL,
-           JackPortIsPhysical | JackPortIsOutput ) ) != NULL )
+    if ( ( ports = jack_get_ports ( pJackClient,
+                                    NULL,
+                                    NULL,
+                                    JackPortIsPhysical | JackPortIsOutput ) ) != NULL )
     {
         if ( jack_connect ( pJackClient, ports[0], jack_port_name ( input_port_left ) ) )
         {
@@ -111,6 +113,10 @@ void CSound::OpenJack()
 
         // before connecting the second stereo channel, check if the input is not
         // mono
+
+// TODO who checks if ports[1] actually exists??? I assume that if we have mono, the
+//      ports array is only one item long...?
+
         if ( ports[1] )
         {
             if ( jack_connect ( pJackClient, ports[1], jack_port_name ( input_port_right ) ) )
@@ -119,12 +125,15 @@ void CSound::OpenJack()
             }
         }
 
+// TODO shouldn't we call jack_free() function instead?
         free ( ports );
     }
 
     // try to connect physical output ports
-    if ( ( ports = jack_get_ports ( pJackClient, NULL, NULL,
-           JackPortIsPhysical | JackPortIsInput ) ) != NULL )
+    if ( ( ports = jack_get_ports ( pJackClient,
+                                    NULL,
+                                    NULL,
+                                    JackPortIsPhysical | JackPortIsInput ) ) != NULL )
     {
         if ( jack_connect ( pJackClient, jack_port_name ( output_port_left ), ports[0] ) )
         {
@@ -133,6 +142,10 @@ void CSound::OpenJack()
 
         // before connecting the second stereo channel, check if the output is not
         // mono
+
+// TODO who checks if ports[1] actually exists??? I assume that if we have mono, the
+//      ports array is only one item long...?
+
         if ( ports[1] )
         {
             if ( jack_connect ( pJackClient, jack_port_name ( output_port_right ), ports[1] ) )
@@ -141,6 +154,7 @@ void CSound::OpenJack()
             }
         }
 
+// TODO shouldn't we call jack_free() function instead?
         free ( ports );
     }
 }
@@ -174,9 +188,17 @@ void CSound::Stop()
 
 int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
 {
+
+
 // try setting buffer size
 // TODO seems not to work! -> no audio after this operation!
+
+// Doesn't this give an infinite loop? The set buffer size function will call our
+// registerd callback which calls "EmitReinitRequestSignal()". In that function
+// this CSound::Init() function is called...
+
 //jack_set_buffer_size ( pJackClient, iNewPrefMonoBufferSize );
+
 
     // get actual buffer size
     iJACKBufferSizeMono = jack_get_buffer_size ( pJackClient );  	
@@ -264,10 +286,12 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
         if ( out_left != 0 && out_right != 0 )
         {
             memset ( out_left,
-                0, sizeof ( jack_default_audio_sample_t ) * nframes );
+                     0,
+                     sizeof ( jack_default_audio_sample_t ) * nframes );
 
             memset ( out_right,
-                0, sizeof ( jack_default_audio_sample_t ) * nframes );
+                     0,
+                     sizeof ( jack_default_audio_sample_t ) * nframes );
         }
     }
 

@@ -6,7 +6,7 @@
 
 - improvement of auto jitter buffer detection in bad network conditions
 
-
+- show info about sound card buffer size if not one of the standard sizes
 
 
 3.3.7

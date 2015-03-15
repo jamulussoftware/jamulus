@@ -447,6 +447,16 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     const int iCurActualBufSize =
         pClient->GetSndCrdActualMonoBlSize();
 
+    // check which predefined size is used (it is possible that none is used)
+    const bool bPreferredChecked =
+        ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED );
+
+    const bool bDefaultChecked =
+        ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT );
+
+    const bool bSafeChecked =
+        ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE );
+
     // Set radio buttons according to current value (To make it possible
     // to have all radio buttons unchecked, we have to disable the
     // exclusive check for the radio button group. We require all radio
@@ -454,16 +464,9 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     // support any of the buffer sizes and therefore all radio buttons
     // are disabeld and unchecked.).
     SndCrdBufferDelayButtonGroup.setExclusive ( false );
-
-    rbtBufferDelayPreferred->setChecked ( iCurActualBufSize ==
-        SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED );
-
-    rbtBufferDelayDefault->setChecked ( iCurActualBufSize ==
-        SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT );
-
-    rbtBufferDelaySafe->setChecked ( iCurActualBufSize ==
-        SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE );
-
+    rbtBufferDelayPreferred->setChecked ( bPreferredChecked );
+    rbtBufferDelayDefault->setChecked   ( bDefaultChecked );
+    rbtBufferDelaySafe->setChecked      ( bSafeChecked );
     SndCrdBufferDelayButtonGroup.setExclusive ( true );
 
     // disable radio buttons which are not supported by audio interface
@@ -475,6 +478,21 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
 
     rbtBufferDelaySafe->setEnabled (
         pClient->GetFraSiFactSafeSupported() );
+
+    // If any of our predefined sizes is chosen, use the regular group box
+    // title text. If not, show the actual buffer size. Otherwise the user
+    // would not know which buffer size is actually used.
+    if ( bPreferredChecked || bDefaultChecked || bSafeChecked )
+    {
+        // default title text
+        grbSoundCrdBufDelay->setTitle ( "Buffer Delay" );
+    }
+    else
+    {
+        // special title text with buffer size information added
+        grbSoundCrdBufDelay->setTitle ( "Buffer Delay: " +
+            GenSndCrdBufferDelayString ( iCurActualBufSize ) );
+    }
 }
 
 void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()

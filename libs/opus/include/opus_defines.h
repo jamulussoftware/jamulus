@@ -113,11 +113,11 @@ extern "C" {
 /**Warning attributes for opus functions
   * NONNULL is not used in OPUS_BUILD to avoid the compiler optimizing out
   * some paranoid null checks. */
-#if defined(__GNUC__) && OPUS_GNUC_PREREQ(3, 4)
-# define OPUS_WARN_UNUSED_RESULT __attribute__ ((__warn_unused_result__))
-#else
+//#if defined(__GNUC__) && OPUS_GNUC_PREREQ(3, 4)
+//# define OPUS_WARN_UNUSED_RESULT __attribute__ ((__warn_unused_result__))
+//#else
 # define OPUS_WARN_UNUSED_RESULT
-#endif
+//#endif
 #if !defined(OPUS_BUILD) && defined(__GNUC__) && OPUS_GNUC_PREREQ(3, 4)
 # define OPUS_ARG_NONNULL(_x)  __attribute__ ((__nonnull__(_x)))
 #else

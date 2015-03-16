@@ -39,7 +39,9 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QLocale>
-#include <QElapsedTimer>
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
+# include <QElapsedTimer>
+#endif
 #include <vector>
 #include <algorithm>
 #include "global.h"
@@ -1138,6 +1140,7 @@ public:
 
 // Timing measurement ----------------------------------------------------------
 // intended for debugging the timing jitter of the sound card or server timer
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
 class CTimingMeas
 {
 public:
@@ -1189,6 +1192,7 @@ protected:
     QElapsedTimer ElapsedTimer;
     int           iCnt;
 };
+#endif
 
 
 /******************************************************************************\

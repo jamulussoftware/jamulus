@@ -95,17 +95,17 @@ CNetBufWithStats::CNetBufWithStats() :
 {
     // define the sizes of the simulation buffers,
     // must be NUM_STAT_SIMULATION_BUFFERS elements!
-    viBufSizesForSim[0]  = 2;
-    viBufSizesForSim[1]  = 3;
-    viBufSizesForSim[2]  = 4;
-    viBufSizesForSim[3]  = 5;
-    viBufSizesForSim[4]  = 6;
-    viBufSizesForSim[5]  = 7;
-    viBufSizesForSim[6]  = 8;
-    viBufSizesForSim[7]  = 9;
-    viBufSizesForSim[8]  = 10;
-    viBufSizesForSim[9]  = 11;
-    viBufSizesForSim[10] = 12;
+    viBufSizesForSim[0]  = 1;
+    viBufSizesForSim[1]  = 2;
+    viBufSizesForSim[2]  = 3;
+    viBufSizesForSim[3]  = 4;
+    viBufSizesForSim[4]  = 5;
+    viBufSizesForSim[5]  = 6;
+    viBufSizesForSim[6]  = 7;
+    viBufSizesForSim[7]  = 8;
+    viBufSizesForSim[8]  = 9;
+    viBufSizesForSim[9]  = 10;
+    viBufSizesForSim[10] = 11;
 
     // set all simulation buffers in simulation mode
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )

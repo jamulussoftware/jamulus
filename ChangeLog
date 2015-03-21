@@ -1,5 +1,7 @@
 3.3.9
 
+- another improvement of auto jitter buffer detection in very bad
+  network conditions
 
 
 

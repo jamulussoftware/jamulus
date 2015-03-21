@@ -418,6 +418,7 @@ public:
 
 protected:
     void UpdateAutoSetting();
+    void ResetInitCounter();
 
     // statistic (do not use the vector class since the classes do not have
     // appropriate copy constructor/operator)

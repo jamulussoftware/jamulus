@@ -150,11 +150,9 @@ void CNetBufWithStats::Init ( const int  iNewBlockSize,
             ErrorRateStatistic[i].Init ( MAX_STATISTIC_COUNT, true );
         }
 
-        // start initialization phase of IIR filtering, use a quarter the size
-        // of the error rate statistic buffers which should be ok for a good
-        // initialization value (initialization phase should be as short as
-        // possible
-        iInitCounter = MAX_STATISTIC_COUNT / 4;
+        // reset the initialization counter which controls the initialization
+        // phase length
+        ResetInitCounter();
 
         // init auto buffer setting with a meaningful value, also init the
         // IIR parameter with this value
@@ -162,6 +160,15 @@ void CNetBufWithStats::Init ( const int  iNewBlockSize,
         dCurIIRFilterResult       = iCurAutoBufferSizeSetting;
         iCurDecidedResult         = iCurAutoBufferSizeSetting;
     }
+}
+
+void CNetBufWithStats::ResetInitCounter()
+{
+    // start initialization phase of IIR filtering, use a quarter the size
+    // of the error rate statistic buffers which should be ok for a good
+    // initialization value (initialization phase should be as short as
+    // possible)
+    iInitCounter = MAX_STATISTIC_COUNT / 4;
 }
 
 bool CNetBufWithStats::Put ( const CVector<uint8_t>& vecbyData,
@@ -250,6 +257,11 @@ void CNetBufWithStats::UpdateAutoSetting()
     {
         // in case no buffer is below bound, use largest buffer size
         iCurMaxUpDecision = viBufSizesForSim[NUM_STAT_SIMULATION_BUFFERS - 1];
+
+        // This is a worst case, something very bad had happened. Hopefully
+        // this was just temporary so that we initiate a new initialzation
+        // phase to get quickly back to normal buffer sizes (hopefully).
+        ResetInitCounter();
     }
 
 

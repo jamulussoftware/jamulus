@@ -26,7 +26,8 @@
 
 
 /* Implementation *************************************************************/
-CClient::CClient ( const quint16 iPortNumber ) :
+CClient::CClient ( const quint16  iPortNumber,
+                   const QString& strConnOnStartupAddress ) :
     vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
     ChannelInfo                      (),
     vecStoredFaderTags               ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
@@ -227,6 +228,13 @@ QObject::connect ( &Channel, SIGNAL ( OpusSupported() ),
     // start the socket (it is important to start the socket after all
     // initializations and connections)
     Socket.Start();
+
+    // do an immediate start if a server address is given
+    if ( !strConnOnStartupAddress.isEmpty() )
+    {
+        SetServerAddr ( strConnOnStartupAddress );
+        Start();
+    }
 }
 
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )

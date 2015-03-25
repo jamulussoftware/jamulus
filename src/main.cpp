@@ -56,13 +56,13 @@ int main ( int argc, char** argv )
     bool         bIsClient                 = true;
     bool         bUseGUI                   = true;
     bool         bStartMinimized           = false;
-    bool         bConnectOnStartup         = false;
     bool         bShowComplRegConnList     = false;
     bool         bShowAnalyzerConsole      = false;
     bool         bCentServPingServerInList = false;
     int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
     quint16      iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
     ELicenceType eLicenceType              = LT_NO_LICENCE;
+    QString      strConnOnStartupAddress   = "";
     QString      strIniFileName            = "";
     QString      strHTMLStatusFileName     = "";
     QString      strServerName             = "";
@@ -324,13 +324,16 @@ int main ( int argc, char** argv )
 
 
         // Connect on startup --------------------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-c",
-                               "--connect" ) )
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-c",
+                                 "--connect",
+                                 strArgument ) )
         {
-            bConnectOnStartup = true;
-            tsConsole << "- connect on startup enabled" << endl;
+            strConnOnStartupAddress = strArgument;
+            tsConsole << "- connect on startup to address: " << strConnOnStartupAddress << endl;
             continue;
         }
 
@@ -397,28 +400,39 @@ int main ( int argc, char** argv )
         {
             // Client:
             // actual client object
-            CClient Client ( iPortNumber );
+            CClient Client ( iPortNumber,
+                             strConnOnStartupAddress );
 
             // load settings from init-file
             CSettings Settings ( &Client, strIniFileName );
             Settings.Load();
 
-            // GUI object
-            CClientDlg ClientDlg ( &Client,
-                                   &Settings,
-                                   bConnectOnStartup,
-                                   bShowComplRegConnList,
-                                   bShowAnalyzerConsole,
-                                   0,
-                                   Qt::Window );
+            if ( bUseGUI )
+            {
+                // GUI object
+                CClientDlg ClientDlg ( &Client,
+                                       &Settings,
+                                       strConnOnStartupAddress,
+                                       bShowComplRegConnList,
+                                       bShowAnalyzerConsole,
+                                       0,
+                                       Qt::Window );
 
-            // set main window
-            pMainWindow = &ClientDlg;
-            pApp        = &app; // Needed for post-event routine
+                // set main window
+                pMainWindow = &ClientDlg;
+                pApp        = &app; // needed for post-event routine
 
-            // show dialog
-            ClientDlg.show();
-            app.exec();
+                // show dialog
+                ClientDlg.show();
+                app.exec();
+            }
+            else
+            {
+                // only start application without using the GUI
+                tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
+
+                app.exec();
+            }
         }
         else
         {
@@ -514,8 +528,8 @@ QString UsageArguments ( char **argv )
         "\nRecognized options:\n"
         "  -a, --servername      server name, required for HTML status (server\n"
         "                        only)\n"
-        "  -c, --connect         connect to last server on startup (client\n"
-        "                        only)\n"
+        "  -c, --connect         connect to given server address on startup\n"
+        "                        (client only)\n"
         "  -e, --centralserver   address of the central server (server only)\n"
         "  -g, --pingservers     ping servers in list to keep NAT port open\n"
         "                        (central server only)\n"

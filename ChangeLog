@@ -3,6 +3,7 @@
 - another improvement of auto jitter buffer detection in very bad
   network conditions
 
+- support client operation without using a GUI frontend
 
 
 

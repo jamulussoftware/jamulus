@@ -114,7 +114,8 @@ class CClient : public QObject
     Q_OBJECT
 
 public:
-    CClient ( const quint16 iPortNumber );
+    CClient ( const quint16  iPortNumber,
+              const QString& strConnOnStartupAddress );
 
     void   Start();
     void   Stop();

@@ -71,7 +71,7 @@ class CClientDlg : public QDialog, private Ui_CClientDlgBase
 public:
     CClientDlg ( CClient*        pNCliP,
                  CSettings*      pNSetP,
-                 const bool      bNewConnectOnStartup,
+                 const QString&  strConnOnStartupAddress,
                  const bool      bNewShowComplRegConnList,
                  const bool      bShowAnalyzerConsole,
                  QWidget*        parent = 0,

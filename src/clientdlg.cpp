@@ -28,7 +28,7 @@
 /* Implementation *************************************************************/
 CClientDlg::CClientDlg ( CClient*        pNCliP,
                          CSettings*      pNSetP,
-                         const bool      bNewConnectOnStartup,
+                         const QString&  strConnOnStartupAddress,
                          const bool      bNewShowComplRegConnList,
                          const bool      bShowAnalyzerConsole,
                          QWidget*        parent,
@@ -225,19 +225,11 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
 
     // Connect on startup ------------------------------------------------------
-    if ( bNewConnectOnStartup )
+    if ( !strConnOnStartupAddress.isEmpty() )
     {
-        // per definition use the last connection (first entry in the
-        // stored address list)
-        const QString strSelectedAddress = pClient->vstrIPAddress[0];
-
-        // only if address is not empty, start the client
-        if ( !strSelectedAddress.isEmpty() )
-        {
-            // initiate connection (always show the address in the mixer board
-            // (no alias))
-            Connect ( strSelectedAddress, strSelectedAddress );
-        }
+        // initiate connection (always show the address in the mixer board
+        // (no alias))
+        Connect ( strConnOnStartupAddress, strConnOnStartupAddress );
     }
 
 
@@ -1001,7 +993,10 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
         // running state but show error message
         try
         {
-            pClient->Start();
+            if ( !pClient->IsRunning() )
+            {
+                pClient->Start();
+            }
         }
 
         catch ( CGenErr generr )

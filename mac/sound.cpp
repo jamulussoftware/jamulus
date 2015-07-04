@@ -243,16 +243,22 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
                              &iPropertySize,
                              &sPropertyStringValue );
 
-    // convert CFString in c-string (quick hack!) and then in QString
-    char* sC_strPropValue =
-        (char*) malloc ( CFStringGetLength ( sPropertyStringValue ) + 1 );
+    // first check if the string is not empty
+    strDeviceName = "UNKNOWN"; // init value in case no name is available
 
-    CFStringGetCString ( sPropertyStringValue,
-                         sC_strPropValue,
-                         CFStringGetLength ( sPropertyStringValue ) + 1,
-                         kCFStringEncodingISOLatin1 );
+    if ( CFStringGetLength ( sPropertyStringValue ) > 0 )
+    {
+        // convert CFString in c-string (quick hack!) and then in QString
+        char* sC_strPropValue =
+            (char*) malloc ( CFStringGetLength ( sPropertyStringValue ) + 1 );
 
-    strDeviceName = sC_strPropValue;
+        CFStringGetCString ( sPropertyStringValue,
+                             sC_strPropValue,
+                             CFStringGetLength ( sPropertyStringValue ) + 1,
+                             kCFStringEncodingISOLatin1 );
+
+        strDeviceName = sC_strPropValue;
+    }
 
     // check if device is input or output or both (is that possible?)
     // we do this by trying to set the current device for the audio unit

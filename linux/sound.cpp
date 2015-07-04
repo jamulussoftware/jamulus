@@ -125,8 +125,7 @@ void CSound::OpenJack()
             }
         }
 
-// TODO shouldn't we call jack_free() function instead?
-        free ( ports );
+        jack_free ( ports );
     }
 
     // try to connect physical output ports
@@ -154,8 +153,7 @@ void CSound::OpenJack()
             }
         }
 
-// TODO shouldn't we call jack_free() function instead?
-        free ( ports );
+        jack_free ( ports );
     }
 }
 

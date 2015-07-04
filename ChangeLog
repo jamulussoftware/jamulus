@@ -5,6 +5,10 @@
 
 - support client operation without using a GUI frontend
 
+- bug fix: fixed a crash in the MacOS audio interface
+
+
+
 
 
 3.3.8

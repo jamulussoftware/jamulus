@@ -180,14 +180,14 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
 
     lNumDevs++; // next device
 
-    // add detected devices (also check for maximum allowed sound cards!)
+    // add detected devices
     //
     // we add combined entries for input and output for each device so that we
     // do not need two combo boxes in the GUI for input and output (therefore
-    // all possible combinations are required)
-    for ( UInt32 i = 0; ( i < deviceCount ) && ( i < MAX_NUMBER_SOUND_CARDS - 1 ); i++ )
+    // all possible combinations are required which can be a large number)
+    for ( UInt32 i = 0; i < deviceCount; i++ )
     {
-        for ( UInt32 j = 0; ( j < deviceCount ) && ( j < MAX_NUMBER_SOUND_CARDS - 1 ); j++ )
+        for ( UInt32 j = 0; j < deviceCount; j++ )
         {
             // get device infos for both current devices
             QString strDeviceName_i;
@@ -207,8 +207,9 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
                                   bIsInput_j,
                                   bIsOutput_j );
 
-            // check if i device is input and j device is output
-            if ( bIsInput_i && bIsOutput_j )
+            // check if i device is input and j device is output and that we are
+            // in range
+            if ( bIsInput_i && bIsOutput_j && ( lNumDevs < MAX_NUMBER_SOUND_CARDS ) )
             {
                 strDriverNames[lNumDevs] = "in: " +
                     strDeviceName_i + "/out: " +

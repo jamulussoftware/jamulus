@@ -252,12 +252,13 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
         char* sC_strPropValue =
             (char*) malloc ( CFStringGetLength ( sPropertyStringValue ) + 1 );
 
-        CFStringGetCString ( sPropertyStringValue,
-                             sC_strPropValue,
-                             CFStringGetLength ( sPropertyStringValue ) + 1,
-                             kCFStringEncodingISOLatin1 );
-
-        strDeviceName = sC_strPropValue;
+        if ( CFStringGetCString ( sPropertyStringValue,
+                                  sC_strPropValue,
+                                  CFStringGetLength ( sPropertyStringValue ) + 1,
+                                  kCFStringEncodingISOLatin1 ) )
+        {
+            strDeviceName = sC_strPropValue;
+        }
     }
 
     // check if device is input or output or both (is that possible?)

@@ -1,3 +1,8 @@
+3.3.10
+
+
+
+
 3.3.9
 
 - another improvement of auto jitter buffer detection in very bad
@@ -6,9 +11,6 @@
 - support client operation without using a GUI frontend
 
 - bug fix: fixed a crash in the MacOS audio interface
-
-
-
 
 
 3.3.8

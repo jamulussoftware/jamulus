@@ -207,19 +207,21 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strServerInfo,
                    const QString&     strNewWelcomeMessage,
                    const bool         bNCentServPingServerInList,
+                   const bool         bNDisconnectAllClients,
                    const ELicenceType eNLicenceType ) :
-    iMaxNumChannels      ( iNewMaxNumChan ),
-    Socket               ( this, iPortNumber ),
-    bWriteStatusHTMLFile ( false ),
-    ServerListManager    ( iPortNumber,
-                           strCentralServer,
-                           strServerInfo,
-                           iNewMaxNumChan,
-                           bNCentServPingServerInList,
-                           &ConnLessProtocol ),
-    bAutoRunMinimized    ( false ),
-    strWelcomeMessage    ( strNewWelcomeMessage ),
-    eLicenceType         ( eNLicenceType )
+    iMaxNumChannels       ( iNewMaxNumChan ),
+    Socket                ( this, iPortNumber ),
+    bWriteStatusHTMLFile  ( false ),
+    ServerListManager     ( iPortNumber,
+                            strCentralServer,
+                            strServerInfo,
+                            iNewMaxNumChan,
+                            bNCentServPingServerInList,
+                            &ConnLessProtocol ),
+    bAutoRunMinimized     ( false ),
+    strWelcomeMessage     ( strNewWelcomeMessage ),
+    eLicenceType          ( eNLicenceType ),
+    bDisconnectAllClients ( bNDisconnectAllClients )
 {
     int iOpusError;
     int i;
@@ -560,6 +562,14 @@ void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 void CServer::OnNewConnection ( int          iChID,
                                 CHostAddress RecHostAddr )
 {
+    // in the special case that all clients shall be disconnected, just send the
+    // disconnect message and leave this function
+    if ( bDisconnectAllClients )
+    {
+        ConnLessProtocol.CreateCLDisconnection ( RecHostAddr );
+        return;
+    }
+
     // on a new connection we query the network transport properties for the
     // audio packets (to use the correct network block size and audio
     // compression properties, etc.)

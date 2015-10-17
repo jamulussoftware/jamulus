@@ -211,6 +211,10 @@ QObject::connect ( &Channel, SIGNAL ( OpusSupported() ),
         SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
         this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLDisconnection ( CHostAddress ) ),
+        this, SLOT ( OnCLDisconnection ( CHostAddress ) ) );
+
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),

@@ -131,6 +131,7 @@ public:
               const QString&     strServerInfo,
               const QString&     strNewWelcomeMessage,
               const bool         bNCentServPingServerInList,
+              const bool         bNDisconnectAllClients,
               const ELicenceType eNLicenceType );
 
     void Start();
@@ -273,6 +274,7 @@ protected:
     // messaging
     QString                    strWelcomeMessage;
     ELicenceType               eLicenceType;
+    bool                       bDisconnectAllClients;
 
 signals:
     void Started();

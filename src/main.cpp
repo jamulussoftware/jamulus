@@ -57,6 +57,7 @@ int main ( int argc, char** argv )
     bool         bUseGUI                   = true;
     bool         bStartMinimized           = false;
     bool         bShowComplRegConnList     = false;
+    bool         bDisconnectAllClients     = false;
     bool         bShowAnalyzerConsole      = false;
     bool         bCentServPingServerInList = false;
     int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
@@ -170,6 +171,20 @@ int main ( int argc, char** argv )
         {
             bShowComplRegConnList = true;
             tsConsole << "- show all registered servers in server list" << endl;
+            continue;
+        }
+
+
+        // Disconnect all clients (emergency mode) -----------------------------
+        // Undocumented debugging command line argument: Needed to disconnect
+        // an unwanted client.
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--disconnectall", // no short form
+                               "--disconnectall" ) )
+        {
+            bDisconnectAllClients = true;
+            tsConsole << "- disconnect all clients" << endl;
             continue;
         }
 
@@ -448,6 +463,7 @@ int main ( int argc, char** argv )
                              strServerInfo,
                              strWelcomeMessage,
                              bCentServPingServerInList,
+                             bDisconnectAllClients,
                              eLicenceType );
 
             if ( bUseGUI )

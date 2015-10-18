@@ -629,7 +629,7 @@ void CClientDlg::OnAudioPanValueChanged ( int value )
 void CClientDlg::OnConnectDlgAccepted()
 {
     // get the address from the connect dialog
-    const QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
+    QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
 
     // only store new host address in our data base if the address is
     // not empty and it was not a server list item (only the addresses
@@ -657,6 +657,16 @@ void CClientDlg::OnConnectDlgAccepted()
         // just show the address string as it was entered by the
         // user
         strMixerBoardLabel = strSelectedAddress;
+
+        // special case: if the address is empty, we substitude the default
+        // central server address so that a user which just pressed the connect
+        // button without selecting an item in the table or manually entered an
+        // address gets a successful connection
+        if ( strSelectedAddress.isEmpty() )
+        {
+            strSelectedAddress = DEFAULT_SERVER_ADDRESS;
+            strMixerBoardLabel = DEFAULT_SERVER_NAME;
+        }
     }
 
     // first check if we are already connected, if this is the case we have to

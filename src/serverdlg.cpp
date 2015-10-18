@@ -493,14 +493,21 @@ void CServerDlg::UpdateGUIDependencies()
     chbDefaultCentralServer->setEnabled ( bCurSerListEnabled );
     grbServerInfo->setEnabled           ( bCurSerListEnabled );
 
-    // If the default central server address is enabled, the line edit shows
-    // the default server and is not editable. Make sure the line edit does not
-    // fire signals when we update the text.
+    // make sure the line edit does not fire signals when we update the text
     edtCentralServerAddress->blockSignals ( true );
     {
-        edtCentralServerAddress->setText (
-            SELECT_SERVER_ADDRESS ( bCurUseDefCentServAddr,
-                                    pServer->GetServerListCentralServerAddress() ) );
+        if ( bCurUseDefCentServAddr )
+        {
+            // if the default central server is used, just show a text of the
+            // server name
+            edtCentralServerAddress->setText ( DEFAULT_SERVER_NAME );
+        }
+        else
+        {
+            // show the current user defined server address
+            edtCentralServerAddress->setText (
+                pServer->GetServerListCentralServerAddress() );
+        }
     }
     edtCentralServerAddress->blockSignals ( false );
 

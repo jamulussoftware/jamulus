@@ -57,8 +57,8 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     QString strServAddrH = tr ( "<b>Server Address:</b> The IP address or URL "
         "of the server running the " ) + APP_NAME + tr ( " server software "
         "must be set here. An optional port number can be added after the IP "
-        "address or URL using a comma as a separator, e.g, <i>" ) +
-        DEFAULT_SERVER_ADDRESS + ":" +
+        "address or URL using a comma as a separator, e.g, <i>"
+        "example.org:" ) +
         QString().setNum ( LLCON_DEFAULT_PORT_NUMBER ) + tr ( "</i>. A list of "
         "the most recent used server IP addresses or URLs is available for "
         "selection." );
@@ -143,6 +143,7 @@ void CConnectDlg::Init ( const QString           strNewCentralServerAddr,
 
     // load stored IP addresses in combo box
     cbxServerAddr->clear();
+    cbxServerAddr->clearEditText();
 
     for ( int iLEIdx = 0; iLEIdx < MAX_NUM_SERVER_ADDR_ITEMS; iLEIdx++ )
     {

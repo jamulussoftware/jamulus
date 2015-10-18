@@ -53,17 +53,9 @@ void CSettings::Load()
         // IP addresses
         for ( iIdx = 0; iIdx < MAX_NUM_SERVER_ADDR_ITEMS; iIdx++ )
         {
-            QString sDefaultIP = "";
-
-            // use default only for first entry
-            if ( iIdx == 0 )
-            {
-                sDefaultIP = DEFAULT_SERVER_ADDRESS;
-            }
-
             pClient->vstrIPAddress[iIdx] =
                 GetIniSetting ( IniXMLDocument, "client",
-                                QString ( "ipaddress%1" ).arg ( iIdx ), sDefaultIP );
+                                QString ( "ipaddress%1" ).arg ( iIdx ), "" );
         }
 
         // stored fader tags

@@ -548,14 +548,21 @@ void CClientSettingsDlg::UpdateCentralServerDependency()
     const bool bCurUseDefCentServAddr =
         pClient->GetUseDefaultCentralServerAddress();
 
-    // If the default central server address is enabled, the line edit shows
-    // the default server and is not editable. Make sure the line edit does not
-    // fire signals when we update the text.
+    // make sure the line edit does not fire signals when we update the text
     edtCentralServerAddress->blockSignals ( true );
     {
-        edtCentralServerAddress->setText (
-            SELECT_SERVER_ADDRESS ( bCurUseDefCentServAddr,
-                                    pClient->GetServerListCentralServerAddress() ) );
+        if ( bCurUseDefCentServAddr )
+        {
+            // if the default central server is used, just show a text of the
+            // server name
+            edtCentralServerAddress->setText ( DEFAULT_SERVER_NAME );
+        }
+        else
+        {
+            // show the current user defined server address
+            edtCentralServerAddress->setText (
+                pClient->GetServerListCentralServerAddress() );
+        }
     }
     edtCentralServerAddress->blockSignals ( false );
 

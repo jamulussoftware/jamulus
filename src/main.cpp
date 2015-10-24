@@ -556,7 +556,7 @@ QString UsageArguments ( char **argv )
         "                        connection (server only)\n"
         "  -m, --htmlstatus      enable HTML status file, set file name (server\n"
         "                        only)\n"
-        "  -n, --nogui           disable GUI (server only)\n"
+        "  -n, --nogui           disable GUI\n"
         "  -o, --serverinfo      infos of the server(s) in the format:\n"
         "                        [name];[city];[country as QLocale ID]; ...\n"
         "                        [server1 address];[server1 name]; ...\n"

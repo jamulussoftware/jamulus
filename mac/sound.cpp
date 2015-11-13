@@ -139,7 +139,8 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
 
 
     // Get available input/output devices --------------------------------------
-    UInt32 iPropertySize;
+    UInt32                     iPropertySize;
+    AudioObjectPropertyAddress stPropertyAddress;
 
     // first get property size of devices array and allocate memory
     AudioHardwareGetPropertyInfo ( kAudioHardwarePropertyDevices,
@@ -160,13 +161,13 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     lNumDevs                 = 0;
     strDriverNames[lNumDevs] = "System Default In/Out Devices";
 
-    iPropertySize = sizeof ( AudioDeviceID );
-    AudioObjectPropertyAddress ePropertyInDevAddress = { kAudioHardwarePropertyDefaultInputDevice,
-                                                         kAudioObjectPropertyScopeGlobal,
-                                                         kAudioObjectPropertyElementMaster };
+    iPropertySize               = sizeof ( AudioDeviceID );
+    stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
+    stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
+    stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
 
     if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject,
-                                      &ePropertyInDevAddress,
+                                      &stPropertyAddress,
                                       0,
                                       NULL,
                                       &iPropertySize,
@@ -176,13 +177,13 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
                              "It seems that no sound card is available in the system." ) );
     }
 
-    iPropertySize = sizeof ( AudioDeviceID );
-    AudioObjectPropertyAddress ePropertyOutDevAddress = { kAudioHardwarePropertyDefaultOutputDevice,
-                                                          kAudioObjectPropertyScopeGlobal,
-                                                          kAudioObjectPropertyElementMaster };
+    iPropertySize               = sizeof ( AudioDeviceID );
+    stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
+    stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
+    stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
 
     if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject,
-                                      &ePropertyOutDevAddress,
+                                      &stPropertyAddress,
                                       0,
                                       NULL,
                                       &iPropertySize,
@@ -247,16 +248,48 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
                                    bool&               bIsInput,
                                    bool&               bIsOutput )
 {
+    // check if device is input or output or both (is that possible?)
+    // we do this by trying to set the current device for the audio unit
+    // with the parameter input and output and then we simply check the
+    // error/ok result
+    bIsInput = !AudioUnitSetProperty ( audioInputUnit,
+                                       kAudioOutputUnitProperty_CurrentDevice,
+                                       kAudioUnitScope_Global,
+                                       1,
+                                       &DeviceID,
+                                       sizeof ( AudioDeviceID ) );
+
+    bIsOutput = !AudioUnitSetProperty ( audioOutputUnit,
+                                        kAudioOutputUnitProperty_CurrentDevice,
+                                        kAudioUnitScope_Global,
+                                        0,
+                                        &DeviceID,
+                                        sizeof ( AudioDeviceID ) );
+
     // get property name
     UInt32      iPropertySize = sizeof ( CFStringRef );
     CFStringRef sPropertyStringValue;
 
-    AudioDeviceGetProperty ( DeviceID,
-                             0,
-                             false,
-                             kAudioObjectPropertyName,
-                             &iPropertySize,
-                             &sPropertyStringValue );
+    AudioObjectPropertyAddress stPropertyAddress;
+    stPropertyAddress.mSelector = kAudioObjectPropertyName;
+
+    if ( bIsInput )
+    {
+        stPropertyAddress.mScope = kAudioDevicePropertyScopeInput;
+    }
+    else
+    {
+        stPropertyAddress.mScope = kAudioDevicePropertyScopeOutput;
+    }
+
+    stPropertyAddress.mElement = 0; // channel
+
+    AudioObjectGetPropertyData ( DeviceID,
+                                 &stPropertyAddress,
+                                 0,
+                                 NULL,
+                                 &iPropertySize,
+                                 &sPropertyStringValue );
 
     // first check if the string is not empty
     strDeviceName = "UNKNOWN"; // init value in case no name is available
@@ -275,24 +308,6 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
             strDeviceName = sC_strPropValue;
         }
     }
-
-    // check if device is input or output or both (is that possible?)
-    // we do this by trying to set the current device for the audio unit
-    // with the parameter input and output and then we simply check the
-    // error/ok result
-    bIsInput = !AudioUnitSetProperty ( audioInputUnit,
-                                       kAudioOutputUnitProperty_CurrentDevice,
-                                       kAudioUnitScope_Global,
-                                       1,
-                                       &DeviceID,
-                                       sizeof ( AudioDeviceID ) );
-
-    bIsOutput = !AudioUnitSetProperty ( audioOutputUnit,
-                                        kAudioOutputUnitProperty_CurrentDevice,
-                                        kAudioUnitScope_Global,
-                                        0,
-                                        &DeviceID,
-                                        sizeof ( AudioDeviceID ) );
 }
 
 QString CSound::LoadAndInitializeDriver ( int iDriverIdx )

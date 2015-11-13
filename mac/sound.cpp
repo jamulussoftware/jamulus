@@ -157,22 +157,36 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     const UInt32 deviceCount = ( iPropertySize / sizeof ( AudioDeviceID ) );
 
     // always add system default devices for input and output as first entry
-    lNumDevs = 0;
+    lNumDevs                 = 0;
     strDriverNames[lNumDevs] = "System Default In/Out Devices";
 
     iPropertySize = sizeof ( AudioDeviceID );
-    if ( AudioHardwareGetProperty ( kAudioHardwarePropertyDefaultInputDevice,
-                                    &iPropertySize,
-                                    &audioInputDevice[lNumDevs] ) )
+    AudioObjectPropertyAddress ePropertyInDevAddress = { kAudioHardwarePropertyDefaultInputDevice,
+                                                         kAudioObjectPropertyScopeGlobal,
+                                                         kAudioObjectPropertyElementMaster };
+
+    if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject,
+                                      &ePropertyInDevAddress,
+                                      0,
+                                      NULL,
+                                      &iPropertySize,
+                                      &audioInputDevice[lNumDevs] ) )
     {
         throw CGenErr ( tr ( "CoreAudio input AudioHardwareGetProperty call failed. "
                              "It seems that no sound card is available in the system." ) );
     }
 
     iPropertySize = sizeof ( AudioDeviceID );
-    if ( AudioHardwareGetProperty ( kAudioHardwarePropertyDefaultOutputDevice,
-                                    &iPropertySize,
-                                    &audioOutputDevice[lNumDevs] ) )
+    AudioObjectPropertyAddress ePropertyOutDevAddress = { kAudioHardwarePropertyDefaultOutputDevice,
+                                                          kAudioObjectPropertyScopeGlobal,
+                                                          kAudioObjectPropertyElementMaster };
+
+    if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject,
+                                      &ePropertyOutDevAddress,
+                                      0,
+                                      NULL,
+                                      &iPropertySize,
+                                      &audioOutputDevice[lNumDevs] ) )
     {
         throw CGenErr ( tr ( "CoreAudio output AudioHardwareGetProperty call failed. "
                              "It seems that no sound card is available in the system." ) );

@@ -142,17 +142,29 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     UInt32                     iPropertySize;
     AudioObjectPropertyAddress stPropertyAddress;
 
+    stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
+    stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
+
     // first get property size of devices array and allocate memory
-    AudioHardwareGetPropertyInfo ( kAudioHardwarePropertyDevices,
-                                   &iPropertySize,
-                                   NULL );
+    stPropertyAddress.mSelector = kAudioHardwarePropertyDevices;
+
+    AudioObjectGetPropertyDataSize ( kAudioObjectSystemObject,
+                                     &stPropertyAddress,
+                                     0,
+                                     NULL,
+                                     &iPropertySize );
 
     AudioDeviceID* audioDevices = (AudioDeviceID*) malloc ( iPropertySize );
 
     // now actually query all devices present in the system
-    AudioHardwareGetProperty ( kAudioHardwarePropertyDevices,
-                               &iPropertySize,
-                               audioDevices );
+    stPropertyAddress.mSelector = kAudioHardwarePropertyDevices;
+
+    AudioObjectGetPropertyData ( kAudioObjectSystemObject,
+                                 &stPropertyAddress,
+                                 0,
+                                 NULL,
+                                 &iPropertySize,
+                                 audioDevices );
 
     // calculate device count based on size of returned data array
     const UInt32 deviceCount = ( iPropertySize / sizeof ( AudioDeviceID ) );
@@ -163,8 +175,6 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
 
     iPropertySize               = sizeof ( AudioDeviceID );
     stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultInputDevice;
-    stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
-    stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
 
     if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject,
                                       &stPropertyAddress,
@@ -179,8 +189,6 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
 
     iPropertySize               = sizeof ( AudioDeviceID );
     stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
-    stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
-    stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
 
     if ( AudioObjectGetPropertyData ( kAudioObjectSystemObject,
                                       &stPropertyAddress,

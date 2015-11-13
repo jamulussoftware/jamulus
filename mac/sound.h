@@ -71,9 +71,8 @@ protected:
     // callbacks
     static OSStatus deviceNotification ( AudioDeviceID,
                                          UInt32,
-                                         Boolean,
-                                         AudioDevicePropertyID inPropertyID,
-                                         void*                 inRefCon );
+                                         const AudioObjectPropertyAddress* inAddresses,
+                                         void*                             inRefCon );
 
     static OSStatus processInput ( void*                       inRefCon,
                                    AudioUnitRenderActionFlags* ioActionFlags,

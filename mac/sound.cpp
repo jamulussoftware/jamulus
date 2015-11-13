@@ -347,10 +347,13 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
 // TODO why is only the input enough...?
 
         // setup callback for xruns (only for input is enough)
-        AudioDeviceAddPropertyListener ( audioInputDevice[lCurDev],
-                                         0,
-                                         true,
-                                         kAudioDeviceProcessorOverload,
+        AudioObjectPropertyAddress stPropertyAddress;
+        stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
+        stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
+        stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
+
+        AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
+                                         &stPropertyAddress,
                                          deviceNotification,
                                          this );
     }
@@ -539,13 +542,12 @@ UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID,
 
 OSStatus CSound::deviceNotification ( AudioDeviceID,
                                       UInt32,
-                                      Boolean,
-                                      AudioDevicePropertyID inPropertyID,
-                                      void*                 inRefCon )
+                                      const AudioObjectPropertyAddress* inAddresses,
+                                      void*                             inRefCon )
 {
     CSound* pSound = static_cast<CSound*> ( inRefCon );
 
-    if ( inPropertyID == kAudioDeviceProcessorOverload )
+    if ( inAddresses->mSelector == kAudioDeviceProcessorOverload )
     {
         // xrun handling (it is important to act on xruns under CoreAudio
         // since it seems that the xrun situation stays stable for a

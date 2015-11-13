@@ -282,7 +282,7 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
         stPropertyAddress.mScope = kAudioDevicePropertyScopeOutput;
     }
 
-    stPropertyAddress.mElement = 0; // channel
+    stPropertyAddress.mElement = 0;
 
     AudioObjectGetPropertyData ( DeviceID,
                                  &stPropertyAddress,
@@ -502,24 +502,37 @@ UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID,
                                const bool     bIsInput,
                                UInt32         iPrefBufferSize )
 {
+    AudioObjectPropertyAddress stPropertyAddress;
+    stPropertyAddress.mSelector = kAudioDevicePropertyBufferFrameSize;
+
+    if ( bIsInput )
+    {
+        stPropertyAddress.mScope = kAudioDevicePropertyScopeInput;
+    }
+    else
+    {
+        stPropertyAddress.mScope = kAudioDevicePropertyScopeOutput;
+    }
+
+    stPropertyAddress.mElement = 0;
+
     // first set the value
     UInt32 iSizeBufValue = sizeof ( UInt32 );
-    AudioDeviceSetProperty ( audioDeviceID,
-                             NULL,
-                             0,
-                             bIsInput,
-                             kAudioDevicePropertyBufferFrameSize,
-                             iSizeBufValue,
-                             &iPrefBufferSize );
+    AudioObjectSetPropertyData ( audioDeviceID,
+                                 &stPropertyAddress,
+                                 0,
+                                 NULL,
+                                 iSizeBufValue,
+                                 &iPrefBufferSize );
 
     // read back which value is actually used
     UInt32 iActualMonoBufferSize;
-    AudioDeviceGetProperty ( audioDeviceID,
-                             0,
-                             bIsInput,
-                             kAudioDevicePropertyBufferFrameSize,
-                             &iSizeBufValue,
-                             &iActualMonoBufferSize );
+    AudioObjectGetPropertyData ( audioDeviceID,
+                                 &stPropertyAddress,
+                                 0,
+                                 NULL,
+                                 &iSizeBufValue,
+                                 &iActualMonoBufferSize );
 
     return iActualMonoBufferSize;
 }

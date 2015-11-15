@@ -29,6 +29,25 @@
 CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
     CSoundBase ( "CoreAudio", true, fpNewProcessCallback, arg )
 {
+    // Apple Mailing Lists: Subject: GUI Apps should set kAudioHardwarePropertyRunLoop
+    // in the HAL, From: Jeff Moore, Date: Fri, 6 Dec 2002
+    // Most GUI applciations have several threads on which they receive
+    // notifications already, so the having the HAL's thread around is wasteful.
+    // Here is what you should do: On the thread you want the HAL to use for
+    // notifications (for most apps, this will be the main thread), add the
+    // following lines of code:
+    // tell the HAL to use the current thread as it's run loop
+    CFRunLoopRef theRunLoop = CFRunLoopGetCurrent();
+    AudioObjectPropertyAddress property = { kAudioHardwarePropertyRunLoop,
+                                            kAudioObjectPropertyScopeGlobal,
+                                            kAudioObjectPropertyElementMaster };
+    AudioObjectSetPropertyData ( kAudioObjectSystemObject,
+                                 &property,
+                                 0,
+                                 NULL,
+                                 sizeof ( CFRunLoopRef ),
+                                 &theRunLoop );
+
     // set up stream format
     streamFormat.mSampleRate       = SYSTEM_SAMPLE_RATE_HZ;
     streamFormat.mFormatID         = kAudioFormatLinearPCM;
@@ -114,7 +133,6 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
         throw CGenErr ( tr ( "CoreAudio stream format set property failed" ) );
     }
 
-
     // set up a callback function for new output data
     if ( AudioUnitSetProperty ( audioOutputUnit,
                                 kAudioUnitProperty_SetRenderCallback,
@@ -126,7 +144,7 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
         throw CGenErr ( tr ( "CoreAudio audio unit set property failed" ) );
     }
 
-    // ste output stream format
+    // set output stream format
     if ( AudioUnitSetProperty ( audioOutputUnit,
                                 kAudioUnitProperty_StreamFormat,
                                 kAudioUnitScope_Input,
@@ -157,8 +175,6 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     AudioDeviceID* audioDevices = (AudioDeviceID*) malloc ( iPropertySize );
 
     // now actually query all devices present in the system
-    stPropertyAddress.mSelector = kAudioHardwarePropertyDevices;
-
     AudioObjectGetPropertyData ( kAudioObjectSystemObject,
                                  &stPropertyAddress,
                                  0,
@@ -248,7 +264,8 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     }
 
     // init device index as not initialized (invalid)
-    lCurDev = INVALID_SNC_CARD_DEVICE;
+    lCurDev                   = INVALID_SNC_CARD_DEVICE;
+    CurrentAudioInputDeviceID = 0;
 }
 
 void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
@@ -343,14 +360,14 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
     }
 
     // check device capabilities if it fullfills our requirements
-    const QString strStat =
-        CheckDeviceCapabilities ( audioInputUnit, audioOutputUnit );
+    const QString strStat = CheckDeviceCapabilities ( iDriverIdx );
 
     // check if device is capable
     if ( strStat.isEmpty() )
     {
         // store ID of selected driver if initialization was successful
-        lCurDev = iDriverIdx;
+        lCurDev                   = iDriverIdx;
+        CurrentAudioInputDeviceID = audioInputDevice[iDriverIdx];
 
 // TODO why is only the input enough...?
 
@@ -369,15 +386,21 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
     return strStat;
 }
 
-QString CSound::CheckDeviceCapabilities ( ComponentInstance& NewAudioInputUnit,
-                                          ComponentInstance& NewAudioOutputUnit )
+QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
 {
-    UInt32 size;
+    UInt32                     size;
+    const Float64              fSystemSampleRate = (Float64) SYSTEM_SAMPLE_RATE_HZ;
+    AudioObjectPropertyAddress stSRatePropertyAddress;
+
+    stSRatePropertyAddress.mSelector = kAudioDevicePropertyNominalSampleRate;
+    stSRatePropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
+    stSRatePropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
 
     // check input device sample rate
     size = sizeof ( Float64 );
     Float64 inputSampleRate;
-    AudioUnitGetProperty ( NewAudioInputUnit,
+
+    AudioUnitGetProperty ( audioInputUnit,
                            kAudioUnitProperty_SampleRate,
                            kAudioUnitScope_Input,
                            1,
@@ -386,16 +409,25 @@ QString CSound::CheckDeviceCapabilities ( ComponentInstance& NewAudioInputUnit,
 
     if ( static_cast<int> ( inputSampleRate ) != SYSTEM_SAMPLE_RATE_HZ )
     {
-        return QString ( tr ( "Current system audio input device sample "
-            "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
-            "Applications->Utilities and try to set a sample rate of %2 Hz." ) ).arg (
-            static_cast<int> ( inputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE_HZ );
+        // try to change the sample rate
+        if ( AudioObjectSetPropertyData ( audioInputDevice[iDriverIdx],
+                                          &stSRatePropertyAddress,
+                                          0,
+                                          NULL,
+                                          sizeof ( Float64 ),
+                                          &fSystemSampleRate ) != noErr )
+        {
+            return QString ( tr ( "Current system audio input device sample "
+                "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
+                "Applications->Utilities and try to set a sample rate of %2 Hz." ) ).arg (
+                static_cast<int> ( inputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE_HZ );
+        }
     }
 
     // check output device sample rate
     size = sizeof ( Float64 );
     Float64 outputSampleRate;
-    AudioUnitGetProperty ( NewAudioOutputUnit,
+    AudioUnitGetProperty ( audioOutputUnit,
                            kAudioUnitProperty_SampleRate,
                            kAudioUnitScope_Output,
                            0,
@@ -404,10 +436,19 @@ QString CSound::CheckDeviceCapabilities ( ComponentInstance& NewAudioInputUnit,
 
     if ( static_cast<int> ( outputSampleRate ) != SYSTEM_SAMPLE_RATE_HZ )
     {
-        return QString ( tr ( "Current system audio output device sample "
-            "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
-            "Applications->Utilities and try to set a sample rate of %2 Hz." ) ).arg (
-            static_cast<int> ( outputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE_HZ );
+        // try to change the sample rate
+        if ( AudioObjectSetPropertyData ( audioOutputDevice[iDriverIdx],
+                                          &stSRatePropertyAddress,
+                                          0,
+                                          NULL,
+                                          sizeof ( Float64 ),
+                                          &fSystemSampleRate ) != noErr )
+        {
+            return QString ( tr ( "Current system audio output device sample "
+                "rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in "
+                "Applications->Utilities and try to set a sample rate of %2 Hz." ) ).arg (
+                static_cast<int> ( outputSampleRate ) ).arg ( SYSTEM_SAMPLE_RATE_HZ );
+        }
     }
 
     // everything is ok, return empty string for "no error" case
@@ -506,6 +547,24 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
         throw CGenErr ( tr ( "Initialization of CoreAudio failed" ) );
     }
 
+
+/*
+// TEST
+AudioDeviceIOProcID testIn;
+AudioDeviceCreateIOProcID ( audioInputDevice[lCurDev],
+                            callbackIO,
+                            this,
+                            &testIn );
+
+AudioDeviceIOProcID testOut;
+AudioDeviceCreateIOProcID ( audioOutputDevice[lCurDev],
+                            callbackIO,
+                            this,
+                            &testOut );
+*/
+
+
+
     return iCoreAudioBufferSizeMono;
 }
 
@@ -557,14 +616,56 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
 
     if ( inAddresses->mSelector == kAudioDeviceProcessorOverload )
     {
+
+// TODO: Do we need this anymore? If not, we can completely remove this function...
+/*
         // xrun handling (it is important to act on xruns under CoreAudio
         // since it seems that the xrun situation stays stable for a
         // while and would give you a long time bad audio)
         pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART );
+*/
     }
 
     return noErr;
 }
+
+
+/*
+// TEST
+OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
+                              const AudioTimeStamp*,
+                              const AudioBufferList* inInputData,
+                              const AudioTimeStamp*,
+                              AudioBufferList*       outOutputData,
+                              const AudioTimeStamp*,
+                              void*                  inRefCon )
+{
+    CSound* pSound = static_cast<CSound*> ( inRefCon );
+
+    if ( inDevice == pSound->CurrentAudioInputDeviceID )
+    {
+        // audio input callback, copy data first
+        memcpy ( &pSound->vecsTmpAudioSndCrdStereo[0],
+                 inInputData->mBuffers[0].mData,
+                 inInputData->mBuffers[0].mDataByteSize );
+
+        // call processing callback function
+        pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
+    }
+    else
+    {
+        // audio output callback, simply copy data
+        memcpy ( outOutputData->mBuffers[0].mData,
+                 &pSound->vecsTmpAudioSndCrdStereo[0],
+                 outOutputData->mBuffers[0].mDataByteSize );
+    }
+
+    return kAudioHardwareNoError;
+}
+*/
+
+
+
 
 OSStatus CSound::processInput ( void*                       inRefCon,
                                 AudioUnitRenderActionFlags* ioActionFlags,
@@ -603,8 +704,8 @@ OSStatus CSound::processOutput ( void*                       inRefCon,
     QMutexLocker locker ( &pSound->Mutex );
 
     memcpy ( ioData->mBuffers[0].mData,
-        &pSound->vecsTmpAudioSndCrdStereo[0],
-        pSound->pBufferList->mBuffers[0].mDataByteSize);
+             &pSound->vecsTmpAudioSndCrdStereo[0],
+             pSound->pBufferList->mBuffers[0].mDataByteSize );
 
     return noErr;
 }

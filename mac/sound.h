@@ -50,12 +50,12 @@ public:
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iCoreAudioBufferSizeMono;
     int            iCoreAudioBufferSizeStereo;
+    AudioDeviceID  CurrentAudioInputDeviceID;
 
 protected:
     virtual QString  LoadAndInitializeDriver ( int iIdx );
 
-    QString CheckDeviceCapabilities ( ComponentInstance& NewAudioInputUnit,
-                                      ComponentInstance& NewAudioOutputUnit );
+    QString CheckDeviceCapabilities ( const int iDriverIdx );
 
     void CloseCoreAudio();
 
@@ -73,6 +73,17 @@ protected:
                                          UInt32,
                                          const AudioObjectPropertyAddress* inAddresses,
                                          void*                             inRefCon );
+
+/*
+// TEST
+    static OSStatus callbackIO ( AudioDeviceID          inDevice,
+                                 const AudioTimeStamp*,
+                                 const AudioBufferList* inInputData,
+                                 const AudioTimeStamp*,
+                                 AudioBufferList*       outOutputData,
+                                 const AudioTimeStamp*,
+                                 void*                  inRefCon );
+*/
 
     static OSStatus processInput ( void*                       inRefCon,
                                    AudioUnitRenderActionFlags* ioActionFlags,

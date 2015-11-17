@@ -350,8 +350,9 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                               "This software requires a stereo device.") );
     }
 
-
+/*
 // TODO check input device, too!
+// It seems that all queried values are zero somehow so the check does not work...
 AudioObjectGetPropertyData ( audioInputDevice[iDriverIdx],
                              &stPropertyAddress,
                              0,
@@ -365,8 +366,7 @@ qDebug() << "mBytesPerPacket" << CurDevStreamFormat.mBytesPerPacket;
 qDebug() << "mChannelsPerFrame" << CurDevStreamFormat.mChannelsPerFrame;
 qDebug() << "mFramesPerPacket" << CurDevStreamFormat.mFramesPerPacket;
 qDebug() << "mSampleRate" << CurDevStreamFormat.mSampleRate;
-
-
+*/
 
     // everything is ok, return empty string for "no error" case
     return "";

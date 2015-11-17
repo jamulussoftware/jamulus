@@ -25,11 +25,8 @@
 #if !defined(_SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_)
 #define _SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_
 
-#include <CoreServices/CoreServices.h>
-#include <AudioUnit/AudioUnit.h>
-#include <CoreAudio/AudioHardware.h>
+#include <CoreAudio/CoreAudio.h>
 #include <QMutex>
-#include "util.h"
 #include "soundbase.h"
 #include "global.h"
 
@@ -39,7 +36,6 @@ class CSound : public CSoundBase
 {
 public:
     CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg );
-    virtual ~CSound() { CloseCoreAudio(); }
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
@@ -57,8 +53,6 @@ protected:
 
     QString CheckDeviceCapabilities ( const int iDriverIdx );
 
-    void CloseCoreAudio();
-
     UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID,
                            const bool     bIsInput,
                            UInt32         iPrefBufferSize );
@@ -74,8 +68,6 @@ protected:
                                          const AudioObjectPropertyAddress* inAddresses,
                                          void*                             inRefCon );
 
-/*
-// TEST
     static OSStatus callbackIO ( AudioDeviceID          inDevice,
                                  const AudioTimeStamp*,
                                  const AudioBufferList* inInputData,
@@ -83,35 +75,13 @@ protected:
                                  AudioBufferList*       outOutputData,
                                  const AudioTimeStamp*,
                                  void*                  inRefCon );
-*/
 
-    static OSStatus processInput ( void*                       inRefCon,
-                                   AudioUnitRenderActionFlags* ioActionFlags,
-                                   const AudioTimeStamp*       inTimeStamp,
-                                   UInt32                      inBusNumber,
-                                   UInt32                      inNumberFrames,
-                                   AudioBufferList* );
+    AudioDeviceID       audioInputDevice[MAX_NUMBER_SOUND_CARDS];
+    AudioDeviceID       audioOutputDevice[MAX_NUMBER_SOUND_CARDS];
+    AudioDeviceIOProcID audioInputProcID;
+    AudioDeviceIOProcID audioOutputProcID;
 
-    static OSStatus processOutput ( void*                       inRefCon,
-                                    AudioUnitRenderActionFlags*,
-                                    const AudioTimeStamp*,
-                                    UInt32,
-                                    UInt32,
-                                    AudioBufferList*            ioData );
-
-    AudioStreamBasicDescription streamFormat;
-
-    AURenderCallbackStruct      inputCallbackStruct;
-    AURenderCallbackStruct      outputCallbackStruct;
-
-    ComponentInstance           audioInputUnit;
-    AudioDeviceID               audioInputDevice[MAX_NUMBER_SOUND_CARDS];
-    ComponentInstance           audioOutputUnit;
-    AudioDeviceID               audioOutputDevice[MAX_NUMBER_SOUND_CARDS];
-
-    AudioBufferList*            pBufferList;
-
-    QMutex                      Mutex;
+    QMutex              Mutex;
 };
 
 #endif // !defined(_SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_)

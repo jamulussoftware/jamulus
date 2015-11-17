@@ -568,10 +568,15 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
                 pSound->vecsTmpAudioSndCrdStereo[i] =
                     (short) ( pInData[i] * _MAXSHORT );
             }
-
-            // call processing callback function
-            pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
         }
+        else
+        {
+            // incompatible sizes, clear work buffer
+            pSound->vecsTmpAudioSndCrdStereo.Reset ( 0 );
+        }
+
+        // call processing callback function
+        pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
     }
     else
     {

@@ -341,8 +341,10 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
          ( CurDevStreamFormat.mChannelsPerFrame != 2 ) ||
          ( CurDevStreamFormat.mBitsPerChannel   != 32 ) )
     {
-        return QString ( tr ( "The audio stream format for this audio device is"
-                              "not compatible with the requirements." ) );
+        return QString ( tr ( "The audio stream format for this audio device is "
+                              "not compatible with the requirements. Maybe the "
+                              "number of channels is incompatible, e.g., if the "
+                              "device only is mono." ) );
     }
 
 // TODO     mSampleRate, mFormatFlags      = kAudioFormatFlagIsSignedInteger

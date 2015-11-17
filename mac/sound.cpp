@@ -585,8 +585,8 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
             // copy output data
             for ( int i = 0; i < pSound->iCoreAudioBufferSizeStereo; i++ )
             {
-                pOutData[i] = (Float32)
-                    pSound->vecsTmpAudioSndCrdStereo[i] / _MAXSHORT;
+                pOutData[i] =
+                    (Float32) pSound->vecsTmpAudioSndCrdStereo[i] / _MAXSHORT;
             }
         }
     }

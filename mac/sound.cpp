@@ -339,17 +339,25 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
          ( CurDevStreamFormat.mBytesPerFrame    != 8 ) ||
          ( CurDevStreamFormat.mBytesPerPacket   != 8 ) ||
          ( CurDevStreamFormat.mChannelsPerFrame != 2 ) ||
-         ( CurDevStreamFormat.mBitsPerChannel   != 32 ) )
+         ( CurDevStreamFormat.mBitsPerChannel   != 32 ) ||
+         ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsFloat ) ) ||
+         ( !( CurDevStreamFormat.mFormatFlags & kAudioFormatFlagIsPacked ) ) )
     {
         return QString ( tr ( "The audio stream format for this audio device is "
                               "not compatible with the requirements. Maybe the "
                               "number of channels is incompatible, e.g., if the "
-                              "device only is mono." ) );
+                              "device is a mono device or has too many channels. "
+                              "This software requires a stereo device.") );
     }
 
-// TODO     mSampleRate, mFormatFlags      = kAudioFormatFlagIsSignedInteger
 
 // TODO check input device, too!
+AudioObjectGetPropertyData ( audioInputDevice[iDriverIdx],
+                             &stPropertyAddress,
+                             0,
+                             NULL,
+                             &iPropertySize,
+                             &CurDevStreamFormat );
 
 qDebug() << "mBitsPerChannel" << CurDevStreamFormat.mBitsPerChannel;
 qDebug() << "mBytesPerFrame" << CurDevStreamFormat.mBytesPerFrame;

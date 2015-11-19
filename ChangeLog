@@ -5,6 +5,7 @@
 - changed the MacOS audio interface to be future proof (do not use
   the Carbon Component Manager anymore)
 
+- added support for audio channel selection for MacOS
 
 
 

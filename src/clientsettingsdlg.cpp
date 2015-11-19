@@ -497,7 +497,7 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
 
 void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
 {
-#ifdef _WIN32
+#if defined ( _WIN32 ) || defined ( __APPLE__ ) || defined ( __MACOSX )
     int iSndChanIdx;
 
     // Definition: The channel selection frame shall only be visible,

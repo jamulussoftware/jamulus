@@ -51,7 +51,7 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
 
 
     // Get available input/output devices --------------------------------------
-    UInt32                     iPropertySize;
+    UInt32                     iPropertySize = 0;
     AudioObjectPropertyAddress stPropertyAddress;
 
     stPropertyAddress.mScope   = kAudioObjectPropertyScopeGlobal;
@@ -204,7 +204,7 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
     bIsOutput = ( iPropertySize > 0 ); // check if any output streams are available
 
     // get property name
-    CFStringRef sPropertyStringValue;
+    CFStringRef sPropertyStringValue = NULL;
 
     stPropertyAddress.mSelector = kAudioObjectPropertyName;
     stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
@@ -252,8 +252,9 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
 QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
 {
     UInt32                      iPropertySize;
-    Float64                     inputSampleRate;
     AudioStreamBasicDescription	CurDevStreamFormat;
+    Float64                     inputSampleRate   = 0;
+    Float64                     outputSampleRate  = 0;
     const Float64               fSystemSampleRate = static_cast<Float64> ( SYSTEM_SAMPLE_RATE_HZ );
     AudioObjectPropertyAddress  stPropertyAddress;
 
@@ -290,7 +291,6 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
 
     // check output device sample rate
     iPropertySize = sizeof ( Float64 );
-    Float64 outputSampleRate;
 
     AudioObjectGetPropertyData ( audioOutputDevice[iDriverIdx],
                                  &stPropertyAddress,
@@ -423,7 +423,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
     // get the channel names of the input device
     for ( int iCurInCH = 0; iCurInCH < iNumInChan; iCurInCH++ )
     {
-        CFStringRef sPropertyStringValue;
+        CFStringRef sPropertyStringValue = NULL;
 
         stPropertyAddress.mSelector = kAudioObjectPropertyElementName;
         stPropertyAddress.mElement  = iCurInCH + 1;
@@ -457,7 +457,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
     // get the channel names of the output device
     for ( int iCurOutCH = 0; iCurOutCH < iNumOutChan; iCurOutCH++ )
     {
-        CFStringRef sPropertyStringValue;
+        CFStringRef sPropertyStringValue = NULL;
 
         stPropertyAddress.mSelector = kAudioObjectPropertyElementName;
         stPropertyAddress.mElement  = iCurOutCH + 1;
@@ -656,6 +656,7 @@ UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID,
 
     // first set the value
     UInt32 iSizeBufValue = sizeof ( UInt32 );
+
     AudioObjectSetPropertyData ( audioDeviceID,
                                  &stPropertyAddress,
                                  0,
@@ -664,7 +665,8 @@ UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID,
                                  &iPrefBufferSize );
 
     // read back which value is actually used
-    UInt32 iActualMonoBufferSize;
+    UInt32 iActualMonoBufferSize = 0;
+
     AudioObjectGetPropertyData ( audioDeviceID,
                                  &stPropertyAddress,
                                  0,
@@ -774,25 +776,33 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     return kAudioHardwareNoError;
 }
 
-bool CSound::ConvertCFStringToQString ( const CFStringRef stringRef, QString& sOut )
+bool CSound::ConvertCFStringToQString ( const CFStringRef stringRef,
+                                        QString&          sOut )
 {
-    // first check if the string is not empty
-    if ( CFStringGetLength ( stringRef ) > 0 )
+    // check if the string reference is a valid pointer
+    if ( stringRef != NULL )
     {
-        // convert CFString in c-string (quick hack!) and then in QString
-        char* sC_strPropValue =
-            (char*) malloc ( CFStringGetLength ( stringRef ) * 3 + 1 );
-
-        if ( CFStringGetCString ( stringRef,
-                                  sC_strPropValue,
-                                  CFStringGetLength ( stringRef ) * 3 + 1,
-                                  kCFStringEncodingUTF8 ) )
+        // first check if the string is not empty
+        if ( CFStringGetLength ( stringRef ) > 0 )
         {
-            sOut = sC_strPropValue;
-            free ( sC_strPropValue );
+            // convert CFString in c-string (quick hack!) and then in QString
+            char* sC_strPropValue =
+                (char*) malloc ( CFStringGetLength ( stringRef ) * 3 + 1 );
 
-            return true; // OK
+            if ( CFStringGetCString ( stringRef,
+                                      sC_strPropValue,
+                                      CFStringGetLength ( stringRef ) * 3 + 1,
+                                      kCFStringEncodingUTF8 ) )
+            {
+                sOut = sC_strPropValue;
+                free ( sC_strPropValue );
+
+                return true; // OK
+            }
         }
+
+        // release the string reference because it is not needed anymore
+        CFRelease ( stringRef );
     }
 
     return false; // not OK

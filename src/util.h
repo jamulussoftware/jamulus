@@ -1176,7 +1176,7 @@ public:
                         for ( int i = 0; i < iNumMeas; i++ )
                         {
                             // convert ns in ms and store the value
-                            streamFile << static_cast<double> ( vElapsedTimes[i] ) / 1000000 << endl;
+                            streamFile << i << " " << static_cast<double> ( vElapsedTimes[i] ) / 1000000 << endl;
                         }
                     }
                 }

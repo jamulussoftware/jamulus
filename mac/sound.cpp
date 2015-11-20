@@ -533,11 +533,24 @@ void CSound::Start()
     // setup callback for xruns (only for input is enough)
     AudioObjectPropertyAddress stPropertyAddress;
 
-    stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
     stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
     stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
 
+    stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
+
     AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
+                                     &stPropertyAddress,
+                                     deviceNotification,
+                                     this );
+
+    stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
+
+    AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
+                                     &stPropertyAddress,
+                                     deviceNotification,
+                                     this );
+
+    AudioObjectAddPropertyListener ( audioOutputDevice[lCurDev],
                                      &stPropertyAddress,
                                      deviceNotification,
                                      this );
@@ -574,9 +587,22 @@ void CSound::Stop()
     // unregister the callback function for xruns
     AudioObjectPropertyAddress stPropertyAddress;
 
-    stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
     stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
     stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
+
+    stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
+
+    AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
+                                       &stPropertyAddress,
+                                       deviceNotification,
+                                       this );
+
+    AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
+                                       &stPropertyAddress,
+                                       deviceNotification,
+                                       this );
+
+    stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
 
     AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
                                        &stPropertyAddress,
@@ -679,13 +705,18 @@ UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID,
 
 OSStatus CSound::deviceNotification ( AudioDeviceID,
                                       UInt32,
-                                      const AudioObjectPropertyAddress* /* inAddresses */,
-                                      void*                             /* inRefCon */ )
+                                      const AudioObjectPropertyAddress* inAddresses,
+                                      void*                             inRefCon )
 {
-// TODO: Do we need this anymore? If not, we can completely remove this function...
-/*
     CSound* pSound = static_cast<CSound*> ( inRefCon );
 
+    if ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged )
+    {
+        // if any property of the device has changed, to a full reload
+        pSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT );
+    }
+
+/*
     if ( inAddresses->mSelector == kAudioDeviceProcessorOverload )
     {
         // xrun handling (it is important to act on xruns under CoreAudio

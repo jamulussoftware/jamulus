@@ -441,11 +441,16 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         const bool bConvOK = ConvertCFStringToQString ( sPropertyStringValue,
                                                         sChannelNamesInput[iCurInCH] );
 
-        // use a defalut name in case there was an error or the name is empty
+        // add the "[n]:" at the beginning as is in the Audio-Midi-Setup
         if ( !bConvOK || ( iPropertySize == 0 ) )
         {
+            // use a defalut name in case there was an error or the name is empty
             sChannelNamesInput[iCurInCH] =
-                QString ( "Channel %1" ).arg ( iCurInCH + 1 );
+                QString ( "%1: Channel %1" ).arg ( iCurInCH + 1 );
+        }
+        else
+        {
+            sChannelNamesInput[iCurInCH].prepend ( QString ( "%1: " ).arg ( iCurInCH + 1 ) );
         }
     }
 
@@ -470,11 +475,16 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         const bool bConvOK = ConvertCFStringToQString ( sPropertyStringValue,
                                                         sChannelNamesOutput[iCurOutCH] );
 
-        // use a defalut name in case there was an error or the name is empty
+        // add the "[n]:" at the beginning as is in the Audio-Midi-Setup
         if ( !bConvOK || ( iPropertySize == 0 ) )
         {
+            // use a defalut name in case there was an error or the name is empty
             sChannelNamesOutput[iCurOutCH] =
-                QString ( "Channel %1" ).arg ( iCurOutCH + 1 );
+                QString ( "%1: Channel %1" ).arg ( iCurOutCH + 1 );
+        }
+        else
+        {
+            sChannelNamesOutput[iCurOutCH].prepend ( QString ( "%1: " ).arg ( iCurOutCH + 1 ) );
         }
     }
 

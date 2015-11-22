@@ -46,7 +46,7 @@
 #define PROTMESSID_REQ_CONN_CLIENTS_LIST      16 // request connected client list
 #define PROTMESSID_CHANNEL_NAME               17 // set channel name for fader tag
 #define PROTMESSID_CHAT_TEXT                  18 // contains a chat text
-#define PROTMESSID_PING_MS                    19 // for measuring ping time
+#define PROTMESSID_PING_MS                    19 // OLD (not used anymore)
 #define PROTMESSID_NETW_TRANSPORT_PROPS       20 // properties for network transport
 #define PROTMESSID_REQ_NETW_TRANSPORT_PROPS   21 // request properties for network transport
 #define PROTMESSID_DISCONNECTION              22 // OLD (not used anymore)

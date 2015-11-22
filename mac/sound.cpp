@@ -530,12 +530,12 @@ void CSound::SetRightOutputChannel ( const int iNewChan )
 
 void CSound::Start()
 {
-    // setup callback for xruns (only for input is enough)
     AudioObjectPropertyAddress stPropertyAddress;
 
     stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
     stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
 
+    // setup callback for xruns (only for input is enough)
     stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
 
     AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
@@ -543,6 +543,7 @@ void CSound::Start()
                                      deviceNotification,
                                      this );
 
+    // setup callbacks for device property changes
     stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
 
     AudioObjectAddPropertyListener ( audioInputDevice[lCurDev],
@@ -584,12 +585,12 @@ void CSound::Stop()
     AudioDeviceDestroyIOProcID ( audioInputDevice[lCurDev], audioInputProcID );
     AudioDeviceDestroyIOProcID ( audioOutputDevice[lCurDev], audioOutputProcID );
 
-    // unregister the callback function for xruns
     AudioObjectPropertyAddress stPropertyAddress;
 
     stPropertyAddress.mElement  = kAudioObjectPropertyElementMaster;
     stPropertyAddress.mScope    = kAudioObjectPropertyScopeGlobal;
 
+    // unregister callback functions for device property changes
     stPropertyAddress.mSelector = kAudioDevicePropertyDeviceHasChanged;
 
     AudioObjectRemovePropertyListener( audioOutputDevice[lCurDev],
@@ -602,6 +603,7 @@ void CSound::Stop()
                                        deviceNotification,
                                        this );
 
+    // unregister the callback function for xruns
     stPropertyAddress.mSelector = kAudioDeviceProcessorOverload;
 
     AudioObjectRemovePropertyListener( audioInputDevice[lCurDev],
@@ -712,7 +714,7 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
 
     if ( inAddresses->mSelector == kAudioDevicePropertyDeviceHasChanged )
     {
-        // if any property of the device has changed, to a full reload
+        // if any property of the device has changed, do a full reload
         pSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT );
     }
 

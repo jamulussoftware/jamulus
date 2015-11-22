@@ -10,24 +10,24 @@
 
 
 
-3.3.10
+3.3.10 (2015-10-20)
 
 - changed the default central server URL
 
 - added support for server disconnection
 
 
-3.3.9
+3.3.9 (2015-07-12)
 
 - another improvement of auto jitter buffer detection in very bad
   network conditions
 
-- support client operation without using a GUI frontend
+- support client operation without using a GUI front end
 
 - bug fix: fixed a crash in the MacOS audio interface
 
 
-3.3.8
+3.3.8 (2015-03-15)
 
 - improved audio quality in bad network conditions
 
@@ -38,7 +38,7 @@
 - show info about sound card buffer size if not one of the standard sizes
 
 
-3.3.7
+3.3.7 (2015-02-05)
 
 - added a musician profile dialog (some settings in the main window
   were removed)
@@ -50,7 +50,7 @@
 - added new instrument picture for "Guitar+Vocal"
 
 
-3.3.6
+3.3.6 (2015-01-25)
 
 - support for a country flag icon on the fader tag
 

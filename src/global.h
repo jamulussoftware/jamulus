@@ -157,7 +157,7 @@ LED bar:      lbr
 // channel infos for (and therefore this is the maximum number of entries in
 // the channel selection combo box regardless of the actual available number
 // of channels by the audio device)
-#define MAX_NUM_IN_OUT_CHANNELS         32
+#define MAX_NUM_IN_OUT_CHANNELS         64
 
 // maximum number of elemts in the server address combo box
 #define MAX_NUM_SERVER_ADDR_ITEMS       6

@@ -107,6 +107,7 @@ public:
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
     CVector<int>     vecStoredFaderIsSolo;
+    int              iNewClientFaderLevel;
 
 protected:
     bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
@@ -119,6 +120,7 @@ protected:
 
     CVector<CChannelFader*> vecpChanFader;
     QHBoxLayout*            pMainLayout;
+    bool                    bNoFaderVisible;
 
 public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG

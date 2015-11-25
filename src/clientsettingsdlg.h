@@ -92,6 +92,7 @@ protected:
     void OnGUIDesignFancyStateChanged ( int value );
     void OnDefaultCentralServerStateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
+    void OnNewClientLevelEditingFinished();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnSoundcardActivated ( int iSndDevIdx );
     void OnLInChanActivated ( int iChanIdx );
@@ -105,4 +106,5 @@ protected:
 signals:
     void GUIDesignChanged();
     void AudioChannelsChanged();
+    void NewClientLevelChanged();
 };

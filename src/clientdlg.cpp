@@ -189,6 +189,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     MainMixerBoard->vecStoredFaderTags   = pClient->vecStoredFaderTags;
     MainMixerBoard->vecStoredFaderLevels = pClient->vecStoredFaderLevels;
     MainMixerBoard->vecStoredFaderIsSolo = pClient->vecStoredFaderIsSolo;
+    MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel;
 
     // init status label
     OnTimerStatus();
@@ -498,6 +499,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( AudioChannelsChanged() ),
         this, SLOT ( OnAudioChannelsChanged() ) );
 
+    QObject::connect ( &ClientSettingsDlg, SIGNAL ( NewClientLevelChanged() ),
+        this, SLOT ( OnNewClientLevelChanged() ) );
+
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
@@ -559,6 +563,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     pClient->vecStoredFaderTags   = MainMixerBoard->vecStoredFaderTags;
     pClient->vecStoredFaderLevels = MainMixerBoard->vecStoredFaderLevels;
     pClient->vecStoredFaderIsSolo = MainMixerBoard->vecStoredFaderIsSolo;
+    pClient->iNewClientFaderLevel = MainMixerBoard->iNewClientFaderLevel;
 
     // default implementation of this event handler routine
     Event->accept();

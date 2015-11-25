@@ -486,7 +486,9 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     QGroupBox            ( parent ),
     vecStoredFaderTags   ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
     vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
-    vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false )
+    vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+    iNewClientFaderLevel ( 100 ),
+    bNoFaderVisible      ( true )
 {
     // set title text (default: no server given)
     SetServerName ( "" );
@@ -586,6 +588,9 @@ void CAudioMixerBoard::HideAll()
         vecpChanFader[i]->Hide();
     }
 
+    // set flag
+    bNoFaderVisible = true;
+
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected
 }
@@ -614,6 +619,18 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
 
                     // show fader
                     vecpChanFader[i]->Show();
+
+                    // Set the default initial fader level. Check first that
+                    // this is not the initialization (i.e. previously there
+                    // were no faders visible) to avoid that our own level is
+                    // adjusted. The fader level of 100 % is the default in the
+                    // server, in that case we do not have to do anything here.
+                    if ( !bNoFaderVisible && ( iNewClientFaderLevel != 100 ) )
+                    {
+                        // the value is in percent -> convert range
+                        vecpChanFader[i]->SetFaderLevel ( static_cast<int> (
+                            iNewClientFaderLevel / 100.0 * AUD_MIX_FADER_MAX ) );
+                    }
                 }
 
                 // restore gain (if new name is different from the current one)
@@ -638,8 +655,8 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
 
                 // update other channel infos (only available for new protocol
                 // which is not compatible with old versions -> this way we make
-                // sure that the protocol which transferrs only the name does
-                // change the other client infos
+                // sure that the protocol which transfers only the name does
+                // change the other client infos)
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED #### -> the "if-condition" can be removed later on...
                 if ( !vecChanInfo[j].bOnlyNameIsUsed )
                 {
@@ -663,6 +680,9 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
     // update the solo states since if any channel was on solo and a new client
     // has just connected, the new channel must be muted
     UpdateSoloStates();
+
+    // update flag for "all faders are invisible"
+    bNoFaderVisible = ( iNumConnectedClients == 0 );
 
     // emit status of connected clients
     emit NumClientsChanged ( iNumConnectedClients );
@@ -711,28 +731,15 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
         // init temporary list count (may be overwritten later on)
         int iTempListCnt = 0;
 
-        // check if the new fader level and solo state is the default one -> in
-        // that case the entry must be deleted from the list if currently
-        // present in the list
-        const bool bNewFaderLevelAndSoloIsDefault =
-            (
-                ( pChanFader->GetFaderLevel() == AUD_MIX_FADER_MAX ) &&
-                ( !pChanFader->IsSolo() ) // solo=OFF is the default
-            );
-
-        // if the new value is not the default value, put it on the top of the
-        // list, otherwise just remove it from the list
+        // put new value on the top of the list
         const int iOldIdx =
             vecStoredFaderTags.StringFiFoWithCompare ( pChanFader->GetReceivedName(),
-                                                       !bNewFaderLevelAndSoloIsDefault );
+                                                       true );
 
-        if ( !bNewFaderLevelAndSoloIsDefault )
-        {
-            // current fader level and solo state is at the top of the list
-            vecStoredFaderLevels[0] = pChanFader->GetFaderLevel();
-            vecStoredFaderIsSolo[0] = pChanFader->IsSolo();
-            iTempListCnt            = 1;
-        }
+        // current fader level and solo state is at the top of the list
+        vecStoredFaderLevels[0] = pChanFader->GetFaderLevel();
+        vecStoredFaderIsSolo[0] = pChanFader->IsSolo();
+        iTempListCnt            = 1;
 
         for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {

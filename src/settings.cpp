@@ -88,6 +88,13 @@ void CSettings::Load()
             }
         }
 
+        // new client level
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "newclientlevel",
+             0, 100, iValue ) )
+        {
+            pClient->iNewClientFaderLevel = iValue;
+        }
+
         // name
         pClient->ChannelInfo.strName = FromBase64ToString (
             GetIniSetting ( IniXMLDocument, "client", "name_base64" ) );
@@ -387,6 +394,10 @@ void CSettings::Save()
                             QString ( "storedfaderissolo%1" ).arg ( iIdx ),
                             pClient->vecStoredFaderIsSolo[iIdx] != false );
         }
+
+        // new client level
+        SetNumericIniSet ( IniXMLDocument, "client", "newclientlevel",
+            pClient->iNewClientFaderLevel );
 
         // name
         PutIniSetting ( IniXMLDocument, "client", "name_base64",

@@ -214,6 +214,18 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     cbxAudioQuality->setWhatsThis ( strAudioQuality );
     cbxAudioQuality->setAccessibleName ( tr ( "Audio quality combo box" ) );
 
+    // new client fader level
+    QString strNewClientLevel = tr ( "<b>New Client Level:</b> The "
+        "new client level setting defines the fader level of a new "
+        "connected client in percent. I.e. if a new client connects "
+        "to the current server, it will get the specified initial "
+        "fader level if no other fader level of a previous connection "
+        "of that client was already stored." );
+
+    lblNewClientLevel->setWhatsThis ( strNewClientLevel );
+    edtNewClientLevel->setWhatsThis ( strNewClientLevel );
+    edtNewClientLevel->setAccessibleName ( tr ( "New client level edit box" ) );
+
     // central server address
     QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
         "central server address is the IP address or URL of the central server "
@@ -272,6 +284,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     lblPingTimeValue->setText     ( "---" );
     lblOverallDelayValue->setText ( "---" );
     lblUpstreamValue->setText     ( "---" );
+    edtNewClientLevel->setValidator ( new QIntValidator ( 0, 100, this ) ); // % range from 0-100
 
 
     // init slider controls ---
@@ -326,6 +339,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     }
     UpdateCentralServerDependency();
 
+    // update new client fader level edit box
+    edtNewClientLevel->setText ( QString::number ( pClient->iNewClientFaderLevel ) );
+
     // set text for sound card buffer delay radio buttons
     rbtBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES,
@@ -370,6 +386,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // line edits
     QObject::connect ( edtCentralServerAddress, SIGNAL ( editingFinished() ),
         this, SLOT ( OnCentralServerAddressEditingFinished() ) );
+
+    QObject::connect ( edtNewClientLevel, SIGNAL ( editingFinished() ),
+        this, SLOT ( OnNewClientLevelEditingFinished() ) );
 
     // combo boxes
     QObject::connect ( cbxSoundcard, SIGNAL ( activated ( int ) ),
@@ -684,6 +703,17 @@ void CClientSettingsDlg::OnCentralServerAddressEditingFinished()
     // store new setting in the client
     pClient->SetServerListCentralServerAddress (
         edtCentralServerAddress->text() );
+}
+
+void CClientSettingsDlg::OnNewClientLevelEditingFinished()
+{
+    // store new setting in the client
+    pClient->iNewClientFaderLevel =
+        edtNewClientLevel->text().toInt();
+
+    // inform that the level has changed and the mixer board settings must
+    // be updated
+    emit NewClientLevelChanged();
 }
 
 void CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button )

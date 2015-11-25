@@ -2,6 +2,8 @@
 
 3.3.11
 
+- added a new client fader level setting
+
 - changed the MacOS audio interface to be future proof (do not use
   the Carbon Component Manager anymore)
 

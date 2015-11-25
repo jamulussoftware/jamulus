@@ -65,7 +65,16 @@
          <enum>QFrame::Plain</enum>
         </property>
         <layout class="QVBoxLayout">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -485,6 +494,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QLabel" name="lblNewClientLevel">
+            <property name="text">
+             <string>New Client Level</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -494,6 +510,20 @@
           </item>
           <item>
            <widget class="QComboBox" name="cbxAudioQuality"/>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLineEdit" name="edtNewClientLevel"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblPercentUnit">
+              <property name="text">
+               <string>%</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>
@@ -687,6 +717,7 @@
   <tabstop>sldNetBufServer</tabstop>
   <tabstop>cbxAudioChannels</tabstop>
   <tabstop>cbxAudioQuality</tabstop>
+  <tabstop>edtNewClientLevel</tabstop>
   <tabstop>chbGUIDesignFancy</tabstop>
   <tabstop>chbDefaultCentralServer</tabstop>
   <tabstop>edtCentralServerAddress</tabstop>

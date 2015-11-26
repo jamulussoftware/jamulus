@@ -1,5 +1,3 @@
-
-
 3.3.11
 
 - added a new client fader level setting
@@ -8,8 +6,6 @@
   the Carbon Component Manager anymore)
 
 - added support for audio channel selection for MacOS
-
-
 
 
 3.3.10 (2015-10-20)

@@ -28,7 +28,7 @@ MAIN FRAME
 - cnt: counter which is increment for each message and wraps around at 255
 - length n in bytes of the data
 - actual data, dependent on message type
-- 16 bits CRC, calculating over the entire message, is transmitted inverted
+- 16 bits CRC, calculated over the entire message and is transmitted inverted
   Generator polynom: G_16(x) = x^16 + x^12 + x^5 + 1, initial state: all ones
 
 
@@ -38,9 +38,9 @@ MESSAGES (with connection)
 
 - PROTMESSID_ACKN: Acknowledgement message
 
-    +-----------------------------------+
-    | 2 bytes ID of message to be ackn. |
-    +-----------------------------------+
+    +------------------------------------------+
+    | 2 bytes ID of message to be acknowledged |
+    +------------------------------------------+
 
     note: the cnt value is the same as of the message to be acknowledged
 
@@ -245,9 +245,9 @@ CONNECTION LESS MESSAGES
 
     for each registered server append following data:
 
-    +--------------------+--------------+--------------------------------+
-    | 4 bytes IP address | 2 bytes port | PROTMESSID_CLM_REGISTER_SERVER |
-    +--------------------+--------------+--------------------------------+
+    +--------------------+--------------------------------+
+    | 4 bytes IP address | PROTMESSID_CLM_REGISTER_SERVER |
+    +--------------------+--------------------------------+
 
     - "PROTMESSID_CLM_REGISTER_SERVER" means that exactly the same message body
       of the PROTMESSID_CLM_REGISTER_SERVER message is used

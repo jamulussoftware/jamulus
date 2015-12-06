@@ -281,6 +281,26 @@ CONNECTION LESS MESSAGES
 
     note: does not have any data -> n = 0
 
+
+- PROTMESSID_CLM_CONN_CLIENTS_LIST: Information about connected clients
+
+    for each connected client append the PROTMESSID_CONN_CLIENTS_LIST:
+
+    +--------------------+------------------------------+ ...
+    | 4 bytes request ID | PROTMESSID_CONN_CLIENTS_LIST | ...
+    +--------------------+------------------------------+ ...
+        +------------------------------+ ...
+        | PROTMESSID_CONN_CLIENTS_LIST | ...
+        +------------------------------+ ...
+
+
+- PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST: Request the connected clients list
+
+    +--------------------+
+    | 4 bytes request ID |
+    +--------------------+
+
+
  ******************************************************************************
  *
  * This program is free software; you can redistribute it and/or modify it under
@@ -646,6 +666,14 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
         case PROTMESSID_CLM_REQ_VERSION_AND_OS:
             bRet = EvaluateCLReqVersionAndOSMes ( InetAddr );
+            break;
+
+        case PROTMESSID_CLM_CONN_CLIENTS_LIST:
+            bRet = EvaluateCLConnClientsListMes ( InetAddr, vecbyMesBodyData );
+            break;
+
+        case PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST:
+            bRet = EvaluateCLReqConnClientsListMes ( InetAddr, vecbyMesBodyData );
             break;
         }
     }
@@ -1935,6 +1963,192 @@ bool CProtocol::EvaluateCLReqVersionAndOSMes ( const CHostAddress& InetAddr )
 {
     // invoke message action
     emit CLReqVersionAndOS ( InetAddr );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLConnClientsListMes ( const CHostAddress&          InetAddr,
+                                             const int                    iRequestID,
+                                             const CVector<CChannelInfo>& vecChanInfo )
+{
+    const int iNumClients = vecChanInfo.Size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( 4 ); // 4 bytes of data for request ID
+    int              iPos = 0; // init position pointer
+
+    // request ID (4 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iRequestID ), 4 );
+
+    for ( int i = 0; i < iNumClients; i++ )
+    {
+        // convert strings to utf-8
+        const QByteArray strUTF8Name = vecChanInfo[i].strName.toUtf8();
+        const QByteArray strUTF8City = vecChanInfo[i].strCity.toUtf8();
+
+        // size of current list entry
+        const int iCurListEntrLen =
+            1 /* chan ID */ + 2 /* country */ +
+            4 /* instrument */ + 1 /* skill level */ +
+            4 /* IP address */ +
+            2 /* utf-8 str. size */ + strUTF8Name.size() +
+            2 /* utf-8 str. size */ + strUTF8City.size();
+
+        // make space for new data
+        vecData.Enlarge ( iCurListEntrLen );
+
+        // channel ID (1 byte)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecChanInfo[i].iChanID ), 1 );
+
+        // country (2 bytes)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecChanInfo[i].eCountry ), 2 );
+
+        // instrument (4 bytes)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecChanInfo[i].iInstrument ), 4 );
+
+        // skill level (1 byte)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecChanInfo[i].eSkillLevel ), 1 );
+
+        // IP address (4 bytes)
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( vecChanInfo[i].iIpAddr ), 4 );
+
+        // name
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
+
+        // city
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8City );
+    }
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_CONN_CLIENTS_LIST,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress&     InetAddr,
+                                               const CVector<uint8_t>& vecData )
+{
+    int                   iPos     = 0; // init position pointer
+    const int             iDataLen = vecData.Size();
+    CVector<CChannelInfo> vecChanInfo ( 0 );
+
+    // check size (the first 4 bytes)
+    if ( iDataLen < 4 )
+    {
+        return true; // return error code
+    }
+
+    // request ID (4 bytes)
+    const int iRequestID =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+    while ( iPos < iDataLen )
+    {
+        // check size (the next 12 bytes)
+        if ( ( iDataLen - iPos ) < 12 )
+        {
+            return true; // return error code
+        }
+
+        // channel ID (1 byte)
+        const int iChanID =
+            static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+        // country (2 bytes)
+        const QLocale::Country eCountry =
+            static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+        // instrument (4 bytes)
+        const int iInstrument =
+            static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+        // skill level (1 byte)
+        const ESkillLevel eSkillLevel =
+            static_cast<ESkillLevel> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+        // IP address (4 bytes)
+        const int iIpAddr =
+            static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+        // name
+        QString strCurName;
+        if ( GetStringFromStream ( vecData,
+                                   iPos,
+                                   MAX_LEN_FADER_TAG,
+                                   strCurName ) )
+        {
+            return true; // return error code
+        }
+
+        // city
+        QString strCurCity;
+        if ( GetStringFromStream ( vecData,
+                                   iPos,
+                                   MAX_LEN_SERVER_CITY,
+                                   strCurCity ) )
+        {
+            return true; // return error code
+        }
+
+        // add channel information to vector
+        vecChanInfo.Add ( CChannelInfo ( iChanID,
+                                         iIpAddr,
+                                         strCurName,
+                                         eCountry,
+                                         strCurCity,
+                                         iInstrument,
+                                         eSkillLevel ) );
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit CLConnClientsListMesReceived ( InetAddr, iRequestID, vecChanInfo );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr,
+                                                const int           iRequestID )
+{
+    int iPos = 0; // init position pointer
+
+    // build data vector (4 bytes long)
+    CVector<uint8_t> vecData ( 4 );
+
+    // request ID (4 bytes)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iRequestID ), 4 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLReqConnClientsListMes ( const CHostAddress&     InetAddr,
+                                                  const CVector<uint8_t>& vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 4 )
+    {
+        return true; // return error code
+    }
+
+    // request ID (4 bytes)
+    const int iRequestID =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+
+    // invoke message action
+    emit CLReqConnClientsList ( InetAddr, iRequestID );
 
     return false; // no error
 }

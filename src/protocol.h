@@ -70,6 +70,8 @@
 #define PROTMESSID_CLM_DISCONNECTION          1010 // disconnection
 #define PROTMESSID_CLM_VERSION_AND_OS         1011 // version number and operating system
 #define PROTMESSID_CLM_REQ_VERSION_AND_OS     1012 // request version number and operating system
+#define PROTMESSID_CLM_CONN_CLIENTS_LIST      1013 // channel infos for connected clients
+#define PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST  1014 // request the connected clients list
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -121,6 +123,11 @@ public:
     void CreateCLDisconnection         ( const CHostAddress& InetAddr );
     void CreateCLVersionAndOSMes       ( const CHostAddress& InetAddr );
     void CreateCLReqVersionAndOSMes    ( const CHostAddress& InetAddr );
+    void CreateCLConnClientsListMes    ( const CHostAddress&          InetAddr,
+                                         const int                    iRequestID,
+                                         const CVector<CChannelInfo>& vecChanInfo );
+    void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr,
+                                         const int           iRequestID );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -236,6 +243,10 @@ protected:
     bool EvaluateCLVersionAndOSMes       ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLReqVersionAndOSMes    ( const CHostAddress& InetAddr );
+    bool EvaluateCLConnClientsListMes    ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
+    bool EvaluateCLReqConnClientsListMes ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -291,6 +302,11 @@ signals:
                                         COSUtil::EOpSystemType eOSType,
                                         QString                strVersion );
     void CLReqVersionAndOS            ( CHostAddress           InetAddr );
+    void CLConnClientsListMesReceived ( CHostAddress           InetAddr,
+                                        int                    iRequestID,
+                                        CVector<CChannelInfo>  vecChanInfo );
+    void CLReqConnClientsList         ( CHostAddress           InetAddr,
+                                        int                    iRequestID );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

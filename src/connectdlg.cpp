@@ -83,7 +83,7 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     lvwServers->setColumnWidth ( 1, 130 );
     lvwServers->setColumnWidth ( 2, 100 );
 #else
-    lvwServers->setColumnWidth ( 0, 165 );
+    lvwServers->setColumnWidth ( 0, 180 );
     lvwServers->setColumnWidth ( 1, 65 );
     lvwServers->setColumnWidth ( 2, 60 );
 #endif
@@ -101,7 +101,7 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
 
     pServerListContextMenu = new QMenu ( this );
 
-    pServerListContextMenu->addAction ( tr ( "&Query Names" ), this,
+    pServerListContextMenu->addAction ( tr ( "&Query Musicians Names" ), this,
         SLOT ( OnServerListContextMenuNames() ) );
 
     // make sure the connect button has the focus

@@ -332,9 +332,8 @@ public slots:
     void OnCLReqVersionAndOS ( CHostAddress InetAddr )
         { ConnLessProtocol.CreateCLVersionAndOSMes ( InetAddr ); }
 
-    void OnCLReqConnClientsList ( CHostAddress InetAddr,
-                                  int          iRequestID )
-    { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, iRequestID, CreateChannelList() ); }
+    void OnCLReqConnClientsList ( CHostAddress InetAddr )
+        { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
 
     void OnCLRegisterServerReceived ( CHostAddress    InetAddr,
                                       CServerCoreInfo ServerInfo )

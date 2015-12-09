@@ -286,19 +286,14 @@ CONNECTION LESS MESSAGES
 
     for each connected client append the PROTMESSID_CONN_CLIENTS_LIST:
 
-    +--------------------+------------------------------+ ...
-    | 4 bytes request ID | PROTMESSID_CONN_CLIENTS_LIST | ...
-    +--------------------+------------------------------+ ...
-        +------------------------------+ ...
-        | PROTMESSID_CONN_CLIENTS_LIST | ...
-        +------------------------------+ ...
+    +------------------------------+------------------------------+ ...
+    | PROTMESSID_CONN_CLIENTS_LIST | PROTMESSID_CONN_CLIENTS_LIST | ...
+    +------------------------------+------------------------------+ ...
 
 
 - PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST: Request the connected clients list
 
-    +--------------------+
-    | 4 bytes request ID |
-    +--------------------+
+    note: does not have any data -> n = 0
 
 
  ******************************************************************************
@@ -673,7 +668,7 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
             break;
 
         case PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST:
-            bRet = EvaluateCLReqConnClientsListMes ( InetAddr, vecbyMesBodyData );
+            bRet = EvaluateCLReqConnClientsListMes ( InetAddr );
             break;
         }
     }
@@ -1968,17 +1963,13 @@ bool CProtocol::EvaluateCLReqVersionAndOSMes ( const CHostAddress& InetAddr )
 }
 
 void CProtocol::CreateCLConnClientsListMes ( const CHostAddress&          InetAddr,
-                                             const int                    iRequestID,
                                              const CVector<CChannelInfo>& vecChanInfo )
 {
     const int iNumClients = vecChanInfo.Size();
 
     // build data vector
-    CVector<uint8_t> vecData ( 4 ); // 4 bytes of data for request ID
+    CVector<uint8_t> vecData ( 0 );
     int              iPos = 0; // init position pointer
-
-    // request ID (4 bytes)
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iRequestID ), 4 );
 
     for ( int i = 0; i < iNumClients; i++ )
     {
@@ -2035,16 +2026,6 @@ bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress&     InetAddr,
     int                   iPos     = 0; // init position pointer
     const int             iDataLen = vecData.Size();
     CVector<CChannelInfo> vecChanInfo ( 0 );
-
-    // check size (the first 4 bytes)
-    if ( iDataLen < 4 )
-    {
-        return true; // return error code
-    }
-
-    // request ID (4 bytes)
-    const int iRequestID =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
 
     while ( iPos < iDataLen )
     {
@@ -2111,44 +2092,22 @@ bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress&     InetAddr,
     }
 
     // invoke message action
-    emit CLConnClientsListMesReceived ( InetAddr, iRequestID, vecChanInfo );
+    emit CLConnClientsListMesReceived ( InetAddr, vecChanInfo );
 
     return false; // no error
 }
 
-void CProtocol::CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr,
-                                                const int           iRequestID )
+void CProtocol::CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr )
 {
-    int iPos = 0; // init position pointer
-
-    // build data vector (4 bytes long)
-    CVector<uint8_t> vecData ( 4 );
-
-    // request ID (4 bytes)
-    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iRequestID ), 4 );
-
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST,
-                                     vecData,
+                                     CVector<uint8_t> ( 0 ),
                                      InetAddr );
 }
 
-bool CProtocol::EvaluateCLReqConnClientsListMes ( const CHostAddress&     InetAddr,
-                                                  const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr )
 {
-    int iPos = 0; // init position pointer
-
-    // check size
-    if ( vecData.Size() != 4 )
-    {
-        return true; // return error code
-    }
-
-    // request ID (4 bytes)
-    const int iRequestID =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
-
     // invoke message action
-    emit CLReqConnClientsList ( InetAddr, iRequestID );
+    emit CLReqConnClientsList ( InetAddr );
 
     return false; // no error
 }

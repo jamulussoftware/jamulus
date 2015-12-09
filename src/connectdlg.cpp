@@ -93,6 +93,17 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     lvwServers->setColumnCount ( 5 );
     lvwServers->hideColumn ( 4 );
 
+    // setup the server list context menu
+    lvwServers->setContextMenuPolicy ( Qt::CustomContextMenu );
+
+    // per default the root shall not be decorated (to save space)
+    lvwServers->setRootIsDecorated ( false );
+
+    pServerListContextMenu = new QMenu ( this );
+
+    pServerListContextMenu->addAction ( tr ( "&Query Names" ), this,
+        SLOT ( OnServerListContextMenuNames() ) );
+
     // make sure the connect button has the focus
     butConnect->setFocus();
 
@@ -115,6 +126,10 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     QObject::connect ( lvwServers, // to get default return key behaviour working
         SIGNAL ( activated ( QModelIndex ) ),
         this, SLOT ( OnConnectClicked() ) );
+
+    QObject::connect ( lvwServers,
+        SIGNAL ( customContextMenuRequested ( const QPoint& ) ),
+        this, SLOT ( OnCustomContextMenuRequested ( const QPoint& ) ) );
 
     // combo boxes
     QObject::connect ( cbxServerAddr, SIGNAL ( editTextChanged ( const QString& ) ),
@@ -305,6 +320,43 @@ strLocation += ", " + vecServerInfo[iIdx].HostAddr.InetAddr.toString() +
     TimerPing.start ( PING_UPDATE_TIME_SERVER_LIST_MS );
 }
 
+void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
+                                       const CVector<CChannelInfo>& vecChanInfo )
+{
+    // find the server with the correct address
+    QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
+
+    if ( pCurListViewItem )
+    {
+        // first remove any existing childs
+        DeleteAllListViewItemChilds ( pCurListViewItem );
+
+        // get number of connected clients
+        const int iNumConnectedClients = vecChanInfo.Size();
+
+        for ( int i = 0; i < iNumConnectedClients; i++ )
+        {
+            // create new list view item
+            QTreeWidgetItem* pNewChildListViewItem =
+                new QTreeWidgetItem ( pCurListViewItem );
+
+            // child items shall use only one column
+            pNewChildListViewItem->setFirstColumnSpanned ( true );
+
+            // set the clients name
+            pNewChildListViewItem->setText ( 0, vecChanInfo[i].strName );
+
+            // add the new child to the corresponding server item
+            pCurListViewItem->addChild ( pNewChildListViewItem );
+
+            // at least one server has childs now, show decoration to be able
+            // to show the childs and also expand to see the new childs
+            lvwServers->setRootIsDecorated ( true );
+            lvwServers->expandItem ( pCurListViewItem );
+        }
+    }
+}
+
 void CConnectDlg::OnServerListItemSelectionChanged()
 {
     // get current selected item (we are only interested in the first selcted
@@ -317,7 +369,8 @@ void CConnectDlg::OnServerListItemSelectionChanged()
         // make sure no signals are send when we change the text
         cbxServerAddr->blockSignals ( true );
         {
-            cbxServerAddr->setEditText ( CurSelListItemList[0]->text ( 0 ) );
+            cbxServerAddr->setEditText (
+                GetParentListViewItem ( CurSelListItemList[0] )->text ( 0 ) );
         }
         cbxServerAddr->blockSignals ( false );
     }
@@ -331,6 +384,24 @@ void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item,
     if ( Item != 0 )
     {
         OnConnectClicked();
+    }
+}
+
+void CConnectDlg::OnCustomContextMenuRequested ( const QPoint& Position )
+{
+    // get the item to which the context menu is assigned to based on the given
+    // mouse position
+    QTreeWidgetItem* Item = lvwServers->itemAt ( Position );
+
+    // first check if the item is valid
+    if ( Item != 0 )
+    {
+        // only show the context menu if there is at least von conntected client
+        if ( Item->text ( 2 ).toInt() > 0  )
+        {
+            // use the given position for the position of the context menu
+            pServerListContextMenu->exec ( lvwServers->mapToGlobal ( Position ) );
+        }
     }
 }
 
@@ -350,12 +421,16 @@ void CConnectDlg::OnConnectClicked()
 
     if ( CurSelListItemList.count() > 0 )
     {
+        // get the parent list view item
+        QTreeWidgetItem* pCurSelTopListItem =
+            GetParentListViewItem ( CurSelListItemList[0] );
+
         // get host address from selected list view item as a string
         strSelectedAddress =
-            CurSelListItemList[0]->data ( 0, Qt::UserRole ).toString();
+            pCurSelTopListItem->data ( 0, Qt::UserRole ).toString();
 
         // store selected server name
-        strSelectedServerName = CurSelListItemList[0]->text ( 0 );
+        strSelectedServerName = pCurSelTopListItem->text ( 0 );
 
         // set flag that a server list item was chosen to connect
         bServerListItemWasChosen = true;
@@ -367,6 +442,28 @@ void CConnectDlg::OnConnectClicked()
 
     // tell the parent window that the connection shall be initiated
     done ( QDialog::Accepted );
+}
+
+void CConnectDlg::OnServerListContextMenuNames()
+{
+    // get the current selected item(s)
+    QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
+
+    if ( CurSelListItemList.count() > 0 )
+    {
+        CHostAddress CurServerAddress;
+
+        // try to parse host address string which is stored as user data
+        // in the server list item GUI control element
+        if ( NetworkUtil().ParseNetworkAddress (
+                CurSelListItemList[0]->
+                data ( 0, Qt::UserRole ).toString(),
+                CurServerAddress ) )
+        {
+            // if address is valid, send connected clients list request
+            emit CreateCLServerListReqConnClientsListMes ( CurServerAddress );
+        }
+    }
 }
 
 void CConnectDlg::OnTimerPing()
@@ -401,6 +498,96 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
                                                    const int                         iNumClients )
 {
     // apply the received ping time to the correct server list entry
+    QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
+
+    if ( pCurListViewItem )
+    {
+        // update the color of the ping time font
+        switch ( ePingTimeLEDColor )
+        {
+        case CMultiColorLED::RL_GREEN:
+            pCurListViewItem->setTextColor ( 1, Qt::darkGreen );
+            break;
+
+        case CMultiColorLED::RL_YELLOW:
+            pCurListViewItem->setTextColor ( 1, Qt::darkYellow );
+            break;
+
+        default: // including "CMultiColorLED::RL_RED"
+            pCurListViewItem->setTextColor ( 1, Qt::red );
+            break;
+        }
+
+        // update ping text, take special care if ping time exceeds a
+        // certain value
+        if ( iPingTime > 500 )
+        {
+            pCurListViewItem->setText ( 1, ">500 ms" );
+        }
+        else
+        {
+            pCurListViewItem->
+                setText ( 1, QString().setNum ( iPingTime ) + " ms" );
+        }
+
+        // update number of clients text
+        pCurListViewItem->
+            setText ( 2, QString().setNum ( iNumClients ) );
+
+        // a ping time was received, set item to visible (note that we have
+        // to check if the item is hidden, otherwise we get a lot of CPU
+        // usage by calling "setHidden(false)" even if the item was already
+        // visible)
+        if ( pCurListViewItem->isHidden() )
+        {
+            pCurListViewItem->setHidden ( false );
+        }
+
+        // update minimum ping time column (invisible, used for sorting) if
+        // the new value is smaller than the old value
+        if ( pCurListViewItem->text ( 4 ).toInt() > iPingTime )
+        {
+            // we pad to a total of 8 characters with zeros to make sure the
+            // sorting is done correctly
+            pCurListViewItem->setText ( 4, QString ( "%1" ).arg (
+                iPingTime, 8, 10, QLatin1Char ( '0' ) ) );
+
+            // Update the sorting (lowest number on top).
+            // Note that the sorting must be the last action for the current
+            // item since the topLevelItem ( iIdx ) is then no longer valid.
+            lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
+        }
+
+        // check if the current number of clients is the same as the number
+        // of child items, if not, we remove all child items
+        if ( iNumClients != pCurListViewItem->childCount() )
+        {
+            // delete all childs
+            DeleteAllListViewItemChilds ( pCurListViewItem );
+        }
+    }
+
+    // if no server item has childs, do not show decoration
+    bool bAnyListItemHasChilds = false;
+    const int iServerListLen   = lvwServers->topLevelItemCount();
+
+    for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+    {
+        // check if the current list item has childs
+        if ( lvwServers->topLevelItem ( iIdx )->childCount() > 0 )
+        {
+            bAnyListItemHasChilds = true;
+        }
+    }
+
+    if ( !bAnyListItemHasChilds )
+    {
+        lvwServers->setRootIsDecorated ( false );
+    }
+}
+
+QTreeWidgetItem* CConnectDlg::FindListViewItem ( const CHostAddress& InetAddr )
+{
     const int iServerListLen = lvwServers->topLevelItemCount();
 
     for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
@@ -411,66 +598,43 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
                 data ( 0, Qt::UserRole ).toString().
                 compare ( InetAddr.toString() ) )
         {
-            // update the color of the ping time font
-            switch ( ePingTimeLEDColor )
-            {
-            case CMultiColorLED::RL_GREEN:
-                lvwServers->
-                    topLevelItem ( iIdx )->setTextColor ( 1, Qt::darkGreen );
-                break;
-
-            case CMultiColorLED::RL_YELLOW:
-                lvwServers->
-                    topLevelItem ( iIdx )->setTextColor ( 1, Qt::darkYellow );
-                break;
-
-            default: // including "CMultiColorLED::RL_RED"
-                lvwServers->
-                    topLevelItem ( iIdx )->setTextColor ( 1, Qt::red );
-                break;
-            }
-
-            // update ping text, take special care if ping time exceeds a
-            // certain value
-            if ( iPingTime > 500 )
-            {
-                lvwServers->topLevelItem ( iIdx )->setText ( 1, ">500 ms" );
-            }
-            else
-            {
-                lvwServers->topLevelItem ( iIdx )->
-                    setText ( 1, QString().setNum ( iPingTime ) + " ms" );
-            }
-
-            // update number of clients text
-            lvwServers->topLevelItem ( iIdx )->
-                setText ( 2, QString().setNum ( iNumClients ) );
-
-            // a ping time was received, set item to visible (note that we have
-            // to check if the item is hidden, otherwise we get a lot of CPU
-            // usage by calling "setHidden(false)" even if the item was already
-            // visible)
-            if ( lvwServers->topLevelItem ( iIdx )->isHidden() )
-            {
-                lvwServers->topLevelItem ( iIdx )->setHidden ( false );
-            }
-
-            // update minimum ping time column (invisible, used for sorting) if
-            // the new value is smaller than the old value
-            if ( lvwServers->topLevelItem ( iIdx )->text ( 4 ).toInt() > iPingTime )
-            {
-                // we pad to a total of 8 characters with zeros to make sure the
-                // sorting is done correctly
-                lvwServers->topLevelItem ( iIdx )->
-                    setText ( 4, QString ( "%1" ).arg (
-                    iPingTime, 8, 10, QLatin1Char ( '0' ) ) );
-
-                // Update the sorting (lowest number on top).
-                // Note that the sorting must be the last action for the current
-                // item since the topLevelItem ( iIdx ) is then no longer valid.
-                lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
-            }
+            return lvwServers->topLevelItem ( iIdx );
         }
+    }
+
+    return NULL;
+}
+
+QTreeWidgetItem* CConnectDlg::GetParentListViewItem ( QTreeWidgetItem* pItem )
+{
+    // check if the current item is already the top item, i.e. the parent
+    // query fails and returns null
+    if ( pItem->parent() )
+    {
+        // we only have maximum one level, i.e. if we call the parent function
+        // we are at the top item
+        return pItem->parent();
+    }
+    else
+    {
+        // this item is already the top item
+        return pItem;
+    }
+}
+
+void CConnectDlg::DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem )
+{
+    // loop over all childs
+    while ( pItem->childCount() > 0 )
+    {
+        // get the first child in the list
+        QTreeWidgetItem* pCurChildItem = pItem->child ( 0 );
+
+        // remove it from the item (note that the object is not deleted)
+        pItem->removeChild ( pCurChildItem );
+
+        // delete the object to avoid a memory leak
+        delete pCurChildItem;
     }
 }
 
@@ -480,28 +644,21 @@ void CConnectDlg::SetVersionAndOSType ( CHostAddress           InetAddr,
                                         QString                strVersion )
 {
     // apply the received version and OS type to the correct server list entry
-    const int iServerListLen = lvwServers->topLevelItemCount();
+    QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
 
-    for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+    if ( pCurListViewItem )
     {
-        // compare the received address with the user data string of the
-        // host address by a string compare
-        if ( !lvwServers->topLevelItem ( iIdx )->
-                data ( 0, Qt::UserRole ).toString().
-                compare ( InetAddr.toString() ) )
-        {
 // TEST since this is just a debug info, we just reuse the ping column (note
 // the we have to replace the ping message emit with the version and OS request
 // so that this works, see above code)
-lvwServers->topLevelItem ( iIdx )->
+pCurListViewItem->
     setText ( 1, strVersion + "/" + COSUtil::GetOperatingSystemString ( eOSType ) );
 
 // a version and OS type was received, set item to visible
-if ( lvwServers->topLevelItem ( iIdx )->isHidden() )
+if ( pCurListViewItem->isHidden() )
 {
-    lvwServers->topLevelItem ( iIdx )->setHidden ( false );
+    pCurListViewItem->setHidden ( false );
 }
-        }
     }
 }
 #endif

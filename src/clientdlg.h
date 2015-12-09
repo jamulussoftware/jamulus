@@ -176,9 +176,16 @@ public slots:
     void OnCreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr )
         { pClient->CreateCLServerListReqVerAndOSMes ( InetAddr ); }
 
+    void OnCreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr )
+        { pClient->CreateCLServerListReqConnClientsListMes ( InetAddr ); }
+
     void OnCLServerListReceived ( CHostAddress         InetAddr,
                                   CVector<CServerInfo> vecServerInfo )
         { ConnectDlg.SetServerList ( InetAddr, vecServerInfo ); }
+
+    void OnCLConnClientsListMesReceived ( CHostAddress          InetAddr,
+                                          CVector<CChannelInfo> vecChanInfo )
+        { ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo ); }
 
     void OnConnectDlgAccepted();
     void OnDisconnected();

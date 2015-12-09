@@ -205,6 +205,10 @@ QObject::connect ( &Channel, SIGNAL ( OpusSupported() ),
         SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ) );
 
     QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLConnClientsListMesReceived ( CHostAddress, CVector<CChannelInfo> ) ),
+        SIGNAL ( CLConnClientsListMesReceived ( CHostAddress, CVector<CChannelInfo> ) ) );
+
+    QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
         this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
 

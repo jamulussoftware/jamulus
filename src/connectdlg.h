@@ -29,6 +29,7 @@
 #include <QTimer>
 #include <QMutex>
 #include <QLocale>
+#include <QMenu>
 #include "global.h"
 #include "client.h"
 #include "multicolorled.h"
@@ -57,6 +58,9 @@ public:
     void SetServerList ( const CHostAddress&         InetAddr,
                          const CVector<CServerInfo>& vecServerInfo );
 
+    void SetConnClientsList ( const CHostAddress&          InetAddr,
+                              const CVector<CChannelInfo>& vecChanInfo );
+
     void SetPingTimeAndNumClientsResult ( CHostAddress&                     InetAddr,
                                           const int                         iPingTime,
                                           const CMultiColorLED::ELightColor ePingTimeLEDColor,
@@ -76,6 +80,11 @@ protected:
     virtual void showEvent ( QShowEvent* );
     virtual void hideEvent ( QHideEvent* );
 
+    QTreeWidgetItem* FindListViewItem ( const CHostAddress& InetAddr );
+    QTreeWidgetItem* GetParentListViewItem ( QTreeWidgetItem* pItem );
+    void             DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
+
+    QMenu*           pServerListContextMenu;
     QTimer           TimerPing;
     QTimer           TimerReRequestServList;
     QString          strCentralServerAddress;
@@ -90,6 +99,8 @@ protected:
 public slots:
     void OnServerListItemSelectionChanged();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
+    void OnCustomContextMenuRequested ( const QPoint& Position );
+    void OnServerListContextMenuNames();
     void OnServerAddrEditTextChanged ( const QString& );
     void OnConnectClicked();
     void OnTimerPing();
@@ -99,4 +110,5 @@ signals:
     void ReqServerListQuery ( CHostAddress InetAddr );
     void CreateCLServerListPingMes ( CHostAddress InetAddr );
     void CreateCLServerListReqVerAndOSMes ( CHostAddress InetAddr );
+    void CreateCLServerListReqConnClientsListMes ( CHostAddress InetAddr );
 };

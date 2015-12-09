@@ -124,10 +124,8 @@ public:
     void CreateCLVersionAndOSMes       ( const CHostAddress& InetAddr );
     void CreateCLReqVersionAndOSMes    ( const CHostAddress& InetAddr );
     void CreateCLConnClientsListMes    ( const CHostAddress&          InetAddr,
-                                         const int                    iRequestID,
                                          const CVector<CChannelInfo>& vecChanInfo );
-    void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr,
-                                         const int           iRequestID );
+    void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -237,16 +235,15 @@ protected:
     bool EvaluateCLUnregisterServerMes   ( const CHostAddress&     InetAddr );
     bool EvaluateCLServerListMes         ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
-    bool EvaluateCLReqServerListMes      ( const CHostAddress& InetAddr );
+    bool EvaluateCLReqServerListMes      ( const CHostAddress&     InetAddr );
     bool EvaluateCLSendEmptyMesMes       ( const CVector<uint8_t>& vecData );
-    bool EvaluateCLDisconnectionMes      ( const CHostAddress& InetAddr );
+    bool EvaluateCLDisconnectionMes      ( const CHostAddress&     InetAddr );
     bool EvaluateCLVersionAndOSMes       ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
-    bool EvaluateCLReqVersionAndOSMes    ( const CHostAddress& InetAddr );
+    bool EvaluateCLReqVersionAndOSMes    ( const CHostAddress&     InetAddr );
     bool EvaluateCLConnClientsListMes    ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
-    bool EvaluateCLReqConnClientsListMes ( const CHostAddress&     InetAddr,
-                                           const CVector<uint8_t>& vecData );
+    bool EvaluateCLReqConnClientsListMes ( const CHostAddress&     InetAddr );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -303,10 +300,8 @@ signals:
                                         QString                strVersion );
     void CLReqVersionAndOS            ( CHostAddress           InetAddr );
     void CLConnClientsListMesReceived ( CHostAddress           InetAddr,
-                                        int                    iRequestID,
                                         CVector<CChannelInfo>  vecChanInfo );
-    void CLReqConnClientsList         ( CHostAddress           InetAddr,
-                                        int                    iRequestID );
+    void CLReqConnClientsList         ( CHostAddress           InetAddr );
 };
 
 #endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

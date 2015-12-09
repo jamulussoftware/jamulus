@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>CConnectDlgBase</class>
- <widget class="QDialog" name="CConnectDlgBase" >
-  <property name="geometry" >
+ <widget class="QDialog" name="CConnectDlgBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,70 +10,65 @@
     <height>294</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Connection Setup</string>
   </property>
-  <property name="windowIcon" >
-   <iconset resource="resources.qrc" >:/png/main/res/mainicon.png</iconset>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/png/main/res/mainicon.png</normaloff>:/png/main/res/mainicon.png</iconset>
   </property>
-  <property name="styleSheet" >
+  <property name="styleSheet">
    <string/>
   </property>
-  <property name="sizeGripEnabled" >
+  <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <widget class="QTreeWidget" name="lvwServers" >
-     <property name="editTriggers" >
+    <widget class="QTreeWidget" name="lvwServers">
+     <property name="editTriggers">
       <set>QAbstractItemView::NoEditTriggers</set>
      </property>
-     <property name="tabKeyNavigation" >
+     <property name="tabKeyNavigation">
       <bool>true</bool>
      </property>
-     <property name="rootIsDecorated" >
-      <bool>false</bool>
-     </property>
-     <property name="itemsExpandable" >
-      <bool>false</bool>
-     </property>
      <column>
-      <property name="text" >
+      <property name="text">
        <string>Server Name</string>
       </property>
      </column>
      <column>
-      <property name="text" >
+      <property name="text">
        <string>Ping Time</string>
       </property>
      </column>
      <column>
-      <property name="text" >
+      <property name="text">
        <string>Musicians</string>
       </property>
      </column>
      <column>
-      <property name="text" >
+      <property name="text">
        <string>Location</string>
       </property>
      </column>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
-      <widget class="QLabel" name="lblServerAddr" >
-       <property name="text" >
+      <widget class="QLabel" name="lblServerAddr">
+       <property name="text">
         <string>Server Name/Address</string>
        </property>
-       <property name="alignment" >
+       <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="cbxServerAddr" >
-       <property name="editable" >
+      <widget class="QComboBox" name="cbxServerAddr">
+       <property name="editable">
         <bool>true</bool>
        </property>
       </widget>
@@ -80,13 +76,13 @@
     </layout>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>351</width>
          <height>25</height>
@@ -95,18 +91,18 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="butCancel" >
-       <property name="text" >
+      <widget class="QPushButton" name="butCancel">
+       <property name="text">
         <string>C&amp;ancel</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="butConnect" >
-       <property name="text" >
+      <widget class="QPushButton" name="butConnect">
+       <property name="text">
         <string>&amp;Connect</string>
        </property>
-       <property name="default" >
+       <property name="default">
         <bool>true</bool>
        </property>
       </widget>
@@ -116,7 +112,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="resources.qrc" />
+  <include location="resources.qrc"/>
  </resources>
  <connections/>
 </ui>

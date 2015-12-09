@@ -267,9 +267,10 @@ public:
     }
 
     void CreateCLServerListReqVerAndOSMes ( const CHostAddress& InetAddr )
-    {
-        ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr );
-    }
+        { ConnLessProtocol.CreateCLReqVersionAndOSMes ( InetAddr ); }
+
+    void CreateCLServerListReqConnClientsListMes ( const CHostAddress& InetAddr )
+        { ConnLessProtocol.CreateCLReqConnClientsListMes ( InetAddr ); }
 
     void CreateCLReqServerListMes ( const CHostAddress& InetAddr )
         { ConnLessProtocol.CreateCLReqServerListMes ( InetAddr ); }
@@ -427,6 +428,9 @@ signals:
 
     void CLServerListReceived ( CHostAddress         InetAddr,
                                 CVector<CServerInfo> vecServerInfo );
+
+    void CLConnClientsListMesReceived ( CHostAddress          InetAddr,
+                                        CVector<CChannelInfo> vecChanInfo );
 
     void CLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
                                             int          iPingTime,

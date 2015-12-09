@@ -810,6 +810,25 @@ public:
         iChanID ( NiID ),
         iIpAddr ( NiIP ) {}
 
+    QString GenNameForDisplay() const
+    {
+        // if text is empty, show IP address instead
+        if ( strName.isEmpty() )
+        {
+            // convert IP address to text and show it (use dummy port number
+            // since it is not used here)
+            const CHostAddress TempAddr =
+                CHostAddress ( QHostAddress ( iIpAddr ), 0 );
+
+            return TempAddr.toString ( CHostAddress::SM_IP_NO_LAST_BYTE );
+        }
+        else
+        {
+            // show name of channel
+            return strName;
+        }
+    }
+
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 CChannelInfo ( const int               NiID,

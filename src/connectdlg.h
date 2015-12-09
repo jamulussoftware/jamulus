@@ -29,7 +29,6 @@
 #include <QTimer>
 #include <QMutex>
 #include <QLocale>
-#include <QMenu>
 #include "global.h"
 #include "client.h"
 #include "multicolorled.h"
@@ -84,7 +83,6 @@ protected:
     QTreeWidgetItem* GetParentListViewItem ( QTreeWidgetItem* pItem );
     void             DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
 
-    QMenu*           pServerListContextMenu;
     QTimer           TimerPing;
     QTimer           TimerReRequestServList;
     QString          strCentralServerAddress;
@@ -99,8 +97,6 @@ protected:
 public slots:
     void OnServerListItemSelectionChanged();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
-    void OnCustomContextMenuRequested ( const QPoint& Position );
-    void OnServerListContextMenuNames();
     void OnServerAddrEditTextChanged ( const QString& );
     void OnConnectClicked();
     void OnTimerPing();

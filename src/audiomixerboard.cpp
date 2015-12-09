@@ -308,7 +308,7 @@ void CChannelFader::SetText ( const CChannelInfo& ChanInfo )
     // break text at predefined position
     const int iBreakPos = MAX_LEN_FADER_TAG / 2;
 
-    QString strModText = GenFaderText ( ChanInfo );
+    QString strModText = ChanInfo.GenNameForDisplay();
 
     if ( strModText.length() > iBreakPos )
     {
@@ -457,25 +457,6 @@ double CChannelFader::CalcFaderGain ( const int value )
     // convert actual slider range in gain values
     // and normalize so that maximum gain is 1
     return static_cast<double> ( value ) / AUD_MIX_FADER_MAX;
-}
-
-QString CChannelFader::GenFaderText ( const CChannelInfo& ChanInfo )
-{
-    // if text is empty, show IP address instead
-    if ( ChanInfo.strName.isEmpty() )
-    {
-        // convert IP address to text and show it (use dummy port number
-        // since it is not used here)
-        const CHostAddress TempAddr =
-            CHostAddress ( QHostAddress ( ChanInfo.iIpAddr ), 0 );
-
-        return TempAddr.toString ( CHostAddress::SM_IP_NO_LAST_BYTE );
-    }
-    else
-    {
-        // show name of channel
-        return ChanInfo.strName;
-    }
 }
 
 

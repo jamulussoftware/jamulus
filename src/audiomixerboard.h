@@ -62,11 +62,10 @@ public:
     void Reset();
 
 protected:
-    double  CalcFaderGain ( const int value );
-    void    SetMute ( const bool bState );
-    QString GenFaderText ( const CChannelInfo& ChanInfo );
-    void    SendFaderLevelToServer ( const int iLevel );
-    void    SetupFaderTag ( const ESkillLevel eSkillLevel );
+    double CalcFaderGain ( const int value );
+    void   SetMute ( const bool bState );
+    void   SendFaderLevelToServer ( const int iLevel );
+    void   SetupFaderTag ( const ESkillLevel eSkillLevel );
 
     QFrame*    pFrame;
     QGroupBox* pLabelInstBox;

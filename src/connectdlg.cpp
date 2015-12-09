@@ -93,16 +93,8 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     lvwServers->setColumnCount ( 5 );
     lvwServers->hideColumn ( 4 );
 
-    // setup the server list context menu
-    lvwServers->setContextMenuPolicy ( Qt::CustomContextMenu );
-
     // per default the root shall not be decorated (to save space)
     lvwServers->setRootIsDecorated ( false );
-
-    pServerListContextMenu = new QMenu ( this );
-
-    pServerListContextMenu->addAction ( tr ( "&Query Musicians Names" ), this,
-        SLOT ( OnServerListContextMenuNames() ) );
 
     // make sure the connect button has the focus
     butConnect->setFocus();
@@ -126,10 +118,6 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     QObject::connect ( lvwServers, // to get default return key behaviour working
         SIGNAL ( activated ( QModelIndex ) ),
         this, SLOT ( OnConnectClicked() ) );
-
-    QObject::connect ( lvwServers,
-        SIGNAL ( customContextMenuRequested ( const QPoint& ) ),
-        this, SLOT ( OnCustomContextMenuRequested ( const QPoint& ) ) );
 
     // combo boxes
     QObject::connect ( cbxServerAddr, SIGNAL ( editTextChanged ( const QString& ) ),
@@ -344,15 +332,14 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
             pNewChildListViewItem->setFirstColumnSpanned ( true );
 
             // set the clients name
-            pNewChildListViewItem->setText ( 0, vecChanInfo[i].strName );
+            pNewChildListViewItem->setText ( 0, vecChanInfo[i].GenNameForDisplay() );
 
             // add the new child to the corresponding server item
             pCurListViewItem->addChild ( pNewChildListViewItem );
 
             // at least one server has childs now, show decoration to be able
-            // to show the childs and also expand to see the new childs
+            // to show the childs
             lvwServers->setRootIsDecorated ( true );
-            lvwServers->expandItem ( pCurListViewItem );
         }
     }
 }
@@ -384,24 +371,6 @@ void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item,
     if ( Item != 0 )
     {
         OnConnectClicked();
-    }
-}
-
-void CConnectDlg::OnCustomContextMenuRequested ( const QPoint& Position )
-{
-    // get the item to which the context menu is assigned to based on the given
-    // mouse position
-    QTreeWidgetItem* Item = lvwServers->itemAt ( Position );
-
-    // first check if the item is valid
-    if ( Item != 0 )
-    {
-        // only show the context menu if there is at least von conntected client
-        if ( Item->text ( 2 ).toInt() > 0  )
-        {
-            // use the given position for the position of the context menu
-            pServerListContextMenu->exec ( lvwServers->mapToGlobal ( Position ) );
-        }
     }
 }
 
@@ -444,28 +413,6 @@ void CConnectDlg::OnConnectClicked()
     done ( QDialog::Accepted );
 }
 
-void CConnectDlg::OnServerListContextMenuNames()
-{
-    // get the current selected item(s)
-    QList<QTreeWidgetItem*> CurSelListItemList = lvwServers->selectedItems();
-
-    if ( CurSelListItemList.count() > 0 )
-    {
-        CHostAddress CurServerAddress;
-
-        // try to parse host address string which is stored as user data
-        // in the server list item GUI control element
-        if ( NetworkUtil().ParseNetworkAddress (
-                CurSelListItemList[0]->
-                data ( 0, Qt::UserRole ).toString(),
-                CurServerAddress ) )
-        {
-            // if address is valid, send connected clients list request
-            emit CreateCLServerListReqConnClientsListMes ( CurServerAddress );
-        }
-    }
-}
-
 void CConnectDlg::OnTimerPing()
 {
     // send ping messages to the servers in the list
@@ -488,6 +435,14 @@ void CConnectDlg::OnTimerPing()
 #else
             emit CreateCLServerListPingMes ( CurServerAddress );
 #endif
+
+            // check if the number of child list items matches the number of
+            // connected clients, if not then request the client names
+            if ( lvwServers->topLevelItem ( iIdx )->text ( 2 ).toInt() !=
+                 lvwServers->topLevelItem ( iIdx )->childCount() )
+            {
+                emit CreateCLServerListReqConnClientsListMes ( CurServerAddress );
+            }
         }
     }
 }
@@ -556,14 +511,6 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
             // Note that the sorting must be the last action for the current
             // item since the topLevelItem ( iIdx ) is then no longer valid.
             lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
-        }
-
-        // check if the current number of clients is the same as the number
-        // of child items, if not, we remove all child items
-        if ( iNumClients != pCurListViewItem->childCount() )
-        {
-            // delete all childs
-            DeleteAllListViewItemChilds ( pCurListViewItem );
         }
     }
 

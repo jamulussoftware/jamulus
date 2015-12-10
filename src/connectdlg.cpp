@@ -332,7 +332,51 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
             pNewChildListViewItem->setFirstColumnSpanned ( true );
 
             // set the clients name
-            pNewChildListViewItem->setText ( 0, vecChanInfo[i].GenNameForDisplay() );
+            QString sClientText = vecChanInfo[i].GenNameForDisplay();
+
+            // set the icon: country flag has priority over instrument
+            bool bCountryFlagIsUsed = false;
+
+            if ( vecChanInfo[i].eCountry != QLocale::AnyCountry )
+            {
+                // try to load the country flag icon
+                QPixmap CountryFlagPixmap (
+                    CCountyFlagIcons::GetResourceReference ( vecChanInfo[i].eCountry ) );
+
+                // first check if resource reference was valid
+                if ( !CountryFlagPixmap.isNull() )
+                {
+                    // set correct picture
+                    pNewChildListViewItem->setIcon ( 0, QIcon ( CountryFlagPixmap ) );
+
+                    // add the instrument information as text
+                    if ( !CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) )
+                    {
+                        sClientText.append ( " (" +
+                            CInstPictures::GetName ( vecChanInfo[i].iInstrument ) + ")" );
+                    }
+
+                    bCountryFlagIsUsed = true;
+                }
+            }
+
+            if ( !bCountryFlagIsUsed )
+            {
+                // get the resource reference string for this instrument
+                const QString strCurResourceRef =
+                    CInstPictures::GetResourceReference ( vecChanInfo[i].iInstrument );
+
+                // first check if instrument picture is used or not and if it is valid
+                if ( !( CInstPictures::IsNotUsedInstrument ( vecChanInfo[i].iInstrument ) ||
+                        strCurResourceRef.isEmpty() ) )
+                {
+                    // set correct picture
+                    pNewChildListViewItem->setIcon ( 0, QIcon ( QPixmap ( strCurResourceRef ) ) );
+                }
+            }
+
+            // apply the client text to the list view item
+            pNewChildListViewItem->setText ( 0, sClientText );
 
             // add the new child to the corresponding server item
             pCurListViewItem->addChild ( pNewChildListViewItem );

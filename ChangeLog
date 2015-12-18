@@ -1,9 +1,13 @@
 
+
 3.4.1
 
+ - show the number of connected clients in the MacOS task bar if more
+   than one client is connected
 
 
-3.4.0
+
+3.4.0 (2015-12-10)
 
 - show the names of the connected clients in the server list
 

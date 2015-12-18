@@ -47,6 +47,7 @@ win32 {
         winmm.lib \
         ws2_32.lib
 } else:macx {
+    QT += macextras
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp
     RC_FILE = mac/mainicon.icns

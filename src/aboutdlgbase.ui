@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>CAboutDlgBase</class>
- <widget class="QDialog" name="CAboutDlgBase" >
-  <property name="geometry" >
+ <widget class="QDialog" name="CAboutDlgBase">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,77 +10,78 @@
     <height>465</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>About</string>
   </property>
-  <property name="windowIcon" >
-   <iconset resource="resources.qrc" >:/png/main/res/mainicon.png</iconset>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/png/main/res/mainicon.png</normaloff>:/png/main/res/mainicon.png</iconset>
   </property>
-  <property name="sizeGripEnabled" >
+  <property name="sizeGripEnabled">
    <bool>true</bool>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QVBoxLayout">
    <item>
-    <layout class="QHBoxLayout" >
+    <layout class="QHBoxLayout">
      <item>
-      <layout class="QVBoxLayout" >
+      <layout class="QVBoxLayout">
        <item>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
+        <layout class="QHBoxLayout">
+         <property name="spacing">
           <number>6</number>
          </property>
-         <property name="leftMargin" >
+         <property name="leftMargin">
           <number>0</number>
          </property>
-         <property name="topMargin" >
+         <property name="topMargin">
           <number>0</number>
          </property>
-         <property name="rightMargin" >
+         <property name="rightMargin">
           <number>0</number>
          </property>
-         <property name="bottomMargin" >
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
-          <widget class="QLabel" name="PixmapLabelDreamLogo" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+          <widget class="QLabel" name="PixmapLabelDreamLogo">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="pixmap" >
+           <property name="pixmap">
             <pixmap/>
            </property>
-           <property name="scaledContents" >
+           <property name="scaledContents">
             <bool>true</bool>
            </property>
-           <property name="wordWrap" >
+           <property name="wordWrap">
             <bool>false</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="lblVersion" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Preferred" hsizetype="Expanding" >
+          <widget class="QLabel" name="lblVersion">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <property name="text" >
+           <property name="text">
             <string>TextLabelVersion</string>
            </property>
-           <property name="alignment" >
+           <property name="alignment">
             <set>Qt::AlignCenter</set>
            </property>
-           <property name="wordWrap" >
+           <property name="wordWrap">
             <bool>false</bool>
            </property>
           </widget>
@@ -87,55 +89,55 @@
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" >
-         <property name="spacing" >
+        <layout class="QHBoxLayout">
+         <property name="spacing">
           <number>6</number>
          </property>
-         <property name="leftMargin" >
+         <property name="leftMargin">
           <number>0</number>
          </property>
-         <property name="topMargin" >
+         <property name="topMargin">
           <number>0</number>
          </property>
-         <property name="rightMargin" >
+         <property name="rightMargin">
           <number>0</number>
          </property>
-         <property name="bottomMargin" >
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
-          <layout class="QVBoxLayout" >
-           <property name="spacing" >
+          <layout class="QVBoxLayout">
+           <property name="spacing">
             <number>6</number>
            </property>
-           <property name="leftMargin" >
+           <property name="leftMargin">
             <number>0</number>
            </property>
-           <property name="topMargin" >
+           <property name="topMargin">
             <number>0</number>
            </property>
-           <property name="rightMargin" >
+           <property name="rightMargin">
             <number>0</number>
            </property>
-           <property name="bottomMargin" >
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
-            <widget class="QLabel" name="lblAuthorNames" >
-             <property name="text" >
+            <widget class="QLabel" name="lblAuthorNames">
+             <property name="text">
               <string>Author: Volker Fischer</string>
              </property>
-             <property name="wordWrap" >
+             <property name="wordWrap">
               <bool>false</bool>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="lblCopyright" >
-             <property name="text" >
-              <string>Copyright (C) 2005-2015</string>
+            <widget class="QLabel" name="lblCopyright">
+             <property name="text">
+              <string>Copyright (C) 2005-2016</string>
              </property>
-             <property name="wordWrap" >
+             <property name="wordWrap">
               <bool>false</bool>
              </property>
             </widget>
@@ -144,13 +146,13 @@
          </item>
          <item>
           <spacer>
-           <property name="orientation" >
+           <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
-           <property name="sizeType" >
+           <property name="sizeType">
             <enum>QSizePolicy::Expanding</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0">
             <size>
              <width>20</width>
              <height>20</height>
@@ -163,26 +165,26 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" >
+      <layout class="QVBoxLayout">
        <item>
-        <widget class="QLabel" name="pxlGigPicture" >
-         <property name="text" >
+        <widget class="QLabel" name="pxlGigPicture">
+         <property name="text">
           <string/>
          </property>
-         <property name="pixmap" >
-          <pixmap resource="resources.qrc" >:/png/main/res/logopicture.png</pixmap>
+         <property name="pixmap">
+          <pixmap resource="resources.qrc">:/png/main/res/logopicture.png</pixmap>
          </property>
         </widget>
        </item>
        <item>
         <spacer>
-         <property name="orientation" >
+         <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeType" >
+         <property name="sizeType">
           <enum>QSizePolicy::Minimum</enum>
          </property>
-         <property name="sizeHint" >
+         <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
            <height>1</height>
@@ -195,34 +197,34 @@
     </layout>
    </item>
    <item>
-    <widget class="QTextBrowser" name="txvCredits" />
+    <widget class="QTextBrowser" name="txvCredits"/>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="spacing" >
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>6</number>
      </property>
-     <property name="leftMargin" >
+     <property name="leftMargin">
       <number>0</number>
      </property>
-     <property name="topMargin" >
+     <property name="topMargin">
       <number>0</number>
      </property>
-     <property name="rightMargin" >
+     <property name="rightMargin">
       <number>0</number>
      </property>
-     <property name="bottomMargin" >
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <item>
       <spacer>
-       <property name="orientation" >
+       <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeType" >
+       <property name="sizeType">
         <enum>QSizePolicy::Expanding</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
          <height>20</height>
@@ -231,14 +233,14 @@
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="buttonOk" >
-       <property name="text" >
+      <widget class="QPushButton" name="buttonOk">
+       <property name="text">
         <string>&amp;OK</string>
        </property>
-       <property name="autoDefault" >
+       <property name="autoDefault">
         <bool>true</bool>
        </property>
-       <property name="default" >
+       <property name="default">
         <bool>true</bool>
        </property>
       </widget>
@@ -252,7 +254,7 @@
   <tabstop>txvCredits</tabstop>
  </tabstops>
  <resources>
-  <include location="resources.qrc" />
+  <include location="resources.qrc"/>
  </resources>
  <connections>
   <connection>
@@ -261,11 +263,11 @@
    <receiver>CAboutDlgBase</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>20</x>
      <y>20</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>20</x>
      <y>20</y>
     </hint>

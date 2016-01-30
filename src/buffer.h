@@ -43,7 +43,7 @@
 #define UP_MAX_ERROR_BOUND                  0.01
 
 // number of simulation network jitter buffers for evaluating the statistic
-#define NUM_STAT_SIMULATION_BUFFERS         11
+#define NUM_STAT_SIMULATION_BUFFERS         10
 
 
 /* Classes ********************************************************************/

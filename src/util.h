@@ -1151,7 +1151,7 @@ public:
 #else
         timespec tp;
         clock_gettime ( CLOCK_MONOTONIC, &tp );
-        return tp.tv_nsec / 1000000; // convert ns in ms
+        return tp.tv_sec * 1000 + tp.tv_nsec / 1000000; // convert ns in ms and add the seconds part
 #endif
     }
 };

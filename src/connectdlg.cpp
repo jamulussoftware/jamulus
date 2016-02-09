@@ -290,7 +290,8 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
 // Do not enable this for official versions!
 #if 0
 strLocation += ", " + vecServerInfo[iIdx].HostAddr.InetAddr.toString() +
-    ":" + QString().setNum ( vecServerInfo[iIdx].HostAddr.iPort );
+    ":" + QString().setNum ( vecServerInfo[iIdx].HostAddr.iPort ) +
+    ", perm: " + QString().setNum ( vecServerInfo[iIdx].bPermanentOnline );
 #endif
 
         pNewListViewItem->setText ( 3, strLocation );

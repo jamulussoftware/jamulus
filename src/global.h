@@ -204,6 +204,9 @@ LED bar:      lbr
 // time until a slave server registers in the server list
 #define SERVLIST_REGIST_INTERV_MINUTES  15 // minutes
 
+// defines the minimum time a server must run to be a permanent server
+#define SERVLIST_TIME_PERMSERV_MINUTES  1440 // minutes, 1440 = 60 min * 24 h
+
 
 // length of the moving average buffer for response time measurement
 #define TIME_MOV_AV_RESPONSE_SECONDS    30 // seconds

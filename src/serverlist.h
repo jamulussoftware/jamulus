@@ -206,6 +206,7 @@ public slots:
     void OnTimerPingServerInList();
     void OnTimerPingCentralServer();
     void OnTimerRegistering() { SlaveServerRegisterServer ( true ); }
+    void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }
 };
 
 #endif /* !defined ( SERVERLIST_HOIJH8OUWEF_WFEIOBU_3_43445KJIUHF1912__INCLUDED_ ) */

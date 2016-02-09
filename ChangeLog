@@ -9,6 +9,8 @@
 
 - the Musicians value in the server list shows a warning if the server is full
 
+- automatic server setting for permanent server flag in the protocol
+
 - bug fix: ping time measurement may be invalid for the Linux OS
 
 

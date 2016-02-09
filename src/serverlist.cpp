@@ -151,6 +151,15 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         iNumPredefinedServers++;
     }
 
+    // for slave servers start the one shot timer for determining if it is a
+    // permanent server
+    if ( !GetIsCentralServer() )
+    {
+        // 1 minute = 60 * 1000 ms
+        QTimer::singleShot ( SERVLIST_TIME_PERMSERV_MINUTES * 60000,
+            this, SLOT ( OnTimerIsPermanent() ) );
+    }
+
 
     // Connections -------------------------------------------------------------
     QObject::connect ( &TimerPollList, SIGNAL ( timeout() ),

@@ -7,6 +7,8 @@
 
 - avoid a single jitter buffer for the auto detection
 
+- the Musicians value in the server list shows a warning if the server is full
+
 - bug fix: ping time measurement may be invalid for the Linux OS
 
 

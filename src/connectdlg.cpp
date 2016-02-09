@@ -89,9 +89,11 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
 #endif
     lvwServers->clear();
 
-    // add invisible column which is used for sorting the list
-    lvwServers->setColumnCount ( 5 );
+    // add invisible columns which are used for sorting the list and storing
+    // the maximum number of clients
+    lvwServers->setColumnCount ( 6 );
     lvwServers->hideColumn ( 4 );
+    lvwServers->hideColumn ( 5 );
 
     // per default the root shall not be decorated (to save space)
     lvwServers->setRootIsDecorated ( false );
@@ -267,7 +269,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         }
 
         // the ping time shall be shown in bold font
-        QFont CurPingTimeFont = pNewListViewItem->font( 3 );
+        QFont CurPingTimeFont = pNewListViewItem->font ( 3 );
         CurPingTimeFont.setBold ( true );
         pNewListViewItem->setFont ( 1, CurPingTimeFont );
 
@@ -296,6 +298,9 @@ strLocation += ", " + vecServerInfo[iIdx].HostAddr.InetAddr.toString() +
         // init the minimum ping time with a large number (note that this number
         // must fit in an integer type)
         pNewListViewItem->setText ( 4, "99999999" );
+
+        // store the maximum number of clients
+        pNewListViewItem->setText ( 5, QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) );
 
         // store host address
         pNewListViewItem->setData ( 0, Qt::UserRole,
@@ -530,8 +535,16 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
         }
 
         // update number of clients text
-        pCurListViewItem->
-            setText ( 2, QString().setNum ( iNumClients ) );
+        if ( iNumClients >= pCurListViewItem->text ( 5 ).toInt() )
+        {
+            pCurListViewItem->
+                setText ( 2, QString().setNum ( iNumClients ) + " (full)" );
+        }
+        else
+        {
+            pCurListViewItem->
+                setText ( 2, QString().setNum ( iNumClients ) );
+        }
 
         // a ping time was received, set item to visible (note that we have
         // to check if the item is hidden, otherwise we get a lot of CPU

@@ -58,9 +58,10 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     // never be deleted
     ServerList.clear();
 
-    // init server list entry (server info for this server) with defaults, per
+    // Init server list entry (server info for this server) with defaults. Per
     // definition the client substitudes the IP address of the central server
-    // itself for his server list
+    // itself for his server list. If we are the central server, we assume that
+    // we have a permanent server.
     CServerListEntry ThisServerListEntry ( CHostAddress(),
                                            iPortNumber,
                                            "",
@@ -68,7 +69,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                            QLocale::system().country(),
                                            "",
                                            iNumChannels,
-                                           true );
+                                           GetIsCentralServer() );
 
     // parse the server info string according to definition:
     // [this server name];[this server city]; ...
@@ -107,7 +108,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     while ( ( iServInfoNumSplitItems - iCurUsedServInfoSplitItems >= 4 ) &&
             ( iNumPredefinedServers <= MAX_NUM_SERVERS_IN_SERVER_LIST ) )
     {
-        // create a new server list entry
+        // create a new server list entry, we assume that servers which are
+        // registered via the command line are permanent servers
         CServerListEntry NewServerListEntry ( CHostAddress(),
                                               0, // port number not used
                                               "",

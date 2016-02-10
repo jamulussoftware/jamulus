@@ -1,4 +1,8 @@
 
+3.4.2
+
+
+
 
 3.4.1
 
@@ -12,8 +16,6 @@
 - automatic server setting for permanent server flag in the protocol
 
 - bug fix: ping time measurement may be invalid for the Linux OS
-
-
 
 
 3.4.0 (2015-12-10)

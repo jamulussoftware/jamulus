@@ -260,7 +260,6 @@ signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChanInfoHasChanged();
     void ReqChanInfo();
-    void OpusSupported();
     void ChatTextReceived ( QString strChatText );
     void ReqNetTranspProps();
     void LicenceRequired ( ELicenceType eLicenceType );

@@ -221,9 +221,6 @@ protected:
     bool EvaluateNetwTranspPropsMes   ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
     bool EvaluateLicenceRequiredMes   ( const CVector<uint8_t>& vecData );
-#ifdef USE_LEGACY_CELT
-    bool EvaluateOpusSupportedMes();
-#endif
 
     bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
@@ -276,7 +273,6 @@ signals:
     void ChangeChanName ( QString strName );
     void ChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void ReqChanInfo();
-    void OpusSupported();
     void ChatTextReceived ( QString strChatText );
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void ReqNetTranspProps();

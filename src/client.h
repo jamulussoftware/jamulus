@@ -30,9 +30,6 @@
 #include <QString>
 #include <QDateTime>
 #include <QMessageBox>
-#ifdef USE_LEGACY_CELT
-# include "cc6_celt.h"
-#endif
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
 #else
@@ -73,20 +70,6 @@
 
 // audio reverberation range
 #define AUD_REVERB_MAX                          100
-
-#ifdef USE_LEGACY_CELT
-// CELT number of coded bytes per audio packet
-// 24: mono low quality            156 kbps (128) / 114 kbps (256)
-// 44: mono normal quality         216 kbps (128) / 174 kbps (256)
-// NOTE: Must be > CELT_MINIMUM_NUM_BYTES (greater, not equal to!)
-# define CELT_NUM_BYTES_MONO_LOW_QUALITY         24
-# define CELT_NUM_BYTES_MONO_NORMAL_QUALITY      44
-
-// 46: stereo low quality          222 kbps (128) / 180 kbps (256)
-// 70: stereo normal quality       294 kbps (128) / 252 kbps (256)
-# define CELT_NUM_BYTES_STEREO_LOW_QUALITY       46
-# define CELT_NUM_BYTES_STEREO_NORMAL_QUALITY    70
-#endif
 
 // OPUS number of coded bytes per audio packet
 // TODO we have to use new numbers for OPUS to avoid that old CELT packets
@@ -316,24 +299,11 @@ protected:
     int         EvaluatePingMessage ( const int iMs );
     void        CreateServerJitterBufferMessage();
 
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-#ifdef USE_LEGACY_CELT
-void SetAudoCompressiontype ( const EAudComprType eNAudCompressionType );
-#endif
-
     // only one channel is needed for client application
     CChannel                Channel;
     CProtocol               ConnLessProtocol;
 
     // audio encoder/decoder
-#ifdef USE_LEGACY_CELT
-    cc6_CELTMode*           CeltModeMono;
-    cc6_CELTEncoder*        CeltEncoderMono;
-    cc6_CELTDecoder*        CeltDecoderMono;
-    cc6_CELTMode*           CeltModeStereo;
-    cc6_CELTEncoder*        CeltEncoderStereo;
-    cc6_CELTDecoder*        CeltDecoderStereo;
-#endif
     OpusCustomMode*         OpusMode;
     OpusCustomEncoder*      OpusEncoderMono;
     OpusCustomDecoder*      OpusDecoderMono;
@@ -414,11 +384,6 @@ public slots:
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
 
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-#ifdef USE_LEGACY_CELT
-void OnOpusSupported();
-#endif
-
 signals:
     void ConClientListNameMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
@@ -443,11 +408,6 @@ signals:
 #endif
 
     void Disconnected();
-
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-#ifdef USE_LEGACY_CELT
-void UpstreamRateChanged();
-#endif
 };
 
 #endif /* !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

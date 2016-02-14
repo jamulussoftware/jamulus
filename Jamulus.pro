@@ -16,8 +16,6 @@ QT += widgets \
 
 INCLUDEPATH += src
 
-INCLUDEPATH_CELT = libs/celt
-
 INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/celt \
     libs/opus/silk \
@@ -134,38 +132,6 @@ HEADERS += src/audiomixerboard.h \
     src/util.h \
     src/analyzerconsole.h
 
-HEADERS_CELT = libs/celt/cc6_celt.h \
-    libs/celt/cc6_celt_types.h \
-    libs/celt/cc6_celt_header.h \
-    libs/celt/cc6__kiss_fft_guts.h \
-    libs/celt/cc6_arch.h \
-    libs/celt/cc6_bands.h \
-    libs/celt/cc6_fixed_c5x.h \
-    libs/celt/cc6_fixed_c6x.h \
-    libs/celt/cc6_cwrs.h \
-    libs/celt/cc6_ecintrin.h \
-    libs/celt/cc6_entcode.h \
-    libs/celt/cc6_entdec.h \
-    libs/celt/cc6_entenc.h \
-    libs/celt/cc6_fixed_generic.h \
-    libs/celt/cc6_float_cast.h \
-    libs/celt/cc6_kfft_double.h \
-    libs/celt/cc6_kfft_single.h \
-    libs/celt/cc6_kiss_fft.h \
-    libs/celt/cc6_kiss_fftr.h \
-    libs/celt/cc6_laplace.h \
-    libs/celt/cc6_mdct.h \
-    libs/celt/cc6_mfrngcod.h \
-    libs/celt/cc6_mathops.h \
-    libs/celt/cc6_modes.h \
-    libs/celt/cc6_os_support.h \
-    libs/celt/cc6_pitch.h \
-    libs/celt/cc6_psy.h \
-    libs/celt/cc6_quant_bands.h \
-    libs/celt/cc6_rate.h \
-    libs/celt/cc6_stack_alloc.h \
-    libs/celt/cc6_vq.h
-
 HEADERS_OPUS = libs/opus/include/opus.h \
     libs/opus/include/opus_multistream.h \
     libs/opus/include/opus_custom.h \
@@ -259,27 +225,6 @@ SOURCES += src/audiomixerboard.cpp \
     src/soundbase.cpp \
     src/util.cpp \
     src/analyzerconsole.cpp
-
-SOURCES_CELT = libs/celt/cc6_bands.c \
-    libs/celt/cc6_celt.c \
-    libs/celt/cc6_cwrs.c \
-    libs/celt/cc6_entcode.c \
-    libs/celt/cc6_entdec.c \
-    libs/celt/cc6_entenc.c \
-    libs/celt/cc6_header.c \
-    libs/celt/cc6_kfft_single.c \
-    libs/celt/cc6__kiss_fft.c \
-    libs/celt/cc6__kiss_fftr.c \
-    libs/celt/cc6_laplace.c \
-    libs/celt/cc6_mdct.c \
-    libs/celt/cc6_modes.c \
-    libs/celt/cc6_pitch.c \
-    libs/celt/cc6_psy.c \
-    libs/celt/cc6_quant_bands.c \
-    libs/celt/cc6_rangedec.c \
-    libs/celt/cc6_rangeenc.c \
-    libs/celt/cc6_rate.c \
-    libs/celt/cc6_vq.c
 
 SOURCES_OPUS = libs/opus/src/opus.c \
     libs/opus/src/opus_decoder.c \
@@ -749,15 +694,6 @@ DISTFILES += AUTHORS \
     src/res/flags/zm.png \
     src/res/flags/zw.png
 
-DISTFILES_CELT += libs/celt/AUTHORS \
-    libs/celt/ChangeLog \
-    libs/celt/COPYING \
-    libs/celt/INSTALL \
-    libs/celt/NEWS \
-    libs/celt/README \
-    libs/celt/README_LLCON \
-    libs/celt/TODO
-
 DISTFILES_OPUS += libs/opus/AUTHORS \
     libs/opus/ChangeLog \
     libs/opus/COPYING \
@@ -766,17 +702,6 @@ DISTFILES_OPUS += libs/opus/AUTHORS \
     libs/opus/README \
     libs/opus/celt/arm/armopts.s.in \
     libs/opus/celt/arm/celt_pitch_xcorr_arm.s \
-
-# exclude CELT support if requested
-!contains(CONFIG, "nocelt") {
-    message(Legacy support for CELT enabled.)
-
-    INCLUDEPATH += $$INCLUDEPATH_CELT
-    HEADERS += $$HEADERS_CELT
-    SOURCES += $$SOURCES_CELT
-    DISTFILES += $$DISTFILES_CELT
-    DEFINES += USE_LEGACY_CELT
-}
 
 # use external OPUS library if requested
 contains(CONFIG, "opus_shared_lib") {

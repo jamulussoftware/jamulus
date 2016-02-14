@@ -488,12 +488,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         this, SLOT ( OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
 #endif
 
-#ifdef USE_LEGACY_CELT
-    QObject::connect ( pClient,
-        SIGNAL ( UpstreamRateChanged() ),
-        this, SLOT ( OnUpstreamRateChanged() ) );
-#endif
-
     QObject::connect ( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
         this, SLOT ( OnAboutToQuit() ) );
 

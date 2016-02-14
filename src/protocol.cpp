@@ -578,13 +578,6 @@ case PROTMESSID_CHANNEL_NAME:
             case PROTMESSID_LICENCE_REQUIRED:
                 bRet = EvaluateLicenceRequiredMes ( vecbyMesBodyData );
                 break;
-
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-#ifdef USE_LEGACY_CELT
-case PROTMESSID_OPUS_SUPPORTED:
-    bRet = EvaluateOpusSupportedMes();
-    break;
-#endif
             }
 
             // immediately send acknowledge message
@@ -1399,16 +1392,6 @@ void CProtocol::CreateOpusSupportedMes()
     CreateAndSendMessage ( PROTMESSID_OPUS_SUPPORTED,
                            CVector<uint8_t> ( 0 ) );
 }
-
-#ifdef USE_LEGACY_CELT
-bool CProtocol::EvaluateOpusSupportedMes()
-{
-    // invoke message action
-    emit OpusSupported();
-
-    return false; // no error
-}
-#endif
 
 
 // Connection less messages ----------------------------------------------------

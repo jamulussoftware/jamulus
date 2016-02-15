@@ -268,8 +268,13 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
             }
         }
 
+        // show server name in bold font if it is a permanent server
+        QFont CurServerNameFont = pNewListViewItem->font ( 0 );
+        CurServerNameFont.setBold ( vecServerInfo[iIdx].bPermanentOnline );
+        pNewListViewItem->setFont ( 0, CurServerNameFont );
+
         // the ping time shall be shown in bold font
-        QFont CurPingTimeFont = pNewListViewItem->font ( 3 );
+        QFont CurPingTimeFont = pNewListViewItem->font ( 1 );
         CurPingTimeFont.setBold ( true );
         pNewListViewItem->setFont ( 1, CurPingTimeFont );
 

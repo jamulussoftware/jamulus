@@ -46,7 +46,9 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
         "a list of available servers which are registered at the central "
         "server. Select a server from the list and press the connect button to "
         "connect to this server. Alternatively, double click a server from "
-        "the list to connect to it.<br>"
+        "the list to connect to it. If a server is occupied, a list of the "
+        "connected musicians is available by expanding the list item. "
+        "Permanent servers are shown in bold font.<br>"
         "Note that it may take some time to retrieve the server list from the "
         "central server. If no valid central server address is specified in "
         "the settings, no server list will be available." ) );

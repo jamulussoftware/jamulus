@@ -92,10 +92,18 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     lvwServers->clear();
 
     // add invisible columns which are used for sorting the list and storing
-    // the maximum number of clients
-    lvwServers->setColumnCount ( 6 );
+    // the current/maximum number of clients
+    // 0: server name
+    // 1: ping time
+    // 2: number of musicians (including additional strings like " (full)")
+    // 3: location
+    // 4: minimum ping time (invisible)
+    // 5: maximum number of clients (invisible)
+    // 6: number of musicians (just the number, invisible)
+    lvwServers->setColumnCount ( 7 );
     lvwServers->hideColumn ( 4 );
     lvwServers->hideColumn ( 5 );
+    lvwServers->hideColumn ( 6 );
 
     // per default the root shall not be decorated (to save space)
     lvwServers->setRootIsDecorated ( false );
@@ -310,6 +318,9 @@ strLocation += ", " + vecServerInfo[iIdx].HostAddr.InetAddr.toString() +
         // store the maximum number of clients
         pNewListViewItem->setText ( 5, QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) );
 
+        // initialize the current number of connected clients
+        pNewListViewItem->setText ( 6, QString().setNum ( 0 ) );
+
         // store host address
         pNewListViewItem->setData ( 0, Qt::UserRole,
             CurHostAddress.toString() );
@@ -495,7 +506,7 @@ void CConnectDlg::OnTimerPing()
 
             // check if the number of child list items matches the number of
             // connected clients, if not then request the client names
-            if ( lvwServers->topLevelItem ( iIdx )->text ( 2 ).toInt() !=
+            if ( lvwServers->topLevelItem ( iIdx )->text ( 6 ).toInt() !=
                  lvwServers->topLevelItem ( iIdx )->childCount() )
             {
                 emit CreateCLServerListReqConnClientsListMes ( CurServerAddress );
@@ -553,6 +564,9 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
             pCurListViewItem->
                 setText ( 2, QString().setNum ( iNumClients ) );
         }
+
+        // update number of clients value (hidden)
+        pCurListViewItem->setText ( 6, QString().setNum ( iNumClients ) );
 
         // a ping time was received, set item to visible (note that we have
         // to check if the item is hidden, otherwise we get a lot of CPU

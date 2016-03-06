@@ -34,10 +34,6 @@
 
 
 // Implementation **************************************************************
-// these pointers are only used for the post-event routine
-QApplication* pApp        = NULL;
-QDialog*      pMainWindow = NULL;
-
 
 int main ( int argc, char** argv )
 {
@@ -433,10 +429,6 @@ int main ( int argc, char** argv )
                                        0,
                                        Qt::Window );
 
-                // set main window
-                pMainWindow = &ClientDlg;
-                pApp        = &app; // needed for post-event routine
-
                 // show dialog
                 ClientDlg.show();
                 app.exec();
@@ -487,10 +479,6 @@ int main ( int argc, char** argv )
                                        bStartMinimized,
                                        0,
                                        Qt::Window );
-
-                // set main window
-                pMainWindow = &ServerDlg;
-                pApp        = &app; // needed for post-event routine
 
                 // show dialog (if not the minimized flag is set)
                 if ( !bStartMinimized )

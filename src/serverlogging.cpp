@@ -298,7 +298,11 @@ void CHistoryGraph::Update()
         // add markers
         for ( i = 0; i < iNumItemsForHistory; i++ )
         {
-            AddMarker ( vHistoryDataFifo[i] );
+            // only use valid dates
+            if ( vHistoryDataFifo[i].DateTime.date().isValid() )
+            {
+                AddMarker ( vHistoryDataFifo[i] );
+            }
         }
 
         // save graph as picture in file

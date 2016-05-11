@@ -1,25 +1,23 @@
 @echo off
 
+rem To set up a new Qt and Visual Studio version
+rem - set environment path variable to the correct Qt bin directory (e.g. 32 bit version)
+rem - if using Visual Studio Express version, download the redistributable (it is not automatically there)
+rem - change the Qt distribute dll names in the installer.nsi file (some contain version numbers)
+
 rem settings and check ---------------------------------------------------------
-set NSIS_PATH=%PROGRAMFILES%\NSIS
+set NSIS_PATH=%PROGRAMFILES(x86)%\NSIS
 
 if "%VSINSTALLDIR%" == "" goto vsenvproblem
 
 rem create visual studio project file ------------------------------------------
 cd ..
-set QMAKESPEC=win32-msvc2010
+set QMAKESPEC=win32-msvc2015
 qmake -tp vc
 
-
-rem TODO Qt 5.2 qmake inserts a line in the project file which does not compile on msvc2010
-rem -> as a workaround we remove that line here
-copy Jamulus.vcxproj JamulusUnmod.vcxproj
-type JamulusUnmod.vcxproj | findstr /v "<DebugInformationFormat>None</DebugInformationFormat>" > Jamulus.vcxproj
-
-
 rem clean and compile solution -------------------------------------------------
-vcexpress Jamulus.vcxproj /clean "Release|Win32"
-vcexpress Jamulus.vcxproj /build "Release|Win32"
+devenv Jamulus.vcxproj /Clean "Release|x86"
+devenv Jamulus.vcxproj /Build "Release|x86"
 
 rem create installer -----------------------------------------------------------
 cd windows

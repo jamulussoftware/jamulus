@@ -435,7 +435,8 @@ CSound::CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), 
         cDriverNames[i] = new char[32];
     }
 
-    loadAsioDriver ( "dummy" ); // to initialize external object
+    char cDummyName[] = "dummy";
+    loadAsioDriver ( cDummyName ); // to initialize external object
     lNumDevs = asioDrivers->getDriverNames ( cDriverNames, MAX_NUMBER_SOUND_CARDS );
 
     // in case we do not have a driver available, throw error

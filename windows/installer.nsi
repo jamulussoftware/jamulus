@@ -6,8 +6,8 @@
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define INSTALLER_NAME    "Jamulusinstaller.exe"
 !define BINARY_PATH       "..\release\"
-!define VS_REDIST_PATH    "C:\Program Files\Microsoft Visual Studio 10.0\SDK\v3.5\BootStrapper\Packages\vcredist_x86\"
-;!define VS_REDIST_PATH   "C:\Programme\Microsoft Visual Studio 10.0\SDK\v3.5\BootStrapper\Packages\vcredist_x86\"
+;!define VS_REDIST_PATH    "C:\Program Files (x86)\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\vcredist_x86\"
+!define VS_REDIST_PATH    "C:\Programme\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\vcredist_x86\"
 !define VS_REDIST_EXE     "vcredist_x86.exe"
 !define UNINST_KEY        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
 !define AUTORUN_KEY       "Software\Microsoft\Windows\CurrentVersion\Run"
@@ -51,10 +51,10 @@ Section
   File             "$%QTDIR%\bin\Qt5Widgets.dll"
   File             "$%QTDIR%\bin\Qt5Network.dll"
   File             "$%QTDIR%\bin\Qt5Xml.dll"
-  File             "$%QTDIR%\bin\D3DCompiler_43.dll"
-  File             "$%QTDIR%\bin\icudt51.dll"
-  File             "$%QTDIR%\bin\icuin51.dll"
-  File             "$%QTDIR%\bin\icuuc51.dll"
+  File             "$%QTDIR%\bin\D3DCompiler_47.dll"
+  File             "$%QTDIR%\bin\icudt54.dll"
+  File             "$%QTDIR%\bin\icuin54.dll"
+  File             "$%QTDIR%\bin\icuuc54.dll"
   File             "$%QTDIR%\bin\libEGL.dll"
   File             "$%QTDIR%\bin\libGLESv2.dll"
 
@@ -111,10 +111,10 @@ Delete $INSTDIR\Qt5Gui.dll
 Delete $INSTDIR\Qt5Widgets.dll
 Delete $INSTDIR\Qt5Network.dll
 Delete $INSTDIR\Qt5Xml.dll
-Delete $INSTDIR\D3DCompiler_43.dll
-Delete $INSTDIR\icudt51.dll
-Delete $INSTDIR\icuin51.dll
-Delete $INSTDIR\icuuc51.dll
+Delete $INSTDIR\D3DCompiler_47.dll
+Delete $INSTDIR\icudt54.dll
+Delete $INSTDIR\icuin54.dll
+Delete $INSTDIR\icuuc54.dll
 Delete $INSTDIR\libEGL.dll
 Delete $INSTDIR\libGLESv2.dll
 Delete $INSTDIR\COPYING

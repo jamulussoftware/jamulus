@@ -6,8 +6,8 @@
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define INSTALLER_NAME    "Jamulusinstaller.exe"
 !define BINARY_PATH       "..\release\"
-;!define VS_REDIST_PATH    "C:\Program Files (x86)\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\vcredist_x86\"
-!define VS_REDIST_PATH    "C:\Programme\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\vcredist_x86\"
+!define VS_REDIST_PATH    "C:\Program Files (x86)\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\vcredist_x86\"
+;!define VS_REDIST_PATH    "C:\Programme\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\vcredist_x86\"
 !define VS_REDIST_EXE     "vcredist_x86.exe"
 !define UNINST_KEY        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
 !define AUTORUN_KEY       "Software\Microsoft\Windows\CurrentVersion\Run"
@@ -84,10 +84,6 @@ Section
   File             "$%QTDIR%\plugins\platforms\qwindows.dll"
   File             "$%QTDIR%\plugins\platforms\qminimal.dll"  
 
-  ; accessible qt plugin
-  SetOutPath       $INSTDIR\accessible
-  File             "$%QTDIR%\plugins\accessible\qtaccessiblewidgets.dll"
-
 SectionEnd
 
 
@@ -121,8 +117,6 @@ Delete $INSTDIR\COPYING
 Delete $INSTDIR\platforms\qwindows.dll
 Delete $INSTDIR\platforms\qminimal.dll
 RMDir  $INSTDIR\platforms
-Delete $INSTDIR\accessible\qtaccessiblewidgets.dll
-RMDir  $INSTDIR\accessible
 RMDir  $INSTDIR
 
 SectionEnd

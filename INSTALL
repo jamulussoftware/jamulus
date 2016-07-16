@@ -39,7 +39,7 @@ Linux:
 Required packages: Build-Essential, QT4 (devel packages, too!), Jack (devel packages, too!)
                    On the most common Linux distributions, the following
                    command should prepare the system for compilation:
-                   sudo apt-get install build-essential libqt4-dev libjack-dev
+                   sudo apt-get install build-essential libqt4-dev libjack-jackd2-dev
 
 - qmake Jamulus.pro
 - make clean
@@ -53,8 +53,6 @@ are using.
 Use qmake "CONFIG+=nosound" Jamulus.pro for pure server installation which
 does not require the Jack packages.
 
-The legacy CELT support can be disabled with qmake "CONFIG+=nocelt" Jamulus.pro
-
 To use an external shared OPUS library instead of the built-in use
 qmake "CONFIG+=opus_shared_lib" Jamulus.pro.
 
@@ -62,6 +60,8 @@ A desktop link file jamulus.desktop is available in the llcon/src/res directory.
 To use this file configure the software with
 qmake "CONFIG+=noupcasename" Jamulus.pro to make sure the output target name of
 this software is jamulus instead of Jamulus (see content of jamulus.desktop).
+
+Jamulus is also compatible with Qt5.
 
 Mac:
 ----

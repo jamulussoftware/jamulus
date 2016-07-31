@@ -6,6 +6,7 @@
 
 - show server name in the server list in bold font if it is a permanent server
 
+- Jack can be used instead of CoreAudio on MacOs (using qmake "CONFIG+=jackonmac")
 
 
 

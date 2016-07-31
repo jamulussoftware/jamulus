@@ -46,7 +46,7 @@
 # ifdef _WIN32
 #  include "../windows/sound.h"
 # else
-#  if defined ( __APPLE__ ) || defined ( __MACOSX )
+#  if ( defined ( __APPLE__ ) || defined ( __MACOSX ) ) && !defined ( JACK_REPLACES_COREAUDIO )
 #   include "../mac/sound.h"
 #  else
 #   ifdef ANDROID

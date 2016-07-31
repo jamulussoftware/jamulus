@@ -56,6 +56,26 @@ win32 {
         -framework CoreAudio \
         -framework AudioToolbox \
         -framework AudioUnit
+
+    # replace coreaudio with jack if requested
+    contains(CONFIG, "jackonmac") {
+        message(Using Jack instead of CoreAudio.)
+
+        !exists(/usr/include/jack/jack.h) {
+            !exists(/usr/local/include/jack/jack.h) {
+                 message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+            }
+        }
+
+        HEADERS -= mac/sound.h
+        SOURCES -= mac/sound.cpp
+        HEADERS += linux/sound.h
+        SOURCES += linux/sound.cpp
+        DEFINES += WITH_SOUND
+        DEFINES += JACK_REPLACES_COREAUDIO
+        INCLUDEPATH += /usr/local/include
+        LIBS += /usr/local/lib/libjack.dylib
+    }
 } else:android {
     HEADERS += android/sound.h
     SOURCES += android/sound.cpp

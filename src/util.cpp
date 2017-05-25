@@ -374,7 +374,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "</b></p>"
         "<ul>"
         "<li>Qt cross-platform application framework: "
-        "<i><a href=""http://qt.digia.com"">http://qt.digia.com</a></i></li>"
+        "<i><a href=""http://www.qt.io"">http://www.qt.io</a></i></li>"
         "<li>Opus Interactive Audio Codec: "
         "<i><a href=""http://www.opus-codec.org"">http://www.opus-codec.org</a></i></li>"
         "<li>Audio reverberation code: by Perry R. Cook and Gary P. Scavone, "

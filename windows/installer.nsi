@@ -53,9 +53,9 @@ Section
   File             "$%QTDIR%\bin\Qt5Network.dll"
   File             "$%QTDIR%\bin\Qt5Xml.dll"
   File             "$%QTDIR%\bin\D3DCompiler_47.dll"
-  File             "$%QTDIR%\bin\icudt54.dll"
-  File             "$%QTDIR%\bin\icuin54.dll"
-  File             "$%QTDIR%\bin\icuuc54.dll"
+  ; File             "$%QTDIR%\bin\icudt54.dll"
+  ; File             "$%QTDIR%\bin\icuin54.dll"
+  ; File             "$%QTDIR%\bin\icuuc54.dll"
   File             "$%QTDIR%\bin\libEGL.dll"
   File             "$%QTDIR%\bin\libGLESv2.dll"
 
@@ -109,9 +109,9 @@ Delete $INSTDIR\Qt5Widgets.dll
 Delete $INSTDIR\Qt5Network.dll
 Delete $INSTDIR\Qt5Xml.dll
 Delete $INSTDIR\D3DCompiler_47.dll
-Delete $INSTDIR\icudt54.dll
-Delete $INSTDIR\icuin54.dll
-Delete $INSTDIR\icuuc54.dll
+; Delete $INSTDIR\icudt54.dll
+; Delete $INSTDIR\icuin54.dll
+; Delete $INSTDIR\icuuc54.dll
 Delete $INSTDIR\libEGL.dll
 Delete $INSTDIR\libGLESv2.dll
 Delete $INSTDIR\COPYING

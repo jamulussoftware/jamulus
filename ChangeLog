@@ -1,13 +1,10 @@
-
-
-3.4.2
+3.4.2 (2017-08-11)
 
 - removed old CELT library (minimum compatible version is now 3.3.1)
 
 - show server name in the server list in bold font if it is a permanent server
 
 - Jack can be used instead of CoreAudio on MacOs (using qmake "CONFIG+=jackonmac")
-
 
 
 3.4.1 (2016-02-10)

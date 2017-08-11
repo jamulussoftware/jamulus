@@ -30,6 +30,7 @@ Page instfiles
 Section
 
   ; check if software is currently running
+  !addplugindir ..\windows
   FindProcDLL::FindProc "${APP_EXE}"
   IntCmp $R0 1 0 notRunning
     MessageBox MB_OK|MB_ICONEXCLAMATION "${APP_NAME} is running. Please close it and run the setup again." /SD IDOK

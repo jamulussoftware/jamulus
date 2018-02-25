@@ -66,9 +66,9 @@ void CSocket::Init ( const quint16 iPortNumber )
         {
             UdpSocketInAddr.sin_port = htons ( iPortNumber + iClientPortIncrement );
 
-            bSuccess = ( bind ( UdpSocket ,
-                                (sockaddr*) &UdpSocketInAddr,
-                                sizeof ( sockaddr_in ) ) == 0 );
+            bSuccess = ( ::bind ( UdpSocket ,
+                                  (sockaddr*) &UdpSocketInAddr,
+                                  sizeof ( sockaddr_in ) ) == 0 );
 
             iClientPortIncrement++;
         }
@@ -80,9 +80,9 @@ void CSocket::Init ( const quint16 iPortNumber )
         // gets the desired port number
         UdpSocketInAddr.sin_port = htons ( iPortNumber );
 
-        bSuccess = ( bind ( UdpSocket ,
-                            (sockaddr*) &UdpSocketInAddr,
-                            sizeof ( sockaddr_in ) ) == 0 );
+        bSuccess = ( ::bind ( UdpSocket ,
+                              (sockaddr*) &UdpSocketInAddr,
+                              sizeof ( sockaddr_in ) ) == 0 );
     }
 
     if ( !bSuccess )

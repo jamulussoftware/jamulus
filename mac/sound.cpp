@@ -771,6 +771,23 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
                 // right
                 pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
                     (short) ( pInData[iNumInChan * i + iSelInputRightChannel] * _MAXSHORT );
+
+
+/*
+// TEST mix channel with micro to the stereo output
+if ( iNumInChan == 4 )
+{
+    // add mic input on input channel 4 to both stereo channels
+    pSound->vecsTmpAudioSndCrdStereo[2 * i] =
+        Double2Short ( (double) ( pInData[iNumInChan * i + 3] * _MAXSHORT ) +
+                       (double) pSound->vecsTmpAudioSndCrdStereo[2 * i] );
+    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
+        Double2Short ( (double) ( pInData[iNumInChan * i + 3] * _MAXSHORT ) +
+                       (double) pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] );
+}
+*/
+
+
             }
         }
         else

@@ -161,6 +161,12 @@ CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* ar
     lCurDev                    = INVALID_SNC_CARD_DEVICE;
     CurrentAudioInputDeviceID  = 0;
     CurrentAudioOutputDeviceID = 0;
+    iNumInChan                 = 0;
+    iNumOutChan                = 0;
+    iSelInputLeftChannel       = 0;
+    iSelInputRightChannel      = 0;
+    iSelOutputLeftChannel      = 0;
+    iSelOutputRightChannel     = 0;
 }
 
 void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,

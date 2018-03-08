@@ -542,8 +542,11 @@ void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
             cbxLInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
             cbxRInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
         }
-        cbxLInChan->setCurrentIndex ( pClient->GetSndCrdLeftInputChannel() );
-        cbxRInChan->setCurrentIndex ( pClient->GetSndCrdRightInputChannel() );
+        if ( pClient->GetSndCrdNumInputChannels() > 0 )
+        {
+            cbxLInChan->setCurrentIndex ( pClient->GetSndCrdLeftInputChannel() );
+            cbxRInChan->setCurrentIndex ( pClient->GetSndCrdRightInputChannel() );
+        }
 
         // output
         cbxLOutChan->clear();
@@ -553,8 +556,11 @@ void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
             cbxLOutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );
             cbxROutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );
         }
-        cbxLOutChan->setCurrentIndex ( pClient->GetSndCrdLeftOutputChannel() );
-        cbxROutChan->setCurrentIndex ( pClient->GetSndCrdRightOutputChannel() );
+        if ( pClient->GetSndCrdNumOutputChannels() > 0 )
+        {
+            cbxLOutChan->setCurrentIndex ( pClient->GetSndCrdLeftOutputChannel() );
+            cbxROutChan->setCurrentIndex ( pClient->GetSndCrdRightOutputChannel() );
+        }
     }
 #else
     // for other OS, no sound card channel selection is supported

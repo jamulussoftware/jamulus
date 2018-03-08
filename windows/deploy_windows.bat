@@ -12,12 +12,12 @@ if "%VSINSTALLDIR%" == "" goto vsenvproblem
 
 rem create visual studio project file ------------------------------------------
 cd ..
-set QMAKESPEC=win32-msvc2015
+rem set QMAKESPEC=win32-msvc2015
 qmake -tp vc
 
 rem clean and compile solution -------------------------------------------------
-devenv Jamulus.vcxproj /Clean "Release|x86"
-devenv Jamulus.vcxproj /Build "Release|x86"
+devenv Jamulus.vcxproj /Clean "Release|x64"
+devenv Jamulus.vcxproj /Build "Release|x64"
 
 rem create installer -----------------------------------------------------------
 cd windows

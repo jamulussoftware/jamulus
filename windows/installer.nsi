@@ -6,9 +6,7 @@
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define INSTALLER_NAME    "Jamulusinstaller.exe"
 !define BINARY_PATH       "..\release\"
-!define VS_REDIST_PATH    "C:\Program Files (x86)\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\vcredist_x86\"
-;!define VS_REDIST_PATH    "C:\Programme\Microsoft Visual Studio 14.0\SDK\Bootstrapper\Packages\vcredist_x86\"
-!define VS_REDIST_EXE     "vcredist_x86.exe"
+!define VS_REDIST_EXE     "VC_redist.x64.exe"
 !define UNINST_KEY        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
 !define AUTORUN_KEY       "Software\Microsoft\Windows\CurrentVersion\Run"
 
@@ -63,7 +61,7 @@ Section
   File             "..\COPYING"
 
   ; temporarily create Microsoft Visual Studio redistributable,
-  File             "${VS_REDIST_PATH}${VS_REDIST_EXE}"
+  File             "${VS_REDIST_EXE}"
   ExecWait         '"$INSTDIR\${VS_REDIST_EXE}" /Q'
 
   ; uninstaller

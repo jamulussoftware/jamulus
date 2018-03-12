@@ -2,6 +2,7 @@
 
 3.4.3cvs
 
+- bug fix: fixed a crash, running Jamulus on MacOS version "High Sierra"
 
 
 
@@ -11,7 +12,7 @@
 
 - show server name in the server list in bold font if it is a permanent server
 
-- Jack can be used instead of CoreAudio on MacOs (using qmake "CONFIG+=jackonmac")
+- Jack can be used instead of CoreAudio on MacOS (using qmake "CONFIG+=jackonmac")
 
 
 3.4.1 (2016-02-10)

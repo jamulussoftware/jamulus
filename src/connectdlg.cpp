@@ -88,8 +88,12 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     lvwServers->setColumnWidth ( 0, 180 );
     lvwServers->setColumnWidth ( 1, 65 );
     lvwServers->setColumnWidth ( 2, 60 );
+    lvwServers->setColumnWidth ( 3, 220 );
 #endif
     lvwServers->clear();
+
+    // make sure we do not get a too long horizontal scroll bar
+    lvwServers->header()->setStretchLastSection ( false );
 
     // add invisible columns which are used for sorting the list and storing
     // the current/maximum number of clients

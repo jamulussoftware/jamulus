@@ -25,10 +25,12 @@
 #if !defined(_SOUND_H__9518A621345F78_3634567_8C0D_EEBF182CF549__INCLUDED_)
 #define _SOUND_H__9518A621345F78_3634567_8C0D_EEBF182CF549__INCLUDED_
 
-#include <unistd.h>
+#ifndef JACK_REPLACES_ASIO // these headers are not available in Windows OS
+# include <unistd.h>
+# include <sys/ioctl.h>
+#endif
 #include <fcntl.h>
 #include <sys/types.h>
-#include <sys/ioctl.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <QThread>

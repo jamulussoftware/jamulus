@@ -139,7 +139,7 @@ public:
                                 const bool    bDoAdding = true );
 
     // this function simply converts the type of size to integer
-    inline int Size() const { return std::vector<TData>::size(); }
+    inline int Size() const { return static_cast<int> ( std::vector<TData>::size() ); }
 
     // This operator allows for a l-value assignment of this object:
     // CVector[x] = y is possible

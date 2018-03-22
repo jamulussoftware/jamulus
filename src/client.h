@@ -43,7 +43,7 @@
 #ifdef LLCON_VST_PLUGIN
 # include "vstsound.h"
 #else
-# ifdef _WIN32
+# if defined ( _WIN32 ) && !defined ( JACK_REPLACES_ASIO )
 #  include "../windows/sound.h"
 # else
 #  if ( defined ( __APPLE__ ) || defined ( __MACOSX ) ) && !defined ( JACK_REPLACES_COREAUDIO )
@@ -53,9 +53,11 @@
 #    include "../android/sound.h"
 #   else
 #    include "../linux/sound.h"
-#    include <sched.h>
+#    ifndef JACK_REPLACES_ASIO // these headers are not available in Windows OS
+#     include <sched.h>
+#     include <netdb.h>
+#    endif
 #    include <socket.h>
-#    include <netdb.h>
 #   endif
 #  endif
 # endif

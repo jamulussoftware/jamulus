@@ -44,6 +44,25 @@ win32 {
         advapi32.lib \
         winmm.lib \
         ws2_32.lib
+
+    # replace ASIO with jack if requested
+    contains(CONFIG, "jackonwindows") {
+        message(Using Jack instead of ASIO.)
+
+        !exists("C:/Program Files (x86)/Jack/includes/jack/jack.h") {
+            message(Warning: jack.h was not found at the usual place, maybe jack is not installed)
+        }
+
+        HEADERS -= windows/sound.h
+        SOURCES -= windows/sound.cpp
+        HEADERS += linux/sound.h
+        SOURCES += linux/sound.cpp
+        DEFINES += WITH_SOUND
+        DEFINES += JACK_REPLACES_ASIO
+        DEFINES += _STDINT_H # supposed to solve compilation error in systemdeps.h
+        INCLUDEPATH += "C:/Program Files (x86)/Jack/includes"
+        LIBS += "C:/Program Files (x86)/Jack/lib/libjack64.lib"
+    }
 } else:macx {
     QT += macextras
     HEADERS += mac/sound.h

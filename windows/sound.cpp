@@ -44,6 +44,7 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
 {
     // load driver
     loadAsioDriver ( cDriverNames[iDriverIdx] );
+
     if ( ASIOInit ( &driverInfo ) != ASE_OK )
     {
         // clean up and return error string
@@ -125,6 +126,8 @@ QString CSound::CheckDeviceCapabilities()
     }
 
     // query channel infos for all available input channels
+    bool bInputChMixingSupported = true;
+
     for ( int i = 0; i < lNumInChan; i++ )
     {
         // setup for input channels
@@ -143,6 +146,14 @@ QString CSound::CheckDeviceCapabilities()
         {
             // return error string
             return tr ( "Required audio sample format not available." );
+        }
+
+        // store the name of the channel and check if channel mixing is supported
+        channelInputName[i] = channelInfosInput[i].name;
+
+        if ( !CheckSampleTypeSupportedForCHMixing ( channelInfosInput[i].type ) )
+        {
+            bInputChMixingSupported = false;
         }
     }
 
@@ -168,6 +179,32 @@ QString CSound::CheckDeviceCapabilities()
         }
     }
 
+    // special case with 4 input channels: support adding channels
+    if ( ( lNumInChan == 4 ) && bInputChMixingSupported )
+    {
+        // add four mixed channels (i.e. 4 normal, 4 mixed channels)
+        lNumInChanPlusAddChan = 8;
+
+        for ( int iCh = 0; iCh < lNumInChanPlusAddChan; iCh++ )
+        {
+            int iSelCH, iSelAddCH;
+
+            GetSelCHAndAddCH ( iCh, lNumInChan, iSelCH, iSelAddCH );
+
+            if ( iSelAddCH >= 0 )
+            {
+                // for mixed channels, show both audio channel names to be mixed
+                channelInputName[iCh] =
+                    channelInputName[iSelCH] + " + " + channelInputName[iSelAddCH];
+            }
+        }
+    }
+    else
+    {
+        // regular case: no mixing input channels used
+        lNumInChanPlusAddChan = lNumInChan;
+    }
+
     // everything is ok, return empty string for "no error" case
     return "";
 }
@@ -175,8 +212,7 @@ QString CSound::CheckDeviceCapabilities()
 void CSound::SetLeftInputChannel  ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChan ) &&
-         ( iNewChan != vSelectedInputChannels[1] ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChanPlusAddChan ) )
     {
         vSelectedInputChannels[0] = iNewChan;
     }
@@ -185,8 +221,7 @@ void CSound::SetLeftInputChannel  ( const int iNewChan )
 void CSound::SetRightInputChannel ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChan ) &&
-         ( iNewChan != vSelectedInputChannels[0] ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChanPlusAddChan ) )
     {
         vSelectedInputChannels[1] = iNewChan;
     }
@@ -195,8 +230,7 @@ void CSound::SetRightInputChannel ( const int iNewChan )
 void CSound::SetLeftOutputChannel  ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) &&
-         ( iNewChan != vSelectedOutputChannels[1] ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) )
     {
         vSelectedOutputChannels[0] = iNewChan;
     }
@@ -205,8 +239,7 @@ void CSound::SetLeftOutputChannel  ( const int iNewChan )
 void CSound::SetRightOutputChannel ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) &&
-         ( iNewChan != vSelectedOutputChannels[0] ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) )
     {
         vSelectedOutputChannels[1] = iNewChan;
     }
@@ -421,6 +454,7 @@ CSound::CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), 
     vSelectedInputChannels  ( NUM_IN_OUT_CHANNELS ),
     vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS ),
     lNumInChan              ( 0 ),
+    lNumInChanPlusAddChan   ( 0 ),
     lNumOutChan             ( 0 ),
     dInOutLatencyMs         ( 0.0 ) // "0.0" means that no latency value is available
 {
@@ -516,6 +550,14 @@ bool CSound::CheckSampleTypeSupported ( const ASIOSampleType SamType )
         ( SamType == ASIOSTInt32MSB24 ) );
 }
 
+bool CSound::CheckSampleTypeSupportedForCHMixing ( const ASIOSampleType SamType )
+{
+    // check for supported sample types for audio channel mixing (see bufferSwitch)
+    return ( ( SamType == ASIOSTInt16LSB ) ||
+             ( SamType == ASIOSTInt24LSB ) ||
+             ( SamType == ASIOSTInt32LSB ) );
+}
+
 void CSound::bufferSwitch ( long index, ASIOBool )
 {
     int iCurSample;
@@ -530,7 +572,10 @@ void CSound::bufferSwitch ( long index, ASIOBool )
         // CAPTURE -------------------------------------------------------------
         for ( int i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
         {
-            const int iSelCH = pSound->vSelectedInputChannels[i];
+            int iSelCH, iSelAddCH;
+
+            GetSelCHAndAddCH ( pSound->vSelectedInputChannels[i], pSound->lNumInChan,
+                               iSelCH, iSelAddCH );
 
             // copy new captured block in thread transfer buffer (copy
             // mono data interleaved in stereo buffer)
@@ -545,11 +590,23 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     vecsTmpAudioSndCrdStereo[2 * iCurSample + i] = pASIOBuf[iCurSample];
                 }
+
+                if ( iSelAddCH >= 0 )
+                {
+                    // mix input channels case:
+                    int16_t* pASIOBufAdd = static_cast<int16_t*> ( pSound->bufferInfos[iSelAddCH].buffers[index] );
+
+                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+                    {
+                        vecsTmpAudioSndCrdStereo[2 * iCurSample + i] =
+                            Double2Short ( (double) vecsTmpAudioSndCrdStereo[2 * iCurSample + i] +
+                                           (double) pASIOBufAdd[iCurSample] );
+                    }
+                }
                 break;
             }
 
             case ASIOSTInt24LSB:
-// NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     int iCurSam = 0;
@@ -557,6 +614,21 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                     iCurSam >>= 8;
 
                     vecsTmpAudioSndCrdStereo[2 * iCurSample + i] = static_cast<int16_t> ( iCurSam );
+                }
+
+                if ( iSelAddCH >= 0 )
+                {
+                    // mix input channels case:
+                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+                    {
+                        int iCurSam = 0;
+                        memcpy ( &iCurSam, ( (char*) pSound->bufferInfos[iSelAddCH].buffers[index] ) + iCurSample * 3, 3 );
+                        iCurSam >>= 8;
+
+                        vecsTmpAudioSndCrdStereo[2 * iCurSample + i] =
+                            Double2Short ( (double) vecsTmpAudioSndCrdStereo[2 * iCurSample + i] +
+                                           (double) static_cast<int16_t> ( iCurSam ) );
+                    }
                 }
                 break;
 
@@ -568,6 +640,19 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     vecsTmpAudioSndCrdStereo[2 * iCurSample + i] =
                         static_cast<int16_t> ( pASIOBuf[iCurSample] >> 16 );
+                }
+
+                if ( iSelAddCH >= 0 )
+                {
+                    // mix input channels case:
+                    int32_t* pASIOBufAdd = static_cast<int32_t*> ( pSound->bufferInfos[iSelAddCH].buffers[index] );
+
+                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
+                    {
+                        vecsTmpAudioSndCrdStereo[2 * iCurSample + i] =
+                            Double2Short ( (double) vecsTmpAudioSndCrdStereo[2 * iCurSample + i] +
+                                           (double) static_cast<int16_t> ( pASIOBufAdd[iCurSample] >> 16 ) );
+                    }
                 }
                 break;
             }

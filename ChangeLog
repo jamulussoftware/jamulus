@@ -2,7 +2,10 @@
 
 3.4.3cvs
 
+- for ASIO and 4 channel input, support mixing channels 1&2 with 3&4
+
 - bug fix: fixed a crash, running Jamulus on MacOS version "High Sierra"
+
 
 
 

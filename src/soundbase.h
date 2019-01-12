@@ -116,7 +116,7 @@ protected:
     void run();
     bool bRun;
 
-    void             ParseMIDIMessage ( const CVector<int8_t>& vMIDIPaketBytes );
+    void             ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes );
 
     bool             bIsCallbackAudioInterface;
     QString          strSystemDriverTechniqueName;

@@ -29,7 +29,8 @@
 CSound::CSound ( void      (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
                  void*     arg,
                  const int iCtrlMIDIChannel ) :
-    CSoundBase ( "CoreAudio", true, fpNewProcessCallback, arg, iCtrlMIDIChannel )
+    CSoundBase ( "CoreAudio", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ),
+    midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
 {
     // Apple Mailing Lists: Subject: GUI Apps should set kAudioHardwarePropertyRunLoop
     // in the HAL, From: Jeff Moore, Date: Fri, 6 Dec 2002
@@ -169,6 +170,25 @@ CSound::CSound ( void      (*fpNewProcessCallback) ( CVector<short>& psData, voi
     iSelInputRightChannel      = 0;
     iSelOutputLeftChannel      = 0;
     iSelOutputRightChannel     = 0;
+
+
+    // Optional MIDI initialization --------------------------------------------
+    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
+    {
+        // create client and ports
+        MIDIClientRef midiClient = static_cast<MIDIClientRef> ( NULL );
+        MIDIClientCreate ( CFSTR ( APP_NAME ), NULL, NULL, &midiClient );
+        MIDIInputPortCreate ( midiClient, CFSTR ( "Input port" ), callbackMIDI, this, &midiInPortRef );
+
+        // open connections from all sources
+        const int iNMIDISources = MIDIGetNumberOfSources();
+
+        for ( int i = 0; i < iNMIDISources; i++ )
+        {
+            MIDIEndpointRef src = MIDIGetSource ( i );
+            MIDIPortConnectSource ( midiInPortRef, src, NULL) ;
+        }
+    }
 }
 
 void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
@@ -830,6 +850,32 @@ if ( iNumInChan == 4 )
     }
 
     return kAudioHardwareNoError;
+}
+
+void CSound::callbackMIDI ( const MIDIPacketList* pktlist,
+                            void*                 refCon,
+                            void* )
+{
+    CSound* pSound = static_cast<CSound*> ( refCon );
+
+    if ( pSound->midiInPortRef != static_cast<MIDIPortRef> ( NULL ) )
+    {
+        MIDIPacket* midiPacket = const_cast<MIDIPacket*> ( pktlist->packet );
+
+        for ( unsigned int j = 0; j < pktlist->numPackets; j++ )
+        {
+            CVector<uint8_t> vMIDIPaketBytes ( midiPacket->length );
+
+            // copy packet and send it to the MIDI parser
+            for ( int i = 0; i < midiPacket->length; i++ )
+            {
+                vMIDIPaketBytes[i] = static_cast<uint8_t> ( midiPacket->data[i] );
+            }
+            pSound->ParseMIDIMessage ( vMIDIPaketBytes );
+
+            midiPacket = MIDIPacketNext ( midiPacket );
+        }
+    }
 }
 
 bool CSound::ConvertCFStringToQString ( const CFStringRef stringRef,

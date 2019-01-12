@@ -97,11 +97,24 @@ void CSoundBase::run()
     }
 }
 
-void CSoundBase::ParseMIDIMessage ( const CVector<int8_t>& vMIDIPaketBytes )
+void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
 {
+    for ( int i = 0; i < vMIDIPaketBytes.Size(); i++ )
+    {
+
+// TEST debugging
+printf ( "%02X ", vMIDIPaketBytes[i] );
+
+    }
+
+// TEST
+static int cnt = 0;
+cnt++;
+if ( cnt >= 10 * AUD_MIX_FADER_MAX ) cnt = 0;
+
 // TODO
 int iChannelIdx = 0;
-int iFaderLevel = 0;
+int iFaderLevel = cnt / 10;
 EmitControllerInFaderLevel ( iChannelIdx, iFaderLevel );
 }
 

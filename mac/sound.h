@@ -103,10 +103,16 @@ protected:
                                  const AudioTimeStamp*,
                                  void*                  inRefCon );
 
+    static void callbackMIDI ( const MIDIPacketList* pktlist,
+                               void*                 refCon,
+                               void* );
+
     AudioDeviceID       audioInputDevice[MAX_NUMBER_SOUND_CARDS];
     AudioDeviceID       audioOutputDevice[MAX_NUMBER_SOUND_CARDS];
     AudioDeviceIOProcID audioInputProcID;
     AudioDeviceIOProcID audioOutputProcID;
+
+    MIDIPortRef         midiInPortRef;
 
     QString             sChannelNamesInput[MAX_NUM_IN_OUT_CHANNELS];
     QString             sChannelNamesOutput[MAX_NUM_IN_OUT_CHANNELS];

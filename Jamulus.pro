@@ -73,6 +73,7 @@ win32 {
     LIBS += -framework CoreFoundation \
         -framework CoreServices \
         -framework CoreAudio \
+        -framework CoreMIDI \
         -framework AudioToolbox \
         -framework AudioUnit
 

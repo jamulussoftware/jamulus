@@ -186,7 +186,7 @@ CSound::CSound ( void      (*fpNewProcessCallback) ( CVector<short>& psData, voi
         for ( int i = 0; i < iNMIDISources; i++ )
         {
             MIDIEndpointRef src = MIDIGetSource ( i );
-            MIDIPortConnectSource ( midiInPortRef, src, NULL) ;
+            MIDIPortConnectSource ( midiInPortRef, src, NULL ) ;
         }
     }
 }
@@ -864,9 +864,8 @@ void CSound::callbackMIDI ( const MIDIPacketList* pktlist,
 
         for ( unsigned int j = 0; j < pktlist->numPackets; j++ )
         {
-            CVector<uint8_t> vMIDIPaketBytes ( midiPacket->length );
-
             // copy packet and send it to the MIDI parser
+            CVector<uint8_t> vMIDIPaketBytes ( midiPacket->length );
             for ( int i = 0; i < midiPacket->length; i++ )
             {
                 vMIDIPaketBytes[i] = static_cast<uint8_t> ( midiPacket->data[i] );

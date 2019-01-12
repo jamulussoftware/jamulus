@@ -100,7 +100,8 @@ class CClient : public QObject
 
 public:
     CClient ( const quint16  iPortNumber,
-              const QString& strConnOnStartupAddress );
+              const QString& strConnOnStartupAddress,
+              const int      iCtrlMIDIChannel );
 
     void   Start();
     void   Stop();
@@ -410,6 +411,7 @@ signals:
 #endif
 
     void Disconnected();
+    void ControllerInFaderLevel ( int iChannelIdx, double dValue );
 };
 
 #endif /* !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

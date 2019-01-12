@@ -134,6 +134,10 @@ public slots:
                                               int          iPingTime,
                                               int          iNumClients );
 
+    void OnControllerInFaderLevel ( const int    iChannelIdx,
+                                    const double dValue ) { MainMixerBoard->SetFaderLevel ( iChannelIdx,
+                                                                                            dValue ); }
+
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
                                     COSUtil::EOpSystemType eOSType,

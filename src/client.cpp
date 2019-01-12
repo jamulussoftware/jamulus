@@ -27,7 +27,8 @@
 
 /* Implementation *************************************************************/
 CClient::CClient ( const quint16  iPortNumber,
-                   const QString& strConnOnStartupAddress ) :
+                   const QString& strConnOnStartupAddress,
+                   const int      iCtrlMIDIChannel ) :
     vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
     ChannelInfo                      (),
     vecStoredFaderTags               ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
@@ -50,7 +51,7 @@ CClient::CClient ( const quint16  iPortNumber,
     eAudioChannelConf                ( CC_MONO ),
     bIsInitializationPhase           ( true ),
     Socket                           ( &Channel, iPortNumber ),
-    Sound                            ( AudioCallback, this ),
+    Sound                            ( AudioCallback, this, iCtrlMIDIChannel ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan                ( false ),
     iReverbLevel                     ( 0 ),
@@ -195,6 +196,10 @@ CClient::CClient ( const quint16  iPortNumber,
     // other
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
         this, SLOT ( OnSndCrdReinitRequest ( int ) ) );
+
+    QObject::connect ( &Sound,
+        SIGNAL ( ControllerInFaderLevel ( int, double ) ),
+        SIGNAL ( ControllerInFaderLevel ( int, double ) ) );
 
     QObject::connect ( &Socket, SIGNAL ( InvalidPacketReceived ( CHostAddress ) ),
         this, SLOT ( OnInvalidPacketReceived ( CHostAddress ) ) );

@@ -49,9 +49,10 @@ class CSoundBase : public QThread
 
 public:
     CSoundBase ( const QString& strNewSystemDriverTechniqueName,
-        const bool bNewIsCallbackAudioInterface,
-        void (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
-        void* pParg );
+                 const bool     bNewIsCallbackAudioInterface,
+                 void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
+                 void*          pParg,
+                 const int      iCtrlMIDIChannel );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
@@ -88,6 +89,9 @@ public:
     void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType )
         { emit ReinitRequest ( eSndCrdResetType ); }
 
+    void EmitControllerInFaderLevel ( const int    iChannelIdx,
+                                      const double dValue ) { emit ControllerInFaderLevel ( iChannelIdx, dValue ); }
+
 protected:
     // driver handling
     virtual QString  LoadAndInitializeDriver ( int ) { return ""; }
@@ -112,6 +116,8 @@ protected:
     void run();
     bool bRun;
 
+    void             ParseMIDIMessage ( const CVector<int8_t>& vMIDIPaketBytes );
+
     bool             bIsCallbackAudioInterface;
     QString          strSystemDriverTechniqueName;
 
@@ -123,6 +129,7 @@ protected:
 
 signals:
     void ReinitRequest ( int iSndCrdResetType );
+    void ControllerInFaderLevel ( int iChannelIdx, double dValue );
 };
 
 #endif /* !defined ( SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_ ) */

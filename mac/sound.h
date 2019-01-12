@@ -26,6 +26,7 @@
 #define _SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_
 
 #include <CoreAudio/CoreAudio.h>
+#include <CoreMIDI/CoreMIDI.h>
 #include <QMutex>
 #include "soundbase.h"
 #include "global.h"
@@ -35,7 +36,9 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg );
+    CSound ( void      (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+             void*     arg,
+             const int iCtrlMIDIChannel );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();

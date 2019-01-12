@@ -27,9 +27,10 @@
 
 /* Implementation *************************************************************/
 CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
-                         const bool bNewIsCallbackAudioInterface,
-                         void (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
-                         void* pParg ) :
+                         const bool     bNewIsCallbackAudioInterface,
+                         void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
+                         void*          pParg,
+                         const int      iCtrlMIDIChannel ) :
     fpProcessCallback ( fpNewProcessCallback ),
     pProcessCallbackArg ( pParg ), bRun ( false ),
     bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ),
@@ -95,6 +96,15 @@ void CSoundBase::run()
         Write ( vecsAudioSndCrdStereo );
     }
 }
+
+void CSoundBase::ParseMIDIMessage ( const CVector<int8_t>& vMIDIPaketBytes )
+{
+// TODO
+int    iChannelIdx = 0;
+double dFaderLevel = 0;
+EmitControllerInFaderLevel ( iChannelIdx, dFaderLevel );
+}
+
 
 
 /******************************************************************************\

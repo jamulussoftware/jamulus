@@ -669,6 +669,19 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
     emit NumClientsChanged ( iNumConnectedClients );
 }
 
+void CAudioMixerBoard::SetFaderLevel ( const int    iChannelIdx,
+                                       const double dValue )
+{
+    // only apply new fader level if channel index is valid and the fader is visible
+    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
+    {
+        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        {
+            vecpChanFader[iChannelIdx]->SetFaderLevel ( dValue );
+        }
+    }
+}
+
 void CAudioMixerBoard::UpdateSoloStates()
 {
     // first check if any channel has a solo state active

@@ -449,8 +449,10 @@ void CSound::Stop()
     }
 }
 
-CSound::CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg ) :
-    CSoundBase              ( "ASIO", true, fpNewCallback, arg ),
+CSound::CSound ( void      (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
+                 void*     arg,
+                 const int iCtrlMIDIChannel ) :
+    CSoundBase              ( "ASIO", true, fpNewCallback, arg, iCtrlMIDIChannel ),
     vSelectedInputChannels  ( NUM_IN_OUT_CHANNELS ),
     vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS ),
     lNumInChan              ( 0 ),

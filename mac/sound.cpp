@@ -26,8 +26,10 @@
 
 
 /* Implementation *************************************************************/
-CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
-    CSoundBase ( "CoreAudio", true, fpNewProcessCallback, arg )
+CSound::CSound ( void      (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+                 void*     arg,
+                 const int iCtrlMIDIChannel ) :
+    CSoundBase ( "CoreAudio", true, fpNewProcessCallback, arg, iCtrlMIDIChannel )
 {
     // Apple Mailing Lists: Subject: GUI Apps should set kAudioHardwarePropertyRunLoop
     // in the HAL, From: Jeff Moore, Date: Fri, 6 Dec 2002

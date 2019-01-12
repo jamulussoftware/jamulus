@@ -36,7 +36,9 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg );
+    CSound ( void      (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+             void*     arg,
+             const int iCtrlMIDIChannel );
     virtual ~CSound() {}
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );

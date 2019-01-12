@@ -57,6 +57,7 @@ int main ( int argc, char** argv )
     bool         bShowAnalyzerConsole      = false;
     bool         bCentServPingServerInList = false;
     int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
+    int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
     quint16      iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
     ELicenceType eLicenceType              = LT_NO_LICENCE;
     QString      strConnOnStartupAddress   = "";
@@ -195,6 +196,23 @@ int main ( int argc, char** argv )
         {
             bShowAnalyzerConsole = true;
             tsConsole << "- show analyzer console" << endl;
+            continue;
+        }
+
+
+        // Controller MIDI channel ---------------------------------------------
+        if ( GetNumericArgument ( tsConsole,
+                                  argc,
+                                  argv,
+                                  i,
+                                  "--ctrlmidich", // no short form
+                                  "--ctrlmidich",
+                                  0,
+                                  15,
+                                  rDbleArgument ) )
+        {
+            iCtrlMIDIChannel = static_cast<int> ( rDbleArgument );
+            tsConsole << "- selected controller MIDI channel: " << iCtrlMIDIChannel << endl;
             continue;
         }
 
@@ -412,7 +430,8 @@ int main ( int argc, char** argv )
             // Client:
             // actual client object
             CClient Client ( iPortNumber,
-                             strConnOnStartupAddress );
+                             strConnOnStartupAddress,
+                             iCtrlMIDIChannel );
 
             // load settings from init-file
             CSettings Settings ( &Client, strIniFileName );
@@ -558,6 +577,7 @@ QString UsageArguments ( char **argv )
         "  -y, --history         enable connection history and set file\n"
         "                        name (server only)\n"
         "  -z, --startminimized  start minimizied (server only)\n"
+        "  --ctrlmidich          MIDI controller channel to listen (client only)"
         "\nExample: " + QString ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }
 

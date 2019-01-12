@@ -26,8 +26,10 @@
 
 
 /* Implementation *************************************************************/
-CSound::CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
-    CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg )
+CSound::CSound ( void      (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+                 void*     arg,
+                 const int iCtrlMIDIChannel ) :
+    CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg, iCtrlMIDIChannel )
 {
 
 }

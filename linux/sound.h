@@ -60,8 +60,10 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ), void* arg ) :
-        CSoundBase ( "Jack", true, fpNewProcessCallback, arg ), iJACKBufferSizeMono ( 0 ),
+    CSound ( void      (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+             void*     arg,
+             const int iCtrlMIDIChannel ) :
+        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ), iJACKBufferSizeMono ( 0 ),
         iJACKBufferSizeStero ( 0 ) { OpenJack(); }
     virtual ~CSound() { CloseJack(); }
 
@@ -85,18 +87,20 @@ protected:
     void CloseJack();
 
     // callbacks
-    static int      process ( jack_nframes_t nframes, void* arg );
-    static int      bufferSizeCallback ( jack_nframes_t, void *arg );
-    static void     shutdownCallback ( void* );
-    jack_client_t*  pJackClient;
+    static int     process ( jack_nframes_t nframes, void* arg );
+    static int     bufferSizeCallback ( jack_nframes_t, void *arg );
+    static void    shutdownCallback ( void* );
+    jack_client_t* pJackClient;
 };
 #else
 // no sound -> dummy class definition
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ), void* pParg ) :
-        CSoundBase ( "nosound", false, fpNewProcessCallback, pParg ) {}
+    CSound ( void      (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
+             void*     pParg,
+             const int iCtrlMIDIChannel ) :
+        CSoundBase ( "nosound", false, fpNewProcessCallback, pParg, iCtrlMIDIChannel ) {}
     virtual ~CSound() {}
 };
 #endif // WITH_SOUND

@@ -102,6 +102,9 @@ public:
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
 
+    void SetFaderLevel ( const int    iChannelIdx,
+                         const double dValue );
+
     // settings
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
@@ -115,7 +118,8 @@ protected:
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
 
-    void OnGainValueChanged ( const int iChannelIdx, const double dValue );
+    void OnGainValueChanged ( const int    iChannelIdx,
+                              const double dValue );
 
     CVector<CChannelFader*> vecpChanFader;
     QHBoxLayout*            pMainLayout;

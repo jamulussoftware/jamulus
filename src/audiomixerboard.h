@@ -102,8 +102,8 @@ public:
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
 
-    void SetFaderLevel ( const int    iChannelIdx,
-                         const double dValue );
+    void SetFaderLevel ( const int iChannelIdx,
+                         const int iValue );
 
     // settings
     CVector<QString> vecStoredFaderTags;

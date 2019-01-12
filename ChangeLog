@@ -1,6 +1,11 @@
 
 
 
+3.4.4
+
+- added support for controlling the audio mixer faders with a MIDI controller (MacOS only)
+
+
 
 3.4.3 (2018-05-17)
 

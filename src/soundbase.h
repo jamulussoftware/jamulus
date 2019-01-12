@@ -89,8 +89,8 @@ public:
     void EmitReinitRequestSignal ( const ESndCrdResetType eSndCrdResetType )
         { emit ReinitRequest ( eSndCrdResetType ); }
 
-    void EmitControllerInFaderLevel ( const int    iChannelIdx,
-                                      const double dValue ) { emit ControllerInFaderLevel ( iChannelIdx, dValue ); }
+    void EmitControllerInFaderLevel ( const int iChannelIdx,
+                                      const int iValue ) { emit ControllerInFaderLevel ( iChannelIdx, iValue ); }
 
 protected:
     // driver handling
@@ -129,7 +129,7 @@ protected:
 
 signals:
     void ReinitRequest ( int iSndCrdResetType );
-    void ControllerInFaderLevel ( int iChannelIdx, double dValue );
+    void ControllerInFaderLevel ( int iChannelIdx, int iValue );
 };
 
 #endif /* !defined ( SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_ ) */

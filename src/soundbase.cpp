@@ -100,9 +100,9 @@ void CSoundBase::run()
 void CSoundBase::ParseMIDIMessage ( const CVector<int8_t>& vMIDIPaketBytes )
 {
 // TODO
-int    iChannelIdx = 0;
-double dFaderLevel = 0;
-EmitControllerInFaderLevel ( iChannelIdx, dFaderLevel );
+int iChannelIdx = 0;
+int iFaderLevel = 0;
+EmitControllerInFaderLevel ( iChannelIdx, iFaderLevel );
 }
 
 

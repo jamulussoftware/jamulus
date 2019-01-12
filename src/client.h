@@ -411,7 +411,7 @@ signals:
 #endif
 
     void Disconnected();
-    void ControllerInFaderLevel ( int iChannelIdx, double dValue );
+    void ControllerInFaderLevel ( int iChannelIdx, int iValue );
 };
 
 #endif /* !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

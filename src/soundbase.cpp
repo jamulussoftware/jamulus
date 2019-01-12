@@ -99,23 +99,43 @@ void CSoundBase::run()
 
 void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
 {
-    for ( int i = 0; i < vMIDIPaketBytes.Size(); i++ )
+    if ( vMIDIPaketBytes.Size() > 0 )
     {
+        const uint8_t iStatusByte = vMIDIPaketBytes[0];
 
-// TEST debugging
-printf ( "%02X ", vMIDIPaketBytes[i] );
+        // check if status byte is correct
+        if ( ( iStatusByte >= 0x80 ) && ( iStatusByte < 0xF0 ) )
+        {
+            const int iMIDIChannel = iStatusByte & 0x0F;
 
+// TODO check for correct channel number
+
+// debugging
+printf ( "%02X: ", iMIDIChannel );
+for ( int i = 0; i < vMIDIPaketBytes.Size(); i++ )
+{
+    printf ( "%02X ", vMIDIPaketBytes[i] );
+}
+printf ( "\n" );
+
+            // we only want to parse controller messages
+            if ( ( iStatusByte >= 0xB0 ) && ( iStatusByte < 0xC0 ) )
+            {
+                // make sure paket is long enough
+                if ( vMIDIPaketBytes.Size() > 2 )
+                {
+
+// TEST TD-20 Hi-Hat control for fader 0 level
+if ( vMIDIPaketBytes[1] == 4 )
+{
+    const int iFaderLevel = static_cast<int> ( static_cast<double> ( vMIDIPaketBytes[2] ) / 256 * AUD_MIX_FADER_MAX );
+    EmitControllerInFaderLevel ( 0, AUD_MIX_FADER_MAX - iFaderLevel ); // invert fader
+}
+
+                }
+            }
+        }
     }
-
-// TEST
-static int cnt = 0;
-cnt++;
-if ( cnt >= 10 * AUD_MIX_FADER_MAX ) cnt = 0;
-
-// TODO
-int iChannelIdx = 0;
-int iFaderLevel = cnt / 10;
-EmitControllerInFaderLevel ( iChannelIdx, iFaderLevel );
 }
 
 

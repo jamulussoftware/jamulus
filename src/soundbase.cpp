@@ -124,13 +124,21 @@ printf ( "\n" );
                 // make sure paket is long enough
                 if ( vMIDIPaketBytes.Size() > 2 )
                 {
+                    // we are assuming that the controller number is the same
+                    // as the audio fader index and the range is 0-127
+                    const int iFaderLevel = static_cast<int> ( static_cast<double> (
+                        qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) ) ) / 127 * AUD_MIX_FADER_MAX );
 
+                    EmitControllerInFaderLevel ( vMIDIPaketBytes[1], iFaderLevel );
+
+/*
 // TEST TD-20 Hi-Hat control for fader 0 level
 if ( vMIDIPaketBytes[1] == 4 )
 {
     const int iFaderLevel = static_cast<int> ( static_cast<double> ( vMIDIPaketBytes[2] ) / 256 * AUD_MIX_FADER_MAX );
     EmitControllerInFaderLevel ( 0, AUD_MIX_FADER_MAX - iFaderLevel ); // invert fader
 }
+*/
 
                 }
             }

@@ -129,7 +129,10 @@ printf ( "\n" );
                     const int iFaderLevel = static_cast<int> ( static_cast<double> (
                         qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) ) ) / 127 * AUD_MIX_FADER_MAX );
 
-                    EmitControllerInFaderLevel ( vMIDIPaketBytes[1], iFaderLevel );
+                    // Behringer X-TOUCH: offset of 0x46
+                    const int iChID = vMIDIPaketBytes[1] - 70;
+
+                    EmitControllerInFaderLevel ( iChID, iFaderLevel );
 
 /*
 // TEST TD-20 Hi-Hat control for fader 0 level

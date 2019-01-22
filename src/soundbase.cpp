@@ -30,11 +30,12 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          const bool     bNewIsCallbackAudioInterface,
                          void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                          void*          pParg,
-                         const int      iCtrlMIDIChannel ) :
+                         const int      iNewCtrlMIDIChannel ) :
     fpProcessCallback ( fpNewProcessCallback ),
     pProcessCallbackArg ( pParg ), bRun ( false ),
     bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ),
-    strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName )
+    strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
+    iCtrlMIDIChannel ( iNewCtrlMIDIChannel )
 {
     // initializations for the sound card names (default)
     lNumDevs          = 1;
@@ -106,43 +107,39 @@ void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
         // check if status byte is correct
         if ( ( iStatusByte >= 0x80 ) && ( iStatusByte < 0xF0 ) )
         {
-            const int iMIDIChannel = iStatusByte & 0x0F;
+            // zero-based MIDI channel number (i.e. range 0-15)
+            const int iMIDIChannelZB = iStatusByte & 0x0F;
 
-// TODO check for correct channel number
-
+/*
 // debugging
-printf ( "%02X: ", iMIDIChannel );
+printf ( "%02X: ", iMIDIChannelZB );
 for ( int i = 0; i < vMIDIPaketBytes.Size(); i++ )
 {
     printf ( "%02X ", vMIDIPaketBytes[i] );
 }
 printf ( "\n" );
-
-            // we only want to parse controller messages
-            if ( ( iStatusByte >= 0xB0 ) && ( iStatusByte < 0xC0 ) )
-            {
-                // make sure paket is long enough
-                if ( vMIDIPaketBytes.Size() > 2 )
-                {
-                    // we are assuming that the controller number is the same
-                    // as the audio fader index and the range is 0-127
-                    const int iFaderLevel = static_cast<int> ( static_cast<double> (
-                        qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) ) ) / 127 * AUD_MIX_FADER_MAX );
-
-                    // Behringer X-TOUCH: offset of 0x46
-                    const int iChID = vMIDIPaketBytes[1] - 70;
-
-                    EmitControllerInFaderLevel ( iChID, iFaderLevel );
-
-/*
-// TEST TD-20 Hi-Hat control for fader 0 level
-if ( vMIDIPaketBytes[1] == 4 )
-{
-    const int iFaderLevel = static_cast<int> ( static_cast<double> ( vMIDIPaketBytes[2] ) / 256 * AUD_MIX_FADER_MAX );
-    EmitControllerInFaderLevel ( 0, AUD_MIX_FADER_MAX - iFaderLevel ); // invert fader
-}
 */
 
+            // per definition if MIDI channel is 0, we listen to all channels
+            // note that iCtrlMIDIChannel is one-based channel number
+            if ( ( iCtrlMIDIChannel == 0 ) || ( iCtrlMIDIChannel - 1 == iMIDIChannelZB ) )
+            {
+                // we only want to parse controller messages
+                if ( ( iStatusByte >= 0xB0 ) && ( iStatusByte < 0xC0 ) )
+                {
+                    // make sure paket is long enough
+                    if ( vMIDIPaketBytes.Size() > 2 )
+                    {
+                        // we are assuming that the controller number is the same
+                        // as the audio fader index and the range is 0-127
+                        const int iFaderLevel = static_cast<int> ( static_cast<double> (
+                            qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) ) ) / 127 * AUD_MIX_FADER_MAX );
+
+                        // Behringer X-TOUCH: offset of 0x46
+                        const int iChID = vMIDIPaketBytes[1] - 70;
+
+                        EmitControllerInFaderLevel ( iChID, iFaderLevel );
+                    }
                 }
             }
         }

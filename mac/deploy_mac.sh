@@ -6,6 +6,9 @@ cd ..
 # cvs -n update 2>null | grep -i "M " # error if any file is locally modified!!! -> TODO
 
 
+# call qmake
+qmake Jamulus.pro
+
 # first clean up
 rm -rf Jamulus.app
 make clean

@@ -20,6 +20,7 @@ macdeployqt Jamulus.app -dmg
 zip Jamulus-version-mac.zip Jamulus.dmg COPYING
 
 # move new file in deploy directory
+mkdir -p deploy
 mv Jamulus-version-mac.zip deploy/Jamulus-version-mac.zip
 
 # cleanup and go back to original directory

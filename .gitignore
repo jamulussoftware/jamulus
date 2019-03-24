@@ -1,4 +1,3 @@
-
 .qmake.stash
 Jamulus
 Makefile
@@ -16,3 +15,8 @@ ui_*.h
 moc_predefs.h
 src/res/qrc_resources.cpp
 windows/ASIOSDK2
+debug/
+jamulus.vcxproj
+jamulus.vcxproj.filters
+release/
+deploy/

@@ -21,3 +21,4 @@ jamulus.vcxproj.filters
 release/
 deploy/
 Jamulus.app/
+.DS_Store

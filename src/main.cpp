@@ -33,17 +33,41 @@
 #include "testbench.h"
 
 
+
+/******************************************************************************\
+* Console logging                                                              *
+\******************************************************************************/
+// Try for a portable console --------------------------------------------------
+
+QTextStream* ConsoleWriterFactory::get()
+{
+    if (ptsConsole == nullptr)
+    {
+#if _WIN32
+        if (!AttachConsole(ATTACH_PARENT_PROCESS))
+        {
+            // Not run from console, dump logging to nowhere
+            static QString conout;
+            ptsConsole = new QTextStream ( &conout );
+        }
+        else
+        {
+            freopen("CONOUT$", "w", stdout);
+            ptsConsole = new QTextStream ( stdout );
+        }
+#else
+        ptsConsole = new QTextStream ( stdout );
+#endif
+    }
+    return ptsConsole;
+}
+
 // Implementation **************************************************************
 
 int main ( int argc, char** argv )
 {
-#ifdef _WIN32
-    // no console on windows -> just write in string and dump it
-    QString     strDummySink;
-    QTextStream tsConsole ( &strDummySink );
-#else
-    QTextStream tsConsole ( stdout );
-#endif
+    QTextStream& tsConsole = *((new ConsoleWriterFactory())->get());
+
     QString strArgument;
     double  rDbleArgument;
 
@@ -56,6 +80,7 @@ int main ( int argc, char** argv )
     bool         bDisconnectAllClients     = false;
     bool         bShowAnalyzerConsole      = false;
     bool         bCentServPingServerInList = false;
+    bool         bEnableRecording          = false;
     int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
     int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
     quint16      iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
@@ -66,6 +91,8 @@ int main ( int argc, char** argv )
     QString      strServerName             = "";
     QString      strLoggingFileName        = "";
     QString      strHistoryFileName        = "";
+    QString      strRecordingDirName       = "";
+    QString      strSessionDirName         = "";
     QString      strCentralServer          = "";
     QString      strServerInfo             = "";
     QString      strWelcomeMessage         = "";
@@ -153,6 +180,18 @@ int main ( int argc, char** argv )
         {
             bCentServPingServerInList = true;
             tsConsole << "- ping servers in slave server list" << endl;
+            continue;
+        }
+
+
+        // Enable recording at the server --------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-r",
+                               "--enablerecording" ) )
+        {
+            bEnableRecording = true;
+            tsConsole << "- enabling recording" << endl;
             continue;
         }
 
@@ -292,6 +331,37 @@ int main ( int argc, char** argv )
         }
 
 
+        // Recording directory -------------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-R",
+                                 "--recordingdirectory",
+                                 strArgument ) )
+        {
+            strRecordingDirName = strArgument;
+            tsConsole << "- recording directory name: " << strRecordingDirName << endl;
+            continue;
+        }
+
+
+        // Convert a recording session to a Reaper Project ---------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-T",
+                                 "--toreaper",
+                                 strArgument ) )
+        {
+            bUseGUI = false;
+            strSessionDirName = strArgument;
+            tsConsole << "- convert " << strSessionDirName << " to Reaper project (no GUI)" << endl;
+            continue;
+        }
+
+
         // Central server ------------------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
@@ -402,7 +472,15 @@ int main ( int argc, char** argv )
 
     // Application/GUI setup ---------------------------------------------------
     // Application object
-    QApplication app ( argc, argv, bUseGUI );
+    if (!bUseGUI && !strHistoryFileName.isEmpty())
+    {
+        tsConsole << "Qt5 requires a windowing system to paint a JPEG image; disabling history graph" << endl;
+        strHistoryFileName = "";
+    }
+    QCoreApplication* _app = bUseGUI
+            ? new QApplication ( argc, argv )
+            : new QCoreApplication ( argc, argv );
+#define app (*_app)
 
 #ifdef _WIN32
     // set application priority class -> high priority
@@ -425,7 +503,11 @@ int main ( int argc, char** argv )
 
     try
     {
-        if ( bIsClient )
+        if ( !strSessionDirName.isEmpty() )
+        {
+            CJamRecorder::SessionDirToReaper(strSessionDirName);
+        }
+        else if ( bIsClient )
         {
             // Client:
             // actual client object
@@ -473,10 +555,11 @@ int main ( int argc, char** argv )
                              strCentralServer,
                              strServerInfo,
                              strWelcomeMessage,
+                             strRecordingDirName,
+                             bEnableRecording,
                              bCentServPingServerInList,
                              bDisconnectAllClients,
                              eLicenceType );
-
             if ( bUseGUI )
             {
                 // special case for the GUI mode: as the default we want to use
@@ -571,7 +654,11 @@ QString UsageArguments ( char **argv )
         "                        [server1 country as QLocale ID]; ...\n"
         "                        [server2 address]; ... (server only)\n"
         "  -p, --port            local port number (server only)\n"
+        "  -r  --enablerecording create recordings of jam sessions (server only)\n"
+        "  -R, --recordingdirectory\n"
+        "                        directory to contain recorded jams (server only)\n"
         "  -s, --server          start server\n"
+        "  -T, --toreaper        create Reaper project from session in named directory\n"
         "  -u, --numchannels     maximum number of channels (server only)\n"
         "  -w, --welcomemessage  welcome message on connect (server only)\n"
         "  -y, --history         enable connection history and set file\n"

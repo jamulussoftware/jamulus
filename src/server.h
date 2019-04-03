@@ -41,6 +41,9 @@
 #include "serverlogging.h"
 #include "serverlist.h"
 
+#include "recorder/jamrecorder.h"
+using recorder::CJamRecorder;
+
 
 /* Definitions ****************************************************************/
 // no valid channel number
@@ -127,6 +130,8 @@ public:
               const QString&     strCentralServer,
               const QString&     strServerInfo,
               const QString&     strNewWelcomeMessage,
+              const QString&     strRecordingDirName,
+              const bool         bEnableRecording,
               const bool         bNCentServPingServerInList,
               const bool         bNDisconnectAllClients,
               const ELicenceType eNLicenceType );
@@ -247,6 +252,9 @@ protected:
     // logging
     CServerLogging             Logging;
 
+    // recording thread
+    CJamRecorder*              JamRecorder;
+
     // HTML file server status
     bool                       bWriteStatusHTMLFile;
     QString                    strServerHTMLFileListName;
@@ -268,6 +276,8 @@ protected:
 signals:
     void Started();
     void Stopped();
+    void ClientDisconnected(const int iChID);
+    void Frame(const int, const QString, const CHostAddress, const int, const CVector<int16_t>);
 
 public slots:
     void OnTimer();

@@ -1,0 +1,17 @@
+.qmake.stash
+Jamulus
+Makefile
+*.pro.user*
+**.cppe
+**.he
+.cproject
+.project
+.settings
+*.user
+*.user.*
+*.o
+moc_*.cpp
+ui_*.h
+moc_predefs.h
+src/res/qrc_resources.cpp
+windows/ASIOSDK2

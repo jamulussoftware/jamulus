@@ -102,3 +102,11 @@ void CChatDlg::AddChatText ( QString strChatText )
 #endif
         );
 }
+
+void CChatDlg::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() != Qt::Key_Escape)
+    {
+        QDialog::keyPressEvent(e);
+    }
+}

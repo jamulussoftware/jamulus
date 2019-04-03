@@ -1200,3 +1200,16 @@ rbtReverbSelR->setStyleSheet ( "" );
     // also apply GUI design to child GUI controls
     MainMixerBoard->SetGUIDesign ( eNewDesign );
 }
+
+void CClientDlg::accept()
+{
+    close();
+}
+
+void CClientDlg::keyPressEvent(QKeyEvent *e)
+{
+    if (e->key() != Qt::Key_Escape)
+    {
+        QDialog::keyPressEvent(e);
+    }
+}

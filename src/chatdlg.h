@@ -48,6 +48,8 @@ public slots:
     void OnLocalInputTextTextChanged ( const QString& strNewText );
     void OnClearPressed();
 
+    void keyPressEvent(QKeyEvent *e);
+
 signals:
     void NewLocalInputText ( QString strNewText );
 };

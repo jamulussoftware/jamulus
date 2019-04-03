@@ -6,6 +6,9 @@ cd ..
 # cvs -n update 2>null | grep -i "M " # error if any file is locally modified!!! -> TODO
 
 
+# call qmake
+qmake Jamulus.pro
+
 # first clean up
 rm -rf Jamulus.app
 make clean
@@ -20,6 +23,7 @@ macdeployqt Jamulus.app -dmg
 zip Jamulus-version-mac.zip Jamulus.dmg COPYING
 
 # move new file in deploy directory
+mkdir -p deploy
 mv Jamulus-version-mac.zip deploy/Jamulus-version-mac.zip
 
 # cleanup and go back to original directory

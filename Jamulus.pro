@@ -123,9 +123,6 @@ win32 {
         LIBS += -ljack
     }
 
-    # enable to following line to support compilation on the Raspberry Pi
-    #LIBS += -lrt
-
     # Linux is our source distribution, include sources from other OSs
     DISTFILES += mac/sound.h \
         mac/sound.cpp \

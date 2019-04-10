@@ -113,7 +113,7 @@ win32 {
 
         !exists(/usr/include/jack/jack.h) {
             !exists(/usr/local/include/jack/jack.h) {
-                 message(Warning: jack.h was not found at the usual place, maybe the jack dev packet is missing)
+                 message("Warning: jack.h was not found at the usual place, maybe the jack dev packet is missing")
             }
         }
 
@@ -170,7 +170,10 @@ HEADERS += src/audiomixerboard.h \
     src/soundbase.h \
     src/testbench.h \
     src/util.h \
-    src/analyzerconsole.h
+    src/analyzerconsole.h \
+    src/recorder/jamrecorder.h \
+    src/recorder/creaperproject.h \
+    src/recorder/cwavestream.h
 
 HEADERS_OPUS = libs/opus/include/opus.h \
     libs/opus/include/opus_multistream.h \
@@ -264,7 +267,10 @@ SOURCES += src/audiomixerboard.cpp \
     src/socket.cpp \
     src/soundbase.cpp \
     src/util.cpp \
-    src/analyzerconsole.cpp
+    src/analyzerconsole.cpp \
+    src/recorder/jamrecorder.cpp \
+    src/recorder/creaperproject.cpp \
+    src/recorder/cwavestream.cpp
 
 SOURCES_OPUS = libs/opus/src/opus.c \
     libs/opus/src/opus_decoder.c \

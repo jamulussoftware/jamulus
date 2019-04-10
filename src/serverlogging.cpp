@@ -342,10 +342,10 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
     const QString strLogStr = CurTimeDatetoLogString() + ", " +
         ClientInetAddr.toString() + ", connected";
 
-#ifndef _WIN32
-    QTextStream tsConsoleStream ( stdout );
-    tsConsoleStream << strLogStr << endl; // on console
-#endif
+
+    QTextStream* tsConsoleStream = (new ConsoleWriterFactory())->get();
+    (*tsConsoleStream) << strLogStr << endl; // on console
+
     *this << strLogStr; // in log file
 
     // add element to history
@@ -357,10 +357,10 @@ void CServerLogging::AddServerStopped()
     const QString strLogStr = CurTimeDatetoLogString() + ",, server stopped "
         "-------------------------------------";
 
-#ifndef _WIN32
-    QTextStream tsConsoleStream ( stdout );
-    tsConsoleStream << strLogStr << endl; // on console
-#endif
+
+    QTextStream* tsConsoleStream = (new ConsoleWriterFactory())->get();
+    (*tsConsoleStream) << strLogStr << endl; // on console
+
     *this << strLogStr; // in log file
 
     // add element to history and update on server stop

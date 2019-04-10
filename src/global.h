@@ -50,6 +50,10 @@ LED bar:      lbr
 #if !defined ( GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_ )
 #define GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_
 
+#if _WIN32
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #include <QString>
 #include <QEvent>
 #include <QDebug>

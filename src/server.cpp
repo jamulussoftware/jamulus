@@ -206,6 +206,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strCentralServer,
                    const QString&     strServerInfo,
                    const QString&     strNewWelcomeMessage,
+                   const QString&     strRecordingDirName,
+                   const bool         bEnableRecording,
                    const bool         bNCentServPingServerInList,
                    const bool         bNDisconnectAllClients,
                    const ELicenceType eNLicenceType ) :
@@ -355,6 +357,13 @@ CServer::CServer ( const int          iNewMaxNumChan,
         StartStatusHTMLFileWriting ( strHTMLStatusFileName,
             strCurServerNameForHTMLStatusFile + ":" +
             QString().number( static_cast<int> ( iPortNumber ) ) );
+    }
+
+    // Enable jam recording (if requested)
+    if ( bEnableRecording )
+    {
+        JamRecorder = new CJamRecorder(this, strRecordingDirName);
+        JamRecorder->start();
     }
 
     // enable all channels (for the server all channel must be enabled the
@@ -739,8 +748,10 @@ JitterMeas.Measure();
 
             // if channel was just disconnected, set flag that connected
             // client list is sent to all other clients
+            // and emit the client disconnected signal
             if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
             {
+                emit ClientDisconnected(iCurChanID); //? do outside mutex lock?
                 bChannelIsNowDisconnected = true;
             }
 
@@ -824,6 +835,8 @@ JitterMeas.Measure();
 
             // get number of audio channels of current channel
             const int iCurNumAudChan = vecNumAudioChannels[i];
+
+            emit Frame(iCurChanID, vecChannels[iCurChanID].GetName(), vecChannels[iCurChanID].GetAddress(), iCurNumAudChan, vecvecsData[i]);
 
             // generate a sparate mix for each channel
             // actual processing of audio data -> mix

@@ -131,7 +131,6 @@ public:
               const QString&     strServerInfo,
               const QString&     strNewWelcomeMessage,
               const QString&     strRecordingDirName,
-              const bool         bEnableRecording,
               const bool         bNCentServPingServerInList,
               const bool         bNDisconnectAllClients,
               const ELicenceType eNLicenceType );
@@ -253,7 +252,8 @@ protected:
     CServerLogging             Logging;
 
     // recording thread
-    CJamRecorder*              JamRecorder;
+    CJamRecorder               JamRecorder;
+    bool                       bEnableRecording;
 
     // HTML file server status
     bool                       bWriteStatusHTMLFile;
@@ -276,8 +276,12 @@ protected:
 signals:
     void Started();
     void Stopped();
-    void ClientDisconnected(const int iChID);
-    void Frame(const int, const QString, const CHostAddress, const int, const CVector<int16_t>);
+    void ClientDisconnected ( const int iChID );
+    void AudioFrame ( const int              iChID,
+                      const QString          stChName,
+                      const CHostAddress     RecHostAddr,
+                      const int              iNumAudChan,
+                      const CVector<int16_t> vecsData );
 
 public slots:
     void OnTimer();

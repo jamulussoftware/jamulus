@@ -80,7 +80,6 @@ int main ( int argc, char** argv )
     bool         bDisconnectAllClients     = false;
     bool         bShowAnalyzerConsole      = false;
     bool         bCentServPingServerInList = false;
-    bool         bEnableRecording          = false;
     int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
     int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
     quint16      iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
@@ -180,18 +179,6 @@ int main ( int argc, char** argv )
         {
             bCentServPingServerInList = true;
             tsConsole << "- ping servers in slave server list" << endl;
-            continue;
-        }
-
-
-        // Enable recording at the server --------------------------------------
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "-r",
-                               "--enablerecording" ) )
-        {
-            bEnableRecording = true;
-            tsConsole << "- enabling recording" << endl;
             continue;
         }
 
@@ -556,7 +543,6 @@ int main ( int argc, char** argv )
                              strServerInfo,
                              strWelcomeMessage,
                              strRecordingDirName,
-                             bEnableRecording,
                              bCentServPingServerInList,
                              bDisconnectAllClients,
                              eLicenceType );
@@ -654,9 +640,8 @@ QString UsageArguments ( char **argv )
         "                        [server1 country as QLocale ID]; ...\n"
         "                        [server2 address]; ... (server only)\n"
         "  -p, --port            local port number (server only)\n"
-        "  -r  --enablerecording create recordings of jam sessions (server only)\n"
-        "  -R, --recordingdirectory\n"
-        "                        directory to contain recorded jams (server only)\n"
+        "  -R, --recording       enables recording and sets directory to contain\n"
+        "                        recorded jams (server only)\n"
         "  -s, --server          start server\n"
         "  -T, --toreaper        create Reaper project from session in named directory\n"
         "  -u, --numchannels     maximum number of channels (server only)\n"

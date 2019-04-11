@@ -138,7 +138,9 @@ class CJamRecorder : public QThread
     Q_OBJECT
 
 public:
-    CJamRecorder(const CServer* server, const QString recordingDirName);
+    CJamRecorder(const QString recordingDirName) :
+        recordBaseDir (recordingDirName), isRecording (false) {}
+    void Init(const CServer* server);
 
     static void SessionDirToReaper(QString& strSessionDirName);
 

@@ -207,12 +207,13 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strServerInfo,
                    const QString&     strNewWelcomeMessage,
                    const QString&     strRecordingDirName,
-                   const bool         bEnableRecording,
                    const bool         bNCentServPingServerInList,
                    const bool         bNDisconnectAllClients,
                    const ELicenceType eNLicenceType ) :
     iMaxNumChannels       ( iNewMaxNumChan ),
     Socket                ( this, iPortNumber ),
+    JamRecorder           ( strRecordingDirName ),
+    bEnableRecording      ( !strRecordingDirName.isEmpty() ),
     bWriteStatusHTMLFile  ( false ),
     ServerListManager     ( iPortNumber,
                             strCentralServer,
@@ -362,8 +363,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // Enable jam recording (if requested)
     if ( bEnableRecording )
     {
-        JamRecorder = new CJamRecorder(this, strRecordingDirName);
-        JamRecorder->start();
+        JamRecorder.Init ( this );
+        JamRecorder.start();
     }
 
     // enable all channels (for the server all channel must be enabled the
@@ -751,7 +752,11 @@ JitterMeas.Measure();
             // and emit the client disconnected signal
             if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
             {
-                emit ClientDisconnected(iCurChanID); //? do outside mutex lock?
+                if ( bEnableRecording )
+                {
+                    emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
+                }
+
                 bChannelIsNowDisconnected = true;
             }
 
@@ -836,7 +841,15 @@ JitterMeas.Measure();
             // get number of audio channels of current channel
             const int iCurNumAudChan = vecNumAudioChannels[i];
 
-            emit Frame(iCurChanID, vecChannels[iCurChanID].GetName(), vecChannels[iCurChanID].GetAddress(), iCurNumAudChan, vecvecsData[i]);
+            // export the audio data for recording purpose
+            if ( bEnableRecording )
+            {
+                emit AudioFrame ( iCurChanID,
+                                  vecChannels[iCurChanID].GetName(),
+                                  vecChannels[iCurChanID].GetAddress(),
+                                  iCurNumAudChan,
+                                  vecvecsData[i] );
+            }
 
             // generate a sparate mix for each channel
             // actual processing of audio data -> mix

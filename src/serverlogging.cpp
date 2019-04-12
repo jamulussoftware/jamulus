@@ -346,7 +346,6 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
     QTextStream tsConsoleStream ( stdout );
     tsConsoleStream << strLogStr << endl; // on console
 #endif
-
     *this << strLogStr; // in log file
 
     // add element to history
@@ -362,7 +361,6 @@ void CServerLogging::AddServerStopped()
     QTextStream tsConsoleStream ( stdout );
     tsConsoleStream << strLogStr << endl; // on console
 #endif
-
     *this << strLogStr; // in log file
 
     // add element to history and update on server stop

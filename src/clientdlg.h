@@ -206,7 +206,7 @@ public slots:
     void OnNumClientsChanged ( int iNewNumClients );
     void OnNewClientLevelChanged() { MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel; }
 
-    void accept();
+    void accept() { close(); } // introduced by pljones
 
     void keyPressEvent ( QKeyEvent *e ) // block escape key
         { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }

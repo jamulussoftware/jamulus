@@ -1200,8 +1200,3 @@ rbtReverbSelR->setStyleSheet ( "" );
     // also apply GUI design to child GUI controls
     MainMixerBoard->SetGUIDesign ( eNewDesign );
 }
-
-void CClientDlg::accept()
-{
-    close();
-}

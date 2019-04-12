@@ -40,7 +40,6 @@
 #include "util.h"
 #include "serverlogging.h"
 #include "serverlist.h"
-
 #include "recorder/jamrecorder.h"
 
 

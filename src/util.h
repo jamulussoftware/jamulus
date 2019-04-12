@@ -482,6 +482,19 @@ public slots:
 };
 
 
+// Console writer factory ------------------------------------------------------
+// this class was written by pljones
+class ConsoleWriterFactory
+{
+public:
+    ConsoleWriterFactory() : ptsConsole ( nullptr ) { }
+    QTextStream* get();
+
+private:
+    QTextStream* ptsConsole;
+};
+
+
 /******************************************************************************\
 * Other Classes/Enums                                                          *
 \******************************************************************************/
@@ -1273,15 +1286,6 @@ protected:
     CMovingAv<char> ErrorsMovAvBuf;
     bool            bBlockOnDoubleErrors;
     bool            bPreviousState;
-};
-
-class ConsoleWriterFactory
-{
-public:
-    ConsoleWriterFactory() : ptsConsole ( nullptr ) { }
-    QTextStream* get();
-private:
-    QTextStream* ptsConsole;
 };
 
 #endif /* !defined ( UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

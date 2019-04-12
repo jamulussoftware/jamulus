@@ -31,45 +31,16 @@
 #include "serverdlg.h"
 #include "settings.h"
 #include "testbench.h"
+#include "util.h"
 
-
-
-/******************************************************************************\
-* Console logging                                                              *
-\******************************************************************************/
-// Try for a portable console --------------------------------------------------
-
-QTextStream* ConsoleWriterFactory::get()
-{
-    if ( ptsConsole == nullptr )
-    {
-#if _WIN32
-        if ( !AttachConsole ( ATTACH_PARENT_PROCESS ) )
-        {
-            // Not run from console, dump logging to nowhere
-            static QString conout;
-            ptsConsole = new QTextStream ( &conout );
-        }
-        else
-        {
-            freopen ( "CONOUT$", "w", stdout );
-            ptsConsole = new QTextStream ( stdout );
-        }
-#else
-        ptsConsole = new QTextStream ( stdout );
-#endif
-    }
-    return ptsConsole;
-}
 
 // Implementation **************************************************************
 
 int main ( int argc, char** argv )
 {
-    QTextStream& tsConsole = *((new ConsoleWriterFactory())->get());
-
-    QString strArgument;
-    double  rDbleArgument;
+    QTextStream& tsConsole = *( ( new ConsoleWriterFactory() )->get() );
+    QString      strArgument;
+    double       rDbleArgument;
 
     // initialize all flags and string which might be changed by command line
     // arguments

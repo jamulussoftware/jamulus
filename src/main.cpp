@@ -493,7 +493,7 @@ int main ( int argc, char** argv )
                                        strConnOnStartupAddress,
                                        bShowComplRegConnList,
                                        bShowAnalyzerConsole,
-                                       0,
+                                       nullptr,
                                        Qt::Window );
 
                 // show dialog
@@ -544,7 +544,7 @@ int main ( int argc, char** argv )
                 CServerDlg ServerDlg ( &Server,
                                        &Settings,
                                        bStartMinimized,
-                                       0,
+                                       nullptr,
                                        Qt::Window );
 
                 // show dialog (if not the minimized flag is set)
@@ -573,11 +573,11 @@ int main ( int argc, char** argv )
         // show generic error
         if ( bUseGUI )
         {
-            QMessageBox::critical ( 0,
+            QMessageBox::critical ( nullptr,
                                     APP_NAME,
                                     generr.GetErrorText(),
                                     "Quit",
-                                    0 );
+                                    nullptr );
         }
         else
         {

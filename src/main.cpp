@@ -41,10 +41,10 @@
 
 QTextStream* ConsoleWriterFactory::get()
 {
-    if (ptsConsole == nullptr)
+    if ( ptsConsole == nullptr )
     {
 #if _WIN32
-        if (!AttachConsole(ATTACH_PARENT_PROCESS))
+        if ( !AttachConsole ( ATTACH_PARENT_PROCESS ) )
         {
             // Not run from console, dump logging to nowhere
             static QString conout;
@@ -52,7 +52,7 @@ QTextStream* ConsoleWriterFactory::get()
         }
         else
         {
-            freopen("CONOUT$", "w", stdout);
+            freopen ( "CONOUT$", "w", stdout );
             ptsConsole = new QTextStream ( stdout );
         }
 #else
@@ -91,7 +91,6 @@ int main ( int argc, char** argv )
     QString      strLoggingFileName        = "";
     QString      strHistoryFileName        = "";
     QString      strRecordingDirName       = "";
-    QString      strSessionDirName         = "";
     QString      strCentralServer          = "";
     QString      strServerInfo             = "";
     QString      strWelcomeMessage         = "";
@@ -333,22 +332,6 @@ int main ( int argc, char** argv )
         }
 
 
-        // Convert a recording session to a Reaper Project ---------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "-T",
-                                 "--toreaper",
-                                 strArgument ) )
-        {
-            bUseGUI = false;
-            strSessionDirName = strArgument;
-            tsConsole << "- convert " << strSessionDirName << " to Reaper project (no GUI)" << endl;
-            continue;
-        }
-
-
         // Central server ------------------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
@@ -490,11 +473,7 @@ int main ( int argc, char** argv )
 
     try
     {
-        if ( !strSessionDirName.isEmpty() )
-        {
-            CJamRecorder::SessionDirToReaper(strSessionDirName);
-        }
-        else if ( bIsClient )
+        if ( bIsClient )
         {
             // Client:
             // actual client object
@@ -643,7 +622,6 @@ QString UsageArguments ( char **argv )
         "  -R, --recording       enables recording and sets directory to contain\n"
         "                        recorded jams (server only)\n"
         "  -s, --server          start server\n"
-        "  -T, --toreaper        create Reaper project from session in named directory\n"
         "  -u, --numchannels     maximum number of channels (server only)\n"
         "  -w, --welcomemessage  welcome message on connect (server only)\n"
         "  -y, --history         enable connection history and set file\n"

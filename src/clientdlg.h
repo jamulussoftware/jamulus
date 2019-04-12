@@ -79,8 +79,8 @@ public:
                  const QString&  strConnOnStartupAddress,
                  const bool      bNewShowComplRegConnList,
                  const bool      bShowAnalyzerConsole,
-                 QWidget*        parent = 0,
-                 Qt::WindowFlags f = 0 );
+                 QWidget*        parent = nullptr,
+                 Qt::WindowFlags f = nullptr );
 
 protected:
     void               SetGUIDesign ( const EGUIDesign eNewDesign );
@@ -205,4 +205,9 @@ public slots:
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
     void OnNewClientLevelChanged() { MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel; }
+
+    void accept() { close(); } // introduced by pljones
+
+    void keyPressEvent ( QKeyEvent *e ) // block escape key
+        { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
 };

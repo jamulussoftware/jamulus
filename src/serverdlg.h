@@ -97,4 +97,7 @@ public slots:
     void OnSysTrayMenuHide() { hide(); }
     void OnSysTrayMenuExit() { close(); }
     void OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason );
+
+    void keyPressEvent ( QKeyEvent *e ) // block escape key
+        { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
 };

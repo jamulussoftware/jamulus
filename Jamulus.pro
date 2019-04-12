@@ -113,7 +113,7 @@ win32 {
 
         !exists(/usr/include/jack/jack.h) {
             !exists(/usr/local/include/jack/jack.h) {
-                 message(Warning: jack.h was not found at the usual place, maybe the jack dev packet is missing)
+                 message("Warning: jack.h was not found at the usual place, maybe the jack dev packet is missing")
             }
         }
 
@@ -122,9 +122,6 @@ win32 {
         DEFINES += WITH_SOUND
         LIBS += -ljack
     }
-
-    # enable to following line to support compilation on the Raspberry Pi
-    #LIBS += -lrt
 
     # Linux is our source distribution, include sources from other OSs
     DISTFILES += mac/sound.h \
@@ -170,7 +167,10 @@ HEADERS += src/audiomixerboard.h \
     src/soundbase.h \
     src/testbench.h \
     src/util.h \
-    src/analyzerconsole.h
+    src/analyzerconsole.h \
+    src/recorder/jamrecorder.h \
+    src/recorder/creaperproject.h \
+    src/recorder/cwavestream.h
 
 HEADERS_OPUS = libs/opus/include/opus.h \
     libs/opus/include/opus_multistream.h \
@@ -264,7 +264,10 @@ SOURCES += src/audiomixerboard.cpp \
     src/socket.cpp \
     src/soundbase.cpp \
     src/util.cpp \
-    src/analyzerconsole.cpp
+    src/analyzerconsole.cpp \
+    src/recorder/jamrecorder.cpp \
+    src/recorder/creaperproject.cpp \
+    src/recorder/cwavestream.cpp
 
 SOURCES_OPUS = libs/opus/src/opus.c \
     libs/opus/src/opus_decoder.c \

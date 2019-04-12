@@ -385,6 +385,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></li>"
         "<li>Country flag icons from Mark James: "
         "<i><a href=""http://www.famfamfam.com"">http://www.famfamfam.com</a></i></li>"
+        "<li>Server wave recording, coded by pljones</li>"
         "</ul>"
         "</center><br>");
 
@@ -1206,6 +1207,31 @@ QString CCountyFlagIcons::GetResourceReference ( const QLocale::Country eCountry
     }
 
     return strReturn;
+}
+
+
+// Console writer factory ------------------------------------------------------
+QTextStream* ConsoleWriterFactory::get()
+{
+    if ( ptsConsole == nullptr )
+    {
+#if _WIN32
+        if ( !AttachConsole ( ATTACH_PARENT_PROCESS ) )
+        {
+            // Not run from console, dump logging to nowhere
+            static QString conout;
+            ptsConsole = new QTextStream ( &conout );
+        }
+        else
+        {
+            freopen ( "CONOUT$", "w", stdout );
+            ptsConsole = new QTextStream ( stdout );
+        }
+#else
+        ptsConsole = new QTextStream ( stdout );
+#endif
+    }
+    return ptsConsole;
 }
 
 

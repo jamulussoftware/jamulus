@@ -31,21 +31,16 @@
 #include "serverdlg.h"
 #include "settings.h"
 #include "testbench.h"
+#include "util.h"
 
 
 // Implementation **************************************************************
 
 int main ( int argc, char** argv )
 {
-#ifdef _WIN32
-    // no console on windows -> just write in string and dump it
-    QString     strDummySink;
-    QTextStream tsConsole ( &strDummySink );
-#else
-    QTextStream tsConsole ( stdout );
-#endif
-    QString strArgument;
-    double  rDbleArgument;
+    QTextStream& tsConsole = *( ( new ConsoleWriterFactory() )->get() );
+    QString      strArgument;
+    double       rDbleArgument;
 
     // initialize all flags and string which might be changed by command line
     // arguments
@@ -66,6 +61,7 @@ int main ( int argc, char** argv )
     QString      strServerName             = "";
     QString      strLoggingFileName        = "";
     QString      strHistoryFileName        = "";
+    QString      strRecordingDirName       = "";
     QString      strCentralServer          = "";
     QString      strServerInfo             = "";
     QString      strWelcomeMessage         = "";
@@ -292,6 +288,21 @@ int main ( int argc, char** argv )
         }
 
 
+        // Recording directory -------------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "-R",
+                                 "--recordingdirectory",
+                                 strArgument ) )
+        {
+            strRecordingDirName = strArgument;
+            tsConsole << "- recording directory name: " << strRecordingDirName << endl;
+            continue;
+        }
+
+
         // Central server ------------------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
@@ -402,7 +413,14 @@ int main ( int argc, char** argv )
 
     // Application/GUI setup ---------------------------------------------------
     // Application object
-    QApplication app ( argc, argv, bUseGUI );
+    if ( !bUseGUI && !strHistoryFileName.isEmpty() )
+    {
+        tsConsole << "Qt5 requires a windowing system to paint a JPEG image; disabling history graph" << endl;
+        strHistoryFileName = "";
+    }
+    QCoreApplication* pApp = bUseGUI
+            ? new QApplication ( argc, argv )
+            : new QCoreApplication ( argc, argv );
 
 #ifdef _WIN32
     // set application priority class -> high priority
@@ -412,7 +430,7 @@ int main ( int argc, char** argv )
     // be located in the install directory of the software by the installer.
     // Here, we set the path to our application path.
     QDir ApplDir ( QApplication::applicationDirPath() );
-    app.addLibraryPath ( QString ( ApplDir.absolutePath() ) );
+    pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
     // init resources
@@ -445,19 +463,19 @@ int main ( int argc, char** argv )
                                        strConnOnStartupAddress,
                                        bShowComplRegConnList,
                                        bShowAnalyzerConsole,
-                                       0,
+                                       nullptr,
                                        Qt::Window );
 
                 // show dialog
                 ClientDlg.show();
-                app.exec();
+                pApp->exec();
             }
             else
             {
                 // only start application without using the GUI
                 tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
 
-                app.exec();
+                pApp->exec();
             }
         }
         else
@@ -473,10 +491,10 @@ int main ( int argc, char** argv )
                              strCentralServer,
                              strServerInfo,
                              strWelcomeMessage,
+                             strRecordingDirName,
                              bCentServPingServerInList,
                              bDisconnectAllClients,
                              eLicenceType );
-
             if ( bUseGUI )
             {
                 // special case for the GUI mode: as the default we want to use
@@ -496,7 +514,7 @@ int main ( int argc, char** argv )
                 CServerDlg ServerDlg ( &Server,
                                        &Settings,
                                        bStartMinimized,
-                                       0,
+                                       nullptr,
                                        Qt::Window );
 
                 // show dialog (if not the minimized flag is set)
@@ -505,7 +523,7 @@ int main ( int argc, char** argv )
                     ServerDlg.show();
                 }
 
-                app.exec();
+                pApp->exec();
             }
             else
             {
@@ -515,7 +533,7 @@ int main ( int argc, char** argv )
                 // only start application without using the GUI
                 tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
 
-                app.exec();
+                pApp->exec();
             }
         }
     }
@@ -525,11 +543,11 @@ int main ( int argc, char** argv )
         // show generic error
         if ( bUseGUI )
         {
-            QMessageBox::critical ( 0,
+            QMessageBox::critical ( nullptr,
                                     APP_NAME,
                                     generr.GetErrorText(),
                                     "Quit",
-                                    0 );
+                                    nullptr );
         }
         else
         {
@@ -571,6 +589,8 @@ QString UsageArguments ( char **argv )
         "                        [server1 country as QLocale ID]; ...\n"
         "                        [server2 address]; ... (server only)\n"
         "  -p, --port            local port number (server only)\n"
+        "  -R, --recording       enables recording and sets directory to contain\n"
+        "                        recorded jams (server only)\n"
         "  -s, --server          start server\n"
         "  -u, --numchannels     maximum number of channels (server only)\n"
         "  -w, --welcomemessage  welcome message on connect (server only)\n"

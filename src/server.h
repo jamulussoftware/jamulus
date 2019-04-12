@@ -40,6 +40,7 @@
 #include "util.h"
 #include "serverlogging.h"
 #include "serverlist.h"
+#include "recorder/jamrecorder.h"
 
 
 /* Definitions ****************************************************************/
@@ -127,6 +128,7 @@ public:
               const QString&     strCentralServer,
               const QString&     strServerInfo,
               const QString&     strNewWelcomeMessage,
+              const QString&     strRecordingDirName,
               const bool         bNCentServPingServerInList,
               const bool         bNDisconnectAllClients,
               const ELicenceType eNLicenceType );
@@ -247,6 +249,10 @@ protected:
     // logging
     CServerLogging             Logging;
 
+    // recording thread
+    recorder::CJamRecorder     JamRecorder;
+    bool                       bEnableRecording;
+
     // HTML file server status
     bool                       bWriteStatusHTMLFile;
     QString                    strServerHTMLFileListName;
@@ -268,6 +274,12 @@ protected:
 signals:
     void Started();
     void Stopped();
+    void ClientDisconnected ( const int iChID );
+    void AudioFrame ( const int              iChID,
+                      const QString          stChName,
+                      const CHostAddress     RecHostAddr,
+                      const int              iNumAudChan,
+                      const CVector<int16_t> vecsData );
 
 public slots:
     void OnTimer();

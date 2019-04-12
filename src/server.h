@@ -42,7 +42,6 @@
 #include "serverlist.h"
 
 #include "recorder/jamrecorder.h"
-using recorder::CJamRecorder;
 
 
 /* Definitions ****************************************************************/
@@ -252,7 +251,7 @@ protected:
     CServerLogging             Logging;
 
     // recording thread
-    CJamRecorder               JamRecorder;
+    recorder::CJamRecorder     JamRecorder;
     bool                       bEnableRecording;
 
     // HTML file server status

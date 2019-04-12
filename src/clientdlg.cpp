@@ -1205,11 +1205,3 @@ void CClientDlg::accept()
 {
     close();
 }
-
-void CClientDlg::keyPressEvent(QKeyEvent *e)
-{
-    if (e->key() != Qt::Key_Escape)
-    {
-        QDialog::keyPressEvent(e);
-    }
-}

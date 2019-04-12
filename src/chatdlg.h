@@ -48,7 +48,8 @@ public slots:
     void OnLocalInputTextTextChanged ( const QString& strNewText );
     void OnClearPressed();
 
-    void keyPressEvent(QKeyEvent *e);
+    void keyPressEvent ( QKeyEvent *e ) // block escape key
+        { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
 
 signals:
     void NewLocalInputText ( QString strNewText );

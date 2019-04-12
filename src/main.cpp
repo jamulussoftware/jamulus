@@ -442,15 +442,14 @@ int main ( int argc, char** argv )
 
     // Application/GUI setup ---------------------------------------------------
     // Application object
-    if (!bUseGUI && !strHistoryFileName.isEmpty())
+    if ( !bUseGUI && !strHistoryFileName.isEmpty() )
     {
         tsConsole << "Qt5 requires a windowing system to paint a JPEG image; disabling history graph" << endl;
         strHistoryFileName = "";
     }
-    QCoreApplication* _app = bUseGUI
+    QCoreApplication* pApp = bUseGUI
             ? new QApplication ( argc, argv )
             : new QCoreApplication ( argc, argv );
-#define app (*_app)
 
 #ifdef _WIN32
     // set application priority class -> high priority
@@ -460,7 +459,7 @@ int main ( int argc, char** argv )
     // be located in the install directory of the software by the installer.
     // Here, we set the path to our application path.
     QDir ApplDir ( QApplication::applicationDirPath() );
-    app.addLibraryPath ( QString ( ApplDir.absolutePath() ) );
+    pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
 
     // init resources
@@ -498,14 +497,14 @@ int main ( int argc, char** argv )
 
                 // show dialog
                 ClientDlg.show();
-                app.exec();
+                pApp->exec();
             }
             else
             {
                 // only start application without using the GUI
                 tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
 
-                app.exec();
+                pApp->exec();
             }
         }
         else
@@ -553,7 +552,7 @@ int main ( int argc, char** argv )
                     ServerDlg.show();
                 }
 
-                app.exec();
+                pApp->exec();
             }
             else
             {
@@ -563,7 +562,7 @@ int main ( int argc, char** argv )
                 // only start application without using the GUI
                 tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
 
-                app.exec();
+                pApp->exec();
             }
         }
     }

@@ -5,6 +5,10 @@
 
 - added support for controlling the audio mixer faders with a MIDI controller (MacOS only)
 
+- audio recording for the server, coded by pljones
+
+
+
 
 
 3.4.3 (2018-05-17)

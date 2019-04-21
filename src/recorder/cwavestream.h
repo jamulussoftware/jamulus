@@ -73,7 +73,8 @@ public:
     explicit CWaveStream(QIODevice *iod, const uint16_t numChannels);
     CWaveStream(QByteArray *iod, QIODevice::OpenMode flags, const uint16_t numChannels);
     CWaveStream(const QByteArray &ba, const uint16_t numChannels);
-    ~CWaveStream();
+
+    void finalise();
 
 private:
     void waveStreamHeaders();

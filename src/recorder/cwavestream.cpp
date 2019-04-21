@@ -120,10 +120,13 @@ void CWaveStream::waveStreamHeaders()
     *this << scHdrRiff << cFmtSubChunk << scDataSubChunkHdr;
 }
 
-CWaveStream::~CWaveStream()
+void CWaveStream::finalise()
 {
+    static const uint32_t hdrRiffChunkSize = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint32_t);
+    static const uint32_t fmtSubChunkSize = sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint32_t) + sizeof(uint32_t) + sizeof(uint16_t) + sizeof(uint16_t);
+
     static const uint32_t hdrRiffChunkSizeOffset = sizeof(uint32_t);
-    static const uint32_t dataSubChunkHdrChunkSizeOffset = sizeof(HdrRiff) + sizeof(FmtSubChunk) + sizeof (uint32_t) + sizeof (uint32_t);
+    static const uint32_t dataSubChunkHdrChunkSizeOffset = hdrRiffChunkSize + fmtSubChunkSize + sizeof (uint32_t);
 
     const int64_t currentPos = this->device()->pos();
     const uint32_t fileLength = static_cast<uint32_t>(currentPos - initialPos);

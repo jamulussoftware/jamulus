@@ -87,7 +87,7 @@ void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm)
  */
 void CJamClient::Disconnect()
 {
-    delete out;
+    static_cast<CWaveStream*>(out)->finalise();
     out = nullptr;
 
     wavFile->close();

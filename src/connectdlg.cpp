@@ -440,7 +440,7 @@ void CConnectDlg::OnServerListItemDoubleClicked ( QTreeWidgetItem* Item,
 {
     // if a server list item was double clicked, it is the same as if the
     // connect button was clicked
-    if ( Item != 0 )
+    if ( Item != nullptr )
     {
         OnConnectClicked();
     }
@@ -632,7 +632,7 @@ QTreeWidgetItem* CConnectDlg::FindListViewItem ( const CHostAddress& InetAddr )
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 QTreeWidgetItem* CConnectDlg::GetParentListViewItem ( QTreeWidgetItem* pItem )

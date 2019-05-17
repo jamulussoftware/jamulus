@@ -1090,7 +1090,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 if ( eAudioCompressionType == CT_OPUS )
                 {
                     opus_custom_decode ( OpusDecoderMono,
-                                         NULL,
+                                         nullptr,
                                          iCeltNumCodedBytes,
                                          &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
                                          SYSTEM_FRAME_SIZE_SAMPLES );
@@ -1101,7 +1101,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 if ( eAudioCompressionType == CT_OPUS )
                 {
                     opus_custom_decode ( OpusDecoderStereo,
-                                         NULL,
+                                         nullptr,
                                          iCeltNumCodedBytes,
                                          &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
                                          SYSTEM_FRAME_SIZE_SAMPLES );
@@ -1158,7 +1158,7 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     // Consider the jitter buffer on the client and on the server side, too.
     const double dTotalJitterBufferDelayMs = SYSTEM_BLOCK_DURATION_MS_FLOAT *
         static_cast<double> ( GetSockBufNumFrames() +
-                              GetServerSockBufNumFrames() ) * 0.7f;
+                              GetServerSockBufNumFrames() ) * 0.7;
 
     // consider delay introduced by the sound card conversion buffer by using
     // "GetSndCrdConvBufAdditionalDelayMonoBlSize()"

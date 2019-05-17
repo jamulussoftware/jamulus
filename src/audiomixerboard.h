@@ -95,7 +95,7 @@ class CAudioMixerBoard : public QGroupBox
     Q_OBJECT
 
 public:
-    CAudioMixerBoard ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    CAudioMixerBoard ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
 
     void HideAll();
     void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );

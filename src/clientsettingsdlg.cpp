@@ -455,7 +455,7 @@ QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int     iFrameSiz
 {
     // use two times the buffer delay for the entire delay since
     // we have input and output
-    return QString().setNum ( (double) iFrameSize * 2 *
+    return QString().setNum ( static_cast<double> ( iFrameSize ) * 2 *
         1000 / SYSTEM_SAMPLE_RATE_HZ, 'f', 2 ) + " ms (" +
         QString().setNum ( iFrameSize ) + strAddText + ")";
 }
@@ -629,7 +629,7 @@ void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
             QString ( tr ( "The selected audio device could not be used "
             "because of the following error: " ) ) + strError +
             QString ( tr ( " The previous driver will be selected." ) ),
-            "Ok", 0 );
+            "Ok", nullptr );
 
         // recover old selection
         cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );

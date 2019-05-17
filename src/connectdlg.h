@@ -48,8 +48,8 @@ class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
 
 public:
     CConnectDlg ( const bool bNewShowCompleteRegList,
-                  QWidget* parent = 0,
-                  Qt::WindowFlags f = 0 );
+                  QWidget* parent = nullptr,
+                  Qt::WindowFlags f = nullptr );
 
     void Init ( const QString           strNewCentralServerAddr, 
                 const CVector<QString>& vstrIPAddresses );

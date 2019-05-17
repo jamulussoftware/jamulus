@@ -83,7 +83,7 @@ inline short Double2Short ( const double dInput )
         return _MAXSHORT;
     }
 
-    return (short) dInput;
+    return static_cast<short> ( dInput );
 }
 
 // debug error handling
@@ -412,7 +412,7 @@ class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
     Q_OBJECT
 
 public:
-    CAboutDlg ( QWidget* parent = 0 );
+    CAboutDlg ( QWidget* parent = nullptr );
 
     static QString GetVersionAndNameStr ( const bool bWithHtml = true );
 };
@@ -424,7 +424,7 @@ class CLicenceDlg : public QDialog
     Q_OBJECT
 
 public:
-    CLicenceDlg ( QWidget* parent = 0 );
+    CLicenceDlg ( QWidget* parent = nullptr );
 
 protected:
     QPushButton* butAccept;
@@ -441,7 +441,7 @@ class CMusProfDlg : public QDialog
 
 public:
     CMusProfDlg ( CClient* pNCliP,
-                  QWidget* parent = 0 );
+                  QWidget* parent = nullptr );
 
 protected:
     virtual void showEvent ( QShowEvent* );
@@ -469,7 +469,7 @@ class CHelpMenu : public QMenu
     Q_OBJECT
 
 public:
-    CHelpMenu ( QWidget* parent = 0 );
+    CHelpMenu ( QWidget* parent = nullptr );
 
 protected:
     CAboutDlg AboutDlg;
@@ -993,13 +993,13 @@ public:
     {
         switch ( eOSType )
         {
-        case OT_WINDOWS: return "Windows"; break;
-        case OT_MAC_OS:  return "MacOS";   break;
-        case OT_LINUX:   return "Linux";   break;
-        case OT_ANDROID: return "Android"; break;
-        case OT_I_OS:    return "iOS";     break;
-        case OT_UNIX:    return "Unix";    break;
-        default:         return "Unknown"; break;
+        case OT_WINDOWS: return "Windows";
+        case OT_MAC_OS:  return "MacOS";
+        case OT_LINUX:   return "Linux";
+        case OT_ANDROID: return "Android";
+        case OT_I_OS:    return "iOS";
+        case OT_UNIX:    return "Unix";
+        default:         return "Unknown";
         }
     }
 
@@ -1024,7 +1024,7 @@ class CAudioReverb
 public:
     CAudioReverb() {}
     
-    void Init ( const int iSampleRate, const double rT60 = (double) 1.1 );
+    void Init ( const int iSampleRate, const double rT60 = 1.1 );
     void Clear();
     void ProcessSample ( int16_t&     iInputOutputLeft,
                          int16_t&     iInputOutputRight,
@@ -1083,7 +1083,7 @@ class MathUtils
 public:
     static int round ( double x )
     {
-        return (int) ( ( x - floor ( x ) ) >= 0.5 ) ? ceil(x) : floor(x);
+        return static_cast<int> ( ( x - floor ( x ) ) >= 0.5 ) ? static_cast<int> ( ceil ( x ) ) : static_cast<int> ( floor ( x ) );
     }
 
     static void UpDownIIR1 ( double&       dOldValue,

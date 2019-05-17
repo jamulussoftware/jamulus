@@ -27,7 +27,7 @@
 
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
-    vecdGains          ( MAX_NUM_CHANNELS, (double) 1.0 ),
+    vecdGains          ( MAX_NUM_CHANNELS, 1.0 ),
     bDoAutoSockBufSize ( true ),
     bIsEnabled         ( false ),
     bIsServer          ( bNIsServer )
@@ -355,9 +355,9 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
         {
             // store received parameters
             eAudioCompressionType = NetworkTransportProps.eAudioCodingType;
-            iNumAudioChannels     = NetworkTransportProps.iNumAudioChannels;
+            iNumAudioChannels     = static_cast<int> ( NetworkTransportProps.iNumAudioChannels );
             iNetwFrameSizeFact    = NetworkTransportProps.iBlockSizeFact;
-            iNetwFrameSize        = NetworkTransportProps.iBaseNetworkPacketSize;
+            iNetwFrameSize        = static_cast<int> ( NetworkTransportProps.iBaseNetworkPacketSize );
 
             MutexSocketBuf.lock();
             {
@@ -388,14 +388,13 @@ CNetworkTransportProps CChannel::GetNetworkTransportPropsFromCurrentSettings()
 {
     // use current stored settings of the channel to fill the network transport
     // properties structure
-    return CNetworkTransportProps (
-        iNetwFrameSize,
-        iNetwFrameSizeFact,
-        iNumAudioChannels,
-        SYSTEM_SAMPLE_RATE_HZ,
-        eAudioCompressionType,
-        0, // version of the codec
-        0 );
+    return CNetworkTransportProps ( static_cast<uint32_t> ( iNetwFrameSize ),
+                                    static_cast<uint16_t> ( iNetwFrameSizeFact ),
+                                    static_cast<uint32_t> ( iNumAudioChannels ),
+                                    SYSTEM_SAMPLE_RATE_HZ,
+                                    eAudioCompressionType,
+                                    0, // version of the codec
+                                    0 );
 }
 
 void CChannel::Disconnect()

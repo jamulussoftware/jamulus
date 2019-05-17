@@ -186,13 +186,13 @@ QString CSoundBase::SetDev ( const int iNewDev )
                 // have changed so that they are not compatible to our
                 // software anymore
                 QMessageBox::critical (
-                    0, APP_NAME, QString ( tr ( "The audio driver properties "
+                    nullptr, APP_NAME, QString ( tr ( "The audio driver properties "
                     "have changed to a state which is incompatible to this "
                     "software. The selected audio device could not be used "
                     "because of the following error: <b>" ) ) +
                     strErrorMessage +
                     QString ( tr ( "</b><br><br>Please restart the software." ) ),
-                    "Close", 0 );
+                    "Close", nullptr );
 
                 _exit ( 0 );
             }

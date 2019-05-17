@@ -920,8 +920,8 @@ void CClientDlg::OnTimerSigMet()
     }
 
     // show current level
-    lbrInputLevelL->setValue ( (int) ceil ( dCurSigLevelL ) );
-    lbrInputLevelR->setValue ( (int) ceil ( dCurSigLevelR ) );
+    lbrInputLevelL->setValue ( static_cast<int> ( ceil ( dCurSigLevelL ) ) );
+    lbrInputLevelR->setValue ( static_cast<int> ( ceil ( dCurSigLevelR ) ) );
 }
 
 void CClientDlg::OnTimerBuffersLED()
@@ -1036,9 +1036,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
         catch ( CGenErr generr )
         {
             // show error message and return the function
-            QMessageBox::critical (
-                this, APP_NAME, generr.GetErrorText(), "Close", 0 );
-
+            QMessageBox::critical ( this, APP_NAME, generr.GetErrorText(), "Close", nullptr );
             return;
         }
 

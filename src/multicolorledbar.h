@@ -39,7 +39,7 @@ class CMultiColorLEDBar : public QFrame
     Q_OBJECT
 
 public:
-    CMultiColorLEDBar ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    CMultiColorLEDBar ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
     virtual ~CMultiColorLEDBar();
 
     void setValue ( const int value );

@@ -170,7 +170,7 @@ protected:
     class CSocketThread : public QThread
     {
     public:
-        CSocketThread ( CSocket* pNewSocket = NULL, QObject* parent = 0 ) :
+        CSocketThread ( CSocket* pNewSocket = nullptr, QObject* parent = nullptr ) :
           QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) {}
 
         void Stop()
@@ -191,7 +191,7 @@ protected:
         void run() {
             // make sure the socket pointer is initialized (should be always the
             // case)
-            if ( pSocket != NULL )
+            if ( pSocket != nullptr )
             {
                 while ( bRun )
                 {

@@ -170,13 +170,13 @@ void CAudioReverb::Init ( const int    iSampleRate,
 
     // delay lengths for 44100 Hz sample rate
     int lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
-    const double scaler = (double) iSampleRate / 44100.0;
+    const double scaler = static_cast<double> ( iSampleRate ) / 44100.0;
 
     if ( scaler != 1.0 )
     {
         for ( i = 0; i < 9; i++ )
         {
-            delay = (int) floor ( scaler * lengths[i] );
+            delay = static_cast<int> ( floor ( scaler * lengths[i] ) );
 
             if ( ( delay & 1 ) == 0 )
             {
@@ -206,7 +206,7 @@ void CAudioReverb::Init ( const int    iSampleRate,
     setT60 ( rT60, iSampleRate );
     outLeftDelay.Init ( lengths[7] );
     outRightDelay.Init ( lengths[8] );
-    allpassCoefficient = (double) 0.7;
+    allpassCoefficient = 0.7;
     Clear();
 }
 
@@ -223,7 +223,7 @@ bool CAudioReverb::isPrime ( const int number )
 
     if ( number & 1 )
     {
-        for ( int i = 3; i < (int) sqrt ( (double) number ) + 1; i += 2 )
+        for ( int i = 3; i < static_cast<int> ( sqrt ( static_cast<double> ( number ) ) ) + 1; i += 2 )
         {
             if ( ( number % i ) == 0 )
             {
@@ -263,7 +263,7 @@ void CAudioReverb::setT60 ( const double rT60,
     // set the reverberation T60 decay time
     for ( int i = 0; i < 4; i++ )
     {
-        combCoefficient[i] = pow ( (double) 10.0, (double) ( -3.0 *
+        combCoefficient[i] = pow ( 10.0, static_cast<double> ( -3.0 *
             combDelays[i].Size() / ( rT60 * iSampleRate ) ) );
     }
 }

@@ -450,7 +450,7 @@ void CServerDlg::OnTimer()
         // fill list with connected clients
         for ( int i = 0; i < iNumChannels; i++ )
         {
-            if ( !( vecHostAddresses[i].InetAddr == QHostAddress ( (quint32) 0 ) ) )
+            if ( !( vecHostAddresses[i].InetAddr == QHostAddress ( static_cast<quint32> ( 0 ) ) ) )
             {
                 // IP, port number
                 vecpListViewItems[i]->setText ( 0,

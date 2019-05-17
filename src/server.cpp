@@ -797,7 +797,7 @@ JitterMeas.Measure();
                     if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
                     {
                         opus_custom_decode ( OpusDecoderMono[iCurChanID],
-                                             NULL,
+                                             nullptr,
                                              iCeltNumCodedBytes,
                                              &vecvecsData[i][0],
                                              SYSTEM_FRAME_SIZE_SAMPLES );
@@ -809,7 +809,7 @@ JitterMeas.Measure();
                     if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
                     {
                         opus_custom_decode ( OpusDecoderStereo[iCurChanID],
-                                             NULL,
+                                             nullptr,
                                              iCeltNumCodedBytes,
                                              &vecvecsData[i][0],
                                              SYSTEM_FRAME_SIZE_SAMPLES );
@@ -1252,11 +1252,11 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,
                 // time reset gains of this channel ID for all other channels
                 for ( int i = 0; i < iMaxNumChannels; i++ )
                 {
-                    vecChannels[iCurChanID].SetGain ( i, (double) 1.0 );
+                    vecChannels[iCurChanID].SetGain ( i, 1.0 );
 
                     // other channels (we do not distinguish the case if
                     // i == iCurChanID for simplicity)
-                    vecChannels[i].SetGain ( iCurChanID, (double) 1.0 );
+                    vecChannels[i].SetGain ( iCurChanID, 1.0 );
                 }
             }
             else

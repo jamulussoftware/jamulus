@@ -39,7 +39,7 @@ class CChatDlg : public QDialog, private Ui_CChatDlgBase
     Q_OBJECT
 
 public:
-    CChatDlg ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    CChatDlg ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
 
     void AddChatText ( QString strChatText );
 

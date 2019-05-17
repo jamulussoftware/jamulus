@@ -52,8 +52,8 @@ class CClientSettingsDlg : public QDialog, private Ui_CClientSettingsDlgBase
 
 public:
     CClientSettingsDlg ( CClient* pNCliP,
-                         QWidget* parent = 0,
-                         Qt::WindowFlags f = 0 );
+                         QWidget* parent = nullptr,
+                         Qt::WindowFlags f = nullptr );
 
     void SetStatus ( const CMultiColorLED::ELightColor eStatus ) { ledNetw->SetLight ( eStatus ); }
 

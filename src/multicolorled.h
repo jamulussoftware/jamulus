@@ -51,7 +51,7 @@ public:
         RL_RED
     };
 
-    CMultiColorLED ( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    CMultiColorLED ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
 
     void Reset();
     void SetLight ( const ELightColor eNewStatus );

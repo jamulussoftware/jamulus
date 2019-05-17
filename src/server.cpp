@@ -1088,8 +1088,6 @@ void CServer::CreateAndSendChanListForAllConChannels()
         if ( vecChannels[i].IsConnected() )
         {
             // send message
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-vecChannels[i].CreateConClientListNameMes ( vecChanInfo );
             vecChannels[i].CreateConClientListMes ( vecChanInfo );
         }
     }
@@ -1107,8 +1105,6 @@ void CServer::CreateAndSendChanListForThisChan ( const int iCurChanID )
     CVector<CChannelInfo> vecChanInfo ( CreateChannelList() );
 
     // now send connected channels list to the channel with the ID "iCurChanID"
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-vecChannels[iCurChanID].CreateConClientListNameMes ( vecChanInfo );
     vecChannels[iCurChanID].CreateConClientListMes ( vecChanInfo );
 }
 

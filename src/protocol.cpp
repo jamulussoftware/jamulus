@@ -64,18 +64,6 @@ MESSAGES (with connection)
     +-------------------+--------------+
 
 
-- PROTMESSID_CONN_CLIENTS_LIST_NAME: IP number and name of connected clients
-
-    for each connected client append following data:
-
-    +-------------------+--------------------+------------------+ ...
-    | 1 byte channel ID | 4 bytes IP address | 2 bytes number n | ...
-    +-------------------+--------------------+------------------+ ...
-        ... ----------------------+
-        ...  n bytes UTF-8 string |
-        ... ----------------------+
-
-
 - PROTMESSID_CONN_CLIENTS_LIST: Information about connected clients
 
     for each connected client append following data:
@@ -97,13 +85,6 @@ MESSAGES (with connection)
 - PROTMESSID_REQ_CONN_CLIENTS_LIST: Request connected clients list
 
     note: does not have any data -> n = 0
-
-
-- PROTMESSID_CHANNEL_NAME: Name of channel
-
-    +------------------+----------------------+
-    | 2 bytes number n | n bytes UTF-8 string |
-    +------------------+----------------------+
 
 
 - PROTMESSID_CHANNEL_INFOS: Information about the channel
@@ -537,11 +518,6 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                 bRet = EvaluateChanGainMes ( vecbyMesBodyData );
                 break;
 
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-case PROTMESSID_CONN_CLIENTS_LIST_NAME:
-    bRet = EvaluateConClientListNameMes ( vecbyMesBodyData );
-    break;
-
             case PROTMESSID_CONN_CLIENTS_LIST:
                 bRet = EvaluateConClientListMes ( vecbyMesBodyData );
                 break;
@@ -549,11 +525,6 @@ case PROTMESSID_CONN_CLIENTS_LIST_NAME:
             case PROTMESSID_REQ_CONN_CLIENTS_LIST:
                 bRet = EvaluateReqConnClientsList();
                 break;
-
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-case PROTMESSID_CHANNEL_NAME:
-    bRet = EvaluateChanNameMes ( vecbyMesBodyData );
-    break;
 
             case PROTMESSID_CHANNEL_INFOS:
                 bRet = EvaluateChanInfoMes ( vecbyMesBodyData );
@@ -773,90 +744,6 @@ bool CProtocol::EvaluateChanGainMes ( const CVector<uint8_t>& vecData )
     return false; // no error
 }
 
-void CProtocol::CreateConClientListNameMes ( const CVector<CChannelInfo>& vecChanInfo )
-{
-    const int iNumClients = vecChanInfo.Size();
-
-    // build data vector
-    CVector<uint8_t> vecData ( 0 );
-    int              iPos = 0; // init position pointer
-
-    for ( int i = 0; i < iNumClients; i++ )
-    {
-        // convert name string to utf-8
-        const QByteArray strUTF8Name = vecChanInfo[i].strName.toUtf8();
-
-        // size of current list entry
-        const int iCurListEntrLen =
-            1 /* chan ID */ + 4 /* IP addr. */ +
-            2 /* utf-8 str. size */ + strUTF8Name.size();
-
-        // make space for new data
-        vecData.Enlarge ( iCurListEntrLen );
-
-        // channel ID (1 byte)
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecChanInfo[i].iChanID ), 1 );
-
-        // IP address (4 bytes)
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecChanInfo[i].iIpAddr ), 4 );
-
-        // name string
-        PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
-    }
-
-    CreateAndSendMessage ( PROTMESSID_CONN_CLIENTS_LIST_NAME, vecData );
-}
-
-bool CProtocol::EvaluateConClientListNameMes ( const CVector<uint8_t>& vecData )
-{
-    int                   iPos     = 0; // init position pointer
-    const int             iDataLen = vecData.Size();
-    CVector<CChannelInfo> vecChanInfo ( 0 );
-
-    while ( iPos < iDataLen )
-    {
-        // check size (the next 5 bytes)
-        if ( ( iDataLen - iPos ) < 5 )
-        {
-            return true; // return error code
-        }
-
-        // channel ID (1 byte)
-        const int iChanID =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
-
-        // IP address (4 bytes)
-        const int iIpAddr =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
-
-        // name
-        QString strCurStr;
-        if ( GetStringFromStream ( vecData,
-                                   iPos,
-                                   MAX_LEN_FADER_TAG,
-                                   strCurStr ) )
-        {
-            return true; // return error code
-        }
-
-        // add channel information to vector
-        vecChanInfo.Add ( CChannelInfo ( iChanID, iIpAddr, strCurStr ) );
-    }
-
-    // check size: all data is read, the position must now be at the end
-    if ( iPos != iDataLen )
-    {
-        return true; // return error code
-    }
-
-    // invoke message action
-    emit ConClientListNameMesReceived ( vecChanInfo );
-
-    return false; // no error
-}
-
 void CProtocol::CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo )
 {
     const int iNumClients = vecChanInfo.Size();
@@ -997,53 +884,6 @@ bool CProtocol::EvaluateReqConnClientsList()
 {
     // invoke message action
     emit ReqConnClientsList();
-
-    return false; // no error
-}
-
-void CProtocol::CreateChanNameMes ( const QString strName )
-{
-    int iPos = 0; // init position pointer
-
-    // convert name string to utf-8
-    const QByteArray strUTF8Name = strName.toUtf8();
-
-    const int iStrUTF8Len = strUTF8Name.size(); // get utf-8 string size
-
-    // size of current list entry
-    const int iEntrLen = 2 /* utf-8 string size */ + iStrUTF8Len;
-
-    // build data vector
-    CVector<uint8_t> vecData ( iEntrLen );
-
-    // name string
-    PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
-
-    CreateAndSendMessage ( PROTMESSID_CHANNEL_NAME, vecData );
-}
-
-bool CProtocol::EvaluateChanNameMes ( const CVector<uint8_t>& vecData )
-{
-    int iPos = 0; // init position pointer
-
-    // channel name
-    QString strName;
-    if ( GetStringFromStream ( vecData,
-                               iPos,
-                               MAX_LEN_FADER_TAG,
-                               strName ) )
-    {
-        return true; // return error code
-    }
-
-    // check size: all data is read, the position must now be at the end
-    if ( iPos != vecData.Size() )
-    {
-        return true; // return error code
-    }
-
-    // invoke message action
-    emit ChangeChanName ( strName );
 
     return false; // no error
 }

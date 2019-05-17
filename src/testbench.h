@@ -122,14 +122,6 @@ public slots:
                                          GenRandomIntInRange ( -100, 100 ) );
             break;
 
-        case 3: // PROTMESSID_CONN_CLIENTS_LIST_NAME
-            vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
-            vecChanInfo[0].iIpAddr = GenRandomIntInRange ( 0, 100000 );
-            vecChanInfo[0].strName = GenRandomString();
-
-            Protocol.CreateConClientListNameMes ( vecChanInfo );
-            break;
-
         case 4: // PROTMESSID_CONN_CLIENTS_LIST
             vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
             vecChanInfo[0].iIpAddr = GenRandomIntInRange ( 0, 100000 );
@@ -140,10 +132,6 @@ public slots:
 
         case 5: // PROTMESSID_REQ_CONN_CLIENTS_LIST
             Protocol.CreateReqConnClientsList();
-            break;
-
-        case 6: // PROTMESSID_CHANNEL_NAME
-            Protocol.CreateChanNameMes ( GenRandomString() );
             break;
 
         case 7: // PROTMESSID_CHANNEL_INFOS

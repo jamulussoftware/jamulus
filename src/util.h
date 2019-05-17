@@ -796,7 +796,6 @@ class CChannelInfo : public CChannelCoreInfo
 {
 public:
     CChannelInfo() :
-        bOnlyNameIsUsed ( false ),
         iChanID ( 0 ),
         iIpAddr ( 0 ) {}
 
@@ -804,7 +803,6 @@ public:
                    const quint32           NiIP,
                    const CChannelCoreInfo& NCorInf ) :
         CChannelCoreInfo ( NCorInf ),
-        bOnlyNameIsUsed ( false ),
         iChanID ( NiID ),
         iIpAddr ( NiIP ) {}
 
@@ -820,7 +818,6 @@ public:
                            NsCity,
                            NiInstrument,
                            NeSkillLevel ),
-        bOnlyNameIsUsed ( false ),
         iChanID ( NiID ),
         iIpAddr ( NiIP ) {}
 
@@ -842,25 +839,6 @@ public:
             return strName;
         }
     }
-
-
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-CChannelInfo ( const int               NiID,
-               const quint32           NiIP,
-               const QString           NsName ) :
-    CChannelCoreInfo ( NsName,
-                       QLocale::AnyCountry,
-                       "",
-                       CInstPictures::GetNotUsedInstrument(),
-                       SL_NOT_SET ),
-    bOnlyNameIsUsed ( true ),
-    iChanID ( NiID ),
-    iIpAddr ( NiIP ) {}
-
-// in old versions, the name was the only client info -> to be removed
-// when compatiblility to old versions is removed
-bool bOnlyNameIsUsed;
-
 
     // ID of the channel
     int     iChanID;

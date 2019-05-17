@@ -141,10 +141,6 @@ CClient::CClient ( const quint16  iPortNumber,
         this, SLOT ( OnReqChanInfo() ) );
 
     QObject::connect ( &Channel,
-        SIGNAL ( ConClientListNameMesReceived ( CVector<CChannelInfo> ) ),
-        SIGNAL ( ConClientListNameMesReceived ( CVector<CChannelInfo> ) ) );
-
-    QObject::connect ( &Channel,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ) );
 

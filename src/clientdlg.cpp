@@ -443,10 +443,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // other
     QObject::connect ( pClient,
-        SIGNAL ( ConClientListNameMesReceived ( CVector<CChannelInfo> ) ),
-        this, SLOT ( OnConClientListMesReceived ( CVector<CChannelInfo> ) ) );
-
-    QObject::connect ( pClient,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
         this, SLOT ( OnConClientListMesReceived ( CVector<CChannelInfo> ) ) );
 

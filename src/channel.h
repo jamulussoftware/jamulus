@@ -93,19 +93,13 @@ public:
     const CHostAddress& GetAddress() const { return InetAddr; }
 
     void ResetInfo() { ChannelInfo = CChannelCoreInfo(); } // reset does not emit a message
-    void SetName ( const QString sNNa );
     QString GetName();
     void SetChanInfo ( const CChannelCoreInfo& NChanInf );
     CChannelCoreInfo& GetChanInfo() { return ChannelInfo; }
 
     void SetRemoteInfo ( const CChannelCoreInfo ChInfo )
-    {
-        // because of compatibility to old versions, we also have to send the
-        // channel name message extra
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-Protocol.CreateChanNameMes ( ChInfo.strName );
-        Protocol.CreateChanInfoMes ( ChInfo );
-    }
+        { Protocol.CreateChanInfoMes ( ChInfo ); }
+
     void CreateReqChanInfoMes() { Protocol.CreateReqChanInfoMes(); }
 
     void SetGain ( const int iChanID, const double dNewGain );
@@ -155,10 +149,6 @@ Protocol.CreateChanNameMes ( ChInfo.strName );
     void CreateReqConnClientsList()                          { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText )    { Protocol.CreateChatTextMes ( strChatText ); }
     void CreateLicReqMes ( const ELicenceType eLicenceType ) { Protocol.CreateLicenceRequiredMes ( eLicenceType ); }
-
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-void CreateConClientListNameMes ( const CVector<CChannelInfo>& vecChanInfo )
-    { Protocol.CreateConClientListNameMes ( vecChanInfo ); }
 
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo )
         { Protocol.CreateConClientListMes ( vecChanInfo ); }
@@ -219,7 +209,6 @@ public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnJittBufSizeChange ( int iNewJitBufSize );
     void OnChangeChanGain ( int iChanID, double dNewGain );
-    void OnChangeChanName ( QString strName );
     void OnChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();
@@ -256,7 +245,6 @@ signals:
     void JittBufSizeChanged ( int iNewJitBufSize );
     void ServerAutoSockBufSizeChange ( int iNNumFra );
     void ReqConnClientsList();
-    void ConClientListNameMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChanInfoHasChanged();
     void ReqChanInfo();

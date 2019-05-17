@@ -77,18 +77,11 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
         SIGNAL ( ReqConnClientsList() ) );
 
     QObject::connect ( &Protocol,
-        SIGNAL ( ConClientListNameMesReceived ( CVector<CChannelInfo> ) ),
-        SIGNAL ( ConClientListNameMesReceived ( CVector<CChannelInfo> ) ) );
-
-    QObject::connect ( &Protocol,
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ) );
 
     QObject::connect( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
-
-    QObject::connect( &Protocol, SIGNAL ( ChangeChanName ( QString ) ),
-        this, SLOT ( OnChangeChanName ( QString ) ) );
 
     QObject::connect( &Protocol, SIGNAL ( ChangeChanInfo ( CChannelCoreInfo ) ),
         this, SLOT ( OnChangeChanInfo ( CChannelCoreInfo ) ) );
@@ -272,28 +265,6 @@ void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
     }
 }
 
-void CChannel::SetName ( const QString strNewName )
-{
-    bool bNameHasChanged = false;
-
-    Mutex.lock();
-    {
-        // apply value (if different from previous one)
-        if ( ChannelInfo.strName.compare ( strNewName ) )
-        {
-            ChannelInfo.strName = strNewName;
-            bNameHasChanged     = true;
-        }
-    }
-    Mutex.unlock();
-
-    // fire message that name has changed
-    if ( bNameHasChanged )
-    {
-        // the "emit" has to be done outside the mutexed region
-        emit ChanInfoHasChanged();
-    }
-}
 QString CChannel::GetName()
 {
     // make sure the string is not written at the same time when it is
@@ -346,11 +317,6 @@ void CChannel::OnChangeChanGain ( int    iChanID,
                                   double dNewGain )
 {
     SetGain ( iChanID, dNewGain );
-}
-
-void CChannel::OnChangeChanName ( QString strName )
-{
-    SetName ( strName );
 }
 
 void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo )

@@ -41,10 +41,10 @@
 #define PROTMESSID_REQ_JITT_BUF_SIZE          11 // request jitter buffer size
 #define PROTMESSID_NET_BLSI_FACTOR            12 // OLD (not used anymore)
 #define PROTMESSID_CHANNEL_GAIN               13 // set channel gain for mix
-#define PROTMESSID_CONN_CLIENTS_LIST_NAME     14 // connected client list
+#define PROTMESSID_CONN_CLIENTS_LIST_NAME     14 // OLD (not used anymore)
 #define PROTMESSID_SERVER_FULL                15 // OLD (not used anymore)
 #define PROTMESSID_REQ_CONN_CLIENTS_LIST      16 // request connected client list
-#define PROTMESSID_CHANNEL_NAME               17 // set channel name for fader tag
+#define PROTMESSID_CHANNEL_NAME               17 // OLD (not used anymore)
 #define PROTMESSID_CHAT_TEXT                  18 // contains a chat text
 #define PROTMESSID_PING_MS                    19 // OLD (not used anymore)
 #define PROTMESSID_NETW_TRANSPORT_PROPS       20 // properties for network transport
@@ -94,10 +94,8 @@ public:
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
     void CreateChanGainMes ( const int iChanID, const double dGain );
-    void CreateConClientListNameMes ( const CVector<CChannelInfo>& vecChanInfo );
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo );
     void CreateReqConnClientsList();
-    void CreateChanNameMes ( const QString strName );
     void CreateChanInfoMes ( const CChannelCoreInfo ChanInfo );
     void CreateReqChanInfoMes();
     void CreateChatTextMes ( const QString strChatText );
@@ -211,10 +209,8 @@ protected:
     bool EvaluateJitBufMes            ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();
     bool EvaluateChanGainMes          ( const CVector<uint8_t>& vecData );
-    bool EvaluateConClientListNameMes ( const CVector<uint8_t>& vecData );
     bool EvaluateConClientListMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateReqConnClientsList();
-    bool EvaluateChanNameMes          ( const CVector<uint8_t>& vecData );
     bool EvaluateChanInfoMes          ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChanInfoMes();
     bool EvaluateChatTextMes          ( const CVector<uint8_t>& vecData );
@@ -266,11 +262,9 @@ signals:
     void ReqJittBufSize();
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ChangeChanGain ( int iChanID, double dNewGain );
-    void ConClientListNameMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ServerFullMesReceived();
     void ReqConnClientsList();
-    void ChangeChanName ( QString strName );
     void ChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void ReqChanInfo();
     void ChatTextReceived ( QString strChatText );

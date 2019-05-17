@@ -634,15 +634,8 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                 // set the text in the fader
                 vecpChanFader[i]->SetText ( vecChanInfo[j] );
 
-                // update other channel infos (only available for new protocol
-                // which is not compatible with old versions -> this way we make
-                // sure that the protocol which transfers only the name does
-                // change the other client infos)
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED #### -> the "if-condition" can be removed later on...
-                if ( !vecChanInfo[j].bOnlyNameIsUsed )
-                {
-                    vecpChanFader[i]->SetChannelInfos ( vecChanInfo[j] );
-                }
+                // update other channel infos
+                vecpChanFader[i]->SetChannelInfos ( vecChanInfo[j] );
 
                 bFaderIsUsed = true;
             }

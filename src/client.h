@@ -388,7 +388,6 @@ public slots:
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
 
 signals:
-    void ConClientListNameMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
     void LicenceRequired ( ELicenceType eLicenceType );

@@ -345,13 +345,9 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
     // only the server shall act on network transport properties message
     if ( bIsServer )
     {
-// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
-        // if old CELT codec is used, inform the client that the new OPUS codec
-        // is required since we refuse the complete network transport properties
-        // if the audio coding type is set to CELT
+        // OPUS codec is the only supported codec right now
         if ( NetworkTransportProps.eAudioCodingType != CT_OPUS )
         {
-            Protocol.CreateOpusSupportedMes();
             return;
         }
 
@@ -361,8 +357,7 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             eAudioCompressionType = NetworkTransportProps.eAudioCodingType;
             iNumAudioChannels     = NetworkTransportProps.iNumAudioChannels;
             iNetwFrameSizeFact    = NetworkTransportProps.iBlockSizeFact;
-            iNetwFrameSize =
-                NetworkTransportProps.iBaseNetworkPacketSize;
+            iNetwFrameSize        = NetworkTransportProps.iBaseNetworkPacketSize;
 
             MutexSocketBuf.lock();
             {

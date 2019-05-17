@@ -181,10 +181,6 @@ public slots:
             Protocol.CreateReqNetwTranspPropsMes();
             break;
 
-        case 13: // PROTMESSID_OPUS_SUPPORTED
-            Protocol.CreateOpusSupportedMes();
-            break;
-
         case 14: // PROTMESSID_CLM_PING_MS
             Protocol.CreateCLPingMes ( CurHostAddress,
                                        GenRandomIntInRange ( -2, 1000 ) );

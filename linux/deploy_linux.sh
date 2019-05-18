@@ -3,7 +3,7 @@ cd ..
 
 make distclean
 qmake Jamulus.pro
-make -j2
+make
 make dist
 
 mkdir -p deploy

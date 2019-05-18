@@ -103,6 +103,9 @@ win32 {
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
     OTHER_FILES += android/AndroidManifest.xml
 } else:unix {
+    # we want to compile with C++11
+    QMAKE_CXXFLAGS += -std=c++0x
+
     # we assume that stdint.h is always present in a Linux system
     DEFINES += HAVE_STDINT_H
 

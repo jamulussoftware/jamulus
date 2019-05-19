@@ -19,7 +19,7 @@ CSvgHistoryGraph::CSvgHistoryGraph() :
     iMarkerSizeNewCon       ( 11 ),
     iMarkerSizeServSt       ( 8 ),
     axisFontFamily          ( "sans-serif" ),
-    axisFontWeight          ( "80" ),
+    axisFontWeight          ( "60" ),
     axisFontSize            ( 10 ),
     iTextOffsetX            ( 18 ),
     plotGridFrameX          ( plotCanvasRectX + iGridFrameOffset ),
@@ -115,12 +115,12 @@ void CSvgHistoryGraph::DrawFrame( QXmlStreamWriter &svgStreamWriter, const unsig
     {
         unsigned int         iBottomExtraTickLen = 0;
         const unsigned int   iCurX = plotGridFrameX + static_cast<unsigned int> ( dayXSpace * ( i + 1 ) );
-        const QDate curXAxisDate = curDate.addDays ( i - numDays + 1 );
+        const QDate curXAxisDate = curDate.addDays ( static_cast<signed>(1 + i - numDays) );
 
         // text (print only every "iXAxisTickStep" tick)
         if ( !( i % iXAxisTickStep ) )
         {
-            text(svgStreamWriter, static_cast<unsigned int>(std::max(0, static_cast<signed int>(iCurX - iTextOffsetX))), plotGridFrameBottom + iXAxisTextHeight + iTextOffsetToGrid, curXAxisDate.toString ( "dd.MM." ), textAttributes);
+            text(svgStreamWriter, static_cast<unsigned>(std::max(0, static_cast<signed>(iCurX - iTextOffsetX))), plotGridFrameBottom + iXAxisTextHeight + iTextOffsetToGrid, curXAxisDate.toString ( "dd.MM." ), textAttributes);
 
             iBottomExtraTickLen = 5;
         }
@@ -162,10 +162,10 @@ void CSvgHistoryGraph::AddMarker ( QXmlStreamWriter &svgStreamWriter, const SHis
 {
     // calculate x-axis offset (difference of days compared to
     // current date)
-    const unsigned int iXAxisOffs = static_cast<unsigned int>( curDate.daysTo ( curHistoryData.DateTime.date() ) );
+    const int iXAxisOffs = curDate.daysTo ( curHistoryData.DateTime.date() );
 
     // check range, if out of range, do not plot anything
-    if ( -iXAxisOffs > ( numDays - 1 ) )
+    if ( -iXAxisOffs > static_cast<int>( numDays - 1 ) )
     {
         return;
     }
@@ -175,13 +175,14 @@ void CSvgHistoryGraph::AddMarker ( QXmlStreamWriter &svgStreamWriter, const SHis
         static_cast<double> ( curHistoryData.DateTime.time().minute() ) / 60;
 
     // calculate the actual point in the graph (in pixels)
-    unsigned int curPointX = plotGridFrameX + static_cast<unsigned int> ( dayXSpace * ( numDays + iXAxisOffs ) );
-    unsigned int curPointY = plotGridFrameY + static_cast<unsigned int> ( static_cast<double> ( plotGridFrameHeight ) / ( iYAxisEnd - iYAxisStart ) * dYAxisOffs );
-    unsigned int wh = 0;
-    QXmlStreamAttributes curPointAttibutes;
-    curPointAttibutes.append("stroke", "0");
+    unsigned int curPointX = plotGridFrameX + ( dayXSpace * static_cast<unsigned int>( numDays + iXAxisOffs ) );
+    unsigned int curPointY = plotGridFrameY + static_cast<unsigned int> ( static_cast<double> (
+	plotGridFrameHeight ) / ( iYAxisEnd - iYAxisStart ) * dYAxisOffs );
 
     // we use different markers for new connection and server stop items
+    QXmlStreamAttributes curPointAttibutes;
+    curPointAttibutes.append("stroke", "0");
+    unsigned int wh = 0;
     switch ( curHistoryData.Type )
     {
     case CHistoryGraph::EHistoryItemType::HIT_SERVER_STOP:

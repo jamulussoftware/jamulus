@@ -333,7 +333,14 @@ void CServerLogging::Start ( const QString& strLoggingFileName )
 
 void CServerLogging::EnableHistory ( const QString& strHistoryFileName )
 {
-    HistoryGraph.Start ( strHistoryFileName );
+    if ( strHistoryFileName.right(4).compare(".svg", Qt::CaseInsensitive) == 0 )
+    {
+        SvgHistoryGraph.Start ( strHistoryFileName );
+    }
+    else
+    {
+        HistoryGraph.Start ( strHistoryFileName );
+    }
 }
 
 void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
@@ -342,14 +349,13 @@ void CServerLogging::AddNewConnection ( const QHostAddress& ClientInetAddr )
     const QString strLogStr = CurTimeDatetoLogString() + ", " +
         ClientInetAddr.toString() + ", connected";
 
-#ifndef _WIN32
-    QTextStream tsConsoleStream ( stdout );
+    QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
     tsConsoleStream << strLogStr << endl; // on console
-#endif
     *this << strLogStr; // in log file
 
     // add element to history
     HistoryGraph.Add ( QDateTime::currentDateTime(), ClientInetAddr );
+    SvgHistoryGraph.Add ( QDateTime::currentDateTime(), ClientInetAddr );
 }
 
 void CServerLogging::AddServerStopped()
@@ -357,17 +363,16 @@ void CServerLogging::AddServerStopped()
     const QString strLogStr = CurTimeDatetoLogString() + ",, server stopped "
         "-------------------------------------";
 
-#ifndef _WIN32
-    QTextStream tsConsoleStream ( stdout );
+    QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
     tsConsoleStream << strLogStr << endl; // on console
-#endif
     *this << strLogStr; // in log file
 
     // add element to history and update on server stop
-    HistoryGraph.Add ( QDateTime::currentDateTime(),
-        CHistoryGraph::HIT_SERVER_STOP );
+    HistoryGraph.Add ( QDateTime::currentDateTime(), CHistoryGraph::HIT_SERVER_STOP );
+    SvgHistoryGraph.Add ( QDateTime::currentDateTime(), CHistoryGraph::HIT_SERVER_STOP );
 
     HistoryGraph.Update();
+    SvgHistoryGraph.Update();
 }
 
 void CServerLogging::operator<< ( const QString& sNewStr )
@@ -420,8 +425,8 @@ void CServerLogging::ParseLogFile ( const QString& strFileName )
                 if ( strAddress.isEmpty() )
                 {
                     // server stop
-                    HistoryGraph.Add ( curDateTime,
-                        CHistoryGraph::HIT_SERVER_STOP );
+                    HistoryGraph.Add ( curDateTime, CHistoryGraph::HIT_SERVER_STOP );
+                    SvgHistoryGraph.Add ( curDateTime, CHistoryGraph::HIT_SERVER_STOP );
                 }
                 else
                 {
@@ -432,13 +437,15 @@ void CServerLogging::ParseLogFile ( const QString& strFileName )
                     {
                         // new client connection
                         HistoryGraph.Add ( curDateTime, curAddress );
+                        SvgHistoryGraph.Add ( curDateTime, curAddress );
                     }
                 }
             }
         }
     }
 
-     HistoryGraph.Update();
+    HistoryGraph.Update();
+    SvgHistoryGraph.Update();
 }
 
 QString CServerLogging::CurTimeDatetoLogString()

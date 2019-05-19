@@ -158,6 +158,7 @@ HEADERS += src/audiomixerboard.h \
     src/connectdlg.h \
     src/global.h \
     src/clientdlg.h \
+    src/historygraph.h \
     src/serverdlg.h \
     src/multicolorled.h \
     src/multicolorledbar.h \
@@ -168,6 +169,7 @@ HEADERS += src/audiomixerboard.h \
     src/settings.h \
     src/socket.h \
     src/soundbase.h \
+    src/svghistorygraph.h \
     src/testbench.h \
     src/util.h \
     src/analyzerconsole.h \
@@ -266,6 +268,7 @@ SOURCES += src/audiomixerboard.cpp \
     src/settings.cpp \
     src/socket.cpp \
     src/soundbase.cpp \
+    src/svghistorygraph.cpp \
     src/util.cpp \
     src/analyzerconsole.cpp \
     src/recorder/jamrecorder.cpp \

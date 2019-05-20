@@ -1,8 +1,6 @@
 #ifndef HISTORYGRAPH_H
 #define HISTORYGRAPH_H
 
-#include <QImage>
-#include <QPainter>
 #include <QDateTime>
 #include <QHostAddress>
 #include <QFile>
@@ -15,11 +13,9 @@
 // number of history items to store
 #define NUM_ITEMS_HISTORY           600
 
-/* Classes ********************************************************************/
-class CHistoryGraph : public QObject
+/* Interface ********************************************************************/
+class AHistoryGraph
 {
-    Q_OBJECT
-
 public:
     enum EHistoryItemType
     {
@@ -28,11 +24,13 @@ public:
         HIT_SERVER_STOP
     };
 
-    CHistoryGraph();
+    AHistoryGraph();
+    ~AHistoryGraph() { }
+
     void Start ( const QString& sNewFileName );
     void Add ( const QDateTime& newDateTime, const EHistoryItemType curType );
     void Add ( const QDateTime& newDateTime, const QHostAddress ClientInetAddr );
-    void Update();
+    virtual void Update ( );
 
 protected:
     struct SHistoryData
@@ -42,49 +40,61 @@ protected:
     };
     void DrawFrame ( const int iNewNumTicksX );
     void AddMarker ( const SHistoryData& curHistoryData );
-    void Save      ( const QString sFileName );
+    virtual void Save ( const QString sFileName ) = 0;
 
+    virtual void rect ( const unsigned int x, const unsigned int y, const unsigned int width, const unsigned int height ) = 0;
+    virtual void text ( const unsigned int x, const unsigned int y, const QString& value ) = 0;
+    virtual void line ( const unsigned int x1, const unsigned int y1, const unsigned int x2, const unsigned int y2, const unsigned int strokeWidth = 1 ) = 0;
+    virtual void point ( const unsigned int x, const unsigned int y, const unsigned int size, const QString& colour ) = 0;
+
+    // Constructor sets these
     QString             sFileName;
-
     bool                bDoHistory;
     CFIFO<SHistoryData> vHistoryDataFifo;
+    unsigned int        iNumTicksX; // Class global, not sure why
 
-    QRect               PlotCanvasRect;
+    QString             BackgroundColor;
+    QString             FrameColor;
+    QString             GridColor;
+    QString             TextColor;
+    QString             MarkerNewColor;
+    QString             MarkerNewLocalColor;
+    QString             MarkerStopColor;
 
-    int                 iNumTicksX;
-    int                 iYAxisStart;
-    int                 iYAxisEnd;
-    int                 iNumTicksY;
-    int                 iGridFrameOffset;
-    int                 iGridWidthWeekend;
-    int                 iTextOffsetToGrid;
-    int                 iXAxisTextHeight;
-    int                 iMarkerSizeNewCon;
-    int                 iMarkerSizeServSt;
+    const unsigned int  canvasRectX;
+    const unsigned int  canvasRectY;
+    const unsigned int  canvasRectWidth;
+    const unsigned int  canvasRectHeight;
 
-    QFont               AxisFont;
-    int                 iTextOffsetX;
+    const unsigned int  iGridFrameOffset;
+    const unsigned int  iGridWidthWeekend;
+    const unsigned int  iXAxisTextHeight;
+    const unsigned int  gridFrameX;
+    const unsigned int  gridFrameY;
+    const unsigned int  gridFrameWidth;
+    const unsigned int  gridFrameHeight;
+    const unsigned int  gridFrameRight;
+    const unsigned int  gridFrameBottom;
 
-    QColor              PlotBackgroundColor;
-    QColor              PlotFrameColor;
-    QColor              PlotGridColor;
-    QColor              PlotTextColor;
-    QColor              PlotMarkerNewColor;
-    QColor              PlotMarkerNewLocalColor;
-    QColor              PlotMarkerStopColor;
+    const QString       axisFontFamily;
+    const QString       axisFontWeight;
+    const unsigned int  axisFontSize;
 
-    QImage              PlotPixmap;
+    const unsigned int  iYAxisStart;
+    const unsigned int  iYAxisEnd;
+    const unsigned int  iNumTicksY;
 
-    double              dXSpace;
-    int                 iYSpace;
+    const unsigned int  iTextOffsetToGrid;
+    const unsigned int  iTextOffsetX;
 
-    QDate               curDate;
-    QRect               PlotGridFrame;
-    QTimer              TimerDailyUpdate;
+    const unsigned int  iMarkerSizeNewCon;
+    const unsigned int  iMarkerSizeServSt;
 
-public slots:
-    void OnTimerDailyUpdate() { Update(); }
+    // others
+    double dayXSpace;
+    unsigned int iYSpace;
+    QDate curDate;
+    QTimer TimerDailyUpdate;
 };
-
 
 #endif // HISTORYGRAPH_H

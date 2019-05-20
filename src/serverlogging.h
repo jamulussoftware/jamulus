@@ -33,7 +33,7 @@
 #include "global.h"
 #include "util.h"
 
-#include "historygraph.h"
+#include "jpeghistorygraph.h"
 #include "svghistorygraph.h"
 
 /* Classes ********************************************************************/
@@ -46,7 +46,6 @@ public:
 
     void Start ( const QString& strLoggingFileName );
     void EnableHistory ( const QString& strHistoryFileName );
-    void EnableSVGHistory ( const QString& strHistoryFileName );
     void AddNewConnection ( const QHostAddress& ClientInetAddr );
     void AddServerStopped();
     void ParseLogFile ( const QString& strFileName );
@@ -55,10 +54,10 @@ protected:
     void operator<< ( const QString& sNewStr );
     QString CurTimeDatetoLogString();
 
-    CHistoryGraph HistoryGraph;
-    CSvgHistoryGraph SvgHistoryGraph;
-    bool          bDoLogging;
-    QFile         File;
+    CJpegHistoryGraph JpegHistoryGraph;
+    CSvgHistoryGraph  SvgHistoryGraph;
+    bool              bDoLogging;
+    QFile             File;
 };
 
 #endif // SERVERLOGGING_H

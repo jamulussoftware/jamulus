@@ -1,25 +1,19 @@
-#ifndef SVGHISTORYGRAPH_H
-#define SVGHISTORYGRAPH_H
+#ifndef JPEGHISTORYGRAPH_H
+#define JPEGHISTORYGRAPH_H
 
 #include "historygraph.h"
 
-#include <QXmlStreamWriter>
-#include <QXmlStreamAttributes>
-
-/* Definitions ****************************************************************/
-// number of history items to store
-#ifndef NUM_ITEMS_HISTORY
-#define NUM_ITEMS_HISTORY           600
-#endif
+#include <QImage>
+#include <QPainter>
 
 /* Classes ********************************************************************/
-class CSvgHistoryGraph : public QObject, virtual public AHistoryGraph
+class CJpegHistoryGraph : public QObject, virtual public AHistoryGraph
 {
     Q_OBJECT
 
 public:
-    CSvgHistoryGraph();
-    virtual void Update();
+    CJpegHistoryGraph();
+    virtual void Update ( );
 
 protected:
     virtual void Save ( const QString sFileName );
@@ -30,12 +24,11 @@ protected:
     virtual void point ( const unsigned int x, const unsigned int y, const unsigned int size, const QString& colour );
 
 private:
-    QXmlStreamAttributes svgRootAttributes;
-    QString svgImage;
-    QXmlStreamWriter svgStreamWriter;
+    QImage PlotPixmap;
+    int iAxisFontWeight;
 
 public slots:
     void OnTimerDailyUpdate() { Update(); }
 };
 
-#endif // SVGHISTORYGRAPH_H
+#endif // JPEGHISTORYGRAPH_H

@@ -174,9 +174,7 @@ HEADERS += src/audiomixerboard.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
-    src/historygraph.h \
-    src/jpeghistorygraph.h \
-    src/svghistorygraph.h
+    src/historygraph.h
 
 HEADERS_OPUS = libs/opus/include/opus.h \
     libs/opus/include/opus_multistream.h \

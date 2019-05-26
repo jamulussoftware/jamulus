@@ -33,8 +33,7 @@
 #include "global.h"
 #include "util.h"
 
-#include "jpeghistorygraph.h"
-#include "svghistorygraph.h"
+#include "historygraph.h"
 
 /* Classes ********************************************************************/
 class CServerLogging

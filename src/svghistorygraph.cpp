@@ -1,4 +1,4 @@
-#include "svghistorygraph.h"
+#include "historygraph.h"
 
 CSvgHistoryGraph::CSvgHistoryGraph() :
     AHistoryGraph(),

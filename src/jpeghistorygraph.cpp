@@ -1,4 +1,4 @@
-#include "jpeghistorygraph.h"
+#include "historygraph.h"
 
 CJpegHistoryGraph::CJpegHistoryGraph() :
     AHistoryGraph(),

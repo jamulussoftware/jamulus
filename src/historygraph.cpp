@@ -252,5 +252,5 @@ void AHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
         break;
     }
 
-    point( curPointX, curPointY, curPointSize, curPointColour );
+    point( curPointX - curPointSize / 2, curPointY - curPointSize / 2, curPointSize, curPointColour );
 }

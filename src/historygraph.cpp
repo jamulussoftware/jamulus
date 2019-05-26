@@ -168,7 +168,7 @@ void AHistoryGraph::DrawFrame ( const int iNewNumTicksX )
     {
         int         iBottomExtraTickLen = 0;
         const int   iCurX = gridFrameX + static_cast<int> ( dayXSpace * ( i + 1 ) );
-        const QDate curXAxisDate = curDate.addDays ( i - iNumTicksX + 1 );
+        const QDate curXAxisDate = curDate.addDays ( 0 - static_cast<signed>( iNumTicksX ) + i + 1 );
 
         // text (print only every "iXAxisTickStep" tick)
         if ( !( i % iXAxisTickStep ) )
@@ -219,7 +219,7 @@ void AHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
         curDate.daysTo ( curHistoryData.DateTime.date() );
 
     // check range, if out of range, do not plot anything
-    if ( -iXAxisOffs > ( static_cast<int>(iNumTicksX) - 1 ) )
+    if ( -iXAxisOffs > ( static_cast<signed>( iNumTicksX ) - 1 ) )
     {
         return;
     }
@@ -229,7 +229,7 @@ void AHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
         static_cast<double> ( curHistoryData.DateTime.time().minute() ) / 60;
 
     // calculate the actual point in the graph (in pixels)
-    int curPointX = gridFrameX + static_cast<int> ( dayXSpace * ( iNumTicksX + iXAxisOffs ) );
+    int curPointX = gridFrameX + static_cast<int> ( dayXSpace * ( static_cast<signed>( iNumTicksX ) + iXAxisOffs ) );
     int curPointY = gridFrameY + static_cast<int> ( static_cast<double> (
         gridFrameHeight ) / ( iYAxisEnd - iYAxisStart ) * dYAxisOffs );
     QString curPointColour = MarkerNewColor;

@@ -1,0 +1,11 @@
+#!/usr/bin/make -f  
+%:  
+	dh $@
+	make Jamulus.pro
+
+override_dh_auto_install:
+
+override_dh_usrlocal:
+	mkdir -p $$(pwd)/debian/jamulus/usr/local/bin/
+	install -D -m 0755 Jamulus $$(pwd)/debian/jamulus/usr/local/bin/
+

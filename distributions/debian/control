@@ -1,0 +1,14 @@
+Source: jamulus
+Section: sound
+Priority: optional
+Maintainer: Marc Landolt (debian@marclandolt.ch)
+Build-Depends: debhelper (>= 9), build-essential, libqt4-dev, libjack-jackd2-dev
+Standards-Version: 3.9.5
+Homepage: http://http://llcon.sourceforge.net/
+#Vcs-Git: git://anonscm.debian.org/collab-maint/helloworld.git
+#Vcs-Browser: https://sourceforge.net/p/llcon/jamulus/ci/master/tree/
+ 
+Package: jamulus
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}, qt4-default, jackd
+Description: Low latency Audio Server/Client 

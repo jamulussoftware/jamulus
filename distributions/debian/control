@@ -12,4 +12,4 @@ Package: jamulus
 Architecture: amd64
 Depends: ${shlibs:Depends}, ${misc:Depends}, libqt4-dev, qtchooser, jackd
 Description: Low latency Audio Server/Client
-that runs on Windows / OSX / Linux
+	that runs on Windows / OSX / Linux

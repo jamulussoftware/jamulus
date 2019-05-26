@@ -272,9 +272,7 @@ SOURCES += src/audiomixerboard.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
     src/recorder/cwavestream.cpp \
-    src/historygraph.cpp \
-    src/jpeghistorygraph.cpp \
-    src/svghistorygraph.cpp
+    src/historygraph.cpp
 
 SOURCES_OPUS = libs/opus/src/opus.c \
     libs/opus/src/opus_decoder.c \

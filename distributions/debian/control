@@ -1,7 +1,6 @@
 Source: jamulus
 Section: sound
 Priority: optional
-Maintainer:  (debian@marclandolt.ch)
 Maintainer: "Marc Landolt jr" <debian@marclandolt.ch>
 Build-Depends: debhelper (>= 9), build-essential, libqt4-dev, libjack-jackd2-dev
 Standards-Version: 3.9.5

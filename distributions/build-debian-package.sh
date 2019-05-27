@@ -1,5 +1,5 @@
 #!/bin/bash
-echo Today (2019-05-27) it is maybe best to build the deb it on Ubuntu 16.04
+echo Today \(2019-05-27\) it is maybe best to build the deb it on Ubuntu 16.04
 echo Since there are no versions specified of the libraries it will takte current
 echo so it would also run on Ubuntu 17,18,19 or Debian 9/10
 echo press a [KEY] to continue or [CTRL]-C to abort

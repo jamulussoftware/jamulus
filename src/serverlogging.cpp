@@ -38,6 +38,7 @@ void CServerLogging::Start ( const QString& strLoggingFileName )
 {
     // open file
     File.setFileName ( strLoggingFileName );
+
     if ( File.open ( QIODevice::Append | QIODevice::Text ) )
     {
         bDoLogging = true;
@@ -46,7 +47,7 @@ void CServerLogging::Start ( const QString& strLoggingFileName )
 
 void CServerLogging::EnableHistory ( const QString& strHistoryFileName )
 {
-    if ( strHistoryFileName.right(4).compare(".svg", Qt::CaseInsensitive) == 0 )
+    if ( strHistoryFileName.right ( 4 ).compare ( ".svg", Qt::CaseInsensitive ) == 0 )
     {
         SvgHistoryGraph.Start ( strHistoryFileName );
     }
@@ -114,7 +115,7 @@ void CServerLogging::ParseLogFile ( const QString& strFileName )
         QString strCurLine = inStream.readLine();
 
         // parse log file line
-        QStringList strlistCurLine = strCurLine.split( "," );
+        QStringList strlistCurLine = strCurLine.split ( "," );
 
         // check number of separated strings condition
         if ( strlistCurLine.size() == 4 )
@@ -135,11 +136,12 @@ void CServerLogging::ParseLogFile ( const QString& strFileName )
 
                 // check if server stop or new client connection
                 QString strAddress = strlistCurLine.at ( 2 ).trimmed();
+
                 if ( strAddress.isEmpty() )
                 {
                     // server stop
                     JpegHistoryGraph.Add ( curDateTime, CJpegHistoryGraph::HIT_SERVER_STOP );
-                    SvgHistoryGraph.Add ( curDateTime, CJpegHistoryGraph::HIT_SERVER_STOP );
+                    SvgHistoryGraph.Add ( curDateTime, CSvgHistoryGraph::HIT_SERVER_STOP );
                 }
                 else
                 {

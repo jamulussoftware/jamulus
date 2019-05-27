@@ -42,9 +42,11 @@
 #include <QXmlStreamWriter>
 #include <QXmlStreamAttributes>
 
+
 /* Definitions ****************************************************************/
 // number of history items to store
 #define NUM_ITEMS_HISTORY           600
+
 
 /* Interface ******************************************************************/
 class AHistoryGraph
@@ -124,11 +126,12 @@ protected:
     const unsigned int  iMarkerSizeServSt;
 
     // others
-    double dayXSpace;
+    double       dayXSpace;
     unsigned int iYSpace;
-    QDate curDate;
-    QTimer TimerDailyUpdate;
+    QDate        curDate;
+    QTimer       TimerDailyUpdate;
 };
+
 
 /* Implementations ************************************************************/
 class CJpegHistoryGraph : public QObject, virtual public AHistoryGraph

@@ -25,12 +25,13 @@
 
 #include "historygraph.h"
 
+
 /* Abstract class *************************************************************/
 AHistoryGraph::AHistoryGraph() :
-    sFileName        ( "" ),
-    bDoHistory       ( false ),
-    vHistoryDataFifo ( NUM_ITEMS_HISTORY ),
-    iNumTicksX       ( 0 ), // number of days in history
+    sFileName           ( "" ),
+    bDoHistory          ( false ),
+    vHistoryDataFifo    ( NUM_ITEMS_HISTORY ),
+    iNumTicksX          ( 0 ), // number of days in history
 
     BackgroundColor     ( "white" ), // background
     FrameColor          ( "black" ), // frame
@@ -40,41 +41,42 @@ AHistoryGraph::AHistoryGraph() :
     MarkerNewLocalColor ( "blue" ), // marker for new local connection
     MarkerStopColor     ( "red" ), // marker for server stop
 
-    canvasRectX             ( 0 ),
-    canvasRectY             ( 0 ),
-    canvasRectWidth         ( 640 ),
-    canvasRectHeight        ( 450 ),
+    canvasRectX         ( 0 ),
+    canvasRectY         ( 0 ),
+    canvasRectWidth     ( 640 ),
+    canvasRectHeight    ( 450 ),
 
-    iGridFrameOffset        ( 10 ),
-    iGridWidthWeekend       ( 3 ), // should be an odd value
-    iXAxisTextHeight        ( 22 ),
-    gridFrameX              ( canvasRectX + iGridFrameOffset ),
-    gridFrameY              ( canvasRectY + iGridFrameOffset ),
-    gridFrameWidth          ( canvasRectWidth - 2 * iGridFrameOffset ),
-    gridFrameHeight         ( canvasRectHeight - 2 * iGridFrameOffset - iXAxisTextHeight ),
-    gridFrameRight          ( gridFrameX + gridFrameWidth - 1 ),
-    gridFrameBottom         ( gridFrameY + gridFrameHeight - 1 ),
+    iGridFrameOffset    ( 10 ),
+    iGridWidthWeekend   ( 3 ), // should be an odd value
+    iXAxisTextHeight    ( 22 ),
+    gridFrameX          ( canvasRectX + iGridFrameOffset ),
+    gridFrameY          ( canvasRectY + iGridFrameOffset ),
+    gridFrameWidth      ( canvasRectWidth - 2 * iGridFrameOffset ),
+    gridFrameHeight     ( canvasRectHeight - 2 * iGridFrameOffset - iXAxisTextHeight ),
+    gridFrameRight      ( gridFrameX + gridFrameWidth - 1 ),
+    gridFrameBottom     ( gridFrameY + gridFrameHeight - 1 ),
 
-    axisFontFamily          ( "Arial" ),
-    axisFontWeight          ( "100" ),
-    axisFontSize            ( 12 ),
+    axisFontFamily      ( "Arial" ),
+    axisFontWeight      ( "100" ),
+    axisFontSize        ( 12 ),
 
-    iYAxisStart             ( 0 ),
-    iYAxisEnd               ( 24 ),
-    iNumTicksY              ( 5 ),
+    iYAxisStart         ( 0 ),
+    iYAxisEnd           ( 24 ),
+    iNumTicksY          ( 5 ),
 
-    iTextOffsetToGrid       ( 3 ),
-    iTextOffsetX            ( 18 ),
+    iTextOffsetToGrid   ( 3 ),
+    iTextOffsetX        ( 18 ),
 
-    iMarkerSizeNewCon       ( 11 ),
-    iMarkerSizeServSt       ( 8 )
+    iMarkerSizeNewCon   ( 11 ),
+    iMarkerSizeServSt   ( 8 )
 {
 }
 
 void AHistoryGraph::Start ( const QString& sNewFileName )
 {
     QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
-    tsConsoleStream << QString("AHistoryGraph::Start ( %1 )").arg(sNewFileName) << endl; // on console
+    tsConsoleStream << QString ( "AHistoryGraph::Start ( %1 )" ).arg ( sNewFileName ) << endl; // on console
+
     if ( !sNewFileName.isEmpty() )
     {
         // save file name
@@ -134,8 +136,9 @@ void AHistoryGraph::Update ( )
         curDate = QDate::currentDate();
 
         // get oldest date in history
-        QDate oldestDate = curDate.addDays ( 1 ); // one day in the future
+        QDate     oldestDate          = curDate.addDays ( 1 ); // one day in the future
         const int iNumItemsForHistory = vHistoryDataFifo.Size();
+
         for ( i = 0; i < iNumItemsForHistory; i++ )
         {
             // only use valid dates
@@ -190,22 +193,23 @@ void AHistoryGraph::DrawFrame ( const int iNewNumTicksX )
 
     // grid (ticks) for x-axis
     dayXSpace = static_cast<double> ( gridFrameWidth ) / ( iNumTicksX + 1 );
-    for ( i = 0; i < static_cast<int>(iNumTicksX); i++ )
+
+    for ( i = 0; i < static_cast<int> ( iNumTicksX ); i++ )
     {
         int         iBottomExtraTickLen = 0;
         const int   iCurX = gridFrameX + static_cast<int> ( dayXSpace * ( i + 1 ) );
-        const QDate curXAxisDate = curDate.addDays ( 0 - static_cast<signed>( iNumTicksX ) + i + 1 );
+        const QDate curXAxisDate = curDate.addDays ( 0 - static_cast<signed> ( iNumTicksX ) + i + 1 );
 
         // text (print only every "iXAxisTickStep" tick)
         if ( !( i % iXAxisTickStep ) )
         {
-            text( iCurX - iTextOffsetX, gridFrameBottom + iXAxisTextHeight + iTextOffsetToGrid, curXAxisDate.toString ( "dd.MM." ) );
+            text ( iCurX - iTextOffsetX, gridFrameBottom + iXAxisTextHeight + iTextOffsetToGrid, curXAxisDate.toString ( "dd.MM." ) );
 
             iBottomExtraTickLen = 5;
         }
 
         // regular grid
-        line( iCurX, 1 + gridFrameY, iCurX, gridFrameBottom + iBottomExtraTickLen );
+        line ( iCurX, 1 + gridFrameY, iCurX, gridFrameBottom + iBottomExtraTickLen );
 
         // different grid width for weekends (overwrite regular grid)
         if ( ( curXAxisDate.dayOfWeek() == 6 ) || // check for Saturday
@@ -213,26 +217,27 @@ void AHistoryGraph::DrawFrame ( const int iNewNumTicksX )
         {
             const int iGridWidthWeekendHalf = iGridWidthWeekend / 2;
 
-            line( iCurX, 1 + gridFrameY + iGridWidthWeekendHalf, iCurX, gridFrameBottom - iGridWidthWeekendHalf, iGridWidthWeekend );
+            line ( iCurX, 1 + gridFrameY + iGridWidthWeekendHalf, iCurX, gridFrameBottom - iGridWidthWeekendHalf, iGridWidthWeekend );
         }
     }
 
     // grid (ticks) for y-axis, draw iNumTicksY - 2 grid lines and
     // iNumTicksY - 1 text labels (the lowest grid line is the grid frame)
     iYSpace = gridFrameHeight / ( iNumTicksY - 1 );
-    for ( i = 0; i < ( static_cast<int>(iNumTicksY) - 1 ); i++ )
+
+    for ( i = 0; i < ( static_cast<int> ( iNumTicksY ) - 1 ); i++ )
     {
         const int iCurY = gridFrameY + iYSpace * ( i + 1 );
 
         // text
-        text( gridFrameX + iTextOffsetToGrid,
+        text ( gridFrameX + iTextOffsetToGrid,
             iCurY - iTextOffsetToGrid,
             QString ( "%1:00" ).arg ( ( iYAxisEnd - iYAxisStart ) / ( iNumTicksY - 1 ) * ( ( iNumTicksY - 2 ) - i ) ) );
 
         // grid (do not overwrite frame)
-        if ( i < ( static_cast<int>(iNumTicksY) - 2 ) )
+        if ( i < ( static_cast<int> ( iNumTicksY ) - 2 ) )
         {
-            line( gridFrameX, iCurY, gridFrameRight, iCurY );
+            line ( gridFrameX, iCurY, gridFrameRight, iCurY );
         }
     }
 }
@@ -245,7 +250,7 @@ void AHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
         curDate.daysTo ( curHistoryData.DateTime.date() );
 
     // check range, if out of range, do not plot anything
-    if ( -iXAxisOffs > ( static_cast<signed>( iNumTicksX ) - 1 ) )
+    if ( -iXAxisOffs > ( static_cast<signed> ( iNumTicksX ) - 1 ) )
     {
         return;
     }
@@ -255,18 +260,19 @@ void AHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
         static_cast<double> ( curHistoryData.DateTime.time().minute() ) / 60;
 
     // calculate the actual point in the graph (in pixels)
-    int curPointX = gridFrameX + static_cast<int> ( dayXSpace * ( static_cast<signed>( iNumTicksX ) + iXAxisOffs ) );
+    int curPointX = gridFrameX + static_cast<int> ( dayXSpace * ( static_cast<signed> ( iNumTicksX ) + iXAxisOffs ) );
     int curPointY = gridFrameY + static_cast<int> ( static_cast<double> (
         gridFrameHeight ) / ( iYAxisEnd - iYAxisStart ) * dYAxisOffs );
+
     QString curPointColour = MarkerNewColor;
-    int curPointSize = iMarkerSizeNewCon;
+    int     curPointSize   = iMarkerSizeNewCon;
 
     // we use different markers for new connection and server stop items
     switch ( curHistoryData.Type )
     {
     case HIT_SERVER_STOP:
         curPointColour = MarkerStopColor;
-        curPointSize = iMarkerSizeServSt;
+        curPointSize   = iMarkerSizeServSt;
         break;
 
     case HIT_LOCAL_CONNECTION:
@@ -278,8 +284,9 @@ void AHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
         break;
     }
 
-    point( curPointX - curPointSize / 2, curPointY - curPointSize / 2, curPointSize, curPointColour );
+    point ( curPointX - curPointSize / 2, curPointY - curPointSize / 2, curPointSize, curPointColour );
 }
+
 
 /* JPEG History Graph implementation ******************************************/
 CJpegHistoryGraph::CJpegHistoryGraph() :
@@ -302,27 +309,35 @@ CJpegHistoryGraph::CJpegHistoryGraph() :
     // Black    = 87    // 900
     bool ok;
     int weight = axisFontWeight.toInt( &ok );
-    if (!ok)
+
+    if ( !ok )
     {
-        if (!QString("normal").compare(axisFontWeight, Qt::CaseSensitivity::CaseInsensitive)) { iAxisFontWeight = 50; }
-        else if (!QString("bold").compare(axisFontWeight, Qt::CaseSensitivity::CaseInsensitive)) { weight = 75; }
+        if ( !QString ( "normal" ).compare ( axisFontWeight, Qt::CaseSensitivity::CaseInsensitive ) )
+        {
+            iAxisFontWeight = 50;
+        }
+        else if ( !QString ( "bold" ).compare ( axisFontWeight, Qt::CaseSensitivity::CaseInsensitive ) )
+        {
+            weight = 75;
+        }
     }
     else
     {
-        if (weight <= 100) { iAxisFontWeight = 0; }
-        else if (weight <= 200) { iAxisFontWeight = 12; }
-        else if (weight <= 300) { iAxisFontWeight = 25; }
-        else if (weight <= 400) { iAxisFontWeight = 50; }
-        else if (weight <= 500) { iAxisFontWeight = 57; }
-        else if (weight <= 600) { iAxisFontWeight = 63; }
-        else if (weight <= 700) { iAxisFontWeight = 75; }
-        else if (weight <= 800) { iAxisFontWeight = 81; }
-        else if (weight <= 900) { iAxisFontWeight = 87; }
+        if ( weight <= 100 ) { iAxisFontWeight = 0; }
+        else if ( weight <= 200 ) { iAxisFontWeight = 12; }
+        else if ( weight <= 300 ) { iAxisFontWeight = 25; }
+        else if ( weight <= 400 ) { iAxisFontWeight = 50; }
+        else if ( weight <= 500 ) { iAxisFontWeight = 57; }
+        else if ( weight <= 600 ) { iAxisFontWeight = 63; }
+        else if ( weight <= 700 ) { iAxisFontWeight = 75; }
+        else if ( weight <= 800 ) { iAxisFontWeight = 81; }
+        else if ( weight <= 900 ) { iAxisFontWeight = 87; }
     }
     // if all else fails, it's left at -1
 
     QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
     tsConsoleStream << "CJpegHistoryGraph" << endl; // on console
+
 
     // Connections -------------------------------------------------------------
     QObject::connect ( &TimerDailyUpdate, SIGNAL ( timeout() ),
@@ -359,7 +374,7 @@ void CJpegHistoryGraph::text ( const unsigned int x, const unsigned int y, const
     QPainter PlotPainter ( &PlotPixmap );
     PlotPainter.setPen ( TextColor );
     // QFont(const QString &family, int pointSize = -1, int weight = -1, bool italic = false);
-    PlotPainter.setFont ( QFont( axisFontFamily, static_cast<int>(axisFontSize), iAxisFontWeight ) );
+    PlotPainter.setFont ( QFont( axisFontFamily, static_cast<int> ( axisFontSize ), iAxisFontWeight ) );
     PlotPainter.drawText ( QPoint ( x, y ), value );
 }
 
@@ -377,26 +392,28 @@ void CJpegHistoryGraph::point ( const unsigned int x, const unsigned int y, cons
     PlotPainter.drawPoint ( x, y );
 }
 
+
 /* SVG History Graph implementation *******************************************/
 CSvgHistoryGraph::CSvgHistoryGraph() :
     AHistoryGraph(),
-    svgImage( "" ),
-    svgStreamWriter( &svgImage )
+    svgImage ( "" ),
+    svgStreamWriter ( &svgImage )
 {
     // set SVG veiwBox to correct size to ensure correct scaling
-    svgRootAttributes.append("viewBox",
-        QString("%1, %2, %3, %4")
-            .arg(canvasRectX)
-            .arg(canvasRectY)
-            .arg(canvasRectWidth)
-            .arg(canvasRectHeight)
+    svgRootAttributes.append ( "viewBox",
+        QString ( "%1, %2, %3, %4" )
+            .arg ( canvasRectX )
+            .arg ( canvasRectY )
+            .arg ( canvasRectWidth )
+            .arg ( canvasRectHeight )
     );
 
-    svgRootAttributes.append("xmlns", "http://www.w3.org/2000/svg");
-    svgRootAttributes.append("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    svgRootAttributes.append ( "xmlns", "http://www.w3.org/2000/svg" );
+    svgRootAttributes.append ( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
 
     QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
     tsConsoleStream << "CSvgHistoryGraph" << endl; // on console
+
 
     // Connections -------------------------------------------------------------
     QObject::connect ( &TimerDailyUpdate, SIGNAL ( timeout() ),
@@ -411,10 +428,10 @@ void CSvgHistoryGraph::Update()
         // create SVG document
         svgImage = "";
 
-        svgStreamWriter.setAutoFormatting(true);
+        svgStreamWriter.setAutoFormatting ( true );
         svgStreamWriter.writeStartDocument();
-        svgStreamWriter.writeStartElement("svg");
-        svgStreamWriter.writeAttributes(svgRootAttributes);
+        svgStreamWriter.writeStartElement ( "svg" );
+        svgStreamWriter.writeAttributes ( svgRootAttributes );
 
         AHistoryGraph::Update();
     }
@@ -424,36 +441,38 @@ void CSvgHistoryGraph::Save ( const QString sFileName )
 {
     svgStreamWriter.writeEndDocument();
 
-    QFile outf (sFileName);
-    if (!outf.open(QFile::WriteOnly)) {
-        throw std::runtime_error( (sFileName + " could not be written.  Aborting.").toStdString() );
+    QFile outf ( sFileName );
+
+    if ( !outf.open ( QFile::WriteOnly ) )
+    {
+        throw std::runtime_error ( ( sFileName + " could not be written. Aborting." ).toStdString() );
     }
-    QTextStream out(&outf);
+    QTextStream out ( &outf );
 
     out << svgImage << endl;
 }
 
 void CSvgHistoryGraph::rect ( const unsigned int x, const unsigned int y, const unsigned int width, const unsigned int height )
 {
-    svgStreamWriter.writeEmptyElement("rect");
-    svgStreamWriter.writeAttribute("x", QString("%1").arg(x));
-    svgStreamWriter.writeAttribute("y", QString("%1").arg(y));
-    svgStreamWriter.writeAttribute("width", QString("%1").arg(width));
-    svgStreamWriter.writeAttribute("height", QString("%1").arg(height));
-    svgStreamWriter.writeAttribute("stroke", FrameColor);
-    svgStreamWriter.writeAttribute("stroke-width", QString("1"));
-    svgStreamWriter.writeAttribute("style", QString("fill: none;"));
+    svgStreamWriter.writeEmptyElement ( "rect" );
+    svgStreamWriter.writeAttribute ( "x", QString ( "%1" ).arg ( x ) );
+    svgStreamWriter.writeAttribute ( "y", QString ( "%1" ).arg ( y ) );
+    svgStreamWriter.writeAttribute ( "width", QString ( "%1" ).arg ( width ) );
+    svgStreamWriter.writeAttribute ( "height", QString ( "%1" ).arg ( height ) );
+    svgStreamWriter.writeAttribute ( "stroke", FrameColor );
+    svgStreamWriter.writeAttribute ( "stroke-width", QString ( "1" ) );
+    svgStreamWriter.writeAttribute ( "style", QString ( "fill: none;" ) );
 }
 
 void CSvgHistoryGraph::text ( const unsigned int x, const unsigned int y, const QString& value )
 {
-    svgStreamWriter.writeStartElement("text");
-    svgStreamWriter.writeAttribute("x", QString("%1").arg(x));
-    svgStreamWriter.writeAttribute("y", QString("%1").arg(y));
-    svgStreamWriter.writeAttribute("stroke", TextColor);
-    svgStreamWriter.writeAttribute("font-family", axisFontFamily);
-    svgStreamWriter.writeAttribute("font-weight", axisFontWeight);
-    svgStreamWriter.writeAttribute("font-size", QString("%1").arg(axisFontSize));
+    svgStreamWriter.writeStartElement ( "text" );
+    svgStreamWriter.writeAttribute ( "x", QString ( "%1" ).arg ( x ) );
+    svgStreamWriter.writeAttribute ( "y", QString ( "%1" ).arg ( y ) );
+    svgStreamWriter.writeAttribute ( "stroke", TextColor );
+    svgStreamWriter.writeAttribute ( "font-family", axisFontFamily );
+    svgStreamWriter.writeAttribute ( "font-weight", axisFontWeight );
+    svgStreamWriter.writeAttribute ( "font-size", QString ( "%1" ).arg ( axisFontSize ) );
 
     svgStreamWriter.writeCharacters( value );
     svgStreamWriter.writeEndElement();
@@ -461,22 +480,22 @@ void CSvgHistoryGraph::text ( const unsigned int x, const unsigned int y, const 
 
 void CSvgHistoryGraph::line ( const unsigned int x1, const unsigned int y1, const unsigned int x2, const unsigned int y2, const unsigned int strokeWidth )
 {
-    svgStreamWriter.writeEmptyElement("line");
-    svgStreamWriter.writeAttribute("x1", QString("%1").arg(x1));
-    svgStreamWriter.writeAttribute("y1", QString("%1").arg(y1));
-    svgStreamWriter.writeAttribute("x2", QString("%1").arg(x2));
-    svgStreamWriter.writeAttribute("y2", QString("%1").arg(y2));
-    svgStreamWriter.writeAttribute("stroke", GridColor);
-    svgStreamWriter.writeAttribute("stroke-width", QString("%1").arg(strokeWidth));
+    svgStreamWriter.writeEmptyElement ( "line" );
+    svgStreamWriter.writeAttribute ( "x1", QString ( "%1" ).arg ( x1 ) );
+    svgStreamWriter.writeAttribute ( "y1", QString ( "%1" ).arg ( y1 ) );
+    svgStreamWriter.writeAttribute ( "x2", QString ( "%1" ).arg ( x2 ) );
+    svgStreamWriter.writeAttribute ( "y2", QString ( "%1" ).arg ( y2 ) );
+    svgStreamWriter.writeAttribute ( "stroke", GridColor );
+    svgStreamWriter.writeAttribute ( "stroke-width", QString ( "%1" ).arg ( strokeWidth ) );
 }
 
 void CSvgHistoryGraph::point ( const unsigned int x, const unsigned int y, const unsigned int size, const QString& colour )
 {
-    svgStreamWriter.writeEmptyElement("rect");
-    svgStreamWriter.writeAttribute("x", QString("%1").arg(x));
-    svgStreamWriter.writeAttribute("y", QString("%1").arg(y));
-    svgStreamWriter.writeAttribute("width", QString("%1").arg(size));
-    svgStreamWriter.writeAttribute("height", QString("%1").arg(size));
-    svgStreamWriter.writeAttribute("stroke-opacity", "0");
-    svgStreamWriter.writeAttribute("fill", colour);
+    svgStreamWriter.writeEmptyElement ( "rect" );
+    svgStreamWriter.writeAttribute ( "x", QString ( "%1" ).arg ( x ) );
+    svgStreamWriter.writeAttribute ( "y", QString ( "%1" ).arg ( y ) );
+    svgStreamWriter.writeAttribute ( "width", QString ( "%1" ).arg ( size ) );
+    svgStreamWriter.writeAttribute ( "height", QString ( "%1" ).arg ( size ) );
+    svgStreamWriter.writeAttribute ( "stroke-opacity", "0" );
+    svgStreamWriter.writeAttribute ( "fill", colour );
 }

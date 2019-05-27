@@ -385,7 +385,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></li>"
         "<li>Country flag icons from Mark James: "
         "<i><a href=""http://www.famfamfam.com"">http://www.famfamfam.com</a></i></li>"
-        "<li>Audio recording for the server, coded by pljones: "
+        "<li>Audio recording for the server and SVG history graph, coded by pljones: "
         "<i><a href=""http://jamulus.drealm.info"">http://jamulus.drealm.info</a></i></li>"
         "</ul>"
         "</center><br>");

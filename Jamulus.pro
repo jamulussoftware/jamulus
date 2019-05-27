@@ -173,7 +173,8 @@ HEADERS += src/audiomixerboard.h \
     src/analyzerconsole.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
-    src/recorder/cwavestream.h
+    src/recorder/cwavestream.h \
+    src/historygraph.h
 
 HEADERS_OPUS = libs/opus/include/opus.h \
     libs/opus/include/opus_multistream.h \
@@ -270,7 +271,8 @@ SOURCES += src/audiomixerboard.cpp \
     src/analyzerconsole.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
-    src/recorder/cwavestream.cpp
+    src/recorder/cwavestream.cpp \
+    src/historygraph.cpp
 
 SOURCES_OPUS = libs/opus/src/opus.c \
     libs/opus/src/opus_decoder.c \

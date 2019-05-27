@@ -415,8 +415,7 @@ int main ( int argc, char** argv )
     // Application object
     if ( !bUseGUI && !strHistoryFileName.isEmpty() )
     {
-        tsConsole << "Qt5 requires a windowing system to paint a JPEG image; disabling history graph" << endl;
-        strHistoryFileName = "";
+        tsConsole << "Qt5 requires a windowing system to paint a JPEG image; image will use SVG" << endl;
     }
     QCoreApplication* pApp = bUseGUI
             ? new QApplication ( argc, argv )

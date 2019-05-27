@@ -1,3 +1,28 @@
+/******************************************************************************\
+ * Copyright (c) 2004-2019
+ *
+ * Author(s):
+ *  Volker Fischer
+ *  Peter L Jones <pljones@users.sf.net>
+ *
+ ******************************************************************************
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ *
+\******************************************************************************/
+
 #ifndef HISTORYGRAPH_H
 #define HISTORYGRAPH_H
 
@@ -9,11 +34,19 @@
 #include "global.h"
 #include "util.h"
 
+// for CJpegHistoryGraph
+#include <QImage>
+#include <QPainter>
+
+// for CSvgHistoryGraph
+#include <QXmlStreamWriter>
+#include <QXmlStreamAttributes>
+
 /* Definitions ****************************************************************/
 // number of history items to store
 #define NUM_ITEMS_HISTORY           600
 
-/* Interface ********************************************************************/
+/* Interface ******************************************************************/
 class AHistoryGraph
 {
 public:
@@ -95,6 +128,56 @@ protected:
     unsigned int iYSpace;
     QDate curDate;
     QTimer TimerDailyUpdate;
+};
+
+/* Implementations ************************************************************/
+class CJpegHistoryGraph : public QObject, virtual public AHistoryGraph
+{
+    Q_OBJECT
+
+public:
+    CJpegHistoryGraph();
+    virtual void Update ( );
+
+protected:
+    virtual void Save ( const QString sFileName );
+
+    virtual void rect ( const unsigned int x, const unsigned int y, const unsigned int width, const unsigned int height );
+    virtual void text ( const unsigned int x, const unsigned int y, const QString& value );
+    virtual void line ( const unsigned int x1, const unsigned int y1, const unsigned int x2, const unsigned int y2, const unsigned int strokeWidth = 1 );
+    virtual void point ( const unsigned int x, const unsigned int y, const unsigned int size, const QString& colour );
+
+private:
+    QImage PlotPixmap;
+    int iAxisFontWeight;
+
+public slots:
+    void OnTimerDailyUpdate() { Update(); }
+};
+
+class CSvgHistoryGraph : public QObject, virtual public AHistoryGraph
+{
+    Q_OBJECT
+
+public:
+    CSvgHistoryGraph();
+    virtual void Update();
+
+protected:
+    virtual void Save ( const QString sFileName );
+
+    virtual void rect ( const unsigned int x, const unsigned int y, const unsigned int width, const unsigned int height );
+    virtual void text ( const unsigned int x, const unsigned int y, const QString& value );
+    virtual void line ( const unsigned int x1, const unsigned int y1, const unsigned int x2, const unsigned int y2, const unsigned int strokeWidth = 1 );
+    virtual void point ( const unsigned int x, const unsigned int y, const unsigned int size, const QString& colour );
+
+private:
+    QXmlStreamAttributes svgRootAttributes;
+    QString svgImage;
+    QXmlStreamWriter svgStreamWriter;
+
+public slots:
+    void OnTimerDailyUpdate() { Update(); }
 };
 
 #endif // HISTORYGRAPH_H

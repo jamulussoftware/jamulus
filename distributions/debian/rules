@@ -1,12 +1,12 @@
 #!/usr/bin/make -f  
 %:  
 	dh $@
-	make Jamulus.pro
 
-override_dh_auto_install:
+override_dh_auto_configure:
+	qmake CONFIG+=noupcasename Jamulus.pro
 
 override_dh_usrlocal:
 	mkdir -p $$(pwd)/debian/jamulus/usr/bin/
-	install -D -m 0755 Jamulus $$(pwd)/debian/jamulus/usr/bin/
+	install -D -m 0755 jamulus $$(pwd)/debian/jamulus/usr/bin/
 	mkdir -p $$(pwd)/debian/jamulus/usr/share/applications/
 	install -D -m 0755 $$(pwd)/src/res/jamulus.desktop $$(pwd)/debian/jamulus/usr/share/applications/

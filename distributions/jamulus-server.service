@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=jamulus
-ExecStart=/usr/bin/jamulus -s -n
+ExecStart=/usr/bin/jamulus -s -n -a $(uname -n)
 
 [Install]
 WantedBy=multi-user.target

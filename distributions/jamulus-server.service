@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=jamulus
-ExecStart=/usr/bin/jamulus -s -n -a $(uname -n)
+ExecStart=/usr/bin/jamulus -s -n -a $(uname -n) -e jamulus.fischvolk.de -g -w "Welcome on Server $(uname -n)"
 
 [Install]
 WantedBy=multi-user.target

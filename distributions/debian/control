@@ -9,7 +9,7 @@ Vcs-Git: git://github.com/corrados/jamulus.git
 Vcs-Browser: https://github.com/corrados/jamulus
  
 Package: jamulus
-Architecture: amd64
+Architecture: i386 amd64 armhf
 Depends: ${shlibs:Depends}, ${misc:Depends}, qt5-default, qtchooser, jackd
 Description: Low latency Audio Server/Client
 	that runs on Windows / OSX / Linux

@@ -14,5 +14,5 @@ override_dh_usrlocal:
 	mkdir -p $$(pwd)/debian/jamulus/usr/share/icons/hicolor/48x48/apps/
 	cp $$(pwd)/distributions/jamulus.png $$(pwd)/debian/jamulus/usr/share/icons/hicolor/48x48/apps/
 	mkdir -p $$(pwd)/debian/jamulus/etc/systemd/system
-	cp $$(pwd)/distributions/jamulus-server.service $$(pwd)/debian/jamulus/etc/systemd/system/
+	cp $$(pwd)/distributions/jamulus-server.service $$(pwd)/debian/jamulus/lib/systemd/system/
 	

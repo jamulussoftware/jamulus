@@ -13,6 +13,6 @@ override_dh_usrlocal:
 	install -D -m 0755 $$(pwd)/distributions/jamulus.desktop $$(pwd)/debian/jamulus/usr/share/applications/
 	mkdir -p $$(pwd)/debian/jamulus/usr/share/icons/hicolor/48x48/apps/
 	cp $$(pwd)/distributions/jamulus.png $$(pwd)/debian/jamulus/usr/share/icons/hicolor/48x48/apps/
-	mkdir -p $$(pwd)/debian/jamulus/etc/systemd/system
+	mkdir -p $$(pwd)/debian/jamulus/lib/systemd/system
 	cp $$(pwd)/distributions/jamulus-server.service $$(pwd)/debian/jamulus/lib/systemd/system/
 	

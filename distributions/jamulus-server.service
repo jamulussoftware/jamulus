@@ -8,7 +8,7 @@ Type=simple
 Restart=always
 RestartSec=1
 User=jamulus
-ExecStart=/usr/bin/jamulus -s -n -a DEBIAN -e jamulus.fischvolk.de -g -w "Welcome on a Server"
+ExecStart=/bin/bash -c '/usr/bin/jamulus -s -n --servername $(uname -n) -l /var/log/jamulus -e jamulus.fischvolk.de -g -w "Connected..." -o "$(uname -n);Aarau;206;"'
 
 [Install]
 WantedBy=multi-user.target

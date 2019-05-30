@@ -1,0 +1,15 @@
+Source: jamulus
+Section: sound
+Priority: optional
+Maintainer: "Marc Landolt jr" <debian@marclandolt.ch>
+Build-Depends: debhelper (>= 9), libc6-dev | libc-dev ,g++, make, dpkg-dev, qtdeclarative5-dev, qt5-default, libjack-jackd2-dev
+Standards-Version: 3.9.5
+Homepage: http://http://llcon.sourceforge.net/
+Vcs-Git: git://github.com/corrados/jamulus.git
+Vcs-Browser: https://github.com/corrados/jamulus
+ 
+Package: jamulus
+Architecture: i386 amd64 armhf
+Depends: ${shlibs:Depends}, ${misc:Depends}, qt5-default, qtchooser, jackd
+Description: Low latency Audio Server/Client
+	that runs on Windows / OSX / Linux

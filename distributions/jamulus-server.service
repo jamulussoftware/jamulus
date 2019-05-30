@@ -1,0 +1,14 @@
+[Unit]
+Description=Jamulus-Server
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=jamulus
+ExecStart=/bin/bash -c '/usr/bin/jamulus -s -n --servername $(uname -n) -l /var/log/jamulus -e jamulus.fischvolk.de -g -w "Connected..." -o "$(uname -n);Aarau;206;"'
+
+[Install]
+WantedBy=multi-user.target

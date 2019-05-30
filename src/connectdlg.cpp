@@ -409,6 +409,9 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
             // add the new child to the corresponding server item
             pCurListViewItem->addChild ( pNewChildListViewItem );
 
+            // per default expand the list item
+            lvwServers->expandItem ( pCurListViewItem );
+
             // at least one server has childs now, show decoration to be able
             // to show the childs
             lvwServers->setRootIsDecorated ( true );

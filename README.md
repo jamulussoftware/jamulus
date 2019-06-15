@@ -1,7 +1,9 @@
+![Homepage picture](http://llcon.sourceforge.net/images/Jamulus_small.png)
+
 Jamulus - Internet Jam Session Software
 =======================================
 
-![Jamulus Icon](http://llcon.sourceforge.net/images/MediaWikiSidebarLogo.png)
+![Jamulus icon](http://llcon.sourceforge.net/images/MediaWikiSidebarLogo.png)
 
 The Jamulus software enables musicians to perform real-time jam sessions over the internet.
 There is one server running the Jamulus server software which collects the audio data from
@@ -17,6 +19,21 @@ The required minimum internet connection speed is 200 kbps for the up- and downs
 The ping time (i.e. round trip delay) from your computer to the server should not exceed 40 ms average.
 
 The source code is [Sourceforge.net](http://sourceforge.net/projects/llcon).
+
+
+Download and Installation
+-------------------------
+
+[Download](http://sourceforge.net/projects/llcon/files) a Windows installer at the
+Sourceforge.net download page
+
+The Jamulus software requires an ASIO sound card driver to be
+available in the system. If your sound card does not have native
+ASIO support, you can try out the following alternative:
+[ASIO4ALL - Universal ASIO Driver For WDM Audio](http://www.asio4all.com)
+
+The ASIO buffer size should be selected as low as possible to get
+the minimum audio latency (a good choice is 128 samples). 
 
 
 EXTERNAL CODE

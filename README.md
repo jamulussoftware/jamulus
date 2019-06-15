@@ -5,6 +5,9 @@ The Jamulus software enables musicians to perform real-time jam sessions over th
 There is one server running the Jamulus server software which collects the audio data from
 each Jamulus client, mixes the audio data and sends the mix back to each client.
 
+Jamulus is __Open Source software__ ([GPL, GNU General Public License](http://www.gnu.org/licenses/gpl-2.0.html)) and runs under __Windows__ ([ASIO](http://www.steinberg.net)), __MacOS__ ([Core Audio](http://developer.apple.com/technologies/mac/audio-and-video.html)) and __Linux__ ([Jack](http://jackaudio.org)).
+It is based on the [Qt framework](https://www.qt.io) and uses the [OPUS](http://www.opus-codec.org) audio codec.
+
 
 Low-Latency (Internet) Connection tool
 Under the GNU General Public License (GPL)

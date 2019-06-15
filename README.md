@@ -21,8 +21,8 @@ The ping time (i.e. round trip delay) from your computer to the server should no
 The source code is [Sourceforge.net](http://sourceforge.net/projects/llcon).
 
 
-Download and Installation
--------------------------
+Windows Download and Installation
+---------------------------------
 
 [Download](http://sourceforge.net/projects/llcon/files) a Windows installer at the
 Sourceforge.net download page

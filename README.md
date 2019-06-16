@@ -69,4 +69,4 @@ source:
   
 - Some pixmaps are from the Open Clip Art Library (OCAL): http://openclipart.org
 
-- Audio recording for the server and SVG history graph, coded by pljones: http://jamulus.drealm.info
+- Audio recording for the server and SVG history graph, coded by [pljones](http://github.com/pljones): http://jamulus.drealm.info

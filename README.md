@@ -15,10 +15,20 @@ __MacOS__ ([Core Audio](http://developer.apple.com/technologies/mac/audio-and-vi
 __Linux__ ([Jack](http://jackaudio.org)).
 It is based on the [Qt framework](https://www.qt.io) and uses the [OPUS](http://www.opus-codec.org) audio codec.
 
+The source code is hosted at [Sourceforge.net](http://sourceforge.net/projects/llcon).
+![Sourceforge logo](http://sflogo.sourceforge.net/sflogo.php?group_id=158367&amp;type=5)
+
+
+Required Hardware Setup
+-----------------------
+
 The required minimum internet connection speed is 200 kbps for the up- and downstream.
 The ping time (i.e. round trip delay) from your computer to the server should not exceed 40 ms average.
 
-The source code is [Sourceforge.net](http://sourceforge.net/projects/llcon).
+For the Jamulus software to run stable it is recommended to use a PC with at least 1.5 GHz CPU frequency.
+
+On a Windows operating system it is recommended to use a sound card with a native ASIO driver.
+This ensures to get the lowest possible latencies.
 
 
 Windows Download and Installation
@@ -36,7 +46,7 @@ The ASIO buffer size should be selected as low as possible to get
 the minimum audio latency (a good choice is 128 samples). 
 
 
-EXTERNAL CODE
+External Code
 -------------
 
 This code contains open source code from different sources. The developer(s) want
@@ -51,7 +61,6 @@ source:
   (taken from "The Synthesis ToolKit in C++ (STK)"):
   http://ccrma.stanford.edu/software/stk
   
-- Some pixmaps are from the Open Clip Art Library (OCAL):
-  http://openclipart.org
+- Some pixmaps are from the Open Clip Art Library (OCAL): http://openclipart.org
 
 - Audio recording for the server and SVG history graph, coded by pljones: http://jamulus.drealm.info

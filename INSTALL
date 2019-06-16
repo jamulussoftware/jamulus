@@ -1,30 +1,8 @@
-/******************************************************************************\
- * Copyright (c) 2004-2019
- *
- * Author(s):
- *	Volker Fischer
- *
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
-\******************************************************************************/
+Jamulus Compile Instructions
+============================
 
-
-Windows:
---------
+Windows
+-------
 
 Rquired software: QT, a compiler like Visual Studio, ASIO development files
 
@@ -33,10 +11,10 @@ Rquired software: QT, a compiler like Visual Studio, ASIO development files
 - open Jamulus.pro in Qt Creator and compile & run
 
 
-Linux:
-------
+Linux
+-----
 
-Required packages: Build-Essential, QT4 (devel packages, too!), Jack (devel packages, too!)
+Required packages: Build-Essential, Qt4/Qt5 (devel packages, too!), Jack (devel packages, too!)
                    On the most common Linux distributions, the following
                    command should prepare the system for compilation:
                    sudo apt-get install build-essential libqt4-dev libjack-jackd2-dev
@@ -56,15 +34,14 @@ does not require the Jack packages.
 To use an external shared OPUS library instead of the built-in use
 qmake "CONFIG+=opus_shared_lib" Jamulus.pro.
 
-A desktop link file jamulus.desktop is available in the llcon/src/res directory.
 To use this file configure the software with
 qmake "CONFIG+=noupcasename" Jamulus.pro to make sure the output target name of
-this software is jamulus instead of Jamulus (see content of jamulus.desktop).
+this software is jamulus instead of Jamulus.
 
 Jamulus is also compatible with Qt5.
 
-Mac:
-----
+Mac
+---
 
 Download and install Apple Xcode and QT SDK for Mac.
 

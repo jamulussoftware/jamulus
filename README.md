@@ -1,9 +1,9 @@
-![Homepage picture](http://llcon.sourceforge.net/images/Jamulus_small.png)
+![Homepage picture](src/res/jamulusbannersmall.png)
 
 Jamulus - Internet Jam Session Software
 =======================================
 
-![Jamulus icon](http://llcon.sourceforge.net/images/MediaWikiSidebarLogo.png)
+![Jamulus icon](src/res/mediawikisidebarlogo.png)
 
 The Jamulus software enables musicians to perform real-time jam sessions over the internet.
 There is one server running the Jamulus server software which collects the audio data from

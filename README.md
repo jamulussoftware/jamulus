@@ -2,8 +2,7 @@
 
 Jamulus - Internet Jam Session Software
 =======================================
-
-![Jamulus icon](src/res/homepage/mediawikisidebarlogo.png)
+<img align="left" src="src/res/homepage/mediawikisidebarlogo.png"/>
 
 The Jamulus software enables musicians to perform real-time jam sessions over the internet.
 There is one server running the Jamulus server software which collects the audio data from
@@ -50,8 +49,7 @@ Help (Software Manual)
 ----------------------
 
 ### Main Window
-
-![Jamulus icon](src/res/homepage/main.jpg)
+![Main window](src/res/homepage/main.jpg)
 
 #### Status LEDs
 
@@ -148,7 +146,6 @@ With the Mute checkbox, the current audio channel can be muted. With the Solo ch
 be set to solo which means that all other channels except of the current channel are muted.
 
 ### Settings Window
-
 ![Settings](src/res/homepage/settings.jpg)
 
 #### Sound card device

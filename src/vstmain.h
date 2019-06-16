@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2011
+ * Copyright (c) 2004-2019
  *
  * Author(s):
  *  Volker Fischer
@@ -44,21 +44,21 @@ class CLlconVST : public QObject, public AudioEffectX
     Q_OBJECT
 
 public:
-	CLlconVST ( audioMasterCallback AudioMaster );
+    CLlconVST ( audioMasterCallback AudioMaster );
 
-	virtual void processReplacing ( float**  pvIn, float**  pvOut, VstInt32 iNumSamples );
+    virtual void processReplacing ( float**  pvIn, float**  pvOut, VstInt32 iNumSamples );
 
     virtual void setProgramName ( char* cName ) { vst_strncpy ( strProgName, cName, kVstMaxProgNameLen ); }
     virtual void getProgramName ( char* cName ) { vst_strncpy ( cName, strProgName, kVstMaxProgNameLen ); }
 
     virtual bool getEffectName    ( char* cString ) { return GetName ( cString ); }
-	virtual bool getVendorString  ( char* cString ) { return GetName ( cString ); }
-	virtual bool getProductString ( char* cString ) { return GetName ( cString ); }
+    virtual bool getVendorString  ( char* cString ) { return GetName ( cString ); }
+    virtual bool getProductString ( char* cString ) { return GetName ( cString ); }
     virtual VstInt32 getVendorVersion () { return 1000; }
 
 protected:
     bool GetName ( char* cName );
-	char strProgName[kVstMaxProgNameLen + 1];
+    char strProgName[kVstMaxProgNameLen + 1];
 
     CClient Client;
     QTimer  TimerOnOff;

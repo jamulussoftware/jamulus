@@ -46,8 +46,14 @@ The ASIO buffer size should be selected as low as possible to get
 the minimum audio latency (a good choice is 128 samples). 
 
 
-External Code
--------------
+Compilation and Development
+---------------------------
+
+See the [Compile Instructions](INSTALL.md) file.
+
+
+Acknowledgments
+---------------
 
 This code contains open source code from different sources. The developer(s) want
 to thank the developer of this code for making their efforts available under open

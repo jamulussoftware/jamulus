@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2011
+ * Copyright (c) 2004-2019
  *
  * Author(s):
  *  Volker Fischer
@@ -35,7 +35,7 @@ class CSound : public CSoundBase
 {
 public:
     CSound ( void (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ), void* arg ) :
-      CSoundBase ( true, fpNewCallback, arg ), iVSTMonoBufferSize ( 0 ) {}
+        CSoundBase ( true, fpNewCallback, arg ), iVSTMonoBufferSize ( 0 ) {}
 
     // special VST functions
     void SetMonoBufferSize ( const int iNVBS ) { iVSTMonoBufferSize = iNVBS; }

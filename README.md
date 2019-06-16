@@ -46,6 +46,46 @@ The ASIO buffer size should be selected as low as possible to get
 the minimum audio latency (a good choice is 128 samples). 
 
 
+Help (Software Manual)
+----------------------
+
+### Main Window
+
+![Jamulus icon](src/res/homepage/main.jpg)
+
+#### Status LEDs
+
+![LEDs](src/res/homepage/led.png)
+
+The Delay status LED indicator shows the current audio delay status. If the light is green, the delay
+is perfect for a jam session. If the ligth is yellow, a session is still possible but it may be harder
+to play. If the light is red, the delay is too large for jamming.
+
+The Buffer status LED indicator shows the current audio/streaming status. If the light is green, there
+are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the
+audio stream is interrupted caused by one of the following problems:
+
+- The network jitter buffer is not large enough for the current network/audio interface jitter.
+- The sound card buffer delay (buffer size) is set to a too small value.
+- The upload or download stream rate is too high for the current available internet bandwidth.
+- The CPU of the client or server is at 100%.
+
+#### Input level
+
+![Input level](src/res/homepage/inputlevel.jpg)
+
+The input level indicators show the input level of the two stereo channels of the current selected audio input.
+Make sure not to clip the input signal to avoid distortions of the audio signal. 
+
+#### Chat button opens the Chat dialog
+
+![Chat dialog](src/res/homepage/chat.jpg)
+
+Press the Chat button to open the Chat dialog. The chat text entered in that dialog is transmitted to
+all connected clients. If a new chat message arrives and the Chat dialog is not already open, it will
+be opened automatically at all clients. 
+
+
 Compilation and Development
 ---------------------------
 

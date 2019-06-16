@@ -85,6 +85,58 @@ Press the Chat button to open the Chat dialog. The chat text entered in that dia
 all connected clients. If a new chat message arrives and the Chat dialog is not already open, it will
 be opened automatically at all clients. 
 
+#### My Profile button opens the Musician Profile dialog
+
+![My profile dialog](src/res/homepage/profile.jpg)
+
+Press the My Profile button to open the Musician Profile dialog. In this dialog you can set your Alias/Name
+which is displayed below your fader in the server audio mixer board. If an instrument and/or country is set,
+icons for these selection will also be shown below your fader. The skill setting changes the background of
+the fader tag and the city entry shows up in the tool tip of the fader tag. This tool tip is shown in the following picture.
+
+![Fader tag tool tip](src/res/homepage/fadertagtooltip.jpg)
+
+#### Connect/disconnect button
+
+Push this button to connect a server. A dialog where you can select a server will open. If you are connected,
+pressing this button will end the session.
+
+![Connect dialog](src/res/homepage/connect.jpg)
+
+The server list shows a list of available servers which are registered at the central server. Select a server
+from the list and press the connect button to connect to this server. Alternatively, double click a server from
+the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding
+the list item. Permanent servers are shown in bold font.
+
+Note that it may take some time to retrieve the server list from the central server. If no valid central server
+address is specified in the settings, no server list will be available.
+
+Alternatively, you can enter an IP address or URL of the server running the Jamulus server in the server address
+field. An optional port number can be added after the IP address or URL using a comma as a separator, e.g,
+jamulus.dyndns.org:22124. A list of the most recent used server IP addresses or URLs is available for selection. 
+
+#### Reverberation effect
+
+![Reverberation](src/res/homepage/reverberation.jpg)
+
+A reverberation effect can be applied to one local mono audio channel or to both channels in stereo mode.
+The mono channel selection and the reverberation level can be modified. If, e.g., the microphone signal is fed
+into the right audio channel of the sound card and a reverberation effect shall be applied, set the channel selector
+to right and move the fader upwards until the desired reverberation level is reached.
+
+The reverberation effect requires significant CPU so that it should only be used on fast PCs. If the reverberation
+level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does
+not cause any additional CPU usage. 
+
+#### Local audio input fader
+
+![Audio fader](src/res/homepage/audiofader.jpg)
+
+With the audio fader, the relative levels of the left and right local audio channels can be changed. For a mono signal
+it acts like a panning between the two channels. If, e.g., a microphone is connected to the right input channel and
+an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader
+in a direction where the label above the fader shows L -x, where x is the current attenuation indicator. 
+
 
 Compilation and Development
 ---------------------------

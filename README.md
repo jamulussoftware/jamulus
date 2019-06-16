@@ -147,6 +147,55 @@ With the faders, the audio level of each client can be modified individually.
 With the Mute checkbox, the current audio channel can be muted. With the Solo checkbox, the current audio channel can
 be set to solo which means that all other channels except of the current channel are muted.
 
+### Settings Window
+
+![Settings](src/res/homepage/settings.jpg)
+
+#### Sound card device
+
+![Sound card device Windows](src/res/homepage/soundcarddevicewindows.jpg)
+![Sound card device Mac](src/res/homepage/soundcarddevicemac.png)
+
+The ASIO driver (sound card) can be selected using Jamulus under the Windows operating system. If the selected ASIO
+driver is not valid an error message is shown and the previous valid driver is selected. Under the Mac operating
+system the input and output hardware can be selected. 
+
+#### Input/output channel mapping
+
+![Channel mapping](src/res/homepage/channelmapping.png)
+
+In case the selected sound card device offers more than one input or output channel, the _Input Channel Mapping
+and Ouptut Channel Mapping_ settings are visible. For each Jamulus input/output channel (left and right channel)
+a different actual sound card channel can be selected. 
+
+#### Buffer delay
+
+![Buffer delay](src/res/homepage/bufferdelay.png)
+
+The buffer delay setting is a fundamental setting of the Jamulus software. This setting has influence on many
+connection properties. Three buffer sizes are supported:
+
+- 128 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.
+- 256 samples: This setting should work on most of the available sound cards.
+- 512 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.
+
+Some sound card driver do not allow the buffer delay to be changed from within the Jamulus software.
+In this case the buffer delay setting is disabled. To change the actual buffer delay,
+this setting has to be changed in the sound card driver. On Windows, press the ASIO Setup button to open
+the driver settings panel.
+
+![Buffer delay Windows](src/res/homepage/bufferdelaywindows.jpg)
+
+On Linux, use the Jack configuration tool to change the buffer size.
+
+The actual buffer delay has influence on the connection status, the current upload rate and the overall delay.
+The lower the buffer size, the higher the probability of red light in the status indicator (drop outs) and the
+higher the upload rate and the lower the overall delay.
+
+![Buffer delay dependencies](src/res/homepage/bufferdelaydependency.jpg)
+
+The buffer setting is therefore a trade-off between audio quality and overall delay. 
+
 
 Compilation and Development
 ---------------------------

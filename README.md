@@ -130,12 +130,22 @@ not cause any additional CPU usage.
 
 #### Local audio input fader
 
-![Audio fader](src/res/homepage/audiofader.jpg)
+![Local audio input fader](src/res/homepage/audiofader.jpg)
 
 With the audio fader, the relative levels of the left and right local audio channels can be changed. For a mono signal
 it acts like a panning between the two channels. If, e.g., a microphone is connected to the right input channel and
 an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader
 in a direction where the label above the fader shows L -x, where x is the current attenuation indicator. 
+
+#### Server audio mixer
+
+![Audio faders](src/res/homepage/faders.jpg)
+
+In the audio mixer frame, a fader for each connected client at the server is shown. This includes a fader for the own signal.
+With the faders, the audio level of each client can be modified individually.
+
+With the Mute checkbox, the current audio channel can be muted. With the Solo checkbox, the current audio channel can
+be set to solo which means that all other channels except of the current channel are muted.
 
 
 Compilation and Development

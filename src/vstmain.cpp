@@ -1,5 +1,5 @@
 /******************************************************************************\
- * Copyright (c) 2004-2011
+ * Copyright (c) 2004-2019
  *
  * Author(s):
  *  Volker Fischer
@@ -29,7 +29,7 @@
 // this function is required for host to get plugin
 AudioEffect* createEffectInstance ( audioMasterCallback AudioMaster )
 {
-	return new CLlconVST ( AudioMaster );
+    return new CLlconVST ( AudioMaster );
 }
 
 CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
@@ -37,13 +37,13 @@ CLlconVST::CLlconVST ( audioMasterCallback AudioMaster ) :
     Client ( LLCON_DEFAULT_PORT_NUMBER )
 {
     // stereo input/output
-	setNumInputs  ( 2 );
-	setNumOutputs ( 2 );
+    setNumInputs  ( 2 );
+    setNumOutputs ( 2 );
 
-	setUniqueID ( 'Llco' );
+    setUniqueID ( 'Llco' );
 
     // capabilities of llcon VST plugin
-	canProcessReplacing();	// supports replacing output
+    canProcessReplacing(); // supports replacing output
 
     // set default program name
     GetName ( strProgName );
@@ -65,8 +65,8 @@ bool CLlconVST::GetName ( char* cName )
 {
     // this name is used for program name, effect name, product string and
     // vendor string
-	vst_strncpy ( cName, "Llcon", kVstMaxEffectNameLen );
-	return true;
+    vst_strncpy ( cName, "Llcon", kVstMaxEffectNameLen );
+    return true;
 }
 
 void CLlconVST::OnTimerOnOff()

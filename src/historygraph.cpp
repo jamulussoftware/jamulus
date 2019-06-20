@@ -335,8 +335,8 @@ CJpegHistoryGraph::CJpegHistoryGraph() :
     }
     // if all else fails, it's left at -1
 
-    QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
-    tsConsoleStream << "CJpegHistoryGraph" << endl; // on console
+//    QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
+//    tsConsoleStream << "CJpegHistoryGraph" << endl; // on console
 
 
     // Connections -------------------------------------------------------------
@@ -411,8 +411,8 @@ CSvgHistoryGraph::CSvgHistoryGraph() :
     svgRootAttributes.append ( "xmlns", "http://www.w3.org/2000/svg" );
     svgRootAttributes.append ( "xmlns:xlink", "http://www.w3.org/1999/xlink" );
 
-    QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
-    tsConsoleStream << "CSvgHistoryGraph" << endl; // on console
+//    QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
+//    tsConsoleStream << "CSvgHistoryGraph" << endl; // on console
 
 
     // Connections -------------------------------------------------------------

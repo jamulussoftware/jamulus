@@ -85,7 +85,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
         // [this server country as QLocale ID]
         const int iCountry = slServInfoSeparateParams[2].toInt();
-        if ( ( iCountry >= 0 ) && ( iCountry <= QLocale::LastCountry ) )
+
+        if ( !slServInfoSeparateParams[2].isEmpty() && ( iCountry >= 0 ) && ( iCountry <= QLocale::LastCountry ) )
         {
             ThisServerListEntry.eCountry = static_cast<QLocale::Country> (
                 iCountry );

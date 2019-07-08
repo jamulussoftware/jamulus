@@ -832,15 +832,34 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
     // init requested host address with invalid address first
     HostAddress = CHostAddress();
 
-    // parse input address for the type [IP address]:[port number]
-    QString strPort = strAddress.section ( ":", 1, 1 );
+    // parse input address for the type "IP4 address:port number" or
+    // "[IP6 address]:port number" assuming the syntax is correctly given
+    QStringList slAddress = strAddress.split ( ":" );
+    QString     strSep    = ":";
+    bool        bIsIP6    = false;
+
+    if ( slAddress.count() > 2 )
+    {
+        // IP6 address
+        bIsIP6 = true;
+        strSep = "]:";
+    }
+
+    QString strPort = strAddress.section ( strSep, 1, 1 );
+
     if ( !strPort.isEmpty() )
     {
         // a colon is present in the address string, try to extract port number
         iNetPort = strPort.toInt();
 
-        // extract address port before colon (should be actual internet address)
-        strAddress = strAddress.section ( ":", 0, 0 );
+        // extract address port before separator (should be actual internet address)
+        strAddress = strAddress.section ( strSep, 0, 0 );
+
+        if ( bIsIP6 )
+        {
+            // remove "[" at the beginning
+            strAddress.remove ( 0, 1 );
+        }
     }
 
     // first try if this is an IP number an can directly applied to QHostAddress

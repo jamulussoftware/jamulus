@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( BUFFER_H__3B123453_4344_BB23945IUHF1912__INCLUDED_ )
-#define BUFFER_H__3B123453_4344_BB23945IUHF1912__INCLUDED_
+#pragma once
 
 #include "util.h"
 #include "global.h"
@@ -491,5 +490,3 @@ protected:
     int            iMemSize;
     int            iPutPos;
 };
-
-#endif /* !defined ( BUFFER_H__3B123453_4344_BB23945IUHF1912__INCLUDED_ ) */

@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_ )
-#define SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_
+#pragma once
 
 #include <QObject>
 #include <QMessageBox>
@@ -229,5 +228,3 @@ protected:
 signals:
     void InvalidPacketReceived ( CHostAddress RecHostAddr );
 };
-
-#endif /* !defined ( SOCKET_HOIHGE76GEKJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

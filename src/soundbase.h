@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_ )
-#define SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_
+#pragma once
 
 #include <QThread>
 #include <QString>
@@ -132,5 +131,3 @@ signals:
     void ReinitRequest ( int iSndCrdResetType );
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
 };
-
-#endif /* !defined ( SOUNDBASE_HOIHGEH8_3_4344456456345634565KJIUHF1912__INCLUDED_ ) */

@@ -21,8 +21,7 @@
  *
 \******************************************************************************/
 
-#ifndef CWAVESTREAM_H
-#define CWAVESTREAM_H
+#pragma once
 
 #include <QDataStream>
 
@@ -89,5 +88,3 @@ private:
 recorder::CWaveStream& operator<<(recorder::CWaveStream& out, recorder::HdrRiff& hdrRiff);
 recorder::CWaveStream& operator<<(recorder::CWaveStream& out, recorder::FmtSubChunk& fmtSubChunk);
 recorder::CWaveStream& operator<<(recorder::CWaveStream& out, recorder::DataSubChunkHdr& dataSubChunkHdr);
-
-#endif // CWAVESTREAM_H

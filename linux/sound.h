@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(_SOUND_H__9518A621345F78_3634567_8C0D_EEBF182CF549__INCLUDED_)
-#define _SOUND_H__9518A621345F78_3634567_8C0D_EEBF182CF549__INCLUDED_
+#pragma once
 
 #ifndef JACK_REPLACES_ASIO // these headers are not available in Windows OS
 # include <unistd.h>
@@ -104,5 +103,3 @@ public:
     virtual ~CSound() {}
 };
 #endif // WITH_SOUND
-
-#endif // !defined(_SOUND_H__9518A621345F78_3634567_8C0D_EEBF182CF549__INCLUDED_)

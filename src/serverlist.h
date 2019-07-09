@@ -57,8 +57,7 @@ private network.
  *
 \******************************************************************************/
 
-#if !defined ( SERVERLIST_HOIJH8OUWEF_WFEIOBU_3_43445KJIUHF1912__INCLUDED_ )
-#define SERVERLIST_HOIJH8OUWEF_WFEIOBU_3_43445KJIUHF1912__INCLUDED_
+#pragma once
 
 #include <QObject>
 #include <QLocale>
@@ -208,5 +207,3 @@ public slots:
     void OnTimerRegistering() { SlaveServerRegisterServer ( true ); }
     void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }
 };
-
-#endif /* !defined ( SERVERLIST_HOIJH8OUWEF_WFEIOBU_3_43445KJIUHF1912__INCLUDED_ ) */

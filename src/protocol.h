@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ )
-#define PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_
+#pragma once
 
 #include <QMutex>
 #include <QTimer>
@@ -292,5 +291,3 @@ signals:
                                         CVector<CChannelInfo>  vecChanInfo );
     void CLReqConnClientsList         ( CHostAddress           InetAddr );
 };
-
-#endif /* !defined ( PROTOCOL_H__3B123453_4344_BB2392354455IUHF1912__INCLUDED_ ) */

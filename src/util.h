@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_ )
-#define UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_
+#pragma once
 
 #include <QHostAddress>
 #include <QHostInfo>
@@ -47,6 +46,7 @@
 #include "global.h"
 using namespace std; // because of the library: "vector"
 #ifdef _WIN32
+# include <winsock2.h>
 # include <windows.h>
 # include <mmsystem.h>
 #elif defined ( __APPLE__ ) || defined ( __MACOSX )
@@ -1265,5 +1265,3 @@ protected:
     bool            bBlockOnDoubleErrors;
     bool            bPreviousState;
 };
-
-#endif /* !defined ( UTIL_HOIH934256GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

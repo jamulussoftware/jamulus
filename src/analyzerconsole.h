@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( ANALYZERCONSOLE_H__FD6BKUBVE723IUH06C2AC__INCLUDED_ )
-#define ANALYZERCONSOLE_H__FD6BKUBVE723IUH06C2AC__INCLUDED_
+#pragma once
 
 #include <QDialog>
 #include <QTabWidget>
@@ -90,5 +89,3 @@ protected:
 public slots:
     void OnTimerErrRateUpdate();
 };
-
-#endif // ANALYZERCONSOLE_H__FD6BKUBVE723IUH06C2AC__INCLUDED_

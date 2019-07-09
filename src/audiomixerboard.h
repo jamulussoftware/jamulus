@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_ )
-#define MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_
+#pragma once
 
 #include <QFrame>
 #include <QGroupBox>
@@ -155,5 +154,3 @@ signals:
     void ChangeChanGain ( int iId, double dGain );
     void NumClientsChanged ( int iNewNumClients );
 };
-
-#endif // MIXERBOARD_H__FD6B49E1606C2AC__INCLUDED_

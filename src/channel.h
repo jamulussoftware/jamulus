@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ )
-#define CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_
+#pragma once
 
 #include <QThread>
 #include <QDateTime>
@@ -261,5 +260,3 @@ signals:
                             int              iRecCounter,
                             int              iRecID );
 };
-
-#endif /* !defined ( CHANNEL_HOIH9345KJH98_3_4344_BB23945IUHF1912__INCLUDED_ ) */

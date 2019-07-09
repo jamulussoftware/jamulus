@@ -23,8 +23,7 @@
  *
 \******************************************************************************/
 
-#ifndef HISTORYGRAPH_H
-#define HISTORYGRAPH_H
+#pragma once
 
 #include <QDateTime>
 #include <QHostAddress>
@@ -182,5 +181,3 @@ private:
 public slots:
     void OnTimerDailyUpdate() { Update(); }
 };
-
-#endif // HISTORYGRAPH_H

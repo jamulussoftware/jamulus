@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ )
-#define CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_
+#pragma once
 
 #include <QHostAddress>
 #include <QHostInfo>
@@ -412,5 +411,3 @@ signals:
     void Disconnected();
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
 };
-
-#endif /* !defined ( CLIENT_HOIHGE76GEKJH98_3_43445KJIUHF1912__INCLUDED_ ) */

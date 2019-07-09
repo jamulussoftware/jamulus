@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( _MULTCOLORLEDBAR_H__FD6B49B5_87DF_48DD_E1606C2AC__INCLUDED_ )
-#define _MULTCOLORLEDBAR_H__FD6B49B5_87DF_48DD_E1606C2AC__INCLUDED_
+#pragma once
 
 #include <QFrame>
 #include <QPixmap>
@@ -80,5 +79,3 @@ protected:
     int              iNumLEDs;
     CVector<cLED*>   vecpLEDs;
 };
-
-#endif // _MULTCOLORLEDBAR_H__FD6B49B5_87DF_48DD_E1606C2AC__INCLUDED_

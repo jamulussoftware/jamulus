@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#ifndef SERVERLOGGING_H
-#define SERVERLOGGING_H
+#pragma once
 
 #include <QDateTime>
 #include <QHostAddress>
@@ -58,5 +57,3 @@ protected:
     bool              bDoLogging;
     QFile             File;
 };
-
-#endif // SERVERLOGGING_H

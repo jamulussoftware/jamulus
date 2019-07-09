@@ -47,8 +47,7 @@ LED bar:      lbr
  *
 \******************************************************************************/
 
-#if !defined ( GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_ )
-#define GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_
+#pragma once
 
 #if _WIN32
 # define _CRT_SECURE_NO_WARNINGS
@@ -331,5 +330,3 @@ bool    GetNumericArgument ( QTextStream& tsConsole,
                              double       rRangeStart,
                              double       rRangeStop,
                              double&      rValue);
-
-#endif /* !defined ( GLOBAL_H__3B123453_4344_BB2B_23E7A0D31912__INCLUDED_ ) */

@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(_SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_)
-#define _SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_
+#pragma once
 
 #include <CoreAudio/CoreAudio.h>
 #include <CoreMIDI/CoreMIDI.h>
@@ -119,5 +118,3 @@ protected:
 
     QMutex              Mutex;
 };
-
-#endif // !defined(_SOUND_H__9518A621345F78_363456876UZGSDF82CF549__INCLUDED_)

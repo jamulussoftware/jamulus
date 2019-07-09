@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( TESTBENCH_HOIHJH8_3_43445KJIUHF1912__INCLUDED_ )
-#define TESTBENCH_HOIHJH8_3_43445KJIUHF1912__INCLUDED_
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -284,5 +283,3 @@ public slots:
         Protocol.Reset();
     }
 };
-
-#endif /* !defined ( TESTBENCH_HOIHJH8_3_43445KJIUHF1912__INCLUDED_ ) */

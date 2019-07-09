@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ )
-#define SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_
+#pragma once
 
 #include <QObject>
 #include <QTimer>
@@ -458,5 +457,3 @@ public slots:
     void OnServerAutoSockBufSizeChangeCh18 ( int iNNumFra ) { vecChannels[18].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh19 ( int iNNumFra ) { vecChannels[19].CreateJitBufMes ( iNNumFra ); }
 };
-
-#endif /* !defined ( SERVER_HOIHGE7LOKIH83JH8_3_43445KJIUHF1912__INCLUDED_ ) */

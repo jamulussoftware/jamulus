@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_ )
-#define SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_
+#pragma once
 
 #include <QDomDocument>
 #include <QFile>
@@ -112,5 +111,3 @@ protected:
     bool     bIsClient;
     QString  strFileName;
 };
-
-#endif // !defined ( SETTINGS_H__3B0BA660_DGEG56G456G9876D31912__INCLUDED_ )

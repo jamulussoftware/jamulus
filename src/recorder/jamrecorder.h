@@ -21,8 +21,7 @@
  *
 \******************************************************************************/
 
-#ifndef JAMRECORDER_H
-#define JAMRECORDER_H
+#pragma once
 
 #include <QDir>
 #include <QFile>
@@ -178,4 +177,3 @@ private:
 
 Q_DECLARE_METATYPE(int16_t)
 Q_DECLARE_METATYPE(CVector<int16_t>)
-#endif // JAMRECORDER_H

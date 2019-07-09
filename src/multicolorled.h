@@ -29,8 +29,7 @@
  *
 \******************************************************************************/
 
-#if !defined ( _MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_ )
-#define _MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_
+#pragma once
 
 #include <QLabel>
 #include <QPixmap>
@@ -74,5 +73,3 @@ protected:
     bool    bFlagGreenLi;
     bool    bFlagYellowLi;
 };
-
-#endif // _MULTCOLORLED_H__FD6B49B5_87DF_48DD_A873_804E1606C2AC__INCLUDED_

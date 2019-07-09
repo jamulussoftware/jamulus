@@ -21,8 +21,7 @@
  *
 \******************************************************************************/
 
-#ifndef CREAPERPROJECT_H
-#define CREAPERPROJECT_H
+#pragma once
 
 #include <QUuid>
 #include <QFileInfo>
@@ -90,4 +89,3 @@ private:
 };
 
 }
-#endif // CREAPERPROJECT_H

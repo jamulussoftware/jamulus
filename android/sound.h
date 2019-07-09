@@ -22,8 +22,7 @@
  *
 \******************************************************************************/
 
-#if !defined(_SOUND_H__9518A621345F78_3638457H73245GUIG9__INCLUDED_)
-#define _SOUND_H__9518A621345F78_3638457H73245GUIG9__INCLUDED_
+#pragma once
 
 #include <SLES/OpenSLES.h>
 #include <SLES/OpenSLES_Android.h>
@@ -81,5 +80,3 @@ protected:
     QMutex                        Mutex;
 
 };
-
-#endif // !defined(_SOUND_H__9518A621345F78_3638457H73245GUIG9__INCLUDED_)

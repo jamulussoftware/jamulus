@@ -22,10 +22,8 @@
  *
 \******************************************************************************/
 
-#if !defined ( _SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_ )
-#define _SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_
+#pragma once
 
-#include <windows.h>
 #include <QMutex>
 #include <QMessageBox>
 #include "../src/util.h"
@@ -152,5 +150,3 @@ protected:
 
     char* cDriverNames[MAX_NUMBER_SOUND_CARDS];
 };
-
-#endif // !defined ( _SOUNDIN_H__9518A621_7F78_11D3_8C0D_EEBF182CF549__INCLUDED_ )

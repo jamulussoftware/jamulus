@@ -18,17 +18,17 @@ else
   cd ..
 fi
 
-# Jack audio without DBUS support
-if [ -d "jack2" ]; then
-  echo "The Jack2 directory is present, we assume it is compiled and ready to use. If not, delete the jack2 directory and call this script again."
-else
-  git clone https://github.com/jackaudio/jack2.git
-  cd jack2
-  git checkout v1.9.12
-  ./waf configure --alsa --prefix=/usr/local --libdir=/usr/lib/x86_64-linux-gnu
-  ./waf
-  cd ..
-fi
+## Jack audio without DBUS support
+#if [ -d "jack2" ]; then
+#  echo "The Jack2 directory is present, we assume it is compiled and ready to use. If not, delete the jack2 directory and call this script again."
+#else
+#  git clone https://github.com/jackaudio/jack2.git
+#  cd jack2
+#  git checkout v1.9.12
+#  ./waf configure --alsa --prefix=/usr/local --libdir=/usr/lib/x86_64-linux-gnu
+#  ./waf
+#  cd ..
+#fi
 
 # compile Jamulus with external Opus library
 cd ..
@@ -44,7 +44,7 @@ echo "Using USB audio device: ${ADEVICE}"
 cd ..
 LD_LIBRARY_PATH="distributions/${OPUS}/.libs"
 export LD_LIBRARY_PATH
-#jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
-jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 256 -n 3 -r 48000 -s &
+jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
+#jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 256 -n 3 -r 48000 -s &
 ./Jamulus -n -c jamulus.fischvolk.de
 

@@ -45,6 +45,5 @@ cd ..
 LD_LIBRARY_PATH="distributions/${OPUS}/.libs"
 export LD_LIBRARY_PATH
 jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
-#jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 256 -n 3 -r 48000 -s &
 ./Jamulus -n -c jamulus.fischvolk.de
 

@@ -22,3 +22,4 @@ release/
 deploy/
 Jamulus.app/
 .DS_Store
+distributions/opus*

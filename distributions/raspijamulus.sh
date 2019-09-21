@@ -24,7 +24,9 @@ if [ -d "jack2" ]; then
 else
   git clone https://github.com/jackaudio/jack2.git
   cd jack2
-  echo "TODO jack2"
+  git checkout v1.9.12
+  ./waf configure --alsa --prefix=/usr/local --libdir=/usr/lib/x86_64-linux-gnu
+  ./waf
   cd ..
 fi
 
@@ -34,12 +36,15 @@ qmake "CONFIG+=opus_shared_lib" Jamulus.pro
 make
 cd distributions
 
+# get first USB audio sound card device
+ADEVICE=$(aplay -l|grep "USB Audio"|head -1|cut -d' ' -f3)
+echo "Using USB audio device: ${ADEVICE}"
+
 # start Jack2 and Jamulus in headless mode
 cd ..
 LD_LIBRARY_PATH="distributions/${OPUS}/.libs"
 export LD_LIBRARY_PATH
-echo "TODO: -dhw:MBox"
-#jackd -P70 -p16 -t2000 -d alsa -dhw:MBox -p 128 -n 3 -r 48000 -s &
-jackd -P70 -p16 -t2000 -d alsa -dhw:MBox -p 256 -n 3 -r 48000 -s &
+#jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
+jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 256 -n 3 -r 48000 -s &
 ./Jamulus -n -c jamulus.fischvolk.de
 

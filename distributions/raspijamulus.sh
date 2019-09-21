@@ -16,6 +16,8 @@ else
   cd ${OPUS}
   ./configure --enable-custom-modes --enable-fixed-point
   make -j${NCORES}
+  mkdir include/opus
+  cp include/*.h include/opus
   cd ..
 fi
 
@@ -33,7 +35,7 @@ fi
 
 # compile Jamulus with external Opus library
 cd ..
-qmake "CONFIG+=opus_shared_lib" Jamulus.pro
+qmake "CONFIG+=opus_shared_lib" "INCLUDEPATH+=distributions/${OPUS}/include" Jamulus.pro
 make -j${NCORES}
 cd distributions
 

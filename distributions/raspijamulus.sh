@@ -35,7 +35,7 @@ fi
 
 # compile Jamulus with external Opus library
 cd ..
-qmake "CONFIG+=opus_shared_lib" "INCLUDEPATH+=distributions/${OPUS}/include" Jamulus.pro
+qmake "CONFIG+=opus_shared_lib" "INCLUDEPATH+=distributions/${OPUS}/include" "QMAKE_LIBDIR+=distributions/${OPUS}/.libs" Jamulus.pro
 make -j${NCORES}
 cd distributions
 
@@ -45,8 +45,8 @@ echo "Using USB audio device: ${ADEVICE}"
 
 # start Jack2 and Jamulus in headless mode
 cd ..
-LD_LIBRARY_PATH="distributions/${OPUS}/.libs"
-export LD_LIBRARY_PATH
-jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
+export LD_LIBRARY_PATH="distributions/${OPUS}/.libs:distributions/jack2/build:distributions/jack2/build/common"
+PATH=$PATH:distributions/jack2/build/common
+distributions/jack2/build/jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
 ./Jamulus -n -c jamulus.fischvolk.de
 

@@ -51,6 +51,7 @@ int main ( int argc, char** argv )
     bool         bDisconnectAllClients     = false;
     bool         bShowAnalyzerConsole      = false;
     bool         bCentServPingServerInList = false;
+    bool         bNoAutoJackConnect        = false;
     int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
     int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
     quint16      iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
@@ -149,6 +150,18 @@ int main ( int argc, char** argv )
         {
             bCentServPingServerInList = true;
             tsConsole << "- ping servers in slave server list" << endl;
+            continue;
+        }
+
+
+        // Disabling auto Jack connections -------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-j",
+                               "--nojackconnect" ) )
+        {
+            bNoAutoJackConnect = true;
+            tsConsole << "- disable auto Jack connections" << endl;
             continue;
         }
 
@@ -448,7 +461,8 @@ int main ( int argc, char** argv )
             // actual client object
             CClient Client ( iPortNumber,
                              strConnOnStartupAddress,
-                             iCtrlMIDIChannel );
+                             iCtrlMIDIChannel,
+                             bNoAutoJackConnect );
 
             // load settings from init-file
             CSettings Settings ( &Client, strIniFileName );
@@ -575,6 +589,7 @@ QString UsageArguments ( char **argv )
         "                        (central server only)\n"
         "  -h, -?, --help        this help text\n"
         "  -i, --inifile         initialization file name (client only)\n"
+        "  -j, --nojackconnect   disable auto Jack connections (client only)\n"
         "  -l, --log             enable logging, set file name\n"
         "  -L, --licence         a licence must be accepted on a new\n"
         "                        connection (server only)\n"

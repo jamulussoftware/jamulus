@@ -30,12 +30,14 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          const bool     bNewIsCallbackAudioInterface,
                          void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                          void*          pParg,
-                         const int      iNewCtrlMIDIChannel ) :
+                         const int      iNewCtrlMIDIChannel,
+                         const bool     bNewNoAutoJackConnect ) :
     fpProcessCallback ( fpNewProcessCallback ),
     pProcessCallbackArg ( pParg ), bRun ( false ),
     bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ),
     strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
-    iCtrlMIDIChannel ( iNewCtrlMIDIChannel )
+    iCtrlMIDIChannel ( iNewCtrlMIDIChannel ),
+    bNoAutoJackConnect ( bNewNoAutoJackConnect )
 {
     // initializations for the sound card names (default)
     lNumDevs          = 1;

@@ -46,9 +46,10 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void  (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
-             void* arg,
-             const int );
+    CSound ( void       (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
+             void*      arg,
+             const int  iCtrlMIDIChannel,
+             const bool bNoAutoJackConnect );
     virtual ~CSound() { UnloadCurrentDriver(); }
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );

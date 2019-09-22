@@ -100,7 +100,8 @@ class CClient : public QObject
 public:
     CClient ( const quint16  iPortNumber,
               const QString& strConnOnStartupAddress,
-              const int      iCtrlMIDIChannel );
+              const int      iCtrlMIDIChannel,
+              const bool     bNoAutoJackConnect );
 
     void   Start();
     void   Stop();

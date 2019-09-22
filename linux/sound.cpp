@@ -87,73 +87,67 @@ void CSound::OpenJack()
         throw CGenErr ( tr ( "The Jack port registering failed." ) );
     }
 
-    const char** ports;
-
     // tell the JACK server that we are ready to roll
     if ( jack_activate ( pJackClient ) )
     {
         throw CGenErr ( tr ( "Cannot activate the Jack client." ) );
     }
 
-    // connect the ports, note: you cannot do this before
-    // the client is activated, because we cannot allow
-    // connections to be made to clients that are not
-    // running
-
-    // try to connect physical input ports
-    if ( ( ports = jack_get_ports ( pJackClient,
-                                    NULL,
-                                    NULL,
-                                    JackPortIsPhysical | JackPortIsOutput ) ) != NULL )
+    if ( !bNoAutoJackConnect )
     {
-        if ( jack_connect ( pJackClient, ports[0], jack_port_name ( input_port_left ) ) )
+        // connect the ports, note: you cannot do this before
+        // the client is activated, because we cannot allow
+        // connections to be made to clients that are not
+        // running
+        const char** ports;
+
+        // try to connect physical input ports
+        if ( ( ports = jack_get_ports ( pJackClient,
+                                        NULL,
+                                        NULL,
+                                        JackPortIsPhysical | JackPortIsOutput ) ) != NULL )
         {
-            throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
-        }
-
-        // before connecting the second stereo channel, check if the input is not
-        // mono
-
-// TODO who checks if ports[1] actually exists??? I assume that if we have mono, the
-//      ports array is only one item long...?
-
-        if ( ports[1] )
-        {
-            if ( jack_connect ( pJackClient, ports[1], jack_port_name ( input_port_right ) ) )
+            if ( jack_connect ( pJackClient, ports[0], jack_port_name ( input_port_left ) ) )
             {
                 throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
             }
+
+            // before connecting the second stereo channel, check if the input is not
+            // mono
+            if ( ports[1] )
+            {
+                if ( jack_connect ( pJackClient, ports[1], jack_port_name ( input_port_right ) ) )
+                {
+                    throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
+                }
+            }
+
+            jack_free ( ports );
         }
 
-        jack_free ( ports );
-    }
-
-    // try to connect physical output ports
-    if ( ( ports = jack_get_ports ( pJackClient,
-                                    NULL,
-                                    NULL,
-                                    JackPortIsPhysical | JackPortIsInput ) ) != NULL )
-    {
-        if ( jack_connect ( pJackClient, jack_port_name ( output_port_left ), ports[0] ) )
+        // try to connect physical output ports
+        if ( ( ports = jack_get_ports ( pJackClient,
+                                        NULL,
+                                        NULL,
+                                        JackPortIsPhysical | JackPortIsInput ) ) != NULL )
         {
-            throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
-        }
-
-        // before connecting the second stereo channel, check if the output is not
-        // mono
-
-// TODO who checks if ports[1] actually exists??? I assume that if we have mono, the
-//      ports array is only one item long...?
-
-        if ( ports[1] )
-        {
-            if ( jack_connect ( pJackClient, jack_port_name ( output_port_right ), ports[1] ) )
+            if ( jack_connect ( pJackClient, jack_port_name ( output_port_left ), ports[0] ) )
             {
                 throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
             }
-        }
 
-        jack_free ( ports );
+            // before connecting the second stereo channel, check if the output is not
+            // mono
+            if ( ports[1] )
+            {
+                if ( jack_connect ( pJackClient, jack_port_name ( output_port_right ), ports[1] ) )
+                {
+                    throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
+                }
+            }
+
+            jack_free ( ports );
+        }
     }
 }
 

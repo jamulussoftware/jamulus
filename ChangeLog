@@ -5,6 +5,8 @@
 
 - added support for controlling the audio mixer faders with a MIDI controller (MacOS only)
 
+- added command line argument for disabling auto jack connection (Ticket #49)
+
 - audio recording for the server, coded by pljones
 
 - SVG server history graph, coded by pljones

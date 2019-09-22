@@ -28,7 +28,7 @@ else
   git clone https://github.com/jackaudio/jack2.git
   cd jack2
   git checkout v1.9.12
-  ./waf configure --alsa --prefix=/usr/local --libdir=/usr/lib/x86_64-linux-gnu
+  ./waf configure --alsa --prefix=/usr/local --libdir=/usr/lib/arm-linux-gnueabihf
   ./waf -j${NCORES}
   cd ..
 fi

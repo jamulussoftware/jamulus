@@ -24,3 +24,5 @@ Jamulus.app/
 .DS_Store
 distributions/opus*
 distributions/jack2
+distributions/claudio_piano.sf2
+distributions/fluidsynth*

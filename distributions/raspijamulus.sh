@@ -71,16 +71,12 @@ PATH=$PATH:distributions/jack2/build/common
 distributions/jack2/build/jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
 
 if [ "$1" == "opt" ]; then
-  ./Jamulus -n -c jamulus.fischvolk.de &>/dev/null &
+  ./Jamulus -n -j -c jamulus.fischvolk.de &>/dev/null &
   sleep 1
-  ./distributions/jack2/build/example-clients/jack_disconnect system:capture_1 "Jamulus:input left"
-  ./distributions/jack2/build/example-clients/jack_disconnect system:capture_2 "Jamulus:input right"
   ./distributions/fluidsynth/build/src/fluidsynth -s -i -a jack -g 1 distributions/fluidsynth/claudio_piano.sf2 &>/dev/null &
   sleep 3
-  ./distributions/jack2/build/example-clients/jack_disconnect system:capture_1 "Jamulus:input left"
-  ./distributions/jack2/build/example-clients/jack_disconnect system:capture_2 "Jamulus:input right"
-  ./distributions/jack2/build/example-clients/jack_disconnect fluidsynth:left system:playback_1
-  ./distributions/jack2/build/example-clients/jack_disconnect fluidsynth:right system:playback_2
+  ./distributions/jack2/build/example-clients/jack_connect "Jamulus:output left" system:playback_1
+  ./distributions/jack2/build/example-clients/jack_connect "Jamulus:output right" system:playback_2
   ./distributions/jack2/build/example-clients/jack_connect fluidsynth:left "Jamulus:input left"
   ./distributions/jack2/build/example-clients/jack_connect fluidsynth:right "Jamulus:input right"
   aconnect 'USB-MIDI' 128

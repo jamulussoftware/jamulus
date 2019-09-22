@@ -39,18 +39,19 @@ fi
 
 # optional: FluidSynth synthesizer
 if [ "$1" == "opt" ]; then
-  if [ -d "fluidsynth-*" ]; then
+  if [ -d "fluidsynth" ]; then
     echo "The Fluidsynth directory is present, we assume it is compiled and ready to use. If not, delete the fluidsynth directory and call this script again."
   else
     wget https://github.com/FluidSynth/fluidsynth/archive/v2.0.6.tar.gz -O fluidsynth.tar.gz
-    wget https://data.musical-artifacts.com/hammersound/claudio_piano.sf2
     tar -xzf fluidsynth.tar.gz
     rm fluidsynth.tar.gz
-    cd fluidsynth-*
+    mv fluidsynth-* fluidsynth
+    cd fluidsynth
     mkdir build
     cd build
     cmake ..
     make -j${NCORES}
+    wget https://data.musical-artifacts.com/hammersound/claudio_piano.sf2
     cd ../..
   fi
 fi
@@ -59,31 +60,31 @@ fi
 cd ..
 qmake "CONFIG+=opus_shared_lib" "INCLUDEPATH+=distributions/${OPUS}/include" "QMAKE_LIBDIR+=distributions/${OPUS}/.libs" Jamulus.pro
 make -j${NCORES}
-cd distributions
 
 # get first USB audio sound card device
 ADEVICE=$(aplay -l|grep "USB Audio"|head -1|cut -d' ' -f3)
 echo "Using USB audio device: ${ADEVICE}"
 
 # start Jack2 and Jamulus in headless mode
-cd ..
 export LD_LIBRARY_PATH="distributions/${OPUS}/.libs:distributions/jack2/build:distributions/jack2/build/common"
 PATH=$PATH:distributions/jack2/build/common
 distributions/jack2/build/jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
-./Jamulus -n -c jamulus.fischvolk.de
 
 if [ "$1" == "opt" ]; then
+  ./Jamulus -n -c jamulus.fischvolk.de &>/dev/null &
   sleep 1
-  jack_disconnect system:capture_1 "Jamulus:input left"
-  jack_disconnect system:capture_2 "Jamulus:input right"
-  ./fluidsynth-*/build/src/fluidsynth -s -i -a jack -g 1 claudio_piano.sf2 &>/dev/null &
+  ./distributions/jack2/build/example-clients/jack_disconnect system:capture_1 "Jamulus:input left"
+  ./distributions/jack2/build/example-clients/jack_disconnect system:capture_2 "Jamulus:input right"
+  ./distributions/fluidsynth/build/src/fluidsynth -s -i -a jack -g 1 distributions/fluidsynth/claudio_piano.sf2 &>/dev/null &
   sleep 3
-  jack_disconnect system:capture_1 "Jamulus:input left"
-  jack_disconnect system:capture_2 "Jamulus:input right"
-  jack_disconnect fluidsynth:left system:playback_1
-  jack_disconnect fluidsynth:right system:playback_2
-  jack_connect fluidsynth:left "Jamulus:input left"
-  jack_connect fluidsynth:right "Jamulus:input right"
+  ./distributions/jack2/build/example-clients/jack_disconnect system:capture_1 "Jamulus:input left"
+  ./distributions/jack2/build/example-clients/jack_disconnect system:capture_2 "Jamulus:input right"
+  ./distributions/jack2/build/example-clients/jack_disconnect fluidsynth:left system:playback_1
+  ./distributions/jack2/build/example-clients/jack_disconnect fluidsynth:right system:playback_2
+  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:left "Jamulus:input left"
+  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:right "Jamulus:input right"
   aconnect 'USB-MIDI' 128
+else
+  ./Jamulus -n -c jamulus.fischvolk.de
 fi
 

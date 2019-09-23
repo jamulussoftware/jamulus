@@ -55,6 +55,8 @@ matrix:
     - unzip ASIOSDK2.3.2.zip
     - mkdir ASIOSDK2
     - cp -rvu ASIOSDK2.3.2/* ASIOSDK2
+    - pwd
+    - cd windows
     - "./qt-unified-windows-x86-online.exe --verbose --script qt-installer-windows.qs"
     - ls -la C:/Qt/5.12.3/msvc2017/bin/qtenv2.bat
     script:

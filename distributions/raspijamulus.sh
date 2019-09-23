@@ -66,10 +66,12 @@ ADEVICE=$(aplay -l|grep "USB Audio"|head -1|cut -d' ' -f3)
 echo "Using USB audio device: ${ADEVICE}"
 
 # write Jamulus ini file for setting the client name
-INIFILE="Jamulus.ini"
-NAME64=$(echo -n "Raspi $(hostname)"|base64)
-echo -e "<client>\n  <name_base64>${NAME64}</name_base64>\n</client>" > ${INIFILE}
-mv ${INIFILE} ~/.config/Jamulus
+JAMULUSINIFILE="Jamulus.ini"
+if [ ! -f "$HOME/.config/Jamulus/$JAMULUSINIFILE" ]; then
+  NAME64=$(echo -n "Raspi $(hostname)"|base64)
+  echo -e "<client>\n  <name_base64>${NAME64}</name_base64>\n</client>" > ${JAMULUSINIFILE}
+  mv ${JAMULUSINIFILE} ~/.config/Jamulus
+fi
 
 # start Jack2 and Jamulus in headless mode
 export LD_LIBRARY_PATH="distributions/${OPUS}/.libs:distributions/jack2/build:distributions/jack2/build/common"

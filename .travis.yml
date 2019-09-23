@@ -49,7 +49,7 @@ matrix:
     before_install:
     - dir C:/Program\ Files\ \(x86\)/Windows\ Kits/10/bin/10.0.17134.0/x64
     - cmd.exe /C 'cd && "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"
-      x86 && cd && cd "C:/Users/travis/build/braindef/jamulus/windows" && dir'
+      x86 && cd && cd "C:/Users/travis/build/corrados/jamulus/windows" && dir'
     - curl -vLO http://download.qt.io/official_releases/online_installers/qt-unified-windows-x86-online.exe
     - curl -vLO http://www.steinberg.net/sdk_downloads/ASIOSDK2.3.2.zip
     - unzip ASIOSDK2.3.2.zip
@@ -64,7 +64,7 @@ matrix:
     script:
     - cmd.exe /C 'cd && "C:\Qt\5.12.3\msvc2017\bin\qtenv2.bat" && cd && "C:\Program
       Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"
-      x86 && cd "C:\Users\travis\build\braindef\jamulus" && cd && qmake Jamulus.pro
+      x86 && cd "C:\Users\travis\build\corrados\jamulus" && cd && qmake Jamulus.pro
       && nmake'
     #deploy function is only available in travis-ci.com (not free) but not in travis-ci.org (free)
     #deploy:

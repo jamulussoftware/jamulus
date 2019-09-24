@@ -87,6 +87,15 @@ if [ "$1" == "opt" ]; then
   ./distributions/jack2/build/example-clients/jack_connect fluidsynth:left "Jamulus:input left"
   ./distributions/jack2/build/example-clients/jack_connect fluidsynth:right "Jamulus:input right"
   aconnect 'USB-MIDI' 128
+
+  # watchdog: if MIDI device is turned off, shutdown Jamulus
+  while [ ! -z "$(amidi -l|grep "USB-MIDI")" ]; do
+    sleep 1
+  done
+  killall jackd
+  killall fluidsynth
+  echo "Cleaned up jackd, Jamulus and fluidsynth"
+
 else
   ./Jamulus -n -c jamulus.fischvolk.de
 fi

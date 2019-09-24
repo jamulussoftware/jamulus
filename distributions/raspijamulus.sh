@@ -88,6 +88,11 @@ if [ "$1" == "opt" ]; then
   ./distributions/jack2/build/example-clients/jack_connect fluidsynth:right "Jamulus:input right"
   aconnect 'USB-MIDI' 128
 
+  # if hyperion is installed, set red color
+  if [ ! -z "$(command -v hyperion-remote)" ]; then
+    hyperion-remote -c red
+  fi
+
   # watchdog: if MIDI device is turned off, shutdown Jamulus
   while [ ! -z "$(amidi -l|grep "USB-MIDI")" ]; do
     sleep 1
@@ -95,6 +100,12 @@ if [ "$1" == "opt" ]; then
   killall jackd
   killall fluidsynth
   echo "Cleaned up jackd, Jamulus and fluidsynth"
+
+  # if hyperion is installed, reset color
+  if [ ! -z "$(command -v hyperion-remote)" ]; then
+    hyperion-remote --color black
+    hyperion-remote --clearall
+  fi
 
 else
   ./Jamulus -n -c jamulus.fischvolk.de

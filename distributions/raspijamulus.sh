@@ -109,5 +109,6 @@ if [ "$1" == "opt" ]; then
 
 else
   ./Jamulus -n -c jamulus.fischvolk.de
+  killall jackd
 fi
 

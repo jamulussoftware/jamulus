@@ -80,7 +80,7 @@ echo -e "<client>\n  <name_base64>${NAME64}</name_base64>\n</client>" > ${JAMULU
 
 # start Jack2 and Jamulus in headless mode
 export LD_LIBRARY_PATH="distributions/${OPUS}/.libs:distributions/jack2/build:distributions/jack2/build/common"
-distributions/jack2/build/jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
+distributions/jack2/build/jackd --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
 
 if [ "$1" == "opt" ]; then
   ./Jamulus -n -i ${JAMULUSINIFILE} -j -c jamulus.fischvolk.de &>/dev/null &

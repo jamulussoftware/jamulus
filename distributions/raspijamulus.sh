@@ -4,7 +4,15 @@
 OPUS="opus-1.1"
 NCORES=$(nproc)
 
-echo "TODO: sudo apt-get install [needed libraries for compilation and runtime]"
+# install required packages
+pkgs='build-essential qt5-default'
+if ! dpkg -s $pkgs >/dev/null 2>&1; then
+  read -p "Do you want to install missing packages? " -n 1 -r
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    sudo apt-get install $pkgs -y
+  fi
+fi
 
 # Opus audio codec, custom compilation with custom modes and fixed point support
 if [ -d "${OPUS}" ]; then
@@ -67,18 +75,15 @@ echo "Using USB audio device: ${ADEVICE}"
 
 # write Jamulus ini file for setting the client name
 JAMULUSINIFILE="Jamulus.ini"
-if [ ! -f "$HOME/.config/Jamulus/$JAMULUSINIFILE" ]; then
-  NAME64=$(echo -n "Raspi $(hostname)"|base64)
-  echo -e "<client>\n  <name_base64>${NAME64}</name_base64>\n</client>" > ${JAMULUSINIFILE}
-  mv ${JAMULUSINIFILE} ~/.config/Jamulus
-fi
+NAME64=$(echo -n "Raspi $(hostname)"|base64)
+echo -e "<client>\n  <name_base64>${NAME64}</name_base64>\n</client>" > ${JAMULUSINIFILE}
 
 # start Jack2 and Jamulus in headless mode
 export LD_LIBRARY_PATH="distributions/${OPUS}/.libs:distributions/jack2/build:distributions/jack2/build/common"
 distributions/jack2/build/jackd -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
 
 if [ "$1" == "opt" ]; then
-  ./Jamulus -n -j -c jamulus.fischvolk.de &>/dev/null &
+  ./Jamulus -n -i ${JAMULUSINIFILE} -j -c jamulus.fischvolk.de &>/dev/null &
   sleep 1
   ./distributions/fluidsynth/build/src/fluidsynth -o synth.polyphony=25 -s -i -a jack -g 1 distributions/fluidsynth/build/claudio_piano.sf2 &>/dev/null &
   sleep 3
@@ -97,8 +102,9 @@ if [ "$1" == "opt" ]; then
   while [ ! -z "$(amidi -l|grep "USB-MIDI")" ]; do
     sleep 1
   done
-  killall jackd
+  killall Jamulus
   killall fluidsynth
+  killall jackd
   echo "Cleaned up jackd, Jamulus and fluidsynth"
 
   # if hyperion is installed, reset color
@@ -108,7 +114,10 @@ if [ "$1" == "opt" ]; then
   fi
 
 else
-  ./Jamulus -n -c jamulus.fischvolk.de
+  ./Jamulus -n -i ${JAMULUSINIFILE} -c jamulus.fischvolk.de &
+  echo "###---------- PRESS ANY KEY TO TERMINATE THE JAMULUS SESSION ---------###"
+  read -n 1 -s -r -p ""
+  killall Jamulus
   killall jackd
 fi
 

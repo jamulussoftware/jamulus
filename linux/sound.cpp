@@ -79,10 +79,14 @@ void CSound::OpenJack()
     output_port_right = jack_port_register ( pJackClient, "output right",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
 
+    input_port_midi = jack_port_register ( pJackClient, "input midi",
+        JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0 );
+
     if ( ( input_port_left   == NULL ) ||
          ( input_port_right  == NULL ) ||
          ( output_port_left  == NULL ) ||
-         ( output_port_right == NULL ) )
+         ( output_port_right == NULL ) ||
+         ( input_port_midi == NULL ) )
     {
         throw CGenErr ( tr ( "The Jack port registering failed." ) );
     }
@@ -225,7 +229,10 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             (jack_default_audio_sample_t*) jack_port_get_buffer (
             pSound->input_port_right, nframes );
 
-        // copy input data
+        void* in_midi = jack_port_get_buffer (
+            pSound->input_port_midi, nframes );
+
+        // copy input audio data
         if ( in_left != 0 && in_right != 0 )
         {
             for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
@@ -235,6 +242,28 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
 
                 pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
                     (short) ( in_right[i] * _MAXSHORT );
+            }
+        }
+
+        // akt on MIDI data
+        if ( in_midi != 0 )
+        {
+            jack_nframes_t event_count = jack_midi_get_event_count ( in_midi );
+
+            for ( jack_nframes_t j = 0; j < event_count; j++ )
+            {
+                jack_midi_event_t in_event;
+
+                jack_midi_event_get ( &in_event, in_midi, j );
+
+                // copy packet and send it to the MIDI parser
+                CVector<uint8_t> vMIDIPaketBytes ( in_event.size );
+
+                for ( i = 0; i < static_cast<int> ( in_event.size ); i++ )
+                {
+                    vMIDIPaketBytes[i] = static_cast<uint8_t> ( in_event.buffer[i] );
+                }
+                pSound->ParseMIDIMessage ( vMIDIPaketBytes );
             }
         }
 

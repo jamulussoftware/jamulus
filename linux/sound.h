@@ -40,6 +40,7 @@
 
 #if WITH_SOUND
 # include <jack/jack.h>
+# include <jack/midiport.h>
 #endif
 
 
@@ -81,6 +82,7 @@ public:
     jack_port_t*   input_port_right;
     jack_port_t*   output_port_left;
     jack_port_t*   output_port_right;
+    jack_port_t*   input_port_midi;
 
 protected:
     void OpenJack();

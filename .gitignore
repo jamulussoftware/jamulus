@@ -1,5 +1,6 @@
 .qmake.stash
 Jamulus
+Jamulus.ini
 Makefile
 *.pro.user*
 **.cppe

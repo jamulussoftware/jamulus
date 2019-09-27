@@ -79,16 +79,28 @@ void CSound::OpenJack()
     output_port_right = jack_port_register ( pJackClient, "output right",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
 
-    input_port_midi = jack_port_register ( pJackClient, "input midi",
-        JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0 );
-
     if ( ( input_port_left   == NULL ) ||
          ( input_port_right  == NULL ) ||
          ( output_port_left  == NULL ) ||
-         ( output_port_right == NULL ) ||
-         ( input_port_midi == NULL ) )
+         ( output_port_right == NULL ) )
     {
         throw CGenErr ( tr ( "The Jack port registering failed." ) );
+    }
+
+    // optional MIDI initialization
+    if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
+    {
+        input_port_midi = jack_port_register ( pJackClient, "input midi",
+            JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0 );
+
+        if ( input_port_midi == NULL )
+        {
+            throw CGenErr ( tr ( "The Jack port registering failed." ) );
+        }
+    }
+    else
+    {
+        input_port_midi = NULL;
     }
 
     // tell the JACK server that we are ready to roll
@@ -229,9 +241,6 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             (jack_default_audio_sample_t*) jack_port_get_buffer (
             pSound->input_port_right, nframes );
 
-        void* in_midi = jack_port_get_buffer (
-            pSound->input_port_midi, nframes );
-
         // copy input audio data
         if ( in_left != 0 && in_right != 0 )
         {
@@ -245,25 +254,32 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             }
         }
 
-        // akt on MIDI data
-        if ( in_midi != 0 )
+        // akt on MIDI data if MIDI is enabled
+        if ( pSound->input_port_midi != NULL )
         {
-            jack_nframes_t event_count = jack_midi_get_event_count ( in_midi );
+            void* in_midi = jack_port_get_buffer (
+                pSound->input_port_midi, nframes );
 
-            for ( jack_nframes_t j = 0; j < event_count; j++ )
+            if ( in_midi != 0 )
             {
-                jack_midi_event_t in_event;
+                jack_nframes_t event_count = jack_midi_get_event_count ( in_midi );
 
-                jack_midi_event_get ( &in_event, in_midi, j );
-
-                // copy packet and send it to the MIDI parser
-                CVector<uint8_t> vMIDIPaketBytes ( in_event.size );
-
-                for ( i = 0; i < static_cast<int> ( in_event.size ); i++ )
+                for ( jack_nframes_t j = 0; j < event_count; j++ )
                 {
-                    vMIDIPaketBytes[i] = static_cast<uint8_t> ( in_event.buffer[i] );
+                    jack_midi_event_t in_event;
+
+                    jack_midi_event_get ( &in_event, in_midi, j );
+
+                    // copy packet and send it to the MIDI parser
+// TODO do not call malloc in real-time callback
+                    CVector<uint8_t> vMIDIPaketBytes ( in_event.size );
+
+                    for ( i = 0; i < static_cast<int> ( in_event.size ); i++ )
+                    {
+                        vMIDIPaketBytes[i] = static_cast<uint8_t> ( in_event.buffer[i] );
+                    }
+                    pSound->ParseMIDIMessage ( vMIDIPaketBytes );
                 }
-                pSound->ParseMIDIMessage ( vMIDIPaketBytes );
             }
         }
 

@@ -5,7 +5,7 @@ OPUS="opus-1.1"
 NCORES=$(nproc)
 
 # install required packages
-pkgs='build-essential qt5-default'
+pkgs='build-essential qt5-default libasound-dev'
 if ! dpkg -s $pkgs >/dev/null 2>&1; then
   read -p "Do you want to install missing packages? " -n 1 -r
   echo

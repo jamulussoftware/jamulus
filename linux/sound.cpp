@@ -254,35 +254,6 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             }
         }
 
-        // akt on MIDI data if MIDI is enabled
-        if ( pSound->input_port_midi != NULL )
-        {
-            void* in_midi = jack_port_get_buffer (
-                pSound->input_port_midi, nframes );
-
-            if ( in_midi != 0 )
-            {
-                jack_nframes_t event_count = jack_midi_get_event_count ( in_midi );
-
-                for ( jack_nframes_t j = 0; j < event_count; j++ )
-                {
-                    jack_midi_event_t in_event;
-
-                    jack_midi_event_get ( &in_event, in_midi, j );
-
-                    // copy packet and send it to the MIDI parser
-// TODO do not call malloc in real-time callback
-                    CVector<uint8_t> vMIDIPaketBytes ( in_event.size );
-
-                    for ( i = 0; i < static_cast<int> ( in_event.size ); i++ )
-                    {
-                        vMIDIPaketBytes[i] = static_cast<uint8_t> ( in_event.buffer[i] );
-                    }
-                    pSound->ParseMIDIMessage ( vMIDIPaketBytes );
-                }
-            }
-        }
-
         // call processing callback function
         pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
 
@@ -329,6 +300,34 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             memset ( out_right,
                      0,
                      sizeof ( jack_default_audio_sample_t ) * nframes );
+        }
+    }
+
+    // akt on MIDI data if MIDI is enabled
+    if ( pSound->input_port_midi != NULL )
+    {
+        void* in_midi = jack_port_get_buffer ( pSound->input_port_midi, nframes );
+
+        if ( in_midi != 0 )
+        {
+            jack_nframes_t event_count = jack_midi_get_event_count ( in_midi );
+
+            for ( jack_nframes_t j = 0; j < event_count; j++ )
+            {
+                jack_midi_event_t in_event;
+
+                jack_midi_event_get ( &in_event, in_midi, j );
+
+                // copy packet and send it to the MIDI parser
+// TODO do not call malloc in real-time callback
+                CVector<uint8_t> vMIDIPaketBytes ( in_event.size );
+
+                for ( i = 0; i < static_cast<int> ( in_event.size ); i++ )
+                {
+                    vMIDIPaketBytes[i] = static_cast<uint8_t> ( in_event.buffer[i] );
+                }
+                pSound->ParseMIDIMessage ( vMIDIPaketBytes );
+            }
         }
     }
 

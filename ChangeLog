@@ -3,7 +3,7 @@
 
 3.4.4
 
-- added support for controlling the audio mixer faders with a MIDI controller (MacOS only)
+- added support for controlling the audio mixer faders with a MIDI controller (MacOS and Linux)
 
 - added command line argument for disabling auto jack connection (Ticket #49)
 

@@ -86,7 +86,7 @@ JAMULUSINIFILE="Jamulus.ini"
 NAME64=$(echo "Raspi $(hostname)"|cut -c -15|tr -d $'\n'|base64)
 echo -e "<client>\n  <name_base64>${NAME64}</name_base64>" > ${JAMULUSINIFILE}
 echo -e "  <autojitbuf>1</autojitbuf>\n  <jitbuf>3</jitbuf>\n  <jitbufserver>3</jitbufserver>" >> ${JAMULUSINIFILE}
-echo -e "  <audiochannels>0</audiochannels>\n  <audioquality>1</audioquality>\n</client>" >> ${JAMULUSINIFILE}
+echo -e "  <audiochannels>0</audiochannels>\n  <audioquality>0</audioquality>\n</client>" >> ${JAMULUSINIFILE}
 
 # taken from "Raspberry Pi and realtime, low-latency audio" homepage at wiki.linuxaudio.org
 #sudo service triggerhappy stop

@@ -75,7 +75,7 @@ echo "Using USB audio device: ${ADEVICE}"
 
 # write Jamulus ini file for setting the client name
 JAMULUSINIFILE="Jamulus.ini"
-NAME64=$(echo -n "Raspi $(hostname)"|cut -c -15|base64)
+NAME64=$(echo "Raspi $(hostname)"|cut -c -15|tr -d $'\n'|base64)
 echo -e "<client>\n  <name_base64>${NAME64}</name_base64>\n</client>" > ${JAMULUSINIFILE}
 
 # start Jack2 and Jamulus in headless mode

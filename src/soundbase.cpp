@@ -100,54 +100,6 @@ void CSoundBase::run()
     }
 }
 
-void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
-{
-    if ( vMIDIPaketBytes.Size() > 0 )
-    {
-        const uint8_t iStatusByte = vMIDIPaketBytes[0];
-
-        // check if status byte is correct
-        if ( ( iStatusByte >= 0x80 ) && ( iStatusByte < 0xF0 ) )
-        {
-            // zero-based MIDI channel number (i.e. range 0-15)
-            const int iMIDIChannelZB = iStatusByte & 0x0F;
-
-/*
-// debugging
-printf ( "%02X: ", iMIDIChannelZB );
-for ( int i = 0; i < vMIDIPaketBytes.Size(); i++ )
-{
-    printf ( "%02X ", vMIDIPaketBytes[i] );
-}
-printf ( "\n" );
-*/
-
-            // per definition if MIDI channel is 0, we listen to all channels
-            // note that iCtrlMIDIChannel is one-based channel number
-            if ( ( iCtrlMIDIChannel == 0 ) || ( iCtrlMIDIChannel - 1 == iMIDIChannelZB ) )
-            {
-                // we only want to parse controller messages
-                if ( ( iStatusByte >= 0xB0 ) && ( iStatusByte < 0xC0 ) )
-                {
-                    // make sure paket is long enough
-                    if ( vMIDIPaketBytes.Size() > 2 )
-                    {
-                        // we are assuming that the controller number is the same
-                        // as the audio fader index and the range is 0-127
-                        const int iFaderLevel = static_cast<int> ( static_cast<double> (
-                            qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) ) ) / 127 * AUD_MIX_FADER_MAX );
-
-                        // Behringer X-TOUCH: offset of 0x46
-                        const int iChID = vMIDIPaketBytes[1] - 70;
-
-                        EmitControllerInFaderLevel ( iChID, iFaderLevel );
-                    }
-                }
-            }
-        }
-    }
-}
-
 
 
 /******************************************************************************\
@@ -292,4 +244,57 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver()
     }
 
     return vsErrorList;
+}
+
+
+
+/******************************************************************************\
+* MIDI handling                                                                *
+\******************************************************************************/
+void CSoundBase::ParseMIDIMessage ( const CVector<uint8_t>& vMIDIPaketBytes )
+{
+    if ( vMIDIPaketBytes.Size() > 0 )
+    {
+        const uint8_t iStatusByte = vMIDIPaketBytes[0];
+
+        // check if status byte is correct
+        if ( ( iStatusByte >= 0x80 ) && ( iStatusByte < 0xF0 ) )
+        {
+            // zero-based MIDI channel number (i.e. range 0-15)
+            const int iMIDIChannelZB = iStatusByte & 0x0F;
+
+/*
+// debugging
+printf ( "%02X: ", iMIDIChannelZB );
+for ( int i = 0; i < vMIDIPaketBytes.Size(); i++ )
+{
+    printf ( "%02X ", vMIDIPaketBytes[i] );
+}
+printf ( "\n" );
+*/
+
+            // per definition if MIDI channel is 0, we listen to all channels
+            // note that iCtrlMIDIChannel is one-based channel number
+            if ( ( iCtrlMIDIChannel == 0 ) || ( iCtrlMIDIChannel - 1 == iMIDIChannelZB ) )
+            {
+                // we only want to parse controller messages
+                if ( ( iStatusByte >= 0xB0 ) && ( iStatusByte < 0xC0 ) )
+                {
+                    // make sure paket is long enough
+                    if ( vMIDIPaketBytes.Size() > 2 )
+                    {
+                        // we are assuming that the controller number is the same
+                        // as the audio fader index and the range is 0-127
+                        const int iFaderLevel = static_cast<int> ( static_cast<double> (
+                            qMin ( vMIDIPaketBytes[2], uint8_t ( 127 ) ) ) / 127 * AUD_MIX_FADER_MAX );
+
+                        // Behringer X-TOUCH: offset of 0x46
+                        const int iChID = vMIDIPaketBytes[1] - 70;
+
+                        EmitControllerInFaderLevel ( iChID, iFaderLevel );
+                    }
+                }
+            }
+        }
+    }
 }

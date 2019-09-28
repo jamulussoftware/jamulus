@@ -26,7 +26,7 @@ matrix:
     #    repo: corrados/jamulus
     #    tags: true
   - os: osx
-    osx_image: xcode7.2
+    osx_image: xcode11
     before_install:
     - brew install qt5
     - brew link qt5 --force

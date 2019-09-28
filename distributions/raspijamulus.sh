@@ -5,7 +5,7 @@ OPUS="opus-1.1"
 NCORES=$(nproc)
 
 # install required packages
-pkgs='build-essential qt5-default'
+pkgs='alsamixergui build-essential qt5-default libasound2-dev cmake libglib2.0-dev'
 if ! dpkg -s $pkgs >/dev/null 2>&1; then
   read -p "Do you want to install missing packages? " -n 1 -r
   echo
@@ -43,6 +43,14 @@ else
   cp build/common/*.so build/jack
   cp build/example-clients/*.so build/jack
   cd ..
+
+  # give audio group rights to do realtime
+  if grep -Fq "@audio" /etc/security/limits.conf; then
+    echo "audio group already has realtime rights"
+  else
+    sudo sh -c 'echo "@audio   -  rtprio   95" >> /etc/security/limits.conf'
+    sudo sh -c 'echo "@audio   -  memlock  unlimited" >> /etc/security/limits.conf'
+  fi
 fi
 
 # optional: FluidSynth synthesizer
@@ -66,7 +74,7 @@ fi
 
 # compile Jamulus with external Opus library
 cd ..
-qmake "CONFIG+=opus_shared_lib" "INCLUDEPATH+=distributions/${OPUS}/include" "QMAKE_LIBDIR+=distributions/${OPUS}/.libs" Jamulus.pro
+qmake "CONFIG+=opus_shared_lib" "INCLUDEPATH+=distributions/${OPUS}/include" "QMAKE_LIBDIR+=distributions/${OPUS}/.libs" "INCLUDEPATH+=distributions/jack2/common" "QMAKE_LIBDIR+=distributions/jack2/build/common" Jamulus.pro
 make -j${NCORES}
 
 # get first USB audio sound card device

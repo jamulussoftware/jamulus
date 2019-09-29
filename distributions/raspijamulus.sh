@@ -58,6 +58,7 @@ if [ "$1" == "opt" ]; then
   if [ -d "fluidsynth" ]; then
     echo "The Fluidsynth directory is present, we assume it is compiled and ready to use. If not, delete the fluidsynth directory and call this script again."
   else
+#TODO if the normal jack package is not installed, fluidsynth compiles without jack support
     wget https://github.com/FluidSynth/fluidsynth/archive/v2.0.6.tar.gz -O fluidsynth.tar.gz
     tar -xzf fluidsynth.tar.gz
     rm fluidsynth.tar.gz

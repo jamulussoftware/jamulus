@@ -102,12 +102,12 @@ fi
 
 # start Jack2 and Jamulus in headless mode
 export LD_LIBRARY_PATH="distributions/${OPUS}/.libs:distributions/jack2/build:distributions/jack2/build/common"
-distributions/jack2/build/jackd --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
 
 if [ "$1" == "opt" ]; then
+  distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 256 -n 3 -r 48000 -s &
   ./Jamulus -n -i ${JAMULUSINIFILE} -j -c jamulus.fischvolk.de &>/dev/null &
   sleep 1
-  ./distributions/fluidsynth/build/src/fluidsynth -o synth.polyphony=25 -s -i -a jack -g 1 distributions/fluidsynth/build/claudio_piano.sf2 &>/dev/null &
+  ./distributions/fluidsynth/build/src/fluidsynth -o synth.polyphony=25 -s -i -a jack -g 0.4 distributions/fluidsynth/build/claudio_piano.sf2 &>/dev/null &
   sleep 3
   ./distributions/jack2/build/example-clients/jack_connect "Jamulus:output left" system:playback_1
   ./distributions/jack2/build/example-clients/jack_connect "Jamulus:output right" system:playback_2
@@ -126,7 +126,6 @@ if [ "$1" == "opt" ]; then
   done
   killall Jamulus
   killall fluidsynth
-  killall jackd
   echo "Cleaned up jackd, Jamulus and fluidsynth"
 
   # if hyperion is installed, reset color
@@ -136,10 +135,10 @@ if [ "$1" == "opt" ]; then
   fi
 
 else
+  distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
   ./Jamulus -n -i ${JAMULUSINIFILE} -c jamulus.fischvolk.de &
   echo "###---------- PRESS ANY KEY TO TERMINATE THE JAMULUS SESSION ---------###"
   read -n 1 -s -r -p ""
   killall Jamulus
-  killall jackd
 fi
 

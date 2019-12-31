@@ -54,7 +54,7 @@ else
 fi
 
 # optional: FluidSynth synthesizer
-if [ "$1" == "opt" ]; then
+if [ "$1" == "opt" -o "$1" == "synth" ]; then
   if [ -d "fluidsynth" ]; then
     echo "The Fluidsynth directory is present, we assume it is compiled and ready to use. If not, delete the fluidsynth directory and call this script again."
   else
@@ -133,6 +133,21 @@ if [ "$1" == "opt" ]; then
     hyperion-remote --color black
     hyperion-remote --clearall
   fi
+
+elif [ "$1" == "synth" ]; then
+  distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 256 -n 3 -r 48000 -s &
+  ./distributions/fluidsynth/build/src/fluidsynth -o synth.polyphony=25 -s -i -a jack -g 0.4 distributions/fluidsynth/build/claudio_piano.sf2 &>/dev/null &
+  sleep 3
+  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:left  system:playback_1
+  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:right system:playback_2
+  aconnect 'USB-MIDI' 128
+
+  # watchdog: if MIDI device is turned off, shutdown fluidsynth
+  while [ ! -z "$(amidi -l|grep "USB-MIDI")" ]; do
+    sleep 1
+  done
+  killall fluidsynth
+  echo "Cleaned up jackd and fluidsynth"
 
 else
   distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &

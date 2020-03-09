@@ -79,7 +79,7 @@ qmake "CONFIG+=opus_shared_lib" "INCLUDEPATH+=distributions/${OPUS}/include" "QM
 make -j${NCORES}
 
 # get first USB audio sound card device
-ADEVICE=$(aplay -l|grep "USB Audio"|head -1|cut -d' ' -f3)
+ADEVICE=$(aplay -l|grep "USB Audio"|tail -1|cut -d' ' -f3)
 echo "Using USB audio device: ${ADEVICE}"
 
 # write Jamulus ini file for setting the client name and buffer settings

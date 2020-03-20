@@ -135,6 +135,9 @@ void AHistoryGraph::Update ( )
         // store current date for reference
         curDate = QDate::currentDate();
 
+        // set oldest date to draw
+        QDate     minDate             = curDate.addDays ( MAX_DAYS_HISTORY * -1 );
+
         // get oldest date in history
         QDate     oldestDate          = curDate.addDays ( 1 ); // one day in the future
         const int iNumItemsForHistory = vHistoryDataFifo.Size();
@@ -150,6 +153,10 @@ void AHistoryGraph::Update ( )
                 }
             }
         }
+        if (oldestDate < minDate)
+        {
+            oldestDate = minDate;
+        }
         const int iNumDaysInHistory = -curDate.daysTo ( oldestDate ) + 1;
 
         // draw frame of the graph
@@ -159,7 +166,7 @@ void AHistoryGraph::Update ( )
         for ( i = 0; i < iNumItemsForHistory; i++ )
         {
             // only use valid dates
-            if ( vHistoryDataFifo[i].DateTime.date().isValid() )
+            if ( vHistoryDataFifo[i].DateTime.date().isValid() && oldestDate <= vHistoryDataFifo[i].DateTime.date() )
             {
                 AddMarker ( vHistoryDataFifo[i] );
             }

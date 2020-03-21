@@ -27,11 +27,13 @@
 
 
 /* Abstract class *************************************************************/
-AHistoryGraph::AHistoryGraph() :
+AHistoryGraph::AHistoryGraph( const int          iNumItemsHistory,
+                              const int          iMaxDaysHistory ) :
     sFileName           ( "" ),
     bDoHistory          ( false ),
-    vHistoryDataFifo    ( NUM_ITEMS_HISTORY ),
+    vHistoryDataFifo    ( iNumItemsHistory ),
     iNumTicksX          ( 0 ), // number of days in history
+    iHistMaxDays        ( iMaxDaysHistory ),
 
     BackgroundColor     ( "white" ), // background
     FrameColor          ( "black" ), // frame
@@ -136,7 +138,7 @@ void AHistoryGraph::Update ( )
         curDate = QDate::currentDate();
 
         // set oldest date to draw
-        QDate minDate = curDate.addDays ( MAX_DAYS_HISTORY * -1 );
+        QDate     minDate             = curDate.addDays ( iHistMaxDays * -1 );
 
         // get oldest date in history
         QDate     oldestDate          = curDate.addDays ( 1 ); // one day in the future
@@ -298,9 +300,10 @@ void AHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
 
 
 /* JPEG History Graph implementation ******************************************/
-CJpegHistoryGraph::CJpegHistoryGraph() :
-    AHistoryGraph(),
-    PlotPixmap ( 1, 1, QImage::Format_RGB32 ),
+CJpegHistoryGraph::CJpegHistoryGraph( const int          iNumItemsHistory,
+                                      const int          iMaxDaysHistory ) :
+    AHistoryGraph   ( iNumItemsHistory, iMaxDaysHistory ),
+    PlotPixmap      ( 1, 1, QImage::Format_RGB32 ),
     iAxisFontWeight ( -1 )
 {
     // scale pixmap to correct size
@@ -403,9 +406,10 @@ void CJpegHistoryGraph::point ( const unsigned int x, const unsigned int y, cons
 
 
 /* SVG History Graph implementation *******************************************/
-CSvgHistoryGraph::CSvgHistoryGraph() :
-    AHistoryGraph(),
-    svgImage ( "" ),
+CSvgHistoryGraph::CSvgHistoryGraph( const int          iNumItemsHistory,
+                                    const int          iMaxDaysHistory ) :
+    AHistoryGraph   ( iNumItemsHistory, iMaxDaysHistory ),
+    svgImage        ( "" ),
     svgStreamWriter ( &svgImage )
 {
     // set SVG veiwBox to correct size to ensure correct scaling

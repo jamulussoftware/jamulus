@@ -53,7 +53,8 @@ public:
         HIT_SERVER_STOP
     };
 
-    AHistoryGraph();
+    AHistoryGraph( const int          iNumItemsHistory,
+                   const int          iMaxDaysHistory );
     ~AHistoryGraph() { }
 
     void Start ( const QString& sNewFileName );
@@ -81,6 +82,7 @@ protected:
     bool                bDoHistory;
     CFIFO<SHistoryData> vHistoryDataFifo;
     unsigned int        iNumTicksX; // Class global, not sure why
+    int                 iHistMaxDays;
 
     QString             BackgroundColor;
     QString             FrameColor;
@@ -133,7 +135,8 @@ class CJpegHistoryGraph : public QObject, virtual public AHistoryGraph
     Q_OBJECT
 
 public:
-    CJpegHistoryGraph();
+    CJpegHistoryGraph( const int          iNumItemsHistory,
+                       const int          iMaxDaysHistory );
     virtual void Update ( );
 
 protected:
@@ -157,7 +160,8 @@ class CSvgHistoryGraph : public QObject, virtual public AHistoryGraph
     Q_OBJECT
 
 public:
-    CSvgHistoryGraph();
+    CSvgHistoryGraph( const int          iNumItemsHistory,
+                      const int          iMaxDaysHistory );
     virtual void Update();
 
 protected:

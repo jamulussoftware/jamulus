@@ -650,27 +650,16 @@ void CClient::Stop()
 void CClient::Init()
 {
     // check if possible frame size factors are supported
-    const int iFraSizePreffered =
-        FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES;
+    const int iFraSizePreffered = FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES;
+    const int iFraSizeDefault   = FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES;
+    const int iFraSizeSafe      = FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES;
 
-    bFraSiFactPrefSupported =
-        ( Sound.Init ( iFraSizePreffered ) == iFraSizePreffered );
-
-    const int iFraSizeDefault =
-        FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES;
-
-    bFraSiFactDefSupported =
-        ( Sound.Init ( iFraSizeDefault ) == iFraSizeDefault );
-
-    const int iFraSizeSafe =
-        FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES;
-
-    bFraSiFactSafeSupported =
-        ( Sound.Init ( iFraSizeSafe ) == iFraSizeSafe );
+    bFraSiFactPrefSupported = ( Sound.Init ( iFraSizePreffered ) == iFraSizePreffered );
+    bFraSiFactDefSupported  = ( Sound.Init ( iFraSizeDefault )   == iFraSizeDefault );
+    bFraSiFactSafeSupported = ( Sound.Init ( iFraSizeSafe )      == iFraSizeSafe );
 
     // translate block size index in actual block size
-    const int iPrefMonoFrameSize =
-        iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
+    const int iPrefMonoFrameSize = iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
 
     // get actual sound card buffer size using preferred size
     iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
@@ -686,7 +675,7 @@ void CClient::Init()
         iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES;
 
         // no sound card conversion buffer required
-        bSndCrdConversionBufferRequired  = false;
+        bSndCrdConversionBufferRequired = false;
     }
     else
     {
@@ -700,8 +689,7 @@ void CClient::Init()
 
         // overwrite block size by smallest supported buffer size
         iSndCrdFrameSizeFactor = FRAME_SIZE_FACTOR_PREFERRED;
-        iMonoBlockSizeSam =
-            SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED;
+        iMonoBlockSizeSam      = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED;
 
         iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 

@@ -17,6 +17,7 @@ moc_predefs.h
 src/res/qrc_resources.cpp
 windows/ASIOSDK2
 debug/
+jamulus.sln
 jamulus.vcxproj
 jamulus.vcxproj.filters
 release/

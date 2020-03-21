@@ -197,8 +197,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
 
                 for ( int i = 0; i < lNumDevs; i++ )
                 {
-                    sErrorMessage += "<li><b>" + GetDeviceName ( i ) + "</b>: " +
-                        vsErrorList[i] + "</li>";
+                    sErrorMessage += "<li><b>" + GetDeviceName ( i ) + "</b>: " + vsErrorList[i] + "</li>";
                 }
                 sErrorMessage += "</ul>";
 
@@ -216,14 +215,13 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver()
 
     // load and initialize first valid ASIO driver
     bool bValidDriverDetected = false;
-    int  iCurDriverIdx = 0;
+    int  iCurDriverIdx        = 0;
 
     // try all available drivers in the system ("lNumDevs" devices)
     while ( !bValidDriverDetected && ( iCurDriverIdx < lNumDevs ) )
     {
         // try to load and initialize current driver, store error message
-        const QString strCurError =
-            LoadAndInitializeDriver ( iCurDriverIdx );
+        const QString strCurError = LoadAndInitializeDriver ( iCurDriverIdx );
 
         vsErrorList.append ( strCurError );
 

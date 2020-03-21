@@ -67,8 +67,8 @@ AHistoryGraph::AHistoryGraph() :
     iTextOffsetToGrid   ( 3 ),
     iTextOffsetX        ( 18 ),
 
-    iMarkerSizeNewCon   ( 11 ),
-    iMarkerSizeServSt   ( 8 )
+    iMarkerSizeNewCon   ( 10 ),
+    iMarkerSizeServSt   ( 6 )
 {
 }
 

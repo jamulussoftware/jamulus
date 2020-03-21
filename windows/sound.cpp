@@ -102,6 +102,22 @@ QString CSound::CheckDeviceCapabilities()
             QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + " Hz";
     }
 
+    // check if sample rate can be set
+    const ASIOError SetSaRateReturn = ASIOSetSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
+
+    if ( ( SetSaRateReturn == ASE_NoClock ) ||
+         ( SetSaRateReturn == ASE_InvalidMode ) ||
+         ( SetSaRateReturn == ASE_NotPresent ) )
+    {
+        // return error string
+        return tr ( "The audio device does not support to set the required sampling "
+            "rate. This error can happen if you have an audio interface like the "
+            "Roland UA-25EX where you set the sample rate with a hardware switch "
+            "on the audio device. If this is the case, please change the sample rate "
+            "to " ) + QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + tr ( " Hz on the "
+            "device and restart the " ) + APP_NAME + tr ( " software." );
+    }
+
     // check the number of available channels
     ASIOGetChannels ( &lNumInChan, &lNumOutChan );
 
@@ -486,7 +502,7 @@ CSound::CSound ( void       (*fpNewCallback) ( CVector<int16_t>& psData, void* a
             "Windows audio interface and therefore a special audio driver is "
             "required. Either your sound card has a native ASIO driver (which "
             "is recommended) or you might want to use alternative drivers like "
-            "the ASIO4All or kX driver." ) );
+            "the ASIO4All driver." ) );
     }
     asioDrivers->removeCurrentDriver();
 

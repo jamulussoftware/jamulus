@@ -53,6 +53,8 @@ int main ( int argc, char** argv )
     bool         bCentServPingServerInList = false;
     bool         bNoAutoJackConnect        = false;
     int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
+    int          iNumItemsHistory          = NUM_ITEMS_HISTORY;
+    int          iMaxDaysHistory           = MAX_DAYS_HISTORY;
     int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
     quint16      iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
     ELicenceType eLicenceType              = LT_NO_LICENCE;
@@ -128,6 +130,45 @@ int main ( int argc, char** argv )
             continue;
         }
 
+
+        // Maximum items in history display ------------------------------------
+        if ( GetNumericArgument ( tsConsole,
+                                  argc,
+                                  argv,
+                                  i,
+                                  "-I",
+                                  "--histitems",
+                                  1,
+                                  65535,
+                                  rDbleArgument ) )
+        {
+            iNumItemsHistory = static_cast<int> ( rDbleArgument );
+
+            tsConsole << "- maximum items in history display: "
+                << iNumItemsHistory << endl;
+
+            continue;
+        }
+
+
+        // Maximum days in history display ------------------------------------
+        if ( GetNumericArgument ( tsConsole,
+                                  argc,
+                                  argv,
+                                  i,
+                                  "-D",
+                                  "--histdays",
+                                  1,
+                                  366,
+                                  rDbleArgument ) )
+        {
+            iMaxDaysHistory = static_cast<int> ( rDbleArgument );
+
+            tsConsole << "- maximum days in history display: "
+                << iMaxDaysHistory << endl;
+
+            continue;
+        }
 
 
         // Start minimized -----------------------------------------------------
@@ -496,6 +537,8 @@ int main ( int argc, char** argv )
             // Server:
             // actual server object
             CServer Server ( iNumServerChannels,
+                             iNumItemsHistory,
+                             iMaxDaysHistory,
                              strLoggingFileName,
                              iPortNumber,
                              strHTMLStatusFileName,
@@ -610,6 +653,8 @@ QString UsageArguments ( char **argv )
         "  -w, --welcomemessage  welcome message on connect (server only)\n"
         "  -y, --history         enable connection history and set file\n"
         "                        name (server only)\n"
+        "  -I, --histitems       number of history items to display (server only)\n"
+        "  -D, --histdays        number of days of history to display (server only)\n"
         "  -z, --startminimized  start minimizied (server only)\n"
         "  --ctrlmidich          MIDI controller channel to listen (client only)"
         "\nExample: " + QString ( argv[0] ) + " -l -inifile myinifile.ini\n";

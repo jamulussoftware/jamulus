@@ -62,7 +62,7 @@ Section
 
   ; temporarily create Microsoft Visual Studio redistributable,
   File             "${VS_REDIST_EXE}"
-  ExecWait         '"$INSTDIR\${VS_REDIST_EXE}" /Q'
+  ExecWait         '"$INSTDIR\${VS_REDIST_EXE}" /q /norestart'
 
   ; uninstaller
   WriteUninstaller $INSTDIR\${UNINSTALL_EXE}

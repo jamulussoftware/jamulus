@@ -45,6 +45,7 @@
 /* Definitions ****************************************************************/
 // number of history items to store
 #define NUM_ITEMS_HISTORY           4800
+
 // oldest item to draw
 #define MAX_DAYS_HISTORY            60
 

@@ -92,7 +92,7 @@ LED bar:      lbr
 // file name for logging file
 #define DEFAULT_LOG_FILE_NAME           "Jamulussrvlog.txt"
 
-// Default oldest item to draw in history graph (days ago)
+// default oldest item to draw in history graph (days ago)
 #define DEFAULT_DAYS_HISTORY            60
 
 // default server address

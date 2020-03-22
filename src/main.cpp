@@ -130,8 +130,7 @@ int main ( int argc, char** argv )
         }
 
 
-
-        // Maximum days in history display ------------------------------------
+        // Maximum days in history display -------------------------------------
         if ( GetNumericArgument ( tsConsole,
                                   argc,
                                   argv,

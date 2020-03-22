@@ -27,7 +27,7 @@
 
 
 /* Abstract class *************************************************************/
-AHistoryGraph::AHistoryGraph( const int          iMaxDaysHistory ) :
+AHistoryGraph::AHistoryGraph ( const int iMaxDaysHistory ) :
     sFileName           ( "" ),
     bDoHistory          ( false ),
     vHistoryDataFifo    ( NUM_ITEMS_HISTORY ),
@@ -137,7 +137,7 @@ void AHistoryGraph::Update ( )
         curDate = QDate::currentDate();
 
         // set oldest date to draw
-        QDate     minDate             = curDate.addDays ( iHistMaxDays * -1 );
+        QDate minDate = curDate.addDays ( iHistMaxDays * -1 );
 
         // get oldest date in history
         QDate     oldestDate          = curDate.addDays ( 1 ); // one day in the future
@@ -299,7 +299,7 @@ void AHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
 
 
 /* JPEG History Graph implementation ******************************************/
-CJpegHistoryGraph::CJpegHistoryGraph( const int          iMaxDaysHistory ) :
+CJpegHistoryGraph::CJpegHistoryGraph ( const int iMaxDaysHistory ) :
     AHistoryGraph   ( iMaxDaysHistory ),
     PlotPixmap      ( 1, 1, QImage::Format_RGB32 ),
     iAxisFontWeight ( -1 )
@@ -404,7 +404,7 @@ void CJpegHistoryGraph::point ( const unsigned int x, const unsigned int y, cons
 
 
 /* SVG History Graph implementation *******************************************/
-CSvgHistoryGraph::CSvgHistoryGraph( const int          iMaxDaysHistory ) :
+CSvgHistoryGraph::CSvgHistoryGraph ( const int iMaxDaysHistory ) :
     AHistoryGraph   ( iMaxDaysHistory ),
     svgImage        ( "" ),
     svgStreamWriter ( &svgImage )

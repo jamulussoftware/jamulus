@@ -58,7 +58,7 @@ public:
         HIT_SERVER_STOP
     };
 
-    AHistoryGraph( const int          iMaxDaysHistory );
+    AHistoryGraph ( const int iMaxDaysHistory );
     ~AHistoryGraph() { }
 
     void Start ( const QString& sNewFileName );
@@ -139,7 +139,7 @@ class CJpegHistoryGraph : public QObject, virtual public AHistoryGraph
     Q_OBJECT
 
 public:
-    CJpegHistoryGraph( const int          iMaxDaysHistory );
+    CJpegHistoryGraph ( const int iMaxDaysHistory );
     virtual void Update ( );
 
 protected:
@@ -163,7 +163,7 @@ class CSvgHistoryGraph : public QObject, virtual public AHistoryGraph
     Q_OBJECT
 
 public:
-    CSvgHistoryGraph( const int          iMaxDaysHistory );
+    CSvgHistoryGraph ( const int iMaxDaysHistory );
     virtual void Update();
 
 protected:

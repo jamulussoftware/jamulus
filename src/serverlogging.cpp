@@ -25,14 +25,6 @@
 #include "serverlogging.h"
 
 // Server logging --------------------------------------------------------------
-CServerLogging::CServerLogging( const int          iMaxDaysHistory ) :
-    JpegHistoryGraph ( iMaxDaysHistory ),
-    SvgHistoryGraph ( iMaxDaysHistory ),
-    bDoLogging ( false ),
-    File ( DEFAULT_LOG_FILE_NAME )
-{
-}
-
 CServerLogging::~CServerLogging()
 {
     // close logging file of open

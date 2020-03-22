@@ -38,7 +38,11 @@
 class CServerLogging
 {
 public:
-    CServerLogging( const int          iMaxDaysHistory );
+    CServerLogging ( const int iMaxDaysHistory ) :
+        JpegHistoryGraph ( iMaxDaysHistory ),
+        SvgHistoryGraph ( iMaxDaysHistory ),
+        bDoLogging ( false ),
+        File ( DEFAULT_LOG_FILE_NAME ) {}
 
     virtual ~CServerLogging();
 

@@ -27,11 +27,10 @@
 
 
 /* Abstract class *************************************************************/
-AHistoryGraph::AHistoryGraph( const int          iNumItemsHistory,
-                              const int          iMaxDaysHistory ) :
+AHistoryGraph::AHistoryGraph( const int          iMaxDaysHistory ) :
     sFileName           ( "" ),
     bDoHistory          ( false ),
-    vHistoryDataFifo    ( iNumItemsHistory ),
+    vHistoryDataFifo    ( NUM_ITEMS_HISTORY ),
     iNumTicksX          ( 0 ), // number of days in history
     iHistMaxDays        ( iMaxDaysHistory ),
 
@@ -300,9 +299,8 @@ void AHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
 
 
 /* JPEG History Graph implementation ******************************************/
-CJpegHistoryGraph::CJpegHistoryGraph( const int          iNumItemsHistory,
-                                      const int          iMaxDaysHistory ) :
-    AHistoryGraph   ( iNumItemsHistory, iMaxDaysHistory ),
+CJpegHistoryGraph::CJpegHistoryGraph( const int          iMaxDaysHistory ) :
+    AHistoryGraph   ( iMaxDaysHistory ),
     PlotPixmap      ( 1, 1, QImage::Format_RGB32 ),
     iAxisFontWeight ( -1 )
 {
@@ -406,9 +404,8 @@ void CJpegHistoryGraph::point ( const unsigned int x, const unsigned int y, cons
 
 
 /* SVG History Graph implementation *******************************************/
-CSvgHistoryGraph::CSvgHistoryGraph( const int          iNumItemsHistory,
-                                    const int          iMaxDaysHistory ) :
-    AHistoryGraph   ( iNumItemsHistory, iMaxDaysHistory ),
+CSvgHistoryGraph::CSvgHistoryGraph( const int          iMaxDaysHistory ) :
+    AHistoryGraph   ( iMaxDaysHistory ),
     svgImage        ( "" ),
     svgStreamWriter ( &svgImage )
 {

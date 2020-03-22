@@ -38,8 +38,7 @@
 class CServerLogging
 {
 public:
-    CServerLogging( const int          iNumItemsHistory,
-                    const int          iMaxDaysHistory );
+    CServerLogging( const int          iMaxDaysHistory );
 
     virtual ~CServerLogging();
 

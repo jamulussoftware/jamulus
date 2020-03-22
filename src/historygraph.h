@@ -42,6 +42,11 @@
 #include <QXmlStreamAttributes>
 
 
+/* Definitions ****************************************************************/
+// number of history items to store
+#define NUM_ITEMS_HISTORY           20000
+
+
 /* Interface ******************************************************************/
 class AHistoryGraph
 {
@@ -53,8 +58,7 @@ public:
         HIT_SERVER_STOP
     };
 
-    AHistoryGraph( const int          iNumItemsHistory,
-                   const int          iMaxDaysHistory );
+    AHistoryGraph( const int          iMaxDaysHistory );
     ~AHistoryGraph() { }
 
     void Start ( const QString& sNewFileName );
@@ -135,8 +139,7 @@ class CJpegHistoryGraph : public QObject, virtual public AHistoryGraph
     Q_OBJECT
 
 public:
-    CJpegHistoryGraph( const int          iNumItemsHistory,
-                       const int          iMaxDaysHistory );
+    CJpegHistoryGraph( const int          iMaxDaysHistory );
     virtual void Update ( );
 
 protected:
@@ -160,8 +163,7 @@ class CSvgHistoryGraph : public QObject, virtual public AHistoryGraph
     Q_OBJECT
 
 public:
-    CSvgHistoryGraph( const int          iNumItemsHistory,
-                      const int          iMaxDaysHistory );
+    CSvgHistoryGraph( const int          iMaxDaysHistory );
     virtual void Update();
 
 protected:

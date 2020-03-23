@@ -112,7 +112,8 @@ CJamSession::CJamSession(QDir recordBaseDir) :
     vecptrJamClients (MAX_NUM_CHANNELS),
     jamClientConnections()
 {
-    const QFileInfo fi(sessionDir.absolutePath());
+    QFileInfo fi(sessionDir.absolutePath());
+    fi.setCaching(false);
 
     if (!fi.exists() && !QDir().mkpath(sessionDir.absolutePath()))
     {
@@ -296,7 +297,8 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString
  */
 void CJamRecorder::Init(const CServer* server)
 {
-    const QFileInfo fi(recordBaseDir.absolutePath());
+    QFileInfo fi(recordBaseDir.absolutePath());
+    fi.setCaching(false);
 
     if (!fi.exists() && !QDir().mkpath(recordBaseDir.absolutePath()))
     {

@@ -198,6 +198,7 @@ void CHighPrecisionTimer::run()
 
 // CServer implementation ******************************************************
 CServer::CServer ( const int          iNewMaxNumChan,
+                   const int          iMaxDaysHistory,
                    const QString&     strLoggingFileName,
                    const quint16      iPortNumber,
                    const QString&     strHTMLStatusFileName,
@@ -212,6 +213,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const ELicenceType eNLicenceType ) :
     iMaxNumChannels       ( iNewMaxNumChan ),
     Socket                ( this, iPortNumber ),
+    Logging               ( iMaxDaysHistory ),
     JamRecorder           ( strRecordingDirName ),
     bEnableRecording      ( !strRecordingDirName.isEmpty() ),
     bWriteStatusHTMLFile  ( false ),

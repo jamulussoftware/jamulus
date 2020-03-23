@@ -119,6 +119,7 @@ class CServer : public QObject
 
 public:
     CServer ( const int          iNewMaxNumChan,
+              const int          iMaxDaysHistory,
               const QString&     strLoggingFileName,
               const quint16      iPortNumber,
               const QString&     strHTMLStatusFileName,

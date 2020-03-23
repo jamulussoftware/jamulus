@@ -38,8 +38,12 @@
 class CServerLogging
 {
 public:
-    CServerLogging() : bDoLogging ( false ),
+    CServerLogging ( const int iMaxDaysHistory ) :
+        JpegHistoryGraph ( iMaxDaysHistory ),
+        SvgHistoryGraph ( iMaxDaysHistory ),
+        bDoLogging ( false ),
         File ( DEFAULT_LOG_FILE_NAME ) {}
+
     virtual ~CServerLogging();
 
     void Start ( const QString& strLoggingFileName );
@@ -56,4 +60,8 @@ protected:
     CSvgHistoryGraph  SvgHistoryGraph;
     bool              bDoLogging;
     QFile             File;
+
+private:
+    int               iHistNumItems;
+    int               iHistMaxDays;
 };

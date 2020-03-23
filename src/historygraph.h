@@ -44,10 +44,7 @@
 
 /* Definitions ****************************************************************/
 // number of history items to store
-#define NUM_ITEMS_HISTORY           4800
-
-// oldest item to draw
-#define MAX_DAYS_HISTORY            60
+#define NUM_ITEMS_HISTORY           20000
 
 
 /* Interface ******************************************************************/
@@ -61,7 +58,7 @@ public:
         HIT_SERVER_STOP
     };
 
-    AHistoryGraph();
+    AHistoryGraph ( const int iMaxDaysHistory );
     ~AHistoryGraph() { }
 
     void Start ( const QString& sNewFileName );
@@ -89,6 +86,7 @@ protected:
     bool                bDoHistory;
     CFIFO<SHistoryData> vHistoryDataFifo;
     unsigned int        iNumTicksX; // Class global, not sure why
+    int                 iHistMaxDays;
 
     QString             BackgroundColor;
     QString             FrameColor;
@@ -141,7 +139,7 @@ class CJpegHistoryGraph : public QObject, virtual public AHistoryGraph
     Q_OBJECT
 
 public:
-    CJpegHistoryGraph();
+    CJpegHistoryGraph ( const int iMaxDaysHistory );
     virtual void Update ( );
 
 protected:
@@ -165,7 +163,7 @@ class CSvgHistoryGraph : public QObject, virtual public AHistoryGraph
     Q_OBJECT
 
 public:
-    CSvgHistoryGraph();
+    CSvgHistoryGraph ( const int iMaxDaysHistory );
     virtual void Update();
 
 protected:

@@ -82,8 +82,8 @@ void CServerLogging::AddServerStopped()
     *this << strLogStr; // in log file
 
     // add element to history and update on server stop
-    JpegHistoryGraph.Add ( QDateTime::currentDateTime(), CJpegHistoryGraph::HIT_SERVER_STOP );
-    SvgHistoryGraph.Add ( QDateTime::currentDateTime(), CJpegHistoryGraph::HIT_SERVER_STOP );
+    JpegHistoryGraph.Add ( QDateTime::currentDateTime(), AHistoryGraph::HIT_SERVER_STOP );
+    SvgHistoryGraph.Add ( QDateTime::currentDateTime(), AHistoryGraph::HIT_SERVER_STOP );
 
     JpegHistoryGraph.Update();
     SvgHistoryGraph.Update();
@@ -140,7 +140,7 @@ void CServerLogging::ParseLogFile ( const QString& strFileName )
                 if ( strAddress.isEmpty() )
                 {
                     // server stop
-                    JpegHistoryGraph.Add ( curDateTime, CJpegHistoryGraph::HIT_SERVER_STOP );
+                    JpegHistoryGraph.Add ( curDateTime, AHistoryGraph::HIT_SERVER_STOP );
                     SvgHistoryGraph.Add ( curDateTime, CSvgHistoryGraph::HIT_SERVER_STOP );
                 }
                 else

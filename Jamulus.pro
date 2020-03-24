@@ -104,7 +104,7 @@ win32 {
     OTHER_FILES += android/AndroidManifest.xml
 } else:unix {
     # we want to compile with C++11
-    QMAKE_CXXFLAGS += -std=c++0x
+    QMAKE_CXXFLAGS += -std=c++11
 
     # we assume that stdint.h is always present in a Linux system
     DEFINES += HAVE_STDINT_H

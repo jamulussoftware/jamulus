@@ -14,10 +14,15 @@ Rquired software: QT, a compiler like Visual Studio, ASIO development files
 Linux
 -----
 
-Required packages: Build-Essential, Qt4/Qt5 (devel packages, too!), Jack (devel packages, too!)
+Required packages: Build-Essential, Qt4/Qt5 (devel packages, too!), Jack (devel packages, too!),
+                   qjackctl can be a good help for configuring jack.
                    On the most common Linux distributions, the following
                    command should prepare the system for compilation:
                    sudo apt-get install build-essential libqt4-dev libjack-jackd2-dev
+                   On fedora use:
+                   sudo dnf install jack-audio-connection-kit-dbus jack-audio-connection-kit-devel \
+                                    qt5-qtdeclarative-devel
+
 
 - qmake Jamulus.pro
 - make clean

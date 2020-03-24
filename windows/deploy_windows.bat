@@ -12,12 +12,15 @@ if "%VSINSTALLDIR%" == "" goto vsenvproblem
 
 rem create visual studio project file ------------------------------------------
 cd ..
-rem set QMAKESPEC=win32-msvc2015
-qmake -tp vc
+qmake -tp vc -spec win32-msvc
+
+rem TODO qmake seems to use the incorrect VS version to create the project file.
+rem      As a quick hack I simply replace the toolset version which seems to work.
+powershell -Command "(gc jamulus.vcxproj) -replace '<PlatformToolset>v141</PlatformToolset>', '<PlatformToolset>v140</PlatformToolset>' | Out-File -encoding ASCII jamulus.vcxproj"
 
 rem clean and compile solution -------------------------------------------------
-devenv Jamulus.vcxproj /Clean "Release|x64"
-devenv Jamulus.vcxproj /Build "Release|x64"
+devenv Jamulus.vcxproj /Clean "Release|x86"
+devenv Jamulus.vcxproj /Build "Release|x86"
 
 rem create installer -----------------------------------------------------------
 cd windows

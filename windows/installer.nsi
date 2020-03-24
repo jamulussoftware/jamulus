@@ -6,7 +6,7 @@
 !define UNINSTALL_EXE     "Uninstall.exe"
 !define INSTALLER_NAME    "Jamulusinstaller.exe"
 !define BINARY_PATH       "..\release\"
-!define VS_REDIST_EXE     "VC_redist.x64.exe"
+!define VS_REDIST_EXE     "vc_redist.x86.exe"
 !define UNINST_KEY        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APP_NAME}"
 !define AUTORUN_KEY       "Software\Microsoft\Windows\CurrentVersion\Run"
 

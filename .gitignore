@@ -17,6 +17,7 @@ moc_predefs.h
 src/res/qrc_resources.cpp
 windows/ASIOSDK2
 windows/VC_redist.x64.exe
+windows/vc_redist.x86.exe
 debug/
 jamulus.sln
 jamulus.vcxproj

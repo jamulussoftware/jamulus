@@ -189,7 +189,7 @@ LED bar:      lbr
 #define DEFAULT_USED_NUM_CHANNELS       10 // default used number channels for server
 
 // maximum number of servers registered in the server list
-#define MAX_NUM_SERVERS_IN_SERVER_LIST  100
+#define MAX_NUM_SERVERS_IN_SERVER_LIST  200
 
 // defines the time interval at which the ping time is updated in the GUI
 #define PING_UPDATE_TIME_MS             500 // ms

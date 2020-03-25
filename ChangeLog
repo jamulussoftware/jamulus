@@ -1,7 +1,8 @@
 
 
 
-3.4.4
+
+3.4.4 (2020-03-25)
 
 - added support for controlling the audio mixer faders with a MIDI controller (MacOS and Linux)
 
@@ -10,9 +11,6 @@
 - audio recording for the server, coded by pljones
 
 - SVG server history graph, coded by pljones
-
-
-
 
 
 3.4.3 (2018-05-17)

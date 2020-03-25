@@ -113,17 +113,12 @@ win32 {
     nosoundoption = $$find(CONFIG, "nosound")
     count(nosoundoption, 0) {
         message(Jack Audio Interface Enabled.)
-
-        !exists(/usr/include/jack/jack.h) {
-            !exists(/usr/local/include/jack/jack.h) {
-                 message("Warning: jack.h was not found at the usual place, maybe the jack dev packet is missing")
-            }
-        }
+        CONFIG += link_pkgconfig
+        PKGCONFIG += jack
 
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
         DEFINES += WITH_SOUND
-        LIBS += -ljack
     }
 
     # Linux is our source distribution, include sources from other OSs

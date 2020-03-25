@@ -412,14 +412,10 @@ SOURCES_OPUS = libs/opus/src/opus.c \
     libs/opus/silk/float/schur_FLP.c \
     libs/opus/silk/float/sort_FLP.c
 
-DISTFILES += AUTHORS \
-    ChangeLog \
+DISTFILES += ChangeLog \
     COPYING \
-    INSTALL \
-    NEWS \
-    README \
-    TODO \
-    src/res/jamulus.desktop \
+    INSTALL.md \
+    README.md \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

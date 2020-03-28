@@ -111,8 +111,8 @@ LED bar:      lbr
 
 // System block size, this is the block size on which the audio coder works.
 // All other block sizes must be a multiple of this size.
-// Note that the UpdateAutoSetting() function assumes a value of 128.
-#define SYSTEM_FRAME_SIZE_SAMPLES       128
+// Note that the UpdateAutoSetting() function assumes a value of 64.
+#define SYSTEM_FRAME_SIZE_SAMPLES       64
 
 #define SYSTEM_BLOCK_DURATION_MS_FLOAT  \
     ( static_cast<double> ( SYSTEM_FRAME_SIZE_SAMPLES ) / \
@@ -121,9 +121,9 @@ LED bar:      lbr
 // define the allowed audio frame size factors (since the
 // "SYSTEM_FRAME_SIZE_SAMPLES" is quite small, it may be that on some
 // computers a larger value is required)
-#define FRAME_SIZE_FACTOR_PREFERRED     1 // 128 (for frame size 128)
-#define FRAME_SIZE_FACTOR_DEFAULT       2 // 256 (for frame size 128)
-#define FRAME_SIZE_FACTOR_SAFE          4 // 512 (for frame size 128)
+#define FRAME_SIZE_FACTOR_PREFERRED     1 // 64 (for frame size 64)
+#define FRAME_SIZE_FACTOR_DEFAULT       2 // 128 (for frame size 64)
+#define FRAME_SIZE_FACTOR_SAFE          4 // 256 (for frame size 64)
 
 // low complexity CELT encoder (if defined)
 #define USE_LOW_COMPLEXITY_CELT_ENC

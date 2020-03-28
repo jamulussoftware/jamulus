@@ -89,7 +89,7 @@
 
 #define OPUS_NUM_BYTES_STEREO_LOW_QUALITY       47
 #define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY    71
-#define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY      142
+#define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY      71
 
 
 /* Classes ********************************************************************/

@@ -30,9 +30,9 @@
 CHighPrecisionTimer::CHighPrecisionTimer()
 {
     // add some error checking, the high precision timer implementation only
-    // supports 128 samples frame size at 48 kHz sampling rate
-#if ( SYSTEM_FRAME_SIZE_SAMPLES != 128 )
-# error "Only system frame size of 128 samples is supported by this module"
+    // supports 64 samples frame size at 48 kHz sampling rate
+#if ( SYSTEM_FRAME_SIZE_SAMPLES != 64 )
+# error "Only system frame size of 64 samples is supported by this module"
 #endif
 #if ( SYSTEM_SAMPLE_RATE_HZ != 48000 )
 # error "Only a system sample rate of 48 kHz is supported by this module"
@@ -65,7 +65,7 @@ void CHighPrecisionTimer::Start()
     iIntervalCounter = 0;
 
     // start internal timer with 2 ms resolution
-    Timer.start ( 2 );
+    Timer.start ( 1);
 }
 
 void CHighPrecisionTimer::Stop()

@@ -11,7 +11,7 @@ Main Window
 ![LEDs](led.png)
 
 The Delay status LED indicator shows the current audio delay status. If the light is green, the delay
-is perfect for a jam session. If the ligth is yellow, a session is still possible but it may be harder
+is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder
 to play. If the light is red, the delay is too large for jamming.
 
 The Buffer status LED indicator shows the current audio/streaming status. If the light is green, there
@@ -44,7 +44,7 @@ be opened automatically at all clients.
 
 Press the My Profile button to open the Musician Profile dialog. In this dialog you can set your Alias/Name
 which is displayed below your fader in the server audio mixer board. If an instrument and/or country is set,
-icons for these selection will also be shown below your fader. The skill setting changes the background of
+icons for these selections will also be shown below your fader. The skill setting changes the background of
 the fader tag and the city entry shows up in the tool tip of the fader tag. This tool tip is shown in the following picture.
 
 ![Fader tag tool tip](fadertagtooltip.jpg)
@@ -119,7 +119,7 @@ system the input and output hardware can be selected.
 ![Channel mapping](channelmapping.png)
 
 In case the selected sound card device offers more than one input or output channel, the _Input Channel Mapping
-and Ouptut Channel Mapping_ settings are visible. For each Jamulus input/output channel (left and right channel)
+and Output Channel Mapping_ settings are visible. For each Jamulus input/output channel (left and right channel)
 a different actual sound card channel can be selected.
 
 ### Buffer delay
@@ -133,7 +133,7 @@ connection properties. Three buffer sizes are supported:
 - 256 samples: This setting should work on most of the available sound cards.
 - 512 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.
 
-Some sound card driver do not allow the buffer delay to be changed from within the Jamulus software.
+Some sound card drivers do not allow the buffer delay to be changed from within the Jamulus software.
 In this case the buffer delay setting is disabled. To change the actual buffer delay,
 this setting has to be changed in the sound card driver. On Windows, press the ASIO Setup button to open
 the driver settings panel.
@@ -227,30 +227,3 @@ The upstream rate depends on the current audio packet size and the audio compres
 rate is not higher than the available rate (check the upstream capabilities of your internet connection by, e.g., using
 [speedtest.net](http://speedtest.net)). 
 
-Server
-------
-
-### Jamulus server requirements
-
-The minimum internet connection speed for the server is 1 Mbps for up- and downstream and a very low ping time.
-It is recommended to have at least 1.6 GHz CPU frequency and 1 GB RAM.
-The Jamulus server can be run on all supported operating systems (Windows, MacOS and Linux). 
-
-### Using Windows OS
-
-After installing Jamulus you find a link to the server in the Windows start menu (or "All apps" under Windows 8).
-When starting the server it automatically registers at the official central server. Just type in the name,
-city and country so that other users can easily identify your server.
-
-If you want the server to be started automatically on each Windows start, enable the corresponding check box.
-If you do not want to register your server at the official central server (so that it does not show up in the
-server list of jamulus.dyndns.org) uncheck the "Register" check box.
-
-### Using a Linux shell
-
-If the server shall be started from within an ssh shell, there is a command line option
-
-`./Jamulus -s -n`
-
-available which starts the server without a GUI (even though the GUI is not used, QT must still be installed on the
-server to run the Jamulus server software). 

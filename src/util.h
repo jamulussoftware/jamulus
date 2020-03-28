@@ -515,9 +515,10 @@ enum EAudChanConf
 enum EAudComprType
 {
     // used for protocol -> enum values must be fixed!
-    CT_NONE = 0,
-    CT_CELT = 1,
-    CT_OPUS = 2
+    CT_NONE   = 0,
+    CT_CELT   = 1,
+    CT_OPUS   = 2,
+    CT_OPUS64 = 3 // using OPUS with 64 samples frame size
 };
 
 

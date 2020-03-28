@@ -30,9 +30,9 @@
 CHighPrecisionTimer::CHighPrecisionTimer()
 {
     // add some error checking, the high precision timer implementation only
-    // supports 128 samples frame size at 48 kHz sampling rate
-#if ( SYSTEM_FRAME_SIZE_SAMPLES != 128 )
-# error "Only system frame size of 128 samples is supported by this module"
+    // supports 64 and 128 samples frame size at 48 kHz sampling rate
+#if ( SYSTEM_FRAME_SIZE_SAMPLES != 64 ) && ( SYSTEM_FRAME_SIZE_SAMPLES != 128 )
+# error "Only system frame size of 64 and 128 samples is supported by this module"
 #endif
 #if ( SYSTEM_SAMPLE_RATE_HZ != 48000 )
 # error "Only a system sample rate of 48 kHz is supported by this module"
@@ -41,14 +41,18 @@ CHighPrecisionTimer::CHighPrecisionTimer()
     // Since QT only supports a minimum timer resolution of 1 ms but for our
     // server we require a timer interval of 2.333 ms for 128 samples
     // frame size at 48 kHz sampling rate.
-    // To support this interval, we use a timer with 2 ms
-    // resolution and fire the actual frame timer if the error to the actual
+    // To support this interval, we use a timer with 2 ms resolution for 128
+    // samples frame size and 1 ms resolution for 64 samples frame size.
+    // Then we fire the actual frame timer if the error to the actual
     // required interval is minimum.
     veciTimeOutIntervals.Init ( 3 );
 
-    // for 128 sample frame size at 48 kHz sampling rate:
+    // for 128 sample frame size at 48 kHz sampling rate with 2 ms timer resolution:
     // actual intervals:  0.0  2.666  5.333  8.0
     // quantized to 2 ms: 0    2      6      8 (0)
+    // for 64 sample frame size at 48 kHz sampling rate with 1 ms timer resolution:
+    // actual intervals:  0.0  1.333  2.666  4.0
+    // quantized to 2 ms: 0    1      3      4 (0)
     veciTimeOutIntervals[0] = 0;
     veciTimeOutIntervals[1] = 1;
     veciTimeOutIntervals[2] = 0;
@@ -64,8 +68,13 @@ void CHighPrecisionTimer::Start()
     iCurPosInVector  = 0;
     iIntervalCounter = 0;
 
-    // start internal timer with 2 ms resolution
+#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
+    // start internal timer with 1 ms resolution for 64 samples frame size
+    Timer.start ( 1 );
+#else
+    // start internal timer with 2 ms resolution for 128 samples frame size
     Timer.start ( 2 );
+#endif
 }
 
 void CHighPrecisionTimer::Stop()
@@ -762,26 +771,24 @@ JitterMeas.Measure();
                 bChannelIsNowDisconnected = true;
             }
 
-            // CELT decode received data stream
+            // OPUS decode received data stream
             if ( eGetStat == GS_BUFFER_OK )
             {
-                if ( iCurNumAudChan == 1 )
+                if ( ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS ) ||
+                     ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS64 ) )
                 {
-                    // mono
-                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
+                    if ( iCurNumAudChan == 1 )
                     {
+                        // mono
                         opus_custom_decode ( OpusDecoderMono[iCurChanID],
                                              &vecbyCodedData[0],
                                              iCeltNumCodedBytes,
                                              &vecvecsData[i][0],
                                              SYSTEM_FRAME_SIZE_SAMPLES );
                     }
-                }
-                else
-                {
-                    // stereo
-                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
+                    else
                     {
+                        // stereo
                         opus_custom_decode ( OpusDecoderStereo[iCurChanID],
                                              &vecbyCodedData[0],
                                              iCeltNumCodedBytes,
@@ -793,23 +800,21 @@ JitterMeas.Measure();
             else
             {
                 // lost packet
-                if ( iCurNumAudChan == 1 )
+                if ( ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS ) ||
+                     ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS64 ) )
                 {
-                    // mono
-                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
+                    if ( iCurNumAudChan == 1 )
                     {
+                        // mono
                         opus_custom_decode ( OpusDecoderMono[iCurChanID],
                                              nullptr,
                                              iCeltNumCodedBytes,
                                              &vecvecsData[i][0],
                                              SYSTEM_FRAME_SIZE_SAMPLES );
                     }
-                }
-                else
-                {
-                    // stereo
-                    if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
+                    else
                     {
+                        // stereo
                         opus_custom_decode ( OpusDecoderStereo[iCurChanID],
                                              nullptr,
                                              iCeltNumCodedBytes,
@@ -866,12 +871,13 @@ JitterMeas.Measure();
             const int iCeltNumCodedBytes =
                 vecChannels[iCurChanID].GetNetwFrameSize();
 
-            // OPUS/CELT encoding
-            if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
+            // OPUS encoding
+            if ( ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS ) ||
+                 ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS64 ) )
             {
-                // mono:
-                if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
+                if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
                 {
+                    // mono:
 
 // TODO find a better place than this: the setting does not change all the time
 //      so for speed optimization it would be better to set it only if the network
@@ -885,12 +891,9 @@ opus_custom_encoder_ctl ( OpusEncoderMono[iCurChanID],
                                          &vecbyCodedData[0],
                                          iCeltNumCodedBytes );
                 }
-            }
-            else
-            {
-                // stereo:
-                if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
+                else
                 {
+                    // stereo:
 
 // TODO find a better place than this: the setting does not change all the time
 //      so for speed optimization it would be better to set it only if the network

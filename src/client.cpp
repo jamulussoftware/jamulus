@@ -600,7 +600,11 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
 void CClient::Start()
 {
     // always use the OPUS codec
+#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
+    eAudioCompressionType = CT_OPUS64;
+#else
     eAudioCompressionType = CT_OPUS;
+#endif
 
     // init object
     Init();
@@ -996,10 +1000,11 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
-        if ( eAudioChannelConf == CC_MONO )
+        // encode current audio frame
+        if ( ( eAudioCompressionType == CT_OPUS ) ||
+             ( eAudioCompressionType == CT_OPUS64 ) )
         {
-            // encode current audio frame
-            if ( eAudioCompressionType == CT_OPUS )
+            if ( eAudioChannelConf == CC_MONO )
             {
                 opus_custom_encode ( OpusEncoderMono,
                                      &vecsStereoSndCrd[i * SYSTEM_FRAME_SIZE_SAMPLES],
@@ -1007,11 +1012,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                                      &vecCeltData[0],
                                      iCeltNumCodedBytes );
             }
-        }
-        else
-        {
-            // encode current audio frame
-            if ( eAudioCompressionType == CT_OPUS )
+            else
             {
                 opus_custom_encode ( OpusEncoderStereo,
                                      &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
@@ -1048,9 +1049,10 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             // flag
             bIsInitializationPhase = false;
 
-            if ( eAudioChannelConf == CC_MONO )
+            if ( ( eAudioCompressionType == CT_OPUS ) ||
+                 ( eAudioCompressionType == CT_OPUS64 ) )
             {
-                if ( eAudioCompressionType == CT_OPUS )
+                if ( eAudioChannelConf == CC_MONO )
                 {
                     opus_custom_decode ( OpusDecoderMono,
                                          &vecbyNetwData[0],
@@ -1058,10 +1060,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                                          &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
                                          SYSTEM_FRAME_SIZE_SAMPLES );
                 }
-            }
-            else
-            {
-                if ( eAudioCompressionType == CT_OPUS )
+                else
                 {
                     opus_custom_decode ( OpusDecoderStereo,
                                          &vecbyNetwData[0],
@@ -1074,9 +1073,10 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         else
         {
             // lost packet
-            if ( eAudioChannelConf == CC_MONO )
+            if ( ( eAudioCompressionType == CT_OPUS ) ||
+                 ( eAudioCompressionType == CT_OPUS64 ) )
             {
-                if ( eAudioCompressionType == CT_OPUS )
+                if ( eAudioChannelConf == CC_MONO )
                 {
                     opus_custom_decode ( OpusDecoderMono,
                                          nullptr,
@@ -1084,10 +1084,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                                          &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
                                          SYSTEM_FRAME_SIZE_SAMPLES );
                 }
-            }
-            else
-            {
-                if ( eAudioCompressionType == CT_OPUS )
+                else
                 {
                     opus_custom_decode ( OpusDecoderStereo,
                                          nullptr,

@@ -98,16 +98,16 @@ CNetBufWithStats::CNetBufWithStats() :
     // Avoid the buffer length 1 because we do not have a solution for a
     // sample rate offset correction. Caused by the jitter we usually get bad
     // performance with just one buffer.
-    viBufSizesForSim[0]  = 2;
-    viBufSizesForSim[1]  = 3;
-    viBufSizesForSim[2]  = 4;
-    viBufSizesForSim[3]  = 5;
-    viBufSizesForSim[4]  = 6;
-    viBufSizesForSim[5]  = 7;
-    viBufSizesForSim[6]  = 8;
-    viBufSizesForSim[7]  = 9;
-    viBufSizesForSim[8]  = 10;
-    viBufSizesForSim[9]  = 11;
+    viBufSizesForSim[0] = 2;
+    viBufSizesForSim[1] = 3;
+    viBufSizesForSim[2] = 4;
+    viBufSizesForSim[3] = 5;
+    viBufSizesForSim[4] = 6;
+    viBufSizesForSim[5] = 7;
+    viBufSizesForSim[6] = 8;
+    viBufSizesForSim[7] = 9;
+    viBufSizesForSim[8] = 10;
+    viBufSizesForSim[9] = 11;
 
     // set all simulation buffers in simulation mode
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
@@ -276,11 +276,9 @@ void CNetBufWithStats::UpdateAutoSetting()
     // the current jitter buffer size significantly.
     // For the initialization phase, use lower weight values to get faster
     // adaptation.
-    // Note that the following definitions of the weigh constants assume a block
-    // size of 128 samples at a sampling rate of 48 kHz.
-    double       dWeightUp          = 0.999995;
-    double       dWeightDown        = 0.9999;
-    const double dHysteresisValue   = 0.1;
+    double       dWeightUp          = IIR_WEIGTH_UP_NORMAL;
+    double       dWeightDown        = IIR_WEIGTH_DOWN_NORMAL;
+    const double dHysteresisValue   = FILTER_DECISION_HYSTERESIS;
     bool         bUseFastAdaptation = false;
 
     // check for initialization phase
@@ -304,8 +302,8 @@ void CNetBufWithStats::UpdateAutoSetting()
     if ( bUseFastAdaptation )
     {
         // overwrite weigth values with lower values
-        dWeightUp   = 0.9995;
-        dWeightDown = 0.999;
+        dWeightUp   = IIR_WEIGTH_UP_FAST;
+        dWeightDown = IIR_WEIGTH_DOWN_FAST;
     }
 
     // apply non-linear IIR filter

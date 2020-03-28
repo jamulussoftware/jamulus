@@ -1148,7 +1148,8 @@ bool CProtocol::EvaluateNetwTranspPropsMes ( const CVector<uint8_t>& vecData )
     // note that CT_NONE is not a valid setting but only used for server
     // initialization
     if ( ( iRecCodingType != CT_CELT ) &&
-         ( iRecCodingType != CT_OPUS ) )
+         ( iRecCodingType != CT_OPUS ) &&
+         ( iRecCodingType != CT_OPUS64 ) )
     {
         return true;
     }

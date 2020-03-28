@@ -128,12 +128,21 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "connection properties.<br>"
         "Three buffer sizes are supported:"
         "<ul>"
+#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
+        "<li>64 samples: This is the preferred setting since it gives lowest "
+        "latency but does not work with all sound cards.</li>"
+        "<li>128 samples: This setting should work on most of the available "
+        "sound cards.</li>"
+        "<li>256 samples: This setting should only be used if only a very slow "
+        "computer or a slow internet connection is available.</li>"
+#else
         "<li>128 samples: This is the preferred setting since it gives lowest "
         "latency but does not work with all sound cards.</li>"
         "<li>256 samples: This setting should work on most of the available "
         "sound cards.</li>"
         "<li>512 samples: This setting should only be used if only a very slow "
         "computer or a slow internet connection is available.</li>"
+#endif
         "</ul>"
         "Some sound card driver do not allow the buffer delay to be changed "
         "from within the " ) + APP_NAME +

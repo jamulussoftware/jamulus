@@ -95,6 +95,11 @@ LED bar:      lbr
 // default oldest item to draw in history graph (days ago)
 #define DEFAULT_DAYS_HISTORY            60
 
+// System block size, this is the block size on which the audio coder works.
+// All other block sizes must be a multiple of this size.
+// Note that the UpdateAutoSetting() function assumes a value of 128.
+#define SYSTEM_FRAME_SIZE_SAMPLES       128
+
 // default server address
 #define DEFAULT_SERVER_ADDRESS          "jamulus.fischvolk.de"
 #define DEFAULT_SERVER_NAME             "Central Server"
@@ -104,15 +109,14 @@ LED bar:      lbr
 #define LLCON_DOWNLOAD_URL              "http://sourceforge.net/projects/llcon/files"
 
 // defined port number for client and server
-#define LLCON_DEFAULT_PORT_NUMBER       22124
+#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
+# define LLCON_DEFAULT_PORT_NUMBER       22064 // different port number for 64 samples frame size version
+#else
+# define LLCON_DEFAULT_PORT_NUMBER       22124
+#endif
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ           48000 // Hz
-
-// System block size, this is the block size on which the audio coder works.
-// All other block sizes must be a multiple of this size.
-// Note that the UpdateAutoSetting() function assumes a value of 128.
-#define SYSTEM_FRAME_SIZE_SAMPLES       128
 
 #define SYSTEM_BLOCK_DURATION_MS_FLOAT  \
     ( static_cast<double> ( SYSTEM_FRAME_SIZE_SAMPLES ) / \
@@ -121,9 +125,9 @@ LED bar:      lbr
 // define the allowed audio frame size factors (since the
 // "SYSTEM_FRAME_SIZE_SAMPLES" is quite small, it may be that on some
 // computers a larger value is required)
-#define FRAME_SIZE_FACTOR_PREFERRED     1 // 128 (for frame size 128)
-#define FRAME_SIZE_FACTOR_DEFAULT       2 // 256 (for frame size 128)
-#define FRAME_SIZE_FACTOR_SAFE          4 // 512 (for frame size 128)
+#define FRAME_SIZE_FACTOR_PREFERRED     1 // 128 (for frame size 128), 64  (for frame size 64)
+#define FRAME_SIZE_FACTOR_DEFAULT       2 // 256 (for frame size 128), 128 (for frame size 64)
+#define FRAME_SIZE_FACTOR_SAFE          4 // 512 (for frame size 128), 256 (for frame size 64)
 
 // low complexity CELT encoder (if defined)
 #define USE_LOW_COMPLEXITY_CELT_ENC

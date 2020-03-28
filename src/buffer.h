@@ -36,9 +36,6 @@
 // hysteresis for buffer size decision to avoid fast changes if close to the bound
 #define FILTER_DECISION_HYSTERESIS          0.1
 
-
-// TODO the following values must be adjusted for 64 samples frame size:
-
 // definition of the upper error bound of the jitter buffers
 #define ERROR_RATE_BOUND                    0.001
 
@@ -47,22 +44,19 @@
 // size state
 #define UP_MAX_ERROR_BOUND                  0.01
 
+#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
+// each regular buffer access lead to a count for put and get, assuming 2.66 ms
+// blocks we have 15 s / 1.33 ms * 2 = approx. 22500
+# define MAX_STATISTIC_COUNT                 22500
 
-// #if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
-// // each regular buffer access lead to a count for put and get, assuming 2.66 ms
-// // blocks we have 15 s / 1.33 ms * 2 = approx. 22500
-// #define MAX_STATISTIC_COUNT                 22500
-//
-// // convert numbers from 128 samples case using http://www.tsdconseil.fr/tutos/tuto-iir1-en.pdf
-// // and https://octave-online.net:
-// // gamma = 1-exp(-Ts/tau)
-// // after some calculations we get: x=0.999995;1-exp(64/128*log(1-x))
-// // TEST x=0.999995;1-exp(128/64*log(1-x))
-// # define IIR_WEIGTH_UP_NORMAL               0.999999999975 // 0.997763932022
-// # define IIR_WEIGTH_DOWN_NORMAL             0.99999999 // 0.99
-// # define IIR_WEIGTH_UP_FAST                 0.99999975 // 0.97763932022
-// # define IIR_WEIGTH_DOWN_FAST               0.999999 // 0.9683772233
-// #else
+// convert numbers from 128 samples case using http://www.tsdconseil.fr/tutos/tuto-iir1-en.pdf
+// and https://octave-online.net:
+// gamma = exp(-Ts/tau), after some calculations we get: x=0.999995;exp(64/128*log(x))
+# define IIR_WEIGTH_UP_NORMAL               0.9999975
+# define IIR_WEIGTH_DOWN_NORMAL             0.99994999875
+# define IIR_WEIGTH_UP_FAST                 0.9997499687422
+# define IIR_WEIGTH_DOWN_FAST               0.999499875
+#else
 // each regular buffer access lead to a count for put and get, assuming 2.66 ms
 // blocks we have 15 s / 2.66 ms * 2 = approx. 11000
 # define MAX_STATISTIC_COUNT                 11000
@@ -73,7 +67,7 @@
 # define IIR_WEIGTH_DOWN_NORMAL             0.9999
 # define IIR_WEIGTH_UP_FAST                 0.9995
 # define IIR_WEIGTH_DOWN_FAST               0.999
-// #endif
+#endif
 
 
 /* Classes ********************************************************************/

@@ -327,7 +327,7 @@ int main ( int argc, char** argv )
                                  argv,
                                  i,
                                  "-R",
-                                 "--recordingdirectory",
+                                 "--recording",
                                  strArgument ) )
         {
             strRecordingDirName = strArgument;

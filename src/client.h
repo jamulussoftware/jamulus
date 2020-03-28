@@ -83,13 +83,23 @@
 // Fs: sampling rate (SYSTEM_SAMPLE_RATE_HZ)
 // L:  number of samples per packet (SYSTEM_FRAME_SIZE_SAMPLES)
 // N:  number of bytes per packet (values below)
-#define OPUS_NUM_BYTES_MONO_LOW_QUALITY         25
-#define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY      45
-#define OPUS_NUM_BYTES_MONO_HIGH_QUALITY        71
+#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
+# define OPUS_NUM_BYTES_MONO_LOW_QUALITY         12 // TODO to be adjusted, most probably higher value needed!
+# define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY      22 // TODO to be adjusted, most probably higher value needed!
+# define OPUS_NUM_BYTES_MONO_HIGH_QUALITY        35 // TODO to be adjusted, most probably higher value needed!
 
-#define OPUS_NUM_BYTES_STEREO_LOW_QUALITY       47
-#define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY    71
-#define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY      142
+# define OPUS_NUM_BYTES_STEREO_LOW_QUALITY       43 // TODO to be adjusted, most probably higher value needed!
+# define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY    35 // TODO to be adjusted, most probably higher value needed!
+# define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY      71 // TODO to be adjusted, most probably higher value needed!
+#else
+# define OPUS_NUM_BYTES_MONO_LOW_QUALITY         25
+# define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY      45
+# define OPUS_NUM_BYTES_MONO_HIGH_QUALITY        71
+
+# define OPUS_NUM_BYTES_STEREO_LOW_QUALITY       47
+# define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY    71
+# define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY      142
+#endif
 
 
 /* Classes ********************************************************************/

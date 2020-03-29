@@ -29,7 +29,8 @@
 CClient::CClient ( const quint16  iPortNumber,
                    const QString& strConnOnStartupAddress,
                    const int      iCtrlMIDIChannel,
-                   const bool     bNoAutoJackConnect ) :
+                   const bool     bNoAutoJackConnect,
+                   QTextStream&   tsNC ) :
     vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
     ChannelInfo                      (),
     vecStoredFaderTags               ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
@@ -45,7 +46,9 @@ CClient::CClient ( const quint16  iPortNumber,
     bWindowWasShownChat              ( false ),
     bWindowWasShownProfile           ( false ),
     bWindowWasShownConnect           ( false ),
+    tsConsole                        ( tsNC ),
     Channel                          ( false ), /* we need a client channel -> "false" */
+    ConnLessProtocol                 ( tsConsole ),
     eAudioCompressionType            ( CT_OPUS ),
     iCeltNumCodedBytes               ( OPUS_NUM_BYTES_MONO_LOW_QUALITY ),
     eAudioQuality                    ( AQ_NORMAL ),
@@ -190,6 +193,10 @@ CClient::CClient ( const quint16  iPortNumber,
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
 #endif
+
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
+        this, SLOT ( OnCLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
 
     // other
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
@@ -607,6 +614,12 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
         // restart client
         Sound.Start();
     }
+}
+
+void CClient::OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                             CVector<uint16_t> vecLevelList )
+{
+    emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
 }
 
 void CClient::Start()

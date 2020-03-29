@@ -485,6 +485,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         SIGNAL ( ControllerInFaderLevel ( int, int ) ),
         this, SLOT ( OnControllerInFaderLevel ( int, int ) ) );
 
+    QObject::connect ( pClient,
+        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
+        this, SLOT ( OnCLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
+
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( pClient,
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),

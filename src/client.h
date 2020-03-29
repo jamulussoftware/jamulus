@@ -111,7 +111,8 @@ public:
     CClient ( const quint16  iPortNumber,
               const QString& strConnOnStartupAddress,
               const int      iCtrlMIDIChannel,
-              const bool     bNoAutoJackConnect );
+              const bool     bNoAutoJackConnect,
+              QTextStream&   tsNC );
 
     void   Start();
     void   Stop();
@@ -315,6 +316,7 @@ protected:
     int         EvaluatePingMessage ( const int iMs );
     void        CreateServerJitterBufferMessage();
 
+    QTextStream&            tsConsole;
     // only one channel is needed for client application
     CChannel                Channel;
     CProtocol               ConnLessProtocol;
@@ -401,6 +403,9 @@ public slots:
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
 
+    void OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                        CVector<uint16_t> vecLevelList );
+
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
@@ -422,6 +427,9 @@ signals:
                                   COSUtil::EOpSystemType eOSType,
                                   QString                strVersion );
 #endif
+
+    void CLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                      CVector<uint16_t> vecLevelList );
 
     void Disconnected();
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );

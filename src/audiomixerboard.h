@@ -147,6 +147,26 @@ public slots:
     void OnGainValueChangedCh17 ( double dValue ) { OnGainValueChanged ( 17, dValue ); }
     void OnGainValueChangedCh18 ( double dValue ) { OnGainValueChanged ( 18, dValue ); }
     void OnGainValueChangedCh19 ( double dValue ) { OnGainValueChanged ( 19, dValue ); }
+    void OnGainValueChangedCh20 ( double dValue ) { OnGainValueChanged ( 20, dValue ); }
+    void OnGainValueChangedCh21 ( double dValue ) { OnGainValueChanged ( 21, dValue ); }
+    void OnGainValueChangedCh22 ( double dValue ) { OnGainValueChanged ( 22, dValue ); }
+    void OnGainValueChangedCh23 ( double dValue ) { OnGainValueChanged ( 23, dValue ); }
+    void OnGainValueChangedCh24 ( double dValue ) { OnGainValueChanged ( 24, dValue ); }
+    void OnGainValueChangedCh25 ( double dValue ) { OnGainValueChanged ( 25, dValue ); }
+    void OnGainValueChangedCh26 ( double dValue ) { OnGainValueChanged ( 26, dValue ); }
+    void OnGainValueChangedCh27 ( double dValue ) { OnGainValueChanged ( 27, dValue ); }
+    void OnGainValueChangedCh28 ( double dValue ) { OnGainValueChanged ( 28, dValue ); }
+    void OnGainValueChangedCh29 ( double dValue ) { OnGainValueChanged ( 29, dValue ); }
+    void OnGainValueChangedCh30 ( double dValue ) { OnGainValueChanged ( 30, dValue ); }
+    void OnGainValueChangedCh31 ( double dValue ) { OnGainValueChanged ( 31, dValue ); }
+    void OnGainValueChangedCh32 ( double dValue ) { OnGainValueChanged ( 32, dValue ); }
+    void OnGainValueChangedCh33 ( double dValue ) { OnGainValueChanged ( 33, dValue ); }
+    void OnGainValueChangedCh34 ( double dValue ) { OnGainValueChanged ( 34, dValue ); }
+    void OnGainValueChangedCh35 ( double dValue ) { OnGainValueChanged ( 35, dValue ); }
+    void OnGainValueChangedCh36 ( double dValue ) { OnGainValueChanged ( 36, dValue ); }
+    void OnGainValueChangedCh37 ( double dValue ) { OnGainValueChanged ( 37, dValue ); }
+    void OnGainValueChangedCh38 ( double dValue ) { OnGainValueChanged ( 38, dValue ); }
+    void OnGainValueChangedCh39 ( double dValue ) { OnGainValueChanged ( 39, dValue ); }
 
     void OnChSoloStateChanged() { UpdateSoloStates(); }
 

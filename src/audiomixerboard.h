@@ -36,6 +36,7 @@
 #include <QHostAddress>
 #include "global.h"
 #include "util.h"
+#include "multicolorledbar.h"
 
 
 /* Classes ********************************************************************/
@@ -55,6 +56,7 @@ public:
     bool IsSolo() { return pcbSolo->isChecked(); }
     bool IsMute() { return pcbMute->isChecked(); }
     void SetGUIDesign ( const EGUIDesign eNewDesign );
+    void SetDisplayChannelLevel ( const bool eNDCL );
 
     void UpdateSoloState ( const bool bNewOtherSoloState );
     void SetFaderLevel ( const int iLevel );
@@ -62,6 +64,7 @@ public:
     void SetFaderIsMute ( const bool bIsMute );
     int  GetFaderLevel() { return pFader->value(); }
     void Reset();
+    void SetChannelLevel ( const uint16_t iLevel );
 
 protected:
     double CalcFaderGain ( const int value );
@@ -69,18 +72,24 @@ protected:
     void   SendFaderLevelToServer ( const int iLevel );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
 
-    QFrame*    pFrame;
-    QGroupBox* pLabelInstBox;
-    QSlider*   pFader;
-    QCheckBox* pcbMute;
-    QCheckBox* pcbSolo;
-    QLabel*    plblLabel;
-    QLabel*    plblInstrument;
-    QLabel*    plblCountryFlag;
+    QFrame*            pFrame;
 
-    QString    strReceivedName;
+    QWidget*           pLevelsBox;
+    QWidget*           pMuteSoloBox;
+    CMultiColorLEDBar* plbrChannelLevel;
+    QSlider*           pFader;
 
-    bool       bOtherChannelIsSolo;
+    QCheckBox*         pcbMute;
+    QCheckBox*         pcbSolo;
+
+    QGroupBox*         pLabelInstBox;
+    QLabel*            plblLabel;
+    QLabel*            plblInstrument;
+    QLabel*            plblCountryFlag;
+
+    QString            strReceivedName;
+
+    bool               bOtherChannelIsSolo;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value ); }
@@ -103,9 +112,12 @@ public:
     void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
+    void SetDisplayChannelLevels ( const bool eNDCL );
 
     void SetFaderLevel ( const int iChannelIdx,
                          const int iValue );
+
+    void SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
 
     // settings
     CVector<QString> vecStoredFaderTags;
@@ -129,6 +141,7 @@ protected:
     CVector<CChannelFader*> vecpChanFader;
     QGroupBox*              pGroupBox;
     QHBoxLayout*            pMainLayout;
+    bool                    bDisplayChannelLevels;
     bool                    bNoFaderVisible;
 
 public slots:

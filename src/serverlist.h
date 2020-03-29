@@ -62,7 +62,7 @@ private network.
 #include <QObject>
 #include <QLocale>
 #include <QList>
-#include <QTimer>
+#include <QElapsedTimer>
 #include <QMutex>
 #include "global.h"
 #include "util.h"
@@ -116,7 +116,7 @@ public:
 
 public:
     // time on which the entry was registered
-    QTime RegisterTime;
+    QElapsedTimer RegisterTime;
 };
 
 class CServerListManager : public QObject

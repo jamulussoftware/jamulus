@@ -75,17 +75,17 @@ static OPUS_INLINE float tansig_approx(float x)
         return 1;
     if (!(x>-8))
         return -1;
-	if (x<0)
-	{
-	   x=-x;
-	   sign=-1;
-	}
-	i = (int)floor(.5f+25*x);
-	x -= .04f*i;
-	y = tansig_table[i];
-	dy = 1-y*y;
-	y = y + x*dy*(1 - y*x);
-	return sign*y;
+    if (x<0)
+    {
+        x=-x;
+        sign=-1;
+    }
+    i = (int)floor(.5f+25*x);
+    x -= .04f*i;
+    y = tansig_table[i];
+    dy = 1-y*y;
+    y = y + x*dy*(1 - y*x);
+    return sign*y;
 }
 #endif
 

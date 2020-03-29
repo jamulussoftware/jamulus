@@ -106,6 +106,10 @@ win32 {
     # we want to compile with C++11
     QMAKE_CXXFLAGS += -std=c++11
 
+    # we assume to have lrintf() one moderately modern linux distributions
+    # would be better to have that tested, though
+    DEFINES += HAVE_LRINTF
+
     # we assume that stdint.h is always present in a Linux system
     DEFINES += HAVE_STDINT_H
 

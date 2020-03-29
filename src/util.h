@@ -114,6 +114,8 @@ public:
     CVector ( const int   iNeSi,
               const TData tInVa ) { Init ( iNeSi, tInVa ); }
 
+    CVector ( CVector const& ) = default;
+
     void Init ( const int iNewSize );
 
     // use this init to give all elements a defined value
@@ -777,6 +779,8 @@ public:
                  ( CompChanInfo.iInstrument != iInstrument ) ||
                  ( CompChanInfo.eSkillLevel != eSkillLevel ) );
     }
+
+    CChannelCoreInfo& operator= ( const CChannelCoreInfo& ) = default;
 
     // fader tag text (channel name)
     QString          strName;

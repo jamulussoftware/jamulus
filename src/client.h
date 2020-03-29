@@ -402,6 +402,9 @@ public slots:
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
 
+    void OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                        CVector<uint16_t> vecLevelList );
+
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
@@ -423,6 +426,9 @@ signals:
                                   COSUtil::EOpSystemType eOSType,
                                   QString                strVersion );
 #endif
+
+    void CLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                      CVector<uint16_t> vecLevelList );
 
     void Disconnected();
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );

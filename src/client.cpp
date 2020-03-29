@@ -192,6 +192,10 @@ CClient::CClient ( const quint16  iPortNumber,
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
 #endif
 
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
+        this, SLOT ( OnCLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
+
     // other
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
         this, SLOT ( OnSndCrdReinitRequest ( int ) ) );
@@ -608,6 +612,12 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
         // restart client
         Sound.Start();
     }
+}
+
+void CClient::OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                             CVector<uint16_t> vecLevelList )
+{
+    emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
 }
 
 void CClient::Start()

@@ -271,6 +271,16 @@ int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
                         &HWBufferInfo.lPreferredSize,
                         &HWBufferInfo.lGranularity );
 
+/*
+// TEST
+#include <QMessageBox>
+QMessageBox::information ( 0, "APP_NAME", QString("lMinSize: %1, lMaxSize: %2, lPreferredSize: %3, lGranularity: %4").
+                           arg(HWBufferInfo.lMinSize).arg(HWBufferInfo.lMaxSize).arg(HWBufferInfo.lPreferredSize).arg(HWBufferInfo.lGranularity) );
+_exit(1);
+*/
+
+// TODO see https://github.com/EddieRingle/portaudio/blob/master/src/hostapi/asio/pa_asio.cpp#L1654 (SelectHostBufferSizeForUnspecifiedUserFramesPerBuffer)
+
     // calculate "nearest" buffer size and set internal parameter accordingly
     // first check minimum and maximum values
     if ( iDesiredBufferSizeMono <= HWBufferInfo.lMinSize )

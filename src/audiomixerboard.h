@@ -36,6 +36,7 @@
 #include <QHostAddress>
 #include "global.h"
 #include "util.h"
+#include "multicolorledbar.h"
 
 
 /* Classes ********************************************************************/
@@ -60,6 +61,7 @@ public:
     void SetFaderIsSolo ( const bool bIsSolo );
     int  GetFaderLevel() { return pFader->value(); }
     void Reset();
+    void SetChannelLevel ( const uint16_t iLevel );
 
 protected:
     double CalcFaderGain ( const int value );
@@ -67,18 +69,23 @@ protected:
     void   SendFaderLevelToServer ( const int iLevel );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
 
-    QFrame*    pFrame;
-    QGroupBox* pLabelInstBox;
-    QSlider*   pFader;
-    QCheckBox* pcbMute;
-    QCheckBox* pcbSolo;
-    QLabel*    plblLabel;
-    QLabel*    plblInstrument;
-    QLabel*    plblCountryFlag;
+    QFrame*            pFrame;
 
-    QString    strReceivedName;
+    QWidget*           pLevelsBox;
+    CMultiColorLEDBar* plbrChannelLevel;
+    QSlider*           pFader;
 
-    bool       bOtherChannelIsSolo;
+    QCheckBox*         pcbMute;
+    QCheckBox*         pcbSolo;
+
+    QGroupBox*         pLabelInstBox;
+    QLabel*            plblLabel;
+    QLabel*            plblInstrument;
+    QLabel*            plblCountryFlag;
+
+    QString            strReceivedName;
+
+    bool               bOtherChannelIsSolo;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value ); }

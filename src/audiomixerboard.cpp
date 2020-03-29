@@ -34,17 +34,27 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     // create new GUI control objects and store pointers to them (note that
     // QWidget takes the ownership of the pMainGrid so that this only has
     // to be created locally in this constructor)
-    pFrame                      = new QFrame      ( pNW );
-    QVBoxLayout* pMainGrid      = new QVBoxLayout ( pFrame );
-    pFader                      = new QSlider     ( Qt::Vertical, pFrame );
-    pcbMute                     = new QCheckBox   ( "Mute",       pFrame );
-    pcbSolo                     = new QCheckBox   ( "Solo",       pFrame );
-    pLabelInstBox               = new QGroupBox   ( pFrame );
-    plblLabel                   = new QLabel      ( "",           pFrame );
-    plblInstrument              = new QLabel      ( pFrame );
-    plblCountryFlag             = new QLabel      ( pFrame );
-    QHBoxLayout* pLabelGrid     = new QHBoxLayout ( pLabelInstBox );
-    QVBoxLayout* pLabelPictGrid = new QVBoxLayout();
+    pFrame                      = new QFrame            ( pNW );
+
+    pLevelsBox                  = new QWidget           ( pFrame );
+    plbrChannelLevel            = new CMultiColorLEDBar ( pLevelsBox );
+    pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
+
+    pcbMute                     = new QCheckBox         ( "Mute",       pFrame );
+    pcbSolo                     = new QCheckBox         ( "Solo",       pFrame );
+
+    pLabelInstBox               = new QGroupBox         ( pFrame );
+    plblLabel                   = new QLabel            ( "",           pFrame );
+    plblInstrument              = new QLabel            ( pFrame );
+    plblCountryFlag             = new QLabel            ( pFrame );
+
+    QVBoxLayout* pMainGrid      = new QVBoxLayout       ( pFrame );
+    QHBoxLayout* pLevelsGrid    = new QHBoxLayout       ( pLevelsBox );
+    QHBoxLayout* pLabelGrid     = new QHBoxLayout       ( pLabelInstBox );
+    QVBoxLayout* pLabelPictGrid = new QVBoxLayout       ( );
+
+    // setup channel level
+    plbrChannelLevel->stackUnder ( pFader );
 
     // setup slider
     pFader->setPageStep ( 1 );
@@ -62,18 +72,26 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     // set margins of the layouts to zero to get maximum space for the controls
     pMainGrid->setContentsMargins ( 0, 0, 0, 0 );
+
+    pLevelsGrid->setContentsMargins ( 0, 0, 0, 0 );
+    pLevelsGrid->setSpacing ( 0 ); // only minimal space
+
     pLabelGrid->setContentsMargins ( 0, 0, 0, 0 );
     pLabelGrid->setSpacing ( 2 ); // only minimal space between picture and text
 
     // add user controls to the grids
     pLabelPictGrid->addWidget ( plblCountryFlag, 0, Qt::AlignHCenter );
     pLabelPictGrid->addWidget ( plblInstrument,  0, Qt::AlignHCenter );
+
     pLabelGrid->addLayout ( pLabelPictGrid );
     pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter );
 
-    pMainGrid->addWidget ( pFader,  0, Qt::AlignHCenter );
-    pMainGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
-    pMainGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
+    pLevelsGrid->addWidget ( plbrChannelLevel, 0, Qt::AlignHCenter );
+    pLevelsGrid->addWidget ( pFader,           0, Qt::AlignHCenter );
+
+    pMainGrid->addWidget ( pLevelsBox );
+    pMainGrid->addWidget ( pcbMute,    0, Qt::AlignLeft );
+    pMainGrid->addWidget ( pcbSolo,    0, Qt::AlignLeft );
     pMainGrid->addWidget ( pLabelInstBox );
 
     // add fader frame to audio mixer board layout
@@ -83,17 +101,23 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     Reset();
 
     // add help text to controls
+    plbrChannelLevel->setWhatsThis ( tr ( "<b>Channel Level:</b> Displays the "
+        "pre-fader audio level of this channel.  All connected clients at the "
+        "server will be assigned an audio level, the same value for each client." ) );
+    plbrChannelLevel->setAccessibleName ( tr ( "Input level of the current audio "
+        "channel at the server" ) );
+
     pFader->setWhatsThis ( tr ( "<b>Mixer Fader:</b> Adjusts the audio level of "
         "this channel. All connected clients at the server will be assigned "
-        "an audio fader at each client." ) );
-    pFader->setAccessibleName ( tr ( "Mixer level setting of the connected client "
-        "at the server" ) );
+        "an audio fader at each client, adjusting the local mix." ) );
+    pFader->setAccessibleName ( tr ( "Local mix level setting of the current audio "
+        "channel at the server" ) );
 
-    pcbMute->setWhatsThis ( tr ( "<b>Mute:</b> With the Mute checkbox, the current "
+    pcbMute->setWhatsThis ( tr ( "<b>Mute:</b> With the Mute checkbox, the "
         "audio channel can be muted." ) );
     pcbMute->setAccessibleName ( tr ( "Mute button" ) );
 
-    pcbSolo->setWhatsThis ( tr ( "<b>Solo:</b> With the Solo checkbox, the current "
+    pcbSolo->setWhatsThis ( tr ( "<b>Solo:</b> With the Solo checkbox, the "
         "audio channel can be set to solo which means that all other channels "
         "except of the current channel are muted. It is possible to set more than "
         "one channel to solo." ) );
@@ -298,6 +322,26 @@ void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
         // mute channel if we are not solo but another channel is solo
         SetMute ( bOtherChannelIsSolo && !IsSolo() );
     }
+}
+
+void CChannelFader::SetChannelLevel ( const uint16_t iLevel )
+{
+    int level = 0;
+    switch ( iLevel )
+    {
+    case 1:
+        level = NUM_STEPS_LED_BAR / 2;
+        break;
+    case 2:
+        level = RED_BOUND_LED_BAR - 1;
+        break;
+    case 3:
+        level = NUM_STEPS_LED_BAR;
+        break;
+    default:
+        break;
+    }
+    plbrChannelLevel->setValue ( level );
 }
 
 void CChannelFader::SetText ( const CChannelInfo& ChanInfo )
@@ -699,6 +743,9 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                         vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
                     }
                 }
+
+                // At some future time a new level will arrive -- ???
+                vecpChanFader[i]->SetChannelLevel ( 0 );
 
                 // set the text in the fader
                 vecpChanFader[i]->SetText ( vecChanInfo[j] );

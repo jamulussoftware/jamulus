@@ -900,7 +900,7 @@ void CClientDlg::OnTimerSigMet()
     // linear transformation of the input level range to the progress-bar
     // range
     dCurSigLevelL -= LOW_BOUND_SIG_METER;
-    dCurSigLevelL *= NUM_STEPS_INP_LEV_METER /
+    dCurSigLevelL *= NUM_STEPS_LED_BAR /
         ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
 
     // lower bound the signal
@@ -910,7 +910,7 @@ void CClientDlg::OnTimerSigMet()
     }
 
     dCurSigLevelR -= LOW_BOUND_SIG_METER;
-    dCurSigLevelR *= NUM_STEPS_INP_LEV_METER /
+    dCurSigLevelR *= NUM_STEPS_LED_BAR /
         ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
 
     // lower bound the signal

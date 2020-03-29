@@ -169,10 +169,14 @@ LED bar:      lbr
 // maximum number of fader settings to be stored (together with the fader tags)
 #define MAX_NUM_STORED_FADER_SETTINGS   100
 
-// defines for LED input level meter
-#define NUM_STEPS_INP_LEV_METER         8
-#define RED_BOUND_INP_LEV_METER         7
-#define YELLOW_BOUND_INP_LEV_METER      5
+// defines for LED level meter CMultiColorLEDBar
+#define NUM_STEPS_LED_BAR               8
+#define RED_BOUND_LED_BAR               7
+#define YELLOW_BOUND_LED_BAR            5
+
+// range for signal level meter
+#define LOW_BOUND_SIG_METER         ( -50.0 ) // dB
+#define UPPER_BOUND_SIG_METER       ( 0.0 )   // dB
 
 // Maximum number of connected clients at the server. If you want to change this
 // paramter you have to modify the code on some places, too! The code tag

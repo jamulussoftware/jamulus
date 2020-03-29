@@ -33,7 +33,7 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f )
     : QFrame ( parent, f )
 {
     // set total number of LEDs
-    iNumLEDs = NUM_STEPS_INP_LEV_METER;
+    iNumLEDs = NUM_STEPS_LED_BAR;
 
     // create layout and set spacing to zero
     pMainLayout = new QVBoxLayout ( this );
@@ -105,14 +105,14 @@ void CMultiColorLEDBar::setValue ( const int value )
             if ( iLEDIdx < value )
             {
                 // check which color we should use (green, yellow or red)
-                if ( iLEDIdx < YELLOW_BOUND_INP_LEV_METER )
+                if ( iLEDIdx < YELLOW_BOUND_LED_BAR )
                 {
                     // green region
                     vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREEN );
                 }
                 else
                 {
-                    if ( iLEDIdx < RED_BOUND_INP_LEV_METER )
+                    if ( iLEDIdx < RED_BOUND_LED_BAR )
                     {
                         // yellow region
                         vecpLEDs[iLEDIdx]->setColor ( cLED::RL_YELLOW );

@@ -16,7 +16,7 @@ __MacOS__ ([Core Audio](http://developer.apple.com/technologies/mac/audio-and-vi
 __Linux__ ([Jack](http://jackaudio.org)).
 It is based on the [Qt framework](https://www.qt.io) and uses the [OPUS](http://www.opus-codec.org) audio codec.
 
-The source code is hosted at [Sourceforge.net](http://sourceforge.net/projects/llcon).
+The project is hosted at [Sourceforge.net](http://sourceforge.net/projects/llcon).
 ![Sourceforge logo](http://sflogo.sourceforge.net/sflogo.php?group_id=158367&amp;type=5)
 
 

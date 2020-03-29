@@ -53,7 +53,7 @@ Bugs and feature requests can be [reported here](https://github.com/corrados/jam
 Compilation and Development
 ---------------------------
 
-See the [Compile Instructions](INSTALL.md) file for compiling a client. 
+See the these [compile Instructions](INSTALL.md) 
 
 For server instructions, see [server compilation](servermanual.md)
 

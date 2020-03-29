@@ -191,6 +191,10 @@ CClient::CClient ( const quint16  iPortNumber,
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
 #endif
 
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
+        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
+
     // other
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
         this, SLOT ( OnSndCrdReinitRequest ( int ) ) );

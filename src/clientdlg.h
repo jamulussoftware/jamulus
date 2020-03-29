@@ -196,6 +196,10 @@ public slots:
                                           CVector<CChannelInfo> vecChanInfo )
         { ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo ); }
 
+    void OnCLChannelLevelListReceived ( CHostAddress       /* unused */,
+                                        CVector<uint16_t> vecLevelList )
+        { MainMixerBoard->SetChannelLevels ( vecLevelList ); }
+
     void OnConnectDlgAccepted();
     void OnDisconnected();
 

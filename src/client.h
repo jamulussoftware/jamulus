@@ -423,6 +423,9 @@ signals:
                                   QString                strVersion );
 #endif
 
+    void CLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                      CVector<uint16_t> vecLevelList );
+
     void Disconnected();
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
 };

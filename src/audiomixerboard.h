@@ -114,6 +114,8 @@ public:
     void SetFaderLevel ( const int iChannelIdx,
                          const int iValue );
 
+    void SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
+
     // settings
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;

@@ -905,3 +905,15 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
     // return "not OK" since we did not find matching fader settings
     return false;
 }
+
+void CAudioMixerBoard::SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel )
+{
+    const int iNumChannelLevels = vecChannelLevel.Size();
+    for ( int i = 0; i < MAX_NUM_CHANNELS && i < iNumChannelLevels; i++ )
+    {
+        if ( vecpChanFader[i]->IsVisible() )
+        {
+            vecpChanFader[i]->SetChannelLevel ( vecChannelLevel[i] );
+        }
+    }
+}

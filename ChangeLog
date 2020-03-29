@@ -4,10 +4,11 @@
 
 - changed the maximum number of clients from 20 to 40
 
+- audio fade-in at the server if new client connects
+
 
 TODO add a QScrollArea to the mixer board to get a scroll bar if we have too many mixer faders
 
-TODO slowly fade in the audio at the server for all inputs of client which new connects to the server and also if new other client enters the server
 
 
 

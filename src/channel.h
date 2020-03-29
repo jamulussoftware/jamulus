@@ -36,10 +36,20 @@
 
 
 /* Definitions ****************************************************************/
-// Set the time-out for the input buffer until the state changes from
+// set the time-out for the input buffer until the state changes from
 // connected to not connected (the actual time depends on the way the error
 // correction is implemented)
 #define CON_TIME_OUT_SEC_MAX                30 // seconds
+
+// number of frames for audio fade-in
+#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
+// 48 kHz, 64 samples: 2 seconds / ( 64 samples / 48 kHz ) = 2250
+# define FADE_IN_NUM_FRAMES                 1500
+#else
+// 48 kHz, 128 samples: 2 seconds / ( 128 samples / 48 kHz ) = 1125
+# define FADE_IN_NUM_FRAMES                 750
+#endif
+
 
 enum EPutDataStat
 {
@@ -103,6 +113,7 @@ public:
 
     void SetGain ( const int iChanID, const double dNewGain );
     double GetGain ( const int iChanID );
+    double GetFadeInGain() { return static_cast<double> ( iFadeInCnt ) / FADE_IN_NUM_FRAMES; }
 
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Protocol.CreateChanGainMes ( iId, dGain ); }
@@ -190,6 +201,7 @@ protected:
 
     int               iConTimeOut;
     int               iConTimeOutStartVal;
+    int               iFadeInCnt;
 
     bool              bIsEnabled;
     bool              bIsServer;

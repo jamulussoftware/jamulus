@@ -833,10 +833,8 @@ JitterMeas.Measure();
             const int iCurChanID = vecChanIDsCurConChan[i];
 
             // get and store number of audio channels
-            const int iCurNumAudChan =
-                vecChannels[iCurChanID].GetNumAudioChannels();
-
-            vecNumAudioChannels[i] = iCurNumAudChan;
+            const int iCurNumAudChan = vecChannels[iCurChanID].GetNumAudioChannels();
+            vecNumAudioChannels[i]   = iCurNumAudChan;
 
             // get gains of all connected channels
             for ( j = 0; j < iNumClients; j++ )
@@ -845,13 +843,14 @@ JitterMeas.Measure();
                 // the channel ID! Therefore we have to use
                 // "vecChanIDsCurConChan" to query the IDs of the currently
                 // connected channels
-                vecvecdGains[i][j] =
-                    vecChannels[iCurChanID].GetGain( vecChanIDsCurConChan[j] );
+                vecvecdGains[i][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
+
+                // consider audio fade-in
+                vecvecdGains[i][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
             }
 
             // get current number of CELT coded bytes
-            const int iCeltNumCodedBytes =
-                vecChannels[iCurChanID].GetNetwFrameSize();
+            const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
 
             // get data
             const EGetDataStat eGetStat =

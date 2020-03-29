@@ -29,6 +29,7 @@
 CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains          ( MAX_NUM_CHANNELS, 1.0 ),
     bDoAutoSockBufSize ( true ),
+    iFadeInCnt         ( 0 ),
     bIsEnabled         ( false ),
     bIsServer          ( bNIsServer )
 {
@@ -461,6 +462,12 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
                 {
                     eRet = PS_AUDIO_ERR;
                 }
+
+                // manage audio fade-in counter
+                if ( iFadeInCnt < FADE_IN_NUM_FRAMES )
+                {
+                    iFadeInCnt++;
+                }
             }
             else
             {
@@ -481,6 +488,9 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
             {
                 // overwrite status
                 eRet = PS_NEW_CONNECTION;
+
+                // init audio fade-in counter
+                iFadeInCnt = 0;
             }
 
             // reset time-out counter (note that this must be done after the

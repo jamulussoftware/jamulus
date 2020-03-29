@@ -1143,6 +1143,8 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
     switch ( eNewDesign )
     {
     case GD_ORIGINAL:
+        scrollAreaMixerBoard->setStyleSheet( "background: transparent;" );
+
         backgroundFrame->setStyleSheet (
             "QFrame#backgroundFrame { border-image:  url(:/png/fader/res/mixerboardbackground.png) 34px 30px 40px 40px;"
             "                         border-top:    34px transparent;"
@@ -1163,7 +1165,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "QCheckBox::indicator:checked {"
             "                         image:          url(:/png/fader/res/ledbuttonpressed.png); }"
             "QCheckBox {              color:          rgb(148, 148, 148);"
-            "                         font:           bold; }" );            
+            "                         font:           bold; }" );
 
 #ifdef _WIN32
 // Workaround QT-Windows problem: This should not be necessary since in the
@@ -1180,7 +1182,9 @@ rbtReverbSelR->setStyleSheet ( "color: rgb(148, 148, 148);"
 
     default:
         // reset style sheet and set original paramters
+        scrollAreaMixerBoard->setStyleSheet( "" );
         backgroundFrame->setStyleSheet ( "" );
+
 
 #ifdef _WIN32
 // Workaround QT-Windows problem: See above description

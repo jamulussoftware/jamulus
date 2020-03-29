@@ -628,6 +628,14 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
         case PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST:
             bRet = EvaluateCLReqConnClientsListMes ( InetAddr );
             break;
+
+        case PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST:
+            bRet = EvaluateCLReqChannelLevelListMes ( InetAddr );
+            break;
+
+        case PROTMESSID_CLM_CHANNEL_LEVEL_LIST:
+            bRet = EvaluateCLChannelLevelListMes ( InetAddr, vecbyMesBodyData );
+            break;
         }
     }
     else
@@ -1921,6 +1929,87 @@ bool CProtocol::EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr )
     // invoke message action
     emit CLReqConnClientsList ( InetAddr );
 
+    return false; // no error
+}
+
+void CProtocol::CreateCLReqChannelLevelListMes ( const CHostAddress& InetAddr )
+{
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST,
+                                     CVector<uint8_t> ( 0 ),
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr )
+{
+    // invoke message action
+    emit CLReqChannelLevelList ( InetAddr );
+
+    return false; // no error
+}
+
+// TODO: thresholds for level need to be #defined - these are temp
+void CProtocol::CreateCLChannelLevelListMes  ( const CHostAddress&     InetAddr,
+                                               const CVector<int16_t>& vecLevelList )
+{
+    const int        iNumClients = vecLevelList.Size();
+
+    // This must be a multiple of bytes at two bits per client
+    CVector<uint8_t> vecData( ( ( iNumClients + 3 ) * 4 ) / 4 );
+    const int        iNumBytes   = vecData.Size();
+    int              iLevelNum   = 0;
+
+    for ( int i = 0; i < iNumBytes; i++ )
+    {
+        vecData[i] = 0; // effectively pads with zero
+        for ( int j = 0; j < 4; j++ )
+        {
+            if ( iLevelNum < iNumClients && vecLevelList[iLevelNum] > INT16_MAX / 4 )
+            {
+                if ( vecLevelList[iLevelNum] < INT16_MAX / 2 )
+                {
+                    vecData[i] |= 1 >> j * 2;
+                }
+                else if ( vecLevelList[iLevelNum] < INT16_MAX - ( INT16_MAX / 8 ) )
+                {
+                    vecData[i] |= 2 >> j * 2;
+                }
+                else
+                {
+                    vecData[i] |= 3 >> j * 2;
+                }
+            }
+            iLevelNum++;
+        }
+    }
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_CHANNEL_LEVEL_LIST,
+                                     vecData,
+                                     InetAddr );
+
+}
+
+bool CProtocol::EvaluateCLChannelLevelListMes  ( const CHostAddress&     InetAddr,
+                                                 const CVector<uint8_t>& vecData )
+{
+    const int         iDataLen = vecData.Size();  // two bits per channel, 4 channels per byte
+
+    CVector<uint16_t> vecLevelList ( iDataLen * 4 ); // one ushort per channel: 0, 1, 2, 3
+    uint8_t           level;
+    int               iClientNum = 0;
+
+    for (int i = 0; i < iDataLen; i++ )
+    {
+        // process one byte
+        level = vecData[i];
+        for (int j = 0; j < 4; j ++)
+        {
+            // output one channel
+            vecLevelList[iClientNum] = 3 & ( level << j * 2 );
+            iClientNum++;
+        }
+    }
+
+    emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
     return false; // no error
 }
 

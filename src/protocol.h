@@ -71,6 +71,8 @@
 #define PROTMESSID_CLM_REQ_VERSION_AND_OS     1012 // request version number and operating system
 #define PROTMESSID_CLM_CONN_CLIENTS_LIST      1013 // channel infos for connected clients
 #define PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST  1014 // request the connected clients list
+#define PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST 1015 // request the channel level list
+#define PROTMESSID_CLM_CHANNEL_LEVEL_LIST     1016 // channel level list
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -102,26 +104,29 @@ public:
     void CreateReqNetwTranspPropsMes();
     void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
 
-    void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
-    void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
-                                         const int           iMs,
-                                         const int           iNumClients );
-    void CreateCLServerFullMes         ( const CHostAddress& InetAddr );
-    void CreateCLRegisterServerMes     ( const CHostAddress&    InetAddr,
-                                         const CServerCoreInfo& ServerInfo );
-    void CreateCLUnregisterServerMes   ( const CHostAddress& InetAddr );
-    void CreateCLServerListMes         ( const CHostAddress&        InetAddr,
-                                         const CVector<CServerInfo> vecServerInfo );
-    void CreateCLReqServerListMes      ( const CHostAddress& InetAddr );
-    void CreateCLSendEmptyMesMes       ( const CHostAddress& InetAddr,
-                                         const CHostAddress& TargetInetAddr );
-    void CreateCLEmptyMes              ( const CHostAddress& InetAddr );
-    void CreateCLDisconnection         ( const CHostAddress& InetAddr );
-    void CreateCLVersionAndOSMes       ( const CHostAddress& InetAddr );
-    void CreateCLReqVersionAndOSMes    ( const CHostAddress& InetAddr );
-    void CreateCLConnClientsListMes    ( const CHostAddress&          InetAddr,
-                                         const CVector<CChannelInfo>& vecChanInfo );
-    void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr );
+    void CreateCLPingMes                 ( const CHostAddress& InetAddr, const int iMs );
+    void CreateCLPingWithNumClientsMes   ( const CHostAddress& InetAddr,
+                                           const int           iMs,
+                                           const int           iNumClients );
+    void CreateCLServerFullMes           ( const CHostAddress& InetAddr );
+    void CreateCLRegisterServerMes       ( const CHostAddress&    InetAddr,
+                                           const CServerCoreInfo& ServerInfo );
+    void CreateCLUnregisterServerMes     ( const CHostAddress& InetAddr );
+    void CreateCLServerListMes           ( const CHostAddress&        InetAddr,
+                                           const CVector<CServerInfo> vecServerInfo );
+    void CreateCLReqServerListMes        ( const CHostAddress& InetAddr );
+    void CreateCLSendEmptyMesMes         ( const CHostAddress& InetAddr,
+                                           const CHostAddress& TargetInetAddr );
+    void CreateCLEmptyMes                ( const CHostAddress& InetAddr );
+    void CreateCLDisconnection           ( const CHostAddress& InetAddr );
+    void CreateCLVersionAndOSMes         ( const CHostAddress& InetAddr );
+    void CreateCLReqVersionAndOSMes      ( const CHostAddress& InetAddr );
+    void CreateCLConnClientsListMes      ( const CHostAddress&          InetAddr,
+                                           const CVector<CChannelInfo>& vecChanInfo );
+    void CreateCLReqConnClientsListMes   ( const CHostAddress& InetAddr );
+    void CreateCLReqChannelLevelListMes  ( const CHostAddress& InetAddr );
+    void CreateCLChannelLevelListMes     ( const CHostAddress&     InetAddr,
+                                           const CVector<int16_t>& vecLevelList );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -216,25 +221,28 @@ protected:
     bool EvaluateReqNetwTranspPropsMes();
     bool EvaluateLicenceRequiredMes   ( const CVector<uint8_t>& vecData );
 
-    bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
-                                           const CVector<uint8_t>& vecData );
-    bool EvaluateCLPingWithNumClientsMes ( const CHostAddress&     InetAddr,
-                                           const CVector<uint8_t>& vecData );
+    bool EvaluateCLPingMes                 ( const CHostAddress&     InetAddr,
+                                             const CVector<uint8_t>& vecData );
+    bool EvaluateCLPingWithNumClientsMes   ( const CHostAddress&     InetAddr,
+                                             const CVector<uint8_t>& vecData );
     bool EvaluateCLServerFullMes();
-    bool EvaluateCLRegisterServerMes     ( const CHostAddress&     InetAddr,
-                                           const CVector<uint8_t>& vecData );
-    bool EvaluateCLUnregisterServerMes   ( const CHostAddress&     InetAddr );
-    bool EvaluateCLServerListMes         ( const CHostAddress&     InetAddr,
-                                           const CVector<uint8_t>& vecData );
-    bool EvaluateCLReqServerListMes      ( const CHostAddress&     InetAddr );
-    bool EvaluateCLSendEmptyMesMes       ( const CVector<uint8_t>& vecData );
-    bool EvaluateCLDisconnectionMes      ( const CHostAddress&     InetAddr );
-    bool EvaluateCLVersionAndOSMes       ( const CHostAddress&     InetAddr,
-                                           const CVector<uint8_t>& vecData );
-    bool EvaluateCLReqVersionAndOSMes    ( const CHostAddress&     InetAddr );
-    bool EvaluateCLConnClientsListMes    ( const CHostAddress&     InetAddr,
-                                           const CVector<uint8_t>& vecData );
-    bool EvaluateCLReqConnClientsListMes ( const CHostAddress&     InetAddr );
+    bool EvaluateCLRegisterServerMes       ( const CHostAddress&     InetAddr,
+                                             const CVector<uint8_t>& vecData );
+    bool EvaluateCLUnregisterServerMes     ( const CHostAddress&     InetAddr );
+    bool EvaluateCLServerListMes           ( const CHostAddress&     InetAddr,
+                                             const CVector<uint8_t>& vecData );
+    bool EvaluateCLReqServerListMes        ( const CHostAddress&     InetAddr );
+    bool EvaluateCLSendEmptyMesMes         ( const CVector<uint8_t>& vecData );
+    bool EvaluateCLDisconnectionMes        ( const CHostAddress&     InetAddr );
+    bool EvaluateCLVersionAndOSMes         ( const CHostAddress&     InetAddr,
+                                             const CVector<uint8_t>& vecData );
+    bool EvaluateCLReqVersionAndOSMes      ( const CHostAddress&     InetAddr );
+    bool EvaluateCLConnClientsListMes      ( const CHostAddress&     InetAddr,
+                                             const CVector<uint8_t>& vecData );
+    bool EvaluateCLReqConnClientsListMes   ( const CHostAddress&     InetAddr );
+    bool EvaluateCLReqChannelLevelListMes  ( const CHostAddress&     InetAddr );
+    bool EvaluateCLChannelLevelListMes     ( const CHostAddress&     InetAddr,
+                                             const CVector<uint8_t>& vecData );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -290,4 +298,7 @@ signals:
     void CLConnClientsListMesReceived ( CHostAddress           InetAddr,
                                         CVector<CChannelInfo>  vecChanInfo );
     void CLReqConnClientsList         ( CHostAddress           InetAddr );
+    void CLReqChannelLevelList        ( CHostAddress           InetAddr );
+    void CLChannelLevelListReceived   ( CHostAddress           InetAddr,
+                                        CVector<uint16_t>      vecLevelList );
 };

@@ -32,31 +32,30 @@ On a Windows operating system it is recommended to use a sound card with a nativ
 This ensures to get the lowest possible latencies.
 
 
-Windows Download and Installation
+Download and Installation
 ---------------------------------
 
-[Download](http://sourceforge.net/projects/llcon/files) a Windows installer at the
-Sourceforge.net download page
+Download the latest version for [Windows, Macintosh or Linux here](https://sourceforge.net/projects/llcon/files/). 
 
-The Jamulus software requires an ASIO sound card driver to be
-available in the system. If your sound card does not have native
-ASIO support, you can try out the following alternative:
-[ASIO4ALL - Universal ASIO Driver For WDM Audio](http://www.asio4all.com)
-
-The ASIO buffer size should be selected as low as possible to get
-the minimum audio latency (a good choice is 128 samples).
+**Windows users**: The Jamulus client software requires an ASIO sound card driver to be available in the system. If your sound card does not have native ASIO support, you can try out [this alternative](http://www.asio4all.org/)
 
 
-Help (Software Manual)
+Help
 ----------------------
 
-See the [Help](src/res/homepage/manual.md) file.
+Official documentation for Jamulus is on the [Github wiki](https://github.com/corrados/jamulus/wiki)
+
+See also the [discussion forums](https://sourceforge.net/p/llcon/discussion)
+
+Bugs and feature requests can be [reported here](https://github.com/corrados/jamulus/issues)
 
 
 Compilation and Development
 ---------------------------
 
-See the [Compile Instructions](INSTALL.md) file.
+See the these [compile Instructions](INSTALL.md) 
+
+For server instructions, see [server compilation](servermanual.md)
 
 
 Acknowledgments

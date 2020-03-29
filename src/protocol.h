@@ -54,6 +54,7 @@
 #define PROTMESSID_CHANNEL_INFOS              25 // set channel infos
 #define PROTMESSID_OPUS_SUPPORTED             26 // tells that OPUS codec is supported
 #define PROTMESSID_LICENCE_REQUIRED           27 // licence required
+#define PROTMESSID_REQ_CHANNEL_LEVEL_LIST     28 // request the channel level list
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -71,6 +72,7 @@
 #define PROTMESSID_CLM_REQ_VERSION_AND_OS     1012 // request version number and operating system
 #define PROTMESSID_CLM_CONN_CLIENTS_LIST      1013 // channel infos for connected clients
 #define PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST  1014 // request the connected clients list
+#define PROTMESSID_CLM_CHANNEL_LEVEL_LIST     1015 // channel level list
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -102,6 +104,7 @@ public:
     void CreateReqNetwTranspPropsMes();
     void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
     void CreateOpusSupportedMes();
+    void CreateReqChannelLevelListMes ( const bool bRCL );
 
     void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
@@ -123,6 +126,9 @@ public:
     void CreateCLConnClientsListMes    ( const CHostAddress&          InetAddr,
                                          const CVector<CChannelInfo>& vecChanInfo );
     void CreateCLReqConnClientsListMes ( const CHostAddress& InetAddr );
+    void CreateCLChannelLevelListMes   ( const CHostAddress&      InetAddr,
+                                         const CVector<uint16_t>& vecLevelList,
+                                         const int                iNumClients );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -205,17 +211,18 @@ protected:
                                           const CVector<uint8_t>& vecData,
                                           const CHostAddress&     InetAddr );
 
-    bool EvaluateJitBufMes            ( const CVector<uint8_t>& vecData );
+    bool EvaluateJitBufMes              ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();
-    bool EvaluateChanGainMes          ( const CVector<uint8_t>& vecData );
-    bool EvaluateConClientListMes     ( const CVector<uint8_t>& vecData );
+    bool EvaluateChanGainMes            ( const CVector<uint8_t>& vecData );
+    bool EvaluateConClientListMes       ( const CVector<uint8_t>& vecData );
     bool EvaluateReqConnClientsList();
-    bool EvaluateChanInfoMes          ( const CVector<uint8_t>& vecData );
+    bool EvaluateChanInfoMes            ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChanInfoMes();
-    bool EvaluateChatTextMes          ( const CVector<uint8_t>& vecData );
-    bool EvaluateNetwTranspPropsMes   ( const CVector<uint8_t>& vecData );
+    bool EvaluateChatTextMes            ( const CVector<uint8_t>& vecData );
+    bool EvaluateNetwTranspPropsMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateReqNetwTranspPropsMes();
-    bool EvaluateLicenceRequiredMes   ( const CVector<uint8_t>& vecData );
+    bool EvaluateLicenceRequiredMes     ( const CVector<uint8_t>& vecData );
+    bool EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData );
 
     bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
@@ -236,6 +243,8 @@ protected:
     bool EvaluateCLConnClientsListMes    ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLReqConnClientsListMes ( const CHostAddress&     InetAddr );
+    bool EvaluateCLChannelLevelListMes   ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -270,6 +279,7 @@ signals:
     void NetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void ReqNetTranspProps();
     void LicenceRequired ( ELicenceType eLicenceType );
+    void ReqChannelLevelList ( bool bOptIn );
 
     void CLPingReceived               ( CHostAddress           InetAddr,
                                         int                    iMs );
@@ -291,4 +301,6 @@ signals:
     void CLConnClientsListMesReceived ( CHostAddress           InetAddr,
                                         CVector<CChannelInfo>  vecChanInfo );
     void CLReqConnClientsList         ( CHostAddress           InetAddr );
+    void CLChannelLevelListReceived   ( CHostAddress           InetAddr,
+                                        CVector<uint16_t>      vecLevelList );
 };

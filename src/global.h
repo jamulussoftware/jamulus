@@ -196,6 +196,9 @@ LED bar:      lbr
 // list
 #define PING_UPDATE_TIME_SERVER_LIST_MS 2000 // ms
 
+// defines the interval between Channel Level updates from the server
+#define CHANNEL_LEVEL_UPDATE_TIME       200  // ms
+
 // time-out until a registered server is deleted from the server list if no
 // new registering was made in minutes
 #define SERVLIST_TIME_OUT_MINUTES       60 // minutes

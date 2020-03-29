@@ -989,6 +989,12 @@ JitterMeas.Measure();
     // one client is connected.
     if ( iNumClients > 0 )
     {
+        // Pre-fader channel level metering
+        // Driven from vecChanIDsCurConChan:
+        // - Compute levels once from vecvecsData
+        // - Send to each client in vecChannels
+        // emit ChannelLevels ( vecChanIDsCurConChan, vecChannels, vecvecsData );
+
         for ( int i = 0; i < iNumClients; i++ )
         {
             // get actual ID of current channel

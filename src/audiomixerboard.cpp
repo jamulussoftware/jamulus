@@ -533,6 +533,16 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     QObject::connect ( vecpChanFader[37], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh37 ( double ) ) );
     QObject::connect ( vecpChanFader[38], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh38 ( double ) ) );
     QObject::connect ( vecpChanFader[39], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh39 ( double ) ) );
+    QObject::connect ( vecpChanFader[40], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh40 ( double ) ) );
+    QObject::connect ( vecpChanFader[41], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh41 ( double ) ) );
+    QObject::connect ( vecpChanFader[42], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh42 ( double ) ) );
+    QObject::connect ( vecpChanFader[43], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh43 ( double ) ) );
+    QObject::connect ( vecpChanFader[44], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh44 ( double ) ) );
+    QObject::connect ( vecpChanFader[45], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh45 ( double ) ) );
+    QObject::connect ( vecpChanFader[46], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh46 ( double ) ) );
+    QObject::connect ( vecpChanFader[47], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh47 ( double ) ) );
+    QObject::connect ( vecpChanFader[48], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh48 ( double ) ) );
+    QObject::connect ( vecpChanFader[49], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh49 ( double ) ) );
 
     QObject::connect ( vecpChanFader[0],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
     QObject::connect ( vecpChanFader[1],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
@@ -574,6 +584,16 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     QObject::connect ( vecpChanFader[37], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
     QObject::connect ( vecpChanFader[38], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
     QObject::connect ( vecpChanFader[39], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+    QObject::connect ( vecpChanFader[40], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+    QObject::connect ( vecpChanFader[41], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+    QObject::connect ( vecpChanFader[42], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+    QObject::connect ( vecpChanFader[43], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+    QObject::connect ( vecpChanFader[44], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+    QObject::connect ( vecpChanFader[45], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+    QObject::connect ( vecpChanFader[46], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+    QObject::connect ( vecpChanFader[47], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+    QObject::connect ( vecpChanFader[48], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+    QObject::connect ( vecpChanFader[49], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
 }
 
 void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )

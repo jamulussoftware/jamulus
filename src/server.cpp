@@ -474,6 +474,16 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &vecChannels[37], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh37 ( CVector<uint8_t> ) ) );
     QObject::connect ( &vecChannels[38], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh38 ( CVector<uint8_t> ) ) );
     QObject::connect ( &vecChannels[39], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh39 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[40], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh40 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[41], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh41 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[42], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh42 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[43], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh43 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[44], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh44 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[45], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh45 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[46], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh46 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[47], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh47 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[48], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh48 ( CVector<uint8_t> ) ) );
+    QObject::connect ( &vecChannels[49], SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ), this, SLOT ( OnSendProtMessCh49 ( CVector<uint8_t> ) ) );
 
     // request connected clients list
     QObject::connect ( &vecChannels[0],  SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh0() ) );
@@ -516,6 +526,16 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &vecChannels[37], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh37() ) );
     QObject::connect ( &vecChannels[38], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh38() ) );
     QObject::connect ( &vecChannels[39], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh39() ) );
+    QObject::connect ( &vecChannels[40], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh40() ) );
+    QObject::connect ( &vecChannels[41], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh41() ) );
+    QObject::connect ( &vecChannels[42], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh42() ) );
+    QObject::connect ( &vecChannels[43], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh43() ) );
+    QObject::connect ( &vecChannels[44], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh44() ) );
+    QObject::connect ( &vecChannels[45], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh45() ) );
+    QObject::connect ( &vecChannels[46], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh46() ) );
+    QObject::connect ( &vecChannels[47], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh47() ) );
+    QObject::connect ( &vecChannels[48], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh48() ) );
+    QObject::connect ( &vecChannels[49], SIGNAL ( ReqConnClientsList() ), this, SLOT ( OnReqConnClientsListCh49() ) );
 
     // channel info has changed
     QObject::connect ( &vecChannels[0],  SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh0() ) );
@@ -558,6 +578,16 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &vecChannels[37], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh37() ) );
     QObject::connect ( &vecChannels[38], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh38() ) );
     QObject::connect ( &vecChannels[39], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh39() ) );
+    QObject::connect ( &vecChannels[40], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh40() ) );
+    QObject::connect ( &vecChannels[41], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh41() ) );
+    QObject::connect ( &vecChannels[42], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh42() ) );
+    QObject::connect ( &vecChannels[43], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh43() ) );
+    QObject::connect ( &vecChannels[44], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh44() ) );
+    QObject::connect ( &vecChannels[45], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh45() ) );
+    QObject::connect ( &vecChannels[46], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh46() ) );
+    QObject::connect ( &vecChannels[47], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh47() ) );
+    QObject::connect ( &vecChannels[48], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh48() ) );
+    QObject::connect ( &vecChannels[49], SIGNAL ( ChanInfoHasChanged() ), this, SLOT ( OnChanInfoHasChangedCh49() ) );
 
     // chat text received
     QObject::connect ( &vecChannels[0],  SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh0  ( QString ) ) );
@@ -600,6 +630,16 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &vecChannels[37], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh37 ( QString ) ) );
     QObject::connect ( &vecChannels[38], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh38 ( QString ) ) );
     QObject::connect ( &vecChannels[39], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh39 ( QString ) ) );
+    QObject::connect ( &vecChannels[40], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh40 ( QString ) ) );
+    QObject::connect ( &vecChannels[41], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh41 ( QString ) ) );
+    QObject::connect ( &vecChannels[42], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh42 ( QString ) ) );
+    QObject::connect ( &vecChannels[43], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh43 ( QString ) ) );
+    QObject::connect ( &vecChannels[44], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh44 ( QString ) ) );
+    QObject::connect ( &vecChannels[45], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh45 ( QString ) ) );
+    QObject::connect ( &vecChannels[46], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh46 ( QString ) ) );
+    QObject::connect ( &vecChannels[47], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh47 ( QString ) ) );
+    QObject::connect ( &vecChannels[48], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh48 ( QString ) ) );
+    QObject::connect ( &vecChannels[49], SIGNAL ( ChatTextReceived ( QString ) ), this, SLOT ( OnChatTextReceivedCh49 ( QString ) ) );
 
     // auto socket buffer size change
     QObject::connect ( &vecChannels[0],  SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh0  ( int ) ) );
@@ -642,6 +682,16 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &vecChannels[37], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh37 ( int ) ) );
     QObject::connect ( &vecChannels[38], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh38 ( int ) ) );
     QObject::connect ( &vecChannels[39], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh39 ( int ) ) );
+    QObject::connect ( &vecChannels[40], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh40 ( int ) ) );
+    QObject::connect ( &vecChannels[41], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh41 ( int ) ) );
+    QObject::connect ( &vecChannels[42], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh42 ( int ) ) );
+    QObject::connect ( &vecChannels[43], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh43 ( int ) ) );
+    QObject::connect ( &vecChannels[44], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh44 ( int ) ) );
+    QObject::connect ( &vecChannels[45], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh45 ( int ) ) );
+    QObject::connect ( &vecChannels[46], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh46 ( int ) ) );
+    QObject::connect ( &vecChannels[47], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh47 ( int ) ) );
+    QObject::connect ( &vecChannels[48], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh48 ( int ) ) );
+    QObject::connect ( &vecChannels[49], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh49 ( int ) ) );
 
 
     // start the socket (it is important to start the socket after all

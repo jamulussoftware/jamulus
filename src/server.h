@@ -393,6 +393,16 @@ public slots:
     void OnSendProtMessCh37 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 37, mess ); }
     void OnSendProtMessCh38 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 38, mess ); }
     void OnSendProtMessCh39 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 39, mess ); }
+    void OnSendProtMessCh40 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 40, mess ); }
+    void OnSendProtMessCh41 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 41, mess ); }
+    void OnSendProtMessCh42 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 42, mess ); }
+    void OnSendProtMessCh43 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 43, mess ); }
+    void OnSendProtMessCh44 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 44, mess ); }
+    void OnSendProtMessCh45 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 45, mess ); }
+    void OnSendProtMessCh46 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 46, mess ); }
+    void OnSendProtMessCh47 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 47, mess ); }
+    void OnSendProtMessCh48 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 48, mess ); }
+    void OnSendProtMessCh49 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 49, mess ); }
 
     void OnReqConnClientsListCh0()  { CreateAndSendChanListForThisChan ( 0  ); }
     void OnReqConnClientsListCh1()  { CreateAndSendChanListForThisChan ( 1  ); }
@@ -434,6 +444,16 @@ public slots:
     void OnReqConnClientsListCh37() { CreateAndSendChanListForThisChan ( 37 ); }
     void OnReqConnClientsListCh38() { CreateAndSendChanListForThisChan ( 38 ); }
     void OnReqConnClientsListCh39() { CreateAndSendChanListForThisChan ( 39 ); }
+    void OnReqConnClientsListCh40() { CreateAndSendChanListForThisChan ( 40 ); }
+    void OnReqConnClientsListCh41() { CreateAndSendChanListForThisChan ( 41 ); }
+    void OnReqConnClientsListCh42() { CreateAndSendChanListForThisChan ( 42 ); }
+    void OnReqConnClientsListCh43() { CreateAndSendChanListForThisChan ( 43 ); }
+    void OnReqConnClientsListCh44() { CreateAndSendChanListForThisChan ( 44 ); }
+    void OnReqConnClientsListCh45() { CreateAndSendChanListForThisChan ( 45 ); }
+    void OnReqConnClientsListCh46() { CreateAndSendChanListForThisChan ( 46 ); }
+    void OnReqConnClientsListCh47() { CreateAndSendChanListForThisChan ( 47 ); }
+    void OnReqConnClientsListCh48() { CreateAndSendChanListForThisChan ( 48 ); }
+    void OnReqConnClientsListCh49() { CreateAndSendChanListForThisChan ( 49 ); }
 
     void OnChanInfoHasChangedCh0()  { CreateAndSendChanListForAllConChannels(); }
     void OnChanInfoHasChangedCh1()  { CreateAndSendChanListForAllConChannels(); }
@@ -475,6 +495,16 @@ public slots:
     void OnChanInfoHasChangedCh37() { CreateAndSendChanListForAllConChannels(); }
     void OnChanInfoHasChangedCh38() { CreateAndSendChanListForAllConChannels(); }
     void OnChanInfoHasChangedCh39() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh40() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh41() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh42() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh43() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh44() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh45() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh46() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh47() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh48() { CreateAndSendChanListForAllConChannels(); }
+    void OnChanInfoHasChangedCh49() { CreateAndSendChanListForAllConChannels(); }
 
     void OnChatTextReceivedCh0  ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 0,  strChatText ); }
     void OnChatTextReceivedCh1  ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 1,  strChatText ); }
@@ -516,6 +546,16 @@ public slots:
     void OnChatTextReceivedCh37 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 37, strChatText ); }
     void OnChatTextReceivedCh38 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 38, strChatText ); }
     void OnChatTextReceivedCh39 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 39, strChatText ); }
+    void OnChatTextReceivedCh40 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 40, strChatText ); }
+    void OnChatTextReceivedCh41 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 41, strChatText ); }
+    void OnChatTextReceivedCh42 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 42, strChatText ); }
+    void OnChatTextReceivedCh43 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 43, strChatText ); }
+    void OnChatTextReceivedCh44 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 44, strChatText ); }
+    void OnChatTextReceivedCh45 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 45, strChatText ); }
+    void OnChatTextReceivedCh46 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 46, strChatText ); }
+    void OnChatTextReceivedCh47 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 47, strChatText ); }
+    void OnChatTextReceivedCh48 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 48, strChatText ); }
+    void OnChatTextReceivedCh49 ( QString strChatText ) { CreateAndSendChatTextForAllConChannels ( 49, strChatText ); }
 
     void OnServerAutoSockBufSizeChangeCh0  ( int iNNumFra ) { vecChannels[0].CreateJitBufMes  ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh1  ( int iNNumFra ) { vecChannels[1].CreateJitBufMes  ( iNNumFra ); }
@@ -557,4 +597,14 @@ public slots:
     void OnServerAutoSockBufSizeChangeCh37 ( int iNNumFra ) { vecChannels[37].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh38 ( int iNNumFra ) { vecChannels[38].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh39 ( int iNNumFra ) { vecChannels[39].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh40 ( int iNNumFra ) { vecChannels[40].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh41 ( int iNNumFra ) { vecChannels[41].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh42 ( int iNNumFra ) { vecChannels[42].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh43 ( int iNNumFra ) { vecChannels[43].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh44 ( int iNNumFra ) { vecChannels[44].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh45 ( int iNNumFra ) { vecChannels[45].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh46 ( int iNNumFra ) { vecChannels[46].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh47 ( int iNNumFra ) { vecChannels[47].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh48 ( int iNNumFra ) { vecChannels[48].CreateJitBufMes ( iNNumFra ); }
+    void OnServerAutoSockBufSizeChangeCh49 ( int iNNumFra ) { vecChannels[49].CreateJitBufMes ( iNNumFra ); }
 };

@@ -167,6 +167,16 @@ public slots:
     void OnGainValueChangedCh37 ( double dValue ) { OnGainValueChanged ( 37, dValue ); }
     void OnGainValueChangedCh38 ( double dValue ) { OnGainValueChanged ( 38, dValue ); }
     void OnGainValueChangedCh39 ( double dValue ) { OnGainValueChanged ( 39, dValue ); }
+    void OnGainValueChangedCh40 ( double dValue ) { OnGainValueChanged ( 40, dValue ); }
+    void OnGainValueChangedCh41 ( double dValue ) { OnGainValueChanged ( 41, dValue ); }
+    void OnGainValueChangedCh42 ( double dValue ) { OnGainValueChanged ( 42, dValue ); }
+    void OnGainValueChangedCh43 ( double dValue ) { OnGainValueChanged ( 43, dValue ); }
+    void OnGainValueChangedCh44 ( double dValue ) { OnGainValueChanged ( 44, dValue ); }
+    void OnGainValueChangedCh45 ( double dValue ) { OnGainValueChanged ( 45, dValue ); }
+    void OnGainValueChangedCh46 ( double dValue ) { OnGainValueChanged ( 46, dValue ); }
+    void OnGainValueChangedCh47 ( double dValue ) { OnGainValueChanged ( 47, dValue ); }
+    void OnGainValueChangedCh48 ( double dValue ) { OnGainValueChanged ( 48, dValue ); }
+    void OnGainValueChangedCh49 ( double dValue ) { OnGainValueChanged ( 49, dValue ); }
 
     void OnChSoloStateChanged() { UpdateSoloStates(); }
 

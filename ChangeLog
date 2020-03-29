@@ -2,7 +2,7 @@
 
 3.4.5git
 
-- changed the maximum number of clients from 20 to 40
+- changed the maximum number of clients from 20 to 50
 
 - audio fade-in at the server if new a client connects
 

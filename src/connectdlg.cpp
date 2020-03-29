@@ -536,15 +536,15 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
         switch ( ePingTimeLEDColor )
         {
         case CMultiColorLED::RL_GREEN:
-            pCurListViewItem->setTextColor ( 1, Qt::darkGreen );
+            pCurListViewItem->setForeground ( 1, Qt::darkGreen );
             break;
 
         case CMultiColorLED::RL_YELLOW:
-            pCurListViewItem->setTextColor ( 1, Qt::darkYellow );
+            pCurListViewItem->setForeground ( 1, Qt::darkYellow );
             break;
 
         default: // including "CMultiColorLED::RL_RED"
-            pCurListViewItem->setTextColor ( 1, Qt::red );
+            pCurListViewItem->setForeground ( 1, Qt::red );
             break;
         }
 

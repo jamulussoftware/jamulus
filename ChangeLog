@@ -4,11 +4,12 @@
 
 - changed the maximum number of clients from 20 to 40
 
-- audio fade-in at the server if new client connects
+- audio fade-in at the server if new a client connects
 
 
-TODO add a QScrollArea to the mixer board to get a scroll bar if we have too many mixer faders
+TODO add a QScrollArea to the mixer board to get a scroll bar if we have too many mixer faders (note, see: https://sourceforge.net/p/llcon/discussion/533517/thread/6354573e36/#79ae)
 
+TODO for the 64 samples version check the audio quality stereo/high for bandwidth (less high frequencies as with 128 samples and stereo/high)
 
 
 

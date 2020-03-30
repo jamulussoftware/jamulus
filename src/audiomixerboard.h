@@ -55,6 +55,7 @@ public:
     bool IsVisible() { return plblLabel->isVisible(); }
     bool IsSolo() { return pcbSolo->isChecked(); }
     void SetGUIDesign ( const EGUIDesign eNewDesign );
+    void SetDisplayChannelLevel ( const bool eNDCL );
 
     void UpdateSoloState ( const bool bNewOtherSoloState );
     void SetFaderLevel ( const int iLevel );
@@ -108,6 +109,7 @@ public:
     void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
+    void SetDisplayChannelLevels ( const bool eNDCL );
 
     void SetFaderLevel ( const int iChannelIdx,
                          const int iValue );
@@ -131,6 +133,7 @@ protected:
     CVector<CChannelFader*> vecpChanFader;
     QGroupBox*              pGroupBox;
     QHBoxLayout*            pMainLayout;
+    bool                    bDisplayChannelLevels;
     bool                    bNoFaderVisible;
 
 public slots:

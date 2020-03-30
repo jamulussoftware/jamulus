@@ -182,6 +182,11 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     }
 }
 
+void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL )
+{
+    plbrChannelLevel->setHidden( !eNDCL );
+}
+
 void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
 {
     // setup group box for label/instrument picture: set a thick black border
@@ -668,6 +673,17 @@ void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         vecpChanFader[i]->SetGUIDesign ( eNewDesign );
+    }
+}
+
+void CAudioMixerBoard::SetDisplayChannelLevels ( const bool eNDCL )
+{
+    bDisplayChannelLevels = eNDCL;
+
+    // apply preference to child GUI controls
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        vecpChanFader[i]->SetDisplayChannelLevel ( bDisplayChannelLevels );
     }
 }
 

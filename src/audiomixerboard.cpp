@@ -464,18 +464,19 @@ double CChannelFader::CalcFaderGain ( const int value )
 * CAudioMixerBoard                                                             *
 \******************************************************************************/
 CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
-    QGroupBox            ( parent ),
+    QScrollArea          ( parent ),
     vecStoredFaderTags   ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
     vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
     vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     iNewClientFaderLevel ( 100 ),
     bNoFaderVisible      ( true )
 {
+    // add group box and hboxlayout
+    pGroupBox   = new QGroupBox(); // will be added to the scroll area which is then the parent
+    pMainLayout = new QHBoxLayout ( pGroupBox );
+
     // set title text (default: no server given)
     SetServerName ( "" );
-
-    // add hboxlayout
-    pMainLayout = new QHBoxLayout ( this );
 
     // create all mixer controls and make them invisible
     vecpChanFader.Init ( MAX_NUM_CHANNELS );
@@ -488,6 +489,15 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
 
     // insert horizontal spacer
     pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
+
+    // add the group box to the scroll area
+    setMinimumWidth ( 200 ); // at least two faders shall be visible
+    setWidget ( pGroupBox );
+    setWidgetResizable ( true ); // make sure it fills the entire scroll area
+    setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
+    setHorizontalScrollBarPolicy ( Qt::ScrollBarAsNeeded );
+    setStyleSheet ( "background: transparent;" );
+    setFrameShape ( QFrame::NoFrame );
 
 
     // Connections -------------------------------------------------------------
@@ -601,11 +611,11 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
     // set title text of the group box
     if ( strNewServerName.isEmpty() )
     {
-        setTitle ( "Server" );
+        pGroupBox->setTitle ( "Server" );
     }
     else
     {
-        setTitle ( strNewServerName );
+        pGroupBox->setTitle ( strNewServerName );
     }
 }
 

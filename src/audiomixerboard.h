@@ -25,6 +25,7 @@
 #pragma once
 
 #include <QFrame>
+#include <QScrollArea>
 #include <QGroupBox>
 #include <QLabel>
 #include <QCheckBox>
@@ -89,7 +90,7 @@ signals:
 };
 
 
-class CAudioMixerBoard : public QGroupBox
+class CAudioMixerBoard : public QScrollArea
 {
     Q_OBJECT
 
@@ -121,6 +122,7 @@ protected:
                               const double dValue );
 
     CVector<CChannelFader*> vecpChanFader;
+    QGroupBox*              pGroupBox;
     QHBoxLayout*            pMainLayout;
     bool                    bNoFaderVisible;
 

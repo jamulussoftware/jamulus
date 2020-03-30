@@ -2,12 +2,14 @@
 
 3.4.5git
 
-- changed the maximum number of clients from 20 to 50
+- added a scroll bar to the mixer board to support large numbers of
+  mixer faders (a thank you to doloopuntil for his help)
 
 - audio fade-in at the server if new a client connects
 
+- changed the maximum number of clients supported by the server from 20 to 50
 
-TODO add a QScrollArea to the mixer board to get a scroll bar if we have too many mixer faders (note, see: https://sourceforge.net/p/llcon/discussion/533517/thread/6354573e36/#79ae)
+
 
 TODO for the 64 samples version check the audio quality stereo/high for bandwidth (less high frequencies as with 128 samples and stereo/high)
 

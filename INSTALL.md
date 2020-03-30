@@ -14,36 +14,39 @@ Rquired software: QT, a compiler like Visual Studio, ASIO development files
 Linux
 -----
 
-Required packages: Build-Essential, Qt4/Qt5 (devel packages, too!), Jack (devel packages, too!),
-                   qjackctl can be a good help for configuring jack.
-                   On the most common Linux distributions, the following
-                   command should prepare the system for compilation:
-                   sudo apt-get install build-essential libqt4-dev libjack-jackd2-dev
-                   On fedora use:
-                   sudo dnf install jack-audio-connection-kit-dbus jack-audio-connection-kit-devel \
-                                    qt5-qtdeclarative-devel
+Required packages: 
 
+- Build-Essential
+- Qt4/Qt5 (devel packages, too!)
+- Jack (devel packages, too!)
+- qjackctl can be a good help configure jack.
 
-- qmake Jamulus.pro
-- make clean
-- make
-- run ./Jamulus
+On the most common Linux distributions, the following command should prepare the system for compilation:
 
-Note that the "make clean" is essential to remove the automatically generated Qt
-files which are present in the .tar.gz file and may not match the Qt version you
-are using.
+sudo apt-get install build-essential libqt4-dev libjack-jackd2-dev
 
-Use qmake "CONFIG+=nosound" Jamulus.pro for pure server installation which
-does not require the Jack packages.
+On Fedora use:
 
-To use an external shared OPUS library instead of the built-in use
-qmake "CONFIG+=opus_shared_lib" Jamulus.pro.
+sudo dnf install jack-audio-connection-kit-dbus jack-audio-connection-kit-devel qt5-qtdeclarative-devel
 
-To use this file configure the software with
-qmake "CONFIG+=noupcasename" Jamulus.pro to make sure the output target name of
-this software is jamulus instead of Jamulus.
+~~~
+qmake Jamulus.pro
+make clean
+make
+~~~
+
+Run the application with `$ ./Jamulus`
+
+Note that the "make clean" is essential to remove the automatically generated Qt files which are present in the .tar.gz file and may not match the Qt version you are using.
+
+To use an external shared OPUS library instead of the built-in use qmake `"CONFIG+=opus_shared_lib" Jamulus.pro`.
+
+To use this file configure the software with `qmake "CONFIG+=noupcasename" Jamulus.pro` to make sure the output target name of this software is jamulus instead of Jamulus.
 
 Jamulus is also compatible with Qt5.
+
+To configure and run Jamulus as a server, see the [server documentation](https://github.com/corrados/jamulus/wiki/Running-a-Server).
+
 
 Mac
 ---

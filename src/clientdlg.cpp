@@ -185,6 +185,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // reset mixer board
     MainMixerBoard->HideAll();
 
+    // restore channel level display preference
+    MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() );
+
     // restore fader settings
     MainMixerBoard->vecStoredFaderTags   = pClient->vecStoredFaderTags;
     MainMixerBoard->vecStoredFaderLevels = pClient->vecStoredFaderLevels;
@@ -494,6 +497,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( GUIDesignChanged() ),
         this, SLOT ( OnGUIDesignChanged() ) );
+
+    QObject::connect ( &ClientSettingsDlg, SIGNAL ( DisplayChannelLevelsChanged() ),
+        this, SLOT ( OnDisplayChannelLevelsChanged() ) );
 
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( AudioChannelsChanged() ),
         this, SLOT ( OnAudioChannelsChanged() ) );

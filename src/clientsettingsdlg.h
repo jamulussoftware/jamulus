@@ -90,6 +90,7 @@ protected:
     void OnSliderSndCrdBufferDelay ( int value );
     void OnAutoJitBufStateChanged ( int value );
     void OnGUIDesignFancyStateChanged ( int value );
+    void OnDisplayChannelLevelsStateChanged ( int value );
     void OnDefaultCentralServerStateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
     void OnNewClientLevelEditingFinished();
@@ -105,6 +106,7 @@ protected:
 
 signals:
     void GUIDesignChanged();
+    void DisplayChannelLevelsChanged();
     void AudioChannelsChanged();
     void NewClientLevelChanged();
 };

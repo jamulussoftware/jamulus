@@ -159,6 +159,7 @@ public:
     void CreateReqConnClientsList()                          { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText )    { Protocol.CreateChatTextMes ( strChatText ); }
     void CreateLicReqMes ( const ELicenceType eLicenceType ) { Protocol.CreateLicenceRequiredMes ( eLicenceType ); }
+    void CreateReqChannelLevelListMes ( bool bOptIn )        { Protocol.CreateReqChannelLevelListMes ( bOptIn ); }
 
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo )
         { Protocol.CreateConClientListMes ( vecChanInfo ); }

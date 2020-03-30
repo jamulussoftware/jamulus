@@ -198,6 +198,9 @@ public slots:
     void OnGUIDesignChanged()
         { SetGUIDesign ( pClient->GetGUIDesign() ); }
 
+    void OnDisplayChannelLevelsChanged()
+        { MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() ); }
+
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
     void OnNewClientLevelChanged() { MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel; }

@@ -530,11 +530,22 @@
        </layout>
       </item>
       <item>
-       <widget class="QCheckBox" name="chbGUIDesignFancy">
-        <property name="text">
-         <string>Fancy Skin</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout">
+        <item>
+         <widget class="QCheckBox" name="chbGUIDesignFancy">
+          <property name="text">
+           <string>Fancy Skin</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="chbDisplayChannelLevels">
+          <property name="text">
+           <string>Display Channel Levels</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <layout class="QHBoxLayout">
@@ -719,6 +730,7 @@
   <tabstop>cbxAudioQuality</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>chbGUIDesignFancy</tabstop>
+  <tabstop>chbDisplayChannelFaders</tabstop>
   <tabstop>chbDefaultCentralServer</tabstop>
   <tabstop>edtCentralServerAddress</tabstop>
  </tabstops>

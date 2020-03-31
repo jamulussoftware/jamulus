@@ -129,7 +129,7 @@ public:
     void SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
 
     bool GetDisplayChannelLevels() const { return bDisplayChannelLevels; }
-    void SetDisplayChannelLevels ( const bool bNDCL ) { bDisplayChannelLevels = bNDCL; }
+    void SetDisplayChannelLevels ( const bool bNDCL );
 
     EAudioQuality GetAudioQuality() const { return eAudioQuality; }
     void SetAudioQuality ( const EAudioQuality eNAudioQuality );

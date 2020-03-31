@@ -630,7 +630,7 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
             break;
 
         case PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST:
-            bRet = EvaluateCLReqChannelLevelListMes ( InetAddr );
+            bRet = EvaluateCLReqChannelLevelListMes ( InetAddr, vecbyMesBodyData );
             break;
 
         case PROTMESSID_CLM_CHANNEL_LEVEL_LIST:
@@ -1932,17 +1932,21 @@ bool CProtocol::EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr )
     return false; // no error
 }
 
-void CProtocol::CreateCLReqChannelLevelListMes ( const CHostAddress& InetAddr )
+void CProtocol::CreateCLReqChannelLevelListMes ( const CHostAddress& InetAddr,
+                                                 const bool          bRCL )
 {
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST,
-                                     CVector<uint8_t> ( 0 ),
+                                     CVector<uint8_t> ( bRCL ? 1 : 0 ),
                                      InetAddr );
 }
 
-bool CProtocol::EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr )
+bool CProtocol::EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr,
+                                                   const CVector<uint8_t>& vecData )
 {
+    bool bSetting = vecData.Size() == 1 && vecData[0] == 1;
+
     // invoke message action
-    emit CLReqChannelLevelList ( InetAddr );
+    emit CLReqChannelLevelList ( InetAddr, bSetting  );
 
     return false; // no error
 }

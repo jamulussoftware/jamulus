@@ -283,6 +283,9 @@ void CClient::OnNewConnection()
     // Same problem is with the jitter buffer message.
     Channel.CreateReqConnClientsList();
     CreateServerJitterBufferMessage();
+
+    // send opt-in / out for Channel Level updates
+    SetDisplayChannelLevels ( bDisplayChannelLevels );
 }
 
 void CClient::CreateServerJitterBufferMessage()
@@ -389,6 +392,14 @@ bool CClient::GetAndResetbJitterBufferOKFlag()
     // since per definition the jitter buffer status is OK if both the
     // put and get status are OK
     return bSocketJitBufOKFlag;
+}
+
+void CClient::SetDisplayChannelLevels ( const bool bNDCL )
+{
+     bDisplayChannelLevels = bNDCL;
+
+     // tell any connected server about the change
+     ConnLessProtocol.CreateCLReqChannelLevelListMes ( Channel.GetAddress(), bNDCL );
 }
 
 void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )

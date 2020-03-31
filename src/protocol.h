@@ -124,7 +124,8 @@ public:
     void CreateCLConnClientsListMes      ( const CHostAddress&          InetAddr,
                                            const CVector<CChannelInfo>& vecChanInfo );
     void CreateCLReqConnClientsListMes   ( const CHostAddress& InetAddr );
-    void CreateCLReqChannelLevelListMes  ( const CHostAddress& InetAddr );
+    void CreateCLReqChannelLevelListMes  ( const CHostAddress& InetAddr,
+                                           const bool          bRCL );
     void CreateCLChannelLevelListMes     ( const CHostAddress&     InetAddr,
                                            const CVector<int16_t>& vecLevelList );
 
@@ -240,7 +241,8 @@ protected:
     bool EvaluateCLConnClientsListMes      ( const CHostAddress&     InetAddr,
                                              const CVector<uint8_t>& vecData );
     bool EvaluateCLReqConnClientsListMes   ( const CHostAddress&     InetAddr );
-    bool EvaluateCLReqChannelLevelListMes  ( const CHostAddress&     InetAddr );
+    bool EvaluateCLReqChannelLevelListMes  ( const CHostAddress&     InetAddr,
+                                             const CVector<uint8_t>& vecData );
     bool EvaluateCLChannelLevelListMes     ( const CHostAddress&     InetAddr,
                                              const CVector<uint8_t>& vecData );
 
@@ -298,7 +300,8 @@ signals:
     void CLConnClientsListMesReceived ( CHostAddress           InetAddr,
                                         CVector<CChannelInfo>  vecChanInfo );
     void CLReqConnClientsList         ( CHostAddress           InetAddr );
-    void CLReqChannelLevelList        ( CHostAddress           InetAddr );
+    void CLReqChannelLevelList        ( CHostAddress           InetAddr,
+                                        bool                   bSetting );
     void CLChannelLevelListReceived   ( CHostAddress           InetAddr,
                                         CVector<uint16_t>      vecLevelList );
 };

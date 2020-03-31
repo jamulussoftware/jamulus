@@ -11,6 +11,7 @@
 
 
 TODO after change with scroll bar, the mute/solo buttons are no longer correct under Linux (maybe a Qt problem)
+TODO after change with scroll bar, the tool tip below fader showing instrument/etc. is transparent under MacOS
 
 TODO for the 64 samples version check the audio quality stereo/high for bandwidth (less high frequencies as with 128 samples and stereo/high)
 

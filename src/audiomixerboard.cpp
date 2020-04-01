@@ -496,7 +496,6 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     setWidgetResizable ( true ); // make sure it fills the entire scroll area
     setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
     setHorizontalScrollBarPolicy ( Qt::ScrollBarAsNeeded );
-    setStyleSheet ( "background: transparent;" );
     setFrameShape ( QFrame::NoFrame );
 
 

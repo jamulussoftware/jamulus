@@ -1155,6 +1155,8 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         font:           bold; }"
             "QRadioButton {           color:          rgb(148, 148, 148);"
             "                         font:           bold; }"
+            "QScrollArea {            background:     transparent; }"
+            "QGroupBox {              background:     transparent; }"
             "QGroupBox::title {       color:          rgb(148, 148, 148); }"
             "QCheckBox::indicator {   width:          38px;"
             "                         height:         21px; }"

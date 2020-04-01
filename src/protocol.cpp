@@ -1935,55 +1935,51 @@ bool CProtocol::EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr )
 void CProtocol::CreateCLReqChannelLevelListMes ( const CHostAddress& InetAddr,
                                                  const bool          bRCL )
 {
+    CVector<uint8_t> vecData ( 1 );
+    int              iPos = 0; // init position pointer
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( bRCL ), 1 );
+
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST,
-                                     CVector<uint8_t> ( bRCL ? 1 : 0 ),
+                                     vecData,
                                      InetAddr );
 }
 
 bool CProtocol::EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr,
                                                    const CVector<uint8_t>& vecData )
 {
-    bool bSetting = vecData.Size() == 1 && vecData[0] == 1;
+    int iPos = 0; // init position pointer
 
     // invoke message action
-    emit CLReqChannelLevelList ( InetAddr, bSetting  );
+    emit CLReqChannelLevelList ( InetAddr, GetValFromStream ( vecData, iPos, 1 ) != 0 );
 
     return false; // no error
 }
 
 // TODO: thresholds for level need to be #defined - these are temp
-void CProtocol::CreateCLChannelLevelListMes  ( const CHostAddress&     InetAddr,
-                                               const CVector<int16_t>& vecLevelList )
+void CProtocol::CreateCLChannelLevelListMes  ( const CHostAddress&      InetAddr,
+                                               const CVector<uint16_t>& vecLevelList )
 {
     const int        iNumClients = vecLevelList.Size();
 
     // This must be a multiple of bytes at two bits per client
-    CVector<uint8_t> vecData( ( ( iNumClients + 3 ) * 4 ) / 4 );
-    const int        iNumBytes   = vecData.Size();
+    const int        iNumBytes   = ( iNumClients + 3 ) / 4;
+    CVector<uint8_t> vecData( iNumBytes );
+
+    int              iPos = 0; // init position pointer
+
     int              iLevelNum   = 0;
 
     for ( int i = 0; i < iNumBytes; i++ )
     {
-        vecData[i] = 0; // effectively pads with zero
-        for ( int j = 0; j < 4; j++ )
+        uint8_t value = 0; // effectively pads with zero
+        for ( int j = 0; j < 4 && iLevelNum < iNumClients; j++ )
         {
-            if ( iLevelNum < iNumClients && vecLevelList[iLevelNum] > INT16_MAX / 4 )
-            {
-                if ( vecLevelList[iLevelNum] < INT16_MAX / 2 )
-                {
-                    vecData[i] |= 1 >> j * 2;
-                }
-                else if ( vecLevelList[iLevelNum] < INT16_MAX - ( INT16_MAX / 8 ) )
-                {
-                    vecData[i] |= 2 >> j * 2;
-                }
-                else
-                {
-                    vecData[i] |= 3 >> j * 2;
-                }
-            }
+            value |= ( vecLevelList[iLevelNum] & 3 ) >> j * 2;
             iLevelNum++;
         }
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( value ), 1 );
     }
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_CHANNEL_LEVEL_LIST,
@@ -1995,6 +1991,7 @@ void CProtocol::CreateCLChannelLevelListMes  ( const CHostAddress&     InetAddr,
 bool CProtocol::EvaluateCLChannelLevelListMes  ( const CHostAddress&     InetAddr,
                                                  const CVector<uint8_t>& vecData )
 {
+    int               iPos = 0; // init position pointer
     const int         iDataLen = vecData.Size();  // two bits per channel, 4 channels per byte
 
     CVector<uint16_t> vecLevelList ( iDataLen * 4 ); // one ushort per channel: 0, 1, 2, 3
@@ -2004,7 +2001,7 @@ bool CProtocol::EvaluateCLChannelLevelListMes  ( const CHostAddress&     InetAdd
     for (int i = 0; i < iDataLen; i++ )
     {
         // process one byte
-        level = vecData[i];
+        level = static_cast<uint8_t>( GetValFromStream ( vecData, iPos, 1 ) );
         for (int j = 0; j < 4; j ++)
         {
             // output one channel
@@ -2013,7 +2010,9 @@ bool CProtocol::EvaluateCLChannelLevelListMes  ( const CHostAddress&     InetAdd
         }
     }
 
+    // invoke message action
     emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
+
     return false; // no error
 }
 

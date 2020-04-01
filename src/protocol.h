@@ -126,8 +126,8 @@ public:
     void CreateCLReqConnClientsListMes   ( const CHostAddress& InetAddr );
     void CreateCLReqChannelLevelListMes  ( const CHostAddress& InetAddr,
                                            const bool          bRCL );
-    void CreateCLChannelLevelListMes     ( const CHostAddress&     InetAddr,
-                                           const CVector<int16_t>& vecLevelList );
+    void CreateCLChannelLevelListMes     ( const CHostAddress&      InetAddr,
+                                           const CVector<uint16_t>& vecLevelList );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,

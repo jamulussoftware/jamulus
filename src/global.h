@@ -136,17 +136,11 @@ LED bar:      lbr
 // gets in trouble if the value is too low)
 #define CELT_MINIMUM_NUM_BYTES          10
 
-// define the maximum mono audio buffer size at a sample rate
-// of 48 kHz, this is important for defining the maximum number
-// of bytes to be expected from the network interface
-
-// TODO check why this number is so large...?
-
-#define MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ 4096
-
-// Maximum block size for network input buffer. Consider a maximum sample rate
-// of 48 kHz and two audio channels and two bytes per sample.
-#define MAX_SIZE_BYTES_NETW_BUF         ( MAX_MONO_AUD_BUFF_SIZE_AT_48KHZ * 4 )
+// Maximum block size for network input buffer. It is defined by the longest
+// protocol message which is PROTMESSID_CLM_SERVER_LIST: Worst case:
+// (2+2+1+2+2)+200*(4+2+2+1+1+2+20+2+32+2+20)=17609
+// We add some headroom to that value.
+#define MAX_SIZE_BYTES_NETW_BUF         20000
 
 // minimum/maximum network buffer size (which can be chosen by slider)
 #define MIN_NET_BUF_SIZE_NUM_BL         1  // number of blocks
@@ -191,7 +185,8 @@ LED bar:      lbr
 // without any other changes in the code
 #define DEFAULT_USED_NUM_CHANNELS       10 // default used number channels for server
 
-// maximum number of servers registered in the server list
+// Maximum number of servers registered in the server list. If you want to
+// change this parameter, you most probably have to adjust MAX_SIZE_BYTES_NETW_BUF.
 #define MAX_NUM_SERVERS_IN_SERVER_LIST  200
 
 // defines the time interval at which the ping time is updated in the GUI

@@ -238,6 +238,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         // the central server, we have to use the receive host address
         // instead
         CHostAddress CurHostAddress;
+
         if ( iIdx > 0 )
         {
             CurHostAddress = vecServerInfo[iIdx].HostAddr;
@@ -271,15 +272,19 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
             if ( vecServerInfo[iIdx].HostAddr.iPort == LLCON_DEFAULT_PORT_NUMBER )
             {
                 // only show IP number, no port number
-                pNewListViewItem->setText ( 0, CurHostAddress.
-                    toString ( CHostAddress::SM_IP_NO_LAST_BYTE ) );
+                pNewListViewItem->setText ( 0, CurHostAddress.toString ( CHostAddress::SM_IP_NO_LAST_BYTE ) );
             }
             else
             {
                 // show IP number and port
-                pNewListViewItem->setText ( 0, CurHostAddress.
-                    toString ( CHostAddress::SM_IP_NO_LAST_BYTE_PORT ) );
+                pNewListViewItem->setText ( 0, CurHostAddress.toString ( CHostAddress::SM_IP_NO_LAST_BYTE_PORT ) );
             }
+        }
+
+        // in case of all servers shown, add the registration number at the beginning
+        if ( bShowCompleteRegList )
+        {
+            pNewListViewItem->setText ( 0, QString ( "%1: " ).arg ( iIdx ) + pNewListViewItem->text ( 0 ) );
         }
 
         // show server name in bold font if it is a permanent server
@@ -294,6 +299,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
 
         // server location (city and country)
         QString strLocation = vecServerInfo[iIdx].strCity;
+
         if ( ( !strLocation.isEmpty() ) &&
              ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry ) )
         {
@@ -301,8 +307,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         }
         if ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry )
         {
-            strLocation +=
-                QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
+            strLocation += QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
         }
 
 // for debugging, plot address infos in connect dialog
@@ -326,8 +331,7 @@ strLocation += ", " + vecServerInfo[iIdx].HostAddr.InetAddr.toString() +
         pNewListViewItem->setText ( 6, QString().setNum ( 0 ) );
 
         // store host address
-        pNewListViewItem->setData ( 0, Qt::UserRole,
-            CurHostAddress.toString() );
+        pNewListViewItem->setData ( 0, Qt::UserRole, CurHostAddress.toString() );
     }
 
     // immediately issue the ping measurements and start the ping timer since
@@ -409,8 +413,11 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
             // add the new child to the corresponding server item
             pCurListViewItem->addChild ( pNewChildListViewItem );
 
-            // per default expand the list item
-            lvwServers->expandItem ( pCurListViewItem );
+            // per default expand the list item (if not "show all servers")
+            if ( !bShowCompleteRegList )
+            {
+                lvwServers->expandItem ( pCurListViewItem );
+            }
 
             // at least one server has childs now, show decoration to be able
             // to show the childs
@@ -596,7 +603,10 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
             // Update the sorting (lowest number on top).
             // Note that the sorting must be the last action for the current
             // item since the topLevelItem ( iIdx ) is then no longer valid.
-            lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
+            if ( !bShowCompleteRegList ) // do not sort if "show all servers"
+            {
+                lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
+            }
         }
     }
 

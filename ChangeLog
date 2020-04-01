@@ -9,11 +9,11 @@
 
 - changed the maximum number of clients supported by the server from 20 to 50
 
-TODO after change with scroll bar, the tool tip below fader showing instrument/etc. is transparent under MacOS
 
 TODO for the 64 samples version check the audio quality stereo/high for bandwidth (less high frequencies as with 128 samples and stereo/high)
 
 TODO revise MAX_SIZE_BYTES_NETW_BUF value -> PROTMESSID_CLM_SERVER_LIST with 200 servers may exceed the network limit
+
 
 
 

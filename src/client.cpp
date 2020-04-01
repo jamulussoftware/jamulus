@@ -193,7 +193,7 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
-        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
+        this, SLOT ( OnCLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
 
     // other
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
@@ -396,10 +396,10 @@ bool CClient::GetAndResetbJitterBufferOKFlag()
 
 void CClient::SetDisplayChannelLevels ( const bool bNDCL )
 {
-     bDisplayChannelLevels = bNDCL;
+    bDisplayChannelLevels = bNDCL;
 
-     // tell any connected server about the change
-     ConnLessProtocol.CreateCLReqChannelLevelListMes ( Channel.GetAddress(), bNDCL );
+    // tell any connected server about the change
+    ConnLessProtocol.CreateCLReqChannelLevelListMes ( Channel.GetAddress(), bNDCL );
 }
 
 void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
@@ -611,6 +611,12 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
         // restart client
         Sound.Start();
     }
+}
+
+void CClient::OnCLChannelLevelListReceived ( CHostAddress InetAddr,
+                                             CVector<uint16_t> vecLevelList )
+{
+    emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
 }
 
 void CClient::Start()

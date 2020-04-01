@@ -431,6 +431,18 @@ CServer::CServer ( const int          iNewMaxNumChan,
         SIGNAL ( CLReqConnClientsList ( CHostAddress ) ),
         this, SLOT ( OnCLReqConnClientsList ( CHostAddress ) ) );
 
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLReqChannelLevelList ( CHostAddress, bool ) ),
+        this, SLOT ( OnCLReqChannelLevelList ( CHostAddress, bool ) ) );
+
+    qRegisterMetaType< Int16_t >();
+    qRegisterMetaType< CVector< int16_t > >();
+    qRegisterMetaType< CVector< CVector< int16_t > > >();
+    QObject::connect ( this,
+        SIGNAL ( AudioFrames ( const Int16_t, const CVector<int16_t>, const CVector<CVector<int16_t> > ) ),
+        this, SLOT ( OnAudioFrames ( const Int16_t, const CVector<int16_t>, const CVector<CVector<int16_t> > ) ),
+            Qt::QueuedConnection);
+
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
@@ -989,11 +1001,25 @@ JitterMeas.Measure();
     // one client is connected.
     if ( iNumClients > 0 )
     {
-        // Pre-fader channel level metering
-        // Driven from vecChanIDsCurConChan:
-        // - Compute levels once from vecvecsData
-        // - Send to each client in vecChannels
-        // emit ChannelLevels ( vecChanIDsCurConChan, vecChannels, vecvecsData );
+
+        // Low frequency updates
+        if ( iFrameCount > CHANNEL_LEVEL_UPDATE_TIME )
+        {
+            iFrameCount = 0;
+
+            // Enable channel levels if any client has requested them
+            for ( int i = 0; i < iNumClients; i++ )
+            {
+                if ( vecChannels[ vecChanIDsCurConChan[i] ].ChannelLevelsRequired() )
+                {
+                    emit AudioFrames ( static_cast<int16_t>(iNumClients),
+                                       vecChanIDsCurConChan,
+                                       vecvecsData );
+                    break;
+                }
+            }
+        }
+        iFrameCount++;
 
         for ( int i = 0; i < iNumClients; i++ )
         {
@@ -1380,6 +1406,16 @@ void CServer::OnProtcolMessageReceived ( int              iRecCounter,
     Mutex.unlock();
 }
 
+void CServer::OnCLReqChannelLevelList ( CHostAddress InetAddr, bool bSetting )
+{
+    int iCurChanID;
+    iCurChanID = FindChannel ( InetAddr );
+    if ( iCurChanID != INVALID_CHANNEL_ID )
+    {
+        vecChannels[iCurChanID].SetChannelLevelsRequired ( bSetting );
+    }
+}
+
 bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,
                              const int               iNumBytesRead,
                              const CHostAddress&     HostAdr,
@@ -1547,6 +1583,29 @@ void CServer::customEvent ( QEvent* pEvent )
             // no effect
             Start();
             break;
+        }
+    }
+}
+
+void CServer::OnAudioFrames ( const Int16_t                    iNumClients,
+                              const CVector<int16_t>           vecChanIDsCurConChan,
+                              const CVector<CVector<int16_t> > vecvecsData )
+{
+    // Compute a vector of uit16_t values from vecvecsData for all connected channels
+    CVector<uint16_t> vecChannelLevels ( iNumClients );
+    for ( int i = 0; i < iNumClients; i++ )
+    {
+        const int iChId = vecChanIDsCurConChan[i];
+        vecChannelLevels[iChId] = 3; // TODO: work out the value from vecvecsData[iChId]
+    }
+
+    // Send levels to each client that wants them
+    for ( int i = 0; i < iNumClients; i++ )
+    {
+        const int iChId = vecChanIDsCurConChan[i];
+        if ( vecChannels[iChId].ChannelLevelsRequired() && vecChannels[iChId].IsConnected() )
+        {
+            ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iChId].GetAddress(), vecChannelLevels );
         }
     }
 }

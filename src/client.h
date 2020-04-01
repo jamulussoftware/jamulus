@@ -401,6 +401,9 @@ public slots:
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
 
+    void OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                        CVector<uint16_t> vecLevelList );
+
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );

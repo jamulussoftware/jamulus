@@ -112,6 +112,16 @@ signals:
 };
 #endif
 
+// Minimal int16_t wrapper for queuing
+class Int16_t {
+public:
+    Int16_t() { value = 0; }
+    Int16_t ( int16_t v ) { value = v; }
+    void operator= ( int16_t v ) { value = v; }
+    operator int16_t() const { return value; }
+protected:
+    int16_t value;
+};
 
 class CServer : public QObject
 {
@@ -235,7 +245,7 @@ protected:
     OpusCustomDecoder*         OpusDecoderStereo[MAX_NUM_CHANNELS];
 
     CVector<QString>           vstrChatColors;
-    CVector<int>               vecChanIDsCurConChan;
+    CVector<int16_t>           vecChanIDsCurConChan;
 
     CVector<CVector<double> >  vecvecdGains;
     CVector<CVector<int16_t> > vecvecsData;
@@ -248,6 +258,9 @@ protected:
 
     // logging
     CServerLogging             Logging;
+
+    // channel level update frame interval counter
+    uint16_t                   iFrameCount;
 
     // recording thread
     recorder::CJamRecorder     JamRecorder;
@@ -275,6 +288,9 @@ signals:
     void Started();
     void Stopped();
     void ClientDisconnected ( const int iChID );
+    void AudioFrames ( const Int16_t                    iNumClients,
+                       const CVector<int16_t>           vecChanIDsCurConChan,
+                       const CVector<CVector<int16_t> > vecvecsData );
     void AudioFrame ( const int              iChID,
                       const QString          stChName,
                       const CHostAddress     RecHostAddr,
@@ -283,6 +299,10 @@ signals:
 
 public slots:
     void OnTimer();
+
+    void OnAudioFrames ( const Int16_t                    iNumClients,
+                         const CVector<int16_t>           vecChanIDsCurConChan,
+                         const CVector<CVector<int16_t> > vecvecsData );
 
     void OnSendProtMessage ( int              iChID,
                              CVector<uint8_t> vecMessage );
@@ -335,6 +355,8 @@ public slots:
 
     void OnCLReqConnClientsList ( CHostAddress InetAddr )
         { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
+
+    void OnCLReqChannelLevelList ( CHostAddress InetAddr, bool bSetting );
 
     void OnCLRegisterServerReceived ( CHostAddress    InetAddr,
                                       CServerCoreInfo ServerInfo )
@@ -608,3 +630,6 @@ public slots:
     void OnServerAutoSockBufSizeChangeCh48 ( int iNNumFra ) { vecChannels[48].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh49 ( int iNNumFra ) { vecChannels[49].CreateJitBufMes ( iNNumFra ); }
 };
+
+Q_DECLARE_METATYPE( Int16_t )
+Q_DECLARE_METATYPE( CVector< CVector<int16_t> > )

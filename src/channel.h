@@ -165,6 +165,11 @@ public:
 
     CNetworkTransportProps GetNetworkTransportPropsFromCurrentSettings();
 
+    bool ChannelLevelsRequired() const                { return bChannelLevelsRequired; }
+    void SetChannelLevelsRequired ( const bool nCLR ) { bChannelLevelsRequired = nCLR; }
+    void CreateChannelLevelsList ( const CVector<uint16_t>& vecChannelLevels )
+        { Protocol.CreateCLChannelLevelListMes ( InetAddr, vecChannelLevels ); }
+
 protected:
     bool ProtocolIsEnabled();
 
@@ -215,6 +220,8 @@ protected:
     QMutex            Mutex;
     QMutex            MutexSocketBuf;
     QMutex            MutexConvBuf;
+
+    bool              bChannelLevelsRequired;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

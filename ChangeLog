@@ -1,11 +1,14 @@
 
 
+
+
+
 3.4.5git
+
+- audio fade-in at the server if new a client connects
 
 - added a scroll bar to the mixer board to support large numbers of
   mixer faders (a thank you to doloopuntil for his help)
-
-- audio fade-in at the server if new a client connects
 
 - changed the maximum number of clients supported by the server from 20 to 50
 

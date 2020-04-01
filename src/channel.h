@@ -43,11 +43,11 @@
 
 // number of frames for audio fade-in
 #if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
-// 48 kHz, 64 samples: 2 seconds / ( 64 samples / 48 kHz ) = 2250
-# define FADE_IN_NUM_FRAMES                 1500
+// 48 kHz, 64 samples: 3 seconds / ( 64 samples / 48 kHz ) = 2250
+# define FADE_IN_NUM_FRAMES                 2250
 #else
-// 48 kHz, 128 samples: 2 seconds / ( 128 samples / 48 kHz ) = 1125
-# define FADE_IN_NUM_FRAMES                 750
+// 48 kHz, 128 samples: 3 seconds / ( 128 samples / 48 kHz ) = 1125
+# define FADE_IN_NUM_FRAMES                 1125
 #endif
 
 

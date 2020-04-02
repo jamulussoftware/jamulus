@@ -12,6 +12,13 @@
 
 - changed the maximum number of clients supported by the server from 20 to 50
 
+TODO x64 deploy version for Windows -> change deploy script
+
+TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
+
+TODO check why for some servers we do not get client list in server list
+
+TODO check server list registration for correct behavior
 
 
 

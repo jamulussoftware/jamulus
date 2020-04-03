@@ -1591,12 +1591,69 @@ void CServer::OnAudioFrames ( const Int16_t                    iNumClients,
                               const CVector<int16_t>           vecChanIDsCurConChan,
                               const CVector<CVector<int16_t> > vecvecsData )
 {
+
     // Compute a vector of uit16_t values from vecvecsData for all connected channels
+    // Much of this comes from util.cpp
+    // - CStereoSignalLevelMeter::Update
+    // - CStereoSignalLevelMeter::UpdateCurLevel
+    // - CStereoSignalLevelMeter::CalcLogResult
+    // and also
+    // - CClientDlg::OnTimerSigMet
+    // so, at some point, it might be worth refactoring for common code
+
     CVector<uint16_t> vecChannelLevels ( iNumClients );
     for ( int i = 0; i < iNumClients; i++ )
     {
         const int iChId = vecChanIDsCurConChan[i];
-        vecChannelLevels[iChId] = 3; // TODO: work out the value from vecvecsData[iChId]
+        const int iStereoVecSize = vecvecsData[iChId].Size();
+        short     sMax = 0;
+
+        for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
+        {
+            short sMix = ( vecvecsData[iChId][i] + vecvecsData[iChId][i + 1] ) / 2;
+            sMax = std::max ( sMax, sMix );
+        }
+
+        double dCurLevel = static_cast<double> ( sMax );
+        const double dNormMicLevel = dCurLevel / _MAXSHORT;
+
+        // logarithmic measure
+        double dCurSigLevel;
+        if ( dNormMicLevel > 0 )
+        {
+            dCurSigLevel = 20.0 * log10 ( dNormMicLevel );
+        }
+        else
+        {
+            dCurSigLevel = -100000.0; // large negative value
+        }
+
+        dCurSigLevel -= LOW_BOUND_SIG_METER;
+        dCurSigLevel *= NUM_STEPS_LED_BAR /
+            ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+
+        if ( dCurSigLevel < 0 )
+        {
+            dCurSigLevel = 0;
+        }
+
+        uint16_t level = static_cast<uint16_t> ( dCurSigLevel );
+        if ( level < 2 )
+        {
+            vecChannelLevels[iChId] = 0;
+        }
+        else if ( level < 4 )
+        {
+            vecChannelLevels[iChId] = 1;
+        }
+        else if ( level < 6 )
+        {
+            vecChannelLevels[iChId] = 2;
+        }
+        else
+        {
+            vecChannelLevels[iChId] = 3;
+        }
     }
 
     // Send levels to each client that wants them
@@ -1608,4 +1665,5 @@ void CServer::OnAudioFrames ( const Int16_t                    iNumClients,
             ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iChId].GetAddress(), vecChannelLevels );
         }
     }
+
 }

@@ -110,9 +110,9 @@ LED bar:      lbr
 
 // defined port number for client and server
 #if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
-# define LLCON_DEFAULT_PORT_NUMBER       22064 // different port number for 64 samples frame size version
+# define LLCON_DEFAULT_PORT_NUMBER      22064 // different port number for 64 samples frame size version
 #else
-# define LLCON_DEFAULT_PORT_NUMBER       22124
+# define LLCON_DEFAULT_PORT_NUMBER      22124
 #endif
 
 // system sample rate (the sound card and audio coder works on this sample rate)

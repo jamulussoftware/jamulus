@@ -169,7 +169,7 @@ void CSocket::SendPacket ( const CVector<uint8_t>& vecbySendBuf,
 
     const int iVecSizeOut = vecbySendBuf.Size();
 
-    if ( iVecSizeOut != 0 )
+    if ( iVecSizeOut > 0 )
     {
         // send packet through network (we have to convert the constant unsigned
         // char vector in "const char*", for this we first convert the const

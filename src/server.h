@@ -220,9 +220,10 @@ protected:
 
     virtual void customEvent ( QEvent* pEvent );
 
-    void CreateAndSendLevelsForAllConChannels ( const int16_t                    iNumClients,
-                                                const CVector<int16_t>           vecChanIDsCurConChan,
-                                                const CVector<CVector<int16_t> > vecvecsData );
+    void CreateLevelsForAllConChannels  ( const int                        iNumClients,
+                                          const CVector<int>&              vecNumAudioChannels,
+                                          const CVector<CVector<int16_t> > vecvecsData,
+                                          CVector<uint16_t>&               vecLevelsOut );
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
@@ -246,6 +247,9 @@ protected:
     CVector<int>               vecNumAudioChannels;
     CVector<int16_t>           vecsSendData;
     CVector<uint8_t>           vecbyCodedData;
+
+    // Channel levels
+    CVector<uint16_t>          vecChannelLevels;
 
     // actual working objects
     CHighPrioSocket            Socket;

@@ -88,7 +88,7 @@ class CProtocol : public QObject
     Q_OBJECT
 
 public:
-    CProtocol();
+    CProtocol( QTextStream& tsNC = *( ( new ConsoleWriterFactory() )->get() ));
 
     void Reset();
 
@@ -127,7 +127,8 @@ public:
     void CreateCLReqChannelLevelListMes  ( const CHostAddress& InetAddr,
                                            const bool          bRCL );
     void CreateCLChannelLevelListMes     ( const CHostAddress&      InetAddr,
-                                           const CVector<uint16_t>& vecLevelList );
+                                           const CVector<uint16_t>& vecLevelList,
+                                           const int                iNumClients );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -255,6 +256,8 @@ protected:
 
     QTimer                  TimerSendMess;
     QMutex                  Mutex;
+
+    QTextStream&            tsConsole;
 
 public slots:
     void OnTimerSendMess() { SendMessage(); }

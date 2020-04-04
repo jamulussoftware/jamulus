@@ -293,7 +293,8 @@ CONNECTION LESS MESSAGES
 
 
 /* Implementation *************************************************************/
-CProtocol::CProtocol()
+CProtocol::CProtocol ( QTextStream& tsNC ) :
+    tsConsole ( tsNC )
 {
     Reset();
 
@@ -1956,58 +1957,47 @@ bool CProtocol::EvaluateCLReqChannelLevelListMes ( const CHostAddress& InetAddr,
     return false; // no error
 }
 
-// TODO: thresholds for level need to be #defined - these are temp
 void CProtocol::CreateCLChannelLevelListMes  ( const CHostAddress&      InetAddr,
-                                               const CVector<uint16_t>& vecLevelList )
+                                               const CVector<uint16_t>& vecLevelList,
+                                               const int                iNumClients )
 {
-    const int        iNumClients = vecLevelList.Size();
-
-    // This must be a multiple of bytes at two bits per client
-    const int        iNumBytes   = ( iNumClients + 3 ) / 4;
+    // This must be a multiple of bytes at four bits per client
+    const int        iNumBytes = ( iNumClients + 1 ) / 2;
     CVector<uint8_t> vecData( iNumBytes );
-
     int              iPos = 0; // init position pointer
 
-    int              iLevelNum   = 0;
-
-    for ( int i = 0; i < iNumBytes; i++ )
+    for ( int i = 0, j = 0; i < iNumClients; i += 2 /* pack two per byte */, j++ )
     {
-        uint8_t value = 0; // effectively pads with zero
-        for ( int j = 0; j < 4 && iLevelNum < iNumClients; j++ )
-        {
-            value |= ( vecLevelList[iLevelNum] & 3 ) >> j * 2;
-            iLevelNum++;
-        }
+        uint16_t levelLo = vecLevelList[i] & 0x0F;
+        uint16_t levelHi = ( i + 1 < iNumClients ) ? vecLevelList[i + 1] & 0x0F : 0;
+        uint8_t  byte    = static_cast<uint8_t> ( levelLo | ( levelHi << 4 ) );
+
         PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( value ), 1 );
+            static_cast<uint32_t> ( byte ), 1 );
     }
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_CHANNEL_LEVEL_LIST,
                                      vecData,
                                      InetAddr );
-
 }
 
 bool CProtocol::EvaluateCLChannelLevelListMes  ( const CHostAddress&     InetAddr,
                                                  const CVector<uint8_t>& vecData )
 {
     int               iPos = 0; // init position pointer
-    const int         iDataLen = vecData.Size();  // two bits per channel, 4 channels per byte
+    const int         iDataLen = vecData.Size();  // four bits per channel, 2 channels per byte
 
-    CVector<uint16_t> vecLevelList ( iDataLen * 4 ); // one ushort per channel: 0, 1, 2, 3
-    uint8_t           level;
-    int               iClientNum = 0;
+    CVector<uint16_t> vecLevelList ( iDataLen * 2 ); // one ushort per channel
+                                                     // may have one too many entries
 
-    for (int i = 0; i < iDataLen; i++ )
+    for (int i = 0, j = 0; i < iDataLen; i++, j += 2 )
     {
-        // process one byte
-        level = static_cast<uint8_t>( GetValFromStream ( vecData, iPos, 1 ) );
-        for (int j = 0; j < 4; j ++)
-        {
-            // output one channel
-            vecLevelList[iClientNum] = 3 & ( level << j * 2 );
-            iClientNum++;
-        }
+        uint8_t  byte    = static_cast<uint8_t> ( GetValFromStream ( vecData, iPos, 1 ) );
+        uint16_t levelLo = byte & 0x0F;
+        uint16_t levelHi = ( byte >> 4 ) & 0x0F;
+
+        vecLevelList[j]     = levelLo;
+        vecLevelList[j + 1] = levelHi;
     }
 
     // invoke message action

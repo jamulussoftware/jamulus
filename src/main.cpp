@@ -482,7 +482,8 @@ int main ( int argc, char** argv )
             CClient Client ( iPortNumber,
                              strConnOnStartupAddress,
                              iCtrlMIDIChannel,
-                             bNoAutoJackConnect );
+                             bNoAutoJackConnect,
+                             tsConsole );
 
             // load settings from init-file
             CSettings Settings ( &Client, strIniFileName );

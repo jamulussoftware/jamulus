@@ -167,8 +167,6 @@ public:
 
     bool ChannelLevelsRequired() const                { return bChannelLevelsRequired; }
     void SetChannelLevelsRequired ( const bool nCLR ) { bChannelLevelsRequired = nCLR; }
-    void CreateChannelLevelsList ( const CVector<uint16_t>& vecChannelLevels )
-        { Protocol.CreateCLChannelLevelListMes ( InetAddr, vecChannelLevels ); }
 
     double GetPrevLevel() const              { return dPrevLevel; }
     void   SetPrevLevel ( const double nPL ) { dPrevLevel = nPL; }

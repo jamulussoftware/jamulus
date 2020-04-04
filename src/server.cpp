@@ -332,6 +332,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // allocate worst case memory for the coded data
     vecbyCodedData.Init ( MAX_SIZE_BYTES_NETW_BUF );
 
+    // allocate worst case memory for the channel levels
+    vecChannelLevels.Init     ( iMaxNumChannels );
 
     // enable history graph (if requested)
     if ( !strHistoryFileName.isEmpty() )
@@ -861,6 +863,7 @@ JitterMeas.Measure();
     // some inits
     int  iNumClients               = 0; // init connected client counter
     bool bChannelIsNowDisconnected = false;
+    bool bSendChannelLevels        = false;
 
     // Make put and get calls thread safe. Do not forget to unlock mutex
     // afterwards!
@@ -995,18 +998,21 @@ JitterMeas.Measure();
     {
 
         // Low frequency updates
-        if ( iFrameCount > CHANNEL_LEVEL_UPDATE_TIME )
+        if ( iFrameCount > CHANNEL_LEVEL_UPDATE_INTERVAL )
         {
             iFrameCount = 0;
 
-            // Enable channel levels if any client has requested them
+            // Calculate channel levels if any client has requested them
             for ( int i = 0; i < iNumClients; i++ )
             {
                 if ( vecChannels[ vecChanIDsCurConChan[i] ].ChannelLevelsRequired() )
                 {
-                    CreateAndSendLevelsForAllConChannels ( static_cast<int16_t> ( iNumClients ),
-                                                           vecChanIDsCurConChan,
-                                                           vecvecsData );
+                    bSendChannelLevels = true;
+
+                    CreateLevelsForAllConChannels ( iNumClients,
+                                                    vecNumAudioChannels,
+                                                    vecvecsData,
+                                                    vecChannelLevels );
                     break;
                 }
             }
@@ -1089,6 +1095,12 @@ opus_custom_encoder_ctl ( OpusEncoderStereo[iCurChanID],
 
             // update socket buffer size
             vecChannels[iCurChanID].UpdateSocketBufferSize();
+
+            // send channel levels
+            if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
+            {
+                ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(), vecChannelLevels, iNumClients );
+            }
         }
     }
     else
@@ -1579,43 +1591,47 @@ void CServer::customEvent ( QEvent* pEvent )
     }
 }
 
-void CServer::CreateAndSendLevelsForAllConChannels ( const int16_t                    iNumClients,
-                                                     const CVector<int16_t>           vecChanIDsCurConChan,
-                                                     const CVector<CVector<int16_t> > vecvecsData )
+/// @brief Compute frame peak level for each client
+void CServer::CreateLevelsForAllConChannels ( const int                        iNumClients,
+                                              const CVector<int>&              vecNumAudioChannels,
+                                              const CVector<CVector<int16_t> > vecvecsData,
+                                              CVector<uint16_t>&               vecLevelsOut )
 {
+    int i, j, k;
 
-    // Compute a vector of uit16_t values from vecvecsData for all connected channels
-    // Much of this comes from util.cpp
-    // - CStereoSignalLevelMeter::Update
-    // - CStereoSignalLevelMeter::UpdateCurLevel
-    // - CStereoSignalLevelMeter::CalcLogResult
-    // and also
-    // - CClientDlg::OnTimerSigMet
-    // so, at some point, it might be worth refactoring for common code
+    // init return vector with zeros since we mix all channels on that vector
+    vecLevelsOut.Reset ( 0 );
 
-    CVector<uint16_t> vecChannelLevels ( iNumClients );
-    for ( int i = 0; i < iNumClients; i++ )
+    for ( j = 0; j < iNumClients; j++ )
     {
-        const int iChId = vecChanIDsCurConChan[i];
-        const int iStereoVecSize = vecvecsData[iChId].Size();
-        int16_t   sMax = 0;
+        // get a reference to the audio data
+        const CVector<int16_t>& vecsData = vecvecsData[j];
 
-        for ( int j = 0; j < iStereoVecSize; j += 6 ) // 2 * 3 = 6 -> stereo
+        double dCurLevel = 0.0;
+        if ( vecNumAudioChannels[j] == 1 )
         {
-            int16_t sMix = static_cast < int16_t > ( ( std::abs ( vecvecsData[iChId][j] ) + std::abs ( vecvecsData[iChId][j + 1] ) ) / 2 );
-            sMax = std::max ( sMax, sMix );
+            // mono
+            for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i += 3 )
+            {
+                dCurLevel = std::max ( dCurLevel, std::abs ( static_cast<double> ( vecsData[i] ) ) );
+            }
+        }
+        else
+        {
+            // stereo: apply stereo-to-mono attenuation
+            for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i += 3, k += 6 )
+            {
+                double sMix = ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
+                dCurLevel = std::max ( dCurLevel, std::abs ( sMix ) );
+            }
         }
 
-        double dCurLevel = static_cast<double> ( sMax );
-
-        // Smoothing
-        double dPrevLevel = vecChannels[iChId].GetPrevLevel() * 0.5;
-        dCurLevel = std::max ( dCurLevel, dPrevLevel );
-        vecChannels[iChId].SetPrevLevel ( dCurLevel );
-
-        const double dNormChanLevel = dCurLevel / _MAXSHORT;
+        // smoothing
+        dCurLevel = std::max ( dCurLevel, vecChannels[j].GetPrevLevel() * 0.5 );
+        vecChannels[j].SetPrevLevel ( dCurLevel );
 
         // logarithmic measure
+        const double dNormChanLevel = dCurLevel / _MAXSHORT;
         double dCurSigLevel;
         if ( dNormChanLevel > 0 )
         {
@@ -1626,6 +1642,7 @@ void CServer::CreateAndSendLevelsForAllConChannels ( const int16_t              
             dCurSigLevel = -100000.0; // large negative value
         }
 
+        // map to signal level meter
         dCurSigLevel -= LOW_BOUND_SIG_METER;
         dCurSigLevel *= NUM_STEPS_LED_BAR /
             ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
@@ -1635,33 +1652,6 @@ void CServer::CreateAndSendLevelsForAllConChannels ( const int16_t              
             dCurSigLevel = 0;
         }
 
-        uint16_t level = static_cast<uint16_t> ( dCurSigLevel );
-        if ( level < 2 )
-        {
-            vecChannelLevels[iChId] = 0;
-        }
-        else if ( level < 4 )
-        {
-            vecChannelLevels[iChId] = 1;
-        }
-        else if ( level < 6 )
-        {
-            vecChannelLevels[iChId] = 2;
-        }
-        else
-        {
-            vecChannelLevels[iChId] = 3;
-        }
+        vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevel ) );
     }
-
-    // Send levels to each client that wants them
-    for ( int i = 0; i < iNumClients; i++ )
-    {
-        const int iChId = vecChanIDsCurConChan[i];
-        if ( vecChannels[iChId].ChannelLevelsRequired() && vecChannels[iChId].IsConnected() )
-        {
-            ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iChId].GetAddress(), vecChannelLevels );
-        }
-    }
-
 }

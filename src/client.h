@@ -111,7 +111,8 @@ public:
     CClient ( const quint16  iPortNumber,
               const QString& strConnOnStartupAddress,
               const int      iCtrlMIDIChannel,
-              const bool     bNoAutoJackConnect );
+              const bool     bNoAutoJackConnect,
+              QTextStream&   tsNC );
 
     void   Start();
     void   Stop();
@@ -315,6 +316,7 @@ protected:
     int         EvaluatePingMessage ( const int iMs );
     void        CreateServerJitterBufferMessage();
 
+    QTextStream&            tsConsole;
     // only one channel is needed for client application
     CChannel                Channel;
     CProtocol               ConnLessProtocol;

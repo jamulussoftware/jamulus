@@ -331,22 +331,7 @@ void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
 
 void CChannelFader::SetChannelLevel ( const uint16_t iLevel )
 {
-    int level = 0;
-    switch ( iLevel )
-    {
-    case 1:
-        level = NUM_STEPS_LED_BAR / 2;
-        break;
-    case 2:
-        level = RED_BOUND_LED_BAR - 1;
-        break;
-    case 3:
-        level = NUM_STEPS_LED_BAR;
-        break;
-    default:
-        break;
-    }
-    plbrChannelLevel->setValue ( level );
+    plbrChannelLevel->setValue ( iLevel );
 }
 
 void CChannelFader::SetText ( const CChannelInfo& ChanInfo )

@@ -129,9 +129,6 @@ LED bar:      lbr
 #define FRAME_SIZE_FACTOR_DEFAULT       2 // 256 (for frame size 128), 128 (for frame size 64)
 #define FRAME_SIZE_FACTOR_SAFE          4 // 512 (for frame size 128), 256 (for frame size 64)
 
-// low complexity CELT encoder (if defined)
-#define USE_LOW_COMPLEXITY_CELT_ENC
-
 // define the minimum allowed number of coded bytes for CELT (the encoder
 // gets in trouble if the value is too low)
 #define CELT_MINIMUM_NUM_BYTES          10

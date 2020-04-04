@@ -266,8 +266,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
         opus_custom_encoder_ctl ( OpusEncoderMono[i],
                                   OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
 
-#ifdef USE_LOW_COMPLEXITY_CELT_ENC
-        // set encoder low complexity
+#if ( SYSTEM_FRAME_SIZE_SAMPLES == 128 )
+        // set encoder low complexity for legacy 128 samples frame size
         opus_custom_encoder_ctl ( OpusEncoderMono[i],
                                   OPUS_SET_COMPLEXITY ( 1 ) );
 #endif
@@ -289,8 +289,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
         opus_custom_encoder_ctl ( OpusEncoderStereo[i],
                                   OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
 
-#ifdef USE_LOW_COMPLEXITY_CELT_ENC
-        // set encoder low complexity
+#if ( SYSTEM_FRAME_SIZE_SAMPLES == 128 )
+        // set encoder low complexity for legacy 128 samples frame size
         opus_custom_encoder_ctl ( OpusEncoderStereo[i],
                                   OPUS_SET_COMPLEXITY ( 1 ) );
 #endif

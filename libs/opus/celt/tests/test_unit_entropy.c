@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <time.h>
+#define CELT_C
 #include "entcode.h"
 #include "entenc.h"
 #include "entdec.h"
@@ -66,10 +67,10 @@ int main(int _argc,char **_argv){
   const char    *env_seed;
   ret=0;
   entropy=0;
-    if (_argc > 2) {
-	fprintf(stderr, "Usage: %s [<seed>]\n", _argv[0]);
-	return 1;
-    }
+  if (_argc > 2) {
+    fprintf(stderr, "Usage: %s [<seed>]\n", _argv[0]);
+    return 1;
+  }
   env_seed = getenv("SEED");
   if (_argc > 1)
     seed = atoi(_argv[1]);

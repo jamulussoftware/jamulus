@@ -27,7 +27,7 @@
 /* This is meant to be a simple example of encoding and decoding audio
    using Opus. It should make it easy to understand how the Opus API
    works. For more information, see the full API documentation at:
-   http://www.opus-codec.org/docs/ */
+   https://www.opus-codec.org/docs/ */
 
 #include <stdlib.h>
 #include <errno.h>
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
    fin = fopen(inFile, "r");
    if (fin==NULL)
    {
-      fprintf(stderr, "failed to open file: %s\n", strerror(errno));
+      fprintf(stderr, "failed to open input file: %s\n", strerror(errno));
       return EXIT_FAILURE;
    }
 
@@ -104,7 +104,7 @@ int main(int argc, char **argv)
    fout = fopen(outFile, "w");
    if (fout==NULL)
    {
-      fprintf(stderr, "failed to open file: %s\n", strerror(errno));
+      fprintf(stderr, "failed to open output file: %s\n", strerror(errno));
       return EXIT_FAILURE;
    }
 
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
       frame_size = opus_decode(decoder, cbits, nbBytes, out, MAX_FRAME_SIZE, 0);
       if (frame_size<0)
       {
-         fprintf(stderr, "decoder failed: %s\n", opus_strerror(err));
+         fprintf(stderr, "decoder failed: %s\n", opus_strerror(frame_size));
          return EXIT_FAILURE;
       }
 

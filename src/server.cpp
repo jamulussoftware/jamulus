@@ -1592,11 +1592,6 @@ void CServer::CreateAndSendLevelsForAllConChannels ( const int16_t              
     // and also
     // - CClientDlg::OnTimerSigMet
     // so, at some point, it might be worth refactoring for common code
-    //
-    // Also, this doesn't smooth the level sent.  That would need the
-    // computed level stored (for all channels, not just connected), so
-    // smoothing between messages could be applied.
-    // That is something that might be added, if needed.
 
     CVector<uint16_t> vecChannelLevels ( iNumClients );
     for ( int i = 0; i < iNumClients; i++ )
@@ -1612,13 +1607,19 @@ void CServer::CreateAndSendLevelsForAllConChannels ( const int16_t              
         }
 
         double dCurLevel = static_cast<double> ( sMax );
-        const double dNormMicLevel = dCurLevel / _MAXSHORT;
+
+        // Smoothing
+        double dPrevLevel = vecChannels[iChId].GetPrevLevel() * 0.5;
+        dCurLevel = std::max ( dCurLevel, dPrevLevel );
+        vecChannels[iChId].SetPrevLevel ( dCurLevel );
+
+        const double dNormChanLevel = dCurLevel / _MAXSHORT;
 
         // logarithmic measure
         double dCurSigLevel;
-        if ( dNormMicLevel > 0 )
+        if ( dNormChanLevel > 0 )
         {
-            dCurSigLevel = 20.0 * log10 ( dNormMicLevel );
+            dCurSigLevel = 20.0 * log10 ( dNormChanLevel );
         }
         else
         {

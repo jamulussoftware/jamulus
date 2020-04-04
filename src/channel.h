@@ -170,6 +170,9 @@ public:
     void CreateChannelLevelsList ( const CVector<uint16_t>& vecChannelLevels )
         { Protocol.CreateCLChannelLevelListMes ( InetAddr, vecChannelLevels ); }
 
+    double GetPrevLevel() const              { return dPrevLevel; }
+    void   SetPrevLevel ( const double nPL ) { dPrevLevel = nPL; }
+
 protected:
     bool ProtocolIsEnabled();
 
@@ -182,6 +185,8 @@ protected:
         iNetwFrameSizeFact    = FRAME_SIZE_FACTOR_PREFERRED;
         iNetwFrameSize        = CELT_MINIMUM_NUM_BYTES;
         iNumAudioChannels     = 1; // mono
+
+        dPrevLevel            = 0.0;
     }
 
     // connection parameters
@@ -222,6 +227,7 @@ protected:
     QMutex            MutexConvBuf;
 
     bool              bChannelLevelsRequired;
+    double            dPrevLevel;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

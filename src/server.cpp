@@ -1600,9 +1600,9 @@ void CServer::CreateAndSendLevelsForAllConChannels ( const int16_t              
         const int iStereoVecSize = vecvecsData[iChId].Size();
         int16_t   sMax = 0;
 
-        for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
+        for ( int j = 0; j < iStereoVecSize; j += 6 ) // 2 * 3 = 6 -> stereo
         {
-            int16_t sMix = static_cast < int16_t > ( ( std::abs ( vecvecsData[iChId][i] ) + std::abs ( vecvecsData[iChId][i + 1] ) ) / 2 );
+            int16_t sMix = static_cast < int16_t > ( ( std::abs ( vecvecsData[iChId][j] ) + std::abs ( vecvecsData[iChId][j + 1] ) ) / 2 );
             sMax = std::max ( sMax, sMix );
         }
 

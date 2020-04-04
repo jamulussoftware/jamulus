@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QHostAddress>
+#include <algorithm>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
 #else
@@ -220,6 +221,11 @@ protected:
 
     virtual void customEvent ( QEvent* pEvent );
 
+    void CreateLevelsForAllConChannels  ( const int                        iNumClients,
+                                          const CVector<int>&              vecNumAudioChannels,
+                                          const CVector<CVector<int16_t> > vecvecsData,
+                                          CVector<uint16_t>&               vecLevelsOut );
+
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
     CChannel                   vecChannels[MAX_NUM_CHANNELS];
@@ -243,11 +249,17 @@ protected:
     CVector<int16_t>           vecsSendData;
     CVector<uint8_t>           vecbyCodedData;
 
+    // Channel levels
+    CVector<uint16_t>          vecChannelLevels;
+
     // actual working objects
     CHighPrioSocket            Socket;
 
     // logging
     CServerLogging             Logging;
+
+    // channel level update frame interval counter
+    uint16_t                   iFrameCount;
 
     // recording thread
     recorder::CJamRecorder     JamRecorder;
@@ -335,6 +347,8 @@ public slots:
 
     void OnCLReqConnClientsList ( CHostAddress InetAddr )
         { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
+
+    void OnCLReqChannelLevelList ( CHostAddress InetAddr, bool bSetting );
 
     void OnCLRegisterServerReceived ( CHostAddress    InetAddr,
                                       CServerCoreInfo ServerInfo )

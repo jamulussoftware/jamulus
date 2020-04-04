@@ -189,6 +189,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     MainMixerBoard->vecStoredFaderTags   = pClient->vecStoredFaderTags;
     MainMixerBoard->vecStoredFaderLevels = pClient->vecStoredFaderLevels;
     MainMixerBoard->vecStoredFaderIsSolo = pClient->vecStoredFaderIsSolo;
+    MainMixerBoard->vecStoredFaderIsMute = pClient->vecStoredFaderIsMute;
     MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel;
 
     // init status label
@@ -568,6 +569,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     pClient->vecStoredFaderTags   = MainMixerBoard->vecStoredFaderTags;
     pClient->vecStoredFaderLevels = MainMixerBoard->vecStoredFaderLevels;
     pClient->vecStoredFaderIsSolo = MainMixerBoard->vecStoredFaderIsSolo;
+    pClient->vecStoredFaderIsMute = MainMixerBoard->vecStoredFaderIsMute;
     pClient->iNewClientFaderLevel = MainMixerBoard->iNewClientFaderLevel;
 
     // default implementation of this event handler routine

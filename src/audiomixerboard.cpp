@@ -250,6 +250,11 @@ void CChannelFader::SetFaderIsSolo ( const bool bIsSolo )
     pcbSolo->setChecked ( bIsSolo );
 }
 
+void CChannelFader::SetFaderIsMute ( const bool bIsMute ) {
+    // changing the state automatically emits the signal, too
+    pcbMute->setChecked ( bIsMute );
+}
+
 void CChannelFader::SendFaderLevelToServer ( const int iLevel )
 {
     // if mute flag is set or other channel is on solo, do not apply the new
@@ -468,6 +473,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     vecStoredFaderTags   ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
     vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
     vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+    vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     iNewClientFaderLevel ( 100 ),
     bNoFaderVisible      ( true )
 {
@@ -690,13 +696,16 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                     // stored settings if we have a matching entry
                     int  iStoredFaderLevel;
                     bool bStoredFaderIsSolo;
+                    bool bStoredFaderIsMute;
 
                     if ( GetStoredFaderSettings ( vecChanInfo[j],
                                                   iStoredFaderLevel,
-                                                  bStoredFaderIsSolo ) )
+                                                  bStoredFaderIsSolo,
+                                                  bStoredFaderIsMute ) )
                     {
                         vecpChanFader[i]->SetFaderLevel ( iStoredFaderLevel );
                         vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
+                        vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
                     }
                 }
 
@@ -783,6 +792,7 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
     {
         CVector<int> viOldStoredFaderLevels ( vecStoredFaderLevels );
         CVector<int> vbOldStoredFaderIsSolo ( vecStoredFaderIsSolo );
+        CVector<int> vbOldStoredFaderIsMute ( vecStoredFaderIsMute );
 
         // init temporary list count (may be overwritten later on)
         int iTempListCnt = 0;
@@ -795,6 +805,7 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
         // current fader level and solo state is at the top of the list
         vecStoredFaderLevels[0] = pChanFader->GetFaderLevel();
         vecStoredFaderIsSolo[0] = pChanFader->IsSolo();
+        vecStoredFaderIsMute[0] = pChanFader->IsMute();
         iTempListCnt            = 1;
 
         for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
@@ -809,6 +820,7 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
                 {
                     vecStoredFaderLevels[iTempListCnt] = viOldStoredFaderLevels[iIdx];
                     vecStoredFaderIsSolo[iTempListCnt] = vbOldStoredFaderIsSolo[iIdx];
+                    vecStoredFaderIsMute[iTempListCnt] = vbOldStoredFaderIsMute[iIdx];
 
                     iTempListCnt++;
                 }
@@ -819,7 +831,8 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
 
 bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                                                 int&                iStoredFaderLevel,
-                                                bool&               bStoredFaderIsSolo )
+                                                bool&               bStoredFaderIsSolo,
+                                                bool&               bStoredFaderIsMute)
 {
     // only do the check if the name string is not empty
     if ( !ChanInfo.strName.isEmpty() )
@@ -831,7 +844,8 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
             {
                 // copy stored settings values
                 iStoredFaderLevel  = vecStoredFaderLevels[iIdx];
-                bStoredFaderIsSolo = vecStoredFaderIsSolo[iIdx] != false;
+                bStoredFaderIsSolo = vecStoredFaderIsSolo[iIdx] != 0;
+                bStoredFaderIsMute = vecStoredFaderIsMute[iIdx] != 0;
 
                 // values found and copied, return OK
                 return true;

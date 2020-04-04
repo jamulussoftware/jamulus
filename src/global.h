@@ -165,7 +165,7 @@ LED bar:      lbr
 #define MAX_NUM_SERVER_ADDR_ITEMS       6
 
 // maximum number of fader settings to be stored (together with the fader tags)
-#define MAX_NUM_STORED_FADER_SETTINGS   70
+#define MAX_NUM_STORED_FADER_SETTINGS   200
 
 // defines for LED input level meter
 #define NUM_STEPS_INP_LEV_METER         8

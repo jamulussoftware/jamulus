@@ -53,11 +53,13 @@ public:
     void Hide() { pFrame->hide(); }
     bool IsVisible() { return plblLabel->isVisible(); }
     bool IsSolo() { return pcbSolo->isChecked(); }
+    bool IsMute() { return pcbMute->isChecked(); }
     void SetGUIDesign ( const EGUIDesign eNewDesign );
 
     void UpdateSoloState ( const bool bNewOtherSoloState );
     void SetFaderLevel ( const int iLevel );
     void SetFaderIsSolo ( const bool bIsSolo );
+    void SetFaderIsMute ( const bool bIsMute );
     int  GetFaderLevel() { return pFader->value(); }
     void Reset();
 
@@ -109,12 +111,15 @@ public:
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
     CVector<int>     vecStoredFaderIsSolo;
+    CVector<int>     vecStoredFaderIsMute;
     int              iNewClientFaderLevel;
 
 protected:
     bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                                   int&                iStoredFaderLevel,
-                                  bool&               bStoredFaderIsSolo );
+                                  bool&               bStoredFaderIsSolo,
+                                  bool&               bStoredFaderIsMute );
+
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
 

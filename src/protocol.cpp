@@ -2039,6 +2039,11 @@ bool CProtocol::EvaluateCLChannelLevelListMes  ( const CHostAddress&     InetAdd
                                           // may have one too many entries, last being 0xF
     int       iVecLen  = iDataLen * 2; // one ushort per channel
 
+    if ( iVecLen > MAX_NUM_CHANNELS )
+    {
+        return true; // return error code
+    }
+
     CVector<uint16_t> vecLevelList ( iVecLen );
 
     for (int i = 0, j = 0; i < iDataLen; i++, j += 2 )

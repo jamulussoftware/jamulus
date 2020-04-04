@@ -1,9 +1,19 @@
 
 
 
+3.4.6git
+
+TODO support OPUS 64 in the server as a first step towards official 64 samples frame size support
+
+TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
+
+TODO #12 A server in the same NAT region as the client is not visible (https://sourceforge.net/p/llcon/bugs/12/)
 
 
-3.4.5git
+
+
+
+3.4.5 (2020-04-04)
 
 - audio fade-in at the server if new a client connects
 
@@ -16,14 +26,6 @@
   be installed is selected automatically according to the detected operating system)
 
 - bug fix: server list ping times may not be accurate and client list may not be retrieved
-
-
-TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
-
-TODO #12 A server in the same NAT region as the client is not visible (https://sourceforge.net/p/llcon/bugs/12/)
-
-
-
 
 
 3.4.4 (2020-03-25)

@@ -55,7 +55,7 @@ class CHighPrecisionTimer : public QObject
     Q_OBJECT
 
 public:
-    CHighPrecisionTimer();
+    CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSize );
 
     void Start();
     void Stop();
@@ -66,6 +66,7 @@ protected:
     CVector<int> veciTimeOutIntervals;
     int          iCurPosInVector;
     int          iIntervalCounter;
+    bool         bUseDoubleSystemFrameSize;
 
 public slots:
     void OnTimer();
@@ -88,7 +89,7 @@ class CHighPrecisionTimer : public QThread
     Q_OBJECT
 
 public:
-    CHighPrecisionTimer();
+    CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize );
 
     void Start();
     void Stop();
@@ -131,6 +132,7 @@ public:
               const QString&     strRecordingDirName,
               const bool         bNCentServPingServerInList,
               const bool         bNDisconnectAllClients,
+              const bool         bNUseDoubleSystemFrameSize,
               const ELicenceType eNLicenceType );
 
     void Start();
@@ -220,6 +222,9 @@ protected:
 
     virtual void customEvent ( QEvent* pEvent );
 
+    // if server mode is normal or double system frame size
+    bool                       bUseDoubleSystemFrameSize;
+
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
     CChannel                   vecChannels[MAX_NUM_CHANNELS];
@@ -228,6 +233,11 @@ protected:
     QMutex                     Mutex;
 
     // audio encoder/decoder
+    OpusCustomMode*            Opus64Mode[MAX_NUM_CHANNELS];
+    OpusCustomEncoder*         Opus64EncoderMono[MAX_NUM_CHANNELS];
+    OpusCustomDecoder*         Opus64DecoderMono[MAX_NUM_CHANNELS];
+    OpusCustomEncoder*         Opus64EncoderStereo[MAX_NUM_CHANNELS];
+    OpusCustomDecoder*         Opus64DecoderStereo[MAX_NUM_CHANNELS];
     OpusCustomMode*            OpusMode[MAX_NUM_CHANNELS];
     OpusCustomEncoder*         OpusEncoderMono[MAX_NUM_CHANNELS];
     OpusCustomDecoder*         OpusDecoderMono[MAX_NUM_CHANNELS];

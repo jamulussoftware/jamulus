@@ -27,11 +27,12 @@
 
 // CHighPrecisionTimer implementation ******************************************
 #ifdef _WIN32
-CHighPrecisionTimer::CHighPrecisionTimer()
+CHighPrecisionTimer::CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSize ) :
+    bUseDoubleSystemFrameSize ( bNewUseDoubleSystemFrameSize )
 {
     // add some error checking, the high precision timer implementation only
     // supports 64 and 128 samples frame size at 48 kHz sampling rate
-#if ( SYSTEM_FRAME_SIZE_SAMPLES != 64 ) && ( SYSTEM_FRAME_SIZE_SAMPLES != 128 )
+#if ( SYSTEM_FRAME_SIZE_SAMPLES_SMALL != 64 ) && ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES != 128 )
 # error "Only system frame size of 64 and 128 samples is supported by this module"
 #endif
 #if ( SYSTEM_SAMPLE_RATE_HZ != 48000 )
@@ -68,13 +69,16 @@ void CHighPrecisionTimer::Start()
     iCurPosInVector  = 0;
     iIntervalCounter = 0;
 
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
-    // start internal timer with 1 ms resolution for 64 samples frame size
-    Timer.start ( 1 );
-#else
-    // start internal timer with 2 ms resolution for 128 samples frame size
-    Timer.start ( 2 );
-#endif
+    if ( bUseDoubleSystemFrameSize )
+    {
+        // start internal timer with 2 ms resolution for 128 samples frame size
+        Timer.start ( 2 );
+    }
+    else
+    {
+        // start internal timer with 1 ms resolution for 64 samples frame size
+        Timer.start ( 1 );
+    }
 }
 
 void CHighPrecisionTimer::Stop()
@@ -110,13 +114,22 @@ void CHighPrecisionTimer::OnTimer()
     }
 }
 #else // Mac and Linux
-CHighPrecisionTimer::CHighPrecisionTimer() :
+CHighPrecisionTimer::CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize ) :
     bRun ( false )
 {
     // calculate delay in ns
-    const uint64_t iNsDelay =
-        ( (uint64_t) SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) /
-        (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
+    const uint64_t iNsDelay;
+
+    if ( bUseDoubleSystemFrameSize )
+    {
+        iNsDelay = ( (uint64_t) DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) /
+                   (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
+    }
+    else
+    {
+        iNsDelay = ( (uint64_t) SYSTEM_FRAME_SIZE_SAMPLES_SMALL * 1000000000 ) /
+                   (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
+    }
 
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
     // calculate delay in mach absolute time
@@ -219,81 +232,69 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strRecordingDirName,
                    const bool         bNCentServPingServerInList,
                    const bool         bNDisconnectAllClients,
+                   const bool         bNUseDoubleSystemFrameSize,
                    const ELicenceType eNLicenceType ) :
-    iMaxNumChannels       ( iNewMaxNumChan ),
-    Socket                ( this, iPortNumber ),
-    Logging               ( iMaxDaysHistory ),
-    JamRecorder           ( strRecordingDirName ),
-    bEnableRecording      ( !strRecordingDirName.isEmpty() ),
-    bWriteStatusHTMLFile  ( false ),
-    ServerListManager     ( iPortNumber,
-                            strCentralServer,
-                            strServerInfo,
-                            iNewMaxNumChan,
-                            bNCentServPingServerInList,
-                            &ConnLessProtocol ),
-    bAutoRunMinimized     ( false ),
-    strWelcomeMessage     ( strNewWelcomeMessage ),
-    eLicenceType          ( eNLicenceType ),
-    bDisconnectAllClients ( bNDisconnectAllClients )
+    bUseDoubleSystemFrameSize ( bNUseDoubleSystemFrameSize ),
+    iMaxNumChannels           ( iNewMaxNumChan ),
+    Socket                    ( this, iPortNumber ),
+    Logging                   ( iMaxDaysHistory ),
+    JamRecorder               ( strRecordingDirName ),
+    bEnableRecording          ( !strRecordingDirName.isEmpty() ),
+    bWriteStatusHTMLFile      ( false ),
+    HighPrecisionTimer        ( bNUseDoubleSystemFrameSize ),
+    ServerListManager         ( iPortNumber,
+                                strCentralServer,
+                                strServerInfo,
+                                iNewMaxNumChan,
+                                bNCentServPingServerInList,
+                                &ConnLessProtocol ),
+    bAutoRunMinimized         ( false ),
+    strWelcomeMessage         ( strNewWelcomeMessage ),
+    eLicenceType              ( eNLicenceType ),
+    bDisconnectAllClients     ( bNDisconnectAllClients )
 {
     int iOpusError;
     int i;
 
-    // create CELT encoder/decoder for each channel (must be done before
+    // create OPUS encoder/decoder for each channel (must be done before
     // enabling the channels), create a mono and stereo encoder/decoder
     // for each channel
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
-        // init audio endocder/decoder (mono)
+        // init OPUS -----------------------------------------------------------
         OpusMode[i] = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                                SYSTEM_FRAME_SIZE_SAMPLES,
+                                                DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES,
                                                 &iOpusError );
 
-        OpusEncoderMono[i] = opus_custom_encoder_create ( OpusMode[i],
-                                                          1,
-                                                          &iOpusError );
+        Opus64Mode[i] = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                                  SYSTEM_FRAME_SIZE_SAMPLES_SMALL,
+                                                  &iOpusError );
 
-        OpusDecoderMono[i] = opus_custom_decoder_create ( OpusMode[i],
-                                                          1,
-                                                          &iOpusError );
-
-        // we require a constant bit rate
-        opus_custom_encoder_ctl ( OpusEncoderMono[i],
-                                  OPUS_SET_VBR ( 0 ) );
-
-        // we want as low delay as possible
-        opus_custom_encoder_ctl ( OpusEncoderMono[i],
-                                  OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
-
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 128 )
-        // set encoder low complexity for legacy 128 samples frame size
-        opus_custom_encoder_ctl ( OpusEncoderMono[i],
-                                  OPUS_SET_COMPLEXITY ( 1 ) );
-#endif
-
-        // init audio endocder/decoder (stereo)
-        OpusEncoderStereo[i] = opus_custom_encoder_create ( OpusMode[i],
-                                                            2,
-                                                            &iOpusError );
-
-        OpusDecoderStereo[i] = opus_custom_decoder_create ( OpusMode[i],
-                                                            2,
-                                                            &iOpusError );
+        // init audio encoders and decoders
+        OpusEncoderMono[i]     = opus_custom_encoder_create ( OpusMode[i],   1, &iOpusError ); // mono encoder legacy
+        OpusDecoderMono[i]     = opus_custom_decoder_create ( OpusMode[i],   1, &iOpusError ); // mono decoder legacy
+        OpusEncoderStereo[i]   = opus_custom_encoder_create ( OpusMode[i],   2, &iOpusError ); // stereo encoder legacy
+        OpusDecoderStereo[i]   = opus_custom_decoder_create ( OpusMode[i],   2, &iOpusError ); // stereo decoder legacy
+        Opus64EncoderMono[i]   = opus_custom_encoder_create ( Opus64Mode[i], 1, &iOpusError ); // mono encoder OPUS64
+        Opus64DecoderMono[i]   = opus_custom_decoder_create ( Opus64Mode[i], 1, &iOpusError ); // mono decoder OPUS64
+        Opus64EncoderStereo[i] = opus_custom_encoder_create ( Opus64Mode[i], 2, &iOpusError ); // stereo encoder OPUS64
+        Opus64DecoderStereo[i] = opus_custom_decoder_create ( Opus64Mode[i], 2, &iOpusError ); // stereo decoder OPUS64
 
         // we require a constant bit rate
-        opus_custom_encoder_ctl ( OpusEncoderStereo[i],
-                                  OPUS_SET_VBR ( 0 ) );
+        opus_custom_encoder_ctl ( OpusEncoderMono[i],     OPUS_SET_VBR ( 0 ) );
+        opus_custom_encoder_ctl ( OpusEncoderStereo[i],   OPUS_SET_VBR ( 0 ) );
+        opus_custom_encoder_ctl ( Opus64EncoderMono[i],   OPUS_SET_VBR ( 0 ) );
+        opus_custom_encoder_ctl ( Opus64EncoderStereo[i], OPUS_SET_VBR ( 0 ) );
 
         // we want as low delay as possible
-        opus_custom_encoder_ctl ( OpusEncoderStereo[i],
-                                  OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+        opus_custom_encoder_ctl ( OpusEncoderMono[i],     OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+        opus_custom_encoder_ctl ( OpusEncoderStereo[i],   OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+        opus_custom_encoder_ctl ( Opus64EncoderMono[i],   OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+        opus_custom_encoder_ctl ( Opus64EncoderStereo[i], OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
 
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 128 )
         // set encoder low complexity for legacy 128 samples frame size
-        opus_custom_encoder_ctl ( OpusEncoderStereo[i],
-                                  OPUS_SET_COMPLEXITY ( 1 ) );
-#endif
+        opus_custom_encoder_ctl ( OpusEncoderMono[i],   OPUS_SET_COMPLEXITY ( 1 ) );
+        opus_custom_encoder_ctl ( OpusEncoderStereo[i], OPUS_SET_COMPLEXITY ( 1 ) );
     }
 
     // define colors for chat window identifiers
@@ -312,7 +313,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // the worst case here:
 
     // we always use stereo audio buffers (which is the worst case)
-    vecsSendData.Init ( 2 * SYSTEM_FRAME_SIZE_SAMPLES );
+    vecsSendData.Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
     // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init ( iMaxNumChannels );
@@ -326,7 +327,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
         vecvecdGains[i].Init ( iMaxNumChannels );
 
         // we always use stereo audio buffers (see "vecsSendData")
-        vecvecsData[i].Init  ( 2 * SYSTEM_FRAME_SIZE_SAMPLES );
+        vecvecsData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
     }
 
     // allocate worst case memory for the coded data
@@ -845,7 +846,10 @@ void CServer::Stop()
 
 void CServer::OnTimer()
 {
-    int i, j;
+    int                i, j;
+    OpusCustomDecoder* CurOpusDecoder;
+    OpusCustomEncoder* CurOpusEncoder;
+    unsigned char*     pCurCodedData;
 
 /*
 // TEST do a timer jitter measurement
@@ -882,9 +886,17 @@ JitterMeas.Measure();
             // get actual ID of current channel
             const int iCurChanID = vecChanIDsCurConChan[i];
 
-            // get and store number of audio channels
-            const int iCurNumAudChan = vecChannels[iCurChanID].GetNumAudioChannels();
-            vecNumAudioChannels[i]   = iCurNumAudChan;
+            // get and store number of audio channels and select the opus decoder
+            vecNumAudioChannels[i] = vecChannels[iCurChanID].GetNumAudioChannels();
+
+            if ( vecNumAudioChannels[i] == 1 )
+            {
+                CurOpusDecoder = OpusDecoderMono[iCurChanID];
+            }
+            else
+            {
+                CurOpusDecoder = OpusDecoderStereo[iCurChanID];
+            }
 
             // get gains of all connected channels
             for ( j = 0; j < iNumClients; j++ )
@@ -902,74 +914,58 @@ JitterMeas.Measure();
             // get current number of CELT coded bytes
             const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
 
-            // get data
-            const EGetDataStat eGetStat =
-                vecChannels[iCurChanID].GetData ( vecbyCodedData,
-                                                  iCeltNumCodedBytes );
+// TODO
+const bool bIsServerDoubleFrameSize = bUseDoubleSystemFrameSize && ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS64 );
+const bool bIsClientDoubleFrameSize = !bUseDoubleSystemFrameSize && ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS );
+const bool bIsCompatibleFramesSize  = !( bIsServerDoubleFrameSize || bIsClientDoubleFrameSize );
+//bUseDoubleSystemFrameSize
+//ConvBuf
+CConvBuf<uint8_t> ConvBufIn; // TEST NOT WORKING!!!!
 
-            // if channel was just disconnected, set flag that connected
-            // client list is sent to all other clients
-            // and emit the client disconnected signal
-            if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
+//ConvBufIn.Put (  );
+int iNumInBlocks = 1;
+
+            for ( int iB = 0; iB < iNumInBlocks; iB++ )
             {
-                if ( bEnableRecording )
+                // get data
+                const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecbyCodedData, iCeltNumCodedBytes );
+
+                // if channel was just disconnected, set flag that connected
+                // client list is sent to all other clients
+                // and emit the client disconnected signal
+                if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
                 {
-                    emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
+                    if ( bEnableRecording )
+                    {
+                        emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
+                    }
+
+                    bChannelIsNowDisconnected = true;
                 }
 
-                bChannelIsNowDisconnected = true;
-            }
+                // get pointer to coded data
+                if ( eGetStat == GS_BUFFER_OK )
+                {
+                    pCurCodedData = &vecbyCodedData[0];
+                }
+                else
+                {
+                    // for lost packets use null pointer as coded input data
+                    pCurCodedData = nullptr;
+                }
 
-            // OPUS decode received data stream
-            if ( eGetStat == GS_BUFFER_OK )
-            {
+                // OPUS decode received data stream
+//                SYSTEM_FRAME_SIZE_SAMPLES_SMALL
+//                DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES
+
                 if ( ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS ) ||
                      ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS64 ) )
                 {
-                    if ( iCurNumAudChan == 1 )
-                    {
-                        // mono
-                        opus_custom_decode ( OpusDecoderMono[iCurChanID],
-                                             &vecbyCodedData[0],
-                                             iCeltNumCodedBytes,
-                                             &vecvecsData[i][0],
-                                             SYSTEM_FRAME_SIZE_SAMPLES );
-                    }
-                    else
-                    {
-                        // stereo
-                        opus_custom_decode ( OpusDecoderStereo[iCurChanID],
-                                             &vecbyCodedData[0],
-                                             iCeltNumCodedBytes,
-                                             &vecvecsData[i][0],
-                                             SYSTEM_FRAME_SIZE_SAMPLES );
-                    }
-                }
-            }
-            else
-            {
-                // lost packet
-                if ( ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS ) ||
-                     ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS64 ) )
-                {
-                    if ( iCurNumAudChan == 1 )
-                    {
-                        // mono
-                        opus_custom_decode ( OpusDecoderMono[iCurChanID],
-                                             nullptr,
-                                             iCeltNumCodedBytes,
-                                             &vecvecsData[i][0],
-                                             SYSTEM_FRAME_SIZE_SAMPLES );
-                    }
-                    else
-                    {
-                        // stereo
-                        opus_custom_decode ( OpusDecoderStereo[iCurChanID],
-                                             nullptr,
-                                             iCeltNumCodedBytes,
-                                             &vecvecsData[i][0],
-                                             SYSTEM_FRAME_SIZE_SAMPLES );
-                    }
+                    opus_custom_decode ( CurOpusDecoder,
+                                         pCurCodedData,
+                                         iCeltNumCodedBytes,
+                                         &vecvecsData[i][0],
+                                         SYSTEM_FRAME_SIZE_SAMPLES );
                 }
             }
         }
@@ -1017,45 +1013,33 @@ JitterMeas.Measure();
                           iNumClients );
 
             // get current number of CELT coded bytes
-            const int iCeltNumCodedBytes =
-                vecChannels[iCurChanID].GetNetwFrameSize();
+            const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
+
+            // select the opus encoder
+            if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
+            {
+                CurOpusEncoder = OpusEncoderMono[iCurChanID];
+            }
+            else
+            {
+                CurOpusEncoder = OpusEncoderStereo[iCurChanID];
+            }
 
             // OPUS encoding
             if ( ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS ) ||
                  ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS64 ) )
             {
-                if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
-                {
-                    // mono:
-
 // TODO find a better place than this: the setting does not change all the time
 //      so for speed optimization it would be better to set it only if the network
 //      frame size is changed
-opus_custom_encoder_ctl ( OpusEncoderMono[iCurChanID],
+opus_custom_encoder_ctl ( CurOpusEncoder,
                           OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes ) ) );
 
-                    opus_custom_encode ( OpusEncoderMono[iCurChanID],
-                                         &vecsSendData[0],
-                                         SYSTEM_FRAME_SIZE_SAMPLES,
-                                         &vecbyCodedData[0],
-                                         iCeltNumCodedBytes );
-                }
-                else
-                {
-                    // stereo:
-
-// TODO find a better place than this: the setting does not change all the time
-//      so for speed optimization it would be better to set it only if the network
-//      frame size is changed
-opus_custom_encoder_ctl ( OpusEncoderStereo[iCurChanID],
-                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes ) ) );
-
-                    opus_custom_encode ( OpusEncoderStereo[iCurChanID],
-                                         &vecsSendData[0],
-                                         SYSTEM_FRAME_SIZE_SAMPLES,
-                                         &vecbyCodedData[0],
-                                         iCeltNumCodedBytes );
-                }
+                opus_custom_encode ( CurOpusEncoder,
+                                     &vecsSendData[0],
+                                     SYSTEM_FRAME_SIZE_SAMPLES,
+                                     &vecbyCodedData[0],
+                                     iCeltNumCodedBytes );
             }
 
             // send separate mix to current clients

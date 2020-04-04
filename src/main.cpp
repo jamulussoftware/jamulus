@@ -513,6 +513,10 @@ int main ( int argc, char** argv )
         }
         else
         {
+
+// TODO
+const bool bUseDoubleSystemFrameSize = true; // TODO for now this value is fixed but has to be changeable by command line argument
+
             // Server:
             // actual server object
             CServer Server ( iNumServerChannels,
@@ -528,6 +532,7 @@ int main ( int argc, char** argv )
                              strRecordingDirName,
                              bCentServPingServerInList,
                              bDisconnectAllClients,
+                             bUseDoubleSystemFrameSize,
                              eLicenceType );
             if ( bUseGUI )
             {

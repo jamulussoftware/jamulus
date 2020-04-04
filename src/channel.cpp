@@ -346,18 +346,12 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
     // only the server shall act on network transport properties message
     if ( bIsServer )
     {
-        // OPUS codec is the only supported codec right now
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
-        if ( NetworkTransportProps.eAudioCodingType != CT_OPUS64 )
+        // OPUS and OPUS64 codecs are the only supported codecs right now
+        if ( ( NetworkTransportProps.eAudioCodingType != CT_OPUS ) &&
+             ( NetworkTransportProps.eAudioCodingType != CT_OPUS64 ) )
         {
             return;
         }
-#else
-        if ( NetworkTransportProps.eAudioCodingType != CT_OPUS )
-        {
-            return;
-        }
-#endif
 
         Mutex.lock();
         {

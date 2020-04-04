@@ -435,14 +435,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
         SIGNAL ( CLReqChannelLevelList ( CHostAddress, bool ) ),
         this, SLOT ( OnCLReqChannelLevelList ( CHostAddress, bool ) ) );
 
-    qRegisterMetaType< Int16_t >();
-    qRegisterMetaType< CVector< int16_t > >();
-    qRegisterMetaType< CVector< CVector< int16_t > > >();
-    QObject::connect ( this,
-        SIGNAL ( AudioFrames ( const Int16_t, const CVector<int16_t>, const CVector<CVector<int16_t> > ) ),
-        this, SLOT ( OnAudioFrames ( const Int16_t, const CVector<int16_t>, const CVector<CVector<int16_t> > ) ),
-            Qt::QueuedConnection);
-
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
@@ -1012,9 +1004,9 @@ JitterMeas.Measure();
             {
                 if ( vecChannels[ vecChanIDsCurConChan[i] ].ChannelLevelsRequired() )
                 {
-                    emit AudioFrames ( static_cast<int16_t>(iNumClients),
-                                       vecChanIDsCurConChan,
-                                       vecvecsData );
+                    CreateAndSendLevelsForAllConChannels ( static_cast<int16_t> ( iNumClients ),
+                                                           vecChanIDsCurConChan,
+                                                           vecvecsData );
                     break;
                 }
             }
@@ -1587,9 +1579,9 @@ void CServer::customEvent ( QEvent* pEvent )
     }
 }
 
-void CServer::OnAudioFrames ( const Int16_t                    iNumClients,
-                              const CVector<int16_t>           vecChanIDsCurConChan,
-                              const CVector<CVector<int16_t> > vecvecsData )
+void CServer::CreateAndSendLevelsForAllConChannels ( const int16_t                    iNumClients,
+                                                     const CVector<int16_t>           vecChanIDsCurConChan,
+                                                     const CVector<CVector<int16_t> > vecvecsData )
 {
 
     // Compute a vector of uit16_t values from vecvecsData for all connected channels
@@ -1600,17 +1592,22 @@ void CServer::OnAudioFrames ( const Int16_t                    iNumClients,
     // and also
     // - CClientDlg::OnTimerSigMet
     // so, at some point, it might be worth refactoring for common code
+    //
+    // Also, this doesn't smooth the level sent.  That would need the
+    // computed level stored (for all channels, not just connected), so
+    // smoothing between messages could be applied.
+    // That is something that might be added, if needed.
 
     CVector<uint16_t> vecChannelLevels ( iNumClients );
     for ( int i = 0; i < iNumClients; i++ )
     {
         const int iChId = vecChanIDsCurConChan[i];
         const int iStereoVecSize = vecvecsData[iChId].Size();
-        short     sMax = 0;
+        int16_t   sMax = 0;
 
         for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
         {
-            short sMix = ( vecvecsData[iChId][i] + vecvecsData[iChId][i + 1] ) / 2;
+            int16_t sMix = static_cast < int16_t > ( ( std::abs ( vecvecsData[iChId][i] ) + std::abs ( vecvecsData[iChId][i + 1] ) ) / 2 );
             sMax = std::max ( sMax, sMix );
         }
 

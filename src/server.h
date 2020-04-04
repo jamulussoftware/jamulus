@@ -113,17 +113,6 @@ signals:
 };
 #endif
 
-// Minimal int16_t wrapper for queuing
-class Int16_t {
-public:
-    Int16_t() { value = 0; }
-    Int16_t ( int16_t v ) { value = v; }
-    void operator= ( int16_t v ) { value = v; }
-    operator int16_t() const { return value; }
-protected:
-    int16_t value;
-};
-
 class CServer : public QObject
 {
     Q_OBJECT
@@ -231,6 +220,10 @@ protected:
 
     virtual void customEvent ( QEvent* pEvent );
 
+    void CreateAndSendLevelsForAllConChannels ( const int16_t                    iNumClients,
+                                                const CVector<int16_t>           vecChanIDsCurConChan,
+                                                const CVector<CVector<int16_t> > vecvecsData );
+
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
     CChannel                   vecChannels[MAX_NUM_CHANNELS];
@@ -289,9 +282,6 @@ signals:
     void Started();
     void Stopped();
     void ClientDisconnected ( const int iChID );
-    void AudioFrames ( const Int16_t                    iNumClients,
-                       const CVector<int16_t>           vecChanIDsCurConChan,
-                       const CVector<CVector<int16_t> > vecvecsData );
     void AudioFrame ( const int              iChID,
                       const QString          stChName,
                       const CHostAddress     RecHostAddr,
@@ -300,10 +290,6 @@ signals:
 
 public slots:
     void OnTimer();
-
-    void OnAudioFrames ( const Int16_t                    iNumClients,
-                         const CVector<int16_t>           vecChanIDsCurConChan,
-                         const CVector<CVector<int16_t> > vecvecsData );
 
     void OnSendProtMessage ( int              iChID,
                              CVector<uint8_t> vecMessage );
@@ -631,6 +617,3 @@ public slots:
     void OnServerAutoSockBufSizeChangeCh48 ( int iNNumFra ) { vecChannels[48].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh49 ( int iNNumFra ) { vecChannels[49].CreateJitBufMes ( iNNumFra ); }
 };
-
-Q_DECLARE_METATYPE( Int16_t )
-Q_DECLARE_METATYPE( CVector< CVector<int16_t> > )

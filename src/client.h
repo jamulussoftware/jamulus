@@ -282,6 +282,7 @@ public:
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
     CVector<int>     vecStoredFaderIsSolo;
+    CVector<int>     vecStoredFaderIsMute;
     int              iNewClientFaderLevel;
 
     // window position/state settings

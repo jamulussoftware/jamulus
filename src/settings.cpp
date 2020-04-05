@@ -88,6 +88,17 @@ void CSettings::Load()
             }
         }
 
+        // stored fader muted state
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+        {
+            if ( GetFlagIniSet ( IniXMLDocument, "client",
+                                 QString ( "storedfaderismute%1" ).arg ( iIdx ),
+                                 bValue ) )
+            {
+                pClient->vecStoredFaderIsMute[iIdx] = bValue;
+            }
+        }
+
         // new client level
         if ( GetNumericIniSet ( IniXMLDocument, "client", "newclientlevel",
              0, 100, iValue ) )
@@ -392,7 +403,15 @@ void CSettings::Save()
         {
             SetFlagIniSet ( IniXMLDocument, "client",
                             QString ( "storedfaderissolo%1" ).arg ( iIdx ),
-                            pClient->vecStoredFaderIsSolo[iIdx] != false );
+                            pClient->vecStoredFaderIsSolo[iIdx] != 0 );
+        }
+
+        // stored fader muted states
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+        {
+            SetFlagIniSet ( IniXMLDocument, "client",
+                            QString ( "storedfaderismute%1" ).arg ( iIdx ),
+                            pClient->vecStoredFaderIsMute[iIdx] != 0 );
         }
 
         // new client level

@@ -250,7 +250,8 @@ void CChannelFader::SetFaderIsSolo ( const bool bIsSolo )
     pcbSolo->setChecked ( bIsSolo );
 }
 
-void CChannelFader::SetFaderIsMute ( const bool bIsMute ) {
+void CChannelFader::SetFaderIsMute ( const bool bIsMute )
+{
     // changing the state automatically emits the signal, too
     pcbMute->setChecked ( bIsMute );
 }

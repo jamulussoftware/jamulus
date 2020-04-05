@@ -166,6 +166,8 @@ public:
 
     CNetworkTransportProps GetNetworkTransportPropsFromCurrentSettings();
 
+    bool ChannelLevelsRequired() const                { return bChannelLevelsRequired; }
+
 protected:
     bool ProtocolIsEnabled();
 
@@ -217,6 +219,8 @@ protected:
     QMutex            MutexSocketBuf;
     QMutex            MutexConvBuf;
 
+    bool              bChannelLevelsRequired;
+
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnJittBufSizeChange ( int iNewJitBufSize );
@@ -249,6 +253,8 @@ public slots:
     }
 
     void OnNewConnection() { emit NewConnection(); }
+
+    void OnReqChannelLevelList ( bool bOptIn ) { bChannelLevelsRequired = bOptIn; }
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );

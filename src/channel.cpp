@@ -575,7 +575,7 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
     // block size
     if ( ConvBuf.Put ( vecbyNPacket, iNPacketLen ) )
     {
-        pSocket->SendPacket ( ConvBuf.Get(), GetAddress() );
+        pSocket->SendPacket ( ConvBuf.GetAll(), GetAddress() );
     }
 }
 

@@ -468,16 +468,20 @@ public:
 
     void Init ( const int iNewMemSize )
     {
-        // set memory size
+        // allocate internal memory and reset read/write positions
+        vecMemory.Init ( iNewMemSize );
         iMemSize = iNewMemSize;
-
-        // allocate and clear memory for actual data buffer
-        vecsMemory.Init ( iMemSize );
-
-        iPutPos = 0;
+        iPutPos  = 0;
+        iGetPos  = 0;
     }
 
-    int GetSize() const { return iMemSize; }
+    void PutAll ( const CVector<TData>& vecsData )
+    {
+        iGetPos = 0;
+        std::copy ( vecsData.begin(),
+                    vecsData.begin() + iMemSize, // note that input vector might be larger then memory size
+                    vecMemory.begin() );
+    }
 
     bool Put ( const CVector<TData>& vecsData,
                const int             iVecSize )
@@ -491,7 +495,7 @@ public:
             // copy new data in internal buffer
             std::copy ( vecsData.begin(),
                         vecsData.begin() + iVecSize,
-                        vecsMemory.begin() + iPutPos );
+                        vecMemory.begin() + iPutPos );
 
             // set buffer pointer one block further
             iPutPos = iEnd;
@@ -504,14 +508,39 @@ public:
         return false;
     }
 
-    const CVector<TData>& Get()
+    const CVector<TData>& GetAll()
     {
         iPutPos = 0;
-        return vecsMemory;
+        return vecMemory;
+    }
+
+    bool Get ( CVector<TData>& vecsData,
+               const int       iVecSize )
+    {
+        // calculate the input size and the end position after copying
+        const int iEnd = iGetPos + iVecSize;
+
+        // first check for buffer underrun
+        if ( iEnd <= iMemSize )
+        {
+            // copy new data from internal buffer
+            std::copy ( vecMemory.begin() + iGetPos,
+                        vecMemory.begin() + iGetPos + iVecSize,
+                        vecsData.begin() );
+
+            // set buffer pointer one block further
+            iGetPos = iEnd;
+
+            // return "buffer is completely read" flag
+            return ( iEnd == iMemSize );
+        }
+
+        // buffer underrun or not initialized, return "completely read"
+        return true;
     }
 
 protected:
-    CVector<TData> vecsMemory;
+    CVector<TData> vecMemory;
     int            iMemSize;
-    int            iPutPos;
+    int            iPutPos, iGetPos;
 };

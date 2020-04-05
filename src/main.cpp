@@ -614,7 +614,7 @@ QString UsageArguments ( char **argv )
         "  -g, --pingservers     ping servers in list to keep NAT port open\n"
         "                        (central server only)\n"
         "  -h, -?, --help        this help text\n"
-        "  -i, --inifile         initialization file name (client only)\n"
+        "  -i, --inifile         initialization file name\n"
         "  -j, --nojackconnect   disable auto Jack connections (client only)\n"
         "  -l, --log             enable logging, set file name\n"
         "  -L, --licence         a licence must be accepted on a new\n"

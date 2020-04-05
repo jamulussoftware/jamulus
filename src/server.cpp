@@ -316,11 +316,12 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecsSendData.Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
     // allocate worst case memory for the temporary vectors
-    vecChanIDsCurConChan.Init ( iMaxNumChannels );
-    vecvecdGains.Init         ( iMaxNumChannels );
-    vecvecsData.Init          ( iMaxNumChannels );
-    vecNumAudioChannels.Init  ( iMaxNumChannels );
-    vecAudioComprType.Init    ( iMaxNumChannels );
+    vecChanIDsCurConChan.Init      ( iMaxNumChannels );
+    vecvecdGains.Init              ( iMaxNumChannels );
+    vecvecsData.Init               ( iMaxNumChannels );
+    vecNumAudioChannels.Init       ( iMaxNumChannels );
+    vecNumFrameSizeConvBlocks.Init ( iMaxNumChannels );
+    vecAudioComprType.Init         ( iMaxNumChannels );
 
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
@@ -892,6 +893,16 @@ JitterMeas.Measure();
             vecNumAudioChannels[i] = vecChannels[iCurChanID].GetNumAudioChannels();
             vecAudioComprType[i]   = vecChannels[iCurChanID].GetAudioCompressionType();
 
+            // get info about required frame size conversion properties
+            if ( bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS64 ) )
+            {
+                vecNumFrameSizeConvBlocks[i] = 2;
+            }
+            else
+            {
+                vecNumFrameSizeConvBlocks[i] = 1;
+            }
+
             // select the opus decoder and raw audio frame length
             if ( vecAudioComprType[i] == CT_OPUS )
             {
@@ -940,22 +951,7 @@ JitterMeas.Measure();
             // get current number of CELT coded bytes
             const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
 
-// TODO
-const bool bIsServerDoubleFrameSize = bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS64 );
-const bool bIsClientDoubleFrameSize = !bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS );
-const bool bIsCompatibleFramesSize  = !( bIsServerDoubleFrameSize || bIsClientDoubleFrameSize );
-//bUseDoubleSystemFrameSize
-//ConvBuf
-//CConvBuf<uint8_t> ConvBufIn; // TEST NOT WORKING!!!!
-
-//ConvBufIn.Put (  );
-int iNumInBlocks = 1;
-if ( bIsServerDoubleFrameSize )
-{
-    iNumInBlocks = 2;
-}
-
-            for ( int iB = 0; iB < iNumInBlocks; iB++ )
+            for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
             {
                 // get data
                 const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecbyCodedData, iCeltNumCodedBytes );
@@ -1073,18 +1069,7 @@ if ( bIsServerDoubleFrameSize )
                 CurOpusEncoder = nullptr;
             }
 
-// TODO copied code from above!!!
-const bool bIsServerDoubleFrameSize = bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS64 );
-const bool bIsClientDoubleFrameSize = !bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS );
-const bool bIsCompatibleFramesSize  = !( bIsServerDoubleFrameSize || bIsClientDoubleFrameSize );
-
-int iNumInBlocks = 1;
-if ( bIsServerDoubleFrameSize )
-{
-    iNumInBlocks = 2;
-}
-
-            for ( int iB = 0; iB < iNumInBlocks; iB++ )
+            for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
             {
                 // OPUS encoding
                 if ( CurOpusEncoder != nullptr )

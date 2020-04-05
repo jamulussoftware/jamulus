@@ -81,11 +81,11 @@ The reverberation effect requires significant CPU so that it should only be used
 level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does
 not cause any additional CPU usage.
 
-### Local audio input fader
+### Local audio pan / balance control
 
-![Local audio input fader](audiofader.jpg)
+![Local audio pan / balance control](audiofader.jpg)
 
-With the audio fader, the relative levels of the left and right local audio channels can be changed. For a mono signal
+With the balance control, the relative levels of the left and right local audio channels can be changed. For a mono signal
 it acts like a panning between the two channels. If, e.g., a microphone is connected to the right input channel and
 an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader
 in a direction where the label above the fader shows L -x, where x is the current attenuation indicator.
@@ -94,11 +94,13 @@ in a direction where the label above the fader shows L -x, where x is the curren
 
 ![Audio faders](faders.jpg)
 
-In the audio mixer frame, a fader for each connected client at the server is shown. This includes a fader for the own signal.
-With the faders, the audio level of each client can be modified individually.
+In the audio mixer frame, a fader is shown for each connected client at the server, including yourself.
+The faders allow you to adjust the level of what you hear without affecting what others hear.
+The VU meter shows the input level at the server - that is, what you are sending.
 
-With the Mute checkbox, the current audio channel can be muted. With the Solo checkbox, the current audio channel can
-be set to solo which means that all other channels except of the current channel are muted.
+Using the Mute checkbox prevents the indicated channel being heard in your local mix.
+
+The solo checkboxes allow you to hear only one, or several, channels, with those not soloed being muted.
 
 Settings Window
 ---------------
@@ -205,6 +207,12 @@ that client was already stored.
 ![Fancy skin](fancyskin.png)
 
 If enabled, a fancy skin will be applied to the main window.
+
+### Display channel levels
+
+![Display channel levels](displaychannellevels.png)
+
+If enabled, the channel input level for each connected client will be displayed in the mixer.
 
 ### Central server address
 

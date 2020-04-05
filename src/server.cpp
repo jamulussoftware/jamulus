@@ -118,7 +118,7 @@ CHighPrecisionTimer::CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize 
     bRun ( false )
 {
     // calculate delay in ns
-    const uint64_t iNsDelay;
+    uint64_t iNsDelay;
 
     if ( bUseDoubleSystemFrameSize )
     {

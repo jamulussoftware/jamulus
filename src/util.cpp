@@ -454,7 +454,7 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     - Accept button (disabled if check box not checked)
     - Decline button
 */
-    setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/mainicon.png" ) ) );
+    setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
     resize ( 700, 450 );
 
     QVBoxLayout*  pLayout    = new QVBoxLayout ( this );
@@ -538,7 +538,7 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     - OK button
 */
     setWindowTitle ( "Musician Profile" );
-    setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/mainicon.png" ) ) );
+    setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
 
     QVBoxLayout* pLayout        = new QVBoxLayout ( this );
     QHBoxLayout* pButSubLayout  = new QHBoxLayout;

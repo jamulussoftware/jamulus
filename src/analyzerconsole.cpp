@@ -45,7 +45,7 @@ CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
     LineMaxUpLimitColor    ( Qt::red )
 {
     // set the window icon and title text
-    const QIcon icon = QIcon ( QString::fromUtf8 ( ":/png/main/res/mainicon.png" ) );
+    const QIcon icon = QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) );
     setWindowIcon ( icon );
     setWindowTitle ( tr ( "Analyzer Console" ) );
 

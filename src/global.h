@@ -175,9 +175,7 @@ LED bar:      lbr
 #define LOW_BOUND_SIG_METER              ( -50.0 ) // dB
 #define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
 
-// Maximum number of connected clients at the server. If you want to change this
-// paramter you have to modify the code on some places, too! The code tag
-// "MAX_NUM_CHANNELS_TAG" shows these places (just search for the tag in the entire code)
+// Maximum number of connected clients at the server.
 #define MAX_NUM_CHANNELS                 50 // max number channels for server
 
 // actual number of used channels in the server

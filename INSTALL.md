@@ -17,13 +17,13 @@ Linux
 Required packages: 
 
 - Build-Essential
-- Qt4/Qt5 (devel packages, too!)
+- Qt5 (devel packages, too!)
 - Jack (devel packages, too!)
 - qjackctl can be a good help configure jack.
 
 On the most common Linux distributions, the following command should prepare the system for compilation:
 
-sudo apt-get install build-essential libqt4-dev libjack-jackd2-dev
+sudo apt-get install build-essential qt5-default libjack-jackd2-dev
 
 On Fedora use:
 
@@ -43,7 +43,7 @@ To use an external shared OPUS library instead of the built-in use qmake `"CONFI
 
 To use this file configure the software with `qmake "CONFIG+=noupcasename" Jamulus.pro` to make sure the output target name of this software is jamulus instead of Jamulus.
 
-Jamulus is also compatible with Qt5.
+Jamulus requires Qt5.
 
 To configure and run Jamulus as a server, see the [server documentation](https://github.com/corrados/jamulus/wiki/Running-a-Server).
 

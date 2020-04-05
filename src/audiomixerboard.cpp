@@ -560,112 +560,29 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     setHorizontalScrollBarPolicy ( Qt::ScrollBarAsNeeded );
     setFrameShape ( QFrame::NoFrame );
 
-
     // Connections -------------------------------------------------------------
-    // CODE TAG: MAX_NUM_CHANNELS_TAG
-    // make sure we have MAX_NUM_CHANNELS connections!!!
-    QObject::connect ( vecpChanFader[0],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh0  ( double ) ) );
-    QObject::connect ( vecpChanFader[1],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh1  ( double ) ) );
-    QObject::connect ( vecpChanFader[2],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh2  ( double ) ) );
-    QObject::connect ( vecpChanFader[3],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh3  ( double ) ) );
-    QObject::connect ( vecpChanFader[4],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh4  ( double ) ) );
-    QObject::connect ( vecpChanFader[5],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh5  ( double ) ) );
-    QObject::connect ( vecpChanFader[6],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh6  ( double ) ) );
-    QObject::connect ( vecpChanFader[7],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh7  ( double ) ) );
-    QObject::connect ( vecpChanFader[8],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh8  ( double ) ) );
-    QObject::connect ( vecpChanFader[9],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh9  ( double ) ) );
-    QObject::connect ( vecpChanFader[10], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh10 ( double ) ) );
-    QObject::connect ( vecpChanFader[11], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh11 ( double ) ) );
-    QObject::connect ( vecpChanFader[12], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh12 ( double ) ) );
-    QObject::connect ( vecpChanFader[13], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh13 ( double ) ) );
-    QObject::connect ( vecpChanFader[14], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh14 ( double ) ) );
-    QObject::connect ( vecpChanFader[15], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh15 ( double ) ) );
-    QObject::connect ( vecpChanFader[16], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh16 ( double ) ) );
-    QObject::connect ( vecpChanFader[17], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh17 ( double ) ) );
-    QObject::connect ( vecpChanFader[18], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh18 ( double ) ) );
-    QObject::connect ( vecpChanFader[19], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh19 ( double ) ) );
-    QObject::connect ( vecpChanFader[20], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh20 ( double ) ) );
-    QObject::connect ( vecpChanFader[21], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh21 ( double ) ) );
-    QObject::connect ( vecpChanFader[22], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh22 ( double ) ) );
-    QObject::connect ( vecpChanFader[23], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh23 ( double ) ) );
-    QObject::connect ( vecpChanFader[24], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh24 ( double ) ) );
-    QObject::connect ( vecpChanFader[25], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh25 ( double ) ) );
-    QObject::connect ( vecpChanFader[26], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh26 ( double ) ) );
-    QObject::connect ( vecpChanFader[27], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh27 ( double ) ) );
-    QObject::connect ( vecpChanFader[28], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh28 ( double ) ) );
-    QObject::connect ( vecpChanFader[29], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh29 ( double ) ) );
-    QObject::connect ( vecpChanFader[30], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh30 ( double ) ) );
-    QObject::connect ( vecpChanFader[31], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh31 ( double ) ) );
-    QObject::connect ( vecpChanFader[32], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh32 ( double ) ) );
-    QObject::connect ( vecpChanFader[33], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh33 ( double ) ) );
-    QObject::connect ( vecpChanFader[34], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh34 ( double ) ) );
-    QObject::connect ( vecpChanFader[35], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh35 ( double ) ) );
-    QObject::connect ( vecpChanFader[36], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh36 ( double ) ) );
-    QObject::connect ( vecpChanFader[37], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh37 ( double ) ) );
-    QObject::connect ( vecpChanFader[38], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh38 ( double ) ) );
-    QObject::connect ( vecpChanFader[39], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh39 ( double ) ) );
-    QObject::connect ( vecpChanFader[40], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh40 ( double ) ) );
-    QObject::connect ( vecpChanFader[41], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh41 ( double ) ) );
-    QObject::connect ( vecpChanFader[42], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh42 ( double ) ) );
-    QObject::connect ( vecpChanFader[43], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh43 ( double ) ) );
-    QObject::connect ( vecpChanFader[44], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh44 ( double ) ) );
-    QObject::connect ( vecpChanFader[45], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh45 ( double ) ) );
-    QObject::connect ( vecpChanFader[46], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh46 ( double ) ) );
-    QObject::connect ( vecpChanFader[47], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh47 ( double ) ) );
-    QObject::connect ( vecpChanFader[48], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh48 ( double ) ) );
-    QObject::connect ( vecpChanFader[49], SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh49 ( double ) ) );
-
-    QObject::connect ( vecpChanFader[0],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[1],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[2],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[3],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[4],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[5],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[6],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[7],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[8],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[9],  SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[10], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[11], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[12], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[13], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[14], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[15], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[16], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[17], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[18], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[19], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[20], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[21], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[22], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[23], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[24], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[25], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[26], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[27], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[28], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[29], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[30], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[31], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[32], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[33], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[34], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[35], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[36], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[37], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[38], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[39], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[40], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[41], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[42], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[43], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[44], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[45], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[46], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[47], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[48], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
-    QObject::connect ( vecpChanFader[49], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+    connectFaderSignalsToMixerBoardSlots<MAX_NUM_CHANNELS>();
 }
+
+template<unsigned int slotId>
+inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
+{
+    int iCurChanID = slotId - 1;
+
+    void ( CAudioMixerBoard::* pGainValueChanged )( double ) =
+        &CAudioMixerBoardSlots<slotId>::OnChGainValueChanged;
+
+    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::soloStateChanged,
+                       this, &CAudioMixerBoard::UpdateSoloStates );
+
+    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::gainValueChanged,
+                       this, pGainValueChanged );
+
+    connectFaderSignalsToMixerBoardSlots<slotId - 1>();
+};
+
+template<>
+inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots<0>() {};
 
 void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 {
@@ -875,8 +792,8 @@ void CAudioMixerBoard::UpdateSoloStates()
     }
 }
 
-void CAudioMixerBoard::OnGainValueChanged ( const int    iChannelIdx,
-                                            const double dValue )
+void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
+                                         const double dValue )
 {
     emit ChangeChanGain ( iChannelIdx, dValue );
 }

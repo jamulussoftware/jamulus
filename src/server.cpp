@@ -320,6 +320,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecvecdGains.Init         ( iMaxNumChannels );
     vecvecsData.Init          ( iMaxNumChannels );
     vecNumAudioChannels.Init  ( iMaxNumChannels );
+    vecAudioComprType.Init    ( iMaxNumChannels );
 
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
@@ -887,11 +888,12 @@ JitterMeas.Measure();
             // get actual ID of current channel
             const int iCurChanID = vecChanIDsCurConChan[i];
 
-            // get and store number of audio channels
+            // get and store number of audio channels and compression type
             vecNumAudioChannels[i] = vecChannels[iCurChanID].GetNumAudioChannels();
+            vecAudioComprType[i]   = vecChannels[iCurChanID].GetAudioCompressionType();
 
             // select the opus decoder and raw audio frame length
-            if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
+            if ( vecAudioComprType[i] == CT_OPUS )
             {
                 iCurRawDataLen = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
 
@@ -904,7 +906,7 @@ JitterMeas.Measure();
                     CurOpusDecoder = OpusDecoderStereo[iCurChanID];
                 }
             }
-            else if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS64 )
+            else if ( vecAudioComprType[i] == CT_OPUS64 )
             {
                 iCurRawDataLen = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
 
@@ -939,8 +941,8 @@ JitterMeas.Measure();
             const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
 
 // TODO
-const bool bIsServerDoubleFrameSize = bUseDoubleSystemFrameSize && ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS64 );
-const bool bIsClientDoubleFrameSize = !bUseDoubleSystemFrameSize && ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS );
+const bool bIsServerDoubleFrameSize = bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS64 );
+const bool bIsClientDoubleFrameSize = !bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS );
 const bool bIsCompatibleFramesSize  = !( bIsServerDoubleFrameSize || bIsClientDoubleFrameSize );
 //bUseDoubleSystemFrameSize
 //ConvBuf
@@ -992,20 +994,6 @@ if ( bIsServerDoubleFrameSize )
                                          iCurRawDataLen );
                 }
             }
-
-/*
-// TEST
-// fid=fopen('v.dat','r');x=fread(fid,'int16');fclose(fid);
-static FILE* pFileDelay = fopen("c:\\temp\\test2.dat", "wb");
-short sData[2];
-for (int i1 = 0; i1 < iNumInBlocks * SYSTEM_FRAME_SIZE_SAMPLES_SMALL; i1++)
-{
-    sData[0] = (short) vecvecsData[i][i1];
-    fwrite(&sData, size_t(2), size_t(1), pFileDelay);
-}
-fflush(pFileDelay);
-*/
-
         }
 
         // a channel is now disconnected, take action on it
@@ -1054,11 +1042,11 @@ fflush(pFileDelay);
             const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
 
             // select the opus encoder and raw audio frame length
-            if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS )
+            if ( vecAudioComprType[i] == CT_OPUS )
             {
                 iCurRawDataLen = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
 
-                if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
+                if ( vecNumAudioChannels[i] == 1 )
                 {
                     CurOpusEncoder = OpusEncoderMono[iCurChanID];
                 }
@@ -1067,11 +1055,11 @@ fflush(pFileDelay);
                     CurOpusEncoder = OpusEncoderStereo[iCurChanID];
                 }
             }
-            else if ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS64 )
+            else if ( vecAudioComprType[i] == CT_OPUS64 )
             {
                 iCurRawDataLen = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
 
-                if ( vecChannels[iCurChanID].GetNumAudioChannels() == 1 )
+                if ( vecNumAudioChannels[i] == 1 )
                 {
                     CurOpusEncoder = Opus64EncoderMono[iCurChanID];
                 }
@@ -1086,8 +1074,8 @@ fflush(pFileDelay);
             }
 
 // TODO copied code from above!!!
-const bool bIsServerDoubleFrameSize = bUseDoubleSystemFrameSize && ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS64 );
-const bool bIsClientDoubleFrameSize = !bUseDoubleSystemFrameSize && ( vecChannels[iCurChanID].GetAudioCompressionType() == CT_OPUS );
+const bool bIsServerDoubleFrameSize = bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS64 );
+const bool bIsClientDoubleFrameSize = !bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS );
 const bool bIsCompatibleFramesSize  = !( bIsServerDoubleFrameSize || bIsClientDoubleFrameSize );
 
 int iNumInBlocks = 1;
@@ -1108,7 +1096,7 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
                           OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes ) ) );
 
                     opus_custom_encode ( CurOpusEncoder,
-                                         &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecChannels[iCurChanID].GetNumAudioChannels()],
+                                         &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i]],
                                          iCurRawDataLen,
                                          &vecbyCodedData[0],
                                          iCeltNumCodedBytes );

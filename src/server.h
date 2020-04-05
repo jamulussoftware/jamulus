@@ -250,6 +250,7 @@ protected:
     CVector<CVector<double> >  vecvecdGains;
     CVector<CVector<int16_t> > vecvecsData;
     CVector<int>               vecNumAudioChannels;
+    CVector<EAudComprType>     vecAudioComprType;
     CVector<int16_t>           vecsSendData;
     CVector<uint8_t>           vecbyCodedData;
 

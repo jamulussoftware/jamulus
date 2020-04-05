@@ -23,7 +23,7 @@
 \******************************************************************************/
 
 #include "sound.h"
-
+#include <QDebug>
 
 /* Implementation *************************************************************/
 CSound::CSound ( void       (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
@@ -100,7 +100,7 @@ CSound::CSound ( void       (*fpNewProcessCallback) ( CVector<short>& psData, vo
         throw CGenErr ( tr ( "CoreAudio input AudioHardwareGetProperty call failed. "
                              "It seems that no sound card is available in the system." ) );
     }
-
+    
     iPropertySize               = sizeof ( AudioDeviceID );
     stPropertyAddress.mSelector = kAudioHardwarePropertyDefaultOutputDevice;
 
@@ -254,11 +254,41 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
     }
 }
 
+int CSound::CountChannels(AudioDeviceID devID, bool isInput)
+{
+    OSStatus err;
+    UInt32 propSize;
+    int result = 0;
+    
+    AudioObjectPropertyScope theScope = isInput ? kAudioDevicePropertyScopeInput : kAudioDevicePropertyScopeOutput;
+    
+    AudioObjectPropertyAddress theAddress = { kAudioDevicePropertyStreamConfiguration,
+                                              theScope,
+                                              0 };
+
+    err = CheckError(AudioObjectGetPropertyDataSize(devID, &theAddress, 0, NULL, &propSize),
+                     "Failed to get stream configuration");
+    if (err) return 0;
+
+    AudioBufferList *buflist = (AudioBufferList *)malloc(propSize);
+    err = AudioObjectGetPropertyData(devID, &theAddress, 0, NULL, &propSize, buflist);
+    if (!err) {
+        mInputBufferCount = buflist->mNumberBuffers;
+        for (UInt32 i = 0; i < buflist->mNumberBuffers; ++i) {
+            result += buflist->mBuffers[i].mNumberChannels;
+        }
+        qDebug() << "Input buffer count is " << mInputBufferCount;
+    }
+    free(buflist);
+    return result;
+}
+
+
 QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
 {
     // check device capabilities if it fullfills our requirements
     const QString strStat = CheckDeviceCapabilities ( iDriverIdx );
-
+    qDebug( "Loading device %d", iDriverIdx);
     // check if device is capable
     if ( strStat.isEmpty() )
     {
@@ -415,16 +445,13 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                     "not compatible with this software." );
     }
 
-    // store the input number of channels for this stream
-    iNumInChan = CurDevStreamFormat.mChannelsPerFrame;
-
     // check the output
-    AudioObjectGetPropertyData ( outputStreamID,
-                                 &stPropertyAddress,
-                                 0,
-                                 NULL,
-                                 &iPropertySize,
-                                 &CurDevStreamFormat );
+    CheckError(AudioObjectGetPropertyData ( outputStreamID,
+                                           &stPropertyAddress,
+                                           0,
+                                           NULL,
+                                           &iPropertySize,
+                                           &CurDevStreamFormat ), "Failed to get stream format");
 
     if ( ( CurDevStreamFormat.mFormatID        != kAudioFormatLinearPCM ) ||
          ( CurDevStreamFormat.mFramesPerPacket != 1 ) ||
@@ -436,8 +463,12 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                     "not compatible with this software." );
     }
 
-    // store the output number of channels for this stream
-    iNumOutChan = CurDevStreamFormat.mChannelsPerFrame;
+    // store the input and out number of channels for this device
+    iNumInChan = CountChannels(audioInputDevice[iDriverIdx], true);
+    iNumOutChan = CountChannels(audioInputDevice[iDriverIdx], false);
+        
+    qDebug( "%u input channels for stream", iNumInChan );
+    qDebug( "%u output channels for stream", iNumOutChan );
 
     // clip the number of input/output channels to our allowed maximum
     if ( iNumInChan > MAX_NUM_IN_OUT_CHANNELS )
@@ -473,7 +504,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         // add the "[n]:" at the beginning as is in the Audio-Midi-Setup
         if ( !bConvOK || ( iPropertySize == 0 ) )
         {
-            // use a defalut name in case there was an error or the name is empty
+            // use a default name in case there was an error or the name is empty
             sChannelNamesInput[iCurInCH] =
                 QString ( "%1: Channel %1" ).arg ( iCurInCH + 1 );
         }
@@ -700,15 +731,11 @@ UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID,
     AudioObjectPropertyAddress stPropertyAddress;
     stPropertyAddress.mSelector = kAudioDevicePropertyBufferFrameSize;
 
-    if ( bIsInput )
-    {
+    if ( bIsInput ) {
         stPropertyAddress.mScope = kAudioDevicePropertyScopeInput;
-    }
-    else
-    {
+    } else {
         stPropertyAddress.mScope = kAudioDevicePropertyScopeOutput;
     }
-
     stPropertyAddress.mElement = kAudioObjectPropertyElementMaster;
 
     // first set the value
@@ -730,7 +757,6 @@ UInt32 CSound::SetBufferSize ( AudioDeviceID& audioDeviceID,
                                  NULL,
                                  &iSizeBufValue,
                                  &iActualMonoBufferSize );
-
     return iActualMonoBufferSize;
 }
 
@@ -747,7 +773,6 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
         pSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT );
     }
 
-/*
     if ( inAddresses->mSelector == kAudioDeviceProcessorOverload )
     {
         // xrun handling (it is important to act on xruns under CoreAudio
@@ -755,8 +780,6 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
         // while and would give you a long time bad audio)
         pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART );
     }
-*/
-
     return noErr;
 }
 
@@ -774,7 +797,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     QMutexLocker locker ( &pSound->Mutex );
 
     const int iCoreAudioBufferSizeMono = pSound->iCoreAudioBufferSizeMono;
-    const int iNumInChan               = pSound->iNumInChan;
+    const UInt32 iNumInChan            = pSound->iNumInChan;
     const int iNumOutChan              = pSound->iNumOutChan;
     const int iSelInputLeftChannel     = pSound->iSelInputLeftChannel;
     const int iSelInputRightChannel    = pSound->iSelInputRightChannel;
@@ -783,10 +806,31 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
 
     if ( inDevice == pSound->CurrentAudioInputDeviceID )
     {
-        // check size (float32 has four bytes)
-        if ( inInputData->mBuffers[0].mDataByteSize ==
+        // We should have a matching number of buffers to channels
+        if (inInputData->mNumberBuffers == iNumInChan &&
+            inInputData->mBuffers[0].mDataByteSize ==
+                    static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) ) {
+            // One buffer per channel mode
+            
+            AudioBuffer left = inInputData->mBuffers[iSelInputLeftChannel];
+            Float32* pLeftData = static_cast<Float32*> ( left.mData );
+            AudioBuffer right = inInputData->mBuffers[iSelInputRightChannel];
+            Float32* pRightData = static_cast<Float32*> ( right.mData );
+            
+            // copy input data
+            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+            {
+                // left
+                pSound->vecsTmpAudioSndCrdStereo[2 * i] = (short) ( pLeftData[i] * _MAXSHORT );
+                
+                // right
+                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( pRightData[i] * _MAXSHORT );
+                qDebug() << *pLeftData << ":" << *pRightData;
+            }
+        } else if ( inInputData->mBuffers[0].mDataByteSize ==
              static_cast<UInt32> ( iCoreAudioBufferSizeMono * iNumInChan * 4 ) )
         {
+            // One buffer with all the channels in
             // get a pointer to the input data of the correct type
             Float32* pInData = static_cast<Float32*> ( inInputData->mBuffers[0].mData );
 
@@ -800,26 +844,12 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
                 // right
                 pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
                     (short) ( pInData[iNumInChan * i + iSelInputRightChannel] * _MAXSHORT );
-
-/*
-// TEST mix channel with micro to the stereo output
-if ( iNumInChan == 4 )
-{
-    // add mic input on input channel 4 to both stereo channels
-    pSound->vecsTmpAudioSndCrdStereo[2 * i] =
-        Double2Short ( (double) ( pInData[iNumInChan * i + 3] * _MAXSHORT ) +
-                       (double) pSound->vecsTmpAudioSndCrdStereo[2 * i] );
-    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
-        Double2Short ( (double) ( pInData[iNumInChan * i + 3] * _MAXSHORT ) +
-                       (double) pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] );
-}
-*/
-
             }
         }
         else
         {
             // incompatible sizes, clear work buffer
+            qDebug("Incompatible data");
             pSound->vecsTmpAudioSndCrdStereo.Reset ( 0 );
         }
 
@@ -908,4 +938,23 @@ bool CSound::ConvertCFStringToQString ( const CFStringRef stringRef,
     }
 
     return false; // not OK
+}
+
+OSStatus CSound::CheckError(OSStatus error, const char *operation)
+{
+    if (error != noErr) {
+        char errorString[20];
+        // See if it appears to be a 4-char-code
+        *(UInt32 *)(errorString + 1) = CFSwapInt32HostToBig(error);
+        if (isprint(errorString[1]) && isprint(errorString[2]) &&
+            isprint(errorString[3]) && isprint(errorString[4])) {
+            errorString[0] = errorString[5] = '\'';
+            errorString[6] = '\0';
+        } else {
+            // No, format it as an integer
+            sprintf(errorString, "%d", (int)error);
+        }
+        qDebug() << "Error:" << operation << " (" << errorString << ") ";
+    }
+    return error;
 }

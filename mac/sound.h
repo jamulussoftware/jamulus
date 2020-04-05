@@ -25,6 +25,7 @@
 #pragma once
 
 #include <CoreAudio/CoreAudio.h>
+#include <AudioToolbox/AudioToolbox.h>
 #include <CoreMIDI/CoreMIDI.h>
 #include <QMutex>
 #include "soundbase.h"
@@ -118,4 +119,8 @@ protected:
     QString             sChannelNamesOutput[MAX_NUM_IN_OUT_CHANNELS];
 
     QMutex              Mutex;
+
+  private:
+    OSStatus            CheckError(OSStatus error, const char *operation);
+    OSStatus            CountChannels(AudioDeviceID devID, bool isInput);
 };

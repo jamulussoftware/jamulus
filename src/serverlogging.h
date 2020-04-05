@@ -61,7 +61,4 @@ protected:
     bool              bDoLogging;
     QFile             File;
 
-private:
-    int               iHistNumItems;
-    int               iHistMaxDays;
 };

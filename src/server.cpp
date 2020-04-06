@@ -1010,8 +1010,7 @@ JitterMeas.Measure();
     // one client is connected.
     if ( iNumClients > 0 )
     {
-
-        // Low frequency updates
+        // low frequency updates
         if ( iFrameCount > CHANNEL_LEVEL_UPDATE_INTERVAL )
         {
             iFrameCount = 0;
@@ -1019,7 +1018,7 @@ JitterMeas.Measure();
             // Calculate channel levels if any client has requested them
             for ( int i = 0; i < iNumClients; i++ )
             {
-                if ( vecChannels[ vecChanIDsCurConChan[i] ].ChannelLevelsRequired() )
+                if ( vecChannels[vecChanIDsCurConChan[i]].ChannelLevelsRequired() )
                 {
                     bSendChannelLevels = true;
 
@@ -1643,13 +1642,14 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
         }
 
         // smoothing
-        int iChId = vecChanIDsCurConChan [ j ];
-        dCurLevel = std::max ( dCurLevel, vecChannels[ iChId ].GetPrevLevel() * 0.5 );
-        vecChannels[ iChId ].SetPrevLevel ( dCurLevel );
+        const int iChId = vecChanIDsCurConChan[j];
+        dCurLevel       = std::max ( dCurLevel, vecChannels[iChId].GetPrevLevel() * 0.5 );
+        vecChannels[iChId].SetPrevLevel ( dCurLevel );
 
         // logarithmic measure
+// TODO we should call CStereoSignalLevelMeter::CalcLogResult instead -> make it public and static
         const double dNormChanLevel = dCurLevel / _MAXSHORT;
-        double dCurSigLevel;
+        double       dCurSigLevel;
         if ( dNormChanLevel > 0 )
         {
             dCurSigLevel = 20.0 * log10 ( dNormChanLevel );

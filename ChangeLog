@@ -14,11 +14,17 @@
 
 TODO support OPUS 64 in the server as a first step towards official 64 samples frame size support
 
+TODO in CreateLevelsForAllConChannels we should call CStereoSignalLevelMeter::CalcLogResult instead -> make it public and static
+
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
+
+TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
 
 TODO #12 A server in the same NAT region as the client is not visible (https://sourceforge.net/p/llcon/bugs/12/)
 
-TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
+TODO #71 Increase "stability" of Connection Setup server list
+
+TODO update text in CAboutDlg
 
 
 

@@ -1,11 +1,18 @@
 
 
 
+
 3.4.6git
 
-TODO support OPUS 64 in the server as a first step towards official 64 samples frame size support
+- added support for channel meters, coded by pljones
 
-TODO merge mixer LED from pljones
+- store fader mute state in the ini file, coded by doloopuntil
+
+- fixed low-res icon issue (Ticket #28)
+
+
+
+TODO support OPUS 64 in the server as a first step towards official 64 samples frame size support
 
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 
@@ -21,7 +28,7 @@ TODO client: larger sound card buffers are managed by conversion buffer, not in 
 
 3.4.5 (2020-04-04)
 
-- audio fade-in at the server if new a client connects
+- audio fade-in at the server if a new client connects
 
 - added a scroll bar to the mixer board to support large numbers of
   mixer faders (a thank you to doloopuntil for his help)

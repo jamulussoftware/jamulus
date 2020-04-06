@@ -273,11 +273,10 @@ int CSound::CountChannels(AudioDeviceID devID, bool isInput)
     AudioBufferList *buflist = (AudioBufferList *)malloc(propSize);
     err = AudioObjectGetPropertyData(devID, &theAddress, 0, NULL, &propSize, buflist);
     if (!err) {
-        mInputBufferCount = buflist->mNumberBuffers;
         for (UInt32 i = 0; i < buflist->mNumberBuffers; ++i) {
             result += buflist->mBuffers[i].mNumberChannels;
         }
-        qDebug() << "Input buffer count is " << mInputBufferCount;
+        qDebug() << "Input buffer count is " << buflist->mNumberBuffers;
     }
     free(buflist);
     return result;
@@ -617,15 +616,15 @@ void CSound::Start()
                                      this );
 
     // register the callback function for input and output
-    AudioDeviceCreateIOProcID ( audioInputDevice[lCurDev],
+    CheckError(AudioDeviceCreateIOProcID ( audioInputDevice[lCurDev],
                                 callbackIO,
                                 this,
-                                &audioInputProcID );
+                                &audioInputProcID ), "Failed to register input callback");
 
-    AudioDeviceCreateIOProcID ( audioOutputDevice[lCurDev],
+    CheckError(AudioDeviceCreateIOProcID ( audioOutputDevice[lCurDev],
                                 callbackIO,
                                 this,
-                                &audioOutputProcID );
+                                &audioOutputProcID ), "Failed to register output callback");
 
     // start the audio stream
     AudioDeviceStart ( audioInputDevice[lCurDev], audioInputProcID );
@@ -797,7 +796,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     QMutexLocker locker ( &pSound->Mutex );
 
     const int iCoreAudioBufferSizeMono = pSound->iCoreAudioBufferSizeMono;
-    const UInt32 iNumInChan            = pSound->iNumInChan;
+    const int iNumInChan               = pSound->iNumInChan;
     const int iNumOutChan              = pSound->iNumOutChan;
     const int iSelInputLeftChannel     = pSound->iSelInputLeftChannel;
     const int iSelInputRightChannel    = pSound->iSelInputRightChannel;
@@ -807,7 +806,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     if ( inDevice == pSound->CurrentAudioInputDeviceID )
     {
         // We should have a matching number of buffers to channels
-        if (inInputData->mNumberBuffers == iNumInChan &&
+        if (inInputData->mNumberBuffers == (UInt32)iNumInChan &&
             inInputData->mBuffers[0].mDataByteSize ==
                     static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) ) {
             // One buffer per channel mode

@@ -57,6 +57,7 @@ public:
     bool IsMute() { return pcbMute->isChecked(); }
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetDisplayChannelLevel ( const bool eNDCL );
+    bool GetDisplayChannelLevel();
 
     void UpdateSoloState ( const bool bNewOtherSoloState );
     void SetFaderLevel ( const int iLevel );

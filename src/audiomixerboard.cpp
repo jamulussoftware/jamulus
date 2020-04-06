@@ -190,7 +190,12 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
 
 void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL )
 {
-    plbrChannelLevel->setHidden( !eNDCL );
+    plbrChannelLevel->setHidden ( !eNDCL );
+}
+
+bool CChannelFader::GetDisplayChannelLevel()
+{
+    return !plbrChannelLevel->isHidden();
 }
 
 void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
@@ -678,10 +683,15 @@ void CAudioMixerBoard::SetDisplayChannelLevels ( const bool eNDCL )
 {
     bDisplayChannelLevels = eNDCL;
 
-    // apply preference to child GUI controls
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    // only update hiding the levels immediately, showing the levels
+    // is only applied if the server actually transmits levels
+    if ( !bDisplayChannelLevels )
     {
-        vecpChanFader[i]->SetDisplayChannelLevel ( bDisplayChannelLevels );
+        // hide all level meters
+        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+        {
+            vecpChanFader[i]->SetDisplayChannelLevel ( false );
+        }
     }
 }
 
@@ -693,6 +703,7 @@ void CAudioMixerBoard::HideAll()
         // before hiding the fader, store its level (if some conditions are fullfilled)
         StoreFaderSettings ( vecpChanFader[i] );
 
+        vecpChanFader[i]->SetDisplayChannelLevel ( false );
         vecpChanFader[i]->Hide();
     }
 
@@ -915,13 +926,20 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
 void CAudioMixerBoard::SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel )
 {
     const int iNumChannelLevels = vecChannelLevel.Size();
-    int i = 0;
+    int       i                 = 0;
 
     for ( int iChId = 0; iChId < MAX_NUM_CHANNELS; iChId++ )
     {
         if ( vecpChanFader[iChId]->IsVisible() && i < iNumChannelLevels )
         {
             vecpChanFader[iChId]->SetChannelLevel ( vecChannelLevel[i++] );
+
+            // show level only if we successfully received levels from the
+            // server (if server does not support levels, do not show levels)
+            if ( bDisplayChannelLevels && !vecpChanFader[iChId]->GetDisplayChannelLevel() )
+            {
+                vecpChanFader[iChId]->SetDisplayChannelLevel ( true );
+            }
         }
     }
 }

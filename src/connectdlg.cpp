@@ -332,6 +332,12 @@ strLocation += ", " + vecServerInfo[iIdx].HostAddr.InetAddr.toString() +
 
         // store host address
         pNewListViewItem->setData ( 0, Qt::UserRole, CurHostAddress.toString() );
+
+        // per default expand the list item (if not "show all servers")
+        if ( !bShowCompleteRegList )
+        {
+            lvwServers->expandItem ( pNewListViewItem );
+        }
     }
 
     // immediately issue the ping measurements and start the ping timer since
@@ -412,12 +418,6 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
 
             // add the new child to the corresponding server item
             pCurListViewItem->addChild ( pNewChildListViewItem );
-
-            // per default expand the list item (if not "show all servers")
-            if ( !bShowCompleteRegList )
-            {
-                lvwServers->expandItem ( pCurListViewItem );
-            }
 
             // at least one server has childs now, show decoration to be able
             // to show the childs

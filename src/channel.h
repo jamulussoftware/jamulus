@@ -159,11 +159,17 @@ public:
     void CreateReqConnClientsList()                          { Protocol.CreateReqConnClientsList(); }
     void CreateChatTextMes ( const QString& strChatText )    { Protocol.CreateChatTextMes ( strChatText ); }
     void CreateLicReqMes ( const ELicenceType eLicenceType ) { Protocol.CreateLicenceRequiredMes ( eLicenceType ); }
+    void CreateReqChannelLevelListMes ( bool bOptIn )        { Protocol.CreateReqChannelLevelListMes ( bOptIn ); }
 
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo )
         { Protocol.CreateConClientListMes ( vecChanInfo ); }
 
     CNetworkTransportProps GetNetworkTransportPropsFromCurrentSettings();
+
+    bool ChannelLevelsRequired() const                { return bChannelLevelsRequired; }
+
+    double GetPrevLevel() const              { return dPrevLevel; }
+    void   SetPrevLevel ( const double nPL ) { dPrevLevel = nPL; }
 
 protected:
     bool ProtocolIsEnabled();
@@ -177,6 +183,8 @@ protected:
         iNetwFrameSizeFact    = FRAME_SIZE_FACTOR_PREFERRED;
         iNetwFrameSize        = CELT_MINIMUM_NUM_BYTES;
         iNumAudioChannels     = 1; // mono
+
+        dPrevLevel            = 0.0;
     }
 
     // connection parameters
@@ -216,6 +224,9 @@ protected:
     QMutex            MutexSocketBuf;
     QMutex            MutexConvBuf;
 
+    bool              bChannelLevelsRequired;
+    double            dPrevLevel;
+
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnJittBufSizeChange ( int iNewJitBufSize );
@@ -248,6 +259,8 @@ public slots:
     }
 
     void OnNewConnection() { emit NewConnection(); }
+
+    void OnReqChannelLevelList ( bool bOptIn ) { bChannelLevelsRequired = bOptIn; }
 
 signals:
     void MessReadyForSending ( CVector<uint8_t> vecMessage );

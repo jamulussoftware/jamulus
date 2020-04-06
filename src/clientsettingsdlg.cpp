@@ -189,6 +189,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     chbGUIDesignFancy->setAccessibleName ( tr ( "Fancy skin check box" ) );
 
+    // display channel levels
+    chbDisplayChannelLevels->setWhatsThis ( tr ( "<b>Display Channel Levels:</b> "
+        "If enabled, each client channel will display a pre-fader level bar." ) );
+
+    chbDisplayChannelLevels->setAccessibleName ( tr ( "Display channel levels check box" ) );
+
     // audio channels
     QString strAudioChannels = tr ( "<b>Audio Channels:</b> "
         "Select the number of audio channels to be used. There are three "
@@ -323,6 +329,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         chbGUIDesignFancy->setCheckState ( Qt::Checked );
     }
 
+    //  Display Channel Levels check box
+    chbDisplayChannelLevels->setCheckState ( pClient->GetDisplayChannelLevels() ? Qt::Checked : Qt::Unchecked );
+
     // "Audio Channels" combo box
     cbxAudioChannels->clear();
     cbxAudioChannels->addItem ( "Mono" );               // CC_MONO
@@ -385,6 +394,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // check boxes
     QObject::connect ( chbGUIDesignFancy, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnGUIDesignFancyStateChanged ( int ) ) );
+
+    QObject::connect ( chbDisplayChannelLevels, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnDisplayChannelLevelsStateChanged ( int ) ) );
 
     QObject::connect ( chbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnAutoJitBufStateChanged ( int ) ) );
@@ -702,6 +714,12 @@ void CClientSettingsDlg::OnGUIDesignFancyStateChanged ( int value )
     }
     emit GUIDesignChanged();
     UpdateDisplay();
+}
+
+void CClientSettingsDlg::OnDisplayChannelLevelsStateChanged ( int value )
+{
+    pClient->SetDisplayChannelLevels ( value != Qt::Unchecked );
+    emit DisplayChannelLevelsChanged();
 }
 
 void CClientSettingsDlg::OnDefaultCentralServerStateChanged ( int value )

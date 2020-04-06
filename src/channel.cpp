@@ -102,6 +102,10 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
     QObject::connect( &Protocol,
         SIGNAL ( LicenceRequired ( ELicenceType ) ),
         SIGNAL ( LicenceRequired ( ELicenceType ) ) );
+
+    QObject::connect ( &Protocol,
+        SIGNAL ( ReqChannelLevelList ( bool ) ),
+        this, SLOT ( OnReqChannelLevelList ( bool ) ) );
 }
 
 bool CChannel::ProtocolIsEnabled()

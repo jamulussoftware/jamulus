@@ -153,6 +153,14 @@ MESSAGES (with connection)
     | 1 byte licence type |
     +---------------------+
 
+- PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST: Opt in or out of the channel level list
+
+    +---------------+
+    | 1 byte option |
+    +---------------+
+
+    option is boolean, true to opt in, false to opt out
+
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
 - PROTMESSID_OPUS_SUPPORTED: Informs that OPUS codec is supported
@@ -275,6 +283,27 @@ CONNECTION LESS MESSAGES
 - PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST: Request the connected clients list
 
     note: does not have any data -> n = 0
+
+- PROTMESSID_CLM_CHANNEL_LEVEL_LIST: The channel level list
+
+    +----------------------------------+
+    | ( ( n + 1 ) / 2 ) * 4 bit values |
+    +----------------------------------+
+
+    n is number of connected clients
+
+    the values are the maximum channel levels for a client frame converted
+    to the range of CMultiColorLEDBar in 4 bits, two entries per byte
+    with the earlier channel in the lower half of the byte
+
+    where an odd number of clients is connected, there will be four unused
+    upper bits in the final byte, containing 0xF (which is out of range)
+
+    the server may compute them message when any client has used
+    PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST to opt in
+
+    the server may issue to message only to a client that has used
+    PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST to opt in
 
 
  ******************************************************************************
@@ -549,6 +578,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
             case PROTMESSID_LICENCE_REQUIRED:
                 bRet = EvaluateLicenceRequiredMes ( vecbyMesBodyData );
                 break;
+
+            case PROTMESSID_REQ_CHANNEL_LEVEL_LIST:
+                bRet = EvaluateReqChannelLevelListMes ( vecbyMesBodyData );
+                break;
             }
 
             // immediately send acknowledge message
@@ -633,6 +666,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
         case PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST:
             bRet = EvaluateCLReqConnClientsListMes ( InetAddr );
+            break;
+
+        case PROTMESSID_CLM_CHANNEL_LEVEL_LIST:
+            bRet = EvaluateCLChannelLevelListMes ( InetAddr, vecbyMesBodyData );
             break;
         }
     }
@@ -1232,6 +1269,40 @@ void CProtocol::CreateOpusSupportedMes()
 {
     CreateAndSendMessage ( PROTMESSID_OPUS_SUPPORTED,
                            CVector<uint8_t> ( 0 ) );
+}
+
+void CProtocol::CreateReqChannelLevelListMes ( const bool bRCL )
+{
+    CVector<uint8_t> vecData ( 1 ); // 1 byte of data
+    int              iPos = 0; // init position pointer
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( bRCL ), 1 );
+
+    CreateAndSendMessage ( PROTMESSID_REQ_CHANNEL_LEVEL_LIST, vecData );
+}
+
+bool CProtocol::EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 1 )
+    {
+        return true; // return error code
+    }
+
+    // extract opt in / out for channel levels
+    uint32_t val = GetValFromStream ( vecData, iPos, 1 );
+
+    if ( val != 0 && val != 1 )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit ReqChannelLevelList ( static_cast<bool> ( val ) );
+
+    return false; // no error
 }
 
 
@@ -1932,6 +2003,70 @@ bool CProtocol::EvaluateCLReqConnClientsListMes ( const CHostAddress& InetAddr )
 {
     // invoke message action
     emit CLReqConnClientsList ( InetAddr );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLChannelLevelListMes  ( const CHostAddress&      InetAddr,
+                                               const CVector<uint16_t>& vecLevelList,
+                                               const int                iNumClients )
+{
+    // This must be a multiple of bytes at four bits per client
+    const int        iNumBytes = ( iNumClients + 1 ) / 2;
+    CVector<uint8_t> vecData( iNumBytes );
+    int              iPos = 0; // init position pointer
+
+    for ( int i = 0, j = 0; i < iNumClients; i += 2 /* pack two per byte */, j++ )
+    {
+        uint16_t levelLo = vecLevelList[i] & 0x0F;
+        uint16_t levelHi = ( i + 1 < iNumClients ) ? vecLevelList[i + 1] & 0x0F : 0x0F;
+        uint8_t  byte    = static_cast<uint8_t> ( levelLo | ( levelHi << 4 ) );
+
+        PutValOnStream ( vecData, iPos,
+            static_cast<uint32_t> ( byte ), 1 );
+    }
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_CHANNEL_LEVEL_LIST,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLChannelLevelListMes  ( const CHostAddress&     InetAddr,
+                                                 const CVector<uint8_t>& vecData )
+{
+    int       iPos     = 0; // init position pointer
+    const int iDataLen = vecData.Size();  // four bits per channel, 2 channels per byte
+                                          // may have one too many entries, last being 0xF
+    int       iVecLen  = iDataLen * 2; // one ushort per channel
+
+    if ( iVecLen > MAX_NUM_CHANNELS )
+    {
+        return true; // return error code
+    }
+
+    CVector<uint16_t> vecLevelList ( iVecLen );
+
+    for (int i = 0, j = 0; i < iDataLen; i++, j += 2 )
+    {
+        uint8_t  byte    = static_cast<uint8_t> ( GetValFromStream ( vecData, iPos, 1 ) );
+        uint16_t levelLo = byte & 0x0F;
+        uint16_t levelHi = ( byte >> 4 ) & 0x0F;
+
+        vecLevelList[j]     = levelLo;
+
+        if ( levelHi != 0x0F )
+        {
+            vecLevelList[j + 1] = levelHi;
+        }
+        else
+        {
+            vecLevelList.resize ( iVecLen - 1 );
+            break;
+        }
+    }
+
+    // invoke message action
+    emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
 
     return false; // no error
 }

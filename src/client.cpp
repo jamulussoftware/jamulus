@@ -65,6 +65,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bFraSiFactDefSupported           ( false ),
     bFraSiFactSafeSupported          ( false ),
     eGUIDesign                       ( GD_ORIGINAL ),
+    bDisplayChannelLevels            ( true ),
     bJitterBufferOK                  ( true ),
     strCentralServerAddress          ( "" ),
     bUseDefaultCentralServerAddress  ( true ),
@@ -191,6 +192,10 @@ CClient::CClient ( const quint16  iPortNumber,
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
 #endif
 
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
+        this, SLOT ( OnCLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
+
     // other
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
         this, SLOT ( OnSndCrdReinitRequest ( int ) ) );
@@ -279,6 +284,9 @@ void CClient::OnNewConnection()
     // Same problem is with the jitter buffer message.
     Channel.CreateReqConnClientsList();
     CreateServerJitterBufferMessage();
+
+    // send opt-in / out for Channel Level updates
+    Channel.CreateReqChannelLevelListMes ( bDisplayChannelLevels );
 }
 
 void CClient::CreateServerJitterBufferMessage()
@@ -385,6 +393,14 @@ bool CClient::GetAndResetbJitterBufferOKFlag()
     // since per definition the jitter buffer status is OK if both the
     // put and get status are OK
     return bSocketJitBufOKFlag;
+}
+
+void CClient::SetDisplayChannelLevels ( const bool bNDCL )
+{
+    bDisplayChannelLevels = bNDCL;
+
+    // tell any connected server about the change
+    Channel.CreateReqChannelLevelListMes ( bDisplayChannelLevels );
 }
 
 void CClient::SetSndCrdPrefFrameSizeFactor ( const int iNewFactor )
@@ -596,6 +612,12 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
         // restart client
         Sound.Start();
     }
+}
+
+void CClient::OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                             CVector<uint16_t> vecLevelList )
+{
+    emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
 }
 
 void CClient::Start()

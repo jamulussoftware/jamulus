@@ -60,10 +60,6 @@
 #define BUFFER_LED_UPDATE_TIME_MS   300   // ms
 #define LED_BAR_UPDATE_TIME_MS      1000  // ms
 
-// range for signal level meter
-#define LOW_BOUND_SIG_METER         ( -50.0 ) // dB
-#define UPPER_BOUND_SIG_METER       ( 0.0 )   // dB
-
 // number of ping times > upper bound until error message is shown
 #define NUM_HIGH_PINGS_UNTIL_ERROR  5
 
@@ -196,11 +192,18 @@ public slots:
                                           CVector<CChannelInfo> vecChanInfo )
         { ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo ); }
 
+    void OnCLChannelLevelListReceived ( CHostAddress       /* unused */,
+                                        CVector<uint16_t> vecLevelList )
+        { MainMixerBoard->SetChannelLevels ( vecLevelList ); }
+
     void OnConnectDlgAccepted();
     void OnDisconnected();
 
     void OnGUIDesignChanged()
         { SetGUIDesign ( pClient->GetGUIDesign() ); }
+
+    void OnDisplayChannelLevelsChanged()
+        { MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() ); }
 
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );

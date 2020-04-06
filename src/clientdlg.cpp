@@ -185,6 +185,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // reset mixer board
     MainMixerBoard->HideAll();
 
+    // restore channel level display preference
+    MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() );
+
     // restore fader settings
     MainMixerBoard->vecStoredFaderTags   = pClient->vecStoredFaderTags;
     MainMixerBoard->vecStoredFaderLevels = pClient->vecStoredFaderLevels;
@@ -483,6 +486,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         SIGNAL ( ControllerInFaderLevel ( int, int ) ),
         this, SLOT ( OnControllerInFaderLevel ( int, int ) ) );
 
+    QObject::connect ( pClient,
+        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
+        this, SLOT ( OnCLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
+
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( pClient,
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),
@@ -494,6 +501,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( GUIDesignChanged() ),
         this, SLOT ( OnGUIDesignChanged() ) );
+
+    QObject::connect ( &ClientSettingsDlg, SIGNAL ( DisplayChannelLevelsChanged() ),
+        this, SLOT ( OnDisplayChannelLevelsChanged() ) );
 
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( AudioChannelsChanged() ),
         this, SLOT ( OnAudioChannelsChanged() ) );
@@ -906,7 +916,7 @@ void CClientDlg::OnTimerSigMet()
     // linear transformation of the input level range to the progress-bar
     // range
     dCurSigLevelL -= LOW_BOUND_SIG_METER;
-    dCurSigLevelL *= NUM_STEPS_INP_LEV_METER /
+    dCurSigLevelL *= NUM_STEPS_LED_BAR /
         ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
 
     // lower bound the signal
@@ -916,7 +926,7 @@ void CClientDlg::OnTimerSigMet()
     }
 
     dCurSigLevelR -= LOW_BOUND_SIG_METER;
-    dCurSigLevelR *= NUM_STEPS_INP_LEV_METER /
+    dCurSigLevelR *= NUM_STEPS_LED_BAR /
         ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
 
     // lower bound the signal

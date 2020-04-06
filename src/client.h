@@ -128,6 +128,9 @@ public:
     EGUIDesign GetGUIDesign() const { return eGUIDesign; }
     void SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
 
+    bool GetDisplayChannelLevels() const { return bDisplayChannelLevels; }
+    void SetDisplayChannelLevels ( const bool bNDCL );
+
     EAudioQuality GetAudioQuality() const { return eAudioQuality; }
     void SetAudioQuality ( const EAudioQuality eNAudioQuality );
 
@@ -359,6 +362,7 @@ protected:
     int                     iStereoBlockSizeSam;
 
     EGUIDesign              eGUIDesign;
+    bool                    bDisplayChannelLevels;
 
     bool                    bJitterBufferOK;
 
@@ -398,6 +402,9 @@ public slots:
 
     void OnSndCrdReinitRequest ( int iSndCrdResetType );
 
+    void OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                        CVector<uint16_t> vecLevelList );
+
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
@@ -419,6 +426,9 @@ signals:
                                   COSUtil::EOpSystemType eOSType,
                                   QString                strVersion );
 #endif
+
+    void CLChannelLevelListReceived ( CHostAddress      InetAddr,
+                                      CVector<uint16_t> vecLevelList );
 
     void Disconnected();
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );

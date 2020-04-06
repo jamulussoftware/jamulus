@@ -276,7 +276,6 @@ int CSound::CountChannels(AudioDeviceID devID, bool isInput)
         for (UInt32 i = 0; i < buflist->mNumberBuffers; ++i) {
             result += buflist->mBuffers[i].mNumberChannels;
         }
-        qDebug() << "Input buffer count is " << buflist->mNumberBuffers;
     }
     free(buflist);
     return result;
@@ -824,7 +823,6 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
                 
                 // right
                 pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( pRightData[i] * _MAXSHORT );
-                qDebug() << *pLeftData << ":" << *pRightData;
             }
         } else if ( inInputData->mBuffers[0].mDataByteSize ==
              static_cast<UInt32> ( iCoreAudioBufferSizeMono * iNumInChan * 4 ) )
@@ -848,7 +846,6 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
         else
         {
             // incompatible sizes, clear work buffer
-            qDebug("Incompatible data");
             pSound->vecsTmpAudioSndCrdStereo.Reset ( 0 );
         }
 

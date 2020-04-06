@@ -350,6 +350,7 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
         if ( ( NetworkTransportProps.eAudioCodingType != CT_OPUS ) &&
              ( NetworkTransportProps.eAudioCodingType != CT_OPUS64 ) )
         {
+            Protocol.CreateOpusSupportedMes();
             return;
         }
 

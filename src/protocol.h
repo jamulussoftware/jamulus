@@ -52,7 +52,7 @@
 #define PROTMESSID_REQ_CHANNEL_INFOS          23 // request channel infos for fader tag
 #define PROTMESSID_CONN_CLIENTS_LIST          24 // channel infos for connected clients
 #define PROTMESSID_CHANNEL_INFOS              25 // set channel infos
-#define PROTMESSID_OPUS_SUPPORTED             26 // OLD (not used anymore)
+#define PROTMESSID_OPUS_SUPPORTED             26 // tells that OPUS codec is supported
 #define PROTMESSID_LICENCE_REQUIRED           27 // licence required
 
 // message IDs of connection less messages (CLM)
@@ -101,6 +101,7 @@ public:
     void CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrProps );
     void CreateReqNetwTranspPropsMes();
     void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
+    void CreateOpusSupportedMes();
 
     void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,

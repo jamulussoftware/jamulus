@@ -154,6 +154,12 @@ MESSAGES (with connection)
     +---------------------+
 
 
+// #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
+- PROTMESSID_OPUS_SUPPORTED: Informs that OPUS codec is supported
+
+    note: does not have any data -> n = 0
+
+
 CONNECTION LESS MESSAGES
 ------------------------
 
@@ -1220,6 +1226,12 @@ bool CProtocol::EvaluateLicenceRequiredMes ( const CVector<uint8_t>& vecData )
     emit LicenceRequired ( eLicenceType );
 
     return false; // no error
+}
+
+void CProtocol::CreateOpusSupportedMes()
+{
+    CreateAndSendMessage ( PROTMESSID_OPUS_SUPPORTED,
+                           CVector<uint8_t> ( 0 ) );
 }
 
 

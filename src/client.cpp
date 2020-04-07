@@ -790,14 +790,14 @@ void CClient::Init()
         opus_custom_encoder_ctl ( OpusEncoderMono,
                                   OPUS_SET_BITRATE (
                                       CalcBitRateBitsPerSecFromCodedBytes (
-                                          iCeltNumCodedBytes ) ) );
+                                          iCeltNumCodedBytes, SYSTEM_FRAME_SIZE_SAMPLES ) ) );
     }
     else
     {
         opus_custom_encoder_ctl ( OpusEncoderStereo,
                                   OPUS_SET_BITRATE (
                                       CalcBitRateBitsPerSecFromCodedBytes (
-                                          iCeltNumCodedBytes ) ) );
+                                          iCeltNumCodedBytes, SYSTEM_FRAME_SIZE_SAMPLES ) ) );
     }
 
     // inits for network and channel
@@ -1122,7 +1122,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
 /*
 // TEST
-// fid=fopen('v.dat','r');x=fread(fid,'int16');fclose(fid);
+// fid=fopen('c:\\temp\test2.dat','r');x=fread(fid,'int16');fclose(fid);
 static FILE* pFileDelay = fopen("c:\\temp\\test2.dat", "wb");
 short sData[2];
 for (i = 0; i < iMonoBlockSizeSam; i++)

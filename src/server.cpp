@@ -1103,7 +1103,7 @@ JitterMeas.Measure();
 //      so for speed optimization it would be better to set it only if the network
 //      frame size is changed
 opus_custom_encoder_ctl ( CurOpusEncoder,
-                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes ) ) );
+                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iCurRawDataLen ) ) );
 
                     opus_custom_encode ( CurOpusEncoder,
                                          &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i]],

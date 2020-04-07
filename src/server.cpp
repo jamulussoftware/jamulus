@@ -1628,7 +1628,7 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
             // mono
             for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i += 3 )
             {
-                dCurLevel = std::max ( dCurLevel, std::abs ( static_cast<double> ( vecsData[i] ) ) );
+                dCurLevel = std::max ( dCurLevel, fabs ( static_cast<double> ( vecsData[i] ) ) );
             }
         }
         else
@@ -1637,7 +1637,7 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
             for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i += 3, k += 6 )
             {
                 double sMix = ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
-                dCurLevel = std::max ( dCurLevel, std::abs ( sMix ) );
+                dCurLevel = std::max ( dCurLevel, fabs ( sMix ) );
             }
         }
 

@@ -247,6 +247,8 @@ public:
     bool GetFraSiFactDefSupported()  { return bFraSiFactDefSupported; }
     bool GetFraSiFactSafeSupported() { return bFraSiFactSafeSupported; }
 
+    void SetMuteInputAndOutputState ( const bool bDoMute ) { bMuteInputAndOutput = bDoMute; }
+
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Channel.SetRemoteChanGain ( iId, dGain ); }
 
@@ -331,6 +333,7 @@ protected:
     EAudioQuality           eAudioQuality;
     EAudChanConf            eAudioChannelConf;
     bool                    bIsInitializationPhase;
+    bool                    bMuteInputAndOutput;
     CVector<unsigned char>  vecCeltData;
 
     CHighPrioSocket         Socket;

@@ -11,6 +11,7 @@
 - fixed low-res icon issue (Ticket #28)
 
 
+TODO insert licence setting in server dialog -> on per default
 
 TODO support OPUS 64 in the server as a first step towards official 64 samples frame size support
 
@@ -24,8 +25,6 @@ TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g.,
 TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
 
 TODO #12 A server in the same NAT region as the client is not visible (https://sourceforge.net/p/llcon/bugs/12/)
-
-TODO #71 Increase "stability" of Connection Setup server list
 
 TODO update text in CAboutDlg
 

@@ -743,7 +743,8 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
     {
         CLicenceDlg LicenceDlg;
 
-// TODO mute the client
+        // mute the client
+        pClient->SetMuteInputAndOutputState ( true );
 
         // Open the licence dialog and check if the licence was accepted. In
         // case the dialog is just closed or the decline button was pressed,
@@ -752,6 +753,9 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
         {
             Disconnect();
         }
+
+        // unmute the client
+        pClient->SetMuteInputAndOutputState ( false );
     }
 }
 

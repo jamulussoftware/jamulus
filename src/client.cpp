@@ -52,6 +52,7 @@ CClient::CClient ( const quint16  iPortNumber,
     eAudioQuality                    ( AQ_NORMAL ),
     eAudioChannelConf                ( CC_MONO ),
     bIsInitializationPhase           ( true ),
+    bMuteInputAndOutput              ( false ),
     Socket                           ( &Channel, iPortNumber ),
     Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
@@ -820,8 +821,9 @@ void CClient::Init()
                                            2 );
     }
 
-    // reset initialization phase flag
+    // reset initialization phase flag and mute flag
     bIsInitializationPhase = true;
+    bMuteInputAndOutput    = false;
 }
 
 void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
@@ -841,6 +843,12 @@ void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsStereoSndCrd )
 static CTimingMeas JitterMeas ( 1000, "test2.dat" );
 JitterMeas.Measure();
 */
+
+    // mute input if requested
+    if ( bMuteInputAndOutput )
+    {
+        vecsStereoSndCrd.Reset ( 0 );
+    }
 
     // check if a conversion buffer is required or not
     if ( bSndCrdConversionBufferRequired )
@@ -868,6 +876,12 @@ JitterMeas.Measure();
         // regular case: no conversion buffer required
         // process audio data
         ProcessAudioDataIntern ( vecsStereoSndCrd );
+    }
+
+    // mute output if requested
+    if ( bMuteInputAndOutput )
+    {
+        vecsStereoSndCrd.Reset ( 0 );
     }
 }
 

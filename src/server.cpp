@@ -306,6 +306,16 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vstrChatColors[4] = "maroon";
     vstrChatColors[5] = "coral";
 
+    // set the server frame size
+    if ( bUseDoubleSystemFrameSize )
+    {
+        iServerFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
+    }
+    else
+    {
+        iServerFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+    }
+
 
     // To avoid audio clitches, in the entire realtime timer audio processing
     // routine including the ProcessData no memory must be allocated. Since we
@@ -851,7 +861,7 @@ void CServer::Stop()
 void CServer::OnTimer()
 {
     int                i, j;
-    int                iCurRawDataLen;
+    int                iClientFrameSizeSamples;
     OpusCustomDecoder* CurOpusDecoder;
     OpusCustomEncoder* CurOpusEncoder;
     unsigned char*     pCurCodedData;
@@ -909,7 +919,7 @@ JitterMeas.Measure();
             // select the opus decoder and raw audio frame length
             if ( vecAudioComprType[i] == CT_OPUS )
             {
-                iCurRawDataLen = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
+                iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
 
                 if ( vecNumAudioChannels[i] == 1 )
                 {
@@ -922,7 +932,7 @@ JitterMeas.Measure();
             }
             else if ( vecAudioComprType[i] == CT_OPUS64 )
             {
-                iCurRawDataLen = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+                iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
 
                 if ( vecNumAudioChannels[i] == 1 )
                 {
@@ -990,7 +1000,7 @@ JitterMeas.Measure();
                                          pCurCodedData,
                                          iCeltNumCodedBytes,
                                          &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i]],
-                                         iCurRawDataLen );
+                                         iClientFrameSizeSamples );
                 }
             }
         }
@@ -1031,6 +1041,11 @@ JitterMeas.Measure();
             }
         }
         iFrameCount++;
+        if ( bUseDoubleSystemFrameSize )
+        {
+            // additional increment needed for double frame size to get to the same time interval
+            iFrameCount++;
+        }
 
         for ( int i = 0; i < iNumClients; i++ )
         {
@@ -1065,7 +1080,7 @@ JitterMeas.Measure();
             // select the opus encoder and raw audio frame length
             if ( vecAudioComprType[i] == CT_OPUS )
             {
-                iCurRawDataLen = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
+                iClientFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
 
                 if ( vecNumAudioChannels[i] == 1 )
                 {
@@ -1078,7 +1093,7 @@ JitterMeas.Measure();
             }
             else if ( vecAudioComprType[i] == CT_OPUS64 )
             {
-                iCurRawDataLen = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+                iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
 
                 if ( vecNumAudioChannels[i] == 1 )
                 {
@@ -1103,11 +1118,11 @@ JitterMeas.Measure();
 //      so for speed optimization it would be better to set it only if the network
 //      frame size is changed
 opus_custom_encoder_ctl ( CurOpusEncoder,
-                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iCurRawDataLen ) ) );
+                          OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
                     opus_custom_encode ( CurOpusEncoder,
                                          &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i]],
-                                         iCurRawDataLen,
+                                         iClientFrameSizeSamples,
                                          &vecbyCodedData[0],
                                          iCeltNumCodedBytes );
                 }
@@ -1165,7 +1180,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                 if ( vecNumAudioChannels[j] == 1 )
                 {
                     // mono
-                    for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++ )
+                    for ( i = 0; i < iServerFrameSizeSamples; i++ )
                     {
                         vecsOutData[i] = Double2Short (
                             static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
@@ -1174,7 +1189,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                 else
                 {
                     // stereo: apply stereo-to-mono attenuation
-                    for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++, k += 2 )
+                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
                         vecsOutData[i] =
                             Double2Short ( vecsOutData[i] +
@@ -1187,7 +1202,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                 if ( vecNumAudioChannels[j] == 1 )
                 {
                     // mono
-                    for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++ )
+                    for ( i = 0; i < iServerFrameSizeSamples; i++ )
                     {
                         vecsOutData[i] = Double2Short (
                             vecsOutData[i] + vecsData[i] * dGain );
@@ -1196,7 +1211,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                 else
                 {
                     // stereo: apply stereo-to-mono attenuation
-                    for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++, k += 2 )
+                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
                         vecsOutData[i] =
                             Double2Short ( vecsOutData[i] + dGain *
@@ -1221,7 +1236,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                 if ( vecNumAudioChannels[j] == 1 )
                 {
                     // mono: copy same mono data in both out stereo audio channels
-                    for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++, k += 2 )
+                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
                         // left channel
                         vecsOutData[k] = Double2Short (
@@ -1235,7 +1250,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                 else
                 {
                     // stereo
-                    for ( i = 0; i < ( 2 * SYSTEM_FRAME_SIZE_SAMPLES ); i++ )
+                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
                         vecsOutData[i] = Double2Short (
                             static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
@@ -1247,7 +1262,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                 if ( vecNumAudioChannels[j] == 1 )
                 {
                     // mono: copy same mono data in both out stereo audio channels
-                    for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i++, k += 2 )
+                    for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
                         // left channel
                         vecsOutData[k] = Double2Short (
@@ -1261,7 +1276,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                 else
                 {
                     // stereo
-                    for ( i = 0; i < ( 2 * SYSTEM_FRAME_SIZE_SAMPLES ); i++ )
+                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
                         vecsOutData[i] = Double2Short (
                             vecsOutData[i] + vecsData[i] * dGain );
@@ -1626,7 +1641,7 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
         if ( vecNumAudioChannels[j] == 1 )
         {
             // mono
-            for ( i = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i += 3 )
+            for ( i = 0; i < iServerFrameSizeSamples; i += 3 )
             {
                 dCurLevel = std::max ( dCurLevel, fabs ( static_cast<double> ( vecsData[i] ) ) );
             }
@@ -1634,7 +1649,7 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
         else
         {
             // stereo: apply stereo-to-mono attenuation
-            for ( i = 0, k = 0; i < SYSTEM_FRAME_SIZE_SAMPLES; i += 3, k += 6 )
+            for ( i = 0, k = 0; i < iServerFrameSizeSamples; i += 3, k += 6 )
             {
                 double sMix = ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
                 dCurLevel = std::max ( dCurLevel, fabs ( sMix ) );

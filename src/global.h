@@ -200,7 +200,7 @@ LED bar:      lbr
 #define PING_UPDATE_TIME_SERVER_LIST_MS 2000 // ms
 
 // defines the interval between Channel Level updates from the server
-#define CHANNEL_LEVEL_UPDATE_INTERVAL   100  // number of frames
+#define CHANNEL_LEVEL_UPDATE_INTERVAL   200  // number of frames at 64 samples frame size
 
 // time-out until a registered server is deleted from the server list if no
 // new registering was made in minutes

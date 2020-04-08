@@ -284,7 +284,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         // in case of all servers shown, add the registration number at the beginning
         if ( bShowCompleteRegList )
         {
-            pNewListViewItem->setText ( 0, QString ( "%1: " ).arg ( iIdx ) + pNewListViewItem->text ( 0 ) );
+            pNewListViewItem->setText ( 0, QString ( "%1: " ).arg ( 1 + iIdx ) + pNewListViewItem->text ( 0 ) );
         }
 
         // show server name in bold font if it is a permanent server
@@ -309,14 +309,6 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         {
             strLocation += QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
         }
-
-// for debugging, plot address infos in connect dialog
-// Do not enable this for official versions!
-#if 0
-strLocation += ", " + vecServerInfo[iIdx].HostAddr.InetAddr.toString() +
-    ":" + QString().setNum ( vecServerInfo[iIdx].HostAddr.iPort ) +
-    ", perm: " + QString().setNum ( vecServerInfo[iIdx].bPermanentOnline );
-#endif
 
         pNewListViewItem->setText ( 3, strLocation );
 

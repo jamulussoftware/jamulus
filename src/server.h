@@ -226,6 +226,7 @@ protected:
 
     // if server mode is normal or double system frame size
     bool                       bUseDoubleSystemFrameSize;
+    int                        iServerFrameSizeSamples;
 
     void CreateLevelsForAllConChannels  ( const int                        iNumClients,
                                           const CVector<int>&              vecNumAudioChannels,

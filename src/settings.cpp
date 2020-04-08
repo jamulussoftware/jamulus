@@ -364,6 +364,13 @@ void CSettings::Load()
         {
             pServer->SetAutoRunMinimized ( bValue );
         }
+
+        // licence type
+        if ( GetNumericIniSet ( IniXMLDocument, "server", "licencetype",
+             0, 1 /* LT_CREATIVECOMMONS */, iValue ) )
+        {
+            pServer->SetLicenceType ( static_cast<ELicenceType> ( iValue ) );
+        }
     }
 }
 
@@ -583,6 +590,10 @@ void CSettings::Save()
         // start minimized on OS start
         SetFlagIniSet ( IniXMLDocument, "server", "autostartmin",
             pServer->GetAutoRunMinimized() );
+
+        // licence type
+        SetNumericIniSet ( IniXMLDocument, "server", "licencetype",
+            static_cast<int> ( pServer->GetLicenceType() ) );
     }
 
     // prepare file name for storing initialization data in XML file and store

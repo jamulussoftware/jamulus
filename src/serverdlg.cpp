@@ -56,6 +56,11 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
         "started when the operating system starts up and is automatically "
         "minimized to a system task bar icon." ) );
 
+    // CC licence dialog switch
+    chbUseCCLicence->setWhatsThis ( tr ( "<b>Show Creative Commons Licence "
+        "Dialog:</b> If enabled, a Creative Commons Licence dialog is shown "
+        "each time a new user connects the server." ) );
+
     // register server flag
     chbRegisterServer->setWhatsThis ( tr ( "<b>Register Server Status:</b> If "
         "the register server check box is checked, this server registers "
@@ -229,6 +234,16 @@ lvwClients->setMinimumHeight ( 140 );
         chbRegisterServer->setCheckState ( Qt::Unchecked );
     }
 
+    // update show Creative Commons licence check box
+    if ( pServer->GetLicenceType() == LT_CREATIVECOMMONS )
+    {
+        chbUseCCLicence->setCheckState ( Qt::Checked );
+    }
+    else
+    {
+        chbUseCCLicence->setCheckState ( Qt::Unchecked );
+    }
+
     // update start minimized check box (only available for Windows)
 #ifndef _WIN32
     chbStartOnOSStart->setVisible ( false );
@@ -283,6 +298,9 @@ lvwClients->setMinimumHeight ( 140 );
 
     QObject::connect ( chbStartOnOSStart, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnStartOnOSStartStateChanged ( int ) ) );
+
+    QObject::connect ( chbUseCCLicence, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnUseCCLicenceStateChanged ( int ) ) );
 
     // line edits
     QObject::connect ( edtCentralServerAddress, SIGNAL ( editingFinished() ),
@@ -340,6 +358,18 @@ void CServerDlg::OnStartOnOSStartStateChanged ( int value )
     // update registry and server setting (for ini file)
     pServer->SetAutoRunMinimized ( bCurAutoStartMinState );
     ModifyAutoStartEntry         ( bCurAutoStartMinState );
+}
+
+void CServerDlg::OnUseCCLicenceStateChanged ( int value )
+{
+    if ( value == Qt::Checked )
+    {
+        pServer->SetLicenceType ( LT_CREATIVECOMMONS );
+    }
+    else
+    {
+        pServer->SetLicenceType ( LT_NO_LICENCE );
+    }
 }
 
 void CServerDlg::OnDefaultCentralServerStateChanged ( int value )

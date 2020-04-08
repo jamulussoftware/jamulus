@@ -6,12 +6,12 @@
 
 - added support for channel meters, coded by pljones
 
+- added show licence switch in the server GUI
+
 - store fader mute state in the ini file, coded by doloopuntil
 
 - fixed low-res icon issue (Ticket #28)
 
-
-TODO insert licence setting in server dialog -> on per default
 
 TODO support OPUS 64 in the server as a first step towards official 64 samples frame size support
 

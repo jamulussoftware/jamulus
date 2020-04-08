@@ -541,6 +541,10 @@ const bool bUseDoubleSystemFrameSize = true; // TODO for now this value is fixed
                 // settings file)
                 Server.SetUseDefaultCentralServerAddress ( true );
 
+                // special case for the GUI mode: we want the licenct type to be
+                // creative commons per default (if not given in the settings file)
+                Server.SetLicenceType ( LT_CREATIVECOMMONS );
+
                 // load settings from init-file
                 CSettings Settings ( &Server, strIniFileName );
                 Settings.Load();

@@ -730,7 +730,7 @@
   <tabstop>cbxAudioQuality</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>chbGUIDesignFancy</tabstop>
-  <tabstop>chbDisplayChannelFaders</tabstop>
+  <tabstop>chbDisplayChannelLevels</tabstop>
   <tabstop>chbDefaultCentralServer</tabstop>
   <tabstop>edtCentralServerAddress</tabstop>
  </tabstops>

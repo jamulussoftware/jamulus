@@ -31,43 +31,41 @@
 /* Definitions ****************************************************************/
 // number of simulation network jitter buffers for evaluating the statistic
 // NOTE If you want to change this number, the code has to modified, too!
-#define NUM_STAT_SIMULATION_BUFFERS         10
+#define NUM_STAT_SIMULATION_BUFFERS                 10
 
 // hysteresis for buffer size decision to avoid fast changes if close to the bound
-#define FILTER_DECISION_HYSTERESIS          0.1
+#define FILTER_DECISION_HYSTERESIS                  0.1
 
 // definition of the upper error bound of the jitter buffers
-#define ERROR_RATE_BOUND                    0.001
+#define ERROR_RATE_BOUND                            0.001
 
 // definition of the upper jitter buffer error bound, if that one is reached we
 // have to speed up the filtering to quickly get out of a incorrect buffer
 // size state
-#define UP_MAX_ERROR_BOUND                  0.01
+#define UP_MAX_ERROR_BOUND                          0.01
 
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
 // each regular buffer access lead to a count for put and get, assuming 2.66 ms
+// blocks we have 15 s / 2.66 ms * 2 = approx. 11000
+#define MAX_STATISTIC_COUNT_DOUBLE_FRAME_SIZE       11000
+
+// Note that the following definitions of the weigh constants assume a block
+// size of 128 samples at a sampling rate of 48 kHz.
+#define IIR_WEIGTH_UP_NORMAL_DOUBLE_FRAME_SIZE      0.999995
+#define IIR_WEIGTH_DOWN_NORMAL_DOUBLE_FRAME_SIZE    0.9999
+#define IIR_WEIGTH_UP_FAST_DOUBLE_FRAME_SIZE        0.9995
+#define IIR_WEIGTH_DOWN_FAST_DOUBLE_FRAME_SIZE      0.999
+
+// each regular buffer access lead to a count for put and get, assuming 1.33 ms
 // blocks we have 15 s / 1.33 ms * 2 = approx. 22500
-# define MAX_STATISTIC_COUNT                 22500
+#define MAX_STATISTIC_COUNT                         22500
 
 // convert numbers from 128 samples case using http://www.tsdconseil.fr/tutos/tuto-iir1-en.pdf
 // and https://octave-online.net:
 // gamma = exp(-Ts/tau), after some calculations we get: x=0.999995;exp(64/128*log(x))
-# define IIR_WEIGTH_UP_NORMAL               0.9999975
-# define IIR_WEIGTH_DOWN_NORMAL             0.99994999875
-# define IIR_WEIGTH_UP_FAST                 0.9997499687422
-# define IIR_WEIGTH_DOWN_FAST               0.999499875
-#else
-// each regular buffer access lead to a count for put and get, assuming 2.66 ms
-// blocks we have 15 s / 2.66 ms * 2 = approx. 11000
-# define MAX_STATISTIC_COUNT                 11000
-
-// Note that the following definitions of the weigh constants assume a block
-// size of 128 samples at a sampling rate of 48 kHz.
-# define IIR_WEIGTH_UP_NORMAL               0.999995
-# define IIR_WEIGTH_DOWN_NORMAL             0.9999
-# define IIR_WEIGTH_UP_FAST                 0.9995
-# define IIR_WEIGTH_DOWN_FAST               0.999
-#endif
+#define IIR_WEIGTH_UP_NORMAL                        0.9999975
+#define IIR_WEIGTH_DOWN_NORMAL                      0.99994999875
+#define IIR_WEIGTH_UP_FAST                          0.9997499687422
+#define IIR_WEIGTH_DOWN_FAST                        0.999499875
 
 
 /* Classes ********************************************************************/
@@ -90,7 +88,6 @@ public:
         {
             // copy old data in new vector using get pointer as zero per
             // definition
-
             int iCurPos;
 
             // copy current data in temporary vector
@@ -158,8 +155,7 @@ public:
                     // perform copying of second part
                     for ( iCurPos = 0; iCurPos < iRemainingCopyLen; iCurPos++ )
                     {
-                        vecMemory[iCurPos + iFirstPartLen] =
-                            vecTempMemory[iCurPos];
+                        vecMemory[iCurPos + iFirstPartLen] = vecTempMemory[iCurPos];
                     }
                 }
             }
@@ -428,9 +424,11 @@ class CNetBufWithStats : public CNetBuf
 public:
     CNetBufWithStats();
 
-    void Init ( const int iNewBlockSize,
-                const int iNewNumBlocks,
+    void Init ( const int  iNewBlockSize,
+                const int  iNewNumBlocks,
                 const bool bPreserve = false );
+
+    void SetUseDoubleSystemFrameSize ( const bool bNDSFSize ) { bUseDoubleSystemFrameSize = bNDSFSize; }
 
     virtual bool Put ( const CVector<uint8_t>& vecbyData, const int iInSize );
     virtual bool Get ( CVector<uint8_t>& vecbyData, const int iOutSize );
@@ -454,6 +452,13 @@ protected:
     int        iCurDecidedResult;
     int        iInitCounter;
     int        iCurAutoBufferSizeSetting;
+    int        iMaxStatisticCount;
+
+    bool       bUseDoubleSystemFrameSize;
+    double     dAutoFilt_WightUpNormal;
+    double     dAutoFilt_WightDownNormal;
+    double     dAutoFilt_WightUpFast;
+    double     dAutoFilt_WightDownFast;
 };
 
 

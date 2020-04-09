@@ -91,7 +91,13 @@ bool CNetBuf::Get ( CVector<uint8_t>& vecbyData,
 
 /* Network buffer with statistic calculations implementation ******************/
 CNetBufWithStats::CNetBufWithStats() :
-    CNetBuf ( false ) // base class init: no simulation mode
+    CNetBuf                   ( false ), // base class init: no simulation mode
+    iMaxStatisticCount        ( MAX_STATISTIC_COUNT ),
+    bUseDoubleSystemFrameSize ( false ),
+    dAutoFilt_WightUpNormal   ( IIR_WEIGTH_UP_NORMAL ),
+    dAutoFilt_WightDownNormal ( IIR_WEIGTH_DOWN_NORMAL ),
+    dAutoFilt_WightUpFast     ( IIR_WEIGTH_UP_FAST ),
+    dAutoFilt_WightDownFast   ( IIR_WEIGTH_DOWN_FAST )
 {
     // Define the sizes of the simulation buffers,
     // must be NUM_STAT_SIMULATION_BUFFERS elements!
@@ -143,13 +149,31 @@ void CNetBufWithStats::Init ( const int  iNewBlockSize,
     // inits for statistics calculation
     if ( !bPreserve )
     {
+        // set the auto filter weights and max statistic count
+        if ( bUseDoubleSystemFrameSize )
+        {
+            dAutoFilt_WightUpNormal   = IIR_WEIGTH_UP_NORMAL_DOUBLE_FRAME_SIZE;
+            dAutoFilt_WightDownNormal = IIR_WEIGTH_DOWN_NORMAL_DOUBLE_FRAME_SIZE;
+            dAutoFilt_WightUpFast     = IIR_WEIGTH_UP_FAST_DOUBLE_FRAME_SIZE;
+            dAutoFilt_WightDownFast   = IIR_WEIGTH_DOWN_FAST_DOUBLE_FRAME_SIZE;
+            iMaxStatisticCount        = MAX_STATISTIC_COUNT_DOUBLE_FRAME_SIZE;
+        }
+        else
+        {
+            dAutoFilt_WightUpNormal   = IIR_WEIGTH_UP_NORMAL;
+            dAutoFilt_WightDownNormal = IIR_WEIGTH_DOWN_NORMAL;
+            dAutoFilt_WightUpFast     = IIR_WEIGTH_UP_FAST;
+            dAutoFilt_WightDownFast   = IIR_WEIGTH_DOWN_FAST;
+            iMaxStatisticCount        = MAX_STATISTIC_COUNT;
+        }
+
         for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
         {
             // init simulation buffers with the correct size
             SimulationBuffer[i].Init ( iNewBlockSize, viBufSizesForSim[i] );
 
             // init statistics
-            ErrorRateStatistic[i].Init ( MAX_STATISTIC_COUNT, true );
+            ErrorRateStatistic[i].Init ( iMaxStatisticCount, true );
         }
 
         // reset the initialization counter which controls the initialization
@@ -170,7 +194,7 @@ void CNetBufWithStats::ResetInitCounter()
     // of the error rate statistic buffers which should be ok for a good
     // initialization value (initialization phase should be as short as
     // possible)
-    iInitCounter = MAX_STATISTIC_COUNT / 4;
+    iInitCounter = iMaxStatisticCount / 4;
 }
 
 bool CNetBufWithStats::Put ( const CVector<uint8_t>& vecbyData,
@@ -276,8 +300,7 @@ void CNetBufWithStats::UpdateAutoSetting()
     // the current jitter buffer size significantly.
     // For the initialization phase, use lower weight values to get faster
     // adaptation.
-    double       dWeightUp          = IIR_WEIGTH_UP_NORMAL;
-    double       dWeightDown        = IIR_WEIGTH_DOWN_NORMAL;
+    double       dWeightUp, dWeightDown;
     const double dHysteresisValue   = FILTER_DECISION_HYSTERESIS;
     bool         bUseFastAdaptation = false;
 
@@ -301,9 +324,13 @@ void CNetBufWithStats::UpdateAutoSetting()
 
     if ( bUseFastAdaptation )
     {
-        // overwrite weigth values with lower values
-        dWeightUp   = IIR_WEIGTH_UP_FAST;
-        dWeightDown = IIR_WEIGTH_DOWN_FAST;
+        dWeightUp   = dAutoFilt_WightUpFast;
+        dWeightDown = dAutoFilt_WightDownFast;
+    }
+    else
+    {
+        dWeightUp   = dAutoFilt_WightUpNormal;
+        dWeightDown = dAutoFilt_WightDownNormal;
     }
 
     // apply non-linear IIR filter
@@ -338,7 +365,7 @@ else
     // Initialization phase check and correction -------------------------------
     // sometimes in the very first period after a connection we get a bad error
     // rate result -> delete this from the initialization phase
-    if ( iInitCounter == MAX_STATISTIC_COUNT / 8 )
+    if ( iInitCounter == iMaxStatisticCount / 8 )
     {
         // check error rate of the largest buffer as the indicator
         if ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].

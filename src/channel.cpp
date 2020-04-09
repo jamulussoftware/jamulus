@@ -140,14 +140,13 @@ void CChannel::SetEnable ( const bool bNEnStat )
 }
 
 void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
-                                          const int iNewNetwFrameSize,
-                                          const int iNewNetwFrameSizeFact,
-                                          const int iNewNumAudioChannels )
+                                          const int           iNewNetwFrameSize,
+                                          const int           iNewNetwFrameSizeFact,
+                                          const int           iNewNumAudioChannels )
 {
 /*
     this function is intended for the client (not the server)
 */
-
     CNetworkTransportProps NetworkTransportProps;
 
     Mutex.lock();
@@ -161,6 +160,7 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         MutexSocketBuf.lock();
         {
             // init socket buffer
+            SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS ); // NOTE must be set BEFORE the init()
             SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
         }
         MutexSocketBuf.unlock();
@@ -173,8 +173,7 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         MutexConvBuf.unlock();
 
         // fill network transport properties struct
-        NetworkTransportProps =
-            GetNetworkTransportPropsFromCurrentSettings();
+        NetworkTransportProps = GetNetworkTransportPropsFromCurrentSettings();
     }
     Mutex.unlock();
 
@@ -369,7 +368,8 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             MutexSocketBuf.lock();
             {
                 // update socket buffer (the network block size is a multiple of the
-                // minimum network frame size
+                // minimum network frame size)
+                SockBuf.SetUseDoubleSystemFrameSize ( eAudioCompressionType == CT_OPUS ); // NOTE must be set BEFORE the init()
                 SockBuf.Init ( iNetwFrameSize, iCurSockBufNumFrames );
             }
             MutexSocketBuf.unlock();

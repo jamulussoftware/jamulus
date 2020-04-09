@@ -367,9 +367,10 @@ public slots:
         { ConnLessProtocol.CreateCLConnClientsListMes ( InetAddr, CreateChannelList() ); }
 
     void OnCLRegisterServerReceived ( CHostAddress    InetAddr,
+                                      CHostAddress    LInetAddr,
                                       CServerCoreInfo ServerInfo )
     {
-        ServerListManager.CentralServerRegisterServer ( InetAddr, ServerInfo );
+        ServerListManager.CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo );
     }
 
     void OnCLUnregisterServerReceived ( CHostAddress InetAddr )

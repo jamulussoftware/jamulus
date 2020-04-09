@@ -231,7 +231,7 @@ LED bar:      lbr
 #define MAX_LEN_CHAT_TEXT               1600
 #define MAX_LEN_CHAT_TEXT_PLUS_HTML     1800
 #define MAX_LEN_SERVER_NAME             20
-#define MAX_LEN_SERVER_TOPIC            32
+#define MAX_LEN_IP_ADDRESS              15
 #define MAX_LEN_SERVER_CITY             20
 #define MAX_LEN_VERSION_TEXT            20
 

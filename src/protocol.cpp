@@ -203,26 +203,28 @@ CONNECTION LESS MESSAGES
         ... -----------------+----------------------------------+ ...
         ...  2 bytes country | 1 byte maximum connected clients | ...
         ... -----------------+----------------------------------+ ...
-        ... ---------------------+------------------+ ...
-        ...  1 byte is permanent | 2 bytes number n | ...
-        ... ---------------------+------------------+ ...
-        ... ----------------------------------+ ...
-        ...  n bytes UTF-8 string server name | ...
-        ... ----------------------------------+ ...
-        ... ------------------+----------------------------+ ...
-        ...  2 bytes number n | n bytes UTF-8 string topic | ...
-        ... ------------------+----------------------------+ ...
+        ... ---------------------+ ...
+        ...  1 byte is permanent | ...
+        ... ---------------------+ ...
+        ... ------------------+----------------------------------+ ...
+        ...  2 bytes number n | n bytes UTF-8 string server name | ...
+        ... ------------------+----------------------------------+ ...
+        ... ------------------+---------------------------------------------+ ...
+        ...  2 bytes number n | n bytes UTF-8 string server interal address | ...
+        ... ------------------+---------------------------------------------+ ...
         ... ------------------+---------------------------+
         ...  2 bytes number n | n bytes UTF-8 string city |
         ... ------------------+---------------------------+
 
+    - "country" is according to "Common Locale Data Repository" which is used in
+      the QLocale class
     - "maximum connected clients" is the maximum number of clients which can
       be connected to the server at the same time
     - "is permanent" is a flag which indicates if the server is permanent
       online or not. If this value is any value <> 0 indicates that the server
       is permanent online.
-    - "country" is according to "Common Locale Data Repository" which is used in
-      the QLocale class
+    - "server interal address" represents the IPv4 address as a dotted quad to
+      be used by clients with the same external IP address as the server.
 
 
 - PROTMESSID_CLM_UNREGISTER_SERVER: Unregister a server
@@ -1401,14 +1403,15 @@ bool CProtocol::EvaluateCLServerFullMes()
 }
 
 void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
+                                            const CHostAddress&    LInetAddr,
                                             const CServerCoreInfo& ServerInfo )
 {
     int iPos = 0; // init position pointer
 
     // convert server info strings to utf-8
-    const QByteArray strUTF8Name  = ServerInfo.strName.toUtf8();
-    const QByteArray strUTF8Topic = ServerInfo.strTopic.toUtf8();
-    const QByteArray strUTF8City  = ServerInfo.strCity.toUtf8();
+    const QByteArray strUTF8LInetAddr = LInetAddr.InetAddr.toString().toUtf8();
+    const QByteArray strUTF8Name      = ServerInfo.strName.toUtf8();
+    const QByteArray strUTF8City      = ServerInfo.strCity.toUtf8();
 
     // size of current message body
     const int iEntrLen =
@@ -1417,7 +1420,7 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
         1 /* maximum number of connected clients */ +
         1 /* is permanent flag */ +
         2 /* name utf-8 string size */ + strUTF8Name.size() +
-        2 /* topic utf-8 string size */ + strUTF8Topic.size() +
+        2 /* server internal address utf-8 string size */ + strUTF8LInetAddr.size() +
         2 /* city utf-8 string size */ + strUTF8City.size();
 
     // build data vector
@@ -1442,8 +1445,8 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
     // name
     PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
 
-    // topic
-    PutStringUTF8OnStream ( vecData, iPos, strUTF8Topic );
+    // server internal address (formerly unused topic)
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8LInetAddr );
 
     // city
     PutStringUTF8OnStream ( vecData, iPos, strUTF8City );
@@ -1458,6 +1461,8 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
 {
     int             iPos     = 0; // init position pointer
     const int       iDataLen = vecData.Size();
+    QString         sLocHost; // temp string for server internal address
+    CHostAddress    LInetAddr;
     CServerCoreInfo RecServerInfo;
 
     // check size (the first 6 bytes)
@@ -1468,7 +1473,7 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
 
     // port number (2 bytes)
     RecServerInfo.iLocalPortNumber =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+        static_cast<uint16_t> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // country (2 bytes)
     RecServerInfo.eCountry =
@@ -1491,11 +1496,21 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
         return true; // return error code
     }
 
-    // server topic
+    // server internal address
     if ( GetStringFromStream ( vecData,
                                iPos,
-                               MAX_LEN_SERVER_TOPIC,
-                               RecServerInfo.strTopic ) )
+                               MAX_LEN_IP_ADDRESS,
+                               sLocHost ) )
+    {
+        return true; // return error code
+    }
+
+    if ( sLocHost.isEmpty() )
+    {
+        // old server, empty "topic", register as external address
+        LInetAddr = InetAddr;
+    }
+    else if ( !LInetAddr.InetAddr.setAddress( sLocHost ) )
     {
         return true; // return error code
     }
@@ -1516,7 +1531,7 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
     }
 
     // invoke message action
-    emit CLRegisterServerReceived ( InetAddr, RecServerInfo );
+    emit CLRegisterServerReceived ( InetAddr, LInetAddr, RecServerInfo );
 
     return false; // no error
 }
@@ -1548,9 +1563,9 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
     for ( int i = 0; i < iNumServers; i++ )
     {
         // convert server list strings to utf-8
-        const QByteArray strUTF8Name  = vecServerInfo[i].strName.toUtf8();
-        const QByteArray strUTF8Topic = vecServerInfo[i].strTopic.toUtf8();
-        const QByteArray strUTF8City  = vecServerInfo[i].strCity.toUtf8();
+        const QByteArray strUTF8Name      = vecServerInfo[i].strName.toUtf8();
+        const QByteArray strUTF8LHostAddr = vecServerInfo[i].LHostAddr.InetAddr.toString().toUtf8();
+        const QByteArray strUTF8City      = vecServerInfo[i].strCity.toUtf8();
 
         // size of current list entry
         const int iCurListEntrLen =
@@ -1560,7 +1575,7 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
             1 /* maximum number of connected clients */ +
             1 /* is permanent flag */ +
             2 /* name utf-8 string size */ + strUTF8Name.size() +
-            2 /* topic utf-8 string size */ + strUTF8Topic.size() +
+            2 /* server internal address utf-8 string size */ + strUTF8LHostAddr.size() +
             2 /* city utf-8 string size */ + strUTF8City.size();
 
         // make space for new data
@@ -1590,7 +1605,7 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
         PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
 
         // topic
-        PutStringUTF8OnStream ( vecData, iPos, strUTF8Topic );
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8LHostAddr );
 
         // city
         PutStringUTF8OnStream ( vecData, iPos, strUTF8City );
@@ -1618,11 +1633,11 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
 
         // IP address (4 bytes)
         const quint32 iIpAddr =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+            static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 4 ) );
 
         // port number (2 bytes)
         const quint16 iPort =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+            static_cast<uint16_t> ( GetValFromStream ( vecData, iPos, 2 ) );
 
         // country (2 bytes)
         const QLocale::Country eCountry =
@@ -1646,12 +1661,23 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
             return true; // return error code
         }
 
-        // server topic
-        QString strTopic;
+        // server internal address
+        QString strLHostAddr;
         if ( GetStringFromStream ( vecData,
                                    iPos,
-                                   MAX_LEN_SERVER_TOPIC,
-                                   strTopic ) )
+                                   MAX_LEN_IP_ADDRESS,
+                                   strLHostAddr ) )
+        {
+            return true; // return error code
+        }
+
+        CHostAddress LInetAddr;
+        if ( strLHostAddr.isEmpty() )
+        {
+            // old central server, empty "topic", default to server address
+            LInetAddr.InetAddr.setAddress( iIpAddr );
+        }
+        else if ( !LInetAddr.InetAddr.setAddress( strLHostAddr ) )
         {
             return true; // return error code
         }
@@ -1669,9 +1695,9 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
         // add server information to vector
         vecServerInfo.Add (
             CServerInfo ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
+                          LInetAddr,
                           iPort,
                           strName,
-                          strTopic,
                           eCountry,
                           strCity,
                           iMaxNumClients,

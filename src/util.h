@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include <QTcpSocket>
 #include <QHostAddress>
 #include <QHostInfo>
 #include <QMenu>
@@ -861,7 +862,6 @@ public:
     CServerCoreInfo() :
         iLocalPortNumber ( 0 ),
         strName          ( "" ),
-        strTopic         ( "" ),
         eCountry         ( QLocale::AnyCountry ),
         strCity          ( "" ),
         iMaxNumClients   ( 0 ),
@@ -870,14 +870,12 @@ public:
     CServerCoreInfo (
         const quint16           NLocPort,
         const QString&          NsName,
-        const QString&          NsTopic,
         const QLocale::Country& NeCountry,
         const QString&          NsCity,
         const int               NiMaxNumClients,
         const bool              NbPermOnline) :
         iLocalPortNumber ( NLocPort ),
         strName          ( NsName ),
-        strTopic         ( NsTopic ),
         eCountry         ( NeCountry ),
         strCity          ( NsCity ),
         iMaxNumClients   ( NiMaxNumClients ),
@@ -888,9 +886,6 @@ public:
 
     // name of the server
     QString          strName;
-
-    // topic of the current jam session or server
-    QString          strTopic;
 
     // country in which the server is located
     QLocale::Country eCountry;
@@ -910,27 +905,33 @@ class CServerInfo : public CServerCoreInfo
 {
 public:
     CServerInfo() :
-        HostAddr ( CHostAddress() ) {}
+        HostAddr  ( CHostAddress() ),
+        LHostAddr ( CHostAddress() )
+    {}
 
     CServerInfo (
         const CHostAddress&     NHAddr,
+        const CHostAddress&     NLAddr,
         const quint16           NLocPort,
         const QString&          NsName,
-        const QString&          NsTopic,
         const QLocale::Country& NeCountry,
         const QString&          NsCity,
         const int               NiMaxNumClients,
         const bool              NbPermOnline) :
             CServerCoreInfo ( NLocPort,
                               NsName,
-                              NsTopic,
                               NeCountry,
                               NsCity,
                               NiMaxNumClients,
-                              NbPermOnline ), HostAddr ( NHAddr ) {}
+                              NbPermOnline ),
+            HostAddr        ( NHAddr ),
+            LHostAddr       ( NLAddr ) {}
 
     // internet address of the server
     CHostAddress HostAddr;
+
+    // server internal address
+    CHostAddress LHostAddr;
 };
 
 
@@ -977,6 +978,8 @@ class NetworkUtil
 public:
     static bool ParseNetworkAddress ( QString       strAddress,
                                       CHostAddress& HostAddress );
+
+    static CHostAddress GetLocalAddress();
 };
 
 

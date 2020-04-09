@@ -890,6 +890,20 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
 }
 
 
+CHostAddress NetworkUtil::GetLocalAddress()
+{
+    QTcpSocket socket;
+    socket.connectToHost("8.8.8.8", 53); // google DNS, or something else reliable
+    if (socket.waitForConnected()) {
+        return CHostAddress( socket.localAddress(), 0 );
+    } else {
+        qWarning()
+            << "could not determine local IPv4 address:"
+            << socket.errorString()
+            << "- using localhost";
+        return CHostAddress( QHostAddress::LocalHost, 0 );
+    }
+}
 // Instrument picture data base ------------------------------------------------
 CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
 {

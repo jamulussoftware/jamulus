@@ -24,7 +24,6 @@
 
 #include "serverlist.h"
 
-
 /* Implementation *************************************************************/
 CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const QString& sNCentServAddr,
@@ -40,6 +39,9 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 {
     // set the central server address
     SetCentralServerAddress ( sNCentServAddr );
+
+    // set the server internal address
+    SlaveCurLocalHostAddress = CHostAddress( NetworkUtil::GetLocalAddress().InetAddr, iNPortNum );
 
     // prepare the server info information
     QStringList slServInfoSeparateParams;
@@ -63,8 +65,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     // itself for his server list. If we are the central server, we assume that
     // we have a permanent server.
     CServerListEntry ThisServerListEntry ( CHostAddress(),
+                                           SlaveCurLocalHostAddress,
                                            iPortNumber,
-                                           "",
                                            "",
                                            QLocale::system().country(),
                                            "",
@@ -112,8 +114,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         // create a new server list entry, we assume that servers which are
         // registered via the command line are permanent servers
         CServerListEntry NewServerListEntry ( CHostAddress(),
+                                              CHostAddress(),
                                               0, // port number not used
-                                              "",
                                               "",
                                               QLocale::AnyCountry,
                                               "",
@@ -124,6 +126,10 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         NetworkUtil().ParseNetworkAddress (
             slServInfoSeparateParams[iCurUsedServInfoSplitItems],
             NewServerListEntry.HostAddr );
+
+        // [server n server internal address]
+        // Not included in the static server info, so use external address
+        NewServerListEntry.LHostAddr = NewServerListEntry.HostAddr;
 
         // [server n name]
         NewServerListEntry.strName =
@@ -307,6 +313,7 @@ void CServerListManager::OnTimerPollList()
 }
 
 void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    InetAddr,
+                                                       const CHostAddress&    LInetAddr,
                                                        const CServerCoreInfo& ServerInfo )
 {
     QMutexLocker locker ( &Mutex );
@@ -321,13 +328,17 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             // define invalid index used as a flag
             const int ciInvalidIdx = -1;
 
-            // Check if server is already registered. Use address to identify
-            // a server. The very first list entry must not be checked since
+            // Check if server is already registered.
+            // Use external address and local port to identify a server
+            // (there could be more than one server on the external address
+            // but they would have to use separate ports).
+            // The very first list entry must not be checked since
             // this is per definition the central server (i.e., this server)
             int iSelIdx = ciInvalidIdx; // initialize with an illegal value
             for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
             {
-                if ( ServerList[iIdx].HostAddr == InetAddr )
+                if ( ServerList[iIdx].HostAddr == InetAddr
+                     && ServerList[iIdx].iLocalPortNumber == ServerInfo.iLocalPortNumber )
                 {
                     // store entry index
                     iSelIdx = iIdx;
@@ -341,7 +352,7 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             if ( iSelIdx == ciInvalidIdx )
             {
                 // create a new server list entry and init with received data
-                ServerList.append ( CServerListEntry ( InetAddr, ServerInfo ) );
+                ServerList.append ( CServerListEntry ( InetAddr, LInetAddr, ServerInfo ) );
             }
             else
             {
@@ -349,9 +360,8 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
                 if ( iSelIdx > iNumPredefinedServers )
                 {
                     // update all data and call update registration function
-                    ServerList[iSelIdx].iLocalPortNumber = ServerInfo.iLocalPortNumber;
+                    ServerList[iSelIdx].LHostAddr        = LInetAddr;
                     ServerList[iSelIdx].strName          = ServerInfo.strName;
-                    ServerList[iSelIdx].strTopic         = ServerInfo.strTopic;
                     ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
                     ServerList[iSelIdx].strCity          = ServerInfo.strCity;
                     ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
@@ -415,20 +425,19 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
             {
                 // check if the address of the client which is requesting the
                 // list is the same address as one server in the list -> in this
-                // case he has to connect to the local host address
+                // case he has to connect to the local host address and port
+                // to allow for NAT.
                 if ( vecServerInfo[iIdx].HostAddr.InetAddr == InetAddr.InetAddr )
                 {
-                    vecServerInfo[iIdx].HostAddr.InetAddr =
-                        QHostAddress ( QHostAddress::LocalHost );
-
-                    // take the local port number instead of the received port
-                    // number since some NAT (network address translation) might
-                    // have changed the port, note that the predefined servers
-                    // are treated differently, for these we assume that the
-                    // received port number is the same as the actual port
-                    // number
+                    // for a predefined server:
+                    // - LHostAddr and HostAddr are the same
+                    // - no local port number is supplied
+                    // otherwise, use the supplied details
                     if ( iIdx > iNumPredefinedServers )
                     {
+                        vecServerInfo[iIdx].HostAddr.InetAddr =
+                            ServerList[iIdx].LHostAddr.InetAddr;
+
                         vecServerInfo[iIdx].HostAddr.iPort =
                             ServerList[iIdx].iLocalPortNumber;
                     }
@@ -491,6 +500,7 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
         {
             // register server
             pConnLessProtocol->CreateCLRegisterServerMes ( SlaveCurCentServerHostAddress,
+                                                           SlaveCurLocalHostAddress,
                                                            ServerList[0] );
         }
         else

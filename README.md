@@ -55,7 +55,7 @@ Compilation and Development
 
 See the these [compile Instructions](INSTALL.md) 
 
-For server instructions, see [server compilation](servermanual.md)
+For server instructions, see [server compilation](src/res/homepage/servermanual.md)
 
 
 Acknowledgments

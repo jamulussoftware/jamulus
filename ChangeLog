@@ -1,19 +1,11 @@
 
 
 
-
-3.4.6git
-
-- added support for channel meters, coded by pljones
-
-- added show licence switch in the server GUI
-
-- store fader mute state in the ini file, coded by doloopuntil
-
-- fixed low-res icon issue (Ticket #28)
-
+3.4.7git
 
 TODO support OPUS 64 in the server as a first step towards official 64 samples frame size support
+
+TODO #12 A server in the same NAT region as the client is not visible (https://sourceforge.net/p/llcon/bugs/12/)
 
 TODO in CreateLevelsForAllConChannels we should call CStereoSignalLevelMeter::CalcLogResult instead -> make it public and static
 
@@ -24,8 +16,6 @@ TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g.,
 
 TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
 
-TODO #12 A server in the same NAT region as the client is not visible (https://sourceforge.net/p/llcon/bugs/12/)
-
 TODO update text in CAboutDlg
 
 TODO mixer faders linear -> log gain is better
@@ -34,6 +24,17 @@ TODO mixer faders linear -> log gain is better
 
 
 
+
+
+3.4.6 (2020-04-09)
+
+- added support for channel meters, coded by pljones
+
+- added show licence switch in the server GUI
+
+- store fader mute state in the ini file, coded by doloopuntil
+
+- fixed low-res icon issue (Ticket #28)
 
 
 3.4.5 (2020-04-04)

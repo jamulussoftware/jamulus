@@ -385,9 +385,9 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></li>"
         "<li>Country flag icons from Mark James: "
         "<i><a href=""http://www.famfamfam.com"">http://www.famfamfam.com</a></i></li>"
-        "<li>Audio recording for the server and SVG history graph, coded by pljones: "
-        "<i><a href=""http://jamulus.drealm.info"">http://jamulus.drealm.info</a></i></li>"
         "</ul>"
+        "We would like to acknowledge the contributors listed in the "
+        "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">Github Contributors list</a>"
         "</center><br>");
 
     // set version number in about dialog

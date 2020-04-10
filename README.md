@@ -12,7 +12,7 @@ each Jamulus client, mixes the audio data and sends the mix back to each client.
 
 Jamulus is __Open Source software__ ([GPL, GNU General Public License](http://www.gnu.org/licenses/gpl-2.0.html))
 and runs under __Windows__ ([ASIO](http://www.steinberg.net)),
-__MacOS__ ([Core Audio](http://developer.apple.com/technologies/mac/audio-and-video.html)) and
+__MacOS__ ([Core Audio](https://developer.apple.com/documentation/coreaudio)) and
 __Linux__ ([Jack](http://jackaudio.org)).
 It is based on the [Qt framework](https://www.qt.io) and uses the [OPUS](http://www.opus-codec.org) audio codec.
 
@@ -33,15 +33,16 @@ This ensures to get the lowest possible latencies.
 
 
 Download and Installation
----------------------------------
+-------------------------
 
 Download the latest version for [Windows, Macintosh or Linux here](https://sourceforge.net/projects/llcon/files/). 
 
-**Windows users**: The Jamulus client software requires an ASIO sound card driver to be available in the system. If your sound card does not have native ASIO support, you can try out [this alternative](http://www.asio4all.org/)
+**Windows users**: The Jamulus client software requires an ASIO sound card driver to be available in the system.
+If your sound card does not have native ASIO support, you can try out [this alternative](http://www.asio4all.org/)
 
 
 Help
-----------------------
+----
 
 Official documentation for Jamulus is on the [Github wiki](https://github.com/corrados/jamulus/wiki)
 
@@ -65,7 +66,7 @@ This code contains open source code from different sources. The developer(s) wan
 to thank the developer of this code for making their efforts available under open
 source:
 
-- Qt cross-platform application framework: http://qt-project.org
+- Qt cross-platform application framework: http://www.qt.io
 
 - Opus Interactive Audio Codec: http://www.opus-codec.org
 
@@ -75,4 +76,7 @@ source:
   
 - Some pixmaps are from the Open Clip Art Library (OCAL): http://openclipart.org
 
-- Audio recording for the server and SVG history graph, coded by [pljones](http://github.com/pljones): http://jamulus.drealm.info
+- Country flag icons from Mark James: http://www.famfamfam.com
+
+We would also like to acknowledge the contributors listed in the
+[Github Contributors list](https://github.com/corrados/jamulus/graphs/contributors).

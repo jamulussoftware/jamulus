@@ -11,22 +11,21 @@
   * fixed column widths are slightly too narrow for "Ping Time" and "Musicians" and typos
 
 
+
+TODO Multichannel CoreAudio Support #44 -> integrate important code lines in Mac sound interface
+
 TODO fix UpdateCurLevel() for new 64 samples frame size
 
-TODO auto jitter buffer performance not good at 64 samples frame size
+TODO mixer faders linear -> log gain is better
+
+TODO auto jitter buffer performance not good at 64 samples frame size -> to be checked again
 
 TODO for different frame sizes (64/128) the start value of 6 for the jitter buffer might be too low
 
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 
-TODO Multichannel CoreAudio Support #44 -> integrate important code lines in Mac sound interface
-
-TODO update text in CAboutDlg
-
-
 TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
 
-TODO mixer faders linear -> log gain is better
 
 
 

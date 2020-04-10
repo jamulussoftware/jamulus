@@ -475,16 +475,33 @@ public:
     {
         // allocate internal memory and reset read/write positions
         vecMemory.Init ( iNewMemSize );
-        iMemSize = iNewMemSize;
-        iPutPos  = 0;
-        iGetPos  = 0;
+        iMemSize    = iNewMemSize;
+        iBufferSize = iNewMemSize;
+        Reset();
+    }
+
+    void Reset()
+    {
+        iPutPos = 0;
+        iGetPos = 0;
+    }
+
+    void SetBufferSize ( const int iNBSize )
+    {
+        // if buffer size has changed, apply new value and reset the buffer pointers
+        if ( ( iNBSize != iBufferSize ) && ( iNBSize <= iMemSize ) )
+        {
+            iBufferSize = iNBSize;
+            Reset();
+        }
     }
 
     void PutAll ( const CVector<TData>& vecsData )
     {
         iGetPos = 0;
+
         std::copy ( vecsData.begin(),
-                    vecsData.begin() + iMemSize, // note that input vector might be larger then memory size
+                    vecsData.begin() + iBufferSize, // note that input vector might be larger then memory size
                     vecMemory.begin() );
     }
 
@@ -495,7 +512,7 @@ public:
         const int iEnd = iPutPos + iVecSize;
 
         // first check for buffer overrun
-        if ( iEnd <= iMemSize )
+        if ( iEnd <= iBufferSize )
         {
             // copy new data in internal buffer
             std::copy ( vecsData.begin(),
@@ -506,7 +523,7 @@ public:
             iPutPos = iEnd;
 
             // return "buffer is ready for readout" flag
-            return ( iEnd == iMemSize );
+            return ( iEnd == iBufferSize );
         }
 
         // buffer overrun or not initialized, return "not ready"
@@ -519,6 +536,17 @@ public:
         return vecMemory;
     }
 
+    void GetAll ( CVector<TData>& vecsData,
+                  const int       iVecSize )
+    {
+        iPutPos = 0;
+
+        // copy data from internal buffer in given buffer
+        std::copy ( vecMemory.begin(),
+                    vecMemory.begin() + iVecSize,
+                    vecsData.begin() );
+    }
+
     bool Get ( CVector<TData>& vecsData,
                const int       iVecSize )
     {
@@ -526,7 +554,7 @@ public:
         const int iEnd = iGetPos + iVecSize;
 
         // first check for buffer underrun
-        if ( iEnd <= iMemSize )
+        if ( iEnd <= iBufferSize )
         {
             // copy new data from internal buffer
             std::copy ( vecMemory.begin() + iGetPos,
@@ -536,16 +564,17 @@ public:
             // set buffer pointer one block further
             iGetPos = iEnd;
 
-            // return "buffer is completely read" flag
-            return ( iEnd == iMemSize );
+            // return the memory could be read
+            return true;
         }
 
-        // buffer underrun or not initialized, return "completely read"
-        return true;
+        // return that no memory could be read
+        return false;
     }
 
 protected:
     CVector<TData> vecMemory;
     int            iMemSize;
+    int            iBufferSize;
     int            iPutPos, iGetPos;
 };

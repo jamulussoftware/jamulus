@@ -295,6 +295,13 @@ CServer::CServer ( const int          iNewMaxNumChan,
         // set encoder low complexity for legacy 128 samples frame size
         opus_custom_encoder_ctl ( OpusEncoderMono[i],   OPUS_SET_COMPLEXITY ( 1 ) );
         opus_custom_encoder_ctl ( OpusEncoderStereo[i], OPUS_SET_COMPLEXITY ( 1 ) );
+
+
+        // init double-to-normal frame size conversion buffers -----------------
+        // use worst case memory initialization to avoid allocating memory in
+        // the time-critical thread
+        DoubleFrameSizeConvBufIn[i].Init  ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+        DoubleFrameSizeConvBufOut[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
     }
 
     // define colors for chat window identifiers
@@ -326,12 +333,13 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecsSendData.Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
     // allocate worst case memory for the temporary vectors
-    vecChanIDsCurConChan.Init      ( iMaxNumChannels );
-    vecvecdGains.Init              ( iMaxNumChannels );
-    vecvecsData.Init               ( iMaxNumChannels );
-    vecNumAudioChannels.Init       ( iMaxNumChannels );
-    vecNumFrameSizeConvBlocks.Init ( iMaxNumChannels );
-    vecAudioComprType.Init         ( iMaxNumChannels );
+    vecChanIDsCurConChan.Init          ( iMaxNumChannels );
+    vecvecdGains.Init                  ( iMaxNumChannels );
+    vecvecsData.Init                   ( iMaxNumChannels );
+    vecNumAudioChannels.Init           ( iMaxNumChannels );
+    vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
+    vecUseDoubleSysFraSizeConvBuf.Init ( iMaxNumChannels );
+    vecAudioComprType.Init             ( iMaxNumChannels );
 
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
@@ -788,6 +796,10 @@ CreateAndSendChanListForAllConChannels();
     {
         vecChannels[iChID].CreateLicReqMes ( eLicenceType );
     }
+
+    // reset the conversion buffers
+    DoubleFrameSizeConvBufIn[iChID].Reset();
+    DoubleFrameSizeConvBufOut[iChID].Reset();
 }
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )
@@ -907,6 +919,8 @@ JitterMeas.Measure();
             vecAudioComprType[i]   = vecChannels[iCurChanID].GetAudioCompressionType();
 
             // get info about required frame size conversion properties
+            vecUseDoubleSysFraSizeConvBuf[i] = ( !bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS ) );
+
             if ( bUseDoubleSystemFrameSize && ( vecAudioComprType[i] == CT_OPUS64 ) )
             {
                 vecNumFrameSizeConvBlocks[i] = 2;
@@ -914,6 +928,13 @@ JitterMeas.Measure();
             else
             {
                 vecNumFrameSizeConvBlocks[i] = 1;
+            }
+
+            // update conversion buffer size (nothing will happen if the size stays the same)
+            if ( vecUseDoubleSysFraSizeConvBuf[i] )
+            {
+                DoubleFrameSizeConvBufIn[iCurChanID].SetBufferSize  ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES  * vecNumAudioChannels[i] );
+                DoubleFrameSizeConvBufOut[iCurChanID].SetBufferSize ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES  * vecNumAudioChannels[i] );
             }
 
             // select the opus decoder and raw audio frame length
@@ -961,46 +982,63 @@ JitterMeas.Measure();
                 vecvecdGains[i][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
             }
 
-            // get current number of CELT coded bytes
-            const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
-
-            for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
+            // If the server frame size is smaller than the received OPUS frame size, we need a conversion
+            // buffer which stores the large buffer.
+            // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
+            // is false and the Get() function is not called at all. Therefore if the buffer is not needed
+            // we do not spend any time in the function but go directly inside the if condition.
+            if ( ( vecUseDoubleSysFraSizeConvBuf[i] == 0 ) ||
+                 !DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecsData[i], SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i] ) )
             {
-                // get data
-                const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecbyCodedData, iCeltNumCodedBytes );
+                // get current number of OPUS coded bytes
+                const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
 
-                // if channel was just disconnected, set flag that connected
-                // client list is sent to all other clients
-                // and emit the client disconnected signal
-                if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
+                for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
                 {
-                    if ( bEnableRecording )
+                    // get data
+                    const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecbyCodedData, iCeltNumCodedBytes );
+
+                    // if channel was just disconnected, set flag that connected
+                    // client list is sent to all other clients
+                    // and emit the client disconnected signal
+                    if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
                     {
-                        emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
+                        if ( bEnableRecording )
+                        {
+                            emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
+                        }
+
+                        bChannelIsNowDisconnected = true;
                     }
 
-                    bChannelIsNowDisconnected = true;
+                    // get pointer to coded data
+                    if ( eGetStat == GS_BUFFER_OK )
+                    {
+                        pCurCodedData = &vecbyCodedData[0];
+                    }
+                    else
+                    {
+                        // for lost packets use null pointer as coded input data
+                        pCurCodedData = nullptr;
+                    }
+
+                    // OPUS decode received data stream
+                    if ( CurOpusDecoder != nullptr )
+                    {
+                        opus_custom_decode ( CurOpusDecoder,
+                                             pCurCodedData,
+                                             iCeltNumCodedBytes,
+                                             &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i]],
+                                             iClientFrameSizeSamples );
+                    }
                 }
 
-                // get pointer to coded data
-                if ( eGetStat == GS_BUFFER_OK )
+                // a new large frame is ready, if the conversion buffer is required, put it in the buffer
+                // and read out the small frame size immediately for further processing
+                if ( vecUseDoubleSysFraSizeConvBuf[i] != 0 )
                 {
-                    pCurCodedData = &vecbyCodedData[0];
-                }
-                else
-                {
-                    // for lost packets use null pointer as coded input data
-                    pCurCodedData = nullptr;
-                }
-
-                // OPUS decode received data stream
-                if ( CurOpusDecoder != nullptr )
-                {
-                    opus_custom_decode ( CurOpusDecoder,
-                                         pCurCodedData,
-                                         iCeltNumCodedBytes,
-                                         &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i]],
-                                         iClientFrameSizeSamples );
+                    DoubleFrameSizeConvBufIn[iCurChanID].PutAll ( vecvecsData[i] );
+                    DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecsData[i], SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i] );
                 }
             }
         }
@@ -1109,37 +1147,52 @@ JitterMeas.Measure();
                 CurOpusEncoder = nullptr;
             }
 
-            for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
+            // If the server frame size is smaller than the received OPUS frame size, we need a conversion
+            // buffer which stores the large buffer.
+            // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
+            // is false and the Get() function is not called at all. Therefore if the buffer is not needed
+            // we do not spend any time in the function but go directly inside the if condition.
+            if ( ( vecUseDoubleSysFraSizeConvBuf[i] == 0 ) ||
+                 DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i] ) )
             {
-                // OPUS encoding
-                if ( CurOpusEncoder != nullptr )
+                if ( vecUseDoubleSysFraSizeConvBuf[i] != 0 )
                 {
+                    // get the large frame from the conversion buffer
+                    DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
+                }
+
+                for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
+                {
+                    // OPUS encoding
+                    if ( CurOpusEncoder != nullptr )
+                    {
 // TODO find a better place than this: the setting does not change all the time
 //      so for speed optimization it would be better to set it only if the network
 //      frame size is changed
 opus_custom_encoder_ctl ( CurOpusEncoder,
                           OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
-                    opus_custom_encode ( CurOpusEncoder,
-                                         &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i]],
-                                         iClientFrameSizeSamples,
-                                         &vecbyCodedData[0],
-                                         iCeltNumCodedBytes );
+                        opus_custom_encode ( CurOpusEncoder,
+                                             &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i]],
+                                             iClientFrameSizeSamples,
+                                             &vecbyCodedData[0],
+                                             iCeltNumCodedBytes );
+                    }
+
+                    // send separate mix to current clients
+                    vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
+                                                                vecbyCodedData,
+                                                                iCeltNumCodedBytes );
                 }
 
-                // send separate mix to current clients
-                vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                            vecbyCodedData,
-                                                            iCeltNumCodedBytes );
-            }
+                // update socket buffer size
+                vecChannels[iCurChanID].UpdateSocketBufferSize();
 
-            // update socket buffer size
-            vecChannels[iCurChanID].UpdateSocketBufferSize();
-
-            // send channel levels
-            if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
-            {
-                ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(), vecChannelLevels, iNumClients );
+                // send channel levels
+                if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
+                {
+                    ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(), vecChannelLevels, iNumClients );
+                }
             }
         }
     }

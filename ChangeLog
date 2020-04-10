@@ -3,9 +3,18 @@
 
 3.4.7git
 
+TODO add command line argument for 64/124 frame size at the server
+
 TODO support OPUS 64 in the server as a first step towards official 64 samples frame size support
 
+TODO for different frame sizes (64/128) the start value of 6 for the jitter buffer might be too low
+
 TODO #12 A server in the same NAT region as the client is not visible (https://sourceforge.net/p/llcon/bugs/12/)
+
+TODO https://sourceforge.net/p/llcon/discussion/533517/thread/62bd07fbcb/?limit=25#ea21
+     1) The column widths are slightly too narrow (UK English) for "Ping Time" and "Musicians" in the "Connection Setup panel.
+     2) Spellings: It would be nice if the Location  Country field had spaces in the data e.g. UnitedKingdom > United Kingdom
+        Instrument "Acoutic Guitar" > "Acoustic Guitar", Instrument "Accordeon" > "Accordion"
 
 TODO in CreateLevelsForAllConChannels we should call CStereoSignalLevelMeter::CalcLogResult instead -> make it public and static
 

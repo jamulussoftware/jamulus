@@ -35,6 +35,7 @@
 # include "opus_custom.h"
 #endif
 #include "global.h"
+#include "buffer.h"
 #include "socket.h"
 #include "channel.h"
 #include "util.h"
@@ -251,6 +252,8 @@ protected:
     OpusCustomDecoder*         OpusDecoderMono[MAX_NUM_CHANNELS];
     OpusCustomEncoder*         OpusEncoderStereo[MAX_NUM_CHANNELS];
     OpusCustomDecoder*         OpusDecoderStereo[MAX_NUM_CHANNELS];
+    CConvBuf<int16_t>          DoubleFrameSizeConvBufIn[MAX_NUM_CHANNELS];
+    CConvBuf<int16_t>          DoubleFrameSizeConvBufOut[MAX_NUM_CHANNELS];
 
     CVector<QString>           vstrChatColors;
     CVector<int>               vecChanIDsCurConChan;
@@ -259,6 +262,7 @@ protected:
     CVector<CVector<int16_t> > vecvecsData;
     CVector<int>               vecNumAudioChannels;
     CVector<int>               vecNumFrameSizeConvBlocks;
+    CVector<int>               vecUseDoubleSysFraSizeConvBuf;
     CVector<EAudComprType>     vecAudioComprType;
     CVector<int16_t>           vecsSendData;
     CVector<uint8_t>           vecbyCodedData;

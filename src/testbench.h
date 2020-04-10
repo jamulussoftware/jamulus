@@ -90,10 +90,10 @@ protected:
 
     QHostAddress GenRandomIPv4Address() const
     {
-        uint32_t a = static_cast<uint32_t> ( 192 );
-        uint32_t b = static_cast<uint32_t> ( 168 );
-        uint32_t c = static_cast<uint32_t> ( GenRandomIntInRange ( 1, 253 ) );
-        uint32_t d = static_cast<uint32_t> ( GenRandomIntInRange ( 1, 253 ) );
+        quint32 a = static_cast<quint32> ( 192 );
+        quint32 b = static_cast<quint32> ( 168 );
+        quint32 c = static_cast<quint32> ( GenRandomIntInRange ( 1, 253 ) );
+        quint32 d = static_cast<quint32> ( GenRandomIntInRange ( 1, 253 ) );
         return QHostAddress( a << 24 | b << 16 | c << 8 | d );
     }
 

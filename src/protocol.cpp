@@ -1473,7 +1473,7 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
 
     // port number (2 bytes)
     RecServerInfo.iLocalPortNumber =
-        static_cast<uint16_t> ( GetValFromStream ( vecData, iPos, 2 ) );
+        static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // country (2 bytes)
     RecServerInfo.eCountry =
@@ -1633,11 +1633,11 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
 
         // IP address (4 bytes)
         const quint32 iIpAddr =
-            static_cast<uint32_t> ( GetValFromStream ( vecData, iPos, 4 ) );
+            static_cast<quint32> ( GetValFromStream ( vecData, iPos, 4 ) );
 
         // port number (2 bytes)
         const quint16 iPort =
-            static_cast<uint16_t> ( GetValFromStream ( vecData, iPos, 2 ) );
+            static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
 
         // country (2 bytes)
         const QLocale::Country eCountry =

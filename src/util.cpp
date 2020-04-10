@@ -907,12 +907,12 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
         vecDataBase.Add ( CInstPictProps ( "Drum Set", ":/png/instr/res/instrdrumset.png", IC_PERCUSSION_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( "Djembe", ":/png/instr/res/instrdjembe.png", IC_PERCUSSION_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( "Electric Guitar", ":/png/instr/res/instreguitar.png", IC_PLUCKING_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( "Acoutic Guitar", ":/png/instr/res/instraguitar.png", IC_PLUCKING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Acoustic Guitar", ":/png/instr/res/instraguitar.png", IC_PLUCKING_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( "Bass Guitar", ":/png/instr/res/instrbassguitar.png", IC_PLUCKING_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( "Keyboard", ":/png/instr/res/instrkeyboard.png", IC_KEYBOARD_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( "Synthesizer", ":/png/instr/res/instrsynthesizer.png", IC_KEYBOARD_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( "Grand Piano", ":/png/instr/res/instrgrandpiano.png", IC_KEYBOARD_INSTRUMENT ) );
-        vecDataBase.Add ( CInstPictProps ( "Accordeon", ":/png/instr/res/instraccordeon.png", IC_KEYBOARD_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Accordion", ":/png/instr/res/instraccordeon.png", IC_KEYBOARD_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( "Vocal", ":/png/instr/res/instrvocal.png", IC_OTHER_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( "Microphone", ":/png/instr/res/instrmicrophone.png", IC_OTHER_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( "Harmonica", ":/png/instr/res/instrharmonica.png", IC_WIND_INSTRUMENT ) );

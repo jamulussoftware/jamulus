@@ -6,16 +6,15 @@
   * added support for 64 samples frame size in the server (if server runs in 64 or 128 samples
     mode it is still compatible to both, 64 and 128 samples frame size clients)
 
+  * fixed server not visible if in same local network, coded by pljones (Ticket #27)
+
+  * fixed column widths are slightly too narrow for "Ping Time" and "Musicians" and typos
 
 
-TODO #12 A server in the same NAT region as the client is not visible (https://sourceforge.net/p/llcon/bugs/12/)
-
-TODO https://sourceforge.net/p/llcon/discussion/533517/thread/62bd07fbcb/?limit=25#ea21
-     1) The column widths are slightly too narrow (UK English) for "Ping Time" and "Musicians" in the "Connection Setup panel.
-     2) Spellings: It would be nice if the Location  Country field had spaces in the data e.g. UnitedKingdom > United Kingdom
-        Instrument "Acoutic Guitar" > "Acoustic Guitar", Instrument "Accordeon" > "Accordion"
 
 TODO in CreateLevelsForAllConChannels we should call CStereoSignalLevelMeter::CalcLogResult instead -> make it public and static
+
+TODO auto jitter buffer performance not good at 64 samples frame size
 
 TODO for different frame sizes (64/128) the start value of 6 for the jitter buffer might be too low
 
@@ -24,7 +23,6 @@ TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g.,
 TODO Multichannel CoreAudio Support #44 -> integrate important code lines in Mac sound interface
 
 TODO update text in CAboutDlg
-
 
 
 TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)

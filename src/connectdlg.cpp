@@ -86,8 +86,8 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     lvwServers->setColumnWidth ( 2, 100 );
 #else
     lvwServers->setColumnWidth ( 0, 180 );
-    lvwServers->setColumnWidth ( 1, 65 );
-    lvwServers->setColumnWidth ( 2, 60 );
+    lvwServers->setColumnWidth ( 1, 75 );
+    lvwServers->setColumnWidth ( 2, 70 );
     lvwServers->setColumnWidth ( 3, 220 );
 #endif
     lvwServers->clear();

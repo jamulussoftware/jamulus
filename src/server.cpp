@@ -1715,17 +1715,7 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
         vecChannels[iChId].SetPrevLevel ( dCurLevel );
 
         // logarithmic measure
-// TODO we should call CStereoSignalLevelMeter::CalcLogResult instead -> make it public and static
-        const double dNormChanLevel = dCurLevel / _MAXSHORT;
-        double       dCurSigLevel;
-        if ( dNormChanLevel > 0 )
-        {
-            dCurSigLevel = 20.0 * log10 ( dNormChanLevel );
-        }
-        else
-        {
-            dCurSigLevel = -100000.0; // large negative value
-        }
+        double dCurSigLevel = CStereoSignalLevelMeter::CalcLogResult ( dCurLevel );
 
         // map to signal level meter
         dCurSigLevel -= LOW_BOUND_SIG_METER;

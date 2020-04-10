@@ -11,8 +11,7 @@
   * fixed column widths are slightly too narrow for "Ping Time" and "Musicians" and typos
 
 
-
-TODO in CreateLevelsForAllConChannels we should call CStereoSignalLevelMeter::CalcLogResult instead -> make it public and static
+TODO fix UpdateCurLevel() for new 64 samples frame size
 
 TODO auto jitter buffer performance not good at 64 samples frame size
 

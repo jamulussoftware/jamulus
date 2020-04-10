@@ -594,17 +594,18 @@ class CStereoSignalLevelMeter
 public:
     CStereoSignalLevelMeter() { Reset(); }
 
-    void   Update ( const CVector<short>& vecsAudio );
-    double MicLevelLeft()  { return CalcLogResult ( dCurLevelL ); }
-    double MicLevelRight() { return CalcLogResult ( dCurLevelR ); }
-    void   Reset()
+    void          Update ( const CVector<short>& vecsAudio );
+    double        MicLevelLeft()  { return CalcLogResult ( dCurLevelL ); }
+    double        MicLevelRight() { return CalcLogResult ( dCurLevelR ); }
+    static double CalcLogResult  ( const double& dLinearLevel );
+
+    void Reset()
     {
         dCurLevelL = 0.0;
         dCurLevelR = 0.0;
     }
 
 protected:
-    double CalcLogResult  ( const double& dLinearLevel );
     double UpdateCurLevel ( double        dCurLevel,
                             const short&  sMax );
 

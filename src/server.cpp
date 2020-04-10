@@ -427,8 +427,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
         this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
 
     QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ),
-        this, SLOT ( OnCLRegisterServerReceived ( CHostAddress, CServerCoreInfo ) ) );
+        SIGNAL ( CLRegisterServerReceived ( CHostAddress, CHostAddress, CServerCoreInfo ) ),
+        this, SLOT ( OnCLRegisterServerReceived ( CHostAddress, CHostAddress, CServerCoreInfo ) ) );
 
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLUnregisterServerReceived ( CHostAddress ) ),

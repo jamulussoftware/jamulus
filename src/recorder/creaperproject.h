@@ -52,7 +52,7 @@ class CReaperItem : public QObject
     Q_OBJECT
 
 public:
-    CReaperItem(const QString& name, const STrackItem& trackItem, const qint32& iid);
+    CReaperItem( const QString& name, const STrackItem& trackItem, const qint32& iid, int frameSize );
     QString toString() { return out; }
 
 private:
@@ -60,7 +60,11 @@ private:
     const QUuid guid = QUuid::createUuid();
     QString out;
 
-    inline QString secondsAt48K(const qint64 frames) { return QString::number(static_cast<double>(frames * SYSTEM_FRAME_SIZE_SAMPLES) / 48000, 'f', 14); }
+    inline QString secondsAt48K( const qint64 frames,
+                                 const int    frameSize )
+    {
+        return QString::number( static_cast<double>( frames * frameSize ) / 48000, 'f', 14 );
+    }
 };
 
 class CReaperTrack : public QObject
@@ -68,7 +72,7 @@ class CReaperTrack : public QObject
     Q_OBJECT
 
 public:
-    CReaperTrack(QString name, qint32 &iid, QList<STrackItem> items);
+    CReaperTrack( QString name, qint32 &iid, QList<STrackItem> items, int frameSize );
     QString toString() { return out; }
 
 private:
@@ -81,7 +85,7 @@ class CReaperProject : public QObject
     Q_OBJECT
 
 public:
-    CReaperProject(QMap<QString, QList<STrackItem> > tracks);
+    CReaperProject( QMap<QString, QList<STrackItem> > tracks, int frameSize );
     QString toString() { return out; }
 
 private:

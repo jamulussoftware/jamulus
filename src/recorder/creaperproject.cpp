@@ -55,7 +55,7 @@ using namespace recorder;
  * @param trackItem the details of where the item is in the track, along with the RIFF WAVE filename
  * @param iid the sequential item id
  */
-CReaperItem::CReaperItem(const QString& name, const STrackItem& trackItem, const qint32& iid)
+CReaperItem::CReaperItem(const QString& name, const STrackItem& trackItem, const qint32& iid, int frameSize)
 {
     QString wavName = trackItem.fileName; // assume RPP in same location...
 
@@ -64,8 +64,8 @@ CReaperItem::CReaperItem(const QString& name, const STrackItem& trackItem, const
     sOut << "    <ITEM " << endl;
     sOut << "      FADEIN 0 0 0 0 0 0" << endl;
     sOut << "      FADEOUT 0 0 0 0 0 0" << endl;
-    sOut << "      POSITION " << secondsAt48K(trackItem.startFrame) << endl;
-    sOut << "      LENGTH " << secondsAt48K(trackItem.frameCount) << endl;
+    sOut << "      POSITION " << secondsAt48K( trackItem.startFrame, frameSize ) << endl;
+    sOut << "      LENGTH " << secondsAt48K( trackItem.frameCount, frameSize ) << endl;
     sOut << "      IGUID " << iguid.toString() << endl;
     sOut << "      IID " << iid << endl;
     sOut << "      NAME " << name << endl;
@@ -86,7 +86,7 @@ CReaperItem::CReaperItem(const QString& name, const STrackItem& trackItem, const
  * @param iid the sequential track id
  * @param items the list of items in the track
  */
-CReaperTrack::CReaperTrack(QString name, qint32& iid, QList<STrackItem> items)
+CReaperTrack::CReaperTrack(QString name, qint32& iid, QList<STrackItem> items, int frameSize)
 {
     QTextStream sOut(&out);
 
@@ -96,7 +96,7 @@ CReaperTrack::CReaperTrack(QString name, qint32& iid, QList<STrackItem> items)
 
     int ino = 1;
     foreach (auto item, items) {
-        sOut << CReaperItem(name + " (" + QString::number(ino) + ")", item, iid).toString() << endl;
+        sOut << CReaperItem(name + " (" + QString::number(ino) + ")", item, iid, frameSize).toString() << endl;
         ino++;
         iid++;
     }
@@ -109,7 +109,7 @@ CReaperTrack::CReaperTrack(QString name, qint32& iid, QList<STrackItem> items)
  * @brief CReaperProject::CReaperProject Construct a Reaper RPP "<REAPER_PROJECT>" for a given list of tracks
  * @param tracks the list of tracks
  */
-CReaperProject::CReaperProject(QMap<QString, QList<STrackItem>> tracks)
+CReaperProject::CReaperProject(QMap<QString, QList<STrackItem>> tracks, int frameSize)
 {
     QTextStream sOut(&out);
 
@@ -121,7 +121,7 @@ CReaperProject::CReaperProject(QMap<QString, QList<STrackItem>> tracks)
     qint32 iid = 0;
     foreach(auto trackName, tracks.keys())
     {
-        sOut << CReaperTrack(trackName, iid, tracks[trackName]).toString() << endl;
+        sOut << CReaperTrack(trackName, iid, tracks[trackName], frameSize).toString() << endl;
     }
 
     sOut << ">";

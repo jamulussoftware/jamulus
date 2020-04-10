@@ -70,11 +70,11 @@ CJamClient::CJamClient(const qint64 frame, const int _numChannels, const QString
  * @param _name The client's current name
  * @param pcm The PCM data
  */
-void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm)
+void CJamClient::Frame(const QString _name, const CVector<int16_t>& pcm, int iServerFrameSizeSamples)
 {
     name = _name;
 
-    for(int i = 0; i < numChannels * SYSTEM_FRAME_SIZE_SAMPLES; i++)
+    for(int i = 0; i < numChannels * iServerFrameSizeSamples; i++)
     {
         *out << pcm[i];
     }
@@ -165,7 +165,7 @@ void CJamSession::DisconnectClient(int iChID)
  *
  * Also manages the overall current frame counter for the session.
  */
-void CJamSession::Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data)
+void CJamSession::Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data, int iServerFrameSizeSamples)
 {
     if (vecptrJamClients[iChID] == nullptr)
     {
@@ -193,7 +193,7 @@ void CJamSession::Frame(const int iChID, const QString name, const CHostAddress 
         return;
     }
 
-    vecptrJamClients[iChID]->Frame(name, data);
+    vecptrJamClients[iChID]->Frame(name, data, iServerFrameSizeSamples);
 
     // If _any_ connected client frame steps past currentFrame, increase currentFrame
     if (vecptrJamClients[iChID]->StartFrame() + vecptrJamClients[iChID]->FrameCount() > currentFrame)
@@ -250,7 +250,7 @@ QMap<QString, QList<STrackItem>> CJamSession::Tracks()
  * @param sessionDirName the directory name to scan
  * @return a map of (latest) client name to connection items
  */
-QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString& sessionDirName)
+QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString& sessionDirName, int iServerFrameSizeSamples)
 {
     QMap<QString, QList<STrackItem>> tracks;
 
@@ -272,7 +272,7 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString
         }
 
         QFileInfo fiEntry(sessionDir.absoluteFilePath(entry));
-        qint64 length = fiEntry.size() / numChannels.toInt() / SYSTEM_FRAME_SIZE_SAMPLES;
+        qint64 length = fiEntry.size() / numChannels.toInt() / iServerFrameSizeSamples;
 
         STrackItem track (
                     numChannels.toInt(),
@@ -295,7 +295,8 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString
  * @brief CJamRecorder::Init Create recording directory, if necessary, and connect signal handlers
  * @param server Server object emiting signals
  */
-void CJamRecorder::Init(const CServer* server)
+void CJamRecorder::Init( const CServer* server,
+                         const int      _iServerFrameSizeSamples )
 {
     QFileInfo fi(recordBaseDir.absolutePath());
     fi.setCaching(false);
@@ -325,6 +326,8 @@ void CJamRecorder::Init(const CServer* server)
     QObject::connect((const QObject *)server, SIGNAL ( AudioFrame(const int, const QString, const CHostAddress, const int, const CVector<int16_t>) ),
                      this, SLOT(  OnFrame(const int, const QString, const CHostAddress, const int, const CVector<int16_t>) ),
                      Qt::ConnectionType::QueuedConnection);
+
+    iServerFrameSizeSamples = _iServerFrameSizeSamples;
 }
 
 /**
@@ -353,15 +356,15 @@ void CJamRecorder::OnEnd()
 
         if (fi.exists())
         {
-            tsConsole << "CJamRecorder::OnEnd() - " << fi.absolutePath() << " exists and will not be overwritten." << endl;
+            qWarning() << "CJamRecorder::OnEnd():" << fi.absolutePath() << "exists and will not be overwritten.";
         }
         else
         {
             QFile outf (reaperProjectFileName);
             outf.open(QFile::WriteOnly);
             QTextStream out(&outf);
-            out << CReaperProject(currentSession->Tracks()).toString() << endl;
-            tsConsole << "Session RPP: " << reaperProjectFileName << endl;
+            out << CReaperProject( currentSession->Tracks(), iServerFrameSizeSamples ).toString() << endl;
+            qDebug() << "Session RPP:" << reaperProjectFileName;
         }
 
         delete currentSession;
@@ -373,7 +376,7 @@ void CJamRecorder::OnEnd()
  * @brief CJamRecorder::SessionDirToReaper Replica of CJamRecorder::OnEnd() but using the directory contents to construct the CReaperProject object
  * @param strSessionDirName
  */
-void CJamRecorder::SessionDirToReaper(QString& strSessionDirName)
+void CJamRecorder::SessionDirToReaper(QString& strSessionDirName, int serverFrameSizeSamples)
 {
     const QFileInfo fiSessionDir(QDir::cleanPath(strSessionDirName));
     if (!fiSessionDir.exists() || !fiSessionDir.isDir())
@@ -395,9 +398,9 @@ void CJamRecorder::SessionDirToReaper(QString& strSessionDirName)
     }
     QTextStream out(&outf);
 
-    out << CReaperProject(CJamSession::TracksFromSessionDir(fiSessionDir.absoluteFilePath())).toString() << endl;
+    out << CReaperProject( CJamSession::TracksFromSessionDir( fiSessionDir.absoluteFilePath(), serverFrameSizeSamples ), serverFrameSizeSamples ).toString() << endl;
 
-    (*(new ConsoleWriterFactory())->get()) << "Session RPP: " << reaperProjectFileName << endl;
+    qDebug() << "Session RPP:" << reaperProjectFileName;
 }
 
 /**
@@ -408,11 +411,11 @@ void CJamRecorder::OnDisconnected(int iChID)
 {
     if (!isRecording)
     {
-        tsConsole << "CJamRecorder::OnDisconnected: channel " << iChID << " disconnected but not recording" << endl;
+        qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but not recording";
     }
     if (currentSession == nullptr)
     {
-        tsConsole << "CJamRecorder::OnDisconnected: channel " << iChID << " disconnected but no currentSession" << endl;
+        qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but no currentSession";
         return;
     }
     currentSession->DisconnectClient(iChID);
@@ -436,5 +439,5 @@ void CJamRecorder::OnFrame(const int iChID, const QString name, const CHostAddre
         OnStart();
     }
 
-    currentSession->Frame(iChID, name, address, numAudioChannels, data);
+    currentSession->Frame( iChID, name, address, numAudioChannels, data, iServerFrameSizeSamples );
 }

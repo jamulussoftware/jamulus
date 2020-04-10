@@ -397,7 +397,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // Enable jam recording (if requested)
     if ( bEnableRecording )
     {
-        JamRecorder.Init ( this );
+        JamRecorder.Init ( this, iServerFrameSizeSamples );
         JamRecorder.start();
     }
 

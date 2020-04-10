@@ -295,7 +295,8 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString
  * @brief CJamRecorder::Init Create recording directory, if necessary, and connect signal handlers
  * @param server Server object emiting signals
  */
-void CJamRecorder::Init(const CServer* server)
+void CJamRecorder::Init( const CServer* server,
+                         const int      _iServerFrameSizeSamples )
 {
     QFileInfo fi(recordBaseDir.absolutePath());
     fi.setCaching(false);
@@ -325,6 +326,8 @@ void CJamRecorder::Init(const CServer* server)
     QObject::connect((const QObject *)server, SIGNAL ( AudioFrame(const int, const QString, const CHostAddress, const int, const CVector<int16_t>) ),
                      this, SLOT(  OnFrame(const int, const QString, const CHostAddress, const int, const CVector<int16_t>) ),
                      Qt::ConnectionType::QueuedConnection);
+
+    iServerFrameSizeSamples = _iServerFrameSizeSamples;
 }
 
 /**

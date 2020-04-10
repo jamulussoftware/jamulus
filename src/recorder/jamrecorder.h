@@ -139,7 +139,8 @@ class CJamRecorder : public QThread
 public:
     CJamRecorder(const QString recordingDirName) :
         recordBaseDir (recordingDirName), isRecording (false) {}
-    void Init(const CServer* server);
+
+    void Init( const CServer* server, const int _iServerFrameSizeSamples );
 
     static void SessionDirToReaper(QString& strSessionDirName);
 
@@ -170,6 +171,7 @@ private:
 
     bool         isRecording;
     CJamSession* currentSession;
+    int          iServerFrameSizeSamples;
 };
 
 }

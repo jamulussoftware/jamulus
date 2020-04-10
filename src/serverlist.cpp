@@ -329,16 +329,12 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             const int ciInvalidIdx = -1;
 
             // Check if server is already registered.
-            // Use external address and local port to identify a server
-            // (there could be more than one server on the external address
-            // but they would have to use separate ports).
             // The very first list entry must not be checked since
             // this is per definition the central server (i.e., this server)
             int iSelIdx = ciInvalidIdx; // initialize with an illegal value
             for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
             {
-                if ( ServerList[iIdx].HostAddr == InetAddr
-                     && ServerList[iIdx].iLocalPortNumber == ServerInfo.iLocalPortNumber )
+                if ( ServerList[iIdx].HostAddr == InetAddr )
                 {
                     // store entry index
                     iSelIdx = iIdx;

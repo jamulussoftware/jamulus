@@ -88,6 +88,15 @@ protected:
         return strReturn;
     }
 
+    QHostAddress GenRandomIPv4Address() const
+    {
+        quint32 a = static_cast<quint32> ( 192 );
+        quint32 b = static_cast<quint32> ( 168 );
+        quint32 c = static_cast<quint32> ( GenRandomIntInRange ( 1, 253 ) );
+        quint32 d = static_cast<quint32> ( GenRandomIntInRange ( 1, 253 ) );
+        return QHostAddress( a << 24 | b << 16 | c << 8 | d );
+    }
+
     QString    sAddress;
     quint16    iPort;        
     QTimer     Timer;
@@ -102,6 +111,7 @@ public slots:
         CServerCoreInfo        ServerInfo;
         CVector<CServerInfo>   vecServerInfo ( 1 );
         CHostAddress           CurHostAddress ( QHostAddress ( sAddress ), iPort );
+        CHostAddress           CurLocalAddress ( GenRandomIPv4Address(), iPort );
         CChannelCoreInfo       ChannelCoreInfo;
         ELicenceType           eLicenceType;
 
@@ -123,7 +133,7 @@ public slots:
 
         case 4: // PROTMESSID_CONN_CLIENTS_LIST
             vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
-            vecChanInfo[0].iIpAddr = GenRandomIntInRange ( 0, 100000 );
+            vecChanInfo[0].iIpAddr = GenRandomIPv4Address().toIPv4Address();
             vecChanInfo[0].strName = GenRandomString();
 
             Protocol.CreateConClientListMes ( vecChanInfo );
@@ -206,9 +216,9 @@ public slots:
             ServerInfo.iMaxNumClients   = GenRandomIntInRange ( -2, 10000 );
             ServerInfo.strCity          = GenRandomString();
             ServerInfo.strName          = GenRandomString();
-            ServerInfo.strTopic         = GenRandomString();
 
             Protocol.CreateCLRegisterServerMes ( CurHostAddress,
+                                                 CurLocalAddress,
                                                  ServerInfo );
             break;
 
@@ -224,11 +234,11 @@ public slots:
                 static_cast<QLocale::Country> ( GenRandomIntInRange ( 0, 100 ) );
 
             vecServerInfo[0].HostAddr         = CurHostAddress;
+            vecServerInfo[0].LHostAddr        = CurLocalAddress;
             vecServerInfo[0].iLocalPortNumber = GenRandomIntInRange ( -2, 10000 );
             vecServerInfo[0].iMaxNumClients   = GenRandomIntInRange ( -2, 10000 );
             vecServerInfo[0].strCity          = GenRandomString();
             vecServerInfo[0].strName          = GenRandomString();
-            vecServerInfo[0].strTopic         = GenRandomString();
 
             Protocol.CreateCLServerListMes ( CurHostAddress,
                                              vecServerInfo );

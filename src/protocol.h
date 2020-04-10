@@ -112,6 +112,7 @@ public:
                                          const int           iNumClients );
     void CreateCLServerFullMes         ( const CHostAddress& InetAddr );
     void CreateCLRegisterServerMes     ( const CHostAddress&    InetAddr,
+                                         const CHostAddress&    LInetAddr,
                                          const CServerCoreInfo& ServerInfo );
     void CreateCLUnregisterServerMes   ( const CHostAddress& InetAddr );
     void CreateCLServerListMes         ( const CHostAddress&        InetAddr,
@@ -287,6 +288,7 @@ signals:
                                         int                    iMs,
                                         int                    iNumClients );
     void CLRegisterServerReceived     ( CHostAddress           InetAddr,
+                                        CHostAddress           LInetAddr,
                                         CServerCoreInfo        ServerInfo );
     void CLUnregisterServerReceived   ( CHostAddress           InetAddr );
     void CLServerListReceived         ( CHostAddress           InetAddr,

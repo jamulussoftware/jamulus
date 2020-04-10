@@ -75,8 +75,8 @@ class CServerListEntry : public CServerInfo
 public:
     CServerListEntry() :
         CServerInfo ( CHostAddress(),
+                      CHostAddress(),
                       0,
-                      "",
                       "",
                       QLocale::AnyCountry,
                       "",
@@ -84,28 +84,29 @@ public:
                       false ) { UpdateRegistration(); }
 
     CServerListEntry ( const CHostAddress&     NHAddr,
+                       const CHostAddress&     NLHAddr,
                        const quint16           NLocPort,
                        const QString&          NsName,
-                       const QString&          NsTopic,
                        const QLocale::Country& NeCountry,
                        const QString&          NsCity,
                        const int               NiMaxNumClients,
                        const bool              NbPermOnline)
         : CServerInfo ( NHAddr,
+                        NLHAddr,
                         NLocPort,
                         NsName,
-                        NsTopic,
                         NeCountry,
                         NsCity,
                         NiMaxNumClients,
                         NbPermOnline ) { UpdateRegistration(); }
 
     CServerListEntry ( const CHostAddress&    NHAddr,
+                       const CHostAddress&    NLHAddr,
                        const CServerCoreInfo& NewCoreServerInfo )
         : CServerInfo ( NHAddr,
+                        NLHAddr,
                         NewCoreServerInfo.iLocalPortNumber,
                         NewCoreServerInfo.strName,
-                        NewCoreServerInfo.strTopic,
                         NewCoreServerInfo.eCountry,
                         NewCoreServerInfo.strCity,
                         NewCoreServerInfo.iMaxNumClients,
@@ -150,6 +151,7 @@ public:
     bool GetIsCentralServer() const { return bIsCentralServer; }
 
     void CentralServerRegisterServer ( const CHostAddress&    InetAddr,
+                                       const CHostAddress&    LInetAddr,
                                        const CServerCoreInfo& ServerInfo );
 
     void CentralServerUnregisterServer ( const CHostAddress& InetAddr );
@@ -197,6 +199,7 @@ protected:
     bool                    bCentServPingServerInList;
 
     CHostAddress            SlaveCurCentServerHostAddress;
+    CHostAddress            SlaveCurLocalHostAddress;
 
     CProtocol*              pConnLessProtocol;
 

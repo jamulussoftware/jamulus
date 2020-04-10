@@ -363,7 +363,7 @@ void CJamRecorder::OnEnd()
             QFile outf (reaperProjectFileName);
             outf.open(QFile::WriteOnly);
             QTextStream out(&outf);
-            out << CReaperProject(currentSession->Tracks()).toString() << endl;
+            out << CReaperProject(currentSession->Tracks(), iServerFrameSizeSamples).toString() << endl;
             qDebug() << "Session RPP:" << reaperProjectFileName;
         }
 
@@ -376,7 +376,7 @@ void CJamRecorder::OnEnd()
  * @brief CJamRecorder::SessionDirToReaper Replica of CJamRecorder::OnEnd() but using the directory contents to construct the CReaperProject object
  * @param strSessionDirName
  */
-void CJamRecorder::SessionDirToReaper(QString& strSessionDirName)
+void CJamRecorder::SessionDirToReaper(QString& strSessionDirName, int serverFrameSizeSamples)
 {
     const QFileInfo fiSessionDir(QDir::cleanPath(strSessionDirName));
     if (!fiSessionDir.exists() || !fiSessionDir.isDir())
@@ -398,7 +398,7 @@ void CJamRecorder::SessionDirToReaper(QString& strSessionDirName)
     }
     QTextStream out(&outf);
 
-    out << CReaperProject(CJamSession::TracksFromSessionDir(fiSessionDir.absoluteFilePath())).toString() << endl;
+    out << CReaperProject( CJamSession::TracksFromSessionDir(fiSessionDir.absoluteFilePath()), serverFrameSizeSamples ).toString() << endl;
 
     qDebug() << "Session RPP:" << reaperProjectFileName;
 }

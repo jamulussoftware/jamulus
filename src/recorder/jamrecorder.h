@@ -142,7 +142,7 @@ public:
 
     void Init( const CServer* server, const int _iServerFrameSizeSamples );
 
-    static void SessionDirToReaper(QString& strSessionDirName);
+    static void SessionDirToReaper( QString& strSessionDirName, int serverFrameSizeSamples );
 
 public slots:
     /**

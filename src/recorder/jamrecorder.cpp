@@ -353,7 +353,7 @@ void CJamRecorder::OnEnd()
 
         if (fi.exists())
         {
-            tsConsole << "CJamRecorder::OnEnd() - " << fi.absolutePath() << " exists and will not be overwritten." << endl;
+            qWarning() << "CJamRecorder::OnEnd():" << fi.absolutePath() << "exists and will not be overwritten.";
         }
         else
         {
@@ -361,7 +361,7 @@ void CJamRecorder::OnEnd()
             outf.open(QFile::WriteOnly);
             QTextStream out(&outf);
             out << CReaperProject(currentSession->Tracks()).toString() << endl;
-            tsConsole << "Session RPP: " << reaperProjectFileName << endl;
+            qDebug() << "Session RPP:" << reaperProjectFileName;
         }
 
         delete currentSession;
@@ -397,7 +397,7 @@ void CJamRecorder::SessionDirToReaper(QString& strSessionDirName)
 
     out << CReaperProject(CJamSession::TracksFromSessionDir(fiSessionDir.absoluteFilePath())).toString() << endl;
 
-    (*(new ConsoleWriterFactory())->get()) << "Session RPP: " << reaperProjectFileName << endl;
+    qDebug() << "Session RPP:" << reaperProjectFileName;
 }
 
 /**
@@ -408,11 +408,11 @@ void CJamRecorder::OnDisconnected(int iChID)
 {
     if (!isRecording)
     {
-        tsConsole << "CJamRecorder::OnDisconnected: channel " << iChID << " disconnected but not recording" << endl;
+        qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but not recording";
     }
     if (currentSession == nullptr)
     {
-        tsConsole << "CJamRecorder::OnDisconnected: channel " << iChID << " disconnected but no currentSession" << endl;
+        qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but no currentSession";
         return;
     }
     currentSession->DisconnectClient(iChID);

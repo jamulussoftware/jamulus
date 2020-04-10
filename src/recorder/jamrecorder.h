@@ -170,7 +170,6 @@ private:
 
     bool         isRecording;
     CJamSession* currentSession;
-    QTextStream& tsConsole = *((new ConsoleWriterFactory())->get());
 };
 
 }

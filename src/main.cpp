@@ -49,6 +49,7 @@ int main ( int argc, char** argv )
     bool         bStartMinimized           = false;
     bool         bShowComplRegConnList     = false;
     bool         bDisconnectAllClients     = false;
+    bool         bUseDoubleSystemFrameSize = true; // default is 128 samples frame size
     bool         bShowAnalyzerConsole      = false;
     bool         bCentServPingServerInList = false;
     bool         bNoAutoJackConnect        = false;
@@ -106,6 +107,18 @@ int main ( int argc, char** argv )
             // right now only the creative commons licence is supported
             eLicenceType = LT_CREATIVECOMMONS;
             tsConsole << "- licence required" << endl;
+            continue;
+        }
+
+
+        // Use 64 samples frame size mode ----------------------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-F",
+                               "--fastupdate" ) )
+        {
+            bUseDoubleSystemFrameSize = false; // 64 samples frame size
+            tsConsole << "- using " << SYSTEM_FRAME_SIZE_SAMPLES_SMALL << " samples frame size mode" << endl;
             continue;
         }
 
@@ -513,10 +526,6 @@ int main ( int argc, char** argv )
         }
         else
         {
-
-// TODO
-const bool bUseDoubleSystemFrameSize = true; // TODO for now this value is fixed but has to be changeable by command line argument
-
             // Server:
             // actual server object
             CServer Server ( iNumServerChannels,
@@ -615,6 +624,7 @@ QString UsageArguments ( char **argv )
         "  -c, --connect         connect to given server address on startup\n"
         "                        (client only)\n"
         "  -e, --centralserver   address of the central server (server only)\n"
+        "  -F, --fastupdate      use 64 samples frame size mode (server only)\n"
         "  -g, --pingservers     ping servers in list to keep NAT port open\n"
         "                        (central server only)\n"
         "  -h, -?, --help        this help text\n"

@@ -3,11 +3,10 @@
 
 3.4.7git
 
-TODO add command line argument for 64/124 frame size at the server
+  * added support for 64 samples frame size in the server (if server runs in 64 or 128 samples
+    mode it is still compatible to both, 64 and 128 samples frame size clients)
 
-TODO support OPUS 64 in the server as a first step towards official 64 samples frame size support
 
-TODO for different frame sizes (64/128) the start value of 6 for the jitter buffer might be too low
 
 TODO #12 A server in the same NAT region as the client is not visible (https://sourceforge.net/p/llcon/bugs/12/)
 
@@ -18,14 +17,17 @@ TODO https://sourceforge.net/p/llcon/discussion/533517/thread/62bd07fbcb/?limit=
 
 TODO in CreateLevelsForAllConChannels we should call CStereoSignalLevelMeter::CalcLogResult instead -> make it public and static
 
-TODO Multichannel CoreAudio Support #44 -> integrate important code lines in Mac sound interface
+TODO for different frame sizes (64/128) the start value of 6 for the jitter buffer might be too low
 
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 
-
-TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
+TODO Multichannel CoreAudio Support #44 -> integrate important code lines in Mac sound interface
 
 TODO update text in CAboutDlg
+
+
+
+TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
 
 TODO mixer faders linear -> log gain is better
 

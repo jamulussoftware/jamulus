@@ -60,8 +60,4 @@ protected:
     CSvgHistoryGraph  SvgHistoryGraph;
     bool              bDoLogging;
     QFile             File;
-
-private:
-    int               iHistNumItems;
-    int               iHistMaxDays;
 };

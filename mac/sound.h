@@ -25,6 +25,7 @@
 #pragma once
 
 #include <CoreAudio/CoreAudio.h>
+#include <AudioToolbox/AudioToolbox.h>
 #include <CoreMIDI/CoreMIDI.h>
 #include <QMutex>
 #include "soundbase.h"
@@ -76,7 +77,9 @@ public:
 protected:
     virtual QString  LoadAndInitializeDriver ( int iIdx );
 
-    QString CheckDeviceCapabilities ( const int iDriverIdx );
+    QString  CheckDeviceCapabilities ( const int iDriverIdx );
+    OSStatus CountChannels ( AudioDeviceID devID,
+                             bool          isInput );
 
     UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID,
                            const bool     bIsInput,

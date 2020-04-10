@@ -70,7 +70,7 @@ class CJamClient : public QObject
 public:
     CJamClient(const qint64 frame, const int numChannels, const QString name, const CHostAddress address, const QDir recordBaseDir);
 
-    void Frame(const QString name, const CVector<int16_t>& pcm);
+    void Frame(const QString name, const CVector<int16_t>& pcm, int iServerFrameSizeSamples);
 
     void Disconnect();
 
@@ -106,7 +106,7 @@ public:
 
     CJamSession(QDir recordBaseDir);
 
-    void Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data);
+    void Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data, int iServerFrameSizeSamples);
 
     void End();
 
@@ -120,7 +120,7 @@ public:
 
     void DisconnectClient(int iChID);
 
-    static QMap<QString, QList<STrackItem>> TracksFromSessionDir(const QString& name);
+    static QMap<QString, QList<STrackItem>> TracksFromSessionDir(const QString& name, int iServerFrameSizeSamples);
 
 private:
     CJamSession();

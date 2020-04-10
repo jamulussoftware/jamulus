@@ -110,6 +110,12 @@ LED bar:      lbr
 // download URL
 #define LLCON_DOWNLOAD_URL              "http://sourceforge.net/projects/llcon/files"
 
+// determining server internal address uses well-known host and port
+// (Google DNS, or something else reliable)
+#define WELL_KNOWN_HOST                 "8.8.8.8"  // Google
+#define WELL_KNOWN_PORT                  53        // DNS
+#define IP_LOOKUP_TIMEOUT                500       // ms
+
 // defined port number for client and server
 #if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
 # define LLCON_DEFAULT_PORT_NUMBER      22064 // different port number for 64 samples frame size version

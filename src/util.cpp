@@ -893,8 +893,8 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
 CHostAddress NetworkUtil::GetLocalAddress()
 {
     QTcpSocket socket;
-    socket.connectToHost("8.8.8.8", 53); // google DNS, or something else reliable
-    if (socket.waitForConnected()) {
+    socket.connectToHost( WELL_KNOWN_HOST, WELL_KNOWN_PORT );
+    if (socket.waitForConnected( IP_LOOKUP_TIMEOUT )) {
         return CHostAddress( socket.localAddress(), 0 );
     } else {
         qWarning()

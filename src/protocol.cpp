@@ -1507,10 +1507,10 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
 
     if ( sLocHost.isEmpty() )
     {
-        // old server, empty "topic", register as external address
-        LInetAddr = InetAddr;
+        // old server, empty "topic", register as local host
+        LInetAddr.InetAddr.setAddress ( QHostAddress::LocalHost );
     }
-    else if ( !LInetAddr.InetAddr.setAddress( sLocHost ) )
+    else if ( !LInetAddr.InetAddr.setAddress ( sLocHost ) )
     {
         return true; // return error code
     }
@@ -1674,10 +1674,10 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
         CHostAddress LInetAddr;
         if ( strLHostAddr.isEmpty() )
         {
-            // old central server, empty "topic", default to server address
-            LInetAddr.InetAddr.setAddress( iIpAddr );
+            // old central server, empty "topic", default to localhost
+            LInetAddr.InetAddr.setAddress ( QHostAddress::LocalHost );
         }
-        else if ( !LInetAddr.InetAddr.setAddress( strLHostAddr ) )
+        else if ( !LInetAddr.InetAddr.setAddress ( strLHostAddr ) )
         {
             return true; // return error code
         }

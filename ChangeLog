@@ -14,7 +14,6 @@
 
 
 
-
 TODO split country names by upper case latters by inserting a space
 
 TODO fix UpdateCurLevel() for new 64 samples frame size
@@ -28,6 +27,8 @@ TODO for different frame sizes (64/128) the start value of 6 for the jitter buff
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 
 TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
+
+TODO should LHostAddr be QHostAddress instead of CHostAddress?
 
 
 

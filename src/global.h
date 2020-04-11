@@ -116,12 +116,13 @@ LED bar:      lbr
 #define WELL_KNOWN_PORT                  53        // DNS
 #define IP_LOOKUP_TIMEOUT                500       // ms
 
-// defined port number for client and server
+// defined port numbers for client and server
 #if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
 # define LLCON_DEFAULT_PORT_NUMBER      22064 // different port number for 64 samples frame size version
 #else
 # define LLCON_DEFAULT_PORT_NUMBER      22124
 #endif
+#define LLCON_PORT_NUMBER_NORTHAMERICA  22224
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ           48000 // Hz
@@ -173,7 +174,7 @@ LED bar:      lbr
 #define MAX_NUM_SERVER_ADDR_ITEMS       6
 
 // maximum number of fader settings to be stored (together with the fader tags)
-#define MAX_NUM_STORED_FADER_SETTINGS   100
+#define MAX_NUM_STORED_FADER_SETTINGS   200
 
 // defines for LED level meter CMultiColorLEDBar
 #define NUM_STEPS_LED_BAR               8

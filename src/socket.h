@@ -78,7 +78,7 @@ public:
     void Close();
 
 protected:
-    void Init ( const quint16 iPortNumber = LLCON_DEFAULT_PORT_NUMBER );
+    void Init ( const quint16 iPortNumber );
 
 #ifdef _WIN32
     SOCKET           UdpSocket;

@@ -12,7 +12,7 @@ Build-Depends:
  qt5-default,
  qtdeclarative5-dev,
 Standards-Version: 3.9.5
-Homepage: http://http://llcon.sourceforge.net/
+Homepage: http://llcon.sourceforge.net/
 Vcs-Git: git://github.com/corrados/jamulus.git
 Vcs-Browser: https://github.com/corrados/jamulus
  

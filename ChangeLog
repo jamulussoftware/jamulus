@@ -6,13 +6,15 @@
   * added support for 64 samples frame size in the server (if server runs in 64 or 128 samples
     mode it is still compatible to both, 64 and 128 samples frame size clients)
 
+  * added multichannel CoreAudio support, coded by emlynmac (#44)
+
   * fixed server not visible if in same local network, coded by pljones (Ticket #27)
 
-  * fixed column widths are slightly too narrow for "Ping Time" and "Musicians" and typos
 
 
+TODO problem with Central Server listing limit of 200 servers (Ticket #50)
 
-TODO Multichannel CoreAudio Support #44 -> integrate important code lines in Mac sound interface
+TODO split country names by upper case latters by inserting a space
 
 TODO fix UpdateCurLevel() for new 64 samples frame size
 

@@ -3,6 +3,8 @@
 
 3.4.7git
 
+  * added support for alternative Central Servers to solve the 200 server registration limit (Ticket #50)
+
   * added support for 64 samples frame size in the server (if server runs in 64 or 128 samples
     mode it is still compatible to both, 64 and 128 samples frame size clients)
 
@@ -12,7 +14,6 @@
 
 
 
-TODO problem with Central Server listing limit of 200 servers (Ticket #50)
 
 TODO split country names by upper case latters by inserting a space
 

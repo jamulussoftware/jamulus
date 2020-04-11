@@ -65,7 +65,7 @@
    <item>
     <widget class="QCheckBox" name="chbRegisterServer">
      <property name="text">
-      <string>Register My Server in the Server List at the Central Server</string>
+      <string>Make My Server Public (Register My Server in the Server List)</string>
      </property>
     </widget>
    </item>

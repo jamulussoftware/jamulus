@@ -431,9 +431,22 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
                     // otherwise, use the supplied details
                     if ( iIdx > iNumPredefinedServers )
                     {
-                        vecServerInfo[iIdx].HostAddr.InetAddr =
-                            ServerList[iIdx].LHostAddr.InetAddr;
+                        // check for server running on the same PC
+                        if ( vecServerInfo[iIdx].HostAddr.iPort == InetAddr.iPort )
+                        {
+                            vecServerInfo[iIdx].HostAddr.InetAddr =
+                                QHostAddress ( QHostAddress::LocalHost );
+                        }
+                        else
+                        {
+                            // we are not on the same PC but in the same local network
+                            vecServerInfo[iIdx].HostAddr.InetAddr =
+                                ServerList[iIdx].LHostAddr.InetAddr;
+                        }
 
+                        // take the local port number instead of the received port
+                        // number since some NAT (network address translation) might
+                        // have changed the port
                         vecServerInfo[iIdx].HostAddr.iPort =
                             ServerList[iIdx].iLocalPortNumber;
                     }

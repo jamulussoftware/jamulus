@@ -73,18 +73,16 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     // central server address
     QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
         "Central server address is the IP address or URL of the central server "
-        "at which this server is registered. If the Default check box is "
-        "checked, the default central server address is shown read-only." );
+        "at which this server is registered. With the central server address "
+        "type either the local region can be selected of the default central "
+        "servers or a manual address can be specified." );
 
     lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    chbDefaultCentralServer->setWhatsThis ( strCentrServAddr );
+    cbxCentServAddrType->setWhatsThis ( strCentrServAddr );
     edtCentralServerAddress->setWhatsThis ( strCentrServAddr );
 
-    chbDefaultCentralServer->setAccessibleName (
-        tr ( "Default central server check box" ) );
-
-    edtCentralServerAddress->setAccessibleName (
-        tr ( "Central server address line edit" ) );
+    cbxCentServAddrType->setAccessibleName ( tr ( "Default central server type combo box" ) );
+    edtCentralServerAddress->setAccessibleName ( tr ( "Central server address line edit" ) );
 
     // server name
     QString strServName = tr ( "<b>Server Name:</b> The server name identifies "
@@ -183,15 +181,12 @@ lvwClients->setMinimumHeight ( 140 );
         vecpListViewItems[i]->setHidden ( true );
     }
 
-    // update default central server address check box
-    if ( pServer->GetUseDefaultCentralServerAddress() )
-    {
-        chbDefaultCentralServer->setCheckState ( Qt::Checked );
-    }
-    else
-    {
-        chbDefaultCentralServer->setCheckState ( Qt::Unchecked );
-    }
+    // central server address type combo box
+    cbxCentServAddrType->clear();
+    cbxCentServAddrType->addItem ( "Manual" );                  // AT_MANUAL
+    cbxCentServAddrType->addItem ( "Default" );                 // AT_DEFAULT
+    cbxCentServAddrType->addItem ( "Default (North America)" ); // AT_NORTH_AMERICA
+    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pServer->GetCentralServerAddressType() ) );
 
     // update server name line edit
     edtServerName->setText ( pServer->GetServerName() );
@@ -293,9 +288,6 @@ lvwClients->setMinimumHeight ( 140 );
     QObject::connect ( chbRegisterServer, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnRegisterServerStateChanged ( int ) ) );
 
-    QObject::connect ( chbDefaultCentralServer, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnDefaultCentralServerStateChanged ( int ) ) );
-
     QObject::connect ( chbStartOnOSStart, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnStartOnOSStartStateChanged ( int ) ) );
 
@@ -315,6 +307,9 @@ lvwClients->setMinimumHeight ( 140 );
     // combo boxes
     QObject::connect ( cbxLocationCountry, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnLocationCountryActivated ( int ) ) );
+
+    QObject::connect ( cbxCentServAddrType, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnCentServAddrTypeActivated ( int ) ) );
 
     // timers
     QObject::connect ( &Timer, SIGNAL ( timeout() ), this, SLOT ( OnTimer() ) );
@@ -370,16 +365,6 @@ void CServerDlg::OnUseCCLicenceStateChanged ( int value )
     {
         pServer->SetLicenceType ( LT_NO_LICENCE );
     }
-}
-
-void CServerDlg::OnDefaultCentralServerStateChanged ( int value )
-{
-    // apply new setting to the server and update it
-    pServer->SetUseDefaultCentralServerAddress ( value == Qt::Checked );
-    pServer->UpdateServerList();
-
-    // update GUI dependencies
-    UpdateGUIDependencies();
 }
 
 void CServerDlg::OnRegisterServerStateChanged ( int value )
@@ -451,6 +436,16 @@ void CServerDlg::OnLocationCountryActivated ( int iCntryListItem )
     pServer->UpdateServerList();
 }
 
+void CServerDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
+{
+    // apply new setting to the server and update it
+    pServer->SetCentralServerAddressType ( static_cast<ECSAddType> ( iTypeIdx ) );
+    pServer->UpdateServerList();
+
+    // update GUI dependencies
+    UpdateGUIDependencies();
+}
+
 void CServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason )
 {
     // on double click on the icon, show window in fore ground
@@ -515,13 +510,12 @@ void CServerDlg::UpdateGUIDependencies()
     // get the states which define the GUI dependencies from the server
     const bool bCurSerListEnabled = pServer->GetServerListEnabled();
 
-    const bool bCurUseDefCentServAddr =
-        pServer->GetUseDefaultCentralServerAddress();
+    const bool bCurUseDefCentServAddr = ( pServer->GetCentralServerAddressType() != AT_MANUAL );
 
     // if register server is not enabled, we disable all the configuration
     // controls for the server list
-    chbDefaultCentralServer->setEnabled ( bCurSerListEnabled );
-    grbServerInfo->setEnabled           ( bCurSerListEnabled );
+    cbxCentServAddrType->setEnabled ( bCurSerListEnabled );
+    grbServerInfo->setEnabled       ( bCurSerListEnabled );
 
     // make sure the line edit does not fire signals when we update the text
     edtCentralServerAddress->blockSignals ( true );

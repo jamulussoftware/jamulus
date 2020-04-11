@@ -84,13 +84,13 @@ public slots:
     void OnAboutToQuit() { pSettings->Save(); }
 
     void OnRegisterServerStateChanged ( int value );
-    void OnDefaultCentralServerStateChanged ( int value );
     void OnStartOnOSStartStateChanged ( int value );
     void OnUseCCLicenceStateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
     void OnServerNameTextChanged ( const QString& strNewName );
     void OnLocationCityTextChanged ( const QString& strNewCity );
     void OnLocationCountryActivated ( int iCntryListItem );
+    void OnCentServAddrTypeActivated ( int iTypeIdx );
     void OnTimer();
     void OnServerStarted() { UpdateSystemTrayIcon ( true ); }
     void OnServerStopped() { UpdateSystemTrayIcon ( false ); }

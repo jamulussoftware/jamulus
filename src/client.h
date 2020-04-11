@@ -137,17 +137,11 @@ public:
     EAudChanConf GetAudioChannels() const { return eAudioChannelConf; }
     void SetAudioChannels ( const EAudChanConf eNAudChanConf );
 
-    void SetServerListCentralServerAddress ( const QString& sNCentServAddr )
-        { strCentralServerAddress = sNCentServAddr; }
+    void SetServerListCentralServerAddress ( const QString& sNCentServAddr ) { strCentralServerAddress = sNCentServAddr; }
+    QString GetServerListCentralServerAddress() { return strCentralServerAddress; }
 
-    QString GetServerListCentralServerAddress()
-        { return strCentralServerAddress; }
-
-    void SetUseDefaultCentralServerAddress ( const bool bNUDCSeAddr )
-        { bUseDefaultCentralServerAddress = bNUDCSeAddr; }
-
-    bool GetUseDefaultCentralServerAddress()
-        { return bUseDefaultCentralServerAddress; }
+    void SetCentralServerAddressType ( const ECSAddType eNCSAT ) { eCentralServerAddressType = eNCSAT; }
+    ECSAddType GetCentralServerAddressType() { return eCentralServerAddressType; }
 
     int GetAudioInFader() const { return iAudioInFader; }
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
@@ -370,7 +364,7 @@ protected:
     bool                    bJitterBufferOK;
 
     QString                 strCentralServerAddress;
-    bool                    bUseDefaultCentralServerAddress;
+    ECSAddType              eCentralServerAddressType;
 
     CVector<int16_t>        vecsAudioSndCrdMono;
 

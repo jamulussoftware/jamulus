@@ -274,11 +274,27 @@ void CSettings::Load()
         pClient->SetServerListCentralServerAddress (
             GetIniSetting ( IniXMLDocument, "client", "centralservaddr" ) );
 
-        // use default central server address flag
-        if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
+        // central server address type
+        if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
+             0, 2 /* AT_NORTH_AMERICA */, iValue ) )
         {
-            pClient->SetUseDefaultCentralServerAddress ( bValue );
+            pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iValue ) );
         }
+        else
+        {
+            // if no address type is given, choose one from the operating system locale
+            pClient->SetCentralServerAddressType ( CLocale::GetCentralServerAddressType ( QLocale::system().country() ) );
+        }
+
+// TODO compatibility to old version
+if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
+{
+    // only the case that manual was set in old ini must be considered
+    if ( !bValue )
+    {
+        pClient->SetCentralServerAddressType ( AT_MANUAL );
+    }
+}
 
         // window position of the main window
         pClient->vecWindowPosMain = FromBase64ToByteArray (
@@ -328,12 +344,28 @@ void CSettings::Load()
     {
         // server:
 
-        // use default central server address flag (note that it is important
+        // central server address type (note that it is important
         // to set this setting prior to the "central server address")
-        if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
+        if ( GetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype",
+             0, 2 /* AT_NORTH_AMERICA */, iValue ) )
         {
-            pServer->SetUseDefaultCentralServerAddress ( bValue );
+            pServer->SetCentralServerAddressType ( static_cast<ECSAddType> ( iValue ) );
         }
+        else
+        {
+            // if no address type is given, choose one from the operating system locale
+            pServer->SetCentralServerAddressType ( CLocale::GetCentralServerAddressType ( QLocale::system().country() ) );
+        }
+
+// TODO compatibility to old version
+if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
+{
+    // only the case that manual was set in old ini must be considered
+    if ( !bValue )
+    {
+        pServer->SetCentralServerAddressType ( AT_MANUAL );
+    }
+}
 
         // central server address (to be set after the "use default central
         // server address)
@@ -519,9 +551,9 @@ void CSettings::Save()
         PutIniSetting ( IniXMLDocument, "client", "centralservaddr",
             pClient->GetServerListCentralServerAddress() );
 
-        // use default central server address flag
-        SetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr",
-            pClient->GetUseDefaultCentralServerAddress() );
+        // central server address type
+        SetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
+            static_cast<int> ( pClient->GetCentralServerAddressType() ) );
 
         // window position of the main window
         PutIniSetting ( IniXMLDocument, "client", "winposmain_base64",
@@ -567,9 +599,9 @@ void CSettings::Save()
         PutIniSetting ( IniXMLDocument, "server", "centralservaddr",
             pServer->GetServerListCentralServerAddress() );
 
-        // use default central server address flag
-        SetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr",
-            pServer->GetUseDefaultCentralServerAddress() );
+        // central server address type
+        SetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype",
+            static_cast<int> ( pServer->GetCentralServerAddressType() ) );
 
         // server list enabled flag
         SetFlagIniSet ( IniXMLDocument, "server", "servlistenabled",

@@ -31,11 +31,11 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const int      iNumChannels,
                                          const bool     bNCentServPingServerInList,
                                          CProtocol*     pNConLProt )
-    : iPortNumber                     ( iNPortNum ),
-      iNumPredefinedServers           ( 0 ),
-      bUseDefaultCentralServerAddress ( false ), // must be false for the "no GUI" case
-      bCentServPingServerInList       ( bNCentServPingServerInList ),
-      pConnLessProtocol               ( pNConLProt )
+    : iPortNumber               ( iNPortNum ),
+      iNumPredefinedServers     ( 0 ),
+      eCentralServerAddressType ( AT_MANUAL ), // must be AT_MANUAL for the "no GUI" case
+      bCentServPingServerInList ( bNCentServPingServerInList ),
+      pConnLessProtocol         ( pNConLProt )
 {
     // set the central server address
     SetCentralServerAddress ( sNCentServAddr );
@@ -199,7 +199,7 @@ void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr 
             (
               ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
                 !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
-              ( !bUseDefaultCentralServerAddress )
+              ( eCentralServerAddressType == AT_MANUAL )
             );
 
         bEnabled = true;
@@ -480,8 +480,8 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
 
     // get the correct central server address
     const QString strCurCentrServAddr =
-        SELECT_SERVER_ADDRESS ( bUseDefaultCentralServerAddress,
-                                strCentralServerAddress );
+            NetworkUtil::GetCentralServerAddress ( eCentralServerAddressType,
+                                                   strCentralServerAddress );
 
     // For the slave server, the slave server properties are stored in the
     // very first item in the server list (which is actually no server list

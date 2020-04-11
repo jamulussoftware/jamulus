@@ -244,19 +244,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // central server address
     QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
         "central server address is the IP address or URL of the central server "
-        "at which the server list of the connection dialog is managed. If the "
-        "Default check box is checked, the default central server address is "
-        "shown read-only." );
+        "at which the server list of the connection dialog is managed. With the "
+        "central server address type either the local region can be selected of "
+        "the default central servers or a manual address can be specified." );
 
     lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    chbDefaultCentralServer->setWhatsThis ( strCentrServAddr );
+    cbxCentServAddrType->setWhatsThis ( strCentrServAddr );
     edtCentralServerAddress->setWhatsThis ( strCentrServAddr );
 
-    chbDefaultCentralServer->setAccessibleName (
-        tr ( "Default central server check box" ) );
-
-    edtCentralServerAddress->setAccessibleName (
-        tr ( "Central server address line edit" ) );
+    cbxCentServAddrType->setAccessibleName ( tr ( "Default central server type combo box" ) );
+    edtCentralServerAddress->setAccessibleName ( tr ( "Central server address line edit" ) );
 
     // current connection status parameter
     QString strConnStats = tr ( "<b>Current Connection Status "
@@ -346,15 +343,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     cbxAudioQuality->addItem ( "High" );   // AQ_HIGH
     cbxAudioQuality->setCurrentIndex ( static_cast<int> ( pClient->GetAudioQuality() ) );
 
-    // update default central server address check box
-    if ( pClient->GetUseDefaultCentralServerAddress() )
-    {
-        chbDefaultCentralServer->setCheckState ( Qt::Checked );
-    }
-    else
-    {
-        chbDefaultCentralServer->setCheckState ( Qt::Unchecked );
-    }
+    // central server address type combo box
+    cbxCentServAddrType->clear();
+    cbxCentServAddrType->addItem ( "Manual" );                  // AT_MANUAL
+    cbxCentServAddrType->addItem ( "Default" );                 // AT_DEFAULT
+    cbxCentServAddrType->addItem ( "Default (North America)" ); // AT_NORTH_AMERICA
+    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
     UpdateCentralServerDependency();
 
     // update new client fader level edit box
@@ -401,9 +395,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( chbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnAutoJitBufStateChanged ( int ) ) );
 
-    QObject::connect ( chbDefaultCentralServer, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnDefaultCentralServerStateChanged ( int ) ) );
-
     // line edits
     QObject::connect ( edtCentralServerAddress, SIGNAL ( editingFinished() ),
         this, SLOT ( OnCentralServerAddressEditingFinished() ) );
@@ -432,6 +423,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     QObject::connect ( cbxAudioQuality, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnAudioQualityActivated ( int ) ) );
+
+    QObject::connect ( cbxCentServAddrType, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnCentServAddrTypeActivated ( int ) ) );
 
     // buttons
     QObject::connect ( butDriverSetup, SIGNAL ( clicked() ),
@@ -591,8 +585,7 @@ void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
 
 void CClientSettingsDlg::UpdateCentralServerDependency()
 {
-    const bool bCurUseDefCentServAddr =
-        pClient->GetUseDefaultCentralServerAddress();
+    const bool bCurUseDefCentServAddr = ( pClient->GetCentralServerAddressType() != AT_MANUAL );
 
     // make sure the line edit does not fire signals when we update the text
     edtCentralServerAddress->blockSignals ( true );
@@ -696,6 +689,15 @@ void CClientSettingsDlg::OnAudioQualityActivated ( int iQualityIdx )
     UpdateDisplay(); // upload rate will be changed
 }
 
+void CClientSettingsDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
+{
+    // apply new setting to the client
+    pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iTypeIdx ) );
+
+    // update GUI dependencies
+    UpdateCentralServerDependency();
+}
+
 void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 {
     pClient->SetDoAutoSockBufSize ( value == Qt::Checked );
@@ -720,15 +722,6 @@ void CClientSettingsDlg::OnDisplayChannelLevelsStateChanged ( int value )
 {
     pClient->SetDisplayChannelLevels ( value != Qt::Unchecked );
     emit DisplayChannelLevelsChanged();
-}
-
-void CClientSettingsDlg::OnDefaultCentralServerStateChanged ( int value )
-{
-    // apply new setting to the client
-    pClient->SetUseDefaultCentralServerAddress ( value == Qt::Checked );
-
-    // update GUI dependencies
-    UpdateCentralServerDependency();
 }
 
 void CClientSettingsDlg::OnCentralServerAddressEditingFinished()

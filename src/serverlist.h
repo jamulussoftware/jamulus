@@ -142,11 +142,8 @@ public:
     void SetCentralServerAddress ( const QString sNCentServAddr );
     QString GetCentralServerAddress() { return strCentralServerAddress; }
 
-    void SetUseDefaultCentralServerAddress ( const bool bNUDCSeAddr )
-        { bUseDefaultCentralServerAddress = bNUDCSeAddr; }
-
-    bool GetUseDefaultCentralServerAddress()
-        { return bUseDefaultCentralServerAddress; }
+    void SetCentralServerAddressType ( const ECSAddType eNCSAT ) { eCentralServerAddressType = eNCSAT; }
+    ECSAddType GetCentralServerAddressType() { return eCentralServerAddressType; }
 
     bool GetIsCentralServer() const { return bIsCentralServer; }
 
@@ -195,7 +192,7 @@ protected:
     int                     iNumPredefinedServers;
     bool                    bEnabled;
     bool                    bIsCentralServer;
-    bool                    bUseDefaultCentralServerAddress;
+    ECSAddType              eCentralServerAddressType;
     bool                    bCentServPingServerInList;
 
     CHostAddress            SlaveCurCentServerHostAddress;

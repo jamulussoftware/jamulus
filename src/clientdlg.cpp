@@ -816,8 +816,8 @@ void CClientDlg::ShowConnectionSetupDialog()
 {
     // get the central server address string
     const QString strCurCentServAddr =
-        SELECT_SERVER_ADDRESS ( pClient->GetUseDefaultCentralServerAddress(),
-                                pClient->GetServerListCentralServerAddress() );
+            NetworkUtil::GetCentralServerAddress ( pClient->GetCentralServerAddressType(),
+                                                   pClient->GetServerListCentralServerAddress() );
 
     // init the connect dialog
     ConnectDlg.Init ( strCurCentServAddr, pClient->vstrIPAddress );

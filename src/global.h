@@ -105,7 +105,6 @@ LED bar:      lbr
 // default server address
 #define DEFAULT_SERVER_ADDRESS          "jamulus.fischvolk.de"
 #define DEFAULT_SERVER_NAME             "Central Server"
-#define SELECT_SERVER_ADDRESS(a, b)     ((a) ? (DEFAULT_SERVER_ADDRESS) : (b))
 
 // download URL
 #define LLCON_DOWNLOAD_URL              "http://sourceforge.net/projects/llcon/files"

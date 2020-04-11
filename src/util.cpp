@@ -908,6 +908,17 @@ CHostAddress NetworkUtil::GetLocalAddress()
     }
 }
 
+QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAddressType,
+                                               const QString&   strCentralServerAddress )
+{
+    switch ( eCentralServerAddressType )
+    {
+    case AT_MANUAL:        return strCentralServerAddress;
+    case AT_NORTH_AMERICA: return QString ( "%1:%2" ).arg ( DEFAULT_SERVER_ADDRESS ).arg ( LLCON_PORT_NUMBER_NORTHAMERICA );
+    default:               return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
+    }
+}
+
 
 // Instrument picture data base ------------------------------------------------
 CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
@@ -992,7 +1003,7 @@ QString CInstPictures::GetName ( const int iInstrument )
 }
 
 
-// Country flag icon data base -------------------------------------------------
+// Locale management class -----------------------------------------------------
 QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry )
 {
     QString strReturn = "";
@@ -1246,6 +1257,23 @@ QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country e
     }
 
     return strReturn;
+}
+
+ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountry )
+{
+// TODO this is the initial implementation and should be extended in the future,
+//      maybe there is/will be some function in Qt to get the continent
+    switch ( eCountry )
+    {
+    case QLocale::UnitedStates:
+    case QLocale::Canada:
+    case QLocale::Mexico:
+    case QLocale::Greenland:
+        return AT_NORTH_AMERICA;
+
+    default:
+        return AT_DEFAULT;
+    }
 }
 
 

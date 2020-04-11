@@ -219,7 +219,8 @@ If enabled, the channel input level for each connected client will be displayed 
 ![Central server address](centralserveraddress.png)
 
 The central server address is the IP address or URL of the central server at which the server list of the connection
-dialog is managed. If the Default check box is checked, the default central server address is shown read-only.
+dialog is managed. With the central server address type either the local region can be selected of the default
+central servers or a manual address can be specified.
 
 ### Current connection status parameter
 

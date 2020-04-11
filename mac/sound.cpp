@@ -466,7 +466,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
 
     // store the input and out number of channels for this device
     iNumInChan  = CountChannels ( audioInputDevice[iDriverIdx], true );
-    iNumOutChan = CountChannels ( audioInputDevice[iDriverIdx], false );
+    iNumOutChan = CountChannels ( audioOutputDevice[iDriverIdx], false );
 
     // clip the number of input/output channels to our allowed maximum
     if ( iNumInChan > MAX_NUM_IN_OUT_CHANNELS )

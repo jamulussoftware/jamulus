@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>567</width>
-    <height>351</height>
+    <height>371</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -557,11 +557,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="chbDefaultCentralServer">
-          <property name="text">
-           <string>Default</string>
-          </property>
-         </widget>
+         <widget class="QComboBox" name="cbxCentServAddrType"/>
         </item>
        </layout>
       </item>
@@ -731,7 +727,7 @@
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>chbGUIDesignFancy</tabstop>
   <tabstop>chbDisplayChannelLevels</tabstop>
-  <tabstop>chbDefaultCentralServer</tabstop>
+  <tabstop>cbxCentServAddrType</tabstop>
   <tabstop>edtCentralServerAddress</tabstop>
  </tabstops>
  <resources>

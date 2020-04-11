@@ -168,11 +168,11 @@ public:
     QString GetServerListCentralServerAddress()
         { return ServerListManager.GetCentralServerAddress(); }
 
-    void SetUseDefaultCentralServerAddress ( const bool bNUDCSeAddr )
-        { ServerListManager.SetUseDefaultCentralServerAddress ( bNUDCSeAddr ); }
+    void SetCentralServerAddressType ( const ECSAddType eNCSAT )
+        { ServerListManager.SetCentralServerAddressType ( eNCSAT ); }
 
-    bool GetUseDefaultCentralServerAddress()
-        { return ServerListManager.GetUseDefaultCentralServerAddress(); }
+    ECSAddType GetCentralServerAddressType()
+        { return ServerListManager.GetCentralServerAddressType(); }
 
     void SetServerName ( const QString& strNewName )
         { ServerListManager.SetServerName ( strNewName ); }

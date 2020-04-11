@@ -518,9 +518,9 @@ enum EAudChanConf
 enum EAudComprType
 {
     // used for protocol -> enum values must be fixed!
-    CT_NONE   = 0,
-    CT_CELT   = 1,
-    CT_OPUS   = 2,
+    CT_NONE = 0,
+    CT_CELT = 1,
+    CT_OPUS = 2,
     CT_OPUS64 = 3 // using OPUS with 64 samples frame size
 };
 
@@ -560,6 +560,15 @@ enum ELicenceType
     // used for protocol -> enum values must be fixed!
     LT_NO_LICENCE = 0,
     LT_CREATIVECOMMONS = 1
+};
+
+
+// Central server address type -------------------------------------------------
+enum ECSAddType
+{
+    AT_MANUAL = 0,
+    AT_DEFAULT = 1, // Europe and others
+    AT_NORTH_AMERICA = 2
 };
 
 
@@ -738,7 +747,8 @@ protected:
 class CLocale
 {
 public:
-    static QString GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
+    static QString    GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
+    static ECSAddType GetCentralServerAddressType ( const QLocale::Country eCountry );
 };
 
 
@@ -980,6 +990,8 @@ public:
                                       CHostAddress& HostAddress );
 
     static CHostAddress GetLocalAddress();
+    static QString      GetCentralServerAddress ( const ECSAddType eCentralServerAddressType,
+                                                  const QString&   strCentralServerAddress );
 };
 
 

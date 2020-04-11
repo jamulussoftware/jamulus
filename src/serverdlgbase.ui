@@ -82,11 +82,7 @@
       <widget class="QLineEdit" name="edtCentralServerAddress"/>
      </item>
      <item>
-      <widget class="QCheckBox" name="chbDefaultCentralServer">
-       <property name="text">
-        <string>Default</string>
-       </property>
-      </widget>
+      <widget class="QComboBox" name="cbxCentServAddrType"/>
      </item>
     </layout>
    </item>
@@ -190,7 +186,7 @@
   <tabstop>chbUseCCLicence</tabstop>
   <tabstop>chbRegisterServer</tabstop>
   <tabstop>edtCentralServerAddress</tabstop>
-  <tabstop>chbDefaultCentralServer</tabstop>
+  <tabstop>cbxCentServAddrType</tabstop>
   <tabstop>edtServerName</tabstop>
   <tabstop>edtLocationCity</tabstop>
   <tabstop>cbxLocationCountry</tabstop>

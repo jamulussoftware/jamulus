@@ -69,7 +69,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bDisplayChannelLevels            ( true ),
     bJitterBufferOK                  ( true ),
     strCentralServerAddress          ( "" ),
-    bUseDefaultCentralServerAddress  ( true ),
+    eCentralServerAddressType        ( AT_DEFAULT ),
     iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL )
 {
     int iOpusError;

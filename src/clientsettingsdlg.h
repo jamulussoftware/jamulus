@@ -91,7 +91,6 @@ protected:
     void OnAutoJitBufStateChanged ( int value );
     void OnGUIDesignFancyStateChanged ( int value );
     void OnDisplayChannelLevelsStateChanged ( int value );
-    void OnDefaultCentralServerStateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
     void OnNewClientLevelEditingFinished();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
@@ -102,6 +101,7 @@ protected:
     void OnROutChanActivated ( int iChanIdx );
     void OnAudioChannelsActivated ( int iChanIdx );
     void OnAudioQualityActivated ( int iQualityIdx );
+    void OnCentServAddrTypeActivated ( int iTypeIdx );
     void OnDriverSetupClicked();
 
 signals:

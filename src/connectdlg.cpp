@@ -371,7 +371,7 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
             {
                 // try to load the country flag icon
                 QPixmap CountryFlagPixmap (
-                    CCountyFlagIcons::GetResourceReference ( vecChanInfo[i].eCountry ) );
+                    CLocale::GetCountryFlagIconsResourceReference ( vecChanInfo[i].eCountry ) );
 
                 // first check if resource reference was valid
                 if ( !CountryFlagPixmap.isNull() )

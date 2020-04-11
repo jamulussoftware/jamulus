@@ -612,7 +612,7 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
 
             // try to load icon from resource file name
             QIcon CurFlagIcon;
-            CurFlagIcon.addFile ( CCountyFlagIcons::GetResourceReference ( eCountry ) );
+            CurFlagIcon.addFile ( CLocale::GetCountryFlagIconsResourceReference ( eCountry ) );
 
             // only add the entry if a flag is available
             if ( !CurFlagIcon.isNull() )
@@ -889,21 +889,26 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
     return true;
 }
 
-
 CHostAddress NetworkUtil::GetLocalAddress()
 {
     QTcpSocket socket;
-    socket.connectToHost( WELL_KNOWN_HOST, WELL_KNOWN_PORT );
-    if (socket.waitForConnected( IP_LOOKUP_TIMEOUT )) {
-        return CHostAddress( socket.localAddress(), 0 );
-    } else {
-        qWarning()
-            << "could not determine local IPv4 address:"
-            << socket.errorString()
-            << "- using localhost";
-        return CHostAddress( QHostAddress::LocalHost, 0 );
+    socket.connectToHost ( WELL_KNOWN_HOST, WELL_KNOWN_PORT );
+
+    if ( socket.waitForConnected ( IP_LOOKUP_TIMEOUT ) )
+    {
+        return CHostAddress ( socket.localAddress(), 0 );
+    }
+    else
+    {
+        qWarning() << "could not determine local IPv4 address:"
+                   << socket.errorString()
+                   << "- using localhost";
+
+        return CHostAddress(  QHostAddress::LocalHost, 0 );
     }
 }
+
+
 // Instrument picture data base ------------------------------------------------
 CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
 {
@@ -988,7 +993,7 @@ QString CInstPictures::GetName ( const int iInstrument )
 
 
 // Country flag icon data base -------------------------------------------------
-QString CCountyFlagIcons::GetResourceReference ( const QLocale::Country eCountry )
+QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry )
 {
     QString strReturn = "";
 

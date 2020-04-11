@@ -330,7 +330,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
                 static_cast<QLocale::Country> ( iCurCntry );
 
             // get resource file name
-            CurFlagIcon.addFile ( CCountyFlagIcons::GetResourceReference ( eCountry ) );
+            CurFlagIcon.addFile ( CLocale::GetCountryFlagIconsResourceReference ( eCountry ) );
 
             // get the country name
             sCurCountryName = QLocale::countryToString ( eCountry );

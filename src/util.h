@@ -734,12 +734,11 @@ protected:
 };
 
 
-// Country flag icon data base -------------------------------------------------
-// this is a pure static class
-class CCountyFlagIcons
+// Locale management class -----------------------------------------------------
+class CLocale
 {
 public:
-    static QString GetResourceReference ( const QLocale::Country eCountry );
+    static QString GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry );
 };
 
 

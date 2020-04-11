@@ -403,8 +403,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     if ( cChanInfo.eCountry != QLocale::AnyCountry )
     {
         // try to load the country flag icon
-        QPixmap CountryFlagPixmap (
-            CCountyFlagIcons::GetResourceReference ( cChanInfo.eCountry ) );
+        QPixmap CountryFlagPixmap ( CLocale::GetCountryFlagIconsResourceReference ( cChanInfo.eCountry ) );
 
         // first check if resource reference was valid
         if ( CountryFlagPixmap.isNull() )

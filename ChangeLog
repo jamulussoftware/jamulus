@@ -19,6 +19,7 @@ TODO client: larger sound card buffers are managed by conversion buffer, not in 
 
 TODO should LHostAddr be QHostAddress instead of CHostAddress?
 
+TODO store Central Server jamulus.server start scripts on the Repo (one for Central Server, one for Central Server North America)
 
 
 

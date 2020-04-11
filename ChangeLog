@@ -1,18 +1,7 @@
 
 
 
-3.4.7git
-
-  * added support for alternative Central Servers to solve the 200 server registration limit (Ticket #50)
-
-  * added support for 64 samples frame size in the server (if server runs in 64 or 128 samples
-    mode it is still compatible to both, 64 and 128 samples frame size clients)
-
-  * added multichannel CoreAudio support, coded by emlynmac (#44)
-
-  * fixed server not visible if in same local network, coded by pljones (Ticket #27)
-
-
+3.4.8git
 
 TODO split country names by upper case latters by inserting a space
 
@@ -35,6 +24,17 @@ TODO should LHostAddr be QHostAddress instead of CHostAddress?
 
 
 
+
+3.4.7 (2020-04-11)
+
+  * added support for alternative Central Servers to solve the 200 server registration limit (Ticket #50)
+
+  * added support for 64 samples frame size in the server (if server runs in 64 or 128 samples
+    mode it is still compatible to both, 64 and 128 samples frame size clients)
+
+  * added multichannel CoreAudio support, coded by emlynmac (#44)
+
+  * fixed server not visible if in same local network, coded by pljones (Ticket #27)
 
 
 3.4.6 (2020-04-09)

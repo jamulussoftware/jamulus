@@ -25,4 +25,9 @@ Depends:
  qt5-default,
  qtchooser,
 Description: Low latency Audio Server/Client
-	that runs on Windows / OSX / Linux
+ The Jamulus software enables musicians to perform real-time jam sessions over
+ the internet. There is one server running the Jamulus server software which
+ collects the audio data from each Jamulus client, mixes the audio data and
+ sends the mix back to each client.
+ .
+ It runs on Windows / OSX / Linux.

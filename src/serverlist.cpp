@@ -31,8 +31,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const int      iNumChannels,
                                          const bool     bNCentServPingServerInList,
                                          CProtocol*     pNConLProt )
-    : iPortNumber               ( iNPortNum ),
-      iNumPredefinedServers     ( 0 ),
+    : iNumPredefinedServers     ( 0 ),
       eCentralServerAddressType ( AT_MANUAL ), // must be AT_MANUAL for the "no GUI" case
       bCentServPingServerInList ( bNCentServPingServerInList ),
       pConnLessProtocol         ( pNConLProt )
@@ -40,7 +39,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     // set the central server address
     SetCentralServerAddress ( sNCentServAddr );
 
-    // set the server internal address
+    // set the server internal address, including internal port number
     SlaveCurLocalHostAddress = CHostAddress( NetworkUtil::GetLocalAddress().InetAddr, iNPortNum );
 
     // prepare the server info information
@@ -66,7 +65,6 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     // we have a permanent server.
     CServerListEntry ThisServerListEntry ( CHostAddress(),
                                            SlaveCurLocalHostAddress,
-                                           iPortNumber,
                                            "",
                                            QLocale::system().country(),
                                            "",
@@ -115,7 +113,6 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
         // registered via the command line are permanent servers
         CServerListEntry NewServerListEntry ( CHostAddress(),
                                               CHostAddress(),
-                                              0, // port number not used
                                               "",
                                               QLocale::AnyCountry,
                                               "",
@@ -322,49 +319,49 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
     {
         const int iCurServerListSize = ServerList.size();
         
-        // check for maximum allowed number of servers in the server list
-        if ( iCurServerListSize < MAX_NUM_SERVERS_IN_SERVER_LIST )
+        // define invalid index used as a flag
+        const int ciInvalidIdx = -1;
+
+        // Check if server is already registered.
+        // The very first list entry must not be checked since
+        // this is per definition the central server (i.e., this server)
+        int iSelIdx = ciInvalidIdx; // initialize with an illegal value
+        for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
         {
-            // define invalid index used as a flag
-            const int ciInvalidIdx = -1;
-
-            // Check if server is already registered.
-            // The very first list entry must not be checked since
-            // this is per definition the central server (i.e., this server)
-            int iSelIdx = ciInvalidIdx; // initialize with an illegal value
-            for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
+            if ( ServerList[iIdx].HostAddr == InetAddr )
             {
-                if ( ServerList[iIdx].HostAddr == InetAddr )
-                {
-                    // store entry index
-                    iSelIdx = iIdx;
+                // store entry index
+                iSelIdx = iIdx;
 
-                    // entry found, leave for-loop
-                    continue;
-                }
+                // entry found, leave for-loop
+                continue;
             }
+        }
 
-            // if server is not yet registered, we have to create a new entry
-            if ( iSelIdx == ciInvalidIdx )
+        // if server is not yet registered, we have to create a new entry
+        if ( iSelIdx == ciInvalidIdx )
+        {
+            // check for maximum allowed number of servers in the server list
+            if ( iCurServerListSize < MAX_NUM_SERVERS_IN_SERVER_LIST )
             {
                 // create a new server list entry and init with received data
                 ServerList.append ( CServerListEntry ( InetAddr, LInetAddr, ServerInfo ) );
             }
-            else
+        }
+        else
+        {
+            // do not update the information in the predefined servers
+            if ( iSelIdx > iNumPredefinedServers )
             {
-                // do not update the information in the predefined servers
-                if ( iSelIdx > iNumPredefinedServers )
-                {
-                    // update all data and call update registration function
-                    ServerList[iSelIdx].LHostAddr        = LInetAddr;
-                    ServerList[iSelIdx].strName          = ServerInfo.strName;
-                    ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
-                    ServerList[iSelIdx].strCity          = ServerInfo.strCity;
-                    ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
-                    ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
+                // update all data and call update registration function
+                ServerList[iSelIdx].LHostAddr        = LInetAddr;
+                ServerList[iSelIdx].strName          = ServerInfo.strName;
+                ServerList[iSelIdx].eCountry         = ServerInfo.eCountry;
+                ServerList[iSelIdx].strCity          = ServerInfo.strCity;
+                ServerList[iSelIdx].iMaxNumClients   = ServerInfo.iMaxNumClients;
+                ServerList[iSelIdx].bPermanentOnline = ServerInfo.bPermanentOnline;
 
-                    ServerList[iSelIdx].UpdateRegistration();
-                }
+                ServerList[iSelIdx].UpdateRegistration();
             }
         }
     }
@@ -431,11 +428,7 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
                     // otherwise, use the supplied details
                     if ( iIdx > iNumPredefinedServers )
                     {
-                        vecServerInfo[iIdx].HostAddr.InetAddr =
-                            ServerList[iIdx].LHostAddr.InetAddr;
-
-                        vecServerInfo[iIdx].HostAddr.iPort =
-                            ServerList[iIdx].iLocalPortNumber;
+                        vecServerInfo[iIdx].HostAddr = ServerList[iIdx].LHostAddr;
                     }
                 }
                 else

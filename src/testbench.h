@@ -45,6 +45,9 @@ public:
         sAddress ( sNewAddress ),
         iPort    ( iNewPort )
     {
+        sLAddress = GenRandomIPv4Address().toString();
+        iLPort = static_cast<quint16> ( GenRandomIntInRange ( -2, 10000 ) );
+
         // bind socket (try 100 port numbers)
         quint16 iPortIncrement = 0;     // start value: port nubmer plus ten
         bool    bSuccess       = false; // initialization for while loop
@@ -98,7 +101,9 @@ protected:
     }
 
     QString    sAddress;
-    quint16    iPort;        
+    quint16    iPort;
+    QString    sLAddress;
+    quint16    iLPort;
     QTimer     Timer;
     CProtocol  Protocol;
     QUdpSocket UdpSocket;
@@ -111,7 +116,7 @@ public slots:
         CServerCoreInfo        ServerInfo;
         CVector<CServerInfo>   vecServerInfo ( 1 );
         CHostAddress           CurHostAddress ( QHostAddress ( sAddress ), iPort );
-        CHostAddress           CurLocalAddress ( GenRandomIPv4Address(), iPort );
+        CHostAddress           CurLocalAddress ( QHostAddress ( sLAddress ), iLPort );
         CChannelCoreInfo       ChannelCoreInfo;
         ELicenceType           eLicenceType;
 
@@ -212,7 +217,6 @@ public slots:
             ServerInfo.eCountry =
                 static_cast<QLocale::Country> ( GenRandomIntInRange ( 0, 100 ) );
 
-            ServerInfo.iLocalPortNumber = GenRandomIntInRange ( -2, 10000 );
             ServerInfo.iMaxNumClients   = GenRandomIntInRange ( -2, 10000 );
             ServerInfo.strCity          = GenRandomString();
             ServerInfo.strName          = GenRandomString();
@@ -235,7 +239,6 @@ public slots:
 
             vecServerInfo[0].HostAddr         = CurHostAddress;
             vecServerInfo[0].LHostAddr        = CurLocalAddress;
-            vecServerInfo[0].iLocalPortNumber = GenRandomIntInRange ( -2, 10000 );
             vecServerInfo[0].iMaxNumClients   = GenRandomIntInRange ( -2, 10000 );
             vecServerInfo[0].strCity          = GenRandomString();
             vecServerInfo[0].strName          = GenRandomString();

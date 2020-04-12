@@ -870,7 +870,6 @@ class CServerCoreInfo
 {
 public:
     CServerCoreInfo() :
-        iLocalPortNumber ( 0 ),
         strName          ( "" ),
         eCountry         ( QLocale::AnyCountry ),
         strCity          ( "" ),
@@ -878,21 +877,16 @@ public:
         bPermanentOnline ( false ) {}
 
     CServerCoreInfo (
-        const quint16           NLocPort,
         const QString&          NsName,
         const QLocale::Country& NeCountry,
         const QString&          NsCity,
         const int               NiMaxNumClients,
         const bool              NbPermOnline) :
-        iLocalPortNumber ( NLocPort ),
         strName          ( NsName ),
         eCountry         ( NeCountry ),
         strCity          ( NsCity ),
         iMaxNumClients   ( NiMaxNumClients ),
         bPermanentOnline ( NbPermOnline ) {}
-
-    // local port number of the server
-    quint16          iLocalPortNumber;
 
     // name of the server
     QString          strName;
@@ -922,14 +916,12 @@ public:
     CServerInfo (
         const CHostAddress&     NHAddr,
         const CHostAddress&     NLAddr,
-        const quint16           NLocPort,
         const QString&          NsName,
         const QLocale::Country& NeCountry,
         const QString&          NsCity,
         const int               NiMaxNumClients,
         const bool              NbPermOnline) :
-            CServerCoreInfo ( NLocPort,
-                              NsName,
+            CServerCoreInfo ( NsName,
                               NeCountry,
                               NsCity,
                               NiMaxNumClients,

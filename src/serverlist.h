@@ -76,7 +76,6 @@ public:
     CServerListEntry() :
         CServerInfo ( CHostAddress(),
                       CHostAddress(),
-                      0,
                       "",
                       QLocale::AnyCountry,
                       "",
@@ -85,7 +84,6 @@ public:
 
     CServerListEntry ( const CHostAddress&     NHAddr,
                        const CHostAddress&     NLHAddr,
-                       const quint16           NLocPort,
                        const QString&          NsName,
                        const QLocale::Country& NeCountry,
                        const QString&          NsCity,
@@ -93,7 +91,6 @@ public:
                        const bool              NbPermOnline)
         : CServerInfo ( NHAddr,
                         NLHAddr,
-                        NLocPort,
                         NsName,
                         NeCountry,
                         NsCity,
@@ -105,7 +102,6 @@ public:
                        const CServerCoreInfo& NewCoreServerInfo )
         : CServerInfo ( NHAddr,
                         NLHAddr,
-                        NewCoreServerInfo.iLocalPortNumber,
                         NewCoreServerInfo.strName,
                         NewCoreServerInfo.eCountry,
                         NewCoreServerInfo.strCity,

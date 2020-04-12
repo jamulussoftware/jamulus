@@ -197,9 +197,9 @@ CONNECTION LESS MESSAGES
 - PROTMESSID_CLM_REGISTER_SERVER: Register a server, providing server
                                   information
 
-    +--------------+ ...
-    | 2 bytes port | ...
-    +--------------+ ...
+    +------------------------------+ ...
+    | 2 bytes server internal port | ...
+    +------------------------------+ ...
         ... -----------------+----------------------------------+ ...
         ...  2 bytes country | 1 byte maximum connected clients | ...
         ... -----------------+----------------------------------+ ...
@@ -225,6 +225,9 @@ CONNECTION LESS MESSAGES
       is permanent online.
     - "server interal address" represents the IPv4 address as a dotted quad to
       be used by clients with the same external IP address as the server.
+      NOTE: In the PROTMESSID_CLM_SERVER_LIST list, this field will be empty
+      as only the initial IP address should be used by the client.  Where
+      necessary, that value will contain the server internal address.
 
 
 - PROTMESSID_CLM_UNREGISTER_SERVER: Unregister a server
@@ -1415,7 +1418,7 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
 
     // size of current message body
     const int iEntrLen =
-        2 /* port number */ +
+        2 /* server internal port number */ +
         2 /* country */ +
         1 /* maximum number of connected clients */ +
         1 /* is permanent flag */ +
@@ -1428,7 +1431,7 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
 
     // port number (2 bytes)
     PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( ServerInfo.iLocalPortNumber ), 2 );
+        static_cast<uint32_t> ( LInetAddr.iPort ), 2 );
 
     // country (2 bytes)
     PutValOnStream ( vecData, iPos,
@@ -1472,7 +1475,7 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
     }
 
     // port number (2 bytes)
-    RecServerInfo.iLocalPortNumber =
+    LInetAddr.iPort =
         static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // country (2 bytes)
@@ -1563,9 +1566,9 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
     for ( int i = 0; i < iNumServers; i++ )
     {
         // convert server list strings to utf-8
-        const QByteArray strUTF8Name      = vecServerInfo[i].strName.toUtf8();
-        const QByteArray strUTF8LHostAddr = vecServerInfo[i].LHostAddr.InetAddr.toString().toUtf8();
-        const QByteArray strUTF8City      = vecServerInfo[i].strCity.toUtf8();
+        const QByteArray strUTF8Name  = vecServerInfo[i].strName.toUtf8();
+        const QByteArray strUTF8Empty = QString("").toUtf8();
+        const QByteArray strUTF8City  = vecServerInfo[i].strCity.toUtf8();
 
         // size of current list entry
         const int iCurListEntrLen =
@@ -1575,17 +1578,19 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
             1 /* maximum number of connected clients */ +
             1 /* is permanent flag */ +
             2 /* name utf-8 string size */ + strUTF8Name.size() +
-            2 /* server internal address utf-8 string size */ + strUTF8LHostAddr.size() +
+            2 /* empty string */ +
             2 /* city utf-8 string size */ + strUTF8City.size();
 
         // make space for new data
         vecData.Enlarge ( iCurListEntrLen );
 
         // IP address (4 bytes)
+        // note the Server List manager has put the internal details in HostAddr where required
         PutValOnStream ( vecData, iPos, static_cast<uint32_t> (
             vecServerInfo[i].HostAddr.InetAddr.toIPv4Address() ), 4 );
 
         // port number (2 bytes)
+        // note the Server List manager has put the internal details in HostAddr where required
         PutValOnStream ( vecData, iPos,
             static_cast<uint32_t> ( vecServerInfo[i].HostAddr.iPort ), 2 );
 
@@ -1604,8 +1609,8 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
         // name
         PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
 
-        // topic
-        PutStringUTF8OnStream ( vecData, iPos, strUTF8LHostAddr );
+        // empty string
+        PutStringUTF8OnStream ( vecData, iPos, strUTF8Empty );
 
         // city
         PutStringUTF8OnStream ( vecData, iPos, strUTF8City );
@@ -1661,23 +1666,12 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
             return true; // return error code
         }
 
-        // server internal address
-        QString strLHostAddr;
+        // empty
+        QString strEmpty;
         if ( GetStringFromStream ( vecData,
                                    iPos,
                                    MAX_LEN_IP_ADDRESS,
-                                   strLHostAddr ) )
-        {
-            return true; // return error code
-        }
-
-        CHostAddress LInetAddr;
-        if ( strLHostAddr.isEmpty() )
-        {
-            // old central server, empty "topic", default to localhost
-            LInetAddr.InetAddr.setAddress ( QHostAddress::LocalHost );
-        }
-        else if ( !LInetAddr.InetAddr.setAddress ( strLHostAddr ) )
+                                   strEmpty ) )
         {
             return true; // return error code
         }
@@ -1695,8 +1689,7 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
         // add server information to vector
         vecServerInfo.Add (
             CServerInfo ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
-                          LInetAddr,
-                          iPort,
+                          CHostAddress ( QHostAddress ( iIpAddr ), iPort ),
                           strName,
                           eCountry,
                           strCity,

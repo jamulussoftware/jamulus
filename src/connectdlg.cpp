@@ -119,6 +119,7 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     if ( bShowCompleteRegList )
     {
         lvwServers->setSortingEnabled ( true );
+        lvwServers->sortItems ( 0, Qt::AscendingOrder );
     }
 
 #ifdef ANDROID

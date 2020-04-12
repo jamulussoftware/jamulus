@@ -10,14 +10,14 @@ TODO fix UpdateCurLevel() for new 64 samples frame size
 
 TODO mixer faders linear -> log gain is better
 
-TODO auto jitter buffer performance not good at 64 samples frame size -> to be checked again
-
-TODO for different frame sizes (64/128) the start value of 6 for the jitter buffer might be too low
-
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 
 TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
              maybe let the use select all possible sound card buffer sizes, this should solve Ticket #53
+
+TODO auto jitter buffer performance not good at 64 samples frame size -> to be checked again
+
+TODO for different frame sizes (64/128) the start value of 6 for the jitter buffer might be too low
 
 TODO store Central Server jamulus.server start scripts on the Repo (one for Central Server, one for Central Server North America)
 TODO should LHostAddr be QHostAddress instead of CHostAddress? See https://github.com/corrados/jamulus/pull/48#issuecomment-612594981

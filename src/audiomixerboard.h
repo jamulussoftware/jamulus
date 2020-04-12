@@ -144,6 +144,7 @@ protected:
     QHBoxLayout*            pMainLayout;
     bool                    bDisplayChannelLevels;
     bool                    bNoFaderVisible;
+    QString                 strServerName;
 
 public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG

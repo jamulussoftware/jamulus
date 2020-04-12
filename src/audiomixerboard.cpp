@@ -520,7 +520,8 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     iNewClientFaderLevel ( 100 ),
-    bNoFaderVisible      ( true )
+    bNoFaderVisible      ( true ),
+    strServerName        ( "" )
 {
     // add group box and hboxlayout
     pGroupBox   = new QGroupBox(); // will be added to the scroll area which is then the parent
@@ -658,14 +659,28 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
 
 void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 {
-    // set title text of the group box
-    if ( strNewServerName.isEmpty() )
+    // store the current server name
+    strServerName = strNewServerName;
+
+    if ( strServerName.isEmpty() )
     {
+        // no connection or connection was reset: show default title
         pGroupBox->setTitle ( "Server" );
     }
     else
     {
-        pGroupBox->setTitle ( strNewServerName );
+        // Do not set the server name directly but first show a label which indicates
+        // that we are trying to connect the server. First if a connected client
+        // list was received, the connection was successful and the title is updated
+        // with the correct server name. Make sure to choose a "try to connect" title
+        // which is most striking (we use filled blocks and upper case letters).
+        QByteArray baBlock;
+        baBlock.append ( 0xE2 );
+        baBlock.append ( 0x96 );
+        baBlock.append ( 0x88 );
+        QString sBlocks = QString().fromUtf8 ( baBlock ).repeated ( 5 );
+
+        pGroupBox->setTitle ( sBlocks + " T R Y I N G   T O   C O N N E C T " + sBlocks );
     }
 }
 
@@ -715,6 +730,13 @@ void CAudioMixerBoard::HideAll()
 
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )
 {
+    // we want to set the server name only if the very first faders appear
+    // in the audio mixer board to show a "try to connect" before
+    if ( pGroupBox->title().compare ( strServerName ) )
+    {
+        pGroupBox->setTitle ( strServerName );
+    }
+
     // get number of connected clients
     const int iNumConnectedClients = vecChanInfo.Size();
 

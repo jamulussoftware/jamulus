@@ -347,6 +347,16 @@ int CClient::EvaluatePingMessage ( const int iMs )
     return PreciseTime.elapsed() - iMs;
 }
 
+void CClient::SetCentralServerAddressType ( const ECSAddType eNCSAT )
+{
+    if ( eCentralServerAddressType != eNCSAT )
+    {
+        // update type and emit message to update the server list, too
+        eCentralServerAddressType = eNCSAT;
+        emit CentralServerAddressTypeChanged();
+    }
+}
+
 void CClient::SetDoAutoSockBufSize ( const bool bValue )
 {
     // first, set new value in the channel object

@@ -126,7 +126,7 @@ public:
     bool   IsConnected() { return Channel.IsConnected(); }
 
     EGUIDesign GetGUIDesign() const { return eGUIDesign; }
-    void SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
+    void       SetGUIDesign ( const EGUIDesign eNGD ) { eGUIDesign = eNGD; }
 
     bool GetDisplayChannelLevels() const { return bDisplayChannelLevels; }
     void SetDisplayChannelLevels ( const bool bNDCL );
@@ -140,13 +140,13 @@ public:
     void SetServerListCentralServerAddress ( const QString& sNCentServAddr ) { strCentralServerAddress = sNCentServAddr; }
     QString GetServerListCentralServerAddress() { return strCentralServerAddress; }
 
-    void SetCentralServerAddressType ( const ECSAddType eNCSAT ) { eCentralServerAddressType = eNCSAT; }
+    void SetCentralServerAddressType ( const ECSAddType eNCSAT );
     ECSAddType GetCentralServerAddressType() { return eCentralServerAddressType; }
 
-    int GetAudioInFader() const { return iAudioInFader; }
+    int  GetAudioInFader() const { return iAudioInFader; }
     void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
-    int GetReverbLevel() const { return iReverbLevel; }
+    int  GetReverbLevel() const { return iReverbLevel; }
     void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
 
     bool IsReverbOnLeftChan() const { return bReverbOnLeftChan; }
@@ -206,8 +206,7 @@ public:
     int     GetSndCrdRightOutputChannel() { return Sound.GetRightOutputChannel(); }
 
     void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
-    int GetSndCrdPrefFrameSizeFactor()
-        { return iSndCrdPrefFrameSizeFactor; }
+    int  GetSndCrdPrefFrameSizeFactor() { return iSndCrdPrefFrameSizeFactor; }
 
     int GetSndCrdActualMonoBlSize()
     {
@@ -429,4 +428,5 @@ signals:
 
     void Disconnected();
     void ControllerInFaderLevel ( int iChannelIdx, int iValue );
+    void CentralServerAddressTypeChanged();
 };

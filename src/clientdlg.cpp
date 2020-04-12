@@ -455,6 +455,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         this, SLOT ( OnDisconnected() ) );
 
     QObject::connect ( pClient,
+        SIGNAL ( CentralServerAddressTypeChanged() ),
+        this, SLOT ( OnCentralServerAddressTypeChanged() ) );
+
+    QObject::connect ( pClient,
         SIGNAL ( ChatTextReceived ( QString ) ),
         this, SLOT ( OnChatTextReceived ( QString ) ) );
 
@@ -725,6 +729,18 @@ void CClientDlg::OnDisconnected()
     UpdateDisplay();
 }
 
+void CClientDlg::OnCentralServerAddressTypeChanged()
+{
+    // if the server list is shown and the server type was changed, update the list
+    if ( ConnectDlg.isVisible() )
+    {
+        ConnectDlg.SetCentralServerAddress ( NetworkUtil::GetCentralServerAddress ( pClient->GetCentralServerAddressType(),
+                                                                                    pClient->GetServerListCentralServerAddress() ) );
+
+        ConnectDlg.RequestServerList();
+    }
+}
+
 void CClientDlg::OnChatTextReceived ( QString strChatText )
 {
     ChatDlg.AddChatText ( strChatText );
@@ -814,13 +830,10 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 
 void CClientDlg::ShowConnectionSetupDialog()
 {
-    // get the central server address string
-    const QString strCurCentServAddr =
-            NetworkUtil::GetCentralServerAddress ( pClient->GetCentralServerAddressType(),
-                                                   pClient->GetServerListCentralServerAddress() );
-
     // init the connect dialog
-    ConnectDlg.Init ( strCurCentServAddr, pClient->vstrIPAddress );
+    ConnectDlg.Init ( pClient->vstrIPAddress );
+    ConnectDlg.SetCentralServerAddress ( NetworkUtil::GetCentralServerAddress ( pClient->GetCentralServerAddressType(),
+                                                                                pClient->GetServerListCentralServerAddress() ) );
 
     // show connect dialog
     ConnectDlg.show();

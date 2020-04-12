@@ -51,8 +51,8 @@ public:
                   QWidget* parent = nullptr,
                   Qt::WindowFlags f = nullptr );
 
-    void Init ( const QString           strNewCentralServerAddr, 
-                const CVector<QString>& vstrIPAddresses );
+    void Init ( const CVector<QString>& vstrIPAddresses );
+    void SetCentralServerAddress ( const QString strNewCentralServerAddr ) { strCentralServerAddress = strNewCentralServerAddr; }
 
     void SetServerList ( const CHostAddress&         InetAddr,
                          const CVector<CServerInfo>& vecServerInfo );
@@ -71,9 +71,10 @@ public:
                                QString                strVersion );
 #endif
 
-    bool GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
+    bool    GetServerListItemWasChosen() const { return bServerListItemWasChosen; }
     QString GetSelectedAddress() const { return strSelectedAddress; }
     QString GetSelectedServerName() const { return strSelectedServerName; }
+    void    RequestServerList();
 
 protected:
     virtual void showEvent ( QShowEvent* );
@@ -83,16 +84,15 @@ protected:
     QTreeWidgetItem* GetParentListViewItem ( QTreeWidgetItem* pItem );
     void             DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
 
-    QTimer           TimerPing;
-    QTimer           TimerReRequestServList;
-    QString          strCentralServerAddress;
-    CHostAddress     CentralServerAddress;
-    CVector<QString> vstrIPAddresses;
-    QString          strSelectedAddress;
-    QString          strSelectedServerName;
-    bool             bShowCompleteRegList;
-    bool             bServerListReceived;
-    bool             bServerListItemWasChosen;
+    QTimer       TimerPing;
+    QTimer       TimerReRequestServList;
+    QString      strCentralServerAddress;
+    CHostAddress CentralServerAddress;
+    QString      strSelectedAddress;
+    QString      strSelectedServerName;
+    bool         bShowCompleteRegList;
+    bool         bServerListReceived;
+    bool         bServerListItemWasChosen;
 
 public slots:
     void OnServerListItemSelectionChanged();

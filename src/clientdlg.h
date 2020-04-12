@@ -198,6 +198,7 @@ public slots:
 
     void OnConnectDlgAccepted();
     void OnDisconnected();
+    void OnCentralServerAddressTypeChanged();
 
     void OnGUIDesignChanged()
         { SetGUIDesign ( pClient->GetGUIDesign() ); }

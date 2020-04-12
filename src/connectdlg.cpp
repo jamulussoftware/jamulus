@@ -154,12 +154,8 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
         this, SLOT ( OnTimerReRequestServList() ) );
 }
 
-void CConnectDlg::Init ( const QString           strNewCentralServerAddr, 
-                         const CVector<QString>& vstrIPAddresses )
+void CConnectDlg::Init ( const CVector<QString>& vstrIPAddresses )
 {
-    // take central server address string
-    strCentralServerAddress = strNewCentralServerAddr;
-
     // load stored IP addresses in combo box
     cbxServerAddr->clear();
     cbxServerAddr->clearEditText();
@@ -175,8 +171,14 @@ void CConnectDlg::Init ( const QString           strNewCentralServerAddr,
 
 void CConnectDlg::showEvent ( QShowEvent* )
 {
-    // reset flags (on opening the connect dialg, we always want to request a
-    // new updated server list per definition)
+    // on opening the connect dialg, we always want to request a
+    // new updated server list per definition
+    RequestServerList();
+}
+
+void CConnectDlg::RequestServerList()
+{
+    // reset flags
     bServerListReceived      = false;
     bServerListItemWasChosen = false;
 
@@ -215,6 +217,8 @@ void CConnectDlg::OnTimerReRequestServList()
     // server list
     if ( !bServerListReceived )
     {
+        // note that this is a connection less message which may get lost
+        // and therefore it makes sense to re-transmit it
         emit ReqServerListQuery ( CentralServerAddress );
     }
 }

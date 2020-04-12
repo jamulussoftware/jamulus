@@ -1,10 +1,11 @@
 [Desktop Entry]
 Name=Jamulus
 Comment=Jam Session
+Comment[fr]=Séance de bœuf
 GenericName=Internet Jam Session Software
+GenericName[fr]=Logiciel de séance de bœuf sur Internet
 Exec=jamulus
 Icon=jamulus
 Terminal=false
 Type=Application
 Categories=AudioVideo;Audio;Mixer;Qt;
-

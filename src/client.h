@@ -316,6 +316,11 @@ protected:
     CProtocol               ConnLessProtocol;
 
     // audio encoder/decoder
+    OpusCustomMode*         Opus64Mode;
+    OpusCustomEncoder*      Opus64EncoderMono;
+    OpusCustomDecoder*      Opus64DecoderMono;
+    OpusCustomEncoder*      Opus64EncoderStereo;
+    OpusCustomDecoder*      Opus64DecoderStereo;
     OpusCustomMode*         OpusMode;
     OpusCustomEncoder*      OpusEncoderMono;
     OpusCustomDecoder*      OpusDecoderMono;
@@ -325,6 +330,7 @@ protected:
     OpusCustomDecoder*      CurOpusDecoder;
     EAudComprType           eAudioCompressionType;
     int                     iCeltNumCodedBytes;
+    int                     iOPUSFrameSizeSamples;
     EAudioQuality           eAudioQuality;
     EAudChanConf            eAudioChannelConf;
     int                     iNumAudioChannels;

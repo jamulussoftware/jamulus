@@ -51,6 +51,7 @@ CClient::CClient ( const quint16  iPortNumber,
     CurOpusDecoder                   ( nullptr ),
     eAudioCompressionType            ( CT_OPUS ),
     iCeltNumCodedBytes               ( OPUS_NUM_BYTES_MONO_LOW_QUALITY ),
+    iOPUSFrameSizeSamples            ( SYSTEM_FRAME_SIZE_SAMPLES ),
     eAudioQuality                    ( AQ_NORMAL ),
     eAudioChannelConf                ( CC_MONO ),
     iNumAudioChannels                ( 1 ),
@@ -77,29 +78,39 @@ CClient::CClient ( const quint16  iPortNumber,
 {
     int iOpusError;
 
-    // init audio encoders and decoders
     OpusMode = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                         SYSTEM_FRAME_SIZE_SAMPLES,
+                                         DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES,
                                          &iOpusError );
 
-    OpusEncoderMono   = opus_custom_encoder_create ( OpusMode, 1, &iOpusError ); // mono encoder legacy
-    OpusDecoderMono   = opus_custom_decoder_create ( OpusMode, 1, &iOpusError ); // mono decoder legacy
-    OpusEncoderStereo = opus_custom_encoder_create ( OpusMode, 2, &iOpusError ); // stereo encoder legacy
-    OpusDecoderStereo = opus_custom_decoder_create ( OpusMode, 2, &iOpusError ); // stereo decoder legacy
+    Opus64Mode = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
+                                           SYSTEM_FRAME_SIZE_SAMPLES_SMALL,
+                                           &iOpusError );
+
+    // init audio encoders and decoders
+    OpusEncoderMono     = opus_custom_encoder_create ( OpusMode,   1, &iOpusError ); // mono encoder legacy
+    OpusDecoderMono     = opus_custom_decoder_create ( OpusMode,   1, &iOpusError ); // mono decoder legacy
+    OpusEncoderStereo   = opus_custom_encoder_create ( OpusMode,   2, &iOpusError ); // stereo encoder legacy
+    OpusDecoderStereo   = opus_custom_decoder_create ( OpusMode,   2, &iOpusError ); // stereo decoder legacy
+    Opus64EncoderMono   = opus_custom_encoder_create ( Opus64Mode, 1, &iOpusError ); // mono encoder OPUS64
+    Opus64DecoderMono   = opus_custom_decoder_create ( Opus64Mode, 1, &iOpusError ); // mono decoder OPUS64
+    Opus64EncoderStereo = opus_custom_encoder_create ( Opus64Mode, 2, &iOpusError ); // stereo encoder OPUS64
+    Opus64DecoderStereo = opus_custom_decoder_create ( Opus64Mode, 2, &iOpusError ); // stereo decoder OPUS64
 
     // we require a constant bit rate
-    opus_custom_encoder_ctl ( OpusEncoderMono,   OPUS_SET_VBR ( 0 ) );
-    opus_custom_encoder_ctl ( OpusEncoderStereo, OPUS_SET_VBR ( 0 ) );
+    opus_custom_encoder_ctl ( OpusEncoderMono,     OPUS_SET_VBR ( 0 ) );
+    opus_custom_encoder_ctl ( OpusEncoderStereo,   OPUS_SET_VBR ( 0 ) );
+    opus_custom_encoder_ctl ( Opus64EncoderMono,   OPUS_SET_VBR ( 0 ) );
+    opus_custom_encoder_ctl ( Opus64EncoderStereo, OPUS_SET_VBR ( 0 ) );
 
     // we want as low delay as possible
-    opus_custom_encoder_ctl ( OpusEncoderMono,   OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
-    opus_custom_encoder_ctl ( OpusEncoderStereo, OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+    opus_custom_encoder_ctl ( OpusEncoderMono,     OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+    opus_custom_encoder_ctl ( OpusEncoderStereo,   OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+    opus_custom_encoder_ctl ( Opus64EncoderMono,   OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+    opus_custom_encoder_ctl ( Opus64EncoderStereo, OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
 
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 128 )
     // set encoder low complexity for legacy 128 samples frame size
     opus_custom_encoder_ctl ( OpusEncoderMono,   OPUS_SET_COMPLEXITY ( 1 ) );
     opus_custom_encoder_ctl ( OpusEncoderStereo, OPUS_SET_COMPLEXITY ( 1 ) );
-#endif
 
 
     // Connections -------------------------------------------------------------
@@ -610,13 +621,6 @@ void CClient::OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
 
 void CClient::Start()
 {
-    // always use the OPUS codec
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
-    eAudioCompressionType = CT_OPUS64;
-#else
-    eAudioCompressionType = CT_OPUS;
-#endif
-
     // init object
     Init();
 
@@ -710,8 +714,7 @@ void CClient::Init()
 
         // inits for conversion buffer (the size of the conversion buffer must
         // be the sum of input/output sizes which is the worst case fill level)
-        const int iConBufSize =
-            iStereoBlockSizeSam + iSndCardStereoBlockSizeSamConvBuff;
+        const int iConBufSize = iStereoBlockSizeSam + iSndCardStereoBlockSizeSamConvBuff;
 
         SndCrdConversionBufferIn.Init  ( iConBufSize );
         SndCrdConversionBufferOut.Init ( iConBufSize );
@@ -734,6 +737,15 @@ void CClient::Init()
     AudioReverbR.Init ( SYSTEM_SAMPLE_RATE_HZ );
 
     // inits for audio coding
+    // always use the OPUS codec
+#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
+    eAudioCompressionType = CT_OPUS64;
+#else
+    eAudioCompressionType = CT_OPUS;
+#endif
+
+    iOPUSFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
+
     if ( eAudioChannelConf == CC_MONO )
     {
         CurOpusEncoder    = OpusEncoderMono;
@@ -766,7 +778,7 @@ void CClient::Init()
     opus_custom_encoder_ctl ( CurOpusEncoder,
                               OPUS_SET_BITRATE (
                                   CalcBitRateBitsPerSecFromCodedBytes (
-                                      iCeltNumCodedBytes, SYSTEM_FRAME_SIZE_SAMPLES ) ) );
+                                      iCeltNumCodedBytes, iOPUSFrameSizeSamples ) ) );
 
     // inits for network and channel
     vecbyNetwData.Init ( iCeltNumCodedBytes );
@@ -988,17 +1000,13 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
         // OPUS encoding
-        if ( ( eAudioCompressionType == CT_OPUS ) ||
-             ( eAudioCompressionType == CT_OPUS64 ) )
+        if ( CurOpusEncoder != nullptr )
         {
-            if ( CurOpusEncoder != nullptr )
-            {
-                opus_custom_encode ( CurOpusEncoder,
-                                     &vecsStereoSndCrd[i * iNumAudioChannels * SYSTEM_FRAME_SIZE_SAMPLES],
-                                     SYSTEM_FRAME_SIZE_SAMPLES,
-                                     &vecCeltData[0],
-                                     iCeltNumCodedBytes );
-            }
+            opus_custom_encode ( CurOpusEncoder,
+                                 &vecsStereoSndCrd[i * iNumAudioChannels * iOPUSFrameSizeSamples],
+                                 iOPUSFrameSizeSamples,
+                                 &vecCeltData[0],
+                                 iCeltNumCodedBytes );
         }
 
         // send coded audio through the network
@@ -1033,17 +1041,13 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
 
         // OPUS decoding
-        if ( ( eAudioCompressionType == CT_OPUS ) ||
-             ( eAudioCompressionType == CT_OPUS64 ) )
+        if ( CurOpusDecoder != nullptr )
         {
-            if ( CurOpusDecoder != nullptr )
-            {
-                opus_custom_decode ( CurOpusDecoder,
-                                     pCurCodedData,
-                                     iCeltNumCodedBytes,
-                                     &vecsStereoSndCrd[i * iNumAudioChannels * SYSTEM_FRAME_SIZE_SAMPLES],
-                                     SYSTEM_FRAME_SIZE_SAMPLES );
-            }
+            opus_custom_decode ( CurOpusDecoder,
+                                 pCurCodedData,
+                                 iCeltNumCodedBytes,
+                                 &vecsStereoSndCrd[i * iNumAudioChannels * iOPUSFrameSizeSamples],
+                                 iOPUSFrameSizeSamples );
         }
     }
 

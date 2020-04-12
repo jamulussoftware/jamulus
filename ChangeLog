@@ -3,7 +3,8 @@
 
 3.4.8git
 
-TODO split country names by upper case latters by inserting a space
+  * refresh server list if the Central Server address type is changed
+
 
 TODO fix UpdateCurLevel() for new 64 samples frame size
 
@@ -16,10 +17,10 @@ TODO for different frame sizes (64/128) the start value of 6 for the jitter buff
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 
 TODO client: larger sound card buffers are managed by conversion buffer, not in processintern for loop (note iSndCrdFrameSizeFactor!)
-
-TODO should LHostAddr be QHostAddress instead of CHostAddress?
+             maybe let the use select all possible sound card buffer sizes, this should solve Ticket #53
 
 TODO store Central Server jamulus.server start scripts on the Repo (one for Central Server, one for Central Server North America)
+TODO should LHostAddr be QHostAddress instead of CHostAddress? See https://github.com/corrados/jamulus/pull/48#issuecomment-612594981
 
 
 

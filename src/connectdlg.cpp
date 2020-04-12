@@ -115,6 +115,12 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     // make sure the connect button has the focus
     butConnect->setFocus();
 
+    // for "show all servers" mode make sort by click on header possible
+    if ( bShowCompleteRegList )
+    {
+        lvwServers->setSortingEnabled ( true );
+    }
+
 #ifdef ANDROID
     // for the android version maximize the window
     setWindowState ( Qt::WindowMaximized );
@@ -288,7 +294,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         // in case of all servers shown, add the registration number at the beginning
         if ( bShowCompleteRegList )
         {
-            pNewListViewItem->setText ( 0, QString ( "%1: " ).arg ( 1 + iIdx ) + pNewListViewItem->text ( 0 ) );
+            pNewListViewItem->setText ( 0, QString ( "%1: " ).arg ( 1 + iIdx, 3 ) + pNewListViewItem->text ( 0 ) );
         }
 
         // show server name in bold font if it is a permanent server
@@ -309,9 +315,26 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         {
             strLocation += ", ";
         }
+
         if ( vecServerInfo[iIdx].eCountry != QLocale::AnyCountry )
         {
-            strLocation += QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
+            QString strCountryToString = QLocale::countryToString ( vecServerInfo[iIdx].eCountry );
+
+            // Qt countryToString does not use spaces in between country name
+            // parts but they use upper case letters which we can detect and
+            // insert spaces as a post processing
+            if ( !strCountryToString.contains ( " " ) )
+            {
+                QRegularExpressionMatchIterator reMatchIt = QRegularExpression ( "[A-Z][^A-Z]*" ).globalMatch ( strCountryToString );
+                QStringList                     slNames;
+                while ( reMatchIt.hasNext() )
+                {
+                    slNames << reMatchIt.next().capturedTexts();
+                }
+                strCountryToString = slNames.join ( " " );
+            }
+
+            strLocation += strCountryToString;
         }
 
         pNewListViewItem->setText ( 3, strLocation );

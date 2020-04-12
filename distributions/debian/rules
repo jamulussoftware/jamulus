@@ -1,5 +1,5 @@
-#!/usr/bin/make -f  
-%:  
+#!/usr/bin/make -f
+%:
 	dh $@
 
 override_dh_auto_configure:
@@ -15,4 +15,3 @@ override_dh_usrlocal:
 	cp $$(pwd)/distributions/jamulus.png $$(pwd)/debian/jamulus/usr/share/icons/hicolor/48x48/apps/
 	mkdir -p $$(pwd)/debian/jamulus/lib/systemd/system
 	cp $$(pwd)/distributions/jamulus-server.service $$(pwd)/debian/jamulus/lib/systemd/system/
-	

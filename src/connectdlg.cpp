@@ -324,6 +324,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
             // Qt countryToString does not use spaces in between country name
             // parts but they use upper case letters which we can detect and
             // insert spaces as a post processing
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
             if ( !strCountryToString.contains ( " " ) )
             {
                 QRegularExpressionMatchIterator reMatchIt = QRegularExpression ( "[A-Z][^A-Z]*" ).globalMatch ( strCountryToString );
@@ -334,6 +335,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
                 }
                 strCountryToString = slNames.join ( " " );
             }
+#endif
 
             strLocation += strCountryToString;
         }

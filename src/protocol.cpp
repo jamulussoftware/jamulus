@@ -1567,7 +1567,7 @@ void CProtocol::CreateCLServerListMes ( const CHostAddress&        InetAddr,
     {
         // convert server list strings to utf-8
         const QByteArray strUTF8Name  = vecServerInfo[i].strName.toUtf8();
-        const QByteArray strUTF8Empty = QString("").toUtf8();
+        const QByteArray strUTF8Empty = QString ( "" ).toUtf8();
         const QByteArray strUTF8City  = vecServerInfo[i].strCity.toUtf8();
 
         // size of current list entry

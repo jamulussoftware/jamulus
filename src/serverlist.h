@@ -183,7 +183,6 @@ protected:
 
     QList<CServerListEntry> ServerList;
 
-    quint16                 iPortNumber;
     QString                 strCentralServerAddress;
     int                     iNumPredefinedServers;
     bool                    bEnabled;

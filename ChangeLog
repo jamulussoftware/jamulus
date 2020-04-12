@@ -20,7 +20,6 @@ TODO auto jitter buffer performance not good at 64 samples frame size -> to be c
 TODO for different frame sizes (64/128) the start value of 6 for the jitter buffer might be too low
 
 TODO store Central Server jamulus.server start scripts on the Repo (one for Central Server, one for Central Server North America)
-TODO should LHostAddr be QHostAddress instead of CHostAddress? See https://github.com/corrados/jamulus/pull/48#issuecomment-612594981
 
 
 

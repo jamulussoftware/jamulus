@@ -6,8 +6,6 @@
   * refresh server list if the Central Server address type is changed
 
 
-TODO fix UpdateCurLevel() for new 64 samples frame size
-
 TODO mixer faders linear -> log gain is better
 
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)

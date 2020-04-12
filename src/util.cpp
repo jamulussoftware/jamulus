@@ -66,7 +66,9 @@ double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
     // decrease max with time
     if ( dCurLevel >= METER_FLY_BACK )
     {
-// TODO calculate factor from sample rate
+// TODO Calculate factor from sample rate and frame size (64 or 128 samples frame size).
+//      But tests with 128 and 64 samples frame size have shown that the meter fly back
+//      is ok for both numbers of samples frame size.
         dCurLevel *= 0.95;
     }
     else

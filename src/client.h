@@ -321,10 +321,13 @@ protected:
     OpusCustomDecoder*      OpusDecoderMono;
     OpusCustomEncoder*      OpusEncoderStereo;
     OpusCustomDecoder*      OpusDecoderStereo;
+    OpusCustomEncoder*      CurOpusEncoder;
+    OpusCustomDecoder*      CurOpusDecoder;
     EAudComprType           eAudioCompressionType;
     int                     iCeltNumCodedBytes;
     EAudioQuality           eAudioQuality;
     EAudChanConf            eAudioChannelConf;
+    int                     iNumAudioChannels;
     bool                    bIsInitializationPhase;
     bool                    bMuteInputAndOutput;
     CVector<unsigned char>  vecCeltData;
@@ -364,8 +367,6 @@ protected:
 
     QString                 strCentralServerAddress;
     ECSAddType              eCentralServerAddressType;
-
-    CVector<int16_t>        vecsAudioSndCrdMono;
 
     // server settings
     int                     iServerSockBufNumFrames;

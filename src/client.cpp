@@ -47,10 +47,13 @@ CClient::CClient ( const quint16  iPortNumber,
     bWindowWasShownProfile           ( false ),
     bWindowWasShownConnect           ( false ),
     Channel                          ( false ), /* we need a client channel -> "false" */
+    CurOpusEncoder                   ( nullptr ),
+    CurOpusDecoder                   ( nullptr ),
     eAudioCompressionType            ( CT_OPUS ),
     iCeltNumCodedBytes               ( OPUS_NUM_BYTES_MONO_LOW_QUALITY ),
     eAudioQuality                    ( AQ_NORMAL ),
     eAudioChannelConf                ( CC_MONO ),
+    iNumAudioChannels                ( 1 ),
     bIsInitializationPhase           ( true ),
     bMuteInputAndOutput              ( false ),
     Socket                           ( &Channel, iPortNumber ),
@@ -74,54 +77,28 @@ CClient::CClient ( const quint16  iPortNumber,
 {
     int iOpusError;
 
-    // init audio encoder/decoder (mono)
+    // init audio encoders and decoders
     OpusMode = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
                                          SYSTEM_FRAME_SIZE_SAMPLES,
                                          &iOpusError );
 
-    OpusEncoderMono = opus_custom_encoder_create ( OpusMode,
-                                                   1,
-                                                   &iOpusError );
-
-    OpusDecoderMono = opus_custom_decoder_create ( OpusMode,
-                                                   1,
-                                                   &iOpusError );
+    OpusEncoderMono   = opus_custom_encoder_create ( OpusMode, 1, &iOpusError ); // mono encoder legacy
+    OpusDecoderMono   = opus_custom_decoder_create ( OpusMode, 1, &iOpusError ); // mono decoder legacy
+    OpusEncoderStereo = opus_custom_encoder_create ( OpusMode, 2, &iOpusError ); // stereo encoder legacy
+    OpusDecoderStereo = opus_custom_decoder_create ( OpusMode, 2, &iOpusError ); // stereo decoder legacy
 
     // we require a constant bit rate
-    opus_custom_encoder_ctl ( OpusEncoderMono,
-                              OPUS_SET_VBR ( 0 ) );
+    opus_custom_encoder_ctl ( OpusEncoderMono,   OPUS_SET_VBR ( 0 ) );
+    opus_custom_encoder_ctl ( OpusEncoderStereo, OPUS_SET_VBR ( 0 ) );
 
     // we want as low delay as possible
-    opus_custom_encoder_ctl ( OpusEncoderMono,
-                              OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+    opus_custom_encoder_ctl ( OpusEncoderMono,   OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
+    opus_custom_encoder_ctl ( OpusEncoderStereo, OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
 
 #if ( SYSTEM_FRAME_SIZE_SAMPLES == 128 )
     // set encoder low complexity for legacy 128 samples frame size
-    opus_custom_encoder_ctl ( OpusEncoderMono,
-                              OPUS_SET_COMPLEXITY ( 1 ) );
-#endif
-
-    // init audio encoder/decoder (stereo)
-    OpusEncoderStereo = opus_custom_encoder_create ( OpusMode,
-                                                     2,
-                                                     &iOpusError );
-
-    OpusDecoderStereo = opus_custom_decoder_create ( OpusMode,
-                                                     2,
-                                                     &iOpusError );
-
-    // we require a constant bit rate
-    opus_custom_encoder_ctl ( OpusEncoderStereo,
-                              OPUS_SET_VBR ( 0 ) );
-
-    // we want as low delay as possible
-    opus_custom_encoder_ctl ( OpusEncoderStereo,
-                              OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
-
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 128 )
-    // set encoder low complexity for legacy 128 samples frame size
-    opus_custom_encoder_ctl ( OpusEncoderStereo,
-                              OPUS_SET_COMPLEXITY ( 1 ) );
+    opus_custom_encoder_ctl ( OpusEncoderMono,   OPUS_SET_COMPLEXITY ( 1 ) );
+    opus_custom_encoder_ctl ( OpusEncoderStereo, OPUS_SET_COMPLEXITY ( 1 ) );
 #endif
 
 
@@ -752,8 +729,6 @@ void CClient::Init()
     // calculate stereo (two channels) buffer size
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
-    vecsAudioSndCrdMono.Init ( iMonoBlockSizeSam );
-
     // init reverberation
     AudioReverbL.Init ( SYSTEM_SAMPLE_RATE_HZ );
     AudioReverbR.Init ( SYSTEM_SAMPLE_RATE_HZ );
@@ -761,75 +736,46 @@ void CClient::Init()
     // inits for audio coding
     if ( eAudioChannelConf == CC_MONO )
     {
+        CurOpusEncoder    = OpusEncoderMono;
+        CurOpusDecoder    = OpusDecoderMono;
+        iNumAudioChannels = 1;
+
         switch ( eAudioQuality )
         {
-        case AQ_LOW:
-            iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_LOW_QUALITY;
-            break;
-
-        case AQ_NORMAL:
-            iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_NORMAL_QUALITY;
-            break;
-
-        case AQ_HIGH:
-            iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;
-            break;
+        case AQ_LOW:    iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_LOW_QUALITY;    break;
+        case AQ_NORMAL: iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_NORMAL_QUALITY; break;
+        case AQ_HIGH:   iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;   break;
         }
     }
     else
     {
+        CurOpusEncoder    = OpusEncoderStereo;
+        CurOpusDecoder    = OpusDecoderStereo;
+        iNumAudioChannels = 2;
+
         switch ( eAudioQuality )
         {
-        case AQ_LOW:
-            iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_LOW_QUALITY;
-            break;
-
-        case AQ_NORMAL:
-            iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY;
-            break;
-
-        case AQ_HIGH:
-            iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;
-            break;
+        case AQ_LOW:    iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_LOW_QUALITY;    break;
+        case AQ_NORMAL: iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY; break;
+        case AQ_HIGH:   iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;   break;
         }
     }
 
     vecCeltData.Init ( iCeltNumCodedBytes );
 
-    if ( eAudioChannelConf == CC_MONO )
-    {
-        opus_custom_encoder_ctl ( OpusEncoderMono,
-                                  OPUS_SET_BITRATE (
-                                      CalcBitRateBitsPerSecFromCodedBytes (
-                                          iCeltNumCodedBytes, SYSTEM_FRAME_SIZE_SAMPLES ) ) );
-    }
-    else
-    {
-        opus_custom_encoder_ctl ( OpusEncoderStereo,
-                                  OPUS_SET_BITRATE (
-                                      CalcBitRateBitsPerSecFromCodedBytes (
-                                          iCeltNumCodedBytes, SYSTEM_FRAME_SIZE_SAMPLES ) ) );
-    }
+    opus_custom_encoder_ctl ( CurOpusEncoder,
+                              OPUS_SET_BITRATE (
+                                  CalcBitRateBitsPerSecFromCodedBytes (
+                                      iCeltNumCodedBytes, SYSTEM_FRAME_SIZE_SAMPLES ) ) );
 
     // inits for network and channel
     vecbyNetwData.Init ( iCeltNumCodedBytes );
 
-    if ( eAudioChannelConf == CC_MONO )
-    {
-        // set the channel network properties
-        Channel.SetAudioStreamProperties ( eAudioCompressionType,
-                                           iCeltNumCodedBytes,
-                                           iSndCrdFrameSizeFactor,
-                                           1 );
-    }
-    else
-    {
-        // set the channel network properties
-        Channel.SetAudioStreamProperties ( eAudioCompressionType,
-                                           iCeltNumCodedBytes,
-                                           iSndCrdFrameSizeFactor,
-                                           2 );
-    }
+    // set the channel network properties
+    Channel.SetAudioStreamProperties ( eAudioCompressionType,
+                                       iCeltNumCodedBytes,
+                                       iSndCrdFrameSizeFactor,
+                                       iNumAudioChannels );
 
     // reset initialization phase flag and mute flag
     bIsInitializationPhase = true;
@@ -897,7 +843,9 @@ JitterMeas.Measure();
 
 void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 {
-    int i, j;
+    int            i, j;
+    unsigned char* pCurCodedData;
+
 
     // Transmit signal ---------------------------------------------------------
     // update stereo signal level meter
@@ -907,8 +855,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     if ( iReverbLevel != 0 )
     {
         // calculate attenuation amplification factor
-        const double dRevLev =
-            static_cast<double> ( iReverbLevel ) / AUD_REVERB_MAX / 2;
+        const double dRevLev = static_cast<double> ( iReverbLevel ) / AUD_REVERB_MAX / 2;
 
         if ( eAudioChannelConf == CC_STEREO )
         {
@@ -957,8 +904,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 // int32), after the normalization by 2, the result will fit
                 // into the old size so that cast to int16 is safe
                 vecsStereoSndCrd[i] = static_cast<int16_t> (
-                    ( static_cast<int32_t> ( vecsStereoSndCrd[j] ) +
-                      vecsStereoSndCrd[j + 1] ) / 2 );
+                    ( static_cast<int32_t> ( vecsStereoSndCrd[j] ) + vecsStereoSndCrd[j + 1] ) / 2 );
             }
         }
     }
@@ -968,16 +914,14 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         {
             // stereo
             const double dAttFactStereo = static_cast<double> (
-                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
-                AUD_FADER_IN_MIDDLE;
+                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) / AUD_FADER_IN_MIDDLE;
 
             if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
             {
                 for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
                 {
                     // attenuation on right channel
-                    vecsStereoSndCrd[j + 1] = Double2Short (
-                        dAttFactStereo * vecsStereoSndCrd[j + 1] );
+                    vecsStereoSndCrd[j + 1] = Double2Short ( dAttFactStereo * vecsStereoSndCrd[j + 1] );
                 }
             }
             else
@@ -985,8 +929,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
                 for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
                 {
                     // attenuation on left channel
-                    vecsStereoSndCrd[j] = Double2Short (
-                        dAttFactStereo * vecsStereoSndCrd[j] );
+                    vecsStereoSndCrd[j] = Double2Short ( dAttFactStereo * vecsStereoSndCrd[j] );
                 }
             }
         }
@@ -997,12 +940,10 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
             // amplified by 1/2, if the pan is set to one channel, this
             // channel should have an amplification of 1
             const double dAttFactMono = static_cast<double> (
-                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
-                AUD_FADER_IN_MIDDLE / 2;
+                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) / AUD_FADER_IN_MIDDLE / 2;
 
             const double dAmplFactMono = 0.5 + static_cast<double> (
-                abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) /
-                AUD_FADER_IN_MIDDLE / 2;
+                abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) / AUD_FADER_IN_MIDDLE / 2;
 
             if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
             {
@@ -1040,29 +981,20 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         // overwrite input values)
         for ( i = iMonoBlockSizeSam - 1, j = iStereoBlockSizeSam - 2; i >= 0; i--, j -= 2 )
         {
-            vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
-                vecsStereoSndCrd[i];
+            vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] = vecsStereoSndCrd[i];
         }
     }
 
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
-        // encode current audio frame
+        // OPUS encoding
         if ( ( eAudioCompressionType == CT_OPUS ) ||
              ( eAudioCompressionType == CT_OPUS64 ) )
         {
-            if ( eAudioChannelConf == CC_MONO )
+            if ( CurOpusEncoder != nullptr )
             {
-                opus_custom_encode ( OpusEncoderMono,
-                                     &vecsStereoSndCrd[i * SYSTEM_FRAME_SIZE_SAMPLES],
-                                     SYSTEM_FRAME_SIZE_SAMPLES,
-                                     &vecCeltData[0],
-                                     iCeltNumCodedBytes );
-            }
-            else
-            {
-                opus_custom_encode ( OpusEncoderStereo,
-                                     &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
+                opus_custom_encode ( CurOpusEncoder,
+                                     &vecsStereoSndCrd[i * iNumAudioChannels * SYSTEM_FRAME_SIZE_SAMPLES],
                                      SYSTEM_FRAME_SIZE_SAMPLES,
                                      &vecCeltData[0],
                                      iCeltNumCodedBytes );
@@ -1083,66 +1015,37 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         const bool bReceiveDataOk =
             ( Channel.GetData ( vecbyNetwData, iCeltNumCodedBytes ) == GS_BUFFER_OK );
 
-        // invalidate the buffer OK status flag if necessary
-        if ( !bReceiveDataOk )
-        {
-            bJitterBufferOK = false;
-        }
-
-        // CELT decoding
+        // get pointer to coded data and manage the flags
         if ( bReceiveDataOk )
         {
-            // on any valid received packet, we clear the initialization phase
-            // flag
-            bIsInitializationPhase = false;
+            pCurCodedData = &vecbyNetwData[0];
 
-            if ( ( eAudioCompressionType == CT_OPUS ) ||
-                 ( eAudioCompressionType == CT_OPUS64 ) )
-            {
-                if ( eAudioChannelConf == CC_MONO )
-                {
-                    opus_custom_decode ( OpusDecoderMono,
-                                         &vecbyNetwData[0],
-                                         iCeltNumCodedBytes,
-                                         &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
-                                         SYSTEM_FRAME_SIZE_SAMPLES );
-                }
-                else
-                {
-                    opus_custom_decode ( OpusDecoderStereo,
-                                         &vecbyNetwData[0],
-                                         iCeltNumCodedBytes,
-                                         &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
-                                         SYSTEM_FRAME_SIZE_SAMPLES );
-                }
-            }
+            // on any valid received packet, we clear the initialization phase flag
+            bIsInitializationPhase = false;
         }
         else
         {
-            // lost packet
-            if ( ( eAudioCompressionType == CT_OPUS ) ||
-                 ( eAudioCompressionType == CT_OPUS64 ) )
+            // for lost packets use null pointer as coded input data
+            pCurCodedData   = nullptr;
+
+            // invalidate the buffer OK status flag
+            bJitterBufferOK = false;
+        }
+
+        // OPUS decoding
+        if ( ( eAudioCompressionType == CT_OPUS ) ||
+             ( eAudioCompressionType == CT_OPUS64 ) )
+        {
+            if ( CurOpusDecoder != nullptr )
             {
-                if ( eAudioChannelConf == CC_MONO )
-                {
-                    opus_custom_decode ( OpusDecoderMono,
-                                         nullptr,
-                                         iCeltNumCodedBytes,
-                                         &vecsAudioSndCrdMono[i * SYSTEM_FRAME_SIZE_SAMPLES],
-                                         SYSTEM_FRAME_SIZE_SAMPLES );
-                }
-                else
-                {
-                    opus_custom_decode ( OpusDecoderStereo,
-                                         nullptr,
-                                         iCeltNumCodedBytes,
-                                         &vecsStereoSndCrd[i * 2 * SYSTEM_FRAME_SIZE_SAMPLES],
-                                         SYSTEM_FRAME_SIZE_SAMPLES );
-                }
+                opus_custom_decode ( CurOpusDecoder,
+                                     pCurCodedData,
+                                     iCeltNumCodedBytes,
+                                     &vecsStereoSndCrd[i * iNumAudioChannels * SYSTEM_FRAME_SIZE_SAMPLES],
+                                     SYSTEM_FRAME_SIZE_SAMPLES );
             }
         }
     }
-
 
 /*
 // TEST
@@ -1151,24 +1054,23 @@ static FILE* pFileDelay = fopen("c:\\temp\\test2.dat", "wb");
 short sData[2];
 for (i = 0; i < iMonoBlockSizeSam; i++)
 {
-    sData[0] = (short) vecsAudioSndCrdMono[i];
+    sData[0] = (short) vecsStereoSndCrd[i];
     fwrite(&sData, size_t(2), size_t(1), pFileDelay);
 }
 fflush(pFileDelay);
 */
 
-
-    // check if channel is connected and if we do not have the initialization
-    // phase
+    // check if channel is connected and if we do not have the initialization phase
     if ( Channel.IsConnected() && ( !bIsInitializationPhase ) )
     {
         if ( eAudioChannelConf == CC_MONO )
         {
-            // copy mono data in stereo sound card buffer
-            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
+            // copy mono data in stereo sound card buffer (note that since the input
+            // and output is the same buffer, we have to start from the end not to
+            // overwrite input values)
+            for ( i = iMonoBlockSizeSam - 1, j = iStereoBlockSizeSam - 2; i >= 0; i--, j -= 2 )
             {
-                vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] =
-                    vecsAudioSndCrdMono[i];
+                vecsStereoSndCrd[j] = vecsStereoSndCrd[j + 1] = vecsStereoSndCrd[i];
             }
         }
     }

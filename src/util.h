@@ -482,7 +482,7 @@ public slots:
     void OnHelpWhatsThis() { QWhatsThis::enterWhatsThisMode(); }
     void OnHelpAbout() { AboutDlg.exec(); }
     void OnHelpDownloadLink()
-        { QDesktopServices::openUrl ( QUrl ( LLCON_DOWNLOAD_URL ) ); }
+        { QDesktopServices::openUrl ( QUrl ( JAMULUS_DOWNLOAD_URL ) ); }
 };
 
 

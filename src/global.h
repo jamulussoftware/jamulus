@@ -107,7 +107,7 @@ LED bar:      lbr
 #define DEFAULT_SERVER_NAME             "Central Server"
 
 // download URL
-#define LLCON_DOWNLOAD_URL              "http://sourceforge.net/projects/llcon/files"
+#define JAMULUS_DOWNLOAD_URL            "http://sourceforge.net/projects/llcon/files"
 
 // determining server internal address uses well-known host and port
 // (Google DNS, or something else reliable)
@@ -116,11 +116,7 @@ LED bar:      lbr
 #define IP_LOOKUP_TIMEOUT                500       // ms
 
 // defined port numbers for client and server
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
-# define LLCON_DEFAULT_PORT_NUMBER      22064 // different port number for 64 samples frame size version
-#else
-# define LLCON_DEFAULT_PORT_NUMBER      22124
-#endif
+#define LLCON_DEFAULT_PORT_NUMBER       22124
 #define LLCON_PORT_NUMBER_NORTHAMERICA  22224
 
 // system sample rate (the sound card and audio coder works on this sample rate)
@@ -133,9 +129,9 @@ LED bar:      lbr
 // define the allowed audio frame size factors (since the
 // "SYSTEM_FRAME_SIZE_SAMPLES" is quite small, it may be that on some
 // computers a larger value is required)
-#define FRAME_SIZE_FACTOR_PREFERRED     1 // 128 (for frame size 128), 64  (for frame size 64)
-#define FRAME_SIZE_FACTOR_DEFAULT       2 // 256 (for frame size 128), 128 (for frame size 64)
-#define FRAME_SIZE_FACTOR_SAFE          4 // 512 (for frame size 128), 256 (for frame size 64)
+#define FRAME_SIZE_FACTOR_PREFERRED     1 // 64 samples accumulated frame size
+#define FRAME_SIZE_FACTOR_DEFAULT       2 // 128 samples accumulated frame size
+#define FRAME_SIZE_FACTOR_SAFE          4 // 256 samples accumulated frame size
 
 // define the minimum allowed number of coded bytes for CELT (the encoder
 // gets in trouble if the value is too low)

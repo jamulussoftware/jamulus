@@ -62,7 +62,7 @@ void CSound::OpenJack()
             "use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
             "to adjust the Jack server sample rate.<br>Make sure to set the "
             "<b>Frames/Period</b> to a low value like <b>" ) +
-            QString().setNum ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) +
+            QString().setNum ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) +
             tr ( "</b> to achieve a low delay." ) );
     }
 

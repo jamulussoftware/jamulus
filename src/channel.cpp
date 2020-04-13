@@ -381,12 +381,12 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             // and audio frame size
             if ( eAudioCompressionType == CT_OPUS )
             {
-                iFadeInCntMax          = FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE;
+                iFadeInCntMax          = FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE / iNetwFrameSizeFact;
                 iAudioFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
             }
             else
             {
-                iFadeInCntMax          = FADE_IN_NUM_FRAMES;
+                iFadeInCntMax          = FADE_IN_NUM_FRAMES / iNetwFrameSizeFact;
                 iAudioFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
             }
 

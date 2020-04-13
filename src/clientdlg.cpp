@@ -1195,20 +1195,20 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                         border-right:  40px transparent;"
             "                         padding:       -5px;"
             "                         margin:        -5px, -5px, 0px, 0px; }"
-            "QLabel {                 color:          rgb(148, 148, 148);"
+            "QLabel {                 color:          rgb(220, 220, 220);"
             "                         font:           bold; }"
-            "QRadioButton {           color:          rgb(148, 148, 148);"
+            "QRadioButton {           color:          rgb(220, 220, 220);"
             "                         font:           bold; }"
             "QScrollArea {            background:     transparent; }"
             "QGroupBox {              background:     transparent; }"
-            "QGroupBox::title {       color:          rgb(148, 148, 148); }"
+            "QGroupBox::title {       color:          rgb(220, 220, 220); }"
             "QCheckBox::indicator {   width:          38px;"
             "                         height:         21px; }"
             "QCheckBox::indicator:unchecked {"
             "                         image:          url(:/png/fader/res/ledbuttonnotpressed.png); }"
             "QCheckBox::indicator:checked {"
             "                         image:          url(:/png/fader/res/ledbuttonpressed.png); }"
-            "QCheckBox {              color:          rgb(148, 148, 148);"
+            "QCheckBox {              color:          rgb(220, 220, 220);"
             "                         font:           bold; }" );            
 
 #ifdef _WIN32
@@ -1216,9 +1216,9 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
 // background frame the style sheet for QRadioButton was already set. But it
 // seems that it is only applied if the style was set to default and then back
 // to GD_ORIGINAL. This seems to be a QT related issue...
-rbtReverbSelL->setStyleSheet ( "color: rgb(148, 148, 148);"
+rbtReverbSelL->setStyleSheet ( "color: rgb(220, 220, 220);"
                                "font:  bold;" );
-rbtReverbSelR->setStyleSheet ( "color: rgb(148, 148, 148);"
+rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
                                "font:  bold;" );
 #endif
 

@@ -1146,12 +1146,15 @@ fflush(pFileDelay);
 
 int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
 {
+    const double dSystemBlockDurationMs = static_cast<double> ( iOPUSFrameSizeSamples ) /
+        SYSTEM_SAMPLE_RATE_HZ * 1000;
+
     // If the jitter buffers are set effectively, i.e. they are exactly the
     // size of the network jitter, then the delay of the buffer is the buffer
     // length. Since that is usually not the case but the buffers are usually
     // a bit larger than necessary, we introduce some factor for compensation.
     // Consider the jitter buffer on the client and on the server side, too.
-    const double dTotalJitterBufferDelayMs = SYSTEM_BLOCK_DURATION_MS_FLOAT *
+    const double dTotalJitterBufferDelayMs = dSystemBlockDurationMs *
         static_cast<double> ( GetSockBufNumFrames() +
                               GetServerSockBufNumFrames() ) * 0.7;
 
@@ -1187,9 +1190,8 @@ int CClient::EstimatedOverallDelay ( const int iPingTimeMs )
     const double dDelayToFillNetworkPacketsMs =
         GetSystemMonoBlSize() * 1000 / SYSTEM_SAMPLE_RATE_HZ;
 
-    // CELT additional delay at small frame sizes is half a frame size
-    const double dAdditionalAudioCodecDelayMs =
-        SYSTEM_BLOCK_DURATION_MS_FLOAT / 2;
+    // OPUS additional delay at small frame sizes is half a frame size
+    const double dAdditionalAudioCodecDelayMs = dSystemBlockDurationMs / 2;
 
     const double dTotalBufferDelayMs =
         dDelayToFillNetworkPacketsMs +

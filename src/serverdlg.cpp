@@ -163,7 +163,7 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
 
     // set up list view for connected clients
     lvwClients->setColumnWidth ( 0, 170 );
-    lvwClients->setColumnWidth ( 1, 130 );
+    lvwClients->setColumnWidth ( 1, 200 );
     lvwClients->clear();
 
 
@@ -175,6 +175,7 @@ lvwClients->setMinimumHeight ( 140 );
     // insert items in reverse order because in Windows all of them are
     // always visible -> put first item on the top
     vecpListViewItems.Init ( MAX_NUM_CHANNELS );
+
     for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
     {
         vecpListViewItems[i] = new QTreeWidgetItem ( lvwClients );
@@ -487,12 +488,6 @@ void CServerDlg::OnTimer()
                 // jitter buffer size (polling for updates)
                 vecpListViewItems[i]->setText ( 2,
                     QString().setNum ( veciJitBufNumFrames[i] ) );
-
-                // out network block size
-                vecpListViewItems[i]->setText ( 3,
-                    QString().setNum ( static_cast<double> (
-                    veciNetwFrameSizeFact[i] * SYSTEM_BLOCK_DURATION_MS_FLOAT
-                    ), 'f', 2 ) );
 
                 vecpListViewItems[i]->setHidden ( false );
             }

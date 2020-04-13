@@ -26,6 +26,9 @@
      <property name="rootIsDecorated">
       <bool>false</bool>
      </property>
+     <property name="columnCount">
+      <number>3</number>
+     </property>
      <column>
       <property name="text">
        <string>Client IP:Port</string>
@@ -39,11 +42,6 @@
      <column>
       <property name="text">
        <string>Jitter Buffer Size</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Block Size Out/ms</string>
       </property>
      </column>
     </widget>

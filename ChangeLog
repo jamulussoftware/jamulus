@@ -19,6 +19,7 @@ TODO issue with Mac audio interface: https://sourceforge.net/p/llcon/discussion/
 
 TODO let the user select all possible sound card buffer sizes, this should solve Ticket #53
 
+
 TODO auto jitter buffer performance not good at 64 samples frame size -> to be checked again
 
 TODO for different frame sizes (64/128) the start value of 6 for the jitter buffer might be too low

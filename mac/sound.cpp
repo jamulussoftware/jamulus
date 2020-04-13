@@ -277,6 +277,9 @@ int CSound::CountChannels ( AudioDeviceID devID,
     {
         for ( UInt32 i = 0; i < buflist->mNumberBuffers; ++i )
         {
+            // The correct value mNumberChannels for an AudioBuffer can be derived from the mChannelsPerFrame
+            // and the interleaved flag. For non interleaved formats, mNumberChannels is always 1.
+            // For interleaved formats, mNumberChannels is equal to mChannelsPerFrame.
             result += buflist->mBuffers[i].mNumberChannels;
         }
     }
@@ -812,28 +815,11 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
 
     if ( inDevice == pSound->CurrentAudioInputDeviceID )
     {
-        // we should have a matching number of buffers to channels
-        if ( inInputData->mNumberBuffers == (UInt32) iNumInChan &&
-             inInputData->mBuffers[0].mDataByteSize == static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) )
+        // check size (float32 has four bytes)
+        if ( inInputData->mBuffers[0].mDataByteSize ==
+             static_cast<UInt32> ( iCoreAudioBufferSizeMono * iNumInChan * 4 ) )
         {
-            // One buffer per channel mode
-            AudioBuffer left       = inInputData->mBuffers[iSelInputLeftChannel];
-            Float32*    pLeftData  = static_cast<Float32*> ( left.mData );
-            AudioBuffer right      = inInputData->mBuffers[iSelInputRightChannel];
-            Float32*    pRightData = static_cast<Float32*> ( right.mData );
-
-            // copy input data
-            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
-            {
-                // left
-                pSound->vecsTmpAudioSndCrdStereo[2 * i] = (short) ( pLeftData[i] * _MAXSHORT );
-
-                // right
-                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( pRightData[i] * _MAXSHORT );
-            }
-        } else if ( inInputData->mBuffers[0].mDataByteSize == static_cast<UInt32> ( iCoreAudioBufferSizeMono * iNumInChan * 4 ) )
-        {
-            // One buffer with all the channels in
+            // one buffer with all the channels in interleaved format:
             // get a pointer to the input data of the correct type
             Float32* pInData = static_cast<Float32*> ( inInputData->mBuffers[0].mData );
 
@@ -862,6 +848,25 @@ if ( iNumInChan == 4 )
 }
 */
 
+            }
+        }
+        else if ( inInputData->mNumberBuffers == (UInt32) iNumInChan && // we should have a matching number of buffers to channels
+                  inInputData->mBuffers[0].mDataByteSize == static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) )
+        {
+            // one buffer per channel mode:
+            AudioBuffer left       = inInputData->mBuffers[iSelInputLeftChannel];
+            Float32*    pLeftData  = static_cast<Float32*> ( left.mData );
+            AudioBuffer right      = inInputData->mBuffers[iSelInputRightChannel];
+            Float32*    pRightData = static_cast<Float32*> ( right.mData );
+
+            // copy input data
+            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+            {
+                // left
+                pSound->vecsTmpAudioSndCrdStereo[2 * i] = (short) ( pLeftData[i] * _MAXSHORT );
+
+                // right
+                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( pRightData[i] * _MAXSHORT );
             }
         }
         else

@@ -65,12 +65,12 @@
 
 /* Definitions ****************************************************************/
 // audio in fader range
-#define AUD_FADER_IN_MIN                        0
-#define AUD_FADER_IN_MAX                        100
-#define AUD_FADER_IN_MIDDLE                     ( AUD_FADER_IN_MAX / 2 )
+#define AUD_FADER_IN_MIN                                    0
+#define AUD_FADER_IN_MAX                                    100
+#define AUD_FADER_IN_MIDDLE                                 ( AUD_FADER_IN_MAX / 2 )
 
 // audio reverberation range
-#define AUD_REVERB_MAX                          100
+#define AUD_REVERB_MAX                                      100
 
 // OPUS number of coded bytes per audio packet
 // TODO we have to use new numbers for OPUS to avoid that old CELT packets
@@ -83,23 +83,19 @@
 // Fs: sampling rate (SYSTEM_SAMPLE_RATE_HZ)
 // L:  number of samples per packet (SYSTEM_FRAME_SIZE_SAMPLES)
 // N:  number of bytes per packet (values below)
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
-# define OPUS_NUM_BYTES_MONO_LOW_QUALITY         12
-# define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY      22
-# define OPUS_NUM_BYTES_MONO_HIGH_QUALITY        35
+#define OPUS_NUM_BYTES_MONO_LOW_QUALITY                     12
+#define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY                  22
+#define OPUS_NUM_BYTES_MONO_HIGH_QUALITY                    35
+#define OPUS_NUM_BYTES_MONO_LOW_QUALITY_DBLE_FRAMESIZE      25
+#define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY_DBLE_FRAMESIZE   45
+#define OPUS_NUM_BYTES_MONO_HIGH_QUALITY_DBLE_FRAMESIZE     71
 
-# define OPUS_NUM_BYTES_STEREO_LOW_QUALITY       24
-# define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY    35
-# define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY      72
-#else
-# define OPUS_NUM_BYTES_MONO_LOW_QUALITY         25
-# define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY      45
-# define OPUS_NUM_BYTES_MONO_HIGH_QUALITY        71
-
-# define OPUS_NUM_BYTES_STEREO_LOW_QUALITY       47
-# define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY    71
-# define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY      142
-#endif
+#define OPUS_NUM_BYTES_STEREO_LOW_QUALITY                   24
+#define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY                35
+#define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY                  72
+#define OPUS_NUM_BYTES_STEREO_LOW_QUALITY_DBLE_FRAMESIZE    47
+#define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY_DBLE_FRAMESIZE 71
+#define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY_DBLE_FRAMESIZE   142
 
 
 /* Classes ********************************************************************/

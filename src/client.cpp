@@ -51,7 +51,7 @@ CClient::CClient ( const quint16  iPortNumber,
     CurOpusDecoder                   ( nullptr ),
     eAudioCompressionType            ( CT_OPUS ),
     iCeltNumCodedBytes               ( OPUS_NUM_BYTES_MONO_LOW_QUALITY ),
-    iOPUSFrameSizeSamples            ( SYSTEM_FRAME_SIZE_SAMPLES ),
+    iOPUSFrameSizeSamples            ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ),
     eAudioQuality                    ( AQ_NORMAL ),
     eAudioChannelConf                ( CC_MONO ),
     iNumAudioChannels                ( 1 ),
@@ -669,16 +669,16 @@ void CClient::Stop()
 void CClient::Init()
 {
     // check if possible frame size factors are supported
-    const int iFraSizePreffered = FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES;
-    const int iFraSizeDefault   = FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES;
-    const int iFraSizeSafe      = FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES;
+    const int iFraSizePreffered = SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_PREFERRED;
+    const int iFraSizeDefault   = SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_DEFAULT;
+    const int iFraSizeSafe      = SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_SAFE;
 
     bFraSiFactPrefSupported = ( Sound.Init ( iFraSizePreffered ) == iFraSizePreffered );
     bFraSiFactDefSupported  = ( Sound.Init ( iFraSizeDefault )   == iFraSizeDefault );
     bFraSiFactSafeSupported = ( Sound.Init ( iFraSizeSafe )      == iFraSizeSafe );
 
     // translate block size index in actual block size
-    const int iPrefMonoFrameSize = iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
+    const int iPrefMonoFrameSize = iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
 
     // get actual sound card buffer size using preferred size
     iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
@@ -686,12 +686,12 @@ void CClient::Init()
     // Calculate the current sound card frame size factor. In case
     // the current mono block size is not a multiple of the system
     // frame size, we have to use a sound card conversion buffer.
-    if ( ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) ) ||
-         ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) ||
-         ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
+    if ( ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_PREFERRED ) ) ||
+         ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_DEFAULT ) ) ||
+         ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_SAFE ) ) )
     {
         // regular case: one of our predefined buffer sizes is available
-        iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES;
+        iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
 
         // no sound card conversion buffer required
         bSndCrdConversionBufferRequired = false;
@@ -700,78 +700,111 @@ void CClient::Init()
     {
         // An unsupported sound card buffer size is currently used -> we have
         // to use a conversion buffer. Per definition we use the smallest buffer
-        // size as the current frame size
+        // size as the current frame size.
 
         // store actual sound card buffer size (stereo)
-        iSndCardMonoBlockSizeSamConvBuff             = iMonoBlockSizeSam;
-        const int iSndCardStereoBlockSizeSamConvBuff = 2 * iMonoBlockSizeSam;
+        bSndCrdConversionBufferRequired  = true;
+        iSndCardMonoBlockSizeSamConvBuff = iMonoBlockSizeSam;
 
-        // overwrite block size by smallest supported buffer size
-        iSndCrdFrameSizeFactor = FRAME_SIZE_FACTOR_PREFERRED;
-        iMonoBlockSizeSam      = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED;
-
-        iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
-
-        // inits for conversion buffer (the size of the conversion buffer must
-        // be the sum of input/output sizes which is the worst case fill level)
-        const int iConBufSize = iStereoBlockSizeSam + iSndCardStereoBlockSizeSamConvBuff;
-
-        SndCrdConversionBufferIn.Init  ( iConBufSize );
-        SndCrdConversionBufferOut.Init ( iConBufSize );
-        vecDataConvBuf.Init            ( iStereoBlockSizeSam );
-
-        // the output conversion buffer must be filled with the inner
-        // block size for initialization (this is the latency which is
-        // introduced by the conversion buffer) to avoid buffer underruns
-        const CVector<int16_t> vZeros ( iStereoBlockSizeSam, 0 );
-        SndCrdConversionBufferOut.Put ( vZeros, vZeros.Size() );
-
-        bSndCrdConversionBufferRequired = true;
+        // overwrite block size factor by using one frame
+        iSndCrdFrameSizeFactor = 1;
     }
 
-    // calculate stereo (two channels) buffer size
-    iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
-
-    // init reverberation
-    AudioReverbL.Init ( SYSTEM_SAMPLE_RATE_HZ );
-    AudioReverbR.Init ( SYSTEM_SAMPLE_RATE_HZ );
-
-    // inits for audio coding
-    // always use the OPUS codec
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
-    eAudioCompressionType = CT_OPUS64;
-#else
-    eAudioCompressionType = CT_OPUS;
-#endif
-
-    iOPUSFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
-
-    if ( eAudioChannelConf == CC_MONO )
+    // select the OPUS frame size mode depending on current mono block size samples
+    if ( bSndCrdConversionBufferRequired )
     {
-        CurOpusEncoder    = OpusEncoderMono;
-        CurOpusDecoder    = OpusDecoderMono;
-        iNumAudioChannels = 1;
-
-        switch ( eAudioQuality )
+        if ( iSndCardMonoBlockSizeSamConvBuff < DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES )
         {
-        case AQ_LOW:    iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_LOW_QUALITY;    break;
-        case AQ_NORMAL: iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_NORMAL_QUALITY; break;
-        case AQ_HIGH:   iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;   break;
+            iMonoBlockSizeSam     = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+            eAudioCompressionType = CT_OPUS64;
+        }
+        else
+        {
+            iMonoBlockSizeSam     = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
+            eAudioCompressionType = CT_OPUS;
         }
     }
     else
     {
-        CurOpusEncoder    = OpusEncoderStereo;
-        CurOpusDecoder    = OpusDecoderStereo;
-        iNumAudioChannels = 2;
-
-        switch ( eAudioQuality )
+        if ( iMonoBlockSizeSam < DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES  )
         {
-        case AQ_LOW:    iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_LOW_QUALITY;    break;
-        case AQ_NORMAL: iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY; break;
-        case AQ_HIGH:   iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;   break;
+            eAudioCompressionType = CT_OPUS64;
+        }
+        else
+        {
+            // since we use double size frame size for OPUS, we have to adjust the frame size factor
+            iSndCrdFrameSizeFactor /= 2;
+            eAudioCompressionType   = CT_OPUS;
+
         }
     }
+
+    // inits for audio coding
+    if ( eAudioCompressionType == CT_OPUS )
+    {
+        iOPUSFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
+
+        if ( eAudioChannelConf == CC_MONO )
+        {
+            CurOpusEncoder    = OpusEncoderMono;
+            CurOpusDecoder    = OpusDecoderMono;
+            iNumAudioChannels = 1;
+
+            switch ( eAudioQuality )
+            {
+            case AQ_LOW:    iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_LOW_QUALITY_DBLE_FRAMESIZE;    break;
+            case AQ_NORMAL: iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_NORMAL_QUALITY_DBLE_FRAMESIZE; break;
+            case AQ_HIGH:   iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY_DBLE_FRAMESIZE;   break;
+            }
+        }
+        else
+        {
+            CurOpusEncoder    = OpusEncoderStereo;
+            CurOpusDecoder    = OpusDecoderStereo;
+            iNumAudioChannels = 2;
+
+            switch ( eAudioQuality )
+            {
+            case AQ_LOW:    iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_LOW_QUALITY_DBLE_FRAMESIZE;    break;
+            case AQ_NORMAL: iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY_DBLE_FRAMESIZE; break;
+            case AQ_HIGH:   iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY_DBLE_FRAMESIZE;   break;
+            }
+        }
+    }
+    else /* CT_OPUS64 */
+    {
+        iOPUSFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+
+        if ( eAudioChannelConf == CC_MONO )
+        {
+            CurOpusEncoder    = Opus64EncoderMono;
+            CurOpusDecoder    = Opus64DecoderMono;
+            iNumAudioChannels = 1;
+
+            switch ( eAudioQuality )
+            {
+            case AQ_LOW:    iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_LOW_QUALITY;    break;
+            case AQ_NORMAL: iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_NORMAL_QUALITY; break;
+            case AQ_HIGH:   iCeltNumCodedBytes = OPUS_NUM_BYTES_MONO_HIGH_QUALITY;   break;
+            }
+        }
+        else
+        {
+            CurOpusEncoder    = Opus64EncoderStereo;
+            CurOpusDecoder    = Opus64DecoderStereo;
+            iNumAudioChannels = 2;
+
+            switch ( eAudioQuality )
+            {
+            case AQ_LOW:    iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_LOW_QUALITY;    break;
+            case AQ_NORMAL: iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY; break;
+            case AQ_HIGH:   iCeltNumCodedBytes = OPUS_NUM_BYTES_STEREO_HIGH_QUALITY;   break;
+            }
+        }
+    }
+
+    // calculate stereo (two channels) buffer size
+    iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
     vecCeltData.Init ( iCeltNumCodedBytes );
 
@@ -788,6 +821,29 @@ void CClient::Init()
                                        iCeltNumCodedBytes,
                                        iSndCrdFrameSizeFactor,
                                        iNumAudioChannels );
+
+    // init reverberation
+    AudioReverbL.Init ( SYSTEM_SAMPLE_RATE_HZ );
+    AudioReverbR.Init ( SYSTEM_SAMPLE_RATE_HZ );
+
+    // init the sound card conversion buffers
+    if ( bSndCrdConversionBufferRequired )
+    {
+        // inits for conversion buffer (the size of the conversion buffer must
+        // be the sum of input/output sizes which is the worst case fill level)
+        const int iSndCardStereoBlockSizeSamConvBuff = 2 * iSndCardMonoBlockSizeSamConvBuff;
+        const int iConBufSize                        = iStereoBlockSizeSam + iSndCardStereoBlockSizeSamConvBuff;
+
+        SndCrdConversionBufferIn.Init  ( iConBufSize );
+        SndCrdConversionBufferOut.Init ( iConBufSize );
+        vecDataConvBuf.Init            ( iStereoBlockSizeSam );
+
+        // the output conversion buffer must be filled with the inner
+        // block size for initialization (this is the latency which is
+        // introduced by the conversion buffer) to avoid buffer underruns
+        const CVector<int16_t> vZeros ( iStereoBlockSizeSam, 0 );
+        SndCrdConversionBufferOut.Put ( vZeros, vZeros.Size() );
+    }
 
     // reset initialization phase flag and mute flag
     bIsInitializationPhase = true;

@@ -128,21 +128,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "connection properties.<br>"
         "Three buffer sizes are supported:"
         "<ul>"
-#if ( SYSTEM_FRAME_SIZE_SAMPLES == 64 )
         "<li>64 samples: This is the preferred setting since it gives lowest "
         "latency but does not work with all sound cards.</li>"
         "<li>128 samples: This setting should work on most of the available "
         "sound cards.</li>"
         "<li>256 samples: This setting should only be used if only a very slow "
         "computer or a slow internet connection is available.</li>"
-#else
-        "<li>128 samples: This is the preferred setting since it gives lowest "
-        "latency but does not work with all sound cards.</li>"
-        "<li>256 samples: This setting should work on most of the available "
-        "sound cards.</li>"
-        "<li>512 samples: This setting should only be used if only a very slow "
-        "computer or a slow internet connection is available.</li>"
-#endif
         "</ul>"
         "Some sound card driver do not allow the buffer delay to be changed "
         "from within the " ) + APP_NAME +
@@ -356,14 +347,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // set text for sound card buffer delay radio buttons
     rbtBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
-        FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES,
+        FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES_SMALL,
         ", preferred" ) );
 
     rbtBufferDelayDefault->setText ( GenSndCrdBufferDelayString (
-        FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES ) );
+        FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES_SMALL ) );
 
     rbtBufferDelaySafe->setText ( GenSndCrdBufferDelayString (
-        FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES ) );
+        FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES_SMALL ) );
 
     // sound card buffer delay inits
     SndCrdBufferDelayButtonGroup.addButton ( rbtBufferDelayPreferred );
@@ -478,18 +469,12 @@ QString CClientSettingsDlg::GenSndCrdBufferDelayString ( const int     iFrameSiz
 void CClientSettingsDlg::UpdateSoundCardFrame()
 {
     // get current actual buffer size value
-    const int iCurActualBufSize =
-        pClient->GetSndCrdActualMonoBlSize();
+    const int iCurActualBufSize = pClient->GetSndCrdActualMonoBlSize();
 
     // check which predefined size is used (it is possible that none is used)
-    const bool bPreferredChecked =
-        ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED );
-
-    const bool bDefaultChecked =
-        ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT );
-
-    const bool bSafeChecked =
-        ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE );
+    const bool bPreferredChecked = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_PREFERRED );
+    const bool bDefaultChecked   = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_DEFAULT );
+    const bool bSafeChecked      = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_SAFE );
 
     // Set radio buttons according to current value (To make it possible
     // to have all radio buttons unchecked, we have to disable the
@@ -504,14 +489,9 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     SndCrdBufferDelayButtonGroup.setExclusive ( true );
 
     // disable radio buttons which are not supported by audio interface
-    rbtBufferDelayPreferred->setEnabled (
-        pClient->GetFraSiFactPrefSupported() );
-
-    rbtBufferDelayDefault->setEnabled (
-        pClient->GetFraSiFactDefSupported() );
-
-    rbtBufferDelaySafe->setEnabled (
-        pClient->GetFraSiFactSafeSupported() );
+    rbtBufferDelayPreferred->setEnabled ( pClient->GetFraSiFactPrefSupported() );
+    rbtBufferDelayDefault->setEnabled   ( pClient->GetFraSiFactDefSupported() );
+    rbtBufferDelaySafe->setEnabled      ( pClient->GetFraSiFactSafeSupported() );
 
     // If any of our predefined sizes is chosen, use the regular group box
     // title text. If not, show the actual buffer size. Otherwise the user

@@ -680,7 +680,7 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
         baBlock.append ( 0x88 );
         QString sBlocks = QString().fromUtf8 ( baBlock ).repeated ( 5 );
 
-        pGroupBox->setTitle ( sBlocks + " T R Y I N G   T O   C O N N E C T " + sBlocks );
+        pGroupBox->setTitle ( sBlocks + "  T R Y I N G   T O   C O N N E C T  " + sBlocks );
     }
 }
 

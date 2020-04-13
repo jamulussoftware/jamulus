@@ -30,6 +30,7 @@ CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains          ( MAX_NUM_CHANNELS, 1.0 ),
     bDoAutoSockBufSize ( true ),
     iFadeInCnt         ( 0 ),
+    iFadeInCntMax      ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
     bIsEnabled         ( false ),
     bIsServer          ( bNIsServer )
 {
@@ -365,6 +366,16 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             iNetwFrameSizeFact    = NetworkTransportProps.iBlockSizeFact;
             iNetwFrameSize        = static_cast<int> ( NetworkTransportProps.iBaseNetworkPacketSize );
 
+            // update maximum number of frames for fade in counter
+            if ( eAudioCompressionType == CT_OPUS )
+            {
+                iFadeInCntMax = FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE;
+            }
+            else
+            {
+                iFadeInCntMax = FADE_IN_NUM_FRAMES;
+            }
+
             MutexSocketBuf.lock();
             {
                 // update socket buffer (the network block size is a multiple of the
@@ -463,7 +474,7 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
                 }
 
                 // manage audio fade-in counter
-                if ( iFadeInCnt < FADE_IN_NUM_FRAMES )
+                if ( iFadeInCnt < iFadeInCntMax )
                 {
                     iFadeInCnt++;
                 }

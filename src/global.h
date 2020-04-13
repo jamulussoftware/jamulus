@@ -107,13 +107,13 @@ LED bar:      lbr
 #define DEFAULT_SERVER_NAME             "Central Server"
 
 // download URL
-#define JAMULUS_DOWNLOAD_URL            "http://sourceforge.net/projects/llcon/files"
+#define SOFTWARE_DOWNLOAD_URL           "http://sourceforge.net/projects/llcon/files"
 
 // determining server internal address uses well-known host and port
 // (Google DNS, or something else reliable)
-#define WELL_KNOWN_HOST                 "8.8.8.8"  // Google
-#define WELL_KNOWN_PORT                  53        // DNS
-#define IP_LOOKUP_TIMEOUT                500       // ms
+#define WELL_KNOWN_HOST                 "8.8.8.8" // Google
+#define WELL_KNOWN_PORT                  53       // DNS
+#define IP_LOOKUP_TIMEOUT                500      // ms
 
 // defined port numbers for client and server
 #define LLCON_DEFAULT_PORT_NUMBER       22124

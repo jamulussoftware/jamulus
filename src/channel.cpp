@@ -27,12 +27,13 @@
 
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
-    vecdGains          ( MAX_NUM_CHANNELS, 1.0 ),
-    bDoAutoSockBufSize ( true ),
-    iFadeInCnt         ( 0 ),
-    iFadeInCntMax      ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
-    bIsEnabled         ( false ),
-    bIsServer          ( bNIsServer )
+    vecdGains              ( MAX_NUM_CHANNELS, 1.0 ),
+    bDoAutoSockBufSize     ( true ),
+    iFadeInCnt             ( 0 ),
+    iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
+    bIsEnabled             ( false ),
+    bIsServer              ( bNIsServer ),
+    iAudioFrameSizeSamples ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES )
 {
     // reset network transport properties
     ResetNetworkTransportProperties();
@@ -157,6 +158,16 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         iNumAudioChannels     = iNewNumAudioChannels;
         iNetwFrameSize        = iNewNetwFrameSize;
         iNetwFrameSizeFact    = iNewNetwFrameSizeFact;
+
+        // update audio frame size
+        if ( eAudioCompressionType == CT_OPUS )
+        {
+            iAudioFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
+        }
+        else
+        {
+            iAudioFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+        }
 
         MutexSocketBuf.lock();
         {
@@ -366,14 +377,17 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             iNetwFrameSizeFact    = NetworkTransportProps.iBlockSizeFact;
             iNetwFrameSize        = static_cast<int> ( NetworkTransportProps.iBaseNetworkPacketSize );
 
-            // update maximum number of frames for fade in counter
+            // update maximum number of frames for fade in counter (only needed for server)
+            // and audio frame size
             if ( eAudioCompressionType == CT_OPUS )
             {
-                iFadeInCntMax = FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE;
+                iFadeInCntMax          = FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE;
+                iAudioFrameSizeSamples = DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES;
             }
             else
             {
-                iFadeInCntMax = FADE_IN_NUM_FRAMES;
+                iFadeInCntMax          = FADE_IN_NUM_FRAMES;
+                iAudioFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
             }
 
             MutexSocketBuf.lock();
@@ -533,12 +547,8 @@ EGetDataStat CChannel::GetData ( CVector<uint8_t>& vecbyData,
             // subtract the number of samples of the current block since the
             // time out counter is based on samples not on blocks (definition:
             // always one atomic block is get by using the GetData() function
-            // where the atomic block size is "SYSTEM_FRAME_SIZE_SAMPLES")
-
-// TODO this code only works with the above assumption -> better
-// implementation so that we are not depending on assumptions
-
-            iConTimeOut -= SYSTEM_FRAME_SIZE_SAMPLES;
+            // where the atomic block size is "iAudioFrameSizeSamples")
+            iConTimeOut -= iAudioFrameSizeSamples;
 
             if ( iConTimeOut <= 0 )
             {
@@ -597,7 +607,7 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
 
 int CChannel::GetUploadRateKbps()
 {
-    const int iAudioSizeOut = iNetwFrameSizeFact * SYSTEM_FRAME_SIZE_SAMPLES;
+    const int iAudioSizeOut = iNetwFrameSizeFact * iAudioFrameSizeSamples;
 
     // we assume that the UDP packet which is transported via IP has an
     // additional header size of ("Network Music Performance (NMP) in narrow

@@ -212,6 +212,7 @@ protected:
 
     int               iNetwFrameSizeFact;
     int               iNetwFrameSize;
+    int               iAudioFrameSizeSamples;
 
     EAudComprType     eAudioCompressionType;
     int               iNumAudioChannels;

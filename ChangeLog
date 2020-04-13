@@ -5,6 +5,8 @@
 
   * refresh server list if the Central Server address type is changed
 
+  * bug fix: the server welcome message may appear twice if the server list was double clicked
+
 
 TODO mixer faders linear -> log gain is better
 

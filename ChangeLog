@@ -8,10 +8,10 @@
 
   * refresh server list if the Central Server address type is changed
 
+  * the unit of the mixer faders is now dB using the range -50 dB to 0 dB
+
   * bug fix: the server welcome message may appear twice if the server list was double clicked
 
-
-TODO mixer faders linear -> log gain is better: CalcFaderGain() -> x = -50:1:0; plot(x, (10 .^ (x / 10)))
 
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 

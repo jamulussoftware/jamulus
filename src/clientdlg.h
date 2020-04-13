@@ -96,6 +96,7 @@ protected:
     CSettings*         pSettings;
 
     bool               bConnected;
+    bool               bConnectDlgWasShown;
     QTimer             TimerSigMet;
     QTimer             TimerBuffersLED;
     QTimer             TimerStatus;

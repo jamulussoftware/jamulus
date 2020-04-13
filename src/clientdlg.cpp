@@ -33,14 +33,15 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
                          const bool      bShowAnalyzerConsole,
                          QWidget*        parent,
                          Qt::WindowFlags f ) :
-    QDialog            ( parent, f ),
-    pClient            ( pNCliP ),
-    pSettings          ( pNSetP ),
-    ClientSettingsDlg  ( pNCliP, parent, Qt::Window ),
-    ChatDlg            ( parent, Qt::Window ),
-    ConnectDlg         ( bNewShowComplRegConnList, parent, Qt::Dialog ),
-    AnalyzerConsole    ( pNCliP, parent, Qt::Window ),
-    MusicianProfileDlg ( pNCliP, parent )
+    QDialog             ( parent, f ),
+    pClient             ( pNCliP ),
+    pSettings           ( pNSetP ),
+    bConnectDlgWasShown ( false ),
+    ClientSettingsDlg   ( pNCliP, parent, Qt::Window ),
+    ChatDlg             ( parent, Qt::Window ),
+    ConnectDlg          ( bNewShowComplRegConnList, parent, Qt::Dialog ),
+    AnalyzerConsole     ( pNCliP, parent, Qt::Window ),
+    MusicianProfileDlg  ( pNCliP, parent )
 {
     setupUi ( this );
 
@@ -654,56 +655,65 @@ void CClientDlg::OnAudioPanValueChanged ( int value )
 
 void CClientDlg::OnConnectDlgAccepted()
 {
-    // get the address from the connect dialog
-    QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
-
-    // only store new host address in our data base if the address is
-    // not empty and it was not a server list item (only the addresses
-    // typed in manually are stored by definition)
-    if ( !strSelectedAddress.isEmpty() &&
-         !ConnectDlg.GetServerListItemWasChosen() )
+    // We had an issue that the accepted signal was emit twice if a list item was double
+    // clicked in the connect dialog. To avoid this we introduced a flag which makes sure
+    // we process the accepted signal only once after the dialog was initially shown.
+    if ( bConnectDlgWasShown )
     {
-        // store new address at the top of the list, if the list was already
-        // full, the last element is thrown out
-        pClient->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
-    }
+        // get the address from the connect dialog
+        QString strSelectedAddress = ConnectDlg.GetSelectedAddress();
 
-    // get name to be set in audio mixer group box title
-    QString strMixerBoardLabel;
-
-    if ( ConnectDlg.GetServerListItemWasChosen() )
-    {
-        // in case a server in the server list was chosen,
-        // display the server name of the server list
-        strMixerBoardLabel = ConnectDlg.GetSelectedServerName();
-    }
-    else
-    {
-        // an item of the server address combo box was chosen,
-        // just show the address string as it was entered by the
-        // user
-        strMixerBoardLabel = strSelectedAddress;
-
-        // special case: if the address is empty, we substitude the default
-        // central server address so that a user which just pressed the connect
-        // button without selecting an item in the table or manually entered an
-        // address gets a successful connection
-        if ( strSelectedAddress.isEmpty() )
+        // only store new host address in our data base if the address is
+        // not empty and it was not a server list item (only the addresses
+        // typed in manually are stored by definition)
+        if ( !strSelectedAddress.isEmpty() &&
+             !ConnectDlg.GetServerListItemWasChosen() )
         {
-            strSelectedAddress = DEFAULT_SERVER_ADDRESS;
-            strMixerBoardLabel = DEFAULT_SERVER_NAME;
+            // store new address at the top of the list, if the list was already
+            // full, the last element is thrown out
+            pClient->vstrIPAddress.StringFiFoWithCompare ( strSelectedAddress );
         }
-    }
 
-    // first check if we are already connected, if this is the case we have to
-    // disconnect the old server first
-    if ( pClient->IsRunning() )
-    {
-        Disconnect();
-    }
+        // get name to be set in audio mixer group box title
+        QString strMixerBoardLabel;
 
-    // initiate connection
-    Connect ( strSelectedAddress, strMixerBoardLabel );
+        if ( ConnectDlg.GetServerListItemWasChosen() )
+        {
+            // in case a server in the server list was chosen,
+            // display the server name of the server list
+            strMixerBoardLabel = ConnectDlg.GetSelectedServerName();
+        }
+        else
+        {
+            // an item of the server address combo box was chosen,
+            // just show the address string as it was entered by the
+            // user
+            strMixerBoardLabel = strSelectedAddress;
+
+            // special case: if the address is empty, we substitude the default
+            // central server address so that a user which just pressed the connect
+            // button without selecting an item in the table or manually entered an
+            // address gets a successful connection
+            if ( strSelectedAddress.isEmpty() )
+            {
+                strSelectedAddress = DEFAULT_SERVER_ADDRESS;
+                strMixerBoardLabel = DEFAULT_SERVER_NAME;
+            }
+        }
+
+        // first check if we are already connected, if this is the case we have to
+        // disconnect the old server first
+        if ( pClient->IsRunning() )
+        {
+            Disconnect();
+        }
+
+        // initiate connection
+        Connect ( strSelectedAddress, strMixerBoardLabel );
+
+        // reset flag
+        bConnectDlgWasShown = false;
+    }
 }
 
 void CClientDlg::OnConnectDisconBut()
@@ -836,6 +846,7 @@ void CClientDlg::ShowConnectionSetupDialog()
                                                                                 pClient->GetServerListCentralServerAddress() ) );
 
     // show connect dialog
+    bConnectDlgWasShown = true;
     ConnectDlg.show();
 
     // make sure dialog is upfront and has focus

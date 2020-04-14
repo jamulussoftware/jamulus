@@ -174,11 +174,11 @@ timing jitter. If the Auto check is enabled, the jitter buffer size faders are d
 
 ![Audio channels](audiochannels.png)
 
-Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one
-and two audio channels respectively. In the mono-in/stereo-out mode the audio signal which is sent to the server is
-mono but the return signal is stereo. This is useful for the case that the sound card puts the instrument on one
-input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono
-channel but the server mix can be heard in stereo.
+Select the number of audio channels to be used for communication between client and server. There are three modes
+available. The mono and stereo modes use one and two audio channels respectively. In the mono-in/stereo-out mode
+the audio signal which is sent to the server is mono but the return signal is stereo. This is useful for the case
+that the sound card puts the instrument on one input channel and the microphone on the other channel. In that case
+the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.
 
 Enabling the stereo streaming mode will increase the stream data rate. Make sure that the current upload rate does
 not exceed the available bandwidth of your internet connection.

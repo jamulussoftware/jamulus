@@ -35,7 +35,8 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
       strSelectedServerName    ( "" ),
       bShowCompleteRegList     ( bNewShowCompleteRegList ),
       bServerListReceived      ( false ),
-      bServerListItemWasChosen ( false )
+      bServerListItemWasChosen ( false ),
+      bListFilterWasActive     ( false )
 {
     setupUi ( this );
 
@@ -142,6 +143,10 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
         SIGNAL ( activated ( QModelIndex ) ),
         this, SLOT ( OnConnectClicked() ) );
 
+    // line edit
+    QObject::connect ( edtFilter, SIGNAL ( textEdited ( const QString& ) ),
+        this, SLOT ( OnFilterTextEdited ( const QString& ) ) );
+
     // combo boxes
     QObject::connect ( cbxServerAddr, SIGNAL ( editTextChanged ( const QString& ) ),
         this, SLOT ( OnServerAddrEditTextChanged ( const QString& ) ) );
@@ -188,6 +193,7 @@ void CConnectDlg::RequestServerList()
     // reset flags
     bServerListReceived      = false;
     bServerListItemWasChosen = false;
+    bListFilterWasActive     = false;
 
     // clear current address and name
     strSelectedAddress    = "";
@@ -195,6 +201,9 @@ void CConnectDlg::RequestServerList()
 
     // clear server list view
     lvwServers->clear();
+
+    // clear filter edit box
+    edtFilter->setText ( "" );
 
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
@@ -485,6 +494,66 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
     lvwServers->clearSelection();
 }
 
+void CConnectDlg::UpdateListFilter()
+{
+    const QString sFilterText = edtFilter->text();
+
+    if ( !sFilterText.isEmpty() )
+    {
+        bListFilterWasActive     = true;
+        const int iServerListLen = lvwServers->topLevelItemCount();
+
+        for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+        {
+            bool bFilterFound = false;
+
+            // search server name
+            if ( lvwServers->topLevelItem ( iIdx )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+            {
+                bFilterFound = true;
+            }
+
+            // search location
+            if ( lvwServers->topLevelItem ( iIdx )->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+            {
+                bFilterFound = true;
+            }
+
+            // search childs
+            for ( int iCCnt = 0; iCCnt < lvwServers->topLevelItem ( iIdx )->childCount(); iCCnt++ )
+            {
+                if ( lvwServers->topLevelItem ( iIdx )->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                {
+                    bFilterFound = true;
+                }
+            }
+
+            // only update Hide state if ping time was received
+            if ( !lvwServers->topLevelItem ( iIdx )->text ( 1 ).isEmpty() )
+            {
+                lvwServers->topLevelItem ( iIdx )->setHidden ( !bFilterFound );
+            }
+        }
+    }
+    else
+    {
+        // if the filter was active but is now disabled, we have to update all list
+        // view items for the "ping received" hide state
+        if ( bListFilterWasActive )
+        {
+            const int iServerListLen = lvwServers->topLevelItemCount();
+
+            for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
+            {
+                // if ping time is empty, hide item
+                lvwServers->topLevelItem ( iIdx )->setHidden ( lvwServers->topLevelItem ( iIdx )->text ( 1 ).isEmpty() );
+            }
+
+            bListFilterWasActive = false;
+        }
+    }
+}
+
 void CConnectDlg::OnConnectClicked()
 {
     // get the IP address to be used according to the following definitions:
@@ -561,6 +630,9 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
 
     if ( pCurListViewItem )
     {
+        // check if this is the first time a ping time is set
+        const bool bIsFirstPing = pCurListViewItem->text ( 1 ).isEmpty();
+
         // update the color of the ping time font
         switch ( ePingTimeLEDColor )
         {
@@ -604,11 +676,8 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
         // update number of clients value (hidden)
         pCurListViewItem->setText ( 6, QString().setNum ( iNumClients ) );
 
-        // a ping time was received, set item to visible (note that we have
-        // to check if the item is hidden, otherwise we get a lot of CPU
-        // usage by calling "setHidden(false)" even if the item was already
-        // visible)
-        if ( pCurListViewItem->isHidden() )
+        // this is the first time a ping time was received, set item to visible
+        if ( bIsFirstPing )
         {
             pCurListViewItem->setHidden ( false );
         }
@@ -649,6 +718,10 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
     {
         lvwServers->setRootIsDecorated ( false );
     }
+
+    // we may have changed the Hidden state for some items, if a filter was active, we now
+    // have to update it to void lines appear which do not satisfy the filter criteria
+    UpdateListFilter();
 }
 
 QTreeWidgetItem* CConnectDlg::FindListViewItem ( const CHostAddress& InetAddr )

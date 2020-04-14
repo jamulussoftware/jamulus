@@ -6,6 +6,8 @@
   * added support for 64 samples OPUS packets in the client (if a sound card buffer size
     larger or equal than 128 samples is chosen, the legacy 128 samples OPUS packets are used)
 
+  * added a filter for the server list to, e.g., filter a specific country or search for a musician
+
   * refresh server list if the Central Server address type is changed
 
   * the unit of the mixer faders is now dB using the range -50 dB to 0 dB

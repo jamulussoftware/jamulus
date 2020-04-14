@@ -83,6 +83,7 @@ protected:
     QTreeWidgetItem* FindListViewItem ( const CHostAddress& InetAddr );
     QTreeWidgetItem* GetParentListViewItem ( QTreeWidgetItem* pItem );
     void             DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
+    void             UpdateListFilter();
 
     QTimer       TimerPing;
     QTimer       TimerReRequestServList;
@@ -93,11 +94,13 @@ protected:
     bool         bShowCompleteRegList;
     bool         bServerListReceived;
     bool         bServerListItemWasChosen;
+    bool         bListFilterWasActive;
 
 public slots:
     void OnServerListItemSelectionChanged();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnServerAddrEditTextChanged ( const QString& );
+    void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();

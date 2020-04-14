@@ -73,6 +73,16 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
         "IP address or URL. It also stores old URLs in the combo box list." ) );
 
+    // filter
+    edtFilter->setWhatsThis ( tr ( "<b>Filter:</b> The server list is filered "
+        "by the given text. Note that the filter is case insensitive." ) );
+    edtFilter->setAccessibleName ( tr ( "Filter edit box" ) );
+
+    // show all mucisians
+    chbExpandAll->setWhatsThis ( tr ( "<b>Show All Musicians:</b> If you check "
+        "this check box, the musicians of all servers are shown. If you "
+        "uncheck the check box, all list view items are collapsed.") );
+    chbExpandAll->setAccessibleName ( tr ( "Show all musicians check box" ) );
 
     // init server address combo box (max MAX_NUM_SERVER_ADDR_ITEMS entries)
     cbxServerAddr->setMaxCount     ( MAX_NUM_SERVER_ADDR_ITEMS );

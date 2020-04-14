@@ -572,6 +572,27 @@ enum ECSAddType
 };
 
 
+// Slave server registration state ---------------------------------------------
+enum ESvrRegStatus
+{
+    SRS_UNREGISTERED = 0,
+    SRS_BAD_ADDRESS = 1,
+    SRS_REQUESTED = 2,
+    SRS_TIME_OUT = 3,
+    SRS_UNKNOWN_RESP = 4,
+    SRS_REGISTERED = 5,
+    SRS_CENTRAL_SVR_FULL = 6
+};
+
+
+// Central server registration outcome -----------------------------------------
+enum ESvrRegResult
+{
+    SRR_REGISTERED = 0,
+    SRR_CENTRAL_SVR_FULL = 1
+};
+
+
 // Skill level enum ------------------------------------------------------------
 enum ESkillLevel
 {

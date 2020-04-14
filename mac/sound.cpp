@@ -885,6 +885,25 @@ if ( iNumInChan == 4 )
         if ( outOutputData->mBuffers[0].mDataByteSize ==
              static_cast<UInt32> ( iCoreAudioBufferSizeMono * iNumOutChan * 4 ) )
         {
+            // Outputs are to individual buffers too, rather than using channels
+            Float32* pLeftOutData = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutputLeftChannel].mData );
+            Float32* pRightOutData = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutputRightChannel].mData );
+            
+            // copy output data
+            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+            {
+                // left
+                pLeftOutData[i] =
+                    (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
+
+                // right
+                pRightOutData[i] =
+                    (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
+            }
+            
+        } else if ( outOutputData->mBuffers[0].mDataByteSize ==
+             static_cast<UInt32> ( iCoreAudioBufferSizeMono * iNumOutChan * 4 ) ) {
+            // Outputs are 2 channels in one buffer
             // get a pointer to the input data of the correct type
             Float32* pOutData = static_cast<Float32*> ( outOutputData->mBuffers[0].mData );
 

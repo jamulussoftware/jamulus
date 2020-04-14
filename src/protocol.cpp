@@ -289,6 +289,7 @@ CONNECTION LESS MESSAGES
 
     note: does not have any data -> n = 0
 
+
 - PROTMESSID_CLM_CHANNEL_LEVEL_LIST: The channel level list
 
     +----------------------------------+
@@ -304,11 +305,29 @@ CONNECTION LESS MESSAGES
     where an odd number of clients is connected, there will be four unused
     upper bits in the final byte, containing 0xF (which is out of range)
 
-    the server may compute them message when any client has used
+    the server may compute the message when any client has used
     PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST to opt in
 
-    the server may issue to message only to a client that has used
+    the server may issue the message only to a client that has used
     PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST to opt in
+
+
+- PROTMESSID_CLM_REGISTER_SERVER_RESP: Version number and operating system
+
+    +---------------+
+    | 1 byte status |
+    +---------------+
+
+    - "status":
+      0 - success
+      1 - failed due to central server list being full
+
+    Note: the central server may send this message in response to a
+          PROTMESSID_CLM_REGISTER_SERVER request.
+          Where not received, the registering server may only retry up to
+          five times for one registration request at 500ms intervals.
+          Beyond this, it should "ping" every 15 minutes
+          (standard re-registration timeout).
 
 
  ******************************************************************************
@@ -675,6 +694,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
         case PROTMESSID_CLM_CHANNEL_LEVEL_LIST:
             bRet = EvaluateCLChannelLevelListMes ( InetAddr, vecbyMesBodyData );
+            break;
+
+        case PROTMESSID_CLM_REGISTER_SERVER_RESP:
+            bRet = EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
             break;
         }
     }
@@ -2090,6 +2113,40 @@ bool CProtocol::EvaluateCLChannelLevelListMes  ( const CHostAddress&     InetAdd
     return false; // no error
 }
 
+void CProtocol::CreateCLRegisterServerResp  ( const CHostAddress& InetAddr,
+                                              const int           iStatus )
+{
+    int              iPos = 0; // init position pointer
+    CVector<uint8_t> vecData( 1 );
+
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( iStatus ), 1 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REGISTER_SERVER_RESP,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress&     InetAddr,
+                                               const CVector<uint8_t>& vecData )
+{
+    int       iPos     = 0; // init position pointer
+    const int iDataLen = vecData.Size();
+
+    if ( iDataLen != 1 )
+    {
+        return true;
+    }
+
+    // known values are 0 and 1 currently
+    // but allow 0 to 255
+    int iStatus = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // invoke message action
+    emit CLRegisterServerResp ( InetAddr, iStatus );
+
+    return false; // no error
+}
 
 /******************************************************************************\
 * Message generation and parsing                                               *

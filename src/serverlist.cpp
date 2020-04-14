@@ -34,7 +34,9 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     : iNumPredefinedServers     ( 0 ),
       eCentralServerAddressType ( AT_MANUAL ), // must be AT_MANUAL for the "no GUI" case
       bCentServPingServerInList ( bNCentServPingServerInList ),
-      pConnLessProtocol         ( pNConLProt )
+      pConnLessProtocol         ( pNConLProt ),
+      eSvrRegStatus             ( SRS_UNREGISTERED ),
+      iSvrRegRetries            ( 0 )
 {
     // set the central server address
     SetCentralServerAddress ( sNCentServAddr );
@@ -177,6 +179,11 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
     QObject::connect ( &TimerRegistering, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerRegistering() ) );
+
+    TimerCLRegisterServerResp.setSingleShot ( true );
+    TimerCLRegisterServerResp.setInterval ( REGISTER_SERVER_TIME_OUT_MS );
+    QObject::connect ( &TimerCLRegisterServerResp, SIGNAL ( timeout() ),
+        this, SLOT ( OnTimerCLRegisterServerResp() ) );
 }
 
 void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr )
@@ -239,6 +246,12 @@ void CServerListManager::Update()
             }
             locker.relock();
 
+            // reset the retry counter to zero because update was called
+            iSvrRegRetries = 0;
+
+            // start timer for registration timeout
+            TimerCLRegisterServerResp.start();
+
             // start timer for registering this server at the central server
             // 1 minute = 60 * 1000 ms
             TimerRegistering.start ( SERVLIST_REGIST_INTERV_MINUTES * 60000 );
@@ -266,6 +279,7 @@ void CServerListManager::Update()
         }
         else
         {
+            TimerCLRegisterServerResp.stop();
             TimerRegistering.stop();
             TimerPingCentralServer.stop();
         }
@@ -297,7 +311,7 @@ void CServerListManager::OnTimerPollList()
     // server entry) and the predefined servers if they are still valid.
     // Note that we have to use "ServerList.size()" function in the for loop
     // since we may remove elements from the server list inside the for loop.
-    for ( int iIdx = 1 + iNumPredefinedServers; iIdx < ServerList.size(); iIdx++ )
+    for ( int iIdx = 1 + iNumPredefinedServers; iIdx < ServerList.size(); )
     {
         // 1 minute = 60 * 1000 ms
         if ( ServerList[iIdx].RegisterTime.elapsed() >
@@ -305,6 +319,11 @@ void CServerListManager::OnTimerPollList()
         {
             // remove this list entry
             ServerList.removeAt ( iIdx );
+        }
+        else
+        {
+            // Move to the next entry (only on else)
+            iIdx++;
         }
     }
 }
@@ -346,6 +365,7 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             {
                 // create a new server list entry and init with received data
                 ServerList.append ( CServerListEntry ( InetAddr, LInetAddr, ServerInfo ) );
+                iSelIdx = iCurServerListSize;
             }
         }
         else
@@ -364,6 +384,8 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
                 ServerList[iSelIdx].UpdateRegistration();
             }
         }
+
+        pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, iSelIdx == ciInvalidIdx ? 1 : 0 );
     }
 }
 
@@ -465,8 +487,35 @@ void CServerListManager::OnTimerPingCentralServer()
     }
 }
 
+void CServerListManager::OnTimerCLRegisterServerResp()
+{
+    QMutexLocker locker ( &Mutex );
+
+    if ( eSvrRegStatus == SRS_REQUESTED )
+    {
+        iSvrRegRetries++;
+        if ( iSvrRegRetries >= REGISTER_SERVER_RETRY_LIMIT )
+        {
+            eSvrRegStatus = SRS_TIME_OUT;
+            emit SvrRegStatusChanged();
+        }
+        else
+        {
+            locker.unlock();
+            {
+                OnTimerRegistering();
+            }
+            locker.relock();
+
+            // re-start timer for registration timeout
+            TimerCLRegisterServerResp.start();
+        }
+    }
+}
+
 void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
 {
+
     // we need the lock since the user might change the server properties at
     // any time
     QMutexLocker locker ( &Mutex );
@@ -488,6 +537,9 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
         if ( bIsRegister )
         {
             // register server
+            eSvrRegStatus = SRS_REQUESTED;
+            emit SvrRegStatusChanged();
+
             pConnLessProtocol->CreateCLRegisterServerMes ( SlaveCurCentServerHostAddress,
                                                            SlaveCurLocalHostAddress,
                                                            ServerList[0] );
@@ -495,7 +547,15 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
         else
         {
             // unregister server
+            eSvrRegStatus = SRS_UNREGISTERED;
+            emit SvrRegStatusChanged();
+
             pConnLessProtocol->CreateCLUnregisterServerMes ( SlaveCurCentServerHostAddress );
         }
+    }
+    else if ( bIsRegister )
+    {
+        eSvrRegStatus = SRS_BAD_ADDRESS;
+        emit SvrRegStatusChanged();
     }
 }

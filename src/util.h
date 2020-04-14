@@ -572,6 +572,18 @@ enum ECSAddType
 };
 
 
+// Registration status ---------------------------------------------------------
+enum ESvrRegStatus
+{
+    SRS_BAD_ADDRESS = -4,
+    SRS_TIME_OUT = -3,
+    SRS_REQUESTED = -2,
+    SRS_UNREGISTERED = -1,
+    SRS_REGISTERED = 0,
+    SRS_CENTRAL_SVR_FULL = 1
+};
+
+
 // Skill level enum ------------------------------------------------------------
 enum ESkillLevel
 {

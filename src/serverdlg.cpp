@@ -61,14 +61,19 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
         "Dialog:</b> If enabled, a Creative Commons Licence dialog is shown "
         "each time a new user connects the server." ) );
 
-    // register server flag
-    chbRegisterServer->setWhatsThis ( tr ( "<b>Register Server Status:</b> If "
-        "the register server check box is checked, this server registers "
+    // Make My Server Public flag
+    chbRegisterServer->setWhatsThis ( tr ( "<b>Make My Server Public:</b> If "
+        "the Make My Server Public check box is checked, this server registers "
         "itself at the central server so that all " ) + APP_NAME +
         tr ( " users can see the server in the connect dialog server list and "
         "connect to it. The registering of the server is renewed periodically "
         "to make sure that all servers in the connect dialog server list are "
         "actually available." ) );
+
+    // register server status label
+    lblRegSvrStatus->setWhatsThis ( tr ( "<b>Register Server Status:</b> If "
+        "the Make My Server Public check box is checked, this will show "
+        "the success of registration with the central server." ) );
 
     // central server address
     QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
@@ -322,6 +327,9 @@ lvwClients->setMinimumHeight ( 140 );
     QObject::connect ( pServer, SIGNAL ( Stopped() ),
         this, SLOT ( OnServerStopped() ) );
 
+    QObject::connect ( pServer, SIGNAL ( SvrRegStatusChanged() ),
+        this, SLOT ( OnSvrRegStatusChanged() ) );
+
     QObject::connect ( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
         this, SLOT ( OnAboutToQuit() ) );
 
@@ -507,6 +515,8 @@ void CServerDlg::UpdateGUIDependencies()
 
     const bool bCurUseDefCentServAddr = ( pServer->GetCentralServerAddressType() != AT_MANUAL );
 
+    const ESvrRegStatus eSvrRegStatus = pServer->GetSvrRegStatus();
+
     // if register server is not enabled, we disable all the configuration
     // controls for the server list
     cbxCentServAddrType->setEnabled ( bCurSerListEnabled );
@@ -534,6 +544,31 @@ void CServerDlg::UpdateGUIDependencies()
     // server list is enabled and not the default address is used
     edtCentralServerAddress->setEnabled (
         !bCurUseDefCentServAddr && bCurSerListEnabled );
+
+    QString strStatus;
+    switch ( eSvrRegStatus )
+    {
+    case SRS_BAD_ADDRESS:
+        strStatus = "Bad address";
+        break;
+    case SRS_TIME_OUT:
+        strStatus = "Using longer retries";
+        break;
+    case SRS_REQUESTED:
+        strStatus = "Registration requested";
+        break;
+    case SRS_UNREGISTERED:
+        strStatus = "Unregistered";
+        break;
+    case SRS_REGISTERED:
+        strStatus = "Registered";
+        break;
+    case SRS_CENTRAL_SVR_FULL:
+        strStatus = "Central Server full";
+        break;
+    }
+    lblRegSvrStatus->setText( strStatus );
+
 }
 
 void CServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )

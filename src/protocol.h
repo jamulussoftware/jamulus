@@ -73,6 +73,7 @@
 #define PROTMESSID_CLM_CONN_CLIENTS_LIST      1013 // channel infos for connected clients
 #define PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST  1014 // request the connected clients list
 #define PROTMESSID_CLM_CHANNEL_LEVEL_LIST     1015 // channel level list
+#define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -130,6 +131,8 @@ public:
     void CreateCLChannelLevelListMes   ( const CHostAddress&      InetAddr,
                                          const CVector<uint16_t>& vecLevelList,
                                          const int                iNumClients );
+    void CreateCLRegisterServerResp    ( const CHostAddress&      InetAddr,
+                                         int                      iStatus );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -246,6 +249,8 @@ protected:
     bool EvaluateCLReqConnClientsListMes ( const CHostAddress&     InetAddr );
     bool EvaluateCLChannelLevelListMes   ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
+    bool EvaluateCLRegisterServerResp    ( const CHostAddress&     InetAddr,
+                                           const CVector<uint8_t>& vecData );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -305,4 +310,6 @@ signals:
     void CLReqConnClientsList         ( CHostAddress           InetAddr );
     void CLChannelLevelListReceived   ( CHostAddress           InetAddr,
                                         CVector<uint16_t>      vecLevelList );
+    void CLRegisterServerResp         ( CHostAddress           InetAddr,
+                                        int                    iStatus );
 };

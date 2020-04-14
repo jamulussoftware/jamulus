@@ -439,6 +439,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
         this, SLOT ( OnCLReqServerList ( CHostAddress ) ) );
 
     QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLRegisterServerResp ( CHostAddress, int ) ),
+        this, SLOT ( OnCLRegisterServerResp ( CHostAddress, int ) ) );
+
+    QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLSendEmptyMes ( CHostAddress ) ),
         this, SLOT ( OnCLSendEmptyMes ( CHostAddress ) ) );
 
@@ -453,6 +457,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLReqConnClientsList ( CHostAddress ) ),
         this, SLOT ( OnCLReqConnClientsList ( CHostAddress ) ) );
+
+    QObject::connect ( &ServerListManager,
+       SIGNAL ( SvrRegStatusChanged() ),
+       this, SLOT ( OnSvrRegStatusChanged() ) );
 
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!

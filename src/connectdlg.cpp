@@ -151,6 +151,10 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     QObject::connect ( cbxServerAddr, SIGNAL ( editTextChanged ( const QString& ) ),
         this, SLOT ( OnServerAddrEditTextChanged ( const QString& ) ) );
 
+    // check boxes
+    QObject::connect ( chbExpandAll, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnExpandAllStateChanged ( int ) ) );
+
     // buttons
     QObject::connect ( butCancel, SIGNAL ( clicked() ),
         this, SLOT ( close() ) );
@@ -204,6 +208,9 @@ void CConnectDlg::RequestServerList()
 
     // clear filter edit box
     edtFilter->setText ( "" );
+
+    // per default we expand all list items
+    chbExpandAll->setCheckState ( Qt::Checked );
 
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
@@ -492,6 +499,18 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
     // in the server address combo box, a text was changed, remove selection
     // in the server list (if any)
     lvwServers->clearSelection();
+}
+
+void CConnectDlg::OnExpandAllStateChanged ( int value )
+{
+    if ( value == Qt::Checked )
+    {
+        lvwServers->expandAll();
+    }
+    else
+    {
+        lvwServers->collapseAll();
+    }
 }
 
 void CConnectDlg::UpdateListFilter()

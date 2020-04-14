@@ -101,6 +101,7 @@ public slots:
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnServerAddrEditTextChanged ( const QString& );
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
+    void OnExpandAllStateChanged ( int value );
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();

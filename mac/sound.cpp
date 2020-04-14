@@ -254,12 +254,14 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
     }
 }
 
-int CSound::CountChannels ( AudioDeviceID devID,
-                            bool          isInput )
+bool CSound::CountChannels ( AudioDeviceID devID,
+                             bool          isInput,
+                             int&          iNumChannels )
 {
     OSStatus err;
+    bool     bIsError = true;
     UInt32   propSize;
-    int      result = 0;
+    iNumChannels = 0;
 
     AudioObjectPropertyScope theScope = isInput ? kAudioDevicePropertyScopeInput : kAudioDevicePropertyScopeOutput;
 
@@ -280,12 +282,14 @@ int CSound::CountChannels ( AudioDeviceID devID,
             // The correct value mNumberChannels for an AudioBuffer can be derived from the mChannelsPerFrame
             // and the interleaved flag. For non interleaved formats, mNumberChannels is always 1.
             // For interleaved formats, mNumberChannels is equal to mChannelsPerFrame.
-            result += buflist->mBuffers[i].mNumberChannels;
+            iNumChannels += buflist->mBuffers[i].mNumberChannels;
         }
+
+        bIsError = false;
     }
     free ( buflist );
 
-    return result;
+    return bIsError;
 }
 
 QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
@@ -449,6 +453,9 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                     "not compatible with this software." );
     }
 
+    // store the input number of channels for this stream
+    const int iNumInChanPerFrame = CurDevStreamFormat.mChannelsPerFrame;
+
     // check the output
     AudioObjectGetPropertyData ( outputStreamID,
                                  &stPropertyAddress,
@@ -467,9 +474,19 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                     "not compatible with this software." );
     }
 
-    // store the input and out number of channels for this device
-    iNumInChan  = CountChannels ( audioInputDevice[iDriverIdx], true );
-    iNumOutChan = CountChannels ( audioOutputDevice[iDriverIdx], false );
+    // store the output number of channels for this stream
+    const int iNumOutChanPerFrame = CurDevStreamFormat.mChannelsPerFrame;
+
+    // store the input and out number of channels for this device (note that in
+    // case the CountChannels failed, we use the number of channels per frame instead)
+    if ( CountChannels ( audioInputDevice[iDriverIdx], true, iNumInChan ) )
+    {
+        iNumInChan = iNumInChanPerFrame;
+    }
+    if ( CountChannels ( audioOutputDevice[iDriverIdx], false, iNumOutChan ) )
+    {
+        iNumOutChan = iNumOutChanPerFrame;
+    }
 
     // clip the number of input/output channels to our allowed maximum
     if ( iNumInChan > MAX_NUM_IN_OUT_CHANNELS )

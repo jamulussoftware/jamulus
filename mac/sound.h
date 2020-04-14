@@ -79,7 +79,8 @@ protected:
 
     QString  CheckDeviceCapabilities ( const int iDriverIdx );
     OSStatus CountChannels ( AudioDeviceID devID,
-                             bool          isInput );
+                             bool          isInput,
+                             int&          iNumChannels );
 
     UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID,
                            const bool     bIsInput,

@@ -219,8 +219,11 @@ void CConnectDlg::RequestServerList()
     // clear filter edit box
     edtFilter->setText ( "" );
 
-    // per default we expand all list items
-    chbExpandAll->setCheckState ( Qt::Checked );
+    // per default we expand all list items (not for the show all servers mode)
+    if ( !bShowCompleteRegList )
+    {
+        chbExpandAll->setCheckState ( Qt::Checked );
+    }
 
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct

@@ -32,7 +32,7 @@ CHighPrecisionTimer::CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSi
 {
     // add some error checking, the high precision timer implementation only
     // supports 64 and 128 samples frame size at 48 kHz sampling rate
-#if ( SYSTEM_FRAME_SIZE_SAMPLES_SMALL != 64 ) && ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES != 128 )
+#if ( SYSTEM_FRAME_SIZE_SAMPLES != 64 ) && ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES != 128 )
 # error "Only system frame size of 64 and 128 samples is supported by this module"
 #endif
 #if ( SYSTEM_SAMPLE_RATE_HZ != 48000 )
@@ -127,7 +127,7 @@ CHighPrecisionTimer::CHighPrecisionTimer ( const bool bUseDoubleSystemFrameSize 
     }
     else
     {
-        iNsDelay = ( (uint64_t) SYSTEM_FRAME_SIZE_SAMPLES_SMALL * 1000000000 ) /
+        iNsDelay = ( (uint64_t) SYSTEM_FRAME_SIZE_SAMPLES * 1000000000 ) /
                    (uint64_t) SYSTEM_SAMPLE_RATE_HZ; // in ns
     }
 
@@ -267,7 +267,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                                                 &iOpusError );
 
         Opus64Mode[i] = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                                  SYSTEM_FRAME_SIZE_SAMPLES_SMALL,
+                                                  SYSTEM_FRAME_SIZE_SAMPLES,
                                                   &iOpusError );
 
         // init audio encoders and decoders
@@ -320,7 +320,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     }
     else
     {
-        iServerFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+        iServerFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
     }
 
 
@@ -953,7 +953,7 @@ JitterMeas.Measure();
             }
             else if ( vecAudioComprType[i] == CT_OPUS64 )
             {
-                iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+                iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
 
                 if ( vecNumAudioChannels[i] == 1 )
                 {
@@ -988,7 +988,7 @@ JitterMeas.Measure();
             // is false and the Get() function is not called at all. Therefore if the buffer is not needed
             // we do not spend any time in the function but go directly inside the if condition.
             if ( ( vecUseDoubleSysFraSizeConvBuf[i] == 0 ) ||
-                 !DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecsData[i], SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i] ) )
+                 !DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecsData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
             {
                 // get current number of OPUS coded bytes
                 const int iCeltNumCodedBytes = vecChannels[iCurChanID].GetNetwFrameSize();
@@ -1028,7 +1028,7 @@ JitterMeas.Measure();
                         opus_custom_decode ( CurOpusDecoder,
                                              pCurCodedData,
                                              iCeltNumCodedBytes,
-                                             &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i]],
+                                             &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
                                              iClientFrameSizeSamples );
                     }
                 }
@@ -1038,7 +1038,7 @@ JitterMeas.Measure();
                 if ( vecUseDoubleSysFraSizeConvBuf[i] != 0 )
                 {
                     DoubleFrameSizeConvBufIn[iCurChanID].PutAll ( vecvecsData[i] );
-                    DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecsData[i], SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i] );
+                    DoubleFrameSizeConvBufIn[iCurChanID].Get ( vecvecsData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
                 }
             }
         }
@@ -1131,7 +1131,7 @@ JitterMeas.Measure();
             }
             else if ( vecAudioComprType[i] == CT_OPUS64 )
             {
-                iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+                iClientFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
 
                 if ( vecNumAudioChannels[i] == 1 )
                 {
@@ -1153,7 +1153,7 @@ JitterMeas.Measure();
             // is false and the Get() function is not called at all. Therefore if the buffer is not needed
             // we do not spend any time in the function but go directly inside the if condition.
             if ( ( vecUseDoubleSysFraSizeConvBuf[i] == 0 ) ||
-                 DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i] ) )
+                 DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
             {
                 if ( vecUseDoubleSysFraSizeConvBuf[i] != 0 )
                 {
@@ -1173,7 +1173,7 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
                           OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
                         opus_custom_encode ( CurOpusEncoder,
-                                             &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES_SMALL * vecNumAudioChannels[i]],
+                                             &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
                                              iClientFrameSizeSamples,
                                              &vecbyCodedData[0],
                                              iCeltNumCodedBytes );

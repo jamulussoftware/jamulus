@@ -166,7 +166,7 @@ void CChannel::SetAudioStreamProperties ( const EAudComprType eNewAudComprType,
         }
         else
         {
-            iAudioFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+            iAudioFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
         }
 
         MutexSocketBuf.lock();
@@ -387,7 +387,7 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
             else
             {
                 iFadeInCntMax          = FADE_IN_NUM_FRAMES / iNetwFrameSizeFact;
-                iAudioFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+                iAudioFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
             }
 
             MutexSocketBuf.lock();

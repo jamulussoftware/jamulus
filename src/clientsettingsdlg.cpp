@@ -347,14 +347,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // set text for sound card buffer delay radio buttons
     rbtBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
-        FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES_SMALL,
+        FRAME_SIZE_FACTOR_PREFERRED * SYSTEM_FRAME_SIZE_SAMPLES,
         ", preferred" ) );
 
     rbtBufferDelayDefault->setText ( GenSndCrdBufferDelayString (
-        FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES_SMALL ) );
+        FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES ) );
 
     rbtBufferDelaySafe->setText ( GenSndCrdBufferDelayString (
-        FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES_SMALL ) );
+        FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES ) );
 
     // sound card buffer delay inits
     SndCrdBufferDelayButtonGroup.addButton ( rbtBufferDelayPreferred );
@@ -472,9 +472,9 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     const int iCurActualBufSize = pClient->GetSndCrdActualMonoBlSize();
 
     // check which predefined size is used (it is possible that none is used)
-    const bool bPreferredChecked = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_PREFERRED );
-    const bool bDefaultChecked   = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_DEFAULT );
-    const bool bSafeChecked      = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_SAFE );
+    const bool bPreferredChecked = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED );
+    const bool bDefaultChecked   = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT );
+    const bool bSafeChecked      = ( iCurActualBufSize == SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE );
 
     // Set radio buttons according to current value (To make it possible
     // to have all radio buttons unchecked, we have to disable the

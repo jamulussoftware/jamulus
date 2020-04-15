@@ -79,169 +79,169 @@ LED bar:      lbr
 
 // version and application name (use version from qt prject file)
 #undef VERSION
-#define VERSION                         APP_VERSION
-#define APP_NAME                        "Jamulus"
+#define VERSION                          APP_VERSION
+#define APP_NAME                         "Jamulus"
 
 // Windows registry key name of auto run entry for the server
-#define AUTORUN_SERVER_REG_NAME         "Jamulus server"
+#define AUTORUN_SERVER_REG_NAME          "Jamulus server"
 
 // default names of the ini-file for client and server
-#define DEFAULT_INI_FILE_NAME           "Jamulus.ini"
-#define DEFAULT_INI_FILE_NAME_SERVER    "Jamulusserver.ini"
+#define DEFAULT_INI_FILE_NAME            "Jamulus.ini"
+#define DEFAULT_INI_FILE_NAME_SERVER     "Jamulusserver.ini"
 
 // file name for logging file
-#define DEFAULT_LOG_FILE_NAME           "Jamulussrvlog.txt"
+#define DEFAULT_LOG_FILE_NAME            "Jamulussrvlog.txt"
 
 // default oldest item to draw in history graph (days ago)
-#define DEFAULT_DAYS_HISTORY            60
+#define DEFAULT_DAYS_HISTORY             60
 
 // System block size, this is the block size on which the audio coder works.
 // All other block sizes must be a multiple of this size.
 // Note that the UpdateAutoSetting() function assumes a value of 128.
-#define SYSTEM_FRAME_SIZE_SAMPLES_SMALL  64 // TODO this is temporary and shall be replaced by SYSTEM_FRAME_SIZE_SAMPLES later on
-#define DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ( 2 * SYSTEM_FRAME_SIZE_SAMPLES_SMALL )
+#define SYSTEM_FRAME_SIZE_SAMPLES        64
+#define DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ( 2 * SYSTEM_FRAME_SIZE_SAMPLES )
 
 // default server address
-#define DEFAULT_SERVER_ADDRESS          "jamulus.fischvolk.de"
-#define DEFAULT_SERVER_NAME             "Central Server"
+#define DEFAULT_SERVER_ADDRESS           "jamulus.fischvolk.de"
+#define DEFAULT_SERVER_NAME              "Central Server"
 
 // download URL
-#define SOFTWARE_DOWNLOAD_URL           "http://sourceforge.net/projects/llcon/files"
+#define SOFTWARE_DOWNLOAD_URL            "http://sourceforge.net/projects/llcon/files"
 
 // determining server internal address uses well-known host and port
 // (Google DNS, or something else reliable)
-#define WELL_KNOWN_HOST                 "8.8.8.8" // Google
-#define WELL_KNOWN_PORT                  53       // DNS
-#define IP_LOOKUP_TIMEOUT                500      // ms
+#define WELL_KNOWN_HOST                  "8.8.8.8" // Google
+#define WELL_KNOWN_PORT                  53        // DNS
+#define IP_LOOKUP_TIMEOUT                500       // ms
 
 // defined port numbers for client and server
-#define LLCON_DEFAULT_PORT_NUMBER       22124
-#define LLCON_PORT_NUMBER_NORTHAMERICA  22224
+#define LLCON_DEFAULT_PORT_NUMBER        22124
+#define LLCON_PORT_NUMBER_NORTHAMERICA   22224
 
 // system sample rate (the sound card and audio coder works on this sample rate)
-#define SYSTEM_SAMPLE_RATE_HZ           48000 // Hz
+#define SYSTEM_SAMPLE_RATE_HZ            48000 // Hz
 
 // define the allowed audio frame size factors (since the
 // "SYSTEM_FRAME_SIZE_SAMPLES" is quite small, it may be that on some
 // computers a larger value is required)
-#define FRAME_SIZE_FACTOR_PREFERRED     1 // 64 samples accumulated frame size
-#define FRAME_SIZE_FACTOR_DEFAULT       2 // 128 samples accumulated frame size
-#define FRAME_SIZE_FACTOR_SAFE          4 // 256 samples accumulated frame size
+#define FRAME_SIZE_FACTOR_PREFERRED      1 // 64 samples accumulated frame size
+#define FRAME_SIZE_FACTOR_DEFAULT        2 // 128 samples accumulated frame size
+#define FRAME_SIZE_FACTOR_SAFE           4 // 256 samples accumulated frame size
 
 // define the minimum allowed number of coded bytes for CELT (the encoder
 // gets in trouble if the value is too low)
-#define CELT_MINIMUM_NUM_BYTES          10
+#define CELT_MINIMUM_NUM_BYTES           10
 
 // Maximum block size for network input buffer. It is defined by the longest
 // protocol message which is PROTMESSID_CLM_SERVER_LIST: Worst case:
 // (2+2+1+2+2)+200*(4+2+2+1+1+2+20+2+32+2+20)=17609
 // We add some headroom to that value.
-#define MAX_SIZE_BYTES_NETW_BUF         20000
+#define MAX_SIZE_BYTES_NETW_BUF          20000
 
 // minimum/maximum network buffer size (which can be chosen by slider)
-#define MIN_NET_BUF_SIZE_NUM_BL         1  // number of blocks
-#define MAX_NET_BUF_SIZE_NUM_BL         20 // number of blocks
-#define AUTO_NET_BUF_SIZE_FOR_PROTOCOL  ( MAX_NET_BUF_SIZE_NUM_BL + 1 ) // auto set parameter (only used for protocol)
+#define MIN_NET_BUF_SIZE_NUM_BL          1  // number of blocks
+#define MAX_NET_BUF_SIZE_NUM_BL          20 // number of blocks
+#define AUTO_NET_BUF_SIZE_FOR_PROTOCOL   ( MAX_NET_BUF_SIZE_NUM_BL + 1 ) // auto set parameter (only used for protocol)
 
 // default network buffer size
-#define DEF_NET_BUF_SIZE_NUM_BL         10 // number of blocks
+#define DEF_NET_BUF_SIZE_NUM_BL          10 // number of blocks
 
 // audio mixer fader maximum value
-#define AUD_MIX_FADER_MAX               100
+#define AUD_MIX_FADER_MAX                100
 
 // maximum number of recognized sound cards installed in the system,
 // definition for "no device"
-#define MAX_NUMBER_SOUND_CARDS          129 // e.g. 16 inputs, 8 outputs + default entry (MacOS)
-#define INVALID_SNC_CARD_DEVICE         -1
+#define MAX_NUMBER_SOUND_CARDS           129 // e.g. 16 inputs, 8 outputs + default entry (MacOS)
+#define INVALID_SNC_CARD_DEVICE          -1
 
 // define the maximum number of audio channel for input/output we can store
 // channel infos for (and therefore this is the maximum number of entries in
 // the channel selection combo box regardless of the actual available number
 // of channels by the audio device)
-#define MAX_NUM_IN_OUT_CHANNELS         64
+#define MAX_NUM_IN_OUT_CHANNELS          64
 
 // maximum number of elemts in the server address combo box
-#define MAX_NUM_SERVER_ADDR_ITEMS       6
+#define MAX_NUM_SERVER_ADDR_ITEMS        6
 
 // maximum number of fader settings to be stored (together with the fader tags)
-#define MAX_NUM_STORED_FADER_SETTINGS   200
+#define MAX_NUM_STORED_FADER_SETTINGS    200
 
 // defines for LED level meter CMultiColorLEDBar
-#define NUM_STEPS_LED_BAR               8
-#define RED_BOUND_LED_BAR               7
-#define YELLOW_BOUND_LED_BAR            5
+#define NUM_STEPS_LED_BAR                8
+#define RED_BOUND_LED_BAR                7
+#define YELLOW_BOUND_LED_BAR             5
 
 // range for signal level meter
-#define LOW_BOUND_SIG_METER         ( -50.0 ) // dB
-#define UPPER_BOUND_SIG_METER       ( 0.0 )   // dB
+#define LOW_BOUND_SIG_METER              ( -50.0 ) // dB
+#define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
 
 // Maximum number of connected clients at the server. If you want to change this
 // paramter you have to modify the code on some places, too! The code tag
 // "MAX_NUM_CHANNELS_TAG" shows these places (just search for the tag in the entire code)
-#define MAX_NUM_CHANNELS                50 // max number channels for server
+#define MAX_NUM_CHANNELS                 50 // max number channels for server
 
 // actual number of used channels in the server
 // this parameter can safely be changed from 1 to MAX_NUM_CHANNELS
 // without any other changes in the code
-#define DEFAULT_USED_NUM_CHANNELS       10 // default used number channels for server
+#define DEFAULT_USED_NUM_CHANNELS        10 // default used number channels for server
 
 // Maximum number of servers registered in the server list. If you want to
 // change this parameter, you most probably have to adjust MAX_SIZE_BYTES_NETW_BUF.
-#define MAX_NUM_SERVERS_IN_SERVER_LIST  200
+#define MAX_NUM_SERVERS_IN_SERVER_LIST   200
 
 // defines the time interval at which the ping time is updated in the GUI
-#define PING_UPDATE_TIME_MS             500 // ms
+#define PING_UPDATE_TIME_MS              500 // ms
 
 // defines the time interval at which the ping time is updated for the server
 // list
-#define PING_UPDATE_TIME_SERVER_LIST_MS 2000 // ms
+#define PING_UPDATE_TIME_SERVER_LIST_MS  2000 // ms
 
 // defines the interval between Channel Level updates from the server
-#define CHANNEL_LEVEL_UPDATE_INTERVAL   200  // number of frames at 64 samples frame size
+#define CHANNEL_LEVEL_UPDATE_INTERVAL    200  // number of frames at 64 samples frame size
 
 // time-out until a registered server is deleted from the server list if no
 // new registering was made in minutes
-#define SERVLIST_TIME_OUT_MINUTES       60 // minutes
+#define SERVLIST_TIME_OUT_MINUTES        60 // minutes
 
 // poll time for server list (to check if entries are time-out)
-#define SERVLIST_POLL_TIME_MINUTES      1 // minute
+#define SERVLIST_POLL_TIME_MINUTES       1 // minute
 
 // time interval for sending ping messages to servers in the server list
-#define SERVLIST_UPDATE_PING_SERVERS_MS 59000 // ms
+#define SERVLIST_UPDATE_PING_SERVERS_MS  59000 // ms
 
 // time until a slave server registers in the server list
-#define SERVLIST_REGIST_INTERV_MINUTES  15 // minutes
+#define SERVLIST_REGIST_INTERV_MINUTES   15 // minutes
 
 // defines the minimum time a server must run to be a permanent server
-#define SERVLIST_TIME_PERMSERV_MINUTES  1440 // minutes, 1440 = 60 min * 24 h
+#define SERVLIST_TIME_PERMSERV_MINUTES   1440 // minutes, 1440 = 60 min * 24 h
 
 
 // length of the moving average buffer for response time measurement
-#define TIME_MOV_AV_RESPONSE_SECONDS    30 // seconds
+#define TIME_MOV_AV_RESPONSE_SECONDS     30 // seconds
 
 
 // Maximum length of fader tag and text message strings (Since for chat messages
 // some HTML code is added, we also have to define a second length which includes
 // this additionl HTML code. Right now the length of the HTML code is approx. 66
 // character. Here, we add some headroom to this number)
-#define MAX_LEN_FADER_TAG               16
-#define MAX_LEN_CHAT_TEXT               1600
-#define MAX_LEN_CHAT_TEXT_PLUS_HTML     1800
-#define MAX_LEN_SERVER_NAME             20
-#define MAX_LEN_IP_ADDRESS              15
-#define MAX_LEN_SERVER_CITY             20
-#define MAX_LEN_VERSION_TEXT            20
+#define MAX_LEN_FADER_TAG                16
+#define MAX_LEN_CHAT_TEXT                1600
+#define MAX_LEN_CHAT_TEXT_PLUS_HTML      1800
+#define MAX_LEN_SERVER_NAME              20
+#define MAX_LEN_IP_ADDRESS               15
+#define MAX_LEN_SERVER_CITY              20
+#define MAX_LEN_VERSION_TEXT             20
 
 // common tool tip bottom line text
-#define TOOLTIP_COM_END_TEXT            tr ( \
+#define TOOLTIP_COM_END_TEXT             tr ( \
     "<br><div align=right><font size=-1><i>" \
     "For more information use the ""What's " \
     "This"" help (? menu, right mouse button or Shift+F1)" \
     "</i></font></div>" )
 
-#define _MAXSHORT                       32767
-#define _MAXBYTE                        255 // binary: 11111111
-#define _MINSHORT                       ( -32768 )
+#define _MAXSHORT                        32767
+#define _MAXBYTE                         255 // binary: 11111111
+#define _MINSHORT                        ( -32768 )
 
 #if HAVE_STDINT_H
 # include <stdint.h>
@@ -268,7 +268,7 @@ typedef unsigned char      uint8_t;
 
 /* Pseudo enum definitions -------------------------------------------------- */
 // definition for custom event
-#define MS_PACKET_RECEIVED              0
+#define MS_PACKET_RECEIVED               0
 
 
 /* Classes ********************************************************************/

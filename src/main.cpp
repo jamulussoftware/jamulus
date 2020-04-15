@@ -118,7 +118,7 @@ int main ( int argc, char** argv )
                                "--fastupdate" ) )
         {
             bUseDoubleSystemFrameSize = false; // 64 samples frame size
-            tsConsole << "- using " << SYSTEM_FRAME_SIZE_SAMPLES_SMALL << " samples frame size mode" << endl;
+            tsConsole << "- using " << SYSTEM_FRAME_SIZE_SAMPLES << " samples frame size mode" << endl;
             continue;
         }
 

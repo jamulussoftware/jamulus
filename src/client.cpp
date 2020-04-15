@@ -83,7 +83,7 @@ CClient::CClient ( const quint16  iPortNumber,
                                          &iOpusError );
 
     Opus64Mode = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,
-                                           SYSTEM_FRAME_SIZE_SAMPLES_SMALL,
+                                           SYSTEM_FRAME_SIZE_SAMPLES,
                                            &iOpusError );
 
     // init audio encoders and decoders
@@ -669,16 +669,16 @@ void CClient::Stop()
 void CClient::Init()
 {
     // check if possible frame size factors are supported
-    const int iFraSizePreffered = SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_PREFERRED;
-    const int iFraSizeDefault   = SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_DEFAULT;
-    const int iFraSizeSafe      = SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_SAFE;
+    const int iFraSizePreffered = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED;
+    const int iFraSizeDefault   = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT;
+    const int iFraSizeSafe      = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE;
 
     bFraSiFactPrefSupported = ( Sound.Init ( iFraSizePreffered ) == iFraSizePreffered );
     bFraSiFactDefSupported  = ( Sound.Init ( iFraSizeDefault )   == iFraSizeDefault );
     bFraSiFactSafeSupported = ( Sound.Init ( iFraSizeSafe )      == iFraSizeSafe );
 
     // translate block size index in actual block size
-    const int iPrefMonoFrameSize = iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+    const int iPrefMonoFrameSize = iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
 
     // get actual sound card buffer size using preferred size
     iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
@@ -686,12 +686,12 @@ void CClient::Init()
     // Calculate the current sound card frame size factor. In case
     // the current mono block size is not a multiple of the system
     // frame size, we have to use a sound card conversion buffer.
-    if ( ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_PREFERRED ) ) ||
-         ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_DEFAULT ) ) ||
-         ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES_SMALL * FRAME_SIZE_FACTOR_SAFE ) ) )
+    if ( ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_PREFERRED ) ) ||
+         ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT ) ) ||
+         ( iMonoBlockSizeSam == ( SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE ) ) )
     {
         // regular case: one of our predefined buffer sizes is available
-        iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+        iSndCrdFrameSizeFactor = iMonoBlockSizeSam / SYSTEM_FRAME_SIZE_SAMPLES;
 
         // no sound card conversion buffer required
         bSndCrdConversionBufferRequired = false;
@@ -715,7 +715,7 @@ void CClient::Init()
     {
         if ( iSndCardMonoBlockSizeSamConvBuff < DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES )
         {
-            iMonoBlockSizeSam     = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+            iMonoBlockSizeSam     = SYSTEM_FRAME_SIZE_SAMPLES;
             eAudioCompressionType = CT_OPUS64;
         }
         else
@@ -773,7 +773,7 @@ void CClient::Init()
     }
     else /* CT_OPUS64 */
     {
-        iOPUSFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES_SMALL;
+        iOPUSFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
 
         if ( eAudioChannelConf == CC_MONO )
         {

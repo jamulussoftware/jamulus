@@ -100,7 +100,6 @@ LED bar:      lbr
 // Note that the UpdateAutoSetting() function assumes a value of 128.
 #define SYSTEM_FRAME_SIZE_SAMPLES_SMALL  64 // TODO this is temporary and shall be replaced by SYSTEM_FRAME_SIZE_SAMPLES later on
 #define DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ( 2 * SYSTEM_FRAME_SIZE_SAMPLES_SMALL )
-#define SYSTEM_FRAME_SIZE_SAMPLES        128
 
 // default server address
 #define DEFAULT_SERVER_ADDRESS          "jamulus.fischvolk.de"
@@ -121,10 +120,6 @@ LED bar:      lbr
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ           48000 // Hz
-
-#define SYSTEM_BLOCK_DURATION_MS_FLOAT  \
-    ( static_cast<double> ( SYSTEM_FRAME_SIZE_SAMPLES ) / \
-    SYSTEM_SAMPLE_RATE_HZ * 1000 )
 
 // define the allowed audio frame size factors (since the
 // "SYSTEM_FRAME_SIZE_SAMPLES" is quite small, it may be that on some

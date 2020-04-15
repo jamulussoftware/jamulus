@@ -15,11 +15,9 @@
   * bug fix: the server welcome message may appear twice if the server list was double clicked
 
 
-TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
-
 TODO issue with Mac audio interface: https://sourceforge.net/p/llcon/discussion/software/thread/7c443f2ed9/#eeab
 
-TODO let the user select all possible sound card buffer sizes, this should solve Ticket #53
+TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 
 
 TODO auto jitter buffer performance not good at 64 samples frame size -> to be checked again

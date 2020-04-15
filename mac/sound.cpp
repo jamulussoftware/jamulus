@@ -255,35 +255,47 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
 }
 
 int CSound::CountChannels ( AudioDeviceID devID,
+                            const int     iNumChanPerFrame,
                             bool          isInput )
 {
     OSStatus err;
     UInt32   propSize;
     int      result = 0;
 
-    AudioObjectPropertyScope theScope = isInput ? kAudioDevicePropertyScopeInput : kAudioDevicePropertyScopeOutput;
-
-    AudioObjectPropertyAddress theAddress = { kAudioDevicePropertyStreamConfiguration,
-                                              theScope,
-                                              0 };
-
-    AudioObjectGetPropertyDataSize ( devID, &theAddress, 0, NULL, &propSize );
-
-    AudioBufferList *buflist = (AudioBufferList*) malloc ( propSize );
-
-    err = AudioObjectGetPropertyData ( devID, &theAddress, 0, NULL, &propSize, buflist );
-
-    if ( !err )
+    // check for the case the we have interleaved format, in that case we assume
+    // that only the very first buffer contains all our channels
+    if ( iNumChanPerFrame > 1 )
     {
-        for ( UInt32 i = 0; i < buflist->mNumberBuffers; ++i )
-        {
-            // The correct value mNumberChannels for an AudioBuffer can be derived from the mChannelsPerFrame
-            // and the interleaved flag. For non interleaved formats, mNumberChannels is always 1.
-            // For interleaved formats, mNumberChannels is equal to mChannelsPerFrame.
-            result += buflist->mBuffers[i].mNumberChannels;
-        }
+        result = iNumChanPerFrame;
     }
-    free ( buflist );
+    else
+    {
+        // it seems we have multiple buffers where each buffer has only one channel,
+        // in that case we assume that each input channel has its own buffer
+        AudioObjectPropertyScope theScope = isInput ? kAudioDevicePropertyScopeInput : kAudioDevicePropertyScopeOutput;
+
+        AudioObjectPropertyAddress theAddress = { kAudioDevicePropertyStreamConfiguration,
+                                                  theScope,
+                                                  0 };
+
+        AudioObjectGetPropertyDataSize ( devID, &theAddress, 0, NULL, &propSize );
+
+        AudioBufferList *buflist = (AudioBufferList*) malloc ( propSize );
+
+        err = AudioObjectGetPropertyData ( devID, &theAddress, 0, NULL, &propSize, buflist );
+
+        if ( !err )
+        {
+            for ( UInt32 i = 0; i < buflist->mNumberBuffers; ++i )
+            {
+                // The correct value mNumberChannels for an AudioBuffer can be derived from the mChannelsPerFrame
+                // and the interleaved flag. For non interleaved formats, mNumberChannels is always 1.
+                // For interleaved formats, mNumberChannels is equal to mChannelsPerFrame.
+                result += buflist->mBuffers[i].mNumberChannels;
+            }
+        }
+        free ( buflist );
+    }
 
     return result;
 }
@@ -449,6 +461,9 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                     "not compatible with this software." );
     }
 
+    // store the input number of channels per frame for this stream
+    const int iNumInChanPerFrame = CurDevStreamFormat.mChannelsPerFrame;
+
     // check the output
     AudioObjectGetPropertyData ( outputStreamID,
                                  &stPropertyAddress,
@@ -467,9 +482,12 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                     "not compatible with this software." );
     }
 
+    // store the output number of channels per frame for this stream
+    const int iNumOutChanPerFrame = CurDevStreamFormat.mChannelsPerFrame;
+
     // store the input and out number of channels for this device
-    iNumInChan  = CountChannels ( audioInputDevice[iDriverIdx], true );
-    iNumOutChan = CountChannels ( audioOutputDevice[iDriverIdx], false );
+    iNumInChan  = CountChannels ( audioInputDevice[iDriverIdx], iNumInChanPerFrame, true );
+    iNumOutChan = CountChannels ( audioOutputDevice[iDriverIdx], iNumOutChanPerFrame, false );
 
     // clip the number of input/output channels to our allowed maximum
     if ( iNumInChan > MAX_NUM_IN_OUT_CHANNELS )
@@ -813,7 +831,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     const int iSelOutputLeftChannel    = pSound->iSelOutputLeftChannel;
     const int iSelOutputRightChannel   = pSound->iSelOutputRightChannel;
 
-    if ( inDevice == pSound->CurrentAudioInputDeviceID )
+    if ( ( inDevice == pSound->CurrentAudioInputDeviceID ) && inInputData )
     {
         // check size (float32 has four bytes)
         if ( inInputData->mBuffers[0].mDataByteSize ==
@@ -879,7 +897,7 @@ if ( iNumInChan == 4 )
         pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
     }
 
-    if ( inDevice == pSound->CurrentAudioOutputDeviceID )
+    if ( ( inDevice == pSound->CurrentAudioOutputDeviceID ) && outOutputData )
     {
         // check size (float32 has four bytes)
         if ( outOutputData->mBuffers[0].mDataByteSize ==

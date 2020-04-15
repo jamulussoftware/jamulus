@@ -78,8 +78,9 @@ protected:
     virtual QString  LoadAndInitializeDriver ( int iIdx );
 
     QString  CheckDeviceCapabilities ( const int iDriverIdx );
-    OSStatus CountChannels ( AudioDeviceID devID,
-                             bool          isInput );
+    int CountChannels ( AudioDeviceID devID,
+                        const int     iNumChanPerFrame,
+                        bool          isInput );
 
     UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID,
                            const bool     bIsInput,

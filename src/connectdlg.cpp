@@ -652,10 +652,9 @@ void CConnectDlg::OnTimerPing()
     }
 }
 
-void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                     InetAddr,
-                                                   const int                         iPingTime,
-                                                   const CMultiColorLED::ELightColor ePingTimeLEDColor,
-                                                   const int                         iNumClients )
+void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
+                                                   const int           iPingTime,
+                                                   const int           iNumClients )
 {
     // apply the received ping time to the correct server list entry
     QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
@@ -664,33 +663,62 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
     {
         // check if this is the first time a ping time is set
         const bool bIsFirstPing = pCurListViewItem->text ( 1 ).isEmpty();
+        bool       bDoSorting   = false;
 
-        // update the color of the ping time font
-        switch ( ePingTimeLEDColor )
+        // update minimum ping time column (invisible, used for sorting) if
+        // the new value is smaller than the old value
+        int iMinPingTime = pCurListViewItem->text ( 4 ).toInt();
+
+        if ( iMinPingTime > iPingTime )
         {
-        case CMultiColorLED::RL_GREEN:
+            // update the minimum ping time with the new lowest value
+            iMinPingTime = iPingTime;
+
+            // we pad to a total of 8 characters with zeros to make sure the
+            // sorting is done correctly
+            pCurListViewItem->setText ( 4, QString ( "%1" ).arg (
+                iPingTime, 8, 10, QLatin1Char ( '0' ) ) );
+
+            // update the sorting (lowest number on top)
+            bDoSorting = true;
+        }
+
+        // for debugging it is good to see the current ping time in the list
+        // and not the minimum ping time -> overwrite the value for debugging
+        if ( bShowCompleteRegList )
+        {
+            iMinPingTime = iPingTime;
+        }
+
+        // Only show minimum ping time in the list since this is the important
+        // value. Temporary bad ping measurements are of no interest.
+        // Color definition: <= 25 ms green, <= 50 ms yellow, otherwise red
+        if ( iMinPingTime <= 25 )
+        {
             pCurListViewItem->setForeground ( 1, Qt::darkGreen );
-            break;
-
-        case CMultiColorLED::RL_YELLOW:
-            pCurListViewItem->setForeground ( 1, Qt::darkYellow );
-            break;
-
-        default: // including "CMultiColorLED::RL_RED"
-            pCurListViewItem->setForeground ( 1, Qt::red );
-            break;
+        }
+        else
+        {
+            if ( iMinPingTime <= 50 )
+            {
+                pCurListViewItem->setForeground ( 1, Qt::darkYellow );
+            }
+            else
+            {
+                pCurListViewItem->setForeground ( 1, Qt::red );
+            }
         }
 
         // update ping text, take special care if ping time exceeds a
         // certain value
-        if ( iPingTime > 500 )
+        if ( iMinPingTime > 500 )
         {
             pCurListViewItem->setText ( 1, ">500 ms" );
         }
         else
         {
             pCurListViewItem->
-                setText ( 1, QString().setNum ( iPingTime ) + " ms" );
+                setText ( 1, QString().setNum ( iMinPingTime ) + " ms" );
         }
 
         // update number of clients text
@@ -714,22 +742,11 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
             pCurListViewItem->setHidden ( false );
         }
 
-        // update minimum ping time column (invisible, used for sorting) if
-        // the new value is smaller than the old value
-        if ( pCurListViewItem->text ( 4 ).toInt() > iPingTime )
+        // Update sorting. Note that the sorting must be the last action for the
+        // current item since the topLevelItem ( iIdx ) is then no longer valid.
+        if ( bDoSorting && !bShowCompleteRegList ) // do not sort if "show all servers"
         {
-            // we pad to a total of 8 characters with zeros to make sure the
-            // sorting is done correctly
-            pCurListViewItem->setText ( 4, QString ( "%1" ).arg (
-                iPingTime, 8, 10, QLatin1Char ( '0' ) ) );
-
-            // Update the sorting (lowest number on top).
-            // Note that the sorting must be the last action for the current
-            // item since the topLevelItem ( iIdx ) is then no longer valid.
-            if ( !bShowCompleteRegList ) // do not sort if "show all servers"
-            {
-                lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
-            }
+            lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
         }
     }
 

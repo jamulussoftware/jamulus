@@ -1031,29 +1031,9 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
                                                       int          iPingTime,
                                                       int          iNumClients )
 {
-    // color definition: <= 25 ms green, <= 50 ms yellow, otherwise red
-    CMultiColorLED::ELightColor ePingTimeLEDColor;
-
-    if ( iPingTime <= 25 )
-    {
-        ePingTimeLEDColor = CMultiColorLED::RL_GREEN;
-    }
-    else
-    {
-        if ( iPingTime <= 50 )
-        {
-            ePingTimeLEDColor = CMultiColorLED::RL_YELLOW;
-        }
-        else
-        {
-            ePingTimeLEDColor = CMultiColorLED::RL_RED;
-        }
-    }
-
     // update connection dialog server list
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr,
                                                 iPingTime,
-                                                ePingTimeLEDColor,
                                                 iNumClients );
 }
 

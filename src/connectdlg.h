@@ -60,10 +60,9 @@ public:
     void SetConnClientsList ( const CHostAddress&          InetAddr,
                               const CVector<CChannelInfo>& vecChanInfo );
 
-    void SetPingTimeAndNumClientsResult ( CHostAddress&                     InetAddr,
-                                          const int                         iPingTime,
-                                          const CMultiColorLED::ELightColor ePingTimeLEDColor,
-                                          const int                         iNumClients );
+    void SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
+                                          const int           iPingTime,
+                                          const int           iNumClients );
 
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void SetVersionAndOSType ( CHostAddress           InetAddr,

@@ -8,6 +8,8 @@
 
   * improved auto jitter buffer for 64 samples frame size
 
+  * the ping times in the server list are now more stable
+
 
 
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)

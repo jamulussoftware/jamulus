@@ -3,11 +3,14 @@
 
 3.5.1git
 
+  * added a Mute Stream button to hear your signal and the signal of the other clients but
+    do not transmit your signal to the server so that the other clients cannot hear you
+
+  * improved auto jitter buffer for 64 samples frame size
+
+
+
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
-
-TODO auto jitter buffer performance not good at 64 samples frame size -> to be checked again
-
-TODO for different frame sizes (64/128) the start value of 6 for the jitter buffer might be too low
 
 TODO store Central Server jamulus.server start scripts on the Repo (one for Central Server, one for Central Server North America)
 

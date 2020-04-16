@@ -215,10 +215,7 @@ public slots:
     void OnTimerPingServerInList();
     void OnTimerPingCentralServer();
     void OnTimerCLRegisterServerResp();
-    void OnTimerRegistering()
-    {
-        SlaveServerRegisterServer ( true );
-    }
+    void OnTimerRegistering() { SlaveServerRegisterServer ( true ); }
     void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }
 
 signals:

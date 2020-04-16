@@ -132,7 +132,7 @@ public:
                                          const CVector<uint16_t>& vecLevelList,
                                          const int                iNumClients );
     void CreateCLRegisterServerResp    ( const CHostAddress&      InetAddr,
-                                         int                      iStatus );
+                                         const ESvrRegStatus      eStatus );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -311,5 +311,5 @@ signals:
     void CLChannelLevelListReceived   ( CHostAddress           InetAddr,
                                         CVector<uint16_t>      vecLevelList );
     void CLRegisterServerResp         ( CHostAddress           InetAddr,
-                                        int                    iStatus );
+                                        ESvrRegStatus          eStatus );
 };

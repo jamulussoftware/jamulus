@@ -385,7 +385,9 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             }
         }
 
-        pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, iSelIdx == ciInvalidIdx ? 1 : 0 );
+        pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, iSelIdx == ciInvalidIdx
+                                                            ? ESvrRegStatus::SRS_CENTRAL_SVR_FULL
+                                                            : ESvrRegStatus::SRS_REGISTERED );
     }
 }
 

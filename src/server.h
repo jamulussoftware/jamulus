@@ -375,10 +375,10 @@ public slots:
         ServerListManager.CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo );
     }
 
-    void OnCLRegisterServerResp ( CHostAddress /* unused */,
-                                  int          iStatus )
+    void OnCLRegisterServerResp ( CHostAddress  /* unused */,
+                                  ESvrRegStatus eStatus )
     {
-        ServerListManager.SetSvrRegStatus ( static_cast<ESvrRegStatus> ( iStatus ) );
+        ServerListManager.SetSvrRegStatus ( eStatus );
     }
 
     void OnSvrRegStatusChanged() { emit SvrRegStatusChanged(); }

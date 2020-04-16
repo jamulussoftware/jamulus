@@ -1131,7 +1131,8 @@ fflush(pFileDelay);
     {
         for ( i = 0; i < iStereoBlockSizeSam; i++ )
         {
-            vecsStereoSndCrd[i] += vecsStereoSndCrdTMP[i];
+            vecsStereoSndCrd[i] = Double2Short (
+                static_cast<double> ( vecsStereoSndCrd[i] ) + vecsStereoSndCrdTMP[i] );
         }
     }
 

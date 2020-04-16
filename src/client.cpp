@@ -56,7 +56,7 @@ CClient::CClient ( const quint16  iPortNumber,
     eAudioChannelConf                ( CC_MONO ),
     iNumAudioChannels                ( 1 ),
     bIsInitializationPhase           ( true ),
-    bMuteInputAndOutput              ( false ),
+    bMuteOutStream                   ( false ),
     Socket                           ( &Channel, iPortNumber ),
     Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
@@ -807,6 +807,8 @@ void CClient::Init()
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
     vecCeltData.Init ( iCeltNumCodedBytes );
+    vecZeros.Init ( iStereoBlockSizeSam, 0 );
+    vecsStereoSndCrdTMP.Init ( iStereoBlockSizeSam );
 
     opus_custom_encoder_ctl ( CurOpusEncoder,
                               OPUS_SET_BITRATE (
@@ -841,13 +843,11 @@ void CClient::Init()
         // the output conversion buffer must be filled with the inner
         // block size for initialization (this is the latency which is
         // introduced by the conversion buffer) to avoid buffer underruns
-        const CVector<int16_t> vZeros ( iStereoBlockSizeSam, 0 );
-        SndCrdConversionBufferOut.Put ( vZeros, vZeros.Size() );
+        SndCrdConversionBufferOut.Put ( vecZeros, iStereoBlockSizeSam );
     }
 
     // reset initialization phase flag and mute flag
     bIsInitializationPhase = true;
-    bMuteInputAndOutput    = false;
 }
 
 void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
@@ -867,12 +867,6 @@ void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsStereoSndCrd )
 static CTimingMeas JitterMeas ( 1000, "test2.dat" );
 JitterMeas.Measure();
 */
-
-    // mute input if requested
-    if ( bMuteInputAndOutput )
-    {
-        vecsStereoSndCrd.Reset ( 0 );
-    }
 
     // check if a conversion buffer is required or not
     if ( bSndCrdConversionBufferRequired )
@@ -900,12 +894,6 @@ JitterMeas.Measure();
         // regular case: no conversion buffer required
         // process audio data
         ProcessAudioDataIntern ( vecsStereoSndCrd );
-    }
-
-    // mute output if requested
-    if ( bMuteInputAndOutput )
-    {
-        vecsStereoSndCrd.Reset ( 0 );
     }
 }
 
@@ -1058,11 +1046,22 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         // OPUS encoding
         if ( CurOpusEncoder != nullptr )
         {
-            opus_custom_encode ( CurOpusEncoder,
-                                 &vecsStereoSndCrd[i * iNumAudioChannels * iOPUSFrameSizeSamples],
-                                 iOPUSFrameSizeSamples,
-                                 &vecCeltData[0],
-                                 iCeltNumCodedBytes );
+            if ( bMuteOutStream )
+            {
+                opus_custom_encode ( CurOpusEncoder,
+                                     &vecZeros[i * iNumAudioChannels * iOPUSFrameSizeSamples],
+                                     iOPUSFrameSizeSamples,
+                                     &vecCeltData[0],
+                                     iCeltNumCodedBytes );
+            }
+            else
+            {
+                opus_custom_encode ( CurOpusEncoder,
+                                     &vecsStereoSndCrd[i * iNumAudioChannels * iOPUSFrameSizeSamples],
+                                     iOPUSFrameSizeSamples,
+                                     &vecCeltData[0],
+                                     iCeltNumCodedBytes );
+            }
         }
 
         // send coded audio through the network
@@ -1073,6 +1072,12 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
 
     // Receive signal ----------------------------------------------------------
+    // in case of mute stream, store local data
+    if ( bMuteOutStream )
+    {
+        vecsStereoSndCrdTMP = vecsStereoSndCrd;
+    }
+
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
     {
         // receive a new block
@@ -1119,6 +1124,16 @@ for (i = 0; i < iMonoBlockSizeSam; i++)
 }
 fflush(pFileDelay);
 */
+
+
+    // for muted stream we have to add our local data here
+    if ( bMuteOutStream )
+    {
+        for ( i = 0; i < iStereoBlockSizeSam; i++ )
+        {
+            vecsStereoSndCrd[i] += vecsStereoSndCrdTMP[i];
+        }
+    }
 
     // check if channel is connected and if we do not have the initialization phase
     if ( Channel.IsConnected() && ( !bIsInitializationPhase ) )

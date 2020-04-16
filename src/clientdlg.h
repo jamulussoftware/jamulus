@@ -150,7 +150,7 @@ public slots:
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
-    void OnProfileStateChanged ( int value );
+    void OnLocalMuteStateChanged ( int value );
 
     void OnAudioPanValueChanged ( int value );
 

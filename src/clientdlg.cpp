@@ -416,8 +416,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( chbChat, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnChatStateChanged ( int ) ) );
 
-    QObject::connect ( chbProfile, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnProfileStateChanged ( int ) ) );
+    QObject::connect ( chbLocalMute, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnLocalMuteStateChanged ( int ) ) );
 
     // timers
     QObject::connect ( &TimerSigMet, SIGNAL ( timeout() ),
@@ -769,8 +769,8 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
     {
         CLicenceDlg LicenceDlg;
 
-        // mute the client
-        pClient->SetMuteInputAndOutputState ( true );
+        // mute the client output stream
+        pClient->SetMuteOutStream ( true );
 
         // Open the licence dialog and check if the licence was accepted. In
         // case the dialog is just closed or the decline button was pressed,
@@ -780,8 +780,11 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
             Disconnect();
         }
 
-        // unmute the client
-        pClient->SetMuteInputAndOutputState ( false );
+        // unmute the client output stream if local mute button is not pressed
+        if ( chbLocalMute->checkState() == Qt::Unchecked )
+        {
+            pClient->SetMuteOutStream ( false );
+        }
     }
 }
 
@@ -923,16 +926,9 @@ void CClientDlg::OnChatStateChanged ( int value )
     }
 }
 
-void CClientDlg::OnProfileStateChanged ( int value )
+void CClientDlg::OnLocalMuteStateChanged ( int value )
 {
-    if ( value == Qt::Checked )
-    {
-        ShowMusicianProfileDialog();
-    }
-    else
-    {
-        MusicianProfileDlg.hide();
-    }
+    pClient->SetMuteOutStream ( value == Qt::Checked );
 }
 
 void CClientDlg::OnTimerSigMet()
@@ -1165,19 +1161,6 @@ void CClientDlg::UpdateDisplay()
         chbChat->blockSignals ( true );
         chbChat->setChecked   ( true );
         chbChat->blockSignals ( false );
-    }
-
-    if ( chbProfile->isChecked() && !MusicianProfileDlg.isVisible() )
-    {
-        chbProfile->blockSignals ( true );
-        chbProfile->setChecked   ( false );
-        chbProfile->blockSignals ( false );
-    }
-    if ( !chbProfile->isChecked() && MusicianProfileDlg.isVisible() )
-    {
-        chbProfile->blockSignals ( true );
-        chbProfile->setChecked   ( true );
-        chbProfile->blockSignals ( false );
     }
 }
 

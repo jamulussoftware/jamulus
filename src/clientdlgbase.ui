@@ -339,9 +339,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="chbProfile">
+         <widget class="QCheckBox" name="chbLocalMute">
           <property name="text">
-           <string>My Profile</string>
+           <string>Mute Stream</string>
           </property>
          </widget>
         </item>

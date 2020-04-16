@@ -236,7 +236,7 @@ public:
     bool GetFraSiFactDefSupported()  { return bFraSiFactDefSupported; }
     bool GetFraSiFactSafeSupported() { return bFraSiFactSafeSupported; }
 
-    void SetMuteInputAndOutputState ( const bool bDoMute ) { bMuteInputAndOutput = bDoMute; }
+    void SetMuteOutStream ( const bool bDoMute ) { bMuteOutStream = bDoMute; }
 
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Channel.SetRemoteChanGain ( iId, dGain ); }
@@ -331,7 +331,7 @@ protected:
     EAudChanConf            eAudioChannelConf;
     int                     iNumAudioChannels;
     bool                    bIsInitializationPhase;
-    bool                    bMuteInputAndOutput;
+    bool                    bMuteOutStream;
     CVector<unsigned char>  vecCeltData;
 
     CHighPrioSocket         Socket;
@@ -354,6 +354,8 @@ protected:
     CBufferBase<int16_t>    SndCrdConversionBufferIn;
     CBufferBase<int16_t>    SndCrdConversionBufferOut;
     CVector<int16_t>        vecDataConvBuf;
+    CVector<int16_t>        vecsStereoSndCrdTMP;
+    CVector<int16_t>        vecZeros;
 
     bool                    bFraSiFactPrefSupported;
     bool                    bFraSiFactDefSupported;

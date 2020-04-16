@@ -37,16 +37,22 @@
 #define FILTER_DECISION_HYSTERESIS                  0.1
 
 // definition of the upper error bound of the jitter buffers
-#define ERROR_RATE_BOUND                            0.001
+#define ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE          0.001
+#define ERROR_RATE_BOUND                            ( ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE / 2 )
 
 // definition of the upper jitter buffer error bound, if that one is reached we
 // have to speed up the filtering to quickly get out of a incorrect buffer
 // size state
-#define UP_MAX_ERROR_BOUND                          0.01
+#define UP_MAX_ERROR_BOUND_DOUBLE_FRAME_SIZE        0.01
+#define UP_MAX_ERROR_BOUND                          ( UP_MAX_ERROR_BOUND_DOUBLE_FRAME_SIZE / 2 )
 
 // each regular buffer access lead to a count for put and get, assuming 2.66 ms
 // blocks we have 15 s / 2.66 ms * 2 = approx. 11000
 #define MAX_STATISTIC_COUNT_DOUBLE_FRAME_SIZE       11000
+
+// each regular buffer access lead to a count for put and get, assuming 1.33 ms
+// blocks we have 15 s / 1.33 ms * 2 = approx. 22500
+#define MAX_STATISTIC_COUNT                         22500
 
 // Note that the following definitions of the weigh constants assume a block
 // size of 128 samples at a sampling rate of 48 kHz.
@@ -54,10 +60,6 @@
 #define IIR_WEIGTH_DOWN_NORMAL_DOUBLE_FRAME_SIZE    0.9999
 #define IIR_WEIGTH_UP_FAST_DOUBLE_FRAME_SIZE        0.9995
 #define IIR_WEIGTH_DOWN_FAST_DOUBLE_FRAME_SIZE      0.999
-
-// each regular buffer access lead to a count for put and get, assuming 1.33 ms
-// blocks we have 15 s / 1.33 ms * 2 = approx. 22500
-#define MAX_STATISTIC_COUNT                         22500
 
 // convert numbers from 128 samples case using http://www.tsdconseil.fr/tutos/tuto-iir1-en.pdf
 // and https://octave-online.net:
@@ -459,6 +461,8 @@ protected:
     double     dAutoFilt_WightDownNormal;
     double     dAutoFilt_WightUpFast;
     double     dAutoFilt_WightDownFast;
+    double     dErrorRateBound;
+    double     dUpMaxErrorBound;
 };
 
 

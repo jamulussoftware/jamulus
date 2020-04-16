@@ -97,7 +97,9 @@ CNetBufWithStats::CNetBufWithStats() :
     dAutoFilt_WightUpNormal   ( IIR_WEIGTH_UP_NORMAL ),
     dAutoFilt_WightDownNormal ( IIR_WEIGTH_DOWN_NORMAL ),
     dAutoFilt_WightUpFast     ( IIR_WEIGTH_UP_FAST ),
-    dAutoFilt_WightDownFast   ( IIR_WEIGTH_DOWN_FAST )
+    dAutoFilt_WightDownFast   ( IIR_WEIGTH_DOWN_FAST ),
+    dErrorRateBound           ( ERROR_RATE_BOUND ),
+    dUpMaxErrorBound          ( UP_MAX_ERROR_BOUND )
 {
     // Define the sizes of the simulation buffers,
     // must be NUM_STAT_SIMULATION_BUFFERS elements!
@@ -135,8 +137,8 @@ void CNetBufWithStats::GetErrorRates ( CVector<double>& vecErrRates,
     }
 
     // get the limits for the decisions
-    dLimit      = ERROR_RATE_BOUND;
-    dMaxUpLimit = UP_MAX_ERROR_BOUND;
+    dLimit      = dErrorRateBound;
+    dMaxUpLimit = dUpMaxErrorBound;
 }
 
 void CNetBufWithStats::Init ( const int  iNewBlockSize,
@@ -157,6 +159,8 @@ void CNetBufWithStats::Init ( const int  iNewBlockSize,
             dAutoFilt_WightUpFast     = IIR_WEIGTH_UP_FAST_DOUBLE_FRAME_SIZE;
             dAutoFilt_WightDownFast   = IIR_WEIGTH_DOWN_FAST_DOUBLE_FRAME_SIZE;
             iMaxStatisticCount        = MAX_STATISTIC_COUNT_DOUBLE_FRAME_SIZE;
+            dErrorRateBound           = ERROR_RATE_BOUND_DOUBLE_FRAME_SIZE;
+            dUpMaxErrorBound          = UP_MAX_ERROR_BOUND_DOUBLE_FRAME_SIZE;
         }
         else
         {
@@ -165,6 +169,8 @@ void CNetBufWithStats::Init ( const int  iNewBlockSize,
             dAutoFilt_WightUpFast     = IIR_WEIGTH_UP_FAST;
             dAutoFilt_WightDownFast   = IIR_WEIGTH_DOWN_FAST;
             iMaxStatisticCount        = MAX_STATISTIC_COUNT;
+            dErrorRateBound           = ERROR_RATE_BOUND;
+            dUpMaxErrorBound          = UP_MAX_ERROR_BOUND;
         }
 
         for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
@@ -248,7 +254,7 @@ void CNetBufWithStats::UpdateAutoSetting()
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
         if ( ( !bDecisionFound ) &&
-             ( ErrorRateStatistic[i].GetAverage() <= ERROR_RATE_BOUND ) )
+             ( ErrorRateStatistic[i].GetAverage() <= dErrorRateBound ) )
         {
             iCurDecision   = viBufSizesForSim[i];
             bDecisionFound = true;
@@ -272,7 +278,7 @@ void CNetBufWithStats::UpdateAutoSetting()
     for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS - 1; i++ )
     {
         if ( ( !bDecisionFound ) &&
-             ( ErrorRateStatistic[i].GetAverage() <= UP_MAX_ERROR_BOUND ) )
+             ( ErrorRateStatistic[i].GetAverage() <= dUpMaxErrorBound ) )
         {
             iCurMaxUpDecision = viBufSizesForSim[i];
             bDecisionFound    = true;
@@ -369,7 +375,7 @@ else
     {
         // check error rate of the largest buffer as the indicator
         if ( ErrorRateStatistic[NUM_STAT_SIMULATION_BUFFERS - 1].
-             GetAverage() > ERROR_RATE_BOUND )
+             GetAverage() > dErrorRateBound )
         {
             for ( int i = 0; i < NUM_STAT_SIMULATION_BUFFERS; i++ )
             {

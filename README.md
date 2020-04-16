@@ -23,8 +23,7 @@ The project is hosted at [Sourceforge.net](http://sourceforge.net/projects/llcon
 Required Hardware Setup
 -----------------------
 
-The required minimum internet connection speed is 200 kbps for the up- and downstream.
-The ping time (i.e. round trip delay) from your computer to the server should not exceed 40 ms average.
+An Internet connection speed of at least 600Kbps (0.6Mbps) up and down, with 800Kbps recommended ([more details here](https://github.com/corrados/jamulus/wiki/Quality,-delay-and-network-bandwidth)). If you have a broadband connection of 10Mbits down and 1Mbps up, you're unlikely to run into any bandwidth-related issues using Jamulus.
 
 For the Jamulus software to run stable it is recommended to use a PC with at least 1.5 GHz CPU frequency.
 

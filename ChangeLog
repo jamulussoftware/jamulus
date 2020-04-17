@@ -13,6 +13,7 @@
   * the ping times in the server list are now more stable
 
 
+TODO we need a switch to enable OPUS64 packets (otherwise it is not possible to use very small sound card buffers with the normal OPUS 128 samples frame size)
 
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 

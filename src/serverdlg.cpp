@@ -548,17 +548,20 @@ void CServerDlg::UpdateGUIDependencies()
     QString strStatus;
     switch ( eSvrRegStatus )
     {
+    case SRS_UNREGISTERED:
+        strStatus = "Unregistered";
+        break;
     case SRS_BAD_ADDRESS:
         strStatus = "Bad address";
-        break;
-    case SRS_TIME_OUT:
-        strStatus = "Using longer retries";
         break;
     case SRS_REQUESTED:
         strStatus = "Registration requested";
         break;
-    case SRS_UNREGISTERED:
-        strStatus = "Unregistered";
+    case SRS_TIME_OUT:
+        strStatus = "Using longer retries";
+        break;
+    case SRS_UNKNOWN_RESP:
+        strStatus = "Check server version, retrying";
         break;
     case SRS_REGISTERED:
         strStatus = "Registered";

@@ -319,7 +319,7 @@ CONNECTION LESS MESSAGES
     +---------------+
 
     - "status":
-      Non-negative values of ESvrRegStatus:
+      Values of ESvrRegResult:
       0 - success
       1 - failed due to central server list being full
 
@@ -2120,16 +2120,8 @@ void CProtocol::CreateCLRegisterServerResp  ( const CHostAddress& InetAddr,
     int              iPos = 0; // init position pointer
     CVector<uint8_t> vecData( 1 );
 
-    int iStatus = static_cast<int> ( eStatus );
-    if ( iStatus < ESvrRegStatus::SRS_MIN_RESP
-         || iStatus > ESvrRegStatus::SRS_MAX_RESP )
-    {
-        qWarning() << "CProtocol::CreateCLRegisterServerResp: eStatus" << eStatus << "invalid value";
-        return;
-    }
-
     PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( iStatus ), 1 );
+        static_cast<uint32_t> ( eStatus ), 1 );
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REGISTER_SERVER_RESP,
                                      vecData,
@@ -2147,15 +2139,11 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress&     InetAddr,
         return true;
     }
 
-    int iStatus = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
-    if ( iStatus < ESvrRegStatus::SRS_MIN_RESP
-         || iStatus > ESvrRegStatus::SRS_MAX_RESP )
-    {
-        return true;
-    }
+    ESvrRegResult eStatus = static_cast<ESvrRegResult> (
+        GetValFromStream ( vecData, iPos, 1 ) );
 
     // invoke message action
-    emit CLRegisterServerResp ( InetAddr, static_cast<ESvrRegStatus> ( iStatus ) );
+    emit CLRegisterServerResp ( InetAddr,  eStatus );
 
     return false; // no error
 }

@@ -376,7 +376,7 @@ public slots:
     }
 
     void OnCLRegisterServerResp ( CHostAddress  /* unused */,
-                                  ESvrRegStatus eStatus )
+                                  ESvrRegResult eStatus )
     {
         ServerListManager.SetSvrRegStatus ( eStatus );
     }

@@ -311,5 +311,5 @@ signals:
     void CLChannelLevelListReceived   ( CHostAddress           InetAddr,
                                         CVector<uint16_t>      vecLevelList );
     void CLRegisterServerResp         ( CHostAddress           InetAddr,
-                                        ESvrRegStatus          eStatus );
+                                        ESvrRegResult          eStatus );
 };

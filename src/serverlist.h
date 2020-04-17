@@ -173,11 +173,7 @@ public:
 
     ESvrRegStatus GetSvrRegStatus() { return eSvrRegStatus; }
 
-    void SetSvrRegStatus ( ESvrRegStatus eStatus )
-    {
-        eSvrRegStatus = eStatus;
-        emit SvrRegStatusChanged();
-    }
+    void SetSvrRegStatus ( ESvrRegResult eStatus );
 
 protected:
     void SlaveServerRegisterServer ( const bool bIsRegister );

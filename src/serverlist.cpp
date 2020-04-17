@@ -474,6 +474,23 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
     }
 }
 
+void CServerListManager::SetSvrRegStatus ( ESvrRegResult eStatus )
+{
+    eSvrRegStatus = ESvrRegStatus::SRS_UNKNOWN_RESP;
+
+    switch  ( eStatus )
+    {
+    case ESvrRegResult::SRR_REGISTERED:
+        eSvrRegStatus = ESvrRegStatus::SRS_REGISTERED;
+        break;
+    case ESvrRegResult::SRR_CENTRAL_SVR_FULL:
+        eSvrRegStatus = ESvrRegStatus::SRS_CENTRAL_SVR_FULL;
+        break;
+    }
+
+    emit SvrRegStatusChanged();
+}
+
 
 /* Slave server functionality *************************************************/
 void CServerListManager::OnTimerPingCentralServer()

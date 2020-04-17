@@ -439,8 +439,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
         this, SLOT ( OnCLReqServerList ( CHostAddress ) ) );
 
     QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLRegisterServerResp ( CHostAddress, ESvrRegStatus ) ),
-        this, SLOT ( OnCLRegisterServerResp ( CHostAddress, ESvrRegStatus ) ) );
+        SIGNAL ( CLRegisterServerResp ( CHostAddress, ESvrRegResult ) ),
+        this, SLOT ( OnCLRegisterServerResp ( CHostAddress, ESvrRegResult ) ) );
 
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLSendEmptyMes ( CHostAddress ) ),

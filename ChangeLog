@@ -6,6 +6,8 @@
   * added a Mute Stream button to hear your signal and the signal of the other clients but
     do not transmit your signal to the server so that the other clients cannot hear you
 
+  * upgrade OPUS codec library to v1.3.1 by doloopuntil
+
   * improved auto jitter buffer for 64 samples frame size
 
   * the ping times in the server list are now more stable

@@ -243,6 +243,12 @@ void CSettings::Load()
             pClient->SetServerSockBufNumFrames ( iValue );
         }
 
+        // enable OPUS64 setting
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "enableopussmall", bValue ) )
+        {
+            pClient->SetEnableOPUS64 ( bValue );
+        }
+
         // GUI design
         if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign",
              0, 1 /* GD_ORIGINAL */, iValue ) )
@@ -530,6 +536,10 @@ void CSettings::Save()
         // network jitter buffer size for server
         SetNumericIniSet ( IniXMLDocument, "client", "jitbufserver",
             pClient->GetServerSockBufNumFrames() );
+
+        // enable OPUS64 setting
+        SetFlagIniSet ( IniXMLDocument, "client", "enableopussmall",
+            pClient->GetEnableOPUS64() );
 
         // GUI design
         SetNumericIniSet ( IniXMLDocument, "client", "guidesign",

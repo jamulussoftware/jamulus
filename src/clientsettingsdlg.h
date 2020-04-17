@@ -87,10 +87,10 @@ protected:
     void OnTimerStatus() { UpdateDisplay(); }
     void OnNetBufValueChanged ( int value );
     void OnNetBufServerValueChanged ( int value );
-    void OnSliderSndCrdBufferDelay ( int value );
     void OnAutoJitBufStateChanged ( int value );
     void OnGUIDesignFancyStateChanged ( int value );
     void OnDisplayChannelLevelsStateChanged ( int value );
+    void OnEnableOPUS64StateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
     void OnNewClientLevelEditingFinished();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );

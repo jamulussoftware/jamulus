@@ -204,6 +204,9 @@ public:
     void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
     int  GetSndCrdPrefFrameSizeFactor() { return iSndCrdPrefFrameSizeFactor; }
 
+    void SetEnableOPUS64 ( const bool eNEnableOPUS64 );
+    bool GetEnableOPUS64() { return bEnableOPUS64; }
+
     int GetSndCrdActualMonoBlSize()
     {
         // the actual sound card mono block size depends on whether a
@@ -366,6 +369,7 @@ protected:
 
     EGUIDesign              eGUIDesign;
     bool                    bDisplayChannelLevels;
+    bool                    bEnableOPUS64;
 
     bool                    bJitterBufferOK;
 

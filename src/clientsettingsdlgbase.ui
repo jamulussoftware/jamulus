@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>567</width>
-    <height>371</height>
+    <width>575</width>
+    <height>394</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -206,6 +206,13 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="chbEnableOPUS64">
+        <property name="text">
+         <string>Enable Small Network Buffers</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QGroupBox" name="grbSoundCrdBufDelay">
@@ -715,6 +722,7 @@
   <tabstop>cbxRInChan</tabstop>
   <tabstop>cbxLOutChan</tabstop>
   <tabstop>cbxROutChan</tabstop>
+  <tabstop>chbEnableOPUS64</tabstop>
   <tabstop>rbtBufferDelayPreferred</tabstop>
   <tabstop>rbtBufferDelayDefault</tabstop>
   <tabstop>rbtBufferDelaySafe</tabstop>

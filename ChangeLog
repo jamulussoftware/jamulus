@@ -6,6 +6,10 @@
   * added a Mute Stream button to hear your signal and the signal of the other clients but
     do not transmit your signal to the server so that the other clients cannot hear you
 
+  * added Enable Small Network Buffers switch to enable small sound card buffers in
+    combination with legacy OPUS packets since OPUS packets with 64 samples enable low
+    latency but can increase audio drop outs
+
   * upgrade OPUS codec library to v1.3.1 by doloopuntil
 
   * improved auto jitter buffer for 64 samples frame size
@@ -13,9 +17,15 @@
   * the ping times in the server list are now more stable
 
 
-TODO we need a switch to enable OPUS64 packets (otherwise it is not possible to use very small sound card buffers with the normal OPUS 128 samples frame size)
+TODO store Show All Musicians setting in the ini-file
+
+TODO bug fix: "Start up the new version with the Connection Setup showing. "Show all musicians" is on (as I say). Switch it off before the list is displayed. The
+     checkbox is off - but the list displays all musicians! You need to turn it on and off again to get it to do its thing. (If you wait a little, it's fine -
+     i.e. before it's populated the musicians but after it's displayed the list, turn it off.)", see https://github.com/corrados/jamulus/issues/78
 
 TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
+
+TODO the server list filter seems not to work if --showallservers is used
 
 TODO store Central Server jamulus.server start scripts on the Repo (one for Central Server, one for Central Server North America)
 

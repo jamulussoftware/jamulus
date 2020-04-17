@@ -121,6 +121,16 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     cbxROutChan->setWhatsThis ( strSndCrdChanMapp );
     cbxROutChan->setAccessibleName ( tr ( "Right output channel selection combo box" ) );
 
+    // enable OPUS64
+    chbEnableOPUS64->setWhatsThis ( tr ( "<b>Enable Small Network Buffers:</b> If enabled, "
+        "the support for very small network audio packets is activated. Very small "
+        "network packets are only actually used if the sound card buffer delay is smaller than " ) +
+        QString().setNum ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) + tr ( " samples. The "
+        "smaller the network buffers, the smaller the audio latency. But at the same time "
+        "the network load increases and the probability of audio dropouts also increases." ) );
+
+    chbEnableOPUS64->setAccessibleName ( tr ( "Enable small network buffers check box" ) );
+
     // sound card buffer delay
     QString strSndCrdBufDelay = tr ( "<b>Sound Card Buffer Delay:</b> The "
         "buffer delay setting is a fundamental setting of the " ) +
@@ -317,7 +327,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         chbGUIDesignFancy->setCheckState ( Qt::Checked );
     }
 
-    //  Display Channel Levels check box
+    // Display Channel Levels check box
     chbDisplayChannelLevels->setCheckState ( pClient->GetDisplayChannelLevels() ? Qt::Checked : Qt::Unchecked );
 
     // "Audio Channels" combo box
@@ -344,6 +354,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // update new client fader level edit box
     edtNewClientLevel->setText ( QString::number ( pClient->iNewClientFaderLevel ) );
+
+    // update enable small network buffers check box
+    chbEnableOPUS64->setCheckState ( pClient->GetEnableOPUS64() ? Qt::Checked : Qt::Unchecked );
 
     // set text for sound card buffer delay radio buttons
     rbtBufferDelayPreferred->setText ( GenSndCrdBufferDelayString (
@@ -385,6 +398,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     QObject::connect ( chbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnAutoJitBufStateChanged ( int ) ) );
+
+    QObject::connect ( chbEnableOPUS64, SIGNAL ( stateChanged ( int ) ),
+        this, SLOT ( OnEnableOPUS64StateChanged ( int ) ) );
 
     // line edits
     QObject::connect ( edtCentralServerAddress, SIGNAL ( editingFinished() ),
@@ -607,12 +623,6 @@ void CClientSettingsDlg::OnNetBufServerValueChanged ( int value )
     UpdateJitterBufferFrame();
 }
 
-void CClientSettingsDlg::OnSliderSndCrdBufferDelay ( int value )
-{
-    pClient->SetSndCrdPrefFrameSizeFactor ( value );
-    UpdateDisplay();
-}
-
 void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
 {
     const QString strError = pClient->SetSndCrdDev ( iSndDevIdx );
@@ -682,6 +692,12 @@ void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 {
     pClient->SetDoAutoSockBufSize ( value == Qt::Checked );
     UpdateJitterBufferFrame();
+}
+
+void CClientSettingsDlg::OnEnableOPUS64StateChanged ( int value )
+{
+    pClient->SetEnableOPUS64 ( value == Qt::Checked );
+    UpdateDisplay();
 }
 
 void CClientSettingsDlg::OnGUIDesignFancyStateChanged ( int value )

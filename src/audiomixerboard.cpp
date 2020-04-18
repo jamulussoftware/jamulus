@@ -562,6 +562,10 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
 
 
     // Connections -------------------------------------------------------------
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    connectFaderSignalsToMixerBoardSlots<MAX_NUM_CHANNELS>();
+
+#else
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     QObject::connect ( vecpChanFader[0],  SIGNAL ( gainValueChanged ( double ) ), this, SLOT ( OnGainValueChangedCh0  ( double ) ) );
@@ -665,7 +669,32 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     QObject::connect ( vecpChanFader[47], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
     QObject::connect ( vecpChanFader[48], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
     QObject::connect ( vecpChanFader[49], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
+
+#endif
 }
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+template<unsigned int slotId>
+inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
+{
+    int iCurChanID = slotId - 1;
+
+    void ( CAudioMixerBoard::* pGainValueChanged )( double ) =
+        &CAudioMixerBoardSlots<slotId>::OnChGainValueChanged;
+
+    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::soloStateChanged,
+                       this, &CAudioMixerBoard::UpdateSoloStates );
+
+    QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::gainValueChanged,
+                       this, pGainValueChanged );
+
+    connectFaderSignalsToMixerBoardSlots<slotId - 1>();
+};
+
+template<>
+inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots<0>() {};
+
+#endif
 
 void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 {
@@ -875,8 +904,8 @@ void CAudioMixerBoard::UpdateSoloStates()
     }
 }
 
-void CAudioMixerBoard::OnGainValueChanged ( const int    iChannelIdx,
-                                            const double dValue )
+void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
+                                         const double dValue )
 {
     emit ChangeChanGain ( iChannelIdx, dValue );
 }

@@ -462,6 +462,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
        SIGNAL ( SvrRegStatusChanged() ),
        this, SLOT ( OnSvrRegStatusChanged() ) );
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    connectChannelSignalsToServerSlots<MAX_NUM_CHANNELS>();
+
+#else
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
@@ -724,13 +728,67 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &vecChannels[48], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh48 ( int ) ) );
     QObject::connect ( &vecChannels[49], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh49 ( int ) ) );
 
+#endif
 
     // start the socket (it is important to start the socket after all
     // initializations and connections)
     Socket.Start();
 }
 
-void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+
+template<unsigned int slotId>
+inline void CServer::connectChannelSignalsToServerSlots()
+{
+    int iCurChanID = slotId - 1;
+
+    void ( CServer::* pOnSendProtMessCh )( CVector<uint8_t> ) =
+        &CServerSlots<slotId>::OnSendProtMessCh;
+
+    void ( CServer::* pOnReqConnClientsListCh )() =
+        &CServerSlots<slotId>::OnReqConnClientsListCh;
+
+    void ( CServer::* pOnChatTextReceivedCh )( QString ) =
+        &CServerSlots<slotId>::OnChatTextReceivedCh;
+
+    void ( CServer::* pOnServerAutoSockBufSizeChangeCh )( int ) =
+        &CServerSlots<slotId>::OnServerAutoSockBufSizeChangeCh;
+
+    // send message
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::MessReadyForSending,
+                       this, pOnSendProtMessCh );
+
+    // request connected clients list
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::ReqConnClientsList,
+                       this, pOnReqConnClientsListCh );
+
+    // channel info has changed
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::ChanInfoHasChanged,
+            this, &CServer::CreateAndSendChanListForAllConChannels );
+
+    // chat text received
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::ChatTextReceived,
+            this, pOnChatTextReceivedCh );
+
+    // auto socket buffer size change
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::ServerAutoSockBufSizeChange,
+            this, pOnServerAutoSockBufSizeChangeCh );
+
+    connectChannelSignalsToServerSlots<slotId - 1>();
+};
+
+template<>
+inline void CServer::connectChannelSignalsToServerSlots<0>() {};
+
+void CServer::CreateAndSendJitBufMessage ( const int iCurChanID,
+                                           const int iNNumFra )
+{
+    vecChannels[iCurChanID].CreateJitBufMes ( iNNumFra );
+}
+
+#endif
+
+void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 {
     // the protocol queries me to call the function to send the message
     // send it through the network

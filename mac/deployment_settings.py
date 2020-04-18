@@ -64,9 +64,9 @@ include_list_view_settings = False
 
 # Where to put the icons
 icon_locations = {
-    app_name: (600, 240),
-    server_name: (500, 240),
-    "Applications": (790, 240)
+    app_name: (630, 210),
+    server_name: (530, 210),
+    "Applications": (820, 210)
 }
 
 # View/Window element configuration
@@ -76,18 +76,17 @@ show_toolbar = False
 show_pathbar = False
 show_sidebar = False
 show_icon_preview = False
-sidebar_width = 180
 
 # Window position in ((x, y), (w, h)) format
-window_rect = ((200, 400), (900, 340))
+window_rect = ((200, 400), (900, 320))
 
 # Icon view configuration
 arrange_by = None
 grid_offset = (0, 0)
-grid_spacing = 100
+grid_spacing = 72
 scroll_position = (0, 0)
 label_pos = "bottom"
-icon_size = 80
+icon_size = 72
 text_size = 12
 
 # License configuration

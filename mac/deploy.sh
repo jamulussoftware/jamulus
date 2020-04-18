@@ -31,6 +31,11 @@ if [ ! -f "${ROOT_PATH}/${APP_NAME}.pro" ]; then
     exit 1
 fi
 
+# Install dmgbuild (for the current user), this is required to build the installer image
+python -m ensurepip --user --default-pip
+python -m pip install --user dmgbuild
+DMGBUILD_BIN="$(python -c 'import site; print(site.USER_BASE)')/bin/dmgbuild"
+
 # Get Jamulus version
 APP_VERSION=$(cat "${ROOT_PATH}/${APP_NAME}.pro" | sed -nE 's/^VERSION *= *(.*)$/\1/p')
 
@@ -44,9 +49,9 @@ mkdir -p "${DEPLOY_PATH}"
 build_app "${APP_NAME}"
 
 # Build Jamulus server
-build_app "${SERVER_NAME}" "DEFINES+=SERVER_MODE"
+build_app "${SERVER_NAME}" "DEFINES+=SERVER_BUNDLE"
 
 # Build installer image
-dmgbuild -s "${MAC_PATH}/deployment_settings.py" -D background="${RES_PATH}/installerbackground.png" \
+"${DMGBUILD_BIN}" -s "${MAC_PATH}/deployment_settings.py" -D background="${RES_PATH}/installerbackground.png" \
     -D app_path="${DEPLOY_PATH}/${APP_NAME}.app" -D server_path="${DEPLOY_PATH}/${SERVER_NAME}.app" \
     -D license="${ROOT_PATH}/COPYING" "${APP_NAME} Installer" "${DEPLOY_PATH}/${INSTALLER_NAME}.dmg"

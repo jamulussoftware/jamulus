@@ -23,7 +23,7 @@ TODO store Central Server jamulus.server start scripts on the Repo (one for Cent
 
 
 
-3.5.1
+3.5.1 (2020-04-18)
 
   * added a Mute Stream button to hear your signal and the signal of the other clients but
     do not transmit your signal to the server so that the other clients cannot hear you

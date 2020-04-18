@@ -12,6 +12,8 @@
 
   * upgrade OPUS codec library to v1.3.1 by doloopuntil
 
+  * server list registration status indicator added to the server GUI, coded by pljones
+
   * improved auto jitter buffer for 64 samples frame size
 
   * the ping times in the server list are now more stable

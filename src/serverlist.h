@@ -171,6 +171,10 @@ public:
 
     QLocale::Country GetServerCountry() { return ServerList[0].eCountry; }
 
+    ESvrRegStatus GetSvrRegStatus() { return eSvrRegStatus; }
+
+    void StoreRegistrationResult ( ESvrRegResult eStatus );
+
 protected:
     void SlaveServerRegisterServer ( const bool bIsRegister );
 
@@ -178,6 +182,7 @@ protected:
     QTimer                  TimerRegistering;
     QTimer                  TimerPingServerInList;
     QTimer                  TimerPingCentralServer;
+    QTimer                  TimerCLRegisterServerResp;
 
     QMutex                  Mutex;
 
@@ -195,10 +200,20 @@ protected:
 
     CProtocol*              pConnLessProtocol;
 
+    // server registration status
+    ESvrRegStatus           eSvrRegStatus;
+
+    // count of registration retries
+    int                     iSvrRegRetries;
+
 public slots:
     void OnTimerPollList();
     void OnTimerPingServerInList();
     void OnTimerPingCentralServer();
+    void OnTimerCLRegisterServerResp();
     void OnTimerRegistering() { SlaveServerRegisterServer ( true ); }
     void OnTimerIsPermanent() { ServerList[0].bPermanentOnline = true; }
+
+signals:
+    void SvrRegStatusChanged();
 };

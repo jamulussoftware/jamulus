@@ -94,6 +94,7 @@ public slots:
     void OnTimer();
     void OnServerStarted() { UpdateSystemTrayIcon ( true ); }
     void OnServerStopped() { UpdateSystemTrayIcon ( false ); }
+    void OnSvrRegStatusChanged() { UpdateGUIDependencies(); }
     void OnSysTrayMenuOpen() { ShowWindowInForeground(); }
     void OnSysTrayMenuHide() { hide(); }
     void OnSysTrayMenuExit() { close(); }

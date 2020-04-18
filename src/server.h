@@ -190,6 +190,7 @@ public:
     QLocale::Country GetServerCountry()
         { return ServerListManager.GetServerCountry(); }
 
+    ESvrRegStatus GetSvrRegStatus() { return ServerListManager.GetSvrRegStatus(); }
 
     // GUI settings ------------------------------------------------------------
     void SetAutoRunMinimized ( const bool NAuRuMin ) { bAutoRunMinimized = NAuRuMin; }
@@ -305,6 +306,7 @@ signals:
     void Started();
     void Stopped();
     void ClientDisconnected ( const int iChID );
+    void SvrRegStatusChanged();
     void AudioFrame ( const int              iChID,
                       const QString          stChName,
                       const CHostAddress     RecHostAddr,
@@ -372,6 +374,14 @@ public slots:
     {
         ServerListManager.CentralServerRegisterServer ( InetAddr, LInetAddr, ServerInfo );
     }
+
+    void OnCLRegisterServerResp ( CHostAddress  /* unused */,
+                                  ESvrRegResult eResult )
+    {
+        ServerListManager.StoreRegistrationResult ( eResult );
+    }
+
+    void OnSvrRegStatusChanged() { emit SvrRegStatusChanged(); }
 
     void OnCLUnregisterServerReceived ( CHostAddress InetAddr )
     {

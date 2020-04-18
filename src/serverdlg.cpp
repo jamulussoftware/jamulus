@@ -554,7 +554,7 @@ void CServerDlg::UpdateGUIDependencies()
         break;
 
     case SRS_BAD_ADDRESS:
-        strStatus = "Bad address";
+        strStatus = "<font color=""red""><b>Bad address</b></font>";
         break;
 
     case SRS_REQUESTED:
@@ -562,7 +562,7 @@ void CServerDlg::UpdateGUIDependencies()
         break;
 
     case SRS_TIME_OUT:
-        strStatus = "Using longer retries";
+        strStatus = "<font color=""red""><b>Registration failed</b></font>";
         break;
 
     case SRS_UNKNOWN_RESP:
@@ -570,14 +570,14 @@ void CServerDlg::UpdateGUIDependencies()
         break;
 
     case SRS_REGISTERED:
-        strStatus = "Registered";
+        strStatus = "<font color=""darkGreen""><b>Registered</b></font>";
         break;
 
     case SRS_CENTRAL_SVR_FULL:
-        strStatus = "Central Server full";
+        strStatus = "<font color=""red""><b>Central Server full</b></font>";
         break;
     }
-    lblRegSvrStatus->setText( strStatus );
+    lblRegSvrStatus->setText ( strStatus );
 }
 
 void CServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )

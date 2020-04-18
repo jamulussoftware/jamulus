@@ -566,7 +566,7 @@ void CServerDlg::UpdateGUIDependencies()
         break;
 
     case SRS_UNKNOWN_RESP:
-        strStatus = "Check server version, retrying";
+        strStatus = "Check server version";
         break;
 
     case SRS_REGISTERED:

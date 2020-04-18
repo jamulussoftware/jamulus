@@ -545,36 +545,21 @@ void CServerDlg::UpdateGUIDependencies()
     edtCentralServerAddress->setEnabled (
         !bCurUseDefCentServAddr && bCurSerListEnabled );
 
-    QString strStatus;
+    QString strStatus = svrRegStatusToString ( eSvrRegStatus );
 
     switch ( eSvrRegStatus )
     {
-    case SRS_UNREGISTERED:
-        strStatus = "Unregistered";
-        break;
-
     case SRS_BAD_ADDRESS:
-        strStatus = "<font color=""red""><b>Bad address</b></font>";
-        break;
-
-    case SRS_REQUESTED:
-        strStatus = "Registration requested";
-        break;
-
     case SRS_TIME_OUT:
-        strStatus = "<font color=""red""><b>Registration failed</b></font>";
-        break;
-
-    case SRS_UNKNOWN_RESP:
-        strStatus = "Check server version";
+    case SRS_CENTRAL_SVR_FULL:
+        strStatus = "<font color=""red""><b>" + strStatus + "</b></font>";
         break;
 
     case SRS_REGISTERED:
-        strStatus = "<font color=""darkGreen""><b>Registered</b></font>";
+        strStatus = "<font color=""darkGreen""><b>" + strStatus + "</b></font>";
         break;
 
-    case SRS_CENTRAL_SVR_FULL:
-        strStatus = "<font color=""red""><b>Central Server full</b></font>";
+    default:
         break;
     }
     lblRegSvrStatus->setText ( strStatus );

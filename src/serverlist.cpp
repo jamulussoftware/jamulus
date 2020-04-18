@@ -479,6 +479,8 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
 /* Slave server functionality *************************************************/
 void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
 {
+    qInfo() << "Server Registration Result received:" << svrRegResultToString ( eResult );
+
     // we need the lock since the user might change the server properties at
     // any time so another response could arrive
     QMutexLocker locker ( &Mutex );
@@ -486,20 +488,18 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
     // we got some response, so stop the retry timer
     TimerCLRegisterServerResp.stop();
 
-    eSvrRegStatus = ESvrRegStatus::SRS_UNKNOWN_RESP;
-
     switch ( eResult )
     {
     case ESvrRegResult::SRR_REGISTERED:
-        eSvrRegStatus = ESvrRegStatus::SRS_REGISTERED;
-        break;
+        SetSvrRegStatus ( ESvrRegStatus::SRS_REGISTERED );
+        return;
 
     case ESvrRegResult::SRR_CENTRAL_SVR_FULL:
-        eSvrRegStatus = ESvrRegStatus::SRS_CENTRAL_SVR_FULL;
-        break;
+        SetSvrRegStatus ( ESvrRegStatus::SRS_CENTRAL_SVR_FULL );
+        return;
     }
 
-    emit SvrRegStatusChanged();
+    SetSvrRegStatus (  ESvrRegStatus::SRS_UNKNOWN_RESP );
 }
 
 void CServerListManager::OnTimerPingCentralServer()
@@ -525,8 +525,7 @@ void CServerListManager::OnTimerCLRegisterServerResp()
 
         if ( iSvrRegRetries >= REGISTER_SERVER_RETRY_LIMIT )
         {
-            eSvrRegStatus = SRS_TIME_OUT;
-            emit SvrRegStatusChanged();
+            SetSvrRegStatus ( SRS_TIME_OUT );
         }
         else
         {
@@ -565,8 +564,7 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
         if ( bIsRegister )
         {
             // register server
-            eSvrRegStatus = SRS_REQUESTED;
-            emit SvrRegStatusChanged();
+            SetSvrRegStatus (  SRS_REQUESTED );
 
             pConnLessProtocol->CreateCLRegisterServerMes ( SlaveCurCentServerHostAddress,
                                                            SlaveCurLocalHostAddress,
@@ -575,15 +573,20 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
         else
         {
             // unregister server
-            eSvrRegStatus = SRS_UNREGISTERED;
-            emit SvrRegStatusChanged();
+            SetSvrRegStatus ( SRS_UNREGISTERED );
 
             pConnLessProtocol->CreateCLUnregisterServerMes ( SlaveCurCentServerHostAddress );
         }
     }
     else
     {
-        eSvrRegStatus = SRS_BAD_ADDRESS;
+        SetSvrRegStatus ( SRS_BAD_ADDRESS );
         emit SvrRegStatusChanged();
     }
+}
+void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )
+{
+    qInfo() << "Server Registration Status update:" << svrRegStatusToString ( eNSvrRegStatus );
+    eSvrRegStatus = eNSvrRegStatus;
+    emit SvrRegStatusChanged();
 }

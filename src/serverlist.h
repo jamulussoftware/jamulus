@@ -177,6 +177,7 @@ public:
 
 protected:
     void SlaveServerRegisterServer ( const bool bIsRegister );
+    void SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus );
 
     QTimer                  TimerPollList;
     QTimer                  TimerRegistering;

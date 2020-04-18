@@ -116,7 +116,50 @@ signals:
 #endif
 
 
-class CServer : public QObject
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+template<unsigned int slotId>
+class CServerSlots : public CServerSlots<slotId - 1>
+{
+
+public:
+    void OnSendProtMessCh( CVector<uint8_t> mess ) { SendProtMessage ( slotId - 1,  mess ); }
+    void OnReqConnClientsListCh()  { CreateAndSendChanListForThisChan ( slotId - 1 ); }
+
+    void OnChatTextReceivedCh( QString strChatText )
+    {
+        CreateAndSendChatTextForAllConChannels ( slotId - 1, strChatText );
+    }
+
+    void OnServerAutoSockBufSizeChangeCh( int iNNumFra )
+    {
+        CreateAndSendJitBufMessage( slotId - 1, iNNumFra );
+    }
+
+protected:
+    virtual void SendProtMessage ( int              iChID,
+                                   CVector<uint8_t> vecMessage ) = 0;
+
+    virtual void CreateAndSendChanListForThisChan ( const int iCurChanID ) = 0;
+
+    virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
+                                                          const QString& strChatText ) = 0;
+
+    virtual void CreateAndSendJitBufMessage ( const int iCurChanID,
+                                              const int iNNumFra ) = 0;
+};
+
+template<>
+class CServerSlots<0> {};
+
+#else
+template<unsigned int slotId>
+class CServerSlots {};
+
+#endif
+
+class CServer :
+        public QObject,
+        public CServerSlots<MAX_NUM_CHANNELS>
 {
     Q_OBJECT
 
@@ -212,10 +255,33 @@ protected:
     int FindChannel ( const CHostAddress& CheckAddr );
     int GetNumberOfConnectedClients();
     CVector<CChannelInfo> CreateChannelList();
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    virtual void CreateAndSendChanListForAllConChannels();
+    virtual void CreateAndSendChanListForThisChan ( const int iCurChanID );
+    virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
+                                                          const QString& strChatText );
+
+    virtual void CreateAndSendJitBufMessage ( const int iCurChanID,
+                                              const int iNNumFra );
+
+    virtual void SendProtMessage ( int              iChID,
+                                   CVector<uint8_t> vecMessage );
+
+    template<unsigned int slotId>
+    inline void connectChannelSignalsToServerSlots();
+
+#else
     void CreateAndSendChanListForAllConChannels();
     void CreateAndSendChanListForThisChan ( const int iCurChanID );
     void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                   const QString& strChatText );
+
+    void SendProtMessage ( int              iChID,
+                           CVector<uint8_t> vecMessage );
+
+#endif
+
     void WriteHTMLChannelList();
 
     void ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
@@ -317,9 +383,6 @@ signals:
 public slots:
     void OnTimer();
 
-    void OnSendProtMessage ( int              iChID,
-                             CVector<uint8_t> vecMessage );
-
     void OnNewConnection ( int          iChID,
                            CHostAddress RecHostAddr );
 
@@ -391,60 +454,60 @@ public slots:
 
     void OnCLDisconnection ( CHostAddress InetAddr );
 
-
+#if QT_VERSION < 0x50000  // MOC does not expand macros in Qt 4, so we cannot use QT_VERSION_CHECK(5, 0, 0)
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
-    void OnSendProtMessCh0  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 0,  mess ); }
-    void OnSendProtMessCh1  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 1,  mess ); }
-    void OnSendProtMessCh2  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 2,  mess ); }
-    void OnSendProtMessCh3  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 3,  mess ); }
-    void OnSendProtMessCh4  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 4,  mess ); }
-    void OnSendProtMessCh5  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 5,  mess ); }
-    void OnSendProtMessCh6  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 6,  mess ); }
-    void OnSendProtMessCh7  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 7,  mess ); }
-    void OnSendProtMessCh8  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 8,  mess ); }
-    void OnSendProtMessCh9  ( CVector<uint8_t> mess ) { OnSendProtMessage ( 9,  mess ); }
-    void OnSendProtMessCh10 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 10, mess ); }
-    void OnSendProtMessCh11 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 11, mess ); }
-    void OnSendProtMessCh12 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 12, mess ); }
-    void OnSendProtMessCh13 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 13, mess ); }
-    void OnSendProtMessCh14 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 14, mess ); }
-    void OnSendProtMessCh15 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 15, mess ); }
-    void OnSendProtMessCh16 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 16, mess ); }
-    void OnSendProtMessCh17 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 17, mess ); }
-    void OnSendProtMessCh18 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 18, mess ); }
-    void OnSendProtMessCh19 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 19, mess ); }
-    void OnSendProtMessCh20 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 20, mess ); }
-    void OnSendProtMessCh21 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 21, mess ); }
-    void OnSendProtMessCh22 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 22, mess ); }
-    void OnSendProtMessCh23 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 23, mess ); }
-    void OnSendProtMessCh24 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 24, mess ); }
-    void OnSendProtMessCh25 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 25, mess ); }
-    void OnSendProtMessCh26 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 26, mess ); }
-    void OnSendProtMessCh27 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 27, mess ); }
-    void OnSendProtMessCh28 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 28, mess ); }
-    void OnSendProtMessCh29 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 29, mess ); }
-    void OnSendProtMessCh30 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 30, mess ); }
-    void OnSendProtMessCh31 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 31, mess ); }
-    void OnSendProtMessCh32 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 32, mess ); }
-    void OnSendProtMessCh33 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 33, mess ); }
-    void OnSendProtMessCh34 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 34, mess ); }
-    void OnSendProtMessCh35 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 35, mess ); }
-    void OnSendProtMessCh36 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 36, mess ); }
-    void OnSendProtMessCh37 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 37, mess ); }
-    void OnSendProtMessCh38 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 38, mess ); }
-    void OnSendProtMessCh39 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 39, mess ); }
-    void OnSendProtMessCh40 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 40, mess ); }
-    void OnSendProtMessCh41 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 41, mess ); }
-    void OnSendProtMessCh42 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 42, mess ); }
-    void OnSendProtMessCh43 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 43, mess ); }
-    void OnSendProtMessCh44 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 44, mess ); }
-    void OnSendProtMessCh45 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 45, mess ); }
-    void OnSendProtMessCh46 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 46, mess ); }
-    void OnSendProtMessCh47 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 47, mess ); }
-    void OnSendProtMessCh48 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 48, mess ); }
-    void OnSendProtMessCh49 ( CVector<uint8_t> mess ) { OnSendProtMessage ( 49, mess ); }
+    void OnSendProtMessCh0  ( CVector<uint8_t> mess ) { SendProtMessage ( 0,  mess ); }
+    void OnSendProtMessCh1  ( CVector<uint8_t> mess ) { SendProtMessage ( 1,  mess ); }
+    void OnSendProtMessCh2  ( CVector<uint8_t> mess ) { SendProtMessage ( 2,  mess ); }
+    void OnSendProtMessCh3  ( CVector<uint8_t> mess ) { SendProtMessage ( 3,  mess ); }
+    void OnSendProtMessCh4  ( CVector<uint8_t> mess ) { SendProtMessage ( 4,  mess ); }
+    void OnSendProtMessCh5  ( CVector<uint8_t> mess ) { SendProtMessage ( 5,  mess ); }
+    void OnSendProtMessCh6  ( CVector<uint8_t> mess ) { SendProtMessage ( 6,  mess ); }
+    void OnSendProtMessCh7  ( CVector<uint8_t> mess ) { SendProtMessage ( 7,  mess ); }
+    void OnSendProtMessCh8  ( CVector<uint8_t> mess ) { SendProtMessage ( 8,  mess ); }
+    void OnSendProtMessCh9  ( CVector<uint8_t> mess ) { SendProtMessage ( 9,  mess ); }
+    void OnSendProtMessCh10 ( CVector<uint8_t> mess ) { SendProtMessage ( 10, mess ); }
+    void OnSendProtMessCh11 ( CVector<uint8_t> mess ) { SendProtMessage ( 11, mess ); }
+    void OnSendProtMessCh12 ( CVector<uint8_t> mess ) { SendProtMessage ( 12, mess ); }
+    void OnSendProtMessCh13 ( CVector<uint8_t> mess ) { SendProtMessage ( 13, mess ); }
+    void OnSendProtMessCh14 ( CVector<uint8_t> mess ) { SendProtMessage ( 14, mess ); }
+    void OnSendProtMessCh15 ( CVector<uint8_t> mess ) { SendProtMessage ( 15, mess ); }
+    void OnSendProtMessCh16 ( CVector<uint8_t> mess ) { SendProtMessage ( 16, mess ); }
+    void OnSendProtMessCh17 ( CVector<uint8_t> mess ) { SendProtMessage ( 17, mess ); }
+    void OnSendProtMessCh18 ( CVector<uint8_t> mess ) { SendProtMessage ( 18, mess ); }
+    void OnSendProtMessCh19 ( CVector<uint8_t> mess ) { SendProtMessage ( 19, mess ); }
+    void OnSendProtMessCh20 ( CVector<uint8_t> mess ) { SendProtMessage ( 20, mess ); }
+    void OnSendProtMessCh21 ( CVector<uint8_t> mess ) { SendProtMessage ( 21, mess ); }
+    void OnSendProtMessCh22 ( CVector<uint8_t> mess ) { SendProtMessage ( 22, mess ); }
+    void OnSendProtMessCh23 ( CVector<uint8_t> mess ) { SendProtMessage ( 23, mess ); }
+    void OnSendProtMessCh24 ( CVector<uint8_t> mess ) { SendProtMessage ( 24, mess ); }
+    void OnSendProtMessCh25 ( CVector<uint8_t> mess ) { SendProtMessage ( 25, mess ); }
+    void OnSendProtMessCh26 ( CVector<uint8_t> mess ) { SendProtMessage ( 26, mess ); }
+    void OnSendProtMessCh27 ( CVector<uint8_t> mess ) { SendProtMessage ( 27, mess ); }
+    void OnSendProtMessCh28 ( CVector<uint8_t> mess ) { SendProtMessage ( 28, mess ); }
+    void OnSendProtMessCh29 ( CVector<uint8_t> mess ) { SendProtMessage ( 29, mess ); }
+    void OnSendProtMessCh30 ( CVector<uint8_t> mess ) { SendProtMessage ( 30, mess ); }
+    void OnSendProtMessCh31 ( CVector<uint8_t> mess ) { SendProtMessage ( 31, mess ); }
+    void OnSendProtMessCh32 ( CVector<uint8_t> mess ) { SendProtMessage ( 32, mess ); }
+    void OnSendProtMessCh33 ( CVector<uint8_t> mess ) { SendProtMessage ( 33, mess ); }
+    void OnSendProtMessCh34 ( CVector<uint8_t> mess ) { SendProtMessage ( 34, mess ); }
+    void OnSendProtMessCh35 ( CVector<uint8_t> mess ) { SendProtMessage ( 35, mess ); }
+    void OnSendProtMessCh36 ( CVector<uint8_t> mess ) { SendProtMessage ( 36, mess ); }
+    void OnSendProtMessCh37 ( CVector<uint8_t> mess ) { SendProtMessage ( 37, mess ); }
+    void OnSendProtMessCh38 ( CVector<uint8_t> mess ) { SendProtMessage ( 38, mess ); }
+    void OnSendProtMessCh39 ( CVector<uint8_t> mess ) { SendProtMessage ( 39, mess ); }
+    void OnSendProtMessCh40 ( CVector<uint8_t> mess ) { SendProtMessage ( 40, mess ); }
+    void OnSendProtMessCh41 ( CVector<uint8_t> mess ) { SendProtMessage ( 41, mess ); }
+    void OnSendProtMessCh42 ( CVector<uint8_t> mess ) { SendProtMessage ( 42, mess ); }
+    void OnSendProtMessCh43 ( CVector<uint8_t> mess ) { SendProtMessage ( 43, mess ); }
+    void OnSendProtMessCh44 ( CVector<uint8_t> mess ) { SendProtMessage ( 44, mess ); }
+    void OnSendProtMessCh45 ( CVector<uint8_t> mess ) { SendProtMessage ( 45, mess ); }
+    void OnSendProtMessCh46 ( CVector<uint8_t> mess ) { SendProtMessage ( 46, mess ); }
+    void OnSendProtMessCh47 ( CVector<uint8_t> mess ) { SendProtMessage ( 47, mess ); }
+    void OnSendProtMessCh48 ( CVector<uint8_t> mess ) { SendProtMessage ( 48, mess ); }
+    void OnSendProtMessCh49 ( CVector<uint8_t> mess ) { SendProtMessage ( 49, mess ); }
 
     void OnReqConnClientsListCh0()  { CreateAndSendChanListForThisChan ( 0  ); }
     void OnReqConnClientsListCh1()  { CreateAndSendChanListForThisChan ( 1  ); }
@@ -649,4 +712,6 @@ public slots:
     void OnServerAutoSockBufSizeChangeCh47 ( int iNNumFra ) { vecChannels[47].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh48 ( int iNNumFra ) { vecChannels[48].CreateJitBufMes ( iNNumFra ); }
     void OnServerAutoSockBufSizeChangeCh49 ( int iNNumFra ) { vecChannels[49].CreateJitBufMes ( iNNumFra ); }
+
+#endif
 };

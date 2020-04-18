@@ -166,6 +166,10 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
             this, SLOT ( OnTimerIsPermanent() ) );
     }
 
+    // prepare the register server response timer (single shot timer)
+    TimerCLRegisterServerResp.setSingleShot ( true );
+    TimerCLRegisterServerResp.setInterval ( REGISTER_SERVER_TIME_OUT_MS );
+
 
     // Connections -------------------------------------------------------------
     QObject::connect ( &TimerPollList, SIGNAL ( timeout() ),
@@ -180,8 +184,6 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     QObject::connect ( &TimerRegistering, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerRegistering() ) );
 
-    TimerCLRegisterServerResp.setSingleShot ( true );
-    TimerCLRegisterServerResp.setInterval ( REGISTER_SERVER_TIME_OUT_MS );
     QObject::connect ( &TimerCLRegisterServerResp, SIGNAL ( timeout() ),
         this, SLOT ( OnTimerCLRegisterServerResp() ) );
 }
@@ -314,15 +316,14 @@ void CServerListManager::OnTimerPollList()
     for ( int iIdx = 1 + iNumPredefinedServers; iIdx < ServerList.size(); )
     {
         // 1 minute = 60 * 1000 ms
-        if ( ServerList[iIdx].RegisterTime.elapsed() >
-                ( SERVLIST_TIME_OUT_MINUTES * 60000 ) )
+        if ( ServerList[iIdx].RegisterTime.elapsed() > ( SERVLIST_TIME_OUT_MINUTES * 60000 ) )
         {
             // remove this list entry
             ServerList.removeAt ( iIdx );
         }
         else
         {
-            // Move to the next entry (only on else)
+            // move to the next entry (only on else)
             iIdx++;
         }
     }
@@ -482,16 +483,17 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
     // any time so another response could arrive
     QMutexLocker locker ( &Mutex );
 
-    // We got some response, so stop the retry timer
+    // we got some response, so stop the retry timer
     TimerCLRegisterServerResp.stop();
 
     eSvrRegStatus = ESvrRegStatus::SRS_UNKNOWN_RESP;
 
-    switch  ( eResult )
+    switch ( eResult )
     {
     case ESvrRegResult::SRR_REGISTERED:
         eSvrRegStatus = ESvrRegStatus::SRS_REGISTERED;
         break;
+
     case ESvrRegResult::SRR_CENTRAL_SVR_FULL:
         eSvrRegStatus = ESvrRegStatus::SRS_CENTRAL_SVR_FULL;
         break;
@@ -520,6 +522,7 @@ void CServerListManager::OnTimerCLRegisterServerResp()
     if ( eSvrRegStatus == SRS_REQUESTED )
     {
         iSvrRegRetries++;
+
         if ( iSvrRegRetries >= REGISTER_SERVER_RETRY_LIMIT )
         {
             eSvrRegStatus = SRS_TIME_OUT;

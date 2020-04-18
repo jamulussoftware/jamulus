@@ -588,6 +588,7 @@ enum ESvrRegStatus
 // Central server registration outcome -----------------------------------------
 enum ESvrRegResult
 {
+    // used for protocol -> enum values must be fixed!
     SRR_REGISTERED = 0,
     SRR_CENTRAL_SVR_FULL = 1
 };

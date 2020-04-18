@@ -19,13 +19,15 @@
   * the ping times in the server list are now more stable
 
 
+TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
+
+TODO try to find a way to catch Windows exceptions in case a 64 bit Jamulus tries to load a 32 bit Jack Audio ASIO dll
+
 TODO store Show All Musicians setting in the ini-file
 
 TODO bug fix: "Start up the new version with the Connection Setup showing. "Show all musicians" is on (as I say). Switch it off before the list is displayed. The
      checkbox is off - but the list displays all musicians! You need to turn it on and off again to get it to do its thing. (If you wait a little, it's fine -
      i.e. before it's populated the musicians but after it's displayed the list, turn it off.)", see https://github.com/corrados/jamulus/issues/78
-
-TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 
 TODO the server list filter seems not to work if --showallservers is used
 

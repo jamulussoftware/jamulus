@@ -546,32 +546,38 @@ void CServerDlg::UpdateGUIDependencies()
         !bCurUseDefCentServAddr && bCurSerListEnabled );
 
     QString strStatus;
+
     switch ( eSvrRegStatus )
     {
     case SRS_UNREGISTERED:
         strStatus = "Unregistered";
         break;
+
     case SRS_BAD_ADDRESS:
         strStatus = "Bad address";
         break;
+
     case SRS_REQUESTED:
         strStatus = "Registration requested";
         break;
+
     case SRS_TIME_OUT:
         strStatus = "Using longer retries";
         break;
+
     case SRS_UNKNOWN_RESP:
         strStatus = "Check server version, retrying";
         break;
+
     case SRS_REGISTERED:
         strStatus = "Registered";
         break;
+
     case SRS_CENTRAL_SVR_FULL:
         strStatus = "Central Server full";
         break;
     }
     lblRegSvrStatus->setText( strStatus );
-
 }
 
 void CServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )

@@ -192,6 +192,7 @@ public:
 
     ESvrRegStatus GetSvrRegStatus() { return ServerListManager.GetSvrRegStatus(); }
 
+
     // GUI settings ------------------------------------------------------------
     void SetAutoRunMinimized ( const bool NAuRuMin ) { bAutoRunMinimized = NAuRuMin; }
     bool GetAutoRunMinimized() { return bAutoRunMinimized; }

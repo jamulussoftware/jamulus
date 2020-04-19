@@ -70,6 +70,8 @@ win32 {
     SOURCES += mac/sound.cpp
     RC_FILE = mac/mainicon.icns
     CONFIG += x86
+    QMAKE_INFO_PLIST = mac/Info.plist
+    QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
 
     LIBS += -framework CoreFoundation \
         -framework CoreServices \

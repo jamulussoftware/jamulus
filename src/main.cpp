@@ -44,7 +44,14 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
+
+#if defined( SERVER_BUNDLE ) && ( defined( __APPLE__ ) || defined( __MACOSX ) )
+    // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
+    bool         bIsClient                 = false;
+#else
     bool         bIsClient                 = true;
+#endif
+
     bool         bUseGUI                   = true;
     bool         bStartMinimized           = false;
     bool         bShowComplRegConnList     = false;
@@ -446,7 +453,6 @@ int main ( int argc, char** argv )
         exit ( 1 );
 #endif
     }
-
 
     // Dependencies ------------------------------------------------------------
     // per definition: if we are in "GUI" server mode and no central server

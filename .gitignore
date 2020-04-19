@@ -19,11 +19,12 @@ windows/ASIOSDK2
 windows/VC_redist.x64.exe
 windows/vc_redist.x86.exe
 debug/
+release/
+build/
+deploy/
 jamulus.sln
 jamulus.vcxproj
 jamulus.vcxproj.filters
-release/
-deploy/
 Jamulus.app/
 .DS_Store
 distributions/opus*

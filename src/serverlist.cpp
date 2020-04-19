@@ -588,7 +588,7 @@ void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )
 {
     // output regirstation result/update on the console
     QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
-    tsConsoleStream << "Server Registration Status update:" << svrRegStatusToString ( eNSvrRegStatus ) << endl;
+    tsConsoleStream << "Server Registration Status update: " << svrRegStatusToString ( eNSvrRegStatus ) << endl;
 
     // store the state and inform the GUI about the new status
     eSvrRegStatus = eNSvrRegStatus;

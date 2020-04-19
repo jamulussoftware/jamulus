@@ -3,18 +3,16 @@
 
 3.5.2git
 
-TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
+TODO store Show All Musicians setting in the ini-file
 
-TODO try to find a way to catch Windows exceptions in case a 64 bit Jamulus tries to load a 32 bit Jack Audio ASIO dll
+TODO if you select server list filter all text and delete, the filter is not updated
 
 TODO improve audio drop out behaviour with OPUS64 by tuning the coding rate (it seems that for some coding rates we get loud artifacts
      on audio drop outs whereas for slightly different rates the behavior is much more pleasent)
 
-TODO store Show All Musicians setting in the ini-file
+TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 
-TODO bug fix: "Start up the new version with the Connection Setup showing. "Show all musicians" is on (as I say). Switch it off before the list is displayed. The
-     checkbox is off - but the list displays all musicians! You need to turn it on and off again to get it to do its thing. (If you wait a little, it's fine -
-     i.e. before it's populated the musicians but after it's displayed the list, turn it off.)", see https://github.com/corrados/jamulus/issues/78
+TODO try to find a way to catch Windows exceptions in case a 64 bit Jamulus tries to load a 32 bit Jack Audio ASIO dll
 
 TODO the server list filter seems not to work if --showallservers is used
 

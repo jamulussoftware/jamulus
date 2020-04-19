@@ -36,7 +36,8 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
       bShowCompleteRegList     ( bNewShowCompleteRegList ),
       bServerListReceived      ( false ),
       bServerListItemWasChosen ( false ),
-      bListFilterWasActive     ( false )
+      bListFilterWasActive     ( false ),
+      bShowAllMusicians        ( true )
 {
     setupUi ( this );
 
@@ -219,11 +220,8 @@ void CConnectDlg::RequestServerList()
     // clear filter edit box
     edtFilter->setText ( "" );
 
-    // per default we expand all list items (not for the show all servers mode)
-    if ( !bShowCompleteRegList )
-    {
-        chbExpandAll->setCheckState ( Qt::Checked );
-    }
+    // update Show All Musicians check box (this will call ShowAllMusicians())
+    chbExpandAll->setCheckState ( bShowAllMusicians ? Qt::Checked : Qt::Unchecked );
 
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
@@ -385,7 +383,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         pNewListViewItem->setData ( 0, Qt::UserRole, CurHostAddress.toString() );
 
         // per default expand the list item (if not "show all servers")
-        if ( !bShowCompleteRegList )
+        if ( bShowAllMusicians )
         {
             lvwServers->expandItem ( pNewListViewItem );
         }
@@ -514,9 +512,11 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
     lvwServers->clearSelection();
 }
 
-void CConnectDlg::OnExpandAllStateChanged ( int value )
+void CConnectDlg::ShowAllMusicians ( const bool bState )
 {
-    if ( value == Qt::Checked )
+    bShowAllMusicians = bState;
+
+    if ( bState )
     {
         lvwServers->expandAll();
     }
@@ -537,33 +537,41 @@ void CConnectDlg::UpdateListFilter()
 
         for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
         {
-            bool bFilterFound = false;
+            QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
+            bool             bFilterFound     = false;
 
             // search server name
-            if ( lvwServers->topLevelItem ( iIdx )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+            if ( pCurListViewItem->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
             {
                 bFilterFound = true;
             }
 
             // search location
-            if ( lvwServers->topLevelItem ( iIdx )->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+            if ( pCurListViewItem->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
             {
                 bFilterFound = true;
             }
 
             // search childs
-            for ( int iCCnt = 0; iCCnt < lvwServers->topLevelItem ( iIdx )->childCount(); iCCnt++ )
+            for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
             {
-                if ( lvwServers->topLevelItem ( iIdx )->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                if ( pCurListViewItem->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
                 {
                     bFilterFound = true;
                 }
             }
 
             // only update Hide state if ping time was received
-            if ( !lvwServers->topLevelItem ( iIdx )->text ( 1 ).isEmpty() )
+            if ( !pCurListViewItem->text ( 1 ).isEmpty() )
             {
-                lvwServers->topLevelItem ( iIdx )->setHidden ( !bFilterFound );
+                // only update hide and expand status if the hide state has to be changed to
+                // preserve if user clicked on expand icon manually
+                if ( ( pCurListViewItem->isHidden() && bFilterFound ) ||
+                     ( !pCurListViewItem->isHidden() && !bFilterFound ) )
+                {
+                    pCurListViewItem->setHidden ( !bFilterFound );
+                    pCurListViewItem->setExpanded ( bShowAllMusicians );
+                }
             }
         }
     }
@@ -577,8 +585,13 @@ void CConnectDlg::UpdateListFilter()
 
             for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
             {
-                // if ping time is empty, hide item
-                lvwServers->topLevelItem ( iIdx )->setHidden ( lvwServers->topLevelItem ( iIdx )->text ( 1 ).isEmpty() );
+                QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
+
+                // if ping time is empty, hide item (if not already hidden)
+                if ( pCurListViewItem->text ( 1 ).isEmpty() && !pCurListViewItem->isHidden() )
+                {
+                    pCurListViewItem->setHidden ( true );
+                }
             }
 
             bListFilterWasActive = false;

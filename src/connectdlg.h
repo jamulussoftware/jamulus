@@ -83,6 +83,7 @@ protected:
     QTreeWidgetItem* GetParentListViewItem ( QTreeWidgetItem* pItem );
     void             DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
     void             UpdateListFilter();
+    void             ShowAllMusicians ( const bool bState );
 
     QTimer       TimerPing;
     QTimer       TimerReRequestServList;
@@ -94,13 +95,14 @@ protected:
     bool         bServerListReceived;
     bool         bServerListItemWasChosen;
     bool         bListFilterWasActive;
+    bool         bShowAllMusicians;
 
 public slots:
     void OnServerListItemSelectionChanged();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnServerAddrEditTextChanged ( const QString& );
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
-    void OnExpandAllStateChanged ( int value );
+    void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();

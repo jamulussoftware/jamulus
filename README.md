@@ -23,7 +23,7 @@ The project is hosted at [Sourceforge.net](http://sourceforge.net/projects/llcon
 Required Hardware Setup
 -----------------------
 
-The required minimum internet connection speed is 200 kbps for the up- and downstream.
+The required minimum internet connection speed is 200 kbps (0.2Mbps) for the up and down-stream.
 The ping time (i.e. round trip delay) from your computer to the server should not exceed 40 ms average.
 
 For the Jamulus software to run stable it is recommended to use a PC with at least 1.5 GHz CPU frequency.
@@ -54,10 +54,9 @@ Bugs and feature requests can be [reported here](https://github.com/corrados/jam
 Compilation and Development
 ---------------------------
 
-See the these [compile Instructions](INSTALL.md) 
+See the [compile Instructions](INSTALL.md) 
 
-For server instructions, see [server manual](src/res/homepage/servermanual.md)
-and the [server documentation](https://github.com/corrados/jamulus/wiki/Running-a-Server).
+For setting up and running a server, see [this guide](https://github.com/corrados/jamulus/wiki/Running-a-Server)
 
 
 Acknowledgments

@@ -562,6 +562,7 @@ void CServerDlg::UpdateGUIDependencies()
     default:
         break;
     }
+
     lblRegSvrStatus->setText ( strStatus );
 }
 

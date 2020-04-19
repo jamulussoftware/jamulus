@@ -610,7 +610,7 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
         return "Central Server full";
     }
 
-    return QString("Unknown value ").append( eSvrRegStatus );
+    return QString ( "Unknown value " ).append ( eSvrRegStatus );
 }
 
 
@@ -621,19 +621,6 @@ enum ESvrRegResult
     SRR_REGISTERED = 0,
     SRR_CENTRAL_SVR_FULL = 1
 };
-
-inline QString svrRegResultToString ( ESvrRegResult eSvrRegResult )
-{
-    switch ( eSvrRegResult )
-    {
-    case SRR_REGISTERED:
-        return "Registered";
-    case SRR_CENTRAL_SVR_FULL:
-        return "Central Server full";
-    }
-
-    return QString("Unknown value ").append( eSvrRegResult );
-}
 
 
 // Skill level enum ------------------------------------------------------------

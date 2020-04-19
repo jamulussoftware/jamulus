@@ -6,12 +6,12 @@
   * store Show All Musicians setting in the ini-file
 
 
-TODO if you select server list filter all text and delete, the filter is not updated
+TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
+
+TODO audio level changes if Buffer Delay is changed
 
 TODO improve audio drop out behaviour with OPUS64 by tuning the coding rate (it seems that for some coding rates we get loud artifacts
      on audio drop outs whereas for slightly different rates the behavior is much more pleasent)
-
-TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
 
 TODO try to find a way to catch Windows exceptions in case a 64 bit Jamulus tries to load a 32 bit Jack Audio ASIO dll
 

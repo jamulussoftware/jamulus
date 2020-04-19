@@ -593,9 +593,18 @@ void CConnectDlg::UpdateListFilter()
                 QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
 
                 // if ping time is empty, hide item (if not already hidden)
-                if ( pCurListViewItem->text ( 1 ).isEmpty() && !pCurListViewItem->isHidden() )
+                if ( pCurListViewItem->text ( 1 ).isEmpty() )
                 {
                     pCurListViewItem->setHidden ( true );
+                }
+                else
+                {
+                    // in case it was hidden, show it and take care of expand
+                    if ( pCurListViewItem->isHidden() )
+                    {
+                        pCurListViewItem->setHidden ( false );
+                        pCurListViewItem->setExpanded ( bShowAllMusicians );
+                    }
                 }
             }
 

@@ -281,6 +281,7 @@ public:
     CVector<int>     vecStoredFaderIsSolo;
     CVector<int>     vecStoredFaderIsMute;
     int              iNewClientFaderLevel;
+    bool             bConnectDlgShowAllMusicians;
 
     // window position/state settings
     QByteArray       vecWindowPosMain;

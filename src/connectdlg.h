@@ -54,6 +54,9 @@ public:
     void Init ( const CVector<QString>& vstrIPAddresses );
     void SetCentralServerAddress ( const QString strNewCentralServerAddr ) { strCentralServerAddress = strNewCentralServerAddr; }
 
+    void SetShowAllMusicians ( const bool bState ) { ShowAllMusicians ( bState ); }
+    bool GetShowAllMusicians() { return bShowAllMusicians; }
+
     void SetServerList ( const CHostAddress&         InetAddr,
                          const CVector<CServerInfo>& vecServerInfo );
 

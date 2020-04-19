@@ -37,6 +37,7 @@ CClient::CClient ( const quint16  iPortNumber,
     vecStoredFaderIsSolo             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     vecStoredFaderIsMute             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     iNewClientFaderLevel             ( 100 ),
+    bConnectDlgShowAllMusicians      ( true ),
     vecWindowPosMain                 (), // empty array
     vecWindowPosSettings             (), // empty array
     vecWindowPosChat                 (), // empty array

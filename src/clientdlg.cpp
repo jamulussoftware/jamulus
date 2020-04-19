@@ -210,14 +210,12 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     ledBuffers->Reset();
     ledDelay->Reset();
 
-
-    // init slider controls ---
-    // audio in fader
+    // init audio in fader
     sldAudioPan->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
     sldAudioPan->setTickInterval ( AUD_FADER_IN_MAX / 5 );
     UpdateAudioFaderSlider();
 
-    // audio reverberation
+    // init audio reverberation
     sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
     const int iCurAudReverb = pClient->GetReverbLevel();
     sldAudioReverb->setValue ( iCurAudReverb );
@@ -225,6 +223,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // init reverb channel
     UpdateRevSelection();
+
+    // init connect dialog
+    ConnectDlg.SetShowAllMusicians ( pClient->bConnectDlgShowAllMusicians );
 
     // set window title (with no clients connected -> "0")
     SetMyWindowTitle ( 0 );
@@ -579,13 +580,14 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
 
     // store mixer fader settings (we have to hide all mixer faders first to
     // initiate a storage of the current mixer fader levels in case we are
-    // just in a connected state)
+    // just in a connected state) and other settings
     MainMixerBoard->HideAll();
-    pClient->vecStoredFaderTags   = MainMixerBoard->vecStoredFaderTags;
-    pClient->vecStoredFaderLevels = MainMixerBoard->vecStoredFaderLevels;
-    pClient->vecStoredFaderIsSolo = MainMixerBoard->vecStoredFaderIsSolo;
-    pClient->vecStoredFaderIsMute = MainMixerBoard->vecStoredFaderIsMute;
-    pClient->iNewClientFaderLevel = MainMixerBoard->iNewClientFaderLevel;
+    pClient->vecStoredFaderTags          = MainMixerBoard->vecStoredFaderTags;
+    pClient->vecStoredFaderLevels        = MainMixerBoard->vecStoredFaderLevels;
+    pClient->vecStoredFaderIsSolo        = MainMixerBoard->vecStoredFaderIsSolo;
+    pClient->vecStoredFaderIsMute        = MainMixerBoard->vecStoredFaderIsMute;
+    pClient->iNewClientFaderLevel        = MainMixerBoard->iNewClientFaderLevel;
+    pClient->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
 
     // default implementation of this event handler routine
     Event->accept();

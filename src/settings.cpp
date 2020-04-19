@@ -106,6 +106,12 @@ void CSettings::Load()
             pClient->iNewClientFaderLevel = iValue;
         }
 
+        // connect dialog show all musicians
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "connectdlgshowallmusicians", bValue ) )
+        {
+            pClient->bConnectDlgShowAllMusicians = bValue;
+        }
+
         // name
         pClient->ChannelInfo.strName = FromBase64ToString (
             GetIniSetting ( IniXMLDocument, "client", "name_base64" ) );
@@ -468,6 +474,10 @@ void CSettings::Save()
         // new client level
         SetNumericIniSet ( IniXMLDocument, "client", "newclientlevel",
             pClient->iNewClientFaderLevel );
+
+        // connect dialog show all musicians
+        SetFlagIniSet ( IniXMLDocument, "client", "connectdlgshowallmusicians",
+            pClient->bConnectDlgShowAllMusicians );
 
         // name
         PutIniSetting ( IniXMLDocument, "client", "name_base64",

@@ -220,9 +220,6 @@ void CConnectDlg::RequestServerList()
     // clear filter edit box
     edtFilter->setText ( "" );
 
-    // update Show All Musicians check box (this will call ShowAllMusicians())
-    chbExpandAll->setCheckState ( bShowAllMusicians ? Qt::Checked : Qt::Unchecked );
-
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
     // time to do it
@@ -516,6 +513,7 @@ void CConnectDlg::ShowAllMusicians ( const bool bState )
 {
     bShowAllMusicians = bState;
 
+    // update list
     if ( bState )
     {
         lvwServers->expandAll();
@@ -523,6 +521,13 @@ void CConnectDlg::ShowAllMusicians ( const bool bState )
     else
     {
         lvwServers->collapseAll();
+    }
+
+    // update check box if necessary
+    if ( ( chbExpandAll->checkState() == Qt::Checked && !bShowAllMusicians ) ||
+         ( chbExpandAll->checkState() == Qt::Unchecked && bShowAllMusicians ) )
+    {
+        chbExpandAll->setCheckState ( bState ? Qt::Checked : Qt::Unchecked );
     }
 }
 

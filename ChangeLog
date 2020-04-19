@@ -3,7 +3,8 @@
 
 3.5.2git
 
-TODO store Show All Musicians setting in the ini-file
+  * store Show All Musicians setting in the ini-file
+
 
 TODO if you select server list filter all text and delete, the filter is not updated
 

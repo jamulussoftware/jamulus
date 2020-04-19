@@ -587,7 +587,8 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
 void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )
 {
     // output regirstation result/update on the console
-    qInfo() << "Server Registration Status update:" << svrRegStatusToString ( eNSvrRegStatus );
+    QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
+    tsConsoleStream << "Server Registration Status update:" << svrRegStatusToString ( eNSvrRegStatus ) << endl;
 
     // store the state and inform the GUI about the new status
     eSvrRegStatus = eNSvrRegStatus;

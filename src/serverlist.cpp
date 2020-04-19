@@ -479,8 +479,6 @@ void CServerListManager::CentralServerQueryServerList ( const CHostAddress& Inet
 /* Slave server functionality *************************************************/
 void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
 {
-    qInfo() << "Server Registration Result received:" << svrRegResultToString ( eResult );
-
     // we need the lock since the user might change the server properties at
     // any time so another response could arrive
     QMutexLocker locker ( &Mutex );
@@ -492,14 +490,16 @@ void CServerListManager::StoreRegistrationResult ( ESvrRegResult eResult )
     {
     case ESvrRegResult::SRR_REGISTERED:
         SetSvrRegStatus ( ESvrRegStatus::SRS_REGISTERED );
-        return;
+        break;
 
     case ESvrRegResult::SRR_CENTRAL_SVR_FULL:
         SetSvrRegStatus ( ESvrRegStatus::SRS_CENTRAL_SVR_FULL );
-        return;
-    }
+        break;
 
-    SetSvrRegStatus (  ESvrRegStatus::SRS_UNKNOWN_RESP );
+    default:
+        SetSvrRegStatus ( ESvrRegStatus::SRS_UNKNOWN_RESP );
+        break;
+    }
 }
 
 void CServerListManager::OnTimerPingCentralServer()
@@ -581,12 +581,15 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
     else
     {
         SetSvrRegStatus ( SRS_BAD_ADDRESS );
-        emit SvrRegStatusChanged();
     }
 }
+
 void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )
 {
+    // output regirstation result/update on the console
     qInfo() << "Server Registration Status update:" << svrRegStatusToString ( eNSvrRegStatus );
+
+    // store the state and inform the GUI about the new status
     eSvrRegStatus = eNSvrRegStatus;
     emit SvrRegStatusChanged();
 }

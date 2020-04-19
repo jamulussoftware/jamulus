@@ -80,10 +80,10 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     if ( iServInfoNumSplitItems >= 3 )
     {
         // [this server name]
-        ThisServerListEntry.strName = slServInfoSeparateParams[0];
+        ThisServerListEntry.strName = slServInfoSeparateParams[0].left ( MAX_LEN_SERVER_NAME );
 
         // [this server city]
-        ThisServerListEntry.strCity = slServInfoSeparateParams[1];
+        ThisServerListEntry.strCity = slServInfoSeparateParams[1].left ( MAX_LEN_SERVER_CITY );
 
         // [this server country as QLocale ID]
         const int iCountry = slServInfoSeparateParams[2].toInt();
@@ -132,11 +132,11 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
         // [server n name]
         NewServerListEntry.strName =
-            slServInfoSeparateParams[iCurUsedServInfoSplitItems + 1];
+            slServInfoSeparateParams[iCurUsedServInfoSplitItems + 1].left ( MAX_LEN_SERVER_NAME );
 
         // [server n city]
         NewServerListEntry.strCity =
-            slServInfoSeparateParams[iCurUsedServInfoSplitItems + 2];
+            slServInfoSeparateParams[iCurUsedServInfoSplitItems + 2].left ( MAX_LEN_SERVER_CITY );
 
         // [server n country as QLocale ID]
         const int iCountry =

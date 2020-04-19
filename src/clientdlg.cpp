@@ -147,7 +147,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QString strLEDDelay = tr ( "<b>Delay Status LED:</b> "
         "The delay status LED indicator shows the current audio delay "
         "status. If the light is green, the delay is perfect for a jam "
-        "session. If the ligth is yellow, a session is still possible but "
+        "session. If the light is yellow, a session is still possible but "
         "it may be harder to play. If the light is red, the delay is too "
         "large for jamming." );
 

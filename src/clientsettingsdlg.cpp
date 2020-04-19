@@ -104,7 +104,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // sound card input/output channel mapping
     QString strSndCrdChanMapp = tr ( "<b>Sound Card Channel Mapping:</b> "
         "In case the selected sound card device offers more than one "
-        "input or output channel, the Input Channel Mapping and Ouptut "
+        "input or output channel, the Input Channel Mapping and Output "
         "Channel Mapping settings are visible.<br>"
         "For each " ) + APP_NAME + tr ( " input/output channel (Left and "
         "Right channel) a different actual sound card channel can be "

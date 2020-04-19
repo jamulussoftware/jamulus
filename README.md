@@ -40,6 +40,9 @@ Download the latest version for [Windows, Macintosh or Linux here](https://sourc
 **Windows users**: The Jamulus client software requires an ASIO sound card driver to be available in the system.
 If your sound card does not have native ASIO support, you can try out [this alternative](http://www.asio4all.org/)
 
+For running the server you can use the Docker image. No compilation is required, can be done with one command.
+Please, follow [instructions here](https://hub.docker.com/r/grundic/jamulus).
+
 
 Help
 ----

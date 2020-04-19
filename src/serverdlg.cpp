@@ -44,7 +44,7 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     // client list
     lvwClients->setWhatsThis ( tr ( "<b>Client List:</b> The client list "
         "shows all clients which are currently connected to this server. Some "
-        "informations about the clients like the IP address and name are given "
+        "information about the clients like the IP address and name are given "
         "for each connected client." ) );
 
     lvwClients->setAccessibleName ( tr ( "Connected clients list view" ) );

@@ -57,6 +57,7 @@ Compilation and Development
 See the these [compile Instructions](INSTALL.md) 
 
 For server instructions, see [server manual](src/res/homepage/servermanual.md)
+and the [server documentation](https://github.com/corrados/jamulus/wiki/Running-a-Server).
 
 
 Acknowledgments

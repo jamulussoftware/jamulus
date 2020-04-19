@@ -574,11 +574,11 @@ int main ( int argc, char** argv )
             }
             else
             {
-                // update serverlist
-                Server.UpdateServerList();
-
                 // only start application without using the GUI
                 tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
+
+                // update serverlist
+                Server.UpdateServerList();
 
                 pApp->exec();
             }

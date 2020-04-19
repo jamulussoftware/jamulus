@@ -3,7 +3,7 @@ set -e
 
 APP_NAME="Jamulus"
 SERVER_NAME="${APP_NAME}Server"
-INSTALLER_NAME="${APP_NAME}Installer"
+INSTALLER_NAME="${APP_NAME}-installer"
 ROOT_PATH="$(pwd)"
 MAC_PATH="${ROOT_PATH}/mac"
 RES_PATH="${ROOT_PATH}/src/res"
@@ -54,4 +54,4 @@ build_app "${SERVER_NAME}" "DEFINES+=SERVER_BUNDLE"
 # Build installer image
 "${DMGBUILD_BIN}" -s "${MAC_PATH}/deployment_settings.py" -D background="${RES_PATH}/installerbackground.png" \
     -D app_path="${DEPLOY_PATH}/${APP_NAME}.app" -D server_path="${DEPLOY_PATH}/${SERVER_NAME}.app" \
-    -D license="${ROOT_PATH}/COPYING" "${APP_NAME} Installer" "${DEPLOY_PATH}/${INSTALLER_NAME}-${APP_VERSION}.dmg"
+    -D license="${ROOT_PATH}/COPYING" "${INSTALLER_NAME}" "${DEPLOY_PATH}/${INSTALLER_NAME}-${APP_VERSION}-mac.dmg"

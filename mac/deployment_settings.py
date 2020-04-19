@@ -18,7 +18,7 @@ def validate_key_path(key, example):
 
     if value is None:
         raise ValueError("The " + key + " key must be specified.\n"
-                         "Example: dmgbuild -D " + key + "=" + example + "...")
+                         "Example: dmgbuild -D " + key + "=" + example + " ...")
 
     if not os.path.exists(value):
         raise ValueError("The " + key + " key must be a valid path.")

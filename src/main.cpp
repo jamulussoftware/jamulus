@@ -545,7 +545,7 @@ int main ( int argc, char** argv )
                              eLicenceType );
             if ( bUseGUI )
             {
-                // special case for the GUI mode: we want the licenct type to be
+                // special case for the GUI mode: we want the licence type to be
                 // creative commons per default (if not given in the settings file)
                 Server.SetLicenceType ( LT_CREATIVECOMMONS );
 

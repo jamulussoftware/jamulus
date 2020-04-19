@@ -584,6 +584,35 @@ enum ESvrRegStatus
     SRS_CENTRAL_SVR_FULL = 6
 };
 
+inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
+{
+    switch ( eSvrRegStatus )
+    {
+    case SRS_UNREGISTERED:
+        return "Unregistered";
+
+    case SRS_BAD_ADDRESS:
+        return "Bad address";
+
+    case SRS_REQUESTED:
+        return "Registration requested";
+
+    case SRS_TIME_OUT:
+        return "Registration failed";
+
+    case SRS_UNKNOWN_RESP:
+        return "Check server version";
+
+    case SRS_REGISTERED:
+        return "Registered";
+
+    case SRS_CENTRAL_SVR_FULL:
+        return "Central Server full";
+    }
+
+    return QString("Unknown value ").append( eSvrRegStatus );
+}
+
 
 // Central server registration outcome -----------------------------------------
 enum ESvrRegResult
@@ -592,6 +621,19 @@ enum ESvrRegResult
     SRR_REGISTERED = 0,
     SRR_CENTRAL_SVR_FULL = 1
 };
+
+inline QString svrRegResultToString ( ESvrRegResult eSvrRegResult )
+{
+    switch ( eSvrRegResult )
+    {
+    case SRR_REGISTERED:
+        return "Registered";
+    case SRR_CENTRAL_SVR_FULL:
+        return "Central Server full";
+    }
+
+    return QString("Unknown value ").append( eSvrRegResult );
+}
 
 
 // Skill level enum ------------------------------------------------------------

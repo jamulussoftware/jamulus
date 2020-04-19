@@ -3,9 +3,9 @@
 <plist version="1.0">
     <dict>
         <key>CFBundleName</key>
-        <string>>@EXECUTABLE@</string>
+        <string>@EXECUTABLE@</string>
         <key>CFBundleDisplayName</key>
-        <string>>@EXECUTABLE@</string>
+        <string>@EXECUTABLE@</string>
         <key>CFBundleIdentifier</key>
         <string>@BUNDLEIDENTIFIER@</string>
         <key>CFBundlePackageType</key>

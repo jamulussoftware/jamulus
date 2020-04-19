@@ -54,4 +54,4 @@ build_app "${SERVER_NAME}" "DEFINES+=SERVER_BUNDLE"
 # Build installer image
 "${DMGBUILD_BIN}" -s "${MAC_PATH}/deployment_settings.py" -D background="${RES_PATH}/installerbackground.png" \
     -D app_path="${DEPLOY_PATH}/${APP_NAME}.app" -D server_path="${DEPLOY_PATH}/${SERVER_NAME}.app" \
-    -D license="${ROOT_PATH}/COPYING" "${APP_NAME} Installer" "${DEPLOY_PATH}/${INSTALLER_NAME}.dmg"
+    -D license="${ROOT_PATH}/COPYING" "${APP_NAME} Installer" "${DEPLOY_PATH}/${INSTALLER_NAME}-${APP_VERSION}.dmg"

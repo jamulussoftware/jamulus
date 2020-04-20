@@ -40,11 +40,19 @@ win32 {
     INCLUDEPATH += windows/ASIOSDK2/common \
         windows/ASIOSDK2/host \
         windows/ASIOSDK2/host/pc
-    LIBS += ole32.lib \
-        user32.lib \
-        advapi32.lib \
-        winmm.lib \
-        ws2_32.lib
+    mingw* {
+        LIBS += -lole32 \
+            -luser32 \
+            -ladvapi32 \
+            -lwinmm \
+            -lws2_32
+    } else {
+        LIBS += ole32.lib \
+            user32.lib \
+            advapi32.lib \
+            winmm.lib \
+            ws2_32.lib
+    }
 
     # replace ASIO with jack if requested
     contains(CONFIG, "jackonwindows") {

@@ -300,7 +300,7 @@ int CSound::CountChannels ( AudioDeviceID devID,
     return result;
 }
 
-QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
+QString CSound::LoadAndInitializeDriver ( int iDriverIdx, bool )
 {
     // check device capabilities if it fullfills our requirements
     const QString strStat = CheckDeviceCapabilities ( iDriverIdx );

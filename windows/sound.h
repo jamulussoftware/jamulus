@@ -76,7 +76,8 @@ public:
     virtual double  GetInOutLatencyMs() { return dInOutLatencyMs; }
 
 protected:
-    virtual QString  LoadAndInitializeDriver ( int iIdx );
+    virtual QString  LoadAndInitializeDriver ( int  iIdx,
+                                               bool bOpenDriverSetup );
     virtual void     UnloadCurrentDriver();
     int              GetActualBufferSize ( const int iDesiredBufferSizeMono );
     QString          CheckDeviceCapabilities();

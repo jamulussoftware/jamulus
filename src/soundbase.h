@@ -94,9 +94,9 @@ public:
 
 protected:
     // driver handling
-    virtual QString  LoadAndInitializeDriver ( int ) { return ""; }
+    virtual QString  LoadAndInitializeDriver ( int, bool ) { return ""; }
     virtual void     UnloadCurrentDriver() {}
-    QVector<QString> LoadAndInitializeFirstValidDriver();
+    QVector<QString> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
 
     // function pointer to callback function
     void (*fpProcessCallback) ( CVector<int16_t>& psData, void* arg );

@@ -75,7 +75,7 @@ public:
     int            iSelOutputRightChannel;
 
 protected:
-    virtual QString  LoadAndInitializeDriver ( int iIdx );
+    virtual QString LoadAndInitializeDriver ( int iIdx, bool );
 
     QString  CheckDeviceCapabilities ( const int iDriverIdx );
     int CountChannels ( AudioDeviceID devID,

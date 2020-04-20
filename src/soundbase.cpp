@@ -124,7 +124,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
         // driver
         UnloadCurrentDriver();
 
-        const QString strErrorMessage = LoadAndInitializeDriver ( iNewDev );
+        const QString strErrorMessage = LoadAndInitializeDriver ( iNewDev, false );
 
         if ( !strErrorMessage.isEmpty() )
         {
@@ -132,7 +132,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
             {
                 // loading and initializing the new driver failed, go back to
                 // original driver and display error message
-                LoadAndInitializeDriver ( lCurDev );
+                LoadAndInitializeDriver ( lCurDev, false );
             }
             else
             {
@@ -167,7 +167,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
             // the first available driver in the system. If this fails, too, we
             // throw an error that no driver is available -> it does not make
             // sense to start the software if no audio hardware is available.
-            if ( !LoadAndInitializeDriver ( iNewDev ).isEmpty() )
+            if ( !LoadAndInitializeDriver ( iNewDev, false ).isEmpty() )
             {
                 // loading and initializing the new driver failed, try to find
                 // at least one usable driver
@@ -183,8 +183,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
         if ( bTryLoadAnyDriver )
         {
             // try to load and initialize any valid driver
-            QVector<QString> vsErrorList =
-                LoadAndInitializeFirstValidDriver();
+            QVector<QString> vsErrorList = LoadAndInitializeFirstValidDriver();
 
             if ( !vsErrorList.isEmpty() )
             {
@@ -201,6 +200,20 @@ QString CSoundBase::SetDev ( const int iNewDev )
                 }
                 sErrorMessage += "</ul>";
 
+#ifdef _WIN32
+                // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
+                // offer the user under Windows that we open the driver setups of all registered
+                // ASIO drivers
+                sErrorMessage = sErrorMessage + tr ( "<br/>Do you want to open the ASIO driver setups?" );
+
+                if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes|QMessageBox::No ) )
+                {
+                    LoadAndInitializeFirstValidDriver ( true );
+                }
+
+                sErrorMessage = APP_NAME + tr ( " could not be started because of audio interface issues." );
+#endif
+
                 throw CGenErr ( sErrorMessage );
             }
         }
@@ -209,7 +222,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
     return strReturn;
 }
 
-QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver()
+QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup )
 {
     QVector<QString> vsErrorList;
 
@@ -221,7 +234,7 @@ QVector<QString> CSoundBase::LoadAndInitializeFirstValidDriver()
     while ( !bValidDriverDetected && ( iCurDriverIdx < lNumDevs ) )
     {
         // try to load and initialize current driver, store error message
-        const QString strCurError = LoadAndInitializeDriver ( iCurDriverIdx );
+        const QString strCurError = LoadAndInitializeDriver ( iCurDriverIdx, bOpenDriverSetup );
 
         vsErrorList.append ( strCurError );
 

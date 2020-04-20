@@ -40,7 +40,8 @@ CSound* pSound;
 /******************************************************************************\
 * Common                                                                       *
 \******************************************************************************/
-QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
+QString CSound::LoadAndInitializeDriver ( int  iDriverIdx,
+                                          bool bOpenDriverSetup )
 {
     // load driver
     loadAsioDriver ( cDriverNames[iDriverIdx] );
@@ -67,6 +68,13 @@ QString CSound::LoadAndInitializeDriver ( int iDriverIdx )
     }
     else
     {
+        // if requested, open ASIO driver setup in case of an error
+        if ( bOpenDriverSetup )
+        {
+            OpenDriverSetup();
+            QMessageBox::question ( nullptr, APP_NAME, "Are you done with your ASIO driver settings of device " + GetDeviceName ( iDriverIdx ) + "?", QMessageBox::Yes );
+        }
+
         // driver cannot be used, clean up
         asioDrivers->removeCurrentDriver();
     }
@@ -480,12 +488,12 @@ CSound::CSound ( void       (*fpNewCallback) ( CVector<int16_t>& psData, void* a
                  const int  iCtrlMIDIChannel,
                  const bool bNoAutoJackConnect) :
     CSoundBase              ( "ASIO", true, fpNewCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect ),
-    vSelectedInputChannels  ( NUM_IN_OUT_CHANNELS ),
-    vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS ),
     lNumInChan              ( 0 ),
     lNumInChanPlusAddChan   ( 0 ),
     lNumOutChan             ( 0 ),
-    dInOutLatencyMs         ( 0.0 ) // "0.0" means that no latency value is available
+    dInOutLatencyMs         ( 0.0 ), // "0.0" means that no latency value is available
+    vSelectedInputChannels  ( NUM_IN_OUT_CHANNELS ),
+    vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS )
 {
     int i;
 

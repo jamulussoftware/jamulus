@@ -567,7 +567,7 @@ void CConnectDlg::UpdateListFilter()
             }
 
             // only update Hide state if ping time was received
-            if ( !pCurListViewItem->text ( 1 ).isEmpty() )
+            if ( !pCurListViewItem->text ( 1 ).isEmpty() || bShowCompleteRegList )
             {
                 // only update hide and expand status if the hide state has to be changed to
                 // preserve if user clicked on expand icon manually
@@ -593,7 +593,7 @@ void CConnectDlg::UpdateListFilter()
                 QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
 
                 // if ping time is empty, hide item (if not already hidden)
-                if ( pCurListViewItem->text ( 1 ).isEmpty() )
+                if ( pCurListViewItem->text ( 1 ).isEmpty() && !bShowCompleteRegList )
                 {
                     pCurListViewItem->setHidden ( true );
                 }

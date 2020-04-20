@@ -431,6 +431,15 @@ int main ( int argc, char** argv )
         }
 
 
+        // Version number ------------------------------------------------------
+        if ( ( !strcmp ( argv[i], "--version" ) ) ||
+             ( !strcmp ( argv[i], "-v" ) ) )
+        {
+            tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
+            exit ( 1 );
+        }
+
+
         // Help (usage) flag ---------------------------------------------------
         if ( ( !strcmp ( argv[i], "--help" ) ) ||
              ( !strcmp ( argv[i], "-h" ) ) ||
@@ -438,9 +447,9 @@ int main ( int argc, char** argv )
         {
             const QString strHelp = UsageArguments ( argv );
             tsConsole << strHelp << endl;
-
             exit ( 1 );
         }
+
 
         // Unknown option ------------------------------------------------------
         tsConsole << argv[0] << ": ";
@@ -628,7 +637,7 @@ QString UsageArguments ( char **argv )
         "  -F, --fastupdate      use 64 samples frame size mode (server only)\n"
         "  -g, --pingservers     ping servers in list to keep NAT port open\n"
         "                        (central server only)\n"
-        "  -h, -?, --help        this help text\n"
+        "  -h, -?, --help        display this help text and exit\n"
         "  -i, --inifile         initialization file name\n"
         "  -j, --nojackconnect   disable auto Jack connections (client only)\n"
         "  -l, --log             enable logging, set file name\n"
@@ -648,6 +657,7 @@ QString UsageArguments ( char **argv )
         "                        recorded jams (server only)\n"
         "  -s, --server          start server\n"
         "  -u, --numchannels     maximum number of channels (server only)\n"
+        "  -v, --version         output version information and exit\n"
         "  -w, --welcomemessage  welcome message on connect (server only)\n"
         "  -y, --history         enable connection history and set file\n"
         "                        name (server only)\n"

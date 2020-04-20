@@ -5,8 +5,17 @@
 
   * store Show All Musicians setting in the ini-file
 
+  * improved Mac installer, coded by doloopuntil
 
-TODO offer the Jamulus ASIO settingspanel in case of an ASIO ERROR to fix, e.g., incorrect sample rate (https://sourceforge.net/p/llcon/discussion/533517/thread/777663cf94/#035f)
+  * support to open ASIO driver setup(s) if startup failed due to incorrect driver settings (Ticket #117)
+
+  * added -v/--version command line argument to output version information (Ticket #121)
+
+  * bug fix: if names given with the -o option were too long, the server registration failed (Ticket #91)
+
+
+
+TODO the server list filter seems not to work if --showallservers is used
 
 TODO audio level changes if Buffer Delay is changed
 
@@ -15,9 +24,6 @@ TODO improve audio drop out behaviour with OPUS64 by tuning the coding rate (it 
 
 TODO try to find a way to catch Windows exceptions in case a 64 bit Jamulus tries to load a 32 bit Jack Audio ASIO dll
 
-TODO the server list filter seems not to work if --showallservers is used
-
-TODO store Central Server jamulus.server start scripts on the Repo (one for Central Server, one for Central Server North America)
 
 
 

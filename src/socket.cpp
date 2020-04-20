@@ -57,7 +57,7 @@ void CSocket::Init ( const quint16 iPortNumber )
         if (iPortNumber == 0)
         {
             // If port number is 0, bind the client to a random available port.
-            UdpSocketInAddr.sin_port = htons ( iPortNumber );
+            UdpSocketInAddr.sin_port = htons ( 0 );
 
             bSuccess = ( ::bind ( UdpSocket ,
                                 (sockaddr*) &UdpSocketInAddr,
@@ -88,7 +88,7 @@ void CSocket::Init ( const quint16 iPortNumber )
     else
     {
         // for the server, only try the given port number and do not try out
-        // other port numbers to bind since it is imporatant that the server
+        // other port numbers to bind since it is important that the server
         // gets the desired port number
         UdpSocketInAddr.sin_port = htons ( iPortNumber );
 

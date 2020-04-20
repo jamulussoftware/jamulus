@@ -1117,7 +1117,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         else
         {
             // for lost packets use null pointer as coded input data
-            pCurCodedData   = nullptr;
+            pCurCodedData = nullptr;
 
             // invalidate the buffer OK status flag
             bJitterBufferOK = false;

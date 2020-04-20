@@ -13,11 +13,8 @@
 
   * bug fix: if names given with the -o option were too long, the server registration failed (Ticket #91)
 
+  * bug fix: audio level changes if Buffer Delay is changed (Ticket #106)
 
-
-TODO the server list filter seems not to work if --showallservers is used
-
-TODO audio level changes if Buffer Delay is changed
 
 TODO improve audio drop out behaviour with OPUS64 by tuning the coding rate (it seems that for some coding rates we get loud artifacts
      on audio drop outs whereas for slightly different rates the behavior is much more pleasent)

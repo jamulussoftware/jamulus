@@ -54,9 +54,9 @@ void CSocket::Init ( const quint16 iPortNumber )
 
     if ( bIsClient )
     {
-        if (iPortNumber == 0)
+        if ( iPortNumber == 0 )
         {
-            // If port number is 0, bind the client to a random available port.
+            // if port number is 0, bind the client to a random available port
             UdpSocketInAddr.sin_port = htons ( 0 );
 
             bSuccess = ( ::bind ( UdpSocket ,
@@ -68,12 +68,11 @@ void CSocket::Init ( const quint16 iPortNumber )
             // Per definition use the port number plus ten for the client to make
             // it possible to run server and client on the same computer. If the
             // port is not available, try "NUM_SOCKET_PORTS_TO_TRY" times with
-            // incremented port numbers
+            // incremented port numbers.
             quint16 iClientPortIncrement = 10; // start value: port nubmer plus ten
             bSuccess                     = false; // initialization for while loop
 
-            while ( !bSuccess &&
-                    ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
+            while ( !bSuccess && ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
             {
                 UdpSocketInAddr.sin_port = htons ( iPortNumber + iClientPortIncrement );
 

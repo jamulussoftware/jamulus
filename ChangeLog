@@ -19,6 +19,8 @@
 TODO improve audio drop out behaviour with OPUS64 by tuning the coding rate (it seems that for some coding rates we get loud artifacts
      on audio drop outs whereas for slightly different rates the behavior is much more pleasent)
 
+TODO support internationalization
+
 TODO try to find a way to catch Windows exceptions in case a 64 bit Jamulus tries to load a 32 bit Jack Audio ASIO dll
 
 

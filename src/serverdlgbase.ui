@@ -56,7 +56,7 @@
    <item>
     <widget class="QCheckBox" name="chbUseCCLicence">
      <property name="text">
-      <string>Show Creative Commons Licence Dialog</string>
+      <string>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</string>
      </property>
     </widget>
    </item>

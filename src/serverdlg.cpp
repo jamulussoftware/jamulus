@@ -58,8 +58,8 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
 
     // CC licence dialog switch
     chbUseCCLicence->setWhatsThis ( tr ( "<b>Show Creative Commons Licence "
-        "Dialog:</b> If enabled, a Creative Commons Licence dialog is shown "
-        "each time a new user connects the server." ) );
+        "Dialog:</b> If enabled, a Creative Commons BY-NC-SA 4.0 Licence "
+        "dialog is shown each time a new user connects the server." ) );
 
     // Make My Server Public flag
     chbRegisterServer->setWhatsThis ( tr ( "<b>Make My Server Public:</b> If "

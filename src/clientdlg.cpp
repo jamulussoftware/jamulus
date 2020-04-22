@@ -936,34 +936,28 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
 void CClientDlg::OnTimerSigMet()
 {
     // get current input levels
-    double dCurSigLevelL = pClient->MicLevelL();
-    double dCurSigLevelR = pClient->MicLevelR();
+    double dCurSigLeveldB_L = pClient->MicLeveldB_L();
+    double dCurSigLeveldB_R = pClient->MicLeveldB_R();
 
-    // linear transformation of the input level range to the progress-bar
-    // range
-    dCurSigLevelL -= LOW_BOUND_SIG_METER;
-    dCurSigLevelL *= NUM_STEPS_LED_BAR /
-        ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+    // linear transformation of the input level range to the progress-bar range
+    dCurSigLeveldB_L -= LOW_BOUND_SIG_METER;
+    dCurSigLeveldB_L *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+    dCurSigLeveldB_R -= LOW_BOUND_SIG_METER;
+    dCurSigLeveldB_R *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
 
     // lower bound the signal
-    if ( dCurSigLevelL < 0 )
+    if ( dCurSigLeveldB_L < 0 )
     {
-        dCurSigLevelL = 0;
+        dCurSigLeveldB_L = 0;
     }
-
-    dCurSigLevelR -= LOW_BOUND_SIG_METER;
-    dCurSigLevelR *= NUM_STEPS_LED_BAR /
-        ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
-
-    // lower bound the signal
-    if ( dCurSigLevelR < 0 )
+    if ( dCurSigLeveldB_R < 0 )
     {
-        dCurSigLevelR = 0;
+        dCurSigLeveldB_R = 0;
     }
 
     // show current level
-    lbrInputLevelL->setValue ( static_cast<int> ( ceil ( dCurSigLevelL ) ) );
-    lbrInputLevelR->setValue ( static_cast<int> ( ceil ( dCurSigLevelR ) ) );
+    lbrInputLevelL->setValue ( dCurSigLeveldB_L );
+    lbrInputLevelR->setValue ( dCurSigLeveldB_R );
 }
 
 void CClientDlg::OnTimerBuffersLED()
@@ -1187,6 +1181,8 @@ rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
                                "font:  bold;" );
 #endif
 
+        lbrInputLevelL->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
+        lbrInputLevelR->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
         break;
 
     default:
@@ -1199,6 +1195,8 @@ rbtReverbSelL->setStyleSheet ( "" );
 rbtReverbSelR->setStyleSheet ( "" );
 #endif
 
+        lbrInputLevelL->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
+        lbrInputLevelR->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
         break;
     }
 

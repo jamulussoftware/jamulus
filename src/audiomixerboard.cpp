@@ -56,12 +56,12 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     QVBoxLayout* pLabelPictGrid = new QVBoxLayout       ( );
 
     // setup channel level
-    plbrChannelLevel->setContentsMargins( 0, 3, 2, 3 );
+    plbrChannelLevel->setContentsMargins ( 0, 3, 2, 3 );
 
     // setup slider
-    pFader->setPageStep ( 1 );
+    pFader->setPageStep     ( 1 );
     pFader->setTickPosition ( QSlider::TicksBothSides );
-    pFader->setRange ( 0, AUD_MIX_FADER_MAX );
+    pFader->setRange        ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
     // setup fader tag label (black bold text which is centered)
@@ -93,8 +93,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pLevelsGrid->addWidget ( plbrChannelLevel, 0, Qt::AlignRight );
     pLevelsGrid->addWidget ( pFader,           0, Qt::AlignLeft );
 
-    pMuteSoloGrid->addWidget ( pcbMute,    0, Qt::AlignLeft );
-    pMuteSoloGrid->addWidget ( pcbSolo,    0, Qt::AlignLeft );
+    pMuteSoloGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
+    pMuteSoloGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
 
     pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pMuteSoloBox, 0, Qt::AlignHCenter );
@@ -172,18 +172,17 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                  padding-bottom: -15px; }"
             "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
 
-        // mute button
-        pcbMute->setText ( tr ( "MUTE" ) );
-
-        // solo button
-        pcbSolo->setText ( tr ( "SOLO" ) );
+        pcbMute->setText                    ( tr ( "MUTE" ) );
+        pcbSolo->setText                    ( tr ( "SOLO" ) );
+        plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
         break;
 
     default:
         // reset style sheet and set original paramters
-        pFader->setStyleSheet ( "" );
-        pcbMute->setText      ( tr ( "Mute" ) );
-        pcbSolo->setText      ( tr ( "Solo" ) );
+        pFader->setStyleSheet               ( "" );
+        pcbMute->setText                    ( tr ( "Mute" ) );
+        pcbSolo->setText                    ( tr ( "Solo" ) );
+        plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
         break;
     }
 }
@@ -826,7 +825,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                                                   bStoredFaderIsSolo,
                                                   bStoredFaderIsMute ) )
                     {
-                        vecpChanFader[i]->SetFaderLevel ( iStoredFaderLevel );
+                        vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel );
                         vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
                         vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
                     }

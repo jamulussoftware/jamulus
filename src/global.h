@@ -166,11 +166,6 @@ LED bar:      lbr
 // maximum number of fader settings to be stored (together with the fader tags)
 #define MAX_NUM_STORED_FADER_SETTINGS    200
 
-// defines for LED level meter CMultiColorLEDBar
-#define NUM_STEPS_LED_BAR                8
-#define RED_BOUND_LED_BAR                7
-#define YELLOW_BOUND_LED_BAR             5
-
 // range for signal level meter
 #define LOW_BOUND_SIG_METER              ( -50.0 ) // dB
 #define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB

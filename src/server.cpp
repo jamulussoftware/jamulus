@@ -1757,6 +1757,7 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
         const CVector<int16_t>& vecsData = vecvecsData[j];
 
         double dCurLevel = 0.0;
+
         if ( vecNumAudioChannels[j] == 1 )
         {
             // mono
@@ -1785,8 +1786,7 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
 
         // map to signal level meter
         dCurSigLevel -= LOW_BOUND_SIG_METER;
-        dCurSigLevel *= NUM_STEPS_LED_BAR /
-            ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+        dCurSigLevel *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
 
         if ( dCurSigLevel < 0 )
         {

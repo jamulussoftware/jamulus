@@ -3,6 +3,8 @@
 
 3.5.2git
 
+  * use audio level meter bars for normal skin
+
   * store Show All Musicians setting in the ini-file
 
   * improved Mac installer, coded by doloopuntil

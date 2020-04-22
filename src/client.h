@@ -114,8 +114,8 @@ public:
     bool   IsRunning() { return Sound.IsRunning(); }
     bool   SetServerAddr ( QString strNAddr );
 
-    double MicLevelL() { return SignalLevelMeter.MicLevelLeft(); }
-    double MicLevelR() { return SignalLevelMeter.MicLevelRight(); }
+    double MicLeveldB_L() { return SignalLevelMeter.MicLeveldBLeft(); }
+    double MicLeveldB_R() { return SignalLevelMeter.MicLeveldBRight(); }
 
     bool   GetAndResetbJitterBufferOKFlag();
 

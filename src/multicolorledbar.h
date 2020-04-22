@@ -28,20 +28,36 @@
 #include <QPixmap>
 #include <QTimer>
 #include <QLayout>
+#include <QProgressBar>
+#include <QStackedLayout>
 #include "util.h"
 #include "global.h"
 
 
+/* Definitions ****************************************************************/
+// defines for LED level meter CMultiColorLEDBar
+#define NUM_STEPS_LED_BAR                8
+#define RED_BOUND_LED_BAR                7
+#define YELLOW_BOUND_LED_BAR             5
+
+
 /* Classes ********************************************************************/
-class CMultiColorLEDBar : public QFrame
+class CMultiColorLEDBar : public QWidget
 {
     Q_OBJECT
 
 public:
+    enum ELevelMeterType
+    {
+        MT_LED,
+        MT_BAR
+    };
+
     CMultiColorLEDBar ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
     virtual ~CMultiColorLEDBar();
 
-    void setValue ( const int value );
+    void setValue ( const double dValue );
+    void SetLevelMeterType ( const ELevelMeterType eNType );
 
 protected:
     class cLED
@@ -57,7 +73,7 @@ protected:
         };
 
         cLED ( QWidget* parent );
-        void setColor ( const ELightColor eNewColor );
+        void    setColor ( const ELightColor eNewColor );
         QLabel* getLabelPointer() { return pLEDLabel; }
 
     protected:
@@ -74,8 +90,8 @@ protected:
     void Reset ( const bool bEnabled );
     virtual void changeEvent ( QEvent* curEvent );
 
-    QVBoxLayout*     pMainLayout;
-
-    int              iNumLEDs;
-    CVector<cLED*>   vecpLEDs;
+    QStackedLayout* pStackedLayout;
+    ELevelMeterType eLevelMeterType;
+    CVector<cLED*>  vecpLEDs;
+    QProgressBar*   pProgressBar;
 };

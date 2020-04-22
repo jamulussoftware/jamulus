@@ -582,8 +582,9 @@
  </customwidgets>
  <tabstops>
   <tabstop>butConnect</tabstop>
-  <tabstop>chbChat</tabstop>
   <tabstop>chbSettings</tabstop>
+  <tabstop>chbChat</tabstop>
+  <tabstop>chbLocalMute</tabstop>
   <tabstop>sldAudioPan</tabstop>
   <tabstop>sldAudioReverb</tabstop>
   <tabstop>rbtReverbSelL</tabstop>

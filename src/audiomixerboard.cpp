@@ -246,9 +246,10 @@ void CChannelFader::Reset()
     // init gain value -> maximum value as definition according to server
     pFader->setValue ( AUD_MIX_FADER_MAX );
 
-    // reset mute/solo check boxes
+    // reset mute/solo check boxes and level meter
     pcbMute->setChecked ( false );
     pcbSolo->setChecked ( false );
+    plbrChannelLevel->setValue ( 0 );
 
     // clear instrument picture, country flag, tool tips and label text
     plblLabel->setText ( "" );
@@ -755,6 +756,7 @@ void CAudioMixerBoard::HideAll()
         // before hiding the fader, store its level (if some conditions are fullfilled)
         StoreFaderSettings ( vecpChanFader[i] );
 
+        vecpChanFader[i]->SetChannelLevel ( 0 );
         vecpChanFader[i]->SetDisplayChannelLevel ( false );
         vecpChanFader[i]->Hide();
     }
@@ -830,9 +832,6 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                         vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
                     }
                 }
-
-                // At some future time a new level will arrive -- ???
-                vecpChanFader[i]->SetChannelLevel ( 0 );
 
                 // set the text in the fader
                 vecpChanFader[i]->SetText ( vecChanInfo[j] );

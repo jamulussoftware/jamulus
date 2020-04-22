@@ -17,8 +17,8 @@
 
   * bug fix: audio level changes if Buffer Delay is changed (Ticket #106)
 
+  * bug fix: do not reset fader level meters if number of clients change
 
-TODO if number of clients change, the fader level meters are reset
 
 TODO sometimes I cannot see the central server in the server list
 

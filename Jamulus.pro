@@ -75,14 +75,25 @@ win32 {
         LIBS += "C:/Program Files (x86)/Jack/lib/libjack64.lib"
     }
 } else:macx {
+    contains(CONFIG, "server_bundle") {
+        message(The generated application bundle will run a server instance.)
+
+        DEFINES += SERVER_BUNDLE
+        TARGET = $${TARGET}Server
+    }
+
     QT += macextras
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp
     RC_FILE = mac/mainicon.icns
     CONFIG += x86
-    !contains(CONFIG, "istravis") {
-        QMAKE_INFO_PLIST = mac/Info.plist
-        QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
+    QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
+    QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
+
+    macx-xcode {
+        QMAKE_INFO_PLIST = mac/Info-xcode.plist
+    } else {
+        QMAKE_INFO_PLIST = mac/Info-make.plist
     }
 
     LIBS += -framework CoreFoundation \

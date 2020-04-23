@@ -15,6 +15,8 @@
 
   * added bodhran instrument icon, created by bomm (Ticket #131)
 
+  * bug fix: if small network buffers are used we get much better audio quality when drop outs occur
+
   * bug fix: if names given with the -o option were too long, the server registration failed (Ticket #91)
 
   * bug fix: audio level changes if Buffer Delay is changed (Ticket #106)
@@ -27,8 +29,6 @@ TODO improve input channel mapping and introduce input/output gains with overran
 TODO support internationalization
 
 TODO sometimes I cannot see the central server in the server list
-
-TODO improve audio drop out behaviour with OPUS64 by tuning the coding rate (it seems that for some coding rates we get loud artifacts on audio drop outs whereas for slightly different rates the behavior is much more pleasent), maybe test with OPUS complexity settings, quality settings, etc to improve PLC
 
 TODO try to find a way to catch Windows exceptions in case a 64 bit Jamulus tries to load a 32 bit Jack Audio ASIO dll
 

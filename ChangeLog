@@ -13,7 +13,7 @@
 
   * added -v/--version command line argument to output version information (Ticket #121)
 
-  * added bodhran instrument icon, created by bomm (Ticket #131)
+  * added bodhran and other instrument icons, bodhran created by bomm (Ticket #131)
 
   * bug fix: if small network buffers are used we get much better audio quality when drop outs occur
 

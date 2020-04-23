@@ -48,6 +48,7 @@
         <file>res/instruments/instrlistener.png</file>
         <file>res/instruments/instrstreamer.png</file>
         <file>res/instruments/instrguitarvocal.png</file>
+        <file>res/instruments/instrkeyboardvocal.png</file>
         <file>res/instruments/bodhran.png</file>
     </qresource>
     <qresource prefix="/png/main">

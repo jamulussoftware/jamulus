@@ -549,6 +549,7 @@ DISTFILES += ChangeLog \
     src/res/instruments/instrviolin.png \
     src/res/instruments/instrvocal.png \
     src/res/instruments/instrguitarvocal.png \
+    src/res/instruments/instrkeyboardvocal.png \
     src/res/instruments/bodhran.svg \
     src/res/instruments/bodhran.png \
     src/res/flags/flagnone.png \

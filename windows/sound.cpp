@@ -857,6 +857,7 @@ void CSound::bufferSwitch ( long index, ASIOBool )
         // call processing callback function
         pSound->ProcessCallback ( vecsTmpAudioSndCrdStereo );
 
+
         // PLAYBACK ------------------------------------------------------------
         for ( int i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
         {

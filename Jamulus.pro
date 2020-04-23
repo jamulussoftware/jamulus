@@ -14,7 +14,8 @@ QT += widgets \
     network \
     xml
 
-#TRANSLATIONS = src/res/translation_de.ts
+#TRANSLATIONS = src/res/translation_de_DE.ts \
+#    src/res/translation_fr_FR.ts
 
 INCLUDEPATH += src
 
@@ -521,33 +522,35 @@ DISTFILES += ChangeLog \
     src/res/VRLEDRedSmall.png \
     src/res/VRLEDYellow.png \
     src/res/VRLEDYellowSmall.png \
-    src/res/instraccordeon.png \
-    src/res/instraguitar.png \
-    src/res/instrbassguitar.png \
-    src/res/instrcello.png \
-    src/res/instrclarinet.png \
-    src/res/instrdjembe.png \
-    src/res/instrdoublebass.png \
-    src/res/instrdrumset.png \
-    src/res/instreguitar.png \
-    src/res/instrflute.png \
-    src/res/instrfrenchhorn.png \
-    src/res/instrgrandpiano.png \
-    src/res/instrharmonica.png \
-    src/res/instrkeyboard.png \
-    src/res/instrlistener.png \
-    src/res/instrmicrophone.png \
-    src/res/instrnone.png \
-    src/res/instrrecorder.png \
-    src/res/instrsaxophone.png \
-    src/res/instrstreamer.png \
-    src/res/instrsynthesizer.png \
-    src/res/instrtrombone.png \
-    src/res/instrtrumpet.png \
-    src/res/instrtuba.png \
-    src/res/instrviolin.png \
-    src/res/instrvocal.png \
-    src/res/instrguitarvocal.png \
+    src/res/instruments/instraccordeon.png \
+    src/res/instruments/instraguitar.png \
+    src/res/instruments/instrbassguitar.png \
+    src/res/instruments/instrcello.png \
+    src/res/instruments/instrclarinet.png \
+    src/res/instruments/instrdjembe.png \
+    src/res/instruments/instrdoublebass.png \
+    src/res/instruments/instrdrumset.png \
+    src/res/instruments/instreguitar.png \
+    src/res/instruments/instrflute.png \
+    src/res/instruments/instrfrenchhorn.png \
+    src/res/instruments/instrgrandpiano.png \
+    src/res/instruments/instrharmonica.png \
+    src/res/instruments/instrkeyboard.png \
+    src/res/instruments/instrlistener.png \
+    src/res/instruments/instrmicrophone.png \
+    src/res/instruments/instrnone.png \
+    src/res/instruments/instrrecorder.png \
+    src/res/instruments/instrsaxophone.png \
+    src/res/instruments/instrstreamer.png \
+    src/res/instruments/instrsynthesizer.png \
+    src/res/instruments/instrtrombone.png \
+    src/res/instruments/instrtrumpet.png \
+    src/res/instruments/instrtuba.png \
+    src/res/instruments/instrviolin.png \
+    src/res/instruments/instrvocal.png \
+    src/res/instruments/instrguitarvocal.png \
+    src/res/instruments/bodhran.svg \
+    src/res/instruments/bodhran.png \
     src/res/flags/flagnone.png \
     src/res/flags/ad.png \
     src/res/flags/ae.png \

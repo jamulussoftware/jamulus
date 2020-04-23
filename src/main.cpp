@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QTextStream>
+#include <QTranslator>
 #include "global.h"
 #include "clientdlg.h"
 #include "serverdlg.h"
@@ -463,6 +464,7 @@ int main ( int argc, char** argv )
 #endif
     }
 
+
     // Dependencies ------------------------------------------------------------
     // per definition: if we are in "GUI" server mode and no central server
     // address is given, we use the default central server address
@@ -495,6 +497,17 @@ int main ( int argc, char** argv )
 
     // init resources
     Q_INIT_RESOURCE(resources);
+
+
+// TODO translation loading does not yet work
+//    // load translations
+//    if ( bUseGUI )
+//    {
+//        QTranslator myappTranslator;
+//        bool ret = myappTranslator.load ( "src/res/translation_" + QLocale::system().name() );
+//qDebug() << "translation successfully loaded: " << ret << "   " << "src/res/translation_" + QLocale::system().name();
+//        pApp->installTranslator ( &myappTranslator );
+//    }
 
 
 // TEST -> activate the following line to activate the test bench,

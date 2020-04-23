@@ -835,6 +835,7 @@ void CClient::Init()
     vecCeltData.Init ( iCeltNumCodedBytes );
     vecZeros.Init ( iStereoBlockSizeSam, 0 );
     vecsStereoSndCrdTMP.Init ( iStereoBlockSizeSam );
+    vecsStereoSndCrdMuteStream.Init ( iStereoBlockSizeSam );
 
     opus_custom_encoder_ctl ( CurOpusEncoder,
                               OPUS_SET_BITRATE (
@@ -883,22 +884,38 @@ void CClient::AudioCallback ( CVector<int16_t>& psData, void* arg )
 
     // process audio data
     pMyClientObj->ProcessSndCrdAudioData ( psData );
-}
-
-void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsStereoSndCrd )
-{
 
 /*
 // TEST do a soundcard jitter measurement
 static CTimingMeas JitterMeas ( 1000, "test2.dat" );
 JitterMeas.Measure();
 */
+}
+
+void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsMultChanAudioSndCrd )
+{
+
+// TODO output mapping from stereo to multi channel: We want to change all the different sound interfaces that they
+// do not select the input and output channels but we do it here at the client. This has the advantage that, e.g.,
+// the special add modes supported for Windows (i.e. if 4 input channels available, you can mix channel 1+3 or 1+4)
+// can then be used for Mac as well without the need of changing anything in the actual Mac sound interface.
+// Since a multichannel signal arrives and must be converted to a stereo signal, we need an additional buffer: vecsStereoSndCrdTMP.
+// TEST input channel selection/mixing
+//const int iNumInCh = 2;
+//for ( int i = 0; i < iNumInCh; i++ )
+//{
+//    for ( int j = 0; j < iMonoBlockSizeSam; j++ )
+//    {
+//        vecsStereoSndCrdTMP[2 * j + i] = vecsMultChanAudioSndCrd[iNumInCh * j + i];
+//    }
+//}
+vecsStereoSndCrdTMP = vecsMultChanAudioSndCrd; // TEST just copy the stereo data for now
 
     // check if a conversion buffer is required or not
     if ( bSndCrdConversionBufferRequired )
     {
         // add new sound card block in conversion buffer
-        SndCrdConversionBufferIn.Put ( vecsStereoSndCrd, vecsStereoSndCrd.Size() );
+        SndCrdConversionBufferIn.Put ( vecsStereoSndCrdTMP, vecsStereoSndCrdTMP.Size() );
 
         // process all available blocks of data
         while ( SndCrdConversionBufferIn.GetAvailData() >= iStereoBlockSizeSam )
@@ -913,14 +930,17 @@ JitterMeas.Measure();
         }
 
         // get processed sound card block out of the conversion buffer
-        SndCrdConversionBufferOut.Get ( vecsStereoSndCrd, vecsStereoSndCrd.Size() );
+        SndCrdConversionBufferOut.Get ( vecsStereoSndCrdTMP, vecsStereoSndCrdTMP.Size() );
     }
     else
     {
         // regular case: no conversion buffer required
         // process audio data
-        ProcessAudioDataIntern ( vecsStereoSndCrd );
+        ProcessAudioDataIntern ( vecsStereoSndCrdTMP );
     }
+
+// TODO output mapping from stereo to multi channel, see comment above for the input mapping
+vecsMultChanAudioSndCrd = vecsStereoSndCrdTMP; // TEST just copy the stereo data for now
 }
 
 void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
@@ -1101,7 +1121,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     // in case of mute stream, store local data
     if ( bMuteOutStream )
     {
-        vecsStereoSndCrdTMP = vecsStereoSndCrd;
+        vecsStereoSndCrdMuteStream = vecsStereoSndCrd;
     }
 
     for ( i = 0; i < iSndCrdFrameSizeFactor; i++ )
@@ -1158,7 +1178,7 @@ fflush(pFileDelay);
         for ( i = 0; i < iStereoBlockSizeSam; i++ )
         {
             vecsStereoSndCrd[i] = Double2Short (
-                static_cast<double> ( vecsStereoSndCrd[i] ) + vecsStereoSndCrdTMP[i] );
+                static_cast<double> ( vecsStereoSndCrd[i] ) + vecsStereoSndCrdMuteStream[i] );
         }
     }
 

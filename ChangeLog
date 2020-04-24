@@ -1,7 +1,19 @@
 
 
+3.5.3git
 
-3.5.2git
+TODO improve input channel mapping and introduce input/output gains with overrange to amplification (separate dialog, replace Pan, etc.)
+
+TODO support internationalization
+
+TODO sometimes I cannot see the central server in the server list
+
+
+
+
+
+
+3.5.2 (2020-04-24)
 
   * use audio level meter bars for normal skin
 
@@ -24,16 +36,6 @@
   * bug fix: do not reset fader level meters if number of clients change
 
   * bug fix: fixed a crash with JackRouter 64 bit ASIO driver (Ticket #93, thanks to elliotclee)
-
-
-TODO improve input channel mapping and introduce input/output gains with overrange to amplification (separate dialog, replace Pan, etc.)
-
-TODO support internationalization
-
-TODO sometimes I cannot see the central server in the server list
-
-
-
 
 
 3.5.1 (2020-04-18)

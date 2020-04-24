@@ -50,6 +50,7 @@ win32 {
             -lwinmm \
             -lws2_32
     } else {
+        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/corrados/jamulus/issues/93
         LIBS += ole32.lib \
             user32.lib \
             advapi32.lib \

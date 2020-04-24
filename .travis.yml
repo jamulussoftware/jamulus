@@ -31,9 +31,8 @@ matrix:
     - brew install qt5
     - brew link qt5 --force
     script:
-    - qmake "CONFIG+=istravis" -spec macx-xcode Jamulus.pro
-    - xcodebuild -list -project Jamulus.xcodeproj
-    - xcodebuild -scheme Jamulus build
+    - qmake Jamulus.pro
+    - mac/deploy_mac.sh
     #deploy function is only available in travis-ci.com (not free) but not in travis-ci.org (free)
     #deploy:
     #  provider: releases

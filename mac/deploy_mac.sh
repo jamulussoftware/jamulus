@@ -1,57 +1,77 @@
 #!/bin/bash
 set -e
 
-APP_NAME="Jamulus"
-SERVER_NAME="${APP_NAME}Server"
-INSTALLER_NAME="${APP_NAME}-installer"
-ROOT_PATH="$(pwd)"
-MAC_PATH="${ROOT_PATH}/mac"
-RES_PATH="${ROOT_PATH}/src/res"
-BUILD_PATH="${ROOT_PATH}/build"
-DEPLOY_PATH="${ROOT_PATH}/deploy"
-JOB_COUNT=$(sysctl -n hw.ncpu)
+root_path="$(pwd)"
+project_path="${root_path}/Jamulus.pro"
+macdeploy_path="${root_path}/mac"
+resources_path="${root_path}/src/res"
+build_path="${root_path}/build"
+deploy_path="${root_path}/deploy"
 
-function build_app {
-    # Build Jamulus
-    qmake "${ROOT_PATH}/${APP_NAME}.pro" -o "${BUILD_PATH}/Makefile" \
-        "CONFIG+=release" "TARGET=$1" "QMAKE_APPLICATION_BUNDLE_NAME=$1" ${@:2}
 
-    make -f "${BUILD_PATH}/Makefile" -C "${BUILD_PATH}" -j${JOB_COUNT}
-
-    # Deploy Jamulus
-    macdeployqt "${BUILD_PATH}/$1.app" -verbose=2 -always-overwrite
-    mv "${BUILD_PATH}/$1.app" "${DEPLOY_PATH}"
-    make -f "${BUILD_PATH}/Makefile" -C "${BUILD_PATH}" distclean
+cleanup()
+{
+    # Clean up previous deployments
+    rm -rf "${build_path}"
+    rm -rf "${deploy_path}"
+    mkdir -p "${build_path}"
+    mkdir -p "${deploy_path}"
 }
 
-# Check we are running from the correct location
-if [ ! -f "${ROOT_PATH}/${APP_NAME}.pro" ]; then
-    echo Please run this script from the ${APP_NAME} Qt project directory.
+
+build_app()
+{
+    # Build Jamulus
+    qmake "${project_path}" -o "${build_path}/Makefile" "CONFIG+=release" ${@:2}
+    local target_name="$(cat "${build_path}/Makefile" | sed -nE 's/^QMAKE_TARGET *= *(.*)$/\1/p')"
+    local job_count="$(sysctl -n hw.ncpu)"
+
+    make -f "${build_path}/Makefile" -C "${build_path}" -j "${job_count}"
+
+    # Add Qt deployment dependencies
+    macdeployqt "${build_path}/${target_name}.app" -verbose=2 -always-overwrite
+    mv "${build_path}/${target_name}.app" "${deploy_path}"
+
+    # Cleanup
+    make -f "${build_path}/Makefile" -C "${build_path}" distclean
+
+    # Return app name for installer image
+    eval "$1=${target_name}"
+}
+
+
+build_installer_image()
+{
+    # Install dmgbuild (for the current user), this is required to build the installer image
+    python -m ensurepip --user --default-pip
+    python -m pip install --user dmgbuild
+    local dmgbuild_bin="$(python -c 'import site; print(site.USER_BASE)')/bin/dmgbuild"
+
+    # Get Jamulus version
+    local app_version="$(cat "${project_path}" | sed -nE 's/^VERSION *= *(.*)$/\1/p')"
+
+    # Build installer image
+    "${dmgbuild_bin}" -s "${macdeploy_path}/deployment_settings.py" -D background="${resources_path}/installerbackground.png" \
+        -D app_path="${deploy_path}/$1.app" -D server_path="${deploy_path}/$2.app" \
+        -D license="${root_path}/COPYING" "$1 Installer" "${deploy_path}/$1-${app_version}-installer-mac.dmg"
+}
+
+
+# Check that we are running from the correct location
+if [ ! -f "${project_path}" ];
+then
+    echo Please run this script from the Qt project directory where "$(basename ${project_path})" is located.
     echo Usage: mac/$(basename $0)
     exit 1
 fi
 
-# Install dmgbuild (for the current user), this is required to build the installer image
-python -m ensurepip --user --default-pip
-python -m pip install --user dmgbuild
-DMGBUILD_BIN="$(python -c 'import site; print(site.USER_BASE)')/bin/dmgbuild"
 
-# Get Jamulus version
-APP_VERSION=$(cat "${ROOT_PATH}/${APP_NAME}.pro" | sed -nE 's/^VERSION *= *(.*)$/\1/p')
+# Cleanup previous deployments
+cleanup
 
-# Clean up previous deployments
-rm -rf "${BUILD_PATH}"
-rm -rf "${DEPLOY_PATH}"
-mkdir -p "${BUILD_PATH}"
-mkdir -p "${DEPLOY_PATH}"
+# Build Jamulus client and server
+build_app client_app
+build_app server_app "CONFIG+=server_bundle"
 
-# Build Jamulus client
-build_app "${APP_NAME}"
-
-# Build Jamulus server
-build_app "${SERVER_NAME}" "DEFINES+=SERVER_BUNDLE"
-
-# Build installer image
-"${DMGBUILD_BIN}" -s "${MAC_PATH}/deployment_settings.py" -D background="${RES_PATH}/installerbackground.png" \
-    -D app_path="${DEPLOY_PATH}/${APP_NAME}.app" -D server_path="${DEPLOY_PATH}/${SERVER_NAME}.app" \
-    -D license="${ROOT_PATH}/COPYING" "${INSTALLER_NAME}" "${DEPLOY_PATH}/${INSTALLER_NAME}-${APP_VERSION}-mac.dmg"
+# Create versioned installer image
+build_installer_image "${client_app}" "${server_app}"

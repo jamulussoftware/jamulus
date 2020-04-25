@@ -244,6 +244,9 @@ public:
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Channel.SetRemoteChanGain ( iId, dGain ); }
 
+	void SetRemoteChanPan ( const int iId, const double dPan )
+		{ Channel.SetRemoteChanPan ( iId, dPan ); }
+
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 
     void CreateChatTextMes ( const QString& strChatText )

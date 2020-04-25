@@ -287,6 +287,7 @@ protected:
 
     void ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                        const CVector<double>&            vecdGains,
+                       const CVector<double>&            vecdPannings,
                        const CVector<int>&               vecNumAudioChannels,
                        CVector<int16_t>&                 vecsOutData,
                        const int                         iCurNumAudChan,
@@ -328,6 +329,7 @@ protected:
     CVector<int>               vecChanIDsCurConChan;
 
     CVector<CVector<double> >  vecvecdGains;
+    CVector<CVector<double> >  vecvecdPannings;
     CVector<CVector<int16_t> > vecvecsData;
     CVector<int>               vecNumAudioChannels;
     CVector<int>               vecNumFrameSizeConvBlocks;

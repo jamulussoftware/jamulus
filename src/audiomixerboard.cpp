@@ -40,6 +40,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     plbrChannelLevel            = new CMultiColorLEDBar ( pLevelsBox );
     pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
 
+    pPan						= new QSlider			(Qt::Horizontal, pLevelsBox);
+
     pMuteSoloBox                = new QWidget           ( pFrame );
     pcbMute                     = new QCheckBox         ( "Mute",       pMuteSoloBox );
     pcbSolo                     = new QCheckBox         ( "Solo",       pMuteSoloBox );
@@ -63,6 +65,11 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setTickPosition ( QSlider::TicksBothSides );
     pFader->setRange        ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
+
+    // setup panning slider
+    pPan->setRange( 0, AUD_MIX_FADER_MAX);
+    pPan->setValue(AUD_MIX_FADER_MAX/2);
+
 
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat    ( Qt::PlainText );
@@ -96,6 +103,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pMuteSoloGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
     pMuteSoloGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
 
+    //TODO: Pan row: "L" slider "R"
+    pMainGrid->addWidget ( pPan,         0,  Qt::AlignCenter );
     pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pMuteSoloBox, 0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pLabelInstBox );
@@ -118,6 +127,10 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
         "an audio fader at each client, adjusting the local mix." ) );
     pFader->setAccessibleName ( tr ( "Local mix level setting of the current audio "
         "channel at the server" ) );
+
+    pPan->setWhatsThis ( tr ( "<b>Panning:</b> Sets the panning position from Left to Right of the channel. "
+                              " Works only in stero or preferably mono in/stereo out mode." ) );
+    pPan->setAccessibleName ( tr ( "Local panning position of the current audio channel at the server" ) );
 
     pcbMute->setWhatsThis ( tr ( "<b>Mute:</b> With the Mute checkbox, the "
         "audio channel can be muted." ) );
@@ -144,6 +157,9 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     // Connections -------------------------------------------------------------
     QObject::connect ( pFader, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnLevelValueChanged ( int ) ) );
+
+    QObject::connect ( pPan, SIGNAL ( valueChanged ( int ) ),
+		this, SLOT ( OnPanValueChanged ( int ) ) );
 
     QObject::connect ( pcbMute, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnMuteStateChanged ( int ) ) );
@@ -243,8 +259,9 @@ void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
 
 void CChannelFader::Reset()
 {
-    // init gain value -> maximum value as definition according to server
+    // init gain and pan value -> maximum value as definition according to server
     pFader->setValue ( AUD_MIX_FADER_MAX );
+    pPan->setValue ( AUD_MIX_FADER_MAX/2 );
 
     // reset mute/solo check boxes and level meter
     pcbMute->setChecked ( false );
@@ -281,6 +298,18 @@ void CChannelFader::SetFaderLevel ( const int iLevel )
         // server about the change
         pFader->setValue       ( iLevel );
         SendFaderLevelToServer ( iLevel );
+	}
+}
+
+void CChannelFader::SetPanValue(const int iPan)
+{
+    // first make a range check
+    if ( ( iPan >= 0 ) && ( iPan <= AUD_MIX_FADER_MAX ) )
+    {
+        // we set the new fader level in the GUI (slider control) and also tell the
+        // server about the change
+        pPan->setValue       ( iPan );
+        SendPanValueToServer(  iPan );
     }
 }
 
@@ -307,6 +336,20 @@ void CChannelFader::SendFaderLevelToServer ( const int iLevel )
         // emit signal for new fader gain value
         emit gainValueChanged ( CalcFaderGain ( iLevel ) );
     }
+}
+
+void CChannelFader::SendPanValueToServer ( const int iPan )
+{
+
+    // if mute flag is set or other channel is on solo, do not apply the pan
+    if ( ( pcbMute->checkState() == Qt::Unchecked ) &&
+         ( !bOtherChannelIsSolo || IsSolo() ) )
+    {
+        // emit signal for new pan value
+        double dPan =  static_cast<double> ( iPan ) / AUD_MIX_FADER_MAX;
+        emit panValueChanged ( dPan );
+    }
+
 }
 
 void CChannelFader::OnMuteStateChanged ( int value )
@@ -562,6 +605,13 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
 
 
     // Connections -------------------------------------------------------------
+
+    for (int i=0; i< static_cast<int>( vecpChanFader.size() ); i++) {
+        QObject::connect ( vecpChanFader[i],  SIGNAL ( panValueChanged ( double ) ),
+                           this, SLOT ( OnPanValueChanged ( double ) ) );
+    }
+
+
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     connectFaderSignalsToMixerBoardSlots<MAX_NUM_CHANNELS>();
 
@@ -906,6 +956,20 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
                                          const double dValue )
 {
     emit ChangeChanGain ( iChannelIdx, dValue );
+}
+
+void CAudioMixerBoard::OnPanValueChanged ( const double dValue )
+{
+
+    // get channel index from sender according t, this SHOULD coincide with the chanID.
+    CChannelFader * channelFader = qobject_cast<CChannelFader * >(sender());
+    if (!channelFader) {
+        return;
+    }
+    // a clumsy way to find the index. Why not to use QList or QVector<ChannelFader * >  and indexOf?
+    CVector<CChannelFader *>::iterator it = std::find(vecpChanFader.begin(), vecpChanFader.end(), channelFader);
+    int iChannelIdx = static_cast<int>( std::distance(vecpChanFader.begin(), it) );  //static_cast<int>(it);
+    emit ChangeChanPan ( iChannelIdx, dValue );
 }
 
 void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )

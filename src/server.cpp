@@ -339,6 +339,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init          ( iMaxNumChannels );
     vecvecdGains.Init                  ( iMaxNumChannels );
+	vecvecdPannings.Init			   ( iMaxNumChannels );
     vecvecsData.Init                   ( iMaxNumChannels );
     vecNumAudioChannels.Init           ( iMaxNumChannels );
     vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
@@ -349,6 +350,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     {
         // init vectors storing information of all channels
         vecvecdGains[i].Init ( iMaxNumChannels );
+		vecvecdPannings[i].Init ( iMaxNumChannels );
 
         // we always use stereo audio buffers (see "vecsSendData")
         vecvecsData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
@@ -1047,9 +1049,11 @@ JitterMeas.Measure();
                 // "vecChanIDsCurConChan" to query the IDs of the currently
                 // connected channels
                 vecvecdGains[i][j] = vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] );
-
                 // consider audio fade-in
                 vecvecdGains[i][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
+
+                //panning
+                vecvecdPannings[i][j] = vecChannels[iCurChanID].GetPan( vecChanIDsCurConChan[j] ); //((double)rand() / (double)(RAND_MAX)); //vecChannels[iCurChanID].GetGain ( vecChanIDsCurConChan[j] ); //TODO: GetPanning
             }
 
             // If the server frame size is smaller than the received OPUS frame size, we need a conversion
@@ -1177,6 +1181,7 @@ JitterMeas.Measure();
             // actual processing of audio data -> mix
             ProcessData ( vecvecsData,
                           vecvecdGains[i],
+                          vecvecdPannings[i],
                           vecNumAudioChannels,
                           vecsSendData,
                           iCurNumAudChan,
@@ -1275,12 +1280,13 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
 }
 
 /// @brief Mix all audio data from all clients together.
-void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
-                            const CVector<double>&            vecdGains,
-                            const CVector<int>&               vecNumAudioChannels,
-                            CVector<int16_t>&                 vecsOutData,
-                            const int                         iCurNumAudChan,
-                            const int                         iNumClients )
+void CServer::ProcessData (const CVector<CVector<int16_t> >& vecvecsData,
+							const CVector<double>&            vecdGains,
+							const CVector<double>&			  vecdPannings,
+							const CVector<int>&               vecNumAudioChannels,
+							CVector<int16_t>&                 vecsOutData,
+							const int                         iCurNumAudChan,
+							const int                         iNumClients )
 {
     int i, j, k;
 
@@ -1352,6 +1358,10 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
             // get a reference to the audio data and gain of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
             const double            dGain    = vecdGains[j];
+            const double			dPan = vecdPannings[j];
+            const double			dPanCoefL = sqrt(1-dPan); // faster: (1-dPan)
+            const double			dPanCoefR = sqrt(dPan); // (dPan)
+            // see http://write.flossmanuals.net/csound/b-panning-and-spatialization/ for better formula, if needed
 
             // if channel gain is 1, avoid multiplication for speed optimization
             if ( dGain == static_cast<double> ( 1.0 ) )
@@ -1363,11 +1373,11 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     {
                         // left channel
                         vecsOutData[k] = Double2Short (
-                            static_cast<double> ( vecsOutData[k] ) + vecsData[i] );
+                                    static_cast<double> ( vecsOutData[k] ) + vecsData[i] * dPanCoefL);
 
                         // right channel
                         vecsOutData[k + 1] = Double2Short (
-                            static_cast<double> ( vecsOutData[k + 1] ) + vecsData[i] );
+                                    static_cast<double> ( vecsOutData[k + 1] ) + vecsData[i] * dPanCoefR);
                     }
                 }
                 else
@@ -1375,8 +1385,9 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
+                        double pan = (i%2==0) ? dPanCoefL : dPanCoefR;
                         vecsOutData[i] = Double2Short (
-                            static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
+                                    static_cast<double> ( vecsOutData[i] ) + vecsData[i] * pan );
                     }
                 }
             }
@@ -1389,11 +1400,11 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     {
                         // left channel
                         vecsOutData[k] = Double2Short (
-                            vecsOutData[k] + vecsData[i] * dGain );
+                                    vecsOutData[k] + vecsData[i] * dGain * dPanCoefL);
 
                         // right channel
                         vecsOutData[k + 1] = Double2Short (
-                            vecsOutData[k + 1] + vecsData[i] * dGain );
+                                    vecsOutData[k + 1] + vecsData[i] * dGain * dPanCoefR);
                     }
                 }
                 else
@@ -1401,8 +1412,10 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
+                        double pan = (i%2==0) ? dPanCoefL : dPanCoefR;
                         vecsOutData[i] = Double2Short (
-                            vecsOutData[i] + vecsData[i] * dGain );
+                                    vecsOutData[i] + vecsData[i] * dGain * pan );
+
                     }
                 }
             }

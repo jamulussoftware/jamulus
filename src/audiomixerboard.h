@@ -61,9 +61,11 @@ public:
 
     void UpdateSoloState ( const bool bNewOtherSoloState );
     void SetFaderLevel ( const int iLevel );
+    void SetPanValue ( const int iPan );
     void SetFaderIsSolo ( const bool bIsSolo );
     void SetFaderIsMute ( const bool bIsMute );
     int  GetFaderLevel() { return pFader->value(); }
+    int  GetPanValue() {return pPan->value(); }
     void Reset();
     void SetChannelLevel ( const uint16_t iLevel );
 
@@ -71,6 +73,7 @@ protected:
     double CalcFaderGain ( const int value );
     void   SetMute ( const bool bState );
     void   SendFaderLevelToServer ( const int iLevel );
+    void   SendPanValueToServer ( const int iPan );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
 
     QFrame*            pFrame;
@@ -79,6 +82,7 @@ protected:
     QWidget*           pMuteSoloBox;
     CMultiColorLEDBar* plbrChannelLevel;
     QSlider*           pFader;
+    QSlider*		   pPan;
 
     QCheckBox*         pcbMute;
     QCheckBox*         pcbSolo;
@@ -94,10 +98,12 @@ protected:
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value ); }
+    void OnPanValueChanged ( int value )  {SendPanValueToServer ( value ); }
     void OnMuteStateChanged ( int value );
 
 signals:
     void gainValueChanged ( double value );
+    void panValueChanged  (double value  );
     void soloStateChanged ( int value );
 };
 
@@ -160,6 +166,9 @@ protected:
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
 
+    void OnGainValueChanged ( const int    iChannelIdx,
+                              const double dValue );
+
     CVector<CChannelFader*> vecpChanFader;
     QGroupBox*              pGroupBox;
     QHBoxLayout*            pMainLayout;
@@ -180,8 +189,10 @@ protected:
 
 #endif
 
-#if QT_VERSION < 0x50000  // MOC does not expand macros in Qt 4, so we cannot use QT_VERSION_CHECK(5, 0, 0)
 public slots:
+    void OnPanValueChanged ( const double dValue );
+
+#if QT_VERSION < 0x50000  // MOC does not expand macros in Qt 4, so we cannot use QT_VERSION_CHECK(5, 0, 0)
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     void OnGainValueChangedCh0  ( double dValue ) { UpdateGainValue ( 0,  dValue ); }
@@ -241,5 +252,6 @@ public slots:
 
 signals:
     void ChangeChanGain ( int iId, double dGain );
+    void ChangeChanPan ( int iId, double dPan );
     void NumClientsChanged ( int iNewNumClients );
 };

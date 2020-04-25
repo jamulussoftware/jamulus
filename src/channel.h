@@ -110,8 +110,14 @@ public:
     double GetGain ( const int iChanID );
     double GetFadeInGain() { return static_cast<double> ( iFadeInCnt ) / iFadeInCntMax; }
 
+    void SetPan ( const int iChanID, const double dNewPan );
+    double GetPan ( const int iChanID );
+
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Protocol.CreateChanGainMes ( iId, dGain ); }
+
+    void SetRemoteChanPan ( const int iId, const double dPan )
+    { Protocol.CreateChanPanMes ( iId, dPan ); }
 
     bool SetSockBufNumFrames ( const int  iNewNumFrames,
                                const bool bPreserve = false );
@@ -191,6 +197,8 @@ protected:
     // mixer and effect settings
     CVector<double>   vecdGains;
 
+    CVector<double>   vecdPannings;
+
     // network jitter-buffer
     CNetBufWithStats  SockBuf;
     int               iCurSockBufNumFrames;
@@ -228,6 +236,7 @@ public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnJittBufSizeChange ( int iNewJitBufSize );
     void OnChangeChanGain ( int iChanID, double dNewGain );
+    void OnChangeChanPan ( int iChanID, double dNewPan );
     void OnChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();

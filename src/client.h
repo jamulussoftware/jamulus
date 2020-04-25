@@ -64,11 +64,6 @@
 
 
 /* Definitions ****************************************************************/
-// audio in fader range
-#define AUD_FADER_IN_MIN                                    0
-#define AUD_FADER_IN_MAX                                    100
-#define AUD_FADER_IN_MIDDLE                                 ( AUD_FADER_IN_MAX / 2 )
-
 // audio reverberation range
 #define AUD_REVERB_MAX                                      100
 
@@ -138,9 +133,6 @@ public:
 
     void SetCentralServerAddressType ( const ECSAddType eNCSAT );
     ECSAddType GetCentralServerAddressType() { return eCentralServerAddressType; }
-
-    int  GetAudioInFader() const { return iAudioInFader; }
-    void SetAudioInFader ( const int iNV ) { iAudioInFader = iNV; }
 
     int  GetReverbLevel() const { return iReverbLevel; }
     void SetReverbLevel ( const int iNL ) { iReverbLevel = iNL; }
@@ -351,8 +343,6 @@ protected:
     CVector<double>         vecdGainsOutputLeft;
     CVector<double>         vecdGainsOutputRight;
 
-
-    int                     iAudioInFader;
     bool                    bReverbOnLeftChan;
     int                     iReverbLevel;
     CAudioReverb            AudioReverbL;

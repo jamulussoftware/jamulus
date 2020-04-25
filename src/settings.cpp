@@ -146,13 +146,6 @@ void CSettings::Load()
             pClient->ChannelInfo.eSkillLevel = static_cast<ESkillLevel> ( iValue );
         }
 
-        // audio fader
-        if ( GetNumericIniSet ( IniXMLDocument, "client", "audfad",
-             AUD_FADER_IN_MIN, AUD_FADER_IN_MAX, iValue ) )
-        {
-            pClient->SetAudioInFader ( iValue );
-        }
-
         // reverberation level
         if ( GetNumericIniSet ( IniXMLDocument, "client", "revlev",
              0, AUD_REVERB_MAX, iValue ) )
@@ -498,10 +491,6 @@ void CSettings::Save()
         // skill level
         SetNumericIniSet ( IniXMLDocument, "client", "skill",
             static_cast<int> ( pClient->ChannelInfo.eSkillLevel ) );
-
-        // audio fader
-        SetNumericIniSet ( IniXMLDocument, "client", "audfad",
-            pClient->GetAudioInFader() );
 
         // reverberation level
         SetNumericIniSet ( IniXMLDocument, "client", "revlev",

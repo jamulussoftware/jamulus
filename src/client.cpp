@@ -66,7 +66,6 @@ CClient::CClient ( const quint16  iPortNumber,
     vecdGainsInputRight              ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
     vecdGainsOutputLeft              ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
     vecdGainsOutputRight             ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
-    iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan                ( false ),
     iReverbLevel                     ( 0 ),
     iSndCrdPrefFrameSizeFactor       ( FRAME_SIZE_FACTOR_DEFAULT ),
@@ -1050,83 +1049,17 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
     }
 
-    // mix both signals depending on the fading setting, convert
-    // from double to short
-    if ( iAudioInFader == AUD_FADER_IN_MIDDLE )
+    // mix both signals together if in mono mode
+    if ( eAudioChannelConf != CC_STEREO )
     {
-        // no action require if fader is in the middle and stereo is used
-        if ( eAudioChannelConf != CC_STEREO )
+        // mix channels together (store result in first half of the vector)
+        for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
         {
-            // mix channels together (store result in first half of the vector)
-            for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-            {
-                // for the sum make sure we have more bits available (cast to
-                // int32), after the normalization by 2, the result will fit
-                // into the old size so that cast to int16 is safe
-                vecsStereoSndCrd[i] = static_cast<int16_t> (
-                    ( static_cast<int32_t> ( vecsStereoSndCrd[j] ) + vecsStereoSndCrd[j + 1] ) / 2 );
-            }
-        }
-    }
-    else
-    {
-        if ( eAudioChannelConf == CC_STEREO )
-        {
-            // stereo
-            const double dAttFactStereo = static_cast<double> (
-                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) / AUD_FADER_IN_MIDDLE;
-
-            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
-            {
-                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-                {
-                    // attenuation on right channel
-                    vecsStereoSndCrd[j + 1] = Double2Short ( dAttFactStereo * vecsStereoSndCrd[j + 1] );
-                }
-            }
-            else
-            {
-                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-                {
-                    // attenuation on left channel
-                    vecsStereoSndCrd[j] = Double2Short ( dAttFactStereo * vecsStereoSndCrd[j] );
-                }
-            }
-        }
-        else
-        {
-            // mono and mono-in/stereo out mode
-            // make sure that in the middle position the two channels are
-            // amplified by 1/2, if the pan is set to one channel, this
-            // channel should have an amplification of 1
-            const double dAttFactMono = static_cast<double> (
-                AUD_FADER_IN_MIDDLE - abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) / AUD_FADER_IN_MIDDLE / 2;
-
-            const double dAmplFactMono = 0.5 + static_cast<double> (
-                abs ( AUD_FADER_IN_MIDDLE - iAudioInFader ) ) / AUD_FADER_IN_MIDDLE / 2;
-
-            if ( iAudioInFader > AUD_FADER_IN_MIDDLE )
-            {
-                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-                {
-                    // attenuation on right channel (store result in first half
-                    // of the vector)
-                    vecsStereoSndCrd[i] = Double2Short (
-                        dAmplFactMono * vecsStereoSndCrd[j] +
-                        dAttFactMono * vecsStereoSndCrd[j + 1] );
-                }
-            }
-            else
-            {
-                for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
-                {
-                    // attenuation on left channel (store result in first half
-                    // of the vector)
-                    vecsStereoSndCrd[i] = Double2Short (
-                        dAmplFactMono * vecsStereoSndCrd[j + 1] +
-                        dAttFactMono * vecsStereoSndCrd[j] );
-                }
-            }
+            // for the sum make sure we have more bits available (cast to
+            // int32), after the normalization by 2, the result will fit
+            // into the old size so that cast to int16 is safe
+            vecsStereoSndCrd[i] = static_cast<int16_t> (
+                ( static_cast<int32_t> ( vecsStereoSndCrd[j] ) + vecsStereoSndCrd[j + 1] ) / 2 );
         }
     }
 

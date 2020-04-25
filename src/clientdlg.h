@@ -86,7 +86,6 @@ protected:
     void               ShowGeneralSettings();
     void               ShowChatWindow ( const bool bForceRaise = true );
     void               ShowAnalyzerConsole();
-    void               UpdateAudioFaderSlider();
     void               UpdateRevSelection();
     void               Connect ( const QString& strSelectedAddress,
                                  const QString& strMixerBoardLabel );
@@ -152,16 +151,15 @@ public slots:
     void OnChatStateChanged ( int value );
     void OnLocalMuteStateChanged ( int value );
 
-    void OnAudioPanValueChanged ( int value );
+    void OnMixerServerClicked()      { MixerBoard->setCurrentIndex ( 0 ); }
+    void OnMixerInputLeftClicked()   { MixerBoard->setCurrentIndex ( 1 ); }
+    void OnMixerInputRightClicked()  { MixerBoard->setCurrentIndex ( 2 ); }
+    void OnMixerOutputLeftClicked()  { MixerBoard->setCurrentIndex ( 3 ); }
+    void OnMixerOutputRightClicked() { MixerBoard->setCurrentIndex ( 4 ); }
 
-    void OnAudioReverbValueChanged ( int value )
-        { pClient->SetReverbLevel ( value ); }
-
-    void OnReverbSelLClicked()
-        { pClient->SetReverbOnLeftChan ( true ); }
-
-    void OnReverbSelRClicked()
-        { pClient->SetReverbOnLeftChan ( false ); }
+    void OnAudioReverbValueChanged ( int value ) { pClient->SetReverbLevel ( value ); }
+    void OnReverbSelLClicked() { pClient->SetReverbOnLeftChan ( true ); }
+    void OnReverbSelRClicked() { pClient->SetReverbOnLeftChan ( false ); }
 
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnChatTextReceived ( QString strChatText );

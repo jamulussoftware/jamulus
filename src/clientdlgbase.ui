@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>345</width>
-    <height>363</height>
+    <width>534</width>
+    <height>364</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -368,99 +368,68 @@
        <layout class="QVBoxLayout">
         <item>
          <layout class="QVBoxLayout">
-          <property name="spacing">
-           <number>3</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="lblAudioPan">
-            <property name="text">
-             <string>Pan</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="lblAudioPanValue">
-            <property name="minimumSize">
-             <size>
-              <width>50</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Center</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-            <property name="wordWrap">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <layout class="QHBoxLayout">
-            <item>
-             <spacer>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QSlider" name="sldAudioPan">
-              <property name="styleSheet">
-               <string/>
-              </property>
-              <property name="pageStep">
-               <number>1</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-              <property name="tickPosition">
-               <enum>QSlider::TicksBothSides</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeType">
-               <enum>QSizePolicy::Minimum</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout">
           <item>
            <layout class="QVBoxLayout">
             <property name="spacing">
              <number>3</number>
             </property>
+            <item>
+             <widget class="QRadioButton" name="rbtMixerServer">
+              <property name="text">
+               <string>Server</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rbtMixerInputLeft">
+              <property name="text">
+               <string>In L</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rbtMixerInputRight">
+              <property name="text">
+               <string>In R</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rbtMixerOutputLeft">
+              <property name="text">
+               <string>Out L</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="rbtMixerOutputRight">
+              <property name="text">
+               <string>Out R</string>
+              </property>
+              <attribute name="buttonGroup">
+               <string notr="true">buttonGroup</string>
+              </attribute>
+             </widget>
+            </item>
+            <item>
+             <widget class="Line" name="line">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+             </widget>
+            </item>
             <item>
              <widget class="QLabel" name="lblAudioReverb">
               <property name="text">
@@ -548,14 +517,14 @@
        </layout>
       </item>
       <item>
-       <widget class="QStackedWidget" name="MixerBoardPages">
+       <widget class="QStackedWidget" name="MixerBoard">
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>3</number>
         </property>
-        <widget class="QWidget" name="ServerMixer">
+        <widget class="QWidget" name="MainMixerBoardPage">
          <layout class="QHBoxLayout" name="horizontalLayoutMainMixer">
           <property name="spacing">
            <number>0</number>
@@ -584,7 +553,122 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="InputLeftMixer"/>
+        <widget class="QWidget" name="MixerBoardInputLeftPage">
+         <layout class="QHBoxLayout" name="horizontalLayoutMixerInputLeft">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="CAudioMixerBoard" name="MixerBoardInputLeft" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="MixerBoardInputRightPage">
+         <layout class="QHBoxLayout" name="horizontalLayoutMixerInputRight">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="CAudioMixerBoard" name="MixerBoardInputRight" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="MixerBoardOutputLeftPage">
+         <layout class="QHBoxLayout" name="horizontalLayoutMixerOutputLeft">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="CAudioMixerBoard" name="MixerBoardOutputLeft" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="MixerBoardOutputRightPage">
+         <layout class="QHBoxLayout" name="horizontalLayoutMixerOutputRight">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="CAudioMixerBoard" name="MixerBoardOutputRight" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -615,7 +699,6 @@
   <tabstop>chbSettings</tabstop>
   <tabstop>chbChat</tabstop>
   <tabstop>chbLocalMute</tabstop>
-  <tabstop>sldAudioPan</tabstop>
   <tabstop>sldAudioReverb</tabstop>
   <tabstop>rbtReverbSelL</tabstop>
   <tabstop>rbtReverbSelR</tabstop>
@@ -624,4 +707,7 @@
   <include location="resources.qrc"/>
  </resources>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>

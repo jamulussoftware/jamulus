@@ -52,27 +52,16 @@ public:
              const bool bNoAutoJackConnect );
     virtual ~CSound() { UnloadCurrentDriver(); }
 
-    virtual int  Init ( const int iNewPrefMonoBufferSize );
+    virtual void Init ( const int iNewPrefMonoBufferSize,
+                        int&      iSndCrdBufferSizeMono,
+                        int&      iSndCrdNumInputChannels,
+                        int&      iSndCrdNumOutputChannels );
     virtual void Start();
     virtual void Stop();
 
-    virtual void OpenDriverSetup() { ASIOControlPanel(); }
-
-    // channel selection
-    virtual int     GetNumInputChannels() { return static_cast<int> ( lNumInChanPlusAddChan ); }
+    virtual void    OpenDriverSetup() { ASIOControlPanel(); }
     virtual QString GetInputChannelName ( const int iDiD ) { return channelInputName[iDiD]; }
-    virtual void    SetLeftInputChannel  ( const int iNewChan );
-    virtual void    SetRightInputChannel ( const int iNewChan );
-    virtual int     GetLeftInputChannel()  { return vSelectedInputChannels[0]; }
-    virtual int     GetRightInputChannel() { return vSelectedInputChannels[1]; }
-
-    virtual int     GetNumOutputChannels() { return static_cast<int> ( lNumOutChan ); }
     virtual QString GetOutputChannelName ( const int iDiD ) { return channelInfosOutput[iDiD].name; }
-    virtual void    SetLeftOutputChannel  ( const int iNewChan );
-    virtual void    SetRightOutputChannel ( const int iNewChan );
-    virtual int     GetLeftOutputChannel()  { return vSelectedOutputChannels[0]; }
-    virtual int     GetRightOutputChannel() { return vSelectedOutputChannels[1]; }
-
     virtual double  GetInOutLatencyMs() { return dInOutLatencyMs; }
 
 protected:
@@ -83,42 +72,12 @@ protected:
     QString          CheckDeviceCapabilities();
     bool             CheckSampleTypeSupported ( const ASIOSampleType SamType );
     bool             CheckSampleTypeSupportedForCHMixing ( const ASIOSampleType SamType );
-    void             ResetChannelMapping();
-
-    static void GetSelCHAndAddCH ( const int iSelCH,    const int iNumInChan,
-                                   int&      iSelCHOut, int&      iSelAddCHOut )
-    {
-        // we have a mixed channel setup
-        // definitions:
-        // - mixed channel setup only for 4 physical inputs:
-        //   SelCH == 4: Ch 0 + Ch 2
-        //   SelCh == 5: Ch 0 + Ch 3
-        //   SelCh == 6: Ch 1 + Ch 2
-        //   SelCh == 7: Ch 1 + Ch 3
-        if ( iSelCH >= iNumInChan )
-        {
-            iSelAddCHOut = ( ( iSelCH - iNumInChan ) % 2 ) + 2;
-            iSelCHOut    = ( iSelCH - iNumInChan ) / 2;
-        }
-        else
-        {
-            iSelAddCHOut = -1;
-            iSelCHOut    = iSelCH;
-        }
-    }
 
     int              iASIOBufferSizeMono;
-    int              iASIOBufferSizeStereo;
-
     long             lNumInChan;
-    long             lNumInChanPlusAddChan; // includes additional "added" channels
     long             lNumOutChan;
     double           dInOutLatencyMs;
-    CVector<int>     vSelectedInputChannels;
-    CVector<int>     vSelectedOutputChannels;
-
     CVector<int16_t> vecsMultChanAudioSndCrd;
-
     QMutex           ASIOMutex;
 
     // utility functions

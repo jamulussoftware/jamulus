@@ -32,12 +32,12 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          void*          pParg,
                          const int      iNewCtrlMIDIChannel,
                          const bool     bNewNoAutoJackConnect ) :
-    fpProcessCallback ( fpNewProcessCallback ),
-    pProcessCallbackArg ( pParg ), bRun ( false ),
-    bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ),
+    fpProcessCallback            ( fpNewProcessCallback ),
+    pProcessCallbackArg          ( pParg ), bRun ( false ),
+    bIsCallbackAudioInterface    ( bNewIsCallbackAudioInterface ),
     strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
-    iCtrlMIDIChannel ( iNewCtrlMIDIChannel ),
-    bNoAutoJackConnect ( bNewNoAutoJackConnect )
+    iCtrlMIDIChannel             ( iNewCtrlMIDIChannel ),
+    bNoAutoJackConnect           ( bNewNoAutoJackConnect )
 {
     // initializations for the sound card names (default)
     lNumDevs          = 1;
@@ -47,7 +47,10 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
     lCurDev = 0; // default device
 }
 
-int CSoundBase::Init ( const int iNewPrefMonoBufferSize )
+void CSoundBase::Init ( const int iNewPrefMonoBufferSize,
+                        int&      iSndCrdBufferSizeMono,
+                        int&      iSndCrdNumInputChannels,
+                        int&      iSndCrdNumOutputChannels )
 {
     // init audio sound card buffer
     if ( !bIsCallbackAudioInterface )
@@ -55,7 +58,9 @@ int CSoundBase::Init ( const int iNewPrefMonoBufferSize )
         vecsAudioSndCrdStereo.Init ( 2 * iNewPrefMonoBufferSize /* stereo */ );
     }
 
-    return iNewPrefMonoBufferSize;
+    iSndCrdBufferSizeMono    = iNewPrefMonoBufferSize;
+    iSndCrdNumInputChannels  = 2;
+    iSndCrdNumOutputChannels = 2;
 }
 
 void CSoundBase::Start()

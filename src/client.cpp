@@ -60,6 +60,12 @@ CClient::CClient ( const quint16  iPortNumber,
     bMuteOutStream                   ( false ),
     Socket                           ( &Channel, iPortNumber ),
     Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect ),
+    iSndCrdNumInputChannels          ( 0 ),
+    iSndCrdNumOutputChannels         ( 0 ),
+    vecdGainsInputLeft               ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
+    vecdGainsInputRight              ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
+    vecdGainsOutputLeft              ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
+    vecdGainsOutputRight             ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan                ( false ),
     iReverbLevel                     ( 0 ),
@@ -117,6 +123,12 @@ CClient::CClient ( const quint16  iPortNumber,
     // set encoder low complexity for legacy 128 samples frame size
     opus_custom_encoder_ctl ( OpusEncoderMono,   OPUS_SET_COMPLEXITY ( 1 ) );
     opus_custom_encoder_ctl ( OpusEncoderStereo, OPUS_SET_COMPLEXITY ( 1 ) );
+
+    // set the sound card input/output mixing defaults
+    vecdGainsInputLeft[0]   = 1;
+    vecdGainsInputRight[1]  = 1;
+    vecdGainsOutputLeft[0]  = 1;
+    vecdGainsOutputRight[1] = 1;
 
 
     // Connections -------------------------------------------------------------
@@ -524,82 +536,98 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
 
 void CClient::SetSndCrdLeftInputChannel ( const int iNewChan )
 {
-    // if client was running then first
-    // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
+// TEST right now we only support switches
+if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumInputChannels ) )
+{
+    vecdGainsInputLeft.Reset ( 0 );
+    vecdGainsInputLeft[iNewChan] = 1;
+}
+}
 
-    Sound.SetLeftInputChannel ( iNewChan );
-    Init();
-
-    if ( bWasRunning )
+int CClient::GetSndCrdLeftInputChannel()
+{
+// TEST right now we only support switches
+int iOutCh = 0;
+for ( int i = 0; i < iSndCrdNumInputChannels; i++ )
+{
+    if ( vecdGainsInputLeft[i] > 0 )
     {
-        // restart client
-        Sound.Start();
+        iOutCh = i;
     }
+}
+return iOutCh;
 }
 
 void CClient::SetSndCrdRightInputChannel ( const int iNewChan )
 {
-    // if client was running then first
-    // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
+// TEST right now we only support switches
+if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumInputChannels ) )
+{
+    vecdGainsInputRight.Reset ( 0 );
+    vecdGainsInputRight[iNewChan] = 1;
+}
+}
 
-    Sound.SetRightInputChannel ( iNewChan );
-    Init();
-
-    if ( bWasRunning )
+int CClient::GetSndCrdRightInputChannel()
+{
+// TEST right now we only support switches
+int iOutCh = 0;
+for ( int i = 0; i < iSndCrdNumInputChannels; i++ )
+{
+    if ( vecdGainsInputRight[i] > 0 )
     {
-        // restart client
-        Sound.Start();
+        iOutCh = i;
     }
+}
+return iOutCh;
 }
 
 void CClient::SetSndCrdLeftOutputChannel ( const int iNewChan )
 {
-    // if client was running then first
-    // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
+// TEST right now we only support switches
+if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumOutputChannels ) )
+{
+    vecdGainsOutputLeft.Reset ( 0 );
+    vecdGainsOutputLeft[iNewChan] = 1;
+}
+}
 
-    Sound.SetLeftOutputChannel ( iNewChan );
-    Init();
-
-    if ( bWasRunning )
+int CClient::GetSndCrdLeftOutputChannel()
+{
+// TEST right now we only support switches
+int iOutCh = 0;
+for ( int i = 0; i < iSndCrdNumOutputChannels; i++ )
+{
+    if ( vecdGainsOutputLeft[i] > 0 )
     {
-        // restart client
-        Sound.Start();
+        iOutCh = i;
     }
+}
+return iOutCh;
 }
 
 void CClient::SetSndCrdRightOutputChannel ( const int iNewChan )
 {
-    // if client was running then first
-    // stop it and restart again after new initialization
-    const bool bWasRunning = Sound.IsRunning();
-    if ( bWasRunning )
-    {
-        Sound.Stop();
-    }
+// TEST right now we only support switches
+if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumOutputChannels ) )
+{
+    vecdGainsOutputRight.Reset ( 0 );
+    vecdGainsOutputRight[iNewChan] = 1;
+}
+}
 
-    Sound.SetRightOutputChannel ( iNewChan );
-    Init();
-
-    if ( bWasRunning )
+int CClient::GetSndCrdRightOutputChannel()
+{
+// TEST right now we only support switches
+int iOutCh = 0;
+for ( int i = 0; i < iSndCrdNumOutputChannels; i++ )
+{
+    if ( vecdGainsOutputRight[i] > 0 )
     {
-        // restart client
-        Sound.Start();
+        iOutCh = i;
     }
+}
+return iOutCh;
 }
 
 void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
@@ -699,15 +727,20 @@ void CClient::Init()
     const int iFraSizeDefault   = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_DEFAULT;
     const int iFraSizeSafe      = SYSTEM_FRAME_SIZE_SAMPLES * FRAME_SIZE_FACTOR_SAFE;
 
-    bFraSiFactPrefSupported = ( Sound.Init ( iFraSizePreffered ) == iFraSizePreffered );
-    bFraSiFactDefSupported  = ( Sound.Init ( iFraSizeDefault )   == iFraSizeDefault );
-    bFraSiFactSafeSupported = ( Sound.Init ( iFraSizeSafe )      == iFraSizeSafe );
+    Sound.Init ( iFraSizePreffered, iMonoBlockSizeSam, iSndCrdNumInputChannels, iSndCrdNumOutputChannels );
+    bFraSiFactPrefSupported = ( iFraSizePreffered == iMonoBlockSizeSam );
+
+    Sound.Init ( iFraSizeDefault, iMonoBlockSizeSam, iSndCrdNumInputChannels, iSndCrdNumOutputChannels );
+    bFraSiFactDefSupported = ( iFraSizeDefault == iMonoBlockSizeSam );
+
+    Sound.Init ( iFraSizeSafe, iMonoBlockSizeSam, iSndCrdNumInputChannels, iSndCrdNumOutputChannels );
+    bFraSiFactSafeSupported = ( iFraSizeSafe == iMonoBlockSizeSam );
 
     // translate block size index in actual block size
     const int iPrefMonoFrameSize = iSndCrdPrefFrameSizeFactor * SYSTEM_FRAME_SIZE_SAMPLES;
 
     // get actual sound card buffer size using preferred size
-    iMonoBlockSizeSam = Sound.Init ( iPrefMonoFrameSize );
+    Sound.Init ( iPrefMonoFrameSize, iMonoBlockSizeSam, iSndCrdNumInputChannels, iSndCrdNumOutputChannels );
 
     // Calculate the current sound card frame size factor. In case
     // the current mono block size is not a multiple of the system
@@ -832,9 +865,10 @@ void CClient::Init()
     // calculate stereo (two channels) buffer size
     iStereoBlockSizeSam = 2 * iMonoBlockSizeSam;
 
-    vecCeltData.Init ( iCeltNumCodedBytes );
-    vecZeros.Init ( iStereoBlockSizeSam, 0 );
-    vecsStereoSndCrdTMP.Init ( iStereoBlockSizeSam );
+    // init required vectors (memory allocation and initialization)
+    vecCeltData.Init                ( iCeltNumCodedBytes );
+    vecZeros.Init                   ( iStereoBlockSizeSam, 0 );
+    vecsStereoSndCrdTMP.Init        ( iStereoBlockSizeSam );
     vecsStereoSndCrdMuteStream.Init ( iStereoBlockSizeSam );
 
     opus_custom_encoder_ctl ( CurOpusEncoder,
@@ -894,22 +928,27 @@ JitterMeas.Measure();
 
 void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsMultChanAudioSndCrd )
 {
-
-// TODO output mapping from stereo to multi channel: We want to change all the different sound interfaces that they
-// do not select the input and output channels but we do it here at the client. This has the advantage that, e.g.,
-// the special add modes supported for Windows (i.e. if 4 input channels available, you can mix channel 1+3 or 1+4)
-// can then be used for Mac as well without the need of changing anything in the actual Mac sound interface.
-// Since a multichannel signal arrives and must be converted to a stereo signal, we need an additional buffer: vecsStereoSndCrdTMP.
-// TEST input channel selection/mixing
-//const int iNumInCh = 2;
-//for ( int i = 0; i < iNumInCh; i++ )
-//{
-//    for ( int j = 0; j < iMonoBlockSizeSam; j++ )
-//    {
-//        vecsStereoSndCrdTMP[2 * j + i] = vecsMultChanAudioSndCrd[iNumInCh * j + i];
-//    }
-//}
-vecsStereoSndCrdTMP = vecsMultChanAudioSndCrd; // TEST just copy the stereo data for now
+    // sound card audio input channel mixing
+    vecsStereoSndCrdTMP.Reset ( 0 ); // start with all zeros since we add the audio data
+    for ( int i = 0; i < iSndCrdNumInputChannels; i++ )
+    {
+        if ( vecdGainsInputLeft[i] > 0 )
+        {
+            for ( int j = 0; j < iMonoBlockSizeSam; j++ )
+            {
+                vecsStereoSndCrdTMP[2 * j] = Double2Short (
+                    vecsStereoSndCrdTMP[2 * j] + vecdGainsInputLeft[i] * vecsMultChanAudioSndCrd[iSndCrdNumInputChannels * j + i] );
+            }
+        }
+        if ( vecdGainsInputRight[i] > 0 )
+        {
+            for ( int j = 0; j < iMonoBlockSizeSam; j++ )
+            {
+                vecsStereoSndCrdTMP[2 * j + 1] = Double2Short (
+                    vecsStereoSndCrdTMP[2 * j + 1] + vecdGainsInputRight[i] * vecsMultChanAudioSndCrd[iSndCrdNumInputChannels * j + i] );
+            }
+        }
+    }
 
     // check if a conversion buffer is required or not
     if ( bSndCrdConversionBufferRequired )
@@ -939,8 +978,27 @@ vecsStereoSndCrdTMP = vecsMultChanAudioSndCrd; // TEST just copy the stereo data
         ProcessAudioDataIntern ( vecsStereoSndCrdTMP );
     }
 
-// TODO output mapping from stereo to multi channel, see comment above for the input mapping
-vecsMultChanAudioSndCrd = vecsStereoSndCrdTMP; // TEST just copy the stereo data for now
+    // sound card audio output channel mixing
+    vecsMultChanAudioSndCrd.Reset ( 0 ); // start with all zeros since we add the audio data
+    for ( int i = 0; i < iSndCrdNumOutputChannels; i++ )
+    {
+        if ( vecdGainsOutputLeft[i] > 0 )
+        {
+            for ( int j = 0; j < iMonoBlockSizeSam; j++ )
+            {
+                vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * j + i] = Double2Short (
+                    vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * j + i] + vecdGainsOutputLeft[i] * vecsStereoSndCrdTMP[2 * j] );
+            }
+        }
+        if ( vecdGainsOutputRight[i] > 0 )
+        {
+            for ( int j = 0; j < iMonoBlockSizeSam; j++ )
+            {
+                vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * j + i] = Double2Short (
+                    vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * j + i] + vecdGainsOutputRight[i] * vecsStereoSndCrdTMP[2 * j + 1] );
+            }
+        }
+    }
 }
 
 void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )

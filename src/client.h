@@ -187,19 +187,19 @@ public:
     void    OpenSndCrdDriverSetup() { Sound.OpenDriverSetup(); }
 
     // sound card channel selection
-    int     GetSndCrdNumInputChannels() { return Sound.GetNumInputChannels(); }
+    int     GetSndCrdNumInputChannels() { return iSndCrdNumInputChannels; }
     QString GetSndCrdInputChannelName ( const int iDiD ) { return Sound.GetInputChannelName ( iDiD ); }
     void    SetSndCrdLeftInputChannel  ( const int iNewChan );
     void    SetSndCrdRightInputChannel ( const int iNewChan );
-    int     GetSndCrdLeftInputChannel()  { return Sound.GetLeftInputChannel(); }
-    int     GetSndCrdRightInputChannel() { return Sound.GetRightInputChannel(); }
+    int     GetSndCrdLeftInputChannel();
+    int     GetSndCrdRightInputChannel();
 
-    int     GetSndCrdNumOutputChannels() { return Sound.GetNumOutputChannels(); }
+    int     GetSndCrdNumOutputChannels() { return iSndCrdNumOutputChannels; }
     QString GetSndCrdOutputChannelName ( const int iDiD ) { return Sound.GetOutputChannelName ( iDiD ); }
     void    SetSndCrdLeftOutputChannel  ( const int iNewChan );
     void    SetSndCrdRightOutputChannel ( const int iNewChan );
-    int     GetSndCrdLeftOutputChannel()  { return Sound.GetLeftOutputChannel(); }
-    int     GetSndCrdRightOutputChannel() { return Sound.GetRightOutputChannel(); }
+    int     GetSndCrdLeftOutputChannel();
+    int     GetSndCrdRightOutputChannel();
 
     void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
     int  GetSndCrdPrefFrameSizeFactor() { return iSndCrdPrefFrameSizeFactor; }
@@ -343,6 +343,14 @@ protected:
     CStereoSignalLevelMeter SignalLevelMeter;
 
     CVector<uint8_t>        vecbyNetwData;
+
+    int                     iSndCrdNumInputChannels;
+    int                     iSndCrdNumOutputChannels;
+    CVector<double>         vecdGainsInputLeft;
+    CVector<double>         vecdGainsInputRight;
+    CVector<double>         vecdGainsOutputLeft;
+    CVector<double>         vecdGainsOutputRight;
+
 
     int                     iAudioInFader;
     bool                    bReverbOnLeftChan;

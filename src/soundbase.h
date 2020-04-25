@@ -54,7 +54,10 @@ public:
                  const int      iNewCtrlMIDIChannel,
                  const bool     bNewNoAutoJackConnect );
 
-    virtual int  Init ( const int iNewPrefMonoBufferSize );
+    virtual void Init ( const int iNewPrefMonoBufferSize,
+                        int&      iSndCrdBufferSizeMono,
+                        int&      iSndCrdNumInputChannels,
+                        int&      iSndCrdNumOutputChannels );
     virtual void Start();
     virtual void Stop();
 

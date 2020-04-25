@@ -59,10 +59,6 @@ QString CSound::LoadAndInitializeDriver ( int  iDriverIdx,
     // check if device is capable
     if ( strStat.isEmpty() )
     {
-        // the device has changed, per definition we reset the channel
-        // mapping to the defaults (first two available channels)
-        ResetChannelMapping();
-
         // store ID of selected driver if initialization was successful
         lCurDev = iDriverIdx;
     }
@@ -203,70 +199,8 @@ QString CSound::CheckDeviceCapabilities()
         }
     }
 
-    // special case with 4 input channels: support adding channels
-    if ( ( lNumInChan == 4 ) && bInputChMixingSupported )
-    {
-        // add four mixed channels (i.e. 4 normal, 4 mixed channels)
-        lNumInChanPlusAddChan = 8;
-
-        for ( int iCh = 0; iCh < lNumInChanPlusAddChan; iCh++ )
-        {
-            int iSelCH, iSelAddCH;
-
-            GetSelCHAndAddCH ( iCh, lNumInChan, iSelCH, iSelAddCH );
-
-            if ( iSelAddCH >= 0 )
-            {
-                // for mixed channels, show both audio channel names to be mixed
-                channelInputName[iCh] =
-                    channelInputName[iSelCH] + " + " + channelInputName[iSelAddCH];
-            }
-        }
-    }
-    else
-    {
-        // regular case: no mixing input channels used
-        lNumInChanPlusAddChan = lNumInChan;
-    }
-
     // everything is ok, return empty string for "no error" case
     return "";
-}
-
-void CSound::SetLeftInputChannel  ( const int iNewChan )
-{
-    // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChanPlusAddChan ) )
-    {
-        vSelectedInputChannels[0] = iNewChan;
-    }
-}
-
-void CSound::SetRightInputChannel ( const int iNewChan )
-{
-    // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChanPlusAddChan ) )
-    {
-        vSelectedInputChannels[1] = iNewChan;
-    }
-}
-
-void CSound::SetLeftOutputChannel  ( const int iNewChan )
-{
-    // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) )
-    {
-        vSelectedOutputChannels[0] = iNewChan;
-    }
-}
-
-void CSound::SetRightOutputChannel ( const int iNewChan )
-{
-    // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumOutChan ) )
-    {
-        vSelectedOutputChannels[1] = iNewChan;
-    }
 }
 
 int CSound::GetActualBufferSize ( const int iDesiredBufferSizeMono )
@@ -386,7 +320,10 @@ _exit(1);
     return iActualBufferSizeMono;
 }
 
-int CSound::Init ( const int iNewPrefMonoBufferSize )
+void CSound::Init ( const int iNewPrefMonoBufferSize,
+                    int&      iSndCrdBufferSizeMono,
+                    int&      iSndCrdNumInputChannels,
+                    int&      iSndCrdNumOutputChannels )
 {
     ASIOMutex.lock(); // get mutex lock
     {
@@ -394,17 +331,11 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
         // by the audio hardware
         iASIOBufferSizeMono = GetActualBufferSize ( iNewPrefMonoBufferSize );
 
-        // init base class
-        CSoundBase::Init ( iASIOBufferSizeMono );
-
-        // set internal buffer size value and calculate stereo buffer size
-        iASIOBufferSizeStereo = 2 * iASIOBufferSizeMono;
-
         // set the sample rate
         ASIOSetSampleRate ( SYSTEM_SAMPLE_RATE_HZ );
 
         // create memory for intermediate audio buffer
-        vecsMultChanAudioSndCrd.Init ( iASIOBufferSizeStereo );
+        vecsMultChanAudioSndCrd.Init ( iASIOBufferSizeMono * std::max ( lNumInChan, lNumOutChan ) );
 
         // create and activate ASIO buffers (buffer size in samples),
         // dispose old buffers (if any)
@@ -455,7 +386,10 @@ int CSound::Init ( const int iNewPrefMonoBufferSize )
     }
     ASIOMutex.unlock();
 
-    return iASIOBufferSizeMono;
+    // apply return values
+    iSndCrdBufferSizeMono    = iASIOBufferSizeMono;
+    iSndCrdNumInputChannels  = lNumInChan;
+    iSndCrdNumOutputChannels = lNumOutChan;
 }
 
 void CSound::Start()
@@ -487,13 +421,10 @@ CSound::CSound ( void       (*fpNewCallback) ( CVector<int16_t>& psData, void* a
                  void*      arg,
                  const int  iCtrlMIDIChannel,
                  const bool bNoAutoJackConnect) :
-    CSoundBase              ( "ASIO", true, fpNewCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect ),
-    lNumInChan              ( 0 ),
-    lNumInChanPlusAddChan   ( 0 ),
-    lNumOutChan             ( 0 ),
-    dInOutLatencyMs         ( 0.0 ), // "0.0" means that no latency value is available
-    vSelectedInputChannels  ( NUM_IN_OUT_CHANNELS ),
-    vSelectedOutputChannels ( NUM_IN_OUT_CHANNELS )
+    CSoundBase      ( "ASIO", true, fpNewCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect ),
+    lNumInChan      ( 0 ),
+    lNumOutChan     ( 0 ),
+    dInOutLatencyMs ( 0.0 ) // "0.0" means that no latency value is available
 {
     int i;
 
@@ -534,24 +465,11 @@ CSound::CSound ( void       (*fpNewCallback) ( CVector<int16_t>& psData, void* a
     // init device index as not initialized (invalid)
     lCurDev = INVALID_SNC_CARD_DEVICE;
 
-    // init channel mapping
-    ResetChannelMapping();
-
     // set up the asioCallback structure
     asioCallbacks.bufferSwitch         = &bufferSwitch;
     asioCallbacks.sampleRateDidChange  = &sampleRateChanged;
     asioCallbacks.asioMessage          = &asioMessages;
     asioCallbacks.bufferSwitchTimeInfo = &bufferSwitchTimeInfo;
-}
-
-void CSound::ResetChannelMapping()
-{
-    // init selected channel numbers with defaults: use first available
-    // channels for input and output
-    vSelectedInputChannels[0]  = 0;
-    vSelectedInputChannels[1]  = 1;
-    vSelectedOutputChannels[0] = 0;
-    vSelectedOutputChannels[1] = 1;
 }
 
 
@@ -600,45 +518,29 @@ void CSound::bufferSwitch ( long index, ASIOBool )
     int iCurSample;
 
     // get references to class members
-    int&              iASIOBufferSizeMono     = pSound->iASIOBufferSizeMono;
+    const int         iASIOBufferSizeMono     = pSound->iASIOBufferSizeMono;
+    const long        lNumInChan              = pSound->lNumInChan;
+    const long        lNumOutChan             = pSound->lNumOutChan;
     CVector<int16_t>& vecsMultChanAudioSndCrd = pSound->vecsMultChanAudioSndCrd;
 
     // perform the processing for input and output
     pSound->ASIOMutex.lock(); // get mutex lock
     {
         // CAPTURE -------------------------------------------------------------
-        for ( int i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
+        for ( int i = 0; i < lNumInChan; i++ )
         {
-            int iSelCH, iSelAddCH;
-
-            GetSelCHAndAddCH ( pSound->vSelectedInputChannels[i], pSound->lNumInChan,
-                               iSelCH, iSelAddCH );
-
             // copy new captured block in thread transfer buffer (copy
             // mono data interleaved in stereo buffer)
-            switch ( pSound->channelInfosInput[iSelCH].type )
+            switch ( pSound->channelInfosInput[i].type )
             {
             case ASIOSTInt16LSB:
             {
                 // no type conversion required, just copy operation
-                int16_t* pASIOBuf = static_cast<int16_t*> ( pSound->bufferInfos[iSelCH].buffers[index] );
+                int16_t* pASIOBuf = static_cast<int16_t*> ( pSound->bufferInfos[i].buffers[index] );
 
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] = pASIOBuf[iCurSample];
-                }
-
-                if ( iSelAddCH >= 0 )
-                {
-                    // mix input channels case:
-                    int16_t* pASIOBufAdd = static_cast<int16_t*> ( pSound->bufferInfos[iSelAddCH].buffers[index] );
-
-                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
-                    {
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] =
-                            Double2Short ( (double) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
-                                           (double) pASIOBufAdd[iCurSample] );
-                    }
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] = pASIOBuf[iCurSample];
                 }
                 break;
             }
@@ -647,49 +549,21 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     int iCurSam = 0;
-                    memcpy ( &iCurSam, ( (char*) pSound->bufferInfos[iSelCH].buffers[index] ) + iCurSample * 3, 3 );
+                    memcpy ( &iCurSam, ( (char*) pSound->bufferInfos[i].buffers[index] ) + iCurSample * 3, 3 );
                     iCurSam >>= 8;
 
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] = static_cast<int16_t> ( iCurSam );
-                }
-
-                if ( iSelAddCH >= 0 )
-                {
-                    // mix input channels case:
-                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
-                    {
-                        int iCurSam = 0;
-                        memcpy ( &iCurSam, ( (char*) pSound->bufferInfos[iSelAddCH].buffers[index] ) + iCurSample * 3, 3 );
-                        iCurSam >>= 8;
-
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] =
-                            Double2Short ( (double) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
-                                           (double) static_cast<int16_t> ( iCurSam ) );
-                    }
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] = static_cast<int16_t> ( iCurSam );
                 }
                 break;
 
             case ASIOSTInt32LSB:
             {
-                int32_t* pASIOBuf = static_cast<int32_t*> ( pSound->bufferInfos[iSelCH].buffers[index] );
+                int32_t* pASIOBuf = static_cast<int32_t*> ( pSound->bufferInfos[i].buffers[index] );
 
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( pASIOBuf[iCurSample] >> 16 );
-                }
-
-                if ( iSelAddCH >= 0 )
-                {
-                    // mix input channels case:
-                    int32_t* pASIOBufAdd = static_cast<int32_t*> ( pSound->bufferInfos[iSelAddCH].buffers[index] );
-
-                    for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
-                    {
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] =
-                            Double2Short ( (double) vecsMultChanAudioSndCrd[2 * iCurSample + i] +
-                                           (double) static_cast<int16_t> ( pASIOBufAdd[iCurSample] >> 16 ) );
-                    }
                 }
                 break;
             }
@@ -698,9 +572,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( static_cast<float*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] * _MAXSHORT );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] * _MAXSHORT );
                 }
                 break;
 
@@ -708,9 +582,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( static_cast<double*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] * _MAXSHORT );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] * _MAXSHORT );
                 }
                 break;
 
@@ -718,9 +592,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( static_cast<int32_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] & 0xFFFF );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] & 0xFFFF );
                 }
                 break;
 
@@ -728,9 +602,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( ( static_cast<int32_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] & 0x3FFFF ) >> 2 );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] & 0x3FFFF ) >> 2 );
                 }
                 break;
 
@@ -738,9 +612,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( ( static_cast<int32_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] & 0xFFFFF ) >> 4 );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] & 0xFFFFF ) >> 4 );
                 }
                 break;
 
@@ -748,9 +622,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( ( static_cast<int32_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] & 0xFFFFFF ) >> 8 );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] & 0xFFFFFF ) >> 8 );
                 }
                 break;
 
@@ -759,9 +633,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 // flip bits
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         Flip16Bits ( ( static_cast<int16_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] ) )[iCurSample] );
+                        pSound->bufferInfos[i].buffers[index] ) )[iCurSample] );
                 }
                 break;
 
@@ -772,9 +646,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                     // because the bits are flipped, we do not have to perform the
                     // shift by 8 bits
                     int iCurSam = 0;
-                    memcpy ( &iCurSam, ( (char*) pSound->bufferInfos[iSelCH].buffers[index] ) + iCurSample * 3, 3 );
+                    memcpy ( &iCurSam, ( (char*) pSound->bufferInfos[i].buffers[index] ) + iCurSample * 3, 3 );
 
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         Flip16Bits ( static_cast<int16_t> ( iCurSam ) );
                 }
                 break;
@@ -784,9 +658,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // flip bits and convert to 16 bit
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( Flip32Bits ( static_cast<int32_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] ) >> 16 );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] ) >> 16 );
                 }
                 break;
 
@@ -794,10 +668,10 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( static_cast<float> (
                         Flip32Bits ( static_cast<int32_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] ) ) * _MAXSHORT );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] ) ) * _MAXSHORT );
                 }
                 break;
 
@@ -805,10 +679,10 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( static_cast<double> (
                         Flip64Bits ( static_cast<int64_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] ) ) * _MAXSHORT );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] ) ) * _MAXSHORT );
                 }
                 break;
 
@@ -816,9 +690,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( Flip32Bits ( static_cast<int32_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] ) & 0xFFFF );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] ) & 0xFFFF );
                 }
                 break;
 
@@ -826,9 +700,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( ( Flip32Bits ( static_cast<int32_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] ) & 0x3FFFF ) >> 2 );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] ) & 0x3FFFF ) >> 2 );
                 }
                 break;
 
@@ -836,9 +710,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( ( Flip32Bits ( static_cast<int32_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] ) & 0xFFFFF ) >> 4 );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] ) & 0xFFFFF ) >> 4 );
                 }
                 break;
 
@@ -846,9 +720,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 // NOT YET TESTED
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    vecsMultChanAudioSndCrd[2 * iCurSample + i] =
+                    vecsMultChanAudioSndCrd[lNumInChan * iCurSample + i] =
                         static_cast<int16_t> ( ( Flip32Bits ( static_cast<int32_t*> (
-                        pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] ) & 0xFFFFFF ) >> 8 );
+                        pSound->bufferInfos[i].buffers[index] )[iCurSample] ) & 0xFFFFFF ) >> 8 );
                 }
                 break;
             }
@@ -859,22 +733,22 @@ void CSound::bufferSwitch ( long index, ASIOBool )
 
 
         // PLAYBACK ------------------------------------------------------------
-        for ( int i = 0; i < NUM_IN_OUT_CHANNELS; i++ )
+        for ( int i = 0; i < lNumOutChan; i++ )
         {
-            const int iSelCH = pSound->lNumInChan + pSound->vSelectedOutputChannels[i];
+            const int iCurCH = lNumInChan + i;
 
             // copy data from sound card in output buffer (copy
             // interleaved stereo data in mono sound card buffer)
-            switch ( pSound->channelInfosOutput[pSound->vSelectedOutputChannels[i]].type )
+            switch ( pSound->channelInfosOutput[i].type )
             {
             case ASIOSTInt16LSB:
             {
                 // no type conversion required, just copy operation
-                int16_t* pASIOBuf = static_cast<int16_t*> ( pSound->bufferInfos[iSelCH].buffers[index] );
+                int16_t* pASIOBuf = static_cast<int16_t*> ( pSound->bufferInfos[iCurCH].buffers[index] );
 
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    pASIOBuf[iCurSample] = vecsMultChanAudioSndCrd[2 * iCurSample + i];
+                    pASIOBuf[iCurSample] = vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i];
                 }
                 break;
             }
@@ -885,23 +759,23 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     // convert current sample in 24 bit format
                     int32_t iCurSam = static_cast<int32_t> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
                     iCurSam <<= 8;
 
-                    memcpy ( ( (char*) pSound->bufferInfos[iSelCH].buffers[index] ) + iCurSample * 3, &iCurSam, 3 );
+                    memcpy ( ( (char*) pSound->bufferInfos[iCurCH].buffers[index] ) + iCurSample * 3, &iCurSam, 3 );
                 }
                 break;
 
             case ASIOSTInt32LSB:
             {
-                int32_t* pASIOBuf = static_cast<int32_t*> ( pSound->bufferInfos[iSelCH].buffers[index] );
+                int32_t* pASIOBuf = static_cast<int32_t*> ( pSound->bufferInfos[iCurCH].buffers[index] );
 
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     // convert to 32 bit
                     const int32_t iCurSam = static_cast<int32_t> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
                     pASIOBuf[iCurSample] = ( iCurSam << 16 );
                 }
@@ -913,9 +787,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     const float fCurSam = static_cast<float> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<float*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<float*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         fCurSam / _MAXSHORT;
                 }
                 break;
@@ -925,9 +799,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     const double fCurSam = static_cast<double> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<double*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<double*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         fCurSam / _MAXSHORT;
                 }
                 break;
@@ -938,9 +812,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     // convert to 32 bit
                     const int32_t iCurSam = static_cast<int32_t> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<int32_t*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<int32_t*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         iCurSam;
                 }
                 break;
@@ -951,9 +825,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     // convert to 32 bit
                     const int32_t iCurSam = static_cast<int32_t> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<int32_t*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<int32_t*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         ( iCurSam << 2 );
                 }
                 break;
@@ -964,9 +838,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     // convert to 32 bit
                     const int32_t iCurSam = static_cast<int32_t> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<int32_t*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<int32_t*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         ( iCurSam << 4 );
                 }
                 break;
@@ -977,9 +851,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     // convert to 32 bit
                     const int32_t iCurSam = static_cast<int32_t> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<int32_t*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<int32_t*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         ( iCurSam << 8 );
                 }
                 break;
@@ -989,8 +863,8 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 // flip bits
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
-                    ( (int16_t*) pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
-                        Flip16Bits ( vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                    ( (int16_t*) pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
+                        Flip16Bits ( vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
                 }
                 break;
 
@@ -1001,9 +875,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                     // because the bits are flipped, we do not have to perform the
                     // shift by 8 bits
                     int32_t iCurSam = static_cast<int32_t> ( Flip16Bits (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] ) );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] ) );
 
-                    memcpy ( ( (char*) pSound->bufferInfos[iSelCH].buffers[index] ) + iCurSample * 3, &iCurSam, 3 );
+                    memcpy ( ( (char*) pSound->bufferInfos[iCurCH].buffers[index] ) + iCurSample * 3, &iCurSam, 3 );
                 }
                 break;
 
@@ -1013,9 +887,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     // convert to 32 bit and flip bits
                     int iCurSam = static_cast<int32_t> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<int32_t*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<int32_t*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         Flip32Bits ( iCurSam << 16 );
                 }
                 break;
@@ -1025,9 +899,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     const float fCurSam = static_cast<float> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<float*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<float*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         static_cast<float> ( Flip32Bits ( static_cast<int32_t> (
                         fCurSam / _MAXSHORT ) ) );
                 }
@@ -1038,9 +912,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 for ( iCurSample = 0; iCurSample < iASIOBufferSizeMono; iCurSample++ )
                 {
                     const double fCurSam = static_cast<double> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<float*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<float*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         static_cast<double> ( Flip64Bits ( static_cast<int64_t> (
                         fCurSam / _MAXSHORT ) ) );
                 }
@@ -1052,9 +926,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     // convert to 32 bit
                     const int32_t iCurSam = static_cast<int32_t> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<int32_t*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<int32_t*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         Flip32Bits ( iCurSam );
                 }
                 break;
@@ -1065,9 +939,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     // convert to 32 bit
                     const int32_t iCurSam = static_cast<int32_t> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<int32_t*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<int32_t*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         Flip32Bits ( iCurSam << 2 );
                 }
                 break;
@@ -1078,9 +952,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     // convert to 32 bit
                     const int32_t iCurSam = static_cast<int32_t> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<int32_t*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<int32_t*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         Flip32Bits ( iCurSam << 4 );
                 }
                 break;
@@ -1091,9 +965,9 @@ void CSound::bufferSwitch ( long index, ASIOBool )
                 {
                     // convert to 32 bit
                     const int32_t iCurSam = static_cast<int32_t> (
-                        vecsMultChanAudioSndCrd[2 * iCurSample + i] );
+                        vecsMultChanAudioSndCrd[lNumOutChan * iCurSample + i] );
 
-                    static_cast<int32_t*> ( pSound->bufferInfos[iSelCH].buffers[index] )[iCurSample] =
+                    static_cast<int32_t*> ( pSound->bufferInfos[iCurCH].buffers[index] )[iCurSample] =
                         Flip32Bits ( iCurSam << 8 );
                 }
                 break;

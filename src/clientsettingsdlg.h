@@ -109,4 +109,5 @@ signals:
     void DisplayChannelLevelsChanged();
     void AudioChannelsChanged();
     void NewClientLevelChanged();
+    void SoundCardDeviceChanged();
 };

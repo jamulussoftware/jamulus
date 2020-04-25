@@ -535,12 +535,12 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
 
 void CClient::SetSndCrdLeftInputChannel ( const int iNewChan )
 {
-// TEST right now we only support switches
-if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumInputChannels ) )
-{
-    vecdGainsInputLeft.Reset ( 0 );
-    vecdGainsInputLeft[iNewChan] = 1;
-}
+//// TEST right now we only support switches
+//if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumInputChannels ) )
+//{
+//    vecdGainsInputLeft.Reset ( 0 );
+//    vecdGainsInputLeft[iNewChan] = 1;
+//}
 }
 
 int CClient::GetSndCrdLeftInputChannel()
@@ -559,12 +559,12 @@ return iOutCh;
 
 void CClient::SetSndCrdRightInputChannel ( const int iNewChan )
 {
-// TEST right now we only support switches
-if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumInputChannels ) )
-{
-    vecdGainsInputRight.Reset ( 0 );
-    vecdGainsInputRight[iNewChan] = 1;
-}
+//// TEST right now we only support switches
+//if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumInputChannels ) )
+//{
+//    vecdGainsInputRight.Reset ( 0 );
+//    vecdGainsInputRight[iNewChan] = 1;
+//}
 }
 
 int CClient::GetSndCrdRightInputChannel()
@@ -583,12 +583,12 @@ return iOutCh;
 
 void CClient::SetSndCrdLeftOutputChannel ( const int iNewChan )
 {
-// TEST right now we only support switches
-if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumOutputChannels ) )
-{
-    vecdGainsOutputLeft.Reset ( 0 );
-    vecdGainsOutputLeft[iNewChan] = 1;
-}
+//// TEST right now we only support switches
+//if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumOutputChannels ) )
+//{
+//    vecdGainsOutputLeft.Reset ( 0 );
+//    vecdGainsOutputLeft[iNewChan] = 1;
+//}
 }
 
 int CClient::GetSndCrdLeftOutputChannel()
@@ -607,12 +607,12 @@ return iOutCh;
 
 void CClient::SetSndCrdRightOutputChannel ( const int iNewChan )
 {
-// TEST right now we only support switches
-if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumOutputChannels ) )
-{
-    vecdGainsOutputRight.Reset ( 0 );
-    vecdGainsOutputRight[iNewChan] = 1;
-}
+//// TEST right now we only support switches
+//if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumOutputChannels ) )
+//{
+//    vecdGainsOutputRight.Reset ( 0 );
+//    vecdGainsOutputRight[iNewChan] = 1;
+//}
 }
 
 int CClient::GetSndCrdRightOutputChannel()

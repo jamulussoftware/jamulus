@@ -523,6 +523,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( NewClientLevelChanged() ),
         this, SLOT ( OnNewClientLevelChanged() ) );
 
+    QObject::connect ( &ClientSettingsDlg, SIGNAL ( SoundCardDeviceChanged() ),
+        this, SLOT ( OnSoundCardDeviceChanged() ) );
+
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
@@ -620,6 +623,11 @@ void CClientDlg::UpdateSndCrdMixerBoards()
     MixerBoardInputRight->HideAll();
     MixerBoardOutputLeft->HideAll();
     MixerBoardOutputRight->HideAll();
+
+    MixerBoardInputLeft->SetServerName   ( "Left Input Mix" );
+    MixerBoardInputRight->SetServerName  ( "Right Input Mix" );
+    MixerBoardOutputLeft->SetServerName  ( "Left Output Mix" );
+    MixerBoardOutputRight->SetServerName ( "Right Output Mix" );
 
     const int iNumInChannels  = pClient->GetSndCrdNumInputChannels();
     const int iNumOutChannels = pClient->GetSndCrdNumOutputChannels();

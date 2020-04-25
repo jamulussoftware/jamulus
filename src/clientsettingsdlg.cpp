@@ -640,6 +640,7 @@ void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
     }
     UpdateSoundChannelSelectionFrame();
     UpdateDisplay();
+    emit SoundCardDeviceChanged();
 }
 
 void CClientSettingsDlg::OnLInChanActivated ( int iChanIdx )

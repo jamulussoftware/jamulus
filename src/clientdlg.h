@@ -87,6 +87,7 @@ protected:
     void               ShowChatWindow ( const bool bForceRaise = true );
     void               ShowAnalyzerConsole();
     void               UpdateRevSelection();
+    void               UpdateSndCrdMixerBoards();
     void               Connect ( const QString& strSelectedAddress,
                                  const QString& strMixerBoardLabel );
     void               Disconnect();
@@ -165,8 +166,11 @@ public slots:
     void OnChatTextReceived ( QString strChatText );
     void OnLicenceRequired ( ELicenceType eLicenceType );
 
-    void OnChangeChanGain ( int iId, double dGain )
-        { pClient->SetRemoteChanGain ( iId, dGain ); }
+    void OnChangeChanGain            ( int iId, double dGain ) { pClient->SetRemoteChanGain ( iId, dGain ); }
+    void OnInputLeftChangeChanGain   ( int iId, double dGain ) { pClient->SetSndCrdLeftInputGain ( iId, dGain ); }
+    void OnInputRightChangeChanGain  ( int iId, double dGain ) { pClient->SetSndCrdRightInputGain ( iId, dGain ); }
+    void OnOutputLeftChangeChanGain  ( int iId, double dGain ) { pClient->SetSndCrdLeftOutputGain ( iId, dGain ); }
+    void OnOutputRightChangeChanGain ( int iId, double dGain ) { pClient->SetSndCrdRightOutputGain ( iId, dGain ); }
 
     void OnNewLocalInputText ( QString strChatText )
         { pClient->CreateChatTextMes ( strChatText ); }

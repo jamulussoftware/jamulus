@@ -376,7 +376,7 @@
             <item>
              <widget class="QRadioButton" name="rbtMixerServer">
               <property name="text">
-               <string>Server</string>
+               <string>Main</string>
               </property>
               <attribute name="buttonGroup">
                <string notr="true">buttonGroup</string>

@@ -185,6 +185,10 @@ public:
     void    SetSndCrdRightInputChannel ( const int iNewChan );
     int     GetSndCrdLeftInputChannel();
     int     GetSndCrdRightInputChannel();
+    void    SetSndCrdLeftInputGain  ( const int iCh, const double iGain ) { vecdGainsInputLeft[iCh] = iGain; }
+    void    SetSndCrdRightInputGain ( const int iCh, const double iGain ) { vecdGainsInputRight[iCh] = iGain; }
+    double  GetSndCrdLeftInputGain  ( const int iCh ) { return vecdGainsInputLeft[iCh]; }
+    double  GetSndCrdRightInputGain ( const int iCh ) { return vecdGainsInputRight[iCh]; }
 
     int     GetSndCrdNumOutputChannels() { return iSndCrdNumOutputChannels; }
     QString GetSndCrdOutputChannelName ( const int iDiD ) { return Sound.GetOutputChannelName ( iDiD ); }
@@ -192,6 +196,10 @@ public:
     void    SetSndCrdRightOutputChannel ( const int iNewChan );
     int     GetSndCrdLeftOutputChannel();
     int     GetSndCrdRightOutputChannel();
+    void    SetSndCrdLeftOutputGain  ( const int iCh, const double iGain ) { vecdGainsOutputLeft[iCh] = iGain; }
+    void    SetSndCrdRightOutputGain ( const int iCh, const double iGain ) { vecdGainsOutputRight[iCh] = iGain; }
+    double  GetSndCrdLeftOutputGain  ( const int iCh ) { return vecdGainsOutputLeft[iCh]; }
+    double  GetSndCrdRightOutputGain ( const int iCh ) { return vecdGainsOutputRight[iCh]; }
 
     void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
     int  GetSndCrdPrefFrameSizeFactor() { return iSndCrdPrefFrameSizeFactor; }

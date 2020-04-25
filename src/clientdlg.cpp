@@ -190,9 +190,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     MainMixerBoard->vecStoredFaderIsMute = pClient->vecStoredFaderIsMute;
     MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel;
 
-    // set mixer board selection to server per default
+    // set mixer board selection to server per default and initialize
     rbtMixerServer->setChecked ( true );
     MixerBoard->setCurrentIndex ( 0 );
+    UpdateSndCrdMixerBoards();
 
     // init status label
     OnTimerStatus();
@@ -528,6 +529,18 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( MainMixerBoard, SIGNAL ( NumClientsChanged ( int ) ),
         this, SLOT ( OnNumClientsChanged ( int ) ) );
 
+    QObject::connect ( MixerBoardInputLeft, SIGNAL ( ChangeChanGain ( int, double ) ),
+        this, SLOT ( OnInputLeftChangeChanGain ( int, double ) ) );
+
+    QObject::connect ( MixerBoardInputRight, SIGNAL ( ChangeChanGain ( int, double ) ),
+        this, SLOT ( OnInputRightChangeChanGain ( int, double ) ) );
+
+    QObject::connect ( MixerBoardOutputLeft, SIGNAL ( ChangeChanGain ( int, double ) ),
+        this, SLOT ( OnOutputLeftChangeChanGain ( int, double ) ) );
+
+    QObject::connect ( MixerBoardOutputRight, SIGNAL ( ChangeChanGain ( int, double ) ),
+        this, SLOT ( OnOutputRightChangeChanGain ( int, double ) ) );
+
     QObject::connect ( &ChatDlg, SIGNAL ( NewLocalInputText ( QString ) ),
         this, SLOT ( OnNewLocalInputText ( QString ) ) );
 
@@ -596,6 +609,70 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
 
     // default implementation of this event handler routine
     Event->accept();
+}
+
+void CClientDlg::UpdateSndCrdMixerBoards()
+{
+
+// TODO mismatch between MAX_NUM_CHANNELS and MAX_NUM_IN_OUT_CHANNELS in the mixer board!!!!!!
+
+    MixerBoardInputLeft->HideAll();
+    MixerBoardInputRight->HideAll();
+    MixerBoardOutputLeft->HideAll();
+    MixerBoardOutputRight->HideAll();
+
+    const int iNumInChannels  = pClient->GetSndCrdNumInputChannels();
+    const int iNumOutChannels = pClient->GetSndCrdNumOutputChannels();
+
+    CVector<CChannelInfo> vecChanInfo ( iNumInChannels );
+
+    // input left
+    for ( int iCh = 0; iCh < iNumInChannels; iCh++ )
+    {
+        vecChanInfo[iCh].iChanID = iCh;
+        vecChanInfo[iCh].strName = pClient->GetSndCrdInputChannelName ( iCh );
+    }
+    MixerBoardInputLeft->ApplyNewConClientList ( vecChanInfo );
+
+    // input right
+    for ( int iCh = 0; iCh < iNumInChannels; iCh++ )
+    {
+        vecChanInfo[iCh].iChanID = iCh;
+        vecChanInfo[iCh].strName = pClient->GetSndCrdInputChannelName ( iCh );
+    }
+    MixerBoardInputRight->ApplyNewConClientList ( vecChanInfo );
+
+    // set input levels
+    for ( int iCh = 0; iCh < iNumInChannels; iCh++ )
+    {
+        MixerBoardInputLeft->SetFaderLevel  ( iCh, pClient->GetSndCrdLeftInputGain ( iCh ) * AUD_MIX_FADER_MAX );
+        MixerBoardInputRight->SetFaderLevel ( iCh, pClient->GetSndCrdRightInputGain ( iCh ) * AUD_MIX_FADER_MAX );
+    }
+
+    vecChanInfo.Init ( iNumOutChannels );
+
+    // output left
+    for ( int iCh = 0; iCh < iNumOutChannels; iCh++ )
+    {
+        vecChanInfo[iCh].iChanID = iCh;
+        vecChanInfo[iCh].strName = pClient->GetSndCrdOutputChannelName ( iCh );
+    }
+    MixerBoardOutputLeft->ApplyNewConClientList ( vecChanInfo );
+
+    // output right
+    for ( int iCh = 0; iCh < iNumOutChannels; iCh++ )
+    {
+        vecChanInfo[iCh].iChanID = iCh;
+        vecChanInfo[iCh].strName = pClient->GetSndCrdOutputChannelName ( iCh );
+    }
+    MixerBoardOutputRight->ApplyNewConClientList ( vecChanInfo );
+
+    // set output levels
+    for ( int iCh = 0; iCh < iNumOutChannels; iCh++ )
+    {
+        MixerBoardOutputLeft->SetFaderLevel  ( iCh, pClient->GetSndCrdLeftOutputGain ( iCh ) * AUD_MIX_FADER_MAX );
+        MixerBoardOutputRight->SetFaderLevel ( iCh, pClient->GetSndCrdRightOutputGain ( iCh ) * AUD_MIX_FADER_MAX );
+    }
 }
 
 void CClientDlg::UpdateRevSelection()
@@ -1171,5 +1248,9 @@ rbtReverbSelR->setStyleSheet ( "" );
     }
 
     // also apply GUI design to child GUI controls
-    MainMixerBoard->SetGUIDesign ( eNewDesign );
+    MainMixerBoard->SetGUIDesign        ( eNewDesign );
+    MixerBoardInputLeft->SetGUIDesign   ( eNewDesign );
+    MixerBoardInputRight->SetGUIDesign  ( eNewDesign );
+    MixerBoardOutputLeft->SetGUIDesign  ( eNewDesign );
+    MixerBoardOutputRight->SetGUIDesign ( eNewDesign );
 }

@@ -713,13 +713,7 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
         // list was received, the connection was successful and the title is updated
         // with the correct server name. Make sure to choose a "try to connect" title
         // which is most striking (we use filled blocks and upper case letters).
-        QByteArray baBlock;
-        baBlock.append ( 0xE2 );
-        baBlock.append ( 0x96 );
-        baBlock.append ( 0x88 );
-        QString sBlocks = QString().fromUtf8 ( baBlock ).repeated ( 5 );
-
-        pGroupBox->setTitle ( sBlocks + "  T R Y I N G   T O   C O N N E C T  " + sBlocks );
+        pGroupBox->setTitle ( u8"\u2588\u2588\u2588\u2588\u2588  T R Y I N G   T O   C O N N E C T  \u2588\u2588\u2588\u2588\u2588" );
     }
 }
 

@@ -942,7 +942,7 @@ void CServer::Stop()
 
 void CServer::OnTimer()
 {
-    int                i, j;
+    int                i, j, iUnused;
     int                iClientFrameSizeSamples;
     OpusCustomDecoder* CurOpusDecoder;
     OpusCustomEncoder* CurOpusEncoder;
@@ -1095,11 +1095,11 @@ JitterMeas.Measure();
                     // OPUS decode received data stream
                     if ( CurOpusDecoder != nullptr )
                     {
-                        opus_custom_decode ( CurOpusDecoder,
-                                             pCurCodedData,
-                                             iCeltNumCodedBytes,
-                                             &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                             iClientFrameSizeSamples );
+                        iUnused = opus_custom_decode ( CurOpusDecoder,
+                                                       pCurCodedData,
+                                                       iCeltNumCodedBytes,
+                                                       &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                       iClientFrameSizeSamples );
                     }
                 }
 
@@ -1242,11 +1242,11 @@ JitterMeas.Measure();
 opus_custom_encoder_ctl ( CurOpusEncoder,
                           OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
-                        opus_custom_encode ( CurOpusEncoder,
-                                             &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                             iClientFrameSizeSamples,
-                                             &vecbyCodedData[0],
-                                             iCeltNumCodedBytes );
+                        iUnused = opus_custom_encode ( CurOpusEncoder,
+                                                       &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                       iClientFrameSizeSamples,
+                                                       &vecbyCodedData[0],
+                                                       iCeltNumCodedBytes );
                     }
 
                     // send separate mix to current clients

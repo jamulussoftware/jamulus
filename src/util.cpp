@@ -1006,6 +1006,20 @@ QString CInstPictures::GetName ( const int iInstrument )
     }
 }
 
+CInstPictures::EInstCategory CInstPictures::GetCategory ( const int iInstrument )
+{
+    // range check
+    if ( IsInstIndexInRange ( iInstrument ) )
+    {
+        // return the name of the instrument
+        return GetTable()[iInstrument].eInstCategory;
+    }
+    else
+    {
+        return IC_OTHER_INSTRUMENT;
+    }
+}
+
 
 // Locale management class -----------------------------------------------------
 QString CLocale::GetCountryFlagIconsResourceReference ( const QLocale::Country eCountry )

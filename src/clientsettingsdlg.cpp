@@ -26,8 +26,12 @@
 
 
 /* Implementation *************************************************************/
-CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
-    Qt::WindowFlags f ) : QDialog ( parent, f ), pClient ( pNCliP )
+CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP,
+                                         QWidget* parent,
+                                         Qt::WindowFlags f ) :
+    QDialog      ( parent, f ),
+    pClient      ( pNCliP ),
+    SndCrdMixDlg ( pNCliP, parent )
 {
     setupUi ( this );
 
@@ -803,3 +807,287 @@ void CClientSettingsDlg::UpdateDisplay()
             QString().setNum ( pClient->GetUploadRateKbps() ) + " kbps" );
     }
 }
+
+
+// Sound card audio channel mixer dialog ---------------------------------------
+CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
+                               QWidget* parent ) :
+    QDialog ( parent ),
+    pClient ( pNCliP )
+{
+/*
+    The sound card audio mixer dialog is structured as follows:
+    - group box for each input/output and left/right
+    - a slider and below of the slider a label for each input/output
+    - OK button
+*/
+    setWindowTitle ( "Sound Card Audio Channel Mixer" );
+    setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
+
+    QVBoxLayout* pLayout               = new QVBoxLayout ( this );
+    QHBoxLayout* pButSubLayout         = new QHBoxLayout;
+    QGroupBox*   pGrpBoxInLeft         = new QGroupBox ( tr ( "Input Left" ), this );
+    QGroupBox*   pGrpBoxInRight        = new QGroupBox ( tr ( "Input Right" ), this );
+    QGroupBox*   pGrpBoxOutLeft        = new QGroupBox ( tr ( "Output Left" ), this );
+    QGroupBox*   pGrpBoxOutRight       = new QGroupBox ( tr ( "Output Right" ), this );
+    QHBoxLayout* pGrpBoxInLeftLayout   = new QHBoxLayout ( pGrpBoxInLeft );
+    QHBoxLayout* pGrpBoxInRightLayout  = new QHBoxLayout ( pGrpBoxInRight );
+    QHBoxLayout* pGrpBoxOutLeftLayout  = new QHBoxLayout ( pGrpBoxOutLeft );
+    QHBoxLayout* pGrpBoxOutRightLayout = new QHBoxLayout ( pGrpBoxOutRight );
+    QPushButton* butClose              = new QPushButton ( "&Close", this );
+    pButSubLayout->addStretch();
+    pButSubLayout->addWidget ( butClose );
+
+    // create all possible faders and make them invisible
+    for ( int iCh = 0; iCh < MAX_NUM_IN_OUT_CHANNELS; iCh++ )
+    {
+        // input left fader
+        pInLFaderWidget[iCh]       = new QWidget     ( pGrpBoxInLeft );
+        QVBoxLayout* pInLFaderGrid = new QVBoxLayout ( pInLFaderWidget[iCh] );
+        pInLFader[iCh]             = new QSlider     ( Qt::Vertical, pInLFaderWidget[iCh] );
+        pInLLabel[iCh]             = new QLabel      ( "",           pInLFaderWidget[iCh] );
+        pInLFader[iCh]->setMinimumHeight ( 50 );
+        pInLFader[iCh]->setPageStep      ( 1 );
+        pInLFader[iCh]->setTickPosition  ( QSlider::TicksBothSides );
+        pInLFader[iCh]->setRange         ( 0, AUD_MIX_FADER_MAX );
+        pInLFader[iCh]->setTickInterval  ( AUD_MIX_FADER_MAX / 9 );
+        pInLFaderGrid->addWidget ( pInLFader[iCh], 0, Qt::AlignHCenter );
+        pInLFaderGrid->addWidget ( pInLLabel[iCh], 0, Qt::AlignHCenter );
+        pGrpBoxInLeftLayout->addWidget ( pInLFaderWidget[iCh] );
+        pInLFaderWidget[iCh]->hide();
+
+        // input right fader
+        pInRFaderWidget[iCh]       = new QWidget     ( pGrpBoxInRight );
+        QVBoxLayout* pInRFaderGrid = new QVBoxLayout ( pInRFaderWidget[iCh] );
+        pInRFader[iCh]             = new QSlider     ( Qt::Vertical, pInRFaderWidget[iCh] );
+        pInRLabel[iCh]             = new QLabel      ( "",           pInRFaderWidget[iCh] );
+        pInRFader[iCh]->setMinimumHeight ( 50 );
+        pInRFader[iCh]->setPageStep      ( 1 );
+        pInRFader[iCh]->setTickPosition  ( QSlider::TicksBothSides );
+        pInRFader[iCh]->setRange         ( 0, AUD_MIX_FADER_MAX );
+        pInRFader[iCh]->setTickInterval  ( AUD_MIX_FADER_MAX / 9 );
+        pInRFaderGrid->addWidget ( pInRFader[iCh], 0, Qt::AlignHCenter );
+        pInRFaderGrid->addWidget ( pInRLabel[iCh], 0, Qt::AlignHCenter );
+        pGrpBoxInRightLayout->addWidget ( pInRFaderWidget[iCh] );
+        pInRFaderWidget[iCh]->hide();
+
+        // output left fader
+        pOutLFaderWidget[iCh]       = new QWidget     ( pGrpBoxOutLeft );
+        QVBoxLayout* pOutLFaderGrid = new QVBoxLayout ( pOutLFaderWidget[iCh] );
+        pOutLFader[iCh]             = new QSlider     ( Qt::Vertical, pOutLFaderWidget[iCh] );
+        pOutLLabel[iCh]             = new QLabel      ( "",           pOutLFaderWidget[iCh] );
+        pOutLFader[iCh]->setMinimumHeight ( 50 );
+        pOutLFader[iCh]->setPageStep      ( 1 );
+        pOutLFader[iCh]->setTickPosition  ( QSlider::TicksBothSides );
+        pOutLFader[iCh]->setRange         ( 0, AUD_MIX_FADER_MAX );
+        pOutLFader[iCh]->setTickInterval  ( AUD_MIX_FADER_MAX / 9 );
+        pOutLFaderGrid->addWidget ( pOutLFader[iCh], 0, Qt::AlignHCenter );
+        pOutLFaderGrid->addWidget ( pOutLLabel[iCh], 0, Qt::AlignHCenter );
+        pGrpBoxOutLeftLayout->addWidget ( pOutLFaderWidget[iCh] );
+        pOutLFaderWidget[iCh]->hide();
+
+        // output right fader
+        pOutRFaderWidget[iCh]       = new QWidget     ( pGrpBoxOutRight );
+        QVBoxLayout* pOutRFaderGrid = new QVBoxLayout ( pOutRFaderWidget[iCh] );
+        pOutRFader[iCh]             = new QSlider     ( Qt::Vertical, pOutRFaderWidget[iCh] );
+        pOutRLabel[iCh]             = new QLabel      ( "",           pOutRFaderWidget[iCh] );
+        pOutRFader[iCh]->setMinimumHeight ( 50 );
+        pOutRFader[iCh]->setPageStep      ( 1 );
+        pOutRFader[iCh]->setTickPosition  ( QSlider::TicksBothSides );
+        pOutRFader[iCh]->setRange         ( 0, AUD_MIX_FADER_MAX );
+        pOutRFader[iCh]->setTickInterval  ( AUD_MIX_FADER_MAX / 9 );
+        pOutRFaderGrid->addWidget ( pOutRFader[iCh], 0, Qt::AlignHCenter );
+        pOutRFaderGrid->addWidget ( pOutRLabel[iCh], 0, Qt::AlignHCenter );
+        pGrpBoxOutRightLayout->addWidget ( pOutRFaderWidget[iCh] );
+        pOutRFaderWidget[iCh]->hide();
+    }
+
+    pLayout->addWidget ( pGrpBoxInLeft );
+    pLayout->addWidget ( pGrpBoxInRight );
+    pLayout->addWidget ( pGrpBoxOutLeft );
+    pLayout->addWidget ( pGrpBoxOutRight );
+    pLayout->addLayout ( pButSubLayout );
+
+    // we do not want to close button to be a default one (the mouse pointer
+    // may jump to that button which we want to avoid)
+    butClose->setAutoDefault ( false );
+    butClose->setDefault ( false );
+
+
+
+//    // Add help text to controls -----------------------------------------------
+//    // fader tag
+//    QString strFaderTag = tr ( "<b>Musician Profile:</b> Set your name "
+//        "or an alias here so that the other musicians you want to play with "
+//        "know who you are. Additionally you may set an instrument picture of "
+//        "the instrument you play and a flag of the country you are living. "
+//        "The city you live in and the skill level of playing your instrument "
+//        "may also be added.\n"
+//        "What you set here will appear at your fader on the mixer board when "
+//        "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
+//        "also show up at each client which is connected to the same server as "
+//        "you. If the name is left empty, the IP address is shown instead." );
+//
+//    pedtAlias->setWhatsThis ( strFaderTag );
+//    pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );
+//    pcbxInstrument->setWhatsThis ( strFaderTag );
+//    pcbxInstrument->setAccessibleName ( tr ( "Instrument picture button" ) );
+//    pcbxCountry->setWhatsThis ( strFaderTag );
+//    pcbxCountry->setAccessibleName ( tr ( "Country flag button" ) );
+//    pedtCity->setWhatsThis ( strFaderTag );
+//    pedtCity->setAccessibleName ( tr ( "City edit box" ) );
+//    pcbxSkill->setWhatsThis ( strFaderTag );
+//    pcbxSkill->setAccessibleName ( tr ( "Skill level combo box" ) );
+
+
+    // Connections -------------------------------------------------------------
+// TODO as soon as Qt4 compatibility is no longer preserved, use new Qt5 connections
+// TODO right now we support a maximum of 16 faders per channel
+    QObject::connect ( pInLFader[0],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[1],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[2],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[3],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[4],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[5],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[6],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[7],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[8],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[9],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[10], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[11], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[12], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[13], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[14], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[15], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+
+    QObject::connect ( pInRFader[0],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[1],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[2],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[3],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[4],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[5],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[6],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[7],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[8],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[9],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[10], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[11], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[12], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[13], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[14], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[15], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+
+    QObject::connect ( pOutLFader[0],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[1],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[2],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[3],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[4],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[5],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[6],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[7],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[8],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[9],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[10], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[11], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[12], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[13], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[14], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[15], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+
+    QObject::connect ( pOutRFader[0],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[1],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[2],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[3],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[4],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[5],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[6],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[7],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[8],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[9],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[10], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[11], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[12], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[13], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[14], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[15], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+
+    QObject::connect ( butClose, SIGNAL ( clicked() ),
+        this, SLOT ( accept() ) );
+}
+
+void CSndCrdMixDlg::showEvent ( QShowEvent* )
+{
+    // Update the controls with the current client settings --------------------
+    const int iNumInChannels  = pClient->GetSndCrdNumInputChannels();
+    const int iNumOutChannels = pClient->GetSndCrdNumOutputChannels();
+
+    // first make all faders invisible
+    for ( int iCh = 0; iCh < MAX_NUM_IN_OUT_CHANNELS; iCh++ )
+    {
+        pInLFaderWidget[iCh]->hide();
+        pInRFaderWidget[iCh]->hide();
+        pOutLFaderWidget[iCh]->hide();
+        pOutRFaderWidget[iCh]->hide();
+    }
+
+    // input
+    for ( int iCh = 0; iCh < iNumInChannels; iCh++ )
+    {
+        pInLLabel[iCh]->setText ( pClient->GetSndCrdInputChannelName ( iCh ) );
+        pInRLabel[iCh]->setText ( pClient->GetSndCrdInputChannelName ( iCh ) );
+        pInLFader[iCh]->setValue ( pClient->GetSndCrdLeftInputGain ( iCh ) * AUD_MIX_FADER_MAX );
+        pInRFader[iCh]->setValue ( pClient->GetSndCrdRightInputGain ( iCh ) * AUD_MIX_FADER_MAX );
+        pInLFaderWidget[iCh]->show();
+        pInRFaderWidget[iCh]->show();
+    }
+
+    // output
+    for ( int iCh = 0; iCh < iNumOutChannels; iCh++ )
+    {
+        pOutLLabel[iCh]->setText ( pClient->GetSndCrdOutputChannelName ( iCh ) );
+        pOutRLabel[iCh]->setText ( pClient->GetSndCrdOutputChannelName ( iCh ) );
+        pOutLFader[iCh]->setValue ( pClient->GetSndCrdLeftOutputGain ( iCh ) * AUD_MIX_FADER_MAX );
+        pOutRFader[iCh]->setValue ( pClient->GetSndCrdRightOutputGain ( iCh ) * AUD_MIX_FADER_MAX );
+        pOutLFaderWidget[iCh]->show();
+        pOutRFaderWidget[iCh]->show();
+    }
+}
+
+void CSndCrdMixDlg::OnValueChanged ( int )
+{
+    // set levels of all faders (regardless that only one fader was moved)
+    const int iNumInChannels  = pClient->GetSndCrdNumInputChannels();
+    const int iNumOutChannels = pClient->GetSndCrdNumOutputChannels();
+
+    // input
+    for ( int iCh = 0; iCh < iNumInChannels; iCh++ )
+    {
+        pClient->SetSndCrdLeftInputGain  ( iCh, CalcFaderGain ( pInLFader[iCh]->value() ) );
+        pClient->SetSndCrdRightInputGain ( iCh, CalcFaderGain ( pInRFader[iCh]->value() ) );
+    }
+
+    // output
+    for ( int iCh = 0; iCh < iNumOutChannels; iCh++ )
+    {
+        pClient->SetSndCrdLeftOutputGain  ( iCh, CalcFaderGain ( pOutLFader[iCh]->value() ) );
+        pClient->SetSndCrdRightOutputGain ( iCh, CalcFaderGain ( pOutRFader[iCh]->value() ) );
+    }
+}
+
+double CSndCrdMixDlg::CalcFaderGain ( const int value )
+{
+    // convert actual slider range in gain values
+    // and normalize so that maximum gain is 1
+    const double dInValueRange0_1 = static_cast<double> ( value ) / AUD_MIX_FADER_MAX;
+
+    // map range from 0..1 to range -35..0 dB and calculate linear gain
+    if ( value == 0 )
+    {
+        return 0; // -infinity
+    }
+    else
+    {
+        return pow ( 10, ( dInValueRange0_1 * 35 - 35 ) / 20 );
+    }
+}
+

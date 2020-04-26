@@ -34,6 +34,7 @@
 #include <QMenuBar>
 #include <QLayout>
 #include <QButtonGroup>
+#include <QGroupBox>
 #include "global.h"
 #include "client.h"
 #include "multicolorled.h"
@@ -46,6 +47,40 @@
 
 
 /* Classes ********************************************************************/
+// Sound card audio channel mixer dialog ---------------------------------------
+class CSndCrdMixDlg : public QDialog
+{
+    Q_OBJECT
+
+public:
+    CSndCrdMixDlg ( CClient* pNCliP,
+                    QWidget* parent = nullptr );
+
+protected:
+    double       CalcFaderGain ( const int value );
+    virtual void showEvent ( QShowEvent* );
+
+    QWidget* pInLFaderWidget[MAX_NUM_IN_OUT_CHANNELS];
+    QSlider* pInLFader[MAX_NUM_IN_OUT_CHANNELS];
+    QLabel*  pInLLabel[MAX_NUM_IN_OUT_CHANNELS];
+    QWidget* pInRFaderWidget[MAX_NUM_IN_OUT_CHANNELS];
+    QSlider* pInRFader[MAX_NUM_IN_OUT_CHANNELS];
+    QLabel*  pInRLabel[MAX_NUM_IN_OUT_CHANNELS];
+    QWidget* pOutLFaderWidget[MAX_NUM_IN_OUT_CHANNELS];
+    QSlider* pOutLFader[MAX_NUM_IN_OUT_CHANNELS];
+    QLabel*  pOutLLabel[MAX_NUM_IN_OUT_CHANNELS];
+    QWidget* pOutRFaderWidget[MAX_NUM_IN_OUT_CHANNELS];
+    QSlider* pOutRFader[MAX_NUM_IN_OUT_CHANNELS];
+    QLabel*  pOutRLabel[MAX_NUM_IN_OUT_CHANNELS];
+
+    CClient* pClient;
+
+public slots:
+    void OnValueChanged ( int );
+};
+
+
+// Client settings dialog ------------------------------------------------------
 class CClientSettingsDlg : public QDialog, private Ui_CClientSettingsDlgBase
 {
     Q_OBJECT
@@ -79,9 +114,10 @@ protected:
 
     virtual void showEvent ( QShowEvent* ) { UpdateDisplay(); }
 
-    CClient*     pClient;
-    QTimer       TimerStatus;
-    QButtonGroup SndCrdBufferDelayButtonGroup;
+    CClient*      pClient;
+    QTimer        TimerStatus;
+    QButtonGroup  SndCrdBufferDelayButtonGroup;
+    CSndCrdMixDlg SndCrdMixDlg;
 
  public slots:
     void OnTimerStatus() { UpdateDisplay(); }

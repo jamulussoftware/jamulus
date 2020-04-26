@@ -761,9 +761,10 @@ public:
     static int  GetNotUsedInstrument() { return 0; }
     static bool IsNotUsedInstrument ( const int iInstrument ) { return iInstrument == 0; }
 
-    static int GetNumAvailableInst() { return GetTable().Size(); }
-    static QString GetResourceReference ( const int iInstrument );
-    static QString GetName ( const int iInstrument );
+    static int           GetNumAvailableInst() { return GetTable().Size(); }
+    static QString       GetResourceReference ( const int iInstrument );
+    static QString       GetName ( const int iInstrument );
+    static EInstCategory GetCategory ( const int iInstrument );
 
 // TODO make use of instrument category (not yet implemented)
 

@@ -207,6 +207,8 @@ protected:
     // count of registration retries
     int                     iSvrRegRetries;
 
+    QTextStream& tsConsoleStream;
+
 public slots:
     void OnTimerPollList();
     void OnTimerPingServerInList();

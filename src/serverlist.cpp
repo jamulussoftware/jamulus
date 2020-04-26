@@ -36,7 +36,8 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
       bCentServPingServerInList ( bNCentServPingServerInList ),
       pConnLessProtocol         ( pNConLProt ),
       eSvrRegStatus             ( SRS_UNREGISTERED ),
-      iSvrRegRetries            ( 0 )
+      iSvrRegRetries            ( 0 ),
+      tsConsoleStream           ( *( ( new ConsoleWriterFactory() )->get() ) )
 {
     // set the central server address
     SetCentralServerAddress ( sNCentServAddr );
@@ -307,6 +308,8 @@ void CServerListManager::OnTimerPingServerInList()
 
 void CServerListManager::OnTimerPollList()
 {
+    CVector<CHostAddress> removals;
+
     QMutexLocker locker ( &Mutex );
 
     // Check all list entries except of the very first one (which is the central
@@ -319,6 +322,7 @@ void CServerListManager::OnTimerPollList()
         if ( ServerList[iIdx].RegisterTime.elapsed() > ( SERVLIST_TIME_OUT_MINUTES * 60000 ) )
         {
             // remove this list entry
+            removals.Add ( ServerList[iIdx].HostAddr );
             ServerList.removeAt ( iIdx );
         }
         else
@@ -327,16 +331,26 @@ void CServerListManager::OnTimerPollList()
             iIdx++;
         }
     }
+    locker.unlock();
+    foreach ( const CHostAddress HostAddr , removals )
+    {
+        tsConsoleStream << "Expired entry for "
+                        << HostAddr.toString() << endl;
+    }
 }
 
 void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    InetAddr,
                                                        const CHostAddress&    LInetAddr,
                                                        const CServerCoreInfo& ServerInfo )
 {
-    QMutexLocker locker ( &Mutex );
-
     if ( bIsCentralServer && bEnabled )
     {
+        tsConsoleStream << "Requested to register entry for "
+                        << InetAddr.toString() << " (" << LInetAddr.toString() << ")"
+                        << ": " << ServerInfo.strName << endl;
+
+        QMutexLocker locker ( &Mutex );
+
         const int iCurServerListSize = ServerList.size();
         
         // define invalid index used as a flag
@@ -394,10 +408,13 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
 
 void CServerListManager::CentralServerUnregisterServer ( const CHostAddress& InetAddr )
 {
-    QMutexLocker locker ( &Mutex );
-
     if ( bIsCentralServer && bEnabled )
     {
+        tsConsoleStream << "Requested to unregister entry for "
+                        << InetAddr.toString() << endl;
+
+        QMutexLocker locker ( &Mutex );
+
         const int iCurServerListSize = ServerList.size();
 
         // Find the server to unregister in the list. The very first list entry
@@ -587,7 +604,6 @@ void CServerListManager::SlaveServerRegisterServer ( const bool bIsRegister )
 void CServerListManager::SetSvrRegStatus ( ESvrRegStatus eNSvrRegStatus )
 {
     // output regirstation result/update on the console
-    QTextStream& tsConsoleStream = *( ( new ConsoleWriterFactory() )->get() );
     tsConsoleStream << "Server Registration Status update: " << svrRegStatusToString ( eNSvrRegStatus ) << endl;
 
     // store the state and inform the GUI about the new status

@@ -825,15 +825,23 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
 
     QVBoxLayout* pLayout               = new QVBoxLayout ( this );
-    QHBoxLayout* pButSubLayout         = new QHBoxLayout;
-    QGroupBox*   pGrpBoxInLeft         = new QGroupBox ( tr ( "Input Left" ), this );
-    QGroupBox*   pGrpBoxInRight        = new QGroupBox ( tr ( "Input Right" ), this );
-    QGroupBox*   pGrpBoxOutLeft        = new QGroupBox ( tr ( "Output Left" ), this );
-    QGroupBox*   pGrpBoxOutRight       = new QGroupBox ( tr ( "Output Right" ), this );
+    QTabWidget*  pTabWidget            = new QTabWidget ( this );
+
+    QWidget*     pInputWidget          = new QWidget ( pTabWidget );
+    QVBoxLayout* pInputLayout          = new QVBoxLayout ( pInputWidget );
+    QGroupBox*   pGrpBoxInLeft         = new QGroupBox ( tr ( "Left Channel" ), this );
+    QGroupBox*   pGrpBoxInRight        = new QGroupBox ( tr ( "Right Channel" ), this );
     QHBoxLayout* pGrpBoxInLeftLayout   = new QHBoxLayout ( pGrpBoxInLeft );
     QHBoxLayout* pGrpBoxInRightLayout  = new QHBoxLayout ( pGrpBoxInRight );
+
+    QWidget*     pOutputWidget         = new QWidget ( pTabWidget );
+    QVBoxLayout* pOutputLayout         = new QVBoxLayout ( pOutputWidget );
+    QGroupBox*   pGrpBoxOutLeft        = new QGroupBox ( tr ( "Left Channel" ), this );
+    QGroupBox*   pGrpBoxOutRight       = new QGroupBox ( tr ( "Right Channel" ), this );
     QHBoxLayout* pGrpBoxOutLeftLayout  = new QHBoxLayout ( pGrpBoxOutLeft );
     QHBoxLayout* pGrpBoxOutRightLayout = new QHBoxLayout ( pGrpBoxOutRight );
+
+    QHBoxLayout* pButSubLayout         = new QHBoxLayout;
     QPushButton* butClose              = new QPushButton ( "&Close", this );
     pButSubLayout->addStretch();
     pButSubLayout->addWidget ( butClose );
@@ -846,7 +854,7 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
         QVBoxLayout* pInLFaderGrid = new QVBoxLayout ( pInLFaderWidget[iCh] );
         pInLFader[iCh]             = new QSlider     ( Qt::Vertical, pInLFaderWidget[iCh] );
         pInLLabel[iCh]             = new QLabel      ( "",           pInLFaderWidget[iCh] );
-        pInLFader[iCh]->setMinimumHeight ( 50 );
+        pInLFader[iCh]->setMinimumHeight ( 80 );
         pInLFader[iCh]->setPageStep      ( 1 );
         pInLFader[iCh]->setTickPosition  ( QSlider::TicksBothSides );
         pInLFader[iCh]->setRange         ( 0, AUD_MIX_FADER_MAX );
@@ -861,7 +869,7 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
         QVBoxLayout* pInRFaderGrid = new QVBoxLayout ( pInRFaderWidget[iCh] );
         pInRFader[iCh]             = new QSlider     ( Qt::Vertical, pInRFaderWidget[iCh] );
         pInRLabel[iCh]             = new QLabel      ( "",           pInRFaderWidget[iCh] );
-        pInRFader[iCh]->setMinimumHeight ( 50 );
+        pInRFader[iCh]->setMinimumHeight ( 80 );
         pInRFader[iCh]->setPageStep      ( 1 );
         pInRFader[iCh]->setTickPosition  ( QSlider::TicksBothSides );
         pInRFader[iCh]->setRange         ( 0, AUD_MIX_FADER_MAX );
@@ -876,7 +884,7 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
         QVBoxLayout* pOutLFaderGrid = new QVBoxLayout ( pOutLFaderWidget[iCh] );
         pOutLFader[iCh]             = new QSlider     ( Qt::Vertical, pOutLFaderWidget[iCh] );
         pOutLLabel[iCh]             = new QLabel      ( "",           pOutLFaderWidget[iCh] );
-        pOutLFader[iCh]->setMinimumHeight ( 50 );
+        pOutLFader[iCh]->setMinimumHeight ( 80 );
         pOutLFader[iCh]->setPageStep      ( 1 );
         pOutLFader[iCh]->setTickPosition  ( QSlider::TicksBothSides );
         pOutLFader[iCh]->setRange         ( 0, AUD_MIX_FADER_MAX );
@@ -891,7 +899,7 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
         QVBoxLayout* pOutRFaderGrid = new QVBoxLayout ( pOutRFaderWidget[iCh] );
         pOutRFader[iCh]             = new QSlider     ( Qt::Vertical, pOutRFaderWidget[iCh] );
         pOutRLabel[iCh]             = new QLabel      ( "",           pOutRFaderWidget[iCh] );
-        pOutRFader[iCh]->setMinimumHeight ( 50 );
+        pOutRFader[iCh]->setMinimumHeight ( 80 );
         pOutRFader[iCh]->setPageStep      ( 1 );
         pOutRFader[iCh]->setTickPosition  ( QSlider::TicksBothSides );
         pOutRFader[iCh]->setRange         ( 0, AUD_MIX_FADER_MAX );
@@ -902,10 +910,13 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
         pOutRFaderWidget[iCh]->hide();
     }
 
-    pLayout->addWidget ( pGrpBoxInLeft );
-    pLayout->addWidget ( pGrpBoxInRight );
-    pLayout->addWidget ( pGrpBoxOutLeft );
-    pLayout->addWidget ( pGrpBoxOutRight );
+    pInputLayout->addWidget ( pGrpBoxInLeft );
+    pInputLayout->addWidget ( pGrpBoxInRight );
+    pOutputLayout->addWidget ( pGrpBoxOutLeft );
+    pOutputLayout->addWidget ( pGrpBoxOutRight );
+    pTabWidget->addTab ( pInputWidget, tr ( "Input Mix" ) );
+    pTabWidget->addTab ( pOutputWidget, tr ( "Output Mix" ) );
+    pLayout->addWidget ( pTabWidget );
     pLayout->addLayout ( pButSubLayout );
 
     // we do not want to close button to be a default one (the mouse pointer

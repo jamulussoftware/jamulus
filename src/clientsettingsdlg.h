@@ -35,6 +35,7 @@
 #include <QLayout>
 #include <QButtonGroup>
 #include <QGroupBox>
+#include <QTabWidget>
 #include "global.h"
 #include "client.h"
 #include "multicolorled.h"
@@ -57,7 +58,6 @@ public:
                     QWidget* parent = nullptr );
 
 protected:
-    double       CalcFaderGain ( const int value );
     virtual void showEvent ( QShowEvent* );
 
     QWidget* pInLFaderWidget[MAX_NUM_IN_OUT_CHANNELS];

@@ -187,32 +187,29 @@ void CSettings::Load()
         // set AFTER the sound card device is set, otherwise the settings are
         // overwritten by the defaults
         //
-        // sound card left input channel mapping
-        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch",
-             0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
+        // sound card channel mixer
+        for ( iIdx = 0; iIdx < MAX_NUM_IN_OUT_CHANNELS; iIdx++ )
         {
-            pClient->SetSndCrdLeftInputChannel ( iValue );
-        }
-
-        // sound card right input channel mapping
-        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch",
-             0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
-        {
-            pClient->SetSndCrdRightInputChannel ( iValue );
-        }
-
-        // sound card left output channel mapping
-        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch",
-             0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
-        {
-            pClient->SetSndCrdLeftOutputChannel ( iValue );
-        }
-
-        // sound card right output channel mapping
-        if ( GetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch",
-             0, MAX_NUM_IN_OUT_CHANNELS - 1, iValue ) )
-        {
-            pClient->SetSndCrdRightOutputChannel ( iValue );
+            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "sndcrdinlfaderlevel%1" ).arg ( iIdx ),
+                 0, AUD_MIX_FADER_MAX, iValue ) )
+            {
+                pClient->SetSndCrdLeftInputFaderLevel ( iIdx, iValue );
+            }
+            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "sndcrdinrfaderlevel%1" ).arg ( iIdx ),
+                 0, AUD_MIX_FADER_MAX, iValue ) )
+            {
+                pClient->SetSndCrdRightInputFaderLevel ( iIdx, iValue );
+            }
+            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "sndcrdoutlfaderlevel%1" ).arg ( iIdx ),
+                 0, AUD_MIX_FADER_MAX, iValue ) )
+            {
+                pClient->SetSndCrdLeftOutputFaderLevel ( iIdx, iValue );
+            }
+            if ( GetNumericIniSet ( IniXMLDocument, "client", QString ( "sndcrdoutrfaderlevel%1" ).arg ( iIdx ),
+                 0, AUD_MIX_FADER_MAX, iValue ) )
+            {
+                pClient->SetSndCrdRightOutputFaderLevel ( iIdx, iValue );
+            }
         }
 
         // sound card preferred buffer size index
@@ -515,21 +512,55 @@ void CSettings::Save()
         SetNumericIniSet ( IniXMLDocument, "client", "auddevidx",
             pClient->GetSndCrdDev() );
 
-        // sound card left input channel mapping
-        SetNumericIniSet ( IniXMLDocument, "client", "sndcrdinlch",
-            pClient->GetSndCrdLeftInputChannel() );
-
-        // sound card right input channel mapping
-        SetNumericIniSet ( IniXMLDocument, "client", "sndcrdinrch",
-            pClient->GetSndCrdRightInputChannel() );
-
-        // sound card left output channel mapping
-        SetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutlch",
-            pClient->GetSndCrdLeftOutputChannel() );
-
-        // sound card right output channel mapping
-        SetNumericIniSet ( IniXMLDocument, "client", "sndcrdoutrch",
-            pClient->GetSndCrdRightOutputChannel() );
+        // sound card channel mixer: only store fader levels which are not zero but at
+        // least two entries must exist (because of the default values set in the client)
+        int iNumLeftInputGains   = 0;
+        int iNumRightInputGains  = 0;
+        int iNumLeftOutputGains  = 0;
+        int iNumRightOutputGains = 0;
+        for ( iIdx = 0; iIdx < MAX_NUM_IN_OUT_CHANNELS; iIdx++ )
+        {
+            if ( pClient->GetSndCrdLeftInputFaderLevel ( iIdx ) > 0 )
+            {
+                iNumLeftInputGains = iIdx + 1;
+            }
+            if ( pClient->GetSndCrdRightInputFaderLevel ( iIdx ) > 0 )
+            {
+                iNumRightInputGains = iIdx + 1;
+            }
+            if ( pClient->GetSndCrdLeftOutputFaderLevel ( iIdx ) > 0 )
+            {
+                iNumLeftOutputGains = iIdx + 1;
+            }
+            if ( pClient->GetSndCrdRightOutputFaderLevel ( iIdx ) > 0 )
+            {
+                iNumRightOutputGains = iIdx + 1;
+            }
+        }
+        for ( iIdx = 0; iIdx < std::max ( 2, iNumLeftInputGains ); iIdx++ )
+        {
+            SetNumericIniSet ( IniXMLDocument, "client",
+                               QString ( "sndcrdinlfaderlevel%1" ).arg ( iIdx ),
+                               pClient->GetSndCrdLeftInputFaderLevel ( iIdx ) );
+        }
+        for ( iIdx = 0; iIdx < std::max ( 2, iNumRightInputGains ); iIdx++ )
+        {
+            SetNumericIniSet ( IniXMLDocument, "client",
+                               QString ( "sndcrdinrfaderlevel%1" ).arg ( iIdx ),
+                               pClient->GetSndCrdRightInputFaderLevel ( iIdx ) );
+        }
+        for ( iIdx = 0; iIdx < std::max ( 2, iNumLeftOutputGains ); iIdx++ )
+        {
+            SetNumericIniSet ( IniXMLDocument, "client",
+                               QString ( "sndcrdoutlfaderlevel%1" ).arg ( iIdx ),
+                               pClient->GetSndCrdLeftOutputFaderLevel ( iIdx ) );
+        }
+        for ( iIdx = 0; iIdx < std::max ( 2, iNumRightOutputGains ); iIdx++ )
+        {
+            SetNumericIniSet ( IniXMLDocument, "client",
+                               QString ( "sndcrdoutrfaderlevel%1" ).arg ( iIdx ),
+                               pClient->GetSndCrdRightOutputFaderLevel ( iIdx ) );
+        }
 
         // sound card preferred buffer size index
         SetNumericIniSet ( IniXMLDocument, "client", "prefsndcrdbufidx",

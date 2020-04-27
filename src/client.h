@@ -193,10 +193,10 @@ public:
     void    SetSndCrdRightInputChannel ( const int iNewChan );
     int     GetSndCrdLeftInputChannel();
     int     GetSndCrdRightInputChannel();
-    void    SetSndCrdLeftInputGain  ( const int iCh, const double iGain ) { vecdGainsInputLeft[iCh] = iGain; }
-    void    SetSndCrdRightInputGain ( const int iCh, const double iGain ) { vecdGainsInputRight[iCh] = iGain; }
-    double  GetSndCrdLeftInputGain  ( const int iCh ) { return vecdGainsInputLeft[iCh]; }
-    double  GetSndCrdRightInputGain ( const int iCh ) { return vecdGainsInputRight[iCh]; }
+    void    SetSndCrdLeftInputFaderLevel  ( const int iCh, const int iGain ) { vecdFaderLevelsInputLeft[iCh]  = iGain; vecdGainsInputLeft[iCh]  = CalcFaderGain ( iGain ); }
+    void    SetSndCrdRightInputFaderLevel ( const int iCh, const int iGain ) { vecdFaderLevelsInputRight[iCh] = iGain; vecdGainsInputRight[iCh] = CalcFaderGain ( iGain ); }
+    int     GetSndCrdLeftInputFaderLevel  ( const int iCh ) { return vecdFaderLevelsInputLeft[iCh]; }
+    int     GetSndCrdRightInputFaderLevel ( const int iCh ) { return vecdFaderLevelsInputRight[iCh]; }
 
     int     GetSndCrdNumOutputChannels() { return iSndCrdNumOutputChannels; }
     QString GetSndCrdOutputChannelName ( const int iDiD ) { return Sound.GetOutputChannelName ( iDiD ); }
@@ -204,10 +204,10 @@ public:
     void    SetSndCrdRightOutputChannel ( const int iNewChan );
     int     GetSndCrdLeftOutputChannel();
     int     GetSndCrdRightOutputChannel();
-    void    SetSndCrdLeftOutputGain  ( const int iCh, const double iGain ) { vecdGainsOutputLeft[iCh] = iGain; }
-    void    SetSndCrdRightOutputGain ( const int iCh, const double iGain ) { vecdGainsOutputRight[iCh] = iGain; }
-    double  GetSndCrdLeftOutputGain  ( const int iCh ) { return vecdGainsOutputLeft[iCh]; }
-    double  GetSndCrdRightOutputGain ( const int iCh ) { return vecdGainsOutputRight[iCh]; }
+    void    SetSndCrdLeftOutputFaderLevel  ( const int iCh, const int iGain ) { vecdFaderLevelsOutputLeft[iCh]  = iGain; vecdGainsOutputLeft[iCh]  = CalcFaderGain ( iGain ); }
+    void    SetSndCrdRightOutputFaderLevel ( const int iCh, const int iGain ) { vecdFaderLevelsOutputRight[iCh] = iGain; vecdGainsOutputRight[iCh] = CalcFaderGain ( iGain ); }
+    int     GetSndCrdLeftOutputFaderLevel  ( const int iCh ) { return vecdFaderLevelsOutputLeft[iCh]; }
+    int     GetSndCrdRightOutputFaderLevel ( const int iCh ) { return vecdFaderLevelsOutputRight[iCh]; }
 
     void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
     int  GetSndCrdPrefFrameSizeFactor() { return iSndCrdPrefFrameSizeFactor; }
@@ -308,6 +308,30 @@ public:
 #endif
 
 protected:
+
+
+
+
+// TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+double CalcFaderGain ( const int value )
+{
+    // convert actual slider range in gain values
+    // and normalize so that maximum gain is 1
+    const double dInValueRange0_1 = static_cast<double> ( value ) / AUD_MIX_FADER_MAX;
+
+    // map range from 0..1 to range -35..0 dB and calculate linear gain
+    if ( value == 0 )
+    {
+        return 0; // -infinity
+    }
+    else
+    {
+        return pow ( 10, ( dInValueRange0_1 * 35 - 35 ) / 20 );
+    }
+}
+
+
+
     // callback function must be static, otherwise it does not work
     static void AudioCallback ( CVector<short>& psData, void* arg );
 
@@ -354,6 +378,10 @@ protected:
 
     int                     iSndCrdNumInputChannels;
     int                     iSndCrdNumOutputChannels;
+    CVector<int>            vecdFaderLevelsInputLeft;
+    CVector<int>            vecdFaderLevelsInputRight;
+    CVector<int>            vecdFaderLevelsOutputLeft;
+    CVector<int>            vecdFaderLevelsOutputRight;
     CVector<double>         vecdGainsInputLeft;
     CVector<double>         vecdGainsInputRight;
     CVector<double>         vecdGainsOutputLeft;

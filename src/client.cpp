@@ -62,6 +62,10 @@ CClient::CClient ( const quint16  iPortNumber,
     Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect ),
     iSndCrdNumInputChannels          ( 0 ),
     iSndCrdNumOutputChannels         ( 0 ),
+    vecdFaderLevelsInputLeft         ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
+    vecdFaderLevelsInputRight        ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
+    vecdFaderLevelsOutputLeft        ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
+    vecdFaderLevelsOutputRight       ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
     vecdGainsInputLeft               ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
     vecdGainsInputRight              ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
     vecdGainsOutputLeft              ( MAX_NUM_IN_OUT_CHANNELS, 0 ),
@@ -125,10 +129,10 @@ CClient::CClient ( const quint16  iPortNumber,
     opus_custom_encoder_ctl ( OpusEncoderStereo, OPUS_SET_COMPLEXITY ( 1 ) );
 
     // set the sound card input/output mixing defaults
-    vecdGainsInputLeft[0]   = 1;
-    vecdGainsInputRight[1]  = 1;
-    vecdGainsOutputLeft[0]  = 1;
-    vecdGainsOutputRight[1] = 1;
+    SetSndCrdLeftInputFaderLevel   ( 0, AUD_MIX_FADER_MAX );
+    SetSndCrdRightInputFaderLevel  ( 1, AUD_MIX_FADER_MAX );
+    SetSndCrdLeftOutputFaderLevel  ( 0, AUD_MIX_FADER_MAX );
+    SetSndCrdRightOutputFaderLevel ( 1, AUD_MIX_FADER_MAX );
 
 
     // Connections -------------------------------------------------------------
@@ -536,12 +540,12 @@ QString CClient::SetSndCrdDev ( const int iNewDev )
 
 void CClient::SetSndCrdLeftInputChannel ( const int iNewChan )
 {
-// TEST right now we only support switches
-if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumInputChannels ) )
-{
-    vecdGainsInputLeft.Reset ( 0 );
-    vecdGainsInputLeft[iNewChan] = 1;
-}
+//// TEST right now we only support switches
+//if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumInputChannels ) )
+//{
+//    vecdGainsInputLeft.Reset ( 0 );
+//    vecdGainsInputLeft[iNewChan] = 1;
+//}
 }
 
 int CClient::GetSndCrdLeftInputChannel()
@@ -560,12 +564,12 @@ return iOutCh;
 
 void CClient::SetSndCrdRightInputChannel ( const int iNewChan )
 {
-// TEST right now we only support switches
-if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumInputChannels ) )
-{
-    vecdGainsInputRight.Reset ( 0 );
-    vecdGainsInputRight[iNewChan] = 1;
-}
+//// TEST right now we only support switches
+//if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumInputChannels ) )
+//{
+//    vecdGainsInputRight.Reset ( 0 );
+//    vecdGainsInputRight[iNewChan] = 1;
+//}
 }
 
 int CClient::GetSndCrdRightInputChannel()
@@ -584,12 +588,12 @@ return iOutCh;
 
 void CClient::SetSndCrdLeftOutputChannel ( const int iNewChan )
 {
-// TEST right now we only support switches
-if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumOutputChannels ) )
-{
-    vecdGainsOutputLeft.Reset ( 0 );
-    vecdGainsOutputLeft[iNewChan] = 1;
-}
+//// TEST right now we only support switches
+//if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumOutputChannels ) )
+//{
+//    vecdGainsOutputLeft.Reset ( 0 );
+//    vecdGainsOutputLeft[iNewChan] = 1;
+//}
 }
 
 int CClient::GetSndCrdLeftOutputChannel()
@@ -608,12 +612,12 @@ return iOutCh;
 
 void CClient::SetSndCrdRightOutputChannel ( const int iNewChan )
 {
-// TEST right now we only support switches
-if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumOutputChannels ) )
-{
-    vecdGainsOutputRight.Reset ( 0 );
-    vecdGainsOutputRight[iNewChan] = 1;
-}
+//// TEST right now we only support switches
+//if ( ( iNewChan >= 0 ) && ( iNewChan < iSndCrdNumOutputChannels ) )
+//{
+//    vecdGainsOutputRight.Reset ( 0 );
+//    vecdGainsOutputRight[iNewChan] = 1;
+//}
 }
 
 int CClient::GetSndCrdRightOutputChannel()

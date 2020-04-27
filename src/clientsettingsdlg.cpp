@@ -1044,10 +1044,14 @@ void CSndCrdMixDlg::showEvent ( QShowEvent* )
     // input
     for ( int iCh = 0; iCh < iNumInChannels; iCh++ )
     {
-        pInLLabel[iCh]->setText ( pClient->GetSndCrdInputChannelName ( iCh ) );
-        pInRLabel[iCh]->setText ( pClient->GetSndCrdInputChannelName ( iCh ) );
-        pInLFader[iCh]->setValue ( pClient->GetSndCrdLeftInputGain ( iCh ) * AUD_MIX_FADER_MAX );
-        pInRFader[iCh]->setValue ( pClient->GetSndCrdRightInputGain ( iCh ) * AUD_MIX_FADER_MAX );
+        pInLLabel[iCh]->setText      ( pClient->GetSndCrdInputChannelName ( iCh ) );
+        pInRLabel[iCh]->setText      ( pClient->GetSndCrdInputChannelName ( iCh ) );
+        pInLFader[iCh]->blockSignals ( true ); // do not fire a signal
+        pInLFader[iCh]->setValue     ( pClient->GetSndCrdLeftInputFaderLevel ( iCh ) );
+        pInLFader[iCh]->blockSignals ( false );
+        pInRFader[iCh]->blockSignals ( true ); // do not fire a signal
+        pInRFader[iCh]->setValue     ( pClient->GetSndCrdRightInputFaderLevel ( iCh ) );
+        pInRFader[iCh]->blockSignals ( false );
         pInLFaderWidget[iCh]->show();
         pInRFaderWidget[iCh]->show();
     }
@@ -1055,10 +1059,14 @@ void CSndCrdMixDlg::showEvent ( QShowEvent* )
     // output
     for ( int iCh = 0; iCh < iNumOutChannels; iCh++ )
     {
-        pOutLLabel[iCh]->setText ( pClient->GetSndCrdOutputChannelName ( iCh ) );
-        pOutRLabel[iCh]->setText ( pClient->GetSndCrdOutputChannelName ( iCh ) );
-        pOutLFader[iCh]->setValue ( pClient->GetSndCrdLeftOutputGain ( iCh ) * AUD_MIX_FADER_MAX );
-        pOutRFader[iCh]->setValue ( pClient->GetSndCrdRightOutputGain ( iCh ) * AUD_MIX_FADER_MAX );
+        pOutLLabel[iCh]->setText      ( pClient->GetSndCrdOutputChannelName ( iCh ) );
+        pOutRLabel[iCh]->setText      ( pClient->GetSndCrdOutputChannelName ( iCh ) );
+        pOutLFader[iCh]->blockSignals ( true ); // do not fire a signal
+        pOutLFader[iCh]->setValue     ( pClient->GetSndCrdLeftOutputFaderLevel ( iCh ) );
+        pOutLFader[iCh]->blockSignals ( false );
+        pOutRFader[iCh]->blockSignals ( true ); // do not fire a signal
+        pOutRFader[iCh]->setValue     ( pClient->GetSndCrdRightOutputFaderLevel ( iCh ) );
+        pOutRFader[iCh]->blockSignals ( false );
         pOutLFaderWidget[iCh]->show();
         pOutRFaderWidget[iCh]->show();
     }
@@ -1073,32 +1081,14 @@ void CSndCrdMixDlg::OnValueChanged ( int )
     // input
     for ( int iCh = 0; iCh < iNumInChannels; iCh++ )
     {
-        pClient->SetSndCrdLeftInputGain  ( iCh, CalcFaderGain ( pInLFader[iCh]->value() ) );
-        pClient->SetSndCrdRightInputGain ( iCh, CalcFaderGain ( pInRFader[iCh]->value() ) );
+        pClient->SetSndCrdLeftInputFaderLevel  ( iCh, pInLFader[iCh]->value() );
+        pClient->SetSndCrdRightInputFaderLevel ( iCh, pInRFader[iCh]->value() );
     }
 
     // output
     for ( int iCh = 0; iCh < iNumOutChannels; iCh++ )
     {
-        pClient->SetSndCrdLeftOutputGain  ( iCh, CalcFaderGain ( pOutLFader[iCh]->value() ) );
-        pClient->SetSndCrdRightOutputGain ( iCh, CalcFaderGain ( pOutRFader[iCh]->value() ) );
+        pClient->SetSndCrdLeftOutputFaderLevel  ( iCh, pOutLFader[iCh]->value() );
+        pClient->SetSndCrdRightOutputFaderLevel ( iCh, pOutRFader[iCh]->value() );
     }
 }
-
-double CSndCrdMixDlg::CalcFaderGain ( const int value )
-{
-    // convert actual slider range in gain values
-    // and normalize so that maximum gain is 1
-    const double dInValueRange0_1 = static_cast<double> ( value ) / AUD_MIX_FADER_MAX;
-
-    // map range from 0..1 to range -35..0 dB and calculate linear gain
-    if ( value == 0 )
-    {
-        return 0; // -infinity
-    }
-    else
-    {
-        return pow ( 10, ( dInValueRange0_1 * 35 - 35 ) / 20 );
-    }
-}
-

@@ -64,8 +64,7 @@ public:
              void*      arg,
              const int  iCtrlMIDIChannel,
              const bool bNoAutoJackConnect ) :
-        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect ), iJACKBufferSizeMono ( 0 ),
-        iJACKBufferSizeStero ( 0 ) { OpenJack(); }
+        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect ), iJACKBufferSizeMono ( 0 ) { OpenJack(); }
     virtual ~CSound() { CloseJack(); }
 
     virtual void Init ( const int /* iNewPrefMonoBufferSize */,
@@ -73,22 +72,21 @@ public:
                         int&      iSndCrdNumInputChannels,
                         int&      iSndCrdNumOutputChannels );
 
-    virtual void Start();
-    virtual void Stop();
+    virtual void Start() { CSoundBase::Start(); }
+    virtual void Stop()  { CSoundBase::Stop(); }
 
     virtual QString GetInputChannelName  ( const int iDiD ) { return QString ( "input %1" ).arg ( 1 + iDiD ); }
     virtual QString GetOutputChannelName ( const int iDiD ) { return QString ( "output %1" ).arg ( 1 + iDiD ); }
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function
-    CVector<short> vecsTmpAudioSndCrdStereo;
+    CVector<short> vecsMultChanAudioSndCrd;
     int            iJACKBufferSizeMono;
-    int            iJACKBufferSizeStero;
+    int            iNumInChan;
+    int            iNumOutChan;
 
-    jack_port_t*   input_port_left;
-    jack_port_t*   input_port_right;
-    jack_port_t*   output_port_left;
-    jack_port_t*   output_port_right;
+    jack_port_t*   input_port[MAX_NUM_IN_OUT_CHANNELS];
+    jack_port_t*   output_port[MAX_NUM_IN_OUT_CHANNELS];
     jack_port_t*   input_port_midi;
 
 protected:

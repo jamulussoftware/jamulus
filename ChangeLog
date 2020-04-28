@@ -4,6 +4,9 @@
 
 3.5.3git
 
+  * jack audio interface ports match number of physical ports now
+
+
 TODO improve input channel mapping and introduce input/output gains with overrange to amplification (separate dialog, replace Pan, etc.)
      -> Shall we make dialog modal? If not, then we have to update on device change -> better not modal... maybe add menu entry for it instead!
      -> TODO CalcFaderGain ( const int value ) is a copy from audiomixerboard -> use one common function instead

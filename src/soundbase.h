@@ -58,6 +58,7 @@ public:
                         int&      iSndCrdBufferSizeMono,
                         int&      iSndCrdNumInputChannels,
                         int&      iSndCrdNumOutputChannels );
+
     virtual void Start();
     virtual void Stop();
 

@@ -66,36 +66,53 @@ void CSound::OpenJack()
             tr ( "</b> to achieve a low delay." ) );
     }
 
-    // create four ports (two for input, two for output -> stereo)
-    input_port_left = jack_port_register ( pJackClient, "input 1",
-        JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
+    // get physical input and output ports (note that JackPortIsOutput/Input must be reverted)
+    const char** inPorts  = jack_get_ports ( pJackClient, NULL, NULL, JackPortIsPhysical | JackPortIsOutput );
+    const char** outPorts = jack_get_ports ( pJackClient, NULL, NULL, JackPortIsPhysical | JackPortIsInput );
 
-    input_port_right = jack_port_register ( pJackClient, "input 2",
-        JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
+    // get the number of available physical input/output channels
+    iNumInChan = 0;
+    while ( inPorts[iNumInChan] != NULL ) iNumInChan++;
 
-    output_port_left = jack_port_register ( pJackClient, "output 1",
-        JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
+    iNumOutChan = 0;
+    while ( outPorts[iNumOutChan] != NULL ) iNumOutChan++;
 
-    output_port_right = jack_port_register ( pJackClient, "output 2",
-        JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
+    // want to have at least two input and two output ports but not more than the maximum allowed
+    iNumInChan  = std::min ( MAX_NUM_IN_OUT_CHANNELS, std::max ( 2, iNumInChan ) );
+    iNumOutChan = std::min ( MAX_NUM_IN_OUT_CHANNELS, std::max ( 2, iNumOutChan ) );
 
-    if ( ( input_port_left   == NULL ) ||
-         ( input_port_right  == NULL ) ||
-         ( output_port_left  == NULL ) ||
-         ( output_port_right == NULL ) )
+    // create input/output ports of this application
+    for ( int i = 0; i < iNumInChan; i++ )
     {
-        throw CGenErr ( tr ( "The Jack port registering failed." ) );
+        input_port[i] = jack_port_register ( pJackClient, QString ( "input %1" ).arg ( 1 + i ).toStdString().c_str(),
+                                             JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
+
+        if ( input_port[i] == NULL )
+        {
+            throw CGenErr ( tr ( "The Jack audio input port registering failed." ) );
+        }
+    }
+
+    for ( int i = 0; i < iNumOutChan; i++ )
+    {
+        output_port[i] = jack_port_register ( pJackClient, QString ( "output %1" ).arg ( 1 + i ).toStdString().c_str(),
+                                              JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
+
+        if ( output_port[i] == NULL )
+        {
+            throw CGenErr ( tr ( "The Jack audio output port registering failed." ) );
+        }
     }
 
     // optional MIDI initialization
     if ( iCtrlMIDIChannel != INVALID_MIDI_CH )
     {
         input_port_midi = jack_port_register ( pJackClient, "input midi",
-            JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0 );
+                                               JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0 );
 
         if ( input_port_midi == NULL )
         {
-            throw CGenErr ( tr ( "The Jack port registering failed." ) );
+            throw CGenErr ( tr ( "The Jack midi port registering failed." ) );
         }
     }
     else
@@ -115,55 +132,35 @@ void CSound::OpenJack()
         // the client is activated, because we cannot allow
         // connections to be made to clients that are not
         // running
-        const char** ports;
 
         // try to connect physical input ports
-        if ( ( ports = jack_get_ports ( pJackClient,
-                                        NULL,
-                                        NULL,
-                                        JackPortIsPhysical | JackPortIsOutput ) ) != NULL )
+        if ( inPorts != NULL )
         {
-            if ( jack_connect ( pJackClient, ports[0], jack_port_name ( input_port_left ) ) )
+            for ( int i = 0; i < iNumInChan; i++ )
             {
-                throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
+                jack_connect ( pJackClient, inPorts[i], jack_port_name ( input_port[i] ) );
             }
-
-            // before connecting the second stereo channel, check if the input is not
-            // mono
-            if ( ports[1] )
-            {
-                if ( jack_connect ( pJackClient, ports[1], jack_port_name ( input_port_right ) ) )
-                {
-                    throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
-                }
-            }
-
-            jack_free ( ports );
         }
 
         // try to connect physical output ports
-        if ( ( ports = jack_get_ports ( pJackClient,
-                                        NULL,
-                                        NULL,
-                                        JackPortIsPhysical | JackPortIsInput ) ) != NULL )
+        if ( outPorts != NULL )
         {
-            if ( jack_connect ( pJackClient, jack_port_name ( output_port_left ), ports[0] ) )
+            for ( int i = 0; i < iNumOutChan; i++ )
             {
-                throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
+                jack_connect ( pJackClient, jack_port_name ( output_port[i] ), outPorts[i] );
             }
-
-            // before connecting the second stereo channel, check if the output is not
-            // mono
-            if ( ports[1] )
-            {
-                if ( jack_connect ( pJackClient, jack_port_name ( output_port_right ), ports[1] ) )
-                {
-                    throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
-                }
-            }
-
-            jack_free ( ports );
         }
+    }
+
+    // free memory
+    if ( inPorts != NULL )
+    {
+        jack_free ( inPorts );
+    }
+
+    if ( outPorts != NULL )
+    {
+        jack_free ( outPorts );
     }
 }
 
@@ -173,25 +170,17 @@ void CSound::CloseJack()
     jack_deactivate ( pJackClient );
 
     // unregister ports
-    jack_port_unregister ( pJackClient, input_port_left );
-    jack_port_unregister ( pJackClient, input_port_right );
-    jack_port_unregister ( pJackClient, output_port_left );
-    jack_port_unregister ( pJackClient, output_port_right );
+    for ( int i = 0; i < iNumInChan; i++ )
+    {
+        jack_port_unregister ( pJackClient, input_port[i] );
+    }
+    for ( int i = 0; i < iNumOutChan; i++ )
+    {
+        jack_port_unregister ( pJackClient, output_port[i] );
+    }
 
     // close client connection to jack server
     jack_client_close ( pJackClient );
-}
-
-void CSound::Start()
-{
-    // call base class
-    CSoundBase::Start();
-}
-
-void CSound::Stop()
-{
-    // call base class
-    CSoundBase::Stop();
 }
 
 void CSound::Init ( const int /* iNewPrefMonoBufferSize */,
@@ -202,105 +191,88 @@ void CSound::Init ( const int /* iNewPrefMonoBufferSize */,
 
 // try setting buffer size
 // TODO seems not to work! -> no audio after this operation!
-
 // Doesn't this give an infinite loop? The set buffer size function will call our
 // registerd callback which calls "EmitReinitRequestSignal()". In that function
 // this CSound::Init() function is called...
-
 //jack_set_buffer_size ( pJackClient, iNewPrefMonoBufferSize );
 
     // get actual buffer size
     iJACKBufferSizeMono = jack_get_buffer_size ( pJackClient );  	
 
-    // set internal buffer size value and calculate stereo buffer size
-    iJACKBufferSizeStero = 2 * iJACKBufferSizeMono;
-
     // create memory for intermediate audio buffer
-    vecsTmpAudioSndCrdStereo.Init ( iJACKBufferSizeStero );
+    vecsMultChanAudioSndCrd.Init ( iJACKBufferSizeMono * std::max ( iNumInChan, iNumOutChan ) );
 
     // apply return values (right now the jack interface supports two input and two output channels)
     iSndCrdBufferSizeMono    = iJACKBufferSizeMono;
-    iSndCrdNumInputChannels  = 2;
-    iSndCrdNumOutputChannels = 2;
+    iSndCrdNumInputChannels  = iNumInChan;
+    iSndCrdNumOutputChannels = iNumOutChan;
 }
 
 
 // JACK callbacks --------------------------------------------------------------
 int CSound::process ( jack_nframes_t nframes, void* arg )
 {
-    CSound* pSound = static_cast<CSound*> ( arg );
-    int     i;
+    CSound*   pSound = static_cast<CSound*> ( arg );
+    const int iJACKBufferSizeMono = pSound->iJACKBufferSizeMono;
+    const int iNumInChan          = pSound->iNumInChan;
+    const int iNumOutChan         = pSound->iNumOutChan;
+    int       i;
 
     if ( pSound->IsRunning() )
     {
-        // get input data pointer
-        jack_default_audio_sample_t* in_left =
-            (jack_default_audio_sample_t*) jack_port_get_buffer (
-            pSound->input_port_left, nframes );
-
-        jack_default_audio_sample_t* in_right =
-            (jack_default_audio_sample_t*) jack_port_get_buffer (
-            pSound->input_port_right, nframes );
-
-        // copy input audio data
-        if ( in_left != 0 && in_right != 0 )
+        for ( int iCh = 0; iCh < iNumInChan; iCh++ )
         {
-            for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
-            {
-                pSound->vecsTmpAudioSndCrdStereo[2 * i] =
-                    (short) ( in_left[i] * _MAXSHORT );
+            // get input data pointer
+            jack_default_audio_sample_t* in_sample =
+                (jack_default_audio_sample_t*) jack_port_get_buffer (
+                pSound->input_port[iCh], nframes );
 
-                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
-                    (short) ( in_right[i] * _MAXSHORT );
+            // copy input audio data
+            if ( in_sample != 0 )
+            {
+                for ( i = 0; i < iJACKBufferSizeMono; i++ )
+                {
+                    pSound->vecsMultChanAudioSndCrd[iNumInChan * i + iCh] =
+                        (short) ( in_sample[i] * _MAXSHORT );
+                }
             }
         }
 
         // call processing callback function
-        pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
+        pSound->ProcessCallback ( pSound->vecsMultChanAudioSndCrd );
 
-        // get output data pointer
-        jack_default_audio_sample_t* out_left =
-            (jack_default_audio_sample_t*) jack_port_get_buffer (
-            pSound->output_port_left, nframes );
-
-        jack_default_audio_sample_t* out_right =
-            (jack_default_audio_sample_t*) jack_port_get_buffer (
-            pSound->output_port_right, nframes );
-
-        // copy output data
-        if ( out_left != 0 && out_right != 0 )
+        for ( int iCh = 0; iCh < iNumOutChan; iCh++ )
         {
-            for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
-            {
-                out_left[i] = (jack_default_audio_sample_t)
-                    pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
+            // get output data pointer
+            jack_default_audio_sample_t* out_sample =
+                (jack_default_audio_sample_t*) jack_port_get_buffer (
+                pSound->output_port[iCh], nframes );
 
-                out_right[i] = (jack_default_audio_sample_t)
-                    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
+            // copy output data
+            if ( out_sample != 0 )
+            {
+                for ( i = 0; i < iJACKBufferSizeMono; i++ )
+                {
+                    out_sample[i] = (jack_default_audio_sample_t)
+                        pSound->vecsMultChanAudioSndCrd[iNumOutChan * i + iCh] / _MAXSHORT;
+                }
             }
         }
     }
     else
     {
-        // get output data pointer
-        jack_default_audio_sample_t* out_left =
-            (jack_default_audio_sample_t*) jack_port_get_buffer (
-            pSound->output_port_left, nframes );
-
-        jack_default_audio_sample_t* out_right =
-            (jack_default_audio_sample_t*) jack_port_get_buffer (
-            pSound->output_port_right, nframes );
-
-        // clear output data
-        if ( out_left != 0 && out_right != 0 )
+        for ( int iCh = 0; iCh < iNumOutChan; iCh++ )
         {
-            memset ( out_left,
-                     0,
-                     sizeof ( jack_default_audio_sample_t ) * nframes );
+            // get output data pointer
+            jack_default_audio_sample_t* out_sample =
+                (jack_default_audio_sample_t*) jack_port_get_buffer (
+                pSound->output_port[iCh], nframes );
 
-            memset ( out_right,
-                     0,
-                     sizeof ( jack_default_audio_sample_t ) * nframes );
+            // clear output data
+            if ( out_sample != 0 )
+            {
+                memset ( out_sample, 0, sizeof ( jack_default_audio_sample_t ) * nframes );
+            }
         }
     }
 

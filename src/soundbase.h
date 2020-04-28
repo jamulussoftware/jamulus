@@ -67,9 +67,7 @@ public:
     virtual QString SetDev ( const int );
     virtual int     GetDev() { return lCurDev; }
 
-    virtual int     GetNumInputChannels() { return 2; }
     virtual QString GetInputChannelName ( const int ) { return "Default"; }
-    virtual int     GetNumOutputChannels() { return 2; }
     virtual QString GetOutputChannelName ( const int ) { return "Default"; }
 
     virtual double  GetInOutLatencyMs() { return 0.0; } // "0.0" means no latency is available

@@ -68,7 +68,11 @@ public:
         iJACKBufferSizeStero ( 0 ) { OpenJack(); }
     virtual ~CSound() { CloseJack(); }
 
-    virtual int  Init ( const int iNewPrefMonoBufferSize );
+    virtual void Init ( const int /* iNewPrefMonoBufferSize */,
+                        int&      iSndCrdBufferSizeMono,
+                        int&      iSndCrdNumInputChannels,
+                        int&      iSndCrdNumOutputChannels );
+
     virtual void Start();
     virtual void Stop();
 

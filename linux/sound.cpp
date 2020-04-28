@@ -194,9 +194,11 @@ void CSound::Stop()
     CSoundBase::Stop();
 }
 
-int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
+void CSound::Init ( const int /* iNewPrefMonoBufferSize */,
+                    int&      iSndCrdBufferSizeMono,
+                    int&      iSndCrdNumInputChannels,
+                    int&      iSndCrdNumOutputChannels )
 {
-
 
 // try setting buffer size
 // TODO seems not to work! -> no audio after this operation!
@@ -207,12 +209,8 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
 
 //jack_set_buffer_size ( pJackClient, iNewPrefMonoBufferSize );
 
-
     // get actual buffer size
     iJACKBufferSizeMono = jack_get_buffer_size ( pJackClient );  	
-
-    // init base class
-    CSoundBase::Init ( iJACKBufferSizeMono );
 
     // set internal buffer size value and calculate stereo buffer size
     iJACKBufferSizeStero = 2 * iJACKBufferSizeMono;
@@ -220,7 +218,10 @@ int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
     // create memory for intermediate audio buffer
     vecsTmpAudioSndCrdStereo.Init ( iJACKBufferSizeStero );
 
-    return iJACKBufferSizeMono;
+    // apply return values (right now the jack interface supports two input and two output channels)
+    iSndCrdBufferSizeMono    = iJACKBufferSizeMono;
+    iSndCrdNumInputChannels  = 2;
+    iSndCrdNumOutputChannels = 2;
 }
 
 

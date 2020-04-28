@@ -67,16 +67,16 @@ void CSound::OpenJack()
     }
 
     // create four ports (two for input, two for output -> stereo)
-    input_port_left = jack_port_register ( pJackClient, "input left",
+    input_port_left = jack_port_register ( pJackClient, "input 1",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
 
-    input_port_right = jack_port_register ( pJackClient, "input right",
+    input_port_right = jack_port_register ( pJackClient, "input 2",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
 
-    output_port_left = jack_port_register ( pJackClient, "output left",
+    output_port_left = jack_port_register ( pJackClient, "output 1",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
 
-    output_port_right = jack_port_register ( pJackClient, "output right",
+    output_port_right = jack_port_register ( pJackClient, "output 2",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
 
     if ( ( input_port_left   == NULL ) ||

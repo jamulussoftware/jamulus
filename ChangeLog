@@ -5,7 +5,6 @@
 3.5.3git
 
 TODO improve input channel mapping and introduce input/output gains with overrange to amplification (separate dialog, replace Pan, etc.)
-     -> TODO jack audio interface channel names are all "Default" -> fix this
      -> Shall we make dialog modal? If not, then we have to update on device change -> better not modal... maybe add menu entry for it instead!
      -> TODO CalcFaderGain ( const int value ) is a copy from audiomixerboard -> use one common function instead
      -> TODO help text for the faders, etc. still missing

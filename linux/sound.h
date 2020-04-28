@@ -76,6 +76,9 @@ public:
     virtual void Start();
     virtual void Stop();
 
+    virtual QString GetInputChannelName  ( const int iDiD ) { return QString ( "input %1" ).arg ( 1 + iDiD ); }
+    virtual QString GetOutputChannelName ( const int iDiD ) { return QString ( "output %1" ).arg ( 1 + iDiD ); }
+
     // these variables should be protected but cannot since we want
     // to access them from the callback function
     CVector<short> vecsTmpAudioSndCrdStereo;

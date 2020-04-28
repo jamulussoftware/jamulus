@@ -51,147 +51,10 @@
        </widget>
       </item>
       <item>
-       <widget class="QFrame" name="FrameSoundcardChannelSelection">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+       <widget class="QPushButton" name="butChanMixer">
+        <property name="text">
+         <string>Channel Mixer</string>
         </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Plain</enum>
-        </property>
-        <layout class="QVBoxLayout">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QLabel" name="lblInChannelMapping">
-           <property name="text">
-            <string>Input Channel Mapping</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout">
-           <property name="spacing">
-            <number>3</number>
-           </property>
-           <item>
-            <layout class="QVBoxLayout">
-             <item>
-              <widget class="QLabel" name="lblLInChan">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>L</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="lblRInChan">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>R</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QVBoxLayout">
-             <property name="spacing">
-              <number>3</number>
-             </property>
-             <item>
-              <widget class="QComboBox" name="cbxLInChan"/>
-             </item>
-             <item>
-              <widget class="QComboBox" name="cbxRInChan"/>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QLabel" name="lblOutChannelMapping">
-           <property name="text">
-            <string>Output Channel Mapping</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout">
-           <property name="spacing">
-            <number>3</number>
-           </property>
-           <item>
-            <layout class="QVBoxLayout">
-             <item>
-              <widget class="QLabel" name="lblLOutChan">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>L</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLabel" name="lblROutChan">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>R</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QVBoxLayout">
-             <property name="spacing">
-              <number>3</number>
-             </property>
-             <item>
-              <widget class="QComboBox" name="cbxLOutChan"/>
-             </item>
-             <item>
-              <widget class="QComboBox" name="cbxROutChan"/>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </item>
-        </layout>
        </widget>
       </item>
       <item>
@@ -718,10 +581,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>cbxSoundcard</tabstop>
-  <tabstop>cbxLInChan</tabstop>
-  <tabstop>cbxRInChan</tabstop>
-  <tabstop>cbxLOutChan</tabstop>
-  <tabstop>cbxROutChan</tabstop>
+  <tabstop>butChanMixer</tabstop>
   <tabstop>chbEnableOPUS64</tabstop>
   <tabstop>rbtBufferDelayPreferred</tabstop>
   <tabstop>rbtBufferDelayDefault</tabstop>

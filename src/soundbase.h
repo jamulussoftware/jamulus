@@ -69,20 +69,10 @@ public:
 
     virtual int     GetNumInputChannels() { return 2; }
     virtual QString GetInputChannelName ( const int ) { return "Default"; }
-    virtual void    SetLeftInputChannel  ( const int ) {}
-    virtual void    SetRightInputChannel ( const int ) {}
-    virtual int     GetLeftInputChannel()  { return 0; }
-    virtual int     GetRightInputChannel() { return 1; }
-
     virtual int     GetNumOutputChannels() { return 2; }
     virtual QString GetOutputChannelName ( const int ) { return "Default"; }
-    virtual void    SetLeftOutputChannel  ( const int ) {}
-    virtual void    SetRightOutputChannel ( const int ) {}
-    virtual int     GetLeftOutputChannel()  { return 0; }
-    virtual int     GetRightOutputChannel() { return 1; }
 
     virtual double  GetInOutLatencyMs() { return 0.0; } // "0.0" means no latency is available
-
     virtual void    OpenDriverSetup() {}
 
     bool IsRunning() const { return bRun; }

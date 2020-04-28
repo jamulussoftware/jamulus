@@ -15,10 +15,15 @@ TODO improve help menu, see https://github.com/corrados/jamulus/issues/90
 
 TODO support internationalization
 
+TODO standard style: meter bar gets smaller sometimes if board is full and fader text is short
+
 TODO sometimes I cannot see the central server in the server list
+
+TODO server: warning if Central server selected but OS location is different (e.g. US) -> warning in GUI and command line
 
 TODO implement panning for channels (Ticket #52, #145)
 
+TODO show mute state of others
 
 
 

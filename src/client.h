@@ -189,10 +189,6 @@ public:
     // sound card channel selection
     int     GetSndCrdNumInputChannels() { return iSndCrdNumInputChannels; }
     QString GetSndCrdInputChannelName ( const int iDiD ) { return Sound.GetInputChannelName ( iDiD ); }
-    void    SetSndCrdLeftInputChannel  ( const int iNewChan );
-    void    SetSndCrdRightInputChannel ( const int iNewChan );
-    int     GetSndCrdLeftInputChannel();
-    int     GetSndCrdRightInputChannel();
     void    SetSndCrdLeftInputFaderLevel  ( const int iCh, const int iGain ) { vecdFaderLevelsInputLeft[iCh]  = iGain; vecdGainsInputLeft[iCh]  = CalcFaderGain ( iGain ); }
     void    SetSndCrdRightInputFaderLevel ( const int iCh, const int iGain ) { vecdFaderLevelsInputRight[iCh] = iGain; vecdGainsInputRight[iCh] = CalcFaderGain ( iGain ); }
     int     GetSndCrdLeftInputFaderLevel  ( const int iCh ) { return vecdFaderLevelsInputLeft[iCh]; }
@@ -200,10 +196,6 @@ public:
 
     int     GetSndCrdNumOutputChannels() { return iSndCrdNumOutputChannels; }
     QString GetSndCrdOutputChannelName ( const int iDiD ) { return Sound.GetOutputChannelName ( iDiD ); }
-    void    SetSndCrdLeftOutputChannel  ( const int iNewChan );
-    void    SetSndCrdRightOutputChannel ( const int iNewChan );
-    int     GetSndCrdLeftOutputChannel();
-    int     GetSndCrdRightOutputChannel();
     void    SetSndCrdLeftOutputFaderLevel  ( const int iCh, const int iGain ) { vecdFaderLevelsOutputLeft[iCh]  = iGain; vecdGainsOutputLeft[iCh]  = CalcFaderGain ( iGain ); }
     void    SetSndCrdRightOutputFaderLevel ( const int iCh, const int iGain ) { vecdFaderLevelsOutputRight[iCh] = iGain; vecdGainsOutputRight[iCh] = CalcFaderGain ( iGain ); }
     int     GetSndCrdLeftOutputFaderLevel  ( const int iCh ) { return vecdFaderLevelsOutputLeft[iCh]; }

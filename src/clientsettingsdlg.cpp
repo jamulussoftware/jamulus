@@ -106,24 +106,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP,
 #endif
 
     // sound card input/output channel mapping
-    QString strSndCrdChanMapp = tr ( "<b>Sound Card Channel Mapping:</b> "
-        "In case the selected sound card device offers more than one "
-        "input or output channel, the Input Channel Mapping and Output "
-        "Channel Mapping settings are visible.<br>"
-        "For each " ) + APP_NAME + tr ( " input/output channel (Left and "
-        "Right channel) a different actual sound card channel can be "
-        "selected." );
+    butChanMixer->setWhatsThis ( tr ( "<b>Channel Mixer:</b> "
+        "Opens the Sound Card Audio Channel Mixer dialog." ) );
 
-    lblInChannelMapping->setWhatsThis ( strSndCrdChanMapp );
-    lblOutChannelMapping->setWhatsThis ( strSndCrdChanMapp );
-    cbxLInChan->setWhatsThis ( strSndCrdChanMapp );
-    cbxLInChan->setAccessibleName ( tr ( "Left input channel selection combo box" ) );
-    cbxRInChan->setWhatsThis ( strSndCrdChanMapp );
-    cbxRInChan->setAccessibleName ( tr ( "Right input channel selection combo box" ) );
-    cbxLOutChan->setWhatsThis ( strSndCrdChanMapp );
-    cbxLOutChan->setAccessibleName ( tr ( "Left output channel selection combo box" ) );
-    cbxROutChan->setWhatsThis ( strSndCrdChanMapp );
-    cbxROutChan->setAccessibleName ( tr ( "Right output channel selection combo box" ) );
+    butChanMixer->setAccessibleName ( tr ( "Channel Mixer button" ) );
 
     // enable OPUS64
     chbEnableOPUS64->setWhatsThis ( tr ( "<b>Enable Small Network Buffers:</b> If enabled, "
@@ -318,9 +304,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP,
     }
     cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
 
-    // init sound card channel selection frame
-    UpdateSoundChannelSelectionFrame();
-
     // fancy GUI design check box
     if ( pClient->GetGUIDesign() == GD_STANDARD )
     {
@@ -417,18 +400,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP,
     QObject::connect ( cbxSoundcard, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnSoundcardActivated ( int ) ) );
 
-    QObject::connect ( cbxLInChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnLInChanActivated ( int ) ) );
-
-    QObject::connect ( cbxRInChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnRInChanActivated ( int ) ) );
-
-    QObject::connect ( cbxLOutChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnLOutChanActivated ( int ) ) );
-
-    QObject::connect ( cbxROutChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnROutChanActivated ( int ) ) );
-
     QObject::connect ( cbxAudioChannels, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnAudioChannelsActivated ( int ) ) );
 
@@ -441,6 +412,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP,
     // buttons
     QObject::connect ( butDriverSetup, SIGNAL ( clicked() ),
         this, SLOT ( OnDriverSetupClicked() ) );
+
+    QObject::connect ( butChanMixer, SIGNAL ( clicked() ),
+        this, SLOT ( OnChanMixerClicked() ) );
 
     // misc
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
@@ -529,60 +503,6 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     }
 }
 
-void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
-{
-#if defined ( _WIN32 ) || defined ( __APPLE__ ) || defined ( __MACOSX )
-    int iSndChanIdx;
-
-    // Definition: The channel selection frame shall only be visible,
-    // if more than two input or output channels are available
-    const int iNumInChannels  = pClient->GetSndCrdNumInputChannels();
-    const int iNumOutChannels = pClient->GetSndCrdNumOutputChannels();
-
-    if ( ( iNumInChannels <= 2 ) && ( iNumOutChannels <= 2 ) )
-    {
-        // as defined, make settings invisible
-        FrameSoundcardChannelSelection->setVisible ( false );
-    }
-    else
-    {
-        // update combo boxes
-        FrameSoundcardChannelSelection->setVisible ( true );
-
-        // input
-        cbxLInChan->clear();
-        cbxRInChan->clear();
-        for ( iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumInputChannels(); iSndChanIdx++ )
-        {
-            cbxLInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
-            cbxRInChan->addItem ( pClient->GetSndCrdInputChannelName ( iSndChanIdx ) );
-        }
-        if ( pClient->GetSndCrdNumInputChannels() > 0 )
-        {
-            cbxLInChan->setCurrentIndex ( pClient->GetSndCrdLeftInputChannel() );
-            cbxRInChan->setCurrentIndex ( pClient->GetSndCrdRightInputChannel() );
-        }
-
-        // output
-        cbxLOutChan->clear();
-        cbxROutChan->clear();
-        for ( iSndChanIdx = 0; iSndChanIdx < pClient->GetSndCrdNumOutputChannels(); iSndChanIdx++ )
-        {
-            cbxLOutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );
-            cbxROutChan->addItem ( pClient->GetSndCrdOutputChannelName ( iSndChanIdx ) );
-        }
-        if ( pClient->GetSndCrdNumOutputChannels() > 0 )
-        {
-            cbxLOutChan->setCurrentIndex ( pClient->GetSndCrdLeftOutputChannel() );
-            cbxROutChan->setCurrentIndex ( pClient->GetSndCrdRightOutputChannel() );
-        }
-    }
-#else
-    // for other OS, no sound card channel selection is supported
-    FrameSoundcardChannelSelection->setVisible ( false );
-#endif
-}
-
 void CClientSettingsDlg::UpdateCentralServerDependency()
 {
     const bool bCurUseDefCentServAddr = ( pClient->GetCentralServerAddressType() != AT_MANUAL );
@@ -615,6 +535,12 @@ void CClientSettingsDlg::OnDriverSetupClicked()
     pClient->OpenSndCrdDriverSetup();
 }
 
+void CClientSettingsDlg::OnChanMixerClicked()
+{
+// TODO
+SndCrdMixDlg.show();
+}
+
 void CClientSettingsDlg::OnNetBufValueChanged ( int value )
 {
     pClient->SetSockBufNumFrames ( value, true );
@@ -642,32 +568,8 @@ void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
         // recover old selection
         cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );
     }
-    UpdateSoundChannelSelectionFrame();
+    SndCrdMixDlg.Update();
     UpdateDisplay();
-}
-
-void CClientSettingsDlg::OnLInChanActivated ( int iChanIdx )
-{
-    pClient->SetSndCrdLeftInputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
-}
-
-void CClientSettingsDlg::OnRInChanActivated ( int iChanIdx )
-{
-    pClient->SetSndCrdRightInputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
-}
-
-void CClientSettingsDlg::OnLOutChanActivated ( int iChanIdx )
-{
-    pClient->SetSndCrdLeftOutputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
-}
-
-void CClientSettingsDlg::OnROutChanActivated ( int iChanIdx )
-{
-    pClient->SetSndCrdRightOutputChannel ( iChanIdx );
-    UpdateSoundChannelSelectionFrame();
 }
 
 void CClientSettingsDlg::OnAudioChannelsActivated ( int iChanIdx )
@@ -970,6 +872,22 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
     QObject::connect ( pInLFader[13], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
     QObject::connect ( pInLFader[14], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
     QObject::connect ( pInLFader[15], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[16], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[17], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[18], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[19], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[20], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[21], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[22], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[23], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[24], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[25], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[26], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[27], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[28], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[29], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[30], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInLFader[31], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
 
     QObject::connect ( pInRFader[0],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
     QObject::connect ( pInRFader[1],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
@@ -987,6 +905,22 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
     QObject::connect ( pInRFader[13], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
     QObject::connect ( pInRFader[14], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
     QObject::connect ( pInRFader[15], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[16], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[17], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[18], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[19], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[20], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[21], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[22], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[23], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[24], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[25], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[26], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[27], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[28], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[29], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[30], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pInRFader[31], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
 
     QObject::connect ( pOutLFader[0],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
     QObject::connect ( pOutLFader[1],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
@@ -1004,6 +938,22 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
     QObject::connect ( pOutLFader[13], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
     QObject::connect ( pOutLFader[14], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
     QObject::connect ( pOutLFader[15], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[16], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[17], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[18], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[19], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[20], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[21], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[22], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[23], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[24], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[25], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[26], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[27], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[28], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[29], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[30], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutLFader[31], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
 
     QObject::connect ( pOutRFader[0],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
     QObject::connect ( pOutRFader[1],  SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
@@ -1021,12 +971,28 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
     QObject::connect ( pOutRFader[13], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
     QObject::connect ( pOutRFader[14], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
     QObject::connect ( pOutRFader[15], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[16], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[17], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[18], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[19], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[20], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[21], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[22], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[23], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[24], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[25], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[26], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[27], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[28], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[29], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[30], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
+    QObject::connect ( pOutRFader[31], SIGNAL ( valueChanged ( int ) ), this, SLOT ( OnValueChanged ( int ) ) );
 
     QObject::connect ( butClose, SIGNAL ( clicked() ),
         this, SLOT ( accept() ) );
 }
 
-void CSndCrdMixDlg::showEvent ( QShowEvent* )
+void CSndCrdMixDlg::Update()
 {
     // Update the controls with the current client settings --------------------
     const int iNumInChannels  = pClient->GetSndCrdNumInputChannels();

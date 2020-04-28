@@ -57,8 +57,10 @@ public:
     CSndCrdMixDlg ( CClient* pNCliP,
                     QWidget* parent = nullptr );
 
+    void Update();
+
 protected:
-    virtual void showEvent ( QShowEvent* );
+    virtual void showEvent ( QShowEvent* ) { Update(); }
 
     QWidget* pInLFaderWidget[MAX_NUM_IN_OUT_CHANNELS];
     QSlider* pInLFader[MAX_NUM_IN_OUT_CHANNELS];
@@ -107,7 +109,6 @@ public:
 protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
-    void    UpdateSoundChannelSelectionFrame();
     void    UpdateCentralServerDependency();
     QString GenSndCrdBufferDelayString ( const int iFrameSize,
                                          const QString strAddText = "" );
@@ -131,14 +132,11 @@ protected:
     void OnNewClientLevelEditingFinished();
     void OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* button );
     void OnSoundcardActivated ( int iSndDevIdx );
-    void OnLInChanActivated ( int iChanIdx );
-    void OnRInChanActivated ( int iChanIdx );
-    void OnLOutChanActivated ( int iChanIdx );
-    void OnROutChanActivated ( int iChanIdx );
     void OnAudioChannelsActivated ( int iChanIdx );
     void OnAudioQualityActivated ( int iQualityIdx );
     void OnCentServAddrTypeActivated ( int iTypeIdx );
     void OnDriverSetupClicked();
+    void OnChanMixerClicked();
 
 signals:
     void GUIDesignChanged();

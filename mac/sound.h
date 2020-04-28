@@ -41,38 +41,29 @@ public:
              const int  iCtrlMIDIChannel,
              const bool bNoAutoJackConnect );
 
-    virtual int  Init ( const int iNewPrefMonoBufferSize );
+    virtual void Init ( const int iNewPrefMonoBufferSize,
+                        int&      iSndCrdBufferSizeMono,
+                        int&      iSndCrdNumInputChannels,
+                        int&      iSndCrdNumOutputChannels );
+
     virtual void Start();
     virtual void Stop();
 
     // channel selection
     virtual int     GetNumInputChannels() { return iNumInChan; }
     virtual QString GetInputChannelName ( const int iDiD ) { return sChannelNamesInput[iDiD]; }
-    virtual void    SetLeftInputChannel  ( const int iNewChan );
-    virtual void    SetRightInputChannel ( const int iNewChan );
-    virtual int     GetLeftInputChannel()  { return iSelInputLeftChannel; }
-    virtual int     GetRightInputChannel() { return iSelInputRightChannel; }
 
     virtual int     GetNumOutputChannels() { return iNumOutChan; }
     virtual QString GetOutputChannelName ( const int iDiD ) { return sChannelNamesOutput[iDiD]; }
-    virtual void    SetLeftOutputChannel  ( const int iNewChan );
-    virtual void    SetRightOutputChannel ( const int iNewChan );
-    virtual int     GetLeftOutputChannel()  { return iSelOutputLeftChannel; }
-    virtual int     GetRightOutputChannel() { return iSelOutputRightChannel; }
 
     // these variables should be protected but cannot since we want
     // to access them from the callback function
-    CVector<short> vecsTmpAudioSndCrdStereo;
+    CVector<short> vecsMultChanAudioSndCrd;
     int            iCoreAudioBufferSizeMono;
-    int            iCoreAudioBufferSizeStereo;
     AudioDeviceID  CurrentAudioInputDeviceID;
     AudioDeviceID  CurrentAudioOutputDeviceID;
     int            iNumInChan;
     int            iNumOutChan;
-    int            iSelInputLeftChannel;
-    int            iSelInputRightChannel;
-    int            iSelOutputLeftChannel;
-    int            iSelOutputRightChannel;
 
 protected:
     virtual QString LoadAndInitializeDriver ( int iIdx, bool );

@@ -427,6 +427,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP,
     TimerStatus.start ( DISPLAY_UPDATE_TIME );
 }
 
+void CClientSettingsDlg::closeEvent ( QCloseEvent* Event )
+{
+    // if settings dialog is open, close it
+    SndCrdMixDlg.close();
+
+    // default implementation of this event handler routine
+    Event->accept();
+}
+
 void CClientSettingsDlg::UpdateJitterBufferFrame()
 {
     // update slider value and text
@@ -528,17 +537,6 @@ void CClientSettingsDlg::UpdateCentralServerDependency()
     // the line edit of the central server address is only enabled, if not the
     // default address is used
     edtCentralServerAddress->setEnabled ( !bCurUseDefCentServAddr );
-}
-
-void CClientSettingsDlg::OnDriverSetupClicked()
-{
-    pClient->OpenSndCrdDriverSetup();
-}
-
-void CClientSettingsDlg::OnChanMixerClicked()
-{
-// TODO
-SndCrdMixDlg.show();
 }
 
 void CClientSettingsDlg::OnNetBufValueChanged ( int value )

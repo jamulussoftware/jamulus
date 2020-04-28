@@ -97,22 +97,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         "Disconnect, i.e., it implements a toggle functionality for connecting "
         "and disconnecting the " ) + APP_NAME + tr ( " software." ) );
 
-    // local audio input fader
-    QString strAudFader = tr ( "<b>Local Audio Input Fader:</b> With the "
-        "audio fader, the relative levels of the left and right local audio "
-        "channels can be changed. For a mono signal it acts like a panning "
-        "between the two channels. If, e.g., a microphone is connected to "
-        "the right input channel and an instrument is connected to the left "
-        "input channel which is much louder than the microphone, move the "
-        "audio fader in a direction where the label above the fader shows "
-        "<i>L -x</i>, where <i>x</i> is the current attenuation indicator." );
-
-    lblAudioPan->setWhatsThis      ( strAudFader );
-    lblAudioPanValue->setWhatsThis ( strAudFader );
-    sldAudioPan->setWhatsThis      ( strAudFader );
-
-    sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
-
     // reverberation level
     QString strAudReverb = tr ( "<b>Reverberation Level:</b> A reverberation "
         "effect can be applied to one local mono audio channel or to both "
@@ -209,11 +193,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // init status LEDs
     ledBuffers->Reset();
     ledDelay->Reset();
-
-    // init audio in fader
-    sldAudioPan->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
-    sldAudioPan->setTickInterval ( AUD_FADER_IN_MAX / 5 );
-    UpdateAudioFaderSlider();
 
     // init audio reverberation
     sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
@@ -434,9 +413,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         this, SLOT ( OnTimerPing() ) );
 
     // sliders
-    QObject::connect ( sldAudioPan, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnAudioPanValueChanged ( int ) ) );
-
     QObject::connect ( sldAudioReverb, SIGNAL ( valueChanged ( int ) ),
         this, SLOT ( OnAudioReverbValueChanged ( int ) ) );
 
@@ -593,35 +569,6 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     Event->accept();
 }
 
-void CClientDlg::UpdateAudioFaderSlider()
-{
-    // update slider and label of audio fader
-    const int iCurAudInFader = pClient->GetAudioInFader();
-    sldAudioPan->setValue ( iCurAudInFader );
-
-    // show in label the center position and what channel is
-    // attenuated
-    if ( iCurAudInFader == AUD_FADER_IN_MIDDLE )
-    {
-        lblAudioPanValue->setText ( "Center" );
-    }
-    else
-    {
-        if ( iCurAudInFader > AUD_FADER_IN_MIDDLE )
-        {
-            // attenuation on right channel
-            lblAudioPanValue->setText ( "R -" +
-                QString().setNum ( iCurAudInFader - AUD_FADER_IN_MIDDLE ) );
-        }
-        else
-        {
-            // attenuation on left channel
-            lblAudioPanValue->setText ( "L -" +
-                QString().setNum ( AUD_FADER_IN_MIDDLE - iCurAudInFader ) );
-        }
-    }
-}
-
 void CClientDlg::UpdateRevSelection()
 {
     if ( pClient->GetAudioChannels() == CC_STEREO )
@@ -647,12 +594,6 @@ void CClientDlg::UpdateRevSelection()
             rbtReverbSelR->setChecked ( true );
         }
     }
-}
-
-void CClientDlg::OnAudioPanValueChanged ( int value )
-{
-    pClient->SetAudioInFader ( value );
-    UpdateAudioFaderSlider();
 }
 
 void CClientDlg::OnConnectDlgAccepted()

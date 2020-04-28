@@ -86,7 +86,6 @@ protected:
     void               ShowGeneralSettings();
     void               ShowChatWindow ( const bool bForceRaise = true );
     void               ShowAnalyzerConsole();
-    void               UpdateAudioFaderSlider();
     void               UpdateRevSelection();
     void               Connect ( const QString& strSelectedAddress,
                                  const QString& strMixerBoardLabel );
@@ -102,7 +101,7 @@ protected:
     QTimer             TimerStatus;
     QTimer             TimerPing;
 
-    virtual void       closeEvent  ( QCloseEvent* Event );
+    virtual void       closeEvent ( QCloseEvent* Event );
     void               UpdateDisplay();
 
     QMenu*             pViewMenu;
@@ -151,8 +150,6 @@ public slots:
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );
     void OnLocalMuteStateChanged ( int value );
-
-    void OnAudioPanValueChanged ( int value );
 
     void OnAudioReverbValueChanged ( int value )
         { pClient->SetReverbLevel ( value ); }

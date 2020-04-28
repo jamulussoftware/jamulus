@@ -36,6 +36,7 @@
 #include <QButtonGroup>
 #include <QGroupBox>
 #include <QTabWidget>
+#include <QCloseEvent>
 #include "global.h"
 #include "client.h"
 #include "multicolorled.h"
@@ -114,6 +115,7 @@ protected:
                                          const QString strAddText = "" );
 
     virtual void showEvent ( QShowEvent* ) { UpdateDisplay(); }
+    virtual void closeEvent ( QCloseEvent* Event );
 
     CClient*      pClient;
     QTimer        TimerStatus;
@@ -135,8 +137,8 @@ protected:
     void OnAudioChannelsActivated ( int iChanIdx );
     void OnAudioQualityActivated ( int iQualityIdx );
     void OnCentServAddrTypeActivated ( int iTypeIdx );
-    void OnDriverSetupClicked();
-    void OnChanMixerClicked();
+    void OnDriverSetupClicked() { pClient->OpenSndCrdDriverSetup(); }
+    void OnChanMixerClicked() { SndCrdMixDlg.show(); }
 
 signals:
     void GUIDesignChanged();

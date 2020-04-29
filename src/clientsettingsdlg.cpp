@@ -825,30 +825,28 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
     butClose->setDefault ( false );
 
 
+    // Add help text to controls -----------------------------------------------
+    // fader tag
+    QString strFaders = tr ( "<b>Sound Card Audio Channel Mixer:</b> With the sound "
+        "card audio channel mixer you can mix all your physical input and output "
+        "channels to the " ) + APP_NAME + tr ( " internal stereo (left/right) channels. "
+        "The default mix is to have the very first input on the left channel and the "
+        "second input on the right channel (same with the outputs).\n"
+        "As an example if you have four physical inputs and you have connected your stereo "
+        "instrument on input one and two and your microphone to input three. Then you can "
+        "put the faders of inputs one und three to the maximum on the left channel and "
+        "the faders of inputs two and three to the maximum on the right channel. With these "
+        "settings you have mapped your stereo instrument signal correctly to the internal "
+        "stereo channels and have mapped your microphone (which is mono) to both channels "
+        "as well." );
 
-//    // Add help text to controls -----------------------------------------------
-//    // fader tag
-//    QString strFaderTag = tr ( "<b>Musician Profile:</b> Set your name "
-//        "or an alias here so that the other musicians you want to play with "
-//        "know who you are. Additionally you may set an instrument picture of "
-//        "the instrument you play and a flag of the country you are living. "
-//        "The city you live in and the skill level of playing your instrument "
-//        "may also be added.\n"
-//        "What you set here will appear at your fader on the mixer board when "
-//        "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
-//        "also show up at each client which is connected to the same server as "
-//        "you. If the name is left empty, the IP address is shown instead." );
-//
-//    pedtAlias->setWhatsThis ( strFaderTag );
-//    pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );
-//    pcbxInstrument->setWhatsThis ( strFaderTag );
-//    pcbxInstrument->setAccessibleName ( tr ( "Instrument picture button" ) );
-//    pcbxCountry->setWhatsThis ( strFaderTag );
-//    pcbxCountry->setAccessibleName ( tr ( "Country flag button" ) );
-//    pedtCity->setWhatsThis ( strFaderTag );
-//    pedtCity->setAccessibleName ( tr ( "City edit box" ) );
-//    pcbxSkill->setWhatsThis ( strFaderTag );
-//    pcbxSkill->setAccessibleName ( tr ( "Skill level combo box" ) );
+    for ( int iCh = 0; iCh < MAX_NUM_IN_OUT_CHANNELS; iCh++ )
+    {
+        pInLFader[iCh]->setWhatsThis ( strFaders );
+        pInRFader[iCh]->setWhatsThis ( strFaders );
+        pOutLFader[iCh]->setWhatsThis ( strFaders );
+        pOutRFader[iCh]->setWhatsThis ( strFaders );
+    }
 
 
     // Connections -------------------------------------------------------------

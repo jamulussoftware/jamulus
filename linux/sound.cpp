@@ -237,7 +237,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
                 pSound->input_port[iCh], nframes );
 
             // copy input audio data
-            if ( in_sample != 0 )
+            if ( in_sample != nullptr )
             {
                 for ( i = 0; i < iJACKBufferSizeMono; i++ )
                 {
@@ -258,7 +258,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
                 pSound->output_port[iCh], nframes );
 
             // copy output data
-            if ( out_sample != 0 )
+            if ( out_sample != nullptr )
             {
                 for ( i = 0; i < iJACKBufferSizeMono; i++ )
                 {
@@ -278,7 +278,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
                 pSound->output_port[iCh], nframes );
 
             // clear output data
-            if ( out_sample != 0 )
+            if ( out_sample != nullptr )
             {
                 memset ( out_sample, 0, sizeof ( jack_default_audio_sample_t ) * nframes );
             }
@@ -290,7 +290,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     {
         void* in_midi = jack_port_get_buffer ( pSound->input_port_midi, nframes );
 
-        if ( in_midi != 0 )
+        if ( in_midi != nullptr )
         {
             jack_nframes_t event_count = jack_midi_get_event_count ( in_midi );
 

@@ -14,6 +14,8 @@ TODO improve input channel mapping and introduce input/output gains with overran
 
 TODO Jack: when sound card is mono capture Jamulus complains it cannot make connections #137
 
+TODO Jack: midi channels are considered for number of input/output ports to be registered which is incorrect
+
 TODO improve help menu, see https://github.com/corrados/jamulus/issues/90
 
 TODO support internationalization

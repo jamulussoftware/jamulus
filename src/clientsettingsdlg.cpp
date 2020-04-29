@@ -570,6 +570,16 @@ void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
     UpdateDisplay();
 }
 
+void CClientSettingsDlg::OnChanMixerClicked()
+{
+    // show sound card audio mixer dialog
+    SndCrdMixDlg.show();
+
+    // make sure dialog is upfront and has focus
+    SndCrdMixDlg.raise();
+    SndCrdMixDlg.activateWindow();
+}
+
 void CClientSettingsDlg::OnAudioChannelsActivated ( int iChanIdx )
 {
     pClient->SetAudioChannels ( static_cast<EAudChanConf> ( iChanIdx ) );

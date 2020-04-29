@@ -138,7 +138,7 @@ protected:
     void OnAudioQualityActivated ( int iQualityIdx );
     void OnCentServAddrTypeActivated ( int iTypeIdx );
     void OnDriverSetupClicked() { pClient->OpenSndCrdDriverSetup(); }
-    void OnChanMixerClicked() { SndCrdMixDlg.show(); }
+    void OnChanMixerClicked();
 
 signals:
     void GUIDesignChanged();

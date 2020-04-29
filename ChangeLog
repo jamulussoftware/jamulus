@@ -4,12 +4,13 @@
 
 3.5.3git
 
+  * added sound card audio channel mixer which replaces the channel selection combo boxes and the pan slider
+
   * jack audio interface ports match number of physical ports now
+
   * bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
 
 
-TODO improve input channel mapping and introduce input/output gains with overrange to amplification (separate dialog, replace Pan, etc.)
-     -> Shall we make dialog modal? If not, then we have to update on device change -> better not modal... maybe add menu entry for it instead!
 
 TODO crash reported with new jack audio interface (Ticket #154)
 

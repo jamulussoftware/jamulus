@@ -77,9 +77,18 @@ void CSound::OpenJack()
     iNumOutChan = 0;
     while ( outPorts[iNumOutChan] != NULL ) iNumOutChan++;
 
-    // want to have at least two input and two output ports but not more than the maximum allowed
-    iNumInChan  = std::min ( MAX_NUM_IN_OUT_CHANNELS, std::max ( 2, iNumInChan ) );
-    iNumOutChan = std::min ( MAX_NUM_IN_OUT_CHANNELS, std::max ( 2, iNumOutChan ) );
+    // want to have at least two input and two output ports but not more than the
+    // maximum allowed, in case of the "no auto jack connect" we always use two
+    if ( bNoAutoJackConnect )
+    {
+        iNumInChan  = 2;
+        iNumOutChan = 2;
+    }
+    else
+    {
+        iNumInChan  = std::min ( MAX_NUM_IN_OUT_CHANNELS, std::max ( 2, iNumInChan ) );
+        iNumOutChan = std::min ( MAX_NUM_IN_OUT_CHANNELS, std::max ( 2, iNumOutChan ) );
+    }
 
     // create input/output ports of this application
     for ( int i = 0; i < iNumInChan; i++ )

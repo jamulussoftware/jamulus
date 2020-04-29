@@ -741,6 +741,16 @@ CSndCrdMixDlg::CSndCrdMixDlg ( CClient* pNCliP,
     QHBoxLayout* pGrpBoxOutLeftLayout  = new QHBoxLayout ( pGrpBoxOutLeft );
     QHBoxLayout* pGrpBoxOutRightLayout = new QHBoxLayout ( pGrpBoxOutRight );
 
+    // do not waste any space between the sliders (since we can have a lot of them)
+    pGrpBoxInLeftLayout->setContentsMargins   ( 0, 0, 0, 0 );
+    pGrpBoxInRightLayout->setContentsMargins  ( 0, 0, 0, 0 );
+    pGrpBoxOutLeftLayout->setContentsMargins  ( 0, 0, 0, 0 );
+    pGrpBoxOutRightLayout->setContentsMargins ( 0, 0, 0, 0 );
+    pGrpBoxInLeftLayout->setSpacing   ( 0 );
+    pGrpBoxInRightLayout->setSpacing  ( 0 );
+    pGrpBoxOutLeftLayout->setSpacing  ( 0 );
+    pGrpBoxOutRightLayout->setSpacing ( 0 );
+
     QHBoxLayout* pButSubLayout         = new QHBoxLayout;
     QPushButton* butClose              = new QPushButton ( "&Close", this );
     pButSubLayout->addStretch();

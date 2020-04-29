@@ -34,7 +34,7 @@ void CSound::OpenJack()
     // try to become a client of the JACK server
     pJackClient = jack_client_open ( APP_NAME, JackNullOption, &JackStatus );
 
-    if ( pJackClient == NULL )
+    if ( pJackClient == nullptr )
     {
         throw CGenErr ( tr ( "The Jack server is not running. This software "
             "requires a Jack server to run. Normally if the Jack server is "
@@ -67,15 +67,15 @@ void CSound::OpenJack()
     }
 
     // get physical input and output ports (note that JackPortIsOutput/Input must be reverted)
-    const char** inPorts  = jack_get_ports ( pJackClient, NULL, NULL, JackPortIsPhysical | JackPortIsOutput );
-    const char** outPorts = jack_get_ports ( pJackClient, NULL, NULL, JackPortIsPhysical | JackPortIsInput );
+    const char** inPorts  = jack_get_ports ( pJackClient, nullptr, nullptr, JackPortIsPhysical | JackPortIsOutput );
+    const char** outPorts = jack_get_ports ( pJackClient, nullptr, nullptr, JackPortIsPhysical | JackPortIsInput );
 
     // get the number of available physical input/output channels
     iNumInChan = 0;
-    while ( inPorts[iNumInChan] != NULL ) iNumInChan++;
+    while ( inPorts[iNumInChan] != nullptr ) iNumInChan++;
 
     iNumOutChan = 0;
-    while ( outPorts[iNumOutChan] != NULL ) iNumOutChan++;
+    while ( outPorts[iNumOutChan] != nullptr ) iNumOutChan++;
 
     // want to have at least two input and two output ports but not more than the
     // maximum allowed, in case of the "no auto jack connect" we always use two
@@ -96,7 +96,7 @@ void CSound::OpenJack()
         input_port[i] = jack_port_register ( pJackClient, QString ( "input %1" ).arg ( 1 + i ).toStdString().c_str(),
                                              JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0 );
 
-        if ( input_port[i] == NULL )
+        if ( input_port[i] == nullptr )
         {
             throw CGenErr ( tr ( "The Jack audio input port registering failed." ) );
         }
@@ -107,7 +107,7 @@ void CSound::OpenJack()
         output_port[i] = jack_port_register ( pJackClient, QString ( "output %1" ).arg ( 1 + i ).toStdString().c_str(),
                                               JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
 
-        if ( output_port[i] == NULL )
+        if ( output_port[i] == nullptr )
         {
             throw CGenErr ( tr ( "The Jack audio output port registering failed." ) );
         }
@@ -119,14 +119,14 @@ void CSound::OpenJack()
         input_port_midi = jack_port_register ( pJackClient, "input midi",
                                                JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0 );
 
-        if ( input_port_midi == NULL )
+        if ( input_port_midi == nullptr )
         {
             throw CGenErr ( tr ( "The Jack midi port registering failed." ) );
         }
     }
     else
     {
-        input_port_midi = NULL;
+        input_port_midi = nullptr;
     }
 
     // tell the JACK server that we are ready to roll
@@ -143,7 +143,7 @@ void CSound::OpenJack()
         // running
 
         // try to connect physical input ports
-        if ( inPorts != NULL )
+        if ( inPorts != nullptr )
         {
             for ( int i = 0; i < iNumInChan; i++ )
             {
@@ -152,7 +152,7 @@ void CSound::OpenJack()
         }
 
         // try to connect physical output ports
-        if ( outPorts != NULL )
+        if ( outPorts != nullptr )
         {
             for ( int i = 0; i < iNumOutChan; i++ )
             {
@@ -162,12 +162,12 @@ void CSound::OpenJack()
     }
 
     // free memory
-    if ( inPorts != NULL )
+    if ( inPorts != nullptr )
     {
         jack_free ( inPorts );
     }
 
-    if ( outPorts != NULL )
+    if ( outPorts != nullptr )
     {
         jack_free ( outPorts );
     }
@@ -286,7 +286,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     }
 
     // akt on MIDI data if MIDI is enabled
-    if ( pSound->input_port_midi != NULL )
+    if ( pSound->input_port_midi != nullptr )
     {
         void* in_midi = jack_port_get_buffer ( pSound->input_port_midi, nframes );
 

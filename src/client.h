@@ -181,15 +181,15 @@ public:
     // sound card channel selection
     int     GetSndCrdNumInputChannels() { return iSndCrdNumInputChannels; }
     QString GetSndCrdInputChannelName ( const int iDiD ) { return Sound.GetInputChannelName ( iDiD ); }
-    void    SetSndCrdLeftInputFaderLevel  ( const int iCh, const int iGain ) { vecdFaderLevelsInputLeft[iCh]  = iGain; vecdGainsInputLeft[iCh]  = CalcFaderGain ( iGain ); }
-    void    SetSndCrdRightInputFaderLevel ( const int iCh, const int iGain ) { vecdFaderLevelsInputRight[iCh] = iGain; vecdGainsInputRight[iCh] = CalcFaderGain ( iGain ); }
+    void    SetSndCrdLeftInputFaderLevel  ( const int iCh, const int iGain ) { vecdFaderLevelsInputLeft[iCh]  = iGain; vecdGainsInputLeft[iCh]  = CSigProc::CalcFaderGain ( iGain ); }
+    void    SetSndCrdRightInputFaderLevel ( const int iCh, const int iGain ) { vecdFaderLevelsInputRight[iCh] = iGain; vecdGainsInputRight[iCh] = CSigProc::CalcFaderGain ( iGain ); }
     int     GetSndCrdLeftInputFaderLevel  ( const int iCh ) { return vecdFaderLevelsInputLeft[iCh]; }
     int     GetSndCrdRightInputFaderLevel ( const int iCh ) { return vecdFaderLevelsInputRight[iCh]; }
 
     int     GetSndCrdNumOutputChannels() { return iSndCrdNumOutputChannels; }
     QString GetSndCrdOutputChannelName ( const int iDiD ) { return Sound.GetOutputChannelName ( iDiD ); }
-    void    SetSndCrdLeftOutputFaderLevel  ( const int iCh, const int iGain ) { vecdFaderLevelsOutputLeft[iCh]  = iGain; vecdGainsOutputLeft[iCh]  = CalcFaderGain ( iGain ); }
-    void    SetSndCrdRightOutputFaderLevel ( const int iCh, const int iGain ) { vecdFaderLevelsOutputRight[iCh] = iGain; vecdGainsOutputRight[iCh] = CalcFaderGain ( iGain ); }
+    void    SetSndCrdLeftOutputFaderLevel  ( const int iCh, const int iGain ) { vecdFaderLevelsOutputLeft[iCh]  = iGain; vecdGainsOutputLeft[iCh]  = CSigProc::CalcFaderGain ( iGain ); }
+    void    SetSndCrdRightOutputFaderLevel ( const int iCh, const int iGain ) { vecdFaderLevelsOutputRight[iCh] = iGain; vecdGainsOutputRight[iCh] = CSigProc::CalcFaderGain ( iGain ); }
     int     GetSndCrdLeftOutputFaderLevel  ( const int iCh ) { return vecdFaderLevelsOutputLeft[iCh]; }
     int     GetSndCrdRightOutputFaderLevel ( const int iCh ) { return vecdFaderLevelsOutputRight[iCh]; }
 
@@ -292,30 +292,6 @@ public:
 #endif
 
 protected:
-
-
-
-
-// TEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-double CalcFaderGain ( const int value )
-{
-    // convert actual slider range in gain values
-    // and normalize so that maximum gain is 1
-    const double dInValueRange0_1 = static_cast<double> ( value ) / AUD_MIX_FADER_MAX;
-
-    // map range from 0..1 to range -35..0 dB and calculate linear gain
-    if ( value == 0 )
-    {
-        return 0; // -infinity
-    }
-    else
-    {
-        return pow ( 10, ( dInValueRange0_1 * 35 - 35 ) / 20 );
-    }
-}
-
-
-
     // callback function must be static, otherwise it does not work
     static void AudioCallback ( CVector<short>& psData, void* arg );
 

@@ -837,22 +837,22 @@ void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsMultChanAudioSndCrd
 {
     // sound card audio input channel mixing
     vecsStereoSndCrdTMP.Reset ( 0 ); // start with all zeros since we add the audio data
-    for ( int i = 0; i < iSndCrdNumInputChannels; i++ )
+    for ( int iCh = 0; iCh < iSndCrdNumInputChannels; iCh++ )
     {
-        if ( vecdGainsInputLeft[i] > 0 )
+        if ( vecdGainsInputLeft[iCh] > 0 )
         {
-            for ( int j = 0; j < iMonoBlockSizeSam; j++ )
+            for ( int i = 0; i < iMonoBlockSizeSam; i++ )
             {
-                vecsStereoSndCrdTMP[2 * j] = Double2Short (
-                    vecsStereoSndCrdTMP[2 * j] + vecdGainsInputLeft[i] * vecsMultChanAudioSndCrd[iSndCrdNumInputChannels * j + i] );
+                vecsStereoSndCrdTMP[2 * i] = Double2Short (
+                    vecsStereoSndCrdTMP[2 * i] + vecdGainsInputLeft[iCh] * vecsMultChanAudioSndCrd[iSndCrdNumInputChannels * i + iCh] );
             }
         }
-        if ( vecdGainsInputRight[i] > 0 )
+        if ( vecdGainsInputRight[iCh] > 0 )
         {
-            for ( int j = 0; j < iMonoBlockSizeSam; j++ )
+            for ( int i = 0; i < iMonoBlockSizeSam; i++ )
             {
-                vecsStereoSndCrdTMP[2 * j + 1] = Double2Short (
-                    vecsStereoSndCrdTMP[2 * j + 1] + vecdGainsInputRight[i] * vecsMultChanAudioSndCrd[iSndCrdNumInputChannels * j + i] );
+                vecsStereoSndCrdTMP[2 * i + 1] = Double2Short (
+                    vecsStereoSndCrdTMP[2 * i + 1] + vecdGainsInputRight[iCh] * vecsMultChanAudioSndCrd[iSndCrdNumInputChannels * i + iCh] );
             }
         }
     }
@@ -887,22 +887,22 @@ void CClient::ProcessSndCrdAudioData ( CVector<int16_t>& vecsMultChanAudioSndCrd
 
     // sound card audio output channel mixing
     vecsMultChanAudioSndCrd.Reset ( 0 ); // start with all zeros since we add the audio data
-    for ( int i = 0; i < iSndCrdNumOutputChannels; i++ )
+    for ( int iCh = 0; iCh < iSndCrdNumOutputChannels; iCh++ )
     {
-        if ( vecdGainsOutputLeft[i] > 0 )
+        if ( vecdGainsOutputLeft[iCh] > 0 )
         {
-            for ( int j = 0; j < iMonoBlockSizeSam; j++ )
+            for ( int i = 0; i < iMonoBlockSizeSam; i++ )
             {
-                vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * j + i] = Double2Short (
-                    vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * j + i] + vecdGainsOutputLeft[i] * vecsStereoSndCrdTMP[2 * j] );
+                vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * i + iCh] = Double2Short (
+                    vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * i + iCh] + vecdGainsOutputLeft[iCh] * vecsStereoSndCrdTMP[2 * i] );
             }
         }
-        if ( vecdGainsOutputRight[i] > 0 )
+        if ( vecdGainsOutputRight[iCh] > 0 )
         {
-            for ( int j = 0; j < iMonoBlockSizeSam; j++ )
+            for ( int i = 0; i < iMonoBlockSizeSam; i++ )
             {
-                vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * j + i] = Double2Short (
-                    vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * j + i] + vecdGainsOutputRight[i] * vecsStereoSndCrdTMP[2 * j + 1] );
+                vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * i + iCh] = Double2Short (
+                    vecsMultChanAudioSndCrd[iSndCrdNumOutputChannels * i + iCh] + vecdGainsOutputRight[iCh] * vecsStereoSndCrdTMP[2 * i + 1] );
             }
         }
     }

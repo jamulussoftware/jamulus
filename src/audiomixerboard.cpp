@@ -305,7 +305,7 @@ void CChannelFader::SendFaderLevelToServer ( const int iLevel )
          ( !bOtherChannelIsSolo || IsSolo() ) )
     {
         // emit signal for new fader gain value
-        emit gainValueChanged ( CalcFaderGain ( iLevel ) );
+        emit gainValueChanged ( CSigProc::CalcFaderGain ( iLevel ) );
     }
 }
 
@@ -328,7 +328,7 @@ void CChannelFader::SetMute ( const bool bState )
         if ( !bOtherChannelIsSolo || IsSolo() )
         {
             // mute was unchecked, get current fader value and apply
-            emit gainValueChanged ( CalcFaderGain ( GetFaderLevel() ) );
+            emit gainValueChanged ( CSigProc::CalcFaderGain ( GetFaderLevel() ) );
         }
     }
 }
@@ -500,23 +500,6 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     plblCountryFlag->setToolTip ( strToolTip );
     plblInstrument->setToolTip  ( strToolTip );
     plblLabel->setToolTip       ( strToolTip );
-}
-
-double CChannelFader::CalcFaderGain ( const int value )
-{
-    // convert actual slider range in gain values
-    // and normalize so that maximum gain is 1
-    const double dInValueRange0_1 = static_cast<double> ( value ) / AUD_MIX_FADER_MAX;
-
-    // map range from 0..1 to range -35..0 dB and calculate linear gain
-    if ( value == 0 )
-    {
-        return 0; // -infinity
-    }
-    else
-    {
-        return pow ( 10, ( dInValueRange0_1 * 35 - 35 ) / 20 );
-    }
 }
 
 

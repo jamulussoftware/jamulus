@@ -672,6 +672,15 @@ protected:
 };
 
 
+// Signal processing functions -------------------------------------------------
+// this is a pure static class
+class CSigProc
+{
+public:
+    static double CalcFaderGain ( const int value );
+};
+
+
 // Host address ----------------------------------------------------------------
 class CHostAddress
 {

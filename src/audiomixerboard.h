@@ -68,10 +68,9 @@ public:
     void SetChannelLevel ( const uint16_t iLevel );
 
 protected:
-    double CalcFaderGain ( const int value );
-    void   SetMute ( const bool bState );
-    void   SendFaderLevelToServer ( const int iLevel );
-    void   SetupFaderTag ( const ESkillLevel eSkillLevel );
+    void SetMute ( const bool bState );
+    void SendFaderLevelToServer ( const int iLevel );
+    void SetupFaderTag ( const ESkillLevel eSkillLevel );
 
     QFrame*            pFrame;
 

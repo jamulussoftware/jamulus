@@ -221,7 +221,7 @@ void CSound::Init ( const int /* iNewPrefMonoBufferSize */,
 // JACK callbacks --------------------------------------------------------------
 int CSound::process ( jack_nframes_t nframes, void* arg )
 {
-    CSound*   pSound = static_cast<CSound*> ( arg );
+    CSound*   pSound      = static_cast<CSound*> ( arg );
     const int iNumInChan  = pSound->iNumInChan;
     const int iNumOutChan = pSound->iNumOutChan;
 

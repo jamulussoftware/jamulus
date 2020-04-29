@@ -222,24 +222,21 @@ void CSound::Init ( const int /* iNewPrefMonoBufferSize */,
 int CSound::process ( jack_nframes_t nframes, void* arg )
 {
     CSound*   pSound = static_cast<CSound*> ( arg );
-    const int iJACKBufferSizeMono = pSound->iJACKBufferSizeMono;
-    const int iNumInChan          = pSound->iNumInChan;
-    const int iNumOutChan         = pSound->iNumOutChan;
-    int       i;
+    const int iNumInChan  = pSound->iNumInChan;
+    const int iNumOutChan = pSound->iNumOutChan;
 
-    if ( pSound->IsRunning() )
+    if ( pSound->IsRunning() && ( nframes == static_cast<jack_nframes_t> ( pSound->iJACKBufferSizeMono ) ) )
     {
         for ( int iCh = 0; iCh < iNumInChan; iCh++ )
         {
             // get input data pointer
             jack_default_audio_sample_t* in_sample =
-                (jack_default_audio_sample_t*) jack_port_get_buffer (
-                pSound->input_port[iCh], nframes );
+                (jack_default_audio_sample_t*) jack_port_get_buffer ( pSound->input_port[iCh], nframes );
 
             // copy input audio data
             if ( in_sample != nullptr )
             {
-                for ( i = 0; i < iJACKBufferSizeMono; i++ )
+                for ( jack_nframes_t i = 0; i < nframes; i++ )
                 {
                     pSound->vecsMultChanAudioSndCrd[iNumInChan * i + iCh] =
                         (short) ( in_sample[i] * _MAXSHORT );
@@ -254,13 +251,12 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
         {
             // get output data pointer
             jack_default_audio_sample_t* out_sample =
-                (jack_default_audio_sample_t*) jack_port_get_buffer (
-                pSound->output_port[iCh], nframes );
+                (jack_default_audio_sample_t*) jack_port_get_buffer ( pSound->output_port[iCh], nframes );
 
             // copy output data
             if ( out_sample != nullptr )
             {
-                for ( i = 0; i < iJACKBufferSizeMono; i++ )
+                for ( jack_nframes_t i = 0; i < nframes; i++ )
                 {
                     out_sample[i] = (jack_default_audio_sample_t)
                         pSound->vecsMultChanAudioSndCrd[iNumOutChan * i + iCh] / _MAXSHORT;
@@ -274,8 +270,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
         {
             // get output data pointer
             jack_default_audio_sample_t* out_sample =
-                (jack_default_audio_sample_t*) jack_port_get_buffer (
-                pSound->output_port[iCh], nframes );
+                (jack_default_audio_sample_t*) jack_port_get_buffer ( pSound->output_port[iCh], nframes );
 
             // clear output data
             if ( out_sample != nullptr )
@@ -302,9 +297,9 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
 
                 // copy packet and send it to the MIDI parser
 // TODO do not call malloc in real-time callback
-                CVector<uint8_t> vMIDIPaketBytes ( in_event.size );
+                CVector<uint8_t> vMIDIPaketBytes ( static_cast<int> ( in_event.size ) );
 
-                for ( i = 0; i < static_cast<int> ( in_event.size ); i++ )
+                for ( int i = 0; i < static_cast<int> ( in_event.size ); i++ )
                 {
                     vMIDIPaketBytes[i] = static_cast<uint8_t> ( in_event.buffer[i] );
                 }

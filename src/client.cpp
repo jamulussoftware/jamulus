@@ -39,6 +39,7 @@ CClient::CClient ( const quint16  iPortNumber,
     vecStoredFaderIsMute             ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     iNewClientFaderLevel             ( 100 ),
     bConnectDlgShowAllMusicians      ( true ),
+    strClientName                    ( strNClientName ),
     vecWindowPosMain                 (), // empty array
     vecWindowPosSettings             (), // empty array
     vecWindowPosChat                 (), // empty array
@@ -77,8 +78,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bJitterBufferOK                  ( true ),
     strCentralServerAddress          ( "" ),
     eCentralServerAddressType        ( AT_DEFAULT ),
-    iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL ),
-    strClientName                    ( strNClientName )
+    iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL )
 {
     int iOpusError;
 

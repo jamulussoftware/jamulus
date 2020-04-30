@@ -657,7 +657,7 @@ public:
     void          Update ( const CVector<short>& vecsAudio );
     double        MicLeveldBLeft()  { return CalcLogResult ( dCurLevelL ); }
     double        MicLeveldBRight() { return CalcLogResult ( dCurLevelR ); }
-    static double CalcLogResult  ( const double& dLinearLevel );
+    static double CalcLogResult ( const double& dLinearLevel );
 
     void Reset()
     {

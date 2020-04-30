@@ -957,7 +957,7 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
     if ( iReverbLevel != 0 )
     {
         // calculate attenuation amplification factor
-        const double dRevLev = static_cast<double> ( iReverbLevel ) / AUD_REVERB_MAX / 2;
+        const double dRevLev = static_cast<double> ( iReverbLevel ) / AUD_REVERB_MAX / 4;
 
         if ( eAudioChannelConf == CC_STEREO )
         {

@@ -2,16 +2,26 @@
 
 
 
+
+
 3.5.3git
 
-TODO improve input channel mapping and introduce input/output gains with overrange to amplification (separate dialog, replace Pan, etc.)
+  * bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
+
+
+TODO improve help menu, see https://github.com/corrados/jamulus/issues/90
 
 TODO support internationalization
 
+TODO standard style: meter bar gets smaller sometimes if board is full and fader text is short
+
 TODO sometimes I cannot see the central server in the server list
+
+TODO server: warning if Central server selected but OS location is different (e.g. US) -> warning in GUI and command line
 
 TODO implement panning for channels (Ticket #52, #145)
 
+TODO show mute state of others
 
 
 

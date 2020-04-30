@@ -34,7 +34,7 @@ void CSound::OpenJack()
     // try to become a client of the JACK server
     pJackClient = jack_client_open ( APP_NAME, JackNullOption, &JackStatus );
 
-    if ( pJackClient == NULL )
+    if ( pJackClient == nullptr )
     {
         throw CGenErr ( tr ( "The Jack server is not running. This software "
             "requires a Jack server to run. Normally if the Jack server is "
@@ -79,10 +79,10 @@ void CSound::OpenJack()
     output_port_right = jack_port_register ( pJackClient, "output right",
         JACK_DEFAULT_AUDIO_TYPE, JackPortIsOutput, 0 );
 
-    if ( ( input_port_left   == NULL ) ||
-         ( input_port_right  == NULL ) ||
-         ( output_port_left  == NULL ) ||
-         ( output_port_right == NULL ) )
+    if ( ( input_port_left   == nullptr ) ||
+         ( input_port_right  == nullptr ) ||
+         ( output_port_left  == nullptr ) ||
+         ( output_port_right == nullptr ) )
     {
         throw CGenErr ( tr ( "The Jack port registering failed." ) );
     }
@@ -93,14 +93,14 @@ void CSound::OpenJack()
         input_port_midi = jack_port_register ( pJackClient, "input midi",
             JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0 );
 
-        if ( input_port_midi == NULL )
+        if ( input_port_midi == nullptr )
         {
             throw CGenErr ( tr ( "The Jack port registering failed." ) );
         }
     }
     else
     {
-        input_port_midi = NULL;
+        input_port_midi = nullptr;
     }
 
     // tell the JACK server that we are ready to roll
@@ -119,23 +119,16 @@ void CSound::OpenJack()
 
         // try to connect physical input ports
         if ( ( ports = jack_get_ports ( pJackClient,
-                                        NULL,
-                                        NULL,
-                                        JackPortIsPhysical | JackPortIsOutput ) ) != NULL )
+                                        nullptr,
+                                        nullptr,
+                                        JackPortIsPhysical | JackPortIsOutput ) ) != nullptr )
         {
-            if ( jack_connect ( pJackClient, ports[0], jack_port_name ( input_port_left ) ) )
-            {
-                throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
-            }
+            jack_connect ( pJackClient, ports[0], jack_port_name ( input_port_left ) );
 
-            // before connecting the second stereo channel, check if the input is not
-            // mono
+            // before connecting the second stereo channel, check if the input is not mono
             if ( ports[1] )
             {
-                if ( jack_connect ( pJackClient, ports[1], jack_port_name ( input_port_right ) ) )
-                {
-                    throw CGenErr ( tr ( "Cannot connect the Jack input ports" ) );
-                }
+                jack_connect ( pJackClient, ports[1], jack_port_name ( input_port_right ) );
             }
 
             jack_free ( ports );
@@ -143,23 +136,16 @@ void CSound::OpenJack()
 
         // try to connect physical output ports
         if ( ( ports = jack_get_ports ( pJackClient,
-                                        NULL,
-                                        NULL,
-                                        JackPortIsPhysical | JackPortIsInput ) ) != NULL )
+                                        nullptr,
+                                        nullptr,
+                                        JackPortIsPhysical | JackPortIsInput ) ) != nullptr )
         {
-            if ( jack_connect ( pJackClient, jack_port_name ( output_port_left ), ports[0] ) )
-            {
-                throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
-            }
+            jack_connect ( pJackClient, jack_port_name ( output_port_left ), ports[0] );
 
-            // before connecting the second stereo channel, check if the output is not
-            // mono
+            // before connecting the second stereo channel, check if the output is not mono
             if ( ports[1] )
             {
-                if ( jack_connect ( pJackClient, jack_port_name ( output_port_right ), ports[1] ) )
-                {
-                    throw CGenErr ( tr ( "Cannot connect the Jack output ports." ) );
-                }
+                jack_connect ( pJackClient, jack_port_name ( output_port_right ), ports[1] );
             }
 
             jack_free ( ports );
@@ -230,7 +216,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     CSound* pSound = static_cast<CSound*> ( arg );
     int     i;
 
-    if ( pSound->IsRunning() )
+    if ( pSound->IsRunning() && ( nframes == static_cast<jack_nframes_t> ( pSound->iJACKBufferSizeMono ) ) )
     {
         // get input data pointer
         jack_default_audio_sample_t* in_left =
@@ -242,7 +228,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             pSound->input_port_right, nframes );
 
         // copy input audio data
-        if ( in_left != 0 && in_right != 0 )
+        if ( ( in_left != nullptr ) && ( in_right != nullptr ) )
         {
             for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
             {
@@ -267,7 +253,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             pSound->output_port_right, nframes );
 
         // copy output data
-        if ( out_left != 0 && out_right != 0 )
+        if ( ( out_left != nullptr ) && ( out_right != nullptr ) )
         {
             for ( i = 0; i < pSound->iJACKBufferSizeMono; i++ )
             {
@@ -291,7 +277,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
             pSound->output_port_right, nframes );
 
         // clear output data
-        if ( out_left != 0 && out_right != 0 )
+        if ( ( out_left != nullptr ) && ( out_right != nullptr ) )
         {
             memset ( out_left,
                      0,
@@ -304,7 +290,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     }
 
     // akt on MIDI data if MIDI is enabled
-    if ( pSound->input_port_midi != NULL )
+    if ( pSound->input_port_midi != nullptr )
     {
         void* in_midi = jack_port_get_buffer ( pSound->input_port_midi, nframes );
 

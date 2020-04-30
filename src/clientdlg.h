@@ -102,7 +102,7 @@ protected:
     QTimer             TimerStatus;
     QTimer             TimerPing;
 
-    virtual void       closeEvent  ( QCloseEvent* Event );
+    virtual void       closeEvent ( QCloseEvent* Event );
     void               UpdateDisplay();
 
     QMenu*             pViewMenu;

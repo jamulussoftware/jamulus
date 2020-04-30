@@ -483,12 +483,12 @@ void CSound::Stop()
     }
 }
 
-CSound::CSound ( void       (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
-                 void*      arg,
-                 const int  iCtrlMIDIChannel,
-                 const bool bNoAutoJackConnect,
-                 const QString&   strJackClientName ) :
-    CSoundBase      ( "ASIO", true, fpNewCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect, strJackClientName ),
+CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
+                 void*          arg,
+                 const int      iCtrlMIDIChannel,
+                 const bool     bNoAutoJackConnect,
+                 const QString& strJackClientName ) :
+    CSoundBase              ( "ASIO", true, fpNewCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect, strJackClientName ),
     lNumInChan              ( 0 ),
     lNumInChanPlusAddChan   ( 0 ),
     lNumOutChan             ( 0 ),

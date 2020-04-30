@@ -328,7 +328,22 @@ int main ( int argc, char** argv )
         }
 
 
-        // HTML status file ----------------------------------------------------
+        // Client Name ---------------------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "--clientname",
+                                 "--clientname",
+                                 strArgument ) )
+        {
+            strClientName = QString ( APP_NAME ) + " " + strArgument;
+            tsConsole << "- client name: " << strClientName << endl;
+            continue;
+        }
+
+
+        // Server history file name --------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
                                  argv,
@@ -432,19 +447,6 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Client Name ---------------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "--clientname",
-                                 "--clientname",
-                                 strArgument ) )
-        {
-            strClientName = strArgument;
-            tsConsole << "- client name: " << strClientName << endl;
-            continue;
-        }
 
         // Version number ------------------------------------------------------
         if ( ( !strcmp ( argv[i], "--version" ) ) ||
@@ -486,6 +488,7 @@ int main ( int argc, char** argv )
     {
         strCentralServer = DEFAULT_SERVER_ADDRESS;
     }
+
 
     // Application/GUI setup ---------------------------------------------------
     // Application object
@@ -687,7 +690,7 @@ QString UsageArguments ( char **argv )
         "  -D, --histdays        number of days of history to display (server only)\n"
         "  -z, --startminimized  start minimizied (server only)\n"
         "  --ctrlmidich          MIDI controller channel to listen (client only)\n"
-        "  --clientname          Jamulus client name (windows title and jack client name)\n"
+        "  --clientname          client name (window title and jack client name)\n"
         "\nExample: " + QString ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }
 

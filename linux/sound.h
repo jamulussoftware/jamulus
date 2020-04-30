@@ -60,12 +60,14 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void       (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
-             void*      arg,
-             const int  iCtrlMIDIChannel,
-             const bool bNoAutoJackConnect,
-             const QString&   strJackClientName ) :
-        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect, strJackClientName ), iJACKBufferSizeMono ( 0 ) { OpenJack( strJackClientName.toLocal8Bit().data() ); }
+    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+             void*          arg,
+             const int      iCtrlMIDIChannel,
+             const bool     bNoAutoJackConnect,
+             const QString& strJackClientName ) :
+        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect, strJackClientName ),
+        iJACKBufferSizeMono ( 0 ) { OpenJack ( strJackClientName.toLocal8Bit().data() ); }
+
     virtual ~CSound() { CloseJack(); }
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
@@ -85,7 +87,7 @@ public:
     jack_port_t*   input_port_midi;
 
 protected:
-    void OpenJack(char* jackClientName);
+    void OpenJack ( const char* jackClientName );
     void CloseJack();
 
     // callbacks

@@ -108,17 +108,12 @@ public:
               const QString& strConnOnStartupAddress,
               const int      iCtrlMIDIChannel,
               const bool     bNoAutoJackConnect,
-              const QString& strClientName );
+              const QString& strNClientName );
 
     void   Start();
     void   Stop();
     bool   IsRunning() { return Sound.IsRunning(); }
     bool   SetServerAddr ( QString strNAddr );
-
-    QString GetClientName() const { return this->strClientName; }
-    void SetClientName ( const QString& strClientName ) {
-        this->strClientName = strClientName;
-    }
 
     double MicLeveldB_L() { return SignalLevelMeter.MicLeveldBLeft(); }
     double MicLeveldB_R() { return SignalLevelMeter.MicLeveldBRight(); }
@@ -288,6 +283,7 @@ public:
     CVector<int>     vecStoredFaderIsMute;
     int              iNewClientFaderLevel;
     bool             bConnectDlgShowAllMusicians;
+    QString          strClientName;
 
     // window position/state settings
     QByteArray       vecWindowPosMain;
@@ -389,8 +385,6 @@ protected:
 
     // for ping measurement
     CPreciseTime            PreciseTime;
-    
-    QString                 strClientName;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

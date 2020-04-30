@@ -802,24 +802,24 @@ void CClientDlg::OnNumClientsChanged ( int iNewNumClients )
     SetMyWindowTitle ( iNewNumClients );
 }
 
-void CClientDlg::SetMyWindowTitle ( const int iNumClients)
+void CClientDlg::SetMyWindowTitle ( const int iNumClients )
 {
     // show number of connected clients in window title (and therefore also in
     // the task bar of the OS)
     if ( iNumClients == 0 )
     {
         // only application name
-        setWindowTitle ( pClient->GetClientName() );
+        setWindowTitle ( pClient->strClientName );
     }
     else
     {
         if ( iNumClients == 1 )
         {
-            setWindowTitle ( QString ( pClient->GetClientName() ) + " (1 user)" );
+            setWindowTitle ( QString ( pClient->strClientName ) + " (1 user)" );
         }
         else
         {
-            setWindowTitle ( QString ( pClient->GetClientName() ) +
+            setWindowTitle ( QString ( pClient->strClientName ) +
                 QString ( " (%1 users)" ).arg ( iNumClients ) );
         }
     }

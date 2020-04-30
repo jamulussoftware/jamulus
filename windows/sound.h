@@ -46,11 +46,11 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void       (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
-             void*      arg,
-             const int  iCtrlMIDIChannel,
-             const bool bNoAutoJackConnect,
-             const QString&   strJackClientName );
+    CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
+             void*          arg,
+             const int      iCtrlMIDIChannel,
+             const bool     bNoAutoJackConnect,
+             const QString& strJackClientName );
     
     virtual ~CSound() { UnloadCurrentDriver(); }
 

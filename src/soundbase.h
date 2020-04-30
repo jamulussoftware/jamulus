@@ -51,9 +51,7 @@ public:
                  const bool     bNewIsCallbackAudioInterface,
                  void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                  void*          pParg,
-                 const int      iNewCtrlMIDIChannel,
-                 const bool     bNewNoAutoJackConnect,
-                 const QString& strNewJackClientName );
+                 const int      iNewCtrlMIDIChannel );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
@@ -122,8 +120,6 @@ protected:
     bool             bIsCallbackAudioInterface;
     QString          strSystemDriverTechniqueName;
     int              iCtrlMIDIChannel;
-    bool             bNoAutoJackConnect;
-    QString          strJackClientName;
 
     CVector<int16_t> vecsAudioSndCrdStereo;
 

@@ -49,8 +49,8 @@ public:
     CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
              void*          arg,
              const int      iCtrlMIDIChannel,
-             const bool     bNoAutoJackConnect,
-             const QString& strJackClientName );
+             const bool     ,
+             const QString& );
     
     virtual ~CSound() { UnloadCurrentDriver(); }
 

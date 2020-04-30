@@ -39,8 +39,8 @@ public:
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
              void*          arg,
              const int      iCtrlMIDIChannel,
-             const bool     bNoAutoJackConnect,
-             const QString& strJackClientName );
+             const bool     ,
+             const QString& );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();

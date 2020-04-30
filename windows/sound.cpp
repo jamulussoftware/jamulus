@@ -486,9 +486,9 @@ void CSound::Stop()
 CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
                  void*          arg,
                  const int      iCtrlMIDIChannel,
-                 const bool     bNoAutoJackConnect,
-                 const QString& strJackClientName ) :
-    CSoundBase              ( "ASIO", true, fpNewCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect, strJackClientName ),
+                 const bool     ,
+                 const QString& ) :
+    CSoundBase              ( "ASIO", true, fpNewCallback, arg, iCtrlMIDIChannel ),
     lNumInChan              ( 0 ),
     lNumInChanPlusAddChan   ( 0 ),
     lNumOutChan             ( 0 ),

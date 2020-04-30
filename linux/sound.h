@@ -65,8 +65,8 @@ public:
              const int      iCtrlMIDIChannel,
              const bool     bNoAutoJackConnect,
              const QString& strJackClientName ) :
-        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect, strJackClientName ),
-        iJACKBufferSizeMono ( 0 ) { OpenJack ( strJackClientName.toLocal8Bit().data() ); }
+        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ),
+        iJACKBufferSizeMono ( 0 ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
 
     virtual ~CSound() { CloseJack(); }
 
@@ -87,7 +87,9 @@ public:
     jack_port_t*   input_port_midi;
 
 protected:
-    void OpenJack ( const char* jackClientName );
+    void OpenJack ( const bool  bNoAutoJackConnect,
+                    const char* jackClientName );
+
     void CloseJack();
 
     // callbacks
@@ -104,9 +106,9 @@ public:
     CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
              void*          pParg,
              const int      iCtrlMIDIChannel,
-             const bool     bNoAutoJackConnect,
-             const QString& strJackClientName ) :
-        CSoundBase ( "nosound", false, fpNewProcessCallback, pParg, iCtrlMIDIChannel, bNoAutoJackConnect, strJackClientName ) {}
+             const bool     ,
+             const QString& ) :
+        CSoundBase ( "nosound", false, fpNewProcessCallback, pParg, iCtrlMIDIChannel ) {}
     virtual ~CSound() {}
 };
 #endif // WITH_SOUND

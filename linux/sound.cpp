@@ -27,7 +27,8 @@
 #include "sound.h"
 
 #ifdef WITH_SOUND
-void CSound::OpenJack ( const char* jackClientName )
+void CSound::OpenJack ( const bool  bNoAutoJackConnect,
+                        const char* jackClientName )
 {
     jack_status_t JackStatus;
 

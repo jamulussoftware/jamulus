@@ -29,7 +29,8 @@
 CClient::CClient ( const quint16  iPortNumber,
                    const QString& strConnOnStartupAddress,
                    const int      iCtrlMIDIChannel,
-                   const bool     bNoAutoJackConnect ) :
+                   const bool     bNoAutoJackConnect,
+                   const QString& strClientName ) :
     vstrIPAddress                    ( MAX_NUM_SERVER_ADDR_ITEMS, "" ),
     ChannelInfo                      (),
     vecStoredFaderTags               ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
@@ -59,7 +60,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bIsInitializationPhase           ( true ),
     bMuteOutStream                   ( false ),
     Socket                           ( &Channel, iPortNumber ),
-    Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect ),
+    Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect, strClientName ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
     bReverbOnLeftChan                ( false ),
     iReverbLevel                     ( 0 ),
@@ -76,8 +77,12 @@ CClient::CClient ( const quint16  iPortNumber,
     bJitterBufferOK                  ( true ),
     strCentralServerAddress          ( "" ),
     eCentralServerAddressType        ( AT_DEFAULT ),
-    iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL )
+    iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL ),
+    strClientName                    ( APP_NAME )
 {
+    
+    SetClientName ( strClientName );
+    
     int iOpusError;
 
     OpusMode = opus_custom_mode_create ( SYSTEM_SAMPLE_RATE_HZ,

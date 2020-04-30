@@ -27,12 +27,12 @@
 #include "sound.h"
 
 #ifdef WITH_SOUND
-void CSound::OpenJack()
+void CSound::OpenJack(char* jackClientName)
 {
     jack_status_t JackStatus;
 
     // try to become a client of the JACK server
-    pJackClient = jack_client_open ( APP_NAME, JackNullOption, &JackStatus );
+    pJackClient = jack_client_open ( jackClientName, JackNullOption, &JackStatus );
 
     if ( pJackClient == nullptr )
     {

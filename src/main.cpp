@@ -76,6 +76,7 @@ int main ( int argc, char** argv )
     QString      strCentralServer          = "";
     QString      strServerInfo             = "";
     QString      strWelcomeMessage         = "";
+    QString      strClientName             = APP_NAME;
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -431,6 +432,19 @@ int main ( int argc, char** argv )
             continue;
         }
 
+        // Client Name ---------------------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "--clientname",
+                                 "--clientname",
+                                 strArgument ) )
+        {
+            strClientName = strArgument;
+            tsConsole << "- client name: " << strClientName << endl;
+            continue;
+        }
 
         // Version number ------------------------------------------------------
         if ( ( !strcmp ( argv[i], "--version" ) ) ||
@@ -472,7 +486,6 @@ int main ( int argc, char** argv )
     {
         strCentralServer = DEFAULT_SERVER_ADDRESS;
     }
-
 
     // Application/GUI setup ---------------------------------------------------
     // Application object
@@ -523,7 +536,8 @@ int main ( int argc, char** argv )
             CClient Client ( iPortNumber,
                              strConnOnStartupAddress,
                              iCtrlMIDIChannel,
-                             bNoAutoJackConnect );
+                             bNoAutoJackConnect,
+                             strClientName );
 
             // load settings from init-file
             CSettings Settings ( &Client, strIniFileName );
@@ -672,7 +686,8 @@ QString UsageArguments ( char **argv )
         "                        name (server only)\n"
         "  -D, --histdays        number of days of history to display (server only)\n"
         "  -z, --startminimized  start minimizied (server only)\n"
-        "  --ctrlmidich          MIDI controller channel to listen (client only)"
+        "  --ctrlmidich          MIDI controller channel to listen (client only)\n"
+        "  --clientname          Jamulus client name (windows title and jack client name)\n"
         "\nExample: " + QString ( argv[0] ) + " -l -inifile myinifile.ini\n";
 }
 

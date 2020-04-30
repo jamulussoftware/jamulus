@@ -95,6 +95,7 @@ protected:
     CClient*           pClient;
     CSettings*         pSettings;
 
+    QString            strClientName;
     bool               bConnected;
     bool               bConnectDlgWasShown;
     QTimer             TimerSigMet;

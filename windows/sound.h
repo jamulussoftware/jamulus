@@ -49,7 +49,9 @@ public:
     CSound ( void       (*fpNewCallback) ( CVector<int16_t>& psData, void* arg ),
              void*      arg,
              const int  iCtrlMIDIChannel,
-             const bool bNoAutoJackConnect );
+             const bool bNoAutoJackConnect,
+             const QString&   strJackClientName );
+    
     virtual ~CSound() { UnloadCurrentDriver(); }
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );

@@ -107,12 +107,18 @@ public:
     CClient ( const quint16  iPortNumber,
               const QString& strConnOnStartupAddress,
               const int      iCtrlMIDIChannel,
-              const bool     bNoAutoJackConnect );
+              const bool     bNoAutoJackConnect,
+              const QString& strClientName );
 
     void   Start();
     void   Stop();
     bool   IsRunning() { return Sound.IsRunning(); }
     bool   SetServerAddr ( QString strNAddr );
+
+    QString GetClientName() const { return this->strClientName; }
+    void SetClientName ( const QString& strClientName ) {
+        this->strClientName = strClientName;
+    }
 
     double MicLeveldB_L() { return SignalLevelMeter.MicLeveldBLeft(); }
     double MicLeveldB_R() { return SignalLevelMeter.MicLeveldBRight(); }
@@ -383,6 +389,8 @@ protected:
 
     // for ping measurement
     CPreciseTime            PreciseTime;
+    
+    QString                 strClientName;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

@@ -26,11 +26,12 @@
 
 
 /* Implementation *************************************************************/
-CSound::CSound ( void       (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
-                 void*      arg,
-                 const int  iCtrlMIDIChannel,
-                 const bool bNoAutoJackConnect ) :
-    CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect )
+CSound::CSound ( void             (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+                 void*            arg,
+                 const int        iCtrlMIDIChannel,
+                 const bool       bNoAutoJackConnect,
+                 const QString&   strJackClientName ) :
+    CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect, strJackClientName )
 {
 
 }

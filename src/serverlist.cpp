@@ -31,13 +31,13 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          const int      iNumChannels,
                                          const bool     bNCentServPingServerInList,
                                          CProtocol*     pNConLProt )
-    : iNumPredefinedServers     ( 0 ),
+    : tsConsoleStream           ( *( ( new ConsoleWriterFactory() )->get() ) ),
+      iNumPredefinedServers     ( 0 ),
       eCentralServerAddressType ( AT_MANUAL ), // must be AT_MANUAL for the "no GUI" case
       bCentServPingServerInList ( bNCentServPingServerInList ),
       pConnLessProtocol         ( pNConLProt ),
       eSvrRegStatus             ( SRS_UNREGISTERED ),
-      iSvrRegRetries            ( 0 ),
-      tsConsoleStream           ( *( ( new ConsoleWriterFactory() )->get() ) )
+      iSvrRegRetries            ( 0 )
 {
     // set the central server address
     SetCentralServerAddress ( sNCentServAddr );
@@ -308,7 +308,7 @@ void CServerListManager::OnTimerPingServerInList()
 
 void CServerListManager::OnTimerPollList()
 {
-    CVector<CHostAddress> removals;
+    CVector<CHostAddress> vecRemovedHostAddr;
 
     QMutexLocker locker ( &Mutex );
 
@@ -322,7 +322,7 @@ void CServerListManager::OnTimerPollList()
         if ( ServerList[iIdx].RegisterTime.elapsed() > ( SERVLIST_TIME_OUT_MINUTES * 60000 ) )
         {
             // remove this list entry
-            removals.Add ( ServerList[iIdx].HostAddr );
+            vecRemovedHostAddr.Add ( ServerList[iIdx].HostAddr );
             ServerList.removeAt ( iIdx );
         }
         else
@@ -331,11 +331,12 @@ void CServerListManager::OnTimerPollList()
             iIdx++;
         }
     }
+
     locker.unlock();
-    foreach ( const CHostAddress HostAddr , removals )
+
+    foreach ( const CHostAddress HostAddr, vecRemovedHostAddr )
     {
-        tsConsoleStream << "Expired entry for "
-                        << HostAddr.toString() << endl;
+        tsConsoleStream << "Expired entry for " << HostAddr.toString() << endl;
     }
 }
 

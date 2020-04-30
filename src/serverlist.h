@@ -186,6 +186,7 @@ protected:
     QTimer                  TimerCLRegisterServerResp;
 
     QMutex                  Mutex;
+    QTextStream&            tsConsoleStream;
 
     QList<CServerListEntry> ServerList;
 
@@ -206,8 +207,6 @@ protected:
 
     // count of registration retries
     int                     iSvrRegRetries;
-
-    QTextStream& tsConsoleStream;
 
 public slots:
     void OnTimerPollList();

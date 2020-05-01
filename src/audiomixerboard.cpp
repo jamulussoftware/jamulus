@@ -49,6 +49,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     plblInstrument              = new QLabel            ( pFrame );
     plblCountryFlag             = new QLabel            ( pFrame );
 
+    plblChannelNumber           = new QLabel            ( "" );
+
     QVBoxLayout* pMainGrid      = new QVBoxLayout       ( pFrame );
     QHBoxLayout* pLevelsGrid    = new QHBoxLayout       ( pLevelsBox );
     QVBoxLayout* pMuteSoloGrid  = new QVBoxLayout       ( pMuteSoloBox );
@@ -99,6 +101,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pMuteSoloBox, 0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pLabelInstBox );
+
+    pMainGrid->addWidget ( plblChannelNumber, 0, Qt::AlignHCenter );
 
     // add fader frame to audio mixer board layout
     pParentLayout->addWidget( pFrame );

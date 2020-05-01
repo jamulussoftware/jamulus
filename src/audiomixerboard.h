@@ -88,6 +88,8 @@ protected:
     QLabel*            plblInstrument;
     QLabel*            plblCountryFlag;
 
+    QLabel*            plblChannelNumber;
+
     QString            strReceivedName;
 
     bool               bOtherChannelIsSolo;

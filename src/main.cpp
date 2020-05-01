@@ -328,7 +328,22 @@ int main ( int argc, char** argv )
         }
 
 
-        // HTML status file ----------------------------------------------------
+        // Client Name ---------------------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "--clientname",
+                                 "--clientname",
+                                 strArgument ) )
+        {
+            strClientName = QString ( APP_NAME ) + " " + strArgument;
+            tsConsole << "- client name: " << strClientName << endl;
+            continue;
+        }
+
+
+        // Server history file name --------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
                                  argv,
@@ -432,19 +447,6 @@ int main ( int argc, char** argv )
             continue;
         }
 
-        // Client Name ---------------------------------------------------------
-        if ( GetStringArgument ( tsConsole,
-                                 argc,
-                                 argv,
-                                 i,
-                                 "--clientname",
-                                 "--clientname",
-                                 strArgument ) )
-        {
-            strClientName = strArgument;
-            tsConsole << "- client name: " << strClientName << endl;
-            continue;
-        }
 
         // Version number ------------------------------------------------------
         if ( ( !strcmp ( argv[i], "--version" ) ) ||
@@ -486,6 +488,7 @@ int main ( int argc, char** argv )
     {
         strCentralServer = DEFAULT_SERVER_ADDRESS;
     }
+
 
     // Application/GUI setup ---------------------------------------------------
     // Application object
@@ -652,23 +655,19 @@ QString UsageArguments ( char **argv )
     return
         "Usage: " + QString ( argv[0] ) + " [option] [argument]\n"
         "\nRecognized options:\n"
+        "\nServer only:\n\n"
         "  -a, --servername      server name, required for HTML status (server\n"
-        "                        only)\n"
-        "  -c, --connect         connect to given server address on startup\n"
-        "                        (client only)\n"
+        "  -D, --histdays        number of days of history to display (server only)\n"
         "  -e, --centralserver   address of the central server (server only)\n"
         "  -F, --fastupdate      use 64 samples frame size mode (server only)\n"
+        "                        only)\n"
         "  -g, --pingservers     ping servers in list to keep NAT port open\n"
         "                        (central server only)\n"
-        "  -h, -?, --help        display this help text and exit\n"
-        "  -i, --inifile         initialization file name\n"
-        "  -j, --nojackconnect   disable auto Jack connections (client only)\n"
         "  -l, --log             enable logging, set file name\n"
         "  -L, --licence         a licence must be accepted on a new\n"
         "                        connection (server only)\n"
         "  -m, --htmlstatus      enable HTML status file, set file name (server\n"
         "                        only)\n"
-        "  -n, --nogui           disable GUI\n"
         "  -o, --serverinfo      infos of the server(s) in the format:\n"
         "                        [name];[city];[country as QLocale ID]; ...\n"
         "                        [server1 address];[server1 name]; ...\n"
@@ -680,15 +679,22 @@ QString UsageArguments ( char **argv )
         "                        recorded jams (server only)\n"
         "  -s, --server          start server\n"
         "  -u, --numchannels     maximum number of channels (server only)\n"
-        "  -v, --version         output version information and exit\n"
         "  -w, --welcomemessage  welcome message on connect (server only)\n"
         "  -y, --history         enable connection history and set file\n"
         "                        name (server only)\n"
-        "  -D, --histdays        number of days of history to display (server only)\n"
         "  -z, --startminimized  start minimizied (server only)\n"
+        "\nClient only:\n\n"
+        "  -c, --connect         connect to given server address on startup\n"
+        "                        (client only)\n"
+        "  -i, --inifile         initialization file name\n"
+        "  -j, --nojackconnect   disable auto Jack connections (client only)\n"
         "  --ctrlmidich          MIDI controller channel to listen (client only)\n"
-        "  --clientname          Jamulus client name (windows title and jack client name)\n"
-        "\nExample: " + QString ( argv[0] ) + " -l -inifile myinifile.ini\n";
+        "  --clientname          client name (window title and jack client name)\n"
+        "\nGeneral purpose:\n\n"
+        "  -n, --nogui           disable GUI\n"
+        "  -h, -?, --help        display this help text and exit\n"
+        "  -v, --version         output version information and exit\n"
+        "\nExample: " + QString ( argv[0] ) + " -l jamulus.log -inifile myinifile.ini\n";
 }
 
 bool GetFlagArgument ( char**  argv,

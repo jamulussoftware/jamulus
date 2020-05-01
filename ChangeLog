@@ -8,6 +8,8 @@
 
   * for CoreAudio and 4 channel input, support mixing channels 1&2 with 3&4
 
+  * added bassoon instrument icon, created by dszgit (Ticket #131)
+
   * bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
 
 

@@ -564,6 +564,8 @@ DISTFILES += ChangeLog \
     src/res/instruments/instrkeyboardvocal.png \
     src/res/instruments/bodhran.svg \
     src/res/instruments/bodhran.png \
+    src/res/instruments/bassoon.svg \
+    src/res/instruments/bassoon.png \
     src/res/flags/flagnone.png \
     src/res/flags/ad.png \
     src/res/flags/ae.png \

@@ -964,6 +964,7 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
         vecDataBase.Add ( CInstPictProps ( "Guitar+Vocal", ":/png/instr/res/instruments/instrguitarvocal.png", IC_MULTIPLE_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( "Keyboard+Vocal", ":/png/instr/res/instruments/instrkeyboardvocal.png", IC_MULTIPLE_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( "Bodhran", ":/png/instr/res/instruments/bodhran.png", IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( "Bassoon", ":/png/instr/res/instruments/bassoon.png", IC_WIND_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;

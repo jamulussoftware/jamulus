@@ -26,11 +26,11 @@
 
 
 /* Implementation *************************************************************/
-CSound::CSound ( void       (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
-                 void*      arg,
-                 const int  iCtrlMIDIChannel,
-                 const bool ,
-                 QString&   ) :
+CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+                 void*          arg,
+                 const int      iCtrlMIDIChannel,
+                 const bool     ,
+                 const QString& ) :
     CSoundBase ( "CoreAudio", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ),
     midiInPortRef ( static_cast<MIDIPortRef> ( NULL ) )
 {

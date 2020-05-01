@@ -167,7 +167,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
     CurrentAudioInputDeviceID  = 0;
     CurrentAudioOutputDeviceID = 0;
     iNumInChan                 = 0;
-    lNumInChanPlusAddChan      = 0;
+    iNumInChanPlusAddChan      = 0;
     iNumOutChan                = 0;
     iSelInputLeftChannel       = 0;
     iSelInputRightChannel      = 0;
@@ -602,7 +602,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
 void CSound::SetLeftInputChannel  ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChanPlusAddChan ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < iNumInChanPlusAddChan ) )
     {
         iSelInputLeftChannel = iNewChan;
     }
@@ -611,7 +611,7 @@ void CSound::SetLeftInputChannel  ( const int iNewChan )
 void CSound::SetRightInputChannel ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChanPlusAddChan ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < iNumInChanPlusAddChan ) )
     {
         iSelInputRightChannel = iNewChan;
     }

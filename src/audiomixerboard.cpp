@@ -77,9 +77,6 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     plblChannelNumber->setTextFormat    ( Qt::PlainText );
     plblChannelNumber->setAlignment     ( Qt::AlignHCenter | Qt::AlignVCenter );
     plblChannelNumber->setMinimumHeight ( 30 );
-    plblChannelNumber->setStyleSheet (
-        "QLabel { color: white;"
-        "         font:  bold; }" );
 
     // set margins of the layouts to zero to get maximum space for the controls
     pMainGrid->setContentsMargins ( 0, 0, 0, 0 );
@@ -193,6 +190,10 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pcbMute->setText                    ( tr ( "MUTE" ) );
         pcbSolo->setText                    ( tr ( "SOLO" ) );
         plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
+        plblChannelNumber->setStyleSheet (
+            "QLabel { color: white;"
+            "         font:  bold; }" );
+
         break;
 
     default:
@@ -201,6 +202,9 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pcbMute->setText                    ( tr ( "Mute" ) );
         pcbSolo->setText                    ( tr ( "Solo" ) );
         plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
+        plblChannelNumber->setStyleSheet (
+            "QLabel { color: black;"
+            "         font:  bold; }" );
         break;
     }
 }

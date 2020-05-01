@@ -74,6 +74,13 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
         "QLabel { color: black;"
         "         font:  bold; }" );
 
+    plblChannelNumber->setTextFormat    ( Qt::PlainText );
+    plblChannelNumber->setAlignment     ( Qt::AlignHCenter | Qt::AlignVCenter );
+    plblChannelNumber->setMinimumHeight ( 30 );
+    plblChannelNumber->setStyleSheet (
+        "QLabel { color: white;"
+        "         font:  bold; }" );
+
     // set margins of the layouts to zero to get maximum space for the controls
     pMainGrid->setContentsMargins ( 0, 0, 0, 0 );
 
@@ -144,6 +151,13 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     plblCountryFlag->setWhatsThis ( strFaderText );
     plblCountryFlag->setAccessibleName ( tr ( "Mixer channel country flag" ) );
 
+    QString strChannelNumberText = tr ( "<b>Channel Number:</b> "
+        "Control this channel by sending MIDI CC messages with control "
+        "number 70+channelNumber." );
+
+    plblChannelNumber->setWhatsThis ( strChannelNumberText );
+    plblChannelNumber->setAccessibleName (
+        tr ( "Channel Number for MIDI control" ) );
 
     // Connections -------------------------------------------------------------
     QObject::connect ( pFader, SIGNAL ( valueChanged ( int ) ),
@@ -264,12 +278,14 @@ void CChannelFader::Reset()
     plblCountryFlag->setToolTip ( "" );
     strReceivedName = "";
     SetupFaderTag ( SL_NOT_SET );
+    plblChannelNumber->setText( "" );
 
     // set a defined tool tip time out
     const int iToolTipDurMs = 30000;
     plblLabel->setToolTipDuration       ( iToolTipDurMs );
     plblInstrument->setToolTipDuration  ( iToolTipDurMs );
     plblCountryFlag->setToolTipDuration ( iToolTipDurMs );
+    plblChannelNumber->setToolTipDuration ( iToolTipDurMs );
 
     bOtherChannelIsSolo = false;
 }
@@ -370,6 +386,12 @@ void CChannelFader::SetText ( const CChannelInfo& ChanInfo )
 
     plblLabel->setText ( strModText );
 }
+
+void CChannelFader::SetChannelNumber ( int channel )
+{
+    plblChannelNumber->setText ( QString::number(channel) );
+}
+
 
 void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 {
@@ -499,9 +521,10 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
         strToolTip.prepend ( "<h3>" + tr ( "Musician Profile" ) + "</h3>" );
     }
 
-    plblCountryFlag->setToolTip ( strToolTip );
-    plblInstrument->setToolTip  ( strToolTip );
-    plblLabel->setToolTip       ( strToolTip );
+    plblCountryFlag->setToolTip   ( strToolTip );
+    plblInstrument->setToolTip    ( strToolTip );
+    plblLabel->setToolTip         ( strToolTip );
+    plblChannelNumber->setToolTip ( "Channel Number" );
 }
 
 double CChannelFader::CalcFaderGain ( const int value )

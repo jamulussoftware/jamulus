@@ -48,6 +48,7 @@ public:
     CChannelFader ( QWidget* pNW, QHBoxLayout* pParentLayout );
 
     void SetText ( const CChannelInfo& ChanInfo );
+    void SetChannelNumber ( int channel );
     QString GetReceivedName() { return strReceivedName; }
     void SetChannelInfos ( const CChannelInfo& cChanInfo );
     void Show() { pFrame->show(); }

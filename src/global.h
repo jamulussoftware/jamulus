@@ -213,15 +213,12 @@ LED bar:      lbr
 #define SERVLIST_TIME_PERMSERV_MINUTES   1440 // minutes, 1440 = 60 min * 24 h
 
 // registration response timeout
-#define REGISTER_SERVER_TIME_OUT_MS     500 // ms
+#define REGISTER_SERVER_TIME_OUT_MS      500 // ms
 
 // defines the maximum number of times to retry server registration
 // when no response is received within the timeout (before reverting
 // to SERVLIST_REGIST_INTERV_MINUTES)
-#define REGISTER_SERVER_RETRY_LIMIT     5 // count
-
-// length of the moving average buffer for response time measurement
-#define TIME_MOV_AV_RESPONSE_SECONDS     30 // seconds
+#define REGISTER_SERVER_RETRY_LIMIT      5 // count
 
 
 // Maximum length of fader tag and text message strings (Since for chat messages

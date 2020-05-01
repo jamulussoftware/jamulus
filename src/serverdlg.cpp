@@ -447,6 +447,12 @@ void CServerDlg::OnLocationCountryActivated ( int iCntryListItem )
 
 void CServerDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
 {
+    // if server was registered, unregister first
+    if ( pServer->GetServerListEnabled() )
+    {
+        pServer->UnregisterSlaveServer();
+    }
+
     // apply new setting to the server and update it
     pServer->SetCentralServerAddressType ( static_cast<ECSAddType> ( iTypeIdx ) );
     pServer->UpdateServerList();

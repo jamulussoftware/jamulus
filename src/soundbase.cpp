@@ -31,11 +31,11 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                          void*          pParg,
                          const int      iNewCtrlMIDIChannel ) :
-    fpProcessCallback ( fpNewProcessCallback ),
-    pProcessCallbackArg ( pParg ), bRun ( false ),
-    bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ),
+    fpProcessCallback            ( fpNewProcessCallback ),
+    pProcessCallbackArg          ( pParg ), bRun ( false ),
+    bIsCallbackAudioInterface    ( bNewIsCallbackAudioInterface ),
     strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
-    iCtrlMIDIChannel ( iNewCtrlMIDIChannel )
+    iCtrlMIDIChannel             ( iNewCtrlMIDIChannel )
 {
     // initializations for the sound card names (default)
     lNumDevs          = 1;

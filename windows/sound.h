@@ -87,28 +87,6 @@ protected:
     bool             CheckSampleTypeSupportedForCHMixing ( const ASIOSampleType SamType );
     void             ResetChannelMapping();
 
-    static void GetSelCHAndAddCH ( const int iSelCH,    const int iNumInChan,
-                                   int&      iSelCHOut, int&      iSelAddCHOut )
-    {
-        // we have a mixed channel setup
-        // definitions:
-        // - mixed channel setup only for 4 physical inputs:
-        //   SelCH == 4: Ch 0 + Ch 2
-        //   SelCh == 5: Ch 0 + Ch 3
-        //   SelCh == 6: Ch 1 + Ch 2
-        //   SelCh == 7: Ch 1 + Ch 3
-        if ( iSelCH >= iNumInChan )
-        {
-            iSelAddCHOut = ( ( iSelCH - iNumInChan ) % 2 ) + 2;
-            iSelCHOut    = ( iSelCH - iNumInChan ) / 2;
-        }
-        else
-        {
-            iSelAddCHOut = -1;
-            iSelCHOut    = iSelCH;
-        }
-    }
-
     int              iASIOBufferSizeMono;
     int              iASIOBufferSizeStereo;
 

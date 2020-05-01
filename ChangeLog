@@ -6,6 +6,8 @@
 
 3.5.3git
 
+  * for CoreAudio and 4 channel input, support mixing channels 1&2 with 3&4
+
   * bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
 
 

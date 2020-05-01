@@ -572,6 +572,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     {
         vecpChanFader[i] = new CChannelFader ( this, pMainLayout );
         vecpChanFader[i]->Hide();
+        vecpChanFader[i]->SetChannelNumber(i);
     }
 
     // insert horizontal spacer
@@ -704,6 +705,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                 {
                     // the fader was not in use, reset everything for new client
                     vecpChanFader[i]->Reset();
+                    vecpChanFader[i]->SetChannelNumber(i);
 
                     // show fader
                     vecpChanFader[i]->Show();

@@ -167,6 +167,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
     CurrentAudioInputDeviceID  = 0;
     CurrentAudioOutputDeviceID = 0;
     iNumInChan                 = 0;
+    lNumInChanPlusAddChan      = 0;
     iNumOutChan                = 0;
     iSelInputLeftChannel       = 0;
     iSelInputRightChannel      = 0;
@@ -568,6 +569,32 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
         }
     }
 
+    // special case with 4 input channels: support adding channels
+    if ( iNumInChan == 4 )
+    {
+        // add four mixed channels (i.e. 4 normal, 4 mixed channels)
+        iNumInChanPlusAddChan = 8;
+
+        for ( int iCh = 0; iCh < iNumInChanPlusAddChan; iCh++ )
+        {
+            int iSelCH, iSelAddCH;
+
+            GetSelCHAndAddCH ( iCh, iNumInChan, iSelCH, iSelAddCH );
+
+            if ( iSelAddCH >= 0 )
+            {
+                // for mixed channels, show both audio channel names to be mixed
+                sChannelNamesInput[iCh] =
+                    sChannelNamesInput[iSelCH] + " + " + sChannelNamesInput[iSelAddCH];
+            }
+        }
+    }
+    else
+    {
+        // regular case: no mixing input channels used
+        iNumInChanPlusAddChan = iNumInChan;
+    }
+
     // everything is ok, return empty string for "no error" case
     return "";
 }
@@ -575,7 +602,7 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
 void CSound::SetLeftInputChannel  ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < iNumInChan ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChanPlusAddChan ) )
     {
         iSelInputLeftChannel = iNewChan;
     }
@@ -584,7 +611,7 @@ void CSound::SetLeftInputChannel  ( const int iNewChan )
 void CSound::SetRightInputChannel ( const int iNewChan )
 {
     // apply parameter after input parameter check
-    if ( ( iNewChan >= 0 ) && ( iNewChan < iNumInChan ) )
+    if ( ( iNewChan >= 0 ) && ( iNewChan < lNumInChanPlusAddChan ) )
     {
         iSelInputRightChannel = iNewChan;
     }
@@ -834,6 +861,13 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
 
     if ( ( inDevice == pSound->CurrentAudioInputDeviceID ) && inInputData )
     {
+        int iSelCHLeft,  iSelAddCHLeft;
+        int iSelCHRight, iSelAddCHRight;
+
+        // get selected input channels plus optional additional channel
+        GetSelCHAndAddCH ( iSelInputLeftChannel,  iNumInChan, iSelCHLeft,  iSelAddCHLeft );
+        GetSelCHAndAddCH ( iSelInputRightChannel, iNumInChan, iSelCHRight, iSelAddCHRight );
+
         // check size (float32 has four bytes)
         if ( inInputData->mBuffers[0].mDataByteSize ==
              static_cast<UInt32> ( iCoreAudioBufferSizeMono * iNumInChan * 4 ) )
@@ -845,47 +879,66 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
             // copy input data
             for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
             {
-                // left
-                pSound->vecsTmpAudioSndCrdStereo[2 * i] =
-                    (short) ( pInData[iNumInChan * i + iSelInputLeftChannel] * _MAXSHORT );
+                // copy left and right channels separately
+                pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( pInData[iNumInChan * i + iSelCHLeft] * _MAXSHORT );
+                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( pInData[iNumInChan * i + iSelCHRight] * _MAXSHORT );
+            }
 
-                // right
-                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
-                    (short) ( pInData[iNumInChan * i + iSelInputRightChannel] * _MAXSHORT );
+            // add an additional optional channel
+            if ( iSelAddCHLeft >= 0 )
+            {
+                for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+                {
+                    pSound->vecsTmpAudioSndCrdStereo[2 * i] = Double2Short (
+                        pSound->vecsTmpAudioSndCrdStereo[2 * i] + pInData[iNumInChan * i + iSelAddCHLeft] * _MAXSHORT );
+                }
+            }
 
-/*
-// TEST mix channel with micro to the stereo output
-if ( iNumInChan == 4 )
-{
-    // add mic input on input channel 4 to both stereo channels
-    pSound->vecsTmpAudioSndCrdStereo[2 * i] =
-        Double2Short ( (double) ( pInData[iNumInChan * i + 3] * _MAXSHORT ) +
-                       (double) pSound->vecsTmpAudioSndCrdStereo[2 * i] );
-    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] =
-        Double2Short ( (double) ( pInData[iNumInChan * i + 3] * _MAXSHORT ) +
-                       (double) pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] );
-}
-*/
-
+            if ( iSelAddCHRight >= 0 )
+            {
+                for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+                {
+                    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = Double2Short (
+                        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] + pInData[iNumInChan * i + iSelAddCHRight] * _MAXSHORT );
+                }
             }
         }
         else if ( inInputData->mNumberBuffers == (UInt32) iNumInChan && // we should have a matching number of buffers to channels
                   inInputData->mBuffers[0].mDataByteSize == static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) )
         {
             // one buffer per channel mode:
-            AudioBuffer left       = inInputData->mBuffers[iSelInputLeftChannel];
-            Float32*    pLeftData  = static_cast<Float32*> ( left.mData );
-            AudioBuffer right      = inInputData->mBuffers[iSelInputRightChannel];
-            Float32*    pRightData = static_cast<Float32*> ( right.mData );
+            Float32* pLeftData  = static_cast<Float32*> ( inInputData->mBuffers[iSelCHLeft].mData );
+            Float32* pRightData = static_cast<Float32*> ( inInputData->mBuffers[iSelCHRight].mData );
 
             // copy input data
             for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
             {
-                // left
-                pSound->vecsTmpAudioSndCrdStereo[2 * i] = (short) ( pLeftData[i] * _MAXSHORT );
-
-                // right
+                // copy left and right channels separately
+                pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( pLeftData[i] * _MAXSHORT );
                 pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( pRightData[i] * _MAXSHORT );
+            }
+
+            // add an additional optional channel
+            if ( iSelAddCHLeft >= 0 )
+            {
+                pLeftData = static_cast<Float32*> ( inInputData->mBuffers[iSelAddCHLeft].mData );
+
+                for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+                {
+                    pSound->vecsTmpAudioSndCrdStereo[2 * i] = Double2Short (
+                        pSound->vecsTmpAudioSndCrdStereo[2 * i] + pLeftData[i] * _MAXSHORT );
+                }
+            }
+
+            if ( iSelAddCHRight >= 0 )
+            {
+                pRightData = static_cast<Float32*> ( inInputData->mBuffers[iSelAddCHRight].mData );
+
+                for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+                {
+                    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = Double2Short (
+                        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] + pRightData[i] * _MAXSHORT );
+                }
             }
         }
         else

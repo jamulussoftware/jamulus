@@ -47,7 +47,7 @@ public:
     virtual void Stop();
 
     // channel selection
-    virtual int     GetNumInputChannels() { return iNumInChan; }
+    virtual int     GetNumInputChannels() { return iNumInChanPlusAddChan; }
     virtual QString GetInputChannelName ( const int iDiD ) { return sChannelNamesInput[iDiD]; }
     virtual void    SetLeftInputChannel  ( const int iNewChan );
     virtual void    SetRightInputChannel ( const int iNewChan );
@@ -69,6 +69,7 @@ public:
     AudioDeviceID  CurrentAudioInputDeviceID;
     AudioDeviceID  CurrentAudioOutputDeviceID;
     int            iNumInChan;
+    int            iNumInChanPlusAddChan; // includes additional "added" channels
     int            iNumOutChan;
     int            iSelInputLeftChannel;
     int            iSelInputRightChannel;

@@ -10,12 +10,12 @@
 
   * added bassoon instrument icon, created by dszgit (Ticket #131)
 
+  * link to docs from application Help menu (Ticket #90)
+
   * bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
 
 
 TODO implement panning for channels (Ticket #52, #145)
-
-TODO improve help menu, see https://github.com/corrados/jamulus/issues/90
 
 TODO support internationalization
 

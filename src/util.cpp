@@ -806,16 +806,20 @@ void CMusProfDlg::OnSkillActivated ( int iCntryListItem )
 
 
 // Help menu -------------------------------------------------------------------
-CHelpMenu::CHelpMenu ( QWidget* parent ) : QMenu ( "&?", parent )
+CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( "&Help", parent )
 {
     // standard help menu consists of about and what's this help
-    addAction ( tr ( "What's &This" ), this,
-        SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
-
+    if ( bIsClient )
+    {
+        addAction ( tr ( "Getting &Started..." ), this, SLOT ( OnHelpClientGetStarted() ) );
+        addAction ( tr ( "Software &Manual..." ), this, SLOT ( OnHelpSoftwareMan() ) );
+    }
+    else
+    {
+        addAction ( tr ( "Getting &Started..." ), this, SLOT ( OnHelpServerGetStarted() ) );
+    }
     addSeparator();
-    addAction ( tr ( "&Download Link..." ), this,
-        SLOT ( OnHelpDownloadLink() ) );
-
+    addAction ( tr ( "What's &This" ), this, SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
     addSeparator();
     addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
 }

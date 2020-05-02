@@ -283,7 +283,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     pMenu = new QMenuBar ( this );
 
     pMenu->addMenu ( pViewMenu );
-    pMenu->addMenu ( new CHelpMenu ( this ) );
+    pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );

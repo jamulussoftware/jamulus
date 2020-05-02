@@ -473,16 +473,17 @@ class CHelpMenu : public QMenu
     Q_OBJECT
 
 public:
-    CHelpMenu ( QWidget* parent = nullptr );
+    CHelpMenu ( const bool bIsClient, QWidget* parent = nullptr );
 
 protected:
     CAboutDlg AboutDlg;
 
 public slots:
-    void OnHelpWhatsThis() { QWhatsThis::enterWhatsThisMode(); }
-    void OnHelpAbout() { AboutDlg.exec(); }
-    void OnHelpDownloadLink()
-        { QDesktopServices::openUrl ( QUrl ( SOFTWARE_DOWNLOAD_URL ) ); }
+    void OnHelpWhatsThis()        { QWhatsThis::enterWhatsThisMode(); }
+    void OnHelpAbout()            { AboutDlg.exec(); }
+    void OnHelpClientGetStarted() { QDesktopServices::openUrl ( QUrl ( CLIENT_GETTING_STARTED_URL ) ); }
+    void OnHelpServerGetStarted() { QDesktopServices::openUrl ( QUrl ( SERVER_GETTING_STARTED_URL ) ); }
+    void OnHelpSoftwareMan()      { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
 };
 
 

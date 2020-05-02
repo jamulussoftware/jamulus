@@ -105,8 +105,10 @@ LED bar:      lbr
 #define DEFAULT_SERVER_ADDRESS           "jamulus.fischvolk.de"
 #define DEFAULT_SERVER_NAME              "Central Server"
 
-// download URL
-#define SOFTWARE_DOWNLOAD_URL            "http://sourceforge.net/projects/llcon/files"
+// getting started and software manual URL
+#define CLIENT_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Software-Manual"
+#define SERVER_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Running-a-Server"
+#define SOFTWARE_MANUAL_URL              "https://github.com/corrados/jamulus/blob/master/src/res/homepage/manual.md"
 
 // determining server internal address uses well-known host and port
 // (Google DNS, or something else reliable)

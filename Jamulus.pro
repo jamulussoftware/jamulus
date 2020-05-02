@@ -510,7 +510,6 @@ DISTFILES += ChangeLog \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
     src/res/fronticon.png \
-    src/res/logopicture.png \
     src/res/mainicon.png \
     src/res/mixerboardbackground.png \
     src/res/VLEDBlack.png \

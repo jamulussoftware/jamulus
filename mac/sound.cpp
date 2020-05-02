@@ -869,6 +869,56 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
         GetSelCHAndAddCH ( iSelInputRightChannel, iNumInChan, iSelCHRight, iSelAddCHRight );
 
         // check size (float32 has four bytes)
+//        if ( inInputData->mBuffers[0].mDataByteSize * inInputData->mNumberBuffers ==
+//             (UInt32) iNumInChan * static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) )
+//        {
+//            const int iNumChanPerFrame  = iNumInChan / inInputData->mNumberBuffers;
+//            const int iSelBufferLeft    = iSelCHLeft / iNumChanPerFrame;
+//            const int iSelBufferRight   = iSelCHRight / iNumChanPerFrame;
+//            const int iSelInterlChLeft  = iSelCHLeft % iNumChanPerFrame;
+//            const int iSelInterlChRight = iSelCHRight % iNumChanPerFrame;
+//
+//            Float32* pLeftData  = static_cast<Float32*> ( inInputData->mBuffers[iSelBufferLeft].mData );
+//            Float32* pRightData = static_cast<Float32*> ( inInputData->mBuffers[iSelBufferRight].mData );
+//
+//            // copy input data
+//            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+//            {
+//                // copy left and right channels separately
+//                pSound->vecsTmpAudioSndCrdStereo[2 * i]     = (short) ( pLeftData[iNumChanPerFrame * i + iSelInterlChLeft] * _MAXSHORT );
+//                pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = (short) ( pRightData[iNumChanPerFrame * i + iSelInterlChRight] * _MAXSHORT );
+//            }
+//
+//            // add an additional optional channel
+//            if ( iSelAddCHLeft >= 0 )
+//            {
+//                const int iSelAddCHBufferLeft    = iSelAddCHLeft / iNumChanPerFrame;
+//                const int iSelAddCHInterlChLeft  = iSelAddCHLeft % iNumChanPerFrame;
+//
+//                pLeftData = static_cast<Float32*> ( inInputData->mBuffers[iSelAddCHBufferLeft].mData );
+//
+//                for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+//                {
+//                    pSound->vecsTmpAudioSndCrdStereo[2 * i] = Double2Short (
+//                        pSound->vecsTmpAudioSndCrdStereo[2 * i] + pLeftData[iNumChanPerFrame * i + iSelAddCHInterlChLeft] * _MAXSHORT );
+//                }
+//            }
+//
+//            if ( iSelAddCHRight >= 0 )
+//            {
+//                const int iSelAddCHBufferRight    = iSelAddCHRight / iNumChanPerFrame;
+//                const int iSelAddCHInterlChRight  = iSelAddCHRight % iNumChanPerFrame;
+//
+//                pRightData = static_cast<Float32*> ( inInputData->mBuffers[iSelAddCHBufferRight].mData );
+//
+//                for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+//                {
+//                    pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] = Double2Short (
+//                        pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] + pRightData[iNumChanPerFrame * i + iSelAddCHInterlChRight] * _MAXSHORT );
+//                }
+//            }
+//        }
+//        else
         if ( inInputData->mBuffers[0].mDataByteSize ==
              static_cast<UInt32> ( iCoreAudioBufferSizeMono * iNumInChan * 4 ) )
         {
@@ -954,6 +1004,27 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     if ( ( inDevice == pSound->CurrentAudioOutputDeviceID ) && outOutputData )
     {
         // check size (float32 has four bytes)
+//        if ( inOutputData->mBuffers[0].mDataByteSize * inOutputData->mNumberBuffers ==
+//             (UInt32) iNumOutChan * static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) )
+//        {
+//            const int iNumChanPerFrame  = iNumOutChan / inOutputData->mNumberBuffers;
+//            const int iSelBufferLeft    = iSelOutputLeftChannel / iNumChanPerFrame;
+//            const int iSelBufferRight   = iSelOutputRightChannel / iNumChanPerFrame;
+//            const int iSelInterlChLeft  = iSelOutputLeftChannel % iNumChanPerFrame;
+//            const int iSelInterlChRight = iSelOutputRightChannel % iNumChanPerFrame;
+//
+//            Float32* pLeftData  = static_cast<Float32*> ( inOutputData->mBuffers[iSelBufferLeft].mData );
+//            Float32* pRightData = static_cast<Float32*> ( inOutputData->mBuffers[iSelBufferRight].mData );
+//
+//            // copy output data
+//            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+//            {
+//                // copy left and right channels separately
+//                pLeftData[iNumChanPerFrame * i + iSelInterlChLeft]   = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
+//                pRightData[iNumChanPerFrame * i + iSelInterlChRight] = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
+//            }
+//        }
+//        else
         if ( outOutputData->mBuffers[0].mDataByteSize ==
              static_cast<UInt32> ( iCoreAudioBufferSizeMono * iNumOutChan * 4 ) )
         {

@@ -15,11 +15,13 @@
   * bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
 
 
-TODO implement panning for channels (Ticket #52, #145)
+TODO support CoreAudio aggregated devices
 
 TODO support internationalization
 
 TODO standard style: meter bar gets smaller sometimes if board is full and fader text is short
+
+TODO implement panning for channels (Ticket #52, #145)
 
 TODO sometimes I cannot see the central server in the server list
 

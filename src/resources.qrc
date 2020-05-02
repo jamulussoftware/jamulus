@@ -51,6 +51,7 @@
         <file>res/instruments/instrkeyboardvocal.png</file>
         <file>res/instruments/bodhran.png</file>
         <file>res/instruments/bassoon.png</file>
+        <file>res/instruments/oboe.png</file>
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>

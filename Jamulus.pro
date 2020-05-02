@@ -565,6 +565,8 @@ DISTFILES += ChangeLog \
     src/res/instruments/bodhran.png \
     src/res/instruments/bassoon.svg \
     src/res/instruments/bassoon.png \
+    src/res/instruments/oboe.svg \
+    src/res/instruments/oboe.png \
     src/res/flags/flagnone.png \
     src/res/flags/ad.png \
     src/res/flags/ae.png \

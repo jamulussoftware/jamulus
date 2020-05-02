@@ -592,12 +592,30 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     // add an entry for all known instruments
     for ( int iCurInst = 0; iCurInst < CInstPictures::GetNumAvailableInst(); iCurInst++ )
     {
-        // create a combo box item with text and image
-        pcbxInstrument->addItem (
-            QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ),
-            CInstPictures::GetName ( iCurInst ),
-            iCurInst );
+        // create a combo box item with text, image and background color
+        QColor InstrColor;
+
+        pcbxInstrument->addItem ( QIcon ( CInstPictures::GetResourceReference ( iCurInst ) ),
+                                  CInstPictures::GetName ( iCurInst ),
+                                  iCurInst );
+
+        switch ( CInstPictures::GetCategory ( iCurInst ) )
+        {
+        case CInstPictures::IC_OTHER_INSTRUMENT:      InstrColor = QColor ( Qt::blue );   break;
+        case CInstPictures::IC_WIND_INSTRUMENT:       InstrColor = QColor ( Qt::green );  break;
+        case CInstPictures::IC_STRING_INSTRUMENT:     InstrColor = QColor ( Qt::red );    break;
+        case CInstPictures::IC_PLUCKING_INSTRUMENT:   InstrColor = QColor ( Qt::cyan );   break;
+        case CInstPictures::IC_PERCUSSION_INSTRUMENT: InstrColor = QColor ( Qt::white );  break;
+        case CInstPictures::IC_KEYBOARD_INSTRUMENT:   InstrColor = QColor ( Qt::yellow ); break;
+        case CInstPictures::IC_MULTIPLE_INSTRUMENT:   InstrColor = QColor ( Qt::black );  break;
+        }
+
+        InstrColor.setAlpha ( 10 );
+        pcbxInstrument->setItemData ( iCurInst, InstrColor, Qt::BackgroundRole );
     }
+
+    // sort the items in alphabetical order
+    pcbxInstrument->model()->sort ( 0 );
 
 
     // Country flag icons combo box --------------------------------------------

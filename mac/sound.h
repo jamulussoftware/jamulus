@@ -75,11 +75,27 @@ public:
     int            iSelInputRightChannel;
     int            iSelOutputLeftChannel;
     int            iSelOutputRightChannel;
+    int            iSelInBufferLeft;
+    int            iSelInBufferRight;
+    int            iSelInInterlChLeft;
+    int            iSelInInterlChRight;
+    int            iSelAddInBufferLeft;
+    int            iSelAddInBufferRight;
+    int            iSelAddInInterlChLeft;
+    int            iSelAddInInterlChRight;
+    int            iSelOutBufferLeft;
+    int            iSelOutBufferRight;
+    int            iSelOutInterlChLeft;
+    int            iSelOutInterlChRight;
+    CVector<int>   vecNumInBufChan;
+    CVector<int>   vecNumOutBufChan;
 
 protected:
     virtual QString LoadAndInitializeDriver ( int iIdx, bool );
 
-    QString  CheckDeviceCapabilities ( const int iDriverIdx );
+    QString CheckDeviceCapabilities ( const int iDriverIdx );
+    void    UpdateChSelection();
+
     int CountChannels ( AudioDeviceID devID,
                         const int     iNumChanPerFrame,
                         bool          isInput );

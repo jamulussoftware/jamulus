@@ -8,7 +8,7 @@
 
   * for CoreAudio and 4 channel input, support mixing channels 1&2 with 3&4
 
-  * added bassoon/oboe instrument icons, created by dszgit (Ticket #131)
+  * added bassoon/oboe/harp instrument icons, created by dszgit (Ticket #131)
 
   * link to docs from application Help menu (Ticket #90)
 

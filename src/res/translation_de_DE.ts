@@ -72,7 +72,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../aboutdlgbase.ui" line="238"/>
+        <location filename="../aboutdlgbase.ui" line="208"/>
         <source>&amp;OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -153,22 +153,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="176"/>
+        <location filename="../audiomixerboard.cpp" line="175"/>
         <source>MUTE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="179"/>
+        <location filename="../audiomixerboard.cpp" line="176"/>
         <source>SOLO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="185"/>
+        <location filename="../audiomixerboard.cpp" line="183"/>
         <source>Mute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../audiomixerboard.cpp" line="186"/>
+        <location filename="../audiomixerboard.cpp" line="184"/>
         <source>Solo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -406,32 +406,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clientdlgbase.ui" line="353"/>
+        <location filename="../clientdlgbase.ui" line="351"/>
         <source>C&amp;onnect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clientdlgbase.ui" line="397"/>
+        <location filename="../clientdlgbase.ui" line="377"/>
         <source>Pan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clientdlgbase.ui" line="413"/>
+        <location filename="../clientdlgbase.ui" line="393"/>
         <source>Center</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clientdlgbase.ui" line="487"/>
+        <location filename="../clientdlgbase.ui" line="467"/>
         <source>Reverb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clientdlgbase.ui" line="553"/>
+        <location filename="../clientdlgbase.ui" line="533"/>
         <source>Left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../clientdlgbase.ui" line="560"/>
+        <location filename="../clientdlgbase.ui" line="540"/>
         <source>Right</source>
         <translation type="unfinished"></translation>
     </message>
@@ -946,17 +946,23 @@
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../util.cpp" line="812"/>
+        <location filename="../util.cpp" line="832"/>
+        <location filename="../util.cpp" line="837"/>
+        <source>Getting &amp;Started...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="833"/>
+        <source>Software &amp;Manual...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="840"/>
         <source>What&apos;s &amp;This</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="816"/>
-        <source>&amp;Download Link...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../util.cpp" line="820"/>
+        <location filename="../util.cpp" line="842"/>
         <source>&amp;About...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1052,39 +1058,199 @@
 <context>
     <name>CMusProfDlg</name>
     <message>
-        <location filename="../util.cpp" line="673"/>
+        <location filename="../util.cpp" line="691"/>
         <source>&lt;b&gt;Musician Profile:&lt;/b&gt; Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living. The city you live in and the skill level of playing your instrument may also be added.
 What you set here will appear at your fader on the mixer board when you are connected to a </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="680"/>
+        <location filename="../util.cpp" line="698"/>
         <source> server. This tag will also show up at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="685"/>
+        <location filename="../util.cpp" line="703"/>
         <source>Alias or name edit box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="687"/>
+        <location filename="../util.cpp" line="705"/>
         <source>Instrument picture button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="689"/>
+        <location filename="../util.cpp" line="707"/>
         <source>Country flag button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="691"/>
+        <location filename="../util.cpp" line="709"/>
         <source>City edit box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../util.cpp" line="693"/>
+        <location filename="../util.cpp" line="711"/>
         <source>Skill level combo box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="960"/>
+        <source>None</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="961"/>
+        <source>Drum Set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="962"/>
+        <source>Djembe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="963"/>
+        <source>Electric Guitar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="964"/>
+        <source>Acoustic Guitar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="965"/>
+        <source>Bass Guitar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="966"/>
+        <source>Keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="967"/>
+        <source>Synthesizer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="968"/>
+        <source>Grand Piano</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="969"/>
+        <source>Accordion</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="970"/>
+        <source>Vocal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="971"/>
+        <source>Microphone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="972"/>
+        <source>Harmonica</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="973"/>
+        <source>Trumpet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="974"/>
+        <source>Trombone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="975"/>
+        <source>French Horn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="976"/>
+        <source>Tuba</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="977"/>
+        <source>Saxophone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="978"/>
+        <source>Clarinet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="979"/>
+        <source>Flute</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="980"/>
+        <source>Violin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="981"/>
+        <source>Cello</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="982"/>
+        <source>Double Bass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="983"/>
+        <source>Recorder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="984"/>
+        <source>Streamer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="985"/>
+        <source>Listener</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="986"/>
+        <source>Guitar+Vocal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="987"/>
+        <source>Keyboard+Vocal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="988"/>
+        <source>Bodhran</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="989"/>
+        <source>Bassoon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="990"/>
+        <source>Oboe</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../util.cpp" line="991"/>
+        <source>Harp</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1112,7 +1278,7 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../serverdlg.cpp" line="60"/>
-        <source>&lt;b&gt;Show Creative Commons Licence Dialog:&lt;/b&gt; If enabled, a Creative Commons Licence dialog is shown each time a new user connects the server.</source>
+        <source>&lt;b&gt;Show Creative Commons Licence Dialog:&lt;/b&gt; If enabled, a Creative Commons BY-NC-SA 4.0 Licence dialog is shown each time a new user connects the server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1234,7 +1400,7 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../serverdlgbase.ui" line="59"/>
-        <source>Show Creative Commons Licence Dialog</source>
+        <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1276,85 +1442,73 @@ What you set here will appear at your fader on the mixer board when you are conn
 <context>
     <name>CSound</name>
     <message>
-        <location filename="../../linux/sound.cpp" line="39"/>
+        <location filename="../../linux/sound.cpp" line="40"/>
         <source>The Jack server is not running. This software requires a Jack server to run. Normally if the Jack server is not running this software will automatically start the Jack server. It seems that this auto start has not worked. Try to start the Jack server manually.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../linux/sound.cpp" line="59"/>
+        <location filename="../../linux/sound.cpp" line="60"/>
         <source>The Jack server sample rate is different from the required one. The required sample rate is: &lt;b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../linux/sound.cpp" line="61"/>
+        <location filename="../../linux/sound.cpp" line="62"/>
         <source> Hz&lt;/b&gt;. You can use a tool like &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.&lt;br&gt;Make sure to set the &lt;b&gt;Frames/Period&lt;/b&gt; to a low value like &lt;b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../linux/sound.cpp" line="66"/>
+        <location filename="../../linux/sound.cpp" line="67"/>
         <source>&lt;/b&gt; to achieve a low delay.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../linux/sound.cpp" line="87"/>
-        <location filename="../../linux/sound.cpp" line="98"/>
+        <location filename="../../linux/sound.cpp" line="88"/>
+        <location filename="../../linux/sound.cpp" line="99"/>
         <source>The Jack port registering failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../linux/sound.cpp" line="109"/>
+        <location filename="../../linux/sound.cpp" line="110"/>
         <source>Cannot activate the Jack client.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../linux/sound.cpp" line="128"/>
-        <location filename="../../linux/sound.cpp" line="137"/>
-        <source>Cannot connect the Jack input ports</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../linux/sound.cpp" line="152"/>
-        <location filename="../../linux/sound.cpp" line="161"/>
-        <source>Cannot connect the Jack output ports.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../linux/sound.cpp" line="350"/>
+        <location filename="../../linux/sound.cpp" line="337"/>
         <source>The Jack server was shut down. This software requires a Jack server to run. Try to restart the software to solve the issue.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mac/sound.cpp" line="100"/>
+        <location filename="../../mac/sound.cpp" line="101"/>
         <source>CoreAudio input AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mac/sound.cpp" line="114"/>
+        <location filename="../../mac/sound.cpp" line="115"/>
         <source>CoreAudio output AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mac/sound.cpp" line="360"/>
+        <location filename="../../mac/sound.cpp" line="362"/>
         <source>Current system audio input device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mac/sound.cpp" line="387"/>
+        <location filename="../../mac/sound.cpp" line="389"/>
         <source>Current system audio output device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mac/sound.cpp" line="460"/>
+        <location filename="../../mac/sound.cpp" line="462"/>
         <source>The audio input stream format for this audio device is not compatible with this software.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mac/sound.cpp" line="481"/>
+        <location filename="../../mac/sound.cpp" line="483"/>
         <source>The audio output stream format for this audio device is not compatible with this software.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../mac/sound.cpp" line="703"/>
+        <location filename="../../mac/sound.cpp" line="731"/>
         <source>The buffer sizes of the current input and output audio device cannot be set to a common value. Please choose other input/output audio devices in your system settings.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1395,12 +1549,12 @@ What you set here will appear at your fader on the mixer board when you are conn
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../windows/sound.cpp" line="517"/>
+        <location filename="../../windows/sound.cpp" line="518"/>
         <source>&lt;b&gt;No ASIO audio device (driver) found.&lt;/b&gt;&lt;br&gt;&lt;br&gt;The </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../windows/sound.cpp" line="518"/>
+        <location filename="../../windows/sound.cpp" line="519"/>
         <source> software requires the low latency audio interface &lt;b&gt;ASIO&lt;/b&gt; to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1408,37 +1562,37 @@ What you set here will appear at your fader on the mixer board when you are conn
 <context>
     <name>CSoundBase</name>
     <message>
-        <location filename="../soundbase.cpp" line="117"/>
+        <location filename="../soundbase.cpp" line="115"/>
         <source>Invalid device selection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../soundbase.cpp" line="143"/>
+        <location filename="../soundbase.cpp" line="141"/>
         <source>The audio driver properties have changed to a state which is incompatible to this software. The selected audio device could not be used because of the following error: &lt;b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../soundbase.cpp" line="148"/>
+        <location filename="../soundbase.cpp" line="146"/>
         <source>&lt;/b&gt;&lt;br&gt;&lt;br&gt;Please restart the software.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../soundbase.cpp" line="191"/>
+        <location filename="../soundbase.cpp" line="189"/>
         <source>&lt;b&gt;No usable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../soundbase.cpp" line="192"/>
+        <location filename="../soundbase.cpp" line="190"/>
         <source> audio device (driver) found.&lt;/b&gt;&lt;br&gt;&lt;br&gt;In the following there is a list of all available drivers with the associated error message:&lt;ul&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../soundbase.cpp" line="207"/>
+        <location filename="../soundbase.cpp" line="205"/>
         <source>&lt;br/&gt;Do you want to open the ASIO driver setups?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../soundbase.cpp" line="214"/>
+        <location filename="../soundbase.cpp" line="212"/>
         <source> could not be started because of audio interface issues.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -869,6 +869,7 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
         GetSelCHAndAddCH ( iSelInputRightChannel, iNumInChan, iSelCHRight, iSelAddCHRight );
 
         // check size (float32 has four bytes)
+// TODO assumption that all buffer have same interleaved number of channels is not correct!
 //        if ( inInputData->mBuffers[0].mDataByteSize * inInputData->mNumberBuffers ==
 //             (UInt32) iNumInChan * static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) )
 //        {
@@ -1004,17 +1005,17 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     if ( ( inDevice == pSound->CurrentAudioOutputDeviceID ) && outOutputData )
     {
         // check size (float32 has four bytes)
-//        if ( inOutputData->mBuffers[0].mDataByteSize * inOutputData->mNumberBuffers ==
+//        if ( outOutputData->mBuffers[0].mDataByteSize * outOutputData->mNumberBuffers ==
 //             (UInt32) iNumOutChan * static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) )
 //        {
-//            const int iNumChanPerFrame  = iNumOutChan / inOutputData->mNumberBuffers;
+//            const int iNumChanPerFrame  = iNumOutChan / outOutputData->mNumberBuffers;
 //            const int iSelBufferLeft    = iSelOutputLeftChannel / iNumChanPerFrame;
 //            const int iSelBufferRight   = iSelOutputRightChannel / iNumChanPerFrame;
 //            const int iSelInterlChLeft  = iSelOutputLeftChannel % iNumChanPerFrame;
 //            const int iSelInterlChRight = iSelOutputRightChannel % iNumChanPerFrame;
 //
-//            Float32* pLeftData  = static_cast<Float32*> ( inOutputData->mBuffers[iSelBufferLeft].mData );
-//            Float32* pRightData = static_cast<Float32*> ( inOutputData->mBuffers[iSelBufferRight].mData );
+//            Float32* pLeftData  = static_cast<Float32*> ( outOutputData->mBuffers[iSelBufferLeft].mData );
+//            Float32* pRightData = static_cast<Float32*> ( outOutputData->mBuffers[iSelBufferRight].mData );
 //
 //            // copy output data
 //            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )

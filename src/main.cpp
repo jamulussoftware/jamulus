@@ -516,12 +516,14 @@ int main ( int argc, char** argv )
 
 
 // TODO translation loading does not yet work
+// TODO CONFIG += lrelease embed_translations
+// TODO QM_FILES_RESOURCE_PREFIX needed???
 //    // load translations
 //    if ( bUseGUI )
 //    {
 //        QTranslator myappTranslator;
-//        bool ret = myappTranslator.load ( "src/res/translation_" + QLocale::system().name() );
-//qDebug() << "translation successfully loaded: " << ret << "   " << "src/res/translation_" + QLocale::system().name();
+//        bool ret = myappTranslator.load ( "translation_" + QLocale::system().name() );
+//qDebug() << "translation successfully loaded: " << ret << "   " << "translation_" + QLocale::system().name();
 //        pApp->installTranslator ( &myappTranslator );
 //    }
 

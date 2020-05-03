@@ -616,10 +616,14 @@ void CSound::UpdateChSelection()
     int iChCnt;
     int iSelCHLeft,  iSelAddCHLeft;
     int iSelCHRight, iSelAddCHRight;
-    iSelAddInBufferLeft    = -1; // initialize with invalid value
-    iSelAddInInterlChLeft  = -1; // initialize with invalid value
-    iSelAddInBufferRight   = -1; // initialize with invalid value
-    iSelAddInInterlChRight = -1; // initialize with invalid value
+
+    // initialize all buffer indexes with an invalid value
+    iSelInBufferLeft     = -1;
+    iSelInBufferRight    = -1;
+    iSelAddInBufferLeft  = -1; // if no additional channel used, this will stay on the invalid value
+    iSelAddInBufferRight = -1; // if no additional channel used, this will stay on the invalid value
+    iSelOutBufferLeft    = -1;
+    iSelOutBufferRight   = -1;
 
     // input
     GetSelCHAndAddCH ( iSelInputLeftChannel,  iNumInChan, iSelCHLeft,  iSelAddCHLeft );
@@ -631,25 +635,25 @@ void CSound::UpdateChSelection()
     {
         iChCnt += vecNumInBufChan[iBuf];
 
-        if ( iChCnt > iSelCHLeft )
+        if ( ( iSelInBufferLeft < 0 ) && ( iChCnt > iSelCHLeft ) )
         {
             iSelInBufferLeft   = iBuf;
             iSelInInterlChLeft = iSelCHLeft - iChCnt + vecNumInBufChan[iBuf];
         }
 
-        if ( iChCnt > iSelCHRight )
+        if ( ( iSelInBufferRight < 0 ) && ( iChCnt > iSelCHRight ) )
         {
             iSelInBufferRight   = iBuf;
             iSelInInterlChRight = iSelCHRight - iChCnt + vecNumInBufChan[iBuf];
         }
 
-        if ( ( iSelAddCHLeft >= 0 ) && ( iChCnt > iSelAddCHLeft ) )
+        if ( ( iSelAddCHLeft >= 0 ) && ( iSelAddInBufferLeft < 0 ) && ( iChCnt > iSelAddCHLeft ) )
         {
             iSelAddInBufferLeft   = iBuf;
             iSelAddInInterlChLeft = iSelAddCHLeft - iChCnt + vecNumInBufChan[iBuf];
         }
 
-        if ( ( iSelAddCHRight >= 0 ) && ( iChCnt > iSelAddCHRight ) )
+        if ( ( iSelAddCHRight >= 0 ) && ( iSelAddInBufferRight < 0 ) && ( iChCnt > iSelAddCHRight ) )
         {
             iSelAddInBufferRight   = iBuf;
             iSelAddInInterlChRight = iSelAddCHRight - iChCnt + vecNumInBufChan[iBuf];
@@ -666,13 +670,13 @@ void CSound::UpdateChSelection()
     {
         iChCnt += vecNumOutBufChan[iBuf];
 
-        if ( iChCnt > iSelCHLeft )
+        if ( ( iSelOutBufferLeft < 0 ) && ( iChCnt > iSelCHLeft ) )
         {
             iSelOutBufferLeft   = iBuf;
             iSelOutInterlChLeft = iSelCHLeft - iChCnt + vecNumOutBufChan[iBuf];
         }
 
-        if ( iChCnt > iSelCHRight )
+        if ( ( iSelOutBufferRight < 0 ) && ( iChCnt > iSelCHRight ) )
         {
             iSelOutBufferRight   = iBuf;
             iSelOutInterlChRight = iSelCHRight - iChCnt + vecNumOutBufChan[iBuf];
@@ -936,34 +940,42 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     // both, the input and output device use the same callback function
     QMutexLocker locker ( &pSound->Mutex );
 
-    const int iCoreAudioBufferSizeMono = pSound->iCoreAudioBufferSizeMono;
-    const int iNumInChan               = pSound->iNumInChan;
-    const int iNumOutChan              = pSound->iNumOutChan;
-    const int iSelInBufferLeft         = pSound->iSelInBufferLeft;
-    const int iSelInBufferRight        = pSound->iSelInBufferRight;
-    const int iSelInInterlChLeft       = pSound->iSelInInterlChLeft;
-    const int iSelInInterlChRight      = pSound->iSelInInterlChRight;
-    const int iSelAddInBufferLeft      = pSound->iSelAddInBufferLeft;
-    const int iSelAddInBufferRight     = pSound->iSelAddInBufferRight;
-    const int iSelAddInInterlChLeft    = pSound->iSelAddInInterlChLeft;
-    const int iSelAddInInterlChRight   = pSound->iSelAddInInterlChRight;
-    const int iSelOutBufferLeft        = pSound->iSelOutBufferLeft;
-    const int iSelOutBufferRight       = pSound->iSelOutBufferRight;
-    const int iSelOutInterlChLeft      = pSound->iSelOutInterlChLeft;
-    const int iSelOutInterlChRight     = pSound->iSelOutInterlChRight;
+    const int           iCoreAudioBufferSizeMono = pSound->iCoreAudioBufferSizeMono;
+    const int           iNumInChan               = pSound->iNumInChan;
+    const int           iNumOutChan              = pSound->iNumOutChan;
+    const int           iSelInBufferLeft         = pSound->iSelInBufferLeft;
+    const int           iSelInBufferRight        = pSound->iSelInBufferRight;
+    const int           iSelInInterlChLeft       = pSound->iSelInInterlChLeft;
+    const int           iSelInInterlChRight      = pSound->iSelInInterlChRight;
+    const int           iSelAddInBufferLeft      = pSound->iSelAddInBufferLeft;
+    const int           iSelAddInBufferRight     = pSound->iSelAddInBufferRight;
+    const int           iSelAddInInterlChLeft    = pSound->iSelAddInInterlChLeft;
+    const int           iSelAddInInterlChRight   = pSound->iSelAddInInterlChRight;
+    const int           iSelOutBufferLeft        = pSound->iSelOutBufferLeft;
+    const int           iSelOutBufferRight       = pSound->iSelOutBufferRight;
+    const int           iSelOutInterlChLeft      = pSound->iSelOutInterlChLeft;
+    const int           iSelOutInterlChRight     = pSound->iSelOutInterlChRight;
+    const CVector<int>& vecNumInBufChan          = pSound->vecNumInBufChan;
+    const CVector<int>& vecNumOutBufChan         = pSound->vecNumOutBufChan;
 
     if ( ( inDevice == pSound->CurrentAudioInputDeviceID ) && inInputData )
     {
-        // check size (float32 has four bytes)
-// TODO check...
-        if ( inInputData->mBuffers[iSelInBufferLeft].mDataByteSize == ...
-inInputData->mBuffers[0].mDataByteSize * inInputData->mNumberBuffers ==
-(UInt32) iNumInChan * static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) )
+        // check sizes (note that float32 has four bytes)
+        if ( ( iSelInBufferLeft >= 0 ) &&
+             ( iSelInBufferLeft < inInputData->mNumberBuffers ) &&
+             ( iSelInBufferRight >= 0 ) &&
+             ( iSelInBufferRight < inInputData->mNumberBuffers ) &&
+             ( iSelAddInBufferLeft < inInputData->mNumberBuffers ) &&
+             ( iSelAddInBufferRight < inInputData->mNumberBuffers ) &&
+             ( inInputData->mBuffers[iSelInBufferLeft].mDataByteSize     == static_cast<UInt32> ( vecNumInBufChan[iSelInBufferLeft] *     iCoreAudioBufferSizeMono * 4 ) &&
+             ( inInputData->mBuffers[iSelInBufferRight].mDataByteSize    == static_cast<UInt32> ( vecNumInBufChan[iSelInBufferRight] *    iCoreAudioBufferSizeMono * 4 ) &&
+             ( inInputData->mBuffers[iSelAddInBufferLeft].mDataByteSize  == static_cast<UInt32> ( vecNumInBufChan[iSelAddInBufferLeft] *  iCoreAudioBufferSizeMono * 4 ) &&
+             ( inInputData->mBuffers[iSelAddInBufferRight].mDataByteSize == static_cast<UInt32> ( vecNumInBufChan[iSelAddInBufferRight] * iCoreAudioBufferSizeMono * 4 ) )
         {
             Float32* pLeftData             = static_cast<Float32*> ( inInputData->mBuffers[iSelInBufferLeft].mData );
             Float32* pRightData            = static_cast<Float32*> ( inInputData->mBuffers[iSelInBufferRight].mData );
-            int      iNumChanPerFrameLeft  = pSound->vecNumInBufChan[iSelInBufferLeft];
-            int      iNumChanPerFrameRight = pSound->vecNumInBufChan[iSelInBufferRight];
+            int      iNumChanPerFrameLeft  = vecNumInBufChan[iSelInBufferLeft];
+            int      iNumChanPerFrameRight = vecNumInBufChan[iSelInBufferRight];
 
             // copy input data
             for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
@@ -977,7 +989,7 @@ inInputData->mBuffers[0].mDataByteSize * inInputData->mNumberBuffers ==
             if ( iSelAddInBufferLeft >= 0 )
             {
                 pLeftData            = static_cast<Float32*> ( inInputData->mBuffers[iSelAddInBufferLeft].mData );
-                iNumChanPerFrameLeft = pSound->vecNumInBufChan[iSelAddInBufferLeft];
+                iNumChanPerFrameLeft = vecNumInBufChan[iSelAddInBufferLeft];
 
                 for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
                 {
@@ -989,7 +1001,7 @@ inInputData->mBuffers[0].mDataByteSize * inInputData->mNumberBuffers ==
             if ( iSelAddInBufferRight >= 0 )
             {
                 pRightData            = static_cast<Float32*> ( inInputData->mBuffers[iSelAddInBufferRight].mData );
-                iNumChanPerFrameRight = pSound->vecNumInBufChan[iSelAddInBufferRight];
+                iNumChanPerFrameRight = vecNumInBufChan[iSelAddInBufferRight];
 
                 for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
                 {
@@ -1010,63 +1022,26 @@ inInputData->mBuffers[0].mDataByteSize * inInputData->mNumberBuffers ==
 
     if ( ( inDevice == pSound->CurrentAudioOutputDeviceID ) && outOutputData )
     {
-        // check size (float32 has four bytes)
-//        if ( outOutputData->mBuffers[0].mDataByteSize * outOutputData->mNumberBuffers ==
-//             (UInt32) iNumOutChan * static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) )
-//        {
-//            const int iNumChanPerFrame  = iNumOutChan / outOutputData->mNumberBuffers;
-//            const int iSelBufferLeft    = iSelOutputLeftChannel / iNumChanPerFrame;
-//            const int iSelBufferRight   = iSelOutputRightChannel / iNumChanPerFrame;
-//            const int iSelInterlChLeft  = iSelOutputLeftChannel % iNumChanPerFrame;
-//            const int iSelInterlChRight = iSelOutputRightChannel % iNumChanPerFrame;
-//
-//            Float32* pLeftData  = static_cast<Float32*> ( outOutputData->mBuffers[iSelBufferLeft].mData );
-//            Float32* pRightData = static_cast<Float32*> ( outOutputData->mBuffers[iSelBufferRight].mData );
-//
-//            // copy output data
-//            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
-//            {
-//                // copy left and right channels separately
-//                pLeftData[iNumChanPerFrame * i + iSelInterlChLeft]   = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
-//                pRightData[iNumChanPerFrame * i + iSelInterlChRight] = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
-//            }
-//        }
-//        else
-        if ( outOutputData->mBuffers[0].mDataByteSize ==
-             static_cast<UInt32> ( iCoreAudioBufferSizeMono * iNumOutChan * 4 ) )
-        {
-            // one buffer with all the channels in interleaved format:
-            // get a pointer to the input data of the correct type
-            Float32* pOutData = static_cast<Float32*> ( outOutputData->mBuffers[0].mData );
+       // check sizes (note that float32 has four bytes)
+       if ( ( iSelOutBufferLeft >= 0 ) &&
+            ( iSelOutBufferLeft < outOutputData->mNumberBuffers ) &&
+            ( iSelOutBufferRight >= 0 ) &&
+            ( iSelOutBufferRight < outOutputData->mNumberBuffers ) &&
+            ( outOutputData->mBuffers[iSelOutBufferLeft].mDataByteSize  == static_cast<UInt32> ( vecNumOutBufChan[iSelOutBufferLeft] *  iCoreAudioBufferSizeMono * 4 ) &&
+            ( outOutputData->mBuffers[iSelOutBufferRight].mDataByteSize == static_cast<UInt32> ( vecNumOutBufChan[iSelOutBufferRight] * iCoreAudioBufferSizeMono * 4 ) )
+       {
+           Float32* pLeftData             = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutBufferLeft].mData );
+           Float32* pRightData            = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutBufferRight].mData );
+           int      iNumChanPerFrameLeft  = vecNumOutBufChan[iSelOutBufferLeft];
+           int      iNumChanPerFrameRight = vecNumOutBufChan[iSelOutBufferRight];
 
-            // copy output data
-            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
-            {
-                // left
-                pOutData[iNumOutChan * i + iSelOutputLeftChannel] =
-                    (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
-
-                // right
-                pOutData[iNumOutChan * i + iSelOutputRightChannel] =
-                    (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
-            }
-        }
-        else if ( outOutputData->mNumberBuffers == (UInt32) iNumOutChan && // we should have a matching number of buffers to channels
-                  outOutputData->mBuffers[0].mDataByteSize == static_cast<UInt32> ( iCoreAudioBufferSizeMono * 4 ) )
-        {
-            // Outputs are to individual buffers too, rather than using channels
-            Float32* pLeftOutData  = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutputLeftChannel].mData );
-            Float32* pRightOutData = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutputRightChannel].mData );
-
-            // copy output data
-            for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
-            {
-                // left
-                pLeftOutData[i] = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
-
-                // right
-                pRightOutData[i] = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
-            }
+           // copy output data
+           for ( int i = 0; i < iCoreAudioBufferSizeMono; i++ )
+           {
+               // copy left and right channels separately
+               pLeftData[iNumChanPerFrameLeft * i + iSelOutInterlChLeft]    = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i] / _MAXSHORT;
+               pRightData[iNumChanPerFrameRight * i + iSelOutInterlChRight] = (Float32) pSound->vecsTmpAudioSndCrdStereo[2 * i + 1] / _MAXSHORT;
+           }
         }
     }
 

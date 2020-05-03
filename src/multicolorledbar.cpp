@@ -48,8 +48,7 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
         // create LED object
         vecpLEDs[iLEDIdx] = new cLED ( parent );
 
-        // add LED to layout with spacer (do not add spacer on the bottom of the
-        // first LED)
+        // add LED to layout with spacer (do not add spacer on the bottom of the first LED)
         if ( iLEDIdx < NUM_STEPS_LED_BAR - 1 )
         {
             pLEDLayout->addStretch();
@@ -77,7 +76,7 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
     // according to QScrollArea description: "When using a scroll area to display the
     // contents of a custom widget, it is important to ensure that the size hint of
     // the child widget is set to a suitable value."
-    pProgressBar->setMinimumSize ( QSize ( 1, 1 ) );
+    pProgressBar->setMinimumSize ( QSize ( 19, 1 ) ); // 15px + 2 * 1px + 2 * 1px = 19px
     pLEDMeter->setMinimumSize    ( QSize ( 1, 1 ) );
 
     // update the meter type (using the default value of the meter type)

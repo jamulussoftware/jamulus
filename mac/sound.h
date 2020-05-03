@@ -97,7 +97,6 @@ protected:
     void    UpdateChSelection();
 
     int CountChannels ( AudioDeviceID devID,
-                        const int     iNumChanPerFrame,
                         bool          isInput );
 
     UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID,

@@ -257,7 +257,6 @@ void CSound::GetAudioDeviceInfos ( const AudioDeviceID DeviceID,
 }
 
 int CSound::CountChannels ( AudioDeviceID devID,
-                            const int     iNumChanPerFrame,
                             bool          isInput )
 {
     OSStatus err;
@@ -472,9 +471,6 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                     "not compatible with this software." );
     }
 
-    // store the input number of channels per frame for this stream
-    const int iNumInChanPerFrame = CurDevStreamFormat.mChannelsPerFrame;
-
     // check the output
     AudioObjectGetPropertyData ( outputStreamID,
                                  &stPropertyAddress,
@@ -493,12 +489,9 @@ QString CSound::CheckDeviceCapabilities ( const int iDriverIdx )
                     "not compatible with this software." );
     }
 
-    // store the output number of channels per frame for this stream
-    const int iNumOutChanPerFrame = CurDevStreamFormat.mChannelsPerFrame;
-
     // store the input and out number of channels for this device
-    iNumInChan  = CountChannels ( audioInputDevice[iDriverIdx], iNumInChanPerFrame, true );
-    iNumOutChan = CountChannels ( audioOutputDevice[iDriverIdx], iNumOutChanPerFrame, false );
+    iNumInChan  = CountChannels ( audioInputDevice[iDriverIdx], true );
+    iNumOutChan = CountChannels ( audioOutputDevice[iDriverIdx], false );
 
     // clip the number of input/output channels to our allowed maximum
     if ( iNumInChan > MAX_NUM_IN_OUT_CHANNELS )
@@ -941,8 +934,6 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     QMutexLocker locker ( &pSound->Mutex );
 
     const int           iCoreAudioBufferSizeMono = pSound->iCoreAudioBufferSizeMono;
-    const int           iNumInChan               = pSound->iNumInChan;
-    const int           iNumOutChan              = pSound->iNumOutChan;
     const int           iSelInBufferLeft         = pSound->iSelInBufferLeft;
     const int           iSelInBufferRight        = pSound->iSelInBufferRight;
     const int           iSelInInterlChLeft       = pSound->iSelInInterlChLeft;
@@ -962,15 +953,13 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     {
         // check sizes (note that float32 has four bytes)
         if ( ( iSelInBufferLeft >= 0 ) &&
-             ( iSelInBufferLeft < inInputData->mNumberBuffers ) &&
+             ( iSelInBufferLeft < static_cast<int> ( inInputData->mNumberBuffers ) ) &&
              ( iSelInBufferRight >= 0 ) &&
-             ( iSelInBufferRight < inInputData->mNumberBuffers ) &&
-             ( iSelAddInBufferLeft < inInputData->mNumberBuffers ) &&
-             ( iSelAddInBufferRight < inInputData->mNumberBuffers ) &&
-             ( inInputData->mBuffers[iSelInBufferLeft].mDataByteSize     == static_cast<UInt32> ( vecNumInBufChan[iSelInBufferLeft] *     iCoreAudioBufferSizeMono * 4 ) &&
-             ( inInputData->mBuffers[iSelInBufferRight].mDataByteSize    == static_cast<UInt32> ( vecNumInBufChan[iSelInBufferRight] *    iCoreAudioBufferSizeMono * 4 ) &&
-             ( inInputData->mBuffers[iSelAddInBufferLeft].mDataByteSize  == static_cast<UInt32> ( vecNumInBufChan[iSelAddInBufferLeft] *  iCoreAudioBufferSizeMono * 4 ) &&
-             ( inInputData->mBuffers[iSelAddInBufferRight].mDataByteSize == static_cast<UInt32> ( vecNumInBufChan[iSelAddInBufferRight] * iCoreAudioBufferSizeMono * 4 ) )
+             ( iSelInBufferRight < static_cast<int> ( inInputData->mNumberBuffers ) ) &&
+             ( iSelAddInBufferLeft < static_cast<int> ( inInputData->mNumberBuffers ) ) &&
+             ( iSelAddInBufferRight < static_cast<int> ( inInputData->mNumberBuffers ) ) &&
+             ( inInputData->mBuffers[iSelInBufferLeft].mDataByteSize  == static_cast<UInt32> ( vecNumInBufChan[iSelInBufferLeft] *  iCoreAudioBufferSizeMono * 4 ) ) &&
+             ( inInputData->mBuffers[iSelInBufferRight].mDataByteSize == static_cast<UInt32> ( vecNumInBufChan[iSelInBufferRight] * iCoreAudioBufferSizeMono * 4 ) ) )
         {
             Float32* pLeftData             = static_cast<Float32*> ( inInputData->mBuffers[iSelInBufferLeft].mData );
             Float32* pRightData            = static_cast<Float32*> ( inInputData->mBuffers[iSelInBufferRight].mData );
@@ -1024,11 +1013,11 @@ OSStatus CSound::callbackIO ( AudioDeviceID          inDevice,
     {
        // check sizes (note that float32 has four bytes)
        if ( ( iSelOutBufferLeft >= 0 ) &&
-            ( iSelOutBufferLeft < outOutputData->mNumberBuffers ) &&
+            ( iSelOutBufferLeft < static_cast<int> ( outOutputData->mNumberBuffers ) ) &&
             ( iSelOutBufferRight >= 0 ) &&
-            ( iSelOutBufferRight < outOutputData->mNumberBuffers ) &&
-            ( outOutputData->mBuffers[iSelOutBufferLeft].mDataByteSize  == static_cast<UInt32> ( vecNumOutBufChan[iSelOutBufferLeft] *  iCoreAudioBufferSizeMono * 4 ) &&
-            ( outOutputData->mBuffers[iSelOutBufferRight].mDataByteSize == static_cast<UInt32> ( vecNumOutBufChan[iSelOutBufferRight] * iCoreAudioBufferSizeMono * 4 ) )
+            ( iSelOutBufferRight < static_cast<int> ( outOutputData->mNumberBuffers ) ) &&
+            ( outOutputData->mBuffers[iSelOutBufferLeft].mDataByteSize  == static_cast<UInt32> ( vecNumOutBufChan[iSelOutBufferLeft] *  iCoreAudioBufferSizeMono * 4 ) ) &&
+            ( outOutputData->mBuffers[iSelOutBufferRight].mDataByteSize == static_cast<UInt32> ( vecNumOutBufChan[iSelOutBufferRight] * iCoreAudioBufferSizeMono * 4 ) ) )
        {
            Float32* pLeftData             = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutBufferLeft].mData );
            Float32* pRightData            = static_cast<Float32*> ( outOutputData->mBuffers[iSelOutBufferRight].mData );

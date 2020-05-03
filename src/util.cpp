@@ -989,6 +989,7 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bassoon" ), ":/png/instr/res/instruments/bassoon.png", IC_WIND_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Oboe" ), ":/png/instr/res/instruments/oboe.png", IC_WIND_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Harp" ), ":/png/instr/res/instruments/harp.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Viola" ), ":/png/instr/res/instruments/viola.png", IC_STRING_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;

@@ -575,6 +575,7 @@ DISTFILES += ChangeLog \
     src/res/instruments/oboe.png \
     src/res/instruments/harp.svg \
     src/res/instruments/harp.png \
+    src/res/instruments/viola.png \
     src/res/flags/flagnone.png \
     src/res/flags/ad.png \
     src/res/flags/ae.png \

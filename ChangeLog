@@ -11,10 +11,10 @@
 
 - link to docs from application Help menu (Ticket #90)
 
+- support Mac CoreAudio aggregated devices (Ticket #138)
+
 - bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
 
-
-TODO support CoreAudio aggregated devices
 
 TODO support internationalization
 

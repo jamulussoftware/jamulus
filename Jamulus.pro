@@ -145,8 +145,14 @@ win32 {
     nosoundoption = $$find(CONFIG, "nosound")
     count(nosoundoption, 0) {
         message(Jack Audio Interface Enabled.)
-        CONFIG += link_pkgconfig
-        PKGCONFIG += jack
+
+        contains(CONFIG, "raspijamulus") {
+            message(Using Jack Audio in raspijamulus.sh mode.)
+            LIBS += -ljack
+        } else {
+            CONFIG += link_pkgconfig
+            PKGCONFIG += jack
+        }
 
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp

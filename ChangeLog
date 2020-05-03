@@ -3,23 +3,20 @@
 
 
 
-
 3.5.3git
 
-  * for CoreAudio and 4 channel input, support mixing channels 1&2 with 3&4
+- for CoreAudio and 4 channel input, support mixing channels 1&2 with 3&4
 
-  * added bassoon/oboe/harp instrument icons, created by dszgit (Ticket #131)
+- added bassoon/oboe/harp instrument icons, created by dszgit (Ticket #131)
 
-  * link to docs from application Help menu (Ticket #90)
+- link to docs from application Help menu (Ticket #90)
 
-  * bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
+- bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
 
 
 TODO support CoreAudio aggregated devices
 
 TODO support internationalization
-
-TODO standard style: meter bar gets smaller sometimes if board is full and fader text is short
 
 TODO implement panning for channels (Ticket #52, #145)
 
@@ -35,73 +32,73 @@ TODO show mute state of others
 
 3.5.2 (2020-04-24)
 
-  * use audio level meter bars for normal skin
+- use audio level meter bars for normal skin
 
-  * store Show All Musicians setting in the ini-file
+- store Show All Musicians setting in the ini-file
 
-  * improved Mac installer, coded by doloopuntil
+- improved Mac installer, coded by doloopuntil
 
-  * support to open ASIO driver setup(s) if startup failed due to incorrect driver settings (Ticket #117)
+- support to open ASIO driver setup(s) if startup failed due to incorrect driver settings (Ticket #117)
 
-  * added -v/--version command line argument to output version information (Ticket #121)
+- added -v/--version command line argument to output version information (Ticket #121)
 
-  * added bodhran and other instrument icons, bodhran created by bomm (Ticket #131)
+- added bodhran and other instrument icons, bodhran created by bomm (Ticket #131)
 
-  * bug fix: if small network buffers are used we get much better audio quality when drop outs occur
+- bug fix: if small network buffers are used we get much better audio quality when drop outs occur
 
-  * bug fix: if names given with the -o option were too long, the server registration failed (Ticket #91)
+- bug fix: if names given with the -o option were too long, the server registration failed (Ticket #91)
 
-  * bug fix: audio level changes if Buffer Delay is changed (Ticket #106)
+- bug fix: audio level changes if Buffer Delay is changed (Ticket #106)
 
-  * bug fix: do not reset fader level meters if number of clients change
+- bug fix: do not reset fader level meters if number of clients change
 
-  * bug fix: fixed a crash with JackRouter 64 bit ASIO driver (Ticket #93, thanks to elliotclee)
+- bug fix: fixed a crash with JackRouter 64 bit ASIO driver (Ticket #93, thanks to elliotclee)
 
 
 3.5.1 (2020-04-18)
 
-  * added a Mute Stream button to hear your signal and the signal of the other clients but
-    do not transmit your signal to the server so that the other clients cannot hear you
+- added a Mute Stream button to hear your signal and the signal of the other clients but
+  do not transmit your signal to the server so that the other clients cannot hear you
 
-  * added Enable Small Network Buffers switch to enable small sound card buffers in
-    combination with legacy OPUS packets since OPUS packets with 64 samples enable low
-    latency but can increase audio drop outs
+- added Enable Small Network Buffers switch to enable small sound card buffers in
+  combination with legacy OPUS packets since OPUS packets with 64 samples enable low
+  latency but can increase audio drop outs
 
-  * upgrade OPUS codec library to v1.3.1 by doloopuntil
+- upgrade OPUS codec library to v1.3.1 by doloopuntil
 
-  * server list registration status indicator added to the server GUI, coded by pljones
+- server list registration status indicator added to the server GUI, coded by pljones
 
-  * improved auto jitter buffer for 64 samples frame size
+- improved auto jitter buffer for 64 samples frame size
 
-  * the ping times in the server list are now more stable
+- the ping times in the server list are now more stable
 
 
 3.5.0 (2020-04-15)
 
-  * added support for 64 samples OPUS packets in the client (if a sound card buffer size
-    larger or equal than 128 samples is chosen, the legacy 128 samples OPUS packets are used)
+- added support for 64 samples OPUS packets in the client (if a sound card buffer size
+  larger or equal than 128 samples is chosen, the legacy 128 samples OPUS packets are used)
 
-  * added a filter for the server list to, e.g., filter a specific country or search for a musician
+- added a filter for the server list to, e.g., filter a specific country or search for a musician
 
-  * refresh server list if the Central Server address type is changed
+- refresh server list if the Central Server address type is changed
 
-  * the unit of the mixer faders is now dB using the range -50 dB to 0 dB
+- the unit of the mixer faders is now dB using the range -50 dB to 0 dB
 
-  * increased LED luminance (Ticket #71)
+- increased LED luminance (Ticket #71)
 
-  * bug fix: the server welcome message may appear twice if the server list was double clicked
+- bug fix: the server welcome message may appear twice if the server list was double clicked
 
 
 3.4.7 (2020-04-11)
 
-  * added support for alternative Central Servers to solve the 200 server registration limit (Ticket #50)
+- added support for alternative Central Servers to solve the 200 server registration limit (Ticket #50)
 
-  * added support for 64 samples frame size in the server (if server runs in 64 or 128 samples
-    mode it is still compatible to both, 64 and 128 samples frame size clients)
+- added support for 64 samples frame size in the server (if server runs in 64 or 128 samples
+  mode it is still compatible to both, 64 and 128 samples frame size clients)
 
-  * added multichannel CoreAudio support, coded by emlynmac (#44)
+- added multichannel CoreAudio support, coded by emlynmac (#44)
 
-  * fixed server not visible if in same local network, coded by pljones (Ticket #27)
+- fixed server not visible if in same local network, coded by pljones (Ticket #27)
 
 
 3.4.6 (2020-04-09)

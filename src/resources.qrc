@@ -1,4 +1,10 @@
 <RCC>
+    <qresource prefix="/translations" lang="de">
+        <file alias="translation.qm">res/translation/translation_de_DE.qm</file>
+    </qresource>
+    <qresource prefix="/translations" lang="fr">
+        <file alias="translation.qm">res/translation/translation_fr_FR.qm</file>
+    </qresource>
     <qresource prefix="/png/LEDs">
         <file>res/CLEDDisabledSmall.png</file>
         <file>res/CLEDGreenArrow.png</file>

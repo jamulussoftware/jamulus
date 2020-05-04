@@ -45,14 +45,12 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
-
 #if defined( SERVER_BUNDLE ) && ( defined( __APPLE__ ) || defined( __MACOSX ) )
     // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
     bool         bIsClient                 = false;
 #else
     bool         bIsClient                 = true;
 #endif
-
     bool         bUseGUI                   = true;
     bool         bStartMinimized           = false;
     bool         bShowComplRegConnList     = false;
@@ -61,6 +59,7 @@ int main ( int argc, char** argv )
     bool         bShowAnalyzerConsole      = false;
     bool         bCentServPingServerInList = false;
     bool         bNoAutoJackConnect        = false;
+    bool         bUseTranslation           = false;
     int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
     int          iMaxDaysHistory           = DEFAULT_DAYS_HISTORY;
     int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
@@ -204,6 +203,21 @@ int main ( int argc, char** argv )
         {
             bNoAutoJackConnect = true;
             tsConsole << "- disable auto Jack connections" << endl;
+            continue;
+        }
+
+
+        // Enable translations -------------------------------------------------
+        // Undocumented debugging command line argument: Enable translations
+        // (since translation is still WIP, it is not enabled by default but
+        // must be enabled with this undocumented command line flag)
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "--translation", // no short form
+                               "--translation" ) )
+        {
+            bUseTranslation = true;
+            tsConsole << "- translations enabled" << endl;
             continue;
         }
 
@@ -514,18 +528,16 @@ int main ( int argc, char** argv )
     // init resources
     Q_INIT_RESOURCE(resources);
 
+    // load translations
+    QTranslator myappTranslator;
 
-// TODO translation loading does not yet work
-// TODO CONFIG += lrelease embed_translations
-// TODO QM_FILES_RESOURCE_PREFIX needed???
-//    // load translations
-//    if ( bUseGUI )
-//    {
-//        QTranslator myappTranslator;
-//        bool ret = myappTranslator.load ( "translation_" + QLocale::system().name() );
-//qDebug() << "translation successfully loaded: " << ret << "   " << "translation_" + QLocale::system().name();
-//        pApp->installTranslator ( &myappTranslator );
-//    }
+    if ( bUseGUI && bUseTranslation )
+    {
+        if ( myappTranslator.load ( ":/translations/translation.qm" ) )
+        {
+            pApp->installTranslator ( &myappTranslator );
+        }
+    }
 
 
 // TEST -> activate the following line to activate the test bench,

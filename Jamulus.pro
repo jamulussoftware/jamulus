@@ -14,8 +14,8 @@ QT += widgets \
     network \
     xml
 
-#TRANSLATIONS = src/res/translation_de_DE.ts \
-#    src/res/translation_fr_FR.ts
+TRANSLATIONS = src/res/translation/translation_de_DE.ts \
+    src/res/translation/translation_fr_FR.ts
 
 INCLUDEPATH += src
 

@@ -297,19 +297,24 @@
         <translation>Se o cliente </translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="58"/>
-        <source> software is connected and you play your instrument/sing in the microphone, the LED level meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. line in instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.&lt;br&gt;For a proper usage of the </source>
-        <translation> estiver ligado a um servidor e tocar o seu instrumento/cantar no microfone, os LEDs do medidor do nível de entrada devem piscar. Se tal não acontecer, provavelmente selecionou o canal de entrada errado (por exemplo, entrada de linha em vez da entrada do microfone) ou ajustou o ganho da entrada muito baixo no misturador de áudio (Windows) ou na placa de som.&lt;br&gt;Para um uso adequado do cliente </translation>
-    </message>
-    <message>
         <location filename="../../clientdlg.cpp" line="64"/>
         <source> software, you should not hear your singing/instrument in the loudspeaker or your headphone when the </source>
         <translation>, não deve ouvir a sua voz/instrumento diretamente nas colunas ou nos headphones enquanto o cliente </translation>
     </message>
     <message>
+        <location filename="../../clientdlg.cpp" line="58"/>
+        <source> software is connected and you play your instrument/sing in the microphone, the LED level meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. line in instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
+        <translation> estiver ligado a um servidor e tocar o seu instrumento/cantar no microfone, os LEDs do medidor do nível de entrada devem piscar. Se tal não acontecer, provavelmente selecionou o canal de entrada errado (por exemplo, entrada de linha em vez da entrada do microfone) ou ajustou o ganho da entrada muito baixo no misturador de áudio (Windows) ou na placa de som.</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="63"/>
+        <source>For a proper usage of the </source>
+        <translation>Para um uso adequado do cliente </translation>
+    </message>
+    <message>
         <location filename="../../clientdlg.cpp" line="67"/>
-        <source> software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (&lt;b&gt;not&lt;/b&gt; the Recording mixer!).</source>
-        <translation> não estiver ligado a um servidor. Isso pode ser feito silenciando (mute) o canal da entrada de áudio no dispositivo de reprodução (&lt;b&gt;não&lt;/b&gt; no dispositivo de captura!).</translation>
+        <source> software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
+        <translation> não estiver ligado a um servidor. Isso pode ser feito silenciando (mute) o canal da entrada de áudio no dispositivo de reprodução (não no dispositivo de captura!)</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="71"/>

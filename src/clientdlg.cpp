@@ -60,13 +60,13 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         "meter should flicker. If this is not the case, you have "
         "probably selected the wrong input channel (e.g. line in instead "
         "of the microphone input) or set the input gain too low in the "
-        "(Windows) audio mixer.<br>For a proper usage of the " ) + APP_NAME +
-        tr ( " software, "
+        "(Windows) audio mixer." ) + "<br>" + tr ( "For a proper usage of the " ) +
+        APP_NAME + tr ( " software, "
         "you should not hear your singing/instrument in the loudspeaker or "
         "your headphone when the " ) + APP_NAME +
         tr ( " software is not connected. This can "
         "be achieved by muting your input audio channel in the Playback "
-        "mixer (<b>not</b> the Recording mixer!)." ) + TOOLTIP_COM_END_TEXT;
+        "mixer (not the Recording mixer!)." ) + TOOLTIP_COM_END_TEXT;
 
     QString strInpLevHAccText  = tr ( "Input level meter" );
     QString strInpLevHAccDescr = tr ( "Simulates an analog LED level meter." );

@@ -191,7 +191,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="456"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Localisation</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="478"/>
@@ -297,18 +297,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="58"/>
-        <source> software is connected and you play your instrument/sing in the microphone, the LED level meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. line in instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.&lt;br&gt;For a proper usage of the </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../clientdlg.cpp" line="64"/>
         <source> software, you should not hear your singing/instrument in the loudspeaker or your headphone when the </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../clientdlg.cpp" line="58"/>
+        <source> software is connected and you play your instrument/sing in the microphone, the LED level meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. line in instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="63"/>
+        <source>For a proper usage of the </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../clientdlg.cpp" line="67"/>
-        <source> software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (&lt;b&gt;not&lt;/b&gt; the Recording mixer!).</source>
+        <source> software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -406,7 +411,7 @@
         <location filename="../../clientdlg.cpp" line="203"/>
         <location filename="../../clientdlg.cpp" line="1084"/>
         <source>C&amp;onnect</source>
-        <translation">Se c&amp;onnecter</translation>
+        <translation>Se c&amp;onnecter</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="255"/>
@@ -426,7 +431,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="263"/>
         <source>C&amp;hat...</source>
-        <translation>Tc&amp;hate...></translation>
+        <translation>Tc&amp;hate...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="266"/>
@@ -1011,7 +1016,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="623"/>
         <source>Ping Time</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Temps de réponse</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="653"/>
@@ -1300,7 +1305,7 @@ What you set here will appear at your fader on the mixer board when you are conn
         <location filename="../../util.cpp" line="667"/>
         <location filename="../../util.cpp" line="959"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aucun</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="542"/>
@@ -1604,7 +1609,7 @@ What you set here will appear at your fader on the mixer board when you are conn
         <location filename="../../serverdlg.cpp" line="134"/>
         <location filename="../../serverdlg.cpp" line="277"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Quitter</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>

@@ -145,8 +145,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverberation" ) );
 
     // delay LED
-    QString strLEDDelay = tr ( "<b>Delay Status LED:</b> "
-        "The delay status LED indicator shows the current audio delay "
+    QString strLEDDelay = "<b>" + tr ( "Delay Status LED" ) + ":</b> " +
+        tr ( "The delay status LED indicator shows the current audio delay "
         "status. If the light is green, the delay is perfect for a jam "
         "session. If the light is yellow, a session is still possible but "
         "it may be harder to play. If the light is red, the delay is too "

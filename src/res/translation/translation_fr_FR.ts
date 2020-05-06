@@ -378,11 +378,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="148"/>
-        <source>&lt;b&gt;Delay Status LED:&lt;/b&gt; The delay status LED indicator shows the current audio delay status. If the light is green, the delay is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder to play. If the light is red, the delay is too large for jamming.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../clientdlg.cpp" line="157"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
         <translation type="unfinished"></translation>
@@ -502,6 +497,16 @@
     <message>
         <location filename="../../clientdlg.cpp" line="138"/>
         <source>With these radio buttons the audio input channel on which the reverberation effect is applied can be chosen. Either the left or right input channel can be selected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="148"/>
+        <source>Delay Status LED</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="149"/>
+        <source>The delay status LED indicator shows the current audio delay status. If the light is green, the delay is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder to play. If the light is red, the delay is too large for jamming.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

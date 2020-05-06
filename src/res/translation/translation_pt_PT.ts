@@ -378,11 +378,6 @@
         <translation>Seleção do canal direito para reverberação</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="148"/>
-        <source>&lt;b&gt;Delay Status LED:&lt;/b&gt; The delay status LED indicator shows the current audio delay status. If the light is green, the delay is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder to play. If the light is red, the delay is too large for jamming.</source>
-        <translation>&lt;b&gt;LED do Estado da Latência:&lt;/b&gt; O indicador LED do estado da latência mostra o estado atual do atraso do áudio. Se a luz estiver verde, o atraso é perfeito para uma jam session. Se a luz estiver amarela, uma sessão ainda é possível, mas pode ser mais difícil tocar sincronizado. Se a luz estiver vermelha, o atraso é demasiado grande para uma sessão de jamming.</translation>
-    </message>
-    <message>
         <location filename="../../clientdlg.cpp" line="157"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
         <translation>Se este indicador LED ficar vermelho, não se vai divertir muito ao usar o </translation>
@@ -503,6 +498,16 @@
         <location filename="../../clientdlg.cpp" line="138"/>
         <source>With these radio buttons the audio input channel on which the reverberation effect is applied can be chosen. Either the left or right input channel can be selected.</source>
         <translation>Com estes botões de seleção, pode ser escolhido o canal de entrada de áudio no qual o efeito de reverberação é aplicado. Pode ser selecionado o canal de entrada esquerdo ou direito.</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="148"/>
+        <source>Delay Status LED</source>
+        <translation>LED do Estado da Latência</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="149"/>
+        <source>The delay status LED indicator shows the current audio delay status. If the light is green, the delay is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder to play. If the light is red, the delay is too large for jamming.</source>
+        <translation>O indicador LED do estado da latência mostra o estado atual do atraso do áudio. Se a luz estiver verde, o atraso é perfeito para uma jam session. Se a luz estiver amarela, uma sessão ainda é possível, mas pode ser mais difícil tocar sincronizado. Se a luz estiver vermelha, o atraso é demasiado grande para uma sessão de jamming.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="819"/>

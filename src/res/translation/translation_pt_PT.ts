@@ -368,11 +368,6 @@
         <translation>Ajuste do nível do efeito de reverberação</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="137"/>
-        <source>&lt;b&gt;Reverberation Channel Selection:&lt;/b&gt; With these radio buttons the audio input channel on which the reverberation effect is applied can be chosen. Either the left or right input channel can be selected.</source>
-        <translation>&lt;b&gt;Seleção do Canal de Reverberação:&lt;/b&gt; Com estes botões de seleção, pode ser escolhido o canal de entrada de áudio no qual o efeito de reverberação é aplicado. Pode ser selecionado o canal de entrada esquerdo ou direito.</translation>
-    </message>
-    <message>
         <location filename="../../clientdlg.cpp" line="143"/>
         <source>Left channel selection for reverberation</source>
         <translation>Seleção do canal esquerdo para reverberação</translation>
@@ -498,6 +493,16 @@
         <location filename="../../clientdlg.cpp" line="125"/>
         <source>The reverberation effect requires significant CPU so that it should only be used on fast PCs. If the reverberation level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does not cause any additional CPU usage.</source>
         <translation>O efeito de reverberação requer uma utilização do CPU significativa, de forma a que só deve ser usado em PCs rápidos. Se o atenuador do nível de reverberação estiver definido como mínimo (que é a configuração padrão), o efeito de reverberação será desativado e não causará nenhum uso adicional do CPU.</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="137"/>
+        <source>Reverberation Channel Selection</source>
+        <translation>Seleção do Canal de Reverberação</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="138"/>
+        <source>With these radio buttons the audio input channel on which the reverberation effect is applied can be chosen. Either the left or right input channel can be selected.</source>
+        <translation>Com estes botões de seleção, pode ser escolhido o canal de entrada de áudio no qual o efeito de reverberação é aplicado. Pode ser selecionado o canal de entrada esquerdo ou direito.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="819"/>

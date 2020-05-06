@@ -134,8 +134,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     sldAudioReverb->setAccessibleName ( tr ( "Reverberation effect level setting" ) );
 
     // reverberation channel selection
-    QString strRevChanSel = tr ( "<b>Reverberation Channel Selection:</b> "
-        "With these radio buttons the audio input channel on which the "
+    QString strRevChanSel = "<b>" + tr ( "Reverberation Channel Selection" ) + ":</b> " +
+        tr ( "With these radio buttons the audio input channel on which the "
         "reverberation effect is applied can be chosen. Either the left "
         "or right input channel can be selected." );
 

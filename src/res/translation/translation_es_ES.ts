@@ -360,11 +360,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="137"/>
-        <source>&lt;b&gt;Reverberation Channel Selection:&lt;/b&gt; With these radio buttons the audio input channel on which the reverberation effect is applied can be chosen. Either the left or right input channel can be selected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../clientdlg.cpp" line="143"/>
         <source>Left channel selection for reverberation</source>
         <translation type="unfinished"></translation>
@@ -489,6 +484,16 @@
     <message>
         <location filename="../../clientdlg.cpp" line="125"/>
         <source>The reverberation effect requires significant CPU so that it should only be used on fast PCs. If the reverberation level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does not cause any additional CPU usage.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="137"/>
+        <source>Reverberation Channel Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="138"/>
+        <source>With these radio buttons the audio input channel on which the reverberation effect is applied can be chosen. Either the left or right input channel can be selected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

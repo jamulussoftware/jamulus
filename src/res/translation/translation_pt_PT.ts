@@ -388,11 +388,6 @@
         <translation>Indicador LED do estado de latência</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="164"/>
-        <source>&lt;b&gt;Buffers Status LED:&lt;/b&gt; The buffers status LED indicator shows the current audio/streaming status. If the light is green, there are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the audio stream is interrupted caused by one of the following problems:&lt;ul&gt;&lt;li&gt;The network jitter buffer is not large enough for the current network/audio interface jitter.&lt;/li&gt;&lt;li&gt;The sound card buffer delay (buffer size) is set to a too small value.&lt;/li&gt;&lt;li&gt;The upload or download stream rate is too high for the current available internet bandwidth.&lt;/li&gt;&lt;li&gt;The CPU of the client or server is at 100%.&lt;/li&gt;&lt;/ul&gt;</source>
-        <translation>&lt;b&gt;LED do Estado dos Buffers:&lt;/b&gt; O indicador LED do estado dos buffers mostra o estado atual do áudio/transmissão. Se a luz estiver verde, não haverá buffer em excesso/déficit e o fluxo de áudio não será interrompido. Se a luz estiver vermelha, o fluxo de áudio é interrompido devido a um dos seguintes problemas:&lt;ul&gt;&lt;li&gt;O jitter buffer da rede não é grande o suficiente para o jitter atual da interface de rede/áudio.&lt;/li&gt;&lt;li&gt;O atraso do buffer da placa de som (buffer size) está definido para um valor demasiado baixo.&lt;/li&gt;&lt;li&gt;A taxa de upload ou download é muito alta para a largura de banda disponível na ligação à Internet.&lt;/li&gt;&lt;li&gt;O CPU do cliente ou servidor está a 100%.&lt;/li&gt;&lt;/ul&gt;</translation>
-    </message>
-    <message>
         <location filename="../../clientdlg.cpp" line="182"/>
         <source>Buffers status LED indicator</source>
         <translation>Indicador LED do estado dos buffers</translation>
@@ -508,6 +503,36 @@
         <location filename="../../clientdlg.cpp" line="149"/>
         <source>The delay status LED indicator shows the current audio delay status. If the light is green, the delay is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder to play. If the light is red, the delay is too large for jamming.</source>
         <translation>O indicador LED do estado da latência mostra o estado atual do atraso do áudio. Se a luz estiver verde, o atraso é perfeito para uma jam session. Se a luz estiver amarela, uma sessão ainda é possível, mas pode ser mais difícil tocar sincronizado. Se a luz estiver vermelha, o atraso é demasiado grande para uma sessão de jamming.</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="164"/>
+        <source>Buffers Status LED</source>
+        <translation>LED do Estado dos Buffers</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="165"/>
+        <source>The buffers status LED indicator shows the current audio/streaming status. If the light is green, there are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the audio stream is interrupted caused by one of the following problems:</source>
+        <translation>O indicador LED do estado dos buffers mostra o estado atual do áudio/transmissão. Se a luz estiver verde, não haverá buffer em excesso/déficit e o fluxo de áudio não será interrompido. Se a luz estiver vermelha, o fluxo de áudio é interrompido devido a um dos seguintes problemas:</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="170"/>
+        <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
+        <translation>O jitter buffer da rede não é grande o suficiente para o jitter atual da interface de rede/áudio.</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="172"/>
+        <source>The sound card buffer delay (buffer size) is set to a too small value.</source>
+        <translation>O atraso do buffer da placa de som (buffer size) está definido para um valor demasiado baixo.</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="174"/>
+        <source>The upload or download stream rate is too high for the current available internet bandwidth.</source>
+        <translation>A taxa de upload ou download é muito alta para a largura de banda disponível na ligação à Internet.</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="176"/>
+        <source>The CPU of the client or server is at 100%.</source>
+        <translation>O CPU do cliente ou servidor está a 100%.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="819"/>

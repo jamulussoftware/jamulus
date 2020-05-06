@@ -388,11 +388,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="164"/>
-        <source>&lt;b&gt;Buffers Status LED:&lt;/b&gt; The buffers status LED indicator shows the current audio/streaming status. If the light is green, there are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the audio stream is interrupted caused by one of the following problems:&lt;ul&gt;&lt;li&gt;The network jitter buffer is not large enough for the current network/audio interface jitter.&lt;/li&gt;&lt;li&gt;The sound card buffer delay (buffer size) is set to a too small value.&lt;/li&gt;&lt;li&gt;The upload or download stream rate is too high for the current available internet bandwidth.&lt;/li&gt;&lt;li&gt;The CPU of the client or server is at 100%.&lt;/li&gt;&lt;/ul&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../clientdlg.cpp" line="182"/>
         <source>Buffers status LED indicator</source>
         <translation type="unfinished"></translation>
@@ -507,6 +502,36 @@
     <message>
         <location filename="../../clientdlg.cpp" line="149"/>
         <source>The delay status LED indicator shows the current audio delay status. If the light is green, the delay is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder to play. If the light is red, the delay is too large for jamming.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="164"/>
+        <source>Buffers Status LED</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="165"/>
+        <source>The buffers status LED indicator shows the current audio/streaming status. If the light is green, there are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the audio stream is interrupted caused by one of the following problems:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="170"/>
+        <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="172"/>
+        <source>The sound card buffer delay (buffer size) is set to a too small value.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="174"/>
+        <source>The upload or download stream rate is too high for the current available internet bandwidth.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="176"/>
+        <source>The CPU of the client or server is at 100%.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

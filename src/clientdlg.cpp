@@ -161,20 +161,20 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
 
     // buffers LED
-    QString strLEDBuffers =  tr ( "<b>Buffers Status LED:</b> "
-        "The buffers status LED indicator shows the current audio/streaming "
+    QString strLEDBuffers = "<b>" + tr ( "Buffers Status LED" ) + ":</b> " +
+        tr ( "The buffers status LED indicator shows the current audio/streaming "
         "status. If the light is green, there are no buffer overruns/underruns "
         "and the audio stream is not interrupted. If the light is red, the "
-        "audio stream is interrupted caused by one of the following problems:"
+        "audio stream is interrupted caused by one of the following problems:" ) +
         "<ul>"
-        "<li>The network jitter buffer is not large enough for the current "
-        "network/audio interface jitter.</li>"
-        "<li>The sound card buffer delay (buffer size) is set to a too small "
-        "value.</li>"
-        "<li>The upload or download stream rate is too high for the current "
-        "available internet bandwidth.</li>"
-        "<li>The CPU of the client or server is at 100%.</li>"
-        "</ul>" );
+        "<li>" + tr ( "The network jitter buffer is not large enough for the current "
+        "network/audio interface jitter." ) + "</li>"
+        "<li>" + tr ( "The sound card buffer delay (buffer size) is set to a too small "
+        "value." ) + "</li>"
+        "<li>" + tr ( "The upload or download stream rate is too high for the current "
+        "available internet bandwidth." ) + "</li>"
+        "<li>" + tr ( "The CPU of the client or server is at 100%." ) + "</li>"
+        "</ul>";
 
     lblBuffers->setWhatsThis ( strLEDBuffers );
     ledBuffers->setWhatsThis ( strLEDBuffers );

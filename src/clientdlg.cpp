@@ -115,14 +115,14 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
 
     // reverberation level
-    QString strAudReverb = tr ( "<b>Reverberation Level:</b> A reverberation "
-        "effect can be applied to one local mono audio channel or to both "
+    QString strAudReverb = "<b>" + tr ( "Reverberation Level" ) + ":</b> " +
+        tr ( "A reverberation effect can be applied to one local mono audio channel or to both "
         "channels in stereo mode. The mone channel selection and the "
         "reverberation level can be modified. If, e.g., "
         "the microphone signal is fed into the right audio channel of the "
         "sound card and a reverberation effect shall be applied, set the "
         "channel selector to right and move the fader upwards until the "
-        "desired reverberation level is reached.<br>"
+        "desired reverberation level is reached." ) + "<br>" + tr (
         "The reverberation effect requires significant CPU so that it should "
         "only be used on fast PCs. If the reverberation level fader is set to "
         "minimum (which is the default setting), the reverberation effect is "

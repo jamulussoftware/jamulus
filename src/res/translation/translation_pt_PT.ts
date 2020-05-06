@@ -254,8 +254,13 @@
     <name>CChatDlg</name>
     <message>
         <location filename="../../chatdlg.cpp" line="37"/>
-        <source>&lt;b&gt;Chat Window:&lt;/b&gt; The chat window shows a history of all chat messages.</source>
-        <translation>&lt;b&gt;Janela de Mensagens:&lt;/b&gt; A janela de mensagens mostra um histórico de todas as mensagens enviadas durante a sessão.</translation>
+        <source>Chat Window</source>
+        <translation>Janela de Mensagens</translation>
+    </message>
+    <message>
+        <location filename="../../chatdlg.cpp" line="37"/>
+        <source>The chat window shows a history of all chat messages.</source>
+        <translation>A janela de mensagens mostra um histórico de todas as mensagens enviadas durante a sessão.</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="40"/>
@@ -264,8 +269,13 @@
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="43"/>
-        <source>&lt;b&gt;Input Message Text:&lt;/b&gt; Enter the chat message text in the edit box and press enter to send the message to the server which distributes the message to all connected clients. Your message will then show up in the chat window.</source>
-        <translation>&lt;b&gt;Texto da Mensagem:&lt;/b&gt; Introduza o texto da mensagem no campo de introdução e pressione &lt;i&gt;Enter&lt;/i&gt; para enviar a mensagem ao servidor, que distribui a mensagem a todos os clientes ligados. A sua mensagem será exibida na janela de mensagens.</translation>
+        <source>Input Message Text</source>
+        <translation>Texto da Mensagem</translation>
+    </message>
+    <message>
+        <location filename="../../chatdlg.cpp" line="43"/>
+        <source>Enter the chat message text in the edit box and press enter to send the message to the server which distributes the message to all connected clients. Your message will then show up in the chat window.</source>
+        <translation>Introduza o texto da mensagem no campo de introdução e pressione Enter para enviar a mensagem ao servidor, que distribui a mensagem a todos os clientes ligados. A sua mensagem será exibida na janela de mensagens.</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="48"/>

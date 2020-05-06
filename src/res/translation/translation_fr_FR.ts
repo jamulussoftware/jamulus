@@ -110,7 +110,12 @@
     <name>CChannelFader</name>
     <message>
         <location filename="../../audiomixerboard.cpp" line="110"/>
-        <source>&lt;b&gt;Channel Level:&lt;/b&gt; Displays the pre-fader audio level of this channel.  All connected clients at the server will be assigned an audio level, the same value for each client.</source>
+        <source>Channel Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="111"/>
+        <source>Displays the pre-fader audio level of this channel.  All connected clients at the server will be assigned an audio level, the same value for each client.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -120,7 +125,12 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="116"/>
-        <source>&lt;b&gt;Mixer Fader:&lt;/b&gt; Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
+        <source>Mixer Fader</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="116"/>
+        <source>Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -130,7 +140,7 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="122"/>
-        <source>&lt;b&gt;Mute:&lt;/b&gt; With the Mute checkbox, the audio channel can be muted.</source>
+        <source>With the Mute checkbox, the audio channel can be muted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -140,7 +150,7 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="126"/>
-        <source>&lt;b&gt;Solo:&lt;/b&gt; With the Solo checkbox, the audio channel can be set to solo which means that all other channels except of the current channel are muted. It is possible to set more than one channel to solo.</source>
+        <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except of the current channel are muted. It is possible to set more than one channel to solo.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -150,7 +160,12 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="132"/>
-        <source>&lt;b&gt;Fader Tag:&lt;/b&gt; The fader tag identifies the connected client. The tag name, the picture of your instrument and a flag of your country can be set in the main window.</source>
+        <source>Fader Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="132"/>
+        <source>The fader tag identifies the connected client. The tag name, the picture of your instrument and a flag of your country can be set in the main window.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -222,12 +237,14 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="44"/>
+        <location filename="../../audiomixerboard.cpp" line="122"/>
         <location filename="../../audiomixerboard.cpp" line="183"/>
         <source>Mute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="45"/>
+        <location filename="../../audiomixerboard.cpp" line="126"/>
         <location filename="../../audiomixerboard.cpp" line="184"/>
         <source>Solo</source>
         <translation type="unfinished"></translation>

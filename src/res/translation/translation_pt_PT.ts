@@ -110,8 +110,13 @@
     <name>CChannelFader</name>
     <message>
         <location filename="../../audiomixerboard.cpp" line="110"/>
-        <source>&lt;b&gt;Channel Level:&lt;/b&gt; Displays the pre-fader audio level of this channel.  All connected clients at the server will be assigned an audio level, the same value for each client.</source>
-        <translation>&lt;b&gt;Nível do Canal:&lt;/b&gt; Mostra o nível de áudio pré-fader deste canal. Todos os clientes ligados ao servidor terão atribuído um nível de áudio, o mesmo valor para cada cliente.</translation>
+        <source>Channel Level</source>
+        <translation>Nível do Canal</translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="111"/>
+        <source>Displays the pre-fader audio level of this channel.  All connected clients at the server will be assigned an audio level, the same value for each client.</source>
+        <translation>Mostra o nível de áudio pré-fader deste canal. Todos os clientes ligados ao servidor terão atribuído um nível de áudio, o mesmo valor para cada cliente.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="113"/>
@@ -120,8 +125,13 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="116"/>
-        <source>&lt;b&gt;Mixer Fader:&lt;/b&gt; Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
-        <translation>&lt;b&gt;Fader da Mistura:&lt;/b&gt; Ajusta o nível de áudio deste canal. Por cada cliente ligado ao servidor será atribuído um fader de áudio em todos os clientes, podendo cada um ajustar a sua mistura local.</translation>
+        <source>Mixer Fader</source>
+        <translation>Fader da Mistura</translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="116"/>
+        <source>Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
+        <translation>Ajusta o nível de áudio deste canal. Por cada cliente ligado ao servidor será atribuído um fader de áudio em todos os clientes, podendo cada um ajustar a sua mistura local.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="119"/>
@@ -130,8 +140,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="122"/>
-        <source>&lt;b&gt;Mute:&lt;/b&gt; With the Mute checkbox, the audio channel can be muted.</source>
-        <translation>&lt;b&gt;Mute:&lt;/b&gt; Com a caixa de seleção Mute, o canal de áudio pode ser silenciado.</translation>
+        <source>With the Mute checkbox, the audio channel can be muted.</source>
+        <translation>Com a caixa de seleção Mute, o canal de áudio pode ser silenciado.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="124"/>
@@ -140,8 +150,8 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="126"/>
-        <source>&lt;b&gt;Solo:&lt;/b&gt; With the Solo checkbox, the audio channel can be set to solo which means that all other channels except of the current channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation>&lt;b&gt;Solo:&lt;/b&gt; Com a caixa de seleção Solo, o canal de áudio pode ser definido como solo, o que significa que todos os outros canais, exceto o canal atual, serão silenciados. É possível definir mais que um canal no modo solo.</translation>
+        <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except of the current channel are muted. It is possible to set more than one channel to solo.</source>
+        <translation>Com a caixa de seleção Solo, o canal de áudio pode ser definido como solo, o que significa que todos os outros canais, exceto o canal atual, serão silenciados. É possível definir mais que um canal no modo solo.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="130"/>
@@ -150,8 +160,13 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="132"/>
-        <source>&lt;b&gt;Fader Tag:&lt;/b&gt; The fader tag identifies the connected client. The tag name, the picture of your instrument and a flag of your country can be set in the main window.</source>
-        <translation>&lt;b&gt;Identificador do Fader:&lt;/b&gt; O Identificador do fader identifica o cliente ligado. O nome no identificador, a imagem do instrumento e a bandeira do país podem ser definidos no &lt;i&gt;Meu Perfil&lt;/i&gt;.</translation>
+        <source>Fader Tag</source>
+        <translation>Identificador do Fader</translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="132"/>
+        <source>The fader tag identifies the connected client. The tag name, the picture of your instrument and a flag of your country can be set in the main window.</source>
+        <translation>O Identificador do fader identifica o cliente ligado. O nome no identificador, a imagem do instrumento e a bandeira do país podem ser definidos no Meu Perfil.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="137"/>
@@ -222,12 +237,14 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="44"/>
+        <location filename="../../audiomixerboard.cpp" line="122"/>
         <location filename="../../audiomixerboard.cpp" line="183"/>
         <source>Mute</source>
         <translation>Mute</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="45"/>
+        <location filename="../../audiomixerboard.cpp" line="126"/>
         <location filename="../../audiomixerboard.cpp" line="184"/>
         <source>Solo</source>
         <translation>Solo</translation>

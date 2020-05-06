@@ -107,29 +107,29 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     Reset();
 
     // add help text to controls
-    plbrChannelLevel->setWhatsThis ( tr ( "<b>Channel Level:</b> Displays the "
-        "pre-fader audio level of this channel.  All connected clients at the "
+    plbrChannelLevel->setWhatsThis ( "<b>" + tr ( "Channel Level" ) + ":</b> " +
+        tr ( "Displays the pre-fader audio level of this channel.  All connected clients at the "
         "server will be assigned an audio level, the same value for each client." ) );
     plbrChannelLevel->setAccessibleName ( tr ( "Input level of the current audio "
         "channel at the server" ) );
 
-    pFader->setWhatsThis ( tr ( "<b>Mixer Fader:</b> Adjusts the audio level of "
-        "this channel. All connected clients at the server will be assigned "
-        "an audio fader at each client, adjusting the local mix." ) );
+    pFader->setWhatsThis ( "<b>" + tr ( "Mixer Fader" ) + ":</b> " + tr (
+        "Adjusts the audio level of this channel. All connected clients at the server "
+        "will be assigned an audio fader at each client, adjusting the local mix." ) );
     pFader->setAccessibleName ( tr ( "Local mix level setting of the current audio "
         "channel at the server" ) );
 
-    pcbMute->setWhatsThis ( tr ( "<b>Mute:</b> With the Mute checkbox, the "
-        "audio channel can be muted." ) );
+    pcbMute->setWhatsThis ( "<b>" + tr ( "Mute" ) + ":</b> " + tr (
+        "With the Mute checkbox, the audio channel can be muted." ) );
     pcbMute->setAccessibleName ( tr ( "Mute button" ) );
 
-    pcbSolo->setWhatsThis ( tr ( "<b>Solo:</b> With the Solo checkbox, the "
+    pcbSolo->setWhatsThis ( "<b>" + tr ( "Solo" ) + ":</b> " + tr ( "With the Solo checkbox, the "
         "audio channel can be set to solo which means that all other channels "
         "except of the current channel are muted. It is possible to set more than "
         "one channel to solo." ) );
     pcbSolo->setAccessibleName ( tr ( "Solo button" ) );
 
-    QString strFaderText = tr ( "<b>Fader Tag:</b> The fader tag "
+    QString strFaderText = "<b>" + tr ( "Fader Tag" ) + ":</b> " + tr ( "The fader tag "
         "identifies the connected client. The tag name, the picture of your "
         "instrument and a flag of your country can be set in the main window." );
 

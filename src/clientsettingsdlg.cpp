@@ -56,12 +56,12 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QString strJitterBufferSizeTT = tr ( "In case the auto setting of the "
         "jitter buffer is enabled, the network buffers of the local client and "
         "the remote server are set to a conservative "
-        "value to minimize the audio dropout probability. To <b>tweak the "
-        "audio delay/latency</b> it is recommended to disable the auto setting "
-        "functionality and to <b>lower the jitter buffer size manually</b> by "
+        "value to minimize the audio dropout probability. To tweak the "
+        "audio delay/latency it is recommended to disable the auto setting "
+        "functionality and to lower the jitter buffer size manually by "
         "using the sliders until your personal acceptable limit of the amount "
         "of dropouts is reached. The LED indicator will visualize the audio "
-        "dropouts of the local jitter buffer by a red light" ) +
+        "dropouts of the local jitter buffer by a red light." ) +
         TOOLTIP_COM_END_TEXT;
 
     lblNetBuf->setWhatsThis            ( strJitterBufferSize );

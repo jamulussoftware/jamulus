@@ -6,22 +6,22 @@
     <message>
         <location filename="../../util.cpp" line="355"/>
         <source>The </source>
-        <translation type="unfinished"></translation>
+        <translation>Le logiciel </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="356"/>
         <source> software enables musicians to perform real-time jam sessions over the internet. There is a </source>
-        <translation type="unfinished"></translation>
+        <translation> permet aux musiciens d&apos;effectuer des boeufs en temps réel sur internet. Il existe un </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="357"/>
         <source> server which collects the audio data from each </source>
-        <translation type="unfinished"></translation>
+        <translation> qui collecte les données audio de chaque </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="359"/>
         <source> client, mixes the audio data and sends the mix back to each client.</source>
-        <translation type="unfinished"></translation>
+        <translation> client, mixe les données audio et renvoie le mixage à chaque client.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="375"/>
@@ -31,22 +31,22 @@
     <message>
         <location filename="../../util.cpp" line="399"/>
         <source>About </source>
-        <translation type="unfinished"></translation>
+        <translation>À propos</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="416"/>
         <source>, Version </source>
-        <translation type="unfinished"></translation>
+        <translation>, version </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="427"/>
         <source>Internet Jam Session Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Logiciels de boeuf sur Internet</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="438"/>
         <source>Under the GNU General Public License (GPL)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sous la licence public général GNU (GPL)</translation>
     </message>
 </context>
 <context>
@@ -54,7 +54,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="20"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>À propos</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="79"/>
@@ -64,17 +64,17 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="128"/>
         <source>Author: Volker Fischer</source>
-        <translation type="unfinished"></translation>
+        <translation>Auteur : Volker Fisher</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="138"/>
         <source>Copyright (C) 2005-2020</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (C) 2005-2020<</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="208"/>
         <source>&amp;OK</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;OK</translation>
     </message>
 </context>
 <context>
@@ -201,7 +201,7 @@
     <message>
         <location filename="../../chatdlgbase.ui" line="19"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Tchate</translation>
     </message>
     <message>
         <location filename="../../chatdlgbase.ui" line="59"/>
@@ -211,7 +211,7 @@
     <message>
         <location filename="../../chatdlgbase.ui" line="69"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fermer</translation>
     </message>
 </context>
 <context>
@@ -350,7 +350,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="266"/>
         <source>&amp;Settings...</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètre&amp;s...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="272"/>
@@ -368,47 +368,47 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="120"/>
         <source>Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Délai</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="172"/>
         <source>Buffers</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampons</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="233"/>
         <source>Input</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrée</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="281"/>
         <source>L</source>
-        <translation type="unfinished"></translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="291"/>
         <source>R</source>
-        <translation type="unfinished"></translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="330"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="337"/>
         <source>Chat</source>
-        <translation type="unfinished"></translation>
+        <translation>Tchate></translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="344"/>
         <source>Mute Myself</source>
-        <translation type="unfinished"></translation>
+        <translation>Me silencer</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="351"/>
         <source>C&amp;onnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Se c&amp;onnecter</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="377"/>
@@ -418,22 +418,22 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="393"/>
         <source>Center</source>
-        <translation type="unfinished"></translation>
+        <translation>Centre</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="467"/>
         <source>Reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Réverb</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="533"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Gauche</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="540"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Droite</translation>
     </message>
 </context>
 <context>
@@ -761,13 +761,13 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="303"/>
         <source>Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="326"/>
         <location filename="../../clientsettingsdlgbase.ui" line="345"/>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="483"/>
@@ -940,7 +940,7 @@
     <message>
         <location filename="../../connectdlgbase.ui" line="127"/>
         <source>&amp;Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Se &amp;connecter</translation>
     </message>
 </context>
 <context>

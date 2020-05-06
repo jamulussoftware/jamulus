@@ -15,7 +15,8 @@ QT += widgets \
     xml
 
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
-    src/res/translation/translation_fr_FR.ts
+    src/res/translation/translation_fr_FR.ts \
+    src/res/translation/translation_pt_PT.ts
 
 INCLUDEPATH += src
 

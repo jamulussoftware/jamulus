@@ -69,7 +69,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="138"/>
         <source>Copyright (C) 2005-2020</source>
-        <translation>Copyright (C) 2005-2020<</translation>
+        <translation>Copyright (C) 2005-2020</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="208"/>

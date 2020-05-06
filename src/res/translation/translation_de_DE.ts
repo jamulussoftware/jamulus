@@ -270,7 +270,17 @@
     <name>CClientDlg</name>
     <message>
         <location filename="../../clientdlg.cpp" line="51"/>
-        <source>&lt;b&gt;Input Level Meter:&lt;/b&gt; The input level indicators show the input level of the two stereo channels of the current selected audio input.&lt;br&gt;Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
+        <source>Input Level Meter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="51"/>
+        <source>The input level indicators show the input level of the two stereo channels of the current selected audio input.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="54"/>
+        <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

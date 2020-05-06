@@ -48,10 +48,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // Add help text to controls -----------------------------------------------
     // input level meter
-    QString strInpLevH = tr ( "<b>Input Level Meter:</b> The input level "
+    QString strInpLevH = "<b>" + tr ( "Input Level Meter" ) + ":</b> " + tr ( "The input level "
         "indicators show the input level of the two stereo channels "
-        "of the current selected audio input.<br>"
-        "Make sure not to clip the input signal to avoid distortions of the "
+        "of the current selected audio input." ) + "<br>" +
+         tr ( "Make sure not to clip the input signal to avoid distortions of the "
         "audio signal." );
 
     QString strInpLevHTT = tr ( "If the " ) + APP_NAME +

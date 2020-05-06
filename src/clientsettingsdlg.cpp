@@ -34,23 +34,23 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // Add help text to controls -----------------------------------------------
     // jitter buffer
-    QString strJitterBufferSize = tr ( "<b>Jitter Buffer Size:</b> The jitter "
-        "buffer compensates for network and sound card timing jitters. The "
+    QString strJitterBufferSize = "<b>" + tr ( "Jitter Buffer Size" ) + ":</b> " + tr (
+        "The jitter buffer compensates for network and sound card timing jitters. The "
         "size of this jitter buffer has therefore influence on the quality of "
         "the audio stream (how many dropouts occur) and the overall delay "
-        "(the longer the buffer, the higher the delay).<br>"
+        "(the longer the buffer, the higher the delay)." ) + "<br>" + tr (
         "The jitter buffer size can be manually chosen for the local client "
         "and the remote server. For the local jitter buffer, dropouts in the "
         "audio stream are indicated by the light on the bottom "
         "of the jitter buffer size faders. If the light turns to red, a buffer "
-        "overrun/underrun took place and the audio stream is interrupted.<br>"
+        "overrun/underrun took place and the audio stream is interrupted." ) + "<br>" + tr (
         "The jitter buffer setting is therefore a trade-off between audio "
-        "quality and overall delay.<br>"
+        "quality and overall delay." ) + "<br>" + tr (
         "An auto setting of the jitter buffer size setting is available. If "
         "the check Auto is enabled, the jitter buffers of the local client and "
         "the remote server are set automatically "
         "based on measurements of the network and sound card timing jitter. If "
-        "the <i>Auto</i> check is enabled, the jitter buffer size faders are "
+        "the Auto check is enabled, the jitter buffer size faders are "
         "disabled (they cannot be moved with the mouse)." );
 
     QString strJitterBufferSizeTT = tr ( "In case the auto setting of the "

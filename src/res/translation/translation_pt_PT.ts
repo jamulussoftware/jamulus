@@ -654,8 +654,28 @@
     <name>CClientSettingsDlg</name>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="37"/>
-        <source>&lt;b&gt;Jitter Buffer Size:&lt;/b&gt; The jitter buffer compensates for network and sound card timing jitters. The size of this jitter buffer has therefore influence on the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).&lt;br&gt;The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light on the bottom of the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.&lt;br&gt;The jitter buffer setting is therefore a trade-off between audio quality and overall delay.&lt;br&gt;An auto setting of the jitter buffer size setting is available. If the check Auto is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If the &lt;i&gt;Auto&lt;/i&gt; check is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
-        <translation>&lt;b&gt;Tamanho do Jitter Buffer:&lt;/b&gt; O jitter buffer (ou buffer de instabilidade) compensa os desvios de temporização da rede e da placa de som. O tamanho desse jitter buffer influencia, portanto, a qualidade do fluxo de áudio (quantas interrupções ocorrem) e a latência geral (quanto maior o buffer, maior a latência).&lt;br&gt;O tamanho do jitter buffer pode ser escolhido manualmente para o cliente local e o servidor remoto. Para o jitter buffer local, as interrupções no fluxo de áudio são indicadas pela luz na parte inferior dos faders do jitter buffer. Se a luz ficar vermelha, ocorreu um excesso/déficit do buffer e o fluxo de áudio é interrompido.&lt;br&gt;A configuração do jitter buffer é, portanto, uma troca entre a qualidade do áudio e o atraso geral.&lt;br&gt;Está disponível uma configuração automática do tamanho do jitter buffer. Se a opção &lt;i&gt;Auto&lt;/i&gt; estiver ativada, os jitter buffers do cliente local e do servidor remoto serão configurados automaticamente com base nas medições da instabilidade de sincronização da rede e da placa de som. Se a opção &lt;i&gt;Auto&lt;/i&gt; estiver ativada, os faders do jitter buffer serão desativados (não poderão ser movidos manualmente).</translation>
+        <source>Jitter Buffer Size</source>
+        <translation>Tamanho do Jitter Buffer</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="37"/>
+        <source>The jitter buffer compensates for network and sound card timing jitters. The size of this jitter buffer has therefore influence on the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
+        <translation>O jitter buffer (ou buffer de instabilidade) compensa os desvios de temporização da rede e da placa de som. O tamanho desse jitter buffer influencia, portanto, a qualidade do fluxo de áudio (quantas interrupções ocorrem) e a latência geral (quanto maior o buffer, maior a latência).</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="41"/>
+        <source>The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light on the bottom of the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.</source>
+        <translation>O tamanho do jitter buffer pode ser escolhido manualmente para o cliente local e o servidor remoto. Para o jitter buffer local, as interrupções no fluxo de áudio são indicadas pela luz na parte inferior dos faders do jitter buffer. Se a luz ficar vermelha, ocorreu um excesso/déficit do buffer e o fluxo de áudio é interrompido.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="46"/>
+        <source>The jitter buffer setting is therefore a trade-off between audio quality and overall delay.</source>
+        <translation>A configuração do jitter buffer é, portanto, uma troca entre a qualidade do áudio e o atraso geral.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="48"/>
+        <source>An auto setting of the jitter buffer size setting is available. If the check Auto is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If the Auto check is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
+        <translation>Está disponível uma configuração automática do tamanho do jitter buffer. Se a opção Auto estiver ativada, os jitter buffers do cliente local e do servidor remoto serão configurados automaticamente com base nas medições da instabilidade de sincronização da rede e da placa de som. Se a opção Auto estiver ativada, os faders do jitter buffer serão desativados (não poderão ser movidos manualmente).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="56"/>

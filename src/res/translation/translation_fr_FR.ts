@@ -98,7 +98,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="707"/>
         <source>Server</source>
-        <translation type="unfinished">Serveur</translation>
+        <translation>Serveur</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="716"/>
@@ -266,7 +266,7 @@
     <message>
         <location filename="../../chatdlgbase.ui" line="59"/>
         <source>Cl&amp;ear</source>
-        <translation type="unfinished"></translation>
+        <translation>N&amp;ettoyer</translation>
     </message>
     <message>
         <location filename="../../chatdlgbase.ui" line="69"/>
@@ -396,27 +396,27 @@
         <location filename="../../clientdlg.cpp" line="203"/>
         <location filename="../../clientdlg.cpp" line="1084"/>
         <source>C&amp;onnect</source>
-        <translation type="unfinished">Se c&amp;onnecter</translation>
+        <translation">Se c&amp;onnecter</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="255"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Vue</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="257"/>
         <source>&amp;Connection Setup...</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres de &amp;connexion...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="260"/>
         <source>My &amp;Profile...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mon &amp;profil</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="263"/>
         <source>C&amp;hat...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tc&amp;hate...></translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="266"/>
@@ -426,42 +426,42 @@
     <message>
         <location filename="../../clientdlg.cpp" line="272"/>
         <source>&amp;Analyzer Console...</source>
-        <translation type="unfinished"></translation>
+        <translation>Console d&apos;&amp;analyse</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="278"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Quitter</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="326"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="606"/>
         <source>Center</source>
-        <translation type="unfinished">Centre</translation>
+        <translation>Centre</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="613"/>
         <source>R</source>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="619"/>
         <source>L</source>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="818"/>
         <source>user</source>
-        <translation type="unfinished"></translation>
+        <translation>utilisateur</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="823"/>
         <source>users</source>
-        <translation type="unfinished"></translation>
+        <translation>utilisateurs</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1060"/>
@@ -1077,42 +1077,42 @@
     <message>
         <location filename="../../connectdlgbase.ui" line="35"/>
         <source>Filter</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtre</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="45"/>
         <source>Show All Musicians</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher tous les musiciens</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="61"/>
         <source>Server Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du serveur</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="66"/>
         <source>Ping Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Temps de réponse</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="71"/>
         <source>Musicians</source>
-        <translation type="unfinished"></translation>
+        <translation>Musiciens</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="76"/>
         <source>Location</source>
-        <translation type="unfinished"></translation>
+        <translation>Localisation</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="86"/>
         <source>Server Name/Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom du serveur / adresse</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="120"/>
         <source>C&amp;ancel</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Annuler</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="127"/>

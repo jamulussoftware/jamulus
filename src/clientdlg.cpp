@@ -200,7 +200,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     OnTimerStatus();
 
     // init connection button text
-    butConnect->setText ( CON_BUT_CONNECTTEXT );
+    butConnect->setText ( tr ( "C&onnect" ) );
 
     // init input level meter bars
     lbrInputLevelL->setValue ( 0 );
@@ -252,7 +252,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
 
     // View menu  --------------------------------------------------------------
-    pViewMenu = new QMenu ( "&View", this );
+    pViewMenu = new QMenu ( tr ( "&View" ), this );
 
     pViewMenu->addAction ( tr ( "&Connection Setup..." ), this,
         SLOT ( OnOpenConnectionSetupDialog() ) );
@@ -323,7 +323,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         {
             // default icon and name for no flag selected
             CurFlagIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
-            sCurCountryName = "None";
+            sCurCountryName = tr ( "None" );
         }
         else
         {
@@ -603,20 +603,20 @@ void CClientDlg::UpdateAudioFaderSlider()
     // attenuated
     if ( iCurAudInFader == AUD_FADER_IN_MIDDLE )
     {
-        lblAudioPanValue->setText ( "Center" );
+        lblAudioPanValue->setText ( tr ( "Center" ) );
     }
     else
     {
         if ( iCurAudInFader > AUD_FADER_IN_MIDDLE )
         {
             // attenuation on right channel
-            lblAudioPanValue->setText ( "R -" +
+            lblAudioPanValue->setText ( tr ( "R" ) + " -" +
                 QString().setNum ( iCurAudInFader - AUD_FADER_IN_MIDDLE ) );
         }
         else
         {
             // attenuation on left channel
-            lblAudioPanValue->setText ( "L -" +
+            lblAudioPanValue->setText ( tr ( "L" ) + " -" +
                 QString().setNum ( AUD_FADER_IN_MIDDLE - iCurAudInFader ) );
         }
     }
@@ -815,12 +815,12 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     {
         if ( iNumClients == 1 )
         {
-            setWindowTitle ( QString ( pClient->strClientName ) + " (1 user)" );
+            setWindowTitle ( QString ( pClient->strClientName ) + " (1 " + tr ( "user" ) + ")" );
         }
         else
         {
             setWindowTitle ( QString ( pClient->strClientName ) +
-                QString ( " (%1 users)" ).arg ( iNumClients ) );
+                QString ( " (%1 " + tr ( "users" ) + ")" ).arg ( iNumClients ) );
         }
     }
 
@@ -1057,7 +1057,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
         }
 
         // change connect button text to "disconnect"
-        butConnect->setText ( CON_BUT_DISCONNECTTEXT );
+        butConnect->setText ( tr ( "D&isconnect" ) );
 
         // set server name in audio mixer group box title
         MainMixerBoard->SetServerName ( strMixerBoardLabel );
@@ -1081,7 +1081,7 @@ void CClientDlg::Disconnect()
     }
 
     // change connect button text to "connect"
-    butConnect->setText ( CON_BUT_CONNECTTEXT );
+    butConnect->setText ( tr ( "C&onnect" ) );
 
     // reset server name in audio mixer group box title
     MainMixerBoard->SetServerName ( "" );

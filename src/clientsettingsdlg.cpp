@@ -285,7 +285,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // init driver button
 #ifdef _WIN32
-    butDriverSetup->setText ( "ASIO Setup" );
+    butDriverSetup->setText ( tr ( "ASIO Setup" ) );
 #else
     // no use for this button for MacOS/Linux right now -> hide it
     butDriverSetup->hide();
@@ -332,23 +332,23 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // "Audio Channels" combo box
     cbxAudioChannels->clear();
-    cbxAudioChannels->addItem ( "Mono" );               // CC_MONO
-    cbxAudioChannels->addItem ( "Mono-in/Stereo-out" ); // CC_MONO_IN_STEREO_OUT
-    cbxAudioChannels->addItem ( "Stereo" );             // CC_STEREO
+    cbxAudioChannels->addItem ( tr ( "Mono" ) );               // CC_MONO
+    cbxAudioChannels->addItem ( tr ( "Mono-in/Stereo-out" ) ); // CC_MONO_IN_STEREO_OUT
+    cbxAudioChannels->addItem ( tr ( "Stereo" ) );             // CC_STEREO
     cbxAudioChannels->setCurrentIndex ( static_cast<int> ( pClient->GetAudioChannels() ) );
 
     // "Audio Quality" combo box
     cbxAudioQuality->clear();
-    cbxAudioQuality->addItem ( "Low" );    // AQ_LOW
-    cbxAudioQuality->addItem ( "Normal" ); // AQ_NORMAL
-    cbxAudioQuality->addItem ( "High" );   // AQ_HIGH
+    cbxAudioQuality->addItem ( tr ( "Low" ) );    // AQ_LOW
+    cbxAudioQuality->addItem ( tr ( "Normal" ) ); // AQ_NORMAL
+    cbxAudioQuality->addItem ( tr ( "High" ) );   // AQ_HIGH
     cbxAudioQuality->setCurrentIndex ( static_cast<int> ( pClient->GetAudioQuality() ) );
 
     // central server address type combo box
     cbxCentServAddrType->clear();
-    cbxCentServAddrType->addItem ( "Manual" );                  // AT_MANUAL
-    cbxCentServAddrType->addItem ( "Default" );                 // AT_DEFAULT
-    cbxCentServAddrType->addItem ( "Default (North America)" ); // AT_NORTH_AMERICA
+    cbxCentServAddrType->addItem ( tr ( "Manual" ) );                  // AT_MANUAL
+    cbxCentServAddrType->addItem ( tr ( "Default" ) );                 // AT_DEFAULT
+    cbxCentServAddrType->addItem ( tr ( "Default (North America)" ) ); // AT_NORTH_AMERICA
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
     UpdateCentralServerDependency();
 
@@ -454,11 +454,11 @@ void CClientSettingsDlg::UpdateJitterBufferFrame()
     // update slider value and text
     const int iCurNumNetBuf = pClient->GetSockBufNumFrames();
     sldNetBuf->setValue ( iCurNumNetBuf );
-    lblNetBuf->setText ( "Size: " + QString().setNum ( iCurNumNetBuf ) );
+    lblNetBuf->setText ( tr ( "Size: " ) + QString().setNum ( iCurNumNetBuf ) );
 
     const int iCurNumNetBufServer = pClient->GetServerSockBufNumFrames();
     sldNetBufServer->setValue ( iCurNumNetBufServer );
-    lblNetBufServer->setText ( "Size: " + QString().setNum ( iCurNumNetBufServer ) );
+    lblNetBufServer->setText ( tr ( "Size: " ) + QString().setNum ( iCurNumNetBufServer ) );
 
     // if auto setting is enabled, disable slider control
     const bool bIsAutoSockBufSize = pClient->GetDoAutoSockBufSize();
@@ -515,12 +515,12 @@ void CClientSettingsDlg::UpdateSoundCardFrame()
     if ( bPreferredChecked || bDefaultChecked || bSafeChecked )
     {
         // default title text
-        grbSoundCrdBufDelay->setTitle ( "Buffer Delay" );
+        grbSoundCrdBufDelay->setTitle ( tr ( "Buffer Delay" ) );
     }
     else
     {
         // special title text with buffer size information added
-        grbSoundCrdBufDelay->setTitle ( "Buffer Delay: " +
+        grbSoundCrdBufDelay->setTitle ( tr ( "Buffer Delay: " ) +
             GenSndCrdBufferDelayString ( iCurActualBufSize ) );
     }
 }
@@ -633,7 +633,7 @@ void CClientSettingsDlg::OnSoundcardActivated ( int iSndDevIdx )
             QString ( tr ( "The selected audio device could not be used "
             "because of the following error: " ) ) + strError +
             QString ( tr ( " The previous driver will be selected." ) ),
-            "Ok", nullptr );
+            tr ( "Ok" ), nullptr );
 
         // recover old selection
         cbxSoundcard->setCurrentIndex ( pClient->GetSndCrdDev() );

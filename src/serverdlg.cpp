@@ -107,8 +107,7 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     lblLocationCity->setWhatsThis ( strLocCity );
     edtLocationCity->setWhatsThis ( strLocCity );
 
-    edtLocationCity->setAccessibleName ( tr (
-        "City where the server is located line edit" ) );
+    edtLocationCity->setAccessibleName ( tr ( "City where the server is located line edit" ) );
 
     // location country
     QString strLocCountry = tr ( "<b>Location country:</b> The country in "
@@ -189,9 +188,9 @@ lvwClients->setMinimumHeight ( 140 );
 
     // central server address type combo box
     cbxCentServAddrType->clear();
-    cbxCentServAddrType->addItem ( "Manual" );                  // AT_MANUAL
-    cbxCentServAddrType->addItem ( "Default" );                 // AT_DEFAULT
-    cbxCentServAddrType->addItem ( "Default (North America)" ); // AT_NORTH_AMERICA
+    cbxCentServAddrType->addItem ( tr ( "Manual" ) );                  // AT_MANUAL
+    cbxCentServAddrType->addItem ( tr ( "Default" ) );                 // AT_DEFAULT
+    cbxCentServAddrType->addItem ( tr ( "Default (North America)" ) ); // AT_NORTH_AMERICA
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pServer->GetCentralServerAddressType() ) );
 
     // update server name line edit
@@ -273,7 +272,7 @@ lvwClients->setMinimumHeight ( 140 );
 
 
     // View menu  --------------------------------------------------------------
-    QMenu* pViewMenu = new QMenu ( "&Window", this );
+    QMenu* pViewMenu = new QMenu ( tr ( "&Window" ), this );
 
     pViewMenu->addAction ( tr ( "E&xit" ), this,
         SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );

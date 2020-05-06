@@ -41,11 +41,11 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
 
     pMuteSoloBox                = new QWidget           ( pFrame );
-    pcbMute                     = new QCheckBox         ( "Mute",       pMuteSoloBox );
-    pcbSolo                     = new QCheckBox         ( "Solo",       pMuteSoloBox );
+    pcbMute                     = new QCheckBox         ( tr ( "Mute" ), pMuteSoloBox );
+    pcbSolo                     = new QCheckBox         ( tr ( "Solo" ), pMuteSoloBox );
 
     pLabelInstBox               = new QGroupBox         ( pFrame );
-    plblLabel                   = new QLabel            ( "",           pFrame );
+    plblLabel                   = new QLabel            ( "", pFrame );
     plblInstrument              = new QLabel            ( pFrame );
     plblCountryFlag             = new QLabel            ( pFrame );
 
@@ -439,13 +439,13 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     // alias/name
     if ( !strReceivedName.isEmpty() )
     {
-        strToolTip += "<h4>Alias/Name</h4>" + strReceivedName;
+        strToolTip += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + strReceivedName;
     }
 
     // instrument
     if ( !CInstPictures::IsNotUsedInstrument ( iTTInstrument ) )
     {
-        strToolTip += "<h4>Instrument</h4>" +
+        strToolTip += "<h4>" + tr ( "Instrument" ) + "</h4>" +
             CInstPictures::GetName ( iTTInstrument );
     }
 
@@ -453,7 +453,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     if ( ( eTTCountry != QLocale::AnyCountry ) ||
          ( !cChanInfo.strCity.isEmpty() ) )
     {
-        strToolTip += "<h4>Location</h4>";
+        strToolTip += "<h4>" + tr ( "Location" ) + "</h4>";
 
         if ( !cChanInfo.strCity.isEmpty() )
         {
@@ -475,15 +475,15 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     switch ( cChanInfo.eSkillLevel )
     {
     case SL_BEGINNER:
-        strToolTip += "<h4>Skill Level</h4>Beginner";
+        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + tr ( "Beginner" );
         break;
 
     case SL_INTERMEDIATE:
-        strToolTip += "<h4>Skill Level</h4>Intermediate";
+        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + tr ( "Intermediate" );
         break;
 
     case SL_PROFESSIONAL:
-        strToolTip += "<h4>Skill Level</h4>Expert";
+        strToolTip += "<h4>" + tr ( "Skill Level" ) + "</h4>" + tr ( "Expert" );
         break;
 
     case SL_NOT_SET:
@@ -494,7 +494,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     // if no information is given, leave the tool tip empty, otherwise add header
     if ( !strToolTip.isEmpty() )
     {
-        strToolTip.prepend ( "<h3>Musician Profile</h3>" );
+        strToolTip.prepend ( "<h3>" + tr ( "Musician Profile" ) + "</h3>" );
     }
 
     plblCountryFlag->setToolTip ( strToolTip );
@@ -704,7 +704,7 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
     if ( strServerName.isEmpty() )
     {
         // no connection or connection was reset: show default title
-        pGroupBox->setTitle ( "Server" );
+        pGroupBox->setTitle ( tr ( "Server" ) );
     }
     else
     {
@@ -713,7 +713,7 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
         // list was received, the connection was successful and the title is updated
         // with the correct server name. Make sure to choose a "try to connect" title
         // which is most striking (we use filled blocks and upper case letters).
-        pGroupBox->setTitle ( u8"\u2588\u2588\u2588\u2588\u2588  T R Y I N G   T O   C O N N E C T  \u2588\u2588\u2588\u2588\u2588" );
+        pGroupBox->setTitle ( u8"\u2588\u2588\u2588\u2588\u2588  " + tr ( "T R Y I N G   T O   C O N N E C T" ) + u8"  \u2588\u2588\u2588\u2588\u2588" );
     }
 }
 

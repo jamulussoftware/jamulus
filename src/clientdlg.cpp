@@ -84,8 +84,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     lbrInputLevelR->setToolTip               ( strInpLevHTT );
 
     // connect/disconnect button
-    butConnect->setWhatsThis ( tr ( "<b>Connect / Disconnect Button:"
-        "</b> Push this button to connect a server. A dialog where you can "
+    butConnect->setWhatsThis ( "<b>" + tr ( "Connect/Disconnect Button" ) + ":</b> " +
+        tr ( "Push this button to connect a server. A dialog where you can "
         "select a server will open. If you are connected, pressing this "
         "button will end the session." ) );
 
@@ -98,14 +98,15 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         "and disconnecting the " ) + APP_NAME + tr ( " software." ) );
 
     // local audio input fader
-    QString strAudFader = tr ( "<b>Local Audio Input Fader:</b> With the "
-        "audio fader, the relative levels of the left and right local audio "
+    QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +
+        tr ( "With the audio fader, the relative levels of the left and right local audio "
         "channels can be changed. For a mono signal it acts like a panning "
         "between the two channels. If, e.g., a microphone is connected to "
         "the right input channel and an instrument is connected to the left "
         "input channel which is much louder than the microphone, move the "
-        "audio fader in a direction where the label above the fader shows "
-        "<i>L -x</i>, where <i>x</i> is the current attenuation indicator." );
+        "audio fader in a direction where the label above the fader shows " ) +
+        "<i>" + tr ( "L" ) + " -x</i>" + tr ( ", where" ) + " <i>x</i> " +
+        tr ( "is the current attenuation indicator." );
 
     lblAudioPan->setWhatsThis      ( strAudFader );
     lblAudioPanValue->setWhatsThis ( strAudFader );

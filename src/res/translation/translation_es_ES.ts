@@ -2077,17 +2077,22 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="60"/>
-        <source>The Jack server sample rate is different from the required one. The required sample rate is: &lt;b&gt;</source>
+        <source>The Jack server sample rate is different from the required one. The required sample rate is:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="62"/>
-        <source> Hz&lt;/b&gt;. You can use a tool like &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.&lt;br&gt;Make sure to set the &lt;b&gt;Frames/Period&lt;/b&gt; to a low value like &lt;b&gt;</source>
+        <source>You can use a tool like &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../linux/sound.cpp" line="64"/>
+        <source>Make sure to set the Frames/Period to a low value like </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="67"/>
-        <source>&lt;/b&gt; to achieve a low delay.</source>
+        <source> to achieve a low delay.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -2086,18 +2086,23 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="60"/>
-        <source>The Jack server sample rate is different from the required one. The required sample rate is: &lt;b&gt;</source>
-        <translation>A taxa de amostragem (sample rate) do servidor Jack é diferente da necessária. A taxa de amostragem necessária é: &lt;b&gt;</translation>
+        <source>The Jack server sample rate is different from the required one. The required sample rate is:</source>
+        <translation>A taxa de amostragem (sample rate) do servidor Jack é diferente da necessária. A taxa de amostragem necessária é:</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="62"/>
-        <source> Hz&lt;/b&gt;. You can use a tool like &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.&lt;br&gt;Make sure to set the &lt;b&gt;Frames/Period&lt;/b&gt; to a low value like &lt;b&gt;</source>
-        <translation> Hz&lt;/b&gt;. Pode usar uma ferramenta como &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; para ajustar a taxa de amostragem do servidor Jack.&lt;br&gt;Certifique-se de definir &lt;b&gt;Frames/Período&lt;/b&gt; para um valor baixo como &lt;b&gt;</translation>
+        <source>You can use a tool like &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
+        <translation>Pode usar uma ferramenta como &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; para ajustar a taxa de amostragem do servidor Jack.</translation>
+    </message>
+    <message>
+        <location filename="../../../linux/sound.cpp" line="64"/>
+        <source>Make sure to set the Frames/Period to a low value like </source>
+        <translation>Certifique-se de definir Frames/Período para um valor baixo como </translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="67"/>
-        <source>&lt;/b&gt; to achieve a low delay.</source>
-        <translation>&lt;/b&gt; para obter uma latência baixa.</translation>
+        <source> to achieve a low delay.</source>
+        <translation> para obter uma latência baixa.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="88"/>

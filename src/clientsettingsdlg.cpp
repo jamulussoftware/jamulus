@@ -80,11 +80,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     ledNetw->setToolTip                ( strJitterBufferSizeTT );
 
     // sound card device
-    cbxSoundcard->setWhatsThis ( tr ( "<b>Sound Card Device:</b> The ASIO "
-        "driver (sound card) can be selected using " ) + APP_NAME +
+    cbxSoundcard->setWhatsThis ( "<b>" + tr ( "Sound Card Device" ) + ":</b> " +
+        tr ( "The ASIO driver (sound card) can be selected using " ) + APP_NAME +
         tr ( " under the Windows operating system. Under MacOS/Linux, no sound "
         "card selection is possible. If the selected ASIO driver is not valid "
-        "an error message is shown and the previous valid driver is selected.<br>"
+        "an error message is shown and the previous valid driver is selected." ) + "<br>" + tr (
         "If the driver is selected during an active connection, the connection "
         "is stopped, the driver is changed and the connection is started again "
         "automatically." ) );

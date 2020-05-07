@@ -696,12 +696,22 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="83"/>
-        <source>&lt;b&gt;Sound Card Device:&lt;/b&gt; The ASIO driver (sound card) can be selected using </source>
+        <source>Sound Card Device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="84"/>
+        <source>The ASIO driver (sound card) can be selected using </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="85"/>
-        <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.&lt;br&gt;If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
+        <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="87"/>
+        <source>If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

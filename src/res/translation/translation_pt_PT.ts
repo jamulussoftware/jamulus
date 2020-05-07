@@ -704,13 +704,23 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="83"/>
-        <source>&lt;b&gt;Sound Card Device:&lt;/b&gt; The ASIO driver (sound card) can be selected using </source>
-        <translation>&lt;b&gt;Dispositivo da Placa de Som:&lt;/b&gt; O driver ASIO (placa de som) pode ser selecionado usando o </translation>
+        <source>Sound Card Device</source>
+        <translation>Dispositivo da Placa de Som</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="84"/>
+        <source>The ASIO driver (sound card) can be selected using </source>
+        <translation>O driver ASIO (placa de som) pode ser selecionado usando o </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="85"/>
-        <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.&lt;br&gt;If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
-        <translation> no Windows. No MacOS/Linux, não é possível seleccionar a placa de som. Se o driver ASIO selecionado não for válido, uma mensagem de erro será exibida e o driver válido anterior será selecionado.&lt;br&gt;Se o driver for selecionado durante uma ligação ativa, a ligação será interrompida, o driver será alterado e a ligação reiniciada automaticamente.</translation>
+        <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
+        <translation> no Windows. No MacOS/Linux, não é possível seleccionar a placa de som. Se o driver ASIO selecionado não for válido, uma mensagem de erro será exibida e o driver válido anterior será selecionado.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="87"/>
+        <source>If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
+        <translation>Se o driver for selecionado durante uma ligação ativa, a ligação será interrompida, o driver será alterado e a ligação reiniciada automaticamente.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="92"/>

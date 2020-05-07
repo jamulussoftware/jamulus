@@ -77,6 +77,13 @@ int main ( int argc, char** argv )
     QString      strWelcomeMessage         = "";
     QString      strClientName             = APP_NAME;
 
+    // adjust default port number for client: use different default port than the server since
+    // if the client is started before the server, the server would get a socket bind error
+    if ( bIsClient )
+    {
+        iPortNumber += 10; // increment by 10
+    }
+
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
     // Start with first argument, therefore "i = 1"

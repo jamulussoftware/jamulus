@@ -186,7 +186,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
             if ( !vsErrorList.isEmpty() )
             {
                 // create error message with all details
-                QString sErrorMessage = "<b>" + tr (  "No usable " ) +
+                QString sErrorMessage = "<b>" + tr ( "No usable " ) +
                     strSystemDriverTechniqueName + tr ( " audio device "
                     "(driver) found." ) + "</b><br><br>" + tr (
                     "In the following there is a list of all available drivers "

@@ -2235,17 +2235,22 @@
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>
-        <source>&lt;b&gt;No usable </source>
+        <source>No usable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="190"/>
-        <source> audio device (driver) found.&lt;/b&gt;&lt;br&gt;&lt;br&gt;In the following there is a list of all available drivers with the associated error message:&lt;ul&gt;</source>
+        <source> audio device (driver) found.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../soundbase.cpp" line="191"/>
+        <source>In the following there is a list of all available drivers with the associated error message:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="205"/>
-        <source>&lt;br/&gt;Do you want to open the ASIO driver setups?</source>
+        <source>Do you want to open the ASIO driver setups?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

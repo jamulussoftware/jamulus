@@ -186,11 +186,11 @@ QString CSoundBase::SetDev ( const int iNewDev )
             if ( !vsErrorList.isEmpty() )
             {
                 // create error message with all details
-                QString sErrorMessage = tr ( "<b>No usable " ) +
+                QString sErrorMessage = "<b>" + tr (  "No usable " ) +
                     strSystemDriverTechniqueName + tr ( " audio device "
-                    "(driver) found.</b><br><br>"
+                    "(driver) found." ) + "</b><br><br>" + tr (
                     "In the following there is a list of all available drivers "
-                    "with the associated error message:<ul>" );
+                    "with the associated error message:" ) + "<ul>";
 
                 for ( int i = 0; i < lNumDevs; i++ )
                 {
@@ -202,7 +202,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
                 // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
                 // offer the user under Windows that we open the driver setups of all registered
                 // ASIO drivers
-                sErrorMessage = sErrorMessage + tr ( "<br/>Do you want to open the ASIO driver setups?" );
+                sErrorMessage = sErrorMessage + "<br/>" + tr ( "Do you want to open the ASIO driver setups?" );
 
                 if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes|QMessageBox::No ) )
                 {

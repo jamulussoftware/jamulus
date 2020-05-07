@@ -2235,18 +2235,23 @@
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>
-        <source>&lt;b&gt;No usable </source>
-        <translation>&lt;b&gt;Nenhum dispositivo de áudio (driver) </translation>
+        <source>No usable </source>
+        <translation>Nenhum dispositivo de áudio (driver) </translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="190"/>
-        <source> audio device (driver) found.&lt;/b&gt;&lt;br&gt;&lt;br&gt;In the following there is a list of all available drivers with the associated error message:&lt;ul&gt;</source>
-        <translation> utilizável encontrado.&lt;/b&gt;&lt;br&gt;&lt;br&gt;De seguida verá uma lista de todos os drivers disponíveis com a mensagem de erro associada:&lt;ul&gt;</translation>
+        <source> audio device (driver) found.</source>
+        <translation> utilizável encontrado.</translation>
+    </message>
+    <message>
+        <location filename="../../soundbase.cpp" line="191"/>
+        <source>In the following there is a list of all available drivers with the associated error message:</source>
+        <translation>De seguida verá uma lista de todos os drivers disponíveis com a mensagem de erro associada:</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="205"/>
-        <source>&lt;br/&gt;Do you want to open the ASIO driver setups?</source>
-        <translation>&lt;br/&gt;Deseja abrir as configurações do driver ASIO?</translation>
+        <source>Do you want to open the ASIO driver setups?</source>
+        <translation>Deseja abrir as configurações do driver ASIO?</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="212"/>

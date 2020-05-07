@@ -799,23 +799,68 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="135"/>
-        <source>&lt;b&gt;Sound Card Buffer Delay:&lt;/b&gt; The buffer delay setting is a fundamental setting of the </source>
-        <translation>&lt;b&gt;Atraso do Buffer da Placa de Som:&lt;/b&gt; A configuração do atraso do buffer (buffer delay) é uma configuração fundamental do cliente </translation>
+        <source>Sound Card Buffer Delay</source>
+        <translation>Atraso do Buffer da Placa de Som</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="136"/>
+        <source>The buffer delay setting is a fundamental setting of the </source>
+        <translation>A configuração do atraso do buffer (buffer delay) é uma configuração fundamental do cliente </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="137"/>
-        <source> software. This setting has influence on many connection properties.&lt;br&gt;Three buffer sizes are supported:&lt;ul&gt;&lt;li&gt;64 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.&lt;/li&gt;&lt;li&gt;128 samples: This setting should work on most of the available sound cards.&lt;/li&gt;&lt;li&gt;256 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.&lt;/li&gt;&lt;/ul&gt;Some sound card driver do not allow the buffer delay to be changed from within the </source>
-        <translation>. Esta configuração tem influência em muitas propriedades da ligação.&lt;br&gt;Três tamanhos de buffer são suportados:&lt;ul&gt;&lt;li&gt;64 amostras: esta é a configuração preferida, pois oferece menor latência, mas não funciona com todas as placas de som.&lt;/li&gt;&lt;li&gt;128 amostras: esta configuração deve funcionar na maioria das placas de som disponíveis.&lt;/li&gt;&lt;li&gt;256 amostras: esta configuração deve ser usada se apenas estiver disponível um computador muito lento ou uma ligação lenta à Internet.&lt;/li&gt;&lt;/ul&gt;Alguns drivers da placa de som não permitem que o atraso do buffer seja alterado pelo cliente </translation>
+        <source> software. This setting has influence on many connection properties.</source>
+        <translation>. Esta configuração tem influência em muitas propriedades da ligação.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="138"/>
+        <source>Three buffer sizes are supported</source>
+        <translation>Três tamanhos de buffer são suportados</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="141"/>
+        <source>64 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.</source>
+        <translation>64 amostras: esta é a configuração preferida, pois oferece menor latência, mas não funciona com todas as placas de som.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="143"/>
+        <source>128 samples: This setting should work on most of the available sound cards.</source>
+        <translation>128 amostras: esta configuração deve funcionar na maioria das placas de som disponíveis.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="145"/>
+        <source>256 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.</source>
+        <translation>256 amostras: esta configuração deve ser usada se apenas estiver disponível um computador muito lento ou uma ligação lenta à Internet.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="147"/>
+        <source>Some sound card driver do not allow the buffer delay to be changed from within the </source>
+        <translation>Alguns drivers da placa de som não permitem que o atraso do buffer seja alterado pelo cliente </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="150"/>
-        <source> software. In this case the buffer delay setting is disabled. To change the actual buffer delay, this setting has to be changed in the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.&lt;br&gt;If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The </source>
-        <translation>. Nesse caso, a configuração de atraso do buffer estará desativada. Para alterar o atraso do buffer, essa configuração deve ser alterada no driver da placa de som. No Windows, pressione o botão &lt;i&gt;Configuração do Driver&lt;/i&gt; para abrir o painel de configurações do driver. No Linux, use a ferramenta de configuração &lt;i&gt;Jack&lt;/i&gt; para alterar o atraso do buffer.&lt;br&gt;Se nenhum atraso do buffer estiver selecionado e todas as configurações estiverem desativadas, um atraso do buffer não suportado será usado pelo driver. O cliente </translation>
+        <source> software. In this case the buffer delay setting is disabled. To change the actual buffer delay, this setting has to be changed in the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
+        <translation>. Nesse caso, a configuração de atraso do buffer estará desativada. Para alterar o atraso do buffer, essa configuração deve ser alterada no driver da placa de som. No Windows, pressione o botão Configuração do Driver para abrir o painel de configurações do driver. No Linux, use a ferramenta de configuração Jack para alterar o atraso do buffer.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="154"/>
+        <source>If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The </source>
+        <translation>Se nenhum atraso do buffer estiver selecionado e todas as configurações estiverem desativadas, um atraso do buffer não suportado será usado pelo driver. O cliente </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="157"/>
-        <source> software will still work with this setting but with restricted performannce.&lt;br&gt;The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.&lt;br&gt;The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation> ainda funcionará com essa configuração, mas com desempenho restrito.&lt;br&gt;O atraso do buffer influencia o estado da ligação, a taxa de upload atual e a latência geral. Quanto menor o atraso do buffer, maior a probabilidade de a luz vermelha no indicador de estado (interrupções), maior a taxa de upload e menor a latência geral.&lt;br&gt;A configuração do buffer é, portanto, uma troca entre qualidade de áudio e latência geral.</translation>
+        <source> software will still work with this setting but with restricted performannce.</source>
+        <translation> ainda funcionará com essa configuração, mas com desempenho restrito.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="158"/>
+        <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
+        <translation>O atraso do buffer influencia o estado da ligação, a taxa de upload atual e a latência geral. Quanto menor o atraso do buffer, maior a probabilidade de a luz vermelha no indicador de estado (interrupções), maior a taxa de upload e menor a latência geral.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="163"/>
+        <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
+        <translation>A configuração do buffer é, portanto, uma troca entre qualidade de áudio e latência geral.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="167"/>

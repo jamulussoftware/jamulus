@@ -799,22 +799,67 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="135"/>
-        <source>&lt;b&gt;Sound Card Buffer Delay:&lt;/b&gt; The buffer delay setting is a fundamental setting of the </source>
+        <source>Sound Card Buffer Delay</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="136"/>
+        <source>The buffer delay setting is a fundamental setting of the </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="137"/>
-        <source> software. This setting has influence on many connection properties.&lt;br&gt;Three buffer sizes are supported:&lt;ul&gt;&lt;li&gt;64 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.&lt;/li&gt;&lt;li&gt;128 samples: This setting should work on most of the available sound cards.&lt;/li&gt;&lt;li&gt;256 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.&lt;/li&gt;&lt;/ul&gt;Some sound card driver do not allow the buffer delay to be changed from within the </source>
+        <source> software. This setting has influence on many connection properties.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="138"/>
+        <source>Three buffer sizes are supported</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="141"/>
+        <source>64 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="143"/>
+        <source>128 samples: This setting should work on most of the available sound cards.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="145"/>
+        <source>256 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="147"/>
+        <source>Some sound card driver do not allow the buffer delay to be changed from within the </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="150"/>
-        <source> software. In this case the buffer delay setting is disabled. To change the actual buffer delay, this setting has to be changed in the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.&lt;br&gt;If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The </source>
+        <source> software. In this case the buffer delay setting is disabled. To change the actual buffer delay, this setting has to be changed in the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="154"/>
+        <source>If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="157"/>
-        <source> software will still work with this setting but with restricted performannce.&lt;br&gt;The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.&lt;br&gt;The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
+        <source> software will still work with this setting but with restricted performannce.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="158"/>
+        <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="163"/>
+        <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

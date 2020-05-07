@@ -132,35 +132,35 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     chbEnableOPUS64->setAccessibleName ( tr ( "Enable small network buffers check box" ) );
 
     // sound card buffer delay
-    QString strSndCrdBufDelay = tr ( "<b>Sound Card Buffer Delay:</b> The "
-        "buffer delay setting is a fundamental setting of the " ) +
+    QString strSndCrdBufDelay = "<b>" + tr ( "Sound Card Buffer Delay" ) + ":</b> " +
+        tr ( "The buffer delay setting is a fundamental setting of the " ) +
         APP_NAME + tr ( " software. This setting has influence on many "
-        "connection properties.<br>"
-        "Three buffer sizes are supported:"
-        "<ul>"
-        "<li>64 samples: This is the preferred setting since it gives lowest "
-        "latency but does not work with all sound cards.</li>"
-        "<li>128 samples: This setting should work on most of the available "
-        "sound cards.</li>"
-        "<li>256 samples: This setting should only be used if only a very slow "
-        "computer or a slow internet connection is available.</li>"
-        "</ul>"
+        "connection properties." ) + "<br>" + tr (
+        "Three buffer sizes are supported" ) +
+        ":<ul>"
+        "<li>" + tr ( "64 samples: This is the preferred setting since it gives lowest "
+        "latency but does not work with all sound cards." ) + "</li>"
+        "<li>" + tr ( "128 samples: This setting should work on most of the available "
+        "sound cards." ) + "</li>"
+        "<li>" + tr ( "256 samples: This setting should only be used if only a very slow "
+        "computer or a slow internet connection is available." ) + "</li>"
+        "</ul>" + tr (
         "Some sound card driver do not allow the buffer delay to be changed "
         "from within the " ) + APP_NAME +
         tr ( " software. In this case the buffer delay setting "
         "is disabled. To change the actual buffer delay, this "
         "setting has to be changed in the sound card driver. On Windows, press "
         "the ASIO Setup button to open the driver settings panel. On Linux, "
-        "use the Jack configuration tool to change the buffer size.<br>"
+        "use the Jack configuration tool to change the buffer size." ) + "<br>" + tr (
         "If no buffer size is selected and all settings are disabled, an "
         "unsupported buffer size is used by the driver. The " ) + APP_NAME +
         tr ( " software will still work with this setting but with restricted "
-        "performannce.<br>"
+        "performannce." ) + "<br>" + tr (
         "The actual buffer delay has influence on the connection status, the "
         "current upload rate and the overall delay. The lower the buffer size, "
         "the higher the probability of red light in the status indicator (drop "
         "outs) and the higher the upload rate and the lower the overall "
-        "delay.<br>"
+        "delay." ) + "<br>" + tr (
         "The buffer setting is therefore a trade-off between audio "
         "quality and overall delay." );
 

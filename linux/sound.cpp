@@ -58,13 +58,13 @@ void CSound::OpenJack ( const bool  bNoAutoJackConnect,
     if ( jack_get_sample_rate ( pJackClient ) != SYSTEM_SAMPLE_RATE_HZ )
     {
         throw CGenErr ( tr ( "The Jack server sample rate is different from "
-            "the required one. The required sample rate is: <b>" ) +
-            QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + tr ( " Hz</b>. You can "
+            "the required one. The required sample rate is:" ) + " <b>" +
+            QString().setNum ( SYSTEM_SAMPLE_RATE_HZ ) + " Hz</b>. " + tr ( "You can "
             "use a tool like <i><a href=""http://qjackctl.sourceforge.net"">QJackCtl</a></i> "
-            "to adjust the Jack server sample rate.<br>Make sure to set the "
-            "<b>Frames/Period</b> to a low value like <b>" ) +
+            "to adjust the Jack server sample rate." ) + "<br>" + tr ( "Make sure to set the "
+            "Frames/Period to a low value like " ) +
             QString().setNum ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) +
-            tr ( "</b> to achieve a low delay." ) );
+            tr ( " to achieve a low delay." ) );
     }
 
     // create four ports (two for input, two for output -> stereo)

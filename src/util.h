@@ -590,28 +590,28 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
     switch ( eSvrRegStatus )
     {
     case SRS_UNREGISTERED:
-        return "Unregistered";
+        return QCoreApplication::translate ( "CServerDlg", "Unregistered" );
 
     case SRS_BAD_ADDRESS:
-        return "Bad address";
+        return QCoreApplication::translate ( "CServerDlg", "Bad address" );
 
     case SRS_REQUESTED:
-        return "Registration requested";
+        return QCoreApplication::translate ( "CServerDlg", "Registration requested" );
 
     case SRS_TIME_OUT:
-        return "Registration failed";
+        return QCoreApplication::translate ( "CServerDlg", "Registration failed" );
 
     case SRS_UNKNOWN_RESP:
-        return "Check server version";
+        return QCoreApplication::translate ( "CServerDlg", "Check server version" );
 
     case SRS_REGISTERED:
-        return "Registered";
+        return QCoreApplication::translate ( "CServerDlg", "Registered" );
 
     case SRS_CENTRAL_SVR_FULL:
-        return "Central Server full";
+        return QCoreApplication::translate ( "CServerDlg", "Central Server full" );
     }
 
-    return QString ( "Unknown value " ).append ( eSvrRegStatus );
+    return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) ).append ( eSvrRegStatus );
 }
 
 

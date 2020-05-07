@@ -515,9 +515,9 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
     // in case we do not have a driver available, throw error
     if ( lNumDevs == 0 )
     {
-        throw CGenErr ( tr ( "<b>No ASIO audio device (driver) found.</b><br><br>"
-            "The " ) + APP_NAME + tr ( " software requires the low latency audio "
-            "interface <b>ASIO</b> to work properly. This is no standard "
+        throw CGenErr ( "<b>" + tr ( "No ASIO audio device (driver) found." ) + "</b><br><br>" +
+            tr ( "The " ) + APP_NAME + tr ( " software requires the low latency audio "
+            "interface ASIO to work properly. This is no standard "
             "Windows audio interface and therefore a special audio driver is "
             "required. Either your sound card has a native ASIO driver (which "
             "is recommended) or you might want to use alternative drivers like "

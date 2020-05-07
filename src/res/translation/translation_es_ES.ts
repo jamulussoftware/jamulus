@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de_DE">
+<TS version="2.1" language="es_ES">
 <context>
     <name>CAboutDlg</name>
     <message>
@@ -440,7 +440,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="267"/>
         <source>&amp;Settings...</source>
-        <translation type="unfinished">&amp;Einstellungen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="273"/>
@@ -902,7 +902,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="194"/>
         <source>Display Channel Levels</source>
-        <translation type="unfinished">Zeige Kanalsignalpegel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="195"/>
@@ -917,7 +917,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
         <source>Audio Channels</source>
-        <translation type="unfinished">Audiokanäle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
@@ -942,7 +942,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source>Audio Quality</source>
-        <translation type="unfinished">Audioqualität</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
@@ -1116,7 +1116,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="33"/>
         <source>Device</source>
-        <translation type="unfinished">Gerät</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="83"/>
@@ -1204,12 +1204,12 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="493"/>
         <source>Audio Channels</source>
-        <translation type="unfinished">Audiokanäle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="500"/>
         <source>Audio Quality</source>
-        <translation type="unfinished">Audioqualität</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="507"/>
@@ -1229,7 +1229,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="551"/>
         <source>Display Channel Levels</source>
-        <translation type="unfinished">Zeige Kanalsignalpegel</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="562"/>
@@ -1416,7 +1416,7 @@
     <message>
         <location filename="../../util.cpp" line="841"/>
         <source>&amp;About...</source>
-        <translation type="unfinished">Über...</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

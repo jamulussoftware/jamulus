@@ -462,9 +462,9 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
     QVBoxLayout*  pLayout    = new QVBoxLayout ( this );
     QHBoxLayout*  pSubLayout = new QHBoxLayout;
     QTextBrowser* txvLicence = new QTextBrowser ( this );
-    QCheckBox*    chbAgree   = new QCheckBox ( "I &agree to the above licence terms", this );
-    butAccept                = new QPushButton ( "Accept", this );
-    QPushButton*  butDecline = new QPushButton ( "Decline", this );
+    QCheckBox*    chbAgree   = new QCheckBox ( tr ( "I &agree to the above licence terms" ), this );
+    butAccept                = new QPushButton ( tr ( "Accept" ), this );
+    QPushButton*  butDecline = new QPushButton ( tr ( "Decline" ), this );
 
     pSubLayout->addStretch();
     pSubLayout->addWidget ( chbAgree );
@@ -486,10 +486,10 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
         "You agree that all data, sounds, or other works transmitted to this server "
         "are owned and created by you or your licensors, and that you are making these "
         "data, sounds or other works available via the following Creative Commons "
-        "License (for more information on this license, see "
+        "License (for more information on this license, see " ) +
         "<i><a href=""http://creativecommons.org/licenses/by-nc-sa/4.0"">"
-        "http://creativecommons.org/licenses/by-nc-sa/4.0</a></i>):" ) + "</big></p>" +
-        "<h3>Attribution-NonCommercial-ShareAlike 4.0</h3>" +
+        "http://creativecommons.org/licenses/by-nc-sa/4.0</a></i>):</big></p>"
+        "<h3>Attribution-NonCommercial-ShareAlike 4.0</h3>"
         "<p>" + tr ( "You are free to:" ) +
         "<ul>"
         "<li><b>" + tr ( "Share" ) + "</b> - " +
@@ -539,22 +539,22 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     - label with combo box for skill level
     - OK button
 */
-    setWindowTitle ( "Musician Profile" );
+    setWindowTitle ( tr ( "Musician Profile" ) );
     setWindowIcon ( QIcon ( QString::fromUtf8 ( ":/png/main/res/fronticon.png" ) ) );
 
     QVBoxLayout* pLayout        = new QVBoxLayout ( this );
     QHBoxLayout* pButSubLayout  = new QHBoxLayout;
-    QLabel*      plblAlias      = new QLabel ( "Alias/Name", this );
+    QLabel*      plblAlias      = new QLabel ( tr ( "Alias/Name" ), this );
     pedtAlias                   = new QLineEdit ( this );
-    QLabel*      plblInstrument = new QLabel ( "Instrument", this );
+    QLabel*      plblInstrument = new QLabel ( tr ( "Instrument" ), this );
     pcbxInstrument              = new QComboBox ( this );
-    QLabel*      plblCountry    = new QLabel ( "Country", this );
+    QLabel*      plblCountry    = new QLabel ( tr ( "Country" ), this );
     pcbxCountry                 = new QComboBox ( this );
-    QLabel*      plblCity       = new QLabel ( "City", this );
+    QLabel*      plblCity       = new QLabel ( tr ( "City" ), this );
     pedtCity                    = new QLineEdit ( this );
-    QLabel*      plblSkill      = new QLabel ( "Skill", this );
+    QLabel*      plblSkill      = new QLabel ( tr ( "Skill" ), this );
     pcbxSkill                   = new QComboBox ( this );
-    QPushButton* butClose       = new QPushButton ( "&Close", this );
+    QPushButton* butClose       = new QPushButton ( tr ( "&Close" ), this );
 
     QGridLayout* pGridLayout = new QGridLayout;
     plblAlias->setSizePolicy ( QSizePolicy::Minimum, QSizePolicy::Expanding );
@@ -627,8 +627,7 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
         if ( static_cast<QLocale::Country> ( iCurCntry ) != QLocale::AnyCountry )
         {
             // get current country enum
-            QLocale::Country eCountry =
-                static_cast<QLocale::Country> ( iCurCntry );
+            QLocale::Country eCountry = static_cast<QLocale::Country> ( iCurCntry );
 
             // try to load icon from resource file name
             QIcon CurFlagIcon;
@@ -653,7 +652,7 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     FlagNoneIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
     pcbxCountry->insertItem ( 0,
                               FlagNoneIcon,
-                              "None",
+                              tr ( "None" ),
                               static_cast<int> ( QLocale::AnyCountry ) );
 
 
@@ -665,35 +664,35 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
                                       RGBCOL_G_SL_NOT_SET,
                                       RGBCOL_B_SL_NOT_SET ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), "None", SL_NOT_SET );
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "None" ), SL_NOT_SET );
 
     SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_BEGINNER,
                                       RGBCOL_G_SL_BEGINNER,
                                       RGBCOL_B_SL_BEGINNER ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), "Beginner", SL_BEGINNER );
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Beginner" ), SL_BEGINNER );
 
     SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_INTERMEDIATE,
                                       RGBCOL_G_SL_INTERMEDIATE,
                                       RGBCOL_B_SL_INTERMEDIATE ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), "Intermediate", SL_INTERMEDIATE );
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Intermediate" ), SL_INTERMEDIATE );
 
     SLPixmap.fill ( QColor::fromRgb ( RGBCOL_R_SL_SL_PROFESSIONAL,
                                       RGBCOL_G_SL_SL_PROFESSIONAL,
                                       RGBCOL_B_SL_SL_PROFESSIONAL ) );
 
-    pcbxSkill->addItem ( QIcon ( SLPixmap ), "Expert", SL_PROFESSIONAL );
+    pcbxSkill->addItem ( QIcon ( SLPixmap ), tr ( "Expert" ), SL_PROFESSIONAL );
 
 
     // Add help text to controls -----------------------------------------------
     // fader tag
-    QString strFaderTag = tr ( "<b>Musician Profile:</b> Set your name "
-        "or an alias here so that the other musicians you want to play with "
+    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " + tr (
+        "Set your name or an alias here so that the other musicians you want to play with "
         "know who you are. Additionally you may set an instrument picture of "
         "the instrument you play and a flag of the country you are living. "
         "The city you live in and the skill level of playing your instrument "
-        "may also be added.\n"
+        "may also be added." ) + "<br>" + tr (
         "What you set here will appear at your fader on the mixer board when "
         "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
         "also show up at each client which is connected to the same server as "

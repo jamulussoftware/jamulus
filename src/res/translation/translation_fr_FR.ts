@@ -779,7 +779,12 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="125"/>
-        <source>&lt;b&gt;Enable Small Network Buffers:&lt;/b&gt; If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
+        <source>Enable Small Network Buffers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="125"/>
+        <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -844,7 +849,12 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="188"/>
-        <source>&lt;b&gt;Fancy Skin:&lt;/b&gt; If enabled, a fancy skin will be applied to the main window.</source>
+        <source>Fancy Skin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="188"/>
+        <source>If enabled, a fancy skin will be applied to the main window.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -854,7 +864,12 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="194"/>
-        <source>&lt;b&gt;Display Channel Levels:&lt;/b&gt; If enabled, each client channel will display a pre-fader level bar.</source>
+        <source>Display Channel Levels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="195"/>
+        <source>If enabled, each client channel will display a pre-fader level bar.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

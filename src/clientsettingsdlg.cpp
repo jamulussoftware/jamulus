@@ -122,8 +122,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     cbxROutChan->setAccessibleName ( tr ( "Right output channel selection combo box" ) );
 
     // enable OPUS64
-    chbEnableOPUS64->setWhatsThis ( tr ( "<b>Enable Small Network Buffers:</b> If enabled, "
-        "the support for very small network audio packets is activated. Very small "
+    chbEnableOPUS64->setWhatsThis ( "<b>" + tr ( "Enable Small Network Buffers" ) + ":</b> " + tr (
+        "If enabled, the support for very small network audio packets is activated. Very small "
         "network packets are only actually used if the sound card buffer delay is smaller than " ) +
         QString().setNum ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) + tr ( " samples. The "
         "smaller the network buffers, the smaller the audio latency. But at the same time "
@@ -185,14 +185,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     butDriverSetup->setToolTip ( strSndCrdBufDelayTT );
 
     // fancy skin
-    chbGUIDesignFancy->setWhatsThis ( tr ( "<b>Fancy Skin:</b> If enabled, "
-        "a fancy skin will be applied to the main window." ) );
+    chbGUIDesignFancy->setWhatsThis ( "<b>" + tr ( "Fancy Skin" ) + ":</b> " + tr (
+        "If enabled, a fancy skin will be applied to the main window." ) );
 
     chbGUIDesignFancy->setAccessibleName ( tr ( "Fancy skin check box" ) );
 
     // display channel levels
-    chbDisplayChannelLevels->setWhatsThis ( tr ( "<b>Display Channel Levels:</b> "
-        "If enabled, each client channel will display a pre-fader level bar." ) );
+    chbDisplayChannelLevels->setWhatsThis ( "<b>" + tr ( "Display Channel Levels" ) + ":</b> " +
+        tr ( "If enabled, each client channel will display a pre-fader level bar." ) );
 
     chbDisplayChannelLevels->setAccessibleName ( tr ( "Display channel levels check box" ) );
 

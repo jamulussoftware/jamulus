@@ -779,8 +779,13 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="125"/>
-        <source>&lt;b&gt;Enable Small Network Buffers:&lt;/b&gt; If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
-        <translation>&lt;b&gt;Ativar Buffers de Rede Pequenos:&lt;/b&gt; Se ativado, o suporte para pacotes de áudio de rede muito pequenos é ativado. Pacotes de rede muito pequenos serão apenas realmente usados se o atraso do buffer da placa de som for menor que </translation>
+        <source>Enable Small Network Buffers</source>
+        <translation>Activar Buffers de Rede Pequenos</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="125"/>
+        <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
+        <translation>Se ativado, o suporte para pacotes de áudio de rede muito pequenos é ativado. Pacotes de rede muito pequenos serão apenas realmente usados se o atraso do buffer da placa de som for menor que </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="128"/>
@@ -844,8 +849,13 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="188"/>
-        <source>&lt;b&gt;Fancy Skin:&lt;/b&gt; If enabled, a fancy skin will be applied to the main window.</source>
-        <translation>&lt;b&gt;Skin Sofisticada:&lt;/b&gt; Se ativada, uma skin sofisticada será aplicada à janela principal.</translation>
+        <source>Fancy Skin</source>
+        <translation>Skin Sofisticada</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="188"/>
+        <source>If enabled, a fancy skin will be applied to the main window.</source>
+        <translation>Se ativada, uma skin sofisticada será aplicada à janela principal.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="191"/>
@@ -854,8 +864,13 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="194"/>
-        <source>&lt;b&gt;Display Channel Levels:&lt;/b&gt; If enabled, each client channel will display a pre-fader level bar.</source>
-        <translation>&lt;b&gt;Mostrar Níveis de Canais:&lt;/b&gt; Se ativado, cada canal de cliente exibirá uma barra de nível pré-fader.</translation>
+        <source>Display Channel Levels</source>
+        <translation>Mostrar Níveis de Canais</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="195"/>
+        <source>If enabled, each client channel will display a pre-fader level bar.</source>
+        <translation>Se ativado, cada canal de cliente exibirá uma barra de nível pré-fader.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="197"/>

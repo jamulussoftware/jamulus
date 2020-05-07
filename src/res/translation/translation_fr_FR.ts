@@ -1533,12 +1533,6 @@
 <context>
     <name>CMusProfDlg</name>
     <message>
-        <location filename="../../util.cpp" line="690"/>
-        <source>&lt;b&gt;Musician Profile:&lt;/b&gt; Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living. The city you live in and the skill level of playing your instrument may also be added.
-What you set here will appear at your fader on the mixer board when you are connected to a </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../util.cpp" line="697"/>
         <source> server. This tag will also show up at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
         <translation type="unfinished"></translation>
@@ -1577,6 +1571,7 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../../util.cpp" line="542"/>
+        <location filename="../../util.cpp" line="690"/>
         <source>Musician Profile</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1623,6 +1618,16 @@ What you set here will appear at your fader on the mixer board when you are conn
     <message>
         <location filename="../../util.cpp" line="685"/>
         <source>Expert</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="690"/>
+        <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living. The city you live in and the skill level of playing your instrument may also be added.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="695"/>
+        <source>What you set here will appear at your fader on the mixer board when you are connected to a </source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -687,12 +687,12 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
 
     // Add help text to controls -----------------------------------------------
     // fader tag
-    QString strFaderTag = tr ( "<b>Musician Profile:</b> Set your name "
-        "or an alias here so that the other musicians you want to play with "
+    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " + tr (
+        "Set your name or an alias here so that the other musicians you want to play with "
         "know who you are. Additionally you may set an instrument picture of "
         "the instrument you play and a flag of the country you are living. "
         "The city you live in and the skill level of playing your instrument "
-        "may also be added.\n"
+        "may also be added." ) + "<br>" + tr (
         "What you set here will appear at your fader on the mixer board when "
         "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
         "also show up at each client which is connected to the same server as "

@@ -233,7 +233,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="497"/>
         <source>Musician Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Perfil do músico</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="44"/>
@@ -1533,13 +1533,6 @@
 <context>
     <name>CMusProfDlg</name>
     <message>
-        <location filename="../../util.cpp" line="690"/>
-        <source>&lt;b&gt;Musician Profile:&lt;/b&gt; Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living. The city you live in and the skill level of playing your instrument may also be added.
-What you set here will appear at your fader on the mixer board when you are connected to a </source>
-        <translation>&lt;b&gt;Perfil do músico:&lt;/b&gt; Defina o seu nome ou um pseudônimo aqui para que os outros músicos com quem quer tocar saibam quem você é. Além disso, pode definir uma imagem do instrumento que toca e uma bandeira do país em que vive. A cidade em que vive e o nível de habilidade com o seu instrumento também podem ser adicionados.
-O que definir aqui aparecerá por baixo do seu fader na secção de mistura quando estiver ligado a um servidor </translation>
-    </message>
-    <message>
         <location filename="../../util.cpp" line="697"/>
         <source> server. This tag will also show up at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
         <translation>. Esta identificação também será exibida em cada cliente ligado ao mesmo servidor que você. Se o nome estiver vazio, o endereço IP será mostrado.</translation>
@@ -1578,8 +1571,9 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
     </message>
     <message>
         <location filename="../../util.cpp" line="542"/>
+        <location filename="../../util.cpp" line="690"/>
         <source>Musician Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Perfil do músico</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="547"/>
@@ -1625,6 +1619,16 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
         <location filename="../../util.cpp" line="685"/>
         <source>Expert</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="690"/>
+        <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living. The city you live in and the skill level of playing your instrument may also be added.</source>
+        <translation>Defina o seu nome ou um pseudônimo aqui para que os outros músicos com quem quer tocar saibam quem você é. Além disso, pode definir uma imagem do instrumento que toca e uma bandeira do país em que vive. A cidade em que vive e o nível de habilidade com o seu instrumento também podem ser adicionados.</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="695"/>
+        <source>What you set here will appear at your fader on the mixer board when you are connected to a </source>
+        <translation>O que definir aqui aparecerá por baixo do seu fader na secção de mistura quando estiver ligado a um servidor </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="960"/>

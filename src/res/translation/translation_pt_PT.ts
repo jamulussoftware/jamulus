@@ -64,7 +64,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="128"/>
         <source>Copyright (C) 2005-2020 Volker Fischer and others</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (C) 2005-2020 Volker Fischer e outros</translation>
     </message>
     <message>
         <source>Author: Volker Fischer</source>
@@ -98,12 +98,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="707"/>
         <source>Server</source>
-        <translation type="unfinished">Servidor</translation>
+        <translation>Servidor</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="716"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
-        <translation type="unfinished"></translation>
+        <translation>T E N T A N D O   L I G A R</translation>
     </message>
 </context>
 <context>
@@ -196,39 +196,39 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="442"/>
         <source>Alias/Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome/Alcunha</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="448"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrumento</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="456"/>
         <source>Location</source>
-        <translation type="unfinished">Localização</translation>
+        <translation>Localização</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="478"/>
         <location filename="../../audiomixerboard.cpp" line="482"/>
         <location filename="../../audiomixerboard.cpp" line="486"/>
         <source>Skill Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Nível de Habilidade</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="478"/>
         <source>Beginner</source>
-        <translation type="unfinished"></translation>
+        <translation>Principiante</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="482"/>
         <source>Intermediate</source>
-        <translation type="unfinished"></translation>
+        <translation>Intermediário</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="486"/>
         <source>Expert</source>
-        <translation type="unfinished"></translation>
+        <translation>Avançado</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="497"/>
@@ -423,12 +423,12 @@
         <location filename="../../clientdlg.cpp" line="204"/>
         <location filename="../../clientdlg.cpp" line="1085"/>
         <source>C&amp;onnect</source>
-        <translation type="unfinished">&amp;Ligar</translation>
+        <translation>&amp;Ligar</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="256"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ver</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="258"/>
@@ -463,23 +463,23 @@
     <message>
         <location filename="../../clientdlg.cpp" line="327"/>
         <source>None</source>
-        <translation type="unfinished">Nenhum</translation>
+        <translation>Nenhum</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="607"/>
         <source>Center</source>
-        <translation type="unfinished">Centro</translation>
+        <translation>Centro</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="614"/>
         <source>R</source>
-        <translation type="unfinished">R</translation>
+        <translation>R</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="108"/>
         <location filename="../../clientdlg.cpp" line="620"/>
         <source>L</source>
-        <translation type="unfinished">L</translation>
+        <translation>L</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="102"/>
@@ -564,17 +564,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="819"/>
         <source>user</source>
-        <translation type="unfinished"></translation>
+        <translation>utilizador</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="824"/>
         <source>users</source>
-        <translation type="unfinished"></translation>
+        <translation>utilizadores</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="1061"/>
         <source>D&amp;isconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Desl&amp;igar</translation>
     </message>
 </context>
 <context>
@@ -930,7 +930,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
         <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In the mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful for the case that the sound card puts the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
-        <translation>Selecione o número de canais de áudio a serem usados. Existem três modos disponíveis. Os modos mono e estéreo usam um e dois canais de áudio, respectivamente. No modo mono-in/stereo-out, o sinal de áudio enviado ao servidor é mono, mas o sinal de retorno é estéreo. Isso é útil quando a placa de som coloca o instrumento e o microfone em canais diferentes. Nesse caso, os dois sinais de entrada podem ser misturados num canal mono, mas a mistura do servidor pode ser ouvida em estéreo.</translation>
+        <translation>Selecione o número de canais de áudio a serem usados. Existem três modos disponíveis. Os modos mono e estéreo usam um e dois canais de áudio, respectivamente. No modo Entrada Mono/Saída Estéreo, o sinal de áudio enviado ao servidor é mono, mas o sinal de retorno é estéreo. Isso é útil quando a placa de som coloca o instrumento e o microfone em canais diferentes. Nesse caso, os dois sinais de entrada podem ser misturados num canal mono, mas a mistura do servidor pode ser ouvida em estéreo.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="209"/>
@@ -1030,68 +1030,68 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="288"/>
         <source>ASIO Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuração ASIO</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="335"/>
         <source>Mono</source>
-        <translation type="unfinished"></translation>
+        <translation>Mono</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="336"/>
         <source>Mono-in/Stereo-out</source>
-        <translation type="unfinished"></translation>
+        <translation>Entrada Mono/Saída Estéreo</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
         <source>Stereo</source>
-        <translation type="unfinished"></translation>
+        <translation>Estéreo</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="342"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Baixa</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="343"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="344"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Alta</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="349"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manual</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="350"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor Padrão</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="351"/>
         <source>Default (North America)</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor Padrão (America do Norte)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="457"/>
         <location filename="../../clientsettingsdlg.cpp" line="461"/>
         <source>Size: </source>
-        <translation type="unfinished"></translation>
+        <translation>Tamanho: </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="518"/>
         <source>Buffer Delay</source>
-        <translation type="unfinished">Atraso do buffer</translation>
+        <translation>Atraso do buffer</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="523"/>
         <source>Buffer Delay: </source>
-        <translation type="unfinished"></translation>
+        <translation>Atraso do buffer:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="633"/>
@@ -1106,7 +1106,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="636"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
 </context>
 <context>
@@ -1432,17 +1432,17 @@
     <message>
         <location filename="../../util.cpp" line="465"/>
         <source>I &amp;agree to the above licence terms</source>
-        <translation type="unfinished"></translation>
+        <translation>Eu &amp;aceito os termos da licença acima</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="466"/>
         <source>Accept</source>
-        <translation type="unfinished"></translation>
+        <translation>Aceitar</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="467"/>
         <source>Decline</source>
-        <translation type="unfinished"></translation>
+        <translation>Rejeitar</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="483"/>
@@ -1578,47 +1578,47 @@
     <message>
         <location filename="../../util.cpp" line="547"/>
         <source>Alias/Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome/Alcunha</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="549"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrumento</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="551"/>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>País</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="553"/>
         <source>City</source>
-        <translation type="unfinished"></translation>
+        <translation>Cidade</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="555"/>
         <source>Skill</source>
-        <translation type="unfinished"></translation>
+        <translation>Habilidade</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="557"/>
         <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Fechar</translation>
+        <translation>&amp;Fechar</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="673"/>
         <source>Beginner</source>
-        <translation type="unfinished"></translation>
+        <translation>Principiante</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="679"/>
         <source>Intermediate</source>
-        <translation type="unfinished"></translation>
+        <translation>Intermediário</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="685"/>
         <source>Expert</source>
-        <translation type="unfinished"></translation>
+        <translation>Avançado</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="690"/>
@@ -1954,17 +1954,17 @@
     <message>
         <location filename="../../serverdlg.cpp" line="191"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manual</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="192"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor Padrão</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="193"/>
         <source>Default (North America)</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor Padrão (America do Norte)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="271"/>
@@ -1974,47 +1974,47 @@
     <message>
         <location filename="../../serverdlg.cpp" line="275"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Janela</translation>
     </message>
     <message>
         <location filename="../../util.h" line="593"/>
         <source>Unregistered</source>
-        <translation type="unfinished"></translation>
+        <translation>Não Registado</translation>
     </message>
     <message>
         <location filename="../../util.h" line="596"/>
         <source>Bad address</source>
-        <translation type="unfinished"></translation>
+        <translation>Endereço incorrecto</translation>
     </message>
     <message>
         <location filename="../../util.h" line="599"/>
         <source>Registration requested</source>
-        <translation type="unfinished"></translation>
+        <translation>Registo solicitado</translation>
     </message>
     <message>
         <location filename="../../util.h" line="602"/>
         <source>Registration failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Falha no registo</translation>
     </message>
     <message>
         <location filename="../../util.h" line="605"/>
         <source>Check server version</source>
-        <translation type="unfinished"></translation>
+        <translation>Verifique versão do servidor</translation>
     </message>
     <message>
         <location filename="../../util.h" line="608"/>
         <source>Registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Registado</translation>
     </message>
     <message>
         <location filename="../../util.h" line="611"/>
         <source>Central Server full</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor Central Cheio</translation>
     </message>
     <message>
         <location filename="../../util.h" line="614"/>
         <source>Unknown value </source>
-        <translation type="unfinished"></translation>
+        <translation>Valor desconhecido </translation>
     </message>
 </context>
 <context>
@@ -2231,7 +2231,7 @@
     <message>
         <location filename="../../soundbase.cpp" line="147"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fechar</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>

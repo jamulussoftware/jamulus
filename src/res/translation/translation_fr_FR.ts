@@ -729,12 +729,27 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="96"/>
-        <source>In case the &lt;b&gt;ASIO4ALL&lt;/b&gt; driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.&lt;br&gt;If you are using the &lt;b&gt;kX ASIO&lt;/b&gt; driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
+        <source>In case the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="99"/>
+        <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="105"/>
-        <source>&lt;b&gt;Sound Card Channel Mapping:&lt;/b&gt; In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.&lt;br&gt;For each </source>
+        <source>Sound Card Channel Mapping</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="106"/>
+        <source>In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="108"/>
+        <source>For each </source>
         <translation type="unfinished"></translation>
     </message>
     <message>

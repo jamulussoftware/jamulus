@@ -729,13 +729,28 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="96"/>
-        <source>In case the &lt;b&gt;ASIO4ALL&lt;/b&gt; driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.&lt;br&gt;If you are using the &lt;b&gt;kX ASIO&lt;/b&gt; driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
-        <translation>Caso o driver &lt;b&gt;ASIO4ALL&lt;/b&gt; seja usado, note que esse driver geralmente introduz aprox. 10-30 ms de atraso de áudio adicional. Dado isto, é recomendável usar uma placa de som com um driver ASIO nativo.&lt;br&gt;Se estiver a usar o driver &lt;b&gt;kX ASIO&lt;/b&gt;, certifique-se de ligar as entradas ASIO no painel de configurações do kX DSP.</translation>
+        <source>In case the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
+        <translation>Caso o driver ASIO4ALL seja usado, note que esse driver geralmente introduz aprox. 10-30 ms de atraso de áudio adicional. Dado isto, é recomendável usar uma placa de som com um driver ASIO nativo.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="99"/>
+        <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
+        <translation>Se estiver a usar o driver kX ASIO, certifique-se de ligar as entradas ASIO no painel de configurações do kX DSP.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="105"/>
-        <source>&lt;b&gt;Sound Card Channel Mapping:&lt;/b&gt; In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.&lt;br&gt;For each </source>
-        <translation>&lt;b&gt;Mapeamento de Canais da Placa de Som:&lt;/b&gt; Caso o dispositivo selecionado da placa de som ofereça mais que um canal de entrada ou saída, as configurações de Mapeamento de canais de entrada e de saída estarão visíveis.&lt;br&gt;Para cada canal de entrada/saída do </translation>
+        <source>Sound Card Channel Mapping</source>
+        <translation>Mapeamento de Canais da Placa de Som</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="106"/>
+        <source>In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
+        <translation>Caso o dispositivo selecionado da placa de som ofereça mais que um canal de entrada ou saída, as configurações de Mapeamento de canais de entrada e de saída estarão visíveis.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="108"/>
+        <source>For each </source>
+        <translation>Para cada canal de entrada/saída do </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="109"/>

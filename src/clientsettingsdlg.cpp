@@ -93,19 +93,19 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
 #ifdef _WIN32
     // set Windows specific tool tip
-    cbxSoundcard->setToolTip ( tr ( "In case the <b>ASIO4ALL</b> driver is used, "
+    cbxSoundcard->setToolTip ( tr ( "In case the ASIO4ALL driver is used, "
         "please note that this driver usually introduces approx. 10-30 ms of "
         "additional audio delay. Using a sound card with a native ASIO driver "
-        "is therefore recommended.<br>If you are using the <b>kX ASIO</b> "
+        "is therefore recommended." ) + "<br>" + tr ( "If you are using the kX ASIO "
         "driver, make sure to connect the ASIO inputs in the kX DSP settings "
         "panel." ) + TOOLTIP_COM_END_TEXT );
 #endif
 
     // sound card input/output channel mapping
-    QString strSndCrdChanMapp = tr ( "<b>Sound Card Channel Mapping:</b> "
-        "In case the selected sound card device offers more than one "
+    QString strSndCrdChanMapp = "<b>" + tr ( "Sound Card Channel Mapping" ) + ":</b> " +
+        tr ( "In case the selected sound card device offers more than one "
         "input or output channel, the Input Channel Mapping and Output "
-        "Channel Mapping settings are visible.<br>"
+        "Channel Mapping settings are visible." ) + "<br>" + tr (
         "For each " ) + APP_NAME + tr ( " input/output channel (Left and "
         "Right channel) a different actual sound card channel can be "
         "selected." );

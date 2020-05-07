@@ -42,28 +42,28 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
 
     // Add help text to controls -----------------------------------------------
     // client list
-    lvwClients->setWhatsThis ( tr ( "<b>Client List:</b> The client list "
-        "shows all clients which are currently connected to this server. Some "
-        "information about the clients like the IP address and name are given "
-        "for each connected client." ) );
+    lvwClients->setWhatsThis ( "<b>" + tr ( "Client List" ) + ":</b> " + tr (
+        "The client list shows all clients which are currently connected to this "
+        "server. Some information about the clients like the IP address and name "
+        "are given for each connected client." ) );
 
     lvwClients->setAccessibleName ( tr ( "Connected clients list view" ) );
 
     // start minimized on operating system start
-    chbStartOnOSStart->setWhatsThis ( tr ( "<b>Start Minimized on Operating "
-        "System Start:</b> If the start minimized on operating system start "
+    chbStartOnOSStart->setWhatsThis ( "<b>" + tr ( "Start Minimized on Operating "
+        "System Start" ) + ":</b> " + tr ( "If the start minimized on operating system start "
         "check box is checked, the " ) + APP_NAME + tr ( " server will be "
         "started when the operating system starts up and is automatically "
         "minimized to a system task bar icon." ) );
 
     // CC licence dialog switch
-    chbUseCCLicence->setWhatsThis ( tr ( "<b>Show Creative Commons Licence "
-        "Dialog:</b> If enabled, a Creative Commons BY-NC-SA 4.0 Licence "
+    chbUseCCLicence->setWhatsThis ( "<b>" + tr ( "Show Creative Commons Licence "
+        "Dialog" ) + ":</b> " + tr ( "If enabled, a Creative Commons BY-NC-SA 4.0 Licence "
         "dialog is shown each time a new user connects the server." ) );
 
     // Make My Server Public flag
-    chbRegisterServer->setWhatsThis ( tr ( "<b>Make My Server Public:</b> If "
-        "the Make My Server Public check box is checked, this server registers "
+    chbRegisterServer->setWhatsThis ( "<b>" + tr ( "Make My Server Public" ) + ":</b> " +
+        tr ( "If the Make My Server Public check box is checked, this server registers "
         "itself at the central server so that all " ) + APP_NAME +
         tr ( " users can see the server in the connect dialog server list and "
         "connect to it. The registering of the server is renewed periodically "
@@ -71,13 +71,13 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
         "actually available." ) );
 
     // register server status label
-    lblRegSvrStatus->setWhatsThis ( tr ( "<b>Register Server Status:</b> If "
-        "the Make My Server Public check box is checked, this will show "
+    lblRegSvrStatus->setWhatsThis ( "<b>" + tr ( "Register Server Status" ) + ":</b> " +
+        tr ( "If the Make My Server Public check box is checked, this will show "
         "the success of registration with the central server." ) );
 
     // central server address
-    QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
-        "Central server address is the IP address or URL of the central server "
+    QString strCentrServAddr = "<b>" + tr ( "Central Server Address" ) + ":</b> " +
+        tr ( "The Central server address is the IP address or URL of the central server "
         "at which this server is registered. With the central server address "
         "type either the local region can be selected of the default central "
         "servers or a manual address can be specified." );
@@ -90,7 +90,7 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     edtCentralServerAddress->setAccessibleName ( tr ( "Central server address line edit" ) );
 
     // server name
-    QString strServName = tr ( "<b>Server Name:</b> The server name identifies "
+    QString strServName = "<b>" + tr ( "Server Name" ) + ":</b> " + tr ( "The server name identifies "
         "your server in the connect dialog server list at the clients. If no "
         "name is given, the IP address is shown instead." );
 
@@ -100,7 +100,7 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     edtServerName->setAccessibleName ( tr ( "Server name line edit" ) );
 
     // location city
-    QString strLocCity = tr ( "<b>Location City:</b> The city in which this "
+    QString strLocCity = "<b>" + tr ( "Location City" ) + ":</b> " + tr ( "The city in which this "
         "server is located can be set here. If a city name is entered, it "
         "will be shown in the connect dialog server list at the clients." );
 
@@ -110,7 +110,7 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     edtLocationCity->setAccessibleName ( tr ( "City where the server is located line edit" ) );
 
     // location country
-    QString strLocCountry = tr ( "<b>Location country:</b> The country in "
+    QString strLocCountry = "<b>" + tr ( "Location country" ) + ":</b> " + tr ( "The country in "
         "which this server is located can be set here. If a country is "
         "entered, it will be shown in the connect dialog server list at the "
         "clients." );

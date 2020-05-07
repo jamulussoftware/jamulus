@@ -1790,7 +1790,12 @@ What you set here will appear at your fader on the mixer board when you are conn
     <name>CServerDlg</name>
     <message>
         <location filename="../../serverdlg.cpp" line="45"/>
-        <source>&lt;b&gt;Client List:&lt;/b&gt; The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
+        <source>Client List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="45"/>
+        <source>The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1800,7 +1805,12 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="53"/>
-        <source>&lt;b&gt;Start Minimized on Operating System Start:&lt;/b&gt; If the start minimized on operating system start check box is checked, the </source>
+        <source>Start Minimized on Operating System Start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="54"/>
+        <source>If the start minimized on operating system start check box is checked, the </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1810,12 +1820,22 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="60"/>
-        <source>&lt;b&gt;Show Creative Commons Licence Dialog:&lt;/b&gt; If enabled, a Creative Commons BY-NC-SA 4.0 Licence dialog is shown each time a new user connects the server.</source>
+        <source>Show Creative Commons Licence Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="61"/>
+        <source>If enabled, a Creative Commons BY-NC-SA 4.0 Licence dialog is shown each time a new user connects the server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="65"/>
-        <source>&lt;b&gt;Make My Server Public:&lt;/b&gt; If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
+        <source>Make My Server Public</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="66"/>
+        <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1825,12 +1845,22 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="74"/>
-        <source>&lt;b&gt;Register Server Status:&lt;/b&gt; If the Make My Server Public check box is checked, this will show the success of registration with the central server.</source>
+        <source>Register Server Status</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="75"/>
+        <source>If the Make My Server Public check box is checked, this will show the success of registration with the central server.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="79"/>
-        <source>&lt;b&gt;Central Server Address:&lt;/b&gt; The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
+        <source>Central Server Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="80"/>
+        <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1845,7 +1875,12 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
-        <source>&lt;b&gt;Server Name:&lt;/b&gt; The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
+        <source>Server Name</source>
+        <translation type="unfinished">Nom du serveur</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="93"/>
+        <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1855,7 +1890,12 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="103"/>
-        <source>&lt;b&gt;Location City:&lt;/b&gt; The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
+        <source>Location City</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="103"/>
+        <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1865,7 +1905,12 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="113"/>
-        <source>&lt;b&gt;Location country:&lt;/b&gt; The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
+        <source>Location country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="113"/>
+        <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

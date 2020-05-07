@@ -1791,8 +1791,13 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
     <name>CServerDlg</name>
     <message>
         <location filename="../../serverdlg.cpp" line="45"/>
-        <source>&lt;b&gt;Client List:&lt;/b&gt; The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
-        <translation>&lt;b&gt;Lista de Clientes:&lt;/b&gt; A lista de clientes mostra todos os clientes que estão atualmente ligados a este servidor. Algumas informações sobre os clientes, como o endereço IP e o nome, são fornecidas para cada cliente ligado.</translation>
+        <source>Client List</source>
+        <translation>Lista de Clientes</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="45"/>
+        <source>The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
+        <translation>A lista de clientes mostra todos os clientes que estão atualmente ligados a este servidor. Algumas informações sobre os clientes, como o endereço IP e o nome, são fornecidas para cada cliente ligado.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="50"/>
@@ -1801,8 +1806,13 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="53"/>
-        <source>&lt;b&gt;Start Minimized on Operating System Start:&lt;/b&gt; If the start minimized on operating system start check box is checked, the </source>
-        <translation>&lt;b&gt;Iniciar Minimizado com o Sistema Operativo:&lt;/b&gt; Se a caixa de seleção &lt;i&gt;Iniciar Minimizado com o Sistema Operativo&lt;/i&gt; estiver marcada, o servidor </translation>
+        <source>Start Minimized on Operating System Start</source>
+        <translation>Iniciar Minimizado com o Sistema Operativo</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="54"/>
+        <source>If the start minimized on operating system start check box is checked, the </source>
+        <translation>Se a caixa de seleção Iniciar Minimizado com o Sistema Operativo estiver marcada, o servidor </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="55"/>
@@ -1811,13 +1821,23 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="60"/>
-        <source>&lt;b&gt;Show Creative Commons Licence Dialog:&lt;/b&gt; If enabled, a Creative Commons BY-NC-SA 4.0 Licence dialog is shown each time a new user connects the server.</source>
-        <translation>&lt;b&gt;Mostrar Diálogo da Licença Creative Commons:&lt;/b&gt; Se ativada, uma caixa de diálogo Creative Commons BY-NC-SA 4.0 será exibida sempre que um novo utilizador se ligar ao servidor.</translation>
+        <source>Show Creative Commons Licence Dialog</source>
+        <translation>Mostrar Diálogo da Licença Creative Commons</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="61"/>
+        <source>If enabled, a Creative Commons BY-NC-SA 4.0 Licence dialog is shown each time a new user connects the server.</source>
+        <translation>Se ativada, uma caixa de diálogo Creative Commons BY-NC-SA 4.0 será exibida sempre que um novo utilizador se ligar ao servidor.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="65"/>
-        <source>&lt;b&gt;Make My Server Public:&lt;/b&gt; If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
-        <translation>&lt;b&gt;Tornar Servidor Público:&lt;/b&gt; Se a caixa de seleção &lt;i&gt;Tornar Servidor Público&lt;/i&gt; estiver marcada, esse servidor irá registar-se no servidor central para que todos os utilizadores do </translation>
+        <source>Make My Server Public</source>
+        <translation>Tornar Servidor Público</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="66"/>
+        <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
+        <translation>Se a caixa de seleção Tornar Servidor Público estiver marcada, esse servidor irá registar-se no servidor central para que todos os utilizadores do </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="68"/>
@@ -1826,13 +1846,23 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="74"/>
-        <source>&lt;b&gt;Register Server Status:&lt;/b&gt; If the Make My Server Public check box is checked, this will show the success of registration with the central server.</source>
-        <translation>&lt;b&gt;Estado de Registo do Servidor:&lt;/b&gt; Se a caixa de seleção &lt;i&gt;Tornar Servidor Público&lt;/i&gt; estiver marcada, isto mostrará o sucesso ou insucesso do registo no servidor central.</translation>
+        <source>Register Server Status</source>
+        <translation>Estado de Registo do Servidor</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="75"/>
+        <source>If the Make My Server Public check box is checked, this will show the success of registration with the central server.</source>
+        <translation>Se a caixa de seleção Tornar Servidor Público estiver marcada, isto mostrará o sucesso ou insucesso do registo no servidor central.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="79"/>
-        <source>&lt;b&gt;Central Server Address:&lt;/b&gt; The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
-        <translation>&lt;b&gt;Endereço do Servidor Central:&lt;/b&gt; O endereço do servidor central é o endereço IP ou o URL do servidor central no qual esse servidor será registado. Com o menu dos servidores centrais, é possível selecionar um dos servidores centrais padrão ou especificar um endereço manual.</translation>
+        <source>Central Server Address</source>
+        <translation>Endereço do servidor central</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="80"/>
+        <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
+        <translation>O endereço do servidor central é o endereço IP ou o URL do servidor central no qual esse servidor será registado. Com o menu dos servidores centrais, é possível selecionar um dos servidores centrais padrão ou especificar um endereço manual.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="89"/>
@@ -1846,8 +1876,13 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
-        <source>&lt;b&gt;Server Name:&lt;/b&gt; The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
-        <translation>&lt;b&gt;Nome do Servidor:&lt;/b&gt; O nome do servidor identifica o servidor na lista do diálogo de ligação exibido nos clientes. Se nenhum nome for fornecido, o endereço IP será mostrado.</translation>
+        <source>Server Name</source>
+        <translation>Nome do Servidor</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="93"/>
+        <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
+        <translation>O nome do servidor identifica o servidor na lista do diálogo de ligação exibido nos clientes. Se nenhum nome for fornecido, o endereço IP será mostrado.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="100"/>
@@ -1856,8 +1891,13 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="103"/>
-        <source>&lt;b&gt;Location City:&lt;/b&gt; The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
-        <translation>&lt;b&gt;Localização: Cidade&lt;/b&gt; A cidade onde este servidor está localizado pode ser definida aqui. Se um nome de cidade for inserido, este será mostrado na lista do diálogo de ligação dos clientes.</translation>
+        <source>Location City</source>
+        <translation>;Localização: Cidade</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="103"/>
+        <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
+        <translation>A cidade onde este servidor está localizado pode ser definida aqui. Se um nome de cidade for inserido, este será mostrado na lista do diálogo de ligação dos clientes.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="110"/>
@@ -1866,8 +1906,13 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="113"/>
-        <source>&lt;b&gt;Location country:&lt;/b&gt; The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
-        <translation>&lt;b&gt;Localização: País&lt;/b&gt; O país em que este servidor está localizado pode ser definido aqui. Se um país for inserido, ele será mostrado na lista do diálogo de logação dos clientes.</translation>
+        <source>Location country</source>
+        <translation>Localização: País</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="113"/>
+        <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
+        <translation>O país em que este servidor está localizado pode ser definido aqui. Se um país for inserido, ele será mostrado na lista do diálogo de logação dos clientes.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="121"/>

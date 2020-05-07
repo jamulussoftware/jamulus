@@ -1263,7 +1263,17 @@
     <name>CConnectDlg</name>
     <message>
         <location filename="../../connectdlg.cpp" line="47"/>
-        <source>&lt;b&gt;Server List:&lt;/b&gt; The server list shows a list of available servers which are registered at the central server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.&lt;br&gt;Note that it may take some time to retrieve the server list from the central server. If no valid central server address is specified in the settings, no server list will be available.</source>
+        <source>Server List</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="47"/>
+        <source>The server list shows a list of available servers which are registered at the central server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="53"/>
+        <source>Note that it may take some time to retrieve the server list from the central server. If no valid central server address is specified in the settings, no server list will be available.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1273,17 +1283,22 @@
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="61"/>
-        <source>&lt;b&gt;Server Address:&lt;/b&gt; The IP address or URL of the server running the </source>
+        <source>Server Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="61"/>
+        <source>The IP address or URL of the server running the </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="62"/>
-        <source> server software must be set here. An optional port number can be added after the IP address or URL using a comma as a separator, e.g, &lt;i&gt;example.org:</source>
+        <source> server software must be set here. An optional port number can be added after the IP address or URL using a comma as a separator, e.g, example.org:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="66"/>
-        <source>&lt;/i&gt;. A list of the most recent used server IP addresses or URLs is available for selection.</source>
+        <source>. A list of the most recent used server IP addresses or URLs is available for selection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1298,7 +1313,12 @@
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="78"/>
-        <source>&lt;b&gt;Filter:&lt;/b&gt; The server list is filered by the given text. Note that the filter is case insensitive.</source>
+        <source>Filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="78"/>
+        <source>The server list is filered by the given text. Note that the filter is case insensitive.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1308,7 +1328,12 @@
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="83"/>
-        <source>&lt;b&gt;Show All Musicians:&lt;/b&gt; If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
+        <source>Show All Musicians</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="83"/>
+        <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

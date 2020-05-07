@@ -1271,8 +1271,18 @@
     <name>CConnectDlg</name>
     <message>
         <location filename="../../connectdlg.cpp" line="47"/>
-        <source>&lt;b&gt;Server List:&lt;/b&gt; The server list shows a list of available servers which are registered at the central server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.&lt;br&gt;Note that it may take some time to retrieve the server list from the central server. If no valid central server address is specified in the settings, no server list will be available.</source>
-        <translation>&lt;b&gt;Lista de servidores:&lt;/b&gt; A lista de servidores mostra a os servidores disponíveis registados no servidor central. Selecione um servidor da lista e pressione o botão Ligar para se ligar a este servidor. Como alternativa, clique duas vezes num servidor da lista para se ligar ao mesmo. Se um servidor estiver ocupado, uma lista dos músicos ligados estará disponível expandindo o item da lista. Os servidores permanentes são mostrados em negrito.&lt;br&gt;Observe que pode demorar algum tempo para obter a lista de servidores do servidor central. Se nenhum endereço de servidor central válido for especificado nas definições, nenhuma lista de servidores estará disponível.</translation>
+        <source>Server List</source>
+        <translation>Lista de servidores</translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="47"/>
+        <source>The server list shows a list of available servers which are registered at the central server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
+        <translation>A lista de servidores mostra a os servidores disponíveis registados no servidor central. Selecione um servidor da lista e pressione o botão Ligar para se ligar a este servidor. Como alternativa, clique duas vezes num servidor da lista para se ligar ao mesmo. Se um servidor estiver ocupado, uma lista dos músicos ligados estará disponível expandindo o item da lista. Os servidores permanentes são mostrados em negrito.</translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="53"/>
+        <source>Note that it may take some time to retrieve the server list from the central server. If no valid central server address is specified in the settings, no server list will be available.</source>
+        <translation>Observe que pode demorar algum tempo para obter a lista de servidores do servidor central. Se nenhum endereço de servidor central válido for especificado nas definições, nenhuma lista de servidores estará disponível.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="58"/>
@@ -1281,18 +1291,23 @@
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="61"/>
-        <source>&lt;b&gt;Server Address:&lt;/b&gt; The IP address or URL of the server running the </source>
-        <translation>&lt;b&gt;Endereço do servidor:&lt;/b&gt; O endereço IP ou URL do servidor executando o servidor </translation>
+        <source>Server Address</source>
+        <translation>Endereço do servidor</translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="61"/>
+        <source>The IP address or URL of the server running the </source>
+        <translation>O endereço IP ou URL do servidor executando o servidor </translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="62"/>
-        <source> server software must be set here. An optional port number can be added after the IP address or URL using a comma as a separator, e.g, &lt;i&gt;example.org:</source>
-        <translation> deve ser definido aqui. Um número de porta opcional pode ser adicionado após o endereço IP ou URL usando o caractere dois pontos como separador, por exemplo, &lt;i&gt;example.org:</translation>
+        <source> server software must be set here. An optional port number can be added after the IP address or URL using a comma as a separator, e.g, example.org:</source>
+        <translation> deve ser definido aqui. Um número de porta opcional pode ser adicionado após o endereço IP ou URL usando o caractere dois pontos como separador, por exemplo, example.org:</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="66"/>
-        <source>&lt;/i&gt;. A list of the most recent used server IP addresses or URLs is available for selection.</source>
-        <translation>&lt;/i&gt;. Uma lista dos endereços IP ou URLs dos servidores usados recentemente está disponível para seleção.</translation>
+        <source>. A list of the most recent used server IP addresses or URLs is available for selection.</source>
+        <translation>. Uma lista dos endereços IP ou URLs dos servidores usados recentemente está disponível para seleção.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="73"/>
@@ -1306,8 +1321,13 @@
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="78"/>
-        <source>&lt;b&gt;Filter:&lt;/b&gt; The server list is filered by the given text. Note that the filter is case insensitive.</source>
-        <translation>&lt;b&gt;Filtro:&lt;/b&gt; A lista de servidores é filtrada pelo texto fornecido. Note que o filtro não diferencia maiúsculas de minúsculas.</translation>
+        <source>Filter</source>
+        <translation>Filtro</translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="78"/>
+        <source>The server list is filered by the given text. Note that the filter is case insensitive.</source>
+        <translation>A lista de servidores é filtrada pelo texto fornecido. Note que o filtro não diferencia maiúsculas de minúsculas.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="80"/>
@@ -1316,8 +1336,13 @@
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="83"/>
-        <source>&lt;b&gt;Show All Musicians:&lt;/b&gt; If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
-        <translation>&lt;b&gt;Mostrar Todos os Músicos:&lt;/b&gt; Se marcar esta caixa de seleção, os músicos de todos os servidores serão mostrados. Se desmarcar a caixa de seleção, todos os itens em exibição na lista serão recolhidos.</translation>
+        <source>Show All Musicians</source>
+        <translation>Mostrar Todos os Músicos</translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="83"/>
+        <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
+        <translation>Se marcar esta caixa de seleção, os músicos de todos os servidores serão mostrados. Se desmarcar a caixa de seleção, todos os itens em exibição na lista serão recolhidos.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="86"/>

@@ -1443,7 +1443,7 @@
     </message>
     <message>
         <location filename="../../util.cpp" line="485"/>
-        <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see &lt;i&gt;&lt;a href=http://creativecommons.org/licenses/by-nc-sa/4.0&gt;http://creativecommons.org/licenses/by-nc-sa/4.0&lt;/a&gt;&lt;/i&gt;):</source>
+        <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see </source>
         <translation type="unfinished"></translation>
     </message>
     <message>

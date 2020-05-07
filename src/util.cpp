@@ -486,10 +486,10 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
         "You agree that all data, sounds, or other works transmitted to this server "
         "are owned and created by you or your licensors, and that you are making these "
         "data, sounds or other works available via the following Creative Commons "
-        "License (for more information on this license, see "
+        "License (for more information on this license, see " ) +
         "<i><a href=""http://creativecommons.org/licenses/by-nc-sa/4.0"">"
-        "http://creativecommons.org/licenses/by-nc-sa/4.0</a></i>):" ) + "</big></p>" +
-        "<h3>Attribution-NonCommercial-ShareAlike 4.0</h3>" +
+        "http://creativecommons.org/licenses/by-nc-sa/4.0</a></i>):</big></p>"
+        "<h3>Attribution-NonCommercial-ShareAlike 4.0</h3>"
         "<p>" + tr ( "You are free to:" ) +
         "<ul>"
         "<li><b>" + tr ( "Share" ) + "</b> - " +

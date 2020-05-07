@@ -141,10 +141,10 @@ QString CSoundBase::SetDev ( const int iNewDev )
                     nullptr, APP_NAME, QString ( tr ( "The audio driver properties "
                     "have changed to a state which is incompatible to this "
                     "software. The selected audio device could not be used "
-                    "because of the following error: <b>" ) ) +
+                    "because of the following error:" ) + " <b>" ) +
                     strErrorMessage +
-                    QString ( tr ( "</b><br><br>Please restart the software." ) ),
-                    "Close", nullptr );
+                    QString ( "</b><br><br>" + tr ( "Please restart the software." ) ),
+                    tr ( "Close" ), nullptr );
 
                 _exit ( 0 );
             }

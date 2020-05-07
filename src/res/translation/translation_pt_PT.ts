@@ -2188,13 +2188,18 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="518"/>
-        <source>&lt;b&gt;No ASIO audio device (driver) found.&lt;/b&gt;&lt;br&gt;&lt;br&gt;The </source>
-        <translation>&lt;b&gt;Nenhum dispositivo de áudio ASIO (driver) encontrado.&lt;/b&gt;&lt;br&gt;&lt;br&gt;O programa </translation>
+        <source>No ASIO audio device (driver) found.</source>
+        <translation>Nenhum dispositivo de áudio ASIO (driver) encontrado</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
-        <source> software requires the low latency audio interface &lt;b&gt;ASIO&lt;/b&gt; to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
-        <translation> requer que a interface de áudio de baixa latência &lt;b&gt;ASIO&lt;/b&gt; funcione corretamente. Esta não é uma interface de áudio padrão do Windows e, portanto, é necessário um driver de áudio especial. Ou a sua placa de som possui um driver ASIO nativo (recomendado), ou pode usar drivers alternativos, como o driver ASIO4All.</translation>
+        <source>The </source>
+        <translation>O programa </translation>
+    </message>
+    <message>
+        <location filename="../../../windows/sound.cpp" line="519"/>
+        <source> software requires the low latency audio interface ASIO to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
+        <translation> requer que a interface de áudio de baixa latência ASIO funcione corretamente. Esta não é uma interface de áudio padrão do Windows e, portanto, é necessário um driver de áudio especial. Ou a sua placa de som possui um driver ASIO nativo (recomendado), ou pode usar drivers alternativos, como o driver ASIO4All.</translation>
     </message>
 </context>
 <context>
@@ -2206,13 +2211,18 @@ O que definir aqui aparecerá por baixo do seu fader na secção de mistura quan
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="141"/>
-        <source>The audio driver properties have changed to a state which is incompatible to this software. The selected audio device could not be used because of the following error: &lt;b&gt;</source>
-        <translation>As propriedades do driver de áudio foram alteradas para um estado incompatível com este programa. O dispositivo de áudio selecionado não pôde ser usado devido ao seguinte erro: &lt;b&gt;</translation>
+        <source>The audio driver properties have changed to a state which is incompatible to this software. The selected audio device could not be used because of the following error:</source>
+        <translation>As propriedades do driver de áudio foram alteradas para um estado incompatível com este programa. O dispositivo de áudio selecionado não pôde ser usado devido ao seguinte erro:</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="146"/>
-        <source>&lt;/b&gt;&lt;br&gt;&lt;br&gt;Please restart the software.</source>
-        <translation>&lt;/b&gt;&lt;br&gt;&lt;br&gt;Por favor reinicie o programa.</translation>
+        <source>Please restart the software.</source>
+        <translation>Por favor reinicie o programa.</translation>
+    </message>
+    <message>
+        <location filename="../../soundbase.cpp" line="147"/>
+        <source>Close</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>

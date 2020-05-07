@@ -2179,12 +2179,17 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="518"/>
-        <source>&lt;b&gt;No ASIO audio device (driver) found.&lt;/b&gt;&lt;br&gt;&lt;br&gt;The </source>
+        <source>No ASIO audio device (driver) found.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
-        <source> software requires the low latency audio interface &lt;b&gt;ASIO&lt;/b&gt; to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
+        <source>The </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../windows/sound.cpp" line="519"/>
+        <source> software requires the low latency audio interface ASIO to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2197,12 +2202,17 @@ What you set here will appear at your fader on the mixer board when you are conn
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="141"/>
-        <source>The audio driver properties have changed to a state which is incompatible to this software. The selected audio device could not be used because of the following error: &lt;b&gt;</source>
+        <source>The audio driver properties have changed to a state which is incompatible to this software. The selected audio device could not be used because of the following error:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="146"/>
-        <source>&lt;/b&gt;&lt;br&gt;&lt;br&gt;Please restart the software.</source>
+        <source>Please restart the software.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../soundbase.cpp" line="147"/>
+        <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

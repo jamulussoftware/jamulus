@@ -954,8 +954,23 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="260"/>
-        <source>&lt;b&gt;Current Connection Status Parameter:&lt;/b&gt; The ping time is the time required for the audio stream to travel from the client to the server and backwards. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.&lt;br&gt;The overall delay is calculated from the current ping time and the delay which is introduced by the current buffer settings.&lt;br&gt;The upstream rate depends on the current audio packet size and the audio compression setting. Make sure that the upstream rate is not higher than the available rate (check the upstream capabilities of your internet connection by, e.g., using speedtest.net).</source>
-        <translation>&lt;b&gt;Parâmetros do Estado da Ligação:&lt;/b&gt; A latência da ligação é o tempo necessário para o fluxo de áudio viajar do cliente para o servidor e vice-versa. Esta latência é introduzida pela rede. Esta latência deve ser tão baixa quanto 20-30 ms. Se esta latência for maior (por exemplo, 50-60 ms), a distância até ao servidor é muito grande ou sua ligação à Internet não é suficiente.&lt;br&gt;A latência geral é calculada a partir da latência da ligação atual e do atraso introduzido pelas configurações do buffer.&lt;br&gt;A taxa de transmissão depende do tamanho do pacote de áudio e da configuração de compactação de áudio. Verifique se a taxa de transmissão não é maior que a taxa disponível (verifique a taxa de upload da sua ligação à Internet usando, por exemplo, o speedtest.net).</translation>
+        <source>Current Connection Status Parameter</source>
+        <translation>Parâmetros do Estado da Ligação</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="261"/>
+        <source>The ping time is the time required for the audio stream to travel from the client to the server and backwards. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.</source>
+        <translation>A latência da ligação é o tempo necessário para o fluxo de áudio viajar do cliente para o servidor e vice-versa. Esta latência é introduzida pela rede. Esta latência deve ser tão baixa quanto 20-30 ms. Se esta latência for maior (por exemplo, 50-60 ms), a distância até ao servidor é muito grande ou sua ligação à Internet não é suficiente.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="266"/>
+        <source>The overall delay is calculated from the current ping time and the delay which is introduced by the current buffer settings.</source>
+        <translation>A latência geral é calculada a partir da latência da ligação atual e do atraso introduzido pelas configurações do buffer.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="268"/>
+        <source>The upstream rate depends on the current audio packet size and the audio compression setting. Make sure that the upstream rate is not higher than the available rate (check the upstream capabilities of your internet connection by, e.g., using speedtest.net).</source>
+        <translation>A taxa de transmissão depende do tamanho do pacote de áudio e da configuração de compactação de áudio. Verifique se a taxa de transmissão não é maior que a taxa disponível (verifique a taxa de upload da sua ligação à Internet usando, por exemplo, o speedtest.net).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="281"/>

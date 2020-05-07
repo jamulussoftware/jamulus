@@ -257,15 +257,15 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     edtCentralServerAddress->setAccessibleName ( tr ( "Central server address line edit" ) );
 
     // current connection status parameter
-    QString strConnStats = tr ( "<b>Current Connection Status "
-        "Parameter:</b> The ping time is the time required for the audio "
+    QString strConnStats = "<b>" + tr (  "Current Connection Status "
+        "Parameter" ) + ":</b> " + tr ( "The ping time is the time required for the audio "
         "stream to travel from the client to the server and backwards. This "
         "delay is introduced by the network. This delay should be as low as "
         "20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to "
         "the server is too large or your internet connection is not "
-        "sufficient.<br>"
+        "sufficient." ) + "<br>" + tr (
         "The overall delay is calculated from the current ping time and the "
-        "delay which is introduced by the current buffer settings.<br>"
+        "delay which is introduced by the current buffer settings." ) + "<br>" + tr (
         "The upstream rate depends on the current audio packet size and the "
         "audio compression setting. Make sure that the upstream rate is not "
         "higher than the available rate (check the upstream capabilities of "

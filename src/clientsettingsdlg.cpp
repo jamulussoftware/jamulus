@@ -197,7 +197,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     chbDisplayChannelLevels->setAccessibleName ( tr ( "Display channel levels check box" ) );
 
     // audio channels
-    QString strAudioChannels = tr ( "<b>Audio Channels:</b> "
+    QString strAudioChannels = "<b>" + tr ( "Audio Channels" ) + ":</b> " + tr (
         "Select the number of audio channels to be used. There are three "
         "modes available. The mono and stereo modes use one and two "
         "audio channels respectively. In the mono-in/stereo-out mode "
@@ -206,10 +206,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "sound card puts the instrument on one input channel and the "
         "microphone on the other channel. In that case the two input signals "
         "can be mixed to one mono channel but the server mix can be heard in "
-        "stereo.<br>"
+        "stereo." ) + "<br>" + tr (
         "Enabling the stereo streaming mode will increase the "
         "stream data rate. Make sure that the current upload rate does not "
-        "exceed the available bandwidth of your internet connection.<br>"
+        "exceed the available bandwidth of your internet connection." ) + "<br>" + tr (
         "In case of the stereo streaming mode, no audio channel selection "
         "for the reverberation effect will be available on the main window "
         "since the effect is applied on both channels in this case." );
@@ -219,7 +219,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     cbxAudioChannels->setAccessibleName ( tr ( "Audio channels combo box" ) );
 
     // audio quality
-    QString strAudioQuality = tr ( "<b>Audio Quality:</b> "
+    QString strAudioQuality = "<b>" + tr ( "Audio Quality" ) + ":</b> " + tr (
         "Select the desired audio quality. A low, normal or high audio "
         "quality can be selected. The higher the audio quality, the higher "
         "the audio stream data rate. Make sure that the current "
@@ -231,8 +231,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     cbxAudioQuality->setAccessibleName ( tr ( "Audio quality combo box" ) );
 
     // new client fader level
-    QString strNewClientLevel = tr ( "<b>New Client Level:</b> The "
-        "new client level setting defines the fader level of a new "
+    QString strNewClientLevel = "<b>" + tr ( "New Client Level" ) + ":</b> " +
+        tr ( "The new client level setting defines the fader level of a new "
         "connected client in percent. I.e. if a new client connects "
         "to the current server, it will get the specified initial "
         "fader level if no other fader level of a previous connection "
@@ -243,8 +243,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     edtNewClientLevel->setAccessibleName ( tr ( "New client level edit box" ) );
 
     // central server address
-    QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
-        "central server address is the IP address or URL of the central server "
+    QString strCentrServAddr = "<b>" + tr ( "Central Server Address" ) + ":</b> " +
+        tr ( "The central server address is the IP address or URL of the central server "
         "at which the server list of the connection dialog is managed. With the "
         "central server address type either the local region can be selected of "
         "the default central servers or a manual address can be specified." );

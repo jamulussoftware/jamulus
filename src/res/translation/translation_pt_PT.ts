@@ -879,8 +879,23 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
-        <source>&lt;b&gt;Audio Channels:&lt;/b&gt; Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In the mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful for the case that the sound card puts the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.&lt;br&gt;Enabling the stereo streaming mode will increase the stream data rate. Make sure that the current upload rate does not exceed the available bandwidth of your internet connection.&lt;br&gt;In case of the stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
-        <translation>&lt;b&gt;Canais de Áudio:&lt;/b&gt; Selecione o número de canais de áudio a serem usados. Existem três modos disponíveis. Os modos mono e estéreo usam um e dois canais de áudio, respectivamente. No modo mono-in/stereo-out, o sinal de áudio enviado ao servidor é mono, mas o sinal de retorno é estéreo. Isso é útil quando a placa de som coloca o instrumento e o microfone em canais diferentes. Nesse caso, os dois sinais de entrada podem ser misturados num canal mono, mas a mistura do servidor pode ser ouvida em estéreo.&lt;br&gt;Ativar o modo de transmissão estéreo aumenta a taxa do fluxo de dados. Verifique que a taxa de transmissão não excede a largura de banda disponível da sua ligação à Internet.&lt;br&gt;No modo de transmissão estéreo, nenhuma seleção de canal de áudio para o efeito de reverberação estará disponível na janela principal, pois o efeito é aplicado em ambos os canais.</translation>
+        <source>Audio Channels</source>
+        <translation>Canais de Áudio</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="200"/>
+        <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In the mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful for the case that the sound card puts the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
+        <translation>Selecione o número de canais de áudio a serem usados. Existem três modos disponíveis. Os modos mono e estéreo usam um e dois canais de áudio, respectivamente. No modo mono-in/stereo-out, o sinal de áudio enviado ao servidor é mono, mas o sinal de retorno é estéreo. Isso é útil quando a placa de som coloca o instrumento e o microfone em canais diferentes. Nesse caso, os dois sinais de entrada podem ser misturados num canal mono, mas a mistura do servidor pode ser ouvida em estéreo.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="209"/>
+        <source>Enabling the stereo streaming mode will increase the stream data rate. Make sure that the current upload rate does not exceed the available bandwidth of your internet connection.</source>
+        <translation>Ativar o modo de transmissão estéreo aumenta a taxa do fluxo de dados. Verifique que a taxa de transmissão não excede a largura de banda disponível da sua ligação à Internet.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="212"/>
+        <source>In case of the stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
+        <translation>No modo de transmissão estéreo, nenhuma seleção de canal de áudio para o efeito de reverberação estará disponível na janela principal, pois o efeito é aplicado em ambos os canais.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="219"/>
@@ -889,8 +904,13 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
-        <source>&lt;b&gt;Audio Quality:&lt;/b&gt; Select the desired audio quality. A low, normal or high audio quality can be selected. The higher the audio quality, the higher the audio stream data rate. Make sure that the current upload rate does not exceed the available bandwidth of your internet connection.</source>
-        <translation>&lt;b&gt;Qualidade de Áudio:&lt;/b&gt; Selecione a qualidade de áudio desejada. Pode ser selecionada uma qualidade de áudio baixa, normal ou alta. Quanto maior a qualidade do áudio, maior a taxa de dados do fluxo de áudio. Verifique que a taxa de transmissão não excede a largura de banda disponível da sua ligação à Internet.</translation>
+        <source>Audio Quality</source>
+        <translation>Qualidade de Áudio</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="222"/>
+        <source>Select the desired audio quality. A low, normal or high audio quality can be selected. The higher the audio quality, the higher the audio stream data rate. Make sure that the current upload rate does not exceed the available bandwidth of your internet connection.</source>
+        <translation>Selecione a qualidade de áudio desejada. Pode ser selecionada uma qualidade de áudio baixa, normal ou alta. Quanto maior a qualidade do áudio, maior a taxa de dados do fluxo de áudio. Verifique que a taxa de transmissão não excede a largura de banda disponível da sua ligação à Internet.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="231"/>
@@ -899,8 +919,13 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="234"/>
-        <source>&lt;b&gt;New Client Level:&lt;/b&gt; The new client level setting defines the fader level of a new connected client in percent. I.e. if a new client connects to the current server, it will get the specified initial fader level if no other fader level of a previous connection of that client was already stored.</source>
-        <translation>&lt;b&gt;Nível de Novo Cliente:&lt;/b&gt; A configuração de nível de novo cliente define, em percentagem, o nível do fader de um novo cliente ligado. Por exemplo, se um cliente novo se ligar ao servidor atual, o seu canal terá o nível inicial do fader especificado, excepto quando um diferente nível do fader de uma ligação anterior desse mesmo cliente já tenha sido definido.</translation>
+        <source>New Client Level</source>
+        <translation>Nível de Novo Cliente</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="235"/>
+        <source>The new client level setting defines the fader level of a new connected client in percent. I.e. if a new client connects to the current server, it will get the specified initial fader level if no other fader level of a previous connection of that client was already stored.</source>
+        <translation>A configuração de nível de novo cliente define, em percentagem, o nível do fader de um novo cliente ligado. Por exemplo, se um cliente novo se ligar ao servidor atual, o seu canal terá o nível inicial do fader especificado, excepto quando um diferente nível do fader de uma ligação anterior desse mesmo cliente já tenha sido definido.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="243"/>
@@ -909,8 +934,13 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="246"/>
-        <source>&lt;b&gt;Central Server Address:&lt;/b&gt; The central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
-        <translation>&lt;b&gt;Endereço do servidor central:&lt;/b&gt; O endereço do servidor central é o endereço IP ou URL do servidor central a partir do qual é gerida a lista de servidores do diálogo de ligação. Com a configuração do endereço do servidor central, é possível selecionar um dos servidores centrais padrão ou especificar um endereço manual.</translation>
+        <source>Central Server Address</source>
+        <translation>Endereço do servidor central</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="247"/>
+        <source>The central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
+        <translation>O endereço do servidor central é o endereço IP ou URL do servidor central a partir do qual é gerida a lista de servidores do diálogo de ligação. Com a configuração do endereço do servidor central, é possível selecionar um dos servidores centrais padrão ou especificar um endereço manual.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="256"/>

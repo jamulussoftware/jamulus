@@ -348,16 +348,14 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 {
     setupUi ( this );
 
-    // set the text for the about dialog html text control
-    txvCredits->setOpenExternalLinks ( true );
-    txvCredits->setText (
-        "<p>" // general description of software
-        "<big>" + tr ( "The " ) + APP_NAME +
+    // general description of software
+    txvAbout->setText (
+        "<p>" + tr ( "The " ) + APP_NAME +
         tr ( " software enables musicians to perform real-time jam sessions "
-        "over the internet. There is a " ) + APP_NAME + tr ( " "
+        "over the internet." ) + "<br>" + tr ( "There is a " ) + APP_NAME + tr ( " "
         "server which collects the audio data from each " ) +
         APP_NAME + tr ( " client, mixes the audio data and sends the mix back "
-        "to each client." ) + "</big></p><br>"
+        "to each client." ) + "</p>"
         "<p><font face=\"courier\">" // GPL header text
         "This program is free software; you can redistribute it and/or modify "
         "it under the terms of the GNU General Public License as published by "
@@ -370,10 +368,11 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "License along with his program; if not, write to the Free Software "
         "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 "
         "USA"
-        "</font></p><br>"
-        "<p><b>" + APP_NAME + // libraries used by this compilation
+        "</font></p>" );
+
+    // libraries used by this compilation
+    txvLibraries->setText ( APP_NAME +
         tr ( " uses the following libraries, resources or code snippets:" ) +
-        "</b></p>"
         "<ul>"
         "<li>Qt cross-platform application framework: "
         "<i><a href=""http://www.qt.io"">http://www.qt.io</a></i></li>"
@@ -387,10 +386,12 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></li>"
         "<li>Country flag icons from Mark James: "
         "<i><a href=""http://www.famfamfam.com"">http://www.famfamfam.com</a></i></li>"
-        "</ul>"
-        "We would like to acknowledge the contributors listed in the "
+        "</ul>" );
+
+    // contributors list
+    txvContributors->setText ( "We would like to acknowledge the contributors listed in the "
         "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">Github Contributors list</a>"
-        "</center><br>");
+        "</center><br>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
@@ -406,7 +407,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
     // name, short description and GPL hint
     if ( bWithHtml )
     {
-        strVersionText += "<center><b>";
+        strVersionText += "<b>";
     }
     else
     {
@@ -424,23 +425,13 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
         strVersionText += "\n *** ";
     }
 
-    strVersionText += tr ( "Internet Jam Session Software" );
-
-    if ( bWithHtml )
+    if ( !bWithHtml )
     {
-        strVersionText += "<br>";
-    }
-    else
-    {
+        strVersionText += tr ( "Internet Jam Session Software" );
         strVersionText += "\n *** ";
     }
 
     strVersionText += tr ( "Under the GNU General Public License (GPL)" );
-
-    if ( bWithHtml )
-    {
-        strVersionText += "</center>";
-    }
 
     return strVersionText;
 }

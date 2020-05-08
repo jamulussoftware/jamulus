@@ -1272,6 +1272,8 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
         // does not consume any significant CPU when no client is connected.
         Stop();
     }
+
+    Q_UNUSED ( iUnused );
 }
 
 /// @brief Mix all audio data from all clients together.

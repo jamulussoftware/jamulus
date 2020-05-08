@@ -11,12 +11,12 @@
     <message>
         <location filename="../../util.cpp" line="356"/>
         <source> software enables musicians to perform real-time jam sessions over the internet. There is a </source>
-        <translation> permet aux musiciens d&apos;effectuer des boeufs en temps réel sur internet. Il existe un </translation>
+        <translation> permet aux musiciens de faire des bœufs en temps réel sur internet. Il existe un </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="357"/>
         <source> server which collects the audio data from each </source>
-        <translation> qui collecte les données audio de chaque </translation>
+        <translation> serveur qui collecte les données audio de chaque </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="359"/>
@@ -26,7 +26,7 @@
     <message>
         <location filename="../../util.cpp" line="375"/>
         <source> uses the following libraries, resources or code snippets:</source>
-        <translation type="unfinished"></translation>
+        <translation> utilise les bibliothèques, ressources ou extraits de code suivants :</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="399"/>
@@ -41,7 +41,7 @@
     <message>
         <location filename="../../util.cpp" line="427"/>
         <source>Internet Jam Session Software</source>
-        <translation>Logiciels de boeuf sur Internet</translation>
+        <translation>Logiciels de bœuf sur Internet</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="438"/>
@@ -64,7 +64,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="128"/>
         <source>Copyright (C) 2005-2020 Volker Fischer and others</source>
-        <translation type="unfinished"></translation>
+        <translation>Copyright (C) 2005-2020 Volker Fischer et autres</translation>
     </message>
     <message>
         <source>Author: Volker Fischer</source>
@@ -85,12 +85,12 @@
     <message>
         <location filename="../../analyzerconsole.cpp" line="50"/>
         <source>Analyzer Console</source>
-        <translation type="unfinished"></translation>
+        <translation>Console d&apos;analyse</translation>
     </message>
     <message>
         <location filename="../../analyzerconsole.cpp" line="69"/>
         <source>Error Rate of Each Buffer Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taux d&apos;erreur de chaque taille de tampon</translation>
     </message>
 </context>
 <context>
@@ -103,7 +103,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="716"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
-        <translation type="unfinished"></translation>
+        <translation>T E N T A T I V E   D E   C O N N E X I O N</translation>
     </message>
 </context>
 <context>
@@ -111,62 +111,62 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="110"/>
         <source>Channel Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau de canal</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="111"/>
         <source>Displays the pre-fader audio level of this channel.  All connected clients at the server will be assigned an audio level, the same value for each client.</source>
-        <translation type="unfinished"></translation>
+        <translation>Affiche le niveau audio pré-fader de ce canal.  Tous les clients connectés au serveur se verront attribuer un niveau audio, la même valeur pour chaque client.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="113"/>
         <source>Input level of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau d&apos;entrée du canal audio actuel sur le serveur</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="116"/>
         <source>Mixer Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>Charriot du mixeur</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="116"/>
         <source>Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
-        <translation type="unfinished"></translation>
+        <translation>Règle le niveau audio de ce canal. Tous les clients connectés au serveur se verront attribuer un charriot audio à chaque client, ce qui permettra d&apos;ajuster le mixage local.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="119"/>
         <source>Local mix level setting of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Réglage du niveau de mixage local du canal audio actuel sur le serveur</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="122"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
-        <translation type="unfinished"></translation>
+        <translation>En cochant la case Muet, le canal audio peut être mis en sourdine.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="124"/>
         <source>Mute button</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouton de sourdine</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="126"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except of the current channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation type="unfinished"></translation>
+        <translation>En cochant la case Solo, le canal audio peut être réglé sur solo, ce qui signifie que tous les autres canaux, à l&apos;exception du canal actuel, sont mis en sourdine. Il est possible de mettre plus d&apos;un canal en solo.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="130"/>
         <source>Solo button</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouton de solo</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="132"/>
         <source>Fader Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Étiquette de charriot</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="132"/>
         <source>The fader tag identifies the connected client. The tag name, the picture of your instrument and a flag of your country can be set in the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;étiquette de charriot identifie le client connecté. Le nom du tag, la photo de votre instrument et un drapeau de votre pays peuvent être définis dans la fenêtre principale.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="137"/>
@@ -306,17 +306,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="51"/>
         <source>Input Level Meter</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicateur de niveau d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="51"/>
         <source>The input level indicators show the input level of the two stereo channels of the current selected audio input.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les indicateurs de niveau d&apos;entrée indiquent le niveau d&apos;entrée des deux canaux stéréo de l&apos;entrée audio actuellement sélectionnée.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="54"/>
         <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veillez à ne pas clipper le signal d&apos;entrée afin d&apos;éviter les distorsions du signal audio.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="57"/>
@@ -514,52 +514,52 @@
     <message>
         <location filename="../../clientdlg.cpp" line="137"/>
         <source>Reverberation Channel Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélection de canal de réverbération</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="138"/>
         <source>With these radio buttons the audio input channel on which the reverberation effect is applied can be chosen. Either the left or right input channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ces boutons radio permettent de choisir le canal d&apos;entrée audio sur lequel l&apos;effet de réverbération est appliqué. Il est possible de sélectionner le canal d&apos;entrée gauche ou droit.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="148"/>
         <source>Delay Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation>LED d&apos;état de délai</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="149"/>
         <source>The delay status LED indicator shows the current audio delay status. If the light is green, the delay is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder to play. If the light is red, the delay is too large for jamming.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;indicateur LED d&apos;état de délai indique l&apos;état actuel du délai audio. Si le voyant est vert, le délai est parfait pour une session de bœuf. Si le voyant est jaune, une session est toujours possible mais elle peut être plus difficile à jouer. Si le voyant est rouge, le délai est trop important pour un bœuf.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="164"/>
         <source>Buffers Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation>LED d&apos;état de tampon</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="165"/>
         <source>The buffers status LED indicator shows the current audio/streaming status. If the light is green, there are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the audio stream is interrupted caused by one of the following problems:</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;indicateur LED d&apos;état des tampons indique l&apos;état actuel de l&apos;audio/du streaming. Si le voyant est vert, il n&apos;y a pas de dépassement de mémoire tampon ni de sous-dépassement et le flux audio n&apos;est pas interrompu. Si le voyant est rouge, le flux audio est interrompu en raison de l&apos;un des problèmes suivants :</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="170"/>
         <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le tampon de jitter réseau n&apos;est pas assez grand pour le jitter actuel de l&apos;interface réseau/audio.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="172"/>
         <source>The sound card buffer delay (buffer size) is set to a too small value.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le délai du tampon de la carte son (taille du tampon) est réglé sur une valeur trop faible.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="174"/>
         <source>The upload or download stream rate is too high for the current available internet bandwidth.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le taux de flux montant ou descendant est trop élevé pour la bande passante Internet actuellement disponible.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="176"/>
         <source>The CPU of the client or server is at 100%.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le processeur du client ou du serveur est à 100%.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="819"/>
@@ -574,7 +574,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1061"/>
         <source>D&amp;isconnect</source>
-        <translation type="unfinished"></translation>
+        <translation>Dé&amp;connecter</translation>
     </message>
 </context>
 <context>
@@ -1114,7 +1114,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="14"/>
         <source>Settings</source>
-        <translation type="unfinished">Paramètres</translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="27"/>
@@ -1409,22 +1409,22 @@
         <location filename="../../util.cpp" line="831"/>
         <location filename="../../util.cpp" line="836"/>
         <source>Getting &amp;Started...</source>
-        <translation type="unfinished"></translation>
+        <translation>Premier pa&amp;s...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="832"/>
         <source>Software &amp;Manual...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Manuel du logiciel...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="839"/>
         <source>What&apos;s &amp;This</source>
-        <translation type="unfinished"></translation>
+        <translation>C&apos;es&amp;t quoi ça</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="841"/>
         <source>&amp;About...</source>
-        <translation type="unfinished"></translation>
+        <translation>À &amp;propos</translation>
     </message>
 </context>
 <context>
@@ -1432,102 +1432,102 @@
     <message>
         <location filename="../../util.cpp" line="465"/>
         <source>I &amp;agree to the above licence terms</source>
-        <translation type="unfinished"></translation>
+        <translation>J&apos;&amp;accepte les conditions de licence ci-dessus</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="466"/>
         <source>Accept</source>
-        <translation type="unfinished"></translation>
+        <translation>Accepter</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="467"/>
         <source>Decline</source>
-        <translation type="unfinished"></translation>
+        <translation>Décliner</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="483"/>
         <source>By connecting to this server and agreeing to this notice, you agree to the following:</source>
-        <translation type="unfinished"></translation>
+        <translation>En vous connectant à ce serveur et en acceptant le présent avis, vous acceptez ce qui suit :</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="485"/>
         <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see </source>
-        <translation type="unfinished"></translation>
+        <translation>Vous acceptez que toutes les données, sons ou autres œuvres transmises à ce serveur soient détenus et créés par vous ou vos ayant-droits, et que vous rendiez ces données, sons ou autres œuvres disponibles via la licence Creative Commons suivante (pour plus d&apos;informations sur cette licence, voir </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="493"/>
         <source>You are free to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous êtes libres de :</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="495"/>
         <source>Share</source>
-        <translation type="unfinished"></translation>
+        <translation>Partager</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="496"/>
         <source>copy and redistribute the material in any medium or format</source>
-        <translation type="unfinished"></translation>
+        <translation>copier et redistribuer le matériel sur tout support ou format</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="497"/>
         <source>Adapt</source>
-        <translation type="unfinished"></translation>
+        <translation>Adapter</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="498"/>
         <source>remix, transform, and build upon the material</source>
-        <translation type="unfinished"></translation>
+        <translation>remixer, transformer et développer à partir du matériel</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="499"/>
         <source>The licensor cannot revoke these freedoms as long as you follow the license terms.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le donneur de licence ne peut pas révoquer ces libertés tant que vous respectez les conditions de la licence.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="501"/>
         <source>Under the following terms:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dans les conditions suivantes :</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="503"/>
         <source>Attribution</source>
-        <translation type="unfinished"></translation>
+        <translation>Attribution</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="504"/>
         <source>You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous devez donner un crédit approprié, fournir un lien vers la licence et indiquer si des modifications ont été apportées. Vous pouvez le faire de toute manière raisonnable, mais pas d&apos;une manière qui suggère que le donneur de licence vous cautionne ou cautionne votre utilisation.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="507"/>
         <source>NonCommercial</source>
-        <translation type="unfinished"></translation>
+        <translation>Non commercial</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="508"/>
         <source>You may not use the material for commercial purposes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous ne pouvez pas utiliser le matériel à des fins commerciales.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="509"/>
         <source>ShareAlike</source>
-        <translation type="unfinished"></translation>
+        <translation>Partager à l&apos;identique</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="510"/>
         <source>If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si vous remixez, transformez ou développez à partir du matériel, vous devez distribuer vos contributions sous la même licence que l&apos;original.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="512"/>
         <source>No additional restrictions</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucune restriction supplémentaire</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="513"/>
         <source>You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous ne pouvez pas appliquer des termes juridiques ou des mesures technologiques qui empêchent légalement d&apos;autres personnes de faire ce que la licence autorise.</translation>
     </message>
 </context>
 <context>

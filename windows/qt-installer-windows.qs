@@ -2,7 +2,7 @@
  * Qt Installer script for a non-interactive installation of Qt5 on Windows.
  *
  * Run with:
- * qt-unified-windows-x86-online.exe --verbose --script qt_installer_windows.qs
+ * qt-unified-windows-x86-online.exe --verbose --script qt-installer-windows.qs
  *
  * globals QInstaller, QMessageBox, buttons, gui, installer, console
  */

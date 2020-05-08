@@ -133,9 +133,9 @@ LangString RUNNING_APP_MSG ${LANG_ENGLISH} \
     ; Add the Start Menu and desktop shortcuts
     CreateShortCut  "$DESKTOP\${APP_NAME}.lnk" "$OUTDIR\${APP_EXE}"
     CreateDirectory "$SMPROGRAMS\${APP_NAME}"
-    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"        "$INSTDIR\${APP_EXE}"
-    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk" "$INSTDIR\${APP_EXE}" "-s"
-    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${UNINSTALL_EXE}.lnk" "$INSTDIR\${UNINSTALL_EXE}"
+    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME}.lnk"           "$INSTDIR\${APP_EXE}"
+    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Server.lnk"    "$INSTDIR\${APP_EXE}" "-s"
+    CreateShortCut  "$SMPROGRAMS\${APP_NAME}\${APP_NAME} Uninstall.lnk" "$INSTDIR\${UNINSTALL_EXE}"
 
 !macroend
 

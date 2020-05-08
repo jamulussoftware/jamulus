@@ -398,11 +398,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
             QString().number( static_cast<int> ( iPortNumber ) ) );
     }
 
-    // Enable jam recording (if requested)
+    // Enable jam recording (if requested) - kicks off the thread
     if ( bEnableRecording )
     {
         JamRecorder.Init ( this, iServerFrameSizeSamples );
-        JamRecorder.start();
     }
 
     // enable all channels (for the server all channel must be enabled the
@@ -465,6 +464,14 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &ServerListManager,
        SIGNAL ( SvrRegStatusChanged() ),
        this, SLOT ( OnSvrRegStatusChanged() ) );
+
+    QObject::connect ( QCoreApplication::instance(),
+        SIGNAL ( aboutToQuit() ),
+        this, SLOT ( OnAboutToQuit() ) );
+
+    QObject::connect ( pSignalHandler,
+        SIGNAL ( ShutdownSignal ( int ) ),
+        this, SLOT ( OnShutdown ( int ) ) );
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     connectChannelSignalsToServerSlots<MAX_NUM_CHANNELS>();
@@ -908,6 +915,54 @@ void CServer::OnCLDisconnection ( CHostAddress InetAddr )
     }
 }
 
+void CServer::OnAboutToQuit()
+{
+    if ( IsRunning() )
+    {
+        // Clean up
+        CleanShutdown();
+    }
+
+    // if server was registered at the central server, unregister on shutdown
+    if ( GetServerListEnabled() )
+    {
+        UnregisterSlaveServer();
+    }
+}
+
+void CServer::OnShutdown ( int )
+{
+    // This should trigger OnAboutToQuit
+    QCoreApplication::instance()->exit();
+}
+
+
+void CServer::CleanShutdown() {
+    Mutex.lock();
+    {
+        bool oldDAC = bDisconnectAllClients;
+
+        // This is to prevent new connections
+        bDisconnectAllClients = true;
+
+        // This is to disconnect all connected channels
+        for ( int i = 0; i < iMaxNumChannels; i++ )
+        {
+            if ( vecChannels[i].IsConnected() )
+            {
+                vecChannels[i].Disconnect();
+            }
+        }
+
+        // This should tell the jam recorder than the jam has ended...
+        Stop();
+
+        // Restore the value in case we are not exiting
+        bDisconnectAllClients = oldDAC;
+    }
+    Mutex.unlock();
+}
+
 void CServer::Start()
 {
     // only start if not already running
@@ -1273,7 +1328,7 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
         Stop();
     }
 
-    Q_UNUSED ( iUnused );
+    Q_UNUSED ( iUnused )
 }
 
 /// @brief Mix all audio data from all clients together.

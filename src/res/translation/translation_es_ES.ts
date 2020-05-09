@@ -1129,6 +1129,11 @@
         <translation>Por defecto (Norteamérica)</translation>
     </message>
     <message>
+        <location filename="../../clientsettingsdlg.cpp" line="367"/>
+        <source>preferred</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../clientsettingsdlg.cpp" line="457"/>
         <location filename="../../clientsettingsdlg.cpp" line="461"/>
         <source>Size: </source>
@@ -1456,6 +1461,11 @@
 </context>
 <context>
     <name>CHelpMenu</name>
+    <message>
+        <location filename="../../util.cpp" line="835"/>
+        <source>&amp;Help</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message>
         <location filename="../../util.cpp" line="840"/>
         <location filename="../../util.cpp" line="845"/>

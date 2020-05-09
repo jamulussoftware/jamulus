@@ -832,7 +832,7 @@ void CMusProfDlg::OnSkillActivated ( int iCntryListItem )
 
 
 // Help menu -------------------------------------------------------------------
-CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( "&Help", parent )
+CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&Help" ), parent )
 {
     // standard help menu consists of about and what's this help
     if ( bIsClient )

@@ -364,7 +364,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     rbtBufferDelayDefault->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES,
-        ", preferred" ) );
+        ", " + tr ( "preferred" ) ) );
 
     rbtBufferDelaySafe->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES ) );

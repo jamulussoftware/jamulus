@@ -59,7 +59,7 @@ int main ( int argc, char** argv )
     bool         bShowAnalyzerConsole      = false;
     bool         bCentServPingServerInList = false;
     bool         bNoAutoJackConnect        = false;
-    bool         bUseTranslation           = false;
+    bool         bUseTranslation           = true;
     int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
     int          iMaxDaysHistory           = DEFAULT_DAYS_HISTORY;
     int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
@@ -214,17 +214,14 @@ int main ( int argc, char** argv )
         }
 
 
-        // Enable translations -------------------------------------------------
-        // Undocumented debugging command line argument: Enable translations
-        // (since translation is still WIP, it is not enabled by default but
-        // must be enabled with this undocumented command line flag)
+        // Disable translations ------------------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
-                               "--translation", // no short form
-                               "--translation" ) )
+                               "-t",
+                               "--notranslation" ) )
         {
-            bUseTranslation = true;
-            tsConsole << "- translations enabled" << endl;
+            bUseTranslation = false;
+            tsConsole << "- translations disabled" << endl;
             continue;
         }
 
@@ -680,6 +677,7 @@ QString UsageArguments ( char **argv )
         "  -i, --inifile         initialization file name\n"
         "  -n, --nogui           disable GUI\n"
         "  -p, --port            set your local port number\n"
+        "  -t, --notranslation   disable translation (use englisch language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
         "  -a, --servername      server name, required for HTML status\n"

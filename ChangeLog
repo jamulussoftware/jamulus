@@ -13,7 +13,7 @@
 
 - support Mac CoreAudio aggregated devices (Ticket #138)
 
-- added translations: french by trebmuh, portuguese by Snayler (Ticket #77)
+- added translations: french by trebmuh, portuguese by Snayler, spanish by ignotus666 (Ticket #77)
 
 - bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
 

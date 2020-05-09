@@ -15,14 +15,14 @@
 
 - added translations: french by trebmuh, portuguese by Snayler, spanish by ignotus666 (Ticket #77)
 
+- new design for the About dialog (Ticket #189)
+
 - bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
 
 
-TODO re-design About dialog
+TODO WIP support internationalization
 
 TODO implement panning for channels (Ticket #52, #145)
-
-TODO WIP support internationalization
 
 TODO show mute state of others
 

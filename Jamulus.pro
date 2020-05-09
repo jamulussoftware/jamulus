@@ -8,7 +8,8 @@ contains(CONFIG, "noupcasename") {
 
 CONFIG += qt \
     thread \
-    release
+    release \
+    lrelease
 
 QT += widgets \
     network \

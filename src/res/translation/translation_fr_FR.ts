@@ -255,58 +255,58 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="442"/>
         <source>Alias/Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Pseudo/nom</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="448"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrument</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="456"/>
         <source>Location</source>
-        <translation type="unfinished">Localisation</translation>
+        <translation>Localisation</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="478"/>
         <location filename="../../audiomixerboard.cpp" line="482"/>
         <location filename="../../audiomixerboard.cpp" line="486"/>
         <source>Skill Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau de compétence</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="478"/>
         <source>Beginner</source>
-        <translation type="unfinished"></translation>
+        <translation>Débutant</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="482"/>
         <source>Intermediate</source>
-        <translation type="unfinished"></translation>
+        <translation>Intermédiaire</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="486"/>
         <source>Expert</source>
-        <translation type="unfinished"></translation>
+        <translation>Expert</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="497"/>
         <source>Musician Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil de musicien</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="44"/>
         <location filename="../../audiomixerboard.cpp" line="122"/>
         <location filename="../../audiomixerboard.cpp" line="183"/>
         <source>Mute</source>
-        <translation type="unfinished"></translation>
+        <translation>Muet</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="45"/>
         <location filename="../../audiomixerboard.cpp" line="126"/>
         <location filename="../../audiomixerboard.cpp" line="184"/>
         <source>Solo</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo</translation>
     </message>
 </context>
 <context>
@@ -583,22 +583,22 @@
     <message>
         <location filename="../../clientdlg.cpp" line="148"/>
         <source>Delay Status LED</source>
-        <translation>LED d&apos;état de délai</translation>
+        <translation>Voyant d&apos;état de délai</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="149"/>
         <source>The delay status LED indicator shows the current audio delay status. If the light is green, the delay is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder to play. If the light is red, the delay is too large for jamming.</source>
-        <translation>L&apos;indicateur LED d&apos;état de délai indique l&apos;état actuel du délai audio. Si le voyant est vert, le délai est parfait pour une session de bœuf. Si le voyant est jaune, une session est toujours possible mais elle peut être plus difficile à jouer. Si le voyant est rouge, le délai est trop important pour un bœuf.</translation>
+        <translation>Le voyant d&apos;état de délai indique l&apos;état actuel du délai audio. Si le voyant est vert, le délai est parfait pour une session de bœuf. Si le voyant est jaune, une session est toujours possible mais elle peut être plus difficile à jouer. Si le voyant est rouge, le délai est trop important pour un bœuf.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="164"/>
         <source>Buffers Status LED</source>
-        <translation>LED d&apos;état de tampon</translation>
+        <translation>Voyant d&apos;état de tampon</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="165"/>
         <source>The buffers status LED indicator shows the current audio/streaming status. If the light is green, there are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the audio stream is interrupted caused by one of the following problems:</source>
-        <translation>L&apos;indicateur LED d&apos;état des tampons indique l&apos;état actuel de l&apos;audio/du streaming. Si le voyant est vert, il n&apos;y a pas de dépassement de mémoire tampon ni de sous-dépassement et le flux audio n&apos;est pas interrompu. Si le voyant est rouge, le flux audio est interrompu en raison de l&apos;un des problèmes suivants :</translation>
+        <translation>Le voyant d&apos;état des tampons indique l&apos;état actuel de l&apos;audio/du streaming. Si le voyant est vert, il n&apos;y a pas de dépassement de mémoire tampon ni de sous-dépassement et le flux audio n&apos;est pas interrompu. Si le voyant est rouge, le flux audio est interrompu en raison de l&apos;un des problèmes suivants :</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="170"/>
@@ -839,57 +839,57 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="125"/>
         <source>Enable Small Network Buffers</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer les petits tampons de réseau</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="125"/>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
-        <translation type="unfinished"></translation>
+        <translation>Si activée, la prise en charge des très petits paquets audio de réseau est activée. Les très petits paquets réseau ne sont réellement utilisés que si le délai de la mémoire tampon de la carte son est inférieur à </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="128"/>
         <source> samples. The smaller the network buffers, the smaller the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
-        <translation type="unfinished"></translation>
+        <translation> échantillons. Plus la mémoire tampon du réseau est petite, plus la latence audio est faible. Mais en même temps, la charge du réseau augmente et la probabilité de décrochage audio augmente également.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="132"/>
         <source>Enable small network buffers check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Cochez la case Activer les petits tampons de réseau</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="135"/>
         <source>Sound Card Buffer Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Délai de temporisation de l&apos;interface audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="136"/>
         <source>The buffer delay setting is a fundamental setting of the </source>
-        <translation type="unfinished"></translation>
+        <translation>Le paramètre de délai de temporisation est un paramètre fondamental du logiciel </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="137"/>
         <source> software. This setting has influence on many connection properties.</source>
-        <translation type="unfinished"></translation>
+        <translation> . Ce paramètre influence de nombreuses propriétés de connexion.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="138"/>
         <source>Three buffer sizes are supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Trois tailles de tampon sont prises en charge</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="141"/>
         <source>64 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>64 échantillons : c&apos;est le réglage préféré car il donne la latence la plus faible mais ne fonctionne pas avec toutes les interfaces audio.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="143"/>
         <source>128 samples: This setting should work on most of the available sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>128 échantillons : ce réglage devrait fonctionner sur la plupart des interfaces audio disponibles.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="145"/>
         <source>256 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.</source>
-        <translation type="unfinished"></translation>
+        <translation>256 échantillons : ce paramètre ne doit être utilisé que si seul un ordinateur très lent ou une connexion internet lente est disponible.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="147"/>
@@ -954,32 +954,32 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="188"/>
         <source>Fancy Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>Habillage fantaisie</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="188"/>
         <source>If enabled, a fancy skin will be applied to the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si activée, un habillage fantaisie sera appliquée à la fenêtre principale.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="191"/>
         <source>Fancy skin check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Cocher la case Habillage fantaisie</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="194"/>
         <source>Display Channel Levels</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les niveaux des canaux</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="195"/>
         <source>If enabled, each client channel will display a pre-fader level bar.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si activée, chaque canal de client affichera une barre de niveau pré-fader.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="197"/>
         <source>Display channel levels check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Cocher la case Afficher les niveaux des canaux</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
@@ -1079,12 +1079,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="281"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="unfinished"></translation>
+        <translation>Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le logiciel </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="283"/>
         <source> software.</source>
-        <translation type="unfinished"></translation>
+        <translation> .</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="288"/>
@@ -1145,7 +1145,7 @@
         <location filename="../../clientsettingsdlg.cpp" line="457"/>
         <location filename="../../clientsettingsdlg.cpp" line="461"/>
         <source>Size: </source>
-        <translation type="unfinished"></translation>
+        <translation>Taille : </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="518"/>
@@ -1170,7 +1170,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="636"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
 </context>
 <context>
@@ -1183,79 +1183,79 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="27"/>
         <source>Soundcard</source>
-        <translation type="unfinished"></translation>
+        <translation>Interface audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="33"/>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Périphérique</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="83"/>
         <source>Input Channel Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartographie des canaux d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="103"/>
         <location filename="../../clientsettingsdlgbase.ui" line="160"/>
         <source>L</source>
-        <translation type="unfinished">G</translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="116"/>
         <location filename="../../clientsettingsdlgbase.ui" line="173"/>
         <source>R</source>
-        <translation type="unfinished">D</translation>
+        <translation>D</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="140"/>
         <source>Output Channel Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartographie des canaux de sortie</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="213"/>
         <source>Enable Small Network Buffers</source>
-        <translation type="unfinished"></translation>
+        <translation>Activer les petits tampons de réseau</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="220"/>
         <source>Buffer Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Délai de temporisation</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="226"/>
         <source>(preferred)</source>
-        <translation type="unfinished"></translation>
+        <translation>(préféré)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="233"/>
         <source>(default)</source>
-        <translation type="unfinished"></translation>
+        <translation>(défaut)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="240"/>
         <source>(safe)</source>
-        <translation type="unfinished"></translation>
+        <translation>(sûr)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="247"/>
         <source>Driver Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Configuration du pilote</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="263"/>
         <source>Jitter Buffer</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampon de gigue</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="269"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="284"/>
         <source>Local</source>
-        <translation type="unfinished"></translation>
+        <translation>Local</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="303"/>
@@ -1271,64 +1271,64 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="483"/>
         <source>Misc</source>
-        <translation type="unfinished"></translation>
+        <translation>Divers</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="493"/>
         <source>Audio Channels</source>
-        <translation type="unfinished"></translation>
+        <translation>Canaux audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="500"/>
         <source>Audio Quality</source>
-        <translation type="unfinished"></translation>
+        <translation>Qualité audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="507"/>
         <source>New Client Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Niveau de nouveau client</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="529"/>
         <source>%</source>
-        <translation type="unfinished"></translation>
+        <translation>%</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="544"/>
         <source>Fancy Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>Habillage fantaisie</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="551"/>
         <source>Display Channel Levels</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher les niveaux des canaux</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="562"/>
         <source>Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse du serveur central :</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="599"/>
         <source>Audio Stream Rate</source>
-        <translation type="unfinished"></translation>
+        <translation>Débit du flux audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="612"/>
         <location filename="../../clientsettingsdlgbase.ui" line="642"/>
         <location filename="../../clientsettingsdlgbase.ui" line="677"/>
         <source>val</source>
-        <translation type="unfinished"></translation>
+        <translation>val</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="623"/>
         <source>Ping Time</source>
-        <translation type="unfinished">Temps de réponse</translation>
+        <translation>Temps de réponse</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="653"/>
         <source>Overall Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Retard global</translation>
     </message>
 </context>
 <context>
@@ -1472,7 +1472,7 @@
     <message>
         <location filename="../../util.cpp" line="835"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aide</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="840"/>
@@ -1636,58 +1636,58 @@
         <location filename="../../util.cpp" line="676"/>
         <location filename="../../util.cpp" line="968"/>
         <source>None</source>
-        <translation type="unfinished">Aucun</translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="551"/>
         <location filename="../../util.cpp" line="699"/>
         <source>Musician Profile</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil de musicien</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="556"/>
         <source>Alias/Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Pseudo/nom</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="558"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrument</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="560"/>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Pays</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="562"/>
         <source>City</source>
-        <translation type="unfinished"></translation>
+        <translation>Ville</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="564"/>
         <source>Skill</source>
-        <translation type="unfinished"></translation>
+        <translation>Compétence</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="566"/>
         <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Fermer</translation>
+        <translation>&amp;Fermer</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="682"/>
         <source>Beginner</source>
-        <translation type="unfinished"></translation>
+        <translation>Débutant</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="688"/>
         <source>Intermediate</source>
-        <translation type="unfinished"></translation>
+        <translation>Intermédiaire</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="694"/>
         <source>Expert</source>
-        <translation type="unfinished"></translation>
+        <translation>Expert</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="699"/>
@@ -1702,172 +1702,172 @@
     <message>
         <location filename="../../util.cpp" line="969"/>
         <source>Drum Set</source>
-        <translation type="unfinished"></translation>
+        <translation>Batterie</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="970"/>
         <source>Djembe</source>
-        <translation type="unfinished"></translation>
+        <translation>Djembé</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="971"/>
         <source>Electric Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare électrique</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="972"/>
         <source>Acoustic Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare accoustique</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="973"/>
         <source>Bass Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare basse</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="974"/>
         <source>Keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavier</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="975"/>
         <source>Synthesizer</source>
-        <translation type="unfinished"></translation>
+        <translation>Synthétiseur</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="976"/>
         <source>Grand Piano</source>
-        <translation type="unfinished"></translation>
+        <translation>Piano à queue</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="977"/>
         <source>Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Accordéon</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="978"/>
         <source>Vocal</source>
-        <translation type="unfinished"></translation>
+        <translation>Voix</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="979"/>
         <source>Microphone</source>
-        <translation type="unfinished"></translation>
+        <translation>Microphone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="980"/>
         <source>Harmonica</source>
-        <translation type="unfinished"></translation>
+        <translation>Harmonica</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="981"/>
         <source>Trumpet</source>
-        <translation type="unfinished"></translation>
+        <translation>Trompette</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="982"/>
         <source>Trombone</source>
-        <translation type="unfinished"></translation>
+        <translation>Trombone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="983"/>
         <source>French Horn</source>
-        <translation type="unfinished"></translation>
+        <translation>Cor d&apos;harmonie</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="984"/>
         <source>Tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="985"/>
         <source>Saxophone</source>
-        <translation type="unfinished"></translation>
+        <translation>Saxophone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="986"/>
         <source>Clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Clarinette</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="987"/>
         <source>Flute</source>
-        <translation type="unfinished"></translation>
+        <translation>Flute</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="988"/>
         <source>Violin</source>
-        <translation type="unfinished"></translation>
+        <translation>Violon</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="989"/>
         <source>Cello</source>
-        <translation type="unfinished"></translation>
+        <translation>Violoncelle</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="990"/>
         <source>Double Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Contrebasse</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="991"/>
         <source>Recorder</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistreur</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="992"/>
         <source>Streamer</source>
-        <translation type="unfinished"></translation>
+        <translation>Diffuseur</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="993"/>
         <source>Listener</source>
-        <translation type="unfinished"></translation>
+        <translation>Auditeur</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="994"/>
         <source>Guitar+Vocal</source>
-        <translation type="unfinished"></translation>
+        <translation>Guitare+voix</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="995"/>
         <source>Keyboard+Vocal</source>
-        <translation type="unfinished"></translation>
+        <translation>Clavier+voix</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="996"/>
         <source>Bodhran</source>
-        <translation type="unfinished"></translation>
+        <translation>Bodhran</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="997"/>
         <source>Bassoon</source>
-        <translation type="unfinished"></translation>
+        <translation>Basson</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="998"/>
         <source>Oboe</source>
-        <translation type="unfinished"></translation>
+        <translation>Hautbois</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="999"/>
         <source>Harp</source>
-        <translation type="unfinished"></translation>
+        <translation>Harpe</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1000"/>
         <source>Viola</source>
-        <translation type="unfinished"></translation>
+        <translation>Alto</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1001"/>
         <source>Congas</source>
-        <translation type="unfinished"></translation>
+        <translation>Congas</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1002"/>
         <source>Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongo</translation>
     </message>
 </context>
 <context>

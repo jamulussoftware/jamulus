@@ -36,7 +36,7 @@
     <message>
         <location filename="../../util.cpp" line="376"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt plattformübergreifender Anwendungsrahmen</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="380"/>
@@ -434,37 +434,37 @@
     <message>
         <location filename="../../clientdlg.cpp" line="115"/>
         <source>Local audio input fader (left/right)</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokaler Eingangsregler</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="134"/>
         <source>Reverberation effect level setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Halleffekt Pegelregler</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="143"/>
         <source>Left channel selection for reverberation</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswahl linker Kanal für Halleffekt</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="145"/>
         <source>Right channel selection for reverberation</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswahl rechter Kanal für Halleffekt</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="157"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn diese LED rot leuchtet, dann wirst du keinen Spaß haben mit der </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="161"/>
         <source>Delay status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>LED Stautuslampe für die Verzögerung</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="182"/>
         <source>Buffers status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>LED Statuslampe für den Netzwerkpuffer</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="204"/>
@@ -531,82 +531,82 @@
     <message>
         <location filename="../../clientdlg.cpp" line="102"/>
         <source>With the audio fader, the relative levels of the left and right local audio channels can be changed. For a mono signal it acts like a panning between the two channels. If, e.g., a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
-        <translation type="unfinished"></translation>
+        <translation>Mit diesem Einstellregler kann der relative Pegel vom linken und rechten Eingangskanal verändert werden. Für ein Mono-Signal verhält sich der Regler wie ein Pan-Regler. Wenn, z.B., ein Mikrofon am rechten Kanal angeschlossen ist und das Instrument am linken Eingangskanal ist viel lauter als das Mikrofon, dann kann man den Lautstärkeunterschied mit diesem Regler kompensieren indem man den Regler in eine Richtung verschiebt, so dass über dem Regler </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="108"/>
         <source>, where</source>
-        <translation type="unfinished"></translation>
+        <translation> angezeigt wird, wobei </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="109"/>
         <source>is the current attenuation indicator.</source>
-        <translation type="unfinished"></translation>
+        <translation>die aktuelle Dämpfung anzeigt.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="118"/>
         <source>Reverberation Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Halleffektregler</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="119"/>
         <source>A reverberation effect can be applied to one local mono audio channel or to both channels in stereo mode. The mone channel selection and the reverberation level can be modified. If, e.g., the microphone signal is fed into the right audio channel of the sound card and a reverberation effect shall be applied, set the channel selector to right and move the fader upwards until the desired reverberation level is reached.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Halleffekt kann auf einen selektierten Mono-Audiokanal oder auf beide Stereoaudiokanäle angewendet werden. Die Mono-Kanalselektion und die Hallstärke können eingestellt werden. Wenn z.B. ein Mikrofonsignal auf dem rechten Kanal anliegt und ein Halleffekt soll auf das Mikrofonsignal angewendet werden, dann muss die Hallkanalselektion auf rechts eingestellt werden und der Hallregler muss erhöht werden, bis die gewünschte Stärke des Halleffekts erreicht ist.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="125"/>
         <source>The reverberation effect requires significant CPU so that it should only be used on fast PCs. If the reverberation level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does not cause any additional CPU usage.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Berechnung des Halleffekts benötigt etwas Rechenleistung, so dass der Halleffekt nur bei schnellen Computern angewendet werden sollte. Wenn der Hallregler ganz nach unten gezogen ist, dann ist der Halleffekt ausgeschaltet und verbraucht keine Rechenleistung mehr.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="137"/>
         <source>Reverberation Channel Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Halleffekt Kanalselektion</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="138"/>
         <source>With these radio buttons the audio input channel on which the reverberation effect is applied can be chosen. Either the left or right input channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit diesen Knöpfen kann ausgewählt werden, auf welches Eingangssignal der Halleffekt angewendet werden soll. Entweder der rechte oder linke Eingangskanal kann ausgewählt werden.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="148"/>
         <source>Delay Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation>Status LED für die Verzögerung</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="149"/>
         <source>The delay status LED indicator shows the current audio delay status. If the light is green, the delay is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder to play. If the light is red, the delay is too large for jamming.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Status-LED für die Verzögerung zeigt eine Bewertung der Gesamtverzögerung des Audiosignals. Wenn die LED grün leuchtet, dann ist die Verzögerung gering genug für das Jammen. Wenn die LED gelb anzeigt kann man noch spielen aber es wird schwieriger Lieder mit hohem Tempo zu spielen. Wenn die LED rot anzeigt, dann ist die Verzögerung zu hoch zum Jammen.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="164"/>
         <source>Buffers Status LED</source>
-        <translation type="unfinished"></translation>
+        <translation>Status LED für den Netzwerkpuffer</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="165"/>
         <source>The buffers status LED indicator shows the current audio/streaming status. If the light is green, there are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the audio stream is interrupted caused by one of the following problems:</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Status-LED für den Netzwerkpuffer zeigt den aktuellen Status des Netzwerkstroms. Wenn die LED grün ist, dann gibt es keine Pufferprobleme. Wenn die LED rot anzeigt, dann ist der Netzwerkstrom kurz unterbrochen. Dies kann folgende Ursachen haben:</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="170"/>
         <source>The network jitter buffer is not large enough for the current network/audio interface jitter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Netzwerkpuffer ist nicht groß genug eingestellt für die aktuellen Netzwerkbedingungen.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="172"/>
         <source>The sound card buffer delay (buffer size) is set to a too small value.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Soundkartenpuffer ist zu klein eingestellt.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="174"/>
         <source>The upload or download stream rate is too high for the current available internet bandwidth.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Upload-Rate der Internetverbindung ist zu klein für den Netzwerkdatenstrom.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="176"/>
         <source>The CPU of the client or server is at 100%.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die CPU des Computers ist voll ausgelastet.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="819"/>
@@ -674,7 +674,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="377"/>
         <source>Pan</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="393"/>
@@ -1067,7 +1067,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="281"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wenn diese LED rot leuchtet, dann wirst du keinen Spaß haben mit der </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="283"/>

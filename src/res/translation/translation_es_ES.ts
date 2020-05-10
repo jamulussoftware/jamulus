@@ -6,7 +6,7 @@
     <message>
         <location filename="../../util.cpp" line="353"/>
         <source>The </source>
-        <translation>Este </translation>
+        <translation>El </translation>
     </message>
     <message>
         <source> software enables musicians to perform real-time jam sessions over the internet. There is a </source>
@@ -15,7 +15,7 @@
     <message>
         <location filename="../../util.cpp" line="354"/>
         <source> software enables musicians to perform real-time jam sessions over the internet.</source>
-        <translation type="unfinished"></translation>
+        <translation> software permite a músicos realizar jam sessions en tiempo real por internet.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="355"/>
@@ -25,7 +25,7 @@
     <message>
         <location filename="../../util.cpp" line="355"/>
         <source>There is a </source>
-        <translation type="unfinished"></translation>
+        <translation>Hay un </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="357"/>
@@ -40,32 +40,32 @@
     <message>
         <location filename="../../util.cpp" line="376"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished"></translation>
+        <translation>Qt cross-platform application framework</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="380"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation type="unfinished"></translation>
+        <translation>Código de reverberación de audio de Perry R. Cook y Gary P. Scavone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="383"/>
         <source>Some pixmaps are from the</source>
-        <translation type="unfinished"></translation>
+        <translation>Algunos pixmaps son del</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="385"/>
         <source>Country flag icons from Mark James</source>
-        <translation type="unfinished"></translation>
+        <translation>Iconos de banderas nacionales de Mark James</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="402"/>
         <source>For details on the contributions check out the </source>
-        <translation type="unfinished"></translation>
+        <translation>Para más detalles sobre los contribuidores consulta la </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="403"/>
         <source>Github Contributors list</source>
-        <translation type="unfinished"></translation>
+        <translation>lista de Contribuidores en Github</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="418"/>
@@ -108,22 +108,22 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
         <source>A&amp;bout</source>
-        <translation type="unfinished"></translation>
+        <translation>A&amp;cerca de</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="120"/>
         <source>&amp;Libraries</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Librerías</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="134"/>
         <source>&amp;Contributors</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Contribuidores</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="148"/>
         <source>&amp;Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Traducción</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="198"/>
@@ -1131,7 +1131,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="367"/>
         <source>preferred</source>
-        <translation type="unfinished"></translation>
+        <translation>aconsejado</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="457"/>
@@ -1464,7 +1464,7 @@
     <message>
         <location filename="../../util.cpp" line="835"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ayuda</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="840"/>
@@ -1854,7 +1854,7 @@
     <message>
         <location filename="../../util.cpp" line="1001"/>
         <source>Congas</source>
-        <translation type="unfinished"></translation>
+        <translation>Congas</translation>
     </message>
 </context>
 <context>

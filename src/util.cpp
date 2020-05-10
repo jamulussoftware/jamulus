@@ -405,7 +405,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     // translators
     txvTranslation->setText (
         "<p><b>Spanish</b></p>"
-        "<p>ignotus (<a href=""https://github.com/ignotus666"">ignotus666</a>)</p>"
+        "<p>Daryl Hanlon (<a href=""https://github.com/ignotus666"">ignotus666</a>)</p>"
         "<p><b>French</b></p>"
         "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
         "<p><b>Portuguese</b></p>"

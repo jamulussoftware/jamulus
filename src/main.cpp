@@ -60,6 +60,7 @@ int main ( int argc, char** argv )
     bool         bCentServPingServerInList = false;
     bool         bNoAutoJackConnect        = false;
     bool         bUseTranslation           = true;
+    bool         bCustomPortNumberGiven    = false;
     int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
     int          iMaxDaysHistory           = DEFAULT_DAYS_HISTORY;
     int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
@@ -76,13 +77,6 @@ int main ( int argc, char** argv )
     QString      strServerInfo             = "";
     QString      strWelcomeMessage         = "";
     QString      strClientName             = APP_NAME;
-
-    // adjust default port number for client: use different default port than the server since
-    // if the client is started before the server, the server would get a socket bind error
-    if ( bIsClient )
-    {
-        iPortNumber += 10; // increment by 10
-    }
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -312,7 +306,8 @@ int main ( int argc, char** argv )
                                   65535,
                                   rDbleArgument ) )
         {
-            iPortNumber = static_cast<quint16> ( rDbleArgument );
+            iPortNumber            = static_cast<quint16> ( rDbleArgument );
+            bCustomPortNumberGiven = true;
             tsConsole << "- selected port number: " << iPortNumber << endl;
             continue;
         }
@@ -507,13 +502,22 @@ int main ( int argc, char** argv )
         strCentralServer = DEFAULT_SERVER_ADDRESS;
     }
 
+    // adjust default port number for client: use different default port than the server since
+    // if the client is started before the server, the server would get a socket bind error
+    if ( bIsClient && !bCustomPortNumberGiven )
+    {
+        iPortNumber += 10; // increment by 10
+    }
 
-    // Application/GUI setup ---------------------------------------------------
-    // Application object
-    if ( !bUseGUI && !strHistoryFileName.isEmpty() )
+    // display a warning if in server no GUI mode and a history file is requested
+    if ( !bIsClient && !bUseGUI && !strHistoryFileName.isEmpty() )
     {
         tsConsole << "Qt5 requires a windowing system to paint a JPEG image; image will use SVG" << endl;
     }
+
+
+    // Application/GUI setup ---------------------------------------------------
+    // Application object
     QCoreApplication* pApp = bUseGUI
             ? new QApplication ( argc, argv )
             : new QCoreApplication ( argc, argv );

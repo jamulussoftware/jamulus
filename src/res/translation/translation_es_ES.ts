@@ -1907,12 +1907,12 @@
     <message>
         <location filename="../../serverdlg.cpp" line="66"/>
         <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
-        <translation>Si se activa Mi Servidor es Público, este servidor se registra en el servidor central para que todos los </translation>
+        <translation>Si se activa Mi Servidor es Público, este servidor se registra en el servidor central para que todos los usuarios de </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="68"/>
         <source> users can see the server in the connect dialog server list and connect to it. The registering of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation> usuarios puedan ver el servidor en la lista de servidores de la ventana de conexión y puedan conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentran realmente disponibles.</translation>
+        <translation> puedan ver el servidor en la lista de servidores de la ventana de conexión y puedan conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentran realmente disponibles.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="74"/>
@@ -1998,24 +1998,24 @@
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <source>&amp;Hide </source>
-        <translation>&amp;Ocultar </translation>
+        <translation>&amp;Ocultar servidor </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <location filename="../../serverdlg.cpp" line="144"/>
         <location filename="../../serverdlg.cpp" line="150"/>
         <source> server</source>
-        <translation> servidor</translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="144"/>
         <source>&amp;Open </source>
-        <translation>&amp;Abrir </translation>
+        <translation>&amp;Abrir servidor </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="166"/>
         <source> server </source>
-        <translation> servidor </translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="191"/>
@@ -2035,7 +2035,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="271"/>
         <source> Server</source>
-        <translation> Servidor</translation>
+        <translation> : Servidor</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="275"/>

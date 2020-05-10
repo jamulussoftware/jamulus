@@ -2194,7 +2194,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="337"/>
+        <location filename="../../../linux/sound.cpp" line="197"/>
         <source>The Jack server was shut down. This software requires a Jack server to run. Try to restart the software to solve the issue.</source>
         <translation type="unfinished"></translation>
     </message>

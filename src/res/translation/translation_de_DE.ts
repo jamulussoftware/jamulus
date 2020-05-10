@@ -173,82 +173,82 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="116"/>
         <source>Mixer Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanalregler</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="116"/>
         <source>Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
-        <translation type="unfinished"></translation>
+        <translation>Regelt die Lautstärke des Kanals. Für alle Teilnehmer, die gerade am Server verbunden sind, wird ein Lautstärkeregler angezeigt. Damit kann man seinen eigenen lokalen Mix erstellen.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="119"/>
         <source>Local mix level setting of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokale Mixerpegeleinstellung des aktuellen Kanals am Server</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="122"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit dem Mute-Schalter kann man den Kanal stumm schalten.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="124"/>
         <source>Mute button</source>
-        <translation type="unfinished"></translation>
+        <translation>Mute Schalter</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="126"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except of the current channel are muted. It is possible to set more than one channel to solo.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bei aktiviertem Solo Status hört man nur diesen Kanal. Alle anderen Kanäle sind stumm geschaltet. Es ist möglich mehrere Kanäle auf Solo zu stellen. Dann hört man nur die Kanäle, die auf Solo gestellt wurden.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="130"/>
         <source>Solo button</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo Schalter</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="132"/>
         <source>Fader Tag</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanalbeschriftung</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="132"/>
         <source>The fader tag identifies the connected client. The tag name, the picture of your instrument and a flag of your country can be set in the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit der Kanalbeschriftung wird der verbundene Teilnehmen identifiziert. Der Name, ein Bild des Instruments und eine Flagge des eigenen Landes kann im eigenen Profil ausgewählt werden.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="137"/>
         <source>Mixer channel instrument picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Mixerkanal Instrumentenbild</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="139"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mixerkanalbeschriftung</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="141"/>
         <source>Mixer channel country flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Mixerkanal Landesflagge</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="175"/>
         <source>MUTE</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="176"/>
         <source>SOLO</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="442"/>
         <source>Alias/Name</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="448"/>
         <source>Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="456"/>
@@ -287,14 +287,14 @@
         <location filename="../../audiomixerboard.cpp" line="122"/>
         <location filename="../../audiomixerboard.cpp" line="183"/>
         <source>Mute</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="45"/>
         <location filename="../../audiomixerboard.cpp" line="126"/>
         <location filename="../../audiomixerboard.cpp" line="184"/>
         <source>Solo</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -302,32 +302,32 @@
     <message>
         <location filename="../../chatdlg.cpp" line="37"/>
         <source>Chat Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatfenster</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="37"/>
         <source>The chat window shows a history of all chat messages.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Chatfenster zeigt den Verlauf aller Chatnachrichten.</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="40"/>
         <source>Chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatverlauf</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="43"/>
         <source>Input Message Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatnachricht Eingabefeld</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="43"/>
         <source>Enter the chat message text in the edit box and press enter to send the message to the server which distributes the message to all connected clients. Your message will then show up in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tippe die Chatnachricht in dieses Feld und drücke anschließend die Eingabetaste um die Nachricht an den Server zu schicken. Der Server verteilt die Nachrichti anschließend an alle Teilnehmer. Die eigene Nachricht wird dann im Chatfenster angezeigt.</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="48"/>
         <source>New chat text edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Chatnachrichteneingabefeld</translation>
     </message>
 </context>
 <context>
@@ -353,83 +353,83 @@
     <message>
         <location filename="../../clientdlg.cpp" line="51"/>
         <source>Input Level Meter</source>
-        <translation>Eingangspegel</translation>
+        <translation>Eingangspegelanzeige</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="51"/>
         <source>The input level indicators show the input level of the two stereo channels of the current selected audio input.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Eingangspegelanzeige zeigt den Pegel der beiden Stereokanäle der selektierten Audiohardware an.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="54"/>
         <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
-        <translation type="unfinished"></translation>
+        <translation>Man sollte darauf achten, dass das Signal nicht zu stark ausgesteuert ist, um Verzerrungen des Signal zu vermeiden.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="57"/>
         <source>If the </source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn die </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="58"/>
         <source> software is connected and you play your instrument/sing in the microphone, the LED level meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. line in instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation type="unfinished"></translation>
+        <translation> Software verbunden ist und die spielst dein Instrument, dann sollte die Eingangspegelanzeige flackern. Wenn das nicht der Fall ist, dann ist wahrscheinlich der falsche Eingangskanal ausgewählt (z.B. der Line-In-Kanal anstatt des Mikrofonkanals) oder der Eingangsregler im (Windows) Systemmixer ist zu niedrig eingestellt.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="63"/>
         <source>For a proper usage of the </source>
-        <translation type="unfinished"></translation>
+        <translation>Um die </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="64"/>
         <source> software, you should not hear your singing/instrument in the loudspeaker or your headphone when the </source>
-        <translation type="unfinished"></translation>
+        <translation> Software optimal zu nutzen, sollte man sein eigenes Instrument oder Gesant nicht im Lautsprecher oder Kopfhörer hören, wenn die </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="67"/>
         <source> software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
-        <translation type="unfinished"></translation>
+        <translation> Software nicht verbunden ist. Das kann man erreichen, indem man den Eingangskanal im Wiedergabemixer stumm schaltet.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="71"/>
         <source>Input level meter</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingangspegelanzeige</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="72"/>
         <source>Simulates an analog LED level meter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Simuliert eine analoge LED-Signalpegelanzeige.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="87"/>
         <source>Connect/Disconnect Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbinden-/Trennschalter</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="88"/>
         <source>Push this button to connect a server. A dialog where you can select a server will open. If you are connected, pressing this button will end the session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Drücke diesen Knopf um sich mit dem Server zu verbinden. Es wird ein Fenster angezeigt, in dem man den Server auswählen kann. Wenn man gerade verbunden ist und den Knopf drückt, dann wird die Verbindung getrennt und die Session wird beendet.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="93"/>
         <source>Connect and disconnect toggle button</source>
-        <translation type="unfinished"></translation>
+        <translation>Schalter zum Verbinden und Trennen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="95"/>
         <source>Clicking on this button changes the caption of the button from Connect to Disconnect, i.e., it implements a toggle functionality for connecting and disconnecting the </source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn man diesen Knopf drückt, dann wird die Beschriftung des Knopfes von Verbinden zu Trennen geändert, das heißt, dass er eine Umschaltfunktion hat zum Verbinden und Trennen der </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="98"/>
         <location filename="../../clientdlg.cpp" line="159"/>
         <source> software.</source>
-        <translation type="unfinished"></translation>
+        <translation> Software.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="101"/>
         <source>Local Audio Input Fader</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokaler Eingangspegelregler</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="115"/>
@@ -1072,7 +1072,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="283"/>
         <source> software.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> Software.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="288"/>
@@ -1466,7 +1466,7 @@
         <location filename="../../util.cpp" line="840"/>
         <location filename="../../util.cpp" line="845"/>
         <source>Getting &amp;Started...</source>
-        <translation>&amp;Vorbereitung...</translation>
+        <translation>&amp;Erste Schritte...</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="841"/>
@@ -2182,7 +2182,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="337"/>
+        <location filename="../../../linux/sound.cpp" line="197"/>
         <source>The Jack server was shut down. This software requires a Jack server to run. Try to restart the software to solve the issue.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2244,7 +2244,7 @@
     <message>
         <location filename="../../../windows/sound.cpp" line="126"/>
         <source> software.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> Software.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="136"/>

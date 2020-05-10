@@ -2186,7 +2186,7 @@
         <translation>No se puede activar el cliente Jack.</translation>
     </message>
     <message>
-        <location filename="../../../linux/sound.cpp" line="337"/>
+        <location filename="../../../linux/sound.cpp" line="197"/>
         <source>The Jack server was shut down. This software requires a Jack server to run. Try to restart the software to solve the issue.</source>
         <translation>El servidor Jack se ha cerrado. Este software necesita el servidor Jack para funcionar. Intenta reiniciar el software para solucionar este problema.</translation>
     </message>

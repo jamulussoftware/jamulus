@@ -6,7 +6,7 @@
     <message>
         <location filename="../../util.cpp" line="353"/>
         <source>The </source>
-        <translation>El </translation>
+        <translation>El software </translation>
     </message>
     <message>
         <source> software enables musicians to perform real-time jam sessions over the internet. There is a </source>
@@ -15,7 +15,7 @@
     <message>
         <location filename="../../util.cpp" line="354"/>
         <source> software enables musicians to perform real-time jam sessions over the internet.</source>
-        <translation> software permite a músicos realizar jam sessions en tiempo real por internet.</translation>
+        <translation> permite a músicos realizar jam sessions en tiempo real por internet.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="355"/>
@@ -372,27 +372,27 @@
     <message>
         <location filename="../../clientdlg.cpp" line="57"/>
         <source>If the </source>
-        <translation>Si el </translation>
+        <translation>Si el software </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="58"/>
         <source> software is connected and you play your instrument/sing in the microphone, the LED level meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. line in instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation> software está conectado y tocas tu instrumento/cantas por el micrófono, el LED del indicador debería parpadear. Si no es así, seguramente has seleccionado el canal de entrada equivocado (por ej. line in en lugar de la entrada del micrófono) o está muy bajo el gain de entrada en el mezclador de audio (Windows).</translation>
+        <translation> está conectado y tocas tu instrumento/cantas por el micrófono, el LED del indicador debería parpadear. Si no es así, seguramente has seleccionado el canal de entrada equivocado (por ej. line in en lugar de la entrada del micrófono) o está muy bajo el gain de entrada en el mezclador de audio (Windows).</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="63"/>
         <source>For a proper usage of the </source>
-        <translation>Para un uso adecuado del </translation>
+        <translation>Para un uso adecuado del software </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="64"/>
         <source> software, you should not hear your singing/instrument in the loudspeaker or your headphone when the </source>
-        <translation> software, no deberías oír tu voz/instrumento por el altavoz o los auriculares cuando el </translation>
+        <translation> , no deberías oír tu voz/instrumento por el altavoz o los auriculares cuando el software </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="67"/>
         <source> software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
-        <translation> software no está conectado. Esto se puede hacer muteando tu entrada de audio en el mezclador de Reproducción (¡y no en el de Grabación!).</translation>
+        <translation> no está conectado. Esto se puede hacer muteando tu entrada de audio en el mezclador de Reproducción (¡y no en el de Grabación!).</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="71"/>
@@ -422,13 +422,13 @@
     <message>
         <location filename="../../clientdlg.cpp" line="95"/>
         <source>Clicking on this button changes the caption of the button from Connect to Disconnect, i.e., it implements a toggle functionality for connecting and disconnecting the </source>
-        <translation>Pulsando este botón cambia el texto del mismo de Conectar a Desconectar; esto es, tiene la función de conmutador para conectar y desconectar el </translation>
+        <translation>Pulsando este botón cambia el texto del mismo de Conectar a Desconectar; esto es, tiene la función de conmutador para conectar y desconectar el software </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="98"/>
         <location filename="../../clientdlg.cpp" line="159"/>
         <source> software.</source>
-        <translation> software.</translation>
+        <translation> .</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="101"/>
@@ -761,12 +761,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="84"/>
         <source>The ASIO driver (sound card) can be selected using </source>
-        <translation>El driver ASIO (tarjeta de audio) se puede seleccionar </translation>
+        <translation>El driver ASIO (tarjeta de audio) se puede seleccionar utilizando </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="85"/>
         <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation> con el sistema operativo Windows. Con MacOs/Linux no es posible seleccionar la tarjeta de audio. Si el driver ASIO no es válido se muestra un mensaje de error y se selecciona el driver válido anterior.</translation>
+        <translation> en el sistema operativo Windows. En MacOs/Linux no es posible seleccionar la tarjeta de audio. Si el driver ASIO no es válido se muestra un mensaje de error y se selecciona el driver válido anterior.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="87"/>
@@ -856,12 +856,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="136"/>
         <source>The buffer delay setting is a fundamental setting of the </source>
-        <translation>Este parámetro es una parte fundamental de la configuración del </translation>
+        <translation>Este parámetro es una parte fundamental de la configuración del software </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="137"/>
         <source> software. This setting has influence on many connection properties.</source>
-        <translation> software. Este parámetro tiene un impacto sobre muchas propiedades de la conexión.</translation>
+        <translation> . Este parámetro tiene un impacto sobre muchas propiedades de la conexión.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="138"/>
@@ -886,22 +886,22 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="147"/>
         <source>Some sound card driver do not allow the buffer delay to be changed from within the </source>
-        <translation>Algunos drivers de tarjetas de audio no permiten cambiar el retardo de buffer por </translation>
+        <translation>Algunos drivers de tarjetas de audio no permiten cambiar el retardo de buffer desde el software </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="150"/>
         <source> software. In this case the buffer delay setting is disabled. To change the actual buffer delay, this setting has to be changed in the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation> software. En este caso la configuración del retardo de buffer se deshabilita. Para cambiarlo, esta configuración debe realizarse en el driver de la tarjeta de audio. En Windows, pulsa el botón de Configuración ASIO para acceder al panel de configuración. En Linux, utiliza la herramienta de configuración de Jack para cambiar el tamaño del buffer.</translation>
+        <translation> . En este caso la configuración del retardo de buffer se deshabilita. Para cambiarlo, esta configuración debe realizarse en el driver de la tarjeta de audio. En Windows, pulsa el botón de Configuración ASIO para acceder al panel de configuración. En Linux, utiliza la herramienta de configuración de Jack para cambiar el tamaño del buffer.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="154"/>
         <source>If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The </source>
-        <translation>Si no hay ningún tamaño de buffer seleccionado y todas las configuraciones están deshabilitadas, el driver está utilizando un tamaño de buffer no soportado. El </translation>
+        <translation>Si no hay ningún tamaño de buffer seleccionado y todas las configuraciones están deshabilitadas, el driver está utilizando un tamaño de buffer no soportado. El software </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="157"/>
         <source> software will still work with this setting but with restricted performannce.</source>
-        <translation> software seguirá funcionando con esta configuración pero con un rendimiento limitado.</translation>
+        <translation> seguirá funcionando con esta configuración pero con un rendimiento limitado.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="158"/>
@@ -916,12 +916,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="167"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the </source>
-        <translation>Si la configuración de retardo de buffers se encuentra deshabilitada, es porque el driver de audio prohíbe la modificación de este parámetro desde dentro del </translation>
+        <translation>Si la configuración de retardo de buffers se encuentra deshabilitada, es porque el driver de audio prohíbe la modificación de este parámetro desde dentro del software </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="170"/>
         <source> software. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation> software. En Windows, pulsa el botón de Configuración ASIO para abrir el panel de configuración del driver. En Linux, utiliza la herramienta de configuración de Jack para cambiar el tamaño del buffer.</translation>
+        <translation> . En Windows, pulsa el botón de Configuración ASIO para abrir el panel de configuración del driver. En Linux, utiliza la herramienta de configuración de Jack para cambiar el tamaño del buffer.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="175"/>
@@ -946,17 +946,17 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="188"/>
         <source>Fancy Skin</source>
-        <translation>Interfaz elegante</translation>
+        <translation>Interfaz Oscura</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="188"/>
         <source>If enabled, a fancy skin will be applied to the main window.</source>
-        <translation>Si se activa, se aplicará un aspecto elegante a la ventana principal.</translation>
+        <translation>Si se activa, se aplicará un aspecto oscuro a la ventana principal.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="191"/>
         <source>Fancy skin check box</source>
-        <translation>Activar interfaz elegante</translation>
+        <translation>Activar interfaz oscura</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="194"/>
@@ -1071,12 +1071,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="281"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation>Si este indicador LED se vuelve rojo, no te divertirás demasiado utilizando el </translation>
+        <translation>Si este indicador LED se vuelve rojo, no te divertirás demasiado utilizando el software </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="283"/>
         <source> software.</source>
-        <translation> software.</translation>
+        <translation> .</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="288"/>
@@ -1288,7 +1288,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="544"/>
         <source>Fancy Skin</source>
-        <translation>Intfaz elegante</translation>
+        <translation>Intfaz Oscura</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="551"/>
@@ -1353,12 +1353,12 @@
     <message>
         <location filename="../../connectdlg.cpp" line="61"/>
         <source>The IP address or URL of the server running the </source>
-        <translation>La dirección IP o URL del servidor ejecutando el </translation>
+        <translation>La dirección IP o URL del servidor ejecutando el software del servidor </translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="62"/>
         <source> server software must be set here. An optional port number can be added after the IP address or URL using a comma as a separator, e.g, example.org:</source>
-        <translation> software del servidor debe introducirse aquí. Se puede añadir un número de puerto opcional detrás de la dirección IP o URL utilizando una coma como separador, por ej. ejemplo.org:</translation>
+        <translation> debe introducirse aquí. Se puede añadir un número de puerto opcional detrás de la dirección IP o URL utilizando una coma como separador, por ej. ejemplo.org:</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="66"/>
@@ -1907,12 +1907,12 @@
     <message>
         <location filename="../../serverdlg.cpp" line="66"/>
         <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
-        <translation>Si se activa Mi Servidor es Público, este servidor se registra en el servidor central para que todos los </translation>
+        <translation>Si se activa Mi Servidor es Público, este servidor se registra en el servidor central para que todos los usuarios de </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="68"/>
         <source> users can see the server in the connect dialog server list and connect to it. The registering of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation> usuarios puedan ver el servidor en la lista de servidores de la ventana de conexión y puedan conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentran realmente disponibles.</translation>
+        <translation> puedan ver el servidor en la lista de servidores de la ventana de conexión y puedan conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentran realmente disponibles.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="74"/>
@@ -1998,24 +1998,24 @@
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <source>&amp;Hide </source>
-        <translation>&amp;Ocultar </translation>
+        <translation>&amp;Ocultar servidor </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <location filename="../../serverdlg.cpp" line="144"/>
         <location filename="../../serverdlg.cpp" line="150"/>
         <source> server</source>
-        <translation> servidor</translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="144"/>
         <source>&amp;Open </source>
-        <translation>&amp;Abrir </translation>
+        <translation>&amp;Abrir servidor </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="166"/>
         <source> server </source>
-        <translation> servidor </translation>
+        <translation> </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="191"/>
@@ -2035,7 +2035,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="271"/>
         <source> Server</source>
-        <translation> Servidor</translation>
+        <translation> : Servidor</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="275"/>
@@ -2243,12 +2243,12 @@
     <message>
         <location filename="../../../windows/sound.cpp" line="125"/>
         <source> Hz on the device and restart the </source>
-        <translation> Hz en el dispositivo y reinicie el </translation>
+        <translation> Hz en el dispositivo y reinicie el software </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="126"/>
         <source> software.</source>
-        <translation> software.</translation>
+        <translation> .</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="136"/>
@@ -2269,12 +2269,12 @@
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
         <source>The </source>
-        <translation>El </translation>
+        <translation>El software </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
-        <translation> software requiere el interfaz de audio de baja latencia ASIO para funcionar correctamente. No es un interfaz estándar de Windows y por tanto se requiere un driver de audio especial. Tu tarjeta de audio podría tener un driver ASIO nativo (lo recomendado) o quizá quieras probar un driver alternativo como ASIO4All.</translation>
+        <translation> requiere la interfaz de audio de baja latencia ASIO para funcionar correctamente. No es una interfaz estándar de Windows y por tanto se requiere un driver de audio especial. Tu tarjeta de audio podría tener un driver ASIO nativo (lo recomendado) o quizá quieras probar un driver alternativo como ASIO4All.</translation>
     </message>
 </context>
 <context>

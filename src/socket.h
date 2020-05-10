@@ -32,9 +32,13 @@
 #include "global.h"
 #include "protocol.h"
 #include "util.h"
+#include "healthcheck.h"
+#include "socketerrors.h"
 #ifndef _WIN32
 # include <netinet/in.h>
 # include <sys/socket.h>
+# include <sys/select.h>
+# include <sys/time.h>
 #endif
 
 
@@ -49,6 +53,31 @@ class CChannel; // forward declaration of CChannel
 // number of ports we try to bind until we give up
 #define NUM_SOCKET_PORTS_TO_TRY         50
 
+
+/* Socket Helper Functions ****************************************************/
+#ifdef _WIN32
+bool SetNonBlocking(SOCKET socket);
+#else
+bool SetNonBlocking(int socket);
+#endif
+
+#ifdef _WIN32
+bool BindSocket(SOCKET socket, const sockaddr_in &address);
+#else
+bool BindSocket(int socket, const sockaddr_in &address);
+#endif
+
+#ifdef _WIN32
+bool SocketConnected(SOCKET socket);
+#else
+bool SocketConnected(int socket);
+#endif
+
+#ifdef _WIN32
+void CloseSocket(SOCKET socket);
+#else
+void CloseSocket(int socket);
+#endif
 
 /* Classes ********************************************************************/
 /* Base socket class -------------------------------------------------------- */
@@ -76,6 +105,14 @@ public:
 
     bool GetAndResetbJitterBufferOKFlag();
     void Close();
+
+#ifdef _WIN32
+    const SOCKET &Socket();
+#else
+    const int &Socket();
+#endif
+
+bool IsClient();
 
 protected:
     void Init ( const quint16 iPortNumber );
@@ -136,11 +173,15 @@ class CHighPrioSocket : public QObject
 public:
     CHighPrioSocket ( CChannel*     pNewChannel,
                       const quint16 iPortNumber )
-        : Socket ( pNewChannel, iPortNumber ) { Init(); }
+        : Socket ( pNewChannel, iPortNumber ),
+          HealthCheckSocket(iPortNumber) { Init(); }
+          
 
     CHighPrioSocket ( CServer*      pNewServer,
                       const quint16 iPortNumber )
-        : Socket ( pNewServer, iPortNumber ) { Init(); }
+        : Socket ( pNewServer, iPortNumber ),
+          HealthCheckSocket(iPortNumber) { Init(); }
+          
 
     virtual ~CHighPrioSocket()
     {
@@ -169,8 +210,8 @@ protected:
     class CSocketThread : public QThread
     {
     public:
-        CSocketThread ( CSocket* pNewSocket = nullptr, QObject* parent = nullptr ) :
-          QThread ( parent ), pSocket ( pNewSocket ), bRun ( true ) {}
+        CSocketThread ( CSocket* pNewSocket = nullptr, CHealthCheckSocket* pHeathCheckSocket = nullptr, QObject* parent = nullptr ) :
+          QThread ( parent ), pSocket ( pNewSocket ), pHealthCheckSocket(pHeathCheckSocket), ReadSockets(), bRun ( true ) {}
 
         void Stop()
         {
@@ -180,28 +221,54 @@ protected:
             // to leave blocking wait for receive
             pSocket->Close();
 
+            pHealthCheckSocket->Close();
+
             // give thread some time to terminate
             wait ( 5000 );
         }
 
         void SetSocket ( CSocket* pNewSocket ) { pSocket = pNewSocket; }
 
+        void SetHealthCheckSocket (CHealthCheckSocket* pNewHealthCheckSocket) { pHealthCheckSocket = pNewHealthCheckSocket; }
+
     protected:
         void run() {
+
+            if(pHealthCheckSocket != nullptr)
+                pHealthCheckSocket->Listen();
+
             // make sure the socket pointer is initialized (should be always the
             // case)
             if ( pSocket != nullptr )
             {
                 while ( bRun )
                 {
-                    // this function is a blocking function (waiting for network
-                    // packets to be received and processed)
-                    pSocket->OnDataReceived();
+                    FD_ZERO(&ReadSockets);
+
+                    FD_SET(pSocket->Socket(), &ReadSockets);
+
+                    if(pHealthCheckSocket != nullptr)
+                        FD_SET(pHealthCheckSocket->Socket(), &ReadSockets);
+                    
+                    int result = select(FD_SETSIZE, &ReadSockets, nullptr, nullptr, nullptr);
+
+                    if(result == -1)
+                        SocketError::HandleSocketError(SocketError::GetError());
+
+                    else if(FD_ISSET(pSocket->Socket(), &ReadSockets))
+                        pSocket->OnDataReceived();
+
+                    else if(pHealthCheckSocket != nullptr && FD_ISSET(pHealthCheckSocket->Socket(), &ReadSockets))
+                        pHealthCheckSocket->HandleConnections();
                 }
             }
         }
 
         CSocket* pSocket;
+        CHealthCheckSocket* pHealthCheckSocket;
+        fd_set ReadSockets;
+
+
         bool     bRun;
     };
 
@@ -216,6 +283,9 @@ protected:
 
         NetworkWorkerThread.SetSocket ( &Socket );
 
+        if(!Socket.IsClient())
+            NetworkWorkerThread.SetHealthCheckSocket ( &HealthCheckSocket );
+
         // connect the "InvalidPacketReceived" signal
         QObject::connect ( &Socket,
             SIGNAL ( InvalidPacketReceived ( CHostAddress ) ),
@@ -224,6 +294,7 @@ protected:
 
     CSocketThread NetworkWorkerThread;
     CSocket       Socket;
+    CHealthCheckSocket HealthCheckSocket;
 
 signals:
     void InvalidPacketReceived ( CHostAddress RecHostAddr );

@@ -179,6 +179,9 @@ LED bar:      lbr
 #endif
 #define MAX_NUM_CHANNELS                 50 // max number channels for server
 
+// Maximum number of HealthCheck connections allowed
+#define MAX_NUM_HEALTH_CONNECTIONS       25
+
 // actual number of used channels in the server
 // this parameter can safely be changed from 1 to MAX_NUM_CHANNELS
 // without any other changes in the code

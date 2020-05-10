@@ -23,8 +23,111 @@
 \******************************************************************************/
 
 #include "socket.h"
+#include "socketerrors.h"
 #include "server.h"
+#include <fcntl.h>
 
+using namespace SocketError;
+
+/* Socket Helper Functions ****************************************************/
+#ifdef _WIN32
+bool SetNonBlocking(SOCKET socket)
+#else
+bool SetNonBlocking(int socket)
+#endif
+{
+    // Try to set this socket as non blocking. This makes it easier to accept and manage
+    // connections on a single thread.
+    int blocking = 0;
+
+#ifdef _WIN32
+    unsigned long mode = 1;
+    blocking = ioctlsocket(socket, FIONBIO, &mode);
+#else
+    int flags = fcntl(socket, F_GETFL);
+
+    if (flags == -1)
+        blocking = flags;
+    else
+    {
+        flags = flags | O_NONBLOCK;
+        blocking = fcntl(socket, F_SETFL, flags);
+    }
+#endif
+
+    return blocking != -1;
+}
+
+#ifdef _WIN32
+bool BindSocket(SOCKET socket, const sockaddr_in &address)
+#else
+bool BindSocket(int socket, const sockaddr_in &address)
+#endif
+{
+    int bound = ::bind ( socket ,
+                         (sockaddr*) &address,
+                         sizeof ( sockaddr_in ));
+
+    if(bound == -1)
+    {
+        HandleSocketError(GetError());
+        return false;
+    }
+        
+    return true;;
+}
+
+
+
+#ifdef _WIN32
+bool SocketConnected(SOCKET socket)
+#else
+bool SocketConnected(int socket)
+#endif
+{
+    int result = 0;
+    char fakeBuffer = '0';
+
+#ifdef _WIN32
+    result = recv(socket, &fakeBuffer, 1, 0);
+#else
+    result = read(socket, &fakeBuffer, 1);
+#endif
+    // A 0 result means Socket was succesfully disconnected
+    if (result == 0)
+        return false;
+
+    // An error was returned, handle the error
+    if (result == -1)
+    {
+        // If the error was one of the Non Blocking codes we're still connected
+        int error = GetError();
+
+        if (IsNonBlockingError(error))
+            return true;
+
+        if (IsDisconnectError(error))
+            return false;
+        
+        HandleSocketError(error);
+
+        return false;
+    }
+
+    return true;
+}
+
+#ifdef _WIN32
+void CloseSocket(SOCKET socket)
+{
+    closesocket(socket);
+}
+#else
+void CloseSocket(int socket)
+{
+    close(socket);
+}
+#endif
 
 /* Implementation *************************************************************/
 void CSocket::Init ( const quint16 iPortNumber )
@@ -40,6 +143,9 @@ void CSocket::Init ( const quint16 iPortNumber )
 
     // create the UDP socket
     UdpSocket = socket ( AF_INET, SOCK_DGRAM, 0 );
+
+    // Set the socket to non blocking
+    SetNonBlocking(UdpSocket);
 
     // allocate memory for network receive and send buffer in samples
     vecbyRecBuf.Init ( MAX_SIZE_BYTES_NETW_BUF );
@@ -59,9 +165,7 @@ void CSocket::Init ( const quint16 iPortNumber )
             // if port number is 0, bind the client to a random available port
             UdpSocketInAddr.sin_port = htons ( 0 );
 
-            bSuccess = ( ::bind ( UdpSocket ,
-                                (sockaddr*) &UdpSocketInAddr,
-                                sizeof ( sockaddr_in ) ) == 0 );
+            bSuccess = BindSocket(UdpSocket, UdpSocketInAddr);
         }
         else
         {
@@ -74,9 +178,7 @@ void CSocket::Init ( const quint16 iPortNumber )
             {
                 UdpSocketInAddr.sin_port = htons ( iPortNumber + iClientPortIncrement );
 
-                bSuccess = ( ::bind ( UdpSocket ,
-                                    (sockaddr*) &UdpSocketInAddr,
-                                    sizeof ( sockaddr_in ) ) == 0 );
+                bSuccess = BindSocket(UdpSocket, UdpSocketInAddr);
 
                 iClientPortIncrement++;
             }
@@ -89,9 +191,7 @@ void CSocket::Init ( const quint16 iPortNumber )
         // gets the desired port number
         UdpSocketInAddr.sin_port = htons ( iPortNumber );
 
-        bSuccess = ( ::bind ( UdpSocket ,
-                              (sockaddr*) &UdpSocketInAddr,
-                              sizeof ( sockaddr_in ) ) == 0 );
+        bSuccess = BindSocket(UdpSocket, UdpSocketInAddr);
     }
 
     if ( !bSuccess )
@@ -334,4 +434,18 @@ void CSocket::OnDataReceived()
             }
         }
     }
+}
+
+#ifdef _WIN32
+    const SOCKET &CSocket::Socket()
+#else
+    const int &CSocket::Socket()
+#endif
+{
+    return UdpSocket;
+}
+
+bool CSocket::IsClient()
+{
+    return bIsClient;
 }

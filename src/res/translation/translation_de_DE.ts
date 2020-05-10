@@ -1852,6 +1852,11 @@
         <source>Congas</source>
         <translation>Congas</translation>
     </message>
+    <message>
+        <location filename="../../util.cpp" line="1002"/>
+        <source>Bongo</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CServerDlg</name>

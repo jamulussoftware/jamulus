@@ -581,6 +581,8 @@ DISTFILES += ChangeLog \
     src/res/instruments/viola.png \
     src/res/instruments/congas.svg \
     src/res/instruments/congas.png \
+    src/res/instruments/bongo.svg \
+    src/res/instruments/bongo.png \
     src/res/flags/flagnone.png \
     src/res/flags/ad.png \
     src/res/flags/ae.png \

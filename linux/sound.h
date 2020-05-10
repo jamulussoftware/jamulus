@@ -66,7 +66,7 @@ public:
              const bool     bNoAutoJackConnect,
              const QString& strJackClientName ) :
         CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ),
-        iJACKBufferSizeMono ( 0 ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
+        iJACKBufferSizeMono ( 0 ), bJackWasShutDown ( false ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
 
     virtual ~CSound() { CloseJack(); }
 
@@ -79,6 +79,7 @@ public:
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iJACKBufferSizeMono;
     int            iJACKBufferSizeStero;
+    bool           bJackWasShutDown;
 
     jack_port_t*   input_port_left;
     jack_port_t*   input_port_right;

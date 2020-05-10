@@ -19,12 +19,15 @@
 
 - bug fix: for mono capture jack audio interface Jamulus complains it cannot make connections (Ticket #137)
 
+- bug fix: fixed that Jamulus segfaults when jackd is restarted (Ticket #122, #127)
+
 
 TODO WIP support internationalization
 
 TODO implement panning for channels (Ticket #52, #145)
 
 TODO show mute state of others
+
 
 
 

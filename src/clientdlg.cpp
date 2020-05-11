@@ -48,10 +48,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // Add help text to controls -----------------------------------------------
     // input level meter
-    QString strInpLevH = tr ( "<b>Input Level Meter:</b> The input level "
+    QString strInpLevH = "<b>" + tr ( "Input Level Meter" ) + ":</b> " + tr ( "The input level "
         "indicators show the input level of the two stereo channels "
-        "of the current selected audio input.<br>"
-        "Make sure not to clip the input signal to avoid distortions of the "
+        "of the current selected audio input." ) + "<br>" +
+         tr ( "Make sure not to clip the input signal to avoid distortions of the "
         "audio signal." );
 
     QString strInpLevHTT = tr ( "If the " ) + APP_NAME +
@@ -60,13 +60,13 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         "meter should flicker. If this is not the case, you have "
         "probably selected the wrong input channel (e.g. line in instead "
         "of the microphone input) or set the input gain too low in the "
-        "(Windows) audio mixer.<br>For a proper usage of the " ) + APP_NAME +
-        tr ( " software, "
+        "(Windows) audio mixer." ) + "<br>" + tr ( "For a proper usage of the " ) +
+        APP_NAME + tr ( " software, "
         "you should not hear your singing/instrument in the loudspeaker or "
         "your headphone when the " ) + APP_NAME +
         tr ( " software is not connected. This can "
         "be achieved by muting your input audio channel in the Playback "
-        "mixer (<b>not</b> the Recording mixer!)." ) + TOOLTIP_COM_END_TEXT;
+        "mixer (not the Recording mixer!)." ) + TOOLTIP_COM_END_TEXT;
 
     QString strInpLevHAccText  = tr ( "Input level meter" );
     QString strInpLevHAccDescr = tr ( "Simulates an analog LED level meter." );
@@ -84,8 +84,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     lbrInputLevelR->setToolTip               ( strInpLevHTT );
 
     // connect/disconnect button
-    butConnect->setWhatsThis ( tr ( "<b>Connect / Disconnect Button:"
-        "</b> Push this button to connect a server. A dialog where you can "
+    butConnect->setWhatsThis ( "<b>" + tr ( "Connect/Disconnect Button" ) + ":</b> " +
+        tr ( "Push this button to connect a server. A dialog where you can "
         "select a server will open. If you are connected, pressing this "
         "button will end the session." ) );
 
@@ -98,14 +98,15 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         "and disconnecting the " ) + APP_NAME + tr ( " software." ) );
 
     // local audio input fader
-    QString strAudFader = tr ( "<b>Local Audio Input Fader:</b> With the "
-        "audio fader, the relative levels of the left and right local audio "
+    QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +
+        tr ( "With the audio fader, the relative levels of the left and right local audio "
         "channels can be changed. For a mono signal it acts like a panning "
         "between the two channels. If, e.g., a microphone is connected to "
         "the right input channel and an instrument is connected to the left "
         "input channel which is much louder than the microphone, move the "
-        "audio fader in a direction where the label above the fader shows "
-        "<i>L -x</i>, where <i>x</i> is the current attenuation indicator." );
+        "audio fader in a direction where the label above the fader shows " ) +
+        "<i>" + tr ( "L" ) + " -x</i>" + tr ( ", where" ) + " <i>x</i> " +
+        tr ( "is the current attenuation indicator." );
 
     lblAudioPan->setWhatsThis      ( strAudFader );
     lblAudioPanValue->setWhatsThis ( strAudFader );
@@ -114,14 +115,14 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
 
     // reverberation level
-    QString strAudReverb = tr ( "<b>Reverberation Level:</b> A reverberation "
-        "effect can be applied to one local mono audio channel or to both "
-        "channels in stereo mode. The mone channel selection and the "
+    QString strAudReverb = "<b>" + tr ( "Reverberation Level" ) + ":</b> " +
+        tr ( "A reverberation effect can be applied to one local mono audio channel or to both "
+        "channels in stereo mode. The mono channel selection and the "
         "reverberation level can be modified. If, e.g., "
         "the microphone signal is fed into the right audio channel of the "
         "sound card and a reverberation effect shall be applied, set the "
         "channel selector to right and move the fader upwards until the "
-        "desired reverberation level is reached.<br>"
+        "desired reverberation level is reached." ) + "<br>" + tr (
         "The reverberation effect requires significant CPU so that it should "
         "only be used on fast PCs. If the reverberation level fader is set to "
         "minimum (which is the default setting), the reverberation effect is "
@@ -133,8 +134,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     sldAudioReverb->setAccessibleName ( tr ( "Reverberation effect level setting" ) );
 
     // reverberation channel selection
-    QString strRevChanSel = tr ( "<b>Reverberation Channel Selection:</b> "
-        "With these radio buttons the audio input channel on which the "
+    QString strRevChanSel = "<b>" + tr ( "Reverberation Channel Selection" ) + ":</b> " +
+        tr ( "With these radio buttons the audio input channel on which the "
         "reverberation effect is applied can be chosen. Either the left "
         "or right input channel can be selected." );
 
@@ -144,10 +145,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverberation" ) );
 
     // delay LED
-    QString strLEDDelay = tr ( "<b>Delay Status LED:</b> "
-        "The delay status LED indicator shows the current audio delay "
+    QString strLEDDelay = "<b>" + tr ( "Delay Status LED" ) + ":</b> " +
+        tr ( "The delay status LED indicator shows the current audio delay "
         "status. If the light is green, the delay is perfect for a jam "
-        "session. If the ligth is yellow, a session is still possible but "
+        "session. If the light is yellow, a session is still possible but "
         "it may be harder to play. If the light is red, the delay is too "
         "large for jamming." );
 
@@ -160,20 +161,20 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
 
     // buffers LED
-    QString strLEDBuffers =  tr ( "<b>Buffers Status LED:</b> "
-        "The buffers status LED indicator shows the current audio/streaming "
+    QString strLEDBuffers = "<b>" + tr ( "Buffers Status LED" ) + ":</b> " +
+        tr ( "The buffers status LED indicator shows the current audio/streaming "
         "status. If the light is green, there are no buffer overruns/underruns "
         "and the audio stream is not interrupted. If the light is red, the "
-        "audio stream is interrupted caused by one of the following problems:"
+        "audio stream is interrupted caused by one of the following problems:" ) +
         "<ul>"
-        "<li>The network jitter buffer is not large enough for the current "
-        "network/audio interface jitter.</li>"
-        "<li>The sound card buffer delay (buffer size) is set to a too small "
-        "value.</li>"
-        "<li>The upload or download stream rate is too high for the current "
-        "available internet bandwidth.</li>"
-        "<li>The CPU of the client or server is at 100%.</li>"
-        "</ul>" );
+        "<li>" + tr ( "The network jitter buffer is not large enough for the current "
+        "network/audio interface jitter." ) + "</li>"
+        "<li>" + tr ( "The sound card buffer delay (buffer size) is set to a too small "
+        "value." ) + "</li>"
+        "<li>" + tr ( "The upload or download stream rate is too high for the current "
+        "available internet bandwidth." ) + "</li>"
+        "<li>" + tr ( "The CPU of the client or server is at 100%." ) + "</li>"
+        "</ul>";
 
     lblBuffers->setWhatsThis ( strLEDBuffers );
     ledBuffers->setWhatsThis ( strLEDBuffers );
@@ -200,7 +201,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     OnTimerStatus();
 
     // init connection button text
-    butConnect->setText ( CON_BUT_CONNECTTEXT );
+    butConnect->setText ( tr ( "C&onnect" ) );
 
     // init input level meter bars
     lbrInputLevelL->setValue ( 0 );
@@ -210,14 +211,12 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     ledBuffers->Reset();
     ledDelay->Reset();
 
-
-    // init slider controls ---
-    // audio in fader
+    // init audio in fader
     sldAudioPan->setRange ( AUD_FADER_IN_MIN, AUD_FADER_IN_MAX );
     sldAudioPan->setTickInterval ( AUD_FADER_IN_MAX / 5 );
     UpdateAudioFaderSlider();
 
-    // audio reverberation
+    // init audio reverberation
     sldAudioReverb->setRange ( 0, AUD_REVERB_MAX );
     const int iCurAudReverb = pClient->GetReverbLevel();
     sldAudioReverb->setValue ( iCurAudReverb );
@@ -225,6 +224,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // init reverb channel
     UpdateRevSelection();
+
+    // init connect dialog
+    ConnectDlg.SetShowAllMusicians ( pClient->bConnectDlgShowAllMusicians );
 
     // set window title (with no clients connected -> "0")
     SetMyWindowTitle ( 0 );
@@ -251,7 +253,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
 
     // View menu  --------------------------------------------------------------
-    pViewMenu = new QMenu ( "&View", this );
+    pViewMenu = new QMenu ( tr ( "&View" ), this );
 
     pViewMenu->addAction ( tr ( "&Connection Setup..." ), this,
         SLOT ( OnOpenConnectionSetupDialog() ) );
@@ -282,7 +284,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     pMenu = new QMenuBar ( this );
 
     pMenu->addMenu ( pViewMenu );
-    pMenu->addMenu ( new CHelpMenu ( this ) );
+    pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
@@ -322,7 +324,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         {
             // default icon and name for no flag selected
             CurFlagIcon.addFile ( ":/png/flags/res/flags/flagnone.png" );
-            sCurCountryName = "None";
+            sCurCountryName = tr ( "None" );
         }
         else
         {
@@ -579,13 +581,14 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
 
     // store mixer fader settings (we have to hide all mixer faders first to
     // initiate a storage of the current mixer fader levels in case we are
-    // just in a connected state)
+    // just in a connected state) and other settings
     MainMixerBoard->HideAll();
-    pClient->vecStoredFaderTags   = MainMixerBoard->vecStoredFaderTags;
-    pClient->vecStoredFaderLevels = MainMixerBoard->vecStoredFaderLevels;
-    pClient->vecStoredFaderIsSolo = MainMixerBoard->vecStoredFaderIsSolo;
-    pClient->vecStoredFaderIsMute = MainMixerBoard->vecStoredFaderIsMute;
-    pClient->iNewClientFaderLevel = MainMixerBoard->iNewClientFaderLevel;
+    pClient->vecStoredFaderTags          = MainMixerBoard->vecStoredFaderTags;
+    pClient->vecStoredFaderLevels        = MainMixerBoard->vecStoredFaderLevels;
+    pClient->vecStoredFaderIsSolo        = MainMixerBoard->vecStoredFaderIsSolo;
+    pClient->vecStoredFaderIsMute        = MainMixerBoard->vecStoredFaderIsMute;
+    pClient->iNewClientFaderLevel        = MainMixerBoard->iNewClientFaderLevel;
+    pClient->bConnectDlgShowAllMusicians = ConnectDlg.GetShowAllMusicians();
 
     // default implementation of this event handler routine
     Event->accept();
@@ -601,20 +604,20 @@ void CClientDlg::UpdateAudioFaderSlider()
     // attenuated
     if ( iCurAudInFader == AUD_FADER_IN_MIDDLE )
     {
-        lblAudioPanValue->setText ( "Center" );
+        lblAudioPanValue->setText ( tr ( "Center" ) );
     }
     else
     {
         if ( iCurAudInFader > AUD_FADER_IN_MIDDLE )
         {
             // attenuation on right channel
-            lblAudioPanValue->setText ( "R -" +
+            lblAudioPanValue->setText ( tr ( "R" ) + " -" +
                 QString().setNum ( iCurAudInFader - AUD_FADER_IN_MIDDLE ) );
         }
         else
         {
             // attenuation on left channel
-            lblAudioPanValue->setText ( "L -" +
+            lblAudioPanValue->setText ( tr ( "L" ) + " -" +
                 QString().setNum ( AUD_FADER_IN_MIDDLE - iCurAudInFader ) );
         }
     }
@@ -807,18 +810,18 @@ void CClientDlg::SetMyWindowTitle ( const int iNumClients )
     if ( iNumClients == 0 )
     {
         // only application name
-        setWindowTitle ( APP_NAME );
+        setWindowTitle ( pClient->strClientName );
     }
     else
     {
         if ( iNumClients == 1 )
         {
-            setWindowTitle ( QString ( APP_NAME ) + " (1 user)" );
+            setWindowTitle ( QString ( pClient->strClientName ) + " (1 " + tr ( "user" ) + ")" );
         }
         else
         {
-            setWindowTitle ( QString ( APP_NAME ) +
-                QString ( " (%1 users)" ).arg ( iNumClients ) );
+            setWindowTitle ( QString ( pClient->strClientName ) +
+                QString ( " (%1 " + tr ( "users" ) + ")" ).arg ( iNumClients ) );
         }
     }
 
@@ -934,34 +937,28 @@ void CClientDlg::OnLocalMuteStateChanged ( int value )
 void CClientDlg::OnTimerSigMet()
 {
     // get current input levels
-    double dCurSigLevelL = pClient->MicLevelL();
-    double dCurSigLevelR = pClient->MicLevelR();
+    double dCurSigLeveldB_L = pClient->MicLeveldB_L();
+    double dCurSigLeveldB_R = pClient->MicLeveldB_R();
 
-    // linear transformation of the input level range to the progress-bar
-    // range
-    dCurSigLevelL -= LOW_BOUND_SIG_METER;
-    dCurSigLevelL *= NUM_STEPS_LED_BAR /
-        ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+    // linear transformation of the input level range to the progress-bar range
+    dCurSigLeveldB_L -= LOW_BOUND_SIG_METER;
+    dCurSigLeveldB_L *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+    dCurSigLeveldB_R -= LOW_BOUND_SIG_METER;
+    dCurSigLeveldB_R *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
 
     // lower bound the signal
-    if ( dCurSigLevelL < 0 )
+    if ( dCurSigLeveldB_L < 0 )
     {
-        dCurSigLevelL = 0;
+        dCurSigLeveldB_L = 0;
     }
-
-    dCurSigLevelR -= LOW_BOUND_SIG_METER;
-    dCurSigLevelR *= NUM_STEPS_LED_BAR /
-        ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
-
-    // lower bound the signal
-    if ( dCurSigLevelR < 0 )
+    if ( dCurSigLeveldB_R < 0 )
     {
-        dCurSigLevelR = 0;
+        dCurSigLeveldB_R = 0;
     }
 
     // show current level
-    lbrInputLevelL->setValue ( static_cast<int> ( ceil ( dCurSigLevelL ) ) );
-    lbrInputLevelR->setValue ( static_cast<int> ( ceil ( dCurSigLevelR ) ) );
+    lbrInputLevelL->setValue ( dCurSigLeveldB_L );
+    lbrInputLevelR->setValue ( dCurSigLeveldB_R );
 }
 
 void CClientDlg::OnTimerBuffersLED()
@@ -1031,29 +1028,9 @@ void CClientDlg::OnCLPingTimeWithNumClientsReceived ( CHostAddress InetAddr,
                                                       int          iPingTime,
                                                       int          iNumClients )
 {
-    // color definition: <= 25 ms green, <= 50 ms yellow, otherwise red
-    CMultiColorLED::ELightColor ePingTimeLEDColor;
-
-    if ( iPingTime <= 25 )
-    {
-        ePingTimeLEDColor = CMultiColorLED::RL_GREEN;
-    }
-    else
-    {
-        if ( iPingTime <= 50 )
-        {
-            ePingTimeLEDColor = CMultiColorLED::RL_YELLOW;
-        }
-        else
-        {
-            ePingTimeLEDColor = CMultiColorLED::RL_RED;
-        }
-    }
-
     // update connection dialog server list
     ConnectDlg.SetPingTimeAndNumClientsResult ( InetAddr,
                                                 iPingTime,
-                                                ePingTimeLEDColor,
                                                 iNumClients );
 }
 
@@ -1081,7 +1058,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
         }
 
         // change connect button text to "disconnect"
-        butConnect->setText ( CON_BUT_DISCONNECTTEXT );
+        butConnect->setText ( tr ( "D&isconnect" ) );
 
         // set server name in audio mixer group box title
         MainMixerBoard->SetServerName ( strMixerBoardLabel );
@@ -1105,7 +1082,7 @@ void CClientDlg::Disconnect()
     }
 
     // change connect button text to "connect"
-    butConnect->setText ( CON_BUT_CONNECTTEXT );
+    butConnect->setText ( tr ( "C&onnect" ) );
 
     // reset server name in audio mixer group box title
     MainMixerBoard->SetServerName ( "" );
@@ -1205,6 +1182,8 @@ rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
                                "font:  bold;" );
 #endif
 
+        lbrInputLevelL->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
+        lbrInputLevelR->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
         break;
 
     default:
@@ -1217,6 +1196,8 @@ rbtReverbSelL->setStyleSheet ( "" );
 rbtReverbSelR->setStyleSheet ( "" );
 #endif
 
+        lbrInputLevelL->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
+        lbrInputLevelR->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
         break;
     }
 

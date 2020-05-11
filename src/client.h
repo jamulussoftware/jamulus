@@ -85,14 +85,14 @@
 // N:  number of bytes per packet (values below)
 #define OPUS_NUM_BYTES_MONO_LOW_QUALITY                     12
 #define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY                  22
-#define OPUS_NUM_BYTES_MONO_HIGH_QUALITY                    35
+#define OPUS_NUM_BYTES_MONO_HIGH_QUALITY                    36
 #define OPUS_NUM_BYTES_MONO_LOW_QUALITY_DBLE_FRAMESIZE      25
 #define OPUS_NUM_BYTES_MONO_NORMAL_QUALITY_DBLE_FRAMESIZE   45
 #define OPUS_NUM_BYTES_MONO_HIGH_QUALITY_DBLE_FRAMESIZE     71
 
 #define OPUS_NUM_BYTES_STEREO_LOW_QUALITY                   24
 #define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY                35
-#define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY                  72
+#define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY                  73
 #define OPUS_NUM_BYTES_STEREO_LOW_QUALITY_DBLE_FRAMESIZE    47
 #define OPUS_NUM_BYTES_STEREO_NORMAL_QUALITY_DBLE_FRAMESIZE 71
 #define OPUS_NUM_BYTES_STEREO_HIGH_QUALITY_DBLE_FRAMESIZE   142
@@ -107,15 +107,16 @@ public:
     CClient ( const quint16  iPortNumber,
               const QString& strConnOnStartupAddress,
               const int      iCtrlMIDIChannel,
-              const bool     bNoAutoJackConnect );
+              const bool     bNoAutoJackConnect,
+              const QString& strNClientName );
 
     void   Start();
     void   Stop();
     bool   IsRunning() { return Sound.IsRunning(); }
     bool   SetServerAddr ( QString strNAddr );
 
-    double MicLevelL() { return SignalLevelMeter.MicLevelLeft(); }
-    double MicLevelR() { return SignalLevelMeter.MicLevelRight(); }
+    double MicLeveldB_L() { return SignalLevelMeter.MicLeveldBLeft(); }
+    double MicLeveldB_R() { return SignalLevelMeter.MicLeveldBRight(); }
 
     bool   GetAndResetbJitterBufferOKFlag();
 
@@ -204,6 +205,9 @@ public:
     void SetSndCrdPrefFrameSizeFactor ( const int iNewFactor );
     int  GetSndCrdPrefFrameSizeFactor() { return iSndCrdPrefFrameSizeFactor; }
 
+    void SetEnableOPUS64 ( const bool eNEnableOPUS64 );
+    bool GetEnableOPUS64() { return bEnableOPUS64; }
+
     int GetSndCrdActualMonoBlSize()
     {
         // the actual sound card mono block size depends on whether a
@@ -278,6 +282,8 @@ public:
     CVector<int>     vecStoredFaderIsSolo;
     CVector<int>     vecStoredFaderIsMute;
     int              iNewClientFaderLevel;
+    bool             bConnectDlgShowAllMusicians;
+    QString          strClientName;
 
     // window position/state settings
     QByteArray       vecWindowPosMain;
@@ -300,7 +306,7 @@ protected:
     static void AudioCallback ( CVector<short>& psData, void* arg );
 
     void        Init();
-    void        ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
+    void        ProcessSndCrdAudioData ( CVector<short>& vecsMultChanAudioSndCrd );
     void        ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
 
     int         PreparePingMessage();
@@ -355,6 +361,7 @@ protected:
     CBufferBase<int16_t>    SndCrdConversionBufferOut;
     CVector<int16_t>        vecDataConvBuf;
     CVector<int16_t>        vecsStereoSndCrdTMP;
+    CVector<int16_t>        vecsStereoSndCrdMuteStream;
     CVector<int16_t>        vecZeros;
 
     bool                    bFraSiFactPrefSupported;
@@ -366,6 +373,7 @@ protected:
 
     EGUIDesign              eGUIDesign;
     bool                    bDisplayChannelLevels;
+    bool                    bEnableOPUS64;
 
     bool                    bJitterBufferOK;
 

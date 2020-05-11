@@ -54,16 +54,18 @@ public:
     void Init ( const CVector<QString>& vstrIPAddresses );
     void SetCentralServerAddress ( const QString strNewCentralServerAddr ) { strCentralServerAddress = strNewCentralServerAddr; }
 
+    void SetShowAllMusicians ( const bool bState ) { ShowAllMusicians ( bState ); }
+    bool GetShowAllMusicians() { return bShowAllMusicians; }
+
     void SetServerList ( const CHostAddress&         InetAddr,
                          const CVector<CServerInfo>& vecServerInfo );
 
     void SetConnClientsList ( const CHostAddress&          InetAddr,
                               const CVector<CChannelInfo>& vecChanInfo );
 
-    void SetPingTimeAndNumClientsResult ( CHostAddress&                     InetAddr,
-                                          const int                         iPingTime,
-                                          const CMultiColorLED::ELightColor ePingTimeLEDColor,
-                                          const int                         iNumClients );
+    void SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
+                                          const int           iPingTime,
+                                          const int           iNumClients );
 
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void SetVersionAndOSType ( CHostAddress           InetAddr,
@@ -84,6 +86,7 @@ protected:
     QTreeWidgetItem* GetParentListViewItem ( QTreeWidgetItem* pItem );
     void             DeleteAllListViewItemChilds ( QTreeWidgetItem* pItem );
     void             UpdateListFilter();
+    void             ShowAllMusicians ( const bool bState );
 
     QTimer       TimerPing;
     QTimer       TimerReRequestServList;
@@ -95,13 +98,14 @@ protected:
     bool         bServerListReceived;
     bool         bServerListItemWasChosen;
     bool         bListFilterWasActive;
+    bool         bShowAllMusicians;
 
 public slots:
     void OnServerListItemSelectionChanged();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnServerAddrEditTextChanged ( const QString& );
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
-    void OnExpandAllStateChanged ( int value );
+    void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
     void OnConnectClicked();
     void OnTimerPing();
     void OnTimerReRequestServList();

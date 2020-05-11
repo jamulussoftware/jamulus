@@ -54,29 +54,38 @@ void CSocket::Init ( const quint16 iPortNumber )
 
     if ( bIsClient )
     {
-        // Per definition use the port number plus ten for the client to make
-        // it possible to run server and client on the same computer. If the
-        // port is not available, try "NUM_SOCKET_PORTS_TO_TRY" times with
-        // incremented port numbers
-        quint16 iClientPortIncrement = 10; // start value: port nubmer plus ten
-        bSuccess                     = false; // initialization for while loop
-
-        while ( !bSuccess &&
-                ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
+        if ( iPortNumber == 0 )
         {
-            UdpSocketInAddr.sin_port = htons ( iPortNumber + iClientPortIncrement );
+            // if port number is 0, bind the client to a random available port
+            UdpSocketInAddr.sin_port = htons ( 0 );
 
             bSuccess = ( ::bind ( UdpSocket ,
-                                  (sockaddr*) &UdpSocketInAddr,
-                                  sizeof ( sockaddr_in ) ) == 0 );
+                                (sockaddr*) &UdpSocketInAddr,
+                                sizeof ( sockaddr_in ) ) == 0 );
+        }
+        else
+        {
+            // if the port is not available, try "NUM_SOCKET_PORTS_TO_TRY" times
+            // with incremented port numbers
+            quint16 iClientPortIncrement = 0;
+            bSuccess                     = false; // initialization for while loop
 
-            iClientPortIncrement++;
+            while ( !bSuccess && ( iClientPortIncrement <= NUM_SOCKET_PORTS_TO_TRY ) )
+            {
+                UdpSocketInAddr.sin_port = htons ( iPortNumber + iClientPortIncrement );
+
+                bSuccess = ( ::bind ( UdpSocket ,
+                                    (sockaddr*) &UdpSocketInAddr,
+                                    sizeof ( sockaddr_in ) ) == 0 );
+
+                iClientPortIncrement++;
+            }
         }
     }
     else
     {
         // for the server, only try the given port number and do not try out
-        // other port numbers to bind since it is imporatant that the server
+        // other port numbers to bind since it is important that the server
         // gets the desired port number
         UdpSocketInAddr.sin_port = htons ( iPortNumber );
 

@@ -1,4 +1,16 @@
 <RCC>
+    <qresource prefix="/translations" lang="de">
+        <file alias="translation.qm">res/translation/translation_de_DE.qm</file>
+    </qresource>
+    <qresource prefix="/translations" lang="fr">
+        <file alias="translation.qm">res/translation/translation_fr_FR.qm</file>
+    </qresource>
+    <qresource prefix="/translations" lang="pt">
+        <file alias="translation.qm">res/translation/translation_pt_PT.qm</file>
+    </qresource>
+    <qresource prefix="/translations" lang="es">
+        <file alias="translation.qm">res/translation/translation_es_ES.qm</file>
+    </qresource>
     <qresource prefix="/png/LEDs">
         <file>res/CLEDDisabledSmall.png</file>
         <file>res/CLEDGreenArrow.png</file>
@@ -21,37 +33,44 @@
         <file>res/mixerboardbackground.png</file>
     </qresource>
     <qresource prefix="/png/instr">
-        <file>res/instrnone.png</file>
-        <file>res/instrbassguitar.png</file>
-        <file>res/instrclarinet.png</file>
-        <file>res/instrdrumset.png</file>
-        <file>res/instreguitar.png</file>
-        <file>res/instrsaxophone.png</file>
-        <file>res/instrtrumpet.png</file>
-        <file>res/instrmicrophone.png</file>
-        <file>res/instrkeyboard.png</file>
-        <file>res/instrviolin.png</file>
-        <file>res/instraguitar.png</file>
-        <file>res/instrflute.png</file>
-        <file>res/instraccordeon.png</file>
-        <file>res/instrcello.png</file>
-        <file>res/instrtrombone.png</file>
-        <file>res/instrfrenchhorn.png</file>
-        <file>res/instrtuba.png</file>
-        <file>res/instrdoublebass.png</file>
-        <file>res/instrgrandpiano.png</file>
-        <file>res/instrsynthesizer.png</file>
-        <file>res/instrvocal.png</file>
-        <file>res/instrdjembe.png</file>
-        <file>res/instrharmonica.png</file>
-        <file>res/instrrecorder.png</file>
-        <file>res/instrlistener.png</file>
-        <file>res/instrstreamer.png</file>
-        <file>res/instrguitarvocal.png</file>
+        <file>res/instruments/instrnone.png</file>
+        <file>res/instruments/instrbassguitar.png</file>
+        <file>res/instruments/instrclarinet.png</file>
+        <file>res/instruments/instrdrumset.png</file>
+        <file>res/instruments/instreguitar.png</file>
+        <file>res/instruments/instrsaxophone.png</file>
+        <file>res/instruments/instrtrumpet.png</file>
+        <file>res/instruments/instrmicrophone.png</file>
+        <file>res/instruments/instrkeyboard.png</file>
+        <file>res/instruments/instrviolin.png</file>
+        <file>res/instruments/instraguitar.png</file>
+        <file>res/instruments/instrflute.png</file>
+        <file>res/instruments/instraccordeon.png</file>
+        <file>res/instruments/instrcello.png</file>
+        <file>res/instruments/instrtrombone.png</file>
+        <file>res/instruments/instrfrenchhorn.png</file>
+        <file>res/instruments/instrtuba.png</file>
+        <file>res/instruments/instrdoublebass.png</file>
+        <file>res/instruments/instrgrandpiano.png</file>
+        <file>res/instruments/instrsynthesizer.png</file>
+        <file>res/instruments/instrvocal.png</file>
+        <file>res/instruments/instrdjembe.png</file>
+        <file>res/instruments/instrharmonica.png</file>
+        <file>res/instruments/instrrecorder.png</file>
+        <file>res/instruments/instrlistener.png</file>
+        <file>res/instruments/instrstreamer.png</file>
+        <file>res/instruments/instrguitarvocal.png</file>
+        <file>res/instruments/instrkeyboardvocal.png</file>
+        <file>res/instruments/bodhran.png</file>
+        <file>res/instruments/bassoon.png</file>
+        <file>res/instruments/oboe.png</file>
+        <file>res/instruments/harp.png</file>
+        <file>res/instruments/viola.png</file>
+        <file>res/instruments/congas.png</file>
+        <file>res/instruments/bongo.png</file>
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>
-        <file>res/logopicture.png</file>
         <file>res/mainicon.png</file>
     </qresource>
     <qresource prefix="/png/flags">

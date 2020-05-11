@@ -390,6 +390,10 @@ void CChannel::OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTranspor
                 iAudioFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
             }
 
+            // the fade-in counter maximum value may have changed, make sure the fade-in counter
+            // is not larger than the allowed maximum value
+            iFadeInCnt = std::min ( iFadeInCnt, iFadeInCntMax );
+
             MutexSocketBuf.lock();
             {
                 // update socket buffer (the network block size is a multiple of the

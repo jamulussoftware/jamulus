@@ -286,6 +286,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
         opus_custom_encoder_ctl ( Opus64EncoderMono[i],   OPUS_SET_VBR ( 0 ) );
         opus_custom_encoder_ctl ( Opus64EncoderStereo[i], OPUS_SET_VBR ( 0 ) );
 
+        // for 64 samples frame size we have to adjust the PLC behavior to avoid loud artifacts
+        opus_custom_encoder_ctl ( Opus64EncoderMono[i],   OPUS_SET_PACKET_LOSS_PERC ( 35 ) );
+        opus_custom_encoder_ctl ( Opus64EncoderStereo[i], OPUS_SET_PACKET_LOSS_PERC ( 35 ) );
+
         // we want as low delay as possible
         opus_custom_encoder_ctl ( OpusEncoderMono[i],     OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
         opus_custom_encoder_ctl ( OpusEncoderStereo[i],   OPUS_SET_APPLICATION ( OPUS_APPLICATION_RESTRICTED_LOWDELAY ) );
@@ -439,6 +443,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
         this, SLOT ( OnCLReqServerList ( CHostAddress ) ) );
 
     QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( CLRegisterServerResp ( CHostAddress, ESvrRegResult ) ),
+        this, SLOT ( OnCLRegisterServerResp ( CHostAddress, ESvrRegResult ) ) );
+
+    QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLSendEmptyMes ( CHostAddress ) ),
         this, SLOT ( OnCLSendEmptyMes ( CHostAddress ) ) );
 
@@ -454,6 +462,14 @@ CServer::CServer ( const int          iNewMaxNumChan,
         SIGNAL ( CLReqConnClientsList ( CHostAddress ) ),
         this, SLOT ( OnCLReqConnClientsList ( CHostAddress ) ) );
 
+    QObject::connect ( &ServerListManager,
+       SIGNAL ( SvrRegStatusChanged() ),
+       this, SLOT ( OnSvrRegStatusChanged() ) );
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    connectChannelSignalsToServerSlots<MAX_NUM_CHANNELS>();
+
+#else
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
     // send message
@@ -716,13 +732,67 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &vecChannels[48], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh48 ( int ) ) );
     QObject::connect ( &vecChannels[49], SIGNAL ( ServerAutoSockBufSizeChange ( int ) ), this, SLOT ( OnServerAutoSockBufSizeChangeCh49 ( int ) ) );
 
+#endif
 
     // start the socket (it is important to start the socket after all
     // initializations and connections)
     Socket.Start();
 }
 
-void CServer::OnSendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+
+template<unsigned int slotId>
+inline void CServer::connectChannelSignalsToServerSlots()
+{
+    int iCurChanID = slotId - 1;
+
+    void ( CServer::* pOnSendProtMessCh )( CVector<uint8_t> ) =
+        &CServerSlots<slotId>::OnSendProtMessCh;
+
+    void ( CServer::* pOnReqConnClientsListCh )() =
+        &CServerSlots<slotId>::OnReqConnClientsListCh;
+
+    void ( CServer::* pOnChatTextReceivedCh )( QString ) =
+        &CServerSlots<slotId>::OnChatTextReceivedCh;
+
+    void ( CServer::* pOnServerAutoSockBufSizeChangeCh )( int ) =
+        &CServerSlots<slotId>::OnServerAutoSockBufSizeChangeCh;
+
+    // send message
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::MessReadyForSending,
+                       this, pOnSendProtMessCh );
+
+    // request connected clients list
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::ReqConnClientsList,
+                       this, pOnReqConnClientsListCh );
+
+    // channel info has changed
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::ChanInfoHasChanged,
+            this, &CServer::CreateAndSendChanListForAllConChannels );
+
+    // chat text received
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::ChatTextReceived,
+            this, pOnChatTextReceivedCh );
+
+    // auto socket buffer size change
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::ServerAutoSockBufSizeChange,
+            this, pOnServerAutoSockBufSizeChangeCh );
+
+    connectChannelSignalsToServerSlots<slotId - 1>();
+};
+
+template<>
+inline void CServer::connectChannelSignalsToServerSlots<0>() {};
+
+void CServer::CreateAndSendJitBufMessage ( const int iCurChanID,
+                                           const int iNNumFra )
+{
+    vecChannels[iCurChanID].CreateJitBufMes ( iNNumFra );
+}
+
+#endif
+
+void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 {
     // the protocol queries me to call the function to send the message
     // send it through the network
@@ -872,7 +942,7 @@ void CServer::Stop()
 
 void CServer::OnTimer()
 {
-    int                i, j;
+    int                i, j, iUnused;
     int                iClientFrameSizeSamples;
     OpusCustomDecoder* CurOpusDecoder;
     OpusCustomEncoder* CurOpusEncoder;
@@ -1025,11 +1095,11 @@ JitterMeas.Measure();
                     // OPUS decode received data stream
                     if ( CurOpusDecoder != nullptr )
                     {
-                        opus_custom_decode ( CurOpusDecoder,
-                                             pCurCodedData,
-                                             iCeltNumCodedBytes,
-                                             &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                             iClientFrameSizeSamples );
+                        iUnused = opus_custom_decode ( CurOpusDecoder,
+                                                       pCurCodedData,
+                                                       iCeltNumCodedBytes,
+                                                       &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                       iClientFrameSizeSamples );
                     }
                 }
 
@@ -1172,11 +1242,11 @@ JitterMeas.Measure();
 opus_custom_encoder_ctl ( CurOpusEncoder,
                           OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
-                        opus_custom_encode ( CurOpusEncoder,
-                                             &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                             iClientFrameSizeSamples,
-                                             &vecbyCodedData[0],
-                                             iCeltNumCodedBytes );
+                        iUnused = opus_custom_encode ( CurOpusEncoder,
+                                                       &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                       iClientFrameSizeSamples,
+                                                       &vecbyCodedData[0],
+                                                       iCeltNumCodedBytes );
                     }
 
                     // send separate mix to current clients
@@ -1202,6 +1272,8 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
         // does not consume any significant CPU when no client is connected.
         Stop();
     }
+
+    Q_UNUSED ( iUnused );
 }
 
 /// @brief Mix all audio data from all clients together.
@@ -1691,6 +1763,7 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
         const CVector<int16_t>& vecsData = vecvecsData[j];
 
         double dCurLevel = 0.0;
+
         if ( vecNumAudioChannels[j] == 1 )
         {
             // mono
@@ -1719,8 +1792,7 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
 
         // map to signal level meter
         dCurSigLevel -= LOW_BOUND_SIG_METER;
-        dCurSigLevel *= NUM_STEPS_LED_BAR /
-            ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+        dCurSigLevel *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
 
         if ( dCurSigLevel < 0 )
         {

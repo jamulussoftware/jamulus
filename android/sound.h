@@ -38,10 +38,11 @@
 class CSound : public CSoundBase, public oboe::AudioStreamCallback//, public IRenderableAudio, public IRestartable
 {
 public:
-    CSound ( void       (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
-             void*      arg,
-             const int  iCtrlMIDIChannel,
-             const bool bNoAutoJackConnect );
+    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+             void*          arg,
+             const int      iCtrlMIDIChannel,
+             const bool     ,
+             const QString& );
     virtual ~CSound() {}
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );

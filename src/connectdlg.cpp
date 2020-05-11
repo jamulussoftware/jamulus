@@ -36,20 +36,21 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
       bShowCompleteRegList     ( bNewShowCompleteRegList ),
       bServerListReceived      ( false ),
       bServerListItemWasChosen ( false ),
-      bListFilterWasActive     ( false )
+      bListFilterWasActive     ( false ),
+      bShowAllMusicians        ( true )
 {
     setupUi ( this );
 
 
     // Add help text to controls -----------------------------------------------
     // server list
-    lvwServers->setWhatsThis ( tr ( "<b>Server List:</b> The server list shows "
-        "a list of available servers which are registered at the central "
-        "server. Select a server from the list and press the connect button to "
+    lvwServers->setWhatsThis ( "<b>" + tr ( "Server List" ) + ":</b> " + tr (
+        "The server list shows a list of available servers which are registered at the "
+        "central server. Select a server from the list and press the connect button to "
         "connect to this server. Alternatively, double click a server from "
         "the list to connect to it. If a server is occupied, a list of the "
         "connected musicians is available by expanding the list item. "
-        "Permanent servers are shown in bold font.<br>"
+        "Permanent servers are shown in bold font." ) + "<br>" + tr (
         "Note that it may take some time to retrieve the server list from the "
         "central server. If no valid central server address is specified in "
         "the settings, no server list will be available." ) );
@@ -57,12 +58,12 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     lvwServers->setAccessibleName ( tr ( "Server list view" ) );
 
     // server address
-    QString strServAddrH = tr ( "<b>Server Address:</b> The IP address or URL "
-        "of the server running the " ) + APP_NAME + tr ( " server software "
-        "must be set here. An optional port number can be added after the IP "
-        "address or URL using a comma as a separator, e.g, <i>"
+    QString strServAddrH = "<b>" + tr ( "Server Address" ) + ":</b> " + tr (
+        "The IP address or URL of the server running the " ) + APP_NAME + tr (
+        " server software must be set here. An optional port number can be added after the IP "
+        "address or URL using a comma as a separator, e.g, "
         "example.org:" ) +
-        QString().setNum ( LLCON_DEFAULT_PORT_NUMBER ) + tr ( "</i>. A list of "
+        QString().setNum ( LLCON_DEFAULT_PORT_NUMBER ) + tr ( ". A list of "
         "the most recent used server IP addresses or URLs is available for "
         "selection." );
 
@@ -74,13 +75,13 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
         "IP address or URL. It also stores old URLs in the combo box list." ) );
 
     // filter
-    edtFilter->setWhatsThis ( tr ( "<b>Filter:</b> The server list is filered "
-        "by the given text. Note that the filter is case insensitive." ) );
+    edtFilter->setWhatsThis ( "<b>" + tr ( "Filter" ) + ":</b> " + tr ( "The server "
+        "list is filered by the given text. Note that the filter is case insensitive." ) );
     edtFilter->setAccessibleName ( tr ( "Filter edit box" ) );
 
     // show all mucisians
-    chbExpandAll->setWhatsThis ( tr ( "<b>Show All Musicians:</b> If you check "
-        "this check box, the musicians of all servers are shown. If you "
+    chbExpandAll->setWhatsThis ( "<b>" + tr ( "Show All Musicians" ) + ":</b> " + tr (
+        "If you check this check box, the musicians of all servers are shown. If you "
         "uncheck the check box, all list view items are collapsed.") );
     chbExpandAll->setAccessibleName ( tr ( "Show all musicians check box" ) );
 
@@ -218,12 +219,6 @@ void CConnectDlg::RequestServerList()
 
     // clear filter edit box
     edtFilter->setText ( "" );
-
-    // per default we expand all list items (not for the show all servers mode)
-    if ( !bShowCompleteRegList )
-    {
-        chbExpandAll->setCheckState ( Qt::Checked );
-    }
 
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
@@ -385,7 +380,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
         pNewListViewItem->setData ( 0, Qt::UserRole, CurHostAddress.toString() );
 
         // per default expand the list item (if not "show all servers")
-        if ( !bShowCompleteRegList )
+        if ( bShowAllMusicians )
         {
             lvwServers->expandItem ( pNewListViewItem );
         }
@@ -514,15 +509,25 @@ void CConnectDlg::OnServerAddrEditTextChanged ( const QString& )
     lvwServers->clearSelection();
 }
 
-void CConnectDlg::OnExpandAllStateChanged ( int value )
+void CConnectDlg::ShowAllMusicians ( const bool bState )
 {
-    if ( value == Qt::Checked )
+    bShowAllMusicians = bState;
+
+    // update list
+    if ( bState )
     {
         lvwServers->expandAll();
     }
     else
     {
         lvwServers->collapseAll();
+    }
+
+    // update check box if necessary
+    if ( ( chbExpandAll->checkState() == Qt::Checked && !bShowAllMusicians ) ||
+         ( chbExpandAll->checkState() == Qt::Unchecked && bShowAllMusicians ) )
+    {
+        chbExpandAll->setCheckState ( bState ? Qt::Checked : Qt::Unchecked );
     }
 }
 
@@ -537,33 +542,41 @@ void CConnectDlg::UpdateListFilter()
 
         for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
         {
-            bool bFilterFound = false;
+            QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
+            bool             bFilterFound     = false;
 
             // search server name
-            if ( lvwServers->topLevelItem ( iIdx )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+            if ( pCurListViewItem->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
             {
                 bFilterFound = true;
             }
 
             // search location
-            if ( lvwServers->topLevelItem ( iIdx )->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+            if ( pCurListViewItem->text ( 3 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
             {
                 bFilterFound = true;
             }
 
             // search childs
-            for ( int iCCnt = 0; iCCnt < lvwServers->topLevelItem ( iIdx )->childCount(); iCCnt++ )
+            for ( int iCCnt = 0; iCCnt < pCurListViewItem->childCount(); iCCnt++ )
             {
-                if ( lvwServers->topLevelItem ( iIdx )->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
+                if ( pCurListViewItem->child ( iCCnt )->text ( 0 ).indexOf ( sFilterText, 0, Qt::CaseInsensitive ) >= 0 )
                 {
                     bFilterFound = true;
                 }
             }
 
             // only update Hide state if ping time was received
-            if ( !lvwServers->topLevelItem ( iIdx )->text ( 1 ).isEmpty() )
+            if ( !pCurListViewItem->text ( 1 ).isEmpty() || bShowCompleteRegList )
             {
-                lvwServers->topLevelItem ( iIdx )->setHidden ( !bFilterFound );
+                // only update hide and expand status if the hide state has to be changed to
+                // preserve if user clicked on expand icon manually
+                if ( ( pCurListViewItem->isHidden() && bFilterFound ) ||
+                     ( !pCurListViewItem->isHidden() && !bFilterFound ) )
+                {
+                    pCurListViewItem->setHidden ( !bFilterFound );
+                    pCurListViewItem->setExpanded ( bShowAllMusicians );
+                }
             }
         }
     }
@@ -577,8 +590,22 @@ void CConnectDlg::UpdateListFilter()
 
             for ( int iIdx = 0; iIdx < iServerListLen; iIdx++ )
             {
-                // if ping time is empty, hide item
-                lvwServers->topLevelItem ( iIdx )->setHidden ( lvwServers->topLevelItem ( iIdx )->text ( 1 ).isEmpty() );
+                QTreeWidgetItem* pCurListViewItem = lvwServers->topLevelItem ( iIdx );
+
+                // if ping time is empty, hide item (if not already hidden)
+                if ( pCurListViewItem->text ( 1 ).isEmpty() && !bShowCompleteRegList )
+                {
+                    pCurListViewItem->setHidden ( true );
+                }
+                else
+                {
+                    // in case it was hidden, show it and take care of expand
+                    if ( pCurListViewItem->isHidden() )
+                    {
+                        pCurListViewItem->setHidden ( false );
+                        pCurListViewItem->setExpanded ( bShowAllMusicians );
+                    }
+                }
             }
 
             bListFilterWasActive = false;
@@ -652,10 +679,9 @@ void CConnectDlg::OnTimerPing()
     }
 }
 
-void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                     InetAddr,
-                                                   const int                         iPingTime,
-                                                   const CMultiColorLED::ELightColor ePingTimeLEDColor,
-                                                   const int                         iNumClients )
+void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
+                                                   const int           iPingTime,
+                                                   const int           iNumClients )
 {
     // apply the received ping time to the correct server list entry
     QTreeWidgetItem* pCurListViewItem = FindListViewItem ( InetAddr );
@@ -664,33 +690,62 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
     {
         // check if this is the first time a ping time is set
         const bool bIsFirstPing = pCurListViewItem->text ( 1 ).isEmpty();
+        bool       bDoSorting   = false;
 
-        // update the color of the ping time font
-        switch ( ePingTimeLEDColor )
+        // update minimum ping time column (invisible, used for sorting) if
+        // the new value is smaller than the old value
+        int iMinPingTime = pCurListViewItem->text ( 4 ).toInt();
+
+        if ( iMinPingTime > iPingTime )
         {
-        case CMultiColorLED::RL_GREEN:
+            // update the minimum ping time with the new lowest value
+            iMinPingTime = iPingTime;
+
+            // we pad to a total of 8 characters with zeros to make sure the
+            // sorting is done correctly
+            pCurListViewItem->setText ( 4, QString ( "%1" ).arg (
+                iPingTime, 8, 10, QLatin1Char ( '0' ) ) );
+
+            // update the sorting (lowest number on top)
+            bDoSorting = true;
+        }
+
+        // for debugging it is good to see the current ping time in the list
+        // and not the minimum ping time -> overwrite the value for debugging
+        if ( bShowCompleteRegList )
+        {
+            iMinPingTime = iPingTime;
+        }
+
+        // Only show minimum ping time in the list since this is the important
+        // value. Temporary bad ping measurements are of no interest.
+        // Color definition: <= 25 ms green, <= 50 ms yellow, otherwise red
+        if ( iMinPingTime <= 25 )
+        {
             pCurListViewItem->setForeground ( 1, Qt::darkGreen );
-            break;
-
-        case CMultiColorLED::RL_YELLOW:
-            pCurListViewItem->setForeground ( 1, Qt::darkYellow );
-            break;
-
-        default: // including "CMultiColorLED::RL_RED"
-            pCurListViewItem->setForeground ( 1, Qt::red );
-            break;
+        }
+        else
+        {
+            if ( iMinPingTime <= 50 )
+            {
+                pCurListViewItem->setForeground ( 1, Qt::darkYellow );
+            }
+            else
+            {
+                pCurListViewItem->setForeground ( 1, Qt::red );
+            }
         }
 
         // update ping text, take special care if ping time exceeds a
         // certain value
-        if ( iPingTime > 500 )
+        if ( iMinPingTime > 500 )
         {
             pCurListViewItem->setText ( 1, ">500 ms" );
         }
         else
         {
             pCurListViewItem->
-                setText ( 1, QString().setNum ( iPingTime ) + " ms" );
+                setText ( 1, QString().setNum ( iMinPingTime ) + " ms" );
         }
 
         // update number of clients text
@@ -714,22 +769,11 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( CHostAddress&                
             pCurListViewItem->setHidden ( false );
         }
 
-        // update minimum ping time column (invisible, used for sorting) if
-        // the new value is smaller than the old value
-        if ( pCurListViewItem->text ( 4 ).toInt() > iPingTime )
+        // Update sorting. Note that the sorting must be the last action for the
+        // current item since the topLevelItem ( iIdx ) is then no longer valid.
+        if ( bDoSorting && !bShowCompleteRegList ) // do not sort if "show all servers"
         {
-            // we pad to a total of 8 characters with zeros to make sure the
-            // sorting is done correctly
-            pCurListViewItem->setText ( 4, QString ( "%1" ).arg (
-                iPingTime, 8, 10, QLatin1Char ( '0' ) ) );
-
-            // Update the sorting (lowest number on top).
-            // Note that the sorting must be the last action for the current
-            // item since the topLevelItem ( iIdx ) is then no longer valid.
-            if ( !bShowCompleteRegList ) // do not sort if "show all servers"
-            {
-                lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
-            }
+            lvwServers->sortByColumn ( 4, Qt::AscendingOrder );
         }
     }
 

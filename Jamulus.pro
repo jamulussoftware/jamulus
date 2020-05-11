@@ -1,4 +1,4 @@
-VERSION = 3.5.1git
+VERSION = 3.5.3git
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -8,18 +8,25 @@ contains(CONFIG, "noupcasename") {
 
 CONFIG += qt \
     thread \
-    release
+    release \
+    lrelease
 
 QT += widgets \
     network \
     xml
+
+TRANSLATIONS = src/res/translation/translation_de_DE.ts \
+    src/res/translation/translation_fr_FR.ts \
+    src/res/translation/translation_pt_PT.ts \
+    src/res/translation/translation_es_ES.ts
 
 INCLUDEPATH += src
 
 INCLUDEPATH_OPUS = libs/opus/include \
     libs/opus/celt \
     libs/opus/silk \
-    libs/opus/silk/float
+    libs/opus/silk/float \
+    libs/opus/silk/fixed
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\" \
     OPUS_BUILD \
@@ -39,11 +46,20 @@ win32 {
     INCLUDEPATH += windows/ASIOSDK2/common \
         windows/ASIOSDK2/host \
         windows/ASIOSDK2/host/pc
-    LIBS += ole32.lib \
-        user32.lib \
-        advapi32.lib \
-        winmm.lib \
-        ws2_32.lib
+    mingw* {
+        LIBS += -lole32 \
+            -luser32 \
+            -ladvapi32 \
+            -lwinmm \
+            -lws2_32
+    } else {
+        QMAKE_LFLAGS += /DYNAMICBASE:NO # fixes crash with libjack64.dll, see https://github.com/corrados/jamulus/issues/93
+        LIBS += ole32.lib \
+            user32.lib \
+            advapi32.lib \
+            winmm.lib \
+            ws2_32.lib
+    }
 
     # replace ASIO with jack if requested
     contains(CONFIG, "jackonwindows") {
@@ -64,11 +80,26 @@ win32 {
         LIBS += "C:/Program Files (x86)/Jack/lib/libjack64.lib"
     }
 } else:macx {
+    contains(CONFIG, "server_bundle") {
+        message(The generated application bundle will run a server instance.)
+
+        DEFINES += SERVER_BUNDLE
+        TARGET = $${TARGET}Server
+    }
+
     QT += macextras
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp
     RC_FILE = mac/mainicon.icns
     CONFIG += x86
+    QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
+    QMAKE_APPLICATION_BUNDLE_NAME. = $$TARGET
+
+    macx-xcode {
+        QMAKE_INFO_PLIST = mac/Info-xcode.plist
+    } else {
+        QMAKE_INFO_PLIST = mac/Info-make.plist
+    }
 
     LIBS += -framework CoreFoundation \
         -framework CoreServices \
@@ -242,8 +273,14 @@ DISTFILES_OBOE += libs/oboe/AUTHORS \
     nosoundoption = $$find(CONFIG, "nosound")
     count(nosoundoption, 0) {
         message(Jack Audio Interface Enabled.)
-        CONFIG += link_pkgconfig
-        PKGCONFIG += jack
+
+        contains(CONFIG, "raspijamulus") {
+            message(Using Jack Audio in raspijamulus.sh mode.)
+            LIBS += -ljack
+        } else {
+            CONFIG += link_pkgconfig
+            PKGCONFIG += jack
+        }
 
         HEADERS += linux/sound.h
         SOURCES += linux/sound.cpp
@@ -300,77 +337,100 @@ HEADERS += src/audiomixerboard.h \
     src/recorder/cwavestream.h \
     src/historygraph.h
 
-HEADERS_OPUS = libs/opus/include/opus.h \
-    libs/opus/include/opus_multistream.h \
-    libs/opus/include/opus_custom.h \
-    libs/opus/include/opus_types.h \
-    libs/opus/include/opus_defines.h \
-    libs/opus/src/opus_private.h \
-    libs/opus/src/analysis.h \
-    libs/opus/src/mlp.h \
-    libs/opus/src/tansig_table.h \
-    libs/opus/celt/arch.h \
+HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \
     libs/opus/celt/celt.h \
+    libs/opus/celt/celt_lpc.h \
     libs/opus/celt/cpu_support.h \
     libs/opus/celt/cwrs.h \
     libs/opus/celt/ecintrin.h \
     libs/opus/celt/entcode.h \
     libs/opus/celt/entdec.h \
     libs/opus/celt/entenc.h \
-    libs/opus/celt/fixed_debug.h \
-    libs/opus/celt/fixed_generic.h \
     libs/opus/celt/float_cast.h \
-    libs/opus/celt/_kiss_fft_guts.h \
     libs/opus/celt/kiss_fft.h \
     libs/opus/celt/laplace.h \
     libs/opus/celt/mathops.h \
+    libs/opus/celt/mdct.c \
     libs/opus/celt/mdct.h \
     libs/opus/celt/mfrngcod.h \
     libs/opus/celt/modes.h \
     libs/opus/celt/os_support.h \
     libs/opus/celt/pitch.h \
-    libs/opus/celt/celt_lpc.h \
     libs/opus/celt/quant_bands.h \
     libs/opus/celt/rate.h \
     libs/opus/celt/stack_alloc.h \
-    libs/opus/celt/vq.h \
     libs/opus/celt/static_modes_float.h \
-    libs/opus/celt/static_modes_fixed.h \
-    libs/opus/celt/arm/armcpu.h \
-    libs/opus/celt/arm/fixed_armv4.h \
-    libs/opus/celt/arm/fixed_armv5e.h \
-    libs/opus/celt/arm/kiss_fft_armv4.h \
-    libs/opus/celt/arm/kiss_fft_armv5e.h \
-    libs/opus/celt/arm/pitch_arm.h \
-    libs/opus/celt/x86/pitch_sse.h \
-    libs/opus/silk/debug.h \
-    libs/opus/silk/control.h \
-    libs/opus/silk/errors.h \
+    libs/opus/celt/vq.c \
+    libs/opus/celt/vq.h \
+    libs/opus/celt/_kiss_fft_guts.h \
+    libs/opus/include/opus.h \
+    libs/opus/include/opus_custom.h \
+    libs/opus/include/opus_defines.h \
+    libs/opus/include/opus_types.h \
     libs/opus/silk/API.h \
-    libs/opus/silk/typedef.h \
+    libs/opus/silk/CNG.c \
+    libs/opus/silk/control.h \
+    libs/opus/silk/debug.h \
     libs/opus/silk/define.h \
-    libs/opus/silk/main.h \
-    libs/opus/silk/PLC.h \
-    libs/opus/silk/SigProc_FIX.h \
-    libs/opus/silk/arm/macros_armv4.h \
-    libs/opus/silk/arm/macros_armv5e.h \
-    libs/opus/silk/arm/SigProc_FIX_armv4.h \
-    libs/opus/silk/arm/SigProc_FIX_armv5e.h \
-    libs/opus/silk/structs.h \
-    libs/opus/silk/tables.h \
-    libs/opus/silk/tuning_parameters.h \
+    libs/opus/silk/errors.h \
+    libs/opus/silk/float/main_FLP.h \
+    libs/opus/silk/float/SigProc_FLP.h \
+    libs/opus/silk/float/structs_FLP.h \
     libs/opus/silk/Inlines.h \
     libs/opus/silk/MacroCount.h \
     libs/opus/silk/MacroDebug.h \
     libs/opus/silk/macros.h \
+    libs/opus/silk/main.h \
+    libs/opus/silk/NSQ.c \
+    libs/opus/silk/NSQ.h \
     libs/opus/silk/pitch_est_defines.h \
+    libs/opus/silk/PLC.c \
+    libs/opus/silk/PLC.h \
     libs/opus/silk/resampler_private.h \
     libs/opus/silk/resampler_rom.h \
     libs/opus/silk/resampler_structs.h \
-    libs/opus/silk/float/main_FLP.h \
-    libs/opus/silk/float/structs_FLP.h \
-    libs/opus/silk/float/SigProc_FLP.h
+    libs/opus/silk/SigProc_FIX.h \
+    libs/opus/silk/structs.h \
+    libs/opus/silk/tables.h \
+    libs/opus/silk/tuning_parameters.h \
+    libs/opus/silk/typedef.h \
+    libs/opus/silk/VAD.c \
+    libs/opus/src/analysis.h \
+    libs/opus/src/mlp.h \
+    libs/opus/src/opus_private.h \
+    libs/opus/src/tansig_table.h
+
+HEADERS_OPUS_ARM = libs/opus/celt/arm/armcpu.h \
+    libs/opus/silk/arm/biquad_alt_arm.h \
+    libs/opus/celt/arm/fft_arm.h \
+    libs/opus/silk/arm/LPC_inv_pred_gain_arm.h \
+    libs/opus/celt/arm/mdct_arm.h \
+    libs/opus/silk/arm/NSQ_del_dec_arm.h \
+    libs/opus/celt/arm/pitch_arm.h
+
+HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
+    libs/opus/celt/x86/pitch_sse.h \
+    libs/opus/celt/x86/vq_sse.h \
+    libs/opus/celt/x86/x86cpu.h
+
+android {
+    contains(ANDROID_ARCHITECTURE, arm) | contains(ANDROID_ARCHITECTURE, arm64) {
+        HEADERS_OPUS += $$HEADERS_OPUS_ARM
+    } else:contains(ANDROID_ARCHITECTURE, x86) | contains(ANDROID_ARCHITECTURE, x86_64) {
+        HEADERS_OPUS += $$HEADERS_OPUS_X86
+    }
+} else:win32 | unix | macx {
+    contains(QT_ARCH, arm) | contains(QT_ARCH, arm64) {
+        HEADERS_OPUS += $$HEADERS_OPUS_ARM
+    } else:contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
+        HEADERS_OPUS += $$HEADERS_OPUS_X86
+    }
+
+    win32 {
+        HEADERS_OPUS += libs/opus/win32/config.h
+    }
+}
 
 SOURCES += src/audiomixerboard.cpp \
     android/androiddebug.cpp \
@@ -399,20 +459,11 @@ SOURCES += src/audiomixerboard.cpp \
     src/recorder/cwavestream.cpp \
     src/historygraph.cpp
 
-SOURCES_OPUS = libs/opus/src/opus.c \
-    libs/opus/src/opus_decoder.c \
-    libs/opus/src/opus_encoder.c \
-    libs/opus/src/opus_multistream.c \
-    libs/opus/src/opus_multistream_encoder.c \
-    libs/opus/src/opus_multistream_decoder.c \
-    libs/opus/src/repacketizer.c \
-    libs/opus/src/analysis.c \
-    libs/opus/src/mlp.c \
-    libs/opus/src/mlp_data.c \
-    libs/opus/celt/bands.c \
+SOURCES_OPUS = libs/opus/celt/bands.c \
     libs/opus/celt/celt.c \
-    libs/opus/celt/celt_encoder.c \
     libs/opus/celt/celt_decoder.c \
+    libs/opus/celt/celt_encoder.c \
+    libs/opus/celt/celt_lpc.c \
     libs/opus/celt/cwrs.c \
     libs/opus/celt/entcode.c \
     libs/opus/celt/entdec.c \
@@ -423,33 +474,102 @@ SOURCES_OPUS = libs/opus/src/opus.c \
     libs/opus/celt/mdct.c \
     libs/opus/celt/modes.c \
     libs/opus/celt/pitch.c \
-    libs/opus/celt/celt_lpc.c \
     libs/opus/celt/quant_bands.c \
     libs/opus/celt/rate.c \
     libs/opus/celt/vq.c \
-    libs/opus/celt/arm/armcpu.c \
-    libs/opus/celt/arm/arm_celt_map.c \
+    libs/opus/silk/A2NLSF.c \
+    libs/opus/silk/ana_filt_bank_1.c \
+    libs/opus/silk/biquad_alt.c \
+    libs/opus/silk/bwexpander.c \
+    libs/opus/silk/bwexpander_32.c \
+    libs/opus/silk/check_control_input.c \
     libs/opus/silk/CNG.c \
     libs/opus/silk/code_signs.c \
-    libs/opus/silk/init_decoder.c \
+    libs/opus/silk/control_audio_bandwidth.c \
+    libs/opus/silk/control_codec.c \
+    libs/opus/silk/control_SNR.c \
+    libs/opus/silk/debug.c \
+    libs/opus/silk/decoder_set_fs.c \
     libs/opus/silk/decode_core.c \
     libs/opus/silk/decode_frame.c \
-    libs/opus/silk/decode_parameters.c \
     libs/opus/silk/decode_indices.c \
+    libs/opus/silk/decode_parameters.c \
+    libs/opus/silk/decode_pitch.c \
     libs/opus/silk/decode_pulses.c \
-    libs/opus/silk/decoder_set_fs.c \
     libs/opus/silk/dec_API.c \
-    libs/opus/silk/enc_API.c \
     libs/opus/silk/encode_indices.c \
     libs/opus/silk/encode_pulses.c \
+    libs/opus/silk/enc_API.c \
+    libs/opus/silk/float/apply_sine_window_FLP.c \
+    libs/opus/silk/float/autocorrelation_FLP.c \
+    libs/opus/silk/float/burg_modified_FLP.c \
+    libs/opus/silk/float/bwexpander_FLP.c \
+    libs/opus/silk/float/corrMatrix_FLP.c \
+    libs/opus/silk/float/encode_frame_FLP.c \
+    libs/opus/silk/float/energy_FLP.c \
+    libs/opus/silk/float/find_LPC_FLP.c \
+    libs/opus/silk/float/find_LTP_FLP.c \
+    libs/opus/silk/float/find_pitch_lags_FLP.c \
+    libs/opus/silk/float/find_pred_coefs_FLP.c \
+    libs/opus/silk/float/inner_product_FLP.c \
+    libs/opus/silk/float/k2a_FLP.c \
+    libs/opus/silk/float/LPC_analysis_filter_FLP.c \
+    libs/opus/silk/float/LTP_analysis_filter_FLP.c \
+    libs/opus/silk/float/LTP_scale_ctrl_FLP.c \
+    libs/opus/silk/float/noise_shape_analysis_FLP.c \
+    libs/opus/silk/float/pitch_analysis_core_FLP.c \
+    libs/opus/silk/float/process_gains_FLP.c \
+    libs/opus/silk/float/residual_energy_FLP.c \
+    libs/opus/silk/float/scale_copy_vector_FLP.c \
+    libs/opus/silk/float/scale_vector_FLP.c \
+    libs/opus/silk/float/schur_FLP.c \
+    libs/opus/silk/float/sort_FLP.c \
+    libs/opus/silk/float/warped_autocorrelation_FLP.c \
+    libs/opus/silk/float/wrappers_FLP.c \
     libs/opus/silk/gain_quant.c \
+    libs/opus/silk/HP_variable_cutoff.c \
+    libs/opus/silk/init_decoder.c \
+    libs/opus/silk/init_encoder.c \
+    libs/opus/silk/inner_prod_aligned.c \
     libs/opus/silk/interpolate.c \
+    libs/opus/silk/lin2log.c \
+    libs/opus/silk/log2lin.c \
+    libs/opus/silk/LPC_analysis_filter.c \
+    libs/opus/silk/LPC_fit.c \
+    libs/opus/silk/LPC_inv_pred_gain.c \
     libs/opus/silk/LP_variable_cutoff.c \
+    libs/opus/silk/NLSF2A.c \
     libs/opus/silk/NLSF_decode.c \
+    libs/opus/silk/NLSF_del_dec_quant.c \
+    libs/opus/silk/NLSF_encode.c \
+    libs/opus/silk/NLSF_stabilize.c \
+    libs/opus/silk/NLSF_unpack.c \
+    libs/opus/silk/NLSF_VQ.c \
+    libs/opus/silk/NLSF_VQ_weights_laroia.c \
     libs/opus/silk/NSQ.c \
     libs/opus/silk/NSQ_del_dec.c \
+    libs/opus/silk/pitch_est_tables.c \
     libs/opus/silk/PLC.c \
+    libs/opus/silk/process_NLSFs.c \
+    libs/opus/silk/quant_LTP_gains.c \
+    libs/opus/silk/resampler.c \
+    libs/opus/silk/resampler_down2.c \
+    libs/opus/silk/resampler_down2_3.c \
+    libs/opus/silk/resampler_private_AR2.c \
+    libs/opus/silk/resampler_private_down_FIR.c \
+    libs/opus/silk/resampler_private_IIR_FIR.c \
+    libs/opus/silk/resampler_private_up2_HQ.c \
+    libs/opus/silk/resampler_rom.c \
     libs/opus/silk/shell_coder.c \
+    libs/opus/silk/sigm_Q15.c \
+    libs/opus/silk/sort.c \
+    libs/opus/silk/stereo_decode_pred.c \
+    libs/opus/silk/stereo_encode_pred.c \
+    libs/opus/silk/stereo_find_predictor.c \
+    libs/opus/silk/stereo_LR_to_MS.c \
+    libs/opus/silk/stereo_MS_to_LR.c \
+    libs/opus/silk/stereo_quant_pred.c \
+    libs/opus/silk/sum_sqr_shift.c \
     libs/opus/silk/tables_gain.c \
     libs/opus/silk/tables_LTP.c \
     libs/opus/silk/tables_NLSF_CB_NB_MB.c \
@@ -457,85 +577,42 @@ SOURCES_OPUS = libs/opus/src/opus.c \
     libs/opus/silk/tables_other.c \
     libs/opus/silk/tables_pitch_lag.c \
     libs/opus/silk/tables_pulses_per_block.c \
-    libs/opus/silk/VAD.c \
-    libs/opus/silk/control_audio_bandwidth.c \
-    libs/opus/silk/quant_LTP_gains.c \
-    libs/opus/silk/VQ_WMat_EC.c \
-    libs/opus/silk/HP_variable_cutoff.c \
-    libs/opus/silk/NLSF_encode.c \
-    libs/opus/silk/NLSF_VQ.c \
-    libs/opus/silk/NLSF_unpack.c \
-    libs/opus/silk/NLSF_del_dec_quant.c \
-    libs/opus/silk/process_NLSFs.c \
-    libs/opus/silk/stereo_LR_to_MS.c \
-    libs/opus/silk/stereo_MS_to_LR.c \
-    libs/opus/silk/check_control_input.c \
-    libs/opus/silk/control_SNR.c \
-    libs/opus/silk/init_encoder.c \
-    libs/opus/silk/control_codec.c \
-    libs/opus/silk/A2NLSF.c \
-    libs/opus/silk/ana_filt_bank_1.c \
-    libs/opus/silk/biquad_alt.c \
-    libs/opus/silk/bwexpander_32.c \
-    libs/opus/silk/bwexpander.c \
-    libs/opus/silk/debug.c \
-    libs/opus/silk/decode_pitch.c \
-    libs/opus/silk/inner_prod_aligned.c \
-    libs/opus/silk/lin2log.c \
-    libs/opus/silk/log2lin.c \
-    libs/opus/silk/LPC_analysis_filter.c \
-    libs/opus/silk/LPC_inv_pred_gain.c \
     libs/opus/silk/table_LSF_cos.c \
-    libs/opus/silk/NLSF2A.c \
-    libs/opus/silk/NLSF_stabilize.c \
-    libs/opus/silk/NLSF_VQ_weights_laroia.c \
-    libs/opus/silk/pitch_est_tables.c \
-    libs/opus/silk/resampler.c \
-    libs/opus/silk/resampler_down2_3.c \
-    libs/opus/silk/resampler_down2.c \
-    libs/opus/silk/resampler_private_AR2.c \
-    libs/opus/silk/resampler_private_down_FIR.c \
-    libs/opus/silk/resampler_private_IIR_FIR.c \
-    libs/opus/silk/resampler_private_up2_HQ.c \
-    libs/opus/silk/resampler_rom.c \
-    libs/opus/silk/sigm_Q15.c \
-    libs/opus/silk/sort.c \
-    libs/opus/silk/sum_sqr_shift.c \
-    libs/opus/silk/stereo_decode_pred.c \
-    libs/opus/silk/stereo_encode_pred.c \
-    libs/opus/silk/stereo_find_predictor.c \
-    libs/opus/silk/stereo_quant_pred.c \
-    libs/opus/silk/float/apply_sine_window_FLP.c \
-    libs/opus/silk/float/corrMatrix_FLP.c \
-    libs/opus/silk/float/encode_frame_FLP.c \
-    libs/opus/silk/float/find_LPC_FLP.c \
-    libs/opus/silk/float/find_LTP_FLP.c \
-    libs/opus/silk/float/find_pitch_lags_FLP.c \
-    libs/opus/silk/float/find_pred_coefs_FLP.c \
-    libs/opus/silk/float/LPC_analysis_filter_FLP.c \
-    libs/opus/silk/float/LTP_analysis_filter_FLP.c \
-    libs/opus/silk/float/LTP_scale_ctrl_FLP.c \
-    libs/opus/silk/float/noise_shape_analysis_FLP.c \
-    libs/opus/silk/float/prefilter_FLP.c \
-    libs/opus/silk/float/process_gains_FLP.c \
-    libs/opus/silk/float/regularize_correlations_FLP.c \
-    libs/opus/silk/float/residual_energy_FLP.c \
-    libs/opus/silk/float/solve_LS_FLP.c \
-    libs/opus/silk/float/warped_autocorrelation_FLP.c \
-    libs/opus/silk/float/wrappers_FLP.c \
-    libs/opus/silk/float/autocorrelation_FLP.c \
-    libs/opus/silk/float/burg_modified_FLP.c \
-    libs/opus/silk/float/bwexpander_FLP.c \
-    libs/opus/silk/float/energy_FLP.c \
-    libs/opus/silk/float/inner_product_FLP.c \
-    libs/opus/silk/float/k2a_FLP.c \
-    libs/opus/silk/float/levinsondurbin_FLP.c \
-    libs/opus/silk/float/LPC_inv_pred_gain_FLP.c \
-    libs/opus/silk/float/pitch_analysis_core_FLP.c \
-    libs/opus/silk/float/scale_copy_vector_FLP.c \
-    libs/opus/silk/float/scale_vector_FLP.c \
-    libs/opus/silk/float/schur_FLP.c \
-    libs/opus/silk/float/sort_FLP.c
+    libs/opus/silk/VAD.c \
+    libs/opus/silk/VQ_WMat_EC.c \
+    libs/opus/src/analysis.c \
+    libs/opus/src/mlp.c \
+    libs/opus/src/mlp_data.c \
+    libs/opus/src/opus.c \
+    libs/opus/src/opus_decoder.c \
+    libs/opus/src/opus_encoder.c \
+    libs/opus/src/repacketizer.c
+
+SOURCES_OPUS_ARM = libs/opus/celt/arm/armcpu.c \
+    libs/opus/celt/arm/arm_celt_map.c \
+    libs/opus/silk/arm/arm_silk_map.c
+
+SOURCES_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse4_1.c \
+    libs/opus/celt/x86/pitch_sse.c \
+    libs/opus/celt/x86/pitch_sse2.c \
+    libs/opus/celt/x86/pitch_sse4_1.c \
+    libs/opus/celt/x86/vq_sse2.c \
+    libs/opus/celt/x86/x86_celt_map.c \
+    libs/opus/celt/x86/x86cpu.c
+
+android {
+    contains(ANDROID_ARCHITECTURE, arm) | contains(ANDROID_ARCHITECTURE, arm64) {
+        SOURCE_OPUS += $$SOURCES_OPUS_ARM
+    } else:contains(ANDROID_ARCHITECTURE, x86) | contains(ANDROID_ARCHITECTURE, x86_64) {
+        SOURCE_OPUS += $$SOURCES_OPUS_X86
+    }
+} else:win32 | unix | macx {
+    contains(QT_ARCH, arm) | contains(QT_ARCH, arm64) {
+        SOURCE_OPUS += $$SOURCES_OPUS_ARM
+    } else:contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
+        SOURCE_OPUS += $$SOURCES_OPUS_X86
+    }
+}
 
 DISTFILES += ChangeLog \
     COPYING \
@@ -574,7 +651,6 @@ DISTFILES += ChangeLog \
     src/res/ledbuttonnotpressed.png \
     src/res/ledbuttonpressed.png \
     src/res/fronticon.png \
-    src/res/logopicture.png \
     src/res/mainicon.png \
     src/res/mixerboardbackground.png \
     src/res/VLEDBlack.png \
@@ -598,33 +674,47 @@ DISTFILES += ChangeLog \
     src/res/VRLEDRedSmall.png \
     src/res/VRLEDYellow.png \
     src/res/VRLEDYellowSmall.png \
-    src/res/instraccordeon.png \
-    src/res/instraguitar.png \
-    src/res/instrbassguitar.png \
-    src/res/instrcello.png \
-    src/res/instrclarinet.png \
-    src/res/instrdjembe.png \
-    src/res/instrdoublebass.png \
-    src/res/instrdrumset.png \
-    src/res/instreguitar.png \
-    src/res/instrflute.png \
-    src/res/instrfrenchhorn.png \
-    src/res/instrgrandpiano.png \
-    src/res/instrharmonica.png \
-    src/res/instrkeyboard.png \
-    src/res/instrlistener.png \
-    src/res/instrmicrophone.png \
-    src/res/instrnone.png \
-    src/res/instrrecorder.png \
-    src/res/instrsaxophone.png \
-    src/res/instrstreamer.png \
-    src/res/instrsynthesizer.png \
-    src/res/instrtrombone.png \
-    src/res/instrtrumpet.png \
-    src/res/instrtuba.png \
-    src/res/instrviolin.png \
-    src/res/instrvocal.png \
-    src/res/instrguitarvocal.png \
+    src/res/instruments/instraccordeon.png \
+    src/res/instruments/instraguitar.png \
+    src/res/instruments/instrbassguitar.png \
+    src/res/instruments/instrcello.png \
+    src/res/instruments/instrclarinet.png \
+    src/res/instruments/instrdjembe.png \
+    src/res/instruments/instrdoublebass.png \
+    src/res/instruments/instrdrumset.png \
+    src/res/instruments/instreguitar.png \
+    src/res/instruments/instrflute.png \
+    src/res/instruments/instrfrenchhorn.png \
+    src/res/instruments/instrgrandpiano.png \
+    src/res/instruments/instrharmonica.png \
+    src/res/instruments/instrkeyboard.png \
+    src/res/instruments/instrlistener.png \
+    src/res/instruments/instrmicrophone.png \
+    src/res/instruments/instrnone.png \
+    src/res/instruments/instrrecorder.png \
+    src/res/instruments/instrsaxophone.png \
+    src/res/instruments/instrstreamer.png \
+    src/res/instruments/instrsynthesizer.png \
+    src/res/instruments/instrtrombone.png \
+    src/res/instruments/instrtrumpet.png \
+    src/res/instruments/instrtuba.png \
+    src/res/instruments/instrviolin.png \
+    src/res/instruments/instrvocal.png \
+    src/res/instruments/instrguitarvocal.png \
+    src/res/instruments/instrkeyboardvocal.png \
+    src/res/instruments/bodhran.svg \
+    src/res/instruments/bodhran.png \
+    src/res/instruments/bassoon.svg \
+    src/res/instruments/bassoon.png \
+    src/res/instruments/oboe.svg \
+    src/res/instruments/oboe.png \
+    src/res/instruments/harp.svg \
+    src/res/instruments/harp.png \
+    src/res/instruments/viola.png \
+    src/res/instruments/congas.svg \
+    src/res/instruments/congas.png \
+    src/res/instruments/bongo.svg \
+    src/res/instruments/bongo.png \
     src/res/flags/flagnone.png \
     src/res/flags/ad.png \
     src/res/flags/ae.png \

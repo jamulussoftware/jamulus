@@ -60,12 +60,14 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void       (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
-             void*      arg,
-             const int  iCtrlMIDIChannel,
-             const bool bNoAutoJackConnect ) :
-        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect ), iJACKBufferSizeMono ( 0 ),
-        iJACKBufferSizeStero ( 0 ) { OpenJack(); }
+    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+             void*          arg,
+             const int      iCtrlMIDIChannel,
+             const bool     bNoAutoJackConnect,
+             const QString& strJackClientName ) :
+        CSoundBase ( "Jack", true, fpNewProcessCallback, arg, iCtrlMIDIChannel ),
+        iJACKBufferSizeMono ( 0 ), bJackWasShutDown ( false ) { OpenJack ( bNoAutoJackConnect, strJackClientName.toLocal8Bit().data() ); }
+
     virtual ~CSound() { CloseJack(); }
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
@@ -77,6 +79,7 @@ public:
     CVector<short> vecsTmpAudioSndCrdStereo;
     int            iJACKBufferSizeMono;
     int            iJACKBufferSizeStero;
+    bool           bJackWasShutDown;
 
     jack_port_t*   input_port_left;
     jack_port_t*   input_port_right;
@@ -85,7 +88,9 @@ public:
     jack_port_t*   input_port_midi;
 
 protected:
-    void OpenJack();
+    void OpenJack ( const bool  bNoAutoJackConnect,
+                    const char* jackClientName );
+
     void CloseJack();
 
     // callbacks
@@ -99,11 +104,12 @@ protected:
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void       (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
-             void*      pParg,
-             const int  iCtrlMIDIChannel,
-             const bool bNoAutoJackConnect ) :
-        CSoundBase ( "nosound", false, fpNewProcessCallback, pParg, iCtrlMIDIChannel, bNoAutoJackConnect ) {}
+    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* pParg ),
+             void*          pParg,
+             const int      iCtrlMIDIChannel,
+             const bool     ,
+             const QString& ) :
+        CSoundBase ( "nosound", false, fpNewProcessCallback, pParg, iCtrlMIDIChannel ) {}
     virtual ~CSound() {}
 };
 #endif // WITH_SOUND

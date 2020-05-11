@@ -27,12 +27,13 @@
 
 /* Implementation *************************************************************/
 
+CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+                 void*          arg,
+                 const int      iCtrlMIDIChannel,
+                 const bool     ,
+                 const QString& ) :
+    CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg, iCtrlMIDIChannel )
 
-CSound::CSound ( void       (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
-                 void*      arg,
-                 const int  iCtrlMIDIChannel,
-                 const bool bNoAutoJackConnect ) :
-    CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect )
 {
      pSound = this;
 #ifdef ANDROIDDEBUG

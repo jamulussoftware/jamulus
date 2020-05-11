@@ -473,16 +473,17 @@ class CHelpMenu : public QMenu
     Q_OBJECT
 
 public:
-    CHelpMenu ( QWidget* parent = nullptr );
+    CHelpMenu ( const bool bIsClient, QWidget* parent = nullptr );
 
 protected:
     CAboutDlg AboutDlg;
 
 public slots:
-    void OnHelpWhatsThis() { QWhatsThis::enterWhatsThisMode(); }
-    void OnHelpAbout() { AboutDlg.exec(); }
-    void OnHelpDownloadLink()
-        { QDesktopServices::openUrl ( QUrl ( SOFTWARE_DOWNLOAD_URL ) ); }
+    void OnHelpWhatsThis()        { QWhatsThis::enterWhatsThisMode(); }
+    void OnHelpAbout()            { AboutDlg.exec(); }
+    void OnHelpClientGetStarted() { QDesktopServices::openUrl ( QUrl ( CLIENT_GETTING_STARTED_URL ) ); }
+    void OnHelpServerGetStarted() { QDesktopServices::openUrl ( QUrl ( SERVER_GETTING_STARTED_URL ) ); }
+    void OnHelpSoftwareMan()      { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
 };
 
 
@@ -572,6 +573,57 @@ enum ECSAddType
 };
 
 
+// Slave server registration state ---------------------------------------------
+enum ESvrRegStatus
+{
+    SRS_UNREGISTERED = 0,
+    SRS_BAD_ADDRESS = 1,
+    SRS_REQUESTED = 2,
+    SRS_TIME_OUT = 3,
+    SRS_UNKNOWN_RESP = 4,
+    SRS_REGISTERED = 5,
+    SRS_CENTRAL_SVR_FULL = 6
+};
+
+inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
+{
+    switch ( eSvrRegStatus )
+    {
+    case SRS_UNREGISTERED:
+        return QCoreApplication::translate ( "CServerDlg", "Unregistered" );
+
+    case SRS_BAD_ADDRESS:
+        return QCoreApplication::translate ( "CServerDlg", "Bad address" );
+
+    case SRS_REQUESTED:
+        return QCoreApplication::translate ( "CServerDlg", "Registration requested" );
+
+    case SRS_TIME_OUT:
+        return QCoreApplication::translate ( "CServerDlg", "Registration failed" );
+
+    case SRS_UNKNOWN_RESP:
+        return QCoreApplication::translate ( "CServerDlg", "Check server version" );
+
+    case SRS_REGISTERED:
+        return QCoreApplication::translate ( "CServerDlg", "Registered" );
+
+    case SRS_CENTRAL_SVR_FULL:
+        return QCoreApplication::translate ( "CServerDlg", "Central Server full" );
+    }
+
+    return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) ).append ( eSvrRegStatus );
+}
+
+
+// Central server registration outcome -----------------------------------------
+enum ESvrRegResult
+{
+    // used for protocol -> enum values must be fixed!
+    SRR_REGISTERED = 0,
+    SRR_CENTRAL_SVR_FULL = 1
+};
+
+
 // Skill level enum ------------------------------------------------------------
 enum ESkillLevel
 {
@@ -604,9 +656,9 @@ public:
     CStereoSignalLevelMeter() { Reset(); }
 
     void          Update ( const CVector<short>& vecsAudio );
-    double        MicLevelLeft()  { return CalcLogResult ( dCurLevelL ); }
-    double        MicLevelRight() { return CalcLogResult ( dCurLevelR ); }
-    static double CalcLogResult  ( const double& dLinearLevel );
+    double        MicLeveldBLeft()  { return CalcLogResult ( dCurLevelL ); }
+    double        MicLeveldBRight() { return CalcLogResult ( dCurLevelR ); }
+    static double CalcLogResult ( const double& dLinearLevel );
 
     void Reset()
     {
@@ -710,9 +762,10 @@ public:
     static int  GetNotUsedInstrument() { return 0; }
     static bool IsNotUsedInstrument ( const int iInstrument ) { return iInstrument == 0; }
 
-    static int GetNumAvailableInst() { return GetTable().Size(); }
-    static QString GetResourceReference ( const int iInstrument );
-    static QString GetName ( const int iInstrument );
+    static int           GetNumAvailableInst() { return GetTable().Size(); }
+    static QString       GetResourceReference ( const int iInstrument );
+    static QString       GetName ( const int iInstrument );
+    static EInstCategory GetCategory ( const int iInstrument );
 
 // TODO make use of instrument category (not yet implemented)
 

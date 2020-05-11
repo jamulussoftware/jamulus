@@ -118,24 +118,17 @@ void CServerLogging::ParseLogFile ( const QString& strFileName )
         QStringList strlistCurLine = strCurLine.split ( "," );
 
         // check number of separated strings condition
-        if ( strlistCurLine.size() == 4 )
+        if ( strlistCurLine.size() == 3 )
         {
             // first entry
-            QDate curDate =
-                QDate::fromString ( strlistCurLine.at ( 0 ).trimmed(),
-                "d.M.yyyy" );
+            QDateTime curDateTime =
+                QDateTime::fromString ( strlistCurLine.at ( 0 ).trimmed(),
+                "yyyy-MM-dd HH:mm:ss" );
 
-            // second entry
-            QTime curTime =
-                QTime::fromString ( strlistCurLine.at ( 1 ).trimmed(),
-                "hh:mm:ss" );
-
-            if ( curDate.isValid() && curTime.isValid() )
+            if ( curDateTime.isValid() )
             {
-                QDateTime curDateTime ( curDate, curTime );
-
                 // check if server stop or new client connection
-                QString strAddress = strlistCurLine.at ( 2 ).trimmed();
+                QString strAddress = strlistCurLine.at ( 1 ).trimmed();
 
                 if ( strAddress.isEmpty() )
                 {
@@ -147,8 +140,8 @@ void CServerLogging::ParseLogFile ( const QString& strFileName )
                 {
                     QHostAddress curAddress;
                     
-                    // third entry is IP address
-                    if ( curAddress.setAddress ( strlistCurLine.at ( 2 ).trimmed() ) )
+                    // second entry is IP address
+                    if ( curAddress.setAddress ( strlistCurLine.at ( 1 ).trimmed() ) )
                     {
                         // new client connection
                         JpegHistoryGraph.Add ( curDateTime, curAddress );
@@ -168,9 +161,6 @@ QString CServerLogging::CurTimeDatetoLogString()
     // time and date to string conversion
     const QDateTime curDateTime = QDateTime::currentDateTime();
 
-    // format date and time output according to "3.9.2006, 11:38:08"
-    return QString().setNum ( curDateTime.date().day() ) + "." +
-        QString().setNum ( curDateTime.date().month() ) + "." +
-        QString().setNum ( curDateTime.date().year() ) + ", " +
-        curDateTime.time().toString();
+    // format date and time output according to "2006-09-30 11:38:08"
+    return curDateTime.toString("yyyy-MM-dd HH:mm:ss");
 }

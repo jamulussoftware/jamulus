@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QTextStream>
+#include <QTranslator>
 #include "global.h"
 #include "clientdlg.h"
 #include "serverdlg.h"
@@ -47,7 +48,12 @@ int main ( int argc, char** argv )
 
     // initialize all flags and string which might be changed by command line
     // arguments
+#if defined( SERVER_BUNDLE ) && ( defined( __APPLE__ ) || defined( __MACOSX ) )
+    // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
+    bool         bIsClient                 = false;
+#else
     bool         bIsClient                 = true;
+#endif
     bool         bUseGUI                   = true;
     bool         bStartMinimized           = false;
     bool         bShowComplRegConnList     = false;
@@ -56,6 +62,8 @@ int main ( int argc, char** argv )
     bool         bShowAnalyzerConsole      = false;
     bool         bCentServPingServerInList = false;
     bool         bNoAutoJackConnect        = false;
+    bool         bUseTranslation           = true;
+    bool         bCustomPortNumberGiven    = false;
     int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
     int          iMaxDaysHistory           = DEFAULT_DAYS_HISTORY;
     int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
@@ -71,6 +79,7 @@ int main ( int argc, char** argv )
     QString      strCentralServer          = "";
     QString      strServerInfo             = "";
     QString      strWelcomeMessage         = "";
+    QString      strClientName             = APP_NAME;
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -202,6 +211,18 @@ int main ( int argc, char** argv )
         }
 
 
+        // Disable translations ------------------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-t",
+                               "--notranslation" ) )
+        {
+            bUseTranslation = false;
+            tsConsole << "- translations disabled" << endl;
+            continue;
+        }
+
+
         // Show all registered servers in the server list ----------------------
         // Undocumented debugging command line argument: Show all registered
         // servers in the server list regardless if a ping to the server is
@@ -288,7 +309,8 @@ int main ( int argc, char** argv )
                                   65535,
                                   rDbleArgument ) )
         {
-            iPortNumber = static_cast<quint16> ( rDbleArgument );
+            iPortNumber            = static_cast<quint16> ( rDbleArgument );
+            bCustomPortNumberGiven = true;
             tsConsole << "- selected port number: " << iPortNumber << endl;
             continue;
         }
@@ -322,7 +344,22 @@ int main ( int argc, char** argv )
         }
 
 
-        // HTML status file ----------------------------------------------------
+        // Client Name ---------------------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "--clientname",
+                                 "--clientname",
+                                 strArgument ) )
+        {
+            strClientName = QString ( APP_NAME ) + " " + strArgument;
+            tsConsole << "- client name: " << strClientName << endl;
+            continue;
+        }
+
+
+        // Server history file name --------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
                                  argv,
@@ -427,6 +464,15 @@ int main ( int argc, char** argv )
         }
 
 
+        // Version number ------------------------------------------------------
+        if ( ( !strcmp ( argv[i], "--version" ) ) ||
+             ( !strcmp ( argv[i], "-v" ) ) )
+        {
+            tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
+            exit ( 1 );
+        }
+
+
         // Help (usage) flag ---------------------------------------------------
         if ( ( !strcmp ( argv[i], "--help" ) ) ||
              ( !strcmp ( argv[i], "-h" ) ) ||
@@ -434,9 +480,9 @@ int main ( int argc, char** argv )
         {
             const QString strHelp = UsageArguments ( argv );
             tsConsole << strHelp << endl;
-
             exit ( 1 );
         }
+
 
         // Unknown option ------------------------------------------------------
         tsConsole << argv[0] << ": ";
@@ -459,13 +505,22 @@ int main ( int argc, char** argv )
         strCentralServer = DEFAULT_SERVER_ADDRESS;
     }
 
+    // adjust default port number for client: use different default port than the server since
+    // if the client is started before the server, the server would get a socket bind error
+    if ( bIsClient && !bCustomPortNumberGiven )
+    {
+        iPortNumber += 10; // increment by 10
+    }
 
-    // Application/GUI setup ---------------------------------------------------
-    // Application object
-    if ( !bUseGUI && !strHistoryFileName.isEmpty() )
+    // display a warning if in server no GUI mode and a history file is requested
+    if ( !bIsClient && !bUseGUI && !strHistoryFileName.isEmpty() )
     {
         tsConsole << "Qt5 requires a windowing system to paint a JPEG image; image will use SVG" << endl;
     }
+
+
+    // Application/GUI setup ---------------------------------------------------
+    // Application object
     QCoreApplication* pApp = bUseGUI
             ? new QApplication ( argc, argv )
             : new QCoreApplication ( argc, argv );
@@ -492,6 +547,17 @@ int main ( int argc, char** argv )
     // init resources
     Q_INIT_RESOURCE(resources);
 
+    // load translations
+    QTranslator myappTranslator;
+
+    if ( bUseGUI && bUseTranslation )
+    {
+        if ( myappTranslator.load ( ":/translations/translation.qm" ) )
+        {
+            pApp->installTranslator ( &myappTranslator );
+        }
+    }
+
 
 // TEST -> activate the following line to activate the test bench,
 //CTestbench Testbench ( "127.0.0.1", LLCON_DEFAULT_PORT_NUMBER );
@@ -506,7 +572,8 @@ int main ( int argc, char** argv )
             CClient Client ( iPortNumber,
                              strConnOnStartupAddress,
                              iCtrlMIDIChannel,
-                             bNoAutoJackConnect );
+                             bNoAutoJackConnect,
+                             strClientName );
 
             // load settings from init-file
             CSettings Settings ( &Client, strIniFileName );
@@ -556,10 +623,6 @@ int main ( int argc, char** argv )
                              eLicenceType );
             if ( bUseGUI )
             {
-                // special case for the GUI mode: we want the licenct type to be
-                // creative commons per default (if not given in the settings file)
-                Server.SetLicenceType ( LT_CREATIVECOMMONS );
-
                 // load settings from init-file
                 CSettings Settings ( &Server, strIniFileName );
                 Settings.Load();
@@ -585,11 +648,11 @@ int main ( int argc, char** argv )
             }
             else
             {
-                // update serverlist
-                Server.UpdateServerList();
-
                 // only start application without using the GUI
                 tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
+
+                // update serverlist
+                Server.UpdateServerList();
 
                 pApp->exec();
             }
@@ -623,43 +686,44 @@ int main ( int argc, char** argv )
 QString UsageArguments ( char **argv )
 {
     return
-        "Usage: " + QString ( argv[0] ) + " [option] [argument]\n"
+        "Usage: " + QString ( argv[0] ) + " [option] [optional argument]\n"
         "\nRecognized options:\n"
-        "  -a, --servername      server name, required for HTML status (server\n"
-        "                        only)\n"
-        "  -c, --connect         connect to given server address on startup\n"
-        "                        (client only)\n"
-        "  -e, --centralserver   address of the central server (server only)\n"
-        "  -F, --fastupdate      use 64 samples frame size mode (server only)\n"
+        "  -h, -?, --help        display this help text and exit\n"
+        "  -i, --inifile         initialization file name\n"
+        "  -n, --nogui           disable GUI\n"
+        "  -p, --port            set your local port number\n"
+        "  -t, --notranslation   disable translation (use englisch language)\n"
+        "  -v, --version         output version information and exit\n"
+        "\nServer only:\n"
+        "  -a, --servername      server name, required for HTML status\n"
+        "  -D, --histdays        number of days of history to display\n"
+        "  -e, --centralserver   address of the central server\n"
+        "  -F, --fastupdate      use 64 samples frame size mode\n"
         "  -g, --pingservers     ping servers in list to keep NAT port open\n"
         "                        (central server only)\n"
-        "  -h, -?, --help        this help text\n"
-        "  -i, --inifile         initialization file name\n"
-        "  -j, --nojackconnect   disable auto Jack connections (client only)\n"
         "  -l, --log             enable logging, set file name\n"
         "  -L, --licence         a licence must be accepted on a new\n"
-        "                        connection (server only)\n"
-        "  -m, --htmlstatus      enable HTML status file, set file name (server\n"
-        "                        only)\n"
-        "  -n, --nogui           disable GUI\n"
+        "                        connection\n"
+        "  -m, --htmlstatus      enable HTML status file, set file name\n"
         "  -o, --serverinfo      infos of the server(s) in the format:\n"
         "                        [name];[city];[country as QLocale ID]; ...\n"
         "                        [server1 address];[server1 name]; ...\n"
         "                        [server1 city]; ...\n"
         "                        [server1 country as QLocale ID]; ...\n"
-        "                        [server2 address]; ... (server only)\n"
-        "  -p, --port            local port number (server only)\n"
+        "                        [server2 address]; ...\n"
         "  -R, --recording       enables recording and sets directory to contain\n"
-        "                        recorded jams (server only)\n"
+        "                        recorded jams\n"
         "  -s, --server          start server\n"
-        "  -u, --numchannels     maximum number of channels (server only)\n"
-        "  -w, --welcomemessage  welcome message on connect (server only)\n"
-        "  -y, --history         enable connection history and set file\n"
-        "                        name (server only)\n"
-        "  -D, --histdays        number of days of history to display (server only)\n"
-        "  -z, --startminimized  start minimizied (server only)\n"
-        "  --ctrlmidich          MIDI controller channel to listen (client only)"
-        "\nExample: " + QString ( argv[0] ) + " -l -inifile myinifile.ini\n";
+        "  -u, --numchannels     maximum number of channels\n"
+        "  -w, --welcomemessage  welcome message on connect\n"
+        "  -y, --history         enable connection history and set file name\n"
+        "  -z, --startminimized  start minimizied\n"
+        "\nClient only:\n"
+        "  -c, --connect         connect to given server address on startup\n"
+        "  -j, --nojackconnect   disable auto Jack connections\n"
+        "  --ctrlmidich          MIDI controller channel to listen\n"
+        "  --clientname          client name (window title and jack client name)\n"
+        "\nExample: " + QString ( argv[0] ) + " -s -inifile myinifile.ini\n";
 }
 
 bool GetFlagArgument ( char**  argv,

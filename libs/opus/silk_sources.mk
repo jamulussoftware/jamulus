@@ -74,8 +74,22 @@ silk/sum_sqr_shift.c \
 silk/stereo_decode_pred.c \
 silk/stereo_encode_pred.c \
 silk/stereo_find_predictor.c \
-silk/stereo_quant_pred.c
+silk/stereo_quant_pred.c \
+silk/LPC_fit.c
 
+SILK_SOURCES_SSE4_1 =  \
+silk/x86/NSQ_sse4_1.c \
+silk/x86/NSQ_del_dec_sse4_1.c \
+silk/x86/x86_silk_map.c \
+silk/x86/VAD_sse4_1.c \
+silk/x86/VQ_WMat_EC_sse4_1.c
+
+SILK_SOURCES_ARM_NEON_INTR = \
+silk/arm/arm_silk_map.c \
+silk/arm/biquad_alt_neon_intr.c \
+silk/arm/LPC_inv_pred_gain_neon_intr.c \
+silk/arm/NSQ_del_dec_neon_intr.c \
+silk/arm/NSQ_neon.c
 
 SILK_SOURCES_FIXED = \
 silk/fixed/LTP_analysis_filter_FIX.c \
@@ -87,12 +101,10 @@ silk/fixed/find_LTP_FIX.c \
 silk/fixed/find_pitch_lags_FIX.c \
 silk/fixed/find_pred_coefs_FIX.c \
 silk/fixed/noise_shape_analysis_FIX.c \
-silk/fixed/prefilter_FIX.c \
 silk/fixed/process_gains_FIX.c \
 silk/fixed/regularize_correlations_FIX.c \
 silk/fixed/residual_energy16_FIX.c \
 silk/fixed/residual_energy_FIX.c \
-silk/fixed/solve_LS_FIX.c \
 silk/fixed/warped_autocorrelation_FIX.c \
 silk/fixed/apply_sine_window_FIX.c \
 silk/fixed/autocorr_FIX.c \
@@ -103,6 +115,13 @@ silk/fixed/pitch_analysis_core_FIX.c \
 silk/fixed/vector_ops_FIX.c \
 silk/fixed/schur64_FIX.c \
 silk/fixed/schur_FIX.c
+
+SILK_SOURCES_FIXED_SSE4_1 = \
+silk/fixed/x86/vector_ops_FIX_sse4_1.c \
+silk/fixed/x86/burg_modified_FIX_sse4_1.c
+
+SILK_SOURCES_FIXED_ARM_NEON_INTR = \
+silk/fixed/arm/warped_autocorrelation_FIX_neon_intr.c
 
 SILK_SOURCES_FLOAT = \
 silk/float/apply_sine_window_FLP.c \
@@ -116,11 +135,9 @@ silk/float/LPC_analysis_filter_FLP.c \
 silk/float/LTP_analysis_filter_FLP.c \
 silk/float/LTP_scale_ctrl_FLP.c \
 silk/float/noise_shape_analysis_FLP.c \
-silk/float/prefilter_FLP.c \
 silk/float/process_gains_FLP.c \
 silk/float/regularize_correlations_FLP.c \
 silk/float/residual_energy_FLP.c \
-silk/float/solve_LS_FLP.c \
 silk/float/warped_autocorrelation_FLP.c \
 silk/float/wrappers_FLP.c \
 silk/float/autocorrelation_FLP.c \
@@ -129,7 +146,6 @@ silk/float/bwexpander_FLP.c \
 silk/float/energy_FLP.c \
 silk/float/inner_product_FLP.c \
 silk/float/k2a_FLP.c \
-silk/float/levinsondurbin_FLP.c \
 silk/float/LPC_inv_pred_gain_FLP.c \
 silk/float/pitch_analysis_core_FLP.c \
 silk/float/scale_copy_vector_FLP.c \

@@ -105,8 +105,10 @@ LED bar:      lbr
 #define DEFAULT_SERVER_ADDRESS           "jamulus.fischvolk.de"
 #define DEFAULT_SERVER_NAME              "Central Server"
 
-// download URL
-#define SOFTWARE_DOWNLOAD_URL            "http://sourceforge.net/projects/llcon/files"
+// getting started and software manual URL
+#define CLIENT_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Software-Manual"
+#define SERVER_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Running-a-Server"
+#define SOFTWARE_MANUAL_URL              "https://github.com/corrados/jamulus/blob/master/src/res/homepage/manual.md"
 
 // determining server internal address uses well-known host and port
 // (Google DNS, or something else reliable)
@@ -166,18 +168,15 @@ LED bar:      lbr
 // maximum number of fader settings to be stored (together with the fader tags)
 #define MAX_NUM_STORED_FADER_SETTINGS    200
 
-// defines for LED level meter CMultiColorLEDBar
-#define NUM_STEPS_LED_BAR                8
-#define RED_BOUND_LED_BAR                7
-#define YELLOW_BOUND_LED_BAR             5
-
 // range for signal level meter
 #define LOW_BOUND_SIG_METER              ( -50.0 ) // dB
 #define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
 
-// Maximum number of connected clients at the server. If you want to change this
-// paramter you have to modify the code on some places, too! The code tag
+// Maximum number of connected clients at the server.
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+// If you want to change this paramter you have to modify the code on some places, too! The code tag
 // "MAX_NUM_CHANNELS_TAG" shows these places (just search for the tag in the entire code)
+#endif
 #define MAX_NUM_CHANNELS                 50 // max number channels for server
 
 // actual number of used channels in the server
@@ -215,9 +214,13 @@ LED bar:      lbr
 // defines the minimum time a server must run to be a permanent server
 #define SERVLIST_TIME_PERMSERV_MINUTES   1440 // minutes, 1440 = 60 min * 24 h
 
+// registration response timeout
+#define REGISTER_SERVER_TIME_OUT_MS      500 // ms
 
-// length of the moving average buffer for response time measurement
-#define TIME_MOV_AV_RESPONSE_SECONDS     30 // seconds
+// defines the maximum number of times to retry server registration
+// when no response is received within the timeout (before reverting
+// to SERVLIST_REGIST_INTERV_MINUTES)
+#define REGISTER_SERVER_RETRY_LIMIT      5 // count
 
 
 // Maximum length of fader tag and text message strings (Since for chat messages

@@ -56,16 +56,43 @@
    <item>
     <widget class="QCheckBox" name="chbUseCCLicence">
      <property name="text">
-      <string>Show Creative Commons Licence Dialog</string>
+      <string>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</string>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QCheckBox" name="chbRegisterServer">
-     <property name="text">
-      <string>Make My Server Public (Register My Server in the Server List)</string>
-     </property>
-    </widget>
+    <layout class="QHBoxLayout">
+     <item>
+       <widget class="QCheckBox" name="chbRegisterServer">
+        <property name="text">
+         <string>Make My Server Public (Register My Server in the Server List)</string>
+        </property>
+       </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblRegSvrStatus">
+       <property name="text">
+        <string>STATUS</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item>
     <layout class="QHBoxLayout">

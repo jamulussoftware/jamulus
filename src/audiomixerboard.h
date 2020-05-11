@@ -52,7 +52,7 @@ public:
     void SetChannelInfos ( const CChannelInfo& cChanInfo );
     void Show() { pFrame->show(); }
     void Hide() { pFrame->hide(); }
-    bool IsVisible() { return plblLabel->isVisible(); }
+    bool IsVisible() { return !pFrame->isHidden(); }
     bool IsSolo() { return pcbSolo->isChecked(); }
     bool IsMute() { return pcbMute->isChecked(); }
     void SetGUIDesign ( const EGUIDesign eNewDesign );
@@ -102,7 +102,31 @@ signals:
 };
 
 
-class CAudioMixerBoard : public QScrollArea
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+template<unsigned int slotId>
+class CAudioMixerBoardSlots : public CAudioMixerBoardSlots<slotId - 1>
+{
+
+public:
+    void OnChGainValueChanged ( double dValue ) { UpdateGainValue ( slotId - 1, dValue ); }
+
+protected:
+    virtual void UpdateGainValue ( const int    iChannelIdx,
+                                   const double dValue ) = 0;
+};
+
+template<>
+class CAudioMixerBoardSlots<0> {};
+
+#else
+template<unsigned int slotId>
+class CAudioMixerBoardSlots {};
+
+#endif
+
+class CAudioMixerBoard :
+    public QScrollArea,
+    public CAudioMixerBoardSlots<MAX_NUM_CHANNELS>
 {
     Q_OBJECT
 
@@ -136,9 +160,6 @@ protected:
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
 
-    void OnGainValueChanged ( const int    iChannelIdx,
-                              const double dValue );
-
     CVector<CChannelFader*> vecpChanFader;
     QGroupBox*              pGroupBox;
     QHBoxLayout*            pMainLayout;
@@ -146,61 +167,77 @@ protected:
     bool                    bNoFaderVisible;
     QString                 strServerName;
 
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    virtual void UpdateGainValue ( const int    iChannelIdx,
+                                   const double dValue );
+
+    template<unsigned int slotId>
+    inline void connectFaderSignalsToMixerBoardSlots();
+
+#else
+    void UpdateGainValue ( const int    iChannelIdx,
+                           const double dValue );
+
+#endif
+
+#if QT_VERSION < 0x50000  // MOC does not expand macros in Qt 4, so we cannot use QT_VERSION_CHECK(5, 0, 0)
 public slots:
     // CODE TAG: MAX_NUM_CHANNELS_TAG
     // make sure we have MAX_NUM_CHANNELS connections!!!
-    void OnGainValueChangedCh0  ( double dValue ) { OnGainValueChanged ( 0,  dValue ); }
-    void OnGainValueChangedCh1  ( double dValue ) { OnGainValueChanged ( 1,  dValue ); }
-    void OnGainValueChangedCh2  ( double dValue ) { OnGainValueChanged ( 2,  dValue ); }
-    void OnGainValueChangedCh3  ( double dValue ) { OnGainValueChanged ( 3,  dValue ); }
-    void OnGainValueChangedCh4  ( double dValue ) { OnGainValueChanged ( 4,  dValue ); }
-    void OnGainValueChangedCh5  ( double dValue ) { OnGainValueChanged ( 5,  dValue ); }
-    void OnGainValueChangedCh6  ( double dValue ) { OnGainValueChanged ( 6,  dValue ); }
-    void OnGainValueChangedCh7  ( double dValue ) { OnGainValueChanged ( 7,  dValue ); }
-    void OnGainValueChangedCh8  ( double dValue ) { OnGainValueChanged ( 8,  dValue ); }
-    void OnGainValueChangedCh9  ( double dValue ) { OnGainValueChanged ( 9,  dValue ); }
-    void OnGainValueChangedCh10 ( double dValue ) { OnGainValueChanged ( 10, dValue ); }
-    void OnGainValueChangedCh11 ( double dValue ) { OnGainValueChanged ( 11, dValue ); }
-    void OnGainValueChangedCh12 ( double dValue ) { OnGainValueChanged ( 12, dValue ); }
-    void OnGainValueChangedCh13 ( double dValue ) { OnGainValueChanged ( 13, dValue ); }
-    void OnGainValueChangedCh14 ( double dValue ) { OnGainValueChanged ( 14, dValue ); }
-    void OnGainValueChangedCh15 ( double dValue ) { OnGainValueChanged ( 15, dValue ); }
-    void OnGainValueChangedCh16 ( double dValue ) { OnGainValueChanged ( 16, dValue ); }
-    void OnGainValueChangedCh17 ( double dValue ) { OnGainValueChanged ( 17, dValue ); }
-    void OnGainValueChangedCh18 ( double dValue ) { OnGainValueChanged ( 18, dValue ); }
-    void OnGainValueChangedCh19 ( double dValue ) { OnGainValueChanged ( 19, dValue ); }
-    void OnGainValueChangedCh20 ( double dValue ) { OnGainValueChanged ( 20, dValue ); }
-    void OnGainValueChangedCh21 ( double dValue ) { OnGainValueChanged ( 21, dValue ); }
-    void OnGainValueChangedCh22 ( double dValue ) { OnGainValueChanged ( 22, dValue ); }
-    void OnGainValueChangedCh23 ( double dValue ) { OnGainValueChanged ( 23, dValue ); }
-    void OnGainValueChangedCh24 ( double dValue ) { OnGainValueChanged ( 24, dValue ); }
-    void OnGainValueChangedCh25 ( double dValue ) { OnGainValueChanged ( 25, dValue ); }
-    void OnGainValueChangedCh26 ( double dValue ) { OnGainValueChanged ( 26, dValue ); }
-    void OnGainValueChangedCh27 ( double dValue ) { OnGainValueChanged ( 27, dValue ); }
-    void OnGainValueChangedCh28 ( double dValue ) { OnGainValueChanged ( 28, dValue ); }
-    void OnGainValueChangedCh29 ( double dValue ) { OnGainValueChanged ( 29, dValue ); }
-    void OnGainValueChangedCh30 ( double dValue ) { OnGainValueChanged ( 30, dValue ); }
-    void OnGainValueChangedCh31 ( double dValue ) { OnGainValueChanged ( 31, dValue ); }
-    void OnGainValueChangedCh32 ( double dValue ) { OnGainValueChanged ( 32, dValue ); }
-    void OnGainValueChangedCh33 ( double dValue ) { OnGainValueChanged ( 33, dValue ); }
-    void OnGainValueChangedCh34 ( double dValue ) { OnGainValueChanged ( 34, dValue ); }
-    void OnGainValueChangedCh35 ( double dValue ) { OnGainValueChanged ( 35, dValue ); }
-    void OnGainValueChangedCh36 ( double dValue ) { OnGainValueChanged ( 36, dValue ); }
-    void OnGainValueChangedCh37 ( double dValue ) { OnGainValueChanged ( 37, dValue ); }
-    void OnGainValueChangedCh38 ( double dValue ) { OnGainValueChanged ( 38, dValue ); }
-    void OnGainValueChangedCh39 ( double dValue ) { OnGainValueChanged ( 39, dValue ); }
-    void OnGainValueChangedCh40 ( double dValue ) { OnGainValueChanged ( 40, dValue ); }
-    void OnGainValueChangedCh41 ( double dValue ) { OnGainValueChanged ( 41, dValue ); }
-    void OnGainValueChangedCh42 ( double dValue ) { OnGainValueChanged ( 42, dValue ); }
-    void OnGainValueChangedCh43 ( double dValue ) { OnGainValueChanged ( 43, dValue ); }
-    void OnGainValueChangedCh44 ( double dValue ) { OnGainValueChanged ( 44, dValue ); }
-    void OnGainValueChangedCh45 ( double dValue ) { OnGainValueChanged ( 45, dValue ); }
-    void OnGainValueChangedCh46 ( double dValue ) { OnGainValueChanged ( 46, dValue ); }
-    void OnGainValueChangedCh47 ( double dValue ) { OnGainValueChanged ( 47, dValue ); }
-    void OnGainValueChangedCh48 ( double dValue ) { OnGainValueChanged ( 48, dValue ); }
-    void OnGainValueChangedCh49 ( double dValue ) { OnGainValueChanged ( 49, dValue ); }
+    void OnGainValueChangedCh0  ( double dValue ) { UpdateGainValue ( 0,  dValue ); }
+    void OnGainValueChangedCh1  ( double dValue ) { UpdateGainValue ( 1,  dValue ); }
+    void OnGainValueChangedCh2  ( double dValue ) { UpdateGainValue ( 2,  dValue ); }
+    void OnGainValueChangedCh3  ( double dValue ) { UpdateGainValue ( 3,  dValue ); }
+    void OnGainValueChangedCh4  ( double dValue ) { UpdateGainValue ( 4,  dValue ); }
+    void OnGainValueChangedCh5  ( double dValue ) { UpdateGainValue ( 5,  dValue ); }
+    void OnGainValueChangedCh6  ( double dValue ) { UpdateGainValue ( 6,  dValue ); }
+    void OnGainValueChangedCh7  ( double dValue ) { UpdateGainValue ( 7,  dValue ); }
+    void OnGainValueChangedCh8  ( double dValue ) { UpdateGainValue ( 8,  dValue ); }
+    void OnGainValueChangedCh9  ( double dValue ) { UpdateGainValue ( 9,  dValue ); }
+    void OnGainValueChangedCh10 ( double dValue ) { UpdateGainValue ( 10, dValue ); }
+    void OnGainValueChangedCh11 ( double dValue ) { UpdateGainValue ( 11, dValue ); }
+    void OnGainValueChangedCh12 ( double dValue ) { UpdateGainValue ( 12, dValue ); }
+    void OnGainValueChangedCh13 ( double dValue ) { UpdateGainValue ( 13, dValue ); }
+    void OnGainValueChangedCh14 ( double dValue ) { UpdateGainValue ( 14, dValue ); }
+    void OnGainValueChangedCh15 ( double dValue ) { UpdateGainValue ( 15, dValue ); }
+    void OnGainValueChangedCh16 ( double dValue ) { UpdateGainValue ( 16, dValue ); }
+    void OnGainValueChangedCh17 ( double dValue ) { UpdateGainValue ( 17, dValue ); }
+    void OnGainValueChangedCh18 ( double dValue ) { UpdateGainValue ( 18, dValue ); }
+    void OnGainValueChangedCh19 ( double dValue ) { UpdateGainValue ( 19, dValue ); }
+    void OnGainValueChangedCh20 ( double dValue ) { UpdateGainValue ( 20, dValue ); }
+    void OnGainValueChangedCh21 ( double dValue ) { UpdateGainValue ( 21, dValue ); }
+    void OnGainValueChangedCh22 ( double dValue ) { UpdateGainValue ( 22, dValue ); }
+    void OnGainValueChangedCh23 ( double dValue ) { UpdateGainValue ( 23, dValue ); }
+    void OnGainValueChangedCh24 ( double dValue ) { UpdateGainValue ( 24, dValue ); }
+    void OnGainValueChangedCh25 ( double dValue ) { UpdateGainValue ( 25, dValue ); }
+    void OnGainValueChangedCh26 ( double dValue ) { UpdateGainValue ( 26, dValue ); }
+    void OnGainValueChangedCh27 ( double dValue ) { UpdateGainValue ( 27, dValue ); }
+    void OnGainValueChangedCh28 ( double dValue ) { UpdateGainValue ( 28, dValue ); }
+    void OnGainValueChangedCh29 ( double dValue ) { UpdateGainValue ( 29, dValue ); }
+    void OnGainValueChangedCh30 ( double dValue ) { UpdateGainValue ( 30, dValue ); }
+    void OnGainValueChangedCh31 ( double dValue ) { UpdateGainValue ( 31, dValue ); }
+    void OnGainValueChangedCh32 ( double dValue ) { UpdateGainValue ( 32, dValue ); }
+    void OnGainValueChangedCh33 ( double dValue ) { UpdateGainValue ( 33, dValue ); }
+    void OnGainValueChangedCh34 ( double dValue ) { UpdateGainValue ( 34, dValue ); }
+    void OnGainValueChangedCh35 ( double dValue ) { UpdateGainValue ( 35, dValue ); }
+    void OnGainValueChangedCh36 ( double dValue ) { UpdateGainValue ( 36, dValue ); }
+    void OnGainValueChangedCh37 ( double dValue ) { UpdateGainValue ( 37, dValue ); }
+    void OnGainValueChangedCh38 ( double dValue ) { UpdateGainValue ( 38, dValue ); }
+    void OnGainValueChangedCh39 ( double dValue ) { UpdateGainValue ( 39, dValue ); }
+    void OnGainValueChangedCh40 ( double dValue ) { UpdateGainValue ( 40, dValue ); }
+    void OnGainValueChangedCh41 ( double dValue ) { UpdateGainValue ( 41, dValue ); }
+    void OnGainValueChangedCh42 ( double dValue ) { UpdateGainValue ( 42, dValue ); }
+    void OnGainValueChangedCh43 ( double dValue ) { UpdateGainValue ( 43, dValue ); }
+    void OnGainValueChangedCh44 ( double dValue ) { UpdateGainValue ( 44, dValue ); }
+    void OnGainValueChangedCh45 ( double dValue ) { UpdateGainValue ( 45, dValue ); }
+    void OnGainValueChangedCh46 ( double dValue ) { UpdateGainValue ( 46, dValue ); }
+    void OnGainValueChangedCh47 ( double dValue ) { UpdateGainValue ( 47, dValue ); }
+    void OnGainValueChangedCh48 ( double dValue ) { UpdateGainValue ( 48, dValue ); }
+    void OnGainValueChangedCh49 ( double dValue ) { UpdateGainValue ( 49, dValue ); }
 
     void OnChSoloStateChanged() { UpdateSoloStates(); }
+
+#endif
 
 signals:
     void ChangeChanGain ( int iId, double dGain );

@@ -42,37 +42,42 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
 
     // Add help text to controls -----------------------------------------------
     // client list
-    lvwClients->setWhatsThis ( tr ( "<b>Client List:</b> The client list "
-        "shows all clients which are currently connected to this server. Some "
-        "informations about the clients like the IP address and name are given "
-        "for each connected client." ) );
+    lvwClients->setWhatsThis ( "<b>" + tr ( "Client List" ) + ":</b> " + tr (
+        "The client list shows all clients which are currently connected to this "
+        "server. Some information about the clients like the IP address and name "
+        "are given for each connected client." ) );
 
     lvwClients->setAccessibleName ( tr ( "Connected clients list view" ) );
 
     // start minimized on operating system start
-    chbStartOnOSStart->setWhatsThis ( tr ( "<b>Start Minimized on Operating "
-        "System Start:</b> If the start minimized on operating system start "
+    chbStartOnOSStart->setWhatsThis ( "<b>" + tr ( "Start Minimized on Operating "
+        "System Start" ) + ":</b> " + tr ( "If the start minimized on operating system start "
         "check box is checked, the " ) + APP_NAME + tr ( " server will be "
         "started when the operating system starts up and is automatically "
         "minimized to a system task bar icon." ) );
 
     // CC licence dialog switch
-    chbUseCCLicence->setWhatsThis ( tr ( "<b>Show Creative Commons Licence "
-        "Dialog:</b> If enabled, a Creative Commons Licence dialog is shown "
-        "each time a new user connects the server." ) );
+    chbUseCCLicence->setWhatsThis ( "<b>" + tr ( "Show Creative Commons Licence "
+        "Dialog" ) + ":</b> " + tr ( "If enabled, a Creative Commons BY-NC-SA 4.0 Licence "
+        "dialog is shown each time a new user connects the server." ) );
 
-    // register server flag
-    chbRegisterServer->setWhatsThis ( tr ( "<b>Register Server Status:</b> If "
-        "the register server check box is checked, this server registers "
+    // Make My Server Public flag
+    chbRegisterServer->setWhatsThis ( "<b>" + tr ( "Make My Server Public" ) + ":</b> " +
+        tr ( "If the Make My Server Public check box is checked, this server registers "
         "itself at the central server so that all " ) + APP_NAME +
         tr ( " users can see the server in the connect dialog server list and "
         "connect to it. The registering of the server is renewed periodically "
         "to make sure that all servers in the connect dialog server list are "
         "actually available." ) );
 
+    // register server status label
+    lblRegSvrStatus->setWhatsThis ( "<b>" + tr ( "Register Server Status" ) + ":</b> " +
+        tr ( "If the Make My Server Public check box is checked, this will show "
+        "the success of registration with the central server." ) );
+
     // central server address
-    QString strCentrServAddr = tr ( "<b>Central Server Address:</b> The "
-        "Central server address is the IP address or URL of the central server "
+    QString strCentrServAddr = "<b>" + tr ( "Central Server Address" ) + ":</b> " +
+        tr ( "The Central server address is the IP address or URL of the central server "
         "at which this server is registered. With the central server address "
         "type either the local region can be selected of the default central "
         "servers or a manual address can be specified." );
@@ -85,7 +90,7 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     edtCentralServerAddress->setAccessibleName ( tr ( "Central server address line edit" ) );
 
     // server name
-    QString strServName = tr ( "<b>Server Name:</b> The server name identifies "
+    QString strServName = "<b>" + tr ( "Server Name" ) + ":</b> " + tr ( "The server name identifies "
         "your server in the connect dialog server list at the clients. If no "
         "name is given, the IP address is shown instead." );
 
@@ -95,18 +100,17 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     edtServerName->setAccessibleName ( tr ( "Server name line edit" ) );
 
     // location city
-    QString strLocCity = tr ( "<b>Location City:</b> The city in which this "
+    QString strLocCity = "<b>" + tr ( "Location City" ) + ":</b> " + tr ( "The city in which this "
         "server is located can be set here. If a city name is entered, it "
         "will be shown in the connect dialog server list at the clients." );
 
     lblLocationCity->setWhatsThis ( strLocCity );
     edtLocationCity->setWhatsThis ( strLocCity );
 
-    edtLocationCity->setAccessibleName ( tr (
-        "City where the server is located line edit" ) );
+    edtLocationCity->setAccessibleName ( tr ( "City where the server is located line edit" ) );
 
     // location country
-    QString strLocCountry = tr ( "<b>Location country:</b> The country in "
+    QString strLocCountry = "<b>" + tr ( "Location country" ) + ":</b> " + tr ( "The country in "
         "which this server is located can be set here. If a country is "
         "entered, it will be shown in the connect dialog server list at the "
         "clients." );
@@ -184,9 +188,9 @@ lvwClients->setMinimumHeight ( 140 );
 
     // central server address type combo box
     cbxCentServAddrType->clear();
-    cbxCentServAddrType->addItem ( "Manual" );                  // AT_MANUAL
-    cbxCentServAddrType->addItem ( "Default" );                 // AT_DEFAULT
-    cbxCentServAddrType->addItem ( "Default (North America)" ); // AT_NORTH_AMERICA
+    cbxCentServAddrType->addItem ( tr ( "Manual" ) );                  // AT_MANUAL
+    cbxCentServAddrType->addItem ( tr ( "Default" ) );                 // AT_DEFAULT
+    cbxCentServAddrType->addItem ( tr ( "Default (North America)" ) ); // AT_NORTH_AMERICA
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pServer->GetCentralServerAddressType() ) );
 
     // update server name line edit
@@ -268,7 +272,7 @@ lvwClients->setMinimumHeight ( 140 );
 
 
     // View menu  --------------------------------------------------------------
-    QMenu* pViewMenu = new QMenu ( "&Window", this );
+    QMenu* pViewMenu = new QMenu ( tr ( "&Window" ), this );
 
     pViewMenu->addAction ( tr ( "E&xit" ), this,
         SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
@@ -278,7 +282,7 @@ lvwClients->setMinimumHeight ( 140 );
     pMenu = new QMenuBar ( this );
 
     pMenu->addMenu ( pViewMenu );
-    pMenu->addMenu ( new CHelpMenu ( this ) );
+    pMenu->addMenu ( new CHelpMenu ( false, this ) );
 
     // Now tell the layout about the menu
     layout()->setMenuBar ( pMenu );
@@ -321,6 +325,9 @@ lvwClients->setMinimumHeight ( 140 );
 
     QObject::connect ( pServer, SIGNAL ( Stopped() ),
         this, SLOT ( OnServerStopped() ) );
+
+    QObject::connect ( pServer, SIGNAL ( SvrRegStatusChanged() ),
+        this, SLOT ( OnSvrRegStatusChanged() ) );
 
     QObject::connect ( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
         this, SLOT ( OnAboutToQuit() ) );
@@ -439,6 +446,12 @@ void CServerDlg::OnLocationCountryActivated ( int iCntryListItem )
 
 void CServerDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
 {
+    // if server was registered, unregister first
+    if ( pServer->GetServerListEnabled() )
+    {
+        pServer->UnregisterSlaveServer();
+    }
+
     // apply new setting to the server and update it
     pServer->SetCentralServerAddressType ( static_cast<ECSAddType> ( iTypeIdx ) );
     pServer->UpdateServerList();
@@ -507,6 +520,8 @@ void CServerDlg::UpdateGUIDependencies()
 
     const bool bCurUseDefCentServAddr = ( pServer->GetCentralServerAddressType() != AT_MANUAL );
 
+    const ESvrRegStatus eSvrRegStatus = pServer->GetSvrRegStatus();
+
     // if register server is not enabled, we disable all the configuration
     // controls for the server list
     cbxCentServAddrType->setEnabled ( bCurSerListEnabled );
@@ -534,6 +549,26 @@ void CServerDlg::UpdateGUIDependencies()
     // server list is enabled and not the default address is used
     edtCentralServerAddress->setEnabled (
         !bCurUseDefCentServAddr && bCurSerListEnabled );
+
+    QString strStatus = svrRegStatusToString ( eSvrRegStatus );
+
+    switch ( eSvrRegStatus )
+    {
+    case SRS_BAD_ADDRESS:
+    case SRS_TIME_OUT:
+    case SRS_CENTRAL_SVR_FULL:
+        strStatus = "<font color=""red""><b>" + strStatus + "</b></font>";
+        break;
+
+    case SRS_REGISTERED:
+        strStatus = "<font color=""darkGreen""><b>" + strStatus + "</b></font>";
+        break;
+
+    default:
+        break;
+    }
+
+    lblRegSvrStatus->setText ( strStatus );
 }
 
 void CServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )

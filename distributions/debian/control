@@ -11,16 +11,18 @@ Build-Depends:
  make,
  qt5-default,
  qtdeclarative5-dev,
+ qttools5-dev-tools,
 Standards-Version: 3.9.5
 Homepage: http://llcon.sourceforge.net/
 Vcs-Git: git://github.com/corrados/jamulus.git
 Vcs-Browser: https://github.com/corrados/jamulus
 
 Package: jamulus
-Architecture: i386 amd64 armhf
+Architecture: any
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
+ adduser,
  jackd,
  qt5-default,
  qtchooser,

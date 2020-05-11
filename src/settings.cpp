@@ -106,6 +106,12 @@ void CSettings::Load()
             pClient->iNewClientFaderLevel = iValue;
         }
 
+        // connect dialog show all musicians
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "connectdlgshowallmusicians", bValue ) )
+        {
+            pClient->bConnectDlgShowAllMusicians = bValue;
+        }
+
         // name
         pClient->ChannelInfo.strName = FromBase64ToString (
             GetIniSetting ( IniXMLDocument, "client", "name_base64" ) );
@@ -241,6 +247,12 @@ void CSettings::Load()
              MIN_NET_BUF_SIZE_NUM_BL, MAX_NET_BUF_SIZE_NUM_BL, iValue ) )
         {
             pClient->SetServerSockBufNumFrames ( iValue );
+        }
+
+        // enable OPUS64 setting
+        if ( GetFlagIniSet ( IniXMLDocument, "client", "enableopussmall", bValue ) )
+        {
+            pClient->SetEnableOPUS64 ( bValue );
         }
 
         // GUI design
@@ -463,6 +475,10 @@ void CSettings::Save()
         SetNumericIniSet ( IniXMLDocument, "client", "newclientlevel",
             pClient->iNewClientFaderLevel );
 
+        // connect dialog show all musicians
+        SetFlagIniSet ( IniXMLDocument, "client", "connectdlgshowallmusicians",
+            pClient->bConnectDlgShowAllMusicians );
+
         // name
         PutIniSetting ( IniXMLDocument, "client", "name_base64",
             ToBase64 ( pClient->ChannelInfo.strName ) );
@@ -530,6 +546,10 @@ void CSettings::Save()
         // network jitter buffer size for server
         SetNumericIniSet ( IniXMLDocument, "client", "jitbufserver",
             pClient->GetServerSockBufNumFrames() );
+
+        // enable OPUS64 setting
+        SetFlagIniSet ( IniXMLDocument, "client", "enableopussmall",
+            pClient->GetEnableOPUS64() );
 
         // GUI design
         SetNumericIniSet ( IniXMLDocument, "client", "guidesign",

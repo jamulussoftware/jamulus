@@ -36,17 +36,18 @@
 class CSound : public CSoundBase
 {
 public:
-    CSound ( void       (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
-             void*      arg,
-             const int  iCtrlMIDIChannel,
-             const bool bNoAutoJackConnect );
+    CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+             void*          arg,
+             const int      iCtrlMIDIChannel,
+             const bool     ,
+             const QString& );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
     virtual void Stop();
 
     // channel selection
-    virtual int     GetNumInputChannels() { return iNumInChan; }
+    virtual int     GetNumInputChannels() { return iNumInChanPlusAddChan; }
     virtual QString GetInputChannelName ( const int iDiD ) { return sChannelNamesInput[iDiD]; }
     virtual void    SetLeftInputChannel  ( const int iNewChan );
     virtual void    SetRightInputChannel ( const int iNewChan );
@@ -68,18 +69,34 @@ public:
     AudioDeviceID  CurrentAudioInputDeviceID;
     AudioDeviceID  CurrentAudioOutputDeviceID;
     int            iNumInChan;
+    int            iNumInChanPlusAddChan; // includes additional "added" channels
     int            iNumOutChan;
     int            iSelInputLeftChannel;
     int            iSelInputRightChannel;
     int            iSelOutputLeftChannel;
     int            iSelOutputRightChannel;
+    int            iSelInBufferLeft;
+    int            iSelInBufferRight;
+    int            iSelInInterlChLeft;
+    int            iSelInInterlChRight;
+    int            iSelAddInBufferLeft;
+    int            iSelAddInBufferRight;
+    int            iSelAddInInterlChLeft;
+    int            iSelAddInInterlChRight;
+    int            iSelOutBufferLeft;
+    int            iSelOutBufferRight;
+    int            iSelOutInterlChLeft;
+    int            iSelOutInterlChRight;
+    CVector<int>   vecNumInBufChan;
+    CVector<int>   vecNumOutBufChan;
 
 protected:
-    virtual QString  LoadAndInitializeDriver ( int iIdx );
+    virtual QString LoadAndInitializeDriver ( int iIdx, bool );
 
-    QString  CheckDeviceCapabilities ( const int iDriverIdx );
+    QString CheckDeviceCapabilities ( const int iDriverIdx );
+    void    UpdateChSelection();
+
     int CountChannels ( AudioDeviceID devID,
-                        const int     iNumChanPerFrame,
                         bool          isInput );
 
     UInt32 SetBufferSize ( AudioDeviceID& audioDeviceID,

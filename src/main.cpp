@@ -34,8 +34,9 @@
 #include "testbench.h"
 #include "util.h"
 #ifdef ANDROID
-    #include <QtAndroidExtras/QtAndroid>
+# include <QtAndroidExtras/QtAndroid>
 #endif
+
 
 // Implementation **************************************************************
 
@@ -524,13 +525,20 @@ int main ( int argc, char** argv )
     QCoreApplication* pApp = bUseGUI
             ? new QApplication ( argc, argv )
             : new QCoreApplication ( argc, argv );
+
 #ifdef ANDROID
-    auto  result = QtAndroid::checkPermission(QString("android.permission.RECORD_AUDIO"));
-        if(result == QtAndroid::PermissionResult::Denied){
-            QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync(QStringList({"android.permission.RECORD_AUDIO"}));
-            if(resultHash["android.permission.RECORD_AUDIO"] == QtAndroid::PermissionResult::Denied)
-                return 0;
+    // special Android coded needed for record audio permission handling
+    auto result = QtAndroid::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
+
+    if ( result == QtAndroid::PermissionResult::Denied )
+    {
+        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync ( QStringList ( { "android.permission.RECORD_AUDIO" } ) );
+
+        if ( resultHash["android.permission.RECORD_AUDIO"] == QtAndroid::PermissionResult::Denied )
+        {
+            return 0;
         }
+    }
 #endif
 
 #ifdef _WIN32

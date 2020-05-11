@@ -140,7 +140,9 @@ win32 {
     INSTALLS += target
 
     HEADERS += android/sound.h
-    SOURCES += android/sound.cpp
+    SOURCES += android/sound.cpp \
+        android/androiddebug.cpp
+
     LIBS += -lOpenSLES
     ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
     OTHER_FILES += android/AndroidManifest.xml
@@ -433,7 +435,6 @@ android {
 }
 
 SOURCES += src/audiomixerboard.cpp \
-    android/androiddebug.cpp \
     src/buffer.cpp \
     src/channel.cpp \
     src/chatdlg.cpp \

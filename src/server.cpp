@@ -251,7 +251,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
     bAutoRunMinimized         ( false ),
     strWelcomeMessage         ( strNewWelcomeMessage ),
     eLicenceType              ( eNLicenceType ),
-    bDisconnectAllClients     ( bNDisconnectAllClients )
+    bDisconnectAllClients     ( bNDisconnectAllClients ),
+    pSignalHandler            ( CSignalHandler::getSingletonP() )
 {
     int iOpusError;
     int i;
@@ -917,11 +918,7 @@ void CServer::OnCLDisconnection ( CHostAddress InetAddr )
 
 void CServer::OnAboutToQuit()
 {
-    if ( IsRunning() )
-    {
-        // Clean up
-        CleanShutdown();
-    }
+    Stop();
 
     // if server was registered at the central server, unregister on shutdown
     if ( GetServerListEnabled() )
@@ -934,33 +931,6 @@ void CServer::OnShutdown ( int )
 {
     // This should trigger OnAboutToQuit
     QCoreApplication::instance()->exit();
-}
-
-
-void CServer::CleanShutdown() {
-    Mutex.lock();
-    {
-        bool oldDAC = bDisconnectAllClients;
-
-        // This is to prevent new connections
-        bDisconnectAllClients = true;
-
-        // This is to disconnect all connected channels
-        for ( int i = 0; i < iMaxNumChannels; i++ )
-        {
-            if ( vecChannels[i].IsConnected() )
-            {
-                vecChannels[i].Disconnect();
-            }
-        }
-
-        // This should tell the jam recorder than the jam has ended...
-        Stop();
-
-        // Restore the value in case we are not exiting
-        bDisconnectAllClients = oldDAC;
-    }
-    Mutex.unlock();
 }
 
 void CServer::Start()

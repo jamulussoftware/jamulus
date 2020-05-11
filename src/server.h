@@ -258,8 +258,6 @@ protected:
     int GetNumberOfConnectedClients();
     CVector<CChannelInfo> CreateChannelList();
 
-    CSignalHandler* pSignalHandler = CSignalHandler::getSingletonP();
-
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     virtual void CreateAndSendChanListForAllConChannels();
     virtual void CreateAndSendChanListForThisChan ( const int iCurChanID );
@@ -305,8 +303,6 @@ protected:
                                           const CVector<int>&              vecNumAudioChannels,
                                           const CVector<CVector<int16_t> > vecvecsData,
                                           CVector<uint16_t>&               vecLevelsOut );
-
-    void CleanShutdown();
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
@@ -374,6 +370,8 @@ protected:
     QString                    strWelcomeMessage;
     ELicenceType               eLicenceType;
     bool                       bDisconnectAllClients;
+
+    CSignalHandler*            pSignalHandler;
 
 signals:
     void Started();

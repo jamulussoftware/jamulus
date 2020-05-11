@@ -255,6 +255,8 @@ typedef unsigned __int64   uint64_t;
 typedef unsigned __int32   uint32_t;
 typedef unsigned __int16   uint16_t;
 typedef unsigned __int8    uint8_t;
+#elif defined ( __ANDROID__ )
+/* don't redfine types for android as these ones below don't work. */
 #else
 typedef long long          int64_t;
 typedef int                int32_t;

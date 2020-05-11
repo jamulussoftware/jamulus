@@ -1294,7 +1294,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="562"/>
         <source>Central Server Address:</source>
-        <translation>Zentralserveradresse</translation>
+        <translation>Zentralserveradresse:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="599"/>
@@ -1324,82 +1324,82 @@
     <message>
         <location filename="../../connectdlg.cpp" line="47"/>
         <source>Server List</source>
-        <translation type="unfinished"></translation>
+        <translation>Severliste</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="47"/>
         <source>The server list shows a list of available servers which are registered at the central server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Serverliste zeigt eine Liste von verfügbaren Server, die sich am Zentralserver registriert haben. Markiere einen Server von der Liste und drücke den Knopf Verbinden um eine Verbindung zu dem Server aufzubauen. Alternativ kann man auch den Server in der Liste direkt doppelklicken. Wenn ein Server belegt ist, dann wird eine Liste der verbundenen Musikern angezeigt. Server, die länger online sind (permanente Server) werden in Fettschrift dargestellt.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="53"/>
         <source>Note that it may take some time to retrieve the server list from the central server. If no valid central server address is specified in the settings, no server list will be available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Es kann einen Moment dauern, bis die Serverliste vom Zentralserver empfangen wird. Falls keine gültige Zentralserveradresse in den Einstellungen angegeben ist, kann keine Liste angezeigt werden.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="58"/>
         <source>Server list view</source>
-        <translation type="unfinished"></translation>
+        <translation>Serverliste Anzeige</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="61"/>
         <source>Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveradresse</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="61"/>
         <source>The IP address or URL of the server running the </source>
-        <translation type="unfinished"></translation>
+        <translation>Die IP-Adresse oder URL des Servers, auf der die </translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="62"/>
         <source> server software must be set here. An optional port number can be added after the IP address or URL using a comma as a separator, e.g, example.org:</source>
-        <translation type="unfinished"></translation>
+        <translation> Serversoftware läuft wird hier angegeben. Optional kann eine Portnummer angefügt werden. Diese wird hinter der IP-Adresse durch ein Doppelpunkt getrennt angegeben. Beispiel: example.org:</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="66"/>
         <source>. A list of the most recent used server IP addresses or URLs is available for selection.</source>
-        <translation type="unfinished"></translation>
+        <translation> Eine Liste der letzten IP-Adressen oder URLs wird gespeichert und kann nachträglich wieder ausgewählt werden.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="73"/>
         <source>Server address edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveradresse Eingabefeld</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="74"/>
         <source>Holds the current server IP address or URL. It also stores old URLs in the combo box list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Enthält die aktuelle Server-IP-Adresse oder URL. Es speichert auch alte URLs in der Auswahlliste.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="78"/>
         <source>Filter</source>
-        <translation type="unfinished">Filter</translation>
+        <translation>Filter</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="78"/>
         <source>The server list is filered by the given text. Note that the filter is case insensitive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Serverliste kann mit dem eingegebenen Text gefiltert werden, d.h. es werden nur Einträge angezeigt, die dem Filtertext entsprechen. Die Groß- und Kleinschreibung des Filtertexts wird dabei nicht beachtet.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="80"/>
         <source>Filter edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtereingabefeld</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="83"/>
         <source>Show All Musicians</source>
-        <translation type="unfinished">Zeige alle Teilnehmer</translation>
+        <translation>Zeige alle Teilnehmer</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="83"/>
         <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ist diese Einstellung angehakt, dann werden alle Musiker auf allen Servern angezeigt. Wird der Haken entfernt, dann werden alle Listeneinträge eingeklappt und die verbundenen Musikernamen werden verborgen.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="86"/>
         <source>Show all musicians check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeige alle Teilnehmer Schalter</translation>
     </message>
 </context>
 <context>
@@ -1504,7 +1504,7 @@
     <message>
         <location filename="../../util.cpp" line="492"/>
         <source>By connecting to this server and agreeing to this notice, you agree to the following:</source>
-        <translation type="unfinished"></translation>
+        <translation>Durch das Verbinden mit diesem Server und das Akzeptieren des Lizenztextes willigst du folgenden Bedingungen ein:</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="494"/>
@@ -1592,32 +1592,32 @@
     <message>
         <location filename="../../util.cpp" line="706"/>
         <source> server. This tag will also show up at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>-Server. Dieses Schild wird auch bei allen anderen Teilnehmern, die mit dem gleichen Server verbunden sind, angezeigt. Wenn der Name leer gelassen wurde, dann wird die IP-Adresse stattdessen angezeigt.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="711"/>
         <source>Alias or name edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Alias oder Name Eingabefeld</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="713"/>
         <source>Instrument picture button</source>
-        <translation type="unfinished"></translation>
+        <translation>Instrumentenbild Knopf</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="715"/>
         <source>Country flag button</source>
-        <translation type="unfinished"></translation>
+        <translation>Landesflagge Knopf</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="717"/>
         <source>City edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Stadt Eingabefeld</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="719"/>
         <source>Skill level combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Fähigkeit Auswahlbox</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="664"/>
@@ -1670,7 +1670,7 @@
     <message>
         <location filename="../../util.cpp" line="688"/>
         <source>Intermediate</source>
-        <translation type="unfinished">Mittlere Spielstärke</translation>
+        <translation>Mittlere Spielstärke</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="694"/>
@@ -1680,12 +1680,12 @@
     <message>
         <location filename="../../util.cpp" line="699"/>
         <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living. The city you live in and the skill level of playing your instrument may also be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schreibe den Namen oder Alias hier rein so dass die anderen Musikern mit denen du spielst wissen wer du bist. Zusätzlich kannst du dein Instrument auswählen und eine Flagge des Landes auswählen in dem du dich befindest. Deine Stadt und deine Spielstärke des Instruments kannst du ebenso angeben.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="704"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a </source>
-        <translation type="unfinished"></translation>
+        <translation>Was man hier sieht wird auch am Fader im Mixer angezeigt, wenn du mit einem </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="969"/>
@@ -1805,7 +1805,7 @@
     <message>
         <location filename="../../util.cpp" line="992"/>
         <source>Streamer</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="993"/>
@@ -1825,7 +1825,7 @@
     <message>
         <location filename="../../util.cpp" line="996"/>
         <source>Bodhran</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="997"/>
@@ -1855,7 +1855,7 @@
     <message>
         <location filename="../../util.cpp" line="1002"/>
         <source>Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongos</translation>
     </message>
 </context>
 <context>
@@ -1863,132 +1863,132 @@
     <message>
         <location filename="../../serverdlg.cpp" line="45"/>
         <source>Client List</source>
-        <translation type="unfinished"></translation>
+        <translation>Teilnehmerliste</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="45"/>
         <source>The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Teilnehmerliste zeigt alle gerade mit dem Server verbunden Musiker an. Für jeden Teilnehmer werden zusätzliche Informationen wie die IP-Adresse und Namen angezeigt.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="50"/>
         <source>Connected clients list view</source>
-        <translation type="unfinished"></translation>
+        <translation>Teilnehmerliste</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="53"/>
         <source>Start Minimized on Operating System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Starte minimiert beim Starten des Betriebssystems</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="54"/>
         <source>If the start minimized on operating system start check box is checked, the </source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn diese Funktion angehakt ist, dann wird der </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="55"/>
         <source> server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
-        <translation type="unfinished"></translation>
+        <translation>-Server automatisch mit dem Betriebssystemstart geladen und erscheint minimiert in der Systemleiste als Icon.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="60"/>
         <source>Show Creative Commons Licence Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeige den Creative Commons Lizenzdialog</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="61"/>
         <source>If enabled, a Creative Commons BY-NC-SA 4.0 Licence dialog is shown each time a new user connects the server.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falls aktiviert wird ein Create Commons BY-NC-SA 4.0 Lizenzdialog angezeigt, wenn ein neuer Teilnehmer versucht sich mit dem Server zu verbinden.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="65"/>
         <source>Make My Server Public</source>
-        <translation type="unfinished"></translation>
+        <translation>Veröffentliche meinen Server</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="66"/>
         <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
-        <translation type="unfinished"></translation>
+        <translation>Mit dieser Funktion wird der eigene Server in der Serverliste des Zentralservers registriert so dass alle anderen Applikationsnutzer den </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="68"/>
         <source> users can see the server in the connect dialog server list and connect to it. The registering of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished"></translation>
+        <translation>-Server in der Liste sehen können und sich mit ihm verbinden können. Die Registrierung mit dem Zentralserver wird periodisch erneuert um sicherzugehen, dass alle registrierten Server auch wirklich erreichbar sind.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="74"/>
         <source>Register Server Status</source>
-        <translation type="unfinished"></translation>
+        <translation>Registrierungsstatus</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
         <source>If the Make My Server Public check box is checked, this will show the success of registration with the central server.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn der eigene Server veröffentlicht wurde, dann zeigt der Registrierungsstatus and, ob die Registrierung erfolgreich war oder nicht.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="79"/>
         <source>Central Server Address</source>
-        <translation type="unfinished">Zentralserveradresse</translation>
+        <translation>Zentralserveradresse</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="80"/>
         <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Zentralserveradrees ist die IP-Adresse oder URL des Zentralservers bei dem man sich registrieren möchte. Mit dem Zentralservertyp legt man die Region fest, in der man sich befindet. Außerdem kann eine freie Adresse eingetragen werden.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="89"/>
         <source>Default central server type combo box</source>
-        <translation type="unfinished">Voreingestellter Zentralservertyp Auswahlbox</translation>
+        <translation>Voreingestellter Zentralservertyp Auswahlbox</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="90"/>
         <source>Central server address line edit</source>
-        <translation type="unfinished">Zentralserveradresse Eingabefeld</translation>
+        <translation>Zentralserveradresse Eingabefeld</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
         <source>Server Name</source>
-        <translation type="unfinished">Servername</translation>
+        <translation>Servername</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
         <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Servername identifiziert deinen Server in der Serverliste. Falls kein Name angegeben wurde, dann wird die IP-Adresse stattdessen angezeigt.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="100"/>
         <source>Server name line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Servername Eingabefeld</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="103"/>
         <source>Location City</source>
-        <translation type="unfinished"></translation>
+        <translation>Standort Stadt</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="103"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hier kann man die Stadt angeben, in der sich der Server befindet. Falls eine Stadt angegeben wurde, dann wird die in der Serverliste angezeigt.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="110"/>
         <source>City where the server is located line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Stadt in der sich der Server befindet Eingabefeld</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="113"/>
         <source>Location country</source>
-        <translation type="unfinished"></translation>
+        <translation>Standort Land</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="113"/>
         <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hier kann man das Land eingeben, in dem sich der Server befindet. Falls ein Land angegeben wurde, dann wird das in der Serverliste angezeigt.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="121"/>
         <source>Country where the server is located combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Land in dem sich der Server befindet Auswahlbox</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="134"/>
@@ -1999,14 +1999,14 @@
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <source>&amp;Hide </source>
-        <translation type="unfinished">Ausblenden vom </translation>
+        <translation>&amp;Ausblenden vom </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <location filename="../../serverdlg.cpp" line="144"/>
         <location filename="../../serverdlg.cpp" line="150"/>
         <source> server</source>
-        <translation type="unfinished">-Server</translation>
+        <translation>-Server</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="144"/>
@@ -2153,134 +2153,134 @@
     <message>
         <location filename="../../../linux/sound.cpp" line="40"/>
         <source>The Jack server is not running. This software requires a Jack server to run. Normally if the Jack server is not running this software will automatically start the Jack server. It seems that this auto start has not worked. Try to start the Jack server manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Jack-Server läuft nicht. Diese Software benötigt aber einen Jack-Server um zu funktionieren. Normalerweise wird der Jack-Server automatisch gestartet. Es scheint so, als hätte dieser Automatismus nicht funktioniert. Versuche den Jack-Server manuell zu starten.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="60"/>
         <source>The Jack server sample rate is different from the required one. The required sample rate is:</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Jack-Server-Samplerate ist verschieden zu der benötigen. Die benötigte Samplerate ist:</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="62"/>
         <source>You can use a tool like &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
-        <translation type="unfinished"></translation>
+        <translation>Do kannst ein Werkzeug wie &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/li&gt; verwenden um die Samplerate umzustellen.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>
         <source>Make sure to set the Frames/Period to a low value like </source>
-        <translation type="unfinished"></translation>
+        <translation>Versichere dich, dass die Frames/Perioden auf einen niedrigen Wert wie z.B. </translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="67"/>
         <source> to achieve a low delay.</source>
-        <translation type="unfinished"></translation>
+        <translation> eingestellt ist um eine niedrige Verzögerung zu erreichen.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="88"/>
         <location filename="../../../linux/sound.cpp" line="99"/>
         <source>The Jack port registering failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Jack-Portregistrierung ist fehlgeschlagen.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="110"/>
         <source>Cannot activate the Jack client.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Jack-Client kann nicht aktiviert werden.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="197"/>
         <source>The Jack server was shut down. This software requires a Jack server to run. Try to restart the software to solve the issue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Jack-Server wurde gestoppt. Diese Software benötigt aber einen aktiven Jack-Server um zu funktionieren. Versuche die Software neu zu starten um das Problem zu lösen.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="101"/>
         <source>CoreAudio input AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>CoreAudio Eingang AudioHardwareGetProperty Aufruf schlug fehl. Es scheint als wäre keine Soundkarte im System vorhanden.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="115"/>
         <source>CoreAudio output AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>CoreAudio Ausgang AudioHardwareGetProperty Aufruf schlug fehl. Es scheint, dass keine Soundkarte ist im System verfügbar.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="370"/>
         <source>Current system audio input device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die aktuelle Eingangssamplerate von %1 Hz wird nicht unterstützt. Bitte öffne die Audio-MIDI-Setup-Applikation in Applikationen-&gt;Werkzeuge und versuche die Samplerate auf %2 Hz einzustellen.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="397"/>
         <source>Current system audio output device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die aktuelle Ausgangssamplerate von %1 Hz wird nicht unterstützt. Bitte öffne die Audio-MIDI-Setup-Applikation in Applikationen-&gt;Werkzeuge und versuche die Samplerate auf %2 Hz einzustellen.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="470"/>
         <source>The audio input stream format for this audio device is not compatible with this software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Audioeingangsstromformat von diesem Audiogerät ist nicht kompatibel mit dieser Software.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="488"/>
         <source>The audio output stream format for this audio device is not compatible with this software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Audioausgangsstromformat von diesem Audiogerät ist nicht kompatibel mit dieser Software.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="813"/>
         <source>The buffer sizes of the current input and output audio device cannot be set to a common value. Please choose other input/output audio devices in your system settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Puffergrößen vom aktuellen Eingangs- und Ausgangsaudiogerät kann nicht auf einen gemeinsamen Wert eingestellt werden. Bitte wähle ein anderes Eingangs-/Ausgangsgerät aus der Geräteliste aus.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="53"/>
         <source>The audio driver could not be initialized.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Audiotreiber konnte nicht initialisiert werden.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="108"/>
         <source>The audio device does not support the required sample rate. The required sample rate is: </source>
-        <translation type="unfinished"></translation>
+        <translation>Das Audiogerät unterstützt nicht die benötigte Samplerate. Die benötigte Samplerate ist: </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="121"/>
         <source>The audio device does not support to set the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
-        <translation type="unfinished"></translation>
+        <translation>Das Audiogerät unterstützt nicht die benötigte Samplerate. Dieser Fehler kann auftreten, wenn ein Audiogerät wie das Roland UA-25EX verwendet wird, bei dem die Samplerate per Schalter am Gerät verstellt werden muss. Falls das der Fall sein sollte, dann stelle bitte den Schalter auf </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="125"/>
         <source> Hz on the device and restart the </source>
-        <translation type="unfinished"></translation>
+        <translation> Hz am Gerät und starte die </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="126"/>
         <source> software.</source>
-        <translation type="unfinished"> Software.</translation>
+        <translation> Software neu.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="136"/>
         <source>The audio device does not support the required number of channels. The required number of channels for input and output is: </source>
-        <translation type="unfinished"></translation>
+        <translation>Das Audiogerät unterstützt nicht die benötigte Anzahl an Kanälen. Die benötigte Anzahl an Kanälen für den Eingang und den Ausgang ist: </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="172"/>
         <location filename="../../../windows/sound.cpp" line="202"/>
         <source>Required audio sample format not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Das benötigte Audio Sampleformat ist nicht verfügbar.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="518"/>
         <source>No ASIO audio device (driver) found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein ASIO-Gerätetreiber wurde gefunden.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
         <source>The </source>
-        <translation type="unfinished">Die </translation>
+        <translation>Die </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
-        <translation type="unfinished"></translation>
+        <translation> Software benötigt aber ein ASIO Audiointerface um zu funktionieren. Dies ist keine Standard-Windowsschnittstelle und benötigt deshalb einen speziellen Treiber. Entweder die Soundkarte liefert einen nativen ASIO-Treiber mit (was empfohlen wird) oder man versucht es mit dem ASIO4All-Universaltreiber.</translation>
     </message>
     <message>
         <location filename="../../../android/sound.cpp" line="137"/>
         <source>Error closing stream: $s</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler beim Schließen des Datenstroms: $s</translation>
     </message>
 </context>
 <context>
@@ -2288,47 +2288,47 @@
     <message>
         <location filename="../../soundbase.cpp" line="115"/>
         <source>Invalid device selection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungültige Geräteauswahl.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="141"/>
         <source>The audio driver properties have changed to a state which is incompatible to this software. The selected audio device could not be used because of the following error:</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Audiotreibereigenschaften haben sich geändert. Die neuen Einstellungen sind nicht mehr kompatibel zu dieser Software. Das ausgewählte Audiogerät konnte nicht benutzt werden wegen folgendem Fehler:</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="146"/>
         <source>Please restart the software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitte starte die Software neu.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="147"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>
         <source>No usable </source>
-        <translation type="unfinished"></translation>
+        <translation>Kein benutzbares </translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="190"/>
         <source> audio device (driver) found.</source>
-        <translation type="unfinished"></translation>
+        <translation> Audiogerät (Treiber) konnte gefunden werden.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="191"/>
         <source>In the following there is a list of all available drivers with the associated error message:</source>
-        <translation type="unfinished"></translation>
+        <translation>Im folgenden wird eine Liste aller gefundenen Audiogeräte mit entsprechender Fehlermeldung angezeigt:</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="205"/>
         <source>Do you want to open the ASIO driver setups?</source>
-        <translation type="unfinished"></translation>
+        <translation>Willst du die ASIO-Treibereinstellungen öffnen?</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="212"/>
         <source> could not be started because of audio interface issues.</source>
-        <translation type="unfinished"></translation>
+        <translation> konnte nicht gestartet werden wegen Problemen mit dem Audiogerät.</translation>
     </message>
 </context>
 </TS>

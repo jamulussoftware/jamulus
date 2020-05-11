@@ -732,347 +732,347 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="72"/>
         <source>Local jitter buffer slider control</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokale Netzwerkpuffergröße Schieberegler</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="75"/>
         <source>Server jitter buffer slider control</source>
-        <translation type="unfinished"></translation>
+        <translation>Server Netzwerkpuffergröße Schieberegler</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="77"/>
         <source>Auto jitter buffer switch</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatik für die Netzwerkpuffergröße aktivieren</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="79"/>
         <source>Jitter buffer status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Netzwerkpuffer Status LED</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="83"/>
         <source>Sound Card Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Soundkartengerät</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="84"/>
         <source>The ASIO driver (sound card) can be selected using </source>
-        <translation type="unfinished"></translation>
+        <translation>Der ASIO-Treiber (Soundkarte) kann ausgewählt werden mit der </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="85"/>
         <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation> Software unter Windows. Unter MacOS und Linux kann man die Soundkarte nicht auswählen. Wenn der selektierte ASIO-Treiber nicht gültig ist, dann wird eine Fehlermeldung angezeigt und der vorherige gültige Treiber wird wieder ausgewählt.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="87"/>
         <source>If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn der Treiber während eine aktiven Verbindung ausgewählt wird, dann wird die Verbindung gestoppt, der neue Treiber ausgewählt und anschließend wird die Verbindung automatisch wiederhergestellt.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="92"/>
         <source>Sound card device selector combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Soundkarten Auswahlbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="96"/>
         <source>In case the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falls der ASIO4All-Treiber verwendet wird, kann es sein, dass dieser Treiber zusätzliche 10-30 ms Verzögerung hinzufügt. Aus diesem Grund sollte man bevorzugt einen nativen ASIO-Treiber der Soundkarte verwenden, der mit dem Produkt mitgeliefert wurde.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="99"/>
         <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falls der kx ASIO-Treiber verwendet wird, dann muss man darauf achten, dass die ASIO-Eingänge im kx DSP-Einstellungsfenster verbunden sind.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="105"/>
         <source>Sound Card Channel Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Soundkarten Kanalzuweisung</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="106"/>
         <source>In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falls die ausgewählte Soundkarte mehr als zwei Eingangs- oder Ausgangskanäle unterstützt, dann werden die Steuerelemente für die Kanalzuweisung angezeigt.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="108"/>
         <source>For each </source>
-        <translation type="unfinished"></translation>
+        <translation>Für jeden </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="109"/>
         <source> input/output channel (Left and Right channel) a different actual sound card channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation> Eingangs-/Ausgangskanal (linker und rechter Kanal) kann ein beliebiger Soundkartenkanal zugewiesen werden.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="116"/>
         <source>Left input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Linker Eingang Kanalauswahlbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="118"/>
         <source>Right input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechter  Eingang Kanalauswahlbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="120"/>
         <source>Left output channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Linker Ausgang Kanalauswahlbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>
         <source>Right output channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechter Ausgang Kanalauswahlbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="125"/>
         <source>Enable Small Network Buffers</source>
-        <translation type="unfinished">Aktiviere kleine Netzwerkpuffer</translation>
+        <translation>Aktiviere kleine Netzwerkpuffer</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="125"/>
         <source>If enabled, the support for very small network audio packets is activated. Very small network packets are only actually used if the sound card buffer delay is smaller than </source>
-        <translation type="unfinished"></translation>
+        <translation>Falls aktiviert wird die Unterstützung für sehr kleine Netzwerk-Audiopakete aktiviert. Sehr kleine Netzwerkpakete werden nur dann verwendet, wenn der Soundkartenpuffer kleiner als </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="128"/>
         <source> samples. The smaller the network buffers, the smaller the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
-        <translation type="unfinished"></translation>
+        <translation> Samples ist. Je kleiner die Netzwerkpakete sind, desto kleiner ist auch die Audioverzögerung. Aber gleichzeitig wird dadurch die Netzwerklast erhöht und die Wahrscheinlichkeit für Audioaussetzer erhöht sich dadurch auch.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="132"/>
         <source>Enable small network buffers check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktiviere kleine Netzwerkpuffer Schalter</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="135"/>
         <source>Sound Card Buffer Delay</source>
-        <translation type="unfinished"></translation>
+        <translation>Soundkarten Puffergröße</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="136"/>
         <source>The buffer delay setting is a fundamental setting of the </source>
-        <translation type="unfinished"></translation>
+        <translation>Die Soundkartenpuffergröße ist eine fundamentale Einstellung der </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="137"/>
         <source> software. This setting has influence on many connection properties.</source>
-        <translation type="unfinished"></translation>
+        <translation> Software. Diese Einstellung hat Einfluss auf viele andere Verbindungseigenschaften.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="138"/>
         <source>Three buffer sizes are supported</source>
-        <translation type="unfinished"></translation>
+        <translation>Drei Puffergrößen werden unterstützt</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="141"/>
         <source>64 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>64 Samples: Dies ist die bevorzugte Einstellung weil es die geringste Verzögerung hat. Diese Puffergröße funktioniert allerdings nicht mit allen Soundkarten.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="143"/>
         <source>128 samples: This setting should work on most of the available sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>128 Samples: Diese Puffergröße sollte mit den meisten Soundkarten funktionieren.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="145"/>
         <source>256 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.</source>
-        <translation type="unfinished"></translation>
+        <translation>256 Samples: Diese Einstellung sollte nur dann verwendet werden, wenn man einen langsamen Computer oder eine langsame Internetverbindung hat.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="147"/>
         <source>Some sound card driver do not allow the buffer delay to be changed from within the </source>
-        <translation type="unfinished"></translation>
+        <translation>Manche Soundkartentreiber unterstützen nicht das Verändern der Puffergröße innerhalb der </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="150"/>
         <source> software. In this case the buffer delay setting is disabled. To change the actual buffer delay, this setting has to be changed in the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation> Software. In diesem Fall ist die Einstellungsmöglichkeit für die Puffergröße deaktiviert. Die Puffergröße muss man stattdessen direkt im Soundkartentreiber durchführen. Unter Windows kann man den ASIO-Einstellungen Knopf drücken um die Treibereinstellungen zu öffnen. Unter Linux benutzt man das Jack-Konfigurationsprogramm um die Puffergröße einzustellen.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="154"/>
         <source>If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The </source>
-        <translation type="unfinished"></translation>
+        <translation>Falls keiner der vorgegebenen Puffergrößen ausgeählt ist und alle Einstellungen deaktiviert sind, dann wird eine nicht unterstützte Puffergröße im Soundkartentreiber verwendet. Die </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="157"/>
         <source> software will still work with this setting but with restricted performannce.</source>
-        <translation type="unfinished"></translation>
+        <translation> Software funktioniert trotzdem aber es könnte eine größere Verzögerung resultieren.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="158"/>
         <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Puffergröße hat einen Einfluss auf den Verbindungsstatus, die aktuelle Upload-Rate und die Gesamtverzögerung. Je kleiner der Puffer, desto größer ist die Wahrscheinlichkeit für das Auftreten einer rot leuchtenden LED (was Audioaussetzer anzeigt), eine höheren Upload-Rate und eine niedrigere Gesamtverzögerung.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="163"/>
         <source>The buffer setting is therefore a trade-off between audio quality and overall delay.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Puffergröße ist somit ein Kompromiss zwischen Audioqualität und Gesamtverzögerung.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="167"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the </source>
-        <translation type="unfinished"></translation>
+        <translation>Falls die Puffergröße nicht verstellt werden kann, dann hat der Soundkartentreiber die Einstellung gesperrt man kann es nicht innerhalb der </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="170"/>
         <source> software. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation> Software verändern. Unter Windows kann man den ASIO-Einstellungen Knopf drücken, um die Treibereinstellungen zu öffnen. Unter Linux kann man ein Jack-Konfigurationswerkzeug verwenden, um die Puffergröße zu verändern.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="175"/>
         <source>128 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>128 Samples Einstellknopf</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>256 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>256 Samples Einstellknopf</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="181"/>
         <source>512 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>512 Samples Einstellknopf</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>
         <source>ASIO setup push button</source>
-        <translation type="unfinished"></translation>
+        <translation>ASIO-Einstellungen Knopf</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="188"/>
         <source>Fancy Skin</source>
-        <translation type="unfinished">Schicke Oberfläche</translation>
+        <translation>Schicke Oberfläche</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="188"/>
         <source>If enabled, a fancy skin will be applied to the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falls aktiviert wird eine schicke Oberfläche im Hauptfenster verwendet.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="191"/>
         <source>Fancy skin check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Schicke Oberfläche Schalter</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="194"/>
         <source>Display Channel Levels</source>
-        <translation type="unfinished">Zeige Kanalsignalpegel</translation>
+        <translation>Zeige Kanalsignalpegel</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="195"/>
         <source>If enabled, each client channel will display a pre-fader level bar.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falls aktiviert wird eine Signalpegelanzeige neben jedem Kanalfader angezeigt, welcher den Pegel vor dem Fader anzeigt.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="197"/>
         <source>Display channel levels check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeige Kanalpegel Schalter</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
         <source>Audio Channels</source>
-        <translation type="unfinished">Audiokanäle</translation>
+        <translation>Audiokanäle</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
         <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In the mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful for the case that the sound card puts the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiermit kann man die Anzahl an Audiokanälen auswählen. Es gibt drei Modi. Die Mono- und Stereomodi verwenden jeweils einen oder zwei Kanäle. Im Mono-In/Stereo-Out Modus wird ein Monosignal zum Server geschickt aber es kommt ein Stereo-Signal zurück vom Server. Dies is nützlich für den Fall, dass man an die Soundkarte ein Instrument an den einen Eingangskanal und ein Mikrofon an den anderen Eingangskanal angeschlossen hat. In diesem Fall können die beiden Signale zusammen gemischt werden und an den Server geschickt werden aber man kann das Stereo-Signal von den anderen Musikern hören.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="209"/>
         <source>Enabling the stereo streaming mode will increase the stream data rate. Make sure that the current upload rate does not exceed the available bandwidth of your internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn man den Stereo-Modus verwendet, dann ist die Übertragungsrate etwas höher. Man muss sicher stellen, dass die Internetverbindung die höhere Rate übertragen kann.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="212"/>
         <source>In case of the stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn der Stereo-Modus ausgewählt wurde, dann verschwindet die Kanalselektion für den Halleffekt im Hauptfenster, da der Effekt auf beide Stereokanäle angewendet wird.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="219"/>
         <source>Audio channels combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Audiokanal Auswahlbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source>Audio Quality</source>
-        <translation type="unfinished">Audioqualität</translation>
+        <translation>Audioqualität</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source>Select the desired audio quality. A low, normal or high audio quality can be selected. The higher the audio quality, the higher the audio stream data rate. Make sure that the current upload rate does not exceed the available bandwidth of your internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählt die gewünschte Audioqualität aus. Es wird eine niedrige, mittlere und hohe Audioqualität angeboten. Je höher die Audioqualität, desto höher ist die Netzwerkübertragungsrate. Man muss sicherstellen, dass die Internetverbindung die höhere Rate übertragen kann.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="231"/>
         <source>Audio quality combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Audioqualität Auswahlbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="234"/>
         <source>New Client Level</source>
-        <translation type="unfinished">Pegel für neuen Teilnehmer</translation>
+        <translation>Pegel für neuen Teilnehmer</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="235"/>
         <source>The new client level setting defines the fader level of a new connected client in percent. I.e. if a new client connects to the current server, it will get the specified initial fader level if no other fader level of a previous connection of that client was already stored.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Pegel für neue Teilnehmer definiert die Fadereinstellung, wenn sich ein Teilnehmer neu mit dem Server verbindet. D.h. wenn ein neuer Fader erscheint, dann wird er auf den voreingestellten Pegel gesetzt. Eine Ausnahme bildet der Fall, dass der Teilnehmer vorher schon mal mit dem Server verbunden war und der Pegel gespeichert war.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="243"/>
         <source>New client level edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Neuer Teilnehmer Pegel Einstellbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="246"/>
         <source>Central Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Zentralserveradresse</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="247"/>
         <source>The central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers, der die Serverlist organisiert und bereitstellt. Mit der Zentralserveradresse kann entweder die örtliche Region festgelegt werden (durch Auswahl des entsprechenden vorgegebenen Zentralservers) oder man gibt eine beliebige Adresse manuell ein.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="256"/>
         <source>Default central server type combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreingestellter Zentralservertyp Auswahlbox</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="257"/>
         <source>Central server address line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Zentralserveradresse Eingabefeld</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="260"/>
         <source>Current Connection Status Parameter</source>
-        <translation type="unfinished"></translation>
+        <translation>Verbindungsstatus Parameter</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="261"/>
         <source>The ping time is the time required for the audio stream to travel from the client to the server and backwards. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Ping-Zeit ist die Zeit, die der Audiodatenstrom benötigt, um von der Applikation zum Server und zurück zu kommen. Diese Verzögerung wird vom Netzwerk hervorgerufen. Diese Verzögerung sollte so um die 20-30 ms sein. Falls die Verzögerung größer ist (z.B. 50-60 ms), der Abstand zum Server ist zu groß oder die Internetverbindung ist nicht ausreichend.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="266"/>
         <source>The overall delay is calculated from the current ping time and the delay which is introduced by the current buffer settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Gesamtverzögerung setzt sich zusammen aus der Ping-Zeit und die Verzögerung, die durch die Puffergrößen verursacht wird.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="268"/>
         <source>The upstream rate depends on the current audio packet size and the audio compression setting. Make sure that the upstream rate is not higher than the available rate (check the upstream capabilities of your internet connection by, e.g., using speedtest.net).</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Upload-Rate hängt von der Soundkartenpuffergröße und die Audiokomprimierung ab. Man muss sicher stellen, dass die Upload-Rate immer kleiner ist als die Rate, die die Internetverbindung zur Verfügung stellt (man kann die Upload-Rate des Internetproviders z.B. mit speedtest.net überprüfen).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="281"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="unfinished">Wenn diese LED rot leuchtet, dann wirst du keinen Spaß haben mit der </translation>
+        <translation>Wenn diese LED rot leuchtet, dann wirst du keinen Spaß haben mit der </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="283"/>
         <source> software.</source>
-        <translation type="unfinished"> Software.</translation>
+        <translation> Software.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="288"/>
@@ -1087,7 +1087,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="336"/>
         <source>Mono-in/Stereo-out</source>
-        <translation type="unfinished"></translation>
+        <translation>Mono-In/Stereo-Out</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
@@ -1148,17 +1148,17 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="633"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="unfinished"></translation>
+        <translation>Das ausgewählte Audiogerät kann aus folgendem Grund nicht verwendet werden: </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="635"/>
         <source> The previous driver will be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation> Der vorherige Treiber wird wieder ausgewählt.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="636"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1203,7 +1203,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="213"/>
         <source>Enable Small Network Buffers</source>
-        <translation type="unfinished">Aktiviere kleine Netzwerkpuffer</translation>
+        <translation>Aktiviere kleine Netzwerkpuffer</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="220"/>
@@ -1306,7 +1306,7 @@
         <location filename="../../clientsettingsdlgbase.ui" line="642"/>
         <location filename="../../clientsettingsdlgbase.ui" line="677"/>
         <source>val</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="623"/>
@@ -1928,7 +1928,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="79"/>
         <source>Central Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zentralserveradresse</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="80"/>
@@ -1938,12 +1938,12 @@
     <message>
         <location filename="../../serverdlg.cpp" line="89"/>
         <source>Default central server type combo box</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Voreingestellter Zentralservertyp Auswahlbox</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="90"/>
         <source>Central server address line edit</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Zentralserveradresse Eingabefeld</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
@@ -2275,6 +2275,11 @@
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../android/sound.cpp" line="137"/>
+        <source>Error closing stream: $s</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

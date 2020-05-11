@@ -436,7 +436,7 @@
         <location filename="../../clientdlg.cpp" line="98"/>
         <location filename="../../clientdlg.cpp" line="159"/>
         <source> software.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> .</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="101"/>
@@ -466,7 +466,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="157"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le logiciel </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="161"/>
@@ -984,7 +984,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
         <source>Audio Channels</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Canaux audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
@@ -1009,7 +1009,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
         <source>Audio Quality</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Qualité audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
@@ -1024,7 +1024,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="234"/>
         <source>New Client Level</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Niveau de nouveau client</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="235"/>
@@ -1150,7 +1150,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="518"/>
         <source>Buffer Delay</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Délai de temporisation</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="523"/>
@@ -2137,7 +2137,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="102"/>
         <source>Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Adresse du serveur central :</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="117"/>
@@ -2261,7 +2261,7 @@
     <message>
         <location filename="../../../windows/sound.cpp" line="126"/>
         <source> software.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"> .</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="136"/>
@@ -2287,6 +2287,11 @@
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../android/sound.cpp" line="137"/>
+        <source>Error closing stream: $s</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -26,12 +26,12 @@
 
 - bug fix: fixed that Jamulus segfaults when jackd is restarted (Ticket #122, #127)
 
+- bug fix: better handling of disconnect message in the client
+
 
 TODO check if Tickets #130, #168 are really solved by code from pljones
 
 TODO WIP support internationalization
-
-TODO improve disconnect message behaviour on client
 
 TODO implement panning for channels (Ticket #52, #145)
 

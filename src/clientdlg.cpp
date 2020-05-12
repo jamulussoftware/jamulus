@@ -732,16 +732,6 @@ void CClientDlg::OnConnectDisconBut()
     }
 }
 
-void CClientDlg::OnDisconnected()
-{
-    // channel is now disconnected, clear mixer board (remove all faders) and
-    // reset the delay LED (since this is only updated on an active connection)
-    MainMixerBoard->HideAll();
-    ledDelay->Reset();
-
-    UpdateDisplay();
-}
-
 void CClientDlg::OnCentralServerAddressTypeChanged()
 {
     // if the server list is shown and the server type was changed, update the list

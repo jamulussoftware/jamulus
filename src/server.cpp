@@ -231,28 +231,28 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strNewWelcomeMessage,
                    const QString&     strRecordingDirName,
                    const bool         bNCentServPingServerInList,
-                   const bool         bNDisconnectAllClients,
+                   const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
                    const ELicenceType eNLicenceType ) :
-    bUseDoubleSystemFrameSize ( bNUseDoubleSystemFrameSize ),
-    iMaxNumChannels           ( iNewMaxNumChan ),
-    Socket                    ( this, iPortNumber ),
-    Logging                   ( iMaxDaysHistory ),
-    JamRecorder               ( strRecordingDirName ),
-    bEnableRecording          ( !strRecordingDirName.isEmpty() ),
-    bWriteStatusHTMLFile      ( false ),
-    HighPrecisionTimer        ( bNUseDoubleSystemFrameSize ),
-    ServerListManager         ( iPortNumber,
-                                strCentralServer,
-                                strServerInfo,
-                                iNewMaxNumChan,
-                                bNCentServPingServerInList,
-                                &ConnLessProtocol ),
-    bAutoRunMinimized         ( false ),
-    strWelcomeMessage         ( strNewWelcomeMessage ),
-    eLicenceType              ( eNLicenceType ),
-    bDisconnectAllClients     ( bNDisconnectAllClients ),
-    pSignalHandler            ( CSignalHandler::getSingletonP() )
+    bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
+    iMaxNumChannels             ( iNewMaxNumChan ),
+    Socket                      ( this, iPortNumber ),
+    Logging                     ( iMaxDaysHistory ),
+    JamRecorder                 ( strRecordingDirName ),
+    bEnableRecording            ( !strRecordingDirName.isEmpty() ),
+    bWriteStatusHTMLFile        ( false ),
+    HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
+    ServerListManager           ( iPortNumber,
+                                  strCentralServer,
+                                  strServerInfo,
+                                  iNewMaxNumChan,
+                                  bNCentServPingServerInList,
+                                  &ConnLessProtocol ),
+    bAutoRunMinimized           ( false ),
+    strWelcomeMessage           ( strNewWelcomeMessage ),
+    eLicenceType                ( eNLicenceType ),
+    bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
+    pSignalHandler              ( CSignalHandler::getSingletonP() )
 {
     int iOpusError;
     int i;
@@ -810,14 +810,6 @@ void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 void CServer::OnNewConnection ( int          iChID,
                                 CHostAddress RecHostAddr )
 {
-    // in the special case that all clients shall be disconnected, just send the
-    // disconnect message and leave this function
-    if ( bDisconnectAllClients )
-    {
-        ConnLessProtocol.CreateCLDisconnection ( RecHostAddr );
-        return;
-    }
-
     // on a new connection we query the network transport properties for the
     // audio packets (to use the correct network block size and audio
     // compression properties, etc.)
@@ -918,6 +910,22 @@ void CServer::OnCLDisconnection ( CHostAddress InetAddr )
 
 void CServer::OnAboutToQuit()
 {
+    // if enabled, disconnect all clients on quit
+    if ( bDisconnectAllClientsOnQuit )
+    {
+        Mutex.lock();
+        {
+            for ( int i = 0; i < iMaxNumChannels; i++ )
+            {
+                if ( vecChannels[i].IsConnected() )
+                {
+                    ConnLessProtocol.CreateCLDisconnection ( vecChannels[i].GetAddress() );
+                }
+            }
+        }
+        Mutex.unlock(); // release mutex
+    }
+
     Stop();
 
     // if server was registered at the central server, unregister on shutdown

@@ -178,7 +178,7 @@ public:
               const QString&     strNewWelcomeMessage,
               const QString&     strRecordingDirName,
               const bool         bNCentServPingServerInList,
-              const bool         bNDisconnectAllClients,
+              const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const ELicenceType eNLicenceType );
 
@@ -369,7 +369,7 @@ protected:
     // messaging
     QString                    strWelcomeMessage;
     ELicenceType               eLicenceType;
-    bool                       bDisconnectAllClients;
+    bool                       bDisconnectAllClientsOnQuit;
 
     CSignalHandler*            pSignalHandler;
 

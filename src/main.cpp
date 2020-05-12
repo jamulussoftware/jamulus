@@ -51,36 +51,36 @@ int main ( int argc, char** argv )
     // arguments
 #if defined( SERVER_BUNDLE ) && ( defined( __APPLE__ ) || defined( __MACOSX ) )
     // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
-    bool         bIsClient                 = false;
+    bool         bIsClient                   = false;
 #else
-    bool         bIsClient                 = true;
+    bool         bIsClient                   = true;
 #endif
-    bool         bUseGUI                   = true;
-    bool         bStartMinimized           = false;
-    bool         bShowComplRegConnList     = false;
-    bool         bDisconnectAllClients     = false;
-    bool         bUseDoubleSystemFrameSize = true; // default is 128 samples frame size
-    bool         bShowAnalyzerConsole      = false;
-    bool         bCentServPingServerInList = false;
-    bool         bNoAutoJackConnect        = false;
-    bool         bUseTranslation           = true;
-    bool         bCustomPortNumberGiven    = false;
-    int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
-    int          iMaxDaysHistory           = DEFAULT_DAYS_HISTORY;
-    int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
-    quint16      iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
-    ELicenceType eLicenceType              = LT_NO_LICENCE;
-    QString      strConnOnStartupAddress   = "";
-    QString      strIniFileName            = "";
-    QString      strHTMLStatusFileName     = "";
-    QString      strServerName             = "";
-    QString      strLoggingFileName        = "";
-    QString      strHistoryFileName        = "";
-    QString      strRecordingDirName       = "";
-    QString      strCentralServer          = "";
-    QString      strServerInfo             = "";
-    QString      strWelcomeMessage         = "";
-    QString      strClientName             = APP_NAME;
+    bool         bUseGUI                     = true;
+    bool         bStartMinimized             = false;
+    bool         bShowComplRegConnList       = false;
+    bool         bDisconnectAllClientsOnQuit = false;
+    bool         bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
+    bool         bShowAnalyzerConsole        = false;
+    bool         bCentServPingServerInList   = false;
+    bool         bNoAutoJackConnect          = false;
+    bool         bUseTranslation             = true;
+    bool         bCustomPortNumberGiven      = false;
+    int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
+    int          iMaxDaysHistory             = DEFAULT_DAYS_HISTORY;
+    int          iCtrlMIDIChannel            = INVALID_MIDI_CH;
+    quint16      iPortNumber                 = LLCON_DEFAULT_PORT_NUMBER;
+    ELicenceType eLicenceType                = LT_NO_LICENCE;
+    QString      strConnOnStartupAddress     = "";
+    QString      strIniFileName              = "";
+    QString      strHTMLStatusFileName       = "";
+    QString      strServerName               = "";
+    QString      strLoggingFileName          = "";
+    QString      strHistoryFileName          = "";
+    QString      strRecordingDirName         = "";
+    QString      strCentralServer            = "";
+    QString      strServerInfo               = "";
+    QString      strWelcomeMessage           = "";
+    QString      strClientName               = APP_NAME;
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -200,6 +200,18 @@ int main ( int argc, char** argv )
         }
 
 
+        // Disconnect all clients on quit --------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-d",
+                               "--discononquit" ) )
+        {
+            bDisconnectAllClientsOnQuit = true;
+            tsConsole << "- disconnect all clients on quit" << endl;
+            continue;
+        }
+
+
         // Disabling auto Jack connections -------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
@@ -235,20 +247,6 @@ int main ( int argc, char** argv )
         {
             bShowComplRegConnList = true;
             tsConsole << "- show all registered servers in server list" << endl;
-            continue;
-        }
-
-
-        // Disconnect all clients (emergency mode) -----------------------------
-        // Undocumented debugging command line argument: Needed to disconnect
-        // an unwanted client.
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "--disconnectall", // no short form
-                               "--disconnectall" ) )
-        {
-            bDisconnectAllClients = true;
-            tsConsole << "- disconnect all clients" << endl;
             continue;
         }
 
@@ -626,7 +624,7 @@ int main ( int argc, char** argv )
                              strWelcomeMessage,
                              strRecordingDirName,
                              bCentServPingServerInList,
-                             bDisconnectAllClients,
+                             bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              eLicenceType );
             if ( bUseGUI )
@@ -704,6 +702,7 @@ QString UsageArguments ( char **argv )
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
         "  -a, --servername      server name, required for HTML status\n"
+        "  -d, --discononquit    disconnect all clients on quit\n"
         "  -D, --histdays        number of days of history to display\n"
         "  -e, --centralserver   address of the central server\n"
         "  -F, --fastupdate      use 64 samples frame size mode\n"

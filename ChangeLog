@@ -21,6 +21,8 @@
 
 - new design for the About dialog (Ticket #189)
 
+- new command line option -d to disconnect all clients on shutdown of the server (Ticket #161)
+
 - bug fix: for mono capture jack audio interface Jamulus complains it
   cannot make connections (Ticket #137)
 

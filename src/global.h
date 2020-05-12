@@ -149,6 +149,11 @@ LED bar:      lbr
 // audio mixer fader maximum value
 #define AUD_MIX_FADER_MAX                100
 
+
+// audio mixer panning maximum value
+#define AUD_MIX_PAN_MAX                  100
+
+
 // maximum number of recognized sound cards installed in the system,
 // definition for "no device"
 #define MAX_NUMBER_SOUND_CARDS           129 // e.g. 16 inputs, 8 outputs + default entry (MacOS)

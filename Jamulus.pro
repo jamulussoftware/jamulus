@@ -8,7 +8,9 @@ contains(CONFIG, "noupcasename") {
 
 CONFIG += qt \
     thread \
-    release
+    debug
+
+CONFIG(debug, debug|release) { CONFIG += qt warn_on rtti exceptions }
 
 QT += widgets \
     network \

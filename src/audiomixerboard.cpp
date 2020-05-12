@@ -40,7 +40,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     plbrChannelLevel            = new CMultiColorLEDBar ( pLevelsBox );
     pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
 
-    pPan						= new QSlider			(Qt::Horizontal, pLevelsBox);
+    pPan                        = new QSlider           (Qt::Horizontal, pLevelsBox);
 
     pMuteSoloBox                = new QWidget           ( pFrame );
     pcbMute                     = new QCheckBox         ( "Mute",       pMuteSoloBox );
@@ -67,8 +67,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
     // setup panning slider
-    pPan->setRange( 0, AUD_MIX_FADER_MAX);
-    pPan->setValue(AUD_MIX_FADER_MAX/2);
+    pPan->setRange( 0, AUD_MIX_PAN_MAX);
+    pPan->setValue(AUD_MIX_PAN_MAX/2);
 
 
     // setup fader tag label (black bold text which is centered)
@@ -261,7 +261,7 @@ void CChannelFader::Reset()
 {
     // init gain and pan value -> maximum value as definition according to server
     pFader->setValue ( AUD_MIX_FADER_MAX );
-    pPan->setValue ( AUD_MIX_FADER_MAX/2 );
+    pPan->setValue ( AUD_MIX_PAN_MAX/2 );
 
     // reset mute/solo check boxes and level meter
     pcbMute->setChecked ( false );
@@ -304,7 +304,7 @@ void CChannelFader::SetFaderLevel ( const int iLevel )
 void CChannelFader::SetPanValue(const int iPan)
 {
     // first make a range check
-    if ( ( iPan >= 0 ) && ( iPan <= AUD_MIX_FADER_MAX ) )
+    if ( ( iPan >= 0 ) && ( iPan <= AUD_MIX_PAN_MAX ) )
     {
         // we set the new fader level in the GUI (slider control) and also tell the
         // server about the change
@@ -339,17 +339,9 @@ void CChannelFader::SendFaderLevelToServer ( const int iLevel )
 }
 
 void CChannelFader::SendPanValueToServer ( const int iPan )
-{
-
-    // if mute flag is set or other channel is on solo, do not apply the pan
-    if ( ( pcbMute->checkState() == Qt::Unchecked ) &&
-         ( !bOtherChannelIsSolo || IsSolo() ) )
-    {
-        // emit signal for new pan value
-        double dPan =  static_cast<double> ( iPan ) / AUD_MIX_FADER_MAX;
-        emit panValueChanged ( dPan );
-    }
-
+{    
+    double dPan =  static_cast<double> ( iPan ) / AUD_MIX_PAN_MAX;
+    emit panValueChanged ( dPan );
 }
 
 void CChannelFader::OnMuteStateChanged ( int value )

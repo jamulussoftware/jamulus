@@ -398,7 +398,7 @@ public slots:
     void OnJittBufSizeChanged ( int iNewJitBufSize );
     void OnReqChanInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
     void OnNewConnection();
-    void OnCLDisconnection ( CHostAddress InetAddr ) { if ( InetAddr == Channel.GetAddress() ) { Stop(); } }
+    void OnCLDisconnection ( CHostAddress InetAddr ) { if ( InetAddr == Channel.GetAddress() ) { emit Disconnected(); } }
     void OnCLPingReceived ( CHostAddress InetAddr,
                             int          iMs );
 

@@ -342,18 +342,6 @@ lvwClients->setMinimumHeight ( 140 );
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
 }
 
-void CServerDlg::closeEvent ( QCloseEvent* Event )
-{
-    // if server was registered at the central server, unregister on shutdown
-    if ( pServer->GetServerListEnabled() )
-    {
-        pServer->UnregisterSlaveServer();
-    }
-
-    // default implementation of this event handler routine
-    Event->accept();
-}
-
 void CServerDlg::OnStartOnOSStartStateChanged ( int value )
 {
     const bool bCurAutoStartMinState = ( value == Qt::Checked );

@@ -251,7 +251,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
     bAutoRunMinimized         ( false ),
     strWelcomeMessage         ( strNewWelcomeMessage ),
     eLicenceType              ( eNLicenceType ),
-    bDisconnectAllClients     ( bNDisconnectAllClients )
+    bDisconnectAllClients     ( bNDisconnectAllClients ),
+    pSignalHandler            ( CSignalHandler::getSingletonP() )
 {
     int iOpusError;
     int i;
@@ -398,11 +399,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
             QString().number( static_cast<int> ( iPortNumber ) ) );
     }
 
-    // Enable jam recording (if requested)
+    // Enable jam recording (if requested) - kicks off the thread
     if ( bEnableRecording )
     {
         JamRecorder.Init ( this, iServerFrameSizeSamples );
-        JamRecorder.start();
     }
 
     // enable all channels (for the server all channel must be enabled the
@@ -465,6 +465,14 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &ServerListManager,
        SIGNAL ( SvrRegStatusChanged() ),
        this, SLOT ( OnSvrRegStatusChanged() ) );
+
+    QObject::connect ( QCoreApplication::instance(),
+        SIGNAL ( aboutToQuit() ),
+        this, SLOT ( OnAboutToQuit() ) );
+
+    QObject::connect ( pSignalHandler,
+        SIGNAL ( ShutdownSignal ( int ) ),
+        this, SLOT ( OnShutdown ( int ) ) );
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     connectChannelSignalsToServerSlots<MAX_NUM_CHANNELS>();
@@ -908,6 +916,23 @@ void CServer::OnCLDisconnection ( CHostAddress InetAddr )
     }
 }
 
+void CServer::OnAboutToQuit()
+{
+    Stop();
+
+    // if server was registered at the central server, unregister on shutdown
+    if ( GetServerListEnabled() )
+    {
+        UnregisterSlaveServer();
+    }
+}
+
+void CServer::OnShutdown ( int )
+{
+    // This should trigger OnAboutToQuit
+    QCoreApplication::instance()->exit();
+}
+
 void CServer::Start()
 {
     // only start if not already running
@@ -1273,7 +1298,7 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
         Stop();
     }
 
-    Q_UNUSED ( iUnused );
+    Q_UNUSED ( iUnused )
 }
 
 /// @brief Mix all audio data from all clients together.

@@ -1357,13 +1357,13 @@
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="62"/>
-        <source> server software must be set here. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
-        <translation> debe introducirse aquí. Se puede añadir un número de puerto opcional detrás de la dirección IP o URL utilizando una coma como separador, por ej. ejemplo.org:</translation>
+        <source> server software must be set here. An optional port number can be added after the IP address or URL using a comma as a separator, e.g, example.org:</source>
+        <translation> debe introducirse aquí. Se puede añadir un número de puerto opcional detrás de la dirección IP o URL utilizando dos puntos como separador, por ej. ejemplo.org:</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="66"/>
         <source>. A list of the most recent used server IP addresses or URLs is available for selection.</source>
-        <translation>. Hay disponible una lista de las direcciones IP o URLs usadas más recientemente para su selección.</translation>
+        <translation>. Hay disponible una lista de las direcciones IP o URLs utilizadas más recientemente para su selección.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="73"/>
@@ -1513,12 +1513,12 @@
     <message>
         <location filename="../../util.cpp" line="494"/>
         <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see </source>
-        <translation>Ud declara que todos los datos, audios u otras obras transmitidas a este servidor son la propiedad de Ud y creadas por Ud o sus licenciatarios, y que pone a disposición de terceras partes estos datos, audios u otras obras mediante la siguiente Licencia Creative Commons (para más información sobre esta licencia, ver </translation>
+        <translation>Ud. declara que todos los datos, audios u otras obras transmitidas a este servidor son la propiedad de Ud. y creadas por Ud. o sus licenciatarios, y que pone a disposición de terceras partes estos datos, audios u otras obras mediante la siguiente Licencia Creative Commons (para más información sobre esta licencia, ver </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="502"/>
         <source>You are free to:</source>
-        <translation>Ud es libre de:</translation>
+        <translation>Ud. es libre de:</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="504"/>
@@ -1543,7 +1543,7 @@
     <message>
         <location filename="../../util.cpp" line="508"/>
         <source>The licensor cannot revoke these freedoms as long as you follow the license terms.</source>
-        <translation>El licenciante no puede revocar estas libertades en tanto Ud siga los términos de la licencia.</translation>
+        <translation>El licenciante no puede revocar estas libertades en tanto Ud. siga los términos de la licencia.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="510"/>
@@ -1558,7 +1558,7 @@
     <message>
         <location filename="../../util.cpp" line="513"/>
         <source>You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</source>
-        <translation>Usted debe dar crédito de manera adecuada, brindar un enlace a la licencia, e indicar si se han realizado cambios. Puede hacerlo en cualquier forma razonable, pero no de forma tal que sugiera que usted o su uso tienen el apoyo de la licenciante.</translation>
+        <translation>Ud. debe dar crédito de manera adecuada, brindar un enlace a la licencia, e indicar si se han realizado cambios. Puede hacerlo en cualquier forma razonable, pero no de forma tal que sugiera que Ud. o su uso tienen el apoyo de la licenciante.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="516"/>
@@ -1859,7 +1859,7 @@
     <message>
         <location filename="../../util.cpp" line="1002"/>
         <source>Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongo</translation>
     </message>
 </context>
 <context>
@@ -1917,7 +1917,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="68"/>
         <source> users can see the server in the connect dialog server list and connect to it. The registering of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation> puedan ver el servidor en la lista de servidores de la ventana de conexión y puedan conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentran realmente disponibles.</translation>
+        <translation> puedan ver el servidor en la lista de servidores de la ventana de conexión y puedan conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentren realmente disponibles.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="74"/>
@@ -2010,7 +2010,7 @@
         <location filename="../../serverdlg.cpp" line="144"/>
         <location filename="../../serverdlg.cpp" line="150"/>
         <source> server</source>
-        <translation> </translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="144"/>
@@ -2284,7 +2284,7 @@
     <message>
         <location filename="../../../android/sound.cpp" line="137"/>
         <source>Error closing stream: $s</source>
-        <translation type="unfinished"></translation>
+        <translation>Error cerrando transmisión: $s</translation>
     </message>
 </context>
 <context>

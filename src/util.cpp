@@ -388,7 +388,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     // contributors list
     txvContributors->setText (
         "<p>Peter L. Jones (<a href=""https://github.com/pljones"">pljones</a>)</p>"
-        "<p>Jonathan (<a href=""https://github.com/gilgongo"">gilgongo</a>)</p>"
+        "<p>Jonathan Baker-Bates (<a href=""https://github.com/gilgongo"">gilgongo</a>)</p>"
         "<p>Daniele Masato (<a href=""https://github.com/doloopuntil"">doloopuntil</a>)</p>"
         "<p>Simon Tomlinson (<a href=""https://github.com/sthenos"">sthenos</a>)</p>"
         "<p>Marc jr. Landolt (<a href=""https://github.com/braindef"">braindef</a>)</p>"

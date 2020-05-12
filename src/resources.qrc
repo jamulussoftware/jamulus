@@ -67,6 +67,7 @@
         <file>res/instruments/harp.png</file>
         <file>res/instruments/viola.png</file>
         <file>res/instruments/congas.png</file>
+        <file>res/instruments/bongo.png</file>
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>

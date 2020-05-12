@@ -562,7 +562,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="119"/>
-        <source>A reverberation effect can be applied to one local mono audio channel or to both channels in stereo mode. The mone channel selection and the reverberation level can be modified. If, e.g., the microphone signal is fed into the right audio channel of the sound card and a reverberation effect shall be applied, set the channel selector to right and move the fader upwards until the desired reverberation level is reached.</source>
+        <source>A reverberation effect can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverberation level can be modified. If, e.g., the microphone signal is fed into the right audio channel of the sound card and a reverberation effect shall be applied, set the channel selector to right and move the fader upwards until the desired reverberation level is reached.</source>
         <translation>Um efeito de reverberação pode ser aplicado a um canal local de áudio mono ou a ambos os canais no modo estéreo. A seleção do canal mono e o nível de reverberação podem ser modificados. Se, por exemplo, o sinal do microfone for alimentado no canal de áudio direito da placa de som, e for aplicado um efeito de reverberação, ajuste o seletor de canal para a direita e mova o fader para cima até que o nível de reverberação desejado seja atingido.</translation>
     </message>
     <message>
@@ -1864,6 +1864,11 @@
         <source>Congas</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../util.cpp" line="1002"/>
+        <source>Bongo</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CServerDlg</name>
@@ -2283,6 +2288,11 @@
         <location filename="../../../windows/sound.cpp" line="519"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
         <translation> requer que a interface de áudio de baixa latência ASIO funcione corretamente. Esta não é uma interface de áudio padrão do Windows e, portanto, é necessário um driver de áudio especial. Ou a sua placa de som possui um driver ASIO nativo (recomendado), ou pode usar drivers alternativos, como o driver ASIO4All.</translation>
+    </message>
+    <message>
+        <location filename="../../../android/sound.cpp" line="137"/>
+        <source>Error closing stream: $s</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

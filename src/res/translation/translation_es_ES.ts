@@ -1357,7 +1357,7 @@
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="62"/>
-        <source> server software must be set here. An optional port number can be added after the IP address or URL using a comma as a separator, e.g, example.org:</source>
+        <source> server software must be set here. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
         <translation> debe introducirse aquí. Se puede añadir un número de puerto opcional detrás de la dirección IP o URL utilizando una coma como separador, por ej. ejemplo.org:</translation>
     </message>
     <message>

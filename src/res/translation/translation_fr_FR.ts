@@ -466,7 +466,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="157"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation type="unfinished">Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le logiciel </translation>
+        <translation>Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le logiciel </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="161"/>
@@ -854,7 +854,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="132"/>
         <source>Enable small network buffers check box</source>
-        <translation>Cochez la case Activer les petits tampons de réseau</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="135"/>
@@ -964,7 +964,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="191"/>
         <source>Fancy skin check box</source>
-        <translation>Cocher la case Habillage fantaisie</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="194"/>
@@ -979,7 +979,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="197"/>
         <source>Display channel levels check box</source>
-        <translation>Cocher la case Afficher les niveaux des canaux</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
@@ -1089,57 +1089,57 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="288"/>
         <source>ASIO Setup</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres ASIO</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="335"/>
         <source>Mono</source>
-        <translation type="unfinished"></translation>
+        <translation>Mono</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="336"/>
         <source>Mono-in/Stereo-out</source>
-        <translation type="unfinished"></translation>
+        <translation>Mono-entrée/stéréo-sortie</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
         <source>Stereo</source>
-        <translation type="unfinished"></translation>
+        <translation>Stéréo</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="342"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Basse</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="343"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normale</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="344"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Haute</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="349"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuel</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="350"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Défaut</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="351"/>
         <source>Default (North America)</source>
-        <translation type="unfinished"></translation>
+        <translation>Défault (Amérique du Nord)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="367"/>
         <source>preferred</source>
-        <translation type="unfinished"></translation>
+        <translation>préféré</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="457"/>
@@ -1155,17 +1155,17 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="523"/>
         <source>Buffer Delay: </source>
-        <translation type="unfinished"></translation>
+        <translation>Délai de temporisation : </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="633"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique audio sélectionné n&apos;a pas pu être utilisé en raison de l&apos;erreur suivante : </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="635"/>
         <source> The previous driver will be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation> Le pilote précédent sera sélectionné.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="636"/>
@@ -1341,7 +1341,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="47"/>
         <source>The server list shows a list of available servers which are registered at the central server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
-        <translation>La liste de serveurs affiche une liste des serveurs disponibles qui sont enregistrés sur le serveur central. Sélectionnez un serveur dans la liste et appuyez sur le bouton de connexion pour vous connecter à ce serveur. Vous pouvez également double-cliquer sur un serveur de la liste pour vous y connecter. Si un serveur est occupé, une liste des musiciens connectés est disponible en développant l&apos;élément de la liste. Les serveurs permanents sont indiqués en caractères gras.</translation>
+        <translation>La liste de serveurs affiche une liste des serveurs disponibles qui sont inscrits sur le serveur central. Sélectionnez un serveur dans la liste et appuyez sur le bouton de connexion pour vous connecter à ce serveur. Vous pouvez également double-cliquer sur un serveur de la liste pour vous y connecter. Si un serveur est occupé, une liste des musiciens connectés est disponible en développant l&apos;élément de la liste. Les serveurs permanents sont indiqués en caractères gras.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="53"/>
@@ -1371,12 +1371,12 @@
     <message>
         <location filename="../../connectdlg.cpp" line="66"/>
         <source>. A list of the most recent used server IP addresses or URLs is available for selection.</source>
-        <translation>Une liste des adresses IP ou URL de serveur les plus récentes est disponible pour la sélection.</translation>
+        <translation>. Une liste des adresses IP ou URL de serveur les plus récentes est disponible pour la sélection.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="73"/>
         <source>Server address edit box</source>
-        <translation>Boîte d&apos;édition de l&apos;adresse du serveur</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="74"/>
@@ -1411,7 +1411,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="86"/>
         <source>Show all musicians check box</source>
-        <translation>Cochez la case Afficher tous les musiciens</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1624,12 +1624,12 @@
     <message>
         <location filename="../../util.cpp" line="717"/>
         <source>City edit box</source>
-        <translation>Boîte d&apos;édition de la ville</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="719"/>
         <source>Skill level combo box</source>
-        <translation>Boîte combo de niveau de compétence</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="664"/>
@@ -1875,12 +1875,12 @@
     <message>
         <location filename="../../serverdlg.cpp" line="45"/>
         <source>Client List</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste des clients</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="45"/>
         <source>The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
-        <translation type="unfinished"></translation>
+        <translation>La liste des clients affiche tous les clients qui sont actuellement connectés à ce serveur. Certaines informations sur les clients, telles que les adresses IP et le nom, sont données pour chaque client connecté.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="50"/>
@@ -1910,42 +1910,42 @@
     <message>
         <location filename="../../serverdlg.cpp" line="61"/>
         <source>If enabled, a Creative Commons BY-NC-SA 4.0 Licence dialog is shown each time a new user connects the server.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si activé, une boîte de dialogue de licence Creative Commons BY-NC-SA 4.0 est affichée chaque fois qu&apos;un nouvel utilisateur se connecte au serveur.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="65"/>
         <source>Make My Server Public</source>
-        <translation type="unfinished"></translation>
+        <translation>Rendre mon serveur public</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="66"/>
         <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all </source>
-        <translation type="unfinished"></translation>
+        <translation>Si la case Rendre mon serveur public est cochée, ce serveur s&apos;inscrit sur le serveur central afin que tous les utilisateurs de </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="68"/>
         <source> users can see the server in the connect dialog server list and connect to it. The registering of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation type="unfinished"></translation>
+        <translation> puisse voir le serveur dans la liste des serveurs du dialogue de connexion et s&apos;y connecter. L&apos;inscription du serveur est renouvelée périodiquement pour s&apos;assurer que tous les serveurs de la liste des serveurs du dialogue de connexion sont effectivement disponibles.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="74"/>
         <source>Register Server Status</source>
-        <translation type="unfinished"></translation>
+        <translation>État du serveur inscrit</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
         <source>If the Make My Server Public check box is checked, this will show the success of registration with the central server.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si la case Rendre mon serveur public est cochée, cela indiquera le succès de l&apos;enregistrement auprès du serveur central.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="79"/>
         <source>Central Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse du serveur central</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="80"/>
         <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;adresse du serveur central est l&apos;adresse IP ou l&apos;URL du serveur central auquel ce serveur est inscrit. Avec le type d&apos;adresse du serveur central, on peut soit sélectionner la région locale parmi les serveurs centraux par défaut, soit spécifier une adresse manuelle.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="89"/>
@@ -1960,12 +1960,12 @@
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
         <source>Server Name</source>
-        <translation type="unfinished">Nom du serveur</translation>
+        <translation>Nom du serveur</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
         <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le nom du serveur identifie votre serveur dans la liste des serveurs du dialogue de connexion chez les clients. Si aucun nom n&apos;est donné, l&apos;adresse IP est affichée à la place.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="100"/>
@@ -1975,12 +1975,12 @@
     <message>
         <location filename="../../serverdlg.cpp" line="103"/>
         <source>Location City</source>
-        <translation type="unfinished"></translation>
+        <translation>Ville de localisation</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="103"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
-        <translation type="unfinished"></translation>
+        <translation>La ville dans laquelle ce serveur est situé peut être définie ici. Si un nom de ville est saisi, il sera affiché dans la liste des serveurs du dialogue de connexion chez les clients.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="110"/>
@@ -1990,12 +1990,12 @@
     <message>
         <location filename="../../serverdlg.cpp" line="113"/>
         <source>Location country</source>
-        <translation type="unfinished"></translation>
+        <translation>Pays de localisation</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="113"/>
         <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le pays dans lequel ce serveur est situé peut être défini ici. Si un pays est saisi, il sera affiché dans la liste des serveurs du dialogue de connexion chez les clients.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="121"/>
@@ -2011,89 +2011,89 @@
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <source>&amp;Hide </source>
-        <translation type="unfinished"></translation>
+        <translation>Cac&amp;hé </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>
         <location filename="../../serverdlg.cpp" line="144"/>
         <location filename="../../serverdlg.cpp" line="150"/>
         <source> server</source>
-        <translation type="unfinished"></translation>
+        <translation> serveur</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="144"/>
         <source>&amp;Open </source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ouvrir </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="166"/>
         <source> server </source>
-        <translation type="unfinished"></translation>
+        <translation> serveur </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="191"/>
         <source>Manual</source>
-        <translation type="unfinished"></translation>
+        <translation>Manuel</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="192"/>
         <source>Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Défaut</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="193"/>
         <source>Default (North America)</source>
-        <translation type="unfinished"></translation>
+        <translation>Défaut (Amérique du nord)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="271"/>
         <source> Server</source>
-        <translation type="unfinished"></translation>
+        <translation> serveur</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="275"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Fenêtre</translation>
     </message>
     <message>
         <location filename="../../util.h" line="593"/>
         <source>Unregistered</source>
-        <translation type="unfinished"></translation>
+        <translation>Non inscrit</translation>
     </message>
     <message>
         <location filename="../../util.h" line="596"/>
         <source>Bad address</source>
-        <translation type="unfinished"></translation>
+        <translation>Mauvaise adresse</translation>
     </message>
     <message>
         <location filename="../../util.h" line="599"/>
         <source>Registration requested</source>
-        <translation type="unfinished"></translation>
+        <translation>Inscription demandée</translation>
     </message>
     <message>
         <location filename="../../util.h" line="602"/>
         <source>Registration failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Échec de l&apos;inscription</translation>
     </message>
     <message>
         <location filename="../../util.h" line="605"/>
         <source>Check server version</source>
-        <translation type="unfinished"></translation>
+        <translation>Vérifier la version du serveur</translation>
     </message>
     <message>
         <location filename="../../util.h" line="608"/>
         <source>Registered</source>
-        <translation type="unfinished"></translation>
+        <translation>Inscrit</translation>
     </message>
     <message>
         <location filename="../../util.h" line="611"/>
         <source>Central Server full</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur central rempli</translation>
     </message>
     <message>
         <location filename="../../util.h" line="614"/>
         <source>Unknown value </source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur inconnue</translation>
     </message>
 </context>
 <context>
@@ -2101,13 +2101,13 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="34"/>
         <source>Client IP:Port</source>
-        <translation type="unfinished"></translation>
+        <translation>IP Client:Port</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="39"/>
         <location filename="../../serverdlgbase.ui" line="125"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="44"/>
@@ -2122,37 +2122,37 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="59"/>
         <source>Show Creative Commons BY-NC-SA 4.0 Licence Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher le dialogue de la licence Creative Commons BY-NC-SA 4.0</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="68"/>
         <source>Make My Server Public (Register My Server in the Server List)</source>
-        <translation type="unfinished"></translation>
+        <translation>Rendre mon serveur public (inscrire mon serveur dans la liste des serveurs)</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="91"/>
         <source>STATUS</source>
-        <translation type="unfinished"></translation>
+        <translation>ÉTAT</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="102"/>
         <source>Central Server Address:</source>
-        <translation type="unfinished">Adresse du serveur central :</translation>
+        <translation>Adresse du serveur central :</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="117"/>
         <source>My Server Info</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations de mon serveur</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="132"/>
         <source>Location: City</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplacement : ville</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="139"/>
         <source>Location: Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Emplacement : pays</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="181"/>

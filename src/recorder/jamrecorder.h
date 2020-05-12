@@ -132,13 +132,16 @@ private:
     QList<CJamClientConnection*> jamClientConnections;
 };
 
-class CJamRecorder : public QThread
+class CJamRecorder : public QObject
 {
     Q_OBJECT
 
 public:
-    CJamRecorder(const QString recordingDirName) :
-        recordBaseDir (recordingDirName), isRecording (false) {}
+    CJamRecorder ( const QString recordingDirName ) :
+        recordBaseDir ( recordingDirName ),
+        isRecording   ( false )
+    {
+    }
 
     void Init( const CServer* server, const int _iServerFrameSizeSamples );
 
@@ -156,15 +159,20 @@ public slots:
     void OnEnd();
 
     /**
+     * @brief Raised when application is stopping
+     */
+    void OnAboutToQuit();
+
+    /**
      * @brief Raised when an existing client leaves the server.
      * @param iChID channel number of client
      */
-    void OnDisconnected(int iChID);
+    void OnDisconnected ( int iChID );
 
     /**
-     * @brief Raised when a frame of data fis available to process
+     * @brief Raised when a frame of data is available to process
      */
-    void OnFrame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data);
+    void OnFrame ( const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data );
 
 private:
     QDir recordBaseDir;
@@ -172,6 +180,8 @@ private:
     bool         isRecording;
     CJamSession* currentSession;
     int          iServerFrameSizeSamples;
+
+    QThread* thisThread;
 };
 
 }

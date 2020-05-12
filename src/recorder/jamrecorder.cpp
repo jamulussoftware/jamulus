@@ -314,21 +314,30 @@ void CJamRecorder::Init( const CServer* server,
         throw std::runtime_error( (recordBaseDir.absolutePath() + " is a directory but cannot be written to").toStdString() );
     }
 
-    QObject::connect((const QObject *)server, SIGNAL ( Stopped() ),
-                     this, SLOT( OnEnd() ),
-                     Qt::ConnectionType::QueuedConnection);
+    QObject::connect( (const QObject *)server, SIGNAL ( Stopped() ),
+                      this, SLOT( OnEnd() ),
+                      Qt::ConnectionType::QueuedConnection );
 
-    QObject::connect((const QObject *)server, SIGNAL ( ClientDisconnected(int) ),
-                     this, SLOT( OnDisconnected(int) ),
-                     Qt::ConnectionType::QueuedConnection);
+    QObject::connect( (const QObject *)server, SIGNAL ( ClientDisconnected ( int ) ),
+                      this, SLOT( OnDisconnected ( int ) ),
+                      Qt::ConnectionType::QueuedConnection );
 
     qRegisterMetaType<CVector<int16_t>>();
-    QObject::connect((const QObject *)server, SIGNAL ( AudioFrame(const int, const QString, const CHostAddress, const int, const CVector<int16_t>) ),
-                     this, SLOT(  OnFrame(const int, const QString, const CHostAddress, const int, const CVector<int16_t>) ),
-                     Qt::ConnectionType::QueuedConnection);
+    QObject::connect( (const QObject *)server, SIGNAL ( AudioFrame( const int, const QString, const CHostAddress, const int, const CVector<int16_t> ) ),
+                      this, SLOT(  OnFrame (const int, const QString, const CHostAddress, const int, const CVector<int16_t> ) ),
+                      Qt::ConnectionType::QueuedConnection );
+
+    QObject::connect( QCoreApplication::instance(),
+                      SIGNAL ( aboutToQuit() ),
+                      this, SLOT( OnAboutToQuit() ) );
 
     iServerFrameSizeSamples = _iServerFrameSizeSamples;
+
+    thisThread = new QThread();
+    moveToThread ( thisThread );
+    thisThread->start();
 }
+
 
 /**
  * @brief CJamRecorder::OnStart Start up tasks when the first client connects
@@ -337,7 +346,7 @@ void CJamRecorder::OnStart() {
     // Ensure any previous cleaning up has been done.
     OnEnd();
 
-    currentSession = new CJamSession(recordBaseDir);
+    currentSession = new CJamSession( recordBaseDir );
     isRecording = true;
 }
 
@@ -346,7 +355,7 @@ void CJamRecorder::OnStart() {
  */
 void CJamRecorder::OnEnd()
 {
-    if (isRecording)
+    if ( isRecording )
     {
         isRecording = false;
         currentSession->End();
@@ -370,6 +379,13 @@ void CJamRecorder::OnEnd()
         delete currentSession;
         currentSession = nullptr;
     }
+}
+
+void CJamRecorder::OnAboutToQuit()
+{
+    OnEnd();
+
+    thisThread->exit();
 }
 
 /**
@@ -409,11 +425,11 @@ void CJamRecorder::SessionDirToReaper(QString& strSessionDirName, int serverFram
  */
 void CJamRecorder::OnDisconnected(int iChID)
 {
-    if (!isRecording)
+    if ( !isRecording )
     {
         qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but not recording";
     }
-    if (currentSession == nullptr)
+    if ( currentSession == nullptr )
     {
         qWarning() << "CJamRecorder::OnDisconnected: channel" << iChID << "disconnected but no currentSession";
         return;
@@ -434,7 +450,7 @@ void CJamRecorder::OnDisconnected(int iChID)
 void CJamRecorder::OnFrame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data)
 {
     // Make sure we are ready
-    if (!isRecording)
+    if ( !isRecording )
     {
         OnStart();
     }

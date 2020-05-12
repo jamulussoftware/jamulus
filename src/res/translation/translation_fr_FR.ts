@@ -908,7 +908,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="157"/>
-        <source> software will still work with this setting but with restricted performannce.</source>
+        <source> software will still work with this setting but with restricted performance.</source>
         <translation> continuera toujours de fonctionner avec ce réglage, mais avec des performances limitées.</translation>
     </message>
     <message>

@@ -959,7 +959,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="188"/>
         <source>If enabled, a fancy skin will be applied to the main window.</source>
-        <translation>Si activée, un habillage fantaisie sera appliquée à la fenêtre principale.</translation>
+        <translation>Si activée, un habillage fantaisie sera appliqué à la fenêtre principale.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="191"/>

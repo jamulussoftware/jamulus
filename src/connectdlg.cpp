@@ -61,7 +61,7 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     QString strServAddrH = "<b>" + tr ( "Server Address" ) + ":</b> " + tr (
         "The IP address or URL of the server running the " ) + APP_NAME + tr (
         " server software must be set here. An optional port number can be added after the IP "
-        "address or URL using a comma as a separator, e.g, "
+        "address or URL using a colon as a separator, e.g, "
         "example.org:" ) +
         QString().setNum ( LLCON_DEFAULT_PORT_NUMBER ) + tr ( ". A list of "
         "the most recent used server IP addresses or URLs is available for "

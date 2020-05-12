@@ -1207,7 +1207,7 @@ fflush(pFileDelay);
     // update socket buffer size
     Channel.UpdateSocketBufferSize();
 
-    Q_UNUSED ( iUnused );
+    Q_UNUSED ( iUnused )
 }
 
 int CClient::EstimatedOverallDelay ( const int iPingTimeMs )

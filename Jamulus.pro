@@ -337,7 +337,8 @@ HEADERS += src/audiomixerboard.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
-    src/historygraph.h
+    src/historygraph.h \
+    src/signalhandler.h
 
 HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \
@@ -451,6 +452,7 @@ SOURCES += src/audiomixerboard.cpp \
     src/serverlist.cpp \
     src/serverlogging.cpp \
     src/settings.cpp \
+    src/signalhandler.cpp \
     src/socket.cpp \
     src/soundbase.cpp \
     src/util.cpp \

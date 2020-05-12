@@ -36,6 +36,7 @@
 #endif
 #include "global.h"
 #include "buffer.h"
+#include "signalhandler.h"
 #include "socket.h"
 #include "channel.h"
 #include "util.h"
@@ -370,6 +371,8 @@ protected:
     ELicenceType               eLicenceType;
     bool                       bDisconnectAllClients;
 
+    CSignalHandler*            pSignalHandler;
+
 signals:
     void Started();
     void Stopped();
@@ -454,6 +457,10 @@ public slots:
     }
 
     void OnCLDisconnection ( CHostAddress InetAddr );
+
+    void OnAboutToQuit();
+
+    void OnShutdown ( int );
 
 #if QT_VERSION < 0x50000  // MOC does not expand macros in Qt 4, so we cannot use QT_VERSION_CHECK(5, 0, 0)
     // CODE TAG: MAX_NUM_CHANNELS_TAG

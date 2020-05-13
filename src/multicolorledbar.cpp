@@ -25,6 +25,8 @@
  *
 \******************************************************************************/
 
+#include <QMouseEvent>
+
 #include "multicolorledbar.h"
 
 
@@ -42,7 +44,7 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
 
     // create clip LED
     pClipLED = new cLED ( parent );
-    pLEDLayout->addWidget (pClipLED->getLabelPointer() );
+    pLEDLayout->addWidget ( pClipLED->getLabelPointer() );
     pLEDLayout->addStretch(); // Keep clip LED separated from the rest of the LED bar
 
     // create LEDs
@@ -116,6 +118,7 @@ void CMultiColorLEDBar::Reset ( const bool bEnabled )
             vecpLEDs[iLEDIdx]->setColor ( cLED::RL_DISABLED );
         }
     }
+    pClipLED->setColor ( cLED::RL_GREY );
 }
 
 void CMultiColorLEDBar::SetLevelMeterType ( const ELevelMeterType eNType )
@@ -164,6 +167,8 @@ void CMultiColorLEDBar::setValue ( const double dValue )
                         {
                             // red region
                             vecpLEDs[iLEDIdx]->setColor ( cLED::RL_RED );
+                            // indicate clipping signal until user click
+                            pClipLED->setColor ( cLED::RL_RED );
                         }
                     }
                 }
@@ -181,6 +186,15 @@ void CMultiColorLEDBar::setValue ( const double dValue )
         }
     }
 }
+
+void CMultiColorLEDBar::mousePressEvent ( QMouseEvent* event )
+{
+    if ( event->button() == Qt::LeftButton )
+    {
+        pClipLED->setColor ( cLED::ELightColor::RL_GREY );
+    }
+}
+
 
 CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
     BitmCubeRoundDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),

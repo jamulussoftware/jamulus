@@ -89,6 +89,7 @@ protected:
 
     void Reset ( const bool bEnabled );
     virtual void changeEvent ( QEvent* curEvent );
+    void mousePressEvent ( QMouseEvent* event ) override;
 
     QStackedLayout* pStackedLayout;
     ELevelMeterType eLevelMeterType;

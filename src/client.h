@@ -107,7 +107,8 @@ public:
     CClient ( const quint16  iPortNumber,
               const QString& strConnOnStartupAddress,
               const int      iCtrlMIDIChannel,
-              const bool     bNoAutoJackConnect );
+              const bool     bNoAutoJackConnect,
+              const QString& strNClientName );
 
     void   Start();
     void   Stop();
@@ -285,6 +286,7 @@ public:
     CVector<int>     vecStoredFaderIsMute;
     int              iNewClientFaderLevel;
     bool             bConnectDlgShowAllMusicians;
+    QString          strClientName;
 
     // window position/state settings
     QByteArray       vecWindowPosMain;
@@ -399,7 +401,7 @@ public slots:
     void OnJittBufSizeChanged ( int iNewJitBufSize );
     void OnReqChanInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
     void OnNewConnection();
-    void OnCLDisconnection ( CHostAddress InetAddr ) { if ( InetAddr == Channel.GetAddress() ) { Stop(); } }
+    void OnCLDisconnection ( CHostAddress InetAddr ) { if ( InetAddr == Channel.GetAddress() ) { emit Disconnected(); } }
     void OnCLPingReceived ( CHostAddress InetAddr,
                             int          iMs );
 

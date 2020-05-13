@@ -52,7 +52,7 @@ public:
     void SetChannelInfos ( const CChannelInfo& cChanInfo );
     void Show() { pFrame->show(); }
     void Hide() { pFrame->hide(); }
-    bool IsVisible() { return plblLabel->isVisible(); }
+    bool IsVisible() { return !pFrame->isHidden(); }
     bool IsSolo() { return pcbSolo->isChecked(); }
     bool IsMute() { return pcbMute->isChecked(); }
     void SetGUIDesign ( const EGUIDesign eNewDesign );

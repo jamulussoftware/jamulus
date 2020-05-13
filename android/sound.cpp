@@ -2,7 +2,7 @@
  * Copyright (c) 2004-2020
  *
  * Author(s):
- *  Volker Fischer
+ *  Simon Tomlinson
  *
  ******************************************************************************
  *
@@ -23,255 +23,157 @@
 \******************************************************************************/
 
 #include "sound.h"
-
+#include "androiddebug.cpp"
 
 /* Implementation *************************************************************/
-CSound::CSound ( void       (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
-                 void*      arg,
-                 const int  iCtrlMIDIChannel,
-                 const bool bNoAutoJackConnect ) :
-    CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg, iCtrlMIDIChannel, bNoAutoJackConnect )
+
+CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData, void* arg ),
+                 void*          arg,
+                 const int      iCtrlMIDIChannel,
+                 const bool     ,
+                 const QString& ) :
+    CSoundBase ( "OpenSL", true, fpNewProcessCallback, arg, iCtrlMIDIChannel )
+
 {
+     pSound = this;
+#ifdef ANDROIDDEBUG
+  qInstallMessageHandler(myMessageHandler);
+#endif
+}
+
+void CSound::setupCommonStreamParams(oboe::AudioStreamBuilder *builder)
+{
+    // We request EXCLUSIVE mode since this will give us the lowest possible
+    // latency. If EXCLUSIVE mode isn't available the builder will fall back to SHARED mode
+    builder->setCallback(this)
+            ->setFormat(oboe::AudioFormat::Float)
+            ->setSharingMode(oboe::SharingMode::Shared)
+            ->setChannelCount(oboe::ChannelCount::Mono)
+           // ->setSampleRate(48000)
+           // ->setSampleRateConversionQuality(oboe::SampleRateConversionQuality::Medium)
+            ->setPerformanceMode(oboe::PerformanceMode::None);
+    return;
+}
+
+void CSound::openStreams()
+{
+    // Create callback
+    mCallback = this;
+
+    //Setup output stream
+     oboe::AudioStreamBuilder inBuilder, outBuilder;
+     outBuilder.setDirection(oboe::Direction::Output);
+     setupCommonStreamParams(&outBuilder);
+     oboe::Result result = outBuilder.openManagedStream(mPlayStream);
+     if (result != oboe::Result::OK) {
+         return;
+     }
+     mPlayStream->setBufferSizeInFrames(pSound->iOpenSLBufferSizeStereo);
+
+    warnIfNotLowLatency(mPlayStream, "PlayStream");
+    printStreamDetails(mPlayStream);
+
+   //Setup input stream
+    inBuilder.setDirection(oboe::Direction::Input);
+    setupCommonStreamParams(&inBuilder);
+    result = inBuilder.openManagedStream(mRecordingStream);
+    if (result != oboe::Result::OK) {
+         closeStream(mPlayStream);
+         return;
+    }
+    mRecordingStream->setBufferSizeInFrames(pSound->iOpenSLBufferSizeStereo);
+
+     warnIfNotLowLatency(mRecordingStream, "RecordStream");
+     printStreamDetails(mRecordingStream);
+}
+
+void CSound::printStreamDetails(oboe::ManagedStream &stream)
+{
+
+    QString sDirection = (stream->getDirection()==oboe::Direction::Input?"Input":"Output");
+    QString sFramesPerBurst = QString::number(stream->getFramesPerBurst());
+    QString sBufferSizeInFrames =  QString::number(stream->getBufferSizeInFrames());
+    QString sBytesPerFrame =  QString::number(stream->getBytesPerFrame());
+    QString sBytesPerSample =  QString::number(stream->getBytesPerSample());
+    QString sBufferCapacityInFrames =  QString::number(stream->getBufferCapacityInFrames());
+    QString sPerformanceMode = (stream->getPerformanceMode()==oboe::PerformanceMode::LowLatency?"LowLatency":"NotLowLatency");
+    QString sSharingMode = (stream->getSharingMode() == oboe::SharingMode::Exclusive?"Exclusive":"Shared");
+    QString sDeviceID =  QString::number(stream->getDeviceId());
+    QString sSampleRate =  QString::number(stream->getSampleRate());
+    QString sAudioFormat = (stream->getFormat()==oboe::AudioFormat::I16?"I16":"Float");
+
+    QString sFramesPerCallback =  QString::number(stream->getFramesPerCallback());
+    //QString sSampleRateConversionQuality = (stream.getSampleRateConversionQuality()==oboe::SampleRateConversionQuality::
+
+    qInfo() << "Stream details: [sDirection: " << sDirection <<
+               ", FramesPerBurst: " << sFramesPerBurst <<
+               ", BufferSizeInFrames: " << sBufferSizeInFrames <<
+               ", BytesPerFrame: " << sBytesPerFrame <<
+               ", BytesPerSample: " << sBytesPerSample <<
+               ", BufferCapacityInFrames: " << sBufferCapacityInFrames <<
+               ", PerformanceMode: " << sPerformanceMode <<
+               ", SharingMode: " << sSharingMode <<
+               ", DeviceID: " << sDeviceID <<
+               ", SampleRate: " << sSampleRate <<
+               ", AudioFormat: " << sAudioFormat <<
+               ", FramesPerCallback: " << sFramesPerCallback << "]";
 
 }
 
-void CSound::InitializeOpenSL()
-{
-    // set up stream formats for input and output
-    SLDataFormat_PCM inStreamFormat;
-    inStreamFormat.formatType    = SL_DATAFORMAT_PCM;
-    inStreamFormat.numChannels   = 1;
-    inStreamFormat.samplesPerSec = SL_SAMPLINGRATE_16;
-    inStreamFormat.bitsPerSample = SL_PCMSAMPLEFORMAT_FIXED_16;
-    inStreamFormat.containerSize = 16;
-    inStreamFormat.channelMask   = SL_SPEAKER_FRONT_CENTER;
-    inStreamFormat.endianness    = SL_BYTEORDER_LITTLEENDIAN;
-
-    SLDataFormat_PCM outStreamFormat;
-    outStreamFormat.formatType    = SL_DATAFORMAT_PCM;
-    outStreamFormat.numChannels   = 2;
-    outStreamFormat.samplesPerSec = SYSTEM_SAMPLE_RATE_HZ * 1000; // unit is mHz
-    outStreamFormat.bitsPerSample = SL_PCMSAMPLEFORMAT_FIXED_16;
-    outStreamFormat.containerSize = 16;
-    outStreamFormat.channelMask   = SL_SPEAKER_FRONT_LEFT | SL_SPEAKER_FRONT_RIGHT;
-    outStreamFormat.endianness    = SL_BYTEORDER_LITTLEENDIAN;
-
-    // create the OpenSL root engine object
-    slCreateEngine ( &engineObject,
-                     0,
-                     nullptr,
-                     0,
-                     nullptr,
-                     nullptr );
-
-    // realize the engine
-    (*engineObject)->Realize ( engineObject,
-                               SL_BOOLEAN_FALSE );
-
-    // get the engine interface (required to create other objects)
-    (*engineObject)->GetInterface ( engineObject,
-                                    SL_IID_ENGINE,
-                                    &engine );
-
-    // create the main output mix
-    (*engine)->CreateOutputMix ( engine,
-                                 &outputMixObject,
-                                 0,
-                                 nullptr,
-                                 nullptr );
-
-    // realize the output mix
-    (*outputMixObject)->Realize ( outputMixObject,
-                                  SL_BOOLEAN_FALSE );
-
-    // configure the audio (data) source for input
-    SLDataLocator_IODevice micLocator;
-    micLocator.locatorType = SL_DATALOCATOR_IODEVICE;
-    micLocator.deviceType  = SL_IODEVICE_AUDIOINPUT;
-    micLocator.deviceID    = SL_DEFAULTDEVICEID_AUDIOINPUT;
-    micLocator.device      = nullptr;
-
-    SLDataSource inDataSource;
-    inDataSource.pLocator = &micLocator;
-    inDataSource.pFormat  = nullptr;
-
-    // configure the input buffer queue
-    SLDataLocator_AndroidSimpleBufferQueue inBufferQueue;
-    inBufferQueue.locatorType = SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE;
-    inBufferQueue.numBuffers  = 2; // max number of buffers in queue
-
-    // configure the audio (data) sink for input
-    SLDataSink inDataSink;
-    inDataSink.pLocator = &inBufferQueue;
-    inDataSink.pFormat  = &inStreamFormat;
-
-    // create the audio recorder
-    const SLInterfaceID recorderIds[] = { SL_IID_ANDROIDSIMPLEBUFFERQUEUE };
-    const SLboolean recorderReq[]     = { SL_BOOLEAN_TRUE };
-
-    (*engine)->CreateAudioRecorder ( engine,
-                                     &recorderObject,
-                                     &inDataSource,
-                                     &inDataSink,
-                                     1,
-                                     recorderIds,
-                                     recorderReq );
-
-    // realize the audio recorder
-    (*recorderObject)->Realize ( recorderObject,
-                                 SL_BOOLEAN_FALSE );
-
-    // get the audio recorder interface
-    (*recorderObject)->GetInterface ( recorderObject,
-                                      SL_IID_RECORD,
-                                      &recorder );
-
-    // get the audio recorder simple buffer queue interface
-    (*recorderObject)->GetInterface ( recorderObject,
-                                      SL_IID_ANDROIDSIMPLEBUFFERQUEUE,
-                                      &recorderSimpleBufQueue );
-
-    // register the audio input callback
-    (*recorderSimpleBufQueue)->RegisterCallback ( recorderSimpleBufQueue,
-                                                  processInput,
-                                                  this );
-
-    // configure the output buffer queue
-    SLDataLocator_AndroidSimpleBufferQueue outBufferQueue;
-    outBufferQueue.locatorType = SL_DATALOCATOR_ANDROIDSIMPLEBUFFERQUEUE;
-    outBufferQueue.numBuffers  = 2; // max number of buffers in queue
-
-    // configure the audio (data) source for output
-    SLDataSource outDataSource;
-    outDataSource.pLocator = &outBufferQueue;
-    outDataSource.pFormat  = &outStreamFormat;
-
-    // configure the output mix
-    SLDataLocator_OutputMix outputMix;
-    outputMix.locatorType = SL_DATALOCATOR_OUTPUTMIX;
-    outputMix.outputMix   = outputMixObject;
-
-    // configure the audio (data) sink for output
-    SLDataSink outDataSink;
-    outDataSink.pLocator = &outputMix;
-    outDataSink.pFormat  = nullptr;
-
-    // create the audio player
-    const SLInterfaceID playerIds[] = { SL_IID_ANDROIDSIMPLEBUFFERQUEUE };
-    const SLboolean playerReq[]     = { SL_BOOLEAN_TRUE };
-
-    (*engine)->CreateAudioPlayer ( engine,
-                                   &playerObject,
-                                   &outDataSource,
-                                   &outDataSink,
-                                   1,
-                                   playerIds,
-                                   playerReq );
-
-    // realize the audio player
-    (*playerObject)->Realize ( playerObject,
-                               SL_BOOLEAN_FALSE );
-
-    // get the audio player interface
-    (*playerObject)->GetInterface ( playerObject,
-                                    SL_IID_PLAY,
-                                    &player );
-
-    // get the audio player simple buffer queue interface
-    (*playerObject)->GetInterface ( playerObject,
-                                    SL_IID_ANDROIDSIMPLEBUFFERQUEUE,
-                                    &playerSimpleBufQueue );
-
-    // register the audio output callback
-    (*playerSimpleBufQueue)->RegisterCallback ( playerSimpleBufQueue,
-                                                processOutput,
-                                                this );
+void CSound::warnIfNotLowLatency(oboe::ManagedStream &stream, QString streamName) {
+    if (stream->getPerformanceMode() != oboe::PerformanceMode::LowLatency) {
+        QString latencyMode = (stream->getPerformanceMode()==oboe::PerformanceMode::None ? "None" : "Power Saving");
+       // throw CGenErr ( tr ( "Stream is NOT low latency."
+                         //    "Check your requested format, sample rate and channel count." ) );
+    }
 }
 
-void CSound::CloseOpenSL()
+void CSound::closeStream(oboe::ManagedStream &stream)
+{
+    if (stream) {
+        oboe::Result requestStopRes = stream->requestStop();
+        oboe::Result result = stream->close();
+        if (result != oboe::Result::OK) {
+            throw CGenErr ( tr ( "Error closing stream: $s",
+                                 oboe::convertToText(result) ) );
+        }
+        stream.reset();
+    }
+}
+
+void CSound::closeStreams()
 {
     // clean up
-    (*recorderObject)->Destroy ( recorderObject );
-    (*playerObject)->Destroy ( playerObject );
-    (*outputMixObject)->Destroy ( outputMixObject );
-    (*engineObject)->Destroy ( engineObject );
+    closeStream(mRecordingStream);
+    closeStream(mPlayStream);
 }
 
 void CSound::Start()
 {
-    InitializeOpenSL();
-
-// TEST We have to supply the interface with initial buffers, otherwise
-// the rendering will not start.
-// Note that the number of buffers enqueued here must match the maximum
-// numbers of buffers configured in the constructor of this class.
-vecsTmpAudioSndCrdStereo.Reset ( 0 );
-
-    // enqueue initial buffers for record
-    (*recorderSimpleBufQueue)->Enqueue ( recorderSimpleBufQueue,
-                                         &vecsTmpAudioSndCrdStereo[0],
-                                         iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
-
-    (*recorderSimpleBufQueue)->Enqueue ( recorderSimpleBufQueue,
-                                         &vecsTmpAudioSndCrdStereo[0],
-                                         iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
-
-    // enqueue initial buffers for playback
-    (*playerSimpleBufQueue)->Enqueue ( playerSimpleBufQueue,
-                                       &vecsTmpAudioSndCrdStereo[0],
-                                       iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
-
-    (*playerSimpleBufQueue)->Enqueue ( playerSimpleBufQueue,
-                                       &vecsTmpAudioSndCrdStereo[0],
-                                       iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
-
-    // start the rendering
-    (*recorder)->SetRecordState ( recorder, SL_RECORDSTATE_RECORDING );
-    (*player)->SetPlayState ( player, SL_PLAYSTATE_PLAYING );
+    openStreams();
 
     // call base class
     CSoundBase::Start();
+
+    // finally start the streams so the callback begins, start with inputstream first.
+    mRecordingStream->requestStart();
+    mPlayStream->requestStart();
+
 }
 
 void CSound::Stop()
 {
-    // stop the audio stream
-    (*recorder)->SetRecordState ( recorder, SL_RECORDSTATE_STOPPED );
-    (*player)->SetPlayState ( player, SL_PLAYSTATE_STOPPED );
-
-    // clear the buffers
-    (*recorderSimpleBufQueue)->Clear ( recorderSimpleBufQueue );
-    (*playerSimpleBufQueue)->Clear ( playerSimpleBufQueue );
+    closeStreams();
 
     // call base class
     CSoundBase::Stop();
-
-    CloseOpenSL();
 }
 
 int CSound::Init ( const int iNewPrefMonoBufferSize )
 {
-
-
-// TODO make use of the following:
-// String sampleRate = am.getProperty(AudioManager.PROPERTY_OUTPUT_SAMPLE_RATE));
-// String framesPerBuffer = am.getProperty(AudioManager.PROPERTY_OUTPUT_FRAMES_PER_BUFFER));
-/*
-// get the Audio IO DEVICE CAPABILITIES interface
-SLAudioIODeviceCapabilitiesItf audioCapabilities;
-
-(*engineObject)->GetInterface ( engineObject,
-    SL_IID_AUDIOIODEVICECAPABILITIES,
-    &audioCapabilities );
-
-(*audioCapabilities)->QueryAudioInputCapabilities ( audioCapabilities,
-                                                    inputDeviceIDs[i],
-                                                    &audioInputDescriptor );
-*/
-
-
     // store buffer size
-    iOpenSLBufferSizeMono = iNewPrefMonoBufferSize;
+    iOpenSLBufferSizeMono = 512 ;
+            //iNewPrefMonoBufferSize;
 
     // init base class
     CSoundBase::Init ( iOpenSLBufferSizeMono );
@@ -281,7 +183,6 @@ SLAudioIODeviceCapabilitiesItf audioCapabilities;
 
     // create memory for intermediate audio buffer
     vecsTmpAudioSndCrdStereo.Init ( iOpenSLBufferSizeStereo );
-
 
 // TEST
 #if ( SYSTEM_SAMPLE_RATE_HZ != 48000 )
@@ -295,57 +196,105 @@ SLAudioIODeviceCapabilitiesItf audioCapabilities;
 iModifiedInBufSize = iOpenSLBufferSizeMono / 3;
 vecsTmpAudioInSndCrd.Init ( iModifiedInBufSize );
 
-
     return iOpenSLBufferSizeMono;
 }
 
-void CSound::processInput ( SLAndroidSimpleBufferQueueItf bufferQueue,
-                            void*                         instance )
+// This is the main callback method for when an audio stream is ready to publish data to an output stream
+// or has received data on an input stream.  As per manual much be very careful not to do anything in this back that
+// can cause delays such as sleeping, file processing, allocate memory, etc
+oboe::DataCallbackResult CSound::onAudioReady(oboe::AudioStream *oboeStream, void *audioData, int32_t numFrames)
 {
-    CSound* pSound = static_cast<CSound*> ( instance );
+     // only process if we are running
+     if ( ! pSound->bRun )
+     {
+         return oboe::DataCallbackResult::Continue;
+     }
 
-    // only process if we are running
-    if ( !pSound->bRun )
+     // Need to modify the size of the buffer based on the numFrames requested in this callback.
+     // Buffer size can change regularly by android devices
+    int& iBufferSizeMono = pSound->iOpenSLBufferSizeMono;
+
+    // perform the processing for input and output
+//    QMutexLocker locker ( &pSound->Mutex );
+ //   locker.mutex();
+
+    //This can be called from both input and output at different times
+    if (oboeStream == pSound->mPlayStream.get() && audioData)
     {
-        return;
+        float *floatData = static_cast<float *>(audioData);
+
+        // Zero out the incoming container array
+        memset(audioData, 0, sizeof(float) * numFrames * oboeStream->getChannelCount());
+
+        // Only copy data if we have data to copy, otherwise fill with silence
+        if (!pSound->vecsTmpAudioSndCrdStereo.empty())
+        {
+            for (int frmNum = 0; frmNum < numFrames; ++frmNum)
+            {
+                for (int channelNum = 0; channelNum < oboeStream->getChannelCount(); channelNum++)
+                {
+                    // copy sample received from server into output buffer
+
+
+                    // convert to 32 bit
+                    const int32_t iCurSam = static_cast<int32_t> (
+                        pSound->vecsTmpAudioSndCrdStereo [frmNum * oboeStream->getChannelCount() + channelNum] );
+                    floatData[frmNum * oboeStream->getChannelCount() + channelNum] = (float) iCurSam/ _MAXSHORT;
+                }
+            }
+        }
+        else
+        {
+            // prime output stream buffer with silence
+            memset(static_cast<float*>(audioData) + numFrames * oboeStream->getChannelCount(), 0,
+                       (numFrames) * oboeStream->getBytesPerFrame());
+        }
     }
-
-    QMutexLocker locker ( &pSound->Mutex );
-
-    // enqueue the buffer for record
-    (*bufferQueue)->Enqueue ( bufferQueue,
-                              &pSound->vecsTmpAudioInSndCrd[0],
-                              pSound->iModifiedInBufSize * 2 /* 2 bytes */ );
-
-// upsampling (without filtering) and channel management
-pSound->vecsTmpAudioSndCrdStereo.Reset ( 0 );
-for ( int i = 0; i < pSound->iModifiedInBufSize; i++ )
-{
-    pSound->vecsTmpAudioSndCrdStereo[6 * i] =
-        pSound->vecsTmpAudioSndCrdStereo[6 * i + 1] =
-            pSound->vecsTmpAudioInSndCrd[i];
-}
-
-}
-
-void CSound::processOutput ( SLAndroidSimpleBufferQueueItf bufferQueue,
-                             void*                         instance )
-{
-    CSound* pSound = static_cast<CSound*> ( instance );
-
-    // only process if we are running
-    if ( !pSound->bRun )
+    else if (oboeStream == pSound->mRecordingStream.get() && audioData)
     {
-        return;
+        // First things first, we need to discard the input queue a little for 500ms or so
+        if (pSound->mCountCallbacksToDrain > 0)
+        {
+            // discard the input buffer
+            int32_t numBytes = numFrames * oboeStream->getBytesPerFrame();
+            memset(audioData, 0 /* value */, numBytes);
+            pSound->mCountCallbacksToDrain--;
+        }
+
+        // We're good to start recording now
+        // Take the data from the recording device ouput buffer and move
+        // it to the vector ready to send up to the server
+
+        float *floatData = static_cast<float *>(audioData);
+
+        // Copy recording data to internal vector
+        for (int frmNum = 0; frmNum < numFrames; ++frmNum)
+        {
+            for (int channelNum = 0; channelNum < oboeStream->getChannelCount(); channelNum++)
+            {
+               pSound->vecsTmpAudioSndCrdStereo [frmNum * oboeStream->getChannelCount() + channelNum] =
+                       (short) floatData[frmNum * oboeStream->getChannelCount() + channelNum] * _MAXSHORT;
+            }
+        }
+
+        // Tell parent class that we've put some data ready to send to the server
+        pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo  );
     }
-
-    QMutexLocker locker ( &pSound->Mutex );
-
-    // call processing callback function
-    pSound->ProcessCallback ( pSound->vecsTmpAudioSndCrdStereo );
-
-    // enqueue the buffer for playback
-    (*bufferQueue)->Enqueue ( bufferQueue,
-                              &pSound->vecsTmpAudioSndCrdStereo[0],
-                              pSound->iOpenSLBufferSizeStereo * 2 /* 2 bytes */ );
+  //  locker.unlock();
+    return oboe::DataCallbackResult::Continue;
 }
+
+//TODO better handling of stream closing errors
+void CSound::onErrorAfterClose(oboe::AudioStream *oboeStream, oboe::Result result)
+{
+    qDebug() << "CSound::onErrorAfterClose";
+}
+
+//TODO better handling of stream closing errors
+void CSound::onErrorBeforeClose(oboe::AudioStream *oboeStream, oboe::Result result)
+{
+     qDebug() << "CSound::onErrorBeforeClose";
+}
+
+
+

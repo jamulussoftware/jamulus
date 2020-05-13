@@ -5,6 +5,10 @@
 override_dh_auto_configure:
 	qmake CONFIG+=noupcasename Jamulus.pro
 
+override_dh_auto_build:
+	cd src/res/translation && lrelease *.ts
+	dh_auto_build
+
 override_dh_usrlocal:
 	echo $$(pwd)
 	mkdir -p $$(pwd)/debian/jamulus/usr/bin/

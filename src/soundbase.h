@@ -51,8 +51,7 @@ public:
                  const bool     bNewIsCallbackAudioInterface,
                  void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                  void*          pParg,
-                 const int      iNewCtrlMIDIChannel,
-                 const bool     bNewNoAutoJackConnect );
+                 const int      iNewCtrlMIDIChannel );
 
     virtual int  Init ( const int iNewPrefMonoBufferSize );
     virtual void Start();
@@ -98,6 +97,27 @@ protected:
     virtual void     UnloadCurrentDriver() {}
     QVector<QString> LoadAndInitializeFirstValidDriver ( const bool bOpenDriverSetup = false );
 
+    static void GetSelCHAndAddCH ( const int iSelCH,    const int iNumInChan,
+                                   int&      iSelCHOut, int&      iSelAddCHOut )
+    {
+        // we have a mixed channel setup, definitions:
+        // - mixed channel setup only for 4 physical inputs:
+        //   SelCH == 4: Ch 0 + Ch 2
+        //   SelCh == 5: Ch 0 + Ch 3
+        //   SelCh == 6: Ch 1 + Ch 2
+        //   SelCh == 7: Ch 1 + Ch 3
+        if ( iSelCH >= iNumInChan )
+        {
+            iSelAddCHOut = ( ( iSelCH - iNumInChan ) % 2 ) + 2;
+            iSelCHOut    = ( iSelCH - iNumInChan ) / 2;
+        }
+        else
+        {
+            iSelAddCHOut = -1; // set it to an invalid number
+            iSelCHOut    = iSelCH;
+        }
+    }
+
     // function pointer to callback function
     void (*fpProcessCallback) ( CVector<int16_t>& psData, void* arg );
     void* pProcessCallbackArg;
@@ -121,7 +141,6 @@ protected:
     bool             bIsCallbackAudioInterface;
     QString          strSystemDriverTechniqueName;
     int              iCtrlMIDIChannel;
-    bool             bNoAutoJackConnect;
 
     CVector<int16_t> vecsAudioSndCrdStereo;
 

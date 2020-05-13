@@ -33,49 +33,54 @@
 #include "settings.h"
 #include "testbench.h"
 #include "util.h"
+#ifdef ANDROID
+# include <QtAndroidExtras/QtAndroid>
+#endif
 
 
 // Implementation **************************************************************
 
 int main ( int argc, char** argv )
 {
+
     QTextStream& tsConsole = *( ( new ConsoleWriterFactory() )->get() );
     QString      strArgument;
     double       rDbleArgument;
 
     // initialize all flags and string which might be changed by command line
     // arguments
-
 #if defined( SERVER_BUNDLE ) && ( defined( __APPLE__ ) || defined( __MACOSX ) )
     // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
-    bool         bIsClient                 = false;
+    bool         bIsClient                   = false;
 #else
-    bool         bIsClient                 = true;
+    bool         bIsClient                   = true;
 #endif
-
-    bool         bUseGUI                   = true;
-    bool         bStartMinimized           = false;
-    bool         bShowComplRegConnList     = false;
-    bool         bDisconnectAllClients     = false;
-    bool         bUseDoubleSystemFrameSize = true; // default is 128 samples frame size
-    bool         bShowAnalyzerConsole      = false;
-    bool         bCentServPingServerInList = false;
-    bool         bNoAutoJackConnect        = false;
-    int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
-    int          iMaxDaysHistory           = DEFAULT_DAYS_HISTORY;
-    int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
-    quint16      iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
-    ELicenceType eLicenceType              = LT_NO_LICENCE;
-    QString      strConnOnStartupAddress   = "";
-    QString      strIniFileName            = "";
-    QString      strHTMLStatusFileName     = "";
-    QString      strServerName             = "";
-    QString      strLoggingFileName        = "";
-    QString      strHistoryFileName        = "";
-    QString      strRecordingDirName       = "";
-    QString      strCentralServer          = "";
-    QString      strServerInfo             = "";
-    QString      strWelcomeMessage         = "";
+    bool         bUseGUI                     = true;
+    bool         bStartMinimized             = false;
+    bool         bShowComplRegConnList       = false;
+    bool         bDisconnectAllClientsOnQuit = false;
+    bool         bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
+    bool         bShowAnalyzerConsole        = false;
+    bool         bCentServPingServerInList   = false;
+    bool         bNoAutoJackConnect          = false;
+    bool         bUseTranslation             = true;
+    bool         bCustomPortNumberGiven      = false;
+    int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
+    int          iMaxDaysHistory             = DEFAULT_DAYS_HISTORY;
+    int          iCtrlMIDIChannel            = INVALID_MIDI_CH;
+    quint16      iPortNumber                 = LLCON_DEFAULT_PORT_NUMBER;
+    ELicenceType eLicenceType                = LT_NO_LICENCE;
+    QString      strConnOnStartupAddress     = "";
+    QString      strIniFileName              = "";
+    QString      strHTMLStatusFileName       = "";
+    QString      strServerName               = "";
+    QString      strLoggingFileName          = "";
+    QString      strHistoryFileName          = "";
+    QString      strRecordingDirName         = "";
+    QString      strCentralServer            = "";
+    QString      strServerInfo               = "";
+    QString      strWelcomeMessage           = "";
+    QString      strClientName               = APP_NAME;
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -195,6 +200,18 @@ int main ( int argc, char** argv )
         }
 
 
+        // Disconnect all clients on quit --------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-d",
+                               "--discononquit" ) )
+        {
+            bDisconnectAllClientsOnQuit = true;
+            tsConsole << "- disconnect all clients on quit" << endl;
+            continue;
+        }
+
+
         // Disabling auto Jack connections -------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
@@ -203,6 +220,18 @@ int main ( int argc, char** argv )
         {
             bNoAutoJackConnect = true;
             tsConsole << "- disable auto Jack connections" << endl;
+            continue;
+        }
+
+
+        // Disable translations ------------------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-t",
+                               "--notranslation" ) )
+        {
+            bUseTranslation = false;
+            tsConsole << "- translations disabled" << endl;
             continue;
         }
 
@@ -218,20 +247,6 @@ int main ( int argc, char** argv )
         {
             bShowComplRegConnList = true;
             tsConsole << "- show all registered servers in server list" << endl;
-            continue;
-        }
-
-
-        // Disconnect all clients (emergency mode) -----------------------------
-        // Undocumented debugging command line argument: Needed to disconnect
-        // an unwanted client.
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "--disconnectall", // no short form
-                               "--disconnectall" ) )
-        {
-            bDisconnectAllClients = true;
-            tsConsole << "- disconnect all clients" << endl;
             continue;
         }
 
@@ -293,7 +308,8 @@ int main ( int argc, char** argv )
                                   65535,
                                   rDbleArgument ) )
         {
-            iPortNumber = static_cast<quint16> ( rDbleArgument );
+            iPortNumber            = static_cast<quint16> ( rDbleArgument );
+            bCustomPortNumberGiven = true;
             tsConsole << "- selected port number: " << iPortNumber << endl;
             continue;
         }
@@ -327,7 +343,22 @@ int main ( int argc, char** argv )
         }
 
 
-        // HTML status file ----------------------------------------------------
+        // Client Name ---------------------------------------------------------
+        if ( GetStringArgument ( tsConsole,
+                                 argc,
+                                 argv,
+                                 i,
+                                 "--clientname",
+                                 "--clientname",
+                                 strArgument ) )
+        {
+            strClientName = QString ( APP_NAME ) + " " + strArgument;
+            tsConsole << "- client name: " << strClientName << endl;
+            continue;
+        }
+
+
+        // Server history file name --------------------------------------------
         if ( GetStringArgument ( tsConsole,
                                  argc,
                                  argv,
@@ -473,16 +504,40 @@ int main ( int argc, char** argv )
         strCentralServer = DEFAULT_SERVER_ADDRESS;
     }
 
+    // adjust default port number for client: use different default port than the server since
+    // if the client is started before the server, the server would get a socket bind error
+    if ( bIsClient && !bCustomPortNumberGiven )
+    {
+        iPortNumber += 10; // increment by 10
+    }
 
-    // Application/GUI setup ---------------------------------------------------
-    // Application object
-    if ( !bUseGUI && !strHistoryFileName.isEmpty() )
+    // display a warning if in server no GUI mode and a history file is requested
+    if ( !bIsClient && !bUseGUI && !strHistoryFileName.isEmpty() )
     {
         tsConsole << "Qt5 requires a windowing system to paint a JPEG image; image will use SVG" << endl;
     }
+
+
+    // Application/GUI setup ---------------------------------------------------
+    // Application object
     QCoreApplication* pApp = bUseGUI
             ? new QApplication ( argc, argv )
             : new QCoreApplication ( argc, argv );
+
+#ifdef ANDROID
+    // special Android coded needed for record audio permission handling
+    auto result = QtAndroid::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
+
+    if ( result == QtAndroid::PermissionResult::Denied )
+    {
+        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync ( QStringList ( { "android.permission.RECORD_AUDIO" } ) );
+
+        if ( resultHash["android.permission.RECORD_AUDIO"] == QtAndroid::PermissionResult::Denied )
+        {
+            return 0;
+        }
+    }
+#endif
 
 #ifdef _WIN32
     // set application priority class -> high priority
@@ -498,16 +553,16 @@ int main ( int argc, char** argv )
     // init resources
     Q_INIT_RESOURCE(resources);
 
+    // load translations
+    QTranslator myappTranslator;
 
-// TODO translation loading does not yet work
-//    // load translations
-//    if ( bUseGUI )
-//    {
-//        QTranslator myappTranslator;
-//        bool ret = myappTranslator.load ( "src/res/translation_" + QLocale::system().name() );
-//qDebug() << "translation successfully loaded: " << ret << "   " << "src/res/translation_" + QLocale::system().name();
-//        pApp->installTranslator ( &myappTranslator );
-//    }
+    if ( bUseGUI && bUseTranslation )
+    {
+        if ( myappTranslator.load ( ":/translations/translation.qm" ) )
+        {
+            pApp->installTranslator ( &myappTranslator );
+        }
+    }
 
 
 // TEST -> activate the following line to activate the test bench,
@@ -523,7 +578,8 @@ int main ( int argc, char** argv )
             CClient Client ( iPortNumber,
                              strConnOnStartupAddress,
                              iCtrlMIDIChannel,
-                             bNoAutoJackConnect );
+                             bNoAutoJackConnect,
+                             strClientName );
 
             // load settings from init-file
             CSettings Settings ( &Client, strIniFileName );
@@ -568,7 +624,7 @@ int main ( int argc, char** argv )
                              strWelcomeMessage,
                              strRecordingDirName,
                              bCentServPingServerInList,
-                             bDisconnectAllClients,
+                             bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              eLicenceType );
             if ( bUseGUI )
@@ -636,44 +692,45 @@ int main ( int argc, char** argv )
 QString UsageArguments ( char **argv )
 {
     return
-        "Usage: " + QString ( argv[0] ) + " [option] [argument]\n"
+        "Usage: " + QString ( argv[0] ) + " [option] [optional argument]\n"
         "\nRecognized options:\n"
-        "  -a, --servername      server name, required for HTML status (server\n"
-        "                        only)\n"
-        "  -c, --connect         connect to given server address on startup\n"
-        "                        (client only)\n"
-        "  -e, --centralserver   address of the central server (server only)\n"
-        "  -F, --fastupdate      use 64 samples frame size mode (server only)\n"
-        "  -g, --pingservers     ping servers in list to keep NAT port open\n"
-        "                        (central server only)\n"
         "  -h, -?, --help        display this help text and exit\n"
         "  -i, --inifile         initialization file name\n"
-        "  -j, --nojackconnect   disable auto Jack connections (client only)\n"
+        "  -n, --nogui           disable GUI\n"
+        "  -p, --port            set your local port number\n"
+        "  -t, --notranslation   disable translation (use englisch language)\n"
+        "  -v, --version         output version information and exit\n"
+        "\nServer only:\n"
+        "  -a, --servername      server name, required for HTML status\n"
+        "  -d, --discononquit    disconnect all clients on quit\n"
+        "  -D, --histdays        number of days of history to display\n"
+        "  -e, --centralserver   address of the central server\n"
+        "  -F, --fastupdate      use 64 samples frame size mode\n"
+        "  -g, --pingservers     ping servers in list to keep NAT port open\n"
+        "                        (central server only)\n"
         "  -l, --log             enable logging, set file name\n"
         "  -L, --licence         a licence must be accepted on a new\n"
-        "                        connection (server only)\n"
-        "  -m, --htmlstatus      enable HTML status file, set file name (server\n"
-        "                        only)\n"
-        "  -n, --nogui           disable GUI\n"
+        "                        connection\n"
+        "  -m, --htmlstatus      enable HTML status file, set file name\n"
         "  -o, --serverinfo      infos of the server(s) in the format:\n"
         "                        [name];[city];[country as QLocale ID]; ...\n"
         "                        [server1 address];[server1 name]; ...\n"
         "                        [server1 city]; ...\n"
         "                        [server1 country as QLocale ID]; ...\n"
-        "                        [server2 address]; ... (server only)\n"
-        "  -p, --port            local port number (server only)\n"
+        "                        [server2 address]; ...\n"
         "  -R, --recording       enables recording and sets directory to contain\n"
-        "                        recorded jams (server only)\n"
+        "                        recorded jams\n"
         "  -s, --server          start server\n"
-        "  -u, --numchannels     maximum number of channels (server only)\n"
-        "  -v, --version         output version information and exit\n"
-        "  -w, --welcomemessage  welcome message on connect (server only)\n"
-        "  -y, --history         enable connection history and set file\n"
-        "                        name (server only)\n"
-        "  -D, --histdays        number of days of history to display (server only)\n"
-        "  -z, --startminimized  start minimizied (server only)\n"
-        "  --ctrlmidich          MIDI controller channel to listen (client only)"
-        "\nExample: " + QString ( argv[0] ) + " -l -inifile myinifile.ini\n";
+        "  -u, --numchannels     maximum number of channels\n"
+        "  -w, --welcomemessage  welcome message on connect\n"
+        "  -y, --history         enable connection history and set file name\n"
+        "  -z, --startminimized  start minimizied\n"
+        "\nClient only:\n"
+        "  -c, --connect         connect to given server address on startup\n"
+        "  -j, --nojackconnect   disable auto Jack connections\n"
+        "  --ctrlmidich          MIDI controller channel to listen\n"
+        "  --clientname          client name (window title and jack client name)\n"
+        "\nExample: " + QString ( argv[0] ) + " -s -inifile myinifile.ini\n";
 }
 
 bool GetFlagArgument ( char**  argv,

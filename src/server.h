@@ -36,6 +36,7 @@
 #endif
 #include "global.h"
 #include "buffer.h"
+#include "signalhandler.h"
 #include "socket.h"
 #include "channel.h"
 #include "util.h"
@@ -177,7 +178,7 @@ public:
               const QString&     strNewWelcomeMessage,
               const QString&     strRecordingDirName,
               const bool         bNCentServPingServerInList,
-              const bool         bNDisconnectAllClients,
+              const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const ELicenceType eNLicenceType );
 
@@ -370,7 +371,9 @@ protected:
     // messaging
     QString                    strWelcomeMessage;
     ELicenceType               eLicenceType;
-    bool                       bDisconnectAllClients;
+    bool                       bDisconnectAllClientsOnQuit;
+
+    CSignalHandler*            pSignalHandler;
 
 signals:
     void Started();
@@ -456,6 +459,10 @@ public slots:
     }
 
     void OnCLDisconnection ( CHostAddress InetAddr );
+
+    void OnAboutToQuit();
+
+    void OnShutdown ( int );
 
 #if QT_VERSION < 0x50000  // MOC does not expand macros in Qt 4, so we cannot use QT_VERSION_CHECK(5, 0, 0)
     // CODE TAG: MAX_NUM_CHANNELS_TAG

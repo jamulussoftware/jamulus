@@ -44,13 +44,13 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
 
     // Add help text to controls -----------------------------------------------
     // server list
-    lvwServers->setWhatsThis ( tr ( "<b>Server List:</b> The server list shows "
-        "a list of available servers which are registered at the central "
-        "server. Select a server from the list and press the connect button to "
+    lvwServers->setWhatsThis ( "<b>" + tr ( "Server List" ) + ":</b> " + tr (
+        "The server list shows a list of available servers which are registered at the "
+        "central server. Select a server from the list and press the connect button to "
         "connect to this server. Alternatively, double click a server from "
         "the list to connect to it. If a server is occupied, a list of the "
         "connected musicians is available by expanding the list item. "
-        "Permanent servers are shown in bold font.<br>"
+        "Permanent servers are shown in bold font." ) + "<br>" + tr (
         "Note that it may take some time to retrieve the server list from the "
         "central server. If no valid central server address is specified in "
         "the settings, no server list will be available." ) );
@@ -58,12 +58,12 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     lvwServers->setAccessibleName ( tr ( "Server list view" ) );
 
     // server address
-    QString strServAddrH = tr ( "<b>Server Address:</b> The IP address or URL "
-        "of the server running the " ) + APP_NAME + tr ( " server software "
-        "must be set here. An optional port number can be added after the IP "
-        "address or URL using a comma as a separator, e.g, <i>"
+    QString strServAddrH = "<b>" + tr ( "Server Address" ) + ":</b> " + tr (
+        "The IP address or URL of the server running the " ) + APP_NAME + tr (
+        " server software must be set here. An optional port number can be added after the IP "
+        "address or URL using a colon as a separator, e.g, "
         "example.org:" ) +
-        QString().setNum ( LLCON_DEFAULT_PORT_NUMBER ) + tr ( "</i>. A list of "
+        QString().setNum ( LLCON_DEFAULT_PORT_NUMBER ) + tr ( ". A list of "
         "the most recent used server IP addresses or URLs is available for "
         "selection." );
 
@@ -75,13 +75,13 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
         "IP address or URL. It also stores old URLs in the combo box list." ) );
 
     // filter
-    edtFilter->setWhatsThis ( tr ( "<b>Filter:</b> The server list is filered "
-        "by the given text. Note that the filter is case insensitive." ) );
+    edtFilter->setWhatsThis ( "<b>" + tr ( "Filter" ) + ":</b> " + tr ( "The server "
+        "list is filered by the given text. Note that the filter is case insensitive." ) );
     edtFilter->setAccessibleName ( tr ( "Filter edit box" ) );
 
     // show all mucisians
-    chbExpandAll->setWhatsThis ( tr ( "<b>Show All Musicians:</b> If you check "
-        "this check box, the musicians of all servers are shown. If you "
+    chbExpandAll->setWhatsThis ( "<b>" + tr ( "Show All Musicians" ) + ":</b> " + tr (
+        "If you check this check box, the musicians of all servers are shown. If you "
         "uncheck the check box, all list view items are collapsed.") );
     chbExpandAll->setAccessibleName ( tr ( "Show all musicians check box" ) );
 

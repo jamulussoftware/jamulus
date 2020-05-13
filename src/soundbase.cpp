@@ -30,14 +30,12 @@ CSoundBase::CSoundBase ( const QString& strNewSystemDriverTechniqueName,
                          const bool     bNewIsCallbackAudioInterface,
                          void           (*fpNewProcessCallback) ( CVector<int16_t>& psData, void* pParg ),
                          void*          pParg,
-                         const int      iNewCtrlMIDIChannel,
-                         const bool     bNewNoAutoJackConnect ) :
-    fpProcessCallback ( fpNewProcessCallback ),
-    pProcessCallbackArg ( pParg ), bRun ( false ),
-    bIsCallbackAudioInterface ( bNewIsCallbackAudioInterface ),
+                         const int      iNewCtrlMIDIChannel ) :
+    fpProcessCallback            ( fpNewProcessCallback ),
+    pProcessCallbackArg          ( pParg ), bRun ( false ),
+    bIsCallbackAudioInterface    ( bNewIsCallbackAudioInterface ),
     strSystemDriverTechniqueName ( strNewSystemDriverTechniqueName ),
-    iCtrlMIDIChannel ( iNewCtrlMIDIChannel ),
-    bNoAutoJackConnect ( bNewNoAutoJackConnect )
+    iCtrlMIDIChannel             ( iNewCtrlMIDIChannel )
 {
     // initializations for the sound card names (default)
     lNumDevs          = 1;
@@ -143,10 +141,10 @@ QString CSoundBase::SetDev ( const int iNewDev )
                     nullptr, APP_NAME, QString ( tr ( "The audio driver properties "
                     "have changed to a state which is incompatible to this "
                     "software. The selected audio device could not be used "
-                    "because of the following error: <b>" ) ) +
+                    "because of the following error:" ) + " <b>" ) +
                     strErrorMessage +
-                    QString ( tr ( "</b><br><br>Please restart the software." ) ),
-                    "Close", nullptr );
+                    QString ( "</b><br><br>" + tr ( "Please restart the software." ) ),
+                    tr ( "Close" ), nullptr );
 
                 _exit ( 0 );
             }
@@ -188,11 +186,11 @@ QString CSoundBase::SetDev ( const int iNewDev )
             if ( !vsErrorList.isEmpty() )
             {
                 // create error message with all details
-                QString sErrorMessage = tr ( "<b>No usable " ) +
+                QString sErrorMessage = "<b>" + tr ( "No usable " ) +
                     strSystemDriverTechniqueName + tr ( " audio device "
-                    "(driver) found.</b><br><br>"
+                    "(driver) found." ) + "</b><br><br>" + tr (
                     "In the following there is a list of all available drivers "
-                    "with the associated error message:<ul>" );
+                    "with the associated error message:" ) + "<ul>";
 
                 for ( int i = 0; i < lNumDevs; i++ )
                 {
@@ -204,7 +202,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
                 // to be able to access the ASIO driver setup for changing, e.g., the sample rate, we
                 // offer the user under Windows that we open the driver setups of all registered
                 // ASIO drivers
-                sErrorMessage = sErrorMessage + tr ( "<br/>Do you want to open the ASIO driver setups?" );
+                sErrorMessage = sErrorMessage + "<br/>" + tr ( "Do you want to open the ASIO driver setups?" );
 
                 if ( QMessageBox::Yes == QMessageBox::information ( nullptr, APP_NAME, sErrorMessage, QMessageBox::Yes|QMessageBox::No ) )
                 {

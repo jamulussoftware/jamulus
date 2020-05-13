@@ -231,27 +231,28 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const QString&     strNewWelcomeMessage,
                    const QString&     strRecordingDirName,
                    const bool         bNCentServPingServerInList,
-                   const bool         bNDisconnectAllClients,
+                   const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
                    const ELicenceType eNLicenceType ) :
-    bUseDoubleSystemFrameSize ( bNUseDoubleSystemFrameSize ),
-    iMaxNumChannels           ( iNewMaxNumChan ),
-    Socket                    ( this, iPortNumber ),
-    Logging                   ( iMaxDaysHistory ),
-    JamRecorder               ( strRecordingDirName ),
-    bEnableRecording          ( !strRecordingDirName.isEmpty() ),
-    bWriteStatusHTMLFile      ( false ),
-    HighPrecisionTimer        ( bNUseDoubleSystemFrameSize ),
-    ServerListManager         ( iPortNumber,
-                                strCentralServer,
-                                strServerInfo,
-                                iNewMaxNumChan,
-                                bNCentServPingServerInList,
-                                &ConnLessProtocol ),
-    bAutoRunMinimized         ( false ),
-    strWelcomeMessage         ( strNewWelcomeMessage ),
-    eLicenceType              ( eNLicenceType ),
-    bDisconnectAllClients     ( bNDisconnectAllClients )
+    bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
+    iMaxNumChannels             ( iNewMaxNumChan ),
+    Socket                      ( this, iPortNumber ),
+    Logging                     ( iMaxDaysHistory ),
+    JamRecorder                 ( strRecordingDirName ),
+    bEnableRecording            ( !strRecordingDirName.isEmpty() ),
+    bWriteStatusHTMLFile        ( false ),
+    HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
+    ServerListManager           ( iPortNumber,
+                                  strCentralServer,
+                                  strServerInfo,
+                                  iNewMaxNumChan,
+                                  bNCentServPingServerInList,
+                                  &ConnLessProtocol ),
+    bAutoRunMinimized           ( false ),
+    strWelcomeMessage           ( strNewWelcomeMessage ),
+    eLicenceType                ( eNLicenceType ),
+    bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
+    pSignalHandler              ( CSignalHandler::getSingletonP() )
 {
     int iOpusError;
     int i;
@@ -400,11 +401,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
             QString().number( static_cast<int> ( iPortNumber ) ) );
     }
 
-    // Enable jam recording (if requested)
+    // Enable jam recording (if requested) - kicks off the thread
     if ( bEnableRecording )
     {
         JamRecorder.Init ( this, iServerFrameSizeSamples );
-        JamRecorder.start();
     }
 
     // enable all channels (for the server all channel must be enabled the
@@ -467,6 +467,14 @@ CServer::CServer ( const int          iNewMaxNumChan,
     QObject::connect ( &ServerListManager,
        SIGNAL ( SvrRegStatusChanged() ),
        this, SLOT ( OnSvrRegStatusChanged() ) );
+
+    QObject::connect ( QCoreApplication::instance(),
+        SIGNAL ( aboutToQuit() ),
+        this, SLOT ( OnAboutToQuit() ) );
+
+    QObject::connect ( pSignalHandler,
+        SIGNAL ( ShutdownSignal ( int ) ),
+        this, SLOT ( OnShutdown ( int ) ) );
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     connectChannelSignalsToServerSlots<MAX_NUM_CHANNELS>();
@@ -804,14 +812,6 @@ void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 void CServer::OnNewConnection ( int          iChID,
                                 CHostAddress RecHostAddr )
 {
-    // in the special case that all clients shall be disconnected, just send the
-    // disconnect message and leave this function
-    if ( bDisconnectAllClients )
-    {
-        ConnLessProtocol.CreateCLDisconnection ( RecHostAddr );
-        return;
-    }
-
     // on a new connection we query the network transport properties for the
     // audio packets (to use the correct network block size and audio
     // compression properties, etc.)
@@ -910,6 +910,39 @@ void CServer::OnCLDisconnection ( CHostAddress InetAddr )
     }
 }
 
+void CServer::OnAboutToQuit()
+{
+    // if enabled, disconnect all clients on quit
+    if ( bDisconnectAllClientsOnQuit )
+    {
+        Mutex.lock();
+        {
+            for ( int i = 0; i < iMaxNumChannels; i++ )
+            {
+                if ( vecChannels[i].IsConnected() )
+                {
+                    ConnLessProtocol.CreateCLDisconnection ( vecChannels[i].GetAddress() );
+                }
+            }
+        }
+        Mutex.unlock(); // release mutex
+    }
+
+    Stop();
+
+    // if server was registered at the central server, unregister on shutdown
+    if ( GetServerListEnabled() )
+    {
+        UnregisterSlaveServer();
+    }
+}
+
+void CServer::OnShutdown ( int )
+{
+    // This should trigger OnAboutToQuit
+    QCoreApplication::instance()->exit();
+}
+
 void CServer::Start()
 {
     // only start if not already running
@@ -944,7 +977,7 @@ void CServer::Stop()
 
 void CServer::OnTimer()
 {
-    int                i, j;
+    int                i, j, iUnused;
     int                iClientFrameSizeSamples;
     OpusCustomDecoder* CurOpusDecoder;
     OpusCustomEncoder* CurOpusEncoder;
@@ -1099,11 +1132,11 @@ JitterMeas.Measure();
                     // OPUS decode received data stream
                     if ( CurOpusDecoder != nullptr )
                     {
-                        opus_custom_decode ( CurOpusDecoder,
-                                             pCurCodedData,
-                                             iCeltNumCodedBytes,
-                                             &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                             iClientFrameSizeSamples );
+                        iUnused = opus_custom_decode ( CurOpusDecoder,
+                                                       pCurCodedData,
+                                                       iCeltNumCodedBytes,
+                                                       &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                       iClientFrameSizeSamples );
                     }
                 }
 
@@ -1247,11 +1280,11 @@ JitterMeas.Measure();
 opus_custom_encoder_ctl ( CurOpusEncoder,
                           OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
-                        opus_custom_encode ( CurOpusEncoder,
-                                             &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                             iClientFrameSizeSamples,
-                                             &vecbyCodedData[0],
-                                             iCeltNumCodedBytes );
+                        iUnused = opus_custom_encode ( CurOpusEncoder,
+                                                       &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                       iClientFrameSizeSamples,
+                                                       &vecbyCodedData[0],
+                                                       iCeltNumCodedBytes );
                     }
 
                     // send separate mix to current clients
@@ -1277,6 +1310,8 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
         // does not consume any significant CPU when no client is connected.
         Stop();
     }
+
+    Q_UNUSED ( iUnused )
 }
 
 /// @brief Mix all audio data from all clients together.

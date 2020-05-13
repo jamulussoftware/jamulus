@@ -51,10 +51,6 @@
 
 
 /* Definitions ****************************************************************/
-// text strings for connection button for connect and disconnect
-#define CON_BUT_CONNECTTEXT         "C&onnect"
-#define CON_BUT_DISCONNECTTEXT      "D&isconnect"
-
 // update time for GUI controls
 #define LEVELMETER_UPDATE_TIME_MS   100   // ms
 #define BUFFER_LED_UPDATE_TIME_MS   300   // ms
@@ -102,7 +98,7 @@ protected:
     QTimer             TimerStatus;
     QTimer             TimerPing;
 
-    virtual void       closeEvent  ( QCloseEvent* Event );
+    virtual void       closeEvent ( QCloseEvent* Event );
     void               UpdateDisplay();
 
     QMenu*             pViewMenu;
@@ -201,7 +197,7 @@ public slots:
         { MainMixerBoard->SetChannelLevels ( vecLevelList ); }
 
     void OnConnectDlgAccepted();
-    void OnDisconnected();
+    void OnDisconnected() { Disconnect(); }
     void OnCentralServerAddressTypeChanged();
 
     void OnGUIDesignChanged()

@@ -105,8 +105,10 @@ LED bar:      lbr
 #define DEFAULT_SERVER_ADDRESS           "jamulus.fischvolk.de"
 #define DEFAULT_SERVER_NAME              "Central Server"
 
-// download URL
-#define SOFTWARE_DOWNLOAD_URL            "http://sourceforge.net/projects/llcon/files"
+// getting started and software manual URL
+#define CLIENT_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Software-Manual"
+#define SERVER_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Running-a-Server"
+#define SOFTWARE_MANUAL_URL              "https://github.com/corrados/jamulus/blob/master/src/res/homepage/manual.md"
 
 // determining server internal address uses well-known host and port
 // (Google DNS, or something else reliable)
@@ -218,15 +220,12 @@ LED bar:      lbr
 #define SERVLIST_TIME_PERMSERV_MINUTES   1440 // minutes, 1440 = 60 min * 24 h
 
 // registration response timeout
-#define REGISTER_SERVER_TIME_OUT_MS     500 // ms
+#define REGISTER_SERVER_TIME_OUT_MS      500 // ms
 
 // defines the maximum number of times to retry server registration
 // when no response is received within the timeout (before reverting
 // to SERVLIST_REGIST_INTERV_MINUTES)
-#define REGISTER_SERVER_RETRY_LIMIT     5 // count
-
-// length of the moving average buffer for response time measurement
-#define TIME_MOV_AV_RESPONSE_SECONDS     30 // seconds
+#define REGISTER_SERVER_RETRY_LIMIT      5 // count
 
 
 // Maximum length of fader tag and text message strings (Since for chat messages
@@ -264,6 +263,8 @@ typedef unsigned __int64   uint64_t;
 typedef unsigned __int32   uint32_t;
 typedef unsigned __int16   uint16_t;
 typedef unsigned __int8    uint8_t;
+#elif defined ( ANDROID )
+// don't redfine types for android as these ones below don't work
 #else
 typedef long long          int64_t;
 typedef int                int32_t;

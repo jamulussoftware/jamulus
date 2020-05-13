@@ -68,6 +68,21 @@
         <translation>lista de Contribuidores en Github</translation>
     </message>
     <message>
+        <location filename="../../util.cpp" line="407"/>
+        <source>Spanish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="409"/>
+        <source>French</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="411"/>
+        <source>Portuguese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../util.cpp" line="418"/>
         <source>About </source>
         <translation>Acerca de </translation>
@@ -472,7 +487,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="204"/>
-        <location filename="../../clientdlg.cpp" line="1085"/>
+        <location filename="../../clientdlg.cpp" line="1075"/>
         <source>C&amp;onnect</source>
         <translation>C&amp;onectar</translation>
     </message>
@@ -613,17 +628,17 @@
         <translation>El procesador del cliente o del servidor está al 100%.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="819"/>
+        <location filename="../../clientdlg.cpp" line="809"/>
         <source>user</source>
         <translation>usuario</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="824"/>
+        <location filename="../../clientdlg.cpp" line="814"/>
         <source>users</source>
         <translation>usuarios</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1061"/>
+        <location filename="../../clientdlg.cpp" line="1051"/>
         <source>D&amp;isconnect</source>
         <translation>D&amp;esconectar</translation>
     </message>
@@ -1356,9 +1371,13 @@
         <translation>La dirección IP o URL del servidor ejecutando el software del servidor </translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="62"/>
         <source> server software must be set here. An optional port number can be added after the IP address or URL using a comma as a separator, e.g, example.org:</source>
-        <translation> debe introducirse aquí. Se puede añadir un número de puerto opcional detrás de la dirección IP o URL utilizando dos puntos como separador, por ej. ejemplo.org:</translation>
+        <translation type="vanished"> debe introducirse aquí. Se puede añadir un número de puerto opcional detrás de la dirección IP o URL utilizando dos puntos como separador, por ej. ejemplo.org:</translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="62"/>
+        <source> server software must be set here. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="66"/>

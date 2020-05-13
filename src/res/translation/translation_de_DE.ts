@@ -26,7 +26,7 @@
     <message>
         <location filename="../../util.cpp" line="357"/>
         <source> client, mixes the audio data and sends the mix back to each client.</source>
-        <translation> Teilnehmern sammelt, zusammen mischt und wieder an alle verbundenen Teilnehmer zurück schickt.</translation>
+        <translation> Musikern sammelt, zusammen mischt und wieder an alle verbundenen Musikern zurück schickt.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="375"/>
@@ -62,6 +62,21 @@
         <location filename="../../util.cpp" line="403"/>
         <source>Github Contributors list</source>
         <translation>Github Liste der Mitwirkenden</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="407"/>
+        <source>Spanish</source>
+        <translation>Spanisch</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="409"/>
+        <source>French</source>
+        <translation>Französisch</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="411"/>
+        <source>Portuguese</source>
+        <translation>Portugiesisch</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="418"/>
@@ -163,12 +178,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="111"/>
         <source>Displays the pre-fader audio level of this channel.  All connected clients at the server will be assigned an audio level, the same value for each client.</source>
-        <translation>Zeigt den Audiopegel vor dem Lautstärkeregler des Kanals. Allen verbundenen Teilnehmern am Server wird ein Audiopegel zugewiesen.</translation>
+        <translation>Zeigt den Audiopegel vor dem Lautstärkeregler des Kanals. Allen verbundenen Musikern am Server wird ein Audiopegel zugewiesen.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="113"/>
         <source>Input level of the current audio channel at the server</source>
-        <translation>Eingangspegel des aktuellen Teilnehmerkanals am Server</translation>
+        <translation>Eingangspegel des aktuellen Musikers am Server</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="116"/>
@@ -178,7 +193,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="116"/>
         <source>Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
-        <translation>Regelt die Lautstärke des Kanals. Für alle Teilnehmer, die gerade am Server verbunden sind, wird ein Lautstärkeregler angezeigt. Damit kann man seinen eigenen lokalen Mix erstellen.</translation>
+        <translation>Regelt die Lautstärke des Kanals. Für alle Musiker, die gerade am Server verbunden sind, wird ein Lautstärkeregler angezeigt. Damit kann man seinen eigenen lokalen Mix erstellen.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="119"/>
@@ -322,7 +337,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="43"/>
         <source>Enter the chat message text in the edit box and press enter to send the message to the server which distributes the message to all connected clients. Your message will then show up in the chat window.</source>
-        <translation>Tippe die Chatnachricht in dieses Feld und drücke anschließend die Eingabetaste um die Nachricht an den Server zu schicken. Der Server verteilt die Nachrichti anschließend an alle Teilnehmer. Die eigene Nachricht wird dann im Chatfenster angezeigt.</translation>
+        <translation>Tippe die Chatnachricht in dieses Feld und drücke anschließend die Eingabetaste um die Nachricht an den Server zu schicken. Der Server verteilt die Nachricht anschließend an alle Musiker. Die eigene Nachricht wird dann im Chatfenster angezeigt.</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="48"/>
@@ -468,7 +483,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="204"/>
-        <location filename="../../clientdlg.cpp" line="1085"/>
+        <location filename="../../clientdlg.cpp" line="1075"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Verbinden</translation>
     </message>
@@ -480,7 +495,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="258"/>
         <source>&amp;Connection Setup...</source>
-        <translation>&amp;Konfiguration der Verbindung...</translation>
+        <translation>&amp;Verbinden...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="261"/>
@@ -609,17 +624,17 @@
         <translation>Die CPU des Computers ist voll ausgelastet.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="819"/>
+        <location filename="../../clientdlg.cpp" line="809"/>
         <source>user</source>
-        <translation>Teilnehmer</translation>
+        <translation>Musiker</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="824"/>
+        <location filename="../../clientdlg.cpp" line="814"/>
         <source>users</source>
-        <translation>Teilnehmer</translation>
+        <translation>Musiker</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1061"/>
+        <location filename="../../clientdlg.cpp" line="1051"/>
         <source>D&amp;isconnect</source>
         <translation>&amp;Trennen</translation>
     </message>
@@ -1181,7 +1196,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="83"/>
         <source>Input Channel Mapping</source>
-        <translation>Eingangskanalzuweisung</translation>
+        <translation>Eingangskanalauswahl</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="103"/>
@@ -1198,7 +1213,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="140"/>
         <source>Output Channel Mapping</source>
-        <translation>Ausgangskanalzuweisung</translation>
+        <translation>Ausgangskanalauswahl</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="213"/>
@@ -1389,7 +1404,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="83"/>
         <source>Show All Musicians</source>
-        <translation>Zeige alle Teilnehmer</translation>
+        <translation>Zeige alle Musiker</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="83"/>
@@ -1399,7 +1414,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="86"/>
         <source>Show all musicians check box</source>
-        <translation>Zeige alle Teilnehmer Schalter</translation>
+        <translation>Zeige alle Musiker Schalter</translation>
     </message>
 </context>
 <context>
@@ -1417,7 +1432,7 @@
     <message>
         <location filename="../../connectdlgbase.ui" line="45"/>
         <source>Show All Musicians</source>
-        <translation>Zeige alle Teilnehmer</translation>
+        <translation>Zeige alle Musiker</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="61"/>
@@ -1432,7 +1447,7 @@
     <message>
         <location filename="../../connectdlgbase.ui" line="71"/>
         <source>Musicians</source>
-        <translation>Teilnehmer</translation>
+        <translation>Musiker</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="76"/>
@@ -1592,7 +1607,7 @@
     <message>
         <location filename="../../util.cpp" line="706"/>
         <source> server. This tag will also show up at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
-        <translation>-Server. Dieses Schild wird auch bei allen anderen Teilnehmern, die mit dem gleichen Server verbunden sind, angezeigt. Wenn der Name leer gelassen wurde, dann wird die IP-Adresse stattdessen angezeigt.</translation>
+        <translation>-Server. Dieses Schild wird auch bei allen anderen Musikern, die mit dem gleichen Server verbunden sind, angezeigt. Wenn der Name leer gelassen wurde, dann wird die IP-Adresse stattdessen angezeigt.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="711"/>
@@ -1863,17 +1878,17 @@
     <message>
         <location filename="../../serverdlg.cpp" line="45"/>
         <source>Client List</source>
-        <translation>Teilnehmerliste</translation>
+        <translation>Musikerliste</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="45"/>
         <source>The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
-        <translation>Die Teilnehmerliste zeigt alle gerade mit dem Server verbunden Musiker an. Für jeden Teilnehmer werden zusätzliche Informationen wie die IP-Adresse und Namen angezeigt.</translation>
+        <translation>Die Musikerliste zeigt alle gerade mit dem Server verbunden Musiker an. Für jeden Musiker werden zusätzliche Informationen wie die IP-Adresse und Namen angezeigt.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="50"/>
         <source>Connected clients list view</source>
-        <translation>Teilnehmerliste</translation>
+        <translation>Musikerliste</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="53"/>

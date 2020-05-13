@@ -93,5 +93,6 @@ protected:
     QStackedLayout* pStackedLayout;
     ELevelMeterType eLevelMeterType;
     CVector<cLED*>  vecpLEDs;
+    cLED*           pClipLED;
     QProgressBar*   pProgressBar;
 };

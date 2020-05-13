@@ -78,10 +78,12 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     lbrInputLevelL->setAccessibleName        ( strInpLevHAccText );
     lbrInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );
     lbrInputLevelL->setToolTip               ( strInpLevHTT );
+    lbrInputLevelL->setPairedBar             ( lbrInputLevelR );
     lbrInputLevelR->setWhatsThis             ( strInpLevH );
     lbrInputLevelR->setAccessibleName        ( strInpLevHAccText );
     lbrInputLevelR->setAccessibleDescription ( strInpLevHAccDescr );
     lbrInputLevelR->setToolTip               ( strInpLevHTT );
+    lbrInputLevelR->setPairedBar             ( lbrInputLevelL );
 
     // connect/disconnect button
     butConnect->setWhatsThis ( "<b>" + tr ( "Connect/Disconnect Button" ) + ":</b> " +

@@ -58,6 +58,7 @@ public:
 
     void setValue ( const double dValue );
     void SetLevelMeterType ( const ELevelMeterType eNType );
+    void setPairedBar ( CMultiColorLEDBar* pBar );
 
 protected:
     class cLED
@@ -91,9 +92,10 @@ protected:
     virtual void changeEvent ( QEvent* curEvent );
     void mousePressEvent ( QMouseEvent* event ) override;
 
-    QStackedLayout* pStackedLayout;
-    ELevelMeterType eLevelMeterType;
-    CVector<cLED*>  vecpLEDs;
-    cLED*           pClipLED;
-    QProgressBar*   pProgressBar;
+    QStackedLayout*    pStackedLayout;
+    ELevelMeterType    eLevelMeterType;
+    CVector<cLED*>     vecpLEDs;
+    cLED*              pClipLED;
+    QProgressBar*      pProgressBar;
+    CMultiColorLEDBar* pPairedBar;
 };

@@ -50,6 +50,8 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
     // create LEDs
     vecpLEDs.Init ( NUM_STEPS_LED_BAR );
 
+    pPairedBar = NULL;
+
     for ( int iLEDIdx = NUM_STEPS_LED_BAR - 1; iLEDIdx >= 0; iLEDIdx-- )
     {
         // create LED object
@@ -191,10 +193,20 @@ void CMultiColorLEDBar::mousePressEvent ( QMouseEvent* event )
 {
     if ( event->button() == Qt::LeftButton )
     {
-        pClipLED->setColor ( cLED::ELightColor::RL_GREY );
+        // Mainly to reset the clip LED, but might be useful to reset the whole
+        // color LED bar.
+        Reset ( isEnabled() );
+        if (pPairedBar != NULL )
+        {
+            pPairedBar->Reset ( pPairedBar->isEnabled() );
+        }
     }
 }
 
+void CMultiColorLEDBar::setPairedBar ( CMultiColorLEDBar* pBar )
+{
+    this->pPairedBar = pBar;
+}
 
 CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
     BitmCubeRoundDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),

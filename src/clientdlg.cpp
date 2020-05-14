@@ -78,12 +78,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     lbrInputLevelL->setAccessibleName        ( strInpLevHAccText );
     lbrInputLevelL->setAccessibleDescription ( strInpLevHAccDescr );
     lbrInputLevelL->setToolTip               ( strInpLevHTT );
-    lbrInputLevelL->setPairedBar             ( lbrInputLevelR );
     lbrInputLevelR->setWhatsThis             ( strInpLevH );
     lbrInputLevelR->setAccessibleName        ( strInpLevHAccText );
     lbrInputLevelR->setAccessibleDescription ( strInpLevHAccDescr );
     lbrInputLevelR->setToolTip               ( strInpLevHTT );
-    lbrInputLevelR->setPairedBar             ( lbrInputLevelL );
 
     // connect/disconnect button
     butConnect->setWhatsThis ( "<b>" + tr ( "Connect/Disconnect Button" ) + ":</b> " +
@@ -204,6 +202,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // init connection button text
     butConnect->setText ( tr ( "C&onnect" ) );
+
+    // pair the input level meter bars together
+    lbrInputLevelR->setPairedBar ( lbrInputLevelL );
+    lbrInputLevelL->setPairedBar ( lbrInputLevelR );
 
     // init input level meter bars
     lbrInputLevelL->setValue ( 0 );

@@ -45,7 +45,7 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
     // create clip LED
     pClipLED = new cLED ( parent );
     pLEDLayout->addWidget ( pClipLED->getLabelPointer() );
-    pLEDLayout->addStretch(); // Keep clip LED separated from the rest of the LED bar
+    pLEDLayout->addStretch(2); // Keep clip LED separated from the rest of the LED bar
 
     // create LEDs
     vecpLEDs.Init ( NUM_STEPS_LED_BAR );
@@ -56,8 +56,13 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
     {
         // create LED object
         vecpLEDs[iLEDIdx] = new cLED ( parent );
-        pLEDLayout->addStretch();
+
+        // add LED to layout with spacer (do not add spacer after last LED)
         pLEDLayout->addWidget ( vecpLEDs[iLEDIdx]->getLabelPointer() );
+        if ( iLEDIdx > 0 )
+        {
+            pLEDLayout->addStretch(1);
+        }
     }
 
     // initialize bar meter
@@ -93,6 +98,9 @@ CMultiColorLEDBar::~CMultiColorLEDBar()
     {
         delete vecpLEDs[iLEDIdx];
     }
+    delete pClipLED;
+    delete pProgressBar;
+    delete pStackedLayout;
 }
 
 void CMultiColorLEDBar::changeEvent ( QEvent* curEvent )

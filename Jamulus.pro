@@ -262,7 +262,7 @@ DISTFILES_OBOE += libs/oboe/AUTHORS \
 
 } else:unix {
     # we want to compile with C++11
-    QMAKE_CXXFLAGS += -std=c++11
+    CONFIG += c++11
 
     # we assume to have lrintf() one moderately modern linux distributions
     # would be better to have that tested, though

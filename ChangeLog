@@ -1,5 +1,14 @@
 
 
+TODO server list split on query
+
+TODO WIP support internationalization
+
+TODO implement panning for channels (Ticket #52, #145)
+
+TODO show mute state of others
+
+
 
 
 
@@ -10,7 +19,7 @@
 
 - for CoreAudio and 4 channel input, support mixing channels 1&2 with 3&4
 
-- added bassoon/oboe/harp instrument icons created by dszgit;
+- added bassoon/oboe/harp instrument icons created by dszgit,
   congas/bongo created by bspeer (Ticket #131)
 
 - link to docs from application Help menu (Ticket #90)
@@ -30,14 +39,10 @@
 
 - bug fix: better handling of disconnect message in the client
 
+- note: Jamulus is no longer compatible to Qt4
 
-TODO check if Tickets #130, #168 are really solved by code from pljones
 
-TODO WIP support internationalization
 
-TODO implement panning for channels (Ticket #52, #145)
-
-TODO show mute state of others
 
 
 

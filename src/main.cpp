@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QTextStream>
 #include <QTranslator>
+#include <QLibraryInfo>
 #include "global.h"
 #include "clientdlg.h"
 #include "serverdlg.h"
@@ -555,12 +556,19 @@ int main ( int argc, char** argv )
 
     // load translations
     QTranslator myappTranslator;
+    QTranslator myqtTranslator;
 
     if ( bUseGUI && bUseTranslation )
     {
         if ( myappTranslator.load ( ":/translations/translation.qm" ) )
         {
             pApp->installTranslator ( &myappTranslator );
+        }
+
+        QString myqtLocation = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
+        if ( myqtTranslator.load ( QLocale(), "qt", "_", myqtLocation ) )
+        {
+            pApp->installTranslator ( &myqtTranslator );
         }
     }
 

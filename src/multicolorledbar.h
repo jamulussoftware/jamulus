@@ -42,6 +42,23 @@
 
 
 /* Classes ********************************************************************/
+
+class CLevelBar
+{
+public:
+
+    CLevelBar ( QWidget* pParent, float fClipRaio );
+    virtual ~CLevelBar();
+
+    void setValue ( int dValue );
+    void Reset();
+
+protected:
+    QProgressBar* pBar;
+    QProgressBar* pClipBar;
+    const float fClipLimitRatio;
+};
+
 class CMultiColorLEDBar : public QWidget
 {
     Q_OBJECT
@@ -96,6 +113,8 @@ protected:
     ELevelMeterType    eLevelMeterType;
     CVector<cLED*>     vecpLEDs;
     cLED*              pClipLED;
-    QProgressBar*      pProgressBar;
+    CLevelBar*         pLevelBar;
     CMultiColorLEDBar* pPairedBar;
+
+    static constexpr float fClipLimitRatio = 0.95f;
 };

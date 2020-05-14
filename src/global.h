@@ -173,10 +173,6 @@ LED bar:      lbr
 #define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
 
 // Maximum number of connected clients at the server.
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-// If you want to change this paramter you have to modify the code on some places, too! The code tag
-// "MAX_NUM_CHANNELS_TAG" shows these places (just search for the tag in the entire code)
-#endif
 #define MAX_NUM_CHANNELS                 50 // max number channels for server
 
 // actual number of used channels in the server

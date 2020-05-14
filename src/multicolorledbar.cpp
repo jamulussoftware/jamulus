@@ -101,11 +101,11 @@ void CMultiColorLEDBar::changeEvent ( QEvent* curEvent )
     if ( curEvent->type() == QEvent::EnabledChange )
     {
         // reset all LEDs
-        Reset ( this->isEnabled() );
+        Reset();
     }
 }
 
-void CMultiColorLEDBar::Reset ( const bool bEnabled )
+void CMultiColorLEDBar::Reset()
 {
     if ( eLevelMeterType == MT_LED )
     {
@@ -113,7 +113,7 @@ void CMultiColorLEDBar::Reset ( const bool bEnabled )
         for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
         {
             // different reset behavior for enabled and disabled control
-            if ( bEnabled )
+            if ( this->isEnabled() )
             {
                 vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
             }
@@ -201,10 +201,10 @@ void CMultiColorLEDBar::mousePressEvent ( QMouseEvent* event )
     {
         // Mainly to reset the clip LED, but might be useful to reset the whole
         // color LED bar.
-        Reset ( isEnabled() );
+        Reset();
         if (pPairedBar != NULL )
         {
-            pPairedBar->Reset ( pPairedBar->isEnabled() );
+            pPairedBar->Reset();
         }
     }
 }

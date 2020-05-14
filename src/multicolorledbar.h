@@ -76,6 +76,7 @@ public:
     void setValue ( const double dValue );
     void SetLevelMeterType ( const ELevelMeterType eNType );
     void setPairedBar ( CMultiColorLEDBar* pBar );
+    void Reset();
 
 protected:
     class cLED
@@ -106,6 +107,7 @@ protected:
     };
 
     void Reset ( const bool bEnabled );
+
     virtual void changeEvent ( QEvent* curEvent );
     void mousePressEvent ( QMouseEvent* event ) override;
 

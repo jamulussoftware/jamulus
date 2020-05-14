@@ -1083,8 +1083,8 @@ void CClientDlg::Disconnect()
 
     // stop timer for level meter bars and reset them
     TimerSigMet.stop();
-    lbrInputLevelL->setValue ( 0 );
-    lbrInputLevelR->setValue ( 0 );
+    lbrInputLevelL->Reset();
+    lbrInputLevelR->Reset();
 
     // stop other timers
     TimerBuffersLED.stop();

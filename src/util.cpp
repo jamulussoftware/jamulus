@@ -404,12 +404,16 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 
     // translators
     txvTranslation->setText (
-        "<p><b>Spanish</b></p>"
+        "<p><b>" + tr ( "Spanish" ) + "</b></p>"
         "<p>Daryl Hanlon (<a href=""https://github.com/ignotus666"">ignotus666</a>)</p>"
-        "<p><b>French</b></p>"
+        "<p><b>" + tr ( "French" ) + "</b></p>"
         "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
-        "<p><b>Portuguese</b></p>"
-        "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>" );
+        "<p><b>" + tr ( "Portuguese" ) + "</b></p>"
+        "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>"
+        "<p><b>" + tr ( "Dutch" ) + "</b></p>"
+        "<p>Jeroen Geertzen (<a href=""https://github.com/jerogee"">jerogee</a>)</p>"
+        "<p><b>" + tr ( "German" ) + "</b></p>"
+        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );

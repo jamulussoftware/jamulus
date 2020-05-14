@@ -73,10 +73,13 @@ public:
     CMultiColorLEDBar ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
     virtual ~CMultiColorLEDBar();
 
+    void Reset();
     void setValue ( const double dValue );
     void SetLevelMeterType ( const ELevelMeterType eNType );
-    void setPairedBar ( CMultiColorLEDBar* pBar );
-    void Reset();
+
+    // Pair another bar with this one. Used to cause action on the paired bar
+    // upon mouse event on this bar.
+    void SetPairedBar ( CMultiColorLEDBar* pBar );
 
 protected:
     class cLED
@@ -105,8 +108,6 @@ protected:
         ELightColor eCurLightColor;
         QLabel*     pLEDLabel;
     };
-
-    void Reset ( const bool bEnabled );
 
     virtual void changeEvent ( QEvent* curEvent );
     void mousePressEvent ( QMouseEvent* event ) override;

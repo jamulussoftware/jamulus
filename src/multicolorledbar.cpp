@@ -209,7 +209,7 @@ void CMultiColorLEDBar::mousePressEvent ( QMouseEvent* event )
     }
 }
 
-void CMultiColorLEDBar::setPairedBar ( CMultiColorLEDBar* pBar )
+void CMultiColorLEDBar::SetPairedBar ( CMultiColorLEDBar* pBar )
 {
     this->pPairedBar = pBar;
 }
@@ -307,6 +307,7 @@ CLevelBar::CLevelBar ( QWidget* pParent, float fClipRatio ):
 CLevelBar::~CLevelBar()
 {
     delete pClipBar;
+    delete pBar;
 }
 
 void CLevelBar::setValue ( int dValue )

@@ -203,9 +203,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // init connection button text
     butConnect->setText ( tr ( "C&onnect" ) );
 
-    // pair the input level meter bars together
-    lbrInputLevelR->setPairedBar ( lbrInputLevelL );
-    lbrInputLevelL->setPairedBar ( lbrInputLevelR );
+    // pair the input level meter bars together, for common action
+    lbrInputLevelR->SetPairedBar ( lbrInputLevelL );
+    lbrInputLevelL->SetPairedBar ( lbrInputLevelR );
 
     // init input level meter bars
     lbrInputLevelL->setValue ( 0 );

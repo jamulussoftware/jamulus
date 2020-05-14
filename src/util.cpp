@@ -411,7 +411,9 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p><b>" + tr ( "Portuguese" ) + "</b></p>"
         "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>"
         "<p><b>" + tr ( "Dutch" ) + "</b></p>"
-        "<p>Jeroen Geertzen (<a href=""https://github.com/jerogee"">Jerogee</a>)</p>" );
+        "<p>Jeroen Geertzen (<a href=""https://github.com/jerogee"">jerogee</a>)</p>"
+        "<p><b>" + tr ( "German" ) + "</b></p>"
+        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );

@@ -26,7 +26,8 @@ TODO show mute state of others
 
 - support Mac CoreAudio aggregated devices (Ticket #138)
 
-- added translations: french by trebmuh, portuguese by Snayler, spanish by ignotus666 (Ticket #77)
+- added translations: French by trebmuh, Portuguese by Snayler,
+  Spanish by ignotus666, Dutch by jerogee, German by corrados (Ticket #77)
 
 - new design for the About dialog (Ticket #189)
 

@@ -117,8 +117,8 @@ LED bar:      lbr
 #define IP_LOOKUP_TIMEOUT                500       // ms
 
 // defined port numbers for client and server
-#define LLCON_DEFAULT_PORT_NUMBER        22124
-#define LLCON_PORT_NUMBER_NORTHAMERICA   22224
+#define DEFAULT_PORT_NUMBER              22124
+#define DEFAULT_PORT_NUMBER_NORTHAMERICA 22224
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ            48000 // Hz

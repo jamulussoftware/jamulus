@@ -63,7 +63,7 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
         " server software must be set here. An optional port number can be added after the IP "
         "address or URL using a colon as a separator, e.g, "
         "example.org:" ) +
-        QString().setNum ( LLCON_DEFAULT_PORT_NUMBER ) + tr ( ". A list of "
+        QString().setNum ( DEFAULT_PORT_NUMBER ) + tr ( ". A list of "
         "the most recent used server IP addresses or URLs is available for "
         "selection." );
 
@@ -304,7 +304,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
             // IP address and port (use IP number without last byte)
             // Definition: If the port number is the default port number, we do
             // not show it.
-            if ( vecServerInfo[iIdx].HostAddr.iPort == LLCON_DEFAULT_PORT_NUMBER )
+            if ( vecServerInfo[iIdx].HostAddr.iPort == DEFAULT_PORT_NUMBER )
             {
                 // only show IP number, no port number
                 pNewListViewItem->setText ( 0, CurHostAddress.toString ( CHostAddress::SM_IP_NO_LAST_BYTE ) );

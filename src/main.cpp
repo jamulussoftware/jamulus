@@ -69,7 +69,7 @@ int main ( int argc, char** argv )
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     int          iMaxDaysHistory             = DEFAULT_DAYS_HISTORY;
     int          iCtrlMIDIChannel            = INVALID_MIDI_CH;
-    quint16      iPortNumber                 = LLCON_DEFAULT_PORT_NUMBER;
+    quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
     QString      strConnOnStartupAddress     = "";
     QString      strIniFileName              = "";
@@ -573,7 +573,7 @@ int main ( int argc, char** argv )
 
 
 // TEST -> activate the following line to activate the test bench,
-//CTestbench Testbench ( "127.0.0.1", LLCON_DEFAULT_PORT_NUMBER );
+//CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
 
 
     try

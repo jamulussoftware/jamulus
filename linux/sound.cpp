@@ -184,16 +184,20 @@ void CSound::Stop()
 int CSound::Init ( const int /* iNewPrefMonoBufferSize */ )
 {
 
-
 // try setting buffer size
 // TODO seems not to work! -> no audio after this operation!
-
 // Doesn't this give an infinite loop? The set buffer size function will call our
 // registerd callback which calls "EmitReinitRequestSignal()". In that function
 // this CSound::Init() function is called...
-
 //jack_set_buffer_size ( pJackClient, iNewPrefMonoBufferSize );
 
+    // without a Jack server, Jamulus makes no sense to run, throw an error message
+    if ( bJackWasShutDown )
+    {
+        throw CGenErr ( tr ( "The Jack server was shut down. This software "
+            "requires a Jack server to run. Try to restart the software to "
+            "solve the issue." ) );
+    }
 
     // get actual buffer size
     iJACKBufferSizeMono = jack_get_buffer_size ( pJackClient );  	
@@ -321,7 +325,7 @@ int CSound::process ( jack_nframes_t nframes, void* arg )
     return 0; // zero on success, non-zero on error 
 }
 
-int CSound::bufferSizeCallback ( jack_nframes_t, void *arg )
+int CSound::bufferSizeCallback ( jack_nframes_t, void* arg )
 {
     CSound* pSound = static_cast<CSound*> ( arg );
 
@@ -330,12 +334,11 @@ int CSound::bufferSizeCallback ( jack_nframes_t, void *arg )
     return 0; // zero on success, non-zero on error
 }
 
-void CSound::shutdownCallback ( void* )
+void CSound::shutdownCallback ( void* arg )
 {
-    // without a Jack server, our software makes no sense to run, throw
-    // error message
-    throw CGenErr ( tr ( "The Jack server was shut down. This software "
-        "requires a Jack server to run. Try to restart the software to "
-        "solve the issue." ) );
+    CSound* pSound = static_cast<CSound*> ( arg );
+
+    pSound->bJackWasShutDown = true;
+    pSound->EmitReinitRequestSignal ( RS_ONLY_RESTART_AND_INIT );
 }
 #endif // WITH_SOUND

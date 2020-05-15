@@ -348,16 +348,14 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 {
     setupUi ( this );
 
-    // set the text for the about dialog html text control
-    txvCredits->setOpenExternalLinks ( true );
-    txvCredits->setText (
-        "<p>" // general description of software
-        "<big>" + tr ( "The " ) + APP_NAME +
+    // general description of software
+    txvAbout->setText (
+        "<p>" + tr ( "The " ) + APP_NAME +
         tr ( " software enables musicians to perform real-time jam sessions "
-        "over the internet. There is a " ) + APP_NAME + tr ( " "
+        "over the internet." ) + "<br>" + tr ( "There is a " ) + APP_NAME + tr ( " "
         "server which collects the audio data from each " ) +
         APP_NAME + tr ( " client, mixes the audio data and sends the mix back "
-        "to each client." ) + "</big></p><br>"
+        "to each client." ) + "</p>"
         "<p><font face=\"courier\">" // GPL header text
         "This program is free software; you can redistribute it and/or modify "
         "it under the terms of the GNU General Public License as published by "
@@ -370,27 +368,53 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "License along with his program; if not, write to the Free Software "
         "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 "
         "USA"
-        "</font></p><br>"
-        "<p><b>" + APP_NAME + // libraries used by this compilation
+        "</font></p>" );
+
+    // libraries used by this compilation
+    txvLibraries->setText ( APP_NAME +
         tr ( " uses the following libraries, resources or code snippets:" ) +
-        "</b></p>"
-        "<ul>"
-        "<li>Qt cross-platform application framework: "
-        "<i><a href=""http://www.qt.io"">http://www.qt.io</a></i></li>"
-        "<li>Opus Interactive Audio Codec: "
-        "<i><a href=""http://www.opus-codec.org"">http://www.opus-codec.org</a></i></li>"
-        "<li>Audio reverberation code: by Perry R. Cook and Gary P. Scavone, "
-        "1995 - 2004 (taken from "
-        "<i><a href=""http://ccrma.stanford.edu/software/stk"">"
-        "The Synthesis ToolKit in C++ (STK)</a></i>)</li>"
-        "<li>Some pixmaps are from the Open Clip Art Library (OCAL): "
-        "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></li>"
-        "<li>Country flag icons from Mark James: "
-        "<i><a href=""http://www.famfamfam.com"">http://www.famfamfam.com</a></i></li>"
-        "</ul>"
-        "We would like to acknowledge the contributors listed in the "
-        "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">Github Contributors list</a>"
-        "</center><br>");
+        "<br><p>" + tr ( "Qt cross-platform application framework" ) +
+        ", <i><a href=""http://www.qt.io"">http://www.qt.io</a></i></p>"
+        "<p>Opus Interactive Audio Codec"
+        ", <i><a href=""http://www.opus-codec.org"">http://www.opus-codec.org</a></i></p>"
+        "<p>" + tr ( "Audio reverberation code by Perry R. Cook and Gary P. Scavone" ) +
+        ", 1995 - 2004, <i><a href=""http://ccrma.stanford.edu/software/stk"">"
+        "The Synthesis ToolKit in C++ (STK)</a></i></p>"
+        "<p>" + tr ( "Some pixmaps are from the" ) + " Open Clip Art Library (OCAL), "
+        "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></p>"
+        "<p>" + tr ( "Country flag icons from Mark James" ) +
+        ", <i><a href=""http://www.famfamfam.com"">http://www.famfamfam.com</a></i></p>" );
+
+    // contributors list
+    txvContributors->setText (
+        "<p>Peter L. Jones (<a href=""https://github.com/pljones"">pljones</a>)</p>"
+        "<p>Jonathan Baker-Bates (<a href=""https://github.com/gilgongo"">gilgongo</a>)</p>"
+        "<p>Daniele Masato (<a href=""https://github.com/doloopuntil"">doloopuntil</a>)</p>"
+        "<p>Simon Tomlinson (<a href=""https://github.com/sthenos"">sthenos</a>)</p>"
+        "<p>Marc jr. Landolt (<a href=""https://github.com/braindef"">braindef</a>)</p>"
+        "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
+        "<p>mirabilos (<a href=""https://github.com/mirabilos"">mirabilos</a>)</p>"
+        "<p>newlaurent62 (<a href=""https://github.com/newlaurent62"">newlaurent62</a>)</p>"
+        "<p>Emlyn Bolton (<a href=""https://github.com/emlynmac"">emlynmac</a>)</p>"
+        "<p>Jos van den Oever (<a href=""https://github.com/vandenoever"">vandenoever</a>)</p>"
+        "<p>Tormod Volden (<a href=""https://github.com/tormodvolden"">tormodvolden</a>)</p>"
+        "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
+        "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
+        "<br>" + tr ( "For details on the contributions check out the " ) +
+        "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">" + tr ( "Github Contributors list" ) + "</a>." );
+
+    // translators
+    txvTranslation->setText (
+        "<p><b>" + tr ( "Spanish" ) + "</b></p>"
+        "<p>Daryl Hanlon (<a href=""https://github.com/ignotus666"">ignotus666</a>)</p>"
+        "<p><b>" + tr ( "French" ) + "</b></p>"
+        "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
+        "<p><b>" + tr ( "Portuguese" ) + "</b></p>"
+        "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>"
+        "<p><b>" + tr ( "Dutch" ) + "</b></p>"
+        "<p>Jeroen Geertzen (<a href=""https://github.com/jerogee"">jerogee</a>)</p>"
+        "<p><b>" + tr ( "German" ) + "</b></p>"
+        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
@@ -406,7 +430,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
     // name, short description and GPL hint
     if ( bWithHtml )
     {
-        strVersionText += "<center><b>";
+        strVersionText += "<b>";
     }
     else
     {
@@ -424,23 +448,13 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
         strVersionText += "\n *** ";
     }
 
-    strVersionText += tr ( "Internet Jam Session Software" );
-
-    if ( bWithHtml )
+    if ( !bWithHtml )
     {
-        strVersionText += "<br>";
-    }
-    else
-    {
+        strVersionText += tr ( "Internet Jam Session Software" );
         strVersionText += "\n *** ";
     }
 
     strVersionText += tr ( "Under the GNU General Public License (GPL)" );
-
-    if ( bWithHtml )
-    {
-        strVersionText += "</center>";
-    }
 
     return strVersionText;
 }
@@ -823,7 +837,7 @@ void CMusProfDlg::OnSkillActivated ( int iCntryListItem )
 
 
 // Help menu -------------------------------------------------------------------
-CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( "&Help", parent )
+CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&Help" ), parent )
 {
     // standard help menu consists of about and what's this help
     if ( bIsClient )
@@ -850,7 +864,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
                                         CHostAddress& HostAddress )
 {
     QHostAddress InetAddr;
-    quint16      iNetPort = LLCON_DEFAULT_PORT_NUMBER;
+    quint16      iNetPort = DEFAULT_PORT_NUMBER;
 
     // init requested host address with invalid address first
     HostAddress = CHostAddress();
@@ -937,7 +951,7 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
     switch ( eCentralServerAddressType )
     {
     case AT_MANUAL:        return strCentralServerAddress;
-    case AT_NORTH_AMERICA: return QString ( "%1:%2" ).arg ( DEFAULT_SERVER_ADDRESS ).arg ( LLCON_PORT_NUMBER_NORTHAMERICA );
+    case AT_NORTH_AMERICA: return QString ( "%1:%2" ).arg ( DEFAULT_SERVER_ADDRESS ).arg ( DEFAULT_PORT_NUMBER_NORTHAMERICA );
     default:               return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
     }
 }
@@ -989,6 +1003,8 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Oboe" ), ":/png/instr/res/instruments/oboe.png", IC_WIND_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Harp" ), ":/png/instr/res/instruments/harp.png", IC_STRING_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Viola" ), ":/png/instr/res/instruments/viola.png", IC_STRING_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Congas" ), ":/png/instr/res/instruments/congas.png", IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bongo" ), ":/png/instr/res/instruments/bongo.png", IC_PERCUSSION_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;

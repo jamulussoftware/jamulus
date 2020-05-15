@@ -194,7 +194,7 @@ public slots:
         { MainMixerBoard->SetChannelLevels ( vecLevelList ); }
 
     void OnConnectDlgAccepted();
-    void OnDisconnected();
+    void OnDisconnected() { Disconnect(); }
     void OnCentralServerAddressTypeChanged();
 
     void OnGUIDesignChanged()

@@ -27,18 +27,23 @@
 #include <QDir>
 #include <QTextStream>
 #include <QTranslator>
+#include <QLibraryInfo>
 #include "global.h"
 #include "clientdlg.h"
 #include "serverdlg.h"
 #include "settings.h"
 #include "testbench.h"
 #include "util.h"
+#ifdef ANDROID
+# include <QtAndroidExtras/QtAndroid>
+#endif
 
 
 // Implementation **************************************************************
 
 int main ( int argc, char** argv )
 {
+
     QTextStream& tsConsole = *( ( new ConsoleWriterFactory() )->get() );
     QString      strArgument;
     double       rDbleArgument;
@@ -47,35 +52,36 @@ int main ( int argc, char** argv )
     // arguments
 #if defined( SERVER_BUNDLE ) && ( defined( __APPLE__ ) || defined( __MACOSX ) )
     // if we are on MacOS and we are building a server bundle, starts Jamulus in server mode
-    bool         bIsClient                 = false;
+    bool         bIsClient                   = false;
 #else
-    bool         bIsClient                 = true;
+    bool         bIsClient                   = true;
 #endif
-    bool         bUseGUI                   = true;
-    bool         bStartMinimized           = false;
-    bool         bShowComplRegConnList     = false;
-    bool         bDisconnectAllClients     = false;
-    bool         bUseDoubleSystemFrameSize = true; // default is 128 samples frame size
-    bool         bShowAnalyzerConsole      = false;
-    bool         bCentServPingServerInList = false;
-    bool         bNoAutoJackConnect        = false;
-    bool         bUseTranslation           = false;
-    int          iNumServerChannels        = DEFAULT_USED_NUM_CHANNELS;
-    int          iMaxDaysHistory           = DEFAULT_DAYS_HISTORY;
-    int          iCtrlMIDIChannel          = INVALID_MIDI_CH;
-    quint16      iPortNumber               = LLCON_DEFAULT_PORT_NUMBER;
-    ELicenceType eLicenceType              = LT_NO_LICENCE;
-    QString      strConnOnStartupAddress   = "";
-    QString      strIniFileName            = "";
-    QString      strHTMLStatusFileName     = "";
-    QString      strServerName             = "";
-    QString      strLoggingFileName        = "";
-    QString      strHistoryFileName        = "";
-    QString      strRecordingDirName       = "";
-    QString      strCentralServer          = "";
-    QString      strServerInfo             = "";
-    QString      strWelcomeMessage         = "";
-    QString      strClientName             = APP_NAME;
+    bool         bUseGUI                     = true;
+    bool         bStartMinimized             = false;
+    bool         bShowComplRegConnList       = false;
+    bool         bDisconnectAllClientsOnQuit = false;
+    bool         bUseDoubleSystemFrameSize   = true; // default is 128 samples frame size
+    bool         bShowAnalyzerConsole        = false;
+    bool         bCentServPingServerInList   = false;
+    bool         bNoAutoJackConnect          = false;
+    bool         bUseTranslation             = true;
+    bool         bCustomPortNumberGiven      = false;
+    int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
+    int          iMaxDaysHistory             = DEFAULT_DAYS_HISTORY;
+    int          iCtrlMIDIChannel            = INVALID_MIDI_CH;
+    quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
+    ELicenceType eLicenceType                = LT_NO_LICENCE;
+    QString      strConnOnStartupAddress     = "";
+    QString      strIniFileName              = "";
+    QString      strHTMLStatusFileName       = "";
+    QString      strServerName               = "";
+    QString      strLoggingFileName          = "";
+    QString      strHistoryFileName          = "";
+    QString      strRecordingDirName         = "";
+    QString      strCentralServer            = "";
+    QString      strServerInfo               = "";
+    QString      strWelcomeMessage           = "";
+    QString      strClientName               = APP_NAME;
 
     // QT docu: argv()[0] is the program name, argv()[1] is the first
     // argument and argv()[argc()-1] is the last argument.
@@ -195,6 +201,18 @@ int main ( int argc, char** argv )
         }
 
 
+        // Disconnect all clients on quit --------------------------------------
+        if ( GetFlagArgument ( argv,
+                               i,
+                               "-d",
+                               "--discononquit" ) )
+        {
+            bDisconnectAllClientsOnQuit = true;
+            tsConsole << "- disconnect all clients on quit" << endl;
+            continue;
+        }
+
+
         // Disabling auto Jack connections -------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
@@ -207,17 +225,14 @@ int main ( int argc, char** argv )
         }
 
 
-        // Enable translations -------------------------------------------------
-        // Undocumented debugging command line argument: Enable translations
-        // (since translation is still WIP, it is not enabled by default but
-        // must be enabled with this undocumented command line flag)
+        // Disable translations ------------------------------------------------
         if ( GetFlagArgument ( argv,
                                i,
-                               "--translation", // no short form
-                               "--translation" ) )
+                               "-t",
+                               "--notranslation" ) )
         {
-            bUseTranslation = true;
-            tsConsole << "- translations enabled" << endl;
+            bUseTranslation = false;
+            tsConsole << "- translations disabled" << endl;
             continue;
         }
 
@@ -233,20 +248,6 @@ int main ( int argc, char** argv )
         {
             bShowComplRegConnList = true;
             tsConsole << "- show all registered servers in server list" << endl;
-            continue;
-        }
-
-
-        // Disconnect all clients (emergency mode) -----------------------------
-        // Undocumented debugging command line argument: Needed to disconnect
-        // an unwanted client.
-        if ( GetFlagArgument ( argv,
-                               i,
-                               "--disconnectall", // no short form
-                               "--disconnectall" ) )
-        {
-            bDisconnectAllClients = true;
-            tsConsole << "- disconnect all clients" << endl;
             continue;
         }
 
@@ -308,7 +309,8 @@ int main ( int argc, char** argv )
                                   65535,
                                   rDbleArgument ) )
         {
-            iPortNumber = static_cast<quint16> ( rDbleArgument );
+            iPortNumber            = static_cast<quint16> ( rDbleArgument );
+            bCustomPortNumberGiven = true;
             tsConsole << "- selected port number: " << iPortNumber << endl;
             continue;
         }
@@ -503,16 +505,40 @@ int main ( int argc, char** argv )
         strCentralServer = DEFAULT_SERVER_ADDRESS;
     }
 
+    // adjust default port number for client: use different default port than the server since
+    // if the client is started before the server, the server would get a socket bind error
+    if ( bIsClient && !bCustomPortNumberGiven )
+    {
+        iPortNumber += 10; // increment by 10
+    }
 
-    // Application/GUI setup ---------------------------------------------------
-    // Application object
-    if ( !bUseGUI && !strHistoryFileName.isEmpty() )
+    // display a warning if in server no GUI mode and a history file is requested
+    if ( !bIsClient && !bUseGUI && !strHistoryFileName.isEmpty() )
     {
         tsConsole << "Qt5 requires a windowing system to paint a JPEG image; image will use SVG" << endl;
     }
+
+
+    // Application/GUI setup ---------------------------------------------------
+    // Application object
     QCoreApplication* pApp = bUseGUI
             ? new QApplication ( argc, argv )
             : new QCoreApplication ( argc, argv );
+
+#ifdef ANDROID
+    // special Android coded needed for record audio permission handling
+    auto result = QtAndroid::checkPermission ( QString ( "android.permission.RECORD_AUDIO" ) );
+
+    if ( result == QtAndroid::PermissionResult::Denied )
+    {
+        QtAndroid::PermissionResultMap resultHash = QtAndroid::requestPermissionsSync ( QStringList ( { "android.permission.RECORD_AUDIO" } ) );
+
+        if ( resultHash["android.permission.RECORD_AUDIO"] == QtAndroid::PermissionResult::Denied )
+        {
+            return 0;
+        }
+    }
+#endif
 
 #ifdef _WIN32
     // set application priority class -> high priority
@@ -529,7 +555,7 @@ int main ( int argc, char** argv )
     Q_INIT_RESOURCE(resources);
 
     // load translations
-    QTranslator myappTranslator;
+    QTranslator myappTranslator, myqtTranslator;
 
     if ( bUseGUI && bUseTranslation )
     {
@@ -537,11 +563,17 @@ int main ( int argc, char** argv )
         {
             pApp->installTranslator ( &myappTranslator );
         }
+
+        // allows the Qt messages to be translated in the application
+        if ( myqtTranslator.load ( QLocale(), "qt", "_", QLibraryInfo::location ( QLibraryInfo::TranslationsPath ) ) )
+        {
+            pApp->installTranslator ( &myqtTranslator );
+        }
     }
 
 
 // TEST -> activate the following line to activate the test bench,
-//CTestbench Testbench ( "127.0.0.1", LLCON_DEFAULT_PORT_NUMBER );
+//CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
 
 
     try
@@ -599,7 +631,7 @@ int main ( int argc, char** argv )
                              strWelcomeMessage,
                              strRecordingDirName,
                              bCentServPingServerInList,
-                             bDisconnectAllClients,
+                             bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              eLicenceType );
             if ( bUseGUI )
@@ -673,9 +705,11 @@ QString UsageArguments ( char **argv )
         "  -i, --inifile         initialization file name\n"
         "  -n, --nogui           disable GUI\n"
         "  -p, --port            set your local port number\n"
+        "  -t, --notranslation   disable translation (use englisch language)\n"
         "  -v, --version         output version information and exit\n"
         "\nServer only:\n"
         "  -a, --servername      server name, required for HTML status\n"
+        "  -d, --discononquit    disconnect all clients on quit\n"
         "  -D, --histdays        number of days of history to display\n"
         "  -e, --centralserver   address of the central server\n"
         "  -F, --fastupdate      use 64 samples frame size mode\n"

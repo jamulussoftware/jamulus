@@ -58,7 +58,6 @@ public:
 
 protected:
     virtual void changeEvent ( QEvent* pEvent );
-    virtual void closeEvent  ( QCloseEvent* Event );
 
     void         UpdateGUIDependencies();
     void         UpdateSystemTrayIcon ( const bool bIsActive );

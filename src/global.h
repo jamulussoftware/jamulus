@@ -117,8 +117,8 @@ LED bar:      lbr
 #define IP_LOOKUP_TIMEOUT                500       // ms
 
 // defined port numbers for client and server
-#define LLCON_DEFAULT_PORT_NUMBER        22124
-#define LLCON_PORT_NUMBER_NORTHAMERICA   22224
+#define DEFAULT_PORT_NUMBER              22124
+#define DEFAULT_PORT_NUMBER_NORTHAMERICA 22224
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ            48000 // Hz
@@ -173,10 +173,6 @@ LED bar:      lbr
 #define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
 
 // Maximum number of connected clients at the server.
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-// If you want to change this paramter you have to modify the code on some places, too! The code tag
-// "MAX_NUM_CHANNELS_TAG" shows these places (just search for the tag in the entire code)
-#endif
 #define MAX_NUM_CHANNELS                 50 // max number channels for server
 
 // actual number of used channels in the server
@@ -236,11 +232,11 @@ LED bar:      lbr
 #define MAX_LEN_VERSION_TEXT             20
 
 // common tool tip bottom line text
-#define TOOLTIP_COM_END_TEXT             tr ( \
-    "<br><div align=right><font size=-1><i>" \
-    "For more information use the ""What's " \
-    "This"" help (? menu, right mouse button or Shift+F1)" \
-    "</i></font></div>" )
+#define TOOLTIP_COM_END_TEXT             \
+    "<br><div align=right><font size=-1><i>" + \
+    QCoreApplication::translate ( "global","For more information use the ""What's " \
+    "This"" help (help menu, right mouse button or Shift+F1)" ) + \
+    "</i></font></div>"
 
 #define _MAXSHORT                        32767
 #define _MAXBYTE                         255 // binary: 11111111
@@ -258,6 +254,8 @@ typedef unsigned __int64   uint64_t;
 typedef unsigned __int32   uint32_t;
 typedef unsigned __int16   uint16_t;
 typedef unsigned __int8    uint8_t;
+#elif defined ( ANDROID )
+// don't redfine types for android as these ones below don't work
 #else
 typedef long long          int64_t;
 typedef int                int32_t;

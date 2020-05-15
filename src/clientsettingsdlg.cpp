@@ -155,7 +155,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "If no buffer size is selected and all settings are disabled, an "
         "unsupported buffer size is used by the driver. The " ) + APP_NAME +
         tr ( " software will still work with this setting but with restricted "
-        "performannce." ) + "<br>" + tr (
+        "performance." ) + "<br>" + tr (
         "The actual buffer delay has influence on the connection status, the "
         "current upload rate and the overall delay. The lower the buffer size, "
         "the higher the probability of red light in the status indicator (drop "
@@ -364,7 +364,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     rbtBufferDelayDefault->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_DEFAULT * SYSTEM_FRAME_SIZE_SAMPLES,
-        ", preferred" ) );
+        ", " + tr ( "preferred" ) ) );
 
     rbtBufferDelaySafe->setText ( GenSndCrdBufferDelayString (
         FRAME_SIZE_FACTOR_SAFE * SYSTEM_FRAME_SIZE_SAMPLES ) );

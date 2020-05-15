@@ -11,6 +11,9 @@
     <qresource prefix="/translations" lang="es">
         <file alias="translation.qm">res/translation/translation_es_ES.qm</file>
     </qresource>
+    <qresource prefix="/translations" lang="nl">
+        <file alias="translation.qm">res/translation/translation_nl_NL.qm</file>
+    </qresource>
     <qresource prefix="/png/LEDs">
         <file>res/CLEDDisabledSmall.png</file>
         <file>res/CLEDGreenArrow.png</file>
@@ -66,6 +69,8 @@
         <file>res/instruments/oboe.png</file>
         <file>res/instruments/harp.png</file>
         <file>res/instruments/viola.png</file>
+        <file>res/instruments/congas.png</file>
+        <file>res/instruments/bongo.png</file>
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>

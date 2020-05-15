@@ -20,17 +20,17 @@
     <message>
         <location filename="../../util.cpp" line="355"/>
         <source> server which collects the audio data from each </source>
-        <translation> servidor que recoge el audio de cada </translation>
+        <translation> que recoge el audio de cada cliente </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="355"/>
         <source>There is a </source>
-        <translation>Hay un </translation>
+        <translation>Hay un servidor </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="357"/>
         <source> client, mixes the audio data and sends the mix back to each client.</source>
-        <translation> cliente, mezcla el audio y lo envía de vuelta a cada cliente.</translation>
+        <translation>, mezcla el audio y lo envía de vuelta a cada cliente.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="375"/>
@@ -70,27 +70,27 @@
     <message>
         <location filename="../../util.cpp" line="407"/>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Español</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="409"/>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Francés</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="411"/>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Portugués</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="413"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Neerlandés</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="415"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Alemán</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="422"/>
@@ -1387,7 +1387,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="62"/>
         <source> server software must be set here. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
-        <translation type="unfinished"></translation>
+        <translation> debe introducirse aquí. Se puede añadir un número de puerto opcional detrás de la dirección IP o URL utilizando dos puntos como separador, por ej. ejemplo.org:</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="66"/>

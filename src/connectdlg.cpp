@@ -76,7 +76,7 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
 
     // filter
     edtFilter->setWhatsThis ( "<b>" + tr ( "Filter" ) + ":</b> " + tr ( "The server "
-        "list is filered by the given text. Note that the filter is case insensitive." ) );
+        "list is filtered by the given text. Note that the filter is case insensitive." ) );
     edtFilter->setAccessibleName ( tr ( "Filter edit box" ) );
 
     // show all mucisians

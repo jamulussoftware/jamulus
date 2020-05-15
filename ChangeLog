@@ -1,4 +1,5 @@
 
+3.5.4git
 
 TODO server list split on query
 
@@ -12,7 +13,8 @@ TODO show mute state of others
 
 
 
-3.5.3git
+
+3.5.3 (2020-05-15)
 
 - correct unregister of headless server and RPP file creation on
   SIGINT/SIGTERM, coded by pljones (Tickets #130, #168)
@@ -41,13 +43,6 @@ TODO show mute state of others
 - bug fix: better handling of disconnect message in the client
 
 - note: Jamulus is no longer compatible to Qt4
-
-
-
-
-
-
-
 
 
 3.5.2 (2020-04-24)

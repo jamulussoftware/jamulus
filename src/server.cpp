@@ -471,8 +471,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
         this, SLOT ( OnAboutToQuit() ) );
 
     QObject::connect ( pSignalHandler,
-        SIGNAL ( ShutdownSignal ( int ) ),
-        this, SLOT ( OnShutdown ( int ) ) );
+        SIGNAL ( HandledSignal ( int ) ),
+        this, SLOT ( OnHandledSignal ( int ) ) );
 
     connectChannelSignalsToServerSlots<MAX_NUM_CHANNELS>();
 
@@ -665,10 +665,31 @@ void CServer::OnAboutToQuit()
     }
 }
 
-void CServer::OnShutdown ( int )
+void CServer::OnHandledSignal ( int sigNum )
 {
-    // This should trigger OnAboutToQuit
+#ifdef _WIN32
+
+    // Windows does not actually get OnHandledSignal triggered
     QCoreApplication::instance()->exit();
+    Q_UNUSED ( sigNum )
+
+#else
+
+    switch ( sigNum )
+    {
+
+    case SIGINT:
+    case SIGTERM:
+        // This should trigger OnAboutToQuit
+        QCoreApplication::instance()->exit();
+        break;
+
+    default:
+        break;
+
+    }
+
+#endif
 }
 
 void CServer::Start()

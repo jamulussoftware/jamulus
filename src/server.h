@@ -441,5 +441,5 @@ public slots:
 
     void OnAboutToQuit();
 
-    void OnShutdown ( int );
+    void OnHandledSignal ( int sigNum );
 };

@@ -232,7 +232,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="124"/>
         <source>Mute button</source>
-        <translation>Dempingsknop</translation>
+        <translation>Dempknop</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="126"/>
@@ -689,12 +689,12 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="344"/>
         <source>Mute Myself</source>
-        <translation>Demp mijzelf</translation>
+        <translation>Demp Mijzelf</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="351"/>
         <source>C&amp;onnect</source>
-        <translation>C&amp;onnect</translation>
+        <translation>&amp;Verbinden</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="377"/>

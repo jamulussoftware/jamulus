@@ -20,17 +20,17 @@
     <message>
         <location filename="../../util.cpp" line="355"/>
         <source> server which collects the audio data from each </source>
-        <translation> servidor que recoge el audio de cada </translation>
+        <translation> que recoge el audio de cada cliente </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="355"/>
         <source>There is a </source>
-        <translation>Hay un </translation>
+        <translation>Hay un servidor </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="357"/>
         <source> client, mixes the audio data and sends the mix back to each client.</source>
-        <translation> cliente, mezcla el audio y lo envía de vuelta a cada cliente.</translation>
+        <translation>, mezcla el audio y lo envía de vuelta a cada cliente.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="375"/>

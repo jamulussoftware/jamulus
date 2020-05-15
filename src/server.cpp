@@ -678,6 +678,10 @@ void CServer::OnHandledSignal ( int sigNum )
     switch ( sigNum )
     {
 
+    case SIGUSR1:
+        RequestNewRecording();
+        break;
+
     case SIGINT:
     case SIGTERM:
         // This should trigger OnAboutToQuit
@@ -1584,5 +1588,13 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
         }
 
         vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevel ) );
+    }
+}
+
+void CServer::RequestNewRecording()
+{
+    if ( bEnableRecording )
+    {
+        emit RestartRecorder();
     }
 }

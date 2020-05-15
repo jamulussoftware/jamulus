@@ -314,6 +314,10 @@ void CJamRecorder::Init( const CServer* server,
         throw std::runtime_error( (recordBaseDir.absolutePath() + " is a directory but cannot be written to").toStdString() );
     }
 
+    QObject::connect( (const QObject *)server, SIGNAL ( RestartRecorder() ),
+                      this, SLOT( OnTriggerSession() ),
+                      Qt::ConnectionType::QueuedConnection );
+
     QObject::connect( (const QObject *)server, SIGNAL ( Stopped() ),
                       this, SLOT( OnEnd() ),
                       Qt::ConnectionType::QueuedConnection );

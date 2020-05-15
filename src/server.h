@@ -285,6 +285,8 @@ protected:
                                           const CVector<CVector<int16_t> > vecvecsData,
                                           CVector<uint16_t>&               vecLevelsOut );
 
+    void RequestNewRecording();
+
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
     CChannel                   vecChannels[MAX_NUM_CHANNELS];
@@ -364,6 +366,7 @@ signals:
                       const CHostAddress     RecHostAddr,
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
+    void RestartRecorder();
 
 public slots:
     void OnTimer();

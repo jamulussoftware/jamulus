@@ -70,27 +70,27 @@
     <message>
         <location filename="../../util.cpp" line="407"/>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Espagnol</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="409"/>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Français</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="411"/>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Portugais</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="413"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Néerlandais</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="415"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Allemand</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="422"/>
@@ -339,12 +339,12 @@
     <message>
         <location filename="../../chatdlg.cpp" line="37"/>
         <source>Chat Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenêtre de tchate</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="37"/>
         <source>The chat window shows a history of all chat messages.</source>
-        <translation type="unfinished"></translation>
+        <translation>La fenêtre de tchate affiche un historique de tous les messages de chat.</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="40"/>
@@ -354,12 +354,12 @@
     <message>
         <location filename="../../chatdlg.cpp" line="43"/>
         <source>Input Message Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Saisie du texte du message</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="43"/>
         <source>Enter the chat message text in the edit box and press enter to send the message to the server which distributes the message to all connected clients. Your message will then show up in the chat window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Saisissez le texte du message de tchate dans la zone d&apos;édition et appuyez sur la touche Entrée pour envoyer le message au serveur qui le distribue à tous les clients connectés. Votre message apparaîtra alors dans la fenêtre de tchate.</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="48"/>
@@ -405,27 +405,27 @@
     <message>
         <location filename="../../clientdlg.cpp" line="57"/>
         <source>If the </source>
-        <translation type="unfinished"></translation>
+        <translation>Si le logiciel </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="64"/>
         <source> software, you should not hear your singing/instrument in the loudspeaker or your headphone when the </source>
-        <translation type="unfinished"></translation>
+        <translation> , vous ne cevriez pas entendre votre chant/instrument dans le haut-parleur ou votre casque lorsque le logiciel </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="58"/>
         <source> software is connected and you play your instrument/sing in the microphone, the LED level meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. line in instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation type="unfinished"></translation>
+        <translation> est connecté et que vous jouez de votre instrument ou chantez dans le microphone, le voyant de niveau devrait clignoter. Si ce n&apos;est pas le cas, vous avez probablement sélectionné le mauvais canal d&apos;entrée (par exemple, entrée ligne au lieu de l&apos;entrée microphone) ou réglé le gain d&apos;entrée trop bas dans le mixeur audio (Windows).</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="63"/>
         <source>For a proper usage of the </source>
-        <translation type="unfinished"></translation>
+        <translation>Pour un bon usage du logiciel </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="67"/>
         <source> software is not connected. This can be achieved by muting your input audio channel in the Playback mixer (not the Recording mixer!).</source>
-        <translation type="unfinished"></translation>
+        <translation> n&apos;est pas connecté. Vous pouvez y parvenir en mettant en sourdine votre canal audio d&apos;entrée dans le mixeur de lecture (et âs dans le mixeur d&apos;enregistrement !).</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="71"/>
@@ -764,7 +764,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="56"/>
         <source>In case the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer by a red light.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si le réglage automatique du tampon de gigue est activé, les tampons réseau du client local et du serveur distant sont réglés à une valeur prudente pour minimiser la probabilité de décrochage audio. Pour ajuster le délai/latence audio, il est recommandé de désactiver la fonction de réglage automatique et de réduire manuellement la taille du tampon de gigue en utilisant les curseurs jusqu&apos;à ce que votre limite personnelle acceptable du nombre d&apos;interruptions soit atteinte. Le voyant visualisera les décrochages audio du tampon de gigue local par une lumière rouge.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="72"/>
@@ -789,22 +789,22 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="83"/>
         <source>Sound Card Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Périphérique d&apos;interface audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="84"/>
         <source>The ASIO driver (sound card) can be selected using </source>
-        <translation type="unfinished"></translation>
+        <translation>Le pilote ASIO (interface audio) peut être sélectionné en utilisant </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="85"/>
         <source> under the Windows operating system. Under MacOS/Linux, no sound card selection is possible. If the selected ASIO driver is not valid an error message is shown and the previous valid driver is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation> sous le système d&apos;exploitation Windows. Sous MacOS/Linux, aucune sélection de carte son n&apos;est possible. Si le pilote ASIO sélectionné n&apos;est pas valide, un message d&apos;erreur s&apos;affiche et le pilote valide précédent est sélectionné.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="87"/>
         <source>If the driver is selected during an active connection, the connection is stopped, the driver is changed and the connection is started again automatically.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si le pilote est sélectionné pendant une connexion active, la connexion est interrompue, le pilote est modifié et la connexion est automatiquement relancée.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="92"/>
@@ -1416,7 +1416,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="78"/>
         <source>The server list is filered by the given text. Note that the filter is case insensitive.</source>
-        <translation type="unfinished"></translation>
+        <translation>La liste des serveurs est filtrée par le texte donné. Notez que le filtre n&apos;est pas sensible à la casse.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="80"/>
@@ -1513,7 +1513,7 @@
     <message>
         <location filename="../../util.cpp" line="852"/>
         <source>What&apos;s &amp;This</source>
-        <translation>C&apos;es&amp;t quoi ça</translation>
+        <translation>Qu&apos;est-ce que c&apos;est ?</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="854"/>
@@ -1629,7 +1629,7 @@
     <message>
         <location filename="../../util.cpp" line="710"/>
         <source> server. This tag will also show up at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
-        <translation type="unfinished"></translation>
+        <translation> . Cette balise apparaîtra également sur chaque client connecté au même serveur que vous. Si le nom est laissé vide, l&apos;adresse IP est affichée à la place.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="715"/>
@@ -1717,12 +1717,12 @@
     <message>
         <location filename="../../util.cpp" line="703"/>
         <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living. The city you live in and the skill level of playing your instrument may also be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>Indiquez ici votre nom ou un pseudonyme afin que les autres musiciens avec lesquels vous voulez jouer sachent qui vous êtes. Vous pouvez également mettre une photo de l&apos;instrument dont vous jouez et un drapeau du pays dans lequel vous vivez. La ville dans laquelle vous vivez et le niveau de compétence pour jouer de votre instrument peuvent également être ajoutés.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="708"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a </source>
-        <translation type="unfinished"></translation>
+        <translation>Ce que vous réglez ici apparaîtra au niveau de votre fader sur la table de mixage lorsque vous serez connecté à un serveur </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="973"/>
@@ -2031,7 +2031,7 @@
         <location filename="../../serverdlg.cpp" line="134"/>
         <location filename="../../serverdlg.cpp" line="277"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished">&amp;Quitter</translation>
+        <translation>&amp;Quitter</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="140"/>

@@ -197,6 +197,7 @@ public:
                           CVector<int>&          veciJitBufNumFrames,
                           CVector<int>&          veciNetwFrameSizeFact );
 
+    bool GetRecordingEnabled() { return bEnableRecording; }
 
     // Server list management --------------------------------------------------
     void UpdateServerList() { ServerListManager.Update(); }
@@ -382,6 +383,7 @@ signals:
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
     void RestartRecorder();
+    void RecordingSessionStarted ( QString sessionDir );
 
 public slots:
     void OnTimer();
@@ -456,6 +458,11 @@ public slots:
     }
 
     void OnCLDisconnection ( CHostAddress InetAddr );
+
+    void OnRecordingSessionStarted ( QString sessionDir )
+    {
+        emit RecordingSessionStarted ( sessionDir );
+    }
 
     void OnAboutToQuit();
 

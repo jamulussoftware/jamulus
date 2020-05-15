@@ -63,6 +63,7 @@ protected:
     void         UpdateSystemTrayIcon ( const bool bIsActive );
     void         ShowWindowInForeground() { showNormal(); raise(); }
     void         ModifyAutoStartEntry ( const bool bDoAutoStart );
+    void         UpdateRecorderStatus( QString sessionDir );
 
     QTimer                        Timer;
     CServer*                      pServer;
@@ -90,9 +91,10 @@ public slots:
     void OnLocationCityTextChanged ( const QString& strNewCity );
     void OnLocationCountryActivated ( int iCntryListItem );
     void OnCentServAddrTypeActivated ( int iTypeIdx );
+    void OnNewRecordingClicked();
     void OnTimer();
-    void OnServerStarted() { UpdateSystemTrayIcon ( true ); }
-    void OnServerStopped() { UpdateSystemTrayIcon ( false ); }
+    void OnServerStarted();
+    void OnServerStopped();
     void OnSvrRegStatusChanged() { UpdateGUIDependencies(); }
     void OnSysTrayMenuOpen() { ShowWindowInForeground(); }
     void OnSysTrayMenuHide() { hide(); }
@@ -101,4 +103,9 @@ public slots:
 
     void keyPressEvent ( QKeyEvent *e ) // block escape key
         { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
+
+    void OnRecordingSessionStarted ( QString sessionDir )
+    {
+        UpdateRecorderStatus ( sessionDir );
+    }
 };

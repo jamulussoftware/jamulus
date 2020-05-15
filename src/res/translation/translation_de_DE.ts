@@ -1403,7 +1403,7 @@
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="78"/>
-        <source>The server list is filered by the given text. Note that the filter is case insensitive.</source>
+        <source>The server list is filtered by the given text. Note that the filter is case insensitive.</source>
         <translation>Die Serverliste kann mit dem eingegebenen Text gefiltert werden, d.h. es werden nur Einträge angezeigt, die dem Filtertext entsprechen. Die Groß- und Kleinschreibung des Filtertexts wird dabei nicht beachtet.</translation>
     </message>
     <message>

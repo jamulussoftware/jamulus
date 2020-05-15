@@ -555,8 +555,7 @@ int main ( int argc, char** argv )
     Q_INIT_RESOURCE(resources);
 
     // load translations
-    QTranslator myappTranslator;
-    QTranslator myqtTranslator;
+    QTranslator myappTranslator, myqtTranslator;
 
     if ( bUseGUI && bUseTranslation )
     {
@@ -565,8 +564,8 @@ int main ( int argc, char** argv )
             pApp->installTranslator ( &myappTranslator );
         }
 
-        QString myqtLocation = QLibraryInfo::location( QLibraryInfo::TranslationsPath );
-        if ( myqtTranslator.load ( QLocale(), "qt", "_", myqtLocation ) )
+        // allows the Qt messages to be translated in the application
+        if ( myqtTranslator.load ( QLocale(), "qt", "_", QLibraryInfo::location ( QLibraryInfo::TranslationsPath ) ) )
         {
             pApp->installTranslator ( &myqtTranslator );
         }

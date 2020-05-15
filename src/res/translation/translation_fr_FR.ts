@@ -2368,4 +2368,12 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>global</name>
+    <message>
+        <location filename="../../global.h" line="237"/>
+        <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

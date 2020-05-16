@@ -115,9 +115,12 @@ class CAudioMixerBoardSlots : public CAudioMixerBoardSlots<slotId - 1>
 
 public:
     void OnChGainValueChanged ( double dValue ) { UpdateGainValue ( slotId - 1, dValue ); }
+    void OnChPanValueChanged ( double dValue ) { UpdatePanValue ( slotId - 1, dValue ); }
 
 protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
+                                   const double dValue ) = 0;
+    virtual void UpdatePanValue ( const int    iChannelIdx,
                                    const double dValue ) = 0;
 };
 
@@ -179,6 +182,8 @@ protected:
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const double dValue );
+    virtual void UpdatePanValue ( const int    iChannelIdx,
+                                   const double dValue );
 
     template<unsigned int slotId>
     inline void connectFaderSignalsToMixerBoardSlots();
@@ -186,6 +191,10 @@ protected:
 #else
     void UpdateGainValue ( const int    iChannelIdx,
                            const double dValue );
+
+    void UpdatePanValue ( const int    iChannelIdx,
+                           const double dValue );
+
 
 #endif
 
@@ -245,6 +254,57 @@ public slots:
     void OnGainValueChangedCh47 ( double dValue ) { UpdateGainValue ( 47, dValue ); }
     void OnGainValueChangedCh48 ( double dValue ) { UpdateGainValue ( 48, dValue ); }
     void OnGainValueChangedCh49 ( double dValue ) { UpdateGainValue ( 49, dValue ); }
+
+    void OnpanValueChangedCh0  ( double dValue ) { UpdatePanValue ( 0,  dValue ); }
+    void OnpanValueChangedCh1  ( double dValue ) { UpdatePanValue ( 1,  dValue ); }
+    void OnpanValueChangedCh2  ( double dValue ) { UpdatePanValue ( 2,  dValue ); }
+    void OnpanValueChangedCh3  ( double dValue ) { UpdatePanValue ( 3,  dValue ); }
+    void OnpanValueChangedCh4  ( double dValue ) { UpdatePanValue ( 4,  dValue ); }
+    void OnpanValueChangedCh5  ( double dValue ) { UpdatePanValue ( 5,  dValue ); }
+    void OnpanValueChangedCh6  ( double dValue ) { UpdatePanValue ( 6,  dValue ); }
+    void OnpanValueChangedCh7  ( double dValue ) { UpdatePanValue ( 7,  dValue ); }
+    void OnpanValueChangedCh8  ( double dValue ) { UpdatePanValue ( 8,  dValue ); }
+    void OnpanValueChangedCh9  ( double dValue ) { UpdatePanValue ( 9,  dValue ); }
+    void OnpanValueChangedCh10 ( double dValue ) { UpdatePanValue ( 10, dValue ); }
+    void OnpanValueChangedCh11 ( double dValue ) { UpdatePanValue ( 11, dValue ); }
+    void OnpanValueChangedCh12 ( double dValue ) { UpdatePanValue ( 12, dValue ); }
+    void OnpanValueChangedCh13 ( double dValue ) { UpdatePanValue ( 13, dValue ); }
+    void OnpanValueChangedCh14 ( double dValue ) { UpdatePanValue ( 14, dValue ); }
+    void OnpanValueChangedCh15 ( double dValue ) { UpdatePanValue ( 15, dValue ); }
+    void OnpanValueChangedCh16 ( double dValue ) { UpdatePanValue ( 16, dValue ); }
+    void OnpanValueChangedCh17 ( double dValue ) { UpdatePanValue ( 17, dValue ); }
+    void OnpanValueChangedCh18 ( double dValue ) { UpdatePanValue ( 18, dValue ); }
+    void OnpanValueChangedCh19 ( double dValue ) { UpdatePanValue ( 19, dValue ); }
+    void OnpanValueChangedCh20 ( double dValue ) { UpdatePanValue ( 20, dValue ); }
+    void OnpanValueChangedCh21 ( double dValue ) { UpdatePanValue ( 21, dValue ); }
+    void OnpanValueChangedCh22 ( double dValue ) { UpdatePanValue ( 22, dValue ); }
+    void OnpanValueChangedCh23 ( double dValue ) { UpdatePanValue ( 23, dValue ); }
+    void OnpanValueChangedCh24 ( double dValue ) { UpdatePanValue ( 24, dValue ); }
+    void OnpanValueChangedCh25 ( double dValue ) { UpdatePanValue ( 25, dValue ); }
+    void OnpanValueChangedCh26 ( double dValue ) { UpdatePanValue ( 26, dValue ); }
+    void OnpanValueChangedCh27 ( double dValue ) { UpdatePanValue ( 27, dValue ); }
+    void OnpanValueChangedCh28 ( double dValue ) { UpdatePanValue ( 28, dValue ); }
+    void OnpanValueChangedCh29 ( double dValue ) { UpdatePanValue ( 29, dValue ); }
+    void OnpanValueChangedCh30 ( double dValue ) { UpdatePanValue ( 30, dValue ); }
+    void OnpanValueChangedCh31 ( double dValue ) { UpdatePanValue ( 31, dValue ); }
+    void OnpanValueChangedCh32 ( double dValue ) { UpdatePanValue ( 32, dValue ); }
+    void OnpanValueChangedCh33 ( double dValue ) { UpdatePanValue ( 33, dValue ); }
+    void OnpanValueChangedCh34 ( double dValue ) { UpdatePanValue ( 34, dValue ); }
+    void OnpanValueChangedCh35 ( double dValue ) { UpdatePanValue ( 35, dValue ); }
+    void OnpanValueChangedCh36 ( double dValue ) { UpdatePanValue ( 36, dValue ); }
+    void OnpanValueChangedCh37 ( double dValue ) { UpdatePanValue ( 37, dValue ); }
+    void OnpanValueChangedCh38 ( double dValue ) { UpdatePanValue ( 38, dValue ); }
+    void OnpanValueChangedCh39 ( double dValue ) { UpdatePanValue ( 39, dValue ); }
+    void OnpanValueChangedCh40 ( double dValue ) { UpdatePanValue ( 40, dValue ); }
+    void OnpanValueChangedCh41 ( double dValue ) { UpdatePanValue ( 41, dValue ); }
+    void OnpanValueChangedCh42 ( double dValue ) { UpdatePanValue ( 42, dValue ); }
+    void OnpanValueChangedCh43 ( double dValue ) { UpdatePanValue ( 43, dValue ); }
+    void OnpanValueChangedCh44 ( double dValue ) { UpdatePanValue ( 44, dValue ); }
+    void OnpanValueChangedCh45 ( double dValue ) { UpdatePanValue ( 45, dValue ); }
+    void OnpanValueChangedCh46 ( double dValue ) { UpdatePanValue ( 46, dValue ); }
+    void OnpanValueChangedCh47 ( double dValue ) { UpdatePanValue ( 47, dValue ); }
+    void OnpanValueChangedCh48 ( double dValue ) { UpdatePanValue ( 48, dValue ); }
+    void OnpanValueChangedCh49 ( double dValue ) { UpdatePanValue ( 49, dValue ); }
 
     void OnChSoloStateChanged() { UpdateSoloStates(); }
 

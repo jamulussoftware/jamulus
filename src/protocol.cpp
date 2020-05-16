@@ -64,6 +64,13 @@ MESSAGES (with connection)
     +-------------------+--------------+
 
 
+- PROTMESSID_CHANNEL_PAN: Gain of channel
+
+    +-------------------+-----------------+
+    | 1 byte channel ID | 2 bytes panning |
+    +-------------------+-----------------+
+
+
 - PROTMESSID_CONN_CLIENTS_LIST: Information about connected clients
 
     for each connected client append following data:

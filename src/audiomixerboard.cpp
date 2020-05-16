@@ -57,6 +57,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     // setup channel level
     plbrChannelLevel->setContentsMargins ( 0, 3, 2, 3 );
+    plbrChannelLevel->SetClipTimeout ( 10000 );
 
     // setup slider
     pFader->setPageStep     ( 1 );

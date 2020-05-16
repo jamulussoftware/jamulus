@@ -42,16 +42,14 @@
 
 
 /* Internal classes declaration ***********************************************/
-/* Common interface to LED class and Bar class */
+/* Common private interface to LED class and Bar class */
 class CLevelMeterInterface
 {
 public:
     virtual ~CLevelMeterInterface() {}
-    virtual void SetValue( double dValue ) = 0;
+    virtual void SetValue ( double dValue ) = 0;
     virtual void Reset () = 0;
-
-protected:
-    static constexpr float fClipLimitRatio = 0.95f;
+    virtual void ClipSet( bool bSet ) = 0;
 };
 
 class CLevelMeterBar : public CLevelMeterInterface
@@ -63,6 +61,7 @@ public:
 
     void SetValue ( double dValue ) override;
     void Reset() override;
+    void ClipSet( bool bSet ) override;
 
 protected:
     QProgressBar* pBar;
@@ -78,6 +77,7 @@ public:
 
     void SetValue( double dValue ) override;
     void Reset() override;
+    void ClipSet( bool bSet ) override;
 
 protected:
     class cLED
@@ -129,13 +129,16 @@ public:
     void Reset();
     void SetValue ( const double dValue );
     void SetLevelMeterType ( const ELevelMeterType eNType );
+    void SetClipTimeout ( int iMilliseconds );
 
     // Pair another bar with this one. Used to cause action on the paired bar
     // upon mouse event on this bar.
     void SetPairedBar ( CLevelMeter* pBar );
 
-protected:
+protected slots:
+    void ClipReset();
 
+protected:
     virtual void changeEvent ( QEvent* curEvent );
     void mousePressEvent ( QMouseEvent* event ) override;
 
@@ -146,4 +149,8 @@ protected:
 
     // Common interface to pLevelBar or pLevelLED, depending on selected skin
     CLevelMeterInterface* pCurrentLevelMeter;
+
+    QTimer*            pClipTimer;
+
+    static constexpr float fClipLimitRatio = 0.95f;
 };

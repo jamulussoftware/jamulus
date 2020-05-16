@@ -58,6 +58,11 @@ CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
 
     // initialize the meter type to default
     SetLevelMeterType ( MT_BAR );
+
+    pClipTimer = new QTimer ( this );
+    connect(pClipTimer, SIGNAL ( timeout() ), this, SLOT ( ClipReset() ) );
+    pClipTimer->setSingleShot ( true );
+    SetClipTimeout ( 60000 ); // 60000: default to one minute
 }
 
 CLevelMeter::~CLevelMeter()
@@ -79,6 +84,10 @@ void CLevelMeter::Reset()
 {
     pCurrentLevelMeter->Reset();
 }
+
+void CLevelMeter::ClipReset()
+{
+    pCurrentLevelMeter->ClipSet ( false );
 }
 
 void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
@@ -97,12 +106,25 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
     }
 }
 
+void CLevelMeter::SetClipTimeout ( int iMilliseconds )
+{
+    if ( pClipTimer != NULL )
+    {
+        pClipTimer->setInterval ( iMilliseconds );
+    }
+}
+
 void CLevelMeter::SetValue ( const double dValue )
 {
     // Scale of input argument dValue is [0..NUM_STEPS_LED_BAR]
     if ( this->isEnabled() )
     {
         pCurrentLevelMeter->SetValue ( dValue );
+        if ( dValue > fClipLimitRatio * NUM_STEPS_LED_BAR)
+        {
+            pCurrentLevelMeter->ClipSet ( true );
+            pClipTimer->start();
+        }
     }
 }
 
@@ -178,17 +200,18 @@ void CLevelMeterBar::SetValue ( double dValue )
     // Scale of input argument dValue is [0..NUM_STEPS_LED_BAR]
     // Range of the progress bar is [0..100 * NUM_STEPS_LED_BAR]
     pBar->setValue ( 100 * dValue );
-    if ( dValue > fClipLimitRatio * NUM_STEPS_LED_BAR ) {
-        pClipBar->setValue ( 1 );
-    }
 }
 
 void CLevelMeterBar::Reset()
 {
     pBar->setValue ( 0 );
-    pClipBar->setValue ( 0 );
+    ClipSet ( false );
 }
 
+void CLevelMeterBar::ClipSet( bool bSet )
+{
+    pClipBar->setValue ( bSet ? 1 : 0 );
+}
 
 CLevelMeterLED::CLevelMeterLED ( QWidget* pParent )
 {
@@ -259,11 +282,6 @@ void CLevelMeterLED::SetValue ( double dValue )
             vecpLEDs[iLEDIdx]->setColor ( cLED::RL_RED );
         }
     }
-    if ( dValue > fClipLimitRatio * NUM_STEPS_LED_BAR)
-    {
-        // indicate clipping signal
-        pClipLED->setColor ( cLED::RL_RED );
-    }
 }
 
 void CLevelMeterLED::Reset()
@@ -273,7 +291,12 @@ void CLevelMeterLED::Reset()
     {
         vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
     }
-    pClipLED->setColor ( cLED::RL_GREY );
+    ClipSet( false );
+}
+
+void CLevelMeterLED::ClipSet( bool bSet )
+{
+    pClipLED->setColor ( bSet ? cLED::RL_RED : cLED::RL_GREY );
 }
 
 CLevelMeterLED::cLED::cLED ( QWidget* parent ) :

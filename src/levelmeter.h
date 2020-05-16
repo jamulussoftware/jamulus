@@ -35,51 +35,38 @@
 
 
 /* Definitions ****************************************************************/
-// defines for LED level meter CMultiColorLEDBar
+// defines for LED level meter CLevelMeterLED
 #define NUM_STEPS_LED_BAR                8
 #define RED_BOUND_LED_BAR                7
 #define YELLOW_BOUND_LED_BAR             5
 
 
-/* Classes ********************************************************************/
-
-class CLevelBar
+/* Internal classes declaration ***********************************************/
+class CLevelMeterBar
 {
 public:
 
-    CLevelBar ( QWidget* pParent, float fClipRaio );
-    virtual ~CLevelBar();
+    CLevelMeterBar ( QWidget* pParent, float fClipRatio );
+    virtual ~CLevelMeterBar();
 
-    void setValue ( int dValue );
+    void SetValue ( double dValue );
     void Reset();
 
 protected:
     QProgressBar* pBar;
     QProgressBar* pClipBar;
-    const float fClipLimitRatio;
+    const float   fClipLimitRatio;
 };
 
-class CMultiColorLEDBar : public QWidget
+class CLevelMeterLED
 {
-    Q_OBJECT
-
 public:
-    enum ELevelMeterType
-    {
-        MT_LED,
-        MT_BAR
-    };
 
-    CMultiColorLEDBar ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
-    virtual ~CMultiColorLEDBar();
+    CLevelMeterLED ( QWidget* pParent, float fClipRatio );
+    virtual ~CLevelMeterLED();
 
+    void SetValue ( int dValue );
     void Reset();
-    void setValue ( const double dValue );
-    void SetLevelMeterType ( const ELevelMeterType eNType );
-
-    // Pair another bar with this one. Used to cause action on the paired bar
-    // upon mouse event on this bar.
-    void SetPairedBar ( CMultiColorLEDBar* pBar );
 
 protected:
     class cLED
@@ -109,15 +96,45 @@ protected:
         QLabel*     pLEDLabel;
     };
 
+    CVector<cLED*>     vecpLEDs;
+    cLED*              pClipLED;
+
+    const float   fClipLimitRatio;
+};
+
+/* Interface class ************************************************************/
+class CLevelMeter : public QWidget
+{
+    Q_OBJECT
+
+public:
+    enum ELevelMeterType
+    {
+        MT_LED,
+        MT_BAR
+    };
+
+    CLevelMeter ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
+    virtual ~CLevelMeter();
+
+    void Reset();
+    void SetValue ( const double dValue );
+    void SetLevelMeterType ( const ELevelMeterType eNType );
+
+    // Pair another bar with this one. Used to cause action on the paired bar
+    // upon mouse event on this bar.
+    void SetPairedBar ( CLevelMeter* pBar );
+
+protected:
+
     virtual void changeEvent ( QEvent* curEvent );
     void mousePressEvent ( QMouseEvent* event ) override;
 
     QStackedLayout*    pStackedLayout;
     ELevelMeterType    eLevelMeterType;
-    CVector<cLED*>     vecpLEDs;
-    cLED*              pClipLED;
-    CLevelBar*         pLevelBar;
-    CMultiColorLEDBar* pPairedBar;
+    CLevelMeterBar*    pLevelBar;
+    CLevelMeterLED*    pLevelLED;
+    CLevelMeter*       pPairedBar;
 
     static constexpr float fClipLimitRatio = 0.95f;
 };

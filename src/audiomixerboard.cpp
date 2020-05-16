@@ -37,7 +37,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFrame                      = new QFrame            ( pNW );
 
     pLevelsBox                  = new QWidget           ( pFrame );
-    plbrChannelLevel            = new CMultiColorLEDBar ( pLevelsBox );
+    plbrChannelLevel            = new CLevelMeter       ( pLevelsBox );
     pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
 
     pMuteSoloBox                = new QWidget           ( pFrame );
@@ -174,7 +174,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
 
         pcbMute->setText                    ( tr ( "MUTE" ) );
         pcbSolo->setText                    ( tr ( "SOLO" ) );
-        plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
+        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED );
         break;
 
     default:
@@ -182,7 +182,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pFader->setStyleSheet               ( "" );
         pcbMute->setText                    ( tr ( "Mute" ) );
         pcbSolo->setText                    ( tr ( "Solo" ) );
-        plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
+        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR );
         break;
     }
 }
@@ -249,7 +249,7 @@ void CChannelFader::Reset()
     // reset mute/solo check boxes and level meter
     pcbMute->setChecked ( false );
     pcbSolo->setChecked ( false );
-    plbrChannelLevel->setValue ( 0 );
+    plbrChannelLevel->Reset();
 
     // clear instrument picture, country flag, tool tips and label text
     plblLabel->setText ( "" );
@@ -348,7 +348,7 @@ void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
 
 void CChannelFader::SetChannelLevel ( const uint16_t iLevel )
 {
-    plbrChannelLevel->setValue ( iLevel );
+    plbrChannelLevel->SetValue ( iLevel );
 }
 
 void CChannelFader::SetText ( const CChannelInfo& ChanInfo )

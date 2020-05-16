@@ -42,7 +42,7 @@
 #include "util.h"
 #include "serverlogging.h"
 #include "serverlist.h"
-#include "multicolorledbar.h"
+#include "levelmeter.h"
 #include "recorder/jamrecorder.h"
 
 

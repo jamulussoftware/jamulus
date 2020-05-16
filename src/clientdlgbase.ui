@@ -240,7 +240,7 @@
             <item>
              <layout class="QHBoxLayout">
               <item>
-               <widget class="CMultiColorLEDBar" name="lbrInputLevelL" native="true">
+               <widget class="CLevelMeter" name="lbrInputLevelL" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -256,7 +256,7 @@
                </widget>
               </item>
               <item>
-               <widget class="CMultiColorLEDBar" name="lbrInputLevelR" native="true">
+               <widget class="CLevelMeter" name="lbrInputLevelR" native="true">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
                   <horstretch>0</horstretch>
@@ -574,9 +574,9 @@
    <header>audiomixerboard.h</header>
   </customwidget>
   <customwidget>
-   <class>CMultiColorLEDBar</class>
+   <class>CLevelMeter</class>
    <extends>QWidget</extends>
-   <header>multicolorledbar.h</header>
+   <header>levelmeter.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

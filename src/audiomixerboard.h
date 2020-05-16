@@ -36,7 +36,7 @@
 #include <QHostAddress>
 #include "global.h"
 #include "util.h"
-#include "multicolorledbar.h"
+#include "levelmeter.h"
 
 
 /* Classes ********************************************************************/
@@ -77,7 +77,7 @@ protected:
 
     QWidget*           pLevelsBox;
     QWidget*           pMuteSoloBox;
-    CMultiColorLEDBar* plbrChannelLevel;
+    CLevelMeter*       plbrChannelLevel;
     QSlider*           pFader;
 
     QCheckBox*         pcbMute;

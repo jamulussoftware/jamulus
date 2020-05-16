@@ -208,8 +208,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     lbrInputLevelL->SetPairedBar ( lbrInputLevelR );
 
     // init input level meter bars
-    lbrInputLevelL->setValue ( 0 );
-    lbrInputLevelR->setValue ( 0 );
+    lbrInputLevelL->Reset();
+    lbrInputLevelR->Reset();
 
     // init status LEDs
     ledBuffers->Reset();
@@ -951,8 +951,8 @@ void CClientDlg::OnTimerSigMet()
     }
 
     // show current level
-    lbrInputLevelL->setValue ( dCurSigLeveldB_L );
-    lbrInputLevelR->setValue ( dCurSigLeveldB_R );
+    lbrInputLevelL->SetValue ( dCurSigLeveldB_L );
+    lbrInputLevelR->SetValue ( dCurSigLeveldB_R );
 }
 
 void CClientDlg::OnTimerBuffersLED()
@@ -1176,8 +1176,8 @@ rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
                                "font:  bold;" );
 #endif
 
-        lbrInputLevelL->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
-        lbrInputLevelR->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED );
         break;
 
     default:
@@ -1190,8 +1190,8 @@ rbtReverbSelL->setStyleSheet ( "" );
 rbtReverbSelR->setStyleSheet ( "" );
 #endif
 
-        lbrInputLevelL->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
-        lbrInputLevelR->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR );
         break;
     }
 

@@ -323,7 +323,7 @@ HEADERS += src/audiomixerboard.h \
     src/clientdlg.h \
     src/serverdlg.h \
     src/multicolorled.h \
-    src/multicolorledbar.h \
+    src/levelmeter.h \
     src/protocol.h \
     src/server.h \
     src/serverlist.h \
@@ -446,7 +446,7 @@ SOURCES += src/audiomixerboard.cpp \
     src/serverdlg.cpp \
     src/main.cpp \
     src/multicolorled.cpp \
-    src/multicolorledbar.cpp \
+    src/levelmeter.cpp \
     src/protocol.cpp \
     src/server.cpp \
     src/serverlist.cpp \

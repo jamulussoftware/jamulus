@@ -140,7 +140,6 @@ protected:
     void mousePressEvent ( QMouseEvent* event ) override;
 
     QStackedLayout*    pStackedLayout;
-    ELevelMeterType    eLevelMeterType;
     CLevelMeterBar*    pLevelBar;
     CLevelMeterLED*    pLevelLED;
     CLevelMeter*       pPairedBar;

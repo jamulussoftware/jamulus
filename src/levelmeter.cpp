@@ -32,8 +32,7 @@
 
 /* Implementation *************************************************************/
 CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
-    QWidget ( parent, f ),
-    eLevelMeterType ( MT_BAR )
+    QWidget ( parent, f )
 {
     pPairedBar = NULL;
 
@@ -57,8 +56,8 @@ CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
     // 15px + 2 * 1px + 2 * 1px = 19px
     pwBarMeter->setMinimumSize    ( QSize ( 19, 1 ) );
 
-    // update the meter type (using the default value of the meter type)
-    SetLevelMeterType ( eLevelMeterType );
+    // initialize the meter type to default
+    SetLevelMeterType ( MT_BAR );
 }
 
 CLevelMeter::~CLevelMeter()
@@ -84,8 +83,6 @@ void CLevelMeter::Reset()
 
 void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
 {
-    eLevelMeterType = eNType;
-
     switch ( eNType )
     {
     case MT_LED:

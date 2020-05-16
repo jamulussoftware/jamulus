@@ -668,13 +668,10 @@ void CServer::OnAboutToQuit()
 void CServer::OnHandledSignal ( int sigNum )
 {
 #ifdef _WIN32
-
     // Windows does not actually get OnHandledSignal triggered
     QCoreApplication::instance()->exit();
     Q_UNUSED ( sigNum )
-
 #else
-
     switch ( sigNum )
     {
 
@@ -690,10 +687,16 @@ void CServer::OnHandledSignal ( int sigNum )
 
     default:
         break;
-
     }
-
 #endif
+}
+
+void CServer::RequestNewRecording()
+{
+    if ( bEnableRecording )
+    {
+        emit RestartRecorder();
+    }
 }
 
 void CServer::Start()
@@ -1588,13 +1591,5 @@ void CServer::CreateLevelsForAllConChannels ( const int                        i
         }
 
         vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevel ) );
-    }
-}
-
-void CServer::RequestNewRecording()
-{
-    if ( bEnableRecording )
-    {
-        emit RestartRecorder();
     }
 }

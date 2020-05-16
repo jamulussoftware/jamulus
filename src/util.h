@@ -571,7 +571,7 @@ enum ECSAddType
     AT_GENERAL_NORTHAMERICA = 2
 };
 
-inline QString csAddTypeToString ( ECSAddType eAddrType )
+inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
 {
     switch ( eAddrType )
     {

@@ -346,9 +346,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // central server address type combo box
     cbxCentServAddrType->clear();
-    cbxCentServAddrType->addItem ( csAddTypeToString ( AT_MANUAL ) );
-    cbxCentServAddrType->addItem ( csAddTypeToString ( AT_DEFAULT ) );
-    cbxCentServAddrType->addItem ( csAddTypeToString ( AT_GENERAL_NORTHAMERICA ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_MANUAL ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENERAL_NORTHAMERICA ) );
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
     UpdateCentralServerDependency();
 

@@ -215,7 +215,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="116"/>
         <source>Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
-        <translation>Règle le niveau audio de ce canal. Tous les clients connectés au serveur se verront attribuer un charriot audio à chaque client, ce qui permettra d&apos;ajuster le mixage local.</translation>
+        <translation>Règle le niveau audio de ce canal. Tous les clients connectés au serveur se verront attribuer un chariot audio à chaque client, ce qui permettra d&apos;ajuster le mixage local.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="119"/>
@@ -245,27 +245,27 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="132"/>
         <source>Fader Tag</source>
-        <translation>Étiquette de charriot</translation>
+        <translation>Étiquette de chariot</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="132"/>
         <source>The fader tag identifies the connected client. The tag name, the picture of your instrument and a flag of your country can be set in the main window.</source>
-        <translation>L&apos;étiquette de charriot identifie le client connecté. Le nom du tag, la photo de votre instrument et un drapeau de votre pays peuvent être définis dans la fenêtre principale.</translation>
+        <translation>L&apos;étiquette de chariot identifie le client connecté. Le nom du tag, la photo de votre instrument et un drapeau de votre pays peuvent être définis dans la fenêtre principale.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="137"/>
         <source>Mixer channel instrument picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Image d&apos;instrument de canal de mixeur</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="139"/>
         <source>Mixer channel label (fader tag)</source>
-        <translation type="unfinished"></translation>
+        <translation>Label de canal de mixeur (étiquette de chariot)</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="141"/>
         <source>Mixer channel country flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Drapeau de pays de canal de mixeur</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="175"/>
@@ -344,7 +344,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="37"/>
         <source>The chat window shows a history of all chat messages.</source>
-        <translation>La fenêtre de tchate affiche un historique de tous les messages de chat.</translation>
+        <translation>La fenêtre de tchate affiche un historique de tous les messages de tchate.</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="40"/>
@@ -364,7 +364,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="48"/>
         <source>New chat text edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue d&apos;édition de nouveau texte de tchate</translation>
     </message>
 </context>
 <context>
@@ -430,12 +430,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="71"/>
         <source>Input level meter</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicateur de niveau d&apos;entrée</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="72"/>
         <source>Simulates an analog LED level meter.</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicateur de niveau simulant un voyant analogique</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="87"/>
@@ -476,17 +476,17 @@
     <message>
         <location filename="../../clientdlg.cpp" line="134"/>
         <source>Reverberation effect level setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètre de niveau d&apos;effet de réverbération</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="143"/>
         <source>Left channel selection for reverberation</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélection de canal gauche pour la réverbération</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="145"/>
         <source>Right channel selection for reverberation</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélection de canal droit pour la réverbération</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="157"/>
@@ -496,12 +496,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="161"/>
         <source>Delay status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicateur LED d&apos;état de délai</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="182"/>
         <source>Buffers status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicateur LED d&apos;état de tampon</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="204"/>
@@ -648,7 +648,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="703"/>
         <source>Central Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Serveur central</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="809"/>
@@ -774,22 +774,22 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="72"/>
         <source>Local jitter buffer slider control</source>
-        <translation type="unfinished"></translation>
+        <translation>Chariot de contrôle de la mémoire tampon de la gigue locale</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="75"/>
         <source>Server jitter buffer slider control</source>
-        <translation type="unfinished"></translation>
+        <translation>Chariot de contrôle de la mémoire tampon de la gigue du serveur</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="77"/>
         <source>Auto jitter buffer switch</source>
-        <translation type="unfinished"></translation>
+        <translation>Commutateur de tampon de gigue automatique</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="79"/>
         <source>Jitter buffer status LED indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicateur LED de l&apos;état du tampon de gigue</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="83"/>
@@ -814,7 +814,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="92"/>
         <source>Sound card device selector combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant de sélecteur de périphérique d&apos;interface audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="96"/>
@@ -829,7 +829,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="105"/>
         <source>Sound Card Channel Mapping</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartographie des canaux de la carte son</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="106"/>
@@ -849,22 +849,22 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="116"/>
         <source>Left input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant de sélection de canal d&apos;entrée gauche</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="118"/>
         <source>Right input channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant de sélection de canal d&apos;entrée droite</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="120"/>
         <source>Left output channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant de sélection de canal de sortie gauche</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="122"/>
         <source>Right output channel selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant de sélection de canal de sortie droite</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="125"/>
@@ -884,7 +884,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="132"/>
         <source>Enable small network buffers check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Case-à-cocher pour activer les petits tampons de réseau</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="135"/>
@@ -964,22 +964,22 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="175"/>
         <source>128 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouton radio de paramétrage à 128 échantillons</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>256 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouton radio de paramétrage à 256 échantillons</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="181"/>
         <source>512 samples setting radio button</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouton radio de paramétrage à 512 échantillons</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>
         <source>ASIO setup push button</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouton-poussoir de paramétrage ASIO</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="188"/>
@@ -994,7 +994,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="191"/>
         <source>Fancy skin check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Case-à-cocher pour l&apos;habillage fantaisie</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="194"/>
@@ -1009,7 +1009,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="197"/>
         <source>Display channel levels check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Case-à-cocher pour l&apos;affichage des niveaux de canaux</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
@@ -1034,7 +1034,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="219"/>
         <source>Audio channels combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant de canaux audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="222"/>
@@ -1049,7 +1049,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="231"/>
         <source>Audio quality combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant de qualité audio</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="234"/>
@@ -1064,7 +1064,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="243"/>
         <source>New client level edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue d&apos;édition de niveau de nouveau client</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="246"/>
@@ -1079,12 +1079,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="256"/>
         <source>Default central server type combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant de type de serveur central par défaut</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="257"/>
         <source>Central server address line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ligne d&apos;édition pour l&apos;adresse du serveur central</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="260"/>
@@ -1190,7 +1190,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="593"/>
         <source>Predefined Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse prédéfinie</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="633"/>
@@ -1411,7 +1411,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="73"/>
         <source>Server address edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue d&apos;édition d&apos;addresse de serveur</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="74"/>
@@ -1431,7 +1431,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="80"/>
         <source>Filter edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue d&apos;édition de filtre</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="83"/>
@@ -1446,7 +1446,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="86"/>
         <source>Show all musicians check box</source>
-        <translation type="unfinished"></translation>
+        <translation>Case-à-cocher pour afficher tous les musiciens</translation>
     </message>
 </context>
 <context>
@@ -1644,7 +1644,7 @@
     <message>
         <location filename="../../util.cpp" line="716"/>
         <source>Alias or name edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue d&apos;édition de pseudo ou de nom</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="718"/>
@@ -1659,12 +1659,12 @@
     <message>
         <location filename="../../util.cpp" line="722"/>
         <source>City edit box</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue d&apos;édition de ville</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="724"/>
         <source>Skill level combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant de niveau de compétence</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="669"/>
@@ -1920,7 +1920,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="50"/>
         <source>Connected clients list view</source>
-        <translation type="unfinished"></translation>
+        <translation>Vue de la liste dess clients connectés</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="53"/>
@@ -1940,7 +1940,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="60"/>
         <source>Show Creative Commons Licence Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialogue d&apos;affichage de la licence Creative Commons</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="61"/>
@@ -1985,12 +1985,12 @@
     <message>
         <location filename="../../serverdlg.cpp" line="89"/>
         <source>Default central server type combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant de type de serveur central par défaut</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="90"/>
         <source>Central server address line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ligne d&apos;édition pour l&apos;adresse du serveur central</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
@@ -2005,7 +2005,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="100"/>
         <source>Server name line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ligne d&apos;édition pour le nom du serveur</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="103"/>
@@ -2020,7 +2020,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="110"/>
         <source>City where the server is located line edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Ligne d&apos;édition pour la ville où est situé le serveur</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="113"/>
@@ -2035,7 +2035,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="121"/>
         <source>Country where the server is located combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant du pays où le serveur est situé</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="134"/>
@@ -2068,7 +2068,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="525"/>
         <source>Predefined Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse prédéfinie</translation>
     </message>
     <message>
         <source>Manual</source>
@@ -2319,7 +2319,7 @@
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
         <source>The </source>
-        <translation type="unfinished">Le logiciel </translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
@@ -2352,7 +2352,7 @@
     <message>
         <location filename="../../soundbase.cpp" line="147"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="189"/>
@@ -2385,7 +2385,7 @@
     <message>
         <location filename="../../global.h" line="234"/>
         <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Pour plus d&apos;informations, utilisez l&apos;aide Qu&apos;est-ce que c&apos;est (menu d&apos;aide, bouton droit de la souris ou Maj+F1)</translation>
     </message>
 </context>
 </TS>

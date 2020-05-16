@@ -156,13 +156,15 @@ public:
     // settings
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
+    CVector<int>     vecStoredPanValues;
     CVector<int>     vecStoredFaderIsSolo;
     CVector<int>     vecStoredFaderIsMute;
     int              iNewClientFaderLevel;
 
 protected:
-    bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
+    bool GetStoredFaderSettings (const CChannelInfo& ChanInfo,
                                   int&                iStoredFaderLevel,
+                                  int&                iStoredPanValue,
                                   bool&               bStoredFaderIsSolo,
                                   bool&               bStoredFaderIsMute );
 

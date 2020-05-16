@@ -562,6 +562,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     QScrollArea          ( parent ),
     vecStoredFaderTags   ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
     vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
+    vecStoredPanValues   ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX/2),
     vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     iNewClientFaderLevel ( 100 ),
@@ -913,15 +914,18 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                     // the text has actually changed, search in the list of
                     // stored settings if we have a matching entry
                     int  iStoredFaderLevel;
+                    int  iStoredPanValue;
                     bool bStoredFaderIsSolo;
                     bool bStoredFaderIsMute;
 
                     if ( GetStoredFaderSettings ( vecChanInfo[j],
                                                   iStoredFaderLevel,
+                                                  iStoredPanValue,
                                                   bStoredFaderIsSolo,
                                                   bStoredFaderIsMute ) )
                     {
                         vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel );
+                        vecpChanFader[i]->SetPanValue    ( iStoredPanValue   );
                         vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
                         vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
                     }
@@ -1029,6 +1033,7 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
          !pChanFader->GetReceivedName().isEmpty() )
     {
         CVector<int> viOldStoredFaderLevels ( vecStoredFaderLevels );
+        CVector<int> viOldStoredPanValues   ( vecStoredPanValues );
         CVector<int> vbOldStoredFaderIsSolo ( vecStoredFaderIsSolo );
         CVector<int> vbOldStoredFaderIsMute ( vecStoredFaderIsMute );
 
@@ -1042,6 +1047,7 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
 
         // current fader level and solo state is at the top of the list
         vecStoredFaderLevels[0] = pChanFader->GetFaderLevel();
+        vecStoredPanValues[0]   = pChanFader->GetPanValue();
         vecStoredFaderIsSolo[0] = pChanFader->IsSolo();
         vecStoredFaderIsMute[0] = pChanFader->IsMute();
         iTempListCnt            = 1;
@@ -1057,6 +1063,7 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
                 if ( iIdx != iOldIdx )
                 {
                     vecStoredFaderLevels[iTempListCnt] = viOldStoredFaderLevels[iIdx];
+                    vecStoredPanValues[iTempListCnt]   = viOldStoredPanValues[iIdx];
                     vecStoredFaderIsSolo[iTempListCnt] = vbOldStoredFaderIsSolo[iIdx];
                     vecStoredFaderIsMute[iTempListCnt] = vbOldStoredFaderIsMute[iIdx];
 
@@ -1069,6 +1076,7 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
 
 bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                                                 int&                iStoredFaderLevel,
+                                                int&                iStoredPanValue,
                                                 bool&               bStoredFaderIsSolo,
                                                 bool&               bStoredFaderIsMute)
 {
@@ -1082,6 +1090,7 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
             {
                 // copy stored settings values
                 iStoredFaderLevel  = vecStoredFaderLevels[iIdx];
+                iStoredPanValue   = vecStoredPanValues[iIdx];
                 bStoredFaderIsSolo = vecStoredFaderIsSolo[iIdx] != 0;
                 bStoredFaderIsMute = vecStoredFaderIsMute[iIdx] != 0;
 

@@ -77,6 +77,17 @@ void CSettings::Load()
             }
         }
 
+        // stored pan values
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+        {
+            if ( GetNumericIniSet ( IniXMLDocument, "client",
+                                    QString ( "storedpanvalue%1" ).arg ( iIdx ),
+                                    0, AUD_MIX_PAN_MAX/2, iValue ) )
+            {
+                pClient->vecStoredPanValues[iIdx] = iValue;
+            }
+        }
+
         // stored fader solo state
         for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
@@ -453,6 +464,14 @@ void CSettings::Save()
             SetNumericIniSet ( IniXMLDocument, "client",
                                QString ( "storedfaderlevel%1" ).arg ( iIdx ),
                                pClient->vecStoredFaderLevels[iIdx] );
+        }
+
+        // stored pan values
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+        {
+            SetNumericIniSet ( IniXMLDocument, "client",
+                               QString ( "storedpanvalue%1" ).arg ( iIdx ),
+                               pClient->vecStoredPanValues[iIdx] );
         }
 
         // stored fader solo states

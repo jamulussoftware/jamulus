@@ -101,9 +101,10 @@ LED bar:      lbr
 #define SYSTEM_FRAME_SIZE_SAMPLES        64
 #define DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ( 2 * SYSTEM_FRAME_SIZE_SAMPLES )
 
-// default server address
+// default server address and port numbers
 #define DEFAULT_SERVER_ADDRESS           "jamulus.fischvolk.de"
-#define DEFAULT_SERVER_NAME              "Central Server"
+#define DEFAULT_PORT_NUMBER              22124
+#define CENTSERV_GENERAL_NORTHAMERICA    "jamulus.fischvolk.de:22224"
 
 // getting started and software manual URL
 #define CLIENT_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Software-Manual"
@@ -115,10 +116,6 @@ LED bar:      lbr
 #define WELL_KNOWN_HOST                  "8.8.8.8" // Google
 #define WELL_KNOWN_PORT                  53        // DNS
 #define IP_LOOKUP_TIMEOUT                500       // ms
-
-// defined port numbers for client and server
-#define DEFAULT_PORT_NUMBER              22124
-#define DEFAULT_PORT_NUMBER_NORTHAMERICA 22224
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ            48000 // Hz

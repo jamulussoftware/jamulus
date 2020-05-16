@@ -565,10 +565,26 @@ enum ELicenceType
 // Central server address type -------------------------------------------------
 enum ECSAddType
 {
+    // used for settings -> enum values must be fixed!
     AT_MANUAL = 0,
-    AT_DEFAULT = 1, // Europe and others
-    AT_NORTH_AMERICA = 2
+    AT_DEFAULT = 1,
+    AT_GENERAL_NORTHAMERICA = 2
 };
+
+inline QString csAddTypeToString ( ECSAddType eAddrType )
+{
+    switch ( eAddrType )
+    {
+    case AT_MANUAL:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Manual" );
+
+    case AT_GENERAL_NORTHAMERICA:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Default (North America)" );
+
+    default: // AT_DEFAULT
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Default" );
+    }
+}
 
 
 // Slave server registration state ---------------------------------------------

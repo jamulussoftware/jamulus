@@ -646,6 +646,11 @@
         <translation>O CPU do cliente ou servidor está a 100%.</translation>
     </message>
     <message>
+        <location filename="../../clientdlg.cpp" line="703"/>
+        <source>Central Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../clientdlg.cpp" line="809"/>
         <source>user</source>
         <translation>utilizador</translation>
@@ -1147,17 +1152,17 @@
         <translation>Alta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="349"/>
+        <location filename="../../util.h" line="579"/>
         <source>Manual</source>
         <translation>Manual</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="350"/>
+        <location filename="../../util.h" line="585"/>
         <source>Default</source>
         <translation>Servidor Padrão</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="351"/>
+        <location filename="../../util.h" line="582"/>
         <source>Default (North America)</source>
         <translation>Servidor Padrão (America do Norte)</translation>
     </message>
@@ -1181,6 +1186,11 @@
         <location filename="../../clientsettingsdlg.cpp" line="523"/>
         <source>Buffer Delay: </source>
         <translation>Atraso do buffer:</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="593"/>
+        <source>Predefined Address</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="633"/>
@@ -2056,19 +2066,21 @@
         <translation> </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="191"/>
+        <location filename="../../serverdlg.cpp" line="525"/>
+        <source>Predefined Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation type="vanished">Manual</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="192"/>
         <source>Default</source>
-        <translation>Servidor Padrão</translation>
+        <translation type="vanished">Servidor Padrão</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="193"/>
         <source>Default (North America)</source>
-        <translation>Servidor Padrão (America do Norte)</translation>
+        <translation type="vanished">Servidor Padrão (America do Norte)</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="271"/>
@@ -2081,42 +2093,42 @@
         <translation>&amp;Janela</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="591"/>
+        <location filename="../../util.h" line="607"/>
         <source>Unregistered</source>
         <translation>Não Registado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="594"/>
+        <location filename="../../util.h" line="610"/>
         <source>Bad address</source>
         <translation>Endereço incorrecto</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="597"/>
+        <location filename="../../util.h" line="613"/>
         <source>Registration requested</source>
         <translation>Registo solicitado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="600"/>
+        <location filename="../../util.h" line="616"/>
         <source>Registration failed</source>
         <translation>Falha no registo</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="603"/>
+        <location filename="../../util.h" line="619"/>
         <source>Check server version</source>
         <translation>Verifique versão do servidor</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="606"/>
+        <location filename="../../util.h" line="622"/>
         <source>Registered</source>
         <translation>Registado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="609"/>
+        <location filename="../../util.h" line="625"/>
         <source>Central Server full</source>
         <translation>Servidor Central Cheio</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="612"/>
+        <location filename="../../util.h" line="628"/>
         <source>Unknown value </source>
         <translation>Valor desconhecido </translation>
     </message>
@@ -2371,7 +2383,7 @@
 <context>
     <name>global</name>
     <message>
-        <location filename="../../global.h" line="237"/>
+        <location filename="../../global.h" line="234"/>
         <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
         <translation>Para mais informações, use O que é isto (menu Ajuda, botão direito do rato ou Shift + F1)</translation>
     </message>

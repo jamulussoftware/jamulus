@@ -950,9 +950,9 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
 {
     switch ( eCentralServerAddressType )
     {
-    case AT_MANUAL:        return strCentralServerAddress;
-    case AT_NORTH_AMERICA: return QString ( "%1:%2" ).arg ( DEFAULT_SERVER_ADDRESS ).arg ( DEFAULT_PORT_NUMBER_NORTHAMERICA );
-    default:               return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
+    case AT_MANUAL:               return strCentralServerAddress;
+    case AT_GENERAL_NORTHAMERICA: return CENTSERV_GENERAL_NORTHAMERICA;
+    default:                      return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
     }
 }
 
@@ -1328,7 +1328,7 @@ ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountr
     case QLocale::Canada:
     case QLocale::Mexico:
     case QLocale::Greenland:
-        return AT_NORTH_AMERICA;
+        return AT_GENERAL_NORTHAMERICA;
 
     default:
         return AT_DEFAULT;

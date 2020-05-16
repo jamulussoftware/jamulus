@@ -42,31 +42,42 @@
 
 
 /* Internal classes declaration ***********************************************/
-class CLevelMeterBar
+/* Common interface to LED class and Bar class */
+class CLevelMeterInterface
+{
+public:
+    virtual ~CLevelMeterInterface() {}
+    virtual void SetValue( double dValue ) = 0;
+    virtual void Reset () = 0;
+
+protected:
+    static constexpr float fClipLimitRatio = 0.95f;
+};
+
+class CLevelMeterBar : public CLevelMeterInterface
 {
 public:
 
-    CLevelMeterBar ( QWidget* pParent, float fClipRatio );
+    CLevelMeterBar ( QWidget* pParent );
     virtual ~CLevelMeterBar();
 
-    void SetValue ( double dValue );
-    void Reset();
+    void SetValue ( double dValue ) override;
+    void Reset() override;
 
 protected:
     QProgressBar* pBar;
     QProgressBar* pClipBar;
-    const float   fClipLimitRatio;
 };
 
-class CLevelMeterLED
+class CLevelMeterLED : public CLevelMeterInterface
 {
 public:
 
-    CLevelMeterLED ( QWidget* pParent, float fClipRatio );
+    CLevelMeterLED ( QWidget* pParent );
     virtual ~CLevelMeterLED();
 
-    void SetValue ( int dValue );
-    void Reset();
+    void SetValue( double dValue ) override;
+    void Reset() override;
 
 protected:
     class cLED
@@ -98,11 +109,9 @@ protected:
 
     CVector<cLED*>     vecpLEDs;
     cLED*              pClipLED;
-
-    const float   fClipLimitRatio;
 };
 
-/* Interface class ************************************************************/
+/* Outside interface class ****************************************************/
 class CLevelMeter : public QWidget
 {
     Q_OBJECT
@@ -136,5 +145,6 @@ protected:
     CLevelMeterLED*    pLevelLED;
     CLevelMeter*       pPairedBar;
 
-    static constexpr float fClipLimitRatio = 0.95f;
+    // Common interface to pLevelBar or pLevelLED, depending on selected skin
+    CLevelMeterInterface* pCurrentLevelMeter;
 };

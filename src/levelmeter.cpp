@@ -38,12 +38,12 @@ CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
     pPairedBar = NULL;
 
     // initialize LED meter
-    QWidget*     pwLEDMeter  = new QWidget();
-    pLevelLED = new CLevelMeterLED ( pwLEDMeter, fClipLimitRatio );
+    QWidget*     pwLEDMeter  = new QWidget ( parent );
+    pLevelLED = new CLevelMeterLED ( pwLEDMeter );
 
     // initialize bar meter
-    QWidget*  pwBarMeter = new QWidget();
-    pLevelBar = new CLevelMeterBar ( pwBarMeter, fClipLimitRatio );
+    QWidget*  pwBarMeter = new QWidget ( parent );
+    pLevelBar = new CLevelMeterBar ( pwBarMeter );
 
     // setup stacked layout for meter type switching mechanism
     pStackedLayout = new QStackedLayout ( this );
@@ -78,14 +78,8 @@ void CLevelMeter::changeEvent ( QEvent* curEvent )
 
 void CLevelMeter::Reset()
 {
-    if ( eLevelMeterType == MT_LED )
-    {
-        pLevelLED->Reset();
-    }
-    else if (eLevelMeterType == MT_BAR )
-    {
-        pLevelBar->Reset();
-    }
+    pCurrentLevelMeter->Reset();
+}
 }
 
 void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
@@ -96,29 +90,22 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
     {
     case MT_LED:
         pStackedLayout->setCurrentIndex ( 0 );
+        pCurrentLevelMeter = pLevelLED;
         break;
 
     case MT_BAR:
         pStackedLayout->setCurrentIndex ( 1 );
+        pCurrentLevelMeter = pLevelBar;
         break;
     }
 }
 
 void CLevelMeter::SetValue ( const double dValue )
 {
-    // Note: scale of input argument dValue is [0..NUM_STEPS_LED_BAR]
+    // Scale of input argument dValue is [0..NUM_STEPS_LED_BAR]
     if ( this->isEnabled() )
     {
-        switch ( eLevelMeterType )
-        {
-        case MT_LED:
-            pLevelLED->SetValue ( dValue );
-            break;
-
-        case MT_BAR:
-            pLevelBar->SetValue ( 100 * dValue );
-            break;
-        }
+        pCurrentLevelMeter->SetValue ( dValue );
     }
 }
 
@@ -139,6 +126,157 @@ void CLevelMeter::mousePressEvent ( QMouseEvent* event )
 void CLevelMeter::SetPairedBar ( CLevelMeter* pBar )
 {
     this->pPairedBar = pBar;
+}
+
+
+/* Internal classes ***********************************************************/
+CLevelMeterBar::CLevelMeterBar ( QWidget* pParent )
+{
+    QVBoxLayout* pBarLayout = new QVBoxLayout ( pParent );
+
+    pBarLayout->setAlignment ( Qt::AlignHCenter );
+    pBarLayout->setMargin    ( 0 );
+    pBarLayout->setSpacing   ( 0 );
+    pBarLayout->setContentsMargins ( 0, 0, 0, 0 );
+
+    // create clip LED
+    pClipBar = new QProgressBar();
+    pBarLayout->addWidget ( pClipBar );
+    pBarLayout->addSpacing ( 5 ); // Keep clip bar separated from the rest of the bar
+
+    pClipBar->setOrientation ( Qt::Vertical );
+    pClipBar->setRange ( 0, 1 );
+    pClipBar->setFormat ( "" ); // suppress percent numbers
+    pClipBar->setMinimumSize ( QSize ( 19, 1 ) ); // 15px + 2 * 1px + 2 * 1px = 19px
+    pClipBar->setStyleSheet (
+        "QProgressBar        { margin:     1px;"
+        "                      padding:    1px; "
+        "                      width:      15px; "
+        "                      max-height: 8px; } "
+        "QProgressBar::chunk { background: red; }" );
+
+
+    pBar = new QProgressBar();
+    pBarLayout->addWidget ( pBar );
+
+    pBar->setOrientation ( Qt::Vertical );
+    pBar->setRange ( 0, 100 * NUM_STEPS_LED_BAR );
+    pBar->setFormat ( "" ); // suppress percent numbers
+    pBar->setMinimumSize ( QSize ( 19, 1 ) ); // 15px + 2 * 1px + 2 * 1px = 19px
+    pBar->setStyleSheet (
+        "QProgressBar        { margin:     1px;"
+        "                      padding:    1px; "
+        "                      width:      15px; }"
+        "QProgressBar::chunk { background: green; }" );
+}
+
+CLevelMeterBar::~CLevelMeterBar()
+{
+    delete pClipBar;
+    delete pBar;
+}
+
+void CLevelMeterBar::SetValue ( double dValue )
+{
+    // Scale of input argument dValue is [0..NUM_STEPS_LED_BAR]
+    // Range of the progress bar is [0..100 * NUM_STEPS_LED_BAR]
+    pBar->setValue ( 100 * dValue );
+    if ( dValue > fClipLimitRatio * NUM_STEPS_LED_BAR ) {
+        pClipBar->setValue ( 1 );
+    }
+}
+
+void CLevelMeterBar::Reset()
+{
+    pBar->setValue ( 0 );
+    pClipBar->setValue ( 0 );
+}
+
+
+CLevelMeterLED::CLevelMeterLED ( QWidget* pParent )
+{
+    QVBoxLayout* pLEDLayout = new QVBoxLayout ( pParent );
+    pLEDLayout->setAlignment ( Qt::AlignHCenter );
+    pLEDLayout->setMargin    ( 0 );
+    pLEDLayout->setSpacing   ( 0 );
+
+    // create clip LED
+    pClipLED = new cLED ( pParent );
+    pLEDLayout->addWidget ( pClipLED->getLabelPointer() );
+    pLEDLayout->addStretch(2); // Keep clip LED separated from the rest of the LED bar
+
+    // create LEDs
+    vecpLEDs.Init ( NUM_STEPS_LED_BAR );
+
+    for ( int iLEDIdx = NUM_STEPS_LED_BAR - 1; iLEDIdx >= 0; iLEDIdx-- )
+    {
+        // create LED object
+        vecpLEDs[iLEDIdx] = new cLED ( pParent );
+
+        // add LED to layout with spacer (do not add spacer after last LED)
+        pLEDLayout->addWidget ( vecpLEDs[iLEDIdx]->getLabelPointer() );
+        if ( iLEDIdx > 0 )
+        {
+            pLEDLayout->addStretch(1);
+        }
+    }
+}
+
+CLevelMeterLED::~CLevelMeterLED()
+{
+    // clean up the LED objects
+    for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
+    {
+        delete vecpLEDs[iLEDIdx];
+    }
+    delete pClipLED;
+}
+
+void CLevelMeterLED::SetValue ( double dValue )
+{
+    // Scale of input argument dValue is [0..NUM_STEPS_LED_BAR]
+
+    // update state of all LEDs for current level value
+    for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
+    {
+        // set active LED color if value is above current LED index
+        if ( iLEDIdx >= dValue )
+        {
+            // we use grey LED for inactive state
+            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
+        }
+        // check which color we should use (green, yellow or red)
+        else if ( iLEDIdx < YELLOW_BOUND_LED_BAR )
+        {
+            // green region
+            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREEN );
+        }
+        else if ( iLEDIdx < RED_BOUND_LED_BAR )
+        {
+            // yellow region
+            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_YELLOW );
+        }
+        else
+        {
+            // red region
+            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_RED );
+        }
+    }
+    if ( dValue > fClipLimitRatio * NUM_STEPS_LED_BAR)
+    {
+        // indicate clipping signal
+        pClipLED->setColor ( cLED::RL_RED );
+    }
+}
+
+void CLevelMeterLED::Reset()
+{
+    // update state of all LEDs
+    for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
+    {
+        vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
+    }
+    pClipLED->setColor ( cLED::RL_GREY );
 }
 
 CLevelMeterLED::cLED::cLED ( QWidget* parent ) :
@@ -188,153 +326,4 @@ void CLevelMeterLED::cLED::setColor ( const ELightColor eNewColor )
         }
         eCurLightColor = eNewColor;
     }
-}
-
-
-/* Internal classes ***********************************************************/
-CLevelMeterBar::CLevelMeterBar ( QWidget* pParent, float fClipRatio ):
-    fClipLimitRatio ( fClipRatio )
-{
-    QVBoxLayout* pBarLayout = new QVBoxLayout ( pParent );
-
-    pBarLayout->setAlignment ( Qt::AlignHCenter );
-    pBarLayout->setMargin    ( 0 );
-    pBarLayout->setSpacing   ( 0 );
-    pBarLayout->setContentsMargins ( 0, 0, 0, 0 );
-
-    // create clip LED
-    pClipBar = new QProgressBar();
-    pBarLayout->addWidget ( pClipBar );
-    pBarLayout->addSpacing ( 5 ); // Keep clip bar separated from the rest of the bar
-
-    pClipBar->setOrientation ( Qt::Vertical );
-    pClipBar->setRange ( 0, 1 );
-    pClipBar->setFormat ( "" ); // suppress percent numbers
-    pClipBar->setMinimumSize ( QSize ( 19, 1 ) ); // 15px + 2 * 1px + 2 * 1px = 19px
-    pClipBar->setStyleSheet (
-        "QProgressBar        { margin:     1px;"
-        "                      padding:    1px; "
-        "                      width:      15px; "
-        "                      max-height: 8px; } "
-        "QProgressBar::chunk { background: red; }" );
-
-
-    pBar = new QProgressBar();
-    pBarLayout->addWidget ( pBar );
-
-    pBar->setOrientation ( Qt::Vertical );
-    pBar->setRange ( 0, 100 * NUM_STEPS_LED_BAR );
-    pBar->setFormat ( "" ); // suppress percent numbers
-    pBar->setMinimumSize ( QSize ( 19, 1 ) ); // 15px + 2 * 1px + 2 * 1px = 19px
-    pBar->setStyleSheet (
-        "QProgressBar        { margin:     1px;"
-        "                      padding:    1px; "
-        "                      width:      15px; }"
-        "QProgressBar::chunk { background: green; }" );
-}
-
-CLevelMeterBar::~CLevelMeterBar()
-{
-    delete pClipBar;
-    delete pBar;
-}
-
-void CLevelMeterBar::SetValue ( double dValue )
-{
-    pBar->setValue ( dValue );
-    if ( dValue > fClipLimitRatio * 100 * NUM_STEPS_LED_BAR ) {
-        pClipBar->setValue ( 1 );
-    }
-}
-
-void CLevelMeterBar::Reset()
-{
-    pBar->setValue ( 0 );
-    pClipBar->setValue ( 0 );
-}
-
-
-CLevelMeterLED::CLevelMeterLED ( QWidget* pParent, float fClipRatio ):
-    fClipLimitRatio ( fClipRatio )
-{
-    QVBoxLayout* pLEDLayout = new QVBoxLayout ( pParent );
-    pLEDLayout->setAlignment ( Qt::AlignHCenter );
-    pLEDLayout->setMargin    ( 0 );
-    pLEDLayout->setSpacing   ( 0 );
-
-    // create clip LED
-    pClipLED = new cLED ( pParent );
-    pLEDLayout->addWidget ( pClipLED->getLabelPointer() );
-    pLEDLayout->addStretch(2); // Keep clip LED separated from the rest of the LED bar
-
-    // create LEDs
-    vecpLEDs.Init ( NUM_STEPS_LED_BAR );
-
-    for ( int iLEDIdx = NUM_STEPS_LED_BAR - 1; iLEDIdx >= 0; iLEDIdx-- )
-    {
-        // create LED object
-        vecpLEDs[iLEDIdx] = new cLED ( pParent );
-
-        // add LED to layout with spacer (do not add spacer after last LED)
-        pLEDLayout->addWidget ( vecpLEDs[iLEDIdx]->getLabelPointer() );
-        if ( iLEDIdx > 0 )
-        {
-            pLEDLayout->addStretch(1);
-        }
-    }
-}
-
-CLevelMeterLED::~CLevelMeterLED()
-{
-    // clean up the LED objects
-    for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
-    {
-        delete vecpLEDs[iLEDIdx];
-    }
-    delete pClipLED;
-}
-
-void CLevelMeterLED::SetValue ( const int dValue )
-{
-    // update state of all LEDs for current level value
-    for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
-    {
-        // set active LED color if value is above current LED index
-        if ( iLEDIdx >= dValue )
-        {
-            // we use grey LED for inactive state
-            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
-        }
-        // check which color we should use (green, yellow or red)
-        else if ( iLEDIdx < YELLOW_BOUND_LED_BAR )
-        {
-            // green region
-            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREEN );
-        }
-        else if ( iLEDIdx < RED_BOUND_LED_BAR )
-        {
-            // yellow region
-            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_YELLOW );
-        }
-        else
-        {
-            // red region
-            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_RED );
-        }
-    }
-    if ( dValue > fClipLimitRatio * NUM_STEPS_LED_BAR)
-    {
-        // indicate clipping signal
-        pClipLED->setColor ( cLED::RL_RED );
-    }
-}
-
-void CLevelMeterLED::Reset()
-{
-    // update state of all LEDs
-    for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
-    {
-        vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
-    }
-    pClipLED->setColor ( cLED::RL_GREY );
 }

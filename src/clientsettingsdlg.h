@@ -102,6 +102,7 @@ protected:
     void OnAudioChannelsActivated ( int iChanIdx );
     void OnAudioQualityActivated ( int iQualityIdx );
     void OnCentServAddrTypeActivated ( int iTypeIdx );
+    void OnCentralServerAddressTypeChanged() { UpdateCentralServerDependency(); }
     void OnDriverSetupClicked();
 
 signals:

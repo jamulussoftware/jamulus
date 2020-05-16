@@ -4,7 +4,10 @@
 
 3.5.4git
 
-TODO Move Central Server Address Dropdown to Connection Setup (#157)
+- support intermediate Reaper RPP file while recording, coded by pljones (Ticket #170)
+
+- duplicate Central Server type dropdown to Connection Setup (#157)
+
 
 TODO Keep lrelease? Does it work as expected?
 

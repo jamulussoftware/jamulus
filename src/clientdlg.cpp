@@ -39,7 +39,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     bConnectDlgWasShown ( false ),
     ClientSettingsDlg   ( pNCliP, parent, Qt::Window ),
     ChatDlg             ( parent, Qt::Window ),
-    ConnectDlg          ( bNewShowComplRegConnList, parent, Qt::Dialog ),
+    ConnectDlg          ( pNCliP, bNewShowComplRegConnList, parent, Qt::Dialog ),
     AnalyzerConsole     ( pNCliP, parent, Qt::Window ),
     MusicianProfileDlg  ( pNCliP, parent )
 {

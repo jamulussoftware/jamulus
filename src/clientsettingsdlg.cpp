@@ -443,6 +443,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         SIGNAL ( buttonClicked ( QAbstractButton* ) ), this,
         SLOT ( OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* ) ) );
 
+    QObject::connect ( pClient,
+        SIGNAL ( CentralServerAddressTypeChanged() ),
+        this, SLOT ( OnCentralServerAddressTypeChanged() ) );
+
 
     // Timers ------------------------------------------------------------------
     // start timer for status bar
@@ -582,6 +586,13 @@ void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
 void CClientSettingsDlg::UpdateCentralServerDependency()
 {
     const bool bCurUseDefCentServAddr = ( pClient->GetCentralServerAddressType() != AT_MANUAL );
+
+    // update server type combo box (because the value may have ben changed
+    // by a control in another dialog, e.g., the connect dialog),
+    // since it is just an update, do not fire signals for the update
+    cbxCentServAddrType->blockSignals ( true );
+    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
+    cbxCentServAddrType->blockSignals ( false );
 
     // make sure the line edit does not fire signals when we update the text
     edtCentralServerAddress->blockSignals ( true );

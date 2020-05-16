@@ -4,13 +4,13 @@
 
 3.5.4git
 
-TODO Your Mix at Server (Ticket #187)
-
 TODO Move Central Server Address Dropdown to Connection Setup (#157)
 
 TODO Keep lrelease? Does it work as expected?
 
 TODO fix Linux deploy script -> gives errors right now
+
+TODO fix incorrect what's this help texts
 
 TODO WIP support internationalization
 

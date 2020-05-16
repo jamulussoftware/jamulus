@@ -101,9 +101,10 @@ LED bar:      lbr
 #define SYSTEM_FRAME_SIZE_SAMPLES        64
 #define DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ( 2 * SYSTEM_FRAME_SIZE_SAMPLES )
 
-// default server address
+// default server address and port numbers
 #define DEFAULT_SERVER_ADDRESS           "jamulus.fischvolk.de"
-#define DEFAULT_SERVER_NAME              "Central Server"
+#define DEFAULT_PORT_NUMBER              22124
+#define CENTSERV_GENERAL_NORTHAMERICA    "jamulus.fischvolk.de:22224"
 
 // getting started and software manual URL
 #define CLIENT_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Software-Manual"
@@ -115,10 +116,6 @@ LED bar:      lbr
 #define WELL_KNOWN_HOST                  "8.8.8.8" // Google
 #define WELL_KNOWN_PORT                  53        // DNS
 #define IP_LOOKUP_TIMEOUT                500       // ms
-
-// defined port numbers for client and server
-#define LLCON_DEFAULT_PORT_NUMBER        22124
-#define LLCON_PORT_NUMBER_NORTHAMERICA   22224
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ            48000 // Hz
@@ -178,10 +175,6 @@ LED bar:      lbr
 #define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
 
 // Maximum number of connected clients at the server.
-#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-// If you want to change this paramter you have to modify the code on some places, too! The code tag
-// "MAX_NUM_CHANNELS_TAG" shows these places (just search for the tag in the entire code)
-#endif
 #define MAX_NUM_CHANNELS                 50 // max number channels for server
 
 // actual number of used channels in the server
@@ -241,11 +234,11 @@ LED bar:      lbr
 #define MAX_LEN_VERSION_TEXT             20
 
 // common tool tip bottom line text
-#define TOOLTIP_COM_END_TEXT             tr ( \
-    "<br><div align=right><font size=-1><i>" \
-    "For more information use the ""What's " \
-    "This"" help (? menu, right mouse button or Shift+F1)" \
-    "</i></font></div>" )
+#define TOOLTIP_COM_END_TEXT             \
+    "<br><div align=right><font size=-1><i>" + \
+    QCoreApplication::translate ( "global","For more information use the ""What's " \
+    "This"" help (help menu, right mouse button or Shift+F1)" ) + \
+    "</i></font></div>"
 
 #define _MAXSHORT                        32767
 #define _MAXBYTE                         255 // binary: 11111111

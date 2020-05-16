@@ -2,22 +2,46 @@
 
 
 
+3.5.4git
 
-3.5.3git
+- support intermediate Reaper RPP file while recording, coded by pljones (Ticket #170)
+
+- duplicate Central Server type dropdown to Connection Setup (#157)
+
+
+TODO Keep lrelease? Does it work as expected?
+
+TODO fix Linux deploy script -> gives errors right now
+
+TODO fix incorrect what's this help texts
+
+TODO WIP support internationalization
+
+TODO implement panning for channels (Ticket #52, #145)
+
+TODO show mute state of others
+
+
+
+
+
+
+3.5.3 (2020-05-15)
 
 - correct unregister of headless server and RPP file creation on
   SIGINT/SIGTERM, coded by pljones (Tickets #130, #168)
 
 - for CoreAudio and 4 channel input, support mixing channels 1&2 with 3&4
 
-- added bassoon/oboe/harp instrument icons created by dszgit;
+- added bassoon/oboe/harp instrument icons created by dszgit,
   congas/bongo created by bspeer (Ticket #131)
 
 - link to docs from application Help menu (Ticket #90)
 
 - support Mac CoreAudio aggregated devices (Ticket #138)
 
-- added translations: french by trebmuh, portuguese by Snayler, spanish by ignotus666 (Ticket #77)
+- added translations: French by trebmuh, Portuguese by Snayler,
+  Spanish by ignotus666, Dutch by jerogee, German by corrados (Ticket #77)
 
 - new design for the About dialog (Ticket #189)
 
@@ -30,18 +54,7 @@
 
 - bug fix: better handling of disconnect message in the client
 
-
-TODO check if Tickets #130, #168 are really solved by code from pljones
-
-TODO WIP support internationalization
-
-TODO implement panning for channels (Ticket #52, #145)
-
-TODO show mute state of others
-
-
-
-
+- note: Jamulus is no longer compatible to Qt4
 
 
 3.5.2 (2020-04-24)

@@ -1,4 +1,4 @@
-VERSION = 3.5.3git
+VERSION = 3.5.4git
 
 # use target name which does not use a captital letter at the beginning
 contains(CONFIG, "noupcasename") {
@@ -18,7 +18,8 @@ QT += widgets \
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \
     src/res/translation/translation_pt_PT.ts \
-    src/res/translation/translation_es_ES.ts
+    src/res/translation/translation_es_ES.ts \
+    src/res/translation/translation_nl_NL.ts
 
 INCLUDEPATH += src
 
@@ -262,7 +263,7 @@ DISTFILES_OBOE += libs/oboe/AUTHORS \
 
 } else:unix {
     # we want to compile with C++11
-    QMAKE_CXXFLAGS += -std=c++11
+    CONFIG += c++11
 
     # we assume to have lrintf() one moderately modern linux distributions
     # would be better to have that tested, though

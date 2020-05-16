@@ -27,6 +27,7 @@
 #include <QDir>
 #include <QTextStream>
 #include <QTranslator>
+#include <QLibraryInfo>
 #include "global.h"
 #include "clientdlg.h"
 #include "serverdlg.h"
@@ -68,7 +69,7 @@ int main ( int argc, char** argv )
     int          iNumServerChannels          = DEFAULT_USED_NUM_CHANNELS;
     int          iMaxDaysHistory             = DEFAULT_DAYS_HISTORY;
     int          iCtrlMIDIChannel            = INVALID_MIDI_CH;
-    quint16      iPortNumber                 = LLCON_DEFAULT_PORT_NUMBER;
+    quint16      iPortNumber                 = DEFAULT_PORT_NUMBER;
     ELicenceType eLicenceType                = LT_NO_LICENCE;
     QString      strConnOnStartupAddress     = "";
     QString      strIniFileName              = "";
@@ -554,7 +555,7 @@ int main ( int argc, char** argv )
     Q_INIT_RESOURCE(resources);
 
     // load translations
-    QTranslator myappTranslator;
+    QTranslator myappTranslator, myqtTranslator;
 
     if ( bUseGUI && bUseTranslation )
     {
@@ -562,11 +563,17 @@ int main ( int argc, char** argv )
         {
             pApp->installTranslator ( &myappTranslator );
         }
+
+        // allows the Qt messages to be translated in the application
+        if ( myqtTranslator.load ( QLocale(), "qt", "_", QLibraryInfo::location ( QLibraryInfo::TranslationsPath ) ) )
+        {
+            pApp->installTranslator ( &myqtTranslator );
+        }
     }
 
 
 // TEST -> activate the following line to activate the test bench,
-//CTestbench Testbench ( "127.0.0.1", LLCON_DEFAULT_PORT_NUMBER );
+//CTestbench Testbench ( "127.0.0.1", DEFAULT_PORT_NUMBER );
 
 
     try

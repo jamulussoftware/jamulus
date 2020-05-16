@@ -39,9 +39,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QLocale>
-#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
-# include <QElapsedTimer>
-#endif
+#include <QElapsedTimer>
 #include <vector>
 #include <algorithm>
 #include "global.h"
@@ -567,10 +565,26 @@ enum ELicenceType
 // Central server address type -------------------------------------------------
 enum ECSAddType
 {
+    // used for settings -> enum values must be fixed!
     AT_MANUAL = 0,
-    AT_DEFAULT = 1, // Europe and others
-    AT_NORTH_AMERICA = 2
+    AT_DEFAULT = 1,
+    AT_GENERAL_NORTHAMERICA = 2
 };
+
+inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
+{
+    switch ( eAddrType )
+    {
+    case AT_MANUAL:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Manual" );
+
+    case AT_GENERAL_NORTHAMERICA:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Default (North America)" );
+
+    default: // AT_DEFAULT
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Default" );
+    }
+}
 
 
 // Slave server registration state ---------------------------------------------
@@ -1217,7 +1231,6 @@ public:
 
 // Timing measurement ----------------------------------------------------------
 // intended for debugging the timing jitter of the sound card or server timer
-#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
 class CTimingMeas
 {
 public:
@@ -1269,7 +1282,6 @@ protected:
     QElapsedTimer ElapsedTimer;
     int           iCnt;
 };
-#endif
 
 
 /******************************************************************************\

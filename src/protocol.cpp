@@ -143,6 +143,7 @@ MESSAGES (with connection)
                           - 0: none, no audio coding applied
                           - 1: CELT
                           - 2: OPUS
+                          - 3: OPUS64
     - "version":         version of the audio coder, if not used this value
                          shall be set to 0
     - "audiocod arg":    argument for the audio coder, if not used this value

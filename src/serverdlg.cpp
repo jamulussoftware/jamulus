@@ -188,9 +188,9 @@ lvwClients->setMinimumHeight ( 140 );
 
     // central server address type combo box
     cbxCentServAddrType->clear();
-    cbxCentServAddrType->addItem ( tr ( "Manual" ) );                  // AT_MANUAL
-    cbxCentServAddrType->addItem ( tr ( "Default" ) );                 // AT_DEFAULT
-    cbxCentServAddrType->addItem ( tr ( "Default (North America)" ) ); // AT_NORTH_AMERICA
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_MANUAL ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENERAL_NORTHAMERICA ) );
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pServer->GetCentralServerAddressType() ) );
 
     // update server name line edit
@@ -522,7 +522,7 @@ void CServerDlg::UpdateGUIDependencies()
         {
             // if the default central server is used, just show a text of the
             // server name
-            edtCentralServerAddress->setText ( DEFAULT_SERVER_NAME );
+            edtCentralServerAddress->setText ( tr ( "Predefined Address" ) );
         }
         else
         {

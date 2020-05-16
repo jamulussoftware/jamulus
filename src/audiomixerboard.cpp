@@ -278,13 +278,11 @@ void CChannelFader::Reset()
     strReceivedName = "";
     SetupFaderTag ( SL_NOT_SET );
 
-    // set a defined tool tip time out (only available in Qt5)
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    // set a defined tool tip time out
     const int iToolTipDurMs = 30000;
     plblLabel->setToolTipDuration       ( iToolTipDurMs );
     plblInstrument->setToolTipDuration  ( iToolTipDurMs );
     plblCountryFlag->setToolTipDuration ( iToolTipDurMs );
-#endif
 
     bOtherChannelIsSolo = false;
 }
@@ -599,12 +597,6 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
 
     // Connections -------------------------------------------------------------
 
-//    for (int i=0; i< static_cast<int>( vecpChanFader.size() ); i++) {
-//        QObject::connect ( vecpChanFader[i],  SIGNAL ( panValueChanged ( double ) ),
-//                           this, SLOT ( OnPanValueChanged ( double ) ) );
-//    }
-
-
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     connectFaderSignalsToMixerBoardSlots<MAX_NUM_CHANNELS>();
 
@@ -766,9 +758,9 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     QObject::connect ( vecpChanFader[49], SIGNAL ( soloStateChanged ( int ) ), this, SLOT ( OnChSoloStateChanged() ) );
 
 #endif
+
 }
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
 template<unsigned int slotId>
 inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 {
@@ -794,8 +786,6 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 
 template<>
 inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots<0>() {};
-
-#endif
 
 void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 {
@@ -867,9 +857,9 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
 {
     // we want to set the server name only if the very first faders appear
     // in the audio mixer board to show a "try to connect" before
-    if ( pGroupBox->title().compare ( strServerName ) )
+    if ( bNoFaderVisible )
     {
-        pGroupBox->setTitle ( strServerName );
+        pGroupBox->setTitle ( tr ( "Personal Mix at the Server: " ) + strServerName );
     }
 
     // get number of connected clients

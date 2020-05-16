@@ -26,10 +26,12 @@
 
 
 /* Implementation *************************************************************/
-CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
-                           QWidget* parent,
+CConnectDlg::CConnectDlg ( CClient*        pNCliP,
+                           const bool      bNewShowCompleteRegList,
+                           QWidget*        parent,
                            Qt::WindowFlags f )
     : QDialog ( parent, f ),
+      pClient                  ( pNCliP ),
       strCentralServerAddress  ( "" ),
       strSelectedAddress       ( "" ),
       strSelectedServerName    ( "" ),
@@ -63,7 +65,7 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
         " server software must be set here. An optional port number can be added after the IP "
         "address or URL using a colon as a separator, e.g, "
         "example.org:" ) +
-        QString().setNum ( LLCON_DEFAULT_PORT_NUMBER ) + tr ( ". A list of "
+        QString().setNum ( DEFAULT_PORT_NUMBER ) + tr ( ". A list of "
         "the most recent used server IP addresses or URLs is available for "
         "selection." );
 
@@ -74,9 +76,15 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
         "IP address or URL. It also stores old URLs in the combo box list." ) );
 
+    // central server address type combo box
+    cbxCentServAddrType->clear();
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_MANUAL ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENERAL_NORTHAMERICA ) );
+
     // filter
     edtFilter->setWhatsThis ( "<b>" + tr ( "Filter" ) + ":</b> " + tr ( "The server "
-        "list is filered by the given text. Note that the filter is case insensitive." ) );
+        "list is filtered by the given text. Note that the filter is case insensitive." ) );
     edtFilter->setAccessibleName ( tr ( "Filter edit box" ) );
 
     // show all mucisians
@@ -162,6 +170,9 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     QObject::connect ( cbxServerAddr, SIGNAL ( editTextChanged ( const QString& ) ),
         this, SLOT ( OnServerAddrEditTextChanged ( const QString& ) ) );
 
+    QObject::connect ( cbxCentServAddrType, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnCentServAddrTypeChanged ( int ) ) );
+
     // check boxes
     QObject::connect ( chbExpandAll, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnExpandAllStateChanged ( int ) ) );
@@ -219,6 +230,11 @@ void CConnectDlg::RequestServerList()
 
     // clear filter edit box
     edtFilter->setText ( "" );
+
+    // update list combo box (disable events to avoid a signal)
+    cbxCentServAddrType->blockSignals ( true );
+    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
+    cbxCentServAddrType->blockSignals ( false );
 
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct
@@ -304,7 +320,7 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
             // IP address and port (use IP number without last byte)
             // Definition: If the port number is the default port number, we do
             // not show it.
-            if ( vecServerInfo[iIdx].HostAddr.iPort == LLCON_DEFAULT_PORT_NUMBER )
+            if ( vecServerInfo[iIdx].HostAddr.iPort == DEFAULT_PORT_NUMBER )
             {
                 // only show IP number, no port number
                 pNewListViewItem->setText ( 0, CurHostAddress.toString ( CHostAddress::SM_IP_NO_LAST_BYTE ) );

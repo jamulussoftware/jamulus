@@ -314,6 +314,10 @@ void CJamRecorder::Init( const CServer* server,
         throw std::runtime_error( (recordBaseDir.absolutePath() + " is a directory but cannot be written to").toStdString() );
     }
 
+    QObject::connect( (const QObject *)server, SIGNAL ( RestartRecorder() ),
+                      this, SLOT( OnTriggerSession() ),
+                      Qt::ConnectionType::QueuedConnection );
+
     QObject::connect( (const QObject *)server, SIGNAL ( Stopped() ),
                       this, SLOT( OnEnd() ),
                       Qt::ConnectionType::QueuedConnection );
@@ -322,13 +326,12 @@ void CJamRecorder::Init( const CServer* server,
                       this, SLOT( OnDisconnected ( int ) ),
                       Qt::ConnectionType::QueuedConnection );
 
-    qRegisterMetaType<CVector<int16_t>>();
+    qRegisterMetaType<CVector<int16_t>> ( "CVector<int16_t>" );
     QObject::connect( (const QObject *)server, SIGNAL ( AudioFrame( const int, const QString, const CHostAddress, const int, const CVector<int16_t> ) ),
                       this, SLOT(  OnFrame (const int, const QString, const CHostAddress, const int, const CVector<int16_t> ) ),
                       Qt::ConnectionType::QueuedConnection );
 
-    QObject::connect( QCoreApplication::instance(),
-                      SIGNAL ( aboutToQuit() ),
+    QObject::connect( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
                       this, SLOT( OnAboutToQuit() ) );
 
     iServerFrameSizeSamples = _iServerFrameSizeSamples;
@@ -338,11 +341,10 @@ void CJamRecorder::Init( const CServer* server,
     thisThread->start();
 }
 
-
 /**
- * @brief CJamRecorder::OnStart Start up tasks when the first client connects
+ * @brief CJamRecorder::Start Start up tasks for a new session
  */
-void CJamRecorder::OnStart() {
+void CJamRecorder::Start() {
     // Ensure any previous cleaning up has been done.
     OnEnd();
 
@@ -350,11 +352,17 @@ void CJamRecorder::OnStart() {
     isRecording = true;
 }
 
+
 /**
  * @brief CJamRecorder::OnEnd Finalise the recording and emit the Reaper RPP file
+ *
+ * Emits RecordingSessionEnded with the Reaper project file name,
+ * or null if was not recording or a problem occurs
  */
 void CJamRecorder::OnEnd()
 {
+    QString reaperProjectFileName = QString::Null();
+
     if ( isRecording )
     {
         isRecording = false;
@@ -366,21 +374,46 @@ void CJamRecorder::OnEnd()
         if (fi.exists())
         {
             qWarning() << "CJamRecorder::OnEnd():" << fi.absolutePath() << "exists and will not be overwritten.";
+            reaperProjectFileName = QString::Null();
         }
         else
         {
             QFile outf (reaperProjectFileName);
-            outf.open(QFile::WriteOnly);
-            QTextStream out(&outf);
-            out << CReaperProject( currentSession->Tracks(), iServerFrameSizeSamples ).toString() << endl;
-            qDebug() << "Session RPP:" << reaperProjectFileName;
+            if ( outf.open(QFile::WriteOnly) )
+            {
+                QTextStream out(&outf);
+                out << CReaperProject( currentSession->Tracks(), iServerFrameSizeSamples ).toString() << endl;
+                qDebug() << "Session RPP:" << reaperProjectFileName;
+            }
+            else
+            {
+                qWarning() << "CJamRecorder::OnEnd():" << fi.absolutePath() << "could not be created, no RPP written.";
+                reaperProjectFileName = QString::Null();
+            }
         }
 
         delete currentSession;
         currentSession = nullptr;
     }
+
+    emit RecordingSessionEnded ( reaperProjectFileName );
 }
 
+/**
+ * @brief CJamRecorder::OnTriggerSession End one session and start a new one
+ */
+void CJamRecorder::OnTriggerSession()
+{
+    // This should magically get everything right...
+    if ( isRecording )
+    {
+        Start();
+    }
+}
+
+/**
+ * @brief CJamRecorder::OnAboutToQuit End any recording and exit thread
+ */
 void CJamRecorder::OnAboutToQuit()
 {
     OnEnd();
@@ -452,7 +485,7 @@ void CJamRecorder::OnFrame(const int iChID, const QString name, const CHostAddre
     // Make sure we are ready
     if ( !isRecording )
     {
-        OnStart();
+        Start();
     }
 
     currentSession->Frame( iChID, name, address, numAudioChannels, data, iServerFrameSizeSamples );

@@ -104,7 +104,7 @@ public slots:
 #endif
 
 signals:
-    void ShutdownSignal ( int sigNum );
+    void HandledSignal ( int sigNum );
 
 private:
     QScopedPointer<CSignalBase> pSignalBase;
@@ -153,7 +153,7 @@ public:
 private:
     mutable QReadWriteLock lock;
 
-    static BOOL WINAPI signalHandler ( _In_ DWORD sigNum );
+    static BOOL WINAPI signalHandler ( _In_ DWORD );
 };
 
 #else

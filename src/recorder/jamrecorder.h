@@ -143,20 +143,43 @@ public:
     {
     }
 
+    /**
+     * @brief Create recording directory, if necessary, and connect signal handlers
+     * @param server Server object emiting signals
+     */
     void Init( const CServer* server, const int _iServerFrameSizeSamples );
 
+    /**
+     * @brief SessionDirToReaper Method that allows an RPP file to be recreated
+     * @param strSessionDirName Where the session wave files are
+     * @param serverFrameSizeSamples What the server frame size was for the session
+     */
     static void SessionDirToReaper( QString& strSessionDirName, int serverFrameSizeSamples );
 
-public slots:
-    /**
-     * @brief Raised when first client joins the server, triggering a new recording.
-     */
-    void OnStart();
+private:
+    void Start();
 
+    QDir recordBaseDir;
+
+    bool         isRecording;
+    CJamSession* currentSession;
+    int          iServerFrameSizeSamples;
+
+    QThread* thisThread;
+
+signals:
+    void RecordingSessionEnded ( QString sessionDir );
+
+private slots:
     /**
      * @brief Raised when last client leaves the server, ending the recording.
      */
     void OnEnd();
+
+    /**
+     * @brief Raised to end one session and start a new one.
+     */
+    void OnTriggerSession();
 
     /**
      * @brief Raised when application is stopping
@@ -173,15 +196,6 @@ public slots:
      * @brief Raised when a frame of data is available to process
      */
     void OnFrame ( const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data );
-
-private:
-    QDir recordBaseDir;
-
-    bool         isRecording;
-    CJamSession* currentSession;
-    int          iServerFrameSizeSamples;
-
-    QThread* thisThread;
 };
 
 }

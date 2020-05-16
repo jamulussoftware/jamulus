@@ -75,7 +75,7 @@ CSignalHandler* CSignalHandler::getSingletonP() { return singleton; }
 
 bool CSignalHandler::emitSignal ( int sigNum )
 {
-    return QMetaObject::invokeMethod( singleton, "ShutdownSignal", Qt::QueuedConnection, Q_ARG( int, sigNum ) );
+    return QMetaObject::invokeMethod( singleton, "HandledSignal", Qt::QueuedConnection, Q_ARG( int, sigNum ) );
 }
 
 #ifndef _WIN32
@@ -124,11 +124,11 @@ QReadWriteLock* CSignalWin::getLock() const
     return &lock;
 }
 
-BOOL WINAPI CSignalWin::signalHandler ( _In_ DWORD sigNum )
+BOOL WINAPI CSignalWin::signalHandler ( _In_ DWORD )
 {
     auto self = getSelf<CSignalWin>();
     QReadLocker lock ( self->getLock() );
-    return self->pSignalHandler->emitSignal ( static_cast<int>( sigNum ) );
+    return self->pSignalHandler->emitSignal ( -1 );
 }
 
 #else
@@ -145,12 +145,14 @@ CSignalUnix::CSignalUnix ( CSignalHandler* nPSignalHandler ) :
 
         socketNotifier->setEnabled ( true );
 
+        setSignalHandled ( SIGUSR1, true );
         setSignalHandled ( SIGINT, true );
         setSignalHandled ( SIGTERM, true );
     }
 }
 
 CSignalUnix::~CSignalUnix() {
+    setSignalHandled ( SIGUSR1, false );
     setSignalHandled ( SIGINT, false );
     setSignalHandled ( SIGTERM, false );
 }

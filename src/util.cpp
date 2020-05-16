@@ -399,17 +399,22 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Jos van den Oever (<a href=""https://github.com/vandenoever"">vandenoever</a>)</p>"
         "<p>Tormod Volden (<a href=""https://github.com/tormodvolden"">tormodvolden</a>)</p>"
         "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
+        "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
         "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">" + tr ( "Github Contributors list" ) + "</a>." );
 
     // translators
     txvTranslation->setText (
-        "<p><b>Spanish</b></p>"
+        "<p><b>" + tr ( "Spanish" ) + "</b></p>"
         "<p>Daryl Hanlon (<a href=""https://github.com/ignotus666"">ignotus666</a>)</p>"
-        "<p><b>French</b></p>"
+        "<p><b>" + tr ( "French" ) + "</b></p>"
         "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
-        "<p><b>Portuguese</b></p>"
-        "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>" );
+        "<p><b>" + tr ( "Portuguese" ) + "</b></p>"
+        "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>"
+        "<p><b>" + tr ( "Dutch" ) + "</b></p>"
+        "<p>Jeroen Geertzen (<a href=""https://github.com/jerogee"">jerogee</a>)</p>"
+        "<p><b>" + tr ( "German" ) + "</b></p>"
+        "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>" );
 
     // set version number in about dialog
     lblVersion->setText ( GetVersionAndNameStr() );
@@ -859,7 +864,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
                                         CHostAddress& HostAddress )
 {
     QHostAddress InetAddr;
-    quint16      iNetPort = LLCON_DEFAULT_PORT_NUMBER;
+    quint16      iNetPort = DEFAULT_PORT_NUMBER;
 
     // init requested host address with invalid address first
     HostAddress = CHostAddress();
@@ -945,9 +950,9 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
 {
     switch ( eCentralServerAddressType )
     {
-    case AT_MANUAL:        return strCentralServerAddress;
-    case AT_NORTH_AMERICA: return QString ( "%1:%2" ).arg ( DEFAULT_SERVER_ADDRESS ).arg ( LLCON_PORT_NUMBER_NORTHAMERICA );
-    default:               return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
+    case AT_MANUAL:               return strCentralServerAddress;
+    case AT_GENERAL_NORTHAMERICA: return CENTSERV_GENERAL_NORTHAMERICA;
+    default:                      return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
     }
 }
 
@@ -1323,7 +1328,7 @@ ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountr
     case QLocale::Canada:
     case QLocale::Mexico:
     case QLocale::Greenland:
-        return AT_NORTH_AMERICA;
+        return AT_GENERAL_NORTHAMERICA;
 
     default:
         return AT_DEFAULT;

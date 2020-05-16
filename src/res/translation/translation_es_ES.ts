@@ -1116,7 +1116,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="336"/>
         <source>Mono-in/Stereo-out</source>
-        <translation>Mono-in/Estéreo-out</translation>
+        <translation>Entrada mono/Salida estéreo</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
@@ -2369,7 +2369,7 @@
     <message>
         <location filename="../../global.h" line="237"/>
         <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Para más información utiliza ¿Qué es Esto? (menú de ayuda, botón derecho del ratón o Shift+F1)</translation>
     </message>
 </context>
 </TS>

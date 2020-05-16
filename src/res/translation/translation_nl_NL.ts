@@ -31,7 +31,7 @@
     <message>
         <location filename="../../util.cpp" line="375"/>
         <source> uses the following libraries, resources or code snippets:</source>
-        <translation> gebruikt de volgende bibliotheken, bronnen of code snippets:</translation>
+        <translation> gebruikt de volgende libraries, bronnen of code snippets:</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="376"/>
@@ -81,12 +81,12 @@
     <message>
         <location filename="../../util.cpp" line="414"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Nederlands</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="416"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Duits</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="423"/>
@@ -101,7 +101,7 @@
     <message>
         <location filename="../../util.cpp" line="453"/>
         <source>Internet Jam Session Software</source>
-        <translation></translation>
+        <translation>Internet Jamsessie Software</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="457"/>
@@ -119,7 +119,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="59"/>
         <source>TextLabelVersion</source>
-        <translation></translation>
+        <translation>TextLabelVersion</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="72"/>
@@ -129,12 +129,12 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
         <source>A&amp;bout</source>
-        <translation></translation>
+        <translation>&amp;Over</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="120"/>
         <source>&amp;Libraries</source>
-        <translation></translation>
+        <translation>&amp;Libraries</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="134"/>
@@ -149,7 +149,7 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="198"/>
         <source>&amp;OK</source>
-        <translation></translation>
+        <translation>&amp;OK</translation>
     </message>
 </context>
 <context>
@@ -157,7 +157,7 @@
     <message>
         <location filename="../../analyzerconsole.cpp" line="50"/>
         <source>Analyzer Console</source>
-        <translation></translation>
+        <translation>Analyzer Console</translation>
     </message>
     <message>
         <location filename="../../analyzerconsole.cpp" line="69"/>
@@ -170,7 +170,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="594"/>
         <source>Server</source>
-        <translation></translation>
+        <translation>Server</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="603"/>
@@ -212,7 +212,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="116"/>
         <source>Mixer Fader</source>
-        <translation></translation>
+        <translation>Mixer Fader</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="116"/>
@@ -232,7 +232,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="124"/>
         <source>Mute button</source>
-        <translation>Dempingsknop</translation>
+        <translation>Dempknop</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="126"/>
@@ -365,7 +365,7 @@
     <message>
         <location filename="../../chatdlgbase.ui" line="59"/>
         <source>Cl&amp;ear</source>
-        <translation></translation>
+        <translation>Wiss&amp;en</translation>
     </message>
     <message>
         <location filename="../../chatdlgbase.ui" line="69"/>
@@ -428,7 +428,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="87"/>
         <source>Connect/Disconnect Button</source>
-        <translation>Aansluiten/afkoppelen-knop</translation>
+        <translation>Verbinden/Verbreken-knop</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="88"/>
@@ -591,7 +591,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="258"/>
         <source>&amp;Connection Setup...</source>
-        <translation>&amp;Connection Setup...</translation>
+        <translation>&amp;Verbindingsinstellingen...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="261"/>
@@ -646,7 +646,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="1051"/>
         <source>D&amp;isconnect</source>
-        <translation>D&amp;isconnect</translation>
+        <translation>&amp;Afmelden</translation>
     </message>
 </context>
 <context>
@@ -689,12 +689,12 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="344"/>
         <source>Mute Myself</source>
-        <translation>Stomme ikzelf</translation>
+        <translation>Demp Mijzelf</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="351"/>
         <source>C&amp;onnect</source>
-        <translation>C&amp;onnect</translation>
+        <translation>&amp;Verbinden</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="377"/>
@@ -709,7 +709,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="467"/>
         <source>Reverb</source>
-        <translation>Reverb</translation>
+        <translation>Galm</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="533"/>
@@ -987,7 +987,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="195"/>
         <source>If enabled, each client channel will display a pre-fader level bar.</source>
-        <translation>Indien ingeschakeld, zal elk klantkanaal een pre-fader niveau balk weergeven.</translation>
+        <translation>Indien ingeschakeld, zal elk clientkanaal een pre-fader niveau balk weergeven.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="197"/>
@@ -1137,7 +1137,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="349"/>
         <source>Manual</source>
-        <translation>Handleiding</translation>
+        <translation>Handmatig</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="350"/>
@@ -1158,7 +1158,7 @@
         <location filename="../../clientsettingsdlg.cpp" line="457"/>
         <location filename="../../clientsettingsdlg.cpp" line="461"/>
         <source>Size: </source>
-        <translation>Grootte: </translation>
+        <translation>Size: </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="518"/>
@@ -1279,7 +1279,7 @@
         <location filename="../../clientsettingsdlgbase.ui" line="326"/>
         <location filename="../../clientsettingsdlgbase.ui" line="345"/>
         <source>Size</source>
-        <translation>Grootte</translation>
+        <translation>Size</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="483"/>
@@ -1309,7 +1309,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="544"/>
         <source>Fancy Skin</source>
-        <translation></translation>
+        <translation>Fancy Skin</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="551"/>
@@ -1331,7 +1331,7 @@
         <location filename="../../clientsettingsdlgbase.ui" line="642"/>
         <location filename="../../clientsettingsdlgbase.ui" line="677"/>
         <source>val</source>
-        <translation></translation>
+        <translation>val</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="623"/>
@@ -1501,7 +1501,7 @@
     <message>
         <location filename="../../util.cpp" line="853"/>
         <source>What&apos;s &amp;This</source>
-        <translation>Wat is dit</translation>
+        <translation>Wat Is Dit</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="855"/>
@@ -2046,7 +2046,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="191"/>
         <source>Manual</source>
-        <translation>Handleiding</translation>
+        <translation>Handmatig</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="192"/>
@@ -2170,7 +2170,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="181"/>
         <source>TextLabelNameVersion</source>
-        <translation></translation>
+        <translation>TextLabelNameVersion</translation>
     </message>
 </context>
 <context>
@@ -2361,7 +2361,7 @@
     <message>
         <location filename="../../global.h" line="237"/>
         <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Voor meer informatie gebruik de Wat Is Dit hulp (helpmenu, rechtermuisklik of Shift+F1)</translation>
     </message>
 </context>
 </TS>

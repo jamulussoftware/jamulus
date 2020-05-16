@@ -15,7 +15,7 @@
     <message>
         <location filename="../../util.cpp" line="354"/>
         <source> software enables musicians to perform real-time jam sessions over the internet.</source>
-        <translation type="unfinished"></translation>
+        <translation> permite aos músicos realizar jam sessions em tempo real pela Internet.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="355"/>
@@ -25,7 +25,7 @@
     <message>
         <location filename="../../util.cpp" line="355"/>
         <source>There is a </source>
-        <translation type="unfinished"></translation>
+        <translation>Existe um servidor </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="357"/>
@@ -40,57 +40,57 @@
     <message>
         <location filename="../../util.cpp" line="376"/>
         <source>Qt cross-platform application framework</source>
-        <translation type="unfinished"></translation>
+        <translation>Estrutura de aplicações multiplataforma Qt</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="380"/>
         <source>Audio reverberation code by Perry R. Cook and Gary P. Scavone</source>
-        <translation type="unfinished"></translation>
+        <translation>Código de reverberação de áudio por Perry R. Cook e Gary P. Scavone</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="383"/>
         <source>Some pixmaps are from the</source>
-        <translation type="unfinished"></translation>
+        <translation>Alguns pixmaps são do</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="385"/>
         <source>Country flag icons from Mark James</source>
-        <translation type="unfinished"></translation>
+        <translation>Ícones de bandeira do país de Mark James</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="403"/>
         <source>For details on the contributions check out the </source>
-        <translation type="unfinished"></translation>
+        <translation>Para detalhes sobre as contribuições, consulte a </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="404"/>
         <source>Github Contributors list</source>
-        <translation type="unfinished"></translation>
+        <translation>lista de colaboradores do Github</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="408"/>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Espanhol</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="410"/>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>Francês</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="412"/>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Português</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="414"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Holandês</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="416"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Alemão</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="423"/>
@@ -133,22 +133,22 @@
     <message>
         <location filename="../../aboutdlgbase.ui" line="106"/>
         <source>A&amp;bout</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sobre</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="120"/>
         <source>&amp;Libraries</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Bibliotecas</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="134"/>
         <source>&amp;Contributors</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Colaboradores</translation>
     </message>
     <message>
         <location filename="../../aboutdlgbase.ui" line="148"/>
         <source>&amp;Translation</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tradução</translation>
     </message>
     <message>
         <source>Author: Volker Fischer</source>
@@ -1164,7 +1164,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="367"/>
         <source>preferred</source>
-        <translation type="unfinished"></translation>
+        <translation>preferido</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="457"/>
@@ -1497,7 +1497,7 @@
     <message>
         <location filename="../../util.cpp" line="840"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ajuda</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="845"/>
@@ -1887,12 +1887,12 @@
     <message>
         <location filename="../../util.cpp" line="1006"/>
         <source>Congas</source>
-        <translation type="unfinished"></translation>
+        <translation>Congas</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1007"/>
         <source>Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Bongo</translation>
     </message>
 </context>
 <context>
@@ -2317,7 +2317,7 @@
     <message>
         <location filename="../../../android/sound.cpp" line="137"/>
         <source>Error closing stream: $s</source>
-        <translation type="unfinished"></translation>
+        <translation>Erro ao fechar o stream: $s</translation>
     </message>
 </context>
 <context>
@@ -2373,7 +2373,7 @@
     <message>
         <location filename="../../global.h" line="237"/>
         <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Para mais informações, use O que é isto (menu Ajuda, botão direito do rato ou Shift + F1)</translation>
     </message>
 </context>
 </TS>

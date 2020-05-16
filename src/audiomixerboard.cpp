@@ -653,9 +653,9 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
 {
     // we want to set the server name only if the very first faders appear
     // in the audio mixer board to show a "try to connect" before
-    if ( pGroupBox->title().compare ( strServerName ) )
+    if ( bNoFaderVisible )
     {
-        pGroupBox->setTitle ( strServerName );
+        pGroupBox->setTitle ( tr ( "Personal Mix at the Server: " ) + strServerName );
     }
 
     // get number of connected clients

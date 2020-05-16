@@ -117,8 +117,8 @@ LED bar:      lbr
 #define IP_LOOKUP_TIMEOUT                500       // ms
 
 // defined port numbers for client and server
-#define LLCON_DEFAULT_PORT_NUMBER        22124
-#define LLCON_PORT_NUMBER_NORTHAMERICA   22224
+#define DEFAULT_PORT_NUMBER              22124
+#define DEFAULT_PORT_NUMBER_NORTHAMERICA 22224
 
 // system sample rate (the sound card and audio coder works on this sample rate)
 #define SYSTEM_SAMPLE_RATE_HZ            48000 // Hz
@@ -232,11 +232,11 @@ LED bar:      lbr
 #define MAX_LEN_VERSION_TEXT             20
 
 // common tool tip bottom line text
-#define TOOLTIP_COM_END_TEXT             tr ( \
-    "<br><div align=right><font size=-1><i>" \
-    "For more information use the ""What's " \
-    "This"" help (? menu, right mouse button or Shift+F1)" \
-    "</i></font></div>" )
+#define TOOLTIP_COM_END_TEXT             \
+    "<br><div align=right><font size=-1><i>" + \
+    QCoreApplication::translate ( "global","For more information use the ""What's " \
+    "This"" help (help menu, right mouse button or Shift+F1)" ) + \
+    "</i></font></div>"
 
 #define _MAXSHORT                        32767
 #define _MAXBYTE                         255 // binary: 11111111

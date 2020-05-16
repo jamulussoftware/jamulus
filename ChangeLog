@@ -3,6 +3,10 @@
 
 TODO server list split on query
 
+TODO Keep lrelease? Does it work as expected?
+
+TODO fix Linux deploy script -> gives errors right now
+
 TODO WIP support internationalization
 
 TODO implement panning for channels (Ticket #52, #145)

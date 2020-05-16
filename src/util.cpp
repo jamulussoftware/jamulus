@@ -864,7 +864,7 @@ bool NetworkUtil::ParseNetworkAddress ( QString       strAddress,
                                         CHostAddress& HostAddress )
 {
     QHostAddress InetAddr;
-    quint16      iNetPort = LLCON_DEFAULT_PORT_NUMBER;
+    quint16      iNetPort = DEFAULT_PORT_NUMBER;
 
     // init requested host address with invalid address first
     HostAddress = CHostAddress();
@@ -951,7 +951,7 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
     switch ( eCentralServerAddressType )
     {
     case AT_MANUAL:        return strCentralServerAddress;
-    case AT_NORTH_AMERICA: return QString ( "%1:%2" ).arg ( DEFAULT_SERVER_ADDRESS ).arg ( LLCON_PORT_NUMBER_NORTHAMERICA );
+    case AT_NORTH_AMERICA: return QString ( "%1:%2" ).arg ( DEFAULT_SERVER_ADDRESS ).arg ( DEFAULT_PORT_NUMBER_NORTHAMERICA );
     default:               return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
     }
 }

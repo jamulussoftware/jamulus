@@ -148,9 +148,9 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     plblCountryFlag->setWhatsThis ( strFaderText );
     plblCountryFlag->setAccessibleName ( tr ( "Mixer channel country flag" ) );
 
-    QString strChannelNumberText = tr ( "<b>Channel Number:</b> "
-        "Control this channel by sending MIDI CC messages with control "
-        "number 70+channelNumber." );
+    QString strChannelNumberText = "<b>" + tr ( "Channel Number" ) + ":</b> " +
+         tr ("Control this channel by sending MIDI CC messages with control "
+             "number 70+channelNumber." );
 
     plblChannelNumber->setWhatsThis ( strChannelNumberText );
     plblChannelNumber->setAccessibleName (
@@ -528,7 +528,7 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     plblCountryFlag->setToolTip   ( strToolTip );
     plblInstrument->setToolTip    ( strToolTip );
     plblLabel->setToolTip         ( strToolTip );
-    plblChannelNumber->setToolTip ( "Channel Number" );
+    plblChannelNumber->setToolTip ( tr ("Channel Number") );
 }
 
 double CChannelFader::CalcFaderGain ( const int value )

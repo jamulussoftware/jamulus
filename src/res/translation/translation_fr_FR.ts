@@ -192,7 +192,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="658"/>
         <source>Personal Mix at the Server: </source>
-        <translation type="unfinished"></translation>
+        <translation>Mixage personnel au serveur : </translation>
     </message>
 </context>
 <context>
@@ -1163,22 +1163,22 @@
     <message>
         <location filename="../../util.h" line="581"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Personnalisé</translation>
     </message>
     <message>
         <location filename="../../util.h" line="584"/>
         <source>All Genres</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les genres</translation>
     </message>
     <message>
         <location filename="../../util.h" line="587"/>
         <source>Genre Rock</source>
-        <translation type="unfinished"></translation>
+        <translation>Genre Rock</translation>
     </message>
     <message>
         <location filename="../../util.h" line="590"/>
         <source>Genre Jazz</source>
-        <translation type="unfinished"></translation>
+        <translation>Genre Jazz</translation>
     </message>
     <message>
         <location filename="../../util.h" line="593"/>
@@ -1187,7 +1187,7 @@
     </message>
     <message>
         <source>Default (North America)</source>
-        <translation type="vanished">Défault (Amérique du Nord)</translation>
+        <translation type="vanished">Défaut (Amérique du Nord)</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="369"/>
@@ -1482,7 +1482,7 @@
     <message>
         <location filename="../../connectdlgbase.ui" line="35"/>
         <source>List</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="45"/>
@@ -1935,22 +1935,22 @@
     <message>
         <location filename="../../util.cpp" line="1010"/>
         <source>Vocal Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Voix basse</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1011"/>
         <source>Vocal Tenor</source>
-        <translation type="unfinished"></translation>
+        <translation>Voix ténor</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1012"/>
         <source>Vocal Alto</source>
-        <translation type="unfinished"></translation>
+        <translation>Voix alto</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1013"/>
         <source>Vocal Soprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Voix soprano</translation>
     </message>
 </context>
 <context>
@@ -2395,7 +2395,7 @@
     <message>
         <location filename="../../soundbase.cpp" line="146"/>
         <source>Please restart the software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez redémarrer le logiciel</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="147"/>

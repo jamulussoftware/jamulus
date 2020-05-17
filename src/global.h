@@ -105,8 +105,8 @@ LED bar:      lbr
 #define DEFAULT_SERVER_ADDRESS           "jamulus.fischvolk.de"
 #define DEFAULT_PORT_NUMBER              22124
 #define CENTSERV_GENERAL_NORTHAMERICA    "jamulus.fischvolk.de:22224"
-#define CENTSERV_GENRE_ROCK              "jamulus.drealm.info:22124"
-#define CENTSERV_GENRE_JAZZ              "jamulus.drealm.info:22224"
+#define CENTSERV_GENRE_ROCK              "centralrock.drealm.info:22124"
+#define CENTSERV_GENRE_JAZZ              "centraljazz.drealm.info:22224"
 
 // getting started and software manual URL
 #define CLIENT_GETTING_STARTED_URL       "https://github.com/corrados/jamulus/wiki/Getting-Started"

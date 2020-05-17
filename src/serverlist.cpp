@@ -33,7 +33,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
                                          CProtocol*     pNConLProt )
     : tsConsoleStream           ( *( ( new ConsoleWriterFactory() )->get() ) ),
       iNumPredefinedServers     ( 0 ),
-      eCentralServerAddressType ( AT_MANUAL ), // must be AT_MANUAL for the "no GUI" case
+      eCentralServerAddressType ( AT_CUSTOM ), // must be AT_CUSTOM for the "no GUI" case
       bCentServPingServerInList ( bNCentServPingServerInList ),
       pConnLessProtocol         ( pNConLProt ),
       eSvrRegStatus             ( SRS_UNREGISTERED ),
@@ -206,7 +206,7 @@ void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr 
             (
               ( !strCentralServerAddress.toLower().compare ( "localhost" ) ||
                 !strCentralServerAddress.compare ( "127.0.0.1" ) ) &&
-              ( eCentralServerAddressType == AT_MANUAL )
+              ( eCentralServerAddressType == AT_CUSTOM )
             );
 
         bEnabled = true;

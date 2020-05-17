@@ -4,10 +4,15 @@
 
 3.5.4git
 
+- introduce genre-based server lists (Ticket #139)
+
 - support intermediate Reaper RPP file while recording, coded by pljones (Ticket #170)
 
 - duplicate Central Server type dropdown to Connection Setup (#157)
 
+
+TODO Central Server Address: "Default" results in empty server browser, "Default (North America)" works fine #156
+     -> made max list smaller from 200 to 150 -> check if that is sufficient to prevent UDP packet fragmentation
 
 TODO Keep lrelease? Does it work as expected?
 

@@ -193,6 +193,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // restore fader settings
     MainMixerBoard->vecStoredFaderTags   = pClient->vecStoredFaderTags;
     MainMixerBoard->vecStoredFaderLevels = pClient->vecStoredFaderLevels;
+    MainMixerBoard->vecStoredPanValues   = pClient->vecStoredPanValues;
     MainMixerBoard->vecStoredFaderIsSolo = pClient->vecStoredFaderIsSolo;
     MainMixerBoard->vecStoredFaderIsMute = pClient->vecStoredFaderIsMute;
     MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel;
@@ -521,6 +522,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
+    QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanPan ( int, double ) ),
+                       this, SLOT ( OnChangeChanPan ( int, double ) ) );
+
     QObject::connect ( MainMixerBoard, SIGNAL ( NumClientsChanged ( int ) ),
         this, SLOT ( OnNumClientsChanged ( int ) ) );
 
@@ -585,6 +589,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     MainMixerBoard->HideAll();
     pClient->vecStoredFaderTags          = MainMixerBoard->vecStoredFaderTags;
     pClient->vecStoredFaderLevels        = MainMixerBoard->vecStoredFaderLevels;
+    pClient->vecStoredPanValues          = MainMixerBoard->vecStoredPanValues;
     pClient->vecStoredFaderIsSolo        = MainMixerBoard->vecStoredFaderIsSolo;
     pClient->vecStoredFaderIsMute        = MainMixerBoard->vecStoredFaderIsMute;
     pClient->iNewClientFaderLevel        = MainMixerBoard->iNewClientFaderLevel;

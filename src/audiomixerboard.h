@@ -8,16 +8,16 @@
  *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
+ * Foundation; either version 2 of the License, or (at your option) any later
  * version.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
+ * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
+ * this program; if not, write to the Free Software Foundation, Inc.,
  * 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  *
 \******************************************************************************/
@@ -61,9 +61,11 @@ public:
 
     void UpdateSoloState ( const bool bNewOtherSoloState );
     void SetFaderLevel ( const int iLevel );
+    void SetPanValue ( const int iPan );
     void SetFaderIsSolo ( const bool bIsSolo );
     void SetFaderIsMute ( const bool bIsMute );
     int  GetFaderLevel() { return pFader->value(); }
+    int  GetPanValue() {return pPan->value(); }
     void Reset();
     void SetChannelLevel ( const uint16_t iLevel );
 
@@ -71,6 +73,7 @@ protected:
     double CalcFaderGain ( const int value );
     void   SetMute ( const bool bState );
     void   SendFaderLevelToServer ( const int iLevel );
+    void   SendPanValueToServer ( const int iPan );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
 
     QFrame*            pFrame;
@@ -79,6 +82,7 @@ protected:
     QWidget*           pMuteSoloBox;
     CMultiColorLEDBar* plbrChannelLevel;
     QSlider*           pFader;
+    QSlider*		   pPan;
 
     QCheckBox*         pcbMute;
     QCheckBox*         pcbSolo;
@@ -94,10 +98,12 @@ protected:
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value ); }
+    void OnPanValueChanged ( int value )  {SendPanValueToServer ( value ); }
     void OnMuteStateChanged ( int value );
 
 signals:
     void gainValueChanged ( double value );
+    void panValueChanged  (double value  );
     void soloStateChanged ( int value );
 };
 
@@ -106,9 +112,12 @@ class CAudioMixerBoardSlots : public CAudioMixerBoardSlots<slotId - 1>
 {
 public:
     void OnChGainValueChanged ( double dValue ) { UpdateGainValue ( slotId - 1, dValue ); }
+    void OnChPanValueChanged ( double dValue ) { UpdatePanValue ( slotId - 1, dValue ); }
 
 protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
+                                   const double dValue ) = 0;
+    virtual void UpdatePanValue ( const int    iChannelIdx,
                                    const double dValue ) = 0;
 };
 
@@ -139,18 +148,23 @@ public:
     // settings
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
+    CVector<int>     vecStoredPanValues;
     CVector<int>     vecStoredFaderIsSolo;
     CVector<int>     vecStoredFaderIsMute;
     int              iNewClientFaderLevel;
 
 protected:
-    bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
+    bool GetStoredFaderSettings (const CChannelInfo& ChanInfo,
                                   int&                iStoredFaderLevel,
+                                  int&                iStoredPanValue,
                                   bool&               bStoredFaderIsSolo,
                                   bool&               bStoredFaderIsMute );
 
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
+
+    void OnGainValueChanged ( const int    iChannelIdx,
+                              const double dValue );
 
     CVector<CChannelFader*> vecpChanFader;
     QGroupBox*              pGroupBox;
@@ -161,11 +175,14 @@ protected:
 
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const double dValue );
+    virtual void UpdatePanValue ( const int    iChannelIdx,
+                                   const double dValue );
 
     template<unsigned int slotId>
     inline void connectFaderSignalsToMixerBoardSlots();
 
 signals:
     void ChangeChanGain ( int iId, double dGain );
+    void ChangeChanPan ( int iId, double dPan );
     void NumClientsChanged ( int iNewNumClients );
 };

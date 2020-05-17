@@ -346,9 +346,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // central server address type combo box
     cbxCentServAddrType->clear();
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_MANUAL ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENERAL_NORTHAMERICA ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_ROCK ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
     UpdateCentralServerDependency();
 
@@ -585,7 +587,7 @@ void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
 
 void CClientSettingsDlg::UpdateCentralServerDependency()
 {
-    const bool bCurUseDefCentServAddr = ( pClient->GetCentralServerAddressType() != AT_MANUAL );
+    const bool bCurUseDefCentServAddr = ( pClient->GetCentralServerAddressType() != AT_CUSTOM );
 
     // update server type combo box (because the value may have ben changed
     // by a control in another dialog, e.g., the connect dialog),

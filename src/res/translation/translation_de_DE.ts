@@ -1920,6 +1920,26 @@
         <source>Bongo</source>
         <translation>Bongos</translation>
     </message>
+    <message>
+        <location filename="../../util.cpp" line="1010"/>
+        <source>Vocal Bass</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1011"/>
+        <source>Vocal Tenor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1012"/>
+        <source>Vocal Alto</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1013"/>
+        <source>Vocal Soprano</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CServerDlg</name>

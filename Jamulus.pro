@@ -719,6 +719,10 @@ DISTFILES += ChangeLog \
     src/res/instruments/congas.png \
     src/res/instruments/bongo.svg \
     src/res/instruments/bongo.png \
+    src/res/instruments/vocalbass.png \
+    src/res/instruments/vocaltenor.png \
+    src/res/instruments/vocalalto.png \
+    src/res/instruments/vocalsoprano.png \
     src/res/flags/flagnone.png \
     src/res/flags/ad.png \
     src/res/flags/ae.png \

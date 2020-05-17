@@ -98,7 +98,7 @@ public:
     void CreateReqJitBufMes();
     void CreateChanGainMes ( const int iChanID, const double dGain );
     void CreateChanPanMes ( const int iChanID, const double dPan );
-	void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo );
+    void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo );
     void CreateReqConnClientsList();
     void CreateChanInfoMes ( const CChannelCoreInfo ChanInfo );
     void CreateReqChanInfoMes();

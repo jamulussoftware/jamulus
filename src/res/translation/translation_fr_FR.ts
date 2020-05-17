@@ -2250,7 +2250,7 @@
     <message>
         <location filename="../../../linux/sound.cpp" line="40"/>
         <source>The Jack server is not running. This software requires a Jack server to run. Normally if the Jack server is not running this software will automatically start the Jack server. It seems that this auto start has not worked. Try to start the Jack server manually.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le serveur Jack n&apos;est pas démarré. Ce logiciel nécessite un serveur Jack pour fonctionner. Normalement, si le serveur Jack n&apos;est pas en cours d&apos;exécution, ce logiciel démarrera automatiquement le serveur Jack. Il semble que ce démarrage automatique n&apos;ait pas fonctionné. Essayez de démarrer le serveur Jack manuellement.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="60"/>

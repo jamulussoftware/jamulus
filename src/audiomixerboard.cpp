@@ -39,8 +39,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pLevelsBox                  = new QWidget           ( pFrame );
     plbrChannelLevel            = new CMultiColorLEDBar ( pLevelsBox );
     pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
-
-    pPan                        = new QSlider           (Qt::Horizontal, pLevelsBox);
+    pPan                        = new QSlider           ( Qt::Horizontal, pLevelsBox );
 
     pMuteSoloBox                = new QWidget           ( pFrame );
     pcbMute                     = new QCheckBox         ( tr ( "Mute" ), pMuteSoloBox );
@@ -67,9 +66,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
     // setup panning slider
-    pPan->setRange( 0, AUD_MIX_PAN_MAX);
-    pPan->setValue(AUD_MIX_PAN_MAX/2);
-
+    pPan->setRange ( 0, AUD_MIX_PAN_MAX );
+    pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
 
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat    ( Qt::PlainText );
@@ -103,7 +101,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pMuteSoloGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
     pMuteSoloGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
 
-    pMainGrid->addWidget ( pPan,         0,  Qt::AlignCenter );
+    pMainGrid->addWidget ( pPan,         0, Qt::AlignCenter );
     pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pMuteSoloBox, 0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pLabelInstBox );
@@ -127,8 +125,9 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setAccessibleName ( tr ( "Local mix level setting of the current audio "
         "channel at the server" ) );
 
-    pPan->setWhatsThis ( "<b>" +  tr ( "Panning") + ":</b>" + tr ( "Sets the panning position from Left to Right of the channel. "
-                              " Works only in stero or preferably mono in/stereo out mode." ) );
+    pPan->setWhatsThis ( "<b>" +  tr ( "Panning" ) + ":</b>" + tr (
+        "Sets the panning position from Left to Right of the channel. "
+        "Works only in stero or preferably mono in/stereo out mode." ) );
     pPan->setAccessibleName ( tr ( "Local panning position of the current audio channel at the server" ) );
 
     pcbMute->setWhatsThis ( "<b>" + tr ( "Mute" ) + ":</b> " + tr (
@@ -158,7 +157,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
         this, SLOT ( OnLevelValueChanged ( int ) ) );
 
     QObject::connect ( pPan, SIGNAL ( valueChanged ( int ) ),
-		this, SLOT ( OnPanValueChanged ( int ) ) );
+        this, SLOT ( OnPanValueChanged ( int ) ) );
 
     QObject::connect ( pcbMute, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnMuteStateChanged ( int ) ) );
@@ -260,7 +259,7 @@ void CChannelFader::Reset()
 {
     // init gain and pan value -> maximum value as definition according to server
     pFader->setValue ( AUD_MIX_FADER_MAX );
-    pPan->setValue ( AUD_MIX_PAN_MAX/2 );
+    pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
 
     // reset mute/solo check boxes and level meter
     pcbMute->setChecked ( false );
@@ -298,7 +297,7 @@ void CChannelFader::SetFaderLevel ( const int iLevel )
 	}
 }
 
-void CChannelFader::SetPanValue(const int iPan)
+void CChannelFader::SetPanValue ( const int iPan )
 {
     // first make a range check
     if ( ( iPan >= 0 ) && ( iPan <= AUD_MIX_PAN_MAX ) )
@@ -306,7 +305,7 @@ void CChannelFader::SetPanValue(const int iPan)
         // we set the new fader level in the GUI (slider control) and also tell the
         // server about the change
         pPan->setValue       ( iPan );
-        SendPanValueToServer(  iPan );
+        SendPanValueToServer ( iPan );
     }
 }
 
@@ -337,8 +336,7 @@ void CChannelFader::SendFaderLevelToServer ( const int iLevel )
 
 void CChannelFader::SendPanValueToServer ( const int iPan )
 {    
-    double dPan =  static_cast<double> ( iPan ) / AUD_MIX_PAN_MAX;
-    emit panValueChanged ( dPan );
+    emit panValueChanged ( static_cast<double> ( iPan ) / AUD_MIX_PAN_MAX );
 }
 
 void CChannelFader::OnMuteStateChanged ( int value )
@@ -559,7 +557,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     QScrollArea          ( parent ),
     vecStoredFaderTags   ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
     vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
-    vecStoredPanValues   ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX/2),
+    vecStoredPanValues   ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
     vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     iNewClientFaderLevel ( 100 ),
@@ -752,7 +750,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                                                   bStoredFaderIsMute ) )
                     {
                         vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel );
-                        vecpChanFader[i]->SetPanValue    ( iStoredPanValue   );
+                        vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
                         vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
                         vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
                     }
@@ -834,11 +832,10 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
 }
 
 void CAudioMixerBoard::UpdatePanValue ( const int    iChannelIdx,
-                                         const double dValue )
+                                        const double dValue )
 {
     emit ChangeChanPan ( iChannelIdx, dValue );
 }
-
 
 void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
 {
@@ -904,7 +901,7 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
             {
                 // copy stored settings values
                 iStoredFaderLevel  = vecStoredFaderLevels[iIdx];
-                iStoredPanValue   = vecStoredPanValues[iIdx];
+                iStoredPanValue    = vecStoredPanValues[iIdx];
                 bStoredFaderIsSolo = vecStoredFaderIsSolo[iIdx] != 0;
                 bStoredFaderIsMute = vecStoredFaderIsMute[iIdx] != 0;
 

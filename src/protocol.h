@@ -282,7 +282,7 @@ signals:
     void ReqJittBufSize();
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
     void ChangeChanGain ( int iChanID, double dNewGain );
-	void ChangeChanPan ( int iChanID, double dNewPan );
+    void ChangeChanPan ( int iChanID, double dNewPan );
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ServerFullMesReceived();
     void ReqConnClientsList();

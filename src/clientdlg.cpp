@@ -523,7 +523,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanPan ( int, double ) ),
-                       this, SLOT ( OnChangeChanPan ( int, double ) ) );
+        this, SLOT ( OnChangeChanPan ( int, double ) ) );
 
     QObject::connect ( MainMixerBoard, SIGNAL ( NumClientsChanged ( int ) ),
         this, SLOT ( OnNumClientsChanged ( int ) ) );

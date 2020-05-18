@@ -118,7 +118,7 @@ public:
         { Protocol.CreateChanGainMes ( iId, dGain ); }
 
     void SetRemoteChanPan ( const int iId, const double dPan )
-    { Protocol.CreateChanPanMes ( iId, dPan ); }
+        { Protocol.CreateChanPanMes ( iId, dPan ); }
 
     bool SetSockBufNumFrames ( const int  iNewNumFrames,
                                const bool bPreserve = false );
@@ -197,7 +197,6 @@ protected:
 
     // mixer and effect settings
     CVector<double>   vecdGains;
-
     CVector<double>   vecdPannings;
 
     // network jitter-buffer

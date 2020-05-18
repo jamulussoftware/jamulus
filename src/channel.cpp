@@ -28,7 +28,7 @@
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains              ( MAX_NUM_CHANNELS, 1.0 ),
-    vecdPannings           ( MAX_NUM_CHANNELS, 0.5),
+    vecdPannings           ( MAX_NUM_CHANNELS, 0.5 ),
     bDoAutoSockBufSize     ( true ),
     iFadeInCnt             ( 0 ),
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
@@ -88,7 +88,7 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
     QObject::connect( &Protocol, SIGNAL ( ChangeChanPan ( int, double ) ),
-                      this, SLOT ( OnChangeChanPan ( int, double ) ) );
+        this, SLOT ( OnChangeChanPan ( int, double ) ) );
 
     QObject::connect( &Protocol, SIGNAL ( ChangeChanInfo ( CChannelCoreInfo ) ),
         this, SLOT ( OnChangeChanInfo ( CChannelCoreInfo ) ) );
@@ -273,7 +273,8 @@ double CChannel::GetGain ( const int iChanID )
     }
 }
 
-void CChannel::SetPan(const int iChanID, const double dNewPan)
+void CChannel::SetPan ( const int    iChanID,
+                        const double dNewPan )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -284,7 +285,7 @@ void CChannel::SetPan(const int iChanID, const double dNewPan)
     }
 }
 
-double CChannel::GetPan(const int iChanID)
+double CChannel::GetPan ( const int iChanID )
 {
     QMutexLocker locker ( &Mutex );
 
@@ -368,7 +369,7 @@ void CChannel::OnChangeChanGain ( int    iChanID,
 void CChannel::OnChangeChanPan ( int    iChanID,
                                  double dNewPan )
 {
-    SetPan( iChanID, dNewPan );
+    SetPan ( iChanID, dNewPan );
 }
 
 void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo )

@@ -65,7 +65,7 @@ public:
     void SetFaderIsSolo ( const bool bIsSolo );
     void SetFaderIsMute ( const bool bIsMute );
     int  GetFaderLevel() { return pFader->value(); }
-    int  GetPanValue() {return pPan->value(); }
+    int  GetPanValue() { return pPan->value(); }
     void Reset();
     void SetChannelLevel ( const uint16_t iLevel );
 
@@ -82,7 +82,7 @@ protected:
     QWidget*           pMuteSoloBox;
     CMultiColorLEDBar* plbrChannelLevel;
     QSlider*           pFader;
-    QSlider*		   pPan;
+    QSlider*           pPan;
 
     QCheckBox*         pcbMute;
     QCheckBox*         pcbSolo;
@@ -98,12 +98,12 @@ protected:
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value ); }
-    void OnPanValueChanged ( int value )  {SendPanValueToServer ( value ); }
+    void OnPanValueChanged ( int value ) { SendPanValueToServer ( value ); }
     void OnMuteStateChanged ( int value );
 
 signals:
     void gainValueChanged ( double value );
-    void panValueChanged  (double value  );
+    void panValueChanged  ( double value );
     void soloStateChanged ( int value );
 };
 
@@ -118,7 +118,7 @@ protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const double dValue ) = 0;
     virtual void UpdatePanValue ( const int    iChannelIdx,
-                                   const double dValue ) = 0;
+                                  const double dValue ) = 0;
 };
 
 template<>
@@ -154,7 +154,7 @@ public:
     int              iNewClientFaderLevel;
 
 protected:
-    bool GetStoredFaderSettings (const CChannelInfo& ChanInfo,
+    bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                                   int&                iStoredFaderLevel,
                                   int&                iStoredPanValue,
                                   bool&               bStoredFaderIsSolo,
@@ -176,7 +176,7 @@ protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const double dValue );
     virtual void UpdatePanValue ( const int    iChannelIdx,
-                                   const double dValue );
+                                  const double dValue );
 
     template<unsigned int slotId>
     inline void connectFaderSignalsToMixerBoardSlots();

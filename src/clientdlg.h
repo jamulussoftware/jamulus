@@ -167,7 +167,7 @@ public slots:
         { pClient->SetRemoteChanGain ( iId, dGain ); }
 
 	void OnChangeChanPan ( int iId, double dPan )
-		{ pClient->SetRemoteChanPan ( iId, dPan ); }
+        { pClient->SetRemoteChanPan ( iId, dPan ); }
 
     void OnNewLocalInputText ( QString strChatText )
         { pClient->CreateChatTextMes ( strChatText ); }

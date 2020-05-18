@@ -805,7 +805,32 @@ void CProtocol::CreateChanGainMes ( const int iChanID, const double dGain )
     CreateAndSendMessage ( PROTMESSID_CHANNEL_GAIN, vecData );
 }
 
-void CProtocol::CreateChanPanMes(const int iChanID, const double dPan)
+bool CProtocol::EvaluateChanGainMes ( const CVector<uint8_t>& vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 3 )
+    {
+        return true; // return error code
+    }
+
+    // channel ID
+    const int iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // gain (read integer value)
+    const int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+    // we convert the gain from integer to double with range 0..1
+    const double dNewGain = static_cast<double> ( iData ) / ( 1 << 15 );
+
+    // invoke message action
+    emit ChangeChanGain ( iCurID, dNewGain );
+
+    return false; // no error
+}
+
+void CProtocol::CreateChanPanMes ( const int iChanID, const double dPan )
 {
     CVector<uint8_t> vecData ( 3 ); // 3 bytes of data
     int              iPos = 0;      // init position pointer
@@ -822,7 +847,7 @@ void CProtocol::CreateChanPanMes(const int iChanID, const double dPan)
     CreateAndSendMessage ( PROTMESSID_CHANNEL_PAN, vecData );
 }
 
-bool CProtocol::EvaluateChanGainMes ( const CVector<uint8_t>& vecData )
+bool CProtocol::EvaluateChanPanMes ( const CVector<uint8_t> &vecData )
 {
     int iPos = 0; // init position pointer
 
@@ -833,39 +858,10 @@ bool CProtocol::EvaluateChanGainMes ( const CVector<uint8_t>& vecData )
     }
 
     // channel ID
-    const int iCurID =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
-
-    // gain (read integer value)
-    const int iData =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
-
-    // we convert the gain from integer to double with range 0..1
-    const double dNewGain = static_cast<double> ( iData ) / ( 1 << 15 );
-
-    // invoke message action
-    emit ChangeChanGain ( iCurID, dNewGain );
-
-    return false; // no error
-}
-
-bool CProtocol::EvaluateChanPanMes(const CVector<uint8_t> &vecData)
-{
-    int iPos = 0; // init position pointer
-
-    // check size
-    if ( vecData.Size() != 3 )
-    {
-        return true; // return error code
-    }
-
-    // channel ID
-    const int iCurID =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+    const int iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // pan (read integer value)
-    const int iData =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+    const int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // we convert the gain from integer to double with range 0..1
     const double dNewPan = static_cast<double> ( iData ) / ( 1 << 15 );

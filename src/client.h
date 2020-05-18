@@ -246,7 +246,7 @@ public:
         { Channel.SetRemoteChanGain ( iId, dGain ); }
 
 	void SetRemoteChanPan ( const int iId, const double dPan )
-		{ Channel.SetRemoteChanPan ( iId, dPan ); }
+        { Channel.SetRemoteChanPan ( iId, dPan ); }
 
     void SetRemoteInfo() { Channel.SetRemoteInfo ( ChannelInfo ); }
 

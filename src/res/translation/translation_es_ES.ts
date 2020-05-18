@@ -1155,7 +1155,7 @@
     <message>
         <location filename="../../util.h" line="581"/>
         <source>Custom</source>
-        <translation>Customizado</translation>
+        <translation>Personalizado</translation>
     </message>
     <message>
         <location filename="../../util.h" line="584"/>

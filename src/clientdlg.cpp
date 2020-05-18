@@ -498,6 +498,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
         this, SLOT ( OnCLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
 
+    QObject::connect ( pClient,
+        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ),
+        this, SLOT ( OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ) );
+
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( pClient,
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),
@@ -747,6 +751,19 @@ void CClientDlg::OnCentralServerAddressTypeChanged()
 
         ConnectDlg.RequestServerList();
     }
+}
+
+void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType,
+                                          QString                strVersion )
+{
+
+
+// TODO the implementation of: check for version number if Pan is supported -> enable Pan controls in mixer board if version is sufficient
+// TEST
+qDebug() << strVersion;
+
+
+
 }
 
 void CClientDlg::OnChatTextReceived ( QString strChatText )

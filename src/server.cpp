@@ -1213,7 +1213,7 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
                         // get the correct pan value for the current channel (left or right)
-                        double pan = ( i % 2 == 0 ) ? dPanCoefL : dPanCoefR;
+                        const double pan = ( i % 2 == 0 ) ? dPanCoefL : dPanCoefR;
 
                         vecsOutData[i] = Double2Short (
                             vecsOutData[i] + vecsData[i] * dGain * pan );

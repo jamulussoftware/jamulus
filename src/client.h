@@ -422,6 +422,7 @@ signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChatTextReceived ( QString strChatText );
     void LicenceRequired ( ELicenceType eLicenceType );
+    void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void PingTimeReceived ( int iPingTime );
 
     void CLServerListReceived ( CHostAddress         InetAddr,

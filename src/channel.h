@@ -281,6 +281,7 @@ signals:
     void ChatTextReceived ( QString strChatText );
     void ReqNetTranspProps();
     void LicenceRequired ( ELicenceType eLicenceType );
+    void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void Disconnected();
 
     void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,

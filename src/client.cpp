@@ -160,6 +160,10 @@ CClient::CClient ( const quint16  iPortNumber,
         SIGNAL ( LicenceRequired ( ELicenceType ) ),
         SIGNAL ( LicenceRequired ( ELicenceType ) ) );
 
+    QObject::connect ( &Channel,
+        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ),
+        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ) );
+
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
         this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );

@@ -110,6 +110,10 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
         SIGNAL ( LicenceRequired ( ELicenceType ) ) );
 
     QObject::connect ( &Protocol,
+        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ),
+        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ) );
+
+    QObject::connect ( &Protocol,
         SIGNAL ( ReqChannelLevelList ( bool ) ),
         this, SLOT ( OnReqChannelLevelList ( bool ) ) );
 }

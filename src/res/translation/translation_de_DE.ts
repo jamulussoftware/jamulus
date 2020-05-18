@@ -81,12 +81,12 @@
     <message>
         <location filename="../../util.cpp" line="414"/>
         <source>Dutch</source>
-        <translation type="unfinished"></translation>
+        <translation>Holländisch</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="416"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>Deutsch</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="423"/>
@@ -180,7 +180,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="658"/>
         <source>Personal Mix at the Server: </source>
-        <translation type="unfinished"></translation>
+        <translation>Eigener Mix am Server: </translation>
     </message>
 </context>
 <context>
@@ -641,7 +641,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="703"/>
         <source>Central Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Zentralserver</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="809"/>
@@ -1151,22 +1151,22 @@
     <message>
         <location filename="../../util.h" line="581"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefiniert</translation>
     </message>
     <message>
         <location filename="../../util.h" line="584"/>
         <source>All Genres</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Genres</translation>
     </message>
     <message>
         <location filename="../../util.h" line="587"/>
         <source>Genre Rock</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../util.h" line="590"/>
         <source>Genre Jazz</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../util.h" line="593"/>
@@ -1201,7 +1201,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="606"/>
         <source>Predefined Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Vordefinierte Adresse</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="646"/>
@@ -1470,7 +1470,7 @@
     <message>
         <location filename="../../connectdlgbase.ui" line="35"/>
         <source>List</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="45"/>
@@ -1923,22 +1923,22 @@
     <message>
         <location filename="../../util.cpp" line="1010"/>
         <source>Vocal Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesang Bass</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1011"/>
         <source>Vocal Tenor</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesang Tenor</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1012"/>
         <source>Vocal Alto</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesang Alt</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1013"/>
         <source>Vocal Soprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesang Sopran</translation>
     </message>
 </context>
 <context>
@@ -2104,7 +2104,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="527"/>
         <source>Predefined Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Vordefinierte Adresse</translation>
     </message>
     <message>
         <source>Manual</source>

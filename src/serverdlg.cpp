@@ -188,9 +188,11 @@ lvwClients->setMinimumHeight ( 140 );
 
     // central server address type combo box
     cbxCentServAddrType->clear();
-    cbxCentServAddrType->addItem ( tr ( "Manual" ) );                  // AT_MANUAL
-    cbxCentServAddrType->addItem ( tr ( "Default" ) );                 // AT_DEFAULT
-    cbxCentServAddrType->addItem ( tr ( "Default (North America)" ) ); // AT_NORTH_AMERICA
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENERAL_NORTHAMERICA ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_ROCK ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pServer->GetCentralServerAddressType() ) );
 
     // update server name line edit
@@ -506,7 +508,7 @@ void CServerDlg::UpdateGUIDependencies()
     // get the states which define the GUI dependencies from the server
     const bool bCurSerListEnabled = pServer->GetServerListEnabled();
 
-    const bool bCurUseDefCentServAddr = ( pServer->GetCentralServerAddressType() != AT_MANUAL );
+    const bool bCurUseDefCentServAddr = ( pServer->GetCentralServerAddressType() != AT_CUSTOM );
 
     const ESvrRegStatus eSvrRegStatus = pServer->GetSvrRegStatus();
 
@@ -522,7 +524,7 @@ void CServerDlg::UpdateGUIDependencies()
         {
             // if the default central server is used, just show a text of the
             // server name
-            edtCentralServerAddress->setText ( DEFAULT_SERVER_NAME );
+            edtCentralServerAddress->setText ( tr ( "Predefined Address" ) );
         }
         else
         {

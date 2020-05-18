@@ -950,9 +950,11 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
 {
     switch ( eCentralServerAddressType )
     {
-    case AT_MANUAL:        return strCentralServerAddress;
-    case AT_NORTH_AMERICA: return QString ( "%1:%2" ).arg ( DEFAULT_SERVER_ADDRESS ).arg ( DEFAULT_PORT_NUMBER_NORTHAMERICA );
-    default:               return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
+    case AT_CUSTOM:               return strCentralServerAddress;
+    case AT_GENERAL_NORTHAMERICA: return CENTSERV_GENERAL_NORTHAMERICA;
+    case AT_GENRE_ROCK:           return CENTSERV_GENRE_ROCK;
+    case AT_GENRE_JAZZ:           return CENTSERV_GENRE_JAZZ;
+    default:                      return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
     }
 }
 
@@ -1005,6 +1007,10 @@ CVector<CInstPictures::CInstPictProps>& CInstPictures::GetTable()
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Viola" ), ":/png/instr/res/instruments/viola.png", IC_STRING_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Congas" ), ":/png/instr/res/instruments/congas.png", IC_PERCUSSION_INSTRUMENT ) );
         vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Bongo" ), ":/png/instr/res/instruments/bongo.png", IC_PERCUSSION_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Bass" ), ":/png/instr/res/instruments/vocalbass.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Tenor" ), ":/png/instr/res/instruments/vocaltenor.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Alto" ), ":/png/instr/res/instruments/vocalalto.png", IC_OTHER_INSTRUMENT ) );
+        vecDataBase.Add ( CInstPictProps ( QCoreApplication::translate ( "CMusProfDlg", "Vocal Soprano" ), ":/png/instr/res/instruments/vocalsoprano.png", IC_OTHER_INSTRUMENT ) );
 
         // now the table is initialized
         TableIsInitialized = true;
@@ -1328,7 +1334,7 @@ ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountr
     case QLocale::Canada:
     case QLocale::Mexico:
     case QLocale::Greenland:
-        return AT_NORTH_AMERICA;
+        return AT_GENERAL_NORTHAMERICA;
 
     default:
         return AT_DEFAULT;

@@ -599,6 +599,9 @@ CreateAndSendChanListForAllConChannels();
         vecChannels[iChID].CreateLicReqMes ( eLicenceType );
     }
 
+    // send version info (for, e.g., feature activation in the client)
+    vecChannels[iChID].CreateVersionAndOSMes();
+
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
     DoubleFrameSizeConvBufOut[iChID].Reset();

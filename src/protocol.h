@@ -55,7 +55,8 @@
 #define PROTMESSID_OPUS_SUPPORTED             26 // tells that OPUS codec is supported
 #define PROTMESSID_LICENCE_REQUIRED           27 // licence required
 #define PROTMESSID_REQ_CHANNEL_LEVEL_LIST     28 // request the channel level list
-#define PROTMESSID_CHANNEL_PAN                29 // set channel gain for mix
+#define PROTMESSID_VERSION_AND_OS             29 // version number and operating system
+#define PROTMESSID_CHANNEL_PAN                30 // set channel pan for mix
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -108,6 +109,7 @@ public:
     void CreateLicenceRequiredMes ( const ELicenceType eLicenceType );
     void CreateOpusSupportedMes();
     void CreateReqChannelLevelListMes ( const bool bRCL );
+    void CreateVersionAndOSMes();
 
     void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
@@ -230,6 +232,7 @@ protected:
     bool EvaluateReqNetwTranspPropsMes();
     bool EvaluateLicenceRequiredMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData );
+    bool EvaluateVersionAndOSMes        ( const CVector<uint8_t>& vecData );
 
     bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
@@ -290,6 +293,7 @@ signals:
     void ReqNetTranspProps();
     void LicenceRequired ( ELicenceType eLicenceType );
     void ReqChannelLevelList ( bool bOptIn );
+    void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
 
     void CLPingReceived               ( CHostAddress           InetAddr,
                                         int                    iMs );

@@ -105,6 +105,7 @@ public:
         { Protocol.CreateChanInfoMes ( ChInfo ); }
 
     void CreateReqChanInfoMes() { Protocol.CreateReqChanInfoMes(); }
+    void CreateVersionAndOSMes() { Protocol.CreateVersionAndOSMes(); }
 
     void SetGain ( const int iChanID, const double dNewGain );
     double GetGain ( const int iChanID );

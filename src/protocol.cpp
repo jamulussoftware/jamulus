@@ -154,13 +154,19 @@ MESSAGES (with connection)
     | 1 byte licence type |
     +---------------------+
 
-- PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST: Opt in or out of the channel level list
+- PROTMESSID_REQ_CHANNEL_LEVEL_LIST: Opt in or out of the channel level list
 
     +---------------+
     | 1 byte option |
     +---------------+
 
     option is boolean, true to opt in, false to opt out
+
+- PROTMESSID_VERSION_AND_OS: Version number and operating system
+
+    +-------------------------+------------------+------------------------------+
+    | 1 byte operating system | 2 bytes number n | n bytes UTF-8 string version |
+    +-------------------------+------------------+------------------------------+
 
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
@@ -607,6 +613,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
             case PROTMESSID_REQ_CHANNEL_LEVEL_LIST:
                 bRet = EvaluateReqChannelLevelListMes ( vecbyMesBodyData );
+                break;
+
+            case PROTMESSID_VERSION_AND_OS:
+                bRet = EvaluateVersionAndOSMes ( vecbyMesBodyData );
                 break;
             }
 
@@ -1331,6 +1341,71 @@ bool CProtocol::EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData
 
     // invoke message action
     emit ReqChannelLevelList ( static_cast<bool> ( val ) );
+
+    return false; // no error
+}
+
+void CProtocol::CreateVersionAndOSMes()
+{
+    int iPos = 0; // init position pointer
+
+    // get the version number string
+    const QString strVerion = VERSION;
+
+    // convert version string to utf-8
+    const QByteArray strUTF8Version = strVerion.toUtf8();
+
+    // size of current message body
+    const int iEntrLen =
+        1 /* operating system */ +
+        2 /* version utf-8 string size */ + strUTF8Version.size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // operating system (1 byte)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( COSUtil::GetOperatingSystem() ), 1 );
+
+    // version
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8Version );
+
+    CreateAndSendMessage ( PROTMESSID_VERSION_AND_OS, vecData );
+}
+
+bool CProtocol::EvaluateVersionAndOSMes ( const CVector<uint8_t>& vecData )
+{
+    int       iPos = 0; // init position pointer
+    const int iDataLen = vecData.Size();
+
+    // check size (the first 1 byte)
+    if ( iDataLen < 1 )
+    {
+        return true; // return error code
+    }
+
+    // operating system (1 byte)
+    const COSUtil::EOpSystemType eOSType =
+        static_cast<COSUtil::EOpSystemType> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // version text
+    QString strVersion;
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_VERSION_TEXT,
+                               strVersion ) )
+    {
+        return true; // return error code
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit VersionAndOSReceived ( eOSType, strVersion );
 
     return false; // no error
 }

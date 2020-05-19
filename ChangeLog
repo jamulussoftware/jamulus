@@ -15,6 +15,7 @@
 - support intermediate Reaper RPP file while recording, coded by pljones (Ticket #170)
 
 
+TODO remove this code "TODO output mapping from stereo to multi channel"
 
 TODO Central Server Address: "Default" results in empty server browser, "Default (North America)" works fine #156
      -> made max list smaller from 200 to 150 -> check if that is sufficient to prevent UDP packet fragmentation

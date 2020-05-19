@@ -1152,17 +1152,18 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
         // Stereo target channel -----------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
-            // get a reference to the audio data and gain of the current client
+            // get a reference to the audio data and gain/pan of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
             const double            dGain    = vecdGains[j];
+            const double            dPan     = vecdPannings[j];
 
-            // calculate pan coefficient, see http://write.flossmanuals.net/csound/b-panning-and-spatialization/ for better formula, if needed
-            const double dPan      = vecdPannings[j];
-            const double dPanCoefL = sqrt ( 1 - dPan ); // faster: ( 1 - dPan )
-            const double dPanCoefR = sqrt ( dPan ); // ( dPan )
+            // calculate combined gain/pan for each stereo channel where we define
+            // the panning that center equals full gain for both channels
+            const double dGainL = std::min ( 0.5, 1 - dPan ) * 2 * dGain;
+            const double dGainR = std::min ( 0.5, dPan ) * 2 * dGain;
 
             // if channel gain is 1, avoid multiplication for speed optimization
-            if ( dGain == static_cast<double> ( 1.0 ) )
+            if ( ( dGainL == static_cast<double> ( 1.0 ) ) && ( dGainR == static_cast<double> ( 1.0 ) ) )
             {
                 if ( vecNumAudioChannels[j] == 1 )
                 {
@@ -1171,11 +1172,11 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     {
                         // left channel
                         vecsOutData[k] = Double2Short (
-                            static_cast<double> ( vecsOutData[k] ) + vecsData[i] * dPanCoefL );
+                            static_cast<double> ( vecsOutData[k] ) + vecsData[i] );
 
                         // right channel
                         vecsOutData[k + 1] = Double2Short (
-                            static_cast<double> ( vecsOutData[k + 1] ) + vecsData[i] * dPanCoefR );
+                            static_cast<double> ( vecsOutData[k + 1] ) + vecsData[i] );
                     }
                 }
                 else
@@ -1183,11 +1184,8 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
-                        // get the correct pan value for the current channel (left or right)
-                        const double pan = ( i % 2 == 0 ) ? dPanCoefL : dPanCoefR;
-
                         vecsOutData[i] = Double2Short (
-                            static_cast<double> ( vecsOutData[i] ) + vecsData[i] * pan );
+                            static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
                     }
                 }
             }
@@ -1200,23 +1198,25 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     {
                         // left channel
                         vecsOutData[k] = Double2Short (
-                            vecsOutData[k] + vecsData[i] * dGain * dPanCoefL );
+                            vecsOutData[k] + vecsData[i] * dGain * dGainL );
 
                         // right channel
                         vecsOutData[k + 1] = Double2Short (
-                            vecsOutData[k + 1] + vecsData[i] * dGain * dPanCoefR );
+                            vecsOutData[k + 1] + vecsData[i] * dGain * dGainR );
                     }
                 }
                 else
                 {
                     // stereo
-                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
                     {
-                        // get the correct pan value for the current channel (left or right)
-                        const double pan = ( i % 2 == 0 ) ? dPanCoefL : dPanCoefR;
-
+                        // left channel
                         vecsOutData[i] = Double2Short (
-                            vecsOutData[i] + vecsData[i] * dGain * pan );
+                            vecsOutData[i] + vecsData[i] * dGain * dGainL );
+
+                        // right channel
+                        vecsOutData[i + 1] = Double2Short (
+                            vecsOutData[i + 1] + vecsData[i + 1] * dGain * dGainR );
                     }
                 }
             }

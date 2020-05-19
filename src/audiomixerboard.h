@@ -32,6 +32,7 @@
 #include <QLayout>
 #include <QString>
 #include <QSlider>
+#include <QDial>
 #include <QSizePolicy>
 #include <QHostAddress>
 #include "global.h"
@@ -58,6 +59,7 @@ public:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetDisplayChannelLevel ( const bool eNDCL );
     bool GetDisplayChannelLevel();
+    void SetDisplayPans ( const bool eNDP );
 
     void UpdateSoloState ( const bool bNewOtherSoloState );
     void SetFaderLevel ( const int iLevel );
@@ -82,7 +84,8 @@ protected:
     QWidget*           pMuteSoloBox;
     CMultiColorLEDBar* plbrChannelLevel;
     QSlider*           pFader;
-    QSlider*           pPan;
+    QDial*             pPan;
+    QLabel*            pPanLabel;
 
     QCheckBox*         pcbMute;
     QCheckBox*         pcbSolo;
@@ -139,6 +142,7 @@ public:
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetDisplayChannelLevels ( const bool eNDCL );
+    void SetPanIsSupported();
 
     void SetFaderLevel ( const int iChannelIdx,
                          const int iValue );

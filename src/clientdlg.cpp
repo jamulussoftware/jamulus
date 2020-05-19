@@ -753,17 +753,16 @@ void CClientDlg::OnCentralServerAddressTypeChanged()
     }
 }
 
-void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType,
+void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
                                           QString                strVersion )
 {
-
-
-// TODO the implementation of: check for version number if Pan is supported -> enable Pan controls in mixer board if version is sufficient
-// TEST
-qDebug() << strVersion;
-
-
-
+    // check if Pan is supported by the server (minimum version is 3.5.4)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 5, 4 ) ) >= 0 )
+    {
+        MainMixerBoard->SetPanIsSupported();
+    }
+#endif
 }
 
 void CClientDlg::OnChatTextReceived ( QString strChatText )

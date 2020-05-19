@@ -33,6 +33,9 @@
 #include <QRadioButton>
 #include <QMenuBar>
 #include <QLayout>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+# include <QVersionNumber>
+#endif
 #include "global.h"
 #include "client.h"
 #include "settings.h"
@@ -131,7 +134,7 @@ public slots:
                                     const int iValue ) { MainMixerBoard->SetFaderLevel ( iChannelIdx,
                                                                                          iValue ); }
 
-    void OnVersionAndOSReceived ( COSUtil::EOpSystemType eOSType,
+    void OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
                                   QString                strVersion );
 
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING

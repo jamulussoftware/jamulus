@@ -39,7 +39,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pLevelsBox                  = new QWidget           ( pFrame );
     plbrChannelLevel            = new CMultiColorLEDBar ( pLevelsBox );
     pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
-    pPan                        = new QSlider           ( Qt::Horizontal, pLevelsBox );
+    pPan                        = new QDial             ( pLevelsBox );
+    pPanLabel                   = new QLabel            ( tr ( "Pan" ) , pLevelsBox );
 
     pMuteSoloBox                = new QWidget           ( pFrame );
     pcbMute                     = new QCheckBox         ( tr ( "Mute" ), pMuteSoloBox );
@@ -60,14 +61,17 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     plbrChannelLevel->setContentsMargins ( 0, 3, 2, 3 );
 
     // setup slider
-    pFader->setPageStep     ( 1 );
-    pFader->setTickPosition ( QSlider::TicksBothSides );
-    pFader->setRange        ( 0, AUD_MIX_FADER_MAX );
-    pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
+    pFader->setPageStep      ( 1 );
+    pFader->setTickPosition  ( QSlider::TicksBothSides );
+    pFader->setRange         ( 0, AUD_MIX_FADER_MAX );
+    pFader->setTickInterval  ( AUD_MIX_FADER_MAX / 9 );
+    pFader->setMinimumHeight ( 90 );
 
-    // setup panning slider
+    // setup panning control
     pPan->setRange ( 0, AUD_MIX_PAN_MAX );
     pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
+    pPan->setFixedSize ( 55, 55 );
+    pPan->setNotchesVisible ( true );
 
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat    ( Qt::PlainText );
@@ -101,7 +105,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pMuteSoloGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
     pMuteSoloGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
 
-    pMainGrid->addWidget ( pPan,         0, Qt::AlignCenter );
+    pMainGrid->addWidget ( pPanLabel,    0, Qt::AlignLeft );
+    pMainGrid->addWidget ( pPan,         0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pMuteSoloBox, 0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pLabelInstBox );
@@ -186,6 +191,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                  padding-bottom: -15px; }"
             "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
 
+        pPanLabel->setText                  ( tr ( "PAN" ) );
         pcbMute->setText                    ( tr ( "MUTE" ) );
         pcbSolo->setText                    ( tr ( "SOLO" ) );
         plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
@@ -194,6 +200,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     default:
         // reset style sheet and set original paramters
         pFader->setStyleSheet               ( "" );
+        pPanLabel->setText                  ( tr ( "Pan" ) );
         pcbMute->setText                    ( tr ( "Mute" ) );
         pcbSolo->setText                    ( tr ( "Solo" ) );
         plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
@@ -209,6 +216,12 @@ void CChannelFader::SetDisplayChannelLevel ( const bool eNDCL )
 bool CChannelFader::GetDisplayChannelLevel()
 {
     return !plbrChannelLevel->isHidden();
+}
+
+void CChannelFader::SetDisplayPans ( const bool eNDP )
+{
+    pPanLabel->setHidden ( !eNDP );
+    pPan->setHidden ( !eNDP );
 }
 
 void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
@@ -587,8 +600,6 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     setMinimumWidth ( 200 ); // at least two faders shall be visible
     setWidget ( pGroupBox );
     setWidgetResizable ( true ); // make sure it fills the entire scroll area
-    setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
-    setHorizontalScrollBarPolicy ( Qt::ScrollBarAsNeeded );
     setFrameShape ( QFrame::NoFrame );
 
 
@@ -668,6 +679,14 @@ void CAudioMixerBoard::SetDisplayChannelLevels ( const bool eNDCL )
     }
 }
 
+void CAudioMixerBoard::SetPanIsSupported()
+{
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        vecpChanFader[i]->SetDisplayPans ( true );
+    }
+}
+
 void CAudioMixerBoard::HideAll()
 {
     // make all controls invisible
@@ -678,6 +697,7 @@ void CAudioMixerBoard::HideAll()
 
         vecpChanFader[i]->SetChannelLevel ( 0 );
         vecpChanFader[i]->SetDisplayChannelLevel ( false );
+        vecpChanFader[i]->SetDisplayPans ( false );
         vecpChanFader[i]->Hide();
     }
 

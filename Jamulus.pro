@@ -302,11 +302,15 @@ DISTFILES_OBOE += libs/oboe/AUTHORS \
         android/sound.h \
         android/sound.cpp
 
-    # could this also be done for all platforms?
-    defined(INSTALL_PATH, var) {
-        INSTALLS += target
-        target.path = $$INSTALL_PATH
+    isEmpty(PREFIX) {
+        PREFIX = /usr/local
     }
+    isEmpty(BINDIR) {
+        BINDIR = bin
+    }
+    BINDIR = $$absolute_path($$BINDIR, $$PREFIX)
+    INSTALLS += target
+    target.path = $$BINDIR
 }
 
 RCC_DIR = src/res

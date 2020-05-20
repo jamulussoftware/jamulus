@@ -56,6 +56,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     QVBoxLayout* pMuteSoloGrid  = new QVBoxLayout       ( pMuteSoloBox );
     QHBoxLayout* pLabelGrid     = new QHBoxLayout       ( pLabelInstBox );
     QVBoxLayout* pLabelPictGrid = new QVBoxLayout       ( );
+    QVBoxLayout* pPanGrid       = new QVBoxLayout       ( );
 
     // setup channel level
     plbrChannelLevel->setContentsMargins ( 0, 3, 2, 3 );
@@ -72,6 +73,8 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
     pPan->setFixedSize ( 55, 55 );
     pPan->setNotchesVisible ( true );
+    pPanGrid->addWidget ( pPanLabel, 0, Qt::AlignLeft );
+    pPanGrid->addWidget ( pPan,      0, Qt::AlignHCenter );
 
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat    ( Qt::PlainText );
@@ -83,6 +86,9 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     // set margins of the layouts to zero to get maximum space for the controls
     pMainGrid->setContentsMargins ( 0, 0, 0, 0 );
+
+    pPanGrid->setContentsMargins ( 0, 0, 0, 0 );
+    pPanGrid->setSpacing ( 0 ); // only minimal space
 
     pLevelsGrid->setContentsMargins ( 0, 0, 0, 0 );
     pLevelsGrid->setSpacing ( 0 ); // only minimal space
@@ -105,8 +111,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pMuteSoloGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
     pMuteSoloGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
 
-    pMainGrid->addWidget ( pPanLabel,    0, Qt::AlignLeft );
-    pMainGrid->addWidget ( pPan,         0, Qt::AlignHCenter );
+    pMainGrid->addLayout ( pPanGrid );
     pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pMuteSoloBox, 0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pLabelInstBox );
@@ -221,7 +226,7 @@ bool CChannelFader::GetDisplayChannelLevel()
 void CChannelFader::SetDisplayPans ( const bool eNDP )
 {
     pPanLabel->setHidden ( !eNDP );
-    pPan->setHidden ( !eNDP );
+    pPan->setHidden      ( !eNDP );
 }
 
 void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )

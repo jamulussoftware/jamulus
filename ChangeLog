@@ -15,8 +15,6 @@
 - support intermediate Reaper RPP file while recording, coded by pljones (Ticket #170)
 
 
-TODO fix incorrect what's this help texts
-
 TODO fix problem with panning and GUI (vertical scroll bar issue in mixer board)
 
 TODO Keep lrelease? Does it work as expected?
@@ -29,6 +27,8 @@ TODO Central Server Address: "Default" results in empty server browser, "Default
 TODO WIP support internationalization
 
 TODO show mute state of others
+
+TODO fix incorrect what's this help texts
 
 
 

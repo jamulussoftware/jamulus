@@ -15,8 +15,6 @@
 - support intermediate Reaper RPP file while recording, coded by pljones (Ticket #170)
 
 
-TODO remove this code "TODO output mapping from stereo to multi channel"
-
 TODO fix incorrect what's this help texts
 
 TODO fix problem with panning and GUI (vertical scroll bar issue in mixer board)

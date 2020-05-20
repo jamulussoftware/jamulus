@@ -310,7 +310,7 @@ protected:
     static void AudioCallback ( CVector<short>& psData, void* arg );
 
     void        Init();
-    void        ProcessSndCrdAudioData ( CVector<short>& vecsMultChanAudioSndCrd );
+    void        ProcessSndCrdAudioData ( CVector<short>& vecsStereoSndCrd );
     void        ProcessAudioDataIntern ( CVector<short>& vecsStereoSndCrd );
 
     int         PreparePingMessage();
@@ -364,7 +364,6 @@ protected:
     CBufferBase<int16_t>    SndCrdConversionBufferIn;
     CBufferBase<int16_t>    SndCrdConversionBufferOut;
     CVector<int16_t>        vecDataConvBuf;
-    CVector<int16_t>        vecsStereoSndCrdTMP;
     CVector<int16_t>        vecsStereoSndCrdMuteStream;
     CVector<int16_t>        vecZeros;
 

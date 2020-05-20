@@ -66,7 +66,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setTickPosition  ( QSlider::TicksBothSides );
     pFader->setRange         ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval  ( AUD_MIX_FADER_MAX / 9 );
-    pFader->setMinimumHeight ( 90 );
+    pFader->setMinimumHeight ( 75 );
 
     // setup panning control
     pPan->setRange ( 0, AUD_MIX_PAN_MAX );
@@ -572,7 +572,7 @@ double CChannelFader::CalcFaderGain ( const int value )
 * CAudioMixerBoard                                                             *
 \******************************************************************************/
 CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
-    QScrollArea          ( parent ),
+    QGroupBox            ( parent ),
     vecStoredFaderTags   ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
     vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
     vecStoredPanValues   ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
@@ -583,8 +583,10 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     strServerName        ( "" )
 {
     // add group box and hboxlayout
-    pGroupBox   = new QGroupBox(); // will be added to the scroll area which is then the parent
-    pMainLayout = new QHBoxLayout ( pGroupBox );
+    QHBoxLayout* pGroupBoxLayout = new QHBoxLayout ( this );
+    QWidget*     pMixerWidget    = new QWidget(); // will be added to the scroll area which is then the parent
+    pScrollArea                  = new CMixerBoardScrollArea ( this );
+    pMainLayout                  = new QHBoxLayout ( pMixerWidget );
 
     // set title text (default: no server given)
     SetServerName ( "" );
@@ -601,11 +603,15 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     // insert horizontal spacer
     pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
 
+    // set margins of the layout to zero to get maximum space for the controls
+    pGroupBoxLayout->setContentsMargins ( 0, 0, 0, 1 ); // note: to avoid problems at the botton, use a small margin for that
+
     // add the group box to the scroll area
-    setMinimumWidth ( 200 ); // at least two faders shall be visible
-    setWidget ( pGroupBox );
-    setWidgetResizable ( true ); // make sure it fills the entire scroll area
-    setFrameShape ( QFrame::NoFrame );
+    pScrollArea->setMinimumWidth ( 200 ); // at least two faders shall be visible
+    pScrollArea->setWidget ( pMixerWidget );
+    pScrollArea->setWidgetResizable ( true ); // make sure it fills the entire scroll area
+    pScrollArea->setFrameShape ( QFrame::NoFrame );
+    pGroupBoxLayout->addWidget ( pScrollArea );
 
 
     // Connections -------------------------------------------------------------
@@ -646,7 +652,7 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
     if ( strServerName.isEmpty() )
     {
         // no connection or connection was reset: show default title
-        pGroupBox->setTitle ( tr ( "Server" ) );
+        setTitle ( tr ( "Server" ) );
     }
     else
     {
@@ -655,7 +661,7 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
         // list was received, the connection was successful and the title is updated
         // with the correct server name. Make sure to choose a "try to connect" title
         // which is most striking (we use filled blocks and upper case letters).
-        pGroupBox->setTitle ( u8"\u2588\u2588\u2588\u2588\u2588  " + tr ( "T R Y I N G   T O   C O N N E C T" ) + u8"  \u2588\u2588\u2588\u2588\u2588" );
+        setTitle ( u8"\u2588\u2588\u2588\u2588\u2588  " + tr ( "T R Y I N G   T O   C O N N E C T" ) + u8"  \u2588\u2588\u2588\u2588\u2588" );
     }
 }
 
@@ -692,14 +698,6 @@ void CAudioMixerBoard::SetPanIsSupported()
     }
 }
 
-void CAudioMixerBoard::resizeEvent ( QResizeEvent* event )
-{
-    // if after a resize of the main window a vertical scroll bar is required, make
-    // sure that the fader label is visible (scroll down completely)
-    ensureVisible ( 0, 2000 ); // use a large value here
-    QScrollArea::resizeEvent ( event );
-}
-
 void CAudioMixerBoard::HideAll()
 {
     // make all controls invisible
@@ -727,7 +725,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
     // in the audio mixer board to show a "try to connect" before
     if ( bNoFaderVisible )
     {
-        pGroupBox->setTitle ( tr ( "Personal Mix at the Server: " ) + strServerName );
+        setTitle ( tr ( "Personal Mix at the Server: " ) + strServerName );
     }
 
     // get number of connected clients

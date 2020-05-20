@@ -129,7 +129,7 @@ class CAudioMixerBoardSlots<0> {};
 
 
 class CAudioMixerBoard :
-    public QScrollArea,
+    public QGroupBox,
     public CAudioMixerBoardSlots<MAX_NUM_CHANNELS>
 {
     Q_OBJECT
@@ -158,7 +158,20 @@ public:
     int              iNewClientFaderLevel;
 
 protected:
-    void resizeEvent ( QResizeEvent* event );
+    class CMixerBoardScrollArea : public QScrollArea
+    {
+    public:
+        CMixerBoardScrollArea ( QWidget* parent = nullptr ) : QScrollArea ( parent ) {}
+
+    protected:
+        virtual void resizeEvent ( QResizeEvent* event )
+        {
+            // if after a resize of the main window a vertical scroll bar is required, make
+            // sure that the fader label is visible (scroll down completely)
+            ensureVisible ( 0, 2000 ); // use a large value here
+            QScrollArea::resizeEvent ( event );
+        }
+    };
 
     bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                                   int&                iStoredFaderLevel,
@@ -173,7 +186,7 @@ protected:
                               const double dValue );
 
     CVector<CChannelFader*> vecpChanFader;
-    QGroupBox*              pGroupBox;
+    CMixerBoardScrollArea*  pScrollArea;
     QHBoxLayout*            pMainLayout;
     bool                    bDisplayChannelLevels;
     bool                    bNoFaderVisible;

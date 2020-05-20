@@ -1171,6 +1171,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "QRadioButton {           color:          rgb(220, 220, 220);"
             "                         font:           bold; }"
             "QScrollArea {            background:     transparent; }"
+            ".QWidget {               background:     transparent; }" // note: matches instances of QWidget, but not of its subclasses
             "QGroupBox {              background:     transparent; }"
             "QGroupBox::title {       color:          rgb(220, 220, 220); }"
             "QCheckBox::indicator {   width:          38px;"

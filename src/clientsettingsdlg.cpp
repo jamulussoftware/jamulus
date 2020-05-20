@@ -172,13 +172,13 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "change the buffer size." ) + TOOLTIP_COM_END_TEXT;
 
     rbtBufferDelayPreferred->setWhatsThis ( strSndCrdBufDelay );
-    rbtBufferDelayPreferred->setAccessibleName ( tr ( "128 samples setting radio button" ) );
+    rbtBufferDelayPreferred->setAccessibleName ( tr ( "64 samples setting radio button" ) );
     rbtBufferDelayPreferred->setToolTip ( strSndCrdBufDelayTT );
     rbtBufferDelayDefault->setWhatsThis ( strSndCrdBufDelay );
-    rbtBufferDelayDefault->setAccessibleName ( tr ( "256 samples setting radio button" ) );
+    rbtBufferDelayDefault->setAccessibleName ( tr ( "128 samples setting radio button" ) );
     rbtBufferDelayDefault->setToolTip ( strSndCrdBufDelayTT );
     rbtBufferDelaySafe->setWhatsThis ( strSndCrdBufDelay );
-    rbtBufferDelaySafe->setAccessibleName ( tr ( "512 samples setting radio button" ) );
+    rbtBufferDelaySafe->setAccessibleName ( tr ( "256 samples setting radio button" ) );
     rbtBufferDelaySafe->setToolTip ( strSndCrdBufDelayTT );
     butDriverSetup->setWhatsThis ( strSndCrdBufDelay );
     butDriverSetup->setAccessibleName ( tr ( "ASIO setup push button" ) );

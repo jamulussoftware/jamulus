@@ -218,17 +218,17 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="133"/>
         <source>Panning</source>
-        <translation type="unfinished"></translation>
+        <translation>Pan</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="133"/>
         <source>Sets the panning position from Left to Right of the channel. Works only in stero or preferably mono in/stereo out mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Legt die Pan-Position von Links nach Rechts fest. Der Pan funktioniert nur im Stereo oder Mono-In/Stereo-Out Modus.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="136"/>
         <source>Local panning position of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokale Pan-Position von dem aktuellen Audiokanal am Server</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="138"/>
@@ -278,7 +278,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="194"/>
         <source>PAN</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="195"/>
@@ -343,7 +343,7 @@
         <location filename="../../audiomixerboard.cpp" line="43"/>
         <location filename="../../audiomixerboard.cpp" line="203"/>
         <source>Pan</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="47"/>
@@ -982,18 +982,18 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="175"/>
+        <source>64 samples setting radio button</source>
+        <translation>64 Samples Einstellknopf</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>128 samples setting radio button</source>
         <translation>128 Samples Einstellknopf</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="178"/>
+        <location filename="../../clientsettingsdlg.cpp" line="181"/>
         <source>256 samples setting radio button</source>
         <translation>256 Samples Einstellknopf</translation>
-    </message>
-    <message>
-        <location filename="../../clientsettingsdlg.cpp" line="181"/>
-        <source>512 samples setting radio button</source>
-        <translation>512 Samples Einstellknopf</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>

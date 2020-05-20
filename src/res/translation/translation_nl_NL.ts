@@ -982,18 +982,18 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="175"/>
-        <source>128 samples setting radio button</source>
-        <translation>128 monsters instellen radioknop</translation>
+        <source>64 samples setting radio button</source>
+        <translation>64 monsters instellen radioknop</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
-        <source>256 samples setting radio button</source>
-        <translation>256 voorbeelden van het instellen van de radioknop</translation>
+        <source>128 samples setting radio button</source>
+        <translation>128 voorbeelden van het instellen van de radioknop</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="181"/>
-        <source>512 samples setting radio button</source>
-        <translation>512 voorbeelden van het instellen van het radioknopje</translation>
+        <source>256 samples setting radio button</source>
+        <translation>256 voorbeelden van het instellen van het radioknopje</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>

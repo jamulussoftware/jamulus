@@ -982,17 +982,17 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="175"/>
-        <source>128 samples setting radio button</source>
+        <source>64 samples setting radio button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="178"/>
-        <source>256 samples setting radio button</source>
+        <source>128 samples setting radio button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="181"/>
-        <source>512 samples setting radio button</source>
+        <source>256 samples setting radio button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

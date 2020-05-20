@@ -986,18 +986,18 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="175"/>
+        <source>64 samples setting radio button</source>
+        <translation>Configuración 64 muestras</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>128 samples setting radio button</source>
         <translation>Configuración 128 muestras</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="178"/>
+        <location filename="../../clientsettingsdlg.cpp" line="181"/>
         <source>256 samples setting radio button</source>
         <translation>Configuración 256 muestras</translation>
-    </message>
-    <message>
-        <location filename="../../clientsettingsdlg.cpp" line="181"/>
-        <source>512 samples setting radio button</source>
-        <translation>Configuración 512 muestras</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>

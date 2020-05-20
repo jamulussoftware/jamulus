@@ -994,18 +994,18 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="175"/>
+        <source>64 samples setting radio button</source>
+        <translation>Bouton radio de paramétrage à 64 échantillons</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>128 samples setting radio button</source>
         <translation>Bouton radio de paramétrage à 128 échantillons</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="178"/>
+        <location filename="../../clientsettingsdlg.cpp" line="181"/>
         <source>256 samples setting radio button</source>
         <translation>Bouton radio de paramétrage à 256 échantillons</translation>
-    </message>
-    <message>
-        <location filename="../../clientsettingsdlg.cpp" line="181"/>
-        <source>512 samples setting radio button</source>
-        <translation>Bouton radio de paramétrage à 512 échantillons</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>

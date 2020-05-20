@@ -158,6 +158,8 @@ public:
     int              iNewClientFaderLevel;
 
 protected:
+    void resizeEvent ( QResizeEvent* event );
+
     bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                                   int&                iStoredFaderLevel,
                                   int&                iStoredPanValue,

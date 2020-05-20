@@ -692,6 +692,14 @@ void CAudioMixerBoard::SetPanIsSupported()
     }
 }
 
+void CAudioMixerBoard::resizeEvent ( QResizeEvent* event )
+{
+    // if after a resize of the main window a vertical scroll bar is required, make
+    // sure that the fader label is visible (scroll down completely)
+    ensureVisible ( 0, 2000 ); // use a large value here
+    QScrollArea::resizeEvent ( event );
+}
+
 void CAudioMixerBoard::HideAll()
 {
     // make all controls invisible

@@ -355,7 +355,6 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/kiss_fft.h \
     libs/opus/celt/laplace.h \
     libs/opus/celt/mathops.h \
-    libs/opus/celt/mdct.c \
     libs/opus/celt/mdct.h \
     libs/opus/celt/mfrngcod.h \
     libs/opus/celt/modes.h \
@@ -365,7 +364,6 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/rate.h \
     libs/opus/celt/stack_alloc.h \
     libs/opus/celt/static_modes_float.h \
-    libs/opus/celt/vq.c \
     libs/opus/celt/vq.h \
     libs/opus/celt/_kiss_fft_guts.h \
     libs/opus/include/opus.h \
@@ -373,7 +371,6 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/include/opus_defines.h \
     libs/opus/include/opus_types.h \
     libs/opus/silk/API.h \
-    libs/opus/silk/CNG.c \
     libs/opus/silk/control.h \
     libs/opus/silk/debug.h \
     libs/opus/silk/define.h \
@@ -386,10 +383,8 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/silk/MacroDebug.h \
     libs/opus/silk/macros.h \
     libs/opus/silk/main.h \
-    libs/opus/silk/NSQ.c \
     libs/opus/silk/NSQ.h \
     libs/opus/silk/pitch_est_defines.h \
-    libs/opus/silk/PLC.c \
     libs/opus/silk/PLC.h \
     libs/opus/silk/resampler_private.h \
     libs/opus/silk/resampler_rom.h \
@@ -399,7 +394,6 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/silk/tables.h \
     libs/opus/silk/tuning_parameters.h \
     libs/opus/silk/typedef.h \
-    libs/opus/silk/VAD.c \
     libs/opus/src/analysis.h \
     libs/opus/src/mlp.h \
     libs/opus/src/opus_private.h \
@@ -622,12 +616,6 @@ DISTFILES += ChangeLog \
     COPYING \
     INSTALL.md \
     README.md \
-    android/build.gradle \
-    android/gradle/wrapper/gradle-wrapper.jar \
-    android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew \
-    android/gradlew.bat \
-    android/res/values/libs.xml \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \

@@ -236,8 +236,9 @@ bool CChannelFader::GetDisplayChannelLevel()
 
 void CChannelFader::SetDisplayPans ( const bool eNDP )
 {
-    pPanLabel->setHidden ( !eNDP );
-    pPan->setHidden      ( !eNDP );
+    pInfoLabel->setHidden ( !eNDP );
+    pPanLabel->setHidden  ( !eNDP );
+    pPan->setHidden       ( !eNDP );
 }
 
 void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )

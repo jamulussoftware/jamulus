@@ -58,6 +58,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     QHBoxLayout* pLabelGrid     = new QHBoxLayout       ( pLabelInstBox );
     QVBoxLayout* pLabelPictGrid = new QVBoxLayout       ( );
     QVBoxLayout* pPanGrid       = new QVBoxLayout       ( );
+    QHBoxLayout* pPanInfoGrid   = new QHBoxLayout       ( );
 
     // setup channel level
     plbrChannelLevel->setContentsMargins ( 0, 3, 2, 3 );
@@ -74,8 +75,10 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
     pPan->setFixedSize ( 55, 55 );
     pPan->setNotchesVisible ( true );
-    pPanGrid->addWidget ( pPanLabel, 0, Qt::AlignLeft );
-    pPanGrid->addWidget ( pPan,      0, Qt::AlignHCenter );
+    pPanInfoGrid->addWidget ( pPanLabel,  0, Qt::AlignLeft );
+    pPanInfoGrid->addWidget ( pInfoLabel, 0, Qt::AlignRight );
+    pPanGrid->addLayout ( pPanInfoGrid );
+    pPanGrid->addWidget ( pPan, 0, Qt::AlignHCenter );
 
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat    ( Qt::PlainText );
@@ -112,7 +115,6 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pMuteSoloGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
     pMuteSoloGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
 
-    pMainGrid->addWidget ( pInfoLabel,   0, Qt::AlignHCenter );
     pMainGrid->addLayout ( pPanGrid );
     pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pMuteSoloBox, 0, Qt::AlignHCenter );
@@ -355,7 +357,7 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
 {
     if ( bIsMute )
     {
-        // utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
+        // show orange utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
         pInfoLabel->setText ( "<font color=""orange"">&#128263;</font>" );
     }
     else

@@ -41,8 +41,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "(the longer the buffer, the higher the delay)." ) + "<br>" + tr (
         "The jitter buffer size can be manually chosen for the local client "
         "and the remote server. For the local jitter buffer, dropouts in the "
-        "audio stream are indicated by the light on the bottom "
-        "of the jitter buffer size faders. If the light turns to red, a buffer "
+        "audio stream are indicated by the light below the"
+        "jitter buffer size faders. If the light turns to red, a buffer "
         "overrun/underrun took place and the audio stream is interrupted." ) + "<br>" + tr (
         "The jitter buffer setting is therefore a trade-off between audio "
         "quality and overall delay." ) + "<br>" + tr (
@@ -61,7 +61,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "functionality and to lower the jitter buffer size manually by "
         "using the sliders until your personal acceptable limit of the amount "
         "of dropouts is reached. The LED indicator will visualize the audio "
-        "dropouts of the local jitter buffer by a red light." ) +
+        "dropouts of the local jitter buffer with a red light." ) +
         TOOLTIP_COM_END_TEXT;
 
     lblNetBuf->setWhatsThis            ( strJitterBufferSize );
@@ -93,7 +93,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
 #ifdef _WIN32
     // set Windows specific tool tip
-    cbxSoundcard->setToolTip ( tr ( "In case the ASIO4ALL driver is used, "
+    cbxSoundcard->setToolTip ( tr ( "If the ASIO4ALL driver is used, "
         "please note that this driver usually introduces approx. 10-30 ms of "
         "additional audio delay. Using a sound card with a native ASIO driver "
         "is therefore recommended." ) + "<br>" + tr ( "If you are using the kX ASIO "
@@ -126,7 +126,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "If enabled, the support for very small network audio packets is activated. Very small "
         "network packets are only actually used if the sound card buffer delay is smaller than " ) +
         QString().setNum ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ) + tr ( " samples. The "
-        "smaller the network buffers, the smaller the audio latency. But at the same time "
+        "smaller the network buffers, the lower the audio latency. But at the same time "
         "the network load increases and the probability of audio dropouts also increases." ) );
 
     chbEnableOPUS64->setAccessibleName ( tr ( "Enable small network buffers check box" ) );
@@ -138,14 +138,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "connection properties." ) + "<br>" + tr (
         "Three buffer sizes are supported" ) +
         ":<ul>"
-        "<li>" + tr ( "64 samples: This is the preferred setting since it gives lowest "
+        "<li>" + tr ( "64 samples: This is the preferred setting since it provides the lowest "
         "latency but does not work with all sound cards." ) + "</li>"
-        "<li>" + tr ( "128 samples: This setting should work on most of the available "
+        "<li>" + tr ( "128 samples: This setting should work for most available "
         "sound cards." ) + "</li>"
         "<li>" + tr ( "256 samples: This setting should only be used if only a very slow "
         "computer or a slow internet connection is available." ) + "</li>"
         "</ul>" + tr (
-        "Some sound card driver do not allow the buffer delay to be changed "
+        "Some sound card drivers do not allow the buffer delay to be changed "
         "from within the " ) + APP_NAME +
         tr ( " software. In this case the buffer delay setting "
         "is disabled. To change the actual buffer delay, this "
@@ -158,7 +158,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "performance." ) + "<br>" + tr (
         "The actual buffer delay has influence on the connection status, the "
         "current upload rate and the overall delay. The lower the buffer size, "
-        "the higher the probability of red light in the status indicator (drop "
+        "the higher the probability of a red light in the status indicator (drop "
         "outs) and the higher the upload rate and the lower the overall "
         "delay." ) + "<br>" + tr (
         "The buffer setting is therefore a trade-off between audio "
@@ -200,10 +200,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QString strAudioChannels = "<b>" + tr ( "Audio Channels" ) + ":</b> " + tr (
         "Select the number of audio channels to be used. There are three "
         "modes available. The mono and stereo modes use one and two "
-        "audio channels respectively. In the mono-in/stereo-out mode "
+        "audio channels respectively. In mono-in/stereo-out mode "
         "the audio signal which is sent to the server is mono but the "
-        "return signal is stereo. This is useful for the case that the "
-        "sound card puts the instrument on one input channel and the "
+        "return signal is stereo. This is useful if the "
+        "sound card has the instrument on one input channel and the "
         "microphone on the other channel. In that case the two input signals "
         "can be mixed to one mono channel but the server mix can be heard in "
         "stereo." ) + "<br>" + tr (
@@ -259,7 +259,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // current connection status parameter
     QString strConnStats = "<b>" + tr (  "Current Connection Status "
         "Parameter" ) + ":</b> " + tr ( "The ping time is the time required for the audio "
-        "stream to travel from the client to the server and backwards. This "
+        "stream to travel from the client to the server and back again. This "
         "delay is introduced by the network. This delay should be as low as "
         "20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to "
         "the server is too large or your internet connection is not "

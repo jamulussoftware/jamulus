@@ -15,12 +15,6 @@
 - support intermediate Reaper RPP file while recording, coded by pljones (Ticket #170)
 
 
-TODO fix problem with panning and GUI (vertical scroll bar issue in mixer board)
-
-TODO Keep lrelease? Does it work as expected?
-
-TODO fix Linux deploy script -> gives errors right now
-
 TODO Central Server Address: "Default" results in empty server browser, "Default (North America)" works fine #156
      -> made max list smaller from 200 to 150 -> check if that is sufficient to prevent UDP packet fragmentation
 

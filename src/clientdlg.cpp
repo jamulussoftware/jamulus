@@ -780,14 +780,6 @@ void CClientDlg::OnChatTextReceived ( QString strChatText )
     UpdateDisplay();
 }
 
-void CClientDlg::OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted )
-{
-
-// TEST
-qDebug() << "mute state changed: iChanID " << iChanID << " bIsMuted " << bIsMuted;
-
-}
-
 void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
 {
     // right now only the creative common licence is supported

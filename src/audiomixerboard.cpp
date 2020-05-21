@@ -41,6 +41,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
     pPan                        = new QDial             ( pLevelsBox );
     pPanLabel                   = new QLabel            ( tr ( "Pan" ) , pLevelsBox );
+    pInfoLabel                  = new QLabel            ( "", pLevelsBox );
 
     pMuteSoloBox                = new QWidget           ( pFrame );
     pcbMute                     = new QCheckBox         ( tr ( "Mute" ), pMuteSoloBox );
@@ -111,6 +112,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pMuteSoloGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
     pMuteSoloGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
 
+    pMainGrid->addWidget ( pInfoLabel,   0, Qt::AlignHCenter );
     pMainGrid->addLayout ( pPanGrid );
     pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pMuteSoloBox, 0, Qt::AlignHCenter );
@@ -135,7 +137,14 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setAccessibleName ( tr ( "Local mix level setting of the current audio "
         "channel at the server" ) );
 
-    pPan->setWhatsThis ( "<b>" +  tr ( "Panning" ) + ":</b>" + tr (
+    pInfoLabel->setWhatsThis ( "<b>" +  tr ( "Status Indicator" ) + ":</b> " + tr (
+        "Shows a status indication about the client which is assigned to this channel. "
+        "Supported indicators are:" ) + "<ul><li>" + tr (
+        "Speaker with cancellation stroke: Indicates that the other client has muted you." ) +
+        "</li></ul>" );
+    pInfoLabel->setAccessibleName ( tr ( "Status indicator label" ) );
+
+    pPan->setWhatsThis ( "<b>" +  tr ( "Panning" ) + ":</b> " + tr (
         "Sets the panning position from Left to Right of the channel. "
         "Works only in stero or preferably mono in/stereo out mode." ) );
     pPan->setAccessibleName ( tr ( "Local panning position of the current audio channel at the server" ) );
@@ -275,6 +284,9 @@ void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
 
 void CChannelFader::Reset()
 {
+    // general initializations
+    SetRemoteFaderIsMute ( false );
+
     // init gain and pan value -> maximum value as definition according to server
     pFader->setValue ( AUD_MIX_FADER_MAX );
     pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
@@ -337,6 +349,19 @@ void CChannelFader::SetFaderIsMute ( const bool bIsMute )
 {
     // changing the state automatically emits the signal, too
     pcbMute->setChecked ( bIsMute );
+}
+
+void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
+{
+    if ( bIsMute )
+    {
+        // utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
+        pInfoLabel->setText ( "<font color=""orange"">&#128263;</font>" );
+    }
+    else
+    {
+        pInfoLabel->setText ( "" );
+    }
 }
 
 void CChannelFader::SendFaderLevelToServer ( const int iLevel )
@@ -827,6 +852,19 @@ void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx,
         if ( vecpChanFader[iChannelIdx]->IsVisible() )
         {
             vecpChanFader[iChannelIdx]->SetFaderLevel ( iValue );
+        }
+    }
+}
+
+void CAudioMixerBoard::SetRemoteFaderIsMute ( const int  iChannelIdx,
+                                              const bool bIsMute )
+{
+    // only apply remote mute state if channel index is valid and the fader is visible
+    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
+    {
+        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        {
+            vecpChanFader[iChannelIdx]->SetRemoteFaderIsMute ( bIsMute );
         }
     }
 }

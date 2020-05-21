@@ -66,6 +66,7 @@ public:
     void SetPanValue ( const int iPan );
     void SetFaderIsSolo ( const bool bIsSolo );
     void SetFaderIsMute ( const bool bIsMute );
+    void SetRemoteFaderIsMute ( const bool bIsMute );
     int  GetFaderLevel() { return pFader->value(); }
     int  GetPanValue() { return pPan->value(); }
     void Reset();
@@ -86,6 +87,7 @@ protected:
     QSlider*           pFader;
     QDial*             pPan;
     QLabel*            pPanLabel;
+    QLabel*            pInfoLabel;
 
     QCheckBox*         pcbMute;
     QCheckBox*         pcbSolo;
@@ -143,6 +145,7 @@ public:
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetDisplayChannelLevels ( const bool eNDCL );
     void SetPanIsSupported();
+    void SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
 
     void SetFaderLevel ( const int iChannelIdx,
                          const int iValue );

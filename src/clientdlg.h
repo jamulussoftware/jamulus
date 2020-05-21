@@ -167,7 +167,6 @@ public slots:
 
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnChatTextReceived ( QString strChatText );
-    void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted );
     void OnLicenceRequired ( ELicenceType eLicenceType );
 
     void OnChangeChanGain ( int iId, double dGain )
@@ -198,6 +197,9 @@ public slots:
     void OnCLConnClientsListMesReceived ( CHostAddress          InetAddr,
                                           CVector<CChannelInfo> vecChanInfo )
         { ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo ); }
+
+    void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted )
+        { MainMixerBoard->SetRemoteFaderIsMute ( iChanID, bIsMuted ); }
 
     void OnCLChannelLevelListReceived ( CHostAddress       /* unused */,
                                         CVector<uint16_t> vecLevelList )

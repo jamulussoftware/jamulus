@@ -66,14 +66,14 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
         tr ( "If the Make My Server Public check box is checked, this server registers "
         "itself at the central server so that all " ) + APP_NAME +
         tr ( " users can see the server in the connect dialog server list and "
-        "connect to it. The registering of the server is renewed periodically "
+        "connect to it. The registration of the server is renewed periodically "
         "to make sure that all servers in the connect dialog server list are "
         "actually available." ) );
 
     // register server status label
     lblRegSvrStatus->setWhatsThis ( "<b>" + tr ( "Register Server Status" ) + ":</b> " +
         tr ( "If the Make My Server Public check box is checked, this will show "
-        "the success of registration with the central server." ) );
+        "whether registration with the central server is successful." ) );
 
     // central server address
     QString strCentrServAddr = "<b>" + tr ( "Central Server Address" ) + ":</b> " +

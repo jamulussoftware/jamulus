@@ -705,8 +705,8 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " + tr (
         "Set your name or an alias here so that the other musicians you want to play with "
         "know who you are. Additionally you may set an instrument picture of "
-        "the instrument you play and a flag of the country you are living. "
-        "The city you live in and the skill level of playing your instrument "
+        "the instrument you play and a flag of the country you are living in. "
+        "The city you live in and the skill level playing your instrument "
         "may also be added." ) + "<br>" + tr (
         "What you set here will appear at your fader on the mixer board when "
         "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "

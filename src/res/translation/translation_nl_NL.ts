@@ -242,7 +242,7 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="133"/>
-        <source>Sets the panning position from Left to Right of the channel. Works only in stero or preferably mono in/stereo out mode.</source>
+        <source>Sets the panning position from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -463,7 +463,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="88"/>
-        <source>Push this button to connect a server. A dialog where you can select a server will open. If you are connected, pressing this button will end the session.</source>
+        <source>Push this button to connect to a server. A dialog where you can select a server will open. If you are connected, pressing this button will end the session.</source>
         <translation>Druk op deze knop om verbinding te maken met een server. In het daaropvolgende dialoogvenster kunt u een server kunt selecteren. Als u verbonden bent, wordt de sessie beëindigd door weer op deze knop te drukken.</translation>
     </message>
     <message>
@@ -525,7 +525,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="125"/>
-        <source>The reverberation effect requires significant CPU so that it should only be used on fast PCs. If the reverberation level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does not cause any additional CPU usage.</source>
+        <source>The reverberation effect requires significant CPU so it should only be used on fast PCs. If the reverberation level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does not cause any additional CPU usage.</source>
         <translation>Het galmeffect vereist aanzienlijk wat CPU, zodat deze alleen op snelle PC&apos;s kan worden gebruikt. Als de fader voor het galmniveau op minimaal is ingesteld (wat de standaardinstelling is), wordt het galmeffect uitgeschakeld en veroorzaakt het geen extra CPU-gebruik.</translation>
     </message>
     <message>
@@ -590,7 +590,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="172"/>
-        <source>The sound card buffer delay (buffer size) is set to a too small value.</source>
+        <source>The sound card buffer delay (buffer size) is set to too small a value.</source>
         <translation>De buffer vertraging van de geluidskaart (buffergrootte) is op een te kleine waarde ingesteld.</translation>
     </message>
     <message>
@@ -772,7 +772,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="41"/>
-        <source>The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light on the bottom of the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.</source>
+        <source>The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.</source>
         <translation>De jitter-buffergrootte kan handmatig worden gekozen voor de lokale client en de externe server. Voor de lokale jitterbuffer worden drop-outs in de audiostream aangegeven door het lampje op de onderkant van de faders voor de jitterbuffergrootte. Als het lampje op rood springt, heeft er een bufferoverschrijding/onderbenedenrijding plaatsgevonden en wordt de audiostream onderbroken.</translation>
     </message>
     <message>
@@ -787,7 +787,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="56"/>
-        <source>In case the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer by a red light.</source>
+        <source>If the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
         <translation>In het geval dat de automatische instelling van de jitterbuffer is ingeschakeld, worden de netwerkbuffers van de lokale client en de externe server op een conservatieve waarde gezet om de kans op audio-uitval te minimaliseren. Om de audio delay/latentie te tweaken is het aan te raden om de automatische instelling uit te schakelen en de grootte van de jitterbuffer handmatig te verlagen met behulp van de schuifregelaars totdat de persoonlijke aanvaardbare limiet van het aantal drop-outs is bereikt. De LED-indicator zal de audio dropouts van de lokale jitterbuffer visualiseren met een rood lampje.</translation>
     </message>
     <message>
@@ -837,7 +837,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="96"/>
-        <source>In case the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
+        <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
         <translation>In het geval dat de ASIO4ALL driver wordt gebruikt, dient u er rekening mee te houden dat deze driver meestal ongeveer 10-30 ms extra geluidsvertraging introduceert. Het gebruik van een geluidskaart met een native ASIO-driver wordt daarom aanbevolen.</translation>
     </message>
     <message>
@@ -852,7 +852,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="106"/>
-        <source>In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
+        <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
         <translation>In het geval dat het geselecteerde geluidskaartapparaat meer dan één ingangs- of uitgangskanaal biedt, zijn de instellingen voor het ingangs- en uitgangskanaal in kaart brengen zichtbaar.</translation>
     </message>
     <message>
@@ -897,7 +897,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="128"/>
-        <source> samples. The smaller the network buffers, the smaller the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
+        <source> samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
         <translation> monsters. Hoe kleiner de netwerkbuffers, hoe kleiner de audiolatentie. Maar tegelijkertijd neemt de netwerkbelasting toe en neemt ook de kans op audio-uitval toe.</translation>
     </message>
     <message>
@@ -927,12 +927,12 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="141"/>
-        <source>64 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.</source>
+        <source>64 samples: This is the preferred setting since it provides the lowest latency but does not work with all sound cards.</source>
         <translation>64 monsters: Dit is de voorkeursinstelling omdat het de laagste latentie geeft, maar niet met alle geluidskaarten werkt.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="143"/>
-        <source>128 samples: This setting should work on most of the available sound cards.</source>
+        <source>128 samples: This setting should work for most available sound cards.</source>
         <translation>128 monsters: Deze instelling zou moeten werken op de meeste beschikbare geluidskaarten.</translation>
     </message>
     <message>
@@ -942,7 +942,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="147"/>
-        <source>Some sound card driver do not allow the buffer delay to be changed from within the </source>
+        <source>Some sound card drivers do not allow the buffer delay to be changed from within the </source>
         <translation>Sommige geluidskaartbestuurders staan niet toe dat de buffervertraging wordt gewijzigd van binnenuit de </translation>
     </message>
     <message>
@@ -962,7 +962,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="158"/>
-        <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
+        <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
         <translation>De werkelijke buffervertraging heeft invloed op de verbindingsstatus, de huidige uploadsnelheid en de totale vertraging. Hoe lager de buffergrootte, hoe hoger de kans op rood licht in de statusindicator (drop outs) en hoe hoger de uploadsnelheid en hoe lager de totale vertraging.</translation>
     </message>
     <message>
@@ -1037,7 +1037,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
-        <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In the mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful for the case that the sound card puts the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
+        <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
         <translation>Selecteer het aantal te gebruiken audiokanalen. Er zijn drie modi beschikbaar. De mono- en stereomodus gebruiken respectievelijk één en twee audiokanalen. In de mono-in/stereo-uit modus is het audiosignaal dat naar de server wordt gestuurd mono, maar het retoursignaal is stereo. Dit is handig voor het geval dat de geluidskaart het instrument op het ene ingangskanaal zet en de microfoon op het andere kanaal. In dat geval kunnen de twee ingangssignalen worden gemixt naar één monokanaal, maar de servermix is in stereo te horen.</translation>
     </message>
     <message>
@@ -1112,7 +1112,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="261"/>
-        <source>The ping time is the time required for the audio stream to travel from the client to the server and backwards. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.</source>
+        <source>The ping time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.</source>
         <translation>De ping-tijd is de tijd die nodig is voor de audiostream om van de client naar de server en terug te reizen. Deze vertraging wordt geïntroduceerd door het netwerk. Deze vertraging moet zo laag zijn als 20-30 ms. Als deze vertraging hoger is (bijv. 50-60 ms), is uw afstand tot de server te groot of is uw internetverbinding niet toereikend.</translation>
     </message>
     <message>
@@ -1738,7 +1738,7 @@
     </message>
     <message>
         <location filename="../../util.cpp" line="705"/>
-        <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living. The city you live in and the skill level of playing your instrument may also be added.</source>
+        <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living in. The city you live in and the skill level playing your instrument may also be added.</source>
         <translation>Stel hier je naam of een alias in zodat de andere muzikanten met wie je wilt spelen weten wie je bent. Daarnaast kun je een instrumentfoto van het instrument dat je bespeelt en een vlag van het land waar je woont, instellen. De stad waar je woont en het vaardigheidsniveau van het spelen van je instrument kunnen ook worden toegevoegd.</translation>
     </message>
     <message>
@@ -2021,7 +2021,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="68"/>
-        <source> users can see the server in the connect dialog server list and connect to it. The registering of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <source> users can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <translation> gebruikers kunnen de server zien in de lijst van de verbindingsserver in het dialoogvenster en er verbinding mee maken. De registratie van de server wordt periodiek vernieuwd om er zeker van te zijn dat alle servers in de connect dialog server lijst daadwerkelijk beschikbaar zijn.</translation>
     </message>
     <message>
@@ -2031,7 +2031,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
-        <source>If the Make My Server Public check box is checked, this will show the success of registration with the central server.</source>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful.</source>
         <translation>Als het selectievakje Maak Mijn Server Openbaar is aangevinkt, zal dit het succes van de registratie bij de centrale server laten zien.</translation>
     </message>
     <message>
@@ -2354,7 +2354,7 @@
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="121"/>
-        <source>The audio device does not support to set the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
+        <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
         <translation>Het audioapparaat biedt geen ondersteuning voor het instellen van de vereiste bemonsteringsfrequentie. Deze fout kan zich voordoen als u een audio-interface heeft zoals de Roland UA-25EX waarbij u de samplefrequentie instelt met een hardwareschakelaar op het audioapparaat. Als dit het geval is, verander dan de samplefrequentie in</translation>
     </message>
     <message>
@@ -2390,7 +2390,7 @@
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
-        <source> software requires the low latency audio interface ASIO to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
+        <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
         <translation> software vereist de lage-latency audio-interface ASIO om goed te kunnen werken. Dit is geen standaard Windows audio-interface en daarom is een speciale audio-stuurprogramma vereist. Ofwel heeft uw geluidskaart een native ASIO driver (die wordt aanbevolen), ofwel wilt u alternatieve drivers gebruiken zoals de ASIO4All driver.</translation>
     </message>
 </context>
@@ -2403,7 +2403,7 @@
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="141"/>
-        <source>The audio driver properties have changed to a state which is incompatible to this software. The selected audio device could not be used because of the following error:</source>
+        <source>The audio driver properties have changed to a state which is incompatible with this software. The selected audio device could not be used because of the following error:</source>
         <translation>De eigenschappen van de audiodriver zijn veranderd in een toestand die niet compatibel is met deze software. Het geselecteerde audioapparaat kon niet worden gebruikt vanwege de volgende fout:</translation>
     </message>
     <message>

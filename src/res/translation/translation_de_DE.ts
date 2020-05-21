@@ -222,7 +222,7 @@
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="133"/>
-        <source>Sets the panning position from Left to Right of the channel. Works only in stero or preferably mono in/stereo out mode.</source>
+        <source>Sets the panning position from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
         <translation>Legt die Pan-Position von Links nach Rechts fest. Der Pan funktioniert nur im Stereo oder Mono-In/Stereo-Out Modus.</translation>
     </message>
     <message>
@@ -463,7 +463,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="88"/>
-        <source>Push this button to connect a server. A dialog where you can select a server will open. If you are connected, pressing this button will end the session.</source>
+        <source>Push this button to connect to a server. A dialog where you can select a server will open. If you are connected, pressing this button will end the session.</source>
         <translation>Drücke diesen Knopf um sich mit dem Server zu verbinden. Es wird ein Fenster angezeigt, in dem man den Server auswählen kann. Wenn man gerade verbunden ist und den Knopf drückt, dann wird die Verbindung getrennt und die Session wird beendet.</translation>
     </message>
     <message>
@@ -611,7 +611,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="125"/>
-        <source>The reverberation effect requires significant CPU so that it should only be used on fast PCs. If the reverberation level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does not cause any additional CPU usage.</source>
+        <source>The reverberation effect requires significant CPU so it should only be used on fast PCs. If the reverberation level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does not cause any additional CPU usage.</source>
         <translation>Die Berechnung des Halleffekts benötigt etwas Rechenleistung, so dass der Halleffekt nur bei schnellen Computern angewendet werden sollte. Wenn der Hallregler ganz nach unten gezogen ist, dann ist der Halleffekt ausgeschaltet und verbraucht keine Rechenleistung mehr.</translation>
     </message>
     <message>
@@ -651,7 +651,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="172"/>
-        <source>The sound card buffer delay (buffer size) is set to a too small value.</source>
+        <source>The sound card buffer delay (buffer size) is set to too small a value.</source>
         <translation>Der Soundkartenpuffer ist zu klein eingestellt.</translation>
     </message>
     <message>
@@ -772,7 +772,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="41"/>
-        <source>The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light on the bottom of the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.</source>
+        <source>The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.</source>
         <translation>Die Netzwerkpuffergröße kann manuell verstellt werden, jeweils getrennt für die Applikation und den Server. Für den lokalen Netzwerkpuffer werden die Aussetzer durch die LED-Anzeige unter den Reglern angezeigt. Wenn die Lampe rot anzeigt, dann hat ein Pufferüberlauf oder ein Leerlauf des Puffers stattgefunden und der Audiodatenstrom wurde kurz unterbrochen.</translation>
     </message>
     <message>
@@ -787,7 +787,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="56"/>
-        <source>In case the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer by a red light.</source>
+        <source>If the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
         <translation>Wenn die Automatik zum Einstellen der Netzwerkpuffer aktiviert ist, dann werden die Netzwerkpuffer der Applikation und des entfernten Servers auf einen konservativen Wert eingestellt, um eine möglichst gute Audioqualität zu garantieren. Um die Gesamtverzögerung zu optimieren, bietet es sich an, die Automatik zu deaktivieren und die Netzwerkpuffer etwas kleiner einzustellen. Die Werte sollte man so weit reduzieren, bis die Audioqualität gerade noch der persönlichen Akzeptanz entspricht. Die LED-Anzeige hilft dabei die Audioaussetzer verursacht durch den lokalen Netzwerkpuffer zu visualisieren (wenn die LED rot leuchtet).</translation>
     </message>
     <message>
@@ -837,7 +837,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="96"/>
-        <source>In case the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
+        <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
         <translation>Falls der ASIO4All-Treiber verwendet wird, kann es sein, dass dieser Treiber zusätzliche 10-30 ms Verzögerung hinzufügt. Aus diesem Grund sollte man bevorzugt einen nativen ASIO-Treiber der Soundkarte verwenden, der mit dem Produkt mitgeliefert wurde.</translation>
     </message>
     <message>
@@ -852,7 +852,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="106"/>
-        <source>In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
+        <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
         <translation>Falls die ausgewählte Soundkarte mehr als zwei Eingangs- oder Ausgangskanäle unterstützt, dann werden die Steuerelemente für die Kanalzuweisung angezeigt.</translation>
     </message>
     <message>
@@ -897,7 +897,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="128"/>
-        <source> samples. The smaller the network buffers, the smaller the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
+        <source> samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
         <translation> Samples ist. Je kleiner die Netzwerkpakete sind, desto kleiner ist auch die Audioverzögerung. Aber gleichzeitig wird dadurch die Netzwerklast erhöht und die Wahrscheinlichkeit für Audioaussetzer erhöht sich dadurch auch.</translation>
     </message>
     <message>
@@ -927,7 +927,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="141"/>
-        <source>64 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.</source>
+        <source>64 samples: This is the preferred setting since it provides the lowest latency but does not work with all sound cards.</source>
         <translation>64 Samples: Dies ist die bevorzugte Einstellung weil es die geringste Verzögerung hat. Diese Puffergröße funktioniert allerdings nicht mit allen Soundkarten.</translation>
     </message>
     <message>
@@ -962,7 +962,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="158"/>
-        <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
+        <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
         <translation>Die Puffergröße hat einen Einfluss auf den Verbindungsstatus, die aktuelle Upload-Rate und die Gesamtverzögerung. Je kleiner der Puffer, desto größer ist die Wahrscheinlichkeit für das Auftreten einer rot leuchtenden LED (was Audioaussetzer anzeigt), eine höheren Upload-Rate und eine niedrigere Gesamtverzögerung.</translation>
     </message>
     <message>
@@ -1037,7 +1037,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
-        <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In the mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful for the case that the sound card puts the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
+        <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful for the case that the sound card puts the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
         <translation>Hiermit kann man die Anzahl an Audiokanälen auswählen. Es gibt drei Modi. Die Mono- und Stereomodi verwenden jeweils einen oder zwei Kanäle. Im Mono-In/Stereo-Out Modus wird ein Monosignal zum Server geschickt aber es kommt ein Stereo-Signal zurück vom Server. Dies ist nützlich für den Fall, dass man an die Soundkarte ein Instrument an den einen Eingangskanal und ein Mikrofon an den anderen Eingangskanal angeschlossen hat. In diesem Fall können die beiden Signale zusammen gemischt werden und an den Server geschickt werden aber man kann das Stereo-Signal von den anderen Musikern hören.</translation>
     </message>
     <message>
@@ -1112,7 +1112,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="261"/>
-        <source>The ping time is the time required for the audio stream to travel from the client to the server and backwards. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.</source>
+        <source>The ping time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.</source>
         <translation>Die Ping-Zeit ist die Zeit, die der Audiodatenstrom benötigt, um von der Applikation zum Server und zurück zu kommen. Diese Verzögerung wird vom Netzwerk hervorgerufen. Diese Verzögerung sollte so um die 20-30 ms sein. Falls die Verzögerung größer ist (z.B. 50-60 ms), der Abstand zum Server ist zu groß oder die Internetverbindung ist nicht ausreichend.</translation>
     </message>
     <message>
@@ -1768,7 +1768,7 @@
     </message>
     <message>
         <location filename="../../util.cpp" line="705"/>
-        <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living. The city you live in and the skill level of playing your instrument may also be added.</source>
+        <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living in. The city you live in and the skill level playing your instrument may also be added.</source>
         <translation>Schreibe den Namen oder Alias hier rein so dass die anderen Musikern mit denen du spielst wissen wer du bist. Zusätzlich kannst du dein Instrument auswählen und eine Flagge des Landes auswählen in dem du dich befindest. Deine Stadt und deine Spielstärke des Instruments kannst du ebenso angeben.</translation>
     </message>
     <message>
@@ -2021,7 +2021,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="68"/>
-        <source> users can see the server in the connect dialog server list and connect to it. The registering of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <source> users can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <translation>-Server in der Liste sehen können und sich mit ihm verbinden können. Die Registrierung mit dem Zentralserver wird periodisch erneuert um sicherzugehen, dass alle registrierten Server auch wirklich erreichbar sind.</translation>
     </message>
     <message>
@@ -2031,7 +2031,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
-        <source>If the Make My Server Public check box is checked, this will show the success of registration with the central server.</source>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful.</source>
         <translation>Wenn der eigene Server veröffentlicht wurde, dann zeigt der Registrierungsstatus and, ob die Registrierung erfolgreich war oder nicht.</translation>
     </message>
     <message>
@@ -2349,7 +2349,7 @@
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="121"/>
-        <source>The audio device does not support to set the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
+        <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
         <translation>Das Audiogerät unterstützt nicht die benötigte Samplerate. Dieser Fehler kann auftreten, wenn ein Audiogerät wie das Roland UA-25EX verwendet wird, bei dem die Samplerate per Schalter am Gerät verstellt werden muss. Falls das der Fall sein sollte, dann stelle bitte den Schalter auf </translation>
     </message>
     <message>
@@ -2385,7 +2385,7 @@
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
-        <source> software requires the low latency audio interface ASIO to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
+        <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
         <translation> Software benötigt aber ein ASIO Audiointerface um zu funktionieren. Dies ist keine Standard-Windowsschnittstelle und benötigt deshalb einen speziellen Treiber. Entweder die Soundkarte liefert einen nativen ASIO-Treiber mit (was empfohlen wird) oder man versucht es mit dem ASIO4All-Universaltreiber.</translation>
     </message>
     <message>
@@ -2403,7 +2403,7 @@
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="141"/>
-        <source>The audio driver properties have changed to a state which is incompatible to this software. The selected audio device could not be used because of the following error:</source>
+        <source>The audio driver properties have changed to a state which is incompatible with this software. The selected audio device could not be used because of the following error:</source>
         <translation>Die Audiotreibereigenschaften haben sich geändert. Die neuen Einstellungen sind nicht mehr kompatibel zu dieser Software. Das ausgewählte Audiogerät konnte nicht benutzt werden wegen folgendem Fehler:</translation>
     </message>
     <message>

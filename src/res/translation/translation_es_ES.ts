@@ -222,17 +222,17 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="133"/>
         <source>Panning</source>
-        <translation type="unfinished"></translation>
+        <translation>Paneo</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="133"/>
         <source>Sets the panning position from Left to Right of the channel. Works only in stero or preferably mono in/stereo out mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fija el paneo de Izquierda a Derecha del canal. Solo funciona en estéreo o preferiblemente en modo Entrada mono/Salida estéreo.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="136"/>
         <source>Local panning position of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Posición local del paneo del canal de audio actual en el servidor</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="138"/>
@@ -282,7 +282,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="194"/>
         <source>PAN</source>
-        <translation type="unfinished"></translation>
+        <translation>PAN</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="195"/>
@@ -347,7 +347,7 @@
         <location filename="../../audiomixerboard.cpp" line="43"/>
         <location filename="../../audiomixerboard.cpp" line="203"/>
         <source>Pan</source>
-        <translation type="unfinished">Paneo</translation>
+        <translation>Paneo</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="47"/>

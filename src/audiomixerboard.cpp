@@ -137,7 +137,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     pPan->setWhatsThis ( "<b>" +  tr ( "Panning" ) + ":</b>" + tr (
         "Sets the panning position from Left to Right of the channel. "
-        "Works only in stero or preferably mono in/stereo out mode." ) );
+        "Works only in stereo or preferably mono in/stereo out mode." ) );
     pPan->setAccessibleName ( tr ( "Local panning position of the current audio channel at the server" ) );
 
     pcbMute->setWhatsThis ( "<b>" + tr ( "Mute" ) + ":</b> " + tr (

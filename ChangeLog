@@ -16,6 +16,7 @@
 
 - support intermediate Reaper RPP file while recording, coded by pljones (#170)
 
+- save client settings on Linux cmdline termination signal, coded by pljones (#70)
 
 
 

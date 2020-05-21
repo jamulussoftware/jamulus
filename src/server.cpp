@@ -1321,10 +1321,10 @@ void CServer::CreateOtherMuteStateChanged ( const int  iCurChanID,
                                             const int  iOtherChanID,
                                             const bool bIsMuted )
 {
-    if ( vecChannels[iCurChanID].IsConnected() )
+    if ( vecChannels[iOtherChanID].IsConnected() )
     {
         // send message
-        vecChannels[iCurChanID].CreateMuteStateHasChangedMes ( iOtherChanID, bIsMuted );
+        vecChannels[iOtherChanID].CreateMuteStateHasChangedMes ( iCurChanID, bIsMuted );
     }
 }
 

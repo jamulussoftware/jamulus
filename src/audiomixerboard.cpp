@@ -76,7 +76,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pPan->setFixedSize ( 55, 55 );
     pPan->setNotchesVisible ( true );
     pPanInfoGrid->addWidget ( pPanLabel,  0, Qt::AlignLeft );
-    pPanInfoGrid->addWidget ( pInfoLabel, 0, Qt::AlignRight );
+    pPanInfoGrid->addWidget ( pInfoLabel );
     pPanGrid->addLayout ( pPanInfoGrid );
     pPanGrid->addWidget ( pPan, 0, Qt::AlignHCenter );
 

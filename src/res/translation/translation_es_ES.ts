@@ -58,57 +58,57 @@
         <translation>Iconos de banderas nacionales de Mark James</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="403"/>
+        <location filename="../../util.cpp" line="404"/>
         <source>For details on the contributions check out the </source>
         <translation>Para más detalles sobre los contribuidores consulta la </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="404"/>
+        <location filename="../../util.cpp" line="405"/>
         <source>Github Contributors list</source>
         <translation>lista de Contribuidores en Github</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="408"/>
+        <location filename="../../util.cpp" line="409"/>
         <source>Spanish</source>
         <translation>Español</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="410"/>
+        <location filename="../../util.cpp" line="411"/>
         <source>French</source>
         <translation>Francés</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="412"/>
+        <location filename="../../util.cpp" line="413"/>
         <source>Portuguese</source>
         <translation>Portugués</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="414"/>
+        <location filename="../../util.cpp" line="415"/>
         <source>Dutch</source>
         <translation>Neerlandés</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="416"/>
+        <location filename="../../util.cpp" line="417"/>
         <source>German</source>
         <translation>Alemán</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="423"/>
+        <location filename="../../util.cpp" line="424"/>
         <source>About </source>
         <translation>Acerca de </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="440"/>
+        <location filename="../../util.cpp" line="441"/>
         <source>, Version </source>
         <translation>, Versión </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="453"/>
+        <location filename="../../util.cpp" line="454"/>
         <source>Internet Jam Session Software</source>
         <translation>Internet Jam Session Software</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="457"/>
+        <location filename="../../util.cpp" line="458"/>
         <source>Under the GNU General Public License (GPL)</source>
         <translation>Bajo la GNU General Public License (GPL)</translation>
     </message>
@@ -172,156 +172,207 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="594"/>
+        <location filename="../../audiomixerboard.cpp" line="680"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="603"/>
+        <location filename="../../audiomixerboard.cpp" line="689"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>I N T E N T A N D O   C O N E C T A R</translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="753"/>
+        <source>Personal Mix at the Server: </source>
+        <translation>Mezcla Personal en el Servidor: </translation>
     </message>
 </context>
 <context>
     <name>CChannelFader</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="110"/>
+        <location filename="../../audiomixerboard.cpp" line="128"/>
         <source>Channel Level</source>
         <translation>Nivel Canal</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="111"/>
+        <location filename="../../audiomixerboard.cpp" line="129"/>
         <source>Displays the pre-fader audio level of this channel.  All connected clients at the server will be assigned an audio level, the same value for each client.</source>
         <translation>Muestra el nivel de audio pre-fader de este canal. Todos los clientes conectados al servidor tienen un nivel de audio asignado, el mismo para cada cliente.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="113"/>
+        <location filename="../../audiomixerboard.cpp" line="131"/>
         <source>Input level of the current audio channel at the server</source>
         <translation>Nivel de entrada del canal de audio actual en el servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="116"/>
+        <location filename="../../audiomixerboard.cpp" line="134"/>
         <source>Mixer Fader</source>
         <translation>Fader Mezclador</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="116"/>
+        <location filename="../../audiomixerboard.cpp" line="134"/>
         <source>Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
         <translation>Ajusta el nivel de audio de este canal. Todos los clientes conectados al servidor tienen asignado un fader en el cliente, ajustando la mezcla local.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="119"/>
+        <location filename="../../audiomixerboard.cpp" line="137"/>
         <source>Local mix level setting of the current audio channel at the server</source>
         <translation>Ajuste local de la mezcla del canal de audio actual en el servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="122"/>
+        <location filename="../../audiomixerboard.cpp" line="140"/>
+        <source>Status Indicator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="140"/>
+        <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="142"/>
+        <source>Speaker with cancellation stroke: Indicates that the other client has muted you.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="145"/>
+        <source>Status indicator label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="147"/>
+        <source>Panning</source>
+        <translation>Paneo</translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="147"/>
+        <source>Sets the panning position from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
+        <translation>Fija el paneo de Izquierda a Derecha del canal. Solo funciona en estéreo o preferiblemente en modo Entrada mono/Salida estéreo.</translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="150"/>
+        <source>Local panning position of the current audio channel at the server</source>
+        <translation>Posición local del paneo del canal de audio actual en el servidor</translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="152"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
         <translation>Activando Mute, se puede mutear el canal de audio.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="124"/>
+        <location filename="../../audiomixerboard.cpp" line="154"/>
         <source>Mute button</source>
         <translation>Botón Mute</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="126"/>
+        <location filename="../../audiomixerboard.cpp" line="156"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except of the current channel are muted. It is possible to set more than one channel to solo.</source>
         <translation>Activando Solo, todos los demás canales de audio excepto este se mutean. Es posible activar esta función para más de un canal.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="130"/>
+        <location filename="../../audiomixerboard.cpp" line="160"/>
         <source>Solo button</source>
         <translation>Botón Solo</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="132"/>
+        <location filename="../../audiomixerboard.cpp" line="162"/>
         <source>Fader Tag</source>
         <translation>Etiqueta Fader</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="132"/>
+        <location filename="../../audiomixerboard.cpp" line="162"/>
         <source>The fader tag identifies the connected client. The tag name, the picture of your instrument and a flag of your country can be set in the main window.</source>
         <translation>La etiqueta del fader identifica al cliente conectado. El nombre de la etiqueta, la imagen de tu instrumento y la bandera de tu país se pueden establecer en la ventana principal.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="137"/>
+        <location filename="../../audiomixerboard.cpp" line="167"/>
         <source>Mixer channel instrument picture</source>
         <translation>Imagen mezclador canal instrumento</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="139"/>
+        <location filename="../../audiomixerboard.cpp" line="169"/>
         <source>Mixer channel label (fader tag)</source>
         <translation>Etiqueta mezclador canal (etiqueta fader)</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="141"/>
+        <location filename="../../audiomixerboard.cpp" line="171"/>
         <source>Mixer channel country flag</source>
         <translation>Bandera país mezclador canal</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="175"/>
+        <location filename="../../audiomixerboard.cpp" line="208"/>
+        <source>PAN</source>
+        <translation>PAN</translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="209"/>
         <source>MUTE</source>
         <translation>MUTE</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="176"/>
+        <location filename="../../audiomixerboard.cpp" line="210"/>
         <source>SOLO</source>
         <translation>SOLO</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="440"/>
+        <location filename="../../audiomixerboard.cpp" line="515"/>
         <source>Alias/Name</source>
         <translation>Alias/Nombre</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="446"/>
+        <location filename="../../audiomixerboard.cpp" line="521"/>
         <source>Instrument</source>
         <translation>Instrumento</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="454"/>
+        <location filename="../../audiomixerboard.cpp" line="529"/>
         <source>Location</source>
         <translation>Ubicación</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="476"/>
-        <location filename="../../audiomixerboard.cpp" line="480"/>
-        <location filename="../../audiomixerboard.cpp" line="484"/>
+        <location filename="../../audiomixerboard.cpp" line="551"/>
+        <location filename="../../audiomixerboard.cpp" line="555"/>
+        <location filename="../../audiomixerboard.cpp" line="559"/>
         <source>Skill Level</source>
         <translation>Nivel Habilidad</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="476"/>
+        <location filename="../../audiomixerboard.cpp" line="551"/>
         <source>Beginner</source>
         <translation>Principiante</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="480"/>
+        <location filename="../../audiomixerboard.cpp" line="555"/>
         <source>Intermediate</source>
         <translation>Intermedio</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="484"/>
+        <location filename="../../audiomixerboard.cpp" line="559"/>
         <source>Expert</source>
         <translation>Experto</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="495"/>
+        <location filename="../../audiomixerboard.cpp" line="570"/>
         <source>Musician Profile</source>
         <translation>Perfil Músico</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="44"/>
-        <location filename="../../audiomixerboard.cpp" line="122"/>
-        <location filename="../../audiomixerboard.cpp" line="183"/>
+        <location filename="../../audiomixerboard.cpp" line="47"/>
+        <location filename="../../audiomixerboard.cpp" line="152"/>
+        <location filename="../../audiomixerboard.cpp" line="218"/>
         <source>Mute</source>
         <translation>Mute</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="45"/>
-        <location filename="../../audiomixerboard.cpp" line="126"/>
-        <location filename="../../audiomixerboard.cpp" line="184"/>
+        <location filename="../../audiomixerboard.cpp" line="43"/>
+        <location filename="../../audiomixerboard.cpp" line="217"/>
+        <source>Pan</source>
+        <translation>Paneo</translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="48"/>
+        <location filename="../../audiomixerboard.cpp" line="156"/>
+        <location filename="../../audiomixerboard.cpp" line="219"/>
         <source>Solo</source>
         <translation>Solo</translation>
     </message>
@@ -436,7 +487,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="88"/>
-        <source>Push this button to connect a server. A dialog where you can select a server will open. If you are connected, pressing this button will end the session.</source>
+        <source>Push this button to connect to a server. A dialog where you can select a server will open. If you are connected, pressing this button will end the session.</source>
         <translation>Pulsa este botón para conectar con un servidor. Se abrirá una ventana donde puedes seleccionar un servidor. Si estás conectado, este botón finalizará la sesión.</translation>
     </message>
     <message>
@@ -496,64 +547,64 @@
         <translation>Indicador LED estado buffers</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="204"/>
-        <location filename="../../clientdlg.cpp" line="1075"/>
+        <location filename="../../clientdlg.cpp" line="205"/>
+        <location filename="../../clientdlg.cpp" line="1100"/>
         <source>C&amp;onnect</source>
         <translation>C&amp;onectar</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="256"/>
+        <location filename="../../clientdlg.cpp" line="257"/>
         <source>&amp;View</source>
         <translation>&amp;Ver</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="258"/>
+        <location filename="../../clientdlg.cpp" line="259"/>
         <source>&amp;Connection Setup...</source>
         <translation>&amp;Configuración de Conexión...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="261"/>
+        <location filename="../../clientdlg.cpp" line="262"/>
         <source>My &amp;Profile...</source>
         <translation>Mi &amp;Perfil...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="264"/>
+        <location filename="../../clientdlg.cpp" line="265"/>
         <source>C&amp;hat...</source>
         <translation>C&amp;hat...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="267"/>
+        <location filename="../../clientdlg.cpp" line="268"/>
         <source>&amp;Settings...</source>
         <translation>&amp;Configuración...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="273"/>
+        <location filename="../../clientdlg.cpp" line="274"/>
         <source>&amp;Analyzer Console...</source>
         <translation>&amp;Analyzer Console...</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="279"/>
+        <location filename="../../clientdlg.cpp" line="280"/>
         <source>E&amp;xit</source>
         <translation>S&amp;alir</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="327"/>
+        <location filename="../../clientdlg.cpp" line="328"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="607"/>
+        <location filename="../../clientdlg.cpp" line="620"/>
         <source>Center</source>
         <translation>Centro</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="614"/>
+        <location filename="../../clientdlg.cpp" line="627"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="108"/>
-        <location filename="../../clientdlg.cpp" line="620"/>
+        <location filename="../../clientdlg.cpp" line="633"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -584,7 +635,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="125"/>
-        <source>The reverberation effect requires significant CPU so that it should only be used on fast PCs. If the reverberation level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does not cause any additional CPU usage.</source>
+        <source>The reverberation effect requires significant CPU so it should only be used on fast PCs. If the reverberation level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does not cause any additional CPU usage.</source>
         <translation>El efecto de reverberación require un esfuerzo importante del procesador, por lo que solo debería usarse en ordenadores potentes. Si se deja el fader de reverberación al mínimo (la configuración por defecto), el efecto estará desactivado y no significará ninguna carga adicional para el procesador.</translation>
     </message>
     <message>
@@ -624,7 +675,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="172"/>
-        <source>The sound card buffer delay (buffer size) is set to a too small value.</source>
+        <source>The sound card buffer delay (buffer size) is set to too small a value.</source>
         <translation>El retardo de buffer de la tarjeta de audio (tamaño buffer) tiene un valor demasiado bajo.</translation>
     </message>
     <message>
@@ -638,17 +689,22 @@
         <translation>El procesador del cliente o del servidor está al 100%.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="809"/>
+        <location filename="../../clientdlg.cpp" line="716"/>
+        <source>Central Server</source>
+        <translation>Servidor Central</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="834"/>
         <source>user</source>
         <translation>usuario</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="814"/>
+        <location filename="../../clientdlg.cpp" line="839"/>
         <source>users</source>
         <translation>usuarios</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1051"/>
+        <location filename="../../clientdlg.cpp" line="1076"/>
         <source>D&amp;isconnect</source>
         <translation>D&amp;esconectar</translation>
     </message>
@@ -739,9 +795,8 @@
         <translation>El jitter buffer compensa el jitter de la red y la tarjeta de audio. El tamaño de este buffer tiene por tanto un impacto sobre la calidad del flujo de audio (el número de caídas de la señal) y el retardo total (a mayor buffer, mayor retardo).</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="41"/>
-        <source>The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light on the bottom of the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.</source>
-        <translation>El tamaño del jitter buffer se puede establecer para el cliente local y para el servidor remoto. Para el jitter buffer local, las caídas del flujo de audio se indican mediante la luz debajo de los faders del jitter buffer. Si la luz se vuelve roja, significa que ha habido una interrupción del flujo de audio.</translation>
+        <source>The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.</source>
+        <translation type="vanished">El tamaño del jitter buffer se puede establecer para el cliente local y para el servidor remoto. Para el jitter buffer local, las caídas del flujo de audio se indican mediante la luz debajo de los faders del jitter buffer. Si la luz se vuelve roja, significa que ha habido una interrupción del flujo de audio.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="46"/>
@@ -754,9 +809,8 @@
         <translation>Hay disponible una configuración automática del jitter buffer. Si se activa Auto, los jitter buffers del cliente local y del servidor remoto se configuran automáticamente basándose en mediciones del jitter de la red y la tarjeta de audio. Si se activa esta opción, los faders quedan deshabilitados (no pueden moverse con el ratón).</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="56"/>
-        <source>In case the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer by a red light.</source>
-        <translation>En caso de activar la configuración automática del jitter buffer, los buffers de red del cliente local y del servidor remoto se asignan a un valor conservador para minimizar la probabilidad de fallos de audio. Para ajustar el retardo de audio/latencia se recomienda desactivar la función automática y bajar los valores de jitter buffer manualmente utilizando los controles deslizantes hasta alcanzar un límite aceptable de caídas de audio. El indicador LED ofrece una visualización de las caídas de audio mediante una luz roja.</translation>
+        <source>If the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
+        <translation type="vanished">En caso de activar la configuración automática del jitter buffer, los buffers de red del cliente local y del servidor remoto se asignan a un valor conservador para minimizar la probabilidad de fallos de audio. Para ajustar el retardo de audio/latencia se recomienda desactivar la función automática y bajar los valores de jitter buffer manualmente utilizando los controles deslizantes hasta alcanzar un límite aceptable de caídas de audio. El indicador LED ofrece una visualización de las caídas de audio mediante una luz roja.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="72"/>
@@ -805,7 +859,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="96"/>
-        <source>In case the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
+        <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
         <translation>En caso de utilizar el driver ASIO4ALL, por favor ten en cuenta que este driver normalmente introduce una latencia adicional de 10-30 ms. Por tanto se recomienda utilizar la tarjeta de audio con un driver nativo.</translation>
     </message>
     <message>
@@ -819,9 +873,23 @@
         <translation>Mapeo Canales Tarjeta Audio</translation>
     </message>
     <message>
+        <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
+        <translation type="vanished">Si el dispositivo de audio ofrece más de un canal de entrada o salida, son visibles las configuraciones para el Mapeo de Canales de Entrada y de Salida.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="41"/>
+        <source>The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below thejitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="56"/>
+        <source>In case the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../clientsettingsdlg.cpp" line="106"/>
         <source>In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
-        <translation>Si el dispositivo de audio ofrece más de un canal de entrada o salida, son visibles las configuraciones para el Mapeo de Canales de Entrada y de Salida.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="108"/>
@@ -865,7 +933,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="128"/>
-        <source> samples. The smaller the network buffers, the smaller the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
+        <source> samples. The smaller the network buffers, the lower the audio latency. But at the same time the network load increases and the probability of audio dropouts also increases.</source>
         <translation> muestras. Cuanto menores los buffers de red, menor la latencia de audio. Pero al mismo tiempo, aumenta la carga de red y la probabilidad de caídas de audio también aumenta.</translation>
     </message>
     <message>
@@ -895,12 +963,12 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="141"/>
-        <source>64 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.</source>
+        <source>64 samples: This is the preferred setting since it provides the lowest latency but does not work with all sound cards.</source>
         <translation>64 muestras: Es la configuración aconsejada puesto que ofrece la latencia más baja, aunque no funciona con todas las tarjetas de audio.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="143"/>
-        <source>128 samples: This setting should work on most of the available sound cards.</source>
+        <source>128 samples: This setting should work for most available sound cards.</source>
         <translation>128 muestras: Esta configuración debería de funcionar con la mayoría de tarjetas de audio.</translation>
     </message>
     <message>
@@ -910,7 +978,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="147"/>
-        <source>Some sound card driver do not allow the buffer delay to be changed from within the </source>
+        <source>Some sound card drivers do not allow the buffer delay to be changed from within the </source>
         <translation>Algunos drivers de tarjetas de audio no permiten cambiar el retardo de buffer desde el software </translation>
     </message>
     <message>
@@ -930,7 +998,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="158"/>
-        <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
+        <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
         <translation>El retardo del buffer tiene un impacto en el estado de la conexión, la tasa de subida y el retardo total. Cuanto menor sea el retardo del buffer, mayor la probabilidad de que el indicador de estado esté en rojo (caídas de audio), mayor la tasa de subida y menor el retardo total.</translation>
     </message>
     <message>
@@ -950,18 +1018,18 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="175"/>
+        <source>64 samples setting radio button</source>
+        <translation>Configuración 64 muestras</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="178"/>
         <source>128 samples setting radio button</source>
         <translation>Configuración 128 muestras</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="178"/>
+        <location filename="../../clientsettingsdlg.cpp" line="181"/>
         <source>256 samples setting radio button</source>
         <translation>Configuración 256 muestras</translation>
-    </message>
-    <message>
-        <location filename="../../clientsettingsdlg.cpp" line="181"/>
-        <source>512 samples setting radio button</source>
-        <translation>Configuración 512 muestras</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="184"/>
@@ -1005,7 +1073,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
-        <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In the mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful for the case that the sound card puts the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
+        <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
         <translation>Selecciona el número de canales de audio a utilizar. Hay tres modos disponibles. Los modos mono y estéreo utilizan uno y dos canales de audio respectivamente. En modo entrada-mono/salida-estéreo la señal de audio enviada al servidor es mono pero la señal que vuelve es estéreo. Esto es útil si la tarjeta de audio tiene un instrumento en un canal de entrada y un micrófono en el otro. En ese caso las dos señales de entrada pueden combinarse en un canal mono pero la mezcla del servidor se escucha en estéreo.</translation>
     </message>
     <message>
@@ -1080,7 +1148,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="261"/>
-        <source>The ping time is the time required for the audio stream to travel from the client to the server and backwards. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.</source>
+        <source>The ping time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.</source>
         <translation>El ping es el tiempo que requiere el flujo de audio para viajar desde el cliente al servidor y volver. Este retardo lo determina la red. Esta cifra debería ser de unos 20-30 ms. Si este retardo es mayor (por ej. 50-60 ms), la distancia al servidor es demasiado grande o tu conexión a internet no es óptima.</translation>
     </message>
     <message>
@@ -1116,7 +1184,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="336"/>
         <source>Mono-in/Stereo-out</source>
-        <translation>Mono-in/Estéreo-out</translation>
+        <translation>Entrada mono/Salida estéreo</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>
@@ -1139,53 +1207,76 @@
         <translation>Alta</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="349"/>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation type="vanished">Manual</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="350"/>
+        <location filename="../../util.h" line="581"/>
+        <source>Custom</source>
+        <translation>Personalizado</translation>
+    </message>
+    <message>
+        <location filename="../../util.h" line="584"/>
+        <source>All Genres</source>
+        <translation>Todos los Géneros</translation>
+    </message>
+    <message>
+        <location filename="../../util.h" line="587"/>
+        <source>Genre Rock</source>
+        <translation>Género Rock</translation>
+    </message>
+    <message>
+        <location filename="../../util.h" line="590"/>
+        <source>Genre Jazz</source>
+        <translation>Género Jazz</translation>
+    </message>
+    <message>
+        <location filename="../../util.h" line="593"/>
         <source>Default</source>
         <translation>Por defecto</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="351"/>
         <source>Default (North America)</source>
-        <translation>Por defecto (Norteamérica)</translation>
+        <translation type="vanished">Por defecto (Norteamérica)</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="367"/>
+        <location filename="../../clientsettingsdlg.cpp" line="369"/>
         <source>preferred</source>
         <translation>aconsejado</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="457"/>
-        <location filename="../../clientsettingsdlg.cpp" line="461"/>
+        <location filename="../../clientsettingsdlg.cpp" line="463"/>
+        <location filename="../../clientsettingsdlg.cpp" line="467"/>
         <source>Size: </source>
         <translation>Tamaño: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="518"/>
+        <location filename="../../clientsettingsdlg.cpp" line="524"/>
         <source>Buffer Delay</source>
         <translation>Retardo Buffer</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="523"/>
+        <location filename="../../clientsettingsdlg.cpp" line="529"/>
         <source>Buffer Delay: </source>
         <translation>Retardo Buffer: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="633"/>
+        <location filename="../../clientsettingsdlg.cpp" line="606"/>
+        <source>Predefined Address</source>
+        <translation>Dirección Preestablecida</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="646"/>
         <source>The selected audio device could not be used because of the following error: </source>
         <translation>El dispositivo de audio seleccionado no puede utilizarse a causa del siguiente error: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="635"/>
+        <location filename="../../clientsettingsdlg.cpp" line="648"/>
         <source> The previous driver will be selected.</source>
         <translation> Se utilizará el driver anterior.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="636"/>
+        <location filename="../../clientsettingsdlg.cpp" line="649"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -1351,32 +1442,32 @@
 <context>
     <name>CConnectDlg</name>
     <message>
-        <location filename="../../connectdlg.cpp" line="47"/>
+        <location filename="../../connectdlg.cpp" line="49"/>
         <source>Server List</source>
         <translation>Lista Servidores</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="47"/>
+        <location filename="../../connectdlg.cpp" line="49"/>
         <source>The server list shows a list of available servers which are registered at the central server. Select a server from the list and press the connect button to connect to this server. Alternatively, double click a server from the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding the list item. Permanent servers are shown in bold font.</source>
         <translation>La lista de servidores muestra una lista de servidores disponibles que se encuentran registrados en el servidor central. Escoge un servidor de la lista y pulsa el botón de conectar para conectarte a este servidor. También es posible realizar la conexión haciendo doble clic en un servidor de la lista. Si un servidor está ocupado, se puede desplegar una lista de los músicos conectados al pulsar el icono al lado del nombre. Los servidores permanentes se muestran en negrita.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="53"/>
+        <location filename="../../connectdlg.cpp" line="55"/>
         <source>Note that it may take some time to retrieve the server list from the central server. If no valid central server address is specified in the settings, no server list will be available.</source>
         <translation>Ten en cuenta que puede llevar un tiempo recuperar la lista de servidores del servidor central. Si no se especifica una dirección válida en la configuración, no habrá ninguna lista de servidores disponible.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="58"/>
+        <location filename="../../connectdlg.cpp" line="60"/>
         <source>Server list view</source>
         <translation>Vista lista de servidores</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="61"/>
+        <location filename="../../connectdlg.cpp" line="63"/>
         <source>Server Address</source>
         <translation>Dirección Servidor</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="61"/>
+        <location filename="../../connectdlg.cpp" line="63"/>
         <source>The IP address or URL of the server running the </source>
         <translation>La dirección IP o URL del servidor ejecutando el software del servidor </translation>
     </message>
@@ -1385,52 +1476,52 @@
         <translation type="vanished"> debe introducirse aquí. Se puede añadir un número de puerto opcional detrás de la dirección IP o URL utilizando dos puntos como separador, por ej. ejemplo.org:</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="62"/>
+        <location filename="../../connectdlg.cpp" line="64"/>
         <source> server software must be set here. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
         <translation> debe introducirse aquí. Se puede añadir un número de puerto opcional detrás de la dirección IP o URL utilizando dos puntos como separador, por ej. ejemplo.org:</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="66"/>
+        <location filename="../../connectdlg.cpp" line="68"/>
         <source>. A list of the most recent used server IP addresses or URLs is available for selection.</source>
         <translation>. Hay disponible una lista de las direcciones IP o URLs utilizadas más recientemente para su selección.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="73"/>
+        <location filename="../../connectdlg.cpp" line="75"/>
         <source>Server address edit box</source>
         <translation>Selección dirección servidor</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="74"/>
+        <location filename="../../connectdlg.cpp" line="76"/>
         <source>Holds the current server IP address or URL. It also stores old URLs in the combo box list.</source>
         <translation>Contiene la dirección IP o URL actual del servidor. También guarda viejas URL en la lista.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="78"/>
+        <location filename="../../connectdlg.cpp" line="88"/>
         <source>Filter</source>
         <translation>Filtro</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="78"/>
+        <location filename="../../connectdlg.cpp" line="88"/>
         <source>The server list is filtered by the given text. Note that the filter is case insensitive.</source>
         <translation>La lista de servidores se filtra con el texto introducido. El filtro no es sensible a mayúsculas/minúsculas.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="80"/>
+        <location filename="../../connectdlg.cpp" line="90"/>
         <source>Filter edit box</source>
         <translation>Campo filtro</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="83"/>
+        <location filename="../../connectdlg.cpp" line="93"/>
         <source>Show All Musicians</source>
         <translation>Mostrar Todos los Músicos</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="83"/>
+        <location filename="../../connectdlg.cpp" line="93"/>
         <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
         <translation>Si activas esta opción, se mostrarán los músicos de todos los servidores. Si lo desactivas, se colapsan todas las listas.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="86"/>
+        <location filename="../../connectdlg.cpp" line="96"/>
         <source>Show all musicians check box</source>
         <translation>Selección Mostrar todos los músicos</translation>
     </message>
@@ -1444,46 +1535,51 @@
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="35"/>
+        <source>List</source>
+        <translation>Lista</translation>
+    </message>
+    <message>
+        <location filename="../../connectdlgbase.ui" line="45"/>
         <source>Filter</source>
         <translation>Filtro</translation>
     </message>
     <message>
-        <location filename="../../connectdlgbase.ui" line="45"/>
+        <location filename="../../connectdlgbase.ui" line="55"/>
         <source>Show All Musicians</source>
         <translation>Mostrar Todos los Músicos</translation>
     </message>
     <message>
-        <location filename="../../connectdlgbase.ui" line="61"/>
+        <location filename="../../connectdlgbase.ui" line="71"/>
         <source>Server Name</source>
         <translation>Nombre Servidor</translation>
     </message>
     <message>
-        <location filename="../../connectdlgbase.ui" line="66"/>
+        <location filename="../../connectdlgbase.ui" line="76"/>
         <source>Ping Time</source>
         <translation>Tiempo Ping</translation>
     </message>
     <message>
-        <location filename="../../connectdlgbase.ui" line="71"/>
+        <location filename="../../connectdlgbase.ui" line="81"/>
         <source>Musicians</source>
         <translation>Músicos</translation>
     </message>
     <message>
-        <location filename="../../connectdlgbase.ui" line="76"/>
+        <location filename="../../connectdlgbase.ui" line="86"/>
         <source>Location</source>
         <translation>Ubicación</translation>
     </message>
     <message>
-        <location filename="../../connectdlgbase.ui" line="86"/>
+        <location filename="../../connectdlgbase.ui" line="96"/>
         <source>Server Name/Address</source>
         <translation>Nombre/Dirección Servidor</translation>
     </message>
     <message>
-        <location filename="../../connectdlgbase.ui" line="120"/>
+        <location filename="../../connectdlgbase.ui" line="130"/>
         <source>C&amp;ancel</source>
         <translation>C&amp;ancelar</translation>
     </message>
     <message>
-        <location filename="../../connectdlgbase.ui" line="127"/>
+        <location filename="../../connectdlgbase.ui" line="137"/>
         <source>&amp;Connect</source>
         <translation>&amp;Conectar</translation>
     </message>
@@ -1491,28 +1587,28 @@
 <context>
     <name>CHelpMenu</name>
     <message>
-        <location filename="../../util.cpp" line="840"/>
+        <location filename="../../util.cpp" line="841"/>
         <source>&amp;Help</source>
         <translation>&amp;Ayuda</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="845"/>
-        <location filename="../../util.cpp" line="850"/>
+        <location filename="../../util.cpp" line="846"/>
+        <location filename="../../util.cpp" line="851"/>
         <source>Getting &amp;Started...</source>
         <translation>Cómo &amp;Empezar...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="846"/>
+        <location filename="../../util.cpp" line="847"/>
         <source>Software &amp;Manual...</source>
         <translation>Manual del &amp;Software...</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="853"/>
+        <location filename="../../util.cpp" line="854"/>
         <source>What&apos;s &amp;This</source>
         <translation>Qué es &amp;Esto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="855"/>
+        <location filename="../../util.cpp" line="856"/>
         <source>&amp;About...</source>
         <translation>&amp;Acerca de...</translation>
     </message>
@@ -1520,102 +1616,102 @@
 <context>
     <name>CLicenceDlg</name>
     <message>
-        <location filename="../../util.cpp" line="479"/>
+        <location filename="../../util.cpp" line="480"/>
         <source>I &amp;agree to the above licence terms</source>
         <translation>&amp;Acepto los términos de la licencia arriba expuestos</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="480"/>
+        <location filename="../../util.cpp" line="481"/>
         <source>Accept</source>
         <translation>Acepto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="481"/>
+        <location filename="../../util.cpp" line="482"/>
         <source>Decline</source>
         <translation>No Acepto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="497"/>
+        <location filename="../../util.cpp" line="498"/>
         <source>By connecting to this server and agreeing to this notice, you agree to the following:</source>
         <translation>Al conectarte a este servidor y aceptar esta notificación, aceptas lo siguiente:</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="499"/>
+        <location filename="../../util.cpp" line="500"/>
         <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see </source>
         <translation>Ud. declara que todos los datos, audios u otras obras transmitidas a este servidor son la propiedad de Ud. y creadas por Ud. o sus licenciatarios, y que pone a disposición de terceras partes estos datos, audios u otras obras mediante la siguiente Licencia Creative Commons (para más información sobre esta licencia, ver </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="507"/>
+        <location filename="../../util.cpp" line="508"/>
         <source>You are free to:</source>
         <translation>Ud. es libre de:</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="509"/>
+        <location filename="../../util.cpp" line="510"/>
         <source>Share</source>
         <translation>Compartir</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="510"/>
+        <location filename="../../util.cpp" line="511"/>
         <source>copy and redistribute the material in any medium or format</source>
         <translation>copiar y redistribuir el material en cualquier medio o formato</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="511"/>
+        <location filename="../../util.cpp" line="512"/>
         <source>Adapt</source>
         <translation>Adaptar</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="512"/>
+        <location filename="../../util.cpp" line="513"/>
         <source>remix, transform, and build upon the material</source>
         <translation>remezclar, transformar y construir a partir del material</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="513"/>
+        <location filename="../../util.cpp" line="514"/>
         <source>The licensor cannot revoke these freedoms as long as you follow the license terms.</source>
         <translation>El licenciante no puede revocar estas libertades en tanto Ud. siga los términos de la licencia.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="515"/>
+        <location filename="../../util.cpp" line="516"/>
         <source>Under the following terms:</source>
         <translation>Bajo los siguientes términos:</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="517"/>
+        <location filename="../../util.cpp" line="518"/>
         <source>Attribution</source>
         <translation>Atribución</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="518"/>
+        <location filename="../../util.cpp" line="519"/>
         <source>You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</source>
         <translation>Ud. debe dar crédito de manera adecuada, brindar un enlace a la licencia, e indicar si se han realizado cambios. Puede hacerlo en cualquier forma razonable, pero no de forma tal que sugiera que Ud. o su uso tienen el apoyo de la licenciante.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="521"/>
+        <location filename="../../util.cpp" line="522"/>
         <source>NonCommercial</source>
         <translation>No-Comercial</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="522"/>
+        <location filename="../../util.cpp" line="523"/>
         <source>You may not use the material for commercial purposes.</source>
         <translation>No puede utilizar el material con fines comerciales.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="523"/>
+        <location filename="../../util.cpp" line="524"/>
         <source>ShareAlike</source>
         <translation>ShareAlike</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="524"/>
+        <location filename="../../util.cpp" line="525"/>
         <source>If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.</source>
         <translation>Si remezcla, transforma o construye sobre el material, debe distribuir sus contribuciones bajo la misma licencia que el original.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="526"/>
+        <location filename="../../util.cpp" line="527"/>
         <source>No additional restrictions</source>
         <translation>Sin restricciones adicionales</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="527"/>
+        <location filename="../../util.cpp" line="528"/>
         <source>You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</source>
         <translation>No puede aplicar términos legales o medidas tecnológicas que restringan legalmente a otras personas de hacer cualquier cosa permitida por la licencia.</translation>
     </message>
@@ -1623,272 +1719,292 @@
 <context>
     <name>CMusProfDlg</name>
     <message>
-        <location filename="../../util.cpp" line="711"/>
+        <location filename="../../util.cpp" line="712"/>
         <source> server. This tag will also show up at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
         <translation> Esta etiqueta también se mostrará a cada cliente conectado al mismo servidor que tú. Se se deja vacío, se muestra la dirección IP en su lugar.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="716"/>
+        <location filename="../../util.cpp" line="717"/>
         <source>Alias or name edit box</source>
         <translation>Campo para alias o nombre</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="718"/>
+        <location filename="../../util.cpp" line="719"/>
         <source>Instrument picture button</source>
         <translation>Botón imagen instrumento</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="720"/>
+        <location filename="../../util.cpp" line="721"/>
         <source>Country flag button</source>
         <translation>Botón bandera país</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="722"/>
+        <location filename="../../util.cpp" line="723"/>
         <source>City edit box</source>
         <translation>Ciudad</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="724"/>
+        <location filename="../../util.cpp" line="725"/>
         <source>Skill level combo box</source>
         <translation>Nivel de habilidad</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="669"/>
-        <location filename="../../util.cpp" line="681"/>
-        <location filename="../../util.cpp" line="973"/>
+        <location filename="../../util.cpp" line="670"/>
+        <location filename="../../util.cpp" line="682"/>
+        <location filename="../../util.cpp" line="976"/>
         <source>None</source>
         <translation>Ninguno</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="556"/>
-        <location filename="../../util.cpp" line="704"/>
+        <location filename="../../util.cpp" line="557"/>
+        <location filename="../../util.cpp" line="705"/>
         <source>Musician Profile</source>
         <translation>Perfil Músico</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="561"/>
+        <location filename="../../util.cpp" line="562"/>
         <source>Alias/Name</source>
         <translation>Alias/Nombre</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="563"/>
+        <location filename="../../util.cpp" line="564"/>
         <source>Instrument</source>
         <translation>Instrumento</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="565"/>
+        <location filename="../../util.cpp" line="566"/>
         <source>Country</source>
         <translation>País</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="567"/>
+        <location filename="../../util.cpp" line="568"/>
         <source>City</source>
         <translation>Ciudad</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="569"/>
+        <location filename="../../util.cpp" line="570"/>
         <source>Skill</source>
         <translation>Habilidad</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="571"/>
+        <location filename="../../util.cpp" line="572"/>
         <source>&amp;Close</source>
         <translation>&amp;Cerrar</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="687"/>
+        <location filename="../../util.cpp" line="688"/>
         <source>Beginner</source>
         <translation>Principiante</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="693"/>
+        <location filename="../../util.cpp" line="694"/>
         <source>Intermediate</source>
         <translation>Intermedio</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="699"/>
+        <location filename="../../util.cpp" line="700"/>
         <source>Expert</source>
         <translation>Experto</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="704"/>
-        <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living. The city you live in and the skill level of playing your instrument may also be added.</source>
+        <location filename="../../util.cpp" line="705"/>
+        <source>Set your name or an alias here so that the other musicians you want to play with know who you are. Additionally you may set an instrument picture of the instrument you play and a flag of the country you are living in. The city you live in and the skill level playing your instrument may also be added.</source>
         <translation>Escribe tu nombre o alias aquí para que los demás músicos con quien quieras tocar te reconozcan. Puedes además añadir una imagen del instrumento que tocas y la bandera del país donde vives. La ciudad donde vives y tu nivel de habilidad con el instrumento también pueden añadirse.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="709"/>
+        <location filename="../../util.cpp" line="710"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a </source>
         <translation>Lo que introduzcas aquí aparecerá en tu fader del mezclador cuando te conectes a un servidor </translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="974"/>
+        <location filename="../../util.cpp" line="977"/>
         <source>Drum Set</source>
         <translation>Batería</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="975"/>
+        <location filename="../../util.cpp" line="978"/>
         <source>Djembe</source>
         <translation>Djembé</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="976"/>
+        <location filename="../../util.cpp" line="979"/>
         <source>Electric Guitar</source>
         <translation>Guitarra Eléctrica</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="977"/>
+        <location filename="../../util.cpp" line="980"/>
         <source>Acoustic Guitar</source>
         <translation>Guitarra Acústica</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="978"/>
+        <location filename="../../util.cpp" line="981"/>
         <source>Bass Guitar</source>
         <translation>Bajo Eléctrico</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="979"/>
+        <location filename="../../util.cpp" line="982"/>
         <source>Keyboard</source>
         <translation>Teclado</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="980"/>
+        <location filename="../../util.cpp" line="983"/>
         <source>Synthesizer</source>
         <translation>Sintetizador</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="981"/>
+        <location filename="../../util.cpp" line="984"/>
         <source>Grand Piano</source>
         <translation>Piano de Cola</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="982"/>
+        <location filename="../../util.cpp" line="985"/>
         <source>Accordion</source>
         <translation>Acordeón</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="983"/>
+        <location filename="../../util.cpp" line="986"/>
         <source>Vocal</source>
         <translation>Voz</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="984"/>
+        <location filename="../../util.cpp" line="987"/>
         <source>Microphone</source>
         <translation>Micrófono</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="985"/>
+        <location filename="../../util.cpp" line="988"/>
         <source>Harmonica</source>
         <translation>Armónica</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="986"/>
+        <location filename="../../util.cpp" line="989"/>
         <source>Trumpet</source>
         <translation>Trompeta</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="987"/>
+        <location filename="../../util.cpp" line="990"/>
         <source>Trombone</source>
         <translation>Trombón</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="988"/>
+        <location filename="../../util.cpp" line="991"/>
         <source>French Horn</source>
         <translation>Trompa</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="989"/>
+        <location filename="../../util.cpp" line="992"/>
         <source>Tuba</source>
         <translation>Tuba</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="990"/>
+        <location filename="../../util.cpp" line="993"/>
         <source>Saxophone</source>
         <translation>Saxofón</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="991"/>
+        <location filename="../../util.cpp" line="994"/>
         <source>Clarinet</source>
         <translation>Clarinete</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="992"/>
+        <location filename="../../util.cpp" line="995"/>
         <source>Flute</source>
         <translation>Flauta</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="993"/>
+        <location filename="../../util.cpp" line="996"/>
         <source>Violin</source>
         <translation>Violín</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="994"/>
+        <location filename="../../util.cpp" line="997"/>
         <source>Cello</source>
         <translation>Violonchelo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="995"/>
+        <location filename="../../util.cpp" line="998"/>
         <source>Double Bass</source>
         <translation>Contrabajo</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="996"/>
+        <location filename="../../util.cpp" line="999"/>
         <source>Recorder</source>
         <translation>Grabadora</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="997"/>
+        <location filename="../../util.cpp" line="1000"/>
         <source>Streamer</source>
         <translation>Streamer</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="998"/>
+        <location filename="../../util.cpp" line="1001"/>
         <source>Listener</source>
         <translation>Oyente</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="999"/>
+        <location filename="../../util.cpp" line="1002"/>
         <source>Guitar+Vocal</source>
         <translation>Guitarra+Voz</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1000"/>
+        <location filename="../../util.cpp" line="1003"/>
         <source>Keyboard+Vocal</source>
         <translation>Teclado+Voz</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1001"/>
+        <location filename="../../util.cpp" line="1004"/>
         <source>Bodhran</source>
         <translation>Bodhran</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1002"/>
+        <location filename="../../util.cpp" line="1005"/>
         <source>Bassoon</source>
         <translation>Fagot</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1003"/>
+        <location filename="../../util.cpp" line="1006"/>
         <source>Oboe</source>
         <translation>Oboe</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1004"/>
+        <location filename="../../util.cpp" line="1007"/>
         <source>Harp</source>
         <translation>Arpa</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1005"/>
+        <location filename="../../util.cpp" line="1008"/>
         <source>Viola</source>
         <translation>Viola</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1006"/>
+        <location filename="../../util.cpp" line="1009"/>
         <source>Congas</source>
         <translation>Congas</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="1007"/>
+        <location filename="../../util.cpp" line="1010"/>
         <source>Bongo</source>
         <translation>Bongo</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1011"/>
+        <source>Vocal Bass</source>
+        <translation>Voz bajo</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1012"/>
+        <source>Vocal Tenor</source>
+        <translation>Voz Tenor</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1013"/>
+        <source>Vocal Alto</source>
+        <translation>Voz Alto</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1014"/>
+        <source>Vocal Soprano</source>
+        <translation>Voz Soprano</translation>
     </message>
 </context>
 <context>
@@ -1945,7 +2061,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="68"/>
-        <source> users can see the server in the connect dialog server list and connect to it. The registering of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
+        <source> users can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <translation> puedan ver el servidor en la lista de servidores de la ventana de conexión y puedan conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentren realmente disponibles.</translation>
     </message>
     <message>
@@ -1955,7 +2071,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
-        <source>If the Make My Server Public check box is checked, this will show the success of registration with the central server.</source>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful.</source>
         <translation>Si se ha activado Mi Servidor es Público, esto mostrará si se ha registrado en el servidor central con éxito.</translation>
     </message>
     <message>
@@ -2025,7 +2141,7 @@
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="134"/>
-        <location filename="../../serverdlg.cpp" line="277"/>
+        <location filename="../../serverdlg.cpp" line="279"/>
         <source>E&amp;xit</source>
         <translation>S&amp;alir</translation>
     </message>
@@ -2052,67 +2168,69 @@
         <translation> </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="191"/>
+        <location filename="../../serverdlg.cpp" line="527"/>
+        <source>Predefined Address</source>
+        <translation>Dirección Preestablecida</translation>
+    </message>
+    <message>
         <source>Manual</source>
-        <translation>Manual</translation>
+        <translation type="vanished">Manual</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="192"/>
         <source>Default</source>
-        <translation>Por defecto</translation>
+        <translation type="vanished">Por defecto</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="193"/>
         <source>Default (North America)</source>
-        <translation>Por defecto (Norteamérica)</translation>
+        <translation type="vanished">Por defecto (Norteamérica)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="271"/>
+        <location filename="../../serverdlg.cpp" line="273"/>
         <source> Server</source>
         <translation> : Servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="275"/>
+        <location filename="../../serverdlg.cpp" line="277"/>
         <source>&amp;Window</source>
         <translation>&amp;Ventana</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="591"/>
+        <location filename="../../util.h" line="615"/>
         <source>Unregistered</source>
         <translation>Sin registrar</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="594"/>
+        <location filename="../../util.h" line="618"/>
         <source>Bad address</source>
         <translation>Dirección no válida</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="597"/>
+        <location filename="../../util.h" line="621"/>
         <source>Registration requested</source>
         <translation>Registro solicitado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="600"/>
+        <location filename="../../util.h" line="624"/>
         <source>Registration failed</source>
         <translation>Error de registro</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="603"/>
+        <location filename="../../util.h" line="627"/>
         <source>Check server version</source>
         <translation>Comprueba la versión del servidor</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="606"/>
+        <location filename="../../util.h" line="630"/>
         <source>Registered</source>
         <translation>Registrado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="609"/>
+        <location filename="../../util.h" line="633"/>
         <source>Central Server full</source>
         <translation>Servidor Central lleno</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="612"/>
+        <location filename="../../util.h" line="636"/>
         <source>Unknown value </source>
         <translation>Valor desconocido </translation>
     </message>
@@ -2271,7 +2389,7 @@
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="121"/>
-        <source>The audio device does not support to set the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
+        <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
         <translation>El dispositivo de audio no permite establecer la tasa de muestreo requerida. Este error puede suceder si tienes un dispositivo de audio como el Roland UA-25EX en el que se configura mediante un interruptor físico en el dispositivo. Si es este el caso, por favor cambia la tasa de muestreo a </translation>
     </message>
     <message>
@@ -2307,7 +2425,7 @@
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
-        <source> software requires the low latency audio interface ASIO to work properly. This is no standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
+        <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
         <translation> requiere la interfaz de audio de baja latencia ASIO para funcionar correctamente. No es una interfaz estándar de Windows y por tanto se requiere un driver de audio especial. Tu tarjeta de audio podría tener un driver ASIO nativo (lo recomendado) o quizá quieras probar un driver alternativo como ASIO4All.</translation>
     </message>
     <message>
@@ -2325,7 +2443,7 @@
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="141"/>
-        <source>The audio driver properties have changed to a state which is incompatible to this software. The selected audio device could not be used because of the following error:</source>
+        <source>The audio driver properties have changed to a state which is incompatible with this software. The selected audio device could not be used because of the following error:</source>
         <translation>Las propiedades del driver de audio han cambiado a un estado que es incompatible con este software. El dispositivo de audio seleccionado no se pudo utilizar a causa del siguiente error:</translation>
     </message>
     <message>
@@ -2367,9 +2485,9 @@
 <context>
     <name>global</name>
     <message>
-        <location filename="../../global.h" line="237"/>
+        <location filename="../../global.h" line="236"/>
         <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Para más información utiliza ¿Qué es Esto? (menú de ayuda, botón derecho del ratón o Shift+F1)</translation>
     </message>
 </context>
 </TS>

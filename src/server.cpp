@@ -340,6 +340,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init          ( iMaxNumChannels );
     vecvecdGains.Init                  ( iMaxNumChannels );
+    vecvecdPannings.Init               ( iMaxNumChannels );
     vecvecsData.Init                   ( iMaxNumChannels );
     vecNumAudioChannels.Init           ( iMaxNumChannels );
     vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
@@ -350,6 +351,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     {
         // init vectors storing information of all channels
         vecvecdGains[i].Init ( iMaxNumChannels );
+        vecvecdPannings[i].Init ( iMaxNumChannels );
 
         // we always use stereo audio buffers (see "vecsSendData")
         vecvecsData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
@@ -471,8 +473,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
         this, SLOT ( OnAboutToQuit() ) );
 
     QObject::connect ( pSignalHandler,
-        SIGNAL ( ShutdownSignal ( int ) ),
-        this, SLOT ( OnShutdown ( int ) ) );
+        SIGNAL ( HandledSignal ( int ) ),
+        this, SLOT ( OnHandledSignal ( int ) ) );
 
     connectChannelSignalsToServerSlots<MAX_NUM_CHANNELS>();
 
@@ -495,6 +497,9 @@ inline void CServer::connectChannelSignalsToServerSlots()
     void ( CServer::* pOnChatTextReceivedCh )( QString ) =
         &CServerSlots<slotId>::OnChatTextReceivedCh;
 
+    void ( CServer::* pOnMuteStateHasChangedCh )( int, bool ) =
+        &CServerSlots<slotId>::OnMuteStateHasChangedCh;
+
     void ( CServer::* pOnServerAutoSockBufSizeChangeCh )( int ) =
         &CServerSlots<slotId>::OnServerAutoSockBufSizeChangeCh;
 
@@ -513,6 +518,10 @@ inline void CServer::connectChannelSignalsToServerSlots()
     // chat text received
     QObject::connect ( &vecChannels[iCurChanID], &CChannel::ChatTextReceived,
                        this, pOnChatTextReceivedCh );
+
+    // other mute state has changed
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::MuteStateHasChanged,
+                       this, pOnMuteStateHasChangedCh );
 
     // auto socket buffer size change
     QObject::connect ( &vecChannels[iCurChanID], &CChannel::ServerAutoSockBufSizeChange,
@@ -597,6 +606,9 @@ CreateAndSendChanListForAllConChannels();
         vecChannels[iChID].CreateLicReqMes ( eLicenceType );
     }
 
+    // send version info (for, e.g., feature activation in the client)
+    vecChannels[iChID].CreateVersionAndOSMes();
+
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
     DoubleFrameSizeConvBufOut[iChID].Reset();
@@ -665,10 +677,38 @@ void CServer::OnAboutToQuit()
     }
 }
 
-void CServer::OnShutdown ( int )
+void CServer::OnHandledSignal ( int sigNum )
 {
-    // This should trigger OnAboutToQuit
+#ifdef _WIN32
+    // Windows does not actually get OnHandledSignal triggered
     QCoreApplication::instance()->exit();
+    Q_UNUSED ( sigNum )
+#else
+    switch ( sigNum )
+    {
+
+    case SIGUSR1:
+        RequestNewRecording();
+        break;
+
+    case SIGINT:
+    case SIGTERM:
+        // This should trigger OnAboutToQuit
+        QCoreApplication::instance()->exit();
+        break;
+
+    default:
+        break;
+    }
+#endif
+}
+
+void CServer::RequestNewRecording()
+{
+    if ( bEnableRecording )
+    {
+        emit RestartRecorder();
+    }
 }
 
 void CServer::Start()
@@ -706,7 +746,7 @@ void CServer::Stop()
 void CServer::OnTimer()
 {
     int                i, j, iUnused;
-    int                iClientFrameSizeSamples;
+    int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
     OpusCustomDecoder* CurOpusDecoder;
     OpusCustomEncoder* CurOpusEncoder;
     unsigned char*     pCurCodedData;
@@ -813,6 +853,9 @@ JitterMeas.Measure();
 
                 // consider audio fade-in
                 vecvecdGains[i][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
+
+                // panning
+                vecvecdPannings[i][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
             }
 
             // If the server frame size is smaller than the received OPUS frame size, we need a conversion
@@ -940,6 +983,7 @@ JitterMeas.Measure();
             // actual processing of audio data -> mix
             ProcessData ( vecvecsData,
                           vecvecdGains[i],
+                          vecvecdPannings[i],
                           vecNumAudioChannels,
                           vecsSendData,
                           iCurNumAudChan,
@@ -1042,6 +1086,7 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
 /// @brief Mix all audio data from all clients together.
 void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                             const CVector<double>&            vecdGains,
+                            const CVector<double>&            vecdPannings,
                             const CVector<int>&               vecNumAudioChannels,
                             CVector<int16_t>&                 vecsOutData,
                             const int                         iCurNumAudChan,
@@ -1114,12 +1159,18 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
         // Stereo target channel -----------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
-            // get a reference to the audio data and gain of the current client
+            // get a reference to the audio data and gain/pan of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
             const double            dGain    = vecdGains[j];
+            const double            dPan     = vecdPannings[j];
+
+            // calculate combined gain/pan for each stereo channel where we define
+            // the panning that center equals full gain for both channels
+            const double dGainL = std::min ( 0.5, 1 - dPan ) * 2 * dGain;
+            const double dGainR = std::min ( 0.5, dPan ) * 2 * dGain;
 
             // if channel gain is 1, avoid multiplication for speed optimization
-            if ( dGain == static_cast<double> ( 1.0 ) )
+            if ( ( dGainL == static_cast<double> ( 1.0 ) ) && ( dGainR == static_cast<double> ( 1.0 ) ) )
             {
                 if ( vecNumAudioChannels[j] == 1 )
                 {
@@ -1154,20 +1205,25 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     {
                         // left channel
                         vecsOutData[k] = Double2Short (
-                            vecsOutData[k] + vecsData[i] * dGain );
+                            vecsOutData[k] + vecsData[i] * dGain * dGainL );
 
                         // right channel
                         vecsOutData[k + 1] = Double2Short (
-                            vecsOutData[k + 1] + vecsData[i] * dGain );
+                            vecsOutData[k + 1] + vecsData[i] * dGain * dGainR );
                     }
                 }
                 else
                 {
                     // stereo
-                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
                     {
+                        // left channel
                         vecsOutData[i] = Double2Short (
-                            vecsOutData[i] + vecsData[i] * dGain );
+                            vecsOutData[i] + vecsData[i] * dGain * dGainL );
+
+                        // right channel
+                        vecsOutData[i + 1] = Double2Short (
+                            vecsOutData[i + 1] + vecsData[i + 1] * dGain * dGainR );
                     }
                 }
             }
@@ -1258,6 +1314,17 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
             // send message
             vecChannels[i].CreateChatTextMes ( strActualMessageText );
         }
+    }
+}
+
+void CServer::CreateOtherMuteStateChanged ( const int  iCurChanID,
+                                            const int  iOtherChanID,
+                                            const bool bIsMuted )
+{
+    if ( vecChannels[iOtherChanID].IsConnected() )
+    {
+        // send message
+        vecChannels[iOtherChanID].CreateMuteStateHasChangedMes ( iCurChanID, bIsMuted );
     }
 }
 

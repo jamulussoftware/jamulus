@@ -28,6 +28,7 @@
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains              ( MAX_NUM_CHANNELS, 1.0 ),
+    vecdPannings           ( MAX_NUM_CHANNELS, 0.5 ),
     bDoAutoSockBufSize     ( true ),
     iFadeInCnt             ( 0 ),
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
@@ -83,13 +84,20 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ) );
 
-    QObject::connect( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
+    QObject::connect ( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
-    QObject::connect( &Protocol, SIGNAL ( ChangeChanInfo ( CChannelCoreInfo ) ),
+    QObject::connect ( &Protocol, SIGNAL ( ChangeChanPan ( int, double ) ),
+        this, SLOT ( OnChangeChanPan ( int, double ) ) );
+
+    QObject::connect ( &Protocol,
+        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ),
+        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ) );
+
+    QObject::connect ( &Protocol, SIGNAL ( ChangeChanInfo ( CChannelCoreInfo ) ),
         this, SLOT ( OnChangeChanInfo ( CChannelCoreInfo ) ) );
 
-    QObject::connect( &Protocol,
+    QObject::connect ( &Protocol,
         SIGNAL ( ChatTextReceived ( QString ) ),
         SIGNAL ( ChatTextReceived ( QString ) ) );
 
@@ -101,9 +109,13 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
         SIGNAL ( ReqNetTranspProps() ),
         this, SLOT ( OnReqNetTranspProps() ) );
 
-    QObject::connect( &Protocol,
+    QObject::connect ( &Protocol,
         SIGNAL ( LicenceRequired ( ELicenceType ) ),
         SIGNAL ( LicenceRequired ( ELicenceType ) ) );
+
+    QObject::connect ( &Protocol,
+        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ),
+        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ) );
 
     QObject::connect ( &Protocol,
         SIGNAL ( ReqChannelLevelList ( bool ) ),
@@ -250,6 +262,16 @@ void CChannel::SetGain ( const int    iChanID,
     // set value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
+        // signal mute change
+        if ( ( vecdGains[iChanID] == 0 ) && ( dNewGain > 0 ) )
+        {
+            emit MuteStateHasChanged ( iChanID, false );
+        }
+        if ( ( vecdGains[iChanID] > 0 ) && ( dNewGain == 0 ) )
+        {
+            emit MuteStateHasChanged ( iChanID, true );
+        }
+
         vecdGains[iChanID] = dNewGain;
     }
 }
@@ -262,6 +284,33 @@ double CChannel::GetGain ( const int iChanID )
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
         return vecdGains[iChanID];
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void CChannel::SetPan ( const int    iChanID,
+                        const double dNewPan )
+{
+    QMutexLocker locker ( &Mutex );
+
+    // set value (make sure channel ID is in range)
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    {
+        vecdPannings[iChanID] = dNewPan;
+    }
+}
+
+double CChannel::GetPan ( const int iChanID )
+{
+    QMutexLocker locker ( &Mutex );
+
+    // get value (make sure channel ID is in range)
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    {
+        return vecdPannings[iChanID];
     }
     else
     {
@@ -333,6 +382,12 @@ void CChannel::OnChangeChanGain ( int    iChanID,
                                   double dNewGain )
 {
     SetGain ( iChanID, dNewGain );
+}
+
+void CChannel::OnChangeChanPan ( int    iChanID,
+                                 double dNewPan )
+{
+    SetPan ( iChanID, dNewPan );
 }
 
 void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo )

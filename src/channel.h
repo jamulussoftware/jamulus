@@ -105,13 +105,21 @@ public:
         { Protocol.CreateChanInfoMes ( ChInfo ); }
 
     void CreateReqChanInfoMes() { Protocol.CreateReqChanInfoMes(); }
+    void CreateVersionAndOSMes() { Protocol.CreateVersionAndOSMes(); }
+    void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted ) { Protocol.CreateMuteStateHasChangedMes ( iChanID, bIsMuted ); }
 
     void SetGain ( const int iChanID, const double dNewGain );
     double GetGain ( const int iChanID );
     double GetFadeInGain() { return static_cast<double> ( iFadeInCnt ) / iFadeInCntMax; }
 
+    void SetPan ( const int iChanID, const double dNewPan );
+    double GetPan ( const int iChanID );
+
     void SetRemoteChanGain ( const int iId, const double dGain )
         { Protocol.CreateChanGainMes ( iId, dGain ); }
+
+    void SetRemoteChanPan ( const int iId, const double dPan )
+        { Protocol.CreateChanPanMes ( iId, dPan ); }
 
     bool SetSockBufNumFrames ( const int  iNewNumFrames,
                                const bool bPreserve = false );
@@ -190,6 +198,7 @@ protected:
 
     // mixer and effect settings
     CVector<double>   vecdGains;
+    CVector<double>   vecdPannings;
 
     // network jitter-buffer
     CNetBufWithStats  SockBuf;
@@ -228,6 +237,7 @@ public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnJittBufSizeChange ( int iNewJitBufSize );
     void OnChangeChanGain ( int iChanID, double dNewGain );
+    void OnChangeChanPan ( int iChanID, double dNewPan );
     void OnChangeChanInfo ( CChannelCoreInfo ChanInfo );
     void OnNetTranspPropsReceived ( CNetworkTransportProps NetworkTransportProps );
     void OnReqNetTranspProps();
@@ -268,10 +278,13 @@ signals:
     void ReqConnClientsList();
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChanInfoHasChanged();
+    void MuteStateHasChanged ( int iChanID, bool bIsMuted );
+    void MuteStateHasChangedReceived ( int iChanID, bool bIsMuted );
     void ReqChanInfo();
     void ChatTextReceived ( QString strChatText );
     void ReqNetTranspProps();
     void LicenceRequired ( ELicenceType eLicenceType );
+    void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
     void Disconnected();
 
     void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,

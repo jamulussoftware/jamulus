@@ -8,8 +8,7 @@ contains(CONFIG, "noupcasename") {
 
 CONFIG += qt \
     thread \
-    release \
-    lrelease
+    release
 
 QT += widgets \
     network \
@@ -19,7 +18,8 @@ TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \
     src/res/translation/translation_pt_PT.ts \
     src/res/translation/translation_es_ES.ts \
-    src/res/translation/translation_nl_NL.ts
+    src/res/translation/translation_nl_NL.ts \
+    src/res/translation/translation_it_IT.ts
 
 INCLUDEPATH += src
 
@@ -301,6 +301,16 @@ DISTFILES_OBOE += libs/oboe/AUTHORS \
         android/AndroidManifest.xml \
         android/sound.h \
         android/sound.cpp
+
+    isEmpty(PREFIX) {
+        PREFIX = /usr/local
+    }
+    isEmpty(BINDIR) {
+        BINDIR = bin
+    }
+    BINDIR = $$absolute_path($$BINDIR, $$PREFIX)
+    INSTALLS += target
+    target.path = $$BINDIR
 }
 
 RCC_DIR = src/res
@@ -355,7 +365,6 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/kiss_fft.h \
     libs/opus/celt/laplace.h \
     libs/opus/celt/mathops.h \
-    libs/opus/celt/mdct.c \
     libs/opus/celt/mdct.h \
     libs/opus/celt/mfrngcod.h \
     libs/opus/celt/modes.h \
@@ -365,7 +374,6 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/rate.h \
     libs/opus/celt/stack_alloc.h \
     libs/opus/celt/static_modes_float.h \
-    libs/opus/celt/vq.c \
     libs/opus/celt/vq.h \
     libs/opus/celt/_kiss_fft_guts.h \
     libs/opus/include/opus.h \
@@ -373,7 +381,6 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/include/opus_defines.h \
     libs/opus/include/opus_types.h \
     libs/opus/silk/API.h \
-    libs/opus/silk/CNG.c \
     libs/opus/silk/control.h \
     libs/opus/silk/debug.h \
     libs/opus/silk/define.h \
@@ -386,10 +393,8 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/silk/MacroDebug.h \
     libs/opus/silk/macros.h \
     libs/opus/silk/main.h \
-    libs/opus/silk/NSQ.c \
     libs/opus/silk/NSQ.h \
     libs/opus/silk/pitch_est_defines.h \
-    libs/opus/silk/PLC.c \
     libs/opus/silk/PLC.h \
     libs/opus/silk/resampler_private.h \
     libs/opus/silk/resampler_rom.h \
@@ -399,7 +404,6 @@ HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/silk/tables.h \
     libs/opus/silk/tuning_parameters.h \
     libs/opus/silk/typedef.h \
-    libs/opus/silk/VAD.c \
     libs/opus/src/analysis.h \
     libs/opus/src/mlp.h \
     libs/opus/src/opus_private.h \
@@ -622,12 +626,6 @@ DISTFILES += ChangeLog \
     COPYING \
     INSTALL.md \
     README.md \
-    android/build.gradle \
-    android/gradle/wrapper/gradle-wrapper.jar \
-    android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew \
-    android/gradlew.bat \
-    android/res/values/libs.xml \
     src/res/CLEDBlack.png \
     src/res/CLEDBlackSmall.png \
     src/res/CLEDDisabledSmall.png \
@@ -678,34 +676,34 @@ DISTFILES += ChangeLog \
     src/res/VRLEDRedSmall.png \
     src/res/VRLEDYellow.png \
     src/res/VRLEDYellowSmall.png \
-    src/res/instruments/instraccordeon.png \
-    src/res/instruments/instraguitar.png \
-    src/res/instruments/instrbassguitar.png \
-    src/res/instruments/instrcello.png \
-    src/res/instruments/instrclarinet.png \
-    src/res/instruments/instrdjembe.png \
-    src/res/instruments/instrdoublebass.png \
-    src/res/instruments/instrdrumset.png \
-    src/res/instruments/instreguitar.png \
-    src/res/instruments/instrflute.png \
-    src/res/instruments/instrfrenchhorn.png \
-    src/res/instruments/instrgrandpiano.png \
-    src/res/instruments/instrharmonica.png \
-    src/res/instruments/instrkeyboard.png \
-    src/res/instruments/instrlistener.png \
-    src/res/instruments/instrmicrophone.png \
-    src/res/instruments/instrnone.png \
-    src/res/instruments/instrrecorder.png \
-    src/res/instruments/instrsaxophone.png \
-    src/res/instruments/instrstreamer.png \
-    src/res/instruments/instrsynthesizer.png \
-    src/res/instruments/instrtrombone.png \
-    src/res/instruments/instrtrumpet.png \
-    src/res/instruments/instrtuba.png \
-    src/res/instruments/instrviolin.png \
-    src/res/instruments/instrvocal.png \
-    src/res/instruments/instrguitarvocal.png \
-    src/res/instruments/instrkeyboardvocal.png \
+    src/res/instruments/accordeon.png \
+    src/res/instruments/aguitar.png \
+    src/res/instruments/bassguitar.png \
+    src/res/instruments/cello.png \
+    src/res/instruments/clarinet.png \
+    src/res/instruments/djembe.png \
+    src/res/instruments/doublebass.png \
+    src/res/instruments/drumset.png \
+    src/res/instruments/eguitar.png \
+    src/res/instruments/flute.png \
+    src/res/instruments/frenchhorn.png \
+    src/res/instruments/grandpiano.png \
+    src/res/instruments/harmonica.png \
+    src/res/instruments/keyboard.png \
+    src/res/instruments/listener.png \
+    src/res/instruments/microphone.png \
+    src/res/instruments/none.png \
+    src/res/instruments/recorder.png \
+    src/res/instruments/saxophone.png \
+    src/res/instruments/streamer.png \
+    src/res/instruments/synthesizer.png \
+    src/res/instruments/trombone.png \
+    src/res/instruments/trumpet.png \
+    src/res/instruments/tuba.png \
+    src/res/instruments/violin.png \
+    src/res/instruments/vocal.png \
+    src/res/instruments/guitarvocal.png \
+    src/res/instruments/keyboardvocal.png \
     src/res/instruments/bodhran.svg \
     src/res/instruments/bodhran.png \
     src/res/instruments/bassoon.svg \
@@ -719,6 +717,10 @@ DISTFILES += ChangeLog \
     src/res/instruments/congas.png \
     src/res/instruments/bongo.svg \
     src/res/instruments/bongo.png \
+    src/res/instruments/vocalbass.png \
+    src/res/instruments/vocaltenor.png \
+    src/res/instruments/vocalalto.png \
+    src/res/instruments/vocalsoprano.png \
     src/res/flags/flagnone.png \
     src/res/flags/ad.png \
     src/res/flags/ae.png \

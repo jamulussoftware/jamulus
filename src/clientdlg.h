@@ -33,6 +33,9 @@
 #include <QRadioButton>
 #include <QMenuBar>
 #include <QLayout>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+# include <QVersionNumber>
+#endif
 #include "global.h"
 #include "client.h"
 #include "settings.h"
@@ -131,6 +134,9 @@ public slots:
                                     const int iValue ) { MainMixerBoard->SetFaderLevel ( iChannelIdx,
                                                                                          iValue ); }
 
+    void OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
+                                  QString                strVersion );
+
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
                                     COSUtil::EOpSystemType eOSType,
@@ -166,6 +172,9 @@ public slots:
     void OnChangeChanGain ( int iId, double dGain )
         { pClient->SetRemoteChanGain ( iId, dGain ); }
 
+	void OnChangeChanPan ( int iId, double dPan )
+        { pClient->SetRemoteChanPan ( iId, dPan ); }
+
     void OnNewLocalInputText ( QString strChatText )
         { pClient->CreateChatTextMes ( strChatText ); }
 
@@ -188,6 +197,9 @@ public slots:
     void OnCLConnClientsListMesReceived ( CHostAddress          InetAddr,
                                           CVector<CChannelInfo> vecChanInfo )
         { ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo ); }
+
+    void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted )
+        { MainMixerBoard->SetRemoteFaderIsMute ( iChanID, bIsMuted ); }
 
     void OnCLChannelLevelListReceived ( CHostAddress       /* unused */,
                                         CVector<uint16_t> vecLevelList )

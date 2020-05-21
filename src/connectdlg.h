@@ -47,8 +47,9 @@ class CConnectDlg : public QDialog, private Ui_CConnectDlgBase
     Q_OBJECT
 
 public:
-    CConnectDlg ( const bool bNewShowCompleteRegList,
-                  QWidget* parent = nullptr,
+    CConnectDlg ( CClient*        pNCliP,
+                  const bool      bNewShowCompleteRegList,
+                  QWidget*        parent = nullptr,
                   Qt::WindowFlags f = nullptr );
 
     void Init ( const CVector<QString>& vstrIPAddresses );
@@ -88,6 +89,8 @@ protected:
     void             UpdateListFilter();
     void             ShowAllMusicians ( const bool bState );
 
+    CClient*     pClient;
+
     QTimer       TimerPing;
     QTimer       TimerReRequestServList;
     QString      strCentralServerAddress;
@@ -104,6 +107,7 @@ public slots:
     void OnServerListItemSelectionChanged();
     void OnServerListItemDoubleClicked ( QTreeWidgetItem* Item, int );
     void OnServerAddrEditTextChanged ( const QString& );
+    void OnCentServAddrTypeChanged ( int iTypeIdx ) { pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iTypeIdx ) ); }
     void OnFilterTextEdited ( const QString& ) { UpdateListFilter(); }
     void OnExpandAllStateChanged ( int value ) { ShowAllMusicians ( value == Qt::Checked ); }
     void OnConnectClicked();

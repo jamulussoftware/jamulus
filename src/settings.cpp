@@ -77,6 +77,17 @@ void CSettings::Load()
             }
         }
 
+        // stored pan values
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+        {
+            if ( GetNumericIniSet ( IniXMLDocument, "client",
+                                    QString ( "storedpanvalue%1" ).arg ( iIdx ),
+                                    0, AUD_MIX_PAN_MAX/2, iValue ) )
+            {
+                pClient->vecStoredPanValues[iIdx] = iValue;
+            }
+        }
+
         // stored fader solo state
         for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
         {
@@ -288,7 +299,7 @@ void CSettings::Load()
 
         // central server address type
         if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
-             0, 2 /* AT_NORTH_AMERICA */, iValue ) )
+             0, 4 /* AT_GENRE_JAZZ */, iValue ) )
         {
             pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iValue ) );
         }
@@ -304,7 +315,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
     // only the case that manual was set in old ini must be considered
     if ( !bValue )
     {
-        pClient->SetCentralServerAddressType ( AT_MANUAL );
+        pClient->SetCentralServerAddressType ( AT_CUSTOM );
     }
 }
 
@@ -359,7 +370,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
         // central server address type (note that it is important
         // to set this setting prior to the "central server address")
         if ( GetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype",
-             0, 2 /* AT_NORTH_AMERICA */, iValue ) )
+             0, 4 /* AT_GENRE_JAZZ */, iValue ) )
         {
             pServer->SetCentralServerAddressType ( static_cast<ECSAddType> ( iValue ) );
         }
@@ -375,7 +386,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
     // only the case that manual was set in old ini must be considered
     if ( !bValue )
     {
-        pServer->SetCentralServerAddressType ( AT_MANUAL );
+        pServer->SetCentralServerAddressType ( AT_CUSTOM );
     }
 }
 
@@ -453,6 +464,14 @@ void CSettings::Save()
             SetNumericIniSet ( IniXMLDocument, "client",
                                QString ( "storedfaderlevel%1" ).arg ( iIdx ),
                                pClient->vecStoredFaderLevels[iIdx] );
+        }
+
+        // stored pan values
+        for ( iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
+        {
+            SetNumericIniSet ( IniXMLDocument, "client",
+                               QString ( "storedpanvalue%1" ).arg ( iIdx ),
+                               pClient->vecStoredPanValues[iIdx] );
         }
 
         // stored fader solo states

@@ -26,10 +26,12 @@
 
 
 /* Implementation *************************************************************/
-CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
-                           QWidget* parent,
+CConnectDlg::CConnectDlg ( CClient*        pNCliP,
+                           const bool      bNewShowCompleteRegList,
+                           QWidget*        parent,
                            Qt::WindowFlags f )
     : QDialog ( parent, f ),
+      pClient                  ( pNCliP ),
       strCentralServerAddress  ( "" ),
       strSelectedAddress       ( "" ),
       strSelectedServerName    ( "" ),
@@ -73,6 +75,14 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     cbxServerAddr->setAccessibleName        ( tr ( "Server address edit box" ) );
     cbxServerAddr->setAccessibleDescription ( tr ( "Holds the current server "
         "IP address or URL. It also stores old URLs in the combo box list." ) );
+
+    // central server address type combo box
+    cbxCentServAddrType->clear();
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENERAL_NORTHAMERICA ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_ROCK ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
 
     // filter
     edtFilter->setWhatsThis ( "<b>" + tr ( "Filter" ) + ":</b> " + tr ( "The server "
@@ -162,6 +172,9 @@ CConnectDlg::CConnectDlg ( const bool bNewShowCompleteRegList,
     QObject::connect ( cbxServerAddr, SIGNAL ( editTextChanged ( const QString& ) ),
         this, SLOT ( OnServerAddrEditTextChanged ( const QString& ) ) );
 
+    QObject::connect ( cbxCentServAddrType, SIGNAL ( activated ( int ) ),
+        this, SLOT ( OnCentServAddrTypeChanged ( int ) ) );
+
     // check boxes
     QObject::connect ( chbExpandAll, SIGNAL ( stateChanged ( int ) ),
         this, SLOT ( OnExpandAllStateChanged ( int ) ) );
@@ -219,6 +232,11 @@ void CConnectDlg::RequestServerList()
 
     // clear filter edit box
     edtFilter->setText ( "" );
+
+    // update list combo box (disable events to avoid a signal)
+    cbxCentServAddrType->blockSignals ( true );
+    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
+    cbxCentServAddrType->blockSignals ( false );
 
     // get the IP address of the central server (using the ParseNetworAddress
     // function) when the connect dialog is opened, this seems to be the correct

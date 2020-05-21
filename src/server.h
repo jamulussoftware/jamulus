@@ -117,22 +117,27 @@ signals:
 };
 #endif
 
+
 template<unsigned int slotId>
 class CServerSlots : public CServerSlots<slotId - 1>
 {
-
 public:
-    void OnSendProtMessCh( CVector<uint8_t> mess ) { SendProtMessage ( slotId - 1,  mess ); }
+    void OnSendProtMessCh ( CVector<uint8_t> mess ) { SendProtMessage ( slotId - 1,  mess ); }
     void OnReqConnClientsListCh()  { CreateAndSendChanListForThisChan ( slotId - 1 ); }
 
-    void OnChatTextReceivedCh( QString strChatText )
+    void OnChatTextReceivedCh ( QString strChatText )
     {
         CreateAndSendChatTextForAllConChannels ( slotId - 1, strChatText );
     }
 
-    void OnServerAutoSockBufSizeChangeCh( int iNNumFra )
+    void OnMuteStateHasChangedCh ( int iChanID, bool bIsMuted )
     {
-        CreateAndSendJitBufMessage( slotId - 1, iNNumFra );
+        CreateOtherMuteStateChanged ( slotId - 1, iChanID, bIsMuted );
+    }
+
+    void OnServerAutoSockBufSizeChangeCh ( int iNNumFra )
+    {
+        CreateAndSendJitBufMessage ( slotId - 1, iNNumFra );
     }
 
 protected:
@@ -143,6 +148,10 @@ protected:
 
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText ) = 0;
+
+    virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
+                                               const int  iOtherChanID,
+                                               const bool bIsMuted ) = 0;
 
     virtual void CreateAndSendJitBufMessage ( const int iCurChanID,
                                               const int iNNumFra ) = 0;
@@ -256,6 +265,10 @@ protected:
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText );
 
+    virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
+                                               const int  iOtherChanID,
+                                               const bool bIsMuted );
+
     virtual void CreateAndSendJitBufMessage ( const int iCurChanID,
                                               const int iNNumFra );
 
@@ -269,6 +282,7 @@ protected:
 
     void ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                        const CVector<double>&            vecdGains,
+                       const CVector<double>&            vecdPannings,
                        const CVector<int>&               vecNumAudioChannels,
                        CVector<int16_t>&                 vecsOutData,
                        const int                         iCurNumAudChan,
@@ -284,6 +298,8 @@ protected:
                                           const CVector<int>&              vecNumAudioChannels,
                                           const CVector<CVector<int16_t> > vecvecsData,
                                           CVector<uint16_t>&               vecLevelsOut );
+
+    void RequestNewRecording();
 
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
@@ -310,6 +326,7 @@ protected:
     CVector<int>               vecChanIDsCurConChan;
 
     CVector<CVector<double> >  vecvecdGains;
+    CVector<CVector<double> >  vecvecdPannings;
     CVector<CVector<int16_t> > vecvecsData;
     CVector<int>               vecNumAudioChannels;
     CVector<int>               vecNumFrameSizeConvBlocks;
@@ -364,6 +381,7 @@ signals:
                       const CHostAddress     RecHostAddr,
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
+    void RestartRecorder();
 
 public slots:
     void OnTimer();
@@ -441,5 +459,5 @@ public slots:
 
     void OnAboutToQuit();
 
-    void OnShutdown ( int );
+    void OnHandledSignal ( int sigNum );
 };

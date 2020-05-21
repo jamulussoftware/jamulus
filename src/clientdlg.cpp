@@ -466,6 +466,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         SIGNAL ( ChatTextReceived ( QString ) ),
         this, SLOT ( OnChatTextReceived ( QString ) ) );
 
+    QObject::connect ( pClient,
+        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ),
+        this, SLOT ( OnMuteStateHasChangedReceived ( int, bool ) ) );
+
     // This connection is a special case. On receiving a licence required message via the
     // protocol, a modal licence dialog is opened. Since this blocks the thread, we need
     // a queued connection to make sure the core protocol mechanism is not blocked, too.
@@ -774,6 +778,14 @@ void CClientDlg::OnChatTextReceived ( QString strChatText )
     ShowChatWindow ( false );
 
     UpdateDisplay();
+}
+
+void CClientDlg::OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted )
+{
+
+// TEST
+qDebug() << "mute state changed: iChanID " << iChanID << " bIsMuted " << bIsMuted;
+
 }
 
 void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )

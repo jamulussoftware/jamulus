@@ -84,16 +84,20 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
         SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ) );
 
-    QObject::connect( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
+    QObject::connect ( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
-    QObject::connect( &Protocol, SIGNAL ( ChangeChanPan ( int, double ) ),
+    QObject::connect ( &Protocol, SIGNAL ( ChangeChanPan ( int, double ) ),
         this, SLOT ( OnChangeChanPan ( int, double ) ) );
 
-    QObject::connect( &Protocol, SIGNAL ( ChangeChanInfo ( CChannelCoreInfo ) ),
+    QObject::connect ( &Protocol,
+        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ),
+        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ) );
+
+    QObject::connect ( &Protocol, SIGNAL ( ChangeChanInfo ( CChannelCoreInfo ) ),
         this, SLOT ( OnChangeChanInfo ( CChannelCoreInfo ) ) );
 
-    QObject::connect( &Protocol,
+    QObject::connect ( &Protocol,
         SIGNAL ( ChatTextReceived ( QString ) ),
         SIGNAL ( ChatTextReceived ( QString ) ) );
 
@@ -105,7 +109,7 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
         SIGNAL ( ReqNetTranspProps() ),
         this, SLOT ( OnReqNetTranspProps() ) );
 
-    QObject::connect( &Protocol,
+    QObject::connect ( &Protocol,
         SIGNAL ( LicenceRequired ( ELicenceType ) ),
         SIGNAL ( LicenceRequired ( ELicenceType ) ) );
 
@@ -258,6 +262,16 @@ void CChannel::SetGain ( const int    iChanID,
     // set value (make sure channel ID is in range)
     if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
     {
+        // signal mute change
+        if ( ( vecdGains[iChanID] == 0 ) && ( dNewGain > 0 ) )
+        {
+            emit MuteStateHasChanged ( iChanID, false );
+        }
+        if ( ( vecdGains[iChanID] > 0 ) && ( dNewGain == 0 ) )
+        {
+            emit MuteStateHasChanged ( iChanID, true );
+        }
+
         vecdGains[iChanID] = dNewGain;
     }
 }

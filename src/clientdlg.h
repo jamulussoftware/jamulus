@@ -167,6 +167,7 @@ public slots:
 
     void OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void OnChatTextReceived ( QString strChatText );
+    void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted );
     void OnLicenceRequired ( ELicenceType eLicenceType );
 
     void OnChangeChanGain ( int iId, double dGain )

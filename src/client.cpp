@@ -156,7 +156,11 @@ CClient::CClient ( const quint16  iPortNumber,
         SIGNAL ( ChatTextReceived ( QString ) ),
         SIGNAL ( ChatTextReceived ( QString ) ) );
 
-    QObject::connect( &Channel,
+    QObject::connect ( &Channel,
+        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ),
+        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ) );
+
+    QObject::connect ( &Channel,
         SIGNAL ( LicenceRequired ( ELicenceType ) ),
         SIGNAL ( LicenceRequired ( ELicenceType ) ) );
 

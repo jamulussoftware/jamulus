@@ -301,6 +301,16 @@ DISTFILES_OBOE += libs/oboe/AUTHORS \
         android/AndroidManifest.xml \
         android/sound.h \
         android/sound.cpp
+
+    isEmpty(PREFIX) {
+        PREFIX = /usr/local
+    }
+    isEmpty(BINDIR) {
+        BINDIR = bin
+    }
+    BINDIR = $$absolute_path($$BINDIR, $$PREFIX)
+    INSTALLS += target
+    target.path = $$BINDIR
 }
 
 RCC_DIR = src/res

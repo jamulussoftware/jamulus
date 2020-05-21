@@ -85,7 +85,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // connect/disconnect button
     butConnect->setWhatsThis ( "<b>" + tr ( "Connect/Disconnect Button" ) + ":</b> " +
-        tr ( "Push this button to connect a server. A dialog where you can "
+        tr ( "Push this button to connect to a server. A dialog where you can "
         "select a server will open. If you are connected, pressing this "
         "button will end the session." ) );
 
@@ -123,7 +123,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         "sound card and a reverberation effect shall be applied, set the "
         "channel selector to right and move the fader upwards until the "
         "desired reverberation level is reached." ) + "<br>" + tr (
-        "The reverberation effect requires significant CPU so that it should "
+        "The reverberation effect requires significant CPU so it should "
         "only be used on fast PCs. If the reverberation level fader is set to "
         "minimum (which is the default setting), the reverberation effect is "
         "switched off and does not cause any additional CPU usage." );
@@ -169,7 +169,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         "<ul>"
         "<li>" + tr ( "The network jitter buffer is not large enough for the current "
         "network/audio interface jitter." ) + "</li>"
-        "<li>" + tr ( "The sound card buffer delay (buffer size) is set to a too small "
+        "<li>" + tr ( "The sound card buffer delay (buffer size) is set to too small a "
         "value." ) + "</li>"
         "<li>" + tr ( "The upload or download stream rate is too high for the current "
         "available internet bandwidth." ) + "</li>"

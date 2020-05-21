@@ -746,7 +746,7 @@ void CServer::Stop()
 void CServer::OnTimer()
 {
     int                i, j, iUnused;
-    int                iClientFrameSizeSamples;
+    int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
     OpusCustomDecoder* CurOpusDecoder;
     OpusCustomEncoder* CurOpusEncoder;
     unsigned char*     pCurCodedData;

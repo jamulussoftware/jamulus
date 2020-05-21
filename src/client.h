@@ -390,9 +390,10 @@ protected:
     // for ping measurement
     CPreciseTime            PreciseTime;
 
-    CSignalHandler*            pSignalHandler;
+    CSignalHandler*         pSignalHandler;
 
 public slots:
+    void OnHandledSignal ( int sigNum );
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnInvalidPacketReceived ( CHostAddress RecHostAddr );
 
@@ -419,9 +420,6 @@ public slots:
 
     void OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
                                         CVector<uint16_t> vecLevelList );
-
-private slots:
-    void OnHandledSignal ( int sigNum );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

@@ -661,7 +661,7 @@ void CClient::OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
     emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
 }
 
-void CClient::OnHandledSignal(int sigNum)
+void CClient::OnHandledSignal ( int sigNum )
 {
 #ifdef _WIN32
     // Windows does not actually get OnHandledSignal triggered
@@ -670,7 +670,6 @@ void CClient::OnHandledSignal(int sigNum)
 #else
     switch ( sigNum )
     {
-
     case SIGINT:
     case SIGTERM:
         // This should trigger OnAboutToQuit

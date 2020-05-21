@@ -39,6 +39,7 @@
 #include "channel.h"
 #include "util.h"
 #include "buffer.h"
+#include "signalhandler.h"
 #ifdef LLCON_VST_PLUGIN
 # include "vstsound.h"
 #else
@@ -389,6 +390,8 @@ protected:
     // for ping measurement
     CPreciseTime            PreciseTime;
 
+    CSignalHandler*            pSignalHandler;
+
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );
     void OnInvalidPacketReceived ( CHostAddress RecHostAddr );
@@ -416,6 +419,9 @@ public slots:
 
     void OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
                                         CVector<uint16_t> vecLevelList );
+
+private slots:
+    void OnHandledSignal ( int sigNum );
 
 signals:
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );

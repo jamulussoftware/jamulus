@@ -28,6 +28,7 @@
 // CChannel implementation *****************************************************
 CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains              ( MAX_NUM_CHANNELS, 1.0 ),
+    vecdPannings           ( MAX_NUM_CHANNELS, 0.5 ),
     bDoAutoSockBufSize     ( true ),
     iFadeInCnt             ( 0 ),
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
@@ -86,6 +87,9 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
     QObject::connect( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
 
+    QObject::connect( &Protocol, SIGNAL ( ChangeChanPan ( int, double ) ),
+        this, SLOT ( OnChangeChanPan ( int, double ) ) );
+
     QObject::connect( &Protocol, SIGNAL ( ChangeChanInfo ( CChannelCoreInfo ) ),
         this, SLOT ( OnChangeChanInfo ( CChannelCoreInfo ) ) );
 
@@ -104,6 +108,10 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
     QObject::connect( &Protocol,
         SIGNAL ( LicenceRequired ( ELicenceType ) ),
         SIGNAL ( LicenceRequired ( ELicenceType ) ) );
+
+    QObject::connect ( &Protocol,
+        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ),
+        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ) );
 
     QObject::connect ( &Protocol,
         SIGNAL ( ReqChannelLevelList ( bool ) ),
@@ -269,6 +277,33 @@ double CChannel::GetGain ( const int iChanID )
     }
 }
 
+void CChannel::SetPan ( const int    iChanID,
+                        const double dNewPan )
+{
+    QMutexLocker locker ( &Mutex );
+
+    // set value (make sure channel ID is in range)
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    {
+        vecdPannings[iChanID] = dNewPan;
+    }
+}
+
+double CChannel::GetPan ( const int iChanID )
+{
+    QMutexLocker locker ( &Mutex );
+
+    // get value (make sure channel ID is in range)
+    if ( ( iChanID >= 0 ) && ( iChanID < MAX_NUM_CHANNELS ) )
+    {
+        return vecdPannings[iChanID];
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 void CChannel::SetChanInfo ( const CChannelCoreInfo& NChanInf )
 {
     // apply value (if different from previous one)
@@ -333,6 +368,12 @@ void CChannel::OnChangeChanGain ( int    iChanID,
                                   double dNewGain )
 {
     SetGain ( iChanID, dNewGain );
+}
+
+void CChannel::OnChangeChanPan ( int    iChanID,
+                                 double dNewPan )
+{
+    SetPan ( iChanID, dNewPan );
 }
 
 void CChannel::OnChangeChanInfo ( CChannelCoreInfo ChanInfo )

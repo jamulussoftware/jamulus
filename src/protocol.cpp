@@ -64,6 +64,13 @@ MESSAGES (with connection)
     +-------------------+--------------+
 
 
+- PROTMESSID_CHANNEL_PAN: Gain of channel
+
+    +-------------------+-----------------+
+    | 1 byte channel ID | 2 bytes panning |
+    +-------------------+-----------------+
+
+
 - PROTMESSID_CONN_CLIENTS_LIST: Information about connected clients
 
     for each connected client append following data:
@@ -154,13 +161,19 @@ MESSAGES (with connection)
     | 1 byte licence type |
     +---------------------+
 
-- PROTMESSID_CLM_REQ_CHANNEL_LEVEL_LIST: Opt in or out of the channel level list
+- PROTMESSID_REQ_CHANNEL_LEVEL_LIST: Opt in or out of the channel level list
 
     +---------------+
     | 1 byte option |
     +---------------+
 
     option is boolean, true to opt in, false to opt out
+
+- PROTMESSID_VERSION_AND_OS: Version number and operating system
+
+    +-------------------------+------------------+------------------------------+
+    | 1 byte operating system | 2 bytes number n | n bytes UTF-8 string version |
+    +-------------------------+------------------+------------------------------+
 
 
 // #### COMPATIBILITY OLD VERSION, TO BE REMOVED ####
@@ -573,6 +586,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                 bRet = EvaluateChanGainMes ( vecbyMesBodyData );
                 break;
 
+            case PROTMESSID_CHANNEL_PAN:
+                bRet = EvaluateChanPanMes ( vecbyMesBodyData );
+                break;
+
             case PROTMESSID_CONN_CLIENTS_LIST:
                 bRet = EvaluateConClientListMes ( vecbyMesBodyData );
                 break;
@@ -607,6 +624,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
             case PROTMESSID_REQ_CHANNEL_LEVEL_LIST:
                 bRet = EvaluateReqChannelLevelListMes ( vecbyMesBodyData );
+                break;
+
+            case PROTMESSID_VERSION_AND_OS:
+                bRet = EvaluateVersionAndOSMes ( vecbyMesBodyData );
                 break;
             }
 
@@ -795,18 +816,58 @@ bool CProtocol::EvaluateChanGainMes ( const CVector<uint8_t>& vecData )
     }
 
     // channel ID
-    const int iCurID =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+    const int iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // gain (read integer value)
-    const int iData =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+    const int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // we convert the gain from integer to double with range 0..1
     const double dNewGain = static_cast<double> ( iData ) / ( 1 << 15 );
 
     // invoke message action
     emit ChangeChanGain ( iCurID, dNewGain );
+
+    return false; // no error
+}
+
+void CProtocol::CreateChanPanMes ( const int iChanID, const double dPan )
+{
+    CVector<uint8_t> vecData ( 3 ); // 3 bytes of data
+    int              iPos = 0;      // init position pointer
+
+    // build data vector
+    // channel ID
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
+
+    // actual gain, we convert from double with range 0..1 to integer
+    const int iCurPan = static_cast<int> ( dPan * ( 1 << 15 ) );
+
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iCurPan ), 2 );
+
+    CreateAndSendMessage ( PROTMESSID_CHANNEL_PAN, vecData );
+}
+
+bool CProtocol::EvaluateChanPanMes ( const CVector<uint8_t> &vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 3 )
+    {
+        return true; // return error code
+    }
+
+    // channel ID
+    const int iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // pan (read integer value)
+    const int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+
+    // we convert the gain from integer to double with range 0..1
+    const double dNewPan = static_cast<double> ( iData ) / ( 1 << 15 );
+
+    // invoke message action
+    emit ChangeChanPan ( iCurID, dNewPan );
 
     return false; // no error
 }
@@ -1331,6 +1392,71 @@ bool CProtocol::EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData
 
     // invoke message action
     emit ReqChannelLevelList ( static_cast<bool> ( val ) );
+
+    return false; // no error
+}
+
+void CProtocol::CreateVersionAndOSMes()
+{
+    int iPos = 0; // init position pointer
+
+    // get the version number string
+    const QString strVerion = VERSION;
+
+    // convert version string to utf-8
+    const QByteArray strUTF8Version = strVerion.toUtf8();
+
+    // size of current message body
+    const int iEntrLen =
+        1 /* operating system */ +
+        2 /* version utf-8 string size */ + strUTF8Version.size();
+
+    // build data vector
+    CVector<uint8_t> vecData ( iEntrLen );
+
+    // operating system (1 byte)
+    PutValOnStream ( vecData, iPos,
+        static_cast<uint32_t> ( COSUtil::GetOperatingSystem() ), 1 );
+
+    // version
+    PutStringUTF8OnStream ( vecData, iPos, strUTF8Version );
+
+    CreateAndSendMessage ( PROTMESSID_VERSION_AND_OS, vecData );
+}
+
+bool CProtocol::EvaluateVersionAndOSMes ( const CVector<uint8_t>& vecData )
+{
+    int       iPos = 0; // init position pointer
+    const int iDataLen = vecData.Size();
+
+    // check size (the first 1 byte)
+    if ( iDataLen < 1 )
+    {
+        return true; // return error code
+    }
+
+    // operating system (1 byte)
+    const COSUtil::EOpSystemType eOSType =
+        static_cast<COSUtil::EOpSystemType> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // version text
+    QString strVersion;
+    if ( GetStringFromStream ( vecData,
+                               iPos,
+                               MAX_LEN_VERSION_TEXT,
+                               strVersion ) )
+    {
+        return true; // return error code
+    }
+
+    // check size: all data is read, the position must now be at the end
+    if ( iPos != iDataLen )
+    {
+        return true; // return error code
+    }
+
+    // invoke message action
+    emit VersionAndOSReceived ( eOSType, strVersion );
 
     return false; // no error
 }

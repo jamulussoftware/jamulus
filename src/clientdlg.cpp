@@ -193,6 +193,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // restore fader settings
     MainMixerBoard->vecStoredFaderTags   = pClient->vecStoredFaderTags;
     MainMixerBoard->vecStoredFaderLevels = pClient->vecStoredFaderLevels;
+    MainMixerBoard->vecStoredPanValues   = pClient->vecStoredPanValues;
     MainMixerBoard->vecStoredFaderIsSolo = pClient->vecStoredFaderIsSolo;
     MainMixerBoard->vecStoredFaderIsMute = pClient->vecStoredFaderIsMute;
     MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel;
@@ -497,6 +498,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
         this, SLOT ( OnCLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
 
+    QObject::connect ( pClient,
+        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ),
+        this, SLOT ( OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ) );
+
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( pClient,
         SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),
@@ -520,6 +525,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
         this, SLOT ( OnChangeChanGain ( int, double ) ) );
+
+    QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanPan ( int, double ) ),
+        this, SLOT ( OnChangeChanPan ( int, double ) ) );
 
     QObject::connect ( MainMixerBoard, SIGNAL ( NumClientsChanged ( int ) ),
         this, SLOT ( OnNumClientsChanged ( int ) ) );
@@ -585,6 +593,7 @@ void CClientDlg::closeEvent ( QCloseEvent* Event )
     MainMixerBoard->HideAll();
     pClient->vecStoredFaderTags          = MainMixerBoard->vecStoredFaderTags;
     pClient->vecStoredFaderLevels        = MainMixerBoard->vecStoredFaderLevels;
+    pClient->vecStoredPanValues          = MainMixerBoard->vecStoredPanValues;
     pClient->vecStoredFaderIsSolo        = MainMixerBoard->vecStoredFaderIsSolo;
     pClient->vecStoredFaderIsMute        = MainMixerBoard->vecStoredFaderIsMute;
     pClient->iNewClientFaderLevel        = MainMixerBoard->iNewClientFaderLevel;
@@ -742,6 +751,18 @@ void CClientDlg::OnCentralServerAddressTypeChanged()
 
         ConnectDlg.RequestServerList();
     }
+}
+
+void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
+                                          QString                strVersion )
+{
+    // check if Pan is supported by the server (minimum version is 3.5.4)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 6, 0)
+    if ( QVersionNumber::compare ( QVersionNumber::fromString ( strVersion ), QVersionNumber ( 3, 5, 4 ) ) >= 0 )
+    {
+        MainMixerBoard->SetPanIsSupported();
+    }
+#endif
 }
 
 void CClientDlg::OnChatTextReceived ( QString strChatText )
@@ -1150,6 +1171,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "QRadioButton {           color:          rgb(220, 220, 220);"
             "                         font:           bold; }"
             "QScrollArea {            background:     transparent; }"
+            ".QWidget {               background:     transparent; }" // note: matches instances of QWidget, but not of its subclasses
             "QGroupBox {              background:     transparent; }"
             "QGroupBox::title {       color:          rgb(220, 220, 220); }"
             "QCheckBox::indicator {   width:          38px;"

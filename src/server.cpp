@@ -340,6 +340,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init          ( iMaxNumChannels );
     vecvecdGains.Init                  ( iMaxNumChannels );
+    vecvecdPannings.Init               ( iMaxNumChannels );
     vecvecsData.Init                   ( iMaxNumChannels );
     vecNumAudioChannels.Init           ( iMaxNumChannels );
     vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
@@ -350,6 +351,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     {
         // init vectors storing information of all channels
         vecvecdGains[i].Init ( iMaxNumChannels );
+        vecvecdPannings[i].Init ( iMaxNumChannels );
 
         // we always use stereo audio buffers (see "vecsSendData")
         vecvecsData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
@@ -597,6 +599,9 @@ CreateAndSendChanListForAllConChannels();
         vecChannels[iChID].CreateLicReqMes ( eLicenceType );
     }
 
+    // send version info (for, e.g., feature activation in the client)
+    vecChannels[iChID].CreateVersionAndOSMes();
+
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
     DoubleFrameSizeConvBufOut[iChID].Reset();
@@ -841,6 +846,9 @@ JitterMeas.Measure();
 
                 // consider audio fade-in
                 vecvecdGains[i][j] *= vecChannels[vecChanIDsCurConChan[j]].GetFadeInGain();
+
+                // panning
+                vecvecdPannings[i][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
             }
 
             // If the server frame size is smaller than the received OPUS frame size, we need a conversion
@@ -968,6 +976,7 @@ JitterMeas.Measure();
             // actual processing of audio data -> mix
             ProcessData ( vecvecsData,
                           vecvecdGains[i],
+                          vecvecdPannings[i],
                           vecNumAudioChannels,
                           vecsSendData,
                           iCurNumAudChan,
@@ -1070,6 +1079,7 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
 /// @brief Mix all audio data from all clients together.
 void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                             const CVector<double>&            vecdGains,
+                            const CVector<double>&            vecdPannings,
                             const CVector<int>&               vecNumAudioChannels,
                             CVector<int16_t>&                 vecsOutData,
                             const int                         iCurNumAudChan,
@@ -1142,12 +1152,18 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
         // Stereo target channel -----------------------------------------------
         for ( j = 0; j < iNumClients; j++ )
         {
-            // get a reference to the audio data and gain of the current client
+            // get a reference to the audio data and gain/pan of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
             const double            dGain    = vecdGains[j];
+            const double            dPan     = vecdPannings[j];
+
+            // calculate combined gain/pan for each stereo channel where we define
+            // the panning that center equals full gain for both channels
+            const double dGainL = std::min ( 0.5, 1 - dPan ) * 2 * dGain;
+            const double dGainR = std::min ( 0.5, dPan ) * 2 * dGain;
 
             // if channel gain is 1, avoid multiplication for speed optimization
-            if ( dGain == static_cast<double> ( 1.0 ) )
+            if ( ( dGainL == static_cast<double> ( 1.0 ) ) && ( dGainR == static_cast<double> ( 1.0 ) ) )
             {
                 if ( vecNumAudioChannels[j] == 1 )
                 {
@@ -1182,20 +1198,25 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     {
                         // left channel
                         vecsOutData[k] = Double2Short (
-                            vecsOutData[k] + vecsData[i] * dGain );
+                            vecsOutData[k] + vecsData[i] * dGain * dGainL );
 
                         // right channel
                         vecsOutData[k + 1] = Double2Short (
-                            vecsOutData[k + 1] + vecsData[i] * dGain );
+                            vecsOutData[k + 1] + vecsData[i] * dGain * dGainR );
                     }
                 }
                 else
                 {
                     // stereo
-                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
+                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
                     {
+                        // left channel
                         vecsOutData[i] = Double2Short (
-                            vecsOutData[i] + vecsData[i] * dGain );
+                            vecsOutData[i] + vecsData[i] * dGain * dGainL );
+
+                        // right channel
+                        vecsOutData[i + 1] = Double2Short (
+                            vecsOutData[i + 1] + vecsData[i + 1] * dGain * dGainR );
                     }
                 }
             }

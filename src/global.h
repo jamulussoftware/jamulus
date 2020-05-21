@@ -147,8 +147,9 @@ LED bar:      lbr
 // default network buffer size
 #define DEF_NET_BUF_SIZE_NUM_BL          10 // number of blocks
 
-// audio mixer fader maximum value
+// audio mixer fader and panning maximum value
 #define AUD_MIX_FADER_MAX                100
+#define AUD_MIX_PAN_MAX                  100
 
 // maximum number of recognized sound cards installed in the system,
 // definition for "no device"

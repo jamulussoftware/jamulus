@@ -180,17 +180,17 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="644"/>
+        <location filename="../../audiomixerboard.cpp" line="680"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="653"/>
+        <location filename="../../audiomixerboard.cpp" line="689"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>T E N T A N D O   L I G A R</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="717"/>
+        <location filename="../../audiomixerboard.cpp" line="753"/>
         <source>Personal Mix at the Server: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -198,169 +198,189 @@
 <context>
     <name>CChannelFader</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="121"/>
+        <location filename="../../audiomixerboard.cpp" line="128"/>
         <source>Channel Level</source>
         <translation>Nível do Canal</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="122"/>
+        <location filename="../../audiomixerboard.cpp" line="129"/>
         <source>Displays the pre-fader audio level of this channel.  All connected clients at the server will be assigned an audio level, the same value for each client.</source>
         <translation>Mostra o nível de áudio pré-fader deste canal. Todos os clientes ligados ao servidor terão atribuído um nível de áudio, o mesmo valor para cada cliente.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="124"/>
+        <location filename="../../audiomixerboard.cpp" line="131"/>
         <source>Input level of the current audio channel at the server</source>
         <translation>Nível de entrada deste canal de áudio do servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="127"/>
+        <location filename="../../audiomixerboard.cpp" line="134"/>
         <source>Mixer Fader</source>
         <translation>Fader da Mistura</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="127"/>
+        <location filename="../../audiomixerboard.cpp" line="134"/>
         <source>Adjusts the audio level of this channel. All connected clients at the server will be assigned an audio fader at each client, adjusting the local mix.</source>
         <translation>Ajusta o nível de áudio deste canal. Por cada cliente ligado ao servidor será atribuído um fader de áudio em todos os clientes, podendo cada um ajustar a sua mistura local.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="130"/>
+        <location filename="../../audiomixerboard.cpp" line="137"/>
         <source>Local mix level setting of the current audio channel at the server</source>
         <translation>Configuração do nível de mistura local deste canal de áudio do servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="133"/>
+        <location filename="../../audiomixerboard.cpp" line="140"/>
+        <source>Status Indicator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="140"/>
+        <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="142"/>
+        <source>Speaker with cancellation stroke: Indicates that the other client has muted you.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="145"/>
+        <source>Status indicator label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="147"/>
         <source>Panning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="133"/>
+        <location filename="../../audiomixerboard.cpp" line="147"/>
         <source>Sets the panning position from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="136"/>
+        <location filename="../../audiomixerboard.cpp" line="150"/>
         <source>Local panning position of the current audio channel at the server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="138"/>
+        <location filename="../../audiomixerboard.cpp" line="152"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
         <translation>Com a caixa de seleção Mute, o canal de áudio pode ser silenciado.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="140"/>
+        <location filename="../../audiomixerboard.cpp" line="154"/>
         <source>Mute button</source>
         <translation>Botão Mute</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="142"/>
+        <location filename="../../audiomixerboard.cpp" line="156"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except of the current channel are muted. It is possible to set more than one channel to solo.</source>
         <translation>Com a caixa de seleção Solo, o canal de áudio pode ser definido como solo, o que significa que todos os outros canais, exceto o canal atual, serão silenciados. É possível definir mais que um canal no modo solo.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="146"/>
+        <location filename="../../audiomixerboard.cpp" line="160"/>
         <source>Solo button</source>
         <translation>Botão Solo</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="148"/>
+        <location filename="../../audiomixerboard.cpp" line="162"/>
         <source>Fader Tag</source>
         <translation>Identificador do Fader</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="148"/>
+        <location filename="../../audiomixerboard.cpp" line="162"/>
         <source>The fader tag identifies the connected client. The tag name, the picture of your instrument and a flag of your country can be set in the main window.</source>
         <translation>O Identificador do fader identifica o cliente ligado. O nome no identificador, a imagem do instrumento e a bandeira do país podem ser definidos no Meu Perfil.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="153"/>
+        <location filename="../../audiomixerboard.cpp" line="167"/>
         <source>Mixer channel instrument picture</source>
         <translation>Imagem do instrumento do canal da mistura</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="155"/>
+        <location filename="../../audiomixerboard.cpp" line="169"/>
         <source>Mixer channel label (fader tag)</source>
         <translation>Identificação do canal da mistura (identificador do fader)</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="157"/>
+        <location filename="../../audiomixerboard.cpp" line="171"/>
         <source>Mixer channel country flag</source>
         <translation>Bandeira do país do canal da mistura</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="194"/>
+        <location filename="../../audiomixerboard.cpp" line="208"/>
         <source>PAN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="195"/>
+        <location filename="../../audiomixerboard.cpp" line="209"/>
         <source>MUTE</source>
         <translation>MUTE</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="196"/>
+        <location filename="../../audiomixerboard.cpp" line="210"/>
         <source>SOLO</source>
         <translation>SOLO</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="485"/>
+        <location filename="../../audiomixerboard.cpp" line="515"/>
         <source>Alias/Name</source>
         <translation>Nome/Alcunha</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="491"/>
+        <location filename="../../audiomixerboard.cpp" line="521"/>
         <source>Instrument</source>
         <translation>Instrumento</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="499"/>
+        <location filename="../../audiomixerboard.cpp" line="529"/>
         <source>Location</source>
         <translation>Localização</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="521"/>
-        <location filename="../../audiomixerboard.cpp" line="525"/>
-        <location filename="../../audiomixerboard.cpp" line="529"/>
+        <location filename="../../audiomixerboard.cpp" line="551"/>
+        <location filename="../../audiomixerboard.cpp" line="555"/>
+        <location filename="../../audiomixerboard.cpp" line="559"/>
         <source>Skill Level</source>
         <translation>Nível de Habilidade</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="521"/>
+        <location filename="../../audiomixerboard.cpp" line="551"/>
         <source>Beginner</source>
         <translation>Principiante</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="525"/>
+        <location filename="../../audiomixerboard.cpp" line="555"/>
         <source>Intermediate</source>
         <translation>Intermediário</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="529"/>
+        <location filename="../../audiomixerboard.cpp" line="559"/>
         <source>Expert</source>
         <translation>Avançado</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="540"/>
+        <location filename="../../audiomixerboard.cpp" line="570"/>
         <source>Musician Profile</source>
         <translation>Perfil do músico</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="46"/>
-        <location filename="../../audiomixerboard.cpp" line="138"/>
-        <location filename="../../audiomixerboard.cpp" line="204"/>
+        <location filename="../../audiomixerboard.cpp" line="47"/>
+        <location filename="../../audiomixerboard.cpp" line="152"/>
+        <location filename="../../audiomixerboard.cpp" line="218"/>
         <source>Mute</source>
         <translation>Mute</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="43"/>
-        <location filename="../../audiomixerboard.cpp" line="203"/>
+        <location filename="../../audiomixerboard.cpp" line="217"/>
         <source>Pan</source>
         <translation type="unfinished">Pan</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="47"/>
-        <location filename="../../audiomixerboard.cpp" line="142"/>
-        <location filename="../../audiomixerboard.cpp" line="205"/>
+        <location filename="../../audiomixerboard.cpp" line="48"/>
+        <location filename="../../audiomixerboard.cpp" line="156"/>
+        <location filename="../../audiomixerboard.cpp" line="219"/>
         <source>Solo</source>
         <translation>Solo</translation>
     </message>
@@ -536,7 +556,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="205"/>
-        <location filename="../../clientdlg.cpp" line="1096"/>
+        <location filename="../../clientdlg.cpp" line="1100"/>
         <source>C&amp;onnect</source>
         <translation>&amp;Ligar</translation>
     </message>
@@ -581,18 +601,18 @@
         <translation>Nenhum</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="616"/>
+        <location filename="../../clientdlg.cpp" line="620"/>
         <source>Center</source>
         <translation>Centro</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="623"/>
+        <location filename="../../clientdlg.cpp" line="627"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="108"/>
-        <location filename="../../clientdlg.cpp" line="629"/>
+        <location filename="../../clientdlg.cpp" line="633"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -677,22 +697,22 @@
         <translation>O CPU do cliente ou servidor está a 100%.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="712"/>
+        <location filename="../../clientdlg.cpp" line="716"/>
         <source>Central Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="830"/>
+        <location filename="../../clientdlg.cpp" line="834"/>
         <source>user</source>
         <translation>utilizador</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="835"/>
+        <location filename="../../clientdlg.cpp" line="839"/>
         <source>users</source>
         <translation>utilizadores</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1072"/>
+        <location filename="../../clientdlg.cpp" line="1076"/>
         <source>D&amp;isconnect</source>
         <translation>Desl&amp;igar</translation>
     </message>
@@ -783,9 +803,8 @@
         <translation>O jitter buffer (ou buffer de instabilidade) compensa os desvios de temporização da rede e da placa de som. O tamanho desse jitter buffer influencia, portanto, a qualidade do fluxo de áudio (quantas interrupções ocorrem) e a latência geral (quanto maior o buffer, maior a latência).</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="41"/>
         <source>The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.</source>
-        <translation>O tamanho do jitter buffer pode ser escolhido manualmente para o cliente local e o servidor remoto. Para o jitter buffer local, as interrupções no fluxo de áudio são indicadas pela luz na parte inferior dos faders do jitter buffer. Se a luz ficar vermelha, ocorreu um excesso/déficit do buffer e o fluxo de áudio é interrompido.</translation>
+        <translation type="vanished">O tamanho do jitter buffer pode ser escolhido manualmente para o cliente local e o servidor remoto. Para o jitter buffer local, as interrupções no fluxo de áudio são indicadas pela luz na parte inferior dos faders do jitter buffer. Se a luz ficar vermelha, ocorreu um excesso/déficit do buffer e o fluxo de áudio é interrompido.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="46"/>
@@ -798,9 +817,8 @@
         <translation>Está disponível uma configuração automática do tamanho do jitter buffer. Se a opção Auto estiver ativada, os jitter buffers do cliente local e do servidor remoto serão configurados automaticamente com base nas medições da instabilidade de sincronização da rede e da placa de som. Se a opção Auto estiver ativada, os faders do jitter buffer serão desativados (não poderão ser movidos manualmente).</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="56"/>
         <source>If the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
-        <translation>Caso a configuração automática do jitter buffer estiver ativada, os buffers de rede do cliente local e do servidor remoto são configurados com um valor conservador para minimizar a probabilidade de perda de áudio. Para ajustar o atraso/latência do áudio, é recomendável desativar a funcionalidade de configuração automática e diminuir o tamanho do jitter buffer manualmente usando os controles deslizantes até que a quantidade de perdas de áudio lhe sejam pessoalmente aceitáveis. O indicador LED representará as interrupções de áudio do jitter buffer local através de uma luz vermelha.</translation>
+        <translation type="vanished">Caso a configuração automática do jitter buffer estiver ativada, os buffers de rede do cliente local e do servidor remoto são configurados com um valor conservador para minimizar a probabilidade de perda de áudio. Para ajustar o atraso/latência do áudio, é recomendável desativar a funcionalidade de configuração automática e diminuir o tamanho do jitter buffer manualmente usando os controles deslizantes até que a quantidade de perdas de áudio lhe sejam pessoalmente aceitáveis. O indicador LED representará as interrupções de áudio do jitter buffer local através de uma luz vermelha.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="72"/>
@@ -863,9 +881,23 @@
         <translation>Mapeamento de Canais da Placa de Som</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="106"/>
         <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
-        <translation>Caso o dispositivo selecionado da placa de som ofereça mais que um canal de entrada ou saída, as configurações de Mapeamento de canais de entrada e de saída estarão visíveis.</translation>
+        <translation type="vanished">Caso o dispositivo selecionado da placa de som ofereça mais que um canal de entrada ou saída, as configurações de Mapeamento de canais de entrada e de saída estarão visíveis.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="41"/>
+        <source>The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below thejitter buffer size faders. If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="56"/>
+        <source>In case the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="106"/>
+        <source>In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="108"/>

@@ -118,7 +118,7 @@ QString CSound::CheckDeviceCapabilities()
          ( SetSaRateReturn == ASE_NotPresent ) )
     {
         // return error string
-        return tr ( "The audio device does not support to set the required sampling "
+        return tr ( "The audio device does not support setting the required sampling "
             "rate. This error can happen if you have an audio interface like the "
             "Roland UA-25EX where you set the sample rate with a hardware switch "
             "on the audio device. If this is the case, please change the sample rate "
@@ -517,7 +517,7 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
     {
         throw CGenErr ( "<b>" + tr ( "No ASIO audio device (driver) found." ) + "</b><br><br>" +
             tr ( "The " ) + APP_NAME + tr ( " software requires the low latency audio "
-            "interface ASIO to work properly. This is no standard "
+            "interface ASIO to work properly. This is not a standard "
             "Windows audio interface and therefore a special audio driver is "
             "required. Either your sound card has a native ASIO driver (which "
             "is recommended) or you might want to use alternative drivers like "

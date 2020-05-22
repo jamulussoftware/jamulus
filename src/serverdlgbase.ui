@@ -63,11 +63,11 @@
    <item>
     <layout class="QHBoxLayout">
      <item>
-       <widget class="QCheckBox" name="chbRegisterServer">
-        <property name="text">
-         <string>Make My Server Public (Register My Server in the Server List)</string>
-        </property>
-       </widget>
+      <widget class="QCheckBox" name="chbRegisterServer">
+       <property name="text">
+        <string>Make My Server Public (Register My Server in the Server List)</string>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer>
@@ -104,10 +104,10 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="edtCentralServerAddress"/>
+      <widget class="QComboBox" name="cbxCentServAddrType"/>
      </item>
      <item>
-      <widget class="QComboBox" name="cbxCentServAddrType"/>
+      <widget class="QLineEdit" name="edtCentralServerAddress"/>
      </item>
     </layout>
    </item>
@@ -210,8 +210,8 @@
   <tabstop>chbStartOnOSStart</tabstop>
   <tabstop>chbUseCCLicence</tabstop>
   <tabstop>chbRegisterServer</tabstop>
-  <tabstop>edtCentralServerAddress</tabstop>
   <tabstop>cbxCentServAddrType</tabstop>
+  <tabstop>edtCentralServerAddress</tabstop>
   <tabstop>edtServerName</tabstop>
   <tabstop>edtLocationCity</tabstop>
   <tabstop>cbxLocationCountry</tabstop>

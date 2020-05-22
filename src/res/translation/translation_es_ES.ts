@@ -2323,7 +2323,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="105"/>
         <source>Custom Central Server Address:</source>
-        <translation>Dirección Personalizada Servidor Central</translation>
+        <translation>Dirección Personalizada Servidor Central:</translation>
     </message>
     <message>
         <source>Central Server Address:</source>

@@ -84,6 +84,10 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
 
+    cbxCentServAddrType->setWhatsThis ( "<b>" + tr ( "Server List Selection" ) + ":</b> " + tr (
+        "Selects the server list to be shown." ) );
+    cbxCentServAddrType->setAccessibleName ( tr ( "Server list selection combo box" ) );
+
     // filter
     edtFilter->setWhatsThis ( "<b>" + tr ( "Filter" ) + ":</b> " + tr ( "The server "
         "list is filtered by the given text. Note that the filter is case insensitive." ) );

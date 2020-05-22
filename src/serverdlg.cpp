@@ -73,21 +73,21 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     // register server status label
     lblRegSvrStatus->setWhatsThis ( "<b>" + tr ( "Register Server Status" ) + ":</b> " +
         tr ( "If the Make My Server Public check box is checked, this will show "
-        "whether registration with the central server is successful." ) );
+        "whether registration with the central server is successful. If the "
+        "registration failed, please choose another server list." ) );
 
-    // central server address
-    QString strCentrServAddr = "<b>" + tr ( "Central Server Address" ) + ":</b> " +
-        tr ( "The Central server address is the IP address or URL of the central server "
-        "at which this server is registered. With the central server address "
-        "type either the local region can be selected of the default central "
-        "servers or a manual address can be specified." );
+    // custom central server address
+    QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
+        tr ( "The custom central server address is the IP address or URL of the central "
+        "server at which the server list of the connection dialog is managed." );
 
     lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    cbxCentServAddrType->setWhatsThis ( strCentrServAddr );
     edtCentralServerAddress->setWhatsThis ( strCentrServAddr );
-
-    cbxCentServAddrType->setAccessibleName ( tr ( "Default central server type combo box" ) );
     edtCentralServerAddress->setAccessibleName ( tr ( "Central server address line edit" ) );
+
+    cbxCentServAddrType->setWhatsThis ( "<b>" + tr ( "Server List Selection" ) + ":</b> " + tr (
+        "Selects the server list (i.e. central server address) in which your server will be added." ) );
+    cbxCentServAddrType->setAccessibleName ( tr ( "Server list selection combo box" ) );
 
     // server name
     QString strServName = "<b>" + tr ( "Server Name" ) + ":</b> " + tr ( "The server name identifies "

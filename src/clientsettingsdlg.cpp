@@ -242,7 +242,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     edtNewClientLevel->setWhatsThis ( strNewClientLevel );
     edtNewClientLevel->setAccessibleName ( tr ( "New client level edit box" ) );
 
-    // central server address
+    // custom central server address
     QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
         tr ( "The custom central server address is the IP address or URL of the central "
         "server at which the server list of the connection dialog is managed. This "

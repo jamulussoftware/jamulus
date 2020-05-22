@@ -346,11 +346,11 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // central server address type combo box
     cbxCentServAddrType->clear();
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENERAL_NORTHAMERICA ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ALL_GENRES ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_ROCK ) );
     cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
+    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
     cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
     UpdateCentralServerDependency();
 

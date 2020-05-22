@@ -360,10 +360,13 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
     {
         // show orange utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
         pInfoLabel->setText ( "<font color=""orange"">&#128263;</font>" );
+//QPixmap CancelledSpeakerPixmap ( QString::fromUtf8 ( ":/png/main/res/speakerwithcancellationstroke.png" ) );
+//pInfoLabel->setPixmap ( CancelledSpeakerPixmap.scaled ( 15, 15, Qt::KeepAspectRatio ) );
     }
     else
     {
         pInfoLabel->setText ( "" );
+//pInfoLabel->setPixmap ( QPixmap() );
     }
 }
 

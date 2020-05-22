@@ -180,19 +180,19 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="683"/>
+        <location filename="../../audiomixerboard.cpp" line="688"/>
         <source>Server</source>
         <translation>Serveur</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="692"/>
+        <location filename="../../audiomixerboard.cpp" line="697"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>T E N T A T I V E   D E   C O N N E X I O N</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="756"/>
+        <location filename="../../audiomixerboard.cpp" line="770"/>
         <source>Personal Mix at the Server: </source>
-        <translation>Mixage personnel au serveur : </translation>
+        <translation>Mixage personnel du serveur : </translation>
     </message>
 </context>
 <context>
@@ -230,37 +230,37 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Status Indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicateur d&apos;état</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Affiche une indication sur l&apos;état du client qui est affecté à ce canal. Les indicateurs pris en charge sont : </translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="144"/>
         <source>Speaker with cancellation stroke: Indicates that the other client has muted you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Haut-parleur avec barre d&apos;annulation : indique que l&apos;autre client vous a mis en sourdine.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="147"/>
         <source>Status indicator label</source>
-        <translation type="unfinished"></translation>
+        <translation>Étiquette d&apos;indicateur d&apos;état</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="149"/>
         <source>Panning</source>
-        <translation type="unfinished"></translation>
+        <translation>Panoramique</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="149"/>
         <source>Sets the panning position from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Règle la position panoramique du canal de gauche à droite. Fonctionne uniquement en mode stéréo ou de préférence en mode entrée mono/sortie stéréo.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="152"/>
         <source>Local panning position of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Position panoramique locale du canal audio actuel sur le serveur</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="154"/>
@@ -310,7 +310,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="210"/>
         <source>PAN</source>
-        <translation type="unfinished"></translation>
+        <translation>PAN</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="211"/>
@@ -323,44 +323,44 @@
         <translation>SOLO</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="518"/>
+        <location filename="../../audiomixerboard.cpp" line="521"/>
         <source>Alias/Name</source>
         <translation>Pseudo/nom</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="524"/>
+        <location filename="../../audiomixerboard.cpp" line="527"/>
         <source>Instrument</source>
         <translation>Instrument</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="532"/>
+        <location filename="../../audiomixerboard.cpp" line="535"/>
         <source>Location</source>
         <translation>Localisation</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="554"/>
-        <location filename="../../audiomixerboard.cpp" line="558"/>
-        <location filename="../../audiomixerboard.cpp" line="562"/>
+        <location filename="../../audiomixerboard.cpp" line="557"/>
+        <location filename="../../audiomixerboard.cpp" line="561"/>
+        <location filename="../../audiomixerboard.cpp" line="565"/>
         <source>Skill Level</source>
         <translation>Niveau de compétence</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="554"/>
+        <location filename="../../audiomixerboard.cpp" line="557"/>
         <source>Beginner</source>
         <translation>Débutant</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="558"/>
+        <location filename="../../audiomixerboard.cpp" line="561"/>
         <source>Intermediate</source>
         <translation>Intermédiaire</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="562"/>
+        <location filename="../../audiomixerboard.cpp" line="565"/>
         <source>Expert</source>
         <translation>Expert</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="573"/>
+        <location filename="../../audiomixerboard.cpp" line="576"/>
         <source>Musician Profile</source>
         <translation>Profil de musicien</translation>
     </message>
@@ -375,7 +375,7 @@
         <location filename="../../audiomixerboard.cpp" line="43"/>
         <location filename="../../audiomixerboard.cpp" line="219"/>
         <source>Pan</source>
-        <translation type="unfinished">Pan</translation>
+        <translation>Pan</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="48"/>
@@ -400,7 +400,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="40"/>
         <source>Chat history</source>
-        <translation type="unfinished"></translation>
+        <translation>Historique du tchate</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="43"/>
@@ -556,7 +556,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="205"/>
-        <location filename="../../clientdlg.cpp" line="1100"/>
+        <location filename="../../clientdlg.cpp" line="1103"/>
         <source>C&amp;onnect</source>
         <translation>Se c&amp;onnecter</translation>
     </message>
@@ -697,22 +697,22 @@
         <translation>Le processeur du client ou du serveur est à 100%.</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="716"/>
+        <location filename="../../clientdlg.cpp" line="719"/>
         <source>Central Server</source>
         <translation>Serveur central</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="834"/>
+        <location filename="../../clientdlg.cpp" line="837"/>
         <source>user</source>
         <translation>utilisateur</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="839"/>
+        <location filename="../../clientdlg.cpp" line="842"/>
         <source>users</source>
         <translation>utilisateurs</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1076"/>
+        <location filename="../../clientdlg.cpp" line="1079"/>
         <source>D&amp;isconnect</source>
         <translation>Dé&amp;connecter</translation>
     </message>
@@ -870,12 +870,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="96"/>
         <source>If the ASIO4ALL driver is used, please note that this driver usually introduces approx. 10-30 ms of additional audio delay. Using a sound card with a native ASIO driver is therefore recommended.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si le pilote ASIO4ALL est utilisé, veuillez noter que ce pilote introduit généralement environ 10 à 30 ms de latence audio supplémentaire. Il est donc recommandé d&apos;utiliser une carte son avec un pilote ASIO natif.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="99"/>
         <source>If you are using the kX ASIO driver, make sure to connect the ASIO inputs in the kX DSP settings panel.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si vous utilisez le pilote ASIO kX, assurez-vous de connecter les entrées ASIO dans le panneau de configuration DSP kX.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="105"/>
@@ -885,17 +885,16 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="106"/>
         <source>In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si la carte son sélectionnée offre plus d&apos;un canal d&apos;entrée ou de sortie, les paramètres de mappage des canaux d&apos;entrée et de sortie sont visibles.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="108"/>
         <source>For each </source>
-        <translation type="unfinished"></translation>
+        <translation>Pour chaque canal d&apos;entrée/sortie (canal gauche et droite) de </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="109"/>
-        <source> input/output channel (Left and Right channel) a different actual sound card channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <source> , a different actual sound card channel can be selected.</source>
+        <translation type="vanished"> , un canal différent de la carte son réelle peut être sélectionné.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="116"/>
@@ -1005,12 +1004,21 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="167"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the </source>
-        <translation type="unfinished"></translation>
+        <translation>Si les paramètres de délai de la mémoire tampon sont désactivés, il est interdit par le pilote audio de modifier ce paramètre à partir du logiciel </translation>
+    </message>
+    <message>
+        <source> . On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
+        <translation type="vanished"> . Sous Windows, appuyez sur le bouton ASIO Setup pour ouvrir le panneau des paramètres du pilote. Sous Linux, utilisez l&apos;outil de configuration Jack pour modifier la taille de la mémoire tampon.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="109"/>
+        <source> input/output channel (Left and Right channel) a different actual sound card channel can be selected.</source>
+        <translation> un canal différent de la carte son réelle peut être sélectionné.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="170"/>
         <source> software. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="175"/>
@@ -1120,12 +1128,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="246"/>
         <source>Custom Central Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse personnalisée du serveur central</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="247"/>
         <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;adresse personnalisée du serveur central est l&apos;adresse IP ou l&apos;URL du serveur central sur lequel la liste des serveurs du dialogue de connexion est gérée. Cette adresse n&apos;est utilisée que si la liste de serveurs personnalisée est sélectionnée dans le dialogue de connexion.</translation>
     </message>
     <message>
         <source>Central Server Address</source>
@@ -1226,12 +1234,12 @@
     <message>
         <location filename="../../util.h" line="587"/>
         <source>Genre Rock/Jazz</source>
-        <translation type="unfinished"></translation>
+        <translation>Genre rock/jazz</translation>
     </message>
     <message>
         <location filename="../../util.h" line="590"/>
         <source>Genre Classical/Folk/Choir</source>
-        <translation type="unfinished"></translation>
+        <translation>Genre classique/folk/coeur</translation>
     </message>
     <message>
         <source>Genre Rock</source>
@@ -1424,7 +1432,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="560"/>
         <source>Custom Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse personnalisée du serveur central : </translation>
     </message>
     <message>
         <source>Central Server Address:</source>
@@ -1503,22 +1511,22 @@
     <message>
         <location filename="../../connectdlg.cpp" line="76"/>
         <source>Holds the current server IP address or URL. It also stores old URLs in the combo box list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Contient l&apos;adresse IP ou l&apos;URL du serveur actuel. Il stocke également les anciennes URL dans la liste déroulante.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>Server List Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélection de la liste des serveurs</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>Selects the server list to be shown.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionne la liste de serveurs à afficher.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="89"/>
         <source>Server list selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste déroulante de sélection de la liste des serveurs</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="92"/>
@@ -2052,17 +2060,17 @@
     <message>
         <location filename="../../serverdlg.cpp" line="53"/>
         <source>Start Minimized on Operating System Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrage minimisé au lancement du système d&apos;exploitation</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="54"/>
         <source>If the start minimized on operating system start check box is checked, the </source>
-        <translation type="unfinished"></translation>
+        <translation>Si la case à cocher &quot;Démarrage minimisé au lancement du système d&apos;exploitation&quot; est cochée, le serveur </translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="55"/>
         <source> server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
-        <translation type="unfinished"></translation>
+        <translation> sera lancé au démarrage du système d&apos;exploitation et est automatiquement minimisé dans une icône de la barre des tâches du système.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="60"/>
@@ -2109,7 +2117,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si la case Rendre mon serveur public est cochée, cela indiquera si l&apos;enregistrement auprès du serveur central est réussi. Si l&apos;enregistrement a échoué, veuillez choisir une autre liste de serveurs.</translation>
     </message>
     <message>
         <source>Default central server type combo box</source>
@@ -2118,12 +2126,12 @@
     <message>
         <location filename="../../serverdlg.cpp" line="80"/>
         <source>Custom Central Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse personnalisée du serveur central</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="81"/>
         <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;adresse personnalisée du serveur central est l&apos;adresse IP ou l&apos;URL du serveur central sur lequel la liste des serveurs du dialogue de connexion est gérée.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="86"/>
@@ -2133,17 +2141,17 @@
     <message>
         <location filename="../../serverdlg.cpp" line="88"/>
         <source>Server List Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélection de la liste des serveurs</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="88"/>
         <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionne la liste de serveurs (c-à-d l&apos;adresse du serveur central) dans laquelle votre serveur sera ajouté.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="90"/>
         <source>Server list selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Liste déroulante de sélection de la liste des serveurs</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
@@ -2307,7 +2315,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="52"/>
         <source>Start Minimized on Windows Start</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrage minimisé au lancement de Windows</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="59"/>
@@ -2327,7 +2335,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="105"/>
         <source>Custom Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse personnalisée du serveur central :</translation>
     </message>
     <message>
         <source>Central Server Address:</source>
@@ -2364,129 +2372,129 @@
     <message>
         <location filename="../../../linux/sound.cpp" line="60"/>
         <source>The Jack server sample rate is different from the required one. The required sample rate is:</source>
-        <translation type="unfinished"></translation>
+        <translation>Le taux d&apos;échantillonnage du serveur Jack est différent de celui requis. Le taux d&apos;échantillonnage requis est le suivant :</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="62"/>
         <source>You can use a tool like &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; to adjust the Jack server sample rate.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous pouvez utiliser un outil comme &lt;i&gt;&lt;a href=http://qjackctl.sourceforge.net&gt;QJackCtl&lt;/a&gt;&lt;/i&gt; pour ajuster le taux d&apos;échantillonnage du serveur Jack.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>
         <source>Make sure to set the Frames/Period to a low value like </source>
-        <translation type="unfinished"></translation>
+        <translation>Veillez à définir les trames/périodes à une valeur faible comme </translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="67"/>
         <source> to achieve a low delay.</source>
-        <translation type="unfinished"></translation>
+        <translation> pour obtenir une latence faible.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="88"/>
         <location filename="../../../linux/sound.cpp" line="99"/>
         <source>The Jack port registering failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;enregistrement du port Jack a échoué.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="110"/>
         <source>Cannot activate the Jack client.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;activer le client Jack.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="197"/>
         <source>The Jack server was shut down. This software requires a Jack server to run. Try to restart the software to solve the issue.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le serveur Jack a été fermé. Ce logiciel nécessite un serveur Jack pour fonctionner. Essayez de redémarrer le logiciel pour résoudre le problème.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="101"/>
         <source>CoreAudio input AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;appel d&apos;entrée AudioHardwareGetProperty CoreAudio a échoué failed. Il semble qu&apos;aucune carte son ne soit disponible dans le système.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="115"/>
         <source>CoreAudio output AudioHardwareGetProperty call failed. It seems that no sound card is available in the system.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;appel de sortie AudioHardwareGetProperty CoreAudio a échoué failed. Il semble qu&apos;aucune carte son ne soit disponible dans le système.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="370"/>
         <source>Current system audio input device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le taux d&apos;échantillonnage de %1 Hz du périphérique d&apos;entrée audio du système actuel n&apos;est pas pris en charge. Veuillez ouvrir la configuration Audio-MIDI dans Applications-&gt;Utilitaires et essayer de définir un taux d&apos;échantillonnage de %2 Hz.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="397"/>
         <source>Current system audio output device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le taux d&apos;échantillonnage de %1 Hz du périphérique de sortie audio du système actuel n&apos;est pas pris en charge. Veuillez ouvrir la configuration Audio-MIDI dans Applications-&gt;Utilitaires et essayer de définir un taux d&apos;échantillonnage de %2 Hz.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="470"/>
         <source>The audio input stream format for this audio device is not compatible with this software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le format du flux d&apos;entrée audio pour ce périphérique audio n&apos;est pas compatible avec ce logiciel.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="488"/>
         <source>The audio output stream format for this audio device is not compatible with this software.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le format du flux de sortie audio pour ce périphérique audio n&apos;est pas compatible avec ce logiciel.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="813"/>
         <source>The buffer sizes of the current input and output audio device cannot be set to a common value. Please choose other input/output audio devices in your system settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les tailles de tampon du périphérique audio d&apos;entrée et de sortie actuel ne peuvent pas être réglées à une valeur commune. Veuillez choisir d&apos;autres périphériques audio d&apos;entrée/sortie dans les paramètres de votre système.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="53"/>
         <source>The audio driver could not be initialized.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le pilote audio n&apos;a pas pu être initialisé.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="108"/>
         <source>The audio device does not support the required sample rate. The required sample rate is: </source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique audio ne prend pas en charge la fréquence d&apos;échantillonnage requise. La fréquence d&apos;échantillonnage requise est : </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="121"/>
         <source>The audio device does not support setting the required sampling rate. This error can happen if you have an audio interface like the Roland UA-25EX where you set the sample rate with a hardware switch on the audio device. If this is the case, please change the sample rate to </source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique audio ne permet pas de régler la fréquence d&apos;échantillonnage requise. Cette erreur peut se produire si vous avez une interface audio comme le Roland UA-25EX où vous réglez la fréquence d&apos;échantillonnage avec un commutateur matériel sur le périphérique audio. Si c&apos;est le cas, veuillez changer la fréquence d&apos;échantillonnage à </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="125"/>
         <source> Hz on the device and restart the </source>
-        <translation type="unfinished"></translation>
+        <translation> Hz sur le péripéhrique et redémarrer le logiciel</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="126"/>
         <source> software.</source>
-        <translation type="unfinished"> .</translation>
+        <translation> .</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="136"/>
         <source>The audio device does not support the required number of channels. The required number of channels for input and output is: </source>
-        <translation type="unfinished"></translation>
+        <translation>Le périphérique audio ne prend pas en charge le nombre de canaux requis. Le nombre de canaux requis pour l&apos;entrée et la sortie est : </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="172"/>
         <location filename="../../../windows/sound.cpp" line="202"/>
         <source>Required audio sample format not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le format de l&apos;échantillon audio requis n&apos;est pas disponible.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="518"/>
         <source>No ASIO audio device (driver) found.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucun périphérique audio ASIO (pilote) trouvé.</translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
         <source>The </source>
-        <translation type="unfinished">Le logiciel </translation>
+        <translation>Le logiciel </translation>
     </message>
     <message>
         <location filename="../../../windows/sound.cpp" line="519"/>
         <source> software requires the low latency audio interface ASIO to work properly. This is not a standard Windows audio interface and therefore a special audio driver is required. Either your sound card has a native ASIO driver (which is recommended) or you might want to use alternative drivers like the ASIO4All driver.</source>
-        <translation type="unfinished"></translation>
+        <translation> nécessite l&apos;interface audio à faible latence ASIO pour fonctionner correctement. Il ne s&apos;agit pas d&apos;une interface audio Windows standard et un pilote audio spécial est donc nécessaire. Soit votre carte son dispose d&apos;un pilote ASIO natif (ce qui est recommandé), soit vous pouvez utiliser d&apos;autres pilotes comme le pilote ASIO4All.</translation>
     </message>
     <message>
         <location filename="../../../android/sound.cpp" line="137"/>
         <source>Error closing stream: $s</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreur de fermeture du flux : $s</translation>
     </message>
 </context>
 <context>
@@ -2494,12 +2502,12 @@
     <message>
         <location filename="../../soundbase.cpp" line="115"/>
         <source>Invalid device selection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélection de périphérique invalide.</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="141"/>
         <source>The audio driver properties have changed to a state which is incompatible with this software. The selected audio device could not be used because of the following error:</source>
-        <translation type="unfinished"></translation>
+        <translation>Les propriétés du pilote audio ont changé et sont devenues incompatibles avec ce logiciel. Le périphérique audio sélectionné n&apos;a pas pu être utilisé en raison de l&apos;erreur suivante :</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="146"/>
@@ -2514,27 +2522,27 @@
     <message>
         <location filename="../../soundbase.cpp" line="189"/>
         <source>No usable </source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de périphérique audio (pilote) </translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="190"/>
         <source> audio device (driver) found.</source>
-        <translation type="unfinished"></translation>
+        <translation> utilisable trouvé</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="191"/>
         <source>In the following there is a list of all available drivers with the associated error message:</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous trouverez ci-dessous une liste de tous les pilotes disponibles avec le message d&apos;erreur associé :</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="205"/>
         <source>Do you want to open the ASIO driver setups?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous ouvrir les configurations des pilotes ASIO ?</translation>
     </message>
     <message>
         <location filename="../../soundbase.cpp" line="212"/>
         <source> could not be started because of audio interface issues.</source>
-        <translation type="unfinished"></translation>
+        <translation> n&apos;a pas pu être lancé en raison de problèmes d&apos;interface audio.</translation>
     </message>
 </context>
 <context>

@@ -104,7 +104,7 @@ LED bar:      lbr
 // default server address and port numbers
 #define DEFAULT_SERVER_ADDRESS           "jamulus.fischvolk.de"
 #define DEFAULT_PORT_NUMBER              22124
-#define CENTSERV_ALL_GENRES              "jamulus.fischvolk.de:22224"
+#define CENTSERV_ALL_GENRES              "jamulusallgenres.fischvolk.de:22224"
 #define CENTSERV_GENRE_ROCK_JAZZ         "jamulusrock.fischvolk.de:22124"
 #define CENTSERV_GENRE_CLASSICAL_FOLK    "jamulusclassical.fischvolk.de:22224"
 

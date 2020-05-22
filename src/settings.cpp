@@ -82,7 +82,7 @@ void CSettings::Load()
         {
             if ( GetNumericIniSet ( IniXMLDocument, "client",
                                     QString ( "storedpanvalue%1" ).arg ( iIdx ),
-                                    0, AUD_MIX_PAN_MAX/2, iValue ) )
+                                    0, AUD_MIX_PAN_MAX, iValue ) )
             {
                 pClient->vecStoredPanValues[iIdx] = iValue;
             }

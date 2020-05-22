@@ -661,6 +661,9 @@ void CClientDlg::UpdateRevSelection()
             rbtReverbSelR->setChecked ( true );
         }
     }
+
+    // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
+    MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
 }
 
 void CClientDlg::OnAudioPanValueChanged ( int value )

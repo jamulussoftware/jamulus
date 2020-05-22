@@ -218,22 +218,22 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Status Indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Statusanzeige</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeigt den Status über den Musiker, der dem Kanal zugewiesen ist. Unterstützte Indikatoren sind:</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="144"/>
         <source>Speaker with cancellation stroke: Indicates that the other client has muted you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Durchgestrichener Lautsprecher: Zeigt an, dass der andere Musiker dich stummgeschaltet hat.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="147"/>
         <source>Status indicator label</source>
-        <translation type="unfinished"></translation>
+        <translation>Statusanzeige</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="149"/>
@@ -1108,12 +1108,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="246"/>
         <source>Custom Central Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierte Zentralserveradresse</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="247"/>
         <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers, der die Serverliste organisiert und bereitstellt. Diese Adresse wird nur benutzt, wenn die benutzerdefinierte Serverliste im Verbindungsdialog ausgewählt wird.</translation>
     </message>
     <message>
         <source>Central Server Address</source>
@@ -1213,13 +1213,13 @@
     </message>
     <message>
         <location filename="../../util.h" line="587"/>
-        <source>Genre Rock</source>
-        <translation></translation>
+        <source>Genre Rock/Jazz</source>
+        <translation>Genre Rock/Jazz</translation>
     </message>
     <message>
         <location filename="../../util.h" line="590"/>
-        <source>Genre Jazz</source>
-        <translation></translation>
+        <source>Genre Classical/Folk/Choir</source>
+        <translation>Genre Klassik/Volksmusik/Chor</translation>
     </message>
     <message>
         <location filename="../../util.h" line="593"/>
@@ -1404,7 +1404,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="560"/>
         <source>Custom Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierte Zentralserveradresse:</translation>
     </message>
     <message>
         <source>Central Server Address:</source>
@@ -1473,7 +1473,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="68"/>
         <source>. A list of the most recent used server IP addresses or URLs is available for selection.</source>
-        <translation> Eine Liste der letzten IP-Adressen oder URLs wird gespeichert und kann nachträglich wieder ausgewählt werden.</translation>
+        <translation>. Eine Liste der letzten IP-Adressen oder URLs wird gespeichert und kann nachträglich wieder ausgewählt werden.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="75"/>
@@ -1488,17 +1488,17 @@
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>Server List Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Serverlistenauswahl</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>Selects the server list to be shown.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wählt die Serverliste aus, die angezeigt werden soll.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="89"/>
         <source>Server list selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Severlistenauswahl Selektion</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="92"/>
@@ -1726,7 +1726,7 @@
     <message>
         <location filename="../../util.cpp" line="712"/>
         <source> server. This tag will also show up at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
-        <translation>-Server. Dieses Schild wird auch bei allen anderen Musikern, die mit dem gleichen Server verbunden sind, angezeigt. Wenn der Name leer gelassen wurde, dann wird die IP-Adresse stattdessen angezeigt.</translation>
+        <translation> Server. Dieses Schild wird auch bei allen anderen Musikern, die mit dem gleichen Server verbunden sind, angezeigt. Wenn der Name leer gelassen wurde, dann wird die IP-Adresse stattdessen angezeigt.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="717"/>
@@ -2042,7 +2042,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="55"/>
         <source> server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
-        <translation>-Server automatisch mit dem Betriebssystemstart geladen und erscheint minimiert in der Systemleiste als Icon.</translation>
+        <translation> Server automatisch mit dem Betriebssystemstart geladen und erscheint minimiert in der Systemleiste als Icon.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="60"/>
@@ -2067,7 +2067,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="68"/>
         <source> users can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
-        <translation>-Server in der Liste sehen können und sich mit ihm verbinden können. Die Registrierung mit dem Zentralserver wird periodisch erneuert um sicherzugehen, dass alle registrierten Server auch wirklich erreichbar sind.</translation>
+        <translation> Server in der Liste sehen können und sich mit ihm verbinden können. Die Registrierung mit dem Zentralserver wird periodisch erneuert um sicherzugehen, dass alle registrierten Server auch wirklich erreichbar sind.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="74"/>
@@ -2079,9 +2079,8 @@
         <translation type="vanished">Wenn der eigene Server veröffentlicht wurde, dann zeigt der Registrierungsstatus and, ob die Registrierung erfolgreich war oder nicht.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="80"/>
         <source>Central Server Address</source>
-        <translation>Zentralserveradresse</translation>
+        <translation type="vanished">Zentralserveradresse</translation>
     </message>
     <message>
         <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
@@ -2090,98 +2089,121 @@
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn der eigene Server veröffentlicht wurde, dann zeigt der Registrierungsstatus and, ob die Registrierung erfolgreich war oder nicht. Wenn die Registrierung fehlgeschlagen ist, dann wähle eine andere Serverliste aus.</translation>
+    </message>
+    <message>
+        <source>The Central server address is the IP address or URL of the central server at which this server is registered. Pre-defined server addresses are available</source>
+        <translation type="vanished">Die Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers bei dem man sich registrieren möchte. Vordefinierte Serveradressen sind verfügbar.</translation>
+    </message>
+    <message>
+        <source>Default central server type combo box</source>
+        <translation type="vanished">Voreingestellter Zentralservertyp Auswahlbox</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="80"/>
+        <source>Custom Central Server Address</source>
+        <translation>Benutzerdefinierte Zentralserveradresse</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="81"/>
-        <source>The Central server address is the IP address or URL of the central server at which this server is registered. Pre-defined server addresses are available</source>
-        <translation type="unfinished"></translation>
+        <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
+        <translation>Die benutzerdefinierte Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers, der die Serverliste für den Verbindungsdialog bereitstellt.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="88"/>
-        <source>Default central server type combo box</source>
-        <translation>Voreingestellter Zentralservertyp Auswahlbox</translation>
-    </message>
-    <message>
-        <location filename="../../serverdlg.cpp" line="89"/>
+        <location filename="../../serverdlg.cpp" line="86"/>
         <source>Central server address line edit</source>
         <translation>Zentralserveradresse Eingabefeld</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="92"/>
+        <location filename="../../serverdlg.cpp" line="88"/>
+        <source>Server List Selection</source>
+        <translation>Serverlistenauswahl</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="88"/>
+        <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
+        <translation>Wählt die Serverliste (d.h. die Zentralserveradresse) aus, in welche dein Server registriert werden soll.</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="90"/>
+        <source>Server list selection combo box</source>
+        <translation>Severlistenauswahl Selektion</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="93"/>
         <source>Server Name</source>
         <translation>Servername</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="92"/>
+        <location filename="../../serverdlg.cpp" line="93"/>
         <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
         <translation>Der Servername identifiziert deinen Server in der Serverliste. Falls kein Name angegeben wurde, dann wird die IP-Adresse stattdessen angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="99"/>
+        <location filename="../../serverdlg.cpp" line="100"/>
         <source>Server name line edit</source>
         <translation>Servername Eingabefeld</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="102"/>
+        <location filename="../../serverdlg.cpp" line="103"/>
         <source>Location City</source>
         <translation>Standort Stadt</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="102"/>
+        <location filename="../../serverdlg.cpp" line="103"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Hier kann man die Stadt angeben, in der sich der Server befindet. Falls eine Stadt angegeben wurde, dann wird die in der Serverliste angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="109"/>
+        <location filename="../../serverdlg.cpp" line="110"/>
         <source>City where the server is located line edit</source>
         <translation>Stadt in der sich der Server befindet Eingabefeld</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="112"/>
+        <location filename="../../serverdlg.cpp" line="113"/>
         <source>Location country</source>
         <translation>Standort Land</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="112"/>
+        <location filename="../../serverdlg.cpp" line="113"/>
         <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Hier kann man das Land eingeben, in dem sich der Server befindet. Falls ein Land angegeben wurde, dann wird das in der Serverliste angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="120"/>
+        <location filename="../../serverdlg.cpp" line="121"/>
         <source>Country where the server is located combo box</source>
         <translation>Land in dem sich der Server befindet Auswahlbox</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="133"/>
-        <location filename="../../serverdlg.cpp" line="278"/>
+        <location filename="../../serverdlg.cpp" line="134"/>
+        <location filename="../../serverdlg.cpp" line="279"/>
         <source>E&amp;xit</source>
         <translation>&amp;Beenden</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="139"/>
+        <location filename="../../serverdlg.cpp" line="140"/>
         <source>&amp;Hide </source>
         <translation>&amp;Ausblenden vom </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="139"/>
-        <location filename="../../serverdlg.cpp" line="143"/>
-        <location filename="../../serverdlg.cpp" line="149"/>
+        <location filename="../../serverdlg.cpp" line="140"/>
+        <location filename="../../serverdlg.cpp" line="144"/>
+        <location filename="../../serverdlg.cpp" line="150"/>
         <source> server</source>
-        <translation>-Server</translation>
+        <translation> Server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="143"/>
+        <location filename="../../serverdlg.cpp" line="144"/>
         <source>&amp;Open </source>
         <translation>Ö&amp;ffne den </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="165"/>
+        <location filename="../../serverdlg.cpp" line="166"/>
         <source> server </source>
         <translation> Server </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="526"/>
+        <location filename="../../serverdlg.cpp" line="527"/>
         <source>Predefined Address</source>
         <translation>Vordefinierte Adresse</translation>
     </message>
@@ -2198,12 +2220,12 @@
         <translation type="vanished">Standard (Nordamerika)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="272"/>
+        <location filename="../../serverdlg.cpp" line="273"/>
         <source> Server</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="276"/>
+        <location filename="../../serverdlg.cpp" line="277"/>
         <source>&amp;Window</source>
         <translation>&amp;Fenster</translation>
     </message>
@@ -2289,7 +2311,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="105"/>
         <source>Custom Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzerdefinierte Zentralserveradresse:</translation>
     </message>
     <message>
         <source>Central Server Address:</source>
@@ -2336,7 +2358,7 @@
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>
         <source>Make sure to set the Frames/Period to a low value like </source>
-        <translation>Versichere dich, dass die Frames/Perioden auf einen niedrigen Wert wie z.B. </translation>
+        <translation>Versichere dich, dass die Frames/Perioden auf einen niedrigen Wert wie zum Beispiel </translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="67"/>

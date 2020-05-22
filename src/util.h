@@ -568,8 +568,8 @@ enum ECSAddType
     // used for settings -> enum values should be fixed
     AT_DEFAULT = 0,
     AT_ALL_GENRES = 1,
-    AT_GENRE_ROCK = 2,
-    AT_GENRE_JAZZ = 3,
+    AT_GENRE_ROCK_JAZZ = 2,
+    AT_GENRE_CLASSICAL_FOLK = 3,
     AT_CUSTOM = 4
 };
 
@@ -583,11 +583,11 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
     case AT_ALL_GENRES:
         return QCoreApplication::translate ( "CClientSettingsDlg", "All Genres" );
 
-    case AT_GENRE_ROCK:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Rock" );
+    case AT_GENRE_ROCK_JAZZ:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Rock/Jazz" );
 
-    case AT_GENRE_JAZZ:
-        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Jazz" );
+    case AT_GENRE_CLASSICAL_FOLK:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk/Choir" );
 
     default: // AT_DEFAULT
         return QCoreApplication::translate ( "CClientSettingsDlg", "Default" );

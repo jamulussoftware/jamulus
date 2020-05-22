@@ -1213,12 +1213,12 @@
     </message>
     <message>
         <location filename="../../util.h" line="587"/>
-        <source>Genre Rock</source>
+        <source>Genre Rock/Jazz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../util.h" line="590"/>
-        <source>Genre Jazz</source>
+        <source>Genre Classical/Folk/Choir</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2075,9 +2075,8 @@
         <translation type="vanished">Als het selectievakje Maak Mijn Server Openbaar is aangevinkt, zal dit het succes van de registratie bij de centrale server laten zien.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="80"/>
         <source>Central Server Address</source>
-        <translation>Centrale Serveradres</translation>
+        <translation type="vanished">Centrale Serveradres</translation>
     </message>
     <message>
         <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
@@ -2089,95 +2088,114 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="81"/>
-        <source>The Central server address is the IP address or URL of the central server at which this server is registered. Pre-defined server addresses are available</source>
+        <source>Default central server type combo box</source>
+        <translation type="vanished">Standaard centrale server type combo box</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="80"/>
+        <source>Custom Central Server Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="88"/>
-        <source>Default central server type combo box</source>
-        <translation>Standaard centrale server type combo box</translation>
+        <location filename="../../serverdlg.cpp" line="81"/>
+        <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="89"/>
+        <location filename="../../serverdlg.cpp" line="86"/>
         <source>Central server address line edit</source>
         <translation>Centrale server adresbewerking van de lijn</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="92"/>
+        <location filename="../../serverdlg.cpp" line="88"/>
+        <source>Server List Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="88"/>
+        <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="90"/>
+        <source>Server list selection combo box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="93"/>
         <source>Server Name</source>
         <translation>Servernaam</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="92"/>
+        <location filename="../../serverdlg.cpp" line="93"/>
         <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
         <translation>De naam van de server identificeert uw server in de lijst van de connect-dialoog-server bij de clients. Als er geen naam wordt gegeven, wordt in plaats daarvan het IP-adres getoond.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="99"/>
+        <location filename="../../serverdlg.cpp" line="100"/>
         <source>Server name line edit</source>
         <translation>Servernaam lijnbewerking</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="102"/>
+        <location filename="../../serverdlg.cpp" line="103"/>
         <source>Location City</source>
         <translation>Locatie Stad</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="102"/>
+        <location filename="../../serverdlg.cpp" line="103"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>De stad waar deze server zich bevindt kan hier worden ingesteld. Als er een plaatsnaam wordt ingevoerd, wordt deze getoond in de lijst van de connect-dialoog-server bij de clients.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="109"/>
+        <location filename="../../serverdlg.cpp" line="110"/>
         <source>City where the server is located line edit</source>
         <translation>Stad waar de server zich bevindt lijnbewerking</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="112"/>
+        <location filename="../../serverdlg.cpp" line="113"/>
         <source>Location country</source>
         <translation>Land van locatie</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="112"/>
+        <location filename="../../serverdlg.cpp" line="113"/>
         <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Het land waarin deze server zich bevindt kan hier worden ingesteld. Als er een land is ingevoerd, wordt dit getoond in de lijst van de verbindingsserver bij de clients.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="120"/>
+        <location filename="../../serverdlg.cpp" line="121"/>
         <source>Country where the server is located combo box</source>
         <translation>Land waar de server zich bevindt combo box</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="133"/>
-        <location filename="../../serverdlg.cpp" line="278"/>
+        <location filename="../../serverdlg.cpp" line="134"/>
+        <location filename="../../serverdlg.cpp" line="279"/>
         <source>E&amp;xit</source>
         <translation>&amp;Sluiten</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="139"/>
+        <location filename="../../serverdlg.cpp" line="140"/>
         <source>&amp;Hide </source>
         <translation>Verbergen</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="139"/>
-        <location filename="../../serverdlg.cpp" line="143"/>
-        <location filename="../../serverdlg.cpp" line="149"/>
+        <location filename="../../serverdlg.cpp" line="140"/>
+        <location filename="../../serverdlg.cpp" line="144"/>
+        <location filename="../../serverdlg.cpp" line="150"/>
         <source> server</source>
         <translation> server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="143"/>
+        <location filename="../../serverdlg.cpp" line="144"/>
         <source>&amp;Open </source>
         <translation>&amp;Open</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="165"/>
+        <location filename="../../serverdlg.cpp" line="166"/>
         <source> server </source>
         <translation> server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="526"/>
+        <location filename="../../serverdlg.cpp" line="527"/>
         <source>Predefined Address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2194,12 +2212,12 @@
         <translation type="vanished">Standaard (Noord-Amerika)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="272"/>
+        <location filename="../../serverdlg.cpp" line="273"/>
         <source> Server</source>
         <translation> Server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="276"/>
+        <location filename="../../serverdlg.cpp" line="277"/>
         <source>&amp;Window</source>
         <translation>&amp;Window</translation>
     </message>

@@ -1119,86 +1119,93 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="246"/>
-        <source>Central Server Address</source>
-        <translation>Adresse du serveur central</translation>
+        <source>Custom Central Server Address</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="247"/>
+        <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Central Server Address</source>
+        <translation type="vanished">Adresse du serveur central</translation>
+    </message>
+    <message>
         <source>The central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
-        <translation>L&apos;adresse du serveur central est l&apos;adresse IP ou l&apos;URL du serveur central sur lequel la liste des serveurs du dialogue de connexion est gérée. Avec le type d&apos;adresse du serveur central, on peut soit sélectionner la région de localisation parmi les serveurs centraux par défaut, soit spécifier une adresse manuelle.</translation>
+        <translation type="vanished">L&apos;adresse du serveur central est l&apos;adresse IP ou l&apos;URL du serveur central sur lequel la liste des serveurs du dialogue de connexion est gérée. Avec le type d&apos;adresse du serveur central, on peut soit sélectionner la région de localisation parmi les serveurs centraux par défaut, soit spécifier une adresse manuelle.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="256"/>
         <source>Default central server type combo box</source>
-        <translation>Choix déroulant de type de serveur central par défaut</translation>
+        <translation type="vanished">Choix déroulant de type de serveur central par défaut</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="257"/>
+        <location filename="../../clientsettingsdlg.cpp" line="254"/>
         <source>Central server address line edit</source>
         <translation>Ligne d&apos;édition pour l&apos;adresse du serveur central</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="260"/>
+        <location filename="../../clientsettingsdlg.cpp" line="257"/>
         <source>Current Connection Status Parameter</source>
         <translation>Paramètre de l&apos;état de la connexion actuelle</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="261"/>
+        <location filename="../../clientsettingsdlg.cpp" line="258"/>
         <source>The ping time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.</source>
         <translation>Le temps de ping est le temps nécessaire pour que le flux audio voyage du client au serveur et vice-versa. Ce délai est introduit par le réseau. Ce délai doit être de 20 ou 30 ms. Si ce délai est supérieur (par exemple 50-60 ms), la distance qui vous sépare du serveur est trop importante ou votre connexion internet n&apos;est pas suffisante.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="266"/>
+        <location filename="../../clientsettingsdlg.cpp" line="263"/>
         <source>The overall delay is calculated from the current ping time and the delay which is introduced by the current buffer settings.</source>
         <translation>Le délai global est calculé à partir du temps de ping actuel et du délai qui est introduit par les paramètres actuels de la mémoire tampon.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="268"/>
+        <location filename="../../clientsettingsdlg.cpp" line="265"/>
         <source>The upstream rate depends on the current audio packet size and the audio compression setting. Make sure that the upstream rate is not higher than the available rate (check the upstream capabilities of your internet connection by, e.g., using speedtest.net).</source>
         <translation>Le débit montant dépend de la taille actuelle du paquet audio et du réglage de la compression audio. Assurez-vous que le débit montant n&apos;est pas supérieur au débit disponible (vérifiez les capacités montant de votre connexion internet en utilisant, par exemple, speedtest.net).</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="281"/>
+        <location filename="../../clientsettingsdlg.cpp" line="278"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
         <translation>Si ce voyant devient rouge, vous n&apos;aurez pas beaucoup de plaisir à utiliser le logiciel </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="283"/>
+        <location filename="../../clientsettingsdlg.cpp" line="280"/>
         <source> software.</source>
         <translation> .</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="288"/>
+        <location filename="../../clientsettingsdlg.cpp" line="285"/>
         <source>ASIO Setup</source>
         <translation>Paramètres ASIO</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="335"/>
+        <location filename="../../clientsettingsdlg.cpp" line="332"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="336"/>
+        <location filename="../../clientsettingsdlg.cpp" line="333"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Mono-entrée/stéréo-sortie</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="337"/>
+        <location filename="../../clientsettingsdlg.cpp" line="334"/>
         <source>Stereo</source>
         <translation>Stéréo</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="342"/>
+        <location filename="../../clientsettingsdlg.cpp" line="339"/>
         <source>Low</source>
         <translation>Basse</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="343"/>
+        <location filename="../../clientsettingsdlg.cpp" line="340"/>
         <source>Normal</source>
         <translation>Normale</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="344"/>
+        <location filename="../../clientsettingsdlg.cpp" line="341"/>
         <source>High</source>
         <translation>Haute</translation>
     </message>
@@ -1236,43 +1243,42 @@
         <translation type="vanished">Défaut (Amérique du Nord)</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="369"/>
+        <location filename="../../clientsettingsdlg.cpp" line="359"/>
         <source>preferred</source>
         <translation>préféré</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="463"/>
-        <location filename="../../clientsettingsdlg.cpp" line="467"/>
+        <location filename="../../clientsettingsdlg.cpp" line="446"/>
+        <location filename="../../clientsettingsdlg.cpp" line="450"/>
         <source>Size: </source>
         <translation>Taille : </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="524"/>
+        <location filename="../../clientsettingsdlg.cpp" line="507"/>
         <source>Buffer Delay</source>
         <translation>Délai de temporisation</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="529"/>
+        <location filename="../../clientsettingsdlg.cpp" line="512"/>
         <source>Buffer Delay: </source>
         <translation>Délai de temporisation : </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="606"/>
         <source>Predefined Address</source>
-        <translation>Adresse prédéfinie</translation>
+        <translation type="vanished">Adresse prédéfinie</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="646"/>
+        <location filename="../../clientsettingsdlg.cpp" line="595"/>
         <source>The selected audio device could not be used because of the following error: </source>
         <translation>Le périphérique audio sélectionné n&apos;a pas pu être utilisé en raison de l&apos;erreur suivante : </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="648"/>
+        <location filename="../../clientsettingsdlg.cpp" line="597"/>
         <source> The previous driver will be selected.</source>
         <translation> Le pilote précédent sera sélectionné.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="649"/>
+        <location filename="../../clientsettingsdlg.cpp" line="598"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -1408,29 +1414,33 @@
         <translation>Afficher les niveaux des canaux</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="562"/>
-        <source>Central Server Address:</source>
-        <translation>Adresse du serveur central :</translation>
+        <location filename="../../clientsettingsdlgbase.ui" line="560"/>
+        <source>Custom Central Server Address:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="599"/>
+        <source>Central Server Address:</source>
+        <translation type="vanished">Adresse du serveur central :</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="592"/>
         <source>Audio Stream Rate</source>
         <translation>Débit du flux audio</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="612"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="642"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="677"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="605"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="635"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="670"/>
         <source>val</source>
         <translation>val</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="623"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="616"/>
         <source>Ping Time</source>
         <translation>Temps de réponse</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="653"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="646"/>
         <source>Overall Delay</source>
         <translation>Délai global</translation>
     </message>
@@ -1488,32 +1498,47 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="88"/>
+        <location filename="../../connectdlg.cpp" line="87"/>
+        <source>Server List Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="87"/>
+        <source>Selects the server list to be shown.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="89"/>
+        <source>Server list selection combo box</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../connectdlg.cpp" line="92"/>
         <source>Filter</source>
         <translation>Filtre</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="88"/>
+        <location filename="../../connectdlg.cpp" line="92"/>
         <source>The server list is filtered by the given text. Note that the filter is case insensitive.</source>
         <translation>La liste des serveurs est filtrée par le texte donné. Notez que le filtre n&apos;est pas sensible à la casse.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="90"/>
+        <location filename="../../connectdlg.cpp" line="94"/>
         <source>Filter edit box</source>
         <translation>Dialogue d&apos;édition de filtre</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="93"/>
+        <location filename="../../connectdlg.cpp" line="97"/>
         <source>Show All Musicians</source>
         <translation>Afficher tous les musiciens</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="93"/>
+        <location filename="../../connectdlg.cpp" line="97"/>
         <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
         <translation>Si vous cochez cette case, les musiciens de tous les serveurs sont affichés. Si vous décochez la case, tous les éléments de la vue en liste sont regroupés.</translation>
     </message>
     <message>
-        <location filename="../../connectdlg.cpp" line="96"/>
+        <location filename="../../connectdlg.cpp" line="100"/>
         <source>Show all musicians check box</source>
         <translation>Case-à-cocher pour afficher tous les musiciens</translation>
     </message>
@@ -2062,105 +2087,113 @@
         <translation>État du serveur inscrit</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="75"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful.</source>
-        <translation>Si la case Rendre mon serveur public est cochée, cela indiquera le succès de l&apos;enregistrement auprès du serveur central.</translation>
+        <translation type="vanished">Si la case Rendre mon serveur public est cochée, cela indiquera le succès de l&apos;enregistrement auprès du serveur central.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="79"/>
+        <location filename="../../serverdlg.cpp" line="80"/>
         <source>Central Server Address</source>
         <translation>Adresse du serveur central</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="80"/>
         <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
-        <translation>L&apos;adresse du serveur central est l&apos;adresse IP ou l&apos;URL du serveur central auquel ce serveur est inscrit. Avec le type d&apos;adresse du serveur central, on peut soit sélectionner la région locale parmi les serveurs centraux par défaut, soit spécifier une adresse manuelle.</translation>
+        <translation type="vanished">L&apos;adresse du serveur central est l&apos;adresse IP ou l&apos;URL du serveur central auquel ce serveur est inscrit. Avec le type d&apos;adresse du serveur central, on peut soit sélectionner la région locale parmi les serveurs centraux par défaut, soit spécifier une adresse manuelle.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="89"/>
+        <location filename="../../serverdlg.cpp" line="75"/>
+        <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful. If the registration failed, please choose another server list.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="81"/>
+        <source>The Central server address is the IP address or URL of the central server at which this server is registered. Pre-defined server addresses are available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="88"/>
         <source>Default central server type combo box</source>
         <translation>Choix déroulant de type de serveur central par défaut</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="90"/>
+        <location filename="../../serverdlg.cpp" line="89"/>
         <source>Central server address line edit</source>
         <translation>Ligne d&apos;édition pour l&apos;adresse du serveur central</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="93"/>
+        <location filename="../../serverdlg.cpp" line="92"/>
         <source>Server Name</source>
         <translation>Nom du serveur</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="93"/>
+        <location filename="../../serverdlg.cpp" line="92"/>
         <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
         <translation>Le nom du serveur identifie votre serveur dans la liste des serveurs du dialogue de connexion chez les clients. Si aucun nom n&apos;est donné, l&apos;adresse IP est affichée à la place.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="100"/>
+        <location filename="../../serverdlg.cpp" line="99"/>
         <source>Server name line edit</source>
         <translation>Ligne d&apos;édition pour le nom du serveur</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="103"/>
+        <location filename="../../serverdlg.cpp" line="102"/>
         <source>Location City</source>
         <translation>Ville de localisation</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="103"/>
+        <location filename="../../serverdlg.cpp" line="102"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>La ville dans laquelle ce serveur est situé peut être définie ici. Si un nom de ville est saisi, il sera affiché dans la liste des serveurs du dialogue de connexion chez les clients.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="110"/>
+        <location filename="../../serverdlg.cpp" line="109"/>
         <source>City where the server is located line edit</source>
         <translation>Ligne d&apos;édition pour la ville où est situé le serveur</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="113"/>
+        <location filename="../../serverdlg.cpp" line="112"/>
         <source>Location country</source>
         <translation>Pays de localisation</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="113"/>
+        <location filename="../../serverdlg.cpp" line="112"/>
         <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Le pays dans lequel ce serveur est situé peut être défini ici. Si un pays est saisi, il sera affiché dans la liste des serveurs du dialogue de connexion chez les clients.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="121"/>
+        <location filename="../../serverdlg.cpp" line="120"/>
         <source>Country where the server is located combo box</source>
         <translation>Choix déroulant du pays où le serveur est situé</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="134"/>
-        <location filename="../../serverdlg.cpp" line="279"/>
+        <location filename="../../serverdlg.cpp" line="133"/>
+        <location filename="../../serverdlg.cpp" line="278"/>
         <source>E&amp;xit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="140"/>
+        <location filename="../../serverdlg.cpp" line="139"/>
         <source>&amp;Hide </source>
         <translation>Cac&amp;hé </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="140"/>
-        <location filename="../../serverdlg.cpp" line="144"/>
-        <location filename="../../serverdlg.cpp" line="150"/>
+        <location filename="../../serverdlg.cpp" line="139"/>
+        <location filename="../../serverdlg.cpp" line="143"/>
+        <location filename="../../serverdlg.cpp" line="149"/>
         <source> server</source>
         <translation> serveur</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="144"/>
+        <location filename="../../serverdlg.cpp" line="143"/>
         <source>&amp;Open </source>
         <translation>&amp;Ouvrir </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="166"/>
+        <location filename="../../serverdlg.cpp" line="165"/>
         <source> server </source>
         <translation> serveur </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="527"/>
+        <location filename="../../serverdlg.cpp" line="526"/>
         <source>Predefined Address</source>
         <translation>Adresse prédéfinie</translation>
     </message>
@@ -2177,12 +2210,12 @@
         <translation type="vanished">Défaut (Amérique du nord)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="273"/>
+        <location filename="../../serverdlg.cpp" line="272"/>
         <source> Server</source>
         <translation> serveur</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="277"/>
+        <location filename="../../serverdlg.cpp" line="276"/>
         <source>&amp;Window</source>
         <translation>&amp;Fenêtre</translation>
     </message>
@@ -2261,14 +2294,18 @@
         <translation>Rendre mon serveur public (inscrire mon serveur dans la liste des serveurs)</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="91"/>
+        <location filename="../../serverdlgbase.ui" line="94"/>
         <source>STATUS</source>
         <translation>ÉTAT</translation>
     </message>
     <message>
-        <location filename="../../serverdlgbase.ui" line="102"/>
+        <location filename="../../serverdlgbase.ui" line="105"/>
+        <source>Custom Central Server Address:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Central Server Address:</source>
-        <translation>Adresse du serveur central :</translation>
+        <translation type="vanished">Adresse du serveur central :</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="117"/>

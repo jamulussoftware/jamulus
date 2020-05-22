@@ -243,17 +243,14 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     edtNewClientLevel->setAccessibleName ( tr ( "New client level edit box" ) );
 
     // central server address
-    QString strCentrServAddr = "<b>" + tr ( "Central Server Address" ) + ":</b> " +
-        tr ( "The central server address is the IP address or URL of the central server "
-        "at which the server list of the connection dialog is managed. With the "
-        "central server address type either the local region can be selected of "
-        "the default central servers or a manual address can be specified." );
+    QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
+        tr ( "The custom central server address is the IP address or URL of the central "
+        "server at which the server list of the connection dialog is managed. This "
+        "address is only used if the custom server list is selected in the connection "
+        "dialog." );
 
     lblCentralServerAddress->setWhatsThis ( strCentrServAddr );
-    cbxCentServAddrType->setWhatsThis ( strCentrServAddr );
     edtCentralServerAddress->setWhatsThis ( strCentrServAddr );
-
-    cbxCentServAddrType->setAccessibleName ( tr ( "Default central server type combo box" ) );
     edtCentralServerAddress->setAccessibleName ( tr ( "Central server address line edit" ) );
 
     // current connection status parameter
@@ -344,15 +341,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     cbxAudioQuality->addItem ( tr ( "High" ) );   // AQ_HIGH
     cbxAudioQuality->setCurrentIndex ( static_cast<int> ( pClient->GetAudioQuality() ) );
 
-    // central server address type combo box
-    cbxCentServAddrType->clear();
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_DEFAULT ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_ALL_GENRES ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_ROCK ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_GENRE_JAZZ ) );
-    cbxCentServAddrType->addItem ( csCentServAddrTypeToString ( AT_CUSTOM ) );
-    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
-    UpdateCentralServerDependency();
+    // custom central server address
+    edtCentralServerAddress->setText ( pClient->GetServerListCentralServerAddress() );
 
     // update new client fader level edit box
     edtNewClientLevel->setText ( QString::number ( pClient->iNewClientFaderLevel ) );
@@ -433,9 +423,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( cbxAudioQuality, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnAudioQualityActivated ( int ) ) );
 
-    QObject::connect ( cbxCentServAddrType, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnCentServAddrTypeActivated ( int ) ) );
-
     // buttons
     QObject::connect ( butDriverSetup, SIGNAL ( clicked() ),
         this, SLOT ( OnDriverSetupClicked() ) );
@@ -444,10 +431,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
         SIGNAL ( buttonClicked ( QAbstractButton* ) ), this,
         SLOT ( OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* ) ) );
-
-    QObject::connect ( pClient,
-        SIGNAL ( CentralServerAddressTypeChanged() ),
-        this, SLOT ( OnCentralServerAddressTypeChanged() ) );
 
 
     // Timers ------------------------------------------------------------------
@@ -585,40 +568,6 @@ void CClientSettingsDlg::UpdateSoundChannelSelectionFrame()
 #endif
 }
 
-void CClientSettingsDlg::UpdateCentralServerDependency()
-{
-    const bool bCurUseDefCentServAddr = ( pClient->GetCentralServerAddressType() != AT_CUSTOM );
-
-    // update server type combo box (because the value may have ben changed
-    // by a control in another dialog, e.g., the connect dialog),
-    // since it is just an update, do not fire signals for the update
-    cbxCentServAddrType->blockSignals ( true );
-    cbxCentServAddrType->setCurrentIndex ( static_cast<int> ( pClient->GetCentralServerAddressType() ) );
-    cbxCentServAddrType->blockSignals ( false );
-
-    // make sure the line edit does not fire signals when we update the text
-    edtCentralServerAddress->blockSignals ( true );
-    {
-        if ( bCurUseDefCentServAddr )
-        {
-            // if the default central server is used, just show a text of the
-            // server name
-            edtCentralServerAddress->setText ( tr ( "Predefined Address" ) );
-        }
-        else
-        {
-            // show the current user defined server address
-            edtCentralServerAddress->setText (
-                pClient->GetServerListCentralServerAddress() );
-        }
-    }
-    edtCentralServerAddress->blockSignals ( false );
-
-    // the line edit of the central server address is only enabled, if not the
-    // default address is used
-    edtCentralServerAddress->setEnabled ( !bCurUseDefCentServAddr );
-}
-
 void CClientSettingsDlg::OnDriverSetupClicked()
 {
     pClient->OpenSndCrdDriverSetup();
@@ -690,15 +639,6 @@ void CClientSettingsDlg::OnAudioQualityActivated ( int iQualityIdx )
 {
     pClient->SetAudioQuality ( static_cast<EAudioQuality> ( iQualityIdx ) );
     UpdateDisplay(); // upload rate will be changed
-}
-
-void CClientSettingsDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
-{
-    // apply new setting to the client
-    pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iTypeIdx ) );
-
-    // update GUI dependencies
-    UpdateCentralServerDependency();
 }
 
 void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )

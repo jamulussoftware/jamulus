@@ -555,18 +555,11 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout">
-        <item>
-         <widget class="QLabel" name="lblCentralServerAddress">
-          <property name="text">
-           <string>Central Server Address:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="cbxCentServAddrType"/>
-        </item>
-       </layout>
+       <widget class="QLabel" name="lblCentralServerAddress">
+        <property name="text">
+         <string>Custom Central Server Address:</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLineEdit" name="edtCentralServerAddress">
@@ -735,7 +728,6 @@
   <tabstop>edtNewClientLevel</tabstop>
   <tabstop>chbGUIDesignFancy</tabstop>
   <tabstop>chbDisplayChannelLevels</tabstop>
-  <tabstop>cbxCentServAddrType</tabstop>
   <tabstop>edtCentralServerAddress</tabstop>
  </tabstops>
  <resources>

@@ -70,6 +70,9 @@
       </widget>
      </item>
      <item>
+      <widget class="QComboBox" name="cbxCentServAddrType"/>
+     </item>
+     <item>
       <spacer>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -99,12 +102,9 @@
      <item>
       <widget class="QLabel" name="lblCentralServerAddress">
        <property name="text">
-        <string>Central Server Address:</string>
+        <string>Custom Central Server Address:</string>
        </property>
       </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="cbxCentServAddrType"/>
      </item>
      <item>
       <widget class="QLineEdit" name="edtCentralServerAddress"/>

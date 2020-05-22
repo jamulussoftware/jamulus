@@ -1213,13 +1213,13 @@
     </message>
     <message>
         <location filename="../../util.h" line="587"/>
-        <source>Genre Rock</source>
-        <translation></translation>
+        <source>Genre Rock/Jazz</source>
+        <translation>Genre Rock/Jazz</translation>
     </message>
     <message>
         <location filename="../../util.h" line="590"/>
-        <source>Genre Jazz</source>
-        <translation></translation>
+        <source>Genre Classical/Folk/Choir</source>
+        <translation>Genre Klassik/Volksmusik/Chor</translation>
     </message>
     <message>
         <location filename="../../util.h" line="593"/>
@@ -2079,9 +2079,8 @@
         <translation type="vanished">Wenn der eigene Server veröffentlicht wurde, dann zeigt der Registrierungsstatus and, ob die Registrierung erfolgreich war oder nicht.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="80"/>
         <source>Central Server Address</source>
-        <translation>Zentralserveradresse</translation>
+        <translation type="vanished">Zentralserveradresse</translation>
     </message>
     <message>
         <source>The Central server address is the IP address or URL of the central server at which this server is registered. With the central server address type either the local region can be selected of the default central servers or a manual address can be specified.</source>
@@ -2093,95 +2092,118 @@
         <translation>Wenn der eigene Server veröffentlicht wurde, dann zeigt der Registrierungsstatus and, ob die Registrierung erfolgreich war oder nicht. Wenn die Registrierung fehlgeschlagen ist, dann wähle eine andere Serverliste aus.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="81"/>
         <source>The Central server address is the IP address or URL of the central server at which this server is registered. Pre-defined server addresses are available</source>
-        <translation>Die Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers bei dem man sich registrieren möchte. Vordefinierte Serveradressen sind verfügbar.</translation>
+        <translation type="vanished">Die Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers bei dem man sich registrieren möchte. Vordefinierte Serveradressen sind verfügbar.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="88"/>
         <source>Default central server type combo box</source>
-        <translation>Voreingestellter Zentralservertyp Auswahlbox</translation>
+        <translation type="vanished">Voreingestellter Zentralservertyp Auswahlbox</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="89"/>
+        <location filename="../../serverdlg.cpp" line="80"/>
+        <source>Custom Central Server Address</source>
+        <translation>Benutzerdefinierte Zentralserveradresse</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="81"/>
+        <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
+        <translation>Die benutzerdefinierte Zentralserveradresse ist die IP-Adresse oder URL des Zentralservers, der die Serverliste für den Verbindungsdialog bereitstellt.</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="86"/>
         <source>Central server address line edit</source>
         <translation>Zentralserveradresse Eingabefeld</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="92"/>
+        <location filename="../../serverdlg.cpp" line="88"/>
+        <source>Server List Selection</source>
+        <translation>Serverlistenauswahl</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="88"/>
+        <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
+        <translation>Wählt die Serverliste (d.h. die Zentralserveradresse) aus, in welche dein Server registriert werden soll.</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="90"/>
+        <source>Server list selection combo box</source>
+        <translation>Severlistenauswahl Selektion</translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="93"/>
         <source>Server Name</source>
         <translation>Servername</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="92"/>
+        <location filename="../../serverdlg.cpp" line="93"/>
         <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
         <translation>Der Servername identifiziert deinen Server in der Serverliste. Falls kein Name angegeben wurde, dann wird die IP-Adresse stattdessen angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="99"/>
+        <location filename="../../serverdlg.cpp" line="100"/>
         <source>Server name line edit</source>
         <translation>Servername Eingabefeld</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="102"/>
+        <location filename="../../serverdlg.cpp" line="103"/>
         <source>Location City</source>
         <translation>Standort Stadt</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="102"/>
+        <location filename="../../serverdlg.cpp" line="103"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Hier kann man die Stadt angeben, in der sich der Server befindet. Falls eine Stadt angegeben wurde, dann wird die in der Serverliste angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="109"/>
+        <location filename="../../serverdlg.cpp" line="110"/>
         <source>City where the server is located line edit</source>
         <translation>Stadt in der sich der Server befindet Eingabefeld</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="112"/>
+        <location filename="../../serverdlg.cpp" line="113"/>
         <source>Location country</source>
         <translation>Standort Land</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="112"/>
+        <location filename="../../serverdlg.cpp" line="113"/>
         <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Hier kann man das Land eingeben, in dem sich der Server befindet. Falls ein Land angegeben wurde, dann wird das in der Serverliste angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="120"/>
+        <location filename="../../serverdlg.cpp" line="121"/>
         <source>Country where the server is located combo box</source>
         <translation>Land in dem sich der Server befindet Auswahlbox</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="133"/>
-        <location filename="../../serverdlg.cpp" line="278"/>
+        <location filename="../../serverdlg.cpp" line="134"/>
+        <location filename="../../serverdlg.cpp" line="279"/>
         <source>E&amp;xit</source>
         <translation>&amp;Beenden</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="139"/>
+        <location filename="../../serverdlg.cpp" line="140"/>
         <source>&amp;Hide </source>
         <translation>&amp;Ausblenden vom </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="139"/>
-        <location filename="../../serverdlg.cpp" line="143"/>
-        <location filename="../../serverdlg.cpp" line="149"/>
+        <location filename="../../serverdlg.cpp" line="140"/>
+        <location filename="../../serverdlg.cpp" line="144"/>
+        <location filename="../../serverdlg.cpp" line="150"/>
         <source> server</source>
-        <translation>-Server</translation>
+        <translation> Server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="143"/>
+        <location filename="../../serverdlg.cpp" line="144"/>
         <source>&amp;Open </source>
         <translation>Ö&amp;ffne den </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="165"/>
+        <location filename="../../serverdlg.cpp" line="166"/>
         <source> server </source>
         <translation> Server </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="526"/>
+        <location filename="../../serverdlg.cpp" line="527"/>
         <source>Predefined Address</source>
         <translation>Vordefinierte Adresse</translation>
     </message>
@@ -2198,12 +2220,12 @@
         <translation type="vanished">Standard (Nordamerika)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="272"/>
+        <location filename="../../serverdlg.cpp" line="273"/>
         <source> Server</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="276"/>
+        <location filename="../../serverdlg.cpp" line="277"/>
         <source>&amp;Window</source>
         <translation>&amp;Fenster</translation>
     </message>
@@ -2336,7 +2358,7 @@
     <message>
         <location filename="../../../linux/sound.cpp" line="64"/>
         <source>Make sure to set the Frames/Period to a low value like </source>
-        <translation>Versichere dich, dass die Frames/Perioden auf einen niedrigen Wert wie z.B. </translation>
+        <translation>Versichere dich, dass die Frames/Perioden auf einen niedrigen Wert wie zum Beispiel </translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="67"/>

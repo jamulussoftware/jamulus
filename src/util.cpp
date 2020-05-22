@@ -951,11 +951,11 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
 {
     switch ( eCentralServerAddressType )
     {
-    case AT_CUSTOM:     return strCentralServerAddress;
-    case AT_ALL_GENRES: return CENTSERV_ALL_GENRES;
-    case AT_GENRE_ROCK: return CENTSERV_GENRE_ROCK;
-    case AT_GENRE_JAZZ: return CENTSERV_GENRE_JAZZ;
-    default:            return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
+    case AT_CUSTOM:               return strCentralServerAddress;
+    case AT_ALL_GENRES:           return CENTSERV_ALL_GENRES;
+    case AT_GENRE_ROCK_JAZZ:      return CENTSERV_GENRE_ROCK_JAZZ;
+    case AT_GENRE_CLASSICAL_FOLK: return CENTSERV_GENRE_CLASSICAL_FOLK;
+    default:                      return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
     }
 }
 

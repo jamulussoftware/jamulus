@@ -41,7 +41,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "(the longer the buffer, the higher the delay)." ) + "<br>" + tr (
         "The jitter buffer size can be manually chosen for the local client "
         "and the remote server. For the local jitter buffer, dropouts in the "
-        "audio stream are indicated by the light below the"
+        "audio stream are indicated by the light below the "
         "jitter buffer size faders. If the light turns to red, a buffer "
         "overrun/underrun took place and the audio stream is interrupted." ) + "<br>" + tr (
         "The jitter buffer setting is therefore a trade-off between audio "

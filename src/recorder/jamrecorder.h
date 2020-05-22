@@ -128,6 +128,7 @@ private:
     const QDir sessionDir;
 
     qint64 currentFrame;
+    int chIdDisconnected;
     QVector<CJamClient*> vecptrJamClients;
     QList<CJamClientConnection*> jamClientConnections;
 };

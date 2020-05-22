@@ -422,24 +422,6 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     libs/opus/celt/x86/vq_sse.h \
     libs/opus/celt/x86/x86cpu.h
 
-android {
-    contains(ANDROID_ARCHITECTURE, arm) | contains(ANDROID_ARCHITECTURE, arm64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_ARM
-    } else:contains(ANDROID_ARCHITECTURE, x86) | contains(ANDROID_ARCHITECTURE, x86_64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_X86
-    }
-} else:win32 | unix | macx {
-    contains(QT_ARCH, arm) | contains(QT_ARCH, arm64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_ARM
-    } else:contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
-        HEADERS_OPUS += $$HEADERS_OPUS_X86
-    }
-
-    win32 {
-        HEADERS_OPUS += libs/opus/win32/config.h
-    }
-}
-
 SOURCES += src/audiomixerboard.cpp \
     src/buffer.cpp \
     src/channel.cpp \
@@ -610,15 +592,22 @@ SOURCES_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse4_1.c \
 
 android {
     contains(ANDROID_ARCHITECTURE, arm) | contains(ANDROID_ARCHITECTURE, arm64) {
+        HEADERS_OPUS += $$HEADERS_OPUS_ARM
         SOURCE_OPUS += $$SOURCES_OPUS_ARM
     } else:contains(ANDROID_ARCHITECTURE, x86) | contains(ANDROID_ARCHITECTURE, x86_64) {
+        HEADERS_OPUS += $$HEADERS_OPUS_X86
         SOURCE_OPUS += $$SOURCES_OPUS_X86
     }
 } else:win32 | unix | macx {
     contains(QT_ARCH, arm) | contains(QT_ARCH, arm64) {
+        HEADERS_OPUS += $$HEADERS_OPUS_ARM
         SOURCE_OPUS += $$SOURCES_OPUS_ARM
     } else:contains(QT_ARCH, x86) | contains(QT_ARCH, x86_64) {
+        HEADERS_OPUS += $$HEADERS_OPUS_X86
         SOURCE_OPUS += $$SOURCES_OPUS_X86
+    }
+    win32 {
+        HEADERS_OPUS += libs/opus/win32/config.h
     }
 }
 

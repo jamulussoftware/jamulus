@@ -1013,12 +1013,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="109"/>
         <source> input/output channel (Left and Right channel) a different actual sound card channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation> un canal différent de la carte son réelle peut être sélectionné.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="170"/>
         <source> software. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="175"/>

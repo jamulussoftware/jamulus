@@ -19,6 +19,9 @@
 - save client settings on Linux cmdline termination signal, coded by pljones (#70)
 
 
+TODO in mono mode we should not show the Pan controls
+
+
 
 
 

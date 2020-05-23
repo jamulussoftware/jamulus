@@ -1330,7 +1330,7 @@
         <location filename="../../clientsettingsdlgbase.ui" line="326"/>
         <location filename="../../clientsettingsdlgbase.ui" line="345"/>
         <source>Size</source>
-        <translation type="unfinished">Livello</translation>
+        <translation>Livello</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="483"/>
@@ -2280,7 +2280,7 @@
     <message>
         <location filename="../../../linux/sound.cpp" line="110"/>
         <source>Cannot activate the Jack client.</source>
-        <translation>Jack client non può essere attivato</translation>
+        <translation>Jack client non può essere attivato.</translation>
     </message>
     <message>
         <location filename="../../../linux/sound.cpp" line="197"/>

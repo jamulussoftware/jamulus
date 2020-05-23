@@ -1239,7 +1239,7 @@
     <message>
         <location filename="../../util.h" line="590"/>
         <source>Genre Classical/Folk/Choir</source>
-        <translation>Genre classique/folk/coeur</translation>
+        <translation>Genre classique/folk/choeur</translation>
     </message>
     <message>
         <source>Genre Rock</source>

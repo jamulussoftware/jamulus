@@ -1179,7 +1179,7 @@
         <location filename="../../clientsettingsdlg.cpp" line="463"/>
         <location filename="../../clientsettingsdlg.cpp" line="467"/>
         <source>Size: </source>
-        <translation>Dimensione: </translation>
+        <translation>Livello: </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="524"/>

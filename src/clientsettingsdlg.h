@@ -73,7 +73,6 @@ protected:
     void    UpdateJitterBufferFrame();
     void    UpdateSoundCardFrame();
     void    UpdateSoundChannelSelectionFrame();
-    void    UpdateCentralServerDependency();
     QString GenSndCrdBufferDelayString ( const int iFrameSize,
                                          const QString strAddText = "" );
 
@@ -101,8 +100,6 @@ protected:
     void OnROutChanActivated ( int iChanIdx );
     void OnAudioChannelsActivated ( int iChanIdx );
     void OnAudioQualityActivated ( int iQualityIdx );
-    void OnCentServAddrTypeActivated ( int iTypeIdx );
-    void OnCentralServerAddressTypeChanged() { UpdateCentralServerDependency(); }
     void OnDriverSetupClicked();
 
 signals:

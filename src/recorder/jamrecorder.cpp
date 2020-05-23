@@ -109,6 +109,7 @@ void CJamClient::Disconnect()
 CJamSession::CJamSession(QDir recordBaseDir) :
     sessionDir (QDir(recordBaseDir.absoluteFilePath("Jam-" + QDateTime().currentDateTimeUtc().toString("yyyyMMdd-HHmmsszzz")))),
     currentFrame (0),
+    chIdDisconnected (-1),
     vecptrJamClients (MAX_NUM_CHANNELS),
     jamClientConnections()
 {
@@ -130,8 +131,6 @@ CJamSession::CJamSession(QDir recordBaseDir) :
 
     // Explicitly set all the pointers to "empty"
     vecptrJamClients.fill(nullptr);
-
-    currentFrame = 0;
 }
 
 /**
@@ -150,6 +149,7 @@ void CJamSession::DisconnectClient(int iChID)
 
     delete vecptrJamClients[iChID];
     vecptrJamClients[iChID] = nullptr;
+    chIdDisconnected = iChID;
 }
 
 /**
@@ -167,6 +167,13 @@ void CJamSession::DisconnectClient(int iChID)
  */
 void CJamSession::Frame(const int iChID, const QString name, const CHostAddress address, const int numAudioChannels, const CVector<int16_t> data, int iServerFrameSizeSamples)
 {
+    if ( iChID == chIdDisconnected )
+    {
+        // DisconnectClient has just been called for this channel - this frame is "too late"
+        chIdDisconnected = -1;
+        return;
+    }
+
     if (vecptrJamClients[iChID] == nullptr)
     {
         // then we have not seen this client this session

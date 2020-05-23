@@ -71,14 +71,14 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setMinimumHeight ( 75 );
 
     // setup panning control
-    pPan->setRange ( 0, AUD_MIX_PAN_MAX );
-    pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
-    pPan->setFixedSize ( 55, 55 );
+    pPan->setRange          ( 0, AUD_MIX_PAN_MAX );
+    pPan->setValue          ( AUD_MIX_PAN_MAX / 2 );
+    pPan->setFixedSize      ( 50, 50 );
     pPan->setNotchesVisible ( true );
-    pPanInfoGrid->addWidget ( pPanLabel,  0, Qt::AlignLeft );
+    pPanInfoGrid->addWidget ( pPanLabel, 0, Qt::AlignLeft );
     pPanInfoGrid->addWidget ( pInfoLabel );
-    pPanGrid->addLayout ( pPanInfoGrid );
-    pPanGrid->addWidget ( pPan, 0, Qt::AlignHCenter );
+    pPanGrid->addLayout     ( pPanInfoGrid );
+    pPanGrid->addWidget     ( pPan, 0, Qt::AlignHCenter );
 
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat    ( Qt::PlainText );
@@ -360,10 +360,13 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
     {
         // show orange utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
         pInfoLabel->setText ( "<font color=""orange"">&#128263;</font>" );
+//QPixmap CancelledSpeakerPixmap ( QString::fromUtf8 ( ":/png/main/res/speakerwithcancellationstroke.png" ) );
+//pInfoLabel->setPixmap ( CancelledSpeakerPixmap.scaled ( 15, 15, Qt::KeepAspectRatio ) );
     }
     else
     {
         pInfoLabel->setText ( "" );
+//pInfoLabel->setPixmap ( QPixmap() );
     }
 }
 
@@ -607,6 +610,8 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     iNewClientFaderLevel ( 100 ),
+    bDisplayPans         ( false ),
+    bIsPanSupported      ( false ),
     bNoFaderVisible      ( true ),
     strServerName        ( "" )
 {
@@ -718,12 +723,20 @@ void CAudioMixerBoard::SetDisplayChannelLevels ( const bool eNDCL )
     }
 }
 
-void CAudioMixerBoard::SetPanIsSupported()
+void CAudioMixerBoard::SetDisplayPans ( const bool eNDP )
 {
+    bDisplayPans = eNDP;
+
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        vecpChanFader[i]->SetDisplayPans ( true );
+        vecpChanFader[i]->SetDisplayPans ( eNDP && bIsPanSupported );
     }
+}
+
+void CAudioMixerBoard::SetPanIsSupported()
+{
+    bIsPanSupported = true;
+    SetDisplayPans ( bDisplayPans );
 }
 
 void CAudioMixerBoard::HideAll()
@@ -740,7 +753,8 @@ void CAudioMixerBoard::HideAll()
         vecpChanFader[i]->Hide();
     }
 
-    // set flag
+    // set flags
+    bIsPanSupported = false;
     bNoFaderVisible = true;
 
     // emit status of connected clients

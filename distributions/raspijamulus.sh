@@ -1,6 +1,16 @@
 #!/bin/bash
 
 # This script is intended to setup a clean Raspberry Pi system for running Jamulus
+
+# Regarding the old OPUS version (#252): I just tried out the following:
+# * Do not use OPUS in shared library but use the version which is included in the jamulus source code:
+#   instead of 80 % load I get 90 % load on my Raspberry Pi Zero
+# * Do not use OPUS in shared libaray but use the version which is included in the Jamulus source code
+#   but try to compile in fixed-point: I get compilation errors so this is not possible right now
+# * I replaced the opus-1.1 with OPUS="opus-1.3.1" in the raspijamulus.sh -> OPUS version 1.3.1 has a
+#   known bug with the custom interface. If I use that version as a shared libaray, I get a runtime error
+#   on starting Jamulus. So this is also not possible. We have to wait for the next official OPUS version.
+# Therefore it is the best to keep the opus-1.1 version.
 OPUS="opus-1.1"
 NCORES=$(nproc)
 

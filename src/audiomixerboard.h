@@ -144,6 +144,7 @@ public:
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetDisplayChannelLevels ( const bool eNDCL );
+    void SetDisplayPans ( const bool eNDP );
     void SetPanIsSupported();
     void SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
 
@@ -192,6 +193,8 @@ protected:
     CMixerBoardScrollArea*  pScrollArea;
     QHBoxLayout*            pMainLayout;
     bool                    bDisplayChannelLevels;
+    bool                    bDisplayPans;
+    bool                    bIsPanSupported;
     bool                    bNoFaderVisible;
     QString                 strServerName;
 

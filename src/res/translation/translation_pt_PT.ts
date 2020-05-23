@@ -192,7 +192,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="770"/>
         <source>Personal Mix at the Server: </source>
-        <translation type="unfinished"></translation>
+        <translation>Mistura Pessoal no Servidor: </translation>
     </message>
 </context>
 <context>
@@ -230,37 +230,37 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Status Indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicador de Estado</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra uma indicação de estado sobre o cliente que está atribuído a este canal. Os indicadores suportados são:</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="144"/>
         <source>Speaker with cancellation stroke: Indicates that the other client has muted you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alti-falante com sinal de proibição: Indica que o cliente silenciou o teu canal.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="147"/>
         <source>Status indicator label</source>
-        <translation type="unfinished"></translation>
+        <translation>Etiqueta do indicador de estado</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="149"/>
         <source>Panning</source>
-        <translation type="unfinished"></translation>
+        <translation>Panorâmica</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="149"/>
         <source>Sets the panning position from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Define a posição de panorâmica da esquerda para a direita do canal. Funciona apenas no modo estéreo ou, de preferência, no modo Entrada Mono/Saída Estéreo.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="152"/>
         <source>Local panning position of the current audio channel at the server</source>
-        <translation type="unfinished"></translation>
+        <translation>Posição de panorâmica local do canal de áudio actual no servidor</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="154"/>
@@ -310,7 +310,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="210"/>
         <source>PAN</source>
-        <translation type="unfinished"></translation>
+        <translation>PAN</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="211"/>
@@ -375,7 +375,7 @@
         <location filename="../../audiomixerboard.cpp" line="43"/>
         <location filename="../../audiomixerboard.cpp" line="219"/>
         <source>Pan</source>
-        <translation type="unfinished">Pan</translation>
+        <translation>Pan</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="48"/>
@@ -568,7 +568,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="259"/>
         <source>&amp;Connection Setup...</source>
-        <translation>&amp;Configuração da ligação ...</translation>
+        <translation>&amp;Ligar a Servidor...</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="262"/>
@@ -699,7 +699,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="719"/>
         <source>Central Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor Central</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="837"/>
@@ -777,7 +777,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="467"/>
         <source>Reverb</source>
-        <translation>Reverberação</translation>
+        <translation>Reverb.</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="533"/>
@@ -1120,12 +1120,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="246"/>
         <source>Custom Central Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Endereço do Servidor Central Personalizado</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="247"/>
         <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>O endereço personalizado do servidor central é o endereço IP ou URL do servidor central no qual a lista de servidores da Configuração de Ligação é gerida. Este endereço é usado apenas se a lista de servidores personalizados estiver selecionada na Configuração de Ligação.</translation>
     </message>
     <message>
         <source>Central Server Address</source>
@@ -1216,22 +1216,22 @@
     <message>
         <location filename="../../util.h" line="581"/>
         <source>Custom</source>
-        <translation type="unfinished"></translation>
+        <translation>Personalizado</translation>
     </message>
     <message>
         <location filename="../../util.h" line="584"/>
         <source>All Genres</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor Geral</translation>
     </message>
     <message>
         <location filename="../../util.h" line="587"/>
         <source>Genre Rock/Jazz</source>
-        <translation type="unfinished"></translation>
+        <translation>Servidor Rock/Jazz</translation>
     </message>
     <message>
         <location filename="../../util.h" line="590"/>
         <source>Genre Classical/Folk/Choir</source>
-        <translation type="unfinished"></translation>
+        <translation>Serv. Clássica/Folclore/Coro</translation>
     </message>
     <message>
         <location filename="../../util.h" line="593"/>
@@ -1412,7 +1412,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="560"/>
         <source>Custom Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Endereço do Servidor Central Personalizado:</translation>
     </message>
     <message>
         <source>Central Server Address:</source>
@@ -1496,17 +1496,17 @@
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>Server List Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecção da Lista de Servidores</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="87"/>
         <source>Selects the server list to be shown.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleciona a lista de servidores a ser apresentada.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="89"/>
         <source>Server list selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Caixa de selecção de lista de servidores</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="92"/>
@@ -1549,7 +1549,7 @@
     <message>
         <location filename="../../connectdlgbase.ui" line="35"/>
         <source>List</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista</translation>
     </message>
     <message>
         <location filename="../../connectdlgbase.ui" line="45"/>
@@ -2002,22 +2002,22 @@
     <message>
         <location filename="../../util.cpp" line="1011"/>
         <source>Vocal Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Voz Baixo</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1012"/>
         <source>Vocal Tenor</source>
-        <translation type="unfinished"></translation>
+        <translation>Voz Tenor</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1013"/>
         <source>Vocal Alto</source>
-        <translation type="unfinished"></translation>
+        <translation>Voz Alto</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1014"/>
         <source>Vocal Soprano</source>
-        <translation type="unfinished"></translation>
+        <translation>Voz Soprano</translation>
     </message>
 </context>
 <context>
@@ -2097,7 +2097,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se a caixa de seleção Tornar Meu Servidor Público fôr seleccionada, isto apresentará se o registro no servidor central foi bem-sucedido. Se o registo falhar, escolha outra lista de servidores.</translation>
     </message>
     <message>
         <source>Default central server type combo box</source>
@@ -2106,12 +2106,12 @@
     <message>
         <location filename="../../serverdlg.cpp" line="80"/>
         <source>Custom Central Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Endereço do Servidor Central Personalizado</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="81"/>
         <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
-        <translation type="unfinished"></translation>
+        <translation>O endereço do servidor central personalizado é o endereço IP ou URL do servidor central no qual a lista de servidores da Configuração da Ligação é gerida.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="86"/>
@@ -2121,17 +2121,17 @@
     <message>
         <location filename="../../serverdlg.cpp" line="88"/>
         <source>Server List Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Selecção da Lista de Servidores</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="88"/>
         <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleciona a lista de servidores (ou seja, endereço do servidor central) à qual seu servidor será adicionado.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="90"/>
         <source>Server list selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Caixa de selecção de lista de servidores</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
@@ -2209,7 +2209,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="527"/>
         <source>Predefined Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Endereço Predefinido</translation>
     </message>
     <message>
         <source>Manual</source>
@@ -2315,7 +2315,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="105"/>
         <source>Custom Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Endereço do Servidor Central Personalizado:</translation>
     </message>
     <message>
         <source>Central Server Address:</source>

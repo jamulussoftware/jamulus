@@ -299,7 +299,7 @@ void CSettings::Load()
 
         // central server address type
         if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
-             0, 4 /* AT_CUSTOM */, iValue ) )
+             0, static_cast<int> ( AT_CUSTOM ), iValue ) )
         {
             pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iValue ) );
         }
@@ -370,7 +370,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
         // central server address type (note that it is important
         // to set this setting prior to the "central server address")
         if ( GetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype",
-             0, 4 /* AT_CUSTOM */, iValue ) )
+             0, static_cast<int> ( AT_CUSTOM ), iValue ) )
         {
             pServer->SetCentralServerAddressType ( static_cast<ECSAddType> ( iValue ) );
         }

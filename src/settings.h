@@ -32,6 +32,7 @@
 #include "global.h"
 #include "client.h"
 #include "server.h"
+#include "util.h"
 
 
 /* Classes ********************************************************************/

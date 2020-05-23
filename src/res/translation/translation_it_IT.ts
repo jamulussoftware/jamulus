@@ -1689,7 +1689,7 @@
     <message>
         <location filename="../../util.cpp" line="566"/>
         <source>Country</source>
-        <translation>Cittò</translation>
+        <translation>Paese</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="568"/>

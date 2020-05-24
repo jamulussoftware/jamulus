@@ -414,6 +414,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>"
         "<p><b>" + tr ( "Dutch" ) + "</b></p>"
         "<p>Jeroen Geertzen (<a href=""https://github.com/jerogee"">jerogee</a>)</p>"
+        "<p><b>" + tr ( "Italian" ) + "</b></p>"
+        "<p>Giuseppe Sapienza (<a href=""https://github.com/dzpex"">dzpex</a>)</p>"
         "<p><b>" + tr ( "German" ) + "</b></p>"
         "<p>Volker Fischer (<a href=""https://github.com/corrados"">corrados</a>)</p>" );
 

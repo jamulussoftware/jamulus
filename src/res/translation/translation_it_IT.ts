@@ -787,7 +787,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="56"/>
-        <source>In case the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
+        <source>If the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
         <translation>Nel caso in cui sia abilitata l&apos;impostazione automatica del jitter buffer, i buffer di rete del client locale e del server remoto sono impostati su un valore di tipo conservativo per ridurre al minimo la probabilità di dropout audio. Per modificare il ritardo / latenza audio, si consiglia di disabilitare la funzionalità di impostazione automatica e di ridurre manualmente la dimensione del JitterBuffer utilizzando i fader fino a raggiungere il limite personale per una qualità audio accettabile. L&apos;indicatore LED visualizzerà i dropout audio del Jitter Buffer locale diventando rosso.</translation>
     </message>
     <message>
@@ -932,7 +932,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="143"/>
-        <source>128 samples: This setting should work on most of the available sound cards.</source>
+        <source>128 samples: This setting should work for most available sound cards.</source>
         <translation>128 Campioni: Settaggio che trova compatibilità con la maggiorparte delle schede audio.</translation>
     </message>
     <message>
@@ -942,7 +942,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="147"/>
-        <source>Some sound card driver do not allow the buffer delay to be changed from within the </source>
+        <source>Some sound card drivers do not allow the buffer delay to be changed from within the </source>
         <translation>Molte Schede audio non permettono di modificare il buffer delay direttamente tramite l&apos;interfaccia di </translation>
     </message>
     <message>
@@ -1037,7 +1037,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="200"/>
-        <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful for the case that the sound card puts the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
+        <source>Select the number of audio channels to be used. There are three modes available. The mono and stereo modes use one and two audio channels respectively. In mono-in/stereo-out mode the audio signal which is sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other channel. In that case the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.</source>
         <translation>Seleziona il numero dei canali audio che saranno usati. Si possono usare tre modalità. In modalità mono e in modalità stereo vengono usati rispettivamente uno o due canali. Nella modalità mono-in/stereo-out il segnale inviato al server è mono ma il segnale di ritorno è stereo. Questà modalità è utile se si collega lo strumento su di un canale e il microfono nell&apos;altro. In questo modo i due segnali verranno mixati su di un canale mono ma sarà possibile ascoltare il mix ricevuto dal server in stereo.</translation>
     </message>
     <message>

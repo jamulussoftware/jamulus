@@ -1,8 +1,14 @@
 
 
 
+3.5.5git
 
-3.5.4git
+
+
+
+
+
+3.5.4 (2020-05-24)
 
 - introduce genre-based server lists (#139)
 
@@ -18,9 +24,9 @@
 
 - save client settings on Linux cmdline termination signal, coded by pljones (#70)
 
+- added translation: Italian by dzpex (#249)
 
-
-
+- bug fix: fixed misaligned tracks in recordings, coded by snayler, improved by pljones (#234)
 
 
 3.5.3 (2020-05-15)

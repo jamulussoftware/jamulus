@@ -86,7 +86,7 @@
     <message>
         <location filename="../../util.cpp" line="417"/>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Italiano</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="419"/>
@@ -243,22 +243,22 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Status Indicator</source>
-        <translation type="unfinished"></translation>
+        <translation>Indicatore di Stato</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
-        <translation type="unfinished"></translation>
+        <translation>Visualizza lo stato del client assegnato a questo canale. Gli Stati supportati sono:</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="144"/>
         <source>Speaker with cancellation stroke: Indicates that the other client has muted you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Altoparlante segnato: Indica che un altro client ha messo in mute il tuo canale.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="147"/>
         <source>Status indicator label</source>
-        <translation type="unfinished"></translation>
+        <translation>Etichetta dell&apos;indicatore di stato</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="149"/>
@@ -1113,12 +1113,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="246"/>
         <source>Custom Central Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo personalizzato del Server Centrale</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="247"/>
         <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed. This address is only used if the custom server list is selected in the connection dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;indirizzo personalizzato del server centrale è un indirizzo IP o URL di  un server centrale in cui viene gestito l&apos;elenco dei server della finestra di dialogo della connessione. Questo indirizzo viene utilizzato solo se l&apos;elenco dei server personalizzati è selezionato nella finestra di dialogo della connessione.</translation>
     </message>
     <message>
         <source>Central Server Address</source>
@@ -1265,7 +1265,7 @@
     <message>
         <location filename="../../util.h" line="594"/>
         <source>Genre Classical/Folk/Choir</source>
-        <translation type="unfinished"></translation>
+        <translation>Genere Classica/Folk/Corale</translation>
     </message>
     <message>
         <location filename="../../util.h" line="597"/>
@@ -1406,7 +1406,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="560"/>
         <source>Custom Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo Server Centrale alternativo:</translation>
     </message>
     <message>
         <source>Central Server Address:</source>
@@ -1490,17 +1490,17 @@
     <message>
         <location filename="../../connectdlg.cpp" line="88"/>
         <source>Server List Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista dei Server selezionabili</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="88"/>
         <source>Selects the server list to be shown.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona la lista dei server da visualizzare.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="90"/>
         <source>Server list selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Box di selezione Lista Server</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="93"/>
@@ -2095,17 +2095,17 @@
     <message>
         <location filename="../../serverdlg.cpp" line="75"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful. If the registration failed, please choose another server list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Se la casella di controllo Rendi il mio server pubblico è selezionata, mostrerà se la registrazione con il server centrale è andata a buon fine. Se la registrazione non è riuscita, selezionare un altro elenco di server.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="80"/>
         <source>Custom Central Server Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo Server Centrale alternativo</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="81"/>
         <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;indirizzo del server centrale alternativo è l&apos;indirizzo IP o l&apos;URL del server centrale in cui viene gestito l&apos;elenco dei server della finestra di dialogo della connessione.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="86"/>
@@ -2115,17 +2115,17 @@
     <message>
         <location filename="../../serverdlg.cpp" line="88"/>
         <source>Server List Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Lista di selezione ei Server</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="88"/>
         <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleziona la lista dei server(es. indirizzo central server) nel quale il tuo server sarà aggiunto.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="90"/>
         <source>Server list selection combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Box di selezione dei server</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
@@ -2297,7 +2297,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="105"/>
         <source>Custom Central Server Address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Indirizzo server centrale alternativo:</translation>
     </message>
     <message>
         <source>Central Server Address:</source>

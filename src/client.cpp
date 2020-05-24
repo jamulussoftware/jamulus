@@ -79,7 +79,8 @@ CClient::CClient ( const quint16  iPortNumber,
     bJitterBufferOK                  ( true ),
     strCentralServerAddress          ( "" ),
     eCentralServerAddressType        ( AT_DEFAULT ),
-    iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL )
+    iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL ),
+    pSignalHandler                   ( CSignalHandler::getSingletonP() )
 {
     int iOpusError;
 
@@ -156,7 +157,11 @@ CClient::CClient ( const quint16  iPortNumber,
         SIGNAL ( ChatTextReceived ( QString ) ),
         SIGNAL ( ChatTextReceived ( QString ) ) );
 
-    QObject::connect( &Channel,
+    QObject::connect ( &Channel,
+        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ),
+        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ) );
+
+    QObject::connect ( &Channel,
         SIGNAL ( LicenceRequired ( ELicenceType ) ),
         SIGNAL ( LicenceRequired ( ELicenceType ) ) );
 
@@ -208,6 +213,10 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &Socket, SIGNAL ( InvalidPacketReceived ( CHostAddress ) ),
         this, SLOT ( OnInvalidPacketReceived ( CHostAddress ) ) );
+
+    QObject::connect ( pSignalHandler,
+        SIGNAL ( HandledSignal ( int ) ),
+        this, SLOT ( OnHandledSignal ( int ) ) );
 
 
     // start the socket (it is important to start the socket after all
@@ -650,6 +659,27 @@ void CClient::OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
                                              CVector<uint16_t> vecLevelList )
 {
     emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
+}
+
+void CClient::OnHandledSignal ( int sigNum )
+{
+#ifdef _WIN32
+    // Windows does not actually get OnHandledSignal triggered
+    QCoreApplication::instance()->exit();
+    Q_UNUSED ( sigNum )
+#else
+    switch ( sigNum )
+    {
+    case SIGINT:
+    case SIGTERM:
+        // This should trigger OnAboutToQuit
+        QCoreApplication::instance()->exit();
+        break;
+
+    default:
+        break;
+    }
+#endif
 }
 
 void CClient::Start()

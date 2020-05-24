@@ -85,7 +85,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // connect/disconnect button
     butConnect->setWhatsThis ( "<b>" + tr ( "Connect/Disconnect Button" ) + ":</b> " +
-        tr ( "Push this button to connect a server. A dialog where you can "
+        tr ( "Push this button to connect to a server. A dialog where you can "
         "select a server will open. If you are connected, pressing this "
         "button will end the session." ) );
 
@@ -123,7 +123,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         "sound card and a reverberation effect shall be applied, set the "
         "channel selector to right and move the fader upwards until the "
         "desired reverberation level is reached." ) + "<br>" + tr (
-        "The reverberation effect requires significant CPU so that it should "
+        "The reverberation effect requires significant CPU so it should "
         "only be used on fast PCs. If the reverberation level fader is set to "
         "minimum (which is the default setting), the reverberation effect is "
         "switched off and does not cause any additional CPU usage." );
@@ -169,7 +169,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         "<ul>"
         "<li>" + tr ( "The network jitter buffer is not large enough for the current "
         "network/audio interface jitter." ) + "</li>"
-        "<li>" + tr ( "The sound card buffer delay (buffer size) is set to a too small "
+        "<li>" + tr ( "The sound card buffer delay (buffer size) is set to too small a "
         "value." ) + "</li>"
         "<li>" + tr ( "The upload or download stream rate is too high for the current "
         "available internet bandwidth." ) + "</li>"
@@ -466,6 +466,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         SIGNAL ( ChatTextReceived ( QString ) ),
         this, SLOT ( OnChatTextReceived ( QString ) ) );
 
+    QObject::connect ( pClient,
+        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ),
+        this, SLOT ( OnMuteStateHasChangedReceived ( int, bool ) ) );
+
     // This connection is a special case. On receiving a licence required message via the
     // protocol, a modal licence dialog is opened. Since this blocks the thread, we need
     // a queued connection to make sure the core protocol mechanism is not blocked, too.
@@ -657,6 +661,9 @@ void CClientDlg::UpdateRevSelection()
             rbtReverbSelR->setChecked ( true );
         }
     }
+
+    // update visibility of the pan controls in the audio mixer board (pan is not supported for mono)
+    MainMixerBoard->SetDisplayPans ( pClient->GetAudioChannels() != CC_MONO );
 }
 
 void CClientDlg::OnAudioPanValueChanged ( int value )
@@ -1171,6 +1178,7 @@ void CClientDlg::SetGUIDesign ( const EGUIDesign eNewDesign )
             "QRadioButton {           color:          rgb(220, 220, 220);"
             "                         font:           bold; }"
             "QScrollArea {            background:     transparent; }"
+            ".QWidget {               background:     transparent; }" // note: matches instances of QWidget, but not of its subclasses
             "QGroupBox {              background:     transparent; }"
             "QGroupBox::title {       color:          rgb(220, 220, 220); }"
             "QCheckBox::indicator {   width:          38px;"

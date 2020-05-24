@@ -106,6 +106,7 @@ public:
 
     void CreateReqChanInfoMes() { Protocol.CreateReqChanInfoMes(); }
     void CreateVersionAndOSMes() { Protocol.CreateVersionAndOSMes(); }
+    void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted ) { Protocol.CreateMuteStateHasChangedMes ( iChanID, bIsMuted ); }
 
     void SetGain ( const int iChanID, const double dNewGain );
     double GetGain ( const int iChanID );
@@ -277,6 +278,8 @@ signals:
     void ReqConnClientsList();
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChanInfoHasChanged();
+    void MuteStateHasChanged ( int iChanID, bool bIsMuted );
+    void MuteStateHasChangedReceived ( int iChanID, bool bIsMuted );
     void ReqChanInfo();
     void ChatTextReceived ( QString strChatText );
     void ReqNetTranspProps();

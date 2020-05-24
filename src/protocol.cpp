@@ -71,6 +71,13 @@ MESSAGES (with connection)
     +-------------------+-----------------+
 
 
+- PROTMESSID_MUTE_STATE_CHANGED: Mute state of your signal at another client has changed
+
+    +-------------------+-----------------+
+    | 1 byte channel ID | 1 byte is muted |
+    +-------------------+-----------------+
+
+
 - PROTMESSID_CONN_CLIENTS_LIST: Information about connected clients
 
     for each connected client append following data:
@@ -590,6 +597,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                 bRet = EvaluateChanPanMes ( vecbyMesBodyData );
                 break;
 
+            case PROTMESSID_MUTE_STATE_CHANGED:
+                bRet = EvaluateMuteStateHasChangedMes ( vecbyMesBodyData );
+                break;
+
             case PROTMESSID_CONN_CLIENTS_LIST:
                 bRet = EvaluateConClientListMes ( vecbyMesBodyData );
                 break;
@@ -868,6 +879,43 @@ bool CProtocol::EvaluateChanPanMes ( const CVector<uint8_t> &vecData )
 
     // invoke message action
     emit ChangeChanPan ( iCurID, dNewPan );
+
+    return false; // no error
+}
+
+void CProtocol::CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted )
+{
+    CVector<uint8_t> vecData ( 2 ); // 2 bytes of data
+    int              iPos = 0;      // init position pointer
+
+    // build data vector
+    // channel ID
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
+
+    // mute state
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( bIsMuted ), 1 );
+
+    CreateAndSendMessage ( PROTMESSID_MUTE_STATE_CHANGED, vecData );
+}
+
+bool CProtocol::EvaluateMuteStateHasChangedMes ( const CVector<uint8_t> &vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 2 )
+    {
+        return true; // return error code
+    }
+
+    // channel ID
+    const int iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // mute state
+    const bool bIsMuted = static_cast<bool> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // invoke message action
+    emit MuteStateHasChangedReceived ( iCurID, bIsMuted );
 
     return false; // no error
 }

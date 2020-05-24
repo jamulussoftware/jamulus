@@ -82,7 +82,7 @@ void CSettings::Load()
         {
             if ( GetNumericIniSet ( IniXMLDocument, "client",
                                     QString ( "storedpanvalue%1" ).arg ( iIdx ),
-                                    0, AUD_MIX_PAN_MAX/2, iValue ) )
+                                    0, AUD_MIX_PAN_MAX, iValue ) )
             {
                 pClient->vecStoredPanValues[iIdx] = iValue;
             }
@@ -299,7 +299,7 @@ void CSettings::Load()
 
         // central server address type
         if ( GetNumericIniSet ( IniXMLDocument, "client", "centservaddrtype",
-             0, 4 /* AT_GENRE_JAZZ */, iValue ) )
+             0, static_cast<int> ( AT_CUSTOM ), iValue ) )
         {
             pClient->SetCentralServerAddressType ( static_cast<ECSAddType> ( iValue ) );
         }
@@ -370,7 +370,7 @@ if ( GetFlagIniSet ( IniXMLDocument, "client", "defcentservaddr", bValue ) )
         // central server address type (note that it is important
         // to set this setting prior to the "central server address")
         if ( GetNumericIniSet ( IniXMLDocument, "server", "centservaddrtype",
-             0, 4 /* AT_GENRE_JAZZ */, iValue ) )
+             0, static_cast<int> ( AT_CUSTOM ), iValue ) )
         {
             pServer->SetCentralServerAddressType ( static_cast<ECSAddType> ( iValue ) );
         }

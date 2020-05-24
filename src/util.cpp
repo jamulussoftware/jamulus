@@ -705,8 +705,8 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " + tr (
         "Set your name or an alias here so that the other musicians you want to play with "
         "know who you are. Additionally you may set an instrument picture of "
-        "the instrument you play and a flag of the country you are living. "
-        "The city you live in and the skill level of playing your instrument "
+        "the instrument you play and a flag of the country you are living in. "
+        "The city you live in and the skill level playing your instrument "
         "may also be added." ) + "<br>" + tr (
         "What you set here will appear at your fader on the mixer board when "
         "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
@@ -952,9 +952,10 @@ QString NetworkUtil::GetCentralServerAddress ( const ECSAddType eCentralServerAd
     switch ( eCentralServerAddressType )
     {
     case AT_CUSTOM:               return strCentralServerAddress;
-    case AT_GENERAL_NORTHAMERICA: return CENTSERV_GENERAL_NORTHAMERICA;
+    case AT_ALL_GENRES:           return CENTSERV_ALL_GENRES;
     case AT_GENRE_ROCK:           return CENTSERV_GENRE_ROCK;
     case AT_GENRE_JAZZ:           return CENTSERV_GENRE_JAZZ;
+    case AT_GENRE_CLASSICAL_FOLK: return CENTSERV_GENRE_CLASSICAL_FOLK;
     default:                      return DEFAULT_SERVER_ADDRESS; // AT_DEFAULT
     }
 }
@@ -1335,7 +1336,7 @@ ECSAddType CLocale::GetCentralServerAddressType ( const QLocale::Country eCountr
     case QLocale::Canada:
     case QLocale::Mexico:
     case QLocale::Greenland:
-        return AT_GENERAL_NORTHAMERICA;
+        return AT_ALL_GENRES;
 
     default:
         return AT_DEFAULT;

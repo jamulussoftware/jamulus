@@ -41,6 +41,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
     pPan                        = new QDial             ( pLevelsBox );
     pPanLabel                   = new QLabel            ( tr ( "Pan" ) , pLevelsBox );
+    pInfoLabel                  = new QLabel            ( "", pLevelsBox );
 
     pMuteSoloBox                = new QWidget           ( pFrame );
     pcbMute                     = new QCheckBox         ( tr ( "Mute" ), pMuteSoloBox );
@@ -57,6 +58,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     QHBoxLayout* pLabelGrid     = new QHBoxLayout       ( pLabelInstBox );
     QVBoxLayout* pLabelPictGrid = new QVBoxLayout       ( );
     QVBoxLayout* pPanGrid       = new QVBoxLayout       ( );
+    QHBoxLayout* pPanInfoGrid   = new QHBoxLayout       ( );
 
     // setup channel level
     plbrChannelLevel->setContentsMargins ( 0, 3, 2, 3 );
@@ -66,15 +68,17 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setTickPosition  ( QSlider::TicksBothSides );
     pFader->setRange         ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval  ( AUD_MIX_FADER_MAX / 9 );
-    pFader->setMinimumHeight ( 90 );
+    pFader->setMinimumHeight ( 75 );
 
     // setup panning control
-    pPan->setRange ( 0, AUD_MIX_PAN_MAX );
-    pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
-    pPan->setFixedSize ( 55, 55 );
+    pPan->setRange          ( 0, AUD_MIX_PAN_MAX );
+    pPan->setValue          ( AUD_MIX_PAN_MAX / 2 );
+    pPan->setFixedSize      ( 50, 50 );
     pPan->setNotchesVisible ( true );
-    pPanGrid->addWidget ( pPanLabel, 0, Qt::AlignLeft );
-    pPanGrid->addWidget ( pPan,      0, Qt::AlignHCenter );
+    pPanInfoGrid->addWidget ( pPanLabel, 0, Qt::AlignLeft );
+    pPanInfoGrid->addWidget ( pInfoLabel );
+    pPanGrid->addLayout     ( pPanInfoGrid );
+    pPanGrid->addWidget     ( pPan, 0, Qt::AlignHCenter );
 
     // setup fader tag label (black bold text which is centered)
     plblLabel->setTextFormat    ( Qt::PlainText );
@@ -135,9 +139,16 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setAccessibleName ( tr ( "Local mix level setting of the current audio "
         "channel at the server" ) );
 
-    pPan->setWhatsThis ( "<b>" +  tr ( "Panning" ) + ":</b>" + tr (
+    pInfoLabel->setWhatsThis ( "<b>" +  tr ( "Status Indicator" ) + ":</b> " + tr (
+        "Shows a status indication about the client which is assigned to this channel. "
+        "Supported indicators are:" ) + "<ul><li>" + tr (
+        "Speaker with cancellation stroke: Indicates that the other client has muted you." ) +
+        "</li></ul>" );
+    pInfoLabel->setAccessibleName ( tr ( "Status indicator label" ) );
+
+    pPan->setWhatsThis ( "<b>" +  tr ( "Panning" ) + ":</b> " + tr (
         "Sets the panning position from Left to Right of the channel. "
-        "Works only in stero or preferably mono in/stereo out mode." ) );
+        "Works only in stereo or preferably mono in/stereo out mode." ) );
     pPan->setAccessibleName ( tr ( "Local panning position of the current audio channel at the server" ) );
 
     pcbMute->setWhatsThis ( "<b>" + tr ( "Mute" ) + ":</b> " + tr (
@@ -225,8 +236,9 @@ bool CChannelFader::GetDisplayChannelLevel()
 
 void CChannelFader::SetDisplayPans ( const bool eNDP )
 {
-    pPanLabel->setHidden ( !eNDP );
-    pPan->setHidden      ( !eNDP );
+    pInfoLabel->setHidden ( !eNDP );
+    pPanLabel->setHidden  ( !eNDP );
+    pPan->setHidden       ( !eNDP );
 }
 
 void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
@@ -275,6 +287,9 @@ void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
 
 void CChannelFader::Reset()
 {
+    // general initializations
+    SetRemoteFaderIsMute ( false );
+
     // init gain and pan value -> maximum value as definition according to server
     pFader->setValue ( AUD_MIX_FADER_MAX );
     pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
@@ -337,6 +352,22 @@ void CChannelFader::SetFaderIsMute ( const bool bIsMute )
 {
     // changing the state automatically emits the signal, too
     pcbMute->setChecked ( bIsMute );
+}
+
+void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
+{
+    if ( bIsMute )
+    {
+        // show orange utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
+        pInfoLabel->setText ( "<font color=""orange"">&#128263;</font>" );
+//QPixmap CancelledSpeakerPixmap ( QString::fromUtf8 ( ":/png/main/res/speakerwithcancellationstroke.png" ) );
+//pInfoLabel->setPixmap ( CancelledSpeakerPixmap.scaled ( 15, 15, Qt::KeepAspectRatio ) );
+    }
+    else
+    {
+        pInfoLabel->setText ( "" );
+//pInfoLabel->setPixmap ( QPixmap() );
+    }
 }
 
 void CChannelFader::SendFaderLevelToServer ( const int iLevel )
@@ -572,19 +603,23 @@ double CChannelFader::CalcFaderGain ( const int value )
 * CAudioMixerBoard                                                             *
 \******************************************************************************/
 CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
-    QScrollArea          ( parent ),
+    QGroupBox            ( parent ),
     vecStoredFaderTags   ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
     vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
     vecStoredPanValues   ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
     vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     iNewClientFaderLevel ( 100 ),
+    bDisplayPans         ( false ),
+    bIsPanSupported      ( false ),
     bNoFaderVisible      ( true ),
     strServerName        ( "" )
 {
     // add group box and hboxlayout
-    pGroupBox   = new QGroupBox(); // will be added to the scroll area which is then the parent
-    pMainLayout = new QHBoxLayout ( pGroupBox );
+    QHBoxLayout* pGroupBoxLayout = new QHBoxLayout ( this );
+    QWidget*     pMixerWidget    = new QWidget(); // will be added to the scroll area which is then the parent
+    pScrollArea                  = new CMixerBoardScrollArea ( this );
+    pMainLayout                  = new QHBoxLayout ( pMixerWidget );
 
     // set title text (default: no server given)
     SetServerName ( "" );
@@ -601,11 +636,15 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     // insert horizontal spacer
     pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
 
+    // set margins of the layout to zero to get maximum space for the controls
+    pGroupBoxLayout->setContentsMargins ( 0, 0, 0, 1 ); // note: to avoid problems at the botton, use a small margin for that
+
     // add the group box to the scroll area
-    setMinimumWidth ( 200 ); // at least two faders shall be visible
-    setWidget ( pGroupBox );
-    setWidgetResizable ( true ); // make sure it fills the entire scroll area
-    setFrameShape ( QFrame::NoFrame );
+    pScrollArea->setMinimumWidth ( 200 ); // at least two faders shall be visible
+    pScrollArea->setWidget ( pMixerWidget );
+    pScrollArea->setWidgetResizable ( true ); // make sure it fills the entire scroll area
+    pScrollArea->setFrameShape ( QFrame::NoFrame );
+    pGroupBoxLayout->addWidget ( pScrollArea );
 
 
     // Connections -------------------------------------------------------------
@@ -646,7 +685,7 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
     if ( strServerName.isEmpty() )
     {
         // no connection or connection was reset: show default title
-        pGroupBox->setTitle ( tr ( "Server" ) );
+        setTitle ( tr ( "Server" ) );
     }
     else
     {
@@ -655,7 +694,7 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
         // list was received, the connection was successful and the title is updated
         // with the correct server name. Make sure to choose a "try to connect" title
         // which is most striking (we use filled blocks and upper case letters).
-        pGroupBox->setTitle ( u8"\u2588\u2588\u2588\u2588\u2588  " + tr ( "T R Y I N G   T O   C O N N E C T" ) + u8"  \u2588\u2588\u2588\u2588\u2588" );
+        setTitle ( u8"\u2588\u2588\u2588\u2588\u2588  " + tr ( "T R Y I N G   T O   C O N N E C T" ) + u8"  \u2588\u2588\u2588\u2588\u2588" );
     }
 }
 
@@ -684,20 +723,20 @@ void CAudioMixerBoard::SetDisplayChannelLevels ( const bool eNDCL )
     }
 }
 
-void CAudioMixerBoard::SetPanIsSupported()
+void CAudioMixerBoard::SetDisplayPans ( const bool eNDP )
 {
+    bDisplayPans = eNDP;
+
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        vecpChanFader[i]->SetDisplayPans ( true );
+        vecpChanFader[i]->SetDisplayPans ( eNDP && bIsPanSupported );
     }
 }
 
-void CAudioMixerBoard::resizeEvent ( QResizeEvent* event )
+void CAudioMixerBoard::SetPanIsSupported()
 {
-    // if after a resize of the main window a vertical scroll bar is required, make
-    // sure that the fader label is visible (scroll down completely)
-    ensureVisible ( 0, 2000 ); // use a large value here
-    QScrollArea::resizeEvent ( event );
+    bIsPanSupported = true;
+    SetDisplayPans ( bDisplayPans );
 }
 
 void CAudioMixerBoard::HideAll()
@@ -714,7 +753,8 @@ void CAudioMixerBoard::HideAll()
         vecpChanFader[i]->Hide();
     }
 
-    // set flag
+    // set flags
+    bIsPanSupported = false;
     bNoFaderVisible = true;
 
     // emit status of connected clients
@@ -727,7 +767,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
     // in the audio mixer board to show a "try to connect" before
     if ( bNoFaderVisible )
     {
-        pGroupBox->setTitle ( tr ( "Personal Mix at the Server: " ) + strServerName );
+        setTitle ( tr ( "Personal Mix at the Server: " ) + strServerName );
     }
 
     // get number of connected clients
@@ -829,6 +869,19 @@ void CAudioMixerBoard::SetFaderLevel ( const int iChannelIdx,
         if ( vecpChanFader[iChannelIdx]->IsVisible() )
         {
             vecpChanFader[iChannelIdx]->SetFaderLevel ( iValue );
+        }
+    }
+}
+
+void CAudioMixerBoard::SetRemoteFaderIsMute ( const int  iChannelIdx,
+                                              const bool bIsMute )
+{
+    // only apply remote mute state if channel index is valid and the fader is visible
+    if ( ( iChannelIdx >= 0 ) && ( iChannelIdx < MAX_NUM_CHANNELS ) )
+    {
+        if ( vecpChanFader[iChannelIdx]->IsVisible() )
+        {
+            vecpChanFader[iChannelIdx]->SetRemoteFaderIsMute ( bIsMute );
         }
     }
 }

@@ -117,22 +117,27 @@ signals:
 };
 #endif
 
+
 template<unsigned int slotId>
 class CServerSlots : public CServerSlots<slotId - 1>
 {
-
 public:
-    void OnSendProtMessCh( CVector<uint8_t> mess ) { SendProtMessage ( slotId - 1,  mess ); }
+    void OnSendProtMessCh ( CVector<uint8_t> mess ) { SendProtMessage ( slotId - 1,  mess ); }
     void OnReqConnClientsListCh()  { CreateAndSendChanListForThisChan ( slotId - 1 ); }
 
-    void OnChatTextReceivedCh( QString strChatText )
+    void OnChatTextReceivedCh ( QString strChatText )
     {
         CreateAndSendChatTextForAllConChannels ( slotId - 1, strChatText );
     }
 
-    void OnServerAutoSockBufSizeChangeCh( int iNNumFra )
+    void OnMuteStateHasChangedCh ( int iChanID, bool bIsMuted )
     {
-        CreateAndSendJitBufMessage( slotId - 1, iNNumFra );
+        CreateOtherMuteStateChanged ( slotId - 1, iChanID, bIsMuted );
+    }
+
+    void OnServerAutoSockBufSizeChangeCh ( int iNNumFra )
+    {
+        CreateAndSendJitBufMessage ( slotId - 1, iNNumFra );
     }
 
 protected:
@@ -143,6 +148,10 @@ protected:
 
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText ) = 0;
+
+    virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
+                                               const int  iOtherChanID,
+                                               const bool bIsMuted ) = 0;
 
     virtual void CreateAndSendJitBufMessage ( const int iCurChanID,
                                               const int iNNumFra ) = 0;
@@ -255,6 +264,10 @@ protected:
 
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText );
+
+    virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
+                                               const int  iOtherChanID,
+                                               const bool bIsMuted );
 
     virtual void CreateAndSendJitBufMessage ( const int iCurChanID,
                                               const int iNNumFra );

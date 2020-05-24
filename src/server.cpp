@@ -497,6 +497,9 @@ inline void CServer::connectChannelSignalsToServerSlots()
     void ( CServer::* pOnChatTextReceivedCh )( QString ) =
         &CServerSlots<slotId>::OnChatTextReceivedCh;
 
+    void ( CServer::* pOnMuteStateHasChangedCh )( int, bool ) =
+        &CServerSlots<slotId>::OnMuteStateHasChangedCh;
+
     void ( CServer::* pOnServerAutoSockBufSizeChangeCh )( int ) =
         &CServerSlots<slotId>::OnServerAutoSockBufSizeChangeCh;
 
@@ -515,6 +518,10 @@ inline void CServer::connectChannelSignalsToServerSlots()
     // chat text received
     QObject::connect ( &vecChannels[iCurChanID], &CChannel::ChatTextReceived,
                        this, pOnChatTextReceivedCh );
+
+    // other mute state has changed
+    QObject::connect ( &vecChannels[iCurChanID], &CChannel::MuteStateHasChanged,
+                       this, pOnMuteStateHasChangedCh );
 
     // auto socket buffer size change
     QObject::connect ( &vecChannels[iCurChanID], &CChannel::ServerAutoSockBufSizeChange,
@@ -739,7 +746,7 @@ void CServer::Stop()
 void CServer::OnTimer()
 {
     int                i, j, iUnused;
-    int                iClientFrameSizeSamples;
+    int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
     OpusCustomDecoder* CurOpusDecoder;
     OpusCustomEncoder* CurOpusEncoder;
     unsigned char*     pCurCodedData;
@@ -1307,6 +1314,17 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
             // send message
             vecChannels[i].CreateChatTextMes ( strActualMessageText );
         }
+    }
+}
+
+void CServer::CreateOtherMuteStateChanged ( const int  iCurChanID,
+                                            const int  iOtherChanID,
+                                            const bool bIsMuted )
+{
+    if ( vecChannels[iOtherChanID].IsConnected() )
+    {
+        // send message
+        vecChannels[iOtherChanID].CreateMuteStateHasChangedMes ( iCurChanID, bIsMuted );
     }
 }
 

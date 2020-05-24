@@ -506,7 +506,7 @@ private:
 // Audio channel configuration -------------------------------------------------
 enum EAudChanConf
 {
-    // used for settings -> enum values must be fixed!
+    // used for settings -> enum values should be fixed
     CC_MONO = 0,
     CC_MONO_IN_STEREO_OUT = 1,
     CC_STEREO = 2
@@ -547,7 +547,7 @@ enum EGetDataStat
 // GUI design enum -------------------------------------------------------------
 enum EGUIDesign
 {
-    // used for settings -> enum values must be fixed!
+    // used for settings -> enum values should be fixed
     GD_STANDARD = 0,
     GD_ORIGINAL = 1
 };
@@ -565,12 +565,13 @@ enum ELicenceType
 // Central server address type -------------------------------------------------
 enum ECSAddType
 {
-    // used for settings -> enum values must be fixed!
-    AT_CUSTOM = 0,
-    AT_DEFAULT = 1,
-    AT_GENERAL_NORTHAMERICA = 2,
-    AT_GENRE_ROCK = 3,
-    AT_GENRE_JAZZ = 4
+    // used for settings -> enum values should be fixed
+    AT_DEFAULT = 0,
+    AT_ALL_GENRES = 1,
+    AT_GENRE_ROCK = 2,
+    AT_GENRE_JAZZ = 3,
+    AT_GENRE_CLASSICAL_FOLK = 4,
+    AT_CUSTOM = 5 // Must be the last entry!
 };
 
 inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
@@ -580,7 +581,7 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
     case AT_CUSTOM:
         return QCoreApplication::translate ( "CClientSettingsDlg", "Custom" );
 
-    case AT_GENERAL_NORTHAMERICA:
+    case AT_ALL_GENRES:
         return QCoreApplication::translate ( "CClientSettingsDlg", "All Genres" );
 
     case AT_GENRE_ROCK:
@@ -588,6 +589,9 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
 
     case AT_GENRE_JAZZ:
         return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Jazz" );
+
+    case AT_GENRE_CLASSICAL_FOLK:
+        return QCoreApplication::translate ( "CClientSettingsDlg", "Genre Classical/Folk/Choir" );
 
     default: // AT_DEFAULT
         return QCoreApplication::translate ( "CClientSettingsDlg", "Default" );

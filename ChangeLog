@@ -4,31 +4,19 @@
 
 3.5.4git
 
-- introduce genre-based server lists (Ticket #139)
+- introduce genre-based server lists (#139)
 
-- implement panning for channels, coded by tarmoj (Ticket #52, #145)
+- implement panning for channels, coded by tarmoj (#52, #145)
 
-- duplicate Central Server type dropdown to Connection Setup (#157)
+- added an indicator that another client has muted me (#257)
 
-- added vocal bass/tenor/alto/soprano instrument icons created by Alberstein8 (Ticket #131)
+- move central server type dropdown to connection setup (#157)
 
-- support intermediate Reaper RPP file while recording, coded by pljones (Ticket #170)
+- added vocal bass/tenor/alto/soprano instrument icons created by Alberstein8 (#131)
 
+- support intermediate Reaper RPP file while recording, coded by pljones (#170)
 
-TODO fix problem with panning and GUI (vertical scroll bar issue in mixer board)
-
-TODO Keep lrelease? Does it work as expected?
-
-TODO fix Linux deploy script -> gives errors right now
-
-TODO Central Server Address: "Default" results in empty server browser, "Default (North America)" works fine #156
-     -> made max list smaller from 200 to 150 -> check if that is sufficient to prevent UDP packet fragmentation
-
-TODO WIP support internationalization
-
-TODO show mute state of others
-
-TODO fix incorrect what's this help texts
+- save client settings on Linux cmdline termination signal, coded by pljones (#70)
 
 
 
@@ -43,23 +31,23 @@ TODO fix incorrect what's this help texts
 - for CoreAudio and 4 channel input, support mixing channels 1&2 with 3&4
 
 - added bassoon/oboe/harp instrument icons created by dszgit,
-  congas/bongo created by bspeer (Ticket #131)
+  congas/bongo created by bspeer (#131)
 
-- link to docs from application Help menu (Ticket #90)
+- link to docs from application Help menu (#90)
 
-- support Mac CoreAudio aggregated devices (Ticket #138)
+- support Mac CoreAudio aggregated devices (#138)
 
 - added translations: French by trebmuh, Portuguese by Snayler,
-  Spanish by ignotus666, Dutch by jerogee, German by corrados (Ticket #77)
+  Spanish by ignotus666, Dutch by jerogee, German by corrados (#77)
 
-- new design for the About dialog (Ticket #189)
+- new design for the About dialog (#189)
 
-- new command line option -d to disconnect all clients on shutdown of the server (Ticket #161)
+- new command line option -d to disconnect all clients on shutdown of the server (#161)
 
 - bug fix: for mono capture jack audio interface Jamulus complains it
-  cannot make connections (Ticket #137)
+  cannot make connections (#137)
 
-- bug fix: fixed that Jamulus segfaults when jackd is restarted (Ticket #122, #127)
+- bug fix: fixed that Jamulus segfaults when jackd is restarted (#122, #127)
 
 - bug fix: better handling of disconnect message in the client
 
@@ -74,21 +62,21 @@ TODO fix incorrect what's this help texts
 
 - improved Mac installer, coded by doloopuntil
 
-- support to open ASIO driver setup(s) if startup failed due to incorrect driver settings (Ticket #117)
+- support to open ASIO driver setup(s) if startup failed due to incorrect driver settings (#117)
 
-- added -v/--version command line argument to output version information (Ticket #121)
+- added -v/--version command line argument to output version information (#121)
 
-- added bodhran and other instrument icons, bodhran created by bomm (Ticket #131)
+- added bodhran and other instrument icons, bodhran created by bomm (#131)
 
 - bug fix: if small network buffers are used we get much better audio quality when drop outs occur
 
-- bug fix: if names given with the -o option were too long, the server registration failed (Ticket #91)
+- bug fix: if names given with the -o option were too long, the server registration failed (#91)
 
-- bug fix: audio level changes if Buffer Delay is changed (Ticket #106)
+- bug fix: audio level changes if Buffer Delay is changed (#106)
 
 - bug fix: do not reset fader level meters if number of clients change
 
-- bug fix: fixed a crash with JackRouter 64 bit ASIO driver (Ticket #93, thanks to elliotclee)
+- bug fix: fixed a crash with JackRouter 64 bit ASIO driver (#93, thanks to elliotclee)
 
 
 3.5.1 (2020-04-18)
@@ -120,21 +108,21 @@ TODO fix incorrect what's this help texts
 
 - the unit of the mixer faders is now dB using the range -50 dB to 0 dB
 
-- increased LED luminance (Ticket #71)
+- increased LED luminance (#71)
 
 - bug fix: the server welcome message may appear twice if the server list was double clicked
 
 
 3.4.7 (2020-04-11)
 
-- added support for alternative Central Servers to solve the 200 server registration limit (Ticket #50)
+- added support for alternative Central Servers to solve the 200 server registration limit (#50)
 
 - added support for 64 samples frame size in the server (if server runs in 64 or 128 samples
   mode it is still compatible to both, 64 and 128 samples frame size clients)
 
 - added multichannel CoreAudio support, coded by emlynmac (#44)
 
-- fixed server not visible if in same local network, coded by pljones (Ticket #27)
+- fixed server not visible if in same local network, coded by pljones (#27)
 
 
 3.4.6 (2020-04-09)
@@ -145,7 +133,7 @@ TODO fix incorrect what's this help texts
 
 - store fader mute state in the ini file, coded by doloopuntil
 
-- fixed low-res icon issue (Ticket #28)
+- fixed low-res icon issue (#28)
 
 
 3.4.5 (2020-04-04)
@@ -167,7 +155,7 @@ TODO fix incorrect what's this help texts
 
 - added support for controlling the audio mixer faders with a MIDI controller (MacOS and Linux)
 
-- added command line argument for disabling auto jack connection (Ticket #49)
+- added command line argument for disabling auto jack connection (#49)
 
 - audio recording for the server, coded by pljones
 

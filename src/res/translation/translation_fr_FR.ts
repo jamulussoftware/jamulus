@@ -1091,7 +1091,7 @@
         <translation>L&apos;activation du mode de streaming stéréo augmentera le débit de données du flux. Assurez-vous que le débit montant actuel ne dépasse pas la bande passante disponible de votre connexion internet.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="212"/>
+        <location filename="../../clientsettingsdlg.cpp" line="213"/>
         <source>In stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
         <translation>Dans le cas du mode de streaming stéréo, aucune sélection de canal audio pour l&apos;effet de réverbération ne sera disponible dans la fenêtre principale puisque l&apos;effet est appliqué sur les deux canaux dans ce cas.</translation>
     </message>

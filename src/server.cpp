@@ -470,7 +470,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     QObject::connect( &JamRecorder,
         SIGNAL ( RecordingSessionStarted ( QString ) ),
-        this, SLOT ( OnRecordingSessionStarted ( QString ) ) );
+        SIGNAL ( RecordingSessionStarted ( QString ) ) );
 
     QObject::connect ( QCoreApplication::instance(),
         SIGNAL ( aboutToQuit() ),

@@ -336,8 +336,8 @@ lvwClients->setMinimumHeight ( 140 );
         this, SLOT ( OnCentServAddrTypeActivated ( int ) ) );
 
     // push buttons
-    QObject::connect( pbtNewRecording, SIGNAL ( released() ),
-            this, SLOT ( OnNewRecordingClicked() ) );
+    QObject::connect ( pbtNewRecording, SIGNAL ( released() ),
+        this, SLOT ( OnNewRecordingClicked() ) );
 
     // timers
     QObject::connect ( &Timer, SIGNAL ( timeout() ), this, SLOT ( OnTimer() ) );
@@ -474,11 +474,6 @@ void CServerDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
     UpdateGUIDependencies();
 }
 
-void CServerDlg::OnNewRecordingClicked()
-{
-    pServer->RestartRecorder();
-}
-
 void CServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason )
 {
     // on double click on the icon, show window in fore ground
@@ -532,17 +527,6 @@ void CServerDlg::OnTimer()
     ListViewMutex.unlock();
 }
 
-void CServerDlg::OnServerStarted()
-{
-     UpdateSystemTrayIcon ( true );
-}
-
-void CServerDlg::OnServerStopped()
-{
-     UpdateSystemTrayIcon ( false );
-
-     UpdateRecorderStatus ( QString::null );
-}
 
 void CServerDlg::UpdateGUIDependencies()
 {

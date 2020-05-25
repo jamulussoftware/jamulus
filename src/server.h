@@ -459,11 +459,6 @@ public slots:
 
     void OnCLDisconnection ( CHostAddress InetAddr );
 
-    void OnRecordingSessionStarted ( QString sessionDir )
-    {
-        emit RecordingSessionStarted ( sessionDir );
-    }
-
     void OnAboutToQuit();
 
     void OnHandledSignal ( int sigNum );

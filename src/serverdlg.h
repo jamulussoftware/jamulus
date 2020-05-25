@@ -91,10 +91,15 @@ public slots:
     void OnLocationCityTextChanged ( const QString& strNewCity );
     void OnLocationCountryActivated ( int iCntryListItem );
     void OnCentServAddrTypeActivated ( int iTypeIdx );
-    void OnNewRecordingClicked();
     void OnTimer();
-    void OnServerStarted();
-    void OnServerStopped();
+
+    void OnServerStarted() { UpdateSystemTrayIcon ( true ); }
+    void OnServerStopped()
+    {
+         UpdateSystemTrayIcon ( false );
+         UpdateRecorderStatus ( QString::null );
+    }
+
     void OnSvrRegStatusChanged() { UpdateGUIDependencies(); }
     void OnSysTrayMenuOpen() { ShowWindowInForeground(); }
     void OnSysTrayMenuHide() { hide(); }
@@ -103,6 +108,11 @@ public slots:
 
     void keyPressEvent ( QKeyEvent *e ) // block escape key
         { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
+
+    void OnNewRecordingClicked();
+    {
+        pServer->RestartRecorder();
+    }
 
     void OnRecordingSessionStarted ( QString sessionDir )
     {

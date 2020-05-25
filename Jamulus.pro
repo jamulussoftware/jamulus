@@ -703,6 +703,8 @@ DISTFILES += ChangeLog \
     src/res/instruments/vocaltenor.png \
     src/res/instruments/vocalalto.png \
     src/res/instruments/vocalsoprano.png \
+    src/res/instruments/banjo.png \
+    src/res/instruments/mandolin.png \
     src/res/flags/flagnone.png \
     src/res/flags/ad.png \
     src/res/flags/ae.png \

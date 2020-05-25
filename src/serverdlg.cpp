@@ -474,6 +474,12 @@ void CServerDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
     UpdateGUIDependencies();
 }
 
+void CServerDlg::OnServerStopped();
+{
+    UpdateSystemTrayIcon ( false );
+    UpdateRecorderStatus ( QString::null );
+}
+
 void CServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason )
 {
     // on double click on the icon, show window in fore ground

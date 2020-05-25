@@ -1071,7 +1071,7 @@
         <translation>Wenn man den Stereo-Modus verwendet, dann ist die Übertragungsrate etwas höher. Man muss sicher stellen, dass die Internetverbindung die höhere Rate übertragen kann.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="212"/>
+        <location filename="../../clientsettingsdlg.cpp" line="213"/>
         <source>In stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
         <translation>Wenn der Stereo-Modus ausgewählt wurde, dann verschwindet die Kanalselektion für den Halleffekt im Hauptfenster, da der Effekt auf beide Stereokanäle angewendet wird.</translation>
     </message>

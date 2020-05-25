@@ -812,7 +812,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="56"/>
-        <source>In case the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
+        <source>In the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
         <translation>Nel caso in cui sia abilitata l&apos;impostazione automatica del jitter buffer, i buffer di rete del client locale e del server remoto sono impostati su un valore di tipo conservativo per ridurre al minimo la probabilità di dropout audio. Per modificare il ritardo / latenza audio, si consiglia di disabilitare la funzionalità di impostazione automatica e di ridurre manualmente la dimensione del JitterBuffer utilizzando i fader fino a raggiungere il limite personale per una qualità audio accettabile. L&apos;indicatore LED visualizzerà i dropout audio del Jitter Buffer locale diventando rosso.</translation>
     </message>
     <message>
@@ -877,7 +877,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="106"/>
-        <source>In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
+        <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
         <translation>Se la scheda audio dispone di diversi Input o Output, verrà visualizzata la mappa dei canali di input e di output.</translation>
     </message>
     <message>
@@ -1072,7 +1072,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="212"/>
-        <source>In case of the stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
+        <source>In stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
         <translation>Nel caso in cui si una lo streaming stereo, non sarà possibile selezionare su quale canale far intervenire il reverbero inquanto sarà applicato ad entrambi i canali Left e Right.</translation>
     </message>
     <message>

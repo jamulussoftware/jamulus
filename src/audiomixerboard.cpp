@@ -587,14 +587,14 @@ double CChannelFader::CalcFaderGain ( const int value )
     // and normalize so that maximum gain is 1
     const double dInValueRange0_1 = static_cast<double> ( value ) / AUD_MIX_FADER_MAX;
 
-    // map range from 0..1 to range -35..0 dB and calculate linear gain
+    // map range from 0..1 to range -25..0 dB and calculate linear gain
     if ( value == 0 )
     {
         return 0; // -infinity
     }
     else
     {
-        return pow ( 10, ( dInValueRange0_1 * 35 - 35 ) / 20 );
+        return pow ( 10, ( dInValueRange0_1 * 25 - 25 ) / 20 );
     }
 }
 

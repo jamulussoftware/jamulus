@@ -1071,7 +1071,7 @@
         <translation>Abilitando lo streaming stereo verrà incrementato l&apos;uso dei dati in upload. Accertarsi di avere velocità in upload sufficiente per lo stream.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="212"/>
+        <location filename="../../clientsettingsdlg.cpp" line="213"/>
         <source>In stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
         <translation>Nel caso in cui si una lo streaming stereo, non sarà possibile selezionare su quale canale far intervenire il reverbero inquanto sarà applicato ad entrambi i canali Left e Right.</translation>
     </message>

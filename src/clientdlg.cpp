@@ -401,11 +401,6 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         ConnectDlg.restoreGeometry ( pClient->vecWindowPosConnect );
     }
 
-    if ( pClient->bWindowWasShownConnect )
-    {
-        ShowConnectionSetupDialog();
-    }
-
 
     // Connections -------------------------------------------------------------
     // push buttons
@@ -559,9 +554,15 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         this, SLOT ( OnConnectDlgAccepted() ) );
 
 
-    // Timers ------------------------------------------------------------------
+    // Initializations which have to be done after the signals are connected ---
     // start timer for status bar
     TimerStatus.start ( LED_BAR_UPDATE_TIME_MS );
+
+    // restore connect dialog
+    if ( pClient->bWindowWasShownConnect )
+    {
+        ShowConnectionSetupDialog();
+    }
 }
 
 void CClientDlg::closeEvent ( QCloseEvent* Event )

@@ -812,7 +812,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="56"/>
-        <source>In case the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
+        <source>If the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
         <translation>Wenn die Automatik zum Einstellen der Netzwerkpuffer aktiviert ist, dann werden die Netzwerkpuffer der Applikation und des entfernten Servers auf einen konservativen Wert eingestellt, um eine möglichst gute Audioqualität zu garantieren. Um die Gesamtverzögerung zu optimieren, bietet es sich an, die Automatik zu deaktivieren und die Netzwerkpuffer etwas kleiner einzustellen. Die Werte sollte man so weit reduzieren, bis die Audioqualität gerade noch der persönlichen Akzeptanz entspricht. Die LED-Anzeige hilft dabei die Audioaussetzer verursacht durch den lokalen Netzwerkpuffer zu visualisieren (wenn die LED rot leuchtet).</translation>
     </message>
     <message>
@@ -877,7 +877,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="106"/>
-        <source>In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
+        <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
         <translation>Falls die ausgewählte Soundkarte mehr als zwei Eingangs- oder Ausgangskanäle unterstützt, dann werden die Steuerelemente für die Kanalzuweisung angezeigt.</translation>
     </message>
     <message>
@@ -1072,7 +1072,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="212"/>
-        <source>In case of the stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
+        <source>In stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
         <translation>Wenn der Stereo-Modus ausgewählt wurde, dann verschwindet die Kanalselektion für den Halleffekt im Hauptfenster, da der Effekt auf beide Stereokanäle angewendet wird.</translation>
     </message>
     <message>

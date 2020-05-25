@@ -2013,6 +2013,16 @@
         <source>Vocal Soprano</source>
         <translation>Voce Soprano</translation>
     </message>
+    <message>
+        <location filename="../../util.cpp" line="1018"/>
+        <source>Banjo</source>
+        <translation>Banjo</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="1019"/>
+        <source>Mandolin</source>
+        <translation>Mandolino</translation>
+    </message>
 </context>
 <context>
     <name>CServerDlg</name>

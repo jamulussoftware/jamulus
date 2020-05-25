@@ -78,6 +78,8 @@
         <file>res/instruments/vocaltenor.png</file>
         <file>res/instruments/vocalalto.png</file>
         <file>res/instruments/vocalsoprano.png</file>
+        <file>res/instruments/banjo.png</file>
+        <file>res/instruments/mandolin.png</file>
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>

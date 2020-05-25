@@ -90,7 +90,7 @@
     <message>
         <location filename="../../util.cpp" line="417"/>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Italiano</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="419"/>

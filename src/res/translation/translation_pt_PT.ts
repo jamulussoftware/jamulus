@@ -824,7 +824,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="56"/>
-        <source>In case the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
+        <source>If the auto setting of the jitter buffer is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the auto setting functionality and to lower the jitter buffer size manually by using the sliders until your personal acceptable limit of the amount of dropouts is reached. The LED indicator will visualize the audio dropouts of the local jitter buffer with a red light.</source>
         <translation>Caso a configuração automática do jitter buffer estiver ativada, os buffers de rede do cliente local e do servidor remoto são configurados com um valor conservador para minimizar a probabilidade de perda de áudio. Para ajustar o atraso/latência do áudio, é recomendável desativar a funcionalidade de configuração automática e diminuir o tamanho do jitter buffer manualmente usando os controles deslizantes até que a quantidade de perdas de áudio lhe sejam pessoalmente aceitáveis. O indicador LED representará as interrupções de áudio do jitter buffer local através de uma luz vermelha.</translation>
     </message>
     <message>
@@ -889,7 +889,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="106"/>
-        <source>In case the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
+        <source>If the selected sound card device offers more than one input or output channel, the Input Channel Mapping and Output Channel Mapping settings are visible.</source>
         <translation>Caso o dispositivo selecionado da placa de som ofereça mais que um canal de entrada ou saída, as configurações de Mapeamento de canais de entrada e de saída estarão visíveis.</translation>
     </message>
     <message>
@@ -1083,8 +1083,8 @@
         <translation>Ativar o modo de transmissão estéreo aumenta a taxa do fluxo de dados. Verifique que a taxa de transmissão não excede a largura de banda disponível da sua ligação à Internet.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="212"/>
-        <source>In case of the stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
+        <location filename="../../clientsettingsdlg.cpp" line="213"/>
+        <source>In stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
         <translation>No modo de transmissão estéreo, nenhuma seleção de canal de áudio para o efeito de reverberação estará disponível na janela principal, pois o efeito é aplicado em ambos os canais.</translation>
     </message>
     <message>

@@ -53,7 +53,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "the Auto check is enabled, the jitter buffer size faders are "
         "disabled (they cannot be moved with the mouse)." );
 
-    QString strJitterBufferSizeTT = tr ( "In case the auto setting of the "
+    QString strJitterBufferSizeTT = tr ( "If the auto setting of the "
         "jitter buffer is enabled, the network buffers of the local client and "
         "the remote server are set to a conservative "
         "value to minimize the audio dropout probability. To tweak the "
@@ -103,7 +103,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // sound card input/output channel mapping
     QString strSndCrdChanMapp = "<b>" + tr ( "Sound Card Channel Mapping" ) + ":</b> " +
-        tr ( "In case the selected sound card device offers more than one "
+        tr ( "If the selected sound card device offers more than one "
         "input or output channel, the Input Channel Mapping and Output "
         "Channel Mapping settings are visible." ) + "<br>" + tr (
         "For each " ) + APP_NAME + tr ( " input/output channel (Left and "
@@ -210,7 +210,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "Enabling the stereo streaming mode will increase the "
         "stream data rate. Make sure that the current upload rate does not "
         "exceed the available bandwidth of your internet connection." ) + "<br>" + tr (
-        "In case of the stereo streaming mode, no audio channel selection "
+        "In stereo streaming mode, no audio channel selection "
         "for the reverberation effect will be available on the main window "
         "since the effect is applied on both channels in this case." );
 

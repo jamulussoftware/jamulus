@@ -138,8 +138,8 @@ also increases.
 The buffer delay setting is a fundamental setting of the Jamulus software. This setting has influence on many
 connection properties. Three buffer sizes are supported:
 
-- 64 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.
-- 128 samples: This setting should work on most of the available sound cards.
+- 64 samples: This is the preferred setting since it provides the lowest latency but does not work with all sound cards.
+- 128 samples: This setting should work for most available sound cards.
 - 256 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.
 
 Some sound card drivers do not allow the buffer delay to be changed from within the Jamulus software.
@@ -189,7 +189,7 @@ the two input signals can be mixed to one mono channel but the server mix can be
 Enabling the stereo streaming mode will increase the stream data rate. Make sure that the current upload rate does
 not exceed the available bandwidth of your internet connection.
 
-In case of the stereo streaming mode, no audio channel selection for the reverberation effect will be available on
+In stereo streaming mode, no audio channel selection for the reverberation effect will be available on
 the main window since the effect is applied on both channels in this case.
 
 ### Audio quality

@@ -130,11 +130,9 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
     // 3: location
     // 4: minimum ping time (invisible)
     // 5: maximum number of clients (invisible)
-    // 6: number of musicians (just the number, invisible)
-    lvwServers->setColumnCount ( 7 );
+    lvwServers->setColumnCount ( 6 );
     lvwServers->hideColumn ( 4 );
     lvwServers->hideColumn ( 5 );
-    lvwServers->hideColumn ( 6 );
 
     // per default the root shall not be decorated (to save space)
     lvwServers->setRootIsDecorated ( false );
@@ -395,9 +393,6 @@ void CConnectDlg::SetServerList ( const CHostAddress&         InetAddr,
 
         // store the maximum number of clients
         pNewListViewItem->setText ( 5, QString().setNum ( vecServerInfo[iIdx].iMaxNumClients ) );
-
-        // initialize the current number of connected clients
-        pNewListViewItem->setText ( 6, QString().setNum ( 0 ) );
 
         // store host address
         pNewListViewItem->setData ( 0, Qt::UserRole, CurHostAddress.toString() );
@@ -690,14 +685,6 @@ void CConnectDlg::OnTimerPing()
 #else
             emit CreateCLServerListPingMes ( CurServerAddress );
 #endif
-
-            // check if the number of child list items matches the number of
-            // connected clients, if not then request the client names
-            if ( lvwServers->topLevelItem ( iIdx )->text ( 6 ).toInt() !=
-                 lvwServers->topLevelItem ( iIdx )->childCount() )
-            {
-                emit CreateCLServerListReqConnClientsListMes ( CurServerAddress );
-            }
         }
     }
 }
@@ -783,8 +770,12 @@ void CConnectDlg::SetPingTimeAndNumClientsResult ( const CHostAddress& InetAddr,
                 setText ( 2, QString().setNum ( iNumClients ) );
         }
 
-        // update number of clients value (hidden)
-        pCurListViewItem->setText ( 6, QString().setNum ( iNumClients ) );
+        // check if the number of child list items matches the number of
+        // connected clients, if not then request the client names
+        if ( iNumClients != pCurListViewItem->childCount() )
+        {
+            emit CreateCLServerListReqConnClientsListMes ( InetAddr );
+        }
 
         // this is the first time a ping time was received, set item to visible
         if ( bIsFirstPing )

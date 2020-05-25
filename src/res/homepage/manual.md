@@ -19,7 +19,7 @@ are no buffer overruns/underruns and the audio stream is not interrupted. If the
 audio stream is interrupted caused by one of the following problems:
 
 - The network jitter buffer is not large enough for the current network/audio interface jitter.
-- The sound card buffer delay (buffer size) is set to a too small value.
+- The sound card buffer delay (buffer size) is set to too small a value.
 - The upload or download stream rate is too high for the current available internet bandwidth.
 - The CPU of the client or server is at 100%.
 
@@ -51,7 +51,7 @@ the fader tag and the city entry shows up in the tool tip of the fader tag. This
 
 ### Connect/disconnect button
 
-Push this button to connect a server. A dialog where you can select a server will open. If you are connected,
+Push this button to connect to a server. A dialog where you can select a server will open. If you are connected,
 pressing this button will end the session.
 
 ![Connect dialog](connect.jpg)
@@ -65,7 +65,7 @@ Note that it may take some time to retrieve the server list from the central ser
 address is specified in the settings, no server list will be available.
 
 Alternatively, you can enter an IP address or URL of the server running the Jamulus server in the server address
-field. An optional port number can be added after the IP address or URL using a comma as a separator, e.g,
+field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g,
 jamulus.dyndns.org:22124. A list of the most recent used server IP addresses or URLs is available for selection.
 
 ### Reverberation effect
@@ -77,7 +77,7 @@ The mono channel selection and the reverberation level can be modified. If, e.g.
 into the right audio channel of the sound card and a reverberation effect shall be applied, set the channel selector
 to right and move the fader upwards until the desired reverberation level is reached.
 
-The reverberation effect requires significant CPU so that it should only be used on fast PCs. If the reverberation
+The reverberation effect requires significant CPU so it should only be used on fast PCs. If the reverberation
 level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does
 not cause any additional CPU usage.
 
@@ -120,7 +120,7 @@ system the input and output hardware can be selected.
 
 ![Channel mapping](channelmapping.png)
 
-In case the selected sound card device offers more than one input or output channel, the _Input Channel Mapping
+If selected sound card device offers more than one input or output channel, the _Input Channel Mapping
 and Output Channel Mapping_ settings are visible. For each Jamulus input/output channel (left and right channel)
 a different actual sound card channel can be selected.
 
@@ -128,7 +128,7 @@ a different actual sound card channel can be selected.
 
 If enabled, the support for very small network audio packets is activated. Very small network packets are only
 actually used if the sound card buffer delay is smaller than 128 samples. The smaller the network buffers, the
-smaller the audio latency. But at the same time the network load increases and the probability of audio dropouts
+lower the audio latency. But at the same time the network load increases and the probability of audio dropouts
 also increases.
 
 ### Buffer delay
@@ -138,9 +138,9 @@ also increases.
 The buffer delay setting is a fundamental setting of the Jamulus software. This setting has influence on many
 connection properties. Three buffer sizes are supported:
 
-- 128 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.
-- 256 samples: This setting should work on most of the available sound cards.
-- 512 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.
+- 64 samples: This is the preferred setting since it gives lowest latency but does not work with all sound cards.
+- 128 samples: This setting should work on most of the available sound cards.
+- 256 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.
 
 Some sound card drivers do not allow the buffer delay to be changed from within the Jamulus software.
 In this case the buffer delay setting is disabled. To change the actual buffer delay,
@@ -152,7 +152,7 @@ the driver settings panel.
 On Linux, use the Jack configuration tool to change the buffer size.
 
 The actual buffer delay has influence on the connection status, the current upload rate and the overall delay.
-The lower the buffer size, the higher the probability of red light in the status indicator (drop outs) and the
+The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the
 higher the upload rate and the lower the overall delay.
 
 ![Buffer delay dependencies](bufferdelaydependency.jpg)
@@ -168,7 +168,7 @@ therefore influence on the quality of the audio stream (how many dropouts occur)
 (the longer the buffer, the higher the delay).
 
 The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter
-buffer, dropouts in the audio stream are indicated by the light on the bottom of the jitter buffer size faders.
+buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders.
 If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.
 
 The jitter buffer setting is therefore a trade-off between audio quality and overall delay.
@@ -182,9 +182,8 @@ timing jitter. If the Auto check is enabled, the jitter buffer size faders are d
 ![Audio channels](audiochannels.png)
 
 Select the number of audio channels to be used for communication between client and server. There are three modes
-available. The mono and stereo modes use one and two audio channels respectively. In the mono-in/stereo-out mode
-the audio signal which is sent to the server is mono but the return signal is stereo. This is useful for the case
-that the sound card puts the instrument on one input channel and the microphone on the other channel. In that case
+available. The mono and stereo modes use one and two audio channels respectively. In mono-in/stereo-out mode
+the audio signal which is sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other channel. In that case
 the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.
 
 Enabling the stereo streaming mode will increase the stream data rate. Make sure that the current upload rate does
@@ -233,7 +232,7 @@ central servers or a manual address can be specified.
 
 ![Indicators](indicators.png)
 
-The ping time is the time required for the audio stream to travel from the client to the server and backwards.
+The ping time is the time required for the audio stream to travel from the client to the server and back again.
 This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms),
 your distance to the server is too large or your internet connection is not sufficient.
 

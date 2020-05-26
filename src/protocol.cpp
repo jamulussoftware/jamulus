@@ -769,8 +769,7 @@ bool CProtocol::EvaluateJitBufMes ( const CVector<uint8_t>& vecData )
     }
 
     // extract jitter buffer size
-    const int iData =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+    const int iData = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     if ( ( ( iData < MIN_NET_BUF_SIZE_NUM_BL ) ||
            ( iData > MAX_NET_BUF_SIZE_NUM_BL ) ) &&
@@ -1083,16 +1082,13 @@ void CProtocol::CreateChanInfoMes ( const CChannelCoreInfo ChanInfo )
     CVector<uint8_t> vecData ( iEntrLen );
 
     // country (2 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( ChanInfo.eCountry ), 2 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ChanInfo.eCountry ), 2 );
 
     // instrument (4 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( ChanInfo.iInstrument ), 4 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ChanInfo.iInstrument ), 4 );
 
     // skill level (1 byte)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( ChanInfo.eSkillLevel ), 1 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ChanInfo.eSkillLevel ), 1 );
 
     // name
     PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
@@ -1116,16 +1112,13 @@ bool CProtocol::EvaluateChanInfoMes ( const CVector<uint8_t>& vecData )
     }
 
     // country (2 bytes)
-    ChanInfo.eCountry =
-        static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+    ChanInfo.eCountry = static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // instrument (4 bytes)
-    ChanInfo.iInstrument =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+    ChanInfo.iInstrument = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
 
     // skill level (1 byte)
-    ChanInfo.eSkillLevel =
-        static_cast<ESkillLevel> ( GetValFromStream ( vecData, iPos, 1 ) );
+    ChanInfo.eSkillLevel = static_cast<ESkillLevel> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // name
     if ( GetStringFromStream ( vecData,
@@ -1235,32 +1228,25 @@ void CProtocol::CreateNetwTranspPropsMes ( const CNetworkTransportProps& NetTrPr
     CVector<uint8_t> vecData ( iEntrLen );
 
     // length of the base network packet (frame) in bytes (4 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( NetTrProps.iBaseNetworkPacketSize ), 4 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iBaseNetworkPacketSize ), 4 );
 
     // block size factor (2 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( NetTrProps.iBlockSizeFact ), 2 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iBlockSizeFact ), 2 );
 
     // number of channels of the audio signal, e.g. "2" is stereo (1 byte)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( NetTrProps.iNumAudioChannels ), 1 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iNumAudioChannels ), 1 );
 
     // sample rate of the audio stream (4 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( NetTrProps.iSampleRate ), 4 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iSampleRate ), 4 );
 
     // audio coding type (2 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( NetTrProps.eAudioCodingType ), 2 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.eAudioCodingType ), 2 );
 
     // version (2 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( NetTrProps.iVersion ), 2 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iVersion ), 2 );
 
     // argument for the audio coder (4 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( NetTrProps.iAudioCodingArg ), 4 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( NetTrProps.iAudioCodingArg ), 4 );
 
     CreateAndSendMessage ( PROTMESSID_NETW_TRANSPORT_PROPS, vecData );
 }
@@ -1406,8 +1392,7 @@ bool CProtocol::EvaluateLicenceRequiredMes ( const CVector<uint8_t>& vecData )
 
 void CProtocol::CreateOpusSupportedMes()
 {
-    CreateAndSendMessage ( PROTMESSID_OPUS_SUPPORTED,
-                           CVector<uint8_t> ( 0 ) );
+    CreateAndSendMessage ( PROTMESSID_OPUS_SUPPORTED, CVector<uint8_t> ( 0 ) );
 }
 
 void CProtocol::CreateReqChannelLevelListMes ( const bool bRCL )
@@ -1576,12 +1561,10 @@ bool CProtocol::EvaluateCLPingWithNumClientsMes ( const CHostAddress&     InetAd
     }
 
     // transmit time
-    const int iCurMs =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+    const int iCurMs = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
 
     // current number of connected clients
-    const int iCurNumClients =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+    const int iCurNumClients = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // invoke message action
     emit CLPingWithNumClientsReceived ( InetAddr, iCurMs, iCurNumClients );
@@ -1629,20 +1612,16 @@ void CProtocol::CreateCLRegisterServerMes ( const CHostAddress&    InetAddr,
     CVector<uint8_t> vecData ( iEntrLen );
 
     // port number (2 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( LInetAddr.iPort ), 2 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( LInetAddr.iPort ), 2 );
 
     // country (2 bytes)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( ServerInfo.eCountry ), 2 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ServerInfo.eCountry ), 2 );
 
     // maximum number of connected clients (1 byte)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( ServerInfo.iMaxNumClients ), 1 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ServerInfo.iMaxNumClients ), 1 );
 
     // "is permanent" flag (1 byte)
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( ServerInfo.bPermanentOnline ), 1 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( ServerInfo.bPermanentOnline ), 1 );
 
     // name
     PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
@@ -1674,20 +1653,16 @@ bool CProtocol::EvaluateCLRegisterServerMes ( const CHostAddress&     InetAddr,
     }
 
     // port number (2 bytes)
-    LInetAddr.iPort =
-        static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
+    LInetAddr.iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // country (2 bytes)
-    RecServerInfo.eCountry =
-        static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+    RecServerInfo.eCountry = static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // maximum number of connected clients (1 byte)
-    RecServerInfo.iMaxNumClients =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+    RecServerInfo.iMaxNumClients = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // "is permanent" flag (1 byte)
-    RecServerInfo.bPermanentOnline =
-        static_cast<bool> ( GetValFromStream ( vecData, iPos, 1 ) );
+    RecServerInfo.bPermanentOnline = static_cast<bool> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // server name
     if ( GetStringFromStream ( vecData,
@@ -1836,24 +1811,19 @@ bool CProtocol::EvaluateCLServerListMes ( const CHostAddress&     InetAddr,
         }
 
         // IP address (4 bytes)
-        const quint32 iIpAddr =
-            static_cast<quint32> ( GetValFromStream ( vecData, iPos, 4 ) );
+        const quint32 iIpAddr = static_cast<quint32> ( GetValFromStream ( vecData, iPos, 4 ) );
 
         // port number (2 bytes)
-        const quint16 iPort =
-            static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
+        const quint16 iPort = static_cast<quint16> ( GetValFromStream ( vecData, iPos, 2 ) );
 
         // country (2 bytes)
-        const QLocale::Country eCountry =
-            static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+        const QLocale::Country eCountry = static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
 
         // maximum number of connected clients (1 byte)
-        const int iMaxNumClients =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+        const int iMaxNumClients = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
         // "is permanent" flag (1 byte)
-        const bool bPermanentOnline =
-            static_cast<bool> ( GetValFromStream ( vecData, iPos, 1 ) );
+        const bool bPermanentOnline = static_cast<bool> ( GetValFromStream ( vecData, iPos, 1 ) );
 
         // server name
         QString strName;
@@ -1955,12 +1925,10 @@ bool CProtocol::EvaluateCLSendEmptyMesMes ( const CVector<uint8_t>& vecData )
     }
 
     // IP address (4 bytes)
-    const quint32 iIpAddr =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+    const quint32 iIpAddr = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
 
     // port number (2 bytes)
-    const quint16 iPort =
-        static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
+    const quint16 iPort = static_cast<int> ( GetValFromStream ( vecData, iPos, 2 ) );
 
     // invoke message action
     emit CLSendEmptyMes ( CHostAddress ( QHostAddress ( iIpAddr ), iPort ) );
@@ -2102,24 +2070,19 @@ void CProtocol::CreateCLConnClientsListMes ( const CHostAddress&          InetAd
         vecData.Enlarge ( iCurListEntrLen );
 
         // channel ID (1 byte)
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecChanInfo[i].iChanID ), 1 );
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].iChanID ), 1 );
 
         // country (2 bytes)
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecChanInfo[i].eCountry ), 2 );
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].eCountry ), 2 );
 
         // instrument (4 bytes)
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecChanInfo[i].iInstrument ), 4 );
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].iInstrument ), 4 );
 
         // skill level (1 byte)
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecChanInfo[i].eSkillLevel ), 1 );
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].eSkillLevel ), 1 );
 
         // IP address (4 bytes)
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( vecChanInfo[i].iIpAddr ), 4 );
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( vecChanInfo[i].iIpAddr ), 4 );
 
         // name
         PutStringUTF8OnStream ( vecData, iPos, strUTF8Name );
@@ -2149,24 +2112,19 @@ bool CProtocol::EvaluateCLConnClientsListMes ( const CHostAddress&     InetAddr,
         }
 
         // channel ID (1 byte)
-        const int iChanID =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+        const int iChanID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
         // country (2 bytes)
-        const QLocale::Country eCountry =
-            static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
+        const QLocale::Country eCountry = static_cast<QLocale::Country> ( GetValFromStream ( vecData, iPos, 2 ) );
 
         // instrument (4 bytes)
-        const int iInstrument =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+        const int iInstrument = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
 
         // skill level (1 byte)
-        const ESkillLevel eSkillLevel =
-            static_cast<ESkillLevel> ( GetValFromStream ( vecData, iPos, 1 ) );
+        const ESkillLevel eSkillLevel = static_cast<ESkillLevel> ( GetValFromStream ( vecData, iPos, 1 ) );
 
         // IP address (4 bytes)
-        const int iIpAddr =
-            static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
+        const int iIpAddr = static_cast<int> ( GetValFromStream ( vecData, iPos, 4 ) );
 
         // name
         QString strCurName;
@@ -2240,8 +2198,7 @@ void CProtocol::CreateCLChannelLevelListMes  ( const CHostAddress&      InetAddr
         uint16_t levelHi = ( i + 1 < iNumClients ) ? vecLevelList[i + 1] & 0x0F : 0x0F;
         uint8_t  byte    = static_cast<uint8_t> ( levelLo | ( levelHi << 4 ) );
 
-        PutValOnStream ( vecData, iPos,
-            static_cast<uint32_t> ( byte ), 1 );
+        PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( byte ), 1 );
     }
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_CHANNEL_LEVEL_LIST,
@@ -2295,8 +2252,7 @@ void CProtocol::CreateCLRegisterServerResp  ( const CHostAddress& InetAddr,
     int              iPos = 0; // init position pointer
     CVector<uint8_t> vecData( 1 );
 
-    PutValOnStream ( vecData, iPos,
-        static_cast<uint32_t> ( eResult ), 1 );
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( eResult ), 1 );
 
     CreateAndImmSendConLessMessage ( PROTMESSID_CLM_REGISTER_SERVER_RESP,
                                      vecData,
@@ -2314,8 +2270,7 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress&     InetAddr,
         return true;
     }
 
-    ESvrRegResult eResult = static_cast<ESvrRegResult> (
-        GetValFromStream ( vecData, iPos, 1 ) );
+    ESvrRegResult eResult = static_cast<ESvrRegResult> ( GetValFromStream ( vecData, iPos, 1 ) );
 
     // invoke message action
     emit CLRegisterServerResp ( InetAddr,  eResult );
@@ -2379,8 +2334,7 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
 
     for ( i = 0; i < iLenCRCCalc; i++ )
     {
-        CRCObj.AddByte ( static_cast<uint8_t> ( 
-            GetValFromStream ( vecbyData, iCurPos, 1 ) ) );
+        CRCObj.AddByte ( static_cast<uint8_t> ( GetValFromStream ( vecbyData, iCurPos, 1 ) ) );
     }
 
     if ( CRCObj.GetCRC () != GetValFromStream ( vecbyData, iCurPos, 2 ) )
@@ -2400,8 +2354,7 @@ bool CProtocol::ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
 
     for ( i = 0; i < iLenBy; i++ )
     {
-        vecbyMesBodyData[i] = static_cast<uint8_t> (
-            GetValFromStream ( vecbyData, iCurPos, 1 ) );
+        vecbyMesBodyData[i] = static_cast<uint8_t> ( GetValFromStream ( vecbyData, iCurPos, 1 ) );
     }
 
     return false; // no error
@@ -2446,8 +2399,7 @@ bool CProtocol::GetStringFromStream ( const CVector<uint8_t>& vecIn,
     }
 
     // number of bytes for utf-8 string (2 bytes)
-    const int iStrUTF8Len =
-        static_cast<int> ( GetValFromStream ( vecIn, iPos, 2 ) );
+    const int iStrUTF8Len = static_cast<int> ( GetValFromStream ( vecIn, iPos, 2 ) );
 
     // (note that iPos was incremented by 2 in the above code!)
     if ( ( iInLen - iPos ) < iStrUTF8Len )
@@ -2497,26 +2449,21 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>&       vecOut,
     int iCurPos = 0; // init position pointer
 
     // 2 bytes TAG (all zero bits)
-    PutValOnStream ( vecOut, iCurPos,
-        static_cast<uint32_t> ( 0 ), 2 );
+    PutValOnStream ( vecOut, iCurPos, static_cast<uint32_t> ( 0 ), 2 );
 
     // 2 bytes ID
-    PutValOnStream ( vecOut, iCurPos,
-        static_cast<uint32_t> ( iID ), 2 );
+    PutValOnStream ( vecOut, iCurPos, static_cast<uint32_t> ( iID ), 2 );
 
     // 1 byte cnt
-    PutValOnStream ( vecOut, iCurPos,
-        static_cast<uint32_t> ( iCnt ), 1 );
+    PutValOnStream ( vecOut, iCurPos, static_cast<uint32_t> ( iCnt ), 1 );
 
     // 2 bytes length
-    PutValOnStream ( vecOut, iCurPos,
-        static_cast<uint32_t> ( iDataLenByte ), 2 );
+    PutValOnStream ( vecOut, iCurPos, static_cast<uint32_t> ( iDataLenByte ), 2 );
 
     // encode data -----
     for ( i = 0; i < iDataLenByte; i++ )
     {
-        PutValOnStream ( vecOut, iCurPos,
-            static_cast<uint32_t> ( vecData[i] ), 1 );
+        PutValOnStream ( vecOut, iCurPos, static_cast<uint32_t> ( vecData[i] ), 1 );
     }
 
 
@@ -2529,18 +2476,16 @@ void CProtocol::GenMessageFrame ( CVector<uint8_t>&       vecOut,
 
     for ( i = 0; i < iLenCRCCalc; i++ )
     {
-        CRCObj.AddByte ( static_cast<uint8_t> ( 
-            GetValFromStream ( vecOut, iCurPos, 1 ) ) );
+        CRCObj.AddByte ( static_cast<uint8_t> ( GetValFromStream ( vecOut, iCurPos, 1 ) ) );
     }
 
-    PutValOnStream ( vecOut, iCurPos,
-        static_cast<uint32_t> ( CRCObj.GetCRC() ), 2 );
+    PutValOnStream ( vecOut, iCurPos, static_cast<uint32_t> ( CRCObj.GetCRC() ), 2 );
 }
 
-void CProtocol::PutValOnStream ( CVector<uint8_t>&  vecIn,
-                                 int&               iPos,
-                                 const uint32_t     iVal,
-                                 const int          iNumOfBytes )
+void CProtocol::PutValOnStream ( CVector<uint8_t>& vecIn,
+                                 int&              iPos,
+                                 const uint32_t    iVal,
+                                 const int         iNumOfBytes )
 {
 /*
     note: iPos is automatically incremented in this function
@@ -2551,9 +2496,7 @@ void CProtocol::PutValOnStream ( CVector<uint8_t>&  vecIn,
 
     for ( int i = 0; i < iNumOfBytes; i++ )
     {
-        vecIn[iPos] =
-            ( iVal >> ( i * 8 /* size of byte */ ) ) & 255 /* 11111111 */;
-
+        vecIn[iPos] = ( iVal >> ( i * 8 /* size of byte */ ) ) & 255 /* 11111111 */;
         iPos++;
     }
 }
@@ -2566,14 +2509,12 @@ void CProtocol::PutStringUTF8OnStream ( CVector<uint8_t>& vecIn,
     const int iStrUTF8Len = sStringUTF8.size();
 
     // number of bytes for utf-8 string (2 bytes)
-    PutValOnStream ( vecIn, iPos,
-        static_cast<uint32_t> ( iStrUTF8Len ), 2 );
+    PutValOnStream ( vecIn, iPos, static_cast<uint32_t> ( iStrUTF8Len ), 2 );
 
     // actual utf-8 string (n bytes)
     for ( int j = 0; j < iStrUTF8Len; j++ )
     {
         // byte-by-byte copying of the utf-8 string data
-        PutValOnStream ( vecIn, iPos,
-            static_cast<uint32_t> ( sStringUTF8[j] ), 1 );
+        PutValOnStream ( vecIn, iPos, static_cast<uint32_t> ( sStringUTF8[j] ), 1 );
     }
 }

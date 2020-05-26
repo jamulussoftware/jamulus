@@ -21,9 +21,6 @@
 - bug fix: server gain calculations were incorrect
 
 
-TODO go back to original fader range dynamic (since issue was caused by server gain calculation)
-
-
 
 
 3.5.4 (2020-05-24)

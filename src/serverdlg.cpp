@@ -267,6 +267,22 @@ lvwClients->setMinimumHeight ( 140 );
     ModifyAutoStartEntry ( bCurAutoStartMinState );
 #endif
 
+    // Recorder controls
+    pbtNewRecording->setAutoDefault ( false );
+
+    if ( !pServer->GetRecordingEnabled() )
+    {
+        // The recorder was not enabled from the command line
+        // TODO: Once enabling from the GUI is implemented, remove
+        lblRecorderStatus->setVisible ( false );
+        pbtNewRecording->setVisible ( false );
+    }
+
+    // TODO: Not yet implemented, so hide them!
+    chbEnableRecorder->setVisible ( false );
+    pbtRecordingDir->setVisible ( false );
+    edtRecordingsDir->setVisible ( false );
+
     // update GUI dependencies
     UpdateGUIDependencies();
 
@@ -319,6 +335,10 @@ lvwClients->setMinimumHeight ( 140 );
     QObject::connect ( cbxCentServAddrType, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnCentServAddrTypeActivated ( int ) ) );
 
+    // push buttons
+    QObject::connect ( pbtNewRecording, SIGNAL ( released() ),
+        this, SLOT ( OnNewRecordingClicked() ) );
+
     // timers
     QObject::connect ( &Timer, SIGNAL ( timeout() ), this, SLOT ( OnTimer() ) );
 
@@ -331,6 +351,9 @@ lvwClients->setMinimumHeight ( 140 );
 
     QObject::connect ( pServer, SIGNAL ( SvrRegStatusChanged() ),
         this, SLOT ( OnSvrRegStatusChanged() ) );
+
+    QObject::connect ( pServer, SIGNAL ( RecordingSessionStarted ( QString ) ),
+        this, SLOT ( OnRecordingSessionStarted ( QString ) ) );
 
     QObject::connect ( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
         this, SLOT ( OnAboutToQuit() ) );
@@ -451,6 +474,12 @@ void CServerDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
     UpdateGUIDependencies();
 }
 
+void CServerDlg::OnServerStopped();
+{
+    UpdateSystemTrayIcon ( false );
+    UpdateRecorderStatus ( QString::null );
+}
+
 void CServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason )
 {
     // on double click on the icon, show window in fore ground
@@ -503,6 +532,7 @@ void CServerDlg::OnTimer()
     }
     ListViewMutex.unlock();
 }
+
 
 void CServerDlg::UpdateGUIDependencies()
 {
@@ -560,6 +590,9 @@ void CServerDlg::UpdateGUIDependencies()
     }
 
     lblRegSvrStatus->setText ( strStatus );
+
+    edtCurrentSessionDir->setText( "" );
+    UpdateRecorderStatus ( QString::null );
 }
 
 void CServerDlg::UpdateSystemTrayIcon ( const bool bIsActive )
@@ -616,6 +649,39 @@ void CServerDlg::ModifyAutoStartEntry ( const bool bDoAutoStart )
         }
 #endif
     }
+}
+
+void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
+{
+    QString currentSessionDir = edtCurrentSessionDir->text();
+    QString strRecorderStatus;
+    bool bIsRecording = false;
+
+    if ( pServer->GetRecordingEnabled() )
+    {
+        if ( pServer->IsRunning() )
+        {
+            currentSessionDir = sessionDir != QString::null ? sessionDir : "";
+            strRecorderStatus = tr ( "Recording" );
+            bIsRecording = true;
+        }
+        else
+        {
+            strRecorderStatus = tr ( "Not recording" );
+        }
+    }
+    else
+    {
+        strRecorderStatus = tr ( "Not enabled" );
+    }
+
+    edtCurrentSessionDir->setVisible ( pServer->GetRecordingEnabled() );
+    edtCurrentSessionDir->setEnabled ( bIsRecording );
+    edtCurrentSessionDir->setText( currentSessionDir );
+
+    lblRecorderStatus->setText ( strRecorderStatus );
+
+    pbtNewRecording->setEnabled ( bIsRecording );
 }
 
 void CServerDlg::changeEvent ( QEvent* pEvent )

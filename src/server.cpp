@@ -468,6 +468,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
        SIGNAL ( SvrRegStatusChanged() ),
        this, SLOT ( OnSvrRegStatusChanged() ) );
 
+    QObject::connect( &JamRecorder,
+        SIGNAL ( RecordingSessionStarted ( QString ) ),
+        SIGNAL ( RecordingSessionStarted ( QString ) ) );
+
     QObject::connect ( QCoreApplication::instance(),
         SIGNAL ( aboutToQuit() ),
         this, SLOT ( OnAboutToQuit() ) );

@@ -357,6 +357,8 @@ void CJamRecorder::Start() {
 
     currentSession = new CJamSession( recordBaseDir );
     isRecording = true;
+
+    emit RecordingSessionStarted ( currentSession->SessionDir().path() );
 }
 
 
@@ -402,8 +404,6 @@ void CJamRecorder::OnEnd()
         delete currentSession;
         currentSession = nullptr;
     }
-
-    emit RecordingSessionEnded ( reaperProjectFileName );
 }
 
 /**

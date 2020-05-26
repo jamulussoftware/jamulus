@@ -160,6 +160,72 @@
    </item>
    <item>
     <layout class="QHBoxLayout">
+     <item>
+      <widget class="QCheckBox" name="chbEnableRecorder">
+       <property name="text">
+        <string>Enable jam recorder</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="edtCurrentSessionDir">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblRecorderStatus">
+       <property name="text">
+        <string>STATUS</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbtNewRecording">
+       <property name="text">
+        <string>New recording</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QPushButton" name="pbtRecordingDir">
+       <property name="text">
+        <string>Recordings folder</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="edtRecordingsDir">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
      <property name="spacing">
       <number>6</number>
      </property>
@@ -215,6 +281,11 @@
   <tabstop>edtServerName</tabstop>
   <tabstop>edtLocationCity</tabstop>
   <tabstop>cbxLocationCountry</tabstop>
+  <tabstop>chbEnableRecorder</tabstop>
+  <tabstop>edtCurrentSessionDir</tabstop>
+  <tabstop>pbtNewRecording</tabstop>
+  <tabstop>pbtRecordingDir</tabstop>
+  <tabstop>edtRecordingsDir</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>

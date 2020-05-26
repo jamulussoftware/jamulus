@@ -169,7 +169,7 @@ private:
     QThread* thisThread;
 
 signals:
-    void RecordingSessionEnded ( QString sessionDir );
+    void RecordingSessionStarted ( QString sessionDir );
 
 private slots:
     /**

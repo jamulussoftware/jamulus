@@ -68,7 +68,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pFader->setTickPosition  ( QSlider::TicksBothSides );
     pFader->setRange         ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval  ( AUD_MIX_FADER_MAX / 9 );
-    pFader->setMinimumHeight ( 75 );
+    pFader->setMinimumHeight ( 85 ); // if this value is too small, the fader might not be movable with the mouse for fancy skin (#292)
 
     // setup panning control
     pPan->setRange          ( 0, AUD_MIX_PAN_MAX );

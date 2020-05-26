@@ -474,7 +474,7 @@ void CServerDlg::OnCentServAddrTypeActivated ( int iTypeIdx )
     UpdateGUIDependencies();
 }
 
-void CServerDlg::OnServerStopped();
+void CServerDlg::OnServerStopped()
 {
     UpdateSystemTrayIcon ( false );
     UpdateRecorderStatus ( QString::null );
@@ -533,7 +533,6 @@ void CServerDlg::OnTimer()
     ListViewMutex.unlock();
 }
 
-
 void CServerDlg::UpdateGUIDependencies()
 {
     // get the states which define the GUI dependencies from the server
@@ -591,7 +590,7 @@ void CServerDlg::UpdateGUIDependencies()
 
     lblRegSvrStatus->setText ( strStatus );
 
-    edtCurrentSessionDir->setText( "" );
+    edtCurrentSessionDir->setText ( "" );
     UpdateRecorderStatus ( QString::null );
 }
 
@@ -654,8 +653,8 @@ void CServerDlg::ModifyAutoStartEntry ( const bool bDoAutoStart )
 void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
 {
     QString currentSessionDir = edtCurrentSessionDir->text();
+    bool    bIsRecording      = false;
     QString strRecorderStatus;
-    bool bIsRecording = false;
 
     if ( pServer->GetRecordingEnabled() )
     {
@@ -663,7 +662,7 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
         {
             currentSessionDir = sessionDir != QString::null ? sessionDir : "";
             strRecorderStatus = tr ( "Recording" );
-            bIsRecording = true;
+            bIsRecording      = true;
         }
         else
         {
@@ -677,7 +676,7 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
 
     edtCurrentSessionDir->setVisible ( pServer->GetRecordingEnabled() );
     edtCurrentSessionDir->setEnabled ( bIsRecording );
-    edtCurrentSessionDir->setText( currentSessionDir );
+    edtCurrentSessionDir->setText    ( currentSessionDir );
 
     lblRecorderStatus->setText ( strRecorderStatus );
 

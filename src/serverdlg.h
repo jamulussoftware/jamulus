@@ -103,7 +103,7 @@ public slots:
     void keyPressEvent ( QKeyEvent *e ) // block escape key
         { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
 
-    void OnNewRecordingClicked(); { pServer->RestartRecorder(); }
+    void OnNewRecordingClicked() { pServer->RestartRecorder(); }
     void OnRecordingSessionStarted ( QString sessionDir )
         { UpdateRecorderStatus ( sessionDir ); }
 };

@@ -466,7 +466,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     QObject::connect ( &ServerListManager,
        SIGNAL ( SvrRegStatusChanged() ),
-       this, SLOT ( OnSvrRegStatusChanged() ) );
+       SIGNAL ( SvrRegStatusChanged() ) );
 
     QObject::connect( &JamRecorder,
         SIGNAL ( RecordingSessionStarted ( QString ) ),
@@ -553,6 +553,10 @@ void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 void CServer::OnNewConnection ( int          iChID,
                                 CHostAddress RecHostAddr )
 {
+    // inform the client about its own ID at the server (note that this
+    // must be the first message to be sent for a new connection)
+    vecChannels[iChID].CreateClientIDMes ( iChID );
+
     // on a new connection we query the network transport properties for the
     // audio packets (to use the correct network block size and audio
     // compression properties, etc.)

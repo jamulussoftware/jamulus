@@ -91,6 +91,10 @@ qRegisterMetaType<CHostAddress> ( "CHostAddress" );
         this, SLOT ( OnChangeChanPan ( int, double ) ) );
 
     QObject::connect ( &Protocol,
+        SIGNAL ( ClientIDReceived ( int ) ),
+        SIGNAL ( ClientIDReceived ( int ) ) );
+
+    QObject::connect ( &Protocol,
         SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ),
         SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ) );
 

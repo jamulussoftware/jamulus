@@ -450,8 +450,6 @@ public slots:
         ServerListManager.StoreRegistrationResult ( eResult );
     }
 
-    void OnSvrRegStatusChanged() { emit SvrRegStatusChanged(); }
-
     void OnCLUnregisterServerReceived ( CHostAddress InetAddr )
     {
         ServerListManager.CentralServerUnregisterServer ( InetAddr );

@@ -462,6 +462,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         this, SLOT ( OnChatTextReceived ( QString ) ) );
 
     QObject::connect ( pClient,
+        SIGNAL ( ClientIDReceived ( int ) ),
+        this, SLOT ( OnClientIDReceived ( int ) ) );
+
+    QObject::connect ( pClient,
         SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ),
         this, SLOT ( OnMuteStateHasChangedReceived ( int, bool ) ) );
 

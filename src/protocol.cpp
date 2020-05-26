@@ -57,6 +57,13 @@ MESSAGES (with connection)
     note: does not have any data -> n = 0
 
 
+- PROTMESSID_CLIENT_ID: Sends the current client ID to the client
+
+    +---------------------------------+
+    | 1 byte channel ID of the client |
+    +---------------------------------+
+
+
 - PROTMESSID_CHANNEL_GAIN: Gain of channel
 
     +-------------------+--------------+
@@ -168,6 +175,7 @@ MESSAGES (with connection)
     | 1 byte licence type |
     +---------------------+
 
+
 - PROTMESSID_REQ_CHANNEL_LEVEL_LIST: Opt in or out of the channel level list
 
     +---------------+
@@ -175,6 +183,7 @@ MESSAGES (with connection)
     +---------------+
 
     option is boolean, true to opt in, false to opt out
+
 
 - PROTMESSID_VERSION_AND_OS: Version number and operating system
 
@@ -589,6 +598,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
                 bRet = EvaluateReqJitBufMes();
                 break;
 
+            case PROTMESSID_CLIENT_ID:
+                bRet = EvaluateClientIDMes ( vecbyMesBodyData );
+                break;
+
             case PROTMESSID_CHANNEL_GAIN:
                 bRet = EvaluateChanGainMes ( vecbyMesBodyData );
                 break;
@@ -794,6 +807,37 @@ bool CProtocol::EvaluateReqJitBufMes()
 {
     // invoke message action
     emit ReqJittBufSize();
+
+    return false; // no error
+}
+
+void CProtocol::CreateClientIDMes ( const int iChanID )
+{
+    CVector<uint8_t> vecData ( 1 ); // 1 byte of data
+    int              iPos = 0;      // init position pointer
+
+    // build data vector
+    // channel ID
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( iChanID ), 1 );
+
+    CreateAndSendMessage ( PROTMESSID_CLIENT_ID, vecData );
+}
+
+bool CProtocol::EvaluateClientIDMes ( const CVector<uint8_t>& vecData )
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 1 )
+    {
+        return true; // return error code
+    }
+
+    // channel ID
+    const int iCurID = static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // invoke message action
+    emit ClientIDReceived ( iCurID );
 
     return false; // no error
 }

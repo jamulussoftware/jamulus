@@ -157,6 +157,7 @@ public:
             Protocol.CreateJitBufMes ( iJitBufSize );
         }
     }
+    void CreateClientIDMes ( const int iChanID )             { Protocol.CreateClientIDMes ( iChanID ); }
     void CreateReqNetwTranspPropsMes()                       { Protocol.CreateReqNetwTranspPropsMes(); }
     void CreateReqJitBufMes()                                { Protocol.CreateReqJitBufMes(); }
     void CreateReqConnClientsList()                          { Protocol.CreateReqConnClientsList(); }
@@ -278,6 +279,7 @@ signals:
     void ReqConnClientsList();
     void ConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo );
     void ChanInfoHasChanged();
+    void ClientIDReceived ( int iChanID );
     void MuteStateHasChanged ( int iChanID, bool bIsMuted );
     void MuteStateHasChangedReceived ( int iChanID, bool bIsMuted );
     void ReqChanInfo();

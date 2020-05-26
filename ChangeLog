@@ -11,10 +11,12 @@
 - display recorder state and latest recording directory in the server GUI,
   allow a new recording to be requested, by pljones (#228)
 
+- New Client Level now also applies if you enter a server
+
 - bug fix: audio fader sliders cannot be moved if the main windows is too small (#292)
 
 
-TODO create protocol message to inform client about its ID at the server
+TODO honour own fader and Mute button in Mute Myself (#148)
 
 
 

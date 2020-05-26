@@ -198,6 +198,9 @@ public slots:
                                           CVector<CChannelInfo> vecChanInfo )
         { ConnectDlg.SetConnClientsList ( InetAddr, vecChanInfo ); }
 
+    void OnClientIDReceived ( int iChanID )
+        { MainMixerBoard->SetMyChannelID ( iChanID ); }
+
     void OnMuteStateHasChangedReceived ( int iChanID, bool bIsMuted )
         { MainMixerBoard->SetRemoteFaderIsMute ( iChanID, bIsMuted ); }
 

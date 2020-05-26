@@ -58,6 +58,7 @@
 #define PROTMESSID_VERSION_AND_OS             29 // version number and operating system
 #define PROTMESSID_CHANNEL_PAN                30 // set channel pan for mix
 #define PROTMESSID_MUTE_STATE_CHANGED         31 // mute state of your signal at another client has changed
+#define PROTMESSID_CLIENT_ID                  32 // current user ID and server status
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -98,6 +99,7 @@ public:
 
     void CreateJitBufMes ( const int iJitBufSize );
     void CreateReqJitBufMes();
+    void CreateClientIDMes ( const int iChanID );
     void CreateChanGainMes ( const int iChanID, const double dGain );
     void CreateChanPanMes ( const int iChanID, const double dPan );
     void CreateMuteStateHasChangedMes ( const int iChanID, const bool bIsMuted );
@@ -223,6 +225,7 @@ protected:
 
     bool EvaluateJitBufMes              ( const CVector<uint8_t>& vecData );
     bool EvaluateReqJitBufMes();
+    bool EvaluateClientIDMes            ( const CVector<uint8_t>& vecData );
     bool EvaluateChanGainMes            ( const CVector<uint8_t>& vecData );
     bool EvaluateChanPanMes             ( const CVector<uint8_t>& vecData );
     bool EvaluateMuteStateHasChangedMes ( const CVector<uint8_t>& vecData );
@@ -284,6 +287,7 @@ signals:
     void ChangeJittBufSize ( int iNewJitBufSize );
     void ReqJittBufSize();
     void ChangeNetwBlSiFact ( int iNewNetwBlSiFact );
+    void ClientIDReceived ( int iChanID );
     void ChangeChanGain ( int iChanID, double dNewGain );
     void ChangeChanPan ( int iChanID, double dNewPan );
     void MuteStateHasChangedReceived ( int iCurID, bool bIsMuted );

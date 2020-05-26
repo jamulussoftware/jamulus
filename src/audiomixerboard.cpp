@@ -613,6 +613,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     bDisplayPans         ( false ),
     bIsPanSupported      ( false ),
     bNoFaderVisible      ( true ),
+    iMyChannelID         ( INVALID_INDEX ),
     strServerName        ( "" )
 {
     // add group box and hboxlayout
@@ -756,6 +757,7 @@ void CAudioMixerBoard::HideAll()
     // set flags
     bIsPanSupported = false;
     bNoFaderVisible = true;
+    iMyChannelID    = INVALID_INDEX;
 
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected
@@ -796,9 +798,13 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                     // Set the default initial fader level. Check first that
                     // this is not the initialization (i.e. previously there
                     // were no faders visible) to avoid that our own level is
-                    // adjusted. The fader level of 100 % is the default in the
+                    // adjusted. If we have received our own channel ID, then
+                    // we can adjust the level even if no fader was visible.
+                    // The fader level of 100 % is the default in the
                     // server, in that case we do not have to do anything here.
-                    if ( !bNoFaderVisible && ( iNewClientFaderLevel != 100 ) )
+                    if ( ( !bNoFaderVisible ||
+                           ( ( iMyChannelID != INVALID_INDEX ) && ( iMyChannelID != i ) ) ) &&
+                         ( iNewClientFaderLevel != 100 ) )
                     {
                         // the value is in percent -> convert range
                         vecpChanFader[i]->SetFaderLevel ( static_cast<int> (

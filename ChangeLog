@@ -3,7 +3,10 @@
 
 
 
-3.5.5git
+
+
+
+3.5.5 (2020-05-26)
 
 - added vocal banjo/mandolin instrument icons created by atsampson (#283)
 
@@ -18,9 +21,7 @@
 
 - bug fix: audio fader sliders cannot be moved if the main windows is too small (#292)
 
-- bug fix: server gain calculations were incorrect
-
-
+- bug fix: server gain calculations were incorrect (introduced in version 3.5.4)
 
 
 3.5.4 (2020-05-24)

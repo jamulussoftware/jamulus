@@ -1203,13 +1203,9 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // mono: copy same mono data in both out stereo audio channels
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        // left channel
-                        vecsOutData[k] = Double2Short (
-                            vecsOutData[k] + vecsData[i] * dGain * dGainL );
-
-                        // right channel
-                        vecsOutData[k + 1] = Double2Short (
-                            vecsOutData[k + 1] + vecsData[i] * dGain * dGainR );
+                        // left/right channel
+                        vecsOutData[k]     = Double2Short ( vecsOutData[k] +     vecsData[i] * dGainL );
+                        vecsOutData[k + 1] = Double2Short ( vecsOutData[k + 1] + vecsData[i] * dGainR );
                     }
                 }
                 else
@@ -1217,13 +1213,9 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
                     {
-                        // left channel
-                        vecsOutData[i] = Double2Short (
-                            vecsOutData[i] + vecsData[i] * dGain * dGainL );
-
-                        // right channel
-                        vecsOutData[i + 1] = Double2Short (
-                            vecsOutData[i + 1] + vecsData[i + 1] * dGain * dGainR );
+                        // left/right channel
+                        vecsOutData[i]     = Double2Short ( vecsOutData[i] +     vecsData[i] *     dGainL );
+                        vecsOutData[i + 1] = Double2Short ( vecsOutData[i + 1] + vecsData[i + 1] * dGainR );
                     }
                 }
             }

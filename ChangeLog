@@ -2,6 +2,7 @@
 
 
 
+
 3.5.5git
 
 - added vocal banjo/mandolin instrument icons created by atsampson (#283)
@@ -13,10 +14,14 @@
 
 - New Client Level now also applies if you enter a server
 
+- bug fix: honour own fader and Mute button in Mute Myself (#148)
+
 - bug fix: audio fader sliders cannot be moved if the main windows is too small (#292)
 
+- bug fix: server gain calculations were incorrect
 
-TODO honour own fader and Mute button in Mute Myself (#148)
+
+TODO go back to original fader range dynamic (since issue was caused by server gain calculation)
 
 
 

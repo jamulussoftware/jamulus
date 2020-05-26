@@ -8,7 +8,7 @@
 
 - faster update of musicians list in the server list table
 
-- display recorder state and latest recording directory,
+- display recorder state and latest recording directory in the server GUI,
   allow a new recording to be requested, by pljones (#228)
 
 

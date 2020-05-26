@@ -243,8 +243,7 @@ public:
 
     void SetMuteOutStream ( const bool bDoMute ) { bMuteOutStream = bDoMute; }
 
-    void SetRemoteChanGain ( const int iId, const double dGain )
-        { Channel.SetRemoteChanGain ( iId, dGain ); }
+    void SetRemoteChanGain ( const int iId, const double dGain, const bool bIsMyOwnFader );
 
 	void SetRemoteChanPan ( const int iId, const double dPan )
         { Channel.SetRemoteChanPan ( iId, dPan ); }
@@ -343,6 +342,7 @@ protected:
     int                     iNumAudioChannels;
     bool                    bIsInitializationPhase;
     bool                    bMuteOutStream;
+    double                  dMuteOutStreamGain;
     CVector<unsigned char>  vecCeltData;
 
     CHighPrioSocket         Socket;

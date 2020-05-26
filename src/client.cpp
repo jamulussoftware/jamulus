@@ -61,6 +61,7 @@ CClient::CClient ( const quint16  iPortNumber,
     iNumAudioChannels                ( 1 ),
     bIsInitializationPhase           ( true ),
     bMuteOutStream                   ( false ),
+    dMuteOutStreamGain               ( 1.0 ),
     Socket                           ( &Channel, iPortNumber ),
     Sound                            ( AudioCallback, this, iCtrlMIDIChannel, bNoAutoJackConnect, strNClientName ),
     iAudioInFader                    ( AUD_FADER_IN_MIDDLE ),
@@ -378,6 +379,19 @@ void CClient::SetDoAutoSockBufSize ( const bool bValue )
 
     // inform the server about the change
     CreateServerJitterBufferMessage();
+}
+
+void CClient::SetRemoteChanGain ( const int    iId,
+                                  const double dGain,
+                                  const bool   bIsMyOwnFader )
+{
+    // if this gain is for my own channel, apply the value for the Mute Myself function
+    if ( bIsMyOwnFader )
+    {
+        dMuteOutStreamGain = dGain;
+    }
+
+    Channel.SetRemoteChanGain ( iId, dGain );
 }
 
 bool CClient::SetServerAddr ( QString strNAddr )
@@ -877,6 +891,8 @@ void CClient::Init()
     vecZeros.Init ( iStereoBlockSizeSam, 0 );
     vecsStereoSndCrdMuteStream.Init ( iStereoBlockSizeSam );
 
+    dMuteOutStreamGain = 1.0;
+
     opus_custom_encoder_ctl ( CurOpusEncoder,
                               OPUS_SET_BITRATE (
                                   CalcBitRateBitsPerSecFromCodedBytes (
@@ -1198,7 +1214,7 @@ fflush(pFileDelay);
         for ( i = 0; i < iStereoBlockSizeSam; i++ )
         {
             vecsStereoSndCrd[i] = Double2Short (
-                static_cast<double> ( vecsStereoSndCrd[i] ) + vecsStereoSndCrdMuteStream[i] );
+                vecsStereoSndCrd[i] + vecsStereoSndCrdMuteStream[i] * dMuteOutStreamGain );
         }
     }
 

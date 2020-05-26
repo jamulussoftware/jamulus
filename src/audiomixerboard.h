@@ -71,6 +71,7 @@ public:
     int  GetPanValue() { return pPan->value(); }
     void Reset();
     void SetChannelLevel ( const uint16_t iLevel );
+    void SetIsMyOwnFader() { bIsMyOwnFader = true; }
 
 protected:
     double CalcFaderGain ( const int value );
@@ -100,6 +101,7 @@ protected:
     QString            strReceivedName;
 
     bool               bOtherChannelIsSolo;
+    bool               bIsMyOwnFader;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value ); }
@@ -107,7 +109,7 @@ public slots:
     void OnMuteStateChanged ( int value );
 
 signals:
-    void gainValueChanged ( double value );
+    void gainValueChanged ( double value, bool bIsMyOwnFader );
     void panValueChanged  ( double value );
     void soloStateChanged ( int value );
 };
@@ -116,12 +118,13 @@ template<unsigned int slotId>
 class CAudioMixerBoardSlots : public CAudioMixerBoardSlots<slotId - 1>
 {
 public:
-    void OnChGainValueChanged ( double dValue ) { UpdateGainValue ( slotId - 1, dValue ); }
+    void OnChGainValueChanged ( double dValue, bool bIsMyOwnFader ) { UpdateGainValue ( slotId - 1, dValue, bIsMyOwnFader ); }
     void OnChPanValueChanged ( double dValue ) { UpdatePanValue ( slotId - 1, dValue ); }
 
 protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
-                                   const double dValue ) = 0;
+                                   const double dValue,
+                                   const bool   bIsMyOwnFader ) = 0;
     virtual void UpdatePanValue ( const int    iChannelIdx,
                                   const double dValue ) = 0;
 };
@@ -147,7 +150,7 @@ public:
     void SetDisplayPans ( const bool eNDP );
     void SetPanIsSupported();
     void SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
-    void SetMyChannelID ( const int iChanID ) { iMyChannelID = iChanID; }
+    void SetMyChannelID ( const int iChannelIdx ) { iMyChannelID = iChannelIdx; }
 
     void SetFaderLevel ( const int iChannelIdx,
                          const int iValue );
@@ -201,7 +204,8 @@ protected:
     QString                 strServerName;
 
     virtual void UpdateGainValue ( const int    iChannelIdx,
-                                   const double dValue );
+                                   const double dValue,
+                                   const bool   bIsMyOwnFader );
     virtual void UpdatePanValue ( const int    iChannelIdx,
                                   const double dValue );
 
@@ -209,7 +213,7 @@ protected:
     inline void connectFaderSignalsToMixerBoardSlots();
 
 signals:
-    void ChangeChanGain ( int iId, double dGain );
+    void ChangeChanGain ( int iId, double dGain, bool bIsMyOwnFader );
     void ChangeChanPan ( int iId, double dPan );
     void NumClientsChanged ( int iNewNumClients );
 };

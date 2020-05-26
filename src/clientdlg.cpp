@@ -526,8 +526,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( &ClientSettingsDlg, SIGNAL ( NewClientLevelChanged() ),
         this, SLOT ( OnNewClientLevelChanged() ) );
 
-    QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double ) ),
-        this, SLOT ( OnChangeChanGain ( int, double ) ) );
+    QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double, bool ) ),
+        this, SLOT ( OnChangeChanGain ( int, double, bool ) ) );
 
     QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanPan ( int, double ) ),
         this, SLOT ( OnChangeChanPan ( int, double ) ) );

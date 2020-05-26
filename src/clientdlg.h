@@ -169,8 +169,8 @@ public slots:
     void OnChatTextReceived ( QString strChatText );
     void OnLicenceRequired ( ELicenceType eLicenceType );
 
-    void OnChangeChanGain ( int iId, double dGain )
-        { pClient->SetRemoteChanGain ( iId, dGain ); }
+    void OnChangeChanGain ( int iId, double dGain, bool bIsMyOwnFader )
+        { pClient->SetRemoteChanGain ( iId, dGain, bIsMyOwnFader ); }
 
 	void OnChangeChanPan ( int iId, double dPan )
         { pClient->SetRemoteChanPan ( iId, dPan ); }

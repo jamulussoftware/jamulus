@@ -316,6 +316,7 @@ void CChannelFader::Reset()
     plblCountryFlag->setToolTipDuration ( iToolTipDurMs );
 
     bOtherChannelIsSolo = false;
+    bIsMyOwnFader       = false;
 }
 
 void CChannelFader::SetFaderLevel ( const int iLevel )
@@ -379,7 +380,7 @@ void CChannelFader::SendFaderLevelToServer ( const int iLevel )
          ( !bOtherChannelIsSolo || IsSolo() ) )
     {
         // emit signal for new fader gain value
-        emit gainValueChanged ( CalcFaderGain ( iLevel ) );
+        emit gainValueChanged ( CalcFaderGain ( iLevel ), bIsMyOwnFader );
     }
 }
 
@@ -399,7 +400,7 @@ void CChannelFader::SetMute ( const bool bState )
     if ( bState )
     {
         // mute channel -> send gain of 0
-        emit gainValueChanged ( 0 );
+        emit gainValueChanged ( 0, bIsMyOwnFader );
     }
     else
     {
@@ -407,7 +408,7 @@ void CChannelFader::SetMute ( const bool bState )
         if ( !bOtherChannelIsSolo || IsSolo() )
         {
             // mute was unchecked, get current fader value and apply
-            emit gainValueChanged ( CalcFaderGain ( GetFaderLevel() ) );
+            emit gainValueChanged ( CalcFaderGain ( GetFaderLevel() ), bIsMyOwnFader );
         }
     }
 }
@@ -657,7 +658,7 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 {
     int iCurChanID = slotId - 1;
 
-    void ( CAudioMixerBoard::* pGainValueChanged )( double ) =
+    void ( CAudioMixerBoard::* pGainValueChanged )( double, bool ) =
         &CAudioMixerBoardSlots<slotId>::OnChGainValueChanged;
 
     void ( CAudioMixerBoard::* pPanValueChanged )( double ) =
@@ -792,6 +793,12 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                     // the fader was not in use, reset everything for new client
                     vecpChanFader[i]->Reset();
 
+                    // check if this is my own fader and set fader property
+                    if ( i == iMyChannelID )
+                    {
+                        vecpChanFader[i]->SetIsMyOwnFader();
+                    }
+
                     // show fader
                     vecpChanFader[i]->Show();
 
@@ -918,9 +925,10 @@ void CAudioMixerBoard::UpdateSoloStates()
 }
 
 void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
-                                         const double dValue )
+                                         const double dValue,
+                                         const bool   bIsMyOwnFader )
 {
-    emit ChangeChanGain ( iChannelIdx, dValue );
+    emit ChangeChanGain ( iChannelIdx, dValue, bIsMyOwnFader );
 }
 
 void CAudioMixerBoard::UpdatePanValue ( const int    iChannelIdx,

@@ -189,9 +189,9 @@ void CSettings::Load()
         }
         else
         {
-            // use "INVALID_SNC_CARD_DEVICE" to tell the sound card driver that
+            // use "INVALID_INDEX" to tell the sound card driver that
             // no device selection was done previously
-            pClient->SetSndCrdDev ( INVALID_SNC_CARD_DEVICE );
+            pClient->SetSndCrdDev ( INVALID_INDEX );
         }
 
         // sound card channel mapping settings: make sure these settings are

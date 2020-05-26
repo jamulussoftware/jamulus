@@ -163,7 +163,7 @@ CSound::CSound ( void           (*fpNewProcessCallback) ( CVector<short>& psData
     }
 
     // init device index as not initialized (invalid)
-    lCurDev                    = INVALID_SNC_CARD_DEVICE;
+    lCurDev                    = INVALID_INDEX;
     CurrentAudioInputDeviceID  = 0;
     CurrentAudioOutputDeviceID = 0;
     iNumInChan                 = 0;
@@ -611,12 +611,12 @@ void CSound::UpdateChSelection()
     int iSelCHRight, iSelAddCHRight;
 
     // initialize all buffer indexes with an invalid value
-    iSelInBufferLeft     = -1;
-    iSelInBufferRight    = -1;
-    iSelAddInBufferLeft  = -1; // if no additional channel used, this will stay on the invalid value
-    iSelAddInBufferRight = -1; // if no additional channel used, this will stay on the invalid value
-    iSelOutBufferLeft    = -1;
-    iSelOutBufferRight   = -1;
+    iSelInBufferLeft     = INVALID_INDEX;
+    iSelInBufferRight    = INVALID_INDEX;
+    iSelAddInBufferLeft  = INVALID_INDEX; // if no additional channel used, this will stay on the invalid value
+    iSelAddInBufferRight = INVALID_INDEX; // if no additional channel used, this will stay on the invalid value
+    iSelOutBufferLeft    = INVALID_INDEX;
+    iSelOutBufferRight   = INVALID_INDEX;
 
     // input
     GetSelCHAndAddCH ( iSelInputLeftChannel,  iNumInChan, iSelCHLeft,  iSelAddCHLeft );

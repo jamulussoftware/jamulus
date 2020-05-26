@@ -116,7 +116,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
     }
 
     // check if an ASIO driver was already initialized
-    if ( lCurDev != INVALID_SNC_CARD_DEVICE )
+    if ( lCurDev != INVALID_INDEX )
     {
         // a device was already been initialized and is used, first clean up
         // driver
@@ -158,7 +158,7 @@ QString CSoundBase::SetDev ( const int iNewDev )
         // init flag for "load any driver"
         bool bTryLoadAnyDriver = false;
 
-        if ( iNewDev != INVALID_SNC_CARD_DEVICE )
+        if ( iNewDev != INVALID_INDEX )
         {
             // This is the first time a driver is to be initialized, we first
             // try to load the selected driver, if this fails, we try to load

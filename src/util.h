@@ -212,7 +212,7 @@ template<class TData> int CVector<TData>::StringFiFoWithCompare ( const QString 
     CVector<QString> vstrTempList ( iVectorSize, "" );
 
     // init with illegal index per definition
-    int iOldIndex = -1;
+    int iOldIndex = INVALID_INDEX;
 
     // init temporary list count (may be overwritten later on)
     int iTempListCnt = 0;
@@ -1249,11 +1249,11 @@ public:
     CTimingMeas ( const int iNNMeas, const QString strNFName = "" ) :
         iNumMeas ( iNNMeas ), vElapsedTimes ( iNNMeas ), strFileName ( strNFName ) { Reset(); }
 
-    void Reset() { iCnt = -1; }
+    void Reset() { iCnt = INVALID_INDEX; }
     void Measure()
     {
         // exclude the very first measurement (initialization phase)
-        if ( iCnt == -1 )
+        if ( iCnt == INVALID_INDEX )
         {
             iCnt = 0;
         }

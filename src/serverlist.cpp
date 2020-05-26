@@ -353,14 +353,11 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
         QMutexLocker locker ( &Mutex );
 
         const int iCurServerListSize = ServerList.size();
-        
-        // define invalid index used as a flag
-        const int ciInvalidIdx = -1;
 
         // Check if server is already registered.
         // The very first list entry must not be checked since
         // this is per definition the central server (i.e., this server)
-        int iSelIdx = ciInvalidIdx; // initialize with an illegal value
+        int iSelIdx = INVALID_INDEX; // initialize with an illegal value
         for ( int iIdx = 1; iIdx < iCurServerListSize; iIdx++ )
         {
             if ( ServerList[iIdx].HostAddr == InetAddr )
@@ -374,7 +371,7 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
         }
 
         // if server is not yet registered, we have to create a new entry
-        if ( iSelIdx == ciInvalidIdx )
+        if ( iSelIdx == INVALID_INDEX )
         {
             // check for maximum allowed number of servers in the server list
             if ( iCurServerListSize < MAX_NUM_SERVERS_IN_SERVER_LIST )
@@ -401,7 +398,7 @@ void CServerListManager::CentralServerRegisterServer ( const CHostAddress&    In
             }
         }
 
-        pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, iSelIdx == ciInvalidIdx
+        pConnLessProtocol->CreateCLRegisterServerResp ( InetAddr, iSelIdx == INVALID_INDEX
                                                             ? ESvrRegResult::SRR_CENTRAL_SVR_FULL
                                                             : ESvrRegResult::SRR_REGISTERED );
     }

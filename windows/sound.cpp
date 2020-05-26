@@ -533,7 +533,7 @@ CSound::CSound ( void           (*fpNewCallback) ( CVector<int16_t>& psData, voi
     }
 
     // init device index as not initialized (invalid)
-    lCurDev = INVALID_SNC_CARD_DEVICE;
+    lCurDev = INVALID_INDEX;
 
     // init channel mapping
     ResetChannelMapping();

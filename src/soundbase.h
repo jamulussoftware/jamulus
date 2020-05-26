@@ -113,7 +113,7 @@ protected:
         }
         else
         {
-            iSelAddCHOut = -1; // set it to an invalid number
+            iSelAddCHOut = INVALID_INDEX; // set it to an invalid number
             iSelCHOut    = iSelCH;
         }
     }

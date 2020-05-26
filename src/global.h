@@ -152,10 +152,8 @@ LED bar:      lbr
 #define AUD_MIX_FADER_MAX                100
 #define AUD_MIX_PAN_MAX                  100
 
-// maximum number of recognized sound cards installed in the system,
-// definition for "no device"
+// maximum number of recognized sound cards installed in the system
 #define MAX_NUMBER_SOUND_CARDS           129 // e.g. 16 inputs, 8 outputs + default entry (MacOS)
-#define INVALID_SNC_CARD_DEVICE          -1
 
 // define the maximum number of audio channel for input/output we can store
 // channel infos for (and therefore this is the maximum number of entries in
@@ -173,7 +171,7 @@ LED bar:      lbr
 #define LOW_BOUND_SIG_METER              ( -50.0 ) // dB
 #define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
 
-// Maximum number of connected clients at the server.
+// maximum number of connected clients at the server (must not be larger than 256)
 #define MAX_NUM_CHANNELS                 50 // max number channels for server
 
 // actual number of used channels in the server
@@ -239,8 +237,8 @@ LED bar:      lbr
     "</i></font></div>"
 
 #define _MAXSHORT                        32767
-#define _MAXBYTE                         255 // binary: 11111111
 #define _MINSHORT                        ( -32768 )
+#define INVALID_INDEX                    -1 // define invalid index as a negative value (a valid index must always be >= 0)
 
 #if HAVE_STDINT_H
 # include <stdint.h>

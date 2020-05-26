@@ -565,17 +565,12 @@ void CServer::OnNewConnection ( int          iChID,
     // client or server thinks that the connection was still active, etc.)
     vecChannels[iChID].CreateReqJitBufMes();
 
-    // logging of new connected channel
-    Logging.AddNewConnection ( RecHostAddr.InetAddr );
-
     // A new client connected to the server, the channel list
     // at all clients have to be updated. This is done by sending
     // a channel name request to the client which causes a channel
     // name message to be transmitted to the server. If the server
     // receives this message, the channel list will be automatically
     // updated (implicitely).
-    // To make sure the protocol message is transmitted, the channel
-    // first has to be marked as connected.
     //
     // Usually it is not required to send the channel list to the
     // client currently connecting since it automatically requests
@@ -585,13 +580,7 @@ void CServer::OnNewConnection ( int          iChID,
     // in case the client thinks he is still connected but the server
     // was restartet, it is important that we send the channel list
     // at this place.
-    vecChannels[iChID].ResetTimeOutCounter();
     vecChannels[iChID].CreateReqChanInfoMes();
-
-// COMPATIBILITY ISSUE
-// since old versions of the software did not implement the channel name
-// request message, we have to explicitely send the channel list here
-CreateAndSendChanListForAllConChannels();
 
     // send welcome message (if enabled)
     if ( !strWelcomeMessage.isEmpty() )
@@ -616,6 +605,9 @@ CreateAndSendChanListForAllConChannels();
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
     DoubleFrameSizeConvBufOut[iChID].Reset();
+
+    // logging of new connected channel
+    Logging.AddNewConnection ( RecHostAddr.InetAddr );
 }
 
 void CServer::OnServerFull ( CHostAddress RecHostAddr )

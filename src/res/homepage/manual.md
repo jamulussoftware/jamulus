@@ -10,7 +10,7 @@ Main Window
 
 ![LEDs](led.png)
 
-The Delay status LED indicator shows the current audio delay status. If the light is green, the delay
+These how the current audio delay status. If the light is green, the delay
 is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder
 to play. If the light is red, the delay is too large for jamming.
 

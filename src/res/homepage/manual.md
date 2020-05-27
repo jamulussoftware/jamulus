@@ -159,17 +159,17 @@ The buffer setting is therefore a trade-off between audio quality and overall de
 
 ![Jitter buffer](jitterbuffer.png)
 
-The jitter buffer compensates for network and sound card timing jitters. The size of this jitter buffer has
-therefore influence on the quality of the audio stream (how many dropouts occur) and the overall delay
+The jitter buffer compensates for network and sound card timing jitters. The size of the buffer
+therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay
 (the longer the buffer, the higher the delay).
 
-The jitter buffer size can be manually chosen for the local client and the remote server. For the local jitter
+You can set the jitter buffer size manually for the local client and the remote server. For the local jitter
 buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders.
-If the light turns to red, a buffer overrun/underrun took place and the audio stream is interrupted.
+If the light turns to red, a buffer overrun/underrun has taken place and the audio stream is interrupted.
 
 The jitter buffer setting is therefore a trade-off between audio quality and overall delay.
 
-An auto setting of the jitter buffer size setting is available. If the check Auto is enabled, the jitter buffers
+If the Auto setting is enabled, the jitter buffers
 of the local client and the remote server are set automatically based on measurements of the network and sound card
 timing jitter. If the Auto check is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).
 
@@ -177,64 +177,62 @@ timing jitter. If the Auto check is enabled, the jitter buffer size faders are d
 
 ![Audio channels](audiochannels.png)
 
-Select the number of audio channels to be used for communication between client and server. There are three modes
-available. The mono and stereo modes use one and two audio channels respectively. In mono-in/stereo-out mode
-the audio signal which is sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other channel. In that case
-the two input signals can be mixed to one mono channel but the server mix can be heard in stereo.
+Selects the number of audio channels to be used for communication between client and server. There are three modes
+available:
 
-Enabling the stereo streaming mode will increase the stream data rate. Make sure that the current upload rate does
-not exceed the available bandwidth of your internet connection.
+Mono and Stereo modes use one and two audio channels respectively. 
 
-In stereo streaming mode, no audio channel selection for the reverberation effect will be available on
-the main window since the effect is applied on both channels in this case.
+Mono-in/Stereo-out: The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case
+the two input signals can be mixed to one mono channel but the server mix is heard in stereo.
+
+Enabling stereo mode will increase your stream's data rate. Make sure your upload rate does
+not exceed the available upload speed of your internet connection.
+
+In stereo streaming mode, no audio channel selection for the reverb effect will be available on
+the main window since the effect is applied to both channels in this case.
 
 ### Audio quality
 
 ![Audio quality](audioquality.png)
 
-Select the desired audio quality. A low, normal or high audio quality can be selected. The higher the audio quality,
-the higher the audio stream data rate. Make sure that the current upload rate does not exceed the available bandwidth
-of your internet connection.
+he higher the audio quality, the higher your audio stream's data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.
 
 ### New client level
 
 ![New client level](newclientlevel.png)
 
-The new client level setting defines the fader level of a new connected client in percent. I.e. if a new client connects
-to the current server, it will get the specified initial fader level if no other fader level of a previous connection of
+This setting defines the fader level of a newly connected client in percent. If a new musician connects
+to the current server, they will get the specified initial fader level if no other fader level from a previous connection of
 that client was already stored.
 
 ### Fancy skin
 
 ![Fancy skin](fancyskin.png)
 
-If enabled, a fancy skin will be applied to the main window.
+This applies a fancy skin to the main window.
 
 ### Display channel levels
 
 ![Display channel levels](displaychannellevels.png)
 
-If enabled, the channel input level for each connected client will be displayed in the mixer.
+This displays the channel input levels for each connected client.
 
-### Central server address
+### Custom central server address
 
 ![Central server address](centralserveraddress.png)
 
-The central server address is the IP address or URL of the central server at which the server list of the connection
-dialog is managed. With the central server address type either the local region can be selected of the default
-central servers or a manual address can be specified.
+Leave this blank unless you need to enter the address of a cenrtral server other than the default.
 
 ### Current connection status parameter
 
 ![Indicators](indicators.png)
 
-The ping time is the time required for the audio stream to travel from the client to the server and back again.
-This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms),
+The Ping Time is the time required for the audio stream to travel from the client to the server and back again.
+This delay is introduced by the network and should about 20-30 ms. If this delay is higher than about 50ms,
 your distance to the server is too large or your internet connection is not sufficient.
 
-The overall delay is calculated from the current ping time and the delay which is introduced by the current buffer settings.
+Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.
 
-The upstream rate depends on the current audio packet size and the audio compression setting. Make sure that the upstream
-rate is not higher than the available rate (check the upstream capabilities of your internet connection by, e.g., using
-[speedtest.net](http://speedtest.net)). 
+Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream
+rate is not higher than your available internet upload speed (check this with a service such as [speedtest.net](http://speedtest.net)). 
 

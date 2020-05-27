@@ -40,11 +40,11 @@ The chat text entered in that dialog is sent to
 all connected clients. If a new chat message arrives and the Chat dialog is not already open, it will
 opened automatically for all clients.
 
-### My Profile button opens the Musician Profile dialog
+### Profile window
 
 ![My profile dialog](profile.jpg)
 
-Use this to set your Alias/Name
+From the View menu, select My Pofile... to set your Alias/Name
 which is displayed below your fader in the server audio mixer board. If an instrument and/or country is set,
 icons for these selections will also be shown below your fader. The skill setting changes the background colour of
 the fader tag and the city entry shows up in the tool tip of the fader tag (see screenshot below).
@@ -63,6 +63,10 @@ The Connection Setup window shows a list of available servers. Server operators 
 If you know the IP address or URL of a server, you can connect to it using the Server Name/Address
 field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g,
 jamulus.dyndns.org:22124. The field will also show a list of the most recently used server addresses.
+
+### Mute Myself button
+
+Cuts your stream to the server so that all other musicians cannot hear you. Note that while you will also be able to see your levels, other musicans will not. However, they will see an icon to indicate that you have muted yourself.
 
 ### Reverb effect
 
@@ -92,10 +96,11 @@ in a direction where the label above the fader shows L -x, where x is the curren
 
 In the audio mixer frame, a fader is shown for each connected client at the server (including yourself).
 The faders allow you to adjust the level of what you hear without affecting what others hear.
-The VU meter shows the input level at the server - that is, what you are sending.
-If you have set your Audio Channel to Stereo or Steroe Out in your Settings, you will also see a pan control.  
 
-Using the Mute button prevents the indicated channel being heard in your local mix. Note that you will continue to see the level indicators moving if sound from the muted musician is reaching the server.
+The VU meter shows the input level at the server - that is, the sound you are sending.
+If you have set your Audio Channel to Stereo or Stereo Out in your Settings, you will also see a pan control.  
+
+Using the Mute button prevents the indicated channel being heard in your local mix. Note that you will continue to see their VU meters moving if sound from the muted musician is reaching the server. Your fader position is also unaffected.
 
 The Solo button allows you to hear one or more musicians on their own. Those not soloed will be muted.
 

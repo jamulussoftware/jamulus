@@ -60,9 +60,11 @@ public:
             iPortIncrement++;
         }
 
-        // connect protocol signal
+        // connect protocol signals
         QObject::connect ( &Protocol, SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
             this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
+        QObject::connect ( &Protocol, SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
+            this, SLOT ( OnSendCLMessage ( CHostAddress, CVector<uint8_t> ) ) );
 
         // connect and start the timer (testbench heartbeat)
         QObject::connect ( &Timer, SIGNAL ( timeout() ),
@@ -294,5 +296,13 @@ public slots:
         // reset protocol so that we do not have to wait for an acknowledge to
         // send the next message
         Protocol.Reset();
+    }
+
+    void OnSendCLMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
+    {
+        // silence unused warning
+        (void) InetAddr;
+
+        OnSendProtMessage ( vecMessage );
     }
 };

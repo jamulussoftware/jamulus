@@ -32,7 +32,7 @@ The **Status** LED shows the current audio delay status.
 This shows the level of the two stereo channels for your audio input.
 Make sure not to clip the input signal to avoid distortions of the audio signal.
 
-### Chat button opens the Chat dialog
+### Chat button
 
 ![Chat dialog](chat.png)
 

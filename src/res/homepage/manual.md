@@ -10,13 +10,15 @@ Main Window
 
 ![LEDs](led.png)
 
-These how the current audio delay status. If the light is green, the delay
-is perfect for a jam session. If the light is yellow, a session is still possible but it may be harder
-to play. If the light is red, the delay is too large for jamming.
+The **Status** LED shows the current audio delay status. 
 
-The Buffer status LED indicator shows the current audio/streaming status. If the light is green, there
-are no buffer overruns/underruns and the audio stream is not interrupted. If the light is red, the
-audio stream is interrupted caused by one of the following problems:
+* **Green** - The delay is perfect for a jam session
+
+* **Yellow** - A session is still possible but it may be harder to play
+
+* **Red** - The delay is too large for jamming
+
+The **Buffers** LED indicator shows the current audio/streaming status. If the light is **red**, the audio stream is interrupted. This is caused by one of the following problems:
 
 - The network jitter buffer is not large enough for the current network/audio interface jitter.
 - The sound card buffer delay (buffer size) is set to too small a value.
@@ -27,66 +29,62 @@ audio stream is interrupted caused by one of the following problems:
 
 ![Input level](inputlevel.jpg)
 
-The input level indicators show the input level of the two stereo channels of the current selected audio input.
+This shows the input level of the two stereo channels of the current selected audio input.
 Make sure not to clip the input signal to avoid distortions of the audio signal.
 
 ### Chat button opens the Chat dialog
 
 ![Chat dialog](chat.jpg)
 
-Press the Chat button to open the Chat dialog. The chat text entered in that dialog is transmitted to
+The chat text entered in that dialog is transmitted to
 all connected clients. If a new chat message arrives and the Chat dialog is not already open, it will
-be opened automatically at all clients.
+opened automatically for all clients.
 
 ### My Profile button opens the Musician Profile dialog
 
 ![My profile dialog](profile.jpg)
 
-Press the My Profile button to open the Musician Profile dialog. In this dialog you can set your Alias/Name
+Use this to set your Alias/Name
 which is displayed below your fader in the server audio mixer board. If an instrument and/or country is set,
-icons for these selections will also be shown below your fader. The skill setting changes the background of
-the fader tag and the city entry shows up in the tool tip of the fader tag. This tool tip is shown in the following picture.
+icons for these selections will also be shown below your fader. The skill setting changes the background colour of
+the fader tag and the city entry shows up in the tool tip of the fader tag (see screenshot below).
 
 ![Fader tag tool tip](fadertagtooltip.jpg)
 
 ### Connect/disconnect button
 
-Push this button to connect to a server. A dialog where you can select a server will open. If you are connected,
+Opens a dialog where you can select a server to connect to. If you are connected,
 pressing this button will end the session.
 
 ![Connect dialog](connect.jpg)
 
-The server list shows a list of available servers which are registered at the central server. Select a server
-from the list and press the connect button to connect to this server. Alternatively, double click a server from
-the list to connect to it. If a server is occupied, a list of the connected musicians is available by expanding
-the list item. Permanent servers are shown in bold font.
+Shows a list of available servers which are registered at the Central Server. Select a server
+from this list and press the Connect button to connect to this server. Alternatively, double click a server from
+the list to connect to it. Permanent servers (those available for longer than 24 hours) are shown in bold font.
 
-Note that it may take some time to retrieve the server list from the central server. If no valid central server
-address is specified in the settings, no server list will be available.
-
-Alternatively, you can enter an IP address or URL of the server running the Jamulus server in the server address
+If you know the IP address or URL of a server, you can connect to it using the Server Name/Address
 field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g,
-jamulus.dyndns.org:22124. A list of the most recent used server IP addresses or URLs is available for selection.
+jamulus.dyndns.org:22124. The field will also show a list of the most recently used server addresses.
 
-### Reverberation effect
+### Reverb effect
 
 ![Reverberation](reverberation.jpg)
 
-A reverberation effect can be applied to one local mono audio channel or to both channels in stereo mode.
-The mono channel selection and the reverberation level can be modified. If, e.g., the microphone signal is fed
-into the right audio channel of the sound card and a reverberation effect shall be applied, set the channel selector
-to right and move the fader upwards until the desired reverberation level is reached.
+Reverb can be applied to one local mono audio channel or to both channels in stereo mode.
+The mono channel selection and the reverberation level can be modified. For example, if a microphone signal is fed
+in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector
+to the right and move the fader upwards until the desired reverb level is reached.
 
-The reverberation effect requires significant CPU so it should only be used on fast PCs. If the reverberation
-level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does
+Reverb requires significant CPU so it should only be used on fast PCs. If the reverb
+level fader is set to minimum (wthe default setting), the effect is switched off and does
 not cause any additional CPU usage.
 
 ### Local audio pan / balance control
 
 ![Local audio pan / balance control](audiofader.jpg)
 
-With the balance control, the relative levels of the left and right local audio channels can be changed. For a mono signal
-it acts like a panning between the two channels. If, e.g., a microphone is connected to the right input channel and
+Controls the relative levels of the left and right local audio channels. For a mono signal
+it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and
 an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader
 in a direction where the label above the fader shows L -x, where x is the current attenuation indicator.
 
@@ -94,13 +92,14 @@ in a direction where the label above the fader shows L -x, where x is the curren
 
 ![Audio faders](faders.jpg)
 
-In the audio mixer frame, a fader is shown for each connected client at the server, including yourself.
+In the audio mixer frame, a fader is shown for each connected client at the server (including yourself).
 The faders allow you to adjust the level of what you hear without affecting what others hear.
 The VU meter shows the input level at the server - that is, what you are sending.
 
-Using the Mute checkbox prevents the indicated channel being heard in your local mix.
+Using the Mute button prevents the indicated channel being heard in your local mix. Note that you will continue to see the level indicators moving if sound from the muted musician is reaching the server.
 
-The solo checkboxes allow you to hear only one, or several, channels, with those not soloed being muted.
+The Solo button allows you to hear one or more musicians on their own. Those not soloed will be muted.
+
 
 Settings Window
 ---------------
@@ -126,8 +125,7 @@ a different actual sound card channel can be selected.
 
 ### Enable Small Network Buffers
 
-If enabled, the support for very small network audio packets is activated. Very small network packets are only
-actually used if the sound card buffer delay is smaller than 128 samples. The smaller the network buffers, the
+Allows support for very small network audio packets. These are only used if the sound card buffer delay is smaller than 128 samples. The smaller the network buffers, the
 lower the audio latency. But at the same time the network load increases and the probability of audio dropouts
 also increases.
 
@@ -135,17 +133,15 @@ also increases.
 
 ![Buffer delay](bufferdelay.png)
 
-The buffer delay setting is a fundamental setting of the Jamulus software. This setting has influence on many
+The buffer delay setting is a fundamental setting of the Jamulus software. This setting has an influence on many
 connection properties. Three buffer sizes are supported:
 
-- 64 samples: This is the preferred setting since it provides the lowest latency but does not work with all sound cards.
-- 128 samples: This setting should work for most available sound cards.
-- 256 samples: This setting should only be used if only a very slow computer or a slow internet connection is available.
+- 64 samples: The preferred setting. Provides the lowest latency but does not work with all sound cards.
+- 128 samples: Should work for most available sound cards.
+- 256 samples: Should only be used on very slow computers, or with a slow internet connection.
 
 Some sound card drivers do not allow the buffer delay to be changed from within the Jamulus software.
-In this case the buffer delay setting is disabled. To change the actual buffer delay,
-this setting has to be changed in the sound card driver. On Windows, press the ASIO Setup button to open
-the driver settings panel.
+In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel.
 
 ![Buffer delay Windows](bufferdelaywindows.jpg)
 

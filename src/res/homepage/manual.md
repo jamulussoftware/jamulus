@@ -4,7 +4,7 @@ Jamulus Help (Software Manual)
 Main Window
 -----------
 
-![Main window](main.jpg)
+![Main window](main.png)
 
 ### Status LEDs
 
@@ -27,14 +27,14 @@ The **Status** LED shows the current audio delay status.
 
 ### Input level
 
-![Input level](inputlevel.jpg)
+![Input level](inputlevel.png)
 
 This shows the level of the two stereo channels for your audio input.
 Make sure not to clip the input signal to avoid distortions of the audio signal.
 
 ### Chat button opens the Chat dialog
 
-![Chat dialog](chat.jpg)
+![Chat dialog](chat.png)
 
 The chat text entered in that dialog is sent to
 all connected clients. If a new chat message arrives and the Chat dialog is not already open, it will
@@ -42,21 +42,21 @@ opened automatically for all clients.
 
 ### Profile window
 
-![My profile dialog](profile.jpg)
+![My profile dialog](profile.png)
 
 From the View menu, select My Pofile... to set your Alias/Name
 which is displayed below your fader in the server audio mixer board. If an instrument and/or country is set,
 icons for these selections will also be shown below your fader. The skill setting changes the background colour of
 the fader tag and the city entry shows up in the tool tip of the fader tag (see screenshot below).
 
-![Fader tag tool tip](fadertagtooltip.jpg)
+![Fader tag tool tip](fadertagtooltip.png)
 
 ### Connect/disconnect button
 
 Opens a dialog where you can select a server to connect to. If you are connected,
 pressing this button will end the session.
 
-![Connect dialog](connect.jpg)
+![Connect dialog](connect.png)
 
 The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by musical genre. Use the List dropdown to select a genre and press the Connect button to join a server. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 24 hours) are shown in bold.
 
@@ -70,7 +70,7 @@ Cuts your stream to the server so that all other musicians cannot hear you. Note
 
 ### Reverb effect
 
-![Reverberation](reverberation.jpg)
+![Reverberation](reverberation.png)
 
 Reverb can be applied to one local mono audio channel or to both channels in stereo mode.
 The mono channel selection and the reverberation level can be modified. For example, if a microphone signal is fed
@@ -83,7 +83,7 @@ not cause any additional CPU usage.
 
 ### Local audio pan / balance control
 
-![Local audio pan / balance control](audiofader.jpg)
+![Local audio pan / balance control](audiofader.png)
 
 Controls the relative levels of the left and right local audio channels. For a mono signal
 it acts as a pan between the two channels. For example, if a microphone is connected to the right input channel and
@@ -92,7 +92,7 @@ in a direction where the label above the fader shows L -x, where x is the curren
 
 ### Server audio mixer
 
-![Audio faders](faders.jpg)
+![Audio faders](faders.png)
 
 In the audio mixer frame, a fader is shown for each connected client at the server (including yourself).
 The faders allow you to adjust the level of what you hear without affecting what others hear.
@@ -108,11 +108,11 @@ The Solo button allows you to hear one or more musicians on their own. Those not
 Settings Window
 ---------------
 
-![Settings](settings.jpg)
+![Settings](settings.png)
 
 ### Sound card device
 
-![Sound card device Windows](soundcarddevicewindows.jpg)
+![Sound card device Windows](soundcarddevicewindows.png)
 ![Sound card device Mac](soundcarddevicemac.png)
 
 The ASIO driver (sound card) can be selected using Jamulus under the Windows operating system. If the selected ASIO
@@ -147,7 +147,7 @@ connection properties. Three buffer sizes are supported:
 Some sound card drivers do not allow the buffer delay to be changed from within the Jamulus software.
 In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel.
 
-![Buffer delay Windows](bufferdelaywindows.jpg)
+![Buffer delay Windows](bufferdelaywindows.png)
 
 On Linux, use the Jack configuration tool to change the buffer size.
 
@@ -155,7 +155,7 @@ The actual buffer delay has influence on the connection status, the current uplo
 The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the
 higher the upload rate and the lower the overall delay.
 
-![Buffer delay dependencies](bufferdelaydependency.jpg)
+![Buffer delay dependencies](bufferdelaydependency.png)
 
 The buffer setting is therefore a trade-off between audio quality and overall delay.
 

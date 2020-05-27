@@ -127,7 +127,7 @@ If the selected sound card device offers more than one input or output channel, 
 and Output Channel Mapping_ settings are visible. For each Jamulus input/output channel (left and right channel)
 a different actual sound card channel can be selected.
 
-### Enable Small Network Buffers
+### Enable small network buffers
 
 Allows support for very small network audio packets. These are only used if the sound card buffer delay is smaller than 128 samples. The smaller the network buffers, the
 lower the audio latency. But at the same time the network load increases and the probability of audio dropouts

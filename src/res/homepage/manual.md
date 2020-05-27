@@ -18,25 +18,25 @@ The **Status** LED shows the current audio delay status.
 
 * **Red** - The delay is too large for jamming
 
-The **Buffers** LED indicator shows the current audio/streaming status. If the light is **red**, the audio stream is interrupted. This is caused by one of the following problems:
+**Buffers** shows the current audio/streaming status. If the light is **red**, the audio stream is interrupted. This is caused by one of the following problems:
 
 - The network jitter buffer is not large enough for the current network/audio interface jitter.
-- The sound card buffer delay (buffer size) is set to too small a value.
-- The upload or download stream rate is too high for the current available internet bandwidth.
+- The sound card's buffer delay (buffer size) is too small (see Settings window).
+- The upload or download stream rate is too high for your internet bandwidth.
 - The CPU of the client or server is at 100%.
 
 ### Input level
 
 ![Input level](inputlevel.jpg)
 
-This shows the input level of the two stereo channels of the current selected audio input.
+This shows the level of the two stereo channels for your audio input.
 Make sure not to clip the input signal to avoid distortions of the audio signal.
 
 ### Chat button opens the Chat dialog
 
 ![Chat dialog](chat.jpg)
 
-The chat text entered in that dialog is transmitted to
+The chat text entered in that dialog is sent to
 all connected clients. If a new chat message arrives and the Chat dialog is not already open, it will
 opened automatically for all clients.
 
@@ -58,9 +58,8 @@ pressing this button will end the session.
 
 ![Connect dialog](connect.jpg)
 
-Shows a list of available servers which are registered at the Central Server. Select a server
-from this list and press the Connect button to connect to this server. Alternatively, double click a server from
-the list to connect to it. Permanent servers (those available for longer than 24 hours) are shown in bold font.
+The Connection Setup window shows a list of available servers which are registered at the Central Server. Select a server
+from this list and press the Connect button to join it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 24 hours) are shown in bold.
 
 If you know the IP address or URL of a server, you can connect to it using the Server Name/Address
 field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g,

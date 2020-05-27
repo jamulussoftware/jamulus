@@ -58,8 +58,7 @@ pressing this button will end the session.
 
 ![Connect dialog](connect.jpg)
 
-The Connection Setup window shows a list of available servers which are registered at the Central Server. Select a server
-from this list and press the Connect button to join it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 24 hours) are shown in bold.
+The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by musical genre. Use the List dropdown to select a genre and press the Connect button to join a server. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 24 hours) are shown in bold.
 
 If you know the IP address or URL of a server, you can connect to it using the Server Name/Address
 field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g,
@@ -94,6 +93,7 @@ in a direction where the label above the fader shows L -x, where x is the curren
 In the audio mixer frame, a fader is shown for each connected client at the server (including yourself).
 The faders allow you to adjust the level of what you hear without affecting what others hear.
 The VU meter shows the input level at the server - that is, what you are sending.
+If you have set your Audio Channel to Stereo or Steroe Out in your Settings, you will also see a pan control.  
 
 Using the Mute button prevents the indicated channel being heard in your local mix. Note that you will continue to see the level indicators moving if sound from the muted musician is reaching the server.
 

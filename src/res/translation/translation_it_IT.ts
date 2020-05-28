@@ -323,7 +323,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="210"/>
         <source>PAN</source>
-        <translation>Bilanciamento</translation>
+        <translation>Bil. (L / R)</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="211"/>
@@ -1315,7 +1315,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="213"/>
         <source>Enable Small Network Buffers</source>
-        <translation>Abilita riduzzione dimensione Buffer</translation>
+        <translation>Abilita riduzione dimensione Buffer</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="220"/>

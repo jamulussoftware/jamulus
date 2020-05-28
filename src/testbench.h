@@ -344,11 +344,8 @@ public slots:
         Protocol.Reset();
     }
 
-    void OnSendCLMessage ( CHostAddress InetAddr, CVector<uint8_t> vecMessage )
+    void OnSendCLMessage ( CHostAddress, CVector<uint8_t> vecMessage )
     {
-        // silence unused warning
-        (void) InetAddr;
-
         OnSendProtMessage ( vecMessage );
     }
 };

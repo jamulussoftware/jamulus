@@ -91,6 +91,8 @@ win32 {
     QT += macextras
     HEADERS += mac/sound.h
     SOURCES += mac/sound.cpp
+    HEADERS += mac/activity.h
+    OBJECTIVE_SOURCES += mac/activity.mm
     RC_FILE = mac/mainicon.icns
     CONFIG += x86
     QMAKE_TARGET_BUNDLE_PREFIX = net.sourceforge.llcon
@@ -107,7 +109,8 @@ win32 {
         -framework CoreAudio \
         -framework CoreMIDI \
         -framework AudioToolbox \
-        -framework AudioUnit
+        -framework AudioUnit \
+        -framework Foundation
 
     # replace coreaudio with jack if requested
     contains(CONFIG, "jackonmac") {

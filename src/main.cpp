@@ -37,6 +37,9 @@
 #ifdef ANDROID
 # include <QtAndroidExtras/QtAndroid>
 #endif
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+# include "mac/activity.h"
+#endif
 
 
 // Implementation **************************************************************
@@ -517,8 +520,7 @@ int main ( int argc, char** argv )
     {
         tsConsole << "Qt5 requires a windowing system to paint a JPEG image; image will use SVG" << endl;
     }
-
-
+    
     // Application/GUI setup ---------------------------------------------------
     // Application object
     QCoreApplication* pApp = bUseGUI
@@ -549,6 +551,14 @@ int main ( int argc, char** argv )
     // Here, we set the path to our application path.
     QDir ApplDir ( QApplication::applicationDirPath() );
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
+#endif
+    
+#if defined ( __APPLE__ ) || defined ( __MACOSX )
+    // On OSX we need to declare an activity to ensure the process doesn't get
+    // throttled by OS level Nap, Sleep, and Thread Priority systems.
+    CActivity activity;
+
+    activity.BeginActivity();
 #endif
 
     // init resources
@@ -688,6 +698,10 @@ int main ( int argc, char** argv )
             tsConsole << generr.GetErrorText() << endl;
         }
     }
+    
+    #if defined ( __APPLE__ ) || defined ( __MACOSX )
+        activity.EndActivity();
+    #endif
 
     return 0;
 }

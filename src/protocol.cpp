@@ -556,6 +556,12 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
         // special treatment for acknowledge messages
         if ( iRecID == PROTMESSID_ACKN )
         {
+            // check size
+            if ( vecbyMesBodyData.Size() != 2 )
+            {
+                return true; // return error code
+            }
+
             // extract data from stream and emit signal for received value
             int       iPos = 0;
             const int iData =

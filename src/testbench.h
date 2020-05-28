@@ -117,13 +117,15 @@ public slots:
         CNetworkTransportProps NetTrProps;
         CServerCoreInfo        ServerInfo;
         CVector<CServerInfo>   vecServerInfo ( 1 );
+        CVector<uint16_t>      vecLevelList ( 1 );
         CHostAddress           CurHostAddress ( QHostAddress ( sAddress ), iPort );
         CHostAddress           CurLocalAddress ( QHostAddress ( sLAddress ), iLPort );
         CChannelCoreInfo       ChannelCoreInfo;
         ELicenceType           eLicenceType;
+        ESvrRegResult          eSvrRegResult;
 
         // generate random protocol message
-        switch ( GenRandomIntInRange ( 0, 27 ) )
+        switch ( GenRandomIntInRange ( 0, 34 ) )
         {
         case 0: // PROTMESSID_JITT_BUF_SIZE
             Protocol.CreateJitBufMes ( GenRandomIntInRange ( 0, 10 ) );
@@ -280,9 +282,53 @@ public slots:
             break;
 
         case 27:
+        {
             // arbitrary "audio" packet (with random sizes)
             CVector<uint8_t> vecMessage ( GenRandomIntInRange ( 1, 1000 ) );
             OnSendProtMessage ( vecMessage );
+            break;
+        }
+
+        case 28: // PROTMESSID_CLM_CONN_CLIENTS_LIST
+            vecChanInfo[0].iChanID = GenRandomIntInRange ( -2, 20 );
+            vecChanInfo[0].iIpAddr = GenRandomIPv4Address().toIPv4Address();
+            vecChanInfo[0].strName = GenRandomString();
+
+            Protocol.CreateCLConnClientsListMes ( CurHostAddress, vecChanInfo );
+            break;
+
+        case 29: // PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST
+            Protocol.CreateCLReqConnClientsListMes ( CurHostAddress );
+            break;
+
+        case 30: // PROTMESSID_CLM_CHANNEL_LEVEL_LIST
+            vecLevelList[0] = GenRandomIntInRange ( 0, 0xF );
+
+            Protocol.CreateCLChannelLevelListMes ( CurHostAddress,
+                                                   vecLevelList,
+                                                   1 );
+            break;
+
+        case 31: // PROTMESSID_CLM_REGISTER_SERVER_RESP
+            eSvrRegResult =
+                static_cast<ESvrRegResult> ( GenRandomIntInRange ( 0, 1 ) );
+
+            Protocol.CreateCLRegisterServerResp ( CurHostAddress,
+                                                  eSvrRegResult );
+            break;
+
+        case 32: // PROTMESSID_CHANNEL_PAN
+            Protocol.CreateChanPanMes ( GenRandomIntInRange ( -2, 20 ),
+                                        GenRandomIntInRange ( 0, 32767 ) );
+            break;
+
+        case 33: // PROTMESSID_MUTE_STATE_CHANGED
+            Protocol.CreateMuteStateHasChangedMes ( GenRandomIntInRange ( -2, 20 ),
+                                                    GenRandomIntInRange ( 0, 1 ) );
+            break;
+
+        case 34: // PROTMESSID_CLIENT_ID
+            Protocol.CreateClientIDMes ( GenRandomIntInRange ( -2, 20 ) );
             break;
         }
     }

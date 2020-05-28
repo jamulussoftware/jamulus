@@ -401,6 +401,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Tormod Volden (<a href=""https://github.com/tormodvolden"">tormodvolden</a>)</p>"
         "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
         "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
+        "<p>Adam Sampson (<a href=""https://github.com/atsampson"">atsampson</a>)</p>"
         "<br>" + tr ( "For details on the contributions check out the " ) +
         "<a href=""https://github.com/corrados/jamulus/graphs/contributors"">" + tr ( "Github Contributors list" ) + "</a>." );
 

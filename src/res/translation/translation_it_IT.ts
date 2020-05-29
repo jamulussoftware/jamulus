@@ -31,7 +31,7 @@
     <message>
         <location filename="../../util.cpp" line="375"/>
         <source> uses the following libraries, resources or code snippets:</source>
-        <translation> usa le seguenti librerie, risorse o pezzi di codice:</translation>
+        <translation> usa le seguenti librerie, risorse o parti di codice:</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="376"/>
@@ -46,7 +46,7 @@
     <message>
         <location filename="../../util.cpp" line="383"/>
         <source>Some pixmaps are from the</source>
-        <translation>Molte pixmaps provengono da</translation>
+        <translation>Alcune pixmaps provengono da</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="385"/>
@@ -56,12 +56,12 @@
     <message>
         <location filename="../../util.cpp" line="404"/>
         <source>For details on the contributions check out the </source>
-        <translation>Per maggiori informazioni su chi ha contributio, visitare </translation>
+        <translation>Per maggiori informazioni su chi ha contribuito, visitare </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="405"/>
         <source>Github Contributors list</source>
-        <translation>Github lista dei collaboratori</translation>
+        <translation>Lista dei collaboratori su Github</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="409"/>
@@ -268,7 +268,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="149"/>
         <source>Sets the panning position from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
-        <translation>Imposta il Bilancimento da Sinistra a Destra del canale. Funzione abilitata in modalità stero oppure in modalità mono in/stereo out.</translation>
+        <translation>Imposta il Bilanciamento da Sinistra a Destra del canale. Funzione abilitata in modalità stereo oppure in modalità mono in/stereo out.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="152"/>
@@ -388,7 +388,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="37"/>
         <source>The chat window shows a history of all chat messages.</source>
-        <translation>Lq finestra della chat mostra la storia di tutti i messaggi.</translation>
+        <translation>La finestra della chat mostra la storia di tutti i messaggi.</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="40"/>
@@ -444,7 +444,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="54"/>
         <source>Make sure not to clip the input signal to avoid distortions of the audio signal.</source>
-        <translation>Controllare di non saturare il livello di input per evitare distorisioni nel segnale audio.</translation>
+        <translation>Controllare di non saturare il livello di input per evitare distorsioni nel segnale audio.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="57"/>
@@ -454,7 +454,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="58"/>
         <source> software is connected and you play your instrument/sing in the microphone, the LED level meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. line in instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation> è collegato, suonando lo strumento oppure cantando con il microfono, l&apos;idicatore a LED dovrebbe illuninarsi. In caso contrario probabilmente avete selezionato il canale di ingresso errato (ad es. Line in anziché l&apos;ingresso del microfono) oppure avete impostato un guadagno di input troppo basso nel mixer audio (Windows).</translation>
+        <translation> è collegato, suonando lo strumento oppure cantando con il microfono, l&apos;idicatore a LED dovrebbe illuninarsi. In caso contrario probabilmente hai selezionato il canale di ingresso errato (ad es. Line in anziché l&apos;ingresso del microfono) oppure hai impostato un guadagno di input troppo basso nel mixer audio (Windows).</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="63"/>
@@ -464,7 +464,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="64"/>
         <source> software, you should not hear your singing/instrument in the loudspeaker or your headphone when the </source>
-        <translation> non dovreste sentire la voce o lo strumento nelle casse o nelle cuffie quando </translation>
+        <translation> non dovresti sentire la voce o lo strumento nelle casse o nelle cuffie quando </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="67"/>
@@ -541,27 +541,27 @@
     <message>
         <location filename="../../clientdlg.cpp" line="118"/>
         <source>Reverberation Level</source>
-        <translation>Livello di Reverbero</translation>
+        <translation>Livello di Riverbero</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="119"/>
         <source>A reverberation effect can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverberation level can be modified. If, e.g., the microphone signal is fed into the right audio channel of the sound card and a reverberation effect shall be applied, set the channel selector to right and move the fader upwards until the desired reverberation level is reached.</source>
-        <translation>Un effetto di riverbero può essere applicato al canale mono od ad antrambi i canali stereo. La selezione del canale mono e il livello di riverbero possono essere modificati. Se, ad esempio, il segnale del microfono viene immesso nel canale audio destro della scheda audio e deve essere applicato un effetto di riverbero, impostare il selettore di canale a destra e spostare il fader verso l&apos;alto fino a raggiungere il livello di riverbero desiderato.</translation>
+        <translation>Un effetto di riverbero può essere applicato al canale mono o ad entrambi i canali stereo. La selezione del canale mono e il livello di riverbero possono essere modificati. Se, ad esempio, il segnale del microfono viene immesso nel canale audio destro della scheda audio e deve essere applicato un effetto di riverbero, impostare il selettore di canale a destra e spostare il fader verso l&apos;alto fino a raggiungere il livello di riverbero desiderato.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="125"/>
         <source>The reverberation effect requires significant CPU so it should only be used on fast PCs. If the reverberation level fader is set to minimum (which is the default setting), the reverberation effect is switched off and does not cause any additional CPU usage.</source>
-        <translation>L&apos;effetto di reverbero richiede un uso significativo della CPU, quindi è raccomandabile usarlo su computer veloci. Se il livello del reverbero è messo al minimo (come di default), l&apos;effetto è disattivato e non causa rallentamenti sulla CPU.</translation>
+        <translation>L&apos;effetto di riverbero richiede un uso significativo della CPU, quindi è raccomandabile usarlo su computer veloci. Se il livello del riverbero è messo al minimo (come di default), l&apos;effetto è disattivato e non causa rallentamenti sulla CPU.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="134"/>
         <source>Reverberation effect level setting</source>
-        <translation>Settaggio del livello di Reverbero</translation>
+        <translation>Settaggio del livello di Riverbero</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="137"/>
         <source>Reverberation Channel Selection</source>
-        <translation>Selettore di canale per il Reverbero</translation>
+        <translation>Selettore di canale per il Riverbero</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="138"/>
@@ -571,12 +571,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="143"/>
         <source>Left channel selection for reverberation</source>
-        <translation>Canale Sinistro per il Reverbero</translation>
+        <translation>Canale Sinistro per il Riverbero</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="145"/>
         <source>Right channel selection for reverberation</source>
-        <translation>Canale Destro per il Reverbero</translation>
+        <translation>Canale Destro per il Riverbero</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="148"/>
@@ -770,7 +770,7 @@
     <message>
         <location filename="../../clientdlgbase.ui" line="467"/>
         <source>Reverb</source>
-        <translation>Reverbero</translation>
+        <translation>Riverbero</translation>
     </message>
     <message>
         <location filename="../../clientdlgbase.ui" line="533"/>
@@ -988,7 +988,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="158"/>
         <source>The actual buffer delay has influence on the connection status, the current upload rate and the overall delay. The lower the buffer size, the higher the probability of a red light in the status indicator (drop outs) and the higher the upload rate and the lower the overall delay.</source>
-        <translation>Il Buffer Delay influenza lo stato della connessione, la velocità di upload e l&apos;OverAll Delay. Usare una dimensione troppo bassa del buffer comporta, maggiore probabilità che l&apos;indicatore di stato diventi rosso (drop outs) consumo di banda in upload e una diminuzione dell&apos;OverAll Delay.</translation>
+        <translation>Il Buffer Delay influenza lo stato della connessione, la velocità di upload e l&apos;Overall Delay. Usare una dimensione troppo bassa del buffer comporta, maggiore probabilità che l&apos;indicatore di stato diventi rosso (drop outs) consumo di banda in upload e una diminuzione dell&apos;Overall Delay.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="163"/>
@@ -1073,7 +1073,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="212"/>
         <source>In stereo streaming mode, no audio channel selection for the reverberation effect will be available on the main window since the effect is applied on both channels in this case.</source>
-        <translation>Nel caso in cui si una lo streaming stereo, non sarà possibile selezionare su quale canale far intervenire il reverbero inquanto sarà applicato ad entrambi i canali Left e Right.</translation>
+        <translation>Nel caso in cui si una lo streaming stereo, non sarà possibile selezionare su quale canale far intervenire il riverbero inquanto sarà applicato ad entrambi i canali Left e Right.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="219"/>
@@ -1103,12 +1103,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="235"/>
         <source>The new client level setting defines the fader level of a new connected client in percent. I.e. if a new client connects to the current server, it will get the specified initial fader level if no other fader level of a previous connection of that client was already stored.</source>
-        <translation>Settare il livello per il nuovo client definisce il livello, in percentuale, di ingresso per un nuovo utente che si connette. Un nuovo client che si connette alla sessione assume un vulome uguale a quello settato se non ci sono livelli memorizzati per questo client in precedenti connessioni con lo stesso.</translation>
+        <translation>Settare il livello per il nuovo client definisce il livello, in percentuale, di ingresso per un nuovo utente che si connette. Un nuovo client che si connette alla sessione assume un volume uguale a quello settato se non ci sono livelli memorizzati per questo client in precedenti connessioni con lo stesso.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="243"/>
         <source>New client level edit box</source>
-        <translation>Box per modificre il livello di ingresso di un nuovo client</translation>
+        <translation>Box per modificare il livello di ingresso di un nuovo client</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="246"/>
@@ -1145,22 +1145,22 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="258"/>
         <source>The ping time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network. This delay should be as low as 20-30 ms. If this delay is higher (e.g., 50-60 ms), your distance to the server is too large or your internet connection is not sufficient.</source>
-        <translation>Il Ping è il tempo richiesto dallo stream audio per essere trasmesso dal client al server e tronare indietro. Questo ritardo è introdotto dalla rete. Questo ritardo dovrebbe non superare i 20-30 ms. Se tale ritardo supera i 50-60 ms significa che la distanza dal server è eccessiva oppure che la connessione non è adeguata.</translation>
+        <translation>Il Ping è il tempo richiesto dallo stream audio per essere trasmesso dal client al server e tornare indietro. Questo ritardo è introdotto dalla rete. Questo ritardo dovrebbe non superare i 20-30 ms. Se tale ritardo supera i 50-60 ms significa che la distanza dal server è eccessiva oppure che la connessione non è adeguata.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>
         <source>The overall delay is calculated from the current ping time and the delay which is introduced by the current buffer settings.</source>
-        <translation>L&apos;OverAll è un valore calcolato dal ping corrente e il ritardo introdotto dai settaggi sul buffer.</translation>
+        <translation>L&apos;Overall è un valore calcolato in base al ping corrente e al ritardo introdotto dai settaggi del buffer.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="265"/>
         <source>The upstream rate depends on the current audio packet size and the audio compression setting. Make sure that the upstream rate is not higher than the available rate (check the upstream capabilities of your internet connection by, e.g., using speedtest.net).</source>
-        <translation>La dimensione dei dati in upload dipende dalla dimensione dei pacchetti audio e dai settaggi di compressione dell&apos;audio. Assicurarsi di non usare valori di upstream non adeguati alla propria connessione (è possibile verificare tali valori mediante un test sulla propria connessione, usando per esempio il sito speedtest.net).</translation>
+        <translation>La velocità di trasferimento dati in upload dipende dalla dimensione dei pacchetti audio e dai settaggi di compressione dell&apos;audio. Assicurarsi di non usare valori di upstream non adeguati alla propria connessione (è possibile verificare tali valori mediante un test sulla propria connessione, usando per esempio il sito speedtest.net).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="278"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
-        <translation>Se questo indicatore a LED diventa rosso non si godra di un esperinza ottimale del programma </translation>
+        <translation>Se questo indicatore a LED diventa rosso non si godrà di un esperienza ottimale del programma </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="280"/>
@@ -1230,7 +1230,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="595"/>
         <source>The selected audio device could not be used because of the following error: </source>
-        <translation>La scheda audio selezioneta non può essere usata per i seguenti motivi: </translation>
+        <translation>La scheda audio selezionata non può essere usata per i seguenti motivi: </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="597"/>
@@ -1432,7 +1432,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="646"/>
         <source>Overall Delay</source>
-        <translation>OverAll Delay</translation>
+        <translation>Overall Delay</translation>
     </message>
 </context>
 <context>
@@ -1455,7 +1455,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="60"/>
         <source>Server list view</source>
-        <translation>Lista di Server</translation>
+        <translation>Lista dei Server</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="63"/>
@@ -1510,7 +1510,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="93"/>
         <source>The server list is filtered by the given text. Note that the filter is case insensitive.</source>
-        <translation>L&apos;elenco dei server è filtrato secondo il testo inserito. Si noti che il filtro non fà distinzione tra maiuscole e minuscole.</translation>
+        <translation>L&apos;elenco dei server è filtrato secondo il testo inserito. Si noti che il filtro non fa distinzione tra maiuscole e minuscole.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="95"/>
@@ -1525,7 +1525,7 @@
     <message>
         <location filename="../../connectdlg.cpp" line="98"/>
         <source>If you check this check box, the musicians of all servers are shown. If you uncheck the check box, all list view items are collapsed.</source>
-        <translation>Se questa casella è selezionata saranno visualizzati tutti i musicisti connessi nei vari server. Se non selezionata la lista sarà compattata.</translation>
+        <translation>Se questa casella è selezionata, saranno visualizzati tutti i musicisti connessi nei vari server. Se non selezionata la lista sarà compattata.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="101"/>
@@ -2395,12 +2395,12 @@
     <message>
         <location filename="../../../mac/sound.cpp" line="370"/>
         <source>Current system audio input device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation>La frequenza di campionamento corrente del dispositivo audio in ingresso di% 1 Hz non è supportata. Apri Impostazioni-Audio-MIDI in Applicazioni-&gt; Utilità e prova a impostare una frequenza di campionamento di% 2 Hz.</translation>
+        <translation>La frequenza di campionamento corrente del dispositivo audio in ingresso di %1 Hz non è supportata. Apri Impostazioni-Audio-MIDI in Applicazioni-&gt; Utilità e prova a impostare una frequenza di campionamento di% 2 Hz.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="397"/>
         <source>Current system audio output device sample rate of %1 Hz is not supported. Please open the Audio-MIDI-Setup in Applications-&gt;Utilities and try to set a sample rate of %2 Hz.</source>
-        <translation>La frequenza di campionamento corrente del dispositivo audio in uscita% 1 Hz non è supportata. Apri Impostazioni-Audio-MIDI in Applicazioni-&gt; Utilità e prova a impostare una frequenza di campionamento di% 2 Hz.</translation>
+        <translation>La frequenza di campionamento corrente del dispositivo audio in uscita %1 Hz non è supportata. Apri Impostazioni-Audio-MIDI in Applicazioni-&gt; Utilità e prova a impostare una frequenza di campionamento di% 2 Hz.</translation>
     </message>
     <message>
         <location filename="../../../mac/sound.cpp" line="470"/>

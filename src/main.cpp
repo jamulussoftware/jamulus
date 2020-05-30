@@ -751,7 +751,7 @@ QString UsageArguments ( char **argv )
         "  -j, --nojackconnect   disable auto Jack connections\n"
         "  --ctrlmidich          MIDI controller channel to listen\n"
         "  --clientname          client name (window title and jack client name)\n"
-        "\nExample: " + QString ( argv[0] ) + " -s -inifile myinifile.ini\n";
+        "\nExample: " + QString ( argv[0] ) + " -s --inifile myinifile.ini\n";
 }
 
 bool GetFlagArgument ( char**  argv,

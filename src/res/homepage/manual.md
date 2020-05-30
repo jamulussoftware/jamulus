@@ -10,7 +10,7 @@ Main Window
 
 ![LEDs](led.png)
 
-The **Status** LED shows the current audio delay status. 
+The **Status** LED shows the current audio delay status.
 
 * **Green** - The delay is perfect for a jam session
 
@@ -58,7 +58,7 @@ pressing this button will end the session.
 
 ![Connect dialog](connect.png)
 
-The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by musical genre. Use the List dropdown to select a genre and press the Connect button to join a server. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 24 hours) are shown in bold.
+The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by musical genre. Use the List dropdown to select a genre and press the Connect button to join a server. Alternatively, double-click on the server name. Permanent servers (those that have been listed for longer than 24 hours) are shown in bold.
 
 If you know the IP address or URL of a server, you can connect to it using the Server Name/Address
 field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g,
@@ -66,7 +66,7 @@ jamulus.dyndns.org:22124. The field will also show a list of the most recently u
 
 ### Mute Myself button
 
-Cuts your stream to the server so that all other musicians cannot hear you. Note that while you will also be able to see your levels, other musicans will not. However, they will see an icon to indicate that you have muted yourself.
+Cuts your stream to the server so that all other musicians cannot hear you. Note that while you will also be able to see your levels, other musicians will not. However, they will see an icon to indicate that you have muted yourself.
 
 ### Reverb effect
 
@@ -78,7 +78,7 @@ in to the right audio channel of the sound card and a reverb effect needs to be 
 to the right and move the fader upwards until the desired reverb level is reached.
 
 Reverb requires significant CPU so it should only be used on fast PCs. If the reverb
-level fader is set to minimum (wthe default setting), the effect is switched off and does
+level fader is set to minimum (with default setting), the effect is switched off and does
 not cause any additional CPU usage.
 
 ### Local audio pan / balance control
@@ -184,7 +184,7 @@ timing jitter. If the Auto check is enabled, the jitter buffer size faders are d
 Selects the number of audio channels to be used for communication between client and server. There are three modes
 available:
 
-Mono and Stereo modes use one and two audio channels respectively. 
+Mono and Stereo modes use one and two audio channels respectively.
 
 Mono-in/Stereo-out: The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case
 the two input signals can be mixed to one mono channel but the server mix is heard in stereo.
@@ -225,18 +225,17 @@ This displays the channel input levels for each connected client.
 
 ![Central server address](centralserveraddress.png)
 
-Leave this blank unless you need to enter the address of a cenrtral server other than the default.
+Leave this blank unless you need to enter the address of a central server other than the default.
 
 ### Current connection status parameter
 
 ![Indicators](indicators.png)
 
 The Ping Time is the time required for the audio stream to travel from the client to the server and back again.
-This delay is introduced by the network and should about 20-30 ms. If this delay is higher than about 50ms,
+This delay is introduced by the network and should about 20-30ms. If this delay is higher than about 50ms,
 your distance to the server is too large or your internet connection is not sufficient.
 
 Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.
 
 Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream
-rate is not higher than your available internet upload speed (check this with a service such as [speedtest.net](http://speedtest.net)). 
-
+rate is not higher than your available internet upload speed (check this with a service such as [speedtest.net](http://speedtest.net)).

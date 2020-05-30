@@ -239,7 +239,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
     Socket                      ( this, iPortNumber ),
     Logging                     ( iMaxDaysHistory ),
     JamRecorder                 ( strRecordingDirName ),
-    bEnableRecording            ( !strRecordingDirName.isEmpty() ),
     bWriteStatusHTMLFile        ( false ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
     ServerListManager           ( iPortNumber,
@@ -402,9 +401,10 @@ CServer::CServer ( const int          iNewMaxNumChan,
     }
 
     // Enable jam recording (if requested) - kicks off the thread
-    if ( bEnableRecording )
+    if ( !strRecordingDirName.isEmpty() )
     {
-        JamRecorder.Init ( this, iServerFrameSizeSamples );
+        bRecorderInitialised = JamRecorder.Init ( this, iServerFrameSizeSamples );
+        bEnableRecording = bRecorderInitialised;
     }
 
     // enable all channels (for the server all channel must be enabled the
@@ -691,6 +691,10 @@ void CServer::OnHandledSignal ( int sigNum )
         RequestNewRecording();
         break;
 
+    case SIGUSR2:
+        SetEnableRecording ( !bEnableRecording );
+        break;
+
     case SIGINT:
     case SIGTERM:
         // This should trigger OnAboutToQuit
@@ -705,9 +709,25 @@ void CServer::OnHandledSignal ( int sigNum )
 
 void CServer::RequestNewRecording()
 {
-    if ( bEnableRecording )
+    if ( bRecorderInitialised && bEnableRecording )
     {
         emit RestartRecorder();
+    }
+}
+
+void CServer::SetEnableRecording ( bool bNewEnableRecording )
+{
+    if ( bRecorderInitialised ) {
+        bEnableRecording = bNewEnableRecording;
+        if ( !bEnableRecording )
+        {
+            emit StopRecorder();
+        }
+        else if ( !IsRunning() )
+        {
+            // This dirty hack is for the GUI.  It doesn't care.
+            emit StopRecorder();
+        }
     }
 }
 

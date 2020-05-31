@@ -169,7 +169,7 @@ bool CSignalUnix::setSignalHandled ( int sigNum, bool state )
     if ( state )
     {
         sa.sa_handler = CSignalUnix::signalHandler;
-        sa.sa_flags |= SA_RESTART;
+        sa.sa_flags = SA_RESTART;
     }
     else
     {

@@ -142,6 +142,24 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     pbtNewRecording->setWhatsThis ( "<b>" + tr ( "New Recording" ) + ":</b>"
         +  tr ( "During a recording session, the button can be used to start a new recording." ) );
 
+    // recording directory
+    pbtRecordingDir->setAccessibleName ( tr ( "Display dialog to select recording directory button" ) );
+    pbtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b>"
+        +  tr ( "Click the button to open the dialog that allows the main recording directory to be selected."
+                "The chosen value must exist and be writeable (allow creation of sub-directories "
+                "by the user Jamulus is running as). " ) );
+
+    edtRecordingDir->setAccessibleName ( tr ( "Main recording directory text box (read-only)" ) );
+    edtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b>"
+        +  tr ( "The current value of the main recording directory. "
+                "The chosen value must exist and be writeable (allow creation of sub-directories "
+                "by the user Jamulus is running as). "
+                "Click the button to open the dialog that allows the main recording directory to be selected." ) );
+
+    tbtClearRecordingDir->setAccessibleName ( tr ( "Clear the recording directory button" ) );
+    tbtClearRecordingDir->setWhatsThis ( "<b>" + tr ( "Clear Recording Directory" ) + ":</b>"
+        +  tr ( "Click the button to clear the currently selected recording directory. "
+                "This will prevent recording until a new value is selected.") );
 
     // check if system tray icon can be used
     bSystemTrayIconAvaialbe = SystemTrayIcon.isSystemTrayAvailable();
@@ -289,22 +307,12 @@ lvwClients->setMinimumHeight ( 140 );
 #endif
 
     // Recorder controls
-    if ( !pServer->GetRecorderInitialised() )
-    {
-        // The recorder was not initialised successfully from the command line
-        // TODO: Once initialising from the GUI is implemented, remove
-        chbEnableRecorder->setVisible ( false );
-        edtCurrentSessionDir->setVisible ( false );
-        lblRecorderStatus->setVisible ( false );
-        pbtNewRecording->setVisible ( false );
-    }
-
+    chbEnableRecorder->setCheckState ( Qt::CheckState::Checked ); // move to settings
     edtCurrentSessionDir->setText ( "" );
     pbtNewRecording->setAutoDefault ( false );
-
-    // TODO: Not yet implemented, so hide them!
-    pbtRecordingDir->setVisible ( false );
-    edtRecordingsDir->setVisible ( false );
+    pbtRecordingDir->setAutoDefault ( false );
+    edtRecordingDir->setText( pServer->GetRecordingDir() );
+    tbtClearRecordingDir->setText ( "(X)" ); // someone make me a nice icon?
 
     UpdateRecorderStatus ( QString::null );
 
@@ -366,6 +374,13 @@ lvwClients->setMinimumHeight ( 140 );
     // push buttons
     QObject::connect ( pbtNewRecording, SIGNAL ( released() ),
         this, SLOT ( OnNewRecordingClicked() ) );
+
+    QObject::connect ( pbtRecordingDir, SIGNAL ( released() ),
+        this, SLOT ( OnRecordingDirClicked() ) );
+
+    // tool buttons
+    QObject::connect ( tbtClearRecordingDir, SIGNAL ( released() ),
+        this, SLOT ( OnClearRecordingDirClicked() ) );
 
     // timers
     QObject::connect ( &Timer, SIGNAL ( timeout() ), this, SLOT ( OnTimer() ) );
@@ -520,6 +535,30 @@ void CServerDlg::OnServerStopped()
 void CServerDlg::OnStopRecorder()
 {
     UpdateRecorderStatus ( QString::null );
+}
+
+void CServerDlg::OnRecordingDirClicked()
+{
+    // get the current value from pServer
+    QString currentValue = pServer->GetRecordingDir();
+    QString newRecordingDir = QFileDialog::getExistingDirectory ( this,
+                                                                  tr ( "Select Main Recording Directory" ),
+                                                                  currentValue,
+                                                                  QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog );
+    if ( newRecordingDir != currentValue )
+    {
+        pServer->SetRecordingDir ( newRecordingDir );
+        UpdateRecorderStatus ( QString::null );
+    }
+}
+
+void CServerDlg::OnClearRecordingDirClicked()
+{
+    if ( pServer->GetRecorderErrMsg() != QString::null || pServer->GetRecordingDir() != "" )
+    {
+        pServer->SetRecordingDir ( "" );
+        UpdateRecorderStatus ( QString::null );
+    }
 }
 
 void CServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason )
@@ -691,45 +730,53 @@ void CServerDlg::ModifyAutoStartEntry ( const bool bDoAutoStart )
 
 void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
 {
-    if ( !pServer->GetRecorderInitialised() )
-    {
-        // everything should be hidden.
-        return;
-    }
-
-    Qt::CheckState csIsEnabled;
     QString        currentSessionDir = edtCurrentSessionDir->text();
+    QString        errMsg            = pServer->GetRecorderErrMsg();
     bool           bIsRecording      = false;
     QString        strRecorderStatus;
+    QString        strRecordingDir;
 
-    if ( pServer->GetRecordingEnabled() )
+    if ( pServer->GetRecorderInitialised() )
     {
-        csIsEnabled = Qt::CheckState::Checked;
-        if ( pServer->IsRunning() )
+        strRecordingDir = pServer->GetRecordingDir();
+        chbEnableRecorder->setEnabled ( true );
+        if ( pServer->GetRecordingEnabled() )
         {
-            currentSessionDir = sessionDir != QString::null ? sessionDir : "";
-            strRecorderStatus = tr ( "Recording" );
-            bIsRecording      = true;
+            if ( pServer->IsRunning() )
+            {
+                edtCurrentSessionDir->setText ( sessionDir != QString::null ? sessionDir : "" );
+                strRecorderStatus = tr ( "Recording" );
+                bIsRecording      = true;
+            }
+            else
+            {
+                strRecorderStatus = tr ( "Not recording" );
+            }
         }
         else
         {
-            strRecorderStatus = tr ( "Not recording" );
+            strRecorderStatus = tr ( "Not enabled" );
         }
     }
     else
     {
-        csIsEnabled       = Qt::CheckState::Unchecked;
-        strRecorderStatus = tr ( "Not enabled" );
+        strRecordingDir = pServer->GetRecorderErrMsg();
+        if ( strRecordingDir == QString::null )
+        {
+            strRecordingDir = pServer->GetRecordingDir();
+        }
+        else
+        {
+            strRecordingDir = tr ( "ERROR" ) + ": " + strRecordingDir;
+        }
+        chbEnableRecorder->setEnabled ( false );
+        strRecorderStatus = tr ( "Not initialised" );
     }
 
-    chbEnableRecorder->setCheckState ( csIsEnabled );
-
     edtCurrentSessionDir->setEnabled ( bIsRecording );
-    edtCurrentSessionDir->setText    ( currentSessionDir );
-
     lblRecorderStatus->setText ( strRecorderStatus );
-
     pbtNewRecording->setEnabled ( bIsRecording );
+    edtRecordingDir->setText( strRecordingDir );
 }
 
 void CServerDlg::changeEvent ( QEvent* pEvent )

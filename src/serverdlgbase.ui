@@ -195,15 +195,19 @@
      <item>
       <widget class="QPushButton" name="pbtRecordingDir">
        <property name="text">
-        <string>Recordings folder</string>
+        <string>Recording directory</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="edtRecordingsDir">
+      <widget class="QLineEdit" name="edtRecordingDir">
        <property name="readOnly">
         <bool>true</bool>
        </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbtClearRecordingDir">
       </widget>
      </item>
     </layout>
@@ -269,7 +273,8 @@
   <tabstop>edtCurrentSessionDir</tabstop>
   <tabstop>pbtNewRecording</tabstop>
   <tabstop>pbtRecordingDir</tabstop>
-  <tabstop>edtRecordingsDir</tabstop>
+  <tabstop>edtRecordingDir</tabstop>
+  <tabstop>tbtClearRecordingDir</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>

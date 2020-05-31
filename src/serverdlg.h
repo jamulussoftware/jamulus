@@ -33,6 +33,7 @@
 #include <QLayout>
 #include <QSystemTrayIcon>
 #include <QSettings>
+#include <QFileDialog>
 #include "global.h"
 #include "server.h"
 #include "settings.h"
@@ -108,6 +109,8 @@ public slots:
         { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }
 
     void OnNewRecordingClicked() { pServer->RequestNewRecording(); }
+    void OnRecordingDirClicked();
+    void OnClearRecordingDirClicked();
     void OnRecordingSessionStarted ( QString sessionDir )
         { UpdateRecorderStatus ( sessionDir ); }
 };

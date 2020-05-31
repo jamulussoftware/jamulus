@@ -198,9 +198,12 @@ public:
                           CVector<int>&          veciNetwFrameSizeFact );
 
     bool GetRecorderInitialised() { return bRecorderInitialised; }
+    QString GetRecorderErrMsg() { return strRecorderErrMsg; }
     bool GetRecordingEnabled() { return bEnableRecording; }
     void RequestNewRecording();
     void SetEnableRecording ( bool bNewEnableRecording );
+    QString GetRecordingDir() { return strRecordingDir; }
+    void SetRecordingDir( QString newRecordingDir );
 
     // Server list management --------------------------------------------------
     void UpdateServerList() { ServerListManager.Update(); }
@@ -356,15 +359,18 @@ protected:
     // ultra-low frequency update frame interval counter
     uint16_t                   iULFFrameCount;
 
-    // recording thread
-    recorder::CJamRecorder     JamRecorder;
-    bool                       bRecorderInitialised;
-    bool                       bEnableRecording;
-
     // HTML file server status
     bool                       bWriteStatusHTMLFile;
     QString                    strServerHTMLFileListName;
     QString                    strServerNameWithPort;
+
+    // recording thread
+    bool                       bRecorderInitialised;
+    bool                       bEnableRecording;
+    QThread                    thJamRecorder;
+    recorder::CJamRecorder*    pJamRecorder;
+    QString                    strRecorderErrMsg;
+    QString                    strRecordingDir;
 
     CHighPrecisionTimer        HighPrecisionTimer;
 
@@ -394,6 +400,7 @@ signals:
     void RestartRecorder();
     void StopRecorder();
     void RecordingSessionStarted ( QString sessionDir );
+    void EndRecorderThread();
 
 public slots:
     void OnTimer();

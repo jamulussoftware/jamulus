@@ -8,6 +8,8 @@
 
 - enable/disable recording from command line, coded by pljones (#228)
 
+- make level meter LED black when off, by fleutot (#318)
+
 - added check in acknowledge message, coded by atsampson (#302)
 
 - bug fix: on MacOS declare an activity to ensure the process doesn't get throttled

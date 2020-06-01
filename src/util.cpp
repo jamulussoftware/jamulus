@@ -400,6 +400,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Emlyn Bolton (<a href=""https://github.com/emlynmac"">emlynmac</a>)</p>"
         "<p>Jos van den Oever (<a href=""https://github.com/vandenoever"">vandenoever</a>)</p>"
         "<p>Tormod Volden (<a href=""https://github.com/tormodvolden"">tormodvolden</a>)</p>"
+        "<p>Gauthier Fleutot Östervall (<a href=""https://github.com/fleutot"">fleutot</a>)</p>"
         "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
         "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"
         "<p>Adam Sampson (<a href=""https://github.com/atsampson"">atsampson</a>)</p>"

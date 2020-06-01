@@ -699,9 +699,9 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
     }
 
     Qt::CheckState csIsEnabled;
-    QString currentSessionDir = edtCurrentSessionDir->text();
-    bool    bIsRecording      = false;
-    QString strRecorderStatus;
+    QString        currentSessionDir = edtCurrentSessionDir->text();
+    bool           bIsRecording      = false;
+    QString        strRecorderStatus;
 
     if ( pServer->GetRecordingEnabled() )
     {
@@ -719,7 +719,7 @@ void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
     }
     else
     {
-        csIsEnabled = Qt::CheckState::Unchecked;
+        csIsEnabled       = Qt::CheckState::Unchecked;
         strRecorderStatus = tr ( "Not enabled" );
     }
 

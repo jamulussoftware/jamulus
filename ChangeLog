@@ -3,7 +3,10 @@
 
 
 
+
 3.5.6git
+
+- enable/disable recording from command line, coded by pljones (#228)
 
 - added check in acknowledge message, coded by atsampson (#302)
 

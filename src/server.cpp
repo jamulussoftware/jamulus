@@ -400,11 +400,11 @@ CServer::CServer ( const int          iNewMaxNumChan,
             QString().number( static_cast<int> ( iPortNumber ) ) );
     }
 
-    // Enable jam recording (if requested) - kicks off the thread
+    // enable jam recording (if requested) - kicks off the thread
     if ( !strRecordingDirName.isEmpty() )
     {
         bRecorderInitialised = JamRecorder.Init ( this, iServerFrameSizeSamples );
-        bEnableRecording = bRecorderInitialised;
+        bEnableRecording     = bRecorderInitialised;
     }
 
     // enable all channels (for the server all channel must be enabled the
@@ -717,8 +717,10 @@ void CServer::RequestNewRecording()
 
 void CServer::SetEnableRecording ( bool bNewEnableRecording )
 {
-    if ( bRecorderInitialised ) {
+    if ( bRecorderInitialised )
+    {
         bEnableRecording = bNewEnableRecording;
+
         if ( !bEnableRecording )
         {
             emit StopRecorder();

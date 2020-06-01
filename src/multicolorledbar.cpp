@@ -110,7 +110,7 @@ void CMultiColorLEDBar::Reset ( const bool bEnabled )
         // different reset behavoiur for enabled and disabled control
         if ( bEnabled )
         {
-            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
+            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_BLACK );
         }
         else
         {
@@ -171,7 +171,7 @@ void CMultiColorLEDBar::setValue ( const double dValue )
                 else
                 {
                     // we use grey LED for inactive state
-                    vecpLEDs[iLEDIdx]->setColor ( cLED::RL_GREY );
+                    vecpLEDs[iLEDIdx]->setColor ( cLED::RL_BLACK );
                 }
             }
             break;
@@ -185,7 +185,7 @@ void CMultiColorLEDBar::setValue ( const double dValue )
 
 CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
     BitmCubeRoundDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),
-    BitmCubeRoundGrey     ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreySmall.png" ) ),
+    BitmCubeRoundBlack    ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDBlackSmall.png" ) ),
     BitmCubeRoundGreen    ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreenSmall.png" ) ),
     BitmCubeRoundYellow   ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDYellowSmall.png" ) ),
     BitmCubeRoundRed      ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDRedSmall.png" ) )
@@ -194,11 +194,11 @@ CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
     pLEDLabel = new QLabel ( "", parent );
 
     // bitmap defines minimum size of the label
-    pLEDLabel->setMinimumSize ( BitmCubeRoundGrey.width(), BitmCubeRoundGrey.height() );
+    pLEDLabel->setMinimumSize ( BitmCubeRoundBlack.width(), BitmCubeRoundBlack.height() );
 
     // set initial bitmap
-    pLEDLabel->setPixmap ( BitmCubeRoundGrey );
-    eCurLightColor = RL_GREY;
+    pLEDLabel->setPixmap ( BitmCubeRoundBlack );
+    eCurLightColor = RL_BLACK;
 }
 
 void CMultiColorLEDBar::cLED::setColor ( const ELightColor eNewColor )
@@ -212,8 +212,8 @@ void CMultiColorLEDBar::cLED::setColor ( const ELightColor eNewColor )
             pLEDLabel->setPixmap ( BitmCubeRoundDisabled );
             break;
 
-        case RL_GREY:
-            pLEDLabel->setPixmap ( BitmCubeRoundGrey );
+        case RL_BLACK:
+            pLEDLabel->setPixmap ( BitmCubeRoundBlack );
             break;
 
         case RL_GREEN:

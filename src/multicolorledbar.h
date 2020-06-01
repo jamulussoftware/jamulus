@@ -66,7 +66,7 @@ protected:
         enum ELightColor
         {
             RL_DISABLED,
-            RL_GREY,
+            RL_BLACK,
             RL_GREEN,
             RL_YELLOW,
             RL_RED
@@ -78,7 +78,7 @@ protected:
 
     protected:
         QPixmap     BitmCubeRoundDisabled;
-        QPixmap     BitmCubeRoundGrey;
+        QPixmap     BitmCubeRoundBlack;
         QPixmap     BitmCubeRoundGreen;
         QPixmap     BitmCubeRoundYellow;
         QPixmap     BitmCubeRoundRed;

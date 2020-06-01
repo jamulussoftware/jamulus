@@ -197,7 +197,10 @@ public:
                           CVector<int>&          veciJitBufNumFrames,
                           CVector<int>&          veciNetwFrameSizeFact );
 
+    bool GetRecorderInitialised() { return bRecorderInitialised; }
     bool GetRecordingEnabled() { return bEnableRecording; }
+    void RequestNewRecording();
+    void SetEnableRecording ( bool bNewEnableRecording );
 
     // Server list management --------------------------------------------------
     void UpdateServerList() { ServerListManager.Update(); }
@@ -300,8 +303,6 @@ protected:
                                           const CVector<CVector<int16_t> > vecvecsData,
                                           CVector<uint16_t>&               vecLevelsOut );
 
-    void RequestNewRecording();
-
     // do not use the vector class since CChannel does not have appropriate
     // copy constructor/operator
     CChannel                   vecChannels[MAX_NUM_CHANNELS];
@@ -350,6 +351,7 @@ protected:
 
     // recording thread
     recorder::CJamRecorder     JamRecorder;
+    bool                       bRecorderInitialised;
     bool                       bEnableRecording;
 
     // HTML file server status
@@ -383,6 +385,7 @@ signals:
                       const int              iNumAudChan,
                       const CVector<int16_t> vecsData );
     void RestartRecorder();
+    void StopRecorder();
     void RecordingSessionStarted ( QString sessionDir );
 
 public slots:

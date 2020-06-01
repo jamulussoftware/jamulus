@@ -146,6 +146,7 @@ CSignalUnix::CSignalUnix ( CSignalHandler* nPSignalHandler ) :
         socketNotifier->setEnabled ( true );
 
         setSignalHandled ( SIGUSR1, true );
+        setSignalHandled ( SIGUSR2, true );
         setSignalHandled ( SIGINT, true );
         setSignalHandled ( SIGTERM, true );
     }
@@ -153,6 +154,7 @@ CSignalUnix::CSignalUnix ( CSignalHandler* nPSignalHandler ) :
 
 CSignalUnix::~CSignalUnix() {
     setSignalHandled ( SIGUSR1, false );
+    setSignalHandled ( SIGUSR2, false );
     setSignalHandled ( SIGINT, false );
     setSignalHandled ( SIGTERM, false );
 }
@@ -167,7 +169,7 @@ bool CSignalUnix::setSignalHandled ( int sigNum, bool state )
     if ( state )
     {
         sa.sa_handler = CSignalUnix::signalHandler;
-        sa.sa_flags |= SA_RESTART;
+        sa.sa_flags = SA_RESTART;
     }
     else
     {

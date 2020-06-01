@@ -302,7 +302,7 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString
  * @brief CJamRecorder::Init Create recording directory, if necessary, and connect signal handlers
  * @param server Server object emiting signals
  */
-void CJamRecorder::Init( const CServer* server,
+bool CJamRecorder::Init( const CServer* server,
                          const int      _iServerFrameSizeSamples )
 {
     QFileInfo fi(recordBaseDir.absolutePath());
@@ -310,19 +310,26 @@ void CJamRecorder::Init( const CServer* server,
 
     if (!fi.exists() && !QDir().mkpath(recordBaseDir.absolutePath()))
     {
-        throw std::runtime_error( (recordBaseDir.absolutePath() + " does not exist but could not be created").toStdString() );
+        qCritical() << recordBaseDir.absolutePath() << "does not exist but could not be created";
+        return false;
     }
     if (!fi.isDir())
     {
-        throw std::runtime_error( (recordBaseDir.absolutePath() + " exists but is not a directory").toStdString() );
+        qCritical() << recordBaseDir.absolutePath() << "exists but is not a directory";
+        return false;
     }
     if (!fi.isWritable())
     {
-        throw std::runtime_error( (recordBaseDir.absolutePath() + " is a directory but cannot be written to").toStdString() );
+        qCritical() << recordBaseDir.absolutePath() << "is a directory but cannot be written to";
+        return false;
     }
 
     QObject::connect( (const QObject *)server, SIGNAL ( RestartRecorder() ),
                       this, SLOT( OnTriggerSession() ),
+                      Qt::ConnectionType::QueuedConnection );
+
+    QObject::connect( (const QObject *)server, SIGNAL ( StopRecorder() ),
+                      this, SLOT( OnEnd() ),
                       Qt::ConnectionType::QueuedConnection );
 
     QObject::connect( (const QObject *)server, SIGNAL ( Stopped() ),
@@ -346,6 +353,8 @@ void CJamRecorder::Init( const CServer* server,
     thisThread = new QThread();
     moveToThread ( thisThread );
     thisThread->start();
+
+    return true;
 }
 
 /**
@@ -363,15 +372,10 @@ void CJamRecorder::Start() {
 
 
 /**
- * @brief CJamRecorder::OnEnd Finalise the recording and emit the Reaper RPP file
- *
- * Emits RecordingSessionEnded with the Reaper project file name,
- * or null if was not recording or a problem occurs
+ * @brief CJamRecorder::OnEnd Finalise the recording and write the Reaper RPP file
  */
 void CJamRecorder::OnEnd()
 {
-    QString reaperProjectFileName = QString::Null();
-
     if ( isRecording )
     {
         isRecording = false;

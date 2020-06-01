@@ -148,7 +148,7 @@ public:
      * @brief Create recording directory, if necessary, and connect signal handlers
      * @param server Server object emiting signals
      */
-    void Init( const CServer* server, const int _iServerFrameSizeSamples );
+    bool Init( const CServer* server, const int _iServerFrameSizeSamples );
 
     /**
      * @brief SessionDirToReaper Method that allows an RPP file to be recreated

@@ -1,17 +1,7 @@
 #!/bin/bash
 
 # This script is intended to setup a clean Raspberry Pi system for running Jamulus
-
-# Regarding the old OPUS version (#252): I just tried out the following:
-# * Do not use OPUS in shared library but use the version which is included in the jamulus source code:
-#   instead of 80 % load I get 90 % load on my Raspberry Pi Zero
-# * Do not use OPUS in shared libaray but use the version which is included in the Jamulus source code
-#   but try to compile in fixed-point: I get compilation errors so this is not possible right now
-# * I replaced the opus-1.1 with OPUS="opus-1.3.1" in the raspijamulus.sh -> OPUS version 1.3.1 has a
-#   known bug with the custom interface. If I use that version as a shared libaray, I get a runtime error
-#   on starting Jamulus. So this is also not possible. We have to wait for the next official OPUS version.
-# Therefore it is the best to keep the opus-1.1 version.
-OPUS="opus-1.1"
+OPUS="opus-1.3.1"
 NCORES=$(nproc)
 
 # install required packages
@@ -32,6 +22,30 @@ else
   tar -xzf ${OPUS}.tar.gz
   rm ${OPUS}.tar.gz
   cd ${OPUS}
+  if [ ${OPUS} == "opus-1.3.1" ]; then
+    echo "@@ -117,13 +117,19 @@ void validate_celt_decoder(CELTDecoder *st)
+ #ifndef CUSTOM_MODES
+    celt_assert(st->mode == opus_custom_mode_create(48000, 960, NULL));
+    celt_assert(st->overlap == 120);
++   celt_assert(st->end <= 21);
++#else
++/* From Section 4.3 in the spec: The normal CELT layer uses 21 of those bands,
++   though Opus Custom (see Section 6.2) may use a different number of bands
++
++   Check if it's within the maximum number of Bark frequency bands instead */
++   celt_assert(st->end <= 25);
+ #endif
+    celt_assert(st->channels == 1 || st->channels == 2);
+    celt_assert(st->stream_channels == 1 || st->stream_channels == 2);
+    celt_assert(st->downsample > 0);
+    celt_assert(st->start == 0 || st->start == 17);
+    celt_assert(st->start < st->end);
+-   celt_assert(st->end <= 21);
+ #ifdef OPUS_ARCHMASK
+    celt_assert(st->arch >= 0);
+    celt_assert(st->arch <= OPUS_ARCHMASK);" >> opus_patch_file.diff
+    patch celt/celt_decoder.c opus_patch_file.diff
+  fi
   ./configure --enable-custom-modes --enable-fixed-point
   make -j${NCORES}
   mkdir include/opus

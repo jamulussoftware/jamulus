@@ -629,8 +629,8 @@ DISTFILES += ChangeLog \
     src/res/faderhandlesmall.png \
     src/res/HLEDGreen.png \
     src/res/HLEDGreenSmall.png \
-    src/res/HLEDGrey.png \
-    src/res/HLEDGreySmall.png \
+    src/res/HLEDBlack.png \
+    src/res/HLEDBlackSmall.png \
     src/res/HLEDRed.png \
     src/res/HLEDRedSmall.png \
     src/res/HLEDYellow.png \

@@ -26,7 +26,7 @@
         <file>res/CLEDRedSmall.png</file>
         <file>res/CLEDYellowSmall.png</file>
         <file>res/HLEDGreenSmall.png</file>
-        <file>res/HLEDGreySmall.png</file>
+        <file>res/HLEDBlackSmall.png</file>
         <file>res/HLEDRedSmall.png</file>
         <file>res/HLEDYellowSmall.png</file>
     </qresource>

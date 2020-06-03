@@ -189,8 +189,13 @@ LED bar:      lbr
 // defines the time interval at which the ping time is updated for the server list
 #define PING_UPDATE_TIME_SERVER_LIST_MS  2500 // ms
 
-// defines the interval between Channel Level updates from the server
-#define CHANNEL_LEVEL_UPDATE_INTERVAL    200  // number of frames at 64 samples frame size
+// defines the interval for low frequency updates from the server, currently:
+// - Channel Level
+#define LOW_FREQUENCY_UPDATE_INTERVAL    200  // number of frames at 64 samples frame size
+
+// defines the multiple of the low frequency interval for ultra low frequency updates, currently:
+// - Recorder Status
+#define ULTRA_LOW_FREQUENCY_LIMIT        5    // times the LOW_FREQUENCY_UPDATE_INTERVAL passes
 
 // time-out until a registered server is deleted from the server list if no
 // new registering was made in minutes

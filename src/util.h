@@ -562,6 +562,36 @@ enum ELicenceType
 };
 
 
+// Server recorder state -------------------------------------------------
+enum ESvrRecState
+{
+    RS_UNKNOWN = 0,
+    RS_NOT_INITIALISED = 1,
+    RS_NOT_ENABLED = 2,
+    RS_ENABLED = 3
+};
+
+inline QString csSvrRecStateToString ( ESvrRecState eState )
+{
+    switch ( eState )
+    {
+    case RS_NOT_INITIALISED:
+        return QCoreApplication::translate ( "CAudioMixerBoard", "[-]" );
+
+    case RS_NOT_ENABLED:
+        return QCoreApplication::translate ( "CAudioMixerBoard", "[-]" );
+
+    case RS_ENABLED:
+        return QCoreApplication::translate ( "CAudioMixerBoard", "[R]" );
+
+    default:
+        break;
+    }
+
+    return QCoreApplication::translate ( "CAudioMixerBoard", "[?]" );
+}
+
+
 // Central server address type -------------------------------------------------
 enum ECSAddType
 {

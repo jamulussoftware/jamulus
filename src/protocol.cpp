@@ -71,7 +71,7 @@ MESSAGES (with connection)
     +-------------------+--------------+
 
 
-- PROTMESSID_CHANNEL_PAN: Gain of channel
+- PROTMESSID_CHANNEL_PAN: Pan position of channel
 
     +-------------------+-----------------+
     | 1 byte channel ID | 2 bytes panning |
@@ -359,6 +359,18 @@ CONNECTION LESS MESSAGES
           five times for one registration request at 500ms intervals.
           Beyond this, it should "ping" every 15 minutes
           (standard re-registration timeout).
+
+
+- PROTMESSID_CLM_RECORDER_STATE_CHANGED: Server recorder state has changed
+
+    +--------------+
+    | 1 byte state |
+    +--------------+
+
+    - "state":
+      0: Server recording is not initialised
+      1: Server recording is initialised but not enabled
+      2: Server recording is enabled (client audio is being recorded)
 
 
  ******************************************************************************
@@ -751,6 +763,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
         case PROTMESSID_CLM_REGISTER_SERVER_RESP:
             bRet = EvaluateCLRegisterServerResp ( InetAddr, vecbyMesBodyData );
+            break;
+
+        case PROTMESSID_CLM_RECORDER_STATE_CHANGED:
+            bRet = EvaluateCLRecorderStateChange ( InetAddr, vecbyMesBodyData );
             break;
         }
     }
@@ -2239,7 +2255,7 @@ void CProtocol::CreateCLChannelLevelListMes  ( const CHostAddress&      InetAddr
 {
     // This must be a multiple of bytes at four bits per client
     const int        iNumBytes = ( iNumClients + 1 ) / 2;
-    CVector<uint8_t> vecData( iNumBytes );
+    CVector<uint8_t> vecData ( iNumBytes );
     int              iPos = 0; // init position pointer
 
     for ( int i = 0, j = 0; i < iNumClients; i += 2 /* pack two per byte */, j++ )
@@ -2300,7 +2316,7 @@ void CProtocol::CreateCLRegisterServerResp  ( const CHostAddress& InetAddr,
                                               const ESvrRegResult eResult )
 {
     int              iPos = 0; // init position pointer
-    CVector<uint8_t> vecData( 1 );
+    CVector<uint8_t> vecData ( 1 );
 
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( eResult ), 1 );
 
@@ -2324,6 +2340,42 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress&     InetAddr,
 
     // invoke message action
     emit CLRegisterServerResp ( InetAddr,  eResult );
+
+    return false; // no error
+}
+
+void CProtocol::CreateCLRecorderStateChange ( const CHostAddress& InetAddr,
+                                              const ESvrRecState  eState )
+{
+    CVector<uint8_t> vecData ( 1 ); // 1 byte of data
+    int              iPos = 0;      // init position pointer
+
+    // build data vector
+    // recorder state (1 byte)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( eState ), 1 );
+
+    CreateAndImmSendConLessMessage ( PROTMESSID_CLM_RECORDER_STATE_CHANGED,
+                                     vecData,
+                                     InetAddr );
+}
+
+bool CProtocol::EvaluateCLRecorderStateChange ( const CHostAddress&,
+                                                const CVector<uint8_t>& vecData )
+{
+    int       iPos = 0; // init position pointer
+    const int iDataLen = vecData.Size();
+
+    // check size
+    if ( iDataLen != 1 )
+    {
+        return true; // return error code
+    }
+
+    // recorder state
+    const ESvrRecState eState = static_cast<ESvrRecState> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    // invoke message action (does not need server address)
+    emit RecorderStateChange ( eState );
 
     return false; // no error
 }

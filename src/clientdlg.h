@@ -139,6 +139,8 @@ public slots:
     void OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
                                   QString                strVersion );
 
+    void OnRecorderStateChange ( ESvrRecState eState );
+
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     void OnCLVersionAndOSReceived ( CHostAddress           InetAddr,
                                     COSUtil::EOpSystemType eOSType,

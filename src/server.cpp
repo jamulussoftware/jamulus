@@ -397,7 +397,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
         // works correctly under Linux)
         StartStatusHTMLFileWriting ( strHTMLStatusFileName,
             strCurServerNameForHTMLStatusFile + ":" +
-            QString().number( static_cast<int> ( iPortNumber ) ) );
+            QString().number ( static_cast<int> ( iPortNumber ) ) );
     }
 
     // enable jam recording (if requested) - kicks off the thread
@@ -468,7 +468,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
        SIGNAL ( SvrRegStatusChanged() ),
        SIGNAL ( SvrRegStatusChanged() ) );
 
-    QObject::connect( &JamRecorder,
+    QObject::connect ( &JamRecorder,
         SIGNAL ( RecordingSessionStarted ( QString ) ),
         SIGNAL ( RecordingSessionStarted ( QString ) ) );
 
@@ -606,6 +606,11 @@ void CServer::OnNewConnection ( int          iChID,
     // send version info (for, e.g., feature activation in the client)
     vecChannels[iChID].CreateVersionAndOSMes();
 
+    // A new client connected to the server and needs to know whether
+    // its audio is being recorded or not.  Subsequent changes
+    // will be sent out as and when they happen.
+    ConnLessProtocol.CreateCLRecorderStateChange ( RecHostAddr, GetRecorderState() );
+
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
     DoubleFrameSizeConvBufOut[iChID].Reset();
@@ -731,6 +736,8 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
             emit StopRecorder();
         }
     }
+
+    CreateAndSendRecorderStateForAllConChannels();
 }
 
 void CServer::Start()
@@ -743,6 +750,8 @@ void CServer::Start()
 
         // emit start signal
         emit Started();
+
+        CreateAndSendRecorderStateForAllConChannels();
     }
 }
 
@@ -762,6 +771,9 @@ void CServer::Stop()
 
         // emit stopped signal
         emit Stopped();
+
+        // by definition there are no connected channels...
+        CreateAndSendRecorderStateForAllConChannels();
     }
 }
 
@@ -956,8 +968,16 @@ JitterMeas.Measure();
     // one client is connected.
     if ( iNumClients > 0 )
     {
+        // ultra-low frequency updates
+        if ( iULFFrameCount > ULTRA_LOW_FREQUENCY_LIMIT )
+        {
+            iULFFrameCount = 0;
+
+            // things can go missing, so send this every now and then
+            CreateAndSendRecorderStateForAllConChannels();
+        }
         // low frequency updates
-        if ( iFrameCount > CHANNEL_LEVEL_UPDATE_INTERVAL )
+        if ( iFrameCount > LOW_FREQUENCY_UPDATE_INTERVAL )
         {
             iFrameCount = 0;
 
@@ -975,6 +995,8 @@ JitterMeas.Measure();
                     break;
                 }
             }
+
+            iULFFrameCount++;
         }
         iFrameCount++;
         if ( bUseDoubleSystemFrameSize )
@@ -1333,6 +1355,35 @@ void CServer::CreateOtherMuteStateChanged ( const int  iCurChanID,
         // send message
         vecChannels[iOtherChanID].CreateMuteStateHasChangedMes ( iCurChanID, bIsMuted );
     }
+}
+
+void CServer::CreateAndSendRecorderStateForAllConChannels()
+{
+    // get the recorder state
+    ESvrRecState eState = GetRecorderState();
+
+    // now send connected channels list to all connected clients
+    for ( int i = 0; i < iMaxNumChannels; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            // send message
+            ConnLessProtocol.CreateCLRecorderStateChange ( vecChannels[i].GetAddress(), eState );
+        }
+    }
+}
+
+ESvrRecState CServer::GetRecorderState()
+{
+    if ( !bRecorderInitialised )
+    {
+        return ESvrRecState::RS_NOT_INITIALISED;
+    }
+    if ( !bEnableRecording )
+    {
+        return ESvrRecState::RS_NOT_ENABLED;
+    }
+    return ESvrRecState::RS_ENABLED;
 }
 
 int CServer::GetFreeChan()

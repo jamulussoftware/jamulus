@@ -78,6 +78,7 @@
 #define PROTMESSID_CLM_REQ_CONN_CLIENTS_LIST  1014 // request the connected clients list
 #define PROTMESSID_CLM_CHANNEL_LEVEL_LIST     1015 // channel level list
 #define PROTMESSID_CLM_REGISTER_SERVER_RESP   1016 // status of server registration request
+#define PROTMESSID_CLM_RECORDER_STATE_CHANGED 1017 // new recording state of server
 
 // lengths of message as defined in protocol.cpp file
 #define MESS_HEADER_LENGTH_BYTE         7 // TAG (2), ID (2), cnt (1), length (2)
@@ -141,6 +142,8 @@ public:
                                          const int                iNumClients );
     void CreateCLRegisterServerResp    ( const CHostAddress& InetAddr,
                                          const ESvrRegResult eResult );
+    void CreateCLRecorderStateChange   ( const CHostAddress& InetAddr,
+                                         const ESvrRecState  eState );
 
     static bool ParseMessageFrame ( const CVector<uint8_t>& vecbyData,
                                     const int               iNumBytesIn,
@@ -263,6 +266,8 @@ protected:
                                            const CVector<uint8_t>& vecData );
     bool EvaluateCLRegisterServerResp    ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
+    bool EvaluateCLRecorderStateChange   ( const CHostAddress&,
+                                           const CVector<uint8_t>& vecData );
 
     int                     iOldRecID;
     int                     iOldRecCnt;
@@ -302,6 +307,7 @@ signals:
     void LicenceRequired ( ELicenceType eLicenceType );
     void ReqChannelLevelList ( bool bOptIn );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
+    void RecorderStateChange ( ESvrRecState state );
 
     void CLPingReceived               ( CHostAddress           InetAddr,
                                         int                    iMs );

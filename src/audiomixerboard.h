@@ -149,6 +149,7 @@ public:
     void SetDisplayChannelLevels ( const bool eNDCL );
     void SetDisplayPans ( const bool eNDP );
     void SetPanIsSupported();
+    void SetServerRecordingState ( QString state );
     void SetRemoteFaderIsMute ( const int iChannelIdx, const bool bIsMute );
     void SetMyChannelID ( const int iChannelIdx ) { iMyChannelID = iChannelIdx; }
 
@@ -202,6 +203,7 @@ protected:
     bool                    bNoFaderVisible;
     int                     iMyChannelID;
     QString                 strServerName;
+    QString                 strServerRecordingState;
 
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const double dValue,

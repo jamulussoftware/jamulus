@@ -121,7 +121,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pMainGrid->addWidget ( pLabelInstBox );
 
     // add fader frame to audio mixer board layout
-    pParentLayout->addWidget( pFrame );
+    pParentLayout->addWidget ( pFrame );
 
     // reset current fader
     Reset();
@@ -603,18 +603,19 @@ double CChannelFader::CalcFaderGain ( const int value )
 * CAudioMixerBoard                                                             *
 \******************************************************************************/
 CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
-    QGroupBox            ( parent ),
-    vecStoredFaderTags   ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
-    vecStoredFaderLevels ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
-    vecStoredPanValues   ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
-    vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-    vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-    iNewClientFaderLevel ( 100 ),
-    bDisplayPans         ( false ),
-    bIsPanSupported      ( false ),
-    bNoFaderVisible      ( true ),
-    iMyChannelID         ( INVALID_INDEX ),
-    strServerName        ( "" )
+    QGroupBox               ( parent ),
+    vecStoredFaderTags      ( MAX_NUM_STORED_FADER_SETTINGS, "" ),
+    vecStoredFaderLevels    ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_FADER_MAX ),
+    vecStoredPanValues      ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
+    vecStoredFaderIsSolo    ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+    vecStoredFaderIsMute    ( MAX_NUM_STORED_FADER_SETTINGS, false ),
+    iNewClientFaderLevel    ( 100 ),
+    bDisplayPans            ( false ),
+    bIsPanSupported         ( false ),
+    bNoFaderVisible         ( true ),
+    iMyChannelID            ( INVALID_INDEX ),
+    strServerName           ( "" ),
+    strServerRecordingState ( "" )
 {
     // add group box and hboxlayout
     QHBoxLayout* pGroupBoxLayout = new QHBoxLayout ( this );
@@ -740,6 +741,19 @@ void CAudioMixerBoard::SetPanIsSupported()
     SetDisplayPans ( bDisplayPans );
 }
 
+void CAudioMixerBoard::SetServerRecordingState ( QString state )
+{
+    strServerRecordingState = state;
+    if ( !strServerName.isEmpty() )
+    {
+        QString strTitle = this->title().remove ( QRegExp ( "^\\[.\\] " ) );
+        if ( strTitle.mid ( 0, 1 ) != "\u2588" )
+        {
+            setTitle ( strServerRecordingState + " " + strTitle );
+        }
+    }
+}
+
 void CAudioMixerBoard::HideAll()
 {
     // make all controls invisible
@@ -769,7 +783,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
     // in the audio mixer board to show a "try to connect" before
     if ( bNoFaderVisible )
     {
-        setTitle ( tr ( "Personal Mix at the Server: " ) + strServerName );
+        setTitle ( strServerRecordingState + " " + tr ( "Personal Mix at the Server: " ) + strServerName );
     }
 
     // get number of connected clients

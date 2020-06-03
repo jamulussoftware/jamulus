@@ -6,9 +6,11 @@
 
 3.5.6git
 
-- enable/disable recording from command line, coded by pljones (#228)
+- add client-side server recording indicator, by pljones (#295)
 
 - add Audacity "list of files" writer to jam recorder, by pljones (#315)
+
+- enable/disable recording from command line and GUI, coded by pljones (#228)
 
 - make level meter LED black when off, by fleutot (#318)
 

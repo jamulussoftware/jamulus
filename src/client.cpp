@@ -191,6 +191,10 @@ CClient::CClient ( const quint16  iPortNumber,
     QObject::connect ( &ConnLessProtocol, &CProtocol::CLChannelLevelListReceived,
         this, &CClient::CLChannelLevelListReceived );
 
+    QObject::connect ( &ConnLessProtocol,
+        SIGNAL ( RecorderStateChange ( ESvrRecState ) ),
+        SIGNAL ( RecorderStateChange ( ESvrRecState ) ) );
+
     // other
     QObject::connect ( &Sound, &CSound::ReinitRequest,
         this, &CClient::OnSndCrdReinitRequest );

@@ -185,6 +185,12 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // reset mixer board
     MainMixerBoard->HideAll();
 
+    MainMixerBoard->setAccessibleName ( tr ( "Personal Mix group box" ) );
+    MainMixerBoard->setWhatsThis ( "<b>" + tr ( "Personal Mix" ) + ":</b> "
+        + "Displays your local, per-channel settings of all channels on a server. "
+        + "The group box title displays an indicator of whether the server is recording, "
+        + "where this is known, along with the server name." );
+
     // restore channel level display preference
     MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() );
 
@@ -489,6 +495,10 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( pClient, &CClient::VersionAndOSReceived,
         this, &CClientDlg::OnVersionAndOSReceived );
 
+    QObject::connect ( pClient,
+        SIGNAL ( RecorderStateChange ( ESvrRecState ) ),
+        this, SLOT ( OnRecorderStateChange ( ESvrRecState ) ) );
+
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
     QObject::connect ( pClient, &CClient::CLVersionAndOSReceived,
         this, &CClientDlg::OnCLVersionAndOSReceived );
@@ -758,6 +768,11 @@ void CClientDlg::OnVersionAndOSReceived ( COSUtil::EOpSystemType ,
         MainMixerBoard->SetPanIsSupported();
     }
 #endif
+}
+
+void CClientDlg::OnRecorderStateChange ( ESvrRecState eState )
+{
+    MainMixerBoard->SetServerRecordingState ( csSvrRecStateToString ( eState ) );
 }
 
 void CClientDlg::OnChatTextReceived ( QString strChatText )
@@ -1075,6 +1090,9 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
         // change connect button text to "disconnect"
         butConnect->setText ( tr ( "D&isconnect" ) );
 
+        // set default recording state
+        MainMixerBoard->SetServerRecordingState ( csSvrRecStateToString ( ESvrRecState::RS_UNKNOWN ) );
+
         // set server name in audio mixer group box title
         MainMixerBoard->SetServerName ( strMixerBoardLabel );
 
@@ -1124,6 +1142,9 @@ OnTimerStatus();
 
     // clear mixer board (remove all faders)
     MainMixerBoard->HideAll();
+
+    // clear recording state
+    MainMixerBoard->SetServerRecordingState ( csSvrRecStateToString ( ESvrRecState::RS_UNKNOWN ) );
 }
 
 void CClientDlg::UpdateDisplay()

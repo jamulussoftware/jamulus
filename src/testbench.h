@@ -54,7 +54,7 @@ public:
 
         while ( !bSuccess && ( iPortIncrement <= 100 ) )
         {
-            bSuccess = UdpSocket.bind ( QHostAddress( QHostAddress::Any ),
+            bSuccess = UdpSocket.bind ( QHostAddress ( QHostAddress::Any ),
                                         22222 + iPortIncrement );
 
             iPortIncrement++;
@@ -99,7 +99,7 @@ protected:
         quint32 b = static_cast<quint32> ( 168 );
         quint32 c = static_cast<quint32> ( GenRandomIntInRange ( 1, 253 ) );
         quint32 d = static_cast<quint32> ( GenRandomIntInRange ( 1, 253 ) );
-        return QHostAddress( a << 24 | b << 16 | c << 8 | d );
+        return QHostAddress ( a << 24 | b << 16 | c << 8 | d );
     }
 
     QString    sAddress;
@@ -125,7 +125,7 @@ public slots:
         ESvrRegResult          eSvrRegResult;
 
         // generate random protocol message
-        switch ( GenRandomIntInRange ( 0, 34 ) )
+        switch ( GenRandomIntInRange ( 0, 35 ) )
         {
         case 0: // PROTMESSID_JITT_BUF_SIZE
             Protocol.CreateJitBufMes ( GenRandomIntInRange ( 0, 10 ) );
@@ -329,6 +329,12 @@ public slots:
 
         case 34: // PROTMESSID_CLIENT_ID
             Protocol.CreateClientIDMes ( GenRandomIntInRange ( -2, 20 ) );
+            break;
+
+        case 35: // PROTMESSID_CLM_RECORDER_STATE_CHANGED
+            Protocol.CreateCLRecorderStateChange ( CurHostAddress,
+                                                   static_cast<ESvrRecState> ( GenRandomIntInRange ( static_cast<int> ( ESvrRecState::RS_UNKNOWN ),
+                                                                                                     static_cast<int> ( ESvrRecState::RS_ENABLED ) ) ) );
             break;
         }
     }

@@ -425,6 +425,7 @@ signals:
     void MuteStateHasChangedReceived ( int iChanID, bool bIsMuted );
     void LicenceRequired ( ELicenceType eLicenceType );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
+    void RecorderStateChange ( ESvrRecState eState );
     void PingTimeReceived ( int iPingTime );
 
     void CLServerListReceived ( CHostAddress         InetAddr,

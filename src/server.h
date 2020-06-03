@@ -279,6 +279,10 @@ protected:
     virtual void SendProtMessage ( int              iChID,
                                    CVector<uint8_t> vecMessage );
 
+    virtual void CreateAndSendRecorderStateForAllConChannels();
+
+    ESvrRecState GetRecorderState();
+
     template<unsigned int slotId>
     inline void connectChannelSignalsToServerSlots();
 
@@ -346,8 +350,11 @@ protected:
     // logging
     CServerLogging             Logging;
 
-    // channel level update frame interval counter
+    // low frequency update frame interval counter
     uint16_t                   iFrameCount;
+
+    // ultra-low frequency update frame interval counter
+    uint16_t                   iULFFrameCount;
 
     // recording thread
     recorder::CJamRecorder     JamRecorder;

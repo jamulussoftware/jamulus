@@ -27,6 +27,31 @@
 
 namespace recorder {
 
+inline QString secondsAt48K( const qint64 frames,
+                             const int    frameSize )
+{
+    return QString::number( static_cast<double>( frames * frameSize ) / 48000, 'f', 14 );
+}
+
+struct STrackItem
+{
+    STrackItem ( int numAudioChannels,
+                 qint64 startFrame,
+                 qint64 frameCount,
+                 QString fileName ) :
+        numAudioChannels ( numAudioChannels ),
+        startFrame       ( startFrame ),
+        frameCount       ( frameCount ),
+        fileName         ( fileName )
+    {
+    }
+
+    int numAudioChannels;
+    qint64 startFrame;
+    qint64 frameCount;
+    QString fileName;
+};
+
 class HdrRiff
 {
 public:

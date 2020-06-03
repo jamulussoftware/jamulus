@@ -159,6 +159,8 @@ public:
 
 private:
     void Start();
+    void ReaperProjectFromCurrentSession();
+    void AudacityLofFromCurrentSession();
 
     QDir recordBaseDir;
 

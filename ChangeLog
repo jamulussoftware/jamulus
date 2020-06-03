@@ -19,7 +19,7 @@
 - bug fix: on MacOS declare an activity to ensure the process doesn't get throttled
   by OS level Nap, Sleep, and Thread Priority systems, coded by AronVietti (#23)
 
-
+- add Audacity "list of files" writer to jam recorder, by pljones (#315)
 
 
 

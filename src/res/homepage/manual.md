@@ -66,7 +66,7 @@ jamulus.dyndns.org:22124. The field will also show a list of the most recently u
 
 ### Mute Myself button
 
-Cuts your stream to the server so that all other musicians cannot hear you. Note that while you will also be able to see your levels, other musicians will not. However, they will see an icon to indicate that you have muted yourself.
+Cuts your audio stream to the server so that you will be able to hear yourself and see your own input levels, but other musicians will not. Be aware that other musicians will not know if you have muted yourself.
 
 ### Reverb effect
 
@@ -100,9 +100,9 @@ The faders allow you to adjust the level of what you hear without affecting what
 The VU meter shows the input level at the server - that is, the sound you are sending.
 If you have set your Audio Channel to Stereo or Stereo Out in your Settings, you will also see a pan control.  
 
-Using the Mute button prevents the indicated channel being heard in your local mix. Note that you will continue to see their VU meters moving if sound from the muted musician is reaching the server. Your fader position is also unaffected.
+Using the Mute button prevents the indicated channel being heard in your local mix. Be aware that when you mute a musician, they will see a "muted" icon above your fader to indicate that you cannot hear them. Note also that you will continue to see their VU meters moving if sound from the muted musician is reaching the server. Your fader position for them is also unaffected.
 
-The Solo button allows you to hear one or more musicians on their own. Those not soloed will be muted.
+The Solo button allows you to hear one or more musicians on their own. Those not soloed will be muted. Note also that those musicians who are not soloed will see a "muted" icon above your fader.
 
 
 Settings Window

@@ -36,7 +36,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // jitter buffer
     QString strJitterBufferSize = "<b>" + tr ( "Jitter Buffer Size" ) + ":</b> " + tr (
         "The jitter buffer compensates for network and sound card timing jitters. The "
-        "size of the buffer has therefore influences the quality of "
+        "size of the buffer therefore influences the quality of "
         "the audio stream (how many dropouts occur) and the overall delay "
         "(the longer the buffer, the higher the delay)." ) + "<br>" + tr (
         "You can set the jitter buffer size manually for the local client "
@@ -46,10 +46,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "overrun/underrun has taken place and the audio stream is interrupted." ) + "<br>" + tr (
         "The jitter buffer setting is therefore a trade-off between audio "
         "quality and overall delay." ) + "<br>" + tr (
-        "If the check Auto is enabled, the jitter buffers of the local client and "
+        "If the Auto setting is enabled, the jitter buffers of the local client and "
         "the remote server are set automatically "
         "based on measurements of the network and sound card timing jitter. If "
-        "the Auto check is enabled, the jitter buffer size faders are "
+        "Auto is enabled, the jitter buffer size faders are "
         "disabled (they cannot be moved with the mouse)." );
 
     QString strJitterBufferSizeTT = tr ( "If the Auto setting "

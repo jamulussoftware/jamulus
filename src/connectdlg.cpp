@@ -47,27 +47,23 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
     // Add help text to controls -----------------------------------------------
     // server list
     lvwServers->setWhatsThis ( "<b>" + tr ( "Server List" ) + ":</b> " + tr (
-        "The server list shows a list of available servers which are registered at the "
-        "central server. Select a server from the list and press the connect button to "
-        "connect to this server. Alternatively, double click a server from "
-        "the list to connect to it. If a server is occupied, a list of the "
-        "connected musicians is available by expanding the list item. "
-        "Permanent servers are shown in bold font." ) + "<br>" + tr (
-        "Note that it may take some time to retrieve the server list from the "
-        "central server. If no valid central server address is specified in "
-        "the settings, no server list will be available." ) );
+        "The Connection Setup window shows a list of available servers "
+        "Server operators can optionally list their servers by music genre. "
+        "Use the List dropdown to select a genre, click on the server you want "
+        "to join and press the Connect button to connect to it. Alternatively, "
+        "double click on on the server name. Permanent servers (those that have "
+        "been listed for longer than 24 hours) are shown in bold." ) );
 
     lvwServers->setAccessibleName ( tr ( "Server list view" ) );
 
     // server address
     QString strServAddrH = "<b>" + tr ( "Server Address" ) + ":</b> " + tr (
-        "The IP address or URL of the server running the " ) + APP_NAME + tr (
-        " server software must be set here. An optional port number can be added after the IP "
+        "If you know the IP address or URL of a server, you can connect to it "
+        "using the Server name/Address field. An optional port number can be added after the IP "
         "address or URL using a colon as a separator, e.g, "
         "example.org:" ) +
-        QString().setNum ( DEFAULT_PORT_NUMBER ) + tr ( ". A list of "
-        "the most recent used server IP addresses or URLs is available for "
-        "selection." );
+        QString().setNum ( DEFAULT_PORT_NUMBER ) + tr ( ". The field will "
+        "also show a list of the most recently used server addresses.");
 
     lblServerAddr->setWhatsThis ( strServAddrH );
     cbxServerAddr->setWhatsThis ( strServAddrH );

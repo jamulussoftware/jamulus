@@ -200,22 +200,22 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "client and server. There are three modes available:" ) +
         "<ul>"
         "<li>" "<b>" + tr ( "Mono" ) + "</b> " + tr ( "and " ) +
-        "<b>" + tr ( "Stereo" ) + ":</b> " + tr ( "modes use "
+        "<b>" + tr ( "Stereo" ) + ":</b> " + tr ( "These modes use "
         "one and two audio channels respectively." ) + "</li>"
         "<li>" "<b>" + tr ( "Mono in/Stereo-out" ) + ":</b> " + tr (
-        "the audio signal sent to the server is mono but the "
+        "The audio signal sent to the server is mono but the "
         "return signal is stereo. This is useful if the "
         "sound card has the instrument on one input channel and the "
         "microphone on the other. In that case the two input signals "
         "can be mixed to one mono channel but the server mix is heard in "
         "stereo." )  + "</li>"
-        "<li>" + tr ("Enabling " ) + "<b>" + tr ( "Stereo" ) + ":</b> " + tr ( "mode "
+        "<li>" + tr ("Enabling " ) + "<b>" + tr ( "Stereo" ) + "</b> " + tr ( "mode "
         "will increase your stream's data rate. Make sure your upload rate does not "
         "exceed the available upload speed of your internet connection." )  + "</li>"
-        "<li>" + tr ( "In stereo streaming mode, no audio channel selection "
+        "</ul>"
+        + "<br>" + tr ( "In stereo streaming mode, no audio channel selection "
         "for the reverb effect will be available on the main window "
-        "since the effect is applied to both channels in this case." ) + "</li>"
-        "</ul>";
+        "since the effect is applied to both channels in this case." );
 
     lblAudioChannels->setWhatsThis ( strAudioChannels );
     cbxAudioChannels->setWhatsThis ( strAudioChannels );

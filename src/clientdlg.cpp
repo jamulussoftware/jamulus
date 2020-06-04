@@ -48,25 +48,23 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // Add help text to controls -----------------------------------------------
     // input level meter
-    QString strInpLevH = "<b>" + tr ( "Input Level Meter" ) + ":</b> " + tr ( "The input level "
-        "indicators show the input level of the two stereo channels "
-        "of the current selected audio input." ) + "<br>" +
+    QString strInpLevH = "<b>" + tr ( "Input Level Meter" ) + ":</b> " + tr ( "This shows "
+        "the level of the two stereo channels "
+        "for your audio input." ) + "<br>" +
          tr ( "Make sure not to clip the input signal to avoid distortions of the "
         "audio signal." );
 
-    QString strInpLevHTT = tr ( "If the " ) + APP_NAME +
-        tr ( " software is connected and "
-        "you play your instrument/sing in the microphone, the LED level "
+    QString strInpLevHTT = tr ( "If the application "
+        "is connected to a server and "
+        "you play your instrument/sing into the microphone, the VU "
         "meter should flicker. If this is not the case, you have "
-        "probably selected the wrong input channel (e.g. line in instead "
+        "probably selected the wrong input channel (e.g. 'line in' instead "
         "of the microphone input) or set the input gain too low in the "
-        "(Windows) audio mixer." ) + "<br>" + tr ( "For a proper usage of the " ) +
-        APP_NAME + tr ( " software, "
-        "you should not hear your singing/instrument in the loudspeaker or "
-        "your headphone when the " ) + APP_NAME +
-        tr ( " software is not connected. This can "
-        "be achieved by muting your input audio channel in the Playback "
-        "mixer (not the Recording mixer!)." ) + TOOLTIP_COM_END_TEXT;
+        "(Windows) audio mixer." ) + "<br>" + tr ( "For proper usage of the "
+        "application, you should not hear your singing/instrument through "
+        "the loudspeaker or your headphone when the software is not connected."
+        "This can be achieved by muting your input audio channel in the "
+        "Playback mixer (not the Recording mixer!)." ) + TOOLTIP_COM_END_TEXT;
 
     QString strInpLevHAccText  = tr ( "Input level meter" );
     QString strInpLevHAccDescr = tr ( "Simulates an analog LED level meter." );
@@ -85,9 +83,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // connect/disconnect button
     butConnect->setWhatsThis ( "<b>" + tr ( "Connect/Disconnect Button" ) + ":</b> " +
-        tr ( "Push this button to connect to a server. A dialog where you can "
-        "select a server will open. If you are connected, pressing this "
-        "button will end the session." ) );
+        tr ( "Opens a dialog where you can select a server to connect to."
+        "If you are connected, pressing this button will end the session." ) );
 
     butConnect->setAccessibleName (
         tr ( "Connect and disconnect toggle button" ) );
@@ -95,13 +92,13 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     butConnect->setAccessibleDescription ( tr ( "Clicking on this "
         "button changes the caption of the button from Connect to "
         "Disconnect, i.e., it implements a toggle functionality for connecting "
-        "and disconnecting the " ) + APP_NAME + tr ( " software." ) );
+        "and disconnecting the application." ) );
 
     // local audio input fader
     QString strAudFader = "<b>" + tr ( "Local Audio Input Fader" ) + ":</b> " +
-        tr ( "With the audio fader, the relative levels of the left and right local audio "
-        "channels can be changed. For a mono signal it acts like a panning "
-        "between the two channels. If, e.g., a microphone is connected to "
+        tr ( "Controls the relative levels of the left and right local audio "
+        "channels. For a mono signal it acts as a pan between the two channels."
+        "For example, if a microphone is connected to "
         "the right input channel and an instrument is connected to the left "
         "input channel which is much louder than the microphone, move the "
         "audio fader in a direction where the label above the fader shows " ) +
@@ -115,64 +112,68 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     sldAudioPan->setAccessibleName ( tr ( "Local audio input fader (left/right)" ) );
 
     // reverberation level
-    QString strAudReverb = "<b>" + tr ( "Reverberation Level" ) + ":</b> " +
-        tr ( "A reverberation effect can be applied to one local mono audio channel or to both "
+    QString strAudReverb = "<b>" + tr ( "Reverb effect" ) + ":</b> " +
+        tr ( "Reverb can be applied to one local mono audio channel or to both "
         "channels in stereo mode. The mono channel selection and the "
-        "reverberation level can be modified. If, e.g., "
-        "the microphone signal is fed into the right audio channel of the "
-        "sound card and a reverberation effect shall be applied, set the "
+        "reverb level can be modified. For example, if "
+        "a microphone signal is fed in to the right audio channel of the "
+        "sound card and a reverb effect needs to be applied, set the "
         "channel selector to right and move the fader upwards until the "
-        "desired reverberation level is reached." ) + "<br>" + tr (
-        "The reverberation effect requires significant CPU so it should "
-        "only be used on fast PCs. If the reverberation level fader is set to "
-        "minimum (which is the default setting), the reverberation effect is "
+        "desired reverb level is reached." ) + "<br>" + tr (
+        "Reverb requires significant CPU so it should "
+        "only be used on fast PCs. If the reverb level fader is set to "
+        "minimum (the default setting), the effect is "
         "switched off and does not cause any additional CPU usage." );
 
     lblAudioReverb->setWhatsThis ( strAudReverb );
     sldAudioReverb->setWhatsThis ( strAudReverb );
 
-    sldAudioReverb->setAccessibleName ( tr ( "Reverberation effect level setting" ) );
+    sldAudioReverb->setAccessibleName ( tr ( "Reverb effect level setting" ) );
 
     // reverberation channel selection
-    QString strRevChanSel = "<b>" + tr ( "Reverberation Channel Selection" ) + ":</b> " +
+    QString strRevChanSel = "<b>" + tr ( "Reverb Channel Selection" ) + ":</b> " +
         tr ( "With these radio buttons the audio input channel on which the "
-        "reverberation effect is applied can be chosen. Either the left "
+        "reverb effect is applied can be chosen. Either the left "
         "or right input channel can be selected." );
 
     rbtReverbSelL->setWhatsThis ( strRevChanSel );
-    rbtReverbSelL->setAccessibleName ( tr ( "Left channel selection for reverberation" ) );
+    rbtReverbSelL->setAccessibleName ( tr ( "Left channel selection for reverb" ) );
     rbtReverbSelR->setWhatsThis ( strRevChanSel );
-    rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverberation" ) );
+    rbtReverbSelR->setAccessibleName ( tr ( "Right channel selection for reverb" ) );
 
     // delay LED
     QString strLEDDelay = "<b>" + tr ( "Delay Status LED" ) + ":</b> " +
-        tr ( "The delay status LED indicator shows the current audio delay "
-        "status. If the light is green, the delay is perfect for a jam "
-        "session. If the light is yellow, a session is still possible but "
-        "it may be harder to play. If the light is red, the delay is too "
-        "large for jamming." );
+        tr ( "The " ) + "<b>" + tr ( "Delay Status" ) + ":</b> " + tr ( "LED shows the "
+        "current audio delay status:" ) +
+        "<ul>"
+        "<li>" "<b>" + tr ( "Green" ) + ":</b> " + tr ( "- The delay is perfect for a jam "
+        "session " ) + "</li>"
+        "<li>" "<b>" + tr ( "Yellow" ) + ":</b> " + tr ( "- A session is still possible "
+        "but it may be harder to play." ) + "</li>"
+        "<li>" "<b>" + tr ( "Red" ) + ":</b> " + tr ( "- The delay is too large for "
+        "jamming." ) + "</li>"
+        "</ul>";
 
     lblDelay->setWhatsThis ( strLEDDelay );
     ledDelay->setWhatsThis ( strLEDDelay );
     ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-        "you will not have much fun using the " ) + APP_NAME +
-        tr ( " software." ) + TOOLTIP_COM_END_TEXT );
+        "you will not have much fun using the application" ) +
+         TOOLTIP_COM_END_TEXT );
 
     ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );
 
     // buffers LED
     QString strLEDBuffers = "<b>" + tr ( "Buffers Status LED" ) + ":</b> " +
-        tr ( "The buffers status LED indicator shows the current audio/streaming "
-        "status. If the light is green, there are no buffer overruns/underruns "
-        "and the audio stream is not interrupted. If the light is red, the "
-        "audio stream is interrupted caused by one of the following problems:" ) +
+        tr ( "The buffers status LED shows the current audio/streaming "
+        "status. If the light is red, the audio stream is interrupted."
+        "This is caused by one of the following problems:" ) +
         "<ul>"
         "<li>" + tr ( "The network jitter buffer is not large enough for the current "
         "network/audio interface jitter." ) + "</li>"
-        "<li>" + tr ( "The sound card buffer delay (buffer size) is set to too small a "
-        "value." ) + "</li>"
-        "<li>" + tr ( "The upload or download stream rate is too high for the current "
-        "available internet bandwidth." ) + "</li>"
+        "<li>" + tr ( "The sound card's buffer delay (buffer size) is too small "
+        "(see Settings window)." ) + "</li>"
+        "<li>" + tr ( "The upload or download stream rate is too high for your "
+        "internet bandwidth." ) + "</li>"
         "<li>" + tr ( "The CPU of the client or server is at 100%." ) + "</li>"
         "</ul>";
 

@@ -10,7 +10,7 @@ Main Window
 
 ![LEDs](led.png)
 
-The **Status** LED shows the current audio delay status.
+The **Delay Status** LED shows the current audio delay status:
 
 * **Green** - The delay is perfect for a jam session
 

@@ -197,7 +197,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // audio channels
     QString strAudioChannels = "<b>" + tr ( "Audio Channels" ) + ":</b> " + tr (
         "Selects the number of audio channels to be used for communication between "
-        "client and server. There are three modes available:"
+        "client and server. There are three modes available:" ) +
         "<ul>"
         "<li>" "<b>" + tr ( "Mono" ) + "</b> " + tr ( "and " ) +
         "<b>" + tr ( "Stereo" ) + ":</b> " + tr ( "modes use "

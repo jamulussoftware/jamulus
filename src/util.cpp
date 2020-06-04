@@ -370,7 +370,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 
     // libraries used by this compilation
     txvLibraries->setText (
-        + tr ( "This app uses the following libraries, resources or code snippets:" ) +
+        tr ( "This app uses the following libraries, resources or code snippets:" ) +
         "<br><p>" + tr ( "Qt cross-platform application framework" ) +
         ", <i><a href=""http://www.qt.io"">http://www.qt.io</a></i></p>"
         "<p>Opus Interactive Audio Codec"

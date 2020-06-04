@@ -47,7 +47,7 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
     // Add help text to controls -----------------------------------------------
     // server list
     lvwServers->setWhatsThis ( "<b>" + tr ( "Server List" ) + ":</b> " + tr (
-        "The Connection Setup window shows a list of available servers "
+        "The Connection Setup window shows a list of available servers. "
         "Server operators can optionally list their servers by music genre. "
         "Use the List dropdown to select a genre, click on the server you want "
         "to join and press the Connect button to connect to it. Alternatively, "

@@ -83,7 +83,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // connect/disconnect button
     butConnect->setWhatsThis ( "<b>" + tr ( "Connect/Disconnect Button" ) + ":</b> " +
-        tr ( "Opens a dialog where you can select a server to connect to."
+        tr ( "Opens a dialog where you can select a server to connect to. "
         "If you are connected, pressing this button will end the session." ) );
 
     butConnect->setAccessibleName (
@@ -143,14 +143,13 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // delay LED
     QString strLEDDelay = "<b>" + tr ( "Delay Status LED" ) + ":</b> " +
-        tr ( "The " ) + "<b>" + tr ( "Delay Status" ) + ":</b> " + tr ( "LED shows the "
-        "current audio delay status:" ) +
+        tr ( "Shows the current audio delay status:" ) +
         "<ul>"
-        "<li>" "<b>" + tr ( "Green" ) + ":</b> " + tr ( "- The delay is perfect for a jam "
+        "<li>" "<b>" + tr ( "Green" ) + ":</b> " + tr ( "The delay is perfect for a jam "
         "session " ) + "</li>"
-        "<li>" "<b>" + tr ( "Yellow" ) + ":</b> " + tr ( "- A session is still possible "
+        "<li>" "<b>" + tr ( "Yellow" ) + ":</b> " + tr ( "A session is still possible "
         "but it may be harder to play." ) + "</li>"
-        "<li>" "<b>" + tr ( "Red" ) + ":</b> " + tr ( "- The delay is too large for "
+        "<li>" "<b>" + tr ( "Red" ) + ":</b> " + tr ( "The delay is too large for "
         "jamming." ) + "</li>"
         "</ul>";
 
@@ -165,7 +164,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // buffers LED
     QString strLEDBuffers = "<b>" + tr ( "Buffers Status LED" ) + ":</b> " +
         tr ( "The buffers status LED shows the current audio/streaming "
-        "status. If the light is red, the audio stream is interrupted."
+        "status. If the light is red, the audio stream is interrupted. "
         "This is caused by one of the following problems:" ) +
         "<ul>"
         "<li>" + tr ( "The network jitter buffer is not large enough for the current "

@@ -606,7 +606,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="122"/>
         <source>Reverb requires significant CPU so it should only be used on fast PCs. If the reverb level fader is set to minimum (the default setting), the effect is switched off and does not cause any additional CPU usage.</source>
-        <translation>El efecto de reverb require un esfuerzo importante del procesador, por lo que solo debería usarse en ordenadores potentes. Si se deja el fader de reverb al mínimo (la configuración por defecto), el efecto estará desactivado y no significará ninguna carga adicional para el procesador.</translation>
+        <translation>El efecto de reverb requiere un esfuerzo importante del procesador, por lo que solo debería usarse en ordenadores potentes. Si se deja el fader de reverb al mínimo (la configuración por defecto), el efecto estará desactivado y no significará ninguna carga adicional para el procesador.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="131"/>
@@ -1414,7 +1414,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="225"/>
         <source>The higher the audio quality, the higher your audio stream&apos;s data rate. Make sure your upload rate does not exceed the available bandwidth of your internet connection.</source>
-        <translation>Cuanto mayor la calidad del audio, mayor la tasa de subidadel audio. Asegúrate de que tu tasa de subida no excede el ancho de banda de tu conexión a Internet.</translation>
+        <translation>Cuanto mayor la calidad del audio, mayor la tasa de subida del audio. Asegúrate de que tu tasa de subida no excede el ancho de banda de tu conexión a Internet.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="236"/>
@@ -1745,12 +1745,12 @@
     <message>
         <location filename="../../connectdlg.cpp" line="49"/>
         <source>The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by music genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double click on on the server name. Permanent servers (those that have been listed for longer than 24 hours) are shown in bold.</source>
-        <translation>La ventana de Conexión muestra una lista de servidores disponibles. Opcionalmente los administradores de los servidores pueden listar sus servidores por género musical.Utiliza el menú Lista para escoger un género, escoge un servidor de la lista y pulsa el botón de Conectar para conectarte a él. También es posible realizar la conexión haciendo doble clic en un servidor de la lista. Los servidores permanentes (aquellos que llevan más de 24 horas en la lista) se muestran en negrita.</translation>
+        <translation>La ventana de Conexión muestra una lista de servidores disponibles. Opcionalmente los administradores de los servidores pueden listar sus servidores por género musical. Utiliza el menú Lista para escoger un género, escoge un servidor de la lista y pulsa el botón de Conectar para conectarte a él. También es posible realizar la conexión haciendo doble clic en un servidor de la lista. Los servidores permanentes (aquellos que llevan más de 24 horas en la lista) se muestran en negrita.</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="60"/>
         <source>If you know the IP address or URL of a server, you can connect to it using the Server name/Address field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g, example.org:</source>
-        <translation>Si conoces la dirección IP o URL de un servidor, puedes conectarte a él utilizando el nombre/dirección del Servidor. Se puede añadir un número de puerto opcional tras la dirección IP o URL utilizando dos puntos como separador, por ej. ejemplo.org:</translation>
+        <translation>Si conoces la dirección IP o URL de un servidor, puedes conectarte a él utilizando el nombre/dirección del Servidor. Se puede añadir un número de puerto opcional tras la dirección IP o URL utilizando dos puntos como separador, por ej. &apos;ejemplo.org&apos;:</translation>
     </message>
     <message>
         <location filename="../../connectdlg.cpp" line="65"/>

@@ -245,7 +245,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // custom central server address
     QString strCentrServAddr = "<b>" + tr ( "Custom Central Server Address" ) + ":</b> " +
-        tr ( "Leave this blank unless you need to enter the address of a cenrtral "
+        tr ( "Leave this blank unless you need to enter the address of a central "
         "server other than the default." );
 
     lblCentralServerAddress->setWhatsThis ( strCentrServAddr );

@@ -52,7 +52,7 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     // start minimized on operating system start
     chbStartOnOSStart->setWhatsThis ( "<b>" + tr ( "Start Minimized on Operating "
         "System Start" ) + ":</b> " + tr ( "If the start minimized on operating system start "
-        "check box is checked, the " ) + APP_NAME + tr ( " server will be "
+        "check box is checked, the server will be "
         "started when the operating system starts up and is automatically "
         "minimized to a system task bar icon." ) );
 
@@ -64,8 +64,8 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     // Make My Server Public flag
     chbRegisterServer->setWhatsThis ( "<b>" + tr ( "Make My Server Public" ) + ":</b> " +
         tr ( "If the Make My Server Public check box is checked, this server registers "
-        "itself at the central server so that all " ) + APP_NAME +
-        tr ( " users can see the server in the connect dialog server list and "
+        "itself at the central server so that all users of the application "
+        "can see the server in the connect dialog server list and "
         "connect to it. The registration of the server is renewed periodically "
         "to make sure that all servers in the connect dialog server list are "
         "actually available." ) );

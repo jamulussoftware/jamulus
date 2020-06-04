@@ -199,7 +199,7 @@ the main window since the effect is applied to both channels in this case.
 
 ![Audio quality](audioquality.png)
 
-he higher the audio quality, the higher your audio stream's data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.
+The higher the audio quality, the higher your audio stream's data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.
 
 ### New client level
 

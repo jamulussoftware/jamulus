@@ -77,10 +77,6 @@ The mono channel selection and the reverberation level can be modified. For exam
 in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector
 to the right and move the fader upwards until the desired reverb level is reached.
 
-Reverb requires significant CPU so it should only be used on fast PCs. If the reverb
-level fader is set to minimum (with default setting), the effect is switched off and does
-not cause any additional CPU usage.
-
 ### Local audio pan / balance control
 
 ![Local audio pan / balance control](audiofader.png)

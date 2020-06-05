@@ -206,7 +206,7 @@ LED bar:      lbr
 #define SERVLIST_REGIST_INTERV_MINUTES   15 // minutes
 
 // defines the minimum time a server must run to be a permanent server
-#define SERVLIST_TIME_PERMSERV_MINUTES   4320 // minutes, 4320 = 60 min * 24 h * 3 d
+#define SERVLIST_TIME_PERMSERV_MINUTES   2880 // minutes, 2880 = 60 min * 24 h * 2 d
 
 // registration response timeout
 #define REGISTER_SERVER_TIME_OUT_MS      500 // ms

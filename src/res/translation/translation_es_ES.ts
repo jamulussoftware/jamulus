@@ -2325,7 +2325,7 @@
     <message>
         <location filename="../../util.cpp" line="1021"/>
         <source>Bass Ukulele</source>
-        <translation>Ukelele Barítono</translation>
+        <translation>Ukulele Barítono</translation>
     </message>
 </context>
 <context>

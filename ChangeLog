@@ -10,6 +10,8 @@
 
 - make level meter LED black when off, by fleutot (#318)
 
+- added ukulele/bass ukulele instrument icons created by dos1 (#319)
+
 - added check in acknowledge message, coded by atsampson (#302)
 
 - bug fix: on MacOS declare an activity to ensure the process doesn't get throttled

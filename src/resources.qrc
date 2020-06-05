@@ -80,6 +80,8 @@
         <file>res/instruments/vocalsoprano.png</file>
         <file>res/instruments/banjo.png</file>
         <file>res/instruments/mandolin.png</file>
+        <file>res/instruments/ukulele.png</file>
+        <file>res/instruments/bassukulele.png</file>
     </qresource>
     <qresource prefix="/png/main">
         <file>res/fronticon.png</file>

@@ -295,12 +295,24 @@ win32 {
     isEmpty(PREFIX) {
         PREFIX = /usr/local
     }
+
     isEmpty(BINDIR) {
         BINDIR = bin
     }
     BINDIR = $$absolute_path($$BINDIR, $$PREFIX)
-    INSTALLS += target
     target.path = $$BINDIR
+    INSTALLS += target
+
+    isEmpty(APPSDIR) {
+        APPSDIR = share/applications
+    }
+    APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
+    desktop.path = $$APPSDIR
+    desktop.files = distributions/jamulus.desktop
+    # the .desktop file assumes the binary is called jamulus
+    contains(CONFIG, "noupcasename") {
+        INSTALLS += desktop
+    }
 }
 
 RCC_DIR = src/res
@@ -702,6 +714,10 @@ DISTFILES += ChangeLog \
     src/res/instruments/congas.png \
     src/res/instruments/bongo.svg \
     src/res/instruments/bongo.png \
+    src/res/instruments/ukulele.svg \
+    src/res/instruments/ukulele.png \
+    src/res/instruments/bassukulele.svg \
+    src/res/instruments/bassukulele.png \
     src/res/instruments/vocalbass.png \
     src/res/instruments/vocaltenor.png \
     src/res/instruments/vocalalto.png \

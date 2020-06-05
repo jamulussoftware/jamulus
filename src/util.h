@@ -836,11 +836,11 @@ class CChannelCoreInfo
 {
 public:
     CChannelCoreInfo() :
-        strName         ( "" ),
-        eCountry        ( QLocale::AnyCountry ),
-        strCity         ( "" ),
-        iInstrument     ( CInstPictures::GetNotUsedInstrument() ),
-        eSkillLevel     ( SL_NOT_SET ) {}
+        strName     ( "" ),
+        eCountry    ( QLocale::AnyCountry ),
+        strCity     ( "" ),
+        iInstrument ( CInstPictures::GetNotUsedInstrument() ),
+        eSkillLevel ( SL_NOT_SET ) {}
 
     CChannelCoreInfo ( const QString           NsName,
                        const QLocale::Country& NeCountry,
@@ -916,25 +916,6 @@ public:
                            NeSkillLevel ),
         iChanID ( NiID ),
         iIpAddr ( NiIP ) {}
-
-    QString GenNameForDisplay() const
-    {
-        // if text is empty, show IP address instead
-        if ( strName.isEmpty() )
-        {
-            // convert IP address to text and show it (use dummy port number
-            // since it is not used here)
-            const CHostAddress TempAddr =
-                CHostAddress ( QHostAddress ( iIpAddr ), 0 );
-
-            return TempAddr.toString ( CHostAddress::SM_IP_NO_LAST_BYTE );
-        }
-        else
-        {
-            // show name of channel
-            return strName;
-        }
-    }
 
     // ID of the channel
     int     iChanID;

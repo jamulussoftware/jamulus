@@ -125,7 +125,8 @@ void CSettings::Load()
 
         // name
         pClient->ChannelInfo.strName = FromBase64ToString (
-            GetIniSetting ( IniXMLDocument, "client", "name_base64" ) );
+            GetIniSetting ( IniXMLDocument, "client", "name_base64",
+                            ToBase64 ( QCoreApplication::translate ( "CMusProfDlg", "No Name" ) ) ) );
 
         // instrument
         if ( GetNumericIniSet ( IniXMLDocument, "client", "instrument",

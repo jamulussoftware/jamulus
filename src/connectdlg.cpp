@@ -430,7 +430,7 @@ void CConnectDlg::SetConnClientsList ( const CHostAddress&          InetAddr,
             pNewChildListViewItem->setFirstColumnSpanned ( true );
 
             // set the clients name
-            QString sClientText = vecChanInfo[i].GenNameForDisplay();
+            QString sClientText = vecChanInfo[i].strName;
 
             // set the icon: country flag has priority over instrument
             bool bCountryFlagIsUsed = false;

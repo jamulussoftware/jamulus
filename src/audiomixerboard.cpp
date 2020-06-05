@@ -439,7 +439,7 @@ void CChannelFader::SetText ( const CChannelInfo& ChanInfo )
     // break text at predefined position
     const int iBreakPos = MAX_LEN_FADER_TAG / 2;
 
-    QString strModText = ChanInfo.GenNameForDisplay();
+    QString strModText = ChanInfo.strName;
 
     if ( strModText.length() > iBreakPos )
     {

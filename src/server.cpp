@@ -1303,13 +1303,6 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
     // get client name, if name is empty, use IP address instead
     QString ChanName = vecChannels[iCurChanID].GetName();
 
-    if ( ChanName.isEmpty() )
-    {
-        // convert IP address to text and show it
-        ChanName = vecChannels[iCurChanID].GetAddress().
-            toString ( CHostAddress::SM_IP_NO_LAST_BYTE );
-    }
-
     // add time and name of the client at the beginning of the message text and
     // use different colors
     QString sCurColor = vstrChatColors[iCurChanID % vstrChatColors.Size()];
@@ -1552,18 +1545,7 @@ void CServer::WriteHTMLChannelList()
         {
             if ( vecChannels[i].IsConnected() )
             {
-                QString strCurChanName = vecChannels[i].GetName();
-
-                // if text is empty, show IP address instead
-                if ( strCurChanName.isEmpty() )
-                {
-                    // convert IP address to text and show it, remove last
-                    // digits
-                    strCurChanName = vecChannels[i].GetAddress().
-                        toString ( CHostAddress::SM_IP_NO_LAST_BYTE );
-                }
-
-                streamFileOut << "  <li>" << strCurChanName << "</li>" << endl;
+                streamFileOut << "  <li>" << vecChannels[i].GetName() << "</li>" << endl;
             }
         }
     }

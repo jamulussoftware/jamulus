@@ -713,7 +713,7 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
         "<br>" + tr ( "What you set here will appear at your fader on the mixer "
         "board when you are connected to a Jamulus server. This tag will "
         "also be shown at each client which is connected to the same server as "
-        "you. If the name is left empty, the IP address is shown instead." );
+        "you." );
 
     pedtAlias->setWhatsThis ( strFaderTag );
     pedtAlias->setAccessibleName ( tr ( "Alias or name edit box" ) );

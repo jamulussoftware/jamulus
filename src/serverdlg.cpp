@@ -91,8 +91,7 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
 
     // server name
     QString strServName = "<b>" + tr ( "Server Name" ) + ":</b> " + tr ( "The server name identifies "
-        "your server in the connect dialog server list at the clients. If no "
-        "name is given, the IP address is shown instead." );
+        "your server in the connect dialog server list at the clients." );
 
     lblServerName->setWhatsThis ( strServName );
     edtServerName->setWhatsThis ( strServName );

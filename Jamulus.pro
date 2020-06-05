@@ -301,18 +301,16 @@ win32 {
     }
     BINDIR = $$absolute_path($$BINDIR, $$PREFIX)
     target.path = $$BINDIR
-    INSTALLS += target
 
     isEmpty(APPSDIR) {
         APPSDIR = share/applications
     }
     APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
     desktop.path = $$APPSDIR
+    QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in
     desktop.files = distributions/jamulus.desktop
-    # the .desktop file assumes the binary is called jamulus
-    contains(CONFIG, "noupcasename") {
-        INSTALLS += desktop
-    }
+
+    INSTALLS += target desktop
 }
 
 RCC_DIR = src/res
@@ -617,6 +615,7 @@ DISTFILES += ChangeLog \
     COPYING \
     INSTALL.md \
     README.md \
+    distributions/jamulus.desktop.in \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
     src/res/translation/translation_pt_PT.qm \

@@ -94,11 +94,18 @@ In the audio mixer frame, a fader is shown for each connected client at the serv
 The faders allow you to adjust the level of what you hear without affecting what others hear.
 
 The VU meter shows the input level at the server - that is, the sound you are sending.
-If you have set your Audio Channel to Stereo or Stereo Out in your Settings, you will also see a pan control.  
 
-Using the Mute button prevents the indicated channel being heard in your local mix. Be aware that when you mute a musician, they will see a "muted" icon above your fader to indicate that you cannot hear them. Note also that you will continue to see their VU meters moving if sound from the muted musician is reaching the server. Your fader position for them is also unaffected.
+If you have set your Audio Channel to Stereo or Stereo Out in your Settings, you will also see a pan control. 
 
-The Solo button allows you to hear one or more musicians on their own. Those not soloed will be muted. Note also that those musicians who are not soloed will see a "muted" icon above your fader.
+If you see a "mute" icon above a channel, it means that musician cannot hear you. Either they have muted you, soloed one or more channels not including yours, or have set your fader in their mix to zero.
+
+Using the **Mute button** prevents the indicated channel being heard in your local mix. Be aware that when you mute a musician, they will see a "muted" icon above your fader to indicate that you cannot hear them. Note also that you will continue to see their VU meters moving if sound from the muted musician is reaching the server. Your fader position for them is also unaffected.
+
+The **Solo button** allows you to hear one or more musicians on their own. Those not soloed will be muted. Note also that those musicians who are not soloed will see a "muted" icon above your fader.
+
+
+
+
 
 
 Settings Window

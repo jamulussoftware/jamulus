@@ -14,7 +14,7 @@
 
 - added check in acknowledge message, coded by atsampson (#302)
 
-- avoid showing IP address if no name in the musician profile is given #316
+- avoid showing IP address if no name in the musician profile is given (#316)
 
 - bug fix: on MacOS declare an activity to ensure the process doesn't get throttled
   by OS level Nap, Sleep, and Thread Priority systems, coded by AronVietti (#23)

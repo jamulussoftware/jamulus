@@ -52,7 +52,7 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
         "Use the List dropdown to select a genre, click on the server you want "
         "to join and press the Connect button to connect to it. Alternatively, "
         "double click on on the server name. Permanent servers (those that have "
-        "been listed for longer than 24 hours) are shown in bold." ) );
+        "been listed for longer than 48 hours) are shown in bold." ) );
 
     lvwServers->setAccessibleName ( tr ( "Server list view" ) );
 

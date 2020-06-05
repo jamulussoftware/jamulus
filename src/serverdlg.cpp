@@ -125,13 +125,13 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     chbEnableRecorder->setAccessibleName( tr ( "Checkbox to turn on or off server recording" ) );
     chbEnableRecorder->setWhatsThis( "<b>" + tr ( "Enable Recorder" ) + ":</b>"
         + tr ( "Checked when the recorder is enabled, otherwise unchecked. "
-               "The recorder will run when a session is in progress, if (set up correctly and) enabled.") );
+               "The recorder will run when a session is in progress, if (set up correctly and) enabled." ) );
 
     // current session directory
     edtCurrentSessionDir->setAccessibleName( tr ( "Current session directory text box (read-only)" ) );
     edtCurrentSessionDir->setWhatsThis( "<b>" + tr ( "Current Session Directory" ) + ":</b>"
         +  tr ( "Enabled during recording and holds the current recording session directory. "
-                "Disabled after recording or when the recorder is not enabled.") );
+                "Disabled after recording or when the recorder is not enabled." ) );
 
     // recorder status
     lblRecorderStatus->setAccessibleName ( tr ( "Recorder status label" ) );

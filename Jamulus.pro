@@ -310,7 +310,14 @@ win32 {
     QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in
     desktop.files = distributions/jamulus.desktop
 
-    INSTALLS += target desktop
+    isEmpty(ICONSDIR) {
+        ICONSDIR = share/icons/hicolor/512x512/apps
+    }
+    ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
+    icons.path = $$ICONSDIR
+    icons.files = distributions/jamulus.png
+
+    INSTALLS += target desktop icons
 }
 
 RCC_DIR = src/res
@@ -616,6 +623,7 @@ DISTFILES += ChangeLog \
     INSTALL.md \
     README.md \
     distributions/jamulus.desktop.in \
+    distributions/jamulus.png \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
     src/res/translation/translation_pt_PT.qm \

@@ -342,6 +342,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecvecdGains.Init                  ( iMaxNumChannels );
     vecvecdPannings.Init               ( iMaxNumChannels );
     vecvecsData.Init                   ( iMaxNumChannels );
+    vecvecsData2.Init                  ( iMaxNumChannels );   //**************** second data // n200602
     vecNumAudioChannels.Init           ( iMaxNumChannels );
     vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
     vecUseDoubleSysFraSizeConvBuf.Init ( iMaxNumChannels );
@@ -354,7 +355,13 @@ CServer::CServer ( const int          iNewMaxNumChan,
         vecvecdPannings[i].Init ( iMaxNumChannels );
 
         // we always use stereo audio buffers (see "vecsSendData")
-        vecvecsData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+        //******************************************************************************************
+        //******************************************************************************************
+        vecvecsData[i].Init  ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+        vecvecsData2[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+        // second buffer for delay panning is added // n200602
+        //******************************************************************************************
+        //******************************************************************************************
     }
 
     // allocate worst case memory for the coded data
@@ -1157,12 +1164,39 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
     else
     {
         // Stereo target channel -----------------------------------------------
+        //******************************************************************************************
+        //  begin
+        //******************************************************************************************
+        // added for delay panning   200601
+        const bool bDelayPan   = true; //  (PANNING_TYPE_DEFAULT == 2);
+        const int  maxPanDelay = MAX_DELAY_PANNING_SAMPLES; // 32  -->  64
+        int        iLpan, iRpan, iPan;
+        //******************************************************************************************
+        //  end
+        //******************************************************************************************
+
         for ( j = 0; j < iNumClients; j++ )
         {
             // get a reference to the audio data and gain/pan of the current client
+            //**************************************************************************************
+            //  begin
+            //**************************************************************************************
+            // const CVector<int16_t>& vecsData = vecvecsData[j];
+            // is replaced by :
             const CVector<int16_t>& vecsData = vecvecsData[j];
+            CVector<int16_t>& vecsData2      = vecvecsData2[j];   // *** second buffer // n200602
             const double            dGain    = vecdGains[j];
-            const double            dPan     = vecdPannings[j];
+            //**************************************************************************************
+            //**************************************************************************************
+            // const double            dPan     = vecdPannings[j];
+            // is replaced by :
+            const double            dPan     = bDelayPan ? 0.5 : vecdPannings[j];
+            const int               iPanDel  = lround((double)(2 * maxPanDelay - 2) * (vecdPannings[j] - 0.5));
+            const int               iPanDelL = (iPanDel > 0) ?  iPanDel : 0;
+            const int               iPanDelR = (iPanDel < 0) ? -iPanDel : 0;
+            //**************************************************************************************
+            //  end
+            //**************************************************************************************
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels
@@ -1177,13 +1211,55 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // mono: copy same mono data in both out stereo audio channels
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        // left channel
-                        vecsOutData[k] = Double2Short (
-                            static_cast<double> ( vecsOutData[k] ) + vecsData[i] );
+                        //***************************************************************************
+                        // begin
+                        //***************************************************************************
+                        if ( bDelayPan )
+                        {
+                            vecsData2[i]   = vecsData[i];   // copy to second buffer
 
-                        // right channel
-                        vecsOutData[k + 1] = Double2Short (
-                            static_cast<double> ( vecsOutData[k + 1] ) + vecsData[i] );
+                            // pan address shift
+                            // left channel
+                            iLpan = i - iPanDelL;
+
+                            if ( iLpan < 0 )
+                            {  // get from second
+                                iLpan = iLpan + iServerFrameSizeSamples;
+
+                                vecsOutData[k] = Double2Short (
+                                    static_cast<double> ( vecsOutData[k] ) + vecsData2[iLpan] );
+                            }
+                            else
+                                vecsOutData[k] = Double2Short (
+                                    static_cast<double> ( vecsOutData[k] ) + vecsData[iLpan] );
+
+                            // right channel
+                            iRpan = i - iPanDelR;
+
+                            if ( iRpan < 0 )
+                            {  // get from second
+                                iRpan = iRpan + iServerFrameSizeSamples;
+
+                                vecsOutData[k + 1] = Double2Short (
+                                    static_cast<double> ( vecsOutData[k + 1] ) + vecsData2[iRpan] );
+                            }
+                            else
+                                vecsOutData[k + 1] = Double2Short (
+                                    static_cast<double> ( vecsOutData[k + 1] ) + vecsData[iRpan] );
+                        }
+                        else
+                        {
+                            // left channel
+                            vecsOutData[k] = Double2Short (
+                                static_cast<double> ( vecsOutData[k] ) + vecsData[i] );
+
+                            // right channel
+                            vecsOutData[k + 1] = Double2Short (
+                                static_cast<double> ( vecsOutData[k + 1] ) + vecsData[i] );
+                        }
+                        //***************************************************************************
+                        // end
+                        //***************************************************************************
                     }
                 }
                 else
@@ -1191,8 +1267,48 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
-                        vecsOutData[i] = Double2Short (
-                            static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
+                        //***************************************************************************
+                        // begin
+                        //***************************************************************************
+                        if ( bDelayPan )
+                        {
+                            vecsData2[i] = vecsData[i];   // copy to second buffer
+
+                            //----------- if (i > mBeforeCopy)
+                            // pan address shift
+                            iLpan = i - iPanDelL;
+                            iRpan = i - iPanDelR;
+
+                            if ( ( i & 1 ) == 0 )
+                            {
+                                iPan = i - 2 * iPanDelL;  // if even : left channel
+                            }
+                            else
+                            {
+                                iPan = i - 2 * iPanDelR;  // if odd  : right channel
+                            }
+
+                            // interleaved channels
+                            if ( iPan < 0 )
+                            {
+                                // get from second
+                                iPan = iPan + 2 * iServerFrameSizeSamples;
+
+                                vecsOutData[i] = Double2Short (
+                                    static_cast<double> ( vecsOutData[i] ) + vecsData2[iPan] );
+                            }
+                            else
+                                vecsOutData[i] = Double2Short (
+                                    static_cast<double> ( vecsOutData[i] ) + vecsData[iPan] );
+                        }
+                        else
+                        {
+                            vecsOutData[i] = Double2Short (
+                                static_cast<double> ( vecsOutData[i] ) + vecsData[i] );
+                        }
+                        //***************************************************************************
+                        // end
+                        //***************************************************************************
                     }
                 }
             }
@@ -1203,9 +1319,53 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // mono: copy same mono data in both out stereo audio channels
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        // left/right channel
-                        vecsOutData[k]     = Double2Short ( vecsOutData[k] +     vecsData[i] * dGainL );
-                        vecsOutData[k + 1] = Double2Short ( vecsOutData[k + 1] + vecsData[i] * dGainR );
+                        //***************************************************************************
+                        // begin
+                        //***************************************************************************
+                        if ( bDelayPan )
+                        {
+                            vecsData2[i] = vecsData[i];   // copy to second buffer
+
+                            // pan address shift
+                            // left channel
+                            iLpan = i - iPanDelL;
+
+                            if ( iLpan < 0 )
+                            {
+                                // get from second
+                                iLpan = iLpan + iServerFrameSizeSamples;
+                                vecsOutData[k] = Double2Short (
+                                   static_cast<double> ( vecsOutData[k] ) + vecsData2[iLpan] * dGainL );
+                            }
+                            else
+                                vecsOutData[k] = Double2Short (
+                                   static_cast<double> ( vecsOutData[k] ) + vecsData[iLpan] * dGainL );
+
+                            // right channel
+                            iRpan = i - iPanDelR;
+
+                            if ( iRpan < 0 )
+                            {
+                                // get from second
+                                iRpan = iRpan + iServerFrameSizeSamples;
+                                vecsOutData[k + 1] = Double2Short (
+                                    static_cast<double> ( vecsOutData[k + 1] ) + vecsData2[iRpan] * dGainR  );
+                            }
+                            else
+                            {
+                                vecsOutData[k + 1] = Double2Short (
+                                    static_cast<double> ( vecsOutData[k + 1] ) + vecsData[iRpan] * dGainR  );
+                            }
+                        }
+                        else
+                        {
+                            // left/right channel
+                            vecsOutData[k]     = Double2Short ( vecsOutData[k] +     vecsData[i] * dGainL );
+                            vecsOutData[k + 1] = Double2Short ( vecsOutData[k + 1] + vecsData[i] * dGainR );
+                        }
+                        //***************************************************************************
+                        // end
+                        //***************************************************************************
                     }
                 }
                 else
@@ -1213,9 +1373,56 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
                     // stereo
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
                     {
-                        // left/right channel
-                        vecsOutData[i]     = Double2Short ( vecsOutData[i] +     vecsData[i] *     dGainL );
-                        vecsOutData[i + 1] = Double2Short ( vecsOutData[i + 1] + vecsData[i + 1] * dGainR );
+                        //***************************************************************************
+                        // begin
+                        //***************************************************************************
+                        if ( bDelayPan )
+                        {
+                            vecsData2[i]   = vecsData[i];   // copy to second buffer
+                            vecsData2[i+1] = vecsData[i+1]; // copy to second buffer
+
+                            // pan address shift
+                            // left channel
+                            iLpan = i - 2 * iPanDelL;
+
+                            if ( iLpan < 0 )
+                            {
+                                // get from second
+                                iLpan = iLpan + 2*iServerFrameSizeSamples;
+                                vecsOutData[i] = Double2Short (
+                                    static_cast<double> ( vecsOutData[i] ) + vecsData2[iLpan] * dGainL );
+                            }
+                            else
+                            {
+                                vecsOutData[i] = Double2Short (
+                                    static_cast<double> ( vecsOutData[i] ) + vecsData[iLpan] * dGainL );
+                            }
+
+                            // right channel
+                            iRpan = i - 2 * iPanDelR + 1;
+                            if ( iRpan < 0 )
+                            {
+                                // get from second
+                                iRpan = iRpan + 2*iServerFrameSizeSamples;
+                                vecsOutData[i + 1] = Double2Short (
+                                    static_cast<double> ( vecsOutData[1 + 1] ) + vecsData2[iRpan] * dGainR );
+                            }
+                            else
+                            {
+                                vecsOutData[i + 1] = Double2Short (
+                                    static_cast<double> ( vecsOutData[i + 1] ) + vecsData[iRpan] * dGainR );
+                            }
+
+                        }
+                        else
+                        {
+                            // left/right channel
+                            vecsOutData[i]     = Double2Short ( vecsOutData[i] +     vecsData[i] *     dGainL );
+                            vecsOutData[i + 1] = Double2Short ( vecsOutData[i + 1] + vecsData[i + 1] * dGainR );
+                        }
+                        //***************************************************************************
+                        // end
+                        //***************************************************************************
                     }
                 }
             }

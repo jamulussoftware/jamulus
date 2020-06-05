@@ -329,6 +329,7 @@ protected:
     CVector<CVector<double> >  vecvecdGains;
     CVector<CVector<double> >  vecvecdPannings;
     CVector<CVector<int16_t> > vecvecsData;
+    CVector<CVector<int16_t> > vecvecsData2; // needed for delay pan implementation
     CVector<int>               vecNumAudioChannels;
     CVector<int>               vecNumFrameSizeConvBlocks;
     CVector<int>               vecUseDoubleSysFraSizeConvBuf;

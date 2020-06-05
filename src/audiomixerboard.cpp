@@ -128,26 +128,26 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     // add help text to controls
     plbrChannelLevel->setWhatsThis ( "<b>" + tr ( "Channel Level" ) + ":</b> " +
-        tr ( "Displays the pre-fader audio level of this channel.  All connected clients at the "
-        "server will be assigned an audio level, the same value for each client." ) );
+        tr ( "Displays the pre-fader audio level of this channel.  All clients connected to the "
+        "server will be assigned an audio level, the same value for every client." ) );
     plbrChannelLevel->setAccessibleName ( tr ( "Input level of the current audio "
         "channel at the server" ) );
 
     pFader->setWhatsThis ( "<b>" + tr ( "Mixer Fader" ) + ":</b> " + tr (
-        "Adjusts the audio level of this channel. All connected clients at the server "
-        "will be assigned an audio fader at each client, adjusting the local mix." ) );
+        "Adjusts the audio level of this channel. All clients connected to the server "
+        "will be assigned an audio fader, displayed at each client, to adjust the local mix." ) );
     pFader->setAccessibleName ( tr ( "Local mix level setting of the current audio "
         "channel at the server" ) );
 
     pInfoLabel->setWhatsThis ( "<b>" +  tr ( "Status Indicator" ) + ":</b> " + tr (
         "Shows a status indication about the client which is assigned to this channel. "
         "Supported indicators are:" ) + "<ul><li>" + tr (
-        "Speaker with cancellation stroke: Indicates that the other client has muted you." ) +
+        "Speaker with cancellation stroke: Indicates that another client has muted you." ) +
         "</li></ul>" );
     pInfoLabel->setAccessibleName ( tr ( "Status indicator label" ) );
 
     pPan->setWhatsThis ( "<b>" +  tr ( "Panning" ) + ":</b> " + tr (
-        "Sets the panning position from Left to Right of the channel. "
+        "Sets the pan from Left to Right of the channel. "
         "Works only in stereo or preferably mono in/stereo out mode." ) );
     pPan->setAccessibleName ( tr ( "Local panning position of the current audio channel at the server" ) );
 
@@ -157,13 +157,13 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
     pcbSolo->setWhatsThis ( "<b>" + tr ( "Solo" ) + ":</b> " + tr ( "With the Solo checkbox, the "
         "audio channel can be set to solo which means that all other channels "
-        "except of the current channel are muted. It is possible to set more than "
+        "except the soloed channel are muted. It is possible to set more than "
         "one channel to solo." ) );
     pcbSolo->setAccessibleName ( tr ( "Solo button" ) );
 
     QString strFaderText = "<b>" + tr ( "Fader Tag" ) + ":</b> " + tr ( "The fader tag "
-        "identifies the connected client. The tag name, the picture of your "
-        "instrument and a flag of your country can be set in the main window." );
+        "identifies the connected client. The tag name, a picture of your "
+        "instrument and the flag of your country can be set in the main window." );
 
     plblInstrument->setWhatsThis ( strFaderText );
     plblInstrument->setAccessibleName ( tr ( "Mixer channel instrument picture" ) );

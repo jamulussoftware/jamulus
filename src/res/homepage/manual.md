@@ -10,7 +10,7 @@ Main Window
 
 ![LEDs](led.png)
 
-The **Status** LED shows the current audio delay status.
+The **Delay Status** LED shows the current audio delay status:
 
 * **Green** - The delay is perfect for a jam session
 
@@ -58,7 +58,7 @@ pressing this button will end the session.
 
 ![Connect dialog](connect.png)
 
-The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by musical genre. Use the List dropdown to select a genre and press the Connect button to join a server. Alternatively, double-click on the server name. Permanent servers (those that have been listed for longer than 24 hours) are shown in bold.
+The Connection Setup window shows a list of available servers. Server operators can optionally list their servers by musical genre. Use the List dropdown to select a genre, click on the server you want to join and press the Connect button to connect to it. Alternatively, double-click on the server name. Permanent servers (those that have been listed for longer than 24 hours) are shown in bold.
 
 If you know the IP address or URL of a server, you can connect to it using the Server Name/Address
 field. An optional port number can be added after the IP address or URL using a colon as a separator, e.g,

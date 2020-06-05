@@ -350,12 +350,10 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 
     // general description of software
     txvAbout->setText (
-        "<p>" + tr ( "The " ) + APP_NAME +
-        tr ( " software enables musicians to perform real-time jam sessions "
-        "over the internet." ) + "<br>" + tr ( "There is a " ) + APP_NAME + tr ( " "
-        "server which collects the audio data from each " ) +
-        APP_NAME + tr ( " client, mixes the audio data and sends the mix back "
-        "to each client." ) + "</p>"
+        "<p>" + tr ( "This app enables musicians to perform real-time jam sessions "
+        "over the internet." ) + "<br>" + tr ( "There is a server which collects "
+        " the audio data from each client, mixes the audio data and sends the mix "
+        " back to each client." ) + "</p>"
         "<p><font face=\"courier\">" // GPL header text
         "This program is free software; you can redistribute it and/or modify "
         "it under the terms of the GNU General Public License as published by "
@@ -371,8 +369,8 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "</font></p>" );
 
     // libraries used by this compilation
-    txvLibraries->setText ( APP_NAME +
-        tr ( " uses the following libraries, resources or code snippets:" ) +
+    txvLibraries->setText (
+        tr ( "This app uses the following libraries, resources or code snippets:" ) +
         "<br><p>" + tr ( "Qt cross-platform application framework" ) +
         ", <i><a href=""http://www.qt.io"">http://www.qt.io</a></i></p>"
         "<p>Opus Interactive Audio Codec"
@@ -382,7 +380,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "The Synthesis ToolKit in C++ (STK)</a></i></p>"
         "<p>" + tr ( "Some pixmaps are from the" ) + " Open Clip Art Library (OCAL), "
         "<i><a href=""http://openclipart.org"">http://openclipart.org</a></i></p>"
-        "<p>" + tr ( "Country flag icons from Mark James" ) +
+        "<p>" + tr ( "Country flag icons by Mark James" ) +
         ", <i><a href=""http://www.famfamfam.com"">http://www.famfamfam.com</a></i></p>" );
 
     // contributors list
@@ -460,7 +458,7 @@ QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
         strVersionText += "\n *** ";
     }
 
-    strVersionText += tr ( "Under the GNU General Public License (GPL)" );
+    strVersionText += tr ( "Released under the GNU General Public License (GPL)" );
 
     return strVersionText;
 }
@@ -707,15 +705,14 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
 
     // Add help text to controls -----------------------------------------------
     // fader tag
-    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " + tr (
-        "Set your name or an alias here so that the other musicians you want to play with "
-        "know who you are. Additionally you may set an instrument picture of "
-        "the instrument you play and a flag of the country you are living in. "
-        "The city you live in and the skill level playing your instrument "
-        "may also be added." ) + "<br>" + tr (
-        "What you set here will appear at your fader on the mixer board when "
-        "you are connected to a " ) + APP_NAME + tr ( " server. This tag will "
-        "also show up at each client which is connected to the same server as "
+    QString strFaderTag = "<b>" + tr ( "Musician Profile" ) + ":</b> " +
+         tr ("Write your name or an alias here so the other musicians you want to "
+        "play with know who you are. You may also add a picture of the instrument "
+        "you play and a flag of the country you are located in. "
+        "Your city and skill level playing your instrument may also be added." ) +
+        "<br>" + tr ( "What you set here will appear at your fader on the mixer "
+        "board when you are connected to a Jamulus server. This tag will "
+        "also be shown at each client which is connected to the same server as "
         "you. If the name is left empty, the IP address is shown instead." );
 
     pedtAlias->setWhatsThis ( strFaderTag );

@@ -1257,7 +1257,7 @@ CVector<CChannelInfo> CServer::CreateChannelList()
             // append channel ID, IP address and channel name to storing vectors
             vecChanInfo.Add ( CChannelInfo (
                 i, // ID
-                vecChannels[i].GetAddress().InetAddr.toIPv4Address(), // IP address
+                QHostAddress ( QHostAddress::Null ).toIPv4Address(), // use invalid IP address (for privacy reason, #316)
                 vecChannels[i].GetChanInfo() ) );
         }
     }

@@ -714,6 +714,10 @@ DISTFILES += ChangeLog \
     src/res/instruments/congas.png \
     src/res/instruments/bongo.svg \
     src/res/instruments/bongo.png \
+    src/res/instruments/ukulele.svg \
+    src/res/instruments/ukulele.png \
+    src/res/instruments/bassukulele.svg \
+    src/res/instruments/bassukulele.png \
     src/res/instruments/vocalbass.png \
     src/res/instruments/vocaltenor.png \
     src/res/instruments/vocalalto.png \

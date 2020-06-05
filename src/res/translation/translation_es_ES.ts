@@ -688,7 +688,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="154"/>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si este indicador LED se vuelve rojo, no te divertirás demasiado utilizando la aplicación.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="162"/>

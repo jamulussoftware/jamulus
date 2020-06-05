@@ -119,11 +119,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         "a microphone signal is fed in to the right audio channel of the "
         "sound card and a reverb effect needs to be applied, set the "
         "channel selector to right and move the fader upwards until the "
-        "desired reverb level is reached." ) + "<br>" + tr (
-        "Reverb requires significant CPU so it should "
-        "only be used on fast PCs. If the reverb level fader is set to "
-        "minimum (the default setting), the effect is "
-        "switched off and does not cause any additional CPU usage." );
+        "desired reverb level is reached." );
 
     lblAudioReverb->setWhatsThis ( strAudReverb );
     sldAudioReverb->setWhatsThis ( strAudReverb );
@@ -156,7 +152,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     lblDelay->setWhatsThis ( strLEDDelay );
     ledDelay->setWhatsThis ( strLEDDelay );
     ledDelay->setToolTip ( tr ( "If this LED indicator turns red, "
-        "you will not have much fun using the application" ) +
+        "you will not have much fun using the application." ) +
          TOOLTIP_COM_END_TEXT );
 
     ledDelay->setAccessibleName ( tr ( "Delay status LED indicator" ) );

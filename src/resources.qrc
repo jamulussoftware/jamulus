@@ -16,11 +16,11 @@
     </qresource>
     <qresource prefix="/translations" lang="it">
         <file alias="translation.qm">res/translation/translation_it_IT.qm</file>
-        </qresource>
-        <qresource prefix="/translations" lang="pl">
+    </qresource>
+    <qresource prefix="/translations" lang="pl">
         <file alias="translation.qm">res/translation/translation_pl_PL.qm</file>
     </qresource>
-        
+
     <qresource prefix="/png/LEDs">
         <file>res/CLEDDisabledSmall.png</file>
         <file>res/CLEDGreenArrow.png</file>

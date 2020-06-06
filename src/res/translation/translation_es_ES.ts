@@ -644,7 +644,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="144"/>
         <source>The delay is perfect for a jam session.</source>
-        <translation type="unfinished"></translation>
+        <translation>El retardo es perfecto para una jam session.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="146"/>
@@ -692,7 +692,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="154"/>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Si este indicador LED se vuelve rojo, no te divertirás demasiado utilizando la aplicación.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="162"/>
@@ -1314,7 +1314,7 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="212"/>
         <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>aumentará la tasa de datos. Asegúrate de que tu tasa de subida no excede el valor de subida disponible con tu ancho de banda de Internet.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="331"/>
@@ -2127,7 +2127,7 @@
     <message>
         <location filename="../../util.cpp" line="713"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lo que introduzcas aquí aparecerá en tu fader del mezclador cuando te conectes a un servidor Jamulus. Esta etiqueta también se mostrará en cada cliente conectado al mismo servidor que tú.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="980"/>
@@ -2342,7 +2342,7 @@
     <message>
         <location filename="../../settings.cpp" line="129"/>
         <source>No Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Sin Nombre</translation>
     </message>
 </context>
 <context>
@@ -2476,7 +2476,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="93"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
-        <translation type="unfinished"></translation>
+        <translation>El nombre del servidor identifica a tu servidor en la lista de conexión de servidores de los clientes.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="99"/>

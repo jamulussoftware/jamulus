@@ -206,7 +206,7 @@ CClient::CClient ( const quint16  iPortNumber,
 
     QObject::connect ( &ConnLessProtocol,
         SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
-        this, SLOT ( OnCLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
+        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
 
     // other
     QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
@@ -673,12 +673,6 @@ void CClient::OnSndCrdReinitRequest ( int iSndCrdResetType )
     }
 }
 
-void CClient::OnCLChannelLevelListReceived ( CHostAddress      InetAddr,
-                                             CVector<uint16_t> vecLevelList )
-{
-    emit CLChannelLevelListReceived ( InetAddr, vecLevelList );
-}
-
 void CClient::OnHandledSignal ( int sigNum )
 {
 #ifdef _WIN32
@@ -690,7 +684,7 @@ void CClient::OnHandledSignal ( int sigNum )
     {
     case SIGINT:
     case SIGTERM:
-        // This should trigger OnAboutToQuit
+        // this should trigger OnAboutToQuit
         QCoreApplication::instance()->exit();
         break;
 

@@ -531,14 +531,14 @@ CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
         tr ( "You may not apply legal terms or technological measures that legally restrict "
         "others from doing anything the license permits." ) + "</p>" );
 
-    QObject::connect ( chbAgree, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnAgreeStateChanged ( int ) ) );
+    QObject::connect ( chbAgree, &QCheckBox::stateChanged,
+        this, &CLicenceDlg::OnAgreeStateChanged );
 
-    QObject::connect ( butAccept, SIGNAL ( clicked() ),
-        this, SLOT ( accept() ) );
+    QObject::connect ( butAccept, &QPushButton::clicked,
+        this, &CLicenceDlg::accept );
 
-    QObject::connect ( butDecline, SIGNAL ( clicked() ),
-        this, SLOT ( reject() ) );
+    QObject::connect ( butDecline, &QPushButton::clicked,
+        this, &CLicenceDlg::reject );
 }
 
 
@@ -728,8 +728,8 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( pedtAlias, SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnAliasTextChanged ( const QString& ) ) );
+    QObject::connect ( pedtAlias, &QLineEdit::textChanged,
+        this, &CMusProfDlg::OnAliasTextChanged );
 
     QObject::connect ( pcbxInstrument, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnInstrumentActivated ( int ) ) );
@@ -737,14 +737,14 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     QObject::connect ( pcbxCountry, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnCountryActivated ( int ) ) );
 
-    QObject::connect ( pedtCity, SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnCityTextChanged ( const QString& ) ) );
+    QObject::connect ( pedtCity, &QLineEdit::textChanged,
+        this, &CMusProfDlg::OnCityTextChanged );
 
     QObject::connect ( pcbxSkill, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnSkillActivated ( int ) ) );
 
-    QObject::connect ( butClose, SIGNAL ( clicked() ),
-        this, SLOT ( accept() ) );
+    QObject::connect ( butClose, &QPushButton::clicked,
+        this, &CMusProfDlg::accept );
 }
 
 void CMusProfDlg::showEvent ( QShowEvent* )

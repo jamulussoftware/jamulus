@@ -389,8 +389,8 @@ CProtocol::CProtocol()
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( &TimerSendMess, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerSendMess() ) );
+    QObject::connect ( &TimerSendMess, &QTimer::timeout,
+        this, &CProtocol::OnTimerSendMess );
 }
 
 void CProtocol::Reset()

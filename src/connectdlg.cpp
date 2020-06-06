@@ -151,46 +151,44 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
 
     // Connections -------------------------------------------------------------
     // list view
-    QObject::connect ( lvwServers,
-        SIGNAL ( itemSelectionChanged() ),
-        this, SLOT ( OnServerListItemSelectionChanged() ) );
+    QObject::connect ( lvwServers, &QTreeWidget::itemSelectionChanged,
+        this, &CConnectDlg::OnServerListItemSelectionChanged );
 
-    QObject::connect ( lvwServers,
-        SIGNAL ( itemDoubleClicked ( QTreeWidgetItem*, int ) ),
-        this, SLOT ( OnServerListItemDoubleClicked ( QTreeWidgetItem*, int ) ) );
+    QObject::connect ( lvwServers, &QTreeWidget::itemDoubleClicked,
+        this, &CConnectDlg::OnServerListItemDoubleClicked );
 
-    QObject::connect ( lvwServers, // to get default return key behaviour working
-        SIGNAL ( activated ( QModelIndex ) ),
-        this, SLOT ( OnConnectClicked() ) );
+    // to get default return key behaviour working
+    QObject::connect ( lvwServers, &QTreeWidget::activated,
+        this, &CConnectDlg::OnConnectClicked );
 
     // line edit
-    QObject::connect ( edtFilter, SIGNAL ( textEdited ( const QString& ) ),
-        this, SLOT ( OnFilterTextEdited ( const QString& ) ) );
+    QObject::connect ( edtFilter, &QLineEdit::textEdited,
+        this, &CConnectDlg::OnFilterTextEdited );
 
     // combo boxes
-    QObject::connect ( cbxServerAddr, SIGNAL ( editTextChanged ( const QString& ) ),
-        this, SLOT ( OnServerAddrEditTextChanged ( const QString& ) ) );
+    QObject::connect ( cbxServerAddr, &QComboBox::editTextChanged,
+        this, &CConnectDlg::OnServerAddrEditTextChanged );
 
     QObject::connect ( cbxCentServAddrType, SIGNAL ( activated ( int ) ),
         this, SLOT ( OnCentServAddrTypeChanged ( int ) ) );
 
     // check boxes
-    QObject::connect ( chbExpandAll, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnExpandAllStateChanged ( int ) ) );
+    QObject::connect ( chbExpandAll, &QCheckBox::stateChanged,
+        this, &CConnectDlg::OnExpandAllStateChanged );
 
     // buttons
-    QObject::connect ( butCancel, SIGNAL ( clicked() ),
-        this, SLOT ( close() ) );
+    QObject::connect ( butCancel, &QPushButton::clicked,
+        this, &CConnectDlg::close );
 
-    QObject::connect ( butConnect, SIGNAL ( clicked() ),
-        this, SLOT ( OnConnectClicked() ) );
+    QObject::connect ( butConnect, &QPushButton::clicked,
+        this, &CConnectDlg::OnConnectClicked );
 
     // timers
-    QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerPing() ) );
+    QObject::connect ( &TimerPing, &QTimer::timeout,
+        this, &CConnectDlg::OnTimerPing );
 
-    QObject::connect ( &TimerReRequestServList, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerReRequestServList() ) );
+    QObject::connect ( &TimerReRequestServList, &QTimer::timeout,
+        this, &CConnectDlg::OnTimerReRequestServList );
 }
 
 void CConnectDlg::Init ( const CVector<QString>& vstrIPAddresses )

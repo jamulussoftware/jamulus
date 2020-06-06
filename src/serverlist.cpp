@@ -173,20 +173,20 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( &TimerPollList, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerPollList() ) );
+    QObject::connect ( &TimerPollList, &QTimer::timeout,
+        this, &CServerListManager::OnTimerPollList );
 
-    QObject::connect ( &TimerPingServerInList, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerPingServerInList() ) );
+    QObject::connect ( &TimerPingServerInList, &QTimer::timeout,
+        this, &CServerListManager::OnTimerPingServerInList );
 
-    QObject::connect ( &TimerPingCentralServer, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerPingCentralServer() ) );
+    QObject::connect ( &TimerPingCentralServer, &QTimer::timeout,
+        this, &CServerListManager::OnTimerPingCentralServer );
 
-    QObject::connect ( &TimerRegistering, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerRegistering() ) );
+    QObject::connect ( &TimerRegistering, &QTimer::timeout,
+        this, &CServerListManager::OnTimerRegistering );
 
-    QObject::connect ( &TimerCLRegisterServerResp, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerCLRegisterServerResp() ) );
+    QObject::connect ( &TimerCLRegisterServerResp, &QTimer::timeout,
+        this, &CServerListManager::OnTimerCLRegisterServerResp );
 }
 
 void CServerListManager::SetCentralServerAddress ( const QString sNCentServAddr )

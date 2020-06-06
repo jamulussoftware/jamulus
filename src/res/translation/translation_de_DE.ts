@@ -636,7 +636,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="144"/>
         <source>The delay is perfect for a jam session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Verzögerung it gering genug für das Jammen.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="146"/>
@@ -680,22 +680,22 @@
     <message>
         <location filename="../../clientdlg.cpp" line="154"/>
         <source>If this LED indicator turns red, you will not have much fun using the application.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn diese LED rot leuchtet, dann wirst du keinen Spaß haben mit der Software.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="162"/>
         <source>The buffers status LED shows the current audio/streaming status. If the light is red, the audio stream is interrupted. This is caused by one of the following problems:</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Status-LED für den Netzwerkpuffer zeigt den aktuellen Status des Netzwerkstroms. Wenn die LED grün ist, dann gibt es keine Pufferprobleme. Wenn die LED rot anzeigt, dann ist der Netzwerkstrom kurz unterbrochen. Dies kann folgende Ursachen haben:</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="168"/>
         <source>The sound card&apos;s buffer delay (buffer size) is too small (see Settings window).</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Soundkartenpuffer ist zu klein eingestellt.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="170"/>
         <source>The upload or download stream rate is too high for your internet bandwidth.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Upload-Rate der Internetverbindung ist zu klein für den Netzwerkdatenstrom.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="178"/>
@@ -1314,102 +1314,102 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="37"/>
         <source>The jitter buffer compensates for network and sound card timing jitters. The size of the buffer therefore influences the quality of the audio stream (how many dropouts occur) and the overall delay (the longer the buffer, the higher the delay).</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Netzwerkpuffer kompensiert die Netzwerk- und Soundkarten-Timing-Schwankungen. Die Größe des Netzwerkpuffers hat Auswirkungen auf die Qualität des Audiosignals (wie viele Aussetzer auftreten) und die Gesamtverzögerung (je länger der Puffer, desto größer ist die Verzögerung).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="41"/>
         <source>You can set the jitter buffer size manually for the local client and the remote server. For the local jitter buffer, dropouts in the audio stream are indicated by the light below the jitter buffer size faders. If the light turns to red, a buffer overrun/underrun has taken place and the audio stream is interrupted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Netzwerkpuffergröße kann manuell verstellt werden, jeweils getrennt für die Applikation und den Server. Für den lokalen Netzwerkpuffer werden die Aussetzer durch die LED-Anzeige unter den Reglern angezeigt. Wenn die Lampe rot anzeigt, dann hat ein Pufferüberlauf oder ein Leerlauf des Puffers stattgefunden und der Audiodatenstrom wurde kurz unterbrochen.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="48"/>
         <source>If the Auto setting is enabled, the jitter buffers of the local client and the remote server are set automatically based on measurements of the network and sound card timing jitter. If Auto is enabled, the jitter buffer size faders are disabled (they cannot be moved with the mouse).</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Netzwerkpuffergröße kann automatisch eingestellt werden. Wenn die Automatik aktiviert ist, dann werden die Netzwerkpuffer der Applikation und des Servers getrennt basierend auf Messungen der Netzwerkschwankungen eingestellt. Wenn die Automatik aktiviert ist, dann sind die beiden Regler gesperrt für die manuelle Verstellung (sie können nicht mit der Maus verändert werden).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="55"/>
         <source>If the Auto setting is enabled, the network buffers of the local client and the remote server are set to a conservative value to minimize the audio dropout probability. To tweak the audio delay/latency it is recommended to disable the Auto setting and to lower the jitter buffer size manually by using the sliders until your personal acceptable amount of dropouts is reached. The LED indicator will display the audio dropouts of the local jitter buffer with a red light.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn die Automatik zum Einstellen der Netzwerkpuffer aktiviert ist, dann werden die Netzwerkpuffer der Applikation und des entfernten Servers auf einen konservativen Wert eingestellt, um eine möglichst gute Audioqualität zu garantieren. Um die Gesamtverzögerung zu optimieren, bietet es sich an, die Automatik zu deaktivieren und die Netzwerkpuffer etwas kleiner einzustellen. Die Werte sollte man so weit reduzieren, bis die Audioqualität gerade noch der persönlichen Akzeptanz entspricht. Die LED-Anzeige hilft dabei die Audioaussetzer verursacht durch den lokalen Netzwerkpuffer zu visualisieren (wenn die LED rot leuchtet).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="135"/>
         <source>The buffer delay setting is a fundamental setting of this software. This setting has an influence on many connection properties.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Soundkartenpuffergröße ist eine fundamentale Einstellung der Software. Diese Einstellung hat Einfluss auf viele andere Verbindungseigenschaften.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="140"/>
         <source>64 samples: The preferred setting. Provides the lowest latency but does not work with all sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>64 Samples: Dies ist die bevorzugte Einstellung weil es die geringste Verzögerung hat. Diese Puffergröße funktioniert allerdings nicht mit allen Soundkarten.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="142"/>
         <source>128 samples: Should work for most available sound cards.</source>
-        <translation type="unfinished"></translation>
+        <translation>128 Samples: Diese Puffergröße sollte mit den meisten Soundkarten funktionieren.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="144"/>
         <source>256 samples: Should only be used on very slow computers or with a slow internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>256 Samples: Diese Einstellung sollte nur dann verwendet werden, wenn man einen langsamen Computer oder eine langsame Internetverbindung hat.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="146"/>
         <source>Some sound card drivers do not allow the buffer delay to be changed from within the application. In this case the buffer delay setting is disabled and has to be changed using the sound card driver. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Manche Soundkartentreiber unterstützen nicht das Verändern der Puffergröße innerhalb der Software. In diesem Fall ist die Einstellungsmöglichkeit für die Puffergröße deaktiviert. Die Puffergröße muss man stattdessen direkt im Soundkartentreiber durchführen. Unter Windows kann man den ASIO-Einstellungen Knopf drücken um die Treibereinstellungen zu öffnen. Unter Linux benutzt man das Jack-Konfigurationsprogramm um die Puffergröße einzustellen.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="152"/>
         <source>If no buffer size is selected and all settings are disabled, an unsupported buffer size is used by the driver. The application will still work with this setting but with restricted performance.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falls keiner der vorgegebenen Puffergrößen ausgeählt ist und alle Einstellungen deaktiviert sind, dann wird eine nicht unterstützte Puffergröße im Soundkartentreiber verwendet. Die Software funktioniert trotzdem aber es könnte eine größere Verzögerung resultieren.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="165"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
-        <translation type="unfinished"></translation>
+        <translation>Falls keiner der vorgegebenen Puffergrößen ausgeählt ist und alle Einstellungen deaktiviert sind, dann wird eine nicht unterstützte Puffergröße im Soundkartentreiber verwendet. Unter Windows kann man den ASIO-Einstellungen Knopf drücken, um die Treibereinstellungen zu öffnen. Unter Linux kann man ein Jack-Konfigurationswerkzeug verwenden, um die Puffergröße zu verändern.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="198"/>
         <source>Selects the number of audio channels to be used for communication between client and server. There are three modes available:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiermit kann man die Anzahl an Audiokanälen auswählen. Es gibt drei Modi:</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="202"/>
         <source>and </source>
-        <translation type="unfinished"></translation>
+        <translation>und </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="203"/>
         <source>These modes use one and two audio channels respectively.</source>
-        <translation type="unfinished"></translation>
+        <translation>Diese Modi verwenden jeweils einen oder zwei Audiokanäle.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="205"/>
         <source>Mono in/Stereo-out</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="205"/>
         <source>The audio signal sent to the server is mono but the return signal is stereo. This is useful if the sound card has the instrument on one input channel and the microphone on the other. In that case the two input signals can be mixed to one mono channel but the server mix is heard in stereo.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Monosignal wird zum Server geschickt aber es kommt ein Stereo-Signal zurück vom Server. Dies ist nützlich für den Fall, dass man an die Soundkarte ein Instrument an den einen Eingangskanal und ein Mikrofon an den anderen Eingangskanal angeschlossen hat. In diesem Fall können die beiden Signale zusammen gemischt werden und an den Server geschickt werden aber man kann das Stereo-Signal von den anderen Musikern hören.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="212"/>
         <source>Enabling </source>
-        <translation type="unfinished"></translation>
+        <translation>Im </translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="212"/>
         <source>mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation> Modus ist die Übertragungsrate etwas höher. Man muss sicher stellen, dass die Internetverbindung die höhere Rate übertragen kann.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="216"/>
         <source>In stereo streaming mode, no audio channel selection for the reverb effect will be available on the main window since the effect is applied to both channels in this case.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn der Stereo-Modus ausgewählt wurde, dann verschwindet die Kanalselektion für den Halleffekt im Hauptfenster, da der Effekt auf beide Stereokanäle angewendet wird.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="225"/>
         <source>The higher the audio quality, the higher your audio stream&apos;s data rate. Make sure your upload rate does not exceed the available bandwidth of your internet connection.</source>
-        <translation type="unfinished"></translation>
+        <translation>Je höher die Audioqualität, desto höher ist die Netzwerkübertragungsrate. Man muss sicherstellen, dass die Internetverbindung die höhere Rate übertragen kann.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="236"/>

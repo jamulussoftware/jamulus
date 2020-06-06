@@ -402,158 +402,143 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
 
     // Connections -------------------------------------------------------------
     // push buttons
-    QObject::connect ( butConnect, SIGNAL ( clicked() ),
-        this, SLOT ( OnConnectDisconBut() ) );
+    QObject::connect ( butConnect, &QPushButton::clicked,
+        this, &CClientDlg::OnConnectDisconBut );
 
     // check boxes
-    QObject::connect ( chbSettings, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnSettingsStateChanged ( int ) ) );
+    QObject::connect ( chbSettings, &QCheckBox::stateChanged,
+        this, &CClientDlg::OnSettingsStateChanged );
 
-    QObject::connect ( chbChat, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnChatStateChanged ( int ) ) );
+    QObject::connect ( chbChat, &QCheckBox::stateChanged,
+        this, &CClientDlg::OnChatStateChanged );
 
-    QObject::connect ( chbLocalMute, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnLocalMuteStateChanged ( int ) ) );
+    QObject::connect ( chbLocalMute, &QCheckBox::stateChanged,
+        this, &CClientDlg::OnLocalMuteStateChanged );
 
     // timers
-    QObject::connect ( &TimerSigMet, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerSigMet() ) );
+    QObject::connect ( &TimerSigMet, &QTimer::timeout,
+        this, &CClientDlg::OnTimerSigMet );
 
-    QObject::connect ( &TimerBuffersLED, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerBuffersLED() ) );
+    QObject::connect ( &TimerBuffersLED, &QTimer::timeout,
+        this, &CClientDlg::OnTimerBuffersLED );
 
-    QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerStatus() ) );
+    QObject::connect ( &TimerStatus, &QTimer::timeout,
+        this, &CClientDlg::OnTimerStatus );
 
-    QObject::connect ( &TimerPing, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerPing() ) );
+    QObject::connect ( &TimerPing, &QTimer::timeout,
+        this, &CClientDlg::OnTimerPing );
 
     // sliders
-    QObject::connect ( sldAudioPan, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnAudioPanValueChanged ( int ) ) );
+    QObject::connect ( sldAudioPan, &QSlider::valueChanged,
+        this, &CClientDlg::OnAudioPanValueChanged );
 
-    QObject::connect ( sldAudioReverb, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnAudioReverbValueChanged ( int ) ) );
+    QObject::connect ( sldAudioReverb, &QSlider::valueChanged,
+        this, &CClientDlg::OnAudioReverbValueChanged );
 
     // radio buttons
-    QObject::connect ( rbtReverbSelL, SIGNAL ( clicked() ),
-        this, SLOT ( OnReverbSelLClicked() ) );
+    QObject::connect ( rbtReverbSelL, &QRadioButton::clicked,
+        this, &CClientDlg::OnReverbSelLClicked );
 
-    QObject::connect ( rbtReverbSelR, SIGNAL ( clicked() ),
-        this, SLOT ( OnReverbSelRClicked() ) );
+    QObject::connect ( rbtReverbSelR, &QRadioButton::clicked,
+        this, &CClientDlg::OnReverbSelRClicked );
 
     // other
-    QObject::connect ( pClient,
-        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
-        this, SLOT ( OnConClientListMesReceived ( CVector<CChannelInfo> ) ) );
+    QObject::connect ( pClient, &CClient::ConClientListMesReceived,
+        this, &CClientDlg::OnConClientListMesReceived );
 
-    QObject::connect ( pClient,
-        SIGNAL ( Disconnected() ),
-        this, SLOT ( OnDisconnected() ) );
+    QObject::connect ( pClient, &CClient::Disconnected,
+        this, &CClientDlg::OnDisconnected );
 
-    QObject::connect ( pClient,
-        SIGNAL ( CentralServerAddressTypeChanged() ),
-        this, SLOT ( OnCentralServerAddressTypeChanged() ) );
+    QObject::connect ( pClient, &CClient::CentralServerAddressTypeChanged,
+        this, &CClientDlg::OnCentralServerAddressTypeChanged );
 
-    QObject::connect ( pClient,
-        SIGNAL ( ChatTextReceived ( QString ) ),
-        this, SLOT ( OnChatTextReceived ( QString ) ) );
+    QObject::connect ( pClient, &CClient::ChatTextReceived,
+        this, &CClientDlg::OnChatTextReceived );
 
-    QObject::connect ( pClient,
-        SIGNAL ( ClientIDReceived ( int ) ),
-        this, SLOT ( OnClientIDReceived ( int ) ) );
+    QObject::connect ( pClient, &CClient::ClientIDReceived,
+        this, &CClientDlg::OnClientIDReceived );
 
-    QObject::connect ( pClient,
-        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ),
-        this, SLOT ( OnMuteStateHasChangedReceived ( int, bool ) ) );
+    QObject::connect ( pClient, &CClient::MuteStateHasChangedReceived,
+        this, &CClientDlg::OnMuteStateHasChangedReceived );
 
     // This connection is a special case. On receiving a licence required message via the
     // protocol, a modal licence dialog is opened. Since this blocks the thread, we need
     // a queued connection to make sure the core protocol mechanism is not blocked, too.
     qRegisterMetaType<ELicenceType> ( "ELicenceType" );
-    QObject::connect ( pClient,
-        SIGNAL ( LicenceRequired ( ELicenceType ) ),
-        this, SLOT ( OnLicenceRequired ( ELicenceType ) ), Qt::QueuedConnection );
+    QObject::connect ( pClient, &CClient::LicenceRequired,
+        this, &CClientDlg::OnLicenceRequired, Qt::QueuedConnection );
 
-    QObject::connect ( pClient,
-        SIGNAL ( PingTimeReceived ( int ) ),
-        this, SLOT ( OnPingTimeResult ( int ) ) );
+    QObject::connect ( pClient, &CClient::PingTimeReceived,
+        this, &CClientDlg::OnPingTimeResult );
 
-    QObject::connect ( pClient,
-        SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ),
-        this, SLOT ( OnCLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ) );
+    QObject::connect ( pClient, &CClient::CLServerListReceived,
+        this, &CClientDlg::OnCLServerListReceived );
 
-    QObject::connect ( pClient,
-        SIGNAL ( CLConnClientsListMesReceived ( CHostAddress, CVector<CChannelInfo> ) ),
-        this, SLOT ( OnCLConnClientsListMesReceived ( CHostAddress, CVector<CChannelInfo> ) ) );
+    QObject::connect ( pClient, &CClient::CLConnClientsListMesReceived,
+        this, &CClientDlg::OnCLConnClientsListMesReceived );
 
-    QObject::connect ( pClient,
-        SIGNAL ( CLPingTimeWithNumClientsReceived ( CHostAddress, int, int ) ),
-        this, SLOT ( OnCLPingTimeWithNumClientsReceived ( CHostAddress, int, int ) ) );
+    QObject::connect ( pClient, &CClient::CLPingTimeWithNumClientsReceived,
+        this, &CClientDlg::OnCLPingTimeWithNumClientsReceived );
 
-    QObject::connect ( pClient,
-        SIGNAL ( ControllerInFaderLevel ( int, int ) ),
-        this, SLOT ( OnControllerInFaderLevel ( int, int ) ) );
+    QObject::connect ( pClient, &CClient::ControllerInFaderLevel,
+        this, &CClientDlg::OnControllerInFaderLevel );
 
-    QObject::connect ( pClient,
-        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
-        this, SLOT ( OnCLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
+    QObject::connect ( pClient, &CClient::CLChannelLevelListReceived,
+        this, &CClientDlg::OnCLChannelLevelListReceived );
 
-    QObject::connect ( pClient,
-        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ),
-        this, SLOT ( OnVersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ) );
+    QObject::connect ( pClient, &CClient::VersionAndOSReceived,
+        this, &CClientDlg::OnVersionAndOSReceived );
 
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
-    QObject::connect ( pClient,
-        SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),
-        this, SLOT ( OnCLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
+    QObject::connect ( pClient, &CClient::CLVersionAndOSReceived,
+        this, &CClientDlg::OnCLVersionAndOSReceived );
 #endif
 
-    QObject::connect ( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
-        this, SLOT ( OnAboutToQuit() ) );
+    QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
+        this, &CClientDlg::OnAboutToQuit );
 
-    QObject::connect ( &ClientSettingsDlg, SIGNAL ( GUIDesignChanged() ),
-        this, SLOT ( OnGUIDesignChanged() ) );
+    QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::GUIDesignChanged,
+        this, &CClientDlg::OnGUIDesignChanged );
 
-    QObject::connect ( &ClientSettingsDlg, SIGNAL ( DisplayChannelLevelsChanged() ),
-        this, SLOT ( OnDisplayChannelLevelsChanged() ) );
+    QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::DisplayChannelLevelsChanged,
+        this, &CClientDlg::OnDisplayChannelLevelsChanged );
 
-    QObject::connect ( &ClientSettingsDlg, SIGNAL ( AudioChannelsChanged() ),
-        this, SLOT ( OnAudioChannelsChanged() ) );
+    QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::AudioChannelsChanged,
+        this, &CClientDlg::OnAudioChannelsChanged );
 
-    QObject::connect ( &ClientSettingsDlg, SIGNAL ( NewClientLevelChanged() ),
-        this, SLOT ( OnNewClientLevelChanged() ) );
+    QObject::connect ( &ClientSettingsDlg, &CClientSettingsDlg::NewClientLevelChanged,
+        this, &CClientDlg::OnNewClientLevelChanged );
 
-    QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanGain ( int, double, bool ) ),
-        this, SLOT ( OnChangeChanGain ( int, double, bool ) ) );
+    QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanGain,
+        this, &CClientDlg::OnChangeChanGain );
 
-    QObject::connect ( MainMixerBoard, SIGNAL ( ChangeChanPan ( int, double ) ),
-        this, SLOT ( OnChangeChanPan ( int, double ) ) );
+    QObject::connect ( MainMixerBoard, &CAudioMixerBoard::ChangeChanPan,
+        this, &CClientDlg::OnChangeChanPan );
 
-    QObject::connect ( MainMixerBoard, SIGNAL ( NumClientsChanged ( int ) ),
-        this, SLOT ( OnNumClientsChanged ( int ) ) );
+    QObject::connect ( MainMixerBoard, &CAudioMixerBoard::NumClientsChanged,
+        this, &CClientDlg::OnNumClientsChanged );
 
-    QObject::connect ( &ChatDlg, SIGNAL ( NewLocalInputText ( QString ) ),
-        this, SLOT ( OnNewLocalInputText ( QString ) ) );
+    QObject::connect ( &ChatDlg, &CChatDlg::NewLocalInputText,
+        this, &CClientDlg::OnNewLocalInputText );
 
-    QObject::connect ( &ConnectDlg, SIGNAL ( ReqServerListQuery ( CHostAddress ) ),
-        this, SLOT ( OnReqServerListQuery ( CHostAddress ) ) );
+    QObject::connect ( &ConnectDlg, &CConnectDlg::ReqServerListQuery,
+        this, &CClientDlg::OnReqServerListQuery );
 
     // note that this connection must be a queued connection, otherwise the server list ping
     // times are not accurate and the client list may not be retrieved for all servers listed
     // (it seems the sendto() function needs to be called from different threads to fire the
     // packet immediately and do not collect packets before transmitting)
-    QObject::connect ( &ConnectDlg, SIGNAL ( CreateCLServerListPingMes ( CHostAddress ) ),
-        this, SLOT ( OnCreateCLServerListPingMes ( CHostAddress ) ), Qt::QueuedConnection );
+    QObject::connect ( &ConnectDlg, &CConnectDlg::CreateCLServerListPingMes,
+        this, &CClientDlg::OnCreateCLServerListPingMes, Qt::QueuedConnection );
 
-    QObject::connect ( &ConnectDlg, SIGNAL ( CreateCLServerListReqVerAndOSMes ( CHostAddress ) ),
-        this, SLOT ( OnCreateCLServerListReqVerAndOSMes ( CHostAddress ) ) );
+    QObject::connect ( &ConnectDlg, &CConnectDlg::CreateCLServerListReqVerAndOSMes,
+        this, &CClientDlg::OnCreateCLServerListReqVerAndOSMes );
 
-    QObject::connect ( &ConnectDlg, SIGNAL ( CreateCLServerListReqConnClientsListMes ( CHostAddress ) ),
-        this, SLOT ( OnCreateCLServerListReqConnClientsListMes ( CHostAddress ) ) );
+    QObject::connect ( &ConnectDlg, &CConnectDlg::CreateCLServerListReqConnClientsListMes,
+        this, &CClientDlg::OnCreateCLServerListReqConnClientsListMes );
 
-    QObject::connect ( &ConnectDlg, SIGNAL ( accepted() ),
-        this, SLOT ( OnConnectDlgAccepted() ) );
+    QObject::connect ( &ConnectDlg, &CConnectDlg::accepted,
+        this, &CClientDlg::OnConnectDlgAccepted );
 
 
     // Initializations which have to be done after the signals are connected ---

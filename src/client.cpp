@@ -126,102 +126,83 @@ CClient::CClient ( const quint16  iPortNumber,
 
     // Connections -------------------------------------------------------------
     // connections for the protocol mechanism
-    QObject::connect ( &Channel,
-        SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-        this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
+    QObject::connect ( &Channel, &CChannel::MessReadyForSending,
+        this, &CClient::OnSendProtMessage );
 
-    QObject::connect ( &Channel,
-        SIGNAL ( DetectedCLMessage ( CVector<uint8_t>, int, CHostAddress ) ),
-        this, SLOT ( OnDetectedCLMessage ( CVector<uint8_t>, int, CHostAddress ) ) );
+    QObject::connect ( &Channel, &CChannel::DetectedCLMessage,
+        this, &CClient::OnDetectedCLMessage );
 
-    QObject::connect ( &Channel, SIGNAL ( ReqJittBufSize() ),
-        this, SLOT ( OnReqJittBufSize() ) );
+    QObject::connect ( &Channel, &CChannel::ReqJittBufSize,
+        this, &CClient::OnReqJittBufSize );
 
-    QObject::connect ( &Channel, SIGNAL ( JittBufSizeChanged ( int ) ),
-        this, SLOT ( OnJittBufSizeChanged ( int ) ) );
+    QObject::connect ( &Channel, &CChannel::JittBufSizeChanged,
+        this, &CClient::OnJittBufSizeChanged );
 
-    QObject::connect ( &Channel, SIGNAL ( ReqChanInfo() ),
-        this, SLOT ( OnReqChanInfo() ) );
+    QObject::connect ( &Channel, &CChannel::ReqChanInfo,
+        this, &CClient::OnReqChanInfo );
 
-    QObject::connect ( &Channel,
-        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
-        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ) );
+    QObject::connect ( &Channel, &CChannel::ConClientListMesReceived,
+        this, &CClient::ConClientListMesReceived );
 
-    QObject::connect ( &Channel,
-        SIGNAL ( Disconnected() ),
-        SIGNAL ( Disconnected() ) );
+    QObject::connect ( &Channel, &CChannel::Disconnected,
+        this, &CClient::Disconnected );
 
-    QObject::connect ( &Channel, SIGNAL ( NewConnection() ),
-        this, SLOT ( OnNewConnection() ) );
+    QObject::connect ( &Channel, &CChannel::NewConnection,
+        this, &CClient::OnNewConnection );
 
-    QObject::connect ( &Channel,
-        SIGNAL ( ChatTextReceived ( QString ) ),
-        SIGNAL ( ChatTextReceived ( QString ) ) );
+    QObject::connect ( &Channel, &CChannel::ChatTextReceived,
+        this, &CClient::ChatTextReceived );
 
-    QObject::connect ( &Channel,
-        SIGNAL ( ClientIDReceived ( int ) ),
-        SIGNAL ( ClientIDReceived ( int ) ) );
+    QObject::connect ( &Channel, &CChannel::ClientIDReceived,
+        this, &CClient::ClientIDReceived );
 
-    QObject::connect ( &Channel,
-        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ),
-        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ) );
+    QObject::connect ( &Channel, &CChannel::MuteStateHasChangedReceived,
+        this, &CClient::MuteStateHasChangedReceived );
 
-    QObject::connect ( &Channel,
-        SIGNAL ( LicenceRequired ( ELicenceType ) ),
-        SIGNAL ( LicenceRequired ( ELicenceType ) ) );
+    QObject::connect ( &Channel, &CChannel::LicenceRequired,
+        this, &CClient::LicenceRequired );
 
-    QObject::connect ( &Channel,
-        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ),
-        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ) );
+    QObject::connect ( &Channel, &CChannel::VersionAndOSReceived,
+        this, &CClient::VersionAndOSReceived );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
-        this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLMessReadyForSending,
+        this, &CClient::OnSendCLProtMessage );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ),
-        SIGNAL ( CLServerListReceived ( CHostAddress, CVector<CServerInfo> ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLServerListReceived,
+        this, &CClient::CLServerListReceived );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLConnClientsListMesReceived ( CHostAddress, CVector<CChannelInfo> ) ),
-        SIGNAL ( CLConnClientsListMesReceived ( CHostAddress, CVector<CChannelInfo> ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLConnClientsListMesReceived,
+        this, &CClient::CLConnClientsListMesReceived );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
-        this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingReceived,
+        this, &CClient::OnCLPingReceived );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
-        this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingWithNumClientsReceived,
+        this, &CClient::OnCLPingWithNumClientsReceived );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLDisconnection ( CHostAddress ) ),
-        this, SLOT ( OnCLDisconnection ( CHostAddress ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLDisconnection ,
+        this, &CClient::OnCLDisconnection );
 
 #ifdef ENABLE_CLIENT_VERSION_AND_OS_DEBUGGING
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ),
-        SIGNAL ( CLVersionAndOSReceived ( CHostAddress, COSUtil::EOpSystemType, QString ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLVersionAndOSReceived,
+        this, &CClient::CLVersionAndOSReceived );
 #endif
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ),
-        SIGNAL ( CLChannelLevelListReceived ( CHostAddress, CVector<uint16_t> ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLChannelLevelListReceived,
+        this, &CClient::CLChannelLevelListReceived );
 
     // other
-    QObject::connect ( &Sound, SIGNAL ( ReinitRequest ( int ) ),
-        this, SLOT ( OnSndCrdReinitRequest ( int ) ) );
+    QObject::connect ( &Sound, &CSound::ReinitRequest,
+        this, &CClient::OnSndCrdReinitRequest );
 
-    QObject::connect ( &Sound,
-        SIGNAL ( ControllerInFaderLevel ( int, int ) ),
-        SIGNAL ( ControllerInFaderLevel ( int, int ) ) );
+    QObject::connect ( &Sound, &CSound::ControllerInFaderLevel,
+        this, &CClient::ControllerInFaderLevel );
 
-    QObject::connect ( &Socket, SIGNAL ( InvalidPacketReceived ( CHostAddress ) ),
-        this, SLOT ( OnInvalidPacketReceived ( CHostAddress ) ) );
+    QObject::connect ( &Socket, &CHighPrioSocket::InvalidPacketReceived,
+        this, &CClient::OnInvalidPacketReceived );
 
-    QObject::connect ( pSignalHandler,
-        SIGNAL ( HandledSignal ( int ) ),
-        this, SLOT ( OnHandledSignal ( int ) ) );
+    QObject::connect ( pSignalHandler, &CSignalHandler::HandledSignal,
+        this, &CClient::OnHandledSignal );
 
 
     // start the socket (it is important to start the socket after all

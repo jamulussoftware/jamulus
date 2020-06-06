@@ -572,7 +572,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="59"/>
         <source>If the application is connected to a server and you play your instrument/sing into the microphone, the VU meter should flicker. If this is not the case, you have probably selected the wrong input channel (e.g. &apos;line in&apos; instead of the microphone input) or set the input gain too low in the (Windows) audio mixer.</source>
-        <translation>Wenn die Software verbunden ist und die spielst dein Instrument, dann sollte die Eingangspegelanzeige flackern. Wenn das nicht der Fall ist, dann ist wahrscheinlich der falsche Eingangskanal ausgewählt (z.B. der Line-In-Kanal anstatt des Mikrofonkanals) oder der Eingangsregler im (Windows) Systemmixer ist zu niedrig eingestellt.</translation>
+        <translation>Wenn die Software verbunden ist und du spielst dein Instrument, dann sollte die Eingangspegelanzeige flackern. Wenn das nicht der Fall ist, dann ist wahrscheinlich der falsche Eingangskanal ausgewählt (z.B. der Line-In-Kanal anstatt des Mikrofonkanals) oder der Eingangsregler im (Windows) Systemmixer ist zu niedrig eingestellt.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="65"/>

@@ -381,34 +381,14 @@ void CJamRecorder::OnEnd()
         isRecording = false;
         currentSession->End();
 
-        QString reaperProjectFileName = currentSession->SessionDir().filePath(currentSession->Name().append(".rpp"));
-        const QFileInfo fi(reaperProjectFileName);
-
-        if (fi.exists())
-        {
-            qWarning() << "CJamRecorder::OnEnd():" << fi.absolutePath() << "exists and will not be overwritten.";
-            reaperProjectFileName = QString::Null();
-        }
-        else
-        {
-            QFile outf (reaperProjectFileName);
-            if ( outf.open(QFile::WriteOnly) )
-            {
-                QTextStream out(&outf);
-                out << CReaperProject( currentSession->Tracks(), iServerFrameSizeSamples ).toString() << endl;
-                qDebug() << "Session RPP:" << reaperProjectFileName;
-            }
-            else
-            {
-                qWarning() << "CJamRecorder::OnEnd():" << fi.absolutePath() << "could not be created, no RPP written.";
-                reaperProjectFileName = QString::Null();
-            }
-        }
+        ReaperProjectFromCurrentSession();
+        AudacityLofFromCurrentSession();
 
         delete currentSession;
         currentSession = nullptr;
     }
 }
+
 
 /**
  * @brief CJamRecorder::OnTriggerSession End one session and start a new one
@@ -430,6 +410,66 @@ void CJamRecorder::OnAboutToQuit()
     OnEnd();
 
     thisThread->exit();
+}
+
+void CJamRecorder::ReaperProjectFromCurrentSession()
+{
+    QString reaperProjectFileName = currentSession->SessionDir().filePath(currentSession->Name().append(".rpp"));
+    const QFileInfo fi(reaperProjectFileName);
+
+    if (fi.exists())
+    {
+        qWarning() << "CJamRecorder::ReaperProjectFromCurrentSession():" << fi.absolutePath() << "exists and will not be overwritten.";
+    }
+    else
+    {
+        QFile outf (reaperProjectFileName);
+        if ( outf.open(QFile::WriteOnly) )
+        {
+            QTextStream out(&outf);
+            out << CReaperProject( currentSession->Tracks(), iServerFrameSizeSamples ).toString() << endl;
+            qDebug() << "Session RPP:" << reaperProjectFileName;
+        }
+        else
+        {
+            qWarning() << "CJamRecorder::ReaperProjectFromCurrentSession():" << fi.absolutePath() << "could not be created, no RPP written.";
+        }
+    }
+}
+
+void CJamRecorder::AudacityLofFromCurrentSession()
+{
+    QString audacityLofFileName = currentSession->SessionDir().filePath(currentSession->Name().append(".lof"));
+    const QFileInfo fi(audacityLofFileName);
+
+    if (fi.exists())
+    {
+        qWarning() << "CJamRecorder::AudacityLofFromCurrentSession():" << fi.absolutePath() << "exists and will not be overwritten.";
+    }
+    else
+    {
+        QFile outf (audacityLofFileName);
+        if ( outf.open(QFile::WriteOnly) )
+        {
+            QTextStream sOut(&outf);
+
+            foreach ( auto trackName, currentSession->Tracks().keys() )
+            {
+                foreach ( auto item, currentSession->Tracks()[trackName] ) {
+                    QFileInfo fi ( item.fileName );
+                    sOut << "file " << '"' << fi.fileName() << '"';
+                    sOut << " offset " << secondsAt48K( item.startFrame, iServerFrameSizeSamples ) << endl;
+                }
+            }
+
+            sOut.flush();
+            qDebug() << "Session LOF:" << audacityLofFileName;
+        }
+        else
+        {
+            qWarning() << "CJamRecorder::AudacityLofFromCurrentSession():" << fi.absolutePath() << "could not be created, no LOF written.";
+        }
+    }
 }
 
 /**

@@ -642,6 +642,11 @@
         <translation>Verde</translation>
     </message>
     <message>
+        <location filename="../../clientdlg.cpp" line="144"/>
+        <source>The delay is perfect for a jam session.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../clientdlg.cpp" line="146"/>
         <source>Yellow</source>
         <translation>Amarillo</translation>
@@ -671,9 +676,8 @@
         <translation>Muestra el estado actual del retardo de audio:</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="144"/>
         <source>The delay is perfect for a jam session </source>
-        <translation>El retardo es perfecto para una jam session </translation>
+        <translation type="vanished">El retardo es perfecto para una jam session </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="146"/>
@@ -2113,9 +2117,13 @@
         <translation>Escribe tu nombre o alias aquí para que otros músicos con quien quieras tocar te reconozcan. Puedes además añadir una imagen del instrumento que tocas y la bandera del país donde vives. La ciudad donde vives y tu nivel de habilidad con el instrumento también pueden añadirse.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="713"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
-        <translation>Lo que introduzcas aquí aparecerá en tu fader del mezclador cuando te conectes a un servidor. Esta etiqueta también se mostrará en cada cliente conectado al mismo servidor que tú. Si se deja el nombre vacío, se muestra la dirección IP en su lugar.</translation>
+        <translation type="vanished">Lo que introduzcas aquí aparecerá en tu fader del mezclador cuando te conectes a un servidor. Esta etiqueta también se mostrará en cada cliente conectado al mismo servidor que tú. Si se deja el nombre vacío, se muestra la dirección IP en su lugar.</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="713"/>
+        <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="980"/>
@@ -2327,6 +2335,11 @@
         <source>Bass Ukulele</source>
         <translation>Ukulele Barítono</translation>
     </message>
+    <message>
+        <location filename="../../settings.cpp" line="129"/>
+        <source>No Name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CServerDlg</name>
@@ -2453,150 +2466,154 @@
         <translation>Nombre Servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="93"/>
         <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
-        <translation>El nombre del servidor identifica a tu servidor en la lista de conexión de servidores de los clientes. Si no se especifica un nombre, se muestra la dirección IP en su lugar.</translation>
+        <translation type="vanished">El nombre del servidor identifica a tu servidor en la lista de conexión de servidores de los clientes. Si no se especifica un nombre, se muestra la dirección IP en su lugar.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="100"/>
+        <location filename="../../serverdlg.cpp" line="93"/>
+        <source>The server name identifies your server in the connect dialog server list at the clients.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="99"/>
         <source>Server name line edit</source>
         <translation>Nombre del servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="103"/>
+        <location filename="../../serverdlg.cpp" line="102"/>
         <source>Location City</source>
         <translation>Ubicación Ciudad</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="103"/>
+        <location filename="../../serverdlg.cpp" line="102"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Aquí se puede especificar la ciudad en donde se ubica el servidor. Si se introduce una ciudad, se mostrará en la lista de conexión de servidores de los clientes.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="110"/>
+        <location filename="../../serverdlg.cpp" line="109"/>
         <source>City where the server is located line edit</source>
         <translation>Ciudad en donde se encuentra en servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="113"/>
+        <location filename="../../serverdlg.cpp" line="112"/>
         <source>Location country</source>
         <translation>Ubicación país</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="113"/>
+        <location filename="../../serverdlg.cpp" line="112"/>
         <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Aquí se puede especificar el país en donde se ubica el servidor. Si se introduce un país, se mostrará en la lista de conexión de servidores de los clientes.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="121"/>
+        <location filename="../../serverdlg.cpp" line="120"/>
         <source>Country where the server is located combo box</source>
         <translation>País en donde se encuentra el servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="125"/>
+        <location filename="../../serverdlg.cpp" line="124"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation>Campo para activar/desactivar la grabación desde el servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="126"/>
+        <location filename="../../serverdlg.cpp" line="125"/>
         <source>Enable Recorder</source>
         <translation>Habilitar Grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="127"/>
+        <location filename="../../serverdlg.cpp" line="126"/>
         <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
         <translation>Activado cuando la grabación está habilitada. La grabación se ejecutará cuando una sesión esté en marcha, si está habilitada (y correctamente configurada).</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="131"/>
+        <location filename="../../serverdlg.cpp" line="130"/>
         <source>Current session directory text box (read-only)</source>
         <translation>Campo para directorio sesión actual (solo lectura)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="132"/>
+        <location filename="../../serverdlg.cpp" line="131"/>
         <source>Current Session Directory</source>
         <translation>Directorio Sesión Actual</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="133"/>
+        <location filename="../../serverdlg.cpp" line="132"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translation>Habilitado durante la grabación y guarda el directorio actual de grabación, Deshabilitado tras la grabación o cuando la grabación no está habilitada.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="137"/>
+        <location filename="../../serverdlg.cpp" line="136"/>
         <source>Recorder status label</source>
         <translation>Etiqueta estado grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="138"/>
+        <location filename="../../serverdlg.cpp" line="137"/>
         <source>Recorder Status</source>
         <translation>Estado Grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="139"/>
+        <location filename="../../serverdlg.cpp" line="138"/>
         <source>Displays the current status of the recorder.</source>
         <translation>Muestra el estado actual de la grabación.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="142"/>
+        <location filename="../../serverdlg.cpp" line="141"/>
         <source>Request new recording button</source>
         <translation>Botón Solicitar nueva grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="143"/>
+        <location filename="../../serverdlg.cpp" line="142"/>
         <source>New Recording</source>
         <translation>Nueva Grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="144"/>
+        <location filename="../../serverdlg.cpp" line="143"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation>Durante una sesión de grabación, el botón puede utilizarse para comenzar una nueva grabación.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="156"/>
-        <location filename="../../serverdlg.cpp" line="322"/>
+        <location filename="../../serverdlg.cpp" line="155"/>
+        <location filename="../../serverdlg.cpp" line="321"/>
         <source>E&amp;xit</source>
         <translation>S&amp;alir</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="162"/>
+        <location filename="../../serverdlg.cpp" line="161"/>
         <source>&amp;Hide </source>
         <translation>&amp;Ocultar servidor </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="162"/>
-        <location filename="../../serverdlg.cpp" line="166"/>
-        <location filename="../../serverdlg.cpp" line="172"/>
+        <location filename="../../serverdlg.cpp" line="161"/>
+        <location filename="../../serverdlg.cpp" line="165"/>
+        <location filename="../../serverdlg.cpp" line="171"/>
         <source> server</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="166"/>
+        <location filename="../../serverdlg.cpp" line="165"/>
         <source>&amp;Open </source>
         <translation>&amp;Abrir servidor </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="188"/>
+        <location filename="../../serverdlg.cpp" line="187"/>
         <source> server </source>
         <translation> </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="600"/>
+        <location filename="../../serverdlg.cpp" line="599"/>
         <source>Predefined Address</source>
         <translation>Dirección Preestablecida</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="712"/>
+        <location filename="../../serverdlg.cpp" line="711"/>
         <source>Recording</source>
         <translation>Grabando</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="717"/>
+        <location filename="../../serverdlg.cpp" line="716"/>
         <source>Not recording</source>
         <translation>No grabando</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="723"/>
+        <location filename="../../serverdlg.cpp" line="722"/>
         <source>Not enabled</source>
         <translation>No habilitado</translation>
     </message>
@@ -2613,12 +2630,12 @@
         <translation type="vanished">Por defecto (Norteamérica)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="316"/>
+        <location filename="../../serverdlg.cpp" line="315"/>
         <source> Server</source>
         <translation> : Servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="320"/>
+        <location filename="../../serverdlg.cpp" line="319"/>
         <source>&amp;Window</source>
         <translation>&amp;Ventana</translation>
     </message>

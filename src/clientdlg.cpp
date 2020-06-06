@@ -142,7 +142,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         tr ( "Shows the current audio delay status:" ) +
         "<ul>"
         "<li>" "<b>" + tr ( "Green" ) + ":</b> " + tr ( "The delay is perfect for a jam "
-        "session " ) + "</li>"
+        "session." ) + "</li>"
         "<li>" "<b>" + tr ( "Yellow" ) + ":</b> " + tr ( "A session is still possible "
         "but it may be harder to play." ) + "</li>"
         "<li>" "<b>" + tr ( "Red" ) + ":</b> " + tr ( "The delay is too large for "

@@ -587,42 +587,42 @@
     <message>
         <location filename="../../clientdlg.cpp" line="99"/>
         <source>Controls the relative levels of the left and right local audio channels. For a mono signal it acts as a pan between the two channels.For example, if a microphone is connected to the right input channel and an instrument is connected to the left input channel which is much louder than the microphone, move the audio fader in a direction where the label above the fader shows </source>
-        <translation type="unfinished"></translation>
+        <translation>Mit diesem Einstellregler kann der relative Pegel vom linken und rechten Eingangskanal verändert werden. Für ein Mono-Signal verhält sich der Regler wie ein Pan-Regler. Wenn, z.B., ein Mikrofon am rechten Kanal angeschlossen ist und das Instrument am linken Eingangskanal ist viel lauter als das Mikrofon, dann kann man den Lautstärkeunterschied mit diesem Regler kompensieren indem man den Regler in eine Richtung verschiebt, so dass über dem Regler </translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="115"/>
         <source>Reverb effect</source>
-        <translation type="unfinished"></translation>
+        <translation>Halleffektregler</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="116"/>
         <source>Reverb can be applied to one local mono audio channel or to both channels in stereo mode. The mono channel selection and the reverb level can be modified. For example, if a microphone signal is fed in to the right audio channel of the sound card and a reverb effect needs to be applied, set the channel selector to right and move the fader upwards until the desired reverb level is reached.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Halleffekt kann auf einen selektierten Mono-Audiokanal oder auf beide Stereoaudiokanäle angewendet werden. Die Mono-Kanalselektion und die Hallstärke können eingestellt werden. Wenn z.B. ein Mikrofonsignal auf dem rechten Kanal anliegt und ein Halleffekt soll auf das Mikrofonsignal angewendet werden, dann muss die Hallkanalselektion auf rechts eingestellt werden und der Hallregler muss erhöht werden, bis die gewünschte Stärke des Halleffekts erreicht ist.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="127"/>
         <source>Reverb effect level setting</source>
-        <translation type="unfinished"></translation>
+        <translation>Halleffekt Pegelregler</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="130"/>
         <source>Reverb Channel Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Halleffekt Kanalselektion</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="131"/>
         <source>With these radio buttons the audio input channel on which the reverb effect is applied can be chosen. Either the left or right input channel can be selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit diesen Knöpfen kann ausgewählt werden, auf welches Eingangssignal der Halleffekt angewendet werden soll. Entweder der rechte oder linke Eingangskanal kann ausgewählt werden.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="136"/>
         <source>Left channel selection for reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswahl linker Kanal für Halleffekt</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="138"/>
         <source>Right channel selection for reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Auswahl rechter Kanal für Halleffekt</translation>
     </message>
     <message>
         <source>The </source>
@@ -631,17 +631,22 @@
     <message>
         <location filename="../../clientdlg.cpp" line="144"/>
         <source>Green</source>
+        <translation>Grün</translation>
+    </message>
+    <message>
+        <location filename="../../clientdlg.cpp" line="144"/>
+        <source>The delay is perfect for a jam session.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="146"/>
         <source>Yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Gelb</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="148"/>
         <source>Red</source>
-        <translation type="unfinished"></translation>
+        <translation>Rot</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="158"/>
@@ -651,27 +656,26 @@
     <message>
         <location filename="../../clientdlg.cpp" line="86"/>
         <source>Opens a dialog where you can select a server to connect to. If you are connected, pressing this button will end the session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn man diesen Knopf drückt, dann wird die Beschriftung des Knopfes von Verbinden zu Trennen geändert, das heißt, dass er eine Umschaltfunktion hat zum Verbinden und Trennen der Software.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="142"/>
         <source>Shows the current audio delay status:</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Status-LED für die Verzögerung zeigt eine Bewertung der Gesamtverzögerung des Audiosignals:</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="144"/>
         <source>The delay is perfect for a jam session </source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Die Verzögerung ist gering genug für das Jammen.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="146"/>
         <source>A session is still possible but it may be harder to play.</source>
-        <translation type="unfinished"></translation>
+        <translation>Man kann noch spielen aber es wird schwieriger Lieder mit hohem Tempo zu spielen.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="148"/>
         <source>The delay is too large for jamming.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Verzögerung ist zu hoch zum Jammen.</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="154"/>
@@ -2093,9 +2097,13 @@
         <translation>Schreibe den Namen oder Alias hier rein so dass die anderen Musikern mit denen du spielst wissen wer du bist. Zusätzlich kannst du dein Instrument auswählen und eine Flagge des Landes auswählen in dem du dich befindest. Deine Stadt und deine Spielstärke des Instruments kannst du ebenso angeben.</translation>
     </message>
     <message>
-        <location filename="../../util.cpp" line="713"/>
         <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
-        <translation>Was man hier sieht wird auch am Fader im Mixer angezeigt, wenn du mit einem Server verbunden bist. Dieses Schild wird auch bei allen anderen Musikern, die mit dem gleichen Server verbunden sind, angezeigt.</translation>
+        <translation type="vanished">Was man hier sieht wird auch am Fader im Mixer angezeigt, wenn du mit einem Server verbunden bist. Dieses Schild wird auch bei allen anderen Musikern, die mit dem gleichen Server verbunden sind, angezeigt.</translation>
+    </message>
+    <message>
+        <location filename="../../util.cpp" line="713"/>
+        <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="980"/>
@@ -2307,6 +2315,11 @@
         <source>Bass Ukulele</source>
         <translation></translation>
     </message>
+    <message>
+        <location filename="../../settings.cpp" line="129"/>
+        <source>No Name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CServerDlg</name>
@@ -2437,150 +2450,154 @@
         <translation>Servername</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="93"/>
         <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
-        <translation>Der Servername identifiziert deinen Server in der Serverliste. Falls kein Name angegeben wurde, dann wird die IP-Adresse stattdessen angezeigt.</translation>
+        <translation type="vanished">Der Servername identifiziert deinen Server in der Serverliste. Falls kein Name angegeben wurde, dann wird die IP-Adresse stattdessen angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="100"/>
+        <location filename="../../serverdlg.cpp" line="93"/>
+        <source>The server name identifies your server in the connect dialog server list at the clients.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="99"/>
         <source>Server name line edit</source>
         <translation>Servername Eingabefeld</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="103"/>
+        <location filename="../../serverdlg.cpp" line="102"/>
         <source>Location City</source>
         <translation>Standort Stadt</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="103"/>
+        <location filename="../../serverdlg.cpp" line="102"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Hier kann man die Stadt angeben, in der sich der Server befindet. Falls eine Stadt angegeben wurde, dann wird die in der Serverliste angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="110"/>
+        <location filename="../../serverdlg.cpp" line="109"/>
         <source>City where the server is located line edit</source>
         <translation>Stadt in der sich der Server befindet Eingabefeld</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="113"/>
+        <location filename="../../serverdlg.cpp" line="112"/>
         <source>Location country</source>
         <translation>Standort Land</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="113"/>
+        <location filename="../../serverdlg.cpp" line="112"/>
         <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Hier kann man das Land eingeben, in dem sich der Server befindet. Falls ein Land angegeben wurde, dann wird das in der Serverliste angezeigt.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="121"/>
+        <location filename="../../serverdlg.cpp" line="120"/>
         <source>Country where the server is located combo box</source>
         <translation>Land in dem sich der Server befindet Auswahlbox</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="125"/>
+        <location filename="../../serverdlg.cpp" line="124"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="126"/>
+        <location filename="../../serverdlg.cpp" line="125"/>
         <source>Enable Recorder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="127"/>
+        <location filename="../../serverdlg.cpp" line="126"/>
         <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="131"/>
+        <location filename="../../serverdlg.cpp" line="130"/>
         <source>Current session directory text box (read-only)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="132"/>
+        <location filename="../../serverdlg.cpp" line="131"/>
         <source>Current Session Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="133"/>
+        <location filename="../../serverdlg.cpp" line="132"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="137"/>
+        <location filename="../../serverdlg.cpp" line="136"/>
         <source>Recorder status label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="138"/>
+        <location filename="../../serverdlg.cpp" line="137"/>
         <source>Recorder Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="139"/>
+        <location filename="../../serverdlg.cpp" line="138"/>
         <source>Displays the current status of the recorder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="142"/>
+        <location filename="../../serverdlg.cpp" line="141"/>
         <source>Request new recording button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="143"/>
+        <location filename="../../serverdlg.cpp" line="142"/>
         <source>New Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="144"/>
+        <location filename="../../serverdlg.cpp" line="143"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="156"/>
-        <location filename="../../serverdlg.cpp" line="322"/>
+        <location filename="../../serverdlg.cpp" line="155"/>
+        <location filename="../../serverdlg.cpp" line="321"/>
         <source>E&amp;xit</source>
         <translation>&amp;Beenden</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="162"/>
+        <location filename="../../serverdlg.cpp" line="161"/>
         <source>&amp;Hide </source>
         <translation>&amp;Ausblenden vom </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="162"/>
-        <location filename="../../serverdlg.cpp" line="166"/>
-        <location filename="../../serverdlg.cpp" line="172"/>
+        <location filename="../../serverdlg.cpp" line="161"/>
+        <location filename="../../serverdlg.cpp" line="165"/>
+        <location filename="../../serverdlg.cpp" line="171"/>
         <source> server</source>
         <translation> Server</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="166"/>
+        <location filename="../../serverdlg.cpp" line="165"/>
         <source>&amp;Open </source>
         <translation>Ö&amp;ffne den </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="188"/>
+        <location filename="../../serverdlg.cpp" line="187"/>
         <source> server </source>
         <translation> Server </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="600"/>
+        <location filename="../../serverdlg.cpp" line="599"/>
         <source>Predefined Address</source>
         <translation>Vordefinierte Adresse</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="712"/>
+        <location filename="../../serverdlg.cpp" line="711"/>
         <source>Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="717"/>
+        <location filename="../../serverdlg.cpp" line="716"/>
         <source>Not recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="723"/>
+        <location filename="../../serverdlg.cpp" line="722"/>
         <source>Not enabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2597,12 +2614,12 @@
         <translation type="vanished">Standard (Nordamerika)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="316"/>
+        <location filename="../../serverdlg.cpp" line="315"/>
         <source> Server</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="320"/>
+        <location filename="../../serverdlg.cpp" line="319"/>
         <source>&amp;Window</source>
         <translation>&amp;Fenster</translation>
     </message>

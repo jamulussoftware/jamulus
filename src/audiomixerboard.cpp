@@ -40,7 +40,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     plbrChannelLevel            = new CMultiColorLEDBar ( pLevelsBox );
     pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
     pPan                        = new QDial             ( pLevelsBox );
-    pPanLabel                   = new QLabel            ( tr ( "Pan" ) , pLevelsBox );
+    pPanLabel                   = new QLabel            ( tr ( "Pan" ), pLevelsBox );
     pInfoLabel                  = new QLabel            ( "", pLevelsBox );
 
     pMuteSoloBox                = new QWidget           ( pFrame );
@@ -674,10 +674,10 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
                        this, pPanValueChanged );
 
     connectFaderSignalsToMixerBoardSlots<slotId - 1>();
-};
+}
 
 template<>
-inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots<0>() {};
+inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots<0>() {}
 
 void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 {

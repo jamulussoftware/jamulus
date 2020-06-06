@@ -61,14 +61,15 @@ public:
         }
 
         // connect protocol signals
-        QObject::connect ( &Protocol, SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-            this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
-        QObject::connect ( &Protocol, SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
-            this, SLOT ( OnSendCLMessage ( CHostAddress, CVector<uint8_t> ) ) );
+        QObject::connect ( &Protocol, &CProtocol::MessReadyForSending,
+            this, &CTestbench::OnSendProtMessage );
+
+        QObject::connect ( &Protocol, &CProtocol::CLMessReadyForSending,
+            this, &CTestbench::OnSendCLMessage );
 
         // connect and start the timer (testbench heartbeat)
-        QObject::connect ( &Timer, SIGNAL ( timeout() ),
-            this, SLOT ( OnTimer() ) );
+        QObject::connect ( &Timer, &QTimer::timeout,
+            this, &CTestbench::OnTimer );
 
         Timer.start ( 1 ); // 1 ms
     }

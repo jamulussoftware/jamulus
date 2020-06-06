@@ -417,68 +417,53 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     // Connections -------------------------------------------------------------
     // connect timer timeout signal
-    QObject::connect ( &HighPrecisionTimer, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimer() ) );
+    QObject::connect ( &HighPrecisionTimer, &CHighPrecisionTimer::timeout,
+        this, &CServer::OnTimer );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLMessReadyForSending ( CHostAddress, CVector<uint8_t> ) ),
-        this, SLOT ( OnSendCLProtMessage ( CHostAddress, CVector<uint8_t> ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLMessReadyForSending,
+        this, &CServer::OnSendCLProtMessage );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLPingReceived ( CHostAddress, int ) ),
-        this, SLOT ( OnCLPingReceived ( CHostAddress, int ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingReceived,
+        this, &CServer::OnCLPingReceived );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLPingWithNumClientsReceived ( CHostAddress, int, int ) ),
-        this, SLOT ( OnCLPingWithNumClientsReceived ( CHostAddress, int, int ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLPingWithNumClientsReceived,
+        this, &CServer::OnCLPingWithNumClientsReceived );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLRegisterServerReceived ( CHostAddress, CHostAddress, CServerCoreInfo ) ),
-        this, SLOT ( OnCLRegisterServerReceived ( CHostAddress, CHostAddress, CServerCoreInfo ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLRegisterServerReceived,
+        this, &CServer::OnCLRegisterServerReceived );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLUnregisterServerReceived ( CHostAddress ) ),
-        this, SLOT ( OnCLUnregisterServerReceived ( CHostAddress ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLUnregisterServerReceived,
+        this, &CServer::OnCLUnregisterServerReceived );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLReqServerList ( CHostAddress ) ),
-        this, SLOT ( OnCLReqServerList ( CHostAddress ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqServerList,
+        this, &CServer::OnCLReqServerList );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLRegisterServerResp ( CHostAddress, ESvrRegResult ) ),
-        this, SLOT ( OnCLRegisterServerResp ( CHostAddress, ESvrRegResult ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLRegisterServerResp,
+        this, &CServer::OnCLRegisterServerResp );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLSendEmptyMes ( CHostAddress ) ),
-        this, SLOT ( OnCLSendEmptyMes ( CHostAddress ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLSendEmptyMes,
+        this, &CServer::OnCLSendEmptyMes );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLDisconnection ( CHostAddress ) ),
-        this, SLOT ( OnCLDisconnection ( CHostAddress ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLDisconnection,
+        this, &CServer::OnCLDisconnection );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLReqVersionAndOS ( CHostAddress ) ),
-        this, SLOT ( OnCLReqVersionAndOS ( CHostAddress ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqVersionAndOS,
+        this, &CServer::OnCLReqVersionAndOS );
 
-    QObject::connect ( &ConnLessProtocol,
-        SIGNAL ( CLReqConnClientsList ( CHostAddress ) ),
-        this, SLOT ( OnCLReqConnClientsList ( CHostAddress ) ) );
+    QObject::connect ( &ConnLessProtocol, &CProtocol::CLReqConnClientsList,
+        this, &CServer::OnCLReqConnClientsList );
 
-    QObject::connect ( &ServerListManager,
-       SIGNAL ( SvrRegStatusChanged() ),
-       SIGNAL ( SvrRegStatusChanged() ) );
+    QObject::connect ( &ServerListManager, &CServerListManager::SvrRegStatusChanged,
+        this, &CServer::SvrRegStatusChanged );
 
-    QObject::connect( &JamRecorder,
-        SIGNAL ( RecordingSessionStarted ( QString ) ),
-        SIGNAL ( RecordingSessionStarted ( QString ) ) );
+    QObject::connect( &JamRecorder, &recorder::CJamRecorder::RecordingSessionStarted,
+        this, &CServer::RecordingSessionStarted );
 
-    QObject::connect ( QCoreApplication::instance(),
-        SIGNAL ( aboutToQuit() ),
-        this, SLOT ( OnAboutToQuit() ) );
+    QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
+        this, &CServer::OnAboutToQuit );
 
-    QObject::connect ( pSignalHandler,
-        SIGNAL ( HandledSignal ( int ) ),
-        this, SLOT ( OnHandledSignal ( int ) ) );
+    QObject::connect ( pSignalHandler, &CSignalHandler::HandledSignal,
+        this, &CServer::OnHandledSignal );
 
     connectChannelSignalsToServerSlots<MAX_NUM_CHANNELS>();
 
@@ -532,10 +517,10 @@ inline void CServer::connectChannelSignalsToServerSlots()
                        this, pOnServerAutoSockBufSizeChangeCh );
 
     connectChannelSignalsToServerSlots<slotId - 1>();
-};
+}
 
 template<>
-inline void CServer::connectChannelSignalsToServerSlots<0>() {};
+inline void CServer::connectChannelSignalsToServerSlots<0>() {}
 
 void CServer::CreateAndSendJitBufMessage ( const int iCurChanID,
                                            const int iNNumFra )

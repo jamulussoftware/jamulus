@@ -217,9 +217,8 @@ protected:
         NetworkWorkerThread.SetSocket ( &Socket );
 
         // connect the "InvalidPacketReceived" signal
-        QObject::connect ( &Socket,
-            SIGNAL ( InvalidPacketReceived ( CHostAddress ) ),
-            SIGNAL ( InvalidPacketReceived ( CHostAddress ) ) );
+        QObject::connect ( &Socket, &CSocket::InvalidPacketReceived,
+            this, &CHighPrioSocket::InvalidPacketReceived );
     }
 
     CSocketThread NetworkWorkerThread;

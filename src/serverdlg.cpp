@@ -334,27 +334,27 @@ lvwClients->setMinimumHeight ( 140 );
 
     // Connections -------------------------------------------------------------
     // check boxes
-    QObject::connect ( chbRegisterServer, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnRegisterServerStateChanged ( int ) ) );
+    QObject::connect ( chbRegisterServer, &QCheckBox::stateChanged,
+        this, &CServerDlg::OnRegisterServerStateChanged );
 
-    QObject::connect ( chbStartOnOSStart, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnStartOnOSStartStateChanged ( int ) ) );
+    QObject::connect ( chbStartOnOSStart, &QCheckBox::stateChanged,
+        this, &CServerDlg::OnStartOnOSStartStateChanged );
 
-    QObject::connect ( chbUseCCLicence, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnUseCCLicenceStateChanged ( int ) ) );
+    QObject::connect ( chbUseCCLicence, &QCheckBox::stateChanged,
+        this, &CServerDlg::OnUseCCLicenceStateChanged );
 
-    QObject::connect ( chbEnableRecorder, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnEnableRecorderStateChanged ( int ) ) );
+    QObject::connect ( chbEnableRecorder, &QCheckBox::stateChanged,
+        this, &CServerDlg::OnEnableRecorderStateChanged );
 
     // line edits
-    QObject::connect ( edtCentralServerAddress, SIGNAL ( editingFinished() ),
-        this, SLOT ( OnCentralServerAddressEditingFinished() ) );
+    QObject::connect ( edtCentralServerAddress, &QLineEdit::editingFinished,
+        this, &CServerDlg::OnCentralServerAddressEditingFinished );
 
-    QObject::connect ( edtServerName, SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnServerNameTextChanged ( const QString& ) ) );
+    QObject::connect ( edtServerName, &QLineEdit::textChanged,
+        this, &CServerDlg::OnServerNameTextChanged );
 
-    QObject::connect ( edtLocationCity, SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnLocationCityTextChanged ( const QString& ) ) );
+    QObject::connect ( edtLocationCity, &QLineEdit::textChanged,
+        this, &CServerDlg::OnLocationCityTextChanged );
 
     // combo boxes
     QObject::connect ( cbxLocationCountry, SIGNAL ( activated ( int ) ),
@@ -364,34 +364,34 @@ lvwClients->setMinimumHeight ( 140 );
         this, SLOT ( OnCentServAddrTypeActivated ( int ) ) );
 
     // push buttons
-    QObject::connect ( pbtNewRecording, SIGNAL ( released() ),
-        this, SLOT ( OnNewRecordingClicked() ) );
+    QObject::connect ( pbtNewRecording, &QPushButton::released,
+        this, &CServerDlg::OnNewRecordingClicked );
 
     // timers
-    QObject::connect ( &Timer, SIGNAL ( timeout() ), this, SLOT ( OnTimer() ) );
+    QObject::connect ( &Timer, &QTimer::timeout,
+        this, &CServerDlg::OnTimer );
 
     // other
-    QObject::connect ( pServer, SIGNAL ( Started() ),
-        this, SLOT ( OnServerStarted() ) );
+    QObject::connect ( pServer, &CServer::Started,
+        this, &CServerDlg::OnServerStarted );
 
-    QObject::connect ( pServer, SIGNAL ( Stopped() ),
-        this, SLOT ( OnServerStopped() ) );
+    QObject::connect ( pServer, &CServer::Stopped,
+        this, &CServerDlg::OnServerStopped );
 
-    QObject::connect ( pServer, SIGNAL ( SvrRegStatusChanged() ),
-        this, SLOT ( OnSvrRegStatusChanged() ) );
+    QObject::connect ( pServer, &CServer::SvrRegStatusChanged,
+        this, &CServerDlg::OnSvrRegStatusChanged );
 
-    QObject::connect ( pServer, SIGNAL ( RecordingSessionStarted ( QString ) ),
-        this, SLOT ( OnRecordingSessionStarted ( QString ) ) );
+    QObject::connect ( pServer, &CServer::RecordingSessionStarted,
+        this, &CServerDlg::OnRecordingSessionStarted );
 
-    QObject::connect ( pServer, SIGNAL ( StopRecorder() ),
-        this, SLOT ( OnStopRecorder() ) );
+    QObject::connect ( pServer, &CServer::StopRecorder,
+        this, &CServerDlg::OnStopRecorder );
 
-    QObject::connect ( QCoreApplication::instance(), SIGNAL ( aboutToQuit() ),
-        this, SLOT ( OnAboutToQuit() ) );
+    QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
+        this, &CServerDlg::OnAboutToQuit );
 
-    QObject::connect ( &SystemTrayIcon,
-        SIGNAL ( activated ( QSystemTrayIcon::ActivationReason ) ),
-        this, SLOT ( OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ) ) );
+    QObject::connect ( &SystemTrayIcon, &QSystemTrayIcon::activated,
+        this, &CServerDlg::OnSysTrayActivated );
 
 
     // Timers ------------------------------------------------------------------

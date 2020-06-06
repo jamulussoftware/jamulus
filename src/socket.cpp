@@ -111,37 +111,30 @@ void CSocket::Init ( const quint16 iPortNumber )
     {
         // client connections:
 
-        QObject::connect ( this,
-            SIGNAL ( ProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ),
-            pChannel, SLOT ( OnProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ) );
+        QObject::connect ( this, &CSocket::ProtcolMessageReceived,
+            pChannel, &CChannel::OnProtcolMessageReceived );
 
-        QObject::connect ( this,
-            SIGNAL ( ProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ),
-            pChannel, SLOT ( OnProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ) );
+        QObject::connect ( this, &CSocket::ProtcolCLMessageReceived,
+            pChannel, &CChannel::OnProtcolCLMessageReceived );
 
-        QObject::connect ( this,
-            SIGNAL ( NewConnection() ),
+        QObject::connect ( this, SIGNAL ( NewConnection() ),
             pChannel, SLOT ( OnNewConnection() ) );
     }
     else
     {
         // server connections:
 
-        QObject::connect ( this,
-            SIGNAL ( ProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ),
-            pServer, SLOT ( OnProtcolMessageReceived ( int, int, CVector<uint8_t>, CHostAddress ) ) );
+        QObject::connect ( this, &CSocket::ProtcolMessageReceived,
+            pServer, &CServer::OnProtcolMessageReceived );
 
-        QObject::connect ( this,
-            SIGNAL ( ProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ),
-            pServer, SLOT ( OnProtcolCLMessageReceived ( int, CVector<uint8_t>, CHostAddress ) ) );
+        QObject::connect ( this, &CSocket::ProtcolCLMessageReceived,
+            pServer, &CServer::OnProtcolCLMessageReceived );
 
-        QObject::connect ( this,
-            SIGNAL ( NewConnection ( int, CHostAddress ) ),
+        QObject::connect ( this, SIGNAL ( NewConnection ( int, CHostAddress ) ),
             pServer, SLOT ( OnNewConnection ( int, CHostAddress ) ) );
 
-        QObject::connect ( this,
-            SIGNAL ( ServerFull ( CHostAddress ) ),
-            pServer, SLOT ( OnServerFull ( CHostAddress ) ) );
+        QObject::connect ( this, &CSocket::ServerFull,
+            pServer, &CServer::OnServerFull );
     }
 }
 

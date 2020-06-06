@@ -369,35 +369,35 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // Connections -------------------------------------------------------------
     // timers
-    QObject::connect ( &TimerStatus, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerStatus() ) );
+    QObject::connect ( &TimerStatus, &QTimer::timeout,
+        this, &CClientSettingsDlg::OnTimerStatus );
 
     // slider controls
-    QObject::connect ( sldNetBuf, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnNetBufValueChanged ( int ) ) );
+    QObject::connect ( sldNetBuf, &QSlider::valueChanged,
+        this, &CClientSettingsDlg::OnNetBufValueChanged );
 
-    QObject::connect ( sldNetBufServer, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnNetBufServerValueChanged ( int ) ) );
+    QObject::connect ( sldNetBufServer, &QSlider::valueChanged,
+        this, &CClientSettingsDlg::OnNetBufServerValueChanged );
 
     // check boxes
-    QObject::connect ( chbGUIDesignFancy, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnGUIDesignFancyStateChanged ( int ) ) );
+    QObject::connect ( chbGUIDesignFancy, &QCheckBox::stateChanged,
+        this, &CClientSettingsDlg::OnGUIDesignFancyStateChanged );
 
-    QObject::connect ( chbDisplayChannelLevels, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnDisplayChannelLevelsStateChanged ( int ) ) );
+    QObject::connect ( chbDisplayChannelLevels, &QCheckBox::stateChanged,
+        this, &CClientSettingsDlg::OnDisplayChannelLevelsStateChanged );
 
-    QObject::connect ( chbAutoJitBuf, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnAutoJitBufStateChanged ( int ) ) );
+    QObject::connect ( chbAutoJitBuf, &QCheckBox::stateChanged,
+        this, &CClientSettingsDlg::OnAutoJitBufStateChanged );
 
-    QObject::connect ( chbEnableOPUS64, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnEnableOPUS64StateChanged ( int ) ) );
+    QObject::connect ( chbEnableOPUS64, &QCheckBox::stateChanged,
+        this, &CClientSettingsDlg::OnEnableOPUS64StateChanged );
 
     // line edits
-    QObject::connect ( edtCentralServerAddress, SIGNAL ( editingFinished() ),
-        this, SLOT ( OnCentralServerAddressEditingFinished() ) );
+    QObject::connect ( edtCentralServerAddress, &QLineEdit::editingFinished,
+        this, &CClientSettingsDlg::OnCentralServerAddressEditingFinished );
 
-    QObject::connect ( edtNewClientLevel, SIGNAL ( editingFinished() ),
-        this, SLOT ( OnNewClientLevelEditingFinished() ) );
+    QObject::connect ( edtNewClientLevel, &QLineEdit::editingFinished,
+        this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );
 
     // combo boxes
     QObject::connect ( cbxSoundcard, SIGNAL ( activated ( int ) ),
@@ -422,8 +422,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         this, SLOT ( OnAudioQualityActivated ( int ) ) );
 
     // buttons
-    QObject::connect ( butDriverSetup, SIGNAL ( clicked() ),
-        this, SLOT ( OnDriverSetupClicked() ) );
+    QObject::connect ( butDriverSetup, &QPushButton::clicked,
+        this, &CClientSettingsDlg::OnDriverSetupClicked );
 
     // misc
     QObject::connect ( &SndCrdBufferDelayButtonGroup,

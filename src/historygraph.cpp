@@ -350,8 +350,8 @@ CJpegHistoryGraph::CJpegHistoryGraph ( const int iMaxDaysHistory ) :
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( &TimerDailyUpdate, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerDailyUpdate() ) );
+    QObject::connect ( &TimerDailyUpdate, &QTimer::timeout,
+        this, &CJpegHistoryGraph::OnTimerDailyUpdate );
 }
 
 // Override Update to blank out the plot area each time
@@ -426,8 +426,8 @@ CSvgHistoryGraph::CSvgHistoryGraph ( const int iMaxDaysHistory ) :
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( &TimerDailyUpdate, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerDailyUpdate() ) );
+    QObject::connect ( &TimerDailyUpdate, &QTimer::timeout,
+        this, &CSvgHistoryGraph::OnTimerDailyUpdate );
 }
 
 // Override Update to create the fresh SVG stream each time

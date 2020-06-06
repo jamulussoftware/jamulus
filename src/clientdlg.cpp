@@ -29,6 +29,7 @@
 CClientDlg::CClientDlg ( CClient*        pNCliP,
                          CSettings*      pNSetP,
                          const QString&  strConnOnStartupAddress,
+                         const int       iCtrlMIDIChannel,
                          const bool      bNewShowComplRegConnList,
                          const bool      bShowAnalyzerConsole,
                          QWidget*        parent,
@@ -37,6 +38,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     pClient             ( pNCliP ),
     pSettings           ( pNSetP ),
     bConnectDlgWasShown ( false ),
+    bMIDICtrlUsed       ( iCtrlMIDIChannel != INVALID_MIDI_CH ),
     ClientSettingsDlg   ( pNCliP, parent, Qt::Window ),
     ChatDlg             ( parent, Qt::Window ),
     ConnectDlg          ( pNCliP, bNewShowComplRegConnList, parent, Qt::Dialog ),
@@ -812,6 +814,15 @@ void CClientDlg::OnLicenceRequired ( ELicenceType eLicenceType )
 
 void CClientDlg::OnConClientListMesReceived ( CVector<CChannelInfo> vecChanInfo )
 {
+    // show channel numbers if --ctrlmidich is used (#241, #95)
+    if ( bMIDICtrlUsed )
+    {
+        for ( int i = 0; i < vecChanInfo.Size(); i++ )
+        {
+            vecChanInfo[i].strName.prepend ( QString().setNum ( vecChanInfo[i].iChanID ) + ":" );
+        }
+    }
+
     // update mixer board with the additional client infos
     MainMixerBoard->ApplyNewConClientList ( vecChanInfo );
 }

@@ -8,6 +8,8 @@
 
 - enable/disable recording from command line, coded by pljones (#228)
 
+- add Audacity "list of files" writer to jam recorder, by pljones (#315)
+
 - make level meter LED black when off, by fleutot (#318)
 
 - added ukulele/bass ukulele instrument icons created by dos1 (#319)
@@ -16,10 +18,10 @@
 
 - avoid showing IP address if no name in the musician profile is given (#316)
 
+- show channel numbers if --ctrlmidich is used (#241, #95)
+
 - bug fix: on MacOS declare an activity to ensure the process doesn't get throttled
   by OS level Nap, Sleep, and Thread Priority systems, coded by AronVietti (#23)
-
-
 
 
 

@@ -19,6 +19,7 @@ TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_pt_PT.ts \
     src/res/translation/translation_es_ES.ts \
     src/res/translation/translation_nl_NL.ts \
+    src/res/translation/translation_pl_PL.ts\
     src/res/translation/translation_it_IT.ts
 
 INCLUDEPATH += src
@@ -301,18 +302,23 @@ win32 {
     }
     BINDIR = $$absolute_path($$BINDIR, $$PREFIX)
     target.path = $$BINDIR
-    INSTALLS += target
 
     isEmpty(APPSDIR) {
         APPSDIR = share/applications
     }
     APPSDIR = $$absolute_path($$APPSDIR, $$PREFIX)
     desktop.path = $$APPSDIR
+    QMAKE_SUBSTITUTES += distributions/jamulus.desktop.in
     desktop.files = distributions/jamulus.desktop
-    # the .desktop file assumes the binary is called jamulus
-    contains(CONFIG, "noupcasename") {
-        INSTALLS += desktop
+
+    isEmpty(ICONSDIR) {
+        ICONSDIR = share/icons/hicolor/512x512/apps
     }
+    ICONSDIR = $$absolute_path($$ICONSDIR, $$PREFIX)
+    icons.path = $$ICONSDIR
+    icons.files = distributions/jamulus.png
+
+    INSTALLS += target desktop icons
 }
 
 RCC_DIR = src/res
@@ -617,6 +623,8 @@ DISTFILES += ChangeLog \
     COPYING \
     INSTALL.md \
     README.md \
+    distributions/jamulus.desktop.in \
+    distributions/jamulus.png \
     src/res/translation/translation_de_DE.qm \
     src/res/translation/translation_fr_FR.qm \
     src/res/translation/translation_pt_PT.qm \

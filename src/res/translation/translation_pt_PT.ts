@@ -642,6 +642,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../clientdlg.cpp" line="144"/>
+        <source>The delay is perfect for a jam session.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../clientdlg.cpp" line="146"/>
         <source>Yellow</source>
         <translation type="unfinished"></translation>
@@ -664,11 +669,6 @@
     <message>
         <location filename="../../clientdlg.cpp" line="142"/>
         <source>Shows the current audio delay status:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../clientdlg.cpp" line="144"/>
-        <source>The delay is perfect for a jam session </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1207,12 +1207,12 @@
         <translation type="vanished">No modo de transmissão estéreo, nenhuma seleção de canal de áudio para o efeito de reverberação estará disponível na janela principal, pois o efeito é aplicado em ambos os canais.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="222"/>
+        <location filename="../../clientsettingsdlg.cpp" line="221"/>
         <source>Audio channels combo box</source>
         <translation>Seletor de canais áudio</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="225"/>
+        <location filename="../../clientsettingsdlg.cpp" line="224"/>
         <source>Audio Quality</source>
         <translation>Qualidade de Áudio</translation>
     </message>
@@ -1221,12 +1221,12 @@
         <translation type="vanished">Selecione a qualidade de áudio desejada. Pode ser selecionada uma qualidade de áudio baixa, normal ou alta. Quanto maior a qualidade do áudio, maior a taxa de dados do fluxo de áudio. Verifique que a taxa de transmissão não excede a largura de banda disponível da sua ligação à Internet.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="232"/>
+        <location filename="../../clientsettingsdlg.cpp" line="231"/>
         <source>Audio quality combo box</source>
         <translation>Seletor de qualidade áudio</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="235"/>
+        <location filename="../../clientsettingsdlg.cpp" line="234"/>
         <source>New Client Level</source>
         <translation>Nível de Novo Cliente</translation>
     </message>
@@ -1235,12 +1235,12 @@
         <translation type="vanished">A configuração de nível de novo cliente define, em percentagem, o nível do fader de um novo cliente ligado. Por exemplo, se um cliente novo se ligar ao servidor atual, o seu canal terá o nível inicial do fader especificado, excepto quando um diferente nível do fader de uma ligação anterior desse mesmo cliente já tenha sido definido.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="244"/>
+        <location filename="../../clientsettingsdlg.cpp" line="243"/>
         <source>New client level edit box</source>
         <translation>Caixa de edição no nível de novo cliente</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="247"/>
+        <location filename="../../clientsettingsdlg.cpp" line="246"/>
         <source>Custom Central Server Address</source>
         <translation>Endereço do Servidor Central Personalizado</translation>
     </message>
@@ -1261,12 +1261,12 @@
         <translation type="vanished">Seletor de servidor central padrão</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="253"/>
+        <location filename="../../clientsettingsdlg.cpp" line="252"/>
         <source>Central server address line edit</source>
         <translation>Caixa de edição do endereço do servidor central</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="256"/>
+        <location filename="../../clientsettingsdlg.cpp" line="255"/>
         <source>Current Connection Status Parameter</source>
         <translation>Parâmetros do Estado da Ligação</translation>
     </message>
@@ -1283,35 +1283,40 @@
         <translation type="vanished">A taxa de transmissão depende do tamanho do pacote de áudio e da configuração de compactação de áudio. Verifique se a taxa de transmissão não é maior que a taxa disponível (verifique a taxa de upload da sua ligação à Internet usando, por exemplo, o speedtest.net).</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="277"/>
+        <location filename="../../clientsettingsdlg.cpp" line="276"/>
         <source>If this LED indicator turns red, you will not have much fun using the </source>
         <translation>Se este indicador LED ficar vermelho, não se irá divertir muito ao usar o </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="279"/>
+        <location filename="../../clientsettingsdlg.cpp" line="278"/>
         <source> software.</source>
         <translation>.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="284"/>
+        <location filename="../../clientsettingsdlg.cpp" line="283"/>
         <source>ASIO Setup</source>
         <translation>Configuração ASIO</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="202"/>
-        <location filename="../../clientsettingsdlg.cpp" line="331"/>
+        <location filename="../../clientsettingsdlg.cpp" line="330"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="332"/>
+        <location filename="../../clientsettingsdlg.cpp" line="212"/>
+        <source> mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="331"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Entrada Mono/Saída Estéreo</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="203"/>
         <location filename="../../clientsettingsdlg.cpp" line="212"/>
-        <location filename="../../clientsettingsdlg.cpp" line="333"/>
+        <location filename="../../clientsettingsdlg.cpp" line="332"/>
         <source>Stereo</source>
         <translation>Estéreo</translation>
     </message>
@@ -1401,57 +1406,52 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="212"/>
-        <source>mode will increase your stream&apos;s data rate. Make sure your upload rate does not exceed the available upload speed of your internet connection.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../clientsettingsdlg.cpp" line="216"/>
+        <location filename="../../clientsettingsdlg.cpp" line="215"/>
         <source>In stereo streaming mode, no audio channel selection for the reverb effect will be available on the main window since the effect is applied to both channels in this case.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="225"/>
+        <location filename="../../clientsettingsdlg.cpp" line="224"/>
         <source>The higher the audio quality, the higher your audio stream&apos;s data rate. Make sure your upload rate does not exceed the available bandwidth of your internet connection.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="236"/>
+        <location filename="../../clientsettingsdlg.cpp" line="235"/>
         <source>This setting defines the fader level of a newly connected client in percent. If a new client connects to the current server, they will get the specified initial fader level if no other fader level from a previous connection of that client was already stored.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="248"/>
+        <location filename="../../clientsettingsdlg.cpp" line="247"/>
         <source>Leave this blank unless you need to enter the address of a central server other than the default.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="257"/>
+        <location filename="../../clientsettingsdlg.cpp" line="256"/>
         <source>The Ping Time is the time required for the audio stream to travel from the client to the server and back again. This delay is introduced by the network and should be about 20-30 ms. If this delay is higher than about 50 ms, your distance to the server is too large or your internet connection is not sufficient.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="262"/>
+        <location filename="../../clientsettingsdlg.cpp" line="261"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="264"/>
+        <location filename="../../clientsettingsdlg.cpp" line="263"/>
         <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="338"/>
+        <location filename="../../clientsettingsdlg.cpp" line="337"/>
         <source>Low</source>
         <translation>Baixa</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="339"/>
+        <location filename="../../clientsettingsdlg.cpp" line="338"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="340"/>
+        <location filename="../../clientsettingsdlg.cpp" line="339"/>
         <source>High</source>
         <translation>Alta</translation>
     </message>
@@ -1498,38 +1498,38 @@
         <translation type="vanished">Servidor Padrão (America do Norte)</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="358"/>
+        <location filename="../../clientsettingsdlg.cpp" line="357"/>
         <source>preferred</source>
         <translation>preferido</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="445"/>
-        <location filename="../../clientsettingsdlg.cpp" line="449"/>
+        <location filename="../../clientsettingsdlg.cpp" line="444"/>
+        <location filename="../../clientsettingsdlg.cpp" line="448"/>
         <source>Size: </source>
         <translation>Tamanho: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="506"/>
+        <location filename="../../clientsettingsdlg.cpp" line="505"/>
         <source>Buffer Delay</source>
         <translation>Atraso do buffer</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="511"/>
+        <location filename="../../clientsettingsdlg.cpp" line="510"/>
         <source>Buffer Delay: </source>
         <translation>Atraso do buffer:</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="594"/>
+        <location filename="../../clientsettingsdlg.cpp" line="593"/>
         <source>The selected audio device could not be used because of the following error: </source>
         <translation>O dispositivo de áudio selecionado não pôde ser usado devido ao seguinte erro: </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="596"/>
+        <location filename="../../clientsettingsdlg.cpp" line="595"/>
         <source> The previous driver will be selected.</source>
         <translation> O driver anterior será selecionado.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="597"/>
+        <location filename="../../clientsettingsdlg.cpp" line="596"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -2098,7 +2098,7 @@
     </message>
     <message>
         <location filename="../../util.cpp" line="713"/>
-        <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you. If the name is left empty, the IP address is shown instead.</source>
+        <source>What you set here will appear at your fader on the mixer board when you are connected to a Jamulus server. This tag will also be shown at each client which is connected to the same server as you.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2311,6 +2311,11 @@
         <source>Bass Ukulele</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../settings.cpp" line="129"/>
+        <source>No Name</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CServerDlg</name>
@@ -2437,150 +2442,154 @@
         <translation>Nome do Servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="93"/>
         <source>The server name identifies your server in the connect dialog server list at the clients. If no name is given, the IP address is shown instead.</source>
-        <translation>O nome do servidor identifica o servidor na lista do diálogo de ligação exibido nos clientes. Se nenhum nome for fornecido, o endereço IP será mostrado.</translation>
+        <translation type="vanished">O nome do servidor identifica o servidor na lista do diálogo de ligação exibido nos clientes. Se nenhum nome for fornecido, o endereço IP será mostrado.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="100"/>
+        <location filename="../../serverdlg.cpp" line="93"/>
+        <source>The server name identifies your server in the connect dialog server list at the clients.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../serverdlg.cpp" line="99"/>
         <source>Server name line edit</source>
         <translation>Caixa de edição do nome do servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="103"/>
+        <location filename="../../serverdlg.cpp" line="102"/>
         <source>Location City</source>
         <translation>;Localização: Cidade</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="103"/>
+        <location filename="../../serverdlg.cpp" line="102"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>A cidade onde este servidor está localizado pode ser definida aqui. Se um nome de cidade for inserido, este será mostrado na lista do diálogo de ligação dos clientes.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="110"/>
+        <location filename="../../serverdlg.cpp" line="109"/>
         <source>City where the server is located line edit</source>
         <translation>Caixa de edição da cidade onde o servidor se encontra</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="113"/>
+        <location filename="../../serverdlg.cpp" line="112"/>
         <source>Location country</source>
         <translation>Localização: País</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="113"/>
+        <location filename="../../serverdlg.cpp" line="112"/>
         <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>O país em que este servidor está localizado pode ser definido aqui. Se um país for inserido, ele será mostrado na lista do diálogo de logação dos clientes.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="121"/>
+        <location filename="../../serverdlg.cpp" line="120"/>
         <source>Country where the server is located combo box</source>
         <translation>Seletor do país onde o servidor de encontra</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="125"/>
+        <location filename="../../serverdlg.cpp" line="124"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="126"/>
+        <location filename="../../serverdlg.cpp" line="125"/>
         <source>Enable Recorder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="127"/>
+        <location filename="../../serverdlg.cpp" line="126"/>
         <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="131"/>
+        <location filename="../../serverdlg.cpp" line="130"/>
         <source>Current session directory text box (read-only)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="132"/>
+        <location filename="../../serverdlg.cpp" line="131"/>
         <source>Current Session Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="133"/>
+        <location filename="../../serverdlg.cpp" line="132"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="137"/>
+        <location filename="../../serverdlg.cpp" line="136"/>
         <source>Recorder status label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="138"/>
+        <location filename="../../serverdlg.cpp" line="137"/>
         <source>Recorder Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="139"/>
+        <location filename="../../serverdlg.cpp" line="138"/>
         <source>Displays the current status of the recorder.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="142"/>
+        <location filename="../../serverdlg.cpp" line="141"/>
         <source>Request new recording button</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="143"/>
+        <location filename="../../serverdlg.cpp" line="142"/>
         <source>New Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="144"/>
+        <location filename="../../serverdlg.cpp" line="143"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="156"/>
-        <location filename="../../serverdlg.cpp" line="322"/>
+        <location filename="../../serverdlg.cpp" line="155"/>
+        <location filename="../../serverdlg.cpp" line="321"/>
         <source>E&amp;xit</source>
         <translation>&amp;Sair</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="162"/>
+        <location filename="../../serverdlg.cpp" line="161"/>
         <source>&amp;Hide </source>
         <translation>&amp;Esconder servidor </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="162"/>
-        <location filename="../../serverdlg.cpp" line="166"/>
-        <location filename="../../serverdlg.cpp" line="172"/>
+        <location filename="../../serverdlg.cpp" line="161"/>
+        <location filename="../../serverdlg.cpp" line="165"/>
+        <location filename="../../serverdlg.cpp" line="171"/>
         <source> server</source>
         <translation> </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="166"/>
+        <location filename="../../serverdlg.cpp" line="165"/>
         <source>&amp;Open </source>
         <translation>&amp;Abrir servidor </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="188"/>
+        <location filename="../../serverdlg.cpp" line="187"/>
         <source> server </source>
         <translation> </translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="600"/>
+        <location filename="../../serverdlg.cpp" line="599"/>
         <source>Predefined Address</source>
         <translation>Endereço Predefinido</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="712"/>
+        <location filename="../../serverdlg.cpp" line="711"/>
         <source>Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="717"/>
+        <location filename="../../serverdlg.cpp" line="716"/>
         <source>Not recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="723"/>
+        <location filename="../../serverdlg.cpp" line="722"/>
         <source>Not enabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2597,12 +2606,12 @@
         <translation type="vanished">Servidor Padrão (America do Norte)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="316"/>
+        <location filename="../../serverdlg.cpp" line="315"/>
         <source> Server</source>
         <translation> - Servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="320"/>
+        <location filename="../../serverdlg.cpp" line="319"/>
         <source>&amp;Window</source>
         <translation>&amp;Janela</translation>
     </message>

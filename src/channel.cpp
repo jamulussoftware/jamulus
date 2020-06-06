@@ -60,70 +60,56 @@ CChannel::CChannel ( const bool bNIsServer ) :
 qRegisterMetaType<CVector<uint8_t> > ( "CVector<uint8_t>" );
 qRegisterMetaType<CHostAddress> ( "CHostAddress" );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( MessReadyForSending ( CVector<uint8_t> ) ),
-        this, SLOT ( OnSendProtMessage ( CVector<uint8_t> ) ) );
+    QObject::connect ( &Protocol, &CProtocol::MessReadyForSending,
+        this, &CChannel::OnSendProtMessage );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( ChangeJittBufSize ( int ) ),
-        this, SLOT ( OnJittBufSizeChange ( int ) ) );
+    QObject::connect ( &Protocol, &CProtocol::ChangeJittBufSize,
+        this, &CChannel::OnJittBufSizeChange );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( ReqJittBufSize() ),
-        SIGNAL ( ReqJittBufSize() ) );
+    QObject::connect ( &Protocol, &CProtocol::ReqJittBufSize,
+        this, &CChannel::ReqJittBufSize );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( ReqChanInfo() ),
-        SIGNAL ( ReqChanInfo() ) );
+    QObject::connect ( &Protocol, &CProtocol::ReqChanInfo,
+        this, &CChannel::ReqChanInfo );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( ReqConnClientsList() ),
-        SIGNAL ( ReqConnClientsList() ) );
+    QObject::connect ( &Protocol, &CProtocol::ReqConnClientsList,
+        this, &CChannel::ReqConnClientsList );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ),
-        SIGNAL ( ConClientListMesReceived ( CVector<CChannelInfo> ) ) );
+    QObject::connect ( &Protocol, &CProtocol::ConClientListMesReceived,
+        this, &CChannel::ConClientListMesReceived );
 
-    QObject::connect ( &Protocol, SIGNAL ( ChangeChanGain ( int, double ) ),
-        this, SLOT ( OnChangeChanGain ( int, double ) ) );
+    QObject::connect ( &Protocol, &CProtocol::ChangeChanGain,
+        this, &CChannel::OnChangeChanGain );
 
-    QObject::connect ( &Protocol, SIGNAL ( ChangeChanPan ( int, double ) ),
-        this, SLOT ( OnChangeChanPan ( int, double ) ) );
+    QObject::connect ( &Protocol, &CProtocol::ChangeChanPan,
+        this, &CChannel::OnChangeChanPan );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( ClientIDReceived ( int ) ),
-        SIGNAL ( ClientIDReceived ( int ) ) );
+    QObject::connect ( &Protocol, &CProtocol::ClientIDReceived,
+        this, &CChannel::ClientIDReceived );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ),
-        SIGNAL ( MuteStateHasChangedReceived ( int, bool ) ) );
+    QObject::connect ( &Protocol, &CProtocol::MuteStateHasChangedReceived,
+        this, &CChannel::MuteStateHasChangedReceived );
 
-    QObject::connect ( &Protocol, SIGNAL ( ChangeChanInfo ( CChannelCoreInfo ) ),
-        this, SLOT ( OnChangeChanInfo ( CChannelCoreInfo ) ) );
+    QObject::connect ( &Protocol, &CProtocol::ChangeChanInfo,
+        this, &CChannel::OnChangeChanInfo );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( ChatTextReceived ( QString ) ),
-        SIGNAL ( ChatTextReceived ( QString ) ) );
+    QObject::connect ( &Protocol, &CProtocol::ChatTextReceived,
+        this, &CChannel::ChatTextReceived );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( NetTranspPropsReceived ( CNetworkTransportProps ) ),
-        this, SLOT ( OnNetTranspPropsReceived ( CNetworkTransportProps ) ) );
+    QObject::connect ( &Protocol, &CProtocol::NetTranspPropsReceived,
+        this, &CChannel::OnNetTranspPropsReceived );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( ReqNetTranspProps() ),
-        this, SLOT ( OnReqNetTranspProps() ) );
+    QObject::connect ( &Protocol, &CProtocol::ReqNetTranspProps,
+        this, &CChannel::OnReqNetTranspProps );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( LicenceRequired ( ELicenceType ) ),
-        SIGNAL ( LicenceRequired ( ELicenceType ) ) );
+    QObject::connect ( &Protocol, &CProtocol::LicenceRequired,
+        this, &CChannel::LicenceRequired );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ),
-        SIGNAL ( VersionAndOSReceived ( COSUtil::EOpSystemType, QString ) ) );
+    QObject::connect ( &Protocol, &CProtocol::VersionAndOSReceived,
+        this, &CChannel::VersionAndOSReceived );
 
-    QObject::connect ( &Protocol,
-        SIGNAL ( ReqChannelLevelList ( bool ) ),
-        this, SLOT ( OnReqChannelLevelList ( bool ) ) );
+    QObject::connect ( &Protocol, &CProtocol::ReqChannelLevelList,
+        this, &CChannel::OnReqChannelLevelList );
 }
 
 bool CChannel::ProtocolIsEnabled()

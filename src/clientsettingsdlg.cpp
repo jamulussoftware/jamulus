@@ -209,11 +209,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "microphone on the other. In that case the two input signals "
         "can be mixed to one mono channel but the server mix is heard in "
         "stereo." )  + "</li>"
-        "<li>" + tr ( "Enabling " ) + "<b>" + tr ( "Stereo" ) + "</b> " + tr ( "mode "
+        "<li>" + tr ( "Enabling " ) + "<b>" + tr ( "Stereo" ) + "</b> " + tr ( " mode "
         "will increase your stream's data rate. Make sure your upload rate does not "
         "exceed the available upload speed of your internet connection." )  + "</li>"
-        "</ul>"
-        + "<br>" + tr ( "In stereo streaming mode, no audio channel selection "
+        "</ul>" + "<br>" + tr ( "In stereo streaming mode, no audio channel selection "
         "for the reverb effect will be available on the main window "
         "since the effect is applied to both channels in this case." );
 

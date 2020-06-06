@@ -40,7 +40,7 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     plbrChannelLevel            = new CMultiColorLEDBar ( pLevelsBox );
     pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
     pPan                        = new QDial             ( pLevelsBox );
-    pPanLabel                   = new QLabel            ( tr ( "Pan" ) , pLevelsBox );
+    pPanLabel                   = new QLabel            ( tr ( "Pan" ), pLevelsBox );
     pInfoLabel                  = new QLabel            ( "", pLevelsBox );
 
     pMuteSoloBox                = new QWidget           ( pFrame );
@@ -174,18 +174,17 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( pFader, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnLevelValueChanged ( int ) ) );
+    QObject::connect ( pFader, &QSlider::valueChanged,
+        this, &CChannelFader::OnLevelValueChanged );
 
-    QObject::connect ( pPan, SIGNAL ( valueChanged ( int ) ),
-        this, SLOT ( OnPanValueChanged ( int ) ) );
+    QObject::connect ( pPan, &QDial::valueChanged,
+        this, &CChannelFader::OnPanValueChanged );
 
-    QObject::connect ( pcbMute, SIGNAL ( stateChanged ( int ) ),
-        this, SLOT ( OnMuteStateChanged ( int ) ) );
+    QObject::connect ( pcbMute, &QCheckBox::stateChanged,
+        this, &CChannelFader::OnMuteStateChanged );
 
-    QObject::connect ( pcbSolo,
-        SIGNAL ( stateChanged ( int ) ),
-        SIGNAL ( soloStateChanged ( int ) ) );
+    QObject::connect ( pcbSolo, &QCheckBox::stateChanged,
+        this, &CChannelFader::soloStateChanged );
 }
 
 void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
@@ -674,10 +673,10 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
                        this, pPanValueChanged );
 
     connectFaderSignalsToMixerBoardSlots<slotId - 1>();
-};
+}
 
 template<>
-inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots<0>() {};
+inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots<0>() {}
 
 void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 {

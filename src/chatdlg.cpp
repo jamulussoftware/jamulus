@@ -54,15 +54,14 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
 
 
     // Connections -------------------------------------------------------------
-    QObject::connect ( edtLocalInputText,
-        SIGNAL ( textChanged ( const QString& ) ),
-        this, SLOT ( OnLocalInputTextTextChanged ( const QString& ) ) );
+    QObject::connect ( edtLocalInputText, &QLineEdit::textChanged,
+        this, &CChatDlg::OnLocalInputTextTextChanged );
 
-    QObject::connect ( edtLocalInputText, SIGNAL ( returnPressed() ),
-        this, SLOT ( OnLocalInputTextReturnPressed() ) );
+    QObject::connect ( edtLocalInputText, &QLineEdit::returnPressed,
+        this, &CChatDlg::OnLocalInputTextReturnPressed );
 
-    QObject::connect ( butClear, SIGNAL ( pressed() ),
-        this, SLOT ( OnClearPressed() ) );
+    QObject::connect ( butClear, &QPushButton::pressed,
+        this, &CChatDlg::OnClearPressed );
 }
 
 void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )

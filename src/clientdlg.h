@@ -72,6 +72,7 @@ public:
     CClientDlg ( CClient*        pNCliP,
                  CSettings*      pNSetP,
                  const QString&  strConnOnStartupAddress,
+                 const int       iCtrlMIDIChannel,
                  const bool      bNewShowComplRegConnList,
                  const bool      bShowAnalyzerConsole,
                  QWidget*        parent = nullptr,
@@ -96,6 +97,7 @@ protected:
 
     bool               bConnected;
     bool               bConnectDlgWasShown;
+    bool               bMIDICtrlUsed;
     QTimer             TimerSigMet;
     QTimer             TimerBuffersLED;
     QTimer             TimerStatus;

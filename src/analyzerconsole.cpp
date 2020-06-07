@@ -71,8 +71,8 @@ CAnalyzerConsole::CAnalyzerConsole ( CClient* pNCliP,
 
     // Connections -------------------------------------------------------------
     // timers
-    QObject::connect ( &TimerErrRateUpdate, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimerErrRateUpdate() ) );
+    QObject::connect ( &TimerErrRateUpdate, &QTimer::timeout,
+        this, &CAnalyzerConsole::OnTimerErrRateUpdate );
 }
 
 void CAnalyzerConsole::showEvent ( QShowEvent* )

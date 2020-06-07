@@ -59,8 +59,8 @@ CHighPrecisionTimer::CHighPrecisionTimer ( const bool bNewUseDoubleSystemFrameSi
     veciTimeOutIntervals[2] = 0;
 
     // connect timer timeout signal
-    QObject::connect ( &Timer, SIGNAL ( timeout() ),
-        this, SLOT ( OnTimer() ) );
+    QObject::connect ( &Timer, &QTimer::timeout,
+        this, &CHighPrecisionTimer::OnTimer );
 }
 
 void CHighPrecisionTimer::Start()

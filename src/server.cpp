@@ -238,6 +238,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     iMaxNumChannels             ( iNewMaxNumChan ),
     Socket                      ( this, iPortNumber ),
     Logging                     ( iMaxDaysHistory ),
+    iFrameCount                 ( 0 ),
     JamRecorder                 ( strRecordingDirName ),
     bWriteStatusHTMLFile        ( false ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
@@ -768,6 +769,7 @@ JitterMeas.Measure();
     // some inits
     int  iNumClients               = 0; // init connected client counter
     bool bChannelIsNowDisconnected = false;
+    bool bUpdateChannelLevels      = false;
     bool bSendChannelLevels        = false;
 
     // Make put and get calls thread safe. Do not forget to unlock mutex
@@ -865,6 +867,12 @@ JitterMeas.Measure();
                 vecvecdPannings[i][j] = vecChannels[iCurChanID].GetPan ( vecChanIDsCurConChan[j] );
             }
 
+            // flag for updating channel levels (if at least one clients wants it)
+            if ( vecChannels[iCurChanID].ChannelLevelsRequired() )
+            {
+                bUpdateChannelLevels = true;
+            }
+
             // If the server frame size is smaller than the received OPUS frame size, we need a conversion
             // buffer which stores the large buffer.
             // Note that we have a shortcut here. If the conversion buffer is not needed, the boolean flag
@@ -941,31 +949,13 @@ JitterMeas.Measure();
     // one client is connected.
     if ( iNumClients > 0 )
     {
-        // low frequency updates
-        if ( iFrameCount > CHANNEL_LEVEL_UPDATE_INTERVAL )
+        // calculate levels for all connected clients
+        if ( bUpdateChannelLevels )
         {
-            iFrameCount = 0;
-
-            // Calculate channel levels if any client has requested them
-            for ( int i = 0; i < iNumClients; i++ )
-            {
-                if ( vecChannels[vecChanIDsCurConChan[i]].ChannelLevelsRequired() )
-                {
-                    bSendChannelLevels = true;
-
-                    CreateLevelsForAllConChannels ( iNumClients,
-                                                    vecNumAudioChannels,
-                                                    vecvecsData,
-                                                    vecChannelLevels );
-                    break;
-                }
-            }
-        }
-        iFrameCount++;
-        if ( bUseDoubleSystemFrameSize )
-        {
-            // additional increment needed for double frame size to get to the same time interval
-            iFrameCount++;
+            bSendChannelLevels = CreateLevelsForAllConChannels ( iNumClients,
+                                                                 vecNumAudioChannels,
+                                                                 vecvecsData,
+                                                                 vecChannelLevels );
         }
 
         for ( int i = 0; i < iNumClients; i++ )
@@ -1075,7 +1065,9 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
                 // send channel levels
                 if ( bSendChannelLevels && vecChannels[iCurChanID].ChannelLevelsRequired() )
                 {
-                    ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(), vecChannelLevels, iNumClients );
+                    ConnLessProtocol.CreateCLChannelLevelListMes ( vecChannels[iCurChanID].GetAddress(),
+                                                                   vecChannelLevels,
+                                                                   iNumClients );
                 }
             }
         }
@@ -1403,7 +1395,7 @@ bool CServer::PutAudioData ( const CVector<uint8_t>& vecbyRecBuf,
                              int&                    iCurChanID )
 {
     bool bNewConnection = false; // init return value
-    bool bChanOK        = true; // init with ok, might be overwritten
+    bool bChanOK        = true;  // init with ok, might be overwritten
 
     Mutex.lock();
     {
@@ -1558,58 +1550,77 @@ void CServer::customEvent ( QEvent* pEvent )
 }
 
 /// @brief Compute frame peak level for each client
-void CServer::CreateLevelsForAllConChannels ( const int                        iNumClients,
+bool CServer::CreateLevelsForAllConChannels ( const int                        iNumClients,
                                               const CVector<int>&              vecNumAudioChannels,
                                               const CVector<CVector<int16_t> > vecvecsData,
                                               CVector<uint16_t>&               vecLevelsOut )
 {
-    int i, j, k;
+    int  i, j, k;
+    bool bLevelsWereUpdated = false;
 
-    // init return vector with zeros since we mix all channels on that vector
-    vecLevelsOut.Reset ( 0 );
-
-    for ( j = 0; j < iNumClients; j++ )
+    // low frequency updates
+    if ( iFrameCount > CHANNEL_LEVEL_UPDATE_INTERVAL )
     {
-        // get a reference to the audio data
-        const CVector<int16_t>& vecsData = vecvecsData[j];
+        iFrameCount        = 0;
+        bLevelsWereUpdated = true;
 
-        double dCurLevel = 0.0;
+        // init return vector with zeros since we mix all channels on that vector
+        vecLevelsOut.Reset ( 0 );
 
-        if ( vecNumAudioChannels[j] == 1 )
+        for ( j = 0; j < iNumClients; j++ )
         {
-            // mono
-            for ( i = 0; i < iServerFrameSizeSamples; i += 3 )
+            // get a reference to the audio data
+            const CVector<int16_t>& vecsData = vecvecsData[j];
+
+            double dCurLevel = 0.0;
+
+            if ( vecNumAudioChannels[j] == 1 )
             {
-                dCurLevel = std::max ( dCurLevel, fabs ( static_cast<double> ( vecsData[i] ) ) );
+                // mono
+                for ( i = 0; i < iServerFrameSizeSamples; i += 3 )
+                {
+                    dCurLevel = std::max ( dCurLevel, fabs ( static_cast<double> ( vecsData[i] ) ) );
+                }
             }
-        }
-        else
-        {
-            // stereo: apply stereo-to-mono attenuation
-            for ( i = 0, k = 0; i < iServerFrameSizeSamples; i += 3, k += 6 )
+            else
             {
-                double sMix = ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
-                dCurLevel = std::max ( dCurLevel, fabs ( sMix ) );
+                // stereo: apply stereo-to-mono attenuation
+                for ( i = 0, k = 0; i < iServerFrameSizeSamples; i += 3, k += 6 )
+                {
+                    double sMix = ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
+                    dCurLevel   = std::max ( dCurLevel, fabs ( sMix ) );
+                }
             }
+
+            // smoothing
+            const int iChId = vecChanIDsCurConChan[j];
+            dCurLevel       = std::max ( dCurLevel, vecChannels[iChId].GetPrevLevel() * 0.5 );
+            vecChannels[iChId].SetPrevLevel ( dCurLevel );
+
+            // logarithmic measure
+            double dCurSigLevel = CStereoSignalLevelMeter::CalcLogResult ( dCurLevel );
+
+            // map to signal level meter
+            dCurSigLevel -= LOW_BOUND_SIG_METER;
+            dCurSigLevel *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+
+            if ( dCurSigLevel < 0 )
+            {
+                dCurSigLevel = 0;
+            }
+
+            vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevel ) );
         }
-
-        // smoothing
-        const int iChId = vecChanIDsCurConChan[j];
-        dCurLevel       = std::max ( dCurLevel, vecChannels[iChId].GetPrevLevel() * 0.5 );
-        vecChannels[iChId].SetPrevLevel ( dCurLevel );
-
-        // logarithmic measure
-        double dCurSigLevel = CStereoSignalLevelMeter::CalcLogResult ( dCurLevel );
-
-        // map to signal level meter
-        dCurSigLevel -= LOW_BOUND_SIG_METER;
-        dCurSigLevel *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
-
-        if ( dCurSigLevel < 0 )
-        {
-            dCurSigLevel = 0;
-        }
-
-        vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevel ) );
     }
+
+    // increment the frame counter needed for low frequency update trigger
+    iFrameCount++;
+
+    if ( bUseDoubleSystemFrameSize )
+    {
+        // additional increment needed for double frame size to get to the same time interval
+        iFrameCount++;
+    }
+
+    return bLevelsWereUpdated;
 }

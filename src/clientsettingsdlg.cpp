@@ -427,8 +427,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // misc
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
-        SIGNAL ( buttonClicked ( QAbstractButton* ) ), this,
-        SLOT ( OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* ) ) );
+        static_cast<void (QButtonGroup::*) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
+        this, &CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked );
 
 
     // Timers ------------------------------------------------------------------

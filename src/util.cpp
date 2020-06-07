@@ -731,17 +731,17 @@ CMusProfDlg::CMusProfDlg ( CClient* pNCliP,
     QObject::connect ( pedtAlias, &QLineEdit::textChanged,
         this, &CMusProfDlg::OnAliasTextChanged );
 
-    QObject::connect ( pcbxInstrument, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnInstrumentActivated ( int ) ) );
+    QObject::connect ( pcbxInstrument, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CMusProfDlg::OnInstrumentActivated );
 
-    QObject::connect ( pcbxCountry, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnCountryActivated ( int ) ) );
+    QObject::connect ( pcbxCountry, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CMusProfDlg::OnCountryActivated );
 
     QObject::connect ( pedtCity, &QLineEdit::textChanged,
         this, &CMusProfDlg::OnCityTextChanged );
 
-    QObject::connect ( pcbxSkill, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnSkillActivated ( int ) ) );
+    QObject::connect ( pcbxSkill, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CMusProfDlg::OnSkillActivated );
 
     QObject::connect ( butClose, &QPushButton::clicked,
         this, &CMusProfDlg::accept );

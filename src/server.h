@@ -298,7 +298,7 @@ protected:
     bool                       bUseDoubleSystemFrameSize;
     int                        iServerFrameSizeSamples;
 
-    void CreateLevelsForAllConChannels  ( const int                        iNumClients,
+    bool CreateLevelsForAllConChannels  ( const int                        iNumClients,
                                           const CVector<int>&              vecNumAudioChannels,
                                           const CVector<CVector<int16_t> > vecvecsData,
                                           CVector<uint16_t>&               vecLevelsOut );
@@ -347,7 +347,7 @@ protected:
     CServerLogging             Logging;
 
     // channel level update frame interval counter
-    uint16_t                   iFrameCount;
+    int                        iFrameCount;
 
     // recording thread
     recorder::CJamRecorder     JamRecorder;

@@ -357,11 +357,11 @@ lvwClients->setMinimumHeight ( 140 );
         this, &CServerDlg::OnLocationCityTextChanged );
 
     // combo boxes
-    QObject::connect ( cbxLocationCountry, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnLocationCountryActivated ( int ) ) );
+    QObject::connect ( cbxLocationCountry, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CServerDlg::OnLocationCountryActivated );
 
-    QObject::connect ( cbxCentServAddrType, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnCentServAddrTypeActivated ( int ) ) );
+    QObject::connect ( cbxCentServAddrType, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CServerDlg::OnCentServAddrTypeActivated );
 
     // push buttons
     QObject::connect ( pbtNewRecording, &QPushButton::released,

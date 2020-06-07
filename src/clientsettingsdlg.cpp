@@ -400,26 +400,26 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         this, &CClientSettingsDlg::OnNewClientLevelEditingFinished );
 
     // combo boxes
-    QObject::connect ( cbxSoundcard, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnSoundcardActivated ( int ) ) );
+    QObject::connect ( cbxSoundcard, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnSoundcardActivated );
 
-    QObject::connect ( cbxLInChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnLInChanActivated ( int ) ) );
+    QObject::connect ( cbxLInChan, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnLInChanActivated );
 
-    QObject::connect ( cbxRInChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnRInChanActivated ( int ) ) );
+    QObject::connect ( cbxRInChan, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnRInChanActivated );
 
-    QObject::connect ( cbxLOutChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnLOutChanActivated ( int ) ) );
+    QObject::connect ( cbxLOutChan, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnLOutChanActivated );
 
-    QObject::connect ( cbxROutChan, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnROutChanActivated ( int ) ) );
+    QObject::connect ( cbxROutChan, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnROutChanActivated );
 
-    QObject::connect ( cbxAudioChannels, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnAudioChannelsActivated ( int ) ) );
+    QObject::connect ( cbxAudioChannels, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnAudioChannelsActivated );
 
-    QObject::connect ( cbxAudioQuality, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnAudioQualityActivated ( int ) ) );
+    QObject::connect ( cbxAudioQuality, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnAudioQualityActivated );
 
     // buttons
     QObject::connect ( butDriverSetup, &QPushButton::clicked,
@@ -427,8 +427,8 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // misc
     QObject::connect ( &SndCrdBufferDelayButtonGroup,
-        SIGNAL ( buttonClicked ( QAbstractButton* ) ), this,
-        SLOT ( OnSndCrdBufferDelayButtonGroupClicked ( QAbstractButton* ) ) );
+        static_cast<void (QButtonGroup::*) ( QAbstractButton* )> ( &QButtonGroup::buttonClicked ),
+        this, &CClientSettingsDlg::OnSndCrdBufferDelayButtonGroupClicked );
 
 
     // Timers ------------------------------------------------------------------

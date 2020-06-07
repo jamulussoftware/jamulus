@@ -169,8 +169,8 @@ CConnectDlg::CConnectDlg ( CClient*        pNCliP,
     QObject::connect ( cbxServerAddr, &QComboBox::editTextChanged,
         this, &CConnectDlg::OnServerAddrEditTextChanged );
 
-    QObject::connect ( cbxCentServAddrType, SIGNAL ( activated ( int ) ),
-        this, SLOT ( OnCentServAddrTypeChanged ( int ) ) );
+    QObject::connect ( cbxCentServAddrType, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CConnectDlg::OnCentServAddrTypeChanged );
 
     // check boxes
     QObject::connect ( chbExpandAll, &QCheckBox::stateChanged,

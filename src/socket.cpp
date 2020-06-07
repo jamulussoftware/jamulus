@@ -117,8 +117,8 @@ void CSocket::Init ( const quint16 iPortNumber )
         QObject::connect ( this, &CSocket::ProtcolCLMessageReceived,
             pChannel, &CChannel::OnProtcolCLMessageReceived );
 
-        QObject::connect ( this, SIGNAL ( NewConnection() ),
-            pChannel, SLOT ( OnNewConnection() ) );
+        QObject::connect ( this, static_cast<void (CSocket::*)()> ( &CSocket::NewConnection ),
+            pChannel, &CChannel::OnNewConnection );
     }
     else
     {
@@ -130,8 +130,8 @@ void CSocket::Init ( const quint16 iPortNumber )
         QObject::connect ( this, &CSocket::ProtcolCLMessageReceived,
             pServer, &CServer::OnProtcolCLMessageReceived );
 
-        QObject::connect ( this, SIGNAL ( NewConnection ( int, CHostAddress ) ),
-            pServer, SLOT ( OnNewConnection ( int, CHostAddress ) ) );
+        QObject::connect ( this, static_cast<void (CSocket::*) ( int, CHostAddress )> ( &CSocket::NewConnection ),
+            pServer, &CServer::OnNewConnection );
 
         QObject::connect ( this, &CSocket::ServerFull,
             pServer, &CServer::OnServerFull );

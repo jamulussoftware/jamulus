@@ -212,7 +212,7 @@
         <translation>T E N T A T I V E   D E   C O N N E X I O N</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="832"/>
+        <location filename="../../audiomixerboard.cpp" line="802"/>
         <source>Personal Mix at the Server: </source>
         <translation>Mixage personnel du serveur : </translation>
     </message>
@@ -758,7 +758,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
-        <source>&amp;Sort Channels by Name...</source>
+        <source>&amp;Sort Channel Users by Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

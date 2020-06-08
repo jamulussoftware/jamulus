@@ -282,7 +282,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     // Edit menu  --------------------------------------------------------------
     pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
-    pEditMenu->addAction ( tr ( "&Sort Channels by Name..." ), this,
+    pEditMenu->addAction ( tr ( "&Sort Channel Users by Name" ), this,
         SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
 
 

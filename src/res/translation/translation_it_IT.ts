@@ -200,7 +200,7 @@
         <translation>I N   A T T E S A   D I   C O N N E S S I O N E</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="832"/>
+        <location filename="../../audiomixerboard.cpp" line="802"/>
         <source>Personal Mix at the Server: </source>
         <translation>Mixer personale sul Server: </translation>
     </message>
@@ -818,7 +818,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
-        <source>&amp;Sort Channels by Name...</source>
+        <source>&amp;Sort Channel Users by Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

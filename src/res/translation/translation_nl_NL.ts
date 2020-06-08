@@ -200,7 +200,7 @@
         <translation>A A N  H E T  V E R B I N D E N</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="832"/>
+        <location filename="../../audiomixerboard.cpp" line="802"/>
         <source>Personal Mix at the Server: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -810,7 +810,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
-        <source>&amp;Sort Channels by Name...</source>
+        <source>&amp;Sort Channel Users by Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

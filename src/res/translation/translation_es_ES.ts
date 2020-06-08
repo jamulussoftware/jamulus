@@ -204,7 +204,7 @@
         <translation>I N T E N T A N D O   C O N E C T A R</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="832"/>
+        <location filename="../../audiomixerboard.cpp" line="802"/>
         <source>Personal Mix at the Server: </source>
         <translation>Mezcla Personal en el Servidor: </translation>
     </message>
@@ -758,12 +758,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="283"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Editar</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
-        <source>&amp;Sort Channels by Name...</source>
-        <translation type="unfinished"></translation>
+        <source>&amp;Sort Channel Users by Name</source>
+        <translation>&amp;Ordenar Canales por Nombre</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="334"/>

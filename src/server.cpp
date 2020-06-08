@@ -758,6 +758,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 */
     // Get data from all connected clients -------------------------------------
     // some inits
+    int  iUnused;
     int  iNumClients               = 0; // init connected client counter
     bool bChannelIsNowDisconnected = false;
     bool bUpdateChannelLevels      = false;
@@ -911,11 +912,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                     // OPUS decode received data stream
                     if ( CurOpusDecoder != nullptr )
                     {
-                        Q_UNUSED ( opus_custom_decode ( CurOpusDecoder,
-                                                        pCurCodedData,
-                                                        iCeltNumCodedBytes,
-                                                        &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                                        iClientFrameSizeSamples ) );
+                        iUnused = opus_custom_decode ( CurOpusDecoder,
+                                                       pCurCodedData,
+                                                       iCeltNumCodedBytes,
+                                                       &vecvecsData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                       iClientFrameSizeSamples );
                     }
                 }
 
@@ -1044,11 +1045,11 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 opus_custom_encoder_ctl ( CurOpusEncoder,
                           OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
-                        Q_UNUSED ( opus_custom_encode ( CurOpusEncoder,
-                                                        &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
-                                                        iClientFrameSizeSamples,
-                                                        &vecbyCodedData[0],
-                                                        iCeltNumCodedBytes ) );
+                        iUnused = opus_custom_encode ( CurOpusEncoder,
+                                                       &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                       iClientFrameSizeSamples,
+                                                       &vecbyCodedData[0],
+                                                       iCeltNumCodedBytes );
                     }
 
                     // send separate mix to current clients
@@ -1076,6 +1077,8 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
         // does not consume any significant CPU when no client is connected.
         Stop();
     }
+
+    Q_UNUSED ( iUnused )
 }
 
 /// @brief Mix all audio data from all clients together.

@@ -212,7 +212,7 @@
         <translation>T E N T A N D O   L I G A R</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="832"/>
+        <location filename="../../audiomixerboard.cpp" line="802"/>
         <source>Personal Mix at the Server: </source>
         <translation>Mistura Pessoal no Servidor: </translation>
     </message>
@@ -754,7 +754,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
-        <source>&amp;Sort Channels by Name...</source>
+        <source>&amp;Sort Channel Users by Name</source>
         <translation>Ordenar os Canais por &amp;Nome...</translation>
     </message>
     <message>

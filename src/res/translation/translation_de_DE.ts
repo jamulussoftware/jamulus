@@ -1930,82 +1930,82 @@
     <message>
         <location filename="../../util.cpp" line="503"/>
         <source>You agree that all data, sounds, or other works transmitted to this server are owned and created by you or your licensors, and that you are making these data, sounds or other works available via the following Creative Commons License (for more information on this license, see </source>
-        <translation type="unfinished"></translation>
+        <translation>Sie stimmen zu, dass alle Daten, Klänge oder andere Arbeiten, die zum Server gesendet werden, Ihnen gehören oder von Ihnen selbst oder einem Lizenzgeber erstellt wurden und dass Sie diese Daten, Klänge oder andere Arbeiten unter die folgende Creative Commons Lizenz stellen (Für weitere Informationen über die Lizenz, siehe </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="511"/>
         <source>You are free to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie dürfen:</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="513"/>
         <source>Share</source>
-        <translation type="unfinished"></translation>
+        <translation>Teilen</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="514"/>
         <source>copy and redistribute the material in any medium or format</source>
-        <translation type="unfinished"></translation>
+        <translation>das Material in jedwedem Format oder Medium vervielfältigen und weiterverbreiten</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="515"/>
         <source>Adapt</source>
-        <translation type="unfinished"></translation>
+        <translation>Bearbeiten</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="516"/>
         <source>remix, transform, and build upon the material</source>
-        <translation type="unfinished"></translation>
+        <translation>das Material remixen, verändern und darauf aufbauen</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="517"/>
         <source>The licensor cannot revoke these freedoms as long as you follow the license terms.</source>
-        <translation type="unfinished"></translation>
+        <translation>Der Lizenzgeber kann diese Freiheiten nicht widerrufen solange Sie sich an die Lizenzbedingungen halten.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="519"/>
         <source>Under the following terms:</source>
-        <translation type="unfinished"></translation>
+        <translation>Unter folgenden Bedingungen:</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="521"/>
         <source>Attribution</source>
-        <translation type="unfinished"></translation>
+        <translation>Namensnennung</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="522"/>
         <source>You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie müssen angemessene Urheber- und Rechteangaben machen, einen Link zur Lizenz beifügen und angeben, ob Änderungen vorgenommen wurden. Diese Angaben dürfen in jeder angemessenen Art und Weise gemacht werden, allerdings nicht so, dass der Eindruck entsteht, der Lizenzgeber unterstütze gerade Sie oder Ihre Nutzung besonders.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="525"/>
         <source>NonCommercial</source>
-        <translation type="unfinished"></translation>
+        <translation>Nicht kommerziell</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="526"/>
         <source>You may not use the material for commercial purposes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie dürfen das Material nicht für kommerzielle Zwecke nutzen.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="527"/>
         <source>ShareAlike</source>
-        <translation type="unfinished"></translation>
+        <translation>Weitergabe unter gleichen Bedingungen</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="528"/>
         <source>If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn Sie das Material remixen, verändern oder anderweitig direkt darauf aufbauen, dürfen Sie Ihre Beiträge nur unter derselben Lizenz wie das Original verbreiten.</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="530"/>
         <source>No additional restrictions</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine weiteren Einschränkungen</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="531"/>
         <source>You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie dürfen keine zusätzlichen Klauseln oder technische Verfahren einsetzen, die anderen rechtlich irgendetwas untersagen, was die Lizenz erlaubt.</translation>
     </message>
 </context>
 <context>

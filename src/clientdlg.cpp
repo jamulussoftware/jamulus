@@ -279,10 +279,18 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
         SLOT ( close() ), QKeySequence ( Qt::CTRL + Qt::Key_Q ) );
 
 
+    // Edit menu  --------------------------------------------------------------
+    pEditMenu = new QMenu ( tr ( "&Edit" ), this );
+
+    pEditMenu->addAction ( tr ( "&Sort Channels by Name..." ), this,
+        SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
+
+
     // Main menu bar -----------------------------------------------------------
     pMenu = new QMenuBar ( this );
 
     pMenu->addMenu ( pViewMenu );
+    pMenu->addMenu ( pEditMenu );
     pMenu->addMenu ( new CHelpMenu ( true, this ) );
 
     // Now tell the layout about the menu

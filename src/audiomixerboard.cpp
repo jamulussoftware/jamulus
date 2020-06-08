@@ -28,8 +28,7 @@
 /******************************************************************************\
 * CChanneFader                                                                 *
 \******************************************************************************/
-CChannelFader::CChannelFader ( QWidget*     pNW,
-                               QHBoxLayout* pParentLayout )
+CChannelFader::CChannelFader ( QWidget* pNW )
 {
     // create new GUI control objects and store pointers to them (note that
     // QWidget takes the ownership of the pMainGrid so that this only has
@@ -119,9 +118,6 @@ CChannelFader::CChannelFader ( QWidget*     pNW,
     pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pMuteSoloBox, 0, Qt::AlignHCenter );
     pMainGrid->addWidget ( pLabelInstBox );
-
-    // add fader frame to audio mixer board layout
-    pParentLayout->addWidget( pFrame );
 
     // reset current fader
     Reset();
@@ -430,15 +426,21 @@ void CChannelFader::SetChannelLevel ( const uint16_t iLevel )
     plbrChannelLevel->setValue ( iLevel );
 }
 
-void CChannelFader::SetText ( const CChannelInfo& ChanInfo )
+void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 {
+    // init properties for the tool tip
+    int              iTTInstrument = CInstPictures::GetNotUsedInstrument();
+    QLocale::Country eTTCountry    = QLocale::AnyCountry;
+
+
+    // Label text --------------------------------------------------------------
     // store original received name
-    strReceivedName = ChanInfo.strName;
+    strReceivedName = cChanInfo.strName;
 
     // break text at predefined position
     const int iBreakPos = MAX_LEN_FADER_TAG / 2;
 
-    QString strModText = ChanInfo.strName;
+    QString strModText = cChanInfo.strName;
 
     if ( strModText.length() > iBreakPos )
     {
@@ -446,13 +448,6 @@ void CChannelFader::SetText ( const CChannelInfo& ChanInfo )
     }
 
     plblLabel->setText ( strModText );
-}
-
-void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
-{
-    // init properties for the tool tip
-    int              iTTInstrument = CInstPictures::GetNotUsedInstrument();
-    QLocale::Country eTTCountry    = QLocale::AnyCountry;
 
 
     // Instrument picture ------------------------------------------------------
@@ -630,8 +625,11 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        vecpChanFader[i] = new CChannelFader ( this, pMainLayout );
+        vecpChanFader[i] = new CChannelFader ( this );
         vecpChanFader[i]->Hide();
+
+        // add fader frame to audio mixer board layout
+        pMainLayout->addWidget ( vecpChanFader[i]->GetMainWidget() );
     }
 
     // insert horizontal spacer
@@ -759,8 +757,70 @@ void CAudioMixerBoard::HideAll()
     bNoFaderVisible = true;
     iMyChannelID    = INVALID_INDEX;
 
+    // use original order of channel (by server ID)
+    ChangeFaderOrder ( false );
+
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected
+}
+
+void CAudioMixerBoard::ChangeFaderOrder ( const bool bDoSort )
+{
+//// TEST for using a dialog for drag'n'drop channels to sort individually
+//QDialog* pDialog = new QDialog ( this ); // TODO put this in header as declaration
+//QVBoxLayout* pLayout = new QVBoxLayout ( pDialog );
+//QListWidget* pList = new QListWidget ( pDialog );
+//pList->setDragDropMode ( QAbstractItemView::InternalMove );
+//pList->setSortingEnabled ( true );
+//pLayout->addWidget ( pList );
+//// TODO use current sort order, not the sorting by ID; up/down buttons; cancel button; title; etc.
+//for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+//{
+//    QListWidgetItem* pNewItem = new QListWidgetItem ( vecpChanFader[i]->GetReceivedName() );
+//    pNewItem->setData ( Qt::UserRole, i );
+//    pList->addItem ( pNewItem );
+//    pNewItem->setHidden ( !vecpChanFader[i]->IsVisible() );
+//}
+//pDialog->exec();
+//QLayoutItem* child;
+//while ( ( child = pMainLayout->takeAt ( 0 ) ) != nullptr )
+//{
+//    pMainLayout->removeWidget ( child->widget() );
+//}
+//for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+//{
+//    // add fader frame to audio mixer board layout
+//    pMainLayout->addWidget ( vecpChanFader[pList->item ( i )->data ( Qt::UserRole ).toInt()]->GetMainWidget() );
+//}
+//// insert horizontal spacer
+//pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
+//delete pDialog;
+
+// TODO better solution to sort by names and get the indexes after sorting (here
+// we utilize the "data" property to store the original ID value)
+    QListWidget ListWidget;
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        // fill list widget (used for sorting the channels)
+        QListWidgetItem* pNewItem = new QListWidgetItem ( vecpChanFader[i]->GetReceivedName() );
+        pNewItem->setData ( Qt::UserRole, i );
+        ListWidget.addItem ( pNewItem );
+
+        // remove channels from layout (note that we keep the spacer on the right side)
+        pMainLayout->removeWidget ( vecpChanFader[i]->GetMainWidget() );
+    }
+    if ( bDoSort )
+    {
+        ListWidget.sortItems();
+    }
+
+    // add channels to the layout in the new order (since we insert on the left, we
+    // have to use a backwards counting loop)
+    for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
+    {
+        // add fader frame to the audio mixer board layout
+        pMainLayout->insertWidget ( 0, vecpChanFader[ListWidget.item ( i )->data ( Qt::UserRole ).toInt()]->GetMainWidget() );
+    }
 }
 
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )
@@ -841,10 +901,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                     }
                 }
 
-                // set the text in the fader
-                vecpChanFader[i]->SetText ( vecChanInfo[j] );
-
-                // update other channel infos
+                // set the channel infos
                 vecpChanFader[i]->SetChannelInfos ( vecChanInfo[j] );
 
                 bFaderIsUsed = true;

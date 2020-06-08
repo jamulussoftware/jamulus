@@ -35,6 +35,7 @@
 #include <QDial>
 #include <QSizePolicy>
 #include <QHostAddress>
+#include <QListWidget>
 #include "global.h"
 #include "util.h"
 #include "multicolorledbar.h"
@@ -46,9 +47,8 @@ class CChannelFader : public QObject
     Q_OBJECT
 
 public:
-    CChannelFader ( QWidget* pNW, QHBoxLayout* pParentLayout );
+    CChannelFader ( QWidget* pNW );
 
-    void SetText ( const CChannelInfo& ChanInfo );
     QString GetReceivedName() { return strReceivedName; }
     void SetChannelInfos ( const CChannelInfo& cChanInfo );
     void Show() { pFrame->show(); }
@@ -60,6 +60,7 @@ public:
     void SetDisplayChannelLevel ( const bool eNDCL );
     bool GetDisplayChannelLevel();
     void SetDisplayPans ( const bool eNDP );
+    QFrame* GetMainWidget() { return pFrame; }
 
     void UpdateSoloState ( const bool bNewOtherSoloState );
     void SetFaderLevel ( const int iLevel );
@@ -143,6 +144,7 @@ public:
     CAudioMixerBoard ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
 
     void HideAll();
+    void ChangeFaderOrder ( const bool bDoSort );
     void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );

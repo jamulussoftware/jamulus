@@ -758,12 +758,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="283"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Editar</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
         <source>&amp;Sort Channel Users by Name</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ordenar Canales por Nombre</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="334"/>

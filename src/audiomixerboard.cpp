@@ -766,36 +766,6 @@ void CAudioMixerBoard::HideAll()
 
 void CAudioMixerBoard::ChangeFaderOrder ( const bool bDoSort )
 {
-//// TEST for using a dialog for drag'n'drop channels to sort individually
-//QDialog* pDialog = new QDialog ( this ); // TODO put this in header as declaration
-//QVBoxLayout* pLayout = new QVBoxLayout ( pDialog );
-//QListWidget* pList = new QListWidget ( pDialog );
-//pList->setDragDropMode ( QAbstractItemView::InternalMove );
-//pList->setSortingEnabled ( true );
-//pLayout->addWidget ( pList );
-//// TODO use current sort order, not the sorting by ID; up/down buttons; cancel button; title; etc.
-//for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-//{
-//    QListWidgetItem* pNewItem = new QListWidgetItem ( vecpChanFader[i]->GetReceivedName() );
-//    pNewItem->setData ( Qt::UserRole, i );
-//    pList->addItem ( pNewItem );
-//    pNewItem->setHidden ( !vecpChanFader[i]->IsVisible() );
-//}
-//pDialog->exec();
-//QLayoutItem* child;
-//while ( ( child = pMainLayout->takeAt ( 0 ) ) != nullptr )
-//{
-//    pMainLayout->removeWidget ( child->widget() );
-//}
-//for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-//{
-//    // add fader frame to audio mixer board layout
-//    pMainLayout->addWidget ( vecpChanFader[pList->item ( i )->data ( Qt::UserRole ).toInt()]->GetMainWidget() );
-//}
-//// insert horizontal spacer
-//pMainLayout->addItem ( new QSpacerItem ( 0, 0, QSizePolicy::Expanding ) );
-//delete pDialog;
-
 // TODO better solution to sort by names and get the indexes after sorting (here
 // we utilize the "data" property to store the original ID value)
     QListWidget ListWidget;

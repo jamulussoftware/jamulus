@@ -107,6 +107,7 @@ protected:
     void               UpdateDisplay();
 
     QMenu*             pViewMenu;
+    QMenu*             pEditMenu;
     QMenuBar*          pMenu;
     QMenu*             pInstrPictPopupMenu;
     QMenu*             pCountryFlagPopupMenu;
@@ -151,6 +152,7 @@ public slots:
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
+    void OnSortChannelsByName() { MainMixerBoard->ChangeFaderOrder ( true ); }
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );

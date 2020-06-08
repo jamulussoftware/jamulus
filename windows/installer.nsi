@@ -31,11 +31,12 @@ Section
 
   ; check if software is currently running
   !addplugindir ..\windows
-  FindProcDLL::FindProc "${APP_EXE}"
-  IntCmp $R0 1 0 notRunning
-    MessageBox MB_OK|MB_ICONEXCLAMATION "${APP_NAME} is running. Please close it and run the setup again." /SD IDOK
-    Abort
-  notRunning:
+  nsProcess::_FindProcess "${APP_EXE}"
+  Pop $R0
+  ${If} $R0 = 0
+      MessageBox MB_OK|MB_ICONEXCLAMATION "${APP_NAME} is running. Please close it and run the setup again." /sd IDOK
+      Quit
+  ${EndIf}
 
   ; add reg keys so that software appears in Windows "Add/Remove Software"
   WriteRegStr HKLM "${UNINST_KEY}" "DisplayName" "${APP_NAME} (remove only)"

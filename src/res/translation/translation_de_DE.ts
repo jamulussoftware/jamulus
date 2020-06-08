@@ -200,7 +200,7 @@
         <translation>V E R B I N D U N G S A U F B A U</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="832"/>
+        <location filename="../../audiomixerboard.cpp" line="802"/>
         <source>Personal Mix at the Server: </source>
         <translation>Eigener Mix am Server: </translation>
     </message>
@@ -750,8 +750,8 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
-        <source>&amp;Sort Channels by Name...</source>
-        <translation>&amp;Sortiere Kanäle nach Namen...</translation>
+        <source>&amp;Sort Channel Users by Name</source>
+        <translation>&amp;Sortiere Kanäle nach Namen</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="334"/>

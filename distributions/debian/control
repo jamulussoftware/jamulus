@@ -7,7 +7,7 @@ Build-Depends:
  libjack-jackd2-dev,
  qtbase5-dev,
  qttools5-dev-tools,
-Standards-Version: 3.9.5
+Standards-Version: 3.9.7
 Homepage: http://llcon.sourceforge.net/
 Vcs-Git: git://github.com/corrados/jamulus.git
 Vcs-Browser: https://github.com/corrados/jamulus

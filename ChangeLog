@@ -4,7 +4,10 @@
 
 
 
-3.5.6git
+
+
+
+3.5.6 (2020-06-09)
 
 - support sorting faders by channel name (#178)
 
@@ -16,19 +19,14 @@
 
 - added ukulele/bass ukulele instrument icons created by dos1 (#319)
 
-- added check in acknowledge message, coded by atsampson (#302)
-
 - avoid showing IP address if no name in the musician profile is given (#316)
 
 - show channel numbers if --ctrlmidich is used (#241, #95)
 
+- added check in acknowledge message, coded by atsampson (#302)
+
 - bug fix: on MacOS declare an activity to ensure the process doesn't get throttled
   by OS level Nap, Sleep, and Thread Priority systems, coded by AronVietti (#23)
-
-
-
-
-
 
 
 3.5.5 (2020-05-26)

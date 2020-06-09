@@ -200,7 +200,7 @@
         <translation>V E R B I N D U N G S A U F B A U</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="802"/>
+        <location filename="../../audiomixerboard.cpp" line="798"/>
         <source>Personal Mix at the Server: </source>
         <translation>Eigener Mix am Server: </translation>
     </message>
@@ -1447,7 +1447,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>
-        <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net.</source>
+        <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
         <translation>Die Upload-Rate hängt von der Soundkartenpuffergröße und die Audiokomprimierung ab. Man muss sicher stellen, dass die Upload-Rate immer kleiner ist als die Rate, die die Internetverbindung zur Verfügung stellt (man kann die Upload-Rate des Internetproviders z.B. mit speedtest.net überprüfen).</translation>
     </message>
     <message>

@@ -212,7 +212,7 @@
         <translation>T E N T A N D O   L I G A R</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="802"/>
+        <location filename="../../audiomixerboard.cpp" line="798"/>
         <source>Personal Mix at the Server: </source>
         <translation>Mistura Pessoal no Servidor: </translation>
     </message>
@@ -1319,6 +1319,11 @@
         <translation> vai aumentar a quantidade de dados da transmissão. Verifique se a taxa de upload não ultrapassa a velocidade de upload disponível da sua ligação à Internet.</translation>
     </message>
     <message>
+        <location filename="../../clientsettingsdlg.cpp" line="263"/>
+        <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
+        <translation type="unfinished">A taxa de transmissão do áudio depende do tamanho do pacote de áudio e da configuração de compactação de áudio. Verifique se a taxa de transmissão não é maior que a taxa disponível (verifique a taxa de upload da sua ligação à Internet usando, por exemplo, o speedtest.net).</translation>
+    </message>
+    <message>
         <location filename="../../clientsettingsdlg.cpp" line="331"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Entrada Mono/Saída Estéreo</translation>
@@ -1444,11 +1449,6 @@
         <location filename="../../clientsettingsdlg.cpp" line="261"/>
         <source>Overall Delay is calculated from the current Ping Time and the delay introduced by the current buffer settings.</source>
         <translation>A latência geral é calculada a partir da latência da ligação atual e do atraso introduzido pelas configurações do buffer.</translation>
-    </message>
-    <message>
-        <location filename="../../clientsettingsdlg.cpp" line="263"/>
-        <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net.</source>
-        <translation>A taxa de transmissão do áudio depende do tamanho do pacote de áudio e da configuração de compactação de áudio. Verifique se a taxa de transmissão não é maior que a taxa disponível (verifique a taxa de upload da sua ligação à Internet usando, por exemplo, o speedtest.net).</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="337"/>

@@ -204,7 +204,7 @@
         <translation>I N T E N T A N D O   C O N E C T A R</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="802"/>
+        <location filename="../../audiomixerboard.cpp" line="798"/>
         <source>Personal Mix at the Server: </source>
         <translation>Mezcla Personal en el Servidor: </translation>
     </message>
@@ -1459,7 +1459,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="263"/>
-        <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net.</source>
+        <source>Audio Upstream Rate depends on the current audio packet size and compression setting. Make sure that the upstream rate is not higher than your available internet upload speed (check this with a service such as speedtest.net).</source>
         <translation>La Tasa de Subida de Audio depende del tamaño actual de paquetes de audio y la configuración de compresión de audio. Asegúrate de que la tasa de subida no es mayor que la velocidad de subida disponible (comprueba la tasa de subida de tu conexión a internet, por ej. con speedtest.net).</translation>
     </message>
     <message>

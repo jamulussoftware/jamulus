@@ -264,7 +264,7 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         "Audio Upstream Rate depends on the current audio packet size and "
         "compression setting. Make sure that the upstream rate is not "
         "higher than your available internet upload speed (check this with a "
-        "service such as speedtest.net." );
+        "service such as speedtest.net)." );
 
     lblPingTime->setWhatsThis          ( strConnStats );
     lblPingTimeValue->setWhatsThis     ( strConnStats );

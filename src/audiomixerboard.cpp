@@ -323,7 +323,7 @@ void CChannelFader::SetFaderLevel ( const int iLevel )
         // server about the change
         pFader->setValue       ( iLevel );
         SendFaderLevelToServer ( iLevel );
-	}
+    }
 }
 
 void CChannelFader::SetPanValue ( const int iPan )
@@ -662,13 +662,13 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
         &CAudioMixerBoardSlots<slotId>::OnChPanValueChanged;
 
     QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::soloStateChanged,
-                       this, &CAudioMixerBoard::UpdateSoloStates );
+        this, &CAudioMixerBoard::UpdateSoloStates );
 
     QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::gainValueChanged,
-                       this, pGainValueChanged );
+        this, pGainValueChanged );
 
     QObject::connect ( vecpChanFader[iCurChanID], &CChannelFader::panValueChanged,
-                       this, pPanValueChanged );
+        this, pPanValueChanged );
 
     connectFaderSignalsToMixerBoardSlots<slotId - 1>();
 }
@@ -766,30 +766,26 @@ void CAudioMixerBoard::HideAll()
 
 void CAudioMixerBoard::ChangeFaderOrder ( const bool bDoSort )
 {
-// TODO better solution to sort by names and get the indexes after sorting (here
-// we utilize the "data" property to store the original ID value)
-    QListWidget ListWidget;
+    // create a pair list of lower strings and fader ID for each channel
+    QList<QPair<QString, int> > PairList;
+
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        // fill list widget (used for sorting the channels)
-        QListWidgetItem* pNewItem = new QListWidgetItem ( vecpChanFader[i]->GetReceivedName() );
-        pNewItem->setData ( Qt::UserRole, i );
-        ListWidget.addItem ( pNewItem );
-
-        // remove channels from layout (note that we keep the spacer on the right side)
-        pMainLayout->removeWidget ( vecpChanFader[i]->GetMainWidget() );
+        PairList << QPair<QString, int> ( vecpChanFader[i]->GetReceivedName().toLower(), i );
     }
+
+    // if requested, sort the channels
     if ( bDoSort )
     {
-        ListWidget.sortItems();
+        qStableSort ( PairList.begin(), PairList.end() );
     }
 
     // add channels to the layout in the new order (since we insert on the left, we
-    // have to use a backwards counting loop)
+    // have to use a backwards counting loop), note that it is not required to remove
+    // the widget from the layout first but it is moved to the new position automatically
     for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
     {
-        // add fader frame to the audio mixer board layout
-        pMainLayout->insertWidget ( 0, vecpChanFader[ListWidget.item ( i )->data ( Qt::UserRole ).toInt()]->GetMainWidget() );
+        pMainLayout->insertWidget ( 0, vecpChanFader[PairList[i].second]->GetMainWidget() );
     }
 }
 

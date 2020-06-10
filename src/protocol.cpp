@@ -4,7 +4,25 @@
  * Author(s):
  *  Volker Fischer
  *
+ ******************************************************************************
+ *
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ *
+\******************************************************************************/
 
+/*
 Protocol message definition
 ---------------------------
 
@@ -145,7 +163,7 @@ MESSAGES (with connection)
         ...  4 bytes sam rate | 2 bytes audiocod type | ...
         ... ------------------+-----------------------+ ...
         ... -----------------+----------------------+
-        ...  2 bytes version | 4 bytes audiocod arg | 
+        ...  2 bytes version | 4 bytes audiocod arg |
         ... -----------------+----------------------+
 
     - "base netw size":  length of the base network packet (frame) in bytes
@@ -359,25 +377,7 @@ CONNECTION LESS MESSAGES
           five times for one registration request at 500ms intervals.
           Beyond this, it should "ping" every 15 minutes
           (standard re-registration timeout).
-
-
- ******************************************************************************
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later 
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT 
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- *
-\******************************************************************************/
+*/
 
 #include "protocol.h"
 

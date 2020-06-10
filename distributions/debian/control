@@ -4,15 +4,10 @@ Priority: optional
 Maintainer: "Marc Landolt jr" <debian@marclandolt.ch>
 Build-Depends:
  debhelper (>= 9),
- dpkg-dev,
- g++,
- libc6-dev | libc-dev,
  libjack-jackd2-dev,
- make,
- qt5-default,
- qtdeclarative5-dev,
+ qtbase5-dev,
  qttools5-dev-tools,
-Standards-Version: 3.9.5
+Standards-Version: 3.9.7
 Homepage: http://llcon.sourceforge.net/
 Vcs-Git: git://github.com/corrados/jamulus.git
 Vcs-Browser: https://github.com/corrados/jamulus

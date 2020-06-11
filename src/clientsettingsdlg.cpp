@@ -331,9 +331,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     // GUI design (skin) combo box
     cbxSkin->clear();
-    cbxSkin->addItem ( tr ( "Normal" ) );       // GD_STANDARD
-    cbxSkin->addItem ( tr ( "Fancy" ) );        // GD_ORIGINAL
-    cbxSkin->addItem ( tr ( "Slim Channel" ) ); // GD_SLIMFADER
+    cbxSkin->addItem ( tr ( "Normal" ) );  // GD_STANDARD
+    cbxSkin->addItem ( tr ( "Fancy" ) );   // GD_ORIGINAL
+    cbxSkin->addItem ( tr ( "Compact" ) ); // GD_SLIMFADER
     cbxSkin->setCurrentIndex ( static_cast<int> ( pClient->GetGUIDesign() ) );
 
     // custom central server address

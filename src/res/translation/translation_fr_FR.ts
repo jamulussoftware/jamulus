@@ -202,17 +202,17 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="687"/>
+        <location filename="../../audiomixerboard.cpp" line="697"/>
         <source>Server</source>
         <translation>Serveur</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="696"/>
+        <location filename="../../audiomixerboard.cpp" line="706"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>T E N T A T I V E   D E   C O N N E X I O N</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="798"/>
+        <location filename="../../audiomixerboard.cpp" line="808"/>
         <source>Personal Mix at the Server: </source>
         <translation>Mixage personnel du serveur : </translation>
     </message>
@@ -220,7 +220,7 @@
 <context>
     <name>CChannelFader</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="126"/>
+        <location filename="../../audiomixerboard.cpp" line="121"/>
         <source>Channel Level</source>
         <translation>Niveau de canal</translation>
     </message>
@@ -229,12 +229,12 @@
         <translation type="vanished">Affiche le niveau audio pré-fader de ce canal.  Tous les clients connectés au serveur se verront attribuer un niveau audio, la même valeur pour chaque client.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="129"/>
+        <location filename="../../audiomixerboard.cpp" line="124"/>
         <source>Input level of the current audio channel at the server</source>
         <translation>Niveau d&apos;entrée du canal audio actuel sur le serveur</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="132"/>
+        <location filename="../../audiomixerboard.cpp" line="127"/>
         <source>Mixer Fader</source>
         <translation>Charriot du mixeur</translation>
     </message>
@@ -243,17 +243,17 @@
         <translation type="vanished">Règle le niveau audio de ce canal. Tous les clients connectés au serveur se verront attribuer un chariot audio à chaque client, ce qui permettra d&apos;ajuster le mixage local.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="135"/>
+        <location filename="../../audiomixerboard.cpp" line="130"/>
         <source>Local mix level setting of the current audio channel at the server</source>
         <translation>Réglage du niveau de mixage local du canal audio actuel sur le serveur</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="138"/>
+        <location filename="../../audiomixerboard.cpp" line="133"/>
         <source>Status Indicator</source>
         <translation>Indicateur d&apos;état</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="138"/>
+        <location filename="../../audiomixerboard.cpp" line="133"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
         <translation>Affiche une indication sur l&apos;état du client qui est affecté à ce canal. Les indicateurs pris en charge sont : </translation>
     </message>
@@ -262,12 +262,12 @@
         <translation type="vanished">Haut-parleur avec barre d&apos;annulation : indique que l&apos;autre client vous a mis en sourdine.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="143"/>
+        <location filename="../../audiomixerboard.cpp" line="138"/>
         <source>Status indicator label</source>
         <translation>Étiquette d&apos;indicateur d&apos;état</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="145"/>
+        <location filename="../../audiomixerboard.cpp" line="140"/>
         <source>Panning</source>
         <translation>Panoramique</translation>
     </message>
@@ -276,17 +276,17 @@
         <translation type="vanished">Règle la position panoramique du canal de gauche à droite. Fonctionne uniquement en mode stéréo ou de préférence en mode entrée mono/sortie stéréo.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="148"/>
+        <location filename="../../audiomixerboard.cpp" line="143"/>
         <source>Local panning position of the current audio channel at the server</source>
         <translation>Position panoramique locale du canal audio actuel sur le serveur</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="150"/>
+        <location filename="../../audiomixerboard.cpp" line="145"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
         <translation>En cochant la case Muet, le canal audio peut être mis en sourdine.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="152"/>
+        <location filename="../../audiomixerboard.cpp" line="147"/>
         <source>Mute button</source>
         <translation>Bouton de sourdine</translation>
     </message>
@@ -295,12 +295,12 @@
         <translation type="vanished">En cochant la case Solo, le canal audio peut être réglé sur solo, ce qui signifie que tous les autres canaux, à l&apos;exception du canal actuel, sont mis en sourdine. Il est possible de mettre plus d&apos;un canal en solo.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="158"/>
+        <location filename="../../audiomixerboard.cpp" line="153"/>
         <source>Solo button</source>
         <translation>Bouton de solo</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="160"/>
+        <location filename="../../audiomixerboard.cpp" line="155"/>
         <source>Fader Tag</source>
         <translation>Étiquette de chariot</translation>
     </message>
@@ -309,124 +309,135 @@
         <translation type="vanished">L&apos;étiquette de chariot identifie le client connecté. Le nom du tag, la photo de votre instrument et un drapeau de votre pays peuvent être définis dans la fenêtre principale.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="127"/>
+        <location filename="../../audiomixerboard.cpp" line="122"/>
         <source>Displays the pre-fader audio level of this channel.  All clients connected to the server will be assigned an audio level, the same value for every client.</source>
         <translation>Affiche le niveau audio pré-fader de ce canal.  Tous les clients connectés au serveur se verront attribuer un niveau audio, la même valeur pour chaque client.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="132"/>
+        <location filename="../../audiomixerboard.cpp" line="127"/>
         <source>Adjusts the audio level of this channel. All clients connected to the server will be assigned an audio fader, displayed at each client, to adjust the local mix.</source>
         <translation>Ajuste le niveau audio de ce canal. Tous les clients connectés au serveur se verront attribuer un chariot audio, affiché sur chaque client, pour ajuster le mixage local.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="140"/>
+        <location filename="../../audiomixerboard.cpp" line="135"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
         <translation>Haut-parleur avec barré d&apos;annulation : indique qu&apos;un autre client vous a mis en sourdine.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="145"/>
+        <location filename="../../audiomixerboard.cpp" line="140"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
         <translation>Règle le panoramique de gauche à droite du canal. Fonctionne uniquement en mode stéréo ou de préférence en mode entrée mono/sortie stéréo.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="154"/>
+        <location filename="../../audiomixerboard.cpp" line="149"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
         <translation>Avec la case-à-cocher Solo, le canal audio peut être réglé sur solo, ce qui signifie que tous les autres canaux, sauf le canal en solo, sont coupés. Il est possible de mettre plus d&apos;un canal en solo.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="160"/>
+        <location filename="../../audiomixerboard.cpp" line="155"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your country can be set in the main window.</source>
         <translation>L&apos;étiquette de chariot identifie le client connecté. Le nom de l&apos;étiquette, une photo de votre instrument et le drapeau de votre pays peuvent être définis dans la fenêtre principale.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="165"/>
+        <location filename="../../audiomixerboard.cpp" line="160"/>
         <source>Mixer channel instrument picture</source>
         <translation>Image d&apos;instrument de canal de mixeur</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="167"/>
+        <location filename="../../audiomixerboard.cpp" line="162"/>
         <source>Mixer channel label (fader tag)</source>
         <translation>Label de canal de mixeur (étiquette de chariot)</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="169"/>
+        <location filename="../../audiomixerboard.cpp" line="164"/>
         <source>Mixer channel country flag</source>
         <translation>Drapeau de pays de canal de mixeur</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="205"/>
+        <location filename="../../audiomixerboard.cpp" line="202"/>
         <source>PAN</source>
         <translation>PAN</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="206"/>
+        <location filename="../../audiomixerboard.cpp" line="203"/>
         <source>MUTE</source>
         <translation>MUET</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="207"/>
+        <location filename="../../audiomixerboard.cpp" line="204"/>
         <source>SOLO</source>
         <translation>SOLO</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="516"/>
+        <location filename="../../audiomixerboard.cpp" line="215"/>
+        <source>M</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="216"/>
+        <source>S</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="526"/>
         <source>Alias/Name</source>
         <translation>Pseudo/nom</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="522"/>
+        <location filename="../../audiomixerboard.cpp" line="532"/>
         <source>Instrument</source>
         <translation>Instrument</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="530"/>
+        <location filename="../../audiomixerboard.cpp" line="540"/>
         <source>Location</source>
         <translation>Localisation</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="552"/>
-        <location filename="../../audiomixerboard.cpp" line="556"/>
-        <location filename="../../audiomixerboard.cpp" line="560"/>
+        <location filename="../../audiomixerboard.cpp" line="562"/>
+        <location filename="../../audiomixerboard.cpp" line="566"/>
+        <location filename="../../audiomixerboard.cpp" line="570"/>
         <source>Skill Level</source>
         <translation>Niveau de compétence</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="552"/>
+        <location filename="../../audiomixerboard.cpp" line="562"/>
         <source>Beginner</source>
         <translation>Débutant</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="556"/>
+        <location filename="../../audiomixerboard.cpp" line="566"/>
         <source>Intermediate</source>
         <translation>Intermédiaire</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="560"/>
+        <location filename="../../audiomixerboard.cpp" line="570"/>
         <source>Expert</source>
         <translation>Expert</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="571"/>
+        <location filename="../../audiomixerboard.cpp" line="581"/>
         <source>Musician Profile</source>
         <translation>Profil de musicien</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="46"/>
-        <location filename="../../audiomixerboard.cpp" line="150"/>
-        <location filename="../../audiomixerboard.cpp" line="215"/>
+        <location filename="../../audiomixerboard.cpp" line="145"/>
+        <location filename="../../audiomixerboard.cpp" line="228"/>
         <source>Mute</source>
         <translation>Muet</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="42"/>
         <location filename="../../audiomixerboard.cpp" line="214"/>
+        <location filename="../../audiomixerboard.cpp" line="227"/>
         <source>Pan</source>
         <translation>Pan</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="47"/>
-        <location filename="../../audiomixerboard.cpp" line="154"/>
-        <location filename="../../audiomixerboard.cpp" line="216"/>
+        <location filename="../../audiomixerboard.cpp" line="149"/>
+        <location filename="../../audiomixerboard.cpp" line="229"/>
         <source>Solo</source>
         <translation>Solo</translation>
     </message>
@@ -1182,19 +1193,16 @@
         <translation>Bouton-poussoir de paramétrage ASIO</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="186"/>
         <source>Fancy Skin</source>
-        <translation>Habillage fantaisie</translation>
+        <translation type="vanished">Habillage fantaisie</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="186"/>
         <source>If enabled, a fancy skin will be applied to the main window.</source>
-        <translation>Si activée, un habillage fantaisie sera appliqué à la fenêtre principale.</translation>
+        <translation type="vanished">Si activée, un habillage fantaisie sera appliqué à la fenêtre principale.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="189"/>
         <source>Fancy skin check box</source>
-        <translation>Case-à-cocher pour l&apos;habillage fantaisie</translation>
+        <translation type="vanished">Case-à-cocher pour l&apos;habillage fantaisie</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="192"/>
@@ -1321,7 +1329,7 @@
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="202"/>
-        <location filename="../../clientsettingsdlg.cpp" line="330"/>
+        <location filename="../../clientsettingsdlg.cpp" line="320"/>
         <source>Mono</source>
         <translation>Mono</translation>
     </message>
@@ -1331,14 +1339,14 @@
         <translation> mode augmentera le débit de données de votre flux. Assurez-vous que votre débit montant ne dépasse pas la vitesse de téléchargement disponible de votre connexion internet.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="331"/>
+        <location filename="../../clientsettingsdlg.cpp" line="321"/>
         <source>Mono-in/Stereo-out</source>
         <translation>Mono-entrée/stéréo-sortie</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="203"/>
         <location filename="../../clientsettingsdlg.cpp" line="212"/>
-        <location filename="../../clientsettingsdlg.cpp" line="332"/>
+        <location filename="../../clientsettingsdlg.cpp" line="322"/>
         <source>Stereo</source>
         <translation>Stéréo</translation>
     </message>
@@ -1396,6 +1404,21 @@
         <location filename="../../clientsettingsdlg.cpp" line="165"/>
         <source>If the buffer delay settings are disabled, it is prohibited by the audio driver to modify this setting from within the software. On Windows, press the ASIO Setup button to open the driver settings panel. On Linux, use the Jack configuration tool to change the buffer size.</source>
         <translation>Si les paramètres de délai de la mémoire tampon sont désactivés, il est interdit par le pilote audio de modifier ce paramètre depuis le logiciel. Sous Windows, appuyez sur le bouton Paramètres ASIO pour ouvrir le panneau des paramètres du pilote. Sous Linux, utilisez l&apos;outil de configuration Jack pour modifier la taille de la mémoire tampon.</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="186"/>
+        <source>Skin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="186"/>
+        <source>Select the skin to be used for the main window.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="189"/>
+        <source>Skin combo box</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="198"/>
@@ -1463,31 +1486,42 @@
         <translation>Le débit montant audio dépend de la taille actuelle des paquets audio et du réglage de la compression. Assurez-vous que le débit montant n&apos;est pas supérieur à votre vitesse de téléchargement Internet disponible (vérifiez cela avec un service tel que speedtest.net).</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="337"/>
+        <location filename="../../clientsettingsdlg.cpp" line="327"/>
         <source>Low</source>
         <translation>Basse</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="338"/>
+        <location filename="../../clientsettingsdlg.cpp" line="328"/>
+        <location filename="../../clientsettingsdlg.cpp" line="334"/>
         <source>Normal</source>
         <translation>Normale</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="339"/>
+        <location filename="../../clientsettingsdlg.cpp" line="329"/>
         <source>High</source>
         <translation>Haute</translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="335"/>
+        <source>Fancy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlg.cpp" line="336"/>
+        <source>Compact</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Manual</source>
         <translation type="vanished">Manuel</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="582"/>
+        <location filename="../../util.h" line="583"/>
         <source>Custom</source>
         <translation>Personnalisé</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="585"/>
+        <location filename="../../util.h" line="586"/>
         <source>All Genres</source>
         <translation>Tous les genres</translation>
     </message>
@@ -1496,22 +1530,22 @@
         <translation type="vanished">Genre rock/jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="594"/>
+        <location filename="../../util.h" line="595"/>
         <source>Genre Classical/Folk/Choir</source>
         <translation>Genre classique/folk/choeur</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="588"/>
+        <location filename="../../util.h" line="589"/>
         <source>Genre Rock</source>
         <translation>Genre Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="591"/>
+        <location filename="../../util.h" line="592"/>
         <source>Genre Jazz</source>
         <translation>Genre Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="597"/>
+        <location filename="../../util.h" line="598"/>
         <source>Default</source>
         <translation>Défaut</translation>
     </message>
@@ -1520,23 +1554,23 @@
         <translation type="vanished">Défaut (Amérique du Nord)</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="357"/>
+        <location filename="../../clientsettingsdlg.cpp" line="354"/>
         <source>preferred</source>
         <translation>préféré</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="444"/>
-        <location filename="../../clientsettingsdlg.cpp" line="448"/>
+        <location filename="../../clientsettingsdlg.cpp" line="441"/>
+        <location filename="../../clientsettingsdlg.cpp" line="445"/>
         <source>Size: </source>
         <translation>Taille : </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="505"/>
+        <location filename="../../clientsettingsdlg.cpp" line="502"/>
         <source>Buffer Delay</source>
         <translation>Délai de temporisation</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="510"/>
+        <location filename="../../clientsettingsdlg.cpp" line="507"/>
         <source>Buffer Delay: </source>
         <translation>Délai de temporisation : </translation>
     </message>
@@ -1545,17 +1579,17 @@
         <translation type="vanished">Adresse prédéfinie</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="593"/>
+        <location filename="../../clientsettingsdlg.cpp" line="590"/>
         <source>The selected audio device could not be used because of the following error: </source>
         <translation>Le périphérique audio sélectionné n&apos;a pas pu être utilisé en raison de l&apos;erreur suivante : </translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="595"/>
+        <location filename="../../clientsettingsdlg.cpp" line="592"/>
         <source> The previous driver will be selected.</source>
         <translation> Le pilote précédent sera sélectionné.</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlg.cpp" line="596"/>
+        <location filename="../../clientsettingsdlg.cpp" line="593"/>
         <source>Ok</source>
         <translation>Ok</translation>
     </message>
@@ -1676,22 +1710,26 @@
         <translation>Niveau de nouveau client</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="529"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="514"/>
+        <source>Skin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../clientsettingsdlgbase.ui" line="536"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="544"/>
         <source>Fancy Skin</source>
-        <translation>Habillage fantaisie</translation>
+        <translation type="vanished">Habillage fantaisie</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="551"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="552"/>
         <source>Display Channel Levels</source>
         <translation>Afficher les niveaux des canaux</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="560"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="559"/>
         <source>Custom Central Server Address:</source>
         <translation>Adresse personnalisée du serveur central : </translation>
     </message>
@@ -1700,24 +1738,24 @@
         <translation type="vanished">Adresse du serveur central :</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="592"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="591"/>
         <source>Audio Stream Rate</source>
         <translation>Débit du flux audio</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="605"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="635"/>
-        <location filename="../../clientsettingsdlgbase.ui" line="670"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="604"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="634"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="669"/>
         <source>val</source>
         <translation>val</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="616"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="615"/>
         <source>Ping Time</source>
         <translation>Temps de réponse</translation>
     </message>
     <message>
-        <location filename="../../clientsettingsdlgbase.ui" line="646"/>
+        <location filename="../../clientsettingsdlgbase.ui" line="645"/>
         <source>Overall Delay</source>
         <translation>Délai global</translation>
     </message>
@@ -2425,7 +2463,7 @@
     <message>
         <location filename="../../serverdlg.cpp" line="54"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
-        <translation>Si la case "Démarrage minimisé au démarrage du système d&apos;exploitation" est cochée, le serveur sera démarré au démarrage du système d&apos;exploitation et sera automatiquement réduit à une icône de la barre des tâches du système.</translation>
+        <translation>Si la case &quot;Démarrage minimisé au démarrage du système d&apos;exploitation&quot; est cochée, le serveur sera démarré au démarrage du système d&apos;exploitation et sera automatiquement réduit à une icône de la barre des tâches du système.</translation>
     </message>
     <message>
         <location filename="../../serverdlg.cpp" line="66"/>
@@ -2642,42 +2680,42 @@
         <translation>&amp;Fenêtre</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="619"/>
+        <location filename="../../util.h" line="620"/>
         <source>Unregistered</source>
         <translation>Non inscrit</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="622"/>
+        <location filename="../../util.h" line="623"/>
         <source>Bad address</source>
         <translation>Mauvaise adresse</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="625"/>
+        <location filename="../../util.h" line="626"/>
         <source>Registration requested</source>
         <translation>Inscription demandée</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="628"/>
+        <location filename="../../util.h" line="629"/>
         <source>Registration failed</source>
         <translation>Échec de l&apos;inscription</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="631"/>
+        <location filename="../../util.h" line="632"/>
         <source>Check server version</source>
         <translation>Vérifier la version du serveur</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="634"/>
+        <location filename="../../util.h" line="635"/>
         <source>Registered</source>
         <translation>Inscrit</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="637"/>
+        <location filename="../../util.h" line="638"/>
         <source>Central Server full</source>
         <translation>Serveur central rempli</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="640"/>
+        <location filename="../../util.h" line="641"/>
         <source>Unknown value </source>
         <translation>Valeur inconnue</translation>
     </message>

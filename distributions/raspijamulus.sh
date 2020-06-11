@@ -117,7 +117,7 @@ if [ "$NCORES" -gt "1" ]; then
 else
   echo -e "<client>\n  <name_base64>${NAME64}</name_base64>" > ${JAMULUSINIFILE}
   echo -e "  <autojitbuf>1</autojitbuf>\n  <jitbuf>3</jitbuf>\n  <jitbufserver>3</jitbufserver>" >> ${JAMULUSINIFILE}
-  echo -e "  <audiochannels>0</audiochannels>\n  <audioquality>0</audioquality>\n</client>" >> ${JAMULUSINIFILE}
+  echo -e "  <audiochannels>0</audiochannels>\n  <audioquality>1</audioquality>\n</client>" >> ${JAMULUSINIFILE}
 fi
 
 # taken from "Raspberry Pi and realtime, low-latency audio" homepage at wiki.linuxaudio.org

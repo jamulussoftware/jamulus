@@ -845,17 +845,17 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     // standard help menu consists of about and what's this help
     if ( bIsClient )
     {
-        addAction ( tr ( "Getting &Started..." ), this, SLOT ( OnHelpClientGetStarted() ) );
-        addAction ( tr ( "Software &Manual..." ), this, SLOT ( OnHelpSoftwareMan() ) );
+        addAction ( tr ( "Getting &Started..." ), this, &CHelpMenu::OnHelpClientGetStarted );
+        addAction ( tr ( "Software &Manual..." ), this, &CHelpMenu::OnHelpSoftwareMan );
     }
     else
     {
-        addAction ( tr ( "Getting &Started..." ), this, SLOT ( OnHelpServerGetStarted() ) );
+        addAction ( tr ( "Getting &Started..." ), this, &CHelpMenu::OnHelpServerGetStarted );
     }
     addSeparator();
-    addAction ( tr ( "What's &This" ), this, SLOT ( OnHelpWhatsThis() ), QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
+    addAction ( tr ( "What's &This" ), this, &CHelpMenu::OnHelpWhatsThis, QKeySequence ( Qt::SHIFT + Qt::Key_F1 ) );
     addSeparator();
-    addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
+    addAction ( tr ( "&About..." ), this, &CHelpMenu::OnHelpAbout );
 }
 
 

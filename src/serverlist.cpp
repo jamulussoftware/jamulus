@@ -164,7 +164,7 @@ CServerListManager::CServerListManager ( const quint16  iNPortNum,
     {
         // 1 minute = 60 * 1000 ms
         QTimer::singleShot ( SERVLIST_TIME_PERMSERV_MINUTES * 60000,
-            this, SLOT ( OnTimerIsPermanent() ) );
+            this, &CServerListManager::OnTimerIsPermanent );
     }
 
     // prepare the register server response timer (single shot timer)

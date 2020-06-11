@@ -255,22 +255,22 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     pViewMenu = new QMenu ( tr ( "&View" ), this );
 
     pViewMenu->addAction ( tr ( "&Connection Setup..." ), this,
-        SLOT ( OnOpenConnectionSetupDialog() ) );
+        &CClientDlg::OnOpenConnectionSetupDialog );
 
     pViewMenu->addAction ( tr ( "My &Profile..." ), this,
-        SLOT ( OnOpenMusicianProfileDialog() ) );
+        &CClientDlg::OnOpenMusicianProfileDialog );
 
     pViewMenu->addAction ( tr ( "C&hat..." ), this,
-        SLOT ( OnOpenChatDialog() ) );
+        &CClientDlg::OnOpenChatDialog );
 
     pViewMenu->addAction ( tr ( "&Settings..." ), this,
-        SLOT ( OnOpenGeneralSettings() ) );
+        &CClientDlg::OnOpenGeneralSettings );
 
     // optionally show analyzer console entry
     if ( bShowAnalyzerConsole )
     {
         pViewMenu->addAction ( tr ( "&Analyzer Console..." ), this,
-            SLOT ( OnOpenAnalyzerConsole() ) );
+            &CClientDlg::OnOpenAnalyzerConsole );
     }
 
     pViewMenu->addSeparator();
@@ -283,7 +283,7 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     pEditMenu = new QMenu ( tr ( "&Edit" ), this );
 
     pEditMenu->addAction ( tr ( "&Sort Channel Users by Name" ), this,
-        SLOT ( OnSortChannelsByName() ), QKeySequence ( Qt::CTRL + Qt::Key_N ) );
+        &CClientDlg::OnSortChannelsByName, QKeySequence ( Qt::CTRL + Qt::Key_N ) );
 
 
     // Main menu bar -----------------------------------------------------------

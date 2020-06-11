@@ -78,7 +78,7 @@ else
 fi
 
 # optional: FluidSynth synthesizer
-if [ "$1" == "opt" -o "$1" == "synth" ]; then
+if [ "$1" == "opt" ]; then
   if [ -d "fluidsynth" ]; then
     echo "The Fluidsynth directory is present, we assume it is compiled and ready to use. If not, delete the fluidsynth directory and call this script again."
   else
@@ -106,7 +106,8 @@ make -j${NCORES}
 ADEVICE=$(aplay -l|grep "USB Audio"|tail -1|cut -d' ' -f3)
 echo "Using USB audio device: ${ADEVICE}"
 
-# write Jamulus ini file for setting the client name and buffer settings
+# write Jamulus ini file for setting the client name and buffer settings, if there is
+# just one CPU core, we assume that we are running on a Raspberry Pi Zero
 JAMULUSINIFILE="Jamulus.ini"
 NAME64=$(echo "Raspi $(hostname)"|cut -c -16|tr -d $'\n'|base64)
 if [ "$NCORES" -gt "1" ]; then
@@ -157,22 +158,6 @@ if [ "$1" == "opt" ]; then
     hyperion-remote --color black
     hyperion-remote --clearall
   fi
-
-elif [ "$1" == "synth" ]; then
-  distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 256 -n 3 -r 48000 -s &
-  ./distributions/fluidsynth/build/src/fluidsynth -o synth.polyphony=25 -s -i -a jack -g 0.4 distributions/fluidsynth/build/claudio_piano.sf2 &>/dev/null &
-  sleep 3
-  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:left  system:playback_1
-  ./distributions/jack2/build/example-clients/jack_connect fluidsynth:right system:playback_2
-  aconnect 'USB-MIDI' 128
-
-  # watchdog: if MIDI device is turned off, shutdown fluidsynth
-  while [ ! -z "$(amidi -l|grep "USB-MIDI")" ]; do
-    sleep 1
-  done
-  killall fluidsynth
-  echo "Cleaned up jackd and fluidsynth"
-
 else
   distributions/jack2/build/jackd -R -T --silent -P70 -p16 -t2000 -d alsa -dhw:${ADEVICE} -p 128 -n 3 -r 48000 -s &
   ./Jamulus -n -i ${JAMULUSINIFILE} -c jamulus.fischvolk.de &

@@ -552,7 +552,7 @@ int main ( int argc, char** argv )
     QDir ApplDir ( QApplication::applicationDirPath() );
     pApp->addLibraryPath ( QString ( ApplDir.absolutePath() ) );
 #endif
-    
+
 #if defined ( __APPLE__ ) || defined ( __MACOSX )
     // On OSX we need to declare an activity to ensure the process doesn't get
     // throttled by OS level Nap, Sleep, and Thread Priority systems.

@@ -44,7 +44,7 @@ opened automatically for all clients.
 
 ![My profile dialog](profile.png)
 
-From the View menu, select My Pofile... to set your Alias/Name
+From the View menu, select My Profile... to set your Alias/Name
 which is displayed below your fader in the server audio mixer board. If an instrument and/or country is set,
 icons for these selections will also be shown below your fader. The skill setting changes the background colour of
 the fader tag and the city entry shows up in the tool tip of the fader tag (see screenshot below).

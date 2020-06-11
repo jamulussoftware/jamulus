@@ -153,17 +153,17 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
         pSystemTrayIconMenu = new QMenu ( this );
 
         pSystemTrayIconMenu->addAction ( tr ( "E&xit" ),
-            this, &CServerDlg::OnSysTrayMenuExit );
+            this, SLOT ( OnSysTrayMenuExit() ) );
 
         pSystemTrayIconMenu->addSeparator();
 
         pSystemTrayIconMenu->addAction (
             tr ( "&Hide " ) + APP_NAME + tr ( " server" ),
-            this, &CServerDlg::OnSysTrayMenuHide );
+            this, SLOT ( OnSysTrayMenuHide() ) );
 
         pSystemTrayIconMenu->setDefaultAction ( pSystemTrayIconMenu->addAction (
             tr ( "&Open " ) + APP_NAME + tr ( " server" ),
-            this, &CServerDlg::OnSysTrayMenuOpen ) );
+            this, SLOT ( OnSysTrayMenuOpen() ) ) );
 
         SystemTrayIcon.setContextMenu ( pSystemTrayIconMenu );
 

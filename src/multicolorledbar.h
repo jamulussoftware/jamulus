@@ -50,7 +50,8 @@ public:
     enum ELevelMeterType
     {
         MT_LED,
-        MT_BAR
+        MT_BAR,
+        MT_SLIM_BAR
     };
 
     CMultiColorLEDBar ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
@@ -77,7 +78,6 @@ protected:
         QLabel* getLabelPointer() { return pLEDLabel; }
 
     protected:
-        QPixmap     BitmCubeRoundDisabled;
         QPixmap     BitmCubeRoundBlack;
         QPixmap     BitmCubeRoundGreen;
         QPixmap     BitmCubeRoundYellow;

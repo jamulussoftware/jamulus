@@ -183,10 +183,10 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     butDriverSetup->setToolTip ( strSndCrdBufDelayTT );
 
     // fancy skin
-    chbGUIDesignFancy->setWhatsThis ( "<b>" + tr ( "Fancy Skin" ) + ":</b> " + tr (
-        "If enabled, a fancy skin will be applied to the main window." ) );
+    cbxSkin->setWhatsThis ( "<b>" + tr ( "Skin" ) + ":</b> " + tr (
+        "Select the skin to be used for the main window." ) );
 
-    chbGUIDesignFancy->setAccessibleName ( tr ( "Fancy skin check box" ) );
+    cbxSkin->setAccessibleName ( tr ( "Skin combo box" ) );
 
     // display channel levels
     chbDisplayChannelLevels->setWhatsThis ( "<b>" + tr ( "Display Channel Levels" ) + ":</b> " +
@@ -312,32 +312,29 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
     // init sound card channel selection frame
     UpdateSoundChannelSelectionFrame();
 
-    // fancy GUI design check box
-    if ( pClient->GetGUIDesign() == GD_STANDARD )
-    {
-        chbGUIDesignFancy->setCheckState ( Qt::Unchecked );
-    }
-    else
-    {
-        chbGUIDesignFancy->setCheckState ( Qt::Checked );
-    }
-
     // Display Channel Levels check box
     chbDisplayChannelLevels->setCheckState ( pClient->GetDisplayChannelLevels() ? Qt::Checked : Qt::Unchecked );
 
-    // "Audio Channels" combo box
+    // Audio Channels combo box
     cbxAudioChannels->clear();
     cbxAudioChannels->addItem ( tr ( "Mono" ) );               // CC_MONO
     cbxAudioChannels->addItem ( tr ( "Mono-in/Stereo-out" ) ); // CC_MONO_IN_STEREO_OUT
     cbxAudioChannels->addItem ( tr ( "Stereo" ) );             // CC_STEREO
     cbxAudioChannels->setCurrentIndex ( static_cast<int> ( pClient->GetAudioChannels() ) );
 
-    // "Audio Quality" combo box
+    // Audio Quality combo box
     cbxAudioQuality->clear();
     cbxAudioQuality->addItem ( tr ( "Low" ) );    // AQ_LOW
     cbxAudioQuality->addItem ( tr ( "Normal" ) ); // AQ_NORMAL
     cbxAudioQuality->addItem ( tr ( "High" ) );   // AQ_HIGH
     cbxAudioQuality->setCurrentIndex ( static_cast<int> ( pClient->GetAudioQuality() ) );
+
+    // GUI design (skin) combo box
+    cbxSkin->clear();
+    cbxSkin->addItem ( tr ( "Normal" ) );       // GD_STANDARD
+    cbxSkin->addItem ( tr ( "Fancy" ) );        // GD_ORIGINAL
+    cbxSkin->addItem ( tr ( "Slim Channel" ) ); // GD_SLIMFADER
+    cbxSkin->setCurrentIndex ( static_cast<int> ( pClient->GetGUIDesign() ) );
 
     // custom central server address
     edtCentralServerAddress->setText ( pClient->GetServerListCentralServerAddress() );
@@ -380,9 +377,6 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
         this, &CClientSettingsDlg::OnNetBufServerValueChanged );
 
     // check boxes
-    QObject::connect ( chbGUIDesignFancy, &QCheckBox::stateChanged,
-        this, &CClientSettingsDlg::OnGUIDesignFancyStateChanged );
-
     QObject::connect ( chbDisplayChannelLevels, &QCheckBox::stateChanged,
         this, &CClientSettingsDlg::OnDisplayChannelLevelsStateChanged );
 
@@ -420,6 +414,9 @@ CClientSettingsDlg::CClientSettingsDlg ( CClient* pNCliP, QWidget* parent,
 
     QObject::connect ( cbxAudioQuality, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
         this, &CClientSettingsDlg::OnAudioQualityActivated );
+
+    QObject::connect ( cbxSkin, static_cast<void (QComboBox::*) ( int )> ( &QComboBox::activated ),
+        this, &CClientSettingsDlg::OnGUIDesignActivated );
 
     // buttons
     QObject::connect ( butDriverSetup, &QPushButton::clicked,
@@ -639,6 +636,13 @@ void CClientSettingsDlg::OnAudioQualityActivated ( int iQualityIdx )
     UpdateDisplay(); // upload rate will be changed
 }
 
+void CClientSettingsDlg::OnGUIDesignActivated ( int iDesignIdx )
+{
+    pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iDesignIdx ) );
+    emit GUIDesignChanged();
+    UpdateDisplay();
+}
+
 void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 {
     pClient->SetDoAutoSockBufSize ( value == Qt::Checked );
@@ -648,20 +652,6 @@ void CClientSettingsDlg::OnAutoJitBufStateChanged ( int value )
 void CClientSettingsDlg::OnEnableOPUS64StateChanged ( int value )
 {
     pClient->SetEnableOPUS64 ( value == Qt::Checked );
-    UpdateDisplay();
-}
-
-void CClientSettingsDlg::OnGUIDesignFancyStateChanged ( int value )
-{
-    if ( value == Qt::Unchecked )
-    {
-        pClient->SetGUIDesign ( GD_STANDARD );
-    }
-    else
-    {
-        pClient->SetGUIDesign ( GD_ORIGINAL );
-    }
-    emit GUIDesignChanged();
     UpdateDisplay();
 }
 

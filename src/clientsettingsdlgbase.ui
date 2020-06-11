@@ -508,6 +508,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QLabel" name="lblSkin">
+            <property name="text">
+             <string>Skin</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -532,27 +539,19 @@
             </item>
            </layout>
           </item>
+          <item>
+           <widget class="QComboBox" name="cbxSkin"/>
+          </item>
          </layout>
         </item>
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout">
-        <item>
-         <widget class="QCheckBox" name="chbGUIDesignFancy">
-          <property name="text">
-           <string>Fancy Skin</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QCheckBox" name="chbDisplayChannelLevels">
-          <property name="text">
-           <string>Display Channel Levels</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QCheckBox" name="chbDisplayChannelLevels">
+        <property name="text">
+         <string>Display Channel Levels</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QLabel" name="lblCentralServerAddress">
@@ -726,7 +725,7 @@
   <tabstop>cbxAudioChannels</tabstop>
   <tabstop>cbxAudioQuality</tabstop>
   <tabstop>edtNewClientLevel</tabstop>
-  <tabstop>chbGUIDesignFancy</tabstop>
+  <tabstop>cbxSkin</tabstop>
   <tabstop>chbDisplayChannelLevels</tabstop>
   <tabstop>edtCentralServerAddress</tabstop>
  </tabstops>

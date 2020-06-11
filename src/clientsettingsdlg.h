@@ -87,7 +87,6 @@ protected:
     void OnNetBufValueChanged ( int value );
     void OnNetBufServerValueChanged ( int value );
     void OnAutoJitBufStateChanged ( int value );
-    void OnGUIDesignFancyStateChanged ( int value );
     void OnDisplayChannelLevelsStateChanged ( int value );
     void OnEnableOPUS64StateChanged ( int value );
     void OnCentralServerAddressEditingFinished();
@@ -100,6 +99,7 @@ protected:
     void OnROutChanActivated ( int iChanIdx );
     void OnAudioChannelsActivated ( int iChanIdx );
     void OnAudioQualityActivated ( int iQualityIdx );
+    void OnGUIDesignActivated ( int iDesignIdx );
     void OnDriverSetupClicked();
 
 signals:

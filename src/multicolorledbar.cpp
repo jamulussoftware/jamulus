@@ -62,11 +62,6 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
     pProgressBar->setOrientation ( Qt::Vertical );
     pProgressBar->setRange ( 0, 100 * NUM_STEPS_LED_BAR );
     pProgressBar->setFormat ( "" ); // suppress percent numbers
-    pProgressBar->setStyleSheet (
-        "QProgressBar        { margin:     1px;"
-        "                      padding:    1px; "
-        "                      width:      15px; }"
-        "QProgressBar::chunk { background: green; }" );
 
     // setup stacked layout for meter type switching mechanism
     pStackedLayout = new QStackedLayout ( this );
@@ -76,7 +71,7 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
     // according to QScrollArea description: "When using a scroll area to display the
     // contents of a custom widget, it is important to ensure that the size hint of
     // the child widget is set to a suitable value."
-    pProgressBar->setMinimumSize ( QSize ( 19, 1 ) ); // 15px + 2 * 1px + 2 * 1px = 19px
+    pProgressBar->setMinimumSize ( QSize ( 1, 1 ) );
     pLEDMeter->setMinimumSize    ( QSize ( 1, 1 ) );
 
     // update the meter type (using the default value of the meter type)
@@ -131,6 +126,27 @@ void CMultiColorLEDBar::SetLevelMeterType ( const ELevelMeterType eNType )
 
     case MT_BAR:
         pStackedLayout->setCurrentIndex ( 1 );
+        pProgressBar->setStyleSheet (
+            "QProgressBar        { margin:     1px;"
+            "                      padding:    1px; "
+            "                      width:      15px; }"
+            "QProgressBar::chunk { background: green; }" );
+        break;
+
+    case MT_SLIM_BAR:
+        // set all LEDs to disabled, otherwise we would not get our desired small width
+        for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
+        {
+            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_DISABLED );
+        }
+
+        pStackedLayout->setCurrentIndex ( 1 );
+        pProgressBar->setStyleSheet (
+            "QProgressBar        { border:     0px;"
+            "                      margin:     0px;"
+            "                      padding:    0px; "
+            "                      width:      4px; }"
+            "QProgressBar::chunk { background: green; }" );
         break;
     }
 }
@@ -177,6 +193,7 @@ void CMultiColorLEDBar::setValue ( const double dValue )
             break;
 
         case MT_BAR:
+        case MT_SLIM_BAR:
             pProgressBar->setValue ( 100 * dValue );
             break;
         }
@@ -184,17 +201,13 @@ void CMultiColorLEDBar::setValue ( const double dValue )
 }
 
 CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
-    BitmCubeRoundDisabled ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDDisabledSmall.png" ) ),
-    BitmCubeRoundBlack    ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDBlackSmall.png" ) ),
-    BitmCubeRoundGreen    ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreenSmall.png" ) ),
-    BitmCubeRoundYellow   ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDYellowSmall.png" ) ),
-    BitmCubeRoundRed      ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDRedSmall.png" ) )
+    BitmCubeRoundBlack  ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDBlackSmall.png" ) ),
+    BitmCubeRoundGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreenSmall.png" ) ),
+    BitmCubeRoundYellow ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDYellowSmall.png" ) ),
+    BitmCubeRoundRed    ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDRedSmall.png" ) )
 {
     // create LED label
     pLEDLabel = new QLabel ( "", parent );
-
-    // bitmap defines minimum size of the label
-    pLEDLabel->setMinimumSize ( BitmCubeRoundBlack.width(), BitmCubeRoundBlack.height() );
 
     // set initial bitmap
     pLEDLabel->setPixmap ( BitmCubeRoundBlack );
@@ -209,7 +222,7 @@ void CMultiColorLEDBar::cLED::setColor ( const ELightColor eNewColor )
         switch ( eNewColor )
         {
         case RL_DISABLED:
-            pLEDLabel->setPixmap ( BitmCubeRoundDisabled );
+            pLEDLabel->setPixmap ( QPixmap() );
             break;
 
         case RL_BLACK:

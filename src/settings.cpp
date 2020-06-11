@@ -269,7 +269,7 @@ void CSettings::Load()
 
         // GUI design
         if ( GetNumericIniSet ( IniXMLDocument, "client", "guidesign",
-             0, 1 /* GD_ORIGINAL */, iValue ) )
+             0, 2 /* GD_SLIMFADER */, iValue ) )
         {
             pClient->SetGUIDesign ( static_cast<EGUIDesign> ( iValue ) );
         }

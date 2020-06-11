@@ -54,8 +54,8 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     QVBoxLayout* pMainGrid      = new QVBoxLayout       ( pFrame );
     QHBoxLayout* pLevelsGrid    = new QHBoxLayout       ( pLevelsBox );
     QVBoxLayout* pMuteSoloGrid  = new QVBoxLayout       ( pMuteSoloBox );
-    QHBoxLayout* pLabelGrid     = new QHBoxLayout       ( pLabelInstBox );
-    QVBoxLayout* pLabelPictGrid = new QVBoxLayout       ( );
+    pLabelGrid                  = new QHBoxLayout       ( pLabelInstBox );
+    pLabelPictGrid              = new QVBoxLayout       ( );
     QVBoxLayout* pPanGrid       = new QVBoxLayout       ( );
     QHBoxLayout* pPanInfoGrid   = new QHBoxLayout       ( );
 
@@ -64,7 +64,6 @@ CChannelFader::CChannelFader ( QWidget* pNW )
 
     // setup slider
     pFader->setPageStep      ( 1 );
-    pFader->setTickPosition  ( QSlider::TicksBothSides );
     pFader->setRange         ( 0, AUD_MIX_FADER_MAX );
     pFader->setTickInterval  ( AUD_MIX_FADER_MAX / 9 );
     pFader->setMinimumHeight ( 85 ); // if this value is too small, the fader might not be movable with the mouse for fancy skin (#292)
@@ -72,7 +71,6 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     // setup panning control
     pPan->setRange          ( 0, AUD_MIX_PAN_MAX );
     pPan->setValue          ( AUD_MIX_PAN_MAX / 2 );
-    pPan->setFixedSize      ( 50, 50 );
     pPan->setNotchesVisible ( true );
     pPanInfoGrid->addWidget ( pPanLabel, 0, Qt::AlignLeft );
     pPanInfoGrid->addWidget ( pInfoLabel );
@@ -80,12 +78,9 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     pPanGrid->addWidget     ( pPan, 0, Qt::AlignHCenter );
 
     // setup fader tag label (black bold text which is centered)
-    plblLabel->setTextFormat    ( Qt::PlainText );
-    plblLabel->setAlignment     ( Qt::AlignHCenter | Qt::AlignVCenter );
-    plblLabel->setMinimumHeight ( 40 ); // maximum hight of the instrument+flag pictures
-    plblLabel->setStyleSheet (
-        "QLabel { color: black;"
-        "         font:  bold; }" );
+    plblLabel->setTextFormat ( Qt::PlainText );
+    plblLabel->setAlignment  ( Qt::AlignHCenter | Qt::AlignVCenter );
+    plblLabel->setStyleSheet ( "QLabel { color: black; font: bold; }" );
 
     // set margins of the layouts to zero to get maximum space for the controls
     pMainGrid->setContentsMargins ( 0, 0, 0, 0 );
@@ -106,7 +101,7 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     pLabelPictGrid->addWidget ( plblInstrument,  0, Qt::AlignHCenter );
 
     pLabelGrid->addLayout ( pLabelPictGrid );
-    pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter );
+    pLabelGrid->addWidget ( plblLabel, 0, Qt::AlignVCenter ); // note: just initial add, may be changed later
 
     pLevelsGrid->addWidget ( plbrChannelLevel, 0, Qt::AlignRight );
     pLevelsGrid->addWidget ( pFader,           0, Qt::AlignLeft );
@@ -188,7 +183,6 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     switch ( eNewDesign )
     {
     case GD_ORIGINAL:
-        // fader
         pFader->setStyleSheet (
             "QSlider { width:         45px;"
             "          border-image:  url(:/png/fader/res/faderbackground.png) repeat;"
@@ -202,15 +196,34 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
             "                  padding-bottom: -15px; }"
             "QSlider::handle { image: url(:/png/fader/res/faderhandle.png); }" );
 
+        pLabelGrid->addWidget               ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
+        pLabelInstBox->setMinimumHeight     ( 52 ); // maximum hight of the instrument+flag pictures
+        pPan->setFixedSize                  ( 50, 50 );
         pPanLabel->setText                  ( tr ( "PAN" ) );
         pcbMute->setText                    ( tr ( "MUTE" ) );
         pcbSolo->setText                    ( tr ( "SOLO" ) );
         plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
         break;
 
+    case GD_SLIMFADER:
+        pLabelPictGrid->addWidget           ( plblLabel,  0, Qt::AlignHCenter ); // label below icons
+        pLabelInstBox->setMinimumHeight     ( 80 ); // maximum hight of the instrument+flag+label
+        pPan->setFixedSize                  ( 28, 28 );
+        pFader->setTickPosition             ( QSlider::NoTicks );
+        pFader->setStyleSheet               ( "" );
+        pPanLabel->setText                  ( tr ( "Pan" ) );
+        pcbMute->setText                    ( tr ( "M" ) );
+        pcbSolo->setText                    ( tr ( "S" ) );
+        plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_SLIM_BAR );
+        break;
+
     default:
         // reset style sheet and set original paramters
+        pFader->setTickPosition             ( QSlider::TicksBothSides );
         pFader->setStyleSheet               ( "" );
+        pLabelGrid->addWidget               ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
+        pLabelInstBox->setMinimumHeight     ( 52 ); // maximum hight of the instrument+flag pictures
+        pPan->setFixedSize                  ( 50, 50 );
         pPanLabel->setText                  ( tr ( "Pan" ) );
         pcbMute->setText                    ( tr ( "Mute" ) );
         pcbSolo->setText                    ( tr ( "Solo" ) );
@@ -241,9 +254,9 @@ void CChannelFader::SetupFaderTag ( const ESkillLevel eSkillLevel )
     // setup group box for label/instrument picture: set a thick black border
     // with nice round edges
     QString strStile =
-        "QGroupBox { border:           2px solid black;"
-        "            border-radius:    4px;"
-        "            padding:          3px;";
+        "QGroupBox { border:        2px solid black;"
+        "            border-radius: 4px;"
+        "            padding:       3px;";
 
     // the background color depends on the skill level
     switch ( eSkillLevel )
@@ -356,13 +369,10 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
     {
         // show orange utf8 SPEAKER WITH CANCELLATION STROKE (U+1F507)
         pInfoLabel->setText ( "<font color=""orange"">&#128263;</font>" );
-//QPixmap CancelledSpeakerPixmap ( QString::fromUtf8 ( ":/png/main/res/speakerwithcancellationstroke.png" ) );
-//pInfoLabel->setPixmap ( CancelledSpeakerPixmap.scaled ( 15, 15, Qt::KeepAspectRatio ) );
     }
     else
     {
         pInfoLabel->setText ( "" );
-//pInfoLabel->setPixmap ( QPixmap() );
     }
 }
 

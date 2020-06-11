@@ -215,9 +215,7 @@ public slots:
     void OnConnectDlgAccepted();
     void OnDisconnected() { Disconnect(); }
     void OnCentralServerAddressTypeChanged();
-
-    void OnGUIDesignChanged()
-        { SetGUIDesign ( pClient->GetGUIDesign() ); }
+    void OnGUIDesignChanged() { SetGUIDesign ( pClient->GetGUIDesign() ); }
 
     void OnDisplayChannelLevelsChanged()
         { MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() ); }

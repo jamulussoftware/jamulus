@@ -90,6 +90,8 @@ protected:
     QDial*             pPan;
     QLabel*            pPanLabel;
     QLabel*            pInfoLabel;
+    QHBoxLayout*       pLabelGrid;
+    QVBoxLayout*       pLabelPictGrid;
 
     QCheckBox*         pcbMute;
     QCheckBox*         pcbSolo;

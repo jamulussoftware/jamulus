@@ -549,7 +549,8 @@ enum EGUIDesign
 {
     // used for settings -> enum values should be fixed
     GD_STANDARD = 0,
-    GD_ORIGINAL = 1
+    GD_ORIGINAL = 1,
+    GD_SLIMFADER = 2
 };
 
 

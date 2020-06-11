@@ -665,6 +665,12 @@ void CClient::OnHandledSignal ( int sigNum )
     {
     case SIGINT:
     case SIGTERM:
+        // if connected, terminate connection (needed for headless mode)
+        if ( IsRunning() )
+        {
+            Stop();
+        }
+
         // this should trigger OnAboutToQuit
         QCoreApplication::instance()->exit();
         break;

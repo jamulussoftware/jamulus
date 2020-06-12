@@ -694,8 +694,8 @@ public:
     }
 
 protected:
-    double UpdateCurLevel ( double        dCurLevel,
-                            const short&  sMax );
+    double UpdateCurLevel ( double       dCurLevel,
+                            const short& sMax );
 
     double dCurLevelL;
     double dCurLevelR;
@@ -1098,11 +1098,15 @@ class CAudioReverb
 public:
     CAudioReverb() {}
     
-    void Init ( const int iSampleRate, const double rT60 = 1.1 );
+    void Init ( const EAudChanConf eNAudioChannelConf,
+                const int          iNStereoBlockSizeSam,
+                const int          iSampleRate,
+                const double       rT60 = 1.1 );
+
     void Clear();
-    void ProcessSample ( int16_t&     iInputOutputLeft,
-                         int16_t&     iInputOutputRight,
-                         const double dAttenuation );
+    void Process ( CVector<int16_t>& vecsStereoInOut,
+                   const bool        bReverbOnLeftChan,
+                   const double      dAttenuation );
 
 protected:
     void setT60 ( const double rT60, const int iSampleRate );
@@ -1122,6 +1126,8 @@ protected:
         double dLastSample;
     };
 
+    EAudChanConf  eAudioChannelConf;
+    int           iStereoBlockSizeSam;
     CFIFO<double> allpassDelays[3];
     CFIFO<double> combDelays[4];
     COnePole      combFilters[4];

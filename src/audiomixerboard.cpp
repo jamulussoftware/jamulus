@@ -447,6 +447,9 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     // store original received name
     strReceivedName = cChanInfo.strName;
 
+    // store received instrument for sorting
+    iReceivedInstrument = cChanInfo.iInstrument;
+
     // break text at predefined position
     const int iBreakPos = MAX_LEN_FADER_TAG / 2;
 
@@ -769,6 +772,7 @@ void CAudioMixerBoard::HideAll()
 
     // use original order of channel (by server ID)
     ChangeFaderOrder ( false );
+    ChangeFaderOrderByInstrument ( false );
 
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected
@@ -794,6 +798,29 @@ void CAudioMixerBoard::ChangeFaderOrder ( const bool bDoSort )
     // have to use a backwards counting loop), note that it is not required to remove
     // the widget from the layout first but it is moved to the new position automatically
     for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
+    {
+        pMainLayout->insertWidget ( 0, vecpChanFader[PairList[i].second]->GetMainWidget() );
+    }
+}
+
+void CAudioMixerBoard::ChangeFaderOrderByInstrument ( const bool bDoSort )
+{
+    // create a pair list of instruments ID and fader ID for each channel
+    QList<QPair<int, int> > PairList;
+
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        PairList << QPair<int, int> ( vecpChanFader[i]->GetReceivedInstrument(), i );
+    }
+
+    // if requested, sort the channels
+    if ( bDoSort )
+    {
+        qStableSort ( PairList.begin(), PairList.end() );
+    }
+
+    // add channels to the layout in the new order
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
         pMainLayout->insertWidget ( 0, vecpChanFader[PairList[i].second]->GetMainWidget() );
     }

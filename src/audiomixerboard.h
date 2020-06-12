@@ -50,6 +50,7 @@ public:
     CChannelFader ( QWidget* pNW );
 
     QString GetReceivedName() { return strReceivedName; }
+    int GetReceivedInstrument() { return iReceivedInstrument; }
     void SetChannelInfos ( const CChannelInfo& cChanInfo );
     void Show() { pFrame->show(); }
     void Hide() { pFrame->hide(); }
@@ -103,6 +104,9 @@ protected:
 
     QString            strReceivedName;
 
+    int                iReceivedInstrument;
+
+
     bool               bOtherChannelIsSolo;
     bool               bIsMyOwnFader;
 
@@ -147,6 +151,7 @@ public:
 
     void HideAll();
     void ChangeFaderOrder ( const bool bDoSort );
+    void ChangeFaderOrderByInstrument (const bool bDoSort );
     void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );

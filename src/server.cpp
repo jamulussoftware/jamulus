@@ -666,7 +666,10 @@ void CServer::OnAboutToQuit()
 
 void CServer::OnHandledSignal ( int sigNum )
 {
-qDebug() << "OnHandledSignal" << sigNum;
+    // show the signal number on the command line (note that this does not work for the Windows command line)
+// TODO we should use the ConsoleWriterFactory() instead of qDebug()
+    qDebug() << "OnHandledSignal: " << sigNum;
+
 #ifdef _WIN32
     // Windows does not actually get OnHandledSignal triggered
     QCoreApplication::instance()->exit();
@@ -710,9 +713,12 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
         // note that this block executes regardless of whether
         // what appears to be a change is being applied, to ensure
         // the requested state is the result
-
         bEnableRecording = bNewEnableRecording;
-        qInfo() << "Recording state" << ( bEnableRecording ? "enabled" : "disabled" );
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qInfo()
+        qInfo() << "Recording state " << ( bEnableRecording ? "enabled" : "disabled" );
+#endif
 
         if ( !bEnableRecording )
         {

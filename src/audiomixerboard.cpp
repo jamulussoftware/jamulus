@@ -314,7 +314,7 @@ void CChannelFader::Reset()
     plblInstrument->setToolTip ( "" );
     plblCountryFlag->setVisible ( false );
     plblCountryFlag->setToolTip ( "" );
-    strReceivedName = "";
+    cReceivedChanInfo = CChannelInfo();
     SetupFaderTag ( SL_NOT_SET );
 
     // set a defined tool tip time out
@@ -438,17 +438,15 @@ void CChannelFader::SetChannelLevel ( const uint16_t iLevel )
 
 void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 {
+    // store received channel info
+    cReceivedChanInfo = cChanInfo;
+
     // init properties for the tool tip
     int              iTTInstrument = CInstPictures::GetNotUsedInstrument();
     QLocale::Country eTTCountry    = QLocale::AnyCountry;
 
 
     // Label text --------------------------------------------------------------
-    // store original received name
-    strReceivedName = cChanInfo.strName;
-
-    // store received instrument for sorting
-    iReceivedInstrument = cChanInfo.iInstrument;
 
     // break text at predefined position
     const int iBreakPos = MAX_LEN_FADER_TAG / 2;
@@ -524,9 +522,9 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     QString strToolTip = "";
 
     // alias/name
-    if ( !strReceivedName.isEmpty() )
+    if ( !cChanInfo.strName.isEmpty() )
     {
-        strToolTip += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + strReceivedName;
+        strToolTip += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + cChanInfo.strName;
     }
 
     // instrument
@@ -771,21 +769,33 @@ void CAudioMixerBoard::HideAll()
     iMyChannelID    = INVALID_INDEX;
 
     // use original order of channel (by server ID)
-    ChangeFaderOrder ( false );
-    ChangeFaderOrderByInstrument ( false );
+
+    ChangeFaderOrder ( false, ST_BY_NAME );
+
 
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected
 }
 
-void CAudioMixerBoard::ChangeFaderOrder ( const bool bDoSort )
+void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
+                                          const EChSortType eChSortType )
 {
     // create a pair list of lower strings and fader ID for each channel
     QList<QPair<QString, int> > PairList;
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        PairList << QPair<QString, int> ( vecpChanFader[i]->GetReceivedName().toLower(), i );
+        if ( eChSortType == ST_BY_NAME )
+        {
+            PairList << QPair<QString, int> ( vecpChanFader[i]->GetReceivedName().toLower(), i );
+        }
+        else // ST_BY_INSTRUMENT
+        {
+            // note that the sorting will not be the same as we would use QPair<int, int>
+            // but this is not a problem since the order of the instrument IDs are arbitrary
+            // anyway
+            PairList << QPair<QString, int> ( QString::number ( vecpChanFader[i]->GetReceivedInstrument() ), i );
+        }
     }
 
     // if requested, sort the channels

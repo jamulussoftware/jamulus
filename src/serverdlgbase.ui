@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>588</width>
-    <height>415</height>
+    <height>419</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,8 +69,26 @@
        </property>
       </widget>
      </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Genre</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <widget class="QComboBox" name="cbxCentServAddrType"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblRegSvrStatus">
+       <property name="text">
+        <string>STATUS</string>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer>
@@ -87,13 +105,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QLabel" name="lblRegSvrStatus">
-       <property name="text">
-        <string>STATUS</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </item>

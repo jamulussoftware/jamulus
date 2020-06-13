@@ -152,8 +152,8 @@ public slots:
     void OnOpenGeneralSettings() { ShowGeneralSettings(); }
     void OnOpenChatDialog() { ShowChatWindow(); }
     void OnOpenAnalyzerConsole() { ShowAnalyzerConsole(); }
-    void OnSortChannelsByName() { MainMixerBoard->ChangeFaderOrder ( true ); }
-    void OnSortChannelsByInstrument() { MainMixerBoard->ChangeFaderOrderByInstrument ( true ); }
+    void OnSortChannelsByName() { MainMixerBoard->ChangeFaderOrder ( true, ST_BY_NAME ); }
+
 
     void OnSettingsStateChanged ( int value );
     void OnChatStateChanged ( int value );

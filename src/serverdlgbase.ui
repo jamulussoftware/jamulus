@@ -69,8 +69,19 @@
        </property>
       </widget>
      </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
      <item>
       <widget class="QComboBox" name="cbxCentServAddrType"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="lblRegSvrStatus">
+       <property name="text">
+        <string>STATUS</string>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer>
@@ -87,13 +98,6 @@
         </size>
        </property>
       </spacer>
-     </item>
-     <item>
-      <widget class="QLabel" name="lblRegSvrStatus">
-       <property name="text">
-        <string>STATUS</string>
-       </property>
-      </widget>
      </item>
     </layout>
    </item>

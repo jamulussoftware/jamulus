@@ -240,6 +240,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     Logging                     ( iMaxDaysHistory ),
     iFrameCount                 ( 0 ),
     JamRecorder                 ( strRecordingDirName ),
+    bEnableRecording            ( false ),
     bWriteStatusHTMLFile        ( false ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
     ServerListManager           ( iPortNumber,
@@ -405,7 +406,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     if ( !strRecordingDirName.isEmpty() )
     {
         bRecorderInitialised = JamRecorder.Init ( this, iServerFrameSizeSamples );
-        bEnableRecording     = bRecorderInitialised;
+        SetEnableRecording ( bRecorderInitialised );
     }
 
     // enable all channels (for the server all channel must be enabled the
@@ -665,6 +666,7 @@ void CServer::OnAboutToQuit()
 
 void CServer::OnHandledSignal ( int sigNum )
 {
+qDebug() << "OnHandledSignal" << sigNum;
 #ifdef _WIN32
     // Windows does not actually get OnHandledSignal triggered
     QCoreApplication::instance()->exit();
@@ -705,7 +707,12 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
 {
     if ( bRecorderInitialised )
     {
+        // note that this block executes regardless of whether
+        // what appears to be a change is being applied, to ensure
+        // the requested state is the result
+
         bEnableRecording = bNewEnableRecording;
+        qInfo() << "Recording state" << ( bEnableRecording ? "enabled" : "disabled" );
 
         if ( !bEnableRecording )
         {

@@ -447,7 +447,6 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 
 
     // Label text --------------------------------------------------------------
-
     // break text at predefined position
     const int iBreakPos = MAX_LEN_FADER_TAG / 2;
 
@@ -769,9 +768,7 @@ void CAudioMixerBoard::HideAll()
     iMyChannelID    = INVALID_INDEX;
 
     // use original order of channel (by server ID)
-
     ChangeFaderOrder ( false, ST_BY_NAME );
-
 
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected

@@ -49,7 +49,8 @@ class CChannelFader : public QObject
 public:
     CChannelFader ( QWidget* pNW );
 
-    QString GetReceivedName() { return strReceivedName; }
+    QString GetReceivedName() { return cReceivedChanInfo.strName; }
+    int GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
     void SetChannelInfos ( const CChannelInfo& cChanInfo );
     void Show() { pFrame->show(); }
     void Hide() { pFrame->hide(); }
@@ -101,7 +102,7 @@ protected:
     QLabel*            plblInstrument;
     QLabel*            plblCountryFlag;
 
-    QString            strReceivedName;
+    CChannelInfo       cReceivedChanInfo;
 
     bool               bOtherChannelIsSolo;
     bool               bIsMyOwnFader;

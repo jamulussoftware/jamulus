@@ -314,7 +314,7 @@ void CChannelFader::Reset()
     plblInstrument->setToolTip ( "" );
     plblCountryFlag->setVisible ( false );
     plblCountryFlag->setToolTip ( "" );
-    strReceivedName = "";
+    cReceivedChanInfo = CChannelInfo();
     SetupFaderTag ( SL_NOT_SET );
 
     // set a defined tool tip time out
@@ -438,15 +438,15 @@ void CChannelFader::SetChannelLevel ( const uint16_t iLevel )
 
 void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
 {
+    // store received channel info
+    cReceivedChanInfo = cChanInfo;
+
     // init properties for the tool tip
     int              iTTInstrument = CInstPictures::GetNotUsedInstrument();
     QLocale::Country eTTCountry    = QLocale::AnyCountry;
 
 
     // Label text --------------------------------------------------------------
-    // store original received name
-    strReceivedName = cChanInfo.strName;
-
     // break text at predefined position
     const int iBreakPos = MAX_LEN_FADER_TAG / 2;
 
@@ -521,9 +521,9 @@ void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )
     QString strToolTip = "";
 
     // alias/name
-    if ( !strReceivedName.isEmpty() )
+    if ( !cChanInfo.strName.isEmpty() )
     {
-        strToolTip += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + strReceivedName;
+        strToolTip += "<h4>" + tr ( "Alias/Name" ) + "</h4>" + cChanInfo.strName;
     }
 
     // instrument

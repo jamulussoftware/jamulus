@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QHostAddress>
+#include <QFileInfo>
 #include <algorithm>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"

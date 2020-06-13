@@ -250,7 +250,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
                                   bNCentServPingServerInList,
                                   &ConnLessProtocol ),
     bAutoRunMinimized           ( false ),
-    strWelcomeMessage           ( strNewWelcomeMessage ),
     eLicenceType                ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
     pSignalHandler              ( CSignalHandler::getSingletonP() )
@@ -401,6 +400,23 @@ CServer::CServer ( const int          iNewMaxNumChan,
             strCurServerNameForHTMLStatusFile + ":" +
             QString().number( static_cast<int> ( iPortNumber ) ) );
     }
+
+    // manage welcome message: if the welcome message is a valid link to a local
+    // file, the content of that file is used as the welcome message (#361)
+    strWelcomeMessage = strNewWelcomeMessage; // first copy text, may be overwritten
+    if ( QFileInfo ( strNewWelcomeMessage ).exists() )
+    {
+        QFile file ( strNewWelcomeMessage );
+
+        if ( file.open ( QIODevice::ReadOnly | QIODevice::Text ) )
+        {
+            // use entrie file content for the welcome message
+            strWelcomeMessage = file.readAll();
+        }
+    }
+
+    // restrict welcome message to maximum allowed length
+    strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
 
     // enable jam recording (if requested) - kicks off the thread
     if ( !strRecordingDirName.isEmpty() )

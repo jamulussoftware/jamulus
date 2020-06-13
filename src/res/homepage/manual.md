@@ -93,7 +93,7 @@ in a direction where the label above the fader shows L -x, where x is the curren
 In the audio mixer frame, a fader is shown for each connected client at the server (including yourself).
 The faders allow you to adjust the level of what you hear without affecting what others hear.
 
-The VU meter shows the input level at the server - that is, the sound you are sending.
+The VU meter shows the input level at the server - that is, the sound being sent.
 
 If you have set your Audio Channel to Stereo or Stereo Out in your Settings, you will also see a pan control. 
 
@@ -103,6 +103,7 @@ Using the **Mute button** prevents the indicated channel being heard in your loc
 
 The **Solo button** allows you to hear one or more musicians on their own. Those not soloed will be muted. Note also that those musicians who are not soloed will see a "muted" icon above your fader.
 
+Channels are listed left to right in the order that clients connect until they leave, at which point their "slot" is filled by the next new arrival. You can change the sort order using the Edit option in the application menu.
 
 
 

@@ -105,9 +105,6 @@ protected:
 
     CChannelInfo       cReceivedChanInfo;
 
-    int                iReceivedInstrument;
-
-
     bool               bOtherChannelIsSolo;
     bool               bIsMyOwnFader;
 

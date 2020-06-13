@@ -768,20 +768,31 @@ void CAudioMixerBoard::HideAll()
     iMyChannelID    = INVALID_INDEX;
 
     // use original order of channel (by server ID)
-    ChangeFaderOrder ( false );
+    ChangeFaderOrder ( false, ST_BY_NAME );
 
     // emit status of connected clients
     emit NumClientsChanged ( 0 ); // -> no clients connected
 }
 
-void CAudioMixerBoard::ChangeFaderOrder ( const bool bDoSort )
+void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
+                                          const EChSortType eChSortType )
 {
     // create a pair list of lower strings and fader ID for each channel
     QList<QPair<QString, int> > PairList;
 
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
-        PairList << QPair<QString, int> ( vecpChanFader[i]->GetReceivedName().toLower(), i );
+        if ( eChSortType == ST_BY_NAME )
+        {
+            PairList << QPair<QString, int> ( vecpChanFader[i]->GetReceivedName().toLower(), i );
+        }
+        else // ST_BY_INSTRUMENT
+        {
+            // note that the sorting will not be the same as we would use QPair<int, int>
+            // but this is not a problem since the order of the instrument IDs are arbitrary
+            // anyway
+            PairList << QPair<QString, int> ( QString::number ( vecpChanFader[i]->GetReceivedInstrument() ), i );
+        }
     }
 
     // if requested, sort the channels

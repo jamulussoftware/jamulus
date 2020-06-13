@@ -147,7 +147,6 @@ public:
     CAudioMixerBoard ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
 
     void HideAll();
-    void ChangeFaderOrder ( const bool bDoSort );
     void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
@@ -159,6 +158,9 @@ public:
 
     void SetFaderLevel ( const int iChannelIdx,
                          const int iValue );
+
+    void ChangeFaderOrder ( const bool        bDoSort,
+                            const EChSortType eChSortType );
 
     void SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
 

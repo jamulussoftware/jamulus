@@ -563,6 +563,14 @@ enum ELicenceType
 };
 
 
+// Channel sort type -----------------------------------------------------------
+enum EChSortType
+{
+    ST_BY_NAME = 0,
+    ST_BY_INSTRUMENT = 1
+};
+
+
 // Central server address type -------------------------------------------------
 enum ECSAddType
 {

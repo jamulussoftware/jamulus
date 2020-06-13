@@ -813,29 +813,6 @@ void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
     }
 }
 
-void CAudioMixerBoard::ChangeFaderOrderByInstrument ( const bool bDoSort )
-{
-    // create a pair list of instruments ID and fader ID for each channel
-    QList<QPair<int, int> > PairList;
-
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-    {
-        PairList << QPair<int, int> ( vecpChanFader[i]->GetReceivedInstrument(), i );
-    }
-
-    // if requested, sort the channels
-    if ( bDoSort )
-    {
-        qStableSort ( PairList.begin(), PairList.end() );
-    }
-
-    // add channels to the layout in the new order
-    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
-    {
-        pMainLayout->insertWidget ( 0, vecpChanFader[PairList[i].second]->GetMainWidget() );
-    }
-}
-
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )
 {
     // we want to set the server name only if the very first faders appear

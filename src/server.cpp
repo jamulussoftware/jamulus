@@ -330,6 +330,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
         iServerFrameSizeSamples = SYSTEM_FRAME_SIZE_SAMPLES;
     }
 
+    bDelayPan = PANNING_TYPE_DEFAULT == 2;
 
     // To avoid audio clitches, in the entire realtime timer audio processing
     // routine including the ProcessData no memory must be allocated. Since we
@@ -341,6 +342,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     vecvecfGains.Init                  ( iMaxNumChannels );
     vecvecfPannings.Init               ( iMaxNumChannels );
     vecvecsData.Init                   ( iMaxNumChannels );
+    vecvecsData2.Init                  ( iMaxNumChannels );
     vecvecsSendData.Init               ( iMaxNumChannels );
     vecvecfIntermediateProcBuf.Init    ( iMaxNumChannels );
     vecvecbyCodedData.Init             ( iMaxNumChannels );
@@ -357,6 +359,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
         // we always use stereo audio buffers (which is the worst case)
         vecvecsData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+        vecvecsData2[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
 
         // (note that we only allocate iMaxNumChannels buffers for the send
         // and coded data because of the OMP implementation)
@@ -934,6 +937,16 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             FutureSynchronizer.waitForFinished();
             FutureSynchronizer.clearFutures();
         }
+        if ( bDelayPan )
+        {
+            for ( int i = 0; i < iNumClients; i++ )
+            {
+                for ( int j = 0; j < 2 * (iServerFrameSizeSamples); j++ )
+                {
+                    vecvecsData2[i][j] = vecvecsData[i][j];
+                }
+            }
+        }
     }
     else
     {
@@ -1196,12 +1209,22 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
     else
     {
         // Stereo target channel -----------------------------------------------
+
+        const int maxPanDelay = MAX_DELAY_PANNING_SAMPLES; // 32  -->  64
+
+        int iLpan, iRpan, iPan;
+
         for ( j = 0; j < iNumClients; j++ )
         {
             // get a reference to the audio data and gain/pan of the current client
             const CVector<int16_t>& vecsData = vecvecsData[j];
+            const CVector<int16_t>& vecsData2 = vecvecsData2[j];
+
             const float             fGain    = vecvecfGains[iChanCnt][j];
-            const float             fPan     = vecvecfPannings[iChanCnt][j];
+            const float             fPan     = bDelayPan ? 0.5f : vecvecfPannings[iChanCnt][j];
+            const int iPanDel = lround( (float)(2 * maxPanDelay - 2) * (vecvecfPannings[iChanCnt][j] - 0.5f) );
+            const int iPanDelL = ( iPanDel > 0 ) ? iPanDel : 0;
+            const int iPanDelR = ( iPanDel < 0 ) ? -iPanDel : 0;
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels
@@ -1216,9 +1239,35 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     // mono: copy same mono data in both out stereo audio channels
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
-                        // left/right channel
-                        vecfIntermProcBuf[k]     += vecsData[i];
-                        vecfIntermProcBuf[k + 1] += vecsData[i];
+                        if ( bDelayPan )
+                        {
+                            // pan address shift
+                            // left channel
+                            iLpan = i - iPanDelL;
+                            if ( iLpan < 0 )
+                            {                                            // get from second
+                                iLpan = iLpan + iServerFrameSizeSamples; //
+                                vecfIntermProcBuf[k] += vecsData2[iLpan];
+                            }
+                            else
+                                vecfIntermProcBuf[k] += vecsData[iLpan];
+                            // right channel
+                            iRpan = i - iPanDelR;
+                            if ( iRpan < 0 )
+                            {                                            // get from second
+                                iRpan = iRpan + iServerFrameSizeSamples; //
+                                vecfIntermProcBuf[k + 1] += vecsData2[iRpan];
+                            }
+                            else
+                                vecfIntermProcBuf[k + 1] += vecsData[iRpan];
+                            ;
+                        }
+                        else
+                        {
+                            // left/right channel
+                            vecfIntermProcBuf[k] += vecsData[i];
+                            vecfIntermProcBuf[k + 1] += vecsData[i];
+                        }
                     }
                 }
                 else
@@ -1226,7 +1275,26 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     // stereo
                     for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
-                        vecfIntermProcBuf[i] += vecsData[i];
+                        if ( bDelayPan )
+                        {
+                            // pan address shift
+                            iLpan = i - iPanDelL;
+                            iRpan = i - iPanDelR;
+                            if ( (i & 1) == 0 )
+                                iPan = i - 2 * iPanDelL; // if even : left channel
+                            else
+                                iPan = i - 2 * iPanDelR; // if odd  : right channel
+                            // interleaved channels
+                            if ( iPan < 0 )
+                            {                                              // get from second
+                                iPan = iPan + 2 * iServerFrameSizeSamples; //  2*iServerFrameSizeSamples;
+                                vecfIntermProcBuf[i] += vecsData2[iPan]; //
+                            }
+                            else
+                                vecfIntermProcBuf[i] += vecsData[iPan]; //*** korr200605
+                        }
+                        else
+                            vecfIntermProcBuf[i] += vecsData[i];
                     }
                 }
             }
@@ -1238,18 +1306,65 @@ void CServer::MixEncodeTransmitData ( const int iChanCnt,
                     for ( i = 0, k = 0; i < iServerFrameSizeSamples; i++, k += 2 )
                     {
                         // left/right channel
-                        vecfIntermProcBuf[k]     += vecsData[i] * fGainL;
-                        vecfIntermProcBuf[k + 1] += vecsData[i] * fGainR;
+                        if ( bDelayPan )
+                        {
+                            // pan address shift
+                            // left channel
+                            iLpan = i - iPanDelL;
+                            if ( iLpan < 0 )
+                            {                                            // get from second
+                                iLpan = iLpan + iServerFrameSizeSamples; //
+                                vecfIntermProcBuf[k] += vecsData2[iLpan] * fGainL;
+                            }
+                            else
+                                vecfIntermProcBuf[k] += vecsData[iLpan] * fGainL;
+                            // right channel
+                            iRpan = i - iPanDelR;
+                            if ( iRpan < 0 )
+                            {                                            // get from second
+                                iRpan = iRpan + iServerFrameSizeSamples; //
+                                vecfIntermProcBuf[k + 2] += vecsData2[iRpan] * fGainR;
+                            }
+                            else
+                                vecfIntermProcBuf[k + 2] += vecsData[iRpan] * fGainR;
+                        }
+                        else
+                        {
+                            vecfIntermProcBuf[k] += vecsData[i] * fGainL;
+                            vecfIntermProcBuf[k + 1] += vecsData[i] * fGainR;
+                        }
                     }
                 }
                 else
                 {
                     // stereo
-                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i += 2 )
+                    for ( i = 0; i < ( 2 * iServerFrameSizeSamples ); i++ )
                     {
                         // left/right channel
-                        vecfIntermProcBuf[i]     += vecsData[i] *     fGainL;
-                        vecfIntermProcBuf[i + 1] += vecsData[i + 1] * fGainR;
+
+                        if ( bDelayPan )
+                        {
+                            // pan address shift
+                            if ( (i & 1) == 0 )
+                                iPan = i - 2 * iPanDelL; // if even : left channel
+                            else
+                                iPan = i - 2 * iPanDelR; // if odd  : right channel
+                            // interleaved channels
+                            if ( iPan < 0 )
+                            {                                              // get from second
+                                iPan = iPan + 2 * iServerFrameSizeSamples; //
+                                vecfIntermProcBuf[i] += vecsData2[iPan] * fGain;
+                            }
+                            else
+                                vecfIntermProcBuf[i] += vecsData[iPan] * fGain;
+                        }
+                        else
+                        {
+                            if ( (i & 1) == 0 ) // if even : left channel
+                                vecfIntermProcBuf[i] += vecsData[i] * fGainL;
+                            else // if odd  : right channel
+                                vecfIntermProcBuf[i] += vecsData[i] * fGainR;
+                        }
                     }
                 }
             }

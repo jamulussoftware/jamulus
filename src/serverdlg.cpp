@@ -315,6 +315,17 @@ lvwClients->setMinimumHeight ( 140 );
     ModifyAutoStartEntry ( bCurAutoStartMinState );
 #endif
 
+    //*******************************************************************
+    // update delay panning check box
+    if ( pServer->IsDelayPanningEnabled() )
+    {
+        chbEnableDelayPanning->setCheckState(Qt::Checked);
+    }
+    else
+    {
+        chbEnableDelayPanning->setCheckState(Qt::Unchecked);
+    }
+
     // Recorder controls
     chbEnableRecorder->setChecked ( pServer->GetRecordingEnabled() );
     edtCurrentSessionDir->setText ( "" );
@@ -381,6 +392,10 @@ lvwClients->setMinimumHeight ( 140 );
 
     QObject::connect ( chbEnableRecorder, &QCheckBox::stateChanged,
         this, &CServerDlg::OnEnableRecorderStateChanged );
+
+    //**************************** delay panning
+    QObject::connect ( chbEnableDelayPanning, &QCheckBox::stateChanged,
+        this, &CServerDlg::OnEnableDelayPanningStateChanged );
 
     // line edits
     QObject::connect ( edtCentralServerAddress, &QLineEdit::editingFinished,

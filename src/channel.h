@@ -290,6 +290,7 @@ signals:
     void ReqNetTranspProps();
     void LicenceRequired ( ELicenceType eLicenceType );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
+    void RecorderStateReceived ( ERecorderState eRecorderState );
     void Disconnected();
 
     void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,

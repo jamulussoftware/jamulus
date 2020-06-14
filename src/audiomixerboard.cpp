@@ -788,10 +788,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
         }
         else // ST_BY_INSTRUMENT
         {
-            // note that the sorting will not be the same as we would use QPair<int, int>
-            // but this is not a problem since the order of the instrument IDs are arbitrary
-            // anyway
-            PairList << QPair<QString, int> ( QString::number ( vecpChanFader[i]->GetReceivedInstrument() ), i );
+            PairList << QPair<QString, int> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ), i );
         }
     }
 

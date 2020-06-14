@@ -251,6 +251,9 @@ public:
     void SetLicenceType ( const ELicenceType NLiType ) { eLicenceType = NLiType; }
     ELicenceType GetLicenceType() { return eLicenceType; }
 
+    // window position/state settings
+    QByteArray vecWindowPosMain;
+
 protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum )

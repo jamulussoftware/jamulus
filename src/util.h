@@ -563,6 +563,14 @@ enum ELicenceType
 };
 
 
+// Server jam recorder state enum ----------------------------------------------
+enum ERecorderState
+{
+    RS_UNDEFINED = 0
+    // ... to be defined ...
+};
+
+
 // Channel sort type -----------------------------------------------------------
 enum EChSortType
 {

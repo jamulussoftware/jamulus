@@ -168,6 +168,9 @@ public:
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo )
         { Protocol.CreateConClientListMes ( vecChanInfo ); }
 
+    void CreateRecorderStateMes ( const ERecorderState eRecorderState )
+        { Protocol.CreateRecorderStateMes ( eRecorderState ); }
+
     CNetworkTransportProps GetNetworkTransportPropsFromCurrentSettings();
 
     bool ChannelLevelsRequired() const                { return bChannelLevelsRequired; }

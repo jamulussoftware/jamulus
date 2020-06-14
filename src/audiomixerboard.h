@@ -49,7 +49,8 @@ class CChannelFader : public QObject
 public:
     CChannelFader ( QWidget* pNW );
 
-    QString GetReceivedName() { return strReceivedName; }
+    QString GetReceivedName() { return cReceivedChanInfo.strName; }
+    int GetReceivedInstrument() { return cReceivedChanInfo.iInstrument; }
     void SetChannelInfos ( const CChannelInfo& cChanInfo );
     void Show() { pFrame->show(); }
     void Hide() { pFrame->hide(); }
@@ -101,7 +102,7 @@ protected:
     QLabel*            plblInstrument;
     QLabel*            plblCountryFlag;
 
-    QString            strReceivedName;
+    CChannelInfo       cReceivedChanInfo;
 
     bool               bOtherChannelIsSolo;
     bool               bIsMyOwnFader;
@@ -146,7 +147,6 @@ public:
     CAudioMixerBoard ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
 
     void HideAll();
-    void ChangeFaderOrder ( const bool bDoSort );
     void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void SetServerName ( const QString& strNewServerName );
     void SetGUIDesign ( const EGUIDesign eNewDesign );
@@ -158,6 +158,9 @@ public:
 
     void SetFaderLevel ( const int iChannelIdx,
                          const int iValue );
+
+    void ChangeFaderOrder ( const bool        bDoSort,
+                            const EChSortType eChSortType );
 
     void SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
 

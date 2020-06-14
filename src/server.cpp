@@ -234,12 +234,14 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
                    const ELicenceType eNLicenceType ) :
+    vecWindowPosMain            (), // empty array
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     iMaxNumChannels             ( iNewMaxNumChan ),
     Socket                      ( this, iPortNumber ),
     Logging                     ( iMaxDaysHistory ),
     iFrameCount                 ( 0 ),
     JamRecorder                 ( strRecordingDirName ),
+    bEnableRecording            ( false ),
     bWriteStatusHTMLFile        ( false ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
     ServerListManager           ( iPortNumber,
@@ -249,7 +251,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
                                   bNCentServPingServerInList,
                                   &ConnLessProtocol ),
     bAutoRunMinimized           ( false ),
-    strWelcomeMessage           ( strNewWelcomeMessage ),
     eLicenceType                ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
     pSignalHandler              ( CSignalHandler::getSingletonP() )
@@ -401,11 +402,28 @@ CServer::CServer ( const int          iNewMaxNumChan,
             QString().number( static_cast<int> ( iPortNumber ) ) );
     }
 
+    // manage welcome message: if the welcome message is a valid link to a local
+    // file, the content of that file is used as the welcome message (#361)
+    strWelcomeMessage = strNewWelcomeMessage; // first copy text, may be overwritten
+    if ( QFileInfo ( strNewWelcomeMessage ).exists() )
+    {
+        QFile file ( strNewWelcomeMessage );
+
+        if ( file.open ( QIODevice::ReadOnly | QIODevice::Text ) )
+        {
+            // use entrie file content for the welcome message
+            strWelcomeMessage = file.readAll();
+        }
+    }
+
+    // restrict welcome message to maximum allowed length
+    strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
+
     // enable jam recording (if requested) - kicks off the thread
     if ( !strRecordingDirName.isEmpty() )
     {
         bRecorderInitialised = JamRecorder.Init ( this, iServerFrameSizeSamples );
-        bEnableRecording     = bRecorderInitialised;
+        SetEnableRecording ( bRecorderInitialised );
     }
 
     // enable all channels (for the server all channel must be enabled the
@@ -665,6 +683,10 @@ void CServer::OnAboutToQuit()
 
 void CServer::OnHandledSignal ( int sigNum )
 {
+    // show the signal number on the command line (note that this does not work for the Windows command line)
+// TODO we should use the ConsoleWriterFactory() instead of qDebug()
+    qDebug() << "OnHandledSignal: " << sigNum;
+
 #ifdef _WIN32
     // Windows does not actually get OnHandledSignal triggered
     QCoreApplication::instance()->exit();
@@ -705,7 +727,15 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
 {
     if ( bRecorderInitialised )
     {
+        // note that this block executes regardless of whether
+        // what appears to be a change is being applied, to ensure
+        // the requested state is the result
         bEnableRecording = bNewEnableRecording;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qInfo()
+        qInfo() << "Recording state " << ( bEnableRecording ? "enabled" : "disabled" );
+#endif
 
         if ( !bEnableRecording )
         {

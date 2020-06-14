@@ -59,6 +59,7 @@
 #define PROTMESSID_CHANNEL_PAN                30 // set channel pan for mix
 #define PROTMESSID_MUTE_STATE_CHANGED         31 // mute state of your signal at another client has changed
 #define PROTMESSID_CLIENT_ID                  32 // current user ID and server status
+#define PROTMESSID_RECORDER_STATE             33 // contains the state of the jam recorder (ERecorderState)
 
 // message IDs of connection less messages (CLM)
 // DEFINITION -> start at 1000, end at 1999, see IsConnectionLessMessageID
@@ -114,6 +115,7 @@ public:
     void CreateOpusSupportedMes();
     void CreateReqChannelLevelListMes ( const bool bRCL );
     void CreateVersionAndOSMes();
+    void CreateRecorderStateMes ( const ERecorderState eRecorderState );
 
     void CreateCLPingMes               ( const CHostAddress& InetAddr, const int iMs );
     void CreateCLPingWithNumClientsMes ( const CHostAddress& InetAddr,
@@ -239,6 +241,7 @@ protected:
     bool EvaluateLicenceRequiredMes     ( const CVector<uint8_t>& vecData );
     bool EvaluateReqChannelLevelListMes ( const CVector<uint8_t>& vecData );
     bool EvaluateVersionAndOSMes        ( const CVector<uint8_t>& vecData );
+    bool EvaluateRecorderStateMes       ( const CVector<uint8_t>& vecData );
 
     bool EvaluateCLPingMes               ( const CHostAddress&     InetAddr,
                                            const CVector<uint8_t>& vecData );
@@ -302,6 +305,7 @@ signals:
     void LicenceRequired ( ELicenceType eLicenceType );
     void ReqChannelLevelList ( bool bOptIn );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
+    void RecorderStateReceived ( ERecorderState eRecorderState );
 
     void CLPingReceived               ( CHostAddress           InetAddr,
                                         int                    iMs );

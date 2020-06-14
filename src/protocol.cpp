@@ -216,6 +216,17 @@ MESSAGES (with connection)
     note: does not have any data -> n = 0
 
 
+- PROTMESSID_RECORDER_STATE: notifies of changes in the server jam recorder state
+
+    +--------------+
+    | 1 byte state |
+    +--------------+
+
+    state is a value from the enum ERecorderState:
+    - 0 undefined (not used by protocol messages)
+    - tbc
+
+
 CONNECTION LESS MESSAGES
 ------------------------
 
@@ -658,6 +669,10 @@ if ( rand() < ( RAND_MAX / 2 ) ) return false;
 
             case PROTMESSID_VERSION_AND_OS:
                 bRet = EvaluateVersionAndOSMes ( vecbyMesBodyData );
+                break;
+
+            case PROTMESSID_RECORDER_STATE:
+                bRet = EvaluateRecorderStateMes ( vecbyMesBodyData );
                 break;
             }
 
@@ -1540,6 +1555,43 @@ bool CProtocol::EvaluateVersionAndOSMes ( const CVector<uint8_t>& vecData )
 
     // invoke message action
     emit VersionAndOSReceived ( eOSType, strVersion );
+
+    return false; // no error
+}
+
+void CProtocol::CreateRecorderStateMes ( const ERecorderState eRecorderState )
+{
+    CVector<uint8_t> vecData ( 1 ); // 1 byte of data
+    int              iPos = 0;      // init position pointer
+
+    // build data vector
+    // server jam recorder state (1 byte)
+    PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( eRecorderState ), 1 );
+
+    CreateAndSendMessage ( PROTMESSID_RECORDER_STATE, vecData );
+}
+
+bool CProtocol::EvaluateRecorderStateMes(const CVector<uint8_t>& vecData)
+{
+    int iPos = 0; // init position pointer
+
+    // check size
+    if ( vecData.Size() != 1 )
+    {
+        return true; // return error code
+    }
+
+    // server jam recorder state (1 byte)
+    const int iRecorderState =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    if ( iRecorderState != RS_UNDEFINED ) // ... to be defined ...
+    {
+        return true;
+    }
+
+    // invoke message action
+    emit RecorderStateReceived ( static_cast<ERecorderState> ( iRecorderState ) );
 
     return false; // no error
 }

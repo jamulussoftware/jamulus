@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QHostAddress>
+#include <QFileInfo>
 #include <algorithm>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
@@ -249,6 +250,9 @@ public:
 
     void SetLicenceType ( const ELicenceType NLiType ) { eLicenceType = NLiType; }
     ELicenceType GetLicenceType() { return eLicenceType; }
+
+    // window position/state settings
+    QByteArray vecWindowPosMain;
 
 protected:
     // access functions for actual channels

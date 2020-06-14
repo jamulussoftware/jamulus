@@ -151,8 +151,7 @@ public:
     void SetReverbOnLeftChan ( const bool bIL )
     {
         bReverbOnLeftChan = bIL;
-        AudioReverbL.Clear();
-        AudioReverbR.Clear();
+        AudioReverb.Clear();
     }
 
     void SetDoAutoSockBufSize ( const bool bValue );
@@ -354,8 +353,7 @@ protected:
     int                     iAudioInFader;
     bool                    bReverbOnLeftChan;
     int                     iReverbLevel;
-    CAudioReverb            AudioReverbL;
-    CAudioReverb            AudioReverbR;
+    CAudioReverb            AudioReverb;
 
     int                     iSndCrdPrefFrameSizeFactor;
     int                     iSndCrdFrameSizeFactor;

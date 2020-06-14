@@ -58,6 +58,7 @@ public:
 
 protected:
     virtual void changeEvent ( QEvent* pEvent );
+    virtual void closeEvent ( QCloseEvent* Event );
 
     void         UpdateGUIDependencies();
     void         UpdateSystemTrayIcon ( const bool bIsActive );
@@ -65,20 +66,20 @@ protected:
     void         ModifyAutoStartEntry ( const bool bDoAutoStart );
     void         UpdateRecorderStatus( QString sessionDir );
 
-    QTimer                        Timer;
-    CServer*                      pServer;
-    CSettings*                    pSettings;
+    QTimer                    Timer;
+    CServer*                  pServer;
+    CSettings*                pSettings;
 
-    CVector<QTreeWidgetItem*>     vecpListViewItems;
-    QMutex                        ListViewMutex;
+    CVector<QTreeWidgetItem*> vecpListViewItems;
+    QMutex                    ListViewMutex;
 
-    QMenuBar*                     pMenu;
+    QMenuBar*                 pMenu;
 
-    bool                          bSystemTrayIconAvaialbe;
-    QSystemTrayIcon               SystemTrayIcon;
-    QPixmap                       BitmapSystemTrayInactive;
-    QPixmap                       BitmapSystemTrayActive;
-    QMenu*                        pSystemTrayIconMenu;
+    bool                      bSystemTrayIconAvaialbe;
+    QSystemTrayIcon           SystemTrayIcon;
+    QPixmap                   BitmapSystemTrayInactive;
+    QPixmap                   BitmapSystemTrayActive;
+    QMenu*                    pSystemTrayIconMenu;
 
 public slots:
     void OnAboutToQuit() { pSettings->Save(); }

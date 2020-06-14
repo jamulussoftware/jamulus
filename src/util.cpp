@@ -165,20 +165,24 @@ uint32_t CCRC::GetCRC()
     three series allpass units, followed by four parallel comb filters, and two
     decorrelation delay lines in parallel at the output.
 */
-void CAudioReverb::Init ( const int    iSampleRate,
-                          const double rT60 )
+void CAudioReverb::Init ( const EAudChanConf eNAudioChannelConf,
+                          const int          iNStereoBlockSizeSam,
+                          const int          iSampleRate,
+                          const double       rT60 )
 {
-    int delay, i;
+    // store paramters
+    eAudioChannelConf   = eNAudioChannelConf;
+    iStereoBlockSizeSam = iNStereoBlockSizeSam;
 
     // delay lengths for 44100 Hz sample rate
-    int lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
-    const double scaler = static_cast<double> ( iSampleRate ) / 44100.0;
+    int          lengths[9] = { 1116, 1356, 1422, 1617, 225, 341, 441, 211, 179 };
+    const double scaler     = static_cast<double> ( iSampleRate ) / 44100.0;
 
     if ( scaler != 1.0 )
     {
-        for ( i = 0; i < 9; i++ )
+        for ( int i = 0; i < 9; i++ )
         {
-            delay = static_cast<int> ( floor ( scaler * lengths[i] ) );
+            int delay = static_cast<int> ( floor ( scaler * lengths[i] ) );
 
             if ( ( delay & 1 ) == 0 )
             {
@@ -194,12 +198,12 @@ void CAudioReverb::Init ( const int    iSampleRate,
         }
     }
 
-    for ( i = 0; i < 3; i++ )
+    for ( int i = 0; i < 3; i++ )
     {
         allpassDelays[i].Init ( lengths[i + 4] );
     }
 
-    for ( i = 0; i < 4; i++ )
+    for ( int i = 0; i < 4; i++ )
     {
         combDelays[i].Init ( lengths[i] );
         combFilters[i].setPole ( 0.2 );
@@ -285,58 +289,81 @@ double CAudioReverb::COnePole::Calc ( const double dIn )
     return dLastSample;
 }
 
-void CAudioReverb::ProcessSample ( int16_t&     iInputOutputLeft,
-                                   int16_t&     iInputOutputRight,
-                                   const double dAttenuation )
+void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
+                             const bool        bReverbOnLeftChan,
+                             const double      dAttenuation )
 {
-    // compute one output sample
-    double temp, temp0, temp1, temp2;
+    double dMixedInput, temp, temp0, temp1, temp2;
 
-    // we sum up the stereo input channels (in case mono input is used, a zero
-    // shall be input for the right channel)
-    const double dMixedInput = 0.5 * ( iInputOutputLeft + iInputOutputRight );
+    for ( int i = 0; i < iStereoBlockSizeSam; i += 2 )
+    {
+        // we sum up the stereo input channels (in case mono input is used, a zero
+        // shall be input for the right channel)
+        if ( eAudioChannelConf == CC_STEREO )
+        {
+            dMixedInput = 0.5 * ( vecsStereoInOut[i] + vecsStereoInOut[i + 1] );
+        }
+        else
+        {
+            if ( bReverbOnLeftChan )
+            {
+                dMixedInput = vecsStereoInOut[i];
+            }
+            else
+            {
+                dMixedInput = vecsStereoInOut[i + 1];
+            }
+        }
 
-    temp = allpassDelays[0].Get();
-    temp0 = allpassCoefficient * temp;
-    temp0 += dMixedInput;
-    allpassDelays[0].Add ( temp0 );
-    temp0 = - ( allpassCoefficient * temp0 ) + temp;
+        temp = allpassDelays[0].Get();
+        temp0 = allpassCoefficient * temp;
+        temp0 += dMixedInput;
+        allpassDelays[0].Add ( temp0 );
+        temp0 = - ( allpassCoefficient * temp0 ) + temp;
 
-    temp = allpassDelays[1].Get();
-    temp1 = allpassCoefficient * temp;
-    temp1 += temp0;
-    allpassDelays[1].Add ( temp1 );
-    temp1 = - ( allpassCoefficient * temp1 ) + temp;
+        temp = allpassDelays[1].Get();
+        temp1 = allpassCoefficient * temp;
+        temp1 += temp0;
+        allpassDelays[1].Add ( temp1 );
+        temp1 = - ( allpassCoefficient * temp1 ) + temp;
 
-    temp = allpassDelays[2].Get();
-    temp2 = allpassCoefficient * temp;
-    temp2 += temp1;
-    allpassDelays[2].Add ( temp2 );
-    temp2 = - ( allpassCoefficient * temp2 ) + temp;
+        temp = allpassDelays[2].Get();
+        temp2 = allpassCoefficient * temp;
+        temp2 += temp1;
+        allpassDelays[2].Add ( temp2 );
+        temp2 = - ( allpassCoefficient * temp2 ) + temp;
 
-    const double temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
-    const double temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
-    const double temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
-    const double temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
+        const double temp3 = temp2 + combFilters[0].Calc ( combCoefficient[0] * combDelays[0].Get() );
+        const double temp4 = temp2 + combFilters[1].Calc ( combCoefficient[1] * combDelays[1].Get() );
+        const double temp5 = temp2 + combFilters[2].Calc ( combCoefficient[2] * combDelays[2].Get() );
+        const double temp6 = temp2 + combFilters[3].Calc ( combCoefficient[3] * combDelays[3].Get() );
 
-    combDelays[0].Add ( temp3 );
-    combDelays[1].Add ( temp4 );
-    combDelays[2].Add ( temp5 );
-    combDelays[3].Add ( temp6 );
+        combDelays[0].Add ( temp3 );
+        combDelays[1].Add ( temp4 );
+        combDelays[2].Add ( temp5 );
+        combDelays[3].Add ( temp6 );
 
-    const double filtout = temp3 + temp4 + temp5 + temp6;
+        const double filtout = temp3 + temp4 + temp5 + temp6;
 
-    outLeftDelay.Add ( filtout );
-    outRightDelay.Add ( filtout );
+        outLeftDelay.Add  ( filtout );
+        outRightDelay.Add ( filtout );
 
-    // inplace apply the attenuated reverb signal
-    iInputOutputLeft  = Double2Short (
-        ( 1.0 - dAttenuation ) * iInputOutputLeft +
-        0.5 * dAttenuation * outLeftDelay.Get() );
+        // inplace apply the attenuated reverb signal (for stereo always apply
+        // reverberation effect on both channels)
+        if ( ( eAudioChannelConf == CC_STEREO ) || bReverbOnLeftChan )
+        {
+            vecsStereoInOut[i] = Double2Short (
+                ( 1.0 - dAttenuation ) * vecsStereoInOut[i] +
+                0.5 * dAttenuation * outLeftDelay.Get() );
+        }
 
-    iInputOutputRight = Double2Short (
-        ( 1.0 - dAttenuation ) * iInputOutputRight +
-        0.5 * dAttenuation * outRightDelay.Get() );
+        if ( ( eAudioChannelConf == CC_STEREO ) || !bReverbOnLeftChan )
+        {
+            vecsStereoInOut[i + 1] = Double2Short (
+                ( 1.0 - dAttenuation ) * vecsStereoInOut[i + 1] +
+                0.5 * dAttenuation * outRightDelay.Get() );
+        }
+    }
 }
 
 
@@ -398,6 +425,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Emlyn Bolton (<a href=""https://github.com/emlynmac"">emlynmac</a>)</p>"
         "<p>Jos van den Oever (<a href=""https://github.com/vandenoever"">vandenoever</a>)</p>"
         "<p>Tormod Volden (<a href=""https://github.com/tormodvolden"">tormodvolden</a>)</p>"
+        "<p>Alberstein8 (<a href=""https://github.com/Alberstein8"">Alberstein8</a>)</p>"
         "<p>Gauthier Fleutot Östervall (<a href=""https://github.com/fleutot"">fleutot</a>)</p>"
         "<p>Stanislas Michalak (<a href=""https://github.com/stanislas-m"">stanislas-m</a>)</p>"
         "<p>JP Cimalando (<a href=""https://github.com/jpcima"">jpcima</a>)</p>"

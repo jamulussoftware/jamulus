@@ -1565,7 +1565,7 @@ void CProtocol::CreateRecorderStateMes ( const ERecorderState eRecorderState )
     int              iPos = 0;      // init position pointer
 
     // build data vector
-    // recorder state
+    // server jam recorder state (1 byte)
     PutValOnStream ( vecData, iPos, static_cast<uint32_t> ( eRecorderState ), 1 );
 
     CreateAndSendMessage ( PROTMESSID_RECORDER_STATE, vecData );
@@ -1581,11 +1581,17 @@ bool CProtocol::EvaluateRecorderStateMes(const CVector<uint8_t>& vecData)
         return true; // return error code
     }
 
-    // server jam recorder state
-    const ERecorderState eRecorderState = static_cast<ERecorderState> ( GetValFromStream ( vecData, iPos, 1 ) );
+    // server jam recorder state (1 byte)
+    const int iRecorderState =
+        static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
+
+    if ( iRecorderState != RS_UNDEFINED ) // ... to be defined ...
+    {
+        return true;
+    }
 
     // invoke message action
-    emit RecorderStateReceived ( eRecorderState );
+    emit RecorderStateReceived ( static_cast<ERecorderState> ( iRecorderState ) );
 
     return false; // no error
 }

@@ -630,9 +630,9 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
 
 
     setAccessibleName ( "Personal Mix at the Server groupbox" );
-    setWhatsThis ( "<b>" + tr( "Personal Mix at the Server" ) + "</b>: " +
+    setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + "</b>: " +
         tr ( "When connected to a server, the controls here allow you to set " ) +
-        tr ( "your local mix without affecting what others hear from you.") + "<br/>" +
+        tr ( "your local mix without affecting what others hear from you." ) + "<br/>" +
         tr ( "The title shows the server name and, when known, "
              "whether it is actively recording." ) );
 
@@ -816,23 +816,23 @@ void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
     }
 }
 
-QString CAudioMixerBoard::GetTitle()
+void CAudioMixerBoard::UpdateTitle()
 {
-    QString myTitle = "";
+    QString strTitlePrefix = "";
+
     if ( eRecorderState == RS_RECORDING )
     {
-        myTitle = "[" + tr ( "RECORDING ACTIVE" )  + "] ";
+        strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" )  + "] ";
     }
-    return myTitle + tr ( "Personal Mix at: " ) + strServerName;
+
+    setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );
 }
 
 void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState )
 {
+    // store the new recorder state and update the title
     eRecorderState = newRecorderState;
-    if ( !strServerName.isEmpty() && !bNoFaderVisible )
-    {
-        setTitle ( GetTitle() );
-    }
+    UpdateTitle();
 }
 
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )
@@ -841,7 +841,7 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
     // in the audio mixer board to show a "try to connect" before
     if ( bNoFaderVisible )
     {
-        setTitle ( GetTitle() );
+        UpdateTitle();
     }
 
     // get number of connected clients

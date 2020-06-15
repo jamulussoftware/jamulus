@@ -9,7 +9,10 @@
 
 - support sorting faders by channel instrument, coded by Alberstein8 (#356)
 
+- add server recording indicator, coded by pljones (#295)
+
 - support for storing/recovering the server window positions (#357)
+
 
 
 

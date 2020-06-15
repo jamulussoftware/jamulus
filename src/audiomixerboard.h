@@ -190,8 +190,6 @@ protected:
         }
     };
 
-    QString GetTitle();
-
     bool GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                                   int&                iStoredFaderLevel,
                                   int&                iStoredPanValue,
@@ -200,6 +198,7 @@ protected:
 
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
+    void UpdateTitle();
 
     void OnGainValueChanged ( const int    iChannelIdx,
                               const double dValue );

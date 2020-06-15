@@ -190,18 +190,43 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="697"/>
+        <location filename="../../audiomixerboard.cpp" line="633"/>
+        <source>Personal Mix at the Server</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="634"/>
+        <source>When connected to a server, the controls here allow you to set </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="635"/>
+        <source>your local mix without affecting what others hear from you.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="636"/>
+        <source>The title shows the server name and, when known, whether it is actively recording.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="706"/>
         <source>Server</source>
         <translation>Server</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="706"/>
+        <location filename="../../audiomixerboard.cpp" line="715"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>I N   A T T E S A   D I   C O N N E S S I O N E</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="819"/>
-        <source>Personal Mix at the Server: </source>
+        <location filename="../../audiomixerboard.cpp" line="825"/>
+        <source>RECORDING ACTIVE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="828"/>
+        <source>Personal Mix at: </source>
         <translation>Mixer personale sul Server: </translation>
     </message>
 </context>
@@ -560,7 +585,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="107"/>
-        <location filename="../../clientdlg.cpp" line="632"/>
+        <location filename="../../clientdlg.cpp" line="635"/>
         <source>L</source>
         <translation>L</translation>
     </message>
@@ -783,7 +808,7 @@
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="203"/>
-        <location filename="../../clientdlg.cpp" line="1111"/>
+        <location filename="../../clientdlg.cpp" line="1114"/>
         <source>C&amp;onnect</source>
         <translation>C&amp;onnetti</translation>
     </message>
@@ -847,32 +872,32 @@
         <translation>Nullo</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="619"/>
+        <location filename="../../clientdlg.cpp" line="622"/>
         <source>Center</source>
         <translation>Centro</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="626"/>
+        <location filename="../../clientdlg.cpp" line="629"/>
         <source>R</source>
         <translation>R</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="718"/>
+        <location filename="../../clientdlg.cpp" line="721"/>
         <source>Central Server</source>
         <translation>Server Centrale</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="845"/>
+        <location filename="../../clientdlg.cpp" line="848"/>
         <source>user</source>
         <translation>utente</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="850"/>
+        <location filename="../../clientdlg.cpp" line="853"/>
         <source>users</source>
         <translation>utenti</translation>
     </message>
     <message>
-        <location filename="../../clientdlg.cpp" line="1087"/>
+        <location filename="../../clientdlg.cpp" line="1090"/>
         <source>D&amp;isconnect</source>
         <translation>D&amp;isconnetti</translation>
     </message>
@@ -1537,32 +1562,32 @@
         <translation>Ok</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="591"/>
+        <location filename="../../util.h" line="601"/>
         <source>Custom</source>
         <translation>Personalizzato</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="594"/>
+        <location filename="../../util.h" line="604"/>
         <source>All Genres</source>
         <translation>Tutti i Generi</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="597"/>
+        <location filename="../../util.h" line="607"/>
         <source>Genre Rock</source>
         <translation>Genere Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="600"/>
+        <location filename="../../util.h" line="610"/>
         <source>Genre Jazz</source>
         <translation>Genere Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="603"/>
+        <location filename="../../util.h" line="613"/>
         <source>Genre Classical/Folk/Choir</source>
         <translation>Genere Classica/Folk/Corale</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="606"/>
+        <location filename="../../util.h" line="616"/>
         <source>Default</source>
         <translation>Default</translation>
     </message>
@@ -2621,62 +2646,62 @@
         <translation>&amp;Finestra</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="599"/>
+        <location filename="../../serverdlg.cpp" line="616"/>
         <source>Predefined Address</source>
         <translation>Indirizzo Predefinito</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="711"/>
+        <location filename="../../serverdlg.cpp" line="728"/>
         <source>Recording</source>
         <translation>Registrazione</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="716"/>
+        <location filename="../../serverdlg.cpp" line="733"/>
         <source>Not recording</source>
         <translation>Registrazione Ferma</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="722"/>
+        <location filename="../../serverdlg.cpp" line="739"/>
         <source>Not enabled</source>
         <translation>Non Abilitata</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="628"/>
+        <location filename="../../util.h" line="638"/>
         <source>Unregistered</source>
         <translation>Non registrato</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="631"/>
+        <location filename="../../util.h" line="641"/>
         <source>Bad address</source>
         <translation>Indirizzo Errato</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="634"/>
+        <location filename="../../util.h" line="644"/>
         <source>Registration requested</source>
         <translation>Registrazione richiesta</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="637"/>
+        <location filename="../../util.h" line="647"/>
         <source>Registration failed</source>
         <translation>Registrazione fallita</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="640"/>
+        <location filename="../../util.h" line="650"/>
         <source>Check server version</source>
         <translation>Controlla Versione server</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="643"/>
+        <location filename="../../util.h" line="653"/>
         <source>Registered</source>
         <translation>Registrato</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="646"/>
+        <location filename="../../util.h" line="656"/>
         <source>Central Server full</source>
         <translation>Server Centrale Pieno</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="649"/>
+        <location filename="../../util.h" line="659"/>
         <source>Unknown value </source>
         <translation>Valore sconosciuto </translation>
     </message>

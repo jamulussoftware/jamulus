@@ -11,8 +11,7 @@
 
 - support for storing/recovering the server window positions (#357)
 
-TODO Mac audio interface -> crackling
-TODO try to reproduce: Quitting client when server window minimized not handled cleanly #355
+
 
 
 

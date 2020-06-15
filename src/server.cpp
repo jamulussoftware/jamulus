@@ -768,9 +768,6 @@ void CServer::Start()
 
         // emit start signal
         emit Started();
-
-        // send recording state message
-        CreateAndSendRecorderStateForAllConChannels();
     }
 }
 
@@ -790,9 +787,6 @@ void CServer::Stop()
 
         // emit stopped signal
         emit Stopped();
-
-        // send recording state message - to no one
-        CreateAndSendRecorderStateForAllConChannels();
     }
 }
 

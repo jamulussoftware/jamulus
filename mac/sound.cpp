@@ -907,7 +907,7 @@ OSStatus CSound::deviceNotification ( AudioDeviceID,
         pSound->EmitReinitRequestSignal ( RS_RELOAD_RESTART_AND_INIT );
     }
 
-/*
+/* NOTE that this code does not solve the crackling sound issue
     if ( inAddresses->mSelector == kAudioDeviceProcessorOverload )
     {
         // xrun handling (it is important to act on xruns under CoreAudio

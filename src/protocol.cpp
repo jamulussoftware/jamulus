@@ -1585,7 +1585,10 @@ bool CProtocol::EvaluateRecorderStateMes(const CVector<uint8_t>& vecData)
     const int iRecorderState =
         static_cast<int> ( GetValFromStream ( vecData, iPos, 1 ) );
 
-    if ( iRecorderState != RS_UNDEFINED ) // ... to be defined ...
+    if ( ( iRecorderState != RS_UNDEFINED ) &&
+         ( iRecorderState != RS_NOT_INITIALISED ) &&
+         ( iRecorderState != RS_NOT_ENABLED ) &&
+         ( iRecorderState != RS_RECORDING ) )
     {
         return true;
     }

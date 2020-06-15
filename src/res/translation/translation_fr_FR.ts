@@ -202,42 +202,32 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="633"/>
+        <location filename="../../audiomixerboard.cpp" line="632"/>
         <source>Personal Mix at the Server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="634"/>
-        <source>When connected to a server, the controls here allow you to set </source>
+        <location filename="../../audiomixerboard.cpp" line="632"/>
+        <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="635"/>
-        <source>your local mix without affecting what others hear from you.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../audiomixerboard.cpp" line="636"/>
-        <source>The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../audiomixerboard.cpp" line="706"/>
+        <location filename="../../audiomixerboard.cpp" line="704"/>
         <source>Server</source>
         <translation>Serveur</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="715"/>
+        <location filename="../../audiomixerboard.cpp" line="713"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>T E N T A T I V E   D E   C O N N E X I O N</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="825"/>
+        <location filename="../../audiomixerboard.cpp" line="833"/>
         <source>RECORDING ACTIVE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="828"/>
+        <location filename="../../audiomixerboard.cpp" line="836"/>
         <source>Personal Mix at: </source>
         <translation>Mixage personnel du serveur : </translation>
     </message>

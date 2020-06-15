@@ -628,13 +628,11 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     pScrollArea                  = new CMixerBoardScrollArea ( this );
     pMainLayout                  = new QHBoxLayout ( pMixerWidget );
 
-
     setAccessibleName ( "Personal Mix at the Server groupbox" );
-    setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + "</b>: " +
-        tr ( "When connected to a server, the controls here allow you to set " ) +
-        tr ( "your local mix without affecting what others hear from you." ) + "<br/>" +
-        tr ( "The title shows the server name and, when known, "
-             "whether it is actively recording." ) );
+    setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + "</b>: " + tr (
+        "When connected to a server, the controls here allow you to set your "
+        "local mix without affecting what others hear from you. The title shows "
+        "the server name and, when known, whether it is actively recording." ) );
 
     // set title text (default: no server given)
     SetServerName ( "" );
@@ -718,6 +716,16 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 
 void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
 {
+    // move the channels tighter together in slim fader mode
+    if ( eNewDesign == GD_SLIMFADER )
+    {
+        pMainLayout->setSpacing ( 2 );
+    }
+    else
+    {
+        pMainLayout->setSpacing ( 6 ); // Qt default spacing value
+    }
+
     // apply GUI design to child GUI controls
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {

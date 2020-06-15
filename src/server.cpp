@@ -740,7 +740,7 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
 // TODO we should use the ConsoleWriterFactory() instead of qInfo()
-        qInfo() << "Recording state " << ( bEnableRecording ? "enabled" : "disabled" );
+        qInfo() << "Recording state" << ( bEnableRecording ? "enabled" : "disabled" );
 #endif
 
         if ( !bEnableRecording )

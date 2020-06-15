@@ -472,6 +472,9 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     QObject::connect ( pClient, &CClient::MuteStateHasChangedReceived,
         this, &CClientDlg::OnMuteStateHasChangedReceived );
 
+    QObject::connect ( pClient, &CClient::RecorderStateReceived,
+        this, &CClientDlg::OnRecorderStateReceived );
+
     // This connection is a special case. On receiving a licence required message via the
     // protocol, a modal licence dialog is opened. Since this blocks the thread, we need
     // a queued connection to make sure the core protocol mechanism is not blocked, too.

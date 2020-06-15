@@ -619,13 +619,22 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     bIsPanSupported      ( false ),
     bNoFaderVisible      ( true ),
     iMyChannelID         ( INVALID_INDEX ),
-    strServerName        ( "" )
+    strServerName        ( "" ),
+    eRecorderState       ( RS_UNDEFINED )
 {
     // add group box and hboxlayout
     QHBoxLayout* pGroupBoxLayout = new QHBoxLayout ( this );
     QWidget*     pMixerWidget    = new QWidget(); // will be added to the scroll area which is then the parent
     pScrollArea                  = new CMixerBoardScrollArea ( this );
     pMainLayout                  = new QHBoxLayout ( pMixerWidget );
+
+
+    setAccessibleName ( "Personal Mix at the Server groupbox" );
+    setWhatsThis ( "<b>" + tr( "Personal Mix at the Server" ) + "</b>: " +
+        tr ( "When connected to a server, the controls here allow you to set " ) +
+        tr ( "your local mix without affecting what others hear from you.") + "<br/>" +
+        tr ( "The title shows the server name and, when known, "
+             "whether it is actively recording." ) );
 
     // set title text (default: no server given)
     SetServerName ( "" );
@@ -807,13 +816,32 @@ void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
     }
 }
 
+QString CAudioMixerBoard::GetTitle()
+{
+    QString myTitle = "";
+    if ( eRecorderState == RS_RECORDING )
+    {
+        myTitle = "[" + tr ( "RECORDING ACTIVE" )  + "] ";
+    }
+    return myTitle + tr ( "Personal Mix at: " ) + strServerName;
+}
+
+void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState )
+{
+    eRecorderState = newRecorderState;
+    if ( !strServerName.isEmpty() && !bNoFaderVisible )
+    {
+        setTitle ( GetTitle() );
+    }
+}
+
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )
 {
     // we want to set the server name only if the very first faders appear
     // in the audio mixer board to show a "try to connect" before
     if ( bNoFaderVisible )
     {
-        setTitle ( tr ( "Personal Mix at the Server: " ) + strServerName );
+        setTitle ( GetTitle() );
     }
 
     // get number of connected clients

@@ -782,6 +782,7 @@ void CAudioMixerBoard::HideAll()
     // set flags
     bIsPanSupported = false;
     bNoFaderVisible = true;
+    eRecorderState  = RS_UNDEFINED;
     iMyChannelID    = INVALID_INDEX;
 
     // use original order of channel (by server ID)

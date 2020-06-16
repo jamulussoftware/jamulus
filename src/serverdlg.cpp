@@ -332,6 +332,14 @@ lvwClients->setMinimumHeight ( 140 );
     layout()->setMenuBar ( pMenu );
 
 
+    // Window positions --------------------------------------------------------
+    // main window
+    if ( !pServer->vecWindowPosMain.isEmpty() && !pServer->vecWindowPosMain.isNull() )
+    {
+        restoreGeometry ( pServer->vecWindowPosMain );
+    }
+
+
     // Connections -------------------------------------------------------------
     // check boxes
     QObject::connect ( chbRegisterServer, &QCheckBox::stateChanged,
@@ -397,6 +405,15 @@ lvwClients->setMinimumHeight ( 140 );
     // Timers ------------------------------------------------------------------
     // start timer for GUI controls
     Timer.start ( GUI_CONTRL_UPDATE_TIME );
+}
+
+void CServerDlg::closeEvent ( QCloseEvent* Event )
+{
+    // store window positions
+    pServer->vecWindowPosMain = saveGeometry();
+
+    // default implementation of this event handler routine
+    Event->accept();
 }
 
 void CServerDlg::OnStartOnOSStartStateChanged ( int value )

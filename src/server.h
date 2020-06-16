@@ -28,6 +28,7 @@
 #include <QTimer>
 #include <QDateTime>
 #include <QHostAddress>
+#include <QFileInfo>
 #include <algorithm>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
@@ -250,6 +251,9 @@ public:
     void SetLicenceType ( const ELicenceType NLiType ) { eLicenceType = NLiType; }
     ELicenceType GetLicenceType() { return eLicenceType; }
 
+    // window position/state settings
+    QByteArray vecWindowPosMain;
+
 protected:
     // access functions for actual channels
     bool IsConnected ( const int iChanNum )
@@ -268,6 +272,10 @@ protected:
 
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText );
+
+    virtual void CreateAndSendRecorderStateForAllConChannels();
+
+    ERecorderState GetRecorderState();
 
     virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
                                                const int  iOtherChanID,

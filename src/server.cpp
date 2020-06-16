@@ -234,6 +234,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
                    const bool         bNDisconnectAllClientsOnQuit,
                    const bool         bNUseDoubleSystemFrameSize,
                    const ELicenceType eNLicenceType ) :
+    vecWindowPosMain            (), // empty array
     bUseDoubleSystemFrameSize   ( bNUseDoubleSystemFrameSize ),
     iMaxNumChannels             ( iNewMaxNumChan ),
     Socket                      ( this, iPortNumber ),
@@ -250,7 +251,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
                                   bNCentServPingServerInList,
                                   &ConnLessProtocol ),
     bAutoRunMinimized           ( false ),
-    strWelcomeMessage           ( strNewWelcomeMessage ),
     eLicenceType                ( eNLicenceType ),
     bDisconnectAllClientsOnQuit ( bNDisconnectAllClientsOnQuit ),
     pSignalHandler              ( CSignalHandler::getSingletonP() )
@@ -401,6 +401,23 @@ CServer::CServer ( const int          iNewMaxNumChan,
             strCurServerNameForHTMLStatusFile + ":" +
             QString().number( static_cast<int> ( iPortNumber ) ) );
     }
+
+    // manage welcome message: if the welcome message is a valid link to a local
+    // file, the content of that file is used as the welcome message (#361)
+    strWelcomeMessage = strNewWelcomeMessage; // first copy text, may be overwritten
+    if ( QFileInfo ( strNewWelcomeMessage ).exists() )
+    {
+        QFile file ( strNewWelcomeMessage );
+
+        if ( file.open ( QIODevice::ReadOnly | QIODevice::Text ) )
+        {
+            // use entrie file content for the welcome message
+            strWelcomeMessage = file.readAll();
+        }
+    }
+
+    // restrict welcome message to maximum allowed length
+    strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
 
     // enable jam recording (if requested) - kicks off the thread
     if ( !strRecordingDirName.isEmpty() )
@@ -593,6 +610,9 @@ void CServer::OnNewConnection ( int          iChID,
     // send version info (for, e.g., feature activation in the client)
     vecChannels[iChID].CreateVersionAndOSMes();
 
+    // send recording state message on connection
+    vecChannels[iChID].CreateRecorderStateMes ( GetRecorderState() );
+
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
     DoubleFrameSizeConvBufOut[iChID].Reset();
@@ -704,6 +724,9 @@ void CServer::RequestNewRecording()
     {
         emit RestartRecorder();
     }
+
+    // send recording state message - doesn't hurt
+    CreateAndSendRecorderStateForAllConChannels();
 }
 
 void CServer::SetEnableRecording ( bool bNewEnableRecording )
@@ -717,7 +740,7 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
 
 #if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
 // TODO we should use the ConsoleWriterFactory() instead of qInfo()
-        qInfo() << "Recording state " << ( bEnableRecording ? "enabled" : "disabled" );
+        qInfo() << "Recording state" << ( bEnableRecording ? "enabled" : "disabled" );
 #endif
 
         if ( !bEnableRecording )
@@ -730,6 +753,9 @@ void CServer::SetEnableRecording ( bool bNewEnableRecording )
             emit StopRecorder();
         }
     }
+
+    // send recording state message
+    CreateAndSendRecorderStateForAllConChannels();
 }
 
 void CServer::Start()
@@ -1310,6 +1336,42 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
             // send message
             vecChannels[i].CreateChatTextMes ( strActualMessageText );
         }
+    }
+}
+
+void CServer::CreateAndSendRecorderStateForAllConChannels()
+{
+    // get recorder state
+    ERecorderState eRecorderState = GetRecorderState();
+
+    // now send recorder state to all connected clients
+    for ( int i = 0; i < iMaxNumChannels; i++ )
+    {
+        if ( vecChannels[i].IsConnected() )
+        {
+            // send message
+            vecChannels[i].CreateRecorderStateMes ( eRecorderState );
+        }
+    }
+}
+
+ERecorderState CServer::GetRecorderState()
+{
+    // return recorder state
+    if ( bRecorderInitialised )
+    {
+        if ( bEnableRecording )
+        {
+            return RS_RECORDING;
+        }
+        else
+        {
+            return RS_NOT_ENABLED;
+        }
+    }
+    else
+    {
+        return RS_NOT_INITIALISED;
     }
 }
 

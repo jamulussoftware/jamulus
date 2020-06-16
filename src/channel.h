@@ -168,6 +168,9 @@ public:
     void CreateConClientListMes ( const CVector<CChannelInfo>& vecChanInfo )
         { Protocol.CreateConClientListMes ( vecChanInfo ); }
 
+    void CreateRecorderStateMes ( const ERecorderState eRecorderState )
+        { Protocol.CreateRecorderStateMes ( eRecorderState ); }
+
     CNetworkTransportProps GetNetworkTransportPropsFromCurrentSettings();
 
     bool ChannelLevelsRequired() const                { return bChannelLevelsRequired; }
@@ -287,6 +290,7 @@ signals:
     void ReqNetTranspProps();
     void LicenceRequired ( ELicenceType eLicenceType );
     void VersionAndOSReceived ( COSUtil::EOpSystemType eOSType, QString strVersion );
+    void RecorderStateReceived ( ERecorderState eRecorderState );
     void Disconnected();
 
     void DetectedCLMessage ( CVector<uint8_t> vecbyMesBodyData,

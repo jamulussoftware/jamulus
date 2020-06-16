@@ -427,6 +427,10 @@ if ( GetFlagIniSet ( IniXMLDocument, "server", "defcentservaddr", bValue ) )
         {
             pServer->SetLicenceType ( static_cast<ELicenceType> ( iValue ) );
         }
+
+        // window position of the main window
+        pServer->vecWindowPosMain = FromBase64ToByteArray (
+            GetIniSetting ( IniXMLDocument, "server", "winposmain_base64" ) );
     }
 }
 
@@ -666,6 +670,10 @@ void CSettings::Save()
         // licence type
         SetNumericIniSet ( IniXMLDocument, "server", "licencetype",
             static_cast<int> ( pServer->GetLicenceType() ) );
+
+        // window position of the main window
+        PutIniSetting ( IniXMLDocument, "server", "winposmain_base64",
+            ToBase64 ( pServer->vecWindowPosMain ) );
     }
 
     // prepare file name for storing initialization data in XML file and store

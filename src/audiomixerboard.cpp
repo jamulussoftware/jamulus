@@ -619,13 +619,20 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     bIsPanSupported      ( false ),
     bNoFaderVisible      ( true ),
     iMyChannelID         ( INVALID_INDEX ),
-    strServerName        ( "" )
+    strServerName        ( "" ),
+    eRecorderState       ( RS_UNDEFINED )
 {
     // add group box and hboxlayout
     QHBoxLayout* pGroupBoxLayout = new QHBoxLayout ( this );
     QWidget*     pMixerWidget    = new QWidget(); // will be added to the scroll area which is then the parent
     pScrollArea                  = new CMixerBoardScrollArea ( this );
     pMainLayout                  = new QHBoxLayout ( pMixerWidget );
+
+    setAccessibleName ( "Personal Mix at the Server groupbox" );
+    setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + "</b>: " + tr (
+        "When connected to a server, the controls here allow you to set your "
+        "local mix without affecting what others hear from you. The title shows "
+        "the server name and, when known, whether it is actively recording." ) );
 
     // set title text (default: no server given)
     SetServerName ( "" );
@@ -709,6 +716,16 @@ void CAudioMixerBoard::SetServerName ( const QString& strNewServerName )
 
 void CAudioMixerBoard::SetGUIDesign ( const EGUIDesign eNewDesign )
 {
+    // move the channels tighter together in slim fader mode
+    if ( eNewDesign == GD_SLIMFADER )
+    {
+        pMainLayout->setSpacing ( 2 );
+    }
+    else
+    {
+        pMainLayout->setSpacing ( 6 ); // Qt default spacing value
+    }
+
     // apply GUI design to child GUI controls
     for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
     {
@@ -765,6 +782,7 @@ void CAudioMixerBoard::HideAll()
     // set flags
     bIsPanSupported = false;
     bNoFaderVisible = true;
+    eRecorderState  = RS_UNDEFINED;
     iMyChannelID    = INVALID_INDEX;
 
     // use original order of channel (by server ID)
@@ -788,10 +806,7 @@ void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
         }
         else // ST_BY_INSTRUMENT
         {
-            // note that the sorting will not be the same as we would use QPair<int, int>
-            // but this is not a problem since the order of the instrument IDs are arbitrary
-            // anyway
-            PairList << QPair<QString, int> ( QString::number ( vecpChanFader[i]->GetReceivedInstrument() ), i );
+            PairList << QPair<QString, int> ( CInstPictures::GetName ( vecpChanFader[i]->GetReceivedInstrument() ), i );
         }
     }
 
@@ -810,13 +825,32 @@ void CAudioMixerBoard::ChangeFaderOrder ( const bool        bDoSort,
     }
 }
 
+void CAudioMixerBoard::UpdateTitle()
+{
+    QString strTitlePrefix = "";
+
+    if ( eRecorderState == RS_RECORDING )
+    {
+        strTitlePrefix = "[" + tr ( "RECORDING ACTIVE" )  + "] ";
+    }
+
+    setTitle ( strTitlePrefix + tr ( "Personal Mix at: " ) + strServerName );
+}
+
+void CAudioMixerBoard::SetRecorderState ( const ERecorderState newRecorderState )
+{
+    // store the new recorder state and update the title
+    eRecorderState = newRecorderState;
+    UpdateTitle();
+}
+
 void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo )
 {
     // we want to set the server name only if the very first faders appear
     // in the audio mixer board to show a "try to connect" before
     if ( bNoFaderVisible )
     {
-        setTitle ( tr ( "Personal Mix at the Server: " ) + strServerName );
+        UpdateTitle();
     }
 
     // get number of connected clients

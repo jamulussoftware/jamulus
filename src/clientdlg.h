@@ -221,6 +221,9 @@ public slots:
     void OnDisplayChannelLevelsChanged()
         { MainMixerBoard->SetDisplayChannelLevels ( pClient->GetDisplayChannelLevels() ); }
 
+    void OnRecorderStateReceived ( ERecorderState eRecorderState )
+        { MainMixerBoard->SetRecorderState ( eRecorderState ); }
+
     void OnAudioChannelsChanged() { UpdateRevSelection(); }
     void OnNumClientsChanged ( int iNewNumClients );
     void OnNewClientLevelChanged() { MainMixerBoard->iNewClientFaderLevel = pClient->iNewClientFaderLevel; }

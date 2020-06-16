@@ -164,6 +164,8 @@ public:
 
     void SetChannelLevels ( const CVector<uint16_t>& vecChannelLevel );
 
+    void SetRecorderState ( const ERecorderState newRecorderState );
+
     // settings
     CVector<QString> vecStoredFaderTags;
     CVector<int>     vecStoredFaderLevels;
@@ -196,6 +198,7 @@ protected:
 
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();
+    void UpdateTitle();
 
     void OnGainValueChanged ( const int    iChannelIdx,
                               const double dValue );
@@ -209,6 +212,7 @@ protected:
     bool                    bNoFaderVisible;
     int                     iMyChannelID;
     QString                 strServerName;
+    ERecorderState          eRecorderState;
 
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const double dValue,

@@ -273,6 +273,10 @@ protected:
     virtual void CreateAndSendChatTextForAllConChannels ( const int      iCurChanID,
                                                           const QString& strChatText );
 
+    virtual void CreateAndSendRecorderStateForAllConChannels();
+
+    ERecorderState GetRecorderState();
+
     virtual void CreateOtherMuteStateChanged ( const int  iCurChanID,
                                                const int  iOtherChanID,
                                                const bool bIsMuted );

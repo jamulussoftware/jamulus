@@ -196,12 +196,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="632"/>
         <source>Personal Mix at the Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Mezcla personal en el Servidor</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="632"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation type="unfinished"></translation>
+        <translation>Estando conectado a un servidor, estos controles te permiten hacer tu mezcla personal sin afectar lo que otros escuchan de tí. El título muestra el nombre del servidor y, cuando se conoce, si está activamente grabando.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="704"/>
@@ -216,7 +216,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="833"/>
         <source>RECORDING ACTIVE</source>
-        <translation type="unfinished"></translation>
+        <translation>GRABACIÓN ACTIVA</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="836"/>
@@ -378,12 +378,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="215"/>
         <source>M</source>
-        <translation type="unfinished"></translation>
+        <translation>M</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="216"/>
         <source>S</source>
-        <translation type="unfinished"></translation>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="526"/>
@@ -1132,12 +1132,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="335"/>
         <source>Fancy</source>
-        <translation type="unfinished"></translation>
+        <translation>Oscuro</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="336"/>
         <source>Compact</source>
-        <translation type="unfinished"></translation>
+        <translation>Compacto</translation>
     </message>
     <message>
         <source>The buffer delay setting is a fundamental setting of the </source>
@@ -1434,17 +1434,17 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="186"/>
         <source>Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>Skin</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="186"/>
         <source>Select the skin to be used for the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Elige el skin a utilizar para la ventana principal.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="189"/>
         <source>Skin combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Campo skin</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="198"/>
@@ -1732,7 +1732,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="514"/>
         <source>Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>Skin</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="536"/>
@@ -2788,7 +2788,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="79"/>
         <source>Genre</source>
-        <translation type="unfinished"></translation>
+        <translation>Género</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="89"/>

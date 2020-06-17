@@ -14,6 +14,7 @@ QT += network \
     xml
 
 contains(CONFIG, "headless") {
+    message(Headless mode activated.)
     QT -= gui
 } else {
     QT += widgets

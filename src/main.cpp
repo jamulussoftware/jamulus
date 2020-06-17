@@ -503,7 +503,7 @@ int main ( int argc, char** argv )
     }
 
 #ifdef HEADLESS
-    if (bUseGUI)
+    if ( bUseGUI )
     {
         bUseGUI = false;
         tsConsole << "No GUI support compiled. Running in headless mode." << endl;
@@ -538,8 +538,8 @@ int main ( int argc, char** argv )
     QCoreApplication* pApp = new QCoreApplication ( argc, argv );
 #else
     QCoreApplication* pApp = bUseGUI
-            ? new QApplication ( argc, argv )
-            : new QCoreApplication ( argc, argv );
+        ? new QApplication ( argc, argv )
+        : new QCoreApplication ( argc, argv );
 #endif
 
 #ifdef ANDROID
@@ -662,6 +662,7 @@ int main ( int argc, char** argv )
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              eLicenceType );
+
 #ifndef HEADLESS
             if ( bUseGUI )
             {

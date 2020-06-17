@@ -22,10 +22,6 @@
  *
 \******************************************************************************/
 
-#ifndef HEADLESS
-# include <QMessageBox>
-#endif
-
 #include "soundbase.h"
 
 

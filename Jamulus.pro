@@ -13,10 +13,10 @@ CONFIG += qt \
 QT += network \
     xml
 
-!contains(CONFIG, "headless") {
-    QT += widgets
-} else {
+contains(CONFIG, "headless") {
     QT -= gui
+} else {
+    QT += widgets
 }
 
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
@@ -992,12 +992,12 @@ DISTFILES_OPUS += libs/opus/AUTHORS \
     libs/opus/celt/arm/armopts.s.in \
     libs/opus/celt/arm/celt_pitch_xcorr_arm.s \
 
-!contains(CONFIG, "headless") {
+contains(CONFIG, "headless") {
+    DEFINES += HEADLESS
+} else {
     HEADERS += $$HEADERS_GUI
     SOURCES += $$SOURCES_GUI
     FORMS += $$FORMS_GUI
-} else {
-    DEFINES += HEADLESS
 }
 
 # use external OPUS library if requested

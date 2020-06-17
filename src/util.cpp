@@ -371,6 +371,7 @@ void CAudioReverb::Process ( CVector<int16_t>& vecsStereoInOut,
 * GUI Utilities                                                                *
 \******************************************************************************/
 // About dialog ----------------------------------------------------------------
+#ifndef HEADLESS
 CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
 {
     setupUi ( this );
@@ -454,43 +455,6 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     // set window title
     setWindowTitle ( tr ( "About " ) + APP_NAME );
 }
-
-QString CAboutDlg::GetVersionAndNameStr ( const bool bWithHtml )
-{
-    QString strVersionText = "";
-
-    // name, short description and GPL hint
-    if ( bWithHtml )
-    {
-        strVersionText += "<b>";
-    }
-    else
-    {
-        strVersionText += " *** ";
-    }
-
-    strVersionText += APP_NAME + tr ( ", Version " ) + VERSION;
-
-    if ( bWithHtml )
-    {
-        strVersionText += "</b><br>";
-    }
-    else
-    {
-        strVersionText += "\n *** ";
-    }
-
-    if ( !bWithHtml )
-    {
-        strVersionText += tr ( "Internet Jam Session Software" );
-        strVersionText += "\n *** ";
-    }
-
-    strVersionText += tr ( "Released under the GNU General Public License (GPL)" );
-
-    return strVersionText;
-}
-
 
 // Licence dialog --------------------------------------------------------------
 CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
@@ -886,6 +850,7 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
 }
 
+#endif
 
 /******************************************************************************\
 * Other Classes                                                                *
@@ -1427,4 +1392,40 @@ void DebugError ( const QString& pchErDescr,
     }
     printf ( "\nDebug error! For more information see test/DebugError.dat\n" );
     exit ( 1 );
+}
+
+QString GetVersionAndNameStr ( const bool bWithHtml )
+{
+    QString strVersionText = "";
+
+    // name, short description and GPL hint
+    if ( bWithHtml )
+    {
+        strVersionText += "<b>";
+    }
+    else
+    {
+        strVersionText += " *** ";
+    }
+
+    strVersionText += APP_NAME + QCoreApplication::tr ( ", Version " ) + VERSION;
+
+    if ( bWithHtml )
+    {
+        strVersionText += "</b><br>";
+    }
+    else
+    {
+        strVersionText += "\n *** ";
+    }
+
+    if ( !bWithHtml )
+    {
+        strVersionText += QCoreApplication::tr ( "Internet Jam Session Software" );
+        strVersionText += "\n *** ";
+    }
+
+    strVersionText += QCoreApplication::tr ( "Released under the GNU General Public License (GPL)" );
+
+    return strVersionText;
 }

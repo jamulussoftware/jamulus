@@ -24,19 +24,22 @@
 
 #pragma once
 
+#include <QCoreApplication>
 #include <QTcpSocket>
 #include <QHostAddress>
 #include <QHostInfo>
-#include <QMenu>
-#include <QWhatsThis>
-#include <QTextBrowser>
-#include <QLabel>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QDateTime>
+#ifndef HEADLESS
+# include <QMenu>
+# include <QWhatsThis>
+# include <QTextBrowser>
+# include <QLabel>
+# include <QCheckBox>
+# include <QComboBox>
+# include <QLineEdit>
+# include <QDateTime>
+# include <QDesktopServices>
+#endif
 #include <QFile>
-#include <QDesktopServices>
 #include <QUrl>
 #include <QLocale>
 #include <QElapsedTimer>
@@ -56,7 +59,9 @@ using namespace std; // because of the library: "vector"
 #else
 # include <sys/time.h>
 #endif
-#include "ui_aboutdlgbase.h"
+#ifndef HEADLESS
+# include "ui_aboutdlgbase.h"
+#endif
 
 
 class CClient;  // forward declaration of CClient
@@ -100,6 +105,7 @@ inline int CalcBitRateBitsPerSecFromCodedBytes ( const int iCeltNumCodedBytes,
     return ( SYSTEM_SAMPLE_RATE_HZ * iCeltNumCodedBytes * 8 ) / iFrameSize;
 }
 
+QString GetVersionAndNameStr ( const bool bWithHtml = true );
 
 
 /******************************************************************************\
@@ -408,6 +414,7 @@ template<class TData> void CMovingAv<TData>::Add ( const TData tNewD )
 /******************************************************************************\
 * GUI Utilities                                                                *
 \******************************************************************************/
+#ifndef HEADLESS
 // About dialog ----------------------------------------------------------------
 class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
 {
@@ -416,7 +423,6 @@ class CAboutDlg : public QDialog, private Ui_CAboutDlgBase
 public:
     CAboutDlg ( QWidget* parent = nullptr );
 
-    static QString GetVersionAndNameStr ( const bool bWithHtml = true );
 };
 
 
@@ -484,6 +490,7 @@ public slots:
     void OnHelpSoftwareMan()      { QDesktopServices::openUrl ( QUrl ( SOFTWARE_MANUAL_URL ) ); }
 };
 
+#endif
 
 // Console writer factory ------------------------------------------------------
 // this class was written by pljones

@@ -26,7 +26,6 @@
 
 #include <QThread>
 #include <QString>
-#include <QMessageBox>
 #include "global.h"
 #include "util.h"
 

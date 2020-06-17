@@ -25,7 +25,6 @@
 #pragma once
 
 #include <QObject>
-#include <QMessageBox>
 #include <QThread>
 #include <QMutex>
 #include <vector>

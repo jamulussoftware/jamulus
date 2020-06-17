@@ -10,9 +10,14 @@ CONFIG += qt \
     thread \
     release
 
-QT += widgets \
-    network \
+QT += network \
     xml
+
+!contains(CONFIG, "headless") {
+    QT += widgets
+} else {
+    QT -= gui
+}
 
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \
@@ -324,25 +329,18 @@ win32 {
 RCC_DIR = src/res
 RESOURCES += src/resources.qrc
 
-FORMS += src/clientdlgbase.ui \
+FORMS_GUI = src/clientdlgbase.ui \
     src/serverdlgbase.ui \
     src/clientsettingsdlgbase.ui \
     src/chatdlgbase.ui \
     src/connectdlgbase.ui \
     src/aboutdlgbase.ui
 
-HEADERS += src/audiomixerboard.h \
-    src/buffer.h \
+HEADERS += src/buffer.h \
     src/channel.h \
-    src/chatdlg.h \
     src/client.h \
-    src/clientsettingsdlg.h \
-    src/connectdlg.h \
     src/global.h \
-    src/clientdlg.h \
-    src/serverdlg.h \
     src/multicolorled.h \
-    src/multicolorledbar.h \
     src/protocol.h \
     src/server.h \
     src/serverlist.h \
@@ -352,12 +350,20 @@ HEADERS += src/audiomixerboard.h \
     src/soundbase.h \
     src/testbench.h \
     src/util.h \
-    src/analyzerconsole.h \
     src/recorder/jamrecorder.h \
     src/recorder/creaperproject.h \
     src/recorder/cwavestream.h \
     src/historygraph.h \
     src/signalhandler.h
+
+HEADERS_GUI = src/audiomixerboard.h \
+    src/chatdlg.h \
+    src/clientsettingsdlg.h \
+    src/connectdlg.h \
+    src/clientdlg.h \
+    src/serverdlg.h \
+    src/multicolorledbar.h \
+    src/analyzerconsole.h
 
 HEADERS_OPUS = libs/opus/celt/arch.h \
     libs/opus/celt/bands.h \
@@ -430,18 +436,10 @@ HEADERS_OPUS_X86 = libs/opus/celt/x86/celt_lpc_sse.h \
     libs/opus/celt/x86/vq_sse.h \
     libs/opus/celt/x86/x86cpu.h
 
-SOURCES += src/audiomixerboard.cpp \
-    src/buffer.cpp \
+SOURCES += src/buffer.cpp \
     src/channel.cpp \
-    src/chatdlg.cpp \
     src/client.cpp \
-    src/clientsettingsdlg.cpp \
-    src/connectdlg.cpp \
-    src/clientdlg.cpp \
-    src/serverdlg.cpp \
     src/main.cpp \
-    src/multicolorled.cpp \
-    src/multicolorledbar.cpp \
     src/protocol.cpp \
     src/server.cpp \
     src/serverlist.cpp \
@@ -451,11 +449,20 @@ SOURCES += src/audiomixerboard.cpp \
     src/socket.cpp \
     src/soundbase.cpp \
     src/util.cpp \
-    src/analyzerconsole.cpp \
     src/recorder/jamrecorder.cpp \
     src/recorder/creaperproject.cpp \
     src/recorder/cwavestream.cpp \
     src/historygraph.cpp
+
+SOURCES_GUI = src/audiomixerboard.cpp \
+    src/chatdlg.cpp \
+    src/clientsettingsdlg.cpp \
+    src/connectdlg.cpp \
+    src/clientdlg.cpp \
+    src/serverdlg.cpp \
+    src/multicolorled.cpp \
+    src/multicolorledbar.cpp \
+    src/analyzerconsole.cpp
 
 SOURCES_OPUS = libs/opus/celt/bands.c \
     libs/opus/celt/celt.c \
@@ -984,6 +991,14 @@ DISTFILES_OPUS += libs/opus/AUTHORS \
     libs/opus/README \
     libs/opus/celt/arm/armopts.s.in \
     libs/opus/celt/arm/celt_pitch_xcorr_arm.s \
+
+!contains(CONFIG, "headless") {
+    HEADERS += $$HEADERS_GUI
+    SOURCES += $$SOURCES_GUI
+    FORMS += $$FORMS_GUI
+} else {
+    DEFINES += HEADLESS
+}
 
 # use external OPUS library if requested
 contains(CONFIG, "opus_shared_lib") {

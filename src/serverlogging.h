@@ -39,7 +39,9 @@ class CServerLogging
 {
 public:
     CServerLogging ( const int iMaxDaysHistory ) :
+#ifndef HEADLESS
         JpegHistoryGraph ( iMaxDaysHistory ),
+#endif
         SvgHistoryGraph ( iMaxDaysHistory ),
         bDoLogging ( false ),
         File ( DEFAULT_LOG_FILE_NAME ) {}
@@ -56,7 +58,9 @@ protected:
     void operator<< ( const QString& sNewStr );
     QString CurTimeDatetoLogString();
 
+#ifndef HEADLESS
     CJpegHistoryGraph JpegHistoryGraph;
+#endif
     CSvgHistoryGraph  SvgHistoryGraph;
     bool              bDoLogging;
     QFile             File;

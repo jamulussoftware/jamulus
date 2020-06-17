@@ -13,6 +13,7 @@
 
 - support for storing/recovering the server window positions (#357)
 
+- add a headless build type which does not depend on QtGui/QtWidgets, coded by marcan (#322)
 
 
 

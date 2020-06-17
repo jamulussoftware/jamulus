@@ -192,12 +192,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="632"/>
         <source>Personal Mix at the Server</source>
-        <translation>Mixer Personale sul Server</translation>
+        <translation>Mixer personale sul Server</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="632"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation>Quando si è connessi ad un server i controlli daranno la possibilità di regolare i volumi in locale senza modificare l&apos;ascolto degli altri utenti. L&apos;intestazione mostra il nome del server, se disponibile, incluse le informazioni sullo stato delle sessioni di registrazione.</translation>
+        <translation>Quando connessi i fader permettono di regolare i volumi in locale senza influenzare l&apos;ascolto degli altri utenti. L&apos;intestazione mostra il nome de server, se valorizzato, e le informazioni sullo stato della sessione di registrazione se attiva.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="704"/>
@@ -212,7 +212,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="833"/>
         <source>RECORDING ACTIVE</source>
-        <translation>Registrazione In corso</translation>
+        <translation>Sessione con Registrazione Attiva</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="836"/>
@@ -850,7 +850,7 @@
     <message>
         <location filename="../../clientdlg.cpp" line="288"/>
         <source>Sort Channel Users by &amp;Instrument</source>
-        <translation>Ordina Canali per &amp;Strumento</translation>
+        <translation>Ordina canali per &amp;Strumento</translation>
     </message>
     <message>
         <source>&amp;Sort Channel Users by Name</source>

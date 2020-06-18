@@ -181,12 +181,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="632"/>
         <source>Personal Mix at the Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigener Mix am Server</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="632"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wenn man mit einem Server verbunden ist, dann kann man hier den eigenen Mix verstellen ohne dass man etwas daran verändert, was die anderen von mir hören. Der Titel zeigt den Servernamen an und falls bekannt den Aufnahmestatus des Servers.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="704"/>
@@ -201,7 +201,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="834"/>
         <source>RECORDING ACTIVE</source>
-        <translation type="unfinished"></translation>
+        <translation>AUFNAHME AKTIV</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="837"/>
@@ -2765,7 +2765,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="79"/>
         <source>Genre</source>
-        <translation type="unfinished"></translation>
+        <translation>Genre</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="89"/>
@@ -3006,17 +3006,17 @@
     <message>
         <location filename="../../util.cpp" line="1412"/>
         <source>, Version </source>
-        <translation type="unfinished"></translation>
+        <translation>, Version </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1425"/>
         <source>Internet Jam Session Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Internet Jam Session Software</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1429"/>
         <source>Released under the GNU General Public License (GPL)</source>
-        <translation type="unfinished">Unter der GNU General Public License (GPL)</translation>
+        <translation>Unter der GNU General Public License (GPL)</translation>
     </message>
 </context>
 <context>

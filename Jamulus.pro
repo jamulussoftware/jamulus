@@ -23,6 +23,7 @@ contains(CONFIG, "headless") {
 TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_fr_FR.ts \
     src/res/translation/translation_pt_PT.ts \
+    src/res/translation/translation_pt_BR.ts \
     src/res/translation/translation_es_ES.ts \
     src/res/translation/translation_nl_NL.ts \
     src/res/translation/translation_pl_PL.ts\

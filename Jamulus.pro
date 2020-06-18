@@ -281,8 +281,7 @@ win32 {
     DEFINES += HAVE_STDINT_H
 
     # only include jack support if CONFIG nosound is not set
-    nosoundoption = $$find(CONFIG, "nosound")
-    count(nosoundoption, 0) {
+    !contains(CONFIG, "nosound") {
         message(Jack Audio Interface Enabled.)
 
         contains(CONFIG, "raspijamulus") {

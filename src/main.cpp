@@ -508,6 +508,9 @@ int main ( int argc, char** argv )
         bUseGUI = false;
         tsConsole << "No GUI support compiled. Running in headless mode." << endl;
     }
+    Q_UNUSED ( bStartMinimized )       // avoid compiler warnings
+    Q_UNUSED ( bShowComplRegConnList ) // avoid compiler warnings
+    Q_UNUSED ( bShowAnalyzerConsole )  // avoid compiler warnings
 #endif
 
 

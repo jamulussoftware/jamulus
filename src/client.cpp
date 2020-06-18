@@ -991,8 +991,8 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         if ( eAudioChannelConf == CC_STEREO )
         {
             // for stereo only apply pan attenuation on one channel (same as pan in the server)
-            const double dGainL = std::min ( 0.5, 1 - dPan ) * 2;
-            const double dGainR = std::min ( 0.5, dPan ) * 2;
+            const double dGainL = MathUtils::GetLeftPan ( dPan, false );
+            const double dGainR = MathUtils::GetRightPan ( dPan, false );
 
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
@@ -1004,12 +1004,14 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
         }
         else
         {
-            // for mono implement a cross-fade between channels and mix them
-            const double dGainL = 1 - dPan;
-            const double dGainR = dPan;
+            // for mono implement a cross-fade between channels and mix them, for
+            // mono-in/stereo-out use no attenuation in pan center
+            const double dGainL = MathUtils::GetLeftPan ( dPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
+            const double dGainR = MathUtils::GetRightPan ( dPan, eAudioChannelConf != CC_MONO_IN_STEREO_OUT );
 
             for ( i = 0, j = 0; i < iMonoBlockSizeSam; i++, j += 2 )
             {
+                // note that we need the Double2Short for stereo pan mode
                 vecsStereoSndCrd[i] = Double2Short (
                     dGainL * vecsStereoSndCrd[j] + dGainR * vecsStereoSndCrd[j + 1] );
             }

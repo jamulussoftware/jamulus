@@ -508,8 +508,6 @@ private:
 /******************************************************************************\
 * Other Classes/Enums                                                          *
 \******************************************************************************/
-
-
 // Audio channel configuration -------------------------------------------------
 enum EAudChanConf
 {
@@ -1199,13 +1197,11 @@ public:
         // different IIR weights for up and down direction
         if ( dNewValue < dOldValue )
         {
-            dOldValue =
-                dOldValue * dWeightDown + ( 1.0 - dWeightDown ) * dNewValue;
+            dOldValue = dOldValue * dWeightDown + ( 1.0 - dWeightDown ) * dNewValue;
         }
         else
         {
-            dOldValue =
-                dOldValue * dWeightUp + ( 1.0 - dWeightUp ) * dNewValue;
+            dOldValue = dOldValue * dWeightUp + ( 1.0 - dWeightUp ) * dNewValue;
         }
     }
 
@@ -1222,6 +1218,17 @@ public:
         {
             return round ( dValue + dHysteresis );
         }
+    }
+
+    // calculate pan gains: in cross fade mode the pan center is attenuated
+    // by 6 dB, otherwise the center equals full gain for both channels
+    static inline double GetLeftPan ( const double dPan, const bool bXFade)
+    {
+        return bXFade ? 1 - dPan : std::min ( 0.5, 1 - dPan ) * 2;
+    }
+    static inline double GetRightPan ( const double dPan, const bool bXFade)
+    {
+        return bXFade ? dPan : std::min ( 0.5, dPan ) * 2;
     }
 };
 

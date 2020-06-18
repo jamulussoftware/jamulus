@@ -1203,8 +1203,8 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels
-            const double dGainL = std::min ( 0.5, 1 - dPan ) * 2 * dGain;
-            const double dGainR = std::min ( 0.5, dPan ) * 2 * dGain;
+            const double dGainL = MathUtils::GetLeftPan ( dPan, false ) * dGain;
+            const double dGainR = MathUtils::GetRightPan ( dPan, false ) * dGain;
 
             // if channel gain is 1, avoid multiplication for speed optimization
             if ( ( dGainL == static_cast<double> ( 1.0 ) ) && ( dGainR == static_cast<double> ( 1.0 ) ) )

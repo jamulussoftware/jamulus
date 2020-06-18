@@ -22,15 +22,18 @@
  *
 \******************************************************************************/
 
-#include <QApplication>
-#include <QMessageBox>
+#include <QCoreApplication>
 #include <QDir>
 #include <QTextStream>
 #include <QTranslator>
 #include <QLibraryInfo>
 #include "global.h"
-#include "clientdlg.h"
-#include "serverdlg.h"
+#ifndef HEADLESS
+# include <QApplication>
+# include <QMessageBox>
+# include "clientdlg.h"
+# include "serverdlg.h"
+#endif
 #include "settings.h"
 #include "testbench.h"
 #include "util.h"
@@ -471,7 +474,7 @@ int main ( int argc, char** argv )
         if ( ( !strcmp ( argv[i], "--version" ) ) ||
              ( !strcmp ( argv[i], "-v" ) ) )
         {
-            tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
+            tsConsole << GetVersionAndNameStr ( false ) << endl;
             exit ( 1 );
         }
 
@@ -499,6 +502,17 @@ int main ( int argc, char** argv )
 #endif
     }
 
+#ifdef HEADLESS
+    if ( bUseGUI )
+    {
+        bUseGUI = false;
+        tsConsole << "No GUI support compiled. Running in headless mode." << endl;
+    }
+    Q_UNUSED ( bStartMinimized )       // avoid compiler warnings
+    Q_UNUSED ( bShowComplRegConnList ) // avoid compiler warnings
+    Q_UNUSED ( bShowAnalyzerConsole )  // avoid compiler warnings
+#endif
+
 
     // Dependencies ------------------------------------------------------------
     // per definition: if we are in "GUI" server mode and no central server
@@ -523,9 +537,13 @@ int main ( int argc, char** argv )
     
     // Application/GUI setup ---------------------------------------------------
     // Application object
+#ifdef HEADLESS
+    QCoreApplication* pApp = new QCoreApplication ( argc, argv );
+#else
     QCoreApplication* pApp = bUseGUI
-            ? new QApplication ( argc, argv )
-            : new QCoreApplication ( argc, argv );
+        ? new QApplication ( argc, argv )
+        : new QCoreApplication ( argc, argv );
+#endif
 
 #ifdef ANDROID
     // special Android coded needed for record audio permission handling
@@ -602,6 +620,7 @@ int main ( int argc, char** argv )
             CSettings Settings ( &Client, strIniFileName );
             Settings.Load();
 
+#ifndef HEADLESS
             if ( bUseGUI )
             {
                 // GUI object
@@ -619,9 +638,10 @@ int main ( int argc, char** argv )
                 pApp->exec();
             }
             else
+#endif
             {
                 // only start application without using the GUI
-                tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
+                tsConsole << GetVersionAndNameStr ( false ) << endl;
 
                 pApp->exec();
             }
@@ -645,6 +665,8 @@ int main ( int argc, char** argv )
                              bDisconnectAllClientsOnQuit,
                              bUseDoubleSystemFrameSize,
                              eLicenceType );
+
+#ifndef HEADLESS
             if ( bUseGUI )
             {
                 // load settings from init-file
@@ -671,9 +693,10 @@ int main ( int argc, char** argv )
                 pApp->exec();
             }
             else
+#endif
             {
                 // only start application without using the GUI
-                tsConsole << CAboutDlg::GetVersionAndNameStr ( false ) << endl;
+                tsConsole << GetVersionAndNameStr ( false ) << endl;
 
                 // update serverlist
                 Server.UpdateServerList();
@@ -686,6 +709,7 @@ int main ( int argc, char** argv )
     catch ( CGenErr generr )
     {
         // show generic error
+#ifndef HEADLESS
         if ( bUseGUI )
         {
             QMessageBox::critical ( nullptr,
@@ -695,6 +719,7 @@ int main ( int argc, char** argv )
                                     nullptr );
         }
         else
+#endif
         {
             tsConsole << generr.GetErrorText() << endl;
         }

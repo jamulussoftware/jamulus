@@ -24,12 +24,14 @@
 
 #pragma once
 
-#include <QFrame>
-#include <QPixmap>
-#include <QTimer>
-#include <QLayout>
-#include <QProgressBar>
-#include <QStackedLayout>
+#ifndef HEADLESS
+# include <QFrame>
+# include <QPixmap>
+# include <QTimer>
+# include <QLayout>
+# include <QProgressBar>
+# include <QStackedLayout>
+#endif
 #include "util.h"
 #include "global.h"
 
@@ -42,6 +44,7 @@
 
 
 /* Classes ********************************************************************/
+#ifndef HEADLESS
 class CMultiColorLEDBar : public QWidget
 {
     Q_OBJECT
@@ -95,3 +98,4 @@ protected:
     CVector<cLED*>  vecpLEDs;
     QProgressBar*   pProgressBar;
 };
+#endif

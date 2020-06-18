@@ -299,6 +299,7 @@ void AHistoryGraph::AddMarker ( const SHistoryData& curHistoryData )
 
 
 /* JPEG History Graph implementation ******************************************/
+#ifndef HEADLESS
 CJpegHistoryGraph::CJpegHistoryGraph ( const int iMaxDaysHistory ) :
     AHistoryGraph   ( iMaxDaysHistory ),
     PlotPixmap      ( 1, 1, QImage::Format_RGB32 ),
@@ -401,6 +402,7 @@ void CJpegHistoryGraph::point ( const unsigned int x, const unsigned int y, cons
     PlotPainter.setPen ( QPen ( QBrush( QColor ( colour ) ), size ) );
     PlotPainter.drawPoint ( x, y );
 }
+#endif
 
 
 /* SVG History Graph implementation *******************************************/

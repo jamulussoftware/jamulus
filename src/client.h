@@ -28,7 +28,6 @@
 #include <QHostInfo>
 #include <QString>
 #include <QDateTime>
-#include <QMessageBox>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
 #else

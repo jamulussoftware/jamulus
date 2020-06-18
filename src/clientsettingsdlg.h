@@ -34,6 +34,7 @@
 #include <QMenuBar>
 #include <QLayout>
 #include <QButtonGroup>
+#include <QMessageBox>
 #include "global.h"
 #include "client.h"
 #include "multicolorled.h"

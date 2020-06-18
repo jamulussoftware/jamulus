@@ -13,7 +13,9 @@
 
 - support for storing/recovering the server window positions (#357)
 
+- add a headless build type which does not depend on QtGui/QtWidgets, coded by marcan (#322)
 
+- the local pan middle position is no longer attenuated in Mono-in/Stereo-out mode (#353)
 
 
 

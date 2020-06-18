@@ -629,7 +629,7 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     pMainLayout                  = new QHBoxLayout ( pMixerWidget );
 
     setAccessibleName ( "Personal Mix at the Server groupbox" );
-    setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + "</b>: " + tr (
+    setWhatsThis ( "<b>" + tr ( "Personal Mix at the Server" ) + ":</b> " + tr (
         "When connected to a server, the controls here allow you to set your "
         "local mix without affecting what others hear from you. The title shows "
         "the server name and, when known, whether it is actively recording." ) );

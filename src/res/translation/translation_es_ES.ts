@@ -3026,17 +3026,17 @@
     <message>
         <location filename="../../util.cpp" line="1412"/>
         <source>, Version </source>
-        <translation type="unfinished">, Versión </translation>
+        <translation>, Versión </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1425"/>
         <source>Internet Jam Session Software</source>
-        <translation type="unfinished">Internet Jam Session Software</translation>
+        <translation>Internet Jam Session Software</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1429"/>
         <source>Released under the GNU General Public License (GPL)</source>
-        <translation type="unfinished">Publicado bajo la GNU General Public License (GPL)</translation>
+        <translation>Publicado bajo la GNU General Public License (GPL)</translation>
     </message>
 </context>
 <context>

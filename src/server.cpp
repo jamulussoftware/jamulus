@@ -335,14 +335,13 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // do not know the required sizes for the vectors, we allocate memory for
     // the worst case here:
 
-    // we always use stereo audio buffers (which is the worst case)
-    vecsSendData.Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
-
     // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init          ( iMaxNumChannels );
     vecvecdGains.Init                  ( iMaxNumChannels );
     vecvecdPannings.Init               ( iMaxNumChannels );
     vecvecsData.Init                   ( iMaxNumChannels );
+    vecvecsSendData.Init               ( iMaxNumChannels );
+    vecvecbyCodedData.Init             ( iMaxNumChannels );
     vecNumAudioChannels.Init           ( iMaxNumChannels );
     vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
     vecUseDoubleSysFraSizeConvBuf.Init ( iMaxNumChannels );
@@ -351,18 +350,22 @@ CServer::CServer ( const int          iNewMaxNumChan,
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
         // init vectors storing information of all channels
-        vecvecdGains[i].Init ( iMaxNumChannels );
+        vecvecdGains[i].Init    ( iMaxNumChannels );
         vecvecdPannings[i].Init ( iMaxNumChannels );
 
-        // we always use stereo audio buffers (see "vecsSendData")
+        // we always use stereo audio buffers (which is the worst case)
         vecvecsData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+
+        // (note that we only allocate iMaxNumChannels buffers for the send
+        // and coded data because of the OMP implementation)
+        vecvecsSendData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+
+        // allocate worst case memory for the coded data
+        vecvecbyCodedData[i].Init ( MAX_SIZE_BYTES_NETW_BUF );
     }
 
-    // allocate worst case memory for the coded data
-    vecbyCodedData.Init ( MAX_SIZE_BYTES_NETW_BUF );
-
     // allocate worst case memory for the channel levels
-    vecChannelLevels.Init     ( iMaxNumChannels );
+    vecChannelLevels.Init ( iMaxNumChannels );
 
     // enable history graph (if requested)
     if ( !strHistoryFileName.isEmpty() )
@@ -922,7 +925,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
                 {
                     // get data
-                    const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecbyCodedData, iCeltNumCodedBytes );
+                    const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecvecbyCodedData[i], iCeltNumCodedBytes );
 
                     // if channel was just disconnected, set flag that connected
                     // client list is sent to all other clients
@@ -940,7 +943,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                     // get pointer to coded data
                     if ( eGetStat == GS_BUFFER_OK )
                     {
-                        pCurCodedData = &vecbyCodedData[0];
+                        pCurCodedData = &vecvecbyCodedData[i][0];
                     }
                     else
                     {
@@ -1023,7 +1026,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                           vecvecdGains[i],
                           vecvecdPannings[i],
                           vecNumAudioChannels,
-                          vecsSendData,
+                          vecvecsSendData[i],
                           iCurNumAudChan,
                           iNumClients );
 
@@ -1068,12 +1071,12 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // is false and the Get() function is not called at all. Therefore if the buffer is not needed
             // we do not spend any time in the function but go directly inside the if condition.
             if ( ( vecUseDoubleSysFraSizeConvBuf[i] == 0 ) ||
-                 DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
+                 DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecvecsSendData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
             {
                 if ( vecUseDoubleSysFraSizeConvBuf[i] != 0 )
                 {
                     // get the large frame from the conversion buffer
-                    DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
+                    DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecvecsSendData[i], DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
                 }
 
                 for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
@@ -1088,15 +1091,15 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
                           OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
                         iUnused = opus_custom_encode ( CurOpusEncoder,
-                                                       &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                       &vecvecsSendData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
                                                        iClientFrameSizeSamples,
-                                                       &vecbyCodedData[0],
+                                                       &vecvecbyCodedData[i][0],
                                                        iCeltNumCodedBytes );
                     }
 
                     // send separate mix to current clients
                     vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                                vecbyCodedData,
+                                                                vecvecbyCodedData[i],
                                                                 iCeltNumCodedBytes );
                 }
 

@@ -342,8 +342,8 @@ protected:
     CVector<int>               vecNumFrameSizeConvBlocks;
     CVector<int>               vecUseDoubleSysFraSizeConvBuf;
     CVector<EAudComprType>     vecAudioComprType;
-    CVector<int16_t>           vecsSendData;
-    CVector<uint8_t>           vecbyCodedData;
+    CVector<CVector<int16_t> > vecvecsSendData;
+    CVector<CVector<uint8_t> > vecvecbyCodedData;
 
     // Channel levels
     CVector<uint16_t>          vecChannelLevels;

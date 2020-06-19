@@ -10,6 +10,7 @@ contains(CONFIG, "noupcasename") {
 contains(CONFIG, "multithreading") {
     unix {
         message(The OpenMP multithreading is enabled.)
+        message(NOTE THAT THE OpenMP IMPLEMENTATION IS STILL EXPERIMENTAL AND MAY NOT BE STABLE.)
         DEFINES += USE_OMP
         QMAKE_CXXFLAGS += -fopenmp
         QMAKE_LFLAGS += -fopenmp

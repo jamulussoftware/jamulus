@@ -993,6 +993,9 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                                                  vecChannelLevels );
         }
 
+#ifdef USE_OMP
+# pragma omp parallel for
+#endif
         for ( int i = 0; i < iNumClients; i++ )
         {
             int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning

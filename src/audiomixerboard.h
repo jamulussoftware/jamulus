@@ -57,7 +57,7 @@ public:
     bool IsVisible() { return !pFrame->isHidden(); }
     bool IsSolo() { return pcbSolo->isChecked(); }
     bool IsMute() { return pcbMute->isChecked(); }
-    bool IsSelect() { return pcbSelect->isChecked(); }
+    bool IsSelect() { return pcbGroup->isChecked(); }
     void SetGUIDesign ( const EGUIDesign eNewDesign );
     void SetDisplayChannelLevel ( const bool eNDCL );
     bool GetDisplayChannelLevel();
@@ -83,7 +83,7 @@ protected:
     void   SendFaderLevelToServer ( const int iLevel );
     void   SendPanValueToServer ( const int iPan );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
-    void   SetSelected ( const bool bState );
+    void   SetSelected ( const bool bState ) { bIsSelected = bState; }
 
     QFrame*            pFrame;
 
@@ -99,7 +99,7 @@ protected:
 
     QCheckBox*         pcbMute;
     QCheckBox*         pcbSolo;
-    QCheckBox*         pcbSelect;
+    QCheckBox*         pcbGroup;
 
     QGroupBox*         pLabelInstBox;
     QLabel*            plblLabel;
@@ -179,7 +179,6 @@ public:
     CVector<int>     vecStoredPanValues;
     CVector<int>     vecStoredFaderIsSolo;
     CVector<int>     vecStoredFaderIsMute;
-    CVector<int>     vecStoredFaderIsSelect;
     int              iNewClientFaderLevel;
 
 protected:
@@ -202,8 +201,7 @@ protected:
                                   int&                iStoredFaderLevel,
                                   int&                iStoredPanValue,
                                   bool&               bStoredFaderIsSolo,
-                                  bool&               bStoredFaderIsMute,
-                                  bool&               bStoredFaderIsSelect);
+                                  bool&               bStoredFaderIsMute );
 
     void StoreFaderSettings ( CChannelFader* pChanFader );
     void UpdateSoloStates();

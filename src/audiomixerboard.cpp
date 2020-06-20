@@ -45,7 +45,7 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     pMuteSoloBox                = new QWidget           ( pFrame );
     pcbMute                     = new QCheckBox         ( tr ( "Mute" ), pMuteSoloBox );
     pcbSolo                     = new QCheckBox         ( tr ( "Solo" ), pMuteSoloBox );
-    pcbSelect                   = new QCheckBox         ( tr ( "Select"), pMuteSoloBox );
+    pcbGroup                    = new QCheckBox         ( tr ( "Group" ), pMuteSoloBox );
 
     pLabelInstBox               = new QGroupBox         ( pFrame );
     plblLabel                   = new QLabel            ( "", pFrame );
@@ -109,7 +109,7 @@ CChannelFader::CChannelFader ( QWidget* pNW )
 
     pMuteSoloGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
     pMuteSoloGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
-    pMuteSoloGrid->addWidget ( pcbSelect, 0, Qt::AlignLeft );
+    pMuteSoloGrid->addWidget ( pcbGroup, 0, Qt::AlignLeft );
 
     pMainGrid->addLayout ( pPanGrid );
     pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
@@ -154,12 +154,10 @@ CChannelFader::CChannelFader ( QWidget* pNW )
         "one channel to solo." ) );
     pcbSolo->setAccessibleName ( tr ( "Solo button" ) );
 
-    pcbSelect->setWhatsThis ( "<b>" + tr ( "Select" ) + ":</b> " + tr ( "With the Select checkbox, the "
+    pcbGroup->setWhatsThis ( "<b>" + tr ( "Group" ) + ":</b> " + tr ( "With the Group checkbox, the "
         "audio channel can be selected among others which means that all changes "
-        " made in any of the selected channels' fader are adjusted to the rest like all were the same "
-         ) );
-    pcbSelect->setAccessibleName ( tr ( "Select button" ) );
-
+        "made in any of the selected channels fader are adjusted to the rest like all were the same." ) );
+    pcbGroup->setAccessibleName ( tr ( "Group button" ) );
 
     QString strFaderText = "<b>" + tr ( "Fader Tag" ) + ":</b> " + tr ( "The fader tag "
         "identifies the connected client. The tag name, a picture of your "
@@ -186,7 +184,7 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     QObject::connect ( pcbSolo, &QCheckBox::stateChanged,
         this, &CChannelFader::soloStateChanged );
 
-    QObject::connect ( pcbSelect, &QCheckBox::stateChanged,
+    QObject::connect ( pcbGroup, &QCheckBox::stateChanged,
         this, &CChannelFader::OnSelectStateChanged );
 }
 
@@ -214,7 +212,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pPanLabel->setText                  ( tr ( "PAN" ) );
         pcbMute->setText                    ( tr ( "MUTE" ) );
         pcbSolo->setText                    ( tr ( "SOLO" ) );
-        pcbSelect->setText                  ( tr ( "SELECT" ) );
+        pcbGroup->setText                   ( tr ( "GROUP" ) );
         plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
         break;
 
@@ -227,7 +225,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pPanLabel->setText                  ( tr ( "Pan" ) );
         pcbMute->setText                    ( tr ( "M" ) );
         pcbSolo->setText                    ( tr ( "S" ) );
-        pcbSelect->setText                    ( tr ( "SL" ) );
+        pcbGroup->setText                   ( tr ( "G" ) );
         plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_SLIM_BAR );
         break;
 
@@ -241,7 +239,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pPanLabel->setText                  ( tr ( "Pan" ) );
         pcbMute->setText                    ( tr ( "Mute" ) );
         pcbSolo->setText                    ( tr ( "Solo" ) );
-        pcbSelect->setText                  ( tr ( "Select" ) );
+        pcbGroup->setText                   ( tr ( "Group" ) );
         plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
         break;
     }
@@ -320,7 +318,7 @@ void CChannelFader::Reset()
     // reset mute/solo/select check boxes and level meter
     pcbMute->setChecked ( false );
     pcbSolo->setChecked ( false );
-    pcbSelect->setChecked ( false );
+    pcbGroup->setChecked ( false );
     plbrChannelLevel->setValue ( 0 );
 
     // clear instrument picture, country flag, tool tips and label text
@@ -395,7 +393,7 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
 
 void CChannelFader::SetFaderIsSelect ( const bool bIsSelected )
 {
-    pcbSelect->setChecked ( bIsSelected );
+    pcbGroup->setChecked ( bIsSelected );
 }
 
 void CChannelFader::SendFaderLevelToServer ( const int iLevel )
@@ -631,11 +629,6 @@ void CChannelFader::OnSelectStateChanged ( int value )
     SetSelected ( static_cast<Qt::CheckState> ( value ) == Qt::Checked );
 }
 
-void CChannelFader::SetSelected ( const bool bState )
-{
-    // Just in case we need future actions here...
-    bIsSelected = bState;
-}
 
 /******************************************************************************\
 * CAudioMixerBoard                                                             *
@@ -647,7 +640,6 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     vecStoredPanValues   ( MAX_NUM_STORED_FADER_SETTINGS, AUD_MIX_PAN_MAX / 2 ),
     vecStoredFaderIsSolo ( MAX_NUM_STORED_FADER_SETTINGS, false ),
     vecStoredFaderIsMute ( MAX_NUM_STORED_FADER_SETTINGS, false ),
-    vecStoredFaderIsSelect( MAX_NUM_STORED_FADER_SETTINGS, false ),
     iNewClientFaderLevel ( 100 ),
     bDisplayPans         ( false ),
     bIsPanSupported      ( false ),
@@ -942,20 +934,17 @@ void CAudioMixerBoard::ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInf
                     int  iStoredPanValue;
                     bool bStoredFaderIsSolo;
                     bool bStoredFaderIsMute;
-                    bool bStoredFaderIsSelect;
 
                     if ( GetStoredFaderSettings ( vecChanInfo[j],
                                                   iStoredFaderLevel,
                                                   iStoredPanValue,
                                                   bStoredFaderIsSolo,
-                                                  bStoredFaderIsMute,
-                                                  bStoredFaderIsSelect) )
+                                                  bStoredFaderIsMute ) )
                     {
                         vecpChanFader[i]->SetFaderLevel  ( iStoredFaderLevel );
                         vecpChanFader[i]->SetPanValue    ( iStoredPanValue );
                         vecpChanFader[i]->SetFaderIsSolo ( bStoredFaderIsSolo );
                         vecpChanFader[i]->SetFaderIsMute ( bStoredFaderIsMute );
-                        vecpChanFader[i]->SetFaderIsSelect ( bStoredFaderIsSelect );
                     }
                 }
 
@@ -1042,14 +1031,12 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
                                          const double dValue,
                                          const bool   bIsMyOwnFader )
 {
-    if ( !vecpChanFader[iChannelIdx]->IsSelect() )
+    // update current gain
+    emit ChangeChanGain ( iChannelIdx, dValue, bIsMyOwnFader );
+
+    // if this fader is selected, all other selected must be updated as well
+    if ( vecpChanFader[iChannelIdx]->IsSelect() )
     {
-       emit ChangeChanGain ( iChannelIdx, dValue, bIsMyOwnFader );
-    }
-    else // This is selected, so all selected must be updated as well
-    {
-        // update current, don't touch fader
-        emit ChangeChanGain ( iChannelIdx, dValue, bIsMyOwnFader );
         for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
         {
             // update rest of faders selected
@@ -1057,12 +1044,14 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
             {
               if ( i != iChannelIdx )
               {
-                  // temporaly unselect so it does not repeat this again and again...
-                 vecpChanFader[i]->SetFaderIsSelect( FALSE );
+                 // temporaly unselect so it does not repeat this again and again...
+                 vecpChanFader[i]->SetFaderIsSelect ( false );
+
                  // "move" faders with moving fader level
-                 vecpChanFader[i]->SetFaderLevel( vecpChanFader[iChannelIdx]->GetFaderLevel() );
+                 vecpChanFader[i]->SetFaderLevel ( vecpChanFader[iChannelIdx]->GetFaderLevel() );
+
                  // back to selected status
-                 vecpChanFader[i]->SetFaderIsSelect( TRUE );
+                 vecpChanFader[i]->SetFaderIsSelect ( true );
               }
             }
         }
@@ -1086,7 +1075,6 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
         CVector<int> viOldStoredPanValues   ( vecStoredPanValues );
         CVector<int> vbOldStoredFaderIsSolo ( vecStoredFaderIsSolo );
         CVector<int> vbOldStoredFaderIsMute ( vecStoredFaderIsMute );
-        CVector<int> vbOldStoredFaderIsSelected ( vecStoredFaderIsSelect );
 
         // init temporary list count (may be overwritten later on)
         int iTempListCnt = 0;
@@ -1101,7 +1089,6 @@ void CAudioMixerBoard::StoreFaderSettings ( CChannelFader* pChanFader )
         vecStoredPanValues[0]   = pChanFader->GetPanValue();
         vecStoredFaderIsSolo[0] = pChanFader->IsSolo();
         vecStoredFaderIsMute[0] = pChanFader->IsMute();
-        vecStoredFaderIsSelect[0] = pChanFader->IsSelect();
         iTempListCnt            = 1;
 
         for ( int iIdx = 0; iIdx < MAX_NUM_STORED_FADER_SETTINGS; iIdx++ )
@@ -1130,8 +1117,7 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                                                 int&                iStoredFaderLevel,
                                                 int&                iStoredPanValue,
                                                 bool&               bStoredFaderIsSolo,
-                                                bool&               bStoredFaderIsMute,
-                                                bool&               bStoredFaderIsSelect)
+                                                bool&               bStoredFaderIsMute )
 {
     // only do the check if the name string is not empty
     if ( !ChanInfo.strName.isEmpty() )
@@ -1146,7 +1132,6 @@ bool CAudioMixerBoard::GetStoredFaderSettings ( const CChannelInfo& ChanInfo,
                 iStoredPanValue    = vecStoredPanValues[iIdx];
                 bStoredFaderIsSolo = vecStoredFaderIsSolo[iIdx] != 0;
                 bStoredFaderIsMute = vecStoredFaderIsMute[iIdx] != 0;
-                bStoredFaderIsSelect = vecStoredFaderIsSelect[iIdx] != 0;
 
                 // values found and copied, return OK
                 return true;

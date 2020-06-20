@@ -64,10 +64,9 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     plbrChannelLevel->setContentsMargins ( 0, 3, 2, 3 );
 
     // setup slider
-    pFader->setPageStep      ( 1 );
-    pFader->setRange         ( 0, AUD_MIX_FADER_MAX );
-    pFader->setTickInterval  ( AUD_MIX_FADER_MAX / 9 );
-    pFader->setMinimumHeight ( 85 ); // if this value is too small, the fader might not be movable with the mouse for fancy skin (#292)
+    pFader->setPageStep     ( 1 );
+    pFader->setRange        ( 0, AUD_MIX_FADER_MAX );
+    pFader->setTickInterval ( AUD_MIX_FADER_MAX / 9 );
 
     // setup panning control
     pPan->setRange          ( 0, AUD_MIX_PAN_MAX );
@@ -205,6 +204,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
 
         pLabelGrid->addWidget               ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
         pLabelInstBox->setMinimumHeight     ( 52 ); // maximum hight of the instrument+flag pictures
+        pFader->setMinimumHeight            ( 120 ); // if this value is too small, the fader might not be movable with the mouse for fancy skin (#292)
         pPan->setFixedSize                  ( 50, 50 );
         pPanLabel->setText                  ( tr ( "PAN" ) );
         pcbMute->setText                    ( tr ( "MUTE" ) );
@@ -216,6 +216,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
     case GD_SLIMFADER:
         pLabelPictGrid->addWidget           ( plblLabel,  0, Qt::AlignHCenter ); // label below icons
         pLabelInstBox->setMinimumHeight     ( 84 ); // maximum hight of the instrument+flag+label
+        pFader->setMinimumHeight            ( 85 );
         pPan->setFixedSize                  ( 28, 28 );
         pFader->setTickPosition             ( QSlider::NoTicks );
         pFader->setStyleSheet               ( "" );
@@ -232,6 +233,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pFader->setStyleSheet               ( "" );
         pLabelGrid->addWidget               ( plblLabel, 0, Qt::AlignVCenter ); // label next to icons
         pLabelInstBox->setMinimumHeight     ( 52 ); // maximum hight of the instrument+flag pictures
+        pFader->setMinimumHeight            ( 85 );
         pPan->setFixedSize                  ( 50, 50 );
         pPanLabel->setText                  ( tr ( "Pan" ) );
         pcbMute->setText                    ( tr ( "Mute" ) );

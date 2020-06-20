@@ -20,6 +20,11 @@
 - the local pan middle position is no longer attenuated in Mono-in/Stereo-out mode (#353)
 
 
+TODO grouping does not work as expected:
+     - fader shall not have the same value but only use the increment from the moved fader
+     - vertical space between check boxes should be smaller
+     - get rid of bIsSelected
+
 
 
 

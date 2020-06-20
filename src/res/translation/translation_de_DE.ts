@@ -179,32 +179,32 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="632"/>
+        <location filename="../../audiomixerboard.cpp" line="669"/>
         <source>Personal Mix at the Server</source>
         <translation>Eigener Mix am Server</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="632"/>
+        <location filename="../../audiomixerboard.cpp" line="669"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
         <translation>Wenn man mit einem Server verbunden ist, dann kann man hier den eigenen Mix verstellen ohne dass man etwas daran verändert, was die anderen von mir hören. Der Titel zeigt den Servernamen an und falls bekannt den Aufnahmestatus des Servers.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="704"/>
+        <location filename="../../audiomixerboard.cpp" line="741"/>
         <source>Server</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="713"/>
+        <location filename="../../audiomixerboard.cpp" line="750"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>V E R B I N D U N G S A U F B A U</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="834"/>
+        <location filename="../../audiomixerboard.cpp" line="871"/>
         <source>RECORDING ACTIVE</source>
         <translation>AUFNAHME AKTIV</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="837"/>
+        <location filename="../../audiomixerboard.cpp" line="874"/>
         <source>Personal Mix at: </source>
         <translation>Eigener Mix am Server: </translation>
     </message>
@@ -212,7 +212,7 @@
 <context>
     <name>CChannelFader</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="121"/>
+        <location filename="../../audiomixerboard.cpp" line="123"/>
         <source>Channel Level</source>
         <translation>Kanalpegel</translation>
     </message>
@@ -221,12 +221,12 @@
         <translation type="vanished">Zeigt den Audiopegel vor dem Lautstärkeregler des Kanals. Allen verbundenen Musikern am Server wird ein Audiopegel zugewiesen.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="124"/>
+        <location filename="../../audiomixerboard.cpp" line="126"/>
         <source>Input level of the current audio channel at the server</source>
         <translation>Eingangspegel des aktuellen Musikers am Server</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="127"/>
+        <location filename="../../audiomixerboard.cpp" line="129"/>
         <source>Mixer Fader</source>
         <translation>Kanalregler</translation>
     </message>
@@ -235,17 +235,17 @@
         <translation type="vanished">Regelt die Lautstärke des Kanals. Für alle Musiker, die gerade am Server verbunden sind, wird ein Lautstärkeregler angezeigt. Damit kann man seinen eigenen lokalen Mix erstellen.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="130"/>
+        <location filename="../../audiomixerboard.cpp" line="132"/>
         <source>Local mix level setting of the current audio channel at the server</source>
         <translation>Lokale Mixerpegeleinstellung des aktuellen Kanals am Server</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="133"/>
+        <location filename="../../audiomixerboard.cpp" line="135"/>
         <source>Status Indicator</source>
         <translation>Statusanzeige</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="133"/>
+        <location filename="../../audiomixerboard.cpp" line="135"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
         <translation>Zeigt den Status über den Musiker, der dem Kanal zugewiesen ist. Unterstützte Indikatoren sind:</translation>
     </message>
@@ -254,12 +254,12 @@
         <translation type="vanished">Durchgestrichener Lautsprecher: Zeigt an, dass der andere Musiker dich stummgeschaltet hat.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="138"/>
+        <location filename="../../audiomixerboard.cpp" line="140"/>
         <source>Status indicator label</source>
         <translation>Statusanzeige</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="140"/>
+        <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Panning</source>
         <translation>Pan</translation>
     </message>
@@ -268,17 +268,17 @@
         <translation type="vanished">Legt die Pan-Position von Links nach Rechts fest. Der Pan funktioniert nur im Stereo oder Mono-In/Stereo-Out Modus.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="143"/>
+        <location filename="../../audiomixerboard.cpp" line="145"/>
         <source>Local panning position of the current audio channel at the server</source>
         <translation>Lokale Pan-Position von dem aktuellen Audiokanal am Server</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="145"/>
+        <location filename="../../audiomixerboard.cpp" line="147"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
         <translation>Mit dem Mute-Schalter kann man den Kanal stumm schalten.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="147"/>
+        <location filename="../../audiomixerboard.cpp" line="149"/>
         <source>Mute button</source>
         <translation>Mute Schalter</translation>
     </message>
@@ -287,12 +287,12 @@
         <translation type="vanished">Bei aktiviertem Solo Status hört man nur diesen Kanal. Alle anderen Kanäle sind stumm geschaltet. Es ist möglich mehrere Kanäle auf Solo zu stellen. Dann hört man nur die Kanäle, die auf Solo gestellt wurden.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="153"/>
+        <location filename="../../audiomixerboard.cpp" line="155"/>
         <source>Solo button</source>
         <translation>Solo Schalter</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="155"/>
+        <location filename="../../audiomixerboard.cpp" line="162"/>
         <source>Fader Tag</source>
         <translation>Kanalbeschriftung</translation>
     </message>
@@ -301,135 +301,166 @@
         <translation type="vanished">Mit der Kanalbeschriftung wird der verbundene Teilnehmen identifiziert. Der Name, ein Bild des Instruments und eine Flagge des eigenen Landes kann im eigenen Profil ausgewählt werden.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="122"/>
+        <location filename="../../audiomixerboard.cpp" line="48"/>
+        <location filename="../../audiomixerboard.cpp" line="242"/>
+        <source>Grp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="124"/>
         <source>Displays the pre-fader audio level of this channel.  All clients connected to the server will be assigned an audio level, the same value for every client.</source>
         <translation>Zeigt den Audiopegel vor dem Lautstärkeregler des Kanals. Allen verbundenen Musikern am Server wird ein Audiopegel zugewiesen.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="127"/>
+        <location filename="../../audiomixerboard.cpp" line="129"/>
         <source>Adjusts the audio level of this channel. All clients connected to the server will be assigned an audio fader, displayed at each client, to adjust the local mix.</source>
         <translation>Regelt die Lautstärke des Kanals. Für alle Musiker, die gerade am Server verbunden sind, wird ein Lautstärkeregler angezeigt. Damit kann man seinen eigenen lokalen Mix erstellen.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="135"/>
+        <location filename="../../audiomixerboard.cpp" line="137"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
         <translation>Durchgestrichener Lautsprecher: Zeigt an, dass der andere Musiker dich stummgeschaltet hat.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="140"/>
+        <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
         <translation>Legt die Pan-Position von Links nach Rechts fest. Der Pan funktioniert nur im Stereo oder Mono-In/Stereo-Out Modus.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="149"/>
+        <location filename="../../audiomixerboard.cpp" line="151"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
         <translation>Bei aktiviertem Solo Status hört man nur diesen Kanal. Alle anderen Kanäle sind stumm geschaltet. Es ist möglich mehrere Kanäle auf Solo zu stellen. Dann hört man nur die Kanäle, die auf Solo gestellt wurden.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="155"/>
+        <location filename="../../audiomixerboard.cpp" line="157"/>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="157"/>
+        <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="160"/>
+        <source>Group button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="162"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your country can be set in the main window.</source>
         <translation>Mit der Kanalbeschriftung wird der verbundene Teilnehmen identifiziert. Der Name, ein Bild des Instruments und eine Flagge des eigenen Landes kann im eigenen Profil ausgewählt werden.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="160"/>
+        <location filename="../../audiomixerboard.cpp" line="167"/>
         <source>Mixer channel instrument picture</source>
         <translation>Mixerkanal Instrumentenbild</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="162"/>
+        <location filename="../../audiomixerboard.cpp" line="169"/>
         <source>Mixer channel label (fader tag)</source>
         <translation>Mixerkanalbeschriftung</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="164"/>
+        <location filename="../../audiomixerboard.cpp" line="171"/>
         <source>Mixer channel country flag</source>
         <translation>Mixerkanal Landesflagge</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="202"/>
+        <location filename="../../audiomixerboard.cpp" line="210"/>
         <source>PAN</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="203"/>
+        <location filename="../../audiomixerboard.cpp" line="211"/>
         <source>MUTE</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="204"/>
+        <location filename="../../audiomixerboard.cpp" line="212"/>
         <source>SOLO</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="215"/>
+        <location filename="../../audiomixerboard.cpp" line="213"/>
+        <source>GRP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="225"/>
         <source>M</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="216"/>
+        <location filename="../../audiomixerboard.cpp" line="226"/>
         <source>S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="526"/>
+        <location filename="../../audiomixerboard.cpp" line="227"/>
+        <source>G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="563"/>
         <source>Alias/Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="532"/>
+        <location filename="../../audiomixerboard.cpp" line="569"/>
         <source>Instrument</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="540"/>
+        <location filename="../../audiomixerboard.cpp" line="577"/>
         <source>Location</source>
         <translation>Standort</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="562"/>
-        <location filename="../../audiomixerboard.cpp" line="566"/>
-        <location filename="../../audiomixerboard.cpp" line="570"/>
+        <location filename="../../audiomixerboard.cpp" line="599"/>
+        <location filename="../../audiomixerboard.cpp" line="603"/>
+        <location filename="../../audiomixerboard.cpp" line="607"/>
         <source>Skill Level</source>
         <translation>Spielstärke</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="562"/>
+        <location filename="../../audiomixerboard.cpp" line="599"/>
         <source>Beginner</source>
         <translation>Anfänger</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="566"/>
+        <location filename="../../audiomixerboard.cpp" line="603"/>
         <source>Intermediate</source>
         <translation>Mittlere Spielstärke</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="570"/>
+        <location filename="../../audiomixerboard.cpp" line="607"/>
         <source>Expert</source>
         <translation>Experte</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="581"/>
+        <location filename="../../audiomixerboard.cpp" line="618"/>
         <source>Musician Profile</source>
         <translation>Profil des Musikers</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="46"/>
-        <location filename="../../audiomixerboard.cpp" line="145"/>
-        <location filename="../../audiomixerboard.cpp" line="228"/>
+        <location filename="../../audiomixerboard.cpp" line="147"/>
+        <location filename="../../audiomixerboard.cpp" line="240"/>
         <source>Mute</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="42"/>
-        <location filename="../../audiomixerboard.cpp" line="214"/>
-        <location filename="../../audiomixerboard.cpp" line="227"/>
+        <location filename="../../audiomixerboard.cpp" line="224"/>
+        <location filename="../../audiomixerboard.cpp" line="239"/>
         <source>Pan</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="47"/>
-        <location filename="../../audiomixerboard.cpp" line="149"/>
-        <location filename="../../audiomixerboard.cpp" line="229"/>
+        <location filename="../../audiomixerboard.cpp" line="151"/>
+        <location filename="../../audiomixerboard.cpp" line="241"/>
         <source>Solo</source>
         <translation></translation>
     </message>
@@ -1517,22 +1548,22 @@
         <translation type="vanished">Manuell</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="606"/>
+        <location filename="../../util.h" line="604"/>
         <source>Custom</source>
         <translation>Benutzerdefiniert</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="609"/>
+        <location filename="../../util.h" line="607"/>
         <source>All Genres</source>
         <translation>Alle Genres</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="612"/>
+        <location filename="../../util.h" line="610"/>
         <source>Genre Rock</source>
         <translation>Genre Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="615"/>
+        <location filename="../../util.h" line="613"/>
         <source>Genre Jazz</source>
         <translation>Genre Jazz</translation>
     </message>
@@ -1541,12 +1572,12 @@
         <translation type="vanished">Genre Rock/Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="618"/>
+        <location filename="../../util.h" line="616"/>
         <source>Genre Classical/Folk/Choir</source>
         <translation>Genre Klassik/Volksmusik/Chor</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="621"/>
+        <location filename="../../util.h" line="619"/>
         <source>Default</source>
         <translation>Standard</translation>
     </message>
@@ -2689,42 +2720,42 @@
         <translation>&amp;Fenster</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="643"/>
+        <location filename="../../util.h" line="641"/>
         <source>Unregistered</source>
         <translation>Nicht registriert</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="646"/>
+        <location filename="../../util.h" line="644"/>
         <source>Bad address</source>
         <translation>Ungültige Adresse</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="649"/>
+        <location filename="../../util.h" line="647"/>
         <source>Registration requested</source>
         <translation>Registrierung angefordert</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="652"/>
+        <location filename="../../util.h" line="650"/>
         <source>Registration failed</source>
         <translation>Registrierung fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="655"/>
+        <location filename="../../util.h" line="653"/>
         <source>Check server version</source>
         <translation>Überprüfe Version des Servers</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="658"/>
+        <location filename="../../util.h" line="656"/>
         <source>Registered</source>
         <translation>Registriert</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="661"/>
+        <location filename="../../util.h" line="659"/>
         <source>Central Server full</source>
         <translation>Zentralserver voll</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="664"/>
+        <location filename="../../util.h" line="662"/>
         <source>Unknown value </source>
         <translation>Unbekannter Wert </translation>
     </message>
@@ -3022,7 +3053,7 @@
 <context>
     <name>global</name>
     <message>
-        <location filename="../../global.h" line="235"/>
+        <location filename="../../global.h" line="240"/>
         <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
         <translation>Für weitere Informationen verwende die Kontexthilfe (Hilfe-Menü, rechte Maustaste oder Tastenkombination Shift+F1)</translation>
     </message>

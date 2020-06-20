@@ -154,9 +154,9 @@ CChannelFader::CChannelFader ( QWidget* pNW )
         "one channel to solo." ) );
     pcbSolo->setAccessibleName ( tr ( "Solo button" ) );
 
-    pcbGroup->setWhatsThis ( "<b>" + tr ( "Group" ) + ":</b> " + tr ( "With the Group checkbox, the "
-        "audio channel can be selected among others which means that all changes "
-        "made in any of the selected channels fader are adjusted to the rest like all were the same." ) );
+    pcbGroup->setWhatsThis ( "<b>" + tr ( "Group" ) + ":</b> " + tr ( "With the Grp checkbox, a "
+        "group of audio channels can be defined. All channel faders in a group are moved "
+        "in proportional synchronization if any one of the group faders are moved." ) );
     pcbGroup->setAccessibleName ( tr ( "Group button" ) );
 
     QString strFaderText = "<b>" + tr ( "Fader Tag" ) + ":</b> " + tr ( "The fader tag "

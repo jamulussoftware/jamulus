@@ -20,8 +20,6 @@
 - the local pan middle position is no longer attenuated in Mono-in/Stereo-out mode (#353)
 
 
-TODO grouping does not work as expected:
-     - update help text
 
 
 

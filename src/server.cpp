@@ -240,10 +240,8 @@ CServer::CServer ( const int          iNewMaxNumChan,
     Socket                      ( this, iPortNumber ),
     Logging                     ( iMaxDaysHistory ),
     iFrameCount                 ( 0 ),
-    JamRecorder                 ( strRecordingDirName ),
-    bRecorderInitialised        ( false ),
-    bEnableRecording            ( false ),
     bWriteStatusHTMLFile        ( false ),
+    bRecorderInitialised        ( false ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
     ServerListManager           ( iPortNumber,
                                   strCentralServer,
@@ -424,11 +422,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     strWelcomeMessage = strWelcomeMessage.left ( MAX_LEN_CHAT_TEXT );
 
     // enable jam recording (if requested) - kicks off the thread
-    if ( !strRecordingDirName.isEmpty() )
-    {
-        bRecorderInitialised = JamRecorder.Init ( this, iServerFrameSizeSamples );
-        SetEnableRecording ( bRecorderInitialised );
-    }
+    SetRecordingDir ( strRecordingDirName );
 
     // enable all channels (for the server all channel must be enabled the
     // entire life time of the software)
@@ -478,9 +472,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     QObject::connect ( &ServerListManager, &CServerListManager::SvrRegStatusChanged,
         this, &CServer::SvrRegStatusChanged );
-
-    QObject::connect( &JamRecorder, &recorder::CJamRecorder::RecordingSessionStarted,
-        this, &CServer::RecordingSessionStarted );
 
     QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
         this, &CServer::OnAboutToQuit );
@@ -740,46 +731,6 @@ void CServer::OnHandledSignal ( int sigNum )
         break;
     }
 #endif
-}
-
-void CServer::RequestNewRecording()
-{
-    if ( bRecorderInitialised && bEnableRecording )
-    {
-        emit RestartRecorder();
-    }
-
-    // send recording state message - doesn't hurt
-    CreateAndSendRecorderStateForAllConChannels();
-}
-
-void CServer::SetEnableRecording ( bool bNewEnableRecording )
-{
-    if ( bRecorderInitialised )
-    {
-        // note that this block executes regardless of whether
-        // what appears to be a change is being applied, to ensure
-        // the requested state is the result
-        bEnableRecording = bNewEnableRecording;
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
-// TODO we should use the ConsoleWriterFactory() instead of qInfo()
-        qInfo() << "Recording state" << ( bEnableRecording ? "enabled" : "disabled" );
-#endif
-
-        if ( !bEnableRecording )
-        {
-            emit StopRecorder();
-        }
-        else if ( !IsRunning() )
-        {
-            // This dirty hack is for the GUI.  It doesn't care.
-            emit StopRecorder();
-        }
-    }
-
-    // send recording state message
-    CreateAndSendRecorderStateForAllConChannels();
 }
 
 void CServer::Start()
@@ -1637,6 +1588,92 @@ void CServer::WriteHTMLChannelList()
 
     // finish list
     streamFileOut << "</ul>" << endl;
+}
+
+void CServer::RequestNewRecording()
+{
+    if ( bRecorderInitialised && bEnableRecording )
+    {
+        emit RestartRecorder();
+    }
+
+    // send recording state message - doesn't hurt
+    CreateAndSendRecorderStateForAllConChannels();
+}
+
+void CServer::SetEnableRecording ( bool bNewEnableRecording )
+{
+    if ( bRecorderInitialised )
+    {
+        // note that this block executes regardless of whether
+        // what appears to be a change is being applied, to ensure
+        // the requested state is the result
+        bEnableRecording = bNewEnableRecording;
+
+#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
+// TODO we should use the ConsoleWriterFactory() instead of qInfo()
+        qInfo() << "Recording state" << ( bEnableRecording ? "enabled" : "disabled" );
+#endif
+
+        if ( !bEnableRecording )
+        {
+            emit StopRecorder();
+        }
+        else if ( !IsRunning() )
+        {
+            // This dirty hack is for the GUI.  It doesn't care.
+            emit StopRecorder();
+        }
+    }
+
+    // send recording state message
+    CreateAndSendRecorderStateForAllConChannels();
+}
+
+void CServer::SetRecordingDir ( QString newRecordingDir )
+{
+    if ( bRecorderInitialised )
+    {
+        // We have a thread and we want to start a new one.
+        // We only want one running.
+        // This could take time, unfortunately.
+        // Hopefully changing recording directory will NOT happen during a long jam...
+        emit EndRecorderThread();
+        thJamRecorder.wait();
+    }
+
+    if ( !newRecordingDir.isEmpty() )
+    {
+        pJamRecorder = new recorder::CJamRecorder ( newRecordingDir );
+        strRecorderErrMsg = pJamRecorder->Init ( this, iServerFrameSizeSamples );
+        bRecorderInitialised = ( strRecorderErrMsg == QString::null );
+        bEnableRecording = bRecorderInitialised;
+    }
+    else
+    {
+        // This is the only time this is ever true - UI needs to handle it
+        strRecorderErrMsg = QString::null;
+        bRecorderInitialised = false;
+        bEnableRecording = false;
+    }
+    if ( bRecorderInitialised )
+    {
+        strRecordingDir = newRecordingDir;
+        pJamRecorder->moveToThread ( &thJamRecorder );
+        thJamRecorder.setObjectName ( "Jamulus::JamRecorder" );
+
+        QObject::connect ( &thJamRecorder, &QThread::finished,
+            pJamRecorder, &QObject::deleteLater );
+
+        QObject::connect ( pJamRecorder, &recorder::CJamRecorder::RecordingSessionStarted,
+            this, &CServer::RecordingSessionStarted );
+
+        thJamRecorder.start();
+    }
+    else
+    {
+        strRecordingDir = "";
+    }
 }
 
 void CServer::customEvent ( QEvent* pEvent )

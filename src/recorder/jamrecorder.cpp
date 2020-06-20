@@ -302,27 +302,32 @@ QMap<QString, QList<STrackItem>> CJamSession::TracksFromSessionDir(const QString
 /**
  * @brief CJamRecorder::Init Create recording directory, if necessary, and connect signal handlers
  * @param server Server object emiting signals
+ * @return QString::null on success else the failure reason
  */
-bool CJamRecorder::Init( const CServer* server,
-                         const int      _iServerFrameSizeSamples )
+QString CJamRecorder::Init( const CServer* server,
+                            const int      _iServerFrameSizeSamples )
 {
+    QString errmsg = QString::null;
     QFileInfo fi(recordBaseDir.absolutePath());
     fi.setCaching(false);
 
     if (!fi.exists() && !QDir().mkpath(recordBaseDir.absolutePath()))
     {
-        qCritical() << recordBaseDir.absolutePath() << "does not exist but could not be created";
-        return false;
+        errmsg = recordBaseDir.absolutePath() + " does not exist but could not be created";
+        qCritical() << errmsg;
+        return errmsg;
     }
     if (!fi.isDir())
     {
-        qCritical() << recordBaseDir.absolutePath() << "exists but is not a directory";
-        return false;
+        errmsg = recordBaseDir.absolutePath() + " exists but is not a directory";
+        qCritical() << errmsg;
+        return errmsg;
     }
     if (!fi.isWritable())
     {
-        qCritical() << recordBaseDir.absolutePath() << "is a directory but cannot be written to";
-        return false;
+        errmsg = recordBaseDir.absolutePath() + " is a directory but cannot be written to";
+        qCritical() << errmsg;
+        return errmsg;
     }
 
     QObject::connect( (const QObject *)server, SIGNAL ( RestartRecorder() ),
@@ -332,6 +337,9 @@ bool CJamRecorder::Init( const CServer* server,
     QObject::connect( (const QObject *)server, SIGNAL ( StopRecorder() ),
                       this, SLOT( OnEnd() ),
                       Qt::ConnectionType::QueuedConnection );
+
+    QObject::connect( (const QObject *)server, SIGNAL ( EndRecorderThread() ),
+                      this, SLOT( OnAboutToQuit() ) );
 
     QObject::connect( (const QObject *)server, SIGNAL ( Stopped() ),
                       this, SLOT( OnEnd() ),
@@ -351,11 +359,7 @@ bool CJamRecorder::Init( const CServer* server,
 
     iServerFrameSizeSamples = _iServerFrameSizeSamples;
 
-    thisThread = new QThread();
-    moveToThread ( thisThread );
-    thisThread->start();
-
-    return true;
+    return errmsg;
 }
 
 /**
@@ -410,7 +414,7 @@ void CJamRecorder::OnAboutToQuit()
 {
     OnEnd();
 
-    thisThread->exit();
+    QThread::currentThread()->exit();
 }
 
 void CJamRecorder::ReaperProjectFromCurrentSession()

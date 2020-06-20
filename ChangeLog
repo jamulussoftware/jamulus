@@ -22,8 +22,10 @@
 
 TODO grouping does not work as expected:
      - vertical space between check boxes should be smaller
+     - update help text
 
 TODO minimum height of faders (dependent on style)
+     - startup height of main windows should be higher now
 
 
 

@@ -397,7 +397,7 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
     }
 }
 
-void CChannelFader::SendFaderLevelToServer ( const int iLevel,
+void CChannelFader::SendFaderLevelToServer ( const int  iLevel,
                                              const bool bIsGroupUpdate )
 {
     // if mute flag is set or other channel is on solo, do not apply the new
@@ -412,6 +412,7 @@ void CChannelFader::SendFaderLevelToServer ( const int iLevel,
                                 bIsGroupUpdate,
                                 iLevel - iPreviousFaderLevel );
 
+        // update previous fader level since the level has changed
         iPreviousFaderLevel = iLevel;
     }
 }
@@ -441,6 +442,12 @@ void CChannelFader::SetMute ( const bool bState )
         {
             // mute was unchecked, get current fader value and apply
             emit gainValueChanged ( CalcFaderGain ( GetFaderLevel() ), bIsMyOwnFader, false, 0 );
+
+// TODO When mute or solo is activated, the group synchronization does not work anymore.
+//      To get a smoother experience, we adjust the previous level as soon as the mute is
+//      again set to off (if we would not do that, on the next move of the fader the other
+//      faders in the group would jump which is very bad).
+            iPreviousFaderLevel = GetFaderLevel();
         }
     }
 }

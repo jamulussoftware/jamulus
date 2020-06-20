@@ -111,6 +111,7 @@ protected:
     bool               bOtherChannelIsSolo;
     bool               bIsMyOwnFader;
     bool               bIsSelected;
+    int                iPreviousFaderLevel;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value ); }
@@ -119,7 +120,7 @@ public slots:
     void OnSelectStateChanged ( int value );
 
 signals:
-    void gainValueChanged ( double value, bool bIsMyOwnFader );
+    void gainValueChanged ( double value, bool bIsMyOwnFader, int iDiffLevel );
     void panValueChanged  ( double value );
     void soloStateChanged ( int value );
 };
@@ -128,13 +129,14 @@ template<unsigned int slotId>
 class CAudioMixerBoardSlots : public CAudioMixerBoardSlots<slotId - 1>
 {
 public:
-    void OnChGainValueChanged ( double dValue, bool bIsMyOwnFader ) { UpdateGainValue ( slotId - 1, dValue, bIsMyOwnFader ); }
+    void OnChGainValueChanged ( double dValue, bool bIsMyOwnFader, int iDiffLevel ) { UpdateGainValue ( slotId - 1, dValue, bIsMyOwnFader, iDiffLevel ); }
     void OnChPanValueChanged ( double dValue ) { UpdatePanValue ( slotId - 1, dValue ); }
 
 protected:
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const double dValue,
-                                   const bool   bIsMyOwnFader ) = 0;
+                                   const bool   bIsMyOwnFader,
+                                   const int    iDiffLevel ) = 0;
     virtual void UpdatePanValue ( const int    iChannelIdx,
                                   const double dValue ) = 0;
 };
@@ -223,7 +225,8 @@ protected:
 
     virtual void UpdateGainValue ( const int    iChannelIdx,
                                    const double dValue,
-                                   const bool   bIsMyOwnFader );
+                                   const bool   bIsMyOwnFader,
+                                   const int    iDiffLevel );
     virtual void UpdatePanValue ( const int    iChannelIdx,
                                   const double dValue );
 

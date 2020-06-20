@@ -317,7 +317,7 @@ void CChannelFader::Reset()
     pFader->setValue ( AUD_MIX_FADER_MAX );
     pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
 
-    // reset mute/solo check boxes and level meter
+    // reset mute/solo/select check boxes and level meter
     pcbMute->setChecked ( false );
     pcbSolo->setChecked ( false );
     pcbSelect->setChecked ( false );

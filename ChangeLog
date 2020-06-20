@@ -21,6 +21,7 @@
 
 
 TODO grouping does not work as expected:
+     - when changing a large group of faders, the volume change is very very slow, also the feedback from server, it seems the protocol is overloaded totally
      - vertical space between check boxes should be smaller
      - get rid of bIsSelected
 

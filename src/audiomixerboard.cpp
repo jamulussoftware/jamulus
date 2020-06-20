@@ -313,7 +313,7 @@ void CChannelFader::Reset()
     iPreviousFaderLevel = AUD_MIX_FADER_MAX;
     pPan->setValue ( AUD_MIX_PAN_MAX / 2 );
 
-    // reset mute/solo/select check boxes and level meter
+    // reset mute/solo/group check boxes and level meter
     pcbMute->setChecked ( false );
     pcbSolo->setChecked ( false );
     pcbGroup->setChecked ( false );
@@ -339,15 +339,20 @@ void CChannelFader::Reset()
     bIsMyOwnFader       = false;
 }
 
-void CChannelFader::SetFaderLevel ( const int iLevel )
+void CChannelFader::SetFaderLevel ( const int iLevel,
+                                    const bool bIsGroupUpdate )
 {
     // first make a range check
     if ( ( iLevel >= 0 ) && ( iLevel <= AUD_MIX_FADER_MAX ) )
     {
         // we set the new fader level in the GUI (slider control) and also tell the
-        // server about the change
-        pFader->setValue       ( iLevel );
-        SendFaderLevelToServer ( iLevel );
+        // server about the change (block the signal of the fader since we want to
+        // call SendFaderLevelToServer with a special additional parameter)
+        pFader->blockSignals ( true );
+        pFader->setValue     ( iLevel );
+        pFader->blockSignals ( false );
+
+        SendFaderLevelToServer ( iLevel, bIsGroupUpdate );
     }
 }
 
@@ -356,10 +361,9 @@ void CChannelFader::SetPanValue ( const int iPan )
     // first make a range check
     if ( ( iPan >= 0 ) && ( iPan <= AUD_MIX_PAN_MAX ) )
     {
-        // we set the new fader level in the GUI (slider control) and also tell the
-        // server about the change
-        pPan->setValue       ( iPan );
-        SendPanValueToServer ( iPan );
+        // we set the new fader level in the GUI (slider control) which then
+        // emits to signal to tell the server about the change (implicitly)
+        pPan->setValue ( iPan );
     }
 }
 
@@ -393,7 +397,8 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
     }
 }
 
-void CChannelFader::SendFaderLevelToServer ( const int iLevel )
+void CChannelFader::SendFaderLevelToServer ( const int iLevel,
+                                             const bool bIsGroupUpdate )
 {
     // if mute flag is set or other channel is on solo, do not apply the new
     // fader value (exception: we are on solo, in that case we ignore the
@@ -402,14 +407,17 @@ void CChannelFader::SendFaderLevelToServer ( const int iLevel )
          ( !bOtherChannelIsSolo || IsSolo() ) )
     {
         // emit signal for new fader gain value
-        emit gainValueChanged ( CalcFaderGain ( iLevel ), bIsMyOwnFader, iLevel - iPreviousFaderLevel );
+        emit gainValueChanged ( CalcFaderGain ( iLevel ),
+                                bIsMyOwnFader,
+                                bIsGroupUpdate,
+                                iLevel - iPreviousFaderLevel );
 
         iPreviousFaderLevel = iLevel;
     }
 }
 
 void CChannelFader::SendPanValueToServer ( const int iPan )
-{    
+{
     emit panValueChanged ( static_cast<double> ( iPan ) / AUD_MIX_PAN_MAX );
 }
 
@@ -424,7 +432,7 @@ void CChannelFader::SetMute ( const bool bState )
     if ( bState )
     {
         // mute channel -> send gain of 0
-        emit gainValueChanged ( 0, bIsMyOwnFader, 0 );
+        emit gainValueChanged ( 0, bIsMyOwnFader, false, 0 );
     }
     else
     {
@@ -432,7 +440,7 @@ void CChannelFader::SetMute ( const bool bState )
         if ( !bOtherChannelIsSolo || IsSolo() )
         {
             // mute was unchecked, get current fader value and apply
-            emit gainValueChanged ( CalcFaderGain ( GetFaderLevel() ), bIsMyOwnFader, 0 );
+            emit gainValueChanged ( CalcFaderGain ( GetFaderLevel() ), bIsMyOwnFader, false, 0 );
         }
     }
 }
@@ -691,7 +699,7 @@ inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 {
     int iCurChanID = slotId - 1;
 
-    void ( CAudioMixerBoard::* pGainValueChanged )( double, bool, int ) =
+    void ( CAudioMixerBoard::* pGainValueChanged )( double, bool, bool, int ) =
         &CAudioMixerBoardSlots<slotId>::OnChGainValueChanged;
 
     void ( CAudioMixerBoard::* pPanValueChanged )( double ) =
@@ -1023,27 +1031,25 @@ void CAudioMixerBoard::UpdateSoloStates()
 void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
                                          const double dValue,
                                          const bool   bIsMyOwnFader,
+                                         const bool   bIsGroupUpdate,
                                          const int    iDiffLevel )
 {
     // update current gain
     emit ChangeChanGain ( iChannelIdx, dValue, bIsMyOwnFader );
 
-    // if this fader is selected, all other selected must be updated as well
-    if ( vecpChanFader[iChannelIdx]->IsSelect() )
+    // if this fader is selected, all other in the group must be updated as
+    // well (note that we do not have to update if this is already a group update
+    // to avoid an infinite loop)
+    if ( vecpChanFader[iChannelIdx]->IsSelect() && !bIsGroupUpdate )
     {
         for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
         {
             // update rest of faders selected
             if ( vecpChanFader[i]->IsVisible() && vecpChanFader[i]->IsSelect() && ( i != iChannelIdx ) )
             {
-                // temporaly unselect so it does not repeat this again and again...
-                vecpChanFader[i]->SetFaderIsSelect ( false );
-
-                // "move" faders with moving fader level
-                vecpChanFader[i]->SetFaderLevel ( vecpChanFader[i]->GetFaderLevel() + iDiffLevel );
-
-                // back to selected status
-                vecpChanFader[i]->SetFaderIsSelect ( true );
+                // synchronize faders with moving fader level (it is important
+                // to set the group flag to avoid inifinite looping)
+                vecpChanFader[i]->SetFaderLevel ( vecpChanFader[i]->GetFaderLevel() + iDiffLevel, true );
             }
         }
     }

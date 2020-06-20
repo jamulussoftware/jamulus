@@ -1,24 +1,24 @@
 <RCC>
-    <qresource prefix="/translations" lang="de">
-        <file alias="translation.qm">res/translation/translation_de_DE.qm</file>
+    <qresource prefix="/translations">
+        <file alias="translation_de_DE.qm">res/translation/translation_de_DE.qm</file>
     </qresource>
-    <qresource prefix="/translations" lang="fr">
-        <file alias="translation.qm">res/translation/translation_fr_FR.qm</file>
+    <qresource prefix="/translations">
+        <file alias="translation_fr_FR.qm">res/translation/translation_fr_FR.qm</file>
     </qresource>
-    <qresource prefix="/translations" lang="pt">
-        <file alias="translation.qm">res/translation/translation_pt_PT.qm</file>
+    <qresource prefix="/translations">
+        <file alias="translation_pt_PT.qm">res/translation/translation_pt_PT.qm</file>
     </qresource>
-    <qresource prefix="/translations" lang="es">
-        <file alias="translation.qm">res/translation/translation_es_ES.qm</file>
+    <qresource prefix="/translations">
+        <file alias="translation_es_ES.qm">res/translation/translation_es_ES.qm</file>
     </qresource>
-    <qresource prefix="/translations" lang="nl">
-        <file alias="translation.qm">res/translation/translation_nl_NL.qm</file>
+    <qresource prefix="/translations">
+        <file alias="translation_nl_NL.qm">res/translation/translation_nl_NL.qm</file>
     </qresource>
-    <qresource prefix="/translations" lang="it">
-        <file alias="translation.qm">res/translation/translation_it_IT.qm</file>
+    <qresource prefix="/translations">
+        <file alias="translation_it_IT.qm">res/translation/translation_it_IT.qm</file>
     </qresource>
-    <qresource prefix="/translations" lang="pl">
-        <file alias="translation.qm">res/translation/translation_pl_PL.qm</file>
+    <qresource prefix="/translations">
+        <file alias="translation_pl_PL.qm">res/translation/translation_pl_PL.qm</file>
     </qresource>
 
     <qresource prefix="/png/LEDs">

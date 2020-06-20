@@ -1590,7 +1590,7 @@ void CServer::WriteHTMLChannelList()
     }
 
     QTextStream streamFileOut ( &serverFileListFile );
-    streamFileOut << strServerNameWithPort << endl << "<ul>" << endl;
+    streamFileOut << strServerNameWithPort.toHtmlEscaped() << endl << "<ul>" << endl;
 
     // depending on number of connected clients write list
     if ( GetNumberOfConnectedClients() == 0 )
@@ -1605,7 +1605,7 @@ void CServer::WriteHTMLChannelList()
         {
             if ( vecChannels[i].IsConnected() )
             {
-                streamFileOut << "  <li>" << vecChannels[i].GetName() << "</li>" << endl;
+                streamFileOut << "  <li>" << vecChannels[i].GetName().toHtmlEscaped() << "</li>" << endl;
             }
         }
     }

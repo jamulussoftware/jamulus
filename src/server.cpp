@@ -1000,6 +1000,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 // TODO This does not work as expected, the CPU is at high levels even if not much work is to be done. So we
 // have an issue using OMP in the OnTimer() function. Even if #pragma omp parallel for is used on a trivial
 // for loop for testing, still the CPU usage goes to very high values -> What is the cause of this issue?
+// NOTE Most probably it is the overhead of threads creation/destruction which causes this effect.
 # pragma omp parallel for
 #endif
         for ( int i = 0; i < iNumClients; i++ )

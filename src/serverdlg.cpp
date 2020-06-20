@@ -123,28 +123,63 @@ CServerDlg::CServerDlg ( CServer*         pNServP,
     cbxLocationCountry->setAccessibleName ( tr (
         "Country where the server is located combo box" ) );
 
+    // recording directory
+    pbtRecordingDir->setAccessibleName ( tr ( "Display dialog to select recording directory button" ) );
+    pbtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> "
+        +  tr ( "Click the button to open the dialog that allows the main recording directory to be selected."
+                "The chosen value must exist and be writeable (allow creation of sub-directories "
+                "by the user Jamulus is running as). " ) );
+
+    edtRecordingDir->setAccessibleName ( tr ( "Main recording directory text box (read-only)" ) );
+    edtRecordingDir->setWhatsThis ( "<b>" + tr ( "Main Recording Directory" ) + ":</b> "
+        +  tr ( "The current value of the main recording directory. "
+                "The chosen value must exist and be writeable (allow creation of sub-directories "
+                "by the user Jamulus is running as). "
+                "Click the button to open the dialog that allows the main recording directory to be selected." ) );
+
+    tbtClearRecordingDir->setAccessibleName ( tr ( "Clear the recording directory button" ) );
+    tbtClearRecordingDir->setWhatsThis ( "<b>" + tr ( "Clear Recording Directory" ) + ":</b> "
+        +  tr ( "Click the button to clear the currently selected recording directory. "
+                "This will prevent recording until a new value is selected.") );
+
     // enable recorder
     chbEnableRecorder->setAccessibleName( tr ( "Checkbox to turn on or off server recording" ) );
-    chbEnableRecorder->setWhatsThis( "<b>" + tr ( "Enable Recorder" ) + ":</b>"
+    chbEnableRecorder->setWhatsThis( "<b>" + tr ( "Enable Recorder" ) + ":</b> "
         + tr ( "Checked when the recorder is enabled, otherwise unchecked. "
                "The recorder will run when a session is in progress, if (set up correctly and) enabled." ) );
 
     // current session directory
     edtCurrentSessionDir->setAccessibleName( tr ( "Current session directory text box (read-only)" ) );
-    edtCurrentSessionDir->setWhatsThis( "<b>" + tr ( "Current Session Directory" ) + ":</b>"
-        +  tr ( "Enabled during recording and holds the current recording session directory. "
-                "Disabled after recording or when the recorder is not enabled." ) );
+    edtCurrentSessionDir->setWhatsThis( "<b>" + tr ( "Current Session Directory" ) + ":</b> "
+        + tr ( "Enabled during recording and holds the current recording session directory. "
+               "Disabled after recording or when the recorder is not enabled." ) );
 
     // recorder status
     lblRecorderStatus->setAccessibleName ( tr ( "Recorder status label" ) );
-    lblRecorderStatus->setWhatsThis ( "<b>" + tr ( "Recorder Status" ) + ":</b>"
-        +  tr ( "Displays the current status of the recorder." ) );
+    lblRecorderStatus->setWhatsThis ( "<b>" + tr ( "Recorder Status" ) + ":</b> "
+        + tr ( "Displays the current status of the recorder.  The following values are possible:"
+               "<dl>"
+               "<dt>Not initialised</dt>"
+               "<dd>No recording directory has been set or the value is not useable</dd>"
+               "<dt>Not enabled</dt>"
+               "<dd>Recording has been switched off" )
+#ifdef _WIN32
+         + tr ( " by the UI checkbox</dd>" )
+#else
+         + tr ( ", either by the UI checkbox or SIGUSR2 being received</dd>" )
+#endif
+         + tr ( "<dt>Not recording</dt>"
+                "<dd>There is no one connected to the server to record</dd>"
+                "<dt>Recording</dt>"
+                "<dd>The performers are being recorded to the specified session directory</dd>"
+                "</dl>" )
+        + tr ( "<br/><b>NOTE:</b> If the recording directory is not useable, "
+               "the problem will be displayed in place of the directory.") );
 
     // new recording
     pbtNewRecording->setAccessibleName ( tr ( "Request new recording button" ) );
-    pbtNewRecording->setWhatsThis ( "<b>" + tr ( "New Recording" ) + ":</b>"
+    pbtNewRecording->setWhatsThis ( "<b>" + tr ( "New Recording" ) + ":</b> "
         +  tr ( "During a recording session, the button can be used to start a new recording." ) );
-
 
     // init system tray icon
     if ( bSystemTrayIconAvaialbe )
@@ -289,22 +324,12 @@ lvwClients->setMinimumHeight ( 140 );
 #endif
 
     // Recorder controls
-    if ( !pServer->GetRecorderInitialised() )
-    {
-        // The recorder was not initialised successfully from the command line
-        // TODO: Once initialising from the GUI is implemented, remove
-        chbEnableRecorder->setVisible ( false );
-        edtCurrentSessionDir->setVisible ( false );
-        lblRecorderStatus->setVisible ( false );
-        pbtNewRecording->setVisible ( false );
-    }
-
+    chbEnableRecorder->setCheckState ( Qt::CheckState::Checked ); // move to settings
     edtCurrentSessionDir->setText ( "" );
     pbtNewRecording->setAutoDefault ( false );
-
-    // TODO: Not yet implemented, so hide them!
-    pbtRecordingDir->setVisible ( false );
-    edtRecordingsDir->setVisible ( false );
+    pbtRecordingDir->setAutoDefault ( false );
+    edtRecordingDir->setText( pServer->GetRecordingDir() );
+    tbtClearRecordingDir->setText ( "(X)" ); // someone make me a nice icon?
 
     UpdateRecorderStatus ( QString::null );
 
@@ -372,8 +397,15 @@ lvwClients->setMinimumHeight ( 140 );
         this, &CServerDlg::OnCentServAddrTypeActivated );
 
     // push buttons
+    QObject::connect ( pbtRecordingDir, &QPushButton::released,
+        this, &CServerDlg::OnRecordingDirClicked );
+
     QObject::connect ( pbtNewRecording, &QPushButton::released,
         this, &CServerDlg::OnNewRecordingClicked );
+
+    // tool buttons
+    QObject::connect ( tbtClearRecordingDir, &QToolButton::released,
+        this, &CServerDlg::OnClearRecordingDirClicked );
 
     // timers
     QObject::connect ( &Timer, &QTimer::timeout,
@@ -537,6 +569,30 @@ void CServerDlg::OnServerStopped()
 void CServerDlg::OnStopRecorder()
 {
     UpdateRecorderStatus ( QString::null );
+}
+
+void CServerDlg::OnRecordingDirClicked()
+{
+    // get the current value from pServer
+    QString currentValue = pServer->GetRecordingDir();
+    QString newRecordingDir = QFileDialog::getExistingDirectory ( this,
+                                                                  tr ( "Select Main Recording Directory" ),
+                                                                  currentValue,
+                                                                  QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog );
+    if ( newRecordingDir != currentValue )
+    {
+        pServer->SetRecordingDir ( newRecordingDir );
+        UpdateRecorderStatus ( QString::null );
+    }
+}
+
+void CServerDlg::OnClearRecordingDirClicked()
+{
+    if ( pServer->GetRecorderErrMsg() != QString::null || pServer->GetRecordingDir() != "" )
+    {
+        pServer->SetRecordingDir ( "" );
+        UpdateRecorderStatus ( QString::null );
+    }
 }
 
 void CServerDlg::OnSysTrayActivated ( QSystemTrayIcon::ActivationReason ActReason )
@@ -710,44 +766,52 @@ void CServerDlg::ModifyAutoStartEntry ( const bool bDoAutoStart )
 
 void CServerDlg::UpdateRecorderStatus ( QString sessionDir )
 {
-    if ( !pServer->GetRecorderInitialised() )
-    {
-        // everything should be hidden.
-        return;
-    }
-
-    Qt::CheckState csIsEnabled;
     QString        currentSessionDir = edtCurrentSessionDir->text();
+    QString        errMsg            = pServer->GetRecorderErrMsg();
     bool           bIsRecording      = false;
     QString        strRecorderStatus;
+    QString        strRecordingDir;
 
-    if ( pServer->GetRecordingEnabled() )
+    if ( pServer->GetRecorderInitialised() )
     {
-        csIsEnabled = Qt::CheckState::Checked;
-        if ( pServer->IsRunning() )
+        strRecordingDir = pServer->GetRecordingDir();
+        chbEnableRecorder->setEnabled ( true );
+        if ( pServer->GetRecordingEnabled() )
         {
-            currentSessionDir = sessionDir != QString::null ? sessionDir : "";
-            strRecorderStatus = tr ( "Recording" );
-            bIsRecording      = true;
+            if ( pServer->IsRunning() )
+            {
+                edtCurrentSessionDir->setText ( sessionDir != QString::null ? sessionDir : "" );
+                strRecorderStatus = tr ( "Recording" );
+                bIsRecording      = true;
+            }
+            else
+            {
+                strRecorderStatus = tr ( "Not recording" );
+            }
         }
         else
         {
-            strRecorderStatus = tr ( "Not recording" );
+            strRecorderStatus = tr ( "Not enabled" );
         }
     }
     else
     {
-        csIsEnabled       = Qt::CheckState::Unchecked;
-        strRecorderStatus = tr ( "Not enabled" );
+        strRecordingDir = pServer->GetRecorderErrMsg();
+        if ( strRecordingDir == QString::null )
+        {
+            strRecordingDir = pServer->GetRecordingDir();
+        }
+        else
+        {
+            strRecordingDir = tr ( "ERROR" ) + ": " + strRecordingDir;
+        }
+        chbEnableRecorder->setEnabled ( false );
+        strRecorderStatus = tr ( "Not initialised" );
     }
 
-    chbEnableRecorder->setCheckState ( csIsEnabled );
-
+    edtRecordingDir->setText( strRecordingDir );
     edtCurrentSessionDir->setEnabled ( bIsRecording );
-    edtCurrentSessionDir->setText    ( currentSessionDir );
-
     lblRecorderStatus->setText ( strRecorderStatus );
-
     pbtNewRecording->setEnabled ( bIsRecording );
 }
 

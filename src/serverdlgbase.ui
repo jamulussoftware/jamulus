@@ -172,9 +172,31 @@
    <item>
     <layout class="QHBoxLayout">
      <item>
+      <widget class="QPushButton" name="pbtRecordingDir">
+       <property name="text">
+        <string>Recording Directory</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="edtRecordingDir">
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbtClearRecordingDir">
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
       <widget class="QCheckBox" name="chbEnableRecorder">
        <property name="text">
-        <string>Enable jam recorder</string>
+        <string>Enable Jam Recorder</string>
        </property>
       </widget>
      </item>
@@ -195,25 +217,7 @@
      <item>
       <widget class="QPushButton" name="pbtNewRecording">
        <property name="text">
-        <string>New recording</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout">
-     <item>
-      <widget class="QPushButton" name="pbtRecordingDir">
-       <property name="text">
-        <string>Recordings folder</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="edtRecordingsDir">
-       <property name="readOnly">
-        <bool>true</bool>
+        <string>New Recording</string>
        </property>
       </widget>
      </item>
@@ -276,11 +280,12 @@
   <tabstop>edtServerName</tabstop>
   <tabstop>edtLocationCity</tabstop>
   <tabstop>cbxLocationCountry</tabstop>
+  <tabstop>pbtRecordingDir</tabstop>
+  <tabstop>edtRecordingDir</tabstop>
+  <tabstop>tbtClearRecordingDir</tabstop>
   <tabstop>chbEnableRecorder</tabstop>
   <tabstop>edtCurrentSessionDir</tabstop>
   <tabstop>pbtNewRecording</tabstop>
-  <tabstop>pbtRecordingDir</tabstop>
-  <tabstop>edtRecordingsDir</tabstop>
  </tabstops>
  <resources>
   <include location="resources.qrc"/>

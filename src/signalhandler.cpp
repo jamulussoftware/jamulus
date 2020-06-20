@@ -174,6 +174,7 @@ bool CSignalUnix::setSignalHandled ( int sigNum, bool state )
     else
     {
         sa.sa_handler = SIG_DFL;
+        sa.sa_flags = 0;
     }
 
     return ::sigaction ( sigNum, &sa, nullptr ) == 0;

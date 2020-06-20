@@ -92,6 +92,7 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     pLevelsGrid->setSpacing ( 0 ); // only minimal space
 
     pMuteSoloGrid->setContentsMargins ( 0, 0, 0, 0 );
+    pMuteSoloGrid->setSpacing ( 0 ); // only minimal space
 
     pLabelGrid->setContentsMargins ( 0, 0, 0, 0 );
     pLabelGrid->setSpacing ( 2 ); // only minimal space between picture and text

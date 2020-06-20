@@ -9,7 +9,7 @@
 
 - support sorting faders by channel instrument, coded by Alberstein8 (#356)
 
-- new group switch to change several faders like one, coded by Alberstein8 (#379)
+- new group switch to change several faders like one, coded by Alberstein8 (#202, #379)
 
 - add server recording indicator, coded by pljones (#295)
 
@@ -21,7 +21,6 @@
 
 
 TODO grouping does not work as expected:
-     - vertical space between check boxes should be smaller
      - update help text
 
 

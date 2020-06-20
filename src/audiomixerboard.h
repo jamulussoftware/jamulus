@@ -83,7 +83,6 @@ protected:
     void   SendFaderLevelToServer ( const int iLevel );
     void   SendPanValueToServer ( const int iPan );
     void   SetupFaderTag ( const ESkillLevel eSkillLevel );
-    void   SetSelected ( const bool bState ) { bIsSelected = bState; }
 
     QFrame*            pFrame;
 
@@ -110,14 +109,12 @@ protected:
 
     bool               bOtherChannelIsSolo;
     bool               bIsMyOwnFader;
-    bool               bIsSelected;
     int                iPreviousFaderLevel;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value ); }
     void OnPanValueChanged ( int value ) { SendPanValueToServer ( value ); }
     void OnMuteStateChanged ( int value );
-    void OnSelectStateChanged ( int value );
 
 signals:
     void gainValueChanged ( double value, bool bIsMyOwnFader, int iDiffLevel );

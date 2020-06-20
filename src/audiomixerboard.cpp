@@ -183,9 +183,6 @@ CChannelFader::CChannelFader ( QWidget* pNW )
 
     QObject::connect ( pcbSolo, &QCheckBox::stateChanged,
         this, &CChannelFader::soloStateChanged );
-
-    QObject::connect ( pcbGroup, &QCheckBox::stateChanged,
-        this, &CChannelFader::OnSelectStateChanged );
 }
 
 void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
@@ -340,7 +337,6 @@ void CChannelFader::Reset()
 
     bOtherChannelIsSolo = false;
     bIsMyOwnFader       = false;
-    bIsSelected         = false;
 }
 
 void CChannelFader::SetFaderLevel ( const int iLevel )
@@ -624,12 +620,6 @@ double CChannelFader::CalcFaderGain ( const int value )
     {
         return pow ( 10, ( dInValueRange0_1 * 35 - 35 ) / 20 );
     }
-}
-
-void CChannelFader::OnSelectStateChanged ( int value )
-{
-    // call selecting function
-    SetSelected ( static_cast<Qt::CheckState> ( value ) == Qt::Checked );
 }
 
 
@@ -1041,22 +1031,19 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
     // if this fader is selected, all other selected must be updated as well
     if ( vecpChanFader[iChannelIdx]->IsSelect() )
     {
-        for ( int i = MAX_NUM_CHANNELS - 1; i >= 0; i-- )
+        for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
         {
             // update rest of faders selected
-           if ( vecpChanFader[i]->IsSelect() )
+            if ( vecpChanFader[i]->IsVisible() && vecpChanFader[i]->IsSelect() && ( i != iChannelIdx ) )
             {
-              if ( i != iChannelIdx )
-              {
-                 // temporaly unselect so it does not repeat this again and again...
-                 vecpChanFader[i]->SetFaderIsSelect ( false );
+                // temporaly unselect so it does not repeat this again and again...
+                vecpChanFader[i]->SetFaderIsSelect ( false );
 
-                 // "move" faders with moving fader level
-                 vecpChanFader[i]->SetFaderLevel ( vecpChanFader[i]->GetFaderLevel() + iDiffLevel );
+                // "move" faders with moving fader level
+                vecpChanFader[i]->SetFaderLevel ( vecpChanFader[i]->GetFaderLevel() + iDiffLevel );
 
-                 // back to selected status
-                 vecpChanFader[i]->SetFaderIsSelect ( true );
-              }
+                // back to selected status
+                vecpChanFader[i]->SetFaderIsSelect ( true );
             }
         }
     }

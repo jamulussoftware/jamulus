@@ -45,7 +45,7 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     pMuteSoloBox                = new QWidget           ( pFrame );
     pcbMute                     = new QCheckBox         ( tr ( "Mute" ), pMuteSoloBox );
     pcbSolo                     = new QCheckBox         ( tr ( "Solo" ), pMuteSoloBox );
-    pcbGroup                    = new QCheckBox         ( tr ( "Group" ), pMuteSoloBox );
+    pcbGroup                    = new QCheckBox         ( tr ( "Grp" ), pMuteSoloBox );
 
     pLabelInstBox               = new QGroupBox         ( pFrame );
     plblLabel                   = new QLabel            ( "", pFrame );
@@ -107,9 +107,9 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     pLevelsGrid->addWidget ( plbrChannelLevel, 0, Qt::AlignRight );
     pLevelsGrid->addWidget ( pFader,           0, Qt::AlignLeft );
 
-    pMuteSoloGrid->addWidget ( pcbMute, 0, Qt::AlignLeft );
-    pMuteSoloGrid->addWidget ( pcbSolo, 0, Qt::AlignLeft );
     pMuteSoloGrid->addWidget ( pcbGroup, 0, Qt::AlignLeft );
+    pMuteSoloGrid->addWidget ( pcbMute,  0, Qt::AlignLeft );
+    pMuteSoloGrid->addWidget ( pcbSolo,  0, Qt::AlignLeft );
 
     pMainGrid->addLayout ( pPanGrid );
     pMainGrid->addWidget ( pLevelsBox,   0, Qt::AlignHCenter );
@@ -212,7 +212,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pPanLabel->setText                  ( tr ( "PAN" ) );
         pcbMute->setText                    ( tr ( "MUTE" ) );
         pcbSolo->setText                    ( tr ( "SOLO" ) );
-        pcbGroup->setText                   ( tr ( "GROUP" ) );
+        pcbGroup->setText                   ( tr ( "GRP" ) );
         plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
         break;
 
@@ -239,7 +239,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pPanLabel->setText                  ( tr ( "Pan" ) );
         pcbMute->setText                    ( tr ( "Mute" ) );
         pcbSolo->setText                    ( tr ( "Solo" ) );
-        pcbGroup->setText                   ( tr ( "Group" ) );
+        pcbGroup->setText                   ( tr ( "Grp" ) );
         plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
         break;
     }
@@ -366,6 +366,11 @@ void CChannelFader::SetPanValue ( const int iPan )
     }
 }
 
+void CChannelFader::SetFaderIsSelect ( const bool bIsSelected )
+{
+    pcbGroup->setChecked ( bIsSelected );
+}
+
 void CChannelFader::SetFaderIsSolo ( const bool bIsSolo )
 {
     // changing the state automatically emits the signal, too
@@ -389,11 +394,6 @@ void CChannelFader::SetRemoteFaderIsMute ( const bool bIsMute )
     {
         pInfoLabel->setText ( "" );
     }
-}
-
-void CChannelFader::SetFaderIsSelect ( const bool bIsSelected )
-{
-    pcbGroup->setChecked ( bIsSelected );
 }
 
 void CChannelFader::SendFaderLevelToServer ( const int iLevel )
@@ -1056,7 +1056,6 @@ void CAudioMixerBoard::UpdateGainValue ( const int    iChannelIdx,
             }
         }
     }
-
 }
 
 void CAudioMixerBoard::UpdatePanValue ( const int    iChannelIdx,

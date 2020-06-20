@@ -24,27 +24,17 @@
 
 #pragma once
 
-#ifndef HEADLESS
-# include <QFrame>
-# include <QPixmap>
-# include <QTimer>
-# include <QLayout>
-# include <QProgressBar>
-# include <QStackedLayout>
-#endif
+#include <QFrame>
+#include <QPixmap>
+#include <QTimer>
+#include <QLayout>
+#include <QProgressBar>
+#include <QStackedLayout>
 #include "util.h"
 #include "global.h"
 
 
-/* Definitions ****************************************************************/
-// defines for LED level meter CMultiColorLEDBar
-#define NUM_STEPS_LED_BAR                8
-#define RED_BOUND_LED_BAR                7
-#define YELLOW_BOUND_LED_BAR             5
-
-
 /* Classes ********************************************************************/
-#ifndef HEADLESS
 class CMultiColorLEDBar : public QWidget
 {
     Q_OBJECT
@@ -98,4 +88,3 @@ protected:
     CVector<cLED*>  vecpLEDs;
     QProgressBar*   pProgressBar;
 };
-#endif

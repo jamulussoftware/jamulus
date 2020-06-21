@@ -21,6 +21,8 @@
 
 - added some protections to the code, coded by atsampson (#380, #381, #382)
 
+- bug fix: server window stop updating after minimized, coded by  AronVietti (#355, #383)
+
 
 
 

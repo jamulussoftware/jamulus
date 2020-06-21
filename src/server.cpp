@@ -1001,6 +1001,8 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
 // have an issue using OMP in the OnTimer() function. Even if #pragma omp parallel for is used on a trivial
 // for loop for testing, still the CPU usage goes to very high values -> What is the cause of this issue?
 // NOTE Most probably it is the overhead of threads creation/destruction which causes this effect.
+// See https://software.intel.com/content/www/us/en/develop/articles/performance-obstacles-for-threading-how-do-they-affect-openmp-code.html
+// "[...] overhead numbers are high enough that it doesn’t make sense to thread that code. In those cases, we’re better off leaving the code in its original serial form."
 # pragma omp parallel for
 #endif
         for ( int i = 0; i < iNumClients; i++ )

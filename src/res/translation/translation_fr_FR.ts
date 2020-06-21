@@ -201,12 +201,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="669"/>
         <source>Personal Mix at the Server</source>
-        <translation type="unfinished"></translation>
+        <translation>Mixage personnel au serveur</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="669"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lorsque vous êtes connecté à un serveur, les contrôles vous permettent de régler votre mixage local sans affecter ce que les autres entendent de vous. Le titre indique le nom du serveur et, lorsqu'il est connu, s'il est en train d'enregistrer.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="741"/>
@@ -221,12 +221,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="871"/>
         <source>RECORDING ACTIVE</source>
-        <translation type="unfinished"></translation>
+        <translation>ENREGISTREMENT ACTIF</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="874"/>
         <source>Personal Mix at: </source>
-        <translation>Mixage personnel du serveur : </translation>
+        <translation>Mixage personnel à : </translation>
     </message>
 </context>
 <context>
@@ -324,7 +324,7 @@
         <location filename="../../audiomixerboard.cpp" line="48"/>
         <location filename="../../audiomixerboard.cpp" line="242"/>
         <source>Grp</source>
-        <translation type="unfinished"></translation>
+        <translation>Grp</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="124"/>
@@ -354,17 +354,17 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Groupe</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Avec la case à cocher Grp, un groupe de canaux audio peut être défini. Tous les chariots de canaux d'un groupe sont déplacés en synchronisation proportionnelle si l'un des chariots du groupe est déplacé.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="160"/>
         <source>Group button</source>
-        <translation type="unfinished"></translation>
+        <translation>Bouton de groupe</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="162"/>
@@ -404,22 +404,22 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="213"/>
         <source>GRP</source>
-        <translation type="unfinished"></translation>
+        <translation>GRP</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="225"/>
         <source>M</source>
-        <translation type="unfinished"></translation>
+        <translation>M</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="226"/>
         <source>S</source>
-        <translation type="unfinished"></translation>
+        <translation>S</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="227"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="563"/>
@@ -520,7 +520,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="56"/>
         <source>Type a message here</source>
-        <translation type="unfinished"></translation>
+        <translation>Écrivez un message ici</translation>
     </message>
 </context>
 <context>
@@ -913,12 +913,12 @@
     <message>
         <location filename="../../clientdlg.cpp" line="285"/>
         <source>Sort Channel Users by &amp;Name</source>
-        <translation type="unfinished"></translation>
+        <translation>Trier les utilisateurs du canal par &amp;nom</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="288"/>
         <source>Sort Channel Users by &amp;Instrument</source>
-        <translation type="unfinished"></translation>
+        <translation>Trier les utilisateurs du canal par &amp;instrument</translation>
     </message>
     <message>
         <location filename="../../clientdlg.cpp" line="721"/>
@@ -1465,17 +1465,17 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="186"/>
         <source>Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>thème graphique</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="186"/>
         <source>Select the skin to be used for the main window.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez le thème graphique à utiliser pour la fenêtre principale.</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="189"/>
         <source>Skin combo box</source>
-        <translation type="unfinished"></translation>
+        <translation>Choix déroulant de thème graphique</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="198"/>
@@ -1561,12 +1561,12 @@
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="335"/>
         <source>Fancy</source>
-        <translation type="unfinished"></translation>
+        <translation>Fantaisie</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlg.cpp" line="336"/>
-        <source>Compact</source>
-        <translation type="unfinished"></translation>
+        <source>Fancy</source>
+        <translation>Fancy</translation>
     </message>
     <message>
         <source>Manual</source>
@@ -1769,7 +1769,7 @@
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="514"/>
         <source>Skin</source>
-        <translation type="unfinished"></translation>
+        <translation>Thème graphique</translation>
     </message>
     <message>
         <location filename="../../clientsettingsdlgbase.ui" line="536"/>
@@ -2813,7 +2813,7 @@
     <message>
         <location filename="../../serverdlgbase.ui" line="79"/>
         <source>Genre</source>
-        <translation type="unfinished"></translation>
+        <translation>Genre</translation>
     </message>
     <message>
         <location filename="../../serverdlgbase.ui" line="89"/>
@@ -3054,17 +3054,17 @@
     <message>
         <location filename="../../util.cpp" line="1412"/>
         <source>, Version </source>
-        <translation type="unfinished">, version </translation>
+        <translation>, version </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1425"/>
         <source>Internet Jam Session Software</source>
-        <translation type="unfinished">Logiciels de bœuf sur Internet</translation>
+        <translation>Logiciel de bœuf sur Internet</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1429"/>
         <source>Released under the GNU General Public License (GPL)</source>
-        <translation type="unfinished">Publié sous la licence publique générale GNU (GPL)</translation>
+        <translation>Publié sous la licence publique générale GNU (GPL)</translation>
     </message>
 </context>
 <context>

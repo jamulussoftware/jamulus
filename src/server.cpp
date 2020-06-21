@@ -241,7 +241,6 @@ CServer::CServer ( const int          iNewMaxNumChan,
     Logging                     ( iMaxDaysHistory ),
     iFrameCount                 ( 0 ),
     bWriteStatusHTMLFile        ( false ),
-    bRecorderInitialised        ( false ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
     ServerListManager           ( iPortNumber,
                                   strCentralServer,
@@ -404,6 +403,9 @@ CServer::CServer ( const int          iNewMaxNumChan,
             QString().number( static_cast<int> ( iPortNumber ) ) );
     }
 
+    // jam recorder needs the frame size
+    JamController.SetRecordingDir ( strRecordingDirName, iServerFrameSizeSamples );
+
     // manage welcome message: if the welcome message is a valid link to a local
     // file, the content of that file is used as the welcome message (#361)
     strWelcomeMessage = strNewWelcomeMessage; // first copy text, may be overwritten
@@ -472,6 +474,28 @@ CServer::CServer ( const int          iNewMaxNumChan,
 
     QObject::connect ( &ServerListManager, &CServerListManager::SvrRegStatusChanged,
         this, &CServer::SvrRegStatusChanged );
+
+    QObject::connect ( &JamController, &recorder::CJamController::RestartRecorder,
+        this, &CServer::RestartRecorder );
+
+    QObject::connect ( &JamController, &recorder::CJamController::StopRecorder,
+        this, &CServer::StopRecorder );
+
+    QObject::connect ( &JamController, &recorder::CJamController::RecordingSessionStarted,
+        this, &CServer::RecordingSessionStarted );
+
+    QObject::connect ( &JamController, &recorder::CJamController::EndRecorderThread,
+        this, &CServer::EndRecorderThread );
+
+    QObject::connect( this, &CServer::Stopped,
+        &JamController, &recorder::CJamController::Stopped );
+
+    QObject::connect( this, &CServer::ClientDisconnected,
+        &JamController, &recorder::CJamController::ClientDisconnected );
+
+    qRegisterMetaType<CVector<int16_t>> ( "CVector<int16_t>" );
+    QObject::connect( this, &CServer::AudioFrame,
+        &JamController, &recorder::CJamController::AudioFrame );
 
     QObject::connect ( QCoreApplication::instance(), &QCoreApplication::aboutToQuit,
         this, &CServer::OnAboutToQuit );
@@ -626,7 +650,7 @@ void CServer::OnNewConnection ( int          iChID,
     vecChannels[iChID].CreateVersionAndOSMes();
 
     // send recording state message on connection
-    vecChannels[iChID].CreateRecorderStateMes ( GetRecorderState() );
+    vecChannels[iChID].CreateRecorderStateMes ( JamController.GetRecorderState() );
 
     // reset the conversion buffers
     DoubleFrameSizeConvBufIn[iChID].Reset();
@@ -718,7 +742,7 @@ void CServer::OnHandledSignal ( int sigNum )
         break;
 
     case SIGUSR2:
-        SetEnableRecording ( !bEnableRecording );
+        SetEnableRecording ( !JamController.GetRecordingEnabled() );
         break;
 
     case SIGINT:
@@ -904,7 +928,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                     // and emit the client disconnected signal
                     if ( eGetStat == GS_CHAN_NOW_DISCONNECTED )
                     {
-                        if ( bEnableRecording )
+                        if ( JamController.GetRecordingEnabled() )
                         {
                             emit ClientDisconnected ( iCurChanID ); // TODO do this outside the mutex lock?
                         }
@@ -989,7 +1013,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             const int iCurNumAudChan = vecNumAudioChannels[i];
 
             // export the audio data for recording purpose
-            if ( bEnableRecording )
+            if ( JamController.GetRecordingEnabled() )
             {
                 emit AudioFrame ( iCurChanID,
                                   vecChannels[iCurChanID].GetName(),
@@ -1324,42 +1348,6 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
     }
 }
 
-void CServer::CreateAndSendRecorderStateForAllConChannels()
-{
-    // get recorder state
-    ERecorderState eRecorderState = GetRecorderState();
-
-    // now send recorder state to all connected clients
-    for ( int i = 0; i < iMaxNumChannels; i++ )
-    {
-        if ( vecChannels[i].IsConnected() )
-        {
-            // send message
-            vecChannels[i].CreateRecorderStateMes ( eRecorderState );
-        }
-    }
-}
-
-ERecorderState CServer::GetRecorderState()
-{
-    // return recorder state
-    if ( bRecorderInitialised )
-    {
-        if ( bEnableRecording )
-        {
-            return RS_RECORDING;
-        }
-        else
-        {
-            return RS_NOT_ENABLED;
-        }
-    }
-    else
-    {
-        return RS_NOT_INITIALISED;
-    }
-}
-
 void CServer::CreateOtherMuteStateChanged ( const int  iCurChanID,
                                             const int  iOtherChanID,
                                             const bool bIsMuted )
@@ -1541,6 +1529,14 @@ void CServer::GetConCliParam ( CVector<CHostAddress>& vecHostAddresses,
     }
 }
 
+void CServer::SetEnableRecording ( bool bNewEnableRecording )
+{
+    JamController.SetEnableRecording ( bNewEnableRecording, IsRunning() );
+
+    // send recording state message - doesn't hurt
+    CreateAndSendRecorderStateForAllConChannels();
+}
+
 void CServer::StartStatusHTMLFileWriting ( const QString& strNewFileName,
                                            const QString& strNewServerNameWithPort )
 {
@@ -1590,89 +1586,19 @@ void CServer::WriteHTMLChannelList()
     streamFileOut << "</ul>" << endl;
 }
 
-void CServer::RequestNewRecording()
+void CServer::CreateAndSendRecorderStateForAllConChannels()
 {
-    if ( bRecorderInitialised && bEnableRecording )
+    // get recorder state
+    ERecorderState eRecorderState = JamController.GetRecorderState();
+
+    // now send recorder state to all connected clients
+    for ( int i = 0; i < iMaxNumChannels; i++ )
     {
-        emit RestartRecorder();
-    }
-
-    // send recording state message - doesn't hurt
-    CreateAndSendRecorderStateForAllConChannels();
-}
-
-void CServer::SetEnableRecording ( bool bNewEnableRecording )
-{
-    if ( bRecorderInitialised )
-    {
-        // note that this block executes regardless of whether
-        // what appears to be a change is being applied, to ensure
-        // the requested state is the result
-        bEnableRecording = bNewEnableRecording;
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 5, 0)
-// TODO we should use the ConsoleWriterFactory() instead of qInfo()
-        qInfo() << "Recording state" << ( bEnableRecording ? "enabled" : "disabled" );
-#endif
-
-        if ( !bEnableRecording )
+        if ( vecChannels[i].IsConnected() )
         {
-            emit StopRecorder();
+            // send message
+            vecChannels[i].CreateRecorderStateMes ( eRecorderState );
         }
-        else if ( !IsRunning() )
-        {
-            // This dirty hack is for the GUI.  It doesn't care.
-            emit StopRecorder();
-        }
-    }
-
-    // send recording state message
-    CreateAndSendRecorderStateForAllConChannels();
-}
-
-void CServer::SetRecordingDir ( QString newRecordingDir )
-{
-    if ( bRecorderInitialised )
-    {
-        // We have a thread and we want to start a new one.
-        // We only want one running.
-        // This could take time, unfortunately.
-        // Hopefully changing recording directory will NOT happen during a long jam...
-        emit EndRecorderThread();
-        thJamRecorder.wait();
-    }
-
-    if ( !newRecordingDir.isEmpty() )
-    {
-        pJamRecorder = new recorder::CJamRecorder ( newRecordingDir );
-        strRecorderErrMsg = pJamRecorder->Init ( this, iServerFrameSizeSamples );
-        bRecorderInitialised = ( strRecorderErrMsg == QString::null );
-        bEnableRecording = bRecorderInitialised;
-    }
-    else
-    {
-        // This is the only time this is ever true - UI needs to handle it
-        strRecorderErrMsg = QString::null;
-        bRecorderInitialised = false;
-        bEnableRecording = false;
-    }
-    if ( bRecorderInitialised )
-    {
-        strRecordingDir = newRecordingDir;
-        pJamRecorder->moveToThread ( &thJamRecorder );
-        thJamRecorder.setObjectName ( "Jamulus::JamRecorder" );
-
-        QObject::connect ( &thJamRecorder, &QThread::finished,
-            pJamRecorder, &QObject::deleteLater );
-
-        QObject::connect ( pJamRecorder, &recorder::CJamRecorder::RecordingSessionStarted,
-            this, &CServer::RecordingSessionStarted );
-
-        thJamRecorder.start();
-    }
-    else
-    {
-        strRecordingDir = "";
     }
 }
 

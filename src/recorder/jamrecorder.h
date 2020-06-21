@@ -139,9 +139,11 @@ class CJamRecorder : public QObject
     Q_OBJECT
 
 public:
-    CJamRecorder ( const QString recordingDirName ) :
-        recordBaseDir ( recordingDirName ),
-        isRecording   ( false )
+    CJamRecorder ( const QString strRecordingBaseDir,
+                   const int     iServerFrameSizeSamples ) :
+        recordBaseDir           ( strRecordingBaseDir ),
+        iServerFrameSizeSamples ( iServerFrameSizeSamples ),
+        isRecording             ( false )
     {
     }
 
@@ -149,7 +151,7 @@ public:
      * @brief Create recording directory, if necessary, and connect signal handlers
      * @param server Server object emiting signals
      */
-    QString Init( const CServer* server, const int _iServerFrameSizeSamples );
+    QString Init();
 
     /**
      * @brief SessionDirToReaper Method that allows an RPP file to be recreated
@@ -163,16 +165,15 @@ private:
     void ReaperProjectFromCurrentSession();
     void AudacityLofFromCurrentSession();
 
-    QDir recordBaseDir;
-
+    QDir         recordBaseDir;
+    int          iServerFrameSizeSamples;
     bool         isRecording;
     CJamSession* currentSession;
-    int          iServerFrameSizeSamples;
 
 signals:
     void RecordingSessionStarted ( QString sessionDir );
 
-private slots:
+public slots:
     /**
      * @brief Handle last client leaving the server, ends the recording.
      */
@@ -201,6 +202,3 @@ private slots:
 };
 
 }
-
-Q_DECLARE_METATYPE(int16_t)
-Q_DECLARE_METATYPE(CVector<int16_t>)

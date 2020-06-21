@@ -355,6 +355,7 @@ HEADERS += src/buffer.h \
     src/global.h \
     src/multicolorled.h \
     src/protocol.h \
+    src/recorder/jamcontroller.h \
     src/server.h \
     src/serverlist.h \
     src/serverlogging.h \
@@ -454,6 +455,7 @@ SOURCES += src/buffer.cpp \
     src/client.cpp \
     src/main.cpp \
     src/protocol.cpp \
+    src/recorder/jamcontroller.cpp \
     src/server.cpp \
     src/serverlist.cpp \
     src/serverlogging.cpp \

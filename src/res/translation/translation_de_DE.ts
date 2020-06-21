@@ -304,7 +304,7 @@
         <location filename="../../audiomixerboard.cpp" line="48"/>
         <location filename="../../audiomixerboard.cpp" line="242"/>
         <source>Grp</source>
-        <translation type="unfinished"></translation>
+        <translation>Grp</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="124"/>
@@ -334,17 +334,17 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppe</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit dem Grp-Knopf kann eine Gruppe von Kanälen definiert werden. Wenn man einen Lautstärkeregler einer Kanalgruppe verändert, dann werden alle anderen Regler der Gruppe gleichermaßen verändert.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="160"/>
         <source>Group button</source>
-        <translation type="unfinished"></translation>
+        <translation>Gruppenknopf</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="162"/>
@@ -384,7 +384,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="213"/>
         <source>GRP</source>
-        <translation type="unfinished"></translation>
+        <translation>GRP</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="225"/>
@@ -399,7 +399,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="227"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="563"/>
@@ -500,7 +500,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="56"/>
         <source>Type a message here</source>
-        <translation type="unfinished"></translation>
+        <translation>Nachricht eingeben</translation>
     </message>
 </context>
 <context>

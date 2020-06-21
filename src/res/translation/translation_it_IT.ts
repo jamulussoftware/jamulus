@@ -364,12 +364,12 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation>Con il comando Rag, può essere definito un gruppo di canali. Tutti i canali ragruppati possono essere modificati in modo proporzionale muovendo uno dei fader del gruppo.</translation>
+        <translation>Con il comando Rag, può essere definito un gruppo di canali. Tutti i canali raggruppati possono essere modificati in modo proporzionale muovendo uno dei fader del gruppo.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="160"/>
         <source>Group button</source>
-        <translation>Ragruppa</translation>
+        <translation>Raggruppa</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="162"/>

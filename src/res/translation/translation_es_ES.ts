@@ -316,7 +316,7 @@
         <location filename="../../audiomixerboard.cpp" line="48"/>
         <location filename="../../audiomixerboard.cpp" line="242"/>
         <source>Grp</source>
-        <translation type="unfinished"></translation>
+        <translation>Grp</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="124"/>
@@ -346,17 +346,17 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Grupo</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Activando Grp se puede definir un grupo de canales. Todos los faders de un grupo se mueven en sincronización proporcional si se mueve cualquier fader del grupo.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="160"/>
         <source>Group button</source>
-        <translation type="unfinished"></translation>
+        <translation>Botón grupo</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="162"/>
@@ -396,7 +396,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="213"/>
         <source>GRP</source>
-        <translation type="unfinished"></translation>
+        <translation>GRP</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="225"/>
@@ -411,7 +411,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="227"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="563"/>
@@ -512,17 +512,17 @@
     <message>
         <location filename="../../chatdlg.cpp" line="59"/>
         <source>Type a message here</source>
-        <translation type="unfinished"></translation>
+        <translation>Teclea un mensaje aquí</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="64"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished">&amp;Editar</translation>
+        <translation>&amp;Editar</translation>
     </message>
     <message>
         <location filename="../../chatdlg.cpp" line="66"/>
         <source>Cl&amp;ear Chat History</source>
-        <translation type="unfinished"></translation>
+        <translation>Li&amp;mpiar Historial Chat</translation>
     </message>
 </context>
 <context>
@@ -535,7 +535,7 @@
     <message>
         <location filename="../../chatdlgbase.ui" line="51"/>
         <source>&amp;Send</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Enviar</translation>
     </message>
     <message>
         <source>Cl&amp;ear</source>

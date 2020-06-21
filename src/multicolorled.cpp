@@ -37,12 +37,12 @@ CMultiColorLED::CMultiColorLED ( QWidget* parent, Qt::WindowFlags f )
     BitmCubeYellow   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDYellowSmall.png" ) ),
     BitmCubeRed      ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDRedSmall.png" ) )
 {
-    // init color flags
-    Reset();
-
     // set init bitmap
     setPixmap ( BitmCubeGrey );
     eColorFlag = RL_GREY;
+
+    // init color flags
+    Reset();
 }
 
 void CMultiColorLED::changeEvent ( QEvent* curEvent )

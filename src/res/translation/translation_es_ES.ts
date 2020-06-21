@@ -509,6 +509,11 @@
         <source>New chat text edit box</source>
         <translation>Campo nuevo texto chat</translation>
     </message>
+    <message>
+        <location filename="../../chatdlg.cpp" line="56"/>
+        <source>Type a message here</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CChatDlgBase</name>

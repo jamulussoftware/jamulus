@@ -169,6 +169,8 @@ public:
     CAudioMixerBoard ( QWidget*        parent = nullptr,
                        Qt::WindowFlags f      = nullptr );
 
+    virtual ~CAudioMixerBoard();
+
     void HideAll();
     void ApplyNewConClientList ( CVector<CChannelInfo>& vecChanInfo );
     void SetServerName ( const QString& strNewServerName );

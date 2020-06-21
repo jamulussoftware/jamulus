@@ -704,6 +704,14 @@ CAudioMixerBoard::CAudioMixerBoard ( QWidget* parent, Qt::WindowFlags ) :
     connectFaderSignalsToMixerBoardSlots<MAX_NUM_CHANNELS>();
 }
 
+CAudioMixerBoard::~CAudioMixerBoard()
+{
+    for ( int i = 0; i < MAX_NUM_CHANNELS; i++ )
+    {
+        delete vecpChanFader[i];
+    }
+}
+
 template<unsigned int slotId>
 inline void CAudioMixerBoard::connectFaderSignalsToMixerBoardSlots()
 {

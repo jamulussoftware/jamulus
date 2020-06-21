@@ -240,7 +240,7 @@
         <location filename="../../audiomixerboard.cpp" line="48"/>
         <location filename="../../audiomixerboard.cpp" line="242"/>
         <source>Grp</source>
-        <translation type="unfinished"></translation>
+        <translation>Rag</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="123"/>
@@ -359,17 +359,17 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>
         <source>Group</source>
-        <translation type="unfinished"></translation>
+        <translation>Raggruppa</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Con il comando Rag, può essere definito un gruppo di canali. Tutti i canali raggruppati possono essere modificati in modo proporzionale muovendo uno dei fader del gruppo.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="160"/>
         <source>Group button</source>
-        <translation type="unfinished"></translation>
+        <translation>Raggruppa</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="162"/>
@@ -409,7 +409,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="213"/>
         <source>GRP</source>
-        <translation type="unfinished"></translation>
+        <translation>RAG</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="225"/>
@@ -424,7 +424,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="227"/>
         <source>G</source>
-        <translation type="unfinished"></translation>
+        <translation>G</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="563"/>
@@ -504,7 +504,7 @@
     <message>
         <location filename="../../chatdlg.cpp" line="56"/>
         <source>Type a message here</source>
-        <translation type="unfinished"></translation>
+        <translation>Inserisi un messaggio qui</translation>
     </message>
 </context>
 <context>
@@ -3002,17 +3002,17 @@
     <message>
         <location filename="../../util.cpp" line="1412"/>
         <source>, Version </source>
-        <translation type="unfinished">, Versione </translation>
+        <translation>Versione, Versione </translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1425"/>
         <source>Internet Jam Session Software</source>
-        <translation type="unfinished"></translation>
+        <translation>Programma per Jam Session su Internet</translation>
     </message>
     <message>
         <location filename="../../util.cpp" line="1429"/>
         <source>Released under the GNU General Public License (GPL)</source>
-        <translation type="unfinished">Rilasciato sotto licensa GNU General Public License (GPL)</translation>
+        <translation>Rilasciato sotto licensa GNU General Public License (GPL)</translation>
     </message>
 </context>
 <context>

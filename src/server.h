@@ -43,7 +43,6 @@
 #include "util.h"
 #include "serverlogging.h"
 #include "serverlist.h"
-#include "multicolorledbar.h"
 #include "recorder/jamrecorder.h"
 
 
@@ -183,6 +182,8 @@ public:
               const bool         bNDisconnectAllClientsOnQuit,
               const bool         bNUseDoubleSystemFrameSize,
               const ELicenceType eNLicenceType );
+
+    virtual ~CServer();
 
     void Start();
     void Stop();
@@ -342,8 +343,8 @@ protected:
     CVector<int>               vecNumFrameSizeConvBlocks;
     CVector<int>               vecUseDoubleSysFraSizeConvBuf;
     CVector<EAudComprType>     vecAudioComprType;
-    CVector<int16_t>           vecsSendData;
-    CVector<uint8_t>           vecbyCodedData;
+    CVector<CVector<int16_t> > vecvecsSendData;
+    CVector<CVector<uint8_t> > vecvecbyCodedData;
 
     // Channel levels
     CVector<uint16_t>          vecChannelLevels;

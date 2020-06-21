@@ -26,7 +26,9 @@
 
 #include <QThread>
 #include <QString>
-#include <QMessageBox>
+#ifndef HEADLESS
+# include <QMessageBox>
+#endif
 #include "global.h"
 #include "util.h"
 

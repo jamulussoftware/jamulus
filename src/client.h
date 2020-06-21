@@ -28,7 +28,6 @@
 #include <QHostInfo>
 #include <QString>
 #include <QDateTime>
-#include <QMessageBox>
 #ifdef USE_OPUS_SHARED_LIB
 # include "opus/opus_custom.h"
 #else
@@ -110,6 +109,8 @@ public:
               const int      iCtrlMIDIChannel,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName );
+
+    virtual ~CClient();
 
     void   Start();
     void   Stop();

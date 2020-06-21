@@ -241,6 +241,7 @@ CServer::CServer ( const int          iNewMaxNumChan,
     Logging                     ( iMaxDaysHistory ),
     iFrameCount                 ( 0 ),
     JamRecorder                 ( strRecordingDirName ),
+    bRecorderInitialised        ( false ),
     bEnableRecording            ( false ),
     bWriteStatusHTMLFile        ( false ),
     HighPrecisionTimer          ( bNUseDoubleSystemFrameSize ),
@@ -335,14 +336,13 @@ CServer::CServer ( const int          iNewMaxNumChan,
     // do not know the required sizes for the vectors, we allocate memory for
     // the worst case here:
 
-    // we always use stereo audio buffers (which is the worst case)
-    vecsSendData.Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
-
     // allocate worst case memory for the temporary vectors
     vecChanIDsCurConChan.Init          ( iMaxNumChannels );
     vecvecdGains.Init                  ( iMaxNumChannels );
     vecvecdPannings.Init               ( iMaxNumChannels );
     vecvecsData.Init                   ( iMaxNumChannels );
+    vecvecsSendData.Init               ( iMaxNumChannels );
+    vecvecbyCodedData.Init             ( iMaxNumChannels );
     vecNumAudioChannels.Init           ( iMaxNumChannels );
     vecNumFrameSizeConvBlocks.Init     ( iMaxNumChannels );
     vecUseDoubleSysFraSizeConvBuf.Init ( iMaxNumChannels );
@@ -351,18 +351,22 @@ CServer::CServer ( const int          iNewMaxNumChan,
     for ( i = 0; i < iMaxNumChannels; i++ )
     {
         // init vectors storing information of all channels
-        vecvecdGains[i].Init ( iMaxNumChannels );
+        vecvecdGains[i].Init    ( iMaxNumChannels );
         vecvecdPannings[i].Init ( iMaxNumChannels );
 
-        // we always use stereo audio buffers (see "vecsSendData")
+        // we always use stereo audio buffers (which is the worst case)
         vecvecsData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+
+        // (note that we only allocate iMaxNumChannels buffers for the send
+        // and coded data because of the OMP implementation)
+        vecvecsSendData[i].Init ( 2 /* stereo */ * DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES /* worst case buffer size */ );
+
+        // allocate worst case memory for the coded data
+        vecvecbyCodedData[i].Init ( MAX_SIZE_BYTES_NETW_BUF );
     }
 
-    // allocate worst case memory for the coded data
-    vecbyCodedData.Init ( MAX_SIZE_BYTES_NETW_BUF );
-
     // allocate worst case memory for the channel levels
-    vecChannelLevels.Init     ( iMaxNumChannels );
+    vecChannelLevels.Init ( iMaxNumChannels );
 
     // enable history graph (if requested)
     if ( !strHistoryFileName.isEmpty() )
@@ -545,6 +549,26 @@ void CServer::CreateAndSendJitBufMessage ( const int iCurChanID,
                                            const int iNNumFra )
 {
     vecChannels[iCurChanID].CreateJitBufMes ( iNNumFra );
+}
+
+CServer::~CServer()
+{
+    for ( int i = 0; i < iMaxNumChannels; i++ )
+    {
+        // free audio encoders and decoders
+        opus_custom_encoder_destroy ( OpusEncoderMono[i] );
+        opus_custom_decoder_destroy ( OpusDecoderMono[i] );
+        opus_custom_encoder_destroy ( OpusEncoderStereo[i] );
+        opus_custom_decoder_destroy ( OpusDecoderStereo[i] );
+        opus_custom_encoder_destroy ( Opus64EncoderMono[i] );
+        opus_custom_decoder_destroy ( Opus64DecoderMono[i] );
+        opus_custom_encoder_destroy ( Opus64EncoderStereo[i] );
+        opus_custom_decoder_destroy ( Opus64DecoderStereo[i] );
+
+        // free audio modes
+        opus_custom_mode_destroy ( OpusMode[i] );
+        opus_custom_mode_destroy ( Opus64Mode[i] );
+    }
 }
 
 void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
@@ -922,7 +946,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                 for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
                 {
                     // get data
-                    const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecbyCodedData, iCeltNumCodedBytes );
+                    const EGetDataStat eGetStat = vecChannels[iCurChanID].GetData ( vecvecbyCodedData[i], iCeltNumCodedBytes );
 
                     // if channel was just disconnected, set flag that connected
                     // client list is sent to all other clients
@@ -940,7 +964,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                     // get pointer to coded data
                     if ( eGetStat == GS_BUFFER_OK )
                     {
-                        pCurCodedData = &vecbyCodedData[0];
+                        pCurCodedData = &vecvecbyCodedData[i][0];
                     }
                     else
                     {
@@ -993,6 +1017,15 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                                                                  vecChannelLevels );
         }
 
+#ifdef USE_OMP
+// TODO This does not work as expected, the CPU is at high levels even if not much work is to be done. So we
+// have an issue using OMP in the OnTimer() function. Even if #pragma omp parallel for is used on a trivial
+// for loop for testing, still the CPU usage goes to very high values -> What is the cause of this issue?
+// NOTE Most probably it is the overhead of threads creation/destruction which causes this effect.
+// See https://software.intel.com/content/www/us/en/develop/articles/performance-obstacles-for-threading-how-do-they-affect-openmp-code.html
+// "[...] overhead numbers are high enough that it doesn’t make sense to thread that code. In those cases, we’re better off leaving the code in its original serial form."
+# pragma omp parallel for
+#endif
         for ( int i = 0; i < iNumClients; i++ )
         {
             int                iClientFrameSizeSamples = 0; // initialize to avoid a compiler warning
@@ -1020,7 +1053,7 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
                           vecvecdGains[i],
                           vecvecdPannings[i],
                           vecNumAudioChannels,
-                          vecsSendData,
+                          vecvecsSendData[i],
                           iCurNumAudChan,
                           iNumClients );
 
@@ -1065,12 +1098,12 @@ static CTimingMeas JitterMeas ( 1000, "test2.dat" ); JitterMeas.Measure(); // TE
             // is false and the Get() function is not called at all. Therefore if the buffer is not needed
             // we do not spend any time in the function but go directly inside the if condition.
             if ( ( vecUseDoubleSysFraSizeConvBuf[i] == 0 ) ||
-                 DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecsSendData, SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
+                 DoubleFrameSizeConvBufOut[iCurChanID].Put ( vecvecsSendData[i], SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] ) )
             {
                 if ( vecUseDoubleSysFraSizeConvBuf[i] != 0 )
                 {
                     // get the large frame from the conversion buffer
-                    DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecsSendData, DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
+                    DoubleFrameSizeConvBufOut[iCurChanID].GetAll ( vecvecsSendData[i], DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i] );
                 }
 
                 for ( int iB = 0; iB < vecNumFrameSizeConvBlocks[i]; iB++ )
@@ -1085,15 +1118,15 @@ opus_custom_encoder_ctl ( CurOpusEncoder,
                           OPUS_SET_BITRATE ( CalcBitRateBitsPerSecFromCodedBytes ( iCeltNumCodedBytes, iClientFrameSizeSamples ) ) );
 
                         iUnused = opus_custom_encode ( CurOpusEncoder,
-                                                       &vecsSendData[iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
+                                                       &vecvecsSendData[i][iB * SYSTEM_FRAME_SIZE_SAMPLES * vecNumAudioChannels[i]],
                                                        iClientFrameSizeSamples,
-                                                       &vecbyCodedData[0],
+                                                       &vecvecbyCodedData[i][0],
                                                        iCeltNumCodedBytes );
                     }
 
                     // send separate mix to current clients
                     vecChannels[iCurChanID].PrepAndSendPacket ( &Socket,
-                                                                vecbyCodedData,
+                                                                vecvecbyCodedData[i],
                                                                 iCeltNumCodedBytes );
                 }
 
@@ -1203,8 +1236,8 @@ void CServer::ProcessData ( const CVector<CVector<int16_t> >& vecvecsData,
 
             // calculate combined gain/pan for each stereo channel where we define
             // the panning that center equals full gain for both channels
-            const double dGainL = std::min ( 0.5, 1 - dPan ) * 2 * dGain;
-            const double dGainR = std::min ( 0.5, dPan ) * 2 * dGain;
+            const double dGainL = MathUtils::GetLeftPan ( dPan, false ) * dGain;
+            const double dGainR = MathUtils::GetRightPan ( dPan, false ) * dGain;
 
             // if channel gain is 1, avoid multiplication for speed optimization
             if ( ( dGainL == static_cast<double> ( 1.0 ) ) && ( dGainR == static_cast<double> ( 1.0 ) ) )
@@ -1324,7 +1357,8 @@ void CServer::CreateAndSendChatTextForAllConChannels ( const int      iCurChanID
 
     const QString strActualMessageText =
         "<font color=""" + sCurColor + """>(" +
-        QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>" + ChanName +
+        QTime::currentTime().toString ( "hh:mm:ss AP" ) + ") <b>" +
+        ChanName.toHtmlEscaped() +
         "</b></font> " + strChatText;
 
 
@@ -1581,7 +1615,7 @@ void CServer::WriteHTMLChannelList()
     }
 
     QTextStream streamFileOut ( &serverFileListFile );
-    streamFileOut << strServerNameWithPort << endl << "<ul>" << endl;
+    streamFileOut << strServerNameWithPort.toHtmlEscaped() << endl << "<ul>" << endl;
 
     // depending on number of connected clients write list
     if ( GetNumberOfConnectedClients() == 0 )
@@ -1596,7 +1630,7 @@ void CServer::WriteHTMLChannelList()
         {
             if ( vecChannels[i].IsConnected() )
             {
-                streamFileOut << "  <li>" << vecChannels[i].GetName() << "</li>" << endl;
+                streamFileOut << "  <li>" << vecChannels[i].GetName().toHtmlEscaped() << "</li>" << endl;
             }
         }
     }

@@ -25,11 +25,11 @@
  *
 \******************************************************************************/
 
-#include "multicolorledbar.h"
+#include "levelmeter.h"
 
 
 /* Implementation *************************************************************/
-CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
+CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
     QWidget ( parent, f ),
     eLevelMeterType ( MT_BAR )
 {
@@ -58,27 +58,27 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
     }
 
     // initialize bar meter
-    pProgressBar = new QProgressBar();
-    pProgressBar->setOrientation ( Qt::Vertical );
-    pProgressBar->setRange ( 0, 100 * NUM_STEPS_LED_BAR );
-    pProgressBar->setFormat ( "" ); // suppress percent numbers
+    pBarMeter = new QProgressBar();
+    pBarMeter->setOrientation ( Qt::Vertical );
+    pBarMeter->setRange ( 0, 100 * NUM_STEPS_LED_BAR );
+    pBarMeter->setFormat ( "" ); // suppress percent numbers
 
     // setup stacked layout for meter type switching mechanism
     pStackedLayout = new QStackedLayout ( this );
     pStackedLayout->addWidget ( pLEDMeter );
-    pStackedLayout->addWidget ( pProgressBar );
+    pStackedLayout->addWidget ( pBarMeter );
 
     // according to QScrollArea description: "When using a scroll area to display the
     // contents of a custom widget, it is important to ensure that the size hint of
     // the child widget is set to a suitable value."
-    pProgressBar->setMinimumSize ( QSize ( 1, 1 ) );
-    pLEDMeter->setMinimumSize    ( QSize ( 1, 1 ) );
+    pBarMeter->setMinimumSize ( QSize ( 1, 1 ) );
+    pLEDMeter->setMinimumSize ( QSize ( 1, 1 ) );
 
     // update the meter type (using the default value of the meter type)
     SetLevelMeterType ( eLevelMeterType );
 }
 
-CMultiColorLEDBar::~CMultiColorLEDBar()
+CLevelMeter::~CLevelMeter()
 {
     // clean up the LED objects
     for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
@@ -87,7 +87,7 @@ CMultiColorLEDBar::~CMultiColorLEDBar()
     }
 }
 
-void CMultiColorLEDBar::changeEvent ( QEvent* curEvent )
+void CLevelMeter::changeEvent ( QEvent* curEvent )
 {
     // act on enabled changed state
     if ( curEvent->type() == QEvent::EnabledChange )
@@ -97,7 +97,7 @@ void CMultiColorLEDBar::changeEvent ( QEvent* curEvent )
     }
 }
 
-void CMultiColorLEDBar::Reset ( const bool bEnabled )
+void CLevelMeter::Reset ( const bool bEnabled )
 {
     // update state of all LEDs
     for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
@@ -114,7 +114,7 @@ void CMultiColorLEDBar::Reset ( const bool bEnabled )
     }
 }
 
-void CMultiColorLEDBar::SetLevelMeterType ( const ELevelMeterType eNType )
+void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
 {
     eLevelMeterType = eNType;
 
@@ -126,7 +126,7 @@ void CMultiColorLEDBar::SetLevelMeterType ( const ELevelMeterType eNType )
 
     case MT_BAR:
         pStackedLayout->setCurrentIndex ( 1 );
-        pProgressBar->setStyleSheet (
+        pBarMeter->setStyleSheet (
             "QProgressBar        { margin:     1px;"
             "                      padding:    1px; "
             "                      width:      15px; }"
@@ -141,7 +141,7 @@ void CMultiColorLEDBar::SetLevelMeterType ( const ELevelMeterType eNType )
         }
 
         pStackedLayout->setCurrentIndex ( 1 );
-        pProgressBar->setStyleSheet (
+        pBarMeter->setStyleSheet (
             "QProgressBar        { border:     0px;"
             "                      margin:     0px;"
             "                      padding:    0px; "
@@ -151,7 +151,7 @@ void CMultiColorLEDBar::SetLevelMeterType ( const ELevelMeterType eNType )
     }
 }
 
-void CMultiColorLEDBar::setValue ( const double dValue )
+void CLevelMeter::SetValue ( const double dValue )
 {
     if ( this->isEnabled() )
     {
@@ -194,13 +194,13 @@ void CMultiColorLEDBar::setValue ( const double dValue )
 
         case MT_BAR:
         case MT_SLIM_BAR:
-            pProgressBar->setValue ( 100 * dValue );
+            pBarMeter->setValue ( 100 * dValue );
             break;
         }
     }
 }
 
-CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
+CLevelMeter::cLED::cLED ( QWidget* parent ) :
     BitmCubeRoundBlack  ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDBlackSmall.png" ) ),
     BitmCubeRoundGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreenSmall.png" ) ),
     BitmCubeRoundYellow ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDYellowSmall.png" ) ),
@@ -214,7 +214,7 @@ CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
     eCurLightColor = RL_BLACK;
 }
 
-void CMultiColorLEDBar::cLED::setColor ( const ELightColor eNewColor )
+void CLevelMeter::cLED::setColor ( const ELightColor eNewColor )
 {
     // only update LED if color has changed
     if ( eNewColor != eCurLightColor )
@@ -222,6 +222,7 @@ void CMultiColorLEDBar::cLED::setColor ( const ELightColor eNewColor )
         switch ( eNewColor )
         {
         case RL_DISABLED:
+            // note that this is required for the compact channel mode
             pLEDLabel->setPixmap ( QPixmap() );
             break;
 

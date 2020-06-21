@@ -34,8 +34,10 @@
 #include "util.h"
 
 // for CJpegHistoryGraph
-#include <QImage>
-#include <QPainter>
+#ifndef HEADLESS
+# include <QImage>
+# include <QPainter>
+#endif
 
 // for CSvgHistoryGraph
 #include <QXmlStreamWriter>
@@ -134,6 +136,7 @@ protected:
 
 
 /* Implementations ************************************************************/
+#ifndef HEADLESS
 class CJpegHistoryGraph : public QObject, virtual public AHistoryGraph
 {
     Q_OBJECT
@@ -157,6 +160,7 @@ private:
 public slots:
     void OnTimerDailyUpdate() { Update(); }
 };
+#endif
 
 class CSvgHistoryGraph : public QObject, virtual public AHistoryGraph
 {

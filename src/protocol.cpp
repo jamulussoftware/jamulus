@@ -358,7 +358,7 @@ CONNECTION LESS MESSAGES
     n is number of connected clients
 
     the values are the maximum channel levels for a client frame converted
-    to the range of CMultiColorLEDBar in 4 bits, two entries per byte
+    to the range of CLevelMeter in 4 bits, two entries per byte
     with the earlier channel in the lower half of the byte
 
     where an odd number of clients is connected, there will be four unused

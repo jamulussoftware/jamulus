@@ -171,7 +171,7 @@ LED bar:      lbr
 #define LOW_BOUND_SIG_METER              ( -50.0 ) // dB
 #define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
 
-// defines for LED level meter CMultiColorLEDBar
+// defines for LED level meter CLevelMeter
 #define NUM_STEPS_LED_BAR                8
 #define RED_BOUND_LED_BAR                7
 #define YELLOW_BOUND_LED_BAR             5

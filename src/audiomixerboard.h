@@ -87,32 +87,32 @@ protected:
     void   SendFaderLevelToServer ( const int  iLevel,
                                     const bool bIsGroupUpdate );
 
-    QFrame*            pFrame;
+    QFrame*      pFrame;
 
-    QWidget*           pLevelsBox;
-    QWidget*           pMuteSoloBox;
-    CMultiColorLEDBar* plbrChannelLevel;
-    QSlider*           pFader;
-    QDial*             pPan;
-    QLabel*            pPanLabel;
-    QLabel*            pInfoLabel;
-    QHBoxLayout*       pLabelGrid;
-    QVBoxLayout*       pLabelPictGrid;
+    QWidget*     pLevelsBox;
+    QWidget*     pMuteSoloBox;
+    CLevelMeter* plbrChannelLevel;
+    QSlider*     pFader;
+    QDial*       pPan;
+    QLabel*      pPanLabel;
+    QLabel*      pInfoLabel;
+    QHBoxLayout* pLabelGrid;
+    QVBoxLayout* pLabelPictGrid;
 
-    QCheckBox*         pcbMute;
-    QCheckBox*         pcbSolo;
-    QCheckBox*         pcbGroup;
+    QCheckBox*   pcbMute;
+    QCheckBox*   pcbSolo;
+    QCheckBox*   pcbGroup;
 
-    QGroupBox*         pLabelInstBox;
-    QLabel*            plblLabel;
-    QLabel*            plblInstrument;
-    QLabel*            plblCountryFlag;
+    QGroupBox*   pLabelInstBox;
+    QLabel*      plblLabel;
+    QLabel*      plblInstrument;
+    QLabel*      plblCountryFlag;
 
-    CChannelInfo       cReceivedChanInfo;
+    CChannelInfo cReceivedChanInfo;
 
-    bool               bOtherChannelIsSolo;
-    bool               bIsMyOwnFader;
-    int                iPreviousFaderLevel;
+    bool         bOtherChannelIsSolo;
+    bool         bIsMyOwnFader;
+    int          iPreviousFaderLevel;
 
 public slots:
     void OnLevelValueChanged ( int value ) { SendFaderLevelToServer ( value, false ); }

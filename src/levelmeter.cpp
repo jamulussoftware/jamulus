@@ -29,7 +29,7 @@
 
 
 /* Implementation *************************************************************/
-CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
+CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
     QWidget ( parent, f ),
     eLevelMeterType ( MT_BAR )
 {
@@ -78,7 +78,7 @@ CMultiColorLEDBar::CMultiColorLEDBar ( QWidget* parent, Qt::WindowFlags f ) :
     SetLevelMeterType ( eLevelMeterType );
 }
 
-CMultiColorLEDBar::~CMultiColorLEDBar()
+CLevelMeter::~CLevelMeter()
 {
     // clean up the LED objects
     for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
@@ -87,7 +87,7 @@ CMultiColorLEDBar::~CMultiColorLEDBar()
     }
 }
 
-void CMultiColorLEDBar::changeEvent ( QEvent* curEvent )
+void CLevelMeter::changeEvent ( QEvent* curEvent )
 {
     // act on enabled changed state
     if ( curEvent->type() == QEvent::EnabledChange )
@@ -97,7 +97,7 @@ void CMultiColorLEDBar::changeEvent ( QEvent* curEvent )
     }
 }
 
-void CMultiColorLEDBar::Reset ( const bool bEnabled )
+void CLevelMeter::Reset ( const bool bEnabled )
 {
     // update state of all LEDs
     for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
@@ -114,7 +114,7 @@ void CMultiColorLEDBar::Reset ( const bool bEnabled )
     }
 }
 
-void CMultiColorLEDBar::SetLevelMeterType ( const ELevelMeterType eNType )
+void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
 {
     eLevelMeterType = eNType;
 
@@ -151,7 +151,7 @@ void CMultiColorLEDBar::SetLevelMeterType ( const ELevelMeterType eNType )
     }
 }
 
-void CMultiColorLEDBar::setValue ( const double dValue )
+void CLevelMeter::setValue ( const double dValue )
 {
     if ( this->isEnabled() )
     {
@@ -200,7 +200,7 @@ void CMultiColorLEDBar::setValue ( const double dValue )
     }
 }
 
-CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
+CLevelMeter::cLED::cLED ( QWidget* parent ) :
     BitmCubeRoundBlack  ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDBlackSmall.png" ) ),
     BitmCubeRoundGreen  ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDGreenSmall.png" ) ),
     BitmCubeRoundYellow ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDYellowSmall.png" ) ),
@@ -214,7 +214,7 @@ CMultiColorLEDBar::cLED::cLED ( QWidget* parent ) :
     eCurLightColor = RL_BLACK;
 }
 
-void CMultiColorLEDBar::cLED::setColor ( const ELightColor eNewColor )
+void CLevelMeter::cLED::setColor ( const ELightColor eNewColor )
 {
     // only update LED if color has changed
     if ( eNewColor != eCurLightColor )

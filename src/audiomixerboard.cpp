@@ -33,32 +33,32 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     // create new GUI control objects and store pointers to them (note that
     // QWidget takes the ownership of the pMainGrid so that this only has
     // to be created locally in this constructor)
-    pFrame                      = new QFrame            ( pNW );
+    pFrame                      = new QFrame      ( pNW );
 
-    pLevelsBox                  = new QWidget           ( pFrame );
-    plbrChannelLevel            = new CMultiColorLEDBar ( pLevelsBox );
-    pFader                      = new QSlider           ( Qt::Vertical, pLevelsBox );
-    pPan                        = new QDial             ( pLevelsBox );
-    pPanLabel                   = new QLabel            ( tr ( "Pan" ), pLevelsBox );
-    pInfoLabel                  = new QLabel            ( "", pLevelsBox );
+    pLevelsBox                  = new QWidget     ( pFrame );
+    plbrChannelLevel            = new CLevelMeter ( pLevelsBox );
+    pFader                      = new QSlider     ( Qt::Vertical, pLevelsBox );
+    pPan                        = new QDial       ( pLevelsBox );
+    pPanLabel                   = new QLabel      ( tr ( "Pan" ), pLevelsBox );
+    pInfoLabel                  = new QLabel      ( "", pLevelsBox );
 
-    pMuteSoloBox                = new QWidget           ( pFrame );
-    pcbMute                     = new QCheckBox         ( tr ( "Mute" ), pMuteSoloBox );
-    pcbSolo                     = new QCheckBox         ( tr ( "Solo" ), pMuteSoloBox );
-    pcbGroup                    = new QCheckBox         ( tr ( "Grp" ), pMuteSoloBox );
+    pMuteSoloBox                = new QWidget     ( pFrame );
+    pcbMute                     = new QCheckBox   ( tr ( "Mute" ), pMuteSoloBox );
+    pcbSolo                     = new QCheckBox   ( tr ( "Solo" ), pMuteSoloBox );
+    pcbGroup                    = new QCheckBox   ( tr ( "Grp" ), pMuteSoloBox );
 
-    pLabelInstBox               = new QGroupBox         ( pFrame );
-    plblLabel                   = new QLabel            ( "", pFrame );
-    plblInstrument              = new QLabel            ( pFrame );
-    plblCountryFlag             = new QLabel            ( pFrame );
+    pLabelInstBox               = new QGroupBox   ( pFrame );
+    plblLabel                   = new QLabel      ( "", pFrame );
+    plblInstrument              = new QLabel      ( pFrame );
+    plblCountryFlag             = new QLabel      ( pFrame );
 
-    QVBoxLayout* pMainGrid      = new QVBoxLayout       ( pFrame );
-    QHBoxLayout* pLevelsGrid    = new QHBoxLayout       ( pLevelsBox );
-    QVBoxLayout* pMuteSoloGrid  = new QVBoxLayout       ( pMuteSoloBox );
-    pLabelGrid                  = new QHBoxLayout       ( pLabelInstBox );
-    pLabelPictGrid              = new QVBoxLayout       ( );
-    QVBoxLayout* pPanGrid       = new QVBoxLayout       ( );
-    QHBoxLayout* pPanInfoGrid   = new QHBoxLayout       ( );
+    QVBoxLayout* pMainGrid      = new QVBoxLayout ( pFrame );
+    QHBoxLayout* pLevelsGrid    = new QHBoxLayout ( pLevelsBox );
+    QVBoxLayout* pMuteSoloGrid  = new QVBoxLayout ( pMuteSoloBox );
+    pLabelGrid                  = new QHBoxLayout ( pLabelInstBox );
+    pLabelPictGrid              = new QVBoxLayout ( );
+    QVBoxLayout* pPanGrid       = new QVBoxLayout ( );
+    QHBoxLayout* pPanInfoGrid   = new QHBoxLayout ( );
 
     // setup channel level
     plbrChannelLevel->setContentsMargins ( 0, 3, 2, 3 );
@@ -211,7 +211,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pcbMute->setText                    ( tr ( "MUTE" ) );
         pcbSolo->setText                    ( tr ( "SOLO" ) );
         pcbGroup->setText                   ( tr ( "GRP" ) );
-        plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
+        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_LED );
         break;
 
     case GD_SLIMFADER:
@@ -225,7 +225,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pcbMute->setText                    ( tr ( "M" ) );
         pcbSolo->setText                    ( tr ( "S" ) );
         pcbGroup->setText                   ( tr ( "G" ) );
-        plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_SLIM_BAR );
+        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_SLIM_BAR );
         break;
 
     default:
@@ -240,7 +240,7 @@ void CChannelFader::SetGUIDesign ( const EGUIDesign eNewDesign )
         pcbMute->setText                    ( tr ( "Mute" ) );
         pcbSolo->setText                    ( tr ( "Solo" ) );
         pcbGroup->setText                   ( tr ( "Grp" ) );
-        plbrChannelLevel->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
+        plbrChannelLevel->SetLevelMeterType ( CLevelMeter::MT_BAR );
         break;
     }
 }

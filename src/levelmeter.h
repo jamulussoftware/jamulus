@@ -35,7 +35,7 @@
 
 
 /* Classes ********************************************************************/
-class CMultiColorLEDBar : public QWidget
+class CLevelMeter : public QWidget
 {
     Q_OBJECT
 
@@ -47,8 +47,8 @@ public:
         MT_SLIM_BAR
     };
 
-    CMultiColorLEDBar ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
-    virtual ~CMultiColorLEDBar();
+    CLevelMeter ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
+    virtual ~CLevelMeter();
 
     void setValue ( const double dValue );
     void SetLevelMeterType ( const ELevelMeterType eNType );

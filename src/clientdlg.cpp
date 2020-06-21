@@ -1212,8 +1212,8 @@ rbtReverbSelR->setStyleSheet ( "color: rgb(220, 220, 220);"
                                "font:  bold;" );
 #endif
 
-        lbrInputLevelL->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
-        lbrInputLevelR->SetLevelMeterType ( CMultiColorLEDBar::MT_LED );
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_LED );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_LED );
         break;
 
     default:
@@ -1226,8 +1226,8 @@ rbtReverbSelL->setStyleSheet ( "" );
 rbtReverbSelR->setStyleSheet ( "" );
 #endif
 
-        lbrInputLevelL->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
-        lbrInputLevelR->SetLevelMeterType ( CMultiColorLEDBar::MT_BAR );
+        lbrInputLevelL->SetLevelMeterType ( CLevelMeter::MT_BAR );
+        lbrInputLevelR->SetLevelMeterType ( CLevelMeter::MT_BAR );
         break;
     }
 

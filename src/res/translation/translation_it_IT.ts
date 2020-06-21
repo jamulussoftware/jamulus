@@ -359,7 +359,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>
         <source>Group</source>
-        <translation>Ragruppa</translation>
+        <translation>Raggruppa</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>

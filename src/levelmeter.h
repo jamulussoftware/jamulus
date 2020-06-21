@@ -50,7 +50,7 @@ public:
     CLevelMeter ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
     virtual ~CLevelMeter();
 
-    void setValue ( const double dValue );
+    void SetValue ( const double dValue );
     void SetLevelMeterType ( const ELevelMeterType eNType );
 
 protected:
@@ -86,5 +86,5 @@ protected:
     QStackedLayout* pStackedLayout;
     ELevelMeterType eLevelMeterType;
     CVector<cLED*>  vecpLEDs;
-    QProgressBar*   pProgressBar;
+    QProgressBar*   pBarMeter;
 };

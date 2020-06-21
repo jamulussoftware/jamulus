@@ -320,7 +320,7 @@ void CChannelFader::Reset()
     pcbMute->setChecked ( false );
     pcbSolo->setChecked ( false );
     pcbGroup->setChecked ( false );
-    plbrChannelLevel->setValue ( 0 );
+    plbrChannelLevel->SetValue ( 0 );
 
     // clear instrument picture, country flag, tool tips and label text
     plblLabel->setText ( "" );
@@ -470,7 +470,7 @@ void CChannelFader::UpdateSoloState ( const bool bNewOtherSoloState )
 
 void CChannelFader::SetChannelLevel ( const uint16_t iLevel )
 {
-    plbrChannelLevel->setValue ( iLevel );
+    plbrChannelLevel->SetValue ( iLevel );
 }
 
 void CChannelFader::SetChannelInfos ( const CChannelInfo& cChanInfo )

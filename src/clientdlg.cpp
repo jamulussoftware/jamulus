@@ -203,8 +203,8 @@ CClientDlg::CClientDlg ( CClient*        pNCliP,
     butConnect->setText ( tr ( "C&onnect" ) );
 
     // init input level meter bars
-    lbrInputLevelL->setValue ( 0 );
-    lbrInputLevelR->setValue ( 0 );
+    lbrInputLevelL->SetValue ( 0 );
+    lbrInputLevelR->SetValue ( 0 );
 
     // init status LEDs
     ledBuffers->Reset();
@@ -986,8 +986,8 @@ void CClientDlg::OnTimerSigMet()
     }
 
     // show current level
-    lbrInputLevelL->setValue ( dCurSigLeveldB_L );
-    lbrInputLevelR->setValue ( dCurSigLeveldB_R );
+    lbrInputLevelL->SetValue ( dCurSigLeveldB_L );
+    lbrInputLevelR->SetValue ( dCurSigLeveldB_R );
 }
 
 void CClientDlg::OnTimerBuffersLED()
@@ -1118,8 +1118,8 @@ void CClientDlg::Disconnect()
 
     // stop timer for level meter bars and reset them
     TimerSigMet.stop();
-    lbrInputLevelL->setValue ( 0 );
-    lbrInputLevelR->setValue ( 0 );
+    lbrInputLevelL->SetValue ( 0 );
+    lbrInputLevelR->SetValue ( 0 );
 
     // stop other timers
     TimerBuffersLED.stop();

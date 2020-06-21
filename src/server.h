@@ -183,6 +183,8 @@ public:
               const bool         bNUseDoubleSystemFrameSize,
               const ELicenceType eNLicenceType );
 
+    virtual ~CServer();
+
     void Start();
     void Stop();
     bool IsRunning() { return HighPrecisionTimer.isActive(); }

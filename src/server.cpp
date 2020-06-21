@@ -550,6 +550,26 @@ void CServer::CreateAndSendJitBufMessage ( const int iCurChanID,
     vecChannels[iCurChanID].CreateJitBufMes ( iNNumFra );
 }
 
+CServer::~CServer()
+{
+    for ( int i = 0; i < iMaxNumChannels; i++ )
+    {
+        // free audio encoders and decoders
+        opus_custom_encoder_destroy ( OpusEncoderMono[i] );
+        opus_custom_decoder_destroy ( OpusDecoderMono[i] );
+        opus_custom_encoder_destroy ( OpusEncoderStereo[i] );
+        opus_custom_decoder_destroy ( OpusDecoderStereo[i] );
+        opus_custom_encoder_destroy ( Opus64EncoderMono[i] );
+        opus_custom_decoder_destroy ( Opus64DecoderMono[i] );
+        opus_custom_encoder_destroy ( Opus64EncoderStereo[i] );
+        opus_custom_decoder_destroy ( Opus64DecoderStereo[i] );
+
+        // free audio modes
+        opus_custom_mode_destroy ( OpusMode[i] );
+        opus_custom_mode_destroy ( Opus64Mode[i] );
+    }
+}
+
 void CServer::SendProtMessage ( int iChID, CVector<uint8_t> vecMessage )
 {
     // the protocol queries me to call the function to send the message

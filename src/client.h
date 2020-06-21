@@ -110,6 +110,8 @@ public:
               const bool     bNoAutoJackConnect,
               const QString& strNClientName );
 
+    virtual ~CClient();
+
     void   Start();
     void   Stop();
     bool   IsRunning() { return Sound.IsRunning(); }

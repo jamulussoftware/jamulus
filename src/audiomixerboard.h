@@ -38,7 +38,7 @@
 #include <QListWidget>
 #include "global.h"
 #include "util.h"
-#include "multicolorledbar.h"
+#include "levelmeter.h"
 
 
 /* Classes ********************************************************************/

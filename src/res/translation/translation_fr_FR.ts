@@ -206,7 +206,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="669"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
-        <translation>Lorsque vous êtes connecté à un serveur, les contrôles vous permettent de régler votre mixage local sans affecter ce que les autres entendent de vous. Le titre indique le nom du serveur et, lorsqu'il est connu, s'il est en train d'enregistrer.</translation>
+        <translation>Lorsque vous êtes connecté à un serveur, les contrôles vous permettent de régler votre mixage local sans affecter ce que les autres entendent de vous. Le titre indique le nom du serveur et, lorsqu&apos;il est connu, s&apos;il est en train d&apos;enregistrer.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="741"/>
@@ -359,7 +359,7 @@
     <message>
         <location filename="../../audiomixerboard.cpp" line="157"/>
         <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
-        <translation>Avec la case à cocher Grp, un groupe de canaux audio peut être défini. Tous les chariots de canaux d'un groupe sont déplacés en synchronisation proportionnelle si l'un des chariots du groupe est déplacé.</translation>
+        <translation>Avec la case à cocher Grp, un groupe de canaux audio peut être défini. Tous les chariots de canaux d&apos;un groupe sont déplacés en synchronisation proportionnelle si l&apos;un des chariots du groupe est déplacé.</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="160"/>

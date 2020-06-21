@@ -26,6 +26,7 @@
 #include <QString>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QMenuBar>
 #include <QWhatsThis>
 #include <QLayout>
 #include <QAccessible>
@@ -44,9 +45,9 @@ public:
     void AddChatText ( QString strChatText );
 
 public slots:
-    void OnLocalInputTextReturnPressed();
+    void OnSendText();
     void OnLocalInputTextTextChanged ( const QString& strNewText );
-    void OnClearPressed();
+    void OnClearChatHistory();
 
     void keyPressEvent ( QKeyEvent *e ) // block escape key
         { if ( e->key() != Qt::Key_Escape ) QDialog::keyPressEvent ( e ); }

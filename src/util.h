@@ -38,6 +38,7 @@
 # include <QLineEdit>
 # include <QDateTime>
 # include <QDesktopServices>
+# include "ui_aboutdlgbase.h"
 #endif
 #include <QFile>
 #include <QUrl>
@@ -58,9 +59,6 @@ using namespace std; // because of the library: "vector"
 # include <mach/mach_time.h>
 #else
 # include <sys/time.h>
-#endif
-#ifndef HEADLESS
-# include "ui_aboutdlgbase.h"
 #endif
 
 

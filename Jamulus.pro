@@ -37,8 +37,9 @@ TRANSLATIONS = src/res/translation/translation_de_DE.ts \
     src/res/translation/translation_pt_BR.ts \
     src/res/translation/translation_es_ES.ts \
     src/res/translation/translation_nl_NL.ts \
-    src/res/translation/translation_pl_PL.ts\
-    src/res/translation/translation_it_IT.ts
+    src/res/translation/translation_pl_PL.ts \
+    src/res/translation/translation_it_IT.ts \
+    src/res/translation/translation_sv_SE.ts
 
 INCLUDEPATH += src
 
@@ -374,7 +375,7 @@ HEADERS_GUI = src/audiomixerboard.h \
     src/connectdlg.h \
     src/clientdlg.h \
     src/serverdlg.h \
-    src/multicolorledbar.h \
+    src/levelmeter.h \
     src/analyzerconsole.h
 
 HEADERS_OPUS = libs/opus/celt/arch.h \
@@ -473,7 +474,7 @@ SOURCES_GUI = src/audiomixerboard.cpp \
     src/clientdlg.cpp \
     src/serverdlg.cpp \
     src/multicolorled.cpp \
-    src/multicolorledbar.cpp \
+    src/levelmeter.cpp \
     src/analyzerconsole.cpp
 
 SOURCES_OPUS = libs/opus/celt/bands.c \

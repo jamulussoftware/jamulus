@@ -587,7 +587,7 @@ int main ( int argc, char** argv )
 
     if ( bUseGUI && bUseTranslation )
     {
-        if ( myappTranslator.load ( ":/translations/translation.qm" ) )
+        if ( myappTranslator.load ( QLocale(), "translation", "_", ":/translations" ) )
         {
             pApp->installTranslator ( &myappTranslator );
         }

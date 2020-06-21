@@ -191,32 +191,32 @@
 <context>
     <name>CAudioMixerBoard</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="632"/>
+        <location filename="../../audiomixerboard.cpp" line="669"/>
         <source>Personal Mix at the Server</source>
         <translation>Mezcla personal en el Servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="632"/>
+        <location filename="../../audiomixerboard.cpp" line="669"/>
         <source>When connected to a server, the controls here allow you to set your local mix without affecting what others hear from you. The title shows the server name and, when known, whether it is actively recording.</source>
         <translation>Estando conectado a un servidor, estos controles te permiten hacer tu mezcla personal sin afectar lo que otros escuchan de tí. El título muestra el nombre del servidor y, cuando se conoce, si está activamente grabando.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="704"/>
+        <location filename="../../audiomixerboard.cpp" line="749"/>
         <source>Server</source>
         <translation>Servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="713"/>
+        <location filename="../../audiomixerboard.cpp" line="758"/>
         <source>T R Y I N G   T O   C O N N E C T</source>
         <translation>I N T E N T A N D O   C O N E C T A R</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="834"/>
+        <location filename="../../audiomixerboard.cpp" line="879"/>
         <source>RECORDING ACTIVE</source>
         <translation>GRABACIÓN ACTIVA</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="837"/>
+        <location filename="../../audiomixerboard.cpp" line="882"/>
         <source>Personal Mix at: </source>
         <translation>Mezcla Personal en el Servidor: </translation>
     </message>
@@ -224,7 +224,7 @@
 <context>
     <name>CChannelFader</name>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="121"/>
+        <location filename="../../audiomixerboard.cpp" line="123"/>
         <source>Channel Level</source>
         <translation>Nivel Canal</translation>
     </message>
@@ -233,12 +233,12 @@
         <translation type="vanished">Muestra el nivel de audio pre-fader de este canal. Todos los clientes conectados al servidor tienen un nivel de audio asignado, el mismo para cada cliente.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="124"/>
+        <location filename="../../audiomixerboard.cpp" line="126"/>
         <source>Input level of the current audio channel at the server</source>
         <translation>Nivel de entrada del canal de audio actual en el servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="127"/>
+        <location filename="../../audiomixerboard.cpp" line="129"/>
         <source>Mixer Fader</source>
         <translation>Fader Mezclador</translation>
     </message>
@@ -247,17 +247,17 @@
         <translation type="vanished">Ajusta el nivel de audio de este canal. Todos los clientes conectados al servidor tienen asignado un fader en el cliente, ajustando la mezcla local.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="130"/>
+        <location filename="../../audiomixerboard.cpp" line="132"/>
         <source>Local mix level setting of the current audio channel at the server</source>
         <translation>Ajuste local de la mezcla del canal de audio actual en el servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="133"/>
+        <location filename="../../audiomixerboard.cpp" line="135"/>
         <source>Status Indicator</source>
         <translation>Indicador de Estado</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="133"/>
+        <location filename="../../audiomixerboard.cpp" line="135"/>
         <source>Shows a status indication about the client which is assigned to this channel. Supported indicators are:</source>
         <translation>Muestra una indicación del estado del cliente asignado a este canal. Los indicadores soportados son:</translation>
     </message>
@@ -266,12 +266,12 @@
         <translation type="vanished">Altavoz tachado: Indica que el otro cliente te ha muteado.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="138"/>
+        <location filename="../../audiomixerboard.cpp" line="140"/>
         <source>Status indicator label</source>
         <translation>Etiqueta indicador estado</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="140"/>
+        <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Panning</source>
         <translation>Paneo</translation>
     </message>
@@ -280,17 +280,17 @@
         <translation type="vanished">Fija el paneo de Izquierda a Derecha del canal. Solo funciona en estéreo o preferiblemente en modo Entrada mono/Salida estéreo.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="143"/>
+        <location filename="../../audiomixerboard.cpp" line="145"/>
         <source>Local panning position of the current audio channel at the server</source>
         <translation>Posición local del paneo del canal de audio actual en el servidor</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="145"/>
+        <location filename="../../audiomixerboard.cpp" line="147"/>
         <source>With the Mute checkbox, the audio channel can be muted.</source>
         <translation>Activando Mute, se puede mutear el canal de audio.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="147"/>
+        <location filename="../../audiomixerboard.cpp" line="149"/>
         <source>Mute button</source>
         <translation>Botón Mute</translation>
     </message>
@@ -299,12 +299,12 @@
         <translation type="vanished">Activando Solo, todos los demás canales de audio excepto este se mutean. Es posible activar esta función para más de un canal.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="153"/>
+        <location filename="../../audiomixerboard.cpp" line="155"/>
         <source>Solo button</source>
         <translation>Botón Solo</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="155"/>
+        <location filename="../../audiomixerboard.cpp" line="162"/>
         <source>Fader Tag</source>
         <translation>Etiqueta Fader</translation>
     </message>
@@ -313,135 +313,166 @@
         <translation type="vanished">La etiqueta del fader identifica al cliente conectado. El nombre de la etiqueta, la imagen de tu instrumento y la bandera de tu país se pueden establecer en la ventana principal.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="122"/>
+        <location filename="../../audiomixerboard.cpp" line="48"/>
+        <location filename="../../audiomixerboard.cpp" line="242"/>
+        <source>Grp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="124"/>
         <source>Displays the pre-fader audio level of this channel.  All clients connected to the server will be assigned an audio level, the same value for every client.</source>
         <translation>Muestra el nivel de audio pre-fader de este canal. Todos los clientes conectados al servidor tienen un nivel de audio asignado, el mismo valor para cada cliente.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="127"/>
+        <location filename="../../audiomixerboard.cpp" line="129"/>
         <source>Adjusts the audio level of this channel. All clients connected to the server will be assigned an audio fader, displayed at each client, to adjust the local mix.</source>
         <translation>Ajusta el nivel de audio de este canal. Todos los clientes conectados al servidor tendrán asignado un fader, mostrado en cada cliente, para ajustar la mezcla local.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="135"/>
+        <location filename="../../audiomixerboard.cpp" line="137"/>
         <source>Speaker with cancellation stroke: Indicates that another client has muted you.</source>
         <translation>Altavoz tachado: Indica que otro cliente te ha muteado.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="140"/>
+        <location filename="../../audiomixerboard.cpp" line="142"/>
         <source>Sets the pan from Left to Right of the channel. Works only in stereo or preferably mono in/stereo out mode.</source>
         <translation>Fija el paneo de Izquierda a Derecha del canal. Solo funciona en modo estéreo o preferiblemente en modo Entrada mono/Salida estéreo.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="149"/>
+        <location filename="../../audiomixerboard.cpp" line="151"/>
         <source>With the Solo checkbox, the audio channel can be set to solo which means that all other channels except the soloed channel are muted. It is possible to set more than one channel to solo.</source>
         <translation>Activando Solo, todos los demás canales de audio excepto este se mutean. Es posible activar esta función para más de un canal.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="155"/>
+        <location filename="../../audiomixerboard.cpp" line="157"/>
+        <source>Group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="157"/>
+        <source>With the Grp checkbox, a group of audio channels can be defined. All channel faders in a group are moved in proportional synchronization if any one of the group faders are moved.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="160"/>
+        <source>Group button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="162"/>
         <source>The fader tag identifies the connected client. The tag name, a picture of your instrument and the flag of your country can be set in the main window.</source>
         <translation>La etiqueta del fader identifica al cliente conectado. El nombre de la etiqueta, la imagen de tu instrumento y la bandera de tu país se pueden establecer en la ventana principal.</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="160"/>
+        <location filename="../../audiomixerboard.cpp" line="167"/>
         <source>Mixer channel instrument picture</source>
         <translation>Imagen mezclador canal instrumento</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="162"/>
+        <location filename="../../audiomixerboard.cpp" line="169"/>
         <source>Mixer channel label (fader tag)</source>
         <translation>Etiqueta mezclador canal (etiqueta fader)</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="164"/>
+        <location filename="../../audiomixerboard.cpp" line="171"/>
         <source>Mixer channel country flag</source>
         <translation>Bandera país mezclador canal</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="202"/>
+        <location filename="../../audiomixerboard.cpp" line="210"/>
         <source>PAN</source>
         <translation>PAN</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="203"/>
+        <location filename="../../audiomixerboard.cpp" line="211"/>
         <source>MUTE</source>
         <translation>MUTE</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="204"/>
+        <location filename="../../audiomixerboard.cpp" line="212"/>
         <source>SOLO</source>
         <translation>SOLO</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="215"/>
+        <location filename="../../audiomixerboard.cpp" line="213"/>
+        <source>GRP</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="225"/>
         <source>M</source>
         <translation>M</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="216"/>
+        <location filename="../../audiomixerboard.cpp" line="226"/>
         <source>S</source>
         <translation>S</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="526"/>
+        <location filename="../../audiomixerboard.cpp" line="227"/>
+        <source>G</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../audiomixerboard.cpp" line="563"/>
         <source>Alias/Name</source>
         <translation>Alias/Nombre</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="532"/>
+        <location filename="../../audiomixerboard.cpp" line="569"/>
         <source>Instrument</source>
         <translation>Instrumento</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="540"/>
+        <location filename="../../audiomixerboard.cpp" line="577"/>
         <source>Location</source>
         <translation>Ubicación</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="562"/>
-        <location filename="../../audiomixerboard.cpp" line="566"/>
-        <location filename="../../audiomixerboard.cpp" line="570"/>
+        <location filename="../../audiomixerboard.cpp" line="599"/>
+        <location filename="../../audiomixerboard.cpp" line="603"/>
+        <location filename="../../audiomixerboard.cpp" line="607"/>
         <source>Skill Level</source>
         <translation>Nivel Habilidad</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="562"/>
+        <location filename="../../audiomixerboard.cpp" line="599"/>
         <source>Beginner</source>
         <translation>Principiante</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="566"/>
+        <location filename="../../audiomixerboard.cpp" line="603"/>
         <source>Intermediate</source>
         <translation>Intermedio</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="570"/>
+        <location filename="../../audiomixerboard.cpp" line="607"/>
         <source>Expert</source>
         <translation>Experto</translation>
     </message>
     <message>
-        <location filename="../../audiomixerboard.cpp" line="581"/>
+        <location filename="../../audiomixerboard.cpp" line="618"/>
         <source>Musician Profile</source>
         <translation>Perfil Músico</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="46"/>
-        <location filename="../../audiomixerboard.cpp" line="145"/>
-        <location filename="../../audiomixerboard.cpp" line="228"/>
+        <location filename="../../audiomixerboard.cpp" line="147"/>
+        <location filename="../../audiomixerboard.cpp" line="240"/>
         <source>Mute</source>
         <translation>Mute</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="42"/>
-        <location filename="../../audiomixerboard.cpp" line="214"/>
-        <location filename="../../audiomixerboard.cpp" line="227"/>
+        <location filename="../../audiomixerboard.cpp" line="224"/>
+        <location filename="../../audiomixerboard.cpp" line="239"/>
         <source>Pan</source>
         <translation>Paneo</translation>
     </message>
     <message>
         <location filename="../../audiomixerboard.cpp" line="47"/>
-        <location filename="../../audiomixerboard.cpp" line="149"/>
-        <location filename="../../audiomixerboard.cpp" line="229"/>
+        <location filename="../../audiomixerboard.cpp" line="151"/>
+        <location filename="../../audiomixerboard.cpp" line="241"/>
         <source>Solo</source>
         <translation>Solo</translation>
     </message>
@@ -478,23 +509,41 @@
         <source>New chat text edit box</source>
         <translation>Campo nuevo texto chat</translation>
     </message>
+    <message>
+        <location filename="../../chatdlg.cpp" line="59"/>
+        <source>Type a message here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../chatdlg.cpp" line="64"/>
+        <source>&amp;Edit</source>
+        <translation type="unfinished">&amp;Editar</translation>
+    </message>
+    <message>
+        <location filename="../../chatdlg.cpp" line="66"/>
+        <source>Cl&amp;ear Chat History</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>CChatDlgBase</name>
     <message>
-        <location filename="../../chatdlgbase.ui" line="19"/>
+        <location filename="../../chatdlgbase.ui" line="20"/>
         <source>Chat</source>
         <translation>Chat</translation>
     </message>
     <message>
-        <location filename="../../chatdlgbase.ui" line="59"/>
-        <source>Cl&amp;ear</source>
-        <translation>Va&amp;ciar</translation>
+        <location filename="../../chatdlgbase.ui" line="51"/>
+        <source>&amp;Send</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../chatdlgbase.ui" line="69"/>
+        <source>Cl&amp;ear</source>
+        <translation type="vanished">Va&amp;ciar</translation>
+    </message>
+    <message>
         <source>&amp;Close</source>
-        <translation>&amp;Cerrar</translation>
+        <translation type="vanished">&amp;Cerrar</translation>
     </message>
 </context>
 <context>
@@ -1533,12 +1582,12 @@
         <translation type="vanished">Manual</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="606"/>
+        <location filename="../../util.h" line="604"/>
         <source>Custom</source>
         <translation>Personalizado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="609"/>
+        <location filename="../../util.h" line="607"/>
         <source>All Genres</source>
         <translation>Todos los Géneros</translation>
     </message>
@@ -1547,22 +1596,22 @@
         <translation type="vanished">Género Rock/Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="618"/>
+        <location filename="../../util.h" line="616"/>
         <source>Genre Classical/Folk/Choir</source>
         <translation>Género Clásica/Folk/Coro</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="612"/>
+        <location filename="../../util.h" line="610"/>
         <source>Genre Rock</source>
         <translation>Género Rock</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="615"/>
+        <location filename="../../util.h" line="613"/>
         <source>Genre Jazz</source>
         <translation>Género Jazz</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="621"/>
+        <location filename="../../util.h" line="619"/>
         <source>Default</source>
         <translation>Por defecto</translation>
     </message>
@@ -2413,22 +2462,22 @@
 <context>
     <name>CServerDlg</name>
     <message>
-        <location filename="../../serverdlg.cpp" line="45"/>
+        <location filename="../../serverdlg.cpp" line="48"/>
         <source>Client List</source>
         <translation>Lista Clientes</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="45"/>
+        <location filename="../../serverdlg.cpp" line="48"/>
         <source>The client list shows all clients which are currently connected to this server. Some information about the clients like the IP address and name are given for each connected client.</source>
         <translation>La lista de clientes muestra todos los clientes actualmente conectados a este servidor. Alguna información sobre los clientes como la dirección IP y el nombre aparecen para cada cliente conectado.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="50"/>
+        <location filename="../../serverdlg.cpp" line="53"/>
         <source>Connected clients list view</source>
         <translation>Vista lista clientes conectados</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="53"/>
+        <location filename="../../serverdlg.cpp" line="56"/>
         <source>Start Minimized on Operating System Start</source>
         <translation>Arranca Minimizado al Arrancar Sistema Operativo</translation>
     </message>
@@ -2441,17 +2490,17 @@
         <translation type="vanished"> servidor arrancará cuando arranque el sistema operativo y se minimizará automáticamente a un icono en la barra de tareas.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="60"/>
+        <location filename="../../serverdlg.cpp" line="63"/>
         <source>Show Creative Commons Licence Dialog</source>
         <translation>Mostrar Diálogo de Licencia Creative Commons</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="61"/>
+        <location filename="../../serverdlg.cpp" line="64"/>
         <source>If enabled, a Creative Commons BY-NC-SA 4.0 Licence dialog is shown each time a new user connects the server.</source>
         <translation>Si se activa, se mostrará un diálogo con la Licencia Creative Commons BY-NC-SA 4.0 cada vez que un cliente nuevo se conecte al servidor.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="65"/>
+        <location filename="../../serverdlg.cpp" line="68"/>
         <source>Make My Server Public</source>
         <translation>Mi Servidor es Público</translation>
     </message>
@@ -2464,7 +2513,7 @@
         <translation type="vanished"> puedan ver el servidor en la lista de servidores de la ventana de conexión y puedan conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentren realmente disponibles.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="74"/>
+        <location filename="../../serverdlg.cpp" line="77"/>
         <source>Register Server Status</source>
         <translation>Estado Registro Servidor</translation>
     </message>
@@ -2481,7 +2530,7 @@
         <translation type="vanished">La dirección del Servidor Central es la dirección IP o URL del servidor central en el que se ha registrado este servidor. Aquí se puede escoger la región local de entre los servidores centrales por defecto o se puede especificar una dirección manualmente.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="75"/>
+        <location filename="../../serverdlg.cpp" line="78"/>
         <source>If the Make My Server Public check box is checked, this will show whether registration with the central server is successful. If the registration failed, please choose another server list.</source>
         <translation>Si se activa Mi Servidor es Público, se mostrará si el registro con el servidor central ha tenido éxito. Si el registro falla, por favor escoge otra lista de servidores.</translation>
     </message>
@@ -2490,47 +2539,47 @@
         <translation type="vanished">Selección servidor central</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="54"/>
+        <location filename="../../serverdlg.cpp" line="57"/>
         <source>If the start minimized on operating system start check box is checked, the server will be started when the operating system starts up and is automatically minimized to a system task bar icon.</source>
         <translation>Si se activa el arranque al arrancar el sistema operativo, el servidor arrancará cuando arranque el sistema operativo y se minimizará automáticamente a un icono en la barra de tareas.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="66"/>
+        <location filename="../../serverdlg.cpp" line="69"/>
         <source>If the Make My Server Public check box is checked, this server registers itself at the central server so that all users of the application can see the server in the connect dialog server list and connect to it. The registration of the server is renewed periodically to make sure that all servers in the connect dialog server list are actually available.</source>
         <translation>Si se activa Mi Servidor es Público, este servidor se registra en el servidor central para que todos los usuarios de la aplicación puedan ver el servidor en la lista de servidores de la ventana de conexión y conectarse a él. El registro del servidor se renueva periódicamente para asegurarse de que todos los servidores en la lista se encuentren realmente disponibles.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="80"/>
+        <location filename="../../serverdlg.cpp" line="83"/>
         <source>Custom Central Server Address</source>
         <translation>Dirección Personalizada Servidor Central</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="81"/>
+        <location filename="../../serverdlg.cpp" line="84"/>
         <source>The custom central server address is the IP address or URL of the central server at which the server list of the connection dialog is managed.</source>
         <translation>La dirección personalizada del servidor central es la dirección IP o URL del servidor central en el cual se gestiona la lista de servidores de la ventana de conexión.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="86"/>
+        <location filename="../../serverdlg.cpp" line="89"/>
         <source>Central server address line edit</source>
         <translation>Dirección servidor central</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="88"/>
+        <location filename="../../serverdlg.cpp" line="91"/>
         <source>Server List Selection</source>
         <translation>Selección Lista Servidores</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="88"/>
+        <location filename="../../serverdlg.cpp" line="91"/>
         <source>Selects the server list (i.e. central server address) in which your server will be added.</source>
         <translation>Selecciona la lista de servidores (por ej. dirección servidor central) al que se añadirá tu servidor.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="90"/>
+        <location filename="../../serverdlg.cpp" line="93"/>
         <source>Server list selection combo box</source>
         <translation>Selección lista de servidores</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="93"/>
+        <location filename="../../serverdlg.cpp" line="96"/>
         <source>Server Name</source>
         <translation>Nombre Servidor</translation>
     </message>
@@ -2539,102 +2588,102 @@
         <translation type="vanished">El nombre del servidor identifica a tu servidor en la lista de conexión de servidores de los clientes. Si no se especifica un nombre, se muestra la dirección IP en su lugar.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="93"/>
+        <location filename="../../serverdlg.cpp" line="96"/>
         <source>The server name identifies your server in the connect dialog server list at the clients.</source>
         <translation>El nombre del servidor identifica a tu servidor en la lista de conexión de servidores de los clientes.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="99"/>
+        <location filename="../../serverdlg.cpp" line="102"/>
         <source>Server name line edit</source>
         <translation>Nombre del servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="102"/>
+        <location filename="../../serverdlg.cpp" line="105"/>
         <source>Location City</source>
         <translation>Ubicación Ciudad</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="102"/>
+        <location filename="../../serverdlg.cpp" line="105"/>
         <source>The city in which this server is located can be set here. If a city name is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Aquí se puede especificar la ciudad en donde se ubica el servidor. Si se introduce una ciudad, se mostrará en la lista de conexión de servidores de los clientes.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="109"/>
+        <location filename="../../serverdlg.cpp" line="112"/>
         <source>City where the server is located line edit</source>
         <translation>Ciudad en donde se encuentra en servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="112"/>
+        <location filename="../../serverdlg.cpp" line="115"/>
         <source>Location country</source>
         <translation>Ubicación país</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="112"/>
+        <location filename="../../serverdlg.cpp" line="115"/>
         <source>The country in which this server is located can be set here. If a country is entered, it will be shown in the connect dialog server list at the clients.</source>
         <translation>Aquí se puede especificar el país en donde se ubica el servidor. Si se introduce un país, se mostrará en la lista de conexión de servidores de los clientes.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="120"/>
+        <location filename="../../serverdlg.cpp" line="123"/>
         <source>Country where the server is located combo box</source>
         <translation>País en donde se encuentra el servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="124"/>
+        <location filename="../../serverdlg.cpp" line="127"/>
         <source>Checkbox to turn on or off server recording</source>
         <translation>Campo para activar/desactivar la grabación desde el servidor</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="125"/>
+        <location filename="../../serverdlg.cpp" line="128"/>
         <source>Enable Recorder</source>
         <translation>Habilitar Grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="126"/>
+        <location filename="../../serverdlg.cpp" line="129"/>
         <source>Checked when the recorder is enabled, otherwise unchecked. The recorder will run when a session is in progress, if (set up correctly and) enabled.</source>
         <translation>Activado cuando la grabación está habilitada. La grabación se ejecutará cuando una sesión esté en marcha, si está habilitada (y correctamente configurada).</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="130"/>
+        <location filename="../../serverdlg.cpp" line="133"/>
         <source>Current session directory text box (read-only)</source>
         <translation>Campo para directorio sesión actual (solo lectura)</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="131"/>
+        <location filename="../../serverdlg.cpp" line="134"/>
         <source>Current Session Directory</source>
         <translation>Directorio Sesión Actual</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="132"/>
+        <location filename="../../serverdlg.cpp" line="135"/>
         <source>Enabled during recording and holds the current recording session directory. Disabled after recording or when the recorder is not enabled.</source>
         <translation>Habilitado durante la grabación y guarda el directorio actual de grabación, Deshabilitado tras la grabación o cuando la grabación no está habilitada.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="136"/>
+        <location filename="../../serverdlg.cpp" line="139"/>
         <source>Recorder status label</source>
         <translation>Etiqueta estado grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="137"/>
+        <location filename="../../serverdlg.cpp" line="140"/>
         <source>Recorder Status</source>
         <translation>Estado Grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="138"/>
+        <location filename="../../serverdlg.cpp" line="141"/>
         <source>Displays the current status of the recorder.</source>
         <translation>Muestra el estado actual de la grabación.</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="141"/>
+        <location filename="../../serverdlg.cpp" line="144"/>
         <source>Request new recording button</source>
         <translation>Botón Solicitar nueva grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="142"/>
+        <location filename="../../serverdlg.cpp" line="145"/>
         <source>New Recording</source>
         <translation>Nueva Grabación</translation>
     </message>
     <message>
-        <location filename="../../serverdlg.cpp" line="143"/>
+        <location filename="../../serverdlg.cpp" line="146"/>
         <source>During a recording session, the button can be used to start a new recording.</source>
         <translation>Durante una sesión de grabación, el botón puede utilizarse para comenzar una nueva grabación.</translation>
     </message>
@@ -2709,42 +2758,42 @@
         <translation>&amp;Ventana</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="643"/>
+        <location filename="../../util.h" line="641"/>
         <source>Unregistered</source>
         <translation>Sin registrar</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="646"/>
+        <location filename="../../util.h" line="644"/>
         <source>Bad address</source>
         <translation>Dirección no válida</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="649"/>
+        <location filename="../../util.h" line="647"/>
         <source>Registration requested</source>
         <translation>Registro solicitado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="652"/>
+        <location filename="../../util.h" line="650"/>
         <source>Registration failed</source>
         <translation>Error de registro</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="655"/>
+        <location filename="../../util.h" line="653"/>
         <source>Check server version</source>
         <translation>Comprueba la versión del servidor</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="658"/>
+        <location filename="../../util.h" line="656"/>
         <source>Registered</source>
         <translation>Registrado</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="661"/>
+        <location filename="../../util.h" line="659"/>
         <source>Central Server full</source>
         <translation>Servidor Central lleno</translation>
     </message>
     <message>
-        <location filename="../../util.h" line="664"/>
+        <location filename="../../util.h" line="662"/>
         <source>Unknown value </source>
         <translation>Valor desconocido </translation>
     </message>
@@ -3042,7 +3091,7 @@
 <context>
     <name>global</name>
     <message>
-        <location filename="../../global.h" line="235"/>
+        <location filename="../../global.h" line="240"/>
         <source>For more information use the What&apos;s This help (help menu, right mouse button or Shift+F1)</source>
         <translation>Para más información utiliza ¿Qué es Esto? (menú de ayuda, botón derecho del ratón o Shift+F1)</translation>
     </message>

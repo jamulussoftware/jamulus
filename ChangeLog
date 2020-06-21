@@ -9,6 +9,8 @@
 
 - support sorting faders by channel instrument, coded by Alberstein8 (#356)
 
+- new group switch to change several faders in sync, coded by Alberstein8 (#202, #379)
+
 - add server recording indicator, coded by pljones (#295)
 
 - support for storing/recovering the server window positions (#357)
@@ -17,7 +19,11 @@
 
 - the local pan middle position is no longer attenuated in Mono-in/Stereo-out mode (#353)
 
+- add some protections to the code, coded by atsampson (#380, #381, #382)
 
+- add send button to chat window (#384)
+
+- bug fix: server window stop updating after minimized, coded by AronVietti (#355, #383)
 
 
 

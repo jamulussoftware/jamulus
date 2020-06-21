@@ -220,6 +220,23 @@ CClient::CClient ( const quint16  iPortNumber,
     }
 }
 
+CClient::~CClient()
+{
+    // free audio encoders and decoders
+    opus_custom_encoder_destroy ( OpusEncoderMono );
+    opus_custom_decoder_destroy ( OpusDecoderMono );
+    opus_custom_encoder_destroy ( OpusEncoderStereo );
+    opus_custom_decoder_destroy ( OpusDecoderStereo );
+    opus_custom_encoder_destroy ( Opus64EncoderMono );
+    opus_custom_decoder_destroy ( Opus64DecoderMono );
+    opus_custom_encoder_destroy ( Opus64EncoderStereo );
+    opus_custom_decoder_destroy ( Opus64DecoderStereo );
+
+    // free audio modes
+    opus_custom_mode_destroy ( OpusMode );
+    opus_custom_mode_destroy ( Opus64Mode );
+}
+
 void CClient::OnSendProtMessage ( CVector<uint8_t> vecMessage )
 {
     // the protocol queries me to call the function to send the message

@@ -762,5 +762,11 @@ void CServerDlg::changeEvent ( QEvent* pEvent )
             // the timer for this purpose
             QTimer::singleShot ( 0, this, SLOT ( hide() ) );
         }
+        else
+        {
+            // we have to call the show function from another thread -> use
+            // the timer for this purpose
+            QTimer::singleShot ( 0, this, SLOT ( show() ) );
+        }
     }
 }

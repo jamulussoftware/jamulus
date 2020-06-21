@@ -52,6 +52,9 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
     txvChatWindow->clear();
     edtLocalInputText->clear();
 
+    // set a placeholder text to make sure where to type the message in (#384)
+    edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
+
 
     // Connections -------------------------------------------------------------
     QObject::connect ( edtLocalInputText, &QLineEdit::textChanged,

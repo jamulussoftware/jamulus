@@ -29,7 +29,7 @@
 CChannel::CChannel ( const bool bNIsServer ) :
     vecdGains              ( MAX_NUM_CHANNELS, 1.0 ),
     vecdPannings           ( MAX_NUM_CHANNELS, 0.5 ),
-    iCurSockBufNumFrames   ( -1 ),
+    iCurSockBufNumFrames   ( INVALID_INDEX ),
     bDoAutoSockBufSize     ( true ),
     iFadeInCnt             ( 0 ),
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),

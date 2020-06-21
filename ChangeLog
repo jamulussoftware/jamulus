@@ -19,6 +19,7 @@
 
 - the local pan middle position is no longer attenuated in Mono-in/Stereo-out mode (#353)
 
+- added some protections to the code, coded by atsampson (#380, #381, #382)
 
 
 

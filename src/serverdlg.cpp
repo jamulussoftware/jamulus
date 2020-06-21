@@ -37,6 +37,9 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
       BitmapSystemTrayInactive ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreyArrow.png" ) ),
       BitmapSystemTrayActive   ( QString::fromUtf8 ( ":/png/LEDs/res/CLEDGreenArrow.png" ) )
 {
+    // check if system tray icon can be used
+    bSystemTrayIconAvaialbe = SystemTrayIcon.isSystemTrayAvailable();
+
     setupUi ( this );
 
 
@@ -142,9 +145,6 @@ CServerDlg::CServerDlg ( CServer*        pNServP,
     pbtNewRecording->setWhatsThis ( "<b>" + tr ( "New Recording" ) + ":</b>"
         +  tr ( "During a recording session, the button can be used to start a new recording." ) );
 
-
-    // check if system tray icon can be used
-    bSystemTrayIconAvaialbe = SystemTrayIcon.isSystemTrayAvailable();
 
     // init system tray icon
     if ( bSystemTrayIconAvaialbe )

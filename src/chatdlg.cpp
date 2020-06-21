@@ -52,19 +52,32 @@ CChatDlg::CChatDlg ( QWidget* parent, Qt::WindowFlags f ) :
     txvChatWindow->clear();
     edtLocalInputText->clear();
 
+    // we do not want to show a curser in the chat history
+    txvChatWindow->setCursorWidth ( 0 );
+
     // set a placeholder text to make sure where to type the message in (#384)
     edtLocalInputText->setPlaceholderText ( tr ( "Type a message here" ) );
+
+
+    // Menu  -------------------------------------------------------------------
+    QMenuBar* pMenu     = new QMenuBar ( this );
+    QMenu*    pEditMenu = new QMenu ( tr ( "&Edit" ), this );
+
+    pEditMenu->addAction ( tr ( "Cl&ear Chat History" ), this,
+        SLOT ( OnClearChatHistory() ), QKeySequence ( Qt::CTRL + Qt::Key_E ) );
+
+    pMenu->addMenu ( pEditMenu );
+
+    // Now tell the layout about the menu
+    layout()->setMenuBar ( pMenu );
 
 
     // Connections -------------------------------------------------------------
     QObject::connect ( edtLocalInputText, &QLineEdit::textChanged,
         this, &CChatDlg::OnLocalInputTextTextChanged );
 
-    QObject::connect ( edtLocalInputText, &QLineEdit::returnPressed,
-        this, &CChatDlg::OnLocalInputTextReturnPressed );
-
-    QObject::connect ( butClear, &QPushButton::pressed,
-        this, &CChatDlg::OnClearPressed );
+    QObject::connect ( butSend, &QPushButton::clicked,
+        this, &CChatDlg::OnSendText );
 }
 
 void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
@@ -77,14 +90,14 @@ void CChatDlg::OnLocalInputTextTextChanged ( const QString& strNewText )
     }
 }
 
-void CChatDlg::OnLocalInputTextReturnPressed()
+void CChatDlg::OnSendText()
 {
     // send new text and clear line afterwards
     emit NewLocalInputText ( edtLocalInputText->text() );
     edtLocalInputText->clear();
 }
 
-void CChatDlg::OnClearPressed()
+void CChatDlg::OnClearChatHistory()
 {
     // clear chat window
     txvChatWindow->clear();

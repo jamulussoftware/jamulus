@@ -73,8 +73,10 @@ protected:
         };
 
         cLED ( QWidget* parent );
-        void    setColor ( const ELightColor eNewColor );
-        QLabel* getLabelPointer() { return pLEDLabel; }
+
+        void        SetColor ( const ELightColor eNewColor );
+        ELightColor GetColor() { return eCurLightColor; };
+        QLabel*     GetLabelPointer() { return pLEDLabel; }
 
     protected:
         QPixmap     BitmCubeRoundBlack;

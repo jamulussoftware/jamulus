@@ -443,6 +443,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
         "<p>Olivier Humbert (<a href=""https://github.com/trebmuh"">trebmuh</a>)</p>"
         "<p><b>" + tr ( "Portuguese" ) + "</b></p>"
         "<p>Miguel de Matos (<a href=""https://github.com/Snayler"">Snayler</a>)</p>"
+        "<p>Melcon Moraes (<a href=""https://github.com/melcon"">melcon</a>)</p>"
         "<p><b>" + tr ( "Dutch" ) + "</b></p>"
         "<p>Jeroen Geertzen (<a href=""https://github.com/jerogee"">jerogee</a>)</p>"
         "<p><b>" + tr ( "Italian" ) + "</b></p>"
@@ -456,6 +457,7 @@ CAboutDlg::CAboutDlg ( QWidget* parent ) : QDialog ( parent )
     // set window title
     setWindowTitle ( tr ( "About " ) + APP_NAME );
 }
+
 
 // Licence dialog --------------------------------------------------------------
 CLicenceDlg::CLicenceDlg ( QWidget* parent ) : QDialog ( parent )
@@ -850,8 +852,8 @@ CHelpMenu::CHelpMenu ( const bool bIsClient, QWidget* parent ) : QMenu ( tr ( "&
     addSeparator();
     addAction ( tr ( "&About..." ), this, SLOT ( OnHelpAbout() ) );
 }
-
 #endif
+
 
 /******************************************************************************\
 * Other Classes                                                                *

@@ -95,6 +95,6 @@ protected:
 
     QTimer          TimerClip;
 
-protected slots:
+public slots:
     void ClipReset();
 };

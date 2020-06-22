@@ -30,9 +30,12 @@
 - bug fix: server window stop updating after minimized, coded by AronVietti (#355, #383)
 
 
-TODO support clip indicator for bar meter as well
+TODO clip LED on channel faders goes on too early (compare to input level meter clip LED)
+     -> only 3 of 4 bits of the channel level protocol are actually used, one bit is wasted
 
 TODO the new translation loading does not work on MacOS
+
+TODO support clip indicator for bar meter as well
 
 TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
      - generate .qm on compile time with lrelease

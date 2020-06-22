@@ -321,6 +321,7 @@ void CChannelFader::Reset()
     pcbSolo->setChecked ( false );
     pcbGroup->setChecked ( false );
     plbrChannelLevel->SetValue ( 0 );
+    plbrChannelLevel->ClipReset();
 
     // clear instrument picture, country flag, tool tips and label text
     plblLabel->setText ( "" );

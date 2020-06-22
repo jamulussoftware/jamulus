@@ -103,6 +103,11 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
     switch ( eNType )
     {
     case MT_LED:
+        // initialize all LEDs
+        for ( int iLEDIdx = 0; iLEDIdx < NUM_LEDS_INCL_CLIP_LED; iLEDIdx++ )
+        {
+            vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_BLACK );
+        }
         pStackedLayout->setCurrentIndex ( 0 );
         break;
 

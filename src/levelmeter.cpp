@@ -40,16 +40,16 @@ CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
     pLEDLayout->setMargin    ( 0 );
     pLEDLayout->setSpacing   ( 0 );
 
-    // create LEDs
-    vecpLEDs.Init ( NUM_STEPS_LED_BAR );
+    // create LEDs plus the clip LED
+    vecpLEDs.Init ( NUM_LEDS_INCL_CLIP_LED );
 
-    for ( int iLEDIdx = NUM_STEPS_LED_BAR - 1; iLEDIdx >= 0; iLEDIdx-- )
+    for ( int iLEDIdx = NUM_LEDS_INCL_CLIP_LED - 1; iLEDIdx >= 0; iLEDIdx-- )
     {
         // create LED object
         vecpLEDs[iLEDIdx] = new cLED ( parent );
 
         // add LED to layout with spacer (do not add spacer on the bottom of the first LED)
-        if ( iLEDIdx < NUM_STEPS_LED_BAR - 1 )
+        if ( iLEDIdx < NUM_LEDS_INCL_CLIP_LED - 1 )
         {
             pLEDLayout->addStretch();
         }
@@ -76,41 +76,23 @@ CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
 
     // update the meter type (using the default value of the meter type)
     SetLevelMeterType ( eLevelMeterType );
+
+    // setup clip indicator timer
+    TimerClip.setSingleShot ( true );
+    TimerClip.setInterval ( CLIP_IND_TIME_OUT_MS );
+
+
+    // Connections -------------------------------------------------------------
+    QObject::connect ( &TimerClip, &QTimer::timeout,
+        this, &CLevelMeter::ClipReset );
 }
 
 CLevelMeter::~CLevelMeter()
 {
     // clean up the LED objects
-    for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
+    for ( int iLEDIdx = 0; iLEDIdx < NUM_LEDS_INCL_CLIP_LED; iLEDIdx++ )
     {
         delete vecpLEDs[iLEDIdx];
-    }
-}
-
-void CLevelMeter::changeEvent ( QEvent* curEvent )
-{
-    // act on enabled changed state
-    if ( curEvent->type() == QEvent::EnabledChange )
-    {
-        // reset all LEDs
-        Reset ( this->isEnabled() );
-    }
-}
-
-void CLevelMeter::Reset ( const bool bEnabled )
-{
-    // update state of all LEDs
-    for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
-    {
-        // different reset behavoiur for enabled and disabled control
-        if ( bEnabled )
-        {
-            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_BLACK );
-        }
-        else
-        {
-            vecpLEDs[iLEDIdx]->setColor ( cLED::RL_DISABLED );
-        }
     }
 }
 
@@ -135,7 +117,7 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
 
     case MT_SLIM_BAR:
         // set all LEDs to disabled, otherwise we would not get our desired small width
-        for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
+        for ( int iLEDIdx = 0; iLEDIdx < NUM_LEDS_INCL_CLIP_LED; iLEDIdx++ )
         {
             vecpLEDs[iLEDIdx]->setColor ( cLED::RL_DISABLED );
         }
@@ -158,7 +140,7 @@ void CLevelMeter::SetValue ( const double dValue )
         switch ( eLevelMeterType )
         {
         case MT_LED:
-            // update state of all LEDs for current level value
+            // update state of all LEDs for current level value (except of the clip LED)
             for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
             {
                 // set active LED color if value is above current LED index
@@ -190,6 +172,13 @@ void CLevelMeter::SetValue ( const double dValue )
                     vecpLEDs[iLEDIdx]->setColor ( cLED::RL_BLACK );
                 }
             }
+
+            // clip LED management
+            if ( dValue > LEV_METER_CLIP_LIMIT_RATIO * NUM_STEPS_LED_BAR)
+            {
+                vecpLEDs[NUM_STEPS_LED_BAR]->setColor ( cLED::RL_RED );
+                TimerClip.start();
+            }
             break;
 
         case MT_BAR:
@@ -199,6 +188,15 @@ void CLevelMeter::SetValue ( const double dValue )
         }
     }
 }
+
+void CLevelMeter::ClipReset()
+{
+    if ( eLevelMeterType == MT_LED )
+    {
+        vecpLEDs[NUM_STEPS_LED_BAR]->setColor ( cLED::RL_BLACK );
+    }
+}
+
 
 CLevelMeter::cLED::cLED ( QWidget* parent ) :
     BitmCubeRoundBlack  ( QString::fromUtf8 ( ":/png/LEDs/res/HLEDBlackSmall.png" ) ),

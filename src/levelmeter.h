@@ -34,6 +34,12 @@
 #include "global.h"
 
 
+/* Definitions ****************************************************************/
+#define LEV_METER_CLIP_LIMIT_RATIO      0.99
+#define NUM_LEDS_INCL_CLIP_LED          ( NUM_STEPS_LED_BAR + 1 )
+#define CLIP_IND_TIME_OUT_MS            20000
+
+
 /* Classes ********************************************************************/
 class CLevelMeter : public QWidget
 {
@@ -80,11 +86,13 @@ protected:
         QLabel*     pLEDLabel;
     };
 
-    void Reset ( const bool bEnabled );
-    virtual void changeEvent ( QEvent* curEvent );
-
     QStackedLayout* pStackedLayout;
     ELevelMeterType eLevelMeterType;
     CVector<cLED*>  vecpLEDs;
     QProgressBar*   pBarMeter;
+
+    QTimer          TimerClip;
+
+protected slots:
+    void ClipReset();
 };

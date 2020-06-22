@@ -11,6 +11,8 @@
 
 - new group switch to change several faders in sync, coded by Alberstein8 (#202, #379)
 
+- support a clip LED, coded by fleutot (#220)
+
 - add server recording indicator, coded by pljones (#295)
 
 - support for storing/recovering the server window positions (#357)
@@ -24,6 +26,11 @@
 - add send button to chat window (#384)
 
 - bug fix: server window stop updating after minimized, coded by AronVietti (#355, #383)
+
+
+
+
+
 
 
 

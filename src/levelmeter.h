@@ -92,6 +92,7 @@ protected:
     ELevelMeterType eLevelMeterType;
     CVector<cLED*>  vecpLEDs;
     QProgressBar*   pBarMeter;
+    QProgressBar*   pBarClipIndicator;
 
     QTimer          TimerClip;
 

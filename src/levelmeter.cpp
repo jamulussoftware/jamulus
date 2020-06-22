@@ -58,21 +58,33 @@ CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
     }
 
     // initialize bar meter
-    pBarMeter = new QProgressBar();
-    pBarMeter->setOrientation ( Qt::Vertical );
-    pBarMeter->setRange ( 0, 100 * NUM_STEPS_LED_BAR );
-    pBarMeter->setFormat ( "" ); // suppress percent numbers
+    QWidget*     pBarMeterBackground = new QWidget();
+    QVBoxLayout* pBarLayout          = new QVBoxLayout ( pBarMeterBackground );
+    pBarLayout->setAlignment ( Qt::AlignHCenter );
+    pBarLayout->setMargin    ( 0 );
+    pBarLayout->setSpacing   ( 0 );
+    pBarClipIndicator = new QProgressBar ( pBarMeterBackground );
+    pBarClipIndicator->setOrientation    ( Qt::Vertical );
+    pBarClipIndicator->setRange          ( 0, 1 );
+    pBarClipIndicator->setFormat         ( "" ); // suppress percent numbers
+    pBarClipIndicator->setMaximumHeight  ( 15 );
+//    pBarLayout->addWidget                ( pBarClipIndicator );
+    pBarMeter = new QProgressBar ( pBarMeterBackground );
+    pBarMeter->setOrientation    ( Qt::Vertical );
+    pBarMeter->setRange          ( 0, 100 * NUM_STEPS_LED_BAR );
+    pBarMeter->setFormat         ( "" ); // suppress percent numbers
+    pBarLayout->addWidget        ( pBarMeter );
 
     // setup stacked layout for meter type switching mechanism
     pStackedLayout = new QStackedLayout ( this );
     pStackedLayout->addWidget ( pLEDMeter );
-    pStackedLayout->addWidget ( pBarMeter );
+    pStackedLayout->addWidget ( pBarMeterBackground );
 
     // according to QScrollArea description: "When using a scroll area to display the
     // contents of a custom widget, it is important to ensure that the size hint of
     // the child widget is set to a suitable value."
-    pBarMeter->setMinimumSize ( QSize ( 1, 1 ) );
-    pLEDMeter->setMinimumSize ( QSize ( 1, 1 ) );
+    pBarMeterBackground->setMinimumSize ( QSize ( 1, 1 ) );
+    pLEDMeter->setMinimumSize           ( QSize ( 1, 1 ) );
 
     // update the meter type (using the default value of the meter type)
     SetLevelMeterType ( eLevelMeterType );
@@ -103,37 +115,59 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
     switch ( eNType )
     {
     case MT_LED:
+        pStackedLayout->setCurrentIndex ( 0 );
+
         // initialize all LEDs
         for ( int iLEDIdx = 0; iLEDIdx < NUM_LEDS_INCL_CLIP_LED; iLEDIdx++ )
         {
             vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_BLACK );
         }
-        pStackedLayout->setCurrentIndex ( 0 );
         break;
 
     case MT_BAR:
         pStackedLayout->setCurrentIndex ( 1 );
+
+        // reset clip indicator
+        pBarClipIndicator->setValue ( 0 );
+
         pBarMeter->setStyleSheet (
             "QProgressBar        { margin:     1px;"
             "                      padding:    1px; "
             "                      width:      15px; }"
             "QProgressBar::chunk { background: green; }" );
+
+        pBarClipIndicator->setStyleSheet (
+            "QProgressBar        { margin:     1px;"
+            "                      padding:    1px; "
+            "                      width:      15px; }"
+            "QProgressBar::chunk { background: red; }" );
         break;
 
     case MT_SLIM_BAR:
+        pStackedLayout->setCurrentIndex ( 1 );
+
         // set all LEDs to disabled, otherwise we would not get our desired small width
         for ( int iLEDIdx = 0; iLEDIdx < NUM_LEDS_INCL_CLIP_LED; iLEDIdx++ )
         {
             vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_DISABLED );
         }
 
-        pStackedLayout->setCurrentIndex ( 1 );
+        // reset clip indicator
+        pBarClipIndicator->setValue ( 0 );
+
         pBarMeter->setStyleSheet (
             "QProgressBar        { border:     0px;"
             "                      margin:     0px;"
             "                      padding:    0px; "
             "                      width:      4px; }"
             "QProgressBar::chunk { background: green; }" );
+
+        pBarClipIndicator->setStyleSheet (
+            "QProgressBar        { border:     0px;"
+            "                      margin:     0px;"
+            "                      padding:    0px; "
+            "                      width:      4px; }"
+            "QProgressBar::chunk { background: red; }" );
         break;
     }
 }
@@ -193,6 +227,17 @@ void CLevelMeter::SetValue ( const double dValue )
         case MT_BAR:
         case MT_SLIM_BAR:
             pBarMeter->setValue ( 100 * dValue );
+
+            // clip LED management
+            if ( dValue > LEV_METER_CLIP_LIMIT_RATIO * NUM_STEPS_LED_BAR)
+            {
+                pBarClipIndicator->setValue ( 1 );
+                TimerClip.start();
+            }
+            else if ( pBarClipIndicator->value() != 1 )
+            {
+                pBarClipIndicator->setValue ( 0 );
+            }
             break;
         }
     }
@@ -200,9 +245,16 @@ void CLevelMeter::SetValue ( const double dValue )
 
 void CLevelMeter::ClipReset()
 {
-    if ( eLevelMeterType == MT_LED )
+    switch ( eLevelMeterType )
     {
+    case MT_LED:
         vecpLEDs[NUM_STEPS_LED_BAR]->SetColor ( cLED::RL_BLACK );
+        break;
+
+    case MT_BAR:
+    case MT_SLIM_BAR:
+        pBarClipIndicator->setValue ( 0 );
+        break;
     }
 }
 

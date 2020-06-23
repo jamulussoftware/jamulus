@@ -632,7 +632,8 @@ enum ESvrRegStatus
     SRS_UNKNOWN_RESP,
     SRS_REGISTERED,
     SRS_CENTRAL_SVR_FULL,
-    SRS_VERSION_TOO_OLD
+    SRS_VERSION_TOO_OLD,
+    SRS_NOT_FULFILL_REQIREMENTS
 };
 
 inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
@@ -662,6 +663,9 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
 
     case SRS_VERSION_TOO_OLD:
         return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
+
+    case SRS_NOT_FULFILL_REQIREMENTS:
+        return QCoreApplication::translate ( "CServerDlg", "Requirements not fulfilled" );
     }
 
     return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) ).append ( eSvrRegStatus );
@@ -674,7 +678,8 @@ enum ESvrRegResult
     // used for protocol -> enum values must be fixed!
     SRR_REGISTERED = 0,
     SRR_CENTRAL_SVR_FULL = 1,
-    SRR_VERSION_TOO_OLD = 2
+    SRR_VERSION_TOO_OLD = 2,
+    SRR_NOT_FULFILL_REQIREMENTS = 3
 };
 
 

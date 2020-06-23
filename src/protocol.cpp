@@ -382,6 +382,7 @@ CONNECTION LESS MESSAGES
       0 - success
       1 - failed due to central server list being full
       2 - your server version is too old
+      3 - registration requirements not fulfilled
 
     Note: the central server may send this message in response to a
           PROTMESSID_CLM_REGISTER_SERVER request.
@@ -2381,7 +2382,8 @@ bool CProtocol::EvaluateCLRegisterServerResp ( const CHostAddress&     InetAddr,
 
     if ( ( iSvrRegResult != SRR_REGISTERED ) &&
          ( iSvrRegResult != SRR_CENTRAL_SVR_FULL ) &&
-         ( iSvrRegResult != SRR_VERSION_TOO_OLD ) )
+         ( iSvrRegResult != SRR_VERSION_TOO_OLD ) &&
+         ( iSvrRegResult != SRR_NOT_FULFILL_REQIREMENTS ) )
     {
         return true;
     }

@@ -637,6 +637,7 @@ void CServerDlg::UpdateGUIDependencies()
     case SRS_TIME_OUT:
     case SRS_CENTRAL_SVR_FULL:
     case SRS_VERSION_TOO_OLD:
+    case SRS_NOT_FULFILL_REQIREMENTS:
         strStatus = "<font color=""red""><b>" + strStatus + "</b></font>";
         break;
 

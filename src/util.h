@@ -569,6 +569,7 @@ enum ELicenceType
 // Server jam recorder state enum ----------------------------------------------
 enum ERecorderState
 {
+    // used for protocol -> enum values must be fixed!
     RS_UNDEFINED = 0,
     RS_NOT_INITIALISED = 1,
     RS_NOT_ENABLED = 2,
@@ -579,8 +580,8 @@ enum ERecorderState
 // Channel sort type -----------------------------------------------------------
 enum EChSortType
 {
-    ST_BY_NAME = 0,
-    ST_BY_INSTRUMENT = 1
+    ST_BY_NAME,
+    ST_BY_INSTRUMENT
 };
 
 
@@ -624,13 +625,14 @@ inline QString csCentServAddrTypeToString ( ECSAddType eAddrType )
 // Slave server registration state ---------------------------------------------
 enum ESvrRegStatus
 {
-    SRS_UNREGISTERED = 0,
-    SRS_BAD_ADDRESS = 1,
-    SRS_REQUESTED = 2,
-    SRS_TIME_OUT = 3,
-    SRS_UNKNOWN_RESP = 4,
-    SRS_REGISTERED = 5,
-    SRS_CENTRAL_SVR_FULL = 6
+    SRS_UNREGISTERED,
+    SRS_BAD_ADDRESS,
+    SRS_REQUESTED,
+    SRS_TIME_OUT,
+    SRS_UNKNOWN_RESP,
+    SRS_REGISTERED,
+    SRS_CENTRAL_SVR_FULL,
+    SRS_VERSION_TOO_OLD
 };
 
 inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
@@ -657,6 +659,9 @@ inline QString svrRegStatusToString ( ESvrRegStatus eSvrRegStatus )
 
     case SRS_CENTRAL_SVR_FULL:
         return QCoreApplication::translate ( "CServerDlg", "Central Server full" );
+
+    case SRS_VERSION_TOO_OLD:
+        return QCoreApplication::translate ( "CServerDlg", "Your server version is too old" );
     }
 
     return QString ( QCoreApplication::translate ( "CServerDlg", "Unknown value " ) ).append ( eSvrRegStatus );
@@ -668,7 +673,8 @@ enum ESvrRegResult
 {
     // used for protocol -> enum values must be fixed!
     SRR_REGISTERED = 0,
-    SRR_CENTRAL_SVR_FULL = 1
+    SRR_CENTRAL_SVR_FULL = 1,
+    SRR_VERSION_TOO_OLD = 2
 };
 
 

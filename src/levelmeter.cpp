@@ -60,7 +60,7 @@ CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
     // initialize bar meter
     pBarMeter = new QProgressBar();
     pBarMeter->setOrientation ( Qt::Vertical );
-    pBarMeter->setRange ( 0, 100 * NUM_STEPS_LED_BAR );
+    pBarMeter->setRange ( 0, 100 * NUM_STEPS_LED_BAR ); // use factor 100 to reduce quantization (bar is continuous)
     pBarMeter->setFormat ( "" ); // suppress percent numbers
 
     // setup stacked layout for meter type switching mechanism

@@ -381,6 +381,7 @@ CONNECTION LESS MESSAGES
       Values of ESvrRegResult:
       0 - success
       1 - failed due to central server list being full
+      2 - your server version is too old
 
     Note: the central server may send this message in response to a
           PROTMESSID_CLM_REGISTER_SERVER request.

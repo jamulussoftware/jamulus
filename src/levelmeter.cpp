@@ -115,7 +115,7 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
         pStackedLayout->setCurrentIndex ( 1 );
         pBarMeter->setStyleSheet (
             "QProgressBar        { margin:     1px;"
-            "                      padding:    1px; "
+            "                      padding:    1px;"
             "                      width:      15px; }"
             "QProgressBar::chunk { background: green; }" );
         break;
@@ -131,7 +131,7 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
         pBarMeter->setStyleSheet (
             "QProgressBar        { border:     0px;"
             "                      margin:     0px;"
-            "                      padding:    0px; "
+            "                      padding:    0px;"
             "                      width:      4px; }"
             "QProgressBar::chunk { background: green; }" );
         break;

@@ -1723,6 +1723,25 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
             }
 
             vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevel ) );
+
+            // Check for clipping: The check for clipping for the channel meter bars is a
+            // special case. It must be checked in the server because in the protocol only
+            // 16 steps are allowed and this quantization is too large to detect a clip
+            // situation in the client in a meaningful way. Since in the current implementation
+            // only 9 of the possible 16 values are used, we define a 10th level which
+            // is basically the clip indicator for the client (this is compatible to old
+            // clients which do not support the clip indicator since if the value is larger
+            // then the maximum value, still the meter shows full level). It is important that
+            // the channel meter defines the clip limit ratio as 1.0f to work properly, see
+            // CChannelFader() constructor.
+            // Note that if the signal actually clips, even with the old servers a value of
+            // NUM_STEPS_LED_BAR + 1 was possible but only very rarely (since this is the maximum
+            // int16_t value but since we only check every third value, the probability is very low).
+            if ( dCurSigLevel > LEV_METER_CLIP_LIMIT_RATIO * NUM_STEPS_LED_BAR )
+            {
+                // per definition: clip situation is maximum level plus one
+                vecLevelsOut[j] = NUM_STEPS_LED_BAR + 1;
+            }
         }
     }
 

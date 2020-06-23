@@ -35,9 +35,8 @@
 
 
 /* Definitions ****************************************************************/
-#define LEV_METER_CLIP_LIMIT_RATIO      0.99
-#define NUM_LEDS_INCL_CLIP_LED          ( NUM_STEPS_LED_BAR + 1 )
-#define CLIP_IND_TIME_OUT_MS            20000
+#define NUM_LEDS_INCL_CLIP_LED           ( NUM_STEPS_LED_BAR + 1 )
+#define CLIP_IND_TIME_OUT_MS             20000
 
 
 /* Classes ********************************************************************/
@@ -53,7 +52,9 @@ public:
         MT_SLIM_BAR
     };
 
-    CLevelMeter ( QWidget* parent = nullptr, Qt::WindowFlags f = nullptr );
+    CLevelMeter ( QWidget*     parent = nullptr,
+                  const double dNLevelMeterClipLimitRatio = LEV_METER_CLIP_LIMIT_RATIO );
+
     virtual ~CLevelMeter();
 
     void SetValue ( const double dValue );
@@ -92,6 +93,7 @@ protected:
     ELevelMeterType eLevelMeterType;
     CVector<cLED*>  vecpLEDs;
     QProgressBar*   pBarMeter;
+    double          dLevelMeterClipLimitRatio;
 
     QTimer          TimerClip;
 

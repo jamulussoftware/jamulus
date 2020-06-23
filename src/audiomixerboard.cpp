@@ -36,7 +36,7 @@ CChannelFader::CChannelFader ( QWidget* pNW )
     pFrame                      = new QFrame      ( pNW );
 
     pLevelsBox                  = new QWidget     ( pFrame );
-    plbrChannelLevel            = new CLevelMeter ( pLevelsBox );
+    plbrChannelLevel            = new CLevelMeter ( pLevelsBox, 1.0f ); // special case with clip limit, see CreateLevelsForAllConChannels()
     pFader                      = new QSlider     ( Qt::Vertical, pLevelsBox );
     pPan                        = new QDial       ( pLevelsBox );
     pPanLabel                   = new QLabel      ( tr ( "Pan" ), pLevelsBox );

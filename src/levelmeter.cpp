@@ -29,9 +29,11 @@
 
 
 /* Implementation *************************************************************/
-CLevelMeter::CLevelMeter ( QWidget* parent, Qt::WindowFlags f ) :
-    QWidget ( parent, f ),
-    eLevelMeterType ( MT_BAR )
+CLevelMeter::CLevelMeter ( QWidget*     parent,
+                           const double dNLevelMeterClipLimitRatio ) :
+    QWidget                   ( parent ),
+    eLevelMeterType           ( MT_BAR ),
+    dLevelMeterClipLimitRatio ( dNLevelMeterClipLimitRatio )
 {
     // initialize LED meter
     QWidget*     pLEDMeter  = new QWidget();
@@ -179,7 +181,7 @@ void CLevelMeter::SetValue ( const double dValue )
             }
 
             // clip LED management
-            if ( dValue > LEV_METER_CLIP_LIMIT_RATIO * NUM_STEPS_LED_BAR)
+            if ( dValue > dLevelMeterClipLimitRatio * NUM_STEPS_LED_BAR )
             {
                 vecpLEDs[NUM_STEPS_LED_BAR]->SetColor ( cLED::RL_RED );
                 TimerClip.start();

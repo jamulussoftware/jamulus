@@ -171,6 +171,9 @@ LED bar:      lbr
 #define LOW_BOUND_SIG_METER              ( -50.0 ) // dB
 #define UPPER_BOUND_SIG_METER            ( 0.0 )   // dB
 
+// clip level ratio (i.e. if the level is above limit, the clip indicator is shown)
+#define LEV_METER_CLIP_LIMIT_RATIO       0.9999
+
 // defines for LED level meter CLevelMeter
 #define NUM_STEPS_LED_BAR                8
 #define RED_BOUND_LED_BAR                7

@@ -30,12 +30,20 @@
 - bug fix: server window stop updating after minimized, coded by AronVietti (#355, #383)
 
 
+TODO add "Update Jamulus Version" in register response errors
+
+TODO add new register message which contains version and, e.g., max number of clients
+
 TODO clip LED on channel faders goes on too early (compare to input level meter clip LED)
      -> only 3 of 4 bits of the channel level protocol are actually used, one bit is wasted
-
-TODO the new translation loading does not work on MacOS
+     -> enlarge range in the server by one value (using wasted dynamic) just in case
+        the signal is above our defined clip ratio -> as a result, only on new servers the
+        channel fader clip LED would work (which is ok)
 
 TODO support clip indicator for bar meter as well
+     -> change background to red in case of clipping
+
+TODO the new translation loading does not work on MacOS
 
 TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
      - generate .qm on compile time with lrelease

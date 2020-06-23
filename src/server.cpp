@@ -1680,29 +1680,34 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
             // get a reference to the audio data
             const CVector<int16_t>& vecsData = vecvecsData[j];
 
-            double dCurLevel = 0.0;
+            // Speed optimization:
+            // - we only make use of the positive values and ignore the negative ones
+            //   -> we do not need to call the fabs() function
+            // - we only evaluate every third sample
+            int16_t sMax = 0;
 
             if ( vecNumAudioChannels[j] == 1 )
             {
                 // mono
                 for ( i = 0; i < iServerFrameSizeSamples; i += 3 )
                 {
-                    dCurLevel = std::max ( dCurLevel, fabs ( static_cast<double> ( vecsData[i] ) ) );
+                    sMax = std::max ( sMax, vecsData[i] );
                 }
             }
             else
             {
-                // stereo: apply stereo-to-mono attenuation
-                for ( i = 0, k = 0; i < iServerFrameSizeSamples; i += 3, k += 6 )
+                // stereo
+                for ( i = 0, k = 0; i < iServerFrameSizeSamples; i += 3, k += 6 ) // 2 * 3 = 6 -> stereo
                 {
-                    double sMix = ( static_cast<double> ( vecsData[k] ) + vecsData[k + 1] ) / 2;
-                    dCurLevel   = std::max ( dCurLevel, fabs ( sMix ) );
+                    // left/right channels separately
+                    sMax = std::max ( sMax, vecsData[k] );
+                    sMax = std::max ( sMax, vecsData[k + 1] );
                 }
             }
 
             // smoothing
-            const int iChId = vecChanIDsCurConChan[j];
-            dCurLevel       = std::max ( dCurLevel, vecChannels[iChId].GetPrevLevel() * 0.5 );
+            const int    iChId     = vecChanIDsCurConChan[j];
+            const double dCurLevel = std::max ( static_cast<double> ( sMax ), vecChannels[iChId].GetPrevLevel() * 0.5 );
             vecChannels[iChId].SetPrevLevel ( dCurLevel );
 
             // logarithmic measure

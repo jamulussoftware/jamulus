@@ -1681,8 +1681,8 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
             const CVector<int16_t>& vecsData = vecvecsData[j];
 
             // Speed optimization:
-            // - we only make use of the positive values and ignore the negative ones
-            //   -> we do not need to call the fabs() function
+            // - we only make use of the negative values and ignore the positive ones (since
+            //   int16 has range {-32768, 32767}) -> we do not need to call the fabs() function
             // - we only evaluate every third sample
             int16_t sMax = 0;
 
@@ -1691,7 +1691,7 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
                 // mono
                 for ( i = 0; i < iServerFrameSizeSamples; i += 3 )
                 {
-                    sMax = std::max ( sMax, vecsData[i] );
+                    sMax = std::min ( sMax, vecsData[i] );
                 }
             }
             else
@@ -1700,14 +1700,14 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
                 for ( i = 0, k = 0; i < iServerFrameSizeSamples; i += 3, k += 6 ) // 2 * 3 = 6 -> stereo
                 {
                     // left/right channels separately
-                    sMax = std::max ( sMax, vecsData[k] );
-                    sMax = std::max ( sMax, vecsData[k + 1] );
+                    sMax = std::min ( sMax, vecsData[k] );
+                    sMax = std::min ( sMax, vecsData[k + 1] );
                 }
             }
 
             // smoothing
             const int    iChId     = vecChanIDsCurConChan[j];
-            const double dCurLevel = std::max ( static_cast<double> ( sMax ), vecChannels[iChId].GetPrevLevel() * 0.5 );
+            const double dCurLevel = std::max ( -static_cast<double> ( sMax ), vecChannels[iChId].GetPrevLevel() * 0.5 );
             vecChannels[iChId].SetPrevLevel ( dCurLevel );
 
             // logarithmic measure

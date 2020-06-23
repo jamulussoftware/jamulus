@@ -36,8 +36,8 @@ void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio )
     // Get maximum of current block
     //
     // Speed optimization:
-    // - we only make use of the positive values and ignore the negative ones
-    //   -> we do not need to call the fabs() function
+    // - we only make use of the negative values and ignore the positive ones (since
+    //   int16 has range {-32768, 32767}) -> we do not need to call the fabs() function
     // - we only evaluate every third sample
     //
     // With these speed optimizations we might loose some information in
@@ -50,18 +50,18 @@ void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio )
     for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
     {
         // left channel
-        sMaxL = std::max ( sMaxL, vecsAudio[i] );
+        sMaxL = std::min ( sMaxL, vecsAudio[i] );
 
         // right channel
-        sMaxR = std::max ( sMaxR, vecsAudio[i + 1] );
+        sMaxR = std::min ( sMaxR, vecsAudio[i + 1] );
     }
 
-    dCurLevelL = UpdateCurLevel ( dCurLevelL, sMaxL );
-    dCurLevelR = UpdateCurLevel ( dCurLevelR, sMaxR );
+    dCurLevelL = UpdateCurLevel ( dCurLevelL, -sMaxL );
+    dCurLevelR = UpdateCurLevel ( dCurLevelR, -sMaxR );
 }
 
-double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
-                                                 const short& sMax )
+double CStereoSignalLevelMeter::UpdateCurLevel ( double dCurLevel,
+                                                 double dMax )
 {
     // decrease max with time
     if ( dCurLevel >= METER_FLY_BACK )
@@ -77,9 +77,9 @@ double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
     }
 
     // update current level -> only use maximum
-    if ( static_cast<double> ( sMax ) > dCurLevel )
+    if ( dMax > dCurLevel )
     {
-        return static_cast<double> ( sMax );
+        return dMax;
     }
     else
     {

@@ -726,8 +726,8 @@ public:
     }
 
 protected:
-    double UpdateCurLevel ( double       dCurLevel,
-                            const short& sMax );
+    double UpdateCurLevel ( double dCurLevel,
+                            double dMax );
 
     double dCurLevelL;
     double dCurLevelR;

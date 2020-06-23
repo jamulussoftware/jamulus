@@ -178,8 +178,12 @@ void CLevelMeter::SetValue ( const double dValue )
                 }
             }
 
-            // clip LED management
-            if ( dValue > LEV_METER_CLIP_LIMIT_RATIO * NUM_STEPS_LED_BAR)
+            // clip LED management (note that in case of clipping, i.e. full
+            // scale level, the value is above NUM_STEPS_LED_BAR since the minimum
+            // value of int16 is -32768 but we normalize with 32767 -> therefore
+            // we really only show the clipping indicator, if actually the largest
+            // value of int16 is used)
+            if ( dValue > NUM_STEPS_LED_BAR )
             {
                 vecpLEDs[NUM_STEPS_LED_BAR]->SetColor ( cLED::RL_RED );
                 TimerClip.start();

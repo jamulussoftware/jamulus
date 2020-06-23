@@ -35,9 +35,8 @@
 
 
 /* Definitions ****************************************************************/
-#define LEV_METER_CLIP_LIMIT_RATIO      0.99
-#define NUM_LEDS_INCL_CLIP_LED          ( NUM_STEPS_LED_BAR + 1 )
-#define CLIP_IND_TIME_OUT_MS            20000
+#define NUM_LEDS_INCL_CLIP_LED           ( NUM_STEPS_LED_BAR + 1 )
+#define CLIP_IND_TIME_OUT_MS             20000
 
 
 /* Classes ********************************************************************/

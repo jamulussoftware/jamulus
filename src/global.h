@@ -282,7 +282,7 @@ public:
     CGenErr ( QString strNewErrorMsg, QString strNewErrorType = "" ) :
         strErrorMsg ( strNewErrorMsg ), strErrorType ( strNewErrorType ) {}
 
-    QString GetErrorText()
+    QString GetErrorText() const
     {
         // return formatted error text
         if ( strErrorType.isEmpty() )

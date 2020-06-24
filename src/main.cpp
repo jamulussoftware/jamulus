@@ -706,7 +706,7 @@ int main ( int argc, char** argv )
         }
     }
 
-    catch ( CGenErr generr )
+    catch ( const CGenErr& generr )
     {
         // show generic error
 #ifndef HEADLESS

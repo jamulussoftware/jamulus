@@ -1079,7 +1079,7 @@ void CClientDlg::Connect ( const QString& strSelectedAddress,
             }
         }
 
-        catch ( CGenErr generr )
+        catch ( const CGenErr& generr )
         {
             // show error message and return the function
             QMessageBox::critical ( this, APP_NAME, generr.GetErrorText(), "Close", nullptr );

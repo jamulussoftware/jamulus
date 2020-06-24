@@ -31,8 +31,7 @@
 
 
 
-TODO support clip indicator for bar meter as well
-     -> change background to red in case of clipping
+TODO use signal level meter class for meter calculation in the server (avoid doubling code), i.e., max calc and smoothing
 
 TODO the new translation loading does not work on MacOS
 

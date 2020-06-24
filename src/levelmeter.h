@@ -87,6 +87,9 @@ protected:
         QLabel*     pLEDLabel;
     };
 
+    void SetBarMeterStyleAndClipStatus ( const ELevelMeterType eNType,
+                                         const bool            bIsClip );
+
     QStackedLayout* pStackedLayout;
     ELevelMeterType eLevelMeterType;
     CVector<cLED*>  vecpLEDs;

@@ -113,11 +113,6 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
 
     case MT_BAR:
         pStackedLayout->setCurrentIndex ( 1 );
-        pBarMeter->setStyleSheet (
-            "QProgressBar        { margin:     1px;"
-            "                      padding:    1px;"
-            "                      width:      15px; }"
-            "QProgressBar::chunk { background: green; }" );
         break;
 
     case MT_SLIM_BAR:
@@ -128,75 +123,140 @@ void CLevelMeter::SetLevelMeterType ( const ELevelMeterType eNType )
         }
 
         pStackedLayout->setCurrentIndex ( 1 );
-        pBarMeter->setStyleSheet (
-            "QProgressBar        { border:     0px;"
-            "                      margin:     0px;"
-            "                      padding:    0px;"
-            "                      width:      4px; }"
-            "QProgressBar::chunk { background: green; }" );
+        break;
+    }
+
+    // update bar meter style and reset clip state
+    SetBarMeterStyleAndClipStatus ( eNType, false );
+}
+
+void CLevelMeter::SetBarMeterStyleAndClipStatus ( const ELevelMeterType eNType,
+                                                  const bool            bIsClip )
+{
+    switch ( eNType )
+    {
+    case MT_SLIM_BAR:
+        if ( bIsClip )
+        {
+            pBarMeter->setStyleSheet (
+                "QProgressBar        { border:     0px solid red;"
+                "                      margin:     0px;"
+                "                      padding:    0px;"
+                "                      width:      4px;"
+                "                      background: red; }"
+                "QProgressBar::chunk { background: green; }" );
+        }
+        else
+        {
+            pBarMeter->setStyleSheet (
+                "QProgressBar        { border:     0px;"
+                "                      margin:     0px;"
+                "                      padding:    0px;"
+                "                      width:      4px; }"
+                "QProgressBar::chunk { background: green; }" );
+        }
+        break;
+
+    default: /* MT_BAR */
+        if ( bIsClip )
+        {
+            pBarMeter->setStyleSheet (
+                "QProgressBar        { border:     2px solid red;"
+                "                      margin:     1px;"
+                "                      padding:    1px;"
+                "                      width:      15px;"
+                "                      background: transparent; }"
+                "QProgressBar::chunk { background: green; }" );
+        }
+        else
+        {
+            pBarMeter->setStyleSheet (
+                "QProgressBar        { margin:     1px;"
+                "                      padding:    1px;"
+                "                      width:      15px; }"
+                "QProgressBar::chunk { background: green; }" );
+        }
         break;
     }
 }
 
 void CLevelMeter::SetValue ( const double dValue )
 {
-    if ( this->isEnabled() )
+    switch ( eLevelMeterType )
+    {
+    case MT_LED:
+        // update state of all LEDs for current level value (except of the clip LED)
+        for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
+        {
+            // set active LED color if value is above current LED index
+            if ( iLEDIdx < dValue )
+            {
+                // check which color we should use (green, yellow or red)
+                if ( iLEDIdx < YELLOW_BOUND_LED_BAR )
+                {
+                    // green region
+                    vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_GREEN );
+                }
+                else
+                {
+                    if ( iLEDIdx < RED_BOUND_LED_BAR )
+                    {
+                        // yellow region
+                        vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_YELLOW );
+                    }
+                    else
+                    {
+                        // red region
+                        vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_RED );
+                    }
+                }
+            }
+            else
+            {
+                // we use black LED for inactive state
+                vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_BLACK );
+            }
+        }
+        break;
+
+    case MT_BAR:
+    case MT_SLIM_BAR:
+        pBarMeter->setValue ( 100 * dValue );
+        break;
+    }
+
+    // clip indicator management (note that in case of clipping, i.e. full
+    // scale level, the value is above NUM_STEPS_LED_BAR since the minimum
+    // value of int16 is -32768 but we normalize with 32767 -> therefore
+    // we really only show the clipping indicator, if actually the largest
+    // value of int16 is used)
+    if ( dValue > NUM_STEPS_LED_BAR )
     {
         switch ( eLevelMeterType )
         {
         case MT_LED:
-            // update state of all LEDs for current level value (except of the clip LED)
-            for ( int iLEDIdx = 0; iLEDIdx < NUM_STEPS_LED_BAR; iLEDIdx++ )
-            {
-                // set active LED color if value is above current LED index
-                if ( iLEDIdx < dValue )
-                {
-                    // check which color we should use (green, yellow or red)
-                    if ( iLEDIdx < YELLOW_BOUND_LED_BAR )
-                    {
-                        // green region
-                        vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_GREEN );
-                    }
-                    else
-                    {
-                        if ( iLEDIdx < RED_BOUND_LED_BAR )
-                        {
-                            // yellow region
-                            vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_YELLOW );
-                        }
-                        else
-                        {
-                            // red region
-                            vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_RED );
-                        }
-                    }
-                }
-                else
-                {
-                    // we use black LED for inactive state
-                    vecpLEDs[iLEDIdx]->SetColor ( cLED::RL_BLACK );
-                }
-            }
-
-            // clip LED management (note that in case of clipping, i.e. full
-            // scale level, the value is above NUM_STEPS_LED_BAR since the minimum
-            // value of int16 is -32768 but we normalize with 32767 -> therefore
-            // we really only show the clipping indicator, if actually the largest
-            // value of int16 is used)
-            if ( dValue > NUM_STEPS_LED_BAR )
-            {
-                vecpLEDs[NUM_STEPS_LED_BAR]->SetColor ( cLED::RL_RED );
-                TimerClip.start();
-            }
-            else if ( vecpLEDs[NUM_STEPS_LED_BAR]->GetColor() != cLED::RL_RED )
-            {
-                vecpLEDs[NUM_STEPS_LED_BAR]->SetColor ( cLED::RL_BLACK );
-            }
+            vecpLEDs[NUM_STEPS_LED_BAR]->SetColor ( cLED::RL_RED );
             break;
 
         case MT_BAR:
         case MT_SLIM_BAR:
-            pBarMeter->setValue ( 100 * dValue );
+            SetBarMeterStyleAndClipStatus ( eLevelMeterType, true );
+            break;
+        }
+
+        TimerClip.start();
+    }
+    else if ( !TimerClip.isActive() )
+    {
+        switch ( eLevelMeterType )
+        {
+        case MT_LED:
+            vecpLEDs[NUM_STEPS_LED_BAR]->SetColor ( cLED::RL_BLACK );
+            break;
+
+        case MT_BAR:
+        case MT_SLIM_BAR:
+            SetBarMeterStyleAndClipStatus ( eLevelMeterType, false );
             break;
         }
     }

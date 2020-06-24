@@ -43,7 +43,6 @@ void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio )
     // With these speed optimizations we might loose some information in
     // special cases but for the average music signals the following code
     // should give good results.
-    //
     short sMaxL = 0;
     short sMaxR = 0;
 
@@ -87,19 +86,29 @@ double CStereoSignalLevelMeter::UpdateCurLevel ( double dCurLevel,
     }
 }
 
-double CStereoSignalLevelMeter::CalcLogResult ( const double& dLinearLevel )
+double CStereoSignalLevelMeter::CalcLogResultForMeter ( const double& dLinearLevel )
 {
-    const double dNormMicLevel = dLinearLevel / _MAXSHORT;
+    const double dNormLevel = dLinearLevel / _MAXSHORT;
 
     // logarithmic measure
-    if ( dNormMicLevel > 0 )
+    double dLevelForMeterdB = -100000.0; // large negative value
+
+    if ( dNormLevel > 0 )
     {
-        return 20.0 * log10 ( dNormMicLevel );
+        dLevelForMeterdB = 20.0 * log10 ( dNormLevel );
     }
-    else
+
+    // map to signal level meter (linear transformation of the input
+    // level range to the level meter range)
+    dLevelForMeterdB -= LOW_BOUND_SIG_METER;
+    dLevelForMeterdB *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
+
+    if ( dLevelForMeterdB < 0 )
     {
-        return -100000.0; // large negative value
+        dLevelForMeterdB = 0;
     }
+
+    return dLevelForMeterdB;
 }
 
 

@@ -1711,18 +1711,9 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
             vecChannels[iChId].SetPrevLevel ( dCurLevel );
 
             // logarithmic measure
-            double dCurSigLevel = CStereoSignalLevelMeter::CalcLogResult ( dCurLevel );
+            double dCurSigLevelForMeterdB = CStereoSignalLevelMeter::CalcLogResultForMeter ( dCurLevel );
 
-            // map to signal level meter
-            dCurSigLevel -= LOW_BOUND_SIG_METER;
-            dCurSigLevel *= NUM_STEPS_LED_BAR / ( UPPER_BOUND_SIG_METER - LOW_BOUND_SIG_METER );
-
-            if ( dCurSigLevel < 0 )
-            {
-                dCurSigLevel = 0;
-            }
-
-            vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevel ) );
+            vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevelForMeterdB ) );
         }
     }
 

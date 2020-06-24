@@ -715,9 +715,9 @@ public:
     CStereoSignalLevelMeter() { Reset(); }
 
     void          Update ( const CVector<short>& vecsAudio );
-    double        MicLeveldBLeft()  { return CalcLogResult ( dCurLevelL ); }
-    double        MicLeveldBRight() { return CalcLogResult ( dCurLevelR ); }
-    static double CalcLogResult ( const double& dLinearLevel );
+    double        GetLevelForMeterdBLeft()  { return CalcLogResultForMeter ( dCurLevelL ); }
+    double        GetLevelForMeterdBRight() { return CalcLogResultForMeter ( dCurLevelR ); }
+    static double CalcLogResultForMeter ( const double& dLinearLevel );
 
     void Reset()
     {

@@ -1663,7 +1663,6 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
                                               const CVector<CVector<int16_t> > vecvecsData,
                                               CVector<uint16_t>&               vecLevelsOut )
 {
-    int  i, j, k;
     bool bLevelsWereUpdated = false;
 
     // low frequency updates
@@ -1675,44 +1674,15 @@ bool CServer::CreateLevelsForAllConChannels ( const int                        i
         // init return vector with zeros since we mix all channels on that vector
         vecLevelsOut.Reset ( 0 );
 
-        for ( j = 0; j < iNumClients; j++ )
+        for ( int j = 0; j < iNumClients; j++ )
         {
-            // get a reference to the audio data
-            const CVector<int16_t>& vecsData = vecvecsData[j];
+            // update and get signal level for meter in dB for each channel
+            const double dCurSigLevelForMeterdB = vecChannels[vecChanIDsCurConChan[j]].
+                UpdateAndGetLevelForMeterdB ( vecvecsData[j],
+                                              iServerFrameSizeSamples,
+                                              vecNumAudioChannels[j] > 1 );
 
-            // Speed optimization:
-            // - we only make use of the negative values and ignore the positive ones (since
-            //   int16 has range {-32768, 32767}) -> we do not need to call the fabs() function
-            // - we only evaluate every third sample
-            int16_t sMax = 0;
-
-            if ( vecNumAudioChannels[j] == 1 )
-            {
-                // mono
-                for ( i = 0; i < iServerFrameSizeSamples; i += 3 )
-                {
-                    sMax = std::min ( sMax, vecsData[i] );
-                }
-            }
-            else
-            {
-                // stereo
-                for ( i = 0, k = 0; i < iServerFrameSizeSamples; i += 3, k += 6 ) // 2 * 3 = 6 -> stereo
-                {
-                    // left/right channels separately
-                    sMax = std::min ( sMax, vecsData[k] );
-                    sMax = std::min ( sMax, vecsData[k + 1] );
-                }
-            }
-
-            // smoothing
-            const int    iChId     = vecChanIDsCurConChan[j];
-            const double dCurLevel = std::max ( -static_cast<double> ( sMax ), vecChannels[iChId].GetPrevLevel() * 0.5 );
-            vecChannels[iChId].SetPrevLevel ( dCurLevel );
-
-            // logarithmic measure
-            double dCurSigLevelForMeterdB = CStereoSignalLevelMeter::CalcLogResultForMeter ( dCurLevel );
-
+            // map value to integer for transmission via the protocol (4 bit available)
             vecLevelsOut[j] = static_cast<uint16_t> ( ceil ( dCurSigLevelForMeterdB ) );
         }
     }

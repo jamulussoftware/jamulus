@@ -35,7 +35,8 @@ CChannel::CChannel ( const bool bNIsServer ) :
     iFadeInCntMax          ( FADE_IN_NUM_FRAMES_DBLE_FRAMESIZE ),
     bIsEnabled             ( false ),
     bIsServer              ( bNIsServer ),
-    iAudioFrameSizeSamples ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES )
+    iAudioFrameSizeSamples ( DOUBLE_SYSTEM_FRAME_SIZE_SAMPLES ),
+    SignalLevelMeter       ( false, 0.5 ) // server mode with mono out and faster smoothing
 {
     // reset network transport properties
     ResetNetworkTransportProperties();
@@ -568,6 +569,9 @@ EPutDataStat CChannel::PutAudioData ( const CVector<uint8_t>& vecbyData,
 
                 // init audio fade-in counter
                 iFadeInCnt = 0;
+
+                // init level meter
+                SignalLevelMeter.Reset();
             }
 
             // reset time-out counter (note that this must be done after the
@@ -656,6 +660,18 @@ void CChannel::PrepAndSendPacket ( CHighPrioSocket*        pSocket,
     {
         pSocket->SendPacket ( ConvBuf.GetAll(), GetAddress() );
     }
+}
+
+double CChannel::UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio,
+                                               const int             iInSize,
+                                               const bool            bIsStereoIn )
+{
+    // update the signal level meter and immediately return the current value
+    SignalLevelMeter.Update ( vecsAudio,
+                              iInSize,
+                              bIsStereoIn );
+
+    return SignalLevelMeter.GetLevelForMeterdBLeftOrMono();
 }
 
 int CChannel::GetUploadRateKbps()

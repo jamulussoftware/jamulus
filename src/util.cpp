@@ -28,11 +28,10 @@
 
 /* Implementation *************************************************************/
 // Input level meter implementation --------------------------------------------
-void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio )
+void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio,
+                                       const int             iMonoBlockSizeSam,
+                                       const bool            bIsStereoIn )
 {
-    // get the stereo vector size
-    const int iStereoVecSize = vecsAudio.Size();
-
     // Get maximum of current block
     //
     // Speed optimization:
@@ -43,32 +42,50 @@ void CStereoSignalLevelMeter::Update ( const CVector<short>& vecsAudio )
     // With these speed optimizations we might loose some information in
     // special cases but for the average music signals the following code
     // should give good results.
-    short sMaxL = 0;
-    short sMaxR = 0;
+    short sMinLOrMono = 0;
+    short sMinR       = 0;
 
-    for ( int i = 0; i < iStereoVecSize; i += 6 ) // 2 * 3 = 6 -> stereo
+    if ( bIsStereoIn )
     {
-        // left channel
-        sMaxL = std::min ( sMaxL, vecsAudio[i] );
+        // stereo in
+        for ( int i = 0; i < 2 * iMonoBlockSizeSam; i += 6 ) // 2 * 3 = 6 -> stereo
+        {
+            // left (or mono) and right channel
+            sMinLOrMono = std::min ( sMinLOrMono, vecsAudio[i] );
+            sMinR       = std::min ( sMinR,       vecsAudio[i + 1] );
+        }
 
-        // right channel
-        sMaxR = std::min ( sMaxR, vecsAudio[i + 1] );
+        // in case of mono out use minimum of both channels
+        if ( !bIsStereoOut )
+        {
+            sMinLOrMono = std::min ( sMinLOrMono, sMinR );
+        }
+    }
+    else
+    {
+        // mono in
+        for ( int i = 0; i < iMonoBlockSizeSam; i += 3 )
+        {
+            sMinLOrMono = std::min ( sMinLOrMono, vecsAudio[i] );
+        }
     }
 
-    dCurLevelL = UpdateCurLevel ( dCurLevelL, -sMaxL );
-    dCurLevelR = UpdateCurLevel ( dCurLevelR, -sMaxR );
+    // apply smoothing, if in stereo out mode, do this for two channels
+    dCurLevelLOrMono = UpdateCurLevel ( dCurLevelLOrMono, -sMinLOrMono );
+
+    if ( bIsStereoOut )
+    {
+        dCurLevelR = UpdateCurLevel ( dCurLevelR, -sMinR );
+    }
 }
 
-double CStereoSignalLevelMeter::UpdateCurLevel ( double dCurLevel,
-                                                 double dMax )
+double CStereoSignalLevelMeter::UpdateCurLevel ( double       dCurLevel,
+                                                 const double dMax )
 {
     // decrease max with time
     if ( dCurLevel >= METER_FLY_BACK )
     {
-// TODO Calculate factor from sample rate and frame size (64 or 128 samples frame size).
-//      But tests with 128 and 64 samples frame size have shown that the meter fly back
-//      is ok for both numbers of samples frame size.
-        dCurLevel *= 0.97;
+        dCurLevel *= dSmoothingFactor;
     }
     else
     {

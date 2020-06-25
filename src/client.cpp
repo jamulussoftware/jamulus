@@ -989,7 +989,9 @@ void CClient::ProcessAudioDataIntern ( CVector<int16_t>& vecsStereoSndCrd )
 
     // Transmit signal ---------------------------------------------------------
     // update stereo signal level meter
-    SignalLevelMeter.Update ( vecsStereoSndCrd );
+    SignalLevelMeter.Update ( vecsStereoSndCrd,
+                              iMonoBlockSizeSam,
+                              true );
 
     // add reverberation effect if activated
     if ( iReverbLevel != 0 )

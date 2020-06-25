@@ -173,10 +173,11 @@ public:
 
     CNetworkTransportProps GetNetworkTransportPropsFromCurrentSettings();
 
-    bool ChannelLevelsRequired() const                { return bChannelLevelsRequired; }
+    bool ChannelLevelsRequired() const { return bChannelLevelsRequired; }
 
-    double GetPrevLevel() const              { return dPrevLevel; }
-    void   SetPrevLevel ( const double nPL ) { dPrevLevel = nPL; }
+    double UpdateAndGetLevelForMeterdB ( const CVector<short>& vecsAudio,
+                                         const int             iInSize,
+                                         const bool            bIsStereoIn );
 
 protected:
     bool ProtocolIsEnabled();
@@ -190,52 +191,51 @@ protected:
         iNetwFrameSizeFact    = FRAME_SIZE_FACTOR_PREFERRED;
         iNetwFrameSize        = CELT_MINIMUM_NUM_BYTES;
         iNumAudioChannels     = 1; // mono
-
-        dPrevLevel            = 0.0;
     }
 
     // connection parameters
-    CHostAddress      InetAddr;
+    CHostAddress            InetAddr;
 
     // channel info
-    CChannelCoreInfo  ChannelInfo;
+    CChannelCoreInfo        ChannelInfo;
 
     // mixer and effect settings
-    CVector<double>   vecdGains;
-    CVector<double>   vecdPannings;
+    CVector<double>         vecdGains;
+    CVector<double>         vecdPannings;
 
     // network jitter-buffer
-    CNetBufWithStats  SockBuf;
-    int               iCurSockBufNumFrames;
-    bool              bDoAutoSockBufSize;
+    CNetBufWithStats        SockBuf;
+    int                     iCurSockBufNumFrames;
+    bool                    bDoAutoSockBufSize;
 
     // network output conversion buffer
-    CConvBuf<uint8_t> ConvBuf;
+    CConvBuf<uint8_t>       ConvBuf;
 
     // network protocol
-    CProtocol         Protocol;
+    CProtocol               Protocol;
 
-    int               iConTimeOut;
-    int               iConTimeOutStartVal;
-    int               iFadeInCnt;
-    int               iFadeInCntMax;
+    int                     iConTimeOut;
+    int                     iConTimeOutStartVal;
+    int                     iFadeInCnt;
+    int                     iFadeInCntMax;
 
-    bool              bIsEnabled;
-    bool              bIsServer;
+    bool                    bIsEnabled;
+    bool                    bIsServer;
 
-    int               iNetwFrameSizeFact;
-    int               iNetwFrameSize;
-    int               iAudioFrameSizeSamples;
+    int                     iNetwFrameSizeFact;
+    int                     iNetwFrameSize;
+    int                     iAudioFrameSizeSamples;
 
-    EAudComprType     eAudioCompressionType;
-    int               iNumAudioChannels;
+    EAudComprType           eAudioCompressionType;
+    int                     iNumAudioChannels;
 
-    QMutex            Mutex;
-    QMutex            MutexSocketBuf;
-    QMutex            MutexConvBuf;
+    QMutex                  Mutex;
+    QMutex                  MutexSocketBuf;
+    QMutex                  MutexConvBuf;
 
-    bool              bChannelLevelsRequired;
-    double            dPrevLevel;
+    bool                    bChannelLevelsRequired;
+
+    CStereoSignalLevelMeter SignalLevelMeter;
 
 public slots:
     void OnSendProtMessage ( CVector<uint8_t> vecMessage );

@@ -117,7 +117,7 @@ public:
     bool   IsRunning() { return Sound.IsRunning(); }
     bool   SetServerAddr ( QString strNAddr );
 
-    double GetLevelForMeterdBLeft()  { return SignalLevelMeter.GetLevelForMeterdBLeft(); }
+    double GetLevelForMeterdBLeft()  { return SignalLevelMeter.GetLevelForMeterdBLeftOrMono(); }
     double GetLevelForMeterdBRight() { return SignalLevelMeter.GetLevelForMeterdBRight(); }
 
     bool   GetAndResetbJitterBufferOKFlag();

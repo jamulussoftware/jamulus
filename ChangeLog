@@ -31,11 +31,9 @@
 
 
 
-TODO use signal level meter class for meter calculation in the server (avoid doubling code), i.e., max calc and smoothing
+TODO add new register message which contains version and, e.g., max number of clients
 
 TODO the new translation loading does not work on MacOS
-
-TODO add new register message which contains version and, e.g., max number of clients
 
 TODO https://github.com/corrados/jamulus/issues/341#issuecomment-647172946
      - generate .qm on compile time with lrelease

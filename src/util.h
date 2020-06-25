@@ -712,25 +712,35 @@ enum ESkillLevel
 class CStereoSignalLevelMeter
 {
 public:
-    CStereoSignalLevelMeter() { Reset(); }
+// TODO Calculate smoothing factor from sample rate and frame size (64 or 128 samples frame size).
+//      But tests with 128 and 64 samples frame size have shown that the meter fly back
+//      is ok for both numbers of samples frame size with a factor of 0.97.
+    CStereoSignalLevelMeter ( const bool   bNIsStereoOut     = true,
+                              const double dNSmoothingFactor = 0.97 ) :
+        dSmoothingFactor ( dNSmoothingFactor ), bIsStereoOut ( bNIsStereoOut ) { Reset(); }
 
-    void          Update ( const CVector<short>& vecsAudio );
-    double        GetLevelForMeterdBLeft()  { return CalcLogResultForMeter ( dCurLevelL ); }
-    double        GetLevelForMeterdBRight() { return CalcLogResultForMeter ( dCurLevelR ); }
+    void Update ( const CVector<short>& vecsAudio,
+                  const int             iInSize,
+                  const bool            bIsStereoIn );
+
+    double        GetLevelForMeterdBLeftOrMono() { return CalcLogResultForMeter ( dCurLevelLOrMono ); }
+    double        GetLevelForMeterdBRight()      { return CalcLogResultForMeter ( dCurLevelR ); }
     static double CalcLogResultForMeter ( const double& dLinearLevel );
 
     void Reset()
     {
-        dCurLevelL = 0.0;
-        dCurLevelR = 0.0;
+        dCurLevelLOrMono = 0.0;
+        dCurLevelR       = 0.0;
     }
 
 protected:
-    double UpdateCurLevel ( double dCurLevel,
-                            double dMax );
+    double UpdateCurLevel ( double       dCurLevel,
+                            const double dMax );
 
-    double dCurLevelL;
+    double dCurLevelLOrMono;
     double dCurLevelR;
+    double dSmoothingFactor;
+    bool   bIsStereoOut;
 };
 
 
